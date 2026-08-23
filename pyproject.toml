@@ -50,6 +50,12 @@ target-version = "py311"
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]
 
+[tool.ruff.lint.per-file-ignores]
+# TN-Eval's SOAP prompt is reproduced verbatim, long lines and trailing spaces
+# included. Rewrapping it would change the string sent to the model and break
+# comparability with their published numbers. A test pins its sha256.
+"src/tnb/tasks/soap.py" = ["E501"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]

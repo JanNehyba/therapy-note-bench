@@ -1,9 +1,10 @@
 """Command line entry point.
 
-Only ``tnb models`` is implemented so far — it answers the question every run
-starts with: what is actually deployed on e-INFRA right now? ``run`` and
-``report`` are declared so the surface is visible, and fail loudly rather than
-pretending to work.
+``tnb models`` answers the question every run starts with: what is actually
+deployed on e-INFRA right now? ``tnb prompts`` shows what will be sent to those
+models and can check the copied wording against its source repositories.
+``run`` and ``report`` are declared so the surface is visible, and fail loudly
+rather than pretending to work.
 """
 
 from __future__ import annotations
@@ -16,6 +17,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
+from tnb import tasks
 from tnb.config import REPO_ROOT, load_policy
 from tnb.providers.einfra import (
     DiscoveredModel,
@@ -124,6 +126,33 @@ def cmd_models(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_prompts(args: argparse.Namespace) -> int:
+    """Show what will be sent to the models, and optionally check it upstream."""
+    for task in tasks.TASKS.values():
+        print(f"{task.name:6} {task.prompt_version:20} {task.calls_per_session} call(s)/session")
+
+    if not args.verify:
+        print("\nAdd --verify to compare the copied wording with its source repository.")
+        return 0
+
+    from tnb.tasks import fidelity
+
+    print("\nChecking the copied prompts against their sources...")
+    failed = False
+    for check in fidelity.check_all():
+        print(f"  {'ok  ' if check.ok else 'FAIL'} {check.name:16} {check.detail}")
+        failed |= not check.ok
+
+    if failed:
+        print(
+            "\nA prompt drifted from its source. Results generated before and after "
+            "are not comparable: update the copy and bump prompt_version.",
+            file=sys.stderr,
+        )
+        return 1
+    return 0
+
+
 def cmd_not_implemented(args: argparse.Namespace) -> int:
     print(
         f"'tnb {args.command}' is not implemented yet — see the roadmap in README.md.",
@@ -149,6 +178,16 @@ def build_parser() -> argparse.ArgumentParser:
         help="prepend a dated section to docs/models-snapshot.md",
     )
     models.set_defaults(func=cmd_models)
+
+    prompts = subparsers.add_parser(
+        "prompts", help="show the generation prompts and check them against their sources"
+    )
+    prompts.add_argument(
+        "--verify",
+        action="store_true",
+        help="fetch TN-Eval and iCARE and confirm the copied wording still matches",
+    )
+    prompts.set_defaults(func=cmd_prompts)
 
     for name, help_text in (
         ("run", "generate and score notes (phases 1-4)"),
