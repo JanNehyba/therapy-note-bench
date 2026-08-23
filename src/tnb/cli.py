@@ -17,7 +17,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from tnb import tasks
+from tnb import generation, tasks
 from tnb.config import REPO_ROOT, load_policy
 from tnb.providers.einfra import (
     DiscoveredModel,
@@ -153,6 +153,86 @@ def cmd_prompts(args: argparse.Namespace) -> int:
     return 0
 
 
+def _select_models(policy, args) -> list[str]:
+    """Which models this run writes notes with.
+
+    ``--models`` names them explicitly; otherwise the live endpoint decides,
+    filtered by models.yaml. Nothing is hard-coded either way.
+    """
+    if args.models:
+        return [name.strip() for name in args.models.split(",") if name.strip()]
+
+    discovered = [model.id for model in discover(policy) if model.included]
+    if args.max_models:
+        # Alphabetical, so "the first two" means the same two tomorrow.
+        discovered = discovered[: args.max_models]
+    elif len(discovered) > policy.discovery.max_models and not args.allow_large:
+        raise RuntimeError(
+            f"{len(discovered)} models exceeds max_models={policy.discovery.max_models} "
+            "in models.yaml. Re-run with --allow-large if that is intended."
+        )
+    return discovered
+
+
+def cmd_generate(args: argparse.Namespace) -> int:
+    policy = load_policy()
+    model_ids = _select_models(policy, args)
+    if not model_ids:
+        raise RuntimeError("No models to generate with.")
+
+    jobs: list[generation.Job] = []
+    for task in tasks.resolve(args.tasks):
+        sessions = task.load_sessions(args.limit)
+        jobs.extend(generation.build_jobs(model_ids, task, sessions))
+        print(f"{task.name:6} {len(sessions):3} sessions x {task.calls_per_session:2} call(s)")
+
+    pending = [job for job in jobs if args.force or generation.load_cached(job, policy) is None]
+    print(
+        f"\n{len(model_ids)} model(s): {', '.join(model_ids)}\n"
+        f"{len(jobs)} calls total, {len(jobs) - len(pending)} already cached, "
+        f"{len(pending)} to generate at concurrency {policy.generation.concurrency}."
+    )
+
+    if args.dry_run:
+        print("\nDry run: nothing was sent. Drop --dry-run to generate.")
+        return 0
+    if not pending:
+        print("\nNothing to do; every note is cached.")
+        return 0
+
+    counts = {"cached": 0, "generated": 0, "failed": 0}
+    failures: list[generation.Outcome] = []
+
+    def report(outcome: generation.Outcome) -> None:
+        counts[outcome.status] += 1
+        if outcome.status == "failed":
+            failures.append(outcome)
+        done = sum(counts.values())
+        print(
+            f"  [{done}/{len(pending)}] {outcome.job.model_id} "
+            f"{outcome.job.task}/{outcome.job.session_id}/{outcome.job.unit} "
+            f"{outcome.status}"
+            + ("" if outcome.status != "failed" else f" -- {outcome.record.get('error')}"),
+            flush=True,
+        )
+
+    print()
+    generation.run_jobs(pending, policy, force=args.force, on_done=report)
+
+    print(f"\nGenerated {counts['generated']}, failed {counts['failed']}.")
+    if failures:
+        print("\nFailures (re-running the same command retries only these):")
+        for outcome in failures[:20]:
+            print(
+                f"  {outcome.job.model_id:30} {outcome.job.task}/{outcome.job.session_id}"
+                f"/{outcome.job.unit}: {outcome.record.get('error')}"
+            )
+        if len(failures) > 20:
+            print(f"  ... and {len(failures) - 20} more")
+    print(f"\nNotes are under {generation.CACHE_DIR.relative_to(REPO_ROOT)}/.")
+    return 0
+
+
 def cmd_not_implemented(args: argparse.Namespace) -> int:
     print(
         f"'tnb {args.command}' is not implemented yet — see the roadmap in README.md.",
@@ -189,8 +269,35 @@ def build_parser() -> argparse.ArgumentParser:
     )
     prompts.set_defaults(func=cmd_prompts)
 
+    generate = subparsers.add_parser(
+        "generate", help="write notes with every discovered model (phase 2)"
+    )
+    generate.add_argument(
+        "--models",
+        help="comma-separated model ids; default is whatever the endpoint reports",
+    )
+    generate.add_argument(
+        "--max-models",
+        type=int,
+        help="use only the first N discovered models, alphabetically (for a smoke run)",
+    )
+    generate.add_argument("--tasks", help="comma-separated: soap, icare; default is both")
+    generate.add_argument("--limit", type=int, help="use only the first N sessions of each task")
+    generate.add_argument(
+        "--force", action="store_true", help="re-generate even where a cached note exists"
+    )
+    generate.add_argument(
+        "--dry-run", action="store_true", help="print the plan and the call count, send nothing"
+    )
+    generate.add_argument(
+        "--allow-large",
+        action="store_true",
+        help="proceed even when more models are discovered than models.yaml allows",
+    )
+    generate.set_defaults(func=cmd_generate)
+
     for name, help_text in (
-        ("run", "generate and score notes (phases 1-4)"),
+        ("run", "generate and score notes end to end (phases 2-4)"),
         ("report", "regenerate the leaderboard (phase 5)"),
     ):
         sub = subparsers.add_parser(name, help=help_text)

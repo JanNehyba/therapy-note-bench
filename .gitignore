@@ -1,6 +1,11 @@
 # Corpora are fetched at run time and never committed. See docs/datasets.md.
 data/
 
+# Generated notes. Derived from corpora that publish no licence, one file per
+# (task, prompt version, model, session, unit), and large: a full run is about
+# 5800 of them. Kept locally so re-scoring never re-generates.
+generations/
+
 .env
 .venv/
 __pycache__/
