@@ -25,7 +25,9 @@ class DiscoveryPolicy:
 
     exclude: tuple[re.Pattern[str], ...] = ()
     exclude_aliases: bool = True
-    alias_ids: tuple[str, ...] = ()
+    #: Verified duplicates: alias id -> the concrete model it resolves to.
+    #: Established by fingerprinting, not by guessing. See models.yaml.
+    aliases: dict[str, str] = field(default_factory=dict)
     max_models: int = 20
 
 
@@ -33,9 +35,12 @@ class DiscoveryPolicy:
 class GenerationPolicy:
     temperature: float = 0.0
     max_tokens: int = 2048
-    concurrency: int = 4
+    concurrency: int = 2
     timeout_s: int = 180
     retries: int = 3
+    #: e-INFRA rate-limits per API key, so 429 is routine rather than
+    #: exceptional. Waits grow as backoff_s * attempt.
+    backoff_s: int = 6
 
 
 @dataclass(frozen=True)
@@ -78,14 +83,15 @@ def load_policy(path: Path | None = None) -> Policy:
                 re.compile(pattern, re.IGNORECASE) for pattern in discovery_raw.get("exclude", [])
             ),
             exclude_aliases=bool(discovery_raw.get("exclude_aliases", True)),
-            alias_ids=tuple(discovery_raw.get("alias_ids", [])),
+            aliases=dict(discovery_raw.get("aliases") or {}),
             max_models=int(discovery_raw.get("max_models", 20)),
         ),
         generation=GenerationPolicy(
             temperature=float(generation_raw.get("temperature", 0.0)),
             max_tokens=int(generation_raw.get("max_tokens", 2048)),
-            concurrency=int(generation_raw.get("concurrency", 4)),
+            concurrency=int(generation_raw.get("concurrency", 2)),
             timeout_s=int(generation_raw.get("timeout_s", 180)),
             retries=int(generation_raw.get("retries", 3)),
+            backoff_s=int(generation_raw.get("backoff_s", 6)),
         ),
     )

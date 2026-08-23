@@ -17,7 +17,12 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 from tnb.config import REPO_ROOT, load_policy
-from tnb.providers.einfra import DiscoveredModel, discover
+from tnb.providers.einfra import (
+    DiscoveredModel,
+    discover,
+    fingerprint,
+    group_by_fingerprint,
+)
 
 SNAPSHOT_PATH = REPO_ROOT / "docs" / "models-snapshot.md"
 
@@ -49,10 +54,39 @@ def _render_snapshot(models: list[DiscoveredModel], today: str) -> str:
     return "\n".join(lines)
 
 
+def _probe(policy, models: list[DiscoveredModel]) -> int:
+    """Ask every reported model a fixed question and group identical answers.
+
+    The endpoint publishes almost no metadata, so identity has to be measured.
+    This is what produced the verified `aliases:` map in models.yaml, and it is
+    how to check that map still holds after e-INFRA redeploys.
+    """
+    digests: dict[str, str] = {}
+    print(f"Probing {len(models)} models (temperature 0, one fixed prompt)...\n")
+    for model in models:
+        digest, excerpt = fingerprint(policy, model.id)
+        digests[model.id] = digest
+        print(f"  {model.id:34} {digest or '-':10} {excerpt}")
+
+    groups = group_by_fingerprint(digests)
+    if not groups:
+        print("\nNo two models answered identically: every id is its own model.")
+        return 0
+
+    print("\nIdentical answers -- these ids are the same model:")
+    for canonical, aliases in sorted(groups.items()):
+        print(f"  {canonical}  <-  {', '.join(aliases)}")
+    print("\nCopy into models.yaml under discovery.aliases if this differs.")
+    return 0
+
+
 def cmd_models(args: argparse.Namespace) -> int:
     policy = load_policy()
     models = discover(policy)
     included = [model for model in models if model.included]
+
+    if args.probe:
+        return _probe(policy, models)
 
     if args.json:
         print(
@@ -104,6 +138,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     models = subparsers.add_parser("models", help="list what e-INFRA has deployed right now")
     models.add_argument("--json", action="store_true", help="machine-readable output")
+    models.add_argument(
+        "--probe",
+        action="store_true",
+        help="ask each model a fixed question and group ids that answer identically",
+    )
     models.add_argument(
         "--write-snapshot",
         action="store_true",
