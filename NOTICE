@@ -1,0 +1,40 @@
+therapy-note-bench
+Copyright (c) 2026 Jan Nehyba
+
+The MIT licence above covers THIS REPOSITORY'S CODE ONLY.
+
+This benchmark does not redistribute any dataset. Every corpus is downloaded
+from its original source at run time. The upstream terms below govern that
+data, not this licence.
+
+--------------------------------------------------------------------------
+TN-Eval  (rubric, SOAP prompt, human notes, human annotations)
+  Apache License 2.0 -- https://github.com/amazon-science/TN-Eval
+  Shah, Raj Sanjay; Xu, Lei; Liu, Qianchu; Burnsky, Jon; Bertagnolli, Drew;
+  Shivade, Chaitanya. "TN-Eval: Rubric and Evaluation Protocols for Measuring
+  the Quality of Behavioral Therapy Notes." ACL 2025, Industry Track.
+
+  This repository reproduces TN-Eval's rubric text, SOAP generation prompt and
+  scoring prompts. They are used under the Apache-2.0 licence, unmodified in
+  wording, with the model backend replaced (AWS Bedrock -> OpenAI-compatible).
+
+--------------------------------------------------------------------------
+AnnoMI  (counselling transcripts underlying the TN-Eval track)
+  No licence file is published. Citation is requested by the authors.
+  https://github.com/uccollab/AnnoMI
+  Wu, Zixiu; Balloccu, Simone; Kumar, Vivek; Helaoui, Rim; Reiter, Ehud;
+  Reforgiato Recupero, Diego; Riboni, Daniele. "Anno-MI: A Dataset of
+  Expert-Annotated Counselling Dialogues." ICASSP 2022.
+
+--------------------------------------------------------------------------
+iCARE / iHOPE  (17-section format, transcripts, expert gold notes)
+  No licence file is published in the code repository.
+  https://github.com/proadhikary/iCARE
+  Adhikary, Prottay Kumar; Singh, S.; Singh, S.; Sharma, P.; Soni, P.;
+  Choudhary, R.; Saxena, C.; Chauhan, P.; Gupta, Swati Kedia; Deb, K. S.;
+  Singh, S. M.; Chakraborty, Tanmoy. "Clinically Grounded AI-Scribing in
+  Psychotherapy: Benchmarking LLMs Against Expert Documentation in the iCARE
+  Framework." medRxiv 2025.06.25.25330252 (v2, 2026-08-19). CC-BY.
+
+  Because no licence is attached to the data, this repository never vendors,
+  mirrors or republishes it. See docs/datasets.md.
