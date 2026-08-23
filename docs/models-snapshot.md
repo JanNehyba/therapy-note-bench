@@ -98,6 +98,12 @@ have put one model in the leaderboard twice under two vendors' names.
   2026-08-23, but it does not hold across them, so a re-generated note is not
   guaranteed to equal the cached one. This is one more reason the cache is the
   record rather than a convenience.
+- **`gpt-oss-120b` will not write a flat dictionary.** It answered 37 of 50
+  TN-Eval conversations with `Plan` as a nested object; TN-Eval's parser slices
+  to the first closing brace and truncates it. Their repair loop rescued 29,
+  and 8 stayed unparseable after all five attempts. See
+  [limitations.md](limitations.md#coverage-is-bounded) — the model's notes are
+  fine, its output shape is not, and the table has to say so.
 - **Throughput, measured on the first run** (2 models, 3 sessions, 108 calls):
   `deepseek-v4-flash` answered an iCARE section in about 1 s and a SOAP note in
   6 s; `deepseek-v4-flash-thinking` took 9 s and 20 s; `gemma4` took 2 s and

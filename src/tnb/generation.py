@@ -33,7 +33,7 @@ from tnb import __version__
 from tnb.config import REPO_ROOT, Policy
 from tnb.datasets.base import Session, checksums
 from tnb.providers import einfra
-from tnb.tasks import Task
+from tnb.tasks import TASKS, Task
 from tnb.tasks import soap as soap_task
 
 CACHE_DIR = REPO_ROOT / "generations"
@@ -140,7 +140,9 @@ def load_cached(job: Job, policy: Policy) -> dict | None:
     return record
 
 
-def _record(job: Job, policy: Policy, completion: einfra.Completion, when: str) -> dict:
+def _record(
+    job: Job, policy: Policy, completion: einfra.Completion, when: str, prompt: str
+) -> dict:
     record = {
         "harness_version": __version__,
         "provider": policy.provider,
@@ -153,8 +155,8 @@ def _record(job: Job, policy: Policy, completion: einfra.Completion, when: str) 
         "unit_meta": job.unit_meta,
         "generated_at": when,
         "request_sha256": request_digest(job.model_id, job.prompt, policy),
-        "prompt_sha256": hashlib.sha256(job.prompt.encode()).hexdigest(),
-        "prompt_chars": len(job.prompt),
+        "prompt_sha256": hashlib.sha256(prompt.encode()).hexdigest(),
+        "prompt_chars": len(prompt),
         "temperature": policy.generation.temperature,
         "max_tokens": completion.max_tokens or policy.generation.max_tokens,
         "escalated": completion.max_tokens > policy.generation.max_tokens,
@@ -202,27 +204,64 @@ def _needs_a_bigger_budget(record: dict, completion: einfra.Completion, policy: 
     return policy.generation.escalate_max_tokens > completion.max_tokens
 
 
-def run_job(job: Job, policy: Policy, *, force: bool = False) -> Outcome:
-    """Answer one job from cache, or ask the model and file the answer away."""
-    if not force:
-        cached = load_cached(job, policy)
-        if cached is not None:
-            return Outcome(job, "cached", cached)
-
-    completion = einfra.complete(policy, job.model_id, job.prompt)
-    record = _record(job, policy, completion, _now())
+def _ask(job: Job, policy: Policy, prompt: str) -> tuple[einfra.Completion, dict]:
+    """One question, plus the second chance for a model that thought too long."""
+    completion = einfra.complete(policy, job.model_id, prompt)
+    record = _record(job, policy, completion, _now(), prompt)
 
     if _needs_a_bigger_budget(record, completion, policy):
         completion = einfra.complete(
             policy,
             job.model_id,
-            job.prompt,
+            prompt,
             max_tokens=policy.generation.escalate_max_tokens,
         )
-        record = _record(job, policy, completion, _now())
+        record = _record(job, policy, completion, _now(), prompt)
+    return completion, record
+
+
+def run_job(job: Job, policy: Policy, *, force: bool = False) -> Outcome:
+    """Answer one job from cache, or ask the model and file the answer away.
+
+    A SOAP answer that arrives but cannot be parsed is re-asked with TN-Eval's
+    repair sentence appended, up to their five attempts. This is their protocol,
+    not our idea, and it is what a model needs when it writes a perfectly good
+    note with a nested Plan: their parser slices from the first brace to the
+    first closing brace, so nesting truncates the JSON. Fixing that by writing a
+    cleverer parser would measure a different extraction than their numbers did.
+
+    Only a parse failure is re-asked -- an answer arrived and was not a note,
+    a refusal included, which is what TN-Eval's loop retries. A 429, a dropped
+    connection or an empty answer is a different problem, and a repair sentence
+    would not help it.
+    """
+    if not force:
+        cached = load_cached(job, policy)
+        if cached is not None:
+            return Outcome(job, "cached", cached)
+
+    task = TASKS.get(job.task)
+    suffix = task.repair_suffix if task else ""
+    attempts = task.parse_attempts if task and suffix else 1
+
+    for attempt in range(attempts):
+        completion, record = _ask(job, policy, job.prompt + suffix * attempt)
+        record["parse_attempt"] = attempt + 1
+        if record["ok"] or not _is_a_parse_failure(completion, record):
+            break
 
     _write(job.path(), record)
     return Outcome(job, "generated" if record["ok"] else "failed", record)
+
+
+def _is_a_parse_failure(completion: einfra.Completion, record: dict) -> bool:
+    """Did an answer arrive that simply was not shaped like a note?
+
+    True only when the model said something usable-looking and the parser could
+    not find a note in it. An empty answer, a 429 or a dropped connection is a
+    different problem and re-asking with a repair sentence would not help.
+    """
+    return completion.ok and not record["ok"]
 
 
 def run_jobs(

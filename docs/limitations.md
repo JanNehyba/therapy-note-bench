@@ -71,6 +71,20 @@ rubric is not completeness against a reimbursement requirement.
   clinical context. Documentation conventions are not universal.
 - One generation prompt per track, at temperature 0. This measures models under
   one prompting strategy, not their ceiling under prompt engineering.
+- **A model can lose sessions to the output format rather than to the note.**
+  TN-Eval ask for a flat four-key dictionary and recover it by slicing from the
+  first `{` to the first `}`, re-asking up to five times when that fails. On the
+  first full generation run `gpt-oss-120b` answered 37 of 50 conversations with
+  a nested `Plan` (sub-headings and lists), which that slice truncates. The
+  repair loop recovered 29; **8 conversations stayed unrecoverable**, so that
+  model is scored on 42 notes and the other ten on 50.
+
+  The notes themselves were good. What failed was instruction-following on the
+  output shape — which is part of the task as TN-Eval defined it, so it is not
+  patched away with a cleverer parser: doing that would score our extraction
+  rather than theirs. But a lower score for `gpt-oss-120b` partly measures
+  formatting, not clinical content, and **any table showing it must show its
+  session count next to it.**
 
 ## What it is good for
 

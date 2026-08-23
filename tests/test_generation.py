@@ -15,7 +15,7 @@ from tnb import generation
 from tnb.config import GenerationPolicy, Policy
 from tnb.datasets.base import Session, Turn
 from tnb.providers import einfra
-from tnb.tasks import TASKS
+from tnb.tasks import TASKS, soap
 
 POLICY = Policy(
     base_url="https://example.invalid/v1",
@@ -326,10 +326,11 @@ def test_the_bigger_try_happens_once_and_then_stops(budgets):
 
 def test_a_refusal_is_not_retried_with_a_bigger_budget(budgets):
     """Only `length` means the budget was the problem. A model that answered
-    something unusable would just answer it again, more expensively."""
+    something unusable is re-asked TN-Eval's five times, but never at a bigger
+    budget: it had plenty and used it to say no."""
     seen = budgets([_completion("I cannot help with that.")])
     assert generation.run_job(_job(), ESCALATING).status == "failed"
-    assert seen == [4096]
+    assert seen == [4096] * 5
 
 
 def test_the_escalation_budget_is_part_of_the_cache_key(budgets):
@@ -341,3 +342,69 @@ def test_the_escalation_budget_is_part_of_the_cache_key(budgets):
 
     assert generation.run_job(job, ESCALATING).status == "cached"
     assert generation.run_job(job, POLICY).status == "generated"
+
+
+# --- TN-Eval's repair loop -------------------------------------------------
+
+
+@pytest.fixture
+def prompts(monkeypatch):
+    """Record the exact prompt each call was given."""
+    sent: list[str] = []
+
+    def serve(sequence):
+        queue = list(sequence)
+
+        def fake_complete(policy, model_id, prompt, *, max_tokens=None):
+            sent.append(prompt)
+            return queue.pop(0) if queue else sequence[-1]
+
+        monkeypatch.setattr(einfra, "complete", fake_complete)
+        return sent
+
+    return serve
+
+
+NESTED = '{"Subjective": "s", "Objective": "o", "Assessment": "a", "Plan": {"Goals": ["x"]}}'
+
+
+def test_a_nested_plan_is_re_asked_with_tn_evals_repair_sentence(prompts):
+    """gpt-oss-120b writes a good note with Plan as a sub-dictionary. TN-Eval's
+    parser slices to the first closing brace, so it truncates -- and their
+    protocol is to append the repair sentence and ask again, which is what a
+    model needs here. A cleverer parser would measure a different extraction
+    than their published numbers did."""
+    sent = prompts([_completion(NESTED), _completion()])
+    outcome = generation.run_job(_job("gpt-oss-120b"), POLICY)
+
+    assert outcome.status == "generated"
+    assert len(sent) == 2
+    assert sent[1] == sent[0] + soap.REPAIR_SENTENCE
+    assert outcome.record["parse_attempt"] == 2
+
+
+def test_the_repair_loop_stops_where_tn_eval_stops(prompts):
+    sent = prompts([_completion(NESTED)])
+    assert generation.run_job(_job(), POLICY).status == "failed"
+    assert len(sent) == soap.PARSE_ATTEMPTS
+
+
+def test_a_note_that_parses_first_time_is_asked_once(prompts):
+    sent = prompts([_completion()])
+    assert generation.run_job(_job(), POLICY).record["parse_attempt"] == 1
+    assert len(sent) == 1
+
+
+def test_an_endpoint_failure_is_not_re_asked_with_a_repair_sentence(prompts):
+    """A 429 that exhausted its retries did not misunderstand the format."""
+    sent = prompts([_completion("", ok=False, error="HTTP429")])
+    assert generation.run_job(_job(), POLICY).status == "failed"
+    assert len(sent) == 1
+
+
+def test_icare_sections_are_never_re_asked(prompts):
+    """iCARE has no repair loop; inventing one would be our protocol, not theirs."""
+    sent = prompts([_completion("Nil")])
+    jobs = list(generation.build_jobs(["gemma4"], TASKS["icare"], [SESSION]))
+    generation.run_job(jobs[0], POLICY)
+    assert len(sent) == 1

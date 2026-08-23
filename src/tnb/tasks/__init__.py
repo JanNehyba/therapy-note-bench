@@ -39,6 +39,11 @@ class Task:
     calls_per_session: int
     load_sessions: Callable[[int | None], list[Session]]
     build_units: Callable[[Session], list[Unit]]
+    #: Appended and re-asked when an answer arrives but cannot be parsed, as
+    #: many times as :attr:`parse_attempts`. TN-Eval do this; iCARE do not, and
+    #: neither does this harness on its own initiative.
+    repair_suffix: str = ""
+    parse_attempts: int = 1
 
 
 def _soap_units(session: Session) -> list[Unit]:
@@ -80,6 +85,8 @@ TASKS: dict[str, Task] = {
         calls_per_session=1,
         load_sessions=soap.load_sessions,
         build_units=_soap_units,
+        repair_suffix=soap.REPAIR_SENTENCE,
+        parse_attempts=soap.PARSE_ATTEMPTS,
     ),
     icare.NAME: Task(
         name=icare.NAME,
