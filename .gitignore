@@ -11,3 +11,6 @@ __pycache__/
 dist/
 build/
 .DS_Store
+
+# Fixtures are committed; fetched corpora are not.
+!tests/fixtures/

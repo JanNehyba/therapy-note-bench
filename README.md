@@ -113,7 +113,7 @@ and needs a MetaCentrum account or Masaryk University affiliation.
 | Phase | | |
 |---|---|---|
 | 0 | Repository, survey, model discovery | **done** |
-| 1 | Dataset adapters (AnnoMI + iHOPE → common schema) | |
+| 1 | Dataset adapters (AnnoMI + iHOPE → common schema) | **done** |
 | 2 | Generation against every discovered model | |
 | 3 | Scoring: rubric, reference metrics, TRACE, temporal | |
 | 4 | Judge calibration against TN-Eval's human annotators | |

@@ -25,9 +25,36 @@ would be the one avoidable mistake in this project. So we do not.
     https://github.com/uccollab/AnnoMI/raw/refs/heads/main/AnnoMI-full.csv
 
 133 expert-annotated motivational-interviewing transcripts, transcribed from
-public YouTube demonstration videos. TN-Eval uses the **first 50 conversations
-of the high-quality split**; we use the same 50, selected the same way, so our
-numbers line up with theirs.
+public YouTube demonstration videos.
+
+**The 50 conversations are taken from TN-Eval's released ids, not reconstructed
+by a rule.** Their paper describes the set as "the first 50 conversations from
+the high-quality split", but the released ids are
+`0, 1, 2, 3, 5, 6, … 117, 122, 129` — they skip several and run to 129, so
+sorting the high-quality split and slicing the first 50 produces a different set
+and would pair therapist notes with the wrong transcripts. The ids are in the
+data; the loader uses them and raises if AnnoMI cannot supply one.
+
+Two properties of AnnoMI-full that matter to the loader:
+
+- **One row per (utterance, annotator).** Seven of the 133 transcripts are
+  annotated by all ten annotators, so every utterance in them appears ten times.
+  TN-Eval deduplicates before grouping and so do we — otherwise those
+  transcripts would be sent to the model with every line repeated ten times.
+  Transcript 7 is one of the seven and is in the benchmark set.
+- **It has not changed since 2023-03-14.** The only commit ever to touch
+  `AnnoMI-full.csv` predates TN-Eval, so the transcripts we score are the ones
+  they scored. Later commits to the repository touched documentation only.
+
+One unexplained discrepancy, recorded rather than smoothed over: the paper
+reports a median conversation length of 1067 words and 42 turns. Measured over
+the 50 released ids we get **793 words and 48 turns**; over all 110 high-quality
+transcripts, 951 words and 52 turns. Neither matches, and collapsing consecutive
+same-speaker utterances does not close the gap. Since pairing was verified
+independently — a note's vocabulary overlaps its own transcript about twice as
+much as a neighbour's, for 44 of 50 sessions, and the six exceptions are
+near-ties on short notes — the likely explanation is a different definition of
+"word" or "turn" rather than a different corpus.
 
 Cite: Wu, Balloccu, Kumar, Helaoui, Reiter, Reforgiato Recupero, Riboni.
 *Anno-MI: A Dataset of Expert-Annotated Counselling Dialogues.* ICASSP 2022.
