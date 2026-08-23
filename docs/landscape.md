@@ -23,6 +23,13 @@ eighteen months, and neither is an established standard:
 Nobody has re-run either of them on current models. That is the gap this
 repository fills.
 
+Two more corpora from the iCARE group cover the adjacent task of *counseling
+summarization* — **MentalCLOUDS** (191 sessions, JMIR Mental Health 2024) and
+**MEMO** (KDD 2022, released on request) — and a third, **TheraFuse** (IEEE JBHI
+2026), republishes the iHOPE corpus in a more usable form. None of them appears
+in any existing survey of this task. See
+[What the search did turn up](#what-the-search-did-turn-up).
+
 ## iCARE / iHOPE
 
 - Code and data: <https://github.com/proadhikary/iCARE>
@@ -57,12 +64,10 @@ in v2.
 
 **Three caveats that shaped this benchmark's design.**
 
-1. *The repository is a version behind.* Its last commit is 2025-04-28 — before
-   v1 was even posted, and sixteen months before v2. The 174-session corpus with
-   gold notes is there, but the TRACE annotations and the blinded expert-review
-   data behind v2's headline finding are **not public**. Our TRACE
-   implementation is therefore a re-implementation with no human anchor, and is
-   labelled as such everywhere it appears.
+1. *The TRACE annotations are not published anywhere.* This was searched for
+   rather than assumed — see [Where the TRACE data is not](#where-the-trace-data-is-not).
+   Our TRACE implementation is therefore a re-implementation with no human
+   anchor, and is labelled as such everywhere it appears.
 2. *The authors report that automatic metrics disagree with clinical judgement.*
    From the v2 abstract: "clinical preference did not always mirror automatic
    benchmarks, with Mistral, a smaller open model, emerging as a surprise
@@ -76,6 +81,64 @@ in v2.
 The corpus carries **no licence file**. The spreadsheet of published scores
 referenced by the repository README is absent from the tree, so the paper's
 numbers can only be transcribed from the PDF, not re-derived.
+
+### Where the TRACE data is not
+
+The TRACE human ratings are the one artefact that would let an automated TRACE
+scorer be calibrated against clinicians. Searched on 2026-08-23, in this order:
+
+1. **The paper's own Data Availability statement** (v2 full text, JATS XML). It
+   reads: *"All conversation transcripts used in this study and all source code
+   for benchmarking experiments are publicly available in
+   https://github.com/ai4mhx/iCARE (accessed April 26, 2025)."* Transcripts and
+   code — human ratings are not claimed to be published.
+2. **`ai4mhx/iCARE`**, the repository that statement names, is a fork of
+   `proadhikary/iCARE` with identical content: same six commits, same size, last
+   pushed 2025-04-28. Two URLs, one repository.
+3. **All seven repositories of the `ai4mhx` organisation** ("AI for Mental Health
+   Experts", the authors' group, recently rebranded as *Manashi*).
+4. **All 112 repositories of `LCS2-IIITD`**, the group's earlier lab org.
+5. **Hugging Face** — the first author's account holds three datasets, none
+   related; searches for iHOPE, iCARE, MentalCLOUDS and AIIMS return nothing.
+6. **The group's own publication list** (20 entries on their site) — no dataset
+   link for TRACE.
+
+The finding is negative and it is a real finding: the ratings are not public.
+The likely route is a request, which is how this group releases data elsewhere —
+see MEMO below.
+
+### What the search did turn up
+
+Three datasets and one instrument from the same lab, none of which appear in any
+survey of this task:
+
+- **TheraFuse** — [ai4mhx/TheraFuse](https://github.com/ai4mhx/TheraFuse), IEEE
+  Journal of Biomedical and Health Informatics 2026. Its `data/` directory ships
+  `graph_train_aiims.json` and `graph_test_aiims.json`: **134 + 40 = 174
+  sessions**, ids matching the iCARE split directories exactly, each with the
+  dialogue and the gold note already joined. This is the iHOPE corpus in a far
+  more usable form than 174 directories of CSV pairs, published openly with no
+  request needed. One session has an empty summary. Median dialogue 9020
+  characters, median note 1263.
+- **MentalCLOUDS** — *Exploring the Efficacy of LLMs in Summarizing Mental Health
+  Counseling Sessions*, [JMIR Mental Health 2024](https://mental.jmir.org/2024/1/e57306).
+  191 counseling sessions with component-guided gold summaries across three
+  counseling aspects, eleven LLMs benchmarked, expert qualitative assessment.
+  Not on GitHub or Hugging Face.
+- **MEMO** — [LCS2-IIITD/MEMO](https://github.com/LCS2-IIITD/MEMO), KDD 2022. A
+  counseling summarization dataset released **on request**: a consent form plus
+  an email. The repository contains nothing but those instructions. This is the
+  precedent for how the group shares data.
+- **MASES** — *Development of a Standardized Clinician-Oriented Scale for
+  Evaluating AI-Generated Medical Summaries*, Indian Journal of Medical Research
+  2026. A clinician-facing evaluation scale from the same authors, plausibly
+  TRACE's published sibling.
+
+Aspect-based *counseling summarization* (MEMO, MentalCLOUDS) is a near neighbour
+of *note generation in a documentation format*, not the same task: the target is
+a summary organised by counseling component rather than a clinical record
+organised by a documentation standard. They are listed here because any survey
+that misses them is incomplete, not because this benchmark scores on them.
 
 ## TN-Eval
 

@@ -44,12 +44,28 @@ judge against a human.
 
 ### iHOPE (iCARE track)
 
-    https://github.com/proadhikary/iCARE (Data/test/<id>/, instructions.json)
+    https://github.com/ai4mhx/TheraFuse/raw/main/data/graph_test_aiims.json
+    https://github.com/ai4mhx/TheraFuse/raw/main/data/graph_train_aiims.json
+    https://github.com/proadhikary/iCARE (instructions.json)
 
-174 sessions total; we score the 40 held-out test sessions. Each session
-directory holds a transcript CSV and an expert gold-note CSV. The 17 section
+174 sessions total; we score the 40 held-out test sessions. The 17 section
 prompts come from `instructions.json` under `doctors_prompts` and are used
 verbatim.
+
+**The transcripts and gold notes are read from TheraFuse, not from the iCARE
+repository**, even though the iCARE repository is what the paper cites. Both hold
+the same corpus, but TheraFuse ships it as two JSON files with `dialogue` and
+`summary` already joined per session, while iCARE spreads it over 174
+directories of CSV pairs. Verified equivalent on 2026-08-23: 134 train + 40 test
+= 174, and the test ids match the iCARE `Data/test/` directory names exactly.
+
+TheraFuse is *Discourse-Guided Summarisation of Psychotherapy Dialogues via
+Graph-Fused Language Models* (IEEE JBHI 2026), from the same authors. Its
+`graph_*_aiims.json` files also carry discourse graph edges, which this
+benchmark ignores.
+
+Known defect: one of the 174 sessions has an empty gold summary. The loader
+drops it and records the drop rather than scoring a model against nothing.
 
 Cite: Adhikary et al. *Clinically Grounded AI-Scribing in Psychotherapy:
 Benchmarking LLMs Against Expert Documentation in the iCARE Framework.*
@@ -60,20 +76,25 @@ medRxiv 2025.06.25.25330252, v2 (2026-08-19).
 The iCARE repository's last commit is **2025-04-28**. Preprint v2, which
 introduces the name *iHOPE* and the TRACE evaluation framework, is dated
 **2026-08-19** — sixteen months later. The published code and data therefore
-predate the paper that describes them.
+predate the paper that describes them, and v2's Data Availability statement
+still cites the repository "accessed April 26, 2025".
 
 What this means in practice:
 
 - The 174-session corpus with expert gold notes **is** present and matches v2's
   description, so the generation and reference-scoring tracks are sound.
-- The **TRACE annotations are not published**, and neither is the blinded
-  expert-review data behind v2's finding that clinicians preferred a smaller
-  model. Our TRACE scorer is a re-implementation with no human anchor.
-- It has not been confirmed whether the corpus itself changed between v1 and v2.
-  If the authors respond and it did, this file gets updated and affected runs get
-  re-tagged with the new `dataset_revision`.
+- The **TRACE annotations are not published anywhere.** This was established by
+  search, not assumption — see
+  [landscape.md](landscape.md#where-the-trace-data-is-not) for what was checked.
+  Our TRACE scorer is a re-implementation with no human anchor.
+- The corpus counts agree across two independently published copies (iCARE's CSV
+  directories and TheraFuse's JSON), which is weak but real evidence that it did
+  not change between v1 and v2.
 
-An issue has been opened upstream asking about both.
+The authors release data on request elsewhere — MEMO ships nothing but a consent
+form and an email address — so a request is the likely route for the TRACE
+ratings. If they arrive, the TRACE column gets a human anchor and affected runs
+are re-tagged.
 
 ## Ethics and scope
 
