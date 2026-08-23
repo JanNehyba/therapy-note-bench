@@ -8,8 +8,10 @@ note. Both were benchmarked once, on models from 2024 and 2025, and never
 re-run. This repository re-runs them on whatever is deployed today, and does it
 from a button — so the table stays true as models change.
 
-> **Status: scaffolding.** The survey and the design are complete and worth
-> reading. No results have been produced yet. See [Roadmap](#roadmap).
+> **Status: no results yet.** The survey, the design and model discovery are
+> done — 31 ids on e-INFRA reduce to **11 distinct benchmarkable models**, and
+> `glm-5.3` is not among them. Generation and scoring are next.
+> See [Roadmap](#roadmap).
 
 ---
 
@@ -71,6 +73,12 @@ stay available". So there is no hard-coded model list: every run queries
 [`models.yaml`](models.yaml). When `glm-5.2` becomes `glm-5.3`, the next run
 picks it up without anyone editing anything.
 
+Names cannot be trusted either. `command-a` sounds like Cohere Command A and
+returns `gemma4`'s exact output; four other ids turned out to be second names
+for models already in the set. `tnb models --probe` establishes identity by
+asking each model a fixed question and comparing answers, rather than by
+reading its name.
+
 Last captured snapshot: [docs/models-snapshot.md](docs/models-snapshot.md).
 
 ## Running it
@@ -92,6 +100,7 @@ two lines to enable it. Nothing spends anything without a click.
 uv sync --all-groups
 cp .env.example .env      # add EINFRA_API_TOKEN and ANTHROPIC_API_KEY
 make models               # what is deployed right now
+uv run tnb models --probe # which ids are secretly the same model
 make smoke                # 3 sessions x 2 models, under $2
 make bench                # everything
 ```
@@ -103,9 +112,9 @@ and needs a MetaCentrum account or Masaryk University affiliation.
 
 | Phase | | |
 |---|---|---|
-| 0 | Repository, survey, model snapshot | in progress |
+| 0 | Repository, survey, model discovery | **done** |
 | 1 | Dataset adapters (AnnoMI + iHOPE → common schema) | |
-| 2 | e-INFRA provider, model discovery, generation | |
+| 2 | Generation against every discovered model | |
 | 3 | Scoring: rubric, reference metrics, TRACE, temporal | |
 | 4 | Judge calibration against TN-Eval's human annotators | |
 | 5 | Leaderboard generation | |

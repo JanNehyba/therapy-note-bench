@@ -4,55 +4,103 @@ The authoritative list of what can be benchmarked is the live endpoint, not this
 file and not e-INFRA's documentation. This page is a dated record so that a
 result from six months ago can be read in the context of what was deployed then.
 
-Refresh it with:
+Refresh it with `make models`, or:
 
 ```sh
 curl -s -H "Authorization: Bearer $EINFRA_API_TOKEN" \
   https://llm.ai.e-infra.cz/v1/models | jq -r '.data[].id' | sort
 ```
 
-or, once the harness is installed, `make models`.
-
 ---
 
-## 2026-08-23 — not yet captured
+## 2026-08-23 — live capture
 
-**Status: pending an API token.** The live endpoint requires a bearer token from
-<https://chat.ai.e-infra.cz> → Account → API keys, which in turn requires a
-MetaCentrum account or Masaryk University affiliation. Until a run happens, this
-section is empty on purpose rather than filled in from documentation.
+`GET /v1/models` reported **31 ids**, which reduce to **11 distinct
+benchmarkable models**. The other twenty are embedding or speech models,
+duplicates under a second name, or unversioned labels.
 
-For reference only — **this is what the CERIT-SC documentation claimed on
-2026-08-23, and it has not been verified against the endpoint**:
+### Benchmark set
 
-| Model | API name | Size | Note |
-|---|---|---|---|
-| Kimi K3 | `kimi-k3` | 2.8T MoE | multimodal, 1M context |
-| GLM 5.2 | `glm-5.2` | 756B | |
-| GPT-OSS-120B | `gpt-oss-120b` | 120B | |
-| DeepSeek-V4-Flash | `DeepSeek-V4-Flash` | 304B | |
-| Qwen3.5 (int4) | `qwen3.5-int4` | 397B / A17B | |
-| Qwen3.5 122B | `qwen3.5-122b` | 122B / A10B | |
-| Qwen3.8 27B | `qwen3.8-27b` | 27B | multimodal |
-| Mistral Medium 3.5 | `mistral-medium-3.5` | 128B | |
-| Gemma 4 | `gemma4` | 31B | |
-| Whisper Large v3 | `whisper-large-v3` | 1.55B | ASR — excluded by `models.yaml` |
+| Model id | Note |
+|---|---|
+| `deepseek-v4-flash` | 1M input context, 8192 output (the only id publishing metadata) |
+| `deepseek-v4-flash-thinking` | reasoning variant, distinct output |
+| `gemma4` | |
+| `glm-5` | distinct model, not an older label for glm-5.2 |
+| `glm-5.2` | newest GLM deployed |
+| `gpt-oss-120b` | |
+| `kimi-k3` | |
+| `mistral-medium-3.5` | |
+| `qwen3.5-122b` | |
+| `qwen3.5-int4` | |
+| `qwen3.8-27b` | |
 
-Documentation drift is expected and is the reason this benchmark discovers
-models at run time. Treat any mismatch between the table above and the endpoint
-as the table being wrong.
+**There is no `glm-5.3` and no `DeepSeek-V4` proper.** The newest GLM on the
+endpoint is `glm-5.2`; the DeepSeek is `deepseek-v4-flash`. Note also the
+casing: the documentation writes `DeepSeek-V4-Flash`, the endpoint serves
+`deepseek-v4-flash`.
+
+### Excluded, and why
+
+| Id | Reason |
+|---|---|
+| `auto-llm`, `auto-llm-heuristic`, `command-a` | same model as `gemma4` |
+| `deepseek` | same model as `deepseek-v4-flash` |
+| `thinker` | same model as `deepseek-v4-flash-thinking` |
+| `qwen3.5` | same model as `qwen3.5-int4` |
+| `mini` | same model as `gpt-oss-120b` |
+| `glm`, `kimi`, `coder`, `agentic`, `deepseek-thinking` | distinct models, but unversioned names |
+| `whisper-large-v3` | speech recognition |
+| `multilingual-e5-large-instruct`, `mxbai-embed-large:latest`, `nomic-embed-text-v1.5`, `nomic-embed-text-v2-moe`, `qwen3-embedding-4b` | embeddings |
+| `qwen3-reranker-4b` | reranker |
+| `all-proxy-models` | meta-entry; rejects generation with HTTP 400 |
+
+### How the duplicates were established
+
+Not by reading names. The endpoint publishes almost no metadata — of 31 models,
+exactly one (`deepseek-v4-flash`) carried a `mode` field, and none of the others
+reported context limits — so identity had to be measured.
+
+Each id was asked one fixed question at temperature 0 and the answers compared.
+Byte-identical answer means the same model. Reproduce with `tnb models --probe`.
+
+Two things had to be right for this to mean anything:
+
+- **Determinism was checked first.** Three consecutive calls to each of six
+  models returned byte-identical text every time.
+- **The prompt has to allow stylistic freedom.** A first attempt asked for the
+  first eight prime numbers; every model answered `2, 3, 5, 7, 11, 13, 17, 19`,
+  which grouped seven unrelated models together. The current prompt asks for a
+  one-sentence description of a lighthouse at night.
+
+`command-a` is the case that justifies the whole exercise. The name reads like
+Cohere Command A; it returns `gemma4`'s exact output. Trusting the name would
+have put one model in the leaderboard twice under two vendors' names.
+
+### Two operational findings
+
+- **Rate limiting is per API key, not per model.** Six concurrent requests drew
+  HTTP 429 on roughly a third of calls. `models.yaml` now runs at concurrency 2
+  with backoff, and the client retries 429 rather than treating it as failure.
+- **Reasoning models need a generous `max_tokens`.** At 64 tokens, several
+  returned empty `content` because the budget went entirely on thinking — they
+  look broken rather than slow. The generation cap is 4096.
 
 ### Aliases are excluded on purpose
 
-e-INFRA maintains moving aliases (`kimi`, `glm`, `deepseek`) for users who want
+e-INFRA maintains moving aliases (`glm`, `kimi`, `deepseek`) for users who want
 stability of *name*. A benchmark needs stability of *model*, which is the
-opposite property: an alias silently changes what it points at, so a row labelled
-`glm` would mix two different models across runs. `models.yaml` excludes them and
-benchmarks concrete versioned ids only.
+opposite property: an alias silently changes what it points at, so a row
+labelled `glm` would compare two different models across runs.
+
+Note that `glm`, `kimi`, `coder` and `agentic` are **not** duplicates — each
+answered differently from every versioned id. They are real models reachable
+only under a name that will move. They are excluded for that reason, not for
+being copies.
 
 ## Access and terms
 
-- Endpoint: `https://llm.ai.e-infra.cz/v1/` (OpenAI-compatible)
+- Endpoint: `https://llm.ai.e-infra.cz/v1/` (OpenAI-compatible, LiteLLM-fronted)
 - Status page: <https://llm.ai.e-infra.cz/status/>
 - Usage dashboard: <https://llm.ai.e-infra.cz/usage>
 - Inference runs entirely inside e-INFRA CZ infrastructure.
