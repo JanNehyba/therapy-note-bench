@@ -31,8 +31,10 @@ prompts:
 smoke:
 	uv run tnb generate --limit 3 --max-models 2
 
+# Every discovered model, both tracks: ~730 calls each, hours at concurrency 2.
+# Scoring joins this target in phase 3; until then it generates and stops.
 bench:
-	uv run tnb run --max-judge-usd 150
+	uv run tnb generate
 
 report:
 	uv run tnb report

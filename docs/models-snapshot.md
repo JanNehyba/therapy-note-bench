@@ -77,7 +77,7 @@ Two things had to be right for this to mean anything:
 Cohere Command A; it returns `gemma4`'s exact output. Trusting the name would
 have put one model in the leaderboard twice under two vendors' names.
 
-### Two operational findings
+### Operational findings
 
 - **Rate limiting is per API key, not per model.** Six concurrent requests drew
   HTTP 429 on roughly a third of calls. `models.yaml` now runs at concurrency 2
@@ -85,6 +85,24 @@ have put one model in the leaderboard twice under two vendors' names.
 - **Reasoning models need a generous `max_tokens`.** At 64 tokens, several
   returned empty `content` because the budget went entirely on thinking — they
   look broken rather than slow. The generation cap is 4096.
+- **4096 is not always enough either.** In the first generation run,
+  `deepseek-v4-flash-thinking` spent all 4096 tokens on 20k characters of
+  reasoning for one iCARE section and returned no content, with
+  `finish_reason: length`. A call that stops that way without a usable answer is
+  asked once more at `escalate_max_tokens` (16384); the record says which budget
+  produced the answer. Without this the leaderboard would carry our token budget
+  under the model's name.
+- **Temperature 0 is not reproducible across runs.** The same
+  (model, prompt, budget) pair failed on budget in one run and answered within
+  4096 tokens in the next. Determinism held *within* a run when fingerprinting on
+  2026-08-23, but it does not hold across them, so a re-generated note is not
+  guaranteed to equal the cached one. This is one more reason the cache is the
+  record rather than a convenience.
+- **Throughput, measured on the first run** (2 models, 3 sessions, 108 calls):
+  `deepseek-v4-flash` answered an iCARE section in about 1 s and a SOAP note in
+  6 s; `deepseek-v4-flash-thinking` took 9 s and 20 s; `gemma4` took 2 s and
+  29 s. A full pass is 730 calls per model, so budget roughly 20–120 minutes of
+  model time per model, halved by running at concurrency 2.
 
 ### Aliases are excluded on purpose
 
