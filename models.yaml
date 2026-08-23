@@ -1,0 +1,44 @@
+# Model selection policy for the e-INFRA CZ endpoint.
+#
+# This file deliberately contains NO hard-coded model list. The authoritative
+# source is the live endpoint:
+#
+#     GET https://llm.ai.e-infra.cz/v1/models
+#
+# e-INFRA's own documentation states that "no specific model version is
+# guaranteed to stay available", so anything pinned here would rot. The harness
+# discovers what is deployed today and filters it with the rules below. When
+# e-INFRA swaps glm-5.2 for glm-5.3, the leaderboard follows on the next run.
+
+provider: einfra
+base_url_env: EINFRA_BASE_URL
+token_env: EINFRA_API_TOKEN
+
+discovery:
+  # Drop ids matching any of these (case-insensitive regex). These are models
+  # that exist on the endpoint but cannot generate a therapy note.
+  exclude:
+    - "^whisper"          # speech recognition
+    - "embed"             # embedding models
+    - "^nomic-"
+    - "^mxbai-"
+    - "^e5-"
+    - "-rerank"
+
+  # Stable aliases e-INFRA maintains (kimi, glm, deepseek, ...). They are handy
+  # for humans but useless in a leaderboard, because the model behind an alias
+  # changes silently. Exclude them and benchmark concrete versioned ids only.
+  exclude_aliases: true
+
+  # Safety net: refuse to start a full run against more models than this
+  # without an explicit --allow-large flag.
+  max_models: 20
+
+generation:
+  temperature: 0.0
+  max_tokens: 2048
+  # Concurrent requests against e-INFRA. Keep modest; it is a shared academic
+  # service and the quota is yours.
+  concurrency: 4
+  timeout_s: 180
+  retries: 3
