@@ -1,0 +1,83 @@
+# Manual benchmark run.
+#
+# There is deliberately NO schedule. Runs cost e-INFRA quota and judge dollars,
+# so nothing happens without someone pressing the button. To enable a monthly
+# run, uncomment the two `schedule:` lines below.
+#
+# There is also deliberately no `pull_request` trigger: secrets must never be
+# reachable from a fork.
+
+name: Benchmark
+
+on:
+  workflow_dispatch:
+    inputs:
+      models:
+        description: "Comma-separated model ids. Blank = every discovered model."
+        required: false
+        default: ""
+      tracks:
+        description: "Which tracks to run"
+        required: true
+        default: "all"
+        type: choice
+        options: [all, tneval, icare]
+      limit:
+        description: "Sessions per track (blank = all). Use a small number for a cheap check."
+        required: false
+        default: ""
+      max_judge_usd:
+        description: "Hard ceiling on judge spend. The run stops rather than exceeding it."
+        required: true
+        default: "25"
+  # schedule:
+  #   - cron: "0 4 1 * *"   # 04:00 UTC on the 1st of each month
+
+permissions:
+  contents: write
+
+concurrency:
+  group: benchmark
+  cancel-in-progress: false
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install
+        run: uv sync --all-groups
+
+      - name: Record what e-INFRA has deployed right now
+        env:
+          EINFRA_API_TOKEN: ${{ secrets.EINFRA_API_TOKEN }}
+        run: uv run tnb models --write-snapshot
+
+      - name: Run benchmark
+        env:
+          EINFRA_API_TOKEN: ${{ secrets.EINFRA_API_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          uv run tnb run \
+            --tracks "${{ inputs.tracks }}" \
+            --max-judge-usd "${{ inputs.max_judge_usd }}" \
+            ${{ inputs.models && format('--models "{0}"', inputs.models) || '' }} \
+            ${{ inputs.limit && format('--limit {0}', inputs.limit) || '' }}
+
+      - name: Regenerate leaderboard
+        run: uv run tnb report
+
+      - name: Commit results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add results docs/models-snapshot.md README.md
+          git diff --staged --quiet && echo "nothing changed" && exit 0
+          git commit -m "bench: refresh leaderboard ($(date -u +%Y-%m-%d))"
+          git push
