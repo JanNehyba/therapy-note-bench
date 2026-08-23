@@ -61,6 +61,13 @@ generation:
   # Reasoning models spend their budget thinking before they write. At 64 tokens
   # several of them returned empty content and looked broken, so this has room.
   max_tokens: 4096
+  # ...and 4096 is still not always enough. On 2026-08-23,
+  # deepseek-v4-flash-thinking spent all 4096 tokens on 20k characters of
+  # reasoning for one iCARE section and returned no content at all. A call that
+  # stops on `length` without a usable answer is asked once more with this
+  # budget. Both numbers are part of the cache key, so which of the two a note
+  # was written with never changes whether it is reused.
+  escalate_max_tokens: 16384
   # e-INFRA rate-limits per API key. Six concurrent requests produced HTTP 429
   # on roughly a third of calls; two is well-behaved on a shared academic
   # service that is also somebody else's quota.

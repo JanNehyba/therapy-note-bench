@@ -35,6 +35,9 @@ class DiscoveryPolicy:
 class GenerationPolicy:
     temperature: float = 0.0
     max_tokens: int = 2048
+    #: Second-chance budget for a call that stopped on `length` with nothing
+    #: usable in it -- a reasoning model that thought until it ran out.
+    escalate_max_tokens: int = 0
     concurrency: int = 2
     timeout_s: int = 180
     retries: int = 3
@@ -89,6 +92,7 @@ def load_policy(path: Path | None = None) -> Policy:
         generation=GenerationPolicy(
             temperature=float(generation_raw.get("temperature", 0.0)),
             max_tokens=int(generation_raw.get("max_tokens", 2048)),
+            escalate_max_tokens=int(generation_raw.get("escalate_max_tokens", 0)),
             concurrency=int(generation_raw.get("concurrency", 2)),
             timeout_s=int(generation_raw.get("timeout_s", 180)),
             retries=int(generation_raw.get("retries", 3)),

@@ -58,6 +58,10 @@ def request_digest(model_id: str, prompt: str, policy: Policy) -> str:
             "prompt": prompt,
             "temperature": policy.generation.temperature,
             "max_tokens": policy.generation.max_tokens,
+            # The escalation budget belongs to the key even for the many calls
+            # that never use it: it describes the procedure, so a note written
+            # on the second attempt is still a hit on the next run.
+            "escalate_max_tokens": policy.generation.escalate_max_tokens,
         },
         sort_keys=True,
         ensure_ascii=False,
@@ -152,7 +156,8 @@ def _record(job: Job, policy: Policy, completion: einfra.Completion, when: str) 
         "prompt_sha256": hashlib.sha256(job.prompt.encode()).hexdigest(),
         "prompt_chars": len(job.prompt),
         "temperature": policy.generation.temperature,
-        "max_tokens": policy.generation.max_tokens,
+        "max_tokens": completion.max_tokens or policy.generation.max_tokens,
+        "escalated": completion.max_tokens > policy.generation.max_tokens,
         "ok": completion.ok,
         "error": completion.error,
         "finish_reason": completion.finish_reason,
@@ -178,6 +183,25 @@ def _write(path: Path, record: dict) -> None:
     path.write_text(json.dumps(record, indent=2, ensure_ascii=False), encoding="utf-8")
 
 
+def _now() -> str:
+    return dt.datetime.now(dt.UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def _needs_a_bigger_budget(record: dict, completion: einfra.Completion, policy: Policy) -> bool:
+    """Was this a model thinking until it ran out, rather than a model failing?
+
+    Observed on 2026-08-23: deepseek-v4-flash-thinking spent all 4096 tokens on
+    20k characters of reasoning for one iCARE section and returned no content.
+    Scoring that as a zero would measure our token budget, not the model. A call
+    that stopped on `length` without a usable answer gets exactly one more try
+    at ``escalate_max_tokens``; anything else -- a refusal, a 429, a note that
+    parsed -- is left alone.
+    """
+    if record["ok"] or completion.finish_reason != "length":
+        return False
+    return policy.generation.escalate_max_tokens > completion.max_tokens
+
+
 def run_job(job: Job, policy: Policy, *, force: bool = False) -> Outcome:
     """Answer one job from cache, or ask the model and file the answer away."""
     if not force:
@@ -186,8 +210,17 @@ def run_job(job: Job, policy: Policy, *, force: bool = False) -> Outcome:
             return Outcome(job, "cached", cached)
 
     completion = einfra.complete(policy, job.model_id, job.prompt)
-    when = dt.datetime.now(dt.UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
-    record = _record(job, policy, completion, when)
+    record = _record(job, policy, completion, _now())
+
+    if _needs_a_bigger_budget(record, completion, policy):
+        completion = einfra.complete(
+            policy,
+            job.model_id,
+            job.prompt,
+            max_tokens=policy.generation.escalate_max_tokens,
+        )
+        record = _record(job, policy, completion, _now())
+
     _write(job.path(), record)
     return Outcome(job, "generated" if record["ok"] else "failed", record)
 

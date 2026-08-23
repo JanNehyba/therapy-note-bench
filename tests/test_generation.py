@@ -56,8 +56,17 @@ def answers(monkeypatch):
     return serve
 
 
-def _completion(text: str = NOTE, *, ok: bool = True, error: str | None = None):
-    return einfra.Completion(model="gemma4", text=text, ok=ok, error=error, finish_reason="stop")
+def _completion(
+    text: str = NOTE, *, ok: bool = True, error: str | None = None, max_tokens: int = 4096
+):
+    return einfra.Completion(
+        model="gemma4",
+        text=text,
+        ok=ok,
+        max_tokens=max_tokens,
+        error=error,
+        finish_reason="stop",
+    )
 
 
 def _job(model_id: str = "gemma4") -> generation.Job:
@@ -255,3 +264,80 @@ def test_the_pool_never_exceeds_the_configured_concurrency(monkeypatch):
 
     assert len(outcomes) == 8
     assert peak <= POLICY.generation.concurrency
+
+
+# --- running out of budget while thinking ----------------------------------
+
+ESCALATING = Policy(
+    base_url="https://example.invalid/v1",
+    generation=GenerationPolicy(max_tokens=4096, escalate_max_tokens=16384, concurrency=2),
+)
+
+
+def _truncated(reasoning_chars: int = 20820, max_tokens: int = 4096):
+    return einfra.Completion(
+        model="deepseek-v4-flash-thinking",
+        text="",
+        ok=False,
+        max_tokens=max_tokens,
+        finish_reason="length",
+        reasoning_chars=reasoning_chars,
+        error="empty content",
+    )
+
+
+@pytest.fixture
+def budgets(monkeypatch):
+    """Record the token budget each call was given."""
+    seen: list[int] = []
+
+    def serve(sequence):
+        queue = list(sequence)
+
+        def fake_complete(policy, model_id, prompt, *, max_tokens=None):
+            seen.append(max_tokens or policy.generation.max_tokens)
+            return queue.pop(0) if queue else sequence[-1]
+
+        monkeypatch.setattr(einfra, "complete", fake_complete)
+        return seen
+
+    return serve
+
+
+def test_a_model_that_thought_until_it_ran_out_gets_one_bigger_try(budgets):
+    """Observed on the live endpoint: 4096 tokens spent entirely on reasoning,
+    no content. Scoring that as a zero would measure our budget, not the model."""
+    seen = budgets([_truncated(), _completion(max_tokens=16384)])
+    outcome = generation.run_job(_job("deepseek-v4-flash-thinking"), ESCALATING)
+
+    assert seen == [4096, 16384]
+    assert outcome.status == "generated"
+    assert outcome.record["escalated"] is True
+    assert outcome.record["max_tokens"] == 16384
+
+
+def test_the_bigger_try_happens_once_and_then_stops(budgets):
+    seen = budgets([_truncated(), _truncated(max_tokens=16384)])
+    outcome = generation.run_job(_job("deepseek-v4-flash-thinking"), ESCALATING)
+
+    assert seen == [4096, 16384]
+    assert outcome.status == "failed"
+
+
+def test_a_refusal_is_not_retried_with_a_bigger_budget(budgets):
+    """Only `length` means the budget was the problem. A model that answered
+    something unusable would just answer it again, more expensively."""
+    seen = budgets([_completion("I cannot help with that.")])
+    assert generation.run_job(_job(), ESCALATING).status == "failed"
+    assert seen == [4096]
+
+
+def test_the_escalation_budget_is_part_of_the_cache_key(budgets):
+    """A note written on the second attempt must still be a hit next run, and
+    changing the escalation budget must not be silently mixed in."""
+    budgets([_completion()])
+    job = _job()
+    generation.run_job(job, ESCALATING)
+
+    assert generation.run_job(job, ESCALATING).status == "cached"
+    assert generation.run_job(job, POLICY).status == "generated"

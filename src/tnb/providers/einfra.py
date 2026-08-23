@@ -223,6 +223,9 @@ class Completion:
     model: str
     text: str
     ok: bool
+    #: The budget this call was actually given, which is not always the one in
+    #: models.yaml -- see the escalation in :mod:`tnb.generation`.
+    max_tokens: int = 0
     finish_reason: str | None = None
     usage: dict | None = None
     reasoning_chars: int = 0
@@ -231,12 +234,17 @@ class Completion:
     error: str | None = None
 
 
-def complete(policy: Policy, model_id: str, prompt: str) -> Completion:
+def complete(
+    policy: Policy, model_id: str, prompt: str, *, max_tokens: int | None = None
+) -> Completion:
     """Send one prompt as a single user message and return what came back.
 
     Both source papers prompt this way — one user turn, no system message — so
-    the harness does too. Generation parameters come from ``models.yaml``.
+    the harness does too. Generation parameters come from ``models.yaml``;
+    ``max_tokens`` overrides the budget for a second attempt at a call that ran
+    out of it while thinking.
     """
+    budget = max_tokens or policy.generation.max_tokens
     started = time.monotonic()
     try:
         response = _post_with_backoff(
@@ -245,7 +253,7 @@ def complete(policy: Policy, model_id: str, prompt: str) -> Completion:
             {
                 "model": model_id,
                 "messages": [{"role": "user", "content": prompt}],
-                "max_tokens": policy.generation.max_tokens,
+                "max_tokens": budget,
                 "temperature": policy.generation.temperature,
             },
             timeout=policy.generation.timeout_s,
@@ -256,6 +264,7 @@ def complete(policy: Policy, model_id: str, prompt: str) -> Completion:
             model=model_id,
             text="",
             ok=False,
+            max_tokens=budget,
             error=f"{type(error).__name__}: {error}",
             attempts=policy.generation.retries + 1,
             latency_s=time.monotonic() - started,
@@ -267,6 +276,7 @@ def complete(policy: Policy, model_id: str, prompt: str) -> Completion:
             model=model_id,
             text="",
             ok=False,
+            max_tokens=budget,
             error=f"HTTP{response.status_code}: {response.text[:200]}",
             latency_s=latency,
         )
@@ -281,6 +291,7 @@ def complete(policy: Policy, model_id: str, prompt: str) -> Completion:
         model=model_id,
         text=text,
         ok=bool(text),
+        max_tokens=budget,
         finish_reason=choice.get("finish_reason"),
         usage=payload.get("usage"),
         reasoning_chars=len(reasoning),
