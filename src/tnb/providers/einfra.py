@@ -14,6 +14,7 @@ from __future__ import annotations
 import hashlib
 import time
 from collections import defaultdict
+from collections.abc import Callable
 from dataclasses import dataclass
 
 import httpx
@@ -59,24 +60,53 @@ def looks_like_alias(model_id: str) -> bool:
     return not any(char.isdigit() for char in model_id)
 
 
+#: Statuses worth asking again about. 429 is routine — e-INFRA rate-limits per
+#: API key, not per model — and the 5xx family is a shared academic service
+#: having a moment, not a verdict on the request.
+RETRIABLE_STATUS = frozenset({408, 425, 429, 500, 502, 503, 504})
+
+
 def _post_with_backoff(
-    policy: Policy, path: str, payload: dict, *, timeout: float, attempts: int = 5
+    policy: Policy,
+    path: str,
+    payload: dict,
+    *,
+    timeout: float,
+    attempts: int = 5,
+    sleep: Callable[[float], None] | None = None,
 ) -> httpx.Response:
-    """POST, retrying on 429. e-INFRA rate-limits per API key, not per model."""
+    """POST, retrying on 429, on 5xx and on a dropped connection.
+
+    Waits grow as ``backoff_s * attempt``. A generation run makes thousands of
+    calls over hours, so a transient failure has to cost one retry rather than
+    the run: without this, one dropped connection at call 4000 loses the lot.
+    """
+    wait = sleep or time.sleep
     last: httpx.Response | None = None
+    last_error: httpx.TransportError | None = None
+
     for attempt in range(attempts):
-        response = httpx.post(
-            f"{policy.base_url.rstrip('/')}{path}",
-            headers={"Authorization": f"Bearer {policy.token()}"},
-            json=payload,
-            timeout=timeout,
-        )
-        if response.status_code != 429:
+        if attempt:
+            wait(policy.generation.backoff_s * attempt)
+        try:
+            response = httpx.post(
+                f"{policy.base_url.rstrip('/')}{path}",
+                headers={"Authorization": f"Bearer {policy.token()}"},
+                json=payload,
+                timeout=timeout,
+            )
+        except httpx.TransportError as error:  # timeouts, resets, DNS
+            last_error = error
+            continue
+
+        if response.status_code not in RETRIABLE_STATUS:
             return response
         last = response
-        time.sleep(policy.generation.backoff_s * (attempt + 1))
-    assert last is not None
-    return last
+
+    if last is not None:
+        return last
+    assert last_error is not None
+    raise last_error
 
 
 def fetch_models(policy: Policy, *, timeout: float = 30.0) -> list[dict]:
@@ -178,3 +208,82 @@ def group_by_fingerprint(fingerprints: dict[str, str]) -> dict[str, list[str]]:
         canonical = sorted(members, key=lambda m: (looks_like_alias(m), -len(m), m))[0]
         resolved[canonical] = sorted(m for m in members if m != canonical)
     return resolved
+
+
+@dataclass(frozen=True)
+class Completion:
+    """One answer from one model, with enough context to explain a bad one.
+
+    ``text`` is the message content and nothing else. When a reasoning model
+    spends its whole budget thinking, content comes back empty while
+    ``reasoning_chars`` is large — that is a truncated run, not a refusal, and
+    the two have to stay distinguishable in the record.
+    """
+
+    model: str
+    text: str
+    ok: bool
+    finish_reason: str | None = None
+    usage: dict | None = None
+    reasoning_chars: int = 0
+    attempts: int = 1
+    latency_s: float = 0.0
+    error: str | None = None
+
+
+def complete(policy: Policy, model_id: str, prompt: str) -> Completion:
+    """Send one prompt as a single user message and return what came back.
+
+    Both source papers prompt this way — one user turn, no system message — so
+    the harness does too. Generation parameters come from ``models.yaml``.
+    """
+    started = time.monotonic()
+    try:
+        response = _post_with_backoff(
+            policy,
+            "/chat/completions",
+            {
+                "model": model_id,
+                "messages": [{"role": "user", "content": prompt}],
+                "max_tokens": policy.generation.max_tokens,
+                "temperature": policy.generation.temperature,
+            },
+            timeout=policy.generation.timeout_s,
+            attempts=policy.generation.retries + 1,
+        )
+    except httpx.TransportError as error:
+        return Completion(
+            model=model_id,
+            text="",
+            ok=False,
+            error=f"{type(error).__name__}: {error}",
+            attempts=policy.generation.retries + 1,
+            latency_s=time.monotonic() - started,
+        )
+
+    latency = time.monotonic() - started
+    if response.status_code != 200:
+        return Completion(
+            model=model_id,
+            text="",
+            ok=False,
+            error=f"HTTP{response.status_code}: {response.text[:200]}",
+            latency_s=latency,
+        )
+
+    payload = response.json()
+    choice = (payload.get("choices") or [{}])[0]
+    message = choice.get("message") or {}
+    text = (message.get("content") or "").strip()
+    reasoning = message.get("reasoning_content") or ""
+
+    return Completion(
+        model=model_id,
+        text=text,
+        ok=bool(text),
+        finish_reason=choice.get("finish_reason"),
+        usage=payload.get("usage"),
+        reasoning_chars=len(reasoning),
+        latency_s=latency,
+        error=None if text else "empty content",
+    )
