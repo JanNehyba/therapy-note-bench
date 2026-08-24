@@ -219,9 +219,13 @@ def build(rows: list[Row]) -> dict:
         judge = table["versions"]["judge_model"]
         table["subtitle"] = f"scored by {judge}" if judge else "not yet scored"
 
+    # Scored tables lead. A queue of systems nobody has judged yet is context,
+    # not a leaderboard, and printing it above the numbers is how a reader ends
+    # up asking why the benchmark is empty when it is not.
     tables.sort(
         key=lambda table: (
             table["track"] != results.TRACK_TNEVAL,
+            not table["scored"],
             table["versions"]["prompt_version"],
         )
     )

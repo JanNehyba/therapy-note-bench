@@ -292,3 +292,28 @@ def test_the_coverage_row_still_exists_for_a_scored_system():
     """Only the page hides it. results/ is append-only and keeps both."""
     rows = [_row(system_id="gemma4"), _scored("gemma4", 0.57)]
     assert len(results.latest(rows)) == 2
+
+
+def test_a_table_with_nothing_scored_is_not_drawn_as_a_scoreboard():
+    """A grid of em-dashes under headings called COMPLETENESS and CONCISENESS
+    reads as "the benchmark measured nothing". Three separate readers hit that.
+    It is a queue and the page draws it as one."""
+    page = report.render_page(report.build([_row(system_id="kimi-k3")]))
+
+    assert "waiting for the judge" in page
+    assert "renderQueue" in page, "the queue path exists"
+
+
+def test_scored_tables_come_before_queues():
+    """Printing the queue above the numbers is how a reader concludes the
+    benchmark is empty when it is not."""
+    data = report.build([_row(system_id="kimi-k3"), _scored("gemma4", 0.57)])
+    assert [table["scored"] for table in data["tables"]] == [True, False]
+
+
+def test_a_queue_still_reports_the_one_thing_that_is_measured():
+    """How many notes each system produced that the protocol could read is a
+    real measurement, and the only one a queue has."""
+    data = report.build([_row(system_id="gpt-oss-120b", n_sessions_generated=42, n_failed=8)])
+    row = data["tables"][0]["rows"][0]
+    assert (row["n_generated"], row["n_attempted"], row["n_failed"]) == (42, 50, 8)

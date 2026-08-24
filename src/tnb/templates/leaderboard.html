@@ -70,6 +70,8 @@
   }
   ol.sections b { font-weight: 600; }
   ol.sections span { color: var(--muted); }
+  ol.queue { line-height: 1.9; }
+  ol.queue .chip { margin-left: .4rem; }
   ol.sections li { break-inside: avoid; }
   @media (max-width: 40rem) { ol.sections { columns: 1; } }
   .subtitle { font-weight: 400; color: var(--muted); }
@@ -258,7 +260,31 @@ function detailRow(row, table) {
   return `<tr class="detail" hidden><td colspan="${span}">${parts.join('')}</td></tr>`;
 }
 
+function renderQueue(table) {
+  // Every score in this table would be an em-dash. A grid of dashes under
+  // headings called COMPLETENESS and CONCISENESS reads as "the benchmark
+  // measured nothing", when what is true is "the judge has not reached these
+  // yet". So it is drawn as what it is: a waiting list, with the one number
+  // that *is* measured.
+  const items = table.rows.map(row => {
+    const short = row.n_failed
+      ? `<span class="short">${row.n_generated}/${row.n_attempted}</span>`
+      : `${row.n_generated}/${row.n_attempted}`;
+    const chip = row.provider ? `<span class="chip">${row.provider}</span>` : '';
+    return `<li><b>${row.label}</b>${chip} <span>notes written ${short}</span></li>`;
+  }).join('');
+
+  return `<section class="box pending">
+      <h2>${table.title} <span class="subtitle">· waiting for the judge</span></h2>
+      <p class="blurb">${table.rows.length} system(s) have written their notes; nothing has been
+         scored yet, so there is nothing to rank. The count is what has been measured — how many
+         notes each one produced that the protocol could read.</p>
+      <ol class="sections queue">${items}</ol>
+    </section>`;
+}
+
 function renderTable(table, index) {
+  if (!table.scored) return renderQueue(table);
   const versions = table.versions;
   const judge = versions.judge_model
     ? `judge <code>${versions.judge_model}</code> · judge prompt <code>${versions.judge_prompt_version}</code>`
@@ -286,7 +312,6 @@ function renderTable(table, index) {
       <p class="blurb">${table.blurb}</p>
       <p class="versions">harness <code>${versions.harness_version}</code> ·
          prompt <code>${versions.prompt_version}</code> · ${judge}</p>
-      ${table.scored ? '' : '<p class="note">Notes generated, not yet scored. Coverage is real; the score columns fill in when the judge runs.</p>'}
       <div class="scroll"><table data-table="${index}">
         <thead><tr><th data-sort="label">System</th>${head}<th data-sort="coverage">Sessions</th></tr></thead>
         <tbody>${body}</tbody>
