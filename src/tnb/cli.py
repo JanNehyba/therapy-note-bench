@@ -17,7 +17,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from tnb import generation, tasks
+from tnb import generation, results, tasks
 from tnb.config import REPO_ROOT, load_policy
 from tnb.providers.einfra import (
     DiscoveredModel,
@@ -233,6 +233,40 @@ def cmd_generate(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_results(args: argparse.Namespace) -> int:
+    """Turn the generation cache into coverage rows the leaderboard can render.
+
+    These rows carry no scores. They exist so the table's shape -- and the fact
+    that one model lost sessions to its output format rather than to bad notes
+    -- is visible before a single judge call is paid for.
+    """
+    run_id = dt.datetime.now(dt.UTC).strftime("%Y-%m-%dT%H-%MZ")
+    rows = results.index_generations(run_id=run_id)
+    if not rows:
+        print(
+            f"Nothing in {generation.CACHE_DIR.name}/ to index yet. Run 'tnb generate' first.",
+            file=sys.stderr,
+        )
+        return 1
+
+    print(f"{'system':30} {'track':12} {'generated':>9} {'failed':>7}")
+    for row in rows:
+        print(
+            f"{row.system_id:30} {row.track:12} "
+            f"{row.n_sessions_generated:>4}/{row.n_sessions_attempted:<4} {row.n_failed:>7}"
+        )
+        for reason, count in row.failure_reasons.items():
+            print(f"{'':30} {'':12} {count:>9}x {reason}")
+
+    if args.dry_run:
+        print("\nDry run: results/rows.jsonl not touched.")
+        return 0
+
+    path = results.append(rows)
+    print(f"\nAppended {len(rows)} rows to {path.relative_to(REPO_ROOT)}.")
+    return 0
+
+
 def cmd_not_implemented(args: argparse.Namespace) -> int:
     print(
         f"'tnb {args.command}' is not implemented yet — see the roadmap in README.md.",
@@ -295,6 +329,17 @@ def build_parser() -> argparse.ArgumentParser:
         help="proceed even when more models are discovered than models.yaml allows",
     )
     generate.set_defaults(func=cmd_generate)
+
+    results_parser = subparsers.add_parser(
+        "results", help="record what has been generated as leaderboard rows"
+    )
+    results_parser.add_argument(
+        "action", choices=["index"], help="index: walk the generation cache and append rows"
+    )
+    results_parser.add_argument(
+        "--dry-run", action="store_true", help="print the rows without appending them"
+    )
+    results_parser.set_defaults(func=cmd_results)
 
     for name, help_text in (
         ("run", "generate and score notes end to end (phases 2-4)"),
