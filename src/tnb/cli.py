@@ -687,8 +687,11 @@ def build_parser() -> argparse.ArgumentParser:
     score.add_argument(
         "--max-judge-usd",
         type=float,
-        default=5.0,
-        help="hard ceiling; the run stops rather than exceeding it",
+        default=250.0,
+        # A runaway guard, not a budget. A full pass over both tracks is on the
+        # order of $40; this stops a loop that has gone wrong, and is set well
+        # above any run anyone means to start so that it never interrupts one.
+        help="runaway guard; the run stops rather than exceeding it",
     )
     score.add_argument("--force", action="store_true", help="re-ask cached questions")
     score.add_argument(
