@@ -105,10 +105,26 @@ counselling video, and the gold notes show it. Across the 40 held-out sessions:
 | Clinical identifiers | 36 of 40 |
 
 **Only 46% of the form is filled in at all** — 316 of 17 x 40 fields — and one
-section was never filled in once. (An earlier revision of this page said 60%:
-it counted a field only in the notes that mentioned its label, so a field a note
-omitted entirely was left out of the denominator instead of counted as
-unanswered. The corrected figure is lower.) Since the protocol's instruction is to write `Nil` when the transcript
+section was never filled in once.
+
+The denominator was checked rather than assumed, because it decides the number.
+An earlier revision said 60%: it counted a field only in the notes that printed
+its label, so a field a note omitted entirely fell out of the denominator
+instead of counting as unanswered. Three things settle it:
+
+- **The label matcher is not the problem.** Every label in every gold note maps
+  to one of the 17 fields; there are zero unrecognised labels, so a field that
+  is missing is genuinely absent from the text.
+- **The absences are scattered, not truncated.** Thirteen of the seventeen
+  fields go missing in some notes; the four that never do — presenting
+  complaints, mental status, issues discussed, clinical diagnosis — are exactly
+  the four that are almost always filled. The annotators dropped the row when
+  they had nothing to write, where others wrote `Nil`. Both mean the same thing.
+- **The two readings can be told apart, and they agree.** Twenty-two of the 40
+  notes carry all seventeen rows, so every field was demonstrably presented in
+  them. Their fill rate is **44%** — the same as the 46% measured over all forty
+  against a denominator of 17 x 40. If an omitted row meant "not asked", the
+  complete notes would score far higher. They do not. Since the protocol's instruction is to write `Nil` when the transcript
 does not say, a model can score well on those sections by staying quiet — and a
 model that tries to be helpful is penalised. Read the iCARE numbers as
 "fills the form correctly, including knowing when not to", not as "writes a good
