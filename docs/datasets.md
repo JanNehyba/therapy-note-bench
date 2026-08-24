@@ -94,6 +94,19 @@ benchmark ignores.
 Known defect: one of the 174 sessions has an empty gold summary. The loader
 drops it and records the drop rather than scoring a model against nothing.
 
+**The sessions are not Indian; the note format is.** This was checked in the
+data on 2026-08-24 rather than taken from the paper. Across the 40 test
+sessions, the strings `AIIMS`, `OPD`, `Delhi` and `India` appear **zero times**,
+and every patient name is Western — Sherry, Jessica, Sam, Judy, Sarah, Tim,
+Emma, Tommy. (One apparent hit for `Rs.` was `Dr. Evers.`) The transcripts are
+the same kind of published counselling demonstration as AnnoMI.
+
+What is Indian is the **form** — 17 fields including Hospital ID, bed number,
+OPD/inpatient/telepsychiatry status — and the clinicians who filled it in. The
+benchmark therefore measures models filling an Indian hospital intake form from
+a Western demonstration video, and that mismatch is visible in the gold notes
+themselves: see [limitations.md](limitations.md#the-form-does-not-fit-the-material).
+
 Cite: Adhikary et al. *Clinically Grounded AI-Scribing in Psychotherapy:
 Benchmarking LLMs Against Expert Documentation in the iCARE Framework.*
 medRxiv 2025.06.25.25330252, v2 (2026-08-19).

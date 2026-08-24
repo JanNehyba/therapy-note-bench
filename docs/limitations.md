@@ -67,8 +67,9 @@ rubric is not completeness against a reimbursement requirement.
 - Motivational interviewing (AnnoMI) and the HOPE demonstration corpus are two
   narrow slices of psychotherapy. No CBT-specific, DBT-specific, psychodynamic
   or family-therapy corpus with gold notes exists publicly.
-- iHOPE's expert notes come from a single institution (AIIMS Delhi) in an Indian
-  clinical context. Documentation conventions are not universal.
+- iHOPE's expert notes were written at a single institution (AIIMS Delhi).
+  Documentation conventions are not universal — and see below: the sessions
+  those notes describe are not Indian, only the form is.
 - One generation prompt per track, at temperature 0. This measures models under
   one prompting strategy, not their ceiling under prompt engineering.
 - **A model can lose sessions to the output format rather than to the note.**
@@ -85,6 +86,32 @@ rubric is not completeness against a reimbursement requirement.
   rather than theirs. But a lower score for `gpt-oss-120b` partly measures
   formatting, not clinical content, and **any table showing it must show its
   session count next to it.**
+
+## The form does not fit the material
+
+The iCARE note is a 17-field clinical form — hospital ID, bed number,
+OPD/inpatient/telepsychiatry status, referring clinician — and the sessions it
+is filled in from are published counselling demonstrations, checked in the data
+and not Indian in any respect (see
+[datasets.md](datasets.md)). Most of those fields have no answer in a YouTube
+counselling video, and the gold notes show it. Across the 40 held-out sessions:
+
+| Section | Blank in the expert's own note |
+|---|---|
+| Reflections by the therapist | **22 of 22** |
+| Referral information | 22 of 24 |
+| Crisis markers | 20 of 23 |
+| Assessments | 19 of 22 |
+| Clinical identifiers | 18 of 22 |
+
+**40% of all filled-in fields are `Nil`**, and one section was never filled in
+once. Since the protocol's instruction is to write `Nil` when the transcript
+does not say, a model can score well on those sections by staying quiet — and a
+model that tries to be helpful is penalised. Read the iCARE numbers as
+"fills the form correctly, including knowing when not to", not as "writes a good
+clinical note". The sections that carry real signal are the ones the transcripts
+can actually answer: presenting complaints, mental status, and what was
+discussed, which the experts filled in 37, 39 and 39 times out of 40.
 
 ## A rubric rewards coverage, not judgement
 
