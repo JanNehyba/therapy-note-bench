@@ -86,6 +86,19 @@ rubric is not completeness against a reimbursement requirement.
   formatting, not clinical content, and **any table showing it must show its
   session count next to it.**
 
+## A rubric rewards coverage, not judgement
+
+The first scored run put both 2025 models **above** the therapist on rubric
+completeness — 0.45 and 0.41 against 0.34 — and above on conciseness and
+faithfulness too. TN-Eval reported the same direction from blinded expert
+comparison, so this is a reproduction, not an anomaly.
+
+It does not mean a model writes a better clinical note than a therapist. It
+means a model is better at covering a checklist. A therapist writes what matters
+for the next session and leaves out what does not; the rubric counts what is
+present and cannot see why something was left out. Quote the number with that
+sentence attached, or do not quote it.
+
 ## What it is good for
 
 Tracking, over time and across model releases, whether a given model can turn a

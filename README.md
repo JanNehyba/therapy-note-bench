@@ -50,7 +50,7 @@ published numbers: **<https://jannehyba.github.io/therapy-note-bench/>**
 | `deepseek-v4-flash` | — | — | — | — | 3/3 |
 | `deepseek-v4-flash-thinking` | — | — | — | — | 3/3 |
 
-*Notes are generated; no scores yet. The judge runs in phase 3 and this table fills in then.* See the [full leaderboard](https://jannehyba.github.io/therapy-note-bench/) for per-section detail, the reference systems and the published numbers.
+See the [full leaderboard](https://jannehyba.github.io/therapy-note-bench/) for per-section detail, the reference systems and the published numbers.
 <!-- LEADERBOARD:END -->
 
 Numbers are only ever combined across runs that agree on harness version,
@@ -61,9 +61,18 @@ starts a new table rather than rewriting the old one — see
 ## Judge calibration
 
 <!-- CALIBRATION:BEGIN -->
-*Not yet measured.* Before any leaderboard number is published, the judge is
-scored against the two human annotators TN-Eval released, and the agreement
-figures appear here — including if they are bad.
+Judge **`gemini-2.5-pro`** (prompts `tneval-rubric-v1`) against the two therapists TN-Eval had rate the same notes.
+
+| Measure | Statistic | Judge vs therapist | Therapist vs therapist | n |
+|---|---|---|---|---|
+| rubric completeness | Cohen's kappa | 0.58 | 0.50 | 3450 |
+| likert completeness | Spearman rho | 0.32 | 0.13 | 600 |
+| likert conciseness | Spearman rho | 0.03 | 0.19 | 600 |
+| likert faithfulness | Spearman rho | 0.06 | 0.18 | 600 |
+
+**The right-hand column is the ceiling, not a target to beat.** Two trained therapists disagree with each other about these notes; a judge that agrees with a therapist as often as the other therapist does has done as well as the task allows.
+
+The judge reproduces TN-Eval's central finding: criterion checklists agree far better than 1–5 scales. That is why the leaderboard ranks on the rubric and reports the Likert columns with a caveat.
 <!-- CALIBRATION:END -->
 
 ---
