@@ -6,17 +6,35 @@
 no annotation is committed. `data/` is in `.gitignore`. Every dataset is fetched
 from its original source at run time, checksummed, and cited.
 
-This is not caution for its own sake. Of the three upstream sources, **two
-publish no licence at all**:
+This is not caution for its own sake. Checked repository by repository on
+2026-08-24 — the GitHub licence field, the file tree, and the README of each:
 
-| Source | Licence | What we do |
-|---|---|---|
-| TN-Eval code + rubric + annotations | Apache-2.0 | Reuse with attribution in `NOTICE` |
-| AnnoMI transcripts | **none published**, citation requested | Fetch at run time, cite, never mirror |
-| iCARE / iHOPE transcripts + gold notes | **none published** | Fetch at run time, cite, never mirror |
+| Source | What we take | `LICENSE` file | Stated elsewhere |
+|---|---|---|---|
+| `amazon-science/TN-Eval` | SOAP prompt, scoring prompts, 23-item rubric | **Apache-2.0** | — |
+| `amazon-science/TN-Eval-Data` | 150 notes, ratings from 2 annotators | **none** | README says only "data for the TN-Eval project" |
+| `uccollab/AnnoMI` | 133 transcripts | **none** | "we release AnnoMI … to benefit research community"; citation requested |
+| `proadhikary/iCARE` | the 17 section instructions | **none** | nothing at all |
+| `ai4mhx/TheraFuse` | iHOPE transcripts and gold notes | **none** | an **MIT badge** in the README |
+| medRxiv 2025.06.25.25330252 | citation only | — | **CC-BY** (confirmed via the medRxiv API) |
 
-Publishing a public repository that mirrors unlicensed clinical-adjacent data
-would be the one avoidable mistake in this project. So we do not.
+Two corrections to what this page used to say:
+
+- **TN-Eval's *data* is not Apache-2.0.** The licence is on the code repository.
+  The annotations we calibrate the judge against live in a separate repository
+  with no licence file and no statement in its README. That was written here as
+  a fact when it was an assumption.
+- **TheraFuse displays an MIT badge**, which is the only positive licence
+  signal anywhere on the iHOPE side. It is weak in two ways: there is no
+  `LICENSE` file behind the badge, and a badge on a code repository conventionally
+  covers the code. The corpus was collected at AIIMS and TheraFuse redistributes
+  it; nobody can license somebody else's data under MIT.
+
+The rule does not change, and the reason for it gets stronger: publishing a
+public repository that mirrors unlicensed clinical-adjacent data would be the one
+avoidable mistake in this project. So we do not. Prompts we reproduce in source
+are Apache-2.0 (TN-Eval); the iCARE instructions are fetched at run time and this
+repository shows only field names.
 
 ## What gets fetched, and from where
 
