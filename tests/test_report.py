@@ -233,3 +233,33 @@ def test_the_json_is_the_only_thing_a_mirror_would_need():
     assert table["versions"]["judge_model"] == "claude-opus-5"
     assert table["versions"]["prompt_version"] == "tneval-soap-v1"
     assert table["rows"][0]["n_attempted"] == 50
+
+
+# --- provenance the reader needs before the numbers -------------------------
+
+
+def test_the_page_carries_the_licence_of_every_input():
+    """One of the five inputs has a licence. A reader deciding whether to reuse
+    any of this needs that before the scores, not in a file they never open."""
+    data = report.build([_row()])
+    sources = {entry["source"] for entry in data["licences"]}
+
+    assert {"TN-Eval (code)", "TN-Eval-Data", "AnnoMI", "iCARE", "TheraFuse"} == sources
+    licensed = [e for e in data["licences"] if e["licence"] == "Apache-2.0"]
+    assert len(licensed) == 1, "only the TN-Eval code repository carries one"
+
+
+def test_every_icare_section_is_defined_not_just_named():
+    """A reader who has never seen the form cannot judge a score on it."""
+    sections = report.protocol()["icare_sections"]
+    assert len(sections) == 17
+    assert all(len(s["description"]) > 30 for s in sections)
+    assert [s["number"] for s in sections if s["temporal"]] == [5, 17]
+
+
+def test_the_section_descriptions_are_ours_not_upstreams():
+    """iCARE publishes no licence, so the page describes the fields in its own
+    words and never reproduces their instruction text."""
+    joined = " ".join(s["description"] for s in report.protocol()["icare_sections"])
+    assert "helpful mental health assistant" not in joined
+    assert "###Dialog###" not in joined

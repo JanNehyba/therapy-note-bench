@@ -19,7 +19,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from tnb import results
+from tnb import corpus, results
 from tnb.config import REPO_ROOT
 from tnb.results import Row
 from tnb.scoring import tneval as rubric
@@ -76,6 +76,61 @@ TRACK_BLURBS = {
 #: Order the sections of a row's breakdown so a reader sees SOAP in SOAP order
 #: rather than alphabetically.
 SECTION_ORDER = ("subjective", "objective", "assessment", "plan")
+
+#: Where every input comes from and what its terms are, checked repository by
+#: repository on 2026-08-24 rather than assumed. Published on the page because a
+#: reader deciding whether to reuse any of this needs it before the numbers.
+LICENCES = [
+    {
+        "source": "TN-Eval (code)",
+        "url": "https://github.com/amazon-science/TN-Eval",
+        "used_for": "SOAP prompt, the five scoring prompts, the 23-item rubric",
+        "licence": "Apache-2.0",
+        "note": "Reproduced verbatim in this repository, with attribution in NOTICE.",
+    },
+    {
+        "source": "TN-Eval-Data",
+        "url": "https://github.com/amazon-science/TN-Eval-Data",
+        "used_for": "150 notes and the ratings of two human annotators",
+        "licence": "none published",
+        "note": (
+            "The Apache licence is on the code repository, not this one. Fetched at run "
+            "time, never"
+            "redistributed."
+        ),
+    },
+    {
+        "source": "AnnoMI",
+        "url": "https://github.com/uccollab/AnnoMI",
+        "used_for": "the 133 transcripts, 50 of which are scored",
+        "licence": "none published",
+        "note": (
+            "Released \u201cto benefit research community\u201d, with a citation "
+            "requested. Fetched"
+            "at run time."
+        ),
+    },
+    {
+        "source": "iCARE",
+        "url": "https://github.com/proadhikary/iCARE",
+        "used_for": "the 17 section instructions",
+        "licence": "none published",
+        "note": (
+            "No licence file and no statement of terms. The instructions are fetched at run time "
+            "and never shown here."
+        ),
+    },
+    {
+        "source": "TheraFuse",
+        "url": "https://github.com/ai4mhx/TheraFuse",
+        "used_for": "the iHOPE transcripts and expert notes",
+        "licence": "MIT badge, no LICENSE file",
+        "note": (
+            "A badge on a code repository, for a corpus collected elsewhere. Treated as no licence "
+            "for the data."
+        ),
+    },
+]
 
 
 def _sort_key(row: Row, track: str):
@@ -145,6 +200,8 @@ def build(rows: list[Row]) -> dict:
     return {
         "tables": tables,
         "protocol": protocol(),
+        "corpus": corpus.load_or_build(),
+        "licences": LICENCES,
         "generated_from": str(results.ROWS_PATH.name),
     }
 
@@ -178,9 +235,10 @@ def protocol() -> dict:
         {
             "number": number,
             "title": title,
+            "description": description,
             "temporal": number in ihope_temporal(),
         }
-        for number, title in enumerate(icare.SECTION_TITLES, start=1)
+        for number, (title, description) in enumerate(icare.SECTIONS, start=1)
     ]
 
     return {

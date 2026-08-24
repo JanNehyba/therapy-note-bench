@@ -58,6 +58,9 @@ select = ["E", "F", "I", "UP", "B", "SIM"]
 # Tests pin their sha256.
 "src/tnb/tasks/soap.py" = ["E501"]
 "src/tnb/scoring/tneval.py" = ["E501"]
+# One field description per line reads better than a rewrapped paragraph, and
+# these are prose for the page rather than code.
+"src/tnb/tasks/icare.py" = ["E501"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

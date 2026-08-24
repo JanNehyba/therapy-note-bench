@@ -349,3 +349,48 @@ def test_a_partial_scoring_run_does_not_look_complete():
     )
     assert (row.n_sessions_scored, row.n_sessions_attempted) == (1, 50)
     assert row.n_failed == 49
+
+
+# --- what the corpus actually contains --------------------------------------
+
+
+def test_a_gold_note_field_is_matched_to_exactly_one_section(tmp_path):
+    """ "Psychotherapy type" and "Psychotherapy technique" share a long prefix.
+    A loose match credited one field with the other's answers, and the profile
+    reported 41 of 58 for a 40-session corpus."""
+    from tnb import corpus
+
+    assert corpus._match_section("Psychotherapy Type") == 10
+    assert corpus._match_section("Psychotherapy Technique ") == 11
+    assert corpus._match_section("Psychotherapy") is None, "ambiguous counts for nobody"
+
+
+def test_nil_is_read_as_an_empty_field(tmp_path):
+    """The protocol asks for "Nil" when the transcript does not say, so a note
+    full of Nil is a note full of blanks -- and the page has to show that."""
+    from tnb import corpus
+
+    note = " ; ".join(
+        [
+            "Patient Particulars: Name tim; sex- male",
+            "Clinical Identifiers: Nil",
+            "Crisis Markers: nil",
+            "Action Plan : ",
+        ]
+    )
+    path = tmp_path / "ihope_test.json"
+    path.write_text(json.dumps([{"id": "1", "summary": note, "dialogue": ""}]), encoding="utf-8")
+
+    profile = {section.number: section for section in corpus.profile_ihope(path)}
+    assert profile[1].filled == 1
+    assert profile[2].filled == 0 and profile[2].total == 1
+    assert profile[8].filled == 0, "lower-case nil counts as empty too"
+    assert profile[16].filled == 0, "so does an empty value"
+
+
+def test_no_corpus_means_no_profile_rather_than_zeros(tmp_path):
+    """Publishing 0% filled because the corpus was never downloaded would be a
+    claim about the data instead of a statement about this machine."""
+    from tnb import corpus
+
+    assert corpus.profile_ihope(tmp_path / "absent.json") is None

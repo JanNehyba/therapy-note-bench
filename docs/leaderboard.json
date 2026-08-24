@@ -152,7 +152,232 @@
     ],
     "rubric_beats_likert": true
   },
+  "corpus": {
+    "datasets": {
+      "icare": {
+        "note_words": {
+          "max": 346,
+          "median": 164,
+          "min": 108,
+          "n": 40
+        },
+        "sessions": 40,
+        "turns": {
+          "max": 419,
+          "median": 118,
+          "min": 44,
+          "n": 40
+        },
+        "words": {
+          "max": 3228,
+          "median": 1033,
+          "min": 411,
+          "n": 40
+        }
+      },
+      "tneval": {
+        "note_words": {
+          "max": 294,
+          "median": 169,
+          "min": 51,
+          "n": 50
+        },
+        "sessions": 50,
+        "turns": {
+          "max": 203,
+          "median": 48,
+          "min": 13,
+          "n": 50
+        },
+        "words": {
+          "max": 2226,
+          "median": 794,
+          "min": 162,
+          "n": 50
+        }
+      }
+    },
+    "fields_filled": 316,
+    "fields_total": 524,
+    "fill_rate": 0.6031,
+    "sections": [
+      {
+        "filled": 34,
+        "number": 1,
+        "rate": 0.8947,
+        "temporal": false,
+        "title": "Patient particulars",
+        "total": 38
+      },
+      {
+        "filled": 4,
+        "number": 2,
+        "rate": 0.1818,
+        "temporal": false,
+        "title": "Clinical identifiers",
+        "total": 22
+      },
+      {
+        "filled": 2,
+        "number": 3,
+        "rate": 0.0833,
+        "temporal": false,
+        "title": "Referral information",
+        "total": 24
+      },
+      {
+        "filled": 15,
+        "number": 4,
+        "rate": 0.4839,
+        "temporal": false,
+        "title": "Therapist information",
+        "total": 31
+      },
+      {
+        "filled": 34,
+        "number": 5,
+        "rate": 0.8718,
+        "temporal": true,
+        "title": "Past session information",
+        "total": 39
+      },
+      {
+        "filled": 37,
+        "number": 6,
+        "rate": 0.925,
+        "temporal": false,
+        "title": "Presenting complaints (symptoms)",
+        "total": 40
+      },
+      {
+        "filled": 17,
+        "number": 7,
+        "rate": 0.68,
+        "temporal": false,
+        "title": "History",
+        "total": 25
+      },
+      {
+        "filled": 3,
+        "number": 8,
+        "rate": 0.1304,
+        "temporal": false,
+        "title": "Crisis markers",
+        "total": 23
+      },
+      {
+        "filled": 39,
+        "number": 9,
+        "rate": 0.975,
+        "temporal": false,
+        "title": "Current mental status examination",
+        "total": 40
+      },
+      {
+        "filled": 20,
+        "number": 10,
+        "rate": 0.6897,
+        "temporal": false,
+        "title": "Psychotherapy type",
+        "total": 29
+      },
+      {
+        "filled": 21,
+        "number": 11,
+        "rate": 0.7241,
+        "temporal": false,
+        "title": "Psychotherapy technique",
+        "total": 29
+      },
+      {
+        "filled": 3,
+        "number": 12,
+        "rate": 0.1364,
+        "temporal": false,
+        "title": "Assessments",
+        "total": 22
+      },
+      {
+        "filled": 39,
+        "number": 13,
+        "rate": 0.975,
+        "temporal": false,
+        "title": "Issues discussed in current session",
+        "total": 40
+      },
+      {
+        "filled": 0,
+        "number": 14,
+        "rate": 0.0,
+        "temporal": false,
+        "title": "Reflections by the therapist",
+        "total": 22
+      },
+      {
+        "filled": 21,
+        "number": 15,
+        "rate": 0.525,
+        "temporal": false,
+        "title": "Clinical diagnosis by reviewer",
+        "total": 40
+      },
+      {
+        "filled": 16,
+        "number": 16,
+        "rate": 0.5,
+        "temporal": false,
+        "title": "Action plan",
+        "total": 32
+      },
+      {
+        "filled": 11,
+        "number": 17,
+        "rate": 0.3929,
+        "temporal": true,
+        "title": "Next session details",
+        "total": 28
+      }
+    ],
+    "sessions": 40
+  },
   "generated_from": "rows.jsonl",
+  "licences": [
+    {
+      "licence": "Apache-2.0",
+      "note": "Reproduced verbatim in this repository, with attribution in NOTICE.",
+      "source": "TN-Eval (code)",
+      "url": "https://github.com/amazon-science/TN-Eval",
+      "used_for": "SOAP prompt, the five scoring prompts, the 23-item rubric"
+    },
+    {
+      "licence": "none published",
+      "note": "The Apache licence is on the code repository, not this one. Fetched at run time, neverredistributed.",
+      "source": "TN-Eval-Data",
+      "url": "https://github.com/amazon-science/TN-Eval-Data",
+      "used_for": "150 notes and the ratings of two human annotators"
+    },
+    {
+      "licence": "none published",
+      "note": "Released “to benefit research community”, with a citation requested. Fetchedat run time.",
+      "source": "AnnoMI",
+      "url": "https://github.com/uccollab/AnnoMI",
+      "used_for": "the 133 transcripts, 50 of which are scored"
+    },
+    {
+      "licence": "none published",
+      "note": "No licence file and no statement of terms. The instructions are fetched at run time and never shown here.",
+      "source": "iCARE",
+      "url": "https://github.com/proadhikary/iCARE",
+      "used_for": "the 17 section instructions"
+    },
+    {
+      "licence": "MIT badge, no LICENSE file",
+      "note": "A badge on a code repository, for a corpus collected elsewhere. Treated as no licence for the data.",
+      "source": "TheraFuse",
+      "url": "https://github.com/ai4mhx/TheraFuse",
+      "used_for": "the iHOPE transcripts and expert notes"
+    }
+  ],
   "protocol": {
     "criteria": [
       {
@@ -296,86 +521,103 @@
     ],
     "icare_sections": [
       {
+        "description": "Name, age, sex, marital status, education, where they live, contact details, and who came with them.",
         "number": 1,
         "temporal": false,
         "title": "Patient particulars"
       },
       {
+        "description": "Hospital and its id, whether this is outpatient, inpatient, telepsychiatry or clinic, room and bed number, date of assessment.",
         "number": 2,
         "temporal": false,
         "title": "Clinical identifiers"
       },
       {
+        "description": "Who sent the patient here and why -- an earlier clinician or hospital, or a school, workplace, legal or administrative route.",
         "number": 3,
         "temporal": false,
         "title": "Referral information"
       },
       {
+        "description": "The clinician seeing the patient now, and their hospital and department.",
         "number": 4,
         "temporal": false,
         "title": "Therapist information"
       },
       {
+        "description": "What kind of session this is -- intake, assessment, follow-up -- and what happened in the sessions before it.",
         "number": 5,
         "temporal": true,
         "title": "Past session information"
       },
       {
+        "description": "The symptoms the patient reports, each with how long it has been going on.",
         "number": 6,
         "temporal": false,
         "title": "Presenting complaints (symptoms)"
       },
       {
+        "description": "Relevant background: earlier illness and treatment, family history, personal history.",
         "number": 7,
         "temporal": false,
         "title": "History"
       },
       {
+        "description": "Risk of harm to self or others: suicidal thoughts with their duration, frequency and severity, and how the patient copes with them.",
         "number": 8,
         "temporal": false,
         "title": "Crisis markers"
       },
       {
+        "description": "What the clinician observes in the room: appearance, behaviour, mood, affect, speech, thought content.",
         "number": 9,
         "temporal": false,
         "title": "Current mental status examination"
       },
       {
+        "description": "Which school of therapy is being used -- dynamic, cognitive, behavioural, exposure, and so on.",
         "number": 10,
         "temporal": false,
         "title": "Psychotherapy type"
       },
       {
+        "description": "The specific techniques used this session: psychoeducation, reflective listening, behavioural activation, thought challenging, journaling.",
         "number": 11,
         "temporal": false,
         "title": "Psychotherapy technique"
       },
       {
+        "description": "Any scale or test administered -- IQ, personality, disability, projective.",
         "number": 12,
         "temporal": false,
         "title": "Assessments"
       },
       {
+        "description": "What the session was actually about.",
         "number": 13,
         "temporal": false,
         "title": "Issues discussed in current session"
       },
       {
+        "description": "What the therapist thought about the session afterwards.",
         "number": 14,
         "temporal": false,
         "title": "Reflections by the therapist"
       },
       {
+        "description": "The diagnosis the reviewing clinician assigns.",
         "number": 15,
         "temporal": false,
         "title": "Clinical diagnosis by reviewer"
       },
       {
+        "description": "What is recommended for the patient from here.",
         "number": 16,
         "temporal": false,
         "title": "Action plan"
       },
       {
+        "description": "When the next session is and what it will cover.",
         "number": 17,
         "temporal": true,
         "title": "Next session details"

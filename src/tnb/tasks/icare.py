@@ -64,32 +64,71 @@ class SectionPrompt:
         return self.number in ihope.TEMPORAL_SECTIONS
 
 
-#: Short labels for the 17 sections, in order, for display only.
+#: The 17 sections, in order: a field name and a description of what belongs in
+#: it, both written here rather than copied.
 #:
-#: The instructions themselves are fetched at run time and never vendored --
-#: iCARE publishes no licence. These are descriptive names taken from the field
-#: labels the expert notes use, so a reader can see what a note contains without
-#: this repository republishing anybody's prompt. A test checks there are still
-#: seventeen of them.
-SECTION_TITLES = (
-    "Patient particulars",
-    "Clinical identifiers",
-    "Referral information",
-    "Therapist information",
-    "Past session information",
-    "Presenting complaints (symptoms)",
-    "History",
-    "Crisis markers",
-    "Current mental status examination",
-    "Psychotherapy type",
-    "Psychotherapy technique",
-    "Assessments",
-    "Issues discussed in current session",
-    "Reflections by the therapist",
-    "Clinical diagnosis by reviewer",
-    "Action plan",
-    "Next session details",
+#: iCARE publishes no licence, so their instruction text stays a run-time fetch
+#: and never enters this repository or the published page. These descriptions are
+#: our own summary of what each field asks for -- enough for a reader to
+#: understand what a note contains, without republishing anybody's prompt.
+#:
+#: Sections 5 and 17 are the temporal pair the source paper reports every model
+#: failing; see ``ihope.TEMPORAL_SECTIONS``.
+SECTIONS = (
+    (
+        "Patient particulars",
+        "Name, age, sex, marital status, education, where they live, contact details, and who came with them.",
+    ),
+    (
+        "Clinical identifiers",
+        "Hospital and its id, whether this is outpatient, inpatient, telepsychiatry or clinic, room and bed number, date of assessment.",
+    ),
+    (
+        "Referral information",
+        "Who sent the patient here and why -- an earlier clinician or hospital, or a school, workplace, legal or administrative route.",
+    ),
+    (
+        "Therapist information",
+        "The clinician seeing the patient now, and their hospital and department.",
+    ),
+    (
+        "Past session information",
+        "What kind of session this is -- intake, assessment, follow-up -- and what happened in the sessions before it.",
+    ),
+    (
+        "Presenting complaints (symptoms)",
+        "The symptoms the patient reports, each with how long it has been going on.",
+    ),
+    (
+        "History",
+        "Relevant background: earlier illness and treatment, family history, personal history.",
+    ),
+    (
+        "Crisis markers",
+        "Risk of harm to self or others: suicidal thoughts with their duration, frequency and severity, and how the patient copes with them.",
+    ),
+    (
+        "Current mental status examination",
+        "What the clinician observes in the room: appearance, behaviour, mood, affect, speech, thought content.",
+    ),
+    (
+        "Psychotherapy type",
+        "Which school of therapy is being used -- dynamic, cognitive, behavioural, exposure, and so on.",
+    ),
+    (
+        "Psychotherapy technique",
+        "The specific techniques used this session: psychoeducation, reflective listening, behavioural activation, thought challenging, journaling.",
+    ),
+    ("Assessments", "Any scale or test administered -- IQ, personality, disability, projective."),
+    ("Issues discussed in current session", "What the session was actually about."),
+    ("Reflections by the therapist", "What the therapist thought about the session afterwards."),
+    ("Clinical diagnosis by reviewer", "The diagnosis the reviewing clinician assigns."),
+    ("Action plan", "What is recommended for the patient from here."),
+    ("Next session details", "When the next session is and what it will cover."),
 )
+
+#: Titles alone, where only the names are needed.
+SECTION_TITLES = tuple(title for title, _description in SECTIONS)
 
 
 def render_dialog(session: Session) -> str:

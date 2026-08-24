@@ -163,10 +163,37 @@ and needs a MetaCentrum account or Masaryk University affiliation.
 
 ## Data and licensing
 
-The MIT licence covers **this repository's code only**. No corpus is
-redistributed here — two of the three upstream sources publish no licence at
-all, so everything is fetched from its origin at run time and cited. See
-[docs/datasets.md](docs/datasets.md) and [NOTICE](NOTICE).
+The MIT licence covers **this repository's code only.** No corpus is
+redistributed here. Checked repository by repository on 2026-08-24 — licence
+field, file tree and README — **one of the five inputs carries a licence:**
+
+| Source | Used for | Licence |
+|---|---|---|
+| [TN-Eval](https://github.com/amazon-science/TN-Eval) (code) | SOAP prompt, scoring prompts, 23-item rubric | **Apache-2.0** |
+| [TN-Eval-Data](https://github.com/amazon-science/TN-Eval-Data) | 150 notes, two annotators' ratings | none published |
+| [AnnoMI](https://github.com/uccollab/AnnoMI) | 133 transcripts, 50 scored | none published, citation requested |
+| [iCARE](https://github.com/proadhikary/iCARE) | the 17 section instructions | none published |
+| [TheraFuse](https://github.com/ai4mhx/TheraFuse) | iHOPE transcripts and expert notes | MIT badge, no `LICENSE` file |
+
+So: prompts under Apache-2.0 are reproduced in source with attribution;
+everything else is fetched from its origin when a run needs it, checksummed, and
+cited. The published page shows scores and field names — never a transcript, a
+note, or somebody else's prompt. Detail and the two corrections this table
+records: [docs/datasets.md](docs/datasets.md), [NOTICE](NOTICE).
+
+### The two tracks are annotated differently, and it changes what they can claim
+
+| | TN-Eval | iCARE |
+|---|---|---|
+| Expert-written reference note | 50, by therapists | 174, by named clinicians |
+| **Human ratings of what a model wrote** | **2 annotators × 150 notes** | **none published** |
+
+That second row is why the judge can be calibrated on one track and not the
+other. TN-Eval's annotators disagree with each other — Cohen's kappa 0.50 on the
+rubric, and *negative* correlation on some Likert scales — and our judge is
+measured against that ceiling rather than against an imagined truth. The iCARE
+TRACE column has no such anchor and is labelled as a re-implementation
+everywhere it appears.
 
 ## Credits
 

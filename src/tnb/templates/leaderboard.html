@@ -58,9 +58,10 @@
   .criteria b { font-weight: 600; }
   .criteria span { color: var(--muted); }
   ol.sections {
-    columns: 2; column-gap: 2rem; margin: 0; padding-left: 1.4rem;
-    font-size: .9rem; line-height: 1.9;
+    margin: 0; padding-left: 1.4rem; font-size: .9rem; display: grid; gap: .4rem;
   }
+  ol.sections b { font-weight: 600; }
+  ol.sections span { color: var(--muted); }
   ol.sections li { break-inside: avoid; }
   @media (max-width: 40rem) { ol.sections { columns: 1; } }
   .subtitle { font-weight: 400; color: var(--muted); }
@@ -129,7 +130,17 @@
     <div id="protocol-body"></div>
   </details>
 
+  <details class="box" id="corpora">
+    <summary><strong>What the two corpora are, and how much of the form the experts filled in</strong></summary>
+    <div id="corpora-body"></div>
+  </details>
+
   <div id="tables"></div>
+
+  <details class="box" id="licences">
+    <summary><strong>Where every input comes from, and on what terms</strong></summary>
+    <div id="licences-body"></div>
+  </details>
 
   <footer>
     <p>* <strong>Faithfulness</strong> is a 1–5 Likert rating. TN-Eval measured Krippendorff's
@@ -276,6 +287,80 @@ function sortBy(table, key) {
   pairs.forEach(([system, detail]) => { tbody.append(system); tbody.append(detail); });
 }
 
+function renderCorpora(data) {
+  const c = data.corpus;
+  if (!c) return;
+
+  const shape = (d, label) => d ? `<tr>
+      <td>${label}</td>
+      <td>${d.sessions}</td>
+      <td>${d.words.median} <span class="dash">(${d.words.min}\u2013${d.words.max})</span></td>
+      <td>${d.turns.median} <span class="dash">(${d.turns.min}\u2013${d.turns.max})</span></td>
+      <td>${d.note_words.median}</td>
+    </tr>` : '';
+
+  const sets = c.datasets || {};
+  const fill = (c.sections || []).slice().sort((a, b) => a.rate - b.rate).map(s => {
+    const pct = Math.round(s.rate * 100);
+    return `<tr>
+      <td>${s.title}${s.temporal ? ' <span class="chip">temporal</span>' : ''}</td>
+      <td>${s.filled}/${s.total}</td>
+      <td><span class="${pct < 25 ? 'short' : ''}">${pct}%</span></td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('corpora-body').innerHTML = `
+    <p class="blurb">Both corpora are transcripts of published counselling demonstrations, not
+       clinical sessions. Sizes are of the splits this benchmark actually scores; lengths are in
+       words of transcript, which is what a model has to read.</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Track</th><th>Sessions</th><th>Words / session (range)</th>
+                 <th>Turns (range)</th><th>Words in the expert note</th></tr></thead>
+      <tbody>
+        ${shape(sets.tneval, 'TN-Eval SOAP \u00b7 AnnoMI')}
+        ${shape(sets.icare, 'iCARE \u00b7 iHOPE')}
+      </tbody>
+    </table></div>
+
+    <h4 style="margin-top:1.6rem">How much of the iCARE form has an answer at all</h4>
+    <p class="blurb">Across the expert notes, <strong>${c.fields_filled} of ${c.fields_total}
+       fields (${Math.round(c.fill_rate * 100)}%)</strong> say something; the rest are
+       <code>Nil</code>. A published counselling video has no hospital id and no referring
+       clinician, so several fields cannot be answered by anyone. On those, a model scores by
+       staying quiet rather than by writing a good note \u2014 read the low rows as
+       <em>no signal</em>, not as a hard test.</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Section</th><th>Filled by the expert</th><th></th></tr></thead>
+      <tbody>${fill}</tbody>
+    </table></div>`;
+}
+
+function renderLicences(data) {
+  if (!data.licences) return;
+  const rows = data.licences.map(l => `<tr>
+      <td><a href="${l.url}">${l.source}</a></td>
+      <td>${l.used_for}</td>
+      <td>${l.licence === 'Apache-2.0'
+            ? '<strong>Apache-2.0</strong>'
+            : `<span class="short">${l.licence}</span>`}</td>
+      <td>${l.note}</td>
+    </tr>`).join('');
+
+  document.getElementById('licences-body').innerHTML = `
+    <p class="blurb">Checked repository by repository \u2014 licence field, file tree and README
+       \u2014 rather than assumed from a sibling project. <strong>Only one of the five carries a
+       licence.</strong> Nothing here redistributes a corpus: every dataset is fetched from its
+       origin when a run needs it, and this page shows field names and scores, never transcripts,
+       notes, or somebody else's prompt.</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Source</th><th>Used for</th><th>Licence</th><th></th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div>`;
+}
+
+renderCorpora(DATA);
+renderLicences(DATA);
+
 function renderProtocol(protocol) {
   if (!protocol) return;
 
@@ -309,7 +394,8 @@ function renderProtocol(protocol) {
        time — the source paper reports that every model it tested failed on them, so they get
        their own column rather than being averaged away.</p>
     <ol class="sections">${protocol.icare_sections.map(s =>
-        `<li>${s.title}${s.temporal ? ' <span class="chip">temporal</span>' : ''}</li>`).join('')}</ol>
+        `<li><b>${s.title}.</b> <span>${s.description}</span>${
+          s.temporal ? ' <span class="chip">temporal</span>' : ''}</li>`).join('')}</ol>
     <p class="blurb">The instructions themselves are fetched from
        <a href="https://github.com/proadhikary/iCARE">the iCARE repository</a> at run time and used
        unchanged; this page shows the field names only, because that repository publishes no licence.</p>`;
