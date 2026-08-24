@@ -237,3 +237,31 @@ def test_a_coverage_row_carries_no_judge_and_no_metrics(cache, monkeypatch):
 
 def test_indexing_an_empty_cache_says_nothing_rather_than_guessing(tmp_path):
     assert results.index_generations(tmp_path / "nothing") == []
+
+
+# --- what must never reach a published file ---------------------------------
+
+
+def test_a_providers_error_body_does_not_publish_its_key(monkeypatch):
+    """e-INFRA's 429 quotes a hash of the API key that hit the limit, and
+    results/ is committed. The reason is worth keeping; the identifier is not."""
+    reason = results.normalise_reason(
+        'HTTP429: {"error":{"message":"Rate limit exceeded for api_key: '
+        "37583a3f93fcc1f6f5e489228f16a6ad204796cecd085e37395d66b7b3b062e2. "
+        'Limit type: max_parallel_requests. Current limit: 4"}}'
+    )
+    assert "37583a3f" not in reason
+    assert "Rate limit exceeded" in reason
+    assert "max_parallel_requests" in reason
+
+
+def test_normalising_keeps_two_identical_failures_countable():
+    """Raw bodies carry request ids and reset timestamps, so every failure would
+    look unique and the count would be meaningless."""
+    first = results.normalise_reason("HTTP429: key abcdef0123456789abcdef, resets soon")
+    second = results.normalise_reason("HTTP429: key 0123456789abcdef0123456789, resets soon")
+    assert first == second
+
+
+def test_a_missing_error_still_says_something():
+    assert results.normalise_reason(None) == "unknown error"

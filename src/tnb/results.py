@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from collections import defaultdict
 from dataclasses import asdict, dataclass, field, replace
 from pathlib import Path
@@ -250,6 +251,26 @@ def scored(rows: list[Row], **overrides) -> list[Row]:
 # --- coverage rows from the generation cache -------------------------------
 
 
+#: Long hex runs in a provider's error body -- e-INFRA's 429 quotes a hash of
+#: the API key that hit the limit. results/ is committed and published, so the
+#: reason is kept and the identifier is not.
+_SECRET_LOOKING = re.compile(r"[0-9a-f]{16,}", re.IGNORECASE)
+
+
+def normalise_reason(error: str | None) -> str:
+    """Turn a provider's error into something safe and countable.
+
+    Raw bodies carry request ids, key hashes and resets timestamps, which makes
+    every failure look unique and puts identifiers in a public file. This keeps
+    the part that explains the failure and drops the part that identifies the
+    caller.
+    """
+    text = (error or "unknown error").strip()
+    text = _SECRET_LOOKING.sub("...", text)
+    text = " ".join(text.split())
+    return text[:120]
+
+
 def index_generations(cache_dir: Path | None = None, *, run_id: str = "") -> list[Row]:
     """Turn what is in ``generations/`` into one coverage row per model and track.
 
@@ -304,7 +325,7 @@ def _coverage_row(
                 checksums = checksums or dict(record.get("dataset_checksums") or {})
                 newest = max(newest, record.get("generated_at") or "")
             else:
-                failures[record.get("error") or "unknown error"] += 1
+                failures[normalise_reason(record.get("error"))] += 1
                 session_ok = False
         complete += session_ok
 

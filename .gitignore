@@ -19,3 +19,6 @@ build/
 
 # Fixtures are committed; fetched corpora are not.
 !tests/fixtures/
+
+# Service-account keys and anything else credential-shaped. Never committed.
+secrets/

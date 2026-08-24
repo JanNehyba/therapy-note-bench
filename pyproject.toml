@@ -17,8 +17,9 @@ dependencies = [
 # multi-gigabyte download. Discovery, generation and the rubric judge do not
 # need it, so only the reference-metric track pays that cost.
 [project.optional-dependencies]
-generate = ["openai>=1.40"]
-judge = ["anthropic>=0.40"]
+# Generation speaks raw HTTP to OpenAI-compatible endpoints via httpx, which is
+# a core dependency -- there is no SDK to install for it.
+judge = ["google-auth>=2.30"]
 scoring = [
     "pandas>=2.2",
     "nltk>=3.9",
