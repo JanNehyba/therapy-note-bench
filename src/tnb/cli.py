@@ -425,6 +425,84 @@ def cmd_score(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_calibrate(args: argparse.Namespace) -> int:
+    """Check the judge against the two therapists who rated the same notes.
+
+    Costs nothing: it reads answers the judge has already given. If the judge
+    disagrees with the therapists, that number is published too — a leaderboard
+    whose referee has never been checked against a person is a table of numbers,
+    not a measurement.
+    """
+    import json as _json
+
+    from tnb.scoring import calibration
+    from tnb.scoring import run as scoring
+
+    sessions = scoring.load_sessions(args.limit)
+    report_data = calibration.calibrate(sessions, args.judge_model)
+
+    if not report_data.agreements:
+        print(
+            "No judge answers found for the notes TN-Eval released. "
+            "Run 'tnb score --systems reference' first.",
+            file=sys.stderr,
+        )
+        return 1
+
+    print(f"Judge {report_data.judge_model} vs 2 therapists, over {report_data.notes} notes\n")
+    print(f"{'measure':24} {'statistic':16} {'judge':>7} {'humans':>7} {'n':>6}")
+    for agreement in report_data.agreements:
+        judge_value = agreement.judge_mean
+        print(
+            f"{agreement.name:24} {agreement.statistic:16} "
+            f"{'—' if judge_value is None else f'{judge_value:7.2f}'} "
+            f"{'—' if agreement.human_vs_human is None else f'{agreement.human_vs_human:7.2f}'} "
+            f"{agreement.n:6}"
+        )
+
+    verdict = report_data.rubric_beats_likert
+    if verdict is not None:
+        print(
+            "\nTN-Eval's finding (checklists beat 1-5 scales) is "
+            + ("reproduced." if verdict else "NOT reproduced.")
+        )
+
+    if args.dry_run:
+        print("\nDry run: nothing written.")
+        return 0
+
+    payload = {
+        "judge_model": report_data.judge_model,
+        "judge_prompt_version": report_data.judge_prompt_version,
+        "notes": report_data.notes,
+        "rubric_beats_likert": report_data.rubric_beats_likert,
+        "agreements": [
+            {
+                "name": a.name,
+                "statistic": a.statistic,
+                "judge": a.judge_mean,
+                "humans": a.human_vs_human,
+                "n": a.n,
+            }
+            for a in report_data.agreements
+        ],
+        "per_criterion": [
+            {"criterion": key, "judge": judge_value, "humans": humans}
+            for key, judge_value, humans in report_data.per_criterion
+        ],
+    }
+    report.DOCS_DIR.mkdir(parents=True, exist_ok=True)
+    report.CALIBRATION_PATH.write_text(
+        _json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    report.update_readme(
+        calibration.render_markdown(report_data), markers=report.CALIBRATION_MARKERS
+    )
+    print(f"\nWrote {report.CALIBRATION_PATH.relative_to(REPO_ROOT)} and the README block.")
+    print("Run 'tnb report' to rebuild the page.")
+    return 0
+
+
 def cmd_not_implemented(args: argparse.Namespace) -> int:
     print(
         f"'tnb {args.command}' is not implemented yet — see the roadmap in README.md.",
@@ -531,6 +609,16 @@ def build_parser() -> argparse.ArgumentParser:
     )
     score.add_argument("--run-id", help="label these rows with a run id")
     score.set_defaults(func=cmd_score)
+
+    calibrate = subparsers.add_parser(
+        "calibrate", help="check the judge against TN-Eval's two human annotators (phase 4)"
+    )
+    calibrate.add_argument(
+        "--judge-model", default=judge.DEFAULT_MODEL, help="which judge's answers to check"
+    )
+    calibrate.add_argument("--limit", type=int, help="use only the first N sessions")
+    calibrate.add_argument("--dry-run", action="store_true", help="print, write nothing")
+    calibrate.set_defaults(func=cmd_calibrate)
 
     report_parser = subparsers.add_parser(
         "report", help="regenerate the leaderboard page, its JSON and the README table"

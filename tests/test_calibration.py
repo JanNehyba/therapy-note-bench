@@ -1,0 +1,164 @@
+"""Checking the judge against two therapists — and the arithmetic that does it.
+
+The statistics are implemented in this repository rather than imported, so they
+are pinned against worked examples here. A calibration figure that is quietly
+wrong is worse than no calibration: it is the number the whole leaderboard rests
+on.
+"""
+
+from __future__ import annotations
+
+import pytest
+
+from tnb.scoring import calibration
+from tnb.scoring.calibration import Agreement, Paired, Report, cohens_kappa, spearman
+
+# --- Cohen's kappa -----------------------------------------------------------
+
+
+def test_perfect_agreement_is_one():
+    assert cohens_kappa([1, 0, 1, 0], [1, 0, 1, 0]) == 1.0
+
+
+def test_chance_agreement_is_about_zero():
+    """Half the labels match, and half is exactly what chance predicts here."""
+    kappa = cohens_kappa([1, 1, 0, 0], [1, 0, 1, 0])
+    assert kappa == pytest.approx(0.0, abs=1e-9)
+
+
+def test_systematic_disagreement_is_negative():
+    assert cohens_kappa([1, 1, 0, 0], [0, 0, 1, 1]) < 0
+
+
+def test_a_worked_example():
+    """20 items: 8 both yes, 7 both no, 3 and 2 split the other ways.
+
+    Observed agreement 15/20 = .75. Expected by chance, from the marginals
+    (11 and 10 yes): (11/20)(10/20) + (9/20)(10/20) = .5.
+    kappa = (.75 - .5) / (1 - .5) = .5
+    """
+    first = [1] * 8 + [0] * 7 + [1] * 3 + [0] * 2
+    second = [1] * 8 + [0] * 7 + [0] * 3 + [1] * 2
+    assert cohens_kappa(first, second) == pytest.approx(0.5, abs=1e-9)
+
+
+def test_two_raters_who_always_said_yes_agreed_completely():
+    """Chance correction is undefined here, not zero. Calling it zero would
+    report a rater who never made a mistake as no better than guessing."""
+    assert cohens_kappa([1, 1, 1], [1, 1, 1]) == 1.0
+
+
+def test_kappa_of_nothing_is_none_rather_than_a_number():
+    assert cohens_kappa([], []) is None
+
+
+# --- Spearman ----------------------------------------------------------------
+
+
+def test_a_monotone_relationship_is_one():
+    assert spearman([1, 2, 3, 4], [10, 20, 30, 40]) == pytest.approx(1.0)
+
+
+def test_a_reversed_relationship_is_minus_one():
+    assert spearman([1, 2, 3, 4], [40, 30, 20, 10]) == pytest.approx(-1.0)
+
+
+def test_ties_are_ranked_by_their_average():
+    """Likert ratings are full of ties; ranking them wrongly would inflate the
+    correlation the calibration reports."""
+    assert spearman([1, 1, 2, 2], [1, 1, 2, 2]) == pytest.approx(1.0)
+
+
+def test_a_rater_with_no_variation_correlates_with_nothing():
+    """A therapist who scored everything 4 carries no rank information. None is
+    honest; 0.0 would look like a measured disagreement."""
+    assert spearman([4, 4, 4, 4], [1, 2, 3, 4]) is None
+
+
+# --- what the report says ----------------------------------------------------
+
+
+def _agreement(name, judge, humans, statistic="Cohen's kappa", n=100) -> Agreement:
+    return Agreement(
+        name=name, n=n, judge_vs_human=[judge, judge], human_vs_human=humans, statistic=statistic
+    )
+
+
+def test_a_judge_at_the_human_ceiling_is_recognised():
+    """Two therapists disagree with each other about these notes. A judge that
+    agrees as often as they do has done as well as the task allows."""
+    assert _agreement("rubric_completeness", 0.62, 0.60).reaches_ceiling is True
+    assert _agreement("rubric_completeness", 0.30, 0.60).reaches_ceiling is False
+
+
+def test_the_report_notices_tn_evals_finding():
+    report = Report(
+        judge_model="gemini-2.5-pro",
+        judge_prompt_version="v1",
+        notes=150,
+        agreements=[
+            _agreement("rubric_completeness", 0.59, 0.62),
+            _agreement("likert_completeness", 0.31, -0.21, "Spearman rho"),
+        ],
+    )
+    assert report.rubric_beats_likert is True
+
+
+def test_the_report_would_say_so_if_the_finding_did_not_hold():
+    report = Report(
+        judge_model="x",
+        judge_prompt_version="v1",
+        notes=150,
+        agreements=[
+            _agreement("rubric_completeness", 0.10, 0.62),
+            _agreement("likert_completeness", 0.80, -0.21, "Spearman rho"),
+        ],
+    )
+    assert report.rubric_beats_likert is False
+    assert "NOT reproduce" in calibration.render_markdown(report) or "not reproduce" in (
+        calibration.render_markdown(report)
+    )
+
+
+def test_the_published_block_always_shows_the_human_ceiling():
+    """Publishing 'judge 0.31' without 'therapists -0.21' beside it would read
+    as a bad judge when it is a bad scale."""
+    report = Report(
+        judge_model="gemini-2.5-pro",
+        judge_prompt_version="v1",
+        notes=150,
+        agreements=[_agreement("likert_completeness", 0.31, -0.21, "Spearman rho")],
+    )
+    markdown = calibration.render_markdown(report)
+
+    assert "0.31" in markdown and "-0.21" in markdown
+    assert "ceiling" in markdown
+
+
+def test_an_uncalibrated_judge_says_so_rather_than_showing_nothing():
+    report = Report(judge_model="x", judge_prompt_version="v1", notes=0, agreements=[])
+    assert "Not yet measured" in calibration.render_markdown(report)
+
+
+# --- pairing -----------------------------------------------------------------
+
+
+def test_pairing_keeps_each_annotator_separate():
+    """Averaging the two therapists before comparing would hide how much they
+    disagree, which is the number that makes the judge's score readable."""
+    paired = Paired()
+    paired.add(1.0, [1.0, 0.0])
+    paired.add(0.0, [0.0, 0.0])
+
+    assert paired.judge == [1.0, 0.0]
+    assert paired.humans == [[1.0, 0.0], [0.0, 0.0]]
+    assert len(paired) == 2
+
+
+def test_scoring_a_binary_measure_uses_kappa_and_a_scale_uses_spearman():
+    paired = Paired()
+    for judge_value, humans in [(1, [1, 1]), (0, [0, 1]), (1, [1, 0]), (0, [0, 0])]:
+        paired.add(float(judge_value), [float(h) for h in humans])
+
+    assert calibration.score_agreement("rubric_x", paired, binary=True).statistic == "Cohen's kappa"
+    assert calibration.score_agreement("likert_x", paired, binary=False).statistic == "Spearman rho"

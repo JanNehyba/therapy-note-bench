@@ -29,6 +29,8 @@ PAGE_PATH = DOCS_DIR / "index.html"
 README_PATH = REPO_ROOT / "README.md"
 
 LEADERBOARD_MARKERS = ("<!-- LEADERBOARD:BEGIN -->", "<!-- LEADERBOARD:END -->")
+CALIBRATION_MARKERS = ("<!-- CALIBRATION:BEGIN -->", "<!-- CALIBRATION:END -->")
+CALIBRATION_PATH = DOCS_DIR / "calibration.json"
 
 #: Column order per track: (key, heading, how many decimals).
 #:
@@ -218,10 +220,12 @@ def render_readme_section(data: dict) -> str:
     return "\n\n".join(blocks)
 
 
-def update_readme(section: str, path: Path | None = None) -> bool:
-    """Replace the marked block. Returns whether anything changed."""
+def update_readme(
+    section: str, path: Path | None = None, markers: tuple[str, str] | None = None
+) -> bool:
+    """Replace one marked block. Returns whether anything changed."""
     path = path or README_PATH
-    begin, end = LEADERBOARD_MARKERS
+    begin, end = markers or LEADERBOARD_MARKERS
     existing = path.read_text(encoding="utf-8")
 
     head, marker, rest = existing.partition(begin)
@@ -238,10 +242,19 @@ def update_readme(section: str, path: Path | None = None) -> bool:
     return True
 
 
+def load_calibration(docs_dir: Path | None = None) -> dict | None:
+    """The last calibration, if one has been run. The page shows it above all else."""
+    path = (docs_dir or DOCS_DIR) / CALIBRATION_PATH.name
+    if not path.exists():
+        return None
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
 def write(rows: list[Row], *, docs_dir: Path | None = None, readme: Path | None = None) -> dict:
     """Write all three artefacts. Returns the data that was rendered."""
     docs_dir = docs_dir or DOCS_DIR
     data = build(rows)
+    data["calibration"] = load_calibration(docs_dir)
 
     docs_dir.mkdir(parents=True, exist_ok=True)
     (docs_dir / DATA_PATH.name).write_text(
