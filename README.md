@@ -13,11 +13,13 @@ swappable backend: today the harness measures what is deployed on
 [e-INFRA CZ](https://www.e-infra.cz/en), and adding another provider adds rows
 rather than a second benchmark.
 
-> **Status: notes written, nothing scored yet.** The 31 model ids currently
-> reachable reduce to **11 distinct benchmarkable models**. All eleven have
-> written the TN-Eval SOAP track — 542 of 550 notes; the eight misses are one
-> model that will not produce a flat dictionary. The judge runs next, and until
-> it does every score column below is a dash. See [Roadmap](#roadmap).
+> **Status: the TN-Eval track is measured.** All **11 benchmarkable models**
+> have written and been scored on 50 AnnoMI conversations, against a judge
+> checked against two therapists first. Every one of them scores above both
+> 2025 models TN-Eval released *and* above the therapist-written note — on a
+> rubric that rewards coverage, which is not the same as writing a better note.
+> The top three cannot be told apart from each other. The iCARE track is still
+> generating. See [Roadmap](#roadmap).
 
 ---
 
@@ -31,12 +33,17 @@ published numbers: **<https://jannehyba.github.io/therapy-note-bench/>**
 
 | Model | Completeness | Conciseness | Faithfulness* | Notes | Scored |
 |---|---|---|---|---|---|
-| `glm-5` | 0.592 | 0.944 | 4.97 | 50/50 | 31 of 50 *(judging)* |
+| `kimi-k3` | 0.654 | 0.961 | 4.98 | 50/50 | 50 |
+| `qwen3.5-122b` | 0.644 | 0.871 | 4.75 | 50/50 | 50 |
+| `qwen3.5-int4` | 0.643 | 0.925 | 4.88 | 50/50 | 50 |
+| `glm-5` | 0.597 | 0.941 | 4.95 | 50/50 | 50 |
 | `deepseek-v4-flash-thinking` | 0.578 | 0.965 | 4.81 | 50/50 | 50 |
+| `qwen3.8-27b` | 0.578 | 0.946 | 4.92 | 50/50 | 50 |
+| `gpt-oss-120b` | 0.575 | 0.898 | 4.39 | 42/50 (8 unusable) | 42 |
+| `glm-5.2` | 0.574 | 0.939 | 4.99 | 50/50 | 50 |
+| `mistral-medium-3.5` | 0.558 | 0.974 | 4.88 | 50/50 | 50 |
 | `gemma4` | 0.556 | 0.944 | 4.99 | 50/50 | 50 |
 | `deepseek-v4-flash` | 0.524 | 0.973 | 4.80 | 50/50 | 50 |
-
-**TN-Eval SOAP · AnnoMI conversations** — *waiting for the judge.* 7 system(s) have written their notes and none has been scored yet: `glm-5.2`, `gpt-oss-120b`, `kimi-k3`, `mistral-medium-3.5`, `qwen3.5-122b`, `qwen3.5-int4`, `qwen3.8-27b`.
 
 **iCARE / iHOPE · 17 sections per session** — *waiting for the judge.* 2 system(s) have written their notes and none has been scored yet: `deepseek-v4-flash`, `deepseek-v4-flash-thinking`.
 
@@ -145,9 +152,9 @@ and needs a MetaCentrum account or Masaryk University affiliation.
 |---|---|---|
 | 0 | Repository, survey, model discovery | **done** |
 | 1 | Dataset adapters (AnnoMI + iHOPE → common schema) | **done** |
-| 2 | Generation against every discovered model | **SOAP done**, iCARE next |
-| 3 | Scoring: rubric, reference metrics, TRACE, temporal | |
-| 4 | Judge calibration against TN-Eval's human annotators | |
+| 2 | Generation against every discovered model | **SOAP done**, iCARE 91% |
+| 3 | Scoring: rubric, reference metrics, TRACE, temporal | **TN-Eval done**, iCARE next |
+| 4 | Judge calibration against TN-Eval's human annotators | **done** |
 | 5 | Leaderboard generation | **done** |
 | 6 | One-click workflow | |
 
