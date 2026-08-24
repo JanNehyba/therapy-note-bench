@@ -17,7 +17,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from tnb import generation, results, tasks
+from tnb import generation, report, results, tasks
 from tnb.config import REPO_ROOT, load_policy
 from tnb.providers.einfra import (
     DiscoveredModel,
@@ -267,6 +267,23 @@ def cmd_results(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_report(args: argparse.Namespace) -> int:
+    """Render results/rows.jsonl into the JSON, the page and the README block."""
+    rows = results.load()
+    if not rows:
+        print("No rows in results/. Run 'tnb results index' first.", file=sys.stderr)
+        return 1
+
+    data = report.write(rows)
+    for table in data["tables"]:
+        state = "scored" if table["scored"] else "coverage only"
+        print(f"{table['track']:12} {len(table['rows']):3} rows  ({state})")
+
+    for path in (report.DATA_PATH, report.PAGE_PATH, report.README_PATH):
+        print(f"wrote {path.relative_to(REPO_ROOT)}")
+    return 0
+
+
 def cmd_not_implemented(args: argparse.Namespace) -> int:
     print(
         f"'tnb {args.command}' is not implemented yet — see the roadmap in README.md.",
@@ -341,12 +358,13 @@ def build_parser() -> argparse.ArgumentParser:
     )
     results_parser.set_defaults(func=cmd_results)
 
-    for name, help_text in (
-        ("run", "generate and score notes end to end (phases 2-4)"),
-        ("report", "regenerate the leaderboard (phase 5)"),
-    ):
-        sub = subparsers.add_parser(name, help=help_text)
-        sub.set_defaults(func=cmd_not_implemented)
+    report_parser = subparsers.add_parser(
+        "report", help="regenerate the leaderboard page, its JSON and the README table"
+    )
+    report_parser.set_defaults(func=cmd_report)
+
+    run = subparsers.add_parser("run", help="generate and score notes end to end (phases 2-4)")
+    run.set_defaults(func=cmd_not_implemented)
 
     return parser
 

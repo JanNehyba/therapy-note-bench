@@ -8,17 +8,45 @@ note. Both were benchmarked once, on models from 2024 and 2025, and never
 re-run. This repository re-runs them on whatever is deployed today, and does it
 from a button — so the table stays true as models change.
 
-> **Status: no results yet.** The survey, the design and model discovery are
-> done — 31 ids on e-INFRA reduce to **11 distinct benchmarkable models**, and
-> `glm-5.3` is not among them. Generation and scoring are next.
+> **Status: notes written, nothing scored yet.** 31 ids on e-INFRA reduce to
+> **11 distinct benchmarkable models**, and `glm-5.3` is not among them. All
+> eleven have written the TN-Eval SOAP track — 542 of 550 notes; the eight
+> misses are one model that will not produce a flat dictionary. The judge runs
+> next, and until it does every score column below is a dash.
 > See [Roadmap](#roadmap).
 
 ---
 
 ## The leaderboard
 
+Full version, with per-section detail, the reference systems and the papers' own
+published numbers: **<https://jannehyba.github.io/therapy-note-bench/>**
+
 <!-- LEADERBOARD:BEGIN -->
-*No runs yet. The first run will populate this section automatically.*
+**TN-Eval SOAP · AnnoMI conversations**
+
+| Model | Completeness | Conciseness | Faithfulness* | Sessions |
+|---|---|---|---|---|
+| `deepseek-v4-flash` | — | — | — | 50/50 |
+| `deepseek-v4-flash-thinking` | — | — | — | 50/50 |
+| `gemma4` | — | — | — | 50/50 |
+| `glm-5` | — | — | — | 50/50 |
+| `glm-5.2` | — | — | — | 50/50 |
+| `gpt-oss-120b` | — | — | — | 42/50 (8 unusable) |
+| `kimi-k3` | — | — | — | 50/50 |
+| `mistral-medium-3.5` | — | — | — | 50/50 |
+| `qwen3.5-122b` | — | — | — | 50/50 |
+| `qwen3.5-int4` | — | — | — | 50/50 |
+| `qwen3.8-27b` | — | — | — | 50/50 |
+
+**iCARE / iHOPE · 17 sections per session**
+
+| Model | ROUGE-L | BERTScore | TRACE† | Temporal | Sessions |
+|---|---|---|---|---|---|
+| `deepseek-v4-flash` | — | — | — | — | 3/3 |
+| `deepseek-v4-flash-thinking` | — | — | — | — | 3/3 |
+
+*Notes are generated; no scores yet. The judge runs in phase 3 and this table fills in then.* See the [full leaderboard](https://jannehyba.github.io/therapy-note-bench/) for per-section detail, the reference systems and the published numbers.
 <!-- LEADERBOARD:END -->
 
 Numbers are only ever combined across runs that agree on harness version,
@@ -101,7 +129,7 @@ uv sync --all-groups
 cp .env.example .env      # add EINFRA_API_TOKEN and ANTHROPIC_API_KEY
 make models               # what is deployed right now
 uv run tnb models --probe # which ids are secretly the same model
-make smoke                # 3 sessions x 2 models, under $2
+make smoke                # 3 sessions x 2 models, e-INFRA quota only
 make bench                # everything
 ```
 
@@ -114,10 +142,10 @@ and needs a MetaCentrum account or Masaryk University affiliation.
 |---|---|---|
 | 0 | Repository, survey, model discovery | **done** |
 | 1 | Dataset adapters (AnnoMI + iHOPE → common schema) | **done** |
-| 2 | Generation against every discovered model | |
+| 2 | Generation against every discovered model | **SOAP done**, iCARE next |
 | 3 | Scoring: rubric, reference metrics, TRACE, temporal | |
 | 4 | Judge calibration against TN-Eval's human annotators | |
-| 5 | Leaderboard generation | |
+| 5 | Leaderboard generation | **done** |
 | 6 | One-click workflow | |
 
 ## Data and licensing
