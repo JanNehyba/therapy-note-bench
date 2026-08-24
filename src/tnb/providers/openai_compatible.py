@@ -1,12 +1,18 @@
-"""Discovery against the e-INFRA CZ OpenAI-compatible endpoint.
+"""Talking to an OpenAI-compatible endpoint: discovery, identity, generation.
+
+Nothing here knows which provider it is speaking to. A :class:`~tnb.config.Provider`
+carries the base URL, the credentials and the discovery rules, so a second
+backend is a stanza in ``models.yaml`` rather than a second module.
 
 The live ``GET /v1/models`` response is the only authority on what can be
 benchmarked. Documentation drifts; aliases move. Everything here exists to turn
 that response into a reproducible benchmark set without ever pinning a list.
 
-The endpoint returns almost no useful metadata — of 31 models reported on
+Endpoints return almost no useful metadata — of the 31 models e-INFRA reported on
 2026-08-23, exactly one carried a ``mode`` field — so what a model *is* has to be
-established by asking it. See :func:`fingerprint`.
+established by asking it. See :func:`fingerprint`. That check matters twice over
+once there are several providers: the same model id on two endpoints can be two
+different builds, and only the answer tells you.
 """
 
 from __future__ import annotations
@@ -19,7 +25,7 @@ from dataclasses import dataclass
 
 import httpx
 
-from tnb.config import DiscoveryPolicy, Policy
+from tnb.config import DiscoveryPolicy, Provider
 
 #: Stylistically free prompt with a short answer. Two ids that return a
 #: byte-identical answer at temperature 0 are the same model behind two names.
@@ -60,14 +66,14 @@ def looks_like_alias(model_id: str) -> bool:
     return not any(char.isdigit() for char in model_id)
 
 
-#: Statuses worth asking again about. 429 is routine — e-INFRA rate-limits per
-#: API key, not per model — and the 5xx family is a shared academic service
-#: having a moment, not a verdict on the request.
+#: Statuses worth asking again about. 429 is routine — providers rate-limit per
+#: API key, not per model — and the 5xx family is an endpoint having a moment,
+#: not a verdict on the request.
 RETRIABLE_STATUS = frozenset({408, 425, 429, 500, 502, 503, 504})
 
 
 def _post_with_backoff(
-    policy: Policy,
+    provider: Provider,
     path: str,
     payload: dict,
     *,
@@ -87,11 +93,11 @@ def _post_with_backoff(
 
     for attempt in range(attempts):
         if attempt:
-            wait(policy.generation.backoff_s * attempt)
+            wait(provider.generation.backoff_s * attempt)
         try:
             response = httpx.post(
-                f"{policy.base_url.rstrip('/')}{path}",
-                headers={"Authorization": f"Bearer {policy.token()}"},
+                f"{provider.base_url.rstrip('/')}{path}",
+                headers={"Authorization": f"Bearer {provider.token()}"},
                 json=payload,
                 timeout=timeout,
             )
@@ -109,17 +115,17 @@ def _post_with_backoff(
     raise last_error
 
 
-def fetch_models(policy: Policy, *, timeout: float = 30.0) -> list[dict]:
+def fetch_models(provider: Provider, *, timeout: float = 30.0) -> list[dict]:
     """Fetch the raw ``/v1/models`` payload. Raises on auth or network failure."""
     response = httpx.get(
-        f"{policy.base_url.rstrip('/')}/models",
-        headers={"Authorization": f"Bearer {policy.token()}"},
+        f"{provider.base_url.rstrip('/')}/models",
+        headers={"Authorization": f"Bearer {provider.token()}"},
         timeout=timeout,
     )
     if response.status_code == 401:
         raise RuntimeError(
-            "e-INFRA rejected the token (401). Check EINFRA_API_TOKEN; keys are "
-            "issued per account at https://chat.ai.e-infra.cz -> Account -> API keys."
+            f"{provider.name} rejected the token (401). Check {provider.token_env}."
+            + (f" {provider.token_help}" if provider.token_help else "")
         )
     response.raise_for_status()
     return list(response.json().get("data", []))
@@ -154,12 +160,12 @@ def apply_policy(raw_models: list[dict], discovery: DiscoveryPolicy) -> list[Dis
     return sorted(results, key=lambda model: model.id.lower())
 
 
-def discover(policy: Policy) -> list[DiscoveredModel]:
+def discover(provider: Provider) -> list[DiscoveredModel]:
     """Fetch and classify in one step."""
-    return apply_policy(fetch_models(policy), policy.discovery)
+    return apply_policy(fetch_models(provider), provider.discovery)
 
 
-def fingerprint(policy: Policy, model_id: str) -> tuple[str, str]:
+def fingerprint(provider: Provider, model_id: str) -> tuple[str, str]:
     """Ask one model a fixed question and hash the answer.
 
     Returns ``(hash, excerpt)``, or ``("", reason)`` when the model cannot chat —
@@ -170,7 +176,7 @@ def fingerprint(policy: Policy, model_id: str) -> tuple[str, str]:
     models returned byte-identical text.
     """
     response = _post_with_backoff(
-        policy,
+        provider,
         "/chat/completions",
         {
             "model": model_id,
@@ -178,7 +184,7 @@ def fingerprint(policy: Policy, model_id: str) -> tuple[str, str]:
             "max_tokens": FINGERPRINT_MAX_TOKENS,
             "temperature": 0,
         },
-        timeout=policy.generation.timeout_s,
+        timeout=provider.generation.timeout_s,
     )
     if response.status_code != 200:
         return "", f"HTTP{response.status_code}"
@@ -235,7 +241,7 @@ class Completion:
 
 
 def complete(
-    policy: Policy, model_id: str, prompt: str, *, max_tokens: int | None = None
+    provider: Provider, model_id: str, prompt: str, *, max_tokens: int | None = None
 ) -> Completion:
     """Send one prompt as a single user message and return what came back.
 
@@ -244,20 +250,20 @@ def complete(
     ``max_tokens`` overrides the budget for a second attempt at a call that ran
     out of it while thinking.
     """
-    budget = max_tokens or policy.generation.max_tokens
+    budget = max_tokens or provider.generation.max_tokens
     started = time.monotonic()
     try:
         response = _post_with_backoff(
-            policy,
+            provider,
             "/chat/completions",
             {
                 "model": model_id,
                 "messages": [{"role": "user", "content": prompt}],
                 "max_tokens": budget,
-                "temperature": policy.generation.temperature,
+                "temperature": provider.generation.temperature,
             },
-            timeout=policy.generation.timeout_s,
-            attempts=policy.generation.retries + 1,
+            timeout=provider.generation.timeout_s,
+            attempts=provider.generation.retries + 1,
         )
     except httpx.TransportError as error:
         return Completion(
@@ -266,7 +272,7 @@ def complete(
             ok=False,
             max_tokens=budget,
             error=f"{type(error).__name__}: {error}",
-            attempts=policy.generation.retries + 1,
+            attempts=provider.generation.retries + 1,
             latency_s=time.monotonic() - started,
         )
 

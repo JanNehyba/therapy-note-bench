@@ -173,12 +173,16 @@ def render_readme_section(data: dict) -> str:
 
     blocks: list[str] = []
     for table in data["tables"]:
-        models = [row for row in table["rows"] if row["system_type"] == "einfra-model"]
+        models = [row for row in table["rows"] if row["system_type"] == "model"]
         if not models:
             continue
 
         columns = table["columns"]
-        header = ["Model", *(column["label"] for column in columns), "Sessions"]
+        multi_provider = len({row["provider"] for row in models}) > 1
+        header = ["Model"]
+        if multi_provider:
+            header.append("Provider")
+        header += [column["label"] for column in columns] + ["Sessions"]
         lines = [
             f"**{table['title']}**",
             "",
@@ -187,6 +191,8 @@ def render_readme_section(data: dict) -> str:
         ]
         for row in models:
             cells = [f"`{row['label']}`"]
+            if multi_provider:
+                cells.append(row["provider"])
             for column in columns:
                 value = row["headline"].get(column["key"])
                 cells.append("—" if value is None else f"{value:.{column['digits']}f}")

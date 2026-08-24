@@ -1,10 +1,10 @@
 """Command line entry point.
 
-``tnb models`` answers the question every run starts with: what is actually
-deployed on e-INFRA right now? ``tnb prompts`` shows what will be sent to those
-models and can check the copied wording against its source repositories.
-``run`` and ``report`` are declared so the surface is visible, and fail loudly
-rather than pretending to work.
+``tnb models`` answers the question every run starts with: what does each
+configured provider have deployed right now? ``tnb prompts`` shows what will be
+sent to those models and can check the copied wording against its source
+repositories. ``tnb generate`` writes the notes, ``tnb results index`` records
+what exists, and ``tnb report`` renders it.
 """
 
 from __future__ import annotations
@@ -19,7 +19,7 @@ from dotenv import load_dotenv
 
 from tnb import generation, report, results, tasks
 from tnb.config import REPO_ROOT, load_policy
-from tnb.providers.einfra import (
+from tnb.providers.openai_compatible import (
     DiscoveredModel,
     discover,
     fingerprint,
@@ -29,12 +29,12 @@ from tnb.providers.einfra import (
 SNAPSHOT_PATH = REPO_ROOT / "docs" / "models-snapshot.md"
 
 
-def _render_snapshot(models: list[DiscoveredModel], today: str) -> str:
+def _render_snapshot(provider_name: str, models: list[DiscoveredModel], today: str) -> str:
     included = [model for model in models if model.included]
     excluded = [model for model in models if not model.included]
 
     lines = [
-        f"## {today} — live capture",
+        f"## {today} — live capture, provider `{provider_name}`",
         "",
         f"`GET /v1/models` reported {len(models)} models; "
         f"{len(included)} are benchmarkable after `models.yaml` filtering.",
@@ -56,17 +56,19 @@ def _render_snapshot(models: list[DiscoveredModel], today: str) -> str:
     return "\n".join(lines)
 
 
-def _probe(policy, models: list[DiscoveredModel]) -> int:
+def _probe(provider, models: list[DiscoveredModel]) -> int:
     """Ask every reported model a fixed question and group identical answers.
 
-    The endpoint publishes almost no metadata, so identity has to be measured.
-    This is what produced the verified `aliases:` map in models.yaml, and it is
-    how to check that map still holds after e-INFRA redeploys.
+    Endpoints publish almost no metadata, so identity has to be measured. This
+    is what produced the verified `aliases:` map in models.yaml, and it is how
+    to check that map still holds after a provider redeploys. Run it against
+    two providers and it also answers the harder question: is their identically
+    named model the same build, or two?
     """
     digests: dict[str, str] = {}
-    print(f"Probing {len(models)} models (temperature 0, one fixed prompt)...\n")
+    print(f"Probing {len(models)} models on {provider.name} (temperature 0, one prompt)...\n")
     for model in models:
-        digest, excerpt = fingerprint(policy, model.id)
+        digest, excerpt = fingerprint(provider, model.id)
         digests[model.id] = digest
         print(f"  {model.id:34} {digest or '-':10} {excerpt}")
 
@@ -83,40 +85,59 @@ def _probe(policy, models: list[DiscoveredModel]) -> int:
 
 
 def cmd_models(args: argparse.Namespace) -> int:
+    """What every configured provider has deployed, right now.
+
+    Reported per provider rather than merged: the same model id on two
+    endpoints is two rows in this benchmark, because it can be two different
+    builds. `--probe` is what tells them apart.
+    """
     policy = load_policy()
-    models = discover(policy)
-    included = [model for model in models if model.included]
+    everything: dict[str, list[DiscoveredModel]] = {}
 
-    if args.probe:
-        return _probe(policy, models)
+    for provider in policy.resolve(args.providers):
+        models = discover(provider)
+        everything[provider.name] = models
+        included = [model for model in models if model.included]
 
-    if args.json:
-        print(
-            json.dumps(
-                [
-                    {"id": m.id, "included": m.included, "excluded_by": m.excluded_by}
-                    for m in models
-                ],
-                indent=2,
-            )
-        )
-    else:
+        if args.probe:
+            _probe(provider, models)
+            continue
+        if args.json:
+            continue
+
+        print(f"\n{provider.name}  ({provider.base_url})")
         for model in models:
             marker = "  " if model.included else "x "
             suffix = "" if model.included else f"   ({model.excluded_by})"
             print(f"{marker}{model.id}{suffix}")
         print(f"\n{len(included)} benchmarkable of {len(models)} reported.")
 
-    if len(included) > policy.discovery.max_models:
+        if len(included) > provider.discovery.max_models:
+            print(
+                f"\nWarning: {len(included)} models exceeds max_models="
+                f"{provider.discovery.max_models} for {provider.name} in models.yaml.",
+                file=sys.stderr,
+            )
+
+    if args.json:
         print(
-            f"\nWarning: {len(included)} models exceeds max_models="
-            f"{policy.discovery.max_models} in models.yaml.",
-            file=sys.stderr,
+            json.dumps(
+                {
+                    name: [
+                        {"id": m.id, "included": m.included, "excluded_by": m.excluded_by}
+                        for m in models
+                    ]
+                    for name, models in everything.items()
+                },
+                indent=2,
+            )
         )
 
     if args.write_snapshot:
         today = dt.datetime.now(dt.UTC).strftime("%Y-%m-%d")
-        section = _render_snapshot(models, today)
+        section = "\n".join(
+            _render_snapshot(name, models, today) for name, models in everything.items()
+        )
         existing = SNAPSHOT_PATH.read_text(encoding="utf-8")
         marker = "---\n"
         head, _, tail = existing.partition(marker)
@@ -153,8 +174,8 @@ def cmd_prompts(args: argparse.Namespace) -> int:
     return 0
 
 
-def _select_models(policy, args) -> list[str]:
-    """Which models this run writes notes with.
+def _select_models(provider, args) -> list[str]:
+    """Which models this run writes notes with, on one provider.
 
     ``--models`` names them explicitly; otherwise the live endpoint decides,
     filtered by models.yaml. Nothing is hard-coded either way.
@@ -162,54 +183,83 @@ def _select_models(policy, args) -> list[str]:
     if args.models:
         return [name.strip() for name in args.models.split(",") if name.strip()]
 
-    discovered = [model.id for model in discover(policy) if model.included]
+    discovered = [model.id for model in discover(provider) if model.included]
     if args.max_models:
         # Alphabetical, so "the first two" means the same two tomorrow.
         discovered = discovered[: args.max_models]
-    elif len(discovered) > policy.discovery.max_models and not args.allow_large:
+    elif len(discovered) > provider.discovery.max_models and not args.allow_large:
         raise RuntimeError(
-            f"{len(discovered)} models exceeds max_models={policy.discovery.max_models} "
-            "in models.yaml. Re-run with --allow-large if that is intended."
+            f"{provider.name} reports {len(discovered)} models, over max_models="
+            f"{provider.discovery.max_models} in models.yaml. "
+            "Re-run with --allow-large if that is intended."
         )
     return discovered
 
 
 def cmd_generate(args: argparse.Namespace) -> int:
+    """Write notes with every model of every configured provider.
+
+    Providers run one after another rather than together: rate limits are per
+    API key, and a second endpoint does not make the first one faster.
+    """
+    generation.check_cache_layout()
     policy = load_policy()
-    model_ids = _select_models(policy, args)
-    if not model_ids:
+    plans = []
+
+    for provider in policy.resolve(args.providers):
+        model_ids = _select_models(provider, args)
+        if not model_ids:
+            print(f"{provider.name}: no models to generate with.", file=sys.stderr)
+            continue
+
+        jobs: list[generation.Job] = []
+        for task in tasks.resolve(args.tasks):
+            sessions = task.load_sessions(args.limit)
+            jobs.extend(generation.build_jobs(provider.name, model_ids, task, sessions))
+            print(
+                f"{provider.name:10} {task.name:6} {len(sessions):3} sessions"
+                f" x {task.calls_per_session:2} call(s)"
+            )
+        plans.append((provider, jobs, model_ids))
+
+    if not plans:
         raise RuntimeError("No models to generate with.")
 
-    jobs: list[generation.Job] = []
-    for task in tasks.resolve(args.tasks):
-        sessions = task.load_sessions(args.limit)
-        jobs.extend(generation.build_jobs(model_ids, task, sessions))
-        print(f"{task.name:6} {len(sessions):3} sessions x {task.calls_per_session:2} call(s)")
+    pending_by_provider = [
+        (
+            provider,
+            [job for job in jobs if args.force or generation.load_cached(job, provider) is None],
+        )
+        for provider, jobs, _ in plans
+    ]
+    total = sum(len(jobs) for _, jobs, _ in plans)
+    pending_total = sum(len(jobs) for _, jobs in pending_by_provider)
 
-    pending = [job for job in jobs if args.force or generation.load_cached(job, policy) is None]
+    print()
+    for provider, _, model_ids in plans:
+        print(f"{provider.name}: {len(model_ids)} model(s) -- {', '.join(model_ids)}")
     print(
-        f"\n{len(model_ids)} model(s): {', '.join(model_ids)}\n"
-        f"{len(jobs)} calls total, {len(jobs) - len(pending)} already cached, "
-        f"{len(pending)} to generate at concurrency {policy.generation.concurrency}."
+        f"\n{total} calls total, {total - pending_total} already cached, "
+        f"{pending_total} to generate."
     )
 
     if args.dry_run:
         print("\nDry run: nothing was sent. Drop --dry-run to generate.")
         return 0
-    if not pending:
+    if not pending_total:
         print("\nNothing to do; every note is cached.")
         return 0
 
     counts = {"cached": 0, "generated": 0, "failed": 0}
     failures: list[generation.Outcome] = []
 
-    def report(outcome: generation.Outcome) -> None:
+    def on_done(outcome: generation.Outcome) -> None:
         counts[outcome.status] += 1
         if outcome.status == "failed":
             failures.append(outcome)
         done = sum(counts.values())
         print(
-            f"  [{done}/{len(pending)}] {outcome.job.model_id} "
+            f"  [{done}/{pending_total}] {outcome.job.provider}/{outcome.job.model_id} "
             f"{outcome.job.task}/{outcome.job.session_id}/{outcome.job.unit} "
             f"{outcome.status}"
             + ("" if outcome.status != "failed" else f" -- {outcome.record.get('error')}"),
@@ -217,14 +267,17 @@ def cmd_generate(args: argparse.Namespace) -> int:
         )
 
     print()
-    generation.run_jobs(pending, policy, force=args.force, on_done=report)
+    for provider, jobs in pending_by_provider:
+        if jobs:
+            generation.run_jobs(jobs, provider, force=args.force, on_done=on_done)
 
     print(f"\nGenerated {counts['generated']}, failed {counts['failed']}.")
     if failures:
         print("\nFailures (re-running the same command retries only these):")
         for outcome in failures[:20]:
             print(
-                f"  {outcome.job.model_id:30} {outcome.job.task}/{outcome.job.session_id}"
+                f"  {outcome.job.provider}/{outcome.job.model_id:24} "
+                f"{outcome.job.task}/{outcome.job.session_id}"
                 f"/{outcome.job.unit}: {outcome.record.get('error')}"
             )
         if len(failures) > 20:
@@ -240,6 +293,7 @@ def cmd_results(args: argparse.Namespace) -> int:
     that one model lost sessions to its output format rather than to bad notes
     -- is visible before a single judge call is paid for.
     """
+    generation.check_cache_layout()
     run_id = dt.datetime.now(dt.UTC).strftime("%Y-%m-%dT%H-%MZ")
     rows = results.index_generations(run_id=run_id)
     if not rows:
@@ -296,7 +350,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="tnb", description=__doc__)
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    models = subparsers.add_parser("models", help="list what e-INFRA has deployed right now")
+    models = subparsers.add_parser(
+        "models", help="list what each configured provider has deployed right now"
+    )
+    models.add_argument(
+        "--providers", help="comma-separated provider names; default is every one with a token"
+    )
     models.add_argument("--json", action="store_true", help="machine-readable output")
     models.add_argument(
         "--probe",
@@ -322,6 +381,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     generate = subparsers.add_parser(
         "generate", help="write notes with every discovered model (phase 2)"
+    )
+    generate.add_argument(
+        "--providers", help="comma-separated provider names; default is every one with a token"
     )
     generate.add_argument(
         "--models",

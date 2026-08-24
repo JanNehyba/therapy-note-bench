@@ -106,6 +106,9 @@
     <p><strong>Sessions</strong> counts notes a protocol could actually read. A model that
        writes a good note in the wrong shape loses sessions to its format, not to its
        clinical content — read the count before comparing the score.</p>
+    <p>The chip after a model name is the <strong>provider</strong> that served it. The same
+       model id on two providers can be two different builds — a different quantisation,
+       different weights, a different system prompt — so they are two rows here, never one.</p>
     <p>Rows are only ever compared when they agree on harness version, prompt version, judge
        model and judge prompt version. A changed judge starts a new table rather than
        rewriting this one.</p>
@@ -121,14 +124,14 @@ const fmt = (value, digits) =>
     : Number(value).toFixed(digits);
 
 const TYPE_LABEL = {
-  'einfra-model': '',
+  'model': '',
   'reference-human': 'therapist',
   'reference-model': 'reference model',
   'published': 'as published',
 };
 
 function rowVisible(row) {
-  if (row.system_type === 'einfra-model') return true;
+  if (row.system_type === 'model') return true;
   if (row.system_type === 'published') return document.getElementById('show-published').checked;
   return document.getElementById('show-reference').checked;
 }
@@ -182,8 +185,10 @@ function renderTable(table, index) {
       .join('');
     const short = row.n_failed ? ' short' : '';
     const coverage = `<span class="${short.trim()}">${row.n_generated}/${row.n_attempted}</span>`;
-    const chip = TYPE_LABEL[row.system_type]
-      ? `<span class="chip">${TYPE_LABEL[row.system_type]}</span>` : '';
+    // The provider is part of a model's identity: the same id on two endpoints
+    // can be two different builds, so it is shown, never merged away.
+    const label = TYPE_LABEL[row.system_type] || row.provider;
+    const chip = label ? `<span class="chip">${label}</span>` : '';
     return `<tr class="system" data-row="${index}-${position}" data-type="${row.system_type}">
         <td class="name"><span class="arrow">▸</span>${row.label}${chip}</td>
         ${cells}<td>${coverage}</td>

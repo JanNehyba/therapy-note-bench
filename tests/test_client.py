@@ -12,11 +12,13 @@ from __future__ import annotations
 import httpx
 import pytest
 
-from tnb.config import GenerationPolicy, Policy
-from tnb.providers import einfra
+from tnb.config import GenerationPolicy, Provider
+from tnb.providers import openai_compatible as einfra
 
-POLICY = Policy(
+PROVIDER = Provider(
+    name="einfra",
     base_url="https://example.invalid/v1",
+    token_env="EINFRA_API_TOKEN",
     generation=GenerationPolicy(
         temperature=0.0, max_tokens=4096, concurrency=2, retries=3, backoff_s=6
     ),
@@ -64,7 +66,7 @@ def _serve(monkeypatch, responses):
 
 def test_a_note_comes_back_with_its_usage(monkeypatch):
     calls = _serve(monkeypatch, [_reply(content="  a note  ")])
-    result = einfra.complete(POLICY, "gemma4", "write a note")
+    result = einfra.complete(PROVIDER, "gemma4", "write a note")
 
     assert result.ok and result.text == "a note"
     assert result.usage == {"prompt_tokens": 10, "completion_tokens": 3}
@@ -76,7 +78,7 @@ def test_the_request_is_one_user_message_at_the_policy_settings(monkeypatch):
     """Both source papers prompt with a single user turn and no system message;
     a system message would make our generations theirs no longer."""
     calls = _serve(monkeypatch, [_reply()])
-    einfra.complete(POLICY, "gemma4", "write a note")
+    einfra.complete(PROVIDER, "gemma4", "write a note")
 
     payload = calls[0]["json"]
     assert payload["messages"] == [{"role": "user", "content": "write a note"}]
@@ -88,7 +90,7 @@ def test_the_request_is_one_user_message_at_the_policy_settings(monkeypatch):
 def test_429_is_retried_with_growing_backoff(monkeypatch, no_waiting):
     """e-INFRA rate-limits per API key, so 429 is routine rather than fatal."""
     _serve(monkeypatch, [_reply(429), _reply(429), _reply(content="a note")])
-    result = einfra.complete(POLICY, "gemma4", "write a note")
+    result = einfra.complete(PROVIDER, "gemma4", "write a note")
 
     assert result.ok
     assert no_waiting == [6, 12]
@@ -96,17 +98,17 @@ def test_429_is_retried_with_growing_backoff(monkeypatch, no_waiting):
 
 def test_a_server_error_is_retried_too(monkeypatch, no_waiting):
     _serve(monkeypatch, [_reply(503), _reply(content="a note")])
-    assert einfra.complete(POLICY, "gemma4", "write a note").ok
+    assert einfra.complete(PROVIDER, "gemma4", "write a note").ok
 
 
 def test_a_dropped_connection_is_retried_and_then_reported(monkeypatch, no_waiting):
     """One reset at call 4000 must cost a retry, not the run."""
     boom = httpx.ConnectError("connection reset")
     _serve(monkeypatch, [boom, _reply(content="a note")])
-    assert einfra.complete(POLICY, "gemma4", "write a note").ok
+    assert einfra.complete(PROVIDER, "gemma4", "write a note").ok
 
     _serve(monkeypatch, [boom, boom, boom, boom])
-    failed = einfra.complete(POLICY, "gemma4", "write a note")
+    failed = einfra.complete(PROVIDER, "gemma4", "write a note")
     assert not failed.ok
     assert "ConnectError" in failed.error
 
@@ -114,7 +116,7 @@ def test_a_dropped_connection_is_retried_and_then_reported(monkeypatch, no_waiti
 def test_giving_up_on_429_is_recorded_as_a_failure_not_an_empty_note(monkeypatch, no_waiting):
     """A note that was never generated must not enter the cache as a blank."""
     _serve(monkeypatch, [_reply(429)])
-    result = einfra.complete(POLICY, "gemma4", "write a note")
+    result = einfra.complete(PROVIDER, "gemma4", "write a note")
 
     assert not result.ok
     assert result.error.startswith("HTTP429")
@@ -124,7 +126,7 @@ def test_giving_up_on_429_is_recorded_as_a_failure_not_an_empty_note(monkeypatch
 def test_a_rejected_request_is_not_retried(monkeypatch, no_waiting):
     """400 means the request is wrong. Asking again four times only wastes quota."""
     calls = _serve(monkeypatch, [httpx.Response(400, text="bad model")])
-    result = einfra.complete(POLICY, "gemma4", "write a note")
+    result = einfra.complete(PROVIDER, "gemma4", "write a note")
 
     assert len(calls) == 1
     assert not result.ok and "HTTP400" in result.error
@@ -134,7 +136,7 @@ def test_a_reasoning_model_that_ran_out_of_budget_is_distinguishable(monkeypatch
     """Empty content with a long chain of thought is a truncated generation, not
     a refusal and not a bad model. The record has to say which it was."""
     _serve(monkeypatch, [_reply(content="", reasoning_content="thinking " * 500)])
-    result = einfra.complete(POLICY, "deepseek-v4-flash-thinking", "write a note")
+    result = einfra.complete(PROVIDER, "deepseek-v4-flash-thinking", "write a note")
 
     assert not result.ok
     assert result.error == "empty content"

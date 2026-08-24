@@ -19,7 +19,8 @@ def _row(**overrides) -> Row:
     base = {
         "track": results.TRACK_TNEVAL,
         "system_id": "gemma4",
-        "system_type": "einfra-model",
+        "system_type": "model",
+        "provider": "einfra",
         "prompt_version": "tneval-soap-v1",
         "n_sessions_attempted": 50,
         "n_sessions_generated": 50,

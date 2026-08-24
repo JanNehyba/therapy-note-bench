@@ -7,7 +7,11 @@ repository calls e-INFRA or the judge API.
 from __future__ import annotations
 
 from tnb.config import DEFAULT_POLICY_PATH, load_policy
-from tnb.providers.einfra import apply_policy, group_by_fingerprint, looks_like_alias
+from tnb.providers.openai_compatible import (
+    apply_policy,
+    group_by_fingerprint,
+    looks_like_alias,
+)
 
 # The ids `GET /v1/models` actually returned on 2026-08-23.
 SAMPLE_PAYLOAD = [
@@ -63,8 +67,8 @@ EXPECTED_BENCHMARK_SET = {
 
 
 def _classify() -> dict[str, str | None]:
-    policy = load_policy(DEFAULT_POLICY_PATH)
-    return {m.id: m.excluded_by for m in apply_policy(SAMPLE_PAYLOAD, policy.discovery)}
+    einfra = load_policy(DEFAULT_POLICY_PATH).get("einfra")
+    return {m.id: m.excluded_by for m in apply_policy(SAMPLE_PAYLOAD, einfra.discovery)}
 
 
 def test_benchmark_set_matches_the_live_endpoint():
@@ -128,7 +132,7 @@ def test_unknown_future_model_is_included_by_default():
         m.id: m.excluded_by
         for m in apply_policy(
             [{"id": "glm-5.3"}, {"id": "DeepSeek-V5"}],
-            load_policy(DEFAULT_POLICY_PATH).discovery,
+            load_policy(DEFAULT_POLICY_PATH).get("einfra").discovery,
         )
     }
     assert verdicts == {"glm-5.3": None, "DeepSeek-V5": None}

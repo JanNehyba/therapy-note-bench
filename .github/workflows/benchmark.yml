@@ -12,6 +12,10 @@ name: Benchmark
 on:
   workflow_dispatch:
     inputs:
+      providers:
+        description: "Comma-separated provider names. Blank = every one with a token."
+        required: false
+        default: ""
       models:
         description: "Comma-separated model ids. Blank = every discovered model."
         required: false
@@ -54,7 +58,7 @@ jobs:
       - name: Install
         run: uv sync --all-groups
 
-      - name: Record what e-INFRA has deployed right now
+      - name: Record what each provider has deployed right now
         env:
           EINFRA_API_TOKEN: ${{ secrets.EINFRA_API_TOKEN }}
         run: uv run tnb models --write-snapshot

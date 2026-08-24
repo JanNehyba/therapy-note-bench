@@ -8,17 +8,20 @@ work that was never really done. Nothing here touches the network.
 from __future__ import annotations
 
 import json
+from dataclasses import replace
 
 import pytest
 
 from tnb import generation
-from tnb.config import GenerationPolicy, Policy
+from tnb.config import GenerationPolicy, Provider
 from tnb.datasets.base import Session, Turn
-from tnb.providers import einfra
+from tnb.providers import openai_compatible as einfra
 from tnb.tasks import TASKS, soap
 
-POLICY = Policy(
+PROVIDER = Provider(
+    name="einfra",
     base_url="https://example.invalid/v1",
+    token_env="EINFRA_API_TOKEN",
     generation=GenerationPolicy(temperature=0.0, max_tokens=4096, concurrency=2),
 )
 
@@ -46,7 +49,7 @@ def answers(monkeypatch):
     def serve(sequence):
         queue = list(sequence)
 
-        def fake_complete(policy, model_id, prompt):
+        def fake_complete(provider, model_id, prompt):
             calls.append(model_id)
             return queue.pop(0) if queue else sequence[-1]
 
@@ -69,8 +72,8 @@ def _completion(
     )
 
 
-def _job(model_id: str = "gemma4") -> generation.Job:
-    return next(iter(generation.build_jobs([model_id], TASKS["soap"], [SESSION])))
+def _job(model_id: str = "gemma4", provider: str = "einfra") -> generation.Job:
+    return next(iter(generation.build_jobs(provider, [model_id], TASKS["soap"], [SESSION])))
 
 
 # --- what the cache is keyed on --------------------------------------------
@@ -80,8 +83,8 @@ def test_a_second_run_asks_nobody_anything(answers):
     calls = answers([_completion()])
     job = _job()
 
-    assert generation.run_job(job, POLICY).status == "generated"
-    assert generation.run_job(job, POLICY).status == "cached"
+    assert generation.run_job(job, PROVIDER).status == "generated"
+    assert generation.run_job(job, PROVIDER).status == "cached"
     assert len(calls) == 1
 
 
@@ -89,11 +92,11 @@ def test_adding_a_model_regenerates_only_that_model(answers):
     """The property the whole cache exists for: an twelfth model must not cost
     a re-run of the eleven already measured."""
     calls = answers([_completion()])
-    generation.run_job(_job("gemma4"), POLICY)
-    generation.run_job(_job("glm-5.2"), POLICY)
+    generation.run_job(_job("gemma4"), PROVIDER)
+    generation.run_job(_job("glm-5.2"), PROVIDER)
 
     assert calls == ["gemma4", "glm-5.2"]
-    assert generation.run_job(_job("gemma4"), POLICY).status == "cached"
+    assert generation.run_job(_job("gemma4"), PROVIDER).status == "cached"
 
 
 def test_a_changed_prompt_is_not_the_same_note(answers):
@@ -101,12 +104,12 @@ def test_a_changed_prompt_is_not_the_same_note(answers):
     would silently report a note that was never written for this prompt."""
     calls = answers([_completion()])
     job = _job()
-    generation.run_job(job, POLICY)
+    generation.run_job(job, PROVIDER)
 
     from dataclasses import replace
 
     reworded = replace(job, prompt=job.prompt + " extra")
-    assert generation.run_job(reworded, POLICY).status == "generated"
+    assert generation.run_job(reworded, PROVIDER).status == "generated"
     assert len(calls) == 2
 
 
@@ -115,11 +118,9 @@ def test_a_changed_token_budget_invalidates_the_cache(answers):
     two budgets are two experiments, not one."""
     calls = answers([_completion()])
     job = _job()
-    generation.run_job(job, POLICY)
+    generation.run_job(job, PROVIDER)
 
-    bigger = Policy(
-        base_url=POLICY.base_url, generation=GenerationPolicy(max_tokens=8192, concurrency=2)
-    )
+    bigger = replace(PROVIDER, generation=GenerationPolicy(max_tokens=8192, concurrency=2))
     assert generation.run_job(job, bigger).status == "generated"
     assert len(calls) == 2
 
@@ -127,14 +128,14 @@ def test_a_changed_token_budget_invalidates_the_cache(answers):
 def test_each_icare_section_is_cached_on_its_own(answers):
     """A run that died at section 9 must resume at section 9, not at section 1."""
     calls = answers([_completion("Nil")])
-    jobs = list(generation.build_jobs(["gemma4"], TASKS["icare"], [SESSION]))
+    jobs = list(generation.build_jobs("einfra", ["gemma4"], TASKS["icare"], [SESSION]))
     assert len(jobs) == 17
 
     for job in jobs[:9]:
-        generation.run_job(job, POLICY)
+        generation.run_job(job, PROVIDER)
     assert len(calls) == 9
 
-    statuses = [generation.run_job(job, POLICY).status for job in jobs]
+    statuses = [generation.run_job(job, PROVIDER).status for job in jobs]
     assert statuses[:9] == ["cached"] * 9
     assert statuses[9:] == ["generated"] * 8
 
@@ -148,8 +149,8 @@ def test_a_failed_call_is_retried_next_run(answers):
     calls = answers([_completion("", ok=False, error="HTTP429"), _completion()])
     job = _job()
 
-    assert generation.run_job(job, POLICY).status == "failed"
-    assert generation.run_job(job, POLICY).status == "generated"
+    assert generation.run_job(job, PROVIDER).status == "failed"
+    assert generation.run_job(job, PROVIDER).status == "generated"
     assert len(calls) == 2
 
 
@@ -158,7 +159,7 @@ def test_a_failure_is_still_written_down(answers, cache_dir):
     which session and what the endpoint said."""
     answers([_completion("", ok=False, error="HTTP429: rate limited")])
     job = _job()
-    generation.run_job(job, POLICY)
+    generation.run_job(job, PROVIDER)
 
     record = json.loads(job.path().read_text(encoding="utf-8"))
     assert record["ok"] is False
@@ -169,7 +170,7 @@ def test_an_answer_without_a_soap_dictionary_is_a_failure(answers):
     """A model that refuses, or explains instead of answering, must not enter
     the cache as a note. It would be scored as one."""
     answers([_completion("I am sorry, I cannot help with that.")])
-    outcome = generation.run_job(_job(), POLICY)
+    outcome = generation.run_job(_job(), PROVIDER)
 
     assert outcome.status == "failed"
     assert outcome.record["note"] is None
@@ -179,8 +180,8 @@ def test_an_answer_without_a_soap_dictionary_is_a_failure(answers):
 def test_force_regenerates_a_cached_note(answers):
     calls = answers([_completion()])
     job = _job()
-    generation.run_job(job, POLICY)
-    generation.run_job(job, POLICY, force=True)
+    generation.run_job(job, PROVIDER)
+    generation.run_job(job, PROVIDER, force=True)
     assert len(calls) == 2
 
 
@@ -191,7 +192,7 @@ def test_a_corrupt_cache_file_is_a_miss_not_a_crash(answers, cache_dir):
     job.path().parent.mkdir(parents=True, exist_ok=True)
     job.path().write_text("{ truncated", encoding="utf-8")
 
-    assert generation.run_job(job, POLICY).status == "generated"
+    assert generation.run_job(job, PROVIDER).status == "generated"
     assert len(calls) == 1
 
 
@@ -201,7 +202,7 @@ def test_a_corrupt_cache_file_is_a_miss_not_a_crash(answers, cache_dir):
 def test_the_record_carries_the_versions_the_leaderboard_joins_on(answers):
     """docs/methodology.md: rows are only ever combined when these agree."""
     answers([_completion()])
-    record = generation.run_job(_job(), POLICY).record
+    record = generation.run_job(_job(), PROVIDER).record
 
     for field in ("harness_version", "prompt_version", "model", "task", "session_id"):
         assert record[field], f"{field} missing from the generation record"
@@ -211,15 +212,15 @@ def test_the_record_carries_the_versions_the_leaderboard_joins_on(answers):
 def test_the_record_says_which_corpus_bytes_it_was_generated_from(answers, monkeypatch):
     monkeypatch.setattr(generation, "checksums", lambda: {"AnnoMI-full.csv": "abc123"})
     answers([_completion()])
-    assert generation.run_job(_job(), POLICY).record["dataset_checksums"]["AnnoMI-full.csv"]
+    assert generation.run_job(_job(), PROVIDER).record["dataset_checksums"]["AnnoMI-full.csv"]
 
 
 def test_icare_records_keep_the_section_number_and_the_temporal_flag(answers):
     """Sections 5 and 17 get their own leaderboard column, so the flag has to
     survive from prompt building to the stored answer."""
     answers([_completion("Nil")])
-    jobs = list(generation.build_jobs(["gemma4"], TASKS["icare"], [SESSION]))
-    record = generation.run_job(jobs[4], POLICY).record
+    jobs = list(generation.build_jobs("einfra", ["gemma4"], TASKS["icare"], [SESSION]))
+    record = generation.run_job(jobs[4], PROVIDER).record
 
     assert record["unit"] == "section-05"
     assert record["unit_meta"] == {"section": 5, "temporal": True}
@@ -230,7 +231,7 @@ def test_paths_survive_a_model_id_with_a_slash_in_it(answers):
     otherwise write outside the cache directory."""
     answers([_completion()])
     job = _job("vendor/model:v1")
-    generation.run_job(job, POLICY)
+    generation.run_job(job, PROVIDER)
     assert job.path().exists()
     assert job.path().parent.name == "7"
 
@@ -247,7 +248,7 @@ def test_the_pool_never_exceeds_the_configured_concurrency(monkeypatch):
     peak = 0
     lock = threading.Lock()
 
-    def fake_complete(policy, model_id, prompt):
+    def fake_complete(provider, model_id, prompt):
         nonlocal live, peak
         with lock:
             live += 1
@@ -259,17 +260,19 @@ def test_the_pool_never_exceeds_the_configured_concurrency(monkeypatch):
                 live -= 1
 
     monkeypatch.setattr(einfra, "complete", fake_complete)
-    jobs = list(generation.build_jobs([f"m{i}" for i in range(8)], TASKS["soap"], [SESSION]))
-    outcomes = generation.run_jobs(jobs, POLICY)
+    jobs = list(
+        generation.build_jobs("einfra", [f"m{i}" for i in range(8)], TASKS["soap"], [SESSION])
+    )
+    outcomes = generation.run_jobs(jobs, PROVIDER)
 
     assert len(outcomes) == 8
-    assert peak <= POLICY.generation.concurrency
+    assert peak <= PROVIDER.generation.concurrency
 
 
 # --- running out of budget while thinking ----------------------------------
 
-ESCALATING = Policy(
-    base_url="https://example.invalid/v1",
+ESCALATING = replace(
+    PROVIDER,
     generation=GenerationPolicy(max_tokens=4096, escalate_max_tokens=16384, concurrency=2),
 )
 
@@ -294,8 +297,8 @@ def budgets(monkeypatch):
     def serve(sequence):
         queue = list(sequence)
 
-        def fake_complete(policy, model_id, prompt, *, max_tokens=None):
-            seen.append(max_tokens or policy.generation.max_tokens)
+        def fake_complete(provider, model_id, prompt, *, max_tokens=None):
+            seen.append(max_tokens or provider.generation.max_tokens)
             return queue.pop(0) if queue else sequence[-1]
 
         monkeypatch.setattr(einfra, "complete", fake_complete)
@@ -341,7 +344,7 @@ def test_the_escalation_budget_is_part_of_the_cache_key(budgets):
     generation.run_job(job, ESCALATING)
 
     assert generation.run_job(job, ESCALATING).status == "cached"
-    assert generation.run_job(job, POLICY).status == "generated"
+    assert generation.run_job(job, PROVIDER).status == "generated"
 
 
 # --- TN-Eval's repair loop -------------------------------------------------
@@ -355,7 +358,7 @@ def prompts(monkeypatch):
     def serve(sequence):
         queue = list(sequence)
 
-        def fake_complete(policy, model_id, prompt, *, max_tokens=None):
+        def fake_complete(provider, model_id, prompt, *, max_tokens=None):
             sent.append(prompt)
             return queue.pop(0) if queue else sequence[-1]
 
@@ -375,7 +378,7 @@ def test_a_nested_plan_is_re_asked_with_tn_evals_repair_sentence(prompts):
     model needs here. A cleverer parser would measure a different extraction
     than their published numbers did."""
     sent = prompts([_completion(NESTED), _completion()])
-    outcome = generation.run_job(_job("gpt-oss-120b"), POLICY)
+    outcome = generation.run_job(_job("gpt-oss-120b"), PROVIDER)
 
     assert outcome.status == "generated"
     assert len(sent) == 2
@@ -385,26 +388,26 @@ def test_a_nested_plan_is_re_asked_with_tn_evals_repair_sentence(prompts):
 
 def test_the_repair_loop_stops_where_tn_eval_stops(prompts):
     sent = prompts([_completion(NESTED)])
-    assert generation.run_job(_job(), POLICY).status == "failed"
+    assert generation.run_job(_job(), PROVIDER).status == "failed"
     assert len(sent) == soap.PARSE_ATTEMPTS
 
 
 def test_a_note_that_parses_first_time_is_asked_once(prompts):
     sent = prompts([_completion()])
-    assert generation.run_job(_job(), POLICY).record["parse_attempt"] == 1
+    assert generation.run_job(_job(), PROVIDER).record["parse_attempt"] == 1
     assert len(sent) == 1
 
 
 def test_an_endpoint_failure_is_not_re_asked_with_a_repair_sentence(prompts):
     """A 429 that exhausted its retries did not misunderstand the format."""
     sent = prompts([_completion("", ok=False, error="HTTP429")])
-    assert generation.run_job(_job(), POLICY).status == "failed"
+    assert generation.run_job(_job(), PROVIDER).status == "failed"
     assert len(sent) == 1
 
 
 def test_icare_sections_are_never_re_asked(prompts):
     """iCARE has no repair loop; inventing one would be our protocol, not theirs."""
     sent = prompts([_completion("Nil")])
-    jobs = list(generation.build_jobs(["gemma4"], TASKS["icare"], [SESSION]))
-    generation.run_job(jobs[0], POLICY)
+    jobs = list(generation.build_jobs("einfra", ["gemma4"], TASKS["icare"], [SESSION]))
+    generation.run_job(jobs[0], PROVIDER)
     assert len(sent) == 1

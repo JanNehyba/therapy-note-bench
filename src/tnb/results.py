@@ -45,11 +45,16 @@ TRACK_BY_TASK = {"soap": TRACK_TNEVAL, "icare": TRACK_ICARE}
 
 #: What produced the note this row scores.
 #:
-#: ``einfra-model``    a model discovered on the endpoint -- the leaderboard proper
+#: ``model``           a model discovered on a provider -- the leaderboard proper
 #: ``reference-human`` a therapist-written note released by TN-Eval
 #: ``reference-model`` a note from a model the source paper ran (Llama 3.1 70B, ...)
 #: ``published``       a number printed in a paper, produced by another harness
-SYSTEM_TYPES = ("einfra-model", "reference-human", "reference-model", "published")
+SYSTEM_TYPES = ("model", "reference-human", "reference-model", "published")
+
+#: Rows written before the harness supported more than one provider named the
+#: first type after that provider. results/ is append-only, so the old value is
+#: translated on the way in rather than edited on disk.
+LEGACY_SYSTEM_TYPES = {"einfra-model": "model"}
 
 #: The fields a row must agree on before it may share a table with another.
 #: `track` is included because two tracks are never one ranking.
@@ -63,7 +68,12 @@ COMPARABILITY_KEYS = (
 
 #: The fields that identify a row. Two rows with the same identity are the same
 #: measurement re-run; the later one supersedes the earlier when rendering.
-IDENTITY_KEYS = (*COMPARABILITY_KEYS, "system_id", "system_type")
+#:
+#: `provider` is here and deliberately **not** in COMPARABILITY_KEYS: two
+#: providers belong in one table -- comparing them is the point -- but they are
+#: never the same row. The same model id on two endpoints can be two different
+#: builds, and merging them would hide that behind one name.
+IDENTITY_KEYS = (*COMPARABILITY_KEYS, "provider", "system_id", "system_type")
 
 
 @dataclass(frozen=True)
@@ -97,7 +107,8 @@ class Row:
     n_sessions_attempted: int
 
     system_label: str = ""
-    provider: str = "einfra"
+    #: Which endpoint served this model. Part of its identity, not a footnote.
+    provider: str = ""
 
     harness_version: str = __version__
     prompt_version: str = ""
@@ -127,6 +138,8 @@ class Row:
     run_id: str = ""
 
     def __post_init__(self) -> None:
+        if self.system_type in LEGACY_SYSTEM_TYPES:
+            object.__setattr__(self, "system_type", LEGACY_SYSTEM_TYPES[self.system_type])
         if self.track not in TRACKS:
             raise ValueError(f"Unknown track {self.track!r}. Known: {', '.join(TRACKS)}.")
         if self.system_type not in SYSTEM_TYPES:
@@ -250,19 +263,24 @@ def index_generations(cache_dir: Path | None = None, *, run_id: str = "") -> lis
         return []
 
     rows: list[Row] = []
-    for task_dir in sorted(p for p in cache_dir.iterdir() if p.is_dir()):
-        track = TRACK_BY_TASK.get(task_dir.name)
-        if track is None:
-            continue
-        for version_dir in sorted(p for p in task_dir.iterdir() if p.is_dir()):
-            for model_dir in sorted(p for p in version_dir.iterdir() if p.is_dir()):
-                row = _coverage_row(track, version_dir.name, model_dir, run_id)
-                if row is not None:
-                    rows.append(row)
+    for provider_dir in sorted(p for p in cache_dir.iterdir() if p.is_dir()):
+        for task_dir in sorted(p for p in provider_dir.iterdir() if p.is_dir()):
+            track = TRACK_BY_TASK.get(task_dir.name)
+            if track is None:
+                continue
+            for version_dir in sorted(p for p in task_dir.iterdir() if p.is_dir()):
+                for model_dir in sorted(p for p in version_dir.iterdir() if p.is_dir()):
+                    row = _coverage_row(
+                        track, provider_dir.name, version_dir.name, model_dir, run_id
+                    )
+                    if row is not None:
+                        rows.append(row)
     return rows
 
 
-def _coverage_row(track: str, prompt_version: str, model_dir: Path, run_id: str) -> Row | None:
+def _coverage_row(
+    track: str, provider: str, prompt_version: str, model_dir: Path, run_id: str
+) -> Row | None:
     sessions = sorted(p for p in model_dir.iterdir() if p.is_dir())
     if not sessions:
         return None
@@ -293,7 +311,8 @@ def _coverage_row(track: str, prompt_version: str, model_dir: Path, run_id: str)
     return Row(
         track=track,
         system_id=model_dir.name,
-        system_type="einfra-model",
+        system_type="model",
+        provider=provider,
         prompt_version=prompt_version,
         n_sessions_attempted=len(sessions),
         n_sessions_generated=complete,

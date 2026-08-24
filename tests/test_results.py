@@ -13,9 +13,9 @@ import json
 import pytest
 
 from tnb import generation, results
-from tnb.config import GenerationPolicy, Policy
+from tnb.config import GenerationPolicy, Provider
 from tnb.datasets.base import Session, Turn
-from tnb.providers import einfra
+from tnb.providers import openai_compatible as einfra
 from tnb.results import Metrics, Row
 from tnb.tasks import TASKS
 
@@ -24,7 +24,7 @@ def _row(**overrides) -> Row:
     base = {
         "track": results.TRACK_TNEVAL,
         "system_id": "gemma4",
-        "system_type": "einfra-model",
+        "system_type": "model",
         "prompt_version": "tneval-soap-v1",
         "n_sessions_attempted": 50,
         "n_sessions_generated": 50,
@@ -170,7 +170,12 @@ def test_a_published_number_carries_its_source_and_no_invented_detail():
 
 # --- coverage rows from the generation cache --------------------------------
 
-POLICY = Policy(base_url="https://example.invalid/v1", generation=GenerationPolicy(concurrency=1))
+PROVIDER = Provider(
+    name="einfra",
+    base_url="https://example.invalid/v1",
+    token_env="EINFRA_API_TOKEN",
+    generation=GenerationPolicy(concurrency=1),
+)
 NOTE = '{"Subjective": "s", "Objective": "o", "Assessment": "a", "Plan": "p"}'
 
 
@@ -184,7 +189,7 @@ def _generate(monkeypatch, model_id: str, session_ids: list[str], text: str = NO
     monkeypatch.setattr(
         einfra,
         "complete",
-        lambda policy, model, prompt: einfra.Completion(
+        lambda provider, model, prompt: einfra.Completion(
             model=model,
             text=text,
             ok=bool(text),
@@ -195,8 +200,8 @@ def _generate(monkeypatch, model_id: str, session_ids: list[str], text: str = NO
     sessions = [
         Session(id=sid, source="tneval", turns=(Turn("therapist", "Hi."),)) for sid in session_ids
     ]
-    for job in generation.build_jobs([model_id], TASKS["soap"], sessions):
-        generation.run_job(job, POLICY)
+    for job in generation.build_jobs("einfra", [model_id], TASKS["soap"], sessions):
+        generation.run_job(job, PROVIDER)
 
 
 def test_indexing_reports_one_row_per_model_and_track(cache, monkeypatch):

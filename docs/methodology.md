@@ -102,15 +102,28 @@ meaningless within a couple of model generations and nobody notices.
 
 ## Model discovery
 
-e-INFRA's documentation states that "no specific model version is guaranteed to
-stay available". A hard-coded model list would therefore be wrong within weeks.
-Each run queries `GET /v1/models` and filters the result through
-[`models.yaml`](../models.yaml), which holds only rules — exclude embeddings,
-exclude speech models, exclude the moving aliases (`glm`, `kimi`, `deepseek`)
-because the model behind an alias changes without notice.
+No provider guarantees that a model version stays available — e-INFRA's
+documentation says so outright. A hard-coded model list would therefore be wrong
+within weeks. Each run queries every configured provider's `GET /v1/models` and
+filters the result through [`models.yaml`](../models.yaml), which holds only
+rules — exclude embeddings, exclude speech models, exclude the moving aliases
+(`glm`, `kimi`, `deepseek`) because the model behind an alias changes without
+notice.
 
-The consequence is the property this repository exists for: when e-INFRA swaps
-`glm-5.2` for `glm-5.3`, the next run picks it up on its own.
+The consequence is the property this repository exists for: when a provider
+swaps `glm-5.2` for `glm-5.3`, the next run picks it up on its own.
+
+### The provider is part of a model's identity
+
+A model id is only unique inside one endpoint. The same name served by two
+providers can be two different things — a different quantisation, different
+weights, a different system prompt — so every result row carries its provider,
+every cached note is filed under it, and the leaderboard shows it. Two providers
+share a table, because comparing them is the point; they never share a row.
+
+`tnb models --probe` answers the question directly: run it against both and
+compare the fingerprints. It is the same check that caught `command-a` returning
+`gemma4`'s exact output, one level up.
 
 ## Cost control
 
