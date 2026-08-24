@@ -122,7 +122,15 @@ def load_answers(root: Path | None = None, judge_model: str = judge.DEFAULT_MODE
     model id: they may be two different builds, and averaging them together
     would report a model that does not exist.
     """
-    base = (root or judge.CACHE_DIR) / judge._slug_model(judge_model)
+    # Scoped to one judge prompt version, not the whole judge directory. Two
+    # versions of the rubric are two instruments, and the leaderboard's central
+    # rule is that their numbers never mix -- an analysis that read both would
+    # break it silently.
+    base = (
+        (root or judge.CACHE_DIR)
+        / judge._slug_model(judge_model)
+        / judge._slug_model(tneval.JUDGE_PROMPT_VERSION)
+    )
     answers: dict[tuple[str, str], dict[str, str]] = defaultdict(dict)
     if not base.exists():
         return answers
@@ -145,11 +153,21 @@ def load_answers(root: Path | None = None, judge_model: str = judge.DEFAULT_MODE
     return answers
 
 
-def per_criterion(answers: dict) -> list[CriterionProfile]:
-    """How often each system satisfied each of the 23 criteria."""
+def per_criterion(answers: dict, include: list[str] | None = None) -> list[CriterionProfile]:
+    """How often each system satisfied each of the 23 criteria.
+
+    ``include`` is the same coverage filter the intervals use. Without it the
+    panel excluded a half-scored system from its ranking and then let that
+    system's handful of notes set the min, the max and therefore the verdict of
+    every criterion bar beside it -- one panel saying two different things about
+    who was measured.
+    """
     hits: dict[tuple[str, str], list[int]] = defaultdict(lambda: [0, 0])
+    allowed = None if include is None else set(include)
 
     for (system, _session), units in answers.items():
+        if allowed is not None and system not in allowed:
+            continue
         for unit, answer in units.items():
             parts = unit.split(".")
             if len(parts) != 3 or parts[1] != "rubric_completeness":
@@ -181,7 +199,13 @@ def per_criterion(answers: dict) -> list[CriterionProfile]:
 
 
 def per_session_scores(answers: dict, measure: str = "completeness") -> dict[str, dict[str, float]]:
-    """One score per (system, session), which is what the bootstrap resamples."""
+    """One score per (system, session), which is what the bootstrap resamples.
+
+    Completeness by default, because it is the measure the leaderboard ranks on
+    and the only one every cached answer set can support: the note text is not
+    in the cache, so which conciseness questions *should* have been asked cannot
+    be reconstructed here.
+    """
     scores: dict[str, dict[str, float]] = defaultdict(dict)
     for (system, session), units in answers.items():
         aggregate = tneval.aggregate(units)
@@ -308,9 +332,9 @@ def build(root: Path | None = None, judge_model: str = judge.DEFAULT_MODEL) -> d
     if not answers:
         return None
 
-    criteria = per_criterion(answers)
     scores = per_session_scores(answers)
-    _usable, partial = usable_systems(scores)
+    usable, partial = usable_systems(scores)
+    criteria = per_criterion(answers, include=usable)
     intervals, beats = paired_intervals(scores)
     if not intervals:
         return None

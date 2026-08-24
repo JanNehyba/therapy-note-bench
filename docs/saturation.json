@@ -10,6 +10,7 @@
         "deepseek-v4-flash": 1.0,
         "deepseek-v4-flash-thinking": 1.0,
         "gemma4": 1.0,
+        "glm-5": 1.0,
         "llama-3.1-70b": 1.0,
         "mistral-large-v2": 0.98,
         "therapist": 0.62
@@ -26,6 +27,7 @@
         "deepseek-v4-flash": 1.0,
         "deepseek-v4-flash-thinking": 1.0,
         "gemma4": 1.0,
+        "glm-5": 1.0,
         "llama-3.1-70b": 0.98,
         "mistral-large-v2": 1.0,
         "therapist": 0.4
@@ -42,6 +44,7 @@
         "deepseek-v4-flash": 1.0,
         "deepseek-v4-flash-thinking": 1.0,
         "gemma4": 1.0,
+        "glm-5": 1.0,
         "llama-3.1-70b": 1.0,
         "mistral-large-v2": 0.98,
         "therapist": 0.62
@@ -57,7 +60,8 @@
       "by_system": {
         "deepseek-v4-flash": 1.0,
         "deepseek-v4-flash-thinking": 1.0,
-        "gemma4": 1.0,
+        "gemma4": 0.98,
+        "glm-5": 1.0,
         "llama-3.1-70b": 0.94,
         "mistral-large-v2": 1.0,
         "therapist": 0.46
@@ -74,6 +78,7 @@
         "deepseek-v4-flash": 1.0,
         "deepseek-v4-flash-thinking": 1.0,
         "gemma4": 1.0,
+        "glm-5": 0.925,
         "llama-3.1-70b": 0.92,
         "mistral-large-v2": 0.96,
         "therapist": 0.3
@@ -89,7 +94,8 @@
       "by_system": {
         "deepseek-v4-flash": 0.78,
         "deepseek-v4-flash-thinking": 0.86,
-        "gemma4": 1.0,
+        "gemma4": 0.74,
+        "glm-5": 0.872,
         "llama-3.1-70b": 0.6,
         "mistral-large-v2": 0.72,
         "therapist": 0.76
@@ -97,7 +103,7 @@
       "human": 0.76,
       "key": "assessment-stages",
       "section": "assessment",
-      "spread": 0.4,
+      "spread": 0.272,
       "text": "Stages of change",
       "verdict": "discriminating"
     },
@@ -105,7 +111,8 @@
       "by_system": {
         "deepseek-v4-flash": 0.78,
         "deepseek-v4-flash-thinking": 0.62,
-        "gemma4": 0.833,
+        "gemma4": 0.74,
+        "glm-5": 0.675,
         "llama-3.1-70b": 0.86,
         "mistral-large-v2": 0.62,
         "therapist": 0.74
@@ -121,7 +128,8 @@
       "by_system": {
         "deepseek-v4-flash": 0.7,
         "deepseek-v4-flash-thinking": 0.7,
-        "gemma4": 0.667,
+        "gemma4": 0.66,
+        "glm-5": 0.65,
         "llama-3.1-70b": 0.54,
         "mistral-large-v2": 0.5,
         "therapist": 0.42
@@ -137,7 +145,8 @@
       "by_system": {
         "deepseek-v4-flash": 0.56,
         "deepseek-v4-flash-thinking": 0.56,
-        "gemma4": 0.5,
+        "gemma4": 0.64,
+        "glm-5": 0.675,
         "llama-3.1-70b": 0.46,
         "mistral-large-v2": 0.56,
         "therapist": 0.48
@@ -145,31 +154,16 @@
       "human": 0.48,
       "key": "subjective-history",
       "section": "subjective",
-      "spread": 0.1,
+      "spread": 0.215,
       "text": "History",
       "verdict": "mixed"
     },
     {
       "by_system": {
-        "deepseek-v4-flash": 0.44,
-        "deepseek-v4-flash-thinking": 0.48,
-        "gemma4": 1.0,
-        "llama-3.1-70b": 0.28,
-        "mistral-large-v2": 0.36,
-        "therapist": 0.4
-      },
-      "human": 0.4,
-      "key": "plan-homework",
-      "section": "plan",
-      "spread": 0.72,
-      "text": "Homework",
-      "verdict": "discriminating"
-    },
-    {
-      "by_system": {
         "deepseek-v4-flash": 0.5,
         "deepseek-v4-flash-thinking": 0.56,
-        "gemma4": 0.5,
+        "gemma4": 0.78,
+        "glm-5": 0.744,
         "llama-3.1-70b": 0.32,
         "mistral-large-v2": 0.4,
         "therapist": 0.5
@@ -177,15 +171,16 @@
       "human": 0.5,
       "key": "assessment-progress",
       "section": "assessment",
-      "spread": 0.24,
+      "spread": 0.46,
       "text": "Progress",
-      "verdict": "mixed"
+      "verdict": "discriminating"
     },
     {
       "by_system": {
         "deepseek-v4-flash": 0.66,
         "deepseek-v4-flash-thinking": 0.62,
-        "gemma4": 0.667,
+        "gemma4": 0.78,
+        "glm-5": 0.775,
         "llama-3.1-70b": 0.08,
         "mistral-large-v2": 0.24,
         "therapist": 0.24
@@ -193,7 +188,7 @@
       "human": 0.24,
       "key": "subjective-quotes",
       "section": "subjective",
-      "spread": 0.587,
+      "spread": 0.7,
       "text": "Quotes",
       "verdict": "discriminating"
     },
@@ -201,7 +196,8 @@
       "by_system": {
         "deepseek-v4-flash": 0.32,
         "deepseek-v4-flash-thinking": 0.5,
-        "gemma4": 0.5,
+        "gemma4": 0.48,
+        "glm-5": 0.684,
         "llama-3.1-70b": 0.38,
         "mistral-large-v2": 0.56,
         "therapist": 0.34
@@ -209,15 +205,16 @@
       "human": 0.34,
       "key": "plan-follow-up",
       "section": "plan",
-      "spread": 0.24,
+      "spread": 0.364,
       "text": "Follow-Up",
-      "verdict": "mixed"
+      "verdict": "discriminating"
     },
     {
       "by_system": {
         "deepseek-v4-flash": 0.56,
         "deepseek-v4-flash-thinking": 0.7,
-        "gemma4": 0.5,
+        "gemma4": 0.44,
+        "glm-5": 0.5,
         "llama-3.1-70b": 0.12,
         "mistral-large-v2": 0.32,
         "therapist": 0.16
@@ -233,7 +230,8 @@
       "by_system": {
         "deepseek-v4-flash": 0.4,
         "deepseek-v4-flash-thinking": 0.52,
-        "gemma4": 0.5,
+        "gemma4": 0.56,
+        "glm-5": 0.615,
         "llama-3.1-70b": 0.26,
         "mistral-large-v2": 0.26,
         "therapist": 0.24
@@ -241,15 +239,33 @@
       "human": 0.24,
       "key": "assessment-triggers",
       "section": "assessment",
-      "spread": 0.26,
+      "spread": 0.355,
       "text": "Identifying Triggers",
       "verdict": "discriminating"
     },
     {
       "by_system": {
+        "deepseek-v4-flash": 0.44,
+        "deepseek-v4-flash-thinking": 0.48,
+        "gemma4": 0.38,
+        "glm-5": 0.472,
+        "llama-3.1-70b": 0.28,
+        "mistral-large-v2": 0.36,
+        "therapist": 0.4
+      },
+      "human": 0.4,
+      "key": "plan-homework",
+      "section": "plan",
+      "spread": 0.2,
+      "text": "Homework",
+      "verdict": "mixed"
+    },
+    {
+      "by_system": {
         "deepseek-v4-flash": 0.38,
         "deepseek-v4-flash-thinking": 0.38,
-        "gemma4": 0.5,
+        "gemma4": 0.44,
+        "glm-5": 0.59,
         "llama-3.1-70b": 0.24,
         "mistral-large-v2": 0.26,
         "therapist": 0.3
@@ -257,31 +273,16 @@
       "human": 0.3,
       "key": "assessment-overall-progress",
       "section": "assessment",
-      "spread": 0.26,
+      "spread": 0.35,
       "text": "Overall/high-level progress",
       "verdict": "discriminating"
     },
     {
       "by_system": {
         "deepseek-v4-flash": 0.2,
-        "deepseek-v4-flash-thinking": 0.4,
-        "gemma4": 0.75,
-        "llama-3.1-70b": 0.02,
-        "mistral-large-v2": 0.02,
-        "therapist": 0.22
-      },
-      "human": 0.22,
-      "key": "objective-therapy-activities",
-      "section": "objective",
-      "spread": 0.73,
-      "text": "Therapy Activities",
-      "verdict": "discriminating"
-    },
-    {
-      "by_system": {
-        "deepseek-v4-flash": 0.2,
         "deepseek-v4-flash-thinking": 0.28,
-        "gemma4": 0.5,
+        "gemma4": 0.36,
+        "glm-5": 0.333,
         "llama-3.1-70b": 0.12,
         "mistral-large-v2": 0.1,
         "therapist": 0.4
@@ -289,31 +290,33 @@
       "human": 0.4,
       "key": "assessment-response",
       "section": "assessment",
-      "spread": 0.4,
+      "spread": 0.26,
       "text": "Response to interventions",
       "verdict": "discriminating"
     },
     {
       "by_system": {
-        "deepseek-v4-flash": 0.08,
-        "deepseek-v4-flash-thinking": 0.2,
-        "gemma4": 0.333,
+        "deepseek-v4-flash": 0.2,
+        "deepseek-v4-flash-thinking": 0.4,
+        "gemma4": 0.28,
+        "glm-5": 0.385,
         "llama-3.1-70b": 0.02,
-        "mistral-large-v2": 0.04,
-        "therapist": 0.04
+        "mistral-large-v2": 0.02,
+        "therapist": 0.22
       },
-      "human": 0.04,
-      "key": "assessment-diagnosis",
-      "section": "assessment",
-      "spread": 0.313,
-      "text": "Diagnosis/Symptoms",
+      "human": 0.22,
+      "key": "objective-therapy-activities",
+      "section": "objective",
+      "spread": 0.38,
+      "text": "Therapy Activities",
       "verdict": "discriminating"
     },
     {
       "by_system": {
         "deepseek-v4-flash": 0.16,
         "deepseek-v4-flash-thinking": 0.22,
-        "gemma4": 0.25,
+        "gemma4": 0.14,
+        "glm-5": 0.051,
         "llama-3.1-70b": 0.0,
         "mistral-large-v2": 0.04,
         "therapist": 0.1
@@ -321,15 +324,33 @@
       "human": 0.1,
       "key": "objective-assessment-tools",
       "section": "objective",
-      "spread": 0.25,
+      "spread": 0.22,
       "text": "Assessment Tools",
-      "verdict": "discriminating"
+      "verdict": "mixed"
+    },
+    {
+      "by_system": {
+        "deepseek-v4-flash": 0.08,
+        "deepseek-v4-flash-thinking": 0.2,
+        "gemma4": 0.18,
+        "glm-5": 0.077,
+        "llama-3.1-70b": 0.02,
+        "mistral-large-v2": 0.04,
+        "therapist": 0.04
+      },
+      "human": 0.04,
+      "key": "assessment-diagnosis",
+      "section": "assessment",
+      "spread": 0.18,
+      "text": "Diagnosis/Symptoms",
+      "verdict": "mixed"
     },
     {
       "by_system": {
         "deepseek-v4-flash": 0.02,
         "deepseek-v4-flash-thinking": 0.22,
-        "gemma4": 0.333,
+        "gemma4": 0.08,
+        "glm-5": 0.179,
         "llama-3.1-70b": 0.0,
         "mistral-large-v2": 0.0,
         "therapist": 0.2
@@ -337,15 +358,16 @@
       "human": 0.2,
       "key": "objective-interventions",
       "section": "objective",
-      "spread": 0.333,
+      "spread": 0.22,
       "text": "Interventions",
-      "verdict": "discriminating"
+      "verdict": "mixed"
     },
     {
       "by_system": {
         "deepseek-v4-flash": 0.02,
         "deepseek-v4-flash-thinking": 0.04,
-        "gemma4": 0.0,
+        "gemma4": 0.06,
+        "glm-5": 0.05,
         "llama-3.1-70b": 0.0,
         "mistral-large-v2": 0.02,
         "therapist": 0.04
@@ -353,7 +375,7 @@
       "human": 0.04,
       "key": "subjective-homework",
       "section": "subjective",
-      "spread": 0.04,
+      "spread": 0.06,
       "text": "Homework from previous sessions",
       "verdict": "unreachable"
     },
@@ -362,6 +384,7 @@
         "deepseek-v4-flash": 0.02,
         "deepseek-v4-flash-thinking": 0.06,
         "gemma4": 0.0,
+        "glm-5": 0.026,
         "llama-3.1-70b": 0.0,
         "mistral-large-v2": 0.0,
         "therapist": 0.0
@@ -376,7 +399,11 @@
   ],
   "indistinguishable": [
     [
+      "glm-5",
       "deepseek-v4-flash-thinking"
+    ],
+    [
+      "gemma4"
     ],
     [
       "deepseek-v4-flash"
@@ -393,44 +420,54 @@
   ],
   "intervals": [
     {
-      "high": 0.6094,
-      "low": 0.5461,
-      "mean": 0.5776,
+      "high": 0.6247,
+      "low": 0.5564,
+      "mean": 0.5897,
+      "system": "glm-5"
+    },
+    {
+      "high": 0.6135,
+      "low": 0.5418,
+      "mean": 0.5773,
       "system": "deepseek-v4-flash-thinking"
     },
     {
-      "high": 0.554,
-      "low": 0.4952,
-      "mean": 0.524,
+      "high": 0.5923,
+      "low": 0.5222,
+      "mean": 0.5562,
+      "system": "gemma4"
+    },
+    {
+      "high": 0.5572,
+      "low": 0.4902,
+      "mean": 0.5228,
       "system": "deepseek-v4-flash"
     },
     {
-      "high": 0.477,
-      "low": 0.4203,
-      "mean": 0.4489,
+      "high": 0.4762,
+      "low": 0.4112,
+      "mean": 0.4427,
       "system": "mistral-large-v2"
     },
     {
-      "high": 0.4346,
-      "low": 0.3793,
-      "mean": 0.406,
+      "high": 0.435,
+      "low": 0.3739,
+      "mean": 0.4039,
       "system": "llama-3.1-70b"
     },
     {
-      "high": 0.377,
-      "low": 0.3053,
-      "mean": 0.3412,
+      "high": 0.3641,
+      "low": 0.2872,
+      "mean": 0.3257,
       "system": "therapist"
     }
   ],
   "judge_model": "gemini-2.5-pro",
-  "sessions": 50,
-  "still_scoring": [
-    "gemma4"
-  ],
+  "sessions": 40,
+  "still_scoring": [],
   "verdict_counts": {
-    "discriminating": 11,
-    "mixed": 5,
+    "discriminating": 9,
+    "mixed": 7,
     "saturated": 5,
     "unreachable": 2
   }

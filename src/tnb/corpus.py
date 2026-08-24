@@ -93,7 +93,6 @@ def profile_ihope(path: Path | None = None) -> list[SectionFill] | None:
 
     sessions = json.loads(path.read_text(encoding="utf-8"))
     filled = dict.fromkeys(range(1, 18), 0)
-    total = dict.fromkeys(range(1, 18), 0)
 
     for entry in sessions:
         for part in (entry.get("summary") or "").split(FIELD_SEPARATOR):
@@ -103,9 +102,14 @@ def profile_ihope(path: Path | None = None) -> list[SectionFill] | None:
             number = _match_section(label)
             if number is None:
                 continue
-            total[number] += 1
             if value.strip().lower() not in EMPTY_MARKERS:
                 filled[number] += 1
+
+    # Every note is asked every field. A note that omits the label entirely did
+    # not answer it either, so the denominator is the corpus -- counting only
+    # the notes that happen to mention a field flattered the sparse ones badly:
+    # crisis markers read as 3 of 23 rather than 3 of 40.
+    total = dict.fromkeys(range(1, 18), len(sessions))
 
     return [
         SectionFill(

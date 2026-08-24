@@ -319,6 +319,11 @@ def render_readme_section(data: dict) -> str:
 
     Anyone who wants the breakdown follows the link to the page. Putting 23
     criteria in a README is how a README stops being read.
+
+    A table with nothing scored in it is written out as a sentence rather than
+    as a grid of dashes under score headings -- the same reason the page draws a
+    queue instead of a scoreboard, applied to the view that was missed when the
+    page was fixed.
     """
     if not data["tables"]:
         return "*No runs yet. The first run will populate this section automatically.*"
@@ -329,12 +334,21 @@ def render_readme_section(data: dict) -> str:
         if not models:
             continue
 
+        if not table["scored"]:
+            names = ", ".join(f"`{row['label']}`" for row in models)
+            blocks.append(
+                f"**{table['title']}** — *waiting for the judge.* "
+                f"{len(models)} system(s) have written their notes and none has been scored "
+                f"yet: {names}."
+            )
+            continue
+
         columns = table["columns"]
         multi_provider = len({row["provider"] for row in models}) > 1
         header = ["Model"]
         if multi_provider:
             header.append("Provider")
-        header += [column["label"] for column in columns] + ["Sessions"]
+        header += [column["label"] for column in columns] + ["Notes", "Scored"]
         lines = [
             f"**{table['title']}**",
             "",
@@ -348,26 +362,30 @@ def render_readme_section(data: dict) -> str:
             for column in columns:
                 value = row["headline"].get(column["key"])
                 cells.append("—" if value is None else f"{value:.{column['digits']}f}")
-            coverage = f"{row['n_generated']}/{row['n_attempted']}"
+            written = f"{row['n_generated']}/{row['n_attempted']}"
             if row["n_failed"]:
-                coverage += f" ({row['n_failed']} unusable)"
-            cells.append(coverage)
+                written += f" ({row['n_failed']} unusable)"
+            cells.append(written)
+            cells.append(_scored_cell(row))
             lines.append("| " + " | ".join(cells) + " |")
         blocks.append("\n".join(lines))
 
-    if not any(table["scored"] for table in data["tables"]):
-        blocks.append(
-            "*Notes are generated; no scores yet. The judge runs in phase 3 and this "
-            "table fills in then.* See the "
-            "[full leaderboard](https://jannehyba.github.io/therapy-note-bench/) for "
-            "per-section detail, the reference systems and the published numbers."
-        )
-    else:
-        blocks.append(
-            "See the [full leaderboard](https://jannehyba.github.io/therapy-note-bench/) "
-            "for per-section detail, the reference systems and the published numbers."
-        )
+    blocks.append(
+        "See the [full leaderboard](https://jannehyba.github.io/therapy-note-bench/) "
+        "for per-section detail, the reference systems and the published numbers."
+    )
     return "\n\n".join(blocks)
+
+
+def _scored_cell(row: dict) -> str:
+    """Judging progress, which is not the same thing as generation coverage.
+
+    A model that wrote every note but is half-way through being judged must not
+    read as a model that failed to write them.
+    """
+    if row["n_scored"] >= row["n_generated"]:
+        return f"{row['n_scored']}"
+    return f"{row['n_scored']} of {row['n_generated']} *(judging)*"
 
 
 def update_readme(

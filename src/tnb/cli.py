@@ -338,6 +338,20 @@ def cmd_report(args: argparse.Namespace) -> int:
     return 0
 
 
+def _generated_per_system(candidates) -> dict[tuple[str, str], int]:
+    """How many usable notes each system wrote.
+
+    Every candidate is a note that exists and that the protocol could read, so
+    counting them is the generation coverage -- separate from how many the judge
+    has finished reading.
+    """
+    counts: dict[tuple[str, str], int] = {}
+    for candidate in candidates:
+        key = (candidate.provider, candidate.system_id)
+        counts[key] = counts.get(key, 0) + 1
+    return counts
+
+
 def cmd_score(args: argparse.Namespace) -> int:
     """Run the judge over generated notes and append the scored rows.
 
@@ -389,12 +403,12 @@ def cmd_score(args: argparse.Namespace) -> int:
         if not scored:
             print("Nothing complete yet.", file=sys.stderr)
             return 1
-        offered = {}
-        for candidate in candidates:
-            key = (candidate.provider, candidate.system_id)
-            offered[key] = offered.get(key, 0) + 1
         rows = scoring.to_rows(
-            scored, judge_model=config.model, n_attempted=offered, run_id=args.run_id or ""
+            scored,
+            judge_model=config.model,
+            n_generated=_generated_per_system(candidates),
+            n_attempted=len(sessions),
+            run_id=args.run_id or "",
         )
         path = results.append(rows)
         print(f"Appended {len(rows)} row(s) to {path.relative_to(REPO_ROOT)}.")
@@ -432,19 +446,11 @@ def cmd_score(args: argparse.Namespace) -> int:
     if args.dry_run or not scored:
         return 0
 
-    # How many notes each system was *offered*, not how many came back. A pilot
-    # over one session must read as 1/50, never as 1/1 -- that column exists to
-    # stop a partial run looking complete.
-    offered: dict[tuple[str, str], int] = {}
-    for candidate in candidates:
-        offered[(candidate.provider, candidate.system_id)] = (
-            offered.get((candidate.provider, candidate.system_id), 0) + 1
-        )
-
     rows = scoring.to_rows(
         scored,
         judge_model=config.model,
-        n_attempted=offered,
+        n_generated=_generated_per_system(candidates),
+        n_attempted=len(sessions),
         run_id=args.run_id or "",
     )
     if args.no_write:

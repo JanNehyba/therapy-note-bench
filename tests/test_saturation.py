@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import pytest
 
-from tnb.scoring import saturation
+from tnb.scoring import saturation, tneval
 from tnb.scoring.saturation import CriterionProfile
 
 
@@ -213,7 +213,13 @@ def test_answers_from_two_providers_do_not_merge(tmp_path):
 
     for provider in ("einfra", "other"):
         path = judge.cache_path(
-            "gemini-2.5-pro", "v1", provider, "qwen3.5-122b", "0", "x.y", root=tmp_path
+            "gemini-2.5-pro",
+            tneval.JUDGE_PROMPT_VERSION,
+            provider,
+            "qwen3.5-122b",
+            "0",
+            "x.y",
+            root=tmp_path,
         )
         judge.write_cached(
             path,
@@ -229,3 +235,46 @@ def test_answers_from_two_providers_do_not_merge(tmp_path):
 
     answers = saturation.load_answers(tmp_path)
     assert len(answers) == 2, "one bucket each, not one merged model"
+
+
+def test_a_second_judge_prompt_version_is_never_mixed_in(tmp_path):
+    """Two versions of the rubric are two instruments. The analysis reads one
+    version's directory, not the whole judge's, or the leaderboard's central
+    rule would break where nobody was looking."""
+    from tnb import judge
+
+    for version, answer in ((tneval.JUDGE_PROMPT_VERSION, "Yes"), ("tneval-rubric-v2", "No")):
+        judge.write_cached(
+            judge.cache_path(
+                "gemini-2.5-pro", version, "einfra", "gemma4", "0", "x.y", root=tmp_path
+            ),
+            {
+                "ok": True,
+                "provider": "einfra",
+                "system_id": "gemma4",
+                "session_id": "0",
+                "unit": "subjective.rubric_completeness.subjective-symptoms",
+                "answer": answer,
+            },
+        )
+
+    answers = saturation.load_answers(tmp_path)
+    assert len(answers) == 1
+    assert list(answers.values())[0]["subjective.rubric_completeness.subjective-symptoms"] == "Yes"
+
+
+def test_a_still_scoring_system_does_not_shape_the_criterion_bars(tmp_path):
+    """The panel excluded a half-scored system from the ranking and let it set
+    the min and max of every criterion bar beside it -- one panel saying two
+    different things about who was measured."""
+    answers = {
+        ("full", str(i)): {"subjective.rubric_completeness.subjective-symptoms": "Yes"}
+        for i in range(20)
+    }
+    answers[("fresh", "0")] = {"subjective.rubric_completeness.subjective-symptoms": "No"}
+
+    everyone = saturation.per_criterion(answers)
+    filtered = saturation.per_criterion(answers, include=["full"])
+
+    assert everyone[0].verdict == "discriminating", "the newcomer drags the bar open"
+    assert filtered[0].verdict == "saturated", "and is excluded once the filter applies"

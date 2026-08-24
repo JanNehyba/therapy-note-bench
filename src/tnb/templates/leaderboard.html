@@ -107,6 +107,7 @@
     letter-spacing: .02em; vertical-align: 1px;
   }
   .short { color: var(--warn); }
+  .pending-mark { color: var(--muted); font-size: .78rem; }
   .dash { color: var(--muted); }
 
   tr.detail > td { background: var(--chip); padding: .9rem 1rem 1.1rem; }
@@ -127,6 +128,7 @@
   .sat-table td.mark { width: 42%; padding-right: 0; }
   .sat-table .verdict { font-size: .74rem; letter-spacing: .03em; white-space: nowrap; }
   svg.plot { display: block; width: 100%; height: auto; overflow: visible; }
+  svg.plot.fixed { width: auto; max-width: none; min-width: 30rem; }
   svg.plot text { font-family: inherit; fill: var(--muted); font-size: 11px; }
   svg.plot text.name { fill: var(--fg); font-size: 12px; font-weight: 600; }
   svg.plot text.value { font-variant-numeric: tabular-nums; }
@@ -228,11 +230,21 @@ function detailRow(row, table) {
   const parts = [];
   if (row.metrics_note) parts.push(`<p class="note">${row.metrics_note}</p>`);
 
-  if (row.n_failed) {
-    const reasons = Object.entries(row.failure_reasons)
-      .map(([reason, count]) => `<div><span>${reason}</span><span>${count}</span></div>`)
-      .join('');
-    parts.push(`<h3>${row.n_failed} session(s) unusable</h3><div class="grid">${reasons}</div>`);
+  if (row.n_scored < row.n_generated) {
+    parts.push(`<p class="note">${row.n_generated - row.n_scored} of this system's notes are
+      still being judged. The scores above are over the ${row.n_scored} finished so far.</p>`);
+  }
+
+  // Only drawn when there is a reason to draw: a heading saying "N unusable"
+  // over an empty grid tells a reader nothing and implies a defect nobody
+  // recorded.
+  const reasons = Object.entries(row.failure_reasons || {});
+  if (row.n_failed && reasons.length) {
+    parts.push(`<h3>${row.n_failed} note(s) the protocol could not read</h3><div class="grid">${
+      reasons.map(([reason, count]) =>
+        `<div><span>${reason}</span><span>${count}</span></div>`).join('')}</div>`);
+  } else if (row.n_failed) {
+    parts.push(`<p class="note">${row.n_failed} note(s) missing, with no recorded reason.</p>`);
   }
 
   const sections = Object.entries(row.by_section);
@@ -295,8 +307,16 @@ function renderTable(table, index) {
     const cells = table.columns
       .map(c => `<td>${fmt(row.headline[c.key], c.digits)}</td>`)
       .join('');
-    const short = row.n_failed ? ' short' : '';
-    const coverage = `<span class="${short.trim()}">${row.n_generated}/${row.n_attempted}</span>`;
+    // Two different facts, never merged: how many notes the model wrote that the
+    // protocol could read, and how many of those the judge has finished. A model
+    // mid-judging must not read as a model that could not write.
+    const written = row.n_failed
+      ? `<span class="short">${row.n_generated}/${row.n_attempted}</span>`
+      : `${row.n_generated}/${row.n_attempted}`;
+    const judging = row.n_scored < row.n_generated
+      ? `<span class="pending-mark">${row.n_scored} judged</span>`
+      : '';
+    const coverage = `${written}${judging ? '<br>' + judging : ''}`;
     // The provider is part of a model's identity: the same id on two endpoints
     // can be two different builds, so it is shown, never merged away.
     const label = TYPE_LABEL[row.system_type] || row.provider;
@@ -313,7 +333,7 @@ function renderTable(table, index) {
       <p class="versions">harness <code>${versions.harness_version}</code> ·
          prompt <code>${versions.prompt_version}</code> · ${judge}</p>
       <div class="scroll"><table data-table="${index}">
-        <thead><tr><th data-sort="label">System</th>${head}<th data-sort="coverage">Sessions</th></tr></thead>
+        <thead><tr><th data-sort="label">System</th>${head}<th data-sort="coverage">Notes</th></tr></thead>
         <tbody>${body}</tbody>
       </table></div>
     </section>`;
@@ -393,7 +413,10 @@ function intervalPlot(rows, human) {
     <line class="rule" x1="${x(human.mean).toFixed(1)}" x2="${x(human.mean).toFixed(1)}"
           y1="${top - 8}" y2="${H - 12}"></line>` : '';
 
-  return `<div class="scroll"><svg class="plot" viewBox="0 0 ${W} ${H}" role="img"
+  // A fixed pixel width inside a scroller, not a viewBox scaled to the screen:
+  // scaling a 720-wide plot into a 360px phone renders every label at ~5px.
+  return `<div class="scroll"><svg class="plot fixed" width="${W}" height="${H}"
+       viewBox="0 0 ${W} ${H}" role="img"
        aria-label="Completeness with 95% bootstrap intervals, best first">
     ${ticks.join('')}${humanRule}${marks}
   </svg></div>`;
@@ -438,7 +461,8 @@ function renderSaturation(data) {
   const all = s.indistinguishable || [];
   const groups = all.map(g =>
     `<li>${g.join(', ')}${g.length > 1 ? ' <span class="dash">— not separable</span>' : ''}</li>`).join('');
-  const separable = all.every(g => g.length === 1)
+  // With one system there are no comparisons, so there is nothing to claim.
+  const separable = all.length > 1 && all.every(g => g.length === 1)
     ? `<p class="blurb">On this evidence <strong>every system is distinguishable from every
        other</strong> — the benchmark has not run out of resolution yet.</p>`
     : '';

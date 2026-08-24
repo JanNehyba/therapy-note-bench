@@ -332,7 +332,7 @@ class Scores:
     by_criterion: dict[str, float] = field(default_factory=dict)
 
 
-def aggregate(answers: dict[str, str]) -> Scores:
+def aggregate(answers: dict[str, str], tasks: list[JudgeTask] | None = None) -> Scores:
     """Turn raw judge answers into scores, keyed by :attr:`JudgeTask.unit`.
 
     Per section, TN-Eval's own arithmetic: completeness is the fraction of that
@@ -344,7 +344,21 @@ def aggregate(answers: dict[str, str]) -> Scores:
     no overall figure, so this averages the four sections equally. An eight-item
     section is not twice as important as a four-item one, and `by_criterion` is
     kept so anyone who disagrees can recompute item-weighted instead.
+
+    Pass ``tasks`` when the questions that *should* have been answered are known.
+    Without it a section whose conciseness answers are simply missing scores a
+    measured-looking 0.0, indistinguishable from a section where the judge
+    rejected every sentence. TN-Eval's zero is for a section with no sentences
+    in it; absence is not that, and is left out instead.
     """
+    expected_conciseness = None
+    if tasks is not None:
+        expected_conciseness = {
+            section: sum(
+                1 for task in tasks if task.section == section and task.kind == "rubric_conciseness"
+            )
+            for section in SOAP_SECTIONS
+        }
     by_section: dict[str, dict[str, float]] = {}
     by_criterion: dict[str, float] = {}
 
@@ -366,7 +380,11 @@ def aggregate(answers: dict[str, str]) -> Scores:
             for unit, answer in answers.items()
             if unit.startswith(f"{section}.rubric_conciseness.")
         ]
-        section_scores["conciseness"] = sum(sentences) / len(sentences) if sentences else 0.0
+        if sentences:
+            section_scores["conciseness"] = sum(sentences) / len(sentences)
+        elif expected_conciseness is None or expected_conciseness[section] == 0:
+            # TN-Eval's own zero: the section had no sentences to judge.
+            section_scores["conciseness"] = 0.0
 
         for kind in ("likert_completeness", "likert_conciseness", "likert_faithfulness"):
             unit = f"{section}.{kind}"

@@ -153,7 +153,8 @@ def score_note(
     answers: dict[str, str] = {}
     result = NoteResult(candidate=candidate, scores=tneval.Scores())
 
-    for task in tneval.build_tasks(candidate.note, candidate.conversation):
+    tasks = tneval.build_tasks(candidate.note, candidate.conversation)
+    for task in tasks:
         path = judge.cache_path(
             client.config.model,
             tneval.JUDGE_PROMPT_VERSION,
@@ -209,7 +210,7 @@ def score_note(
         if on_answer is not None:
             on_answer(task, answer)
 
-    result.scores = tneval.aggregate(answers)
+    result.scores = tneval.aggregate(answers, tasks)
     return result
 
 
@@ -258,7 +259,7 @@ def from_cache(
         scored.append(
             NoteResult(
                 candidate=candidate,
-                scores=tneval.aggregate(answers),
+                scores=tneval.aggregate(answers, tasks),
                 cached=len(answers),
             )
         )
@@ -346,10 +347,24 @@ def to_rows(
     scored: list[NoteResult],
     *,
     judge_model: str,
-    n_attempted: dict[tuple[str, str], int] | None = None,
+    n_generated: dict[tuple[str, str], int] | None = None,
+    n_attempted: int | None = None,
     run_id: str = "",
 ) -> list[Row]:
-    """One row per (provider, system), carrying the versions the table joins on."""
+    """One row per (provider, system), carrying the versions the table joins on.
+
+    Three counts, three meanings, kept apart because conflating them libels a
+    model. ``n_sessions_attempted`` is the corpus. ``n_sessions_generated`` is
+    how many notes the model wrote that the protocol could read.
+    ``n_sessions_scored`` is how many of those the judge has finished, which
+    moves while a scoring run is in progress. ``n_failed`` counts generation
+    failures only.
+
+    The version this replaces set generated to the number *scored* and failed to
+    the remainder, so a model half-way through judging was published as having
+    written unusable notes -- gemma4 appeared as "17/50 (33 unusable)" having
+    written all fifty perfectly.
+    """
     groups: dict[tuple[str, str], SystemAggregate] = {}
     labels: dict[tuple[str, str], Candidate] = {}
 
@@ -362,7 +377,8 @@ def to_rows(
     rows = []
     for key, aggregate in sorted(groups.items()):
         candidate = labels[key]
-        attempted = (n_attempted or {}).get(key, len(aggregate.notes))
+        generated = (n_generated or {}).get(key, len(aggregate.notes))
+        attempted = n_attempted or generated
         rows.append(
             Row(
                 track=results.TRACK_TNEVAL,
@@ -375,9 +391,9 @@ def to_rows(
                 judge_model=judge_model,
                 judge_prompt_version=tneval.JUDGE_PROMPT_VERSION,
                 n_sessions_attempted=attempted,
-                n_sessions_generated=len(aggregate.notes),
+                n_sessions_generated=generated,
                 n_sessions_scored=len(aggregate.notes),
-                n_failed=max(0, attempted - len(aggregate.notes)),
+                n_failed=max(0, attempted - generated),
                 metrics=aggregate.metrics(),
                 metrics_note=(
                     "faithfulness is a Likert rating; TN-Eval measured weak human "

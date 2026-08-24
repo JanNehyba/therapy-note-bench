@@ -29,31 +29,16 @@ published numbers: **<https://jannehyba.github.io/therapy-note-bench/>**
 <!-- LEADERBOARD:BEGIN -->
 **TN-Eval SOAP · AnnoMI conversations**
 
-| Model | Completeness | Conciseness | Faithfulness* | Sessions |
-|---|---|---|---|---|
-| `deepseek-v4-flash-thinking` | 0.578 | 0.965 | 4.81 | 50/50 |
-| `gemma4` | 0.568 | 0.941 | 4.99 | 17/50 (33 unusable) |
-| `deepseek-v4-flash` | 0.524 | 0.973 | 4.80 | 50/50 |
-
-**TN-Eval SOAP · AnnoMI conversations**
-
-| Model | Completeness | Conciseness | Faithfulness* | Sessions |
-|---|---|---|---|---|
-| `glm-5` | — | — | — | 50/50 |
-| `glm-5.2` | — | — | — | 50/50 |
-| `gpt-oss-120b` | — | — | — | 42/50 (8 unusable) |
-| `kimi-k3` | — | — | — | 50/50 |
-| `mistral-medium-3.5` | — | — | — | 50/50 |
-| `qwen3.5-122b` | — | — | — | 50/50 |
-| `qwen3.5-int4` | — | — | — | 50/50 |
-| `qwen3.8-27b` | — | — | — | 50/50 |
-
-**iCARE / iHOPE · 17 sections per session**
-
-| Model | ROUGE-L | BERTScore | TRACE† | Temporal | Sessions |
+| Model | Completeness | Conciseness | Faithfulness* | Notes | Scored |
 |---|---|---|---|---|---|
-| `deepseek-v4-flash` | — | — | — | — | 3/3 |
-| `deepseek-v4-flash-thinking` | — | — | — | — | 3/3 |
+| `glm-5` | 0.592 | 0.944 | 4.97 | 50/50 | 31 of 50 *(judging)* |
+| `deepseek-v4-flash-thinking` | 0.578 | 0.965 | 4.81 | 50/50 | 50 |
+| `gemma4` | 0.556 | 0.944 | 4.99 | 50/50 | 50 |
+| `deepseek-v4-flash` | 0.524 | 0.973 | 4.80 | 50/50 | 50 |
+
+**TN-Eval SOAP · AnnoMI conversations** — *waiting for the judge.* 7 system(s) have written their notes and none has been scored yet: `glm-5.2`, `gpt-oss-120b`, `kimi-k3`, `mistral-medium-3.5`, `qwen3.5-122b`, `qwen3.5-int4`, `qwen3.8-27b`.
+
+**iCARE / iHOPE · 17 sections per session** — *waiting for the judge.* 2 system(s) have written their notes and none has been scored yet: `deepseek-v4-flash`, `deepseek-v4-flash-thinking`.
 
 See the [full leaderboard](https://jannehyba.github.io/therapy-note-bench/) for per-section detail, the reference systems and the published numbers.
 <!-- LEADERBOARD:END -->

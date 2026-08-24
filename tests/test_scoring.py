@@ -333,22 +333,60 @@ def test_a_scored_row_is_json_round_trippable():
     assert results.from_dict(json.loads(json.dumps(row.to_dict()))) == row
 
 
-def test_a_partial_scoring_run_does_not_look_complete():
-    """A pilot over one session of fifty must read as 1/50. Reporting 1/1 is how
-    a table quietly claims coverage it does not have."""
+def _one_result():
     from tnb.datasets.base import Session, Turn
 
     session = Session(
         id="0", source="tneval", turns=(Turn("therapist", "Hi."),), meta={"human_note": NOTE}
     )
     (candidate,) = list(scoring.from_reference([session]))
-    result = scoring.NoteResult(candidate=candidate, scores=tneval.Scores())
+    return candidate, scoring.NoteResult(candidate=candidate, scores=tneval.Scores())
+
+
+def test_a_partial_scoring_run_does_not_look_complete():
+    """A pilot over one session of fifty must read as 1 of 50 judged, not as
+    full coverage."""
+    candidate, result = _one_result()
 
     (row,) = scoring.to_rows(
-        [result], judge_model="gemini-2.5-pro", n_attempted={("tneval", "therapist"): 50}
+        [result],
+        judge_model="gemini-2.5-pro",
+        n_generated={("tneval", "therapist"): 50},
+        n_attempted=50,
     )
-    assert (row.n_sessions_scored, row.n_sessions_attempted) == (1, 50)
-    assert row.n_failed == 49
+    assert row.n_sessions_scored == 1
+    assert row.n_sessions_attempted == 50
+
+
+def test_notes_the_judge_has_not_read_are_not_generation_failures():
+    """The defect this replaces: gemma4 wrote all fifty notes and the README
+    published "17/50 (33 unusable)" because the judge was 17 in. Judging
+    progress and generation coverage are different facts."""
+    candidate, result = _one_result()
+
+    (row,) = scoring.to_rows(
+        [result],
+        judge_model="gemini-2.5-pro",
+        n_generated={("tneval", "therapist"): 50},
+        n_attempted=50,
+    )
+    assert row.n_sessions_generated == 50, "every note was written"
+    assert row.n_sessions_scored == 1, "one has been judged"
+    assert row.n_failed == 0, "nothing failed to generate"
+
+
+def test_a_model_that_really_lost_notes_still_reports_them():
+    """gpt-oss-120b's eight unreadable notes are a real generation failure and
+    must survive the fix that stopped inventing fake ones."""
+    candidate, result = _one_result()
+
+    (row,) = scoring.to_rows(
+        [result],
+        judge_model="gemini-2.5-pro",
+        n_generated={("tneval", "therapist"): 42},
+        n_attempted=50,
+    )
+    assert (row.n_sessions_generated, row.n_failed) == (42, 8)
 
 
 # --- what the corpus actually contains --------------------------------------
@@ -394,3 +432,34 @@ def test_no_corpus_means_no_profile_rather_than_zeros(tmp_path):
     from tnb import corpus
 
     assert corpus.profile_ihope(tmp_path / "absent.json") is None
+
+
+# --- a zero that was never measured -----------------------------------------
+
+
+def test_a_section_whose_conciseness_was_never_asked_is_not_scored_zero():
+    """TN-Eval's zero is for a section with no sentences in it. A section whose
+    answers simply have not arrived is absent, and scoring it 0.0 makes an
+    unfinished run look like a model that wrote nothing but padding."""
+    tasks = tneval.build_tasks(NOTE, CONVERSATION)
+    answers = {"plan.rubric_completeness.plan-homework": "Yes"}
+
+    scored = tneval.aggregate(answers, tasks)
+    assert "conciseness" not in scored.by_section["plan"]
+
+
+def test_a_section_with_no_sentences_still_scores_zero():
+    """Their rule, reproduced: an empty note segment has nothing to be concise
+    about and scores 0 rather than being skipped."""
+    empty = {"subjective": "", "objective": "", "assessment": "", "plan": ""}
+    tasks = tneval.build_tasks(empty, CONVERSATION)
+    scored = tneval.aggregate({"plan.rubric_completeness.plan-homework": "No"}, tasks)
+
+    assert scored.by_section["plan"]["conciseness"] == 0.0
+
+
+def test_without_the_task_list_the_old_behaviour_holds():
+    """Callers that cannot know what was asked -- the saturation analysis reads
+    the answer cache, not the notes -- keep TN-Eval's arithmetic."""
+    scored = tneval.aggregate({"plan.rubric_completeness.plan-homework": "Yes"})
+    assert scored.by_section["plan"]["conciseness"] == 0.0

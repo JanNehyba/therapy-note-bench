@@ -44,48 +44,48 @@
     }
   },
   "fields_filled": 316,
-  "fields_total": 524,
-  "fill_rate": 0.6031,
+  "fields_total": 680,
+  "fill_rate": 0.4647,
   "sections": [
     {
       "filled": 34,
       "number": 1,
-      "rate": 0.8947,
+      "rate": 0.85,
       "temporal": false,
       "title": "Patient particulars",
-      "total": 38
+      "total": 40
     },
     {
       "filled": 4,
       "number": 2,
-      "rate": 0.1818,
+      "rate": 0.1,
       "temporal": false,
       "title": "Clinical identifiers",
-      "total": 22
+      "total": 40
     },
     {
       "filled": 2,
       "number": 3,
-      "rate": 0.0833,
+      "rate": 0.05,
       "temporal": false,
       "title": "Referral information",
-      "total": 24
+      "total": 40
     },
     {
       "filled": 15,
       "number": 4,
-      "rate": 0.4839,
+      "rate": 0.375,
       "temporal": false,
       "title": "Therapist information",
-      "total": 31
+      "total": 40
     },
     {
       "filled": 34,
       "number": 5,
-      "rate": 0.8718,
+      "rate": 0.85,
       "temporal": true,
       "title": "Past session information",
-      "total": 39
+      "total": 40
     },
     {
       "filled": 37,
@@ -98,18 +98,18 @@
     {
       "filled": 17,
       "number": 7,
-      "rate": 0.68,
+      "rate": 0.425,
       "temporal": false,
       "title": "History",
-      "total": 25
+      "total": 40
     },
     {
       "filled": 3,
       "number": 8,
-      "rate": 0.1304,
+      "rate": 0.075,
       "temporal": false,
       "title": "Crisis markers",
-      "total": 23
+      "total": 40
     },
     {
       "filled": 39,
@@ -122,26 +122,26 @@
     {
       "filled": 20,
       "number": 10,
-      "rate": 0.6897,
+      "rate": 0.5,
       "temporal": false,
       "title": "Psychotherapy type",
-      "total": 29
+      "total": 40
     },
     {
       "filled": 21,
       "number": 11,
-      "rate": 0.7241,
+      "rate": 0.525,
       "temporal": false,
       "title": "Psychotherapy technique",
-      "total": 29
+      "total": 40
     },
     {
       "filled": 3,
       "number": 12,
-      "rate": 0.1364,
+      "rate": 0.075,
       "temporal": false,
       "title": "Assessments",
-      "total": 22
+      "total": 40
     },
     {
       "filled": 39,
@@ -157,7 +157,7 @@
       "rate": 0.0,
       "temporal": false,
       "title": "Reflections by the therapist",
-      "total": 22
+      "total": 40
     },
     {
       "filled": 21,
@@ -170,18 +170,18 @@
     {
       "filled": 16,
       "number": 16,
-      "rate": 0.5,
+      "rate": 0.4,
       "temporal": false,
       "title": "Action plan",
-      "total": 32
+      "total": 40
     },
     {
       "filled": 11,
       "number": 17,
-      "rate": 0.3929,
+      "rate": 0.275,
       "temporal": true,
       "title": "Next session details",
-      "total": 28
+      "total": 40
     }
   ],
   "sessions": 40

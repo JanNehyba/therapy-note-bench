@@ -98,14 +98,17 @@ counselling video, and the gold notes show it. Across the 40 held-out sessions:
 
 | Section | Blank in the expert's own note |
 |---|---|
-| Reflections by the therapist | **22 of 22** |
-| Referral information | 22 of 24 |
-| Crisis markers | 20 of 23 |
-| Assessments | 19 of 22 |
-| Clinical identifiers | 18 of 22 |
+| Reflections by the therapist | **40 of 40** |
+| Referral information | 38 of 40 |
+| Crisis markers | 37 of 40 |
+| Assessments | 37 of 40 |
+| Clinical identifiers | 36 of 40 |
 
-**40% of all filled-in fields are `Nil`**, and one section was never filled in
-once. Since the protocol's instruction is to write `Nil` when the transcript
+**Only 46% of the form is filled in at all** — 316 of 17 x 40 fields — and one
+section was never filled in once. (An earlier revision of this page said 60%:
+it counted a field only in the notes that mentioned its label, so a field a note
+omitted entirely was left out of the denominator instead of counted as
+unanswered. The corrected figure is lower.) Since the protocol's instruction is to write `Nil` when the transcript
 does not say, a model can score well on those sections by staying quiet — and a
 model that tries to be helpful is penalised. Read the iCARE numbers as
 "fills the form correctly, including knowing when not to", not as "writes a good
