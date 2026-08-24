@@ -404,10 +404,16 @@ function renderSaturation(data) {
        other</strong> — the benchmark has not run out of resolution yet.</p>`
     : '';
 
+  const pending = (s.still_scoring || []).length
+    ? `<p class="note">Left out of this section because they are still being scored:
+       ${s.still_scoring.join(', ')}. Including a half-scored system would shrink the shared
+       corpus for everyone else.</p>` : '';
+
   document.getElementById('saturation-body').innerHTML = `
     <p class="blurb">A ranking always prints an order. This asks whether the evidence supports one.
        Both parts read the individual judgements, not the averages, over the
        <strong>${s.sessions} conversations every system wrote a note for</strong>.</p>
+    ${pending}
 
     <h4>Completeness, with the range the evidence supports</h4>
     <p class="blurb">95% intervals from a paired bootstrap over conversations — the same resample
@@ -416,7 +422,8 @@ function renderSaturation(data) {
     ${intervalPlot(s.intervals.filter(r => r.system !== 'therapist'),
                    s.intervals.find(r => r.system === 'therapist'))}
     <p class="blurb" style="margin-top:.9rem">Ranked, with systems the evidence cannot separate
-       grouped on one line:</p>
+       grouped on one line. These are groups, not equivalence classes: being inseparable is not
+       transitive, so the boundary between adjacent lines is a convention.</p>
     <ol class="sections">${groups}</ol>
     ${separable}
 

@@ -97,17 +97,38 @@ class Interval:
     sessions: int
 
 
+def label_for(provider: str, system_id: str, providers_by_system: dict) -> str:
+    """How a system is named in this analysis.
+
+    Bare id while it is unambiguous, qualified once two providers serve the same
+    name. A model id is only unique inside one endpoint, and merging two
+    providers' answers under one name is the mistake the rest of this repository
+    is built to avoid.
+    """
+    return (
+        system_id
+        if len(providers_by_system.get(system_id, ())) < 2
+        else f"{system_id} ({provider})"
+    )
+
+
 def load_answers(root: Path | None = None, judge_model: str = judge.DEFAULT_MODEL) -> dict:
     """Every judge answer, keyed (system, session) -> {question unit: answer}.
 
     Read from the answer cache rather than from the result rows, because the
     rows carry averages and these analyses need the individual judgements.
+
+    The system key carries its provider whenever two providers serve the same
+    model id: they may be two different builds, and averaging them together
+    would report a model that does not exist.
     """
     base = (root or judge.CACHE_DIR) / judge._slug_model(judge_model)
     answers: dict[tuple[str, str], dict[str, str]] = defaultdict(dict)
     if not base.exists():
         return answers
 
+    records = []
+    providers_by_system: dict[str, set[str]] = defaultdict(set)
     for path in base.rglob("*.json"):
         try:
             record = json.loads(path.read_text(encoding="utf-8"))
@@ -115,7 +136,12 @@ def load_answers(root: Path | None = None, judge_model: str = judge.DEFAULT_MODE
             continue
         if not record.get("ok"):
             continue
-        answers[(record["system_id"], record["session_id"])][record["unit"]] = record["answer"]
+        records.append(record)
+        providers_by_system[record["system_id"]].add(record.get("provider", ""))
+
+    for record in records:
+        label = label_for(record.get("provider", ""), record["system_id"], providers_by_system)
+        answers[(label, record["session_id"])][record["unit"]] = record["answer"]
     return answers
 
 
@@ -165,6 +191,29 @@ def per_session_scores(answers: dict, measure: str = "completeness") -> dict[str
     return scores
 
 
+#: A system covering less of the corpus than this, relative to the best-covered
+#: one, is still being scored. Including it would drag the shared set down to its
+#: handful of conversations and silently shrink everybody else's evidence.
+MIN_COVERAGE = 0.8
+
+
+def usable_systems(scores: dict[str, dict[str, float]]) -> tuple[list[str], list[str]]:
+    """Split systems into those with enough coverage to compare, and the rest.
+
+    Found the hard way: one model two conversations into its scoring run
+    collapsed the shared set to two and voided the whole analysis. A partial
+    system is now left out and named, rather than quietly taking everyone with
+    it.
+    """
+    if not scores:
+        return [], []
+    best = max(len(sessions) for sessions in scores.values())
+    usable, partial = [], []
+    for system, sessions in sorted(scores.items()):
+        (usable if len(sessions) >= best * MIN_COVERAGE else partial).append(system)
+    return usable, partial
+
+
 def paired_intervals(
     scores: dict[str, dict[str, float]],
     *,
@@ -182,8 +231,10 @@ def paired_intervals(
     in which the first system scored above the second — which is the number that
     answers "can these two be told apart".
     """
-    shared = sorted(set.intersection(*(set(v) for v in scores.values()))) if scores else []
-    systems = sorted(scores)
+    systems, _partial = usable_systems(scores)
+    shared = (
+        sorted(set.intersection(*(set(scores[system]) for system in systems))) if systems else []
+    )
     if len(shared) < 2:
         return [], {}
 
@@ -232,6 +283,13 @@ def indistinguishable(
     Two systems are told apart only when one beats the other in at least
     `threshold` of resamples. Anything less is a ranking the data does not
     support, however confidently the table prints it.
+
+    These are groups, **not equivalence classes**, and cannot be: "cannot be
+    separated" is not transitive. A may be inseparable from B, and B from C,
+    while A is clearly above C. Systems are placed best-first into the first
+    group whose members none of them beats, which keeps the reading "everything
+    on this line is tied for this position" true, and leaves the boundary
+    between adjacent lines a convention rather than a fact.
     """
     groups: list[list[str]] = []
     for interval in intervals:
@@ -252,6 +310,7 @@ def build(root: Path | None = None, judge_model: str = judge.DEFAULT_MODEL) -> d
 
     criteria = per_criterion(answers)
     scores = per_session_scores(answers)
+    _usable, partial = usable_systems(scores)
     intervals, beats = paired_intervals(scores)
     if not intervals:
         return None
@@ -263,6 +322,9 @@ def build(root: Path | None = None, judge_model: str = judge.DEFAULT_MODEL) -> d
     return {
         "judge_model": judge_model,
         "sessions": intervals[0].sessions,
+        # Named rather than dropped: a reader must be able to tell "not measured
+        # yet" from "measured and left out".
+        "still_scoring": partial,
         "criteria": [
             {
                 "key": profile.key,

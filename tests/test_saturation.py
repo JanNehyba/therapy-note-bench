@@ -131,15 +131,17 @@ def test_too_few_sessions_produce_no_claim_at_all():
 
 
 def test_only_sessions_every_system_wrote_are_compared():
-    """A model scored on the five easiest conversations must not appear to beat
-    one scored on all fifty."""
+    """Two systems with the same coverage but different conversations are
+    compared on the overlap alone. Scoring one on easy conversations and the
+    other on hard ones must not read as a difference between the models."""
     scores = {
-        "a": {"1": 0.9, "2": 0.9, "3": 0.9, "4": 0.1, "5": 0.1},
-        "b": {"1": 0.8, "2": 0.8, "3": 0.8},
+        "a": {"1": 0.9, "2": 0.9, "3": 0.5, "4": 0.5, "5": 0.5},
+        "b": {"3": 0.5, "4": 0.5, "5": 0.5, "6": 0.1, "7": 0.1},
     }
-    intervals, _ = saturation.paired_intervals(scores, samples=200)
-    assert all(interval.sessions == 3 for interval in intervals)
-    assert intervals[0].system == "a", "compared only on the three both wrote"
+    intervals, beats = saturation.paired_intervals(scores, samples=200)
+
+    assert all(interval.sessions == 3 for interval in intervals), "sessions 3, 4 and 5"
+    assert max(beats["a"]["b"], beats["b"]["a"]) < 0.95, "identical on the overlap"
 
 
 # --- grouping ----------------------------------------------------------------
@@ -168,3 +170,62 @@ def test_a_stricter_threshold_never_splits_more(threshold):
     )
     groups = saturation.indistinguishable(intervals, beats, threshold=threshold)
     assert sum(len(group) for group in groups) == 3
+
+
+# --- bugs found by looking, each pinned so it cannot come back ---------------
+
+
+def test_a_system_still_being_scored_does_not_void_the_analysis():
+    """Found live: one model two conversations into its run collapsed the shared
+    set to two and the whole analysis returned nothing. A partial system is left
+    out, not allowed to take everyone with it."""
+    scores = _scores(a=[0.5] * 50, b=[0.4] * 50, fresh=[0.9, 0.9])
+    usable, partial = saturation.usable_systems(scores)
+
+    assert usable == ["a", "b"]
+    assert partial == ["fresh"]
+
+    intervals, _ = saturation.paired_intervals(scores, samples=200)
+    assert [i.system for i in intervals] == ["a", "b"]
+    assert intervals[0].sessions == 50, "the full corpus, not the newcomer's two"
+
+
+def test_a_system_scored_on_most_of_the_corpus_is_still_compared():
+    """The cut is for runs in progress, not for a model that lost a few notes."""
+    scores = _scores(a=[0.5] * 50, nearly=[0.4] * 45)
+    usable, partial = saturation.usable_systems(scores)
+    assert usable == ["a", "nearly"] and partial == []
+
+
+def test_two_providers_serving_one_model_id_are_kept_apart():
+    """The mistake the whole provider refactor exists to prevent, one layer up:
+    keying answers on the model id alone merged two endpoints' judgements into
+    one system that does not exist."""
+    providers = {"qwen3.5-122b": {"einfra", "other"}, "gemma4": {"einfra"}}
+
+    assert saturation.label_for("einfra", "qwen3.5-122b", providers) == "qwen3.5-122b (einfra)"
+    assert saturation.label_for("other", "qwen3.5-122b", providers) == "qwen3.5-122b (other)"
+    assert saturation.label_for("einfra", "gemma4", providers) == "gemma4", "unambiguous stays bare"
+
+
+def test_answers_from_two_providers_do_not_merge(tmp_path):
+    from tnb import judge
+
+    for provider in ("einfra", "other"):
+        path = judge.cache_path(
+            "gemini-2.5-pro", "v1", provider, "qwen3.5-122b", "0", "x.y", root=tmp_path
+        )
+        judge.write_cached(
+            path,
+            {
+                "ok": True,
+                "provider": provider,
+                "system_id": "qwen3.5-122b",
+                "session_id": "0",
+                "unit": "subjective.rubric_completeness.subjective-symptoms",
+                "answer": "Yes" if provider == "einfra" else "No",
+            },
+        )
+
+    answers = saturation.load_answers(tmp_path)
+    assert len(answers) == 2, "one bucket each, not one merged model"

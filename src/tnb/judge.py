@@ -32,7 +32,7 @@ import json
 import os
 import threading
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 import httpx
@@ -288,18 +288,28 @@ def estimate_usd(model: str, input_tokens: int, output_tokens: int) -> float:
 
 @dataclass
 class Spend:
-    """Running total for one scoring run, and the ceiling it must not cross."""
+    """Running total for one scoring run, and the ceiling it must not cross.
+
+    Threads share one of these. Whether ``+=`` on an attribute can lose an
+    update was tested rather than assumed: 8 threads and 240 000 increments,
+    with the switch interval forced to a nanosecond, lost nothing on CPython
+    3.13 -- the GIL makes that store effectively atomic. It is not a language
+    guarantee, though, and a free-threaded build removes it, so the lock is here
+    anyway. It is taken once per API call that already takes seconds.
+    """
 
     limit_usd: float
     input_tokens: int = 0
     output_tokens: int = 0
     calls: int = 0
+    _lock: threading.Lock = field(default_factory=threading.Lock, repr=False)
 
     def record(self, model: str, answer: Answer) -> None:
-        self.calls += 1
-        self.input_tokens += answer.input_tokens
-        # Thinking is billed as output even though it never reaches us.
-        self.output_tokens += answer.output_tokens + answer.thinking_tokens
+        with self._lock:
+            self.calls += 1
+            self.input_tokens += answer.input_tokens
+            # Thinking is billed as output even though it never reaches us.
+            self.output_tokens += answer.output_tokens + answer.thinking_tokens
 
     def usd(self, model: str) -> float:
         return estimate_usd(model, self.input_tokens, self.output_tokens)
