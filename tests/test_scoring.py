@@ -331,3 +331,21 @@ def test_a_scored_row_is_json_round_trippable():
         n_sessions_attempted=50,
     )
     assert results.from_dict(json.loads(json.dumps(row.to_dict()))) == row
+
+
+def test_a_partial_scoring_run_does_not_look_complete():
+    """A pilot over one session of fifty must read as 1/50. Reporting 1/1 is how
+    a table quietly claims coverage it does not have."""
+    from tnb.datasets.base import Session, Turn
+
+    session = Session(
+        id="0", source="tneval", turns=(Turn("therapist", "Hi."),), meta={"human_note": NOTE}
+    )
+    (candidate,) = list(scoring.from_reference([session]))
+    result = scoring.NoteResult(candidate=candidate, scores=tneval.Scores())
+
+    (row,) = scoring.to_rows(
+        [result], judge_model="gemini-2.5-pro", n_attempted={("tneval", "therapist"): 50}
+    )
+    assert (row.n_sessions_scored, row.n_sessions_attempted) == (1, 50)
+    assert row.n_failed == 49

@@ -414,7 +414,21 @@ def cmd_score(args: argparse.Namespace) -> int:
     if args.dry_run or not scored:
         return 0
 
-    rows = scoring.to_rows(scored, judge_model=config.model, run_id=args.run_id or "")
+    # How many notes each system was *offered*, not how many came back. A pilot
+    # over one session must read as 1/50, never as 1/1 -- that column exists to
+    # stop a partial run looking complete.
+    offered: dict[tuple[str, str], int] = {}
+    for candidate in candidates:
+        offered[(candidate.provider, candidate.system_id)] = (
+            offered.get((candidate.provider, candidate.system_id), 0) + 1
+        )
+
+    rows = scoring.to_rows(
+        scored,
+        judge_model=config.model,
+        n_attempted=offered,
+        run_id=args.run_id or "",
+    )
     if args.no_write:
         print("\n--no-write: rows were not appended.")
         return 0
