@@ -1,19 +1,23 @@
 # therapy-note-bench
 
-**A reproducible benchmark of LLM-generated psychotherapy session notes, run
-against the models actually deployed on [e-INFRA CZ](https://www.e-infra.cz/en).**
+**A reproducible benchmark of LLM-written psychotherapy session notes, scored
+on two published protocols and re-run as models change.**
 
-Two published datasets exist for turning a therapy transcript into a clinical
-note. Both were benchmarked once, on models from 2024 and 2025, and never
-re-run. This repository re-runs them on whatever is deployed today, and does it
-from a button — so the table stays true as models change.
+Two datasets exist for turning a therapy transcript into a clinical note. Both
+were benchmarked once, on models from 2024 and 2025, and never re-run. This
+repository re-runs them from a button — so the table stays true as models
+change.
 
-> **Status: notes written, nothing scored yet.** 31 ids on e-INFRA reduce to
-> **11 distinct benchmarkable models**, and `glm-5.3` is not among them. All
-> eleven have written the TN-Eval SOAP track — 542 of 550 notes; the eight
-> misses are one model that will not produce a flat dictionary. The judge runs
-> next, and until it does every score column below is a dash.
-> See [Roadmap](#roadmap).
+Which models is a question of configuration, not of design. Providers are a
+swappable backend: today the harness measures what is deployed on
+[e-INFRA CZ](https://www.e-infra.cz/en), and adding another provider adds rows
+rather than a second benchmark.
+
+> **Status: notes written, nothing scored yet.** The 31 model ids currently
+> reachable reduce to **11 distinct benchmarkable models**. All eleven have
+> written the TN-Eval SOAP track — 542 of 550 notes; the eight misses are one
+> model that will not produce a flat dictionary. The judge runs next, and until
+> it does every score column below is a dash. See [Roadmap](#roadmap).
 
 ---
 
@@ -95,11 +99,11 @@ notes are not tested. This repository covers the ground they exclude.
 
 ## Why the model list is not in this repository
 
-e-INFRA's own documentation says "no specific model version is guaranteed to
-stay available". So there is no hard-coded model list: every run queries
-`GET /v1/models` and filters it through rules in
-[`models.yaml`](models.yaml). When `glm-5.2` becomes `glm-5.3`, the next run
-picks it up without anyone editing anything.
+No provider guarantees that a model version stays available — e-INFRA's
+documentation says so outright. A hard-coded list would therefore be wrong
+within weeks, so there is none: every run queries the provider's `/v1/models`
+and filters it through rules in [`models.yaml`](models.yaml). When `glm-5.2`
+becomes `glm-5.3`, the next run picks it up without anyone editing anything.
 
 Names cannot be trusted either. `command-a` sounds like Cohere Command A and
 returns `gemma4`'s exact output; four other ids turned out to be second names
