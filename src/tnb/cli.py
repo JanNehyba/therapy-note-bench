@@ -17,7 +17,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from tnb import generation, report, results, tasks
+from tnb import generation, judge, report, results, tasks
 from tnb.config import REPO_ROOT, load_policy
 from tnb.providers.openai_compatible import (
     DiscoveredModel,
@@ -338,6 +338,93 @@ def cmd_report(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_score(args: argparse.Namespace) -> int:
+    """Run the judge over generated notes and append the scored rows.
+
+    Scoring is where money is spent, so nothing here happens without a ceiling:
+    `--max-judge-usd` is checked before every call and the run stops rather than
+    crossing it. `--dry-run` prints the size of the job and asks nothing.
+    """
+    from tnb.scoring import run as scoring
+    from tnb.scoring import tneval as rubric
+
+    config = judge.config_from_env(model=args.judge_model)
+    sessions = scoring.load_sessions(args.limit)
+
+    candidates: list[scoring.Candidate] = []
+    if args.systems in ("all", "reference"):
+        candidates += list(scoring.from_reference(sessions))
+    if args.systems in ("all", "models"):
+        candidates += list(scoring.from_generations(sessions))
+    if args.models:
+        wanted = {name.strip() for name in args.models.split(",") if name.strip()}
+        candidates = [c for c in candidates if c.system_id in wanted]
+    if args.notes:
+        candidates = candidates[: args.notes]
+
+    if not candidates:
+        raise RuntimeError(
+            "Nothing to score. Generate notes first, or use --systems reference "
+            "to score the notes TN-Eval released."
+        )
+
+    questions = sum(len(rubric.build_tasks(c.note, c.conversation)) for c in candidates)
+    systems = sorted({(c.provider, c.system_id) for c in candidates})
+    print(
+        f"{len(candidates)} note(s) from {len(systems)} system(s), "
+        f"{questions} judge questions.\n"
+        f"judge {config.model}, thinking budget {config.thinking_budget}, "
+        f"ceiling ${args.max_judge_usd:.2f}"
+    )
+
+    if args.dry_run:
+        print("\nDry run: the judge was not called.")
+        return 0
+
+    client = judge.Judge(config)
+    spend = judge.Spend(limit_usd=args.max_judge_usd)
+    done = 0
+
+    def on_note(result: scoring.NoteResult) -> None:
+        nonlocal done
+        done += 1
+        head = result.scores.headline
+        print(
+            f"  [{done}/{len(candidates)}] {result.candidate.system_id[:28]:28} "
+            f"session {result.candidate.session_id:>4}  "
+            f"completeness {head.get('completeness', 0):.2f}  "
+            f"asked {result.asked:3} cached {result.cached:3}"
+            + (f" failed {result.failed}" if result.failed else "")
+            + f"  ${spend.usd(config.model):.2f}",
+            flush=True,
+        )
+
+    print()
+    scored = scoring.score_many(candidates, client, spend, force=args.force, on_note=on_note)
+
+    print(
+        f"\nScored {len(scored)} note(s). "
+        f"{spend.calls} judge calls, {spend.input_tokens} in / {spend.output_tokens} out, "
+        f"${spend.usd(config.model):.2f} at list price."
+    )
+    if scored:
+        per_note = spend.usd(config.model) / max(1, sum(1 for r in scored if r.asked))
+        print(f"Cost per freshly scored note: ${per_note:.4f}")
+
+    if args.dry_run or not scored:
+        return 0
+
+    rows = scoring.to_rows(scored, judge_model=config.model, run_id=args.run_id or "")
+    if args.no_write:
+        print("\n--no-write: rows were not appended.")
+        return 0
+
+    path = results.append(rows)
+    print(f"\nAppended {len(rows)} row(s) to {path.relative_to(REPO_ROOT)}.")
+    print("Run 'tnb report' to rebuild the page.")
+    return 0
+
+
 def cmd_not_implemented(args: argparse.Namespace) -> int:
     print(
         f"'tnb {args.command}' is not implemented yet — see the roadmap in README.md.",
@@ -419,6 +506,31 @@ def build_parser() -> argparse.ArgumentParser:
         "--dry-run", action="store_true", help="print the rows without appending them"
     )
     results_parser.set_defaults(func=cmd_results)
+
+    score = subparsers.add_parser("score", help="run the judge over generated notes (phase 3)")
+    score.add_argument(
+        "--systems",
+        choices=["all", "models", "reference"],
+        default="all",
+        help="reference = the therapist-written and TN-Eval model notes only",
+    )
+    score.add_argument("--models", help="comma-separated system ids to score")
+    score.add_argument("--limit", type=int, help="use only the first N sessions")
+    score.add_argument("--notes", type=int, help="stop after N notes (for a pilot)")
+    score.add_argument("--judge-model", default=judge.DEFAULT_MODEL, help="which judge to run")
+    score.add_argument(
+        "--max-judge-usd",
+        type=float,
+        default=5.0,
+        help="hard ceiling; the run stops rather than exceeding it",
+    )
+    score.add_argument("--force", action="store_true", help="re-ask cached questions")
+    score.add_argument("--dry-run", action="store_true", help="print the job, ask nothing")
+    score.add_argument(
+        "--no-write", action="store_true", help="score but do not append result rows"
+    )
+    score.add_argument("--run-id", help="label these rows with a run id")
+    score.set_defaults(func=cmd_score)
 
     report_parser = subparsers.add_parser(
         "report", help="regenerate the leaderboard page, its JSON and the README table"

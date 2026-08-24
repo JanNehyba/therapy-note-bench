@@ -22,3 +22,7 @@ build/
 
 # Service-account keys and anything else credential-shaped. Never committed.
 secrets/
+
+# Judge answers. Same reasoning as generations/: derived from unlicensed corpora,
+# tens of thousands of small files, and cheaper to keep than to re-ask.
+scores/

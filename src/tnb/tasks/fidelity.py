@@ -17,12 +17,27 @@ from dataclasses import dataclass
 
 import httpx
 
+from tnb.scoring import tneval as judge_prompts
 from tnb.tasks import icare, soap
 
 SOAP_SOURCE_URL = (
     "https://raw.githubusercontent.com/amazon-science/TN-Eval/main/src/generate_soap_note.py"
 )
 ICARE_SOURCE_URL = "https://raw.githubusercontent.com/proadhikary/iCARE/main/Baselines.py"
+JUDGE_SOURCE_URL = (
+    "https://raw.githubusercontent.com/amazon-science/TN-Eval/main/src/"
+    "run_metrics_reference_free.py"
+)
+RUBRIC_SOURCE_URL = "https://raw.githubusercontent.com/amazon-science/TN-Eval/main/src/constant.py"
+
+#: Our constant name -> theirs.
+JUDGE_PROMPTS = {
+    "PROMPT_COMPLETENESS": "rubric_prompt_completeness",
+    "PROMPT_CONCISENESS": "rubric_prompt_conciseness",
+    "PROMPT_LIKERT_COMPLETENESS": "rubric_prompt_likert_completeness",
+    "PROMPT_LIKERT_CONCISENESS": "rubric_prompt_likert_conciseness",
+    "PROMPT_LIKERT_FAITHFULNESS": "rubric_prompt_likert_faithfulness",
+}
 
 
 @dataclass(frozen=True)
@@ -38,13 +53,27 @@ def _fetch(url: str, timeout: float) -> str:
     return response.text
 
 
-def _literal(source: str, name: str) -> str | None:
-    """Read one module-level string constant without executing the file."""
+def _evaluate(node: ast.AST):
+    """Evaluate a literal, including TN-Eval's ``\"\"\"...\"\"\".strip()`` idiom."""
+    if (
+        isinstance(node, ast.Call)
+        and isinstance(node.func, ast.Attribute)
+        and node.func.attr == "strip"
+        and not node.args
+    ):
+        inner = _evaluate(node.func.value)
+        return inner.strip() if isinstance(inner, str) else None
+    try:
+        return ast.literal_eval(node)
+    except (ValueError, SyntaxError):
+        return None
+
+
+def _literal(source: str, name: str):
+    """Read one module-level constant without executing the file."""
     for node in ast.parse(source).body:
         if isinstance(node, ast.Assign) and getattr(node.targets[0], "id", "") == name:
-            value = node.value
-            if isinstance(value, ast.Constant) and isinstance(value.value, str):
-                return value.value
+            return _evaluate(node.value)
     return None
 
 
@@ -88,5 +117,53 @@ def check_icare(timeout: float = 30.0) -> Check:
     return Check("icare wrapper", True, "all six fragments still present in Baselines.py")
 
 
+def check_judge(timeout: float = 30.0) -> Check:
+    """Compare our copies of the five scoring prompts with TN-Eval's."""
+    source = _fetch(JUDGE_SOURCE_URL, timeout)
+    drifted = []
+    for ours, theirs in JUDGE_PROMPTS.items():
+        upstream = _literal(source, theirs)
+        if not isinstance(upstream, str):
+            drifted.append(f"{theirs} not found upstream")
+            continue
+        digest = hashlib.sha256(upstream.encode()).hexdigest()
+        if digest != judge_prompts.UPSTREAM_SHA256[ours]:
+            drifted.append(f"{theirs} changed")
+
+    if drifted:
+        return Check("judge prompts", False, "; ".join(drifted))
+    return Check("judge prompts", True, f"all {len(JUDGE_PROMPTS)} unchanged")
+
+
+def check_rubric(timeout: float = 30.0) -> Check:
+    """Compare our 23 completeness criteria with TN-Eval's, wording included.
+
+    A reworded criterion is a different question to the judge, so this is not a
+    count check: every key and every sentence has to match.
+    """
+    upstream = _literal(_fetch(RUBRIC_SOURCE_URL, timeout), "CHECKBOX_MAPPING")
+    if not isinstance(upstream, dict):
+        return Check("rubric", False, "CHECKBOX_MAPPING not found upstream")
+    if upstream != judge_prompts.CHECKBOX_MAPPING:
+        added = sorted(set(upstream) - set(judge_prompts.CHECKBOX_MAPPING))
+        removed = sorted(set(judge_prompts.CHECKBOX_MAPPING) - set(upstream))
+        reworded = sorted(
+            key
+            for key in set(upstream) & set(judge_prompts.CHECKBOX_MAPPING)
+            if upstream[key] != judge_prompts.CHECKBOX_MAPPING[key]
+        )
+        return Check(
+            "rubric",
+            False,
+            f"added {added or '-'}, removed {removed or '-'}, reworded {reworded or '-'}",
+        )
+    return Check("rubric", True, f"all {len(upstream)} criteria unchanged")
+
+
 def check_all(timeout: float = 30.0) -> list[Check]:
-    return [check_soap(timeout), check_icare(timeout)]
+    return [
+        check_soap(timeout),
+        check_icare(timeout),
+        check_judge(timeout),
+        check_rubric(timeout),
+    ]
