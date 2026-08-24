@@ -1,0 +1,292 @@
+"""Has this benchmark run out of room to measure anything?
+
+The question worth asking of any benchmark, and the one this repository is best
+placed to answer, because it holds every individual judgement rather than only
+the averages. Three analyses, none of which needs an external capability score:
+
+**Per criterion.** The 23 rubric items do not behave alike. Some every model
+satisfies — nothing left to measure. Some *nobody* satisfies, the therapist
+included, because a single counselling session does not contain the answer;
+a zero there is a property of the corpus, not of the model. The rest is where
+the benchmark still separates one model from another, and counting them is the
+honest statement of how much measuring power is left.
+
+**Confidence intervals.** Every model wrote a note for the same 50
+conversations, so the bootstrap is *paired*: resample conversations, not models,
+and the same resample scores everyone. That answers "can these two models be
+told apart at all", which a ranking on its own never does. `docs/limitations.md`
+has always said small gaps are noise; this is what turns that warning into a
+number.
+
+**The 2025 anchor.** TN-Eval released notes from Llama 3.1 70B and Mistral Large
+V2, scored here by the same judge on the same rubric. A year of model progress
+is therefore measurable directly, with no external index and no assumption about
+which model is which.
+
+Deterministic on purpose: the bootstrap is seeded, so a rebuilt page is
+byte-identical and its diffs stay readable.
+"""
+
+from __future__ import annotations
+
+import json
+import random
+from collections import defaultdict
+from dataclasses import dataclass
+from pathlib import Path
+
+from tnb import judge
+from tnb.scoring import tneval
+
+#: Fixed so the published intervals do not move when nothing else did.
+BOOTSTRAP_SEED = 20260824
+BOOTSTRAP_SAMPLES = 2000
+
+#: A criterion every model satisfies almost always has nothing left to measure.
+SATURATED_AT = 0.90
+#: A criterion nobody satisfies -- the human reference included -- is not a hard
+#: question but an absent one: the transcript does not contain the answer.
+FLOOR_AT = 0.10
+#: How far apart the best and worst model must be for a criterion to be doing
+#: any separating.
+DISCRIMINATES_AT = 0.25
+
+
+@dataclass(frozen=True)
+class CriterionProfile:
+    """One rubric item, and what it does to the field of models."""
+
+    key: str
+    text: str
+    section: str
+    by_system: dict[str, float]
+    human: float | None
+
+    @property
+    def models(self) -> dict[str, float]:
+        return {name: rate for name, rate in self.by_system.items() if name != "therapist"}
+
+    @property
+    def spread(self) -> float:
+        rates = list(self.models.values())
+        return max(rates) - min(rates) if rates else 0.0
+
+    @property
+    def verdict(self) -> str:
+        rates = list(self.models.values())
+        if not rates:
+            return "unknown"
+        if min(rates) >= SATURATED_AT:
+            return "saturated"
+        everyone = rates + ([self.human] if self.human is not None else [])
+        if max(everyone) <= FLOOR_AT:
+            return "unreachable"
+        if self.spread >= DISCRIMINATES_AT:
+            return "discriminating"
+        return "mixed"
+
+
+@dataclass(frozen=True)
+class Interval:
+    """A model's score with the range the evidence actually supports."""
+
+    system: str
+    mean: float
+    low: float
+    high: float
+    sessions: int
+
+
+def load_answers(root: Path | None = None, judge_model: str = judge.DEFAULT_MODEL) -> dict:
+    """Every judge answer, keyed (system, session) -> {question unit: answer}.
+
+    Read from the answer cache rather than from the result rows, because the
+    rows carry averages and these analyses need the individual judgements.
+    """
+    base = (root or judge.CACHE_DIR) / judge._slug_model(judge_model)
+    answers: dict[tuple[str, str], dict[str, str]] = defaultdict(dict)
+    if not base.exists():
+        return answers
+
+    for path in base.rglob("*.json"):
+        try:
+            record = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            continue
+        if not record.get("ok"):
+            continue
+        answers[(record["system_id"], record["session_id"])][record["unit"]] = record["answer"]
+    return answers
+
+
+def per_criterion(answers: dict) -> list[CriterionProfile]:
+    """How often each system satisfied each of the 23 criteria."""
+    hits: dict[tuple[str, str], list[int]] = defaultdict(lambda: [0, 0])
+
+    for (system, _session), units in answers.items():
+        for unit, answer in units.items():
+            parts = unit.split(".")
+            if len(parts) != 3 or parts[1] != "rubric_completeness":
+                continue
+            slot = hits[(system, parts[2])]
+            slot[0] += tneval.parse_yes_no(answer)
+            slot[1] += 1
+
+    systems = sorted({system for system, _key in hits})
+    profiles = []
+    for key, text in tneval.CHECKBOX_MAPPING.items():
+        by_system = {}
+        for system in systems:
+            got, total = hits[(system, key)]
+            if total:
+                by_system[system] = got / total
+        if not by_system:
+            continue
+        profiles.append(
+            CriterionProfile(
+                key=key,
+                text=text.split(":")[0].strip(),
+                section=key.split("-")[0],
+                by_system=by_system,
+                human=by_system.get("therapist"),
+            )
+        )
+    return profiles
+
+
+def per_session_scores(answers: dict, measure: str = "completeness") -> dict[str, dict[str, float]]:
+    """One score per (system, session), which is what the bootstrap resamples."""
+    scores: dict[str, dict[str, float]] = defaultdict(dict)
+    for (system, session), units in answers.items():
+        aggregate = tneval.aggregate(units)
+        value = aggregate.headline.get(measure)
+        if value is not None:
+            scores[system][session] = value
+    return scores
+
+
+def paired_intervals(
+    scores: dict[str, dict[str, float]],
+    *,
+    samples: int = BOOTSTRAP_SAMPLES,
+    seed: int = BOOTSTRAP_SEED,
+) -> tuple[list[Interval], dict[str, dict[str, float]]]:
+    """Bootstrap over conversations, scoring every system on the same resample.
+
+    Paired because every system wrote a note for the same conversations: a
+    conversation that is hard for one is hard for all, and resampling them
+    together removes that shared difficulty from the comparison instead of
+    counting it as disagreement.
+
+    Returns the intervals and, for every ordered pair, the fraction of resamples
+    in which the first system scored above the second — which is the number that
+    answers "can these two be told apart".
+    """
+    shared = sorted(set.intersection(*(set(v) for v in scores.values()))) if scores else []
+    systems = sorted(scores)
+    if len(shared) < 2:
+        return [], {}
+
+    rng = random.Random(seed)
+    draws: dict[str, list[float]] = {system: [] for system in systems}
+    wins: dict[str, dict[str, int]] = {a: dict.fromkeys(systems, 0) for a in systems}
+
+    for _ in range(samples):
+        picked = [shared[rng.randrange(len(shared))] for _ in shared]
+        means = {
+            system: sum(scores[system][session] for session in picked) / len(picked)
+            for system in systems
+        }
+        for system, value in means.items():
+            draws[system].append(value)
+        for first in systems:
+            for second in systems:
+                if means[first] > means[second]:
+                    wins[first][second] += 1
+
+    intervals = []
+    for system in systems:
+        ordered = sorted(draws[system])
+        intervals.append(
+            Interval(
+                system=system,
+                mean=sum(scores[system][s] for s in shared) / len(shared),
+                low=ordered[int(0.025 * samples)],
+                high=ordered[int(0.975 * samples) - 1],
+                sessions=len(shared),
+            )
+        )
+
+    beats = {
+        first: {second: wins[first][second] / samples for second in systems if second != first}
+        for first in systems
+    }
+    return sorted(intervals, key=lambda i: -i.mean), beats
+
+
+def indistinguishable(
+    intervals: list[Interval], beats: dict[str, dict[str, float]], *, threshold: float = 0.95
+) -> list[list[str]]:
+    """Groups of systems the evidence cannot separate, best first.
+
+    Two systems are told apart only when one beats the other in at least
+    `threshold` of resamples. Anything less is a ranking the data does not
+    support, however confidently the table prints it.
+    """
+    groups: list[list[str]] = []
+    for interval in intervals:
+        for group in groups:
+            if all(beats[member].get(interval.system, 0) < threshold for member in group):
+                group.append(interval.system)
+                break
+        else:
+            groups.append([interval.system])
+    return groups
+
+
+def build(root: Path | None = None, judge_model: str = judge.DEFAULT_MODEL) -> dict | None:
+    """The whole analysis, as the page consumes it."""
+    answers = load_answers(root, judge_model)
+    if not answers:
+        return None
+
+    criteria = per_criterion(answers)
+    scores = per_session_scores(answers)
+    intervals, beats = paired_intervals(scores)
+    if not intervals:
+        return None
+
+    verdicts = defaultdict(list)
+    for profile in criteria:
+        verdicts[profile.verdict].append(profile.key)
+
+    return {
+        "judge_model": judge_model,
+        "sessions": intervals[0].sessions,
+        "criteria": [
+            {
+                "key": profile.key,
+                "text": profile.text,
+                "section": profile.section,
+                "verdict": profile.verdict,
+                "spread": round(profile.spread, 3),
+                "human": None if profile.human is None else round(profile.human, 3),
+                "by_system": {k: round(v, 3) for k, v in sorted(profile.by_system.items())},
+            }
+            for profile in sorted(
+                criteria, key=lambda p: -sum(p.models.values()) if p.models else 0
+            )
+        ],
+        "verdict_counts": {name: len(keys) for name, keys in sorted(verdicts.items())},
+        "intervals": [
+            {
+                "system": i.system,
+                "mean": round(i.mean, 4),
+                "low": round(i.low, 4),
+                "high": round(i.high, 4),
+            }
+            for i in intervals
+        ],
+        "indistinguishable": indistinguishable(intervals, beats),
+        "bootstrap": {"samples": BOOTSTRAP_SAMPLES, "seed": BOOTSTRAP_SEED, "paired": True},
+    }

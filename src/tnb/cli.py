@@ -517,6 +517,56 @@ def cmd_calibrate(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_saturation(args: argparse.Namespace) -> int:
+    """Ask whether the benchmark can still tell these models apart.
+
+    Costs nothing: it reads answers the judge has already given. Three findings
+    a ranking cannot produce on its own -- which rubric items are used up, which
+    are unanswerable from a transcript, and which models the evidence genuinely
+    separates.
+    """
+    import json as _json
+
+    from tnb.scoring import saturation
+
+    data = saturation.build(judge_model=args.judge_model)
+    if data is None:
+        print(
+            "No judge answers to analyse. Run 'tnb score' first.",
+            file=sys.stderr,
+        )
+        return 1
+
+    counts = data["verdict_counts"]
+    print(f"{len(data['criteria'])} rubric criteria over {data['sessions']} shared sessions:")
+    for verdict in ("saturated", "discriminating", "mixed", "unreachable"):
+        if counts.get(verdict):
+            print(f"  {verdict:16} {counts[verdict]:2}")
+
+    print("\nScore with the range the evidence supports (paired bootstrap):")
+    for row in data["intervals"]:
+        print(f"  {row['system']:30} {row['mean']:.3f}  [{row['low']:.3f}, {row['high']:.3f}]")
+
+    groups = data["indistinguishable"]
+    print("\nGroups this evidence cannot separate, best first:")
+    for index, group in enumerate(groups, start=1):
+        print(f"  {index}. {', '.join(group)}")
+    if all(len(group) == 1 for group in groups):
+        print("  (every system is distinguishable from every other)")
+
+    if args.dry_run:
+        print("\nDry run: nothing written.")
+        return 0
+
+    report.DOCS_DIR.mkdir(parents=True, exist_ok=True)
+    report.SATURATION_PATH.write_text(
+        _json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    print(f"\nWrote {report.SATURATION_PATH.relative_to(REPO_ROOT)}.")
+    print("Run 'tnb report' to rebuild the page.")
+    return 0
+
+
 def cmd_not_implemented(args: argparse.Namespace) -> int:
     print(
         f"'tnb {args.command}' is not implemented yet — see the roadmap in README.md.",
@@ -633,6 +683,15 @@ def build_parser() -> argparse.ArgumentParser:
     calibrate.add_argument("--limit", type=int, help="use only the first N sessions")
     calibrate.add_argument("--dry-run", action="store_true", help="print, write nothing")
     calibrate.set_defaults(func=cmd_calibrate)
+
+    saturation = subparsers.add_parser(
+        "saturation", help="is there anything left to measure? (reads the answer cache)"
+    )
+    saturation.add_argument(
+        "--judge-model", default=judge.DEFAULT_MODEL, help="whose answers to analyse"
+    )
+    saturation.add_argument("--dry-run", action="store_true", help="print, write nothing")
+    saturation.set_defaults(func=cmd_saturation)
 
     report_parser = subparsers.add_parser(
         "report", help="regenerate the leaderboard page, its JSON and the README table"

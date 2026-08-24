@@ -316,6 +316,13 @@ class Spend:
         return projected > self.limit_usd
 
 
+def _slug_model(model: str) -> str:
+    """The directory one judge's answers live under."""
+    from tnb.generation import _slug
+
+    return _slug(model)
+
+
 def cache_path(
     judge_model: str,
     judge_prompt_version: str,

@@ -33,6 +33,7 @@ README_PATH = REPO_ROOT / "README.md"
 LEADERBOARD_MARKERS = ("<!-- LEADERBOARD:BEGIN -->", "<!-- LEADERBOARD:END -->")
 CALIBRATION_MARKERS = ("<!-- CALIBRATION:BEGIN -->", "<!-- CALIBRATION:END -->")
 CALIBRATION_PATH = DOCS_DIR / "calibration.json"
+SATURATION_PATH = DOCS_DIR / "saturation.json"
 
 #: Column order per track: (key, heading, how many decimals).
 #:
@@ -360,6 +361,10 @@ def update_readme(
     return True
 
 
+def _load_json(path: Path) -> dict | None:
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
+
+
 def load_calibration(docs_dir: Path | None = None) -> dict | None:
     """The last calibration, if one has been run. The page shows it above all else."""
     path = (docs_dir or DOCS_DIR) / CALIBRATION_PATH.name
@@ -373,6 +378,7 @@ def write(rows: list[Row], *, docs_dir: Path | None = None, readme: Path | None 
     docs_dir = docs_dir or DOCS_DIR
     data = build(rows)
     data["calibration"] = load_calibration(docs_dir)
+    data["saturation"] = _load_json(docs_dir / SATURATION_PATH.name)
 
     docs_dir.mkdir(parents=True, exist_ok=True)
     (docs_dir / DATA_PATH.name).write_text(
