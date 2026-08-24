@@ -8,11 +8,19 @@
   :root {
     --bg: #fbfbfa; --fg: #1a1a19; --muted: #6b6b66; --line: #e2e2dd;
     --card: #ffffff; --accent: #2f6f4f; --warn: #8a5a00; --chip: #f0f0eb;
+    /* Verdict colours. Chosen with the palette validator rather than by eye:
+       all three clear the chroma floor, the CVD separation threshold and 3:1
+       contrast on this surface. Every mark also carries a word, so colour is
+       never the only channel. */
+    --v-discriminating: #00806a; --v-saturated: #c05a10; --v-unreachable: #4a4fb8;
+    --v-mixed: #7d8a85;
   }
   @media (prefers-color-scheme: dark) {
     :root {
       --bg: #17181a; --fg: #e8e8e4; --muted: #9a9a94; --line: #2c2e31;
       --card: #1e1f22; --accent: #7fc0a0; --warn: #d5a03c; --chip: #26282b;
+      --v-discriminating: #22a184; --v-saturated: #c9701f; --v-unreachable: #7c80e0;
+      --v-mixed: #7d8a85;
     }
   }
   * { box-sizing: border-box; }
@@ -96,6 +104,19 @@
   .note { color: var(--warn); font-size: .85rem; margin: .2rem 0 .8rem; }
   .versions { color: var(--muted); font-size: .8rem; margin: .1rem 0 .9rem; }
   .versions code { background: var(--chip); padding: .05rem .3rem; border-radius: 4px; }
+  /* --- saturation --- */
+  .legend { display: flex; flex-wrap: wrap; gap: .25rem 1.1rem; margin: .2rem 0 1rem; font-size: .82rem; }
+  .legend span { display: inline-flex; align-items: center; gap: .4rem; color: var(--muted); }
+  .legend i { width: 11px; height: 11px; border-radius: 2px; display: inline-block; }
+  .sat-table td.mark { width: 42%; padding-right: 0; }
+  .sat-table .verdict { font-size: .74rem; letter-spacing: .03em; white-space: nowrap; }
+  svg.plot { display: block; width: 100%; height: auto; overflow: visible; }
+  svg.plot text { font-family: inherit; fill: var(--muted); font-size: 11px; }
+  svg.plot text.name { fill: var(--fg); font-size: 12px; font-weight: 600; }
+  svg.plot text.value { font-variant-numeric: tabular-nums; }
+  svg.plot .grid { stroke: var(--line); stroke-width: 1; }
+  svg.plot .rule { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3; }
+
   footer { color: var(--muted); font-size: .85rem; margin-top: 2.5rem; max-width: 72ch; }
   footer p { margin: .4rem 0; }
 </style>
@@ -133,6 +154,11 @@
   <details class="box" id="corpora">
     <summary><strong>What the two corpora are, and how much of the form the experts filled in</strong></summary>
     <div id="corpora-body"></div>
+  </details>
+
+  <details class="box" id="saturation">
+    <summary><strong>Is there anything left to measure?</strong></summary>
+    <div id="saturation-body"></div>
   </details>
 
   <div id="tables"></div>
@@ -286,6 +312,127 @@ function sortBy(table, key) {
   table.dataset.sorted = ascending ? '' : key;
   pairs.forEach(([system, detail]) => { tbody.append(system); tbody.append(detail); });
 }
+
+const VERDICTS = {
+  discriminating: ['--v-discriminating', 'still separates models'],
+  saturated:      ['--v-saturated',      'every model already does this'],
+  mixed:          ['--v-mixed',          'partly, weakly'],
+  unreachable:    ['--v-unreachable',    'nobody can, the therapist included'],
+};
+
+function intervalPlot(rows, human) {
+  // A dot with its interval, not a bar: the interesting range is 0.3-0.6 and a
+  // bar would imply a zero baseline nobody is near.
+  const rowH = 26, padL = 190, padR = 54, top = 22, W = 720;
+  const H = top + rows.length * rowH + 16;
+  const lo = Math.min(...rows.map(r => r.low), human ? human.low : 1) - 0.04;
+  const hi = Math.max(...rows.map(r => r.high)) + 0.04;
+  const x = v => padL + (v - lo) / (hi - lo) * (W - padL - padR);
+
+  const ticks = [];
+  for (let t = Math.ceil(lo * 10) / 10; t <= hi; t += 0.1) {
+    ticks.push(`<line class="grid" x1="${x(t).toFixed(1)}" x2="${x(t).toFixed(1)}"
+                      y1="${top - 8}" y2="${H - 12}"></line>
+                <text x="${x(t).toFixed(1)}" y="${top - 12}" text-anchor="middle">${t.toFixed(1)}</text>`);
+  }
+
+  const marks = rows.map((r, i) => {
+    const y = top + i * rowH + rowH / 2;
+    const colour = r.system === 'therapist' ? 'var(--muted)' : 'var(--accent)';
+    return `<g>
+      <title>${r.system}: ${r.mean.toFixed(3)} (95% interval ${r.low.toFixed(3)} to ${r.high.toFixed(3)})</title>
+      <text class="name" x="${padL - 12}" y="${y + 4}" text-anchor="end">${r.system}</text>
+      <line x1="${x(r.low).toFixed(1)}" x2="${x(r.high).toFixed(1)}" y1="${y}" y2="${y}"
+            stroke="${colour}" stroke-width="2" stroke-linecap="round"></line>
+      <circle cx="${x(r.mean).toFixed(1)}" cy="${y}" r="5" fill="${colour}"
+              stroke="var(--card)" stroke-width="2"></circle>
+      <text class="value" x="${W - padR + 8}" y="${y + 4}">${r.mean.toFixed(3)}</text>
+    </g>`;
+  }).join('');
+
+  const humanRule = human ? `
+    <line class="rule" x1="${x(human.mean).toFixed(1)}" x2="${x(human.mean).toFixed(1)}"
+          y1="${top - 8}" y2="${H - 12}"></line>` : '';
+
+  return `<div class="scroll"><svg class="plot" viewBox="0 0 ${W} ${H}" role="img"
+       aria-label="Completeness with 95% bootstrap intervals, best first">
+    ${ticks.join('')}${humanRule}${marks}
+  </svg></div>`;
+}
+
+function renderSaturation(data) {
+  const s = data.saturation;
+  if (!s) return;
+
+  const counts = s.verdict_counts || {};
+  const legend = Object.entries(VERDICTS)
+    .filter(([name]) => counts[name])
+    .map(([name, [token, gloss]]) =>
+      `<span><i style="background:var(${token})"></i>${name} (${counts[name]}) — ${gloss}</span>`)
+    .join('');
+
+  const strips = s.criteria.map(c => {
+    const rates = Object.entries(c.by_system).filter(([k]) => k !== 'therapist').map(([, v]) => v);
+    if (!rates.length) return '';
+    const lo = Math.min(...rates), hi = Math.max(...rates);
+    const token = VERDICTS[c.verdict] ? VERDICTS[c.verdict][0] : '--v-mixed';
+    const human = c.human === null ? '' :
+      `<line x1="${(c.human * 100).toFixed(1)}%" x2="${(c.human * 100).toFixed(1)}%" y1="1" y2="15"
+             stroke="var(--muted)" stroke-width="2"></line>`;
+    return `<tr>
+      <td>${c.text} <span class="dash">${c.section}</span></td>
+      <td class="mark"><svg class="plot" viewBox="0 0 100 16" preserveAspectRatio="none"
+              style="height:16px" role="img"
+              aria-label="${c.text}: models ${Math.round(lo*100)} to ${Math.round(hi*100)} percent">
+          <title>${c.text}: models ${Math.round(lo*100)}–${Math.round(hi*100)}%${
+            c.human === null ? '' : `, therapist ${Math.round(c.human*100)}%`}</title>
+          <line x1="0" x2="100" y1="8" y2="8" stroke="var(--line)" stroke-width="2"></line>
+          <line x1="${(lo*100).toFixed(1)}" x2="${(hi*100).toFixed(1)}" y1="8" y2="8"
+                stroke="var(${token})" stroke-width="6" stroke-linecap="round"
+                vector-effect="non-scaling-stroke"></line>
+          ${human}
+        </svg></td>
+      <td class="verdict" style="color:var(${token})">${c.verdict}</td>
+    </tr>`;
+  }).join('');
+
+  const all = s.indistinguishable || [];
+  const groups = all.map(g =>
+    `<li>${g.join(', ')}${g.length > 1 ? ' <span class="dash">— not separable</span>' : ''}</li>`).join('');
+  const separable = all.every(g => g.length === 1)
+    ? `<p class="blurb">On this evidence <strong>every system is distinguishable from every
+       other</strong> — the benchmark has not run out of resolution yet.</p>`
+    : '';
+
+  document.getElementById('saturation-body').innerHTML = `
+    <p class="blurb">A ranking always prints an order. This asks whether the evidence supports one.
+       Both parts read the individual judgements, not the averages, over the
+       <strong>${s.sessions} conversations every system wrote a note for</strong>.</p>
+
+    <h4>Completeness, with the range the evidence supports</h4>
+    <p class="blurb">95% intervals from a paired bootstrap over conversations — the same resample
+       scores every system, so a hard conversation counts as difficulty rather than disagreement.
+       The dashed line is the therapist.</p>
+    ${intervalPlot(s.intervals.filter(r => r.system !== 'therapist'),
+                   s.intervals.find(r => r.system === 'therapist'))}
+    <p class="blurb" style="margin-top:.9rem">Ranked, with systems the evidence cannot separate
+       grouped on one line:</p>
+    <ol class="sections">${groups}</ol>
+    ${separable}
+
+    <h4 style="margin-top:1.8rem">What each rubric criterion is still doing</h4>
+    <p class="blurb">The bar spans lowest to highest model; the grey tick is the therapist. A bar
+       pinned right means every model already satisfies it. A bar pinned left where the therapist
+       is pinned left too means the question has no answer in a counselling transcript — that is a
+       fact about the corpus, not about the models.</p>
+    <div class="legend">${legend}</div>
+    <div class="scroll"><table class="sat-table">
+      <thead><tr><th>Criterion</th><th>Models, worst to best</th><th></th></tr></thead>
+      <tbody>${strips}</tbody>
+    </table></div>`;
+}
+
+renderSaturation(DATA);
 
 function renderCorpora(data) {
   const c = data.corpus;

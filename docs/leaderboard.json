@@ -642,6 +642,417 @@
       }
     ]
   },
+  "saturation": {
+    "bootstrap": {
+      "paired": true,
+      "samples": 2000,
+      "seed": 20260824
+    },
+    "criteria": [
+      {
+        "by_system": {
+          "deepseek-v4-flash": 1.0,
+          "deepseek-v4-flash-thinking": 1.0,
+          "llama-3.1-70b": 1.0,
+          "mistral-large-v2": 0.98,
+          "therapist": 0.62
+        },
+        "human": 0.62,
+        "key": "subjective-symptoms",
+        "section": "subjective",
+        "spread": 0.02,
+        "text": "Symptoms",
+        "verdict": "saturated"
+      },
+      {
+        "by_system": {
+          "deepseek-v4-flash": 1.0,
+          "deepseek-v4-flash-thinking": 1.0,
+          "llama-3.1-70b": 0.98,
+          "mistral-large-v2": 1.0,
+          "therapist": 0.4
+        },
+        "human": 0.4,
+        "key": "objective-behavior",
+        "section": "objective",
+        "spread": 0.02,
+        "text": "Client’s observed behavior",
+        "verdict": "saturated"
+      },
+      {
+        "by_system": {
+          "deepseek-v4-flash": 1.0,
+          "deepseek-v4-flash-thinking": 1.0,
+          "llama-3.1-70b": 1.0,
+          "mistral-large-v2": 0.98,
+          "therapist": 0.62
+        },
+        "human": 0.62,
+        "key": "assessment-analysis",
+        "section": "assessment",
+        "spread": 0.02,
+        "text": "Analysis",
+        "verdict": "saturated"
+      },
+      {
+        "by_system": {
+          "deepseek-v4-flash": 1.0,
+          "deepseek-v4-flash-thinking": 1.0,
+          "llama-3.1-70b": 0.94,
+          "mistral-large-v2": 1.0,
+          "therapist": 0.46
+        },
+        "human": 0.46,
+        "key": "plan-interventions",
+        "section": "plan",
+        "spread": 0.06,
+        "text": "Future Interventions",
+        "verdict": "saturated"
+      },
+      {
+        "by_system": {
+          "deepseek-v4-flash": 1.0,
+          "deepseek-v4-flash-thinking": 1.0,
+          "llama-3.1-70b": 0.92,
+          "mistral-large-v2": 0.96,
+          "therapist": 0.3
+        },
+        "human": 0.3,
+        "key": "objective-mental-status",
+        "section": "objective",
+        "spread": 0.08,
+        "text": "Mental Status",
+        "verdict": "saturated"
+      },
+      {
+        "by_system": {
+          "deepseek-v4-flash": 0.78,
+          "deepseek-v4-flash-thinking": 0.857,
+          "llama-3.1-70b": 0.6,
+          "mistral-large-v2": 0.72,
+          "therapist": 0.76
+        },
+        "human": 0.76,
+        "key": "assessment-stages",
+        "section": "assessment",
+        "spread": 0.257,
+        "text": "Stages of change",
+        "verdict": "discriminating"
+      },
+      {
+        "by_system": {
+          "deepseek-v4-flash": 0.78,
+          "deepseek-v4-flash-thinking": 0.667,
+          "llama-3.1-70b": 0.86,
+          "mistral-large-v2": 0.62,
+          "therapist": 0.74
+        },
+        "human": 0.74,
+        "key": "subjective-chief-complaint",
+        "section": "subjective",
+        "spread": 0.24,
+        "text": "Chief complaint",
+        "verdict": "mixed"
+      },
+      {
+        "by_system": {
+          "deepseek-v4-flash": 0.7,
+          "deepseek-v4-flash-thinking": 0.7,
+          "llama-3.1-70b": 0.54,
+          "mistral-large-v2": 0.5,
+          "therapist": 0.42
+        },
+        "human": 0.42,
+        "key": "subjective-goals",
+        "section": "subjective",
+        "spread": 0.2,
+        "text": "Client's Goals",
+        "verdict": "mixed"
+      },
+      {
+        "by_system": {
+          "deepseek-v4-flash": 0.56,
+          "deepseek-v4-flash-thinking": 0.567,
+          "llama-3.1-70b": 0.46,
+          "mistral-large-v2": 0.56,
+          "therapist": 0.48
+        },
+        "human": 0.48,
+        "key": "subjective-history",
+        "section": "subjective",
+        "spread": 0.107,
+        "text": "History",
+        "verdict": "mixed"
+      },
+      {
+        "by_system": {
+          "deepseek-v4-flash": 0.32,
+          "deepseek-v4-flash-thinking": 0.481,
+          "llama-3.1-70b": 0.38,
+          "mistral-large-v2": 0.56,
+          "therapist": 0.34
+        },
+        "human": 0.34,
+        "key": "plan-follow-up",
+        "section": "plan",
+        "spread": 0.24,
+        "text": "Follow-Up",
+        "verdict": "mixed"
+      },
+      {
+        "by_system": {
+          "deepseek-v4-flash": 0.5,
+          "deepseek-v4-flash-thinking": 0.517,
+          "llama-3.1-70b": 0.32,
+          "mistral-large-v2": 0.4,
+          "therapist": 0.5
+        },
+        "human": 0.5,
+        "key": "assessment-progress",
+        "section": "assessment",
+        "spread": 0.197,
+        "text": "Progress",
+        "verdict": "mixed"
+      },
+      {
+        "by_system": {
+          "deepseek-v4-flash": 0.56,
+          "deepseek-v4-flash-thinking": 0.704,
+          "llama-3.1-70b": 0.12,
+          "mistral-large-v2": 0.32,
+          "therapist": 0.16
+        },
+        "human": 0.16,
+        "key": "plan-adjustment",
+        "section": "plan",
+        "spread": 0.584,
+        "text": "Adjustment of medication/intervention",
+        "verdict": "discriminating"
+      },
+      {
+        "by_system": {
+          "deepseek-v4-flash": 0.66,
+          "deepseek-v4-flash-thinking": 0.667,
+          "llama-3.1-70b": 0.08,
+          "mistral-large-v2": 0.24,
+          "therapist": 0.24
+        },
+        "human": 0.24,
+        "key": "subjective-quotes",
+        "section": "subjective",
+        "spread": 0.587,
+        "text": "Quotes",
+        "verdict": "discriminating"
+      },
+      {
+        "by_system": {
+          "deepseek-v4-flash": 0.44,
+          "deepseek-v4-flash-thinking": 0.444,
+          "llama-3.1-70b": 0.28,
+          "mistral-large-v2": 0.36,
+          "therapist": 0.4
+        },
+        "human": 0.4,
+        "key": "plan-homework",
+        "section": "plan",
+        "spread": 0.164,
+        "text": "Homework",
+        "verdict": "mixed"
+      },
+      {
+        "by_system": {
+          "deepseek-v4-flash": 0.4,
+          "deepseek-v4-flash-thinking": 0.517,
+          "llama-3.1-70b": 0.26,
+          "mistral-large-v2": 0.26,
+          "therapist": 0.24
+        },
+        "human": 0.24,
+        "key": "assessment-triggers",
+        "section": "assessment",
+        "spread": 0.257,
+        "text": "Identifying Triggers",
+        "verdict": "discriminating"
+      },
+      {
+        "by_system": {
+          "deepseek-v4-flash": 0.38,
+          "deepseek-v4-flash-thinking": 0.345,
+          "llama-3.1-70b": 0.24,
+          "mistral-large-v2": 0.26,
+          "therapist": 0.3
+        },
+        "human": 0.3,
+        "key": "assessment-overall-progress",
+        "section": "assessment",
+        "spread": 0.14,
+        "text": "Overall/high-level progress",
+        "verdict": "mixed"
+      },
+      {
+        "by_system": {
+          "deepseek-v4-flash": 0.2,
+          "deepseek-v4-flash-thinking": 0.433,
+          "llama-3.1-70b": 0.02,
+          "mistral-large-v2": 0.02,
+          "therapist": 0.22
+        },
+        "human": 0.22,
+        "key": "objective-therapy-activities",
+        "section": "objective",
+        "spread": 0.413,
+        "text": "Therapy Activities",
+        "verdict": "discriminating"
+      },
+      {
+        "by_system": {
+          "deepseek-v4-flash": 0.2,
+          "deepseek-v4-flash-thinking": 0.241,
+          "llama-3.1-70b": 0.12,
+          "mistral-large-v2": 0.1,
+          "therapist": 0.4
+        },
+        "human": 0.4,
+        "key": "assessment-response",
+        "section": "assessment",
+        "spread": 0.141,
+        "text": "Response to interventions",
+        "verdict": "mixed"
+      },
+      {
+        "by_system": {
+          "deepseek-v4-flash": 0.08,
+          "deepseek-v4-flash-thinking": 0.276,
+          "llama-3.1-70b": 0.02,
+          "mistral-large-v2": 0.04,
+          "therapist": 0.04
+        },
+        "human": 0.04,
+        "key": "assessment-diagnosis",
+        "section": "assessment",
+        "spread": 0.256,
+        "text": "Diagnosis/Symptoms",
+        "verdict": "discriminating"
+      },
+      {
+        "by_system": {
+          "deepseek-v4-flash": 0.16,
+          "deepseek-v4-flash-thinking": 0.2,
+          "llama-3.1-70b": 0.0,
+          "mistral-large-v2": 0.04,
+          "therapist": 0.1
+        },
+        "human": 0.1,
+        "key": "objective-assessment-tools",
+        "section": "objective",
+        "spread": 0.2,
+        "text": "Assessment Tools",
+        "verdict": "mixed"
+      },
+      {
+        "by_system": {
+          "deepseek-v4-flash": 0.02,
+          "deepseek-v4-flash-thinking": 0.267,
+          "llama-3.1-70b": 0.0,
+          "mistral-large-v2": 0.0,
+          "therapist": 0.2
+        },
+        "human": 0.2,
+        "key": "objective-interventions",
+        "section": "objective",
+        "spread": 0.267,
+        "text": "Interventions",
+        "verdict": "discriminating"
+      },
+      {
+        "by_system": {
+          "deepseek-v4-flash": 0.02,
+          "deepseek-v4-flash-thinking": 0.069,
+          "llama-3.1-70b": 0.0,
+          "mistral-large-v2": 0.0,
+          "therapist": 0.0
+        },
+        "human": 0.0,
+        "key": "assessment-goals",
+        "section": "assessment",
+        "spread": 0.069,
+        "text": "Treatment Goals",
+        "verdict": "unreachable"
+      },
+      {
+        "by_system": {
+          "deepseek-v4-flash": 0.02,
+          "deepseek-v4-flash-thinking": 0.033,
+          "llama-3.1-70b": 0.0,
+          "mistral-large-v2": 0.02,
+          "therapist": 0.04
+        },
+        "human": 0.04,
+        "key": "subjective-homework",
+        "section": "subjective",
+        "spread": 0.033,
+        "text": "Homework from previous sessions",
+        "verdict": "unreachable"
+      }
+    ],
+    "indistinguishable": [
+      [
+        "deepseek-v4-flash-thinking"
+      ],
+      [
+        "deepseek-v4-flash"
+      ],
+      [
+        "mistral-large-v2"
+      ],
+      [
+        "llama-3.1-70b"
+      ],
+      [
+        "therapist"
+      ]
+    ],
+    "intervals": [
+      {
+        "high": 0.6255,
+        "low": 0.5374,
+        "mean": 0.5792,
+        "system": "deepseek-v4-flash-thinking"
+      },
+      {
+        "high": 0.5618,
+        "low": 0.486,
+        "mean": 0.5222,
+        "system": "deepseek-v4-flash"
+      },
+      {
+        "high": 0.4833,
+        "low": 0.4076,
+        "mean": 0.444,
+        "system": "mistral-large-v2"
+      },
+      {
+        "high": 0.4508,
+        "low": 0.3734,
+        "mean": 0.4092,
+        "system": "llama-3.1-70b"
+      },
+      {
+        "high": 0.3883,
+        "low": 0.2956,
+        "mean": 0.3412,
+        "system": "therapist"
+      }
+    ],
+    "judge_model": "gemini-2.5-pro",
+    "sessions": 30,
+    "verdict_counts": {
+      "discriminating": 7,
+      "mixed": 9,
+      "saturated": 5,
+      "unreachable": 2
+    }
+  },
   "tables": [
     {
       "blurb": "Reference-free. 23 completeness criteria, conciseness scored sentence by sentence, faithfulness against the full transcript.",
