@@ -79,9 +79,13 @@ have put one model in the leaderboard twice under two vendors' names.
 
 ### Operational findings
 
-- **Rate limiting is per API key, not per model.** Six concurrent requests drew
-  HTTP 429 on roughly a third of calls. `models.yaml` now runs at concurrency 2
-  with backoff, and the client retries 429 rather than treating it as failure.
+- **Rate limiting is per API key, not per model, and the limit is 4.** Six
+  concurrent requests drew HTTP 429 on roughly a third of calls. The endpoint
+  states the number in the 429 body itself, which is where it was read rather
+  than guessed: `Limit type: max_parallel_requests. Current limit: 4`.
+  `models.yaml` runs at concurrency 2 — half the allowance, leaving room for
+  whatever else the same key is doing — and the client retries 429 with backoff.
+  One 429 in the ~9600 calls of the first generation run.
 - **Reasoning models need a generous `max_tokens`.** At 64 tokens, several
   returned empty `content` because the budget went entirely on thinking — they
   look broken rather than slow. The generation cap is 4096.
