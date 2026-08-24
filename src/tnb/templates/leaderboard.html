@@ -75,6 +75,20 @@
   .subtitle { font-weight: 400; color: var(--muted); }
 
   .scroll { overflow-x: auto; }
+  /* On a narrow screen the table scrolls sideways and the first column is the
+     one that must not leave: a row of dashes with no name on it says nothing.
+     Pinned, with its own background so the scrolling columns pass underneath. */
+  table th:first-child, table td:first-child {
+    position: sticky; left: 0; z-index: 1;
+    background: var(--card);
+    box-shadow: 1px 0 0 var(--line);
+  }
+  tbody tr.system:hover td:first-child { background: var(--chip); }
+  tr.detail > td:first-child { background: var(--chip); }
+  @media (max-width: 34rem) {
+    table th:first-child, table td:first-child { max-width: 9.5rem; }
+    td.name { font-size: .88rem; }
+  }
   table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
   th, td { text-align: right; padding: .45rem .6rem; border-bottom: 1px solid var(--line); }
   th:first-child, td:first-child { text-align: left; }

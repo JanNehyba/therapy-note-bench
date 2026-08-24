@@ -263,3 +263,32 @@ def test_the_section_descriptions_are_ours_not_upstreams():
     joined = " ".join(s["description"] for s in report.protocol()["icare_sections"])
     assert "helpful mental health assistant" not in joined
     assert "###Dialog###" not in joined
+
+
+def test_a_scored_system_is_not_also_shown_as_unscored():
+    """It reads as a missing measurement rather than as two version sets --
+    which is exactly how a reader hit it: a row of dashes for a model that had
+    already been judged."""
+    data = report.build(
+        [
+            _row(system_id="gemma4"),  # coverage row, no judge
+            _scored("gemma4", 0.57),  # the same model, judged
+            _row(system_id="kimi-k3"),  # genuinely not judged yet
+        ]
+    )
+    unscored = [t for t in data["tables"] if not t["scored"]]
+    scored = [t for t in data["tables"] if t["scored"]]
+
+    assert [r["label"] for r in unscored[0]["rows"]] == ["kimi-k3"]
+    assert [r["label"] for r in scored[0]["rows"]] == ["gemma4"]
+
+
+def test_a_table_left_with_no_rows_is_dropped_rather_than_drawn_empty():
+    data = report.build([_row(system_id="gemma4"), _scored("gemma4", 0.57)])
+    assert [t["scored"] for t in data["tables"]] == [True]
+
+
+def test_the_coverage_row_still_exists_for_a_scored_system():
+    """Only the page hides it. results/ is append-only and keeps both."""
+    rows = [_row(system_id="gemma4"), _scored("gemma4", 0.57)]
+    assert len(results.latest(rows)) == 2

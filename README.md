@@ -31,9 +31,6 @@ published numbers: **<https://jannehyba.github.io/therapy-note-bench/>**
 
 | Model | Completeness | Conciseness | Faithfulness* | Sessions |
 |---|---|---|---|---|
-| `deepseek-v4-flash` | — | — | — | 50/50 |
-| `deepseek-v4-flash-thinking` | — | — | — | 50/50 |
-| `gemma4` | — | — | — | 50/50 |
 | `glm-5` | — | — | — | 50/50 |
 | `glm-5.2` | — | — | — | 50/50 |
 | `gpt-oss-120b` | — | — | — | 42/50 (8 unusable) |
@@ -42,6 +39,14 @@ published numbers: **<https://jannehyba.github.io/therapy-note-bench/>**
 | `qwen3.5-122b` | — | — | — | 50/50 |
 | `qwen3.5-int4` | — | — | — | 50/50 |
 | `qwen3.8-27b` | — | — | — | 50/50 |
+
+**TN-Eval SOAP · AnnoMI conversations**
+
+| Model | Completeness | Conciseness | Faithfulness* | Sessions |
+|---|---|---|---|---|
+| `deepseek-v4-flash-thinking` | 0.578 | 0.965 | 4.81 | 50/50 |
+| `gemma4` | 0.568 | 0.941 | 4.99 | 17/50 (33 unusable) |
+| `deepseek-v4-flash` | 0.524 | 0.973 | 4.80 | 50/50 |
 
 **iCARE / iHOPE · 17 sections per session**
 

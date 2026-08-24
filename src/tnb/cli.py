@@ -382,6 +382,24 @@ def cmd_score(args: argparse.Namespace) -> int:
         return 0
 
     client = judge.Judge(config)
+
+    if args.cache_only:
+        scored = scoring.from_cache(candidates, client)
+        print(f"\n{len(scored)} note(s) already answered in full; nothing asked.")
+        if not scored:
+            print("Nothing complete yet.", file=sys.stderr)
+            return 1
+        offered = {}
+        for candidate in candidates:
+            key = (candidate.provider, candidate.system_id)
+            offered[key] = offered.get(key, 0) + 1
+        rows = scoring.to_rows(
+            scored, judge_model=config.model, n_attempted=offered, run_id=args.run_id or ""
+        )
+        path = results.append(rows)
+        print(f"Appended {len(rows)} row(s) to {path.relative_to(REPO_ROOT)}.")
+        print("Run 'tnb report' to rebuild the page.")
+        return 0
     spend = judge.Spend(limit_usd=args.max_judge_usd)
     done = 0
 
@@ -667,6 +685,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="hard ceiling; the run stops rather than exceeding it",
     )
     score.add_argument("--force", action="store_true", help="re-ask cached questions")
+    score.add_argument(
+        "--cache-only",
+        action="store_true",
+        help="publish the notes already answered, without asking the judge anything",
+    )
     score.add_argument("--dry-run", action="store_true", help="print the job, ask nothing")
     score.add_argument(
         "--no-write", action="store_true", help="score but do not append result rows"

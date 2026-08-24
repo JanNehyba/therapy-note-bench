@@ -1104,63 +1104,6 @@
           "by_section": {},
           "detail": {},
           "failure_reasons": {},
-          "generated_at": "2026-08-23T21:17:39Z",
-          "headline": {},
-          "label": "deepseek-v4-flash",
-          "metrics_note": "",
-          "n_attempted": 50,
-          "n_failed": 0,
-          "n_generated": 50,
-          "n_scored": 0,
-          "provider": "einfra",
-          "scored": false,
-          "scored_at": null,
-          "source": "",
-          "system_id": "deepseek-v4-flash",
-          "system_type": "model"
-        },
-        {
-          "by_section": {},
-          "detail": {},
-          "failure_reasons": {},
-          "generated_at": "2026-08-23T21:24:54Z",
-          "headline": {},
-          "label": "deepseek-v4-flash-thinking",
-          "metrics_note": "",
-          "n_attempted": 50,
-          "n_failed": 0,
-          "n_generated": 50,
-          "n_scored": 0,
-          "provider": "einfra",
-          "scored": false,
-          "scored_at": null,
-          "source": "",
-          "system_id": "deepseek-v4-flash-thinking",
-          "system_type": "model"
-        },
-        {
-          "by_section": {},
-          "detail": {},
-          "failure_reasons": {},
-          "generated_at": "2026-08-23T21:31:19Z",
-          "headline": {},
-          "label": "gemma4",
-          "metrics_note": "",
-          "n_attempted": 50,
-          "n_failed": 0,
-          "n_generated": 50,
-          "n_scored": 0,
-          "provider": "einfra",
-          "scored": false,
-          "scored_at": null,
-          "source": "",
-          "system_id": "gemma4",
-          "system_type": "model"
-        },
-        {
-          "by_section": {},
-          "detail": {},
-          "failure_reasons": {},
           "generated_at": "2026-08-23T21:42:37Z",
           "headline": {},
           "label": "glm-5",
@@ -1343,6 +1286,234 @@
         }
       ],
       "rows": [
+        {
+          "by_section": {
+            "assessment": {
+              "completeness": 0.4825,
+              "conciseness": 1.0,
+              "likert_completeness": 3.92,
+              "likert_conciseness": 4.6,
+              "likert_faithfulness": 4.94
+            },
+            "objective": {
+              "completeness": 0.568,
+              "conciseness": 0.9808,
+              "likert_completeness": 3.56,
+              "likert_conciseness": 4.22,
+              "likert_faithfulness": 4.96
+            },
+            "plan": {
+              "completeness": 0.67,
+              "conciseness": 0.8833,
+              "likert_completeness": 3.74,
+              "likert_conciseness": 4.62,
+              "likert_faithfulness": 4.36
+            },
+            "subjective": {
+              "completeness": 0.59,
+              "conciseness": 0.9975,
+              "likert_completeness": 3.92,
+              "likert_conciseness": 4.54,
+              "likert_faithfulness": 4.98
+            }
+          },
+          "detail": {
+            "assessment-analysis": 1.0,
+            "assessment-diagnosis": 0.2,
+            "assessment-goals": 0.06,
+            "assessment-overall-progress": 0.38,
+            "assessment-progress": 0.56,
+            "assessment-response": 0.28,
+            "assessment-stages": 0.86,
+            "assessment-triggers": 0.52,
+            "objective-assessment-tools": 0.22,
+            "objective-behavior": 1.0,
+            "objective-interventions": 0.22,
+            "objective-mental-status": 1.0,
+            "objective-therapy-activities": 0.4,
+            "plan-adjustment": 0.7,
+            "plan-follow-up": 0.5,
+            "plan-homework": 0.48,
+            "plan-interventions": 1.0,
+            "subjective-chief-complaint": 0.62,
+            "subjective-goals": 0.7,
+            "subjective-history": 0.56,
+            "subjective-homework": 0.04,
+            "subjective-quotes": 0.62,
+            "subjective-symptoms": 1.0
+          },
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "completeness": 0.5776,
+            "conciseness": 0.9654,
+            "faithfulness": 4.81
+          },
+          "label": "deepseek-v4-flash-thinking",
+          "metrics_note": "faithfulness is a Likert rating; TN-Eval measured weak human agreement on it -- see docs/limitations.md",
+          "n_attempted": 50,
+          "n_failed": 0,
+          "n_generated": 50,
+          "n_scored": 50,
+          "provider": "einfra",
+          "scored": true,
+          "scored_at": "2026-08-24T18:48:10Z",
+          "source": "",
+          "system_id": "deepseek-v4-flash-thinking",
+          "system_type": "model"
+        },
+        {
+          "by_section": {
+            "assessment": {
+              "completeness": 0.5074,
+              "conciseness": 1.0,
+              "likert_completeness": 3.7647,
+              "likert_conciseness": 4.8824,
+              "likert_faithfulness": 5.0
+            },
+            "objective": {
+              "completeness": 0.5529,
+              "conciseness": 1.0,
+              "likert_completeness": 3.1765,
+              "likert_conciseness": 4.5294,
+              "likert_faithfulness": 5.0
+            },
+            "plan": {
+              "completeness": 0.5441,
+              "conciseness": 0.7657,
+              "likert_completeness": 3.2941,
+              "likert_conciseness": 4.9412,
+              "likert_faithfulness": 4.9412
+            },
+            "subjective": {
+              "completeness": 0.6667,
+              "conciseness": 1.0,
+              "likert_completeness": 4.0,
+              "likert_conciseness": 4.6471,
+              "likert_faithfulness": 5.0
+            }
+          },
+          "detail": {
+            "assessment-analysis": 1.0,
+            "assessment-diagnosis": 0.2353,
+            "assessment-goals": 0.0,
+            "assessment-overall-progress": 0.4118,
+            "assessment-progress": 0.8235,
+            "assessment-response": 0.2353,
+            "assessment-stages": 0.8235,
+            "assessment-triggers": 0.5294,
+            "objective-assessment-tools": 0.2353,
+            "objective-behavior": 1.0,
+            "objective-interventions": 0.0588,
+            "objective-mental-status": 1.0,
+            "objective-therapy-activities": 0.4706,
+            "plan-adjustment": 0.3529,
+            "plan-follow-up": 0.5882,
+            "plan-homework": 0.2941,
+            "plan-interventions": 0.9412,
+            "subjective-chief-complaint": 0.8824,
+            "subjective-goals": 0.6471,
+            "subjective-history": 0.6471,
+            "subjective-homework": 0.0,
+            "subjective-quotes": 0.8235,
+            "subjective-symptoms": 1.0
+          },
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "completeness": 0.5678,
+            "conciseness": 0.9414,
+            "faithfulness": 4.9853
+          },
+          "label": "gemma4",
+          "metrics_note": "faithfulness is a Likert rating; TN-Eval measured weak human agreement on it -- see docs/limitations.md",
+          "n_attempted": 50,
+          "n_failed": 33,
+          "n_generated": 17,
+          "n_scored": 17,
+          "provider": "einfra",
+          "scored": true,
+          "scored_at": "2026-08-24T18:48:10Z",
+          "source": "",
+          "system_id": "gemma4",
+          "system_type": "model"
+        },
+        {
+          "by_section": {
+            "assessment": {
+              "completeness": 0.42,
+              "conciseness": 0.996,
+              "likert_completeness": 3.9,
+              "likert_conciseness": 4.82,
+              "likert_faithfulness": 4.92
+            },
+            "objective": {
+              "completeness": 0.476,
+              "conciseness": 0.996,
+              "likert_completeness": 3.46,
+              "likert_conciseness": 4.34,
+              "likert_faithfulness": 4.9
+            },
+            "plan": {
+              "completeness": 0.58,
+              "conciseness": 0.8991,
+              "likert_completeness": 3.64,
+              "likert_conciseness": 4.76,
+              "likert_faithfulness": 4.42
+            },
+            "subjective": {
+              "completeness": 0.62,
+              "conciseness": 1.0,
+              "likert_completeness": 3.88,
+              "likert_conciseness": 4.6,
+              "likert_faithfulness": 4.98
+            }
+          },
+          "detail": {
+            "assessment-analysis": 1.0,
+            "assessment-diagnosis": 0.08,
+            "assessment-goals": 0.02,
+            "assessment-overall-progress": 0.38,
+            "assessment-progress": 0.5,
+            "assessment-response": 0.2,
+            "assessment-stages": 0.78,
+            "assessment-triggers": 0.4,
+            "objective-assessment-tools": 0.16,
+            "objective-behavior": 1.0,
+            "objective-interventions": 0.02,
+            "objective-mental-status": 1.0,
+            "objective-therapy-activities": 0.2,
+            "plan-adjustment": 0.56,
+            "plan-follow-up": 0.32,
+            "plan-homework": 0.44,
+            "plan-interventions": 1.0,
+            "subjective-chief-complaint": 0.78,
+            "subjective-goals": 0.7,
+            "subjective-history": 0.56,
+            "subjective-homework": 0.02,
+            "subjective-quotes": 0.66,
+            "subjective-symptoms": 1.0
+          },
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "completeness": 0.524,
+            "conciseness": 0.9728,
+            "faithfulness": 4.805
+          },
+          "label": "deepseek-v4-flash",
+          "metrics_note": "faithfulness is a Likert rating; TN-Eval measured weak human agreement on it -- see docs/limitations.md",
+          "n_attempted": 50,
+          "n_failed": 0,
+          "n_generated": 50,
+          "n_scored": 50,
+          "provider": "einfra",
+          "scored": true,
+          "scored_at": "2026-08-24T18:48:10Z",
+          "source": "",
+          "system_id": "deepseek-v4-flash",
+          "system_type": "model"
+        },
         {
           "by_section": {
             "assessment": {

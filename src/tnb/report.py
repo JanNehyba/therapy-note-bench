@@ -185,6 +185,33 @@ def build(rows: list[Row]) -> dict:
             }
         )
 
+    # A system with a score has no business appearing in the "not yet scored"
+    # table as a row of dashes: it *is* scored, and showing it twice reads as a
+    # missing measurement rather than as two version sets. Its coverage row
+    # stays in results/ -- this only decides what the page draws.
+    scored_systems = {
+        (table["track"], table["versions"]["prompt_version"], row["provider"], row["system_id"])
+        for table in tables
+        if table["scored"]
+        for row in table["rows"]
+        if row["scored"]
+    }
+    for table in tables:
+        if table["scored"]:
+            continue
+        table["rows"] = [
+            row
+            for row in table["rows"]
+            if (
+                table["track"],
+                table["versions"]["prompt_version"],
+                row["provider"],
+                row["system_id"],
+            )
+            not in scored_systems
+        ]
+    tables = [table for table in tables if table["rows"]]
+
     for table in tables:
         # Two tables can carry the same title and differ only in whether a judge
         # has seen them. Saying so in the heading stops the page reading as a

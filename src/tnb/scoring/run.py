@@ -213,6 +213,58 @@ def score_note(
     return result
 
 
+def from_cache(
+    candidates: list[Candidate],
+    client: judge.Judge,
+    *,
+    cache_root=None,
+    min_answers: int = 20,
+) -> list[NoteResult]:
+    """Score every note whose answers are already on disk, asking nothing.
+
+    A scoring run over 542 notes takes hours, and holding every number back
+    until the last one lands means the page says "not yet scored" about work
+    that finished long ago. This publishes what is measured, whenever it is
+    asked, and a note whose questions are still being answered is left out
+    rather than averaged over the handful that came back.
+    """
+    fingerprint = client.config.fingerprint()
+    scored: list[NoteResult] = []
+
+    for candidate in candidates:
+        answers: dict[str, str] = {}
+        tasks = tneval.build_tasks(candidate.note, candidate.conversation)
+        for task in tasks:
+            record = judge.load_cached(
+                judge.cache_path(
+                    client.config.model,
+                    tneval.JUDGE_PROMPT_VERSION,
+                    candidate.provider,
+                    candidate.system_id,
+                    candidate.session_id,
+                    task.unit,
+                    root=cache_root,
+                ),
+                fingerprint,
+            )
+            if record is not None:
+                answers[task.unit] = record["answer"]
+
+        # A note answered only in part would score low for want of questions,
+        # not for want of content.
+        if len(answers) < max(min_answers, len(tasks) * 0.9):
+            continue
+
+        scored.append(
+            NoteResult(
+                candidate=candidate,
+                scores=tneval.aggregate(answers),
+                cached=len(answers),
+            )
+        )
+    return scored
+
+
 def score_many(
     candidates: list[Candidate],
     client: judge.Judge,
