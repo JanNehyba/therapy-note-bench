@@ -57,6 +57,12 @@
   .criteria li::marker { color: var(--muted); }
   .criteria b { font-weight: 600; }
   .criteria span { color: var(--muted); }
+  ol.sections {
+    columns: 2; column-gap: 2rem; margin: 0; padding-left: 1.4rem;
+    font-size: .9rem; line-height: 1.9;
+  }
+  ol.sections li { break-inside: avoid; }
+  @media (max-width: 40rem) { ol.sections { columns: 1; } }
   .subtitle { font-weight: 400; color: var(--muted); }
 
   .scroll { overflow-x: auto; }
@@ -293,7 +299,20 @@ function renderProtocol(protocol) {
        item is present in the matching section. These are TN-Eval's
        <strong>${protocol.criteria.length} criteria</strong>, reproduced verbatim — a note
        scoring 0.50 contained half of them.</p>
-    <div class="criteria">${criteria}</div>`;
+    <div class="criteria">${criteria}</div>
+
+    <h4 style="margin-top:1.6rem">The other track: iCARE's 17 sections</h4>
+    <p class="blurb">The iCARE note is not four paragraphs but a <strong>form</strong>. Each of these
+       17 fields is filled by its own model call, using an instruction written by clinicians at
+       AIIMS Delhi, and the correct answer is <code>Nil</code> when the transcript does not say.
+       The two marked sections ask what happened <em>last</em> time and what happens <em>next</em>
+       time — the source paper reports that every model it tested failed on them, so they get
+       their own column rather than being averaged away.</p>
+    <ol class="sections">${protocol.icare_sections.map(s =>
+        `<li>${s.title}${s.temporal ? ' <span class="chip">temporal</span>' : ''}</li>`).join('')}</ol>
+    <p class="blurb">The instructions themselves are fetched from
+       <a href="https://github.com/proadhikary/iCARE">the iCARE repository</a> at run time and used
+       unchanged; this page shows the field names only, because that repository publishes no licence.</p>`;
 }
 
 renderProtocol(DATA.protocol);

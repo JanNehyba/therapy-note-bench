@@ -64,6 +64,34 @@ class SectionPrompt:
         return self.number in ihope.TEMPORAL_SECTIONS
 
 
+#: Short labels for the 17 sections, in order, for display only.
+#:
+#: The instructions themselves are fetched at run time and never vendored --
+#: iCARE publishes no licence. These are descriptive names taken from the field
+#: labels the expert notes use, so a reader can see what a note contains without
+#: this repository republishing anybody's prompt. A test checks there are still
+#: seventeen of them.
+SECTION_TITLES = (
+    "Patient particulars",
+    "Clinical identifiers",
+    "Referral information",
+    "Therapist information",
+    "Past session information",
+    "Presenting complaints (symptoms)",
+    "History",
+    "Crisis markers",
+    "Current mental status examination",
+    "Psychotherapy type",
+    "Psychotherapy technique",
+    "Assessments",
+    "Issues discussed in current session",
+    "Reflections by the therapist",
+    "Clinical diagnosis by reviewer",
+    "Action plan",
+    "Next session details",
+)
+
+
 def render_dialog(session: Session) -> str:
     """Render the transcript the way iCARE's ``CSVtoStringDialog`` does.
 

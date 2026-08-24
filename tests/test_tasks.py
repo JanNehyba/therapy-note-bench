@@ -140,3 +140,18 @@ def test_resolve_rejects_an_unknown_task():
 
 def test_resolve_defaults_to_both_tracks():
     assert [task.name for task in tasks.resolve(None)] == ["soap", "icare"]
+
+
+def test_the_seventeen_section_labels_stay_in_step_with_the_prompts():
+    """The labels are for display; the prompts are fetched at run time. If
+    upstream ever changes the count, the page would quietly show the old form."""
+    assert len(icare.SECTION_TITLES) == 17
+    assert icare.SECTION_TITLES[4] == "Past session information", "section 5 is temporal"
+    assert icare.SECTION_TITLES[16] == "Next session details", "section 17 is temporal"
+
+
+def test_the_labels_are_names_not_someone_elses_prompt():
+    """iCARE publishes no licence, so this repository shows field names and
+    never republishes their instruction text."""
+    assert all(len(title) < 60 for title in icare.SECTION_TITLES)
+    assert not any("helpful mental health assistant" in t for t in icare.SECTION_TITLES)

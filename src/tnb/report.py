@@ -23,7 +23,7 @@ from tnb import results
 from tnb.config import REPO_ROOT
 from tnb.results import Row
 from tnb.scoring import tneval as rubric
-from tnb.tasks import soap
+from tnb.tasks import icare, soap
 
 DOCS_DIR = REPO_ROOT / "docs"
 DATA_PATH = DOCS_DIR / "leaderboard.json"
@@ -174,7 +174,26 @@ def protocol() -> dict:
             }
         )
 
-    return {"sections": sections, "criteria": criteria}
+    icare_sections = [
+        {
+            "number": number,
+            "title": title,
+            "temporal": number in ihope_temporal(),
+        }
+        for number, title in enumerate(icare.SECTION_TITLES, start=1)
+    ]
+
+    return {
+        "sections": sections,
+        "criteria": criteria,
+        "icare_sections": icare_sections,
+    }
+
+
+def ihope_temporal() -> tuple[int, ...]:
+    from tnb.datasets import ihope
+
+    return ihope.TEMPORAL_SECTIONS
 
 
 def _render_row(row: Row) -> dict:

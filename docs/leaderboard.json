@@ -294,6 +294,93 @@
         "title": "Homework"
       }
     ],
+    "icare_sections": [
+      {
+        "number": 1,
+        "temporal": false,
+        "title": "Patient particulars"
+      },
+      {
+        "number": 2,
+        "temporal": false,
+        "title": "Clinical identifiers"
+      },
+      {
+        "number": 3,
+        "temporal": false,
+        "title": "Referral information"
+      },
+      {
+        "number": 4,
+        "temporal": false,
+        "title": "Therapist information"
+      },
+      {
+        "number": 5,
+        "temporal": true,
+        "title": "Past session information"
+      },
+      {
+        "number": 6,
+        "temporal": false,
+        "title": "Presenting complaints (symptoms)"
+      },
+      {
+        "number": 7,
+        "temporal": false,
+        "title": "History"
+      },
+      {
+        "number": 8,
+        "temporal": false,
+        "title": "Crisis markers"
+      },
+      {
+        "number": 9,
+        "temporal": false,
+        "title": "Current mental status examination"
+      },
+      {
+        "number": 10,
+        "temporal": false,
+        "title": "Psychotherapy type"
+      },
+      {
+        "number": 11,
+        "temporal": false,
+        "title": "Psychotherapy technique"
+      },
+      {
+        "number": 12,
+        "temporal": false,
+        "title": "Assessments"
+      },
+      {
+        "number": 13,
+        "temporal": false,
+        "title": "Issues discussed in current session"
+      },
+      {
+        "number": 14,
+        "temporal": false,
+        "title": "Reflections by the therapist"
+      },
+      {
+        "number": 15,
+        "temporal": false,
+        "title": "Clinical diagnosis by reviewer"
+      },
+      {
+        "number": 16,
+        "temporal": false,
+        "title": "Action plan"
+      },
+      {
+        "number": 17,
+        "temporal": true,
+        "title": "Next session details"
+      }
+    ],
     "sections": [
       {
         "description": "In this section, document the subjective reports from the client, their family members, and past medical records. Include how the client describes their feelings and current symptoms.",
