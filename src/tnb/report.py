@@ -22,6 +22,8 @@ from pathlib import Path
 from tnb import results
 from tnb.config import REPO_ROOT
 from tnb.results import Row
+from tnb.scoring import tneval as rubric
+from tnb.tasks import soap
 
 DOCS_DIR = REPO_ROOT / "docs"
 DATA_PATH = DOCS_DIR / "leaderboard.json"
@@ -127,13 +129,52 @@ def build(rows: list[Row]) -> dict:
             }
         )
 
+    for table in tables:
+        # Two tables can carry the same title and differ only in whether a judge
+        # has seen them. Saying so in the heading stops the page reading as a
+        # duplicate -- which is exactly how it read before.
+        judge = table["versions"]["judge_model"]
+        table["subtitle"] = f"scored by {judge}" if judge else "not yet scored"
+
     tables.sort(
         key=lambda table: (
             table["track"] != results.TRACK_TNEVAL,
             table["versions"]["prompt_version"],
         )
     )
-    return {"tables": tables, "generated_from": str(results.ROWS_PATH.name)}
+    return {
+        "tables": tables,
+        "protocol": protocol(),
+        "generated_from": str(results.ROWS_PATH.name),
+    }
+
+
+def protocol() -> dict:
+    """What a note is and what the judge is asked, straight from the source.
+
+    Both come out of the modules that hold TN-Eval's own wording, so the page
+    can never drift from what was actually sent to the models and the judge.
+    """
+    sections = []
+    for line in soap.PROMPT_TEMPLATE_SOAP.splitlines():
+        if line.startswith("- ") and ":" in line:
+            name, _, description = line[2:].partition(":")
+            sections.append({"name": name.strip(), "description": description.strip()})
+
+    criteria = []
+    for key, text in rubric.CHECKBOX_MAPPING.items():
+        section, _, _slug = key.partition("-")
+        title, _, description = text.partition(":")
+        criteria.append(
+            {
+                "key": key,
+                "section": section,
+                "title": title.strip(),
+                "description": description.strip(),
+            }
+        )
+
+    return {"sections": sections, "criteria": criteria}
 
 
 def _render_row(row: Row) -> dict:

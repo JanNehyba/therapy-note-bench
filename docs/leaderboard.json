@@ -153,6 +153,166 @@
     "rubric_beats_likert": true
   },
   "generated_from": "rows.jsonl",
+  "protocol": {
+    "criteria": [
+      {
+        "description": "The reason why the client is seeking therapy or a description of symptoms.",
+        "key": "subjective-chief-complaint",
+        "section": "subjective",
+        "title": "Chief complaint"
+      },
+      {
+        "description": "The client’s own description of their feelings, thoughts, and behaviors along with the severity.",
+        "key": "subjective-symptoms",
+        "section": "subjective",
+        "title": "Symptoms"
+      },
+      {
+        "description": "Relevant background information, including any past medical, therapy, or behavioral issues.",
+        "key": "subjective-history",
+        "section": "subjective",
+        "title": "History"
+      },
+      {
+        "description": "What the client hopes to achieve through therapy.",
+        "key": "subjective-goals",
+        "section": "subjective",
+        "title": "Client's Goals"
+      },
+      {
+        "description": "Reviewing homework from the previous sessions and note client’s compliance.",
+        "key": "subjective-homework",
+        "section": "subjective",
+        "title": "Homework from previous sessions"
+      },
+      {
+        "description": "Direct quotes from the client capturing their exact words and emotional tone.",
+        "key": "subjective-quotes",
+        "section": "subjective",
+        "title": "Quotes"
+      },
+      {
+        "description": "The therapist's observations of the client's behavior, mood, appearance, and affect during the session.",
+        "key": "objective-behavior",
+        "section": "objective",
+        "title": "Client’s observed behavior"
+      },
+      {
+        "description": "Observations regarding the client’s appearance, speech, thought processes, and orientation.",
+        "key": "objective-mental-status",
+        "section": "objective",
+        "title": "Mental Status"
+      },
+      {
+        "description": "Results from any standardized assessments or scales used during the session.",
+        "key": "objective-assessment-tools",
+        "section": "objective",
+        "title": "Assessment Tools"
+      },
+      {
+        "description": "Description of specific interventions or activities conducted during the session.",
+        "key": "objective-therapy-activities",
+        "section": "objective",
+        "title": "Therapy Activities"
+      },
+      {
+        "description": "Applied interventions and treatment plans (MI, Cognitive Restructuring, DBT, etc.). Focus on describing active interventions provided rather than passive ones.",
+        "key": "objective-interventions",
+        "section": "objective",
+        "title": "Interventions"
+      },
+      {
+        "description": "Any formal diagnoses made based on DSM-5 criteria or other diagnostic tools.",
+        "key": "assessment-diagnosis",
+        "section": "assessment",
+        "title": "Diagnosis/Symptoms"
+      },
+      {
+        "description": "Any triggers shown by the client.",
+        "key": "assessment-triggers",
+        "section": "assessment",
+        "title": "Identifying Triggers"
+      },
+      {
+        "description": "Evaluation of the client's progress toward their therapeutic goals.",
+        "key": "assessment-progress",
+        "section": "assessment",
+        "title": "Progress"
+      },
+      {
+        "description": "The therapist's interpretation of how the client's subjective report and objective observations relate to their overall condition.",
+        "key": "assessment-analysis",
+        "section": "assessment",
+        "title": "Analysis"
+      },
+      {
+        "description": "The client's response to the provided interventions.",
+        "key": "assessment-response",
+        "section": "assessment",
+        "title": "Response to interventions"
+      },
+      {
+        "description": "Overall progress made by the client.",
+        "key": "assessment-overall-progress",
+        "section": "assessment",
+        "title": "Overall/high-level progress"
+      },
+      {
+        "description": "Specific, measurable, achievable, relevant, and time-bound (SMART) goals for the client. Adjustment to the treatment goals.",
+        "key": "assessment-goals",
+        "section": "assessment",
+        "title": "Treatment Goals"
+      },
+      {
+        "description": "Client's stage of change (Pre-contemplation, contemplation, action, maintenance, etc.).",
+        "key": "assessment-stages",
+        "section": "assessment",
+        "title": "Stages of change"
+      },
+      {
+        "description": "Planned therapeutic techniques or strategies to be used in future sessions.",
+        "key": "plan-interventions",
+        "section": "plan",
+        "title": "Future Interventions"
+      },
+      {
+        "description": "Scheduling of the next session and any referrals to other professionals if needed. Note the date for the next appointment if decided upon.",
+        "key": "plan-follow-up",
+        "section": "plan",
+        "title": "Follow-Up"
+      },
+      {
+        "description": "Any adjustments made to medications or interventions.",
+        "key": "plan-adjustment",
+        "section": "plan",
+        "title": "Adjustment of medication/intervention"
+      },
+      {
+        "description": "Assignments or activities for the client to work on between the sessions.",
+        "key": "plan-homework",
+        "section": "plan",
+        "title": "Homework"
+      }
+    ],
+    "sections": [
+      {
+        "description": "In this section, document the subjective reports from the client, their family members, and past medical records. Include how the client describes their feelings and current symptoms.",
+        "name": "Subjective"
+      },
+      {
+        "description": "This section is for recording objective observations made during the session. Note any factual, observable information, such as the client's appearance, behavior, mood, affect, and speech patterns. Avoid including any subjective statements or self-reported information from the client.",
+        "name": "Objective"
+      },
+      {
+        "description": "In this section, integrate the subjective and objective information to provide a comprehensive analysis of the client's current condition. Summarize your clinical impressions and hypotheses regarding the client's issues.",
+        "name": "Assessment"
+      },
+      {
+        "description": "Outline the next steps for the client's treatment. Include both short-term and long-term goals, specifying what will be addressed in the next session as well as overall treatment objectives. Be clear and specific about your expectations and the client’s goals for the duration of treatment.",
+        "name": "Plan"
+      }
+    ]
+  },
   "tables": [
     {
       "blurb": "Reference-free. 23 completeness criteria, conciseness scored sentence by sentence, faithfulness against the full transcript.",
@@ -387,6 +547,7 @@
         }
       ],
       "scored": false,
+      "subtitle": "not yet scored",
       "title": "TN-Eval SOAP · AnnoMI conversations",
       "track": "tneval-soap",
       "versions": {
@@ -646,6 +807,7 @@
         }
       ],
       "scored": true,
+      "subtitle": "scored by gemini-2.5-pro",
       "title": "TN-Eval SOAP · AnnoMI conversations",
       "track": "tneval-soap",
       "versions": {
@@ -720,6 +882,7 @@
         }
       ],
       "scored": false,
+      "subtitle": "not yet scored",
       "title": "iCARE / iHOPE · 17 sections per session",
       "track": "icare",
       "versions": {

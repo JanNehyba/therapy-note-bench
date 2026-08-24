@@ -37,6 +37,28 @@
   .controls { display: flex; flex-wrap: wrap; gap: .75rem 1.25rem; margin-bottom: 1.5rem; }
   .controls label { display: inline-flex; align-items: center; gap: .4rem; font-size: .9rem; }
 
+  details#protocol > summary {
+    cursor: pointer; font-size: 1.05rem; padding: .1rem 0;
+  }
+  details#protocol[open] > summary { margin-bottom: 1rem; }
+  .soap { display: grid; gap: .6rem; margin-bottom: 1.5rem; }
+  .soap div {
+    display: grid; grid-template-columns: 7.5rem 1fr; gap: .8rem;
+    padding-bottom: .6rem; border-bottom: 1px solid var(--line);
+  }
+  .soap dt { font-weight: 600; }
+  .soap dd { margin: 0; color: var(--muted); font-size: .92rem; }
+  .criteria { display: grid; gap: 1.1rem; }
+  .criteria h4 {
+    margin: 0 0 .4rem; font-size: .78rem; text-transform: uppercase;
+    letter-spacing: .06em; color: var(--muted);
+  }
+  .criteria ol { margin: 0; padding-left: 1.4rem; display: grid; gap: .35rem; font-size: .9rem; }
+  .criteria li::marker { color: var(--muted); }
+  .criteria b { font-weight: 600; }
+  .criteria span { color: var(--muted); }
+  .subtitle { font-weight: 400; color: var(--muted); }
+
   .scroll { overflow-x: auto; }
   table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
   th, td { text-align: right; padding: .45rem .6rem; border-bottom: 1px solid var(--line); }
@@ -95,6 +117,11 @@
     <label><input type="checkbox" id="show-reference"> Show reference systems (therapist-written and the papers' own models)</label>
     <label><input type="checkbox" id="show-published"> Show numbers as published (different harness — never ranked with ours)</label>
   </div>
+
+  <details class="box" id="protocol">
+    <summary><strong>What is a note here, and what is it scored against?</strong></summary>
+    <div id="protocol-body"></div>
+  </details>
 
   <div id="tables"></div>
 
@@ -198,7 +225,7 @@ function renderTable(table, index) {
   }).join('');
 
   return `<section class="box${table.scored ? '' : ' pending'}">
-      <h2>${table.title}</h2>
+      <h2>${table.title} <span class="subtitle">· ${table.subtitle}</span></h2>
       <p class="blurb">${table.blurb}</p>
       <p class="versions">harness <code>${versions.harness_version}</code> ·
          prompt <code>${versions.prompt_version}</code> · ${judge}</p>
@@ -242,6 +269,34 @@ function sortBy(table, key) {
   table.dataset.sorted = ascending ? '' : key;
   pairs.forEach(([system, detail]) => { tbody.append(system); tbody.append(detail); });
 }
+
+function renderProtocol(protocol) {
+  if (!protocol) return;
+
+  const soap = protocol.sections.map(s =>
+    `<div><dt>${s.name}</dt><dd>${s.description}</dd></div>`).join('');
+
+  const bySection = {};
+  protocol.criteria.forEach(c => (bySection[c.section] ||= []).push(c));
+  const criteria = Object.entries(bySection).map(([section, items]) => `
+      <div>
+        <h4>${section} — ${items.length} criteria</h4>
+        <ol>${items.map(c =>
+          `<li><b>${c.title}.</b> <span>${c.description}</span></li>`).join('')}</ol>
+      </div>`).join('');
+
+  document.getElementById('protocol-body').innerHTML = `
+    <p class="blurb">A note here is a <strong>SOAP note</strong>: four sections, in this order.
+       The descriptions are the ones the models are given, quoted from TN-Eval's own prompt.</p>
+    <dl class="soap">${soap}</dl>
+    <p class="blurb">Completeness is scored by asking the judge, once per item, whether that
+       item is present in the matching section. These are TN-Eval's
+       <strong>${protocol.criteria.length} criteria</strong>, reproduced verbatim — a note
+       scoring 0.50 contained half of them.</p>
+    <div class="criteria">${criteria}</div>`;
+}
+
+renderProtocol(DATA.protocol);
 
 function renderCalibration(calibration) {
   if (!calibration || !calibration.agreements || !calibration.agreements.length) return;
