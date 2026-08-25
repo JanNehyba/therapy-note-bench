@@ -185,6 +185,13 @@ def load_cached(job: Job, provider: Provider) -> dict | None:
 
     if not record.get("ok"):
         return None
+    # Judged by today's rules, not by the ones in force when it was written.
+    # 16 sections stopped mid-sentence at the token budget and were stored as
+    # `ok: true` because nothing read `finish_reason` yet. Deleting them would
+    # lose the evidence; rejecting them here re-asks each one on the next run,
+    # and this time the escalation fires.
+    if record.get("finish_reason") == "length":
+        return None
     if record.get("request_sha256") != request_digest(job.model_id, job.prompt, provider):
         return None
     return record

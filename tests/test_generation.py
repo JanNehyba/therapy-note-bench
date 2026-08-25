@@ -442,3 +442,31 @@ def test_a_truncated_answer_gets_the_bigger_budget_too(budgets):
     # which is a separate question from whether the call finished. This test is
     # about the second one.
     assert record["finish_reason"] == "stop"
+
+
+def test_a_record_stored_before_the_truncation_rule_is_not_a_cache_hit(tmp_path, monkeypatch):
+    """The cache holds what the endpoint said; today's rules decide if it counts.
+
+    16 sections were written as `ok: true` while stopping mid-sentence at the
+    budget, because nothing read `finish_reason` at the time. Deleting them
+    would lose the evidence of what happened; rejecting them at the read
+    boundary re-asks each one, and this time the escalation fires.
+    """
+    monkeypatch.setattr(generation, "CACHE_DIR", tmp_path)
+    job = _job()
+    path = job.path()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        json.dumps(
+            {
+                "ok": True,
+                "text": "The client reported feeling anxious about",
+                "finish_reason": "length",
+                "request_sha256": generation.request_digest(job.model_id, job.prompt, PROVIDER),
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    assert generation.load_cached(job, PROVIDER) is None
+    assert path.exists(), "kept, so the failure can still be explained"
