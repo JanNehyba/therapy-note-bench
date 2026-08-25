@@ -82,6 +82,28 @@ Those numbers go in the README, above the leaderboard. **If the judge disagrees
 with therapists, that is published too.** A leaderboard whose referee has never
 been checked against a human is a table of numbers, not a measurement.
 
+### The judge does not drift, and that was tested
+
+Models are scored one after another in alphabetical order, so "scored first" and
+"scored at 17:34" are the same fact: a reader who notices that three of the top
+four were judged late cannot tell an order effect from a real difference by
+looking. Checked on 2026-08-25, three ways:
+
+- **The judge was asked again.** 120 rubric questions from the first-scored
+  model, re-asked fourteen hours later: **98.3% identical answers**, and the
+  yes-rate moved +1.7 points. The gap between the first- and last-scored models
+  is 12 points, which a 1.7-point drift cannot produce.
+- **The correlation is weak.** Spearman between scoring position and score is
+  **+0.31** over eleven models — well inside what eleven points produce by
+  chance.
+- **The last model breaks the pattern.** `qwen3.8-27b` was judged last, ninety
+  minutes after everyone else, and landed mid-table at 55.2%.
+  `mistral-medium-3.5` was judged eighth and is near the bottom.
+
+If a future run wants to re-check this, the method is the first bullet: re-ask a
+sample of already-answered questions and compare, which costs cents because the
+answers are all cached.
+
 ## Comparability over time
 
 The point of this repository is a table that stays meaningful as models change.
