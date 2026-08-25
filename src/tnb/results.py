@@ -373,7 +373,38 @@ _SECRET_LOOKING = re.compile(r"[0-9a-f]{16,}", re.IGNORECASE)
 #: refused a fourth parallel request. Retrying is the fix and it costs one call,
 #: so these are reported separately and marked as re-runnable rather than folded
 #: into a score.
+#:
+#: The transport half is derived from `httpx` rather than listed by hand. The
+#: hand-written list named twelve and caught six: `ReadError` -- a connection
+#: reset part-way through a response, which is what a busy shared endpoint
+#: does -- was missing, and `TransportError` was in it as an abstract base
+#: that is never raised, so it matched nothing at all. Every error string is
+#: `type(error).__name__: ...`, so asking the class hierarchy is exact and
+#: stays right when httpx adds one.
+_OUR_OWN_FAULT = frozenset(
+    {
+        # We sent something malformed. Naming that "the endpoint refused"
+        # would file our own bug under somebody else's failure.
+        "LocalProtocolError",
+        # A bad base URL. A config error, and it does not go away on a retry.
+        "UnsupportedProtocol",
+    }
+)
+
+
+def _transport_errors() -> tuple[str, ...]:
+    import httpx
+
+    def walk(cls):
+        yield cls.__name__
+        for sub in cls.__subclasses__():
+            yield from walk(sub)
+
+    return tuple(sorted(set(walk(httpx.TransportError)) - _OUR_OWN_FAULT))
+
+
 INFRASTRUCTURE_ERRORS = (
+    # e-INFRA's rate limiter, its backend, and the gateways in front of both.
     "HTTP408",
     "HTTP425",
     "HTTP429",
@@ -381,13 +412,7 @@ INFRASTRUCTURE_ERRORS = (
     "HTTP502",
     "HTTP503",
     "HTTP504",
-    "ConnectTimeout",
-    "ReadTimeout",
-    "ConnectError",
-    "RemoteProtocolError",
-    "TransportError",
-    "PoolTimeout",
-)
+) + _transport_errors()
 
 
 def is_infrastructure_failure(error: str | None) -> bool:

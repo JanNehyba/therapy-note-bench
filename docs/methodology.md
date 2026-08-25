@@ -63,7 +63,7 @@ TN-Eval's, verbatim.
 
 | Role | Model | Setting |
 |---|---|---|
-| Judge A | `gemini-3.1-pro-preview` | thinking budget 128 |
+| Judge A | `gemini-3.1-pro-preview` | thinking budget 256 |
 | Judge B | `gpt-5.6-terra` | reasoning effort `medium` |
 
 Each scores every system, its own family included, and the two produce separate
@@ -74,9 +74,20 @@ model asked to score text tends to score its own output higher than a neutral
 rater would. Judging only with one of them would leave that as a caveat. With
 two, the difference between the tables measures it: for each system take
 `score_A − score_B`; the average over one judge's own family minus the average
-over everything else is the self-preference effect, in the units of the
-leaderboard, with a bootstrap interval. If the interval spans zero the page says
-the effect was not detected. If it does not, the number is a result.
+over the systems **neither judge wrote** is the self-preference effect, in the
+units of the leaderboard, with a bootstrap interval. If the interval spans zero
+the page says the effect was not detected. If it does not, the number is a
+result.
+
+**Neither judge wrote, not "everything else".** This document said "everything
+else" and the code does not, because that version does not work with two
+judges. There is only one difference `d` and it is antisymmetric, so A's
+comparison group would contain B's family and B favouring its own would show up
+as A favouring its own: with A favouring Gemini by *x* and B favouring GPT by
+*y*, it returns `x + y/2` for A. Comparing against the neutral systems returns
+*x*, and the two effects can be read apart. It also means the panel needs at
+least one neutral system to say anything, and it refuses to report a number
+otherwise.
 
 The obvious alternative — each judge scores only the *other* family — was
 rejected: it would put two instruments with two calibrations in one column, and

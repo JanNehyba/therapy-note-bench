@@ -448,3 +448,34 @@ def _scored_note(provider: str, system_id: str):
         reference="Patient Particulars : x",
     )
     return icare_run.NoteResult(candidate=candidate, scores=scorer.Scores())
+
+
+def test_every_httpx_transport_error_is_classified():
+    """The hand-written list named twelve prefixes and caught six of sixteen.
+
+    `ReadError` -- a connection reset part-way through a response, which is what
+    a busy shared endpoint does -- was missing, so it counted as the model's
+    failure. `TransportError` was in the list as an abstract base that is never
+    raised, so it matched nothing. Deriving the list from the class hierarchy is
+    what keeps this true when httpx adds one.
+    """
+    import httpx
+
+    def walk(cls):
+        yield cls.__name__
+        for sub in cls.__subclasses__():
+            yield from walk(sub)
+
+    for name in set(walk(httpx.TransportError)):
+        expected = name not in results._OUR_OWN_FAULT
+        assert results.is_infrastructure_failure(f"{name}: connection reset") is expected, name
+
+
+def test_a_malformed_request_of_ours_is_not_the_endpoints_fault():
+    """Filing our own bug under "the endpoint refused" hides it twice over.
+
+    It leaves the score column with a gap nobody is accountable for, and it
+    makes the call look like it would succeed on a retry when it never will.
+    """
+    assert results.is_infrastructure_failure("LocalProtocolError: bad header") is False
+    assert results.is_infrastructure_failure("UnsupportedProtocol: no scheme") is False

@@ -309,11 +309,27 @@ LICENCES = [
 
 
 def _sort_key(row: Row, track: str):
-    """Best first on the track's leading metric; unscored rows last."""
+    """Best first on the track's leading metric; unscored and unmeasured last.
+
+    A track whose `RANKING_MEASURES` entry is None declines to be ranked -- the
+    iCARE columns measure different things and the source paper found they
+    disagree. The fallback to the first column overrode that refusal and sorted
+    it by ROUGE-L anyway, so a page saying "deliberately not ranked" printed a
+    ranking.
+
+    An unmeasured row sorts with the unscored rather than as 0.0. Reading a
+    missing measure as the worst possible score published `mistral-large-v2`
+    last on a measure nobody had computed for it.
+    """
     if not row.is_scored:
         return (1, 0.0, row.system_id)
-    leading = RANKING_MEASURES.get(track) or COLUMNS[track][0][0]
-    return (0, -float(row.metrics.headline.get(leading, 0.0)), row.system_id)
+    leading = RANKING_MEASURES.get(track)
+    if leading is None:
+        return (0, 0.0, row.system_id)
+    value = row.metrics.headline.get(leading)
+    if value is None:
+        return (1, 0.0, row.system_id)
+    return (0, -float(value), row.system_id)
 
 
 def _ordered_sections(names: list[str]) -> list[str]:
@@ -554,8 +570,12 @@ def render_readme_section(data: dict) -> str:
         # 0.65 are not the same kind of number.
         header += [f"{column['label']} ({column['scale']})" for column in columns]
         header += ["Notes", "Scored"]
+        # The judge's name is part of the title here, not a footnote. Three
+        # tables read "TN-Eval SOAP - AnnoMI conversations" and carried
+        # different numbers for the same model, and README is the view nobody
+        # scrolls back up in to find out why.
         lines = [
-            f"**{table['title']}**",
+            f"**{table['title']}** — {table['subtitle']}",
             "",
             "| " + " | ".join(header) + " |",
             "|" + "---|" * len(header),
@@ -568,8 +588,18 @@ def render_readme_section(data: dict) -> str:
                 value = row["headline"].get(column["key"])
                 cells.append("—" if value is None else f"{value:.{column['digits']}f}")
             written = f"{row['n_generated']}/{row['n_attempted']}"
+            # Two different gaps, named apart. "unusable" is the model's own
+            # doing; "unreached" is the endpoint refusing, and charging that to
+            # the model is what published glm-5 as "39/40 (1 unusable)" over a
+            # rate limit. The JSON and the page have said both since; README
+            # could only ever say the accusation.
+            gaps = []
             if row["n_failed"]:
-                written += f" ({row['n_failed']} unusable)"
+                gaps.append(f"{row['n_failed']} unusable")
+            if row["n_unreached"]:
+                gaps.append(f"{row['n_unreached']} unreached")
+            if gaps:
+                written += f" ({', '.join(gaps)})"
             cells.append(written)
             cells.append(_scored_cell(row))
             lines.append("| " + " | ".join(cells) + " |")

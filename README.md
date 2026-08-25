@@ -29,7 +29,7 @@ Full version, with per-section detail, the reference systems and the papers' own
 published numbers: **<https://jannehyba.github.io/therapy-note-bench/>**
 
 <!-- LEADERBOARD:BEGIN -->
-**TN-Eval SOAP · AnnoMI conversations**
+**TN-Eval SOAP · AnnoMI conversations** — scored by gemini-2.5-pro
 
 | Model | Completeness (0-1) | Conciseness (0-1) | Faithfulness (1-5) | Notes | Scored |
 |---|---|---|---|---|---|
@@ -50,7 +50,7 @@ published numbers: **<https://jannehyba.github.io/therapy-note-bench/>**
 - **Conciseness** (0-1) — Fraction of the note's sentences that fit at least one rubric item. 1.00 means nothing is off-topic; it does not mean the note is short.
 - **Faithfulness** (1-5) — Whether the note contradicts the transcript, rated 1 to 5, where 5 is no inaccuracies. TN-Eval's protocol has no criterion-based version of this one, so it stays a Likert scale. A different scale from the two columns beside it, and a weak one: TN-Eval measured Krippendorff's alpha of 0.18 between trained therapists on this rating. Read it as a flag for gross invention, not as a ranking.
 
-**TN-Eval SOAP · AnnoMI conversations**
+**TN-Eval SOAP · AnnoMI conversations** — scored by gemini-3.1-pro-preview
 
 | Model | Provider | Completeness (0-1) | Conciseness (0-1) | Faithfulness (1-5) | Notes | Scored |
 |---|---|---|---|---|---|---|
@@ -76,7 +76,7 @@ published numbers: **<https://jannehyba.github.io/therapy-note-bench/>**
 - **Conciseness** (0-1) — Fraction of the note's sentences that fit at least one rubric item. 1.00 means nothing is off-topic; it does not mean the note is short.
 - **Faithfulness** (1-5) — Whether the note contradicts the transcript, rated 1 to 5, where 5 is no inaccuracies. TN-Eval's protocol has no criterion-based version of this one, so it stays a Likert scale. A different scale from the two columns beside it, and a weak one: TN-Eval measured Krippendorff's alpha of 0.18 between trained therapists on this rating. Read it as a flag for gross invention, not as a ranking.
 
-**TN-Eval SOAP · AnnoMI conversations**
+**TN-Eval SOAP · AnnoMI conversations** — scored by gpt-5.6-terra
 
 | Model | Provider | Completeness (0-1) | Conciseness (0-1) | Faithfulness (1-5) | Notes | Scored |
 |---|---|---|---|---|---|---|
@@ -102,19 +102,33 @@ published numbers: **<https://jannehyba.github.io/therapy-note-bench/>**
 - **Conciseness** (0-1) — Fraction of the note's sentences that fit at least one rubric item. 1.00 means nothing is off-topic; it does not mean the note is short.
 - **Faithfulness** (1-5) — Whether the note contradicts the transcript, rated 1 to 5, where 5 is no inaccuracies. TN-Eval's protocol has no criterion-based version of this one, so it stays a Likert scale. A different scale from the two columns beside it, and a weak one: TN-Eval measured Krippendorff's alpha of 0.18 between trained therapists on this rating. Read it as a flag for gross invention, not as a ranking.
 
-**iCARE / iHOPE · 17 sections per session**
+**iCARE / iHOPE · 17 sections per session** — scored by gemini-3.1-pro-preview
 
-| Model | ROUGE-L (0-1) | BERTScore (0-1) | TRACE (1-5) | Temporal (0-1) | Notes | Scored |
-|---|---|---|---|---|---|---|
-| `deepseek-v4-flash` | 0.303 | 0.841 | 5.00 | 0.750 | 40/40 | 2 of 40 *(judging)* |
+| Model | Provider | ROUGE-L (0-1) | BERTScore (0-1) | TRACE (1-5) | Looks back (0-1) | Looks forward (0-1) | Notes | Scored |
+|---|---|---|---|---|---|---|---|---|
+| `deepseek-v4-flash` | einfra | 0.247 | 0.831 | 4.81 | — | — | 40/40 | 40 |
+| `deepseek-v4-flash-thinking` | einfra | 0.252 | 0.829 | 4.89 | — | — | 40/40 | 40 |
+| `gemma4` | einfra | 0.276 | 0.835 | 4.88 | — | — | 40/40 | 40 |
+| `glm-5` | einfra | 0.238 | 0.836 | 4.91 | — | — | 40/40 | 40 |
+| `glm-5.2` | einfra | 0.227 | 0.835 | 4.92 | — | — | 40/40 | 40 |
+| `google_gemini-3.1-pro-preview` | vertex | 0.242 | 0.834 | 4.96 | — | — | 40/40 | 40 |
+| `google_gemini-3.7-flash` | vertex | 0.265 | 0.835 | 4.99 | — | — | 40/40 | 40 |
+| `gpt-5.6-luna` | openai | 0.185 | 0.825 | 4.96 | — | — | 40/40 | 40 |
+| `gpt-5.6-sol` | openai | 0.227 | 0.829 | 4.97 | — | — | 40/40 | 40 |
+| `gpt-5.6-terra` | openai | 0.200 | 0.828 | 4.95 | — | — | 40/40 | 40 |
+| `gpt-oss-120b` | einfra | 0.195 | 0.823 | 4.78 | — | — | 40/40 | 40 |
+| `kimi-k3` | einfra | 0.123 | 0.824 | 4.97 | — | — | 40/40 | 40 |
+| `mistral-medium-3.5` | einfra | 0.264 | 0.830 | 4.93 | — | — | 40/40 | 40 |
+| `qwen3.5-122b` | einfra | 0.176 | 0.825 | 4.82 | — | — | 40/40 | 40 |
+| `qwen3.5-int4` | einfra | 0.253 | 0.833 | 4.93 | — | — | 40/40 | 40 |
+| `qwen3.8-27b` | einfra | 0.255 | 0.834 | 4.96 | — | — | 40/40 | 40 |
 
 *Deliberately not ranked: these columns measure different things and the source paper found they disagree.*
-- **ROUGE-L** (0-1) — Longest-common-subsequence overlap with the expert note. Rewards using the same words in the same order. Cannot tell a good paraphrase from a wrong answer. The source paper found it disagrees with what clinicians preferred.
+- **ROUGE-L** (0-1) — Longest-common-subsequence overlap with the expert note, F-measure. Rewards using the same words in the same order. Cannot tell a good paraphrase from a wrong answer. The source paper found it disagrees with what clinicians preferred.
 - **BERTScore** (0-1) — Embedding similarity to the expert note. Tolerates paraphrase. A fluent note about the wrong session still scores well.
-- **TRACE** (1-5) — Trustworthiness, relevance, accuracy, comprehensiveness and expression, averaged. A re-implementation with no human anchor: the authors never published their ratings, so unlike the TN-Eval track this number is not calibrated against anybody.
-- **Temporal** (0-1) — Sections 5 and 17 only -- what happened last time, what happens next. Kept out of the average. The source paper reports every model it tested failing here, so a low number is the expected result, not a surprise.
-
-**iCARE / iHOPE · 17 sections per session** — *waiting for the judge.* 15 system(s) have written their notes and none has been scored yet: `deepseek-v4-flash-thinking`, `gemma4`, `glm-5`, `glm-5.2`, `google_gemini-3.1-pro-preview`, `google_gemini-3.7-flash`, `gpt-5.6-luna`, `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-oss-120b`, `kimi-k3`, `mistral-medium-3.5`, `qwen3.5-122b`, `qwen3.5-int4`, `qwen3.8-27b`.
+- **TRACE** (1-5) — Trustworthiness, relevance, accuracy, comprehensiveness and expression, each rated 1-5 by a judge and averaged. A re-implementation with no human anchor: the authors never published their ratings, so unlike the TN-Eval track this number is not calibrated against anybody.
+- **Looks back** (0-1) — Section 5 only -- what happened in the previous session. The fraction of the 34 sessions whose expert note answered it where the model did too. Kept out of any average. Every model scores 0.97-1.00 here, so this column separates nobody -- it is shown because its twin does.
+- **Looks forward** (0-1) — Section 17 only -- what happens at the next session. The fraction of the 11 sessions whose expert note answered it where the model did too. This is where the source paper reports every model it tested failing, and ours do too: 0.00 to 0.55. Reported apart from its twin because averaging the two turned 1.00 and 0.09 into 0.78 and hid exactly this.
 
 See the [full leaderboard](https://jannehyba.github.io/therapy-note-bench/) for per-section detail, the reference systems and the published numbers.
 <!-- LEADERBOARD:END -->
