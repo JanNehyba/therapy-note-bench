@@ -105,8 +105,16 @@ def test_a_section_score_is_the_fraction_of_its_criteria_found():
 
 
 def test_a_section_with_no_sentences_scores_zero_for_conciseness():
-    """TN-Eval's code does exactly this rather than skipping the section."""
-    scores = tneval.aggregate({"plan.rubric_completeness.plan-homework": "Yes"})
+    """TN-Eval's own rule, kept -- but only where we can see that it applies.
+
+    A section that really has no sentences scores 0, exactly as their code does.
+    Knowing it has none requires the task list; see the test below for what
+    happens without it.
+    """
+    empty = {"subjective": "", "objective": "", "assessment": "", "plan": ""}
+    tasks = tneval.build_tasks(empty, CONVERSATION)
+    scores = tneval.aggregate({"plan.rubric_completeness.plan-homework": "Yes"}, tasks)
+
     assert scores.by_section["plan"]["conciseness"] == 0.0
 
 
@@ -511,11 +519,23 @@ def test_a_section_with_no_sentences_still_scores_zero():
     assert scored.by_section["plan"]["conciseness"] == 0.0
 
 
-def test_without_the_task_list_the_old_behaviour_holds():
-    """Callers that cannot know what was asked -- the saturation analysis reads
-    the answer cache, not the notes -- keep TN-Eval's arithmetic."""
+def test_without_the_task_list_no_conciseness_is_invented():
+    """A caller that cannot know what was asked gets no conciseness at all.
+
+    This asserted `== 0.0`, which is the fabrication rather than the rule. A
+    zero says "the model wrote nothing but padding"; absence says "nobody
+    measured this". Without the task list the two are indistinguishable, and
+    guessing the first one published a measurement nobody took.
+
+    The saturation analysis is the caller that cannot pass tasks -- the note
+    text is not in the answer cache -- and it reads completeness only, so
+    nothing downstream loses a number it was using.
+    """
     scored = tneval.aggregate({"plan.rubric_completeness.plan-homework": "Yes"})
-    assert scored.by_section["plan"]["conciseness"] == 0.0
+
+    assert "conciseness" not in scored.by_section.get("plan", {})
+    assert "conciseness" in scored.missing
+    assert scored.is_complete is False
 
 
 def test_completeness_divides_by_the_criteria_asked_not_by_the_answers_returned():
@@ -595,15 +615,18 @@ def _candidate(session_id: str, provider: str = "einfra") -> scoring.Candidate:
     )
 
 
+def _complete_scores(value: str = "Yes") -> tneval.Scores:
+    """A note where every question the protocol asks came back."""
+    tasks = tneval.build_tasks(NOTE, CONVERSATION)
+    answers = {}
+    for task in tasks:
+        answers[task.unit] = value if task.kind.startswith("rubric") else "5"
+    return tneval.aggregate(answers, tasks)
+
+
 def test_a_partly_judged_note_is_left_out_of_the_systems_headline():
     """One level up, the same rule: the average is over complete notes only."""
-    complete = tneval.aggregate(
-        {
-            f"{section}.rubric_completeness.{key}": "Yes"
-            for section in tneval.SOAP_SECTIONS
-            for key in tneval.criteria_keys(section)
-        }
-    )
+    complete = _complete_scores()
     partial = tneval.aggregate(
         {
             f"{section}.rubric_completeness.{key}": "No"
@@ -618,10 +641,29 @@ def test_a_partly_judged_note_is_left_out_of_the_systems_headline():
         ]
     )
 
+    assert complete.is_complete is True, "the fixture must actually be complete"
     assert aggregate.n_partial == 1
     # 1.0 from the complete note alone; averaging the 0.0 in would read as a
     # model that failed rather than a note the judge did not finish.
     assert aggregate.metrics().headline["completeness"] == pytest.approx(1.0)
+
+
+def test_a_note_missing_a_whole_measure_is_not_complete():
+    """The hole this closes: a note with completeness and nothing else.
+
+    It had no conciseness key at all, so a check that walked only the measures
+    present found nothing wrong and called it complete. It then joined its
+    system's headline contributing completeness alone -- shrinking the
+    denominator for the two measures it did not have, in a way that is not
+    random, because judge failures cluster on hard notes.
+    """
+    tasks = tneval.build_tasks(NOTE, CONVERSATION)
+    only_completeness = {task.unit: "Yes" for task in tasks if task.kind == "rubric_completeness"}
+
+    scored = tneval.aggregate(only_completeness, tasks)
+
+    assert scored.missing == ("conciseness", "faithfulness")
+    assert scored.is_complete is False
 
 
 def test_a_reference_model_is_not_charged_for_notes_nobody_asked_it_for():

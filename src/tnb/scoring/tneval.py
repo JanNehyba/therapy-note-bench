@@ -408,12 +408,25 @@ class Scores:
     #: Sections left out because the judge did not answer everything the
     #: protocol asks. Named, never silently folded into a smaller denominator.
     incomplete: dict[str, list[str]] = field(default_factory=dict)
+    #: Measures the protocol asks for that produced no value at all.
+    missing: tuple[str, ...] = ()
 
     @property
     def is_complete(self) -> bool:
-        """Every headline figure rests on all four sections."""
-        return not self.incomplete and all(
-            count == len(SOAP_SECTIONS) for count in self.sections_used.values()
+        """Every headline figure exists and rests on all four sections.
+
+        The `missing` half is not redundant. A note whose conciseness answers
+        never arrived has no conciseness key at all, so a check that only walked
+        `sections_used` found nothing wrong and called the note complete. It
+        then joined its system's headline average contributing completeness
+        alone -- which quietly shrinks the denominator for the two measures it
+        did not have, and the shrinking is not random, because judge failures
+        cluster on the notes that are hard to read.
+        """
+        return (
+            not self.incomplete
+            and not self.missing
+            and all(count == len(SOAP_SECTIONS) for count in self.sections_used.values())
         )
 
 
@@ -436,7 +449,8 @@ def aggregate(answers: dict[str, str], tasks: list[JudgeTask] | None = None) -> 
     rejected every sentence. TN-Eval's zero is for a section with no sentences
     in it; absence is not that, and is left out instead.
 
-    **Nothing here divides by the answers that came back.** Completeness uses the
+    **Nothing here invents a measurement, and nothing divides by the answers
+    that came back.** Completeness uses the
     protocol's criterion count as its denominator and a section with any
     unanswered criterion is omitted and named in ``incomplete``; the headline
     records in ``sections_used`` how many sections it averaged. Both exist
@@ -488,8 +502,13 @@ def aggregate(answers: dict[str, str], tasks: list[JudgeTask] | None = None) -> 
         ]
         if sentences:
             section_scores["conciseness"] = sum(sentences) / len(sentences)
-        elif expected_conciseness is None or expected_conciseness[section] == 0:
-            # TN-Eval's own zero: the section had no sentences to judge.
+        elif expected_conciseness is not None and expected_conciseness[section] == 0:
+            # TN-Eval's own zero, and only where it applies: the section really
+            # had no sentences in it. Reaching this without `tasks` used to score
+            # 0.0 as well -- so a note whose conciseness answers never arrived
+            # was published as a model that wrote nothing but padding. A zero is
+            # a measurement and absence is not one, so absence is now left out
+            # and named below.
             section_scores["conciseness"] = 0.0
 
         for kind in ("likert_completeness", "likert_conciseness", "likert_faithfulness"):
@@ -502,6 +521,7 @@ def aggregate(answers: dict[str, str], tasks: list[JudgeTask] | None = None) -> 
 
     headline = {}
     sections_used = {}
+    missing = []
     for measure in ("completeness", "conciseness", "faithfulness"):
         values = [scores[measure] for scores in by_section.values() if measure in scores]
         if values:
@@ -509,6 +529,8 @@ def aggregate(answers: dict[str, str], tasks: list[JudgeTask] | None = None) -> 
             # A mean over three sections and a mean over four print the same and
             # are not the same. The count is stored so a view can say which.
             sections_used[measure] = len(values)
+        else:
+            missing.append(measure)
 
     return Scores(
         headline=headline,
@@ -516,4 +538,5 @@ def aggregate(answers: dict[str, str], tasks: list[JudgeTask] | None = None) -> 
         by_criterion=by_criterion,
         sections_used=sections_used,
         incomplete=incomplete,
+        missing=tuple(missing),
     )
