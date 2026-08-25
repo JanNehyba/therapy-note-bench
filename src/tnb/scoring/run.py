@@ -194,6 +194,10 @@ def score_note(
                 "prompt_sha256": judge.prompt_digest(task.prompt),
                 "answer": answer.text,
                 "ok": answer.ok,
+                # Recorded because it was not, and the question "did the
+                # judge run out of room" then had to be reconstructed from
+                # the token counts. The provider has parsed it all along.
+                "finish_reason": answer.finish_reason,
                 "error": answer.error,
                 "input_tokens": answer.input_tokens,
                 "output_tokens": answer.output_tokens,
