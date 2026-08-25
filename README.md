@@ -13,13 +13,21 @@ swappable backend: today the harness measures what is deployed on
 [e-INFRA CZ](https://www.e-infra.cz/en), and adding another provider adds rows
 rather than a second benchmark.
 
-> **Status: the TN-Eval track is measured.** All **11 benchmarkable models**
-> have written and been scored on 50 AnnoMI conversations, against a judge
-> checked against two therapists first. Every one of them scores above both
-> 2025 models TN-Eval released *and* above the therapist-written note — on a
-> rubric that rewards coverage, which is not the same as writing a better note.
-> The top three cannot be told apart from each other. The iCARE track is still
-> generating. See [Roadmap](#roadmap).
+> **Status: both tracks are measured.** **16 models** have written notes on 50
+> AnnoMI conversations and on 40 iHOPE sessions, scored by two independent
+> judges. On the TN-Eval track each judge is first checked against the two
+> therapists who annotated the source data; TRACE, on the iCARE track, has no
+> human anchor and says so wherever it appears.
+>
+> Every model scores above both 2025 models TN-Eval released *and* above the
+> therapist-written note — on a rubric that rewards coverage, which is not the
+> same as writing a better note.
+>
+> **The two judges agree on the shape of the ranking and not on the order**, so
+> "near the top" is a claim this benchmark supports and "ninth rather than
+> tenth" is not. Most systems are beaten outright by nobody, which is why no
+> single winner is named. The figures are under the tables below, where a run
+> keeps them current. See [Roadmap](#roadmap).
 
 ---
 
@@ -135,6 +143,8 @@ published numbers: **<https://jannehyba.github.io/therapy-note-bench/>**
 `gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on completeness (+0.889) and place 11 of 19 systems differently on it anyway. They agree least on faithfulness (+0.706, 17 of 19 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. 14 system(s) beat at least one other on every measure under both judges, which needs no weighting to be true: `google_gemini-3.1-pro-preview` beats 4. 12 of 19 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner. Ordering by completeness says little about conciseness (`gemini-3.1-pro-preview` -0.18, `gpt-5.6-terra` -0.33). Ordering by completeness says different things to the two judges about faithfulness (`gemini-3.1-pro-preview` +0.72, `gpt-5.6-terra` +0.04). The two judges disagree about whether those columns are related at all, so neither reading is this benchmark's answer.
 
 *16 icare row(s) of generation coverage at harness `0.1.0` are no longer shown: the measures were redefined in `0.2.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+
+*16 icare row(s) scored by `gemini-3.1-pro-preview` at harness `0.1.0` are no longer shown: the measures were redefined in `0.2.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
 *16 tneval-soap row(s) of generation coverage at harness `0.1.0` are no longer shown: the measures were redefined in `0.2.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
