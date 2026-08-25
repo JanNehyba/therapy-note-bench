@@ -373,6 +373,19 @@ def cmd_score(args: argparse.Namespace) -> int:
     if args.models:
         wanted = {name.strip() for name in args.models.split(",") if name.strip()}
         candidates = [c for c in candidates if c.system_id in wanted]
+
+    # Coverage is a fact about generation and is counted here, before `--notes`
+    # takes a slice for this run. Counting afterwards published the slice as the
+    # model's output: `tnb score --notes 20` over a 50-session corpus reported
+    # "20/50 (30 unusable)" for a model that had written all fifty. That is the
+    # gemma4 libel arriving through a flag instead of through the aggregator.
+    coverage = _generated_per_system(candidates)
+    # And a reference model was only ever asked for the sessions TN-Eval
+    # published a note for, so the corpus size is not its denominator either.
+    attempted = {
+        key: len(sessions) if key[0] != "tneval" else count for key, count in coverage.items()
+    }
+
     if args.notes:
         candidates = candidates[: args.notes]
 
@@ -406,8 +419,8 @@ def cmd_score(args: argparse.Namespace) -> int:
         rows = scoring.to_rows(
             scored,
             judge_model=config.model,
-            n_generated=_generated_per_system(candidates),
-            n_attempted=len(sessions),
+            n_generated=coverage,
+            n_attempted=attempted,
             run_id=args.run_id or "",
         )
         path = results.append(rows)
@@ -449,8 +462,8 @@ def cmd_score(args: argparse.Namespace) -> int:
     rows = scoring.to_rows(
         scored,
         judge_model=config.model,
-        n_generated=_generated_per_system(candidates),
-        n_attempted=len(sessions),
+        n_generated=coverage,
+        n_attempted=attempted,
         run_id=args.run_id or "",
     )
     if args.no_write:

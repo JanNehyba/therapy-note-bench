@@ -369,7 +369,7 @@ def to_rows(
     *,
     judge_model: str,
     n_generated: dict[tuple[str, str], int] | None = None,
-    n_attempted: int | None = None,
+    n_attempted: dict[tuple[str, str], int] | int | None = None,
     run_id: str = "",
 ) -> list[Row]:
     """One row per (provider, system), carrying the versions the table joins on.
@@ -385,6 +385,11 @@ def to_rows(
     the remainder, so a model half-way through judging was published as having
     written unusable notes -- gemma4 appeared as "17/50 (33 unusable)" having
     written all fifty perfectly.
+
+    ``n_attempted`` may be one number for every system or a mapping per system.
+    The mapping exists because "the corpus" is not the same for everybody: a
+    reference model was only ever asked for the sessions TN-Eval published a
+    note for, and charging it with the rest is the same libel by another route.
     """
     groups: dict[tuple[str, str], SystemAggregate] = {}
     labels: dict[tuple[str, str], Candidate] = {}
@@ -399,7 +404,10 @@ def to_rows(
     for key, aggregate in sorted(groups.items()):
         candidate = labels[key]
         generated = (n_generated or {}).get(key, len(aggregate.notes))
-        attempted = n_attempted or generated
+        if isinstance(n_attempted, dict):
+            attempted = n_attempted.get(key, generated)
+        else:
+            attempted = n_attempted or generated
         rows.append(
             Row(
                 track=results.TRACK_TNEVAL,

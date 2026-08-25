@@ -522,9 +522,20 @@ def test_the_headline_records_how_many_sections_it_averaged():
     assert scored.is_complete is False
 
 
-def _candidate(session_id: str) -> scoring.Candidate:
+def _full() -> tneval.Scores:
+    """A note the judge answered completely, so it joins the headline."""
+    return tneval.aggregate(
+        {
+            f"{section}.rubric_completeness.{key}": "Yes"
+            for section in tneval.SOAP_SECTIONS
+            for key in tneval.criteria_keys(section)
+        }
+    )
+
+
+def _candidate(session_id: str, provider: str = "einfra") -> scoring.Candidate:
     return scoring.Candidate(
-        provider="einfra",
+        provider=provider,
         system_id="a-model",
         system_type="model",
         system_label="a-model",
@@ -561,3 +572,54 @@ def test_a_partly_judged_note_is_left_out_of_the_systems_headline():
     # 1.0 from the complete note alone; averaging the 0.0 in would read as a
     # model that failed rather than a note the judge did not finish.
     assert aggregate.metrics().headline["completeness"] == pytest.approx(1.0)
+
+
+def test_a_reference_model_is_not_charged_for_notes_nobody_asked_it_for():
+    """TN-Eval published notes for some sessions, not all.
+
+    Passing one corpus size for every system makes the missing ones read as
+    generation failures. A reference model was never asked, so its denominator
+    is what it was asked for.
+    """
+    scored = [
+        scoring.NoteResult(candidate=_candidate("s1", provider="tneval"), scores=_full(), cached=1)
+    ]
+    key = ("tneval", "a-model")
+
+    rows = scoring.to_rows(scored, judge_model="j", n_generated={key: 12}, n_attempted={key: 12})
+
+    assert rows[0].n_sessions_generated == 12
+    assert rows[0].n_sessions_attempted == 12
+    assert rows[0].n_failed == 0
+
+
+def test_scoring_a_slice_does_not_report_the_rest_as_unwritten():
+    """`--notes 20` over 50 sessions must not publish "20/50 (30 unusable)".
+
+    The counts are taken from the full candidate list before the slice, so a
+    flag that limits *this run* cannot become a claim about *the model*. This
+    asserts the contract `to_rows` is given, which is where the CLI now takes
+    its numbers from.
+    """
+    key = ("einfra", "a-model")
+    # Judged two of fifty so far; wrote all fifty.
+    scored = [
+        scoring.NoteResult(candidate=_candidate(f"s{i}"), scores=_full(), cached=1)
+        for i in range(2)
+    ]
+
+    rows = scoring.to_rows(scored, judge_model="j", n_generated={key: 50}, n_attempted={key: 50})
+
+    assert rows[0].n_sessions_generated == 50
+    assert rows[0].n_sessions_scored == 2
+    assert rows[0].n_failed == 0
+
+
+def test_a_real_generation_failure_is_still_counted():
+    """The guard must not hide the thing it is guarding the shape of."""
+    key = ("einfra", "a-model")
+    scored = [scoring.NoteResult(candidate=_candidate("s1"), scores=_full(), cached=1)]
+
+    rows = scoring.to_rows(scored, judge_model="j", n_generated={key: 42}, n_attempted={key: 50})
+
+    assert rows[0].n_failed == 8
