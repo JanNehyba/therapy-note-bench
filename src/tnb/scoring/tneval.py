@@ -481,6 +481,23 @@ class Scores:
             and all(count == len(SOAP_SECTIONS) for count in self.sections_used.values())
         )
 
+    def rests_on_every_section(self, measure: str) -> bool:
+        """Whether one measure was computed from all four SOAP sections.
+
+        Weaker than `is_complete`, and needed where that is too strong. An
+        analysis reading only the answer cache cannot reconstruct conciseness
+        at all -- the note text is not there, so which sentence questions
+        *should* have been asked is unknowable -- and asking it for
+        `is_complete` would drop every session it has.
+
+        What it can and must check is that the measure it *does* read is whole.
+        A note whose judge answered subjective and objective in full and never
+        reached assessment and plan comes back with completeness 1.0 over two
+        sections and an empty `incomplete`: nothing in the object says it is
+        half a measurement.
+        """
+        return self.sections_used.get(measure) == len(SOAP_SECTIONS)
+
 
 def aggregate(answers: dict[str, str], tasks: list[JudgeTask] | None = None) -> Scores:
     """Turn raw judge answers into scores, keyed by :attr:`JudgeTask.unit`.

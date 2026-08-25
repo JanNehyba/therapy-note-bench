@@ -217,6 +217,21 @@ def per_session_scores(answers: dict, measure: str = "completeness") -> dict[str
     scores: dict[str, dict[str, float]] = defaultdict(dict)
     for (system, session), units in answers.items():
         aggregate = tneval.aggregate(units)
+        # A measure computed from some of the four sections is not this note's
+        # score for it. A judge that answered subjective and objective in full
+        # and never reached assessment and plan produces a completeness of 1.0
+        # over two sections with an empty `incomplete`, and it entered the
+        # bootstrap as a measurement. Judge failures cluster on the notes that
+        # are hard to read, so the bias from keeping them runs one way.
+        #
+        # `is_complete` is the wrong test here and would drop everything: it
+        # also requires conciseness and faithfulness, and the note text is not
+        # in the answer cache, so those cannot be reconstructed at all.
+        # `usable_systems` then drops and names a system that loses too many,
+        # which is the honest way for coverage to fall rather than for scores
+        # to quietly sag.
+        if not aggregate.rests_on_every_section(measure):
+            continue
         value = aggregate.headline.get(measure)
         if value is not None:
             scores[system][session] = value

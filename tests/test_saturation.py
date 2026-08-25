@@ -329,3 +329,40 @@ def test_a_failed_judge_call_never_reaches_a_numerator(tmp_path):
     assert list(answers[("gemma4", "0")]) == [
         "subjective.rubric_completeness.subjective-symptoms"
     ], "the one that worked, and only that"
+
+
+def test_a_half_answered_session_does_not_enter_the_bootstrap():
+    """The leaderboard's headline drops it; this path did not.
+
+    A note answered on 3 of 23 criteria is already caught -- `aggregate` gives
+    it no completeness at all. The one that got through is subtler: a judge
+    that answered subjective and objective in full and never reached assessment
+    and plan produces a completeness of **1.0** averaged over two sections,
+    with an empty `incomplete` and nothing anywhere saying it is half a
+    measurement. Resampling that is worse than losing it, because judge
+    failures cluster on the notes that are hard to read: the bias runs one way.
+    """
+    # All 23 criteria across all four SOAP sections: `is_complete` is about the
+    # whole note, so answering one section in full is still a partial note.
+    complete = {
+        f"{section}.rubric_completeness.{key}": "Yes"
+        for section in tneval.SOAP_SECTIONS
+        for key in tneval.criteria_keys(section)
+    }
+    half = {
+        unit: answer
+        for unit, answer in complete.items()
+        if unit.split(".")[0] in ("subjective", "objective")
+    }
+    assert tneval.aggregate(half).headline["completeness"] == 1.0, "and it looks perfect"
+
+    scores = saturation.per_session_scores(
+        {
+            ("gemma4", "0"): dict(complete),
+            ("gemma4", "1"): half,
+            # Three of twenty-three: `aggregate` already refuses this one.
+            ("gemma4", "2"): dict(list(complete.items())[:3]),
+        }
+    )
+
+    assert list(scores["gemma4"]) == ["0"]
