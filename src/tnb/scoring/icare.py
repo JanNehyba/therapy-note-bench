@@ -202,9 +202,10 @@ def split_sections(note: str) -> dict[int, str]:
     return found
 
 
-def is_filled(value: str) -> bool:
-    """Whether a field says anything. "Nil" is an answer, not content."""
-    return value.strip().lower() not in corpus.EMPTY_MARKERS
+#: Whether a field says anything a clinician could use. Lives in `corpus` so the
+#: gold notes and the generated ones are read by one rule -- `profile_ihope` used
+#: to inline its own copy, and the two would have drifted the moment either moved.
+is_filled = corpus.is_filled
 
 
 # --- ROUGE-L ------------------------------------------------------------------

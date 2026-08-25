@@ -18,6 +18,7 @@ the corpus is not downloaded — a run in CI, or a reader with no token.
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -32,7 +33,63 @@ FIELD_SEPARATOR = " ; "
 
 #: What the experts wrote when the transcript did not say. The protocol asks for
 #: exactly this word, and models are asked for it too.
+#:
+#: Measured across the 10 876 generated sections rather than guessed: a bare
+#: "Nil" is the *only* standalone marker any model writes. Not one section's
+#: whole value is "Not specified", "N/A", "Unknown" or any of the phrasings one
+#: would expect, so lengthening this set would change nothing.
 EMPTY_MARKERS = {"nil", "", "none", "na", "n/a"}
+
+#: Markdown a model wraps a field label in. Stripped before a value is read,
+#: because "**Harm to Self:** Nil" and "Harm to Self: Nil" say the same thing.
+_DECORATION = re.compile(r"[*_`#]+|^\s*[-•]\s*")
+
+#: A field may answer several sub-questions at once -- "Date: ... Place: ..." --
+#: on separate lines or separated by semicolons.
+_SUB_FIELD = re.compile(r"[\n;]+")
+
+#: A label is short and has no sentence in it. The bound stops a real sentence
+#: containing a colon ("The client said: I feel awful") from having its content
+#: mistaken for a label and thrown away.
+_LABEL_CHARS = 48
+
+
+def _carries_content(part: str) -> bool:
+    """Whether one sub-field says anything, once its label is removed."""
+    text = _DECORATION.sub("", part).strip()
+    label, separator, value = text.partition(":")
+    if separator and len(label) <= _LABEL_CHARS and "." not in label:
+        text = value.strip()
+    return text.lower() not in EMPTY_MARKERS
+
+
+def is_filled(value: str) -> bool:
+    """Whether a field says anything a clinician could use.
+
+    A bare "Nil" is an answer meaning "nothing to report", and so is a field
+    that spells the same thing out one sub-question at a time:
+
+        Date: Nil
+        Place: Nil
+        Time: Nil
+        Bring anyone: Nil
+
+    Reading only the whole string counted that as content, because it is not
+    literally "Nil". `gemma4` wrote exactly that into *what happens next* in 40
+    of 40 sessions and was published with a perfect temporal score of 1.000,
+    directly contradicting the finding this benchmark reproduces -- that every
+    model tested fails on the time-bearing fields.
+
+    So the value is split into its sub-fields and each one is read past its own
+    label. The field is filled when **at least one** sub-field carries content:
+    "Type: Nil; Mode: Individual" does say something.
+
+    Measured on the corpus: this is a structural problem, not a vocabulary one.
+    150 distinct composite strings over 534 records say nothing while looking
+    like content, and no amount of adding phrases to `EMPTY_MARKERS` would
+    catch them.
+    """
+    return any(_carries_content(part) for part in _SUB_FIELD.split(value))
 
 
 @dataclass(frozen=True)
@@ -102,7 +159,10 @@ def profile_ihope(path: Path | None = None) -> list[SectionFill] | None:
             number = _match_section(label)
             if number is None:
                 continue
-            if value.strip().lower() not in EMPTY_MARKERS:
+            # The same rule the models are read by. It used to be inlined here
+            # and stricter nowhere, so an expert note spelling "nothing to
+            # report" out one sub-question at a time counted as filled.
+            if is_filled(value):
                 filled[number] += 1
 
     # Every note is asked every field. A note that omits the label entirely did
