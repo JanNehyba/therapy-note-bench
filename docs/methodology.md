@@ -44,12 +44,28 @@ by experts over the model that led on automatic scores.
 
 | Column | What it is | Why it is here |
 |---|---|---|
-| `rouge_l` / `bertscore` | The paper's own metrics against expert gold notes | Lets our numbers be compared with the published table |
+| `rouge_l` / `bertscore` | The paper's own metrics, over the **field values** of the sections the expert answered | See below: not directly comparable with their published table |
 | `trace` | Trustworthiness, Relevance, Accuracy, Comprehensiveness, Expression, as an LLM judge over the note | The paper's own human framework — the thing the metrics above were found to miss |
-| `temporal` | Sections 5 and 17 only (session details, next-session details) | The paper reports that *all* models fail here; averaging it away hides the finding |
+| `temporal_past` | Section 5 alone (what happened last session) | The paper reports that *all* models fail on time; one of these two shows they do not |
+| `temporal_next` | Section 17 alone (what happens next session) | And this is the one they fail. Averaged together the finding disappears -- see below |
 
 **The gap between the first two columns is a published result, not an error.**
 It is reported, not smoothed over.
+
+**Why the two temporal columns are not one.** They were, and the average lied.
+Looking back is something every model does (0.97-1.00); looking forward is
+something almost none of them does (0.00-0.55, `gpt-oss-120b` at 0.00). The
+expert notes answer section 5 in 34 of 40 cases and section 17 in 11, so the
+mean is weighted 3:1 towards the easy half and turned 1.00 and 0.09 into 0.78 --
+publishing the *opposite* of the finding this track exists to reproduce.
+
+**Why ROUGE-L is not comparable with their table.** Their score is computed over
+the whole rendered note, which means both sides share our 17 field labels and
+every `Nil` the expert wrote. Measured: a note where the model wrote **nothing
+at all** scored 0.379 that way, higher than most real notes. Ours compares the
+field values only, over the sections the expert answered -- the same empty note
+now scores 0.000. The cost is that the number no longer lines up with the
+published one, and that is the smaller of the two evils.
 
 Our TRACE is a **re-implementation without a human anchor.** The authors'
 TRACE annotations and blinded expert review are not in the public repository, so

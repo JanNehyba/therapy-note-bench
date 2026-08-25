@@ -121,9 +121,23 @@ other is a field that was never written down at all -- and 524 labelled parts
 across the corpus parse with **zero** the matcher cannot place, so it is a fact
 about the notes rather than about our splitter.
 
-It has one direct consequence for scoring: the temporal measure takes its
+It has one direct consequence for scoring: the temporal measures take their
 denominator from what the expert answered, not from what the form asks. A model
 is not marked down for leaving blank a field the expert left blank too.
+
+And "answered" is structural, not a word list. A model that writes
+
+    Date: Nil
+    Place: Nil
+    Time: Nil
+    Accompanying Person: Nil
+
+has said nothing, and reading only the whole string counted it as content
+because it is not literally "Nil". `gemma4` wrote exactly that into *what
+happens next* in 40 of 40 sessions and was published with a perfect temporal
+score. 150 distinct composite strings over 534 records say nothing while looking
+like content, so no amount of adding phrases to the marker list would have
+caught them.
 
 **The sessions are not Indian; the note format is.** This was checked in the
 data on 2026-08-24 rather than taken from the paper. Across the 40 test
