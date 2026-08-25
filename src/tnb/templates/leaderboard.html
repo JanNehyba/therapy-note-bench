@@ -95,6 +95,10 @@
      column of figures, so its last column stays left-aligned. */
   table.concordance td:last-child, table.concordance th:last-child { text-align: left; }
   ul.dominance { margin: .4rem 0 0; padding-left: 1.2rem; font-size: .9rem; line-height: 1.7; }
+  /* A judge that clears the human ceiling on a measure. Marked rather than
+     stated per row: the comparison is per column and the eye reads it that way. */
+  td.beats { font-weight: 600; }
+  tr.humans td { border-top: 2px solid var(--line); }
   ul.dominance code { font-size: .85rem; }
   table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
   th, td { text-align: right; padding: .45rem .6rem; border-bottom: 1px solid var(--line); }
@@ -226,6 +230,11 @@ p.settings { margin-top: .2rem; }
   <details class="box" id="saturation">
     <summary><strong>Is there anything left to measure?</strong></summary>
     <div id="saturation-body"></div>
+  </details>
+
+  <details class="box" id="judges">
+    <summary><strong>Why these two judges, and not the newest models</strong></summary>
+    <div id="judges-body"></div>
   </details>
 
   <div class="box" id="preference"></div>
@@ -999,6 +1008,113 @@ function renderPreference(data) {
     ${data.effects.map(e => `<p class="note">${code(e.summary)}</p>`).join('')}`;
 }
 
+// Every judge that was tried, against the two therapists. The evidence for the
+// panel's composition -- computed, written to docs/judges.json, loaded into
+// this page, and until now drawn nowhere.
+// Both of these read the table rather than restating a conclusion from the day
+// it was measured. The prose here used to name `gpt-5.6-sol` as evidence, and
+// `docs/judges.json` does not contain it -- a claim a reader could not check
+// against the numbers beside it.
+function alphaOf(judge, measure) {
+  const found = judge.agreements.find(a => a.name === measure);
+  return found ? Number(found.alpha) : null;
+}
+
+// Version numbers compared as numbers. Sorting the names as text puts
+// `gemini-10.0-flash` before `gemini-3.7-flash`, and this box's whole claim is
+// about which model came later.
+function version(name) {
+  const found = name.match(/(\d+)(?:\.(\d+))?/);
+  return found ? Number(found[1]) + Number(found[2] || 0) / 100 : 0;
+}
+
+function notReleaseOrder(data, measure) {
+  // Models whose names differ only by a version number, best and worst by
+  // agreement. If the better one is not the later one, capability did not
+  // predict judge quality -- which is the whole reason this box exists.
+  const families = {};
+  data.judges.forEach(j => {
+    const family = j.judge_model.replace(/[\d.]+/g, '#');
+    (families[family] = families[family] || []).push(j);
+  });
+  const upsets = Object.values(families)
+    .filter(group => group.length > 1)
+    .map(group => {
+      const ranked = [...group].sort((a, b) => alphaOf(b, measure) - alphaOf(a, measure));
+      const newest = [...group].sort((a, b) => version(a.judge_model) - version(b.judge_model)).pop();
+      return ranked[0].judge_model === newest.judge_model
+        ? null
+        : {best: ranked[0].judge_model, newest: newest.judge_model};
+    })
+    .filter(Boolean);
+
+  if (!upsets.length) return '';
+  return `<p class="note">Reputation does not pick a judge here; agreement with two
+     therapists does. ${upsets.map(u =>
+       `<code>${u.best}</code> agrees with them more than the later
+        <code>${u.newest}</code>`).join(', and ')}. Choosing by release order would have
+     chosen worse.</p>`;
+}
+
+function whereTheCeilingIsCleared(data, measures, ceiling) {
+  const cleared = measures.filter(m =>
+    data.judges.every(j => { const a = alphaOf(j, m); return a !== null && a >= ceiling[m]; }));
+  const none = measures.filter(m =>
+    data.judges.every(j => { const a = alphaOf(j, m); return a === null || a < ceiling[m]; }));
+  if (!cleared.length && !none.length) return '';
+  return `<p class="note">
+    ${cleared.length ? `Every judge clears the human ceiling on
+      ${cleared.map(m => `<code>${m}</code>`).join(', ')}.` : ''}
+    ${none.length ? ` None of them does on
+      ${none.map(m => `<code>${m}</code>`).join(', ')}, which is why those columns carry the
+      caveat they do in every table above — the two therapists barely agree there either.` : ''}
+    </p>`;
+}
+
+function renderJudges(data) {
+  const box = document.getElementById('judges');
+  if (!data || !data.judges || !data.judges.length) { box.remove(); return; }
+
+  const measures = data.judges[0].agreements.map(a => a.name);
+  const ceiling = {};
+  data.judges[0].agreements.forEach(a => { ceiling[a.name] = Number(a.alpha_humans); });
+
+  // The two judges the panel is actually made of, not every judge with a table:
+  // `results/` also holds a full pass by one that was tried and not chosen, and
+  // labelling that "in the panel" is exactly the confusion this box exists to
+  // clear up. The comparison names the pair; the tables only show who ran.
+  const pair = Object.values(DATA.concordance || {})[0];
+  const chosen = new Set(pair ? [pair.judge_a, pair.judge_b] : []);
+  const rows = data.judges.map(j => {
+    const cells = measures.map(name => {
+      const found = j.agreements.find(a => a.name === name);
+      const alpha = found ? Number(found.alpha) : null;
+      const beats = alpha !== null && alpha >= ceiling[name];
+      return `<td${beats ? ' class="beats"' : ''}>${alpha === null ? '—' : alpha.toFixed(3)}</td>`;
+    }).join('');
+    const mark = chosen.has(j.judge_model) ? ' <span class="dash">— in the panel</span>' : '';
+    return `<tr><td><code>${j.judge_model}</code>${mark}</td>${cells}</tr>`;
+  }).join('');
+
+  const humans = measures
+    .map(name => `<td>${ceiling[name].toFixed(3)}</td>`).join('');
+
+  document.getElementById('judges-body').innerHTML = `
+    <p class="blurb">Krippendorff's alpha against the two therapists who annotated TN-Eval's
+       own data, over the same ${data.notes} notes. The bottom row is what those two
+       therapists reach <em>with each other</em> — the ceiling any judge is measured against,
+       and it is not high.</p>
+    <div class="scroll"><table class="concordance">
+      <thead><tr><th>Judge</th>${measures.map(m => `<th>${m}</th>`).join('')}</tr></thead>
+      <tbody>${rows}
+        <tr class="humans"><td><strong>the two therapists</strong></td>${humans}</tr>
+      </tbody>
+    </table></div>
+    ${notReleaseOrder(data, measures[0])}
+    ${whereTheCeilingIsCleared(data, measures, ceiling)}`;
+}
+
+renderJudges(DATA.judges);
 renderPreference(DATA.preference);
 renderConcordance(DATA.concordance);
 

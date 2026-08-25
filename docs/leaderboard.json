@@ -267,6 +267,11 @@
       ],
       "judge_a": "gemini-3.1-pro-preview",
       "judge_b": "gpt-5.6-terra",
+      "judge_measures": [
+        "completeness",
+        "conciseness",
+        "faithfulness"
+      ],
       "measures": [
         {
           "furthest": {
@@ -863,6 +868,7 @@
       "used_for": "the iHOPE transcripts and expert notes"
     }
   ],
+  "preference": null,
   "protocol": {
     "criteria": [
       {

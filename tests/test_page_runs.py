@@ -198,3 +198,98 @@ def test_the_saturation_panel_names_the_judge_that_produced_it(tmp_path):
 
     assert "judge_fingerprint" in page
     assert "thinking_budget" in page
+
+
+def _judges_data() -> dict:
+    """Six candidate judges, the shape `tnb judges` writes."""
+
+    def judge_row(name: str, rubric: float, likert: float) -> dict:
+        return {
+            "judge_model": name,
+            "rubric_beats_likert": "True",
+            "agreements": [
+                {
+                    "name": "rubric_completeness",
+                    "alpha": str(rubric),
+                    "alpha_humans": "0.504",
+                    "alpha_level": "nominal",
+                    "statistic": "Cohen's kappa",
+                    "judge": str(rubric),
+                    "humans": "0.504",
+                    "n": "3450",
+                },
+                {
+                    "name": "likert_faithfulness",
+                    "alpha": str(likert),
+                    "alpha_humans": "0.179",
+                    "alpha_level": "ordinal",
+                    "statistic": "Spearman",
+                    "judge": str(likert),
+                    "humans": "0.179",
+                    "n": "150",
+                },
+            ],
+        }
+
+    return {
+        "notes": 150,
+        "judges": [
+            judge_row("gemini-3.1-pro-preview", 0.587, 0.133),
+            judge_row("gemini-2.5-flash", 0.550, 0.141),
+            judge_row("gemini-3.7-flash", 0.540, 0.091),
+            judge_row("gpt-5.6-terra", 0.520, -0.015),
+            judge_row("gemini-2.5-pro", 0.574, 0.063),
+        ],
+    }
+
+
+def _with_judges(tmp_path: Path) -> str:
+    from tnb import judge
+    from tnb.scoring import concordance
+
+    rows = [
+        _row(system, judge_model, value)
+        for judge_model, scores in (
+            (judge.DEFAULT_MODEL, {"x": 0.9, "y": 0.5}),
+            (judge.SECOND_JUDGE, {"x": 0.5, "y": 0.9}),
+        )
+        for system, value in scores.items()
+    ]
+    data = report.build(rows)
+    data["calibration"] = None
+    data["similarity_example"] = None
+    data["saturation"] = None
+    data["preference"] = None
+    data["judges"] = _judges_data()
+    data["concordance"] = {
+        results.TRACK_TNEVAL: concordance.to_json(
+            concordance.compare(
+                rows,
+                results.TRACK_TNEVAL,
+                [key for key, _ in report.COLUMNS[results.TRACK_TNEVAL]],
+            )
+        )
+    }
+    return report.render_page(data)
+
+
+def test_only_the_two_panel_judges_are_marked_as_being_in_the_panel(tmp_path):
+    """`results/` also holds a full pass by `gemini-2.5-pro`, which was tried
+    and not chosen. Marking every judge with a table as "in the panel" is the
+    confusion this box exists to clear up."""
+    page = _with_judges(tmp_path)
+    _run(page, tmp_path)
+
+    assert "pair.judge_a, pair.judge_b" in page, "the pair comes from the comparison"
+    assert "DATA.tables.map(t => t.versions.judge_model)" not in page
+
+
+def test_the_judge_box_claims_are_derived_from_its_own_table(tmp_path):
+    """The prose named `gpt-5.6-sol` as evidence and `docs/judges.json` does not
+    contain it -- a claim a reader could not check against the numbers beside
+    it. Every sentence there is now computed from the rows it sits under."""
+    page = _with_judges(tmp_path)
+    _run(page, tmp_path)
+
+    assert "gpt-5.6-sol" not in page.split("renderJudges")[-1]
+    assert "notReleaseOrder" in page and "whereTheCeilingIsCleared" in page
