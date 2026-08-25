@@ -156,13 +156,18 @@ providers:
       catalogue_key: publisherModels
       catalogue_id_field: name
       model_prefix: "google/"
+      # Two, not four. The catalogue also serves gemini-3.5-flash and
+      # gemini-3.6-flash, which are the same thing a generation apart; three
+      # near-identical flash models would spend the judge's budget on a
+      # within-family comparison nobody asked for. The newest flash and the
+      # one pro in the 3.x line bracket the family.
+      #
+      # gemini-3.1-pro-preview is also a judge candidate. That is deliberate
+      # and it is why there are two judges -- see docs/methodology.md.
       include:
-        - "^google/gemini-3\\.[0-9]+-pro"
-        - "^google/gemini-3\\.[0-9]+-flash$"
-      exclude:
-        - "image"
-        - "tts"
-      max_models: 6
+        - "^google/gemini-3\\.1-pro-preview$"
+        - "^google/gemini-3\\.7-flash$"
+      max_models: 4
 
   # A second provider looks like this. Uncomment, set the token in .env, and the
   # next run adds its models as their own rows -- same protocols, same judge,
