@@ -362,7 +362,10 @@ def cmd_score(args: argparse.Namespace) -> int:
     from tnb.scoring import run as scoring
     from tnb.scoring import tneval as rubric
 
-    config = judge.config_from_env(model=args.judge_model)
+    overrides = {"model": args.judge_model}
+    if getattr(args, "concurrency", None):
+        overrides["concurrency"] = args.concurrency
+    config = judge.config_from_env(**overrides)
     sessions = scoring.load_sessions(args.limit)
 
     candidates: list[scoring.Candidate] = []
@@ -746,7 +749,10 @@ def cmd_score_icare(args: argparse.Namespace) -> int:
     from tnb.scoring import icare as icare_scorer
     from tnb.scoring import icare_run
 
-    config = judge.config_from_env(model=args.judge_model)
+    overrides = {"model": args.judge_model}
+    if getattr(args, "concurrency", None):
+        overrides["concurrency"] = args.concurrency
+    config = judge.config_from_env(**overrides)
     client = judge.Judge(config)
 
     sessions = icare_run.load_sessions(args.limit)
@@ -950,6 +956,16 @@ def build_parser() -> argparse.ArgumentParser:
         # order of $40; this stops a loop that has gone wrong, and is set well
         # above any run anyone means to start so that it never interrupts one.
         help="runaway guard; the run stops rather than exceeding it",
+    )
+    score.add_argument(
+        "--concurrency",
+        type=int,
+        help=(
+            "parallel judge calls; default 4. A full pass is ~51 000 questions, "
+            "which is hours at 4. Vertex and OpenAI both rate-limit per project "
+            "and both retry 429 with backoff, so this is a throughput knob, not a "
+            "risk one -- unlike e-INFRA's, which is one person's academic quota."
+        ),
     )
     score.add_argument("--force", action="store_true", help="re-ask cached questions")
     score.add_argument(

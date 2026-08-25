@@ -56,6 +56,11 @@ JUDGE_CANDIDATES = (
     "gemini-3.5-flash",
     "gemini-2.5-flash",
     "gpt-5.6-terra",
+    # Added after terra calibrated at 0.520 -- above the human ceiling of 0.504,
+    # but the weakest of six and the only one with a *negative* agreement on
+    # faithfulness. Worth $17 to find out whether the flagship is better before
+    # committing $65 to a full pass with the one that barely cleared.
+    "gpt-5.6-sol",
 )
 
 
