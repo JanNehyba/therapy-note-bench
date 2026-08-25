@@ -680,3 +680,64 @@ def test_the_temporal_denominators_in_the_column_text_match_the_corpus():
             f"{measure} says {text!r} but the experts answered section {number} "
             f"in {answered[number]} of the sessions"
         )
+
+
+def test_bertscore_is_cached_on_the_pair_it_measures(tmp_path, monkeypatch):
+    """It depends on the two strings and on nothing else -- not the judge, not
+    the run -- and it was recomputed from scratch every time, loading
+    roberta-large and spending about half an hour on 640 pairs before the first
+    judge question was asked."""
+    calls = []
+
+    def fake_score(candidates, references, **_kwargs):
+        calls.append(list(candidates))
+        return None, None, [0.5 + 0.1 * i for i in range(len(candidates))]
+
+    monkeypatch.setitem(
+        __import__("sys").modules, "bert_score", type("m", (), {"score": fake_score})
+    )
+    cache = tmp_path / "bertscore.json"
+
+    first = scorer.bertscore(["a note", "another"], ["gold", "gold two"], cache=cache)
+    second = scorer.bertscore(["a note", "another"], ["gold", "gold two"], cache=cache)
+
+    assert first == second
+    assert len(calls) == 1, "the second run computed nothing"
+
+
+def test_a_pair_that_changed_is_recomputed_and_the_rest_is_not(tmp_path, monkeypatch):
+    """A re-generated note must not keep its predecessor's score, and the
+    fifteen models that did not change must not pay for the one that did."""
+    calls = []
+
+    def fake_score(candidates, references, **_kwargs):
+        calls.append(list(candidates))
+        return None, None, [0.9] * len(candidates)
+
+    monkeypatch.setitem(
+        __import__("sys").modules, "bert_score", type("m", (), {"score": fake_score})
+    )
+    cache = tmp_path / "bertscore.json"
+
+    scorer.bertscore(["first", "second"], ["gold", "gold"], cache=cache)
+    scorer.bertscore(["first", "second, re-generated"], ["gold", "gold"], cache=cache)
+
+    assert calls[1] == ["second, re-generated"], "only the changed one"
+
+
+def test_a_missing_dependency_is_still_reported_as_absent(tmp_path, monkeypatch):
+    """None rather than zero. A column of zeros would rank every model equally
+    and look like a measurement."""
+    import builtins
+
+    real_import = builtins.__import__
+
+    def refuse(name, *args, **kwargs):
+        if name == "bert_score":
+            raise ImportError("not installed")
+        return real_import(name, *args, **kwargs)
+
+    monkeypatch.delitem(__import__("sys").modules, "bert_score", raising=False)
+    monkeypatch.setattr(builtins, "__import__", refuse)
+
+    assert scorer.bertscore(["a"], ["b"], cache=tmp_path / "x.json") is None

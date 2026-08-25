@@ -23,10 +23,14 @@ download behind it and most runs do not want one.
 
 from __future__ import annotations
 
+import hashlib
+import json
 import re
 from dataclasses import dataclass, field
+from pathlib import Path
 
 from tnb import corpus
+from tnb.config import REPO_ROOT
 from tnb.datasets import ihope
 from tnb.tasks import icare
 
@@ -322,7 +326,23 @@ def rouge_l(candidate: str, reference: str) -> float:
 # --- BERTScore ----------------------------------------------------------------
 
 
-def bertscore(candidates: list[str], references: list[str]) -> list[float] | None:
+#: Where computed BERTScores live, keyed by the pair they measure.
+#:
+#: The score is a property of (note, expert note) and nothing else -- not of the
+#: judge, not of the run -- but it was recomputed from scratch every time,
+#: loading roberta-large and spending about half an hour on 640 pairs before the
+#: first judge question was asked. Three runs in one evening paid that three
+#: times for identical numbers.
+BERT_CACHE = REPO_ROOT / "scores" / "bertscore.json"
+
+
+def _bert_key(candidate: str, reference: str) -> str:
+    return hashlib.sha256(f"{candidate}\x00{reference}".encode()).hexdigest()
+
+
+def bertscore(
+    candidates: list[str], references: list[str], *, cache: Path | None = None
+) -> list[float] | None:
     """Embedding similarity, F1, or None when the optional dependency is absent.
 
     None rather than zero, and never a substitute metric: a column of zeros
@@ -330,18 +350,42 @@ def bertscore(candidates: list[str], references: list[str]) -> list[float] | Non
     `scoring` in pyproject; without it the page shows the column as not computed
     and says why.
 
-    Imported inside the function because it pulls a model download behind it and
-    most runs -- every test run, certainly -- do not want one.
+    Cached on the exact pair of strings, so a re-run scores only what changed
+    and a model whose note was re-generated is recomputed because its key moved.
+    The import is inside the function because it pulls a model download behind
+    it, and it is skipped entirely when every pair is already known -- which is
+    what makes a cached run start immediately.
     """
     if not candidates:
         return []
-    try:
-        from bert_score import score as _score
-    except ImportError:
-        return None
 
-    _precision, _recall, f1 = _score(candidates, references, lang="en", verbose=False)
-    return [float(value) for value in f1]
+    path = cache or BERT_CACHE
+    known: dict[str, float] = {}
+    if path.exists():
+        try:
+            known = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            known = {}
+
+    keys = [_bert_key(c, r) for c, r in zip(candidates, references, strict=True)]
+    todo = [index for index, key in enumerate(keys) if key not in known]
+
+    if todo:
+        try:
+            from bert_score import score as _score
+        except ImportError:
+            return None
+
+        _precision, _recall, f1 = _score(
+            [candidates[i] for i in todo], [references[i] for i in todo], lang="en", verbose=False
+        )
+        for index, value in zip(todo, f1, strict=True):
+            known[keys[index]] = float(value)
+
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(known, indent=0, sort_keys=True), encoding="utf-8")
+
+    return [known[key] for key in keys]
 
 
 # --- putting one note's numbers together --------------------------------------
