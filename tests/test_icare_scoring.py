@@ -93,6 +93,41 @@ def test_an_ambiguous_label_is_credited_to_nobody():
 # --- ROUGE-L ------------------------------------------------------------------
 
 
+def test_a_note_with_nothing_in_it_scores_zero_not_a_third():
+    """The floor, measured on the real corpus rather than constructed.
+
+    `render_note` builds 17 field titles with "Nil" wherever the model wrote
+    nothing, and the expert note is built the same way -- so comparing the two
+    rendered strings compared our own scaffolding with itself. A note in which
+    the model wrote absolutely nothing scored 0.379 on average and 0.770 on one
+    session, above what most real models score.
+    """
+    empty = scorer.render_note({})
+    for session in ihope.load("test"):
+        candidate, gold = scorer.comparable_pair(empty, session.reference)
+        assert scorer.rouge_l(candidate, gold) == 0.0, session.id
+
+
+def test_only_the_fields_the_expert_answered_are_compared():
+    """A field the expert left blank has nothing to compare against."""
+    gold = "Patient particulars : Name sasha ; Clinical identifiers : Nil"
+    note = scorer.render_note({"section-01": "Name sasha", "section-02": "Ward 4, bed 12"})
+
+    candidate, reference = scorer.comparable_pair(note, gold)
+
+    assert "sasha" in candidate and "sasha" in reference
+    assert "Ward 4" not in candidate, "the expert left field 2 blank"
+
+
+def test_the_labels_never_reach_the_comparison():
+    """Three quarters of the old floor was the 17 field titles matching."""
+    gold = "Patient particulars : Name sasha ; Clinical identifiers : Nil"
+    candidate, reference = scorer.comparable_pair(scorer.render_note({}), gold)
+
+    for title in icare.SECTION_TITLES:
+        assert title not in candidate and title not in reference
+
+
 def test_a_note_identical_to_the_expert_note_scores_one():
     assert scorer.rouge_l(GOLD, GOLD) == pytest.approx(1.0)
 

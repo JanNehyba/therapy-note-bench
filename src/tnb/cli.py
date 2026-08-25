@@ -807,8 +807,13 @@ def cmd_score_icare(args: argparse.Namespace) -> int:
     # BERTScore over every note at once: the model loads once instead of 640
     # times. None when the optional extra is absent, and then the column is
     # simply not reported -- never zeroed.
+    # The same content-only pair ROUGE-L compares. Given the rendered notes,
+    # BERTScore would score the similarity of our own 17 field titles to
+    # themselves -- the identical defect, and worse, because an embedding model
+    # finds "Nil" and "Nil" similar rather than merely equal.
+    pairs = [icare_scorer.comparable_pair(c.note, c.reference) for c in candidates]
     bert_values = icare_scorer.bertscore(
-        [c.note for c in candidates], [c.reference for c in candidates]
+        [note for note, _gold in pairs], [gold for _note, gold in pairs]
     )
     if bert_values is None:
         print("BERTScore: the 'scoring' extra is not installed, so that column is skipped.\n")

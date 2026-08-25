@@ -230,6 +230,48 @@ def split_sections(note: str) -> dict[int, str]:
 is_filled = corpus.is_filled
 
 
+def content_of(sections: dict[int, str], fields) -> str:
+    """The values of these fields, without their labels and without the empty ones.
+
+    What a text-overlap metric must be given, and what it was not. `render_note`
+    builds a note out of 17 field titles with "Nil" wherever the model wrote
+    nothing, and the expert note is built the same way -- so comparing the two
+    strings compares our scaffolding with itself.
+
+    Measured on the 40 gold notes: a note in which the model wrote **absolutely
+    nothing** scored ROUGE-L 0.379 on average and 0.770 on one session, above
+    what most real models score. The single published iCARE row was 0.303, below
+    the score for writing nothing at all.
+
+    Attributing that floor: dropping the titles takes it from 0.379 to 0.090,
+    and dropping the "Nil" values as well takes it to exactly 0.000 on all 40.
+    Both halves are needed.
+    """
+    return " ".join(
+        sections[number]
+        for number in sorted(fields)
+        if number in sections and is_filled(sections[number])
+    )
+
+
+def comparable_pair(note: str, reference: str) -> tuple[str, str]:
+    """The two strings a text-overlap metric should compare.
+
+    Restricted to the fields the **expert** answered. A field they left blank
+    has nothing to compare against, so whatever the model wrote there is neither
+    rewarded nor punished -- the same rule the temporal measures use for their
+    denominator.
+
+    The trade-off, stated: a model that pads fields the expert left empty is not
+    penalised for it here. iCARE has no conciseness measure to catch that, and
+    the alternative is putting the padding back into both sides of a comparison
+    it would only add noise to.
+    """
+    note_sections, gold_sections = split_sections(note), split_sections(reference)
+    answered = [n for n in gold_sections if is_filled(gold_sections[n])]
+    return content_of(note_sections, answered), content_of(gold_sections, answered)
+
+
 # --- ROUGE-L ------------------------------------------------------------------
 
 _WORD = re.compile(r"[a-z0-9']+")
@@ -357,7 +399,10 @@ def aggregate(
     incomplete: dict[str, list[str]] = {}
     sections_used: dict[str, int] = {}
 
-    headline["rouge_l"] = rouge_l(note, reference)
+    # Field values only, over the fields the expert answered -- see
+    # `comparable_pair`. Comparing the rendered strings compared our own labels.
+    candidate_content, gold_content = comparable_pair(note, reference)
+    headline["rouge_l"] = rouge_l(candidate_content, gold_content)
     if bert is not None:
         headline["bertscore"] = bert
 
