@@ -138,9 +138,41 @@ published numbers: **<https://jannehyba.github.io/therapy-note-bench/>**
 - **Looks back** (0-1) — Section 5 only -- what happened in the previous session. The fraction of the 34 sessions whose expert note answered it where the model did too. Kept out of any average. Every model scores 0.97-1.00 here, so this column separates nobody -- it is shown because its twin does.
 - **Looks forward** (0-1) — Section 17 only -- what happens at the next session. The fraction of the 11 sessions whose expert note answered it where the model did too. This is where the source paper reports every model it tested failing, and ours do too: 0.00 to 0.55. Reported apart from its twin because averaging the two turned 1.00 and 0.09 into 0.78 and hid exactly this.
 
+**iCARE / iHOPE · 17 sections per session** — scored by gpt-5.6-terra
+
+| Model | Provider | ROUGE-L (0-1) | BERTScore (0-1) | TRACE (1-5) | Looks back (0-1) | Looks forward (0-1) | Notes | Scored |
+|---|---|---|---|---|---|---|---|---|
+| `deepseek-v4-flash` | einfra | 0.168 | 0.816 | 3.58 | 1.000 | 0.091 | 40/40 | 40 |
+| `deepseek-v4-flash-thinking` | einfra | 0.170 | 0.811 | 3.74 | 1.000 | 0.182 | 40/40 | 40 |
+| `gemma4` | einfra | 0.202 | 0.820 | 3.92 | 1.000 | 0.364 | 40/40 | 40 |
+| `glm-5` | einfra | 0.179 | 0.820 | 3.81 | 1.000 | 0.364 | 40/40 | 40 |
+| `glm-5.2` | einfra | 0.173 | 0.820 | 3.85 | 1.000 | 0.364 | 40/40 | 40 |
+| `google_gemini-3.1-pro-preview` | vertex | 0.182 | 0.817 | 3.92 | 1.000 | 0.455 | 40/40 | 40 |
+| `google_gemini-3.7-flash` | vertex | 0.186 | 0.819 | 3.99 | 0.971 | 0.364 | 40/40 | 40 |
+| `gpt-5.6-luna` | openai | 0.150 | 0.811 | 3.96 | 1.000 | 0.273 | 40/40 | 40 |
+| `gpt-5.6-sol` | openai | 0.169 | 0.816 | 4.11 | 1.000 | 0.545 | 40/40 | 40 |
+| `gpt-5.6-terra` | openai | 0.155 | 0.815 | 4.04 | 0.971 | 0.455 | 40/40 | 40 |
+| `gpt-oss-120b` | einfra | 0.159 | 0.808 | 3.67 | 1.000 | 0.000 | 40/40 | 40 |
+| `kimi-k3` | einfra | 0.109 | 0.812 | 3.90 | 1.000 | 0.364 | 40/40 | 40 |
+| `mistral-medium-3.5` | einfra | 0.186 | 0.815 | 3.75 | 1.000 | 0.182 | 40/40 | 40 |
+| `qwen3.5-122b` | einfra | 0.140 | 0.815 | 3.58 | 1.000 | 0.273 | 40/40 | 40 |
+| `qwen3.5-int4` | einfra | 0.182 | 0.818 | 3.87 | 1.000 | 0.091 | 40/40 | 40 |
+| `qwen3.8-27b` | einfra | 0.187 | 0.819 | 3.99 | 1.000 | 0.273 | 40/40 | 40 |
+
+*Deliberately not ranked: these columns measure different things and the source paper found they disagree.*
+- **ROUGE-L** (0-1) — Longest-common-subsequence overlap with the expert note, F-measure. Rewards using the same words in the same order. Cannot tell a good paraphrase from a wrong answer. The source paper found it disagrees with what clinicians preferred.
+- **BERTScore** (0-1) — Embedding similarity to the expert note. Tolerates paraphrase. A fluent note about the wrong session still scores well.
+- **TRACE** (1-5) — Trustworthiness, relevance, accuracy, comprehensiveness and expression, each rated 1-5 by a judge and averaged. A re-implementation with no human anchor: the authors never published their ratings, so unlike the TN-Eval track this number is not calibrated against anybody.
+- **Looks back** (0-1) — Section 5 only -- what happened in the previous session. The fraction of the 34 sessions whose expert note answered it where the model did too. Kept out of any average. Every model scores 0.97-1.00 here, so this column separates nobody -- it is shown because its twin does.
+- **Looks forward** (0-1) — Section 17 only -- what happens at the next session. The fraction of the 11 sessions whose expert note answered it where the model did too. This is where the source paper reports every model it tested failing, and ours do too: 0.00 to 0.55. Reported apart from its twin because averaging the two turned 1.00 and 0.09 into 0.78 and hid exactly this.
+
 **Do the two judges agree?** (TN-Eval SOAP · AnnoMI conversations)
 
 `gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on completeness (+0.889) and place 11 of 19 systems differently on it anyway. They agree least on faithfulness (+0.706, 17 of 19 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. 14 system(s) beat at least one other on every measure under both judges, which needs no weighting to be true: `google_gemini-3.1-pro-preview` beats 4. 12 of 19 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner. Ordering by completeness says little about conciseness (`gemini-3.1-pro-preview` -0.18, `gpt-5.6-terra` -0.33). Ordering by completeness says different things to the two judges about faithfulness (`gemini-3.1-pro-preview` +0.72, `gpt-5.6-terra` +0.04). The two judges disagree about whether those columns are related at all, so neither reading is this benchmark's answer.
+
+**Do the two judges agree?** (iCARE / iHOPE · 17 sections per session)
+
+`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on trace (+0.813) and place 12 of 16 systems differently on it anyway. The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. 9 system(s) beat at least one other on every measure under both judges, which needs no weighting to be true: `gpt-5.6-sol` beats 7. 8 of 16 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner.
 
 *16 icare row(s) of generation coverage at harness `0.1.0` are no longer shown: the measures were redefined in `0.2.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 

@@ -165,6 +165,222 @@
     "rubric_beats_likert": true
   },
   "concordance": {
+    "icare": {
+      "dominance": [
+        {
+          "beats": [
+            "deepseek-v4-flash",
+            "deepseek-v4-flash-thinking",
+            "gpt-5.6-luna",
+            "gpt-5.6-terra",
+            "gpt-oss-120b",
+            "kimi-k3",
+            "qwen3.5-122b"
+          ],
+          "system": "gpt-5.6-sol"
+        },
+        {
+          "beats": [
+            "deepseek-v4-flash",
+            "deepseek-v4-flash-thinking",
+            "gpt-5.6-luna",
+            "gpt-oss-120b",
+            "mistral-medium-3.5",
+            "qwen3.5-122b"
+          ],
+          "system": "qwen3.8-27b"
+        },
+        {
+          "beats": [
+            "deepseek-v4-flash",
+            "deepseek-v4-flash-thinking",
+            "gpt-oss-120b",
+            "qwen3.5-122b"
+          ],
+          "system": "glm-5"
+        },
+        {
+          "beats": [
+            "deepseek-v4-flash",
+            "deepseek-v4-flash-thinking",
+            "gpt-oss-120b",
+            "qwen3.5-122b"
+          ],
+          "system": "glm-5.2"
+        },
+        {
+          "beats": [
+            "deepseek-v4-flash",
+            "deepseek-v4-flash-thinking",
+            "gpt-oss-120b",
+            "qwen3.5-122b"
+          ],
+          "system": "google_gemini-3.1-pro-preview"
+        },
+        {
+          "beats": [
+            "deepseek-v4-flash",
+            "gpt-oss-120b",
+            "qwen3.5-122b"
+          ],
+          "system": "gemma4"
+        },
+        {
+          "beats": [
+            "deepseek-v4-flash-thinking",
+            "gpt-oss-120b"
+          ],
+          "system": "mistral-medium-3.5"
+        },
+        {
+          "beats": [
+            "deepseek-v4-flash",
+            "gpt-oss-120b"
+          ],
+          "system": "qwen3.5-int4"
+        },
+        {
+          "beats": [
+            "gpt-oss-120b"
+          ],
+          "system": "deepseek-v4-flash-thinking"
+        }
+      ],
+      "judge_a": "gemini-3.1-pro-preview",
+      "judge_b": "gpt-5.6-terra",
+      "judge_measures": [
+        "trace"
+      ],
+      "measures": [
+        {
+          "furthest": {
+            "rank_a": 3,
+            "rank_b": 9,
+            "system": "qwen3.5-int4"
+          },
+          "measure": "trace",
+          "moved": 12,
+          "n_systems": 16,
+          "rho": 0.8133,
+          "stable": 4
+        }
+      ],
+      "n_systems": 16,
+      "ranking_measure": null,
+      "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on trace (+0.813) and place 12 of 16 systems differently on it anyway. The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. 9 system(s) beat at least one other on every measure under both judges, which needs no weighting to be true: `gpt-5.6-sol` beats 7. 8 of 16 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner.",
+      "tensions": [
+        {
+          "agrees": true,
+          "first": "rouge_l",
+          "n_systems": 16,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.6951,
+            "gpt-5.6-terra": 0.6951
+          },
+          "second": "bertscore"
+        },
+        {
+          "agrees": false,
+          "first": "rouge_l",
+          "n_systems": 16,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.0111,
+            "gpt-5.6-terra": 0.2134
+          },
+          "second": "trace"
+        },
+        {
+          "agrees": false,
+          "first": "rouge_l",
+          "n_systems": 16,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": -0.0205,
+            "gpt-5.6-terra": -0.0205
+          },
+          "second": "temporal_past"
+        },
+        {
+          "agrees": false,
+          "first": "rouge_l",
+          "n_systems": 16,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.0503,
+            "gpt-5.6-terra": 0.0503
+          },
+          "second": "temporal_next"
+        },
+        {
+          "agrees": false,
+          "first": "bertscore",
+          "n_systems": 16,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.0724,
+            "gpt-5.6-terra": 0.1604
+          },
+          "second": "trace"
+        },
+        {
+          "agrees": false,
+          "first": "bertscore",
+          "n_systems": 16,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.0,
+            "gpt-5.6-terra": 0.0
+          },
+          "second": "temporal_past"
+        },
+        {
+          "agrees": false,
+          "first": "bertscore",
+          "n_systems": 16,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.3109,
+            "gpt-5.6-terra": 0.3109
+          },
+          "second": "temporal_next"
+        },
+        {
+          "agrees": false,
+          "first": "trace",
+          "n_systems": 16,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": -0.3703,
+            "gpt-5.6-terra": -0.492
+          },
+          "second": "temporal_past"
+        },
+        {
+          "agrees": true,
+          "first": "trace",
+          "n_systems": 16,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.5874,
+            "gpt-5.6-terra": 0.7143
+          },
+          "second": "temporal_next"
+        },
+        {
+          "agrees": false,
+          "first": "temporal_past",
+          "n_systems": 16,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": -0.3556,
+            "gpt-5.6-terra": -0.3556
+          },
+          "second": "temporal_next"
+        }
+      ],
+      "undominated": [
+        "gemma4",
+        "glm-5",
+        "glm-5.2",
+        "google_gemini-3.1-pro-preview",
+        "google_gemini-3.7-flash",
+        "gpt-5.6-sol",
+        "qwen3.5-int4",
+        "qwen3.8-27b"
+      ]
+    },
     "tneval-soap": {
       "dominance": [
         {
@@ -7173,6 +7389,813 @@
       "versions": {
         "harness_version": "0.2.0",
         "judge_model": "gemini-3.1-pro-preview",
+        "judge_prompt_version": "icare-trace-v1",
+        "prompt_version": "icare-zeroshot-v1"
+      }
+    },
+    {
+      "blurb": "Automatic metrics and a TRACE judge side by side, because the source paper found they disagree. That disagreement is a result, not an error.",
+      "columns": [
+        {
+          "caveat": "Cannot tell a good paraphrase from a wrong answer. The source paper found it disagrees with what clinicians preferred.",
+          "definition": "Longest-common-subsequence overlap with the expert note, F-measure. Rewards using the same words in the same order.",
+          "digits": 3,
+          "key": "rouge_l",
+          "label": "ROUGE-L",
+          "ranking": false,
+          "scale": "0-1"
+        },
+        {
+          "caveat": "A fluent note about the wrong session still scores well.",
+          "definition": "Embedding similarity to the expert note. Tolerates paraphrase.",
+          "digits": 3,
+          "key": "bertscore",
+          "label": "BERTScore",
+          "ranking": false,
+          "scale": "0-1"
+        },
+        {
+          "caveat": "A re-implementation with no human anchor: the authors never published their ratings, so unlike the TN-Eval track this number is not calibrated against anybody.",
+          "definition": "Trustworthiness, relevance, accuracy, comprehensiveness and expression, each rated 1-5 by a judge and averaged.",
+          "digits": 2,
+          "key": "trace",
+          "label": "TRACE",
+          "ranking": false,
+          "scale": "1-5"
+        },
+        {
+          "caveat": "Kept out of any average. Every model scores 0.97-1.00 here, so this column separates nobody -- it is shown because its twin does.",
+          "definition": "Section 5 only -- what happened in the previous session. The fraction of the 34 sessions whose expert note answered it where the model did too.",
+          "digits": 3,
+          "key": "temporal_past",
+          "label": "Looks back",
+          "ranking": false,
+          "scale": "0-1"
+        },
+        {
+          "caveat": "This is where the source paper reports every model it tested failing, and ours do too: 0.00 to 0.55. Reported apart from its twin because averaging the two turned 1.00 and 0.09 into 0.78 and hid exactly this.",
+          "definition": "Section 17 only -- what happens at the next session. The fraction of the 11 sessions whose expert note answered it where the model did too.",
+          "digits": 3,
+          "key": "temporal_next",
+          "label": "Looks forward",
+          "ranking": false,
+          "scale": "0-1"
+        }
+      ],
+      "design": {
+        "calibrated": false,
+        "calibration": "Not possible here. The authors' expert ratings are not in the public repository, so there is nothing to check this judge against. Two independent judges score every note instead, and where they disagree is the only control this track can have.",
+        "human_role": "The expert note is the answer key and never competes. In the source paper the experts compared models with each other -- a smaller Mistral was preferred over the model leading on the automatic metrics -- and the expert note was what those metrics measured against, not an entry.",
+        "human_role_short": "answer key",
+        "scored_against": "An expert note written by the clinician who saw the session. ROUGE-L and BERTScore measure how closely the model reproduced it; TRACE asks a judge to rate the note itself, the way the paper's experts did."
+      },
+      "has_effort": true,
+      "ranking_measure": null,
+      "rows": [
+        {
+          "by_section": {
+            "trace": {
+              "accuracy": 3.325,
+              "comprehensiveness": 3.4,
+              "expression": 3.875,
+              "relevance": 3.925,
+              "trustworthiness": 3.375
+            }
+          },
+          "detail": {
+            "accuracy": 3.325,
+            "comprehensiveness": 3.4,
+            "expression": 3.875,
+            "relevance": 3.925,
+            "trustworthiness": 3.375
+          },
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "bertscore": 0.8163,
+            "rouge_l": 0.1675,
+            "temporal_next": 0.0909,
+            "temporal_past": 1.0,
+            "trace": 3.58
+          },
+          "label": "deepseek-v4-flash",
+          "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
+          "n_attempted": 40,
+          "n_complete": 40,
+          "n_failed": 0,
+          "n_generated": 40,
+          "n_partial": 0,
+          "n_scored": 40,
+          "n_unreached": 0,
+          "provider": "einfra",
+          "scored": true,
+          "scored_at": "2026-08-25T23:45:39Z",
+          "settings": "temperature 0, max tokens 4096",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "deepseek-v4-flash",
+          "system_type": "model",
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {
+            "trace": {
+              "accuracy": 3.625,
+              "comprehensiveness": 3.55,
+              "expression": 3.9,
+              "relevance": 4.0,
+              "trustworthiness": 3.625
+            }
+          },
+          "detail": {
+            "accuracy": 3.625,
+            "comprehensiveness": 3.55,
+            "expression": 3.9,
+            "relevance": 4.0,
+            "trustworthiness": 3.625
+          },
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "bertscore": 0.8114,
+            "rouge_l": 0.1695,
+            "temporal_next": 0.1818,
+            "temporal_past": 1.0,
+            "trace": 3.74
+          },
+          "label": "deepseek-v4-flash-thinking",
+          "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
+          "n_attempted": 40,
+          "n_complete": 40,
+          "n_failed": 0,
+          "n_generated": 40,
+          "n_partial": 0,
+          "n_scored": 40,
+          "n_unreached": 0,
+          "provider": "einfra",
+          "scored": true,
+          "scored_at": "2026-08-25T23:45:39Z",
+          "settings": "temperature 0, max tokens 4096",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "deepseek-v4-flash-thinking",
+          "system_type": "model",
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {
+            "trace": {
+              "accuracy": 3.85,
+              "comprehensiveness": 3.475,
+              "expression": 4.0,
+              "relevance": 4.275,
+              "trustworthiness": 3.975
+            }
+          },
+          "detail": {
+            "accuracy": 3.85,
+            "comprehensiveness": 3.475,
+            "expression": 4.0,
+            "relevance": 4.275,
+            "trustworthiness": 3.975
+          },
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "bertscore": 0.8197,
+            "rouge_l": 0.2022,
+            "temporal_next": 0.3636,
+            "temporal_past": 1.0,
+            "trace": 3.915
+          },
+          "label": "gemma4",
+          "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
+          "n_attempted": 40,
+          "n_complete": 40,
+          "n_failed": 0,
+          "n_generated": 40,
+          "n_partial": 0,
+          "n_scored": 40,
+          "n_unreached": 0,
+          "provider": "einfra",
+          "scored": true,
+          "scored_at": "2026-08-25T23:45:39Z",
+          "settings": "temperature 0, max tokens 4096",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "gemma4",
+          "system_type": "model",
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {
+            "trace": {
+              "accuracy": 3.675,
+              "comprehensiveness": 3.675,
+              "expression": 4.025,
+              "relevance": 4.0,
+              "trustworthiness": 3.7
+            }
+          },
+          "detail": {
+            "accuracy": 3.675,
+            "comprehensiveness": 3.675,
+            "expression": 4.025,
+            "relevance": 4.0,
+            "trustworthiness": 3.7
+          },
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "bertscore": 0.8204,
+            "rouge_l": 0.1788,
+            "temporal_next": 0.3636,
+            "temporal_past": 1.0,
+            "trace": 3.815
+          },
+          "label": "glm-5",
+          "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
+          "n_attempted": 40,
+          "n_complete": 40,
+          "n_failed": 0,
+          "n_generated": 40,
+          "n_partial": 0,
+          "n_scored": 40,
+          "n_unreached": 0,
+          "provider": "einfra",
+          "scored": true,
+          "scored_at": "2026-08-25T23:45:39Z",
+          "settings": "temperature 0, max tokens 4096",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "glm-5",
+          "system_type": "model",
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {
+            "trace": {
+              "accuracy": 3.775,
+              "comprehensiveness": 3.7,
+              "expression": 4.1,
+              "relevance": 4.1,
+              "trustworthiness": 3.575
+            }
+          },
+          "detail": {
+            "accuracy": 3.775,
+            "comprehensiveness": 3.7,
+            "expression": 4.1,
+            "relevance": 4.1,
+            "trustworthiness": 3.575
+          },
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "bertscore": 0.8204,
+            "rouge_l": 0.1729,
+            "temporal_next": 0.3636,
+            "temporal_past": 1.0,
+            "trace": 3.85
+          },
+          "label": "glm-5.2",
+          "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
+          "n_attempted": 40,
+          "n_complete": 40,
+          "n_failed": 0,
+          "n_generated": 40,
+          "n_partial": 0,
+          "n_scored": 40,
+          "n_unreached": 0,
+          "provider": "einfra",
+          "scored": true,
+          "scored_at": "2026-08-25T23:45:39Z",
+          "settings": "temperature 0, max tokens 4096",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "glm-5.2",
+          "system_type": "model",
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {
+            "trace": {
+              "accuracy": 3.775,
+              "comprehensiveness": 3.6,
+              "expression": 4.0,
+              "relevance": 4.35,
+              "trustworthiness": 3.9
+            }
+          },
+          "detail": {
+            "accuracy": 3.775,
+            "comprehensiveness": 3.6,
+            "expression": 4.0,
+            "relevance": 4.35,
+            "trustworthiness": 3.9
+          },
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "bertscore": 0.817,
+            "rouge_l": 0.1824,
+            "temporal_next": 0.4545,
+            "temporal_past": 1.0,
+            "trace": 3.925
+          },
+          "label": "google_gemini-3.1-pro-preview",
+          "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
+          "n_attempted": 40,
+          "n_complete": 40,
+          "n_failed": 0,
+          "n_generated": 40,
+          "n_partial": 0,
+          "n_scored": 40,
+          "n_unreached": 0,
+          "provider": "vertex",
+          "scored": true,
+          "scored_at": "2026-08-25T23:45:39Z",
+          "settings": "temperature 0, max tokens 4096",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "google_gemini-3.1-pro-preview",
+          "system_type": "model",
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {
+            "trace": {
+              "accuracy": 3.95,
+              "comprehensiveness": 3.55,
+              "expression": 4.1,
+              "relevance": 4.375,
+              "trustworthiness": 3.975
+            }
+          },
+          "detail": {
+            "accuracy": 3.95,
+            "comprehensiveness": 3.55,
+            "expression": 4.1,
+            "relevance": 4.375,
+            "trustworthiness": 3.975
+          },
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "bertscore": 0.8189,
+            "rouge_l": 0.186,
+            "temporal_next": 0.3636,
+            "temporal_past": 0.9706,
+            "trace": 3.99
+          },
+          "label": "google_gemini-3.7-flash",
+          "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
+          "n_attempted": 40,
+          "n_complete": 40,
+          "n_failed": 0,
+          "n_generated": 40,
+          "n_partial": 0,
+          "n_scored": 40,
+          "n_unreached": 0,
+          "provider": "vertex",
+          "scored": true,
+          "scored_at": "2026-08-25T23:45:39Z",
+          "settings": "temperature 0, max tokens 4096",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "google_gemini-3.7-flash",
+          "system_type": "model",
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {
+            "trace": {
+              "accuracy": 3.6,
+              "comprehensiveness": 4.225,
+              "expression": 4.2,
+              "relevance": 3.95,
+              "trustworthiness": 3.825
+            }
+          },
+          "detail": {
+            "accuracy": 3.6,
+            "comprehensiveness": 4.225,
+            "expression": 4.2,
+            "relevance": 3.95,
+            "trustworthiness": 3.825
+          },
+          "effort": "medium",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "bertscore": 0.8113,
+            "rouge_l": 0.1504,
+            "temporal_next": 0.2727,
+            "temporal_past": 1.0,
+            "trace": 3.96
+          },
+          "label": "gpt-5.6-luna",
+          "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
+          "n_attempted": 40,
+          "n_complete": 40,
+          "n_failed": 0,
+          "n_generated": 40,
+          "n_partial": 0,
+          "n_scored": 40,
+          "n_unreached": 0,
+          "provider": "openai",
+          "scored": true,
+          "scored_at": "2026-08-25T23:45:39Z",
+          "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
+          "settings_differ": true,
+          "source": "",
+          "system_id": "gpt-5.6-luna",
+          "system_type": "model",
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {
+            "trace": {
+              "accuracy": 3.775,
+              "comprehensiveness": 4.3,
+              "expression": 4.25,
+              "relevance": 4.35,
+              "trustworthiness": 3.875
+            }
+          },
+          "detail": {
+            "accuracy": 3.775,
+            "comprehensiveness": 4.3,
+            "expression": 4.25,
+            "relevance": 4.35,
+            "trustworthiness": 3.875
+          },
+          "effort": "medium",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "bertscore": 0.816,
+            "rouge_l": 0.1692,
+            "temporal_next": 0.5455,
+            "temporal_past": 1.0,
+            "trace": 4.11
+          },
+          "label": "gpt-5.6-sol",
+          "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
+          "n_attempted": 40,
+          "n_complete": 40,
+          "n_failed": 0,
+          "n_generated": 40,
+          "n_partial": 0,
+          "n_scored": 40,
+          "n_unreached": 0,
+          "provider": "openai",
+          "scored": true,
+          "scored_at": "2026-08-25T23:45:39Z",
+          "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
+          "settings_differ": true,
+          "source": "",
+          "system_id": "gpt-5.6-sol",
+          "system_type": "model",
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {
+            "trace": {
+              "accuracy": 3.8,
+              "comprehensiveness": 4.25,
+              "expression": 4.2,
+              "relevance": 4.2,
+              "trustworthiness": 3.775
+            }
+          },
+          "detail": {
+            "accuracy": 3.8,
+            "comprehensiveness": 4.25,
+            "expression": 4.2,
+            "relevance": 4.2,
+            "trustworthiness": 3.775
+          },
+          "effort": "medium",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "bertscore": 0.8145,
+            "rouge_l": 0.1553,
+            "temporal_next": 0.4545,
+            "temporal_past": 0.9706,
+            "trace": 4.045
+          },
+          "label": "gpt-5.6-terra",
+          "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
+          "n_attempted": 40,
+          "n_complete": 40,
+          "n_failed": 0,
+          "n_generated": 40,
+          "n_partial": 0,
+          "n_scored": 40,
+          "n_unreached": 0,
+          "provider": "openai",
+          "scored": true,
+          "scored_at": "2026-08-25T23:45:39Z",
+          "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
+          "settings_differ": true,
+          "source": "",
+          "system_id": "gpt-5.6-terra",
+          "system_type": "model",
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {
+            "trace": {
+              "accuracy": 3.3,
+              "comprehensiveness": 3.725,
+              "expression": 4.0,
+              "relevance": 3.925,
+              "trustworthiness": 3.4
+            }
+          },
+          "detail": {
+            "accuracy": 3.3,
+            "comprehensiveness": 3.725,
+            "expression": 4.0,
+            "relevance": 3.925,
+            "trustworthiness": 3.4
+          },
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "bertscore": 0.8083,
+            "rouge_l": 0.1586,
+            "temporal_next": 0.0,
+            "temporal_past": 1.0,
+            "trace": 3.67
+          },
+          "label": "gpt-oss-120b",
+          "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
+          "n_attempted": 40,
+          "n_complete": 40,
+          "n_failed": 0,
+          "n_generated": 40,
+          "n_partial": 0,
+          "n_scored": 40,
+          "n_unreached": 0,
+          "provider": "einfra",
+          "scored": true,
+          "scored_at": "2026-08-25T23:45:39Z",
+          "settings": "temperature 0, max tokens 4096",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "gpt-oss-120b",
+          "system_type": "model",
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {
+            "trace": {
+              "accuracy": 3.5,
+              "comprehensiveness": 4.5,
+              "expression": 4.175,
+              "relevance": 3.75,
+              "trustworthiness": 3.575
+            }
+          },
+          "detail": {
+            "accuracy": 3.5,
+            "comprehensiveness": 4.5,
+            "expression": 4.175,
+            "relevance": 3.75,
+            "trustworthiness": 3.575
+          },
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "bertscore": 0.8124,
+            "rouge_l": 0.1089,
+            "temporal_next": 0.3636,
+            "temporal_past": 1.0,
+            "trace": 3.9
+          },
+          "label": "kimi-k3",
+          "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
+          "n_attempted": 40,
+          "n_complete": 40,
+          "n_failed": 0,
+          "n_generated": 40,
+          "n_partial": 0,
+          "n_scored": 40,
+          "n_unreached": 0,
+          "provider": "einfra",
+          "scored": true,
+          "scored_at": "2026-08-25T23:45:39Z",
+          "settings": "temperature 0, max tokens 4096",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "kimi-k3",
+          "system_type": "model",
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {
+            "trace": {
+              "accuracy": 3.55,
+              "comprehensiveness": 3.475,
+              "expression": 4.1,
+              "relevance": 4.15,
+              "trustworthiness": 3.475
+            }
+          },
+          "detail": {
+            "accuracy": 3.55,
+            "comprehensiveness": 3.475,
+            "expression": 4.1,
+            "relevance": 4.15,
+            "trustworthiness": 3.475
+          },
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "bertscore": 0.8152,
+            "rouge_l": 0.186,
+            "temporal_next": 0.1818,
+            "temporal_past": 1.0,
+            "trace": 3.75
+          },
+          "label": "mistral-medium-3.5",
+          "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
+          "n_attempted": 40,
+          "n_complete": 40,
+          "n_failed": 0,
+          "n_generated": 40,
+          "n_partial": 0,
+          "n_scored": 40,
+          "n_unreached": 0,
+          "provider": "einfra",
+          "scored": true,
+          "scored_at": "2026-08-25T23:45:39Z",
+          "settings": "temperature 0, max tokens 4096",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "mistral-medium-3.5",
+          "system_type": "model",
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {
+            "trace": {
+              "accuracy": 3.1,
+              "comprehensiveness": 3.825,
+              "expression": 4.075,
+              "relevance": 3.65,
+              "trustworthiness": 3.275
+            }
+          },
+          "detail": {
+            "accuracy": 3.1,
+            "comprehensiveness": 3.825,
+            "expression": 4.075,
+            "relevance": 3.65,
+            "trustworthiness": 3.275
+          },
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "bertscore": 0.8151,
+            "rouge_l": 0.1402,
+            "temporal_next": 0.2727,
+            "temporal_past": 1.0,
+            "trace": 3.585
+          },
+          "label": "qwen3.5-122b",
+          "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
+          "n_attempted": 40,
+          "n_complete": 40,
+          "n_failed": 0,
+          "n_generated": 40,
+          "n_partial": 0,
+          "n_scored": 40,
+          "n_unreached": 0,
+          "provider": "einfra",
+          "scored": true,
+          "scored_at": "2026-08-25T23:45:39Z",
+          "settings": "temperature 0, max tokens 4096",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "qwen3.5-122b",
+          "system_type": "model",
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {
+            "trace": {
+              "accuracy": 3.775,
+              "comprehensiveness": 3.5,
+              "expression": 4.05,
+              "relevance": 4.2,
+              "trustworthiness": 3.825
+            }
+          },
+          "detail": {
+            "accuracy": 3.775,
+            "comprehensiveness": 3.5,
+            "expression": 4.05,
+            "relevance": 4.2,
+            "trustworthiness": 3.825
+          },
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "bertscore": 0.8177,
+            "rouge_l": 0.1822,
+            "temporal_next": 0.0909,
+            "temporal_past": 1.0,
+            "trace": 3.87
+          },
+          "label": "qwen3.5-int4",
+          "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
+          "n_attempted": 40,
+          "n_complete": 40,
+          "n_failed": 0,
+          "n_generated": 40,
+          "n_partial": 0,
+          "n_scored": 40,
+          "n_unreached": 0,
+          "provider": "einfra",
+          "scored": true,
+          "scored_at": "2026-08-25T23:45:39Z",
+          "settings": "temperature 0, max tokens 16384",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "qwen3.5-int4",
+          "system_type": "model",
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {
+            "trace": {
+              "accuracy": 3.8718,
+              "comprehensiveness": 3.775,
+              "expression": 4.15,
+              "relevance": 4.175,
+              "trustworthiness": 3.975
+            }
+          },
+          "detail": {
+            "accuracy": 3.8718,
+            "comprehensiveness": 3.775,
+            "expression": 4.15,
+            "relevance": 4.175,
+            "trustworthiness": 3.975
+          },
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "bertscore": 0.8192,
+            "rouge_l": 0.1866,
+            "temporal_next": 0.2727,
+            "temporal_past": 1.0,
+            "trace": 3.9897
+          },
+          "label": "qwen3.8-27b",
+          "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
+          "n_attempted": 40,
+          "n_complete": 39,
+          "n_failed": 0,
+          "n_generated": 40,
+          "n_partial": 1,
+          "n_scored": 40,
+          "n_unreached": 0,
+          "provider": "einfra",
+          "scored": true,
+          "scored_at": "2026-08-25T23:45:39Z",
+          "settings": "temperature 0, max tokens 16384",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "qwen3.8-27b",
+          "system_type": "model",
+          "unreached_reasons": {}
+        }
+      ],
+      "scored": true,
+      "subtitle": "scored by gpt-5.6-terra",
+      "title": "iCARE / iHOPE · 17 sections per session",
+      "track": "icare",
+      "versions": {
+        "harness_version": "0.2.0",
+        "judge_model": "gpt-5.6-terra",
         "judge_prompt_version": "icare-trace-v1",
         "prompt_version": "icare-zeroshot-v1"
       }
