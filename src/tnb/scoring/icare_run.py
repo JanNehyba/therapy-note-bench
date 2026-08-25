@@ -105,9 +105,18 @@ def from_generations(
 
     A session whose expert note is missing is skipped rather than scored: every
     measure on this track compares against that note, so there is nothing to
-    compare to. A section file that failed to generate is rendered as "Nil",
-    which is the same thing a model saying nothing would produce -- the
-    generation coverage row is where a failure is reported, not here.
+    compare to.
+
+    **A note is skipped when any of its 17 sections never reached the model.**
+    Rendering the gap as "Nil" -- which is what this did -- scores the model as
+    though it had chosen to leave the field blank, and a rate limit is not a
+    choice. glm-5 lost one section to e-INFRA refusing a fourth parallel
+    request, and that would have counted against its temporal and ROUGE-L
+    scores as an empty field.
+
+    A section the *model* failed to write is a different case and is not skipped:
+    an empty answer or an unparseable one is the model's own doing, and "Nil" is
+    the honest rendering of it.
     """
     cache_dir = cache_dir or generation.CACHE_DIR
     by_id = {session.id: session for session in sessions}
@@ -125,6 +134,7 @@ def from_generations(
                     continue
 
                 sections: dict[str, str] = {}
+                unreached = False
                 for unit_path in session_dir.glob("*.json"):
                     try:
                         record = json.loads(unit_path.read_text(encoding="utf-8"))
@@ -132,7 +142,9 @@ def from_generations(
                         continue
                     if record.get("ok"):
                         sections[unit_path.stem] = record.get("text", "")
-                if not sections:
+                    elif results.is_infrastructure_failure(record.get("error")):
+                        unreached = True
+                if not sections or unreached:
                     continue
 
                 yield Candidate(

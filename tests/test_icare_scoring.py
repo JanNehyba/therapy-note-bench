@@ -261,3 +261,61 @@ def test_every_measure_the_page_shows_is_documented_here():
 def test_trace_says_it_has_no_human_anchor_wherever_it_appears():
     """A CLAUDE.md invariant, asserted rather than promised."""
     assert "no human anchor" in scorer.MEASURES["trace"]["caveat"]
+
+
+def test_a_section_the_endpoint_refused_does_not_score_as_a_blank_field(tmp_path):
+    """The same misattribution one level down from the coverage row.
+
+    A section rendered as "Nil" scores as a field the model chose to leave
+    empty. A rate limit is not a choice: glm-5 lost one section to e-INFRA
+    refusing a fourth parallel request, and that would have counted against its
+    temporal and ROUGE-L scores.
+    """
+    import json
+
+    from tnb.datasets.base import Session
+    from tnb.scoring import icare_run
+
+    session_dir = tmp_path / "einfra" / "icare" / icare.PROMPT_VERSION / "a-model" / "s1"
+    session_dir.mkdir(parents=True)
+    for number in range(1, 18):
+        failed = number == 3
+        (session_dir / f"section-{number:02d}.json").write_text(
+            json.dumps(
+                {
+                    "ok": not failed,
+                    "text": "" if failed else "content",
+                    "error": "HTTP429: rate limit" if failed else None,
+                }
+            ),
+            encoding="utf-8",
+        )
+
+    sessions = [Session(id="s1", source="ihope", turns=(), reference="Patient Particulars : x")]
+    assert list(icare_run.from_generations(sessions, cache_dir=tmp_path)) == []
+
+
+def test_a_section_the_model_failed_to_write_is_still_scored(tmp_path):
+    """Its own empty answer is the model's doing, and "Nil" is honest for that."""
+    import json
+
+    from tnb.datasets.base import Session
+    from tnb.scoring import icare_run
+
+    session_dir = tmp_path / "einfra" / "icare" / icare.PROMPT_VERSION / "a-model" / "s1"
+    session_dir.mkdir(parents=True)
+    for number in range(1, 18):
+        failed = number == 3
+        (session_dir / f"section-{number:02d}.json").write_text(
+            json.dumps(
+                {
+                    "ok": not failed,
+                    "text": "" if failed else "content",
+                    "error": "empty content" if failed else None,
+                }
+            ),
+            encoding="utf-8",
+        )
+
+    sessions = [Session(id="s1", source="ihope", turns=(), reference="Patient Particulars : x")]
+    assert len(list(icare_run.from_generations(sessions, cache_dir=tmp_path))) == 1
