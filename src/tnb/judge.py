@@ -44,7 +44,30 @@ CACHE_DIR = REPO_ROOT / "scores"
 
 #: The judge, pinned. Part of every result row's comparability key: changing it
 #: starts a new leaderboard rather than rewriting the old one.
-DEFAULT_MODEL = "gemini-2.5-pro"
+DEFAULT_MODEL = "gemini-3.1-pro-preview"
+
+#: The second judge, and why there is one. Both of these models also *write*
+#: notes here, so each is marking its own homework; two of them, scoring
+#: everything including their own family, turn that from a caveat into a number
+#: -- see tnb.scoring.preference.
+#:
+#: Chosen by measurement over the same 150 notes the humans rated, not by
+#: reputation. Krippendorff's alpha on the rubric, against a human-vs-human
+#: ceiling of 0.504:
+#:
+#:     gemini-3.1-pro-preview  0.587      gpt-5.6-terra  0.520
+#:     gemini-2.5-pro          0.574      gpt-5.6-sol    0.510
+#:     gemini-2.5-flash        0.550
+#:     gemini-3.5-flash        0.543
+#:     gemini-3.7-flash        0.540
+#:
+#: Two things that ordering says and a release-date ordering would not. The
+#: newest flash is the *worst* of the three flashes, and the flagship `sol` is
+#: worse than the cheaper `terra` -- twice, from two vendors, capability does not
+#: predict judge quality on this task. And every one of them agrees with a
+#: therapist more often than the two therapists agree with each other (77.2%),
+#: so "worst" here means 78.6% against 81.5%, not bad.
+SECOND_JUDGE = "gpt-5.6-terra"
 
 #: Candidates worth measuring against the human annotators before one is chosen.
 #: Reputation does not pick a judge here; agreement with two therapists does.

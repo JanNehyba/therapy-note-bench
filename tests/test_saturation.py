@@ -213,7 +213,7 @@ def test_answers_from_two_providers_do_not_merge(tmp_path):
 
     for provider in ("einfra", "other"):
         path = judge.cache_path(
-            "gemini-2.5-pro",
+            judge.DEFAULT_MODEL,
             tneval.JUDGE_PROMPT_VERSION,
             provider,
             "qwen3.5-122b",
@@ -246,7 +246,7 @@ def test_a_second_judge_prompt_version_is_never_mixed_in(tmp_path):
     for version, answer in ((tneval.JUDGE_PROMPT_VERSION, "Yes"), ("tneval-rubric-v2", "No")):
         judge.write_cached(
             judge.cache_path(
-                "gemini-2.5-pro", version, "einfra", "gemma4", "0", "x.y", root=tmp_path
+                judge.DEFAULT_MODEL, version, "einfra", "gemma4", "0", "x.y", root=tmp_path
             ),
             {
                 "ok": True,
