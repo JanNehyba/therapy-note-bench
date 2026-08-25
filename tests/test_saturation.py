@@ -366,3 +366,43 @@ def test_a_half_answered_session_does_not_enter_the_bootstrap():
     )
 
     assert list(scores["gemma4"]) == ["0"]
+
+
+def test_two_judge_settings_in_one_cache_are_not_averaged_together(tmp_path):
+    """The cache is scoped by judge model and prompt version, not by settings.
+
+    A thinking budget is a setting: raising it from 128 to 256 re-asks every
+    question, so mid-run the directory holds both and averaging across them
+    reports a number no single judge produced. The leaderboard's rule that two
+    fingerprints never share a table has to hold here too, and this is the one
+    place it was not enforced.
+    """
+    from tnb import judge
+
+    for session, budget, answer in (("0", 128, "Yes"), ("1", 256, "No"), ("2", 256, "No")):
+        judge.write_cached(
+            judge.cache_path(
+                judge.DEFAULT_MODEL,
+                tneval.JUDGE_PROMPT_VERSION,
+                "einfra",
+                "gemma4",
+                session,
+                "subjective.rubric_completeness.subjective-symptoms",
+                root=tmp_path,
+            ),
+            {
+                "ok": True,
+                "provider": "einfra",
+                "system_id": "gemma4",
+                "session_id": session,
+                "unit": "subjective.rubric_completeness.subjective-symptoms",
+                "answer": answer,
+                "judge_fingerprint": {"model": judge.DEFAULT_MODEL, "thinking_budget": budget},
+            },
+        )
+
+    answers = saturation.load_answers(tmp_path)
+
+    assert sorted(session for _system, session in answers) == ["1", "2"], "the larger set"
+    assert answers.chosen_fingerprint["thinking_budget"] == 256
+    assert sum(answers.other_fingerprints.values()) == 1, "and it says what it left out"

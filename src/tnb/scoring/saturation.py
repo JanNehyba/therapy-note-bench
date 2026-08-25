@@ -120,7 +120,23 @@ def label_for(provider: str, system_id: str, providers_by_system: dict) -> str:
     )
 
 
-def load_answers(root: Path | None = None, judge_model: str = judge.DEFAULT_MODEL) -> dict:
+class Answers(defaultdict):
+    """Judge answers keyed (system, session) -> {unit: answer}, from one instrument.
+
+    A plain dict of the answers plus the two facts a caller needs in order to
+    say what was analysed: which judge settings produced them, and what else
+    was in the cache and left out.
+    """
+
+    #: The `judge_fingerprint` every answer in here shares.
+    chosen_fingerprint: dict | None = None
+    #: Fingerprints found in the cache and not used, with how many answers each
+    #: had. Non-empty during a re-scoring run, and the caller says so rather
+    #: than silently reporting a subset.
+    other_fingerprints: dict[str, int] = {}  # noqa: RUF012
+
+
+def load_answers(root: Path | None = None, judge_model: str = judge.DEFAULT_MODEL) -> Answers:
     """Every judge answer, keyed (system, session) -> {question unit: answer}.
 
     Read from the answer cache rather than from the result rows, because the
@@ -139,12 +155,12 @@ def load_answers(root: Path | None = None, judge_model: str = judge.DEFAULT_MODE
         / judge._slug_model(judge_model)
         / judge._slug_model(tneval.JUDGE_PROMPT_VERSION)
     )
-    answers: dict[tuple[str, str], dict[str, str]] = defaultdict(dict)
+    answers = Answers(dict)
     if not base.exists():
         return answers
 
     records = []
-    providers_by_system: dict[str, set[str]] = defaultdict(set)
+    by_fingerprint: dict[str, list[dict]] = defaultdict(list)
     for path in base.rglob("*.json"):
         try:
             record = json.loads(path.read_text(encoding="utf-8"))
@@ -152,7 +168,29 @@ def load_answers(root: Path | None = None, judge_model: str = judge.DEFAULT_MODE
             continue
         if not record.get("ok"):
             continue
-        records.append(record)
+        by_fingerprint[json.dumps(record.get("judge_fingerprint"), sort_keys=True)].append(record)
+
+    # One instrument at a time. The directory is scoped by judge model and
+    # prompt version but not by the judge's *settings*, and a thinking budget
+    # is a setting: raising it from 128 to 256 re-asks every question, so
+    # mid-run the cache holds both and averaging across them would report a
+    # number no single judge produced. The leaderboard's rule that two
+    # fingerprints never share a table has to hold here too.
+    #
+    # The largest set wins, deterministically: during a re-scoring run that is
+    # the complete old instrument rather than the half-finished new one, which
+    # is the conservative choice. `dropped_fingerprints` says what was left
+    # out so the caller can report it.
+    if by_fingerprint:
+        chosen = max(sorted(by_fingerprint), key=lambda key: len(by_fingerprint[key]))
+        records = by_fingerprint[chosen]
+        answers.chosen_fingerprint = json.loads(chosen) if chosen != "null" else None
+        answers.other_fingerprints = {
+            key: len(group) for key, group in sorted(by_fingerprint.items()) if key != chosen
+        }
+
+    providers_by_system: dict[str, set[str]] = defaultdict(set)
+    for record in records:
         providers_by_system[record["system_id"]].add(record.get("provider", ""))
 
     for record in records:

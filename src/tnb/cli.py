@@ -615,6 +615,22 @@ def cmd_calibrate(args: argparse.Namespace) -> int:
     return 0
 
 
+def _say_which_instrument(judge_model: str, answers) -> None:
+    """Name the judge settings an analysis read, and what it left out.
+
+    The answer cache is scoped by judge model and prompt version but not by the
+    judge's settings, so during a re-scoring run it holds two. Picking the
+    larger set is the right call and reporting it is the rest of the call: a
+    number over 128-token answers and a number over 256-token answers are two
+    instruments, and the reader has to know which one this is.
+    """
+    if answers.chosen_fingerprint:
+        settings = ", ".join(f"{k}={v}" for k, v in sorted(answers.chosen_fingerprint.items()))
+        print(f"{judge_model}: reading answers at {settings}")
+    for other, count in answers.other_fingerprints.items():
+        print(f"  ignoring {count} answer(s) at different settings: {other}", file=sys.stderr)
+
+
 def cmd_preference(args: argparse.Namespace) -> int:
     """Does either judge score its own family higher than a neutral rater would?
 
@@ -630,6 +646,7 @@ def cmd_preference(args: argparse.Namespace) -> int:
     by_judge = {}
     for judge_model in (args.judge_a, args.judge_b):
         answers = saturation.load_answers(judge_model=judge_model)
+        _say_which_instrument(judge_model, answers)
         if not answers:
             print(
                 f"No cached answers for {judge_model!r}. Both judges must have scored "
@@ -696,6 +713,7 @@ def cmd_saturation(args: argparse.Namespace) -> int:
 
     from tnb.scoring import saturation
 
+    _say_which_instrument(args.judge_model, saturation.load_answers(judge_model=args.judge_model))
     data = saturation.build(judge_model=args.judge_model)
     if data is None:
         print(
