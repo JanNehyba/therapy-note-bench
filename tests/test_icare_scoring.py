@@ -657,3 +657,26 @@ def test_results_come_back_in_the_order_they_were_submitted(tmp_path):
     assert [note.candidate.session_id for note in scored] == [
         candidate.session_id for candidate in candidates
     ]
+
+
+def test_the_temporal_denominators_in_the_column_text_match_the_corpus():
+    """Those two columns publish fractions of 34 and of 11, not of 40.
+
+    A `temporal_next` of 0.09 is one session out of eleven, which is a much
+    weaker statement than the same figure over the corpus, and the only place
+    the reader is told is the column definition on the page. The numbers there
+    are written out in prose, so they can go stale without anything failing --
+    unless this asks the corpus.
+    """
+    profile = corpus.profile_ihope()
+    if profile is None:
+        pytest.skip("iHOPE not fetched; the profile cannot be measured here")
+
+    answered = {section.number: section.filled for section in profile}
+
+    for measure, number in scorer.TEMPORAL_MEASURES.items():
+        text = scorer.MEASURES[measure]["definition"]
+        assert f"{answered[number]} sessions" in text, (
+            f"{measure} says {text!r} but the experts answered section {number} "
+            f"in {answered[number]} of the sessions"
+        )
