@@ -570,7 +570,15 @@ def aggregate(answers: dict[str, str], tasks: list[JudgeTask] | None = None) -> 
             if unit.startswith(f"{section}.rubric_conciseness.")
         ]
         expected_sentences = None if expected_conciseness is None else expected_conciseness[section]
-        if sentences and (expected_sentences is None or len(sentences) == expected_sentences):
+        # `expected_sentences is None` means the note text was not available, so
+        # how many sentence questions *should* have been asked is unknowable.
+        # That used to publish the mean of whatever arrived: one "yes" of four
+        # sentences read as a conciseness of 1.00 with nothing marking it. Not
+        # knowing the denominator is not the same as the denominator being the
+        # numerator's length, so nothing is published. Live scoring always
+        # passes `tasks` and is unaffected; the analyses that do not pass them
+        # ask for completeness.
+        if sentences and len(sentences) == expected_sentences:
             section_scores["conciseness"] = sum(sentences) / len(sentences)
         elif sentences:
             # The half of the denominator fix that completeness got and this did

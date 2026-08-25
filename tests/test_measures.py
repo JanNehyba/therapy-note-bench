@@ -20,10 +20,17 @@ from tnb import report, results
 from tnb.scoring import tneval
 
 
-def _tneval_answers(note: dict, transcript: str) -> dict[str, str]:
-    """Answer every question the protocol asks, so nothing is missing by accident."""
+def _tneval_scores(note: dict, transcript: str) -> tneval.Scores:
+    """Every question the protocol asks, answered, and scored the way a run does.
+
+    The tasks are passed to `aggregate` as well as used to build the answers.
+    Without them conciseness has no denominator -- the note text is what says
+    how many sentence questions there should have been -- and the scorer now
+    declines to publish a mean over however many happened to arrive.
+    """
     tasks = tneval.build_tasks(note, transcript)
-    return {task.unit: ("Yes" if task.kind.startswith("rubric") else "4") for task in tasks}
+    answers = {task.unit: ("Yes" if task.kind.startswith("rubric") else "4") for task in tasks}
+    return tneval.aggregate(answers, tasks)
 
 
 NOTE = {
@@ -41,7 +48,7 @@ def test_every_measure_a_scorer_produces_is_either_displayed_or_declared_interna
     scorer's explicit internal list. A third possibility -- produced, stored, and
     read by nobody -- is the bug, and this is the assertion that names it.
     """
-    scores = tneval.aggregate(_tneval_answers(NOTE, "therapist: hello"))
+    scores = _tneval_scores(NOTE, "therapist: hello")
     produced = {key for values in scores.by_section.values() for key in values}
     produced |= set(scores.headline)
 
@@ -56,7 +63,7 @@ def test_every_measure_a_scorer_produces_is_either_displayed_or_declared_interna
 
 def test_every_displayed_column_is_actually_produced():
     """The other direction: a column with no producer renders as a dash forever."""
-    scores = tneval.aggregate(_tneval_answers(NOTE, "therapist: hello"))
+    scores = _tneval_scores(NOTE, "therapist: hello")
     produced = set(scores.headline)
     displayed = {key for key, _ in report.COLUMNS[results.TRACK_TNEVAL]}
 
@@ -65,7 +72,7 @@ def test_every_displayed_column_is_actually_produced():
 
 def test_faithfulness_is_named_the_same_in_the_headline_and_in_every_section():
     """The original defect, stated directly."""
-    scores = tneval.aggregate(_tneval_answers(NOTE, "therapist: hello"))
+    scores = _tneval_scores(NOTE, "therapist: hello")
 
     assert "faithfulness" in scores.headline
     for section, values in scores.by_section.items():
@@ -160,3 +167,22 @@ def test_a_row_written_after_the_rename_is_left_alone():
     row = results.from_dict(current)
 
     assert row.metrics.by_section["plan"] == {"faithfulness": 4.0}
+
+
+def test_conciseness_is_not_published_when_its_denominator_is_unknown():
+    """How many sentence questions there should have been is a fact about the note.
+
+    Without the note text there is no denominator, and the mean of whatever
+    answers arrived is not conciseness: one "yes" of four sentences read as a
+    perfect 1.00 with nothing marking it. Not knowing the denominator is not the
+    same as the denominator being the numerator's length.
+    """
+    tasks = tneval.build_tasks(NOTE, "therapist: hello")
+    answers = {task.unit: ("Yes" if task.kind.startswith("rubric") else "4") for task in tasks}
+
+    with_note = tneval.aggregate(answers, tasks)
+    without = tneval.aggregate(answers)
+
+    assert with_note.headline["conciseness"] == 1.0
+    assert "conciseness" not in without.headline
+    assert without.headline["completeness"] == 1.0, "completeness needs no note text"
