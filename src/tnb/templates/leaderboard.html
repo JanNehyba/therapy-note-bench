@@ -445,7 +445,10 @@ function intervalPlot(rows, human) {
     const y = top + i * rowH + rowH / 2;
     const colour = r.system === 'therapist' ? 'var(--muted)' : 'var(--accent)';
     return `<g>
-      <title>${r.system}: ${r.mean.toFixed(3)} (95% interval ${r.low.toFixed(3)} to ${r.high.toFixed(3)})</title>
+      <title>${r.system}: ${r.mean.toFixed(3)} over the shared conversations (95% interval ${r.low.toFixed(3)} to ${r.high.toFixed(3)})${
+        r.own_mean != null && r.own_sessions !== r.sessions
+          ? ` — the table shows ${r.own_mean.toFixed(3)}, over all ${r.own_sessions} of its own`
+          : ''}</title>
       <text class="name" x="${padL - 12}" y="${y + 4}" text-anchor="end">${r.system}</text>
       <line x1="${x(r.low).toFixed(1)}" x2="${x(r.high).toFixed(1)}" y1="${y}" y2="${y}"
             stroke="${colour}" stroke-width="2" stroke-linecap="round"></line>
@@ -518,16 +521,36 @@ function renderSaturation(data) {
        ${s.still_scoring.join(', ')}. Including a half-scored system would shrink the shared
        corpus for everyone else.</p>` : '';
 
+  // Two Completeness figures on one page is a contradiction unless the page
+  // says why. The table averages each system over its own notes; this panel
+  // averages every system over the conversations they all share, because a
+  // paired bootstrap has no meaning otherwise. When those differ the orderings
+  // can differ too, and that is worth stating rather than hiding.
+  const narrowedBy = s.narrowed_by || {};
+  const narrowedNames = Object.keys(narrowedBy);
+  const denominator = s.corpus_sessions && s.corpus_sessions > s.sessions
+    ? `<p class="note"><strong>These numbers are not the table's numbers, and they should not
+         be.</strong> The table above averages each system over its own notes; this section
+         averages every system over the <strong>${s.sessions} of ${s.corpus_sessions}</strong>
+         conversations they <em>all</em> have, because a paired comparison is only paired on a
+         shared set. The set is smaller because ${narrowedNames.map(n =>
+           `${esc(n)} was scored on ${narrowedBy[n]} fewer`).join(', ')}. Expect small
+         differences from the table, and expect closely-matched systems to change places: that
+         two orderings disagree over which 42 of 50 conversations you use is itself a result
+         about how tightly packed these models are.</p>`
+    : '';
+
   document.getElementById('saturation-body').innerHTML = `
     <p class="blurb">A ranking always prints an order. This asks whether the evidence supports one.
        Both parts read the individual judgements, not the averages, over the
        <strong>${s.sessions} conversations every system wrote a note for</strong>.</p>
+    ${denominator}
     ${pending}
 
-    <h4>Completeness, with the range the evidence supports</h4>
+    <h4>Completeness over the shared conversations, with the range the evidence supports</h4>
     <p class="blurb">95% intervals from a paired bootstrap over conversations — the same resample
        scores every system, so a hard conversation counts as difficulty rather than disagreement.
-       The dashed line is the therapist.</p>
+       The dashed line is the therapist. Hover a bar for the table's figure beside this one.</p>
     ${intervalPlot(s.intervals.filter(r => r.system !== 'therapist'),
                    s.intervals.find(r => r.system === 'therapist'))}
     <p class="blurb" style="margin-top:.9rem">Ranked, with systems the evidence cannot separate

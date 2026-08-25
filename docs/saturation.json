@@ -4,6 +4,7 @@
     "samples": 2000,
     "seed": 20260824
   },
+  "corpus_sessions": 50,
   "criteria": [
     {
       "by_system": {
@@ -595,88 +596,119 @@
       "high": 0.695,
       "low": 0.6174,
       "mean": 0.6577,
+      "own_mean": 0.6538,
+      "own_sessions": 50,
       "system": "kimi-k3"
     },
     {
       "high": 0.6843,
       "low": 0.6154,
       "mean": 0.6505,
+      "own_mean": 0.6435,
+      "own_sessions": 50,
       "system": "qwen3.5-int4"
     },
     {
       "high": 0.6744,
       "low": 0.6205,
       "mean": 0.6475,
+      "own_mean": 0.6441,
+      "own_sessions": 50,
       "system": "qwen3.5-122b"
     },
     {
       "high": 0.6381,
       "low": 0.5738,
       "mean": 0.6054,
+      "own_mean": 0.5971,
+      "own_sessions": 50,
       "system": "glm-5"
     },
     {
       "high": 0.6203,
       "low": 0.5542,
       "mean": 0.5876,
+      "own_mean": 0.5775,
+      "own_sessions": 50,
       "system": "qwen3.8-27b"
     },
     {
       "high": 0.6122,
       "low": 0.547,
       "mean": 0.5787,
+      "own_mean": 0.5776,
+      "own_sessions": 50,
       "system": "deepseek-v4-flash-thinking"
     },
     {
       "high": 0.613,
       "low": 0.5424,
       "mean": 0.5763,
+      "own_mean": 0.5743,
+      "own_sessions": 50,
       "system": "glm-5.2"
     },
     {
       "high": 0.5993,
       "low": 0.5492,
       "mean": 0.575,
+      "own_mean": 0.575,
+      "own_sessions": 42,
       "system": "gpt-oss-120b"
     },
     {
       "high": 0.5965,
       "low": 0.527,
       "mean": 0.5614,
+      "own_mean": 0.556,
+      "own_sessions": 50,
       "system": "gemma4"
     },
     {
       "high": 0.5814,
       "low": 0.5322,
       "mean": 0.5573,
+      "own_mean": 0.5579,
+      "own_sessions": 50,
       "system": "mistral-medium-3.5"
     },
     {
       "high": 0.5605,
       "low": 0.4984,
       "mean": 0.528,
+      "own_mean": 0.524,
+      "own_sessions": 50,
       "system": "deepseek-v4-flash"
     },
     {
       "high": 0.4795,
       "low": 0.4185,
       "mean": 0.4473,
+      "own_mean": 0.4489,
+      "own_sessions": 50,
       "system": "mistral-large-v2"
     },
     {
       "high": 0.4365,
       "low": 0.3788,
       "mean": 0.4062,
+      "own_mean": 0.406,
+      "own_sessions": 50,
       "system": "llama-3.1-70b"
     },
     {
       "high": 0.3737,
       "low": 0.3,
       "mean": 0.3351,
+      "own_mean": 0.3412,
+      "own_sessions": 50,
       "system": "therapist"
     }
   ],
   "judge_model": "gemini-2.5-pro",
+  "narrowed_by": {
+    "gpt-oss-120b": 8
+  },
   "sessions": 42,
   "still_scoring": [],
   "verdict_counts": {

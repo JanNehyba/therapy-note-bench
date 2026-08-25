@@ -315,8 +315,29 @@ class SystemAggregate:
 
     notes: list[NoteResult] = field(default_factory=list)
 
+    @property
+    def complete(self) -> list[NoteResult]:
+        """Notes the judge answered in full.
+
+        The headline averages these and nothing else. A note scored over three
+        of four sections is a different measurement from one scored over four,
+        and mixing them produces a figure whose denominator varies per model --
+        with the variation driven by which judge calls happened to fail, which
+        is not a property of the note.
+        """
+        return [note for note in self.notes if note.scores.is_complete]
+
+    @property
+    def n_partial(self) -> int:
+        """Notes left out of the headline because the judging is incomplete."""
+        return len(self.notes) - len(self.complete)
+
     def metrics(self) -> Metrics:
-        headline = _mean_of_dicts([note.scores.headline for note in self.notes])
+        usable = self.complete
+        headline = _mean_of_dicts([note.scores.headline for note in usable])
+        # Sections keep every note that has them: a section the judge finished
+        # is a real measurement even when a sibling section failed, and dropping
+        # it would lose detail the headline is right to exclude.
         by_section = {
             section: _mean_of_dicts(
                 [

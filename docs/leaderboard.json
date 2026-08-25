@@ -353,7 +353,181 @@
     "sessions": 40
   },
   "generated_from": "rows.jsonl",
-  "judges": null,
+  "judges": {
+    "judges": [
+      {
+        "agreements": [
+          {
+            "humans": 0.5037692102193586,
+            "judge": 0.5750196747444976,
+            "n": 3450,
+            "name": "rubric_completeness",
+            "statistic": "Cohen's kappa"
+          },
+          {
+            "humans": 0.13096836110903934,
+            "judge": 0.3152597171539703,
+            "n": 600,
+            "name": "likert_completeness",
+            "statistic": "Spearman rho"
+          },
+          {
+            "humans": 0.19210453252909696,
+            "judge": 0.027486768976666322,
+            "n": 600,
+            "name": "likert_conciseness",
+            "statistic": "Spearman rho"
+          },
+          {
+            "humans": 0.1830973712087935,
+            "judge": 0.06321627210801624,
+            "n": 600,
+            "name": "likert_faithfulness",
+            "statistic": "Spearman rho"
+          }
+        ],
+        "judge_model": "gemini-2.5-pro",
+        "rubric_beats_likert": true
+      },
+      {
+        "agreements": [
+          {
+            "humans": 0.5040468120704713,
+            "judge": 0.5868509856731878,
+            "n": 3442,
+            "name": "rubric_completeness",
+            "statistic": "Cohen's kappa"
+          },
+          {
+            "humans": 0.1229156401883026,
+            "judge": 0.23555810411123734,
+            "n": 597,
+            "name": "likert_completeness",
+            "statistic": "Spearman rho"
+          },
+          {
+            "humans": 0.18545507425902644,
+            "judge": 0.08690681081977929,
+            "n": 597,
+            "name": "likert_conciseness",
+            "statistic": "Spearman rho"
+          },
+          {
+            "humans": 0.1799941940844287,
+            "judge": 0.1400013736769053,
+            "n": 598,
+            "name": "likert_faithfulness",
+            "statistic": "Spearman rho"
+          }
+        ],
+        "judge_model": "gemini-3.1-pro-preview",
+        "rubric_beats_likert": true
+      },
+      {
+        "agreements": [
+          {
+            "humans": 0.5037692102193586,
+            "judge": 0.5410317342372306,
+            "n": 3450,
+            "name": "rubric_completeness",
+            "statistic": "Cohen's kappa"
+          },
+          {
+            "humans": 0.13096836110903934,
+            "judge": 0.2219081346551724,
+            "n": 600,
+            "name": "likert_completeness",
+            "statistic": "Spearman rho"
+          },
+          {
+            "humans": 0.19210453252909696,
+            "judge": 0.03523282489426165,
+            "n": 600,
+            "name": "likert_conciseness",
+            "statistic": "Spearman rho"
+          },
+          {
+            "humans": 0.1830973712087935,
+            "judge": 0.10296225804106575,
+            "n": 600,
+            "name": "likert_faithfulness",
+            "statistic": "Spearman rho"
+          }
+        ],
+        "judge_model": "gemini-3.7-flash",
+        "rubric_beats_likert": true
+      },
+      {
+        "agreements": [
+          {
+            "humans": 0.5037692102193586,
+            "judge": 0.5432121638015741,
+            "n": 3450,
+            "name": "rubric_completeness",
+            "statistic": "Cohen's kappa"
+          },
+          {
+            "humans": 0.13096836110903934,
+            "judge": 0.3037134500820071,
+            "n": 600,
+            "name": "likert_completeness",
+            "statistic": "Spearman rho"
+          },
+          {
+            "humans": 0.19210453252909696,
+            "judge": 0.06125494206434177,
+            "n": 600,
+            "name": "likert_conciseness",
+            "statistic": "Spearman rho"
+          },
+          {
+            "humans": 0.1830973712087935,
+            "judge": 0.012154028047190022,
+            "n": 600,
+            "name": "likert_faithfulness",
+            "statistic": "Spearman rho"
+          }
+        ],
+        "judge_model": "gemini-3.5-flash",
+        "rubric_beats_likert": true
+      },
+      {
+        "agreements": [
+          {
+            "humans": 0.5037692102193586,
+            "judge": 0.5501506063074957,
+            "n": 3450,
+            "name": "rubric_completeness",
+            "statistic": "Cohen's kappa"
+          },
+          {
+            "humans": 0.13096836110903934,
+            "judge": 0.2879894530234797,
+            "n": 600,
+            "name": "likert_completeness",
+            "statistic": "Spearman rho"
+          },
+          {
+            "humans": 0.19210453252909696,
+            "judge": 0.1266635748527724,
+            "n": 600,
+            "name": "likert_conciseness",
+            "statistic": "Spearman rho"
+          },
+          {
+            "humans": 0.1830973712087935,
+            "judge": 0.14502652040288316,
+            "n": 600,
+            "name": "likert_faithfulness",
+            "statistic": "Spearman rho"
+          }
+        ],
+        "judge_model": "gemini-2.5-flash",
+        "rubric_beats_likert": true
+      }
+    ],
+    "notes": 150
+  },
   "licences": [
     {
       "licence": "Apache-2.0",
@@ -661,6 +835,7 @@
       "samples": 2000,
       "seed": 20260824
     },
+    "corpus_sessions": 50,
     "criteria": [
       {
         "by_system": {
@@ -1252,88 +1427,119 @@
         "high": 0.695,
         "low": 0.6174,
         "mean": 0.6577,
+        "own_mean": 0.6538,
+        "own_sessions": 50,
         "system": "kimi-k3"
       },
       {
         "high": 0.6843,
         "low": 0.6154,
         "mean": 0.6505,
+        "own_mean": 0.6435,
+        "own_sessions": 50,
         "system": "qwen3.5-int4"
       },
       {
         "high": 0.6744,
         "low": 0.6205,
         "mean": 0.6475,
+        "own_mean": 0.6441,
+        "own_sessions": 50,
         "system": "qwen3.5-122b"
       },
       {
         "high": 0.6381,
         "low": 0.5738,
         "mean": 0.6054,
+        "own_mean": 0.5971,
+        "own_sessions": 50,
         "system": "glm-5"
       },
       {
         "high": 0.6203,
         "low": 0.5542,
         "mean": 0.5876,
+        "own_mean": 0.5775,
+        "own_sessions": 50,
         "system": "qwen3.8-27b"
       },
       {
         "high": 0.6122,
         "low": 0.547,
         "mean": 0.5787,
+        "own_mean": 0.5776,
+        "own_sessions": 50,
         "system": "deepseek-v4-flash-thinking"
       },
       {
         "high": 0.613,
         "low": 0.5424,
         "mean": 0.5763,
+        "own_mean": 0.5743,
+        "own_sessions": 50,
         "system": "glm-5.2"
       },
       {
         "high": 0.5993,
         "low": 0.5492,
         "mean": 0.575,
+        "own_mean": 0.575,
+        "own_sessions": 42,
         "system": "gpt-oss-120b"
       },
       {
         "high": 0.5965,
         "low": 0.527,
         "mean": 0.5614,
+        "own_mean": 0.556,
+        "own_sessions": 50,
         "system": "gemma4"
       },
       {
         "high": 0.5814,
         "low": 0.5322,
         "mean": 0.5573,
+        "own_mean": 0.5579,
+        "own_sessions": 50,
         "system": "mistral-medium-3.5"
       },
       {
         "high": 0.5605,
         "low": 0.4984,
         "mean": 0.528,
+        "own_mean": 0.524,
+        "own_sessions": 50,
         "system": "deepseek-v4-flash"
       },
       {
         "high": 0.4795,
         "low": 0.4185,
         "mean": 0.4473,
+        "own_mean": 0.4489,
+        "own_sessions": 50,
         "system": "mistral-large-v2"
       },
       {
         "high": 0.4365,
         "low": 0.3788,
         "mean": 0.4062,
+        "own_mean": 0.406,
+        "own_sessions": 50,
         "system": "llama-3.1-70b"
       },
       {
         "high": 0.3737,
         "low": 0.3,
         "mean": 0.3351,
+        "own_mean": 0.3412,
+        "own_sessions": 50,
         "system": "therapist"
       }
     ],
     "judge_model": "gemini-2.5-pro",
+    "narrowed_by": {
+      "gpt-oss-120b": 8
+    },
     "sessions": 42,
     "still_scoring": [],
     "verdict_counts": {

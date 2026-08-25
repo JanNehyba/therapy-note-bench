@@ -1,0 +1,175 @@
+{
+  "judges": [
+    {
+      "agreements": [
+        {
+          "humans": 0.5037692102193586,
+          "judge": 0.5750196747444976,
+          "n": 3450,
+          "name": "rubric_completeness",
+          "statistic": "Cohen's kappa"
+        },
+        {
+          "humans": 0.13096836110903934,
+          "judge": 0.3152597171539703,
+          "n": 600,
+          "name": "likert_completeness",
+          "statistic": "Spearman rho"
+        },
+        {
+          "humans": 0.19210453252909696,
+          "judge": 0.027486768976666322,
+          "n": 600,
+          "name": "likert_conciseness",
+          "statistic": "Spearman rho"
+        },
+        {
+          "humans": 0.1830973712087935,
+          "judge": 0.06321627210801624,
+          "n": 600,
+          "name": "likert_faithfulness",
+          "statistic": "Spearman rho"
+        }
+      ],
+      "judge_model": "gemini-2.5-pro",
+      "rubric_beats_likert": true
+    },
+    {
+      "agreements": [
+        {
+          "humans": 0.5040468120704713,
+          "judge": 0.5868509856731878,
+          "n": 3442,
+          "name": "rubric_completeness",
+          "statistic": "Cohen's kappa"
+        },
+        {
+          "humans": 0.1229156401883026,
+          "judge": 0.23555810411123734,
+          "n": 597,
+          "name": "likert_completeness",
+          "statistic": "Spearman rho"
+        },
+        {
+          "humans": 0.18545507425902644,
+          "judge": 0.08690681081977929,
+          "n": 597,
+          "name": "likert_conciseness",
+          "statistic": "Spearman rho"
+        },
+        {
+          "humans": 0.1799941940844287,
+          "judge": 0.1400013736769053,
+          "n": 598,
+          "name": "likert_faithfulness",
+          "statistic": "Spearman rho"
+        }
+      ],
+      "judge_model": "gemini-3.1-pro-preview",
+      "rubric_beats_likert": true
+    },
+    {
+      "agreements": [
+        {
+          "humans": 0.5037692102193586,
+          "judge": 0.5410317342372306,
+          "n": 3450,
+          "name": "rubric_completeness",
+          "statistic": "Cohen's kappa"
+        },
+        {
+          "humans": 0.13096836110903934,
+          "judge": 0.2219081346551724,
+          "n": 600,
+          "name": "likert_completeness",
+          "statistic": "Spearman rho"
+        },
+        {
+          "humans": 0.19210453252909696,
+          "judge": 0.03523282489426165,
+          "n": 600,
+          "name": "likert_conciseness",
+          "statistic": "Spearman rho"
+        },
+        {
+          "humans": 0.1830973712087935,
+          "judge": 0.10296225804106575,
+          "n": 600,
+          "name": "likert_faithfulness",
+          "statistic": "Spearman rho"
+        }
+      ],
+      "judge_model": "gemini-3.7-flash",
+      "rubric_beats_likert": true
+    },
+    {
+      "agreements": [
+        {
+          "humans": 0.5037692102193586,
+          "judge": 0.5432121638015741,
+          "n": 3450,
+          "name": "rubric_completeness",
+          "statistic": "Cohen's kappa"
+        },
+        {
+          "humans": 0.13096836110903934,
+          "judge": 0.3037134500820071,
+          "n": 600,
+          "name": "likert_completeness",
+          "statistic": "Spearman rho"
+        },
+        {
+          "humans": 0.19210453252909696,
+          "judge": 0.06125494206434177,
+          "n": 600,
+          "name": "likert_conciseness",
+          "statistic": "Spearman rho"
+        },
+        {
+          "humans": 0.1830973712087935,
+          "judge": 0.012154028047190022,
+          "n": 600,
+          "name": "likert_faithfulness",
+          "statistic": "Spearman rho"
+        }
+      ],
+      "judge_model": "gemini-3.5-flash",
+      "rubric_beats_likert": true
+    },
+    {
+      "agreements": [
+        {
+          "humans": 0.5037692102193586,
+          "judge": 0.5501506063074957,
+          "n": 3450,
+          "name": "rubric_completeness",
+          "statistic": "Cohen's kappa"
+        },
+        {
+          "humans": 0.13096836110903934,
+          "judge": 0.2879894530234797,
+          "n": 600,
+          "name": "likert_completeness",
+          "statistic": "Spearman rho"
+        },
+        {
+          "humans": 0.19210453252909696,
+          "judge": 0.1266635748527724,
+          "n": 600,
+          "name": "likert_conciseness",
+          "statistic": "Spearman rho"
+        },
+        {
+          "humans": 0.1830973712087935,
+          "judge": 0.14502652040288316,
+          "n": 600,
+          "name": "likert_faithfulness",
+          "statistic": "Spearman rho"
+        }
+      ],
+      "judge_model": "gemini-2.5-flash",
+      "rubric_beats_likert": true
+    }
+  ],
+  "notes": 150
+}

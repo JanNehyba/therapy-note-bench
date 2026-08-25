@@ -94,7 +94,15 @@ class Interval:
     mean: float
     low: float
     high: float
+    #: Conversations in the shared set -- the same number for every system here,
+    #: because that is what makes the comparison paired.
     sessions: int
+    #: Conversations this system was actually scored on. Larger than `sessions`
+    #: whenever some *other* system lost notes, which is why this mean and the
+    #: leaderboard's differ: same measure, different denominator.
+    own_sessions: int = 0
+    #: The mean over this system's own conversations -- what the table shows.
+    own_mean: float = 0.0
 
 
 def label_for(provider: str, system_id: str, providers_by_system: dict) -> str:
@@ -282,6 +290,7 @@ def paired_intervals(
     intervals = []
     for system in systems:
         ordered = sorted(draws[system])
+        own = scores[system]
         intervals.append(
             Interval(
                 system=system,
@@ -289,6 +298,8 @@ def paired_intervals(
                 low=ordered[int(0.025 * samples)],
                 high=ordered[int(0.975 * samples) - 1],
                 sessions=len(shared),
+                own_sessions=len(own),
+                own_mean=sum(own.values()) / len(own) if own else 0.0,
             )
         )
 
@@ -343,9 +354,35 @@ def build(root: Path | None = None, judge_model: str = judge.DEFAULT_MODEL) -> d
     for profile in criteria:
         verdicts[profile.verdict].append(profile.key)
 
+    # Why the two Completeness figures on this page differ, computed rather than
+    # asserted. The table averages each system over its own notes; this panel
+    # averages every system over the conversations they all share, because a
+    # paired bootstrap has no meaning otherwise. When some system lost notes the
+    # shared set is smaller than the corpus, and the two means -- and sometimes
+    # the two orderings -- come apart. Saying which systems cost how many
+    # conversations turns an apparent contradiction into a stated fact.
+    shared = intervals[0].sessions
+    largest = max((i.own_sessions for i in intervals), default=shared)
+
+    # Which systems constrain the intersection -- the ones scored on fewer
+    # conversations than the fullest corpus. Naming these is the point; listing
+    # the systems that lost nothing would be a list of everybody else.
+    narrowed_by = {
+        interval.system: largest - interval.own_sessions
+        for interval in intervals
+        if interval.own_sessions < largest
+    }
+
     return {
         "judge_model": judge_model,
-        "sessions": intervals[0].sessions,
+        "sessions": shared,
+        #: The fullest per-system corpus, so the page can say "42 of 50".
+        "corpus_sessions": largest,
+        #: Systems scored on fewer conversations than the fullest corpus, and by
+        #: how many. These are why the shared set is smaller than the corpus, and
+        #: therefore why this panel's means differ from the leaderboard's. Empty
+        #: when every system was scored on the same conversations.
+        "narrowed_by": dict(sorted(narrowed_by.items(), key=lambda kv: -kv[1])),
         # Named rather than dropped: a reader must be able to tell "not measured
         # yet" from "measured and left out".
         "still_scoring": partial,
@@ -368,6 +405,8 @@ def build(root: Path | None = None, judge_model: str = judge.DEFAULT_MODEL) -> d
             {
                 "system": i.system,
                 "mean": round(i.mean, 4),
+                "own_mean": round(i.own_mean, 4),
+                "own_sessions": i.own_sessions,
                 "low": round(i.low, 4),
                 "high": round(i.high, 4),
             }

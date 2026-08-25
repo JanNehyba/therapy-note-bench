@@ -442,9 +442,12 @@ def test_a_section_whose_conciseness_was_never_asked_is_not_scored_zero():
     answers simply have not arrived is absent, and scoring it 0.0 makes an
     unfinished run look like a model that wrote nothing but padding."""
     tasks = tneval.build_tasks(NOTE, CONVERSATION)
-    answers = {"plan.rubric_completeness.plan-homework": "Yes"}
+    # Every completeness question answered, so the section is scored at all;
+    # only the conciseness answers are missing, which is what this is about.
+    answers = {f"plan.rubric_completeness.{key}": "Yes" for key in tneval.criteria_keys("plan")}
 
     scored = tneval.aggregate(answers, tasks)
+    assert "completeness" in scored.by_section["plan"]
     assert "conciseness" not in scored.by_section["plan"]
 
 
@@ -463,3 +466,98 @@ def test_without_the_task_list_the_old_behaviour_holds():
     the answer cache, not the notes -- keep TN-Eval's arithmetic."""
     scored = tneval.aggregate({"plan.rubric_completeness.plan-homework": "Yes"})
     assert scored.by_section["plan"]["conciseness"] == 0.0
+
+
+def test_completeness_divides_by_the_criteria_asked_not_by_the_answers_returned():
+    """Two of six answered, both Yes, is not a perfect section.
+
+    Dividing by the answers that came back turns a partly-failed judge run into
+    a top score, and judge failures are not random -- they cluster on the notes
+    that are hard to read, so the bias runs one way. The section is omitted and
+    named instead, the same policy conciseness already had.
+    """
+    tasks = tneval.build_tasks(NOTE, CONVERSATION)
+    keys = list(tneval.criteria_keys("subjective"))
+    answers = {f"subjective.rubric_completeness.{key}": "Yes" for key in keys[:2]}
+
+    scored = tneval.aggregate(answers, tasks)
+
+    assert "completeness" not in scored.by_section.get("subjective", {})
+    assert scored.incomplete["subjective"] == keys[2:]
+    assert scored.is_complete is False
+
+
+def test_a_fully_answered_section_still_scores_normally():
+    """The guard must not cost anything when the judge answered everything."""
+    tasks = tneval.build_tasks(NOTE, CONVERSATION)
+    keys = list(tneval.criteria_keys("subjective"))
+    answers = {f"subjective.rubric_completeness.{key}": "Yes" for key in keys}
+    answers[f"subjective.rubric_completeness.{keys[0]}"] = "No"
+
+    scored = tneval.aggregate(answers, tasks)
+
+    assert scored.by_section["subjective"]["completeness"] == pytest.approx(
+        (len(keys) - 1) / len(keys)
+    )
+    assert not scored.incomplete
+
+
+def test_the_headline_records_how_many_sections_it_averaged():
+    """A three-section mean and a four-section mean print the same.
+
+    Without the count there is nothing on the row, in the JSON or on the page
+    that distinguishes them, so a model whose judging partly failed is compared
+    against one whose did not as though the two figures were alike.
+    """
+    tasks = tneval.build_tasks(NOTE, CONVERSATION)
+    answers = {
+        f"{section}.rubric_completeness.{key}": "Yes"
+        for section in ("subjective", "objective", "assessment")
+        for key in tneval.criteria_keys(section)
+    }
+
+    scored = tneval.aggregate(answers, tasks)
+
+    assert scored.sections_used["completeness"] == 3
+    assert scored.is_complete is False
+
+
+def _candidate(session_id: str) -> scoring.Candidate:
+    return scoring.Candidate(
+        provider="einfra",
+        system_id="a-model",
+        system_type="model",
+        system_label="a-model",
+        session_id=session_id,
+        note={},
+        conversation="",
+    )
+
+
+def test_a_partly_judged_note_is_left_out_of_the_systems_headline():
+    """One level up, the same rule: the average is over complete notes only."""
+    complete = tneval.aggregate(
+        {
+            f"{section}.rubric_completeness.{key}": "Yes"
+            for section in tneval.SOAP_SECTIONS
+            for key in tneval.criteria_keys(section)
+        }
+    )
+    partial = tneval.aggregate(
+        {
+            f"{section}.rubric_completeness.{key}": "No"
+            for section in ("subjective", "objective")
+            for key in tneval.criteria_keys(section)
+        }
+    )
+    aggregate = scoring.SystemAggregate(
+        notes=[
+            scoring.NoteResult(candidate=_candidate("s1"), scores=complete, cached=1),
+            scoring.NoteResult(candidate=_candidate("s2"), scores=partial, cached=1),
+        ]
+    )
+
+    assert aggregate.n_partial == 1
+    # 1.0 from the complete note alone; averaging the 0.0 in would read as a
+    # model that failed rather than a note the judge did not finish.
+    assert aggregate.metrics().headline["completeness"] == pytest.approx(1.0)

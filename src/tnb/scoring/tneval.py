@@ -401,6 +401,21 @@ class Scores:
     by_section: dict[str, dict[str, float]] = field(default_factory=dict)
     by_criterion: dict[str, float] = field(default_factory=dict)
 
+    #: How many of the four SOAP sections each headline figure averaged. A
+    #: three-section mean and a four-section mean print identically and are not
+    #: the same measurement, so the count travels with the number.
+    sections_used: dict[str, int] = field(default_factory=dict)
+    #: Sections left out because the judge did not answer everything the
+    #: protocol asks. Named, never silently folded into a smaller denominator.
+    incomplete: dict[str, list[str]] = field(default_factory=dict)
+
+    @property
+    def is_complete(self) -> bool:
+        """Every headline figure rests on all four sections."""
+        return not self.incomplete and all(
+            count == len(SOAP_SECTIONS) for count in self.sections_used.values()
+        )
+
 
 def aggregate(answers: dict[str, str], tasks: list[JudgeTask] | None = None) -> Scores:
     """Turn raw judge answers into scores, keyed by :attr:`JudgeTask.unit`.
@@ -420,6 +435,14 @@ def aggregate(answers: dict[str, str], tasks: list[JudgeTask] | None = None) -> 
     measured-looking 0.0, indistinguishable from a section where the judge
     rejected every sentence. TN-Eval's zero is for a section with no sentences
     in it; absence is not that, and is left out instead.
+
+    **Nothing here divides by the answers that came back.** Completeness uses the
+    protocol's criterion count as its denominator and a section with any
+    unanswered criterion is omitted and named in ``incomplete``; the headline
+    records in ``sections_used`` how many sections it averaged. Both exist
+    because the alternative is silent: a partially-judged note scores like a
+    fully-judged one, and judge failures are not random -- they cluster on the
+    notes that are hard to read.
     """
     expected_conciseness = None
     if tasks is not None:
@@ -431,19 +454,32 @@ def aggregate(answers: dict[str, str], tasks: list[JudgeTask] | None = None) -> 
         }
     by_section: dict[str, dict[str, float]] = {}
     by_criterion: dict[str, float] = {}
+    incomplete: dict[str, list[str]] = {}
 
     for section in SOAP_SECTIONS:
         section_scores: dict[str, float] = {}
 
-        completeness = []
-        for key in criteria_keys(section):
+        # The denominator is the protocol's criterion count, never the number of
+        # answers that came back. A judge call that failed is not a criterion the
+        # note satisfied and it is not one it missed -- it is unknown, and
+        # dividing by the survivors turns "two of six answered, both yes" into a
+        # perfect score. Judge failures correlate with hard notes, so that bias
+        # runs one way. Same policy as conciseness below: absent, not zero.
+        expected = list(criteria_keys(section))
+        answered = []
+        for key in expected:
             unit = f"{section}.rubric_completeness.{key}"
             if unit in answers:
                 value = parse_yes_no(answers[unit])
                 by_criterion[key] = float(value)
-                completeness.append(value)
-        if completeness:
-            section_scores["completeness"] = sum(completeness) / len(completeness)
+                answered.append(value)
+        if len(answered) == len(expected) and expected:
+            section_scores["completeness"] = sum(answered) / len(expected)
+        elif answered:
+            missing = [
+                key for key in expected if f"{section}.rubric_completeness.{key}" not in answers
+            ]
+            incomplete[section] = missing
 
         sentences = [
             parse_yes_no(answer)
@@ -465,9 +501,19 @@ def aggregate(answers: dict[str, str], tasks: list[JudgeTask] | None = None) -> 
             by_section[section] = section_scores
 
     headline = {}
+    sections_used = {}
     for measure in ("completeness", "conciseness", "faithfulness"):
         values = [scores[measure] for scores in by_section.values() if measure in scores]
         if values:
             headline[measure] = sum(values) / len(values)
+            # A mean over three sections and a mean over four print the same and
+            # are not the same. The count is stored so a view can say which.
+            sections_used[measure] = len(values)
 
-    return Scores(headline=headline, by_section=by_section, by_criterion=by_criterion)
+    return Scores(
+        headline=headline,
+        by_section=by_section,
+        by_criterion=by_criterion,
+        sections_used=sections_used,
+        incomplete=incomplete,
+    )
