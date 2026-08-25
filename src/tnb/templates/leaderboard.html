@@ -929,7 +929,10 @@ function renderConcordance(all) {
       <p class="note">Rank correlation is between <code>${c.judge_a}</code>'s ordering and
          <code>${c.judge_b}</code>'s, over the ${c.n_systems} systems both have scored.
          Scores that print the same are treated as tied rather than ordered by a digit
-         the table does not show.</p>
+         the table does not show. Only measures a judge decides are compared here:
+         ${c.judge_measures.map(m => `<code>${m}</code>`).join(', ')}. The rest are
+         computed from the note and the expert note, so they are identical under every
+         judge and agreeing about them would say nothing.</p>
       ${c.tensions.length ? `<h3>Do the columns agree with each other?</h3>
       <p class="note">A separate question from whether the judges do, and the one that
          decides whether the ordering column can be read as "quality". A model that

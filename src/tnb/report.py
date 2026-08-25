@@ -83,6 +83,17 @@ RANKING_MEASURES: dict[str, str | None] = {
 }
 
 
+#: Which measures each track's judge actually decides. Only these can be
+#: compared *between* two judges: on the iCARE track four of the five columns
+#: are computed from the note and the expert note alone, so they are identical
+#: under every judge, and "the judges agree perfectly on ROUGE-L" would dress a
+#: tautology as a finding.
+JUDGE_MEASURES: dict[str, tuple[str, ...]] = {
+    results.TRACK_TNEVAL: rubric.JUDGE_MEASURES,
+    results.TRACK_ICARE: icare_scorer.JUDGE_MEASURES,
+}
+
+
 def measure_table(track: str) -> dict[str, dict[str, str]]:
     """The measure definitions for one track, from the scorer that owns them."""
     return MEASURE_TABLES.get(track, {})
@@ -769,6 +780,7 @@ def write(rows: list[Row], *, docs_dir: Path | None = None, readme: Path | None 
                     rows,
                     track,
                     [key for key, _ in COLUMNS[track]],
+                    judge_measures=JUDGE_MEASURES.get(track),
                     ranking_measure=RANKING_MEASURES.get(track),
                 )
             )

@@ -99,6 +99,9 @@ class Comparison:
     #: how the judges relate to each other and just as necessary before reading
     #: the ranking column as "the best model".
     tensions: list[Tension] = field(default_factory=list)
+    #: Which of `measures` a judge actually decides -- the ones the agreement
+    #: figures above are computed over.
+    judge_measures: tuple[str, ...] = ()
     #: The column the table is ordered by, if it has one. Named so the summary
     #: can report the tensions involving it rather than the numerically most
     #: extreme pair, which is often one nobody is reading as a ranking.
@@ -165,6 +168,7 @@ def compare(
     *,
     judge_a: str = judge.DEFAULT_MODEL,
     judge_b: str = judge.SECOND_JUDGE,
+    judge_measures: tuple[str, ...] | None = None,
     ranking_measure: str | None = None,
 ) -> Comparison | None:
     """Read the panel's two judges' tables together, or None if either is absent.
@@ -184,8 +188,17 @@ def compare(
     if len(shared) < 2:
         return None
 
+    # Rank agreement is asked only of measures a judge decides. On the iCARE
+    # track ROUGE-L, BERTScore and the two temporal columns come from the note
+    # and the expert note alone, so they are identical under every judge:
+    # reporting a correlation of 1.000 there would dress a tautology as a
+    # finding. The tensions and the dominance below use every measure, because
+    # those are questions about the columns and the models rather than about
+    # the judges.
+    compared = [m for m in measures if judge_measures is None or m in judge_measures]
+
     agreements = []
-    for measure in measures:
+    for measure in compared:
         first = [by_judge[judge_a][s].get(measure) for s in shared]
         second = [by_judge[judge_b][s].get(measure) for s in shared]
         pairs = [
@@ -250,6 +263,7 @@ def compare(
         judge_a=judge_a,
         judge_b=judge_b,
         tensions=tensions,
+        judge_measures=tuple(compared),
         ranking_measure=ranking_measure,
         measures=agreements,
         dominance=sorted(dominance, key=lambda d: (-len(d.beats), d.system)),
@@ -332,6 +346,7 @@ def to_json(comparison: Comparison | None) -> dict | None:
         "judge_a": comparison.judge_a,
         "judge_b": comparison.judge_b,
         "ranking_measure": comparison.ranking_measure,
+        "judge_measures": list(comparison.judge_measures),
         "n_systems": comparison.n_systems,
         "summary": describe(comparison),
         "measures": [

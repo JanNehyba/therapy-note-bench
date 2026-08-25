@@ -93,6 +93,11 @@ INTERNAL_MEASURES = ("likert_completeness", "likert_conciseness")
 #: The measure this track is ranked by. Everything else on the row is context.
 RANKING_MEASURE = "completeness"
 
+#: Every measure on this track is the judge's. Declared rather than assumed, so
+#: the two tracks answer the same question in the same place -- see
+#: `icare.JUDGE_MEASURES`, where only one of five is.
+JUDGE_MEASURES = ("completeness", "conciseness", "faithfulness")
+
 #: Verbatim from TN-Eval's ``rubric_prompt_completeness``.
 PROMPT_COMPLETENESS = """\
 Below is a behavioral therapy progress note segment. The rubric item outlines one of the necessary components for the note. Verify if the rubric item presents in the progress note segment. 

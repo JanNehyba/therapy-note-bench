@@ -107,6 +107,13 @@ RANKING_MEASURE = None
 #: Written into the row but not shown as a column.
 INTERNAL_MEASURES: tuple[str, ...] = ()
 
+#: Which measures a judge produces. Only these can be compared *between* judges:
+#: ROUGE-L, BERTScore and the two temporal columns are computed from the note
+#: and the expert note, so they are byte-identical under every judge and
+#: reporting "the judges agree perfectly on ROUGE-L" would dress a tautology as
+#: a finding. TRACE is the only thing a judge decides here.
+JUDGE_MEASURES: tuple[str, ...] = ("trace",)
+
 #: Which iHOPE section each time-bearing measure reads. Separate measures, never
 #: averaged -- see `temporal_score` for the numbers that forced the split.
 #:

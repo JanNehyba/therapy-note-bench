@@ -277,3 +277,65 @@ def test_measures_that_do_agree_are_not_reported_as_a_tension():
 
     assert all(t.agrees for t in result.tensions)
     assert "Ordering by" not in concordance.describe(result)
+
+
+def test_a_measure_no_judge_decides_is_left_out_of_the_agreement():
+    """On the iCARE track four of five columns are computed from the note and
+    the expert note alone, so they are byte-identical under every judge.
+    Reporting "the judges agree perfectly on ROUGE-L" would dress a tautology
+    as a finding, and a reader has no way to tell it from a real one."""
+    automatic = 0.42
+    rows = _panel(
+        {
+            A: {
+                "x": {"rouge_l": automatic, "trace": 5.0},
+                "y": {"rouge_l": automatic, "trace": 3.0},
+            },
+            B: {
+                "x": {"rouge_l": automatic, "trace": 3.0},
+                "y": {"rouge_l": automatic, "trace": 5.0},
+            },
+        }
+    )
+    for row in rows:
+        object.__setattr__(row, "track", results.TRACK_ICARE)
+
+    result = concordance.compare(
+        rows,
+        results.TRACK_ICARE,
+        ["rouge_l", "trace"],
+        judge_measures=("trace",),
+    )
+
+    assert [m.measure for m in result.measures] == ["trace"]
+    assert result.judge_measures == ("trace",)
+
+
+def test_the_columns_are_still_compared_with_each_other_across_all_of_them():
+    """A tension is a question about the columns, not about the judges, so an
+    automatic metric belongs in it -- and on the iCARE track "does ROUGE-L
+    predict the judge's rating" is the source paper's own finding."""
+    rows = _panel(
+        {
+            A: {
+                "x": {"rouge_l": 0.9, "trace": 1.0},
+                "y": {"rouge_l": 0.5, "trace": 3.0},
+                "z": {"rouge_l": 0.1, "trace": 5.0},
+            },
+            B: {
+                "x": {"rouge_l": 0.9, "trace": 1.0},
+                "y": {"rouge_l": 0.5, "trace": 3.0},
+                "z": {"rouge_l": 0.1, "trace": 5.0},
+            },
+        }
+    )
+    for row in rows:
+        object.__setattr__(row, "track", results.TRACK_ICARE)
+
+    result = concordance.compare(
+        rows, results.TRACK_ICARE, ["rouge_l", "trace"], judge_measures=("trace",)
+    )
+
+    tension = next(t for t in result.tensions if {t.first, t.second} == {"rouge_l", "trace"})
+    assert all(rho == pytest.approx(-1.0) for rho in tension.rho_by_judge.values())
+    assert tension.agrees is False
