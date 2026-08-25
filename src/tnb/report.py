@@ -392,6 +392,18 @@ def _current_groups(groups: dict[tuple, list[Row]]) -> tuple[dict[tuple, list[Ro
     return keep, sorted(superseded, key=lambda item: (item["track"], item["harness_version"]))
 
 
+def current_rows(rows: list[Row]) -> list[Row]:
+    """The rows a table would draw: newest per identity, newest harness per lane.
+
+    Anything reading rows for an analysis has to go through this. Reading them
+    raw mixes two definitions of the same measure under one name -- every iCARE
+    system appears twice right now, once at each harness -- and a dictionary
+    keyed on the system silently keeps whichever came last.
+    """
+    groups, _superseded = _current_groups(results.comparable_groups(results.latest(rows)))
+    return [row for group in groups.values() for row in group]
+
+
 def build(rows: list[Row]) -> dict:
     """Shape the rows into the JSON both presentations read.
 
@@ -771,13 +783,16 @@ def write(rows: list[Row], *, docs_dir: Path | None = None, readme: Path | None 
     # Computed here rather than cached in docs/, because it is a statement about
     # the rows being rendered right now. A stale copy of "the judges disagree
     # about 11 of 19" beside a table where they no longer do is worse than none.
+    # From the rows a table would draw, not from every row in the file. Two
+    # harness versions carry two definitions of the same column.
+    drawn = current_rows(rows)
     data["concordance"] = {
         track: found
         for track in COLUMNS
         if (
             found := concordance.to_json(
                 concordance.compare(
-                    rows,
+                    drawn,
                     track,
                     [key for key, _ in COLUMNS[track]],
                     judge_measures=JUDGE_MEASURES.get(track),

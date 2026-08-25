@@ -113,13 +113,29 @@ class Comparison:
 
 
 def _scores_by_judge(rows: list[Row], track: str) -> dict[str, dict[str, dict[str, float]]]:
-    """{judge: {system: {measure: value}}} for the scored rows of one track."""
+    """{judge: {system: {measure: value}}} for the scored rows of one track.
+
+    Raises rather than overwriting when one system appears twice under one
+    judge. That is not a hypothetical: `results/` holds every iCARE system at
+    two harness versions, and a dictionary keyed on the system would keep
+    whichever came last -- comparing one judge's new ROUGE-L with the other's
+    old one and calling the difference a disagreement. Callers pass
+    `report.current_rows`, which resolves it; anything that does not, fails
+    here rather than quietly.
+    """
     out: dict[str, dict[str, dict[str, float]]] = {}
     for row in rows:
         if row.track != track or not row.is_scored or not row.judge_model:
             continue
         label = row.system_label or row.system_id
-        out.setdefault(row.judge_model, {})[label] = dict(row.metrics.headline)
+        seen = out.setdefault(row.judge_model, {})
+        if label in seen:
+            raise ValueError(
+                f"{label!r} appears twice for judge {row.judge_model!r} on {track!r}. "
+                f"Pass rows through `report.current_rows` first: two harness versions "
+                f"are two definitions of the same measure."
+            )
+        seen[label] = dict(row.metrics.headline)
     return out
 
 

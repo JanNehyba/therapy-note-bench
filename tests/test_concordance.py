@@ -359,3 +359,36 @@ def test_one_judged_measure_is_not_described_as_the_best_and_the_worst():
 
     assert sentence.count("trace") == 1
     assert "agree least" not in sentence
+
+
+def test_two_harness_versions_of_one_system_are_refused_rather_than_merged():
+    """`results/` is append-only, so a system re-scored under a redefined
+    measure is in the file twice. A dictionary keyed on the system keeps
+    whichever came last, which would compare one judge's new ROUGE-L with the
+    other's old one and publish the difference as a disagreement.
+
+    Measured on the live file when this was written: 148 rows after `latest()`
+    and 100 after the harness filter, with every iCARE system doubled.
+    """
+    rows = _panel({A: {"x": _flat(0.9)}, B: {"x": _flat(0.5)}})
+    stale = _row("x", A, completeness=0.1, conciseness=0.1, faithfulness=1.0)
+    object.__setattr__(stale, "harness_version", "0.1.0")
+
+    with pytest.raises(ValueError, match="appears twice"):
+        concordance.compare([*rows, stale], results.TRACK_TNEVAL, MEASURES)
+
+
+def test_the_report_hands_it_only_the_rows_a_table_would_draw():
+    """The resolution lives in one place and everything reading rows uses it."""
+    from tnb import report
+
+    rows = _panel({A: {"x": _flat(0.9), "y": _flat(0.5)}, B: {"x": _flat(0.8), "y": _flat(0.4)}})
+    stale = [_row(s, j, **_flat(0.01)) for s in ("x", "y") for j in (A, B)]
+    for row in stale:
+        object.__setattr__(row, "harness_version", "0.1.0")
+
+    drawn = report.current_rows([*rows, *stale])
+    result = concordance.compare(drawn, results.TRACK_TNEVAL, MEASURES)
+
+    assert result is not None
+    assert result.n_systems == 2
