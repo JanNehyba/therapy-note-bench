@@ -106,7 +106,7 @@ API_LOCATION = "global"
 #: Gemini 2.5 Pro cannot be told to stop thinking — a budget of 0 is rejected —
 #: and 128 is its minimum. Measured effect: ~480 thinking tokens down to ~51.
 #: 2.5 Flash accepts 0. Part of the request digest, so changing it re-scores.
-DEFAULT_THINKING_BUDGET = 128
+DEFAULT_THINKING_BUDGET = 256
 
 #: Room for the answer itself, which is "Yes", "No" or a single digit.
 ANSWER_TOKENS = 32
@@ -372,7 +372,7 @@ class OpenAIBackend(Backend):
             # Room for the reasoning as well as the answer, the same reason the
             # Vertex ceiling exists. Measured on terra: a Likert question spends
             # up to ~170 reasoning tokens at medium, a rubric question spends 0.
-            "max_completion_tokens": output_ceiling(config.thinking_budget) + REASONING_HEADROOM,
+            "max_completion_tokens": OPENAI_OUTPUT_CEILING,
         }
         if config.effort:
             body["reasoning_effort"] = config.effort
@@ -412,7 +412,7 @@ class OpenAIBackend(Backend):
             "backend": self.name,
             "model": config.model,
             "effort": config.effort,
-            "max_output_tokens": output_ceiling(config.thinking_budget) + REASONING_HEADROOM,
+            "max_output_tokens": OPENAI_OUTPUT_CEILING,
         }
 
     def count_tokens(self, config: JudgeConfig, prompt: str) -> int:
@@ -428,6 +428,16 @@ class OpenAIBackend(Backend):
 #: Measured on terra at effort `medium`: 0 reasoning tokens on a rubric
 #: question, up to ~170 on a Likert one.
 REASONING_HEADROOM = 512
+
+#: What an OpenAI judge is allowed to emit, thinking included. A fixed number
+#: rather than one derived from `thinking_budget`, because the two are unrelated
+#: mechanisms and tying them together made a Vertex change invalidate an OpenAI
+#: cache: raising Gemini's budget from 128 to 256 would have thrown away terra's
+#: 51 000 answers, not one of which was ever truncated.
+#:
+#: Pinned at the value the existing cache was produced under -- output_ceiling(128)
+#: plus the headroom -- so decoupling it changes no fingerprint today.
+OPENAI_OUTPUT_CEILING = 160 + REASONING_HEADROOM
 
 BACKENDS: dict[str, Backend] = {"vertex": VertexBackend(), "openai": OpenAIBackend()}
 
