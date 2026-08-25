@@ -293,3 +293,34 @@ def test_the_judge_box_claims_are_derived_from_its_own_table(tmp_path):
 
     assert "gpt-5.6-sol" not in page.split("renderJudges")[-1]
     assert "notReleaseOrder" in page and "whereTheCeilingIsCleared" in page
+
+
+def test_every_key_in_the_page_data_is_read_by_the_page():
+    """The fourth instance of one shape, so it becomes a rule.
+
+    `preference`, `judges` and `generated_from` were each computed, written into
+    the payload, and consumed by nothing -- the self-preference panel that
+    `docs/limitations.md` tells readers to check, the evidence for the panel's
+    own composition, and the line saying where the numbers come from. A key
+    nobody reads is either a missing panel or dead weight, and both are worth
+    failing over.
+    """
+    template = (Path(report.__file__).parent / "templates" / "leaderboard.html").read_text(
+        encoding="utf-8"
+    )
+
+    data = report.build([_row("x", "a-judge", 0.5)])
+    data.update(
+        calibration=None,
+        similarity_example=None,
+        saturation=None,
+        judges=None,
+        preference=None,
+        concordance={},
+    )
+
+    # `.key` rather than `DATA.key`: several panels are rendered by a function
+    # that takes the whole payload and reads `data.saturation` inside it, so a
+    # literal `DATA.saturation` never appears.
+    unread = [key for key in data if f".{key}" not in template]
+    assert not unread, f"in the payload and read by nothing: {unread}"

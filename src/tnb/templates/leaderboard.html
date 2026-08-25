@@ -264,6 +264,7 @@ p.settings { margin-top: .2rem; }
     <p>Rows are only ever compared when they agree on harness version, prompt version, judge
        model and judge prompt version. A changed judge starts a new table rather than
        rewriting this one.</p>
+    <p id="provenance"></p>
   </footer>
 </main>
 
@@ -1113,6 +1114,14 @@ function renderJudges(data) {
     ${notReleaseOrder(data, measures[0])}
     ${whereTheCeilingIsCleared(data, measures, ceiling)}`;
 }
+
+// Where every number on this page came from. It was in the payload and drawn
+// nowhere, which for a provenance string is close to the opposite of the point.
+document.getElementById('provenance').innerHTML = DATA.generated_from
+  ? `Every figure on this page is generated from <code>results/${DATA.generated_from}</code>,
+     which is append-only: a re-run adds rows beside the old ones rather than replacing
+     them, and what is drawn here is the newest of each.`
+  : '';
 
 renderJudges(DATA.judges);
 renderPreference(DATA.preference);
