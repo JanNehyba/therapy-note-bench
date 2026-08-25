@@ -164,12 +164,26 @@ The judge reproduces TN-Eval's central finding: criterion checklists agree far b
 | Track | Corpus | Protocol | Reference needed |
 |---|---|---|---|
 | **TN-Eval SOAP** | 50 AnnoMI conversations | 23 completeness criteria, per-sentence conciseness, faithfulness | No |
-| **iCARE / iHOPE** | 40 held-out sessions, 17 sections | ROUGE-L + BERTScore, TRACE, and a separate temporal-reasoning column | Yes |
+| **iCARE / iHOPE** | 40 held-out sessions, 17 sections | ROUGE-L + BERTScore, TRACE, and two temporal columns -- looking back and looking forward | Yes |
 
 The iCARE track reports automatic metrics and a TRACE judge **side by side
 because the source paper found they disagree** — experts preferred a smaller
 Mistral model over the automatic-score leader. That disagreement is a result, and
 it is reported rather than averaged away.
+
+**Two temporal columns, not one.** Looking back at the last session is something
+every model does; saying what happens at the next one is something almost none of
+them does. Averaged together those became a single respectable-looking number,
+and the expert notes answer the backward-looking section three times as often as
+the forward-looking one, so the mean was weighted towards the easy half. Split
+apart, the finding the source paper reports is visible again.
+
+**Our ROUGE-L is not comparable with the paper's table.** Theirs compares the
+whole rendered note, which means both sides share the 17 field labels and every
+`Nil` the expert wrote: a note where the model wrote *nothing at all* scores
+0.379 that way. Ours compares the field values of the sections the expert
+answered, and that same empty note scores 0.000. Losing comparability with a
+published figure is the smaller of the two costs.
 
 Full detail: [docs/methodology.md](docs/methodology.md).
 
@@ -237,8 +251,8 @@ and needs a MetaCentrum account or Masaryk University affiliation.
 |---|---|---|
 | 0 | Repository, survey, model discovery | **done** |
 | 1 | Dataset adapters (AnnoMI + iHOPE → common schema) | **done** |
-| 2 | Generation against every discovered model | **SOAP done**, iCARE 91% |
-| 3 | Scoring: rubric, reference metrics, TRACE, temporal | **TN-Eval done**, iCARE next |
+| 2 | Generation against every discovered model | **done**, both tracks |
+| 3 | Scoring: rubric, reference metrics, TRACE, temporal | **done**, both tracks, two judges |
 | 4 | Judge calibration against TN-Eval's human annotators | **done** |
 | 5 | Leaderboard generation | **done** |
 | 6 | One-click workflow | |
