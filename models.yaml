@@ -115,6 +115,11 @@ providers:
       Create one at https://platform.openai.com/api-keys and put it in .env.
 
     generation:
+      # A commercial endpoint with published rate limits, not a shared academic
+      # quota. e-INFRA stays at 2 because it is one person's allocation; there
+      # is no such reason here, and 3 650 calls at 2 is a two-hour wall clock.
+      concurrency: 8
+
       # The middle of the five levels this family accepts (none, low, medium,
       # high, xhigh) and its documented default. Measured: effort barely moves
       # the generation bill -- the whole benchmark costs $0.33 / $0.33 / $0.36
@@ -152,6 +157,9 @@ providers:
     token_help: >-
       Point GOOGLE_APPLICATION_CREDENTIALS at a service-account key with the
       Vertex AI User role. The key belongs in secrets/, which is gitignored.
+
+    generation:
+      concurrency: 8
 
     discovery:
       catalogue_url: https://aiplatform.googleapis.com/v1beta1/publishers/google/models

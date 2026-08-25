@@ -55,7 +55,16 @@ JUDGE_CANDIDATES = (
     "gemini-3.7-flash",
     "gemini-3.5-flash",
     "gemini-2.5-flash",
+    "gpt-5.6-terra",
 )
+
+
+#: Which transport a judge model speaks. Derived from the name because that is
+#: the one thing about a model that is never ambiguous here, and overridable on
+#: the config for the day it is.
+def backend_for(model: str) -> str:
+    return "openai" if model.startswith("gpt-") else "vertex"
+
 
 #: `v1beta1` at the `global` endpoint, for every model rather than per model.
 #:
@@ -112,51 +121,60 @@ class JudgeConfig:
     backoff_s: int = 4
     concurrency: int = 4
 
+    #: Empty means "derive from the model name". Set it only to override.
+    backend: str = ""
+    #: Reasoning effort, for a backend that has one. Measured on `gpt-5.6-terra`:
+    #: a rubric question spends 0 reasoning tokens at every level and answers
+    #: identically, but a Likert rating at `none` disagreed with `low`/`medium`/
+    #: `high` on two of six questions, so `none` is not safe here. `medium` and
+    #: `high` agreed on all six; `medium` is the cheaper of the two.
+    effort: str = "medium"
+
+    @property
+    def transport(self) -> Backend:
+        return BACKENDS[self.backend or backend_for(self.model)]
+
     @property
     def endpoint(self) -> str:
-        host = (
-            "aiplatform.googleapis.com"
-            if API_LOCATION == "global"
-            else f"{API_LOCATION}-aiplatform.googleapis.com"
-        )
-        return (
-            f"https://{host}/{API_VERSION}/projects/{self.project}"
-            f"/locations/{API_LOCATION}/publishers/google/models/"
-            f"{self.model}:generateContent"
-        )
+        return self.transport.endpoint(self)
 
     def fingerprint(self) -> dict:
         """What about the judge decides an answer, for the cache key.
 
         Deliberately excludes the project and the location: the same model at
         the same settings is the same judge, wherever it is billed.
+
+        Delegated to the transport because the two have different settings to
+        record -- and because the Vertex shape must not move by so much as a
+        key. 65 832 answers are cached against it, and `load_cached` rejects any
+        record whose fingerprint differs, so a cosmetic change here is a full
+        re-judge of the whole corpus.
         """
-        return {
-            "model": self.model,
-            "thinking_budget": self.thinking_budget,
-            "max_output_tokens": output_ceiling(self.thinking_budget),
-            "temperature": 0,
-        }
+        return self.transport.fingerprint(self)
 
 
 def config_from_env(**overrides) -> JudgeConfig:
-    """Build a config from ``.env``, with an error that says what is missing."""
-    missing = [
-        name
-        for name in ("VERTEX_PROJECT", "VERTEX_LOCATION", "GOOGLE_APPLICATION_CREDENTIALS")
-        if not os.environ.get(name, "").strip()
-    ]
+    """Build a config from ``.env``, with an error that says what is missing.
+
+    Only what the chosen backend actually needs: asking for a Vertex project in
+    order to run a GPT judge would be a confusing way to fail.
+    """
+    model = overrides.get("model", DEFAULT_MODEL)
+    backend = overrides.get("backend") or backend_for(model)
+    required = BACKENDS[backend].required_env
+
+    missing = [name for name in required if not os.environ.get(name, "").strip()]
     if missing:
         raise RuntimeError(
-            f"The judge needs {', '.join(missing)} in .env. "
+            f"The {backend} judge needs {', '.join(missing)} in .env. "
             "See .env.example; the service-account key belongs in secrets/, which is "
             "gitignored."
         )
 
     return JudgeConfig(
-        project=os.environ["VERTEX_PROJECT"].strip(),
-        location=os.environ["VERTEX_LOCATION"].strip(),
-        credentials_path=os.environ["GOOGLE_APPLICATION_CREDENTIALS"].strip(),
+        project=os.environ.get("VERTEX_PROJECT", "").strip(),
+        location=os.environ.get("VERTEX_LOCATION", "").strip(),
+        credentials_path=os.environ.get("GOOGLE_APPLICATION_CREDENTIALS", "").strip(),
         **overrides,
     )
 
@@ -173,6 +191,217 @@ class Answer:
     latency_s: float = 0.0
     finish_reason: str | None = None
     error: str | None = None
+
+
+# --- transports ---------------------------------------------------------------
+#
+# Everything above and below this block is shared: the retry loop, the 401
+# refresh, the spend ceiling, the answer cache, and every prompt. Only three
+# things differ between a Vertex judge and an OpenAI one -- where to post, what
+# shape to post, and how to read the reply -- so only those three live here.
+
+
+class Backend:
+    """Where to post, what to post, how to read the reply."""
+
+    name = ""
+    #: Environment variables without which this transport cannot run at all.
+    required_env: tuple[str, ...] = ()
+
+    def endpoint(self, config: JudgeConfig) -> str:
+        raise NotImplementedError
+
+    def token(self, config: JudgeConfig, *, force_refresh: bool = False) -> str:
+        raise NotImplementedError
+
+    def payload(self, config: JudgeConfig, prompt: str) -> dict:
+        raise NotImplementedError
+
+    def parse(self, body: dict, latency: float) -> Answer:
+        raise NotImplementedError
+
+    def fingerprint(self, config: JudgeConfig) -> dict:
+        raise NotImplementedError
+
+    def count_tokens(self, config: JudgeConfig, prompt: str) -> int:
+        """How large a prompt is, for the budget check before spending."""
+        raise NotImplementedError
+
+
+class VertexBackend(Backend):
+    """Gemini through Vertex's native endpoint.
+
+    Native rather than Vertex's OpenAI-compatible route on purpose: only the
+    native one takes `thinkingConfig.thinkingBudget`, and capping the thinking
+    budget is what took a rubric answer from 480 reasoning tokens to 51.
+    `reasoning_effort` on the compatible endpoint did not.
+    """
+
+    name = "vertex"
+    required_env = ("VERTEX_PROJECT", "VERTEX_LOCATION", "GOOGLE_APPLICATION_CREDENTIALS")
+
+    def endpoint(self, config: JudgeConfig) -> str:
+        host = (
+            "aiplatform.googleapis.com"
+            if API_LOCATION == "global"
+            else f"{API_LOCATION}-aiplatform.googleapis.com"
+        )
+        return (
+            f"https://{host}/{API_VERSION}/projects/{config.project}"
+            f"/locations/{API_LOCATION}/publishers/google/models/"
+            f"{config.model}:generateContent"
+        )
+
+    def token(self, config: JudgeConfig, *, force_refresh: bool = False) -> str:
+        return google_auth.token(force_refresh=force_refresh, path=config.credentials_path)
+
+    def payload(self, config: JudgeConfig, prompt: str) -> dict:
+        return {
+            "contents": [{"role": "user", "parts": [{"text": prompt}]}],
+            "generationConfig": {
+                "temperature": 0,
+                "maxOutputTokens": output_ceiling(config.thinking_budget),
+                "thinkingConfig": {"thinkingBudget": config.thinking_budget},
+            },
+        }
+
+    def parse(self, body: dict, latency: float) -> Answer:
+        usage = body.get("usageMetadata") or {}
+        candidates = body.get("candidates") or [{}]
+        parts = (candidates[0].get("content") or {}).get("parts") or []
+        text = "".join(part.get("text", "") for part in parts).strip()
+        finish = candidates[0].get("finishReason")
+
+        return Answer(
+            text=text,
+            # An empty answer is a failure even at HTTP 200. It is usually the
+            # model spending its whole output budget on thinking, and scoring it
+            # would silently record a "No" that nobody said.
+            ok=bool(text),
+            input_tokens=int(usage.get("promptTokenCount", 0)),
+            output_tokens=int(usage.get("candidatesTokenCount", 0)),
+            thinking_tokens=int(usage.get("thoughtsTokenCount", 0)),
+            latency_s=latency,
+            finish_reason=finish,
+            error=None if text else f"empty answer (finishReason={finish})",
+        )
+
+    def fingerprint(self, config: JudgeConfig) -> dict:
+        """Frozen. 65 832 cached answers are keyed on exactly these four keys.
+
+        Adding a field -- even `backend`, even `effort` -- would invalidate
+        every one of them, because `load_cached` rejects a record whose
+        fingerprint differs. Anything new belongs in the OpenAI shape, which has
+        no history to protect.
+        """
+        return {
+            "model": config.model,
+            "thinking_budget": config.thinking_budget,
+            "max_output_tokens": output_ceiling(config.thinking_budget),
+            "temperature": 0,
+        }
+
+    def count_tokens(self, config: JudgeConfig, prompt: str) -> int:
+        response = httpx.post(
+            self.endpoint(config).replace(":generateContent", ":countTokens"),
+            headers={"Authorization": f"Bearer {self.token(config)}"},
+            json={"contents": [{"role": "user", "parts": [{"text": prompt}]}]},
+            timeout=config.timeout_s,
+        )
+        response.raise_for_status()
+        return int(response.json().get("totalTokens", 0))
+
+
+class OpenAIBackend(Backend):
+    """GPT through the ordinary chat-completions endpoint.
+
+    Three quirks of the reasoning family, each established by sending the
+    request rather than by reading the documentation: it wants
+    `max_completion_tokens`, it rejects the `temperature` *field* rather than
+    just the value, and it has `reasoning_effort` where Vertex has a thinking
+    budget.
+    """
+
+    name = "openai"
+    required_env = ("OPENAI_API_KEY",)
+    base_url = "https://api.openai.com/v1"
+
+    def endpoint(self, config: JudgeConfig) -> str:
+        return f"{self.base_url}/chat/completions"
+
+    def token(self, config: JudgeConfig, *, force_refresh: bool = False) -> str:
+        # A static key; `force_refresh` is meaningless and a 401 here is a wrong
+        # key rather than an expired one.
+        value = os.environ.get("OPENAI_API_KEY", "").strip()
+        if not value:
+            raise RuntimeError("OPENAI_API_KEY is not set. See .env.example.")
+        return value
+
+    def payload(self, config: JudgeConfig, prompt: str) -> dict:
+        body = {
+            "model": config.model,
+            "messages": [{"role": "user", "content": prompt}],
+            # Room for the reasoning as well as the answer, the same reason the
+            # Vertex ceiling exists. Measured on terra: a Likert question spends
+            # up to ~170 reasoning tokens at medium, a rubric question spends 0.
+            "max_completion_tokens": output_ceiling(config.thinking_budget) + REASONING_HEADROOM,
+        }
+        if config.effort:
+            body["reasoning_effort"] = config.effort
+        return body
+
+    def parse(self, body: dict, latency: float) -> Answer:
+        usage = body.get("usage") or {}
+        choices = body.get("choices") or [{}]
+        message = choices[0].get("message") or {}
+        text = (message.get("content") or "").strip()
+        finish = choices[0].get("finish_reason")
+        details = usage.get("completion_tokens_details") or {}
+        thinking = int(details.get("reasoning_tokens", 0))
+
+        return Answer(
+            text=text,
+            ok=bool(text),
+            input_tokens=int(usage.get("prompt_tokens", 0)),
+            # Reported completion tokens already include the reasoning, so the
+            # two are separated here to match the Vertex shape -- `Spend` adds
+            # them back together and would otherwise count thinking twice.
+            output_tokens=max(0, int(usage.get("completion_tokens", 0)) - thinking),
+            thinking_tokens=thinking,
+            latency_s=latency,
+            finish_reason=finish,
+            error=None if text else f"empty answer (finish_reason={finish})",
+        )
+
+    def fingerprint(self, config: JudgeConfig) -> dict:
+        """Effort is in here because it changes the answer.
+
+        Measured on terra over six Likert questions: `none` disagreed with
+        `low`/`medium`/`high` on two of them. Two efforts are two judges and
+        must not share a cache entry.
+        """
+        return {
+            "backend": self.name,
+            "model": config.model,
+            "effort": config.effort,
+            "max_output_tokens": output_ceiling(config.thinking_budget) + REASONING_HEADROOM,
+        }
+
+    def count_tokens(self, config: JudgeConfig, prompt: str) -> int:
+        """Estimated, not asked: this API has no counting endpoint.
+
+        Four characters per token is the usual rule of thumb and it only feeds
+        the pre-spend projection, which is deliberately an over-estimate.
+        """
+        return len(prompt) // 4
+
+
+#: Extra output room for a reasoning model that has no thinking budget to cap.
+#: Measured on terra at effort `medium`: 0 reasoning tokens on a rubric
+#: question, up to ~170 on a Likert one.
+REASONING_HEADROOM = 512
+
+BACKENDS: dict[str, Backend] = {"vertex": VertexBackend(), "openai": OpenAIBackend()}
 
 
 class Judge:
@@ -197,29 +426,14 @@ class Judge:
         well as judging them, and two objects refreshing independently is the
         race this already met once -- an HTTP 401 on 2 of 142 questions.
         """
-        return google_auth.token(force_refresh=force_refresh, path=self.config.credentials_path)
+        return self.config.transport.token(self.config, force_refresh=force_refresh)
 
     def _payload(self, prompt: str) -> dict:
-        return {
-            "contents": [{"role": "user", "parts": [{"text": prompt}]}],
-            "generationConfig": {
-                "temperature": 0,
-                "maxOutputTokens": output_ceiling(self.config.thinking_budget),
-                "thinkingConfig": {"thinkingBudget": self.config.thinking_budget},
-            },
-        }
+        return self.config.transport.payload(self.config, prompt)
 
     def count_tokens(self, prompt: str) -> int:
-        """Ask Vertex how large a prompt is, for the budget check before spending."""
-        url = self.config.endpoint.replace(":generateContent", ":countTokens")
-        response = httpx.post(
-            url,
-            headers={"Authorization": f"Bearer {self._token()}"},
-            json={"contents": [{"role": "user", "parts": [{"text": prompt}]}]},
-            timeout=self.config.timeout_s,
-        )
-        response.raise_for_status()
-        return int(response.json().get("totalTokens", 0))
+        """How large a prompt is, for the budget check before spending."""
+        return self.config.transport.count_tokens(self.config, prompt)
 
     def ask(self, prompt: str, *, sleep=time.sleep) -> Answer:
         """One question. Retries quota and backend errors, reports the rest."""
@@ -258,31 +472,14 @@ class Judge:
                     latency_s=time.monotonic() - started,
                     error=f"HTTP{response.status_code}: {response.text[:160]}",
                 )
-            return self._parse(response.json(), time.monotonic() - started)
+            return self.config.transport.parse(response.json(), time.monotonic() - started)
 
         return Answer(text="", ok=False, latency_s=time.monotonic() - started, error=last_error)
 
     @staticmethod
     def _parse(body: dict, latency: float) -> Answer:
-        usage = body.get("usageMetadata") or {}
-        candidates = body.get("candidates") or [{}]
-        parts = (candidates[0].get("content") or {}).get("parts") or []
-        text = "".join(part.get("text", "") for part in parts).strip()
-        finish = candidates[0].get("finishReason")
-
-        return Answer(
-            text=text,
-            # An empty answer is a failure even at HTTP 200. It is usually the
-            # model spending its whole output budget on thinking, and scoring it
-            # would silently record a "No" that nobody said.
-            ok=bool(text),
-            input_tokens=int(usage.get("promptTokenCount", 0)),
-            output_tokens=int(usage.get("candidatesTokenCount", 0)),
-            thinking_tokens=int(usage.get("thoughtsTokenCount", 0)),
-            latency_s=latency,
-            finish_reason=finish,
-            error=None if text else f"empty answer (finishReason={finish})",
-        )
+        """Kept as the Vertex parser so existing callers and tests still work."""
+        return BACKENDS["vertex"].parse(body, latency)
 
 
 # --- what a judge call costs -------------------------------------------------
