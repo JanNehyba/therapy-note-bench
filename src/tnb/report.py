@@ -171,6 +171,114 @@ TRACK_BLURBS = {
     ),
 }
 
+#: What a note is compared with, what a human's note is doing in the comparison,
+#: and whether the judge can be checked against a person.
+#:
+#: This is on the page because two readers in a row worked it out only by asking.
+#: The two tracks put a human note in opposite roles, and every number below
+#: means something different depending on which role it is:
+#:
+#: - On TN-Eval the therapist's note is **a competitor**. It is scored by the
+#:   same protocol as every model and it is a row in the table -- which is why
+#:   every model outscores it on completeness. The rubric counts what a note
+#:   contains and cannot see what a clinician chose to leave out.
+#: - On iCARE the expert note is **the answer key**. It never competes. Two of
+#:   the four columns measure how closely a model reproduced it, which is
+#:   similarity, not quality.
+TRACK_DESIGN = {
+    results.TRACK_TNEVAL: {
+        "scored_against": (
+            "The transcript and a 23-item rubric. There is no gold note to copy, "
+            "so any new model can be measured without anyone writing one."
+        ),
+        "human_role": (
+            "The therapist's note is scored by the identical protocol and sits in "
+            "the table as its own row. It is a competitor, not the answer key."
+        ),
+        "human_role_short": "competitor",
+        "calibrated": True,
+        "calibration": (
+            "TN-Eval released 150 notes that two therapists had already rated -- 50 "
+            "written by a therapist, 50 by Llama 3.1 70B, 50 by Mistral Large V2. "
+            "Every judge here answers those same questions about those same notes "
+            "first, so how far it agrees with a person is a published number and "
+            "not a hope."
+        ),
+    },
+    results.TRACK_ICARE: {
+        "scored_against": (
+            "An expert note written by the clinician who saw the session. ROUGE-L "
+            "and BERTScore measure how closely the model reproduced it; TRACE asks "
+            "a judge to rate the note itself, the way the paper's experts did."
+        ),
+        "human_role": (
+            "The expert note is the answer key and never competes. In the source "
+            "paper the experts compared models with each other -- a smaller Mistral "
+            "was preferred over the model leading on the automatic metrics -- and "
+            "the expert note was what those metrics measured against, not an entry."
+        ),
+        "human_role_short": "answer key",
+        "calibrated": False,
+        "calibration": (
+            "Not possible here. The authors' expert ratings are not in the public "
+            "repository, so there is nothing to check this judge against. Two "
+            "independent judges score every note instead, and where they disagree "
+            "is the only control this track can have."
+        ),
+    },
+}
+
+#: Why similarity is not quality, shown rather than asserted.
+#:
+#: Both halves are verbatim from section 6 of held-out session 6, written by the
+#: clinician who saw it and by `kimi-k3`. Verbatim matters: an abridged model
+#: note shares proportionally more words with the expert and scores 0.238 where
+#: the real one scores 0.111, which would have made the point look weaker than
+#: it is. The score is computed from these strings on every render, so it cannot
+#: drift away from the text beside it.
+SIMILARITY_EXAMPLE = {
+    "section": "Presenting symptoms",
+    "session": "6",
+    "model": "kimi-k3",
+    "expert": (
+        "1. Tingling sensation in stomach 2. Palpitations 3. Trembling hands "
+        "4. Restlessness and inability to relax"
+    ),
+    "generated": (
+        "**Presenting Symptoms:**\n\n1. Nervousness/anxiety before and during presentatio"
+        "ns at weekly work meetings: few weeks; 2. Butterflies in stomach: few weeks; 3"
+        ". Rapid heartbeat (heart beating faster): few weeks; 4. Sweaty palms: few week"
+        "s; 5. Shaking/trembling hands: few weeks; 6. Shaky voice with stuttering and t"
+        "ripping over words: few weeks; 7. Difficulty concentrating/zoning out during o"
+        "thers' presentations due to self-focused attention on physical symptoms: few w"
+        "eeks; 8. Persistent worry about negative evaluation by boss (post-presentation"
+        " rumination about performance): few weeks; 9. Sadness and disappointment in se"
+        "lf following presentations: few weeks; 10. Worry about coworkers' opinions of "
+        "her: few weeks\n\n**Chief Complaints:**\n\n1. Nervousness when making presentation"
+        "s during undergraduate college years: NA (historical; perceived as normal at t"
+        "he time, did not impair performance or grades)"
+    ),
+    "note": (
+        "Read the two. Tingling in the stomach and butterflies in the stomach are "
+        "the same symptom; palpitations and a rapid heartbeat are the same symptom; "
+        "trembling hands appear in both. The model also records how long each has "
+        "lasted and when it happens, which the expert note does not. It shares "
+        "almost no *words* with the clinician, and a metric that counts shared "
+        "words scores it accordingly."
+    ),
+}
+
+
+def similarity_example() -> dict:
+    """The worked example with its ROUGE-L computed here rather than quoted."""
+    from tnb.scoring.icare import rouge_l
+
+    return {
+        **SIMILARITY_EXAMPLE,
+        "rouge_l": round(rouge_l(SIMILARITY_EXAMPLE["generated"], SIMILARITY_EXAMPLE["expert"]), 3),
+    }
+
+
 #: Order the sections of a row's breakdown so a reader sees SOAP in SOAP order
 #: rather than alphabetically.
 SECTION_ORDER = ("subjective", "objective", "assessment", "plan")
@@ -266,6 +374,7 @@ def build(rows: list[Row]) -> dict:
                 "track": track,
                 "title": TRACK_TITLES.get(track, track),
                 "blurb": TRACK_BLURBS.get(track, ""),
+                "design": TRACK_DESIGN.get(track, {}),
                 "versions": {
                     "harness_version": harness_version,
                     "prompt_version": prompt_version,
@@ -564,6 +673,7 @@ def write(rows: list[Row], *, docs_dir: Path | None = None, readme: Path | None 
     docs_dir = docs_dir or DOCS_DIR
     data = build(rows)
     data["calibration"] = load_calibration(docs_dir)
+    data["similarity_example"] = similarity_example()
     data["saturation"] = _load_json(docs_dir / SATURATION_PATH.name)
     data["judges"] = _load_json(docs_dir / JUDGES_PATH.name)
 

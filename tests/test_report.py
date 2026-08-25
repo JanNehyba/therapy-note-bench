@@ -357,3 +357,61 @@ def test_no_index_renders_exactly_what_results_already_holds(tmp_path, monkeypat
     cli.cmd_report(argparse.Namespace(no_index=True, run_id=""))
 
     assert not calls
+
+
+# --- what a number is compared with -----------------------------------------
+
+
+def test_every_track_says_what_it_scores_a_note_against():
+    """Two readers in a row worked this out only by asking, so it is on the page.
+
+    The two tracks put a human's note in opposite roles and every number means
+    something different depending on which: on TN-Eval the therapist competes and
+    is a row in the table, on iCARE the expert note is the answer key and never
+    competes.
+    """
+    data = report.build([_scored("gemma4", 0.6), _row(track=results.TRACK_ICARE)])
+
+    for table in data["tables"]:
+        design = table["design"]
+        assert design["scored_against"], table["track"]
+        assert design["human_role"], table["track"]
+        assert design["calibration"], table["track"]
+
+
+def test_the_two_tracks_disagree_about_what_the_human_note_is_for():
+    tneval = report.TRACK_DESIGN[results.TRACK_TNEVAL]
+    icare = report.TRACK_DESIGN[results.TRACK_ICARE]
+
+    assert tneval["human_role_short"] == "competitor"
+    assert icare["human_role_short"] == "answer key"
+    assert tneval["calibrated"] is True
+    assert icare["calibrated"] is False, "the authors' expert ratings were never published"
+
+
+def test_the_similarity_example_is_computed_from_the_text_beside_it():
+    """A quoted score can drift from its example; a computed one cannot.
+
+    0.111 is what the real pair scores in the corpus. An abridged model note
+    shares proportionally more words and scores 0.238, which would have made the
+    point look weaker than it is — so the strings are verbatim and the number is
+    recomputed on every render.
+    """
+    example = report.similarity_example()
+
+    assert example["rouge_l"] == pytest.approx(0.111, abs=0.001)
+    assert "Butterflies in stomach" in example["generated"]
+    assert "Tingling sensation in stomach" in example["expert"]
+
+
+def test_the_worked_example_reaches_the_page():
+    page = report.render_page(
+        report.write.__wrapped__(  # type: ignore[attr-defined]
+            [_scored("gemma4", 0.6)]
+        )
+        if hasattr(report.write, "__wrapped__")
+        else report.build([_scored("gemma4", 0.6)])
+    )
+
+    assert "designBlock" in page, "the per-track design block must render"
+    assert "similarity-example" in page

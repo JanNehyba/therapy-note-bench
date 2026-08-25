@@ -157,6 +157,28 @@ dl.measures em { font-style: normal; color: var(--warn); }
            font-size: .68em; font-weight: 600; letter-spacing: .02em;
            background: var(--chip); color: var(--warn); white-space: nowrap; }
 p.settings { margin-top: .2rem; }
+
+.design { margin: .6rem 0 1rem; padding: .8rem .95rem; border: 1px solid var(--line);
+          border-radius: 6px; background: var(--card); font-size: .84rem; }
+.design-marks { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: .6rem; }
+.role { display: inline-block; padding: .12em .5em; border-radius: 3px; font-size: .92em;
+        font-weight: 600; letter-spacing: .01em; }
+.role-competitor { background: var(--chip); color: var(--accent); }
+.role-key { background: var(--chip); color: var(--warn); }
+.design dl { display: grid; gap: .5rem .9rem; margin: 0; }
+.design dl > div { display: grid; grid-template-columns: minmax(9rem, 12rem) 1fr; gap: .1rem .9rem; }
+.design dt { font-weight: 600; color: var(--fg); }
+.design dd { margin: 0; color: var(--muted); }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; margin: .7rem 0; }
+.pair > div { padding: .7rem .85rem; border: 1px solid var(--line); border-radius: 6px;
+              background: var(--card); }
+.pair h4 { margin: 0 0 .35rem; font-size: .8rem; text-transform: uppercase;
+           letter-spacing: .04em; color: var(--muted); }
+.pair p { margin: 0; font-size: .84rem; line-height: 1.5; }
+@media (max-width: 720px) {
+  .pair { grid-template-columns: 1fr; }
+  .design dl > div { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
@@ -183,6 +205,8 @@ p.settings { margin-top: .2rem; }
     <label><input type="checkbox" id="show-reference"> Show reference systems (therapist-written and the papers' own models)</label>
     <label><input type="checkbox" id="show-published"> Show numbers as published (different harness — never ranked with ours)</label>
   </div>
+
+  <div class="box" id="similarity-example"></div>
 
   <details class="box" id="protocol">
     <summary><strong>What is a note here, and what is it scored against?</strong></summary>
@@ -395,6 +419,7 @@ function renderTable(table, index) {
   return `<section class="box${table.scored ? '' : ' pending'}">
       <h2>${table.title} <span class="subtitle">· ${table.subtitle}</span></h2>
       <p class="blurb">${table.blurb}</p>
+      ${designBlock(table)}
       <p class="versions">harness <code>${versions.harness_version}</code> ·
          prompt <code>${versions.prompt_version}</code> · ${judge}</p>
       <div class="scroll"><table data-table="${index}">
@@ -717,6 +742,50 @@ function renderProtocol(protocol) {
 }
 
 renderProtocol(DATA.protocol);
+
+// What a note here is compared with, and what a human's note is doing in that
+// comparison. On the page rather than in the docs because two readers in a row
+// worked it out only by asking, and every number in the table means something
+// different depending on the answer.
+function designBlock(table) {
+  const d = table.design || {};
+  if (!d.scored_against) return '';
+  const role = d.human_role_short === 'competitor'
+    ? `<span class="role role-competitor">the human note competes</span>`
+    : `<span class="role role-key">the human note is the answer key</span>`;
+  const cal = d.calibrated
+    ? `<span class="role role-competitor">judge checked against people</span>`
+    : `<span class="role role-key">judge cannot be checked</span>`;
+  return `<div class="design">
+      <div class="design-marks">${role}${cal}</div>
+      <dl>
+        <div><dt>Scored against</dt><dd>${esc(d.scored_against)}</dd></div>
+        <div><dt>Where the human note sits</dt><dd>${esc(d.human_role)}</dd></div>
+        <div><dt>Can the judge be checked?</dt><dd>${esc(d.calibration)}</dd></div>
+      </dl>
+    </div>`;
+}
+
+// Similarity is not quality, shown rather than asserted. The score is computed
+// from the two strings on every render, so it cannot drift from the text.
+function renderSimilarityExample(example) {
+  const host = document.getElementById('similarity-example');
+  if (!host || !example || !example.expert) return;
+  host.innerHTML = `
+    <p class="blurb">Two of the four iCARE columns measure how closely a model
+       reproduced the clinician's wording. Here is what that misses — section
+       <strong>${esc(example.section)}</strong> of session ${esc(example.session)},
+       written by the clinician who saw it and by <code>${esc(example.model)}</code>,
+       both verbatim.</p>
+    <div class="pair">
+      <div><h4>The clinician wrote</h4><p>${esc(example.expert)}</p></div>
+      <div><h4>${esc(example.model)} wrote</h4><p>${esc(example.generated)}</p></div>
+    </div>
+    <p class="note">ROUGE-L: <strong>${example.rouge_l.toFixed(3)}</strong> — near zero.
+       ${esc(example.note)}</p>`;
+}
+
+renderSimilarityExample(DATA.similarity_example);
 
 function renderCalibration(calibration) {
   if (!calibration || !calibration.agreements || !calibration.agreements.length) return;
