@@ -736,6 +736,97 @@ def cmd_judges(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_score_icare(args: argparse.Namespace) -> int:
+    """Score the iCARE notes: two local metrics, one judge, one flag.
+
+    Separate from `cmd_score` because the two tracks share nothing but the
+    judge. This one assembles 17 section files into one note, compares it with
+    an expert note, and asks five questions rather than fifty-four.
+    """
+    from tnb.scoring import icare as icare_scorer
+    from tnb.scoring import icare_run
+
+    config = judge.config_from_env(model=args.judge_model)
+    client = judge.Judge(config)
+
+    sessions = icare_run.load_sessions(args.limit)
+    candidates = list(icare_run.from_generations(sessions))
+    if args.models:
+        wanted = {name.strip() for name in args.models.split(",") if name.strip()}
+        candidates = [c for c in candidates if c.system_id in wanted]
+
+    # Counted before `--notes` takes a slice: coverage is a fact about
+    # generation, not about what this invocation chose to read.
+    coverage: dict[tuple[str, str], int] = {}
+    for candidate in candidates:
+        key = (candidate.provider, candidate.system_id)
+        coverage[key] = coverage.get(key, 0) + 1
+    attempted = dict.fromkeys(coverage, len(sessions))
+    settings = results.settings_by_system()
+
+    if args.notes:
+        candidates = candidates[: args.notes]
+    if not candidates:
+        raise RuntimeError("Nothing to score. Generate the iCARE notes first.")
+
+    questions = len(candidates) * len(icare_scorer.TRACE_DIMENSIONS)
+    print(f"{len(candidates)} note(s) from {len(coverage)} system(s), {questions} TRACE questions.")
+    print(f"judge {config.model}, ceiling ${args.max_judge_usd:.2f}\n")
+    if args.dry_run:
+        print("Dry run: the judge was not called.")
+        return 0
+
+    # BERTScore over every note at once: the model loads once instead of 640
+    # times. None when the optional extra is absent, and then the column is
+    # simply not reported -- never zeroed.
+    bert_values = icare_scorer.bertscore(
+        [c.note for c in candidates], [c.reference for c in candidates]
+    )
+    if bert_values is None:
+        print("BERTScore: the 'scoring' extra is not installed, so that column is skipped.\n")
+
+    spend = judge.Spend(limit_usd=args.max_judge_usd)
+    scored = []
+    for index, candidate in enumerate(candidates):
+        try:
+            result = icare_run.score_note(
+                candidate,
+                client,
+                spend,
+                force=args.force,
+                bert=None if bert_values is None else bert_values[index],
+            )
+        except icare_run.BudgetExceeded as stop:
+            print(f"\n{stop}", file=sys.stderr)
+            break
+        scored.append(result)
+        if (index + 1) % 20 == 0 or index + 1 == len(candidates):
+            print(f"  [{index + 1}/{len(candidates)}] {candidate.system_id[:30]:30}", flush=True)
+
+    if not scored:
+        print("Nothing scored.", file=sys.stderr)
+        return 1
+
+    total = spend.usd(config.model)
+    # None rather than 0.00 when the model has no recorded price: a run whose
+    # cost is unknown must not print a number that looks measured.
+    cost = "unknown" if total is None else f"${total:.2f}"
+    print(f"\nAsked {spend.calls} question(s); cost {cost}.")
+
+    rows = icare_run.to_rows(
+        scored,
+        judge_model=config.model,
+        n_generated=coverage,
+        n_attempted=attempted,
+        settings=settings,
+        run_id=args.run_id or "",
+    )
+    path = results.append(rows)
+    print(f"Appended {len(rows)} row(s) to {path.relative_to(REPO_ROOT)}.")
+    print("Run 'tnb report' to rebuild the page.")
+    return 0
+
+
 def cmd_not_implemented(args: argparse.Namespace) -> int:
     print(
         f"'tnb {args.command}' is not implemented yet — see the roadmap in README.md.",
@@ -817,6 +908,28 @@ def build_parser() -> argparse.ArgumentParser:
         "--dry-run", action="store_true", help="print the rows without appending them"
     )
     results_parser.set_defaults(func=cmd_results)
+
+    score_icare = subparsers.add_parser(
+        "score-icare", help="score the iCARE notes: ROUGE-L, BERTScore, TRACE, temporal"
+    )
+    score_icare.add_argument("--models", help="comma-separated system ids to score")
+    score_icare.add_argument("--limit", type=int, help="use only the first N sessions")
+    score_icare.add_argument("--notes", type=int, help="stop after N notes (for a pilot)")
+    score_icare.add_argument(
+        "--judge-model", default=judge.DEFAULT_MODEL, help="which judge runs TRACE"
+    )
+    score_icare.add_argument(
+        "--max-judge-usd",
+        type=float,
+        default=250.0,
+        help="runaway guard; the run stops rather than exceeding it. 0 disables it",
+    )
+    score_icare.add_argument("--force", action="store_true", help="re-ask cached questions")
+    score_icare.add_argument(
+        "--dry-run", action="store_true", help="print the size of the job, ask nothing"
+    )
+    score_icare.add_argument("--run-id", default="", help="label these rows in results/")
+    score_icare.set_defaults(func=cmd_score_icare)
 
     score = subparsers.add_parser("score", help="run the judge over generated notes (phase 3)")
     score.add_argument(
