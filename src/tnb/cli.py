@@ -321,11 +321,33 @@ def cmd_results(args: argparse.Namespace) -> int:
     return 0
 
 
+def _today_run_id() -> str:
+    """A default label for rows this command appends, so they can be traced."""
+    return "report-" + dt.datetime.now(dt.UTC).strftime("%Y-%m-%d")
+
+
 def cmd_report(args: argparse.Namespace) -> int:
-    """Render results/rows.jsonl into the JSON, the page and the README block."""
+    """Render results/rows.jsonl into the JSON, the page and the README block.
+
+    Coverage is re-read from ``generations/`` on the way, unless ``--no-index``
+    says otherwise. It used to be somebody's job to remember `tnb results index`
+    after generating, and it went exactly as that always goes: the page reported
+    iCARE as "3/3" for two days after 7 480 sections had been written, because
+    the last index predated them.
+
+    Reading the cache is cheap and it cannot be stale by construction, so the
+    page now describes what is on disk rather than what was on disk the last
+    time anyone ran a second command.
+    """
+    if not args.no_index:
+        coverage = results.index_generations(run_id=args.run_id or _today_run_id())
+        if coverage:
+            fresh = results.append(coverage)
+            print(f"indexed {len(coverage)} coverage row(s) into {fresh.relative_to(REPO_ROOT)}")
+
     rows = results.load()
     if not rows:
-        print("No rows in results/. Run 'tnb results index' first.", file=sys.stderr)
+        print("No rows in results/. Generate some notes first.", file=sys.stderr)
         return 1
 
     data = report.write(rows)
@@ -1019,6 +1041,12 @@ def build_parser() -> argparse.ArgumentParser:
     report_parser = subparsers.add_parser(
         "report", help="regenerate the leaderboard page, its JSON and the README table"
     )
+    report_parser.add_argument(
+        "--no-index",
+        action="store_true",
+        help="do not re-read generations/ first; render exactly what results/ already holds",
+    )
+    report_parser.add_argument("--run-id", default="", help="label the coverage rows this appends")
     report_parser.set_defaults(func=cmd_report)
 
     run = subparsers.add_parser("run", help="generate and score notes end to end (phases 2-4)")

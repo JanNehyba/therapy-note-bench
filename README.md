@@ -50,7 +50,21 @@ published numbers: **<https://jannehyba.github.io/therapy-note-bench/>**
 - **Conciseness** (0-1) — Fraction of the note's sentences that fit at least one rubric item. 1.00 means nothing is off-topic; it does not mean the note is short.
 - **Faithfulness** (1-5) — Whether the note contradicts the transcript, rated 1 to 5, where 5 is no inaccuracies. TN-Eval's protocol has no criterion-based version of this one, so it stays a Likert scale. A different scale from the two columns beside it, and a weak one: TN-Eval measured Krippendorff's alpha of 0.18 between trained therapists on this rating. Read it as a flag for gross invention, not as a ranking.
 
-**iCARE / iHOPE · 17 sections per session** — *waiting for the judge.* 2 system(s) have written their notes and none has been scored yet: `deepseek-v4-flash`, `deepseek-v4-flash-thinking`.
+**TN-Eval SOAP · AnnoMI conversations** — *waiting for the judge.* 5 system(s) have written their notes and none has been scored yet: `google_gemini-3.1-pro-preview`, `google_gemini-3.7-flash`, `gpt-5.6-luna`, `gpt-5.6-sol`, `gpt-5.6-terra`.
+
+**iCARE / iHOPE · 17 sections per session**
+
+| Model | ROUGE-L (0-1) | BERTScore (0-1) | TRACE (1-5) | Temporal (0-1) | Notes | Scored |
+|---|---|---|---|---|---|---|
+| `deepseek-v4-flash` | 0.303 | 0.841 | 5.00 | 0.750 | 40/40 | 2 of 40 *(judging)* |
+
+*Deliberately not ranked: these columns measure different things and the source paper found they disagree.*
+- **ROUGE-L** (0-1) — Longest-common-subsequence overlap with the expert note. Rewards using the same words in the same order. Cannot tell a good paraphrase from a wrong answer. The source paper found it disagrees with what clinicians preferred.
+- **BERTScore** (0-1) — Embedding similarity to the expert note. Tolerates paraphrase. A fluent note about the wrong session still scores well.
+- **TRACE** (1-5) — Trustworthiness, relevance, accuracy, comprehensiveness and expression, averaged. A re-implementation with no human anchor: the authors never published their ratings, so unlike the TN-Eval track this number is not calibrated against anybody.
+- **Temporal** (0-1) — Sections 5 and 17 only -- what happened last time, what happens next. Kept out of the average. The source paper reports every model it tested failing here, so a low number is the expected result, not a surprise.
+
+**iCARE / iHOPE · 17 sections per session** — *waiting for the judge.* 15 system(s) have written their notes and none has been scored yet: `deepseek-v4-flash-thinking`, `gemma4`, `glm-5`, `glm-5.2`, `google_gemini-3.1-pro-preview`, `google_gemini-3.7-flash`, `gpt-5.6-luna`, `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-oss-120b`, `kimi-k3`, `mistral-medium-3.5`, `qwen3.5-122b`, `qwen3.5-int4`, `qwen3.8-27b`.
 
 See the [full leaderboard](https://jannehyba.github.io/therapy-note-bench/) for per-section detail, the reference systems and the published numbers.
 <!-- LEADERBOARD:END -->

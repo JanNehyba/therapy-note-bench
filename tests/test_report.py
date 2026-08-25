@@ -320,3 +320,40 @@ def test_a_queue_still_reports_the_one_thing_that_is_measured():
     data = report.build([_row(system_id="gpt-oss-120b", n_sessions_generated=42, n_failed=8)])
     row = data["tables"][0]["rows"][0]
     assert (row["n_generated"], row["n_attempted"], row["n_failed"]) == (42, 50, 8)
+
+
+def test_report_reads_the_generation_cache_rather_than_trusting_a_memory(tmp_path, monkeypatch):
+    """The page said iCARE was "3/3" for two days after 7 480 sections existed.
+
+    Nothing was wrong with the data; the last `tnb results index` predated the
+    generation run and nobody remembered to run it again. Reading the cache is
+    cheap and cannot be stale by construction.
+    """
+    import argparse
+
+    from tnb import cli, results
+
+    calls = []
+    monkeypatch.setattr(results, "index_generations", lambda **kw: calls.append(kw) or [])
+    monkeypatch.setattr(results, "load", lambda *a, **kw: [])
+
+    args = argparse.Namespace(no_index=False, run_id="")
+    cli.cmd_report(args)
+
+    assert calls, "report must re-read generations/ before rendering"
+    assert calls[0]["run_id"].startswith("report-"), "the rows it appends are traceable"
+
+
+def test_no_index_renders_exactly_what_results_already_holds(tmp_path, monkeypatch):
+    """An escape hatch, so a published page can be reproduced from results/ alone."""
+    import argparse
+
+    from tnb import cli, results
+
+    calls = []
+    monkeypatch.setattr(results, "index_generations", lambda **kw: calls.append(kw) or [])
+    monkeypatch.setattr(results, "load", lambda *a, **kw: [])
+
+    cli.cmd_report(argparse.Namespace(no_index=True, run_id=""))
+
+    assert not calls
