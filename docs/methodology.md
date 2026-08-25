@@ -56,15 +56,43 @@ TRACE annotations and blinded expert review are not in the public repository, so
 we cannot calibrate it the way we calibrate the TN-Eval judge. Every table and
 column that carries a TRACE score says so.
 
-## The judge
+## The judges
 
-`claude-opus-5`, pinned. Scoring prompts are TN-Eval's, verbatim.
+**Two of them, and they mark each other's homework.** Scoring prompts are
+TN-Eval's, verbatim.
 
-**Why an external model.** Both corpora are transcripts of public YouTube
-videos. There are no patient data involved, so keeping inference inside e-INFRA
-buys nothing here. If real session data are ever added to this benchmark, the
-judge must move inside the infrastructure that holds them — which is why the
-provider layer is swappable from the start.
+| Role | Model | Setting |
+|---|---|---|
+| Judge A | `gemini-3.1-pro-preview` | thinking budget 128 |
+| Judge B | `gpt-5.6-terra` | reasoning effort `medium` |
+
+Each scores every system, its own family included, and the two produce separate
+tables — the leaderboard never mixes rows that disagree on `judge_model`.
+
+**Why two.** Both of these models also *write* notes in this benchmark, and a
+model asked to score text tends to score its own output higher than a neutral
+rater would. Judging only with one of them would leave that as a caveat. With
+two, the difference between the tables measures it: for each system take
+`score_A − score_B`; the average over one judge's own family minus the average
+over everything else is the self-preference effect, in the units of the
+leaderboard, with a bootstrap interval. If the interval spans zero the page says
+the effect was not detected. If it does not, the number is a result.
+
+The obvious alternative — each judge scores only the *other* family — was
+rejected: it would put two instruments with two calibrations in one column, and
+leave every system with a single score and no way to check it.
+
+**Why external models.** Both corpora are transcripts of public YouTube videos.
+There are no patient data involved, so keeping inference inside e-INFRA buys
+nothing here. If real session data are ever added to this benchmark, the judge
+must move inside the infrastructure that holds them — which is why the provider
+layer is swappable from the start.
+
+**Why not the newest one.** Judge quality here does not follow release order.
+Measured over the same 150 notes, Krippendorff's alpha on the rubric:
+`gemini-2.5-flash` 0.550, `gemini-3.5-flash` 0.543, `gemini-3.7-flash` 0.541 —
+exactly backwards from what a general benchmark would predict. The calibration
+below is not a formality; without it we would have chosen worse.
 
 ### Calibration comes before the leaderboard
 
@@ -73,10 +101,23 @@ therapist-written, 50 Llama 3.1 70B, 50 Mistral Large V2). Before any leaderboar
 number is trusted, the judge is run over those same notes and compared with the
 humans:
 
-- Cohen's kappa per rubric criterion
-- Spearman correlation on the aggregate section scores
-- Whether the judge reproduces TN-Eval's own finding that rubric agreement beats
-  Likert agreement
+- Cohen's kappa per rubric criterion — the statistic a reader expects for a
+  yes/no judgement
+- Spearman correlation on the 1–5 section scores — likewise, for a rating
+- **Krippendorff's alpha on both**, which is the only one of the three defined
+  for both kinds of rating
+
+That third one carries a decision rather than a description. Whether the judge
+reproduces TN-Eval's own finding — that criterion checklists agree far better
+than 1–5 scales — is the stated reason this leaderboard ranks on the rubric, and
+that comparison can only be made on a statistic that means the same thing on
+both sides. It was made on a kappa against a Spearman rho until 2026-08-25, when
+the two were compared as though they were one quantity. They are not, and the
+inequality between them said nothing. TN-Eval reached the finding with alpha, so
+reproducing it means using alpha.
+
+The verdict is refused, rather than rounded, when the two instruments land
+within 0.05 of each other.
 
 Those numbers go in the README, above the leaderboard. **If the judge disagrees
 with therapists, that is published too.** A leaderboard whose referee has never

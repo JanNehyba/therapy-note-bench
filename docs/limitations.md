@@ -25,11 +25,33 @@ precise.
 Small differences between adjacent models on this leaderboard are noise. Treat
 the table as a coarse ordering.
 
+## The judges also sit the exam
+
+Two of the models being scored are also the two doing the scoring:
+`gemini-3.1-pro-preview` and `gpt-5.6-terra` both write notes here. A model
+asked to grade text tends to grade its own output higher than a neutral rater
+would, which would inflate exactly the two systems a reader is most likely to
+be curious about.
+
+This is measured rather than disclaimed. Both judges score every system, the
+two resulting tables are published side by side, and the difference between
+them estimates the effect with a bootstrap interval. Read that panel before
+reading either table. If the interval spans zero, the effect was not detected
+in this data — which is not the same as it being absent, only that a run this
+size could not see it.
+
+Cells where a judge scored a model from its own family are marked in the table
+where they sit. They are never dropped: a missing row would be a worse
+distortion than a marked one.
+
 ## The judge is a model
 
-For the TN-Eval track the judge is calibrated against two human annotators and
+For the TN-Eval track each judge is calibrated against two human annotators and
 that calibration is published above the leaderboard. Calibrated is not the same
-as correct. TN-Eval's own finding is that LLM judges track humans acceptably on
+as correct. Nor does newer mean better: on this task `gemini-2.5-flash` agreed
+with the therapists slightly *more* than `gemini-3.7-flash` did, which is the
+reverse of what any general benchmark would predict, and is why every candidate
+is measured rather than assumed. TN-Eval's own finding is that LLM judges track humans acceptably on
 completeness and conciseness and **struggle on faithfulness** — which is the
 dimension that matters most clinically, because it is where hallucinations show
 up.

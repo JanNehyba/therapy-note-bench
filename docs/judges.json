@@ -229,6 +229,52 @@
       ],
       "judge_model": "gemini-2.5-flash",
       "rubric_beats_likert": true
+    },
+    {
+      "agreements": [
+        {
+          "alpha": 0.5198903139267457,
+          "alpha_humans": 0.5037134105690964,
+          "alpha_level": "nominal",
+          "humans": 0.5037692102193586,
+          "judge": 0.5207392564959898,
+          "n": 3450,
+          "name": "rubric_completeness",
+          "statistic": "Cohen's kappa"
+        },
+        {
+          "alpha": -0.010126775603597926,
+          "alpha_humans": 0.13053214160572235,
+          "alpha_level": "ordinal",
+          "humans": 0.13096836110903934,
+          "judge": 0.30244552741166736,
+          "n": 600,
+          "name": "likert_completeness",
+          "statistic": "Spearman rho"
+        },
+        {
+          "alpha": 0.02012166218416578,
+          "alpha_humans": 0.18712235103669383,
+          "alpha_level": "ordinal",
+          "humans": 0.19210453252909696,
+          "judge": 0.019391914235186283,
+          "n": 600,
+          "name": "likert_conciseness",
+          "statistic": "Spearman rho"
+        },
+        {
+          "alpha": -0.01458628464715006,
+          "alpha_humans": 0.17930428214514715,
+          "alpha_level": "ordinal",
+          "humans": 0.1830973712087935,
+          "judge": 0.08713374975989989,
+          "n": 600,
+          "name": "likert_faithfulness",
+          "statistic": "Spearman rho"
+        }
+      ],
+      "judge_model": "gpt-5.6-terra",
+      "rubric_beats_likert": true
     }
   ],
   "notes": 150
