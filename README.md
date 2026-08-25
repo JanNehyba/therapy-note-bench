@@ -106,22 +106,22 @@ published numbers: **<https://jannehyba.github.io/therapy-note-bench/>**
 
 | Model | Provider | ROUGE-L (0-1) | BERTScore (0-1) | TRACE (1-5) | Looks back (0-1) | Looks forward (0-1) | Notes | Scored |
 |---|---|---|---|---|---|---|---|---|
-| `deepseek-v4-flash` | einfra | 0.247 | 0.831 | 4.81 | — | — | 40/40 | 40 |
-| `deepseek-v4-flash-thinking` | einfra | 0.252 | 0.829 | 4.89 | — | — | 40/40 | 40 |
-| `gemma4` | einfra | 0.276 | 0.835 | 4.88 | — | — | 40/40 | 40 |
-| `glm-5` | einfra | 0.238 | 0.836 | 4.91 | — | — | 40/40 | 40 |
-| `glm-5.2` | einfra | 0.227 | 0.835 | 4.92 | — | — | 40/40 | 40 |
-| `google_gemini-3.1-pro-preview` | vertex | 0.242 | 0.834 | 4.96 | — | — | 40/40 | 40 |
-| `google_gemini-3.7-flash` | vertex | 0.265 | 0.835 | 4.99 | — | — | 40/40 | 40 |
-| `gpt-5.6-luna` | openai | 0.185 | 0.825 | 4.96 | — | — | 40/40 | 40 |
-| `gpt-5.6-sol` | openai | 0.227 | 0.829 | 4.97 | — | — | 40/40 | 40 |
-| `gpt-5.6-terra` | openai | 0.200 | 0.828 | 4.95 | — | — | 40/40 | 40 |
-| `gpt-oss-120b` | einfra | 0.195 | 0.823 | 4.78 | — | — | 40/40 | 40 |
-| `kimi-k3` | einfra | 0.123 | 0.824 | 4.97 | — | — | 40/40 | 40 |
-| `mistral-medium-3.5` | einfra | 0.264 | 0.830 | 4.93 | — | — | 40/40 | 40 |
-| `qwen3.5-122b` | einfra | 0.176 | 0.825 | 4.82 | — | — | 40/40 | 40 |
-| `qwen3.5-int4` | einfra | 0.253 | 0.833 | 4.93 | — | — | 40/40 | 40 |
-| `qwen3.8-27b` | einfra | 0.255 | 0.834 | 4.96 | — | — | 40/40 | 40 |
+| `deepseek-v4-flash` | einfra | 0.168 | 0.816 | 4.78 | 1.000 | 0.091 | 40/40 | 40 |
+| `deepseek-v4-flash-thinking` | einfra | 0.170 | 0.811 | 4.87 | 1.000 | 0.182 | 40/40 | 40 |
+| `gemma4` | einfra | 0.202 | 0.820 | 4.83 | 1.000 | 0.364 | 40/40 | 40 |
+| `glm-5` | einfra | 0.179 | 0.820 | 4.88 | 1.000 | 0.364 | 40/40 | 40 |
+| `glm-5.2` | einfra | 0.173 | 0.820 | 4.92 | 1.000 | 0.364 | 40/40 | 40 |
+| `google_gemini-3.1-pro-preview` | vertex | 0.182 | 0.817 | 4.96 | 1.000 | 0.455 | 40/40 | 40 |
+| `google_gemini-3.7-flash` | vertex | 0.186 | 0.819 | 4.97 | 0.971 | 0.364 | 40/40 | 40 |
+| `gpt-5.6-luna` | openai | 0.150 | 0.811 | 4.92 | 1.000 | 0.273 | 40/40 | 40 |
+| `gpt-5.6-sol` | openai | 0.169 | 0.816 | 4.99 | 1.000 | 0.545 | 40/40 | 40 |
+| `gpt-5.6-terra` | openai | 0.155 | 0.815 | 4.97 | 0.971 | 0.455 | 40/40 | 40 |
+| `gpt-oss-120b` | einfra | 0.159 | 0.808 | 4.79 | 1.000 | 0.000 | 40/40 | 40 |
+| `kimi-k3` | einfra | 0.109 | 0.812 | 4.98 | 1.000 | 0.364 | 40/40 | 40 |
+| `mistral-medium-3.5` | einfra | 0.186 | 0.815 | 4.87 | 1.000 | 0.182 | 40/40 | 40 |
+| `qwen3.5-122b` | einfra | 0.140 | 0.815 | 4.76 | 1.000 | 0.273 | 40/40 | 40 |
+| `qwen3.5-int4` | einfra | 0.182 | 0.818 | 4.97 | 1.000 | 0.091 | 40/40 | 40 |
+| `qwen3.8-27b` | einfra | 0.186 | 0.819 | 4.95 | 1.000 | 0.273 | 40/40 | 40 |
 
 *Deliberately not ranked: these columns measure different things and the source paper found they disagree.*
 - **ROUGE-L** (0-1) — Longest-common-subsequence overlap with the expert note, F-measure. Rewards using the same words in the same order. Cannot tell a good paraphrase from a wrong answer. The source paper found it disagrees with what clinicians preferred.
@@ -132,11 +132,11 @@ published numbers: **<https://jannehyba.github.io/therapy-note-bench/>**
 
 **Do the two judges agree?** (TN-Eval SOAP · AnnoMI conversations)
 
-`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on completeness (+0.889) and place 11 of 19 systems differently on it anyway. They agree least on faithfulness (+0.706, 17 of 19 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. 14 system(s) beat at least one other on every measure under both judges, which needs no weighting to be true: `google_gemini-3.1-pro-preview` beats 4. 12 of 19 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner.
+`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on completeness (+0.889) and place 11 of 19 systems differently on it anyway. They agree least on faithfulness (+0.706, 17 of 19 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. 14 system(s) beat at least one other on every measure under both judges, which needs no weighting to be true: `google_gemini-3.1-pro-preview` beats 4. 12 of 19 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner. Ordering by completeness says little about conciseness (`gemini-3.1-pro-preview` -0.18, `gpt-5.6-terra` -0.33). Ordering by completeness says different things to the two judges about faithfulness (`gemini-3.1-pro-preview` +0.72, `gpt-5.6-terra` +0.04). The two judges disagree about whether those columns are related at all, so neither reading is this benchmark's answer.
 
-*16 row(s) scored by `None` at harness `0.1.0` are no longer shown: the measures were redefined in `0.2.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 icare row(s) of generation coverage at harness `0.1.0` are no longer shown: the measures were redefined in `0.2.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*16 row(s) scored by `None` at harness `0.1.0` are no longer shown: the measures were redefined in `0.2.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 tneval-soap row(s) of generation coverage at harness `0.1.0` are no longer shown: the measures were redefined in `0.2.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
 See the [full leaderboard](https://jannehyba.github.io/therapy-note-bench/) for per-section detail, the reference systems and the published numbers.
 <!-- LEADERBOARD:END -->

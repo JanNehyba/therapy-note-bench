@@ -306,7 +306,40 @@
         }
       ],
       "n_systems": 19,
-      "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on completeness (+0.889) and place 11 of 19 systems differently on it anyway. They agree least on faithfulness (+0.706, 17 of 19 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. 14 system(s) beat at least one other on every measure under both judges, which needs no weighting to be true: `google_gemini-3.1-pro-preview` beats 4. 12 of 19 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner.",
+      "ranking_measure": "completeness",
+      "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on completeness (+0.889) and place 11 of 19 systems differently on it anyway. They agree least on faithfulness (+0.706, 17 of 19 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. 14 system(s) beat at least one other on every measure under both judges, which needs no weighting to be true: `google_gemini-3.1-pro-preview` beats 4. 12 of 19 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner. Ordering by completeness says little about conciseness (`gemini-3.1-pro-preview` -0.18, `gpt-5.6-terra` -0.33). Ordering by completeness says different things to the two judges about faithfulness (`gemini-3.1-pro-preview` +0.72, `gpt-5.6-terra` +0.04). The two judges disagree about whether those columns are related at all, so neither reading is this benchmark's answer.",
+      "tensions": [
+        {
+          "agrees": false,
+          "first": "completeness",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": -0.1842,
+            "gpt-5.6-terra": -0.3263
+          },
+          "second": "conciseness"
+        },
+        {
+          "agrees": false,
+          "first": "completeness",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.725,
+            "gpt-5.6-terra": 0.0404
+          },
+          "second": "faithfulness"
+        },
+        {
+          "agrees": false,
+          "first": "conciseness",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.1538,
+            "gpt-5.6-terra": -0.0211
+          },
+          "second": "faithfulness"
+        }
+      ],
       "undominated": [
         "deepseek-v4-flash",
         "deepseek-v4-flash-thinking",
@@ -6383,28 +6416,29 @@
         {
           "by_section": {
             "trace": {
-              "accuracy": 4.65,
-              "comprehensiveness": 4.9,
-              "expression": 4.975,
-              "relevance": 4.925,
-              "trustworthiness": 4.6
+              "accuracy": 4.55,
+              "comprehensiveness": 4.825,
+              "expression": 5.0,
+              "relevance": 4.975,
+              "trustworthiness": 4.55
             }
           },
           "detail": {
-            "accuracy": 4.65,
-            "comprehensiveness": 4.9,
-            "expression": 4.975,
-            "relevance": 4.925,
-            "trustworthiness": 4.6
+            "accuracy": 4.55,
+            "comprehensiveness": 4.825,
+            "expression": 5.0,
+            "relevance": 4.975,
+            "trustworthiness": 4.55
           },
           "effort": "",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8313,
-            "rouge_l": 0.247,
-            "temporal": 0.8676,
-            "trace": 4.81
+            "bertscore": 0.8163,
+            "rouge_l": 0.1675,
+            "temporal_next": 0.0909,
+            "temporal_past": 1.0,
+            "trace": 4.78
           },
           "label": "deepseek-v4-flash",
           "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
@@ -6417,7 +6451,7 @@
           "n_unreached": 0,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-25T20:08:51Z",
+          "scored_at": "2026-08-25T22:52:53Z",
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -6428,28 +6462,29 @@
         {
           "by_section": {
             "trace": {
-              "accuracy": 4.825,
-              "comprehensiveness": 4.95,
-              "expression": 4.875,
+              "accuracy": 4.9,
+              "comprehensiveness": 4.8,
+              "expression": 4.85,
               "relevance": 4.95,
-              "trustworthiness": 4.85
+              "trustworthiness": 4.825
             }
           },
           "detail": {
-            "accuracy": 4.825,
-            "comprehensiveness": 4.95,
-            "expression": 4.875,
+            "accuracy": 4.9,
+            "comprehensiveness": 4.8,
+            "expression": 4.85,
             "relevance": 4.95,
-            "trustworthiness": 4.85
+            "trustworthiness": 4.825
           },
           "effort": "",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8293,
-            "rouge_l": 0.2515,
-            "temporal": 0.9706,
-            "trace": 4.89
+            "bertscore": 0.8114,
+            "rouge_l": 0.1695,
+            "temporal_next": 0.1818,
+            "temporal_past": 1.0,
+            "trace": 4.865
           },
           "label": "deepseek-v4-flash-thinking",
           "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
@@ -6462,7 +6497,7 @@
           "n_unreached": 0,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-25T20:08:51Z",
+          "scored_at": "2026-08-25T22:52:53Z",
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -6473,28 +6508,29 @@
         {
           "by_section": {
             "trace": {
-              "accuracy": 4.8,
-              "comprehensiveness": 4.875,
+              "accuracy": 4.7,
+              "comprehensiveness": 4.825,
               "expression": 5.0,
               "relevance": 4.95,
-              "trustworthiness": 4.8
+              "trustworthiness": 4.675
             }
           },
           "detail": {
-            "accuracy": 4.8,
-            "comprehensiveness": 4.875,
+            "accuracy": 4.7,
+            "comprehensiveness": 4.825,
             "expression": 5.0,
             "relevance": 4.95,
-            "trustworthiness": 4.8
+            "trustworthiness": 4.675
           },
           "effort": "",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8354,
-            "rouge_l": 0.2758,
-            "temporal": 1.0,
-            "trace": 4.885
+            "bertscore": 0.8197,
+            "rouge_l": 0.2022,
+            "temporal_next": 0.3636,
+            "temporal_past": 1.0,
+            "trace": 4.83
           },
           "label": "gemma4",
           "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
@@ -6507,7 +6543,7 @@
           "n_unreached": 0,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-25T20:08:51Z",
+          "scored_at": "2026-08-25T22:52:53Z",
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -6518,28 +6554,29 @@
         {
           "by_section": {
             "trace": {
-              "accuracy": 4.725,
-              "comprehensiveness": 5.0,
+              "accuracy": 4.85,
+              "comprehensiveness": 4.9,
               "expression": 5.0,
-              "relevance": 4.975,
-              "trustworthiness": 4.85
+              "relevance": 4.95,
+              "trustworthiness": 4.7
             }
           },
           "detail": {
-            "accuracy": 4.725,
-            "comprehensiveness": 5.0,
+            "accuracy": 4.85,
+            "comprehensiveness": 4.9,
             "expression": 5.0,
-            "relevance": 4.975,
-            "trustworthiness": 4.85
+            "relevance": 4.95,
+            "trustworthiness": 4.7
           },
           "effort": "",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8359,
-            "rouge_l": 0.2384,
-            "temporal": 0.9706,
-            "trace": 4.91
+            "bertscore": 0.8204,
+            "rouge_l": 0.1788,
+            "temporal_next": 0.3636,
+            "temporal_past": 1.0,
+            "trace": 4.88
           },
           "label": "glm-5",
           "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
@@ -6552,7 +6589,7 @@
           "n_unreached": 0,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-25T20:08:51Z",
+          "scored_at": "2026-08-25T22:52:53Z",
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -6563,27 +6600,28 @@
         {
           "by_section": {
             "trace": {
-              "accuracy": 4.85,
-              "comprehensiveness": 4.975,
+              "accuracy": 4.825,
+              "comprehensiveness": 4.925,
               "expression": 4.975,
-              "relevance": 4.95,
-              "trustworthiness": 4.85
+              "relevance": 4.975,
+              "trustworthiness": 4.9
             }
           },
           "detail": {
-            "accuracy": 4.85,
-            "comprehensiveness": 4.975,
+            "accuracy": 4.825,
+            "comprehensiveness": 4.925,
             "expression": 4.975,
-            "relevance": 4.95,
-            "trustworthiness": 4.85
+            "relevance": 4.975,
+            "trustworthiness": 4.9
           },
           "effort": "",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8349,
-            "rouge_l": 0.2268,
-            "temporal": 0.9853,
+            "bertscore": 0.8204,
+            "rouge_l": 0.1729,
+            "temporal_next": 0.3636,
+            "temporal_past": 1.0,
             "trace": 4.92
           },
           "label": "glm-5.2",
@@ -6597,7 +6635,7 @@
           "n_unreached": 0,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-25T20:08:51Z",
+          "scored_at": "2026-08-25T22:52:53Z",
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -6608,16 +6646,16 @@
         {
           "by_section": {
             "trace": {
-              "accuracy": 4.925,
-              "comprehensiveness": 4.925,
+              "accuracy": 4.95,
+              "comprehensiveness": 4.95,
               "expression": 4.975,
               "relevance": 5.0,
               "trustworthiness": 4.95
             }
           },
           "detail": {
-            "accuracy": 4.925,
-            "comprehensiveness": 4.925,
+            "accuracy": 4.95,
+            "comprehensiveness": 4.95,
             "expression": 4.975,
             "relevance": 5.0,
             "trustworthiness": 4.95
@@ -6626,10 +6664,11 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8336,
-            "rouge_l": 0.2419,
-            "temporal": 0.9118,
-            "trace": 4.955
+            "bertscore": 0.817,
+            "rouge_l": 0.1824,
+            "temporal_next": 0.4545,
+            "temporal_past": 1.0,
+            "trace": 4.965
           },
           "label": "google_gemini-3.1-pro-preview",
           "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
@@ -6642,7 +6681,7 @@
           "n_unreached": 0,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-25T20:08:51Z",
+          "scored_at": "2026-08-25T22:52:53Z",
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -6653,28 +6692,29 @@
         {
           "by_section": {
             "trace": {
-              "accuracy": 4.975,
-              "comprehensiveness": 5.0,
+              "accuracy": 5.0,
+              "comprehensiveness": 4.85,
               "expression": 5.0,
-              "relevance": 4.975,
+              "relevance": 5.0,
               "trustworthiness": 5.0
             }
           },
           "detail": {
-            "accuracy": 4.975,
-            "comprehensiveness": 5.0,
+            "accuracy": 5.0,
+            "comprehensiveness": 4.85,
             "expression": 5.0,
-            "relevance": 4.975,
+            "relevance": 5.0,
             "trustworthiness": 5.0
           },
           "effort": "",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8349,
-            "rouge_l": 0.2645,
-            "temporal": 0.8971,
-            "trace": 4.99
+            "bertscore": 0.8189,
+            "rouge_l": 0.186,
+            "temporal_next": 0.3636,
+            "temporal_past": 0.9706,
+            "trace": 4.97
           },
           "label": "google_gemini-3.7-flash",
           "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
@@ -6687,7 +6727,7 @@
           "n_unreached": 0,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-25T20:08:51Z",
+          "scored_at": "2026-08-25T22:52:53Z",
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -6698,28 +6738,29 @@
         {
           "by_section": {
             "trace": {
-              "accuracy": 4.95,
+              "accuracy": 4.875,
               "comprehensiveness": 4.975,
               "expression": 4.95,
               "relevance": 4.975,
-              "trustworthiness": 4.925
+              "trustworthiness": 4.85
             }
           },
           "detail": {
-            "accuracy": 4.95,
+            "accuracy": 4.875,
             "comprehensiveness": 4.975,
             "expression": 4.95,
             "relevance": 4.975,
-            "trustworthiness": 4.925
+            "trustworthiness": 4.85
           },
           "effort": "medium",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8251,
-            "rouge_l": 0.1852,
-            "temporal": 1.0,
-            "trace": 4.955
+            "bertscore": 0.8113,
+            "rouge_l": 0.1504,
+            "temporal_next": 0.2727,
+            "temporal_past": 1.0,
+            "trace": 4.925
           },
           "label": "gpt-5.6-luna",
           "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
@@ -6732,7 +6773,7 @@
           "n_unreached": 0,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-25T20:08:51Z",
+          "scored_at": "2026-08-25T22:52:53Z",
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
           "source": "",
@@ -6743,28 +6784,29 @@
         {
           "by_section": {
             "trace": {
-              "accuracy": 4.925,
-              "comprehensiveness": 5.0,
+              "accuracy": 4.975,
+              "comprehensiveness": 4.975,
               "expression": 5.0,
               "relevance": 5.0,
-              "trustworthiness": 4.95
+              "trustworthiness": 4.975
             }
           },
           "detail": {
-            "accuracy": 4.925,
-            "comprehensiveness": 5.0,
+            "accuracy": 4.975,
+            "comprehensiveness": 4.975,
             "expression": 5.0,
             "relevance": 5.0,
-            "trustworthiness": 4.95
+            "trustworthiness": 4.975
           },
           "effort": "medium",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8294,
-            "rouge_l": 0.2265,
-            "temporal": 0.9412,
-            "trace": 4.975
+            "bertscore": 0.816,
+            "rouge_l": 0.1692,
+            "temporal_next": 0.5455,
+            "temporal_past": 1.0,
+            "trace": 4.985
           },
           "label": "gpt-5.6-sol",
           "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
@@ -6777,7 +6819,7 @@
           "n_unreached": 0,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-25T20:08:51Z",
+          "scored_at": "2026-08-25T22:52:53Z",
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
           "source": "",
@@ -6788,28 +6830,29 @@
         {
           "by_section": {
             "trace": {
-              "accuracy": 4.9,
-              "comprehensiveness": 4.975,
+              "accuracy": 4.925,
+              "comprehensiveness": 5.0,
               "expression": 4.975,
-              "relevance": 4.975,
-              "trustworthiness": 4.925
+              "relevance": 5.0,
+              "trustworthiness": 4.95
             }
           },
           "detail": {
-            "accuracy": 4.9,
-            "comprehensiveness": 4.975,
+            "accuracy": 4.925,
+            "comprehensiveness": 5.0,
             "expression": 4.975,
-            "relevance": 4.975,
-            "trustworthiness": 4.925
+            "relevance": 5.0,
+            "trustworthiness": 4.95
           },
           "effort": "medium",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8283,
-            "rouge_l": 0.1997,
-            "temporal": 0.9265,
-            "trace": 4.95
+            "bertscore": 0.8145,
+            "rouge_l": 0.1553,
+            "temporal_next": 0.4545,
+            "temporal_past": 0.9706,
+            "trace": 4.97
           },
           "label": "gpt-5.6-terra",
           "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
@@ -6822,7 +6865,7 @@
           "n_unreached": 0,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-25T20:08:51Z",
+          "scored_at": "2026-08-25T22:52:53Z",
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
           "source": "",
@@ -6833,28 +6876,29 @@
         {
           "by_section": {
             "trace": {
-              "accuracy": 4.8,
-              "comprehensiveness": 4.875,
-              "expression": 4.875,
-              "relevance": 4.75,
-              "trustworthiness": 4.6
+              "accuracy": 4.6,
+              "comprehensiveness": 4.925,
+              "expression": 4.975,
+              "relevance": 4.9,
+              "trustworthiness": 4.525
             }
           },
           "detail": {
-            "accuracy": 4.8,
-            "comprehensiveness": 4.875,
-            "expression": 4.875,
-            "relevance": 4.75,
-            "trustworthiness": 4.6
+            "accuracy": 4.6,
+            "comprehensiveness": 4.925,
+            "expression": 4.975,
+            "relevance": 4.9,
+            "trustworthiness": 4.525
           },
           "effort": "",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8232,
-            "rouge_l": 0.1947,
-            "temporal": 0.8382,
-            "trace": 4.78
+            "bertscore": 0.8083,
+            "rouge_l": 0.1586,
+            "temporal_next": 0.0,
+            "temporal_past": 1.0,
+            "trace": 4.785
           },
           "label": "gpt-oss-120b",
           "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
@@ -6867,7 +6911,7 @@
           "n_unreached": 0,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-25T20:08:51Z",
+          "scored_at": "2026-08-25T22:52:53Z",
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -6878,28 +6922,29 @@
         {
           "by_section": {
             "trace": {
-              "accuracy": 4.9,
+              "accuracy": 4.975,
               "comprehensiveness": 5.0,
               "expression": 5.0,
-              "relevance": 5.0,
-              "trustworthiness": 4.975
+              "relevance": 4.925,
+              "trustworthiness": 5.0
             }
           },
           "detail": {
-            "accuracy": 4.9,
+            "accuracy": 4.975,
             "comprehensiveness": 5.0,
             "expression": 5.0,
-            "relevance": 5.0,
-            "trustworthiness": 4.975
+            "relevance": 4.925,
+            "trustworthiness": 5.0
           },
           "effort": "",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8243,
-            "rouge_l": 0.1226,
-            "temporal": 0.8971,
-            "trace": 4.975
+            "bertscore": 0.8124,
+            "rouge_l": 0.1089,
+            "temporal_next": 0.3636,
+            "temporal_past": 1.0,
+            "trace": 4.98
           },
           "label": "kimi-k3",
           "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
@@ -6912,7 +6957,7 @@
           "n_unreached": 0,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-25T20:08:51Z",
+          "scored_at": "2026-08-25T22:52:53Z",
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -6923,28 +6968,29 @@
         {
           "by_section": {
             "trace": {
-              "accuracy": 4.85,
-              "comprehensiveness": 4.95,
+              "accuracy": 4.75,
+              "comprehensiveness": 4.85,
               "expression": 5.0,
               "relevance": 5.0,
-              "trustworthiness": 4.85
+              "trustworthiness": 4.725
             }
           },
           "detail": {
-            "accuracy": 4.85,
-            "comprehensiveness": 4.95,
+            "accuracy": 4.75,
+            "comprehensiveness": 4.85,
             "expression": 5.0,
             "relevance": 5.0,
-            "trustworthiness": 4.85
+            "trustworthiness": 4.725
           },
           "effort": "",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8302,
-            "rouge_l": 0.2642,
-            "temporal": 0.8971,
-            "trace": 4.93
+            "bertscore": 0.8152,
+            "rouge_l": 0.186,
+            "temporal_next": 0.1818,
+            "temporal_past": 1.0,
+            "trace": 4.865
           },
           "label": "mistral-medium-3.5",
           "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
@@ -6957,7 +7003,7 @@
           "n_unreached": 0,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-25T20:08:51Z",
+          "scored_at": "2026-08-25T22:52:53Z",
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -6968,28 +7014,29 @@
         {
           "by_section": {
             "trace": {
-              "accuracy": 4.65,
-              "comprehensiveness": 4.95,
+              "accuracy": 4.575,
+              "comprehensiveness": 4.875,
               "expression": 5.0,
-              "relevance": 4.85,
-              "trustworthiness": 4.625
+              "relevance": 4.825,
+              "trustworthiness": 4.525
             }
           },
           "detail": {
-            "accuracy": 4.65,
-            "comprehensiveness": 4.95,
+            "accuracy": 4.575,
+            "comprehensiveness": 4.875,
             "expression": 5.0,
-            "relevance": 4.85,
-            "trustworthiness": 4.625
+            "relevance": 4.825,
+            "trustworthiness": 4.525
           },
           "effort": "",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8245,
-            "rouge_l": 0.1756,
-            "temporal": 0.9706,
-            "trace": 4.815
+            "bertscore": 0.8151,
+            "rouge_l": 0.1402,
+            "temporal_next": 0.2727,
+            "temporal_past": 1.0,
+            "trace": 4.76
           },
           "label": "qwen3.5-122b",
           "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
@@ -7002,7 +7049,7 @@
           "n_unreached": 0,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-25T20:08:51Z",
+          "scored_at": "2026-08-25T22:52:53Z",
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -7013,28 +7060,29 @@
         {
           "by_section": {
             "trace": {
-              "accuracy": 4.9,
-              "comprehensiveness": 4.9,
-              "expression": 4.95,
-              "relevance": 4.975,
-              "trustworthiness": 4.925
+              "accuracy": 4.975,
+              "comprehensiveness": 4.875,
+              "expression": 5.0,
+              "relevance": 5.0,
+              "trustworthiness": 5.0
             }
           },
           "detail": {
-            "accuracy": 4.9,
-            "comprehensiveness": 4.9,
-            "expression": 4.95,
-            "relevance": 4.975,
-            "trustworthiness": 4.925
+            "accuracy": 4.975,
+            "comprehensiveness": 4.875,
+            "expression": 5.0,
+            "relevance": 5.0,
+            "trustworthiness": 5.0
           },
           "effort": "",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8329,
-            "rouge_l": 0.2534,
-            "temporal": 0.9853,
-            "trace": 4.93
+            "bertscore": 0.8177,
+            "rouge_l": 0.1822,
+            "temporal_next": 0.0909,
+            "temporal_past": 1.0,
+            "trace": 4.97
           },
           "label": "qwen3.5-int4",
           "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
@@ -7047,7 +7095,7 @@
           "n_unreached": 0,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-25T20:08:51Z",
+          "scored_at": "2026-08-25T22:52:53Z",
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
           "source": "",
@@ -7058,7 +7106,7 @@
         {
           "by_section": {
             "trace": {
-              "accuracy": 4.925,
+              "accuracy": 4.9,
               "comprehensiveness": 4.975,
               "expression": 5.0,
               "relevance": 4.975,
@@ -7066,7 +7114,7 @@
             }
           },
           "detail": {
-            "accuracy": 4.925,
+            "accuracy": 4.9,
             "comprehensiveness": 4.975,
             "expression": 5.0,
             "relevance": 4.975,
@@ -7076,10 +7124,11 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8341,
-            "rouge_l": 0.2549,
-            "temporal": 0.9559,
-            "trace": 4.955
+            "bertscore": 0.8191,
+            "rouge_l": 0.1861,
+            "temporal_next": 0.2727,
+            "temporal_past": 1.0,
+            "trace": 4.95
           },
           "label": "qwen3.8-27b",
           "metrics_note": "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md",
@@ -7092,7 +7141,7 @@
           "n_unreached": 0,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-25T20:08:51Z",
+          "scored_at": "2026-08-25T22:52:53Z",
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
           "source": "",

@@ -594,3 +594,26 @@ def test_a_withdrawn_coverage_group_is_not_described_as_scored_by_nobody():
     assert "None" not in section and "null" not in section
     assert "generation coverage" in section
     assert "generation coverage" in page
+
+
+def test_rebuilding_the_same_rows_produces_the_same_bytes(tmp_path):
+    """A rebuild that moves bytes makes every diff unreadable.
+
+    Everything feeding the page has to be ordered rather than merely present:
+    the bootstrap is seeded, the tables sort deterministically, and ties break
+    on a name rather than on dictionary order.
+    """
+    rows = _two_judges()
+    docs = tmp_path / "docs"
+    readme = tmp_path / "README.md"
+    readme.write_text(
+        "# T\n\n<!-- LEADERBOARD:BEGIN -->\nx\n<!-- LEADERBOARD:END -->\n", encoding="utf-8"
+    )
+
+    report.write(rows, docs_dir=docs, readme=readme)
+    first = {p.name: p.read_bytes() for p in docs.iterdir()} | {"README": readme.read_bytes()}
+
+    report.write(rows, docs_dir=docs, readme=readme)
+    second = {p.name: p.read_bytes() for p in docs.iterdir()} | {"README": readme.read_bytes()}
+
+    assert first == second
