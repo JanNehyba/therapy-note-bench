@@ -583,3 +583,77 @@ def test_the_headline_averages_complete_notes_and_the_detail_averages_all():
     metrics = aggregate.metrics()
     assert metrics.headline["trace"] == 5.0, "the complete note only"
     assert metrics.detail["comprehensiveness"] == 3.0, "both notes, (5 + 1) / 2"
+
+
+class _ExplodingJudge(_RefusingJudge):
+    """Raises on one note, the way a 429 on `count_tokens` does -- no retry loop."""
+
+    def __init__(self, config, boom_on: str) -> None:
+        super().__init__(config, refuse_at=0)
+        self._boom_on = boom_on
+
+    def count_tokens(self, prompt: str) -> int:
+        if self._boom_on in prompt:
+            raise RuntimeError("HTTP429: rate limit")
+        return len(prompt) // 4
+
+
+def _many_candidates(tmp_path, session_ids):
+    from tnb.datasets.base import Session
+    from tnb.scoring import icare_run
+
+    sessions = []
+    for session_id in session_ids:
+        session_dir = tmp_path / "einfra" / "icare" / icare.PROMPT_VERSION / "a-model" / session_id
+        session_dir.mkdir(parents=True)
+        for number in range(1, 18):
+            (session_dir / f"section-{number:02d}.json").write_text(
+                json.dumps({"ok": True, "text": f"content for {session_id}", "error": None}),
+                encoding="utf-8",
+            )
+        sessions.append(
+            Session(
+                id=session_id,
+                source="ihope",
+                turns=(),
+                reference=f"Patient Particulars : {session_id}",
+            )
+        )
+    return list(icare_run.from_generations(sessions, cache_dir=tmp_path))
+
+
+def test_a_note_that_raised_takes_the_whole_run_down(tmp_path):
+    """`score_many` had no test on either track, and its first version was mine.
+
+    It submitted the futures and never called `.result()`, so anything but a
+    budget stop -- a 429 on `count_tokens`, which has no retry loop, or a
+    timeout -- deleted that note from the average with no traceback, no stderr
+    and no exit code. The notes that vanish are the long ones: both the slowest
+    to count and the likeliest to time out, so the loss is not random.
+    """
+    from tnb.scoring import icare_run
+
+    candidates = _many_candidates(tmp_path, ["s1", "s2", "s3"])
+    client = _ExplodingJudge(_judge_config(), boom_on="content for s2")
+
+    with pytest.raises(RuntimeError, match="429"):
+        icare_run.score_many(
+            candidates, client, judge.Spend(limit_usd=0.0), cache_root=tmp_path / "scores"
+        )
+
+
+def test_results_come_back_in_the_order_they_were_submitted(tmp_path):
+    """However the threads interleave. A run has to be reproducible."""
+    from tnb.scoring import icare_run
+
+    candidates = _many_candidates(tmp_path, ["s1", "s2", "s3"])
+    scored = icare_run.score_many(
+        candidates,
+        _RefusingJudge(_judge_config(), refuse_at=0),
+        judge.Spend(limit_usd=0.0),
+        cache_root=tmp_path / "scores",
+    )
+
+    assert [note.candidate.session_id for note in scored] == [
+        candidate.session_id for candidate in candidates
+    ]
