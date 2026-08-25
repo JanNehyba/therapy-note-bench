@@ -69,16 +69,29 @@ MEASURES: dict[str, dict[str, str]] = {
             "calibrated against anybody."
         ),
     },
-    "temporal": {
-        "label": "Temporal",
+    "temporal_past": {
+        "label": "Looks back",
         "scale": "0-1",
         "definition": (
-            "Sections {sections} only -- what happened last time, what happens next. "
-            "The fraction of those the note answered where the expert note did."
+            "Section 5 only -- what happened in the previous session. The fraction "
+            "of the 34 sessions whose expert note answered it where the model did too."
         ),
         "caveat": (
-            "Kept out of the average. The source paper reports every model it tested "
-            "failing here, so a low number is the expected result, not a surprise."
+            "Kept out of any average. Every model scores 0.97-1.00 here, so this "
+            "column separates nobody -- it is shown because its twin does."
+        ),
+    },
+    "temporal_next": {
+        "label": "Looks forward",
+        "scale": "0-1",
+        "definition": (
+            "Section 17 only -- what happens at the next session. The fraction of "
+            "the 11 sessions whose expert note answered it where the model did too."
+        ),
+        "caveat": (
+            "This is where the source paper reports every model it tested failing, "
+            "and ours do too: 0.00 to 0.55. Reported apart from its twin because "
+            "averaging the two turned 1.00 and 0.09 into 0.78 and hid exactly this."
         ),
     },
 }
@@ -89,6 +102,15 @@ RANKING_MEASURE = None
 
 #: Written into the row but not shown as a column.
 INTERNAL_MEASURES: tuple[str, ...] = ()
+
+#: Which iHOPE section each time-bearing measure reads. Separate measures, never
+#: averaged -- see `temporal_score` for the numbers that forced the split.
+#:
+#: Derived from `ihope.TEMPORAL_SECTIONS` rather than repeated, because that
+#: module raises when the upstream form changes shape and this would otherwise
+#: keep pointing at whatever section 5 and 17 became.
+_LOOKS_BACK, _LOOKS_FORWARD = ihope.TEMPORAL_SECTIONS
+TEMPORAL_MEASURES = {"temporal_past": _LOOKS_BACK, "temporal_next": _LOOKS_FORWARD}
 
 #: The five TRACE dimensions, in the source paper's order.
 TRACE_DIMENSIONS = (
@@ -290,18 +312,28 @@ def parse_likert(answer: str) -> int:
     return _parse(answer)
 
 
-def temporal_score(note_sections: dict[int, str], gold_sections: dict[int, str]) -> float | None:
-    """The two time-bearing fields, scored only where the expert answered.
+def temporal_score(
+    note_sections: dict[int, str], gold_sections: dict[int, str], section: int
+) -> float | None:
+    """One time-bearing field, scored only where the expert answered it.
 
-    Sections 5 and 17 -- what happened last session, what happens next. A model
-    cannot be marked down for leaving blank what the expert also left blank, so
-    the denominator is the fields the expert filled. When the expert filled
-    neither, there is nothing to measure and this returns None rather than 0.0.
+    A model cannot be marked down for leaving blank what the expert also left
+    blank, so the denominator is whether the expert filled *this* field. None
+    when they did not -- there is nothing to measure, and 0.0 would be a claim.
+
+    **One field at a time, and never averaged.** The two are not one measure:
+    measured across all 16 models, looking back scores 0.97-1.00 and looking
+    forward scores 0.00-0.55. Because the expert notes fill section 5 in 34 of
+    40 sessions and section 17 in only 11, a blended average is weighted three
+    to one toward the easy one and turned 1.00 and 0.09 into 0.78.
+
+    That blend hid the finding this track exists to reproduce -- that models
+    fail on the forward-looking field -- which is the second thing concealing
+    it, after `is_filled` counting a written-out refusal as an answer.
     """
-    wanted = [n for n in ihope.TEMPORAL_SECTIONS if is_filled(gold_sections.get(n, ""))]
-    if not wanted:
+    if not is_filled(gold_sections.get(section, "")):
         return None
-    return sum(is_filled(note_sections.get(n, "")) for n in wanted) / len(wanted)
+    return float(is_filled(note_sections.get(section, "")))
 
 
 def aggregate(
@@ -345,9 +377,11 @@ def aggregate(
     elif ratings:
         incomplete["trace"] = missing
 
-    temporal = temporal_score(split_sections(note), split_sections(reference))
-    if temporal is not None:
-        headline["temporal"] = temporal
+    note_sections, gold_sections = split_sections(note), split_sections(reference)
+    for measure, section in TEMPORAL_MEASURES.items():
+        value = temporal_score(note_sections, gold_sections, section)
+        if value is not None:
+            headline[measure] = value
 
     return Scores(
         headline=headline,

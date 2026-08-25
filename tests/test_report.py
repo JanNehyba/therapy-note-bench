@@ -68,7 +68,7 @@ def test_each_track_gets_its_own_columns():
     source paper found the first two disagree with expert preference."""
     data = report.build([_row(track=results.TRACK_ICARE, prompt_version="icare-zeroshot-v1")])
     keys = [column["key"] for column in data["tables"][0]["columns"]]
-    assert keys == ["rouge_l", "bertscore", "trace", "temporal"]
+    assert keys == ["rouge_l", "bertscore", "trace", "temporal_past", "temporal_next"]
 
 
 # --- ordering and coverage --------------------------------------------------

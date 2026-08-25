@@ -22,6 +22,7 @@ from pathlib import Path
 from tnb import corpus, results
 from tnb.config import REPO_ROOT
 from tnb.results import Row
+from tnb.scoring import icare as icare_scorer
 from tnb.scoring import tneval as rubric
 from tnb.tasks import icare, soap
 
@@ -51,53 +52,21 @@ COLUMNS: dict[str, tuple[tuple[str, int], ...]] = {
         ("rouge_l", 3),
         ("bertscore", 3),
         ("trace", 2),
-        ("temporal", 3),
+        ("temporal_past", 3),
+        ("temporal_next", 3),
     ),
 }
 
-#: The iCARE measures. Same shape as `tneval.MEASURES`, which owns the TN-Eval
-#: ones -- each carries the heading, the range, what it counts, and what a
-#: reader must not conclude from it.
-ICARE_MEASURES: dict[str, dict[str, str]] = {
-    "rouge_l": {
-        "label": "ROUGE-L",
-        "scale": "0-1",
-        "definition": (
-            "Longest-common-subsequence overlap with the expert note. Rewards using "
-            "the same words in the same order."
-        ),
-        "caveat": (
-            "Cannot tell a good paraphrase from a wrong answer. The source paper "
-            "found it disagrees with what clinicians preferred."
-        ),
-    },
-    "bertscore": {
-        "label": "BERTScore",
-        "scale": "0-1",
-        "definition": "Embedding similarity to the expert note. Tolerates paraphrase.",
-        "caveat": "A fluent note about the wrong session still scores well.",
-    },
-    "trace": {
-        "label": "TRACE",
-        "scale": "1-5",
-        "definition": (
-            "Trustworthiness, relevance, accuracy, comprehensiveness and expression, averaged."
-        ),
-        "caveat": (
-            "A re-implementation with no human anchor: the authors never published "
-            "their ratings, so unlike the TN-Eval track this number is not "
-            "calibrated against anybody."
-        ),
-    },
-    "temporal": {
-        "label": "Temporal",
-        "scale": "0-1",
-        "definition": "Sections {sections} only -- what happened last time, what happens next.",
-        "caveat": (
-            "Kept out of the average. The source paper reports every model it tested "
-            "failing here, so a low number is the expected result, not a surprise."
-        ),
-    },
+#: Where each track's measure definitions live. Both scorers own their own --
+#: the range, the heading and the caveat sit next to the code that produces the
+#: number, so a measure cannot be renamed in one place and described in another.
+#:
+#: This module used to keep a second copy of the iCARE half. It drifted the first
+#: time the scorer changed: `temporal` was split into looking back and looking
+#: forward there and stayed a single averaged column here.
+MEASURE_TABLES = {
+    results.TRACK_TNEVAL: rubric.MEASURES,
+    results.TRACK_ICARE: icare_scorer.MEASURES,
 }
 
 #: Which measure each track is ranked by, and the honest `None` where the
@@ -114,8 +83,8 @@ RANKING_MEASURES: dict[str, str | None] = {
 
 
 def measure_table(track: str) -> dict[str, dict[str, str]]:
-    """The measure definitions for one track. Unknown tracks get nothing."""
-    return rubric.MEASURES if track == results.TRACK_TNEVAL else ICARE_MEASURES
+    """The measure definitions for one track, from the scorer that owns them."""
+    return MEASURE_TABLES.get(track, {})
 
 
 def column_meta(track: str, key: str) -> dict:

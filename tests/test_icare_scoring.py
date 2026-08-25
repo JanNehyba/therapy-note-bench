@@ -140,14 +140,46 @@ def test_a_model_is_not_marked_down_for_a_blank_the_expert_left_blank():
     gold = {5: "Nil", 17: "Nil"}
     note = {5: "Nil", 17: "Nil"}
 
-    assert scorer.temporal_score(note, gold) is None
+    for section in scorer.TEMPORAL_MEASURES.values():
+        assert scorer.temporal_score(note, gold, section) is None
 
 
 def test_temporal_counts_only_the_fields_the_expert_filled():
     gold = {5: "Second session", 17: "Nil"}
 
-    assert scorer.temporal_score({5: "Second session", 17: "Nil"}, gold) == 1.0
-    assert scorer.temporal_score({5: "Nil", 17: "Next week"}, gold) == 0.0
+    assert scorer.temporal_score({5: "Second session", 17: "Nil"}, gold, 5) == 1.0
+    assert scorer.temporal_score({5: "Nil", 17: "Next week"}, gold, 5) == 0.0
+    assert scorer.temporal_score({5: "x", 17: "Next week"}, gold, 17) is None
+
+
+def test_looking_back_and_looking_forward_are_never_averaged():
+    """Blending them hid the finding this track exists to reproduce.
+
+    Measured over all 16 models: looking back scores 0.97-1.00 and looking
+    forward 0.00-0.55. The expert notes fill section 5 in 34 of 40 sessions and
+    section 17 in only 11, so an average is weighted three to one toward the
+    easy one -- it turned 1.00 and 0.09 into 0.78.
+    """
+    gold = {5: "Second session", 17: "Next Tuesday"}
+    note = {5: "Reviewed last week's homework", 17: "Nil"}
+
+    scores = scorer.aggregate(
+        scorer.render_note({f"section-{n:02d}": v for n, v in note.items()}),
+        " ; ".join(f"{icare.SECTION_TITLES[n - 1]} : {v}" for n, v in gold.items()),
+    )
+
+    assert scores.headline["temporal_past"] == 1.0
+    assert scores.headline["temporal_next"] == 0.0
+    assert "temporal" not in scores.headline, "the blended column must be gone"
+
+
+def test_a_written_out_refusal_does_not_count_as_looking_forward():
+    """gemma4 wrote this into section 17 in 40 of 40 sessions and scored 1.000."""
+    gold = {17: "Next Tuesday at the clinic"}
+    refusal = "Date: Nil\nPlace: Nil\nTime: Nil\nAccompanying Person: Nil"
+
+    assert scorer.temporal_score({17: refusal}, gold, 17) == 0.0
+    assert scorer.temporal_score({17: "Next Tuesday, clinic"}, gold, 17) == 1.0
 
 
 # --- TRACE --------------------------------------------------------------------
