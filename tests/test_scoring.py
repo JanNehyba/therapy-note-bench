@@ -193,7 +193,11 @@ def test_an_answer_comes_back_with_its_thinking_counted(monkeypatch):
 
     assert answer.ok and answer.text == "Yes"
     assert answer.thinking_tokens == 57
-    assert sent[0]["json"]["generationConfig"]["thinkingConfig"]["thinkingBudget"] == 128
+    # Read from the constant, not repeated. The budget moved from 128 to 256
+    # when 262 of gemini-3.1-pro's answers turned out to be truncated mid-thought,
+    # and a hard-coded copy here only says the test was written first.
+    budget = sent[0]["json"]["generationConfig"]["thinkingConfig"]["thinkingBudget"]
+    assert budget == judge.DEFAULT_THINKING_BUDGET
 
 
 def test_an_empty_answer_is_a_failure_not_a_no(monkeypatch):
