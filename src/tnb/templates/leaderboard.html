@@ -91,6 +91,11 @@
     table th:first-child, table td:first-child { max-width: 9.5rem; }
     td.name { font-size: .88rem; }
   }
+  /* The judge-comparison table is read left to right as prose, not scanned as a
+     column of figures, so its last column stays left-aligned. */
+  table.concordance td:last-child, table.concordance th:last-child { text-align: left; }
+  ul.dominance { margin: .4rem 0 0; padding-left: 1.2rem; font-size: .9rem; line-height: 1.7; }
+  ul.dominance code { font-size: .85rem; }
   table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
   th, td { text-align: right; padding: .45rem .6rem; border-bottom: 1px solid var(--line); }
   th:first-child, td:first-child { text-align: left; }
@@ -222,6 +227,8 @@ p.settings { margin-top: .2rem; }
     <summary><strong>Is there anything left to measure?</strong></summary>
     <div id="saturation-body"></div>
   </details>
+
+  <div class="box" id="concordance"></div>
 
   <div id="tables"></div>
 
@@ -868,15 +875,72 @@ function renderCalibration(calibration) {
 
 renderCalibration(DATA.calibration);
 
+// What two judges' tables say when read together, which is the one thing a
+// reader cannot get by looking at them side by side. Drawn above the tables
+// rather than under them: it changes how the tables should be read, so it has
+// to arrive first.
+function renderConcordance(all) {
+  const tracks = Object.keys(all || {});
+  const box = document.getElementById('concordance');
+  if (!tracks.length) { box.remove(); return; }
+
+  box.innerHTML = tracks.map(track => {
+    const c = all[track];
+    const rows = c.measures.map(m => `<tr>
+      <td>${m.measure}</td>
+      <td class="num">${m.rho === null ? '—' : m.rho.toFixed(3)}</td>
+      <td class="num">${m.moved} of ${m.n_systems}</td>
+      <td>${m.furthest
+            ? `<code>${m.furthest.system}</code> ${m.furthest.rank_a} &rarr; ${m.furthest.rank_b}`
+            : 'nobody moved'}</td>
+    </tr>`).join('');
+
+    const beaten = c.dominance.length
+      ? `<ul class="dominance">${c.dominance.map(d =>
+          `<li><code>${d.system}</code> beats ${d.beats.length}: ${
+            d.beats.map(b => `<code>${b}</code>`).join(', ')}</li>`).join('')}</ul>`
+      : '<p class="note">No system beats another on every measure under both judges.</p>';
+
+    return `<h2>Do the two judges agree?</h2>
+      <p class="blurb">${c.summary}</p>
+      <div class="scroll"><table class="concordance">
+        <thead><tr>
+          <th>Measure</th><th>Rank correlation</th><th>Systems placed differently</th>
+          <th>Moved furthest</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table></div>
+      <p class="note">Rank correlation is between <code>${c.judge_a}</code>'s ordering and
+         <code>${c.judge_b}</code>'s, over the ${c.n_systems} systems both have scored.
+         Scores that print the same are treated as tied rather than ordered by a digit
+         the table does not show.</p>
+      <h3>Better with no weighting required</h3>
+      <p class="note">A system that is at least as good on <em>every</em> measure under
+         <em>both</em> judges, and strictly better somewhere, is better however a reader
+         weighs the measures — and weighing them is a clinical decision, not a
+         measurement. Everything else on this page is a column, not a verdict.</p>
+      ${beaten}
+      <p class="note"><strong>${c.undominated.length} of ${c.n_systems} systems are beaten
+         outright by nobody.</strong> That is why there is no single winner named here.</p>`;
+  }).join('');
+}
+
+renderConcordance(DATA.concordance);
+
 // Rows that were published and are not any more. Named rather than drawn: two
 // harness versions are two definitions of the measures, and a reader who
 // remembers a different figure must be able to see that the measure moved
 // rather than conclude the model got worse.
 function renderSuperseded(gone) {
-  return `<p class="note">${gone.rows} row(s) on <strong>${gone.track}</strong>, scored by
-    <code>${gone.judge_model}</code> at harness <code>${gone.harness_version}</code>, are no
-    longer shown: the measures were redefined in <code>${gone.current_harness_version}</code>
-    and the two are not comparable. They are still in <code>results/rows.jsonl</code>.</p>`;
+  // A group with no judge is coverage -- what was generated, before anything was
+  // scored. Calling those "scored by null" was both ugly and untrue.
+  const what = gone.judge_model
+    ? `scored by <code>${gone.judge_model}</code>`
+    : 'of generation coverage';
+  return `<p class="note">${gone.rows} row(s) on <strong>${gone.track}</strong>, ${what},
+    at harness <code>${gone.harness_version}</code>, are no longer shown: the measures were
+    redefined in <code>${gone.current_harness_version}</code> and the two are not comparable.
+    They are still in <code>results/rows.jsonl</code>.</p>`;
 }
 
 document.getElementById('tables').innerHTML =

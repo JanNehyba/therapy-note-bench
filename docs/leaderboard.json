@@ -164,6 +164,165 @@
     ],
     "rubric_beats_likert": true
   },
+  "concordance": {
+    "tneval-soap": {
+      "dominance": [
+        {
+          "beats": [
+            "glm-5",
+            "gpt-oss-120b",
+            "qwen3.8-27b",
+            "therapist-written (TN-Eval)"
+          ],
+          "system": "google_gemini-3.1-pro-preview"
+        },
+        {
+          "beats": [
+            "glm-5",
+            "glm-5.2",
+            "qwen3.8-27b",
+            "therapist-written (TN-Eval)"
+          ],
+          "system": "google_gemini-3.7-flash"
+        },
+        {
+          "beats": [
+            "glm-5.2",
+            "qwen3.8-27b",
+            "therapist-written (TN-Eval)"
+          ],
+          "system": "gpt-5.6-sol"
+        },
+        {
+          "beats": [
+            "gpt-oss-120b",
+            "qwen3.5-122b",
+            "therapist-written (TN-Eval)"
+          ],
+          "system": "kimi-k3"
+        },
+        {
+          "beats": [
+            "qwen3.8-27b",
+            "therapist-written (TN-Eval)"
+          ],
+          "system": "glm-5"
+        },
+        {
+          "beats": [
+            "qwen3.8-27b",
+            "therapist-written (TN-Eval)"
+          ],
+          "system": "gpt-5.6-luna"
+        },
+        {
+          "beats": [
+            "qwen3.8-27b",
+            "therapist-written (TN-Eval)"
+          ],
+          "system": "gpt-5.6-terra"
+        },
+        {
+          "beats": [
+            "llama-3.1-70b (TN-Eval, 2025)"
+          ],
+          "system": "deepseek-v4-flash"
+        },
+        {
+          "beats": [
+            "therapist-written (TN-Eval)"
+          ],
+          "system": "gemma4"
+        },
+        {
+          "beats": [
+            "therapist-written (TN-Eval)"
+          ],
+          "system": "glm-5.2"
+        },
+        {
+          "beats": [
+            "therapist-written (TN-Eval)"
+          ],
+          "system": "mistral-large-v2 (TN-Eval, 2025)"
+        },
+        {
+          "beats": [
+            "llama-3.1-70b (TN-Eval, 2025)"
+          ],
+          "system": "mistral-medium-3.5"
+        },
+        {
+          "beats": [
+            "therapist-written (TN-Eval)"
+          ],
+          "system": "qwen3.5-int4"
+        },
+        {
+          "beats": [
+            "therapist-written (TN-Eval)"
+          ],
+          "system": "qwen3.8-27b"
+        }
+      ],
+      "judge_a": "gemini-3.1-pro-preview",
+      "judge_b": "gpt-5.6-terra",
+      "measures": [
+        {
+          "furthest": {
+            "rank_a": 11,
+            "rank_b": 4,
+            "system": "gpt-oss-120b"
+          },
+          "measure": "completeness",
+          "moved": 11,
+          "n_systems": 19,
+          "rho": 0.8895,
+          "stable": 8
+        },
+        {
+          "furthest": {
+            "rank_a": 5,
+            "rank_b": 14,
+            "system": "gpt-5.6-luna"
+          },
+          "measure": "conciseness",
+          "moved": 14,
+          "n_systems": 19,
+          "rho": 0.807,
+          "stable": 5
+        },
+        {
+          "furthest": {
+            "rank_a": 2,
+            "rank_b": 12,
+            "system": "kimi-k3"
+          },
+          "measure": "faithfulness",
+          "moved": 17,
+          "n_systems": 19,
+          "rho": 0.7056,
+          "stable": 2
+        }
+      ],
+      "n_systems": 19,
+      "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on completeness (+0.889) and place 11 of 19 systems differently on it anyway. They agree least on faithfulness (+0.706, 17 of 19 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. 14 system(s) beat at least one other on every measure under both judges, which needs no weighting to be true: `google_gemini-3.1-pro-preview` beats 4. 12 of 19 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner.",
+      "undominated": [
+        "deepseek-v4-flash",
+        "deepseek-v4-flash-thinking",
+        "gemma4",
+        "google_gemini-3.1-pro-preview",
+        "google_gemini-3.7-flash",
+        "gpt-5.6-luna",
+        "gpt-5.6-sol",
+        "gpt-5.6-terra",
+        "kimi-k3",
+        "mistral-large-v2 (TN-Eval, 2025)",
+        "mistral-medium-3.5",
+        "qwen3.5-int4"
+      ]
+    }
+  },
   "corpus": {
     "datasets": {
       "icare": {
@@ -1664,6 +1823,28 @@
     "section": "Presenting symptoms",
     "session": "6"
   },
+  "superseded": [
+    {
+      "current_harness_version": "0.2.0",
+      "harness_version": "0.1.0",
+      "judge_model": null,
+      "judge_prompt_version": null,
+      "prompt_version": "icare-zeroshot-v1",
+      "rows": 16,
+      "scored_at": "",
+      "track": "icare"
+    },
+    {
+      "current_harness_version": "0.2.0",
+      "harness_version": "0.1.0",
+      "judge_model": null,
+      "judge_prompt_version": null,
+      "prompt_version": "tneval-soap-v1",
+      "rows": 16,
+      "scored_at": "",
+      "track": "tneval-soap"
+    }
+  ],
   "tables": [
     {
       "blurb": "Reference-free. 23 completeness criteria, conciseness scored sentence by sentence, faithfulness against the full transcript.",

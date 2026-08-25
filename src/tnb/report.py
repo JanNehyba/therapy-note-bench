@@ -22,6 +22,7 @@ from pathlib import Path
 from tnb import corpus, results
 from tnb.config import REPO_ROOT
 from tnb.results import Row
+from tnb.scoring import concordance
 from tnb.scoring import icare as icare_scorer
 from tnb.scoring import tneval as rubric
 from tnb.tasks import icare, soap
@@ -668,22 +669,39 @@ def render_readme_section(data: dict) -> str:
             lines.append(f"- {note}")
         blocks.append("\n".join(lines))
 
+    # Above the link, below the tables: it changes how the tables should be
+    # read, and a README reader who stops at the first table has still seen the
+    # numbers. Saying it here is the least this view can do.
+    for track, found in (data.get("concordance") or {}).items():
+        blocks.append(f"**Do the two judges agree?** ({TRACK_TITLES.get(track, track)})")
+        blocks.append(found["summary"])
+
     # Named, not drawn. A number that was published and is not any more
     # should be explainable; a reader who remembers a different figure needs
     # to see that the measure changed, not wonder whether the model did.
     for gone in data.get("superseded", []):
-        blocks.append(
-            f"*{gone['rows']} row(s) scored by `{gone['judge_model']}` at harness "
-            f"`{gone['harness_version']}` are no longer shown: the measures were "
-            f"redefined in `{gone['current_harness_version']}` and the two are not "
-            f"comparable. They stay in `results/rows.jsonl`.*"
-        )
+        blocks.append(f"*{_superseded_sentence(gone)}*")
 
     blocks.append(
         "See the [full leaderboard](https://jannehyba.github.io/therapy-note-bench/) "
         "for per-section detail, the reference systems and the published numbers."
     )
     return "\n\n".join(blocks)
+
+
+def _superseded_sentence(gone: dict) -> str:
+    """Why a group of rows stopped being drawn, in one sentence.
+
+    A group with no judge is coverage -- what was generated, before anything was
+    scored -- and calling those "scored by None" was both ugly and untrue.
+    """
+    what = f"scored by `{gone['judge_model']}`" if gone["judge_model"] else "of generation coverage"
+    return (
+        f"{gone['rows']} {gone['track']} row(s) {what} at harness "
+        f"`{gone['harness_version']}` are no longer shown: the measures were redefined "
+        f"in `{gone['current_harness_version']}` and the two are not comparable. They "
+        f"stay in `results/rows.jsonl`."
+    )
 
 
 def _scored_cell(row: dict) -> str:
@@ -739,6 +757,18 @@ def write(rows: list[Row], *, docs_dir: Path | None = None, readme: Path | None 
     data["similarity_example"] = similarity_example()
     data["saturation"] = _load_json(docs_dir / SATURATION_PATH.name)
     data["judges"] = _load_json(docs_dir / JUDGES_PATH.name)
+    # Computed here rather than cached in docs/, because it is a statement about
+    # the rows being rendered right now. A stale copy of "the judges disagree
+    # about 11 of 19" beside a table where they no longer do is worse than none.
+    data["concordance"] = {
+        track: found
+        for track in COLUMNS
+        if (
+            found := concordance.to_json(
+                concordance.compare(rows, track, [key for key, _ in COLUMNS[track]])
+            )
+        )
+    }
 
     docs_dir.mkdir(parents=True, exist_ok=True)
     (docs_dir / DATA_PATH.name).write_text(

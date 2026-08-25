@@ -520,3 +520,77 @@ def test_the_page_says_it_too():
 
     assert "Withdrawn from the tables" in page
     assert "renderSuperseded" in page
+
+
+def _two_judges() -> list[Row]:
+    """One system each side of a disagreement, under both panel judges."""
+    from tnb import judge
+
+    rows = []
+    for judge_model, scores in (
+        (judge.DEFAULT_MODEL, {"x": 0.9, "y": 0.5, "z": 0.1}),
+        (judge.SECOND_JUDGE, {"x": 0.5, "y": 0.1, "z": 0.9}),
+    ):
+        for system, value in scores.items():
+            rows.append(
+                _scored(
+                    system,
+                    value,
+                    judge_model=judge_model,
+                    metrics=Metrics(
+                        headline={
+                            "completeness": value,
+                            "conciseness": value,
+                            "faithfulness": value,
+                        }
+                    ),
+                )
+            )
+    return rows
+
+
+def test_the_readme_says_how_far_the_two_judges_agree(tmp_path):
+    """The comparison a reader cannot do by eye, in the view that gets read.
+
+    Two tables side by side do not say that the judges place most systems
+    differently, and that is the fact deciding whether "ninth versus tenth" is
+    a claim this benchmark can make.
+    """
+    from tnb.scoring import concordance
+
+    rows = _two_judges()
+    data = report.build(rows)
+    data["concordance"] = {
+        results.TRACK_TNEVAL: concordance.to_json(
+            concordance.compare(
+                rows,
+                results.TRACK_TNEVAL,
+                [key for key, _ in report.COLUMNS[results.TRACK_TNEVAL]],
+            )
+        )
+    }
+
+    section = report.render_readme_section(data)
+
+    assert "Do the two judges agree?" in section
+    assert "ninth" in section
+    assert "beaten outright by nobody" in section
+
+
+def test_a_withdrawn_coverage_group_is_not_described_as_scored_by_nobody():
+    """Rows with no judge are generation coverage, written before any scoring.
+
+    Both views said "scored by `None`" about them, which is ugly and untrue.
+    """
+    old = _row(harness_version="0.1.0")
+    new = _row(harness_version="0.2.0")
+
+    data = report.build([old, new])
+    assert len(data["superseded"]) == 1
+
+    section = report.render_readme_section(data)
+    page = report.render_page(data)
+
+    assert "None" not in section and "null" not in section
+    assert "generation coverage" in section
+    assert "generation coverage" in page
