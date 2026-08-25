@@ -34,6 +34,7 @@ LEADERBOARD_MARKERS = ("<!-- LEADERBOARD:BEGIN -->", "<!-- LEADERBOARD:END -->")
 CALIBRATION_MARKERS = ("<!-- CALIBRATION:BEGIN -->", "<!-- CALIBRATION:END -->")
 CALIBRATION_PATH = DOCS_DIR / "calibration.json"
 SATURATION_PATH = DOCS_DIR / "saturation.json"
+JUDGES_PATH = DOCS_DIR / "judges.json"
 
 #: Column order per track: (key, heading, how many decimals).
 #:
@@ -428,6 +429,7 @@ def write(rows: list[Row], *, docs_dir: Path | None = None, readme: Path | None 
     data = build(rows)
     data["calibration"] = load_calibration(docs_dir)
     data["saturation"] = _load_json(docs_dir / SATURATION_PATH.name)
+    data["judges"] = _load_json(docs_dir / JUDGES_PATH.name)
 
     docs_dir.mkdir(parents=True, exist_ok=True)
     (docs_dir / DATA_PATH.name).write_text(

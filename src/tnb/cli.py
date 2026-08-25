@@ -591,6 +591,119 @@ def cmd_saturation(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_judges(args: argparse.Namespace) -> int:
+    """Score the calibration set with several judges and compare them to humans.
+
+    A judge is chosen here by measured agreement with the two therapists who
+    rated the same 150 notes, not by which model is newest. Every candidate
+    answers the identical questions about the identical notes, so the comparison
+    is of judges and nothing else.
+
+    Scoring a candidate is resumable and cached: a judge already run costs
+    nothing to include again.
+    """
+    import json as _json
+
+    from tnb.scoring import calibration
+    from tnb.scoring import run as scoring
+
+    models = (
+        [name.strip() for name in args.models.split(",") if name.strip()]
+        if args.models
+        else list(judge.JUDGE_CANDIDATES)
+    )
+    sessions = scoring.load_sessions(args.limit)
+    candidates = list(scoring.from_reference(sessions))
+    print(
+        f"{len(models)} candidate judge(s) over {len(candidates)} released notes "
+        f"({len(sessions)} conversations x therapist, Llama 3.1 70B, Mistral Large V2)\n"
+    )
+
+    reports = []
+    for model in models:
+        config = judge.config_from_env(model=model)
+        client = judge.Judge(config)
+        spend = judge.Spend(limit_usd=args.max_judge_usd)
+
+        if not args.dry_run:
+            done = 0
+
+            def on_note(result, model=model) -> None:
+                nonlocal done
+                done += 1
+                if done % 25 == 0 or done == len(candidates):
+                    print(f"  {model:24} {done}/{len(candidates)} notes", flush=True)
+
+            scoring.score_many(candidates, client, spend, on_note=on_note)
+
+        report_data = calibration.calibrate(sessions, model)
+        if report_data.agreements:
+            reports.append(report_data)
+
+    if not reports:
+        print("No judge has answers to compare yet.", file=sys.stderr)
+        return 1
+
+    measures = [
+        "rubric_completeness",
+        "likert_completeness",
+        "likert_conciseness",
+        "likert_faithfulness",
+    ]
+    print(f"\n{'judge':26}" + "".join(f"{m.replace('likert_', 'L-')[:16]:>17}" for m in measures))
+    ceilings = {}
+    for report_data in reports:
+        cells = ""
+        for measure in measures:
+            found = next((a for a in report_data.agreements if a.name == measure), None)
+            value = found.judge_mean if found else None
+            if found and found.human_vs_human is not None:
+                ceilings[measure] = found.human_vs_human
+            cells += f"{'—' if value is None else f'{value:.2f}':>17}"
+        print(f"{report_data.judge_model:26}{cells}")
+    print(
+        f"{'therapist vs therapist':26}"
+        + "".join(f"{ceilings.get(m, float('nan')):17.2f}" for m in measures)
+    )
+    print("\nThe last row is the ceiling. Agreeing with a therapist as often as the")
+    print("other therapist does is as well as this task allows.")
+
+    if args.dry_run or args.no_write:
+        return 0
+
+    report.DOCS_DIR.mkdir(parents=True, exist_ok=True)
+    report.JUDGES_PATH.write_text(
+        _json.dumps(
+            {
+                "notes": reports[0].notes,
+                "judges": [
+                    {
+                        "judge_model": r.judge_model,
+                        "agreements": [
+                            {
+                                "name": a.name,
+                                "statistic": a.statistic,
+                                "judge": a.judge_mean,
+                                "humans": a.human_vs_human,
+                                "n": a.n,
+                            }
+                            for a in r.agreements
+                        ],
+                        "rubric_beats_likert": r.rubric_beats_likert,
+                    }
+                    for r in reports
+                ],
+            },
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    print(f"\nWrote {report.JUDGES_PATH.relative_to(REPO_ROOT)}.")
+    return 0
+
+
 def cmd_not_implemented(args: argparse.Namespace) -> int:
     print(
         f"'tnb {args.command}' is not implemented yet — see the roadmap in README.md.",
@@ -724,6 +837,23 @@ def build_parser() -> argparse.ArgumentParser:
     )
     saturation.add_argument("--dry-run", action="store_true", help="print, write nothing")
     saturation.set_defaults(func=cmd_saturation)
+
+    judges = subparsers.add_parser(
+        "judges", help="compare candidate judges against the two human annotators (phase 4)"
+    )
+    judges.add_argument(
+        "--models",
+        help=f"comma-separated judges; default {', '.join(judge.JUDGE_CANDIDATES)}",
+    )
+    judges.add_argument("--limit", type=int, help="use only the first N conversations")
+    judges.add_argument(
+        "--max-judge-usd", type=float, default=250.0, help="runaway guard per candidate"
+    )
+    judges.add_argument(
+        "--dry-run", action="store_true", help="compare what is cached, ask nothing"
+    )
+    judges.add_argument("--no-write", action="store_true", help="print without writing the JSON")
+    judges.set_defaults(func=cmd_judges)
 
     report_parser = subparsers.add_parser(
         "report", help="regenerate the leaderboard page, its JSON and the README table"

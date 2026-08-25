@@ -45,6 +45,26 @@ CACHE_DIR = REPO_ROOT / "scores"
 #: starts a new leaderboard rather than rewriting the old one.
 DEFAULT_MODEL = "gemini-2.5-pro"
 
+#: Candidates worth measuring against the human annotators before one is chosen.
+#: Reputation does not pick a judge here; agreement with two therapists does.
+#: Probed live on 2026-08-25 -- every one of these answers a rubric question.
+JUDGE_CANDIDATES = (
+    "gemini-2.5-pro",
+    "gemini-3.1-pro-preview",
+    "gemini-3.7-flash",
+    "gemini-3.5-flash",
+    "gemini-2.5-flash",
+)
+
+#: `v1beta1` at the `global` endpoint, for every model rather than per model.
+#:
+#: Found by asking rather than guessing: `us-west4` serves no Gemini 3.x at all,
+#: and `v1` does not know them either -- the earlier conclusion that "Gemini 3 is
+#: not on this project" was wrong on both counts. 2.5 answers here too, so one
+#: path serves every candidate and a judge swap needs no plumbing.
+API_VERSION = "v1beta1"
+API_LOCATION = "global"
+
 #: Gemini 2.5 Pro cannot be told to stop thinking — a budget of 0 is rejected —
 #: and 128 is its minimum. Measured effect: ~480 thinking tokens down to ~51.
 #: 2.5 Flash accepts 0. Part of the request digest, so changing it re-scores.
@@ -93,9 +113,14 @@ class JudgeConfig:
 
     @property
     def endpoint(self) -> str:
+        host = (
+            "aiplatform.googleapis.com"
+            if API_LOCATION == "global"
+            else f"{API_LOCATION}-aiplatform.googleapis.com"
+        )
         return (
-            f"https://{self.location}-aiplatform.googleapis.com/v1/projects/"
-            f"{self.project}/locations/{self.location}/publishers/google/models/"
+            f"https://{host}/{API_VERSION}/projects/{self.project}"
+            f"/locations/{API_LOCATION}/publishers/google/models/"
             f"{self.model}:generateContent"
         )
 
@@ -275,6 +300,10 @@ PRICES_USD_PER_MTOK = {
     "gemini-2.5-pro": {"input": 1.25, "output": 10.00},
     "gemini-2.5-flash": {"input": 0.30, "output": 2.50},
     "gemini-2.5-flash-lite": {"input": 0.10, "output": 0.40},
+    # The 3.x list prices are not pinned here; a judge run reports the tokens it
+    # used and the cloud console is the authority on what they cost. An unknown
+    # model prices at zero, which disables the ceiling rather than guessing --
+    # see estimate_usd.
 }
 
 
