@@ -615,6 +615,75 @@ def cmd_calibrate(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_preference(args: argparse.Namespace) -> int:
+    """Does either judge score its own family higher than a neutral rater would?
+
+    Costs nothing: it reads answers both judges have already given.
+    `docs/limitations.md` has told readers to check this panel before reading
+    either table since the second judge was added, and until now there was no
+    panel -- the module was written, tested, and never called.
+    """
+    import json as _json
+
+    from tnb.scoring import preference, saturation
+
+    by_judge = {}
+    for judge_model in (args.judge_a, args.judge_b):
+        answers = saturation.load_answers(judge_model=judge_model)
+        if not answers:
+            print(
+                f"No cached answers for {judge_model!r}. Both judges must have scored "
+                f"before their difference means anything.",
+                file=sys.stderr,
+            )
+            return 1
+        by_judge[judge_model] = saturation.per_session_scores(answers, args.measure)
+
+    effects = preference.compare(by_judge, judge_a=args.judge_a, judge_b=args.judge_b)
+    if not effects:
+        print(
+            "Nothing to report: neither judge has a family among the scored systems, "
+            "or there is no system that neither of them wrote to compare against.",
+            file=sys.stderr,
+        )
+        return 1
+
+    for effect in effects:
+        print()
+        print(preference.describe(effect, args.measure))
+
+    if args.dry_run:
+        print("\nDry run: nothing written.")
+        return 0
+
+    data = {
+        "measure": args.measure,
+        "judge_a": args.judge_a,
+        "judge_b": args.judge_b,
+        "effects": [
+            {
+                "judge": effect.judge,
+                "family": effect.family,
+                "estimate": round(effect.estimate, 4),
+                "low": round(effect.low, 4),
+                "high": round(effect.high, 4),
+                "detected": effect.detected,
+                "n_own": effect.n_own,
+                "n_neutral": effect.n_neutral,
+                "n_sessions": effect.n_sessions,
+                "summary": preference.describe(effect, args.measure),
+            }
+            for effect in effects
+        ],
+    }
+    report.DOCS_DIR.mkdir(parents=True, exist_ok=True)
+    report.PREFERENCE_PATH.write_text(
+        _json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    print(f"\nWrote {report.PREFERENCE_PATH.relative_to(REPO_ROOT)}.")
+    return 0
+
+
 def cmd_saturation(args: argparse.Namespace) -> int:
     """Ask whether the benchmark can still tell these models apart.
 
@@ -1065,6 +1134,19 @@ def build_parser() -> argparse.ArgumentParser:
     )
     saturation.add_argument("--dry-run", action="store_true", help="print, write nothing")
     saturation.set_defaults(func=cmd_saturation)
+
+    pref = subparsers.add_parser(
+        "preference", help="does either judge favour its own family? (reads the answer cache)"
+    )
+    pref.add_argument("--judge-a", default=judge.DEFAULT_MODEL)
+    pref.add_argument("--judge-b", default=judge.SECOND_JUDGE)
+    pref.add_argument(
+        "--measure",
+        default="completeness",
+        help="which headline measure to estimate the effect in; default completeness",
+    )
+    pref.add_argument("--dry-run", action="store_true", help="print, write nothing")
+    pref.set_defaults(func=cmd_preference)
 
     judges = subparsers.add_parser(
         "judges", help="compare candidate judges against the two human annotators (phase 4)"

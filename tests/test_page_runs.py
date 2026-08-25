@@ -116,3 +116,53 @@ def test_a_panel_with_no_data_removes_itself_rather_than_leaving_an_empty_box(tm
     output = _run(report.render_page(data), tmp_path)
 
     assert "concordance" not in output.split("empty and not removed:")[-1]
+
+
+def test_the_self_preference_panel_draws_when_there_is_an_effect_to_report(tmp_path):
+    """`docs/limitations.md` tells the reader to check this panel before reading
+    either table. It said that while the module had no caller and the page had
+    no panel."""
+    data = report.build([_row("x", "a-judge", 0.5)])
+    data["calibration"] = None
+    data["similarity_example"] = None
+    data["saturation"] = None
+    data["judges"] = None
+    data["concordance"] = {}
+    data["preference"] = {
+        "measure": "completeness",
+        "judge_a": "gemini-3.1-pro-preview",
+        "judge_b": "gpt-5.6-terra",
+        "effects": [
+            {
+                "judge": "gemini-3.1-pro-preview",
+                "family": "gemini",
+                "estimate": 0.006,
+                "low": -0.008,
+                "high": 0.019,
+                "detected": False,
+                "n_own": 2,
+                "n_neutral": 12,
+                "n_sessions": 50,
+                "summary": "`gemini-3.1-pro-preview` shows no detectable preference.",
+            }
+        ],
+    }
+
+    output = _run(report.render_page(data), tmp_path)
+
+    assert "preference: " in output, "the panel rendered nothing"
+
+
+def test_the_self_preference_panel_removes_itself_when_there_is_nothing(tmp_path):
+    """A heading over an empty box reads as a section nobody finished."""
+    data = report.build([_row("x", "a-judge", 0.5)])
+    data["calibration"] = None
+    data["similarity_example"] = None
+    data["saturation"] = None
+    data["judges"] = None
+    data["concordance"] = {}
+    data["preference"] = None
+
+    output = _run(report.render_page(data), tmp_path)
+
+    assert "preference" not in output.split("empty and not removed:")[-1]

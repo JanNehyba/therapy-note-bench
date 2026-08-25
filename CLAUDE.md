@@ -129,6 +129,7 @@ uv run tnb score            # TN-Eval rubric, one judge per run
 uv run tnb score-icare      # ROUGE-L, BERTScore, TRACE, the two temporal columns
 uv run tnb judges           # every candidate judge against the two therapists
 uv run tnb saturation       # is there anything left to measure?
+uv run tnb preference       # does either judge favour its own family?
 uv run tnb report           # rebuild the page, its JSON and the README table
 ```
 

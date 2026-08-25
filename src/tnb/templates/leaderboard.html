@@ -228,6 +228,8 @@ p.settings { margin-top: .2rem; }
     <div id="saturation-body"></div>
   </details>
 
+  <div class="box" id="preference"></div>
+
   <div class="box" id="concordance"></div>
 
   <div id="tables"></div>
@@ -959,6 +961,33 @@ function renderConcordance(all) {
   }).join('');
 }
 
+// Both judges also write notes here, so each is marking its own homework. The
+// panel `docs/limitations.md` has told readers to check before reading either
+// table -- and which, until now, did not exist.
+function renderPreference(data) {
+  const box = document.getElementById('preference');
+  if (!data || !data.effects || !data.effects.length) { box.remove(); return; }
+
+  box.innerHTML = `<h2>Does either judge favour its own models?</h2>
+    <p class="note">Measured, not disclaimed. Both judges score everything, and the
+       difference between their tables for a judge's own family — against the systems
+       <em>neither</em> of them wrote — is the effect, in ${data.measure}, with a paired
+       bootstrap over conversations.</p>
+    <div class="scroll"><table class="concordance">
+      <thead><tr><th>Judge</th><th>Its family</th><th>Effect</th><th>95% interval</th>
+        <th>Detected</th></tr></thead>
+      <tbody>${data.effects.map(e => `<tr>
+        <td><code>${e.judge}</code></td>
+        <td>${e.family}</td>
+        <td>${e.estimate >= 0 ? '+' : ''}${e.estimate.toFixed(3)}</td>
+        <td>${e.low >= 0 ? '+' : ''}${e.low.toFixed(3)} to ${e.high >= 0 ? '+' : ''}${e.high.toFixed(3)}</td>
+        <td>${e.detected ? '<strong>yes</strong>' : 'no'}</td>
+      </tr>`).join('')}</tbody>
+    </table></div>
+    ${data.effects.map(e => `<p class="note">${code(e.summary)}</p>`).join('')}`;
+}
+
+renderPreference(DATA.preference);
 renderConcordance(DATA.concordance);
 
 // Rows that were published and are not any more. Named rather than drawn: two

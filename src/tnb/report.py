@@ -37,6 +37,7 @@ CALIBRATION_MARKERS = ("<!-- CALIBRATION:BEGIN -->", "<!-- CALIBRATION:END -->")
 CALIBRATION_PATH = DOCS_DIR / "calibration.json"
 SATURATION_PATH = DOCS_DIR / "saturation.json"
 JUDGES_PATH = DOCS_DIR / "judges.json"
+PREFERENCE_PATH = DOCS_DIR / "preference.json"
 
 #: Column order per track: (key, how many decimals).
 #:
@@ -780,6 +781,7 @@ def write(rows: list[Row], *, docs_dir: Path | None = None, readme: Path | None 
     data["similarity_example"] = similarity_example()
     data["saturation"] = _load_json(docs_dir / SATURATION_PATH.name)
     data["judges"] = _load_json(docs_dir / JUDGES_PATH.name)
+    data["preference"] = _load_json(docs_dir / PREFERENCE_PATH.name)
     # Computed here rather than cached in docs/, because it is a statement about
     # the rows being rendered right now. A stale copy of "the judges disagree
     # about 11 of 19" beside a table where they no longer do is worse than none.
