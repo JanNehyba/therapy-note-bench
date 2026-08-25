@@ -1,0 +1,371 @@
+"""Scoring the iCARE track: two automatic metrics, one judge, one flag.
+
+The last missing scorer. The iCARE track has had generation, a track id and
+page columns since phase 2, and nothing that produced a number.
+
+**Three columns that are meant to disagree.** The source paper found that
+clinical preference "did not always mirror automatic benchmarks" — a smaller
+Mistral model was preferred by experts over the model that led on the automatic
+scores. Reporting only one of them would delete that finding, so ROUGE-L and
+BERTScore sit beside TRACE and the gap between them is published as a result.
+
+**TRACE here has no human anchor.** The authors' TRACE annotations and their
+blinded expert review are not in the public repository — checked, and recorded
+in docs/datasets.md. The TN-Eval track can say how far its judge agrees with two
+therapists; this one cannot say anything of the sort, and every view that
+carries a TRACE number says so.
+
+The two automatic metrics are computed here rather than imported so the offline
+test suite can exercise them: ROUGE-L is a longest-common-subsequence, which is
+a dozen lines, and BERTScore is imported lazily because it drags a model
+download behind it and most runs do not want one.
+"""
+
+from __future__ import annotations
+
+import re
+from dataclasses import dataclass, field
+
+from tnb import corpus
+from tnb.datasets import ihope
+from tnb.tasks import icare
+
+#: Bumped whenever anything reaching the TRACE judge changes. Result rows carry
+#: it and the leaderboard never mixes two versions.
+JUDGE_PROMPT_VERSION = "icare-trace-v1"
+
+#: What each reported measure is, on what scale, and what a reader must not
+#: conclude from it. Same shape as `tneval.MEASURES`; `report.column_meta` reads
+#: whichever belongs to the track.
+MEASURES: dict[str, dict[str, str]] = {
+    "rouge_l": {
+        "label": "ROUGE-L",
+        "scale": "0-1",
+        "definition": (
+            "Longest-common-subsequence overlap with the expert note, F-measure. "
+            "Rewards using the same words in the same order."
+        ),
+        "caveat": (
+            "Cannot tell a good paraphrase from a wrong answer. The source paper "
+            "found it disagrees with what clinicians preferred."
+        ),
+    },
+    "bertscore": {
+        "label": "BERTScore",
+        "scale": "0-1",
+        "definition": "Embedding similarity to the expert note. Tolerates paraphrase.",
+        "caveat": "A fluent note about the wrong session still scores well.",
+    },
+    "trace": {
+        "label": "TRACE",
+        "scale": "1-5",
+        "definition": (
+            "Trustworthiness, relevance, accuracy, comprehensiveness and expression, "
+            "each rated 1-5 by a judge and averaged."
+        ),
+        "caveat": (
+            "A re-implementation with no human anchor: the authors never published "
+            "their ratings, so unlike the TN-Eval track this number is not "
+            "calibrated against anybody."
+        ),
+    },
+    "temporal": {
+        "label": "Temporal",
+        "scale": "0-1",
+        "definition": (
+            "Sections {sections} only -- what happened last time, what happens next. "
+            "The fraction of those the note answered where the expert note did."
+        ),
+        "caveat": (
+            "Kept out of the average. The source paper reports every model it tested "
+            "failing here, so a low number is the expected result, not a surprise."
+        ),
+    },
+}
+
+#: Reported side by side, never merged. Naming one the ranking would publish a
+#: claim the methodology declines to make -- see docs/methodology.md.
+RANKING_MEASURE = None
+
+#: Written into the row but not shown as a column.
+INTERNAL_MEASURES: tuple[str, ...] = ()
+
+#: The five TRACE dimensions, in the source paper's order.
+TRACE_DIMENSIONS = (
+    ("trustworthiness", "the note can be relied on and does not overstate what was said"),
+    ("relevance", "the note keeps to what matters clinically about this session"),
+    ("accuracy", "every statement in the note is supported by the transcript"),
+    ("comprehensiveness", "the note covers what a clinician would need from this session"),
+    ("expression", "the note is written clearly and in appropriate clinical language"),
+)
+
+#: Our own wording. The authors published no TRACE prompt -- only the dimension
+#: names and their definitions in the paper's prose -- so unlike the TN-Eval
+#: prompts, which are reproduced byte for byte, this one could not be copied.
+#: That is one more reason the column is labelled as a re-implementation.
+PROMPT_TRACE = """\
+Below is a therapy session transcript and a clinical note written about it.
+
+## Transcript
+{conversation}
+
+## Note
+{note}
+
+## Dimension
+{dimension}: {description}
+
+## Rating Codebook
+1: The note fails this dimension throughout.
+2: The note fails this dimension more often than not.
+3: The note meets this dimension in part.
+4: The note meets this dimension with minor lapses.
+5: The note fully meets this dimension.
+
+Using the 1 to 5 scale from the rating codebook, rate the note on this \
+dimension. Output only the rating [1, 2, 3, 4, 5]:"""
+
+
+@dataclass(frozen=True)
+class TraceTask:
+    """One question about one note, and where its answer is cached."""
+
+    dimension: str
+    prompt: str
+
+    @property
+    def unit(self) -> str:
+        return f"trace.{self.dimension}"
+
+    @property
+    def kind(self) -> str:
+        return "trace"
+
+    @property
+    def section(self) -> str:
+        return "trace"
+
+
+@dataclass
+class Scores:
+    """One note's scores, at the levels a result row carries."""
+
+    headline: dict[str, float] = field(default_factory=dict)
+    by_section: dict[str, dict[str, float]] = field(default_factory=dict)
+    by_criterion: dict[str, float] = field(default_factory=dict)
+    sections_used: dict[str, int] = field(default_factory=dict)
+    incomplete: dict[str, list[str]] = field(default_factory=dict)
+
+    @property
+    def is_complete(self) -> bool:
+        return not self.incomplete
+
+
+def build_trace_tasks(note: str, conversation: str) -> list[TraceTask]:
+    """The five questions asked about one note."""
+    return [
+        TraceTask(
+            dimension=name,
+            prompt=PROMPT_TRACE.format(
+                conversation=conversation, note=note, dimension=name, description=description
+            ),
+        )
+        for name, description in TRACE_DIMENSIONS
+    ]
+
+
+# --- splitting a note into its 17 fields --------------------------------------
+
+
+def split_sections(note: str) -> dict[int, str]:
+    """Map a note's own labels onto the 17 field numbers.
+
+    Reuses `corpus._match_section`, which compares on letters only because the
+    labels are hand-written and vary -- extra spaces, dropped parentheses -- and
+    which refuses an ambiguous label rather than guessing. "Psychotherapy type"
+    and "Psychotherapy technique" share a long prefix, and a loose match once
+    credited one field with the other's answers.
+
+    A field the note never labelled is absent from the result, which is not the
+    same as a field it answered with "Nil". Both are unfilled; only one of them
+    means the model ignored the question.
+    """
+    found: dict[int, str] = {}
+    for part in (note or "").split(corpus.FIELD_SEPARATOR):
+        label, separator, value = part.partition(":")
+        if not separator:
+            continue
+        number = corpus._match_section(label)
+        if number is None:
+            continue
+        found.setdefault(number, value.strip())
+    return found
+
+
+def is_filled(value: str) -> bool:
+    """Whether a field says anything. "Nil" is an answer, not content."""
+    return value.strip().lower() not in corpus.EMPTY_MARKERS
+
+
+# --- ROUGE-L ------------------------------------------------------------------
+
+_WORD = re.compile(r"[a-z0-9']+")
+
+
+def tokenise(text: str) -> list[str]:
+    return _WORD.findall((text or "").lower())
+
+
+def _lcs_length(first: list[str], second: list[str]) -> int:
+    """Longest common subsequence, on one row of state rather than a matrix.
+
+    A full note against a full note is a few thousand tokens each side, so the
+    quadratic matrix is tens of megabytes per pair and there are 640 pairs. One
+    row is the same answer in a few kilobytes.
+    """
+    if not first or not second:
+        return 0
+    previous = [0] * (len(second) + 1)
+    for a in first:
+        current = [0]
+        for index, b in enumerate(second):
+            current.append(
+                previous[index] + 1 if a == b else max(current[index], previous[index + 1])
+            )
+        previous = current
+    return previous[-1]
+
+
+def rouge_l(candidate: str, reference: str) -> float:
+    """LCS-based F-measure, the same statistic the source paper reports.
+
+    F rather than recall: recall alone rewards a note that repeats the whole
+    transcript, and at least one model in this benchmark does exactly that when
+    it cannot decide what to leave out.
+    """
+    hypothesis, gold = tokenise(candidate), tokenise(reference)
+    if not hypothesis or not gold:
+        return 0.0
+    common = _lcs_length(hypothesis, gold)
+    if not common:
+        return 0.0
+    precision = common / len(hypothesis)
+    recall = common / len(gold)
+    return 2 * precision * recall / (precision + recall)
+
+
+# --- BERTScore ----------------------------------------------------------------
+
+
+def bertscore(candidates: list[str], references: list[str]) -> list[float] | None:
+    """Embedding similarity, F1, or None when the optional dependency is absent.
+
+    None rather than zero, and never a substitute metric: a column of zeros
+    would rank every model equally and look like a measurement. The extra is
+    `scoring` in pyproject; without it the page shows the column as not computed
+    and says why.
+
+    Imported inside the function because it pulls a model download behind it and
+    most runs -- every test run, certainly -- do not want one.
+    """
+    if not candidates:
+        return []
+    try:
+        from bert_score import score as _score
+    except ImportError:
+        return None
+
+    _precision, _recall, f1 = _score(candidates, references, lang="en", verbose=False)
+    return [float(value) for value in f1]
+
+
+# --- putting one note's numbers together --------------------------------------
+
+
+def parse_likert(answer: str) -> int:
+    """TN-Eval's parser, reused so both tracks read a rating the same way."""
+    from tnb.scoring.tneval import parse_likert as _parse
+
+    return _parse(answer)
+
+
+def temporal_score(note_sections: dict[int, str], gold_sections: dict[int, str]) -> float | None:
+    """The two time-bearing fields, scored only where the expert answered.
+
+    Sections 5 and 17 -- what happened last session, what happens next. A model
+    cannot be marked down for leaving blank what the expert also left blank, so
+    the denominator is the fields the expert filled. When the expert filled
+    neither, there is nothing to measure and this returns None rather than 0.0.
+    """
+    wanted = [n for n in ihope.TEMPORAL_SECTIONS if is_filled(gold_sections.get(n, ""))]
+    if not wanted:
+        return None
+    return sum(is_filled(note_sections.get(n, "")) for n in wanted) / len(wanted)
+
+
+def aggregate(
+    note: str,
+    reference: str,
+    trace_answers: dict[str, str] | None = None,
+    *,
+    bert: float | None = None,
+) -> Scores:
+    """One note's row-level scores.
+
+    TRACE is the mean of whichever of the five dimensions came back, and a note
+    missing any of them is named in ``incomplete`` rather than averaged over a
+    smaller denominator -- the same rule the TN-Eval scorer follows, and for the
+    same reason: judge failures cluster on the notes that are hard to read, so
+    the bias from dividing by the survivors runs one way.
+    """
+    trace_answers = trace_answers or {}
+    headline: dict[str, float] = {}
+    by_criterion: dict[str, float] = {}
+    incomplete: dict[str, list[str]] = {}
+    sections_used: dict[str, int] = {}
+
+    headline["rouge_l"] = rouge_l(note, reference)
+    if bert is not None:
+        headline["bertscore"] = bert
+
+    ratings = []
+    missing = []
+    for name, _description in TRACE_DIMENSIONS:
+        unit = f"trace.{name}"
+        if unit in trace_answers:
+            value = float(parse_likert(trace_answers[unit]))
+            by_criterion[name] = value
+            ratings.append(value)
+        else:
+            missing.append(name)
+    if ratings and not missing:
+        headline["trace"] = sum(ratings) / len(ratings)
+        sections_used["trace"] = len(ratings)
+    elif ratings:
+        incomplete["trace"] = missing
+
+    temporal = temporal_score(split_sections(note), split_sections(reference))
+    if temporal is not None:
+        headline["temporal"] = temporal
+
+    return Scores(
+        headline=headline,
+        by_section={"trace": dict(by_criterion)} if by_criterion else {},
+        by_criterion=by_criterion,
+        sections_used=sections_used,
+        incomplete=incomplete,
+    )
+
+
+def render_note(sections: dict[str, str]) -> str:
+    """Join generated sections into the one string the metrics compare.
+
+    The generator writes 17 units; the expert note is one string with 17
+    labelled fields. Rendering ours the same way is what makes the comparison a
+    comparison rather than a shape mismatch.
+    """
+    parts = []
+    for number, title in enumerate(icare.SECTION_TITLES, start=1):
+        value = (sections.get(f"section-{number:02d}") or "").strip()
+        parts.append(f"{title} : {value or 'Nil'}")
+    return f" {corpus.FIELD_SEPARATOR} ".join(parts)
