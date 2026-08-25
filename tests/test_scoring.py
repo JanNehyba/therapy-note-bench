@@ -240,8 +240,58 @@ def test_thinking_is_billed_as_output():
 
 
 def test_an_unknown_judge_model_is_not_silently_free():
-    """A price of zero would disable the ceiling. Better to notice."""
-    assert judge.estimate_usd("some-new-model", 1_000_000, 1_000_000) == 0.0
+    """A price of zero would disable the ceiling. Better to notice.
+
+    This test asserted `== 0.0`, which is the behaviour its own docstring calls
+    a problem: the ceiling was off for every model missing from the price table,
+    and the run reported a total of $0.00 while spending real money. That was
+    all five 3.x judge candidates and all three GPT ones.
+    """
+    with pytest.raises(judge.UnpricedModel, match="some-new-model"):
+        judge.estimate_usd("some-new-model", 1_000_000, 1_000_000)
+
+
+def test_a_priced_model_still_costs_what_it_costs():
+    assert judge.estimate_usd("gpt-5.6-terra", 1_000_000, 0) == pytest.approx(2.00)
+    assert judge.estimate_usd("gpt-5.6-terra", 0, 1_000_000) == pytest.approx(12.00)
+
+
+def test_the_ceiling_refuses_to_run_an_unpriced_judge():
+    """Refusing is the point: a guard that stops guarding is worse than none."""
+    spend = judge.Spend(limit_usd=10.0)
+
+    with pytest.raises(judge.UnpricedModel, match="cannot be enforced"):
+        spend.would_exceed("some-new-model", 1000)
+
+
+def test_no_ceiling_is_an_explicit_choice_not_an_accident():
+    """`--max-judge-usd 0` runs an unpriced model, having said so out loud."""
+    spend = judge.Spend(limit_usd=0.0)
+
+    assert spend.would_exceed("some-new-model", 1_000_000) is False
+
+
+def test_the_ceiling_still_stops_a_priced_judge():
+    spend = judge.Spend(limit_usd=0.01)
+    spend.input_tokens = 10_000_000
+
+    assert spend.would_exceed("gpt-5.6-terra", 1000) is True
+
+
+def test_an_unpriced_run_reports_no_total_rather_than_zero():
+    """A number that looks measured, and is not, is the worse of the two."""
+    spend = judge.Spend(limit_usd=0.0)
+    spend.input_tokens = 1_000_000
+
+    assert spend.usd("some-new-model") is None
+    assert spend.usd("gpt-5.6-terra") == pytest.approx(2.00)
+
+
+def test_every_judge_candidate_has_a_price():
+    """A candidate that cannot be costed cannot be run under a ceiling."""
+    missing = [m for m in judge.JUDGE_CANDIDATES if m not in judge.PRICES_USD_PER_MTOK]
+
+    assert not missing, f"judge candidates with no price: {missing}"
 
 
 # --- the cache ---------------------------------------------------------------

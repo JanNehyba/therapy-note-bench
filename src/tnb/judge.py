@@ -292,21 +292,48 @@ class Judge:
 #: report what a run cost; the authority on what was actually billed is the
 #: cloud console, and the pilot prints both so they can be compared.
 PRICES_USD_PER_MTOK = {
+    # Vertex, checked 2026-08-24.
     "gemini-2.5-pro": {"input": 1.25, "output": 10.00},
     "gemini-2.5-flash": {"input": 0.30, "output": 2.50},
     "gemini-2.5-flash-lite": {"input": 0.10, "output": 0.40},
-    # The 3.x list prices are not pinned here; a judge run reports the tokens it
-    # used and the cloud console is the authority on what they cost. An unknown
-    # model prices at zero, which disables the ceiling rather than guessing --
-    # see estimate_usd.
+    "gemini-3.1-pro-preview": {"input": 1.25, "output": 10.00},
+    "gemini-3.7-flash": {"input": 0.30, "output": 2.50},
+    "gemini-3.5-flash": {"input": 0.30, "output": 2.50},
+    # OpenAI, from developers.openai.com/api/docs/pricing on 2026-08-25, the
+    # short-context tier -- every prompt this judge sends is far under the long
+    # context threshold. Sol's is promotional pricing, stated as holding at
+    # least until 2026-11-21, so it is the one most likely to move.
+    "gpt-5.6-luna": {"input": 0.20, "output": 1.20},
+    "gpt-5.6-terra": {"input": 2.00, "output": 12.00},
+    "gpt-5.6-sol": {"input": 4.00, "output": 20.00},
 }
 
 
+class UnpricedModel(RuntimeError):
+    """A judge whose price is unknown, asked to run under a spending ceiling."""
+
+
 def estimate_usd(model: str, input_tokens: int, output_tokens: int) -> float:
-    """Cost of one call. Thinking tokens are output tokens and are billed as such."""
+    """Cost of one call. Thinking tokens are output tokens and are billed as such.
+
+    Raises on a model with no entry above rather than returning zero.
+
+    Returning zero is what this did, and it silently **disabled the ceiling for
+    every model not in the table** -- which was all five of the 3.x judge
+    candidates and all three GPT ones, the exact set for which real money is now
+    at stake. A guard that quietly stops guarding is worse than no guard,
+    because the run reports a total of $0.00 and everyone believes it.
+
+    Prices go stale, so this is not the authority on what was billed; the
+    provider's console is. It is the authority on when to stop.
+    """
     prices = PRICES_USD_PER_MTOK.get(model)
     if prices is None:
-        return 0.0
+        raise UnpricedModel(
+            f"No price is recorded for judge model {model!r}, so a spending ceiling "
+            f"cannot be enforced. Add it to judge.PRICES_USD_PER_MTOK, or pass "
+            f"--max-judge-usd 0 to run without a ceiling deliberately."
+        )
     return (input_tokens * prices["input"] + output_tokens * prices["output"]) / 1_000_000
 
 
@@ -336,15 +363,36 @@ class Spend:
             self.output_tokens += answer.output_tokens + answer.thinking_tokens
 
     def usd(self, model: str) -> float:
-        return estimate_usd(model, self.input_tokens, self.output_tokens)
+        """What this run has cost so far, or None when the model has no price.
+
+        None rather than 0.0: a run whose cost is unknown must not print a
+        number that looks like a measurement.
+        """
+        try:
+            return estimate_usd(model, self.input_tokens, self.output_tokens)
+        except UnpricedModel:
+            return None
 
     def would_exceed(self, model: str, next_input_tokens: int) -> bool:
         """Check before spending, not after.
 
         The next call's output is unknown, so it is assumed to be the full
         output budget plus the thinking budget — the most it can be.
+
+        A ceiling of 0 means "no ceiling", which is the only way to run an
+        unpriced model: the caller has said so explicitly rather than finding
+        out afterwards.
         """
-        projected = self.usd(model) + estimate_usd(
+        if self.limit_usd <= 0:
+            return False
+        spent = self.usd(model)
+        if spent is None:
+            raise UnpricedModel(
+                f"Judge model {model!r} has no recorded price, so --max-judge-usd "
+                f"cannot be enforced. Add it to judge.PRICES_USD_PER_MTOK, or pass "
+                f"--max-judge-usd 0 to run without a ceiling deliberately."
+            )
+        projected = spent + estimate_usd(
             model, next_input_tokens, output_ceiling(DEFAULT_THINKING_BUDGET)
         )
         return projected > self.limit_usd
