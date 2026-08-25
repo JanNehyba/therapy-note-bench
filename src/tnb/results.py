@@ -173,6 +173,28 @@ class Row:
         return {"row_id": self.row_id, **asdict(self)}
 
 
+#: Measures that were once stored under another name. `results/` is append-only,
+#: so a rename cannot be applied to what is already on disk -- it has to be
+#: applied on the way in. Without this, rows written before the rename keep the
+#: old key, the view looks the measure up under the new one, and the table
+#: prints a dash over a number that is right there in the file.
+LEGACY_MEASURE_NAMES = {"likert_faithfulness": "faithfulness"}
+
+
+def _rename_legacy(values: dict) -> dict:
+    """Map any superseded measure name to the one the views read.
+
+    A row that already carries the new name keeps its own value; the legacy key
+    is dropped either way, so every row leaves this function with one name per
+    measure whatever version wrote it.
+    """
+    renamed = {}
+    for key, value in values.items():
+        target = LEGACY_MEASURE_NAMES.get(key, key)
+        renamed.setdefault(target, value)
+    return renamed
+
+
 def from_dict(payload: dict) -> Row:
     """Rebuild a row, ignoring the derived fields and any newer unknown ones.
 
@@ -185,9 +207,9 @@ def from_dict(payload: dict) -> Row:
     return Row(
         **{key: value for key, value in payload.items() if key in known},
         metrics=Metrics(
-            headline=dict(metrics_raw.get("headline") or {}),
+            headline=_rename_legacy(metrics_raw.get("headline") or {}),
             by_section={
-                section: dict(values)
+                section: _rename_legacy(values)
                 for section, values in (metrics_raw.get("by_section") or {}).items()
             },
             detail=dict(metrics_raw.get("detail") or {}),

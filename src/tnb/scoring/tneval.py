@@ -23,6 +23,76 @@ JUDGE_PROMPT_VERSION = "tneval-rubric-v1"
 #: The four SOAP sections, in TN-Eval's order.
 SOAP_SECTIONS = ("subjective", "objective", "assessment", "plan")
 
+#: What each reported measure is, on what scale, and what a reader must know
+#: before believing it.
+#:
+#: Two scales sit side by side in this protocol and nothing in the numbers says
+#: which is which: a completeness of 0.65 and a faithfulness of 4.98 look like
+#: the same kind of quantity and are not. Every view renders `scale` beside the
+#: heading and `caveat` beside the table, so the answer travels with the number
+#: instead of living in a footnote.
+MEASURES: dict[str, dict[str, str]] = {
+    "completeness": {
+        "label": "Completeness",
+        "scale": "0-1",
+        "definition": (
+            "Fraction of the section's rubric criteria the judge found present. "
+            "0.65 means about two thirds of the required items are in the note."
+        ),
+        "caveat": "",
+    },
+    "conciseness": {
+        "label": "Conciseness",
+        "scale": "0-1",
+        "definition": (
+            "Fraction of the note's sentences that fit at least one rubric item. "
+            "1.00 means nothing is off-topic; it does not mean the note is short."
+        ),
+        "caveat": "",
+    },
+    "faithfulness": {
+        "label": "Faithfulness",
+        "scale": "1-5",
+        "definition": (
+            "Whether the note contradicts the transcript, rated 1 to 5, where 5 is "
+            "no inaccuracies. TN-Eval's protocol has no criterion-based version of "
+            "this one, so it stays a Likert scale."
+        ),
+        "caveat": (
+            "A different scale from the two columns beside it, and a weak one: "
+            "TN-Eval measured Krippendorff's alpha of 0.18 between trained "
+            "therapists on this rating. Read it as a flag for gross invention, "
+            "not as a ranking."
+        ),
+    },
+    "likert_completeness": {
+        "label": "Completeness (Likert)",
+        "scale": "1-5",
+        "definition": ("The completeness question asked as a 1-5 rating instead of a checklist."),
+        "caveat": "Kept only so the two forms can be compared; not displayed.",
+    },
+    "likert_conciseness": {
+        "label": "Conciseness (Likert)",
+        "scale": "1-5",
+        "definition": "The 1-5 counterpart of conciseness.",
+        "caveat": "Kept only so the two forms can be compared; not displayed.",
+    },
+}
+
+#: The judge answers a unit named `likert_faithfulness`; the measure it produces
+#: is named `faithfulness`. The unit name is part of the answer-cache path and
+#: must not move -- this maps one to the other in the single place that stores a
+#: score, so a measure can never be written under a name a view does not read.
+MEASURE_OF_UNIT = {"likert_faithfulness": "faithfulness"}
+
+#: Written into `by_section` but deliberately not on the leaderboard. Named so
+#: that the test which pairs produced keys against displayed columns can tell
+#: "internal on purpose" from "computed and silently dropped".
+INTERNAL_MEASURES = ("likert_completeness", "likert_conciseness")
+
+#: The measure this track is ranked by. Everything else on the row is context.
+RANKING_MEASURE = "completeness"
+
 #: Verbatim from TN-Eval's ``rubric_prompt_completeness``.
 PROMPT_COMPLETENESS = """\
 Below is a behavioral therapy progress note segment. The rubric item outlines one of the necessary components for the note. Verify if the rubric item presents in the progress note segment. 
@@ -389,15 +459,15 @@ def aggregate(answers: dict[str, str], tasks: list[JudgeTask] | None = None) -> 
         for kind in ("likert_completeness", "likert_conciseness", "likert_faithfulness"):
             unit = f"{section}.{kind}"
             if unit in answers:
-                section_scores[kind] = float(parse_likert(answers[unit]))
+                section_scores[MEASURE_OF_UNIT.get(kind, kind)] = float(parse_likert(answers[unit]))
 
         if section_scores:
             by_section[section] = section_scores
 
     headline = {}
-    for measure in ("completeness", "conciseness", "likert_faithfulness"):
+    for measure in ("completeness", "conciseness", "faithfulness"):
         values = [scores[measure] for scores in by_section.values() if measure in scores]
         if values:
-            headline[measure.replace("likert_", "")] = sum(values) / len(values)
+            headline[measure] = sum(values) / len(values)
 
     return Scores(headline=headline, by_section=by_section, by_criterion=by_criterion)
