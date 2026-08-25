@@ -374,6 +374,7 @@ def to_rows(
     judge_model: str,
     n_generated: dict[tuple[str, str], int] | None = None,
     n_attempted: dict[tuple[str, str], int] | int | None = None,
+    n_unreached: dict[tuple[str, str], results.Unreached] | None = None,
     settings: dict[tuple[str, str], results.Settings] | None = None,
     run_id: str = "",
 ) -> list[Row]:
@@ -419,6 +420,16 @@ def to_rows(
             attempted = n_attempted.get(key, generated)
         else:
             attempted = n_attempted or generated
+
+        # A note the endpoint never answered is missing, but it is not the
+        # model's doing. `_coverage_row` has separated the two since glm-5 was
+        # published as "39/40 (1 unusable)" over a rate limit; the scored rows
+        # never got the same treatment, so the accusation survived here.
+        # Bounded by what is actually missing: the coverage index is read from
+        # the whole cache and the candidate list may be a slice of it.
+        unreached = (n_unreached or {}).get(key)
+        missing = max(0, attempted - generated)
+        blameless = min(missing, unreached.sessions if unreached else 0)
         rows.append(
             Row(
                 track=results.TRACK_TNEVAL,
@@ -435,7 +446,8 @@ def to_rows(
                 n_sessions_generated=generated,
                 n_sessions_scored=len(aggregate.notes),
                 n_sessions_partial=aggregate.n_partial,
-                n_failed=max(0, attempted - generated),
+                n_failed=missing - blameless,
+                unreached_reasons=dict(unreached.reasons) if unreached else {},
                 metrics=aggregate.metrics(),
                 metrics_note=(
                     "faithfulness is a Likert rating; TN-Eval measured weak human "

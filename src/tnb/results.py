@@ -26,6 +26,7 @@ import re
 from collections import defaultdict
 from dataclasses import asdict, dataclass, field, replace
 from pathlib import Path
+from typing import NamedTuple
 
 from tnb import __version__, generation
 from tnb.config import REPO_ROOT
@@ -435,6 +436,36 @@ def index_generations(cache_dir: Path | None = None, *, run_id: str = "") -> lis
                     if row is not None:
                         rows.append(row)
     return rows
+
+
+class Unreached(NamedTuple):
+    """What one system lost to the endpoint rather than to itself."""
+
+    #: Sessions with no usable note because a call was never answered.
+    sessions: int
+    #: Why, counted per refused call. Sums higher than `sessions` on the iCARE
+    #: track, where one session is seventeen separate calls.
+    reasons: dict[str, int]
+
+
+def unreached_by_system(
+    track: str, cache_dir: Path | None = None
+) -> dict[tuple[str, str], Unreached]:
+    """Per system, what the endpoint refused -- read from the coverage rows.
+
+    Derived from `index_generations` rather than re-walking the cache, so a
+    scored row and a coverage row can never disagree about whose failure a
+    missing note was. `_coverage_row` already separates the two; this carries
+    that separation into the rows that get published with scores on them.
+    """
+    found: dict[tuple[str, str], Unreached] = {}
+    for row in index_generations(cache_dir):
+        if row.track != track:
+            continue
+        sessions = row.n_sessions_attempted - row.n_sessions_generated - row.n_failed
+        if sessions or row.unreached_reasons:
+            found[(row.provider, row.system_id)] = Unreached(sessions, row.unreached_reasons)
+    return found
 
 
 def settings_by_system(cache_dir: Path | None = None) -> dict[tuple[str, str], Settings]:

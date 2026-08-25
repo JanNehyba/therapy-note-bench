@@ -17,7 +17,9 @@ from tnb.config import GenerationPolicy, Provider
 from tnb.datasets.base import Session, Turn
 from tnb.providers import openai_compatible as einfra
 from tnb.results import Metrics, Row
+from tnb.scoring import icare_run
 from tnb.tasks import TASKS
+from tnb.tasks import icare as icare_task
 
 
 def _row(**overrides) -> Row:
@@ -377,3 +379,72 @@ def test_the_headline_denominator_reaches_the_row(tmp_path):
     restored = results.from_dict(row.to_dict())
 
     assert restored.n_sessions_partial == 7, "a row must survive the round trip carrying it"
+
+
+def test_a_scored_row_does_not_blame_the_model_for_the_endpoint(tmp_path):
+    """The separation existed only on the coverage row, not where scores are.
+
+    `_coverage_row` has told a rate limit apart from a bad answer since glm-5
+    was published as "39/40 (1 unusable)" over e-INFRA refusing a fourth
+    parallel request. But `to_rows` -- the rows that carry the actual metrics,
+    and the ones a reader compares -- computed `n_failed` as attempted minus
+    generated and charged both kinds to the model. The accusation survived the
+    fix by living somewhere else.
+    """
+    model_dir = tmp_path / "einfra" / "icare" / icare_task.PROMPT_VERSION / "a-model"
+    for session, error in (("1", None), ("2", "empty content"), ("3", "HTTP429: rate limit")):
+        unit = model_dir / session
+        unit.mkdir(parents=True)
+        (unit / "note.json").write_text(
+            json.dumps({"ok": error is None, "error": error}), encoding="utf-8"
+        )
+
+    unreached = results.unreached_by_system(results.TRACK_ICARE, tmp_path)
+    assert unreached == {("einfra", "a-model"): results.Unreached(1, {"HTTP429: rate limit": 1})}
+
+    row = icare_run.to_rows(
+        [_scored_note("einfra", "a-model")],
+        judge_model="a-judge",
+        n_generated={("einfra", "a-model"): 1},
+        n_attempted={("einfra", "a-model"): 3},
+        n_unreached=unreached,
+    )[0]
+
+    assert row.n_failed == 1, "the empty answer, and only that"
+    assert row.unreached_reasons == {"HTTP429: rate limit": 1}
+
+
+def test_the_endpoint_cannot_be_blamed_for_more_than_is_missing(tmp_path):
+    """The coverage index reads the whole cache; the notes scored may be a slice.
+
+    `--notes 5` scores five of forty. If the endpoint refused a session outside
+    that slice, subtracting it from a denominator it was never in would push
+    `n_failed` negative and publish a model as having failed a negative number
+    of sessions.
+    """
+    row = icare_run.to_rows(
+        [_scored_note("einfra", "a-model")],
+        judge_model="a-judge",
+        n_generated={("einfra", "a-model"): 5},
+        n_attempted={("einfra", "a-model"): 5},
+        n_unreached={("einfra", "a-model"): results.Unreached(9, {"HTTP429: rate limit": 9})},
+    )[0]
+
+    assert row.n_failed == 0
+
+
+def _scored_note(provider: str, system_id: str):
+    """One finished iCARE note, with no bearing on the counts under test."""
+    from tnb.scoring import icare as scorer
+
+    candidate = icare_run.Candidate(
+        provider=provider,
+        system_id=system_id,
+        system_type="model",
+        system_label=system_id,
+        session_id="1",
+        conversation="",
+        note={},
+        reference="Patient Particulars : x",
+    )
+    return icare_run.NoteResult(candidate=candidate, scores=scorer.Scores())

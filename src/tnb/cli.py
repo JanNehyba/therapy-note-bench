@@ -424,6 +424,8 @@ def cmd_score(args: argparse.Namespace) -> int:
     attempted = {
         key: len(sessions) if key[0] != "tneval" else count for key, count in coverage.items()
     }
+    # What e-INFRA refused, so the row does not charge it to the model.
+    unreached = results.unreached_by_system(results.TRACK_TNEVAL)
 
     if args.notes:
         candidates = candidates[: args.notes]
@@ -460,6 +462,7 @@ def cmd_score(args: argparse.Namespace) -> int:
             judge_model=config.model,
             n_generated=coverage,
             n_attempted=attempted,
+            n_unreached=unreached,
             settings=settings,
             run_id=args.run_id or "",
         )
@@ -510,6 +513,7 @@ def cmd_score(args: argparse.Namespace) -> int:
         judge_model=config.model,
         n_generated=coverage,
         n_attempted=attempted,
+        n_unreached=unreached,
         settings=settings,
         run_id=args.run_id or "",
     )
@@ -806,6 +810,7 @@ def cmd_score_icare(args: argparse.Namespace) -> int:
         key = (candidate.provider, candidate.system_id)
         coverage[key] = coverage.get(key, 0) + 1
     attempted = dict.fromkeys(coverage, len(sessions))
+    unreached = results.unreached_by_system(results.TRACK_ICARE)
     settings = results.settings_by_system()
 
     if args.notes:
@@ -876,6 +881,7 @@ def cmd_score_icare(args: argparse.Namespace) -> int:
         judge_model=config.model,
         n_generated=coverage,
         n_attempted=attempted,
+        n_unreached=unreached,
         settings=settings,
         run_id=args.run_id or "",
     )
