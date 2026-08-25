@@ -343,6 +343,7 @@ def to_rows(
                 n_sessions_attempted=attempted,
                 n_sessions_generated=generated,
                 n_sessions_scored=len(aggregate.notes),
+                n_sessions_partial=aggregate.n_partial,
                 n_failed=max(0, attempted - generated),
                 metrics=aggregate.metrics(),
                 metrics_note=(

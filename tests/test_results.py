@@ -335,3 +335,45 @@ def test_a_rate_limit_message_never_carries_the_key_to_the_page():
 
     assert "37583a3f" not in cleaned
     assert "Rate limit exceeded" in cleaned, "the useful part survives"
+
+
+def test_a_rate_limited_session_is_not_charged_to_the_model(tmp_path):
+    """The count had to be split, not just the reasons.
+
+    glm-5 was published as "39/40 (1 unusable)" over an e-INFRA rate limit. The
+    first fix separated `failure_reasons` from `unreached_reasons` but left the
+    infrastructure branch decrementing the same counter, so the accusation
+    survived — and with an empty failure_reasons the page rendered it as
+    "1 note missing, with no recorded reason".
+    """
+    model_dir = tmp_path / "einfra" / "icare" / "v1" / "glm-5"
+    for session, error in (("1", None), ("2", "empty content"), ("3", "HTTP429: rate limit")):
+        unit = model_dir / session
+        unit.mkdir(parents=True)
+        (unit / "note.json").write_text(
+            json.dumps({"ok": error is None, "error": error}), encoding="utf-8"
+        )
+
+    row = results.index_generations(tmp_path)[0]
+
+    assert row.n_sessions_attempted == 3
+    assert row.n_sessions_generated == 1, "neither the failure nor the rate limit produced a note"
+    assert row.n_failed == 1, "only the model's own failure"
+    assert sum(row.unreached_reasons.values()) == 1
+    assert list(row.failure_reasons) == ["empty content"]
+
+
+def test_the_headline_denominator_reaches_the_row(tmp_path):
+    """`n_partial` was computed in both tracks and had nowhere to go."""
+    row = results.Row(
+        track=results.TRACK_TNEVAL,
+        system_id="m",
+        system_type="model",
+        n_sessions_attempted=50,
+        n_sessions_scored=50,
+        n_sessions_partial=7,
+    )
+
+    restored = results.from_dict(row.to_dict())
+
+    assert restored.n_sessions_partial == 7, "a row must survive the round trip carrying it"

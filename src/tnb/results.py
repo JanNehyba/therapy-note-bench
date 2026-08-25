@@ -170,6 +170,11 @@ class Row:
     #: not the same thing as producing a bad one, so it gets its own column.
     n_sessions_generated: int = 0
     n_sessions_scored: int = 0
+    #: Notes the judge touched but did not finish, and which the headline
+    #: therefore excludes. Both aggregates computed this and neither could write
+    #: it down, so `n_sessions_scored` was published as the headline's
+    #: denominator when it is the count of notes the judge *started*.
+    n_sessions_partial: int = 0
     n_failed: int = 0
     failure_reasons: dict[str, int] = field(default_factory=dict)
     #: Calls that never reached the model -- rate limits, backend errors,
@@ -494,10 +499,12 @@ def _coverage_row(
     # say how the note was written, not how the config would write it now.
     observed: set[tuple] = set()
     budgets: set[int] = set()
+    unreached_sessions = 0
 
     for session_dir in sessions:
         units = sorted(session_dir.glob("*.json"))
         session_ok = bool(units)
+        session_unreached = False
         for unit_path in units:
             try:
                 record = json.loads(unit_path.read_text(encoding="utf-8"))
@@ -518,12 +525,22 @@ def _coverage_row(
                 if record.get("max_tokens"):
                     budgets.add(int(record["max_tokens"]))
             elif is_infrastructure_failure(record.get("error")):
+                # Counted apart and NOT charged to the model. Splitting the
+                # reasons without splitting the count left glm-5 published as
+                # "39/40 (1 unusable)" over a rate limit -- the reason sat in
+                # the unreached panel while the count still said the model
+                # failed, and the README printed the accusation with no reason
+                # at all beside it.
                 unreached[normalise_reason(record.get("error"))] += 1
                 session_ok = False
+                session_unreached = True
             else:
                 failures[normalise_reason(record.get("error"))] += 1
                 session_ok = False
         complete += session_ok
+        # Not generated -- there is no usable note -- but not the model's doing
+        # either, so it leaves `n_failed` below rather than joining it.
+        unreached_sessions += session_unreached
 
     return Row(
         track=track,
@@ -534,7 +551,9 @@ def _coverage_row(
         settings=_settings_from(observed, budgets),
         n_sessions_attempted=len(sessions),
         n_sessions_generated=complete,
-        n_failed=len(sessions) - complete,
+        # What the *model* failed to produce. A call the endpoint never
+        # answered is in `unreached_reasons` and is nobody's failure.
+        n_failed=len(sessions) - complete - unreached_sessions,
         failure_reasons=dict(sorted(failures.items())),
         unreached_reasons=dict(sorted(unreached.items())),
         dataset_checksums=checksums,

@@ -288,7 +288,22 @@ function detailRow(row, table) {
 
   if (row.n_scored < row.n_generated) {
     parts.push(`<p class="note">${row.n_generated - row.n_scored} of this system's notes are
-      still being judged. The scores above are over the ${row.n_scored} finished so far.</p>`);
+      still being judged.</p>`);
+  }
+
+  // The headline's real denominator. It used to say "over the N finished so
+  // far" using n_scored, which counts notes the judge *started* -- a note it
+  // began and did not finish is excluded from the average and was still in
+  // that N. Judge failures cluster on the long, messy transcripts, so the
+  // difference is never random.
+  if (row.n_partial) {
+    parts.push(`<p class="note">The scores above rest on
+      <strong>${row.n_complete}</strong> of the ${row.n_scored} notes the judge started:
+      ${row.n_partial} came back with part of the protocol unanswered and are left out
+      rather than averaged over a smaller denominator.</p>`);
+  } else if (row.n_scored) {
+    parts.push(`<p class="note">The scores above rest on all
+      ${row.n_scored} notes the judge finished.</p>`);
   }
 
   // Only drawn when there is a reason to draw: a heading saying "N unusable"

@@ -481,6 +481,11 @@ def _render_row(row: Row) -> dict:
         "n_attempted": row.n_sessions_attempted,
         "n_generated": row.n_sessions_generated,
         "n_scored": row.n_sessions_scored,
+        # How many of those the headline actually rests on. Without it the page
+        # said "the scores above are over the N finished so far" with an N that
+        # counted notes the judge started and did not finish.
+        "n_partial": row.n_sessions_partial,
+        "n_complete": row.n_sessions_scored - row.n_sessions_partial,
         "n_failed": row.n_failed,
         "failure_reasons": row.failure_reasons,
         "unreached_reasons": row.unreached_reasons,

@@ -552,8 +552,22 @@ def aggregate(answers: dict[str, str], tasks: list[JudgeTask] | None = None) -> 
             for unit, answer in answers.items()
             if unit.startswith(f"{section}.rubric_conciseness.")
         ]
-        if sentences:
+        expected_sentences = None if expected_conciseness is None else expected_conciseness[section]
+        if sentences and (expected_sentences is None or len(sentences) == expected_sentences):
             section_scores["conciseness"] = sum(sentences) / len(sentences)
+        elif sentences:
+            # The half of the denominator fix that completeness got and this did
+            # not. Dividing by the sentences that came back turns "one of four
+            # answered, and it was a yes" into a perfect 1.00 -- the exact
+            # arithmetic the comment above forbids for completeness.
+            #
+            # It is also the likeliest loss: `build_tasks` emits conciseness
+            # sentences last in each section, so any run that stops early --
+            # a budget ceiling, Ctrl-C -- truncates conciseness first.
+            incomplete.setdefault(section, [])
+            incomplete[section].append(
+                f"conciseness: {len(sentences)} of {expected_sentences} sentences"
+            )
         elif expected_conciseness is not None and expected_conciseness[section] == 0:
             # TN-Eval's own zero, and only where it applies: the section really
             # had no sentences in it. Reaching this without `tasks` used to score
