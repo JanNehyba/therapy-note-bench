@@ -166,3 +166,35 @@ def test_the_self_preference_panel_removes_itself_when_there_is_nothing(tmp_path
     output = _run(report.render_page(data), tmp_path)
 
     assert "preference" not in output.split("empty and not removed:")[-1]
+
+
+def test_the_saturation_panel_names_the_judge_that_produced_it(tmp_path):
+    """`docs/saturation.json` was published from `gemini-2.5-pro` -- a judge
+    that was tried and not chosen -- beside two tables scored by two others,
+    and the panel said nothing about which one it was."""
+    data = report.build([_row("x", "a-judge", 0.5)])
+    data["calibration"] = None
+    data["similarity_example"] = None
+    data["judges"] = None
+    data["concordance"] = {}
+    data["preference"] = None
+    data["saturation"] = {
+        "judge_model": "gemini-2.5-pro",
+        "judge_fingerprint": {"model": "gemini-2.5-pro", "thinking_budget": 128},
+        "ignored_fingerprints": {},
+        "sessions": 42,
+        "corpus_sessions": 50,
+        "criteria": [],
+        "intervals": [],
+        "indistinguishable": [],
+        "narrowed_by": {},
+        "still_scoring": [],
+        "verdict_counts": {},
+        "bootstrap": {},
+    }
+
+    page = report.render_page(data)
+    _run(page, tmp_path)
+
+    assert "judge_fingerprint" in page
+    assert "thinking_budget" in page

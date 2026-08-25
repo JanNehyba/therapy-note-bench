@@ -428,6 +428,12 @@ def build(root: Path | None = None, judge_model: str = judge.DEFAULT_MODEL) -> d
 
     return {
         "judge_model": judge_model,
+        # Which *settings* of that judge, and what else was in the cache. The
+        # model name alone does not identify the instrument: the same judge at
+        # two thinking budgets produces two, and until now a published panel
+        # could not say which one it was.
+        "judge_fingerprint": answers.chosen_fingerprint,
+        "ignored_fingerprints": answers.other_fingerprints,
         "sessions": shared,
         #: The fullest per-system corpus, so the page can say "42 of 50".
         "corpus_sessions": largest,

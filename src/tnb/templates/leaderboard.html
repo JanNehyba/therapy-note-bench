@@ -630,7 +630,19 @@ function renderSaturation(data) {
          about how tightly packed these models are.</p>`
     : '';
 
-  document.getElementById('saturation-body').innerHTML = `
+  // Which instrument produced these numbers. The panel used to say nothing:
+  // `docs/saturation.json` was published from a judge that had been tried and
+  // not chosen, beside tables scored by two others, with no way to notice.
+  const settings = s.judge_fingerprint
+    ? Object.entries(s.judge_fingerprint).map(([k, v]) => `${k} ${v}`).join(', ')
+    : '';
+  const instrument = `<p class="note">Computed from
+     <code>${s.judge_model}</code>'s individual answers${settings ? ` at ${settings}` : ''}.
+     ${Object.keys(s.ignored_fingerprints || {}).length
+        ? 'The cache also held answers at other settings; they are two instruments and were not mixed in.'
+        : ''}</p>`;
+
+  document.getElementById('saturation-body').innerHTML = instrument + `
     <p class="blurb">A ranking always prints an order. This asks whether the evidence supports one.
        Both parts read the individual judgements, not the averages, over the
        <strong>${s.sessions} conversations every system wrote a note for</strong>.</p>
