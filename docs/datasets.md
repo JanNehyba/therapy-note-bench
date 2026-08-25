@@ -112,6 +112,19 @@ benchmark ignores.
 Known defect: one of the 174 sessions has an empty gold summary. The loader
 drops it and records the drop rather than scoring a model against nothing.
 
+**Most gold notes do not carry all 17 labels.** Measured on 2026-08-25 across
+the 40 held-out notes: 22 carry all seventeen and 18 carry between seven and
+twelve. The sparsest fields are Clinical identifiers, Assessments and
+Reflections by the therapist, each labelled in 22 of 40. This is not the same as
+a field answered `Nil` -- one is a clinician writing "nothing to report", the
+other is a field that was never written down at all -- and 524 labelled parts
+across the corpus parse with **zero** the matcher cannot place, so it is a fact
+about the notes rather than about our splitter.
+
+It has one direct consequence for scoring: the temporal measure takes its
+denominator from what the expert answered, not from what the form asks. A model
+is not marked down for leaving blank a field the expert left blank too.
+
 **The sessions are not Indian; the note format is.** This was checked in the
 data on 2026-08-24 rather than taken from the paper. Across the 40 test
 sessions, the strings `AIIMS`, `OPD`, `Delhi` and `India` appear **zero times**,
