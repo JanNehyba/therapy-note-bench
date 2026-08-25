@@ -879,6 +879,22 @@ renderCalibration(DATA.calibration);
 // reader cannot get by looking at them side by side. Drawn above the tables
 // rather than under them: it changes how the tables should be read, so it has
 // to arrive first.
+// The summary is authored once and printed in two places: the README, where
+// `backticks` are code, and here, where they are backticks. Converting keeps
+// one source of words rather than two that drift apart.
+function code(text) {
+  return String(text).replace(/`([^`]+)`/g, '<code>$1</code>');
+}
+
+// "not related" is the wrong label for a pair the two judges read differently:
+// one of them found +0.72. Saying which of the three cases it is costs a word.
+function relation(tension) {
+  const found = Object.values(tension.rho_by_judge).filter(rho => rho !== null);
+  if (!found.length) return '—';
+  if (tension.agrees) return 'related';
+  return Math.max(...found) - Math.min(...found) >= 0.4 ? 'judges disagree' : 'not related';
+}
+
 function renderConcordance(all) {
   const tracks = Object.keys(all || {});
   const box = document.getElementById('concordance');
@@ -902,7 +918,7 @@ function renderConcordance(all) {
       : '<p class="note">No system beats another on every measure under both judges.</p>';
 
     return `<h2>Do the two judges agree?</h2>
-      <p class="blurb">${c.summary}</p>
+      <p class="blurb">${code(c.summary)}</p>
       <div class="scroll"><table class="concordance">
         <thead><tr>
           <th>Measure</th><th>Rank correlation</th><th>Systems placed differently</th>
@@ -925,7 +941,7 @@ function renderConcordance(all) {
           <td>${t.first} &times; ${t.second}</td>
           ${Object.values(t.rho_by_judge).map(rho =>
             `<td>${rho === null ? '—' : rho.toFixed(3)}</td>`).join('')}
-          <td>${t.agrees ? 'related' : 'not related'}</td>
+          <td>${relation(t)}</td>
         </tr>`).join('')}</tbody>
       </table></div>` : ''}
 
