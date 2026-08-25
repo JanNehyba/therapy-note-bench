@@ -868,10 +868,25 @@ function renderCalibration(calibration) {
 
 renderCalibration(DATA.calibration);
 
+// Rows that were published and are not any more. Named rather than drawn: two
+// harness versions are two definitions of the measures, and a reader who
+// remembers a different figure must be able to see that the measure moved
+// rather than conclude the model got worse.
+function renderSuperseded(gone) {
+  return `<p class="note">${gone.rows} row(s) on <strong>${gone.track}</strong>, scored by
+    <code>${gone.judge_model}</code> at harness <code>${gone.harness_version}</code>, are no
+    longer shown: the measures were redefined in <code>${gone.current_harness_version}</code>
+    and the two are not comparable. They are still in <code>results/rows.jsonl</code>.</p>`;
+}
+
 document.getElementById('tables').innerHTML =
-  DATA.tables.length
+  (DATA.tables.length
     ? DATA.tables.map(renderTable).join('')
-    : '<div class="box pending"><h2>No runs yet</h2><p class="blurb">The first run will populate this page.</p></div>';
+    : '<div class="box pending"><h2>No runs yet</h2><p class="blurb">The first run will populate this page.</p></div>')
+  + ((DATA.superseded || []).length
+    ? `<div class="box"><h2>Withdrawn from the tables</h2>
+       ${DATA.superseded.map(renderSuperseded).join('')}</div>`
+    : '');
 
 document.querySelectorAll('tr.system').forEach(tr => {
   tr.addEventListener('click', () => {

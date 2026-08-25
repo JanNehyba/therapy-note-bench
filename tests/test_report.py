@@ -456,3 +456,67 @@ def test_the_worked_example_reaches_the_page():
 
     assert "designBlock" in page, "the per-track design block must render"
     assert "similarity-example" in page
+
+
+def test_an_older_harness_is_named_rather_than_drawn_beside_the_new_one():
+    """Two harnesses are two definitions of the measures, not two models.
+
+    ROUGE-L, the temporal measures and `is_filled` all changed meaning during
+    the repairs. Drawing both versions puts a model's old ROUGE-L beside its
+    new one with nothing saying which is which, and a reader cannot tell a
+    changed model from a changed metric. `build`'s docstring has promised this
+    split since it was written; the code drew every group.
+    """
+    old = _scored("gemma4", 0.61, harness_version="0.1.0", scored_at="2026-08-01T00:00:00Z")
+    new = _scored("gemma4", 0.42, harness_version="0.2.0", scored_at="2026-08-26T00:00:00Z")
+
+    data = report.build([old, new])
+
+    assert len(data["tables"]) == 1
+    assert data["tables"][0]["versions"]["harness_version"] == "0.2.0"
+    assert [row["headline"]["completeness"] for row in data["tables"][0]["rows"]] == [0.42]
+
+    assert len(data["superseded"]) == 1
+    gone = data["superseded"][0]
+    assert gone["harness_version"] == "0.1.0"
+    assert gone["current_harness_version"] == "0.2.0"
+    assert gone["rows"] == 1
+
+
+def test_two_judges_at_the_same_harness_both_stay_drawn():
+    """The split is per lane. Two judges are two instruments, not two versions,
+    and comparing them is the whole reason there are two."""
+    a = _scored("gemma4", 0.61, judge_model="gemini-3.1-pro-preview")
+    b = _scored("gemma4", 0.55, judge_model="gpt-5.6-terra")
+
+    data = report.build([a, b])
+
+    assert len(data["tables"]) == 2
+    assert data["superseded"] == []
+
+
+def test_the_readme_says_why_a_number_it_used_to_show_is_gone():
+    """A reader who remembers a different figure needs to know the measure moved.
+
+    Otherwise the only available reading is that the model got worse.
+    """
+    old = _scored("gemma4", 0.61, harness_version="0.1.0")
+    new = _scored("gemma4", 0.42, harness_version="0.2.0")
+
+    section = report.render_readme_section(report.build([old, new]))
+
+    assert "0.610" not in section, "the old number is not drawn"
+    assert "no longer shown" in section
+    assert "`0.1.0`" in section and "`0.2.0`" in section
+    assert "results/rows.jsonl" in section, "and where it still is"
+
+
+def test_the_page_says_it_too():
+    """The README's reader and the page's reader need the same explanation."""
+    old = _scored("gemma4", 0.61, harness_version="0.1.0")
+    new = _scored("gemma4", 0.42, harness_version="0.2.0")
+
+    page = report.render_page(report.build([old, new]))
+
+    assert "Withdrawn from the tables" in page
+    assert "renderSuperseded" in page

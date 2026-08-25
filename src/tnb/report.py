@@ -338,18 +338,61 @@ def _ordered_sections(names: list[str]) -> list[str]:
     return known + rest
 
 
+def _current_groups(groups: dict[tuple, list[Row]]) -> tuple[dict[tuple, list[Row]], list[dict]]:
+    """Split comparability groups into the ones to draw and the ones to name.
+
+    Every group is a table, and two groups that differ only in `harness_version`
+    are the same measurement under two definitions of the measures. Drawing both
+    puts a model's old ROUGE-L beside its new one with nothing saying which is
+    which -- the reader cannot tell a changed model from a changed metric.
+
+    So the newest harness wins per (track, judge, judge prompt, generation
+    prompt), and the rest is reported as a line: what it was, when, and how many
+    rows. This is what `build`'s docstring has promised since it was written and
+    what the code did not do.
+    """
+    newest: dict[tuple, str] = {}
+    for key in groups:
+        track, harness, prompt_version, judge_model, judge_prompt = key
+        lane = (track, prompt_version, judge_model, judge_prompt)
+        newest[lane] = max(newest.get(lane, ""), harness)
+
+    keep: dict[tuple, list[Row]] = {}
+    superseded = []
+    for key, group in groups.items():
+        track, harness, prompt_version, judge_model, judge_prompt = key
+        lane = (track, prompt_version, judge_model, judge_prompt)
+        if harness == newest[lane]:
+            keep[key] = group
+            continue
+        superseded.append(
+            {
+                "track": track,
+                "harness_version": harness,
+                "current_harness_version": newest[lane],
+                "judge_model": judge_model,
+                "prompt_version": prompt_version,
+                "judge_prompt_version": judge_prompt,
+                "rows": len(group),
+                "scored_at": max((row.scored_at or "" for row in group), default=""),
+            }
+        )
+    return keep, sorted(superseded, key=lambda item: (item["track"], item["harness_version"]))
+
+
 def build(rows: list[Row]) -> dict:
     """Shape the rows into the JSON both presentations read.
 
     Groups that disagree on any version field become separate tables rather than
-    separate rows in one table. The newest group per track is `current`; older
-    ones stay in `superseded` so a stale number is explainable rather than
-    silently gone.
+    separate rows in one table. The newest harness per track and judge is drawn;
+    older ones are named in `superseded` so a stale number is explainable rather
+    than silently gone.
     """
     current = results.latest(rows)
     tables = []
 
-    for key, group in results.comparable_groups(current).items():
+    groups, superseded = _current_groups(results.comparable_groups(current))
+    for key, group in groups.items():
         track, harness_version, prompt_version, judge_model, judge_prompt_version = key
         if track not in COLUMNS:
             continue
@@ -426,6 +469,9 @@ def build(rows: list[Row]) -> dict:
     )
     return {
         "tables": tables,
+        # Not drawn, but named. A number that used to be published and is not
+        # any more should be explainable rather than silently gone.
+        "superseded": superseded,
         "protocol": protocol(),
         "corpus": corpus.load_or_build(),
         "licences": LICENCES,
@@ -621,6 +667,17 @@ def render_readme_section(data: dict) -> str:
                 note += f" {column['caveat']}"
             lines.append(f"- {note}")
         blocks.append("\n".join(lines))
+
+    # Named, not drawn. A number that was published and is not any more
+    # should be explainable; a reader who remembers a different figure needs
+    # to see that the measure changed, not wonder whether the model did.
+    for gone in data.get("superseded", []):
+        blocks.append(
+            f"*{gone['rows']} row(s) scored by `{gone['judge_model']}` at harness "
+            f"`{gone['harness_version']}` are no longer shown: the measures were "
+            f"redefined in `{gone['current_harness_version']}` and the two are not "
+            f"comparable. They stay in `results/rows.jsonl`.*"
+        )
 
     blocks.append(
         "See the [full leaderboard](https://jannehyba.github.io/therapy-note-bench/) "
