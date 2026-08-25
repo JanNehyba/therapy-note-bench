@@ -194,7 +194,7 @@ def score_note(
             root=cache_root,
         )
         if not force:
-            record = judge.load_cached(path, fingerprint)
+            record = judge.load_cached(path, fingerprint, task.prompt)
             if record is not None:
                 answers[task.unit] = record["answer"]
                 cached += 1
@@ -227,6 +227,7 @@ def score_note(
                 "kind": task.kind,
                 "section": task.section,
                 "prompt_chars": len(task.prompt),
+                "prompt_sha256": judge.prompt_digest(task.prompt),
                 "answer": answer.text,
                 "ok": answer.ok,
                 "error": answer.error,

@@ -767,3 +767,48 @@ def test_a_truncated_fragment_is_not_an_answer(text):
     """242 of gemini-3.1-pro's cached rubric answers looked like this and were
     each scored as a criterion the note failed to satisfy."""
     assert tneval.is_an_answer(text) is False
+
+
+def test_a_note_that_changed_is_not_scored_by_its_predecessors_judgement(tmp_path):
+    """The answer cache mentioned everything about a judgement except the note.
+
+    Its key is (judge, prompt version, provider, system, session, unit) and its
+    fingerprint covers the judge's settings. Nothing in either is the text. So
+    re-generating a note and re-scoring it silently reused the judgement of the
+    text it replaced, and the row carried a score for a note that no longer
+    exists. The generation cache has hashed its request since the beginning;
+    this side never did.
+    """
+    from tnb import judge
+
+    path = tmp_path / "answer.json"
+    fingerprint = {"model": "a-judge", "thinking_budget": 256}
+    judge.write_cached(
+        path,
+        {
+            "ok": True,
+            "answer": "Yes",
+            "judge_fingerprint": fingerprint,
+            "prompt_sha256": judge.prompt_digest("the note as it was"),
+        },
+    )
+
+    assert judge.load_cached(path, fingerprint, "the note as it was") is not None
+    assert judge.load_cached(path, fingerprint, "the note after it was re-generated") is None
+
+
+def test_an_answer_stored_before_the_digest_existed_is_still_usable(tmp_path):
+    """169 036 of them, and re-asking all to catch nineteen is the wrong trade.
+
+    Treated as unknown rather than as wrong. The notes that actually changed
+    were dealt with directly instead -- their 95 judgements were removed,
+    because a judgement of text that no longer exists cannot be checked against
+    anything.
+    """
+    from tnb import judge
+
+    path = tmp_path / "answer.json"
+    fingerprint = {"model": "a-judge", "thinking_budget": 256}
+    judge.write_cached(path, {"ok": True, "answer": "Yes", "judge_fingerprint": fingerprint})
+
+    assert judge.load_cached(path, fingerprint, "any prompt at all") is not None

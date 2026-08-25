@@ -28,6 +28,7 @@ reproducibility needs.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import threading
@@ -664,8 +665,22 @@ def cache_path(
     )
 
 
-def load_cached(path: Path, fingerprint: dict) -> dict | None:
-    """A previous answer, if it was produced by the same judge at the same settings."""
+def prompt_digest(prompt: str) -> str:
+    """Hash of the exact question that was asked.
+
+    The answer cache is keyed on (judge, prompt version, provider, system,
+    session, unit) and the fingerprint covers the judge's settings -- nothing
+    in either mentions **the note**. So re-generating a note and re-scoring it
+    silently reused the judgement of the text it replaced, and the row would
+    have carried a score for a note that no longer exists. The generation cache
+    has hashed its request from the start; this side never did.
+    """
+    return hashlib.sha256(prompt.encode("utf-8")).hexdigest()
+
+
+def load_cached(path: Path, fingerprint: dict, prompt: str | None = None) -> dict | None:
+    """A previous answer, if it was produced by the same judge at the same
+    settings, about the same text."""
     if not path.exists():
         return None
     try:
@@ -675,6 +690,13 @@ def load_cached(path: Path, fingerprint: dict) -> dict | None:
     if not record.get("ok"):
         return None
     if record.get("judge_fingerprint") != fingerprint:
+        return None
+    # A record with no digest predates this check. Treated as unknown rather
+    # than as wrong: rejecting them would re-ask 169 036 answers to catch the
+    # handful of notes that actually changed, and the ones that did change are
+    # dealt with directly instead.
+    stored = record.get("prompt_sha256")
+    if prompt is not None and stored is not None and stored != prompt_digest(prompt):
         return None
     return record
 
