@@ -278,3 +278,54 @@ def test_a_still_scoring_system_does_not_shape_the_criterion_bars(tmp_path):
 
     assert everyone[0].verdict == "discriminating", "the newcomer drags the bar open"
     assert filtered[0].verdict == "saturated", "and is excluded once the filter applies"
+
+
+def test_a_failed_judge_call_never_reaches_a_numerator(tmp_path):
+    """The one guard holding failed calls out of every saturation number.
+
+    A record with `ok: false` carries whatever text came back before the call
+    died -- an empty string, or a fragment of the judge's own reasoning. Read as
+    an answer, a fragment that happens not to start with "yes" counts as the
+    model missing a criterion, which is the model's fault for something the
+    judge did. `load_answers` skips it and nothing else in this module checks.
+    """
+    from tnb import judge
+
+    units = {
+        "subjective.rubric_completeness.subjective-symptoms": ("Yes", True),
+        "subjective.rubric_completeness.subjective-history": ("", False),
+        # The shape actually found on disk: the answer is a fragment of the
+        # judge's thinking, cut off when the output budget ran out.
+        "subjective.rubric_completeness.subjective-context": (
+            'g., "The client has',
+            False,
+        ),
+    }
+    for unit, (answer, ok) in units.items():
+        judge.write_cached(
+            judge.cache_path(
+                judge.DEFAULT_MODEL,
+                tneval.JUDGE_PROMPT_VERSION,
+                "einfra",
+                "gemma4",
+                "0",
+                unit,
+                root=tmp_path,
+            ),
+            {
+                "ok": ok,
+                "provider": "einfra",
+                "system_id": "gemma4",
+                "session_id": "0",
+                "unit": unit,
+                "answer": answer,
+                "error": None if ok else "HTTP429: rate limit",
+            },
+        )
+
+    answers = saturation.load_answers(tmp_path)
+
+    assert list(answers) == [("gemma4", "0")]
+    assert list(answers[("gemma4", "0")]) == [
+        "subjective.rubric_completeness.subjective-symptoms"
+    ], "the one that worked, and only that"

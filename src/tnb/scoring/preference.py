@@ -118,6 +118,16 @@ def _mean(values: list[float]) -> float:
     return sum(values) / len(values) if values else 0.0
 
 
+#: The same threshold saturation uses, and deliberately the same number: a
+#: system covering less of the corpus than this, relative to the best-covered
+#: one, is still being scored rather than done.
+MIN_COVERAGE = 0.8
+
+#: Below this the interval is not worth reporting. Two conversations produce a
+#: bootstrap that resamples two numbers, and its interval says nothing.
+MIN_SESSIONS = 10
+
+
 def compare(
     by_judge: dict[str, dict[str, dict[str, float]]],
     *,
@@ -143,10 +153,22 @@ def compare(
     if len(systems) < 2:
         return []
 
-    # Only conversations every system was scored on by both judges: a difference
-    # taken over two different session sets is not a difference.
+    # A system still being scored is dropped before the intersection below, the
+    # same rule and threshold `saturation.usable_systems` applies and for the
+    # identical reason: `shared` is an intersection, so one model two
+    # conversations into its run collapses it to two and the whole comparison
+    # rests on them. Saturation was given this guard after exactly that
+    # happened; this module was written later and never got it.
+    covered = {s: len(set(scores_a[s]) & set(scores_b[s])) for s in systems}
+    best = max(covered.values())
+    systems = [s for s in systems if covered[s] >= MIN_COVERAGE * best]
+    if len(systems) < 2:
+        return []
+
+    # Only conversations every remaining system was scored on by both judges: a
+    # difference taken over two different session sets is not a difference.
     shared = sorted(set.intersection(*(set(scores_a[s]) & set(scores_b[s]) for s in systems)))
-    if len(shared) < 2:
+    if len(shared) < MIN_SESSIONS:
         return []
 
     effects = []

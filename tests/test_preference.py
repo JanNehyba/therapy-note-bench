@@ -245,3 +245,52 @@ def test_the_bootstrap_is_reproducible():
 
     assert [e.low for e in first] == [e.low for e in second]
     assert [e.high for e in first] == [e.high for e in second]
+
+
+def _partial_scores(systems: dict[str, int], value: float) -> dict[str, dict[str, float]]:
+    """One judge's per-session scores, `systems` giving each one's session count."""
+    return {
+        system: {str(i): value for i in range(sessions)} for system, sessions in systems.items()
+    }
+
+
+def test_a_system_still_being_scored_does_not_shrink_everyone_elses_evidence():
+    """`shared` is an intersection, so a partial system takes the panel with it.
+
+    Saturation was given this guard after one model two conversations into its
+    run collapsed the shared set to two and voided the whole analysis. This
+    module was written later and never got it, so the same run would have
+    published a self-preference interval computed over two conversations
+    without saying so.
+    """
+    full = {"google_gemini-3.7-flash": 50, "gemma4": 50, "qwen3.5-122b": 50}
+    by_judge = {
+        "gemini-3.1-pro-preview": _partial_scores({**full, "half-done": 3}, 0.60),
+        "gpt-5.6-terra": _partial_scores({**full, "half-done": 3}, 0.55),
+    }
+
+    effects = preference.compare(
+        by_judge, judge_a="gemini-3.1-pro-preview", judge_b="gpt-5.6-terra"
+    )
+
+    assert effects, "the three finished systems are still comparable"
+    assert all(e.n_sessions == 50 for e in effects), "not 3"
+
+
+def test_too_few_shared_conversations_reports_nothing_at_all():
+    """A bootstrap that resamples three numbers has an interval saying nothing.
+
+    Reporting it anyway is worse than reporting nothing: the panel's whole
+    purpose is to tell a reader how much the judges can be trusted, and an
+    interval built on three conversations answers that question falsely.
+    """
+    tiny = {"google_gemini-3.7-flash": 3, "gemma4": 3, "qwen3.5-122b": 3}
+    by_judge = {
+        "gemini-3.1-pro-preview": _partial_scores(tiny, 0.60),
+        "gpt-5.6-terra": _partial_scores(tiny, 0.55),
+    }
+
+    assert (
+        preference.compare(by_judge, judge_a="gemini-3.1-pro-preview", judge_b="gpt-5.6-terra")
+        == []
+    )

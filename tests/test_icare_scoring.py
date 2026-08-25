@@ -499,3 +499,87 @@ def _judge_config(**overrides) -> judge.JudgeConfig:
         "credentials_path": "secrets/none.json",
     }
     return judge.JudgeConfig(**{**base, **overrides})
+
+
+def test_a_dimension_the_judge_did_not_rate_is_named_not_averaged_over():
+    """Judge failures cluster on the notes that are hard to read.
+
+    So dividing TRACE by the four dimensions that came back, rather than
+    declaring the note incomplete, biases in one direction: the notes that lost
+    a dimension are the ones a smaller denominator flatters most.
+    """
+    answers = {f"trace.{name}": "4" for name, _ in scorer.TRACE_DIMENSIONS}
+    answers.pop("trace.accuracy")
+
+    scores = scorer.aggregate("Patient Particulars : x", "Patient Particulars : x", answers)
+
+    assert "trace" not in scores.headline, "not a mean over the survivors"
+    assert scores.incomplete["trace"] == ["accuracy"], "named, so the gap has a reason"
+    assert scores.is_complete is False
+
+
+def test_a_note_the_judge_never_rated_at_all_is_incomplete():
+    """Zero of five used to pass as complete.
+
+    The branch read `elif ratings`, so a note with no ratings fell through both
+    arms: nothing was written to `headline`, nothing to `incomplete`, and the
+    note joined its system's average contributing nothing to TRACE while
+    counting in the denominator.
+    """
+    scores = scorer.aggregate("Patient Particulars : x", "Patient Particulars : x", {})
+
+    assert scores.is_complete is False
+    assert len(scores.incomplete["trace"]) == len(scorer.TRACE_DIMENSIONS)
+
+
+def test_a_temporal_measure_with_no_gold_answer_is_absent_not_zero():
+    """The experts left section 17 blank in 29 of 40 notes.
+
+    With no gold answer there is nothing to be right or wrong about, so the
+    measure is omitted. Scoring it as 0.0 would report every model failing a
+    question nobody asked.
+    """
+    gold = "Patient Particulars : x"  # neither temporal section answered
+    scores = scorer.aggregate(gold, gold, {})
+
+    assert "temporal_past" not in scores.headline
+    assert "temporal_next" not in scores.headline
+
+
+def test_the_headline_averages_complete_notes_and_the_detail_averages_all():
+    """The twin of a rule the TN-Eval aggregate is tested on and this one was not.
+
+    A note the judge could not finish still says something about the criteria it
+    *did* answer, so `by_criterion` keeps it. The headline does not: an average
+    over notes measured on different subsets of the dimensions is not a number
+    about the model.
+    """
+    from tnb.scoring import icare_run
+
+    def note(trace: dict[str, str]):
+        candidate = icare_run.Candidate(
+            provider="einfra",
+            system_id="a-model",
+            system_type="model",
+            system_label="a-model",
+            session_id="1",
+            conversation="",
+            note={},
+            reference="Patient Particulars : x",
+        )
+        scores = scorer.aggregate("Patient Particulars : x", "Patient Particulars : x", trace)
+        return icare_run.NoteResult(candidate=candidate, scores=scores)
+
+    full = {f"trace.{name}": "5" for name, _ in scorer.TRACE_DIMENSIONS}
+    short = dict(full)
+    short.pop("trace.accuracy")
+    short["trace.comprehensiveness"] = "1"
+
+    aggregate = icare_run.SystemAggregate(notes=[note(full), note(short)])
+
+    assert len(aggregate.complete) == 1
+    assert aggregate.n_partial == 1
+
+    metrics = aggregate.metrics()
+    assert metrics.headline["trace"] == 5.0, "the complete note only"
+    assert metrics.detail["comprehensiveness"] == 3.0, "both notes, (5 + 1) / 2"
