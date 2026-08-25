@@ -597,7 +597,7 @@ class Spend:
             # Thinking is billed as output even though it never reaches us.
             self.output_tokens += answer.output_tokens + answer.thinking_tokens
 
-    def usd(self, model: str) -> float:
+    def usd(self, model: str) -> float | None:
         """What this run has cost so far, or None when the model has no price.
 
         None rather than 0.0: a run whose cost is unknown must not print a

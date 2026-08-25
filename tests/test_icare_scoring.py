@@ -8,9 +8,11 @@ like a measurement.
 
 from __future__ import annotations
 
+import json
+
 import pytest
 
-from tnb import corpus
+from tnb import corpus, judge
 from tnb.datasets import ihope
 from tnb.scoring import icare as scorer
 from tnb.tasks import icare
@@ -386,3 +388,114 @@ def test_a_section_the_model_failed_to_write_is_still_scored(tmp_path):
 
     sessions = [Session(id="s1", source="ihope", turns=(), reference="Patient Particulars : x")]
     assert len(list(icare_run.from_generations(sessions, cache_dir=tmp_path))) == 1
+
+
+def _icare_candidate(tmp_path):
+    """One iCARE note the judge can be pointed at."""
+    import json
+
+    from tnb.datasets.base import Session
+    from tnb.scoring import icare_run
+
+    session_dir = tmp_path / "einfra" / "icare" / icare.PROMPT_VERSION / "a-model" / "s1"
+    session_dir.mkdir(parents=True)
+    for number in range(1, 18):
+        (session_dir / f"section-{number:02d}.json").write_text(
+            json.dumps({"ok": True, "text": "content", "error": None}),
+            encoding="utf-8",
+        )
+
+    sessions = [Session(id="s1", source="ihope", turns=(), reference="Patient Particulars : x")]
+    return next(iter(icare_run.from_generations(sessions, cache_dir=tmp_path)))
+
+
+class _RefusingJudge:
+    """Answers every question but one, the way a rate-limited endpoint does."""
+
+    def __init__(self, config, refuse_at: int) -> None:
+        self.config = config
+        self._refuse_at = refuse_at
+        self._n = 0
+
+    def count_tokens(self, prompt: str) -> int:
+        return len(prompt) // 4
+
+    def ask(self, prompt: str):
+        self._n += 1
+        if self._n == self._refuse_at:
+            return judge.Answer(text="", ok=False, error="HTTP429: rate limit")
+        return judge.Answer(text="4", ok=True, output_tokens=1)
+
+
+def test_a_judge_call_that_failed_leaves_a_record_behind(tmp_path):
+    """The iCARE twin used to drop it on the floor.
+
+    A refused TRACE dimension and a dimension the scorer does not produce leave
+    the same hole in `scores`, so with nothing on disk there was no way to tell
+    a rate limit from a measure that was never asked for. `load_cached` rejects
+    an `ok: false` record, so writing it costs nothing and it is re-asked next
+    run.
+    """
+    from tnb.scoring import icare_run
+
+    candidate = _icare_candidate(tmp_path)
+    client = _RefusingJudge(_judge_config(), refuse_at=2)
+
+    result = icare_run.score_note(
+        candidate,
+        client,
+        judge.Spend(limit_usd=0.0),
+        cache_root=tmp_path / "scores",
+    )
+
+    assert result.failed == 1
+    assert result.asked == 5
+
+    written = sorted((tmp_path / "scores").rglob("*.json"))
+    assert len(written) == 5, "every call is recorded, refusals included"
+    refused = [json.loads(p.read_text(encoding="utf-8")) for p in written]
+    refused = [r for r in refused if not r["ok"]]
+    assert len(refused) == 1
+    assert refused[0]["error"] == "HTTP429: rate limit"
+
+
+def test_a_refused_answer_is_not_read_back_as_an_answer(tmp_path):
+    """The record exists to be explained, never to be scored."""
+    from tnb.scoring import icare_run
+
+    candidate = _icare_candidate(tmp_path)
+    spend = judge.Spend(limit_usd=0.0)
+    root = tmp_path / "scores"
+
+    icare_run.score_note(candidate, _RefusingJudge(_judge_config(), 2), spend, cache_root=root)
+
+    # Between the runs: the refusal is on disk. Checking after the second run
+    # would find nothing, because a successful re-ask overwrites it -- which is
+    # right, and would also have made this test pass with no fix at all.
+    refused = [
+        p for p in root.rglob("*.json") if not json.loads(p.read_text(encoding="utf-8"))["ok"]
+    ]
+    assert len(refused) == 1
+
+    second = icare_run.score_note(
+        candidate, _RefusingJudge(_judge_config(), 99), spend, cache_root=root
+    )
+
+    # Asked again despite the record being there: four came from the cache, the
+    # refused one did not.
+    assert second.cached == 4
+    assert second.asked == 1
+    assert second.failed == 0
+    assert not [
+        p for p in root.rglob("*.json") if not json.loads(p.read_text(encoding="utf-8"))["ok"]
+    ]
+
+
+def _judge_config(**overrides) -> judge.JudgeConfig:
+    """A config that names no real project -- nothing here reaches a network."""
+    base = {
+        "project": "a-project",
+        "location": "us-west4",
+        "credentials_path": "secrets/none.json",
+    }
+    return judge.JudgeConfig(**{**base, **overrides})

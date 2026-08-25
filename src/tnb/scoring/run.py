@@ -301,7 +301,11 @@ def score_many(
             if on_note is not None:
                 on_note(result)
 
-    if stopped is not None and not scored:
+    # Raised even when some notes were scored -- see the same rule in
+    # `icare_run.score_many`. A run that stopped at the ceiling did not finish,
+    # and a run that did not finish must not publish rows whose denominators
+    # depend on how far the pool got. The answers already paid for are cached.
+    if stopped is not None:
         raise stopped
     return scored
 

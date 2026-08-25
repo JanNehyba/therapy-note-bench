@@ -20,6 +20,7 @@ client, the answer cache, the spend ceiling and the retry policy all come from
 
 from __future__ import annotations
 
+import datetime as dt
 import json
 from collections.abc import Callable, Iterator
 from concurrent.futures import ThreadPoolExecutor
@@ -58,6 +59,11 @@ class NoteResult:
     candidate: Candidate
     scores: scorer.Scores
     cached: int = 0
+    asked: int = 0
+    #: Judge calls that came back unusable. Counted rather than inferred: a
+    #: dimension the judge refused and a dimension the scorer does not produce
+    #: leave the same hole in `scores`, and only one of them is a failure.
+    failed: int = 0
 
 
 @dataclass
@@ -174,6 +180,8 @@ def score_note(
     fingerprint = client.config.fingerprint()
     answers: dict[str, str] = {}
     cached = 0
+    asked = 0
+    failed = 0
 
     for task in tasks:
         path = judge.cache_path(
@@ -197,26 +205,50 @@ def score_note(
 
         answer = client.ask(task.prompt)
         spend.record(client.config.model, answer)
-        if not answer.ok:
-            continue
-        answers[task.unit] = answer.text
+        asked += 1
+
+        # Written whether or not it worked, exactly as the TN-Eval path does.
+        # A refusal used to be dropped on the floor here: the note came back
+        # scored on four of five TRACE dimensions with nothing on disk saying
+        # the fifth had ever been asked, so the gap was indistinguishable from
+        # a dimension the scorer does not produce. `load_cached` rejects an
+        # `ok: false` record, so keeping it costs nothing and it is re-asked on
+        # the next run.
         judge.write_cached(
             path,
             {
-                "answer": answer.text,
-                "ok": True,
+                "judge_model": client.config.model,
+                "judge_prompt_version": scorer.JUDGE_PROMPT_VERSION,
                 "judge_fingerprint": fingerprint,
+                "provider": candidate.provider,
+                "system_id": candidate.system_id,
+                "session_id": candidate.session_id,
                 "unit": task.unit,
+                "kind": task.kind,
+                "section": task.section,
+                "prompt_chars": len(task.prompt),
+                "answer": answer.text,
+                "ok": answer.ok,
+                "error": answer.error,
                 "input_tokens": answer.input_tokens,
                 "output_tokens": answer.output_tokens,
                 "thinking_tokens": answer.thinking_tokens,
+                "latency_s": round(answer.latency_s, 3),
+                "scored_at": dt.datetime.now(dt.UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
             },
         )
+
+        if answer.ok:
+            answers[task.unit] = answer.text
+        else:
+            failed += 1
 
     return NoteResult(
         candidate=candidate,
         scores=scorer.aggregate(candidate.note, candidate.reference, answers, bert=bert),
         cached=cached,
+        asked=asked,
+        failed=failed,
     )
 
 
@@ -243,33 +275,48 @@ def score_many(
     a lock and each answer writes its own file.
     """
     results_by_index: dict[int, NoteResult] = {}
-    stopped = False
+    stopped: BudgetExceeded | None = None
 
-    def one(index: int, candidate: Candidate) -> None:
-        nonlocal stopped
-        if stopped:
-            return
-        try:
-            results_by_index[index] = score_note(
-                candidate,
-                client,
-                spend,
-                force=force,
-                cache_root=cache_root,
-                bert=None if bert is None else bert[index],
-            )
-        except BudgetExceeded:
-            # One thread hitting the ceiling stops the rest. Answers already
-            # written stay cached, so resuming costs nothing.
-            stopped = True
-            return
-        if on_note is not None:
-            on_note(results_by_index[index])
+    def one(index: int, candidate: Candidate) -> NoteResult:
+        return score_note(
+            candidate,
+            client,
+            spend,
+            force=force,
+            cache_root=cache_root,
+            bert=None if bert is None else bert[index],
+        )
 
     with ThreadPoolExecutor(max_workers=max(1, client.config.concurrency)) as pool:
-        for index, candidate in enumerate(candidates):
-            pool.submit(one, index, candidate)
+        futures = {
+            pool.submit(one, index, candidate): index for index, candidate in enumerate(candidates)
+        }
+        for future, index in futures.items():
+            try:
+                results_by_index[index] = future.result()
+            except BudgetExceeded as error:
+                # The ceiling, not a fault. Answers already written stay cached,
+                # so resuming costs nothing -- but the caller has to be told,
+                # because a truncated run still writes rows.
+                stopped = error
+                continue
+            if on_note is not None:
+                on_note(results_by_index[index])
 
+    # Every other exception is raised, not swallowed. The first version of this
+    # discarded the futures, so anything but a budget stop -- a 429 on
+    # `count_tokens`, which has no retry loop; an UnpricedModel; a timeout --
+    # deleted that note from the average with no traceback, no stderr and no
+    # exit code. The notes that vanish are the long ones, which are both the
+    # slowest to count and the likeliest to time out.
+    # A budget stop raises even when some notes were scored. Returning the
+    # partial set let the caller append rows whose averages rest on whichever
+    # notes the pool happened to reach -- candidates are ordered by system, so
+    # the models sorted first got full coverage and the ones sorted last got
+    # none, published side by side with nothing marking the difference. Nothing
+    # is lost by refusing: every answer already paid for is in the cache.
+    if stopped is not None:
+        raise stopped
     return [results_by_index[i] for i in sorted(results_by_index)]
 
 
@@ -307,8 +354,6 @@ def to_rows(
     finished. Conflating them is what once published a model as "17/50 (33
     unusable)" for notes it had written perfectly.
     """
-    import datetime as dt
-
     from tnb import __version__
 
     groups: dict[tuple[str, str], SystemAggregate] = {}

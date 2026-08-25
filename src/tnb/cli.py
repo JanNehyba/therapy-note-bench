@@ -374,6 +374,16 @@ def _generated_per_system(candidates) -> dict[tuple[str, str], int]:
     return counts
 
 
+def _money(value: float | None) -> str:
+    """A dollar figure, or the word for not knowing one."""
+    return "unknown" if value is None else f"${value:.2f}"
+
+
+def _measure_cell(value: float | None) -> str:
+    """One headline figure for the progress line, or a dash when there is none."""
+    return "  -  " if value is None else f"{value:.2f}"
+
+
 def cmd_score(args: argparse.Namespace) -> int:
     """Run the judge over generated notes and append the scored rows.
 
@@ -467,23 +477,29 @@ def cmd_score(args: argparse.Namespace) -> int:
         print(
             f"  [{done}/{len(candidates)}] {result.candidate.system_id[:28]:28} "
             f"session {result.candidate.session_id:>4}  "
-            f"completeness {head.get('completeness', 0):.2f}  "
+            # A dash, not a zero. The aggregator omits a measure it could not
+            # compute; putting 0.00 back for the human watching reports a model
+            # that scored nothing when nobody measured anything.
+            f"completeness {_measure_cell(head.get('completeness'))}  "
             f"asked {result.asked:3} cached {result.cached:3}"
             + (f" failed {result.failed}" if result.failed else "")
-            + f"  ${spend.usd(config.model):.2f}",
+            + f"  {_money(spend.usd(config.model))}",
             flush=True,
         )
 
     print()
     scored = scoring.score_many(candidates, client, spend, force=args.force, on_note=on_note)
 
+    # None when the judge model has no recorded price. No total is printed
+    # at all then, rather than a $0.00 that reads as a measurement.
+    total = spend.usd(config.model)
     print(
         f"\nScored {len(scored)} note(s). "
         f"{spend.calls} judge calls, {spend.input_tokens} in / {spend.output_tokens} out, "
-        f"${spend.usd(config.model):.2f} at list price."
+        f"{_money(total)} at list price."
     )
-    if scored:
-        per_note = spend.usd(config.model) / max(1, sum(1 for r in scored if r.asked))
+    if scored and total is not None:
+        per_note = total / max(1, sum(1 for r in scored if r.asked))
         print(f"Cost per freshly scored note: ${per_note:.4f}")
 
     if args.dry_run or not scored:
@@ -827,14 +843,23 @@ def cmd_score_icare(args: argparse.Namespace) -> int:
         if done % 20 == 0 or done == len(candidates):
             print(f"  [{done}/{len(candidates)}] {result.candidate.system_id[:30]:30}", flush=True)
 
-    scored = icare_run.score_many(
-        candidates,
-        client,
-        spend,
-        force=args.force,
-        bert=bert_values,
-        on_note=on_note,
-    )
+    try:
+        scored = icare_run.score_many(
+            candidates,
+            client,
+            spend,
+            force=args.force,
+            bert=bert_values,
+            on_note=on_note,
+        )
+    except icare_run.BudgetExceeded as stop:
+        # Nothing is appended. A truncated run's averages depend on how far the
+        # pool got, and results/ is append-only, so a row written now cannot be
+        # withdrawn. Every answer already paid for is cached, so raising the
+        # ceiling and re-running costs only what was not asked yet.
+        print(f"\n{stop}", file=sys.stderr)
+        print("No rows were written. Raise --max-judge-usd and run again.", file=sys.stderr)
+        return 1
 
     if not scored:
         print("Nothing scored.", file=sys.stderr)
