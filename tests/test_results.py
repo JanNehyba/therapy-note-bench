@@ -265,3 +265,73 @@ def test_normalising_keeps_two_identical_failures_countable():
 
 def test_a_missing_error_still_says_something():
     assert results.normalise_reason(None) == "unknown error"
+
+
+# --- whose fault was it -------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    "error",
+    [
+        'HTTP429: {"error":{"message":"Rate limit exceeded for api_key: ..."}}',
+        "HTTP503: upstream unavailable",
+        "ReadTimeout: timed out",
+        "ConnectError: connection refused",
+    ],
+)
+def test_a_call_that_never_reached_the_model_is_not_the_models_fault(error):
+    """glm-5 was published as "39/40, 1 unusable" over a rate limit.
+
+    That is a fact about a shared academic endpoint refusing a fourth parallel
+    request, and nothing at all about glm-5's ability to write a note. It is the
+    same libel `to_rows` already guards against, arriving by a different route.
+    """
+    assert results.is_infrastructure_failure(error) is True
+
+
+@pytest.mark.parametrize(
+    "error",
+    [
+        "answer did not contain a SOAP dictionary",
+        "empty content",
+        "HTTP400: unsupported value",
+        "",
+        None,
+    ],
+)
+def test_a_model_that_answered_badly_is_the_models_fault(error):
+    """A 400 is us or the model, not the endpoint being busy. So is a bad shape."""
+    assert results.is_infrastructure_failure(error) is False
+
+
+def test_the_two_kinds_are_counted_separately(tmp_path):
+    """A reader comparing scores has to know which kind of gap they are looking at."""
+    model_dir = tmp_path / "einfra" / "icare" / "v1" / "a-model"
+    for session, error in (("1", None), ("2", "empty content"), ("3", "HTTP429: rate limit")):
+        unit = model_dir / session
+        unit.mkdir(parents=True)
+        (unit / "note.json").write_text(
+            json.dumps({"ok": error is None, "error": error}), encoding="utf-8"
+        )
+
+    row = results.index_generations(tmp_path)[0]
+
+    assert row.n_sessions_generated == 1
+    assert list(row.failure_reasons) == ["empty content"], "the model's own failure"
+    assert list(row.unreached_reasons) == ["HTTP429: rate limit"], "the endpoint's"
+    assert row.unreached_reasons["HTTP429: rate limit"] == 1
+
+
+def test_a_rate_limit_message_never_carries_the_key_to_the_page():
+    """e-INFRA's 429 body quotes the API key back at us. It is gitignored where
+    it lands, and redacted before it can reach anything published."""
+    raw = (
+        'HTTP429: {"error":{"message":"Rate limit exceeded for api_key: '
+        "37583a3f93fcc1f6f5e489228f16a6ad204796cecd085e37395d66b7b3b062e2"
+        '. Limit type: max_parallel_requests"}}'
+    )
+
+    cleaned = results.normalise_reason(raw)
+
+    assert "37583a3f" not in cleaned
+    assert "Rate limit exceeded" in cleaned, "the useful part survives"

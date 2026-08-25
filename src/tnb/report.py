@@ -514,6 +514,8 @@ def _render_row(row: Row) -> dict:
         "n_scored": row.n_sessions_scored,
         "n_failed": row.n_failed,
         "failure_reasons": row.failure_reasons,
+        "unreached_reasons": row.unreached_reasons,
+        "n_unreached": sum(row.unreached_reasons.values()),
         "headline": row.metrics.headline,
         "by_section": {
             section: row.metrics.by_section[section]

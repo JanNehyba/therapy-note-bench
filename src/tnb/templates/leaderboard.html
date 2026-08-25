@@ -303,6 +303,18 @@ function detailRow(row, table) {
     parts.push(`<p class="note">${row.n_failed} note(s) missing, with no recorded reason.</p>`);
   }
 
+  // Calls the endpoint never answered. Kept apart from the model's own failures
+  // because a rate limit is a fact about a shared academic endpoint and says
+  // nothing about the model -- and unlike a badly shaped note, re-running fixes
+  // it.
+  if (row.n_unreached) {
+    parts.push(`<h3>${row.n_unreached} call(s) the endpoint never answered</h3>
+      <p class="note">Not the model's doing, and not counted against it: a rate limit,
+         a backend error or a timeout. Re-running the generation fills these in.</p>
+      <div class="grid">${Object.entries(row.unreached_reasons).map(([reason, count]) =>
+        `<div><span>${esc(reason)}</span><span>${count}</span></div>`).join('')}</div>`);
+  }
+
   // How it was asked, beside what it scored. A row that does not say this
   // cannot be reproduced, which is the same rule this benchmark already applies
   // to prompt_version and judge_model.

@@ -172,6 +172,10 @@ class Row:
     n_sessions_scored: int = 0
     n_failed: int = 0
     failure_reasons: dict[str, int] = field(default_factory=dict)
+    #: Calls that never reached the model -- rate limits, backend errors,
+    #: timeouts. Separate from `failure_reasons` because they say nothing about
+    #: the model and, unlike a bad note, re-running fixes them.
+    unreached_reasons: dict[str, int] = field(default_factory=dict)
 
     #: How the model was asked, taken from the generation records rather than
     #: from what the config requested -- so it says what happened. Part of the
@@ -354,6 +358,38 @@ def scored(rows: list[Row], **overrides) -> list[Row]:
 _SECRET_LOOKING = re.compile(r"[0-9a-f]{16,}", re.IGNORECASE)
 
 
+#: Errors that say nothing about the model, because the model never answered.
+#:
+#: A 429 is e-INFRA's rate limiter; a 5xx is its backend; a timeout is the
+#: network. Counting any of them as a failure of the *model* is the same libel
+#: as the one `to_rows` already guards against -- glm-5 was published as "39/40,
+#: 1 unusable" when what actually happened is that a shared academic endpoint
+#: refused a fourth parallel request. Retrying is the fix and it costs one call,
+#: so these are reported separately and marked as re-runnable rather than folded
+#: into a score.
+INFRASTRUCTURE_ERRORS = (
+    "HTTP408",
+    "HTTP425",
+    "HTTP429",
+    "HTTP500",
+    "HTTP502",
+    "HTTP503",
+    "HTTP504",
+    "ConnectTimeout",
+    "ReadTimeout",
+    "ConnectError",
+    "RemoteProtocolError",
+    "TransportError",
+    "PoolTimeout",
+)
+
+
+def is_infrastructure_failure(error: str | None) -> bool:
+    """Whether a call failed before the model had any say in it."""
+    text = (error or "").strip()
+    return any(text.startswith(prefix) for prefix in INFRASTRUCTURE_ERRORS)
+
+
 def normalise_reason(error: str | None) -> str:
     """Turn a provider's error into something safe and countable.
 
@@ -449,6 +485,9 @@ def _coverage_row(
 
     complete = 0
     failures: dict[str, int] = defaultdict(int)
+    # Kept apart from `failures` on purpose: one is about the model, the other
+    # about the endpoint, and a reader comparing scores needs to know which.
+    unreached: dict[str, int] = defaultdict(int)
     checksums: dict[str, str] = {}
     newest = ""
     # Read from the records rather than from today's `models.yaml`: the row must
@@ -478,6 +517,9 @@ def _coverage_row(
                 )
                 if record.get("max_tokens"):
                     budgets.add(int(record["max_tokens"]))
+            elif is_infrastructure_failure(record.get("error")):
+                unreached[normalise_reason(record.get("error"))] += 1
+                session_ok = False
             else:
                 failures[normalise_reason(record.get("error"))] += 1
                 session_ok = False
@@ -494,6 +536,7 @@ def _coverage_row(
         n_sessions_generated=complete,
         n_failed=len(sessions) - complete,
         failure_reasons=dict(sorted(failures.items())),
+        unreached_reasons=dict(sorted(unreached.items())),
         dataset_checksums=checksums,
         generated_at=newest,
         run_id=run_id,
