@@ -126,6 +126,21 @@ def output_ceiling(thinking_budget: int) -> int:
     return thinking_budget + ANSWER_TOKENS
 
 
+#: What each provider calls "I ran out of room". Both spellings are checked
+#: everywhere rather than per backend, because a judge answer is read by code
+#: that does not know which one produced it.
+TRUNCATED = frozenset({"MAX_TOKENS", "length"})
+
+
+def _stopped_early(text: str, finish: str | None) -> str | None:
+    """Why an HTTP 200 was not an answer, or None when it was one."""
+    if finish in TRUNCATED:
+        return f"answer truncated ({finish})"
+    if not text:
+        return f"empty answer (finish_reason={finish})"
+    return None
+
+
 SCOPES = ("https://www.googleapis.com/auth/cloud-platform",)
 
 #: Retriable: quota, backend hiccups, and a token that expired mid-run.
@@ -301,18 +316,22 @@ class VertexBackend(Backend):
         text = "".join(part.get("text", "") for part in parts).strip()
         finish = candidates[0].get("finishReason")
 
+        cut_off = finish in TRUNCATED
         return Answer(
             text=text,
-            # An empty answer is a failure even at HTTP 200. It is usually the
-            # model spending its whole output budget on thinking, and scoring it
-            # would silently record a "No" that nobody said.
-            ok=bool(text),
+            # An empty answer is a failure even at HTTP 200, and so is one that
+            # stopped at the cap. Both are the model spending its output budget
+            # on thinking; the difference is only whether a fragment leaked out
+            # before it ran out. Scoring either would record a "No" that nobody
+            # said -- `parse_yes_no` reads anything that is not a yes as a no,
+            # which is TN-Eval's own parser and stays that way.
+            ok=bool(text) and not cut_off,
             input_tokens=int(usage.get("promptTokenCount", 0)),
             output_tokens=int(usage.get("candidatesTokenCount", 0)),
             thinking_tokens=int(usage.get("thoughtsTokenCount", 0)),
             latency_s=latency,
             finish_reason=finish,
-            error=None if text else f"empty answer (finishReason={finish})",
+            error=_stopped_early(text, finish),
         )
 
     def fingerprint(self, config: JudgeConfig) -> dict:
@@ -390,7 +409,8 @@ class OpenAIBackend(Backend):
 
         return Answer(
             text=text,
-            ok=bool(text),
+            # Same rule as the Vertex parser above.
+            ok=bool(text) and finish not in TRUNCATED,
             input_tokens=int(usage.get("prompt_tokens", 0)),
             # Reported completion tokens already include the reasoning, so the
             # two are separated here to match the Vertex shape -- `Spend` adds
@@ -399,7 +419,7 @@ class OpenAIBackend(Backend):
             thinking_tokens=thinking,
             latency_s=latency,
             finish_reason=finish,
-            error=None if text else f"empty answer (finish_reason={finish})",
+            error=_stopped_early(text, finish),
         )
 
     def fingerprint(self, config: JudgeConfig) -> dict:

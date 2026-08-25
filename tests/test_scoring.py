@@ -812,3 +812,33 @@ def test_an_answer_stored_before_the_digest_existed_is_still_usable(tmp_path):
     judge.write_cached(path, {"ok": True, "answer": "Yes", "judge_fingerprint": fingerprint})
 
     assert judge.load_cached(path, fingerprint, "any prompt at all") is not None
+
+
+def test_a_judge_answer_that_stopped_at_the_cap_is_not_an_answer(monkeypatch):
+    """`parse_yes_no` reads anything that is not a yes as a no.
+
+    That is TN-Eval's own parser and it stays that way, so the only place to
+    tell a refusal from silence is here: a fragment that leaked out before the
+    model ran out of room must not reach it. Measured across the cached
+    answers, 158 of 31 500 at a 128-token thinking budget were exactly this --
+    "Evaluate against Rubric Item:**", "producingproducing..." -- each one
+    scored as a criterion the note failed to satisfy.
+    """
+    client, _sent = _client(monkeypatch, [_reply("Evaluate against Rubric", finish="MAX_TOKENS")])
+
+    answer = client.ask("is the note complete?")
+
+    assert answer.ok is False
+    assert answer.finish_reason == "MAX_TOKENS"
+    assert "truncated" in answer.error
+    assert answer.text, "the fragment is kept so the record can be explained"
+
+
+def test_a_judge_answer_that_finished_is_an_answer(monkeypatch):
+    """The other half, so the guard cannot be widened into rejecting everything."""
+    client, _sent = _client(monkeypatch, [_reply("Yes", finish="STOP")])
+
+    answer = client.ask("is the note complete?")
+
+    assert answer.ok is True
+    assert answer.error is None
