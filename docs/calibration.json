@@ -1,6 +1,9 @@
 {
   "agreements": [
     {
+      "alpha": 0.5744533746909184,
+      "alpha_humans": 0.5037134105690964,
+      "alpha_level": "nominal",
       "humans": 0.5037692102193586,
       "judge": 0.5750196747444976,
       "n": 3450,
@@ -8,6 +11,9 @@
       "statistic": "Cohen's kappa"
     },
     {
+      "alpha": 0.1947971313411877,
+      "alpha_humans": 0.13053214160572235,
+      "alpha_level": "ordinal",
       "humans": 0.13096836110903934,
       "judge": 0.3152597171539703,
       "n": 600,
@@ -15,6 +21,9 @@
       "statistic": "Spearman rho"
     },
     {
+      "alpha": 0.019136177455935377,
+      "alpha_humans": 0.18712235103669383,
+      "alpha_level": "ordinal",
       "humans": 0.19210453252909696,
       "judge": 0.027486768976666322,
       "n": 600,
@@ -22,6 +31,9 @@
       "statistic": "Spearman rho"
     },
     {
+      "alpha": 0.06299924818261221,
+      "alpha_humans": 0.17930428214514715,
+      "alpha_level": "ordinal",
       "humans": 0.1830973712087935,
       "judge": 0.06321627210801624,
       "n": 600,

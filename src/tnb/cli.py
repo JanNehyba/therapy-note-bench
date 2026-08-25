@@ -488,13 +488,20 @@ def cmd_calibrate(args: argparse.Namespace) -> int:
         return 1
 
     print(f"Judge {report_data.judge_model} vs 2 therapists, over {report_data.notes} notes\n")
-    print(f"{'measure':24} {'statistic':16} {'judge':>7} {'humans':>7} {'n':>6}")
+    print(
+        f"{'measure':24} {'statistic':16} {'judge':>7} {'humans':>7} "
+        f"{'a-judge':>8} {'a-human':>8} {'n':>6}"
+    )
+
+    def _cell(value: float | None, width: int) -> str:
+        return f"{'—':>{width}}" if value is None else f"{value:{width}.2f}"
+
     for agreement in report_data.agreements:
-        judge_value = agreement.judge_mean
         print(
             f"{agreement.name:24} {agreement.statistic:16} "
-            f"{'—' if judge_value is None else f'{judge_value:7.2f}'} "
-            f"{'—' if agreement.human_vs_human is None else f'{agreement.human_vs_human:7.2f}'} "
+            f"{_cell(agreement.judge_mean, 7)} {_cell(agreement.human_vs_human, 7)} "
+            f"{_cell(agreement.alpha_judge_mean, 8)} "
+            f"{_cell(agreement.alpha_human_vs_human, 8)} "
             f"{agreement.n:6}"
         )
 
@@ -518,6 +525,9 @@ def cmd_calibrate(args: argparse.Namespace) -> int:
             {
                 "name": a.name,
                 "statistic": a.statistic,
+                "alpha": a.alpha_judge_mean,
+                "alpha_humans": a.alpha_human_vs_human,
+                "alpha_level": a.alpha_level,
                 "judge": a.judge_mean,
                 "humans": a.human_vs_human,
                 "n": a.n,
@@ -683,6 +693,9 @@ def cmd_judges(args: argparse.Namespace) -> int:
                             {
                                 "name": a.name,
                                 "statistic": a.statistic,
+                                "alpha": a.alpha_judge_mean,
+                                "alpha_humans": a.alpha_human_vs_human,
+                                "alpha_level": a.alpha_level,
                                 "judge": a.judge_mean,
                                 "humans": a.human_vs_human,
                                 "n": a.n,

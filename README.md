@@ -65,16 +65,18 @@ starts a new table rather than rewriting the old one — see
 <!-- CALIBRATION:BEGIN -->
 Judge **`gemini-2.5-pro`** (prompts `tneval-rubric-v1`) against the two therapists TN-Eval had rate the same notes.
 
-| Measure | Statistic | Judge vs therapist | Therapist vs therapist | n |
-|---|---|---|---|---|
-| rubric completeness | Cohen's kappa | 0.58 | 0.50 | 3450 |
-| likert completeness | Spearman rho | 0.32 | 0.13 | 600 |
-| likert conciseness | Spearman rho | 0.03 | 0.19 | 600 |
-| likert faithfulness | Spearman rho | 0.06 | 0.18 | 600 |
+| Measure | Statistic | Judge vs therapist | Therapist vs therapist | Alpha, judge | Alpha, therapists | n |
+|---|---|---|---|---|---|---|
+| rubric completeness | Cohen's kappa | 0.58 | 0.50 | 0.57 | 0.50 | 3450 |
+| likert completeness | Spearman rho | 0.32 | 0.13 | 0.19 | 0.13 | 600 |
+| likert conciseness | Spearman rho | 0.03 | 0.19 | 0.02 | 0.19 | 600 |
+| likert faithfulness | Spearman rho | 0.06 | 0.18 | 0.06 | 0.18 | 600 |
 
-**The right-hand column is the ceiling, not a target to beat.** Two trained therapists disagree with each other about these notes; a judge that agrees with a therapist as often as the other therapist does has done as well as the task allows.
+**The therapist-vs-therapist columns are the ceiling, not a target to beat.** Two trained therapists disagree with each other about these notes; a judge that agrees with a therapist as often as the other therapist does has done as well as the task allows.
 
-The judge reproduces TN-Eval's central finding: criterion checklists agree far better than 1–5 scales. That is why the leaderboard ranks on the rubric and reports the Likert columns with a caveat.
+**Why two statistics.** Cohen's kappa suits a yes/no criterion and Spearman suits a 1–5 scale, so each measure is reported under the one a reader expects. But those two are different quantities and an inequality between them means nothing, so the rubric-versus-Likert comparison below is made on **Krippendorff's alpha**, which is defined for both — nominal for the rubric, ordinal for the scales — and is the statistic TN-Eval used to reach the finding in the first place.
+
+The judge reproduces TN-Eval's central finding: criterion checklists agree far better than 1–5 scales (alpha 0.57 against 0.19). That is why the leaderboard ranks on the rubric and reports the Likert columns with a caveat.
 <!-- CALIBRATION:END -->
 
 ---

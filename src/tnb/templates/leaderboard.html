@@ -669,19 +669,30 @@ renderProtocol(DATA.protocol);
 function renderCalibration(calibration) {
   if (!calibration || !calibration.agreements || !calibration.agreements.length) return;
 
+  const cell = value => value === null || value === undefined
+    ? '<span class="dash">—</span>' : value.toFixed(2);
   const rows = calibration.agreements.map(a => `<tr>
-      <td>${a.name.replace(/_/g, ' ')}</td>
-      <td>${a.statistic}</td>
-      <td>${a.judge === null ? '<span class="dash">—</span>' : a.judge.toFixed(2)}</td>
-      <td>${a.humans === null ? '<span class="dash">—</span>' : a.humans.toFixed(2)}</td>
+      <td>${esc(a.name.replace(/_/g, ' '))}</td>
+      <td>${esc(a.statistic)}</td>
+      <td>${cell(a.judge)}</td>
+      <td>${cell(a.humans)}</td>
+      <td>${cell(a.alpha)}</td>
+      <td>${cell(a.alpha_humans)}</td>
       <td>${a.n}</td>
     </tr>`).join('');
 
+  const alphaFigures = (() => {
+    const find = name => calibration.agreements.find(a => a.name === name);
+    const rubric = find('rubric_completeness'), likert = find('likert_completeness');
+    return rubric && likert && rubric.alpha != null && likert.alpha != null
+      ? ` (alpha ${rubric.alpha.toFixed(2)} against ${likert.alpha.toFixed(2)})` : '';
+  })();
+
   const finding = calibration.rubric_beats_likert === true
-    ? '<p class="blurb">The judge reproduces TN-Eval\'s central finding: criterion checklists agree far better than 1–5 scales. That is why the ranking uses the rubric and the Likert columns carry a caveat.</p>'
+    ? `<p class="blurb">The judge reproduces TN-Eval's central finding: criterion checklists agree far better than 1–5 scales${alphaFigures}. That is why the ranking uses the rubric and the Likert columns carry a caveat.</p>`
     : calibration.rubric_beats_likert === false
-      ? '<p class="note">The judge does <strong>not</strong> reproduce TN-Eval\'s finding that criterion checklists agree better than 1–5 scales. Reported rather than explained away.</p>'
-      : '';
+      ? `<p class="note">The judge does <strong>not</strong> reproduce TN-Eval's finding that criterion checklists agree better than 1–5 scales${alphaFigures}. Reported rather than explained away.</p>`
+      : `<p class="note">The two instruments <strong>cannot be separated</strong> here${alphaFigures}, so this run neither reproduces nor contradicts TN-Eval's finding. Reported as undecided rather than rounded into a verdict.</p>`;
 
   document.getElementById('calibration').classList.remove('pending');
   document.getElementById('calibration-body').innerHTML = `
@@ -689,12 +700,21 @@ function renderCalibration(calibration) {
        TN-Eval had rate the same ${calibration.notes} notes.</p>
     <div class="scroll"><table>
       <thead><tr><th>Measure</th><th>Statistic</th><th>Judge vs therapist</th>
-                 <th>Therapist vs therapist</th><th>n</th></tr></thead>
+                 <th>Therapist vs therapist</th>
+                 <th title="Krippendorff's alpha, judge vs therapist">Alpha, judge</th>
+                 <th title="Krippendorff's alpha, therapist vs therapist">Alpha, therapists</th>
+                 <th>n</th></tr></thead>
       <tbody>${rows}</tbody>
     </table></div>
     <p class="blurb"><strong>The right-hand column is the ceiling, not a target to beat.</strong>
        Two trained therapists disagree with each other about these notes; a judge that agrees with
        a therapist as often as the other therapist does has done as well as the task allows.</p>
+    <p class="blurb"><strong>Why two statistics.</strong> Cohen's kappa suits a yes/no criterion
+       and Spearman suits a 1–5 scale, so each measure is reported under the one a reader
+       expects. Those two are different quantities and an inequality between them means nothing,
+       so the comparison below is made on <strong>Krippendorff's alpha</strong> — defined for
+       both, nominal for the rubric and ordinal for the scales, and the statistic TN-Eval used
+       to reach the finding in the first place.</p>
     ${finding}`;
 }
 

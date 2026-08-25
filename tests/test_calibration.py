@@ -78,9 +78,24 @@ def test_a_rater_with_no_variation_correlates_with_nothing():
 # --- what the report says ----------------------------------------------------
 
 
-def _agreement(name, judge, humans, statistic="Cohen's kappa", n=100) -> Agreement:
+def _agreement(
+    name, judge, humans, statistic="Cohen's kappa", n=100, alpha=None, alpha_humans=None
+) -> Agreement:
+    """One measure's agreement.
+
+    ``alpha`` defaults to the judge figure so a test that only cares about the
+    natural statistic reads the same as before. The verdict, though, is computed
+    from the alpha alone -- see `test_the_verdict_is_refused_without_a_comparable_statistic`.
+    """
     return Agreement(
-        name=name, n=n, judge_vs_human=[judge, judge], human_vs_human=humans, statistic=statistic
+        name=name,
+        n=n,
+        judge_vs_human=[judge, judge],
+        human_vs_human=humans,
+        statistic=statistic,
+        alpha_judge_vs_human=[judge if alpha is None else alpha],
+        alpha_human_vs_human=humans if alpha_humans is None else alpha_humans,
+        alpha_level="nominal" if statistic == "Cohen's kappa" else "ordinal",
     )
 
 
@@ -89,6 +104,42 @@ def test_a_judge_at_the_human_ceiling_is_recognised():
     agrees as often as they do has done as well as the task allows."""
     assert _agreement("rubric_completeness", 0.62, 0.60).reaches_ceiling is True
     assert _agreement("rubric_completeness", 0.30, 0.60).reaches_ceiling is False
+
+
+def test_the_verdict_is_refused_without_a_comparable_statistic():
+    """No alpha, no claim.
+
+    The two per-measure statistics are a kappa and a Spearman rho. Comparing them
+    is what this property used to do, and the sentence it produced was the stated
+    reason for ranking on the rubric. With nothing comparable to read, the honest
+    output is no verdict.
+    """
+    bare = Report(
+        judge_model="x",
+        judge_prompt_version="v1",
+        notes=150,
+        agreements=[
+            Agreement("rubric_completeness", 100, [0.90], 0.5, "Cohen's kappa"),
+            Agreement("likert_completeness", 100, [0.30], 0.2, "Spearman rho"),
+        ],
+    )
+
+    assert bare.rubric_beats_likert is None
+
+
+def test_the_verdict_follows_the_alpha_and_not_the_raw_statistic():
+    """A kappa that would win the raw comparison must not win the real one."""
+    report = Report(
+        judge_model="x",
+        judge_prompt_version="v1",
+        notes=150,
+        agreements=[
+            _agreement("rubric_completeness", 0.90, 0.5, alpha=0.20),
+            _agreement("likert_completeness", 0.30, 0.2, "Spearman rho", alpha=0.60),
+        ],
+    )
+
+    assert report.rubric_beats_likert is False
 
 
 def test_the_report_notices_tn_evals_finding():

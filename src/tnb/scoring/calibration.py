@@ -90,6 +90,76 @@ def spearman(first: list[float], second: list[float]) -> float | None:
     return covariance / (spread_x * spread_y)
 
 
+def krippendorff_alpha(units: list[list[float]], *, ordinal: bool) -> float | None:
+    """Krippendorff's alpha over units, each rated by two or more raters.
+
+    Implemented because the comparison it feeds cannot be made with anything
+    else. Cohen's kappa suits the rubric's yes/no calls and Spearman suits the
+    1-5 scales, but they are different quantities: an inequality between a kappa
+    and a rho says nothing about which instrument agrees better. TN-Eval reached
+    their own finding with alpha on both, so reproducing the finding means using
+    the statistic they used.
+
+    ``ordinal`` picks the distance function: nominal treats every disagreement
+    as total, which is right for a yes/no criterion, while ordinal weights a
+    4-versus-5 as a smaller disagreement than a 1-versus-5, which is right for a
+    Likert scale. Both are normalised the same way, which is what makes the two
+    alphas comparable in the way the two raw statistics were not.
+
+    Returns None when there is nothing to measure: fewer than two units, or a
+    corpus where every rating is identical and expected disagreement is zero.
+    """
+    usable = [unit for unit in units if len(unit) >= 2]
+    if len(usable) < 2:
+        return None
+
+    # Coincidence matrix: every ordered pair of ratings within a unit, weighted
+    # by that unit's rater count so units with more raters do not dominate.
+    coincidence: dict[tuple[float, float], float] = {}
+    for unit in usable:
+        weight = len(unit) - 1
+        for i, first in enumerate(unit):
+            for j, second in enumerate(unit):
+                if i == j:
+                    continue  # a rating is not paired with itself -- by position,
+                    # not by value: two raters who agree are the case that matters
+                key = (first, second)
+                coincidence[key] = coincidence.get(key, 0.0) + 1.0 / weight
+
+    values = sorted({value for unit in usable for value in unit})
+    marginal = {
+        value: sum(count for (a, _b), count in coincidence.items() if a == value)
+        for value in values
+    }
+    total = sum(marginal.values())
+    if total <= 1:
+        return None
+
+    if ordinal:
+        # The ordinal distance runs over the marginals between the two values,
+        # so the gap between adjacent categories reflects how populated they are.
+        cumulative = {}
+        running = 0.0
+        for value in values:
+            cumulative[value] = running + marginal[value] / 2
+            running += marginal[value]
+
+        def distance(first: float, second: float) -> float:
+            return (cumulative[first] - cumulative[second]) ** 2
+    else:
+
+        def distance(first: float, second: float) -> float:
+            return 0.0 if first == second else 1.0
+
+    observed = sum(count * distance(a, b) for (a, b), count in coincidence.items()) / total
+    expected = sum(
+        marginal[a] * marginal[b] * distance(a, b) for a in values for b in values if a != b
+    ) / (total * (total - 1))
+    if expected == 0:
+        return None
+    return 1 - observed / expected
+
+
 def exact_agreement(first: list[int], second: list[int]) -> float | None:
     if not first:
         return None
@@ -122,9 +192,22 @@ class Agreement:
     human_vs_human: float | None
     statistic: str
 
+    #: The same measure again under Krippendorff's alpha, which -- unlike kappa
+    #: and Spearman -- is defined for both the binary rubric and the 1-5 scales.
+    #: Reported beside the natural statistic, and it is the only one the
+    #: rubric-versus-Likert comparison is allowed to use.
+    alpha_judge_vs_human: list[float | None] = field(default_factory=list)
+    alpha_human_vs_human: float | None = None
+    alpha_level: str = ""
+
     @property
     def judge_mean(self) -> float | None:
         values = [value for value in self.judge_vs_human if value is not None]
+        return sum(values) / len(values) if values else None
+
+    @property
+    def alpha_judge_mean(self) -> float | None:
+        values = [value for value in self.alpha_judge_vs_human if value is not None]
         return sum(values) / len(values) if values else None
 
     @property
@@ -217,7 +300,13 @@ def collect(
 
 
 def score_agreement(name: str, paired: Paired, *, binary: bool) -> Agreement:
-    """Kappa for the rubric's yes/no calls, Spearman for the 1-5 scales."""
+    """Kappa or Spearman as the measure deserves, and alpha for both.
+
+    The first is the statistic a reader expects for that kind of rating. The
+    second exists so the rubric and the Likert scales can be put side by side at
+    all: kappa and rho are not the same quantity, and an inequality between them
+    is not a finding.
+    """
     if binary:
         judge_vs = [
             cohens_kappa([int(v) for v in paired.judge], [int(v) for v in human])
@@ -232,12 +321,27 @@ def score_agreement(name: str, paired: Paired, *, binary: bool) -> Agreement:
         human_vs = spearman(paired.humans[0], paired.humans[1])
         statistic = "Spearman rho"
 
+    ordinal = not binary
+    alpha_judge = [
+        krippendorff_alpha(
+            [[j, h] for j, h in zip(paired.judge, human, strict=True)], ordinal=ordinal
+        )
+        for human in paired.humans
+    ]
+    alpha_human = krippendorff_alpha(
+        [[a, b] for a, b in zip(paired.humans[0], paired.humans[1], strict=True)],
+        ordinal=ordinal,
+    )
+
     return Agreement(
         name=name,
         n=len(paired),
         judge_vs_human=judge_vs,
         human_vs_human=human_vs,
         statistic=statistic,
+        alpha_judge_vs_human=alpha_judge,
+        alpha_human_vs_human=alpha_human,
+        alpha_level="ordinal" if ordinal else "nominal",
     )
 
 
@@ -249,19 +353,36 @@ class Report:
     agreements: list[Agreement]
     per_criterion: list[tuple[str, float | None, float | None]] = field(default_factory=list)
 
+    #: How far apart the two alphas must be before the comparison is called.
+    #: Two instruments within this of each other are reported as inseparable
+    #: rather than rounded into a finding.
+    ALPHA_MARGIN = 0.05
+
     @property
     def rubric_beats_likert(self) -> bool | None:
         """TN-Eval's central finding. Does our judge reproduce it?
 
         They measured far better human agreement on criterion checklists than on
-        1-5 scales. If the judge shows the same pattern, the instrument behaves
-        like the one they validated.
+        1-5 scales, using Krippendorff's alpha on both. If the judge shows the
+        same pattern, the instrument behaves like the one they validated.
+
+        Read from `alpha_judge_mean`, never from `judge_mean`: the latter is a
+        kappa on one side and a Spearman rho on the other, and an inequality
+        between two different statistics is not evidence of anything. That
+        comparison is what this property used to make, and the sentence it
+        produced was the repository's stated reason for ranking on the rubric.
+
+        None when the two are within `ALPHA_MARGIN`, which is an answer -- "these
+        cannot be separated" -- rather than a missing one.
         """
         rubric = next((a for a in self.agreements if a.name == "rubric_completeness"), None)
         likert = next((a for a in self.agreements if a.name == "likert_completeness"), None)
-        if not rubric or not likert or rubric.judge_mean is None or likert.judge_mean is None:
+        if not rubric or not likert:
             return None
-        return rubric.judge_mean > likert.judge_mean
+        first, second = rubric.alpha_judge_mean, likert.alpha_judge_mean
+        if first is None or second is None or abs(first - second) < self.ALPHA_MARGIN:
+            return None
+        return first > second
 
 
 def calibrate(sessions: list[Session], judge_model: str, *, root: Path | None = None) -> Report:
@@ -310,35 +431,64 @@ def render_markdown(report: Report) -> str:
         f"Judge **`{report.judge_model}`** (prompts `{report.judge_prompt_version}`) against the "
         f"two therapists TN-Eval had rate the same notes.",
         "",
-        "| Measure | Statistic | Judge vs therapist | Therapist vs therapist | n |",
-        "|---|---|---|---|---|",
+        "| Measure | Statistic | Judge vs therapist | Therapist vs therapist | "
+        "Alpha, judge | Alpha, therapists | n |",
+        "|---|---|---|---|---|---|---|",
     ]
+
+    def cell(value: float | None) -> str:
+        return "—" if value is None else f"{value:.2f}"
+
     for agreement in report.agreements:
-        judge_value = agreement.judge_mean
-        ceiling = agreement.human_vs_human
         lines.append(
             f"| {agreement.name.replace('_', ' ')} | {agreement.statistic} | "
-            f"{'—' if judge_value is None else f'{judge_value:.2f}'} | "
-            f"{'—' if ceiling is None else f'{ceiling:.2f}'} | {agreement.n} |"
+            f"{cell(agreement.judge_mean)} | {cell(agreement.human_vs_human)} | "
+            f"{cell(agreement.alpha_judge_mean)} | {cell(agreement.alpha_human_vs_human)} | "
+            f"{agreement.n} |"
         )
 
     lines += [
         "",
-        "**The right-hand column is the ceiling, not a target to beat.** Two trained "
-        "therapists disagree with each other about these notes; a judge that agrees with a "
-        "therapist as often as the other therapist does has done as well as the task allows.",
+        "**The therapist-vs-therapist columns are the ceiling, not a target to beat.** Two "
+        "trained therapists disagree with each other about these notes; a judge that agrees "
+        "with a therapist as often as the other therapist does has done as well as the task "
+        "allows.",
+        "",
+        "**Why two statistics.** Cohen's kappa suits a yes/no criterion and Spearman suits a "
+        "1–5 scale, so each measure is reported under the one a reader expects. But those two "
+        "are different quantities and an inequality between them means nothing, so the "
+        "rubric-versus-Likert comparison below is made on **Krippendorff's alpha**, which is "
+        "defined for both — nominal for the rubric, ordinal for the scales — and is the "
+        "statistic TN-Eval used to reach the finding in the first place.",
     ]
+
+    rubric = next((a for a in report.agreements if a.name == "rubric_completeness"), None)
+    likert = next((a for a in report.agreements if a.name == "likert_completeness"), None)
+    figures = (
+        f" (alpha {rubric.alpha_judge_mean:.2f} against {likert.alpha_judge_mean:.2f})"
+        if rubric is not None
+        and likert is not None
+        and rubric.alpha_judge_mean is not None
+        and likert.alpha_judge_mean is not None
+        else ""
+    )
 
     if report.rubric_beats_likert is True:
         lines.append(
-            "\nThe judge reproduces TN-Eval's central finding: criterion checklists agree far "
-            "better than 1–5 scales. That is why the leaderboard ranks on the rubric and "
-            "reports the Likert columns with a caveat."
+            f"\nThe judge reproduces TN-Eval's central finding: criterion checklists agree far "
+            f"better than 1–5 scales{figures}. That is why the leaderboard ranks on the rubric "
+            f"and reports the Likert columns with a caveat."
         )
     elif report.rubric_beats_likert is False:
         lines.append(
-            "\n**The judge does not reproduce TN-Eval's finding** that criterion checklists "
-            "agree better than 1–5 scales. That is unexpected and is reported rather than "
-            "explained away; see docs/limitations.md."
+            f"\n**The judge does not reproduce TN-Eval's finding** that criterion checklists "
+            f"agree better than 1–5 scales{figures}. That is unexpected and is reported rather "
+            f"than explained away; see docs/limitations.md."
+        )
+    else:
+        lines.append(
+            f"\n**The two instruments cannot be separated here**{figures}, so this run neither "
+            f"reproduces nor contradicts TN-Eval's finding that criterion checklists agree "
+            f"better than 1–5 scales. Reported as undecided rather than rounded into a verdict."
         )
     return "\n".join(lines)
