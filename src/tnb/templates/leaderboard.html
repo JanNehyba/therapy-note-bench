@@ -152,6 +152,11 @@ dl.measures dt { font-weight: 600; color: var(--fg); }
 dl.measures dd { margin: 0; color: var(--muted); }
 dl.measures em { font-style: normal; color: var(--warn); }
 @media (max-width: 620px) { dl.measures .measure { grid-template-columns: 1fr; } }
+
+.differs { display: inline-block; margin-left: .45em; padding: .05em .4em; border-radius: 3px;
+           font-size: .68em; font-weight: 600; letter-spacing: .02em;
+           background: var(--chip); color: var(--warn); white-space: nowrap; }
+p.settings { margin-top: .2rem; }
 </style>
 </head>
 <body>
@@ -274,6 +279,13 @@ function detailRow(row, table) {
     parts.push(`<p class="note">${row.n_failed} note(s) missing, with no recorded reason.</p>`);
   }
 
+  // How it was asked, beside what it scored. A row that does not say this
+  // cannot be reproduced, which is the same rule this benchmark already applies
+  // to prompt_version and judge_model.
+  parts.push(row.settings
+    ? `<p class="note settings">Generated with <strong>${esc(row.settings)}</strong>.</p>`
+    : '<p class="note settings">Generation settings were not recorded for this row.</p>');
+
   const sections = Object.entries(row.by_section);
   if (sections.length) {
     const head = table.columns.map(c =>
@@ -365,9 +377,18 @@ function renderTable(table, index) {
     // can be two different builds, so it is shown, never merged away.
     const label = TYPE_LABEL[row.system_type] || row.provider;
     const chip = label ? `<span class="chip">${label}</span>` : '';
+    // A row produced under conditions the others did not share is marked where
+    // it sits, never dropped and never normalised away. Today that is the GPT
+    // family, whose provider refuses any temperature but 1.
+    const oddOneOut = row.settings_differ
+      ? ' <span class="differs" title="' + esc(row.settings) + '">≠ settings</span>'
+      : '';
+    const effortCell = table.has_effort
+      ? `<td>${row.effort ? esc(row.effort) : '<span class="dash" title="this provider has no effort control">—</span>'}</td>`
+      : '';
     return `<tr class="system" data-row="${index}-${position}" data-type="${row.system_type}">
-        <td class="name"><span class="arrow">▸</span>${row.label}${chip}</td>
-        ${cells}<td>${coverage}</td>
+        <td class="name"><span class="arrow">▸</span>${esc(row.label)}${chip}${oddOneOut}</td>
+        ${effortCell}${cells}<td>${coverage}</td>
       </tr>` + detailRow(row, table);
   }).join('');
 
@@ -377,7 +398,9 @@ function renderTable(table, index) {
       <p class="versions">harness <code>${versions.harness_version}</code> ·
          prompt <code>${versions.prompt_version}</code> · ${judge}</p>
       <div class="scroll"><table data-table="${index}">
-        <thead><tr><th data-sort="label">System</th>${head}<th data-sort="coverage">Notes</th></tr></thead>
+        <thead><tr><th data-sort="label">System</th>${
+          table.has_effort ? '<th data-sort="effort" title="Reasoning effort the note was written at. Blank where the provider has no such control.">Effort</th>' : ''
+        }${head}<th data-sort="coverage">Notes</th></tr></thead>
         <tbody>${body}</tbody>
       </table></div>
       <p class="ranking-note">${rankingNote}</p>
@@ -404,6 +427,12 @@ function sortBy(table, key) {
     const row = data.rows[Number(tr.dataset.row.split('-')[1])];
     if (key === 'label') return row.label.toLowerCase();
     if (key === 'coverage') return -row.n_generated;
+    // Effort is ordinal, not alphabetical: sorting it as text would put xhigh
+    // between none and low. A provider with no such control sorts last.
+    if (key === 'effort') {
+      const rank = {none: 0, low: 1, medium: 2, high: 3, xhigh: 4};
+      return row.effort in rank ? rank[row.effort] : 99;
+    }
     const score = row.headline[key];
     return score === undefined || score === null ? Infinity : -score;
   };

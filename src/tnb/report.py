@@ -260,6 +260,7 @@ def build(rows: list[Row]) -> dict:
         track, harness_version, prompt_version, judge_model, judge_prompt_version = key
         if track not in COLUMNS:
             continue
+        rendered = [_render_row(row) for row in sorted(group, key=lambda r: _sort_key(r, track))]
         tables.append(
             {
                 "track": track,
@@ -277,9 +278,11 @@ def build(rows: list[Row]) -> dict:
                     for key_, digits in COLUMNS[track]
                 ],
                 "ranking_measure": RANKING_MEASURES.get(track),
-                "rows": [
-                    _render_row(row) for row in sorted(group, key=lambda r: _sort_key(r, track))
-                ],
+                "rows": rendered,
+                # Drawn only where something to show exists. A column of empty
+                # cells is worse than no column: it reads as missing data rather
+                # than as a control this provider does not have.
+                "has_effort": any(row["effort"] for row in rendered),
             }
         )
 
@@ -390,6 +393,13 @@ def _render_row(row: Row) -> dict:
         "label": row.label,
         "system_type": row.system_type,
         "provider": row.provider,
+        "effort": row.settings.effort,
+        "settings": row.settings.summary,
+        # A row produced under conditions the rest of the table did not share is
+        # marked in place rather than dropped or silently normalised -- WMT's
+        # convention for systems that used extra resources. The forced
+        # temperature on the GPT family is exactly this case.
+        "settings_differ": bool(row.settings.temperature_forced),
         "n_attempted": row.n_sessions_attempted,
         "n_generated": row.n_sessions_generated,
         "n_scored": row.n_sessions_scored,

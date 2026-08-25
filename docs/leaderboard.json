@@ -358,6 +358,9 @@
       {
         "agreements": [
           {
+            "alpha": 0.5744533746909184,
+            "alpha_humans": 0.5037134105690964,
+            "alpha_level": "nominal",
             "humans": 0.5037692102193586,
             "judge": 0.5750196747444976,
             "n": 3450,
@@ -365,6 +368,9 @@
             "statistic": "Cohen's kappa"
           },
           {
+            "alpha": 0.1947971313411877,
+            "alpha_humans": 0.13053214160572235,
+            "alpha_level": "ordinal",
             "humans": 0.13096836110903934,
             "judge": 0.3152597171539703,
             "n": 600,
@@ -372,6 +378,9 @@
             "statistic": "Spearman rho"
           },
           {
+            "alpha": 0.019136177455935377,
+            "alpha_humans": 0.18712235103669383,
+            "alpha_level": "ordinal",
             "humans": 0.19210453252909696,
             "judge": 0.027486768976666322,
             "n": 600,
@@ -379,6 +388,9 @@
             "statistic": "Spearman rho"
           },
           {
+            "alpha": 0.06299924818261221,
+            "alpha_humans": 0.17930428214514715,
+            "alpha_level": "ordinal",
             "humans": 0.1830973712087935,
             "judge": 0.06321627210801624,
             "n": 600,
@@ -392,30 +404,42 @@
       {
         "agreements": [
           {
-            "humans": 0.5040468120704713,
-            "judge": 0.5868509856731878,
-            "n": 3442,
+            "alpha": 0.5869692148373635,
+            "alpha_humans": 0.5037134105690964,
+            "alpha_level": "nominal",
+            "humans": 0.5037692102193586,
+            "judge": 0.5869696900356649,
+            "n": 3450,
             "name": "rubric_completeness",
             "statistic": "Cohen's kappa"
           },
           {
-            "humans": 0.1229156401883026,
-            "judge": 0.23555810411123734,
-            "n": 597,
+            "alpha": 0.023733001716138513,
+            "alpha_humans": 0.13053214160572235,
+            "alpha_level": "ordinal",
+            "humans": 0.13096836110903934,
+            "judge": 0.2403403311737524,
+            "n": 600,
             "name": "likert_completeness",
             "statistic": "Spearman rho"
           },
           {
-            "humans": 0.18545507425902644,
-            "judge": 0.08690681081977929,
-            "n": 597,
+            "alpha": -0.004149548098131173,
+            "alpha_humans": 0.18712235103669383,
+            "alpha_level": "ordinal",
+            "humans": 0.19210453252909696,
+            "judge": 0.08607047522971537,
+            "n": 600,
             "name": "likert_conciseness",
             "statistic": "Spearman rho"
           },
           {
-            "humans": 0.1799941940844287,
-            "judge": 0.1400013736769053,
-            "n": 598,
+            "alpha": 0.13328426591761883,
+            "alpha_humans": 0.17930428214514715,
+            "alpha_level": "ordinal",
+            "humans": 0.1830973712087935,
+            "judge": 0.1368613569816083,
+            "n": 600,
             "name": "likert_faithfulness",
             "statistic": "Spearman rho"
           }
@@ -426,6 +450,9 @@
       {
         "agreements": [
           {
+            "alpha": 0.5401386156481822,
+            "alpha_humans": 0.5037134105690964,
+            "alpha_level": "nominal",
             "humans": 0.5037692102193586,
             "judge": 0.5410317342372306,
             "n": 3450,
@@ -433,6 +460,9 @@
             "statistic": "Cohen's kappa"
           },
           {
+            "alpha": 0.1803137308522773,
+            "alpha_humans": 0.13053214160572235,
+            "alpha_level": "ordinal",
             "humans": 0.13096836110903934,
             "judge": 0.2219081346551724,
             "n": 600,
@@ -440,6 +470,9 @@
             "statistic": "Spearman rho"
           },
           {
+            "alpha": -0.047307233416250205,
+            "alpha_humans": 0.18712235103669383,
+            "alpha_level": "ordinal",
             "humans": 0.19210453252909696,
             "judge": 0.03523282489426165,
             "n": 600,
@@ -447,6 +480,9 @@
             "statistic": "Spearman rho"
           },
           {
+            "alpha": 0.0914919280115104,
+            "alpha_humans": 0.17930428214514715,
+            "alpha_level": "ordinal",
             "humans": 0.1830973712087935,
             "judge": 0.10296225804106575,
             "n": 600,
@@ -460,6 +496,9 @@
       {
         "agreements": [
           {
+            "alpha": 0.5432130776206548,
+            "alpha_humans": 0.5037134105690964,
+            "alpha_level": "nominal",
             "humans": 0.5037692102193586,
             "judge": 0.5432121638015741,
             "n": 3450,
@@ -467,6 +506,9 @@
             "statistic": "Cohen's kappa"
           },
           {
+            "alpha": 0.027845702241683035,
+            "alpha_humans": 0.13053214160572235,
+            "alpha_level": "ordinal",
             "humans": 0.13096836110903934,
             "judge": 0.3037134500820071,
             "n": 600,
@@ -474,6 +516,9 @@
             "statistic": "Spearman rho"
           },
           {
+            "alpha": -0.016785929197366767,
+            "alpha_humans": 0.18712235103669383,
+            "alpha_level": "ordinal",
             "humans": 0.19210453252909696,
             "judge": 0.06125494206434177,
             "n": 600,
@@ -481,6 +526,9 @@
             "statistic": "Spearman rho"
           },
           {
+            "alpha": 0.009260158300235466,
+            "alpha_humans": 0.17930428214514715,
+            "alpha_level": "ordinal",
             "humans": 0.1830973712087935,
             "judge": 0.012154028047190022,
             "n": 600,
@@ -494,6 +542,9 @@
       {
         "agreements": [
           {
+            "alpha": 0.5501663766238587,
+            "alpha_humans": 0.5037134105690964,
+            "alpha_level": "nominal",
             "humans": 0.5037692102193586,
             "judge": 0.5501506063074957,
             "n": 3450,
@@ -501,6 +552,9 @@
             "statistic": "Cohen's kappa"
           },
           {
+            "alpha": 0.08993815113752979,
+            "alpha_humans": 0.13053214160572235,
+            "alpha_level": "ordinal",
             "humans": 0.13096836110903934,
             "judge": 0.2879894530234797,
             "n": 600,
@@ -508,6 +562,9 @@
             "statistic": "Spearman rho"
           },
           {
+            "alpha": -0.3987561630630899,
+            "alpha_humans": 0.18712235103669383,
+            "alpha_level": "ordinal",
             "humans": 0.19210453252909696,
             "judge": 0.1266635748527724,
             "n": 600,
@@ -515,6 +572,9 @@
             "statistic": "Spearman rho"
           },
           {
+            "alpha": 0.14093638761591326,
+            "alpha_humans": 0.17930428214514715,
+            "alpha_level": "ordinal",
             "humans": 0.1830973712087935,
             "judge": 0.14502652040288316,
             "n": 600,
@@ -1581,6 +1641,7 @@
           "scale": "1-5"
         }
       ],
+      "has_effort": false,
       "ranking_measure": "completeness",
       "rows": [
         {
@@ -1639,6 +1700,7 @@
             "subjective-quotes": 1.0,
             "subjective-symptoms": 1.0
           },
+          "effort": "",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
@@ -1655,6 +1717,8 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-24T23:19:45Z",
+          "settings": "",
+          "settings_differ": false,
           "source": "",
           "system_id": "kimi-k3",
           "system_type": "model"
@@ -1715,6 +1779,7 @@
             "subjective-quotes": 0.8,
             "subjective-symptoms": 1.0
           },
+          "effort": "",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
@@ -1731,6 +1796,8 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-24T23:19:45Z",
+          "settings": "",
+          "settings_differ": false,
           "source": "",
           "system_id": "qwen3.5-122b",
           "system_type": "model"
@@ -1791,6 +1858,7 @@
             "subjective-quotes": 0.68,
             "subjective-symptoms": 1.0
           },
+          "effort": "",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
@@ -1807,6 +1875,8 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-24T23:19:45Z",
+          "settings": "",
+          "settings_differ": false,
           "source": "",
           "system_id": "qwen3.5-int4",
           "system_type": "model"
@@ -1867,6 +1937,7 @@
             "subjective-quotes": 0.76,
             "subjective-symptoms": 1.0
           },
+          "effort": "",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
@@ -1883,6 +1954,8 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-24T23:19:45Z",
+          "settings": "",
+          "settings_differ": false,
           "source": "",
           "system_id": "glm-5",
           "system_type": "model"
@@ -1943,6 +2016,7 @@
             "subjective-quotes": 0.62,
             "subjective-symptoms": 1.0
           },
+          "effort": "",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
@@ -1959,6 +2033,8 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-24T23:19:45Z",
+          "settings": "",
+          "settings_differ": false,
           "source": "",
           "system_id": "deepseek-v4-flash-thinking",
           "system_type": "model"
@@ -2019,6 +2095,7 @@
             "subjective-quotes": 0.3,
             "subjective-symptoms": 1.0
           },
+          "effort": "",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
@@ -2035,6 +2112,8 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-24T23:19:45Z",
+          "settings": "",
+          "settings_differ": false,
           "source": "",
           "system_id": "qwen3.8-27b",
           "system_type": "model"
@@ -2095,6 +2174,7 @@
             "subjective-quotes": 0.5952,
             "subjective-symptoms": 0.9762
           },
+          "effort": "",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
@@ -2111,6 +2191,8 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-24T23:19:45Z",
+          "settings": "",
+          "settings_differ": false,
           "source": "",
           "system_id": "gpt-oss-120b",
           "system_type": "model"
@@ -2171,6 +2253,7 @@
             "subjective-quotes": 0.74,
             "subjective-symptoms": 1.0
           },
+          "effort": "",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
@@ -2187,6 +2270,8 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-24T23:19:45Z",
+          "settings": "",
+          "settings_differ": false,
           "source": "",
           "system_id": "glm-5.2",
           "system_type": "model"
@@ -2247,6 +2332,7 @@
             "subjective-quotes": 0.52,
             "subjective-symptoms": 1.0
           },
+          "effort": "",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
@@ -2263,6 +2349,8 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-24T23:19:45Z",
+          "settings": "",
+          "settings_differ": false,
           "source": "",
           "system_id": "mistral-medium-3.5",
           "system_type": "model"
@@ -2323,6 +2411,7 @@
             "subjective-quotes": 0.78,
             "subjective-symptoms": 1.0
           },
+          "effort": "",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
@@ -2339,6 +2428,8 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-24T23:19:45Z",
+          "settings": "",
+          "settings_differ": false,
           "source": "",
           "system_id": "gemma4",
           "system_type": "model"
@@ -2399,6 +2490,7 @@
             "subjective-quotes": 0.66,
             "subjective-symptoms": 1.0
           },
+          "effort": "",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
@@ -2415,6 +2507,8 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-24T23:19:45Z",
+          "settings": "",
+          "settings_differ": false,
           "source": "",
           "system_id": "deepseek-v4-flash",
           "system_type": "model"
@@ -2475,6 +2569,7 @@
             "subjective-quotes": 0.24,
             "subjective-symptoms": 0.98
           },
+          "effort": "",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
@@ -2491,6 +2586,8 @@
           "provider": "tneval",
           "scored": true,
           "scored_at": "2026-08-24T12:39:05Z",
+          "settings": "",
+          "settings_differ": false,
           "source": "",
           "system_id": "mistral-large-v2",
           "system_type": "reference-model"
@@ -2551,6 +2648,7 @@
             "subjective-quotes": 0.08,
             "subjective-symptoms": 1.0
           },
+          "effort": "",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
@@ -2567,6 +2665,8 @@
           "provider": "tneval",
           "scored": true,
           "scored_at": "2026-08-24T12:39:05Z",
+          "settings": "",
+          "settings_differ": false,
           "source": "",
           "system_id": "llama-3.1-70b",
           "system_type": "reference-model"
@@ -2627,6 +2727,7 @@
             "subjective-quotes": 0.24,
             "subjective-symptoms": 0.62
           },
+          "effort": "",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
@@ -2643,6 +2744,8 @@
           "provider": "tneval",
           "scored": true,
           "scored_at": "2026-08-24T12:39:05Z",
+          "settings": "",
+          "settings_differ": false,
           "source": "",
           "system_id": "therapist",
           "system_type": "reference-human"
@@ -2699,11 +2802,13 @@
           "scale": "0-1"
         }
       ],
+      "has_effort": false,
       "ranking_measure": null,
       "rows": [
         {
           "by_section": {},
           "detail": {},
+          "effort": "",
           "failure_reasons": {},
           "generated_at": "2026-08-23T21:05:15Z",
           "headline": {},
@@ -2716,6 +2821,8 @@
           "provider": "einfra",
           "scored": false,
           "scored_at": null,
+          "settings": "",
+          "settings_differ": false,
           "source": "",
           "system_id": "deepseek-v4-flash",
           "system_type": "model"
@@ -2723,6 +2830,7 @@
         {
           "by_section": {},
           "detail": {},
+          "effort": "",
           "failure_reasons": {},
           "generated_at": "2026-08-23T21:09:59Z",
           "headline": {},
@@ -2735,6 +2843,8 @@
           "provider": "einfra",
           "scored": false,
           "scored_at": null,
+          "settings": "",
+          "settings_differ": false,
           "source": "",
           "system_id": "deepseek-v4-flash-thinking",
           "system_type": "model"

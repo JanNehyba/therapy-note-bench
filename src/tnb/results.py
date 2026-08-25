@@ -74,7 +74,16 @@ COMPARABILITY_KEYS = (
 #: providers belong in one table -- comparing them is the point -- but they are
 #: never the same row. The same model id on two endpoints can be two different
 #: builds, and merging them would hide that behind one name.
-IDENTITY_KEYS = (*COMPARABILITY_KEYS, "provider", "system_id", "system_type")
+#: What makes a row a *different row*. Wider than comparability on purpose: two
+#: rows that differ only here still belong in one table, because comparing them
+#: is the interesting part -- but they must never be averaged into one line.
+#:
+#: `effort` is here because the same model asked to think harder is a different
+#: system. Measured on `gpt-5.6-terra`: on a rubric question effort changes
+#: nothing at all, but on a Likert rating `none` gave a different answer to
+#: `low`/`medium`/`high` on two of six questions. A table that folded those
+#: together would report one number for two instruments.
+IDENTITY_KEYS = (*COMPARABILITY_KEYS, "provider", "system_id", "system_type", "effort")
 
 
 @dataclass(frozen=True)
@@ -96,6 +105,44 @@ class Metrics:
 
     def is_empty(self) -> bool:
         return not (self.headline or self.by_section or self.detail)
+
+
+@dataclass(frozen=True)
+class Settings:
+    """What a model was actually asked, as opposed to what it was configured with.
+
+    Three things vary across this field and every one of them changes the
+    output, so a row that omits them cannot be reproduced or fairly compared:
+
+    - **effort** -- `medium` on the GPT-5.6 family, nothing comparable elsewhere.
+    - **temperature** -- 0 everywhere except GPT-5.6, which accepts only 1. The
+      value here is the one that was *sent*; `temperature_forced` says whether
+      the provider refused ours, which is what makes the caveat on the page
+      truthful rather than decorative.
+    - **max_tokens** -- 4096, escalating to 16384 for a model that spent its
+      whole budget thinking. A truncated note scores as an incomplete one.
+    """
+
+    effort: str = ""
+    temperature: float | None = None
+    temperature_forced: bool = False
+    max_tokens: int | None = None
+
+    def is_empty(self) -> bool:
+        return self.temperature is None and self.max_tokens is None and not self.effort
+
+    @property
+    def summary(self) -> str:
+        """One line for the row's detail panel. Empty when nothing is known."""
+        parts = []
+        if self.effort:
+            parts.append(f"effort {self.effort}")
+        if self.temperature is not None:
+            forced = " (forced by the provider)" if self.temperature_forced else ""
+            parts.append(f"temperature {self.temperature:g}{forced}")
+        if self.max_tokens:
+            parts.append(f"max tokens {self.max_tokens}")
+        return ", ".join(parts)
 
 
 @dataclass(frozen=True)
@@ -126,6 +173,16 @@ class Row:
     n_failed: int = 0
     failure_reasons: dict[str, int] = field(default_factory=dict)
 
+    #: How the model was asked, taken from the generation records rather than
+    #: from what the config requested -- so it says what happened. Part of the
+    #: identity via `effort`; the rest is shown in the row's detail.
+    #:
+    #: A leaderboard row that does not say how the model was configured cannot
+    #: be reproduced. This benchmark already applies that rule to
+    #: `prompt_version`, `judge_model` and `harness_version`; generation
+    #: settings were the gap.
+    settings: Settings = field(default_factory=lambda: Settings())
+
     metrics: Metrics = field(default_factory=Metrics)
     #: Caveats that must travel with the numbers, e.g. that TRACE has no human
     #: anchor. Rendered next to the score, not buried in a footnote nobody reads.
@@ -147,6 +204,15 @@ class Row:
             raise ValueError(
                 f"Unknown system_type {self.system_type!r}. Known: {', '.join(SYSTEM_TYPES)}."
             )
+
+    @property
+    def effort(self) -> str:
+        """The reasoning effort this row was generated under, or "" for none.
+
+        Read from `settings` so there is one home for the value, and exposed as
+        an attribute because `IDENTITY_KEYS` reads identity fields by name.
+        """
+        return self.settings.effort
 
     @property
     def row_id(self) -> str:
@@ -203,9 +269,18 @@ def from_dict(payload: dict) -> Row:
     earlier one instead of crashing it.
     """
     metrics_raw = payload.get("metrics") or {}
-    known = {f for f in Row.__dataclass_fields__ if f != "metrics"}
+    # Both are rebuilt below from their own nested payloads, so they must not
+    # also arrive through the flat spread -- that is two values for one keyword.
+    known = {f for f in Row.__dataclass_fields__ if f not in ("metrics", "settings")}
     return Row(
         **{key: value for key, value in payload.items() if key in known},
+        settings=Settings(
+            **{
+                key: value
+                for key, value in (payload.get("settings") or {}).items()
+                if key in Settings.__dataclass_fields__
+            }
+        ),
         metrics=Metrics(
             headline=_rename_legacy(metrics_raw.get("headline") or {}),
             by_section={
@@ -321,6 +396,50 @@ def index_generations(cache_dir: Path | None = None, *, run_id: str = "") -> lis
     return rows
 
 
+def settings_by_system(cache_dir: Path | None = None) -> dict[tuple[str, str], Settings]:
+    """How each (provider, system) was generated, from the records on disk.
+
+    The scored rows need this as much as the coverage rows do, and reading it
+    from one place means a scored row and a coverage row for the same model can
+    never disagree about how it was asked.
+
+    Keyed on (provider, system_id) rather than including the task: a model is
+    configured per provider, not per track, and a settings block that differed
+    between a model's SOAP row and its iCARE row would be describing the
+    harness rather than the model.
+    """
+    return {
+        (row.provider, row.system_id): row.settings
+        for row in index_generations(cache_dir)
+        if not row.settings.is_empty()
+    }
+
+
+def _settings_from(observed: set[tuple], budgets: set[int]) -> Settings:
+    """One `Settings` for a model's notes, or nothing if they disagree.
+
+    A model whose notes were written under two different settings has no single
+    answer, and inventing one -- picking the first, or the most common -- would
+    put a number on the page that describes only some of the notes behind it.
+    Better to say nothing, which the row's detail renders as "not recorded",
+    than to say something that is true of half the evidence.
+
+    In practice this stays empty only for a cache written before these fields
+    existed. The escalation budget is the expected reason for two `max_tokens`,
+    so the *largest* is reported: it is the ceiling the model was allowed, which
+    is what a reader needs in order to know whether a note could be truncated.
+    """
+    if len(observed) != 1:
+        return Settings()
+    effort, temperature, forced = next(iter(observed))
+    return Settings(
+        effort=effort or "",
+        temperature=temperature,
+        temperature_forced=forced,
+        max_tokens=max(budgets) if budgets else None,
+    )
+
+
 def _coverage_row(
     track: str, provider: str, prompt_version: str, model_dir: Path, run_id: str
 ) -> Row | None:
@@ -332,6 +451,10 @@ def _coverage_row(
     failures: dict[str, int] = defaultdict(int)
     checksums: dict[str, str] = {}
     newest = ""
+    # Read from the records rather than from today's `models.yaml`: the row must
+    # say how the note was written, not how the config would write it now.
+    observed: set[tuple] = set()
+    budgets: set[int] = set()
 
     for session_dir in sessions:
         units = sorted(session_dir.glob("*.json"))
@@ -346,6 +469,15 @@ def _coverage_row(
             if record.get("ok"):
                 checksums = checksums or dict(record.get("dataset_checksums") or {})
                 newest = max(newest, record.get("generated_at") or "")
+                observed.add(
+                    (
+                        record.get("effort", ""),
+                        record.get("temperature"),
+                        bool(record.get("temperature_forced")),
+                    )
+                )
+                if record.get("max_tokens"):
+                    budgets.add(int(record["max_tokens"]))
             else:
                 failures[normalise_reason(record.get("error"))] += 1
                 session_ok = False
@@ -357,6 +489,7 @@ def _coverage_row(
         system_type="model",
         provider=provider,
         prompt_version=prompt_version,
+        settings=_settings_from(observed, budgets),
         n_sessions_attempted=len(sessions),
         n_sessions_generated=complete,
         n_failed=len(sessions) - complete,

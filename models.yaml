@@ -105,7 +105,9 @@ providers:
   #
   # `gpt-5.6` ships as luna / sol / terra. Probed on 2026-08-25: they are three
   # distinct models, not aliases -- they disagree on a borderline rubric
-  # question. Terra is skipped because luna and sol already bracket the range.
+  # question. All three generate, and terra is also one of the two judges:
+  # a judge that never writes a note is a judge whose self-preference cannot
+  # be measured, which is the whole point of having two.
   - name: openai
     base_url: https://api.openai.com/v1
     token_env: OPENAI_API_KEY
@@ -132,7 +134,7 @@ providers:
 
     discovery:
       include:
-        - "^gpt-5\\.6-(luna|sol)$"
+        - "^gpt-5\\.6-(luna|sol|terra)$"
       max_models: 4
 
   # Gemini as a note *writer*. The judge already talks to Vertex; this is the

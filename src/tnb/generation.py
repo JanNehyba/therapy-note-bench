@@ -81,23 +81,37 @@ def request_digest(model_id: str, prompt: str, provider: Provider) -> str:
     Not just the prompt: two runs with different token budgets are not the same
     experiment, and the same model id on two providers is not the same model.
     A cache that ignored either would quietly mix them.
+
+    Two things here are deliberately shaped so that adding them changed no
+    existing key, and 8 030 already-generated notes stayed valid:
+
+    - ``temperature`` is the one that will actually be **sent**, not the one
+      configured. For every provider that accepts our value the two are equal,
+      so nothing moved; for OpenAI, which refuses anything but 1, the key now
+      records the 1 that happens instead of the 0 that does not.
+    - ``effort`` is present **only when the provider has one**. A provider with
+      no such control contributes no key, which is both truthful -- there is
+      nothing to record -- and what keeps every existing digest identical.
+      Where an effort does exist it is part of the key, so the same model at
+      two efforts is two caches and can never be served one from the other.
     """
-    payload = json.dumps(
-        {
-            "provider": provider.name,
-            "model": model_id,
-            "prompt": prompt,
-            "temperature": provider.generation.temperature,
-            "max_tokens": provider.generation.max_tokens,
-            # The escalation budget belongs to the key even for the many calls
-            # that never use it: it describes the procedure, so a note written
-            # on the second attempt is still a hit on the next run.
-            "escalate_max_tokens": provider.generation.escalate_max_tokens,
-        },
-        sort_keys=True,
-        ensure_ascii=False,
-    )
-    return hashlib.sha256(payload.encode()).hexdigest()
+    payload: dict[str, object] = {
+        "provider": provider.name,
+        "model": model_id,
+        "prompt": prompt,
+        "temperature": provider.generation.effective_temperature,
+        "max_tokens": provider.generation.max_tokens,
+        # The escalation budget belongs to the key even for the many calls
+        # that never use it: it describes the procedure, so a note written
+        # on the second attempt is still a hit on the next run.
+        "escalate_max_tokens": provider.generation.escalate_max_tokens,
+    }
+    if provider.generation.effort:
+        payload["effort"] = provider.generation.effort
+
+    return hashlib.sha256(
+        json.dumps(payload, sort_keys=True, ensure_ascii=False).encode()
+    ).hexdigest()
 
 
 @dataclass(frozen=True)
@@ -193,7 +207,10 @@ def _record(
         "request_sha256": request_digest(job.model_id, job.prompt, provider),
         "prompt_sha256": hashlib.sha256(prompt.encode()).hexdigest(),
         "prompt_chars": len(prompt),
-        "temperature": provider.generation.temperature,
+        # What was used, not what was asked for -- see `effective_temperature`.
+        "temperature": provider.generation.effective_temperature,
+        "temperature_forced": not provider.generation.dialect.send_temperature,
+        "effort": provider.generation.effort,
         "max_tokens": completion.max_tokens or provider.generation.max_tokens,
         "escalated": completion.max_tokens > provider.generation.max_tokens,
         "ok": completion.ok,

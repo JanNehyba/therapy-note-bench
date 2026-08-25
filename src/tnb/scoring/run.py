@@ -370,6 +370,7 @@ def to_rows(
     judge_model: str,
     n_generated: dict[tuple[str, str], int] | None = None,
     n_attempted: dict[tuple[str, str], int] | int | None = None,
+    settings: dict[tuple[str, str], results.Settings] | None = None,
     run_id: str = "",
 ) -> list[Row]:
     """One row per (provider, system), carrying the versions the table joins on.
@@ -385,6 +386,12 @@ def to_rows(
     the remainder, so a model half-way through judging was published as having
     written unusable notes -- gemma4 appeared as "17/50 (33 unusable)" having
     written all fifty perfectly.
+
+    ``settings`` says how each system's notes were written -- effort,
+    temperature, token budget -- read from the generation records rather than
+    from the config, so the row states what happened. A system with no entry
+    gets an empty block, which the page renders as "not recorded" rather than
+    as a claim.
 
     ``n_attempted`` may be one number for every system or a mapping per system.
     The mapping exists because "the corpus" is not the same for everybody: a
@@ -419,6 +426,7 @@ def to_rows(
                 prompt_version=soap.PROMPT_VERSION,
                 judge_model=judge_model,
                 judge_prompt_version=tneval.JUDGE_PROMPT_VERSION,
+                settings=(settings or {}).get(key, results.Settings()),
                 n_sessions_attempted=attempted,
                 n_sessions_generated=generated,
                 n_sessions_scored=len(aggregate.notes),

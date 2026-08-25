@@ -380,6 +380,10 @@ def cmd_score(args: argparse.Namespace) -> int:
     # "20/50 (30 unusable)" for a model that had written all fifty. That is the
     # gemma4 libel arriving through a flag instead of through the aggregator.
     coverage = _generated_per_system(candidates)
+    # How each model was actually asked, from the generation records. The
+    # reference systems have no records -- their notes came from TN-Eval, not
+    # from us -- so they get an empty block, which is the truth.
+    settings = results.settings_by_system()
     # And a reference model was only ever asked for the sessions TN-Eval
     # published a note for, so the corpus size is not its denominator either.
     attempted = {
@@ -421,6 +425,7 @@ def cmd_score(args: argparse.Namespace) -> int:
             judge_model=config.model,
             n_generated=coverage,
             n_attempted=attempted,
+            settings=settings,
             run_id=args.run_id or "",
         )
         path = results.append(rows)
@@ -464,6 +469,7 @@ def cmd_score(args: argparse.Namespace) -> int:
         judge_model=config.model,
         n_generated=coverage,
         n_attempted=attempted,
+        settings=settings,
         run_id=args.run_id or "",
     )
     if args.no_write:
