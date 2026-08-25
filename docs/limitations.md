@@ -44,6 +44,36 @@ Cells where a judge scored a model from its own family are marked in the table
 where they sit. They are never dropped: a missing row would be a worse
 distortion than a marked one.
 
+## The ranking is a shape, not an order
+
+The two judges agree on where a model sits roughly and disagree on exactly
+where. Measured over the current rows: rank correlation +0.889 on completeness,
++0.807 on conciseness, +0.706 on faithfulness — and 11 of 19 systems still land
+in a different position on completeness alone, 17 of 19 on faithfulness, with
+`kimi-k3` moving from 2nd to 12th.
+
+**So the table supports "near the top" and "near the bottom". It does not
+support "ninth rather than tenth".** A comparison between two adjacent rows is
+not a result of this benchmark, and the page says so beside the tables rather
+than here.
+
+The one claim that survives is dominance: a system at least as good on *every*
+measure under *both* judges is better however a reader weights the measures.
+Twelve of nineteen systems are beaten outright by nobody, which is why no
+single winner is named.
+
+## The columns do not agree with each other either
+
+Ordering by completeness says little about conciseness (−0.18 and −0.33 under
+the two judges) and something the judges cannot agree on about faithfulness
+(+0.72 and +0.04). A model that answers every question satisfies more criteria
+and invents more; the two columns measure that trade, and collapsing them into
+one number means deciding which matters more.
+
+That decision is clinical, not statistical, so this benchmark does not make it.
+What it would take to settle it is a clinician reading two notes and saying
+which they would sign — which is a different study.
+
 ## The judge is a model
 
 For the TN-Eval track each judge is calibrated against two human annotators and
@@ -69,6 +99,21 @@ semantic alignment was strong.
 
 This benchmark reports both and shows the disagreement rather than picking a
 winner. If you need one number, you are asking the wrong question of this data.
+
+**And our ROUGE-L is not their ROUGE-L.** Theirs compares the whole rendered
+note, which puts our own 17 field labels and every `Nil` the expert wrote on
+both sides of the comparison: measured here, a note where the model wrote
+*nothing at all* scores **0.379** that way — higher than most real notes. Ours
+compares the field values of the sections the expert answered, and the same
+empty note scores **0.000**. Every model's figure fell by roughly a third as a
+result. The number can no longer be lined up against their published table, and
+that is the smaller of the two costs.
+
+**The forward-looking temporal column rests on eleven sessions.** The experts
+answered "what happens at the next session" in 11 of 40 notes and "what happened
+last session" in 34, which is why those are two columns rather than one. Eleven
+is a small denominator: a score of 0.09 there is one session, and the gap
+between two models a few tenths apart is not evidence.
 
 ## Nothing here is in Czech
 
