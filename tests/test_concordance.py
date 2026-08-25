@@ -392,3 +392,24 @@ def test_the_report_hands_it_only_the_rows_a_table_would_draw():
 
     assert result is not None
     assert result.n_systems == 2
+
+
+def test_both_judges_rank_the_same_field():
+    """A position out of nineteen and a position out of sixteen are not
+    comparable, and a judge part-way through a run has the smaller table -- so
+    ranking each judge's whole set would report the most movement exactly when
+    a reader is most likely to be watching."""
+    rows = _panel(
+        {
+            A: {"x": _flat(0.9), "y": _flat(0.5), "z": _flat(0.1)},
+            # Same order for the two they share, plus one this judge alone has
+            # and which sits between them.
+            B: {"x": _flat(0.9), "extra": _flat(0.7), "y": _flat(0.5)},
+        }
+    )
+
+    result = concordance.compare(rows, results.TRACK_TNEVAL, MEASURES)
+
+    assert result.n_systems == 2, "x and y"
+    completeness = next(m for m in result.measures if m.measure == "completeness")
+    assert completeness.moved == 0, "`extra` must not push `y` down a place"

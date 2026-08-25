@@ -139,9 +139,23 @@ def _scores_by_judge(rows: list[Row], track: str) -> dict[str, dict[str, dict[st
     return out
 
 
-def _positions(scores: dict[str, dict[str, float]], measure: str) -> dict[str, int]:
-    """1-based rank per system, best first, ties sharing the better position."""
-    have = [(system, values[measure]) for system, values in scores.items() if measure in values]
+def _positions(
+    scores: dict[str, dict[str, float]], measure: str, systems: list[str]
+) -> dict[str, int]:
+    """1-based rank per system, best first, ties sharing the better position.
+
+    Over `systems` and nothing else, so both judges rank the same field. Ranking
+    each judge's whole table would compare a position out of nineteen with a
+    position out of sixteen and report the difference as movement -- and a
+    judge part-way through a run has a smaller table, so the error would grow
+    exactly when a reader is most likely to be watching.
+
+    Ties within `TIES_WITHIN` share a position. The rule chains: three systems
+    each a fifth of a printed digit from the next are all tied, though the ends
+    are further apart than the tolerance. That is generous in the direction of
+    claiming *less* movement, which is the safe direction for this panel.
+    """
+    have = [(s, scores[s][measure]) for s in systems if measure in scores.get(s, {})]
     have.sort(key=lambda pair: (-pair[1], pair[0]))
 
     positions: dict[str, int] = {}
@@ -223,8 +237,8 @@ def compare(
         if len(pairs) < 2:
             continue
 
-        rank_a = _positions(by_judge[judge_a], measure)
-        rank_b = _positions(by_judge[judge_b], measure)
+        rank_a = _positions(by_judge[judge_a], measure, shared)
+        rank_b = _positions(by_judge[judge_b], measure, shared)
         both = [s for s in shared if s in rank_a and s in rank_b]
         moves = {s: abs(rank_a[s] - rank_b[s]) for s in both}
         furthest = max(moves, key=lambda s: (moves[s], s)) if moves else None
