@@ -164,10 +164,51 @@ def test_the_readme_shows_models_only_and_says_where_the_rest_is():
 
 
 def test_the_readme_prints_a_dash_rather_than_a_zero_for_a_missing_score():
-    """A model that has not been judged has no score. Zero is a claim."""
-    section = report.render_readme_section(report.build([_row()]))
-    assert "—" in section
-    assert "0.000" not in section
+    """A model with a measure missing has no score for it. Zero is a claim.
+
+    This test used to pass an *unscored* row, which renders no table at all --
+    just "waiting for the judge" -- so the cell it exists to guard never ran.
+    The em-dash it asserted was the one in the heading. It needs a row that is
+    scored on one measure and silent on another, which is the only shape that
+    reaches the branch.
+    """
+    row = _scored("gemma4", 0.61)
+    row.metrics.headline.pop("conciseness", None)
+    section = report.render_readme_section(report.build([row]))
+
+    line = next(line for line in section.splitlines() if line.startswith("| `gemma4`"))
+    assert "0.610" in line, "the measure that exists is printed"
+    assert "—" in line, "and the one that does not is a dash"
+    assert "0.000" not in line
+
+
+def test_a_measure_nobody_computed_does_not_sort_a_model_last():
+    """The same mistake one level up: in the ordering rather than in the cell.
+
+    Reading a missing completeness as 0.0 puts the model at the bottom of a
+    ranking on evidence nobody has.
+    """
+    # Scored, but not on the measure the table ranks by. A row with *nothing*
+    # measured is already `is_scored == False` and never reaches this branch,
+    # so it cannot tell the two readings apart.
+    unmeasured = _scored("a-not-measured", 0.0)
+    unmeasured.metrics.headline.pop("completeness")
+    unmeasured.metrics.headline["conciseness"] = 0.9
+    # Two things make this discriminate, and it passed for the wrong reason
+    # without each of them. A model genuinely measured at zero, because
+    # completeness cannot go below 0.0 and a missing value read as 0.0 also
+    # lands last. And names whose alphabetical order is the *opposite* of the
+    # expected one, because ties break on system_id -- with friendlier names
+    # the accident put them in the right order anyway.
+    rows = [
+        _scored("high", 0.7),
+        unmeasured,
+        _scored("z-measured-zero", 0.0, metrics=Metrics(headline={"completeness": 0.0})),
+    ]
+
+    labels = [row["label"] for row in report.build(rows)["tables"][0]["rows"]]
+
+    assert labels == ["high", "z-measured-zero", "a-not-measured"]
 
 
 def test_the_readme_edit_touches_only_the_marked_block(tmp_path):
