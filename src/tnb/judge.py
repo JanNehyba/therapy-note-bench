@@ -37,6 +37,7 @@ from pathlib import Path
 
 import httpx
 
+from tnb import google_auth
 from tnb.config import REPO_ROOT
 
 CACHE_DIR = REPO_ROOT / "scores"
@@ -190,19 +191,13 @@ class Judge:
         self._lock = threading.Lock()
 
     def _token(self, *, force_refresh: bool = False) -> str:
-        # Imported here so that `tnb models`, generation and the report never
-        # need google-auth installed: it is the `judge` extra, not a core one.
-        from google.auth.transport.requests import Request
-        from google.oauth2 import service_account
+        """The bearer token, from the one credential the process shares.
 
-        with self._lock:
-            if self._credentials is None:
-                self._credentials = service_account.Credentials.from_service_account_file(
-                    self.config.credentials_path, scopes=list(SCOPES)
-                )
-            if force_refresh or not self._credentials.valid:
-                self._credentials.refresh(Request())
-            return self._credentials.token
+        Generation needs the same credential now that Gemini writes notes as
+        well as judging them, and two objects refreshing independently is the
+        race this already met once -- an HTTP 401 on 2 of 142 questions.
+        """
+        return google_auth.token(force_refresh=force_refresh, path=self.config.credentials_path)
 
     def _payload(self, prompt: str) -> dict:
         return {

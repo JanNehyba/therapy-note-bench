@@ -99,6 +99,71 @@ providers:
       # without an explicit --allow-large flag.
       max_models: 20
 
+  # OpenAI. Its /models reports 132 entries -- the whole catalogue, not a
+  # deployment -- so this names what is under test rather than excluding the
+  # rest. Anything OpenAI adds tomorrow stays out until somebody puts it here.
+  #
+  # `gpt-5.6` ships as luna / sol / terra. Probed on 2026-08-25: they are three
+  # distinct models, not aliases -- they disagree on a borderline rubric
+  # question. Terra is skipped because luna and sol already bracket the range.
+  - name: openai
+    base_url: https://api.openai.com/v1
+    token_env: OPENAI_API_KEY
+    token_help: >-
+      Create one at https://platform.openai.com/api-keys and put it in .env.
+
+    generation:
+      # The middle of the five levels this family accepts (none, low, medium,
+      # high, xhigh) and its documented default. Measured: effort barely moves
+      # the generation bill -- the whole benchmark costs $0.33 / $0.33 / $0.36
+      # on luna at low / medium / xhigh -- so there is nothing to save by going
+      # lower, and the middle is the setting a reader can interpret.
+      effort: medium
+
+      dialect:
+        # Established by asking. Each of these is a 400 from the live endpoint.
+        max_tokens_field: max_completion_tokens
+        # "Unsupported value: 'temperature' does not support 0 with this model.
+        # Only the default (1) value is supported." -- verbatim. gpt-4.1 still
+        # accepts 0, so this belongs to the reasoning family, not to OpenAI.
+        # The row records temperature 1, which is what actually happens.
+        send_temperature: false
+        effort_field: reasoning_effort
+
+    discovery:
+      include:
+        - "^gpt-5\\.6-(luna|sol)$"
+      max_models: 4
+
+  # Gemini as a note *writer*. The judge already talks to Vertex; this is the
+  # same project and the same credential, through Vertex's OpenAI-compatible
+  # endpoint, so generation stays one code path.
+  #
+  # Two things here are not the default shape, both established by asking:
+  # `/models` on this endpoint is a 404 HTML page, so the catalogue comes from
+  # the publisher list; and the chat endpoint wants ids prefixed `google/`.
+  # The project id is interpolated from the environment and never written down.
+  - name: vertex
+    base_url: https://aiplatform.googleapis.com/v1beta1/projects/{project}/locations/global/endpoints/openapi
+    auth: google
+    token_env: GOOGLE_APPLICATION_CREDENTIALS
+    token_help: >-
+      Point GOOGLE_APPLICATION_CREDENTIALS at a service-account key with the
+      Vertex AI User role. The key belongs in secrets/, which is gitignored.
+
+    discovery:
+      catalogue_url: https://aiplatform.googleapis.com/v1beta1/publishers/google/models
+      catalogue_key: publisherModels
+      catalogue_id_field: name
+      model_prefix: "google/"
+      include:
+        - "^google/gemini-3\\.[0-9]+-pro"
+        - "^google/gemini-3\\.[0-9]+-flash$"
+      exclude:
+        - "image"
+        - "tts"
+      max_models: 6
+
   # A second provider looks like this. Uncomment, set the token in .env, and the
   # next run adds its models as their own rows -- same protocols, same judge,
   # same prompt version, with the provider recorded next to each model id.

@@ -18,6 +18,7 @@ different builds, and only the answer tells you.
 from __future__ import annotations
 
 import hashlib
+import os
 import time
 from collections import defaultdict
 from collections.abc import Callable
@@ -96,7 +97,7 @@ def _post_with_backoff(
             wait(provider.generation.backoff_s * attempt)
         try:
             response = httpx.post(
-                f"{provider.base_url.rstrip('/')}{path}",
+                f"{provider.url.rstrip('/')}{path}",
                 headers={"Authorization": f"Bearer {provider.token()}"},
                 json=payload,
                 timeout=timeout,
@@ -115,10 +116,32 @@ def _post_with_backoff(
     raise last_error
 
 
+def catalogue_url(provider: Provider) -> str:
+    """Where to ask what this provider serves.
+
+    ``<base_url>/models`` unless the provider says otherwise. Vertex's
+    OpenAI-compatible endpoint answers chat completions only -- ``/models``
+    there returns a 404 HTML page -- so it names the publisher catalogue, with
+    ``{project}`` and ``{location}`` filled from the environment so no account
+    identifier is ever written into a tracked file.
+    """
+    configured = provider.discovery.catalogue_url
+    if not configured:
+        return f"{provider.url.rstrip('/')}/models"
+    return configured.format(
+        project=os.environ.get("VERTEX_PROJECT", ""),
+        location=os.environ.get("VERTEX_LOCATION", ""),
+    )
+
+
 def fetch_models(provider: Provider, *, timeout: float = 30.0) -> list[dict]:
-    """Fetch the raw ``/v1/models`` payload. Raises on auth or network failure."""
+    """Fetch the raw catalogue. Raises on auth or network failure.
+
+    Entries are normalised to the OpenAI shape -- an ``id`` key -- so everything
+    downstream sees one format whatever the provider reported.
+    """
     response = httpx.get(
-        f"{provider.base_url.rstrip('/')}/models",
+        catalogue_url(provider),
         headers={"Authorization": f"Bearer {provider.token()}"},
         timeout=timeout,
     )
@@ -128,7 +151,22 @@ def fetch_models(provider: Provider, *, timeout: float = 30.0) -> list[dict]:
             + (f" {provider.token_help}" if provider.token_help else "")
         )
     response.raise_for_status()
-    return list(response.json().get("data", []))
+
+    discovery = provider.discovery
+    entries = list(response.json().get(discovery.catalogue_key, []))
+    if discovery.catalogue_id_field == "id" and not discovery.model_prefix:
+        return entries
+
+    normalised = []
+    for entry in entries:
+        raw_id = str(entry.get(discovery.catalogue_id_field, ""))
+        if not raw_id:
+            continue
+        # Vertex reports `publishers/google/models/gemini-2.5-pro`; the chat
+        # endpoint wants `google/gemini-2.5-pro`. Only the last segment is the
+        # model, and the prefix the endpoint expects is configured, not guessed.
+        normalised.append({**entry, "id": discovery.model_prefix + raw_id.rsplit("/", 1)[-1]})
+    return normalised
 
 
 def apply_policy(raw_models: list[dict], discovery: DiscoveryPolicy) -> list[DiscoveredModel]:
@@ -145,14 +183,28 @@ def apply_policy(raw_models: list[dict], discovery: DiscoveryPolicy) -> list[Dis
             continue
 
         reason: str | None = None
+        # An include list, where one is given, is the whole rule: everything it
+        # does not name is out. Recorded as a reason like any other exclusion,
+        # so a run record still shows what the endpoint offered.
+        if discovery.include and not any(p.search(model_id) for p in discovery.include):
+            reason = "not on the include list"
         for pattern in discovery.exclude:
-            if pattern.search(model_id):
+            if reason is None and pattern.search(model_id):
                 reason = f"exclude:{pattern.pattern}"
                 break
 
         if reason is None and model_id in discovery.aliases:
             reason = f"alias:{discovery.aliases[model_id]}"
-        if reason is None and discovery.exclude_aliases and looks_like_alias(model_id):
+        # An explicit include list has already said which ids are wanted, so the
+        # unversioned-name heuristic is not applied on top of it: it drops any id
+        # without a digit, which is right for a deployment that invents aliases
+        # and wrong for a catalogue whose real names happen to look like them.
+        if (
+            reason is None
+            and discovery.exclude_aliases
+            and not discovery.include
+            and looks_like_alias(model_id)
+        ):
             reason = "alias:unversioned"
 
         results.append(DiscoveredModel(id=model_id, raw=entry, excluded_by=reason))

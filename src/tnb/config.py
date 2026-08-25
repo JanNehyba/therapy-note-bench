@@ -30,11 +30,31 @@ class DiscoveryPolicy:
     """Rules for turning one endpoint's model list into a benchmark set."""
 
     exclude: tuple[re.Pattern[str], ...] = ()
+    #: When set, *only* ids matching one of these are benchmarked and everything
+    #: else is excluded as "not on the include list". For an endpoint that
+    #: serves a general catalogue rather than a deployment -- OpenAI reports 132
+    #: models, of which three are the ones under test -- naming what is wanted
+    #: is honest, where a long exclude list would silently admit whatever is
+    #: added next.
+    include: tuple[re.Pattern[str], ...] = ()
     exclude_aliases: bool = True
     #: Verified duplicates: alias id -> the concrete model it resolves to.
     #: Established by fingerprinting, not by guessing. See models.yaml.
     aliases: dict[str, str] = field(default_factory=dict)
     max_models: int = 20
+
+    #: Where this provider's catalogue lives, when it is not ``<base_url>/models``.
+    #: Vertex's OpenAI-compatible endpoint serves chat completions and nothing
+    #: else -- ``/models`` there is a 404 HTML page -- so its list comes from the
+    #: publisher catalogue instead.
+    catalogue_url: str = ""
+    #: Which key in the response holds the list, and which field in each entry
+    #: holds the id. ``data``/``id`` is the OpenAI shape.
+    catalogue_key: str = "data"
+    catalogue_id_field: str = "id"
+    #: Prefix the chat endpoint expects on a model id that the catalogue reports
+    #: without one. Vertex wants ``google/gemini-3.1-pro-preview``.
+    model_prefix: str = ""
 
 
 @dataclass(frozen=True)
@@ -119,21 +139,66 @@ class Provider:
     #: What to tell someone whose token is missing or rejected. Providers differ
     #: in how a key is obtained, and "401" on its own helps nobody.
     token_help: str = ""
+    #: How the bearer token is obtained. ``static`` reads ``token_env``;
+    #: ``google`` mints a short-lived one from the service-account key that
+    #: ``token_env`` points at. Vertex has no static key, so a provider served
+    #: from there cannot use the first mode -- and the token expires mid-run,
+    #: which is why this is a mode rather than a value read once at startup.
+    auth: str = "static"
     discovery: DiscoveryPolicy = field(default_factory=DiscoveryPolicy)
     generation: GenerationPolicy = field(default_factory=GenerationPolicy)
 
-    def token(self) -> str:
-        """Read the API token, with an error message that says what to do."""
+    @property
+    def url(self) -> str:
+        """``base_url`` with ``{project}`` and ``{location}`` filled in.
+
+        Vertex puts the project id in the path. That id is an account
+        identifier, so it is interpolated from the environment at call time and
+        never written into this repository -- which is a public one, and which
+        has a test that fails if it ever appears in a tracked file.
+
+        A provider whose URL has no placeholders is returned unchanged, so this
+        costs the ordinary case nothing.
+        """
+        if "{" not in self.base_url:
+            return self.base_url
+        return self.base_url.format(
+            project=os.environ.get("VERTEX_PROJECT", ""),
+            location=os.environ.get("VERTEX_LOCATION", ""),
+        )
+
+    def token(self, *, force_refresh: bool = False) -> str:
+        """A bearer token, with an error message that says what to do.
+
+        ``force_refresh`` matters only in ``google`` mode and only after a 401:
+        the library believes the token is valid, the server does not, and the
+        server is the one that decides.
+        """
         value = os.environ.get(self.token_env, "").strip()
         if not value:
             raise RuntimeError(
                 f"{self.token_env} is not set for provider '{self.name}'."
                 + (f" {self.token_help}" if self.token_help else "")
             )
+        if self.auth == "google":
+            from tnb import google_auth
+
+            return google_auth.token(force_refresh=force_refresh, path=value)
         return value
 
     def has_token(self) -> bool:
-        return bool(os.environ.get(self.token_env, "").strip())
+        """Whether this provider is usable at all. A missing one is skipped.
+
+        In ``google`` mode the variable names a key *file*, so its presence is
+        not enough -- a stale path would fail every call in the run instead of
+        skipping the provider once, at the start, where it can be read.
+        """
+        value = os.environ.get(self.token_env, "").strip()
+        if not value:
+            return False
+        if self.auth == "google":
+            return Path(value).is_file()
+        return True
 
 
 @dataclass(frozen=True)
@@ -171,9 +236,14 @@ class Policy:
 def _discovery(raw: dict) -> DiscoveryPolicy:
     return DiscoveryPolicy(
         exclude=tuple(re.compile(pattern, re.IGNORECASE) for pattern in raw.get("exclude", [])),
+        include=tuple(re.compile(pattern, re.IGNORECASE) for pattern in raw.get("include", [])),
         exclude_aliases=bool(raw.get("exclude_aliases", True)),
         aliases=dict(raw.get("aliases") or {}),
         max_models=int(raw.get("max_models", 20)),
+        catalogue_url=str(raw.get("catalogue_url", "")),
+        catalogue_key=str(raw.get("catalogue_key", "data")),
+        catalogue_id_field=str(raw.get("catalogue_id_field", "id")),
+        model_prefix=str(raw.get("model_prefix", "")),
     )
 
 
@@ -229,6 +299,7 @@ def load_policy(path: Path | None = None) -> Policy:
                 base_url=env_url or entry["base_url"],
                 token_env=entry["token_env"],
                 token_help=entry.get("token_help", ""),
+                auth=entry.get("auth", "static"),
                 discovery=_discovery(entry.get("discovery") or {}),
                 generation=_generation(entry.get("generation") or {}, defaults),
             )
