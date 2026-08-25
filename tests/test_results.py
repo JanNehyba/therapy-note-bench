@@ -479,3 +479,17 @@ def test_a_malformed_request_of_ours_is_not_the_endpoints_fault():
     """
     assert results.is_infrastructure_failure("LocalProtocolError: bad header") is False
     assert results.is_infrastructure_failure("UnsupportedProtocol: no scheme") is False
+
+
+def test_the_package_and_the_project_agree_on_the_version():
+    """`harness_version` goes into every row's comparability key, so a
+    disagreement between the two would publish rows under a version the
+    installed package does not claim."""
+    import tomllib
+
+    from tnb import __version__
+
+    project = tomllib.loads(
+        (results.ROWS_PATH.parent.parent / "pyproject.toml").read_text(encoding="utf-8")
+    )
+    assert project["project"]["version"] == __version__
