@@ -240,6 +240,29 @@ class Completion:
     error: str | None = None
 
 
+def build_request(provider: Provider, model_id: str, prompt: str, budget: int) -> dict:
+    """The request body, spelled the way this provider wants it.
+
+    Separate from :func:`complete` so a dialect can be checked without a network
+    call -- which is the only way to test it, since the failures it prevents are
+    400s from a live endpoint.
+    """
+    dialect = provider.generation.dialect
+    body: dict = {
+        "model": model_id,
+        "messages": [{"role": "user", "content": prompt}],
+        dialect.max_tokens_field: budget,
+    }
+    # Omitted, not defaulted: a provider that rejects any temperature but its own
+    # rejects the field even when the value matches, and sending nothing is the
+    # only thing it accepts.
+    if dialect.send_temperature:
+        body["temperature"] = provider.generation.temperature
+    if dialect.effort_field and provider.generation.effort:
+        body[dialect.effort_field] = provider.generation.effort
+    return body
+
+
 def complete(
     provider: Provider, model_id: str, prompt: str, *, max_tokens: int | None = None
 ) -> Completion:
@@ -256,12 +279,7 @@ def complete(
         response = _post_with_backoff(
             provider,
             "/chat/completions",
-            {
-                "model": model_id,
-                "messages": [{"role": "user", "content": prompt}],
-                "max_tokens": budget,
-                "temperature": provider.generation.temperature,
-            },
+            build_request(provider, model_id, prompt, budget),
             timeout=provider.generation.timeout_s,
             attempts=provider.generation.retries + 1,
         )

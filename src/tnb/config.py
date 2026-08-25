@@ -38,6 +38,39 @@ class DiscoveryPolicy:
 
 
 @dataclass(frozen=True)
+class Dialect:
+    """How one provider spells an otherwise identical request.
+
+    Every backend here speaks the OpenAI chat-completions shape, and they
+    disagree about it in small ways that are fatal rather than cosmetic. The
+    defaults are what e-INFRA accepts, so an existing stanza needs none of this.
+
+    Established by asking the endpoints rather than by reading their docs:
+
+    - OpenAI's reasoning models reject ``max_tokens`` and require
+      ``max_completion_tokens``.
+    - They also reject every temperature but 1 -- verbatim, *"Unsupported value:
+      'temperature' does not support 0 with this model. Only the default (1)
+      value is supported."* ``gpt-4.1`` still accepts 0, so this is specific to
+      the reasoning family and not a mix-up.
+    - They accept a ``reasoning_effort`` that no other provider here has.
+
+    A model generated under a different temperature is a differently-configured
+    system, so `effective_temperature` reports what will actually be sent and
+    the row records that rather than what `models.yaml` asked for.
+    """
+
+    #: `max_tokens` everywhere except OpenAI, which wants `max_completion_tokens`.
+    max_tokens_field: str = "max_tokens"
+    #: False where the provider rejects any temperature but its own default.
+    send_temperature: bool = True
+    #: The temperature the provider forces when it will not take ours.
+    forced_temperature: float = 1.0
+    #: Request field carrying the reasoning effort, where the provider has one.
+    effort_field: str = ""
+
+
+@dataclass(frozen=True)
 class GenerationPolicy:
     temperature: float = 0.0
     max_tokens: int = 2048
@@ -52,6 +85,24 @@ class GenerationPolicy:
     retries: int = 3
     #: 429 is routine rather than exceptional. Waits grow as backoff_s * attempt.
     backoff_s: int = 6
+
+    #: How this provider spells a request. Defaults to what e-INFRA accepts.
+    dialect: Dialect = field(default_factory=Dialect)
+    #: Reasoning effort, for providers that have the control. Part of a system's
+    #: identity: the same model at two efforts produces two rows, never an
+    #: average of both under one name.
+    effort: str = ""
+
+    @property
+    def effective_temperature(self) -> float:
+        """The temperature that will actually be sent.
+
+        Not the one configured: a provider that refuses ours substitutes its
+        own, and the row has to record what happened rather than what was asked.
+        """
+        return (
+            self.temperature if self.dialect.send_temperature else self.dialect.forced_temperature
+        )
 
 
 @dataclass(frozen=True)
@@ -126,20 +177,40 @@ def _discovery(raw: dict) -> DiscoveryPolicy:
     )
 
 
+def _dialect(raw: dict, defaults: Dialect) -> Dialect:
+    """How this provider spells a request, over the inherited defaults."""
+    return replace(
+        defaults,
+        **{
+            name: type(getattr(defaults, name))(raw[name])
+            for name in Dialect.__dataclass_fields__
+            if name in raw
+        },
+    )
+
+
+#: Fields of :class:`GenerationPolicy` that are not plain scalars, so the flat
+#: coercion below must not try to build them from a single value.
+_NESTED_GENERATION_FIELDS = ("dialect",)
+
+
 def _generation(raw: dict, defaults: GenerationPolicy) -> GenerationPolicy:
     """Provider-level generation settings, falling back to the shared block.
 
     Rate limits belong to a provider, not to the benchmark, so a slow endpoint
-    can be given a lower concurrency without changing anyone else's.
+    can be given a lower concurrency without changing anyone else's. The same
+    goes for the request dialect, which is nested and therefore merged field by
+    field rather than replaced wholesale -- a provider that overrides only
+    ``send_temperature`` keeps the shared value for everything else.
     """
-    return replace(
-        defaults,
-        **{
-            field_name: type(getattr(defaults, field_name))(raw[field_name])
-            for field_name in GenerationPolicy.__dataclass_fields__
-            if field_name in raw
-        },
-    )
+    scalars = {
+        name: type(getattr(defaults, name))(raw[name])
+        for name in GenerationPolicy.__dataclass_fields__
+        if name in raw and name not in _NESTED_GENERATION_FIELDS
+    }
+    if "dialect" in raw:
+        scalars["dialect"] = _dialect(raw["dialect"] or {}, defaults.dialect)
+    return replace(defaults, **scalars)
 
 
 def load_policy(path: Path | None = None) -> Policy:
