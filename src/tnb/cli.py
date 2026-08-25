@@ -814,22 +814,22 @@ def cmd_score_icare(args: argparse.Namespace) -> int:
         print("BERTScore: the 'scoring' extra is not installed, so that column is skipped.\n")
 
     spend = judge.Spend(limit_usd=args.max_judge_usd)
-    scored = []
-    for index, candidate in enumerate(candidates):
-        try:
-            result = icare_run.score_note(
-                candidate,
-                client,
-                spend,
-                force=args.force,
-                bert=None if bert_values is None else bert_values[index],
-            )
-        except icare_run.BudgetExceeded as stop:
-            print(f"\n{stop}", file=sys.stderr)
-            break
-        scored.append(result)
-        if (index + 1) % 20 == 0 or index + 1 == len(candidates):
-            print(f"  [{index + 1}/{len(candidates)}] {candidate.system_id[:30]:30}", flush=True)
+    done = 0
+
+    def on_note(result: icare_run.NoteResult) -> None:
+        nonlocal done
+        done += 1
+        if done % 20 == 0 or done == len(candidates):
+            print(f"  [{done}/{len(candidates)}] {result.candidate.system_id[:30]:30}", flush=True)
+
+    scored = icare_run.score_many(
+        candidates,
+        client,
+        spend,
+        force=args.force,
+        bert=bert_values,
+        on_note=on_note,
+    )
 
     if not scored:
         print("Nothing scored.", file=sys.stderr)
@@ -951,6 +951,15 @@ def build_parser() -> argparse.ArgumentParser:
         type=float,
         default=250.0,
         help="runaway guard; the run stops rather than exceeding it. 0 disables it",
+    )
+    score_icare.add_argument(
+        "--concurrency",
+        type=int,
+        help=(
+            "parallel judge calls; default 4. This ran one note at a time until "
+            "2026-08-25 and managed 0.3 answers a second against a "
+            "transcript-sized prompt -- five hours for two judges over 640 notes."
+        ),
     )
     score_icare.add_argument("--force", action="store_true", help="re-ask cached questions")
     score_icare.add_argument(

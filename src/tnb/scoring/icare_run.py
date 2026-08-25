@@ -21,7 +21,8 @@ client, the answer cache, the spend ceiling and the retry policy all come from
 from __future__ import annotations
 
 import json
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -217,6 +218,59 @@ def score_note(
         scores=scorer.aggregate(candidate.note, candidate.reference, answers, bert=bert),
         cached=cached,
     )
+
+
+def score_many(
+    candidates: list[Candidate],
+    client: judge.Judge,
+    spend: judge.Spend,
+    *,
+    force: bool = False,
+    cache_root: Path | None = None,
+    bert: list[float] | None = None,
+    on_note: Callable[[NoteResult], None] | None = None,
+) -> list[NoteResult]:
+    """Score every note, several at a time.
+
+    The TN-Eval path has always done this; this one did not, and at five
+    questions per note against a transcript-sized prompt it managed 0.3 answers
+    a second -- five hours for two judges over 640 notes. The work is entirely
+    network wait, so the pool is the whole fix.
+
+    Results come back in the order they were submitted, not the order they
+    finished, so a run is reproducible however the threads interleave. The
+    spending ceiling and the answer cache are already thread-safe; `Spend` takes
+    a lock and each answer writes its own file.
+    """
+    results_by_index: dict[int, NoteResult] = {}
+    stopped = False
+
+    def one(index: int, candidate: Candidate) -> None:
+        nonlocal stopped
+        if stopped:
+            return
+        try:
+            results_by_index[index] = score_note(
+                candidate,
+                client,
+                spend,
+                force=force,
+                cache_root=cache_root,
+                bert=None if bert is None else bert[index],
+            )
+        except BudgetExceeded:
+            # One thread hitting the ceiling stops the rest. Answers already
+            # written stay cached, so resuming costs nothing.
+            stopped = True
+            return
+        if on_note is not None:
+            on_note(results_by_index[index])
+
+    with ThreadPoolExecutor(max_workers=max(1, client.config.concurrency)) as pool:
+        for index, candidate in enumerate(candidates):
+            pool.submit(one, index, candidate)
+
+    return [results_by_index[i] for i in sorted(results_by_index)]
 
 
 class BudgetExceeded(RuntimeError):

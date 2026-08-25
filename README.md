@@ -50,7 +50,57 @@ published numbers: **<https://jannehyba.github.io/therapy-note-bench/>**
 - **Conciseness** (0-1) — Fraction of the note's sentences that fit at least one rubric item. 1.00 means nothing is off-topic; it does not mean the note is short.
 - **Faithfulness** (1-5) — Whether the note contradicts the transcript, rated 1 to 5, where 5 is no inaccuracies. TN-Eval's protocol has no criterion-based version of this one, so it stays a Likert scale. A different scale from the two columns beside it, and a weak one: TN-Eval measured Krippendorff's alpha of 0.18 between trained therapists on this rating. Read it as a flag for gross invention, not as a ranking.
 
-**TN-Eval SOAP · AnnoMI conversations** — *waiting for the judge.* 5 system(s) have written their notes and none has been scored yet: `google_gemini-3.1-pro-preview`, `google_gemini-3.7-flash`, `gpt-5.6-luna`, `gpt-5.6-sol`, `gpt-5.6-terra`.
+**TN-Eval SOAP · AnnoMI conversations**
+
+| Model | Provider | Completeness (0-1) | Conciseness (0-1) | Faithfulness (1-5) | Notes | Scored |
+|---|---|---|---|---|---|---|
+| `kimi-k3` | einfra | 0.525 | 0.835 | 5.00 | 50/50 | 50 |
+| `qwen3.5-int4` | einfra | 0.518 | 0.809 | 4.97 | 50/50 | 50 |
+| `google_gemini-3.1-pro-preview` | vertex | 0.514 | 0.822 | 4.99 | 50/50 | 50 |
+| `google_gemini-3.7-flash` | vertex | 0.508 | 0.836 | 5.00 | 50/50 | 50 |
+| `qwen3.5-122b` | einfra | 0.502 | 0.785 | 4.82 | 50/50 | 50 |
+| `gpt-5.6-sol` | openai | 0.488 | 0.828 | 4.96 | 50/50 | 50 |
+| `glm-5` | einfra | 0.482 | 0.807 | 4.97 | 50/50 | 50 |
+| `glm-5.2` | einfra | 0.479 | 0.828 | 4.96 | 50/50 | 50 |
+| `gpt-5.6-terra` | openai | 0.476 | 0.827 | 4.96 | 50/50 | 50 |
+| `deepseek-v4-flash-thinking` | einfra | 0.467 | 0.831 | 4.87 | 50/50 | 50 |
+| `gpt-oss-120b` | einfra | 0.465 | 0.783 | 4.35 | 42/50 (8 unusable) | 42 |
+| `gpt-5.6-luna` | openai | 0.462 | 0.837 | 4.96 | 50/50 | 50 |
+| `qwen3.8-27b` | einfra | 0.458 | 0.768 | 4.92 | 50/50 | 50 |
+| `gemma4` | einfra | 0.454 | 0.857 | 4.96 | 50/50 | 50 |
+| `mistral-medium-3.5` | einfra | 0.448 | 0.857 | 4.91 | 50/50 | 50 |
+| `deepseek-v4-flash` | einfra | 0.431 | 0.881 | 4.88 | 50/50 | 50 |
+
+*Ordered by **Completeness**. Every other column is context.*
+- **Completeness** (0-1) — Fraction of the section's rubric criteria the judge found present. 0.65 means about two thirds of the required items are in the note.
+- **Conciseness** (0-1) — Fraction of the note's sentences that fit at least one rubric item. 1.00 means nothing is off-topic; it does not mean the note is short.
+- **Faithfulness** (1-5) — Whether the note contradicts the transcript, rated 1 to 5, where 5 is no inaccuracies. TN-Eval's protocol has no criterion-based version of this one, so it stays a Likert scale. A different scale from the two columns beside it, and a weak one: TN-Eval measured Krippendorff's alpha of 0.18 between trained therapists on this rating. Read it as a flag for gross invention, not as a ranking.
+
+**TN-Eval SOAP · AnnoMI conversations**
+
+| Model | Provider | Completeness (0-1) | Conciseness (0-1) | Faithfulness (1-5) | Notes | Scored |
+|---|---|---|---|---|---|---|
+| `kimi-k3` | einfra | 0.514 | 0.897 | 4.33 | 50/50 | 50 |
+| `qwen3.5-122b` | einfra | 0.508 | 0.835 | 3.90 | 50/50 | 50 |
+| `google_gemini-3.1-pro-preview` | vertex | 0.503 | 0.882 | 4.49 | 50/50 | 50 |
+| `gpt-oss-120b` | einfra | 0.494 | 0.837 | 3.39 | 42/50 (8 unusable) | 42 |
+| `qwen3.5-int4` | einfra | 0.490 | 0.845 | 4.37 | 50/50 | 50 |
+| `gpt-5.6-terra` | openai | 0.487 | 0.892 | 4.73 | 50/50 | 50 |
+| `gpt-5.6-sol` | openai | 0.478 | 0.887 | 4.76 | 50/50 | 50 |
+| `google_gemini-3.7-flash` | vertex | 0.475 | 0.889 | 4.53 | 50/50 | 50 |
+| `deepseek-v4-flash-thinking` | einfra | 0.473 | 0.905 | 4.09 | 50/50 | 50 |
+| `glm-5` | einfra | 0.459 | 0.872 | 4.47 | 50/50 | 50 |
+| `glm-5.2` | einfra | 0.459 | 0.886 | 4.41 | 50/50 | 50 |
+| `gpt-5.6-luna` | openai | 0.449 | 0.866 | 4.69 | 50/50 | 50 |
+| `deepseek-v4-flash` | einfra | 0.438 | 0.928 | 4.25 | 50/50 | 50 |
+| `qwen3.8-27b` | einfra | 0.438 | 0.845 | 4.45 | 50/50 | 50 |
+| `mistral-medium-3.5` | einfra | 0.429 | 0.917 | 4.25 | 50/50 | 50 |
+| `gemma4` | einfra | 0.409 | 0.899 | 4.46 | 50/50 | 50 |
+
+*Ordered by **Completeness**. Every other column is context.*
+- **Completeness** (0-1) — Fraction of the section's rubric criteria the judge found present. 0.65 means about two thirds of the required items are in the note.
+- **Conciseness** (0-1) — Fraction of the note's sentences that fit at least one rubric item. 1.00 means nothing is off-topic; it does not mean the note is short.
+- **Faithfulness** (1-5) — Whether the note contradicts the transcript, rated 1 to 5, where 5 is no inaccuracies. TN-Eval's protocol has no criterion-based version of this one, so it stays a Likert scale. A different scale from the two columns beside it, and a weak one: TN-Eval measured Krippendorff's alpha of 0.18 between trained therapists on this rating. Read it as a flag for gross invention, not as a ranking.
 
 **iCARE / iHOPE · 17 sections per session**
 
