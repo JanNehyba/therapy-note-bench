@@ -285,10 +285,19 @@ def describe(comparison: Comparison) -> str:
         parts.append(
             f"`{comparison.judge_a}` and `{comparison.judge_b}` agree on the shape of the "
             f"ranking on {best.measure} ({best.rho:+.3f}) and place {best.moved} of "
-            f"{best.n_systems} systems differently on it anyway. They agree least on "
-            f"{worst.measure} ({worst.rho:+.3f}, {worst.moved} of {worst.n_systems} moved). "
-            f"The tables can say who is near the top and who is near the bottom. "
-            f"They cannot say who is ninth and who is tenth."
+            f"{best.n_systems} systems differently on it anyway."
+        )
+        # Only when there is a second measure to be worst. With one -- the iCARE
+        # track, where TRACE is the only thing a judge decides -- naming the same
+        # measure twice reads as two findings and is one.
+        if worst is not best:
+            parts.append(
+                f"They agree least on {worst.measure} ({worst.rho:+.3f}, {worst.moved} "
+                f"of {worst.n_systems} moved)."
+            )
+        parts.append(
+            "The tables can say who is near the top and who is near the bottom. "
+            "They cannot say who is ninth and who is tenth."
         )
 
     if comparison.dominance:

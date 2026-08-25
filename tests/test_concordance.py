@@ -339,3 +339,23 @@ def test_the_columns_are_still_compared_with_each_other_across_all_of_them():
     tension = next(t for t in result.tensions if {t.first, t.second} == {"rouge_l", "trace"})
     assert all(rho == pytest.approx(-1.0) for rho in tension.rho_by_judge.values())
     assert tension.agrees is False
+
+
+def test_one_judged_measure_is_not_described_as_the_best_and_the_worst():
+    """The iCARE track has exactly one: TRACE. Naming it twice reads as two
+    findings and is one."""
+    rows = _panel(
+        {
+            A: {"x": {"trace": 5.0}, "y": {"trace": 3.0}, "z": {"trace": 1.0}},
+            B: {"x": {"trace": 4.0}, "y": {"trace": 3.5}, "z": {"trace": 1.0}},
+        }
+    )
+    for row in rows:
+        object.__setattr__(row, "track", results.TRACK_ICARE)
+
+    sentence = concordance.describe(
+        concordance.compare(rows, results.TRACK_ICARE, ["trace"], judge_measures=("trace",))
+    )
+
+    assert sentence.count("trace") == 1
+    assert "agree least" not in sentence
