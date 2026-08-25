@@ -21,14 +21,19 @@ jargon, and prove things in small verified steps rather than large ones.
 
 ## Where We Are
 
-Phases 0 and 1 are done: the survey, model discovery, and both dataset loaders.
-`tnb models` works against the live endpoint. No notes have been generated yet.
+Phases 0 to 5 are done. 16 models have written notes on both tracks — 50 AnnoMI
+conversations for TN-Eval SOAP, 40 iHOPE sessions for iCARE — and both tracks
+are scored by two independent judges, `gemini-3.1-pro-preview` and
+`gpt-5.6-terra`. The leaderboard, its JSON and the README table are generated
+from `results/rows.jsonl` by `tnb report`.
 
-**Phase 2 is next — generation.** An OpenAI-compatible client against
-`EINFRA_BASE_URL`, driven by `models.yaml`, writing one note per
-(model, task, session) into a content-addressed cache so adding a model
-re-generates only that model. Two tasks: TN-Eval's SOAP prompt over 50 sessions,
-and iCARE's 17 section prompts over 40. Then phases 3-6 per the README.
+**Phase 6 is next — the one-click workflow.** Everything before it has run by
+hand.
+
+Read `docs/limitations.md` before adding a number to any view. The two most
+recent findings both bound what a table may claim: the two judges agree on the
+*shape* of the ranking and not on the order, and the three TN-Eval columns do
+not predict each other.
 
 ## Working Rules
 
@@ -41,6 +46,20 @@ and iCARE's 17 section prompts over 40. Then phases 3-6 per the README.
 - **Record negative and unexplained findings, do not smooth them over.** The
   TRACE ratings are not published and the docs say where that was checked. The
   paper's median conversation length does not reproduce and the docs say so.
+- **An absence is never a measurement.** Every number here is a fraction, and
+  for each one the question "what happens when something is missing" has three
+  answers and one is right: counting it as zero invents a measurement nobody
+  made; dropping it from the denominator is biased, because what goes missing
+  clusters on the hard cases; **omitting the number and naming the gap** is the
+  only honest one. Two code reviews found this same shape sixteen times —
+  `gemma4` published with a perfect temporal score for writing "Nil" four ways,
+  `glm-5` accused of failing a session e-INFRA refused to answer, a conciseness
+  of 1.00 from one answered sentence of four.
+- **Measure before deciding, and re-measure after.** The plan to raise the
+  judge's thinking budget was held until the truncation rate was counted (0.50%
+  at 128) and confirmed after (0.05% at 256). A first attempt at that
+  measurement classified TRACE ratings with the yes/no parser and reported the
+  opposite conclusion; the numbers were re-derived rather than reported.
 - **Never vendor a corpus.** Two of the three upstream sources publish no
   licence. Everything is fetched at run time into a gitignored `data/` and
   checksummed.
@@ -57,6 +76,17 @@ and iCARE's 17 section prompts over 40. Then phases 3-6 per the README.
 - Every result row carries `harness_version`, `prompt_version`, `judge_model`,
   `judge_prompt_version` and dataset revisions. **The leaderboard only combines
   rows that agree on all four.** Changing the judge starts a new table.
+- `harness_version` is **not a release number**: it is the claim "these measures
+  mean what they meant last time". Bump it whenever a measure's definition
+  changes even if no interface does — 0.2.0 was the ROUGE-L, temporal,
+  `is_filled` and conciseness repairs. Older groups are named on the page rather
+  than drawn beside the new ones.
+- A cached answer is tied to **what was asked**: the judge cache records the
+  prompt's digest, as the generation cache always has. Re-generating a note and
+  re-scoring it used to reuse the judgement of the text it replaced.
+- **The ranking is a shape, not an order.** Two judges place most systems
+  differently. The only claim about "better" that survives is dominance —
+  at least as good on every measure under both judges.
 - Generation and scoring prompts are reproduced **verbatim** from TN-Eval and
   iCARE. Measure models on their task, not on ours.
 - The judge is calibrated against TN-Eval's two human annotators before any
@@ -76,7 +106,11 @@ and iCARE's 17 section prompts over 40. Then phases 3-6 per the README.
 - e-INFRA rate-limits per API key, not per model: six concurrent requests drew
   429 on a third of calls. Keep `concurrency: 2` and retry 429 with backoff.
 - Reasoning models return empty content when `max_tokens` is small — the budget
-  goes on thinking. They are not broken.
+  goes on thinking. They are not broken. **A truncated answer is a failure on
+  both sides**: `finish_reason` decides `ok`, which is what lets the generator
+  escalate and the judge re-ask.
+- BERTScore is cached under `scores/bertscore.json`, keyed on the pair it
+  measures. Without it every run spent half an hour before its first question.
 - Judging is grouped **by session, not by model**, so one transcript is sent as
   a cached prefix and reused across roughly a hundred calls.
 
@@ -90,6 +124,16 @@ make models    # what e-INFRA has deployed right now
 make smoke     # cheap end-to-end run
 make bench     # everything
 uv run tnb models --probe   # which ids are secretly the same model
+uv run tnb generate         # write notes; re-asks only what is missing
+uv run tnb score            # TN-Eval rubric, one judge per run
+uv run tnb score-icare      # ROUGE-L, BERTScore, TRACE, the two temporal columns
+uv run tnb judges           # every candidate judge against the two therapists
+uv run tnb saturation       # is there anything left to measure?
+uv run tnb report           # rebuild the page, its JSON and the README table
 ```
 
-Secrets live in `.env` (gitignored): `EINFRA_API_TOKEN`, `ANTHROPIC_API_KEY`.
+Secrets live in `.env` and `secrets/`, both gitignored, and appear in no
+tracked file: `EINFRA_BASE_URL`, `EINFRA_API_TOKEN`, `OPENAI_API_KEY`,
+`VERTEX_PROJECT`, `VERTEX_LOCATION`, `GOOGLE_APPLICATION_CREDENTIALS`. Which
+name each provider reads is in `models.yaml`, which is public and holds no
+values.
