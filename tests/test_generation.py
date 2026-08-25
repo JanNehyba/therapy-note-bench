@@ -411,3 +411,34 @@ def test_icare_sections_are_never_re_asked(prompts):
     jobs = list(generation.build_jobs("einfra", ["gemma4"], TASKS["icare"], [SESSION]))
     generation.run_job(jobs[0], PROVIDER)
     assert len(sent) == 1
+
+
+def test_a_truncated_answer_gets_the_bigger_budget_too(budgets):
+    """Escalation used to require an *empty* answer.
+
+    A model that produced half a sentence and stopped at `length` looked
+    successful, so `_needs_a_bigger_budget` returned early on `record["ok"]`
+    and the second chance never happened. Half an answer and no answer are the
+    same event -- the budget ran out -- and both deserve it.
+    """
+    half = einfra.Completion(
+        model="glm-5",
+        text="The client reported feeling anxious about",
+        ok=False,
+        max_tokens=4096,
+        finish_reason="length",
+        error="truncated at max_tokens=4096",
+    )
+    finished = einfra.Completion(
+        model="glm-5", text="a whole section", ok=True, max_tokens=16384, finish_reason="stop"
+    )
+    seen = budgets([half, finished])
+
+    completion, record = generation._ask(_job(), ESCALATING, "write section 6")
+
+    assert seen == [4096, 16384], "asked again at the bigger budget"
+    assert completion.ok
+    # `record["ok"]` is about whether the *task's* parser could read the answer,
+    # which is a separate question from whether the call finished. This test is
+    # about the second one.
+    assert record["finish_reason"] == "stop"

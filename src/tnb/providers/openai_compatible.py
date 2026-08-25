@@ -362,15 +362,29 @@ def complete(
     message = choice.get("message") or {}
     text = (message.get("content") or "").strip()
     reasoning = message.get("reasoning_content") or ""
+    finish = choice.get("finish_reason")
+
+    # A sentence that stops mid-word is not an answer. `finish_reason` was
+    # parsed and recorded here and never once read, so 16 iCARE sections cut
+    # off at the budget were filed as complete: the escalation `generation.py`
+    # already has is gated on `ok`, so the one thing built to handle this never
+    # fired. What that measures is our token budget, not the model.
+    truncated = finish == "length"
 
     return Completion(
         model=model_id,
         text=text,
-        ok=bool(text),
+        ok=bool(text) and not truncated,
         max_tokens=budget,
-        finish_reason=choice.get("finish_reason"),
+        finish_reason=finish,
         usage=payload.get("usage"),
         reasoning_chars=len(reasoning),
         latency_s=latency,
-        error=None if text else "empty content",
+        error=(
+            None
+            if text and not truncated
+            else f"truncated at max_tokens={budget}"
+            if truncated
+            else "empty content"
+        ),
     )

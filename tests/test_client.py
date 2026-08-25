@@ -141,3 +141,31 @@ def test_a_reasoning_model_that_ran_out_of_budget_is_distinguishable(monkeypatch
     assert not result.ok
     assert result.error == "empty content"
     assert result.reasoning_chars > 0
+
+
+def test_an_answer_cut_off_at_the_budget_is_not_an_answer(monkeypatch):
+    """`finish_reason` was parsed here and never read.
+
+    Sixteen iCARE sections stopped mid-sentence at the token budget and were
+    filed as complete, because `ok` asked only whether any text came back. The
+    escalation `generation.py` already has is gated on `ok`, so the one thing
+    built to handle this never fired -- and what a truncated section measures
+    is our budget, not the model.
+    """
+    body = {
+        "choices": [
+            {
+                "message": {"content": "The client reported feeling anxious about"},
+                "finish_reason": "length",
+            }
+        ],
+        "usage": {"prompt_tokens": 10, "completion_tokens": 512},
+    }
+    _serve(monkeypatch, [httpx.Response(200, json=body)])
+
+    result = einfra.complete(PROVIDER, "glm-5", "write section 6")
+
+    assert result.ok is False
+    assert result.finish_reason == "length"
+    assert "truncated" in result.error
+    assert result.text, "the fragment is kept, so the record can be explained"
