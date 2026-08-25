@@ -137,6 +137,21 @@
 
   footer { color: var(--muted); font-size: .85rem; margin-top: 2.5rem; max-width: 72ch; }
   footer p { margin: .4rem 0; }
+
+.scale { display: inline-block; margin-left: .4em; font-size: .72em; font-weight: 500;
+         letter-spacing: .02em; color: var(--muted); font-variant-numeric: tabular-nums; }
+.ranks { display: inline-block; margin-left: .4em; padding: .05em .4em; border-radius: 3px;
+         font-size: .66em; font-weight: 600; text-transform: uppercase; letter-spacing: .04em;
+         background: var(--chip); color: var(--accent); }
+.ranking-note { margin: .9rem 0 .2rem; font-size: .86rem; color: var(--muted); }
+dl.measures { display: grid; gap: .55rem .75rem; margin: .4rem 0 0; padding: .75rem .9rem;
+              border: 1px solid var(--line); border-radius: 6px; background: var(--card);
+              font-size: .82rem; }
+dl.measures .measure { display: grid; grid-template-columns: minmax(9rem, 12rem) 1fr; gap: .1rem .9rem; }
+dl.measures dt { font-weight: 600; color: var(--fg); }
+dl.measures dd { margin: 0; color: var(--muted); }
+dl.measures em { font-style: normal; color: var(--warn); }
+@media (max-width: 620px) { dl.measures .measure { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -187,12 +202,12 @@
   </details>
 
   <footer>
-    <p>* <strong>Faithfulness</strong> is a 1–5 Likert rating. TN-Eval measured Krippendorff's
-       alpha of 0.18 between trained therapists on it, so it is reported with that caveat and
-       never used as a headline ranking.</p>
-    <p>† <strong>TRACE</strong> is a re-implementation with <em>no human anchor</em>: the authors'
-       TRACE annotations are not published anywhere. It is reported beside the automatic
-       metrics, never averaged into them.</p>
+    <p>Each column's range, what it counts and what it must not be read as are printed
+       under the table it belongs to — including the near-zero human agreement on
+       <strong>Faithfulness</strong> (Krippendorff's alpha 0.18) and the fact that
+       <strong>TRACE</strong> is a re-implementation with <em>no human anchor</em>. Those
+       caveats used to be footnotes down here; a number and its caveat should not be
+       separated by a scroll.</p>
     <p><strong>Sessions</strong> counts notes a protocol could actually read. A model that
        writes a good note in the wrong shape loses sessions to its format, not to its
        clinical content — read the count before comparing the score.</p>
@@ -207,6 +222,18 @@
 
 <script>
 const DATA = __DATA__;
+
+// Every string that came from the data goes through this before it reaches
+// innerHTML. Most of it is ours, but failure_reasons are provider error bodies
+// passed through verbatim, and one of those containing a tag would rewrite the
+// page rather than be printed on it.
+const esc = value => String(value ?? '').replace(/[&<>"']/g, ch =>
+  ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[ch]));
+
+// The heading for a measure key, from the table's own columns -- so the
+// "ordered by X" sentence and the column it names can never disagree.
+const colLabel = (table, key) =>
+  (table.columns.find(c => c.key === key) || {}).label || key;
 
 const fmt = (value, digits) =>
   value === undefined || value === null
@@ -242,14 +269,15 @@ function detailRow(row, table) {
   if (row.n_failed && reasons.length) {
     parts.push(`<h3>${row.n_failed} note(s) the protocol could not read</h3><div class="grid">${
       reasons.map(([reason, count]) =>
-        `<div><span>${reason}</span><span>${count}</span></div>`).join('')}</div>`);
+        `<div><span>${esc(reason)}</span><span>${count}</span></div>`).join('')}</div>`);
   } else if (row.n_failed) {
     parts.push(`<p class="note">${row.n_failed} note(s) missing, with no recorded reason.</p>`);
   }
 
   const sections = Object.entries(row.by_section);
   if (sections.length) {
-    const head = table.columns.map(c => `<th>${c.label}</th>`).join('');
+    const head = table.columns.map(c =>
+      `<th title="${esc(c.definition)}">${esc(c.label)}<span class="scale">${esc(c.scale)}</span></th>`).join('');
     const body = sections.map(([name, values]) => {
       const cells = table.columns.map(c => `<td>${fmt(values[c.key], c.digits)}</td>`).join('');
       return `<tr><td>${name}</td>${cells}</tr>`;
@@ -302,7 +330,23 @@ function renderTable(table, index) {
     ? `judge <code>${versions.judge_model}</code> · judge prompt <code>${versions.judge_prompt_version}</code>`
     : 'not yet judged';
 
-  const head = table.columns.map(c => `<th data-sort="${c.key}">${c.label}</th>`).join('');
+  // The scale rides on the heading, not in a footnote. Two of these columns are
+  // 0-1 fractions and one is a 1-5 rating; a reader comparing 0.65 with 4.98
+  // has no way to know that unless the header says so at the point of use.
+  const head = table.columns.map(c =>
+    `<th data-sort="${c.key}" title="${esc(c.definition)}">${esc(c.label)}` +
+    `<span class="scale">${esc(c.scale)}</span>` +
+    (c.ranking ? '<span class="ranks" title="the table is ordered by this column">ranks</span>' : '') +
+    `</th>`).join('');
+  const legend = table.columns.map(c =>
+    `<div class="measure"><dt>${esc(c.label)} <span class="scale">${esc(c.scale)}</span>` +
+    (c.ranking ? '<span class="ranks">ranks this table</span>' : '') +
+    `</dt><dd>${esc(c.definition)}` +
+    (c.caveat ? ` <em>${esc(c.caveat)}</em>` : '') + `</dd></div>`).join('');
+  const rankingNote = table.ranking_measure
+    ? `Ordered by <strong>${esc(colLabel(table, table.ranking_measure))}</strong>. Every other column is context and is not a ranking.`
+    : 'This track is deliberately <strong>not ranked</strong>: its columns measure different things and the source paper found they disagree. That disagreement is the result.';
+
   const body = table.rows.map((row, position) => {
     const cells = table.columns
       .map(c => `<td>${fmt(row.headline[c.key], c.digits)}</td>`)
@@ -336,6 +380,8 @@ function renderTable(table, index) {
         <thead><tr><th data-sort="label">System</th>${head}<th data-sort="coverage">Notes</th></tr></thead>
         <tbody>${body}</tbody>
       </table></div>
+      <p class="ranking-note">${rankingNote}</p>
+      <dl class="measures">${legend}</dl>
     </section>`;
 }
 

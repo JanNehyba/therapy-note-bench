@@ -36,25 +36,121 @@ CALIBRATION_PATH = DOCS_DIR / "calibration.json"
 SATURATION_PATH = DOCS_DIR / "saturation.json"
 JUDGES_PATH = DOCS_DIR / "judges.json"
 
-#: Column order per track: (key, heading, how many decimals).
+#: Column order per track: (key, how many decimals).
 #:
-#: Reproduced from what each protocol actually measures -- see
-#: docs/methodology.md. Faithfulness carries an asterisk because TN-Eval measured
-#: near-zero human agreement on the Likert scales; TRACE carries a dagger
-#: because the authors' human ratings were never published.
-COLUMNS: dict[str, tuple[tuple[str, str, int], ...]] = {
+#: The heading is *not* here. It lives in the track's measure table below,
+#: together with the scale and the caveat, so a measure is named in one place
+#: and cannot be renamed in a view while the definition keeps the old word.
+COLUMNS: dict[str, tuple[tuple[str, int], ...]] = {
     results.TRACK_TNEVAL: (
-        ("completeness", "Completeness", 3),
-        ("conciseness", "Conciseness", 3),
-        ("faithfulness", "Faithfulness*", 2),
+        ("completeness", 3),
+        ("conciseness", 3),
+        ("faithfulness", 2),
     ),
     results.TRACK_ICARE: (
-        ("rouge_l", "ROUGE-L", 3),
-        ("bertscore", "BERTScore", 3),
-        ("trace", "TRACE†", 2),
-        ("temporal", "Temporal", 3),
+        ("rouge_l", 3),
+        ("bertscore", 3),
+        ("trace", 2),
+        ("temporal", 3),
     ),
 }
+
+#: The iCARE measures. Same shape as `tneval.MEASURES`, which owns the TN-Eval
+#: ones -- each carries the heading, the range, what it counts, and what a
+#: reader must not conclude from it.
+ICARE_MEASURES: dict[str, dict[str, str]] = {
+    "rouge_l": {
+        "label": "ROUGE-L",
+        "scale": "0-1",
+        "definition": (
+            "Longest-common-subsequence overlap with the expert note. Rewards using "
+            "the same words in the same order."
+        ),
+        "caveat": (
+            "Cannot tell a good paraphrase from a wrong answer. The source paper "
+            "found it disagrees with what clinicians preferred."
+        ),
+    },
+    "bertscore": {
+        "label": "BERTScore",
+        "scale": "0-1",
+        "definition": "Embedding similarity to the expert note. Tolerates paraphrase.",
+        "caveat": "A fluent note about the wrong session still scores well.",
+    },
+    "trace": {
+        "label": "TRACE",
+        "scale": "1-5",
+        "definition": (
+            "Trustworthiness, relevance, accuracy, comprehensiveness and expression, averaged."
+        ),
+        "caveat": (
+            "A re-implementation with no human anchor: the authors never published "
+            "their ratings, so unlike the TN-Eval track this number is not "
+            "calibrated against anybody."
+        ),
+    },
+    "temporal": {
+        "label": "Temporal",
+        "scale": "0-1",
+        "definition": "Sections {sections} only -- what happened last time, what happens next.",
+        "caveat": (
+            "Kept out of the average. The source paper reports every model it tested "
+            "failing here, so a low number is the expected result, not a surprise."
+        ),
+    },
+}
+
+#: Which measure each track is ranked by, and the honest `None` where the
+#: project refuses to rank.
+#:
+#: iCARE is `None` on purpose: its three columns are reported side by side
+#: *because they disagree*, and naming one of them the ranking would publish a
+#: claim the methodology declines to make. `_sort_key` reads this, so what the
+#: page says it ranks by and what it is actually sorted by cannot drift apart.
+RANKING_MEASURES: dict[str, str | None] = {
+    results.TRACK_TNEVAL: rubric.RANKING_MEASURE,
+    results.TRACK_ICARE: None,
+}
+
+
+def measure_table(track: str) -> dict[str, dict[str, str]]:
+    """The measure definitions for one track. Unknown tracks get nothing."""
+    return rubric.MEASURES if track == results.TRACK_TNEVAL else ICARE_MEASURES
+
+
+def column_meta(track: str, key: str) -> dict:
+    """Heading, range, definition and caveat for one column.
+
+    Raises rather than substituting a blank: a column with no documented scale
+    is exactly the thing this whole structure exists to prevent, and a silent
+    empty string would put it back on the page as a bare number.
+    """
+    try:
+        meta = measure_table(track)[key]
+    except KeyError:
+        raise KeyError(
+            f"column {key!r} on track {track!r} has no entry in the measure table, "
+            f"so the page could not say what scale it is on"
+        ) from None
+    definition = meta["definition"]
+    if "{sections}" in definition:
+        definition = definition.format(sections=_and_list(ihope_temporal()))
+    return {
+        "key": key,
+        "label": meta["label"],
+        "scale": meta["scale"],
+        "definition": definition,
+        "caveat": meta["caveat"],
+        "ranking": key == RANKING_MEASURES.get(track),
+    }
+
+
+def _and_list(values) -> str:
+    values = [str(value) for value in values]
+    if len(values) < 2:
+        return "".join(values)
+    return f"{', '.join(values[:-1])} and {values[-1]}"
+
 
 #: Titles say what the protocol is, never how many sessions it covers. The
 #: count belongs in the Sessions column, where it is whatever was actually run
@@ -139,7 +235,7 @@ def _sort_key(row: Row, track: str):
     """Best first on the track's leading metric; unscored rows last."""
     if not row.is_scored:
         return (1, 0.0, row.system_id)
-    leading = COLUMNS[track][0][0]
+    leading = RANKING_MEASURES.get(track) or COLUMNS[track][0][0]
     return (0, -float(row.metrics.headline.get(leading, 0.0)), row.system_id)
 
 
@@ -177,9 +273,10 @@ def build(rows: list[Row]) -> dict:
                 },
                 "scored": any(row.is_scored for row in group),
                 "columns": [
-                    {"key": key_, "label": label, "digits": digits}
-                    for key_, label, digits in COLUMNS[track]
+                    {**column_meta(track, key_), "digits": digits}
+                    for key_, digits in COLUMNS[track]
                 ],
+                "ranking_measure": RANKING_MEASURES.get(track),
                 "rows": [
                     _render_row(row) for row in sorted(group, key=lambda r: _sort_key(r, track))
                 ],
@@ -315,6 +412,14 @@ def _render_row(row: Row) -> dict:
 # --- README -----------------------------------------------------------------
 
 
+def _ranking_label(table: dict) -> str:
+    """The heading of the column a table is ordered by, read from the table."""
+    for column in table["columns"]:
+        if column["key"] == table["ranking_measure"]:
+            return column["label"]
+    return table["ranking_measure"] or ""
+
+
 def render_readme_section(data: dict) -> str:
     """The shop window: e-INFRA models only, headline numbers only.
 
@@ -349,7 +454,11 @@ def render_readme_section(data: dict) -> str:
         header = ["Model"]
         if multi_provider:
             header.append("Provider")
-        header += [column["label"] for column in columns] + ["Notes", "Scored"]
+        # The range goes in the heading. This table puts a 0-1 fraction beside a
+        # 1-5 rating, and a reader with no scale has no reason to think 4.98 and
+        # 0.65 are not the same kind of number.
+        header += [f"{column['label']} ({column['scale']})" for column in columns]
+        header += ["Notes", "Scored"]
         lines = [
             f"**{table['title']}**",
             "",
@@ -369,6 +478,23 @@ def render_readme_section(data: dict) -> str:
             cells.append(written)
             cells.append(_scored_cell(row))
             lines.append("| " + " | ".join(cells) + " |")
+
+        # The caveat travels with the table rather than with a footnote marker
+        # further down the file. README is the view most people read and the one
+        # nobody scrolls, so a column that must not be read as a ranking says so
+        # right here, under the numbers it applies to.
+        lines.append("")
+        lines.append(
+            f"*Ordered by **{_ranking_label(table)}**. Every other column is context.*"
+            if table["ranking_measure"]
+            else "*Deliberately not ranked: these columns measure different things and "
+            "the source paper found they disagree.*"
+        )
+        for column in columns:
+            note = f"**{column['label']}** ({column['scale']}) — {column['definition']}"
+            if column["caveat"]:
+                note += f" {column['caveat']}"
+            lines.append(f"- {note}")
         blocks.append("\n".join(lines))
 
     blocks.append(
@@ -440,9 +566,28 @@ def write(rows: list[Row], *, docs_dir: Path | None = None, readme: Path | None 
     return data
 
 
+#: Characters that are legal in JSON and fatal inside a <script> element.
+#:
+#: `json.dumps` does not escape `<`, so a string containing a closing script tag
+#: ends the block early and the rest of the page never runs. That string is not
+#: hypothetical: `failure_reasons` keys are provider error bodies kept verbatim,
+#: and one HTML error page from e-INFRA would blank the whole leaderboard rather
+#: than fail loudly. U+2028 and U+2029 are the same problem in JavaScript, where
+#: they are line terminators inside a string literal.
+_INLINE_ESCAPES = {
+    "<": "\\u003c",
+    ">": "\\u003e",
+    "&": "\\u0026",
+    " ": "\\u2028",
+    " ": "\\u2029",
+}
+
+
 def render_page(data: dict) -> str:
     """The standalone page: the data inlined, no build step, no dependency."""
     payload = json.dumps(data, ensure_ascii=False, sort_keys=True)
+    for char, escape in _INLINE_ESCAPES.items():
+        payload = payload.replace(char, escape)
     return PAGE_TEMPLATE.replace("__DATA__", payload)
 
 

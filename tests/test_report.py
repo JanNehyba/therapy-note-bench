@@ -154,9 +154,12 @@ def test_the_readme_shows_models_only_and_says_where_the_rest_is():
             ]
         )
     )
-    assert "gemma4" in section
-    assert "therapist" not in section
-    assert "mistral-large-v2" not in section
+    # Look for the row, not the word. The column legend below the table explains
+    # that two *therapists* rated these notes, and a bare substring check reads
+    # that sentence as the therapist baseline having leaked into the table.
+    rows = [line for line in section.splitlines() if line.startswith("| `")]
+    named = {line.split("`")[1] for line in rows}
+    assert named == {"gemma4"}
     assert "full leaderboard" in section
 
 

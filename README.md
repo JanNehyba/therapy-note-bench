@@ -31,7 +31,7 @@ published numbers: **<https://jannehyba.github.io/therapy-note-bench/>**
 <!-- LEADERBOARD:BEGIN -->
 **TN-Eval SOAP · AnnoMI conversations**
 
-| Model | Completeness | Conciseness | Faithfulness* | Notes | Scored |
+| Model | Completeness (0-1) | Conciseness (0-1) | Faithfulness (1-5) | Notes | Scored |
 |---|---|---|---|---|---|
 | `kimi-k3` | 0.654 | 0.961 | 4.98 | 50/50 | 50 |
 | `qwen3.5-122b` | 0.644 | 0.871 | 4.75 | 50/50 | 50 |
@@ -44,6 +44,11 @@ published numbers: **<https://jannehyba.github.io/therapy-note-bench/>**
 | `mistral-medium-3.5` | 0.558 | 0.974 | 4.88 | 50/50 | 50 |
 | `gemma4` | 0.556 | 0.944 | 4.99 | 50/50 | 50 |
 | `deepseek-v4-flash` | 0.524 | 0.973 | 4.80 | 50/50 | 50 |
+
+*Ordered by **Completeness**. Every other column is context.*
+- **Completeness** (0-1) — Fraction of the section's rubric criteria the judge found present. 0.65 means about two thirds of the required items are in the note.
+- **Conciseness** (0-1) — Fraction of the note's sentences that fit at least one rubric item. 1.00 means nothing is off-topic; it does not mean the note is short.
+- **Faithfulness** (1-5) — Whether the note contradicts the transcript, rated 1 to 5, where 5 is no inaccuracies. TN-Eval's protocol has no criterion-based version of this one, so it stays a Likert scale. A different scale from the two columns beside it, and a weak one: TN-Eval measured Krippendorff's alpha of 0.18 between trained therapists on this rating. Read it as a flag for gross invention, not as a ranking.
 
 **iCARE / iHOPE · 17 sections per session** — *waiting for the judge.* 2 system(s) have written their notes and none has been scored yet: `deepseek-v4-flash`, `deepseek-v4-flash-thinking`.
 
