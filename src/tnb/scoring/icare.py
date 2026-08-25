@@ -354,6 +354,24 @@ def parse_likert(answer: str) -> int:
     return _parse(answer)
 
 
+def is_a_rating(answer: str) -> bool:
+    """Whether a TRACE answer is a rating at all.
+
+    On the TN-Eval track a judge that will not answer is scored 3 because their
+    published numbers were produced that way and ours are compared with them.
+    **No such argument applies here.** The TRACE prompt is this repository's own
+    wording -- the authors published the five dimension names and their prose
+    definitions, never a prompt -- so a fabricated middle-of-the-scale 3 buys
+    comparability with nothing and costs a measurement nobody took.
+
+    Two are on disk: `glm-5` session 6 answered "and performance anxiety,
+    physical symptoms," and was recorded as a 3.
+    """
+    from tnb.scoring.tneval import is_a_rating as _is_a_rating
+
+    return _is_a_rating(answer)
+
+
 def temporal_score(
     note_sections: dict[int, str], gold_sections: dict[int, str], section: int
 ) -> float | None:
@@ -410,7 +428,9 @@ def aggregate(
     missing = []
     for name, _description in TRACE_DIMENSIONS:
         unit = f"trace.{name}"
-        if unit in trace_answers:
+        # An answer that is not a rating is a dimension nobody rated, not a 3.
+        # See `is_a_rating`: this track has no paper to stay comparable with.
+        if unit in trace_answers and is_a_rating(trace_answers[unit]):
             value = float(parse_likert(trace_answers[unit]))
             by_criterion[name] = value
             ratings.append(value)
@@ -419,7 +439,11 @@ def aggregate(
     if ratings and not missing:
         headline["trace"] = sum(ratings) / len(ratings)
         sections_used["trace"] = len(ratings)
-    elif ratings:
+    elif missing:
+        # Every branch, including none-of-five. `elif ratings` skipped that case
+        # entirely, so a note the judge never rated came back `is_complete` and
+        # joined its system's headline contributing nothing to TRACE -- the same
+        # hole the TN-Eval scorer closed with `missing` and this one never got.
         incomplete["trace"] = missing
 
     note_sections, gold_sections = split_sections(note), split_sections(reference)

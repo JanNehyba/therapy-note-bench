@@ -719,3 +719,51 @@ def test_a_real_generation_failure_is_still_counted():
     rows = scoring.to_rows(scored, judge_model="j", n_generated={key: 42}, n_attempted={key: 50})
 
     assert rows[0].n_failed == 8
+
+
+# --- telling a refusal from an answer ----------------------------------------
+
+
+def test_the_digit_scan_takes_the_rating_not_the_first_number_in_the_text():
+    """TN-Eval's fallback scanned 1..5 ascending and took the first digit found
+    anywhere, so a rating followed by any other number read as that number.
+
+    On disk right now: qwen3.5-122b's TRACE accuracy for session 146 answered
+    "4 (Patient says 2" and was recorded as 2.
+    """
+    assert tneval.parse_likert("4 (Patient says 2") == 4
+    assert tneval.parse_likert("5 out of 5") == 5
+    assert tneval.parse_likert("2, the note omits most of it") == 2
+
+
+def test_an_unparseable_rating_still_becomes_three():
+    """Their arithmetic, kept -- our numbers are compared with theirs."""
+    assert tneval.parse_likert("nonsense") == 3
+    assert tneval.parse_likert("") == 3
+
+
+@pytest.mark.parametrize("text", ["4", "[4]", " 5 ", "1."])
+def test_a_rating_is_recognised_as_one(text):
+    assert tneval.is_a_rating(text) is True
+
+
+@pytest.mark.parametrize(
+    "text", ["4 (Patient says 2", "nonsense", "", "Based on the rubrics and", "10, acknowledging"]
+)
+def test_anything_else_is_not_a_rating(text):
+    """The fabricated 3 has to be distinguishable from a real one."""
+    assert tneval.is_a_rating(text) is False
+
+
+@pytest.mark.parametrize("text", ["Yes", "No", "[Yes]", "yes.", "The note contains no such item"])
+def test_a_yes_or_no_is_recognised_as_an_answer(text):
+    assert tneval.is_an_answer(text) is True
+
+
+@pytest.mark.parametrize(
+    "text", ["Evaluate against Rubric Item:**", "producingproducing", "", "/Plan)", ":**"]
+)
+def test_a_truncated_fragment_is_not_an_answer(text):
+    """242 of gemini-3.1-pro's cached rubric answers looked like this and were
+    each scored as a criterion the note failed to satisfy."""
+    assert tneval.is_an_answer(text) is False

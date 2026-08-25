@@ -49,6 +49,23 @@ def cohens_kappa(first: list[int], second: list[int]) -> float | None:
     if not first or len(first) != len(second):
         return None
 
+    # A rater who gave everything the same label made no distinctions, so there
+    # is no agreement to chance-correct. `spearman` refuses this case and says
+    # why -- "0.0 would look like a measured disagreement" -- and kappa produced
+    # exactly that 0.0 instead: observed equals expected, so the formula returns
+    # zero, which reads as "agrees no better than chance".
+    #
+    # Live in docs/calibration.json before this: the judge answered "no" to
+    # assessment-goals on all 150 notes and was published at 0.000, as though it
+    # had measured the criterion and disagreed. Krippendorff's alpha on the same
+    # data gives -0.15; only kappa manufactured the zero. The both-constant case
+    # below is different and stays -- two raters who agreed on everything did
+    # agree.
+    judge_varies = len(set(first)) > 1
+    human_varies = len(set(second)) > 1
+    if not (judge_varies and human_varies) and first != second:
+        return None
+
     labels = sorted(set(first) | set(second))
     total = len(first)
     observed = sum(a == b for a, b in zip(first, second, strict=True)) / total

@@ -213,3 +213,28 @@ def test_scoring_a_binary_measure_uses_kappa_and_a_scale_uses_spearman():
 
     assert calibration.score_agreement("rubric_x", paired, binary=True).statistic == "Cohen's kappa"
     assert calibration.score_agreement("likert_x", paired, binary=False).statistic == "Spearman rho"
+
+
+def test_a_judge_that_never_discriminated_measured_nothing():
+    """It answered "no" to everything. That is not chance-level agreement.
+
+    Live in docs/calibration.json before this: the judge answered "no" to
+    assessment-goals on all 150 notes and was published at 0.000, which reads as
+    "measured it and agreed no better than chance". Krippendorff's alpha on the
+    same data gives -0.15; only kappa manufactured the zero, because observed
+    equals expected when one rater makes no distinctions.
+
+    `spearman` already refuses this and says why. Now both do.
+    """
+    assert cohens_kappa([0] * 8, [1, 0, 1, 0, 1, 0, 1, 0]) is None
+    assert cohens_kappa([1, 0, 1, 0], [0] * 4) is None
+    assert cohens_kappa([1] * 4, [0] * 4) is None
+
+
+def test_two_raters_who_agreed_on_everything_still_score_one():
+    """The one degenerate case that is a real answer, and it is kept."""
+    assert cohens_kappa([1, 1, 1], [1, 1, 1]) == 1.0
+
+
+def test_a_normal_disagreement_is_untouched():
+    assert cohens_kappa([1, 1, 0, 0], [1, 0, 1, 0]) == pytest.approx(0.0, abs=1e-9)

@@ -301,21 +301,73 @@ def parse_yes_no(answer: str) -> int:
 
     Reproduced rather than improved: a judge that refuses to answer is scored as
     a missing rubric item in their numbers too, and changing that would make
-    ours incomparable.
+    ours incomparable. Use `is_an_answer` to tell a refusal from a "No" before
+    handing it here.
     """
     return 1 if "yes" in (answer or "").lower() else 0
 
 
+def is_an_answer(answer: str) -> bool:
+    """Whether a yes/no question actually got a yes or a no.
+
+    `parse_yes_no` cannot say: it returns 0 both for a judge that said "No" and
+    for one that said nothing usable, and their numbers depend on that. This
+    separates the two without touching the parser.
+
+    Not hypothetical. 242 of gemini-3.1-pro-preview's cached rubric answers are
+    fragments of its own reasoning -- "Evaluate against Rubric Item:**",
+    "producingproducing..." -- each scored as a criterion the note failed to
+    satisfy. A judge that was cut off mid-thought is not evidence about the note.
+    """
+    text = (answer or "").lower()
+    return "yes" in text or "no" in text
+
+
+#: A rating, and nothing but a rating. Any digit 1-5 with only punctuation or a
+#: bracket around it -- "4", "[4]", "4." -- which is what the prompt asks for.
+_RATING = re.compile(r"^\W*([1-5])\W*$")
+
+
+def is_a_rating(answer: str) -> bool:
+    """Whether a 1-5 question actually got a 1-5.
+
+    `parse_likert` always returns a number, so nothing downstream can tell a
+    real rating from its fallback. This can.
+    """
+    return _RATING.match((answer or "").strip()) is not None
+
+
 def parse_likert(answer: str) -> int:
-    """TN-Eval's parser: an unparseable rating becomes 3, the middle of the scale."""
+    """TN-Eval's parser: an unparseable rating becomes 3, the middle of the scale.
+
+    Reproduced with one bug removed rather than two kept. Their fallback scans
+    for digits **1 to 5 in ascending order** and returns the first one present
+    *anywhere* in the text, so a rating with any other number after it is read
+    as that other number:
+
+        "4 (Patient says 2"  ->  2
+
+    That is on disk right now, in `qwen3.5-122b`'s TRACE accuracy for session
+    146: the judge answered 4 and was recorded as 2. Scanning ascending is not a
+    convention worth reproducing -- it is not even self-consistent, since it
+    would read "5 out of 5" as 5 only by luck of ordering. The leading digit is
+    taken instead, which is what the prompt asks the judge to emit and what the
+    parser reads on every well-formed answer anyway.
+
+    The middle-of-the-scale 3 for a genuinely unparseable answer *is* kept: it
+    is their arithmetic and our numbers are compared with theirs. `is_a_rating`
+    is how a caller tells that fabricated 3 from a real one.
+    """
     text = (answer or "").strip()
     try:
         score = int(text)
     except ValueError:
-        for candidate in range(1, 6):
-            if str(candidate) in text:
-                return candidate
-        return 3
+        # The first digit in *reading* order, which is the rating the judge
+        # gave. Their scan went 1,2,3,4,5 and returned whichever appeared
+        # anywhere, so "4 (Patient says 2" read as 2. Reading order keeps
+        # "Rating: 2" working and fixes that.
+        first = re.search(r"[1-5]", text)
+        return int(first.group()) if first else 3
     return score if 1 <= score <= 5 else 3
 
 
