@@ -914,6 +914,21 @@ function renderConcordance(all) {
          <code>${c.judge_b}</code>'s, over the ${c.n_systems} systems both have scored.
          Scores that print the same are treated as tied rather than ordered by a digit
          the table does not show.</p>
+      ${c.tensions.length ? `<h3>Do the columns agree with each other?</h3>
+      <p class="note">A separate question from whether the judges do, and the one that
+         decides whether the ordering column can be read as "quality". A model that
+         answers every question satisfies more criteria <em>and</em> invents more.</p>
+      <div class="scroll"><table class="concordance">
+        <thead><tr><th>Pair</th>${Object.keys(c.tensions[0].rho_by_judge).map(
+          j => `<th>${j}</th>`).join('')}<th></th></tr></thead>
+        <tbody>${c.tensions.map(t => `<tr>
+          <td>${t.first} &times; ${t.second}</td>
+          ${Object.values(t.rho_by_judge).map(rho =>
+            `<td>${rho === null ? '—' : rho.toFixed(3)}</td>`).join('')}
+          <td>${t.agrees ? 'related' : 'not related'}</td>
+        </tr>`).join('')}</tbody>
+      </table></div>` : ''}
+
       <h3>Better with no weighting required</h3>
       <p class="note">A system that is at least as good on <em>every</em> measure under
          <em>both</em> judges, and strictly better somewhere, is better however a reader

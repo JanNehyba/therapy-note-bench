@@ -198,3 +198,82 @@ def test_the_summary_says_what_the_tables_cannot_do():
 
     assert "ninth" in sentence and "tenth" in sentence
     assert "beaten outright by nobody" in sentence
+
+
+def test_two_measures_that_do_not_predict_each_other_are_reported_as_such():
+    """The reason the ranking column is not "quality", stated as a measurement.
+
+    A model that answers every question satisfies more criteria and invents
+    more. Where the two columns behave that way, collapsing them into one
+    number means deciding which matters, and that is a clinical decision.
+    """
+    rows = _panel(
+        {
+            A: {
+                "eager": {"completeness": 0.9, "conciseness": 0.5, "faithfulness": 3.0},
+                "careful": {"completeness": 0.5, "conciseness": 0.5, "faithfulness": 5.0},
+                "middling": {"completeness": 0.7, "conciseness": 0.5, "faithfulness": 4.0},
+            },
+            B: {
+                "eager": {"completeness": 0.8, "conciseness": 0.5, "faithfulness": 3.1},
+                "careful": {"completeness": 0.4, "conciseness": 0.5, "faithfulness": 4.9},
+                "middling": {"completeness": 0.6, "conciseness": 0.5, "faithfulness": 4.0},
+            },
+        }
+    )
+
+    result = concordance.compare(
+        rows, results.TRACK_TNEVAL, MEASURES, ranking_measure="completeness"
+    )
+    tension = next(
+        t for t in result.tensions if {t.first, t.second} == {"completeness", "faithfulness"}
+    )
+
+    assert all(rho == pytest.approx(-1.0) for rho in tension.rho_by_judge.values())
+    assert tension.agrees is False
+    assert "faithfulness" in concordance.describe(result)
+
+
+def test_a_tension_the_two_judges_read_differently_is_not_resolved_for_the_reader():
+    """Picking the judge that tells the better story is the one thing this
+    repository exists not to do. Measured live: completeness and faithfulness
+    correlate +0.72 under one judge and +0.04 under the other."""
+    rows = _panel(
+        {
+            A: {
+                "x": {"completeness": 0.9, "conciseness": 0.5, "faithfulness": 5.0},
+                "y": {"completeness": 0.5, "conciseness": 0.5, "faithfulness": 3.0},
+                "z": {"completeness": 0.1, "conciseness": 0.5, "faithfulness": 1.0},
+            },
+            B: {
+                "x": {"completeness": 0.9, "conciseness": 0.5, "faithfulness": 1.0},
+                "y": {"completeness": 0.5, "conciseness": 0.5, "faithfulness": 3.0},
+                "z": {"completeness": 0.1, "conciseness": 0.5, "faithfulness": 5.0},
+            },
+        }
+    )
+
+    result = concordance.compare(
+        rows, results.TRACK_TNEVAL, MEASURES, ranking_measure="completeness"
+    )
+    sentence = concordance.describe(result)
+
+    assert "different things to the two judges" in sentence
+    assert "neither reading is this benchmark's answer" in sentence
+
+
+def test_measures_that_do_agree_are_not_reported_as_a_tension():
+    """A panel that flagged every pair would say nothing by saying everything."""
+    rows = _panel(
+        {
+            A: {"x": _flat(0.9), "y": _flat(0.5), "z": _flat(0.1)},
+            B: {"x": _flat(0.8), "y": _flat(0.4), "z": _flat(0.05)},
+        }
+    )
+
+    result = concordance.compare(
+        rows, results.TRACK_TNEVAL, MEASURES, ranking_measure="completeness"
+    )
+
+    assert all(t.agrees for t in result.tensions)
+    assert "Ordering by" not in concordance.describe(result)

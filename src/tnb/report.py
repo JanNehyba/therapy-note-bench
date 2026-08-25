@@ -765,7 +765,12 @@ def write(rows: list[Row], *, docs_dir: Path | None = None, readme: Path | None 
         for track in COLUMNS
         if (
             found := concordance.to_json(
-                concordance.compare(rows, track, [key for key, _ in COLUMNS[track]])
+                concordance.compare(
+                    rows,
+                    track,
+                    [key for key, _ in COLUMNS[track]],
+                    ranking_measure=RANKING_MEASURES.get(track),
+                )
             )
         )
     }

@@ -68,6 +68,22 @@ class Dominance:
 
 
 @dataclass(frozen=True)
+class Tension:
+    """Two measures, and how much the ranking on one predicts the other."""
+
+    first: str
+    second: str
+    #: One per judge, so a near-zero correlation cannot be blamed on one of them.
+    rho_by_judge: dict[str, float | None]
+    n_systems: int
+
+    @property
+    def agrees(self) -> bool:
+        found = [rho for rho in self.rho_by_judge.values() if rho is not None]
+        return bool(found) and all(rho >= 0.5 for rho in found)
+
+
+@dataclass(frozen=True)
 class Comparison:
     """Everything two judges' tables say when read together."""
 
@@ -79,6 +95,14 @@ class Comparison:
     #: winners' list: it includes everything nobody has separated from the rest.
     undominated: list[str]
     n_systems: int
+    #: How the measures relate to each other, which is a different question from
+    #: how the judges relate to each other and just as necessary before reading
+    #: the ranking column as "the best model".
+    tensions: list[Tension] = field(default_factory=list)
+    #: The column the table is ordered by, if it has one. Named so the summary
+    #: can report the tensions involving it rather than the numerically most
+    #: extreme pair, which is often one nobody is reading as a ranking.
+    ranking_measure: str | None = None
 
     @property
     def any_ranking_support(self) -> bool:
@@ -141,6 +165,7 @@ def compare(
     *,
     judge_a: str = judge.DEFAULT_MODEL,
     judge_b: str = judge.SECOND_JUDGE,
+    ranking_measure: str | None = None,
 ) -> Comparison | None:
     """Read the panel's two judges' tables together, or None if either is absent.
 
@@ -197,9 +222,35 @@ def compare(
         if beats:
             dominance.append(Dominance(system=better, beats=sorted(beats)))
 
+    tensions = []
+    for index, first in enumerate(measures):
+        for second in measures[index + 1 :]:
+            rho_by_judge: dict[str, float | None] = {}
+            counted = 0
+            for judge_model, scores in by_judge.items():
+                pairs = [
+                    (scores[s][first], scores[s][second])
+                    for s in shared
+                    if first in scores.get(s, {}) and second in scores.get(s, {})
+                ]
+                counted = max(counted, len(pairs))
+                rho_by_judge[judge_model] = (
+                    spearman([a for a, _ in pairs], [b for _, b in pairs])
+                    if len(pairs) >= 2
+                    else None
+                )
+            if any(rho is not None for rho in rho_by_judge.values()):
+                tensions.append(
+                    Tension(
+                        first=first, second=second, rho_by_judge=rho_by_judge, n_systems=counted
+                    )
+                )
+
     return Comparison(
         judge_a=judge_a,
         judge_b=judge_b,
+        tensions=tensions,
+        ranking_measure=ranking_measure,
         measures=agreements,
         dominance=sorted(dominance, key=lambda d: (-len(d.beats), d.system)),
         undominated=sorted(set(shared) - dominated),
@@ -238,6 +289,38 @@ def describe(comparison: Comparison) -> str:
         f"by nobody. That is a result too, and it is the reason this page does not name a "
         f"single winner."
     )
+
+    # The reason there is no single winner, stated as the measurement rather
+    # than as a policy. Reported for the column the table is *ordered by*,
+    # because that is the one a reader is most likely to mistake for "quality".
+    if comparison.ranking_measure:
+        against = [
+            t
+            for t in comparison.tensions
+            if comparison.ranking_measure in (t.first, t.second) and not t.agrees
+        ]
+        for tension in against:
+            other = tension.second if tension.first == comparison.ranking_measure else tension.first
+            readings = ", ".join(
+                f"`{judge_model}` {'--' if rho is None else format(rho, '+.2f')}"
+                for judge_model, rho in sorted(tension.rho_by_judge.items())
+            )
+            # Whether the judges even agree that the two columns disagree is
+            # itself a finding, and picking the judge that tells the better
+            # story would be the thing this repository exists not to do.
+            found = [rho for rho in tension.rho_by_judge.values() if rho is not None]
+            split = len(found) > 1 and max(found) - min(found) >= 0.4
+            parts.append(
+                f"Ordering by {comparison.ranking_measure} says "
+                f"{'little' if not split else 'different things to the two judges'} about "
+                f"{other} ({readings})."
+                + (
+                    " The two judges disagree about whether those columns are related at "
+                    "all, so neither reading is this benchmark's answer."
+                    if split
+                    else ""
+                )
+            )
     return " ".join(parts)
 
 
@@ -248,6 +331,7 @@ def to_json(comparison: Comparison | None) -> dict | None:
     return {
         "judge_a": comparison.judge_a,
         "judge_b": comparison.judge_b,
+        "ranking_measure": comparison.ranking_measure,
         "n_systems": comparison.n_systems,
         "summary": describe(comparison),
         "measures": [
@@ -264,6 +348,19 @@ def to_json(comparison: Comparison | None) -> dict | None:
                 ),
             }
             for m in comparison.measures
+        ],
+        "tensions": [
+            {
+                "first": t.first,
+                "second": t.second,
+                "n_systems": t.n_systems,
+                "agrees": t.agrees,
+                "rho_by_judge": {
+                    judge_model: None if rho is None else round(rho, 4)
+                    for judge_model, rho in sorted(t.rho_by_judge.items())
+                },
+            }
+            for t in comparison.tensions
         ],
         "dominance": [{"system": d.system, "beats": d.beats} for d in comparison.dominance],
         "undominated": comparison.undominated,
