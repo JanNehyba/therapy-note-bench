@@ -253,18 +253,34 @@ def test_the_page_keeps_the_caveats_attached_to_the_numbers():
 
 def test_rendering_twice_produces_the_same_bytes(tmp_path):
     """A report that churns on every run makes its own diffs unreadable and
-    turns every workflow run into a commit."""
-    rows = [_scored("gemma4", 0.61)]
+    turns every workflow run into a commit.
+
+    Two judges rather than one, so the panels that only exist when there are
+    two -- the judge comparison, its bootstrap, its tie-breaking -- are in the
+    output being compared. Everything feeding them has to be ordered rather
+    than merely present. The README is compared too: it is a third artefact
+    written by the same call and it was not checked here.
+    """
+    rows = _two_judges()
     readme = tmp_path / "README.md"
-    readme.write_text("<!-- LEADERBOARD:BEGIN -->\nx\n<!-- LEADERBOARD:END -->\n", encoding="utf-8")
+    readme.write_text(
+        "<!-- LEADERBOARD:BEGIN -->"
+        + chr(10)
+        + "x"
+        + chr(10)
+        + "<!-- LEADERBOARD:END -->"
+        + chr(10),
+        encoding="utf-8",
+    )
+    docs = tmp_path / "docs"
 
-    report.write(rows, docs_dir=tmp_path / "docs", readme=readme)
-    first = (tmp_path / "docs" / "index.html").read_bytes()
-    first_json = (tmp_path / "docs" / "leaderboard.json").read_bytes()
+    report.write(rows, docs_dir=docs, readme=readme)
+    first = {p.name: p.read_bytes() for p in docs.iterdir()} | {"README": readme.read_bytes()}
 
-    report.write(rows, docs_dir=tmp_path / "docs", readme=readme)
-    assert (tmp_path / "docs" / "index.html").read_bytes() == first
-    assert (tmp_path / "docs" / "leaderboard.json").read_bytes() == first_json
+    report.write(rows, docs_dir=docs, readme=readme)
+    second = {p.name: p.read_bytes() for p in docs.iterdir()} | {"README": readme.read_bytes()}
+
+    assert first == second
 
 
 def test_the_json_is_the_only_thing_a_mirror_would_need():
@@ -594,26 +610,3 @@ def test_a_withdrawn_coverage_group_is_not_described_as_scored_by_nobody():
     assert "None" not in section and "null" not in section
     assert "generation coverage" in section
     assert "generation coverage" in page
-
-
-def test_rebuilding_the_same_rows_produces_the_same_bytes(tmp_path):
-    """A rebuild that moves bytes makes every diff unreadable.
-
-    Everything feeding the page has to be ordered rather than merely present:
-    the bootstrap is seeded, the tables sort deterministically, and ties break
-    on a name rather than on dictionary order.
-    """
-    rows = _two_judges()
-    docs = tmp_path / "docs"
-    readme = tmp_path / "README.md"
-    readme.write_text(
-        "# T\n\n<!-- LEADERBOARD:BEGIN -->\nx\n<!-- LEADERBOARD:END -->\n", encoding="utf-8"
-    )
-
-    report.write(rows, docs_dir=docs, readme=readme)
-    first = {p.name: p.read_bytes() for p in docs.iterdir()} | {"README": readme.read_bytes()}
-
-    report.write(rows, docs_dir=docs, readme=readme)
-    second = {p.name: p.read_bytes() for p in docs.iterdir()} | {"README": readme.read_bytes()}
-
-    assert first == second
