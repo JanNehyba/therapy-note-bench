@@ -47,20 +47,19 @@ distortion than a marked one.
 ## The ranking is a shape, not an order
 
 The two judges agree on where a model sits roughly and disagree on exactly
-where. Measured over the current rows: rank correlation +0.889 on completeness,
-+0.807 on conciseness, +0.706 on faithfulness — and 11 of 19 systems still land
-in a different position on completeness alone, 17 of 19 on faithfulness, with
-`kimi-k3` moving from 2nd to 12th.
+where. The rank correlations are high and most systems still land in a
+different position, on both tracks. The current figures are on the leaderboard,
+in the panel above the tables, where a run keeps them right; repeating them
+here would only guarantee that one of the two copies is wrong.
 
 **So the table supports "near the top" and "near the bottom". It does not
 support "ninth rather than tenth".** A comparison between two adjacent rows is
-not a result of this benchmark, and the page says so beside the tables rather
-than here.
+not a result of this benchmark.
 
 The one claim that survives is dominance: a system at least as good on *every*
 measure under *both* judges is better however a reader weights the measures.
-Twelve of nineteen systems are beaten outright by nobody, which is why no
-single winner is named.
+Most systems are beaten outright by nobody, which is why no single winner is
+named.
 
 **And it is not only two judges disagreeing — one judge disagrees with
 itself.** Gemini's thinking budget was raised from 128 to 256 tokens and all
