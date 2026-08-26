@@ -67,7 +67,7 @@ def _page(tmp_path: Path) -> str:
             concordance.compare(
                 rows,
                 results.TRACK_TNEVAL,
-                [key for key, _ in report.COLUMNS[results.TRACK_TNEVAL]],
+                report.COLUMNS[results.TRACK_TNEVAL],
                 ranking_measure=report.RANKING_MEASURES.get(results.TRACK_TNEVAL),
             )
         )
@@ -271,7 +271,7 @@ def _with_judges(tmp_path: Path) -> str:
             concordance.compare(
                 rows,
                 results.TRACK_TNEVAL,
-                [key for key, _ in report.COLUMNS[results.TRACK_TNEVAL]],
+                report.COLUMNS[results.TRACK_TNEVAL],
             )
         )
     }
@@ -353,9 +353,7 @@ def test_candidates_measured_at_different_settings_are_flagged(tmp_path):
     data.update(calibration=None, similarity_example=None, saturation=None, preference=None)
     data["concordance"] = {
         results.TRACK_TNEVAL: concordance.to_json(
-            concordance.compare(
-                rows, results.TRACK_TNEVAL, [k for k, _ in report.COLUMNS[results.TRACK_TNEVAL]]
-            )
+            concordance.compare(rows, results.TRACK_TNEVAL, report.COLUMNS[results.TRACK_TNEVAL])
         )
     }
 

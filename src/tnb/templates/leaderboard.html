@@ -1085,7 +1085,15 @@ function renderPreference(data) {
         <td>${e.detected ? '<strong>yes</strong>' : 'no'}</td>
       </tr>`).join('')}</tbody>
     </table></div>
-    ${data.effects.map(e => `<p class="note">${code(e.summary)}</p>`).join('')}`;
+    ${data.effects.map(e => `<p class="note">${code(e.summary)}</p>`).join('')}
+    ${(data.effects[0] && data.effects[0].neutral || []).length
+      ? `<p class="note">Measured against the ${data.effects[0].neutral.length} systems
+         neither judge's vendor wrote: ${data.effects[0].neutral.map(code).join(', ')}. Named
+         rather than counted, because the estimate is only as good as this group — two of
+         these were the judges' own vendors under a name their model families did not share
+         (<code>gemma4</code> is Google's, <code>gpt-oss-120b</code> is OpenAI's), and both
+         pulled the answer toward zero.</p>`
+      : ''}`;
 }
 
 // Every judge that was tried, against the two therapists. The evidence for the

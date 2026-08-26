@@ -691,6 +691,10 @@ def cmd_preference(args: argparse.Namespace) -> int:
                 "detected": effect.detected,
                 "n_own": effect.n_own,
                 "n_neutral": effect.n_neutral,
+                # By name, not only counted. The comparison group is what the
+                # whole estimate is measured against, and a reader who cannot
+                # see who is in it cannot see that a judge's own vendor is.
+                "neutral": list(effect.neutral),
                 "n_sessions": effect.n_sessions,
                 "summary": preference.describe(effect, args.measure),
             }

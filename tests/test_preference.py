@@ -27,18 +27,34 @@ def _scores(values: dict[str, float]) -> dict[str, dict[str, float]]:
 @pytest.mark.parametrize(
     "system,family",
     [
-        ("gemini-3.7-flash", "gemini"),
-        ("google/gemini-3.1-pro-preview", "gemini"),
-        ("google_gemini-3.7-flash", "gemini"),
-        ("gpt-5.6-luna", "gpt-5.6"),
-        ("gpt-5.6-terra", "gpt-5.6"),
+        ("gemini-3.7-flash", "google"),
+        ("google/gemini-3.1-pro-preview", "google"),
+        ("google_gemini-3.7-flash", "google"),
+        ("gemma4", "google"),
+        ("gpt-5.6-luna", "openai"),
+        ("gpt-5.6-terra", "openai"),
+        ("gpt-oss-120b", "openai"),
         ("kimi-k3", None),
-        ("gpt-oss-120b", None),
+        ("glm-5.2", None),
         ("therapist", None),
     ],
 )
-def test_a_system_is_placed_in_the_right_family(system, family):
-    """`gpt-oss-120b` is the trap: an OpenAI-named model nobody at OpenAI serves."""
+def test_a_system_is_placed_with_the_vendor_that_built_it(system, family):
+    """The two traps run the other way from how this test first read them.
+
+    It used to assert `gpt-oss-120b -> None`, on the argument that it is "an
+    OpenAI-named model nobody at OpenAI serves". Who serves the weights is not
+    the question. Self-preference is about the vendor that *built* the text's
+    generator, and both `gpt-oss-120b` and `gemma4` were built by a judge's
+    vendor -- OpenAI and Google DeepMind respectively.
+
+    Whether the effect actually carries across an open-weight sibling is an
+    open question. Leaving them in the comparison group answered it "no" with
+    no evidence, in the one group the whole estimate is measured against, and
+    both published effects read "not detected" with an interval near zero.
+    Excluding them makes the panel say less, which is the direction an
+    unanswered question should move a claim.
+    """
     assert preference.family_of(system) == family
 
 
@@ -106,7 +122,7 @@ def test_the_other_judge_is_measured_with_the_sign_the_right_way_round():
     effects = {e.judge: e for e in preference.compare(by_judge, judge_a=A, judge_b=B)}
 
     assert effects[B].estimate == pytest.approx(0.12)
-    assert effects[B].family == "gpt-5.6"
+    assert effects[B].family == "openai"
     assert effects[A].estimate == pytest.approx(0.0)
 
 
@@ -294,3 +310,41 @@ def test_too_few_shared_conversations_reports_nothing_at_all():
         preference.compare(by_judge, judge_a="gemini-3.1-pro-preview", judge_b="gpt-5.6-terra")
         == []
     )
+
+
+def test_the_comparison_group_is_named_not_only_counted():
+    """The estimate is only as good as this group, and a count cannot be checked.
+
+    A reader who sees "against 14 neutral systems" cannot see that two of the
+    fourteen were the judges' own vendors. A reader who sees the names can.
+    """
+    by_judge = {
+        A: _scores({"gemini-3.7-flash": 0.68, "kimi-k3": 0.55, "glm-5.2": 0.50}),
+        B: _scores({"gemini-3.7-flash": 0.60, "kimi-k3": 0.55, "glm-5.2": 0.50}),
+    }
+
+    effect = next(e for e in preference.compare(by_judge, judge_a=A, judge_b=B) if e.judge == A)
+
+    assert effect.neutral == ("glm-5.2", "kimi-k3")
+    assert effect.n_neutral == len(effect.neutral)
+
+
+def test_a_judges_own_open_weight_sibling_is_not_its_control_group():
+    """The defect, put back as data: `gemma4` is Google's, like judge A.
+
+    A marks every Google model 0.08 above B. With `gemma4` counted as neutral
+    that rise appears on both sides of the subtraction and the panel reports a
+    fraction of the real effect -- here 0.04 instead of 0.08 -- as "not
+    detected".
+    """
+    by_judge = {
+        A: _scores({"gemini-3.7-flash": 0.68, "gemma4": 0.63, "kimi-k3": 0.55}),
+        B: _scores({"gemini-3.7-flash": 0.60, "gemma4": 0.55, "kimi-k3": 0.55}),
+    }
+
+    effect = next(e for e in preference.compare(by_judge, judge_a=A, judge_b=B) if e.judge == A)
+
+    assert "gemma4" not in effect.neutral
+    assert effect.neutral == ("kimi-k3",)
+    assert effect.estimate == pytest.approx(0.08)
+    assert effect.detected is True

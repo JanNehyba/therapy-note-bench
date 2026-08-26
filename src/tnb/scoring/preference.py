@@ -65,14 +65,27 @@ NEGLIGIBLE = 0.005
 #: Which vendor a system belongs to, for "its own family". Matched on the model
 #: id because that is what a row carries; the provider is not enough, since
 #: e-INFRA serves models from half a dozen labs.
+#:
+#: Keyed on the **vendor**, not on the judge's own name. Keying it on the name
+#: put two of the judges' own vendors in the comparison group: `gemma4` is
+#: Google's, like the Gemini judge, and `gpt-oss-120b` is OpenAI's, like the
+#: GPT judge. Both then pulled the estimate toward zero, and both published
+#: results read "not detected" with an interval sitting near it -- so the
+#: panel's conclusion could have been an artefact of its own control group.
 FAMILY_PREFIXES = {
-    "gemini": ("gemini", "google/gemini", "google_gemini"),
-    "gpt-5.6": ("gpt-5.6",),
+    "google": ("gemini", "gemma", "google/", "google_"),
+    "openai": ("gpt-", "o1-", "o3-", "o4-", "openai/", "openai_"),
 }
 
 
 def family_of(system_id: str) -> str | None:
-    """The vendor family of a system, or None when it belongs to neither judge."""
+    """The vendor family of a system, or None when it belongs to neither judge.
+
+    `None` is the answer that puts a system in the comparison group, so it is
+    the answer that has to be earned. A vendor this table does not list reads
+    as neutral, silently, and a silent mistake here moves the estimate rather
+    than raising anything -- which is what `unfamilied` exists to surface.
+    """
     name = system_id.lower()
     for family, prefixes in FAMILY_PREFIXES.items():
         if any(name.startswith(prefix) for prefix in prefixes):
@@ -103,6 +116,13 @@ class Effect:
     #: Systems neither judge's family wrote, which is what the effect is
     #: measured against.
     n_neutral: int = 0
+
+    #: And which they were, by name. A count cannot be checked; a list can.
+    #: `gemma4` sat in this group for the Gemini judge and `gpt-oss-120b` for
+    #: the GPT one, because the vendor table was keyed on the judges' own model
+    #: names. Naming the group is how a reader sees that before quoting the
+    #: number, and how a test sees it before a reader does.
+    neutral: tuple[str, ...] = ()
 
     @property
     def detected(self) -> bool:
@@ -217,6 +237,7 @@ def compare(
                 n_own=len(own),
                 n_others=len(neutral),
                 n_neutral=len(neutral),
+                neutral=tuple(neutral),
                 n_sessions=len(shared),
             )
         )

@@ -29,17 +29,30 @@ score. That is the point.
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 
 from tnb import judge
 from tnb.results import Row
 from tnb.scoring.calibration import spearman
 
-#: A gap below this is not a difference in the units the leaderboard prints.
-#: Completeness is published to three decimals and faithfulness to two, so two
-#: systems whose scores round to the same printed number must not be ranked
-#: against each other by digits the reader cannot see.
-TIES_WITHIN = 0.0005
+
+def as_printed(value: float, decimals: int) -> str:
+    """The number as the table shows it. The unit every claim here is made in.
+
+    This replaced a fixed tolerance of 0.0005. That number was chosen for a
+    three-decimal column, and it failed at both ends. Faithfulness prints two
+    decimals, where half a digit is 0.005, so `glm-5` 4.96 and `gpt-5.6-sol`
+    4.955 print the same and were ranked against each other -- fifteen such
+    pairs across the tables. And raising it would not have fixed it: 0.9742 and
+    0.9735 are 0.0007 apart, *above* any three-decimal tolerance, and both
+    print 0.974.
+
+    Printed equality is also transitive, which a tolerance is not. Three
+    systems each a fifth of a digit from the next used to be one tie though the
+    ends were further apart than the tolerance allowed.
+    """
+    return f"{value:.{decimals}f}"
 
 
 @dataclass(frozen=True)
@@ -140,7 +153,7 @@ def _scores_by_judge(rows: list[Row], track: str) -> dict[str, dict[str, dict[st
 
 
 def _positions(
-    scores: dict[str, dict[str, float]], measure: str, systems: list[str]
+    scores: dict[str, dict[str, float]], measure: str, systems: list[str], decimals: int
 ) -> dict[str, int]:
     """1-based rank per system, best first, ties sharing the better position.
 
@@ -150,17 +163,16 @@ def _positions(
     judge part-way through a run has a smaller table, so the error would grow
     exactly when a reader is most likely to be watching.
 
-    Ties within `TIES_WITHIN` share a position. The rule chains: three systems
-    each a fifth of a printed digit from the next are all tied, though the ends
-    are further apart than the tolerance. That is generous in the direction of
-    claiming *less* movement, which is the safe direction for this panel.
+    Two systems share a position when they print the same number. Every claim
+    this panel makes is one a reader checks against the table, so the table's
+    own precision is the unit it has to be made in.
     """
     have = [(s, scores[s][measure]) for s in systems if measure in scores.get(s, {})]
     have.sort(key=lambda pair: (-pair[1], pair[0]))
 
     positions: dict[str, int] = {}
     for index, (system, value) in enumerate(have):
-        if index and abs(value - have[index - 1][1]) <= TIES_WITHIN:
+        if index and as_printed(value, decimals) == as_printed(have[index - 1][1], decimals):
             positions[system] = positions[have[index - 1][0]]
         else:
             positions[system] = index + 1
@@ -168,7 +180,10 @@ def _positions(
 
 
 def _dominates(
-    better: str, worse: str, by_judge: dict[str, dict[str, dict[str, float]]], measures: list[str]
+    better: str,
+    worse: str,
+    by_judge: dict[str, dict[str, dict[str, float]]],
+    decimals: dict[str, int],
 ) -> bool:
     """Whether `better` is at least as good on every measure under every judge.
 
@@ -176,25 +191,34 @@ def _dominates(
     claim survive any weighting a reader might apply. A measure missing for
     either system under either judge makes the comparison unavailable rather
     than favourable: an absent number is not a low one.
+
+    Compared as printed, for the same reason as `_positions`: "beaten outright"
+    is a sentence about the table, and a reader who checks it sees the printed
+    digits and nothing else.
     """
     strictly_better_somewhere = False
     for scores in by_judge.values():
-        for measure in measures:
+        for measure, places in decimals.items():
             first = scores.get(better, {}).get(measure)
             second = scores.get(worse, {}).get(measure)
             if first is None or second is None:
                 return False
-            if first < second - TIES_WITHIN:
+            # Equality is decided by the printed form and order by the value.
+            # Comparing the strings for order would read "10.00" as below
+            # "4.96", which no measure here can produce today and every measure
+            # here could produce tomorrow.
+            if as_printed(first, places) == as_printed(second, places):
+                continue
+            if first < second:
                 return False
-            if first > second + TIES_WITHIN:
-                strictly_better_somewhere = True
+            strictly_better_somewhere = True
     return strictly_better_somewhere
 
 
 def compare(
     rows: list[Row],
     track: str,
-    measures: list[str],
+    measures: Sequence[tuple[str, int]],
     *,
     judge_a: str = judge.DEFAULT_MODEL,
     judge_b: str = judge.SECOND_JUDGE,
@@ -209,6 +233,12 @@ def compare(
     they came back in would be a choice made silently. The panel is declared in
     `tnb.judge`; this reports on the panel.
     """
+    #: Each measure with the number of decimals the table prints it to. Passed
+    #: in rather than looked up: `report.COLUMNS` owns the precision, and a
+    #: second copy of it here would be a second thing to keep in step.
+    places = dict(measures)
+    measures = [name for name, _ in measures]
+
     by_judge = _scores_by_judge(rows, track)
     if judge_a not in by_judge or judge_b not in by_judge:
         return None
@@ -237,8 +267,8 @@ def compare(
         if len(pairs) < 2:
             continue
 
-        rank_a = _positions(by_judge[judge_a], measure, shared)
-        rank_b = _positions(by_judge[judge_b], measure, shared)
+        rank_a = _positions(by_judge[judge_a], measure, shared, places[measure])
+        rank_b = _positions(by_judge[judge_b], measure, shared, places[measure])
         both = [s for s in shared if s in rank_a and s in rank_b]
         moves = {s: abs(rank_a[s] - rank_b[s]) for s in both}
         furthest = max(moves, key=lambda s: (moves[s], s)) if moves else None
@@ -260,7 +290,7 @@ def compare(
     dominance = []
     dominated = set()
     for better in shared:
-        beats = [w for w in shared if w != better and _dominates(better, w, by_judge, measures)]
+        beats = [w for w in shared if w != better and _dominates(better, w, by_judge, places)]
         dominated.update(beats)
         if beats:
             dominance.append(Dominance(system=better, beats=sorted(beats)))

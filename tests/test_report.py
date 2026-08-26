@@ -586,7 +586,7 @@ def test_the_readme_says_how_far_the_two_judges_agree(tmp_path):
             concordance.compare(
                 rows,
                 results.TRACK_TNEVAL,
-                [key for key, _ in report.COLUMNS[results.TRACK_TNEVAL]],
+                report.COLUMNS[results.TRACK_TNEVAL],
             )
         )
     }

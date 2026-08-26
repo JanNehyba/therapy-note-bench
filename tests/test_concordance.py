@@ -8,7 +8,11 @@ from tnb import results
 from tnb.results import Metrics, Row
 from tnb.scoring import concordance
 
-MEASURES = ["completeness", "conciseness", "faithfulness"]
+#: Each measure with the decimals the leaderboard prints it to -- the same
+#: shape `report.COLUMNS` holds, because the panel's claims are made in the
+#: units the reader sees. Faithfulness prints two, which is where the old fixed
+#: tolerance failed.
+MEASURES = [("completeness", 3), ("conciseness", 3), ("faithfulness", 2)]
 
 
 def _row(system: str, judge_model: str, **headline) -> Row:
@@ -306,7 +310,7 @@ def test_a_measure_no_judge_decides_is_left_out_of_the_agreement():
     result = concordance.compare(
         rows,
         results.TRACK_ICARE,
-        ["rouge_l", "trace"],
+        [("rouge_l", 3), ("trace", 2)],
         judge_measures=("trace",),
     )
 
@@ -336,7 +340,7 @@ def test_the_columns_are_still_compared_with_each_other_across_all_of_them():
         object.__setattr__(row, "track", results.TRACK_ICARE)
 
     result = concordance.compare(
-        rows, results.TRACK_ICARE, ["rouge_l", "trace"], judge_measures=("trace",)
+        rows, results.TRACK_ICARE, [("rouge_l", 3), ("trace", 2)], judge_measures=("trace",)
     )
 
     tension = next(t for t in result.tensions if {t.first, t.second} == {"rouge_l", "trace"})
@@ -357,7 +361,7 @@ def test_one_judged_measure_is_not_described_as_the_best_and_the_worst():
         object.__setattr__(row, "track", results.TRACK_ICARE)
 
     sentence = concordance.describe(
-        concordance.compare(rows, results.TRACK_ICARE, ["trace"], judge_measures=("trace",))
+        concordance.compare(rows, results.TRACK_ICARE, [("trace", 2)], judge_measures=("trace",))
     )
 
     assert sentence.count("trace") == 1
@@ -416,3 +420,76 @@ def test_both_judges_rank_the_same_field():
     assert result.n_systems == 2, "x and y"
     completeness = next(m for m in result.measures if m.measure == "completeness")
     assert completeness.moved == 0, "`extra` must not push `y` down a place"
+
+
+def test_two_systems_that_print_the_same_number_are_not_ranked_against_each_other():
+    """The rule is "tied iff they print the same", not a fixed tolerance.
+
+    The tolerance was 0.0005, chosen for a three-decimal column. Faithfulness
+    prints two, where half a digit is ten times that: `glm-5` 4.96 and
+    `gpt-5.6-sol` 4.955 both print **4.96** and were ranked against each other
+    by a digit the table does not show. Fifteen such pairs stood across the
+    published tables.
+    """
+    rows = _panel(
+        {
+            A: {"glm-5": _flat(4.96), "sol": _flat(4.955)},
+            B: {"glm-5": _flat(4.955), "sol": _flat(4.96)},
+        }
+    )
+
+    result = concordance.compare(rows, results.TRACK_TNEVAL, MEASURES)
+
+    faith = next(m for m in result.measures if m.measure == "faithfulness")
+    assert faith.moved == 0, "both judges print 4.96 for both systems"
+    assert faith.furthest is None
+
+
+def test_raising_the_tolerance_would_not_have_been_the_fix():
+    """A three-decimal column fails the same way. 0.9742 and 0.9735 are 0.0007
+    apart -- above any tolerance small enough to be honest -- and both print
+    0.974."""
+    rows = _panel(
+        {
+            A: {"x": _flat(0.9742), "y": _flat(0.9735)},
+            B: {"x": _flat(0.9735), "y": _flat(0.9742)},
+        }
+    )
+
+    result = concordance.compare(rows, results.TRACK_TNEVAL, MEASURES)
+
+    assert all(m.moved == 0 for m in result.measures)
+
+
+def test_a_difference_the_table_does_show_is_still_a_difference():
+    """The guard must not swallow the movement it exists to report."""
+    rows = _panel(
+        {
+            A: {"x": _flat(0.900), "y": _flat(0.800)},
+            B: {"x": _flat(0.800), "y": _flat(0.900)},
+        }
+    )
+
+    result = concordance.compare(rows, results.TRACK_TNEVAL, MEASURES)
+
+    assert all(m.moved == 2 for m in result.measures)
+
+
+def test_beaten_outright_is_a_claim_about_the_printed_table():
+    """A reader checking "beaten outright by nobody" sees the printed digits
+    and nothing else, so a lead that rounds away is not a lead."""
+    # 0.0007 apart -- *above* the tolerance this replaced, so the old rule
+    # called it a lead -- and both print 0.974 on the three-decimal columns and
+    # 0.97 on the two-decimal one. `y` leads everywhere and the table shows it
+    # nowhere.
+    rows = _panel(
+        {
+            A: {"x": _flat(0.9735), "y": _flat(0.9742)},
+            B: {"x": _flat(0.9735), "y": _flat(0.9742)},
+        }
+    )
+
+    result = concordance.compare(rows, results.TRACK_TNEVAL, MEASURES)
+
+    assert result.dominance == []
+    assert sorted(result.undominated) == ["x", "y"]

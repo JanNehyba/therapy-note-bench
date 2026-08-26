@@ -1000,7 +1000,7 @@ def write(rows: list[Row], *, docs_dir: Path | None = None, readme: Path | None 
                 concordance.compare(
                     drawn,
                     track,
-                    [key for key, _ in COLUMNS[track]],
+                    COLUMNS[track],
                     judge_measures=JUDGE_MEASURES.get(track),
                     ranking_measure=RANKING_MEASURES.get(track),
                 )
