@@ -406,3 +406,13 @@ def test_two_judge_settings_in_one_cache_are_not_averaged_together(tmp_path):
     assert sorted(session for _system, session in answers) == ["1", "2"], "the larger set"
     assert answers.chosen_fingerprint["thinking_budget"] == 256
     assert sum(answers.other_fingerprints.values()) == 1, "and it says what it left out"
+
+
+def test_two_loads_do_not_share_their_bookkeeping(tmp_path):
+    """`tnb preference` loads both judges in one process. A mutable attribute
+    on the class rather than the instance would have them report each other's
+    ignored fingerprints."""
+    first = saturation.load_answers(tmp_path)
+    first.other_fingerprints["only-mine"] = 1
+
+    assert saturation.load_answers(tmp_path).other_fingerprints == {}

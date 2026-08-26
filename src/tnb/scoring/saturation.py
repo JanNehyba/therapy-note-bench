@@ -128,12 +128,18 @@ class Answers(defaultdict):
     was in the cache and left out.
     """
 
-    #: The `judge_fingerprint` every answer in here shares.
-    chosen_fingerprint: dict | None = None
-    #: Fingerprints found in the cache and not used, with how many answers each
-    #: had. Non-empty during a re-scoring run, and the caller says so rather
-    #: than silently reporting a subset.
-    other_fingerprints: dict[str, int] = {}  # noqa: RUF012
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        #: The `judge_fingerprint` every answer in here shares.
+        self.chosen_fingerprint: dict | None = None
+        #: Fingerprints found in the cache and not used, with how many answers
+        #: each had. Non-empty during a re-scoring run, and the caller says so
+        #: rather than silently reporting a subset.
+        #:
+        #: Per instance, not on the class: a mutable class attribute is shared
+        #: by every `Answers` ever made, and two judges are loaded in one
+        #: process by `tnb preference`.
+        self.other_fingerprints: dict[str, int] = {}
 
 
 def load_answers(root: Path | None = None, judge_model: str = judge.DEFAULT_MODEL) -> Answers:
