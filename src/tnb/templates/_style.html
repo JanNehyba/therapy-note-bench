@@ -2,10 +2,16 @@
   :root {
     --bg: #fbfbfa; --fg: #1a1a19; --muted: #6b6b66; --line: #e2e2dd;
     --card: #ffffff; --accent: #2f6f4f; --warn: #8a5a00; --chip: #f0f0eb;
-    /* Verdict colours. Chosen with the palette validator rather than by eye:
-       all three clear the chroma floor, the CVD separation threshold and 3:1
-       contrast on this surface. Every mark also carries a word, so colour is
-       never the only channel. */
+    /* Verdict colours. Chosen with the palette validator rather than by eye.
+       The three that signal -- discriminating, saturated, unreachable -- clear
+       the lightness band, the chroma floor, the CVD separation threshold and
+       3:1 contrast, on both surfaces. Re-checked 2026-08-26.
+
+       `--v-mixed` is grey on purpose and fails the chroma floor on purpose:
+       its verdict is "partly, weakly", and a fourth hue would make the neutral
+       case look like a fourth finding. Run the validator on the three, not on
+       the four. Every mark also carries a word, so colour is never the only
+       channel either way. */
     --v-discriminating: #00806a; --v-saturated: #c05a10; --v-unreachable: #4a4fb8;
     --v-mixed: #7d8a85;
   }
