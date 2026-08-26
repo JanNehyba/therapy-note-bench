@@ -263,3 +263,31 @@ def test_no_html_entity_survives_into_the_briefing_as_text():
     visible = re.sub(r"<[^>]+>", " ", prose)
 
     assert not re.findall(r"&amp;[a-z]+;", visible), "an entity was escaped and printed"
+
+
+def test_the_briefing_reports_saturation_from_the_published_analysis(brief_html, data):
+    """Whether a benchmark still measures anything is the first question anybody
+    who has watched one die will ask, and the counts were published before the
+    document said a word about them."""
+    saturation = data.saturation[figures.JUDGE_A]
+    counts = saturation["verdict_counts"]
+    total = len(saturation["criteria"])
+
+    for verdict in ("saturated", "unreachable", "discriminating"):
+        assert f"{counts[verdict]} of {total}" in brief_html, f"{verdict} is not reported"
+
+    trace = {}
+    for judge in (figures.JUDGE_A, figures.JUDGE_B):
+        values = [
+            row["headline"]["trace"]
+            for row in data.tables[("icare", judge)]["rows"]
+            if row["headline"].get("trace") is not None
+        ]
+        trace[judge] = (min(values), max(values))
+        assert f"{min(values):.2f}" in brief_html and f"{max(values):.2f}" in brief_html
+
+    # The claim rests on the range being small, so the fixture assumption is
+    # asserted rather than assumed: if a future model breaks out of it, this
+    # fails and the paragraph gets rewritten instead of quietly going wrong.
+    for low, high in trace.values():
+        assert (high - low) / 4 < 0.25, "TRACE has more room than the paragraph says"

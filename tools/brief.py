@@ -375,6 +375,103 @@ def what_it_means(data: Data) -> str:
 """
 
 
+def how_much_room_is_left(data: Data) -> str:
+    """Is the benchmark still measuring anything, and for how much longer.
+
+    The question anybody who has watched a benchmark die asks first. It is
+    answered per criterion rather than in aggregate, because a benchmark does
+    not saturate evenly -- three of these twenty-three criteria are already
+    free points and two have never been met by anyone, human included.
+    """
+    saturation = data.saturation.get(JUDGE_A) or {}
+    counts = saturation.get("verdict_counts") or {}
+    total = len(saturation.get("criteria") or []) or 23
+    free = counts.get("saturated", 0)
+    dead = counts.get("unreachable", 0)
+    live = counts.get("discriminating", 0)
+    partly = counts.get("mixed", 0)
+    reachable = (total - dead) / total
+
+    table = data.tables[("tneval-soap", JUDGE_A)]
+    current = [
+        row["headline"]["completeness"] for row in table["rows"] if row["system_type"] == "model"
+    ]
+    older = [
+        row["headline"]["completeness"]
+        for row in table["rows"]
+        if row["system_type"] == "reference-model"
+    ]
+    best = max(current)
+
+    trace = {}
+    for judge in (JUDGE_A, JUDGE_B):
+        values = [
+            row["headline"]["trace"]
+            for row in data.tables[("icare", judge)]["rows"]
+            if row["headline"].get("trace") is not None
+        ]
+        trace[judge] = (min(values), max(values))
+
+    rows = "".join(
+        f"<tr><td>{label}</td><td class='num'>{count} of {total}</td><td>{meaning}</td></tr>"
+        for label, count, meaning in (
+            (
+                "Every model already does it",
+                free,
+                "Free points. They raise every score by the same amount and separate nobody.",
+            ),
+            (
+                "Nobody does it, the therapist included",
+                dead,
+                "Dead. These transcripts do not contain the answer, so the criterion "
+                "measures the corpus rather than the model.",
+            ),
+            ("Still separates models", live, "Where the benchmark is doing its job."),
+            ("Partly", partly, "Separates some models and not others."),
+        )
+    )
+
+    return f"""
+  <h2 class="page-break">How much room is left</h2>
+  <p>A benchmark that everything passes has stopped measuring. This one has not, and
+     it has not evenly: the twenty-three rubric criteria are in four different states
+     at once.</p>
+  <table>
+    <thead><tr><th>Criterion</th><th class="num">How many</th><th>What that means</th></tr></thead>
+    <tbody>{rows}</tbody>
+  </table>
+  <p>Strip out the {dead} nobody reaches and the most a model could score is
+     {reachable:.2f}. <strong>The best model here reaches {best:.3f}, which is
+     {best / reachable:.0%} of that.</strong> There is room.</p>
+  <p>How fast it is being used up: the two 2025 models the source paper benchmarked
+     score {min(older):.3f} and {max(older):.3f}; the {len(current)} current ones span
+     {min(current):.3f} to {best:.3f}. <strong>One model generation moved the top of
+     the table by {best - max(older):+.3f}.</strong> Two or three more at that rate and
+     the reachable part of this rubric is exhausted &mdash; which is a reason to record
+     what the corpus and the protocol are now, not a reason to trust the ranking more.</p>
+
+  <h3>The other track&rsquo;s judge-scored measure is nearly out of room</h3>
+  <p>TRACE rates five dimensions from 1 to 5. Under one judge all {len(current)} models
+     land between {trace[JUDGE_A][0]:.2f} and {trace[JUDGE_A][1]:.2f} &mdash;
+     {(trace[JUDGE_A][1] - trace[JUDGE_A][0]) / 4:.0%} of the scale. Under the other,
+     {trace[JUDGE_B][0]:.2f} to {trace[JUDGE_B][1]:.2f}, which is
+     {(trace[JUDGE_B][1] - trace[JUDGE_B][0]) / 4:.0%}. The two judges&rsquo; orderings
+     correlate at +0.83 and place 11 of 16 systems differently anyway.</p>
+  <p><strong>What to do with that.</strong> A measure where every model scores within a
+     few percent of every other is not evidence that the models are equally good; it is
+     evidence that the measure is running out. That the two judges disagree about how
+     much room is left &mdash; 6% against 13% &mdash; is a fact about the judges, and it
+     is why one judge is not enough to notice this happening. If you are building an evaluation, the
+     per-criterion breakdown is the thing to watch &mdash; an aggregate stays healthy
+     for a long time after the parts of it have died.</p>
+  <p class="note">Computed by a paired bootstrap over the conversations every system was
+     scored on, published as <code>docs/saturation-&lt;judge&gt;.json</code> and drawn in
+     full on the methods page. TRACE has no human anchor at all: unlike the rubric, no
+     therapist ever rated these notes on it, and it is labelled that way wherever it
+     appears.</p>
+"""
+
+
 def what_it_does_not_mean(data: Data) -> str:
     return f"""
   <h2 class="page-break">What these numbers are not</h2>
@@ -398,7 +495,10 @@ def what_it_does_not_mean(data: Data) -> str:
         figure_block(
             "coverage-against-invention.svg",
             "Completeness against factual accuracy, one panel per judge. The two judges do not "
-            "agree about whether covering more of a checklist goes with inventing more.",
+            "agree about whether covering more of a checklist goes with inventing more. Only "
+            "the two ends are named &mdash; nineteen labels in a panel this size collide, and "
+            "the figure is about the contrast between the judges rather than about any one "
+            "model. Every system is named in the chart above.",
         )
     }
   <p class="note">Neither track measures whether a note is clinically useful, safe to
@@ -456,6 +556,7 @@ def render(data: Data) -> str:
         + what_was_measured(data)
         + the_judges(data)
         + what_it_means(data)
+        + how_much_room_is_left(data)
         + what_it_does_not_mean(data)
         + how_to_check(data)
         + "\n</main>\n</body>\n</html>\n"

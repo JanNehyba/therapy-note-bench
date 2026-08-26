@@ -525,7 +525,11 @@ def figure_coverage_against_invention(data: Data) -> str:
             "Each dot is one system. Horizontal: Completeness. Vertical: Faithfulness. "
             "The dashed line is least squares, drawn rather than described.",
         )
-        + f'\n<text class="value" x="14" y="{top - 12}">Faithfulness</text>\n'
+        # Rotated along the axis it labels. Written flat at x=14 it shared a
+        # line with the first panel's subtitle at x=58, and the two printed on
+        # top of each other -- plain in the PDF, invisible in the source.
+        + f'\n<text class="value" x="{-(top + panel_h / 2):.0f}" y="16" '
+        + 'transform="rotate(-90)" text-anchor="middle">Faithfulness</text>\n'
         + "\n".join(panels)
         + "\n"
         + footnote(
