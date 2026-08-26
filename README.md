@@ -37,7 +37,7 @@ Full version, with per-section detail, the reference systems and the papers' own
 published numbers: **<https://jannehyba.github.io/therapy-note-bench/>**
 
 <!-- LEADERBOARD:BEGIN -->
-**TN-Eval SOAP · AnnoMI conversations** — scored by gemini-2.5-pro
+**TN-Eval SOAP · AnnoMI conversations** — scored by gemini-2.5-pro — measured by harness `0.1.0`, whose columns may not mean what the newer tables' columns mean
 
 | Model | Completeness (0-1) | Conciseness (0-1) | Faithfulness (1-5) | Notes | Scored |
 |---|---|---|---|---|---|
@@ -58,33 +58,33 @@ published numbers: **<https://jannehyba.github.io/therapy-note-bench/>**
 - **Conciseness** (0-1) — Fraction of the note's sentences that fit at least one rubric item. 1.00 means nothing is off-topic; it does not mean the note is short.
 - **Faithfulness** (1-5) — Whether the note contradicts the transcript, rated 1 to 5, where 5 is no inaccuracies. TN-Eval's protocol has no criterion-based version of this one, so it stays a Likert scale. A different scale from the two columns beside it, and a weak one: TN-Eval measured Krippendorff's alpha of 0.18 between trained therapists on this rating. Read it as a flag for gross invention, not as a ranking.
 
-**TN-Eval SOAP · AnnoMI conversations** — scored by gemini-3.1-pro-preview
+**TN-Eval SOAP · AnnoMI conversations** — scored by gemini-3.1-pro-preview (max_output_tokens 288, temperature 0, thinking_budget 256)
 
 | Model | Provider | Completeness (0-1) | Conciseness (0-1) | Faithfulness (1-5) | Notes | Scored |
 |---|---|---|---|---|---|---|
-| `kimi-k3` | einfra | 0.525 | 0.835 | 5.00 | 50/50 | 50 |
-| `qwen3.5-int4` | einfra | 0.518 | 0.809 | 4.97 | 50/50 | 50 |
-| `google_gemini-3.1-pro-preview` | vertex | 0.514 | 0.822 | 4.99 | 50/50 | 50 |
-| `google_gemini-3.7-flash` | vertex | 0.508 | 0.836 | 5.00 | 50/50 | 50 |
-| `qwen3.5-122b` | einfra | 0.502 | 0.785 | 4.82 | 50/50 | 50 |
-| `gpt-5.6-sol` | openai | 0.488 | 0.828 | 4.96 | 50/50 | 50 |
-| `glm-5` | einfra | 0.482 | 0.807 | 4.97 | 50/50 | 50 |
-| `glm-5.2` | einfra | 0.479 | 0.828 | 4.96 | 50/50 | 50 |
-| `gpt-5.6-terra` | openai | 0.476 | 0.827 | 4.96 | 50/50 | 50 |
-| `deepseek-v4-flash-thinking` | einfra | 0.467 | 0.831 | 4.87 | 50/50 | 50 |
-| `gpt-oss-120b` | einfra | 0.465 | 0.783 | 4.35 | 42/50 (8 unusable) | 42 |
-| `gpt-5.6-luna` | openai | 0.462 | 0.837 | 4.96 | 50/50 | 50 |
-| `qwen3.8-27b` | einfra | 0.458 | 0.768 | 4.92 | 50/50 | 50 |
-| `gemma4` | einfra | 0.454 | 0.857 | 4.96 | 50/50 | 50 |
-| `mistral-medium-3.5` | einfra | 0.448 | 0.857 | 4.91 | 50/50 | 50 |
-| `deepseek-v4-flash` | einfra | 0.431 | 0.881 | 4.88 | 50/50 | 50 |
+| `kimi-k3` | einfra | 0.553 | 0.886 | 4.99 | 50/50 | 50 |
+| `qwen3.5-int4` | einfra | 0.536 | 0.847 | 4.92 | 50/50 | 50 |
+| `google_gemini-3.1-pro-preview` | vertex | 0.530 | 0.873 | 4.97 | 50/50 | 50 |
+| `google_gemini-3.7-flash` | vertex | 0.526 | 0.875 | 4.98 | 50/50 | 50 |
+| `qwen3.5-122b` | einfra | 0.526 | 0.814 | 4.78 | 50/50 | 50 |
+| `glm-5` | einfra | 0.504 | 0.860 | 4.96 | 50/50 | 50 |
+| `glm-5.2` | einfra | 0.500 | 0.873 | 4.97 | 50/50 | 50 |
+| `gpt-5.6-sol` | openai | 0.498 | 0.882 | 4.96 | 50/50 | 50 |
+| `gpt-5.6-terra` | openai | 0.496 | 0.888 | 5.00 | 50/50 | 50 |
+| `gpt-oss-120b` | einfra | 0.487 | 0.826 | 4.28 | 42/50 (8 unusable) | 42 |
+| `gpt-5.6-luna` | openai | 0.482 | 0.888 | 4.93 | 50/50 | 50 |
+| `deepseek-v4-flash-thinking` | einfra | 0.479 | 0.894 | 4.84 | 50/50 | 50 |
+| `qwen3.8-27b` | einfra | 0.475 | 0.834 | 4.95 | 50/50 | 50 |
+| `gemma4` | einfra | 0.474 | 0.895 | 4.95 | 50/50 | 50 |
+| `mistral-medium-3.5` | einfra | 0.456 | 0.903 | 4.89 | 50/50 | 50 |
+| `deepseek-v4-flash` | einfra | 0.444 | 0.915 | 4.88 | 50/50 | 50 |
 
 *Ordered by **Completeness**. Every other column is context.*
 - **Completeness** (0-1) — Fraction of the section's rubric criteria the judge found present. 0.65 means about two thirds of the required items are in the note.
 - **Conciseness** (0-1) — Fraction of the note's sentences that fit at least one rubric item. 1.00 means nothing is off-topic; it does not mean the note is short.
 - **Faithfulness** (1-5) — Whether the note contradicts the transcript, rated 1 to 5, where 5 is no inaccuracies. TN-Eval's protocol has no criterion-based version of this one, so it stays a Likert scale. A different scale from the two columns beside it, and a weak one: TN-Eval measured Krippendorff's alpha of 0.18 between trained therapists on this rating. Read it as a flag for gross invention, not as a ranking.
 
-**TN-Eval SOAP · AnnoMI conversations** — scored by gpt-5.6-terra
+**TN-Eval SOAP · AnnoMI conversations** — scored by gpt-5.6-terra (backend openai, effort medium, max_output_tokens 672)
 
 | Model | Provider | Completeness (0-1) | Conciseness (0-1) | Faithfulness (1-5) | Notes | Scored |
 |---|---|---|---|---|---|---|
@@ -110,7 +110,7 @@ published numbers: **<https://jannehyba.github.io/therapy-note-bench/>**
 - **Conciseness** (0-1) — Fraction of the note's sentences that fit at least one rubric item. 1.00 means nothing is off-topic; it does not mean the note is short.
 - **Faithfulness** (1-5) — Whether the note contradicts the transcript, rated 1 to 5, where 5 is no inaccuracies. TN-Eval's protocol has no criterion-based version of this one, so it stays a Likert scale. A different scale from the two columns beside it, and a weak one: TN-Eval measured Krippendorff's alpha of 0.18 between trained therapists on this rating. Read it as a flag for gross invention, not as a ranking.
 
-**iCARE / iHOPE · 17 sections per session** — scored by gemini-3.1-pro-preview
+**iCARE / iHOPE · 17 sections per session** — scored by gemini-3.1-pro-preview (max_output_tokens 288, temperature 0, thinking_budget 256)
 
 | Model | Provider | ROUGE-L (0-1) | BERTScore (0-1) | TRACE (1-5) | Looks back (0-1) | Looks forward (0-1) | Notes | Scored |
 |---|---|---|---|---|---|---|---|---|
@@ -138,7 +138,7 @@ published numbers: **<https://jannehyba.github.io/therapy-note-bench/>**
 - **Looks back** (0-1) — Section 5 only -- what happened in the previous session. The fraction of the 34 sessions whose expert note answered it where the model did too. Kept out of any average. Every model scores 0.97-1.00 here, so this column separates nobody -- it is shown because its twin does.
 - **Looks forward** (0-1) — Section 17 only -- what happens at the next session. The fraction of the 11 sessions whose expert note answered it where the model did too. This is where the source paper reports every model it tested failing, and ours do too: 0.00 to 0.55. Reported apart from its twin because averaging the two turned 1.00 and 0.09 into 0.78 and hid exactly this.
 
-**iCARE / iHOPE · 17 sections per session** — scored by gpt-5.6-terra
+**iCARE / iHOPE · 17 sections per session** — scored by gpt-5.6-terra (backend openai, effort medium, max_output_tokens 672)
 
 | Model | Provider | ROUGE-L (0-1) | BERTScore (0-1) | TRACE (1-5) | Looks back (0-1) | Looks forward (0-1) | Notes | Scored |
 |---|---|---|---|---|---|---|---|---|
@@ -157,7 +157,7 @@ published numbers: **<https://jannehyba.github.io/therapy-note-bench/>**
 | `mistral-medium-3.5` | einfra | 0.186 | 0.815 | 3.75 | 1.000 | 0.182 | 40/40 | 40 |
 | `qwen3.5-122b` | einfra | 0.140 | 0.815 | 3.58 | 1.000 | 0.273 | 40/40 | 40 |
 | `qwen3.5-int4` | einfra | 0.182 | 0.818 | 3.87 | 1.000 | 0.091 | 40/40 | 40 |
-| `qwen3.8-27b` | einfra | 0.187 | 0.819 | 3.99 | 1.000 | 0.273 | 40/40 | 40 |
+| `qwen3.8-27b` | einfra | 0.186 | 0.819 | 3.99 | 1.000 | 0.273 | 40/40 | 40 |
 
 *Deliberately not ranked: these columns measure different things and the source paper found they disagree.*
 - **ROUGE-L** (0-1) — Longest-common-subsequence overlap with the expert note, F-measure. Rewards using the same words in the same order. Cannot tell a good paraphrase from a wrong answer. The source paper found it disagrees with what clinicians preferred.
@@ -168,17 +168,27 @@ published numbers: **<https://jannehyba.github.io/therapy-note-bench/>**
 
 **Do the two judges agree?** (TN-Eval SOAP · AnnoMI conversations)
 
-`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on completeness (+0.889) and place 11 of 19 systems differently on it anyway. They agree least on faithfulness (+0.706, 17 of 19 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. 14 system(s) beat at least one other on every measure under both judges, which needs no weighting to be true: `google_gemini-3.1-pro-preview` beats 4. 12 of 19 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner. Ordering by completeness says little about conciseness (`gemini-3.1-pro-preview` -0.18, `gpt-5.6-terra` -0.33). Ordering by completeness says different things to the two judges about faithfulness (`gemini-3.1-pro-preview` +0.72, `gpt-5.6-terra` +0.04). The two judges disagree about whether those columns are related at all, so neither reading is this benchmark's answer.
+`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on conciseness (+0.896) and place 10 of 19 systems differently on it anyway. They agree least on faithfulness (+0.738, 16 of 19 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. 14 system(s) beat at least one other on every measure under both judges, which needs no weighting to be true: `google_gemini-3.1-pro-preview` beats 4. 12 of 19 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner. Ordering by completeness says little about conciseness (`gemini-3.1-pro-preview` -0.35, `gpt-5.6-terra` -0.33). Ordering by completeness says different things to the two judges about faithfulness (`gemini-3.1-pro-preview` +0.61, `gpt-5.6-terra` +0.04). The two judges disagree about whether those columns are related at all, so neither reading is this benchmark's answer.
 
 **Do the two judges agree?** (iCARE / iHOPE · 17 sections per session)
 
-`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on trace (+0.813) and place 12 of 16 systems differently on it anyway. The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. 9 system(s) beat at least one other on every measure under both judges, which needs no weighting to be true: `gpt-5.6-sol` beats 7. 8 of 16 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner.
+`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on trace (+0.809) and place 12 of 16 systems differently on it anyway. The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. 9 system(s) beat at least one other on every measure under both judges, which needs no weighting to be true: `gpt-5.6-sol` beats 7. 8 of 16 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner.
 
 *16 icare row(s) of generation coverage at harness `0.1.0` are no longer shown: the measures were redefined in `0.2.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
 *16 icare row(s) scored by `gemini-3.1-pro-preview` at harness `0.1.0` are no longer shown: the measures were redefined in `0.2.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
+*16 icare row(s) scored by `gemini-3.1-pro-preview` at harness `0.2.0` are no longer shown: the measures were redefined in `0.2.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+
+*16 icare row(s) scored by `gpt-5.6-terra` at harness `0.2.0` are no longer shown: the measures were redefined in `0.2.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+
 *16 tneval-soap row(s) of generation coverage at harness `0.1.0` are no longer shown: the measures were redefined in `0.2.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+
+*19 tneval-soap row(s) scored by `gemini-3.1-pro-preview` at harness `0.1.0` are no longer shown: the measures were redefined in `0.2.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+
+*19 tneval-soap row(s) scored by `gpt-5.6-terra` at harness `0.1.0` are no longer shown: the measures were redefined in `0.2.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+
+*19 tneval-soap row(s) scored by `gemini-3.1-pro-preview` at harness `0.2.0` are no longer shown: the measures were redefined in `0.2.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
 See the [full leaderboard](https://jannehyba.github.io/therapy-note-bench/) for per-section detail, the reference systems and the published numbers.
 <!-- LEADERBOARD:END -->
