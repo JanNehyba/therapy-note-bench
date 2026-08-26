@@ -1,7 +1,8 @@
 # therapy-note-bench — Agent Notes
 
 A reproducible benchmark of LLM-generated psychotherapy session notes, run
-against whatever models e-INFRA CZ has deployed, refreshed from a button.
+against whatever models e-INFRA CZ has deployed. Generation refreshes from a
+button; scoring is run by hand, because CI has no judge credential.
 
 This repository is **not** part of `destilo` (a separate project in a sibling
 directory). No shared code, no shared conventions beyond the language rule.
