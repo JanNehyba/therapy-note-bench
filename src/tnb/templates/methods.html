@@ -99,7 +99,23 @@ const VERDICTS = {
   unreachable:    ['--v-unreachable',    'nobody can, the therapist included'],
 };
 
-function intervalPlot(rows, human) {
+// What the leaderboard prints for one system under one judge, or null.
+//
+// The saturation panel used to recompute this and label it "the table shows".
+// It averages every conversation it found answers for; the table averages only
+// the notes the judge finished. For `kimi-k3` that was 0.550 over 49 against
+// the table's 0.546 over 48 -- a figure attributed to a table that does not
+// contain it, which a reader can check in two clicks.
+function asTheTableShows(judgeModel, system, measure) {
+  const table = (DATA.tables || []).find(t =>
+    t.versions && t.versions.judge_model === judgeModel && t.ranking_measure === measure);
+  if (!table) return null;
+  const row = (table.rows || []).find(r => (r.label || r.system_id) === system);
+  if (!row || !row.headline || row.headline[measure] === undefined) return null;
+  return {value: row.headline[measure], notes: row.n_complete};
+}
+
+function intervalPlot(rows, human, judgeModel, measure) {
   // A dot with its interval, not a bar: the interesting range is 0.3-0.6 and a
   // bar would imply a zero baseline nobody is near.
   const rowH = 26, padL = 190, padR = 54, top = 22, W = 720;
@@ -119,10 +135,12 @@ function intervalPlot(rows, human) {
     const y = top + i * rowH + rowH / 2;
     const colour = r.system === 'therapist' ? 'var(--muted)' : 'var(--accent)';
     return `<g>
-      <title>${r.system}: ${r.mean.toFixed(3)} over the shared conversations (95% interval ${r.low.toFixed(3)} to ${r.high.toFixed(3)})${
-        r.own_mean != null && r.own_sessions !== r.sessions
-          ? ` — the table shows ${r.own_mean.toFixed(3)}, over all ${r.own_sessions} of its own`
-          : ''}</title>
+      <title>${r.system}: ${r.mean.toFixed(3)} over the shared conversations (95% interval ${r.low.toFixed(3)} to ${r.high.toFixed(3)})${(() => {
+        const shown = asTheTableShows(judgeModel, r.system, measure);
+        return shown && shown.notes !== r.sessions
+          ? ` — the table shows ${shown.value.toFixed(3)}, over the ${shown.notes} notes the judge finished`
+          : '';
+      })()}</title>
       <text class="name" x="${padL - 12}" y="${y + 4}" text-anchor="end">${r.system}</text>
       <line x1="${x(r.low).toFixed(1)}" x2="${x(r.high).toFixed(1)}" y1="${y}" y2="${y}"
             stroke="${colour}" stroke-width="2" stroke-linecap="round"></line>
@@ -201,14 +219,31 @@ function renderSaturation(data) {
   // paired bootstrap has no meaning otherwise. When those differ the orderings
   // can differ too, and that is worth stating rather than hiding.
   const narrowedBy = s.narrowed_by || {};
-  const narrowedNames = Object.keys(narrowedBy);
+  // Sorted here, not trusted from the payload. Python orders this mapping by
+  // how much each system cost, and `json.dumps(..., sort_keys=True)` re-sorts
+  // every mapping alphabetically on the way out -- so reading the key order
+  // named the first three systems by name rather than the three that mattered.
+  // The same trap the concordance panel fell into over track order.
+  const narrowedNames = Object.keys(narrowedBy)
+    .sort((a, b) => narrowedBy[b] - narrowedBy[a] || a.localeCompare(b));
   const denominator = s.corpus_sessions && s.corpus_sessions > s.sessions
     ? `<p class="note"><strong>These numbers are not the table's numbers, and they should not
          be.</strong> The table above averages each system over its own notes; this section
          averages every system over the <strong>${s.sessions} of ${s.corpus_sessions}</strong>
          conversations they <em>all</em> have, because a paired comparison is only paired on a
-         shared set. The set is smaller because ${narrowedNames.map(n =>
-           `${esc(n)} was scored on ${narrowedBy[n]} fewer`).join(', ')}. Expect small
+         shared set. The set is smaller because ${(() => {
+           // Named while naming is informative. Past a handful the list is
+           // every system on the page, which tells a reader nothing they
+           // cannot see from the count above -- so it gives the shape instead:
+           // who cost the most, and how small the rest are.
+           const worst = narrowedNames.slice(0, 3).map(n =>
+             `${esc(n)} was scored on ${narrowedBy[n]} fewer`);
+           if (narrowedNames.length <= 3) return worst.join(', ');
+           const rest = narrowedNames.slice(3).map(n => narrowedBy[n]);
+           const most = Math.max(...rest);
+           return `${worst.join(', ')}, and the other ${rest.length} on ` +
+             `${most === 1 ? 'one each' : `no more than ${most} each`}`;
+         })()}. Expect small
          differences from the table, and expect closely-matched systems to change places: that
          two orderings disagree over which 42 of 50 conversations you use is itself a result
          about how tightly packed these models are.</p>`
@@ -238,7 +273,8 @@ function renderSaturation(data) {
        scores every system, so a hard conversation counts as difficulty rather than disagreement.
        The dashed line is the therapist. Hover a bar for the table's figure beside this one.</p>
     ${intervalPlot(s.intervals.filter(r => r.system !== 'therapist'),
-                   s.intervals.find(r => r.system === 'therapist'))}
+                   s.intervals.find(r => r.system === 'therapist'),
+                   s.judge_model, 'completeness')}
     <p class="blurb" style="margin-top:.9rem">Ranked, with systems the evidence cannot separate
        grouped on one line. These are groups, not equivalence classes: being inseparable is not
        transitive, so the boundary between adjacent lines is a convention.</p>

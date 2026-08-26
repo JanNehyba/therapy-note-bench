@@ -2841,6 +2841,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:24:12Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -2926,6 +2932,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:24:12Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
           "source": "",
@@ -3011,6 +3023,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:24:12Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -3096,6 +3114,12 @@
           "provider": "vertex",
           "scored": true,
           "scored_at": "2026-08-26T12:24:12Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -3181,6 +3205,12 @@
           "provider": "vertex",
           "scored": true,
           "scored_at": "2026-08-26T12:24:12Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -3266,6 +3296,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:24:12Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -3351,6 +3387,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:24:12Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -3436,6 +3478,12 @@
           "provider": "openai",
           "scored": true,
           "scored_at": "2026-08-26T12:24:12Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
           "source": "",
@@ -3521,6 +3569,12 @@
           "provider": "openai",
           "scored": true,
           "scored_at": "2026-08-26T12:24:12Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
           "source": "",
@@ -3608,6 +3662,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:24:12Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -3693,6 +3753,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:24:12Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -3778,6 +3844,12 @@
           "provider": "openai",
           "scored": true,
           "scored_at": "2026-08-26T12:24:12Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
           "source": "",
@@ -3863,6 +3935,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:24:12Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -3948,6 +4026,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:24:12Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
           "source": "",
@@ -4033,6 +4117,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:24:12Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -4118,6 +4208,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:24:12Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -4203,6 +4299,12 @@
           "provider": "tneval",
           "scored": true,
           "scored_at": "2026-08-26T12:24:12Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "",
           "settings_differ": false,
           "source": "",
@@ -4288,6 +4390,12 @@
           "provider": "tneval",
           "scored": true,
           "scored_at": "2026-08-26T12:24:12Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "",
           "settings_differ": false,
           "source": "",
@@ -4373,6 +4481,12 @@
           "provider": "tneval",
           "scored": true,
           "scored_at": "2026-08-26T12:24:12Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "",
           "settings_differ": false,
           "source": "",
@@ -4560,6 +4674,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:36:18Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -4645,6 +4765,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:36:18Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -4730,6 +4856,12 @@
           "provider": "vertex",
           "scored": true,
           "scored_at": "2026-08-26T12:36:18Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -4817,6 +4949,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:36:18Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -4902,6 +5040,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:36:18Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
           "source": "",
@@ -4987,6 +5131,12 @@
           "provider": "openai",
           "scored": true,
           "scored_at": "2026-08-26T12:36:18Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
           "source": "",
@@ -5072,6 +5222,12 @@
           "provider": "openai",
           "scored": true,
           "scored_at": "2026-08-26T12:36:18Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
           "source": "",
@@ -5157,6 +5313,12 @@
           "provider": "vertex",
           "scored": true,
           "scored_at": "2026-08-26T12:36:18Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -5242,6 +5404,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:36:18Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -5327,6 +5495,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:36:18Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -5412,6 +5586,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:36:18Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -5497,6 +5677,12 @@
           "provider": "openai",
           "scored": true,
           "scored_at": "2026-08-26T12:36:18Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
           "source": "",
@@ -5582,6 +5768,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:36:18Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -5667,6 +5859,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:36:18Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
           "source": "",
@@ -5752,6 +5950,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:36:18Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -5837,6 +6041,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:36:18Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -5922,6 +6132,12 @@
           "provider": "tneval",
           "scored": true,
           "scored_at": "2026-08-26T12:36:18Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "",
           "settings_differ": false,
           "source": "",
@@ -6007,6 +6223,12 @@
           "provider": "tneval",
           "scored": true,
           "scored_at": "2026-08-26T12:36:18Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "",
           "settings_differ": false,
           "source": "",
@@ -6092,6 +6314,12 @@
           "provider": "tneval",
           "scored": true,
           "scored_at": "2026-08-26T12:36:18Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "",
           "settings_differ": false,
           "source": "",
@@ -6240,6 +6468,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T09:29:10Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -6325,6 +6559,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T09:29:10Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -6410,6 +6650,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T09:29:10Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
           "source": "",
@@ -6495,6 +6741,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T09:29:10Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -6580,6 +6832,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T09:29:10Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -6665,6 +6923,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T09:29:10Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
           "source": "",
@@ -6750,6 +7014,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T09:29:10Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -6835,6 +7105,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T09:29:10Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -6920,6 +7196,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T09:29:10Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -7005,6 +7287,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T09:29:10Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -7090,6 +7378,12 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T09:29:10Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -7238,6 +7532,12 @@
           "provider": "tneval",
           "scored": true,
           "scored_at": "2026-08-26T09:29:56Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "",
           "settings_differ": false,
           "source": "",
@@ -7323,6 +7623,12 @@
           "provider": "tneval",
           "scored": true,
           "scored_at": "2026-08-26T09:29:56Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "",
           "settings_differ": false,
           "source": "",
@@ -7408,6 +7714,12 @@
           "provider": "tneval",
           "scored": true,
           "scored_at": "2026-08-26T09:29:56Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
           "settings": "",
           "settings_differ": false,
           "source": "",
@@ -7576,6 +7888,9 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:27:30Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -7624,6 +7939,9 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:27:30Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -7672,6 +7990,9 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:27:30Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -7720,6 +8041,9 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:27:30Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -7768,6 +8092,9 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:27:30Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -7816,6 +8143,9 @@
           "provider": "vertex",
           "scored": true,
           "scored_at": "2026-08-26T12:27:30Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -7864,6 +8194,9 @@
           "provider": "vertex",
           "scored": true,
           "scored_at": "2026-08-26T12:27:30Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -7912,6 +8245,9 @@
           "provider": "openai",
           "scored": true,
           "scored_at": "2026-08-26T12:27:30Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
           "source": "",
@@ -7960,6 +8296,9 @@
           "provider": "openai",
           "scored": true,
           "scored_at": "2026-08-26T12:27:30Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
           "source": "",
@@ -8008,6 +8347,9 @@
           "provider": "openai",
           "scored": true,
           "scored_at": "2026-08-26T12:27:30Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
           "source": "",
@@ -8056,6 +8398,9 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:27:30Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -8104,6 +8449,9 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:27:30Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -8152,6 +8500,9 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:27:30Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -8200,6 +8551,9 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:27:30Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -8248,6 +8602,9 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:27:30Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
           "source": "",
@@ -8298,6 +8655,9 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:27:30Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
           "source": "",
@@ -8466,6 +8826,9 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:28:42Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -8514,6 +8877,9 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:28:42Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -8562,6 +8928,9 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:28:42Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -8610,6 +8979,9 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:28:42Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -8658,6 +9030,9 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:28:42Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -8706,6 +9081,9 @@
           "provider": "vertex",
           "scored": true,
           "scored_at": "2026-08-26T12:28:42Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -8754,6 +9132,9 @@
           "provider": "vertex",
           "scored": true,
           "scored_at": "2026-08-26T12:28:42Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -8802,6 +9183,9 @@
           "provider": "openai",
           "scored": true,
           "scored_at": "2026-08-26T12:28:42Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
           "source": "",
@@ -8850,6 +9234,9 @@
           "provider": "openai",
           "scored": true,
           "scored_at": "2026-08-26T12:28:42Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
           "source": "",
@@ -8898,6 +9285,9 @@
           "provider": "openai",
           "scored": true,
           "scored_at": "2026-08-26T12:28:42Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
           "source": "",
@@ -8946,6 +9336,9 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:28:42Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -8994,6 +9387,9 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:28:42Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -9042,6 +9438,9 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:28:42Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -9090,6 +9489,9 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:28:42Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -9138,6 +9540,9 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:28:42Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
           "source": "",
@@ -9188,6 +9593,9 @@
           "provider": "einfra",
           "scored": true,
           "scored_at": "2026-08-26T12:28:42Z",
+          "section_order": [
+            "trace"
+          ],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
           "source": "",

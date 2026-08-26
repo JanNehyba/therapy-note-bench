@@ -164,7 +164,11 @@ function detailRow(row, table) {
        depends on the serving stack, not only on the model.</p>`);
   }
 
-  const sections = Object.entries(row.by_section);
+  // `section_order`, not the mapping's key order: the payload is serialised
+  // with sorted keys, so reading the keys printed a SOAP note as A, O, P, S.
+  const sections = (row.section_order || Object.keys(row.by_section))
+    .filter(name => row.by_section[name])
+    .map(name => [name, row.by_section[name]]);
   if (sections.length) {
     const head = table.columns.map(c =>
       `<th title="${esc(c.definition)}">${esc(c.label)}<span class="scale">${esc(c.scale)}</span></th>`).join('');

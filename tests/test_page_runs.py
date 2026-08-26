@@ -835,3 +835,56 @@ def test_our_own_ceiling_is_not_described_as_the_endpoint_refusing(tmp_path):
     assert "1 call(s) this harness cut off" in host
     assert "1 call(s) the endpoint never answered" in host
     assert "already had its one escalation" in host
+
+
+def test_the_saturation_tooltip_quotes_the_table_it_names(tmp_path):
+    """It said "the table shows 0.550, over all 49 of its own". The table shows
+    0.546, over 48.
+
+    The panel was recomputing the figure from the answer cache and labelling it
+    with the table's name. It averages every conversation it found answers for;
+    the table averages only the notes the judge *finished*, so a note the judge
+    started and left part-answered is in one denominator and not the other.
+    Three of four systems checked disagreed, and the fourth agreed only because
+    it had no partial notes.
+    """
+    from tnb import report
+
+    scored = _row("kimi-k3", "a-judge", 0.5)
+    object.__setattr__(scored, "n_sessions_partial", 2)
+    object.__setattr__(
+        scored, "metrics", Metrics(headline={"completeness": 0.5459}, by_section={}, detail={})
+    )
+
+    data = report.build([scored])
+    data.update(calibration=None, similarity_example=None, judges=None, preference=None)
+    data["concordance"] = {}
+    data["saturation"] = {
+        "judge_model": "a-judge",
+        "judge_fingerprint": {"model": "a-judge"},
+        "ignored_fingerprints": {},
+        "sessions": 40,
+        "corpus_sessions": 50,
+        "narrowed_by": {},
+        "criteria": [],
+        "verdict_counts": {},
+        "still_scoring": [],
+        "indistinguishable": [["kimi-k3"]],
+        "intervals": [
+            {
+                "system": "kimi-k3",
+                "mean": 0.527,
+                # What the panel used to print, and what it must not print now.
+                "own_mean": 0.5503,
+                "own_sessions": 49,
+                "low": 0.488,
+                "high": 0.569,
+            }
+        ],
+    }
+
+    body = _flat(_run(report.render_methods(data), tmp_path, panel="saturation-body"))
+
+    assert "the table shows 0.546" in body, "the figure comes from the table"
+    assert "0.550" not in body, "and not from a second computation of it"
+    assert "48 notes the judge finished" in body, "with the denominator that produced it"

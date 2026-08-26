@@ -913,10 +913,12 @@ def _render_row(row: Row) -> dict:
         "unreached_reasons": row.unreached_reasons,
         "n_unreached": sum(row.unreached_reasons.values()),
         "headline": row.metrics.headline,
-        "by_section": {
-            section: row.metrics.by_section[section]
-            for section in _ordered_sections(list(row.metrics.by_section))
-        },
+        "by_section": row.metrics.by_section,
+        # The order, carried beside the mapping rather than in it. A mapping's
+        # key order survives no serialiser -- this payload is written with
+        # `sort_keys=True`, which is what makes a re-run produce no diff -- and
+        # SOAP is an acronym whose letters are the sequence.
+        "section_order": _ordered_sections(list(row.metrics.by_section)),
         "detail": row.metrics.detail,
         "metrics_note": row.metrics_note,
         "source": row.source,

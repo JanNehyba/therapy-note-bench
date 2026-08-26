@@ -135,8 +135,19 @@ def test_a_row_carries_its_section_and_criterion_breakdown_to_the_page():
     )
     rendered = report.build([row])["tables"][0]["rows"][0]
 
-    assert list(rendered["by_section"]) == ["subjective", "plan"], "SOAP order, not alphabetical"
     assert rendered["detail"]["subjective-chief-complaint"] == 0.9
+
+    # Through the serialiser the page is actually given. This used to assert on
+    # `list(rendered["by_section"])` -- the mapping's key order, at the one
+    # point where it still existed. `render_page` writes the payload with
+    # `sort_keys=True`, which is what makes a re-run produce no diff, and the
+    # published page showed a SOAP note as assessment, objective, plan,
+    # subjective.
+    through_json = json.loads(json.dumps(rendered, sort_keys=True))
+    assert through_json["section_order"] == ["subjective", "plan"], "SOAP order, not alphabetical"
+    assert list(through_json["by_section"]) == ["plan", "subjective"], (
+        "and the mapping is alphabetical, which is why the order is carried beside it"
+    )
 
 
 def test_an_unscored_table_says_so():
