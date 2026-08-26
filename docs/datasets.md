@@ -83,7 +83,9 @@ Cite: Wu, Balloccu, Kumar, Helaoui, Reiter, Reforgiato Recupero, Riboni.
 
 50 conversations × 3 notes (therapist-written, Llama 3.1 70B, Mistral Large V2),
 each with rubric and Likert scores from two human annotators and two LLM judges.
-Apache-2.0. This is the **calibration anchor** described in
+**No licence published** — see the correction at the top of this page; the
+Apache-2.0 licence is on TN-Eval's *code* repository, not on this one. This is
+the **calibration anchor** described in
 [methodology.md](methodology.md) — without it there would be no way to check the
 judge against a human.
 

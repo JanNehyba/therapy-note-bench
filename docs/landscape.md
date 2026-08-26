@@ -17,7 +17,7 @@ eighteen months, and neither is an established standard:
 | Corpus | 174 sessions (HOPE / YouTube, re-transcribed) | 50 conversations (AnnoMI) |
 | Gold notes | Yes — expert-written, 17 sections | Yes — therapist-written, SOAP |
 | Evaluation | Reference-based + TRACE human framework | Rubric, **reference-free** |
-| Licence on data | **None published** | Apache-2.0 (code + annotations) |
+| Licence on data | **None published** | **None published** (Apache-2.0 covers the code) |
 | Models benchmarked | 11 (2025-era) | 7 (2024-era) |
 
 Nobody has re-run either of them on current models. That is the gap this
