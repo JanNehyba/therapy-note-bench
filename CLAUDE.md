@@ -24,16 +24,28 @@ jargon, and prove things in small verified steps rather than large ones.
 Phases 0 to 5 are done. 16 models have written notes on both tracks — 50 AnnoMI
 conversations for TN-Eval SOAP, 40 iHOPE sessions for iCARE — and both tracks
 are scored by two independent judges, `gemini-3.1-pro-preview` and
-`gpt-5.6-terra`. The leaderboard, its JSON and the README table are generated
-from `results/rows.jsonl` by `tnb report`.
+`gpt-5.6-terra`. `tnb report` writes four artefacts from `results/rows.jsonl`:
+`docs/index.html` (the tables), `docs/methods.html` (the instrument),
+`docs/leaderboard.json` and the README block.
 
-**Phase 6 is next — the one-click workflow.** Everything before it has run by
-hand.
+**Two pages, on purpose.** The tables answer "which model" and the panels
+answer "why believe the tables", and both were on one page until eight panels
+had grown above the thing a reader came for. The leaderboard draws **one**
+comparability group at a time with a switch for the track and the judge; every
+ordering decision is made in Python and the page only draws it.
 
-Read `docs/limitations.md` before adding a number to any view. The two most
-recent findings both bound what a table may claim: the two judges agree on the
-*shape* of the ranking and not on the order, and the three TN-Eval columns do
-not predict each other.
+**The Actions button generates and does not score.** It has only ever held the
+e-INFRA token, and the README used to promise it "commits the new results and
+regenerates the table" while its one step called a stub that exits 2. Wiring a
+judge into CI is undecided, and `tests/test_workflow.py` holds the button to
+what it actually does.
+
+Read `docs/limitations.md` before adding a number to any view. Three findings
+bound what a table may claim: the two judges agree on the *shape* of the
+ranking and not on the order, the three TN-Eval columns do not predict each
+other, and **`gpt-5.6-terra` has a measured self-preference** for OpenAI-built
+systems of +0.027 completeness [+0.011, +0.042] — so its column is read with
+that discount, and the rows it applies to are marked in the table.
 
 ## Working Rules
 
@@ -130,11 +142,13 @@ make bench     # everything
 uv run tnb models --probe   # which ids are secretly the same model
 uv run tnb generate         # write notes; re-asks only what is missing
 uv run tnb score            # TN-Eval rubric, one judge per run
+uv run tnb score --cache-only   # publish what is answered, ask the judge nothing
+uv run tnb score --thinking-budget N  # a budget is part of the instrument
 uv run tnb score-icare      # ROUGE-L, BERTScore, TRACE, the two temporal columns
 uv run tnb judges           # every candidate judge against the two therapists
 uv run tnb saturation       # is there anything left to measure?
 uv run tnb preference       # does either judge favour its own family?
-uv run tnb report           # rebuild the page, its JSON and the README table
+uv run tnb report           # rebuild both pages, the JSON and the README table
 ```
 
 Secrets live in `.env` and `secrets/`, both gitignored, and appear in no
