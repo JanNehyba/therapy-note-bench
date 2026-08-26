@@ -58,7 +58,16 @@ class Session:
         return sum(len(turn.text.split()) for turn in self.turns)
 
 
-def _record_checksum(name: str, digest: str) -> None:
+def record_checksum(name: str, digest: str) -> None:
+    """Record what a corpus was, under a name the run record can publish.
+
+    Public because not every corpus is fetched. A loader reading files already
+    on disk has no download to hang this off, and without it its rows carry
+    every other corpus's digest and nothing about their own.
+
+    ``name`` reaches `Row.dataset_checksums` and therefore the published page,
+    so it is a label for the corpus, never a filename.
+    """
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
     existing: dict[str, str] = {}
     if CHECKSUM_PATH.exists():
@@ -83,7 +92,7 @@ def fetch(url: str, name: str, *, timeout: float = 120.0) -> Path:
     response.raise_for_status()
 
     target.write_bytes(response.content)
-    _record_checksum(name, hashlib.sha256(response.content).hexdigest())
+    record_checksum(name, hashlib.sha256(response.content).hexdigest())
     return target
 
 
