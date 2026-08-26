@@ -5,8 +5,8 @@ on two published protocols and re-run as models change.**
 
 Two datasets exist for turning a therapy transcript into a clinical note. Both
 were benchmarked once, on models from 2024 and 2025, and never re-run. This
-repository re-runs them from a button — so the table stays true as models
-change.
+repository re-runs them — one command per stage, with generation on a button —
+so the table stays true as models change.
 
 Which models is a question of configuration, not of design. Providers are a
 swappable backend: today the harness measures what is deployed on
