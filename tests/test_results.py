@@ -400,7 +400,11 @@ def test_a_scored_row_does_not_blame_the_model_for_the_endpoint(tmp_path):
         )
 
     unreached = results.unreached_by_system(results.TRACK_ICARE, tmp_path)
-    assert unreached == {("einfra", "a-model"): results.Unreached(1, {"HTTP429: rate limit": 1})}
+    assert unreached == {
+        ("einfra", "a-model"): results.Unreached(
+            1, {"HTTP429: rate limit": 1}, 1, {"empty content": 1}
+        )
+    }
 
     row = icare_run.to_rows(
         [_scored_note("einfra", "a-model")],
@@ -412,6 +416,14 @@ def test_a_scored_row_does_not_blame_the_model_for_the_endpoint(tmp_path):
 
     assert row.n_failed == 1, "the empty answer, and only that"
     assert row.unreached_reasons == {"HTTP429: rate limit": 1}
+    # And the count comes with its reason. Every scored row published in this
+    # repository until now carried `n_failed` above zero and `failure_reasons`
+    # empty, because only the coverage row was ever given the reasons -- and
+    # `report` drops the coverage row for any system that has been scored. The
+    # README printed "42/50 (8 unusable)" and the page "8 note(s) missing, with
+    # no recorded reason", about a model whose reason was on disk the whole
+    # time.
+    assert row.failure_reasons == {"empty content": 1}
 
 
 def test_the_endpoint_cannot_be_blamed_for_more_than_is_missing(tmp_path):
@@ -599,3 +611,46 @@ def test_the_masking_happens_before_the_length_cut(monkeypatch):
     cleaned = results.normalise_reason("x" * 110 + " distinctive-project-name")
 
     assert "distinctive" not in cleaned
+
+
+def test_a_note_we_cut_off_is_not_a_note_the_model_failed(tmp_path):
+    """`n_failed` is published as "N unusable" beside a model's name.
+
+    `generation` argues that scoring a note cut off at our ceiling "would
+    measure our token budget, not the model" -- and the counter one column over
+    was doing exactly that, on 14 iCARE calls from `qwen3.5-int4`. A generation
+    that stopped on `length` has already had its one escalation to
+    `escalate_max_tokens`; past that we stopped it, and what it would have
+    written is not something this benchmark knows.
+    """
+    model_dir = tmp_path / "einfra" / "icare" / icare_task.PROMPT_VERSION / "a-model"
+    for session, error in (
+        ("1", None),
+        ("2", "empty content"),
+        ("3", "truncated at max_tokens=16384"),
+    ):
+        unit = model_dir / session
+        unit.mkdir(parents=True)
+        (unit / "note.json").write_text(
+            json.dumps({"ok": error is None, "error": error}), encoding="utf-8"
+        )
+
+    found = results.unreached_by_system(results.TRACK_ICARE, tmp_path)[("einfra", "a-model")]
+
+    assert found.failed == 1, "the empty answer, and only that"
+    assert found.failure_reasons == {"empty content": 1}
+    assert found.reasons == {"truncated at max_tokens=16384": 1}
+    assert found.sessions == 1
+
+
+def test_the_three_kinds_of_missing_note_are_told_apart():
+    """One predicate per question, and the accusing one defaults to no."""
+    assert results.is_infrastructure_failure("HTTP429: rate limit")
+    assert not results.is_our_own_ceiling("HTTP429: rate limit")
+
+    assert results.is_our_own_ceiling("truncated at max_tokens=16384")
+    assert not results.is_infrastructure_failure("truncated at max_tokens=16384")
+
+    assert results.is_the_models_fault("answer did not contain a SOAP dictionary")
+    assert not results.is_the_models_fault("truncated at max_tokens=16384")
+    assert not results.is_the_models_fault("HTTP503: backend unavailable")

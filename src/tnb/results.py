@@ -24,8 +24,10 @@ import hashlib
 import json
 import re
 from collections import defaultdict
+from collections.abc import Mapping
 from dataclasses import asdict, dataclass, field, replace
 from pathlib import Path
+from types import MappingProxyType
 from typing import NamedTuple
 
 from tnb import __version__, generation
@@ -202,9 +204,10 @@ class Row:
     n_sessions_partial: int = 0
     n_failed: int = 0
     failure_reasons: dict[str, int] = field(default_factory=dict)
-    #: Calls that never reached the model -- rate limits, backend errors,
-    #: timeouts. Separate from `failure_reasons` because they say nothing about
-    #: the model and, unlike a bad note, re-running fixes them.
+    #: Calls whose missing answer is not the model's doing -- rate limits,
+    #: backend errors, timeouts, and our own token ceiling. Separate from
+    #: `failure_reasons` because they say nothing about the model and, unlike a
+    #: bad note, re-running or raising the ceiling fixes them.
     unreached_reasons: dict[str, int] = field(default_factory=dict)
 
     #: How the model was asked, taken from the generation records rather than
@@ -493,10 +496,35 @@ INFRASTRUCTURE_ERRORS = (
 ) + _transport_errors()
 
 
+#: What we did to the call, rather than what the model or the endpoint did.
+#: A generation that stopped on `length` has already had its one escalation to
+#: `escalate_max_tokens`; past that we cut it off, and we do not know what it
+#: would have written.
+OUR_OWN_LIMITS = ("truncated at max_tokens",)
+
+
 def is_infrastructure_failure(error: str | None) -> bool:
     """Whether a call failed before the model had any say in it."""
     text = (error or "").strip()
     return any(text.startswith(prefix) for prefix in INFRASTRUCTURE_ERRORS)
+
+
+def is_our_own_ceiling(error: str | None) -> bool:
+    """Whether the harness stopped the call rather than the model failing it."""
+    text = (error or "").strip()
+    return any(text.startswith(prefix) for prefix in OUR_OWN_LIMITS)
+
+
+def is_the_models_fault(error: str | None) -> bool:
+    """Whether a missing note may be charged to the model.
+
+    The counter it feeds is published as "N unusable" beside a model's name, so
+    the question it answers is an accusation and the default has to be no.
+    `generation` already argues that a note cut off at our ceiling "would
+    measure our token budget, not the model" -- and the counter one column over
+    was measuring exactly that, on 14 iCARE calls from `qwen3.5-int4`.
+    """
+    return not is_infrastructure_failure(error) and not is_our_own_ceiling(error)
 
 
 def normalise_reason(error: str | None) -> str:
@@ -571,11 +599,22 @@ class Unreached(NamedTuple):
     #: track, where one session is seventeen separate calls.
     reasons: dict[str, int]
 
+    #: And the other half: what the model itself failed to produce, and why.
+    #: Carried here because a scored row needs both and reading them from two
+    #: walks of the cache is how the two came to disagree. Without it every
+    #: scored row published `n_failed` with `failure_reasons: {}` -- the
+    #: accusation with no reason beside it, which is the defect this pair of
+    #: fields was introduced to fix, one counter over.
+    failed: int = 0
+    #: A read-only mapping rather than `{}`: a mutable default on a NamedTuple
+    #: is one object shared by every instance that takes it.
+    failure_reasons: Mapping[str, int] = MappingProxyType({})
+
 
 def unreached_by_system(
     track: str, cache_dir: Path | None = None
 ) -> dict[tuple[str, str], Unreached]:
-    """Per system, what the endpoint refused -- read from the coverage rows.
+    """Per system, what never got written -- read from the coverage rows.
 
     Derived from `index_generations` rather than re-walking the cache, so a
     scored row and a coverage row can never disagree about whose failure a
@@ -587,8 +626,10 @@ def unreached_by_system(
         if row.track != track:
             continue
         sessions = row.n_sessions_attempted - row.n_sessions_generated - row.n_failed
-        if sessions or row.unreached_reasons:
-            found[(row.provider, row.system_id)] = Unreached(sessions, row.unreached_reasons)
+        if sessions or row.unreached_reasons or row.n_failed or row.failure_reasons:
+            found[(row.provider, row.system_id)] = Unreached(
+                sessions, row.unreached_reasons, row.n_failed, row.failure_reasons
+            )
     return found
 
 
@@ -692,7 +733,7 @@ def _coverage_row(
                 details = (record.get("usage") or {}).get("completion_tokens_details") or {}
                 if details.get("reasoning_tokens") is not None:
                     thinking.append(int(details["reasoning_tokens"]))
-            elif is_infrastructure_failure(record.get("error")):
+            elif not is_the_models_fault(record.get("error")):
                 # Counted apart and NOT charged to the model. Splitting the
                 # reasons without splitting the count left glm-5 published as
                 # "39/40 (1 unusable)" over a rate limit -- the reason sat in

@@ -149,7 +149,9 @@ def from_generations(
                         continue
                     if record.get("ok"):
                         sections[unit_path.stem] = record.get("text", "")
-                    elif results.is_infrastructure_failure(record.get("error")):
+                    elif not results.is_the_models_fault(record.get("error")):
+                        # A section we cut off at our own ceiling counts here
+                        # too: a note scored without it measures the ceiling.
                         unreached = True
                 if not sections or unreached:
                     continue
@@ -408,6 +410,13 @@ def to_rows(
                 n_sessions_scored=len(aggregate.notes),
                 n_sessions_partial=aggregate.n_partial,
                 n_failed=missing - blameless,
+                # The other half of the same separation. Without this every
+                # scored row carried a count of unusable notes and an empty
+                # `failure_reasons`, so the README printed "42/50 (8 unusable)"
+                # and the page "8 note(s) missing, with no recorded reason" --
+                # while the reason sat on the coverage row, which `report`
+                # drops for any system that has a scored row.
+                failure_reasons=dict(unreached.failure_reasons) if unreached else {},
                 unreached_reasons=dict(unreached.reasons) if unreached else {},
                 metrics=aggregate.metrics(),
                 metrics_note=(

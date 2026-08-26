@@ -902,3 +902,100 @@ def test_a_refused_sentence_question_does_not_shrink_the_conciseness_denominator
     assert any("conciseness" in reason for reason in scores.incomplete[section])
     assert scores.sections_used["conciseness"] == len(tneval.SOAP_SECTIONS) - 1
     assert scores.is_complete is False
+
+
+def _cache_every_answer(root, candidate, client, *, prompt_of):
+    """Write a full set of cached answers for one note. `prompt_of` decides what
+    question each answer claims to be about."""
+    from tnb import judge
+
+    tasks = tneval.build_tasks(candidate.note, candidate.conversation)
+    for task in tasks:
+        judge.write_cached(
+            judge.cache_path(
+                client.config.model,
+                tneval.JUDGE_PROMPT_VERSION,
+                candidate.provider,
+                candidate.system_id,
+                candidate.session_id,
+                task.unit,
+                root=root,
+            ),
+            {
+                "ok": True,
+                "answer": "Yes" if task.kind.startswith("rubric") else "5",
+                "judge_fingerprint": client.config.fingerprint(),
+                "prompt_sha256": judge.prompt_digest(prompt_of(task)),
+            },
+        )
+    return len(tasks)
+
+
+def _one_candidate():
+    from tnb.scoring import run as scoring
+
+    return scoring.Candidate(
+        provider="einfra",
+        system_id="a-model",
+        system_type="model",
+        system_label="a-model",
+        session_id="s1",
+        note=NOTE,
+        conversation="therapist: hello\nclient: hello",
+    )
+
+
+def test_publishing_from_cache_checks_what_the_judge_was_asked(tmp_path, monkeypatch):
+    """`tnb score --cache-only` is the one route that publishes without asking.
+
+    `score_note` has passed the prompt to `load_cached` since the digest was
+    added; `from_cache` never did, so the single path that turns cached answers
+    into published rows had the check switched off -- and had no test at all.
+    """
+    from tnb import judge
+    from tnb.scoring import run as scoring
+
+    client = judge.Judge(
+        judge.JudgeConfig(project="p", location="l", credentials_path="", model="a-judge")
+    )
+    candidate = _one_candidate()
+    _cache_every_answer(tmp_path, candidate, client, prompt_of=lambda task: task.prompt)
+
+    assert scoring.from_cache([candidate], client, cache_root=tmp_path), "the note as answered"
+
+    # The same answers, now claiming to be about a note that no longer exists.
+    _cache_every_answer(tmp_path, candidate, client, prompt_of=lambda task: "a different note")
+
+    assert scoring.from_cache([candidate], client, cache_root=tmp_path) == []
+
+
+def test_publishing_from_cache_still_accepts_answers_older_than_the_digest(tmp_path):
+    """169 036 of them. Treated as unknown, exactly as `load_cached` treats them
+    on the asking path -- the two must not disagree about what the cache holds."""
+    from tnb import judge
+    from tnb.scoring import run as scoring
+
+    client = judge.Judge(
+        judge.JudgeConfig(project="p", location="l", credentials_path="", model="a-judge")
+    )
+    candidate = _one_candidate()
+    tasks = tneval.build_tasks(candidate.note, candidate.conversation)
+    for task in tasks:
+        judge.write_cached(
+            judge.cache_path(
+                client.config.model,
+                tneval.JUDGE_PROMPT_VERSION,
+                candidate.provider,
+                candidate.system_id,
+                candidate.session_id,
+                task.unit,
+                root=tmp_path,
+            ),
+            {
+                "ok": True,
+                "answer": "Yes" if task.kind.startswith("rubric") else "5",
+                "judge_fingerprint": client.config.fingerprint(),
+            },
+        )
+
+    assert len(scoring.from_cache([candidate], client, cache_root=tmp_path)) == 1

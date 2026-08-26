@@ -252,6 +252,13 @@ def from_cache(
                     root=cache_root,
                 ),
                 fingerprint,
+                # The question, so a note that was re-generated does not get
+                # published carrying the judgement of the text it replaced.
+                # `score_note` has passed this since the digest was added;
+                # this path did not, so `tnb score --cache-only` -- the one
+                # route that publishes without asking the judge anything --
+                # had the check switched off.
+                task.prompt,
             )
             if record is not None:
                 answers[task.unit] = record["answer"]
@@ -454,6 +461,13 @@ def to_rows(
                 n_sessions_scored=len(aggregate.notes),
                 n_sessions_partial=aggregate.n_partial,
                 n_failed=missing - blameless,
+                # The other half of the same separation. Without this every
+                # scored row carried a count of unusable notes and an empty
+                # `failure_reasons`, so the README printed "42/50 (8 unusable)"
+                # and the page "8 note(s) missing, with no recorded reason" --
+                # while the reason sat on the coverage row, which `report`
+                # drops for any system that has a scored row.
+                failure_reasons=dict(unreached.failure_reasons) if unreached else {},
                 unreached_reasons=dict(unreached.reasons) if unreached else {},
                 metrics=aggregate.metrics(),
                 metrics_note=(
