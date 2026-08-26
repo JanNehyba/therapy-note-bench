@@ -312,7 +312,7 @@ function renderTable(table, index) {
   }).join('');
 
   return `<section class="box${table.scored ? '' : ' pending'}">
-      <h2>${table.title} <span class="subtitle">· ${table.subtitle}</span></h2>
+      <h2>${table.title}</h2>
       <p class="blurb">${table.blurb}</p>
       ${designBlock(table)}
       <p class="versions">harness <code>${versions.harness_version}</code> ·
@@ -416,26 +416,134 @@ document.getElementById('provenance').innerHTML = DATA.generated_from
   : '';
 
 
-document.getElementById('tables').innerHTML =
-  DATA.tables.length
-    ? DATA.tables.map(renderTable).join('')
-    : '<div class="box pending"><h2>No runs yet</h2><p class="blurb">The first run will populate this page.</p></div>';
+// --- which table is on screen -----------------------------------------------
+//
+// Five comparability groups, one drawn. The rule that makes five is untouched --
+// it is this project's central invariant -- and all that changes is that the
+// reader picks one instead of scrolling past four.
+//
+// Every ordering decision was made in Python; this only draws what it was given.
+const SELECTION = DATA.selection || { tracks: [], default: '' };
+const INDEX_OF = {};
+(DATA.tables || []).forEach((table, index) => { INDEX_OF[table.id] = index; });
 
-document.querySelectorAll('tr.system').forEach(tr => {
-  tr.addEventListener('click', () => {
-    const detail = tr.nextElementSibling;
-    detail.hidden = !detail.hidden;
-    tr.querySelector('.arrow').textContent = detail.hidden ? '▸' : '▾';
+function trackOf(id) {
+  return SELECTION.tracks.find(t => t.judges.some(j => j.table === id));
+}
+
+function wanted() {
+  // A link to a particular judge's table should come back to that table.
+  const fromHash = (location.hash || '').replace(/^#/, '');
+  return fromHash in INDEX_OF ? fromHash : SELECTION.default;
+}
+
+let current = wanted();
+
+function renderSwitch() {
+  const host = document.getElementById('switch');
+  if (!host) return;
+  // One track and one judge is not a choice, and a control offering it says
+  // there is something to compare when there is not.
+  const tracks = SELECTION.tracks;
+  const here = trackOf(current);
+  if (!here || (tracks.length < 2 && here.judges.length < 2)) { host.innerHTML = ''; return; }
+
+  const trackButtons = tracks.length < 2 ? '' : `
+    <div class="pick" role="group" aria-label="Track">
+      ${tracks.map(t => {
+        // Keep the judge across the switch where that judge scored this track
+        // too, so changing track does not silently change the referee.
+        const keep = t.judges.find(j => j.judge_model === currentJudge());
+        const target = keep ? keep.table : t.default;
+        return `<button type="button" data-target="${target}"
+                  aria-pressed="${t === here}">${esc(t.label)}</button>`;
+      }).join('')}
+    </div>`;
+
+  const judgeButtons = here.judges.length < 2 ? '' : `
+    <div class="pick" role="group" aria-label="Judge">
+      <span class="pick-label">Judge</span>
+      ${here.judges.map(j => `<button type="button" data-target="${j.table}"
+          aria-pressed="${j.table === current}"
+          ${j.settings_differ ? `title="${esc(j.settings_label)}"` : ''}>${esc(j.label)}${
+            j.settings_differ ? `<span class="scale">${esc(j.settings_label)}</span>` : ''
+          }${j.stale_harness ? '<span class="scale">older harness</span>' : ''}</button>`).join('')}
+    </div>`;
+
+  host.innerHTML = trackButtons + judgeButtons;
+}
+
+function currentJudge() {
+  const here = trackOf(current);
+  const found = here && here.judges.find(j => j.table === current);
+  return found ? found.judge_model : null;
+}
+
+// One sentence of what the other judge would have shown, under the table it
+// qualifies. The panel itself is on the methods page; this is the part that
+// changes how the table above it should be read, so it stays with the table.
+function agreementNote(track) {
+  const found = (DATA.concordance || {})[track];
+  if (!found || !found.measures || !found.measures.length) return '';
+  const ranking = found.measures.find(m => m.measure === found.ranking_measure)
+    || found.measures[0];
+  if (!ranking || ranking.rho === null) return '';
+  const far = ranking.furthest;
+  return `<p class="note"><strong>The two judges agree on the shape of this ranking and not
+    on its order.</strong> On ${esc(colLabel(DATA.tables[INDEX_OF[current]], ranking.measure))},
+    ${ranking.moved} of ${ranking.n_systems} systems land somewhere else under
+    <code>${esc(found.judge_b === currentJudge() ? found.judge_a : found.judge_b)}</code>${
+      far ? `, <code>${esc(far.system)}</code> furthest — ${far.rank_a} against ${far.rank_b}` : ''
+    }. Near the top and near the bottom are claims this table supports; ninth against tenth
+    is not. <a href="methods.html#concordance">How far they agree →</a></p>`;
+}
+
+function show(id) {
+  if (!(id in INDEX_OF)) return;
+  current = id;
+  const index = INDEX_OF[id];
+  const table = DATA.tables[index];
+  document.getElementById('table-host').innerHTML =
+    renderTable(table, index) + agreementNote(table.track);
+  renderSwitch();
+  applyFilters();
+  if (location.hash.replace(/^#/, '') !== id) {
+    history.replaceState(null, '', '#' + id);
+  }
+}
+
+document.getElementById('tables').innerHTML = DATA.tables.length
+  ? '<div id="switch" class="switch"></div><div id="table-host"></div>'
+  : '<div class="box pending"><h2>No runs yet</h2><p class="blurb">The first run will populate this page.</p></div>';
+
+if (DATA.tables.length) {
+  // Delegated, not bound at load. The listeners used to be attached once by
+  // `querySelectorAll`, and after the first switch they were holding nodes that
+  // are no longer in the document -- expanding a row and sorting a column would
+  // both stop working, silently, the moment a reader used the switch.
+  const host = document.getElementById('table-host');
+  host.addEventListener('click', event => {
+    const th = event.target.closest('th[data-sort]');
+    if (th) { sortBy(th.closest('table'), th.dataset.sort); return; }
+    const tr = event.target.closest('tr.system');
+    if (tr && tr.dataset.row) {
+      const detail = tr.nextElementSibling;
+      detail.hidden = !detail.hidden;
+      tr.querySelector('.arrow').textContent = detail.hidden ? '▸' : '▾';
+    }
   });
-});
 
-document.querySelectorAll('th[data-sort]').forEach(th => {
-  th.addEventListener('click', () => sortBy(th.closest('table'), th.dataset.sort));
-});
+  document.getElementById('switch').addEventListener('click', event => {
+    const button = event.target.closest('button[data-target]');
+    if (button) show(button.dataset.target);
+  });
 
-active.forEach(f =>
-  document.getElementById(f.id).addEventListener('change', applyFilters));
-applyFilters();
+  active.forEach(f =>
+    document.getElementById(f.id).addEventListener('change', applyFilters));
+
+  window.addEventListener('hashchange', () => show(wanted()));
+  show(current);
+}
 </script>
 </body>
 </html>

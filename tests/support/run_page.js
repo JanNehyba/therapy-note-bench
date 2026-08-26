@@ -29,7 +29,17 @@ global.document = {
   addEventListener() {},
   body: new El('body'),
 };
-global.window = { addEventListener() {}, matchMedia: () => ({ matches: false, addEventListener() {} }) };
+// Before the script runs, not after: the leaderboard reads `location.hash` to
+// decide which table to draw, and a missing stub throws on the first line of
+// every page test at once rather than in the one that cares.
+global.location = { hash: '', href: 'https://example.invalid/', search: '' };
+global.history = { replaceState() {}, pushState() {} };
+global.window = {
+  addEventListener() {},
+  matchMedia: () => ({ matches: false, addEventListener() {} }),
+  location: global.location,
+  history: global.history,
+};
 global.localStorage = { getItem() { return null; }, setItem() {} };
 
 try {

@@ -16,7 +16,9 @@ Nothing here decides what may be compared. That is
 
 from __future__ import annotations
 
+import hashlib
 import json
+import re
 from pathlib import Path
 
 from tnb import corpus, results
@@ -178,6 +180,14 @@ def _and_list(values) -> str:
 TRACK_TITLES = {
     results.TRACK_TNEVAL: "TN-Eval SOAP · AnnoMI conversations",
     results.TRACK_ICARE: "iCARE / iHOPE · 17 sections per session",
+}
+
+#: The same tracks, short enough to be a button. Separate from the titles rather
+#: than sliced out of them: a title is a sentence and a slice of a sentence is
+#: whatever survived the punctuation.
+TRACK_SWITCH_LABELS = {
+    results.TRACK_TNEVAL: "TN-Eval SOAP",
+    results.TRACK_ICARE: "iCARE / iHOPE",
 }
 
 TRACK_BLURBS = {
@@ -387,6 +397,132 @@ def _ordered_sections(names: list[str]) -> list[str]:
     known = [name for name in SECTION_ORDER if name in names]
     rest = sorted(name for name in names if name not in SECTION_ORDER)
     return known + rest
+
+
+def _table_id(table: dict) -> str:
+    """A stable, readable name for one comparability group.
+
+    Readable because it goes in the URL: a link to a particular judge's table
+    should say which one. Stable because a reader who bookmarks it comes back
+    to the same table, so it is derived from what makes the group a group and
+    not from its position on the page.
+    """
+    versions = table["versions"]
+    settings = versions.get("judge_settings") or {}
+    parts = [
+        table["track"],
+        versions["judge_model"] or "unjudged",
+        versions["harness_version"] or "0",
+    ]
+    if settings:
+        # Two tables can share a judge and a harness and differ only here --
+        # `gemini-2.5-pro` answered eleven systems at a thinking budget of 128
+        # and three at 256. A digest rather than the settings themselves: the
+        # settings are a mapping and the id has to survive being a URL.
+        digest = hashlib.sha256(json.dumps(settings, sort_keys=True).encode("utf-8")).hexdigest()[
+            :6
+        ]
+        parts.append(digest)
+    return "-".join(re.sub(r"[^a-z0-9.]+", "-", str(part).lower()).strip("-") for part in parts)
+
+
+def _settings_label(settings: dict | None, peers: list[dict] | None = None) -> str:
+    """How a judge was set, in the fewest words that still say it.
+
+    `model` and `backend` are dropped: the first is already the button's name
+    and the second is how we reach it, not how it answered.
+
+    With `peers` -- the other settings this one has to be told apart from --
+    only the keys that actually differ are named. The two `gemini-2.5-pro`
+    tables differ in one setting and agree on two, and printing all three puts
+    `temperature 0` on both buttons to distinguish nothing.
+    """
+    settings = settings or {}
+    interesting = [name for name in sorted(settings) if name not in ("model", "backend")]
+    if peers:
+        differing = [
+            name
+            for name in interesting
+            if any(peer.get(name) != settings.get(name) for peer in peers)
+        ]
+        # Everything agrees: two tables the reader cannot tell apart from their
+        # settings, which is worth saying rather than labelling both blank.
+        interesting = differing or interesting
+    return ", ".join(f"{name} {settings[name]}" for name in interesting)
+
+
+def _selection(tables: list[dict]) -> dict:
+    """Which table to draw, and what the reader may switch to.
+
+    Judges are listed per track, so "a judge with no rows on this track" cannot
+    be offered -- `gemini-2.5-pro` has TN-Eval rows and no iCARE ones, and a
+    disabled button is an offer that cannot be accepted.
+
+    A judge's settings appear on its button only when two tables on the same
+    track share that judge's name. Printing them always would put
+    `max_output_tokens 288, temperature 0, thinking_budget 256` on every button
+    to disambiguate nothing.
+    """
+    from tnb import judge as judge_module
+
+    tracks: list[dict] = []
+    for table in tables:
+        track = table["track"]
+        found = next((item for item in tracks if item["track"] == track), None)
+        if found is None:
+            found = {
+                "track": track,
+                "label": TRACK_SWITCH_LABELS.get(track, track),
+                "judges": [],
+            }
+            tracks.append(found)
+        found["judges"].append(
+            {
+                "judge_model": table["versions"]["judge_model"],
+                "label": table["versions"]["judge_model"] or "not yet scored",
+                "settings": table["versions"].get("judge_settings") or {},
+                "settings_label": "",
+                "settings_differ": False,
+                "table": table["id"],
+                "stale_harness": table["stale_harness"],
+            }
+        )
+
+    for item in tracks:
+        names = [entry["judge_model"] for entry in item["judges"]]
+        for entry in item["judges"]:
+            entry["settings_differ"] = names.count(entry["judge_model"]) > 1
+            peers = [
+                other["settings"]
+                for other in item["judges"]
+                if other is not entry and other["judge_model"] == entry["judge_model"]
+            ]
+            entry["settings_label"] = (
+                _settings_label(entry["settings"], peers) if entry["settings_differ"] else ""
+            )
+        # Only the labels reach the page; the mappings were scaffolding. Popped
+        # after the loop, not inside it: an entry is another entry's peer, and
+        # removing one while the rest are still being labelled loses the
+        # comparison the labels are made of.
+        for entry in item["judges"]:
+            entry.pop("settings", None)
+        # The judge the leaderboard is ranked by leads, then the panel's second,
+        # then whatever else ran. `tables` is already ordered scored-first, so
+        # anything not named keeps that order.
+        preferred = (judge_module.DEFAULT_MODEL, judge_module.SECOND_JUDGE)
+        item["judges"].sort(
+            key=lambda entry: (
+                preferred.index(entry["judge_model"])
+                if entry["judge_model"] in preferred
+                else len(preferred)
+            )
+        )
+        item["default"] = item["judges"][0]["table"] if item["judges"] else ""
+
+    return {
+        "tracks": tracks,
+        "default": tracks[0]["default"] if tracks else "",
+    }
 
 
 def _current_groups(groups: dict[tuple, list[Row]]) -> tuple[dict[tuple, list[Row]], list[dict]]:
@@ -649,8 +785,17 @@ def build(rows: list[Row], saturations: list[dict] | None = None) -> dict:
             table["versions"]["prompt_version"],
         )
     )
+    for table in tables:
+        table["id"] = _table_id(table)
+    # Two tables with one id would silently draw the same one twice, and the
+    # reader would see a switch that does nothing.
+    assert len({table["id"] for table in tables}) == len(tables), "table ids collide"
+
     return {
         "tables": tables,
+        # Which one to draw and what may be switched to. Decided here, because
+        # every other ordering on this page is.
+        "selection": _selection(tables),
         # Not drawn, but named. A number that used to be published and is not
         # any more should be explainable rather than silently gone.
         "superseded": superseded,

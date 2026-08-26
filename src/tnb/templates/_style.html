@@ -189,4 +189,40 @@ p.settings { margin-top: .2rem; }
   .pair { grid-template-columns: 1fr; }
   .design dl > div { grid-template-columns: 1fr; }
 }
+
+  /* --- picking a table ------------------------------------------------- */
+
+  .switch { display: flex; flex-wrap: wrap; gap: .6rem 1.5rem; margin: 0 0 1.1rem; }
+  .pick { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; }
+  .pick-label {
+    font-size: .72rem; letter-spacing: .04em; text-transform: uppercase;
+    color: var(--muted); margin-right: .2rem;
+  }
+  .pick button {
+    font: inherit; font-size: .88rem; line-height: 1.2; cursor: pointer;
+    display: inline-flex; flex-direction: column; align-items: flex-start;
+    padding: .32rem .7rem; border: 1px solid var(--line); border-radius: 6px;
+    background: var(--card); color: var(--fg);
+  }
+  .pick button:hover { border-color: var(--muted); }
+  /* The pressed state is read off `aria-pressed`, so the announcement and the
+     appearance are the same fact rather than two that can disagree. */
+  .pick button[aria-pressed="true"] {
+    background: var(--chip); border-color: var(--accent); color: var(--accent);
+    font-weight: 600;
+  }
+  .pick button .scale { margin: .1rem 0 0; font-weight: 400; }
+  .pick button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .methods-link {
+    margin: 1.4rem 0 0; padding: .9rem 1.1rem; font-size: .9rem;
+    border: 1px solid var(--line); border-radius: 8px; background: var(--card);
+    color: var(--muted);
+  }
+  .methods-link a { font-weight: 600; }
+
+  @media (max-width: 640px) {
+    .switch { gap: .5rem; }
+    .pick button { font-size: .82rem; }
+  }
 </style>

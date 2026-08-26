@@ -502,3 +502,116 @@ def test_a_row_of_a_type_nothing_offers_to_hide_is_still_shown(tmp_path):
     controls = _run(report.render_page(data), tmp_path, panel="controls")
 
     assert "show-published" in controls
+
+
+def test_only_one_table_is_drawn_at_a_time(tmp_path):
+    """Five comparability groups, one on screen.
+
+    The rule that makes five is untouched -- it is this project's central
+    invariant. What changed is that the reader picks one instead of scrolling
+    past four, and the page must never draw two sets of rows at once: a reader
+    who sorted a column would be sorting one referee's table while looking at
+    another's.
+    """
+    from tnb import report
+
+    data = _page_data(tmp_path)
+    assert len(data["tables"]) >= 2, "the fixture must have something to switch between"
+
+    host = _run(report.render_page(data), tmp_path, panel="table-host")
+
+    # `data-table=` marks the grid of model rows. A rendered table also holds
+    # nested ones -- the per-row detail and the column legend -- so counting
+    # `<table` counts the furniture too.
+    assert host.count('data-table="') == 1, "one grid of model rows, whatever the payload holds"
+
+
+def test_the_heading_does_not_name_the_judge_the_control_names(tmp_path):
+    """Two labels for one fact contradict each other the moment one changes.
+
+    The heading said "scored by gemini-3.1-pro-preview" while the control said
+    which judge was selected; after a switch the heading would be describing
+    the table the reader just left.
+    """
+    from tnb import report
+
+    data = _page_data(tmp_path)
+    host = _run(report.render_page(data), tmp_path, panel="table-host")
+    switch = _run(report.render_page(data), tmp_path, panel="switch")
+
+    heading = host.split("</h2>")[0]
+    for table in data["tables"]:
+        judge = table["versions"]["judge_model"]
+        if judge:
+            assert judge not in heading, "the heading must not name the judge"
+
+    assert any(t["versions"]["judge_model"] in switch for t in data["tables"]), (
+        "and the control must"
+    )
+
+
+def test_two_tables_from_one_judge_are_told_apart_by_their_settings(tmp_path):
+    """`gemini-2.5-pro` has two tables: eleven systems answered at a thinking
+    budget of 128 and three at 256. Two buttons reading `gemini-2.5-pro` and
+    nothing else is a choice the reader cannot make."""
+    from tnb import report
+
+    rows = [
+        _row("x", "a-judge", 0.5, judge_settings={"model": "a-judge", "thinking_budget": budget})
+        for budget in (128, 256)
+    ]
+    data = report.build(rows)
+    assert len(data["tables"]) == 2, "two settings are two instruments"
+
+    switch = _run(report.render_page(data), tmp_path, panel="switch")
+
+    assert "thinking_budget 128" in switch
+    assert "thinking_budget 256" in switch
+
+
+def test_a_judge_with_no_rows_on_this_track_is_not_offered(tmp_path):
+    """A disabled button is an offer that cannot be accepted.
+
+    `gemini-2.5-pro` has TN-Eval rows and no iCARE ones. Listing judges per
+    track makes the case structurally impossible rather than handled.
+    """
+    from tnb import report
+
+    rows = [
+        _row("x", "judge-a", 0.5),
+        _row("x", "judge-b", 0.5),
+        _row("x", "judge-a", 0.5, track=results.TRACK_ICARE, prompt_version="icare-zeroshot-v1"),
+    ]
+    selection = report.build(rows)["selection"]
+
+    by_track = {t["track"]: [j["judge_model"] for j in t["judges"]] for t in selection["tracks"]}
+
+    assert sorted(by_track[results.TRACK_TNEVAL]) == ["judge-a", "judge-b"]
+    assert by_track[results.TRACK_ICARE] == ["judge-a"]
+
+
+def test_the_link_in_the_address_bar_comes_back_to_the_same_table(tmp_path):
+    """A reader who sends somebody a link to one judge's table means that one."""
+    from tnb import report
+
+    data = _page_data(tmp_path)
+    wanted = data["tables"][-1]["id"]
+    assert wanted != data["selection"]["default"], "the fixture must not pick the default"
+
+    page = report.render_page(data)
+    script = tmp_path / "hash.js"
+    body = "\n".join(re.findall(r"<script[^>]*>(.*?)</script>", page, re.S))
+    script.write_text(f"global.location = {{ hash: '#{wanted}' }};\n" + body, encoding="utf-8")
+
+    finished = subprocess.run(
+        [shutil.which("node") or "node", str(RUNNER), str(script), "table-host"],
+        capture_output=True,
+        text=True,
+        timeout=60,
+    )
+    assert finished.returncode == 0, finished.stdout + finished.stderr
+
+    judge = next(t for t in data["tables"] if t["id"] == wanted)["versions"]["judge_model"]
+    switch = _run(page, tmp_path, panel="switch")
+    assert judge, "the fixture's last table must be a judged one"
+    assert judge in switch
