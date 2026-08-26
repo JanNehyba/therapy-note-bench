@@ -538,3 +538,64 @@ def _scored_row(**overrides) -> Row:
         metrics=Metrics(headline={"completeness": 0.5}),
         **overrides,
     )
+
+
+def test_a_cloud_resource_path_never_carries_the_project_to_the_page():
+    """Vertex is a *generation* provider and its URL is built from the project.
+
+    A 404 quotes the whole resource path back, and the path travelled through
+    `generation` into `results/rows.jsonl`, which is committed, and on to the
+    published page. The only guard was a hex-run pattern, and a project id is
+    not hex, has no prefix and has no fixed length -- so it went straight
+    through, while `judge.py` said in a comment that it could not.
+    """
+    raw = (
+        'HTTP404: {"error":{"code":404,"message":"Publisher Model '
+        "`projects/a-real-looking-project/locations/global/publishers/google/models/x` "
+        'was not found.","status":"NOT_FOUND"}}'
+    )
+
+    cleaned = results.normalise_reason(raw)
+
+    assert "a-real-looking-project" not in cleaned
+    assert "projects/..." in cleaned, "the shape survives so the failure is still readable"
+    # The reason is cut to 120 characters, which a Vertex body exceeds. What has
+    # to survive is enough to tell one failure from another: the status and what
+    # kind of resource was missing.
+    assert cleaned.startswith("HTTP404:")
+    assert "Publisher Model" in cleaned
+
+
+def test_our_own_configured_secrets_are_masked_by_value(monkeypatch):
+    """Masking by shape is a blocklist, and this one lost once already.
+
+    What can be done exactly is recognise our own values, because we are the
+    ones who set them. The names come from `models.yaml`, so a provider added
+    tomorrow is covered without anyone remembering to add it here.
+    """
+    monkeypatch.setenv("VERTEX_PROJECT", "zealous-hamlet-42")
+    monkeypatch.setenv("OPENAI_API_KEY", "totally-not-a-real-key-value")
+
+    cleaned = results.normalise_reason(
+        "HTTP403: caller zealous-hamlet-42 with key totally-not-a-real-key-value denied"
+    )
+
+    assert "zealous-hamlet-42" not in cleaned
+    assert "totally-not-a-real-key-value" not in cleaned
+    assert "denied" in cleaned
+
+
+def test_a_short_environment_value_is_not_treated_as_a_secret(monkeypatch):
+    """Masking every short value would redact ordinary prose into nonsense."""
+    monkeypatch.setenv("VERTEX_PROJECT", "us")
+
+    assert "because" in results.normalise_reason("HTTP500: because the backend fell over")
+
+
+def test_the_masking_happens_before_the_length_cut(monkeypatch):
+    """Otherwise a secret can be half-cut and still recognisable."""
+    monkeypatch.setenv("VERTEX_PROJECT", "distinctive-project-name")
+
+    cleaned = results.normalise_reason("x" * 110 + " distinctive-project-name")
+
+    assert "distinctive" not in cleaned

@@ -394,6 +394,53 @@ def scored(rows: list[Row], **overrides) -> list[Row]:
 #: reason is kept and the identifier is not.
 _SECRET_LOOKING = re.compile(r"[0-9a-f]{16,}", re.IGNORECASE)
 
+#: A cloud resource path names the project that owns it. Vertex is configured
+#: as a *generation* provider and its URL is built from `$VERTEX_PROJECT` at
+#: call time, so a 404 quotes the whole path back:
+#:
+#:     Publisher Model `projects/<the project>/locations/global/...` was not found.
+#:
+#: Nothing above catches that -- a project id is not hex, has no prefix and has
+#: no fixed length. Kept as defence in depth for a deployment whose project is
+#: not in *this* process's environment; the exact check is `_sensitive_values`.
+_RESOURCE_PATH = re.compile(r"\b(projects|organizations|folders|billingAccounts)/[^/\s\"'`)]+")
+
+
+def _sensitive_names() -> tuple[str, ...]:
+    """Environment variables whose value must never be published.
+
+    Read from `models.yaml` rather than listed here, for the reason the file
+    itself gives: adding a provider is advertised as a config change, so a
+    hand-kept list would leave the next provider's key outside the guard.
+    """
+    from tnb.config import load_policy
+
+    extra = ("VERTEX_PROJECT", "OPENAI_API_KEY", "GOOGLE_APPLICATION_CREDENTIALS")
+    try:
+        from_providers = {provider.token_env for provider in load_policy().providers}
+    except Exception:  # noqa: BLE001 -- a broken config must not disable the guard
+        from_providers = set()
+    return tuple(sorted(from_providers | set(extra)))
+
+
+def _sensitive_values() -> list[str]:
+    """Our own secrets, by value, longest first.
+
+    Masking by *shape* is a blocklist, and blocklists lose: the project id that
+    started this is not hex, not prefixed and not a fixed length. What can be
+    done exactly is recognise our own values, because we are the ones who set
+    them. Longest first so a value containing another is masked whole.
+
+    Read at call time, not at import: a test that sets an environment variable
+    expects the next call to honour it.
+    """
+    import os
+
+    found = {
+        value.strip() for name in _sensitive_names() if len(value := os.environ.get(name, "")) >= 6
+    }
+    return sorted(found, key=len, reverse=True)
+
 
 #: Errors that say nothing about the model, because the model never answered.
 #:
@@ -459,8 +506,29 @@ def normalise_reason(error: str | None) -> str:
     every failure look unique and puts identifiers in a public file. This keeps
     the part that explains the failure and drops the part that identifies the
     caller.
+
+    Three passes, weakest last, because each catches what the others cannot:
+
+    1. **Our own values, exactly.** Masking by shape is a blocklist and
+       blocklists lose. This one lost: a hex-run pattern was the only guard, and
+       a GCP project id is not hex, has no prefix and has no fixed length.
+       Vertex is a *generation* provider whose URL is built from
+       ``$VERTEX_PROJECT``, so its 404 quotes the whole resource path back, and
+       the path ran through `generation` into `results/rows.jsonl`, which is
+       committed, and on to the published page. Recognising our own values is
+       exact, because we are the ones who set them.
+    2. **Cloud resource paths**, for a deployment whose project is not in this
+       process's environment.
+    3. **Long hex runs** -- e-INFRA's 429 quotes a hash of the key that hit the
+       limit.
+
+    Masking happens before the length cut, so a secret can never be half-cut and
+    still recognisable.
     """
     text = (error or "unknown error").strip()
+    for value in _sensitive_values():
+        text = text.replace(value, "...")
+    text = _RESOURCE_PATH.sub(r"\1/...", text)
     text = _SECRET_LOOKING.sub("...", text)
     text = " ".join(text.split())
     return text[:120]

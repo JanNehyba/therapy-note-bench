@@ -42,8 +42,16 @@ EXTRA_SENSITIVE_ENV = (
 #: is not in this machine's environment, so a key pasted from elsewhere is found
 #: too. `sk-proj-` needs no pattern of its own: `-` is inside the class below,
 #: so the general `sk-` shape already covers it.
+#:
+#: The `sk-` pattern needed a second form. A provider does not always quote the
+#: key back whole -- OpenAI's 401 body reads `sk-proj-Ab3d************xyz9`, and
+#: `*` is outside the character class, so the match died after twelve
+#: characters and the fragment sailed through. A redacted key is still a key:
+#: it names the account, and the visible head and tail narrow it considerably.
 KEY_SHAPES = (
     re.compile(r"\bsk-[A-Za-z0-9_-]{20,}"),
+    # The redacted form: a `sk-` head, a run of mask characters, then a tail.
+    re.compile(r"\bsk-[A-Za-z0-9_-]{2,}(?:[*.]{3,}|…+)[A-Za-z0-9_-]{2,}"),
     re.compile(r"\bAIza[A-Za-z0-9_-]{30,}"),
     re.compile(r"-----BEGIN [A-Z ]*PRIVATE KEY-----"),
     re.compile(r"\b\d{10,}-compute@developer\.gserviceaccount\.com"),
@@ -113,6 +121,12 @@ def find_secret_values(files: list[Path], secrets: dict[str, str]) -> list[str]:
             if value in text:
                 offences.append(f"{path} contains ${name}")
     return offences
+
+
+def find_key_shapes_in_text(text: str) -> list[str]:
+    """Which credential shapes a string matches. The same net the file scan
+    uses, exposed so a test can prove the net catches what it claims to."""
+    return [p.pattern for p in KEY_SHAPES if p.search(text)]
 
 
 def find_key_shapes(files: list[Path]) -> list[str]:
@@ -207,3 +221,29 @@ def test_the_test_module_is_importable_under_its_package_name():
     import tests.test_secrets as by_package
 
     assert by_package is sys.modules[__name__]
+
+
+def test_a_redacted_key_is_still_caught():
+    """A provider does not always quote the key back whole.
+
+    OpenAI's 401 body reads `sk-proj-Ab3d************xyz9`. `*` is outside the
+    general pattern's character class, so the match died after twelve characters
+    and the fragment sailed through the backstop. A redacted key still names the
+    account, and its visible head and tail narrow it considerably.
+    """
+    for body in (
+        "Incorrect API key provided: sk-proj-Ab3d************xyz9",
+        "Incorrect API key provided: sk-proj-Ab3d...xyz9",
+        "key sk-Ab3d…xyz9 was rejected",
+    ):
+        assert find_key_shapes_in_text(body), body
+
+
+def test_ordinary_prose_is_not_mistaken_for_a_redacted_key():
+    """The pattern needs a `sk-` head, so a sentence with dots is safe."""
+    for body in (
+        "the request failed... try again",
+        "asked for sk-ip but got nothing",
+        "HTTP500: backend error",
+    ):
+        assert not find_key_shapes_in_text(body), body
