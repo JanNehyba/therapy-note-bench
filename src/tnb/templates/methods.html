@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>therapy-note-bench — how this was measured</title>
+__STYLE__
+</head>
+<body>
+<main>
+  <h1>How this was measured</h1>
+  <p class="sub">
+    The instrument behind <a href="index.html">the leaderboard</a>: which judge, checked
+    against whom, over which corpora, and what the two judges disagree about. Every panel
+    here is drawn from the same run that produced the tables — nothing on this page is
+    written by hand.
+    <a href="https://github.com/JanNehyba/therapy-note-bench">Source and method</a>.
+  </p>
+
+  <div class="box pending" id="calibration">
+    <h2>Judge calibration</h2>
+    <div id="calibration-body">
+      <p class="blurb">
+        Before any number here is trusted, the judge is scored against the two human
+        annotators TN-Eval released, and the agreement appears here — including if it is bad.
+        <strong>Not yet measured.</strong>
+      </p>
+    </div>
+  </div>
+
+  <details class="box" id="judges">
+    <summary><strong>Why these two judges, and not the newest models</strong></summary>
+    <div id="judges-body"></div>
+  </details>
+
+  <div class="box" id="preference"></div>
+
+  <div class="box" id="concordance"></div>
+
+  <details class="box" id="saturation">
+    <summary><strong>Is there anything left to measure?</strong></summary>
+    <div id="saturation-body"></div>
+  </details>
+
+  <details class="box" id="protocol">
+    <summary><strong>What is a note here, and what is it scored against?</strong></summary>
+    <div id="protocol-body"></div>
+  </details>
+
+  <div class="box" id="similarity-example"></div>
+
+  <details class="box" id="corpora">
+    <summary><strong>What the two corpora are, and how much of the form the experts filled in</strong></summary>
+    <div id="corpora-body"></div>
+  </details>
+
+  <div id="withdrawn"></div>
+
+  <details class="box" id="licences">
+    <summary><strong>Where every input comes from, and on what terms</strong></summary>
+    <div id="licences-body"></div>
+  </details>
+
+  <footer>
+    <p>Each column's range, what it counts and what it must not be read as are printed
+       under the table it belongs to on <a href="index.html">the leaderboard</a> — including
+       the near-zero human agreement on <strong>Faithfulness</strong> (Krippendorff's alpha
+       0.18) and the fact that <strong>TRACE</strong> is a re-implementation with
+       <em>no human anchor</em>. A number and its caveat should not be separated by a scroll,
+       which is why they are there and this page is here.</p>
+    <p><strong>Notes</strong> counts the notes a protocol could actually read. A model that
+       writes a good note in the wrong shape loses notes to its format, not to its
+       clinical content — read the count before comparing the score.</p>
+    <p>The chip after a model name is the <strong>provider</strong> that served it. The same
+       model id on two providers can be two different builds — a different quantisation,
+       different weights, a different system prompt — so they are two rows there, never one.</p>
+    <p>Rows are only ever compared when they agree on all six of track, harness version,
+       prompt version, judge model, judge prompt version and <strong>the settings the judge
+       ran at</strong>. A changed judge — or a judge given a different budget to think with —
+       starts a new table rather than rewriting this one. A group that names a judge and
+       cannot say how it was set is withdrawn: two rows that both record nothing are not
+       thereby the same instrument.</p>
+    <p id="provenance"></p>
+  </footer>
+</main>
+
+<script>
+const DATA = __DATA__;
+
+__HELPERS__
+
+// Nothing is drawn yet. The panels above are the frames the leaderboard's own
+// renderers will move into, one commit at a time, so that the move shows up as
+// a move in the diff rather than as a rewrite. Until then this page generates,
+// validates and links nowhere.
+</script>
+</body>
+</html>

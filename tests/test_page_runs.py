@@ -390,3 +390,33 @@ def test_candidates_measured_at_different_settings_are_flagged(tmp_path):
 
     assert "not all measured at the same" not in agreed
     assert "thinking_budget 256" in agreed
+
+
+def test_the_methods_page_executes_without_throwing(tmp_path):
+    """It shares a payload and a script context with the leaderboard, so a
+    helper the leaderboard happens to define first would hide a missing one
+    here until the panels moved across."""
+    from tnb import report
+
+    data = report.build([_row("gemma4", "a-judge", 0.5)])
+    _run(report.render_methods(data), tmp_path)
+
+
+def test_both_pages_are_written_by_one_run(tmp_path):
+    """One payload, two views. A methods page computed separately could describe
+    a run the leaderboard is not showing, and being checkable against the
+    tables beside it is the whole reason it exists."""
+    from tnb import report
+
+    readme = tmp_path / "README.md"
+    readme.write_text("<!-- LEADERBOARD:BEGIN -->\n<!-- LEADERBOARD:END -->\n", encoding="utf-8")
+    report.write([_row("gemma4", "a-judge", 0.5)], docs_dir=tmp_path, readme=readme)
+
+    page = (tmp_path / report.PAGE_PATH.name).read_text(encoding="utf-8")
+    methods = (tmp_path / report.METHODS_PATH.name).read_text(encoding="utf-8")
+
+    assert "const DATA = " in methods
+    payload = "const DATA = "
+    assert page.split(payload)[1].split("\n")[0] == methods.split(payload)[1].split("\n")[0], (
+        "the two pages must be drawn from the same payload, character for character"
+    )

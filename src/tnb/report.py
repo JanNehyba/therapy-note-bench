@@ -30,6 +30,13 @@ from tnb.tasks import icare, soap
 DOCS_DIR = REPO_ROOT / "docs"
 DATA_PATH = DOCS_DIR / "leaderboard.json"
 PAGE_PATH = DOCS_DIR / "index.html"
+
+#: The leaderboard's sister page. The tables answer "which model"; this one
+#: answers "why believe the tables", and the two questions want different
+#: amounts of a reader's attention. Eight panels grew above the tables one
+#: finding at a time, until the thing a reader came for was below four collapsed
+#: boxes.
+METHODS_PATH = DOCS_DIR / "methods.html"
 README_PATH = REPO_ROOT / "README.md"
 
 LEADERBOARD_MARKERS = ("<!-- LEADERBOARD:BEGIN -->", "<!-- LEADERBOARD:END -->")
@@ -1037,6 +1044,7 @@ def write(rows: list[Row], *, docs_dir: Path | None = None, readme: Path | None 
         json.dumps(data, indent=2, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8"
     )
     (docs_dir / PAGE_PATH.name).write_text(render_page(data), encoding="utf-8")
+    (docs_dir / METHODS_PATH.name).write_text(render_methods(data), encoding="utf-8")
     update_readme(render_readme_section(data), readme)
     return data
 
@@ -1058,12 +1066,27 @@ _INLINE_ESCAPES = {
 }
 
 
-def render_page(data: dict) -> str:
-    """The standalone page: the data inlined, no build step, no dependency."""
+def _inline(data: dict) -> str:
+    """The payload, safe to sit inside a `<script>` element."""
     payload = json.dumps(data, ensure_ascii=False, sort_keys=True)
     for char, escape in _INLINE_ESCAPES.items():
         payload = payload.replace(char, escape)
-    return PAGE_TEMPLATE.replace("__DATA__", payload)
+    return payload
+
+
+def render_page(data: dict) -> str:
+    """The standalone page: the data inlined, no build step, no dependency."""
+    return PAGE_TEMPLATE.replace("__DATA__", _inline(data))
+
+
+def render_methods(data: dict) -> str:
+    """The same payload, drawn as the method behind the tables.
+
+    One payload rather than two. A methods page computed separately could
+    describe a run the leaderboard is not showing, and the whole reason this
+    page exists is to be checkable against the tables beside it.
+    """
+    return METHODS_TEMPLATE.replace("__DATA__", _inline(data))
 
 
 TEMPLATE_DIR = Path(__file__).parent / "templates"
@@ -1092,3 +1115,4 @@ def _assemble(name: str) -> str:
 
 
 PAGE_TEMPLATE = _assemble("leaderboard.html")
+METHODS_TEMPLATE = _assemble("methods.html")
