@@ -255,6 +255,87 @@ clinical note". The sections that carry real signal are the ones the transcripts
 can actually answer: presenting complaints, mental status, and what was
 discussed, which the experts filled in 37, 39 and 39 times out of 40.
 
+## Seven of nine things a clinician means by "quality" are not measured
+
+The field has an instrument for this: [PDSQI-9](https://arxiv.org/abs/2501.08977),
+validated on real EHR data with physicians doing the rating. It has nine
+attributes. **This benchmark measures two of them.**
+
+| PDSQI-9 attribute | Measured here? |
+|---|---|
+| **Thorough** — covers all pertinent issues | **Yes.** `completeness`, and the leaderboard is ordered by it |
+| **Accurate** — true, free of incorrect information | **Yes.** `faithfulness` — on which two trained therapists reach an alpha of 0.18 |
+| **Succinct** — brief, to the point, without redundancy | **No.** `conciseness` counts sentences that fit a rubric item; a note twice as long scores the same |
+| **Organized** — structured so the reader follows the clinical course | No |
+| **Synthesized** — shows understanding and an ability to plan care | No |
+| **Useful** — relevant, provides value | No |
+| **Comprehensible** — clear, unambiguous | No |
+| **Citation** — sources present and appropriate | No |
+| **Stigmatizing** — free of stigmatising language | No |
+
+So the ranking column is the one attribute of nine that most rewards writing
+more, and the seven it does not measure are the ones that separate a good note
+from a complete one. That is not a flaw in the protocol — TN-Eval's rubric is
+reproduced here exactly and it never claimed to measure the rest. It is a limit
+on the sentence "this model writes better notes", which no number here
+supports.
+
+**Adopting PDSQI-9 would not fix it, and would look like it had.** The
+instrument was validated with physicians rating; its authors did not compare
+LLM raters against human ones. Scoring these notes on it with a judge model
+would produce nine columns with no human anchor for any of them — the position
+TRACE is already in, and labelled as being in wherever it appears. Doing it
+properly means clinicians rating the notes in `generations/`. That is a study,
+not a configuration change.
+
+## Five of the twenty-three criteria cannot apply to these conversations
+
+AnnoMI is motivational-interviewing demonstrations. There is no medication to
+adjust, no formal diagnosis, no assessment instrument administered. The rubric
+asks about all of them anyway, of every note, and the denominator is always 23.
+
+The therapist was in the room, and how often she writes each one is the best
+available reading of whether it applies:
+
+| Criterion | Therapist writes it | Models |
+|---|---|---|
+| Client's goals (assessment) | 2% | 0–4% |
+| Homework (subjective) | 4% | 0–8% |
+| Adjustment of medication | 6% | 2–16% |
+| Diagnosis | 6% | 4–41% |
+| Assessment tools | 8% | 0–12% |
+
+**What this breaks and what it does not.** Recomputed over the eighteen
+criteria that can apply, the ordering is essentially unchanged — Spearman
++0.983 against the published one, ten of eighteen systems move and none by more
+than two places, and the top three and bottom four are identical. **The
+ranking survives.**
+
+The *number* does not. Every system gains about 0.12: the leader goes from
+0.554 to 0.681. A reader who sees 0.546 and reads "about half" is reading a
+figure deflated by roughly a fifth for questions the transcript cannot answer.
+Quote it as a fraction of the whole rubric, which is what it is, and not as a
+proportion of what a note could have contained.
+
+## How a model beats a therapist: by filling boxes she leaves empty
+
+The mechanism is visible per criterion. Models exceed the therapist on 15 of
+the 23, by a mean of +0.15, and the largest gaps are where a note either has a
+section or does not:
+
+| Criterion | Therapist | Models (median) |
+|---|---|---|
+| Mental status examination | 0.26 | 0.96 |
+| Interventions (plan) | 0.36 | 0.97 |
+| Behaviour (objective) | 0.44 | 1.00 |
+| Client's own words, quoted | 0.24 | 0.66 |
+
+A model writes a mental status section in almost every note; the therapist
+writes one in a quarter of them. **Whether what the model wrote there is true
+is checked by exactly one measure** — faithfulness — **and that is the measure
+two therapists agree on least.** Coverage is verified against a checklist;
+what fills the coverage is verified against the weakest instrument in the set.
+
 ## A rubric rewards coverage, not judgement
 
 Every judge that has scored this corpus puts both 2025 models **above** the

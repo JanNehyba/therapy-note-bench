@@ -211,6 +211,43 @@ No. Checked five ways on 2026-08-23:
 - `justlab-ai/oss-20b-aci-bench` — a single evaluation run of gpt-oss on
   ACI-Bench.
 
+### The instrument this field uses to mean "quality"
+
+**[PDSQI-9](https://arxiv.org/abs/2501.08977)** — the Provider Documentation
+Summarization Quality Instrument, published January 2025. It is the successor
+to PDQI-9, which was written for provider-authored notes, and it exists because
+that older instrument does not address what LLM summarisation gets wrong:
+hallucination, omission, relevance.
+
+Nine attributes: **accurate, citation, comprehensible, organized, succinct,
+stigmatizing, synthesized, thorough, useful**. Five-point scales and binary
+scales, depending on the attribute. Validated on real EHR data — 200 patients
+with 3–5 prior encounters each, across 11 specialties — reaching an ICC of
+0.867 between raters.
+
+**This benchmark measures two of those nine**, and reports a third under a name
+that means something else:
+
+| PDSQI-9 attribute | Here |
+|---|---|
+| Thorough | `completeness` — **the column the leaderboard is ordered by** |
+| Accurate | `faithfulness`, on which two therapists reach an alpha of 0.18 |
+| Succinct | not measured. `conciseness` counts sentences that fit a rubric item, and its own definition says it "does not mean the note is short" |
+| Organized, synthesized, useful, comprehensible, citation, stigmatizing | not measured at all |
+
+**Why it is not simply adopted.** PDSQI-9 was validated with *physicians* doing
+the rating; the authors state they did not compare LLM raters against human
+ones. Scoring these notes on it with an LLM judge would produce nine columns
+with no human anchor for any of them — which is exactly what this repository
+already labels TRACE as, and labels it everywhere it appears. Adopting the
+instrument properly needs clinicians rating the notes in `generations/`, which
+is a study rather than a code change.
+
+The closest thing here is TRACE, whose five dimensions (trustworthiness,
+relevance, accuracy, comprehensiveness, expression) overlap PDSQI-9's
+construct more than the rubric does — and which has no human anchor and,
+measured on 2026-08-26, separates the sixteen models across 5.6% of its scale.
+
 ## Adjacent, but a different task
 
 These come up in searches for "therapy benchmark" and are not about notes:

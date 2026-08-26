@@ -285,3 +285,40 @@ def test_the_empty_marker_set_is_matched_exactly_and_that_is_on_purpose():
     assert is_filled("Date: Nil; Place: Nil") is False
     assert is_filled("Nil.") is True, "the documented hole, held so it cannot close by accident"
     assert is_filled("Type: Nil; Mode: Individual") is True, "one sub-field is enough"
+
+
+def test_the_docs_name_what_is_not_measured():
+    """Seven of PDSQI-9's nine attributes are not measured here, and until
+    2026-08-26 nothing said so or named the instrument.
+
+    `docs/landscape.md` is the survey of what exists in this field; a validated
+    instrument for exactly this task was missing from it.
+    """
+    from tnb.config import REPO_ROOT
+
+    landscape = (REPO_ROOT / "docs" / "landscape.md").read_text(encoding="utf-8")
+    limitations = (REPO_ROOT / "docs" / "limitations.md").read_text(encoding="utf-8")
+
+    assert "PDSQI-9" in landscape and "PDSQI-9" in limitations
+    for attribute in ("organized", "synthesized", "useful", "comprehensible", "stigmatizing"):
+        assert attribute in limitations.lower(), f"{attribute} is not accounted for"
+
+    # The reason it is not adopted, which is the part a reader will skip.
+    assert "did not compare LLM raters" in landscape
+    assert "no human anchor" in landscape
+
+
+def test_the_criteria_the_corpus_cannot_answer_are_named_with_the_sensitivity():
+    """Five of 23 rubric criteria never apply to motivational-interviewing
+    demonstrations, and the denominator is 23 regardless.
+
+    The published claim is that this deflates the number and not the ranking.
+    Both halves are in the docs, so both are checked here.
+    """
+    from tnb.config import REPO_ROOT
+
+    limitations = (REPO_ROOT / "docs" / "limitations.md").read_text(encoding="utf-8")
+
+    assert "Five of the twenty-three criteria" in limitations
+    assert "+0.983" in limitations, "the sensitivity figure is the point of the section"
+    assert "0.554 to 0.681" in limitations, "and so is what it does to the number"
