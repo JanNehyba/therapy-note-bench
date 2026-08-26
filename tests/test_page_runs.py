@@ -61,7 +61,6 @@ def _page_data(tmp_path: Path) -> dict:
     a panel test now renders whichever of the two pages holds its panel, from
     the same data, so the test is about the panel and not about the split."""
     from tnb import judge
-    from tnb.scoring import concordance
 
     rows = [
         _row(system, judge_model, value)
@@ -76,16 +75,7 @@ def _page_data(tmp_path: Path) -> dict:
     data["similarity_example"] = None
     data["saturation"] = None
     data["judges"] = None
-    data["concordance"] = {
-        results.TRACK_TNEVAL: concordance.to_json(
-            concordance.compare(
-                rows,
-                results.TRACK_TNEVAL,
-                report.COLUMNS[results.TRACK_TNEVAL],
-                ranking_measure=report.RANKING_MEASURES.get(results.TRACK_TNEVAL),
-            )
-        )
-    }
+    data["concordance"] = report.concordance_payload(rows)
     return data
 
 
@@ -106,6 +96,10 @@ def _run(page: str, tmp_path: Path, panel: str | None = None) -> str:
         [node, str(RUNNER), str(script), *([panel] if panel else [])],
         capture_output=True,
         text=True,
+        # Node writes UTF-8; without this Python decodes it with the
+        # locale codec, and every assertion about a rendered string with a
+        # non-ASCII character in it compares two different manglings.
+        encoding="utf-8",
         timeout=60,
     )
     assert finished.returncode == 0, finished.stdout + finished.stderr
@@ -278,7 +272,6 @@ def _judges_data() -> dict:
 
 def _with_judges(tmp_path: Path) -> str:
     from tnb import judge
-    from tnb.scoring import concordance
 
     rows = [
         _row(system, judge_model, value)
@@ -294,15 +287,7 @@ def _with_judges(tmp_path: Path) -> str:
     data["saturation"] = None
     data["preference"] = None
     data["judges"] = _judges_data()
-    data["concordance"] = {
-        results.TRACK_TNEVAL: concordance.to_json(
-            concordance.compare(
-                rows,
-                results.TRACK_TNEVAL,
-                report.COLUMNS[results.TRACK_TNEVAL],
-            )
-        )
-    }
+    data["concordance"] = report.concordance_payload(rows)
     # The methods page: this box moved there with the rest of the instrument.
     return report.render_methods(data)
 
@@ -607,6 +592,10 @@ def test_the_link_in_the_address_bar_comes_back_to_the_same_table(tmp_path):
         [shutil.which("node") or "node", str(RUNNER), str(script), "table-host"],
         capture_output=True,
         text=True,
+        # Node writes UTF-8; without this Python decodes it with the
+        # locale codec, and every assertion about a rendered string with a
+        # non-ASCII character in it compares two different manglings.
+        encoding="utf-8",
         timeout=60,
     )
     assert finished.returncode == 0, finished.stdout + finished.stderr
@@ -688,6 +677,7 @@ def test_the_sentence_under_the_table_names_this_table_s_rank_first(tmp_path):
             [shutil.which("node") or "node", str(RUNNER), str(script), "table-host"],
             capture_output=True,
             text=True,
+            encoding="utf-8",
             timeout=60,
         )
         assert finished.returncode == 0, finished.stdout + finished.stderr
@@ -731,3 +721,40 @@ def test_every_link_between_the_two_pages_lands_somewhere(tmp_path):
                 assert f'id="{anchor}"' in pages[target], (
                     f"{name} links to #{anchor} in {target}, which has no such element"
                 )
+
+
+def test_the_concordance_panel_puts_the_tracks_in_the_tables_order(tmp_path):
+    """The payload is serialised with sorted keys, so `icare` comes before
+    `tneval-soap` whatever order Python built it in -- and the panel trusted
+    the key order while the SOAP track leads everywhere else on the site."""
+    from tnb import report
+
+    rows = []
+    for track, prompt, measure in (
+        (results.TRACK_TNEVAL, "tneval-soap-v1", "completeness"),
+        (results.TRACK_ICARE, "icare-zeroshot-v1", "trace"),
+    ):
+        for judge_model, values in (("judge-a", (0.9, 0.5)), ("judge-b", (0.5, 0.9))):
+            for system, value in zip(("x", "y"), values, strict=True):
+                rows.append(
+                    _row(
+                        system,
+                        judge_model,
+                        value,
+                        track=track,
+                        prompt_version=prompt,
+                        metrics=Metrics(headline={measure: value}),
+                    )
+                )
+
+    data = report.build(rows)
+    data["concordance"] = report.concordance_payload(rows, judge_a="judge-a", judge_b="judge-b")
+    assert len(data["concordance"]) == 2, "the fixture needs both tracks"
+
+    panel = _run(report.render_methods(data), tmp_path, panel="concordance")
+
+    soap = report.TRACK_TITLES[results.TRACK_TNEVAL]
+    icare = report.TRACK_TITLES[results.TRACK_ICARE]
+    assert soap in panel and icare in panel, "each section says which track it is"
+    assert panel.index(soap) < panel.index(icare), "SOAP leads, as the tables do"
+    assert panel.count("Do the two judges agree?") == 1, "one heading over both sections"

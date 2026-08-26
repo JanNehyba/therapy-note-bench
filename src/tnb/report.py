@@ -1168,22 +1168,7 @@ def write(rows: list[Row], *, docs_dir: Path | None = None, readme: Path | None 
     # about 11 of 19" beside a table where they no longer do is worse than none.
     # From the rows a table would draw, not from every row in the file. Two
     # harness versions carry two definitions of the same column.
-    drawn = current_rows(rows)
-    data["concordance"] = {
-        track: found
-        for track in COLUMNS
-        if (
-            found := concordance.to_json(
-                concordance.compare(
-                    drawn,
-                    track,
-                    COLUMNS[track],
-                    judge_measures=JUDGE_MEASURES.get(track),
-                    ranking_measure=RANKING_MEASURES.get(track),
-                )
-            )
-        )
-    }
+    data["concordance"] = concordance_payload(rows)
 
     docs_dir.mkdir(parents=True, exist_ok=True)
     (docs_dir / DATA_PATH.name).write_text(
@@ -1218,6 +1203,43 @@ def _inline(data: dict) -> str:
     for char, escape in _INLINE_ESCAPES.items():
         payload = payload.replace(char, escape)
     return payload
+
+
+def concordance_payload(rows: list[Row], **overrides) -> dict:
+    """What the two judges' tables say when read together, per track.
+
+    Computed rather than cached: it is a statement about the rows being
+    rendered right now, and a stale "the judges disagree about 11 of 19" beside
+    a table where they no longer do is worse than none.
+
+    From the rows a table would draw, not every row in the file: two harness
+    versions carry two definitions of the same column.
+
+    A function rather than four lines inside `write`, because three tests built
+    their own copy of those four lines -- so a field added here reached the
+    page and not them, and the test that checks the page's labelling failed for
+    want of a label rather than for want of the labelling.
+    """
+    drawn = current_rows(rows)
+    return {
+        # The track's own title travels with it. The panel draws one section
+        # per track and named neither, which was invisible with one track and
+        # is two unlabelled tables with two.
+        track: {**found, "track": track, "track_label": TRACK_TITLES.get(track, track)}
+        for track in COLUMNS
+        if (
+            found := concordance.to_json(
+                concordance.compare(
+                    drawn,
+                    track,
+                    COLUMNS[track],
+                    judge_measures=JUDGE_MEASURES.get(track),
+                    ranking_measure=RANKING_MEASURES.get(track),
+                    **overrides,
+                )
+            )
+        )
+    }
 
 
 def render_page(data: dict) -> str:

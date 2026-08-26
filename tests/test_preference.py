@@ -348,3 +348,45 @@ def test_a_judges_own_open_weight_sibling_is_not_its_control_group():
     assert effect.neutral == ("kimi-k3",)
     assert effect.estimate == pytest.approx(0.08)
     assert effect.detected is True
+
+
+def test_the_sentence_says_which_reason_applies():
+    """ "an interval that includes zero, or is smaller than 0.005" was printed of
+    [+0.004, +0.032], which does not include zero.
+
+    Both branches were true of an earlier run and only one is true of this one.
+    A reader was left to work out which half applied, from numbers to three
+    places beside a threshold given to one.
+    """
+    by_judge = {
+        A: _scores({"gemini-3.7-flash": 0.604, "gpt-5.6-luna": 0.5, "kimi-k3": 0.55}),
+        B: _scores({"gemini-3.7-flash": 0.600, "gpt-5.6-luna": 0.5, "kimi-k3": 0.55}),
+    }
+    effect = next(e for e in preference.compare(by_judge, judge_a=A, judge_b=B) if e.judge == A)
+    assert effect.low > 0 and not effect.detected, "above zero, below the noise floor"
+
+    said = preference.describe(effect)
+    assert "clears zero by less than" in said
+    assert "includes zero" not in said
+
+    flat = {
+        A: _scores({"gemini-3.7-flash": 0.6, "kimi-k3": 0.55}),
+        B: _scores({"gemini-3.7-flash": 0.6, "kimi-k3": 0.55}),
+    }
+    zero = next(e for e in preference.compare(flat, judge_a=A, judge_b=B) if e.judge == A)
+    assert "includes zero" in preference.describe(zero)
+
+
+def test_a_vendor_is_named_the_way_a_sentence_names_it():
+    """The family key is a slug because it is matched against model ids. It
+    reached the page as one: "Read its column for a openai model"."""
+    by_judge = {
+        A: _scores({"gemini-3.7-flash": 0.68, "kimi-k3": 0.55}),
+        B: _scores({"gemini-3.7-flash": 0.60, "kimi-k3": 0.55}),
+    }
+    said = preference.describe(
+        next(e for e in preference.compare(by_judge, judge_a=A, judge_b=B) if e.judge == A)
+    )
+
+    assert "Google" in said
+    assert "a google model" not in said and "a openai model" not in said

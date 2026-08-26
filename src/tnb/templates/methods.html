@@ -465,11 +465,19 @@ function relation(tension) {
 }
 
 function renderConcordance(all) {
-  const tracks = Object.keys(all || {});
   const box = document.getElementById('concordance');
+  // In the order the tables are in, not the order the keys are in: the payload
+  // is serialised with sorted keys, so `icare` comes before `tneval-soap`
+  // whatever order Python built it in, and the SOAP track leads everywhere
+  // else on this site.
+  const order = [...new Set((DATA.tables || []).map(t => t.track))];
+  const tracks = Object.keys(all || {}).sort((a, b) => {
+    const ia = order.indexOf(a), ib = order.indexOf(b);
+    return (ia < 0 ? order.length : ia) - (ib < 0 ? order.length : ib);
+  });
   if (!tracks.length) { box.remove(); return; }
 
-  box.innerHTML = tracks.map(track => {
+  box.innerHTML = '<h2>Do the two judges agree?</h2>' + tracks.map(track => {
     const c = all[track];
     const rows = c.measures.map(m => `<tr>
       <td>${m.measure}</td>
@@ -486,7 +494,9 @@ function renderConcordance(all) {
             d.beats.map(b => `<code>${b}</code>`).join(', ')}</li>`).join('')}</ul>`
       : '<p class="note">No system beats another on every measure under both judges.</p>';
 
-    return `<h2>Do the two judges agree?</h2>
+    return `${tracks.length > 1
+        ? `<h3 class="track-head">${esc(c.track_label || track)}</h3>`
+        : ''}
       <p class="blurb">${code(c.summary)}</p>
       <div class="scroll"><table class="concordance">
         <thead><tr>

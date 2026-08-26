@@ -618,19 +618,10 @@ def test_the_readme_says_how_far_the_two_judges_agree(tmp_path):
     differently, and that is the fact deciding whether "ninth versus tenth" is
     a claim this benchmark can make.
     """
-    from tnb.scoring import concordance
 
     rows = _two_judges()
     data = report.build(rows)
-    data["concordance"] = {
-        results.TRACK_TNEVAL: concordance.to_json(
-            concordance.compare(
-                rows,
-                results.TRACK_TNEVAL,
-                report.COLUMNS[results.TRACK_TNEVAL],
-            )
-        )
-    }
+    data["concordance"] = report.concordance_payload(rows)
 
     section = report.render_readme_section(data)
 

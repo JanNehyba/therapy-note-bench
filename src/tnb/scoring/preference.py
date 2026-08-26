@@ -244,22 +244,40 @@ def compare(
     return effects
 
 
+#: How each vendor is written in a sentence. The family key is a slug because
+#: it is matched against model ids; a sentence is not.
+FAMILY_NAMES = {"google": "Google", "openai": "OpenAI"}
+
+
+def family_name(family: str) -> str:
+    return FAMILY_NAMES.get(family, family)
+
+
 def describe(effect: Effect, measure: str = "completeness") -> str:
     """One sentence a reader can act on, whichever way it came out."""
     if not effect.detected:
+        # Which of the two it is, rather than both. "an interval that includes
+        # zero, or is smaller than 0.005" was said of [+0.004, +0.032], which
+        # does not include zero -- the reader had to work out which half
+        # applied, from numbers printed to three places beside a threshold
+        # given to one.
+        why = (
+            "an interval that includes zero"
+            if effect.low <= 0 <= effect.high
+            else f"an interval that clears zero by less than {NEGLIGIBLE:g}"
+        )
         return (
-            f"`{effect.judge}` shows no detectable preference for its own family: "
-            f"{effect.estimate:+.3f} {measure} "
-            f"[{effect.low:+.3f} to {effect.high:+.3f}], an interval that includes "
-            f"zero, or is smaller than {NEGLIGIBLE:g}. Not detected is not the same as "
-            f"absent — {effect.n_own} system(s) against {effect.n_neutral} neutral one(s) "
+            f"`{effect.judge}` shows no detectable preference for {family_name(effect.family)} "
+            f"models: {effect.estimate:+.3f} {measure} "
+            f"[{effect.low:+.3f} to {effect.high:+.3f}], {why}. Not detected is not the same "
+            f"as absent — {effect.n_own} system(s) against {effect.n_neutral} neutral one(s) "
             f"over {effect.n_sessions} conversations is what this run could see."
         )
     direction = "higher" if effect.estimate > 0 else "lower"
     return (
-        f"`{effect.judge}` scores its own family {abs(effect.estimate):.3f} {measure} "
-        f"{direction} than the other judge does, relative to how the two differ on "
-        f"the {effect.n_neutral} systems neither of them wrote "
-        f"[{effect.low:+.3f} to {effect.high:+.3f}]. Read its column "
-        f"for a {effect.family} model with that in mind."
+        f"`{effect.judge}` scores {family_name(effect.family)} models "
+        f"{abs(effect.estimate):.3f} {measure} {direction} than the other judge does, "
+        f"relative to how the two differ on the {effect.n_neutral} systems neither of "
+        f"them wrote [{effect.low:+.3f} to {effect.high:+.3f}]. Read its column for a "
+        f"{family_name(effect.family)} model with that in mind."
     )
