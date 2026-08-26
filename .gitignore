@@ -26,3 +26,6 @@ secrets/
 # Judge answers. Same reasoning as generations/: derived from unlicensed corpora,
 # tens of thousands of small files, and cheaper to keep than to re-ask.
 scores/
+
+# Working handoff notes. Kept on disk, not published.
+HANDOFF-*.md
