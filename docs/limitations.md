@@ -76,11 +76,20 @@ compared on, and why each table's heading names them.
 
 ## The columns do not agree with each other either
 
-Ordering by completeness says little about conciseness (−0.18 and −0.33 under
-the two judges) and something the judges cannot agree on about faithfulness
-(+0.72 and +0.04). A model that answers every question satisfies more criteria
-and invents more; the two columns measure that trade, and collapsing them into
-one number means deciding which matters more.
+Ordering by completeness says little about conciseness — the correlation is
+negative under both judges — and something the two judges cannot agree on about
+faithfulness, where one sees a moderate positive relationship and the other
+sees none. The current figures are in the panel under the tables, where a run
+keeps them right.
+
+They are not repeated here, for the reason given two sections above and
+demonstrated by this paragraph: it used to carry four numbers copied by hand,
+two of them wrong by more than the difference they were describing, and all
+four stale within a fortnight.
+
+A model that answers every question satisfies more criteria and invents more;
+the two columns measure that trade, and collapsing them into one number means
+deciding which matters more.
 
 That decision is clinical, not statistical, so this benchmark does not make it.
 What it would take to settle it is a clinician reading two notes and saying

@@ -217,10 +217,19 @@ Every result row carries:
 - `dataset_revision` — upstream commit SHA for each corpus
 - `model_id` exactly as the provider reported it, plus the raw `/v1/models` entry
 
-**The leaderboard only ever combines rows that agree on all four version
-fields.** Changing the judge produces a new table alongside the old one; it never
+**The leaderboard only ever combines rows that agree on all six comparability
+fields** — `track`, `harness_version`, `prompt_version`, `judge_model`,
+`judge_prompt_version` and `judge_settings`. Changing the judge, or the
+settings the judge ran at, produces a new table alongside the old one; it never
 rewrites history in place. Without this rule the table quietly becomes
 meaningless within a couple of model generations and nobody notices.
+
+This page said "all four" while the tuple held six. The sixth is
+`judge_settings`, which is the field the thinking-budget argument on this page
+turns on — and a table did blend two instruments while three documents promised
+it could not, because rows written before that field existed all record
+nothing and nothing told them apart. A group that names a judge and cannot say
+how the judge was set is now withdrawn rather than drawn.
 
 ## Model discovery
 

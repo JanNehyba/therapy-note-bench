@@ -56,12 +56,12 @@
     {
       "agreements": [
         {
-          "alpha": 0.5996556081280879,
-          "alpha_humans": 0.5037134105690964,
+          "alpha": 0.5998072626406157,
+          "alpha_humans": 0.5040964461994439,
           "alpha_level": "nominal",
-          "humans": 0.5037692102193586,
-          "judge": 0.5996242040903192,
-          "n": 3450,
+          "humans": 0.5041571652036615,
+          "judge": 0.5997766802795041,
+          "n": 3448,
           "name": "rubric_completeness",
           "statistic": "Cohen's kappa"
         },
@@ -119,12 +119,12 @@
           "statistic": "Cohen's kappa"
         },
         {
-          "alpha": 0.1875786751650792,
-          "alpha_humans": 0.13051940625193215,
+          "alpha": 0.1878043836441407,
+          "alpha_humans": 0.13053214160572235,
           "alpha_level": "ordinal",
-          "humans": 0.13085948840091324,
-          "judge": 0.22380262953453167,
-          "n": 599,
+          "humans": 0.13096836110903934,
+          "judge": 0.22409582663342958,
+          "n": 600,
           "name": "likert_completeness",
           "statistic": "Spearman rho"
         },
@@ -162,42 +162,42 @@
     {
       "agreements": [
         {
-          "alpha": 0.5366509311127649,
-          "alpha_humans": 0.5033732987273044,
+          "alpha": 0.5361740471244403,
+          "alpha_humans": 0.5034527634718307,
           "alpha_level": "nominal",
-          "humans": 0.5034292566299206,
-          "judge": 0.5367163601949936,
-          "n": 3448,
+          "humans": 0.5035086757364534,
+          "judge": 0.5362353291878434,
+          "n": 3449,
           "name": "rubric_completeness",
           "statistic": "Cohen's kappa"
         },
         {
-          "alpha": 0.05264470754733902,
-          "alpha_humans": 0.12774582333493656,
+          "alpha": 0.056705478280929755,
+          "alpha_humans": 0.12758026424718016,
           "alpha_level": "ordinal",
-          "humans": 0.12781510100957014,
-          "judge": 0.3258243617489227,
-          "n": 591,
+          "humans": 0.12764563728451947,
+          "judge": 0.3268523494183857,
+          "n": 594,
           "name": "likert_completeness",
           "statistic": "Spearman rho"
         },
         {
-          "alpha": -0.006361214471400645,
-          "alpha_humans": 0.18301632587489114,
+          "alpha": -0.009130832946232514,
+          "alpha_humans": 0.1896121741232445,
           "alpha_level": "ordinal",
-          "humans": 0.18805707706177804,
-          "judge": 0.10348096171086119,
-          "n": 594,
+          "humans": 0.19437264825464623,
+          "judge": 0.09408917300562679,
+          "n": 598,
           "name": "likert_conciseness",
           "statistic": "Spearman rho"
         },
         {
-          "alpha": 0.021696921325137453,
-          "alpha_humans": 0.17648337960163374,
+          "alpha": 0.026836221135689342,
+          "alpha_humans": 0.18302139102822457,
           "alpha_level": "ordinal",
-          "humans": 0.18021438456272346,
-          "judge": 0.05612156465236409,
-          "n": 568,
+          "humans": 0.18704052871253657,
+          "judge": 0.06059279593780228,
+          "n": 582,
           "name": "likert_faithfulness",
           "statistic": "Spearman rho"
         }
@@ -372,5 +372,82 @@
       "rubric_beats_likert": true
     }
   ],
-  "notes": 150
+  "notes": 150,
+  "separable": {
+    "above_ceiling": [
+      "gemini-3.1-pro-preview",
+      "gemini-2.5-pro"
+    ],
+    "all_at_or_above_ceiling": true,
+    "ceiling": 0.5037134105690964,
+    "margin": 0.05,
+    "measure": "rubric_completeness",
+    "ranked": [
+      {
+        "alpha": 0.5998072626406157,
+        "judge": "gemini-3.1-pro-preview"
+      },
+      {
+        "alpha": 0.5744010609015743,
+        "judge": "gemini-2.5-pro"
+      },
+      {
+        "alpha": 0.5444454928308946,
+        "judge": "gemini-3.7-flash"
+      },
+      {
+        "alpha": 0.537282136371755,
+        "judge": "gemini-2.5-flash"
+      },
+      {
+        "alpha": 0.5361740471244403,
+        "judge": "gemini-3.5-flash"
+      },
+      {
+        "alpha": 0.5198903139267457,
+        "judge": "gpt-5.6-terra"
+      },
+      {
+        "alpha": 0.5103987801526486,
+        "judge": "gpt-5.6-sol"
+      }
+    ],
+    "separated": [
+      {
+        "better": "gemini-3.1-pro-preview",
+        "by": 0.0554,
+        "worse": "gemini-3.7-flash"
+      },
+      {
+        "better": "gemini-3.1-pro-preview",
+        "by": 0.0625,
+        "worse": "gemini-2.5-flash"
+      },
+      {
+        "better": "gemini-3.1-pro-preview",
+        "by": 0.0636,
+        "worse": "gemini-3.5-flash"
+      },
+      {
+        "better": "gemini-3.1-pro-preview",
+        "by": 0.0799,
+        "worse": "gpt-5.6-terra"
+      },
+      {
+        "better": "gemini-3.1-pro-preview",
+        "by": 0.0894,
+        "worse": "gpt-5.6-sol"
+      },
+      {
+        "better": "gemini-2.5-pro",
+        "by": 0.0545,
+        "worse": "gpt-5.6-terra"
+      },
+      {
+        "better": "gemini-2.5-pro",
+        "by": 0.064,
+        "worse": "gpt-5.6-sol"
+      }
+    ]
+  }
 }

@@ -50,8 +50,15 @@ MEASURES: dict[str, dict[str, str]] = {
             "Rewards using the same words in the same order."
         ),
         "caveat": (
-            "Cannot tell a good paraphrase from a wrong answer. The source paper "
-            "found it disagrees with what clinicians preferred."
+            "Not the source paper's ROUGE-L and not comparable with their "
+            "published table. Theirs compares the whole rendered note, which "
+            "puts our own field labels and every `Nil` the expert wrote on both "
+            "sides -- a note where the model wrote nothing at all scores 0.379 "
+            "that way, above most real notes. This compares the field values of "
+            "the sections the expert answered, where the same empty note scores "
+            "0.000, and every model's figure fell by about a third. It also "
+            "cannot tell a good paraphrase from a wrong answer, and the source "
+            "paper found it disagrees with what clinicians preferred."
         ),
     },
     "bertscore": {

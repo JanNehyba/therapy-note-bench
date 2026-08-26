@@ -186,3 +186,44 @@ def test_conciseness_is_not_published_when_its_denominator_is_unknown():
     assert with_note.headline["conciseness"] == 1.0
     assert "conciseness" not in without.headline
     assert without.headline["completeness"] == 1.0, "completeness needs no note text"
+
+
+def test_every_column_a_table_draws_carries_a_caveat():
+    """An empty `caveat` is a claim that the number needs no qualification.
+
+    Three of them were empty, including `completeness` -- the column the
+    TN-Eval table is *ordered by*. `docs/limitations.md` ends its section on
+    that measure with "quote the number with that sentence attached, or do not
+    quote it", and the sentence appeared nowhere near the number. ROUGE-L's
+    said nothing about being a different measure from the source paper's, which
+    three sections of prose are about.
+
+    The column definitions are the only text most readers meet. This is not a
+    style rule: a measure whose caveat is genuinely empty has to say so out
+    loud, by being listed here.
+    """
+    #: Measures whose caveat may be empty, with the reason. Empty today.
+    NEEDS_NO_CAVEAT: dict[str, str] = {}
+
+    silent = []
+    for track, columns in report.COLUMNS.items():
+        table = report.MEASURE_TABLES[track]
+        for key, _decimals in columns:
+            if key in NEEDS_NO_CAVEAT:
+                continue
+            if not (table.get(key, {}).get("caveat") or "").strip():
+                silent.append(f"{track}.{key}")
+
+    assert not silent, f"drawn in a table with an empty caveat: {silent}"
+
+
+def test_the_ranking_column_says_what_it_cannot_see():
+    """The caveat that has to travel furthest, because it travels with an order."""
+    for track, measure in report.RANKING_MEASURES.items():
+        if measure is None:
+            continue
+        caveat = report.MEASURE_TABLES[track][measure]["caveat"]
+        assert "checklist" in caveat or "coverage" in caveat, (
+            f"{track} is ordered by {measure} and its caveat does not say what "
+            f"the ordering cannot see"
+        )

@@ -73,9 +73,13 @@ not predict each other.
 
 - Models are **discovered at run time**, never hard-coded. Unversioned aliases
   are excluded: they point somewhere else after the next deployment.
-- Every result row carries `harness_version`, `prompt_version`, `judge_model`,
-  `judge_prompt_version` and dataset revisions. **The leaderboard only combines
-  rows that agree on all four.** Changing the judge starts a new table.
+- Every result row carries `track`, `harness_version`, `prompt_version`,
+  `judge_model`, `judge_prompt_version`, `judge_settings` and dataset
+  revisions. **The leaderboard only combines rows that agree on all six of
+  `results.COMPARABILITY_KEYS`.** Changing the judge — or the budget it thinks
+  with — starts a new table. A group that names a judge and records no settings
+  for it is withdrawn, not drawn: two rows that both say nothing are not
+  thereby the same instrument.
 - `harness_version` is **not a release number**: it is the claim "these measures
   mean what they meant last time". Bump it whenever a measure's definition
   changes even if no interface does — 0.2.0 was the ROUGE-L, temporal,

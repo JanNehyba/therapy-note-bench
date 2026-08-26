@@ -271,8 +271,8 @@ and filters it through rules in [`models.yaml`](models.yaml). When `glm-5.2`
 becomes `glm-5.3`, the next run picks it up without anyone editing anything.
 
 Names cannot be trusted either. `command-a` sounds like Cohere Command A and
-returns `gemma4`'s exact output; four other ids turned out to be second names
-for models already in the set. `tnb models --probe` establishes identity by
+returns `gemma4`'s exact output; six other ids turned out to be second names
+for models already in the set, and three of the seven point at `gemma4`. `tnb models --probe` establishes identity by
 asking each model a fixed question and comparing answers, rather than by
 reading its name.
 
@@ -295,7 +295,7 @@ two lines to enable it. Nothing spends anything without a click.
 
 ```sh
 uv sync --all-groups
-cp .env.example .env      # add EINFRA_API_TOKEN and ANTHROPIC_API_KEY
+cp .env.example .env      # generation needs EINFRA_API_TOKEN; scoring needs a judge
 make models               # what is deployed right now
 uv run tnb models --probe # which ids are secretly the same model
 make smoke                # 3 sessions x 2 models, e-INFRA quota only

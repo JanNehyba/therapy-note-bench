@@ -39,7 +39,15 @@ MEASURES: dict[str, dict[str, str]] = {
             "Fraction of the section's rubric criteria the judge found present. "
             "0.65 means about two thirds of the required items are in the note."
         ),
-        "caveat": "",
+        "caveat": (
+            "Counts coverage of a checklist, not judgement. A therapist writes "
+            "what matters for the next session and leaves out what does not; "
+            "the rubric sees what is present and cannot see why anything was "
+            "left out -- which is why every model here scores above the "
+            "therapist on it. This is the column the table is ordered by, so "
+            "the caveat travels with the ranking: quote the number with this "
+            "sentence attached, or do not quote it."
+        ),
     },
     "conciseness": {
         "label": "Conciseness",
@@ -48,7 +56,13 @@ MEASURES: dict[str, dict[str, str]] = {
             "Fraction of the note's sentences that fit at least one rubric item. "
             "1.00 means nothing is off-topic; it does not mean the note is short."
         ),
-        "caveat": "",
+        "caveat": (
+            "Not a length measure, despite the name: a note twice as long scores "
+            "the same if every added sentence is on topic. It is also the measure "
+            "most moved by the judge's own settings -- raising the thinking "
+            "budget from 128 to 256 tokens shifted all nineteen systems and "
+            "reordered sixteen of them."
+        ),
     },
     "faithfulness": {
         "label": "Faithfulness",

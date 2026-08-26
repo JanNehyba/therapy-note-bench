@@ -8,8 +8,11 @@ number that changes underneath a reader is worse than no number.
 Two rules live here rather than in the renderers, so that no table can quietly
 break them:
 
-- **Only rows that agree on all four version fields may be compared.** Changing
-  the judge starts a new table beside the old one; see
+- **Only rows that agree on every field of** :data:`COMPARABILITY_KEYS` **may
+  be compared.** There are six, and the count is written down in one place on
+  purpose: it was "four" in three documents for as long as the tuple had five
+  entries and then six. Changing the judge -- or the judge's settings -- starts
+  a new table beside the old one; see
   ``docs/methodology.md#comparability-over-time`` and :func:`comparable_groups`.
 - **A metric is never one number.** Both source papers compute per section, so a
   row carries ``headline`` for the table column, ``by_section`` under it, and a
