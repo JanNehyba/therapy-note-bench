@@ -1,4 +1,4 @@
-.PHONY: help install lint test models prompts smoke bench score score-icare analyse report figures
+.PHONY: help install lint test models prompts smoke bench score score-icare analyse report figures brief pdf
 
 help:
 	@echo "install     install dependencies (uv)"
@@ -13,6 +13,8 @@ help:
 	@echo "analyse     saturation and self-preference, from cached answers"
 	@echo "report      regenerate both pages, docs/leaderboard.json and the README table"
 	@echo "figures     redraw docs/figures/*.svg from the published payload"
+	@echo "brief       rebuild docs/brief.html from the payload and the figures"
+	@echo "pdf         print the brief to docs/therapy-note-bench.pdf (needs Chrome)"
 
 install:
 	uv sync --all-groups --all-extras
@@ -62,3 +64,9 @@ report:
 
 figures:
 	uv run python tools/figures.py
+
+brief: figures
+	uv run python tools/brief.py
+
+pdf: brief
+	uv run python tools/pdf.py

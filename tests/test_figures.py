@@ -184,3 +184,82 @@ def test_the_payload_the_figures_read_is_the_one_the_site_publishes():
     """One source, so a figure and the page cannot disagree."""
     payload = json.loads((DOCS / "leaderboard.json").read_text(encoding="utf-8"))
     assert payload["generated_from"] == "rows.jsonl"
+
+
+# --- the briefing --------------------------------------------------------------
+
+
+@pytest.fixture(scope="module")
+def brief_html(data) -> str:
+    brief = pytest.importorskip("brief")
+    return brief.render(data)
+
+
+def test_the_briefing_quotes_the_published_calibration(brief_html):
+    """It prints the judge's agreement with two therapists. Those four figures
+    come out of `docs/calibration.json`, so they cannot drift from the panel
+    that shows the same table on the site."""
+    calibration = json.loads((DOCS / "calibration.json").read_text(encoding="utf-8"))
+    for entry in calibration["agreements"]:
+        assert f"{entry['alpha']:.2f}" in brief_html
+        assert f"{entry['alpha_humans']:.2f}" in brief_html
+    assert f"{calibration['notes']} of those notes" in brief_html
+
+
+def test_the_briefing_quotes_the_published_self_preference(data, brief_html):
+    """The document's third headline claim is a measured effect, so every digit
+    of it is checked against the file it came from."""
+    effects = (data.preference or {}).get("effects") or []
+    assert effects, "the fixture needs a self-preference panel"
+    for entry in effects:
+        assert f"{entry['estimate']:+.3f}" in brief_html
+        assert f"{entry['low']:+.3f} to {entry['high']:+.3f}" in brief_html
+
+
+def test_the_briefing_headline_matches_the_bootstrap(data, brief_html):
+    separable, agree = figures.agreeing_pairs(data, "tneval-soap", "completeness")
+    assert f"{agree}/{separable}" in brief_html
+    assert f"in {agree} of {separable} pairs" in brief_html
+
+
+def test_every_figure_is_in_the_briefing(brief_html):
+    """Inlined, not linked: a `<img src>` would leave the PDF depending on four
+    files beside it."""
+    for name in figures.FIGURES:
+        assert name.removesuffix(".svg") in brief_html or "<svg" in brief_html
+    assert brief_html.count("<svg") == len(figures.FIGURES)
+    assert "Figure missing" not in brief_html
+
+
+def test_the_briefing_has_no_unrendered_placeholder(brief_html):
+    """A conditional written inside an f-string is not a conditional — it is
+    four words of literal text in the document, and that shipped once.
+
+    Every `<style>` block is stripped first, including the four the figures
+    bring with them: CSS is made of braces and the first version of this test
+    found them all.
+    """
+    prose = re.sub(r"<style>.*?</style>", "", brief_html, flags=re.S)
+
+    assert " if " not in re.sub(r"<[^>]+>", " ", prose).replace(" if you ", " ")
+    for leak in ("{", "}"):
+        assert leak not in prose, f"the body carries an unrendered {leak!r}"
+
+
+def test_the_briefing_says_what_it_is_not(brief_html):
+    """The one paragraph that must survive every edit: nothing here is a
+    clinical validation."""
+    assert "Nothing here is a clinical validation" in brief_html
+    assert "lower bound on what you would have to check" in brief_html
+
+
+def test_no_html_entity_survives_into_the_briefing_as_text():
+    """`claim()` escapes its heading, so an `&ndash;` written there reaches the
+    page as five letters. It did: the fourth card read `0.00&ndash;0.55`."""
+    brief = pytest.importorskip("brief")
+    html = brief.render(figures.Data.load())
+    prose = re.sub(r"<svg.*?</svg>", " ", html, flags=re.S)
+    prose = re.sub(r"<style>.*?</style>", "", prose, flags=re.S)
+    visible = re.sub(r"<[^>]+>", " ", prose)
+
+    assert not re.findall(r"&amp;[a-z]+;", visible), "an entity was escaped and printed"
