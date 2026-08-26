@@ -77,15 +77,23 @@ PUBLISHABLE_LABEL = re.compile(r"^[A-Za-z][A-Za-z0-9._-]{0,63}$")
 #: Reasons written before the vocabulary existed, and left where they are.
 #:
 #: `results/` is append-only, so these three rows keep what they were written
-#: with. They are e-INFRA rate-limit bodies -- the key hash was already masked
-#: when they were written, and there is no clinical text in them, which is why
-#: leaving them is safe rather than merely convenient. `Row.__post_init__`
-#: brings every row through `normalise_reason` on the way in, so nothing that
-#: renders one can reach this text; only the raw line still holds it.
+#: with. They are e-INFRA rate-limit bodies; the key hash was already masked
+#: when they were written and there is no clinical text in them, which is why
+#: leaving them is safe rather than merely convenient.
 #:
-#: Verified 2026-08-26. Nothing may be added to this tuple: a new entry means a
-#: run wrote an off-vocabulary reason, which is the thing the test exists to
-#: catch.
+#: This body did reach the published page, and the history says exactly when.
+#: `5a4d2e6` (2026-08-25 16:05) wrote it into `docs/leaderboard.json` and
+#: `docs/index.html`; `33b9e8c` (18:54) took it out again, when a rate limit
+#: stopped being counted as the model's failure and the row moved groups. Both
+#: commits are on `origin/main`, which is public and serves the page, so for
+#: those three hours it was live. It is out of the current render, and
+#: `Row.__post_init__` now brings every row through `normalise_reason` on the
+#: way in, so no renderer can put it back. Only the raw line still holds it, and
+#: git history holds it permanently.
+#:
+#: Verified 2026-08-26 by `git log -S` over both files. Nothing may be added to
+#: this tuple: a new entry means a run wrote an off-vocabulary reason, which is
+#: the thing the test exists to catch.
 GRANDFATHERED = (
     'HTTP429: {"error":{"message":"Rate limit exceeded for api_key: .... '
     "Limit type: max_parallel_requests. Current limit: 4,",
