@@ -1197,7 +1197,13 @@ def build_parser() -> argparse.ArgumentParser:
     report_parser.add_argument("--run-id", default="", help="label the coverage rows this appends")
     report_parser.set_defaults(func=cmd_report)
 
-    run = subparsers.add_parser("run", help="generate and score notes end to end (phases 2-4)")
+    run = subparsers.add_parser(
+        "run",
+        help=(
+            "generate and score end to end in one command — not built yet (phase 6); "
+            "until then run generate, score, score-icare and report in turn"
+        ),
+    )
     run.set_defaults(func=cmd_not_implemented)
 
     return parser

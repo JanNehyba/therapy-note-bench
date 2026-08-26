@@ -1,14 +1,17 @@
-.PHONY: help install lint test models prompts smoke bench report
+.PHONY: help install lint test models prompts smoke bench score score-icare analyse report
 
 help:
-	@echo "install  install dependencies (uv)"
-	@echo "lint     ruff check + format check"
-	@echo "test     pytest (offline, no API calls)"
-	@echo "models   print what e-INFRA has deployed right now"
-	@echo "prompts  show the generation prompts; --verify checks them upstream"
-	@echo "smoke    3 sessions x 2 models, cheap end-to-end check"
-	@echo "bench    full run over every discovered model"
-	@echo "report   regenerate leaderboard.md and the README table"
+	@echo "install     install dependencies (uv)"
+	@echo "lint        ruff check + format check"
+	@echo "test        pytest (offline, no API calls)"
+	@echo "models      print what e-INFRA has deployed right now"
+	@echo "prompts     show the generation prompts; --verify checks them upstream"
+	@echo "smoke       3 sessions x 2 models, cheap end-to-end check"
+	@echo "bench       generate over every discovered model (no judge, no money)"
+	@echo "score       judge the TN-Eval notes with both judges"
+	@echo "score-icare judge the iCARE notes with both judges"
+	@echo "analyse     saturation and self-preference, from cached answers"
+	@echo "report      regenerate docs/index.html, docs/leaderboard.json and the README table"
 
 install:
 	uv sync --all-groups --all-extras
@@ -26,15 +29,32 @@ models:
 prompts:
 	uv run tnb prompts --verify
 
-# Generation only until the judge lands in phase 3, so this spends e-INFRA
-# quota and no money: 2 models x 3 sessions x (1 SOAP + 17 iCARE) calls.
+# Generation only, so this spends e-INFRA quota and no money: 2 models x 3
+# sessions x (1 SOAP + 17 iCARE) calls.
 smoke:
 	uv run tnb generate --limit 3 --max-models 2
 
 # Every discovered model, both tracks: ~730 calls each, hours at concurrency 2.
-# Scoring joins this target in phase 3; until then it generates and stops.
+# Generation only -- scoring is a separate target because it costs money and
+# should be an explicit decision rather than something `bench` does on the way
+# past.
 bench:
 	uv run tnb generate
+
+# Both judges, because one judge cannot say how much to trust its own ranking.
+# Answers are cached, so a repeat run asks only what is new.
+score:
+	uv run tnb score --judge-model gemini-3.1-pro-preview
+	uv run tnb score --judge-model gpt-5.6-terra
+
+score-icare:
+	uv run tnb score-icare --judge-model gemini-3.1-pro-preview
+	uv run tnb score-icare --judge-model gpt-5.6-terra
+
+# Free: both of these read answers the judges have already given.
+analyse:
+	uv run tnb saturation
+	uv run tnb preference
 
 report:
 	uv run tnb report
