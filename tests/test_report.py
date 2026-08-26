@@ -250,8 +250,41 @@ def test_the_page_is_self_contained_and_carries_its_data(tmp_path):
 def test_the_page_keeps_the_caveats_attached_to_the_numbers():
     """Faithfulness has near-zero human agreement and TRACE has no human anchor
     at all. Both have to be visible next to the column, not in a doc nobody
-    opens."""
-    page = report.render_page(report.build([_row()]))
+    opens.
+
+    This used to render one unscored TN-Eval row and assert that the strings
+    "Krippendorff" and "no human anchor" appeared somewhere on the page. With
+    no iCARE row there is no TRACE column, and the second string was matching
+    the static footer -- so every measure caveat could have been deleted and
+    this would have stayed green.
+
+    Now both tracks are rendered and each caveat is read out of the measure
+    table it belongs to, so rewording one does not silently satisfy the test
+    and dropping one fails it.
+    """
+    rows = [
+        _scored("gemma4", 0.6),
+        _scored(
+            "gemma4",
+            0.6,
+            track=results.TRACK_ICARE,
+            prompt_version="icare-zeroshot-v1",
+            metrics=Metrics(headline={"trace": 3.9}),
+        ),
+    ]
+    page = report.render_page(report.build(rows))
+
+    for track, columns in report.COLUMNS.items():
+        table = report.MEASURE_TABLES[track]
+        for key, _decimals in columns:
+            caveat = (table[key].get("caveat") or "").strip()
+            assert caveat, f"{track}.{key} is drawn with no caveat at all"
+            # A distinctive fragment rather than the whole sentence, which the
+            # renderer is free to wrap.
+            fragment = caveat.split(".")[0][:40]
+            assert fragment in page, f"{track}.{key}'s caveat is not on the page"
+
+    # The two the docstring names, by the words a reader would look for.
     assert "Krippendorff" in page
     assert "no human anchor" in page
 

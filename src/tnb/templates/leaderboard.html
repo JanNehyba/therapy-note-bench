@@ -262,15 +262,18 @@ p.settings { margin-top: .2rem; }
        <strong>TRACE</strong> is a re-implementation with <em>no human anchor</em>. Those
        caveats used to be footnotes down here; a number and its caveat should not be
        separated by a scroll.</p>
-    <p><strong>Sessions</strong> counts notes a protocol could actually read. A model that
-       writes a good note in the wrong shape loses sessions to its format, not to its
+    <p><strong>Notes</strong> counts the notes a protocol could actually read. A model that
+       writes a good note in the wrong shape loses notes to its format, not to its
        clinical content — read the count before comparing the score.</p>
     <p>The chip after a model name is the <strong>provider</strong> that served it. The same
        model id on two providers can be two different builds — a different quantisation,
        different weights, a different system prompt — so they are two rows here, never one.</p>
-    <p>Rows are only ever compared when they agree on harness version, prompt version, judge
-       model and judge prompt version. A changed judge starts a new table rather than
-       rewriting this one.</p>
+    <p>Rows are only ever compared when they agree on all six of track, harness version,
+       prompt version, judge model, judge prompt version and <strong>the settings the judge
+       ran at</strong>. A changed judge — or a judge given a different budget to think with —
+       starts a new table rather than rewriting this one. A group that names a judge and
+       cannot say how it was set is withdrawn: two rows that both record nothing are not
+       thereby the same instrument.</p>
     <p id="provenance"></p>
   </footer>
 </main>
