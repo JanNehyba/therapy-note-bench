@@ -29,3 +29,7 @@ scores/
 
 # Working handoff notes. Kept on disk, not published.
 HANDOFF-*.md
+
+# Review output. Same reasoning as the handoff notes: a working document, kept
+# on disk and not published.
+REVIEW-FINDINGS.md
