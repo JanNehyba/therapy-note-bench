@@ -24,6 +24,28 @@ TN-Eval  (rubric, SOAP prompt, scoring prompts)
   wording, with the model backend replaced (AWS Bedrock -> OpenAI-compatible).
 
 --------------------------------------------------------------------------
+PDSQI-9  (clinical note quality instrument, Czech track)
+  CC BY 4.0 -- https://arxiv.org/abs/2501.08977
+  Croxford, Emma; Gao, Yanjun; Pellegrino, Nicholas; et al. "Development and
+  Validation of the Provider Documentation Summarization Quality Instrument for
+  Large Language Models." 2025.
+
+  Itself an adaptation of the Physician Documentation Quality Instrument
+  (PDQI-9): Stetson, Peter D.; Bakken, Suzanne; Wrenn, Jesse O.; Siegler,
+  Eugenia L. "Assessing Electronic Note Quality Using the Physician
+  Documentation Quality Instrument (PDQI-9)." Appl Clin Inform 2012,
+  PMC3347480.
+
+  CC BY 4.0 permits reproduction and adaptation with attribution. This
+  repository reproduces eight of the nine attributes with their published
+  questions and 1-5 anchors, and states its three changes in
+  `src/tnb/scoring/pdsqi.py`: the "Cited" attribute is dropped (a note written
+  from one transcript has no source documents to cite), the words "summary" and
+  "source notes" are replaced by "note" and "session transcript", and the
+  binary stigmatizing-language item is reported inverted so that every column in
+  a table is better when higher. The judge is asked the published question.
+
+--------------------------------------------------------------------------
 AnnoMI  (counselling transcripts underlying the TN-Eval track)
   No licence file is published. Citation is requested by the authors.
   https://github.com/uccollab/AnnoMI

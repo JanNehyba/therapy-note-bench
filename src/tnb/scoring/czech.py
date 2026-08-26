@@ -17,7 +17,7 @@ each has its own `judge_prompt_version`, which is part of `COMPARABILITY_KEYS`
 -- so the two can never share a leaderboard table, and a run always records
 which was used. `docs/methodology.md` records how the choice was decided.
 
-**No composite.** Eight columns, no average. Weighting spelling against
+**No composite.** Six columns, no average. Weighting spelling against
 terminology is a linguistic decision, not a measurement, and the correlation
 this track exists to look for is more useful per dimension anyway: English
 completeness may predict terminology and say nothing about typography.
@@ -46,10 +46,10 @@ DEFAULT_LANGUAGE = "cs"
 _NO_CONTENT_CHECK = (
     "Judged from the note alone, with no transcript and no reference: this says "
     "nothing about whether the note is true or complete. An invented note in "
-    "faultless Czech scores 10."
+    "faultless Czech scores 5."
 )
 
-#: The eight dimensions, in the order they are asked and shown.
+#: The six dimensions, in the order they are asked and shown.
 #:
 #: `key` reaches the page and is English. The Czech and English wordings are
 #: both here because the prompt language is part of the instrument. The example
@@ -86,11 +86,11 @@ DIMENSIONS: tuple[tuple[str, str, str, str, str], ...] = (
         "terminology",
         "Odborná terminologie",
         "tam, kde má čeština zavedený odborný termín, poznámka ho používá a "
-        "nenechává anglický originál (například „vyhýbavé zvládání“, ne "
+        "nenechává anglický originál (například nepřeložené "
         "„behavioral avoidance coping“)",
         "Clinical terminology",
         "where Czech has an established clinical term the note uses it rather than "
-        "leaving the English (for example „vyhýbavé zvládání“, not "
+        "leaving the English (for example an untranslated "
         "„behavioral avoidance coping“)",
     ),
     (
@@ -103,28 +103,12 @@ DIMENSIONS: tuple[tuple[str, str, str, str, str], ...] = (
         "colloquial speech (for example „sestra“, not „ségra“)",
     ),
     (
-        "readability",
-        "Čtivost",
-        "poznámka se čte plynule a není zahlcená podstatnými jmény slovesnými ani "
-        "neúnosně dlouhými souvětími",
-        "Readability",
-        "the note reads smoothly and is not choked with verbal nouns or unworkably long sentences",
-    ),
-    (
         "typography",
         "Typografie",
         "české uvozovky, pomlčky, mezery, zkratky a zápis čísel a dat odpovídají české normě",
         "Typography",
         "Czech quotation marks, dashes, spacing, abbreviations and the way numbers "
         "and dates are written follow Czech convention",
-    ),
-    (
-        "consistency",
-        "Vnitřní konzistence",
-        "poznámka si neodporuje a tutéž věc i téhož člověka nazývá v celém textu stejně",
-        "Internal consistency",
-        "the note does not contradict itself and calls the same thing, and the same "
-        "person, by the same name throughout",
     ),
 )
 
@@ -141,41 +125,39 @@ INTERNAL_MEASURES: tuple[str, ...] = ("note_words",)
 MEASURES: dict[str, dict[str, str]] = {
     key: {
         "label": label_en,
-        "scale": "0-10",
+        "scale": "1-5",
         "definition": (
             f"{description_en[0].upper()}{description_en[1:]}. "
-            "Rated 0-10 by a judge reading only the note."
+            "Rated 1-5 by a judge reading only the note."
         ),
         "caveat": _NO_CONTENT_CHECK,
     }
     for key, _name_cs, _description_cs, label_en, description_en in DIMENSIONS
 }
 
-#: Eight measures, no average. See the module docstring.
+#: Six measures, no average. See the module docstring.
 RANKING_MEASURE = None
 
 #: Every column here is a judge's decision -- unlike iCARE, where four of five
 #: are computed from the note and the reference and so are byte-identical under
 #: any judge. The two-judge agreement panel is therefore meaningful on all
-#: eight, which matters more here than anywhere else: this track has no human
+#: six, which matters more here than anywhere else: this track has no human
 #: anchor at all, and where the judges disagree is the only control it has.
 JUDGE_MEASURES: tuple[str, ...] = DIMENSION_KEYS
 
 _SCALE_CS = """\
-10: v této vlastnosti bez jediné chyby
-8-9: jedna nebo dvě drobnosti, které čtenáře nezdrží
-6-7: několik chyb, text je ale pořád dobře čitelný
-4-5: chyby jsou časté a při čtení ruší
-2-3: chyby jsou skoro v každé větě a kazí dojem z dokumentace
-0-1: vlastnost v poznámce prakticky chybí"""
+5: v této vlastnosti bez jediné chyby
+4: jedna nebo dvě drobnosti, které čtenáře nezdrží
+3: několik chyb, text je ale pořád dobře čitelný
+2: chyby jsou časté a při čtení ruší
+1: chyby jsou skoro v každé větě a kazí dojem z dokumentace"""
 
 _SCALE_EN = """\
-10: no error of this kind at all
-8-9: one or two small things that do not slow a reader down
-6-7: several errors, but the text still reads well
-4-5: errors are frequent and get in the way
-2-3: errors in almost every sentence, and the documentation suffers for it
-0-1: the note effectively lacks this property"""
+5: no error of this kind at all
+4: one or two small things that do not slow a reader down
+3: several errors, but the text still reads well
+2: errors are frequent and get in the way
+1: errors in almost every sentence, and the documentation suffers for it"""
 
 PROMPT_CS = f"""\
 Níže je klinická poznámka z psychoterapeutického sezení, napsaná česky.
@@ -191,7 +173,7 @@ Níže je klinická poznámka z psychoterapeutického sezení, napsaná česky.
 
 Ohodnoť poznámku jen v této jedné vlastnosti. Nehodnoť, jestli je obsah poznámky \
 správný nebo úplný -- transkript sezení k dispozici nemáš a posuzuje se pouze \
-čeština. Napiš pouze číslo od 0 do 10 a nic jiného:"""
+čeština. Napiš pouze číslo od 1 do 5 a nic jiného:"""
 
 PROMPT_EN = f"""\
 Below is a clinical note from a psychotherapy session, written in Czech.
@@ -207,16 +189,17 @@ Below is a clinical note from a psychotherapy session, written in Czech.
 
 Rate the note on this one property only. Do not judge whether the note's content \
 is correct or complete -- you do not have the session transcript, and only the \
-Czech is being assessed. Output only a number from 0 to 10 and nothing else:"""
+Czech is being assessed. Output only the rating [1, 2, 3, 4, 5]:"""
 
-#: A rating, and nothing but a rating. 0 and 10 are both real answers here, so
-#: the pattern spans the whole scale rather than TN-Eval's 1-5.
+#: A rating, and nothing but a rating. The same 1-5 range TN-Eval's Likert
+#: questions and iCARE's TRACE use, so the judges have answered thousands of
+#: questions on it inside this repository already.
 #:
 #: Brackets, quotes, asterisks and a trailing full stop are tolerated because a
 #: judge writes "[7]" or "7." often enough. A sign is not: `\W` would have
 #: swallowed the minus in "-1" and returned 1, which is the same trick that
 #: makes `tneval.parse_likert` read "10/10" as one.
-_RATING = re.compile(r"^[^\w+-]*(10|[0-9])[^\w+-]*$")
+_RATING = re.compile(r"^[^\w+-]*([1-5])[^\w+-]*$")
 
 
 def judge_prompt_version(language: str = DEFAULT_LANGUAGE) -> str:
@@ -227,7 +210,7 @@ def judge_prompt_version(language: str = DEFAULT_LANGUAGE) -> str:
 
 
 def is_a_rating(answer: str) -> bool:
-    """Whether a 0-10 question actually got a 0-10."""
+    """Whether a 1-5 question actually got a 1-5."""
     return _RATING.match((answer or "").strip()) is not None
 
 
@@ -240,20 +223,13 @@ def parse_rating(answer: str) -> int | None:
     is compared against nothing, so an invented rating would buy comparability
     with nobody and cost a measurement nobody took.
 
-    Delegating to that parser would have been wrong in two different ways, both
-    checked against it rather than assumed:
+    The range is the same, so the only difference is that one: a refusal here
+    is recorded as a refusal.
 
-        parse_likert("10")          ->  3   # int() succeeds, 10 is outside 1-5
-        parse_likert("0")           ->  3
-        parse_likert("7")           ->  3
-        parse_likert("Rating: 10")  ->  1   # int() fails, the digit scan
-        parse_likert("10/10")       ->  1   # finds the leading 1
-        parse_likert("10.")         ->  1
+        tneval.parse_likert("")                 ->  3
+        tneval.parse_likert("I cannot rate.")   ->  3
+        czech.parse_rating("")                  ->  None
 
-    So a bare rating outside 1-5 becomes a fabricated middle of the scale, and a
-    rating of ten with anything at all around it becomes a one -- the top of this
-    scale recorded as the bottom. Neither says anything, and neither is visible
-    afterwards.
     """
     match = _RATING.match((answer or "").strip())
     return int(match.group(1)) if match else None
@@ -295,12 +271,12 @@ class Scores:
 
 
 def build_tasks(note: str, language: str = DEFAULT_LANGUAGE) -> list[RubricTask]:
-    """The eight questions asked about one note -- one call each.
+    """The six questions asked about one note -- one call each.
 
-    Not one call returning eight ratings, which would be cheaper and is wrong.
+    Not one call returning six ratings, which would be cheaper and is wrong.
     `judge.ANSWER_TOKENS` and `judge.OPENAI_OUTPUT_CEILING` are inside the judge
     fingerprint, and `judge.load_cached` rejects any answer whose fingerprint
-    differs. Raising either to fit eight ratings into one JSON reply would re-key
+    differs. Raising either to fit six ratings into one JSON reply would re-key
     and throw away every cached answer belonging to the other two tracks.
 
     The prompt carries the note and nothing else. There is no transcript in it,
@@ -329,13 +305,13 @@ def note_words(note: str) -> int:
 
 
 def aggregate(note: str, answers: dict[str, str]) -> Scores:
-    """One note's eight ratings, or a named account of what is missing.
+    """One note's six ratings, or a named account of what is missing.
 
     A dimension the judge did not rate is listed in `incomplete`, never scored
-    zero and never quietly dropped from a denominator. All eight or the note is
+    zero and never quietly dropped from a denominator. All six or the note is
     partial, and `SystemAggregate` keeps a partial note out of every headline:
-    eight columns computed over different numbers of notes, with nothing on the
-    page saying so, would be worse than eight columns over fewer notes.
+    six columns computed over different numbers of notes, with nothing on the
+    page saying so, would be worse than six columns over fewer notes.
     """
     scores = Scores()
     missing: list[str] = []

@@ -18,8 +18,8 @@ Plán: Nácvik dýchání, kontrola za dva týdny."""
 
 
 def _answers(**overrides: str) -> dict[str, str]:
-    """Eight well-formed ratings, with any of them replaced."""
-    answers = {f"quality.{key}": "8" for key in czech.DIMENSION_KEYS}
+    """Six well-formed ratings, with any of them replaced."""
+    answers = {f"quality.{key}": "4" for key in czech.DIMENSION_KEYS}
     answers.update({f"quality.{key}": value for key, value in overrides.items()})
     return answers
 
@@ -27,69 +27,53 @@ def _answers(**overrides: str) -> dict[str, str]:
 # --- the parser ------------------------------------------------------------
 
 
-def test_ten_is_read_as_ten():
-    assert czech.parse_rating("10") == 10
-    assert czech.is_a_rating("10")
-
-
-def test_zero_is_a_real_rating_and_not_a_missing_one():
-    """0 is the bottom of this scale, not the absence of an answer. Everything
-    downstream distinguishes them by None, never by falsiness."""
-    assert czech.parse_rating("0") == 0
-    assert czech.is_a_rating("0")
-
-
 def test_the_whole_scale_survives_a_round_trip():
-    assert [czech.parse_rating(str(n)) for n in range(11)] == list(range(11))
+    assert [czech.parse_rating(str(n)) for n in range(1, 6)] == [1, 2, 3, 4, 5]
+    assert all(czech.is_a_rating(str(n)) for n in range(1, 6))
 
 
 def test_punctuation_around_the_rating_is_tolerated():
-    assert [czech.parse_rating(a) for a in ("  8 ", "[6]", "9.", "*4*")] == [8, 6, 9, 4]
+    assert [czech.parse_rating(a) for a in ("  4 ", "[2]", "5.", "*3*")] == [4, 2, 5, 3]
 
 
 def test_a_refusal_produces_no_number_at_all():
     """Never a fabricated middle of the scale. A judge that wrote prose did not
     rate, and the note is recorded as partial rather than as a 5."""
-    for answer in ("", "   ", "I cannot rate this.", "the note is fine", "8/10 overall"):
+    for answer in ("", "   ", "I cannot rate this.", "the note is fine", "4/5 overall"):
         assert not czech.is_a_rating(answer)
         assert czech.parse_rating(answer) is None
 
 
 def test_an_out_of_range_number_is_not_a_rating():
-    for answer in ("11", "42", "-1", "100"):
+    for answer in ("0", "6", "10", "-1", "42"):
         assert czech.parse_rating(answer) is None
 
 
-def test_the_tneval_parser_would_have_got_these_wrong():
-    """The bug, put back and watched.
+def test_the_tneval_parser_fabricates_a_middle_and_this_one_does_not():
+    """The two parsers share a range; only one of them invents an answer.
 
-    This also pins TN-Eval's behaviour as a documented fact: if anyone ever
-    widens `parse_likert` to 0-10 to be helpful, the published TN-Eval numbers
-    change meaning and this test fails first.
+    This also pins TN-Eval's behaviour as a documented fact, because its 3 is
+    load-bearing there -- their published numbers were computed with it.
     """
-    # int() succeeds and the value is outside 1-5, so the middle is fabricated.
-    assert tneval.parse_likert("10") == 3
-    assert tneval.parse_likert("0") == 3
-    assert tneval.parse_likert("7") == 3
-    # int() fails, and the digit scan finds the leading 1 of "10".
-    assert tneval.parse_likert("Rating: 10") == 1
-    assert tneval.parse_likert("10/10") == 1
-    # Which the rubric's own parser refuses to do.
-    assert czech.parse_rating("10") == 10
-    assert czech.parse_rating("Rating: 10") is None
+    for refusal in ("", "I cannot rate this.", "the note is fine"):
+        assert tneval.parse_likert(refusal) == 3
+        assert czech.parse_rating(refusal) is None
+    # And where the judge did answer, the two agree.
+    assert [tneval.parse_likert(str(n)) for n in range(1, 6)] == [1, 2, 3, 4, 5]
+    assert [czech.parse_rating(str(n)) for n in range(1, 6)] == [1, 2, 3, 4, 5]
 
 
 # --- the prompts -----------------------------------------------------------
 
 
 def test_every_dimension_is_asked_in_its_own_call():
-    """One call per dimension, never eight ratings in one answer.
+    """One call per dimension, never six ratings in one answer.
     `judge.ANSWER_TOKENS` is inside the judge fingerprint, so raising it to fit
     a longer reply would discard every cached answer of the other two tracks."""
     tasks = czech.build_tasks(NOTE)
-    assert len(tasks) == len(czech.DIMENSION_KEYS) == 8
+    assert len(tasks) == len(czech.DIMENSION_KEYS) == 6
     assert [task.dimension for task in tasks] == list(czech.DIMENSION_KEYS)
-    assert len({task.unit for task in tasks}) == 8
+    assert len({task.unit for task in tasks}) == 6
 
 
 def test_a_prompt_names_one_dimension_and_not_the_others():
@@ -118,7 +102,7 @@ def test_the_judge_is_never_shown_the_transcript():
 def test_the_prompt_asks_for_a_bare_number():
     for task in czech.build_tasks(NOTE):
         assert task.prompt.rstrip().endswith(":")
-        assert "0 do 10" in task.prompt
+        assert "1 do 5" in task.prompt
 
 
 def test_both_prompt_languages_carry_the_note_and_differ():
@@ -141,15 +125,15 @@ def test_the_prompt_language_is_part_of_the_instrument():
 # --- aggregation -----------------------------------------------------------
 
 
-def test_eight_ratings_make_a_complete_note():
+def test_six_ratings_make_a_complete_note():
     scores = czech.aggregate(NOTE, _answers())
     assert scores.is_complete
     assert set(scores.by_criterion) == set(czech.DIMENSION_KEYS)
-    assert scores.headline["spelling"] == 8.0
+    assert scores.headline["spelling"] == 4.0
 
 
 def test_a_dimension_the_judge_refused_is_named_and_not_scored():
-    """An absence is not a measurement. It is not a zero, and the seven that
+    """An absence is not a measurement. It is not a zero, and the five that
     were answered do not quietly become the note's score."""
     scores = czech.aggregate(NOTE, _answers(typography="I cannot rate this."))
 
@@ -157,7 +141,7 @@ def test_a_dimension_the_judge_refused_is_named_and_not_scored():
     assert scores.incomplete["quality"] == ["typography"]
     assert "typography" not in scores.headline
     assert "typography" not in scores.by_criterion
-    assert scores.sections_used["quality"] == 7
+    assert scores.sections_used["quality"] == 5
 
 
 def test_a_missing_answer_is_treated_like_a_refusal():
@@ -167,12 +151,13 @@ def test_a_missing_answer_is_treated_like_a_refusal():
     assert scores.incomplete["quality"] == ["grammar"]
 
 
-def test_a_zero_rating_is_kept_and_is_not_missing():
-    """The failure this guards: `if not rating` would file a legitimate 0 as a
-    refusal, and the worst Czech in the run would vanish from the average."""
-    scores = czech.aggregate(NOTE, _answers(spelling="0"))
+def test_the_bottom_of_the_scale_is_kept_and_is_not_missing():
+    """The worst Czech in the run must not vanish from the average. The check
+    downstream is `is None`, never falsiness, so 1 survives and so would 0 if
+    the scale ever grew one."""
+    scores = czech.aggregate(NOTE, _answers(spelling="1"))
     assert scores.is_complete
-    assert scores.headline["spelling"] == 0.0
+    assert scores.headline["spelling"] == 1.0
 
 
 def test_note_length_is_recorded_even_when_the_judge_failed():
@@ -201,7 +186,7 @@ def test_the_track_declines_to_name_a_ranking_measure():
 def test_every_dimension_is_documented_on_the_same_scale():
     assert set(czech.MEASURES) == set(czech.DIMENSION_KEYS)
     for key, measure in czech.MEASURES.items():
-        assert measure["scale"] == "0-10", key
+        assert measure["scale"] == "1-5", key
         assert len(measure["definition"]) > 40, key
         assert measure["caveat"], key
 
