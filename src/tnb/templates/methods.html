@@ -720,7 +720,7 @@ function renderSuperseded(gone) {
     settings: `the judge's settings were not recorded, so the rows cannot be shown to
       have come from one instrument`,
   };
-  const why = (gone.reasons || ['harness']).map(name => said[name]).filter(Boolean).join(' and ');
+  const why = (gone.reasons || ['harness']).map(name => said[name]).filter(Boolean).join('; and ');
   return `<p class="note">${gone.rows} row(s) on <strong>${gone.track}</strong>, ${what},
     at harness <code>${gone.harness_version}</code>, are no longer shown: ${why}.
     They are still in <code>results/rows.jsonl</code>.</p>`;

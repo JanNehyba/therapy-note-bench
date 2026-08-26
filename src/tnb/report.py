@@ -1095,7 +1095,9 @@ def _superseded_sentence(gone: dict) -> str:
     return (
         f"{gone['rows']} {gone['track']} row(s) {what} at harness "
         f"`{gone['harness_version']}` are no longer shown: "
-        f"{' and '.join(_superseded_reasons(gone))}. They stay in `results/rows.jsonl`."
+        # "; and" rather than "and": each reason already contains one, and two
+        # joined by a third read as a single run-on clause.
+        f"{'; and '.join(_superseded_reasons(gone))}. They stay in `results/rows.jsonl`."
     )
 
 
