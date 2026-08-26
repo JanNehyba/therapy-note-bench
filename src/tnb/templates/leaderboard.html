@@ -15,10 +15,7 @@ __STYLE__
     <a href="https://github.com/JanNehyba/therapy-note-bench">Source and method</a>.
   </p>
 
-  <div class="controls">
-    <label><input type="checkbox" id="show-reference"> Show reference systems (therapist-written and the papers' own models)</label>
-    <label><input type="checkbox" id="show-published"> Show numbers as published (different harness — never ranked with ours)</label>
-  </div>
+  <div class="controls" id="controls"></div>
 
   <div id="tables"></div>
 
@@ -49,10 +46,37 @@ __STYLE__
 <script>
 const DATA = __DATA__;
 
-__HELPERS__function rowVisible(row) {
-  if (row.system_type === 'model') return true;
-  if (row.system_type === 'published') return document.getElementById('show-published').checked;
-  return document.getElementById('show-reference').checked;
+__HELPERS__// Which system types are hidden by default, and what the box that shows them
+// says. `model` is not here: the models are what the table is for.
+const FILTERS = [
+  {
+    id: 'show-reference',
+    types: ['reference-human', 'reference-model'],
+    label: 'Show reference systems (therapist-written and the papers\u2019 own models)',
+  },
+  {
+    id: 'show-published',
+    types: ['published'],
+    label: 'Show numbers as published (different harness \u2014 never ranked with ours)',
+  },
+];
+
+// Drawn from the data, so a control exists only when it has something to
+// filter. `show-published` was in the page as static HTML and no row has ever
+// carried that type: a switch wired to nothing, which teaches a reader who
+// ticks it that the page is broken.
+const present = new Set(
+  (DATA.tables || []).flatMap(t => (t.rows || []).map(r => r.system_type))
+);
+const active = FILTERS.filter(f => f.types.some(type => present.has(type)));
+document.getElementById('controls').innerHTML = active.map(f =>
+  `<label><input type="checkbox" id="${f.id}"> ${f.label}</label>`).join('');
+
+function rowVisible(row) {
+  const filter = active.find(f => f.types.includes(row.system_type));
+  // A type nobody offers to hide is shown. The alternative -- hiding a row
+  // because no control was drawn for it -- loses data silently.
+  return filter ? document.getElementById(filter.id).checked : true;
 }
 
 function detailRow(row, table) {
@@ -409,8 +433,8 @@ document.querySelectorAll('th[data-sort]').forEach(th => {
   th.addEventListener('click', () => sortBy(th.closest('table'), th.dataset.sort));
 });
 
-['show-reference', 'show-published'].forEach(id =>
-  document.getElementById(id).addEventListener('change', applyFilters));
+active.forEach(f =>
+  document.getElementById(f.id).addEventListener('change', applyFilters));
 applyFilters();
 </script>
 </body>

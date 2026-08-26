@@ -654,3 +654,19 @@ def test_the_three_kinds_of_missing_note_are_told_apart():
     assert results.is_the_models_fault("answer did not contain a SOAP dictionary")
     assert not results.is_the_models_fault("truncated at max_tokens=16384")
     assert not results.is_the_models_fault("HTTP503: backend unavailable")
+
+
+def test_every_published_row_carries_a_system_type_the_code_knows():
+    """`SYSTEM_TYPES` is a list the writers are trusted to honour, and one did not.
+
+    Eleven TN-Eval rows and two iCARE rows from the run of 2026-08-24 carry
+    `einfra-model`, which is the provider glued to the type. Nothing reads that
+    value, so the page fell through to its default and drew them as models --
+    right by accident. None of them survives `latest()`, so this checks the
+    rows that are actually drawn rather than the whole append-only history,
+    which cannot be corrected and should not be.
+    """
+    drawn = results.latest(results.load())
+    unknown = sorted({row.system_type for row in drawn} - set(results.SYSTEM_TYPES))
+
+    assert not unknown, f"drawn with a system_type nothing knows: {unknown}"

@@ -1006,7 +1006,6 @@ def write(rows: list[Row], *, docs_dir: Path | None = None, readme: Path | None 
     data = build(rows, saturations)
     data["calibration"] = load_calibration(docs_dir)
     data["similarity_example"] = similarity_example()
-    data["saturations"] = saturations
     # The panel shows one, and it is the judge the leaderboard is ranked by
     # rather than whichever file sorted first.
     from tnb import judge as judge_module

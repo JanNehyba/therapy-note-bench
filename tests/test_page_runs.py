@@ -25,23 +25,34 @@ from tnb.results import Metrics, Row
 RUNNER = Path(__file__).parent / "support" / "run_page.js"
 
 
-def _row(system: str, judge_model: str, value: float) -> Row:
+def _row(system: str, judge_model: str, value: float, **overrides) -> Row:
     return Row(
-        track=results.TRACK_TNEVAL,
-        system_id=system,
-        system_type="model",
-        provider="einfra",
-        prompt_version="tneval-soap-v1",
-        judge_model=judge_model,
-        judge_prompt_version="tneval-rubric-v1",
-        n_sessions_attempted=50,
-        n_sessions_generated=50,
-        n_sessions_scored=50,
-        metrics=Metrics(
-            headline={"completeness": value, "conciseness": value, "faithfulness": value * 5},
-            by_section={"subjective": {"completeness": value}},
-            detail={"subjective-symptoms": value},
-        ),
+        **{
+            "track": results.TRACK_TNEVAL,
+            "system_id": system,
+            "system_type": "model",
+            "provider": "einfra",
+            "prompt_version": "tneval-soap-v1",
+            "judge_model": judge_model,
+            "judge_prompt_version": "tneval-rubric-v1",
+            # Every row the scorer writes records the judge's settings, and a
+            # group that names a judge without them is withdrawn rather than
+            # drawn -- so a fixture without one is not a table.
+            "judge_settings": {"model": judge_model, "thinking_budget": 256},
+            "n_sessions_attempted": 50,
+            "n_sessions_generated": 50,
+            "n_sessions_scored": 50,
+            "metrics": Metrics(
+                headline={
+                    "completeness": value,
+                    "conciseness": value,
+                    "faithfulness": value * 5,
+                },
+                by_section={"subjective": {"completeness": value}},
+                detail={"subjective-symptoms": value},
+            ),
+            **overrides,
+        }
     )
 
 
@@ -346,15 +357,16 @@ def test_every_key_in_the_page_data_is_read_by_the_page():
         path.read_text(encoding="utf-8") for path in report.TEMPLATE_DIR.glob("*.html")
     )
 
-    data = report.build([_row("x", "a-judge", 0.5)])
-    data.update(
-        calibration=None,
-        similarity_example=None,
-        saturation=None,
-        judges=None,
-        preference=None,
-        concordance={},
-    )
+    # `write`'s payload, not `build`'s. `saturations` -- the whole list, beside
+    # the one the page draws -- was added in `write`, so a test that built its
+    # own payload never saw the key it exists to catch.
+    import tempfile
+
+    with tempfile.TemporaryDirectory() as tmp:
+        docs = Path(tmp)
+        readme = docs / "README.md"
+        readme.write_text("<!-- LEADERBOARD:BEGIN -->\n<!-- LEADERBOARD:END -->\n", "utf-8")
+        data = report.write([_row("x", "a-judge", 0.5)], docs_dir=docs, readme=readme)
 
     # `.key` rather than `DATA.key`: several panels are rendered by a function
     # that takes the whole payload and reads `data.saturation` inside it, so a
@@ -434,3 +446,59 @@ def test_both_pages_are_written_by_one_run(tmp_path):
     assert page.split(payload)[1].split("\n")[0] == methods.split(payload)[1].split("\n")[0], (
         "the two pages must be drawn from the same payload, character for character"
     )
+
+
+def test_a_filter_is_drawn_only_when_it_has_something_to_filter(tmp_path):
+    """`Show numbers as published` was static HTML wired to nothing.
+
+    No row in `results/` has ever carried `system_type: published` -- 1001 are
+    `model`, 34 `reference-model`, 17 `reference-human`. A reader who ticked it
+    and saw no change learned that the page does not work.
+
+    Asserted on the `controls` element's rendered HTML rather than on the
+    runner's summary: the first version of this test asked the summary, which
+    reports only elements the script reads, and it passed with the defect put
+    back.
+    """
+    from tnb import report
+
+    models_only = report.build([_row("x", "a-judge", 0.5)])
+    controls = _run(report.render_page(models_only), tmp_path, panel="controls")
+
+    # Empty, not absent. "not in" alone passes when the element was never
+    # written to at all, which is exactly the state the static markup left it
+    # in -- so the first version of this assertion held under the defect.
+    assert controls.strip() == "", f"expected no controls at all, got {controls!r}"
+
+
+def test_a_filter_appears_for_the_rows_that_need_one(tmp_path):
+    """The mirror: a reference row brings its control with it."""
+    from tnb import report
+
+    data = report.build(
+        [
+            _row("x", "a-judge", 0.5),
+            _row("therapist", "a-judge", 0.3, system_type="reference-human"),
+        ]
+    )
+    controls = _run(report.render_page(data), tmp_path, panel="controls")
+
+    assert "show-reference" in controls
+    assert "show-published" not in controls, "still nothing published to show"
+
+
+def test_a_row_of_a_type_nothing_offers_to_hide_is_still_shown(tmp_path):
+    """The reason the dead control is replaced rather than deleted.
+
+    Deleting it and leaving `rowVisible` to hide the type would lose a row
+    silently, which is worse than a switch that does nothing. A `published` row
+    brings its own control, and until one exists neither is drawn.
+    """
+    from tnb import report
+
+    data = report.build(
+        [_row("x", "a-judge", 0.5), _row("paper", "a-judge", 0.3, system_type="published")]
+    )
+    controls = _run(report.render_page(data), tmp_path, panel="controls")
+
+    assert "show-published" in controls

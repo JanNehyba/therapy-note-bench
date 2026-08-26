@@ -144,7 +144,7 @@ function intervalPlot(rows, human) {
 
 function renderSaturation(data) {
   const s = data.saturation;
-  if (!s) return;
+  if (!s) { document.getElementById('saturation').remove(); return; }
 
   const counts = s.verdict_counts || {};
   const legend = Object.entries(VERDICTS)
@@ -258,7 +258,7 @@ renderSaturation(DATA);
 
 function renderCorpora(data) {
   const c = data.corpus;
-  if (!c) return;
+  if (!c) { document.getElementById('corpora').remove(); return; }
 
   const shape = (d, label) => d ? `<tr>
       <td>${label}</td>
@@ -305,7 +305,7 @@ function renderCorpora(data) {
 }
 
 function renderLicences(data) {
-  if (!data.licences) return;
+  if (!data.licences) { document.getElementById('licences').remove(); return; }
   const rows = data.licences.map(l => `<tr>
       <td><a href="${l.url}">${l.source}</a></td>
       <td>${l.used_for}</td>
@@ -331,7 +331,7 @@ renderCorpora(DATA);
 renderLicences(DATA);
 
 function renderProtocol(protocol) {
-  if (!protocol) return;
+  if (!protocol) { document.getElementById('protocol').remove(); return; }
 
   const soap = protocol.sections.map(s =>
     `<div><dt>${s.name}</dt><dd>${s.description}</dd></div>`).join('');
@@ -376,7 +376,8 @@ renderProtocol(DATA.protocol);
 // from the two strings on every render, so it cannot drift from the text.
 function renderSimilarityExample(example) {
   const host = document.getElementById('similarity-example');
-  if (!host || !example || !example.expert) return;
+  if (!host) return;
+  if (!example || !example.expert) { host.remove(); return; }
   host.innerHTML = `
     <p class="blurb">Two of the four iCARE columns measure how closely a model
        reproduced the clinician's wording. Here is what that misses — section
@@ -726,10 +727,14 @@ function renderSuperseded(gone) {
 }
 
 
-document.getElementById('withdrawn').innerHTML = (DATA.superseded || []).length
-  ? `<div class="box"><h2>Withdrawn from the tables</h2>
-     ${DATA.superseded.map(renderSuperseded).join('')}</div>`
-  : '';
+// Nothing withdrawn is the good case and needs no heading saying so.
+if ((DATA.superseded || []).length) {
+  document.getElementById('withdrawn').innerHTML =
+    `<div class="box"><h2>Withdrawn from the tables</h2>
+     ${DATA.superseded.map(renderSuperseded).join('')}</div>`;
+} else {
+  document.getElementById('withdrawn').remove();
+}
 
 renderJudges(DATA.judges);
 renderPreference(DATA.preference);
