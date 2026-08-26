@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" width="900" height="712" viewBox="0 0 900 712" role="img" aria-label="13 of 19 systems change place">
+<style>
+  .fig { font: 13px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  .fig text { fill: #1a1a19; }
+  .fig .muted { fill: #6b6b66; }
+  .fig .rule { stroke: #e2e2dd; stroke-width: 1; }
+  .fig .title { font-size: 17px; font-weight: 650; letter-spacing: -.01em; }
+  .fig .sub { font-size: 13px; fill: #6b6b66; }
+  .fig .note { font-size: 11.5px; fill: #6b6b66; }
+  .fig .name { font-size: 12px; }
+  .fig .value { font-size: 11.5px; fill: #6b6b66; font-variant-numeric: tabular-nums; }
+  .fig .a { stroke: #00806a; }
+  .fig .b { stroke: #c05a10; }
+  .fig .fill-a { fill: #00806a; }
+  .fig .fill-b { fill: #c05a10; }
+  .fig .flat { stroke: #b8b8b1; }
+  .fig .fill-flat { fill: #b8b8b1; }
+  .fig .band { fill: #f0f0eb; }
+  /* The ring that keeps overlapping marks apart is the *surface*, so it has to
+     flip with the theme. Written as a literal it put a white halo on every dot
+     in dark mode. */
+  .fig .ring { stroke: #fcfcfb; }
+  @media (prefers-color-scheme: dark) {
+    .fig text { fill: #e8e8e4; }
+    .fig .muted, .fig .sub, .fig .note, .fig .value { fill: #9a9a94; }
+    .fig .rule { stroke: #2c2e31; }
+    .fig .a { stroke: #22a184; }
+    .fig .b { stroke: #c9701f; }
+    .fig .fill-a { fill: #22a184; }
+    .fig .fill-b { fill: #c9701f; }
+    .fig .flat { stroke: #55554f; }
+    .fig .fill-flat { fill: #55554f; }
+    .fig .band { fill: #26282b; }
+    .fig .ring { stroke: #1a1a19; }
+  }
+</style>
+<text class="title" x="0" y="22">Two judges agree on 118 of the 125 pairs they can separate — and 13 of 19 systems still change place</text>
+<text class="sub" x="0" y="43">Same notes, same rubric, same 23 criteria. Ordered by Completeness. A position is a place in a queue, not a measurement.</text>
+<line class="rule" x1="0" y1="62" x2="900" y2="62"/>
+<text class="value" x="262" y="82" text-anchor="end">judge A · gemini-3.1-pro-preview</text><text class="value" x="638" y="82">judge B · gpt-5.6-terra</text><line class="a" x1="274" y1="52" x2="300" y2="52" stroke-width="2" stroke-linecap="round"/><text class="value" x="308" y="56">13 changed place</text><line class="flat" x1="424" y1="52" x2="450" y2="52" stroke-width="2" stroke-linecap="round"/><text class="value" x="458" y="56">6 held theirs</text>
+<g><title>kimi-k3: 1 under gemini-3.1-pro-preview, 1 under gpt-5.6-terra</title><path class="flat" d="M 274 109.0 C 344 109.0, 556 109.0, 626 109.0" fill="none" stroke-width="2" stroke-opacity="0.35" stroke-linecap="round"/><circle cx="274" cy="109.0" r="3.5" class="fill-a"/><circle cx="626" cy="109.0" r="3.5" class="fill-b"/></g>
+<g><title>qwen3.5-int4: 2 under gemini-3.1-pro-preview, 5 under gpt-5.6-terra</title><path class="a" d="M 274 135.0 C 344 135.0, 556 213.0, 626 213.0" fill="none" stroke-width="2" stroke-opacity="0.85" stroke-linecap="round"/><circle cx="274" cy="135.0" r="3.5" class="fill-a"/><circle cx="626" cy="213.0" r="3.5" class="fill-b"/></g>
+<g><title>qwen3.5-122b: 3 under gemini-3.1-pro-preview, 2 under gpt-5.6-terra</title><path class="a" d="M 274 161.0 C 344 161.0, 556 135.0, 626 135.0" fill="none" stroke-width="2" stroke-opacity="0.85" stroke-linecap="round"/><circle cx="274" cy="161.0" r="3.5" class="fill-a"/><circle cx="626" cy="135.0" r="3.5" class="fill-b"/></g>
+<g><title>gemini-3.1-pro-preview: 4 under gemini-3.1-pro-preview, 3 under gpt-5.6-terra</title><path class="a" d="M 274 187.0 C 344 187.0, 556 161.0, 626 161.0" fill="none" stroke-width="2" stroke-opacity="0.85" stroke-linecap="round"/><circle cx="274" cy="187.0" r="3.5" class="fill-a"/><circle cx="626" cy="161.0" r="3.5" class="fill-b"/></g>
+<g><title>gemini-3.7-flash: 5 under gemini-3.1-pro-preview, 8 under gpt-5.6-terra</title><path class="a" d="M 274 213.0 C 344 213.0, 556 291.0, 626 291.0" fill="none" stroke-width="2" stroke-opacity="0.85" stroke-linecap="round"/><circle cx="274" cy="213.0" r="3.5" class="fill-a"/><circle cx="626" cy="291.0" r="3.5" class="fill-b"/></g>
+<g><title>glm-5: 6 under gemini-3.1-pro-preview, 10 under gpt-5.6-terra</title><path class="a" d="M 274 239.0 C 344 239.0, 556 343.0, 626 343.0" fill="none" stroke-width="2" stroke-opacity="0.85" stroke-linecap="round"/><circle cx="274" cy="239.0" r="3.5" class="fill-a"/><circle cx="626" cy="343.0" r="3.5" class="fill-b"/></g>
+<g><title>glm-5.2: 7 under gemini-3.1-pro-preview, 10 under gpt-5.6-terra</title><path class="a" d="M 274 265.0 C 344 265.0, 556 343.0, 626 343.0" fill="none" stroke-width="2" stroke-opacity="0.85" stroke-linecap="round"/><circle cx="274" cy="265.0" r="3.5" class="fill-a"/><circle cx="626" cy="343.0" r="3.5" class="fill-b"/></g>
+<g><title>gpt-5.6-sol: 8 under gemini-3.1-pro-preview, 7 under gpt-5.6-terra</title><path class="a" d="M 274 291.0 C 344 291.0, 556 265.0, 626 265.0" fill="none" stroke-width="2" stroke-opacity="0.85" stroke-linecap="round"/><circle cx="274" cy="291.0" r="3.5" class="fill-a"/><circle cx="626" cy="265.0" r="3.5" class="fill-b"/></g>
+<g><title>gpt-5.6-terra: 9 under gemini-3.1-pro-preview, 6 under gpt-5.6-terra</title><path class="a" d="M 274 317.0 C 344 317.0, 556 239.0, 626 239.0" fill="none" stroke-width="2" stroke-opacity="0.85" stroke-linecap="round"/><circle cx="274" cy="317.0" r="3.5" class="fill-a"/><circle cx="626" cy="239.0" r="3.5" class="fill-b"/></g>
+<g><title>gpt-oss-120b: 10 under gemini-3.1-pro-preview, 4 under gpt-5.6-terra</title><path class="a" d="M 274 343.0 C 344 343.0, 556 187.0, 626 187.0" fill="none" stroke-width="2" stroke-opacity="0.85" stroke-linecap="round"/><circle cx="274" cy="343.0" r="3.5" class="fill-a"/><circle cx="626" cy="187.0" r="3.5" class="fill-b"/></g>
+<g><title>deepseek-v4-flash-thinking: 11 under gemini-3.1-pro-preview, 9 under gpt-5.6-terra</title><path class="a" d="M 274 369.0 C 344 369.0, 556 317.0, 626 317.0" fill="none" stroke-width="2" stroke-opacity="0.85" stroke-linecap="round"/><circle cx="274" cy="369.0" r="3.5" class="fill-a"/><circle cx="626" cy="317.0" r="3.5" class="fill-b"/></g>
+<g><title>gpt-5.6-luna: 12 under gemini-3.1-pro-preview, 12 under gpt-5.6-terra</title><path class="flat" d="M 274 395.0 C 344 395.0, 556 395.0, 626 395.0" fill="none" stroke-width="2" stroke-opacity="0.35" stroke-linecap="round"/><circle cx="274" cy="395.0" r="3.5" class="fill-a"/><circle cx="626" cy="395.0" r="3.5" class="fill-b"/></g>
+<g><title>gemma4: 13 under gemini-3.1-pro-preview, 16 under gpt-5.6-terra</title><path class="a" d="M 274 421.0 C 344 421.0, 556 499.0, 626 499.0" fill="none" stroke-width="2" stroke-opacity="0.85" stroke-linecap="round"/><circle cx="274" cy="421.0" r="3.5" class="fill-a"/><circle cx="626" cy="499.0" r="3.5" class="fill-b"/></g>
+<g><title>qwen3.8-27b: 14 under gemini-3.1-pro-preview, 13 under gpt-5.6-terra</title><path class="a" d="M 274 447.0 C 344 447.0, 556 421.0, 626 421.0" fill="none" stroke-width="2" stroke-opacity="0.85" stroke-linecap="round"/><circle cx="274" cy="447.0" r="3.5" class="fill-a"/><circle cx="626" cy="421.0" r="3.5" class="fill-b"/></g>
+<g><title>mistral-medium-3.5: 15 under gemini-3.1-pro-preview, 15 under gpt-5.6-terra</title><path class="flat" d="M 274 473.0 C 344 473.0, 556 473.0, 626 473.0" fill="none" stroke-width="2" stroke-opacity="0.35" stroke-linecap="round"/><circle cx="274" cy="473.0" r="3.5" class="fill-a"/><circle cx="626" cy="473.0" r="3.5" class="fill-b"/></g>
+<g><title>deepseek-v4-flash: 16 under gemini-3.1-pro-preview, 13 under gpt-5.6-terra</title><path class="a" d="M 274 499.0 C 344 499.0, 556 421.0, 626 421.0" fill="none" stroke-width="2" stroke-opacity="0.85" stroke-linecap="round"/><circle cx="274" cy="499.0" r="3.5" class="fill-a"/><circle cx="626" cy="421.0" r="3.5" class="fill-b"/></g>
+<g><title>mistral-large-v2: 17 under gemini-3.1-pro-preview, 17 under gpt-5.6-terra</title><path class="flat" d="M 274 525.0 C 344 525.0, 556 525.0, 626 525.0" fill="none" stroke-width="2" stroke-opacity="0.35" stroke-linecap="round"/><circle cx="274" cy="525.0" r="3.5" class="fill-a"/><circle cx="626" cy="525.0" r="3.5" class="fill-b"/></g>
+<g><title>llama-3.1-70b: 18 under gemini-3.1-pro-preview, 18 under gpt-5.6-terra</title><path class="flat" d="M 274 551.0 C 344 551.0, 556 551.0, 626 551.0" fill="none" stroke-width="2" stroke-opacity="0.35" stroke-linecap="round"/><circle cx="274" cy="551.0" r="3.5" class="fill-a"/><circle cx="626" cy="551.0" r="3.5" class="fill-b"/></g>
+<g><title>therapist: 19 under gemini-3.1-pro-preview, 19 under gpt-5.6-terra</title><path class="flat" d="M 274 577.0 C 344 577.0, 556 577.0, 626 577.0" fill="none" stroke-width="2" stroke-opacity="0.35" stroke-linecap="round"/><circle cx="274" cy="577.0" r="3.5" class="fill-a"/><circle cx="626" cy="577.0" r="3.5" class="fill-b"/></g>
+<text class="name" x="262" y="113.0" text-anchor="end">1. kimi-k3</text>
+<text class="name" x="262" y="139.0" text-anchor="end">2. qwen3.5-int4</text>
+<text class="name" x="262" y="165.0" text-anchor="end">3. qwen3.5-122b</text>
+<text class="name" x="262" y="191.0" text-anchor="end">4. gemini-3.1-pro-preview</text>
+<text class="name" x="262" y="217.0" text-anchor="end">5. gemini-3.7-flash</text>
+<text class="name" x="262" y="243.0" text-anchor="end">6. glm-5</text>
+<text class="name" x="262" y="269.0" text-anchor="end">7. glm-5.2</text>
+<text class="name" x="262" y="295.0" text-anchor="end">8. gpt-5.6-sol</text>
+<text class="name" x="262" y="321.0" text-anchor="end">9. gpt-5.6-terra</text>
+<text class="name" x="262" y="347.0" text-anchor="end">10. gpt-oss-120b</text>
+<text class="name" x="262" y="373.0" text-anchor="end">11. deepseek-v4-flash-thinking</text>
+<text class="name" x="262" y="399.0" text-anchor="end">12. gpt-5.6-luna</text>
+<text class="name" x="262" y="425.0" text-anchor="end">13. gemma4</text>
+<text class="name" x="262" y="451.0" text-anchor="end">14. qwen3.8-27b</text>
+<text class="name" x="262" y="477.0" text-anchor="end">15. mistral-medium-3.5</text>
+<text class="name" x="262" y="503.0" text-anchor="end">16. deepseek-v4-flash</text>
+<text class="name" x="262" y="529.0" text-anchor="end">17. mistral-large-v2</text>
+<text class="name" x="262" y="555.0" text-anchor="end">18. llama-3.1-70b</text>
+<text class="name" x="262" y="581.0" text-anchor="end">19. therapist</text>
+<text class="name" x="638" y="113.0">1. kimi-k3</text>
+<text class="name" x="638" y="139.0">2. qwen3.5-122b</text>
+<text class="name" x="638" y="165.0">3. gemini-3.1-pro-preview</text>
+<text class="name" x="638" y="191.0">4. gpt-oss-120b</text>
+<text class="name" x="638" y="217.0">5. qwen3.5-int4</text>
+<text class="name" x="638" y="243.0">6. gpt-5.6-terra</text>
+<text class="name" x="638" y="269.0">7. gpt-5.6-sol</text>
+<text class="name" x="638" y="295.0">8. gemini-3.7-flash</text>
+<text class="name" x="638" y="321.0">9. deepseek-v4-flash-thinking</text>
+<text class="name" x="638" y="347.0">10. glm-5</text>
+<text class="name" x="638" y="347.0">10. glm-5.2</text>
+<text class="name" x="638" y="399.0">12. gpt-5.6-luna</text>
+<text class="name" x="638" y="425.0">13. deepseek-v4-flash</text>
+<text class="name" x="638" y="425.0">13. qwen3.8-27b</text>
+<text class="name" x="638" y="477.0">15. mistral-medium-3.5</text>
+<text class="name" x="638" y="503.0">16. gemma4</text>
+<text class="name" x="638" y="529.0">17. mistral-large-v2</text>
+<text class="name" x="638" y="555.0">18. llama-3.1-70b</text>
+<text class="name" x="638" y="581.0">19. therapist</text>
+<text class="note" x="0" y="650">Grey lines held their place. A pair counts as separable when a paired bootstrap puts the two systems in different groups under that judge — over 25 shared</text>
+<text class="note" x="0" y="665">conversations for judge A and 42 for judge B, because more of A's notes went unfinished. Systems that print the same score share a place.</text>
+<text class="note" x="0" y="692">Source: docs/leaderboard.json and docs/saturation-*.json, harness 0.2.0.</text>
+</svg>

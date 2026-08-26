@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" width="880" height="650" viewBox="0 0 880 650" role="img" aria-label="Looking back against looking forward, per model">
+<style>
+  .fig { font: 13px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  .fig text { fill: #1a1a19; }
+  .fig .muted { fill: #6b6b66; }
+  .fig .rule { stroke: #e2e2dd; stroke-width: 1; }
+  .fig .title { font-size: 17px; font-weight: 650; letter-spacing: -.01em; }
+  .fig .sub { font-size: 13px; fill: #6b6b66; }
+  .fig .note { font-size: 11.5px; fill: #6b6b66; }
+  .fig .name { font-size: 12px; }
+  .fig .value { font-size: 11.5px; fill: #6b6b66; font-variant-numeric: tabular-nums; }
+  .fig .a { stroke: #00806a; }
+  .fig .b { stroke: #c05a10; }
+  .fig .fill-a { fill: #00806a; }
+  .fig .fill-b { fill: #c05a10; }
+  .fig .flat { stroke: #b8b8b1; }
+  .fig .fill-flat { fill: #b8b8b1; }
+  .fig .band { fill: #f0f0eb; }
+  /* The ring that keeps overlapping marks apart is the *surface*, so it has to
+     flip with the theme. Written as a literal it put a white halo on every dot
+     in dark mode. */
+  .fig .ring { stroke: #fcfcfb; }
+  @media (prefers-color-scheme: dark) {
+    .fig text { fill: #e8e8e4; }
+    .fig .muted, .fig .sub, .fig .note, .fig .value { fill: #9a9a94; }
+    .fig .rule { stroke: #2c2e31; }
+    .fig .a { stroke: #22a184; }
+    .fig .b { stroke: #c9701f; }
+    .fig .fill-a { fill: #22a184; }
+    .fig .fill-b { fill: #c9701f; }
+    .fig .flat { stroke: #55554f; }
+    .fig .fill-flat { fill: #55554f; }
+    .fig .band { fill: #26282b; }
+    .fig .ring { stroke: #1a1a19; }
+  }
+</style>
+<text class="title" x="0" y="22">Every model can say what happened last time. Almost none can say what happens next.</text>
+<text class="sub" x="0" y="43">iCARE's two time-bearing sections, scored on the same 40 sessions. The fraction of the expert-answered sections each model also answered.</text>
+<circle cx="226" cy="74" r="5" class="fill-a"/><text class="value" x="238" y="78">looks back — section 5, answered by the experts in 34 of 40 notes</text><circle cx="226" cy="92" r="5" class="fill-b"/><text class="value" x="238" y="96">looks forward — section 17, answered in 11 of 40</text>
+<line class="rule" x1="220.0" y1="108" x2="220.0" y2="534"/><text class="value" x="220.0" y="100" text-anchor="middle">0.0</text><line class="rule" x1="332.8" y1="108" x2="332.8" y2="534"/><text class="value" x="332.8" y="100" text-anchor="middle">0.2</text><line class="rule" x1="445.6" y1="108" x2="445.6" y2="534"/><text class="value" x="445.6" y="100" text-anchor="middle">0.4</text><line class="rule" x1="558.4" y1="108" x2="558.4" y2="534"/><text class="value" x="558.4" y="100" text-anchor="middle">0.6</text><line class="rule" x1="671.2" y1="108" x2="671.2" y2="534"/><text class="value" x="671.2" y="100" text-anchor="middle">0.8</text><line class="rule" x1="784.0" y1="108" x2="784.0" y2="534"/><text class="value" x="784.0" y="100" text-anchor="middle">1.0</text>
+<g><title>gpt-5.6-sol: looks back 1.00, looks forward 0.55</title><line class="flat" x1="527.7" y1="131.0" x2="784.0" y2="131.0" stroke-width="2" stroke-opacity="0.6"/><circle cx="527.7" cy="131.0" r="5" class="fill-b"/><circle cx="784.0" cy="131.0" r="5" class="fill-a"/><text class="name" x="206" y="135.0" text-anchor="end">gpt-5.6-sol</text><text class="value" x="792" y="135.0">0.55 → 1.00</text></g>
+<g><title>gemini-3.1-pro-preview: looks back 1.00, looks forward 0.45</title><line class="flat" x1="476.3" y1="157.0" x2="784.0" y2="157.0" stroke-width="2" stroke-opacity="0.6"/><circle cx="476.3" cy="157.0" r="5" class="fill-b"/><circle cx="784.0" cy="157.0" r="5" class="fill-a"/><text class="name" x="206" y="161.0" text-anchor="end">gemini-3.1-pro-preview</text><text class="value" x="792" y="161.0">0.45 → 1.00</text></g>
+<g><title>gpt-5.6-terra: looks back 0.97, looks forward 0.45</title><line class="flat" x1="476.3" y1="183.0" x2="767.4" y2="183.0" stroke-width="2" stroke-opacity="0.6"/><circle cx="476.3" cy="183.0" r="5" class="fill-b"/><circle cx="767.4" cy="183.0" r="5" class="fill-a"/><text class="name" x="206" y="187.0" text-anchor="end">gpt-5.6-terra</text><text class="value" x="792" y="187.0">0.45 → 0.97</text></g>
+<g><title>gemma4: looks back 1.00, looks forward 0.36</title><line class="flat" x1="425.1" y1="209.0" x2="784.0" y2="209.0" stroke-width="2" stroke-opacity="0.6"/><circle cx="425.1" cy="209.0" r="5" class="fill-b"/><circle cx="784.0" cy="209.0" r="5" class="fill-a"/><text class="name" x="206" y="213.0" text-anchor="end">gemma4</text><text class="value" x="792" y="213.0">0.36 → 1.00</text></g>
+<g><title>glm-5: looks back 1.00, looks forward 0.36</title><line class="flat" x1="425.1" y1="235.0" x2="784.0" y2="235.0" stroke-width="2" stroke-opacity="0.6"/><circle cx="425.1" cy="235.0" r="5" class="fill-b"/><circle cx="784.0" cy="235.0" r="5" class="fill-a"/><text class="name" x="206" y="239.0" text-anchor="end">glm-5</text><text class="value" x="792" y="239.0">0.36 → 1.00</text></g>
+<g><title>glm-5.2: looks back 1.00, looks forward 0.36</title><line class="flat" x1="425.1" y1="261.0" x2="784.0" y2="261.0" stroke-width="2" stroke-opacity="0.6"/><circle cx="425.1" cy="261.0" r="5" class="fill-b"/><circle cx="784.0" cy="261.0" r="5" class="fill-a"/><text class="name" x="206" y="265.0" text-anchor="end">glm-5.2</text><text class="value" x="792" y="265.0">0.36 → 1.00</text></g>
+<g><title>kimi-k3: looks back 1.00, looks forward 0.36</title><line class="flat" x1="425.1" y1="287.0" x2="784.0" y2="287.0" stroke-width="2" stroke-opacity="0.6"/><circle cx="425.1" cy="287.0" r="5" class="fill-b"/><circle cx="784.0" cy="287.0" r="5" class="fill-a"/><text class="name" x="206" y="291.0" text-anchor="end">kimi-k3</text><text class="value" x="792" y="291.0">0.36 → 1.00</text></g>
+<g><title>gemini-3.7-flash: looks back 0.97, looks forward 0.36</title><line class="flat" x1="425.1" y1="313.0" x2="767.4" y2="313.0" stroke-width="2" stroke-opacity="0.6"/><circle cx="425.1" cy="313.0" r="5" class="fill-b"/><circle cx="767.4" cy="313.0" r="5" class="fill-a"/><text class="name" x="206" y="317.0" text-anchor="end">gemini-3.7-flash</text><text class="value" x="792" y="317.0">0.36 → 0.97</text></g>
+<g><title>gpt-5.6-luna: looks back 1.00, looks forward 0.27</title><line class="flat" x1="373.8" y1="339.0" x2="784.0" y2="339.0" stroke-width="2" stroke-opacity="0.6"/><circle cx="373.8" cy="339.0" r="5" class="fill-b"/><circle cx="784.0" cy="339.0" r="5" class="fill-a"/><text class="name" x="206" y="343.0" text-anchor="end">gpt-5.6-luna</text><text class="value" x="792" y="343.0">0.27 → 1.00</text></g>
+<g><title>qwen3.5-122b: looks back 1.00, looks forward 0.27</title><line class="flat" x1="373.8" y1="365.0" x2="784.0" y2="365.0" stroke-width="2" stroke-opacity="0.6"/><circle cx="373.8" cy="365.0" r="5" class="fill-b"/><circle cx="784.0" cy="365.0" r="5" class="fill-a"/><text class="name" x="206" y="369.0" text-anchor="end">qwen3.5-122b</text><text class="value" x="792" y="369.0">0.27 → 1.00</text></g>
+<g><title>qwen3.8-27b: looks back 1.00, looks forward 0.27</title><line class="flat" x1="373.8" y1="391.0" x2="784.0" y2="391.0" stroke-width="2" stroke-opacity="0.6"/><circle cx="373.8" cy="391.0" r="5" class="fill-b"/><circle cx="784.0" cy="391.0" r="5" class="fill-a"/><text class="name" x="206" y="395.0" text-anchor="end">qwen3.8-27b</text><text class="value" x="792" y="395.0">0.27 → 1.00</text></g>
+<g><title>deepseek-v4-flash-thinking: looks back 1.00, looks forward 0.18</title><line class="flat" x1="322.5" y1="417.0" x2="784.0" y2="417.0" stroke-width="2" stroke-opacity="0.6"/><circle cx="322.5" cy="417.0" r="5" class="fill-b"/><circle cx="784.0" cy="417.0" r="5" class="fill-a"/><text class="name" x="206" y="421.0" text-anchor="end">deepseek-v4-flash-thinking</text><text class="value" x="792" y="421.0">0.18 → 1.00</text></g>
+<g><title>mistral-medium-3.5: looks back 1.00, looks forward 0.18</title><line class="flat" x1="322.5" y1="443.0" x2="784.0" y2="443.0" stroke-width="2" stroke-opacity="0.6"/><circle cx="322.5" cy="443.0" r="5" class="fill-b"/><circle cx="784.0" cy="443.0" r="5" class="fill-a"/><text class="name" x="206" y="447.0" text-anchor="end">mistral-medium-3.5</text><text class="value" x="792" y="447.0">0.18 → 1.00</text></g>
+<g><title>deepseek-v4-flash: looks back 1.00, looks forward 0.09</title><line class="flat" x1="271.3" y1="469.0" x2="784.0" y2="469.0" stroke-width="2" stroke-opacity="0.6"/><circle cx="271.3" cy="469.0" r="5" class="fill-b"/><circle cx="784.0" cy="469.0" r="5" class="fill-a"/><text class="name" x="206" y="473.0" text-anchor="end">deepseek-v4-flash</text><text class="value" x="792" y="473.0">0.09 → 1.00</text></g>
+<g><title>qwen3.5-int4: looks back 1.00, looks forward 0.09</title><line class="flat" x1="271.3" y1="495.0" x2="784.0" y2="495.0" stroke-width="2" stroke-opacity="0.6"/><circle cx="271.3" cy="495.0" r="5" class="fill-b"/><circle cx="784.0" cy="495.0" r="5" class="fill-a"/><text class="name" x="206" y="499.0" text-anchor="end">qwen3.5-int4</text><text class="value" x="792" y="499.0">0.09 → 1.00</text></g>
+<g><title>gpt-oss-120b: looks back 1.00, looks forward 0.00</title><line class="flat" x1="220.0" y1="521.0" x2="784.0" y2="521.0" stroke-width="2" stroke-opacity="0.6"/><circle cx="220.0" cy="521.0" r="5" class="fill-b"/><circle cx="784.0" cy="521.0" r="5" class="fill-a"/><text class="name" x="206" y="525.0" text-anchor="end">gpt-oss-120b</text><text class="value" x="792" y="525.0">0.00 → 1.00</text></g>
+<text class="note" x="0" y="572">The forward column rests on eleven sessions, so a score of 0.09 there is one session and the gap between two models a few hundredths apart is not</text>
+<text class="note" x="0" y="587">evidence. The backward column rests on thirty-four. They were one averaged column until harness 0.2.0, and the average — weighted three to one towards</text>
+<text class="note" x="0" y="602">the easy half — published the opposite of the finding this track exists to reproduce.</text>
+<text class="note" x="0" y="630">Source: docs/leaderboard.json, iCARE track, judge gemini-3.1-pro-preview, harness 0.2.0. Neither column involves the judge: both are computed from the</text>
+<text class="note" x="0" y="645">note and the expert note alone.</text>
+</svg>

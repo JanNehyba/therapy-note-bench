@@ -1,4 +1,4 @@
-.PHONY: help install lint test models prompts smoke bench score score-icare analyse report
+.PHONY: help install lint test models prompts smoke bench score score-icare analyse report figures
 
 help:
 	@echo "install     install dependencies (uv)"
@@ -11,7 +11,8 @@ help:
 	@echo "score       judge the TN-Eval notes with both judges"
 	@echo "score-icare judge the iCARE notes with both judges"
 	@echo "analyse     saturation and self-preference, from cached answers"
-	@echo "report      regenerate docs/index.html, docs/leaderboard.json and the README table"
+	@echo "report      regenerate both pages, docs/leaderboard.json and the README table"
+	@echo "figures     redraw docs/figures/*.svg from the published payload"
 
 install:
 	uv sync --all-groups --all-extras
@@ -58,3 +59,6 @@ analyse:
 
 report:
 	uv run tnb report
+
+figures:
+	uv run python tools/figures.py

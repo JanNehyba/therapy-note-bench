@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" width="940" height="660" viewBox="0 0 940 660" role="img" aria-label="Completeness for every system, therapist included">
+<style>
+  .fig { font: 13px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  .fig text { fill: #1a1a19; }
+  .fig .muted { fill: #6b6b66; }
+  .fig .rule { stroke: #e2e2dd; stroke-width: 1; }
+  .fig .title { font-size: 17px; font-weight: 650; letter-spacing: -.01em; }
+  .fig .sub { font-size: 13px; fill: #6b6b66; }
+  .fig .note { font-size: 11.5px; fill: #6b6b66; }
+  .fig .name { font-size: 12px; }
+  .fig .value { font-size: 11.5px; fill: #6b6b66; font-variant-numeric: tabular-nums; }
+  .fig .a { stroke: #00806a; }
+  .fig .b { stroke: #c05a10; }
+  .fig .fill-a { fill: #00806a; }
+  .fig .fill-b { fill: #c05a10; }
+  .fig .flat { stroke: #b8b8b1; }
+  .fig .fill-flat { fill: #b8b8b1; }
+  .fig .band { fill: #f0f0eb; }
+  /* The ring that keeps overlapping marks apart is the *surface*, so it has to
+     flip with the theme. Written as a literal it put a white halo on every dot
+     in dark mode. */
+  .fig .ring { stroke: #fcfcfb; }
+  @media (prefers-color-scheme: dark) {
+    .fig text { fill: #e8e8e4; }
+    .fig .muted, .fig .sub, .fig .note, .fig .value { fill: #9a9a94; }
+    .fig .rule { stroke: #2c2e31; }
+    .fig .a { stroke: #22a184; }
+    .fig .b { stroke: #c9701f; }
+    .fig .fill-a { fill: #22a184; }
+    .fig .fill-b { fill: #c9701f; }
+    .fig .flat { stroke: #55554f; }
+    .fig .fill-flat { fill: #55554f; }
+    .fig .band { fill: #26282b; }
+    .fig .ring { stroke: #1a1a19; }
+  }
+</style>
+<text class="title" x="0" y="22">Every model covers more of the rubric than the therapist does — which is not the same as writing a better note</text>
+<text class="sub" x="0" y="43">Completeness: the fraction of 23 rubric criteria a judge found present. Judge gemini-3.1-pro-preview.</text>
+<line class="rule" x1="220.0" y1="98" x2="220.0" y2="564"/><text class="value" x="220.0" y="90" text-anchor="middle">0.0</text><line class="rule" x1="301.2" y1="98" x2="301.2" y2="564"/><text class="value" x="301.2" y="90" text-anchor="middle">0.1</text><line class="rule" x1="382.4" y1="98" x2="382.4" y2="564"/><text class="value" x="382.4" y="90" text-anchor="middle">0.2</text><line class="rule" x1="463.7" y1="98" x2="463.7" y2="564"/><text class="value" x="463.7" y="90" text-anchor="middle">0.3</text><line class="rule" x1="544.9" y1="98" x2="544.9" y2="564"/><text class="value" x="544.9" y="90" text-anchor="middle">0.4</text><line class="rule" x1="626.1" y1="98" x2="626.1" y2="564"/><text class="value" x="626.1" y="90" text-anchor="middle">0.5</text>
+<g><title>kimi-k3: 0.546</title><rect x="220" y="112" width="443.4" height="15" rx="4" class="fill-a" fill-opacity="0.9"/><text class="name" x="206" y="124.0" text-anchor="end">kimi-k3</text><text class="value" x="736" y="124.0" text-anchor="end">0.546</text></g>
+<g><title>qwen3.5-int4: 0.535</title><rect x="220" y="136" width="434.9" height="15" rx="4" class="fill-a" fill-opacity="0.9"/><text class="name" x="206" y="148.0" text-anchor="end">qwen3.5-int4</text><text class="value" x="736" y="148.0" text-anchor="end">0.535</text></g>
+<g><title>qwen3.5-122b: 0.526</title><rect x="220" y="160" width="427.4" height="15" rx="4" class="fill-a" fill-opacity="0.9"/><text class="name" x="206" y="172.0" text-anchor="end">qwen3.5-122b</text><text class="value" x="736" y="172.0" text-anchor="end">0.526</text></g>
+<g><title>gemini-3.1-pro-preview: 0.525</title><rect x="220" y="184" width="426.5" height="15" rx="4" class="fill-a" fill-opacity="0.9"/><text class="name" x="206" y="196.0" text-anchor="end">gemini-3.1-pro-preview</text><text class="value" x="736" y="196.0" text-anchor="end">0.525</text></g>
+<g><title>gemini-3.7-flash: 0.524</title><rect x="220" y="208" width="426.0" height="15" rx="4" class="fill-a" fill-opacity="0.9"/><text class="name" x="206" y="220.0" text-anchor="end">gemini-3.7-flash</text><text class="value" x="736" y="220.0" text-anchor="end">0.524</text></g>
+<g><title>glm-5: 0.502</title><rect x="220" y="232" width="407.6" height="15" rx="4" class="fill-a" fill-opacity="0.9"/><text class="name" x="206" y="244.0" text-anchor="end">glm-5</text><text class="value" x="736" y="244.0" text-anchor="end">0.502</text></g>
+<g><title>glm-5.2: 0.499</title><rect x="220" y="256" width="405.1" height="15" rx="4" class="fill-a" fill-opacity="0.9"/><text class="name" x="206" y="268.0" text-anchor="end">glm-5.2</text><text class="value" x="736" y="268.0" text-anchor="end">0.499</text></g>
+<g><title>gpt-5.6-sol: 0.497</title><rect x="220" y="280" width="403.5" height="15" rx="4" class="fill-a" fill-opacity="0.9"/><text class="name" x="206" y="292.0" text-anchor="end">gpt-5.6-sol</text><text class="value" x="736" y="292.0" text-anchor="end">0.497</text></g>
+<g><title>gpt-5.6-terra: 0.493</title><rect x="220" y="304" width="400.8" height="15" rx="4" class="fill-a" fill-opacity="0.9"/><text class="name" x="206" y="316.0" text-anchor="end">gpt-5.6-terra</text><text class="value" x="736" y="316.0" text-anchor="end">0.493</text></g>
+<g><title>gpt-oss-120b: 0.482</title><rect x="220" y="328" width="391.6" height="15" rx="4" class="fill-a" fill-opacity="0.9"/><text class="name" x="206" y="340.0" text-anchor="end">gpt-oss-120b</text><text class="value" x="736" y="340.0" text-anchor="end">0.482</text></g>
+<g><title>deepseek-v4-flash-thinking: 0.477</title><rect x="220" y="352" width="387.1" height="15" rx="4" class="fill-a" fill-opacity="0.9"/><text class="name" x="206" y="364.0" text-anchor="end">deepseek-v4-flash-thinking</text><text class="value" x="736" y="364.0" text-anchor="end">0.477</text></g>
+<g><title>gpt-5.6-luna: 0.476</title><rect x="220" y="376" width="387.0" height="15" rx="4" class="fill-a" fill-opacity="0.9"/><text class="name" x="206" y="388.0" text-anchor="end">gpt-5.6-luna</text><text class="value" x="736" y="388.0" text-anchor="end">0.476</text></g>
+<g><title>gemma4: 0.475</title><rect x="220" y="400" width="385.8" height="15" rx="4" class="fill-a" fill-opacity="0.9"/><text class="name" x="206" y="412.0" text-anchor="end">gemma4</text><text class="value" x="736" y="412.0" text-anchor="end">0.475</text></g>
+<g><title>qwen3.8-27b: 0.471</title><rect x="220" y="424" width="382.6" height="15" rx="4" class="fill-a" fill-opacity="0.9"/><text class="name" x="206" y="436.0" text-anchor="end">qwen3.8-27b</text><text class="value" x="736" y="436.0" text-anchor="end">0.471</text></g>
+<g><title>mistral-medium-3.5: 0.456</title><rect x="220" y="448" width="370.1" height="15" rx="4" class="fill-a" fill-opacity="0.9"/><text class="name" x="206" y="460.0" text-anchor="end">mistral-medium-3.5</text><text class="value" x="736" y="460.0" text-anchor="end">0.456</text></g>
+<g><title>deepseek-v4-flash: 0.446</title><rect x="220" y="472" width="362.0" height="15" rx="4" class="fill-a" fill-opacity="0.9"/><text class="name" x="206" y="484.0" text-anchor="end">deepseek-v4-flash</text><text class="value" x="736" y="484.0" text-anchor="end">0.446</text></g>
+<g><title>mistral-large-v2: 0.389 — a 2025 model, from the paper</title><rect x="220" y="496" width="315.7" height="15" rx="4" class="fill-flat" fill-opacity="0.9"/><text class="name" x="206" y="508.0" text-anchor="end">mistral-large-v2</text><text class="value" x="736" y="508.0" text-anchor="end">0.389</text><text class="value" x="744" y="508.0">a 2025 model, from the paper</text></g>
+<g><title>llama-3.1-70b: 0.364 — a 2025 model, from the paper</title><rect x="220" y="520" width="295.4" height="15" rx="4" class="fill-flat" fill-opacity="0.9"/><text class="name" x="206" y="532.0" text-anchor="end">llama-3.1-70b</text><text class="value" x="736" y="532.0" text-anchor="end">0.364</text><text class="value" x="744" y="532.0">a 2025 model, from the paper</text></g>
+<g><title>therapist: 0.326 — written by a therapist</title><rect x="220" y="544" width="264.8" height="15" rx="4" class="fill-flat" fill-opacity="0.9"/><text class="name" x="206" y="556.0" text-anchor="end" style="font-weight:650">therapist</text><text class="value" x="736" y="556.0" text-anchor="end">0.326</text><text class="value" x="744" y="556.0">written by a therapist</text></g>
+<text class="note" x="0" y="598">A therapist writes what matters for the next session and leaves out what does not; the rubric counts what is present and cannot see why anything was left out.</text>
+<text class="note" x="0" y="613">TN-Eval reported the same direction from blinded expert comparison, so this is a reproduction rather than an anomaly — and it is a statement about a checklist,</text>
+<text class="note" x="0" y="628">not about clinical writing. Quote the number with this sentence attached, or do not quote it.</text>
+<text class="note" x="0" y="640">Source: docs/leaderboard.json, harness 0.2.0. The same ordering holds under the second judge; the figures differ.</text>
+</svg>
