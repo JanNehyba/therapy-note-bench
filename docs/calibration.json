@@ -1,149 +1,149 @@
 {
   "agreements": [
     {
-      "alpha": 0.5744533746909184,
-      "alpha_humans": 0.5037134105690964,
+      "alpha": 0.5998072626406157,
+      "alpha_humans": 0.5040964461994439,
       "alpha_level": "nominal",
-      "humans": 0.5037692102193586,
-      "judge": 0.5750196747444976,
-      "n": 3450,
+      "humans": 0.5041571652036615,
+      "judge": 0.5997766802795041,
+      "n": 3448,
       "name": "rubric_completeness",
       "statistic": "Cohen's kappa"
     },
     {
-      "alpha": 0.1947971313411877,
+      "alpha": 0.10943408363151369,
       "alpha_humans": 0.13053214160572235,
       "alpha_level": "ordinal",
       "humans": 0.13096836110903934,
-      "judge": 0.3152597171539703,
+      "judge": 0.24453266155975872,
       "n": 600,
       "name": "likert_completeness",
       "statistic": "Spearman rho"
     },
     {
-      "alpha": 0.019136177455935377,
+      "alpha": 0.030139343524273998,
       "alpha_humans": 0.18712235103669383,
       "alpha_level": "ordinal",
       "humans": 0.19210453252909696,
-      "judge": 0.027486768976666322,
+      "judge": 0.11061336434027434,
       "n": 600,
       "name": "likert_conciseness",
       "statistic": "Spearman rho"
     },
     {
-      "alpha": 0.06299924818261221,
+      "alpha": 0.09333623235527316,
       "alpha_humans": 0.17930428214514715,
       "alpha_level": "ordinal",
       "humans": 0.1830973712087935,
-      "judge": 0.06321627210801624,
+      "judge": 0.09390692033812073,
       "n": 600,
       "name": "likert_faithfulness",
       "statistic": "Spearman rho"
     }
   ],
-  "judge_model": "gemini-2.5-pro",
+  "judge_model": "gemini-3.1-pro-preview",
   "judge_prompt_version": "tneval-rubric-v1",
-  "notes": 150,
+  "notes": 149,
   "per_criterion": [
     {
       "criterion": "assessment-analysis",
       "humans": 0.38259506076048583,
-      "judge": 0.26146222447850753
+      "judge": 0.23293062364208938
     },
     {
       "criterion": "assessment-diagnosis",
-      "humans": 0.32188065099457486,
-      "judge": 0.3052648384006813
+      "humans": 0.3211226535447422,
+      "judge": 0.569619366961666
     },
     {
       "criterion": "assessment-goals",
       "humans": -0.037735849056602704,
-      "judge": 0.0
+      "judge": -0.011398324348897594
     },
     {
       "criterion": "assessment-overall-progress",
       "humans": -0.02890739833414959,
-      "judge": 0.16551635193383896
+      "judge": 0.19952964806591686
     },
     {
       "criterion": "assessment-progress",
       "humans": 0.022801302931596205,
-      "judge": 0.2703186693719488
+      "judge": 0.14615878159164836
     },
     {
       "criterion": "assessment-response",
       "humans": 0.033696729435084165,
-      "judge": 0.25275689262529255
+      "judge": 0.22927011956612198
     },
     {
       "criterion": "assessment-stages",
       "humans": 0.24198250728862977,
-      "judge": 0.2817655893195124
+      "judge": 0.39283378373910904
     },
     {
       "criterion": "assessment-triggers",
       "humans": 0.32343234323432335,
-      "judge": 0.32291104404381366
+      "judge": 0.355177654392662
     },
     {
       "criterion": "objective-assessment-tools",
       "humans": 0.2197659297789342,
-      "judge": 0.4437628925722952
+      "judge": 0.3594727391124185
     },
     {
       "criterion": "objective-behavior",
       "humans": 0.5662100456621004,
-      "judge": 0.6003501087075822
+      "judge": 0.6286511525430105
     },
     {
       "criterion": "objective-interventions",
       "humans": 0.36974789915966444,
-      "judge": 0.4936428149024243
+      "judge": 0.46167926844172
     },
     {
       "criterion": "objective-mental-status",
       "humans": 0.4268406337371855,
-      "judge": 0.5337361370600433
+      "judge": 0.5254030706068513
     },
     {
       "criterion": "objective-therapy-activities",
       "humans": 0.35760171306209965,
-      "judge": 0.5327301479697709
+      "judge": 0.4838064689091057
     },
     {
       "criterion": "plan-adjustment",
       "humans": 0.05511811023622061,
-      "judge": 0.040229885057470924
+      "judge": 0.10533515731874116
     },
     {
       "criterion": "plan-follow-up",
       "humans": 0.3160245672808487,
-      "judge": 0.4278566086840831
+      "judge": 0.4795322886318967
     },
     {
       "criterion": "plan-homework",
       "humans": 0.3107769423558897,
-      "judge": 0.45481725368890547
+      "judge": 0.42128999297197345
     },
     {
       "criterion": "plan-interventions",
       "humans": 0.27643236857649145,
-      "judge": 0.3183436933436933
+      "judge": 0.36148447436422804
     },
     {
       "criterion": "subjective-chief-complaint",
       "humans": 0.004009020295665222,
-      "judge": 0.20082933135451228
+      "judge": 0.295284906466481
     },
     {
       "criterion": "subjective-goals",
       "humans": 0.36785914965349303,
-      "judge": 0.5101661484524826
+      "judge": 0.5400855201118591
     },
     {
       "criterion": "subjective-history",
       "humans": 0.20649398029916077,
-      "judge": 0.4
+      "judge": 0.3799807550727819
     },
     {
       "criterion": "subjective-homework",
@@ -153,12 +153,12 @@
     {
       "criterion": "subjective-quotes",
       "humans": 0.22543523163174992,
-      "judge": 0.5443342320053062
+      "judge": 0.5570219400824146
     },
     {
       "criterion": "subjective-symptoms",
-      "humans": 0.4819646968534151,
-      "judge": 0.5190704179891331
+      "humans": 0.49517852488923647,
+      "judge": 0.4441337727068402
     }
   ],
   "rubric_beats_likert": true

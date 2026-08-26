@@ -76,6 +76,11 @@ def load_saturations(docs_dir: Path | None = None) -> list[dict]:
     return [item for item in found if item]
 
 
+#: Where the pages are served from. Written once: it appears in the README
+#: block, in a table link and in a methods link, and three copies of a URL are
+#: three chances for one of them to point at the old host.
+SITE_URL = "https://jannehyba.github.io/therapy-note-bench/"
+
 JUDGES_PATH = DOCS_DIR / "judges.json"
 PREFERENCE_PATH = DOCS_DIR / "preference.json"
 
@@ -932,6 +937,35 @@ def _ranking_label(table: dict) -> str:
     return table["ranking_measure"] or ""
 
 
+def _readme_tables(data: dict) -> tuple[list[dict], list[dict]]:
+    """One table per track to print, and the rest to name.
+
+    Five tables filled 157 of the README's 385 lines -- the complaint the split
+    answered on the site, left standing in the view most people read. A file
+    cannot have a switch, so it shows the judge the site opens with and says
+    where the others are.
+
+    The choice is `selection`'s, not a second rule here: the site and the README
+    must open on the same table or a reader following the link finds different
+    numbers from the ones they came for.
+    """
+    by_id = {table["id"]: table for table in data["tables"]}
+    opening = {
+        track["default"]
+        for track in data.get("selection", {}).get("tracks", [])
+        if track.get("default")
+    } or {table["id"] for table in data["tables"]}
+
+    drawn = [table for table in data["tables"] if table["id"] in opening]
+    named = [table for table in data["tables"] if table["id"] not in opening]
+    # A table of nothing but reference rows is not printed by the loop below
+    # either, so naming it would advertise an empty grid.
+    named = [
+        table for table in named if any(row["system_type"] == "model" for row in table["rows"])
+    ]
+    return (drawn or list(by_id.values()), named)
+
+
 def render_readme_section(data: dict) -> str:
     """The shop window: e-INFRA models only, headline numbers only.
 
@@ -946,8 +980,10 @@ def render_readme_section(data: dict) -> str:
     if not data["tables"]:
         return "*No runs yet. The first run will populate this section automatically.*"
 
+    drawn, named = _readme_tables(data)
+
     blocks: list[str] = []
-    for table in data["tables"]:
+    for table in drawn:
         models = [row for row in table["rows"] if row["system_type"] == "model"]
         if not models:
             continue
@@ -1036,9 +1072,25 @@ def render_readme_section(data: dict) -> str:
     for gone in data.get("superseded", []):
         blocks.append(f"*{_superseded_sentence(gone)}*")
 
+    # Named, with a link each. Nothing is hidden by printing one table per
+    # track -- it is moved to the page, which has a switch, from a file that
+    # cannot have one.
+    if named:
+        lines = [
+            f"- **{table['title']}**, {_judge_line(table)} — [open it]({SITE_URL}#{table['id']})"
+            for table in named
+        ]
+        blocks.append(
+            "**Also scored, and not printed here.** Two judges are two instruments and "
+            "two tables; the site draws one at a time and this file cannot, so it shows "
+            "the one the site opens with.\n" + "\n".join(lines)
+        )
+
     blocks.append(
-        "See the [full leaderboard](https://jannehyba.github.io/therapy-note-bench/) "
-        "for per-section detail, the reference systems and the published numbers."
+        f"See the [full leaderboard]({SITE_URL}) for per-section detail, the reference "
+        f"systems and the published numbers, and "
+        f"[how it was measured]({SITE_URL}methods.html) for the judge, the corpora and "
+        f"what the two judges disagree about."
     )
     return "\n\n".join(blocks)
 

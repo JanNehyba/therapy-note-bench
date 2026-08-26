@@ -852,3 +852,43 @@ def test_a_partial_is_shared_rather_than_copied():
             assert body not in template.read_text(encoding="utf-8"), (
                 f"{template.name} holds its own copy of {name}"
             )
+
+
+def test_the_readme_prints_one_table_per_track_and_names_the_rest():
+    """Five tables filled 157 of the README's 385 lines.
+
+    That is the complaint the two-page split answered on the site, left
+    standing in the view most people read: a reader scrolling past four tables
+    looking for the numbers is why the leaderboard has a switch, and a file
+    cannot have one.
+
+    Nothing is hidden. What is not printed is named, with what separates it and
+    a link straight to it.
+    """
+    rows = [
+        _scored("gemma4", 0.61, judge_model=judge_model)
+        for judge_model in ("gemini-3.1-pro-preview", "gpt-5.6-terra")
+    ]
+    data = report.build(rows)
+    assert len(data["tables"]) == 2, "two judges are two tables"
+
+    section = report.render_readme_section(data)
+
+    assert section.count("| Model |") == 1, "one table printed"
+    assert "Also scored, and not printed here" in section
+    assert "gpt-5.6-terra" in section, "and the other is named"
+    assert f"#{data['tables'][1]['id']}" in section, "with a link to it"
+
+
+def test_the_readme_opens_on_the_table_the_site_opens_on():
+    """Otherwise a reader following the link finds different numbers from the
+    ones they came for."""
+    rows = [
+        _scored("gemma4", 0.61, judge_model=judge_model)
+        for judge_model in ("gpt-5.6-terra", "gemini-3.1-pro-preview")
+    ]
+    data = report.build(rows)
+
+    drawn, _named = report._readme_tables(data)
+
+    assert [table["id"] for table in drawn] == [data["selection"]["tracks"][0]["default"]]
