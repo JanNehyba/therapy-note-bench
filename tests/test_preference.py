@@ -390,3 +390,90 @@ def test_a_vendor_is_named_the_way_a_sentence_names_it():
 
     assert "Google" in said
     assert "a google model" not in said and "a openai model" not in said
+
+
+def test_the_interval_covers_the_systems_it_generalises_over():
+    """The published sentence is "this judge scores its own vendor's models
+    higher". That is a claim about a vendor, and the leaderboard marks *rows*
+    with it — so the three or four models the mean is over are a sample.
+
+    Resampling conversations alone treated them as the whole vendor, and that
+    is what produced the one "detected" verdict this repository published. With
+    the systems resampled too it is [-0.002, +0.059] and includes zero.
+    """
+    import random
+    import statistics
+
+    from tnb.scoring import preference as module
+
+    # A judge whose own family is genuinely higher on average, carried by ONE
+    # of its three systems. Resampling conversations cannot see that; resampling
+    # systems must.
+    by_judge = {
+        A: _scores(
+            {
+                "gemini-3.7-flash": 0.75,
+                "gemini-3.1-pro-preview": 0.60,
+                "gemma4": 0.60,
+                "kimi-k3": 0.60,
+                "glm-5": 0.60,
+                "qwen3.5-int4": 0.60,
+            }
+        ),
+        B: _scores(
+            {
+                "gemini-3.7-flash": 0.60,
+                "gemini-3.1-pro-preview": 0.60,
+                "gemma4": 0.60,
+                "kimi-k3": 0.60,
+                "glm-5": 0.60,
+                "qwen3.5-int4": 0.60,
+            }
+        ),
+    }
+    effect = next(e for e in module.compare(by_judge, judge_a=A, judge_b=B) if e.judge == A)
+
+    assert effect.estimate == pytest.approx(0.05, abs=1e-9), "one system of three, +0.15"
+    # Exactly zero, not below it: with three systems and one carrying the
+    # effect, 29% of draws pick none of it, so the 2.5th percentile is the
+    # mean of the two that show nothing.
+    assert effect.low <= 0 < effect.high, (
+        "an effect resting on one of three systems cannot exclude zero"
+    )
+    assert not effect.detected
+
+    # And the point estimate is still over the systems as observed, not resampled.
+    assert effect.own == pytest.approx(0.05, abs=1e-9)
+
+
+def test_an_effect_every_system_shows_is_still_detected():
+    """The widening must not swallow a real one: if every member of the family
+    is higher, resampling the family changes nothing."""
+    from tnb.scoring import preference as module
+
+    by_judge = {
+        A: _scores(
+            {
+                "gemini-3.7-flash": 0.70,
+                "gemini-3.1-pro-preview": 0.70,
+                "gemma4": 0.70,
+                "kimi-k3": 0.60,
+                "glm-5": 0.60,
+                "qwen3.5-int4": 0.60,
+            }
+        ),
+        B: _scores(
+            {
+                "gemini-3.7-flash": 0.60,
+                "gemini-3.1-pro-preview": 0.60,
+                "gemma4": 0.60,
+                "kimi-k3": 0.60,
+                "glm-5": 0.60,
+                "qwen3.5-int4": 0.60,
+            }
+        ),
+    }
+    effect = next(e for e in module.compare(by_judge, judge_a=A, judge_b=B) if e.judge == A)
+
+    assert effect.estimate == pytest.approx(0.10, abs=1e-9)
+    assert effect.detected, "unanimous within the family, so the interval holds"

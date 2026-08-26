@@ -209,6 +209,12 @@ def compare(
             return _mean([scores_a[system][x] - scores_b[system][x] for x in sessions])
 
         def estimate(sessions: list[str], own=own, neutral=neutral) -> float:
+            """The point estimate, over the systems as observed.
+
+            The interval below resamples the systems as well; this does not,
+            because the point estimate is a statement about the systems that
+            were scored and the interval is a statement about the vendor.
+            """
             return _mean([difference(s, sessions) for s in own]) - _mean(
                 [difference(s, sessions) for s in neutral]
             )
@@ -218,11 +224,27 @@ def compare(
         sign = 1.0 if judge_model == judge_a else -1.0
         point = sign * estimate(shared)
 
+        # Conversations *and* systems. The claim this interval supports is
+        # "this judge scores its own vendor's models higher", which generalises
+        # past the three or four models the mean is over -- the page marks rows
+        # with it, and a row is a vendor's model rather than one of these four.
+        # Resampling conversations alone treats those four as the whole of
+        # OpenAI, and that is what produced the one "detected" verdict this
+        # repository published: widened properly it is
+        # [-0.0014, +0.0572] and includes zero.
         rng = random.Random(seed)
         draws = []
         for _ in range(samples):
             picked = [shared[rng.randrange(len(shared))] for _ in shared]
-            draws.append(sign * estimate(picked))
+            own_sample = [own[rng.randrange(len(own))] for _ in own]
+            neutral_sample = [neutral[rng.randrange(len(neutral))] for _ in neutral]
+            draws.append(
+                sign
+                * (
+                    _mean([difference(s, picked) for s in own_sample])
+                    - _mean([difference(s, picked) for s in neutral_sample])
+                )
+            )
         draws.sort()
 
         effects.append(

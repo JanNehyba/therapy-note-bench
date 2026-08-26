@@ -225,8 +225,9 @@ scales, depending on the attribute. Validated on real EHR data — 200 patients
 with 3–5 prior encounters each, across 11 specialties — reaching an ICC of
 0.867 between raters.
 
-**This benchmark measures two of those nine**, and reports a third under a name
-that means something else:
+**This benchmark publishes two of those nine**, and reports a third under a
+name that means something else. An implementation of the instrument exists
+and has not been run:
 
 | PDSQI-9 attribute | Here |
 |---|---|
@@ -235,13 +236,20 @@ that means something else:
 | Succinct | not measured. `conciseness` counts sentences that fit a rubric item, and its own definition says it "does not mean the note is short" |
 | Organized, synthesized, useful, comprehensible, citation, stigmatizing | not measured at all |
 
-**Why it is not simply adopted.** PDSQI-9 was validated with *physicians* doing
-the rating; the authors state they did not compare LLM raters against human
-ones. Scoring these notes on it with an LLM judge would produce nine columns
-with no human anchor for any of them — which is exactly what this repository
-already labels TRACE as, and labels it everywhere it appears. Adopting the
-instrument properly needs clinicians rating the notes in `generations/`, which
-is a study rather than a code change.
+**What adopting it does and does not buy.** PDSQI-9 was validated with
+*physicians* doing the rating, and the authors state they did not compare LLM
+raters against human ones. So an LLM judge scoring these notes on it produces
+columns that are better anchored than TRACE and still not calibrated here.
+TRACE has no human agreement figure at all; PDSQI-9 publishes one — physicians
+reach Krippendorff's alpha 0.575 with each other, against 0.18 between two
+therapists on faithfulness — and that is a ceiling a judge can be held against.
+What neither gives is a measurement of how well *our* judge agrees with people
+about *these* notes, which needs clinicians rating what is in `generations/`.
+
+`src/tnb/scoring/pdsqi.py` implements the instrument, with the "cited"
+attribute dropped (a note written from one transcript has no source documents
+to cite) and two wordings substituted, both named in the module and in
+`NOTICE`. It has not been run: no row in `results/` carries a PDSQI figure.
 
 The closest thing here is TRACE, whose five dimensions (trustworthiness,
 relevance, accuracy, comprehensiveness, expression) overlap PDSQI-9's

@@ -280,13 +280,32 @@ reproduced here exactly and it never claimed to measure the rest. It is a limit
 on the sentence "this model writes better notes", which no number here
 supports.
 
-**Adopting PDSQI-9 would not fix it, and would look like it had.** The
-instrument was validated with physicians rating; its authors did not compare
-LLM raters against human ones. Scoring these notes on it with a judge model
-would produce nine columns with no human anchor for any of them — the position
-TRACE is already in, and labelled as being in wherever it appears. Doing it
-properly means clinicians rating the notes in `generations/`. That is a study,
-not a configuration change.
+**Adopting PDSQI-9 helps, and less than it looks.** The instrument was
+validated with physicians doing the rating, and its authors state they did not
+compare LLM raters against human ones. So scoring these notes on it with a
+judge gives columns that are *better anchored than TRACE and still not
+calibrated here*, and the difference between those two sentences is the whole
+point:
+
+- TRACE has **no human agreement figure at all**. Nobody has rated anything on
+  it that this repository can cite, which is why it is labelled that way
+  wherever it appears.
+- PDSQI-9 publishes one: trained physicians agree with each other at
+  Krippendorff's alpha **0.575** — against the 0.18 two therapists reach on
+  faithfulness. That is a **ceiling** a judge can be held against, and it is not
+  nothing.
+- Neither is a measurement of how well *our* judge agrees with *people* about
+  *these* notes. That still needs clinicians rating what is in `generations/`,
+  and that is a study rather than a configuration change.
+
+`src/tnb/scoring/pdsqi.py` implements the instrument with three adaptations
+named rather than absorbed — the "cited" attribute dropped because a note
+written from one transcript has no source documents, the wording moved from
+"summary" to "note", and the stigmatising item asked as published and reported
+flipped so that every column runs the same way. It has not been run: no row in
+`results/` carries a PDSQI figure, and nothing on the site reports one. **When
+it is run, the ceiling belongs beside every column it produces**, exactly as
+the rubric's does.
 
 ## Five of the twenty-three criteria cannot apply to these conversations
 

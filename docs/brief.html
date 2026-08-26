@@ -82,7 +82,7 @@
   <div class="claims">
     <div class="claim"><div class="figure">118/125<small>pairs, agreed</small></div><p>Where both judges can tell two systems apart, they agree on which is better in 118 of 125 pairs. The judges are not the problem.</p></div>
     <div class="claim"><div class="figure">13/19<small>changed place</small></div><p>And this many systems still land somewhere else. A leaderboard position is not a measurement; it is a place in a queue, and a few real moves renumber everyone below them.</p></div>
-    <div class="claim"><div class="figure">+0.027<small>one judge's bias</small></div><p>One of the two judges scores its own vendor&rsquo;s models measurably higher &mdash; a detected effect, not a caveat. If you use a model to grade models, measure this or do not publish the ranking.</p></div>
+    <div class="claim"><div class="figure">±0.02<small>each judge's own vendor</small></div><p>Both judges score their own vendor&rsquo;s models higher by about this much, and the evidence cannot rule out zero for either. If you grade models with a model, measure this &mdash; and resample the models, not just the cases.</p></div>
     <div class="claim"><div class="figure">0.00–0.55<small>the production gap</small></div><p>Every model reliably records what happened last session. Almost none can say what happens at the next one. That is a feature gap, not a scoring artefact.</p></div>
   </div>
 
@@ -265,21 +265,22 @@
   <table>
     <thead><tr><th>Judge</th><th>Its vendor</th><th class="num">Effect</th>
       <th class="num">95% interval</th><th>Detected</th></tr></thead>
-    <tbody><tr><td><code>gemini-3.1-pro-preview</code></td><td>google</td><td class="num">+0.018</td><td class="num">+0.004 to +0.032</td><td>no</td></tr><tr><td><code>gpt-5.6-terra</code></td><td>openai</td><td class="num">+0.027</td><td class="num">+0.011 to +0.042</td><td><strong>yes</strong></td></tr></tbody>
+    <tbody><tr><td><code>gemini-3.1-pro-preview</code></td><td>google</td><td class="num">+0.018</td><td class="num">-0.011 to +0.048</td><td>no</td></tr><tr><td><code>gpt-5.6-terra</code></td><td>openai</td><td class="num">+0.027</td><td class="num">-0.002 to +0.059</td><td>no</td></tr></tbody>
   </table>
-  <p><strong>One of the two is detected.</strong> The units are
-     completeness, so +0.027 is about a fortieth of the whole range the models occupy
-     &mdash; enough to move a system several places in an ordering this tight, and not
-     enough to make a bad note look good.</p>
+  <p><strong>Neither is detected once the models are treated as a sample rather than as the whole vendor.</strong> The units are completeness, so an effect of about 0.02 is a fiftieth of
+     the range the models occupy &mdash; enough to move a system several places in an
+     ordering this tight, and not enough to make a bad note look good. Both point
+     estimates are positive and neither interval clears zero.</p>
   <p><strong>What to do with that.</strong> If you evaluate models with a model, run
      this check. Two judges from two vendors is the cheapest way to have it; one judge
      cannot measure its own bias at all, and a caveat in the methods section is not a
      measurement.</p>
-  <p class="note">The comparison group matters more than the estimate does. Until
-     2026-08-26 it included <code>gemma4</code> and <code>gpt-oss-120b</code> &mdash;
-     built by the two judges&rsquo; own vendors under names their model families do not
-     share. Both pulled the answer toward zero, and correcting it turned one
-     &ldquo;not detected&rdquo; into the result above.</p>
+  <p class="note">Two systems carry most of it, and they are the two that a
+     definition change moved into these groups on 2026-08-26: dropping
+     <code>gemma4</code> takes the Gemini figure from +0.018 to +0.008, and dropping
+     <code>gpt-oss-120b</code> takes the GPT one from +0.027 to +0.018. Nothing here
+     tests whether the two judges differ from each other; asked directly, they do not
+     &mdash; +0.010 [&minus;0.015, +0.033].</p>
 
   <h2 class="page-break">Three: nothing here can tell you what happens next</h2>
   <p>The iCARE form has two time-bearing sections: what happened at the previous

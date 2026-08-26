@@ -44,9 +44,12 @@ what it actually does.
 Read `docs/limitations.md` before adding a number to any view. Three findings
 bound what a table may claim: the two judges agree on the *shape* of the
 ranking and not on the order, the three TN-Eval columns do not predict each
-other, and **`gpt-5.6-terra` has a measured self-preference** for OpenAI-built
-systems of +0.027 completeness [+0.011, +0.042] — so its column is read with
-that discount, and the rows it applies to are marked in the table.
+other, and **each judge scores its own vendor about 0.02 completeness higher**
+— +0.018 for `gemini-3.1-pro-preview` and +0.027 for `gpt-5.6-terra`, neither
+interval clearing zero once the models are resampled as well as the
+conversations. The rows it applies to are marked in the table. A published
+"detected" verdict came from resampling conversations only, which treats four
+models as the whole of OpenAI.
 
 ## Working Rules
 

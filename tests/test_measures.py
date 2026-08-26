@@ -14,6 +14,8 @@ ordered by is what it is actually ordered by.
 
 from __future__ import annotations
 
+import re
+
 import pytest
 
 from tnb import report, results
@@ -296,16 +298,22 @@ def test_the_docs_name_what_is_not_measured():
     """
     from tnb.config import REPO_ROOT
 
-    landscape = (REPO_ROOT / "docs" / "landscape.md").read_text(encoding="utf-8")
-    limitations = (REPO_ROOT / "docs" / "limitations.md").read_text(encoding="utf-8")
+    # Whitespace-normalised: Markdown wraps, so a phrase that spans a line
+    # break is absent from the raw text and present on the page.
+    def flat(path):
+        return re.sub(r"\s+", " ", (REPO_ROOT / "docs" / path).read_text(encoding="utf-8"))
+
+    landscape = flat("landscape.md")
+    limitations = flat("limitations.md")
 
     assert "PDSQI-9" in landscape and "PDSQI-9" in limitations
     for attribute in ("organized", "synthesized", "useful", "comprehensible", "stigmatizing"):
         assert attribute in limitations.lower(), f"{attribute} is not accounted for"
 
-    # The reason it is not adopted, which is the part a reader will skip.
-    assert "did not compare LLM raters" in landscape
-    assert "no human anchor" in landscape
+    # What adopting it does and does not buy, which is the part a reader skips.
+    assert "did not compare LLM raters against human ones" in landscape
+    assert "no human agreement figure at all" in landscape, "TRACE's position, stated"
+    assert "0.575" in landscape, "and PDSQI-9's, which is not the same position"
 
 
 def test_the_criteria_the_corpus_cannot_answer_are_named_with_the_sensitivity():

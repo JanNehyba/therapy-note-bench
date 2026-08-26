@@ -193,11 +193,11 @@ def front(data: Data) -> str:
     }
     {
         claim(
-            "+0.027",
-            "one judge's bias",
-            "One of the two judges scores its own vendor&rsquo;s models measurably higher "
-            "&mdash; a detected effect, not a caveat. If you use a model to grade models, "
-            "measure this or do not publish the ranking.",
+            "±0.02",
+            "each judge's own vendor",
+            "Both judges score their own vendor&rsquo;s models higher by about this much, "
+            "and the evidence cannot rule out zero for either. If you grade models with a "
+            "model, measure this &mdash; and resample the models, not just the cases.",
         )
     }
     {
@@ -308,6 +308,9 @@ def what_it_means(data: Data) -> str:
     preference = data.preference or {}
     effects = {entry["judge"]: entry for entry in preference.get("effects", [])}
     detected = [entry for entry in effects.values() if entry["detected"]]
+    # Was "One of the two is detected." It was, until the interval was widened
+    # to cover the three or four systems each mean is taken over -- which is
+    # what the sentence generalises to, since the leaderboard marks *rows*.
     # Built here rather than inside the document string: a comprehension nested
     # in a triple-quoted f-string needs the same quote character twice, which
     # this project's Python does not allow and no reader should have to parse.
@@ -322,7 +325,12 @@ def what_it_means(data: Data) -> str:
             f'<td class="num">{entry["low"]:+.3f} to {entry["high"]:+.3f}</td>'
             f"<td>{verdict}</td></tr>"
         )
-    found = "<strong>One of the two is detected.</strong> " if detected else ""
+    found = (
+        "<strong>One of the two is detected.</strong> "
+        if detected
+        else "<strong>Neither is detected once the models are treated as a sample "
+        "rather than as the whole vendor.</strong> "
+    )
     return f"""
   <h2 class="page-break">One: a leaderboard position is not a measurement</h2>
   <p>The two judges see the same notes, ask the same 23 questions and reach almost the
@@ -352,19 +360,20 @@ def what_it_means(data: Data) -> str:
       <th class="num">95% interval</th><th>Detected</th></tr></thead>
     <tbody>{"".join(rows)}</tbody>
   </table>
-  <p>{found}The units are
-     completeness, so +0.027 is about a fortieth of the whole range the models occupy
-     &mdash; enough to move a system several places in an ordering this tight, and not
-     enough to make a bad note look good.</p>
+  <p>{found}The units are completeness, so an effect of about 0.02 is a fiftieth of
+     the range the models occupy &mdash; enough to move a system several places in an
+     ordering this tight, and not enough to make a bad note look good. Both point
+     estimates are positive and neither interval clears zero.</p>
   <p><strong>What to do with that.</strong> If you evaluate models with a model, run
      this check. Two judges from two vendors is the cheapest way to have it; one judge
      cannot measure its own bias at all, and a caveat in the methods section is not a
      measurement.</p>
-  <p class="note">The comparison group matters more than the estimate does. Until
-     2026-08-26 it included <code>gemma4</code> and <code>gpt-oss-120b</code> &mdash;
-     built by the two judges&rsquo; own vendors under names their model families do not
-     share. Both pulled the answer toward zero, and correcting it turned one
-     &ldquo;not detected&rdquo; into the result above.</p>
+  <p class="note">Two systems carry most of it, and they are the two that a
+     definition change moved into these groups on 2026-08-26: dropping
+     <code>gemma4</code> takes the Gemini figure from +0.018 to +0.008, and dropping
+     <code>gpt-oss-120b</code> takes the GPT one from +0.027 to +0.018. Nothing here
+     tests whether the two judges differ from each other; asked directly, they do not
+     &mdash; +0.010 [&minus;0.015, +0.033].</p>
 
   <h2 class="page-break">Three: nothing here can tell you what happens next</h2>
   <p>The iCARE form has two time-bearing sections: what happened at the previous
