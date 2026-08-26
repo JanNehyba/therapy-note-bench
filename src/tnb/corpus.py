@@ -88,6 +88,16 @@ def is_filled(value: str) -> bool:
     150 distinct composite strings over 534 records say nothing while looking
     like content, and no amount of adding phrases to `EMPTY_MARKERS` would
     catch them.
+
+    **It is punctuation-sensitive and deliberately left that way.** `"Nil"` is
+    empty and `"Nil."` is not, because the marker set is matched exactly. That
+    is a real hole and it is not a live one: counted on 2026-08-26, it fires on
+    0 of 524 expert fields and 0 of 10 879 model-written sections. Closing it
+    would change the definition of a published measure -- which by this
+    repository's own rule means bumping `harness_version` and re-scoring both
+    tracks -- to move no number that anyone has ever computed. Re-count before
+    deciding differently; the scan is four lines and the numbers above are what
+    it returned.
     """
     return any(_carries_content(part) for part in _SUB_FIELD.split(value))
 

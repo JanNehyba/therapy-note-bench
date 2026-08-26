@@ -266,3 +266,22 @@ def test_the_reference_models_beat_the_therapist_where_the_docs_say_they_do():
                 )
 
     assert checked >= 4, "the corpus must actually contain the rows this checks"
+
+
+def test_the_empty_marker_set_is_matched_exactly_and_that_is_on_purpose():
+    """`is_filled` reads "Nil" as empty and "Nil." as content.
+
+    A real hole, and not a live one: 0 of 524 expert fields and 0 of 10 879
+    model-written sections trip it, counted on 2026-08-26. Closing it would
+    change a published measure's definition — which means a `harness_version`
+    bump and a re-score of both tracks — to move no number anyone has computed.
+
+    Pinned rather than fixed, so the decision is visible and a change to it is
+    deliberate rather than incidental.
+    """
+    from tnb.corpus import is_filled
+
+    assert is_filled("Nil") is False
+    assert is_filled("Date: Nil; Place: Nil") is False
+    assert is_filled("Nil.") is True, "the documented hole, held so it cannot close by accident"
+    assert is_filled("Type: Nil; Mode: Individual") is True, "one sub-field is enough"
