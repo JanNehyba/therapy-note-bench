@@ -823,3 +823,33 @@ def test_a_coverage_row_has_no_judge_to_share_a_vendor_with():
     data = report.build([_row(system_id="gpt-oss-120b")])
 
     assert data["tables"][0]["rows"][0]["judges_own_family"] == ""
+
+
+def test_the_page_is_assembled_from_its_partials_and_carries_all_of_them():
+    """`__STYLE__` and `__HELPERS__` are shared with `methods.html`.
+
+    A marker left unreplaced ships the literal word to a reader; a partial
+    dropped ships a page with no stylesheet, which still renders and looks
+    merely ugly rather than broken. Both are cheap to check.
+    """
+    page = report.render_page(report.build([]))
+
+    for marker in report.PARTIALS:
+        assert marker not in page, f"{marker} was not replaced"
+
+    assert "<style>" in page and "</style>" in page
+    assert "const esc" in page and "function code(" in page
+
+
+def test_a_partial_is_shared_rather_than_copied():
+    """The point of the extraction. Two copies of a stylesheet drift the first
+    time one of them is edited, and the drift is invisible until a reader on
+    one page sees a rule the other page lost."""
+    for name in report.PARTIALS.values():
+        body = (report.TEMPLATE_DIR / name).read_text(encoding="utf-8")
+        for template in report.TEMPLATE_DIR.glob("*.html"):
+            if template.name.startswith("_"):
+                continue
+            assert body not in template.read_text(encoding="utf-8"), (
+                f"{template.name} holds its own copy of {name}"
+            )

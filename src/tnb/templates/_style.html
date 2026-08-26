@@ -1,0 +1,192 @@
+<style>
+  :root {
+    --bg: #fbfbfa; --fg: #1a1a19; --muted: #6b6b66; --line: #e2e2dd;
+    --card: #ffffff; --accent: #2f6f4f; --warn: #8a5a00; --chip: #f0f0eb;
+    /* Verdict colours. Chosen with the palette validator rather than by eye:
+       all three clear the chroma floor, the CVD separation threshold and 3:1
+       contrast on this surface. Every mark also carries a word, so colour is
+       never the only channel. */
+    --v-discriminating: #00806a; --v-saturated: #c05a10; --v-unreachable: #4a4fb8;
+    --v-mixed: #7d8a85;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #17181a; --fg: #e8e8e4; --muted: #9a9a94; --line: #2c2e31;
+      --card: #1e1f22; --accent: #7fc0a0; --warn: #d5a03c; --chip: #26282b;
+      --v-discriminating: #22a184; --v-saturated: #c9701f; --v-unreachable: #7c80e0;
+      --v-mixed: #7d8a85;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 2rem 1.25rem 5rem; background: var(--bg); color: var(--fg);
+    font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  main { max-width: 1080px; margin: 0 auto; }
+  h1 { font-size: 1.6rem; margin: 0 0 .3rem; letter-spacing: -.01em; }
+  h2 { font-size: 1.1rem; margin: 0 0 .2rem; }
+  p.sub { color: var(--muted); margin: 0 0 2rem; }
+  p.blurb { color: var(--muted); margin: .1rem 0 .9rem; font-size: .9rem; max-width: 68ch; }
+  a { color: var(--accent); }
+
+  .box {
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+    padding: 1rem 1.1rem; margin-bottom: 1.5rem;
+  }
+  .box.pending { border-style: dashed; }
+  .box h2 .badge { font-weight: 400; }
+
+  .controls { display: flex; flex-wrap: wrap; gap: .75rem 1.25rem; margin-bottom: 1.5rem; }
+  .controls label { display: inline-flex; align-items: center; gap: .4rem; font-size: .9rem; }
+
+  details#protocol > summary {
+    cursor: pointer; font-size: 1.05rem; padding: .1rem 0;
+  }
+  details#protocol[open] > summary { margin-bottom: 1rem; }
+  .soap { display: grid; gap: .6rem; margin-bottom: 1.5rem; }
+  .soap div {
+    display: grid; grid-template-columns: 7.5rem 1fr; gap: .8rem;
+    padding-bottom: .6rem; border-bottom: 1px solid var(--line);
+  }
+  .soap dt { font-weight: 600; }
+  .soap dd { margin: 0; color: var(--muted); font-size: .92rem; }
+  .criteria { display: grid; gap: 1.1rem; }
+  .criteria h4 {
+    margin: 0 0 .4rem; font-size: .78rem; text-transform: uppercase;
+    letter-spacing: .06em; color: var(--muted);
+  }
+  .criteria ol { margin: 0; padding-left: 1.4rem; display: grid; gap: .35rem; font-size: .9rem; }
+  .criteria li::marker { color: var(--muted); }
+  .criteria b { font-weight: 600; }
+  .criteria span { color: var(--muted); }
+  ol.sections {
+    margin: 0; padding-left: 1.4rem; font-size: .9rem; display: grid; gap: .4rem;
+  }
+  ol.sections b { font-weight: 600; }
+  ol.sections span { color: var(--muted); }
+  ol.queue { line-height: 1.9; }
+  ol.queue .chip { margin-left: .4rem; }
+  ol.sections li { break-inside: avoid; }
+  @media (max-width: 40rem) { ol.sections { columns: 1; } }
+  .subtitle { font-weight: 400; color: var(--muted); }
+
+  .scroll { overflow-x: auto; }
+  /* On a narrow screen the table scrolls sideways and the first column is the
+     one that must not leave: a row of dashes with no name on it says nothing.
+     Pinned, with its own background so the scrolling columns pass underneath. */
+  table th:first-child, table td:first-child {
+    position: sticky; left: 0; z-index: 1;
+    background: var(--card);
+    box-shadow: 1px 0 0 var(--line);
+  }
+  tbody tr.system:hover td:first-child { background: var(--chip); }
+  tr.detail > td:first-child { background: var(--chip); }
+  @media (max-width: 34rem) {
+    table th:first-child, table td:first-child { max-width: 9.5rem; }
+    td.name { font-size: .88rem; }
+  }
+  /* The judge-comparison table is read left to right as prose, not scanned as a
+     column of figures, so its last column stays left-aligned. */
+  table.concordance td:last-child, table.concordance th:last-child { text-align: left; }
+  ul.dominance { margin: .4rem 0 0; padding-left: 1.2rem; font-size: .9rem; line-height: 1.7; }
+  /* A judge that clears the human ceiling on a measure. Marked rather than
+     stated per row: the comparison is per column and the eye reads it that way. */
+  td.beats { font-weight: 600; }
+  /* The rank, not the row number. Systems the evidence cannot separate share
+     one, so the column repeats a number rather than counting up -- which is the
+     point, and looks wrong until you know that. */
+  td.rank { color: var(--muted); font-variant-numeric: tabular-nums; width: 2.5rem; }
+  td.rank.top { color: var(--fg); font-weight: 700; }
+  tbody tr.first-group td { background: var(--chip); }
+  tbody tr.first-group td.name { background: var(--chip); }
+  tr.humans td { border-top: 2px solid var(--line); }
+  ul.dominance code { font-size: .85rem; }
+  table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+  th, td { text-align: right; padding: .45rem .6rem; border-bottom: 1px solid var(--line); }
+  th:first-child, td:first-child { text-align: left; }
+  th { font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); font-weight: 600; }
+  th[data-sort] { cursor: pointer; user-select: none; white-space: nowrap; }
+  th[data-sort]:hover { color: var(--fg); }
+  tbody tr.system { cursor: pointer; }
+  tbody tr.system:hover { background: var(--chip); }
+  td.name { font-weight: 600; }
+  td.name .arrow { color: var(--muted); font-weight: 400; display: inline-block; width: 1em; }
+  .chip {
+    display: inline-block; margin-left: .5rem; padding: .05rem .45rem; border-radius: 999px;
+    background: var(--chip); color: var(--muted); font-size: .72rem; font-weight: 500;
+    letter-spacing: .02em; vertical-align: 1px;
+  }
+  .short { color: var(--warn); }
+  .pending-mark { color: var(--muted); font-size: .78rem; }
+  .dash { color: var(--muted); }
+
+  tr.detail > td { background: var(--chip); padding: .9rem 1rem 1.1rem; }
+  tr.detail h3 { font-size: .8rem; text-transform: uppercase; letter-spacing: .04em;
+                 color: var(--muted); margin: 0 0 .5rem; font-weight: 600; }
+  tr.detail table { margin-bottom: 1rem; background: var(--card); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: .3rem .9rem; }
+  .grid div { display: flex; justify-content: space-between; gap: .5rem;
+              border-bottom: 1px solid var(--line); padding: .2rem 0; font-size: .87rem; }
+  .grid span:last-child { font-variant-numeric: tabular-nums; }
+  .note { color: var(--warn); font-size: .85rem; margin: .2rem 0 .8rem; }
+  .versions { color: var(--muted); font-size: .8rem; margin: .1rem 0 .9rem; }
+  .versions code { background: var(--chip); padding: .05rem .3rem; border-radius: 4px; }
+  /* --- saturation --- */
+  .legend { display: flex; flex-wrap: wrap; gap: .25rem 1.1rem; margin: .2rem 0 1rem; font-size: .82rem; }
+  .legend span { display: inline-flex; align-items: center; gap: .4rem; color: var(--muted); }
+  .legend i { width: 11px; height: 11px; border-radius: 2px; display: inline-block; }
+  .sat-table td.mark { width: 42%; padding-right: 0; }
+  .sat-table .verdict { font-size: .74rem; letter-spacing: .03em; white-space: nowrap; }
+  svg.plot { display: block; width: 100%; height: auto; overflow: visible; }
+  svg.plot.fixed { width: auto; max-width: none; min-width: 30rem; }
+  svg.plot text { font-family: inherit; fill: var(--muted); font-size: 11px; }
+  svg.plot text.name { fill: var(--fg); font-size: 12px; font-weight: 600; }
+  svg.plot text.value { font-variant-numeric: tabular-nums; }
+  svg.plot .grid { stroke: var(--line); stroke-width: 1; }
+  svg.plot .rule { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3; }
+
+  footer { color: var(--muted); font-size: .85rem; margin-top: 2.5rem; max-width: 72ch; }
+  footer p { margin: .4rem 0; }
+
+.scale { display: inline-block; margin-left: .4em; font-size: .72em; font-weight: 500;
+         letter-spacing: .02em; color: var(--muted); font-variant-numeric: tabular-nums; }
+.ranks { display: inline-block; margin-left: .4em; padding: .05em .4em; border-radius: 3px;
+         font-size: .66em; font-weight: 600; text-transform: uppercase; letter-spacing: .04em;
+         background: var(--chip); color: var(--accent); }
+.ranking-note { margin: .9rem 0 .2rem; font-size: .86rem; color: var(--muted); }
+dl.measures { display: grid; gap: .55rem .75rem; margin: .4rem 0 0; padding: .75rem .9rem;
+              border: 1px solid var(--line); border-radius: 6px; background: var(--card);
+              font-size: .82rem; }
+dl.measures .measure { display: grid; grid-template-columns: minmax(9rem, 12rem) 1fr; gap: .1rem .9rem; }
+dl.measures dt { font-weight: 600; color: var(--fg); }
+dl.measures dd { margin: 0; color: var(--muted); }
+dl.measures em { font-style: normal; color: var(--warn); }
+@media (max-width: 620px) { dl.measures .measure { grid-template-columns: 1fr; } }
+
+.differs { display: inline-block; margin-left: .45em; padding: .05em .4em; border-radius: 3px;
+           font-size: .68em; font-weight: 600; letter-spacing: .02em;
+           background: var(--chip); color: var(--warn); white-space: nowrap; }
+p.settings { margin-top: .2rem; }
+
+.design { margin: .6rem 0 1rem; padding: .8rem .95rem; border: 1px solid var(--line);
+          border-radius: 6px; background: var(--card); font-size: .84rem; }
+.design-marks { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: .6rem; }
+.role { display: inline-block; padding: .12em .5em; border-radius: 3px; font-size: .92em;
+        font-weight: 600; letter-spacing: .01em; }
+.role-competitor { background: var(--chip); color: var(--accent); }
+.role-key { background: var(--chip); color: var(--warn); }
+.design dl { display: grid; gap: .5rem .9rem; margin: 0; }
+.design dl > div { display: grid; grid-template-columns: minmax(9rem, 12rem) 1fr; gap: .1rem .9rem; }
+.design dt { font-weight: 600; color: var(--fg); }
+.design dd { margin: 0; color: var(--muted); }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; margin: .7rem 0; }
+.pair > div { padding: .7rem .85rem; border: 1px solid var(--line); border-radius: 6px;
+              background: var(--card); }
+.pair h4 { margin: 0 0 .35rem; font-size: .8rem; text-transform: uppercase;
+           letter-spacing: .04em; color: var(--muted); }
+.pair p { margin: 0; font-size: .84rem; line-height: 1.5; }
+@media (max-width: 720px) {
+  .pair { grid-template-columns: 1fr; }
+  .design dl > div { grid-template-columns: 1fr; }
+}
+</style>

@@ -1066,6 +1066,29 @@ def render_page(data: dict) -> str:
     return PAGE_TEMPLATE.replace("__DATA__", payload)
 
 
-PAGE_TEMPLATE = (Path(__file__).parent / "templates" / "leaderboard.html").read_text(
-    encoding="utf-8"
-)
+TEMPLATE_DIR = Path(__file__).parent / "templates"
+
+#: Fragments both pages need, inserted at the marker each is named for. Shared
+#: rather than copied: the leaderboard and the methods page draw the same tables
+#: with the same escaping and the same number formatting, and two copies of a
+#: stylesheet drift the first time one of them is edited.
+#:
+#: Assembly is two `str.replace` calls, the same build step `__DATA__` already
+#: uses. No new dependency and no new file format -- each page stays a single
+#: self-contained HTML file once rendered.
+PARTIALS = {
+    "__STYLE__": "_style.html",
+    "__HELPERS__": "_helpers.html",
+}
+
+
+def _assemble(name: str) -> str:
+    """One template with its partials inlined, ready for `__DATA__`."""
+    text = (TEMPLATE_DIR / name).read_text(encoding="utf-8")
+    for marker, partial in PARTIALS.items():
+        if marker in text:
+            text = text.replace(marker, (TEMPLATE_DIR / partial).read_text(encoding="utf-8"))
+    return text
+
+
+PAGE_TEMPLATE = _assemble("leaderboard.html")
