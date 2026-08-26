@@ -96,8 +96,9 @@ function detailRow(row, table) {
   if (row.n_partial) {
     parts.push(`<p class="note">The scores above rest on
       <strong>${row.n_complete}</strong> of the ${row.n_scored} notes the judge started:
-      ${row.n_partial} came back with part of the protocol unanswered and are left out
-      rather than averaged over a smaller denominator.</p>`);
+      ${row.n_partial} came back with part of the protocol unanswered and
+      ${row.n_partial === 1 ? 'is' : 'are'} left out rather than averaged over a
+      smaller denominator.</p>`);
   } else if (row.n_scored) {
     parts.push(`<p class="note">The scores above rest on all
       ${row.n_scored} notes the judge finished.</p>`);
@@ -115,14 +116,28 @@ function detailRow(row, table) {
     parts.push(`<p class="note">${row.n_failed} note(s) missing, with no recorded reason.</p>`);
   }
 
-  // Calls the endpoint never answered. Kept apart from the model's own failures
-  // because a rate limit is a fact about a shared academic endpoint and says
-  // nothing about the model -- and unlike a badly shaped note, re-running fixes
-  // it.
+  // Notes that are missing and are not the model's doing. Two kinds, and the
+  // heading says which: a rate limit or a backend error, where the call never
+  // reached the model and re-running fixes it; or our own token ceiling, where
+  // it did reach the model and we stopped it, and what it would have written
+  // is not something this benchmark knows. Kept apart from the model's own
+  // failures either way, because the counter beside them is published as an
+  // accusation.
   if (row.n_unreached) {
-    parts.push(`<h3>${row.n_unreached} call(s) the endpoint never answered</h3>
-      <p class="note">Not the model's doing, and not counted against it: a rate limit,
-         a backend error or a timeout. Re-running the generation fills these in.</p>
+    const kinds = Object.keys(row.unreached_reasons || {});
+    const ours = kinds.filter(k => k.startsWith('truncated at max_tokens'));
+    const theirs = kinds.filter(k => !k.startsWith('truncated at max_tokens'));
+    const heading = ours.length && !theirs.length
+      ? `${row.n_unreached} call(s) this harness cut off`
+      : ours.length
+        ? `${row.n_unreached} call(s) unanswered or cut off`
+        : `${row.n_unreached} call(s) the endpoint never answered`;
+    parts.push(`<h3>${heading}</h3>
+      <p class="note">Not the model's doing, and not counted against it.${
+        theirs.length ? ' A rate limit, a backend error or a timeout; re-running the'
+                      + ' generation fills those in.' : ''}${
+        ours.length ? ' Where the reason is a token ceiling it is ours: the call had'
+                    + ' already had its one escalation, and past that we stopped it.' : ''}</p>
       <div class="grid">${Object.entries(row.unreached_reasons).map(([reason, count]) =>
         `<div><span>${esc(reason)}</span><span>${count}</span></div>`).join('')}</div>`);
   }

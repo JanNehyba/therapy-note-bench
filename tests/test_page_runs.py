@@ -758,3 +758,36 @@ def test_the_concordance_panel_puts_the_tracks_in_the_tables_order(tmp_path):
     assert soap in panel and icare in panel, "each section says which track it is"
     assert panel.index(soap) < panel.index(icare), "SOAP leads, as the tables do"
     assert panel.count("Do the two judges agree?") == 1, "one heading over both sections"
+
+
+def test_our_own_ceiling_is_not_described_as_the_endpoint_refusing(tmp_path):
+    """`unreached_reasons` outgrew its heading.
+
+    It used to hold only what the endpoint refused. It now also holds calls
+    this harness cut off at its own token ceiling -- which did reach the model,
+    and which re-running does not fix. "1 call the endpoint never answered",
+    over a list whose one entry reads `truncated at max_tokens=16384`, is a
+    heading the line beneath it contradicts.
+    """
+    from tnb import report
+
+    cut_off = _row(
+        "x",
+        "a-judge",
+        0.5,
+        n_sessions_generated=49,
+        unreached_reasons={"truncated at max_tokens=16384": 1},
+    )
+    refused = _row(
+        "y",
+        "a-judge",
+        0.5,
+        n_sessions_generated=49,
+        unreached_reasons={"HTTP429: rate limit": 1},
+    )
+
+    host = _run(report.render_page(report.build([cut_off, refused])), tmp_path, panel="table-host")
+
+    assert "1 call(s) this harness cut off" in host
+    assert "1 call(s) the endpoint never answered" in host
+    assert "already had its one escalation" in host
