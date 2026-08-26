@@ -657,3 +657,42 @@ def test_neither_page_leaves_a_panel_as_an_empty_frame(tmp_path):
     assert ".switch:empty" in style and ".controls:empty" in style, (
         "the two that stay must take no room"
     )
+
+
+def test_the_sentence_under_the_table_names_this_table_s_rank_first(tmp_path):
+    """`rank_a` belongs to `judge_a`, and the note printed the pair in that
+    fixed order whichever table was on screen.
+
+    Read while looking at the second judge's table, "10th here and 4th there"
+    had the two the wrong way round -- a number a reader could check against
+    the rows in front of them and find wrong.
+    """
+    from tnb import report
+
+    data = _page_data(tmp_path)
+    found = data["concordance"][results.TRACK_TNEVAL]
+    ranking = next(m for m in found["measures"] if m["measure"] == found["ranking_measure"])
+    far = ranking["furthest"]
+    assert far and far["rank_a"] != far["rank_b"], "the fixture must have a system that moved"
+
+    page = report.render_page(data)
+    body = "\n".join(re.findall(r"<script[^>]*>(.*?)</script>", page, re.S))
+
+    for table in data["tables"]:
+        judge = table["versions"]["judge_model"]
+        if judge not in (found["judge_a"], found["judge_b"]):
+            continue
+        script = tmp_path / "note.js"
+        script.write_text(f"global.location = {{ hash: '#{table['id']}' }};\n" + body, "utf-8")
+        finished = subprocess.run(
+            [shutil.which("node") or "node", str(RUNNER), str(script), "table-host"],
+            capture_output=True,
+            text=True,
+            timeout=60,
+        )
+        assert finished.returncode == 0, finished.stdout + finished.stderr
+
+        here = far["rank_a"] if judge == found["judge_a"] else far["rank_b"]
+        assert f"{here}" in finished.stdout.split("in this table")[0][-12:], (
+            f"viewing {judge}, the rank before 'in this table' must be its own"
+        )

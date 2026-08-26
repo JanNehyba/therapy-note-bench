@@ -488,14 +488,33 @@ function agreementNote(track) {
   const ranking = found.measures.find(m => m.measure === found.ranking_measure)
     || found.measures[0];
   if (!ranking || ranking.rho === null) return '';
+
+  // The comparison is between two named judges and only one of them is on
+  // screen. `rank_a` belongs to `judge_a`; printing the pair in that fixed
+  // order put the other judge's rank first whenever the reader was looking at
+  // `judge_b`'s table -- a number they could check against the rows in front
+  // of them and find wrong.
+  const showing = currentJudge();
+  const other = found.judge_a === showing ? found.judge_b : found.judge_a;
   const far = ranking.furthest;
+  const here = far && (found.judge_a === showing ? far.rank_a : far.rank_b);
+  const there = far && (found.judge_a === showing ? far.rank_b : far.rank_a);
+
   return `<p class="note"><strong>The two judges agree on the shape of this ranking and not
     on its order.</strong> On ${esc(colLabel(DATA.tables[INDEX_OF[current]], ranking.measure))},
     ${ranking.moved} of ${ranking.n_systems} systems land somewhere else under
-    <code>${esc(found.judge_b === currentJudge() ? found.judge_a : found.judge_b)}</code>${
-      far ? `, <code>${esc(far.system)}</code> furthest — ${far.rank_a} against ${far.rank_b}` : ''
+    <code>${esc(other)}</code>${
+      far ? ` — <code>${esc(far.system)}</code> furthest, ${here}${ordinal(here)} in this table
+             and ${there}${ordinal(there)} in that one` : ''
     }. Near the top and near the bottom are claims this table supports; ninth against tenth
     is not. <a href="methods.html#concordance">How far they agree →</a></p>`;
+}
+
+// 1st, 2nd, 3rd, 4th. Only ever applied to a rank, so the teens are the whole
+// of the special case.
+function ordinal(n) {
+  if (n % 100 >= 11 && n % 100 <= 13) return 'th';
+  return ['th', 'st', 'nd', 'rd'][n % 10] || 'th';
 }
 
 function show(id) {
