@@ -454,6 +454,9 @@ def build(rows: list[Row]) -> dict:
     tables = []
 
     groups, superseded = _current_groups(results.comparable_groups(current))
+    newest_harness = max(
+        (row.harness_version for group in groups.values() for row in group), default=""
+    )
     for group in groups.values():
         # From a row rather than from the key: `comparability_key` serialises a
         # mapping so the tuple stays hashable, and the page needs the mapping.
@@ -478,6 +481,13 @@ def build(rows: list[Row]) -> dict:
                     name: versions[name] for name in results.COMPARABILITY_KEYS if name != "track"
                 },
                 "scored": any(row.is_scored for row in group),
+                # True when this table's measures are defined by an older
+                # harness than the newest one on the page. A judge that was
+                # tried and not re-run keeps its table -- a different judge is
+                # a different table, which is this project's rule -- but the
+                # reader has to be told its columns may not mean the same thing
+                # as the columns above it.
+                "stale_harness": versions["harness_version"] != newest_harness,
                 "columns": [
                     {**column_meta(track, key_), "digits": digits}
                     for key_, digits in COLUMNS[track]
@@ -768,7 +778,13 @@ def _judge_line(table: dict) -> str:
         for key, value in sorted((table["versions"].get("judge_settings") or {}).items())
         if key != "model"
     )
-    return table["subtitle"] + (f" ({settings})" if settings else "")
+    line = table["subtitle"] + (f" ({settings})" if settings else "")
+    if table.get("stale_harness"):
+        line += (
+            f" — measured by harness `{table['versions']['harness_version']}`, "
+            f"whose columns may not mean what the newer tables' columns mean"
+        )
+    return line
 
 
 def _superseded_sentence(gone: dict) -> str:

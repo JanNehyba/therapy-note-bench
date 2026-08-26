@@ -418,7 +418,13 @@ function renderTable(table, index) {
     .map(([k, v]) => `${k} ${v}`).join(', ');
   const judge = versions.judge_model
     ? `judge <code>${versions.judge_model}</code>${settings ? ` (${esc(settings)})` : ''}` +
-      ` · judge prompt <code>${versions.judge_prompt_version}</code>`
+      ` · judge prompt <code>${versions.judge_prompt_version}</code>` +
+      // A judge tried and not re-run keeps its table -- a different judge is a
+      // different table -- but its columns are defined by an older harness and
+      // may not mean what the newer tables' columns mean.
+      (table.stale_harness
+        ? ` · <strong>older harness</strong>, columns may differ from the tables above`
+        : '')
     : 'not yet judged';
 
   // The scale rides on the heading, not in a footnote. Two of these columns are

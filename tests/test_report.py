@@ -674,3 +674,23 @@ def test_two_real_settings_at_one_harness_are_still_two_tables():
     at_256 = _scored("gemma4", 0.63, judge_settings={"thinking_budget": 256})
 
     assert len(report.build([at_128, at_256])["tables"]) == 2
+
+
+def test_a_table_measured_by_an_older_harness_says_so():
+    """A judge tried and not re-run keeps its table -- a different judge is a
+    different table, which is this project's rule -- but its columns are
+    defined by an older harness and may not mean what the newer tables' columns
+    mean. `gemini-2.5-pro` is drawn at 0.1.0 beside two tables at 0.2.0.
+    """
+    old = _scored("gemma4", 0.61, judge_model="a-retired-judge", harness_version="0.1.0")
+    new = _scored("gemma4", 0.63, judge_model="the-current-judge", harness_version="0.2.0")
+
+    data = report.build([old, new])
+    by_judge = {t["versions"]["judge_model"]: t for t in data["tables"]}
+
+    assert by_judge["a-retired-judge"]["stale_harness"] is True
+    assert by_judge["the-current-judge"]["stale_harness"] is False
+
+    section = report.render_readme_section(data)
+    assert "may not mean what the newer tables' columns mean" in section
+    assert "older harness" in report.render_page(data)
