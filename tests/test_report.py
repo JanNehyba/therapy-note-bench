@@ -610,3 +610,41 @@ def test_a_withdrawn_coverage_group_is_not_described_as_scored_by_nobody():
     assert "None" not in section and "null" not in section
     assert "generation coverage" in section
     assert "generation coverage" in page
+
+
+def test_a_table_names_the_judges_settings_not_only_its_name():
+    """The same judge at two thinking budgets is two instruments.
+
+    Measured on this benchmark: raising Gemini's from 128 to 256 moved
+    completeness by +0.017 on every system and changed the conciseness top
+    three. A heading reading only "scored by gemini-3.1-pro-preview" would name
+    both of them the same way.
+    """
+    row = _scored(
+        "gemma4",
+        0.61,
+        judge_model="gemini-3.1-pro-preview",
+        judge_settings={"model": "gemini-3.1-pro-preview", "thinking_budget": 256},
+    )
+
+    data = report.build([row])
+    section = report.render_readme_section(data)
+    page = report.render_page(data)
+
+    assert data["tables"][0]["versions"]["judge_settings"]["thinking_budget"] == 256
+    assert "thinking_budget 256" in section
+    assert "judge_settings" in page
+    # The model name is already the heading; repeating it inside the brackets
+    # would be noise.
+    assert "model gemini-3.1-pro-preview" not in section
+
+
+def test_two_budgets_of_one_judge_are_two_tables():
+    """The rule the comparability key exists for, at the level a reader sees."""
+    at_128 = _scored("gemma4", 0.61, judge_settings={"thinking_budget": 128})
+    at_256 = _scored("gemma4", 0.63, judge_settings={"thinking_budget": 256})
+
+    tables = report.build([at_128, at_256])["tables"]
+
+    assert len(tables) == 2
+    assert {t["versions"]["judge_settings"]["thinking_budget"] for t in tables} == {128, 256}

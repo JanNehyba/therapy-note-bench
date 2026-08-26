@@ -408,8 +408,17 @@ function renderQueue(table) {
 function renderTable(table, index) {
   if (!table.scored) return renderQueue(table);
   const versions = table.versions;
+  // The judge's settings, not only its name. Measured on this benchmark: the
+  // same judge at a thinking budget of 128 and of 256 moved completeness by
+  // +0.017 on every system and changed the conciseness top three. A table
+  // saying only "judge gemini-3.1-pro-preview" would name two instruments the
+  // same way. `model` is dropped from the list because it is already the name.
+  const settings = Object.entries(versions.judge_settings || {})
+    .filter(([k]) => k !== 'model')
+    .map(([k, v]) => `${k} ${v}`).join(', ');
   const judge = versions.judge_model
-    ? `judge <code>${versions.judge_model}</code> · judge prompt <code>${versions.judge_prompt_version}</code>`
+    ? `judge <code>${versions.judge_model}</code>${settings ? ` (${esc(settings)})` : ''}` +
+      ` · judge prompt <code>${versions.judge_prompt_version}</code>`
     : 'not yet judged';
 
   // The scale rides on the heading, not in a footnote. Two of these columns are

@@ -433,7 +433,11 @@ def build(rows: list[Row]) -> dict:
 
     groups, superseded = _current_groups(results.comparable_groups(current))
     for key, group in groups.items():
-        versions = dict(zip(results.COMPARABILITY_KEYS, key, strict=True))
+        # From a row rather than from the key: `comparability_key` serialises a
+        # mapping so the tuple stays hashable, and the page needs the mapping.
+        # Every row in the group agrees on these fields -- that is what makes it
+        # a group -- so the first one speaks for all of them.
+        versions = {name: getattr(group[0], name) for name in results.COMPARABILITY_KEYS}
         track = versions["track"]
         if track not in COLUMNS:
             continue
@@ -663,7 +667,7 @@ def render_readme_section(data: dict) -> str:
         # different numbers for the same model, and README is the view nobody
         # scrolls back up in to find out why.
         lines = [
-            f"**{table['title']}** — {table['subtitle']}",
+            f"**{table['title']}** — {_judge_line(table)}",
             "",
             "| " + " | ".join(header) + " |",
             "|" + "---|" * len(header),
@@ -728,6 +732,21 @@ def render_readme_section(data: dict) -> str:
         "for per-section detail, the reference systems and the published numbers."
     )
     return "\n\n".join(blocks)
+
+
+def _judge_line(table: dict) -> str:
+    """Which instrument scored this table, name and settings both.
+
+    Measured on this benchmark: the same judge at a thinking budget of 128 and
+    of 256 moved completeness by +0.017 on every system. "scored by
+    gemini-3.1-pro-preview" names two instruments the same way.
+    """
+    settings = ", ".join(
+        f"{key} {value}"
+        for key, value in sorted((table["versions"].get("judge_settings") or {}).items())
+        if key != "model"
+    )
+    return table["subtitle"] + (f" ({settings})" if settings else "")
 
 
 def _superseded_sentence(gone: dict) -> str:
