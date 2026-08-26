@@ -546,6 +546,156 @@ def cmd_score(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_score_pdsqi(args: argparse.Namespace) -> int:
+    """Rate the same SOAP notes on PDSQI-9, a published quality instrument.
+
+    Separate from `cmd_score` because it is a separate measurement, not a
+    separate corpus. The notes are the ones the rubric already scored for
+    coverage; the questions are eight attributes a validated instrument asks
+    about a clinical note. The rows land on their own track and can never join
+    the rubric's table, which is the reason the track exists.
+
+    Eight questions a note against the rubric's sixty, so a full pass is an
+    order of magnitude cheaper -- and the point of running it is that
+    completeness ranks the therapist last, and an instrument built to rate
+    clinical notes may not.
+    """
+    from tnb.scoring import pdsqi
+    from tnb.scoring import pdsqi_run as scoring_pdsqi
+    from tnb.scoring import run as scoring
+
+    overrides = {"model": args.judge_model}
+    if getattr(args, "concurrency", None):
+        overrides["concurrency"] = args.concurrency
+    if getattr(args, "thinking_budget", None) is not None:
+        overrides["thinking_budget"] = args.thinking_budget
+    config = judge.config_from_env(**overrides)
+    sessions = scoring.load_sessions(args.limit)
+
+    candidates: list[scoring.Candidate] = []
+    if args.systems in ("all", "reference"):
+        candidates += list(scoring.from_reference(sessions))
+    if args.systems in ("all", "models"):
+        candidates += list(scoring.from_generations(sessions))
+    if args.models:
+        wanted = {name.strip() for name in args.models.split(",") if name.strip()}
+        candidates = [c for c in candidates if c.system_id in wanted]
+
+    # Counted before `--notes` takes a slice, for the reason spelled out in
+    # `cmd_score`: a slice published as the model's output is an accusation.
+    coverage = _generated_per_system(candidates)
+    settings = results.settings_by_system()
+    attempted = {
+        key: len(sessions) if key[0] != "tneval" else count for key, count in coverage.items()
+    }
+    # The TN-Eval track's, deliberately. What e-INFRA refused it refused during
+    # generation, and these are the same generations -- there is no separate
+    # PDSQI coverage to read, and inventing one would report every model as
+    # having attempted nothing.
+    unreached = results.unreached_by_system(results.TRACK_TNEVAL)
+
+    if args.notes:
+        candidates = candidates[: args.notes]
+
+    if not candidates:
+        raise RuntimeError(
+            "Nothing to score. Generate notes first, or use --systems reference "
+            "to rate the notes TN-Eval released."
+        )
+
+    with_transcript = not args.no_transcript
+    per_note = len(pdsqi.ATTRIBUTES) if with_transcript else len(pdsqi.NOTE_ONLY_KEYS)
+    questions = len(candidates) * per_note
+    systems = sorted({(c.provider, c.system_id) for c in candidates})
+    print(
+        f"{len(candidates)} note(s) from {len(systems)} system(s), "
+        f"{questions} judge questions ({per_note} per note).\n"
+        f"judge {config.model}, thinking budget {config.thinking_budget}, "
+        f"ceiling ${args.max_judge_usd:.2f}"
+    )
+    if not with_transcript:
+        print(
+            "--no-transcript: accurate and thorough are not asked. "
+            "Their columns will be absent, not zero."
+        )
+
+    if args.dry_run:
+        print("\nDry run: the judge was not called.")
+        return 0
+
+    client = judge.Judge(config)
+
+    def append(scored) -> int:
+        rows = scoring_pdsqi.to_rows(
+            scored,
+            judge_model=config.model,
+            judge_settings=config.fingerprint(),
+            n_generated=coverage,
+            n_attempted=attempted,
+            n_unreached=unreached,
+            settings=settings,
+            run_id=args.run_id or "",
+        )
+        if args.no_write:
+            print("\n--no-write: rows were not appended.")
+            return 0
+        path = results.append(rows)
+        print(f"\nAppended {len(rows)} row(s) to {path.relative_to(REPO_ROOT)}.")
+        print("Run 'tnb report' to rebuild the page.")
+        return 0
+
+    if args.cache_only:
+        scored = scoring_pdsqi.from_cache(candidates, client, with_transcript=with_transcript)
+        complete = sum(1 for r in scored if r.is_complete)
+        print(f"\n{len(scored)} note(s) answered, {complete} of them in full; nothing asked.")
+        if not complete:
+            print("Nothing complete yet.", file=sys.stderr)
+            return 1
+        return append(scored)
+
+    spend = judge.Spend(limit_usd=args.max_judge_usd)
+    done = 0
+
+    def on_note(result) -> None:
+        nonlocal done
+        done += 1
+        print(
+            f"  [{done}/{len(candidates)}] {result.candidate.system_id[:28]:28} "
+            f"session {result.candidate.session_id:>4}  "
+            # Two of the eight, so the watcher can see the judge is answering
+            # rather than refusing. A dash where nothing was measured; there is
+            # no composite to print, because the instrument has none.
+            f"useful {_measure_cell(result.scored.get('useful'))}  "
+            f"accurate {_measure_cell(result.scored.get('accurate'))}  "
+            f"asked {result.asked:2} cached {result.cached:2}"
+            + (f" missing {len(result.missing)}" if result.missing else "")
+            + f"  {_money(spend.usd(config.model))}",
+            flush=True,
+        )
+
+    print()
+    scored = scoring_pdsqi.score_many(
+        candidates,
+        client,
+        spend,
+        force=args.force,
+        with_transcript=with_transcript,
+        on_note=on_note,
+    )
+
+    total = spend.usd(config.model)
+    complete = sum(1 for r in scored if r.is_complete)
+    print(
+        f"\nRated {len(scored)} note(s), {complete} of them on every attribute asked. "
+        f"{spend.calls} judge calls, {spend.input_tokens} in / {spend.output_tokens} out, "
+        f"{_money(total)} at list price."
+    )
+
+    if not scored:
+        return 0
+    return append(scored)
+
+
 def cmd_calibrate(args: argparse.Namespace) -> int:
     """Check the judge against the two therapists who rated the same notes.
 
@@ -1183,6 +1333,57 @@ def build_parser() -> argparse.ArgumentParser:
     )
     score.add_argument("--run-id", help="label these rows with a run id")
     score.set_defaults(func=cmd_score)
+
+    score_pdsqi = subparsers.add_parser(
+        "score-pdsqi",
+        help="rate the same SOAP notes on PDSQI-9, a published quality instrument",
+    )
+    score_pdsqi.add_argument(
+        "--systems",
+        choices=["all", "models", "reference"],
+        default="all",
+        help="reference = the therapist-written and TN-Eval model notes only",
+    )
+    score_pdsqi.add_argument("--models", help="comma-separated system ids to rate")
+    score_pdsqi.add_argument("--limit", type=int, help="use only the first N sessions")
+    score_pdsqi.add_argument("--notes", type=int, help="stop after N notes (for a pilot)")
+    score_pdsqi.add_argument(
+        "--judge-model", default=judge.DEFAULT_MODEL, help="which judge to run"
+    )
+    score_pdsqi.add_argument(
+        "--no-transcript",
+        action="store_true",
+        help=(
+            "ask only the six attributes a note can be rated on alone. Accurate "
+            "and thorough are then absent from the row rather than scored zero -- "
+            "and this is the only mode a confidential session may be rated in, "
+            "because with no transcript there is no transcript in scope to send"
+        ),
+    )
+    score_pdsqi.add_argument(
+        "--max-judge-usd",
+        type=float,
+        default=250.0,
+        help="runaway guard; the run stops rather than exceeding it",
+    )
+    score_pdsqi.add_argument("--concurrency", type=int, help="parallel judge calls; default 4")
+    score_pdsqi.add_argument(
+        "--thinking-budget",
+        type=int,
+        help="how much room the judge gets to think; default 256, part of the cache key",
+    )
+    score_pdsqi.add_argument("--force", action="store_true", help="re-ask cached questions")
+    score_pdsqi.add_argument(
+        "--cache-only",
+        action="store_true",
+        help="publish the notes already answered, without asking the judge anything",
+    )
+    score_pdsqi.add_argument("--dry-run", action="store_true", help="print the job, ask nothing")
+    score_pdsqi.add_argument(
+        "--no-write", action="store_true", help="rate but do not append result rows"
+    )
+    score_pdsqi.add_argument("--run-id", help="label these rows with a run id")
+    score_pdsqi.set_defaults(func=cmd_score_pdsqi)
 
     calibrate = subparsers.add_parser(
         "calibrate", help="check the judge against TN-Eval's two human annotators (phase 4)"
