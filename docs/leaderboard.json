@@ -44,7 +44,7 @@
     ],
     "judge_model": "gemini-3.1-pro-preview",
     "judge_prompt_version": "tneval-rubric-v1",
-    "notes": 149,
+    "notes": 150,
     "per_criterion": [
       {
         "criterion": "assessment-analysis",

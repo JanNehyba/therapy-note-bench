@@ -733,11 +733,16 @@ def test_the_sentence_under_the_table_names_this_table_s_rank_first(tmp_path):
 
 
 def test_every_link_between_the_two_pages_lands_somewhere(tmp_path):
-    """The split created cross-page links, and a link to a panel that moved
+    """The split created cross-page links, and a link to a panel that moves
     again is a dead end a reader finds and nobody else does.
 
     Checks the file and the anchor: `methods.html#concordance` requires both a
     `methods.html` and an element with that id in it.
+
+    Over what `report.write` produces, and nothing else. It is what a fresh
+    checkout has before anyone runs `make figures`, so a link between these two
+    must resolve without the other artefacts existing -- and a link *out* to
+    one of them is checked against the real `docs/` below.
     """
     from tnb import report
 
@@ -745,26 +750,59 @@ def test_every_link_between_the_two_pages_lands_somewhere(tmp_path):
     readme.write_text("<!-- LEADERBOARD:BEGIN -->\n<!-- LEADERBOARD:END -->\n", encoding="utf-8")
     report.write([_row("x", "a-judge", 0.5)], docs_dir=tmp_path, readme=readme)
 
-    pages = {
-        name: (tmp_path / name).read_text(encoding="utf-8")
-        for name in ("index.html", "methods.html")
-    }
+    written = {"index.html", "methods.html"}
+    pages = {name: (tmp_path / name).read_text(encoding="utf-8") for name in written}
 
     for name, text in pages.items():
-        # The static markup only. A `href="${l.url}"` inside a template literal
-        # is a link the page builds at run time out of the payload, and its
-        # target is a licence's website rather than anything here.
-        static = re.sub(r"<script[^>]*>.*?</script>", "", text, flags=re.S)
-        for href in re.findall(r'href="([^"]+)"', static):
-            if href.startswith(("http://", "https://", "mailto:")):
-                continue
-            target, _, anchor = href.partition("#")
-            target = target or name
-            assert target in pages, f"{name} links to {target}, which is not written"
+        for target, anchor in _links_in(text, name):
+            if target not in written:
+                continue  # an artefact from tools/, checked against docs/ below
+            assert not anchor or f'id="{anchor}"' in pages[target], (
+                f"{name} links to #{anchor} in {target}, which has no such element"
+            )
+
+
+def test_the_published_site_has_no_dead_link():
+    """What a reader actually gets: every local href in `docs/` resolves.
+
+    The pages point at `brief.html` and `therapy-note-bench.pdf`, which
+    `tools/` writes rather than `tnb report`, so nothing else notices when one
+    of them is missing or renamed.
+    """
+    docs = Path(report.DOCS_DIR)
+    published = {p.name: p for p in docs.iterdir() if p.is_file()}
+    if "index.html" not in published:
+        pytest.skip("the site has not been generated in this checkout")
+
+    text_of = {
+        name: path.read_text(encoding="utf-8")
+        for name, path in published.items()
+        if name.endswith(".html")
+    }
+
+    for name, text in text_of.items():
+        for target, anchor in _links_in(text, name):
+            assert target in published, f"{name} links to {target}, which is not published"
             if anchor:
-                assert f'id="{anchor}"' in pages[target], (
+                assert f'id="{anchor}"' in text_of.get(target, ""), (
                     f"{name} links to #{anchor} in {target}, which has no such element"
                 )
+
+
+def _links_in(text: str, page: str) -> list[tuple[str, str]]:
+    """(file, anchor) for every local href in the static markup.
+
+    Scripts are skipped: a `href="${l.url}"` inside a template literal is built
+    at run time from the payload and points at a licence's website.
+    """
+    static = re.sub(r"<script[^>]*>.*?</script>", "", text, flags=re.S)
+    found = []
+    for href in re.findall(r'href="([^"]+)"', static):
+        if href.startswith(("http://", "https://", "mailto:", "#")):
+            continue
+        target, _, anchor = href.partition("#")
+        found.append((target or page, anchor))
+    return found
 
 
 def test_the_concordance_panel_puts_the_tracks_in_the_tables_order(tmp_path):

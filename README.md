@@ -42,6 +42,11 @@ much the two judges disagree with each other, what the corpora are, and which
 rows are no longer drawn:
 **<https://jannehyba.github.io/therapy-note-bench/methods.html>**
 
+Eight pages on what a leaderboard of these models can and cannot tell you,
+written for somebody building or buying one:
+**<https://jannehyba.github.io/therapy-note-bench/brief.html>**
+([PDF](https://jannehyba.github.io/therapy-note-bench/therapy-note-bench.pdf))
+
 <!-- LEADERBOARD:BEGIN -->
 **TN-Eval SOAP · AnnoMI conversations** — scored by gemini-3.1-pro-preview (max_output_tokens 288, temperature 0, thinking_budget 256)
 
