@@ -109,6 +109,19 @@ The obvious alternative — each judge scores only the *other* family — was
 rejected: it would put two instruments with two calibrations in one column, and
 leave every system with a single score and no way to check it.
 
+**"Its own family" means the vendor, not the name.** `gemma4` is Google
+DeepMind's and `gpt-oss-120b` is OpenAI's, and both were in the comparison
+group until 2026-08-26 because the table that assigns families was keyed on the
+judges' own model names. Both pulled the estimate toward zero, in the one group
+the whole estimate is measured against. Whether self-preference carries across
+an open-weight sibling is genuinely open; leaving them in the control group
+answered it "no" with no evidence, so they are now counted with the vendor that
+built them and the panel names its comparison group on the page. Correcting it
+moved `gemini-3.1-pro-preview` from +0.005 to +0.018 and turned
+`gpt-5.6-terra`'s effect from *not detected* into a detected +0.027
+completeness [+0.011, +0.042] — which is why the page tells a reader to check
+that panel before reading either table.
+
 **The budget is part of the instrument.** At 128 tokens Gemini spent its whole
 allowance thinking on 0.50% of questions and returned a fragment of its own
 reasoning, which `parse_yes_no` reads as a "No" charged to the model. At 256
