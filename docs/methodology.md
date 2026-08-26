@@ -178,7 +178,7 @@ reproducing it means using alpha.
 The verdict is refused, rather than rounded, when the two instruments land
 within 0.05 of each other.
 
-Those numbers go in the README, above the leaderboard. **If the judge disagrees
+Those numbers go in the README and on the methods page. **If the judge disagrees
 with therapists, that is published too.** A leaderboard whose referee has never
 been checked against a human is a table of numbers, not a measurement.
 

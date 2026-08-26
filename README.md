@@ -26,7 +26,7 @@ rather than a second benchmark.
 > **The two judges agree on the shape of the ranking and not on the order**, so
 > "near the top" is a claim this benchmark supports and "ninth rather than
 > tenth" is not. Most systems are beaten outright by nobody, which is why no
-> single winner is named. The figures are under the tables below, where a run
+> single winner is named. The figures are on the methods page, where a run
 > keeps them current. See [Roadmap](#roadmap).
 
 ---

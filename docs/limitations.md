@@ -48,9 +48,11 @@ distortion than a marked one.
 
 The two judges agree on where a model sits roughly and disagree on exactly
 where. The rank correlations are high and most systems still land in a
-different position, on both tracks. The current figures are on the leaderboard,
-in the panel above the tables, where a run keeps them right; repeating them
-here would only guarantee that one of the two copies is wrong.
+different position, on both tracks. The current figures are on
+[the methods page](https://jannehyba.github.io/therapy-note-bench/methods.html), under *Do the two judges agree?*, where a run keeps them right — and
+one sentence of them sits under the leaderboard's table, because it changes how
+that table should be read. Repeating them here would only guarantee that one of
+the copies is wrong.
 
 **So the table supports "near the top" and "near the bottom". It does not
 support "ninth rather than tenth".** A comparison between two adjacent rows is
@@ -79,8 +81,8 @@ compared on, and why each table's heading names them.
 Ordering by completeness says little about conciseness — the correlation is
 negative under both judges — and something the two judges cannot agree on about
 faithfulness, where one sees a moderate positive relationship and the other
-sees none. The current figures are in the panel under the tables, where a run
-keeps them right.
+sees none. The current figures are on [the methods page](https://jannehyba.github.io/therapy-note-bench/methods.html), under *Do the columns agree
+with each other?*, where a run keeps them right.
 
 They are not repeated here, for the reason given two sections above and
 demonstrated by this paragraph: it used to carry four numbers copied by hand,
@@ -128,7 +130,7 @@ it is real, and a gap in it can be accounting rather than behaviour.
 ## The judge is a model
 
 For the TN-Eval track each judge is calibrated against two human annotators and
-that calibration is published above the leaderboard. Calibrated is not the same
+that calibration is published on [the methods page](https://jannehyba.github.io/therapy-note-bench/methods.html). Calibrated is not the same
 as correct. Nor does newer or dearer mean better: measured at one setting, the
 seven candidates span 0.089 in agreement with the therapists, and of the 21
 pairs among them only 7 are separated by more than the 0.05 this repository
