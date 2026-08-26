@@ -280,12 +280,21 @@ Last captured snapshot: [docs/models-snapshot.md](docs/models-snapshot.md).
 
 ## Running it
 
-### One click
+### From the Actions tab
 
-Actions → **Benchmark** → *Run workflow*. Inputs: which models (blank means
-every discovered model), which tracks, an optional session limit, and a hard
-dollar ceiling on judge spend. The workflow commits the new results and
-regenerates the table above.
+Actions → **Benchmark** → *Run workflow*. Inputs: which providers and models
+(blank means every discovered one), which tasks, and an optional session limit.
+
+**It writes notes and rebuilds the page. It does not score them.** Scoring
+needs a judge, and this workflow has only ever held one secret — the e-INFRA
+token. It commits the new coverage rows and the regenerated page; the scores
+come from `tnb score` and `tnb score-icare` run locally, and until those are
+run the page says a model is generated and not yet judged.
+
+This section used to say the workflow "commits the new results and regenerates
+the table above", from a single `tnb run`. `tnb run` is a stub that exits 2:
+the step could only ever fail, and it exported a key nothing reads and none of
+the four a judge needs.
 
 There is **no scheduled run.** The `schedule:` trigger sits commented out in
 [`.github/workflows/benchmark.yml`](.github/workflows/benchmark.yml); uncomment

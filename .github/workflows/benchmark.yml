@@ -20,20 +20,16 @@ on:
         description: "Comma-separated model ids. Blank = every discovered model."
         required: false
         default: ""
-      tracks:
-        description: "Which tracks to run"
+      tasks:
+        description: "Which note-writing task to run. These are `tnb generate --tasks` values."
         required: true
         default: "all"
         type: choice
-        options: [all, tneval, icare]
+        options: [all, soap, icare]
       limit:
-        description: "Sessions per track (blank = all). Use a small number for a cheap check."
+        description: "Sessions per task (blank = all). Use a small number for a cheap check."
         required: false
         default: ""
-      max_judge_usd:
-        description: "Hard ceiling on judge spend. The run stops rather than exceeding it."
-        required: true
-        default: "25"
   # schedule:
   #   - cron: "0 4 1 * *"   # 04:00 UTC on the 1st of each month
 
@@ -63,17 +59,33 @@ jobs:
           EINFRA_API_TOKEN: ${{ secrets.EINFRA_API_TOKEN }}
         run: uv run tnb models --write-snapshot
 
-      - name: Run benchmark
+      # Generation only, and that is the whole truth about this button. It
+      # used to call `tnb run`, which is a stub that exits 2, while exporting
+      # ANTHROPIC_API_KEY -- which nothing in src/ reads -- and none of
+      # VERTEX_PROJECT, VERTEX_LOCATION, GOOGLE_APPLICATION_CREDENTIALS or
+      # OPENAI_API_KEY, which is what a judge actually needs. The step could
+      # only fail; had it not, it would have failed at scoring.
+      #
+      # Wiring a judge in is a separate decision with its own cost. The Vertex
+      # credential is a service-account JSON that would have to be written to a
+      # file from a secret, and a workflow that scores half a corpus before a
+      # ceiling stops it publishes a table nobody finished. Until that is
+      # decided, the button does the half it can and says so.
+      #
+      # `--tasks`, not `--tracks`: `soap`/`icare` is what `tnb generate` takes.
+      # `tneval-soap` is the leaderboard's word for the same thing and would
+      # have been rejected here.
+      - name: Generate notes
         env:
           EINFRA_API_TOKEN: ${{ secrets.EINFRA_API_TOKEN }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
-          uv run tnb run \
-            --tracks "${{ inputs.tracks }}" \
-            --max-judge-usd "${{ inputs.max_judge_usd }}" \
+          uv run tnb generate \
+            ${{ inputs.tasks != 'all' && format('--tasks {0}', inputs.tasks) || '' }} \
+            ${{ inputs.providers && format('--providers "{0}"', inputs.providers) || '' }} \
             ${{ inputs.models && format('--models "{0}"', inputs.models) || '' }} \
             ${{ inputs.limit && format('--limit {0}', inputs.limit) || '' }}
 
+      # Reads generations/ and results/ and writes the page. No judge, no spend.
       - name: Regenerate leaderboard
         run: uv run tnb report
 
@@ -83,5 +95,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add results docs/models-snapshot.md README.md
           git diff --staged --quiet && echo "nothing changed" && exit 0
-          git commit -m "bench: refresh leaderboard ($(date -u +%Y-%m-%d))"
+          git commit -m "bench: refresh generation coverage ($(date -u +%Y-%m-%d))"
           git push
