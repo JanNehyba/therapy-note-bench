@@ -460,6 +460,7 @@ def cmd_score(args: argparse.Namespace) -> int:
         rows = scoring.to_rows(
             scored,
             judge_model=config.model,
+            judge_settings=config.fingerprint(),
             n_generated=coverage,
             n_attempted=attempted,
             n_unreached=unreached,
@@ -511,6 +512,7 @@ def cmd_score(args: argparse.Namespace) -> int:
     rows = scoring.to_rows(
         scored,
         judge_model=config.model,
+        judge_settings=config.fingerprint(),
         n_generated=coverage,
         n_attempted=attempted,
         n_unreached=unreached,
@@ -966,6 +968,7 @@ def cmd_score_icare(args: argparse.Namespace) -> int:
     rows = icare_run.to_rows(
         scored,
         judge_model=config.model,
+        judge_settings=config.fingerprint(),
         n_generated=coverage,
         n_attempted=attempted,
         n_unreached=unreached,

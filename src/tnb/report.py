@@ -364,17 +364,32 @@ def _current_groups(groups: dict[tuple, list[Row]]) -> tuple[dict[tuple, list[Ro
     rows. This is what `build`'s docstring has promised since it was written and
     what the code did not do.
     """
+
+    # Unpacked by name rather than by position: `COMPARABILITY_KEYS` grew a
+    # sixth field and every one of these lines broke at once, which is what
+    # positional unpacking of a key that is allowed to grow buys.
+    def field(key: tuple, name: str):
+        return key[results.COMPARABILITY_KEYS.index(name)]
+
+    def lane_of(key: tuple) -> tuple:
+        return tuple(
+            field(key, name) for name in results.COMPARABILITY_KEYS if name != "harness_version"
+        )
+
     newest: dict[tuple, str] = {}
     for key in groups:
-        track, harness, prompt_version, judge_model, judge_prompt = key
-        lane = (track, prompt_version, judge_model, judge_prompt)
-        newest[lane] = max(newest.get(lane, ""), harness)
+        lane = lane_of(key)
+        newest[lane] = max(newest.get(lane, ""), field(key, "harness_version"))
 
     keep: dict[tuple, list[Row]] = {}
     superseded = []
     for key, group in groups.items():
-        track, harness, prompt_version, judge_model, judge_prompt = key
-        lane = (track, prompt_version, judge_model, judge_prompt)
+        track = field(key, "track")
+        harness = field(key, "harness_version")
+        prompt_version = field(key, "prompt_version")
+        judge_model = field(key, "judge_model")
+        judge_prompt = field(key, "judge_prompt_version")
+        lane = lane_of(key)
         if harness == newest[lane]:
             keep[key] = group
             continue
@@ -418,7 +433,8 @@ def build(rows: list[Row]) -> dict:
 
     groups, superseded = _current_groups(results.comparable_groups(current))
     for key, group in groups.items():
-        track, harness_version, prompt_version, judge_model, judge_prompt_version = key
+        versions = dict(zip(results.COMPARABILITY_KEYS, key, strict=True))
+        track = versions["track"]
         if track not in COLUMNS:
             continue
         rendered = [_render_row(row) for row in sorted(group, key=lambda r: _sort_key(r, track))]
@@ -428,11 +444,12 @@ def build(rows: list[Row]) -> dict:
                 "title": TRACK_TITLES.get(track, track),
                 "blurb": TRACK_BLURBS.get(track, ""),
                 "design": TRACK_DESIGN.get(track, {}),
+                # Every comparability field, so a reader can see exactly what
+                # this table's rows had to agree on. Named from the tuple
+                # rather than listed here: the list grew a sixth entry once and
+                # a hand-written copy would have quietly kept showing five.
                 "versions": {
-                    "harness_version": harness_version,
-                    "prompt_version": prompt_version,
-                    "judge_model": judge_model,
-                    "judge_prompt_version": judge_prompt_version,
+                    name: versions[name] for name in results.COMPARABILITY_KEYS if name != "track"
                 },
                 "scored": any(row.is_scored for row in group),
                 "columns": [

@@ -493,3 +493,48 @@ def test_the_package_and_the_project_agree_on_the_version():
         (results.ROWS_PATH.parent.parent / "pyproject.toml").read_text(encoding="utf-8")
     )
     assert project["project"]["version"] == __version__
+
+
+def test_two_thinking_budgets_are_two_instruments():
+    """A row recorded which judge it was, not how that judge was set.
+
+    Measured on this benchmark: raising Gemini's thinking budget from 128 to
+    256 moved completeness by +0.017 on every one of the nineteen systems and
+    changed the top three on conciseness. That is a different instrument by any
+    standard the rest of this file applies -- and `judge_model` alone said the
+    two were the same judge, so half a leaderboard scored at each would have
+    been drawn as one table.
+    """
+    at_128 = _scored_row(judge_settings={"model": "g", "thinking_budget": 128})
+    at_256 = _scored_row(judge_settings={"model": "g", "thinking_budget": 256})
+
+    assert at_128.comparability_key() != at_256.comparability_key()
+    assert at_128.row_id != at_256.row_id
+    assert len(results.comparable_groups([at_128, at_256])) == 2
+
+
+def test_the_same_settings_written_in_a_different_order_are_the_same_instrument():
+    """The key is a mapping, and a mapping has no order. Serialising it without
+    sorting would make a row incomparable with itself."""
+    first = _scored_row(judge_settings={"model": "g", "thinking_budget": 256})
+    second = _scored_row(judge_settings={"thinking_budget": 256, "model": "g"})
+
+    assert first.comparability_key() == second.comparability_key()
+    assert first.row_id == second.row_id
+
+
+def _scored_row(**overrides) -> Row:
+    return Row(
+        track=results.TRACK_TNEVAL,
+        system_id="gemma4",
+        system_type="model",
+        provider="einfra",
+        prompt_version="tneval-soap-v1",
+        judge_model="gemini-3.1-pro-preview",
+        judge_prompt_version="tneval-rubric-v1",
+        n_sessions_attempted=50,
+        n_sessions_generated=50,
+        n_sessions_scored=50,
+        metrics=Metrics(headline={"completeness": 0.5}),
+        **overrides,
+    )

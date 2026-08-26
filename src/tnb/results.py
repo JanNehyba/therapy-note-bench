@@ -66,6 +66,10 @@ COMPARABILITY_KEYS = (
     "prompt_version",
     "judge_model",
     "judge_prompt_version",
+    # The judge's settings, not only its name. A run at a different thinking
+    # budget is a different instrument and starts its own table, exactly as a
+    # different judge does.
+    "judge_settings",
 )
 
 #: The fields that identify a row. Two rows with the same identity are the same
@@ -165,6 +169,13 @@ class Row:
     #: coverage row and a scored row are not the same measurement.
     judge_model: str | None = None
     judge_prompt_version: str | None = None
+    #: The judge's own settings, as the answer cache fingerprints them. Two
+    #: thinking budgets are two instruments -- measured on this benchmark,
+    #: raising Gemini's from 128 to 256 moved completeness by +0.017 on every
+    #: system and changed the conciseness top three -- and until this was
+    #: recorded, `judge_model` alone said they were the same judge and the
+    #: leaderboard would have put them in one table.
+    judge_settings: dict = field(default_factory=dict)
 
     #: Sessions with a complete set of usable generations. Lower than
     #: `n_sessions_attempted` when a model would not produce a note -- which is
@@ -243,7 +254,14 @@ class Row:
         return not self.metrics.is_empty()
 
     def comparability_key(self) -> tuple:
-        return tuple(getattr(self, key) for key in COMPARABILITY_KEYS)
+        # Serialised where a field is a mapping: the key has to be hashable and
+        # to order the same way whichever run wrote the row.
+        return tuple(
+            json.dumps(value, sort_keys=True)
+            if isinstance(value := getattr(self, key), dict)
+            else value
+            for key in COMPARABILITY_KEYS
+        )
 
     def to_dict(self) -> dict:
         return {"row_id": self.row_id, **asdict(self)}
