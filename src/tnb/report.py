@@ -371,15 +371,34 @@ def _current_groups(groups: dict[tuple, list[Row]]) -> tuple[dict[tuple, list[Ro
     def field(key: tuple, name: str):
         return key[results.COMPARABILITY_KEYS.index(name)]
 
+    #: Fields a lane is *not* keyed on. `harness_version` because that is what
+    #: this function chooses between. `judge_settings` because a row written
+    #: before that field existed records none, and an absent record of the
+    #: settings is not a different instrument -- it is the same instrument,
+    #: less well described. Leaving it in the lane drew two identical Gemini
+    #: tables side by side, one from each side of the commit that added it.
+    CHOSEN_BETWEEN = ("harness_version", "judge_settings")
+
     def lane_of(key: tuple) -> tuple:
         return tuple(
-            field(key, name) for name in results.COMPARABILITY_KEYS if name != "harness_version"
+            field(key, name) for name in results.COMPARABILITY_KEYS if name not in CHOSEN_BETWEEN
         )
 
-    newest: dict[tuple, str] = {}
+    def rank(key: tuple) -> tuple:
+        # Newer harness wins; at the same harness, the group that records its
+        # judge settings beats the one that does not. Strictly more informative
+        # supersedes strictly less, which is the same rule `latest` applies to
+        # a re-run.
+        #
+        # Read from a row, not from the key: the key holds the *serialised*
+        # mapping, and `"{}"` is a perfectly truthy string, so testing the key
+        # said every group records its settings.
+        return (field(key, "harness_version"), bool(groups[key][0].judge_settings))
+
+    best: dict[tuple, tuple] = {}
     for key in groups:
         lane = lane_of(key)
-        newest[lane] = max(newest.get(lane, ""), field(key, "harness_version"))
+        best[lane] = max(best.get(lane, ("", False)), rank(key))
 
     keep: dict[tuple, list[Row]] = {}
     superseded = []
@@ -390,14 +409,17 @@ def _current_groups(groups: dict[tuple, list[Row]]) -> tuple[dict[tuple, list[Ro
         judge_model = field(key, "judge_model")
         judge_prompt = field(key, "judge_prompt_version")
         lane = lane_of(key)
-        if harness == newest[lane]:
+        # Every group tied at the best rank is kept, not one of them: two
+        # genuinely different judge settings at the same harness are two
+        # instruments and both belong on the page.
+        if rank(key) == best[lane]:
             keep[key] = group
             continue
         superseded.append(
             {
                 "track": track,
                 "harness_version": harness,
-                "current_harness_version": newest[lane],
+                "current_harness_version": best[lane][0],
                 "judge_model": judge_model,
                 "prompt_version": prompt_version,
                 "judge_prompt_version": judge_prompt,
@@ -432,7 +454,7 @@ def build(rows: list[Row]) -> dict:
     tables = []
 
     groups, superseded = _current_groups(results.comparable_groups(current))
-    for key, group in groups.items():
+    for group in groups.values():
         # From a row rather than from the key: `comparability_key` serialises a
         # mapping so the tuple stays hashable, and the page needs the mapping.
         # Every row in the group agrees on these fields -- that is what makes it

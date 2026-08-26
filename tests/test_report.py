@@ -648,3 +648,29 @@ def test_two_budgets_of_one_judge_are_two_tables():
 
     assert len(tables) == 2
     assert {t["versions"]["judge_settings"]["thinking_budget"] for t in tables} == {128, 256}
+
+
+def test_a_row_that_records_its_judge_settings_supersedes_one_that_does_not():
+    """`judge_settings` was added mid-project and `results/` is append-only.
+
+    Rows written before it exists record none. An absent record of the settings
+    is not a different instrument -- it is the same instrument, less well
+    described -- so putting it in the lane drew two identical Gemini tables side
+    by side, one from each side of the commit that added the field.
+    """
+    described = _scored("gemma4", 0.61, judge_settings={"thinking_budget": 256})
+    silent = _scored("gemma4", 0.61)
+    object.__setattr__(silent, "system_id", "gemma4")
+
+    tables = report.build([silent, described])["tables"]
+
+    assert len(tables) == 1
+    assert tables[0]["versions"]["judge_settings"] == {"thinking_budget": 256}
+
+
+def test_two_real_settings_at_one_harness_are_still_two_tables():
+    """The rule supersedes an *unrecorded* setting, not a different one."""
+    at_128 = _scored("gemma4", 0.61, judge_settings={"thinking_budget": 128})
+    at_256 = _scored("gemma4", 0.63, judge_settings={"thinking_budget": 256})
+
+    assert len(report.build([at_128, at_256])["tables"]) == 2
