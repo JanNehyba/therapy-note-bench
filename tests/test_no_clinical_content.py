@@ -35,7 +35,17 @@ from tnb.config import REPO_ROOT
 
 #: Letters that exist in Czech and not in English. A cheap, broad net for
 #: transcript text that reached a file it should not have.
-DIACRITIC = re.compile(r"[ěščřžýáíéúůňťďĚŠČŘŽÝÁÍÉÚŮŇŤĎ]")
+#:
+#: Written as escapes rather than as the letters themselves, because this file
+#: asserts that no tracked file outside the allow-list holds Czech -- and
+#: spelling the class out put the scanner into its own report. Allow-listing it
+#: instead would have been the wrong repair: the allow-list opens a door per
+#: file with a reason, and "the file that guards the door" is the one entry
+#: that must never be on it.
+DIACRITIC = re.compile(
+    "[" + "\u011b\u0161\u010d\u0159\u017e\u00fd\u00e1\u00ed\u00e9\u00fa\u016f\u0148\u0165\u010f"
+    "\u011a\u0160\u010c\u0158\u017d\u00dd\u00c1\u00cd\u00c9\u00da\u016e\u0147\u0164\u010e]"
+)
 
 #: The only tracked files that may contain Czech, each with the reason it may.
 #: A path is listed one per line so that adding one is a decision somebody made
@@ -119,6 +129,21 @@ def test_only_named_files_contain_czech(tracked_files):
         if text and DIACRITIC.search(text) and _relative(path) not in ALLOWED_CZECH:
             offenders.append(_relative(path))
     assert not offenders, f"Czech text in tracked files that may not carry it: {offenders}"
+
+
+def test_the_scanner_is_never_allow_listed():
+    """The one file that may not buy itself an exemption.
+
+    Spelling the diacritic class out as letters makes this file match its own
+    scan, and the cheapest way to green is to add it to the allow-list. That
+    repair costs the guarantee: "no tracked file holds Czech except these six"
+    would then be enforced by a scanner standing outside its own rule, and a
+    real transcript pasted into this file as a test case would pass. The class
+    is escaped instead, so the scanner stays under the scan.
+    """
+    assert _relative(REPO_ROOT / "tests/test_no_clinical_content.py") not in ALLOWED_CZECH
+    assert not DIACRITIC.search(path_text := Path(__file__).read_text(encoding="utf-8"))
+    assert "ALLOWED_CZECH" in path_text  # the file really is the one being read
 
 
 def test_the_allow_list_has_no_stale_entries(tracked_files):
