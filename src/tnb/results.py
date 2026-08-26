@@ -525,7 +525,11 @@ def is_the_models_fault(error: str | None) -> bool:
     the question it answers is an accusation and the default has to be no.
     `generation` already argues that a note cut off at our ceiling "would
     measure our token budget, not the model" -- and the counter one column over
-    was measuring exactly that, on 14 iCARE calls from `qwen3.5-int4`.
+    was measuring exactly that. Measured in `generations/`: one call, in
+    `qwen3.5-int4`'s iCARE session 146. (An earlier version of this docstring
+    said fourteen. `results/` holds fourteen rows that name the truncation and
+    each of them counts one call -- the same coverage row, re-appended by
+    fourteen `tnb report` runs.)
     """
     return not is_infrastructure_failure(error) and not is_our_own_ceiling(error)
 

@@ -618,10 +618,12 @@ def test_a_note_we_cut_off_is_not_a_note_the_model_failed(tmp_path):
 
     `generation` argues that scoring a note cut off at our ceiling "would
     measure our token budget, not the model" -- and the counter one column over
-    was doing exactly that, on 14 iCARE calls from `qwen3.5-int4`. A generation
-    that stopped on `length` has already had its one escalation to
-    `escalate_max_tokens`; past that we stopped it, and what it would have
-    written is not something this benchmark knows.
+    was doing exactly that. One call in `generations/`, `qwen3.5-int4`'s iCARE
+    session 146; the fourteen rows in `results/` that name it are fourteen
+    copies of one coverage row. A generation that stopped on `length` has
+    already had its one escalation to `escalate_max_tokens`; past that we
+    stopped it, and what it would have written is not something this benchmark
+    knows.
     """
     model_dir = tmp_path / "einfra" / "icare" / icare_task.PROMPT_VERSION / "a-model"
     for session, error in (

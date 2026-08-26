@@ -355,7 +355,12 @@ def cmd_report(args: argparse.Namespace) -> int:
         state = "scored" if table["scored"] else "coverage only"
         print(f"{table['track']:12} {len(table['rows']):3} rows  ({state})")
 
-    for path in (report.DATA_PATH, report.PAGE_PATH, report.README_PATH):
+    for path in (
+        report.DATA_PATH,
+        report.PAGE_PATH,
+        report.METHODS_PATH,
+        report.README_PATH,
+    ):
         print(f"wrote {path.relative_to(REPO_ROOT)}")
     return 0
 
