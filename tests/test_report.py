@@ -32,6 +32,11 @@ def _scored(system_id: str, completeness: float, **overrides) -> Row:
     judged = {
         "judge_model": "claude-opus-5",
         "judge_prompt_version": "tneval-rubric-v1",
+        # Not decoration. Every row the scorer writes carries the judge's
+        # fingerprint, and a judged group that records none is no longer drawn
+        # -- so a fixture without one models a row that can no longer be
+        # produced. The tests that want that case pass `judge_settings=None`.
+        "judge_settings": {"model": "claude-opus-5", "thinking_budget": 256},
         "n_sessions_scored": 50,
         "metrics": Metrics(headline={"completeness": completeness}),
     }
@@ -653,19 +658,20 @@ def test_two_budgets_of_one_judge_are_two_tables():
 def test_a_row_that_records_its_judge_settings_supersedes_one_that_does_not():
     """`judge_settings` was added mid-project and `results/` is append-only.
 
-    Rows written before it exists record none. An absent record of the settings
-    is not a different instrument -- it is the same instrument, less well
-    described -- so putting it in the lane drew two identical Gemini tables side
-    by side, one from each side of the commit that added the field.
+    Rows written before it exists record none, and drawing both sides of that
+    commit put two identical Gemini tables next to each other. The described
+    group wins the lane; the silent one is withdrawn rather than drawn -- it
+    cannot be shown to have come from one instrument, which is a stronger
+    reason than being the loser of a lane.
     """
     described = _scored("gemma4", 0.61, judge_settings={"thinking_budget": 256})
-    silent = _scored("gemma4", 0.61)
-    object.__setattr__(silent, "system_id", "gemma4")
+    silent = _scored("gemma4", 0.61, judge_settings=None)
 
-    tables = report.build([silent, described])["tables"]
+    data = report.build([silent, described])
 
-    assert len(tables) == 1
-    assert tables[0]["versions"]["judge_settings"] == {"thinking_budget": 256}
+    assert len(data["tables"]) == 1
+    assert data["tables"][0]["versions"]["judge_settings"] == {"thinking_budget": 256}
+    assert data["superseded"][0]["reasons"] == ["settings"]
 
 
 def test_two_real_settings_at_one_harness_are_still_two_tables():
@@ -694,3 +700,59 @@ def test_a_table_measured_by_an_older_harness_says_so():
     section = report.render_readme_section(data)
     assert "may not mean what the newer tables' columns mean" in section
     assert "older harness" in report.render_page(data)
+
+
+def test_a_judged_table_that_cannot_say_how_the_judge_was_set_is_not_drawn():
+    """Two rows that both record nothing are not thereby one instrument.
+
+    The published `gemini-2.5-pro` table was fourteen rows from two: eleven
+    e-INFRA systems answered at `thinking_budget` 128, and the therapist and
+    TN-Eval's two reference models at 256 -- the very setting this repository
+    elsewhere shows reorders a leaderboard. Both halves recorded `null`, so the
+    comparability key could not tell them apart and ranked them against each
+    other.
+    """
+    blended = [
+        _scored("gemma4", 0.61, judge_settings=None),
+        _scored("therapist", 0.34, judge_settings=None),
+    ]
+
+    data = report.build(blended)
+
+    assert data["tables"] == []
+    assert len(data["superseded"]) == 1
+    assert data["superseded"][0]["reasons"] == ["settings"]
+    # No harness superseded it, so no harness may be named as the cause.
+    assert data["superseded"][0]["current_harness_version"] == ""
+
+    said = report.render_readme_section(data) + report.render_page(data)
+    assert "settings were not recorded" in said
+
+
+def test_generation_coverage_has_no_settings_to_record_and_stays():
+    """The rule reaches a ranking, not a count. Coverage rows have no judge, so
+    demanding they describe one would erase the only thing on the page before
+    anything is scored."""
+    data = report.build([_row(), _row(system_id="glm-5")])
+
+    assert len(data["tables"]) == 1
+    assert data["superseded"] == []
+
+
+def test_a_group_withdrawn_for_two_reasons_reports_both():
+    """`at harness 0.2.0 ... redefined in 0.2.0` contradicted itself, and named
+    the wrong cause: what actually beat that group was a group that could say
+    what settings it used."""
+    old = _scored("gemma4", 0.61, harness_version="0.1.0", judge_settings=None)
+    new = _scored("gemma4", 0.42, harness_version="0.2.0", judge_settings={"thinking_budget": 256})
+
+    data = report.build([old, new])
+
+    assert len(data["tables"]) == 1
+    gone = data["superseded"][0]
+    assert gone["reasons"] == ["settings", "harness"]
+
+    sentence = report._superseded_sentence(gone)
+    assert "settings were not recorded" in sentence
+    assert "redefined in `0.2.0`" in sentence
+    assert "`0.1.0` are no longer shown" in sentence

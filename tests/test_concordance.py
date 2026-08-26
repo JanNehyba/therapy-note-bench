@@ -20,6 +20,9 @@ def _row(system: str, judge_model: str, **headline) -> Row:
         prompt_version="tneval-soap-v1",
         judge_model=judge_model,
         judge_prompt_version="tneval-rubric-v1",
+        # A judged group that does not record its judge's settings is withdrawn
+        # rather than drawn, so a fixture without one is not a table.
+        judge_settings={"model": judge_model},
         n_sessions_attempted=50,
         n_sessions_generated=50,
         n_sessions_scored=50,

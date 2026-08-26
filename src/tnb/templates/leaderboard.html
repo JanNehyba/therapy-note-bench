@@ -1237,9 +1237,17 @@ function renderSuperseded(gone) {
   const what = gone.judge_model
     ? `scored by <code>${gone.judge_model}</code>`
     : 'of generation coverage';
+  // Both reasons can be true at once. Reporting only the first printed
+  // "at harness 0.2.0 ... redefined in 0.2.0", which contradicts itself.
+  const said = {
+    harness: `the measures were redefined in <code>${gone.current_harness_version}</code>
+      and the two are not comparable`,
+    settings: `the judge's settings were not recorded, so the rows cannot be shown to
+      have come from one instrument`,
+  };
+  const why = (gone.reasons || ['harness']).map(name => said[name]).filter(Boolean).join(' and ');
   return `<p class="note">${gone.rows} row(s) on <strong>${gone.track}</strong>, ${what},
-    at harness <code>${gone.harness_version}</code>, are no longer shown: the measures were
-    redefined in <code>${gone.current_harness_version}</code> and the two are not comparable.
+    at harness <code>${gone.harness_version}</code>, are no longer shown: ${why}.
     They are still in <code>results/rows.jsonl</code>.</p>`;
 }
 

@@ -37,6 +37,12 @@ def _row(**kwargs) -> Row:
         "system_type": "model",
         "n_sessions_attempted": 50,
     }
+    # A row that names a judge and not the judge's settings is withdrawn from
+    # the tables rather than drawn, so a fixture that names one gets one -- as
+    # every row the scorer writes does. These tests are about the *generation*
+    # settings column and would otherwise fail for an unrelated reason.
+    if kwargs.get("judge_model") and "judge_settings" not in kwargs:
+        kwargs = {**kwargs, "judge_settings": {"model": kwargs["judge_model"]}}
     return Row(**{**base, **kwargs})
 
 

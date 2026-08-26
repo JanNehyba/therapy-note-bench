@@ -415,45 +415,73 @@ def _current_groups(groups: dict[tuple, list[Row]]) -> tuple[dict[tuple, list[Ro
             field(key, name) for name in results.COMPARABILITY_KEYS if name not in CHOSEN_BETWEEN
         )
 
+    def records_its_instrument(key: tuple) -> bool:
+        """A group that names a judge has to say how that judge was set.
+
+        Two rows that both record nothing are not thereby the same instrument;
+        they are two rows that cannot say. The `gemini-2.5-pro` table was
+        fourteen rows drawn from two instruments and ranked against each other
+        for exactly that reason -- eleven e-INFRA systems answered at
+        `thinking_budget` 128, and the therapist and TN-Eval's two reference
+        models at 256, which is the very setting the rest of this repository
+        argues reorders a leaderboard. Both halves recorded `null`, so the
+        comparability key could not tell them apart.
+
+        A group with no judge is generation coverage. It has no settings to
+        record and is not a ranking, so the rule does not reach it.
+
+        Read from a row, not from the key: the key holds the *serialised*
+        mapping, and `"{}"` is a perfectly truthy string.
+        """
+        return not field(key, "judge_model") or bool(groups[key][0].judge_settings)
+
     def rank(key: tuple) -> tuple:
         # Newer harness wins; at the same harness, the group that records its
         # judge settings beats the one that does not. Strictly more informative
         # supersedes strictly less, which is the same rule `latest` applies to
         # a re-run.
-        #
-        # Read from a row, not from the key: the key holds the *serialised*
-        # mapping, and `"{}"` is a perfectly truthy string, so testing the key
-        # said every group records its settings.
         return (field(key, "harness_version"), bool(groups[key][0].judge_settings))
 
+    # Only a drawable group can set the bar. A lane whose every group is
+    # unpublishable leaves `best` empty for that lane, and nothing there is
+    # superseded *by a harness* -- it is withdrawn for the other reason.
     best: dict[tuple, tuple] = {}
     for key in groups:
-        lane = lane_of(key)
-        best[lane] = max(best.get(lane, ("", False)), rank(key))
+        if records_its_instrument(key):
+            lane = lane_of(key)
+            best[lane] = max(best.get(lane, ("", False)), rank(key))
 
     keep: dict[tuple, list[Row]] = {}
     superseded = []
     for key, group in groups.items():
-        track = field(key, "track")
         harness = field(key, "harness_version")
-        prompt_version = field(key, "prompt_version")
-        judge_model = field(key, "judge_model")
-        judge_prompt = field(key, "judge_prompt_version")
         lane = lane_of(key)
+        current = best.get(lane, ("", False))[0]
+
+        #: Why this group is not drawn. Both can be true at once, and reporting
+        #: only the first produced the line "at harness 0.2.0 ... redefined in
+        #: 0.2.0", which contradicts itself and names the wrong cause.
+        reasons = []
+        if not records_its_instrument(key):
+            reasons.append("settings")
         # Every group tied at the best rank is kept, not one of them: two
         # genuinely different judge settings at the same harness are two
         # instruments and both belong on the page.
-        if rank(key) == best[lane]:
+        if current and rank(key) < best[lane] and harness < current:
+            reasons.append("harness")
+
+        if not reasons:
             keep[key] = group
             continue
         superseded.append(
             {
-                "track": track,
+                "track": field(key, "track"),
                 "harness_version": harness,
-                "current_harness_version": best[lane][0],
-                "judge_model": judge_model,
-                "prompt_version": prompt_version,
-                "judge_prompt_version": judge_prompt,
+                "current_harness_version": current if "harness" in reasons else "",
+                "judge_model": field(key, "judge_model"),
+                "prompt_version": field(key, "prompt_version"),
+                "judge_prompt_version": field(key, "judge_prompt_version"),
+                "reasons": reasons,
                 "rows": len(group),
                 "scored_at": max((row.scored_at or "" for row in group), default=""),
             }
@@ -860,6 +888,27 @@ def _judge_line(table: dict) -> str:
     return line
 
 
+def _superseded_reasons(gone: dict) -> list[str]:
+    """The clauses that say why, one per reason, in Markdown.
+
+    A group can be withdrawn for both reasons at once. Reporting only the first
+    printed "at harness `0.2.0` ... redefined in `0.2.0`", which contradicts
+    itself and blames the wrong thing.
+    """
+    said = {
+        "harness": (
+            f"the measures were redefined in `{gone.get('current_harness_version')}` "
+            "and the two are not comparable"
+        ),
+        "settings": (
+            "the judge's settings were not recorded, so the rows cannot be shown to "
+            "have come from one instrument"
+        ),
+    }
+    # Older rows carry no `reasons`; before this field existed there was only one.
+    return [said[name] for name in gone.get("reasons") or ["harness"] if name in said]
+
+
 def _superseded_sentence(gone: dict) -> str:
     """Why a group of rows stopped being drawn, in one sentence.
 
@@ -869,9 +918,8 @@ def _superseded_sentence(gone: dict) -> str:
     what = f"scored by `{gone['judge_model']}`" if gone["judge_model"] else "of generation coverage"
     return (
         f"{gone['rows']} {gone['track']} row(s) {what} at harness "
-        f"`{gone['harness_version']}` are no longer shown: the measures were redefined "
-        f"in `{gone['current_harness_version']}` and the two are not comparable. They "
-        f"stay in `results/rows.jsonl`."
+        f"`{gone['harness_version']}` are no longer shown: "
+        f"{' and '.join(_superseded_reasons(gone))}. They stay in `results/rows.jsonl`."
     )
 
 

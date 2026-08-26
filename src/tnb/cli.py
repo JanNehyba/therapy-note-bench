@@ -397,6 +397,8 @@ def cmd_score(args: argparse.Namespace) -> int:
     overrides = {"model": args.judge_model}
     if getattr(args, "concurrency", None):
         overrides["concurrency"] = args.concurrency
+    if getattr(args, "thinking_budget", None) is not None:
+        overrides["thinking_budget"] = args.thinking_budget
     config = judge.config_from_env(**overrides)
     sessions = scoring.load_sessions(args.limit)
 
@@ -1129,6 +1131,17 @@ def build_parser() -> argparse.ArgumentParser:
             "which is hours at 4. Vertex and OpenAI both rate-limit per project "
             "and both retry 429 with backoff, so this is a throughput knob, not a "
             "risk one -- unlike e-INFRA's, which is one person's academic quota."
+        ),
+    )
+    score.add_argument(
+        "--thinking-budget",
+        type=int,
+        help=(
+            "how much room the judge gets to think; default 256. It is part of the "
+            "cache key, so a run at a budget the cache does not hold asks the judge "
+            "again -- and --cache-only at that budget publishes only what was "
+            "answered at it, which is how a table built from two budgets is split "
+            "back into the two tables it always was."
         ),
     )
     score.add_argument("--force", action="store_true", help="re-ask cached questions")
