@@ -24,7 +24,7 @@
         "qwen3.8-27b",
         "therapist"
       ],
-      "summary": "`gemini-3.1-pro-preview` shows no detectable preference for its own family: +0.018 completeness [+0.004 to +0.032], an interval that includes zero, or is smaller than 0.005. Not detected is not the same as absent \u2014 3 system(s) against 12 neutral one(s) over 25 conversations is what this run could see."
+      "summary": "`gemini-3.1-pro-preview` shows no detectable preference for Google models: +0.018 completeness [+0.004 to +0.032], an interval that clears zero by less than 0.005. Not detected is not the same as absent \u2014 3 system(s) against 12 neutral one(s) over 25 conversations is what this run could see."
     },
     {
       "detected": true,
@@ -50,7 +50,7 @@
         "qwen3.8-27b",
         "therapist"
       ],
-      "summary": "`gpt-5.6-terra` scores its own family 0.027 completeness higher than the other judge does, relative to how the two differ on the 12 systems neither of them wrote [+0.011 to +0.042]. Read its column for a openai model with that in mind."
+      "summary": "`gpt-5.6-terra` scores OpenAI models 0.027 completeness higher than the other judge does, relative to how the two differ on the 12 systems neither of them wrote [+0.011 to +0.042]. Read its column for a OpenAI model with that in mind."
     }
   ],
   "judge_a": "gemini-3.1-pro-preview",
