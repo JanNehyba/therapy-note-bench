@@ -615,3 +615,45 @@ def test_the_link_in_the_address_bar_comes_back_to_the_same_table(tmp_path):
     switch = _run(page, tmp_path, panel="switch")
     assert judge, "the fixture's last table must be a judged one"
     assert judge in switch
+
+
+def test_neither_page_leaves_a_panel_as_an_empty_frame(tmp_path):
+    """Nothing to say and a heading saying it are different things.
+
+    Six panels used to return early and leave a `<details>` with a summary over
+    an empty body, which reads as a section somebody abandoned. This is the
+    general form of that rule, over a payload where every panel has nothing.
+
+    `controls` and `switch` are the exceptions and are named rather than
+    excused: both are written on every render and are legitimately empty when
+    there is one table and nothing to filter. Their margins are collapsed with
+    `:empty` in the stylesheet, so an empty one takes no room.
+    """
+    from tnb import report
+
+    data = report.build([_row("x", "a-judge", 0.5)])
+    data.update(
+        calibration=None,
+        similarity_example=None,
+        saturation=None,
+        judges=None,
+        preference=None,
+        concordance={},
+        corpus=None,
+        licences=None,
+        protocol=None,
+    )
+
+    ALLOWED = {"controls", "switch"}
+    for name, render in (("leaderboard", report.render_page), ("methods", report.render_methods)):
+        output = _run(render(data), tmp_path)
+        if "empty and not removed:" not in output:
+            continue
+        left = output.split("empty and not removed:")[-1].strip()
+        stayed = {part.strip() for part in left.split(",") if part.strip()}
+        assert stayed <= ALLOWED, f"{name} left an empty frame: {sorted(stayed - ALLOWED)}"
+
+    style = (report.TEMPLATE_DIR / "_style.html").read_text(encoding="utf-8")
+    assert ".switch:empty" in style and ".controls:empty" in style, (
+        "the two that stay must take no room"
+    )

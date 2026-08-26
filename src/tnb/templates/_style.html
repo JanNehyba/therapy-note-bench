@@ -193,6 +193,10 @@ p.settings { margin-top: .2rem; }
   /* --- picking a table ------------------------------------------------- */
 
   .switch { display: flex; flex-wrap: wrap; gap: .6rem 1.5rem; margin: 0 0 1.1rem; }
+  /* Both are written on every render and are legitimately empty when there is
+     one table and nothing to filter. Their margins are not: an empty container
+     leaves a gap that reads as a missing control. */
+  .switch:empty, .controls:empty { display: none; margin: 0; }
   .pick { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; }
   .pick-label {
     font-size: .72rem; letter-spacing: .04em; text-transform: uppercase;
