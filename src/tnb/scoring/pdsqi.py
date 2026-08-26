@@ -54,6 +54,8 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 
+from tnb.tasks import soap
+
 #: Bumped whenever anything reaching this judge changes. Rows carry it and the
 #: leaderboard never mixes two versions.
 JUDGE_PROMPT_VERSION = "pdsqi9-note-v1"
@@ -385,6 +387,29 @@ def parse_yes_no(answer: str) -> bool | None:
     """True for yes, False for no, None for anything else."""
     match = _YES_NO.match((answer or "").strip())
     return match.group(1).lower() == "yes" if match else None
+
+
+def render_note(note: dict[str, str]) -> str:
+    """One SOAP note as the single block of text the instrument rates.
+
+    PDSQI-9 asks about a note, not about a section: "is it organized?" has no
+    answer for a quarter of a note. So the four sections are joined, and how
+    they are joined is part of the prompt and therefore part of
+    `JUDGE_PROMPT_VERSION`.
+
+    Two choices, both to keep the presentation from becoming a measurement:
+
+    - The order is `soap.SECTIONS`, never the dictionary's. A note parsed out of
+      a model's reply carries whatever order that model wrote in, and
+      "organized" would then be scoring the order our parser happened to see.
+    - All four headings are always present, so every note is shown in the same
+      shape. A model that wrote no plan is presented with an empty Plan, which
+      is what a reader would find; a model that wrote no plan and was shown
+      three headings would look tidier for the omission.
+    """
+    return "\n\n".join(
+        f"{section.capitalize()}: {(note.get(section) or '').strip()}" for section in soap.SECTIONS
+    )
 
 
 def build_tasks(note: str, transcript: str | None = None) -> list[PdsqiTask]:
