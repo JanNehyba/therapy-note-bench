@@ -514,6 +514,14 @@ function renderTable(table, index) {
     const oddOneOut = row.settings_differ
       ? ' <span class="differs" title="' + esc(row.settings) + '">≠ settings</span>'
       : '';
+    // A cell where the judge is grading its own vendor's model. Marked in
+    // place, never dropped: a missing row would be the worse distortion, and
+    // the self-preference panel below measures how much to discount it by.
+    const ownFamily = row.judges_own_family
+      ? ` <span class="differs" title="scored by a judge from the same vendor` +
+        `, whose self-preference is measured in the panel below">judge's own ` +
+        `${esc(row.judges_own_family)}</span>`
+      : '';
     const effortCell = table.has_effort
       ? `<td>${row.effort ? esc(row.effort) : '<span class="dash" title="this provider has no effort control">—</span>'}</td>`
       : '';
@@ -527,7 +535,7 @@ function renderTable(table, index) {
     return `<tr class="system${rank === 1 ? ' first-group' : ''}"` +
       ` data-row="${index}-${position}" data-type="${row.system_type}">
         ${rankCell}
-        <td class="name"><span class="arrow">▸</span>${esc(row.label)}${chip}${oddOneOut}</td>
+        <td class="name"><span class="arrow">▸</span>${esc(row.label)}${chip}${oddOneOut}${ownFamily}</td>
         ${effortCell}${cells}<td>${coverage}</td>
       </tr>` + detailRow(row, table);
   }).join('');

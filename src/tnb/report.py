@@ -702,6 +702,28 @@ def ihope_temporal() -> tuple[int, ...]:
     return ihope.TEMPORAL_SECTIONS
 
 
+def _judges_own_family(row: Row) -> str:
+    """The vendor this row's judge shares with the system it scored, or "".
+
+    `docs/limitations.md` has promised since the second judge was added that
+    these cells are "marked in the table where they sit", and nothing marked
+    them -- not `renderTable`, not the row data it draws from. The effect the
+    mark warns about is no longer hypothetical: with the comparison group
+    corrected to the vendor that built each model, `gpt-5.6-terra` shows a
+    detected self-preference of +0.027 completeness.
+
+    The row is marked, never dropped. A missing row would be the worse
+    distortion, and a reader who can see which cells to discount can do the
+    arithmetic the panel does not do for them.
+    """
+    from tnb.scoring.preference import family_of
+
+    if not row.judge_model:
+        return ""
+    family = family_of(row.judge_model)
+    return family if family and family_of(row.system_id) == family else ""
+
+
 def _render_row(row: Row) -> dict:
     return {
         "system_id": row.system_id,
@@ -719,6 +741,8 @@ def _render_row(row: Row) -> dict:
         # convention for systems that used extra resources. The forced
         # temperature on the GPT family is exactly this case.
         "settings_differ": bool(row.settings.temperature_forced),
+        # Empty unless the judge and the system it scored come from one vendor.
+        "judges_own_family": _judges_own_family(row),
         "n_attempted": row.n_sessions_attempted,
         "n_generated": row.n_sessions_generated,
         "n_scored": row.n_sessions_scored,

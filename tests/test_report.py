@@ -756,3 +756,37 @@ def test_a_group_withdrawn_for_two_reasons_reports_both():
     assert "settings were not recorded" in sentence
     assert "redefined in `0.2.0`" in sentence
     assert "`0.1.0` are no longer shown" in sentence
+
+
+def test_a_judge_grading_its_own_vendor_is_marked_in_the_row():
+    """`docs/limitations.md` has promised this since the second judge was added.
+
+    "Cells where a judge scored a model from its own family are marked in the
+    table where they sit" -- and nothing marked them, in `renderTable` or in
+    the row data it draws from. The effect is no longer hypothetical: with the
+    comparison group corrected to the vendor that built each model,
+    `gpt-5.6-terra` shows a detected self-preference of +0.027 completeness.
+    """
+    data = report.build(
+        [
+            _scored("gpt-oss-120b", 0.61, judge_model="gpt-5.6-terra"),
+            _scored("gemma4", 0.60, judge_model="gpt-5.6-terra"),
+            _scored("kimi-k3", 0.59, judge_model="gpt-5.6-terra"),
+        ]
+    )
+
+    marked = {row["system_id"]: row["judges_own_family"] for row in data["tables"][0]["rows"]}
+
+    assert marked["gpt-oss-120b"] == "openai", "OpenAI's model, graded by OpenAI's judge"
+    assert marked["gemma4"] == "", "Google's model is not the GPT judge's own"
+    assert marked["kimi-k3"] == ""
+
+    page = report.render_page(data)
+    assert "judges_own_family" in page, "and the page reads it"
+
+
+def test_a_coverage_row_has_no_judge_to_share_a_vendor_with():
+    """Nobody scored it, so the question does not arise."""
+    data = report.build([_row(system_id="gpt-oss-120b")])
+
+    assert data["tables"][0]["rows"][0]["judges_own_family"] == ""
