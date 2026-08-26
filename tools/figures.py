@@ -242,11 +242,24 @@ def svg(width: int, height: int, body: str, *, label: str) -> str:
     )
 
 
-def heading(title: str, subtitle: str, x: int = 0, y: int = 22) -> str:
-    return (
-        f'<text class="title" x="{x}" y="{y}">{esc(title)}</text>\n'
-        f'<text class="sub" x="{x}" y="{y + 21}">{esc(subtitle)}</text>'
+#: Roughly how wide one character of each face is. Used to wrap rather than to
+#: lay out: SVG has no line breaking, so a line that does not fit leaves the
+#: canvas and looks fine in the source.
+CHAR_PX = {"note": 5.8, "sub": 6.4, "title": 8.6}
+
+
+def heading(title: str, subtitle: str, x: int = 0, y: int = 22, *, width_px: int = 900) -> str:
+    """A title and a subtitle, the subtitle wrapped to the canvas.
+
+    The title is not wrapped. A figure whose title does not fit on one line has
+    a title doing the subtitle's job, and breaking it here would hide that
+    rather than fix it -- the test names the figure and the overshoot instead.
+    """
+    drawn = "".join(
+        f'<text class="sub" x="{x}" y="{y + 21 + index * 17}">{esc(line)}</text>'
+        for index, line in enumerate(wrap(subtitle, width_px, per_char=CHAR_PX["sub"]))
     )
+    return f'<text class="title" x="{x}" y="{y}">{esc(title)}</text>' + drawn
 
 
 #: Roughly how wide one character of the note face is, at 11.5px. Used to wrap
@@ -256,9 +269,9 @@ def heading(title: str, subtitle: str, x: int = 0, y: int = 22) -> str:
 NOTE_CHAR_PX = 5.8
 
 
-def wrap(text: str, width_px: int) -> list[str]:
-    """`text` split into lines that fit `width_px` at the note size."""
-    limit = max(20, int(width_px / NOTE_CHAR_PX))
+def wrap(text: str, width_px: int, *, per_char: float = NOTE_CHAR_PX) -> list[str]:
+    """`text` split into lines that fit `width_px` at the given face."""
+    limit = max(20, int(width_px / per_char))
     lines, line = [], ""
     for word in text.split():
         candidate = f"{line} {word}".strip()
@@ -330,8 +343,8 @@ def figure_positions(data: Data) -> str:
             f'<path class="{klass}" d="M {mid_l} {y1:.1f} C {mid_l + 70} {y1:.1f}, '
             f'{mid_r - 70} {y2:.1f}, {mid_r} {y2:.1f}" fill="none" stroke-width="2" '
             f'stroke-opacity="{opacity}" stroke-linecap="round"/>'
-            f'<circle cx="{mid_l}" cy="{y1:.1f}" r="3.5" class="fill-a"/>'
-            f'<circle cx="{mid_r}" cy="{y2:.1f}" r="3.5" class="fill-b"/></g>'
+            f'<circle cx="{mid_l}" cy="{y1:.1f}" r="4.5" class="fill-a"/>'
+            f'<circle cx="{mid_r}" cy="{y2:.1f}" r="4.5" class="fill-b"/></g>'
         )
 
     for name in order:
@@ -763,11 +776,240 @@ def figure_what_the_rubric_rewards(data: Data) -> str:
     return svg(width, height, body, label="Completeness for every system, therapist included")
 
 
+# --- figure 5: where there is still room to measure ---------------------------
+
+#: The verdict colours the site already uses, so a reader who has seen the
+#: methods page recognises them here. Validated on both surfaces; `mixed` is
+#: grey on purpose and fails the chroma floor on purpose, because a fourth hue
+#: would dress the neutral case as a fourth finding. Every strip also carries
+#: the word, so colour is never the only channel.
+VERDICT_INK = {
+    "discriminating": ("#00806a", "#22a184", "separates models"),
+    "saturated": ("#c05a10", "#c9701f", "every model does it"),
+    "unreachable": ("#4a4fb8", "#7c80e0", "nobody does it"),
+    "mixed": ("#7d8a85", "#7d8a85", "partly"),
+}
+
+VERDICT_ORDER = ("saturated", "discriminating", "mixed", "unreachable")
+
+
+def _verdict_css() -> str:
+    """One class per verdict, both themes, added beside the shared stylesheet."""
+    light = "".join(
+        f"  .fig .v-{name} {{ stroke: {pair[0]}; }}\n" for name, pair in VERDICT_INK.items()
+    )
+    dark = "".join(
+        f"    .fig .v-{name} {{ stroke: {pair[1]}; }}\n" for name, pair in VERDICT_INK.items()
+    )
+    return f"{light}  @media (prefers-color-scheme: dark) {{\n{dark}  }}\n"
+
+
+def figure_room_left(data: Data) -> str:
+    """How much of the available range each instrument still uses.
+
+    Two panels asking one question. On the left the 23 rubric criteria, each a
+    strip from the worst model to the best: three sit pinned at the top because
+    every model already satisfies them, two at the bottom because nobody does
+    -- the therapist included, which is how a reader can tell it is the corpus
+    being measured and not the models. On the right the same reading of TRACE,
+    where the strip is all sixteen models at once and it is very short.
+
+    The same form twice, deliberately. The comparison is the figure.
+    """
+    saturation = data.saturation.get(JUDGE_A)
+    if not saturation:
+        return svg(400, 60, footnote("No saturation analysis published.", 0, 30), label="empty")
+
+    rows = []
+    for entry in saturation["criteria"]:
+        rates = [value for name, value in entry["by_system"].items() if name != "therapist"]
+        if rates:
+            rows.append(
+                {
+                    "text": entry["text"],
+                    "section": entry["section"],
+                    "verdict": entry["verdict"],
+                    "low": min(rates),
+                    "high": max(rates),
+                    "human": entry.get("human"),
+                }
+            )
+    # By state first, then by score inside it. The gap and the heading between
+    # runs are the second channel the palette needs: the verdict hues clear CVD
+    # separation at 6.7 on the tritan axis in dark mode, which is inside the
+    # band that is only legal with one.
+    order = {name: index for index, name in enumerate(VERDICT_ORDER)}
+    rows.sort(
+        key=lambda item: (order.get(item["verdict"], 99), -item["high"], -item["low"], item["text"])
+    )
+
+    row_h, top = 20, 136
+    left, plot_w = 236, 344
+    gap, right_w = 54, 232
+    width = left + plot_w + gap + right_w + 82
+    groups = len({row["verdict"] for row in rows})
+    height = top + len(rows) * row_h + max(0, groups - 1) * 24 + 118
+    right_x = left + plot_w + gap
+
+    def px(value: float) -> float:
+        return left + value * plot_w
+
+    ticks = []
+    for step in range(6):
+        value = step / 5
+        ticks.append(
+            f'<line class="rule" x1="{px(value):.1f}" y1="{top - 10}" '
+            f'x2="{px(value):.1f}" y2="{height - 108}"/>'
+            f'<text class="value" x="{px(value):.1f}" y="{top - 18}" '
+            f'text-anchor="middle">{value:.1f}</text>'
+        )
+
+    #: Extra height before the first strip of each run, for the heading.
+    GROUP_GAP = 24
+
+    offsets, seen, extra = [], None, 0
+    for row in rows:
+        if row["verdict"] != seen:
+            extra += GROUP_GAP if seen is not None else 0
+            seen = row["verdict"]
+        offsets.append(extra)
+
+    strips, seen = [], None
+    for index, row in enumerate(rows):
+        y = top + index * row_h + offsets[index] + row_h / 2
+        if row["verdict"] != seen:
+            seen = row["verdict"]
+            strips.append(
+                f'<text class="value" x="{left - 12}" y="{y - row_h:.1f}" '
+                f'text-anchor="end" style="font-weight:650">'
+                f"{esc(VERDICT_INK[row['verdict']][2])}</text>"
+                f'<line class="rule" x1="{left - 4}" y1="{y - row_h - 4:.1f}" '
+                f'x2="{left + plot_w}" y2="{y - row_h - 4:.1f}"/>'
+            )
+        x0, x1 = px(row["low"]), px(row["high"])
+        shown = "not rated" if row["human"] is None else f"{row['human']:.2f}"
+        human = ""
+        if row["human"] is not None:
+            hx = px(row["human"])
+            human = (
+                f'<line class="flat" x1="{hx:.1f}" y1="{y - 5:.1f}" x2="{hx:.1f}" '
+                f'y2="{y + 5:.1f}" stroke-width="2"/>'
+            )
+        strips.append(
+            f"<g><title>{esc(row['text'])} ({esc(row['section'])}): models "
+            f"{row['low']:.2f} to {row['high']:.2f}, therapist {shown} "
+            f"&mdash; {esc(VERDICT_INK[row['verdict']][2])}</title>"
+            f'<line class="v-{row["verdict"]}" x1="{x0:.1f}" y1="{y:.1f}" '
+            f'x2="{max(x1, x0 + 3):.1f}" y2="{y:.1f}" stroke-width="6" '
+            f'stroke-linecap="round" stroke-opacity="0.9"/>'
+            f"{human}"
+            f'<text class="name" x="{left - 12}" y="{y + 4:.1f}" text-anchor="end">'
+            f'{esc(row["text"])}<tspan class="value" dx="6">{esc(row["section"])}</tspan>'
+            "</text></g>"
+        )
+
+    counts = saturation.get("verdict_counts") or {}
+    legend = []
+    offset = 0
+    for name in VERDICT_ORDER:
+        if not counts.get(name):
+            continue
+        lx = left + offset * 122
+        offset += 1
+        legend.append(
+            f'<line class="v-{name}" x1="{lx}" y1="{top - 46}" x2="{lx + 22}" y2="{top - 46}" '
+            f'stroke-width="6" stroke-linecap="round"/>'
+            f'<text class="value" x="{lx + 30}" y="{top - 42}">'
+            f"{counts[name]} {esc(VERDICT_INK[name][2])}</text>"
+        )
+
+    trace_rows = []
+    for judge in (JUDGE_A, JUDGE_B):
+        table = data.tables.get(("icare", judge))
+        if not table:
+            continue
+        values = [
+            row["headline"]["trace"]
+            for row in table["rows"]
+            if row["headline"].get("trace") is not None
+        ]
+        if values:
+            trace_rows.append((judge, min(values), max(values), len(values)))
+
+    def tx(value: float) -> float:
+        return right_x + (value - 1) / 4 * right_w
+
+    trace = []
+    for step in range(5):
+        value = 1 + step
+        trace.append(
+            f'<line class="rule" x1="{tx(value):.1f}" y1="{top - 10}" '
+            f'x2="{tx(value):.1f}" y2="{top + len(trace_rows) * 38 + 8}"/>'
+            f'<text class="value" x="{tx(value):.1f}" y="{top - 18}" '
+            f'text-anchor="middle">{value}</text>'
+        )
+    for index, entry in enumerate(trace_rows):
+        judge, low, high, count = entry
+        y = top + index * 38 + 24
+        klass = "a" if index == 0 else "b"
+        label = "A" if index == 0 else "B"
+        trace.append(
+            f"<g><title>{esc(judge)}: all {count} models between {low:.2f} and "
+            f"{high:.2f}</title>"
+            f'<line class="{klass}" x1="{tx(low):.1f}" y1="{y:.1f}" '
+            f'x2="{max(tx(high), tx(low) + 3):.1f}" y2="{y:.1f}" stroke-width="6" '
+            f'stroke-linecap="round"/>'
+            f'<text class="value" x="{right_x}" y="{y - 12:.1f}">judge {label} '
+            f"&middot; all {count} models</text>"
+            f'<text class="value" x="{tx(high) + 10:.1f}" y="{y + 4:.1f}">'
+            f"{(high - low) / 4:.0%} of the scale</text></g>"
+        )
+
+    body = (
+        f"<style>{_verdict_css()}</style>\n"
+        + heading(
+            "The rubric still has room. TRACE has very little.",
+            "How much of each measure's range the models actually occupy. Left: one strip "
+            "per rubric criterion, worst model to best. Right: the same reading of TRACE, "
+            "where one strip is every model at once.",
+            width_px=width,
+        )
+        + f'\n<line class="rule" x1="0" y1="{top - 64}" x2="{width}" y2="{top - 64}"/>\n'
+        + "".join(legend)
+        + f'<text class="value" x="{right_x}" y="{top - 42}">TRACE, rated 1 to 5</text>\n'
+        + "".join(ticks)
+        + "\n"
+        + "\n".join(strips)
+        + "\n"
+        + "".join(trace)
+        + "\n"
+        + footnote(
+            "The grey tick on each strip is the therapist. Where she sits inside a strip, the "
+            "criterion measures something models and people both do; where a strip is pinned "
+            "at either end and she is pinned with it, it is measuring the corpus rather than "
+            "the model. Completeness is a fraction of the conversations; TRACE is a 1-to-5 "
+            "rating with no human anchor at all.",
+            0,
+            height - 74,
+            width_px=width,
+        )
+        + "\n"
+        + footnote(
+            f"Source: docs/saturation-{JUDGE_A}.json and docs/leaderboard.json, harness 0.2.0.",
+            0,
+            height - 20,
+            width_px=width,
+        )
+    )
+    return svg(width, height, body, label="How much range each measure still uses")
+
+
 FIGURES = {
     "positions.svg": figure_positions,
     "coverage-against-invention.svg": figure_coverage_against_invention,
     "temporal.svg": figure_temporal,
     "what-the-rubric-rewards.svg": figure_what_the_rubric_rewards,
+    "room-left.svg": figure_room_left,
 }
 
 

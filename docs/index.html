@@ -230,6 +230,15 @@ p.settings { margin-top: .2rem; }
   .pick button .scale { margin: .1rem 0 0; font-weight: 400; }
   .pick button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
+  /* A generated figure inside a panel. It scrolls rather than shrinking: the
+     labels are 12px and a 940px drawing squeezed into a phone renders them at
+     about five. */
+  figure.wide { margin: .9rem 0 1.2rem; }
+  figure.wide svg { display: block; max-width: 100%; height: auto; }
+  figure.wide figcaption {
+    font-size: .82rem; color: var(--muted); margin-top: .4rem; max-width: 68ch;
+  }
+
   /* One section per track inside a panel that has a single heading. */
   .track-head {
     margin: 1.6rem 0 .4rem; font-size: 1rem; font-weight: 600; color: var(--muted);

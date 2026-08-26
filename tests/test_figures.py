@@ -222,13 +222,30 @@ def test_the_briefing_headline_matches_the_bootstrap(data, brief_html):
     assert f"in {agree} of {separable} pairs" in brief_html
 
 
-def test_every_figure_is_in_the_briefing(brief_html):
-    """Inlined, not linked: a `<img src>` would leave the PDF depending on four
-    files beside it."""
-    for name in figures.FIGURES:
-        assert name.removesuffix(".svg") in brief_html or "<svg" in brief_html
-    assert brief_html.count("<svg") == len(figures.FIGURES)
+def test_the_briefing_inlines_the_figures_it_uses(brief_html):
+    """Inlined, not linked: an `<img src>` would leave the PDF depending on
+    four files beside it.
+
+    Four of the five. `room-left.svg` is on the methods page, beside the
+    saturation panel whose analysis it draws.
+    """
+    brief = pytest.importorskip("brief")
+
+    assert brief.BRIEF_FIGURES, "the document names the figures it uses"
+    assert set(brief.BRIEF_FIGURES) <= set(figures.FIGURES), "and each one is generated"
+    assert brief_html.count("<svg") == len(brief.BRIEF_FIGURES)
     assert "Figure missing" not in brief_html
+
+
+def test_a_figure_the_briefing_does_not_use_is_on_a_page():
+    """Otherwise it is a file nobody sees."""
+    from tnb import report
+
+    brief = pytest.importorskip("brief")
+    unused = set(figures.FIGURES) - set(brief.BRIEF_FIGURES)
+    assert unused == set(report.FIGURE_MARKERS.values()), (
+        "every generated figure is either in the briefing or inlined into a page"
+    )
 
 
 def test_the_briefing_has_no_unrendered_placeholder(brief_html):
@@ -291,3 +308,56 @@ def test_the_briefing_reports_saturation_from_the_published_analysis(brief_html,
     # fails and the paragraph gets rewritten instead of quietly going wrong.
     for low, high in trace.values():
         assert (high - low) / 4 < 0.25, "TRACE has more room than the paragraph says"
+
+
+# --- the anti-pattern catalogue, as far as it can be checked -----------------
+
+
+def _body(svg: str) -> str:
+    """The drawing without its stylesheet.
+
+    Checking the whole file matches every class the stylesheet *defines*, which
+    is how a check for "two inks and no legend" flagged a single-series chart.
+    """
+    return svg.split("</style>")[-1]
+
+
+def test_no_marker_is_below_the_accessible_size(drawn):
+    """8px across is the floor. The slopegraph's endpoints were 7."""
+    for name, svg in drawn.items():
+        radii = [float(r) for r in re.findall(r'<circle[^>]*r="([\d.]+)"', _body(svg))]
+        assert all(r * 2 >= 8 for r in radii), f"{name} has a marker under 8px across"
+
+
+def test_a_figure_with_two_inks_names_them(drawn):
+    """A legend, or a direct label on each. Colour is never the only channel."""
+    naming = ("judge A", "looks back", "separates models", "therapist", "2025 model")
+    for name, svg in drawn.items():
+        body = _body(svg)
+        inks = {token for token in ("fill-a", "fill-b", "fill-flat", "v-") if token in body}
+        if len(inks) > 1:
+            assert any(word in body for word in naming), f"{name} has {inks} and names none"
+
+
+def test_gridlines_are_solid(drawn):
+    """Dashing reads as a threshold or a projection when it is just a grid."""
+    for name, svg in drawn.items():
+        assert not re.search(r'class="rule"[^>]*stroke-dasharray', _body(svg)), (
+            f"{name} has a dashed gridline"
+        )
+
+
+def test_the_saturation_figure_groups_by_verdict(drawn, data):
+    """Its palette clears CVD separation at 6.7 on the tritan axis in dark mode,
+    which the skill allows only with a second channel.
+
+    The groups supply two of the ones it names — a gap and a direct label —
+    and reading by state is what the figure is about anyway.
+    """
+    svg = drawn["room-left.svg"]
+    counts = data.saturation[figures.JUDGE_A]["verdict_counts"]
+
+    for verdict, count in counts.items():
+        if count:
+            word = figures.VERDICT_INK[verdict][2]
+            assert svg.count(word) >= 2, f"{verdict} is not named as a group and in the legend"

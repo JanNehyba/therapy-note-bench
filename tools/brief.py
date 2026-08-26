@@ -35,6 +35,16 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from figures import JUDGE_A, JUDGE_B, Data, agreeing_pairs, esc  # noqa: E402
 
+#: The figures this document inlines, in the order it uses them. Not all of
+#: them: `room-left.svg` belongs beside the saturation panel on the methods
+#: page, where the analysis it draws already lives.
+BRIEF_FIGURES = (
+    "positions.svg",
+    "temporal.svg",
+    "what-the-rubric-rewards.svg",
+    "coverage-against-invention.svg",
+)
+
 SITE = "https://jannehyba.github.io/therapy-note-bench/"
 SOURCE = "https://github.com/JanNehyba/therapy-note-bench"
 

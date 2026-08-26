@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" width="948" height="786" viewBox="0 0 948 786" role="img" aria-label="How much range each measure still uses">
+<style>
+  .fig { font: 13px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  .fig text { fill: #1a1a19; }
+  .fig .muted { fill: #6b6b66; }
+  .fig .rule { stroke: #e2e2dd; stroke-width: 1; }
+  .fig .title { font-size: 17px; font-weight: 650; letter-spacing: -.01em; }
+  .fig .sub { font-size: 13px; fill: #6b6b66; }
+  .fig .note { font-size: 11.5px; fill: #6b6b66; }
+  .fig .name { font-size: 12px; }
+  .fig .value { font-size: 11.5px; fill: #6b6b66; font-variant-numeric: tabular-nums; }
+  .fig .a { stroke: #00806a; }
+  .fig .b { stroke: #c05a10; }
+  .fig .fill-a { fill: #00806a; }
+  .fig .fill-b { fill: #c05a10; }
+  .fig .flat { stroke: #b8b8b1; }
+  .fig .fill-flat { fill: #b8b8b1; }
+  .fig .band { fill: #f0f0eb; }
+  /* The ring that keeps overlapping marks apart is the *surface*, so it has to
+     flip with the theme. Written as a literal it put a white halo on every dot
+     in dark mode. */
+  .fig .ring { stroke: #fcfcfb; }
+  @media (prefers-color-scheme: dark) {
+    .fig text { fill: #e8e8e4; }
+    .fig .muted, .fig .sub, .fig .note, .fig .value { fill: #9a9a94; }
+    .fig .rule { stroke: #2c2e31; }
+    .fig .a { stroke: #22a184; }
+    .fig .b { stroke: #c9701f; }
+    .fig .fill-a { fill: #22a184; }
+    .fig .fill-b { fill: #c9701f; }
+    .fig .flat { stroke: #55554f; }
+    .fig .fill-flat { fill: #55554f; }
+    .fig .band { fill: #26282b; }
+    .fig .ring { stroke: #1a1a19; }
+  }
+</style>
+<style>  .fig .v-discriminating { stroke: #00806a; }
+  .fig .v-saturated { stroke: #c05a10; }
+  .fig .v-unreachable { stroke: #4a4fb8; }
+  .fig .v-mixed { stroke: #7d8a85; }
+  @media (prefers-color-scheme: dark) {
+    .fig .v-discriminating { stroke: #22a184; }
+    .fig .v-saturated { stroke: #c9701f; }
+    .fig .v-unreachable { stroke: #7c80e0; }
+    .fig .v-mixed { stroke: #7d8a85; }
+  }
+</style>
+<text class="title" x="0" y="22">The rubric still has room. TRACE has very little.</text><text class="sub" x="0" y="43">How much of each measure's range the models actually occupy. Left: one strip per rubric criterion, worst model to best. Right: the same reading of</text><text class="sub" x="0" y="60">TRACE, where one strip is every model at once.</text>
+<line class="rule" x1="0" y1="72" x2="948" y2="72"/>
+<line class="v-saturated" x1="236" y1="90" x2="258" y2="90" stroke-width="6" stroke-linecap="round"/><text class="value" x="266" y="94">3 every model does it</text><line class="v-discriminating" x1="358" y1="90" x2="380" y2="90" stroke-width="6" stroke-linecap="round"/><text class="value" x="388" y="94">13 separates models</text><line class="v-mixed" x1="480" y1="90" x2="502" y2="90" stroke-width="6" stroke-linecap="round"/><text class="value" x="510" y="94">5 partly</text><line class="v-unreachable" x1="602" y1="90" x2="624" y2="90" stroke-width="6" stroke-linecap="round"/><text class="value" x="632" y="94">2 nobody does it</text><text class="value" x="634" y="94">TRACE, rated 1 to 5</text>
+<line class="rule" x1="236.0" y1="126" x2="236.0" y2="678"/><text class="value" x="236.0" y="118" text-anchor="middle">0.0</text><line class="rule" x1="304.8" y1="126" x2="304.8" y2="678"/><text class="value" x="304.8" y="118" text-anchor="middle">0.2</text><line class="rule" x1="373.6" y1="126" x2="373.6" y2="678"/><text class="value" x="373.6" y="118" text-anchor="middle">0.4</text><line class="rule" x1="442.4" y1="126" x2="442.4" y2="678"/><text class="value" x="442.4" y="118" text-anchor="middle">0.6</text><line class="rule" x1="511.2" y1="126" x2="511.2" y2="678"/><text class="value" x="511.2" y="118" text-anchor="middle">0.8</text><line class="rule" x1="580.0" y1="126" x2="580.0" y2="678"/><text class="value" x="580.0" y="118" text-anchor="middle">1.0</text>
+<text class="value" x="224" y="126.0" text-anchor="end" style="font-weight:650">every model does it</text><line class="rule" x1="232" y1="122.0" x2="580" y2="122.0"/>
+<g><title>Analysis (assessment): models 1.00 to 1.00, therapist 0.78 &mdash; every model does it</title><line class="v-saturated" x1="580.0" y1="146.0" x2="583.0" y2="146.0" stroke-width="6" stroke-linecap="round" stroke-opacity="0.9"/><line class="flat" x1="504.3" y1="141.0" x2="504.3" y2="151.0" stroke-width="2"/><text class="name" x="224" y="150.0" text-anchor="end">Analysis<tspan class="value" dx="6">assessment</tspan></text></g>
+<g><title>Client’s observed behavior (objective): models 0.94 to 1.00, therapist 0.44 &mdash; every model does it</title><line class="v-saturated" x1="559.4" y1="166.0" x2="580.0" y2="166.0" stroke-width="6" stroke-linecap="round" stroke-opacity="0.9"/><line class="flat" x1="387.4" y1="161.0" x2="387.4" y2="171.0" stroke-width="2"/><text class="name" x="224" y="170.0" text-anchor="end">Client’s observed behavior<tspan class="value" dx="6">objective</tspan></text></g>
+<g><title>Future Interventions (plan): models 0.92 to 1.00, therapist 0.36 &mdash; every model does it</title><line class="v-saturated" x1="552.5" y1="186.0" x2="580.0" y2="186.0" stroke-width="6" stroke-linecap="round" stroke-opacity="0.9"/><line class="flat" x1="359.8" y1="181.0" x2="359.8" y2="191.0" stroke-width="2"/><text class="name" x="224" y="190.0" text-anchor="end">Future Interventions<tspan class="value" dx="6">plan</tspan></text></g>
+<text class="value" x="224" y="210.0" text-anchor="end" style="font-weight:650">separates models</text><line class="rule" x1="232" y1="206.0" x2="580" y2="206.0"/>
+<g><title>Mental Status (objective): models 0.65 to 1.00, therapist 0.26 &mdash; separates models</title><line class="v-discriminating" x1="460.6" y1="230.0" x2="580.0" y2="230.0" stroke-width="6" stroke-linecap="round" stroke-opacity="0.9"/><line class="flat" x1="325.4" y1="225.0" x2="325.4" y2="235.0" stroke-width="2"/><text class="name" x="224" y="234.0" text-anchor="end">Mental Status<tspan class="value" dx="6">objective</tspan></text></g>
+<g><title>Quotes (subjective): models 0.12 to 1.00, therapist 0.24 &mdash; separates models</title><line class="v-discriminating" x1="277.3" y1="250.0" x2="580.0" y2="250.0" stroke-width="6" stroke-linecap="round" stroke-opacity="0.9"/><line class="flat" x1="318.6" y1="245.0" x2="318.6" y2="255.0" stroke-width="2"/><text class="name" x="224" y="254.0" text-anchor="end">Quotes<tspan class="value" dx="6">subjective</tspan></text></g>
+<g><title>History (subjective): models 0.48 to 0.76, therapist 0.56 &mdash; separates models</title><line class="v-discriminating" x1="401.1" y1="270.0" x2="497.4" y2="270.0" stroke-width="6" stroke-linecap="round" stroke-opacity="0.9"/><line class="flat" x1="428.6" y1="265.0" x2="428.6" y2="275.0" stroke-width="2"/><text class="name" x="224" y="274.0" text-anchor="end">History<tspan class="value" dx="6">subjective</tspan></text></g>
+<g><title>Therapy Activities (objective): models 0.00 to 0.76, therapist 0.24 &mdash; separates models</title><line class="v-discriminating" x1="236.0" y1="290.0" x2="497.4" y2="290.0" stroke-width="6" stroke-linecap="round" stroke-opacity="0.9"/><line class="flat" x1="318.6" y1="285.0" x2="318.6" y2="295.0" stroke-width="2"/><text class="name" x="224" y="294.0" text-anchor="end">Therapy Activities<tspan class="value" dx="6">objective</tspan></text></g>
+<g><title>Follow-Up (plan): models 0.20 to 0.71, therapist 0.40 &mdash; separates models</title><line class="v-discriminating" x1="304.8" y1="310.0" x2="481.6" y2="310.0" stroke-width="6" stroke-linecap="round" stroke-opacity="0.9"/><line class="flat" x1="373.6" y1="305.0" x2="373.6" y2="315.0" stroke-width="2"/><text class="name" x="224" y="314.0" text-anchor="end">Follow-Up<tspan class="value" dx="6">plan</tspan></text></g>
+<g><title>Identifying Triggers (assessment): models 0.32 to 0.62, therapist 0.18 &mdash; separates models</title><line class="v-discriminating" x1="346.1" y1="330.0" x2="449.3" y2="330.0" stroke-width="6" stroke-linecap="round" stroke-opacity="0.9"/><line class="flat" x1="297.9" y1="325.0" x2="297.9" y2="335.0" stroke-width="2"/><text class="name" x="224" y="334.0" text-anchor="end">Identifying Triggers<tspan class="value" dx="6">assessment</tspan></text></g>
+<g><title>Overall/high-level progress (assessment): models 0.16 to 0.62, therapist 0.30 &mdash; separates models</title><line class="v-discriminating" x1="291.0" y1="350.0" x2="449.3" y2="350.0" stroke-width="6" stroke-linecap="round" stroke-opacity="0.9"/><line class="flat" x1="339.2" y1="345.0" x2="339.2" y2="355.0" stroke-width="2"/><text class="name" x="224" y="354.0" text-anchor="end">Overall/high-level progress<tspan class="value" dx="6">assessment</tspan></text></g>
+<g><title>Homework (plan): models 0.30 to 0.60, therapist 0.36 &mdash; separates models</title><line class="v-discriminating" x1="339.2" y1="370.0" x2="442.4" y2="370.0" stroke-width="6" stroke-linecap="round" stroke-opacity="0.9"/><line class="flat" x1="359.8" y1="365.0" x2="359.8" y2="375.0" stroke-width="2"/><text class="name" x="224" y="374.0" text-anchor="end">Homework<tspan class="value" dx="6">plan</tspan></text></g>
+<g><title>Progress (assessment): models 0.16 to 0.58, therapist 0.56 &mdash; separates models</title><line class="v-discriminating" x1="291.0" y1="390.0" x2="435.5" y2="390.0" stroke-width="6" stroke-linecap="round" stroke-opacity="0.9"/><line class="flat" x1="428.6" y1="385.0" x2="428.6" y2="395.0" stroke-width="2"/><text class="name" x="224" y="394.0" text-anchor="end">Progress<tspan class="value" dx="6">assessment</tspan></text></g>
+<g><title>Stages of change (assessment): models 0.10 to 0.52, therapist 0.48 &mdash; separates models</title><line class="v-discriminating" x1="270.4" y1="410.0" x2="414.9" y2="410.0" stroke-width="6" stroke-linecap="round" stroke-opacity="0.9"/><line class="flat" x1="401.1" y1="405.0" x2="401.1" y2="415.0" stroke-width="2"/><text class="name" x="224" y="414.0" text-anchor="end">Stages of change<tspan class="value" dx="6">assessment</tspan></text></g>
+<g><title>Response to interventions (assessment): models 0.10 to 0.48, therapist 0.44 &mdash; separates models</title><line class="v-discriminating" x1="270.4" y1="430.0" x2="401.1" y2="430.0" stroke-width="6" stroke-linecap="round" stroke-opacity="0.9"/><line class="flat" x1="387.4" y1="425.0" x2="387.4" y2="435.0" stroke-width="2"/><text class="name" x="224" y="434.0" text-anchor="end">Response to interventions<tspan class="value" dx="6">assessment</tspan></text></g>
+<g><title>Interventions (objective): models 0.00 to 0.46, therapist 0.20 &mdash; separates models</title><line class="v-discriminating" x1="236.0" y1="450.0" x2="394.2" y2="450.0" stroke-width="6" stroke-linecap="round" stroke-opacity="0.9"/><line class="flat" x1="304.8" y1="445.0" x2="304.8" y2="455.0" stroke-width="2"/><text class="name" x="224" y="454.0" text-anchor="end">Interventions<tspan class="value" dx="6">objective</tspan></text></g>
+<g><title>Diagnosis/Symptoms (assessment): models 0.04 to 0.41, therapist 0.06 &mdash; separates models</title><line class="v-discriminating" x1="249.8" y1="470.0" x2="375.3" y2="470.0" stroke-width="6" stroke-linecap="round" stroke-opacity="0.9"/><line class="flat" x1="257.0" y1="465.0" x2="257.0" y2="475.0" stroke-width="2"/><text class="name" x="224" y="474.0" text-anchor="end">Diagnosis/Symptoms<tspan class="value" dx="6">assessment</tspan></text></g>
+<text class="value" x="224" y="494.0" text-anchor="end" style="font-weight:650">partly</text><line class="rule" x1="232" y1="490.0" x2="580" y2="490.0"/>
+<g><title>Symptoms (subjective): models 0.88 to 0.98, therapist 0.51 &mdash; partly</title><line class="v-mixed" x1="538.7" y1="514.0" x2="573.1" y2="514.0" stroke-width="6" stroke-linecap="round" stroke-opacity="0.9"/><line class="flat" x1="411.4" y1="509.0" x2="411.4" y2="519.0" stroke-width="2"/><text class="name" x="224" y="518.0" text-anchor="end">Symptoms<tspan class="value" dx="6">subjective</tspan></text></g>
+<g><title>Chief complaint (subjective): models 0.64 to 0.82, therapist 0.76 &mdash; partly</title><line class="v-mixed" x1="456.2" y1="534.0" x2="518.1" y2="534.0" stroke-width="6" stroke-linecap="round" stroke-opacity="0.9"/><line class="flat" x1="497.4" y1="529.0" x2="497.4" y2="539.0" stroke-width="2"/><text class="name" x="224" y="538.0" text-anchor="end">Chief complaint<tspan class="value" dx="6">subjective</tspan></text></g>
+<g><title>Client's Goals (subjective): models 0.48 to 0.68, therapist 0.36 &mdash; partly</title><line class="v-mixed" x1="401.1" y1="554.0" x2="469.9" y2="554.0" stroke-width="6" stroke-linecap="round" stroke-opacity="0.9"/><line class="flat" x1="359.8" y1="549.0" x2="359.8" y2="559.0" stroke-width="2"/><text class="name" x="224" y="558.0" text-anchor="end">Client's Goals<tspan class="value" dx="6">subjective</tspan></text></g>
+<g><title>Adjustment of medication/intervention (plan): models 0.02 to 0.16, therapist 0.06 &mdash; partly</title><line class="v-mixed" x1="242.9" y1="574.0" x2="291.0" y2="574.0" stroke-width="6" stroke-linecap="round" stroke-opacity="0.9"/><line class="flat" x1="256.6" y1="569.0" x2="256.6" y2="579.0" stroke-width="2"/><text class="name" x="224" y="578.0" text-anchor="end">Adjustment of medication/intervention<tspan class="value" dx="6">plan</tspan></text></g>
+<g><title>Assessment Tools (objective): models 0.00 to 0.12, therapist 0.08 &mdash; partly</title><line class="v-mixed" x1="236.0" y1="594.0" x2="277.3" y2="594.0" stroke-width="6" stroke-linecap="round" stroke-opacity="0.9"/><line class="flat" x1="263.5" y1="589.0" x2="263.5" y2="599.0" stroke-width="2"/><text class="name" x="224" y="598.0" text-anchor="end">Assessment Tools<tspan class="value" dx="6">objective</tspan></text></g>
+<text class="value" x="224" y="618.0" text-anchor="end" style="font-weight:650">nobody does it</text><line class="rule" x1="232" y1="614.0" x2="580" y2="614.0"/>
+<g><title>Homework from previous sessions (subjective): models 0.00 to 0.08, therapist 0.04 &mdash; nobody does it</title><line class="v-unreachable" x1="236.0" y1="638.0" x2="263.5" y2="638.0" stroke-width="6" stroke-linecap="round" stroke-opacity="0.9"/><line class="flat" x1="249.8" y1="633.0" x2="249.8" y2="643.0" stroke-width="2"/><text class="name" x="224" y="642.0" text-anchor="end">Homework from previous sessions<tspan class="value" dx="6">subjective</tspan></text></g>
+<g><title>Treatment Goals (assessment): models 0.00 to 0.04, therapist 0.02 &mdash; nobody does it</title><line class="v-unreachable" x1="236.0" y1="658.0" x2="249.8" y2="658.0" stroke-width="6" stroke-linecap="round" stroke-opacity="0.9"/><line class="flat" x1="242.9" y1="653.0" x2="242.9" y2="663.0" stroke-width="2"/><text class="name" x="224" y="662.0" text-anchor="end">Treatment Goals<tspan class="value" dx="6">assessment</tspan></text></g>
+<line class="rule" x1="634.0" y1="126" x2="634.0" y2="220"/><text class="value" x="634.0" y="118" text-anchor="middle">1</text><line class="rule" x1="692.0" y1="126" x2="692.0" y2="220"/><text class="value" x="692.0" y="118" text-anchor="middle">2</text><line class="rule" x1="750.0" y1="126" x2="750.0" y2="220"/><text class="value" x="750.0" y="118" text-anchor="middle">3</text><line class="rule" x1="808.0" y1="126" x2="808.0" y2="220"/><text class="value" x="808.0" y="118" text-anchor="middle">4</text><line class="rule" x1="866.0" y1="126" x2="866.0" y2="220"/><text class="value" x="866.0" y="118" text-anchor="middle">5</text><g><title>gemini-3.1-pro-preview: all 16 models between 4.76 and 4.99</title><line class="a" x1="852.1" y1="160.0" x2="865.1" y2="160.0" stroke-width="6" stroke-linecap="round"/><text class="value" x="634" y="148.0">judge A &middot; all 16 models</text><text class="value" x="875.1" y="164.0">6% of the scale</text></g><g><title>gpt-5.6-terra: all 16 models between 3.58 and 4.11</title><line class="b" x1="783.6" y1="198.0" x2="814.4" y2="198.0" stroke-width="6" stroke-linecap="round"/><text class="value" x="634" y="186.0">judge B &middot; all 16 models</text><text class="value" x="824.4" y="202.0">13% of the scale</text></g>
+<text class="note" x="0" y="712">The grey tick on each strip is the therapist. Where she sits inside a strip, the criterion measures something models and people both do; where a strip is pinned at</text>
+<text class="note" x="0" y="727">either end and she is pinned with it, it is measuring the corpus rather than the model. Completeness is a fraction of the conversations; TRACE is a 1-to-5 rating</text>
+<text class="note" x="0" y="742">with no human anchor at all.</text>
+<text class="note" x="0" y="766">Source: docs/saturation-gemini-3.1-pro-preview.json and docs/leaderboard.json, harness 0.2.0.</text>
+</svg>

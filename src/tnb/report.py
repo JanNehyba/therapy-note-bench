@@ -1308,7 +1308,13 @@ def render_methods(data: dict) -> str:
     describe a run the leaderboard is not showing, and the whole reason this
     page exists is to be checkable against the tables beside it.
     """
-    return METHODS_TEMPLATE.replace("__DATA__", _inline(data))
+    page = METHODS_TEMPLATE
+    # Read here rather than at import: `tools/figures.py` may run after this
+    # module was imported, and the page should pick up the newer drawing.
+    for marker, name in FIGURE_MARKERS.items():
+        if marker in page:
+            page = page.replace(marker, _figure(name))
+    return page.replace("__DATA__", _inline(data))
 
 
 TEMPLATE_DIR = Path(__file__).parent / "templates"
@@ -1325,6 +1331,26 @@ PARTIALS = {
     "__STYLE__": "_style.html",
     "__HELPERS__": "_helpers.html",
 }
+
+
+#: Figures the pages inline, by marker. Written by `tools/figures.py`, which is
+#: not part of this package -- so a page that wants one gets it when it exists
+#: and nothing when it does not, the same contract `load_calibration` has.
+#:
+#: Inlined rather than linked: the pages are single files that open from
+#: anywhere, and an `<img src>` would end that. Substituted here rather than
+#: carried in the payload, because the payload is also `docs/leaderboard.json`
+#: and a mirror API has no business holding a drawing.
+FIGURE_MARKERS = {"__FIGURE_ROOM_LEFT__": "room-left.svg"}
+
+
+def _figure(name: str) -> str:
+    """One published figure, or nothing at all."""
+    path = DOCS_DIR / "figures" / name
+    if not path.exists():
+        return ""
+    svg = path.read_text(encoding="utf-8")
+    return svg[svg.index("<svg") :]
 
 
 def _assemble(name: str) -> str:
