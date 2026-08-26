@@ -227,3 +227,42 @@ def test_the_ranking_column_says_what_it_cannot_see():
             f"{track} is ordered by {measure} and its caveat does not say what "
             f"the ordering cannot see"
         )
+
+
+def test_the_reference_models_beat_the_therapist_where_the_docs_say_they_do():
+    """`docs/limitations.md` makes a claim about published rows, so it is
+    checkable, so it is checked.
+
+    An earlier version of that paragraph said the two 2025 models beat the
+    therapist on all three measures. They do on completeness and conciseness
+    under every judge; Llama 3.1 70B is *below* her on faithfulness under both
+    panel judges. The paragraph now says so, and this holds it to that.
+    """
+    from tnb import report, results
+
+    drawn = report.current_rows(results.latest(results.load()))
+    tables: dict[str, dict[str, dict]] = {}
+    for row in drawn:
+        if row.track != results.TRACK_TNEVAL or not row.judge_model:
+            continue
+        tables.setdefault(row.judge_model, {})[row.system_label or row.system_id] = (
+            row.metrics.headline
+        )
+
+    checked = 0
+    for systems in tables.values():
+        human = systems.get("therapist-written (TN-Eval)")
+        if not human:
+            continue  # a table without her makes no claim about her
+        for name in ("mistral-large-v2 (TN-Eval, 2025)", "llama-3.1-70b (TN-Eval, 2025)"):
+            model = systems.get(name)
+            if not model:
+                continue
+            checked += 1
+            for measure in ("completeness", "conciseness"):
+                assert model[measure] > human[measure], (
+                    f"{name} is not above the therapist on {measure}, which "
+                    f"docs/limitations.md says it is under every judge"
+                )
+
+    assert checked >= 4, "the corpus must actually contain the rows this checks"

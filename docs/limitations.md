@@ -257,10 +257,22 @@ discussed, which the experts filled in 37, 39 and 39 times out of 40.
 
 ## A rubric rewards coverage, not judgement
 
-The first scored run put both 2025 models **above** the therapist on rubric
-completeness — 0.45 and 0.41 against 0.34 — and above on conciseness and
-faithfulness too. TN-Eval reported the same direction from blinded expert
+Every judge that has scored this corpus puts both 2025 models **above** the
+therapist on rubric completeness, and above on conciseness — all three judges,
+no exception. TN-Eval reported the same direction from blinded expert
 comparison, so this is a reproduction, not an anomaly.
+
+**Faithfulness is the exception, and it is the informative one.** Llama 3.1
+70B scores *below* the therapist there under both panel judges and above her
+under the third. That is the measure with near-zero agreement between the two
+therapists who rated these notes, and it behaves like it: a column that
+reverses when the referee changes is not measuring what the other two are.
+
+The figures are in the tables rather than here. The three this paragraph used
+to quote came from a run that has since been withdrawn, so a reader could not
+have checked them against anything published — and the first attempt at
+replacing them claimed the pattern held on all three measures, which the check
+written to verify it disproved in one line.
 
 It does not mean a model writes a better clinical note than a therapist. It
 means a model is better at covering a checklist. A therapist writes what matters
