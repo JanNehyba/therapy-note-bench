@@ -289,7 +289,14 @@ class Completion:
     reasoning_chars: int = 0
     attempts: int = 1
     latency_s: float = 0.0
+    #: What this repository says went wrong. One of a closed set -- see
+    #: `http_reason` -- so that nothing a provider wrote can travel from here
+    #: into `results/rows.jsonl`, which is committed and published.
     error: str | None = None
+    #: What the provider actually said, kept for debugging. Written only into
+    #: the generation record under the gitignored `generations/`, never into a
+    #: row, a page or a log line.
+    error_body: str = ""
 
 
 def build_request(provider: Provider, model_id: str, prompt: str, budget: int) -> dict:
@@ -315,13 +322,53 @@ def build_request(provider: Provider, model_id: str, prompt: str, budget: int) -
     return body
 
 
-#: How much of a non-200 body is kept. A provider's error is the only place a
-#: cloud project id or a key hash can reach us, and `results.normalise_reason`
-#: masks it -- but this cut happens first, so the two have to be read together:
-#: it can only bisect a value straddling this character, and `normalise_reason`
-#: keeps fewer than this, so a bisected fragment never survives into `results/`.
-#: `tests/test_results` asserts the pair rather than the pair of numbers.
+#: How much of a non-200 body is kept **in the generation record**, which lives
+#: under the gitignored `generations/`. It no longer reaches `Completion.error`.
+#:
+#: An earlier version of this comment argued the cut was safe because
+#: `normalise_reason` masks secrets and keeps fewer characters than this, so a
+#: bisected secret could not survive. That reasoning was sound and it answered
+#: the wrong question. Masking is shaped for things that look like credentials;
+#: request *content* looks like prose, so nothing touched it. e-INFRA is
+#: LiteLLM-fronted and a 400 or 413 on an over-long prompt echoes the request,
+#: and three rows in the committed `results/rows.jsonl` carry a verbatim 429
+#: body to prove the path is live rather than theoretical.
+#:
+#: So the body is kept where it is useful and cannot travel, and `error` carries
+#: a phrase this repository wrote instead.
 ERROR_BODY_CHARS = 200
+
+#: What `error` says for a status code. A closed set, so `Completion.error` is
+#: always a value the harness chose and never one a provider sent.
+#:
+#: The `HTTP<code>` prefix is load-bearing and must survive any edit here:
+#: `results.INFRASTRUCTURE_ERRORS` matches on it to decide that a call failed
+#: before the model had any say, which is what stops a run charging the
+#: endpoint's refusal to the model as a failure.
+HTTP_PHRASES: dict[int, str] = {
+    400: "bad request",
+    401: "unauthorized",
+    403: "forbidden",
+    404: "model not found",
+    408: "gateway timeout",
+    409: "conflict",
+    413: "request too large",
+    422: "unprocessable request",
+    425: "too early",
+    429: "rate limited",
+    500: "backend error",
+    502: "backend error",
+    503: "backend error",
+    504: "backend error",
+}
+
+#: For a status nobody has seen yet. Still says nothing the provider wrote.
+UNKNOWN_HTTP_PHRASE = "refused"
+
+
+def http_reason(status: int) -> str:
+    """The one thing `error` may say about a non-200, whatever came back."""
+    return f"HTTP{status}: {HTTP_PHRASES.get(status, UNKNOWN_HTTP_PHRASE)}"
 
 
 def complete(
@@ -350,7 +397,8 @@ def complete(
             text="",
             ok=False,
             max_tokens=budget,
-            error=f"{type(error).__name__}: {error}",
+            error=type(error).__name__,
+            error_body=f"{type(error).__name__}: {error}"[:ERROR_BODY_CHARS],
             attempts=provider.generation.retries + 1,
             latency_s=time.monotonic() - started,
         )
@@ -362,7 +410,8 @@ def complete(
             text="",
             ok=False,
             max_tokens=budget,
-            error=f"HTTP{response.status_code}: {response.text[:ERROR_BODY_CHARS]}",
+            error=http_reason(response.status_code),
+            error_body=response.text[:ERROR_BODY_CHARS],
             latency_s=latency,
         )
 

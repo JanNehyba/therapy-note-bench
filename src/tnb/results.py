@@ -244,6 +244,11 @@ class Row:
             raise ValueError(
                 f"Unknown system_type {self.system_type!r}. Known: {', '.join(SYSTEM_TYPES)}."
             )
+        # Not a refusal, because `results/` is append-only and every historic
+        # row has to stay loadable. Repairing here instead means no renderer can
+        # reach the old text, whichever way a row was built.
+        object.__setattr__(self, "failure_reasons", canonical_reasons(self.failure_reasons))
+        object.__setattr__(self, "unreached_reasons", canonical_reasons(self.unreached_reasons))
 
     @property
     def effort(self) -> str:
@@ -395,57 +400,17 @@ def scored(rows: list[Row], **overrides) -> list[Row]:
 # --- coverage rows from the generation cache -------------------------------
 
 
-#: Long hex runs in a provider's error body -- e-INFRA's 429 quotes a hash of
-#: the API key that hit the limit. results/ is committed and published, so the
-#: reason is kept and the identifier is not.
-_SECRET_LOOKING = re.compile(r"[0-9a-f]{16,}", re.IGNORECASE)
-
-#: A cloud resource path names the project that owns it. Vertex is configured
-#: as a *generation* provider and its URL is built from `$VERTEX_PROJECT` at
-#: call time, so a 404 quotes the whole path back:
-#:
-#:     Publisher Model `projects/<the project>/locations/global/...` was not found.
-#:
-#: Nothing above catches that -- a project id is not hex, has no prefix and has
-#: no fixed length. Kept as defence in depth for a deployment whose project is
-#: not in *this* process's environment; the exact check is `_sensitive_values`.
-_RESOURCE_PATH = re.compile(r"\b(projects|organizations|folders|billingAccounts)/[^/\s\"'`)]+")
-
-
-def _sensitive_names() -> tuple[str, ...]:
-    """Environment variables whose value must never be published.
-
-    Read from `models.yaml` rather than listed here, for the reason the file
-    itself gives: adding a provider is advertised as a config change, so a
-    hand-kept list would leave the next provider's key outside the guard.
-    """
-    from tnb.config import load_policy
-
-    extra = ("VERTEX_PROJECT", "OPENAI_API_KEY", "GOOGLE_APPLICATION_CREDENTIALS")
-    try:
-        from_providers = {provider.token_env for provider in load_policy().providers}
-    except Exception:  # noqa: BLE001 -- a broken config must not disable the guard
-        from_providers = set()
-    return tuple(sorted(from_providers | set(extra)))
-
-
-def _sensitive_values() -> list[str]:
-    """Our own secrets, by value, longest first.
-
-    Masking by *shape* is a blocklist, and blocklists lose: the project id that
-    started this is not hex, not prefixed and not a fixed length. What can be
-    done exactly is recognise our own values, because we are the ones who set
-    them. Longest first so a value containing another is masked whole.
-
-    Read at call time, not at import: a test that sets an environment variable
-    expects the next call to honour it.
-    """
-    import os
-
-    found = {
-        value.strip() for name in _sensitive_names() if len(value := os.environ.get(name, "")) >= 6
-    }
-    return sorted(found, key=len, reverse=True)
+# Masking a provider's error by shape used to live here: a hex-run pattern for
+# the key hash e-INFRA quotes in a 429, a resource-path pattern for the project
+# id Vertex quotes in a 404, and an exact pass over our own configured values.
+#
+# All three are gone because none is reachable any more, and dead safety
+# machinery is worse than none -- it reads as a protection. A provider's body no
+# longer reaches `Completion.error` at all (see `openai_compatible.http_reason`),
+# so `normalise_reason` recognises a value this repository wrote rather than
+# sanitising one somebody else did. What those patterns bought for things shaped
+# like credentials now holds for every kind of content, including the prose they
+# were never shaped for.
 
 
 #: Errors that say nothing about the model, because the model never answered.
@@ -534,51 +499,117 @@ def is_the_models_fault(error: str | None) -> bool:
     return not is_infrastructure_failure(error) and not is_our_own_ceiling(error)
 
 
-def normalise_reason(error: str | None) -> str:
-    """Turn a provider's error into something safe and countable.
+#: The reasons that are neither an HTTP status nor a transport failure: things
+#: this harness decided about an answer it did get.
+#:
+#: `truncated at max_tokens=` keeps its number. The number is a budget we set,
+#: not anything a provider wrote, and `OUR_OWN_LIMITS` matches the prefix -- so
+#: dropping it would buy nothing and break `is_our_own_ceiling`.
+HARNESS_REASONS = (
+    "truncated at max_tokens",
+    "empty content",
+    "answer did not contain a SOAP dictionary",
+    "unreadable cache file",
+)
 
-    Raw bodies carry request ids, key hashes and resets timestamps, which makes
-    every failure look unique and puts identifiers in a public file. This keeps
-    the part that explains the failure and drops the part that identifies the
-    caller.
+#: What an unrecognised failure becomes. It does **not** contain the input:
+#: that is the whole difference between a vocabulary and a filter.
+UNRECOGNISED = "unrecognised failure"
 
-    Three passes, weakest last, because each catches what the others cannot:
+_HTTP_REASON = re.compile(r"^HTTP(\d{3})")
+_TRUNCATED = re.compile(r"^truncated at max_tokens=(\d+)$")
 
-    1. **Our own values, exactly.** Masking by shape is a blocklist and
-       blocklists lose. This one lost: a hex-run pattern was the only guard, and
-       a GCP project id is not hex, has no prefix and has no fixed length.
-       Vertex is a *generation* provider whose URL is built from
-       ``$VERTEX_PROJECT``, so its 404 quotes the whole resource path back, and
-       the path ran through `generation` into `results/rows.jsonl`, which is
-       committed, and on to the published page. Recognising our own values is
-       exact, because we are the ones who set them.
-    2. **Cloud resource paths**, for a deployment whose project is not in this
-       process's environment.
-    3. **Long hex runs** -- e-INFRA's 429 quotes a hash of the key that hit the
-       limit.
 
-    Masking happens before the length cut, so a secret can never be half-cut and
-    still recognisable.
+def reason_vocabulary() -> tuple[str, ...]:
+    """Every fixed reason a row may carry, for documentation and for tests.
 
-    There is an *earlier* cut, in the provider: a non-200 response is stored as
-    ``response.text[:200]``, before anything masks. It cannot defeat this, and
-    the arithmetic is worth writing down rather than re-deriving. That cut can
-    only bisect a value straddling character 200; this function keeps 120. A
-    fragment left at 200 is discarded at 120, so no half of anything survives
-    into ``results/``.
-
-    Every path a raw provider error can take was walked on 2026-08-26:
-    ``generations/`` and ``scores/`` hold it verbatim and both are gitignored;
-    `index_generations` and both scorers are the only readers, and each either
-    classifies it or brings it through here first.
+    Not the whole range: `HTTP<code>` and `truncated at max_tokens=<budget>`
+    carry a number this repository chose. `normalise_reason` is the authority --
+    a string it returns unchanged is in the vocabulary.
     """
-    text = (error or "unknown error").strip()
-    for value in _sensitive_values():
-        text = text.replace(value, "...")
-    text = _RESOURCE_PATH.sub(r"\1/...", text)
-    text = _SECRET_LOOKING.sub("...", text)
-    text = " ".join(text.split())
-    return text[:120]
+    from tnb.providers.openai_compatible import http_reason
+
+    return (
+        tuple(http_reason(status) for status in sorted(_HTTP_PHRASES()))
+        + _transport_errors()
+        + ("empty content", "answer did not contain a SOAP dictionary", "unreadable cache file")
+        + (UNRECOGNISED,)
+    )
+
+
+def _HTTP_PHRASES() -> dict:
+    from tnb.providers.openai_compatible import HTTP_PHRASES
+
+    return HTTP_PHRASES
+
+
+def normalise_reason(error: str | None) -> str:
+    """Map a failure onto the closed set of things a committed row may say.
+
+    An allow-list, not a scrubber, and the difference is the point. A scrubber
+    has to anticipate every bad shape; this has to recognise every good one, and
+    the good ones are finite because `openai_compatible.http_reason` made them
+    so. Anything unrecognised becomes `UNRECOGNISED` **without its input**, so
+    the range of this function is a compile-time constant.
+
+    Why it changed. The previous version masked three shapes -- our own secret
+    values, cloud resource paths, long hex runs -- and its docstring reasoned
+    carefully that a secret bisected by the provider's 200-character cut could
+    not survive the 120 kept here. That reasoning was correct and it answered
+    the wrong question. Masking is shaped for things that look like credentials.
+    Request *content* looks like prose, so none of the three passes touched it,
+    and three rows in the committed `results/rows.jsonl` carry a verbatim 429
+    body from e-INFRA to prove it. The Czech track reads real clinical sessions
+    and e-INFRA is LiteLLM-fronted, which echoes an over-long request back in
+    the body of its refusal.
+
+    It is also a repairer. `results/` is append-only, so rows already on disk
+    keep whatever they were written with; `Row.__post_init__` brings every one
+    of them through here on the way in, the same way `LEGACY_SYSTEM_TYPES`
+    translates an old system type rather than editing the file. Nothing that
+    renders a row can reach the old text.
+
+    Two prefixes are load-bearing and survive deliberately: `HTTP<code>`, which
+    `is_infrastructure_failure` reads to keep an endpoint's refusal from being
+    charged to the model, and `truncated at max_tokens`, which
+    `is_our_own_ceiling` reads for the same reason about our own budget.
+    """
+    text = " ".join((error or "").split())
+    if not text:
+        return UNRECOGNISED
+
+    status = _HTTP_REASON.match(text)
+    if status:
+        from tnb.providers.openai_compatible import http_reason
+
+        return http_reason(int(status.group(1)))
+
+    truncated = _TRUNCATED.match(text)
+    if truncated:
+        return f"truncated at max_tokens={truncated.group(1)}"
+
+    for reason in HARNESS_REASONS:
+        if text == reason or text.startswith(f"{reason}="):
+            return text if text == reason else UNRECOGNISED
+
+    for name in _transport_errors():
+        if text == name or text.startswith(f"{name}:"):
+            return name
+
+    return UNRECOGNISED
+
+
+def canonical_reasons(reasons: Mapping[str, int] | None) -> dict[str, int]:
+    """Every key through `normalise_reason`, with counts merged where two meet.
+
+    Two different 429 bodies are one reason once the body is gone, and their
+    counts have to add rather than one of them winning.
+    """
+    merged: dict[str, int] = {}
+    for reason, count in (reasons or {}).items():
+        key = normalise_reason(reason)
+        merged[key] = merged.get(key, 0) + int(count)
+    return merged
 
 
 def index_generations(cache_dir: Path | None = None, *, run_id: str = "") -> list[Row]:

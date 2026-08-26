@@ -262,7 +262,11 @@ def cmd_generate(args: argparse.Namespace) -> int:
             f"  [{done}/{pending_total}] {outcome.job.provider}/{outcome.job.model_id} "
             f"{outcome.job.task}/{outcome.job.session_id}/{outcome.job.unit} "
             f"{outcome.status}"
-            + ("" if outcome.status != "failed" else f" -- {outcome.record.get('error')}"),
+            + (
+                ""
+                if outcome.status != "failed"
+                else f" -- {results.normalise_reason(outcome.record.get('error'))}"
+            ),
             flush=True,
         )
 
@@ -272,13 +276,19 @@ def cmd_generate(args: argparse.Namespace) -> int:
             generation.run_jobs(jobs, provider, force=args.force, on_done=on_done)
 
     print(f"\nGenerated {counts['generated']}, failed {counts['failed']}.")
+    # The reason, not the body. On a public repository the Actions log is
+    # world-readable, and a provider's 413 quotes back the request it refused --
+    # which for the Czech tracks is a clinical transcript. What the provider
+    # actually said is kept in the generation record as `error_body`, under the
+    # gitignored `generations/`.
     if failures:
         print("\nFailures (re-running the same command retries only these):")
         for outcome in failures[:20]:
             print(
                 f"  {outcome.job.provider}/{outcome.job.model_id:24} "
                 f"{outcome.job.task}/{outcome.job.session_id}"
-                f"/{outcome.job.unit}: {outcome.record.get('error')}"
+                f"/{outcome.job.unit}: "
+                f"{results.normalise_reason(outcome.record.get('error'))}"
             )
         if len(failures) > 20:
             print(f"  ... and {len(failures) - 20} more")

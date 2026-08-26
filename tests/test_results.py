@@ -244,17 +244,51 @@ def test_indexing_an_empty_cache_says_nothing_rather_than_guessing(tmp_path):
 # --- what must never reach a published file ---------------------------------
 
 
-def test_a_providers_error_body_does_not_publish_its_key(monkeypatch):
-    """e-INFRA's 429 quotes a hash of the API key that hit the limit, and
-    results/ is committed. The reason is worth keeping; the identifier is not."""
+def test_a_providers_error_body_reaches_a_row_as_nothing_but_its_status():
+    """The body is not redacted; none of it is kept.
+
+    An earlier version kept the readable part and masked what looked like a
+    credential. That was a filter, and a filter has to anticipate every bad
+    shape. It anticipated key hashes and project ids and did not anticipate
+    prose -- so when e-INFRA refuses an over-long prompt and LiteLLM echoes the
+    request, a sentence of a clinical transcript went through untouched.
+    """
     reason = results.normalise_reason(
         'HTTP429: {"error":{"message":"Rate limit exceeded for api_key: '
         "37583a3f93fcc1f6f5e489228f16a6ad204796cecd085e37395d66b7b3b062e2. "
         'Limit type: max_parallel_requests. Current limit: 4"}}'
     )
-    assert "37583a3f" not in reason
-    assert "Rate limit exceeded" in reason
-    assert "max_parallel_requests" in reason
+    assert reason == "HTTP429: rate limited"
+
+
+def test_an_echoed_request_cannot_reach_a_committed_row():
+    """The case this was all for. LiteLLM quotes the request back in a 413."""
+    reason = results.normalise_reason(
+        'HTTP413: {"error":{"message":"litellm.BadRequestError: token limit; '
+        "messages=[{'role':'user','content':'K: Mam strach ze zkousky a nespim'}]\"}}"
+    )
+    assert reason == "HTTP413: request too large"
+    assert "zkousky" not in reason
+
+
+def test_the_range_of_normalise_reason_is_a_constant():
+    """A filter is judged by what it removes and can always be surprised. A
+    vocabulary is judged by what it can return, and this one cannot be."""
+    hostile = [
+        "Klientka uvadi, ze se citi lepe nez minule",
+        "HTTP403: caller zealous-hamlet-42 with key sk-proj-abcdef denied",
+        'HTTP404: {"message":"projects/a-real-project/locations/global/models/x"}',
+        "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+        "x" * 5000,
+        "",
+        None,
+    ]
+    vocabulary = set(results.reason_vocabulary())
+    for text in hostile:
+        result = results.normalise_reason(text)
+        assert result in vocabulary, result
+        if text:
+            assert text[:40] not in result
 
 
 def test_normalising_keeps_two_identical_failures_countable():
@@ -266,7 +300,50 @@ def test_normalising_keeps_two_identical_failures_countable():
 
 
 def test_a_missing_error_still_says_something():
-    assert results.normalise_reason(None) == "unknown error"
+    assert results.normalise_reason(None) == results.UNRECOGNISED
+    assert results.normalise_reason("") == results.UNRECOGNISED
+
+
+def test_an_unrecognised_failure_does_not_carry_its_input():
+    """The fallback is where a filter usually leaks: it passes through what it
+    could not classify, which is exactly the text it understood least."""
+    assert results.normalise_reason("something nobody has seen") == results.UNRECOGNISED
+
+
+def test_a_legacy_reason_is_repaired_when_a_row_is_built():
+    """`results/` is append-only, so the three rows already carrying a verbatim
+    429 body keep it on disk. Nothing that renders a row can reach it."""
+    row = results.from_dict(
+        {
+            "track": results.TRACK_ICARE,
+            "system_id": "a-model",
+            "system_type": "model",
+            "n_sessions_attempted": 3,
+            "failure_reasons": {"empty content": 2},
+            "unreached_reasons": {
+                'HTTP429: {"error":{"message":"Rate limit exceeded for api_key: abc"}}': 1,
+                'HTTP429: {"error":{"message":"Rate limit exceeded for api_key: def"}}': 2,
+            },
+        }
+    )
+
+    assert row.failure_reasons == {"empty content": 2}
+    # Two bodies, one reason once the bodies are gone -- and the counts add
+    # rather than one of them winning.
+    assert row.unreached_reasons == {"HTTP429: rate limited": 3}
+
+
+def test_repairing_a_reason_keeps_the_prefixes_two_functions_read():
+    """`is_infrastructure_failure` and `is_our_own_ceiling` match on prefixes,
+    and both decide whether a missing note is charged to the model."""
+    infra = results.normalise_reason('HTTP429: {"error":"whatever"}')
+    ceiling = results.normalise_reason("truncated at max_tokens=16384")
+
+    assert results.is_infrastructure_failure(infra)
+    assert not results.is_the_models_fault(infra)
+    assert results.is_our_own_ceiling(ceiling)
+    assert not results.is_the_models_fault(ceiling)
+    assert results.is_the_models_fault(results.normalise_reason("empty content"))
 
 
 # --- whose fault was it -------------------------------------------------------
@@ -309,7 +386,7 @@ def test_a_model_that_answered_badly_is_the_models_fault(error):
 def test_the_two_kinds_are_counted_separately(tmp_path):
     """A reader comparing scores has to know which kind of gap they are looking at."""
     model_dir = tmp_path / "einfra" / "icare" / "v1" / "a-model"
-    for session, error in (("1", None), ("2", "empty content"), ("3", "HTTP429: rate limit")):
+    for session, error in (("1", None), ("2", "empty content"), ("3", "HTTP429: rate limited")):
         unit = model_dir / session
         unit.mkdir(parents=True)
         (unit / "note.json").write_text(
@@ -320,23 +397,22 @@ def test_the_two_kinds_are_counted_separately(tmp_path):
 
     assert row.n_sessions_generated == 1
     assert list(row.failure_reasons) == ["empty content"], "the model's own failure"
-    assert list(row.unreached_reasons) == ["HTTP429: rate limit"], "the endpoint's"
-    assert row.unreached_reasons["HTTP429: rate limit"] == 1
+    assert list(row.unreached_reasons) == ["HTTP429: rate limited"], "the endpoint's"
+    assert row.unreached_reasons["HTTP429: rate limited"] == 1
 
 
-def test_a_rate_limit_message_never_carries_the_key_to_the_page():
-    """e-INFRA's 429 body quotes the API key back at us. It is gitignored where
-    it lands, and redacted before it can reach anything published."""
-    raw = (
-        'HTTP429: {"error":{"message":"Rate limit exceeded for api_key: '
-        "37583a3f93fcc1f6f5e489228f16a6ad204796cecd085e37395d66b7b3b062e2"
-        '. Limit type: max_parallel_requests"}}'
+def test_two_different_bodies_become_one_countable_reason():
+    """Raw bodies carry request ids and reset timestamps, so every failure looked
+    unique and the count meant nothing. Now they are the same failure, which is
+    what a count of failures is for."""
+    first = results.normalise_reason(
+        'HTTP429: {"error":{"message":"Rate limit exceeded for api_key: abc. resets 12s"}}'
+    )
+    second = results.normalise_reason(
+        'HTTP429: {"error":{"message":"Rate limit exceeded for api_key: def. resets 3s"}}'
     )
 
-    cleaned = results.normalise_reason(raw)
-
-    assert "37583a3f" not in cleaned
-    assert "Rate limit exceeded" in cleaned, "the useful part survives"
+    assert first == second == "HTTP429: rate limited"
 
 
 def test_a_rate_limited_session_is_not_charged_to_the_model(tmp_path):
@@ -349,7 +425,7 @@ def test_a_rate_limited_session_is_not_charged_to_the_model(tmp_path):
     "1 note missing, with no recorded reason".
     """
     model_dir = tmp_path / "einfra" / "icare" / "v1" / "glm-5"
-    for session, error in (("1", None), ("2", "empty content"), ("3", "HTTP429: rate limit")):
+    for session, error in (("1", None), ("2", "empty content"), ("3", "HTTP429: rate limited")):
         unit = model_dir / session
         unit.mkdir(parents=True)
         (unit / "note.json").write_text(
@@ -392,7 +468,7 @@ def test_a_scored_row_does_not_blame_the_model_for_the_endpoint(tmp_path):
     fix by living somewhere else.
     """
     model_dir = tmp_path / "einfra" / "icare" / icare_task.PROMPT_VERSION / "a-model"
-    for session, error in (("1", None), ("2", "empty content"), ("3", "HTTP429: rate limit")):
+    for session, error in (("1", None), ("2", "empty content"), ("3", "HTTP429: rate limited")):
         unit = model_dir / session
         unit.mkdir(parents=True)
         (unit / "note.json").write_text(
@@ -402,7 +478,7 @@ def test_a_scored_row_does_not_blame_the_model_for_the_endpoint(tmp_path):
     unreached = results.unreached_by_system(results.TRACK_ICARE, tmp_path)
     assert unreached == {
         ("einfra", "a-model"): results.Unreached(
-            1, {"HTTP429: rate limit": 1}, 1, {"empty content": 1}
+            1, {"HTTP429: rate limited": 1}, 1, {"empty content": 1}
         )
     }
 
@@ -415,7 +491,7 @@ def test_a_scored_row_does_not_blame_the_model_for_the_endpoint(tmp_path):
     )[0]
 
     assert row.n_failed == 1, "the empty answer, and only that"
-    assert row.unreached_reasons == {"HTTP429: rate limit": 1}
+    assert row.unreached_reasons == {"HTTP429: rate limited": 1}
     # And the count comes with its reason. Every scored row published in this
     # repository until now carried `n_failed` above zero and `failure_reasons`
     # empty, because only the coverage row was ever given the reasons -- and
@@ -439,7 +515,7 @@ def test_the_endpoint_cannot_be_blamed_for_more_than_is_missing(tmp_path):
         judge_model="a-judge",
         n_generated={("einfra", "a-model"): 5},
         n_attempted={("einfra", "a-model"): 5},
-        n_unreached={("einfra", "a-model"): results.Unreached(9, {"HTTP429: rate limit": 9})},
+        n_unreached={("einfra", "a-model"): results.Unreached(9, {"HTTP429: rate limited": 9})},
     )[0]
 
     assert row.n_failed == 0
@@ -552,65 +628,30 @@ def _scored_row(**overrides) -> Row:
     )
 
 
-def test_a_cloud_resource_path_never_carries_the_project_to_the_page():
-    """Vertex is a *generation* provider and its URL is built from the project.
-
-    A 404 quotes the whole resource path back, and the path travelled through
-    `generation` into `results/rows.jsonl`, which is committed, and on to the
-    published page. The only guard was a hex-run pattern, and a project id is
-    not hex, has no prefix and has no fixed length -- so it went straight
-    through, while `judge.py` said in a comment that it could not.
-    """
-    raw = (
+def test_a_cloud_resource_path_cannot_reach_the_page_at_all():
+    """Vertex is a generation provider and its URL is built from the project, so
+    a 404 quotes the whole resource path back. Masking that path by shape was
+    the previous fix; not keeping the body is this one."""
+    reason = results.normalise_reason(
         'HTTP404: {"error":{"code":404,"message":"Publisher Model '
         "`projects/a-real-looking-project/locations/global/publishers/google/models/x` "
         'was not found.","status":"NOT_FOUND"}}'
     )
 
-    cleaned = results.normalise_reason(raw)
-
-    assert "a-real-looking-project" not in cleaned
-    assert "projects/..." in cleaned, "the shape survives so the failure is still readable"
-    # The reason is cut to 120 characters, which a Vertex body exceeds. What has
-    # to survive is enough to tell one failure from another: the status and what
-    # kind of resource was missing.
-    assert cleaned.startswith("HTTP404:")
-    assert "Publisher Model" in cleaned
+    assert reason == "HTTP404: model not found"
+    assert "a-real-looking-project" not in reason
 
 
-def test_our_own_configured_secrets_are_masked_by_value(monkeypatch):
-    """Masking by shape is a blocklist, and this one lost once already.
+def test_the_provider_never_puts_a_body_where_a_row_can_read_it():
+    """The property at its source. `Completion.error` is a phrase this
+    repository wrote, for every status code and every transport failure, so
+    `normalise_reason` is recognising a value rather than sanitising one."""
+    from tnb.providers import openai_compatible as einfra
 
-    What can be done exactly is recognise our own values, because we are the
-    ones who set them. The names come from `models.yaml`, so a provider added
-    tomorrow is covered without anyone remembering to add it here.
-    """
-    monkeypatch.setenv("VERTEX_PROJECT", "zealous-hamlet-42")
-    monkeypatch.setenv("OPENAI_API_KEY", "totally-not-a-real-key-value")
-
-    cleaned = results.normalise_reason(
-        "HTTP403: caller zealous-hamlet-42 with key totally-not-a-real-key-value denied"
-    )
-
-    assert "zealous-hamlet-42" not in cleaned
-    assert "totally-not-a-real-key-value" not in cleaned
-    assert "denied" in cleaned
-
-
-def test_a_short_environment_value_is_not_treated_as_a_secret(monkeypatch):
-    """Masking every short value would redact ordinary prose into nonsense."""
-    monkeypatch.setenv("VERTEX_PROJECT", "us")
-
-    assert "because" in results.normalise_reason("HTTP500: because the backend fell over")
-
-
-def test_the_masking_happens_before_the_length_cut(monkeypatch):
-    """Otherwise a secret can be half-cut and still recognisable."""
-    monkeypatch.setenv("VERTEX_PROJECT", "distinctive-project-name")
-
-    cleaned = results.normalise_reason("x" * 110 + " distinctive-project-name")
-
-    assert "distinctive" not in cleaned
+    for status in (400, 404, 413, 429, 500, 418):
+        reason = einfra.http_reason(status)
+        assert reason.startswith(f"HTTP{status}: ")
+        assert results.normalise_reason(reason) == reason
 
 
 def test_a_note_we_cut_off_is_not_a_note_the_model_failed(tmp_path):
@@ -647,8 +688,8 @@ def test_a_note_we_cut_off_is_not_a_note_the_model_failed(tmp_path):
 
 def test_the_three_kinds_of_missing_note_are_told_apart():
     """One predicate per question, and the accusing one defaults to no."""
-    assert results.is_infrastructure_failure("HTTP429: rate limit")
-    assert not results.is_our_own_ceiling("HTTP429: rate limit")
+    assert results.is_infrastructure_failure("HTTP429: rate limited")
+    assert not results.is_our_own_ceiling("HTTP429: rate limited")
 
     assert results.is_our_own_ceiling("truncated at max_tokens=16384")
     assert not results.is_infrastructure_failure("truncated at max_tokens=16384")

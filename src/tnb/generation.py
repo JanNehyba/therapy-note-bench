@@ -223,6 +223,11 @@ def _record(
         "escalated": completion.max_tokens > provider.generation.max_tokens,
         "ok": completion.ok,
         "error": completion.error,
+        # What the provider actually said. `generations/` is gitignored, and
+        # this is the only place it is kept: `error` above carries a phrase this
+        # repository chose, so nothing a provider wrote can reach a committed
+        # file. Debugging loses nothing; it just has to look here.
+        "error_body": completion.error_body,
         "finish_reason": completion.finish_reason,
         "usage": completion.usage,
         "reasoning_chars": completion.reasoning_chars,
