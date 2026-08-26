@@ -62,6 +62,19 @@ measure under *both* judges is better however a reader weights the measures.
 Twelve of nineteen systems are beaten outright by nobody, which is why no
 single winner is named.
 
+**And it is not only two judges disagreeing — one judge disagrees with
+itself.** Gemini's thinking budget was raised from 128 to 256 tokens and all
+51 000 questions were asked again. Nothing else changed: same model, same
+prompts, same notes. Every one of the nineteen systems scored higher on
+completeness (mean +0.017) and on conciseness (mean +0.048) and slightly lower
+on faithfulness (mean −0.021). Six systems changed position on completeness,
+sixteen on conciseness; the conciseness top three changed and so did the leader
+on faithfulness.
+
+A setting a reader never sees moved the table more than most of the differences
+printed in it. That is why the judge's settings are part of what a table is
+compared on, and why each table's heading names them.
+
 ## The columns do not agree with each other either
 
 Ordering by completeness says little about conciseness (−0.18 and −0.33 under

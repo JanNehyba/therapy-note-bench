@@ -109,6 +109,15 @@ The obvious alternative — each judge scores only the *other* family — was
 rejected: it would put two instruments with two calibrations in one column, and
 leave every system with a single score and no way to check it.
 
+**The budget is part of the instrument.** At 128 tokens Gemini spent its whole
+allowance thinking on 0.50% of questions and returned a fragment of its own
+reasoning, which `parse_yes_no` reads as a "No" charged to the model. At 256
+that falls to 0.05%. Re-asking all 51 000 questions at the higher budget raised
+every system's completeness (mean +0.017) and conciseness (+0.048) and lowered
+faithfulness slightly (−0.021), and moved six systems on completeness and
+sixteen on conciseness. So a run at one budget and a run at another are two
+instruments, they never share a table, and each table says which it is.
+
 **Why external models.** Both corpora are transcripts of public YouTube videos.
 There are no patient data involved, so keeping inference inside e-INFRA buys
 nothing here. If real session data are ever added to this benchmark, the judge
