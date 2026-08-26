@@ -401,9 +401,6 @@ def test_the_interval_covers_the_systems_it_generalises_over():
     is what produced the one "detected" verdict this repository published. With
     the systems resampled too it is [-0.002, +0.059] and includes zero.
     """
-    import random
-    import statistics
-
     from tnb.scoring import preference as module
 
     # A judge whose own family is genuinely higher on average, carried by ONE
