@@ -43,7 +43,12 @@ ROWS_PATH = RESULTS_DIR / "rows.jsonl"
 #: never averaged together -- see docs/methodology.md.
 TRACK_TNEVAL = "tneval-soap"
 TRACK_ICARE = "icare"
-TRACKS = (TRACK_TNEVAL, TRACK_ICARE)
+#: The same notes as `TRACK_TNEVAL`, asked a different instrument. It is a track
+#: rather than a column set because a track is named for what it measures: the
+#: rubric counts what a note covers, PDSQI-9 rates how good it is, and one table
+#: holding both would invite a reader to average them.
+TRACK_PDSQI = "pdsqi-soap"
+TRACKS = (TRACK_TNEVAL, TRACK_ICARE, TRACK_PDSQI)
 
 #: Generation tasks are named for what they produce, tracks for what they
 #: measure. One task feeds one track, but the names differ because the TN-Eval

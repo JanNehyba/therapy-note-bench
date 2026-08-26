@@ -282,8 +282,21 @@ def test_the_page_keeps_the_caveats_attached_to_the_numbers():
             prompt_version="icare-zeroshot-v1",
             metrics=Metrics(headline={"trace": 3.9}),
         ),
+        _scored(
+            "gemma4",
+            0.6,
+            track=results.TRACK_PDSQI,
+            judge_prompt_version="pdsqi9-note-v1",
+            metrics=Metrics(headline={"useful": 4.1}),
+        ),
     ]
     page = report.render_page(report.build(rows))
+
+    # Every track this module knows how to draw, not the two that were written
+    # first: adding a track without its caveats is exactly the omission this
+    # test exists to catch, and a fixture listing tracks by hand would have let
+    # the third one through.
+    assert set(report.COLUMNS) == set(results.TRACKS)
 
     for track, columns in report.COLUMNS.items():
         table = report.MEASURE_TABLES[track]

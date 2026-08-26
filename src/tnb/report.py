@@ -24,7 +24,7 @@ from pathlib import Path
 from tnb import corpus, results
 from tnb.config import REPO_ROOT
 from tnb.results import Row
-from tnb.scoring import concordance
+from tnb.scoring import concordance, pdsqi
 from tnb.scoring import icare as icare_scorer
 from tnb.scoring import tneval as rubric
 from tnb.tasks import icare, soap
@@ -102,6 +102,13 @@ COLUMNS: dict[str, tuple[tuple[str, int], ...]] = {
         ("temporal_past", 3),
         ("temporal_next", 3),
     ),
+    # Built from the instrument's own order rather than retyped, so the columns
+    # cannot drift out of the order a reader will find in the paper. Seven are
+    # 1-5 ratings; the eighth is the fraction of notes free of stigmatising
+    # language, which is a proportion and printed like the other proportions.
+    results.TRACK_PDSQI: tuple(
+        (key, 3 if key == "stigmatizing" else 2) for key in pdsqi.ATTRIBUTE_KEYS
+    ),
 }
 
 #: Where each track's measure definitions live. Both scorers own their own --
@@ -114,6 +121,7 @@ COLUMNS: dict[str, tuple[tuple[str, int], ...]] = {
 MEASURE_TABLES = {
     results.TRACK_TNEVAL: rubric.MEASURES,
     results.TRACK_ICARE: icare_scorer.MEASURES,
+    results.TRACK_PDSQI: pdsqi.MEASURES,
 }
 
 #: Which measure each track is ranked by, and the honest `None` where the
@@ -126,6 +134,10 @@ MEASURE_TABLES = {
 RANKING_MEASURES: dict[str, str | None] = {
     results.TRACK_TNEVAL: rubric.RANKING_MEASURE,
     results.TRACK_ICARE: None,
+    # Also None, and for the instrument's own reason: PDSQI-9's authors report
+    # its attributes separately, and a mean of seven 1-5 ratings with a yes/no
+    # would be a composite nobody validated.
+    results.TRACK_PDSQI: pdsqi.RANKING_MEASURE,
 }
 
 
@@ -137,6 +149,10 @@ RANKING_MEASURES: dict[str, str | None] = {
 JUDGE_MEASURES: dict[str, tuple[str, ...]] = {
     results.TRACK_TNEVAL: rubric.JUDGE_MEASURES,
     results.TRACK_ICARE: icare_scorer.JUDGE_MEASURES,
+    # Every one of the eight. Unlike iCARE, nothing here is computed from the
+    # text alone, so all eight columns are a judge's opinion and all eight can
+    # be compared between two of them.
+    results.TRACK_PDSQI: pdsqi.JUDGE_MEASURES,
 }
 
 
@@ -185,6 +201,7 @@ def _and_list(values) -> str:
 TRACK_TITLES = {
     results.TRACK_TNEVAL: "TN-Eval SOAP · AnnoMI conversations",
     results.TRACK_ICARE: "iCARE / iHOPE · 17 sections per session",
+    results.TRACK_PDSQI: "PDSQI-9 · the same notes, rated for quality",
 }
 
 #: The same tracks, short enough to be a button. Separate from the titles rather
@@ -193,6 +210,7 @@ TRACK_TITLES = {
 TRACK_SWITCH_LABELS = {
     results.TRACK_TNEVAL: "TN-Eval SOAP",
     results.TRACK_ICARE: "iCARE / iHOPE",
+    results.TRACK_PDSQI: "PDSQI-9 quality",
 }
 
 TRACK_BLURBS = {
@@ -203,6 +221,11 @@ TRACK_BLURBS = {
     results.TRACK_ICARE: (
         "Automatic metrics and a TRACE judge side by side, because the source paper "
         "found they disagree. That disagreement is a result, not an error."
+    ),
+    results.TRACK_PDSQI: (
+        "A published instrument, asked about the very notes the rubric above scores "
+        "for coverage. Eight attributes, reported separately and never averaged, "
+        "because the instrument reports them that way."
     ),
 }
 
@@ -259,6 +282,36 @@ TRACK_DESIGN = {
             "repository, so there is nothing to check this judge against. Two "
             "independent judges score every note instead, and where they disagree "
             "is the only control this track can have."
+        ),
+    },
+    results.TRACK_PDSQI: {
+        "scored_against": (
+            "The note itself, and for two of the eight attributes the transcript as "
+            "well -- accurate and thorough ask whether the note is true and complete, "
+            "which cannot be answered without the session. There is no gold note, so "
+            "this track is reference-free in the same sense the rubric track is."
+        ),
+        "human_role": (
+            "The therapist's note is scored by the identical protocol and sits in the "
+            "table as its own row, exactly as it does on the rubric track. That is "
+            "the reason this table exists next to that one: the same notes, two "
+            "instruments, and a reader can see where they disagree about who wrote "
+            "well."
+        ),
+        "human_role_short": "competitor",
+        # False, and the reason is not the reason iCARE is False. There the
+        # ratings exist and are unpublished; here nobody has ever rated *these*
+        # notes on this instrument. What PDSQI-9 does publish is a ceiling, which
+        # is more than TRACE has and less than a calibration.
+        "calibrated": False,
+        "calibration": (
+            "No human has rated these notes on this instrument, so there is no "
+            "agreement figure for this judge. What the instrument publishes instead "
+            "is a ceiling: trained physicians agreed with each other at "
+            "Krippendorff's alpha 0.575, against the 0.18 two therapists reach on "
+            "faithfulness. A judge cannot be asked to agree with a person better "
+            "than people agree with each other -- but a ceiling is not a "
+            "measurement, and these columns have not been checked against anyone."
         ),
     },
 }
