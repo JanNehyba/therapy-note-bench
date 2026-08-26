@@ -45,7 +45,10 @@ def _row(system: str, judge_model: str, value: float) -> Row:
     )
 
 
-def _page(tmp_path: Path) -> str:
+def _page_data(tmp_path: Path) -> dict:
+    """The payload both pages are drawn from. Split out when the panels moved:
+    a panel test now renders whichever of the two pages holds its panel, from
+    the same data, so the test is about the panel and not about the split."""
     from tnb import judge
     from tnb.scoring import concordance
 
@@ -72,7 +75,11 @@ def _page(tmp_path: Path) -> str:
             )
         )
     }
-    return report.render_page(data)
+    return data
+
+
+def _page(tmp_path: Path) -> str:
+    return report.render_page(_page_data(tmp_path))
 
 
 def _run(page: str, tmp_path: Path, panel: str | None = None) -> str:
@@ -101,10 +108,13 @@ def test_the_page_executes_without_throwing(tmp_path):
 def test_every_panel_with_data_puts_something_on_the_page(tmp_path):
     """A render function that returns early leaves an empty box, which looks
     exactly like a section nobody wrote."""
-    output = _run(_page(tmp_path), tmp_path)
+    data = _page_data(tmp_path)
 
-    for panel in ("tables", "concordance", "protocol-body", "licences-body"):
-        assert f"{panel}: " in output, f"{panel} rendered nothing"
+    assert "tables: " in _run(report.render_page(data), tmp_path), "the tables are the leaderboard"
+
+    methods = _run(report.render_methods(data), tmp_path)
+    for panel in ("concordance", "protocol-body", "licences-body"):
+        assert f"{panel}: " in methods, f"{panel} rendered nothing"
 
 
 def test_a_panel_with_no_data_removes_itself_rather_than_leaving_an_empty_box(tmp_path):
@@ -116,7 +126,7 @@ def test_a_panel_with_no_data_removes_itself_rather_than_leaving_an_empty_box(tm
     data["judges"] = None
     data["concordance"] = {}
 
-    output = _run(report.render_page(data), tmp_path)
+    output = _run(report.render_methods(data), tmp_path)
 
     assert "concordance" not in output.split("empty and not removed:")[-1]
 
@@ -151,7 +161,7 @@ def test_the_self_preference_panel_draws_when_there_is_an_effect_to_report(tmp_p
         ],
     }
 
-    output = _run(report.render_page(data), tmp_path)
+    output = _run(report.render_methods(data), tmp_path)
 
     assert "preference: " in output, "the panel rendered nothing"
 
@@ -166,7 +176,7 @@ def test_the_self_preference_panel_removes_itself_when_there_is_nothing(tmp_path
     data["concordance"] = {}
     data["preference"] = None
 
-    output = _run(report.render_page(data), tmp_path)
+    output = _run(report.render_methods(data), tmp_path)
 
     assert "preference" not in output.split("empty and not removed:")[-1]
 
@@ -282,7 +292,8 @@ def _with_judges(tmp_path: Path) -> str:
             )
         )
     }
-    return report.render_page(data)
+    # The methods page: this box moved there with the rest of the instrument.
+    return report.render_methods(data)
 
 
 def test_only_the_two_panel_judges_are_marked_as_being_in_the_panel(tmp_path):
@@ -328,8 +339,11 @@ def test_every_key_in_the_page_data_is_read_by_the_page():
     nobody reads is either a missing panel or dead weight, and both are worth
     failing over.
     """
-    template = (Path(report.__file__).parent / "templates" / "leaderboard.html").read_text(
-        encoding="utf-8"
+    # Both pages, and the partials they share. A key read by either is read;
+    # a key read by neither still fails. Checking one page would have started
+    # passing for the wrong reason the moment a panel moved to the other.
+    templates = "".join(
+        path.read_text(encoding="utf-8") for path in report.TEMPLATE_DIR.glob("*.html")
     )
 
     data = report.build([_row("x", "a-judge", 0.5)])
@@ -345,7 +359,7 @@ def test_every_key_in_the_page_data_is_read_by_the_page():
     # `.key` rather than `DATA.key`: several panels are rendered by a function
     # that takes the whole payload and reads `data.saturation` inside it, so a
     # literal `DATA.saturation` never appears.
-    unread = [key for key in data if f".{key}" not in template]
+    unread = [key for key in data if f".{key}" not in templates]
     assert not unread, f"in the payload and read by nothing: {unread}"
 
 
@@ -378,7 +392,7 @@ def test_candidates_measured_at_different_settings_are_flagged(tmp_path):
     mixed = _judges_data()
     mixed["judges"][1]["judge_settings"]["thinking_budget"] = 128
     data["judges"] = mixed
-    drawn = _run(report.render_page(data), tmp_path, panel="judges-body")
+    drawn = _run(report.render_methods(data), tmp_path, panel="judges-body")
 
     assert "not all measured at the same" in drawn
     assert "thinking_budget 128" in drawn and "thinking_budget 256" in drawn
@@ -386,7 +400,7 @@ def test_candidates_measured_at_different_settings_are_flagged(tmp_path):
     # And silent when they agree. Asserted on what the page renders, not on its
     # source: the warning is a string literal in the template either way.
     data["judges"] = _judges_data()
-    agreed = _run(report.render_page(data), tmp_path, panel="judges-body")
+    agreed = _run(report.render_methods(data), tmp_path, panel="judges-body")
 
     assert "not all measured at the same" not in agreed
     assert "thinking_budget 256" in agreed

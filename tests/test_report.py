@@ -500,16 +500,17 @@ def test_the_similarity_example_is_computed_from_the_text_beside_it():
 
 
 def test_the_worked_example_reaches_the_page():
-    page = report.render_page(
-        report.write.__wrapped__(  # type: ignore[attr-defined]
-            [_scored("gemma4", 0.6)]
-        )
-        if hasattr(report.write, "__wrapped__")
-        else report.build([_scored("gemma4", 0.6)])
-    )
+    """Each on the page whose reader needs it.
 
-    assert "designBlock" in page, "the per-track design block must render"
-    assert "similarity-example" in page
+    The design block says what a note here *is* and what a human's note is
+    doing in the comparison, so it belongs on the row it qualifies. The worked
+    similarity example is a demonstration of how one metric behaves, which is a
+    question about the instrument.
+    """
+    data = report.build([_scored("gemma4", 0.6)])
+
+    assert "designBlock" in report.render_page(data), "it qualifies the table"
+    assert "similarity-example" in report.render_methods(data)
 
 
 def test_an_older_harness_is_named_rather_than_drawn_beside_the_new_one():
@@ -566,14 +567,21 @@ def test_the_readme_says_why_a_number_it_used_to_show_is_gone():
 
 
 def test_the_page_says_it_too():
-    """The README's reader and the page's reader need the same explanation."""
+    """The README's reader and the page's reader need the same explanation.
+
+    It is on the methods page rather than under the tables: a list of what was
+    withdrawn is a statement about the instrument, and a reader choosing a
+    model is not the reader who needs it.
+    """
     old = _scored("gemma4", 0.61, harness_version="0.1.0")
     new = _scored("gemma4", 0.42, harness_version="0.2.0")
 
-    page = report.render_page(report.build([old, new]))
+    data = report.build([old, new])
+    methods = report.render_methods(data)
 
-    assert "Withdrawn from the tables" in page
-    assert "renderSuperseded" in page
+    assert "Withdrawn from the tables" in methods
+    assert "renderSuperseded" in methods
+    assert "renderSuperseded" not in report.render_page(data), "and not in both places"
 
 
 def _two_judges() -> list[Row]:
@@ -643,11 +651,11 @@ def test_a_withdrawn_coverage_group_is_not_described_as_scored_by_nobody():
     assert len(data["superseded"]) == 1
 
     section = report.render_readme_section(data)
-    page = report.render_page(data)
+    methods = report.render_methods(data)
 
     assert "None" not in section and "null" not in section
     assert "generation coverage" in section
-    assert "generation coverage" in page
+    assert "generation coverage" in methods
 
 
 def test_a_table_names_the_judges_settings_not_only_its_name():
