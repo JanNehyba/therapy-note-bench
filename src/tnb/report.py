@@ -36,6 +36,37 @@ LEADERBOARD_MARKERS = ("<!-- LEADERBOARD:BEGIN -->", "<!-- LEADERBOARD:END -->")
 CALIBRATION_MARKERS = ("<!-- CALIBRATION:BEGIN -->", "<!-- CALIBRATION:END -->")
 CALIBRATION_PATH = DOCS_DIR / "calibration.json"
 SATURATION_PATH = DOCS_DIR / "saturation.json"
+
+
+def saturation_path(judge_model: str, docs_dir: Path | None = None) -> Path:
+    """Where one judge's saturation analysis lives.
+
+    One file per judge, because the analysis is of a judge's own answers and
+    two judges' are two analyses. The leaderboard already refuses to put two
+    judges in one table; the same rule has to hold for what is drawn beside
+    them.
+    """
+    from tnb.generation import _slug
+
+    return (docs_dir or DOCS_DIR) / f"saturation-{_slug(judge_model)}.json"
+
+
+def load_saturations(docs_dir: Path | None = None) -> list[dict]:
+    """Every judge's saturation analysis that has been run.
+
+    Includes the legacy single-file form, so a repository that has not re-run
+    the analysis since this was split keeps its panel.
+    """
+    docs_dir = docs_dir or DOCS_DIR
+    found = [_load_json(path) for path in sorted(docs_dir.glob("saturation-*.json"))]
+    legacy = _load_json(docs_dir / SATURATION_PATH.name)
+    if legacy is not None and not any(
+        item and item.get("judge_model") == legacy.get("judge_model") for item in found
+    ):
+        found.append(legacy)
+    return [item for item in found if item]
+
+
 JUDGES_PATH = DOCS_DIR / "judges.json"
 PREFERENCE_PATH = DOCS_DIR / "preference.json"
 
@@ -442,8 +473,37 @@ def current_rows(rows: list[Row]) -> list[Row]:
     return [row for group in groups.values() for row in group]
 
 
-def build(rows: list[Row]) -> dict:
+def _groups_for(versions: dict, saturations: list[dict]) -> dict | None:
+    """The indistinguishable groups belonging to one table, or None.
+
+    Matched on the judge *and its settings*, not on the judge's name: the same
+    judge at two thinking budgets is two instruments, and drawing one's groups
+    over the other's numbers is the error this file spends most of its comments
+    on.
+    """
+    for item in saturations:
+        if item.get("judge_model") != versions.get("judge_model"):
+            continue
+        recorded = item.get("judge_fingerprint")
+        if recorded and versions.get("judge_settings") and recorded != versions["judge_settings"]:
+            continue
+        if not item.get("indistinguishable"):
+            continue
+        return {
+            "measure": "completeness",
+            "sessions": item.get("sessions"),
+            "corpus_sessions": item.get("corpus_sessions"),
+            "of": item["indistinguishable"],
+        }
+    return None
+
+
+def build(rows: list[Row], saturations: list[dict] | None = None) -> dict:
     """Shape the rows into the JSON both presentations read.
+
+    `saturations` carries, per judge, which systems that judge's evidence
+    cannot tell apart. Optional because a coverage-only build has none, and
+    absent is drawn as "not measured for this table" rather than as agreement.
 
     Groups that disagree on any version field become separate tables rather than
     separate rows in one table. The newest harness per track and judge is drawn;
@@ -453,6 +513,7 @@ def build(rows: list[Row]) -> dict:
     current = results.latest(rows)
     tables = []
 
+    saturations = saturations or []
     groups, superseded = _current_groups(results.comparable_groups(current))
     newest_harness = max(
         (row.harness_version for group in groups.values() for row in group), default=""
@@ -481,6 +542,13 @@ def build(rows: list[Row]) -> dict:
                     name: versions[name] for name in results.COMPARABILITY_KEYS if name != "track"
                 },
                 "scored": any(row.is_scored for row in group),
+                # Which systems this evidence cannot tell apart, from the
+                # saturation analysis of *this* table's judge at *these*
+                # settings. None when nobody has run it for this table, and
+                # the table then says so rather than reading as a strict
+                # ranking -- a first row that looks like a winner is the whole
+                # thing this is here to stop.
+                "groups": _groups_for(versions, saturations),
                 # True when this table's measures are defined by an older
                 # harness than the newest one on the page. A judge that was
                 # tried and not re-run keeps its table -- a different judge is
@@ -498,6 +566,7 @@ def build(rows: list[Row]) -> dict:
                 # cells is worse than no column: it reads as missing data rather
                 # than as a control this provider does not have.
                 "has_effort": any(row["effort"] for row in rendered),
+                "has_thinking": any(row["thinking_tokens"] for row in rendered),
             }
         )
 
@@ -612,6 +681,10 @@ def _render_row(row: Row) -> dict:
         "system_type": row.system_type,
         "provider": row.provider,
         "effort": row.settings.effort,
+        # In its own column, not only in the row's detail. Two models compared
+        # on one line spent 1620 and 13 tokens thinking before writing, and a
+        # reader who cannot see that is comparing two different experiments.
+        "thinking_tokens": row.settings.thinking_tokens,
         "settings": row.settings.summary,
         # A row produced under conditions the rest of the table did not share is
         # marked in place rather than dropped or silently normalised -- WMT's
@@ -850,10 +923,19 @@ def load_calibration(docs_dir: Path | None = None) -> dict | None:
 def write(rows: list[Row], *, docs_dir: Path | None = None, readme: Path | None = None) -> dict:
     """Write all three artefacts. Returns the data that was rendered."""
     docs_dir = docs_dir or DOCS_DIR
-    data = build(rows)
+    saturations = load_saturations(docs_dir)
+    data = build(rows, saturations)
     data["calibration"] = load_calibration(docs_dir)
     data["similarity_example"] = similarity_example()
-    data["saturation"] = _load_json(docs_dir / SATURATION_PATH.name)
+    data["saturations"] = saturations
+    # The panel shows one, and it is the judge the leaderboard is ranked by
+    # rather than whichever file sorted first.
+    from tnb import judge as judge_module
+
+    data["saturation"] = next(
+        (item for item in saturations if item.get("judge_model") == judge_module.DEFAULT_MODEL),
+        saturations[0] if saturations else None,
+    )
     data["judges"] = _load_json(docs_dir / JUDGES_PATH.name)
     data["preference"] = _load_json(docs_dir / PREFERENCE_PATH.name)
     # Computed here rather than cached in docs/, because it is a statement about

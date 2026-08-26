@@ -98,6 +98,13 @@
   /* A judge that clears the human ceiling on a measure. Marked rather than
      stated per row: the comparison is per column and the eye reads it that way. */
   td.beats { font-weight: 600; }
+  /* The rank, not the row number. Systems the evidence cannot separate share
+     one, so the column repeats a number rather than counting up -- which is the
+     point, and looks wrong until you know that. */
+  td.rank { color: var(--muted); font-variant-numeric: tabular-nums; width: 2.5rem; }
+  td.rank.top { color: var(--fg); font-weight: 700; }
+  tbody tr.first-group td { background: var(--chip); }
+  tbody tr.first-group td.name { background: var(--chip); }
   tr.humans td { border-top: 2px solid var(--line); }
   ul.dominance code { font-size: .85rem; }
   table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
@@ -356,6 +363,21 @@ function detailRow(row, table) {
     ? `<p class="note settings">Generated with <strong>${esc(row.settings)}</strong>.</p>`
     : '<p class="note settings">Generation settings were not recorded for this row.</p>');
 
+  // Down here rather than in a column, on purpose. The figure is real, but it
+  // is reported by whoever serves the model and the serving stacks do not
+  // count the same thing: vLLM -- which e-INFRA runs -- documents that it
+  // reports 0 for models whose reasoning is text-delimited (Qwen3, DeepSeek
+  // R1), while it counts normally for others, and OpenAI's own output count
+  // can exceed the visible tokens while reasoning_tokens reads 0. Two of these
+  // numbers side by side in a sortable column would invite a comparison that
+  // is partly about bookkeeping.
+  if (row.thinking_tokens) {
+    parts.push(`<p class="note">Spent about <strong>${row.thinking_tokens.toLocaleString('en')}
+       tokens reasoning</strong> before writing, averaged over its notes — as reported by the
+       provider. <em>Not comparable across providers:</em> what counts as a reasoning token
+       depends on the serving stack, not only on the model.</p>`);
+  }
+
   const sections = Object.entries(row.by_section);
   if (sections.length) {
     const head = table.columns.map(c =>
@@ -378,7 +400,8 @@ function detailRow(row, table) {
   if (row.source) parts.push(`<p class="note">Source: ${row.source}</p>`);
   if (!parts.length) parts.push('<p class="note">Nothing to break down yet — this row has no scores.</p>');
 
-  const span = table.columns.length + 2;
+  const span =
+    table.columns.length + 2 + (table.groups ? 1 : 0) + (table.has_effort ? 1 : 0);
   return `<tr class="detail" hidden><td colspan="${span}">${parts.join('')}</td></tr>`;
 }
 
@@ -440,9 +463,32 @@ function renderTable(table, index) {
     (c.ranking ? '<span class="ranks">ranks this table</span>' : '') +
     `</dt><dd>${esc(c.definition)}` +
     (c.caveat ? ` <em>${esc(c.caveat)}</em>` : '') + `</dd></div>`).join('');
+  // Said under the table either way. A table with no grouping measured must not
+  // read as a strict ranking just because nobody has checked.
+  const groupNote = table.groups
+    ? `<p class="note"><strong>Systems that share a rank cannot be told apart by this
+         evidence.</strong> ${table.groups.of.filter(g => g.length > 1).length} of
+         ${table.groups.of.length} ranks are shared, and the top one has
+         ${table.groups.of[0].length} system(s) in it. Measured on
+         <strong>${esc(table.groups.measure)}</strong> over the
+         ${table.groups.sessions} conversations every system here was scored on, by
+         resampling those conversations — not by whether two intervals overlap, which
+         is a weaker test.</p>`
+    : `<p class="note"><strong>Which of these can be told apart has not been measured
+         for this table.</strong> Read the order as roughly who is near the top and
+         near the bottom, not as a ranking: two adjacent rows are not a result.</p>`;
+
   const rankingNote = table.ranking_measure
     ? `Ordered by <strong>${esc(colLabel(table, table.ranking_measure))}</strong>. Every other column is context and is not a ranking.`
     : 'This track is deliberately <strong>not ranked</strong>: its columns measure different things and the source paper found they disagree. That disagreement is the result.';
+
+  // Which systems this evidence cannot tell apart. A leaderboard prints an
+  // order whether or not one exists; this gives every row the rank it actually
+  // earned, so several systems can share first place -- which here they do.
+  const band = {};
+  (table.groups ? table.groups.of : []).forEach((members, i) => {
+    members.forEach(name => { band[name] = i + 1; });
+  });
 
   const body = table.rows.map((row, position) => {
     const cells = table.columns
@@ -471,7 +517,16 @@ function renderTable(table, index) {
     const effortCell = table.has_effort
       ? `<td>${row.effort ? esc(row.effort) : '<span class="dash" title="this provider has no effort control">—</span>'}</td>`
       : '';
-    return `<tr class="system" data-row="${index}-${position}" data-type="${row.system_type}">
+    
+    // The rank, not the row number. Systems the evidence cannot separate share
+    // one, and the top of the table is a group rather than a winner.
+    const rank = band[row.label];
+    const rankCell = table.groups
+      ? `<td class="rank${rank === 1 ? ' top' : ''}">${rank || '<span class="dash">—</span>'}</td>`
+      : '';
+    return `<tr class="system${rank === 1 ? ' first-group' : ''}"` +
+      ` data-row="${index}-${position}" data-type="${row.system_type}">
+        ${rankCell}
         <td class="name"><span class="arrow">▸</span>${esc(row.label)}${chip}${oddOneOut}</td>
         ${effortCell}${cells}<td>${coverage}</td>
       </tr>` + detailRow(row, table);
@@ -484,12 +539,21 @@ function renderTable(table, index) {
       <p class="versions">harness <code>${versions.harness_version}</code> ·
          prompt <code>${versions.prompt_version}</code> · ${judge}</p>
       <div class="scroll"><table data-table="${index}">
-        <thead><tr><th data-sort="label">System</th>${
-          table.has_effort ? '<th data-sort="effort" title="Reasoning effort the note was written at. Blank where the provider has no such control.">Effort</th>' : ''
-        }${head}<th data-sort="coverage">Notes</th></tr></thead>
+        <thead><tr>${table.groups
+          ? '<th title="systems this evidence cannot tell apart share a rank">Rank</th>'
+          : ''}<th data-sort="label">System</th>${
+          table.has_effort ? '<th data-sort="effort" title="Reasoning effort the note was written at. Blank where the provider has no such control.">Effort</th>' : '' }${
+          ''}${head}<th data-sort="coverage">Notes</th></tr></thead>
         <tbody>${body}</tbody>
       </table></div>
       <p class="ranking-note">${rankingNote}</p>
+      ${groupNote}
+      ${table.has_thinking ? `<p class="note">Each row also records how many tokens its
+         model spent <strong>reasoning</strong> before writing — open a row to see it. It is
+         not a column because it is not comparable between providers: vLLM, which serves the
+         e-INFRA models, reports zero for models whose reasoning is text-delimited even when
+         they reason, and OpenAI counts differently again. A gap there can be bookkeeping
+         rather than behaviour.</p>` : ''}
       <dl class="measures">${legend}</dl>
     </section>`;
 }

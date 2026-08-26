@@ -746,10 +746,11 @@ def cmd_saturation(args: argparse.Namespace) -> int:
         return 0
 
     report.DOCS_DIR.mkdir(parents=True, exist_ok=True)
-    report.SATURATION_PATH.write_text(
-        _json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-    )
-    print(f"\nWrote {report.SATURATION_PATH.relative_to(REPO_ROOT)}.")
+    # One file per judge: two judges' analyses are two analyses, and writing
+    # both to one path meant the second silently replaced the first.
+    path = report.saturation_path(args.judge_model)
+    path.write_text(_json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(f"\nWrote {path.relative_to(REPO_ROOT)}.")
     print("Run 'tnb report' to rebuild the page.")
     return 0
 

@@ -126,12 +126,25 @@ class Settings:
       truthful rather than decorative.
     - **max_tokens** -- 4096, escalating to 16384 for a model that spent its
       whole budget thinking. A truncated note scores as an incomplete one.
+
+    And one that is **measured rather than set**:
+
+    - **thinking_tokens** -- how many tokens the model actually spent reasoning
+      before it wrote anything, averaged over its notes. Nothing here sets a
+      thinking budget for a *generating* model, so each one uses its own
+      default, and those defaults differ by two orders of magnitude: 1620 for
+      `qwen3.8-27b` against 13 for `gpt-5.6-terra`. Since raising the *judge's*
+      budget from 128 to 256 moved every system's completeness by +0.017 and
+      reordered sixteen of nineteen on conciseness, a reader comparing two
+      models has to be able to see this. It is `None` for a provider that does
+      not report it, which is not the same as zero.
     """
 
     effort: str = ""
     temperature: float | None = None
     temperature_forced: bool = False
     max_tokens: int | None = None
+    thinking_tokens: int | None = None
 
     def is_empty(self) -> bool:
         return self.temperature is None and self.max_tokens is None and not self.effort
@@ -530,7 +543,9 @@ def settings_by_system(cache_dir: Path | None = None) -> dict[tuple[str, str], S
     }
 
 
-def _settings_from(observed: set[tuple], budgets: set[int]) -> Settings:
+def _settings_from(
+    observed: set[tuple], budgets: set[int], thinking: list[int] | None = None
+) -> Settings:
     """One `Settings` for a model's notes, or nothing if they disagree.
 
     A model whose notes were written under two different settings has no single
@@ -544,14 +559,19 @@ def _settings_from(observed: set[tuple], budgets: set[int]) -> Settings:
     so the *largest* is reported: it is the ceiling the model was allowed, which
     is what a reader needs in order to know whether a note could be truncated.
     """
+    # The thinking figure survives disagreement about the rest: it is measured
+    # from the notes rather than configured, so it describes them whatever they
+    # were asked with.
+    spent = round(sum(thinking) / len(thinking)) if thinking else None
     if len(observed) != 1:
-        return Settings()
+        return Settings(thinking_tokens=spent)
     effort, temperature, forced = next(iter(observed))
     return Settings(
         effort=effort or "",
         temperature=temperature,
         temperature_forced=forced,
         max_tokens=max(budgets) if budgets else None,
+        thinking_tokens=spent,
     )
 
 
@@ -573,6 +593,7 @@ def _coverage_row(
     # say how the note was written, not how the config would write it now.
     observed: set[tuple] = set()
     budgets: set[int] = set()
+    thinking: list[int] = []
     unreached_sessions = 0
 
     for session_dir in sessions:
@@ -598,6 +619,11 @@ def _coverage_row(
                 )
                 if record.get("max_tokens"):
                     budgets.add(int(record["max_tokens"]))
+                # Measured, not configured: nothing sets a thinking budget for
+                # a generating model, so this is what each one chose to spend.
+                details = (record.get("usage") or {}).get("completion_tokens_details") or {}
+                if details.get("reasoning_tokens") is not None:
+                    thinking.append(int(details["reasoning_tokens"]))
             elif is_infrastructure_failure(record.get("error")):
                 # Counted apart and NOT charged to the model. Splitting the
                 # reasons without splitting the count left glm-5 published as
@@ -622,7 +648,7 @@ def _coverage_row(
         system_type="model",
         provider=provider,
         prompt_version=prompt_version,
-        settings=_settings_from(observed, budgets),
+        settings=_settings_from(observed, budgets, thinking),
         n_sessions_attempted=len(sessions),
         n_sessions_generated=complete,
         # What the *model* failed to produce. A call the endpoint never
