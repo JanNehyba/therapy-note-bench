@@ -694,15 +694,34 @@ function renderJudges(data) {
        therapists reach <em>with each other</em> — the ceiling any judge is measured against,
        and it is not high.</p>
     ${(() => {
-      const kinds = new Set(data.judges
-        .map(j => JSON.stringify(Object.entries(j.judge_settings || {})
-          .filter(([k]) => k !== 'model' && k !== 'backend').sort())));
-      return kinds.size > 1
-        ? `<p class="note"><strong>These rows were not all measured at the same
-             settings.</strong> Each candidate is shown at the settings its answers were
-             produced at, under its name. A judge's settings change its answers — measured
-             here, one judge's thinking budget going from 128 to 256 moved every model's
-             completeness — so rows at different settings are not strictly comparable.</p>`
+      // Grouped by backend before comparing. A Gemini thinking budget and a
+      // GPT reasoning effort are different controls, so their settings can
+      // never be equal and a plain "these differ" fired on every table --
+      // including this one, where every candidate of a kind was re-measured at
+      // one setting and the warning was simply wrong.
+      const byBackend = {};
+      data.judges.forEach(j => {
+        const settings = j.judge_settings || {};
+        const backend = settings.backend || 'vertex';
+        const rest = JSON.stringify(Object.entries(settings)
+          .filter(([k]) => k !== 'model' && k !== 'backend').sort());
+        (byBackend[backend] = byBackend[backend] || new Set()).add(rest);
+      });
+      const mixed = Object.entries(byBackend).filter(([, kinds]) => kinds.size > 1);
+      if (mixed.length) {
+        return `<p class="note"><strong>Some of these rows were measured at different
+           settings from others of the same kind.</strong> Each candidate is shown at the
+           settings its answers were produced at, under its name. A judge's settings change
+           its answers — measured here, one judge's thinking budget going from 128 to 256
+           moved every model's completeness and reversed the order of the three
+           <code>flash</code> candidates — so those rows are not strictly comparable.</p>`;
+      }
+      return Object.keys(byBackend).length > 1
+        ? `<p class="note">Every candidate of a kind was measured at one setting. Across
+             kinds there is no such thing: a thinking budget and a reasoning effort are
+             different controls, and no value of one is the same as a value of the other.
+             That is a limit of comparing judges from two vendors, not a gap in this
+             run.</p>`
         : '';
     })()}
     <div class="scroll"><table class="concordance">

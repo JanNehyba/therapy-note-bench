@@ -238,3 +238,37 @@ def test_two_raters_who_agreed_on_everything_still_score_one():
 
 def test_a_normal_disagreement_is_untouched():
     assert cohens_kappa([1, 1, 0, 0], [1, 0, 1, 0]) == pytest.approx(0.0, abs=1e-9)
+
+
+def test_a_dropped_criterion_is_not_a_dropped_note(monkeypatch):
+    """The panel published "149 notes" the morning two answers were skipped.
+
+    `notes` was `len(rubric) // 23` -- rubric pairs over criteria. It read
+    exactly 150 until the guard against scoring a judge's refusal as a "no"
+    removed two pairs of 3450, and integer division turned that into two lost
+    notes. Two criteria were lost; the notes they belong to are still in the
+    analysis with 22 criteria each. The two published files disagreed, 149
+    against 150, because they divided different judges' pair counts.
+    """
+    rubric = Paired()
+    # Three notes' worth of criteria, one short: exactly what the division
+    # tripped on.
+    for _ in range(3 * 23 - 1):
+        rubric.add(1.0, [1.0, 1.0])
+
+    seen = {("s1", "therapist"), ("s1", "llama-3.1-70b"), ("s2", "therapist")}
+    monkeypatch.setattr(
+        calibration,
+        "collect",
+        lambda *args, **kwargs: {
+            "rubric_completeness": rubric,
+            "_per_criterion": {},
+            "_settings": __import__("collections").Counter(),
+            "_notes": seen,
+        },
+    )
+
+    report = calibration.calibrate([], "a-judge")
+
+    assert len(rubric) // 23 == 2, "the derivation this replaced loses a note"
+    assert report.notes == 3, "the notes are counted, not divided out"

@@ -296,6 +296,11 @@ def collect(
     pairs: dict[str, Paired] = defaultdict(Paired)
     per_criterion: dict[str, Paired] = defaultdict(Paired)
     seen: Counter = Counter()
+    #: Every (conversation, system) that contributed at least one paired
+    #: judgement. Counted rather than derived from the number of pairs: the
+    #: derivation was `len(rubric) // 23`, and the moment one criterion went
+    #: missing anywhere it reported a whole note gone.
+    notes: set[tuple[str, str]] = set()
 
     for session in sessions:
         blobs = {"therapist": session.meta.get("human_ratings") or {}}
@@ -330,6 +335,7 @@ def collect(
                     humans = [float(entry[key]) for entry in raw]
                     pairs["rubric_completeness"].add(value, humans)
                     per_criterion[key].add(value, humans)
+                    notes.add((session.id, system_id))
 
                 for measure in ("likert_completeness", "likert_conciseness", "likert_faithfulness"):
                     unit = f"{section}.{measure}"
@@ -342,6 +348,7 @@ def collect(
 
     pairs["_per_criterion"] = per_criterion  # type: ignore[assignment]
     pairs["_settings"] = seen  # type: ignore[assignment]
+    pairs["_notes"] = notes  # type: ignore[assignment]
     return pairs
 
 
@@ -511,6 +518,7 @@ def calibrate(sessions: list[Session], judge_model: str, *, root: Path | None = 
     pairs = collect(sessions, judge_model, root=root)
     per_criterion = pairs.pop("_per_criterion", {})  # type: ignore[arg-type]
     settings = pairs.pop("_settings", Counter())  # type: ignore[arg-type]
+    notes = len(pairs.pop("_notes", set()))  # type: ignore[arg-type]
 
     agreements = []
     for name in (
@@ -530,8 +538,6 @@ def calibrate(sessions: list[Session], judge_model: str, *, root: Path | None = 
         agreement = score_agreement(key, paired, binary=True)
         detail.append((key, agreement.judge_mean, agreement.human_vs_human))
 
-    rubric = pairs.get("rubric_completeness")
-    notes = len(rubric) // 23 if rubric else 0
     return Report(
         judge_model=judge_model,
         judge_prompt_version=tneval.JUDGE_PROMPT_VERSION,

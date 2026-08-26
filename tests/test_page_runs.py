@@ -83,6 +83,16 @@ def _page(tmp_path: Path) -> str:
     return report.render_page(_page_data(tmp_path))
 
 
+def _flat(html: str) -> str:
+    """Rendered HTML with its wrapping taken out.
+
+    A sentence in a template literal keeps the template's line breaks, so
+    asserting on a phrase that spans one silently fails on a page that says
+    exactly the right thing.
+    """
+    return re.sub(r"\s+", " ", html)
+
+
 def _run(page: str, tmp_path: Path, panel: str | None = None) -> str:
     node = shutil.which("node")
     if node is None:
@@ -391,7 +401,9 @@ def test_candidates_measured_at_different_settings_are_flagged(tmp_path):
     data["judges"] = mixed
     drawn = _run(report.render_methods(data), tmp_path, panel="judges-body")
 
-    assert "not all measured at the same" in drawn
+    # Whitespace-normalised: the sentence wraps in the template, so the
+    # rendered HTML carries a newline in the middle of it.
+    assert "from others of the same kind" in _flat(drawn)
     assert "thinking_budget 128" in drawn and "thinking_budget 256" in drawn
 
     # And silent when they agree. Asserted on what the page renders, not on its
@@ -399,8 +411,40 @@ def test_candidates_measured_at_different_settings_are_flagged(tmp_path):
     data["judges"] = _judges_data()
     agreed = _run(report.render_methods(data), tmp_path, panel="judges-body")
 
-    assert "not all measured at the same" not in agreed
+    assert "from others of the same kind" not in _flat(agreed)
     assert "thinking_budget 256" in agreed
+
+
+def test_two_vendors_settings_are_not_reported_as_a_defect(tmp_path):
+    """A thinking budget and a reasoning effort are different controls.
+
+    The warning compared whole settings mappings, so a Gemini row beside a GPT
+    row could never match and it fired on every table -- including one where
+    every candidate of a kind had just been re-measured at a single setting,
+    which is what made the flash ordering reverse. It was telling a reader
+    about a defect that had been fixed that morning.
+    """
+    from tnb import report
+
+    data = report.build([_row("x", "a-judge", 0.5)])
+    data.update(calibration=None, similarity_example=None, saturation=None, preference=None)
+    data["concordance"] = {}
+
+    judges = _judges_data()
+    for entry in judges["judges"]:
+        if entry["judge_model"].startswith("gpt-"):
+            entry["judge_settings"] = {
+                "model": entry["judge_model"],
+                "backend": "openai",
+                "effort": "medium",
+                "max_output_tokens": 672,
+            }
+    data["judges"] = judges
+
+    drawn = _run(report.render_methods(data), tmp_path, panel="judges-body")
+
+    assert "from others of the same kind" not in _flat(drawn)
+    assert "different controls" in _flat(drawn), "it says what the difference is instead"
 
 
 def test_the_methods_page_executes_without_throwing(tmp_path):
