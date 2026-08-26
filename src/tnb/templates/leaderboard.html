@@ -1109,7 +1109,16 @@ function renderJudges(data) {
       return `<td${beats ? ' class="beats"' : ''}>${alpha === null ? '—' : alpha.toFixed(3)}</td>`;
     }).join('');
     const mark = chosen.has(j.judge_model) ? ' <span class="dash">— in the panel</span>' : '';
-    return `<tr><td><code>${j.judge_model}</code>${mark}</td>${cells}</tr>`;
+    // What each candidate was measured at. Two of these at two thinking
+    // budgets are two instruments, and a row that hides that invites the
+    // reader to compare them anyway.
+    const at = j.judge_settings
+      ? Object.entries(j.judge_settings)
+          .filter(([k]) => k !== 'model' && k !== 'backend')
+          .map(([k, v]) => `${k} ${v}`).join(', ')
+      : '';
+    return `<tr><td><code>${j.judge_model}</code>${mark}` +
+      `${at ? `<br><span class="dash">${esc(at)}</span>` : ''}</td>${cells}</tr>`;
   }).join('');
 
   const humans = measures
@@ -1120,6 +1129,18 @@ function renderJudges(data) {
        own data, over the same ${data.notes} notes. The bottom row is what those two
        therapists reach <em>with each other</em> — the ceiling any judge is measured against,
        and it is not high.</p>
+    ${(() => {
+      const kinds = new Set(data.judges
+        .map(j => JSON.stringify(Object.entries(j.judge_settings || {})
+          .filter(([k]) => k !== 'model' && k !== 'backend').sort())));
+      return kinds.size > 1
+        ? `<p class="note"><strong>These rows were not all measured at the same
+             settings.</strong> Each candidate is shown at the settings its answers were
+             produced at, under its name. A judge's settings change its answers — measured
+             here, one judge's thinking budget going from 128 to 256 moved every model's
+             completeness — so rows at different settings are not strictly comparable.</p>`
+        : '';
+    })()}
     <div class="scroll"><table class="concordance">
       <thead><tr><th>Judge</th>${measures.map(m => `<th>${m}</th>`).join('')}</tr></thead>
       <tbody>${rows}

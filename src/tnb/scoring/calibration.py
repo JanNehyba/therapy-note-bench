@@ -26,7 +26,7 @@ suite with no scientific stack behind it.
 from __future__ import annotations
 
 import json
-from collections import defaultdict
+from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -242,8 +242,15 @@ def _answers_for(
     *,
     provider: str = "tneval",
     root: Path | None = None,
+    seen: Counter | None = None,
 ) -> dict[str, str]:
-    """Every cached judge answer for one note, keyed by question unit."""
+    """Every cached judge answer for one note, keyed by question unit.
+
+    `seen` counts the settings the answers were produced at. A candidate
+    measured at one thinking budget and compared against a candidate measured
+    at another is the mistake this whole panel exists to avoid making about
+    models -- and the panel was making it about itself.
+    """
     path = judge_module.cache_path(
         judge_model,
         tneval.JUDGE_PROMPT_VERSION,
@@ -261,6 +268,8 @@ def _answers_for(
         record = json.loads(file.read_text(encoding="utf-8"))
         if record.get("ok"):
             answers[record["unit"]] = record["answer"]
+            if seen is not None:
+                seen[json.dumps(record.get("judge_fingerprint"), sort_keys=True)] += 1
     return answers
 
 
@@ -274,6 +283,7 @@ def collect(
     """
     pairs: dict[str, Paired] = defaultdict(Paired)
     per_criterion: dict[str, Paired] = defaultdict(Paired)
+    seen: Counter = Counter()
 
     for session in sessions:
         blobs = {"therapist": session.meta.get("human_ratings") or {}}
@@ -284,7 +294,7 @@ def collect(
             human = blob.get("metrics_human")
             if not isinstance(human, list) or len(human) != ANNOTATORS:
                 continue
-            answers = _answers_for(session.id, system_id, judge_model, root=root)
+            answers = _answers_for(session.id, system_id, judge_model, root=root, seen=seen)
             if not answers:
                 continue
 
@@ -313,6 +323,7 @@ def collect(
                     )
 
     pairs["_per_criterion"] = per_criterion  # type: ignore[assignment]
+    pairs["_settings"] = seen  # type: ignore[assignment]
     return pairs
 
 
@@ -370,6 +381,13 @@ class Report:
     agreements: list[Agreement]
     per_criterion: list[tuple[str, float | None, float | None]] = field(default_factory=list)
 
+    #: The judge settings these answers were produced at, so two candidates
+    #: measured differently are not silently compared. `None` for a report read
+    #: from a file written before this was recorded.
+    judge_settings: dict | None = None
+    #: Present only when one candidate's own cache held more than one setting.
+    other_settings: dict[str, int] = field(default_factory=dict)
+
     #: How far apart the two alphas must be before the comparison is called.
     #: Two instruments within this of each other are reported as inseparable
     #: rather than rounded into a finding.
@@ -405,6 +423,7 @@ class Report:
 def calibrate(sessions: list[Session], judge_model: str, *, root: Path | None = None) -> Report:
     pairs = collect(sessions, judge_model, root=root)
     per_criterion = pairs.pop("_per_criterion", {})  # type: ignore[arg-type]
+    settings = pairs.pop("_settings", Counter())  # type: ignore[arg-type]
 
     agreements = []
     for name in (
@@ -429,6 +448,13 @@ def calibrate(sessions: list[Session], judge_model: str, *, root: Path | None = 
     return Report(
         judge_model=judge_model,
         judge_prompt_version=tneval.JUDGE_PROMPT_VERSION,
+        # What this candidate was measured at. Comparing a judge at one thinking
+        # budget with a judge at another is exactly the confusion the panel is
+        # meant to resolve, and it was making it about its own rows.
+        judge_settings=(json.loads(settings.most_common(1)[0][0]) if settings else None),
+        other_settings={key: count for key, count in sorted(settings.items())}
+        if len(settings) > 1
+        else {},
         notes=notes,
         agreements=agreements,
         per_criterion=detail,

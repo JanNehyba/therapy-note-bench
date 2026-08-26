@@ -842,6 +842,12 @@ def cmd_judges(args: argparse.Namespace) -> int:
                 "judges": [
                     {
                         "judge_model": r.judge_model,
+                        # What this candidate was measured at. Two candidates at
+                        # two thinking budgets are two instruments, and the
+                        # panel that picks a judge was comparing them without
+                        # saying so.
+                        "judge_settings": r.judge_settings,
+                        "other_settings": r.other_settings,
                         "agreements": [
                             {
                                 "name": a.name,

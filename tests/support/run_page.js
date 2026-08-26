@@ -40,6 +40,15 @@ try {
   process.exit(1);
 }
 
+// With a second argument, print that panel's rendered HTML instead of the
+// summary: a string can sit in the template unconditionally and still never
+// reach the page, so asserting on the source cannot tell the two apart.
+const wanted = process.argv[3];
+if (wanted) {
+  console.log(nodes[wanted] ? nodes[wanted].innerHTML : '(panel absent)');
+  process.exit(0);
+}
+
 const rendered = Object.entries(nodes)
   .filter(([, el]) => el.innerHTML && el.innerHTML.length > 40)
   .map(([id, el]) => `${id}: ${el.innerHTML.length} chars`);

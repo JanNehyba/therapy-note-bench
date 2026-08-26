@@ -75,7 +75,7 @@ def _page(tmp_path: Path) -> str:
     return report.render_page(data)
 
 
-def _run(page: str, tmp_path: Path) -> str:
+def _run(page: str, tmp_path: Path, panel: str | None = None) -> str:
     node = shutil.which("node")
     if node is None:
         pytest.skip("node is not installed; the page cannot be executed here")
@@ -85,7 +85,10 @@ def _run(page: str, tmp_path: Path) -> str:
         "\n".join(re.findall(r"<script[^>]*>(.*?)</script>", page, re.S)), encoding="utf-8"
     )
     finished = subprocess.run(
-        [node, str(RUNNER), str(script)], capture_output=True, text=True, timeout=60
+        [node, str(RUNNER), str(script), *([panel] if panel else [])],
+        capture_output=True,
+        text=True,
+        timeout=60,
     )
     assert finished.returncode == 0, finished.stdout + finished.stderr
     return finished.stdout
@@ -203,9 +206,11 @@ def test_the_saturation_panel_names_the_judge_that_produced_it(tmp_path):
 def _judges_data() -> dict:
     """Six candidate judges, the shape `tnb judges` writes."""
 
-    def judge_row(name: str, rubric: float, likert: float) -> dict:
+    def judge_row(name: str, rubric: float, likert: float, budget: int = 256) -> dict:
         return {
             "judge_model": name,
+            "judge_settings": {"model": name, "thinking_budget": budget},
+            "other_settings": {},
             "rubric_beats_likert": "True",
             "agreements": [
                 {
@@ -324,3 +329,48 @@ def test_every_key_in_the_page_data_is_read_by_the_page():
     # literal `DATA.saturation` never appears.
     unread = [key for key in data if f".{key}" not in template]
     assert not unread, f"in the payload and read by nothing: {unread}"
+
+
+def test_candidates_measured_at_different_settings_are_flagged(tmp_path):
+    """The panel that picks a judge was comparing instruments, not judges.
+
+    `gemini-3.1-pro-preview`'s answers were re-asked at a thinking budget of
+    256 and the other Gemini candidates' were still at 128, with the table
+    putting the four alphas side by side and saying nothing.
+    """
+    from tnb import judge
+    from tnb.scoring import concordance
+
+    rows = [
+        _row(system, judge_model, value)
+        for judge_model, scores in (
+            (judge.DEFAULT_MODEL, {"x": 0.9, "y": 0.5}),
+            (judge.SECOND_JUDGE, {"x": 0.5, "y": 0.9}),
+        )
+        for system, value in scores.items()
+    ]
+    data = report.build(rows)
+    data.update(calibration=None, similarity_example=None, saturation=None, preference=None)
+    data["concordance"] = {
+        results.TRACK_TNEVAL: concordance.to_json(
+            concordance.compare(
+                rows, results.TRACK_TNEVAL, [k for k, _ in report.COLUMNS[results.TRACK_TNEVAL]]
+            )
+        )
+    }
+
+    mixed = _judges_data()
+    mixed["judges"][1]["judge_settings"]["thinking_budget"] = 128
+    data["judges"] = mixed
+    drawn = _run(report.render_page(data), tmp_path, panel="judges-body")
+
+    assert "not all measured at the same" in drawn
+    assert "thinking_budget 128" in drawn and "thinking_budget 256" in drawn
+
+    # And silent when they agree. Asserted on what the page renders, not on its
+    # source: the warning is a string literal in the template either way.
+    data["judges"] = _judges_data()
+    agreed = _run(report.render_page(data), tmp_path, panel="judges-body")
+
+    assert "not all measured at the same" not in agreed
+    assert "thinking_budget 256" in agreed
