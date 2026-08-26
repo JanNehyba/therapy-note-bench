@@ -10,8 +10,9 @@ Two providers serving `qwen3.5-122b` may be serving two different builds -- a
 different quantisation, different weights -- and letting them share a path would
 silently overwrite one benchmark with another.
 
-so adding a twelfth model to the benchmark re-generates that model and nothing
-else, and a run interrupted at section 9 of session 30 resumes there. That is
+Every unit is its own file and every file is written once, so adding a twelfth
+model to the benchmark re-generates that model and nothing else, and a run
+interrupted at section 9 of session 30 resumes there. That is
 the whole reason this exists: a full pass is roughly 730 calls per model and
 several hours at the concurrency a shared academic endpoint tolerates.
 
