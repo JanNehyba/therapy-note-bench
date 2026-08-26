@@ -841,37 +841,45 @@ def cmd_judges(args: argparse.Namespace) -> int:
     if args.dry_run or args.no_write:
         return 0
 
+    judges = [
+        {
+            "judge_model": r.judge_model,
+            # What this candidate was measured at. Two candidates at two
+            # thinking budgets are two instruments, and the panel that picks a
+            # judge was comparing them without saying so.
+            "judge_settings": r.judge_settings,
+            "other_settings": r.other_settings,
+            "agreements": [
+                {
+                    "name": a.name,
+                    "statistic": a.statistic,
+                    "alpha": a.alpha_judge_mean,
+                    "alpha_humans": a.alpha_human_vs_human,
+                    "alpha_level": a.alpha_level,
+                    "judge": a.judge_mean,
+                    "humans": a.human_vs_human,
+                    "n": a.n,
+                }
+                for a in r.agreements
+            ],
+            "rubric_beats_likert": r.rubric_beats_likert,
+        }
+        for r in reports
+    ]
+
     report.DOCS_DIR.mkdir(parents=True, exist_ok=True)
     report.JUDGES_PATH.write_text(
         _json.dumps(
             {
                 "notes": reports[0].notes,
-                "judges": [
-                    {
-                        "judge_model": r.judge_model,
-                        # What this candidate was measured at. Two candidates at
-                        # two thinking budgets are two instruments, and the
-                        # panel that picks a judge was comparing them without
-                        # saying so.
-                        "judge_settings": r.judge_settings,
-                        "other_settings": r.other_settings,
-                        "agreements": [
-                            {
-                                "name": a.name,
-                                "statistic": a.statistic,
-                                "alpha": a.alpha_judge_mean,
-                                "alpha_humans": a.alpha_human_vs_human,
-                                "alpha_level": a.alpha_level,
-                                "judge": a.judge_mean,
-                                "humans": a.human_vs_human,
-                                "n": a.n,
-                            }
-                            for a in r.agreements
-                        ],
-                        "rubric_beats_likert": r.rubric_beats_likert,
-                    }
-                    for r in reports
-                ],
+                # Which of these candidates the measurement can tell apart and
+                # which it cannot, computed from the rows above rather than
+                # from the reports behind them -- so the claim and the numbers
+                # a reader checks it against are the same list. The rule is the
+                # one that gives the leaderboard its shared ranks; the panel
+                # that picks the judge was never held to it.
+                "separable": calibration.separations(judges, "rubric_completeness"),
+                "judges": judges,
             },
             indent=2,
             sort_keys=True,

@@ -120,10 +120,13 @@ it is real, and a gap in it can be accounting rather than behaviour.
 
 For the TN-Eval track each judge is calibrated against two human annotators and
 that calibration is published above the leaderboard. Calibrated is not the same
-as correct. Nor does newer mean better: on this task `gemini-2.5-flash` agreed
-with the therapists slightly *more* than `gemini-3.7-flash` did, which is the
-reverse of what any general benchmark would predict, and is why every candidate
-is measured rather than assumed. TN-Eval's own finding is that LLM judges track humans acceptably on
+as correct. Nor does newer or dearer mean better: measured at one setting, the
+seven candidates span 0.089 in agreement with the therapists, and of the 21
+pairs among them only 7 are separated by more than the 0.05 this repository
+treats as the smallest real difference. The three `flash` candidates cannot be
+told apart from each other, and neither can the $20 GPT from the $12 one. That
+is why every candidate is measured rather than assumed — and why the panel
+reports bands rather than an order. TN-Eval's own finding is that LLM judges track humans acceptably on
 completeness and conciseness and **struggle on faithfulness** — which is the
 dimension that matters most clinically, because it is where hallucinations show
 up.

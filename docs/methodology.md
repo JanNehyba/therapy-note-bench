@@ -124,11 +124,21 @@ nothing here. If real session data are ever added to this benchmark, the judge
 must move inside the infrastructure that holds them — which is why the provider
 layer is swappable from the start.
 
-**Why not the newest one.** Judge quality here does not follow release order.
-Measured over the same 150 notes, Krippendorff's alpha on the rubric:
-`gemini-2.5-flash` 0.550, `gemini-3.5-flash` 0.543, `gemini-3.7-flash` 0.541 —
-exactly backwards from what a general benchmark would predict. The calibration
-below is not a formality; without it we would have chosen worse.
+**Why not the newest one.** Judge quality here does not follow release order,
+and mostly it does not follow anything: measured over the same 150 notes with
+every candidate at one setting, the three `flash` models score 0.544, 0.537 and
+0.537 on the rubric. They span 0.008. The rule this repository uses elsewhere —
+two things closer than 0.05 are reported as inseparable rather than ranked —
+says that ordering is not a finding, in either direction.
+
+An earlier version of this page said the newest flash was the *worst* of the
+three, with the numbers 0.550, 0.543 and 0.541. Those were measured at
+different thinking budgets and the conclusion reversed when they were not.
+What the calibration does support is narrower and is derived on the page
+itself: `gemini-3.1-pro-preview` is separably above five of the six others,
+`gemini-2.5-pro` above the two GPT candidates, and no other pair separates —
+so the $20 judge is indistinguishable from the $2.50 one. The calibration is
+not a formality; without it we would have picked by reputation.
 
 ### Calibration comes before the leaderboard
 

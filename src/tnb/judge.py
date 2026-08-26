@@ -53,21 +53,30 @@ DEFAULT_MODEL = "gemini-3.1-pro-preview"
 #: -- see tnb.scoring.preference.
 #:
 #: Chosen by measurement over the same 150 notes the humans rated, not by
-#: reputation. Krippendorff's alpha on the rubric, against a human-vs-human
-#: ceiling of 0.504:
+#: reputation. Krippendorff's alpha on the rubric, every candidate at one
+#: setting, against a human-vs-human ceiling of 0.504:
 #:
-#:     gemini-3.1-pro-preview  0.587      gpt-5.6-terra  0.520
+#:     gemini-3.1-pro-preview  0.600      gpt-5.6-terra  0.520
 #:     gemini-2.5-pro          0.574      gpt-5.6-sol    0.510
-#:     gemini-2.5-flash        0.550
-#:     gemini-3.5-flash        0.543
-#:     gemini-3.7-flash        0.540
+#:     gemini-3.7-flash        0.544
+#:     gemini-2.5-flash        0.537
+#:     gemini-3.5-flash        0.537
 #:
-#: Two things that ordering says and a release-date ordering would not. The
-#: newest flash is the *worst* of the three flashes, and the flagship `sol` is
-#: worse than the cheaper `terra` -- twice, from two vendors, capability does not
-#: predict judge quality on this task. And every one of them agrees with a
-#: therapist more often than the two therapists agree with each other (77.2%),
-#: so "worst" here means 78.6% against 81.5%, not bad.
+#: Read as bands, not as an order. Of the 21 pairs, 7 are separated by more
+#: than `calibration.ALPHA_MARGIN`: this one over five of the other six, and
+#: `gemini-2.5-pro` over the two GPT candidates. Nothing else separates -- not
+#: the three `flash` models from each other (they span 0.008), and not `sol` at
+#: $20 per million output tokens from `terra` at $12 or from `flash` at $2.50.
+#: Capability does not predict judge quality on this task, and neither does
+#: price.
+#:
+#: This comment used to say the newest flash was the worst of the three. It was
+#: reading three numbers taken at different thinking budgets; at one budget the
+#: order reverses, which is what a 0.008 spread should be expected to do.
+#:
+#: Every candidate agrees with a therapist at least as often as the two
+#: therapists agree with each other, but only the two `pro` models clear that
+#: ceiling by the margin.
 SECOND_JUDGE = "gpt-5.6-terra"
 
 #: Candidates worth measuring against the human annotators before one is chosen.

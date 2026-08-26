@@ -236,15 +236,22 @@ def _judges_data() -> dict:
             ],
         }
 
+    from tnb.scoring import calibration
+
+    judges = [
+        judge_row("gemini-3.1-pro-preview", 0.587, 0.133),
+        judge_row("gemini-2.5-flash", 0.550, 0.141),
+        judge_row("gemini-3.7-flash", 0.540, 0.091),
+        judge_row("gpt-5.6-terra", 0.520, -0.015),
+        judge_row("gemini-2.5-pro", 0.574, 0.063),
+    ]
+    # Computed rather than hand-written, and computed from the same list the
+    # page draws -- which is the point of the block: a claim about these rows
+    # that a reader checks against these rows.
     return {
         "notes": 150,
-        "judges": [
-            judge_row("gemini-3.1-pro-preview", 0.587, 0.133),
-            judge_row("gemini-2.5-flash", 0.550, 0.141),
-            judge_row("gemini-3.7-flash", 0.540, 0.091),
-            judge_row("gpt-5.6-terra", 0.520, -0.015),
-            judge_row("gemini-2.5-pro", 0.574, 0.063),
-        ],
+        "separable": calibration.separations(judges, "rubric_completeness"),
+        "judges": judges,
     }
 
 
@@ -297,7 +304,18 @@ def test_the_judge_box_claims_are_derived_from_its_own_table(tmp_path):
     _run(page, tmp_path)
 
     assert "gpt-5.6-sol" not in page.split("renderJudges")[-1]
-    assert "notReleaseOrder" in page and "whereTheCeilingIsCleared" in page
+    assert "whatTheCalibrationSeparates" in page and "whereTheCeilingIsCleared" in page
+
+    # And what it derives is margin-aware. `gemini-3.1-pro-preview` 0.587 leads
+    # `gpt-5.6-terra` 0.520 by 0.067, which clears the 0.05 margin; it leads
+    # `gemini-2.5-pro` 0.574 by 0.013, which does not. The page used to say
+    # "the newest flash is the worst of the three" -- a gap of 0.0077, a
+    # seventh of the margin, and it reversed on the next measurement.
+    block = _judges_data()["separable"]
+    separated = {(item["better"], item["worse"]) for item in block["separated"]}
+    assert ("gemini-3.1-pro-preview", "gpt-5.6-terra") in separated
+    assert ("gemini-3.1-pro-preview", "gemini-2.5-pro") not in separated
+    assert not any("flash" in better and "flash" in worse for better, worse in separated)
 
 
 def test_every_key_in_the_page_data_is_read_by_the_page():

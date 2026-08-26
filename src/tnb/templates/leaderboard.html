@@ -1116,32 +1116,48 @@ function version(name) {
   return found ? Number(found[1]) + Number(found[2] || 0) / 100 : 0;
 }
 
-function notReleaseOrder(data, measure) {
-  // Models whose names differ only by a version number, best and worst by
-  // agreement. If the better one is not the later one, capability did not
-  // predict judge quality -- which is the whole reason this box exists.
-  const families = {};
-  data.judges.forEach(j => {
-    const family = j.judge_model.replace(/[\d.]+/g, '#');
-    (families[family] = families[family] || []).push(j);
-  });
-  const upsets = Object.values(families)
-    .filter(group => group.length > 1)
-    .map(group => {
-      const ranked = [...group].sort((a, b) => alphaOf(b, measure) - alphaOf(a, measure));
-      const newest = [...group].sort((a, b) => version(a.judge_model) - version(b.judge_model)).pop();
-      return ranked[0].judge_model === newest.judge_model
-        ? null
-        : {best: ranked[0].judge_model, newest: newest.judge_model};
-    })
-    .filter(Boolean);
+function whatTheCalibrationSeparates(sep) {
+  // The pairs this measurement can actually tell apart, and the ones it cannot.
+  // Decided in Python and drawn here, under the same rule that gives the
+  // leaderboard its shared ranks.
+  //
+  // This replaced a sentence derived from the top of the ordering -- "the
+  // newest flash is the worst of the three". Re-measured at one setting the
+  // newest flash is the *best* of the three, by 0.0077, which is a seventh of
+  // the margin: the sentence was true of noise in both directions.
+  if (!sep || !sep.ranked || sep.ranked.length < 2) return '';
+  const names = new Set(sep.separated.map(s => s.better));
+  const best = sep.ranked[0];
+  const worst = sep.ranked[sep.ranked.length - 1];
 
-  if (!upsets.length) return '';
-  return `<p class="note">Reputation does not pick a judge here; agreement with two
-     therapists does. ${upsets.map(u =>
-       `<code>${u.best}</code> agrees with them more than the later
-        <code>${u.newest}</code>`).join(', and ')}. Choosing by release order would have
-     chosen worse.</p>`;
+  const led = [...names].map(better => {
+    const under = sep.separated.filter(s => s.better === better).map(s => s.worse);
+    return `<code>${better}</code> over ${under.map(w => `<code>${w}</code>`).join(', ')}`;
+  });
+
+  return `<p class="note">Read as bands, not as an order. Two candidates closer than
+    ${sep.margin} are reported here as inseparable rather than ranked — the rule the
+    tables above use for models, applied to the judges for the same reason.
+    ${led.length
+      ? `Of the ${(sep.ranked.length * (sep.ranked.length - 1)) / 2} pairs, ${sep.separated.length}
+         are separated by more than that: ${led.join('; ')}. Every other pair is not,
+         including all three <code>flash</code> candidates among themselves and the two
+         GPT candidates against each other — so price does not buy a better judge here.`
+      : `No pair is separated by more than that: this measurement orders them and cannot
+         tell them apart.`}
+    ${sep.ceiling !== null && sep.ceiling !== undefined
+      ? ` ${sep.all_at_or_above_ceiling
+            ? `Every candidate agrees with a therapist at least as often as the two
+               therapists agree with each other`
+            : `Not every candidate reaches the ceiling the two therapists set between them`}
+          (${sep.ceiling.toFixed(3)}), but only
+          ${sep.above_ceiling.length
+            ? sep.above_ceiling.map(n => `<code>${n}</code>`).join(' and ')
+            : 'none of them'} clear${sep.above_ceiling.length === 1 ? 's' : ''} it by the margin.`
+      : ''}
+    The spread from <code>${best.judge}</code> ${best.alpha.toFixed(3)} to
+    <code>${worst.judge}</code> ${worst.alpha.toFixed(3)} is
+    ${(best.alpha - worst.alpha).toFixed(3)}.</p>`;
 }
 
 function whereTheCeilingIsCleared(data, measures, ceiling) {
@@ -1219,7 +1235,7 @@ function renderJudges(data) {
         <tr class="humans"><td><strong>the two therapists</strong></td>${humans}</tr>
       </tbody>
     </table></div>
-    ${notReleaseOrder(data, measures[0])}
+    ${whatTheCalibrationSeparates(data.separable)}
     ${whereTheCeilingIsCleared(data, measures, ceiling)}`;
 }
 

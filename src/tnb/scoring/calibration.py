@@ -183,6 +183,18 @@ def exact_agreement(first: list[int], second: list[int]) -> float | None:
     return sum(a == b for a, b in zip(first, second, strict=True)) / len(first)
 
 
+#: How far apart two agreement figures must be before the difference between
+#: them is a finding. Two instruments within this of each other are reported as
+#: inseparable rather than rounded into an ordering.
+#:
+#: This rule is why the leaderboard shares ranks between models it cannot
+#: separate. It was applied to the rubric-against-Likert comparison inside one
+#: judge and to nothing else -- so the panel that picks the judge ordered seven
+#: candidates spanning 0.089 by differences as small as 0.0072, and the page
+#: derived a sentence from the top of that ordering.
+ALPHA_MARGIN = 0.05
+
+
 @dataclass
 class Paired:
     """Judgements of the same thing by the judge and by each human."""
@@ -395,9 +407,9 @@ class Report:
     other_settings: dict[str, int] = field(default_factory=dict)
 
     #: How far apart the two alphas must be before the comparison is called.
-    #: Two instruments within this of each other are reported as inseparable
-    #: rather than rounded into a finding.
-    ALPHA_MARGIN = 0.05
+    #: The shared rule, kept here under its old name so nothing that reads it
+    #: through the class has to change.
+    ALPHA_MARGIN = ALPHA_MARGIN
 
     @property
     def rubric_beats_likert(self) -> bool | None:
@@ -424,6 +436,75 @@ class Report:
         if first is None or second is None or abs(first - second) < self.ALPHA_MARGIN:
             return None
         return first > second
+
+
+def separations(judges: list[dict], measure: str, margin: float = ALPHA_MARGIN) -> dict:
+    """Which candidate judges this measurement can actually tell apart.
+
+    Takes the serialised rows -- the same list that goes into `docs/judges.json`
+    and reaches the page -- rather than the `Report` objects behind them, so
+    what this describes and what the reader sees cannot come apart.
+
+    Seven candidates spanning 0.089 with consecutive gaps as small as 0.0072 is
+    an ordering the data does not support, and the page was deriving a sentence
+    from the top of it. The leaderboard has shared ranks for exactly this
+    reason; the panel that picks the judge did not.
+
+    Bands are deliberately *not* formed by chaining "within the margin" down
+    the list. That relation is not transitive -- every consecutive gap here is
+    under the margin while the ends are 0.089 apart -- so chaining would put all
+    seven in one band and say nothing. What is reported instead is the set of
+    pairs the margin does separate, which is a claim a reader can check against
+    the two numbers beside it.
+
+    `above_ceiling` gets the same treatment. Every candidate agrees with a
+    therapist at least as often as the two therapists agree with each other,
+    but only the ones clear of that ceiling *by the margin* are distinguishable
+    from it, and the difference between those two sentences is most of what a
+    calibration is for.
+    """
+
+    def number(value) -> float | None:
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            return None
+
+    found: list[tuple[str, float]] = []
+    ceiling = None
+    for row in judges:
+        agreement = next((a for a in row.get("agreements", []) if a.get("name") == measure), None)
+        if agreement is None:
+            continue
+        alpha = number(agreement.get("alpha"))
+        if alpha is None:
+            continue
+        ceiling = number(agreement.get("alpha_humans")) or ceiling
+        found.append((row["judge_model"], alpha))
+    found.sort(key=lambda pair: (-pair[1], pair[0]))
+
+    return {
+        "measure": measure,
+        "margin": margin,
+        "ceiling": ceiling,
+        "ranked": [{"judge": name, "alpha": alpha} for name, alpha in found],
+        "separated": [
+            {"better": better, "worse": worse, "by": round(first - second, 4)}
+            for index, (better, first) in enumerate(found)
+            for worse, second in found[index + 1 :]
+            if first - second > margin
+        ],
+        "above_ceiling": (
+            [name for name, alpha in found if alpha - ceiling > margin]
+            if ceiling is not None
+            else []
+        ),
+        "all_at_or_above_ceiling": (
+            bool(found) and all(alpha >= ceiling for _, alpha in found)
+            if ceiling is not None
+            else False
+        ),
+    }
 
 
 def calibrate(sessions: list[Session], judge_model: str, *, root: Path | None = None) -> Report:
