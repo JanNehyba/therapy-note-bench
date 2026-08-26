@@ -416,3 +416,26 @@ def test_two_loads_do_not_share_their_bookkeeping(tmp_path):
     first.other_fingerprints["only-mine"] = 1
 
     assert saturation.load_answers(tmp_path).other_fingerprints == {}
+
+
+def test_a_system_with_nothing_of_its_own_reports_no_mean_rather_than_zero():
+    """`own_mean` was `0.0` when there was nothing to average, and the page
+    prints it: "the table shows 0.000, over all 0 of its own".
+
+    Zero is not what such a system scored; it is what nobody measured. The page
+    has always guarded on `!= null` — Python was the side that would not say
+    it, and the serialiser would have thrown on the honest value.
+    """
+    from tnb.scoring import saturation
+
+    empty = saturation.Interval(system="x", mean=0.5, low=0.4, high=0.6, sessions=10)
+
+    assert empty.own_mean is None, "the default is an absence, not a zero"
+
+    payload = saturation.interval_json(empty)
+    assert payload["own_mean"] is None, "and the serialiser passes it through"
+
+    measured = saturation.Interval(
+        system="y", mean=0.5, low=0.4, high=0.6, sessions=10, own_sessions=12, own_mean=0.5123
+    )
+    assert saturation.interval_json(measured)["own_mean"] == 0.5123, "a real one still arrives"

@@ -102,7 +102,11 @@ class Interval:
     #: leaderboard's differ: same measure, different denominator.
     own_sessions: int = 0
     #: The mean over this system's own conversations -- what the table shows.
-    own_mean: float = 0.0
+    #: `None` when there is nothing to average, never 0.0: the page prints this
+    #: figure, and a zero there reads as a score rather than as an absence. The
+    #: page has always guarded on `!= null`; this side was the one that would
+    #: not say it.
+    own_mean: float | None = None
 
 
 def label_for(provider: str, system_id: str, providers_by_system: dict) -> str:
@@ -364,7 +368,7 @@ def paired_intervals(
                 high=ordered[int(0.975 * samples) - 1],
                 sessions=len(shared),
                 own_sessions=len(own),
-                own_mean=sum(own.values()) / len(own) if own else 0.0,
+                own_mean=sum(own.values()) / len(own) if own else None,
             )
         )
 
@@ -400,6 +404,27 @@ def indistinguishable(
         else:
             groups.append([interval.system])
     return groups
+
+
+def interval_json(interval: Interval) -> dict:
+    """One system's interval, as the page consumes it.
+
+    A function rather than four lines inside `build` so it can be called: the
+    only way to reach it otherwise is to run the whole analysis off disk, which
+    is why the `own_mean` absence went untested until it was found by reading.
+    """
+    return {
+        "system": interval.system,
+        "mean": round(interval.mean, 4),
+        # `None` travels as null. The page guards on it and prints nothing;
+        # rounding an absence here would throw, and returning 0.0 instead --
+        # which is what this did -- prints "the table shows 0.000" about a
+        # system nobody measured.
+        "own_mean": None if interval.own_mean is None else round(interval.own_mean, 4),
+        "own_sessions": interval.own_sessions,
+        "low": round(interval.low, 4),
+        "high": round(interval.high, 4),
+    }
 
 
 def build(root: Path | None = None, judge_model: str = judge.DEFAULT_MODEL) -> dict | None:
@@ -472,17 +497,7 @@ def build(root: Path | None = None, judge_model: str = judge.DEFAULT_MODEL) -> d
             )
         ],
         "verdict_counts": {name: len(keys) for name, keys in sorted(verdicts.items())},
-        "intervals": [
-            {
-                "system": i.system,
-                "mean": round(i.mean, 4),
-                "own_mean": round(i.own_mean, 4),
-                "own_sessions": i.own_sessions,
-                "low": round(i.low, 4),
-                "high": round(i.high, 4),
-            }
-            for i in intervals
-        ],
+        "intervals": [interval_json(i) for i in intervals],
         "indistinguishable": indistinguishable(intervals, beats),
         "bootstrap": {"samples": BOOTSTRAP_SAMPLES, "seed": BOOTSTRAP_SEED, "paired": True},
     }
