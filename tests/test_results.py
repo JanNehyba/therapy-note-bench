@@ -672,3 +672,28 @@ def test_every_published_row_carries_a_system_type_the_code_knows():
     unknown = sorted({row.system_type for row in drawn} - set(results.SYSTEM_TYPES))
 
     assert not unknown, f"drawn with a system_type nothing knows: {unknown}"
+
+
+def test_the_providers_earlier_cut_cannot_leave_half_a_secret(monkeypatch):
+    """`openai_compatible` stores `response.text[:200]` before anything masks.
+
+    That cut can only bisect a value straddling character 200, and
+    `normalise_reason` keeps 120 — so a fragment left at 200 is discarded at
+    120. Asserted rather than reasoned about, because the two constants live in
+    different modules and either could move.
+    """
+    cut = einfra.ERROR_BODY_CHARS
+    secret = "my-fake-project-9876"
+    monkeypatch.setenv("VERTEX_PROJECT", secret)
+
+    # Positioned so the provider's cut lands inside it, with no `projects/`
+    # prefix for the resource-path pass to catch.
+    lead = "y" * (cut - len("HTTP429: ") - len(secret) // 2)
+    body = f"HTTP429: {lead}{secret} please retry"
+    assert secret not in body[:cut], "the fixture must actually bisect it"
+
+    masked = results.normalise_reason(body[:cut])
+
+    for length in range(6, len(secret)):
+        assert secret[:length] not in masked, f"a {length}-character head survived"
+    assert len(masked) < cut, "and the second cut is the shorter of the two"

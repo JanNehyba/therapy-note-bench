@@ -315,6 +315,15 @@ def build_request(provider: Provider, model_id: str, prompt: str, budget: int) -
     return body
 
 
+#: How much of a non-200 body is kept. A provider's error is the only place a
+#: cloud project id or a key hash can reach us, and `results.normalise_reason`
+#: masks it -- but this cut happens first, so the two have to be read together:
+#: it can only bisect a value straddling this character, and `normalise_reason`
+#: keeps fewer than this, so a bisected fragment never survives into `results/`.
+#: `tests/test_results` asserts the pair rather than the pair of numbers.
+ERROR_BODY_CHARS = 200
+
+
 def complete(
     provider: Provider, model_id: str, prompt: str, *, max_tokens: int | None = None
 ) -> Completion:
@@ -353,7 +362,7 @@ def complete(
             text="",
             ok=False,
             max_tokens=budget,
-            error=f"HTTP{response.status_code}: {response.text[:200]}",
+            error=f"HTTP{response.status_code}: {response.text[:ERROR_BODY_CHARS]}",
             latency_s=latency,
         )
 

@@ -559,6 +559,18 @@ def normalise_reason(error: str | None) -> str:
 
     Masking happens before the length cut, so a secret can never be half-cut and
     still recognisable.
+
+    There is an *earlier* cut, in the provider: a non-200 response is stored as
+    ``response.text[:200]``, before anything masks. It cannot defeat this, and
+    the arithmetic is worth writing down rather than re-deriving. That cut can
+    only bisect a value straddling character 200; this function keeps 120. A
+    fragment left at 200 is discarded at 120, so no half of anything survives
+    into ``results/``.
+
+    Every path a raw provider error can take was walked on 2026-08-26:
+    ``generations/`` and ``scores/`` hold it verbatim and both are gitignored;
+    `index_generations` and both scorers are the only readers, and each either
+    classifies it or brings it through here first.
     """
     text = (error or "unknown error").strip()
     for value in _sensitive_values():
