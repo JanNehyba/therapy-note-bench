@@ -696,3 +696,38 @@ def test_the_sentence_under_the_table_names_this_table_s_rank_first(tmp_path):
         assert f"{here}" in finished.stdout.split("in this table")[0][-12:], (
             f"viewing {judge}, the rank before 'in this table' must be its own"
         )
+
+
+def test_every_link_between_the_two_pages_lands_somewhere(tmp_path):
+    """The split created cross-page links, and a link to a panel that moved
+    again is a dead end a reader finds and nobody else does.
+
+    Checks the file and the anchor: `methods.html#concordance` requires both a
+    `methods.html` and an element with that id in it.
+    """
+    from tnb import report
+
+    readme = tmp_path / "README.md"
+    readme.write_text("<!-- LEADERBOARD:BEGIN -->\n<!-- LEADERBOARD:END -->\n", encoding="utf-8")
+    report.write([_row("x", "a-judge", 0.5)], docs_dir=tmp_path, readme=readme)
+
+    pages = {
+        name: (tmp_path / name).read_text(encoding="utf-8")
+        for name in ("index.html", "methods.html")
+    }
+
+    for name, text in pages.items():
+        # The static markup only. A `href="${l.url}"` inside a template literal
+        # is a link the page builds at run time out of the payload, and its
+        # target is a licence's website rather than anything here.
+        static = re.sub(r"<script[^>]*>.*?</script>", "", text, flags=re.S)
+        for href in re.findall(r'href="([^"]+)"', static):
+            if href.startswith(("http://", "https://", "mailto:")):
+                continue
+            target, _, anchor = href.partition("#")
+            target = target or name
+            assert target in pages, f"{name} links to {target}, which is not written"
+            if anchor:
+                assert f'id="{anchor}"' in pages[target], (
+                    f"{name} links to #{anchor} in {target}, which has no such element"
+                )
