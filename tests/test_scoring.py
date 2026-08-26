@@ -842,3 +842,63 @@ def test_a_judge_answer_that_finished_is_an_answer(monkeypatch):
 
     assert answer.ok is True
     assert answer.error is None
+
+
+def _rubric_answers(value: str = "Yes") -> dict[str, str]:
+    """Every completeness question answered, so one can be spoiled in isolation."""
+    return {
+        f"{section}.rubric_completeness.{key}": value
+        for section in tneval.SOAP_SECTIONS
+        for key in tneval.criteria_keys(section)
+    }
+
+
+def test_a_judge_that_ran_out_of_room_is_not_the_model_missing_a_criterion():
+    """`parse_yes_no` returns 0 for "No" and 0 for a fragment of reasoning.
+
+    `is_an_answer` exists to tell those apart and was called from no production
+    code at all -- only from tests. Measured across the cache: 43 of 39 696
+    rubric answers are fragments like "Evaluate against Rubric Item:**", over 18
+    systems and 42 notes, three of them the therapist's.
+    """
+    answers = _rubric_answers()
+    spoiled = "subjective.rubric_completeness.subjective-symptoms"
+    answers[spoiled] = "Evaluate against Rubric Item:**"
+
+    scores = tneval.aggregate(answers)
+
+    assert scores.incomplete["subjective"] == ["subjective-symptoms"], "named, not scored"
+    assert "subjective-symptoms" not in scores.by_criterion, "and not counted as a miss"
+    # Where the published number is actually protected: the section drops out
+    # of `sections_used`, `is_complete` goes false, and `SystemAggregate`
+    # averages only complete notes. The per-note headline still carries a mean
+    # over the three whole sections; it never reaches a table.
+    assert scores.sections_used["completeness"] == 3
+    assert scores.is_complete is False
+
+
+def test_a_real_no_is_still_a_no():
+    """The guard must not swallow the answer it exists to distinguish."""
+    answers = _rubric_answers()
+    answers["subjective.rubric_completeness.subjective-symptoms"] = "No"
+
+    scores = tneval.aggregate(answers)
+
+    assert scores.incomplete == {}, "a No is an answer"
+    assert scores.by_criterion["subjective-symptoms"] == 0.0
+    assert scores.headline["completeness"] < 1.0
+
+
+def test_a_refused_sentence_question_does_not_shrink_the_conciseness_denominator():
+    """The same rule on the other measure."""
+    tasks = tneval.build_tasks(NOTE, "therapist: hello")
+    answers = {task.unit: ("Yes" if task.kind.startswith("rubric") else "4") for task in tasks}
+    refused = next(u for u in answers if ".rubric_conciseness." in u)
+    answers[refused] = "Format Output:**\n    *   ["
+
+    scores = tneval.aggregate(answers, tasks)
+
+    section = refused.split(".")[0]
+    assert any("conciseness" in reason for reason in scores.incomplete[section])
+    assert scores.sections_used["conciseness"] == len(tneval.SOAP_SECTIONS) - 1
+    assert scores.is_complete is False

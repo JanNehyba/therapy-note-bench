@@ -308,6 +308,12 @@ def collect(
                     raw = [entry.get("rubric_completeness_raw") or {} for entry in per_annotator]
                     if unit not in answers or not all(key in entry for entry in raw):
                         continue
+                    # A refusal paired against a therapist's real rating is not
+                    # a disagreement, it is a missing observation. Counting it
+                    # drags the judge's agreement down for something the judge
+                    # did rather than something it got wrong.
+                    if not tneval.is_an_answer(answers[unit]):
+                        continue
                     value = float(tneval.parse_yes_no(answers[unit]))
                     humans = [float(entry[key]) for entry in raw]
                     pairs["rubric_completeness"].add(value, humans)

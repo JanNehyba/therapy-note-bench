@@ -555,24 +555,38 @@ def aggregate(answers: dict[str, str], tasks: list[JudgeTask] | None = None) -> 
         # runs one way. Same policy as conciseness below: absent, not zero.
         expected = list(criteria_keys(section))
         answered = []
+        missing = []
         for key in expected:
             unit = f"{section}.rubric_completeness.{key}"
-            if unit in answers:
+            # `is_an_answer`, not merely `unit in answers`. `parse_yes_no`
+            # returns 0 for "No" and 0 for a fragment of the judge's own
+            # reasoning, so without this a judge that ran out of room was
+            # scored as the model missing a criterion. Measured across the
+            # cache: 43 of 39 696 rubric answers are fragments like
+            # "Evaluate against Rubric Item:**", spread over 18 systems and 42
+            # notes -- three of them the therapist's, a reference row.
+            #
+            # The parser itself is untouched. Reproducing TN-Eval's arithmetic
+            # means running it on their answers; running it on our
+            # infrastructure's failures was never part of their protocol.
+            if unit in answers and is_an_answer(answers[unit]):
                 value = parse_yes_no(answers[unit])
                 by_criterion[key] = float(value)
                 answered.append(value)
-        if len(answered) == len(expected) and expected:
+            else:
+                missing.append(key)
+        if not missing and expected:
             section_scores["completeness"] = sum(answered) / len(expected)
         elif answered:
-            missing = [
-                key for key in expected if f"{section}.rubric_completeness.{key}" not in answers
-            ]
             incomplete[section] = missing
 
+        # Same rule as completeness above: a fragment is not a "no". A refused
+        # sentence question shrinks the count below `expected_sentences`, so the
+        # section is named in `incomplete` rather than averaged over survivors.
         sentences = [
             parse_yes_no(answer)
             for unit, answer in answers.items()
-            if unit.startswith(f"{section}.rubric_conciseness.")
+            if unit.startswith(f"{section}.rubric_conciseness.") and is_an_answer(answer)
         ]
         expected_sentences = None if expected_conciseness is None else expected_conciseness[section]
         # `expected_sentences is None` means the note text was not available, so

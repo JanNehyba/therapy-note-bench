@@ -224,6 +224,12 @@ def per_criterion(answers: dict, include: list[str] | None = None) -> list[Crite
             parts = unit.split(".")
             if len(parts) != 3 or parts[1] != "rubric_completeness":
                 continue
+            # A fragment of the judge's own reasoning is not a "no". Without
+            # this it counted in the denominator as a criterion the model
+            # failed, and every criterion bar and every verdict on the page
+            # rests on these two counters.
+            if not tneval.is_an_answer(answer):
+                continue
             slot = hits[(system, parts[2])]
             slot[0] += tneval.parse_yes_no(answer)
             slot[1] += 1
