@@ -23,7 +23,9 @@ from __future__ import annotations
 
 import json
 import sys
+from collections import Counter
 from pathlib import Path
+from statistics import fmean
 
 REPO = Path(__file__).resolve().parent.parent
 DOCS = REPO / "docs"
@@ -418,7 +420,23 @@ def how_much_room_is_left(data: Data) -> str:
     other_dead = other.get("unreachable")
     live = counts.get("discriminating", 0)
     partly = counts.get("mixed", 0)
-    reachable = (total - dead) / total
+
+    # The ceiling has to be weighted the way completeness is, or it is not a
+    # ceiling on completeness. `tneval.aggregate` scores each SOAP section and
+    # averages the four equally, so a criterion in the four-item plan section is
+    # worth twice one in the eight-item assessment section. Counting 21 of 23
+    # flat says 0.91; the two dead criteria sit in the six- and eight-item
+    # sections, so the real ceiling is 0.93 -- and the sentence below divides the
+    # best score by it, which made "60% of that" out of 58.9%.
+    per_section: Counter[str] = Counter(c["section"] for c in saturation.get("criteria") or [])
+    alive: Counter[str] = Counter(
+        c["section"] for c in saturation.get("criteria") or [] if c["verdict"] != "unreachable"
+    )
+    reachable = (
+        fmean(alive[section] / count for section, count in per_section.items())
+        if per_section
+        else 1.0
+    )
 
     table = data.tables[("tneval-soap", JUDGE_A)]
     current = [
@@ -475,7 +493,9 @@ def how_much_room_is_left(data: Data) -> str:
      above it. <code>docs/limitations.md</code> excludes only the {dead} both of them
      put there.</p>
   <p>Strip out the {dead} nobody reaches and the most a model could score is
-     {reachable:.2f}. <strong>The best model here reaches {best:.3f}, which is
+     {reachable:.2f} &mdash; weighted the way completeness is, four sections
+     averaged equally rather than 21 criteria out of 23.
+     <strong>The best model here reaches {best:.3f}, which is
      {best / reachable:.0%} of that.</strong> There is room.</p>
   <p>How fast it is being used up: the two 2025 models the source paper benchmarked
      score {min(older):.3f} and {max(older):.3f}; the {len(current)} current ones span

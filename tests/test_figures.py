@@ -361,3 +361,40 @@ def test_the_saturation_figure_groups_by_verdict(drawn, data):
         if count:
             word = figures.VERDICT_INK[verdict][2]
             assert svg.count(word) >= 2, f"{verdict} is not named as a group and in the legend"
+
+
+def test_the_reachable_ceiling_is_weighted_the_way_completeness_is(data, brief_html):
+    """The briefing divides the best score by a ceiling. Both must be the same
+    arithmetic or the percentage beside them is not a percentage of anything.
+
+    `tneval.aggregate` scores each SOAP section and averages the four equally,
+    so a criterion in the four-item plan section carries twice the weight of one
+    in the eight-item assessment section. Counting the surviving criteria flat --
+    21 of 23 -- ignores that and says 0.91 where the answer is 0.93, and the
+    published sentence turned 58.9% into "60% of that".
+
+    Held on the code rather than on the string: the flat figure must not be what
+    the page prints, whatever the criteria happen to be next time.
+    """
+    from collections import Counter
+    from statistics import fmean
+
+    criteria = data.saturation[figures.JUDGE_A]["criteria"]
+    dead = [c for c in criteria if c["verdict"] == "unreachable"]
+    assert dead, "the fixture only means something while some criterion is on the floor"
+
+    per_section = Counter(c["section"] for c in criteria)
+    alive = Counter(c["section"] for c in criteria if c["verdict"] != "unreachable")
+    weighted = fmean(alive[section] / count for section, count in per_section.items())
+    flat = (len(criteria) - len(dead)) / len(criteria)
+    assert f"{weighted:.2f}" != f"{flat:.2f}", (
+        "this corpus no longer distinguishes the two; the test cannot see a regression"
+    )
+
+    assert f"could score is\n     {weighted:.2f}" in brief_html.replace("\r\n", "\n")
+    best = max(
+        row["headline"]["completeness"]
+        for row in data.tables[("tneval-soap", figures.JUDGE_A)]["rows"]
+        if row["system_type"] == "model"
+    )
+    assert f"{best / weighted:.0%} of that" in brief_html
