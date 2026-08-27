@@ -321,3 +321,41 @@ def test_a_measured_ceiling_of_zero_is_not_replaced_by_somebody_else_s():
     assert "humans-at-chance" in out["above_ceiling"], (
         "0.30 against a ceiling of 0.0 clears it by 0.30, whatever the other row says"
     )
+
+
+def test_a_separation_across_two_settings_is_labelled_as_such():
+    """`COMPARABILITY_KEYS` says a judge's settings are part of the instrument
+    and that two instruments never share a table. The panel that picks the judge
+    did not apply that to itself: the Gemini candidates answered at
+    `max_output_tokens` 288 with a thinking budget of 256, the GPT ones at 672
+    with `effort: medium`, and four of the seven published separations cross that
+    line — including `gemini-3.1-pro-preview` over `gpt-5.6-terra`, which is the
+    comparison the leaderboard's judge is chosen by.
+
+    Labelled rather than dropped, the way a row produced under conditions the
+    others did not share is marked in place everywhere else on this page.
+    """
+    judges = [
+        {
+            "judge_model": "one",
+            "judge_settings": {"model": "one", "max_output_tokens": 288, "thinking_budget": 256},
+            "agreements": [{"name": "rubric_completeness", "alpha": 0.70, "alpha_humans": 0.50}],
+        },
+        {
+            "judge_model": "two",
+            "judge_settings": {"model": "two", "max_output_tokens": 288, "thinking_budget": 256},
+            "agreements": [{"name": "rubric_completeness", "alpha": 0.60, "alpha_humans": 0.50}],
+        },
+        {
+            "judge_model": "three",
+            "judge_settings": {"model": "three", "max_output_tokens": 672, "effort": "medium"},
+            "agreements": [{"name": "rubric_completeness", "alpha": 0.50, "alpha_humans": 0.50}],
+        },
+    ]
+    out = calibration.separations(judges, "rubric_completeness", margin=0.05)
+
+    assert out["instruments"] == 2, "two settings shapes among the three candidates"
+    crossing = {(s["better"], s["worse"]): s["crosses_instrument"] for s in out["separated"]}
+    assert crossing[("one", "two")] is False, "same settings, a difference between judges"
+    assert crossing[("one", "three")] is True
+    assert crossing[("two", "three")] is True

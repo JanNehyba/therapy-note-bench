@@ -384,6 +384,7 @@
    0.5034527634718307,
    0.5040964461994439
   ],
+  "instruments": 2,
   "margin": 0.05,
   "measure": "rubric_completeness",
   "ranked": [
@@ -427,36 +428,43 @@
    {
     "better": "gemini-3.1-pro-preview",
     "by": 0.0554,
+    "crosses_instrument": false,
     "worse": "gemini-3.7-flash"
    },
    {
     "better": "gemini-3.1-pro-preview",
     "by": 0.0625,
+    "crosses_instrument": false,
     "worse": "gemini-2.5-flash"
    },
    {
     "better": "gemini-3.1-pro-preview",
     "by": 0.0636,
+    "crosses_instrument": false,
     "worse": "gemini-3.5-flash"
    },
    {
     "better": "gemini-3.1-pro-preview",
     "by": 0.0799,
+    "crosses_instrument": true,
     "worse": "gpt-5.6-terra"
    },
    {
     "better": "gemini-3.1-pro-preview",
     "by": 0.0894,
+    "crosses_instrument": true,
     "worse": "gpt-5.6-sol"
    },
    {
     "better": "gemini-2.5-pro",
     "by": 0.0545,
+    "crosses_instrument": true,
     "worse": "gpt-5.6-terra"
    },
    {
     "better": "gemini-2.5-pro",
     "by": 0.064,
+    "crosses_instrument": true,
     "worse": "gpt-5.6-sol"
    }
   ]

@@ -485,6 +485,20 @@ def separations(judges: list[dict], measure: str, margin: float = ALPHA_MARGIN) 
     # value and measured every candidate against whichever row happened to come
     # last; and `0.0` is falsy, so a candidate whose therapists genuinely agreed
     # at chance silently inherited somebody else's ceiling instead.
+    # What each candidate was asked *at*, minus its own name. Two candidates
+    # that differ here are two instruments, and a difference between their
+    # alphas is not only a difference between the judges: the Gemini candidates
+    # answered at `max_output_tokens: 288` with a thinking budget of 256, the
+    # GPT ones at 672 with `effort: medium`, and four of the seven separations
+    # published cross that line. `COMPARABILITY_KEYS` forbids exactly this for
+    # models; the panel that picks the judge did not apply it to itself.
+    def instrument(row: dict) -> str:
+        settings = dict(row.get("judge_settings") or {})
+        settings.pop("model", None)
+        return json.dumps(settings, sort_keys=True)
+
+    shapes = {row["judge_model"]: instrument(row) for row in judges}
+
     found: list[tuple[str, float, float | None]] = []
     for row in judges:
         agreement = next((a for a in row.get("agreements", []) if a.get("name") == measure), None)
@@ -513,11 +527,25 @@ def separations(judges: list[dict], measure: str, margin: float = ALPHA_MARGIN) 
         "ceiling_span": span if span and span[0] != span[1] else None,
         "ranked": [{"judge": name, "alpha": alpha, "ceiling": own} for name, alpha, own in found],
         "separated": [
-            {"better": better, "worse": worse, "by": round(first - second, 4)}
+            {
+                "better": better,
+                "worse": worse,
+                "by": round(first - second, 4),
+                #: Whether the two were asked at different settings. A separation
+                #: that crosses this is a difference between two instruments as
+                #: much as between two judges, and the page says so rather than
+                #: dropping the comparison -- it is the comparison that picks the
+                #: leaderboard's judge.
+                "crosses_instrument": shapes.get(better) != shapes.get(worse),
+            }
             for index, (better, first, _) in enumerate(found)
             for worse, second, _ in found[index + 1 :]
             if first - second > margin
         ],
+        #: How many distinct settings the candidates were measured at. One means
+        #: the panel is comparing judges; more means it is also comparing
+        #: instruments.
+        "instruments": len(set(shapes.values())),
         "above_ceiling": [
             name for name, alpha, own in found if own is not None and alpha - own > margin
         ],
