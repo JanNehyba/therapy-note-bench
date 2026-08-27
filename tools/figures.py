@@ -144,6 +144,34 @@ class Data:
             preference=payload.get("preference"),
         )
 
+    @property
+    def harness(self) -> str:
+        """The harness version the drawn tables were measured by.
+
+        Read from the data rather than written into the captions. Every "Source:
+        ... harness 0.2.0" line was a string typed once and left there, and the
+        harness went to 0.5.0 underneath them -- so each figure named a version
+        that had not produced any of the numbers above it, on the one line whose
+        whole job is to say where the numbers came from.
+
+        The two published judges only. `docs/leaderboard.json` also carries the
+        superseded `gemini-2.5-pro` group at an older version, and no figure
+        draws from it -- naming its version in a caption would be as wrong as
+        the frozen string was, in the other direction.
+
+        More than one can still appear if the two judges ever sit at different
+        versions. Naming both beats naming the newer, which would be wrong about
+        half the picture.
+        """
+        found = sorted(
+            {
+                table["versions"]["harness_version"]
+                for (_track, judge), table in self.tables.items()
+                if judge in (JUDGE_A, JUDGE_B) and table["versions"].get("harness_version")
+            }
+        )
+        return " and ".join(found) if found else "unrecorded"
+
     def scores(self, track: str, judge: str, measure: str) -> dict[str, float]:
         """{system: score}, keyed by the name the figures print.
 
@@ -428,7 +456,7 @@ def figure_positions(data: Data) -> str:
         )
         + "\n"
         + footnote(
-            "Source: docs/leaderboard.json and docs/saturation-*.json, harness 0.2.0.",
+            f"Source: docs/leaderboard.json and docs/saturation-*.json, harness {data.harness}.",
             0,
             height - 20,
             width_px=width,
@@ -582,7 +610,7 @@ def figure_coverage_against_invention(data: Data) -> str:
         )
         + "\n"
         + footnote(
-            "Source: docs/leaderboard.json, harness 0.2.0. Spearman as computed for the "
+            f"Source: docs/leaderboard.json, harness {data.harness}. Spearman as computed for the "
             "concordance panel.",
             0,
             height - 20,
@@ -681,7 +709,7 @@ def figure_temporal(data: Data) -> str:
         )
         + "\n"
         + footnote(
-            f"Source: docs/leaderboard.json, iCARE track, judge {JUDGE_A}, harness 0.2.0. "
+            f"Source: docs/leaderboard.json, iCARE track, judge {JUDGE_A}, harness {data.harness}. "
             "Neither column involves the judge: both are computed from the note and the "
             "expert note alone.",
             0,
@@ -792,8 +820,8 @@ def figure_what_the_rubric_rewards(data: Data) -> str:
         )
         + "\n"
         + footnote(
-            "Source: docs/leaderboard.json, harness 0.2.0. The same ordering holds under the "
-            "second judge; the figures differ.",
+            f"Source: docs/leaderboard.json, harness {data.harness}. The same ordering "
+            "holds under the second judge; the figures differ.",
             0,
             height - 20,
             width_px=width,
@@ -1021,7 +1049,8 @@ def figure_room_left(data: Data) -> str:
         )
         + "\n"
         + footnote(
-            f"Source: docs/saturation-{JUDGE_A}.json and docs/leaderboard.json, harness 0.2.0.",
+            f"Source: docs/saturation-{JUDGE_A}.json and docs/leaderboard.json, "
+            f"harness {data.harness}.",
             0,
             height - 20,
             width_px=width,

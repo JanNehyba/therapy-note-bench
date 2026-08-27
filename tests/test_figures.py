@@ -139,11 +139,57 @@ def test_nothing_runs_off_the_canvas(drawn):
             )
 
 
-def test_every_figure_names_where_its_numbers_came_from(drawn):
-    """A figure travels further than the page it was made for."""
+def test_every_figure_names_the_harness_its_numbers_were_measured_by(drawn, data):
+    """A figure travels further than the page it was made for.
+
+    This asserted the literal string "harness 0.2.0", which is how the label
+    came to be wrong. The captions were typed once, the harness went to 0.5.0
+    underneath them, and this test held the frozen string in place: every figure
+    named a version that had produced none of the numbers above it, on the one
+    line whose whole job is to say where they came from. Seven captions across
+    the figures and the brief said it.
+
+    Compared against the data now, so the caption cannot drift from the tables
+    again without failing here.
+    """
     for name, svg in drawn.items():
         assert "Source:" in svg, f"{name} does not say where it is from"
-        assert "harness 0.2.0" in svg, f"{name} does not say which harness"
+        assert f"harness {data.harness}" in svg, f"{name} does not say which harness"
+
+
+def test_the_harness_named_is_the_one_the_drawn_tables_carry():
+    """And it is the drawn tables, not every table in the payload.
+
+    `docs/leaderboard.json` also carries the superseded `gemini-2.5-pro` group
+    at an older harness. No figure draws from it, so naming its version in a
+    caption would be as wrong as the frozen string was, in the other direction.
+    """
+
+    def table(track, judge, harness):
+        return {
+            "track": track,
+            "scored": True,
+            "rows": [],
+            "versions": {"judge_model": judge, "harness_version": harness},
+        }
+
+    data = figures.Data(
+        tables={
+            ("tneval-soap", figures.JUDGE_A): table("tneval-soap", figures.JUDGE_A, "0.5.0"),
+            ("tneval-soap", figures.JUDGE_B): table("tneval-soap", figures.JUDGE_B, "0.5.0"),
+            ("tneval-soap", "gemini-2.5-pro"): table("tneval-soap", "gemini-2.5-pro", "0.2.0"),
+        },
+        saturation={},
+        concordance={},
+        preference=None,
+    )
+
+    assert data.harness == "0.5.0", "a group no figure draws named the version in every caption"
+
+    data.tables[("tneval-soap", figures.JUDGE_B)]["versions"]["harness_version"] = "0.4.0"
+    assert data.harness == "0.4.0 and 0.5.0", (
+        "two judges at two versions must both be named, not silently reduced to one"
+    )
 
 
 def test_a_figure_is_the_same_bytes_twice(data):

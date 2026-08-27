@@ -171,7 +171,7 @@ def front(data: Data) -> str:
      protocols, and two independent LLM judges scored every one of them. This is what
      the exercise says about choosing a model &mdash; and about reading anybody's
      leaderboard, including this one.</p>
-  <p class="meta">therapy-note-bench &middot; harness 0.2.0 &middot;
+  <p class="meta">therapy-note-bench &middot; harness {data.harness} &middot;
      every figure here is generated from <code>docs/leaderboard.json</code> &middot;
      <a href="{SITE}">{SITE}</a></p>
 
@@ -618,7 +618,7 @@ def how_to_check(data: Data) -> str:
   </ul>
 
   <hr class="rule">
-  <p class="meta">therapy-note-bench &middot; harness 0.2.0 &middot;
+  <p class="meta">therapy-note-bench &middot; harness {data.harness} &middot;
      judges <code>{esc(JUDGE_A)}</code> and <code>{esc(JUDGE_B)}</code> &middot;
      source and method: <a href="{SOURCE}">{SOURCE}</a></p>
 """
