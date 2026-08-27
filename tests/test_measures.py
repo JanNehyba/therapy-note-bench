@@ -317,16 +317,67 @@ def test_the_docs_name_what_is_not_measured():
 
 
 def test_the_criteria_the_corpus_cannot_answer_are_named_with_the_sensitivity():
-    """Five of 23 rubric criteria never apply to motivational-interviewing
-    demonstrations, and the denominator is 23 regardless.
+    """Two of 23 rubric criteria are on the floor for everyone, and the
+    denominator is 23 regardless.
 
-    The published claim is that this deflates the number and not the ranking.
-    Both halves are in the docs, so both are checked here.
+    The published claim is that excluding them deflates the number and not the
+    ranking. Both halves are in the docs, so both are checked here.
     """
     from tnb.config import REPO_ROOT
 
     limitations = (REPO_ROOT / "docs" / "limitations.md").read_text(encoding="utf-8")
 
-    assert "Five of the twenty-three criteria" in limitations
-    assert "+0.983" in limitations, "the sensitivity figure is the point of the section"
-    assert "0.554 to 0.681" in limitations, "and so is what it does to the number"
+    assert "Two of the twenty-three criteria are on the floor" in limitations
+    assert "+0.996" in limitations, "the sensitivity figure is the point of the section"
+    assert "0.550 → 0.598" in limitations, "and so is what it does to the number"
+    # The correction is not neutral between the parties, and the section that
+    # this one replaces did not say so. That sentence is the finding.
+    assert "not neutral between the parties" in limitations
+
+
+def test_the_exclusion_is_not_read_off_the_party_being_measured():
+    """The excluded criteria are `saturation`'s verdict, not the therapist's rate.
+
+    The rule this replaced picked the criteria the therapist herself writes in at
+    most 10% of her notes -- which decides the model-versus-therapist comparison
+    with the therapist's own behaviour, and does not survive changing the judge:
+    recomputed on the second judge's answers it keeps a different five, one of
+    them `objective-mental-status`, and moves a system seven places.
+
+    So the set is held to what the code already computes and both judges agree
+    on. `unreachable` requires every system to be at or below the floor, the
+    therapist counting as one system among nineteen rather than as the authority.
+    """
+    import json
+
+    from tnb.config import REPO_ROOT
+    from tnb.scoring import saturation
+
+    docs = REPO_ROOT / "docs"
+    published = [
+        json.loads(path.read_text(encoding="utf-8"))
+        for path in sorted(docs.glob("saturation-*.json"))
+    ]
+    live = [
+        d for d in published if d.get("judge_model") in ("gemini-3.1-pro-preview", "gpt-5.6-terra")
+    ]
+    assert len(live) == 2, "both live judges publish a saturation analysis"
+
+    floors = [{c["key"] for c in d["criteria"] if c["verdict"] == "unreachable"} for d in live]
+    agreed = set.intersection(*floors)
+    assert agreed == {"assessment-goals", "subjective-homework"}
+
+    # Not the same as "what the therapist rarely writes": under at least one
+    # judge the two rules disagree, which is why one of them is in the docs.
+    for d in live:
+        therapist_rule = {
+            c["key"] for c in d["criteria"] if (c["human"] or 0.0) <= saturation.FLOOR_AT
+        }
+        assert therapist_rule != agreed, (
+            f"{d['judge_model']}: the therapist rule and the floor rule are not "
+            "interchangeable, and the docs must not present them as if they were"
+        )
+
+    limitations = (docs / "limitations.md").read_text(encoding="utf-8")
+    assert "`saturation`'s `unreachable`" in limitations, "the docs name the rule"
+    assert "at most 10% of her notes" in limitations, "and name what it replaced"

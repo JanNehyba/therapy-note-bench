@@ -399,14 +399,23 @@ def how_much_room_is_left(data: Data) -> str:
 
     The question anybody who has watched a benchmark die asks first. It is
     answered per criterion rather than in aggregate, because a benchmark does
-    not saturate evenly -- three of these twenty-three criteria are already
-    free points and two have never been met by anyone, human included.
+    not saturate evenly: some criteria are free points and some have never been
+    met by anyone, the therapist included.
+
+    **The four counts are one judge's**, and the panel says so. A verdict is a
+    reading of that judge's answers, and the two judges do not return the same
+    reading -- `gpt-5.6-terra` puts a third criterion on the floor that
+    `gemini-3.1-pro-preview` leaves 0.02 above it. `docs/limitations.md`
+    excludes only what both of them put there, which is why that page says two
+    and this one used to say two without saying whose two.
     """
     saturation = data.saturation.get(JUDGE_A) or {}
     counts = saturation.get("verdict_counts") or {}
     total = len(saturation.get("criteria") or []) or 23
     free = counts.get("saturated", 0)
     dead = counts.get("unreachable", 0)
+    other = (data.saturation.get(JUDGE_B) or {}).get("verdict_counts") or {}
+    other_dead = other.get("unreachable")
     live = counts.get("discriminating", 0)
     partly = counts.get("mixed", 0)
     reachable = (total - dead) / total
@@ -453,12 +462,18 @@ def how_much_room_is_left(data: Data) -> str:
     return f"""
   <h2 class="page-break">How much room is left</h2>
   <p>A benchmark that everything passes has stopped measuring. This one has not, and
-     it has not evenly: the twenty-three rubric criteria are in four different states
-     at once.</p>
+     it has not evenly: under <code>{esc(JUDGE_A)}</code> the twenty-three rubric
+     criteria are in four different states at once.</p>
   <table>
     <thead><tr><th>Criterion</th><th class="num">How many</th><th>What that means</th></tr></thead>
     <tbody>{rows}</tbody>
   </table>
+  <p><strong>These are one judge&rsquo;s verdicts.</strong> A verdict reads that
+     judge&rsquo;s answers, and the second judge does not return the same reading:
+     <code>{esc(JUDGE_B)}</code> puts {other_dead} criteria on the floor rather than
+     {dead}, the extra one being assessment tools, which the first judge leaves 0.02
+     above it. <code>docs/limitations.md</code> excludes only the {dead} both of them
+     put there.</p>
   <p>Strip out the {dead} nobody reaches and the most a model could score is
      {reachable:.2f}. <strong>The best model here reaches {best:.3f}, which is
      {best / reachable:.0%} of that.</strong> There is room.</p>

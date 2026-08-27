@@ -307,34 +307,102 @@ flipped so that every column runs the same way. It has not been run: no row in
 it is run, the ceiling belongs beside every column it produces**, exactly as
 the rubric's does.
 
-## Five of the twenty-three criteria cannot apply to these conversations
+## Two of the twenty-three criteria are on the floor for every system
 
 AnnoMI is motivational-interviewing demonstrations. There is no medication to
 adjust, no formal diagnosis, no assessment instrument administered. The rubric
 asks about all of them anyway, of every note, and the denominator is always 23.
 
-The therapist was in the room, and how often she writes each one is the best
-available reading of whether it applies:
+**What decides that a criterion cannot apply.** `saturation`'s `unreachable`
+verdict, which is already in the code and already published per judge in
+`docs/saturation-<judge>.json`: **nobody** reaches it — every one of the
+nineteen systems at or below 0.10, the therapist among them as one system and
+not as the authority on it. Two criteria meet that under both judges:
 
-| Criterion | Therapist writes it | Models |
+| Criterion | Best of the nineteen, `gemini-3.1-pro-preview` | `gpt-5.6-terra` |
 |---|---|---|
-| Client's goals (assessment) | 2% | 0–4% |
-| Homework (subjective) | 4% | 0–8% |
-| Adjustment of medication | 6% | 2–16% |
-| Diagnosis | 6% | 4–41% |
-| Assessment tools | 8% | 0–12% |
+| Treatment goals, SMART (assessment) | 0.04 | 0.02 |
+| Homework from previous sessions (subjective) | 0.08 | 0.06 |
 
-**What this breaks and what it does not.** Recomputed over the eighteen
-criteria that can apply, the ordering is essentially unchanged — Spearman
-+0.983 against the published one, ten of eighteen systems move and none by more
-than two places, and the top three and bottom four are identical. **The
-ranking survives.**
+A third — **assessment tools** — is on the floor under `gpt-5.6-terra` (best
+0.10) and a hair off it under `gemini-3.1-pro-preview` (best 0.12). The entire
+difference is one note out of fifty in one model, so it is named here rather
+than counted: **2 of 23 is what both judges support**, and that is the count the
+briefing's panel prints. Excluding the third as well would move the leader a
+further +0.029 under judge A and +0.015 under judge B.
 
-The *number* does not. Every system gains about 0.12: the leader goes from
-0.554 to 0.681. A reader who sees 0.546 and reads "about half" is reading a
-figure deflated by roughly a fifth for questions the transcript cannot answer.
-Quote it as a fraction of the whole rubric, which is what it is, and not as a
-proportion of what a note could have contained.
+**What this does to the number, and to the ordering.** Recomputed over the
+twenty-one criteria somebody reaches, on the notes whose completeness the judge
+answered in full — the saturation panel's denominator, which is why the baseline
+below is 0.550 and the leaderboard's headline for the same model is 0.546, and
+the note set is held to what was complete under all 23 so that the only thing
+changing is the criterion list:
+
+| | `gemini-3.1-pro-preview` | `gpt-5.6-terra` |
+|---|---|---|
+| Leader, `kimi-k3` | 0.550 → 0.598 | 0.514 → 0.564 |
+| Weakest model, `llama-3.1-70b` | 0.364 → 0.396 | 0.315 → 0.348 |
+| Therapist | 0.325 → 0.355 | 0.273 → 0.303 |
+| Mean model gain | +0.041 | +0.044 |
+| The therapist's gain | +0.030, 0.74× the models' | +0.030, 0.68× |
+| Weakest model minus therapist | +0.039 → +0.040 | +0.042 → +0.045 |
+| Ordering | Spearman +0.996; four systems move, none by more than one place | +1.000; nothing moves at all |
+
+**The correction is small and it is not neutral between the parties.** The
+therapist gains about seven tenths of what the average model gains, so the gap
+between her and the weakest model widens — by 4% under one judge and 7% under
+the other. Small, and said out loud, because the version of this section it
+replaces did not say it at all.
+
+### The rule this replaces
+
+Until 2026-08-27 the exclusion was five criteria, chosen as those the therapist
+writes in at most 10% of her notes. Two things are wrong with that, and both are
+measured rather than argued.
+
+**It settles the comparison with the quantity being compared.** The
+most-quoted result here is that every model covers more of the rubric than the
+therapist, and the mechanism the next section documents is that models fill
+boxes she leaves empty. A rule that then defines "inapplicable" as "the boxes
+she leaves empty" is not independent of the finding it adjusts. Its effect was
+correspondingly larger and ran one way: the leader went 0.550 → 0.676, and the
+therapist-to-weakest-model gap widened by **42%** under judge A and 41% under
+judge B — which the section never reported, because the therapist was left out
+of the loop that produced its table. (Its published pair, "0.554 to 0.681", is
+also not either of these: it came from an aggregation the scoring pipeline never
+performs, the mean over sections of per-criterion rates across sessions, rather
+than the mean over notes of each note's completeness.)
+
+**And its answer depends on which judge is asked.** The rule reads a therapist
+rate, and a therapist rate is a judge's opinion about her notes. Recomputed on
+`gpt-5.6-terra`'s answers, the same rule keeps a *different* five:
+`plan-adjustment` leaves, because she reaches 0.12 there, and
+**`objective-mental-status` arrives** at 0.02 — the criterion the next section
+names as the clearest case of the coverage mechanism, and where the best model
+reaches 0.52. Excluding that set moves ten of eighteen systems and one of them
+by **seven places**, Spearman +0.934, against the published claim that nothing
+moved by more than two. The `unreachable` rule does not behave like this: its
+two criteria are the same two under both judges.
+
+### Three of the five it dropped are kept on purpose
+
+`assessment-diagnosis` is the clearest. Nobody diagnoses in a
+motivational-interviewing demonstration and the therapist writes one in 6% of her
+notes — but under `gemini-3.1-pro-preview`, `gpt-oss-120b` writes one in **41%**
+of its notes. If the criterion genuinely cannot apply, that is a model inventing
+a diagnosis in four sessions out of ten, which is evidence about the models and
+the strongest of its kind in this repository. Excluding the criterion deletes
+the evidence rather than reading it.
+
+It is also a column the two judges do not agree about — under `gpt-5.6-terra`
+the same model sits at 0.02 and the whole field's maximum is 0.12 — and a
+disagreement that size is a result about the instrument, so it is reported
+rather than removed. `plan-adjustment` is the same shape with the judges
+swapped: judge B puts `gpt-5.6-terra` at 0.54 there and judge A puts the field's
+maximum at 0.16.
+
+Quote completeness as a fraction of the whole 23-item rubric, which is what it
+is, and not as a proportion of what a note could have contained.
 
 ## How a model beats a therapist: by filling boxes she leaves empty
 

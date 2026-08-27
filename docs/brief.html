@@ -356,12 +356,18 @@
 
   <h2 class="page-break">How much room is left</h2>
   <p>A benchmark that everything passes has stopped measuring. This one has not, and
-     it has not evenly: the twenty-three rubric criteria are in four different states
-     at once.</p>
+     it has not evenly: under <code>gemini-3.1-pro-preview</code> the twenty-three rubric
+     criteria are in four different states at once.</p>
   <table>
     <thead><tr><th>Criterion</th><th class="num">How many</th><th>What that means</th></tr></thead>
     <tbody><tr><td>Every model already does it</td><td class='num'>3 of 23</td><td>Free points. They raise every score by the same amount and separate nobody.</td></tr><tr><td>Nobody does it, the therapist included</td><td class='num'>2 of 23</td><td>Dead. These transcripts do not contain the answer, so the criterion measures the corpus rather than the model.</td></tr><tr><td>Still separates models</td><td class='num'>13 of 23</td><td>Where the benchmark is doing its job.</td></tr><tr><td>Partly</td><td class='num'>5 of 23</td><td>Separates some models and not others.</td></tr></tbody>
   </table>
+  <p><strong>These are one judge&rsquo;s verdicts.</strong> A verdict reads that
+     judge&rsquo;s answers, and the second judge does not return the same reading:
+     <code>gpt-5.6-terra</code> puts 3 criteria on the floor rather than
+     2, the extra one being assessment tools, which the first judge leaves 0.02
+     above it. <code>docs/limitations.md</code> excludes only the 2 both of them
+     put there.</p>
   <p>Strip out the 2 nobody reaches and the most a model could score is
      0.91. <strong>The best model here reaches 0.546, which is
      60% of that.</strong> There is room.</p>
