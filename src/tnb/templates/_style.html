@@ -224,6 +224,14 @@ p.settings { margin-top: .2rem; }
     background: var(--chip); border-color: var(--accent); color: var(--accent);
     font-weight: 600;
   }
+  /* The instrument a column belongs to, above its name. Quieter than the
+     label and louder than nothing: a reader scanning eleven headings has to
+     see the seam between the two without reading a footnote. */
+  th .instrument {
+    display: block; font-size: .64rem; letter-spacing: .04em;
+    text-transform: uppercase; color: var(--accent); font-weight: 600;
+    margin-bottom: .12rem;
+  }
   .pick button .scale { margin: .1rem 0 0; font-weight: 400; }
   .pick button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 

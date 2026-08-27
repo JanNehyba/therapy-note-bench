@@ -340,7 +340,12 @@ function renderTable(table, index) {
     .map(([k, v]) => `${k} ${v}`).join(', ');
   const judge = versions.judge_model
     ? `judge <code>${versions.judge_model}</code>${settings ? ` (${esc(settings)})` : ''}` +
-      ` · judge prompt <code>${versions.judge_prompt_version}</code>` +
+      // Two instruments in one table were asked two different sets of
+      // questions. Naming one of them would say the eight PDSQI columns
+      // came from the rubric's prompt.
+      ` · judge prompt${(table.judge_prompt_versions || []).length > 1 ? 's' : ''} ` +
+      (table.judge_prompt_versions || [versions.judge_prompt_version])
+        .map(v => `<code>${v}</code>`).join(' and ') +
       // A judge tried and not re-run keeps its table -- a different judge is a
       // different table -- but its columns are defined by an older harness and
       // may not mean what the newer tables' columns mean.
@@ -353,7 +358,13 @@ function renderTable(table, index) {
   // 0-1 fractions and one is a 1-5 rating; a reader comparing 0.65 with 4.98
   // has no way to know that unless the header says so at the point of use.
   const head = table.columns.map(c =>
-    `<th data-sort="${c.key}" title="${esc(c.definition)}">${esc(c.label)}` +
+    `<th data-sort="${c.key}" title="${esc(c.definition)}">` +
+    // Which instrument asked for this column. Eleven columns from two
+    // instruments read as eleven columns from one unless the header says
+    // otherwise -- and then a reader compares a coverage count with a 1-5
+    // quality rating as though they were two grades from the same exam.
+    (c.instrument ? `<span class="instrument">${esc(c.instrument)}</span>` : '') +
+    `${esc(c.label)}` +
     `<span class="scale">${esc(c.scale)}</span>` +
     (c.ranking ? '<span class="ranks" title="the table is ordered by this column">ranks</span>' : '') +
     `</th>`).join('');

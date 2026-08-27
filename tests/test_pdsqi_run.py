@@ -443,3 +443,55 @@ def test_the_docs_carry_what_an_empty_note_scores_on_this_instrument():
     )
     for figure in ("5.00", "4.20", "2.92", "0.90"):
         assert figure in text, f"the measurement is quoted without {figure}"
+
+
+def test_the_rubric_and_pdsqi_are_drawn_in_one_table_and_averaged_in_none():
+    """They rate the same 942 notes with the same judge at the same settings
+    under the same harness, differing on `judge_prompt_version` alone -- so the
+    question both were run for, whether an instrument built to rate clinical
+    notes agrees with the rubric that ranks the therapist last, is one row
+    rather than two tabs.
+
+    Drawing them together is not combining them. The rows still come from two
+    comparability groups, no figure spans the two, and every column says which
+    instrument asked for it.
+    """
+    data = report.build(results.load())
+
+    merged = [t for t in data["tables"] if t.get("merged_from")]
+    assert merged, "the SOAP tables draw one instrument each"
+
+    for table in merged:
+        assert table["merged_from"] == [results.TRACK_TNEVAL, results.TRACK_PDSQI]
+        scored = [c for c in table["columns"] if c.get("scale")]
+        instruments = {c["instrument"] for c in scored}
+        assert instruments == {"TN-Eval rubric", "PDSQI-9"}, (
+            "a reader has to see which columns are which instrument's"
+        )
+        assert len(table["judge_prompt_versions"]) == 2, (
+            "naming one prompt would say the PDSQI columns came from the rubric's"
+        )
+        # The measure the bands and the order are read off stays the rubric's:
+        # the saturation analysis behind them was run on that measure.
+        ranking = [c for c in scored if c.get("ranking")]
+        assert [c["instrument"] for c in ranking] == ["TN-Eval rubric"]
+
+    assert not [t for t in data["tables"] if t["track"] == results.TRACK_PDSQI], (
+        "the absorbed table is drawn twice"
+    )
+
+
+def test_no_figure_is_ever_computed_across_the_two_instruments():
+    """The rule the merge must not break. One of the eight PDSQI columns is a
+    0-1 fraction against seven 1-5 scales and three rubric columns of two more
+    kinds; a mean over them would be a number with no unit, and it is exactly
+    what a merged table invites somebody to add later."""
+    data = report.build(results.load())
+
+    for table in [t for t in data["tables"] if t.get("merged_from")]:
+        for row in table["rows"]:
+            keys = set(row["headline"])
+            assert not keys & {"total", "overall", "score", "mean", "composite"}, (
+                "a combined figure appeared over two instruments"
+            )
+        assert table["ranking_measure"] in {c["key"] for c in table["columns"]}

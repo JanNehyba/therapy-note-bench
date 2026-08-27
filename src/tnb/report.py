@@ -476,6 +476,16 @@ def _ordered_sections(names: list[str]) -> list[str]:
     return known + rest
 
 
+#: Which instrument a column came from, for a table that draws two. Named
+#: rather than inferred from the column key: a reader has to be able to see
+#: which three of the eleven are the rubric's without knowing the rubric.
+INSTRUMENT_LABELS = {
+    results.TRACK_TNEVAL: "TN-Eval rubric",
+    results.TRACK_PDSQI: "PDSQI-9",
+    results.TRACK_ICARE: "iCARE",
+}
+
+
 def _table_id(table: dict) -> str:
     """A stable, readable name for one comparability group.
 
@@ -814,6 +824,93 @@ def _with_note_words(rows: list[Row]) -> list[Row]:
     ]
 
 
+def _merge_instruments(tables: list[dict]) -> list[dict]:
+    """Draw PDSQI-9 beside the rubric, in one table, for the SOAP notes.
+
+    They rate **the same 942 notes** with the same judge at the same settings
+    under the same harness: the only comparability field they differ on is
+    `judge_prompt_version`, because they ask different questions about one
+    corpus. Two tabs made a reader click between them to answer the question
+    both were run for -- whether an instrument built to rate clinical notes
+    agrees with the rubric that ranks the therapist last -- and a reader who has
+    to hold eleven numbers in their head across a page reload does not answer it.
+
+    **Side by side is not averaged in, and the difference is the whole rule.**
+    `harness_version` and the six comparability keys are untouched: the rows
+    still come from two groups and nothing is combined into a figure. What is
+    merged is the drawing. `ranking_measure` stays the rubric's, so the band
+    logic keeps reading the measure the saturation analysis was run on, and
+    every column carries the instrument it came from so the page can head them
+    separately.
+
+    iCARE cannot join and does not: a different corpus, different notes, sixteen
+    models against nineteen. Joining on `system_id` there would put two models'
+    work in one row.
+    """
+
+    def instrument_key(table: dict) -> tuple:
+        versions = table["versions"]
+        return (
+            versions["harness_version"],
+            versions["prompt_version"],
+            versions["judge_model"],
+            json.dumps(versions["judge_settings"], sort_keys=True),
+        )
+
+    beside = {
+        instrument_key(table): table
+        for table in tables
+        if table["track"] == results.TRACK_PDSQI and table["scored"]
+    }
+    absorbed: set[str] = set()
+    for table in tables:
+        if table["track"] != results.TRACK_TNEVAL or not table["scored"]:
+            continue
+        other = beside.get(instrument_key(table))
+        if other is None:
+            continue
+
+        for column in table["columns"]:
+            column.setdefault("instrument", INSTRUMENT_LABELS[table["track"]])
+        added = []
+        for column in other["columns"]:
+            added.append({**column, "instrument": INSTRUMENT_LABELS[other["track"]]})
+        table["columns"] = table["columns"] + added
+
+        by_system = {row["system_id"]: row for row in other["rows"]}
+        for row in table["rows"]:
+            found = by_system.get(row["system_id"])
+            # A system the second instrument has not rated keeps its dashes. It
+            # is not dropped and its rubric figures are not touched: one
+            # instrument having finished and the other not is a fact about the
+            # run, not about the model.
+            if found:
+                row["headline"] = {**row["headline"], **(found.get("headline") or {})}
+
+        # Both judge prompts, so the provenance line names what was actually
+        # asked. A merged table that reported one of them would say the eight
+        # PDSQI columns came from the rubric's prompt.
+        table["judge_prompt_versions"] = [
+            table["versions"]["judge_prompt_version"],
+            other["versions"]["judge_prompt_version"],
+        ]
+        table["merged_from"] = [table["track"], other["track"]]
+        table["title"] = "SOAP notes on AnnoMI · two instruments, the same notes"
+        table["blurb"] = (
+            "Eleven columns from two instruments over one set of notes, so the "
+            "question both were run for can be read off one row. The first three "
+            "are TN-Eval's rubric: it counts what a note contains. The other "
+            "eight are PDSQI-9, a published instrument that rates how a clinical "
+            "note is written. **Nothing is averaged across them** — they are "
+            "different questions on different scales, and there is no eleven-"
+            "column total here for the same reason neither instrument publishes "
+            "one."
+        )
+        absorbed.add(other["id"])
+
+    return [table for table in tables if table["id"] not in absorbed]
+
+
 def build(rows: list[Row], saturations: list[dict] | None = None) -> dict:
     """Shape the rows into the JSON both presentations read.
 
@@ -936,6 +1033,10 @@ def build(rows: list[Row], saturations: list[dict] | None = None) -> dict:
     # Two tables with one id would silently draw the same one twice, and the
     # reader would see a switch that does nothing.
     assert len({table["id"] for table in tables}) == len(tables), "table ids collide"
+
+    # After the ids, because absorbing a table is done by id, and before
+    # `_selection`, which decides what the switch offers.
+    tables = _merge_instruments(tables)
 
     return {
         "tables": tables,
