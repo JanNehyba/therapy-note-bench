@@ -420,35 +420,51 @@ def test_a_composite_nil_answer_is_empty_however_it_is_punctuated():
         assert is_filled(filled), f"{filled!r} says something"
 
 
-def test_a_numbered_list_is_still_cut_into_bare_numerals_and_why():
-    """The defect is real, measured, and deliberately still here.
+def test_a_numbered_list_is_not_cut_into_bare_numerals():
+    """A list marker is not a sentence, and was scored as one.
 
-    `1. ` ends in a full stop followed by a space, so a numbered plan is cut
-    into pieces that are bare numerals — and every piece becomes a question put
+    `1. ` ends in a full stop followed by a space, so a numbered plan was cut
+    into pieces that were bare numerals -- and every piece became a question put
     to the judge: does this sentence serve a rubric criterion? A numeral cannot,
-    so it is a certain No in the numerator and a certain +1 in the denominator.
-    The numerals are 65% of `qwen3.5-122b`'s conciseness failures, 62% of
+    so it was a certain No in the numerator and a certain +1 in the denominator.
+    The numerals were 65% of `qwen3.5-122b`'s conciseness failures, 62% of
     `google_gemini-3.7-flash`'s and 56% of `gpt-oss-120b`'s, against 0% for the
     five models that write prose.
 
-    **It cannot be fixed from the cache.** A conciseness answer is stored under
-    the sentence's *index*, `subjective.rubric_conciseness.s02`, so changing
-    what counts as a sentence re-numbers them and pairs every cached answer with
-    a different sentence. 168 of the 792 notes change their sentence list under
-    the fix, and `judge.load_cached` cannot catch it because neither published
-    judge's answers carry a prompt digest. It was applied on 2026-08-27 and
-    reverted the same hour: the published conciseness moved for exactly the
-    models with numbered lists, and downward, which is the mismatch and not the
-    fix.
+    **This took two attempts, and the first one is the reason for the digest.**
+    A conciseness answer is cached under the sentence's *index*,
+    `subjective.rubric_conciseness.s02`, so changing what counts as a sentence
+    re-numbers them and pairs every cached answer with a different sentence. 173
+    of the 942 notes change their sentence list, and 672 bare numerals stop
+    being questions. Applied on 2026-08-27 and
+    reverted the same hour, because the published conciseness moved for exactly
+    the models with numbered lists and *downward*: the re-pairing, not the fix.
+    `judge.load_cached` compares a cached answer's prompt digest against the
+    question about to be asked and would have caught it, except that neither
+    published judge's answers carried a digest. They all do now.
 
-    Held open so the next person meets the reason rather than the symptom.
+    Two digits at most, so a sentence that ends in a year still ends there.
     """
     from tnb.scoring.tneval import split_sentences
 
-    pieces = split_sentences("Plan: 1. Continue weekly sessions. 2. Practise breathing.")
-    assert "2." in pieces, "the defect, pinned; closing it needs the questions re-asked"
-    assert "Continue weekly sessions." in pieces
+    assert split_sentences("Plan: 1. Continue weekly sessions. 2. Practise breathing.") == [
+        "Plan: 1. Continue weekly sessions.",
+        "2. Practise breathing.",
+    ]
+    assert split_sentences("1. First. 2. Second. 3. Third.") == [
+        "1. First.",
+        "2. Second.",
+        "3. Third.",
+    ]
     assert split_sentences("He was calm. She agreed.") == ["He was calm.", "She agreed."]
+    assert split_sentences("She relapsed in 2019. She has been sober since.") == [
+        "She relapsed in 2019.",
+        "She has been sober since.",
+    ], "a four-digit year is not a list marker"
+    assert split_sentences("Seen by Dr. Novak. Client was calm.") == [
+        "Seen by Dr. Novak.",
+        "Client was calm.",
+    ], "the abbreviation repair still works beside the new one"
 
 
 def test_the_docs_say_that_nothing_verifies_the_icare_answer_key():

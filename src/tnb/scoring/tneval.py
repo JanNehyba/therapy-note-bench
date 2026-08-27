@@ -290,28 +290,37 @@ CHECKBOX_MAPPING = {
 _ABBREVIATIONS = ("Dr", "Mr", "Mrs", "Ms", "e.g", "i.e", "vs", "etc", "St", "Prof")
 #: A sentence ends at `.!?` followed by whitespace.
 #:
-#: **A numbered list is cut into pieces that are bare numerals, and this is not
-#: fixed here.** `1. ` ends in a full stop followed by a space, so "Plan: 1.
-#: Continue weekly sessions. 2. Practise breathing." becomes five pieces, two of
-#: them the strings "1." and "2." -- and every piece becomes a question put to
-#: the judge: does this sentence serve a rubric criterion? A numeral cannot, so
-#: it is a certain No in the numerator and a certain +1 in the denominator.
-#: Measured: the numerals are 65% of `qwen3.5-122b`'s conciseness failures, 62%
-#: of `google_gemini-3.7-flash`'s, 56% of `gpt-oss-120b`'s, and 0% for the five
-#: models that write prose. The column is partly measuring markdown.
+#: **A list marker is not a sentence end, and used to be treated as one.** `1. `
+#: ends in a full stop followed by a space, so "Plan: 1. Continue weekly
+#: sessions. 2. Practise breathing." was cut into four pieces, one of them the
+#: string "2." -- and every piece became a question put to the judge: does this
+#: sentence serve a rubric criterion? A numeral cannot, so it was a certain No
+#: in the numerator and a certain +1 in the denominator. Measured before the
+#: fix: the numerals were 65% of `qwen3.5-122b`'s conciseness failures, 62% of
+#: `google_gemini-3.7-flash`'s, 56% of `gpt-oss-120b`'s, and 0% for the five
+#: models that write prose. The column was partly measuring markdown.
 #:
-#: **Why it is still here.** A conciseness answer is cached under the sentence's
-#: *index* -- `subjective.rubric_conciseness.s02` -- so changing what counts as a
-#: sentence re-numbers them and pairs every cached answer with a different
-#: sentence. 168 of the 792 notes change their sentence list under the fix, and
-#: `judge.load_cached` cannot catch it because the two published judges' answers
-#: carry no prompt digest. Applying the fix therefore needs either the
-#: conciseness questions re-asked for those notes (real money, roughly 1 700
-#: questions) or the cache re-keyed by sentence content. It was applied once on
-#: 2026-08-27 and reverted the same hour when the published conciseness moved
-#: for exactly the models with numbered lists -- downward, which is the mismatch
-#: and not the fix.
+#: A piece ending in a standalone one- or two-digit numeral and a full stop is
+#: joined to the piece after it, which is the same repair `_ABBREVIATIONS`
+#: already makes for "Dr." and lands the marker where a reader would put it.
+#: Two digits at most, so a sentence ending in a year -- "relapsed in 2019. She
+#: has been sober since" -- still ends there.
+#:
+#: **Why this took two attempts.** A conciseness answer is cached under the
+#: sentence's *index*, `subjective.rubric_conciseness.s02`, so changing what
+#: counts as a sentence re-numbers them and pairs every cached answer with a
+#: different sentence. 173 of the 942 notes change their sentence list under the
+#: fix, and 672 bare numerals stop being questions. Applied on 2026-08-27 and reverted the same hour, because the published
+#: conciseness moved for exactly the models with numbered lists and *downward* --
+#: the re-pairing, not the fix. `judge.load_cached` could not catch it: it
+#: compares a cached answer's prompt digest against the question about to be
+#: asked, and neither published judge's answers carried one. They all carry one
+#: now, so the re-paired answers are rejected and re-asked instead of returned.
 _SENTENCE_END = re.compile(r"(?<=[.!?])\s+")
+
+#: A standalone list marker at the end of a piece: "2." or "Plan: 1." but not
+#: "in 2019." and not "v1.2." -- the numeral has to be the whole token.
+_LIST_MARKER = re.compile(r"(?:^|\s)\d{1,2}\.$")
 
 
 def split_sentences(text: str) -> list[str]:
@@ -322,7 +331,11 @@ def split_sentences(text: str) -> list[str]:
         if not candidate:
             continue
         previous = parts[-1] if parts else ""
-        if previous and any(previous.endswith(f"{abbr}.") for abbr in _ABBREVIATIONS):
+        joins = previous and (
+            any(previous.endswith(f"{abbr}.") for abbr in _ABBREVIATIONS)
+            or _LIST_MARKER.search(previous) is not None
+        )
+        if joins:
             parts[-1] = f"{previous} {candidate}"
         else:
             parts.append(candidate)

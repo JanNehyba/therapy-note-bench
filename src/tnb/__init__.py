@@ -19,4 +19,17 @@
 #:   words it takes.
 #: - `conciseness` is not published when the note text is unavailable, because
 #:   then its denominator is unknown rather than equal to whatever arrived.
-__version__ = "0.3.0"
+#: 0.3.0 -- a composite "Nil" is empty however it is punctuated. `is_filled`
+#: split a composite answer on newlines and semicolons but not commas, and
+#: matched the empty markers exactly, so "Nil" was empty and "Nil." was not.
+#: `deepseek-v4-flash-thinking` wrote `Date: Nil, Place: Nil, Time: Nil` into
+#: *what happens next* in the only two sessions that carried its Looks-forward
+#: score, published as 0.1818 where the answer is 0.0909.
+#:
+#: 0.4.0 -- a list marker is no longer a sentence. `1. ` ends in a full stop
+#: followed by a space, so a numbered plan was cut into pieces that were bare
+#: numerals, each one a question the judge was asked and a numeral cannot pass:
+#: a certain No in the numerator and a certain +1 in the denominator of
+#: `conciseness`. It was 65% of `qwen3.5-122b`'s conciseness failures and 0% for
+#: the models that write prose, so the column was partly measuring markdown.
+__version__ = "0.4.0"
