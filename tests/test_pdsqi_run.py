@@ -11,6 +11,7 @@ from __future__ import annotations
 import json
 
 from tnb import judge, report, results
+from tnb.config import REPO_ROOT
 from tnb.scoring import pdsqi, pdsqi_run
 from tnb.scoring.run import Candidate
 
@@ -353,3 +354,43 @@ def test_a_session_the_endpoint_refused_is_not_charged_to_the_model():
     assert row.n_sessions_generated == 1
     assert row.n_failed == 0, "two missing notes, both of them the endpoint's"
     assert row.unreached_reasons == {"HTTP429: rate limited": 2}
+
+
+def test_pdsqi_asks_for_the_track_its_notes_were_generated_on(tmp_path):
+    """PDSQI rates the SOAP notes, so it wants the SOAP track's settings — and
+    it must ask for them by name.
+
+    It used to get them by accident: `settings_by_system` walked every track
+    into one mapping and `icare` sorts before `soap`, so the SOAP entry happened
+    to be written last and win. Keying that mapping on the track (the fix for
+    the iCARE rows, which were publishing SOAP's reasoning figure) removes the
+    accident, and `TRACK_PDSQI` is `'pdsqi-soap'` — a name nothing has ever
+    generated under. Asking for it returns nothing at all.
+    """
+    from tnb import results
+
+    record = {
+        "ok": True,
+        "generated_at": "2026-01-01T00:00:00Z",
+        "effort": "",
+        "temperature": 0,
+        "temperature_forced": False,
+        "max_tokens": 4096,
+        "usage": {"completion_tokens_details": {"reasoning_tokens": 100}},
+    }
+    directory = tmp_path / "einfra" / "soap" / "tneval-soap-v1" / "mymodel" / "s1"
+    directory.mkdir(parents=True)
+    (directory / "note.json").write_text(json.dumps(record), encoding="utf-8")
+
+    assert results.settings_by_system(tmp_path, track=results.TRACK_TNEVAL), (
+        "the notes PDSQI rates are generated on the SOAP track"
+    )
+    assert results.settings_by_system(tmp_path, track=results.TRACK_PDSQI) == {}, (
+        "nothing is generated under the PDSQI track name; asking for it returns nothing"
+    )
+
+    source = (REPO_ROOT / "src" / "tnb" / "cli.py").read_text(encoding="utf-8")
+    body = source.split("def cmd_score_pdsqi")[1].split("\ndef ")[0]
+    assert "settings_by_system(track=results.TRACK_TNEVAL)" in body, (
+        "cmd_score_pdsqi must name the SOAP track rather than rely on sort order"
+    )

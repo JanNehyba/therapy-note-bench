@@ -688,22 +688,38 @@ def unreached_by_system(
     return found
 
 
-def settings_by_system(cache_dir: Path | None = None) -> dict[tuple[str, str], Settings]:
-    """How each (provider, system) was generated, from the records on disk.
+def settings_by_system(
+    cache_dir: Path | None = None, track: str | None = None
+) -> dict[tuple[str, str], Settings]:
+    """How each (provider, system) was generated on one track, from the records.
 
     The scored rows need this as much as the coverage rows do, and reading it
     from one place means a scored row and a coverage row for the same model can
     never disagree about how it was asked.
 
-    Keyed on (provider, system_id) rather than including the task: a model is
-    configured per provider, not per track, and a settings block that differed
-    between a model's SOAP row and its iCARE row would be describing the
-    harness rather than the model.
+    **`track` is not optional in practice.** The key is (provider, system_id),
+    which is right for `temperature` and `effort` -- a model is configured per
+    provider -- and wrong for the other two fields the block carries.
+    `thinking_tokens` is *measured* from that track's notes, and `max_tokens`
+    records whether the escalation to 16384 fired on that track. Both differ
+    between a model's SOAP run and its iCARE run, and not because of the
+    harness.
+
+    Without the filter this walked both tracks into one mapping and let the
+    later write win. `index_generations` visits task directories in sorted
+    order, `icare` sorts before `soap`, so **every iCARE row published the SOAP
+    track's reasoning figure** -- `google_gemini-3.7-flash` shown as 687 tokens
+    where its iCARE notes averaged 390, `gpt-5.6-terra` as 13 where iCARE was
+    41, ten of ten rows wrong -- and four rows printed "max tokens 4096" for
+    notes written under a 16384 ceiling.
+
+    `None` keeps the old behaviour and is kept only for a caller that genuinely
+    wants every track at once. Nothing in this repository does.
     """
     return {
         (row.provider, row.system_id): row.settings
         for row in index_generations(cache_dir)
-        if not row.settings.is_empty()
+        if not row.settings.is_empty() and (track is None or row.track == track)
     }
 
 

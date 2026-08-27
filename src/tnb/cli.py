@@ -435,7 +435,7 @@ def cmd_score(args: argparse.Namespace) -> int:
     # How each model was actually asked, from the generation records. The
     # reference systems have no records -- their notes came from TN-Eval, not
     # from us -- so they get an empty block, which is the truth.
-    settings = results.settings_by_system()
+    settings = results.settings_by_system(track=results.TRACK_TNEVAL)
     # And a reference model was only ever asked for the sessions TN-Eval
     # published a note for, so the corpus size is not its denominator either.
     attempted = {
@@ -584,7 +584,10 @@ def cmd_score_pdsqi(args: argparse.Namespace) -> int:
     # Counted before `--notes` takes a slice, for the reason spelled out in
     # `cmd_score`: a slice published as the model's output is an accusation.
     coverage = _generated_per_system(candidates)
-    settings = results.settings_by_system()
+    # PDSQI rates the SOAP notes, so it wants the SOAP track's settings.
+    # It used to get them by accident: the mapping walked both tracks and
+    # `icare` sorts before `soap`, so the SOAP entry happened to win.
+    settings = results.settings_by_system(track=results.TRACK_TNEVAL)
     attempted = {
         key: len(sessions) if key[0] != "tneval" else count for key, count in coverage.items()
     }
@@ -1086,7 +1089,7 @@ def cmd_score_icare(args: argparse.Namespace) -> int:
         coverage[key] = coverage.get(key, 0) + 1
     attempted = dict.fromkeys(coverage, len(sessions))
     unreached = results.unreached_by_system(results.TRACK_ICARE)
-    settings = results.settings_by_system()
+    settings = results.settings_by_system(track=results.TRACK_ICARE)
 
     if args.notes:
         candidates = candidates[: args.notes]

@@ -738,3 +738,47 @@ def test_the_providers_earlier_cut_cannot_leave_half_a_secret(monkeypatch):
     for length in range(6, len(secret)):
         assert secret[:length] not in masked, f"a {length}-character head survived"
     assert len(masked) < cut, "and the second cut is the shorter of the two"
+
+
+def test_settings_are_read_from_the_track_that_was_asked_for(tmp_path):
+    """`thinking_tokens` is measured from that track's notes and `max_tokens`
+    records whether the escalation fired on it. Both differ between a model's
+    SOAP run and its iCARE run, and not because of the harness.
+
+    Unfiltered, the mapping walked both tracks and let the later write win.
+    `index_generations` visits task directories in sorted order and `icare`
+    sorts before `soap`, so every iCARE row published the SOAP track's figure.
+    """
+    soap = {
+        "ok": True,
+        "generated_at": "2026-01-01T00:00:00Z",
+        "effort": "",
+        "temperature": 0,
+        "temperature_forced": False,
+        "max_tokens": 4096,
+        "usage": {"completion_tokens_details": {"reasoning_tokens": 100}},
+    }
+    icare = {**soap, "max_tokens": 16384}
+    icare["usage"] = {"completion_tokens_details": {"reasoning_tokens": 900}}
+
+    for task, prompt_version, unit, record in (
+        ("soap", "tneval-soap-v1", "note", soap),
+        ("icare", "icare-zeroshot-v1", "section-01", icare),
+    ):
+        directory = tmp_path / "einfra" / task / prompt_version / "mymodel" / "s1"
+        directory.mkdir(parents=True, exist_ok=True)
+        (directory / f"{unit}.json").write_text(json.dumps(record), encoding="utf-8")
+
+    key = ("einfra", "mymodel")
+    soap_settings = results.settings_by_system(tmp_path, track=results.TRACK_TNEVAL)[key]
+    icare_settings = results.settings_by_system(tmp_path, track=results.TRACK_ICARE)[key]
+
+    assert soap_settings.thinking_tokens == 100
+    assert icare_settings.thinking_tokens == 900, "the iCARE row must not carry SOAP's figure"
+    assert soap_settings.max_tokens == 4096
+    assert icare_settings.max_tokens == 16384
+
+    # And the shape the defect had: unfiltered, one of the two wins silently.
+    both = results.settings_by_system(tmp_path)[key]
+    assert both.thinking_tokens in (100, 900)
+    assert (both.thinking_tokens == 900) != (both.thinking_tokens == 100)
