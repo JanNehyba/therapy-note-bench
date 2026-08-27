@@ -139,3 +139,101 @@ def test_the_documented_instances_are_the_ones_the_docs_carry():
 
     assert "an empty note" in text
     assert "never as things it can win" in text
+
+
+# --- the guard: nothing is rated that is not there ----------------------------
+
+
+def test_a_section_with_no_text_gets_no_rating():
+    """`faithfulness` asks whether the text agrees with the transcript, and text
+    that does not exist agrees with everything. An empty SOAP note was rated
+    5.00 -- above the therapist and above every model but one.
+
+    The rating is withheld. The emptiness is still measured, by completeness and
+    by TN-Eval's own conciseness rule, both at zero.
+    """
+    tasks = tneval.build_tasks(EMPTY_SOAP, "therapist: hello")
+    answers = {task.unit: ("5" if "likert" in task.unit else "No") for task in tasks}
+
+    scores = tneval.aggregate(answers, tasks)
+
+    assert "faithfulness" not in scores.headline, "a rating of nothing reached the page"
+    assert scores.headline["completeness"] == 0.0, "the emptiness is still measured"
+    assert scores.headline["conciseness"] == 0.0
+
+
+def test_the_note_is_not_dropped_for_being_empty():
+    """The trap in the obvious fix. A note named in `incomplete` is left out of
+    the mean entirely -- so routing an empty section through it would make a
+    model's worst note *vanish* rather than count against it. The emptiness has
+    to be scored, not excused.
+    """
+    tasks = tneval.build_tasks(EMPTY_SOAP, "therapist: hello")
+    answers = {task.unit: ("5" if "likert" in task.unit else "No") for task in tasks}
+
+    scores = tneval.aggregate(answers, tasks)
+
+    assert not scores.incomplete, "an empty note was recorded as unanswered rather than as empty"
+    assert len(scores.by_section) == 4, "every section is still counted"
+
+
+def test_a_section_that_has_text_is_rated_as_before():
+    """The guard is about absence. A note with words in it is untouched, and
+    only the sections that have them contribute a rating."""
+    half = {**EMPTY_SOAP, "subjective": "Client reports low mood. She slept badly."}
+    tasks = tneval.build_tasks(half, "therapist: hello")
+    answers = {task.unit: ("5" if "likert" in task.unit else "Yes") for task in tasks}
+
+    scores = tneval.aggregate(answers, tasks)
+
+    assert scores.headline["faithfulness"] == 5.0, "the section with text is still rated"
+    assert "faithfulness" in scores.by_section["subjective"]
+    assert "faithfulness" not in scores.by_section["objective"], "and the empty ones are not"
+
+
+def test_pdsqi_asks_nothing_about_a_note_with_nothing_in_it():
+    """Three of its eight attributes reward vacuity -- `accurate` 5.00 against
+    the therapist's 4.20, `succinct` 5.00 against 2.92, and a perfect score on
+    the stigmatising column. The instrument is published and not ours to change;
+    declining to put the question is.
+
+    Refused before the call, so it also costs nothing.
+    """
+    from tnb.scoring import pdsqi
+
+    assert pdsqi.build_tasks(pdsqi.render_note(EMPTY_SOAP), "therapist: hello") == []
+    assert not pdsqi.has_content(pdsqi.render_note(EMPTY_SOAP))
+
+    real = {**EMPTY_SOAP, "plan": "Follow up next week."}
+    assert pdsqi.has_content(pdsqi.render_note(real))
+    assert pdsqi.build_tasks(pdsqi.render_note(real), "therapist: hello"), "a real note is asked"
+
+
+def test_no_published_note_is_empty_so_no_figure_moves():
+    """The guard changes nothing on the page today, and this is what says so.
+
+    It also fails the moment a published note *does* come back empty -- which is
+    the case the guard exists for, and the one worth being told about.
+    """
+    from tnb.scoring import run as scoring
+
+    try:
+        sessions = scoring.load_sessions(None)
+    except Exception:  # pragma: no cover - the corpus is not in every checkout
+        pytest.skip("no corpus in this checkout")
+
+    notes = list(scoring.from_generations(sessions)) + list(scoring.from_reference(sessions))
+    if not notes:
+        pytest.skip("nothing generated in this checkout")
+
+    blank = [
+        (c.system_id, c.session_id, section)
+        for c in notes
+        for section, text in c.note.items()
+        if isinstance(text, str) and not text.strip()
+    ]
+
+    assert not blank, (
+        f"{len(blank)} published section(s) are empty, e.g. {blank[:3]} -- their ratings are "
+        "now withheld, so the figures for those systems have moved and the page needs a re-score"
+    )

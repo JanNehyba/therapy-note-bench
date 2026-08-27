@@ -44,4 +44,15 @@
 #: onto the page as a considered 3. One answer in the cache is such a fragment.
 #: The rubric and conciseness branches have refused fragments since
 #: `is_an_answer`; this was the third place that needed it.
-__version__ = "0.5.0"
+#: 0.6.0 -- nothing is rated that is not there. `faithfulness`, PDSQI's
+#: `accurate` and `succinct`, and its stigmatising column all ask about the
+#: *absence of a fault*, so a section with no text in it collects full marks for
+#: saying nothing: an empty SOAP note scored 5.00 on faithfulness, above the
+#: therapist and above every model but one. The ratings are now withheld for a
+#: section with no sentences, and PDSQI is not asked about a note with no
+#: content at all. The emptiness is still measured -- completeness and TN-Eval's
+#: own conciseness rule both score it zero -- and the note is deliberately *not*
+#: marked incomplete, because a partial note is left out of the mean and a
+#: model's worst note must count rather than vanish. No published figure moves:
+#: none of the 942 notes has an empty section.
+__version__ = "0.6.0"

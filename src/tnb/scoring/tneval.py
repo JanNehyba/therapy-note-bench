@@ -700,9 +700,30 @@ def aggregate(answers: dict[str, str], tasks: list[JudgeTask] | None = None) -> 
         # `gemini-3.1-pro-preview`, 1 of 11 304 Likert answers. Small, and it is
         # a measurement nobody made. Named in `incomplete` like an unanswered
         # criterion rather than averaged in.
+        # **A section with nothing in it is not rated, and this is the reason.**
+        # These three ask whether the text is faithful, complete and concise --
+        # questions about the *absence of a fault*. A section that says nothing
+        # has nothing unfaithful in it, so it collects full marks for being
+        # empty. Measured against `gemini-3.1-pro-preview`: an empty SOAP note
+        # scores 5.00 on faithfulness, above the therapist's 4.65 and above
+        # every model but one, while completeness and conciseness correctly
+        # score 0.000.
+        #
+        # The note is **not** dropped and the section is **not** named in
+        # `incomplete`, which would be the worse mistake: a partial note is left
+        # out of the mean, so a model that wrote nothing would have its bad note
+        # vanish rather than count. The emptiness is already measured -- by
+        # completeness, at zero, and by TN-Eval's own conciseness rule, also at
+        # zero. What is withheld is only the rating of text that does not exist.
+        #
+        # Nothing published today changes: none of the 942 notes has an empty
+        # section, and across the real ones a shorter section does not score
+        # higher (rho +0.07 and -0.01 on the two judges). This is a guard
+        # against a model that starts writing thinly, not a repair of a number.
+        has_text = expected_conciseness is None or expected_conciseness[section] > 0
         for kind in ("likert_completeness", "likert_conciseness", "likert_faithfulness"):
             unit = f"{section}.{kind}"
-            if unit not in answers:
+            if unit not in answers or not has_text:
                 continue
             if is_a_rating(answers[unit]):
                 section_scores[MEASURE_OF_UNIT.get(kind, kind)] = float(parse_likert(answers[unit]))

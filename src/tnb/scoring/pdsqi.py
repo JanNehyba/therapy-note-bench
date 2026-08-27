@@ -415,6 +415,32 @@ def render_note(note: dict[str, str]) -> str:
     )
 
 
+def has_content(note: str) -> bool:
+    """Whether there is a note here to rate at all.
+
+    Three of the eight attributes ask about the *absence of a fault* -- is
+    anything inaccurate, is anything superfluous, is anything stigmatising --
+    and a note that says nothing has none of those. Measured against
+    `gemini-3.1-pro-preview`: an empty note scores `accurate` 5.00 against the
+    therapist's 4.20, `succinct` 5.00 against 2.92 and a perfect 1.00 on the
+    stigmatising column. The other five correctly collapse to 1, so the judge is
+    reading it; the instrument's anchors simply reward vacuity.
+
+    Neither the wording nor the anchors are ours to change -- PDSQI-9 is a
+    published instrument and this benchmark reproduces it. What is ours is
+    declining to publish a rating of nothing.
+
+    The rendering carries the field labels, so emptiness has to be judged on the
+    values rather than on the string: `render_note({})` is not empty text.
+    """
+    return any(str(value).strip() for value in _values_of(note))
+
+
+def _values_of(note: str) -> list[str]:
+    """The note's field values, without the labels `render_note` added."""
+    return [line.split(":", 1)[1] for line in note.splitlines() if ":" in line]
+
+
 def build_tasks(note: str, transcript: str | None = None) -> list[PdsqiTask]:
     """The questions asked about one note -- one call each.
 
@@ -427,6 +453,12 @@ def build_tasks(note: str, transcript: str | None = None) -> list[PdsqiTask]:
     is inside the judge fingerprint, so raising it to fit a longer answer would
     re-key and discard every cached answer belonging to the other tracks.
     """
+    # Nothing is asked about a note with nothing in it. Three of the eight
+    # attributes reward exactly that -- see `has_content` -- and the cheapest
+    # place to refuse is before the question is put, which also spends nothing.
+    if not has_content(note):
+        return []
+
     tasks: list[PdsqiTask] = []
     for attribute in ATTRIBUTES:
         if attribute.needs_transcript and transcript is None:
