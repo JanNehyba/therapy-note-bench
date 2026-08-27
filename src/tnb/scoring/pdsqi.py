@@ -23,9 +23,12 @@ published on the page rather than smoothed over.**
 1. It was developed and validated on a corpus from which *psychiatry notes were
    explicitly excluded*. It is a validated instrument, but not on our material.
 2. It rates a *summary of several earlier notes*, not a note written from one
-   session. That is why its ninth attribute, "Cited", asks whether assertions
+   session. That is why its first attribute, "Cited", asks whether assertions
    carry citations back to the source documents. We have no source documents, so
-   that attribute has nothing to measure here and is dropped -- eight remain.
+   that attribute has nothing to measure here and is dropped -- items 2 to 9
+   remain, which is eight. (PDSQI-**9** counts its attributes, not its
+   numbering: `DROPPED` says the same thing and this sentence used to say
+   "ninth", which is the one place in the file the two disagreed.)
 3. Its wording therefore says "summary" and "source notes" throughout. Asking a
    judge to rate "the summary" when it is looking at a session note invites it
    to rate the wrong thing, so two substitutions are made and named:

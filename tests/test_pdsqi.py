@@ -176,3 +176,21 @@ def test_an_unreadable_yes_no_is_missing_and_not_a_clean_note():
 
 def test_the_instrument_declines_to_name_a_ranking_measure():
     assert pdsqi.RANKING_MEASURE is None
+
+
+def test_the_dropped_attribute_is_numbered_the_same_way_twice():
+    """The module docstring and the comment above `DROPPED` both say which
+    PDSQI-9 item is not asked here, and until 2026-08-27 they disagreed: the
+    docstring called `Cited` the ninth attribute and the comment called it item
+    1. The kept items are 2 to 9, so the comment was right.
+
+    Held on the code, so the prose cannot drift from the numbering again.
+    """
+    items = sorted(attribute.item for attribute in pdsqi.ATTRIBUTES)
+    assert items == list(range(2, 10)), "items 2 to 9 are kept; item 1 is dropped"
+    assert pdsqi.DROPPED == ("cited",)
+    assert len(pdsqi.ATTRIBUTES) == 8
+
+    doc = pdsqi.__doc__ or ""
+    assert "ninth attribute" not in doc, "item 1 is not the ninth attribute"
+    assert "first attribute" in doc
