@@ -847,7 +847,7 @@
         }
       ],
       "track": "pdsqi-soap",
-      "track_label": "PDSQI-9 · the same notes, rated for quality",
+      "track_label": "PDSQI-9 · the SOAP notes on AnnoMI, rated for quality",
       "undominated": [
         "gemma4",
         "glm-5.2",
@@ -3554,7 +3554,7 @@
             "table": "pdsqi-soap-gpt-5.6-terra-0.5.0-acf643"
           }
         ],
-        "label": "PDSQI-9 quality",
+        "label": "PDSQI-9 on SOAP",
         "track": "pdsqi-soap"
       }
     ]
@@ -10592,7 +10592,7 @@
       }
     },
     {
-      "blurb": "A published instrument, asked about the very notes the rubric above scores for coverage. Eight attributes, reported separately and never averaged, because the instrument reports them that way.",
+      "blurb": "A published instrument asked about the same notes as the TN-Eval SOAP track: the SOAP notes written from the 50 AnnoMI conversations. Not a third corpus -- one corpus, two instruments, so the two tables can be read against each other. Eight attributes, reported separately and never averaged, because the instrument reports them that way and because one of the eight is a 0-1 column: a mean over it and seven 1-5 scales would be a number with no unit.",
       "columns": [
         {
           "caveat": "PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.",
@@ -11428,7 +11428,7 @@
       "scored": true,
       "stale_harness": false,
       "subtitle": "scored by gemini-3.1-pro-preview",
-      "title": "PDSQI-9 · the same notes, rated for quality",
+      "title": "PDSQI-9 · the SOAP notes on AnnoMI, rated for quality",
       "track": "pdsqi-soap",
       "versions": {
         "harness_version": "0.5.0",
@@ -11444,7 +11444,7 @@
       }
     },
     {
-      "blurb": "A published instrument, asked about the very notes the rubric above scores for coverage. Eight attributes, reported separately and never averaged, because the instrument reports them that way.",
+      "blurb": "A published instrument asked about the same notes as the TN-Eval SOAP track: the SOAP notes written from the 50 AnnoMI conversations. Not a third corpus -- one corpus, two instruments, so the two tables can be read against each other. Eight attributes, reported separately and never averaged, because the instrument reports them that way and because one of the eight is a 0-1 column: a mean over it and seven 1-5 scales would be a number with no unit.",
       "columns": [
         {
           "caveat": "PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.",
@@ -12280,7 +12280,7 @@
       "scored": true,
       "stale_harness": false,
       "subtitle": "scored by gpt-5.6-terra",
-      "title": "PDSQI-9 · the same notes, rated for quality",
+      "title": "PDSQI-9 · the SOAP notes on AnnoMI, rated for quality",
       "track": "pdsqi-soap",
       "versions": {
         "harness_version": "0.5.0",

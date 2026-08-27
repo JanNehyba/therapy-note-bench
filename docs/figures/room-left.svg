@@ -80,5 +80,5 @@
 <text class="note" x="0" y="712">The grey tick on each strip is the therapist. Where she sits inside a strip, the criterion measures something models and people both do; where a strip is pinned at</text>
 <text class="note" x="0" y="727">either end and she is pinned with it, it is measuring the corpus rather than the model. Completeness is a fraction of the conversations; TRACE is a 1-to-5 rating</text>
 <text class="note" x="0" y="742">with no human anchor at all.</text>
-<text class="note" x="0" y="766">Source: docs/saturation-gemini-3.1-pro-preview.json and docs/leaderboard.json, harness 0.2.0.</text>
+<text class="note" x="0" y="766">Source: docs/saturation-gemini-3.1-pro-preview.json and docs/leaderboard.json, harness 0.5.0.</text>
 </svg>

@@ -58,5 +58,5 @@
 <text class="note" x="0" y="598">A therapist writes what matters for the next session and leaves out what does not; the rubric counts what is present and cannot see why anything was left out.</text>
 <text class="note" x="0" y="613">TN-Eval reported the same direction from blinded expert comparison, so this is a reproduction rather than an anomaly — and it is a statement about a checklist,</text>
 <text class="note" x="0" y="628">not about clinical writing. Quote the number with this sentence attached, or do not quote it.</text>
-<text class="note" x="0" y="640">Source: docs/leaderboard.json, harness 0.2.0. The same ordering holds under the second judge; the figures differ.</text>
+<text class="note" x="0" y="640">Source: docs/leaderboard.json, harness 0.5.0. The same ordering holds under the second judge; the figures differ.</text>
 </svg>

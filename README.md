@@ -102,7 +102,7 @@ written for somebody building or buying one:
 - **Looks back** (0-1) — Section 5 only -- what happened in the previous session. The fraction of the 34 sessions whose expert note answered it where the model did too. Kept out of any average. Every model scores 0.97-1.00 here, so this column separates nobody -- it is shown because its twin does.
 - **Looks forward** (0-1) — Section 17 only -- what happens at the next session. The fraction of the 11 sessions whose expert note answered it where the model did too. This is where the source paper reports every model it tested failing, and ours do too: 0.00 to 0.55. Reported apart from its twin because averaging the two turned 1.00 and 0.09 into 0.78 and hid exactly this.
 
-**PDSQI-9 · the same notes, rated for quality** — scored by gemini-3.1-pro-preview (max_output_tokens 288, temperature 0, thinking_budget 256)
+**PDSQI-9 · the SOAP notes on AnnoMI, rated for quality** — scored by gemini-3.1-pro-preview (max_output_tokens 288, temperature 0, thinking_budget 256)
 
 | Model | Provider | Accurate (1-5) | Thorough (1-5) | Useful (1-5) | Organized (1-5) | Comprehensible (1-5) | Succinct (1-5) | Synthesized (1-5) | Free of stigmatizing language (0-1) | Notes | Scored |
 |---|---|---|---|---|---|---|---|---|---|---|---|
@@ -141,7 +141,7 @@ written for somebody building or buying one:
 
 `gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on trace (+0.826) and place 11 of 16 systems differently on it anyway. The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. 9 system(s) beat at least one other on every measure under both judges, which needs no weighting to be true: `gpt-5.6-sol` beats 6. 8 of 16 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner.
 
-**Do the two judges agree?** (PDSQI-9 · the same notes, rated for quality)
+**Do the two judges agree?** (PDSQI-9 · the SOAP notes on AnnoMI, rated for quality)
 
 `gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on thorough (+0.833) and place 18 of 19 systems differently on it anyway. They agree least on succinct (+0.446, 18 of 19 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. No agreement figure is given for comprehensible (18 of 19 share one value), organized (18 of 19 share one value), synthesized (18 of 19 share one value), useful (18 of 19 share one value): most systems print the same number there, so there are no orderings for the two judges to agree about, and a correlation over them would be decided by the few that differ. 4 system(s) beat at least one other on every measure under both judges, which needs no weighting to be true: `gpt-5.6-sol` beats 7. 11 of 19 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner.
 
@@ -207,7 +207,7 @@ written for somebody building or buying one:
 - **TN-Eval SOAP · AnnoMI conversations**, scored by gemini-2.5-pro (max_output_tokens 160, temperature 0, thinking_budget 128) — measured by harness `0.2.0`, whose columns may not mean what the newer tables' columns mean — [open it](https://jannehyba.github.io/therapy-note-bench/#tneval-soap-gemini-2.5-pro-0.2.0-345ec0)
 - **TN-Eval SOAP · AnnoMI conversations**, scored by gpt-5.6-terra (backend openai, effort medium, max_output_tokens 672) — [open it](https://jannehyba.github.io/therapy-note-bench/#tneval-soap-gpt-5.6-terra-0.5.0-acf643)
 - **iCARE form on the iHOPE corpus · 17 sections per session**, scored by gpt-5.6-terra (backend openai, effort medium, max_output_tokens 672) — [open it](https://jannehyba.github.io/therapy-note-bench/#icare-gpt-5.6-terra-0.5.0-acf643)
-- **PDSQI-9 · the same notes, rated for quality**, scored by gpt-5.6-terra (backend openai, effort medium, max_output_tokens 672) — [open it](https://jannehyba.github.io/therapy-note-bench/#pdsqi-soap-gpt-5.6-terra-0.5.0-acf643)
+- **PDSQI-9 · the SOAP notes on AnnoMI, rated for quality**, scored by gpt-5.6-terra (backend openai, effort medium, max_output_tokens 672) — [open it](https://jannehyba.github.io/therapy-note-bench/#pdsqi-soap-gpt-5.6-terra-0.5.0-acf643)
 
 See the [full leaderboard](https://jannehyba.github.io/therapy-note-bench/) for per-section detail, the reference systems and the published numbers, and [how it was measured](https://jannehyba.github.io/therapy-note-bench/methods.html) for the judge, the corpora and what the two judges disagree about.
 <!-- LEADERBOARD:END -->
