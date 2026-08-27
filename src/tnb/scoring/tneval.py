@@ -288,6 +288,29 @@ CHECKBOX_MAPPING = {
 #: sentences, so a different split changes the denominator; the difference is
 #: recorded in docs/limitations.md rather than hidden.
 _ABBREVIATIONS = ("Dr", "Mr", "Mrs", "Ms", "e.g", "i.e", "vs", "etc", "St", "Prof")
+#: A sentence ends at `.!?` followed by whitespace.
+#:
+#: **A numbered list is cut into pieces that are bare numerals, and this is not
+#: fixed here.** `1. ` ends in a full stop followed by a space, so "Plan: 1.
+#: Continue weekly sessions. 2. Practise breathing." becomes five pieces, two of
+#: them the strings "1." and "2." -- and every piece becomes a question put to
+#: the judge: does this sentence serve a rubric criterion? A numeral cannot, so
+#: it is a certain No in the numerator and a certain +1 in the denominator.
+#: Measured: the numerals are 65% of `qwen3.5-122b`'s conciseness failures, 62%
+#: of `google_gemini-3.7-flash`'s, 56% of `gpt-oss-120b`'s, and 0% for the five
+#: models that write prose. The column is partly measuring markdown.
+#:
+#: **Why it is still here.** A conciseness answer is cached under the sentence's
+#: *index* -- `subjective.rubric_conciseness.s02` -- so changing what counts as a
+#: sentence re-numbers them and pairs every cached answer with a different
+#: sentence. 168 of the 792 notes change their sentence list under the fix, and
+#: `judge.load_cached` cannot catch it because the two published judges' answers
+#: carry no prompt digest. Applying the fix therefore needs either the
+#: conciseness questions re-asked for those notes (real money, roughly 1 700
+#: questions) or the cache re-keyed by sentence content. It was applied once on
+#: 2026-08-27 and reverted the same hour when the published conciseness moved
+#: for exactly the models with numbered lists -- downward, which is the mismatch
+#: and not the fix.
 _SENTENCE_END = re.compile(r"(?<=[.!?])\s+")
 
 

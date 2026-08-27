@@ -46,7 +46,12 @@ _DECORATION = re.compile(r"[*_`#]+|^\s*[-•]\s*")
 
 #: A field may answer several sub-questions at once -- "Date: ... Place: ..." --
 #: on separate lines or separated by semicolons.
-_SUB_FIELD = re.compile(r"[\n;]+")
+#: Commas count. A model that answers "Date: Nil, Place: Nil, Time: Nil, Bring
+#: anyone: Nil" has said exactly what the newline and the semicolon forms say,
+#: and `deepseek-v4-flash-thinking` wrote that into *what happens next* in two
+#: sessions -- which was its entire Looks-forward score: 2 of the 11 the expert
+#: answered, published as 0.1818 where the answer is 0.0000.
+_SUB_FIELD = re.compile(r"[\n;,]+")
 
 #: A label is short and has no sentence in it. The bound stops a real sentence
 #: containing a colon ("The client said: I feel awful") from having its content
@@ -60,7 +65,11 @@ def _carries_content(part: str) -> bool:
     label, separator, value = text.partition(":")
     if separator and len(label) <= _LABEL_CHARS and "." not in label:
         text = value.strip()
-    return text.lower() not in EMPTY_MARKERS
+    # Trailing punctuation is not content. `EMPTY_MARKERS` is matched exactly,
+    # so "Nil" was empty and "Nil." was not -- documented as a hole that fired
+    # nowhere, and it fired once: a model section of eight "Nil" sub-fields
+    # whose last one ended in a full stop.
+    return text.lower().rstrip(".;,! ") not in EMPTY_MARKERS
 
 
 def is_filled(value: str) -> bool:

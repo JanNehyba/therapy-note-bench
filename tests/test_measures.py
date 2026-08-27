@@ -270,22 +270,32 @@ def test_the_reference_models_beat_the_therapist_where_the_docs_say_they_do():
     assert checked >= 4, "the corpus must actually contain the rows this checks"
 
 
-def test_the_empty_marker_set_is_matched_exactly_and_that_is_on_purpose():
-    """`is_filled` reads "Nil" as empty and "Nil." as content.
+def test_the_empty_marker_set_was_pinned_open_and_the_count_was_wrong():
+    """This test used to hold the hole open, and the reason it gave was measured
+    and false.
 
-    A real hole, and not a live one: 0 of 524 expert fields and 0 of 10 879
-    model-written sections trip it, counted on 2026-08-26. Closing it would
-    change a published measure's definition — which means a `harness_version`
-    bump and a re-score of both tracks — to move no number anyone has computed.
+    It said: `is_filled` reads "Nil" as empty and "Nil." as content, a real hole
+    and not a live one, 0 of 524 expert fields and 0 of 10 879 model-written
+    sections. Re-counted on 2026-08-27 over every `ok` iCARE generation on disk,
+    the trailing stop fires **1 of 10 880** -- `gpt-5.6-luna`, session 81,
+    section 2: eight sub-fields, every one "Nil", counted as content because the
+    last one ended in a full stop.
 
-    Pinned rather than fixed, so the decision is visible and a change to it is
-    deliberate rather than incidental.
+    And the comma form, which nothing had counted at all, fires twice -- both in
+    section 17, `deepseek-v4-flash-thinking`, which is its **entire**
+    Looks-forward score: 2 of the 11 the expert answered, published as 0.1818
+    where the answer is 0.0000.
+
+    So the decision the old test pinned was taken on a number that was wrong.
+    Both are closed now, with the `harness_version` bump and re-score the old
+    docstring correctly said it would cost.
     """
     from tnb.corpus import is_filled
 
     assert is_filled("Nil") is False
     assert is_filled("Date: Nil; Place: Nil") is False
-    assert is_filled("Nil.") is True, "the documented hole, held so it cannot close by accident"
+    assert is_filled("Nil.") is False, "closed 2026-08-27; it fired once"
+    assert is_filled("Date: Nil, Place: Nil, Time: Nil") is False, "and the comma form twice"
     assert is_filled("Type: Nil; Mode: Individual") is True, "one sub-field is enough"
 
 
@@ -381,3 +391,61 @@ def test_the_exclusion_is_not_read_off_the_party_being_measured():
     limitations = (docs / "limitations.md").read_text(encoding="utf-8")
     assert "`saturation`'s `unreachable`" in limitations, "the docs name the rule"
     assert "at most 10% of her notes" in limitations, "and name what it replaced"
+
+
+def test_a_composite_nil_answer_is_empty_however_it_is_punctuated():
+    """ "Nothing to report" spelled out one sub-question at a time is still
+    nothing to report, whichever separator the model chose.
+
+    `deepseek-v4-flash-thinking` wrote the comma form into *what happens next*
+    in two sessions, and those two were its entire Looks-forward score: 2 of the
+    11 the expert answered, published as 0.1818 where the answer is 0.0000. The
+    trailing full stop is the other half, documented as a hole that fired
+    nowhere and firing once.
+    """
+    from tnb.corpus import is_filled
+
+    for empty in (
+        "Nil",
+        "Nil.",
+        "Date: Nil\nPlace: Nil\nTime: Nil",
+        "Date: Nil; Place: Nil; Time: Nil",
+        "Date: Nil, Place: Nil, Time: Nil, Bring anyone: Nil",
+        "Date: Nil, Place: Nil, Time: Nil, Bring anyone: Nil.",
+    ):
+        assert not is_filled(empty), f"{empty!r} says nothing"
+
+    # And prose that happens to contain a comma is still content.
+    for filled in ("Anxiety, low mood", "Type: Nil; Mode: Individual", "He reports poor sleep"):
+        assert is_filled(filled), f"{filled!r} says something"
+
+
+def test_a_numbered_list_is_still_cut_into_bare_numerals_and_why():
+    """The defect is real, measured, and deliberately still here.
+
+    `1. ` ends in a full stop followed by a space, so a numbered plan is cut
+    into pieces that are bare numerals — and every piece becomes a question put
+    to the judge: does this sentence serve a rubric criterion? A numeral cannot,
+    so it is a certain No in the numerator and a certain +1 in the denominator.
+    The numerals are 65% of `qwen3.5-122b`'s conciseness failures, 62% of
+    `google_gemini-3.7-flash`'s and 56% of `gpt-oss-120b`'s, against 0% for the
+    five models that write prose.
+
+    **It cannot be fixed from the cache.** A conciseness answer is stored under
+    the sentence's *index*, `subjective.rubric_conciseness.s02`, so changing
+    what counts as a sentence re-numbers them and pairs every cached answer with
+    a different sentence. 168 of the 792 notes change their sentence list under
+    the fix, and `judge.load_cached` cannot catch it because neither published
+    judge's answers carry a prompt digest. It was applied on 2026-08-27 and
+    reverted the same hour: the published conciseness moved for exactly the
+    models with numbered lists, and downward, which is the mismatch and not the
+    fix.
+
+    Held open so the next person meets the reason rather than the symptom.
+    """
+    from tnb.scoring.tneval import split_sentences
+
+    pieces = split_sentences("Plan: 1. Continue weekly sessions. 2. Practise breathing.")
+    assert "2." in pieces, "the defect, pinned; closing it needs the questions re-asked"
+    assert "Continue weekly sessions." in pieces
+    assert split_sentences("He was calm. She agreed.") == ["He was calm.", "She agreed."]

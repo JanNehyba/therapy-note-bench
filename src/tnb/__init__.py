@@ -19,4 +19,4 @@
 #:   words it takes.
 #: - `conciseness` is not published when the note text is unavailable, because
 #:   then its denominator is unknown rather than equal to whatever arrived.
-__version__ = "0.2.0"
+__version__ = "0.3.0"
