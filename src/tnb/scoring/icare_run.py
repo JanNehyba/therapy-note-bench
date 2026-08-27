@@ -85,11 +85,19 @@ class SystemAggregate:
         usable = self.complete
         headline = _mean_of_dicts([note.scores.headline for note in usable])
         detail = _mean_of_dicts([note.scores.by_criterion for note in self.notes])
-        return Metrics(
-            headline=headline,
-            by_section={"trace": detail} if detail else {},
-            detail=detail,
-        )
+        # `by_section` is left empty on purpose, and that is not the same as
+        # having nothing to say. `Metrics` documents the field as the same
+        # measures per section -- 4 for SOAP, 17 for iCARE -- and this track has
+        # no per-section scores: ROUGE-L and BERTScore are computed over the
+        # whole note against the whole expert note, and TRACE is five ratings of
+        # the note, not of a section.
+        #
+        # It used to carry `{"trace": detail}`: one key that is not a section,
+        # holding the same five values `detail` holds one line below. The page
+        # then drew a BY SECTION table whose only row was labelled `trace` and
+        # whose every cell was an em-dash, because those five keys are not the
+        # five column keys -- an expansion that looked truncated and was.
+        return Metrics(headline=headline, detail=detail)
 
 
 def _mean_of_dicts(dicts: list[dict[str, float]]) -> dict[str, float]:

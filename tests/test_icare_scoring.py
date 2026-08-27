@@ -15,6 +15,7 @@ import pytest
 from tnb import corpus, judge
 from tnb.datasets import ihope
 from tnb.scoring import icare as scorer
+from tnb.scoring import icare_run
 from tnb.tasks import icare
 
 GOLD = (
@@ -741,3 +742,30 @@ def test_a_missing_dependency_is_still_reported_as_absent(tmp_path, monkeypatch)
     monkeypatch.setattr(builtins, "__import__", refuse)
 
     assert scorer.bertscore(["a"], ["b"], cache=tmp_path / "x.json") is None
+
+
+def test_the_icare_row_claims_no_per_section_scores_because_it_has_none():
+    """`Metrics.by_section` is documented as the same measures per section — 4
+    for SOAP, 17 for iCARE. This track has none: ROUGE-L and BERTScore compare
+    the whole note with the whole expert note, and TRACE rates the note.
+
+    It used to carry one key, `trace`, which is not a section, holding the same
+    five values `detail` holds. The page drew a BY SECTION table with one row
+    labelled `trace` and an em-dash in every cell, because the five TRACE
+    dimensions are not the five columns — an expansion that looked truncated
+    because it was.
+    """
+    aggregate = icare_run.SystemAggregate(
+        notes=[
+            icare_run.NoteResult(
+                candidate=None,
+                scores=scorer.Scores(
+                    headline={"trace": 4.5},
+                    by_criterion={"accuracy": 4.0, "relevance": 5.0},
+                ),
+            )
+        ]
+    )
+    metrics = aggregate.metrics()
+    assert metrics.detail == {"accuracy": 4.0, "relevance": 5.0}, "the dimensions are kept"
+    assert metrics.by_section == {}, "and they are not dressed up as a section"
