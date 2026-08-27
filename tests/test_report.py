@@ -916,3 +916,71 @@ def test_the_readme_opens_on_the_table_the_site_opens_on():
     drawn, _named = report._readme_tables(data)
 
     assert [table["id"] for table in drawn] == [data["selection"]["tracks"][0]["default"]]
+
+
+def test_a_scored_row_borrows_the_reason_its_coverage_row_recorded():
+    """A count of unusable notes travels with the reason it was unusable.
+
+    `run.to_rows` follows that rule, but only for rows written since it learned
+    to. `results/` is append-only, so rows scored before it still carry
+    `n_failed` with `failure_reasons: {}` and the README prints the accusation
+    with nothing beside it. The reason is on the coverage row for the same
+    model, which `report` also has in hand.
+    """
+    coverage = _row(
+        system_id="gpt-oss-120b",
+        judge_model="",
+        n_failed=8,
+        failure_reasons={"answer did not contain a SOAP dictionary": 8},
+    )
+    scored = _row(system_id="gpt-oss-120b", judge_model="a-judge", n_failed=8)
+    assert scored.failure_reasons == {}
+
+    repaired = {row.judge_model: row for row in report._with_borrowed_reasons([coverage, scored])}
+    assert repaired["a-judge"].failure_reasons == {"answer did not contain a SOAP dictionary": 8}
+    assert repaired[""].failure_reasons == coverage.failure_reasons, "the coverage row is untouched"
+
+
+def test_borrowing_never_overwrites_a_reason_a_row_recorded_itself():
+    """Only ever adds. A row that knows why it failed keeps its own answer, and a
+    row with nothing to explain is not given one.
+    """
+    coverage = _row(
+        system_id="m",
+        judge_model="",
+        n_failed=8,
+        failure_reasons={"answer did not contain a SOAP dictionary": 8},
+    )
+    own = _row(system_id="m", judge_model="j", n_failed=2, failure_reasons={"empty content": 2})
+    clean = _row(system_id="m", judge_model="k", n_failed=0)
+
+    repaired = {
+        row.judge_model: row for row in report._with_borrowed_reasons([coverage, own, clean])
+    }
+    assert repaired["j"].failure_reasons == {"empty content": 2}
+    assert repaired["k"].failure_reasons == {}, "nothing failed, so nothing to explain"
+
+
+def test_the_repair_is_wired_into_the_build_and_not_merely_available():
+    """Testing the helper is not testing the page.
+
+    The first version of the two tests above called `_with_borrowed_reasons`
+    directly, so removing the call from `build` left them green -- the defect
+    class this repository keeps finding. This one asserts on the payload a
+    reader gets.
+    """
+    coverage = _row(
+        system_id="gpt-oss-120b",
+        judge_model="",
+        n_failed=8,
+        failure_reasons={"answer did not contain a SOAP dictionary": 8},
+    )
+    scored = _scored("gpt-oss-120b", 0.48, n_failed=8, n_sessions_generated=42)
+    assert scored.failure_reasons == {}
+
+    table = next(t for t in report.build([coverage, scored])["tables"] if t["scored"])
+    drawn = next(row for row in table["rows"] if row["label"].startswith("gpt-oss-120b"))
+    assert drawn["n_failed"] == 8
+    assert drawn["failure_reasons"] == {"answer did not contain a SOAP dictionary": 8}, (
+        "the page must never print a count of unusable notes with no reason beside it"
+    )

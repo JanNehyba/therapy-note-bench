@@ -19,6 +19,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+from dataclasses import replace
 from pathlib import Path
 
 from tnb import corpus, results
@@ -727,6 +728,41 @@ def _groups_for(versions: dict, saturations: list[dict]) -> dict | None:
     return None
 
 
+def _with_borrowed_reasons(rows: list[Row]) -> list[Row]:
+    """Give a scored row the reason its coverage row already recorded.
+
+    A count of unusable notes travels with the reason it was unusable. That is
+    the rule, and `run.to_rows` follows it -- but only for rows written since it
+    learned to. `results/` is append-only, so five rows drawn today were scored
+    before that and carry `n_failed: 8` with `failure_reasons: {}`. The README
+    prints "42/50 (8 unusable)" from them and the page says "8 note(s) missing,
+    with no recorded reason", while the reason sits in `results/rows.jsonl` on
+    the coverage row for the same model: eight answers that did not contain a
+    SOAP dictionary.
+
+    Repaired on the way in rather than fixed by re-scoring, for the reason
+    `normalise_reason` is: an append-only file keeps what it was written with,
+    and the fix has to be in the reading. It also means a future run that
+    forgets to pass `n_unreached` publishes a reason anyway rather than an
+    accusation.
+
+    Only ever adds. A row that recorded its own reasons keeps them.
+    """
+    recorded = {
+        (row.provider, row.system_id, row.track): row.failure_reasons
+        for row in rows
+        if not row.judge_model and row.failure_reasons
+    }
+    return [
+        replace(row, failure_reasons=dict(found))
+        if row.n_failed
+        and not row.failure_reasons
+        and (found := recorded.get((row.provider, row.system_id, row.track)))
+        else row
+        for row in rows
+    ]
+
+
 def build(rows: list[Row], saturations: list[dict] | None = None) -> dict:
     """Shape the rows into the JSON both presentations read.
 
@@ -739,7 +775,7 @@ def build(rows: list[Row], saturations: list[dict] | None = None) -> dict:
     older ones are named in `superseded` so a stale number is explainable rather
     than silently gone.
     """
-    current = results.latest(rows)
+    current = _with_borrowed_reasons(results.latest(rows))
     tables = []
 
     saturations = saturations or []

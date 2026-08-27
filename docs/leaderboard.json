@@ -1148,36 +1148,47 @@
         "gemini-2.5-pro"
       ],
       "all_at_or_above_ceiling": true,
-      "ceiling": 0.5037134105690964,
+      "ceiling": 0.5037308946452509,
+      "ceiling_span": [
+        0.5034527634718307,
+        0.5040964461994439
+      ],
       "margin": 0.05,
       "measure": "rubric_completeness",
       "ranked": [
         {
           "alpha": 0.5998072626406157,
+          "ceiling": 0.5040964461994439,
           "judge": "gemini-3.1-pro-preview"
         },
         {
           "alpha": 0.5744010609015743,
+          "ceiling": 0.5037134105690964,
           "judge": "gemini-2.5-pro"
         },
         {
           "alpha": 0.5444454928308946,
+          "ceiling": 0.5037134105690964,
           "judge": "gemini-3.7-flash"
         },
         {
           "alpha": 0.537282136371755,
+          "ceiling": 0.5037134105690964,
           "judge": "gemini-2.5-flash"
         },
         {
           "alpha": 0.5361740471244403,
+          "ceiling": 0.5034527634718307,
           "judge": "gemini-3.5-flash"
         },
         {
           "alpha": 0.5198903139267457,
+          "ceiling": 0.5037134105690964,
           "judge": "gpt-5.6-terra"
         },
         {
           "alpha": 0.5103987801526486,
+          "ceiling": 0.5037134105690964,
           "judge": "gpt-5.6-sol"
         }
       ],
@@ -6994,7 +7005,9 @@
             "subjective-symptoms": 0.9762
           },
           "effort": "",
-          "failure_reasons": {},
+          "failure_reasons": {
+            "answer did not contain a SOAP dictionary": 8
+          },
           "generated_at": "",
           "headline": {
             "completeness": 0.575,
