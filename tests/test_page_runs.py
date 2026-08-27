@@ -1194,3 +1194,40 @@ def test_the_panel_says_whether_the_two_leans_differ_from_each_other(tmp_path):
     assert "not distinguishable from each other" in output, (
         "the difference between the two judges was computed and not drawn"
     )
+
+
+def test_the_agreement_table_does_not_print_a_correlation_it_has_disowned(tmp_path):
+    """The prose stopped quoting `organized`; the table went on printing 1.000.
+
+    Eighteen of nineteen systems sat on 5.00, so the correlation was decided by
+    the one that did not, and the row beside it read "0 of 19 placed
+    differently" -- perfect agreement, from a column with nothing in it. A
+    reader checking the sentence against the table would have found the table
+    contradicting it.
+    """
+    data = _page_data(tmp_path)
+    payload = dict(data["concordance"])
+    track = next(iter(payload))
+    entry = dict(payload[track])
+    measures = [dict(m) for m in entry["measures"]]
+    measures[0] = {
+        **measures[0],
+        "measure": "organized",
+        "rho": 1.0,
+        "moved": 0,
+        "n_systems": 19,
+        "tied": 18,
+        "rankable": False,
+        "furthest": None,
+    }
+    entry["measures"] = measures
+    payload[track] = entry
+    data["concordance"] = payload
+
+    output = _flat(_run(report.render_methods(data), tmp_path, "concordance"))
+
+    assert "1.000" not in output.split("organized")[1][:200], (
+        "a measure that cannot order the systems still published a rank correlation"
+    )
+    assert "18 of 19 systems print the same number" in output
+    assert "does not order them" in output

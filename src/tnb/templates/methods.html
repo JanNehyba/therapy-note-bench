@@ -610,7 +610,19 @@ function renderConcordance(all) {
 
   box.innerHTML = '<h2>Do the two judges agree?</h2>' + tracks.map(track => {
     const c = all[track];
-    const rows = c.measures.map(m => `<tr>
+    // A measure most systems tie on has a correlation and no ordering for it
+    // to be about. `organized` printed 1.000 and "0 of 19 placed differently"
+    // off eighteen systems sitting on 5.00 -- which reads as the judges
+    // agreeing perfectly and is the arithmetic of a column with nothing in it.
+    // The prose stopped quoting those; the table went on printing them.
+    const rows = c.measures.map(m => m.rankable === false
+      ? `<tr>
+      <td>${m.measure}</td>
+      <td class="num">—</td>
+      <td colspan="2">${m.tied} of ${m.n_systems} systems print the same number, so this
+        measure does not order them and there is no agreement to report</td>
+    </tr>`
+      : `<tr>
       <td>${m.measure}</td>
       <td class="num">${m.rho === null ? '—' : m.rho.toFixed(3)}</td>
       <td class="num">${m.moved} of ${m.n_systems}</td>

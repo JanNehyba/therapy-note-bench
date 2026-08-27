@@ -29,6 +29,7 @@ score. That is the point.
 
 from __future__ import annotations
 
+from collections import Counter
 from collections.abc import Sequence
 from dataclasses import dataclass, field
 
@@ -67,9 +68,30 @@ class MeasureAgreement:
     #: The system that moved furthest, with its two positions (1-based).
     furthest: tuple[str, int, int] | None = None
 
+    #: How many systems print the same value as each other, counted on the
+    #: judge where the tie is worst. A measure has to tell the systems apart
+    #: before an agreement about its ordering means anything.
+    tied: int = 0
+
     @property
     def stable(self) -> int:
         return self.n_systems - self.moved
+
+    @property
+    def rankable(self) -> bool:
+        """Whether this measure orders the systems at all.
+
+        `organized` gives 5.00 to eighteen of nineteen systems under both
+        judges. Spearman over that is +1.000 and the page said the judges
+        "agree on the shape of the ranking" -- a claim decided by the single
+        system that was not at the ceiling. It is the same defect the
+        `judge_measures` filter above was written for, arriving by the other
+        road: there the correlation was a tautology, here it is a coin.
+
+        Half is the line. A measure on which most systems are indistinguishable
+        cannot order them, whatever the remainder does.
+        """
+        return self.n_systems >= 2 and self.tied * 2 <= self.n_systems
 
 
 @dataclass(frozen=True)
@@ -150,6 +172,21 @@ def _scores_by_judge(rows: list[Row], track: str) -> dict[str, dict[str, dict[st
             )
         seen[label] = dict(row.metrics.headline)
     return out
+
+
+def _largest_tie(
+    scores: dict[str, dict[str, float]], measure: str, systems: list[str], decimals: int
+) -> int:
+    """How many systems print the same value as each other on this measure.
+
+    Counted on the printed value, like `_positions` and for the same reason: a
+    reader who cannot tell two numbers apart in the table cannot tell the two
+    systems apart, whatever the stored floats do.
+    """
+    printed = Counter(
+        as_printed(scores[s][measure], decimals) for s in systems if measure in scores.get(s, {})
+    )
+    return max(printed.values(), default=0)
 
 
 def _positions(
@@ -269,6 +306,10 @@ def compare(
 
         rank_a = _positions(by_judge[judge_a], measure, shared, places[measure])
         rank_b = _positions(by_judge[judge_b], measure, shared, places[measure])
+        tied = max(
+            _largest_tie(by_judge[judge_a], measure, shared, places[measure]),
+            _largest_tie(by_judge[judge_b], measure, shared, places[measure]),
+        )
         both = [s for s in shared if s in rank_a and s in rank_b]
         moves = {s: abs(rank_a[s] - rank_b[s]) for s in both}
         furthest = max(moves, key=lambda s: (moves[s], s)) if moves else None
@@ -279,6 +320,7 @@ def compare(
                 rho=spearman([a for a, _ in pairs], [b for _, b in pairs]),
                 n_systems=len(both),
                 moved=sum(1 for distance in moves.values() if distance),
+                tied=tied,
                 furthest=(
                     (furthest, rank_a[furthest], rank_b[furthest])
                     if furthest and moves[furthest]
@@ -335,7 +377,12 @@ def compare(
 def describe(comparison: Comparison) -> str:
     """One paragraph a reader can act on, whichever way the numbers came out."""
     parts = []
-    ranked = [m for m in comparison.measures if m.rho is not None]
+    # A measure that gives most systems the same number cannot order them, and
+    # a correlation between two such orderings is decided by the handful that
+    # differ. `organized` was published as "+1.000, agree on the shape of the
+    # ranking" off eighteen of nineteen systems sitting on 5.00.
+    unrankable = [m for m in comparison.measures if m.rho is not None and not m.rankable]
+    ranked = [m for m in comparison.measures if m.rho is not None and m.rankable]
     if ranked:
         # Named per measure rather than as one worst-case number: they do not
         # agree equally, and "17 of 19 moved" attached to the ranking measure
@@ -358,6 +405,19 @@ def describe(comparison: Comparison) -> str:
         parts.append(
             "The tables can say who is near the top and who is near the bottom. "
             "They cannot say who is ninth and who is tenth."
+        )
+
+    if unrankable:
+        named = ", ".join(
+            f"{m.measure} ({m.tied} of {m.n_systems} share one value)"
+            for m in sorted(unrankable, key=lambda m: m.measure)
+        )
+        one = len(unrankable) == 1
+        parts.append(
+            f"No agreement figure is given for {named}: most systems print the same "
+            f"number there, so there {'is no ordering' if one else 'are no orderings'} "
+            f"for the two judges to agree about, and a correlation over "
+            f"{'it' if one else 'them'} would be decided by the few that differ."
         )
 
     if comparison.dominance:
@@ -425,6 +485,8 @@ def to_json(comparison: Comparison | None) -> dict | None:
                 "n_systems": m.n_systems,
                 "moved": m.moved,
                 "stable": m.stable,
+                "tied": m.tied,
+                "rankable": m.rankable,
                 "furthest": (
                     None
                     if m.furthest is None

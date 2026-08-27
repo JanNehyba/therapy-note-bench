@@ -493,3 +493,107 @@ def test_beaten_outright_is_a_claim_about_the_printed_table():
 
     assert result.dominance == []
     assert sorted(result.undominated) == ["x", "y"]
+
+
+def _ceiling_panel() -> list[Row]:
+    """Eighteen systems at the ceiling on one measure, one just below it.
+
+    `organized` on the PDSQI track, in miniature. Completeness varies and can
+    be ranked; conciseness gives nine of ten systems the identical 5.000.
+    """
+    names = [f"m{n:02d}" for n in range(10)]
+    # The judges disagree about the measures that *can* be ranked, and cannot
+    # disagree about the one that cannot -- which is the whole trap. The
+    # ceiling column then has the highest correlation of the three, so a
+    # `describe` that ranks by correlation alone picks it as the headline. That
+    # is what the page did.
+    shuffled = [0, 2, 1, 4, 3, 6, 5, 8, 7, 9]
+    scores: dict[str, dict[str, dict[str, float]]] = {A: {}, B: {}}
+    for index, name in enumerate(names):
+        scores[A][name] = {
+            "completeness": 0.9 - index * 0.05,
+            "conciseness": 5.0 if index else 4.98,
+            "faithfulness": 4.9 - index * 0.03,
+        }
+        scores[B][name] = {
+            "completeness": 0.8 - shuffled[index] * 0.04,
+            "conciseness": 5.0 if index else 4.90,
+            "faithfulness": 4.7 - shuffled[index] * 0.02,
+        }
+    return _panel(scores)
+
+
+def test_a_measure_most_systems_tie_on_gets_no_agreement_figure():
+    """`organized` gave 5.00 to eighteen of nineteen systems under both judges.
+
+    Spearman over that is +1.000 and the page published "the two judges agree on
+    the shape of the ranking on organized" -- a claim decided entirely by the
+    one system that was not at the ceiling. The `judge_measures` filter already
+    in this module was written against the same defect arriving the other way
+    round, where the correlation was a tautology rather than a coin.
+    """
+    comparison = concordance.compare(
+        _ceiling_panel(), results.TRACK_TNEVAL, MEASURES, judge_a=A, judge_b=B
+    )
+
+    assert comparison is not None
+    found = {m.measure: m for m in comparison.measures}
+    assert found["conciseness"].tied == 9, "nine of ten print the same number"
+    assert not found["conciseness"].rankable
+    assert found["completeness"].rankable and found["completeness"].tied == 1
+    assert found["conciseness"].rho > found["completeness"].rho, (
+        "the trap: the measure that cannot order the systems correlates best"
+    )
+
+    sentence = concordance.describe(comparison)
+    assert "shape of the ranking on conciseness" not in sentence, (
+        "a measure that cannot order the systems was published as agreement about their order"
+    )
+    assert "No agreement figure is given for conciseness (9 of 10 share one value)" in sentence
+    assert "shape of the ranking on completeness" in sentence, (
+        "the measures that do rank the systems are still reported"
+    )
+
+
+def test_the_rankability_of_every_measure_reaches_the_page():
+    """A reader who wants to check the exclusion needs the count, not the prose."""
+    comparison = concordance.compare(
+        _ceiling_panel(), results.TRACK_TNEVAL, MEASURES, judge_a=A, judge_b=B
+    )
+    published = concordance.to_json(comparison)
+
+    assert published is not None
+    by_measure = {m["measure"]: m for m in published["measures"]}
+    assert by_measure["conciseness"]["tied"] == 9
+    assert by_measure["conciseness"]["rankable"] is False
+    assert by_measure["completeness"]["rankable"] is True
+
+
+def test_a_measure_split_evenly_is_still_ranked():
+    """Half is the line, and half is on the ranked side of it.
+
+    Otherwise a two-way split -- a real, if coarse, ordering -- would be thrown
+    away with the ceilings.
+    """
+    scores: dict[str, dict[str, dict[str, float]]] = {A: {}, B: {}}
+    for index in range(10):
+        high = index < 5
+        scores[A][f"m{index:02d}"] = {
+            "completeness": 0.9 - index * 0.05,
+            "conciseness": 5.0 if high else 4.0,
+            "faithfulness": 4.9 - index * 0.03,
+        }
+        scores[B][f"m{index:02d}"] = {
+            "completeness": 0.8 - index * 0.04,
+            "conciseness": 5.0 if high else 4.0,
+            "faithfulness": 4.7 - index * 0.02,
+        }
+
+    comparison = concordance.compare(
+        _panel(scores), results.TRACK_TNEVAL, MEASURES, judge_a=A, judge_b=B
+    )
+
+    assert comparison is not None
+    found = {m.measure: m for m in comparison.measures}
+    assert found["conciseness"].tied == 5
+    assert found["conciseness"].rankable, "five of ten is not most of them"
