@@ -333,6 +333,23 @@ def what_it_means(data: Data) -> str:
         else "<strong>Neither is detected once the models are treated as a sample "
         "rather than as the whole vendor.</strong> "
     )
+
+    # The caption under the figure used to assert "the four systems in the top
+    # group are the same four under both", which is the reassuring half of this
+    # section's argument -- read it as bands and the bands agree. It was written
+    # by hand and it is false: the top band holds four systems under one judge
+    # and five under the other. Counted here so the sentence cannot outlive the
+    # payload it describes.
+    top_a = {name for name, band in data.bands(JUDGE_A).items() if band == 1}
+    top_b = {name for name, band in data.bands(JUDGE_B).items() if band == 1}
+    shared_top = top_a & top_b
+    if len(top_a) == len(top_b) == len(shared_top):
+        top_sentence = f"The {len(shared_top)} systems in the top group are the same under both."
+    else:
+        top_sentence = (
+            f"The top group holds {len(top_a)} systems under one judge and "
+            f"{len(top_b)} under the other; {len(shared_top)} are in both."
+        )
     return f"""
   <h2 class="page-break">One: a leaderboard position is not a measurement</h2>
   <p>The two judges see the same notes, ask the same 23 questions and reach almost the
@@ -348,7 +365,7 @@ def what_it_means(data: Data) -> str:
         figure_block(
             "positions.svg",
             "Completeness under each of the two judges. Grey lines held their place. "
-            "The four systems in the top group are the same four under both.",
+            + top_sentence,
         )
     }
 

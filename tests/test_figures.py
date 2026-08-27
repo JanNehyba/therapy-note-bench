@@ -398,3 +398,26 @@ def test_the_reachable_ceiling_is_weighted_the_way_completeness_is(data, brief_h
         if row["system_type"] == "model"
     )
     assert f"{best / weighted:.0%} of that" in brief_html
+
+
+def test_the_briefing_counts_the_top_group_rather_than_asserting_it(data, brief_html):
+    """The caption under figure 1 said "the four systems in the top group are the
+    same four under both". It is the reassuring half of that section's argument --
+    read it as bands and the bands agree -- and it was written by hand and wrong:
+    the top band holds four systems under one judge and five under the other.
+
+    Whatever the payload says, the caption has to say the same. Held on the
+    counts rather than on a fixed sentence, so it survives the bands changing.
+    """
+    top_a = {name for name, band in data.bands(figures.JUDGE_A).items() if band == 1}
+    top_b = {name for name, band in data.bands(figures.JUDGE_B).items() if band == 1}
+    shared = top_a & top_b
+
+    if len(top_a) == len(top_b) == len(shared):
+        assert f"The {len(shared)} systems in the top group are the same under both" in brief_html
+    else:
+        assert (
+            f"The top group holds {len(top_a)} systems under one judge and "
+            f"{len(top_b)} under the other; {len(shared)} are in both" in brief_html
+        )
+        assert "are the same four under both" not in brief_html
