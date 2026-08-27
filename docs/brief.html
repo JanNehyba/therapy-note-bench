@@ -75,7 +75,7 @@
      protocols, and two independent LLM judges scored every one of them. This is what
      the exercise says about choosing a model &mdash; and about reading anybody's
      leaderboard, including this one.</p>
-  <p class="meta">therapy-note-bench &middot; harness 0.5.0 &middot;
+  <p class="meta">therapy-note-bench &middot; harness 0.6.0 &middot;
      every figure here is generated from <code>docs/leaderboard.json</code> &middot;
      <a href="https://jannehyba.github.io/therapy-note-bench/">https://jannehyba.github.io/therapy-note-bench/</a></p>
 
@@ -253,7 +253,7 @@
 <text class="name" x="638" y="581.0">19. therapist</text>
 <text class="note" x="0" y="650">Grey lines held their place. A pair counts as separable when a paired bootstrap puts the two systems in different groups under that judge — over 25 shared</text>
 <text class="note" x="0" y="665">conversations for judge A and 42 for judge B, because more of A's notes went unfinished. Systems that print the same score share a place.</text>
-<text class="note" x="0" y="692">Source: docs/leaderboard.json and docs/saturation-*.json, harness 0.5.0.</text>
+<text class="note" x="0" y="692">Source: docs/leaderboard.json and docs/saturation-*.json, harness 0.6.0.</text>
 </svg>
 <figcaption>Completeness under each of the two judges. Grey lines held their place. The top group holds 4 systems under one judge and 5 under the other; 4 are in both.</figcaption></figure>
 
@@ -345,7 +345,7 @@
 <text class="note" x="0" y="572">The forward column rests on eleven sessions, so a score of 0.09 there is one session and the gap between two models a few hundredths apart is not</text>
 <text class="note" x="0" y="587">evidence. The backward column rests on thirty-four. They were one averaged column until harness 0.2.0, and the average — weighted three to one towards</text>
 <text class="note" x="0" y="602">the easy half — published the opposite of the finding this track exists to reproduce.</text>
-<text class="note" x="0" y="630">Source: docs/leaderboard.json, iCARE track, judge gemini-3.1-pro-preview, harness 0.5.0. Neither column involves the judge: both are computed from the</text>
+<text class="note" x="0" y="630">Source: docs/leaderboard.json, iCARE track, judge gemini-3.1-pro-preview, harness 0.6.0. Neither column involves the judge: both are computed from the</text>
 <text class="note" x="0" y="645">note and the expert note alone.</text>
 </svg>
 <figcaption>The fraction of expert-answered sections each model also answered. Backward on the left of each pair, forward on the right.</figcaption></figure>
@@ -461,7 +461,7 @@
 <text class="note" x="0" y="598">A therapist writes what matters for the next session and leaves out what does not; the rubric counts what is present and cannot see why anything was left out.</text>
 <text class="note" x="0" y="613">TN-Eval reported the same direction from blinded expert comparison, so this is a reproduction rather than an anomaly — and it is a statement about a checklist,</text>
 <text class="note" x="0" y="628">not about clinical writing. Quote the number with this sentence attached, or do not quote it.</text>
-<text class="note" x="0" y="640">Source: docs/leaderboard.json, harness 0.5.0. The same ordering holds under the second judge; the figures differ.</text>
+<text class="note" x="0" y="640">Source: docs/leaderboard.json, harness 0.6.0. The same ordering holds under the second judge; the figures differ.</text>
 </svg>
 <figcaption>Completeness, every system, under the first judge. The therapist-written note is the bottom row.</figcaption></figure>
   <p><strong>Every model covers more of the rubric than the therapist does.</strong>
@@ -515,7 +515,7 @@
 <line class="rule" x1="518.0" y1="116" x2="518.0" y2="416"/><text class="value" x="518.0" y="434" text-anchor="middle">0.25</text><line class="rule" x1="618.0" y1="116" x2="618.0" y2="416"/><text class="value" x="618.0" y="434" text-anchor="middle">0.32</text><line class="rule" x1="718.0" y1="116" x2="718.0" y2="416"/><text class="value" x="718.0" y="434" text-anchor="middle">0.39</text><line class="rule" x1="818.0" y1="116" x2="818.0" y2="416"/><text class="value" x="818.0" y="434" text-anchor="middle">0.46</text><line class="rule" x1="918.0" y1="116" x2="918.0" y2="416"/><text class="value" x="918.0" y="434" text-anchor="middle">0.53</text><line class="rule" x1="518" y1="416.0" x2="918" y2="416.0"/><text class="value" x="510" y="420.0" text-anchor="end">3.3</text><line class="rule" x1="518" y1="316.0" x2="918" y2="316.0"/><text class="value" x="510" y="320.0" text-anchor="end">3.8</text><line class="rule" x1="518" y1="216.0" x2="918" y2="216.0"/><text class="value" x="510" y="220.0" text-anchor="end">4.3</text><line class="rule" x1="518" y1="116.0" x2="918" y2="116.0"/><text class="value" x="510" y="120.0" text-anchor="end">4.9</text><line class="b" x1="518.0" y1="210.8" x2="918.0" y2="219.4" stroke-width="2" stroke-dasharray="6 4" stroke-opacity="0.8"/><g><title>deepseek-v4-flash: completeness 0.438, faithfulness 4.25</title><circle cx="782.2" cy="232.2" r="4.5" class="fill-b ring" fill-opacity="0.85" stroke-width="1.5"/></g><g><title>deepseek-v4-flash-thinking: completeness 0.473, faithfulness 4.09</title><circle cx="831.6" cy="262.9" r="4.5" class="fill-b ring" fill-opacity="0.85" stroke-width="1.5"/></g><g><title>gemini-3.1-pro-preview: completeness 0.503, faithfulness 4.49</title><circle cx="875.2" cy="189.5" r="4.5" class="fill-b ring" fill-opacity="0.85" stroke-width="1.5"/></g><g><title>gemini-3.7-flash: completeness 0.475, faithfulness 4.53</title><circle cx="834.7" cy="181.1" r="4.5" class="fill-b ring" fill-opacity="0.85" stroke-width="1.5"/></g><g><title>gemma4: completeness 0.409, faithfulness 4.46</title><circle cx="740.6" cy="194.1" r="4.5" class="fill-b ring" fill-opacity="0.85" stroke-width="1.5"/></g><g><title>glm-5: completeness 0.459, faithfulness 4.47</title><circle cx="812.1" cy="192.3" r="4.5" class="fill-b ring" fill-opacity="0.85" stroke-width="1.5"/></g><g><title>glm-5.2: completeness 0.459, faithfulness 4.41</title><circle cx="811.4" cy="203.4" r="4.5" class="fill-b ring" fill-opacity="0.85" stroke-width="1.5"/></g><g><title>gpt-5.6-luna: completeness 0.449, faithfulness 4.69</title><circle cx="797.9" cy="151.3" r="4.5" class="fill-b ring" fill-opacity="0.85" stroke-width="1.5"/></g><g><title>gpt-5.6-sol: completeness 0.478, faithfulness 4.76</title><circle cx="838.9" cy="138.3" r="4.5" class="fill-b ring" fill-opacity="0.85" stroke-width="1.5"/></g><g><title>gpt-5.6-terra: completeness 0.487, faithfulness 4.73</title><circle cx="852.4" cy="143.9" r="4.5" class="fill-b ring" fill-opacity="0.85" stroke-width="1.5"/></g><g><title>gpt-oss-120b: completeness 0.494, faithfulness 3.39</title><circle cx="861.3" cy="393.7" r="4.5" class="fill-b ring" fill-opacity="0.85" stroke-width="1.5"/></g><text class="value" x="852.3" y="397.7" text-anchor="end">gpt-oss-120b</text><g><title>kimi-k3: completeness 0.514, faithfulness 4.33</title><circle cx="889.5" cy="219.2" r="4.5" class="fill-b ring" fill-opacity="0.85" stroke-width="1.5"/></g><text class="value" x="880.5" y="223.2" text-anchor="end">kimi-k3</text><g><title>llama-3.1-70b: completeness 0.315, faithfulness 4.16</title><circle cx="606.4" cy="249.9" r="4.5" class="fill-b ring" fill-opacity="0.85" stroke-width="1.5"/></g><g><title>mistral-large-v2: completeness 0.337, faithfulness 4.43</title><circle cx="638.7" cy="199.7" r="4.5" class="fill-b ring" fill-opacity="0.85" stroke-width="1.5"/></g><g><title>mistral-medium-3.5: completeness 0.429, faithfulness 4.25</title><circle cx="769.0" cy="234.1" r="4.5" class="fill-b ring" fill-opacity="0.85" stroke-width="1.5"/></g><g><title>qwen3.5-122b: completeness 0.508, faithfulness 3.90</title><circle cx="881.7" cy="298.3" r="4.5" class="fill-b ring" fill-opacity="0.85" stroke-width="1.5"/></g><g><title>qwen3.5-int4: completeness 0.490, faithfulness 4.37</title><circle cx="855.9" cy="210.8" r="4.5" class="fill-b ring" fill-opacity="0.85" stroke-width="1.5"/></g><g><title>qwen3.8-27b: completeness 0.438, faithfulness 4.45</title><circle cx="782.1" cy="196.9" r="4.5" class="fill-b ring" fill-opacity="0.85" stroke-width="1.5"/></g><g><title>therapist: completeness 0.273, faithfulness 4.29</title><circle cx="546.5" cy="224.8" r="4.5" class="fill-b ring" fill-opacity="0.85" stroke-width="1.5"/></g><text class="name" x="518" y="86">judge B · gpt-5.6-terra</text><text class="sub" x="518" y="104">Spearman +0.040 — no relationship</text><text class="value" x="718" y="454" text-anchor="middle">Completeness</text>
 <text class="note" x="0" y="470">Faithfulness is the weakest column here: two trained therapists rating the same notes reach a Krippendorff's alpha of 0.18 on it. A relationship that appears</text>
 <text class="note" x="0" y="485">under one judge and not the other is a fact about the instrument before it is a fact about the models.</text>
-<text class="note" x="0" y="512">Source: docs/leaderboard.json, harness 0.5.0. Spearman as computed for the concordance panel.</text>
+<text class="note" x="0" y="512">Source: docs/leaderboard.json, harness 0.6.0. Spearman as computed for the concordance panel.</text>
 </svg>
 <figcaption>Completeness against factual accuracy, one panel per judge. The two judges do not agree about whether covering more of a checklist goes with inventing more. Only the two ends are named &mdash; nineteen labels in a panel this size collide, and the figure is about the contrast between the judges rather than about any one model. Every system is named in the chart above.</figcaption></figure>
   <p class="note">Neither track measures whether a note is clinically useful, safe to
@@ -558,7 +558,7 @@
   </ul>
 
   <hr class="rule">
-  <p class="meta">therapy-note-bench &middot; harness 0.5.0 &middot;
+  <p class="meta">therapy-note-bench &middot; harness 0.6.0 &middot;
      judges <code>gemini-3.1-pro-preview</code> and <code>gpt-5.6-terra</code> &middot;
      source and method: <a href="https://github.com/JanNehyba/therapy-note-bench">https://github.com/JanNehyba/therapy-note-bench</a></p>
 

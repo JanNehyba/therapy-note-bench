@@ -122,68 +122,84 @@ written for somebody building or buying one:
 
 `gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on thorough (+0.833) and place 18 of 19 systems differently on it anyway. They agree least on succinct (+0.446, 18 of 19 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. No agreement figure is given for comprehensible (18 of 19 share one value), organized (18 of 19 share one value), synthesized (18 of 19 share one value), useful (18 of 19 share one value): most systems print the same number there, so there are no orderings for the two judges to agree about, and a correlation over them would be decided by the few that differ. 4 system(s) beat at least one other on every measure under both judges, which needs no weighting to be true: `gpt-5.6-sol` beats 7. 11 of 19 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner.
 
-*16 icare row(s) of generation coverage at harness `0.1.0` are no longer shown: the measures were redefined in `0.5.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 icare row(s) of generation coverage at harness `0.1.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*16 icare row(s) scored by `gemini-3.1-pro-preview` at harness `0.1.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.5.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 icare row(s) scored by `gemini-3.1-pro-preview` at harness `0.1.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*16 icare row(s) of generation coverage at harness `0.2.0` are no longer shown: the measures were redefined in `0.5.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 icare row(s) of generation coverage at harness `0.2.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*16 icare row(s) scored by `gemini-3.1-pro-preview` at harness `0.2.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.5.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 icare row(s) scored by `gemini-3.1-pro-preview` at harness `0.2.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*16 icare row(s) scored by `gpt-5.6-terra` at harness `0.2.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.5.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 icare row(s) scored by `gpt-5.6-terra` at harness `0.2.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*16 icare row(s) scored by `gemini-3.1-pro-preview` at harness `0.2.0` are no longer shown: the measures were redefined in `0.5.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 icare row(s) scored by `gemini-3.1-pro-preview` at harness `0.2.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*16 icare row(s) scored by `gpt-5.6-terra` at harness `0.2.0` are no longer shown: the measures were redefined in `0.5.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 icare row(s) scored by `gpt-5.6-terra` at harness `0.2.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*16 icare row(s) scored by `gemini-3.1-pro-preview` at harness `0.3.0` are no longer shown: the measures were redefined in `0.5.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 icare row(s) scored by `gemini-3.1-pro-preview` at harness `0.3.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*16 icare row(s) scored by `gpt-5.6-terra` at harness `0.3.0` are no longer shown: the measures were redefined in `0.5.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 icare row(s) scored by `gpt-5.6-terra` at harness `0.3.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*16 icare row(s) scored by `gemini-3.1-pro-preview` at harness `0.4.0` are no longer shown: the measures were redefined in `0.5.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 icare row(s) scored by `gemini-3.1-pro-preview` at harness `0.4.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*16 icare row(s) scored by `gpt-5.6-terra` at harness `0.4.0` are no longer shown: the measures were redefined in `0.5.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 icare row(s) scored by `gpt-5.6-terra` at harness `0.4.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*16 icare row(s) of generation coverage at harness `0.4.0` are no longer shown: the measures were redefined in `0.5.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 icare row(s) of generation coverage at harness `0.4.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*19 pdsqi-soap row(s) scored by `gemini-3.1-pro-preview` at harness `0.3.0` are no longer shown: the measures were redefined in `0.5.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 icare row(s) scored by `gemini-3.1-pro-preview` at harness `0.5.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*19 pdsqi-soap row(s) scored by `gpt-5.6-terra` at harness `0.3.0` are no longer shown: the measures were redefined in `0.5.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 icare row(s) scored by `gpt-5.6-terra` at harness `0.5.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*19 pdsqi-soap row(s) scored by `gemini-3.1-pro-preview` at harness `0.4.0` are no longer shown: the measures were redefined in `0.5.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 icare row(s) of generation coverage at harness `0.5.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*19 pdsqi-soap row(s) scored by `gpt-5.6-terra` at harness `0.4.0` are no longer shown: the measures were redefined in `0.5.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*19 pdsqi-soap row(s) scored by `gemini-3.1-pro-preview` at harness `0.3.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*16 tneval-soap row(s) of generation coverage at harness `0.1.0` are no longer shown: the measures were redefined in `0.5.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*19 pdsqi-soap row(s) scored by `gpt-5.6-terra` at harness `0.3.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+
+*19 pdsqi-soap row(s) scored by `gemini-3.1-pro-preview` at harness `0.4.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+
+*19 pdsqi-soap row(s) scored by `gpt-5.6-terra` at harness `0.4.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+
+*19 pdsqi-soap row(s) scored by `gemini-3.1-pro-preview` at harness `0.5.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+
+*19 pdsqi-soap row(s) scored by `gpt-5.6-terra` at harness `0.5.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+
+*16 tneval-soap row(s) of generation coverage at harness `0.1.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
 *14 tneval-soap row(s) scored by `gemini-2.5-pro` at harness `0.1.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.2.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*19 tneval-soap row(s) scored by `gemini-3.1-pro-preview` at harness `0.1.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.5.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*19 tneval-soap row(s) scored by `gemini-3.1-pro-preview` at harness `0.1.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*19 tneval-soap row(s) scored by `gpt-5.6-terra` at harness `0.1.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.5.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*19 tneval-soap row(s) scored by `gpt-5.6-terra` at harness `0.1.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*16 tneval-soap row(s) of generation coverage at harness `0.2.0` are no longer shown: the measures were redefined in `0.5.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 tneval-soap row(s) of generation coverage at harness `0.2.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*19 tneval-soap row(s) scored by `gemini-3.1-pro-preview` at harness `0.2.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.5.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*19 tneval-soap row(s) scored by `gemini-3.1-pro-preview` at harness `0.2.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*19 tneval-soap row(s) scored by `gemini-3.1-pro-preview` at harness `0.2.0` are no longer shown: the measures were redefined in `0.5.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*19 tneval-soap row(s) scored by `gemini-3.1-pro-preview` at harness `0.2.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*19 tneval-soap row(s) scored by `gpt-5.6-terra` at harness `0.2.0` are no longer shown: the measures were redefined in `0.5.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*19 tneval-soap row(s) scored by `gpt-5.6-terra` at harness `0.2.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*19 tneval-soap row(s) scored by `gemini-3.1-pro-preview` at harness `0.3.0` are no longer shown: the measures were redefined in `0.5.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*19 tneval-soap row(s) scored by `gemini-3.1-pro-preview` at harness `0.3.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*19 tneval-soap row(s) scored by `gpt-5.6-terra` at harness `0.3.0` are no longer shown: the measures were redefined in `0.5.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*19 tneval-soap row(s) scored by `gpt-5.6-terra` at harness `0.3.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*19 tneval-soap row(s) scored by `gemini-3.1-pro-preview` at harness `0.4.0` are no longer shown: the measures were redefined in `0.5.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*19 tneval-soap row(s) scored by `gemini-3.1-pro-preview` at harness `0.4.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*19 tneval-soap row(s) scored by `gpt-5.6-terra` at harness `0.4.0` are no longer shown: the measures were redefined in `0.5.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*19 tneval-soap row(s) scored by `gpt-5.6-terra` at harness `0.4.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*16 tneval-soap row(s) of generation coverage at harness `0.4.0` are no longer shown: the measures were redefined in `0.5.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 tneval-soap row(s) of generation coverage at harness `0.4.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+
+*19 tneval-soap row(s) scored by `gemini-3.1-pro-preview` at harness `0.5.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+
+*19 tneval-soap row(s) scored by `gpt-5.6-terra` at harness `0.5.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+
+*16 tneval-soap row(s) of generation coverage at harness `0.5.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
 **Also scored, and not printed here.** Two judges are two instruments and two tables; the site draws one at a time and this file cannot, so it shows the one the site opens with.
 - **TN-Eval SOAP · AnnoMI conversations**, scored by gemini-2.5-pro (max_output_tokens 160, temperature 0, thinking_budget 128) — measured by harness `0.2.0`, whose columns may not mean what the newer tables' columns mean — [open it](https://jannehyba.github.io/therapy-note-bench/#tneval-soap-gemini-2.5-pro-0.2.0-345ec0)
-- **SOAP notes on AnnoMI · two instruments, the same notes**, scored by gpt-5.6-terra (backend openai, effort medium, max_output_tokens 672) — [open it](https://jannehyba.github.io/therapy-note-bench/#tneval-soap-gpt-5.6-terra-0.5.0-acf643)
-- **iCARE form on the iHOPE corpus · 17 sections per session**, scored by gpt-5.6-terra (backend openai, effort medium, max_output_tokens 672) — [open it](https://jannehyba.github.io/therapy-note-bench/#icare-gpt-5.6-terra-0.5.0-acf643)
+- **SOAP notes on AnnoMI · two instruments, the same notes**, scored by gpt-5.6-terra (backend openai, effort medium, max_output_tokens 672) — [open it](https://jannehyba.github.io/therapy-note-bench/#tneval-soap-gpt-5.6-terra-0.6.0-acf643)
+- **iCARE form on the iHOPE corpus · 17 sections per session**, scored by gpt-5.6-terra (backend openai, effort medium, max_output_tokens 672) — [open it](https://jannehyba.github.io/therapy-note-bench/#icare-gpt-5.6-terra-0.6.0-acf643)
 
 See the [full leaderboard](https://jannehyba.github.io/therapy-note-bench/) for per-section detail, the reference systems and the published numbers, and [how it was measured](https://jannehyba.github.io/therapy-note-bench/methods.html) for the judge, the corpora and what the two judges disagree about.
 <!-- LEADERBOARD:END -->

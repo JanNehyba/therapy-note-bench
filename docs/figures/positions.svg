@@ -96,5 +96,5 @@
 <text class="name" x="638" y="581.0">19. therapist</text>
 <text class="note" x="0" y="650">Grey lines held their place. A pair counts as separable when a paired bootstrap puts the two systems in different groups under that judge — over 25 shared</text>
 <text class="note" x="0" y="665">conversations for judge A and 42 for judge B, because more of A's notes went unfinished. Systems that print the same score share a place.</text>
-<text class="note" x="0" y="692">Source: docs/leaderboard.json and docs/saturation-*.json, harness 0.5.0.</text>
+<text class="note" x="0" y="692">Source: docs/leaderboard.json and docs/saturation-*.json, harness 0.6.0.</text>
 </svg>

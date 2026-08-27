@@ -3470,10 +3470,10 @@
     }
   },
   "selection": {
-    "default": "tneval-soap-gemini-3.1-pro-preview-0.5.0-102129",
+    "default": "tneval-soap-gemini-3.1-pro-preview-0.6.0-102129",
     "tracks": [
       {
-        "default": "tneval-soap-gemini-3.1-pro-preview-0.5.0-102129",
+        "default": "tneval-soap-gemini-3.1-pro-preview-0.6.0-102129",
         "judges": [
           {
             "judge_model": "gemini-3.1-pro-preview",
@@ -3481,7 +3481,7 @@
             "settings_differ": false,
             "settings_label": "",
             "stale_harness": false,
-            "table": "tneval-soap-gemini-3.1-pro-preview-0.5.0-102129"
+            "table": "tneval-soap-gemini-3.1-pro-preview-0.6.0-102129"
           },
           {
             "judge_model": "gpt-5.6-terra",
@@ -3489,7 +3489,7 @@
             "settings_differ": false,
             "settings_label": "",
             "stale_harness": false,
-            "table": "tneval-soap-gpt-5.6-terra-0.5.0-acf643"
+            "table": "tneval-soap-gpt-5.6-terra-0.6.0-acf643"
           },
           {
             "judge_model": "gemini-2.5-pro",
@@ -3512,7 +3512,7 @@
         "track": "tneval-soap"
       },
       {
-        "default": "icare-gemini-3.1-pro-preview-0.5.0-102129",
+        "default": "icare-gemini-3.1-pro-preview-0.6.0-102129",
         "judges": [
           {
             "judge_model": "gemini-3.1-pro-preview",
@@ -3520,7 +3520,7 @@
             "settings_differ": false,
             "settings_label": "",
             "stale_harness": false,
-            "table": "icare-gemini-3.1-pro-preview-0.5.0-102129"
+            "table": "icare-gemini-3.1-pro-preview-0.6.0-102129"
           },
           {
             "judge_model": "gpt-5.6-terra",
@@ -3528,7 +3528,7 @@
             "settings_differ": false,
             "settings_label": "",
             "stale_harness": false,
-            "table": "icare-gpt-5.6-terra-0.5.0-acf643"
+            "table": "icare-gpt-5.6-terra-0.6.0-acf643"
           }
         ],
         "label": "iCARE / iHOPE",
@@ -3547,7 +3547,7 @@
   },
   "superseded": [
     {
-      "current_harness_version": "0.5.0",
+      "current_harness_version": "0.6.0",
       "harness_version": "0.1.0",
       "judge_model": null,
       "judge_prompt_version": null,
@@ -3560,7 +3560,7 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.5.0",
+      "current_harness_version": "0.6.0",
       "harness_version": "0.1.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "icare-trace-v1",
@@ -3574,7 +3574,7 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.5.0",
+      "current_harness_version": "0.6.0",
       "harness_version": "0.2.0",
       "judge_model": null,
       "judge_prompt_version": null,
@@ -3587,7 +3587,7 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.5.0",
+      "current_harness_version": "0.6.0",
       "harness_version": "0.2.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "icare-trace-v1",
@@ -3601,7 +3601,7 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.5.0",
+      "current_harness_version": "0.6.0",
       "harness_version": "0.2.0",
       "judge_model": "gpt-5.6-terra",
       "judge_prompt_version": "icare-trace-v1",
@@ -3615,7 +3615,7 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.5.0",
+      "current_harness_version": "0.6.0",
       "harness_version": "0.2.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "icare-trace-v1",
@@ -3628,7 +3628,7 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.5.0",
+      "current_harness_version": "0.6.0",
       "harness_version": "0.2.0",
       "judge_model": "gpt-5.6-terra",
       "judge_prompt_version": "icare-trace-v1",
@@ -3641,7 +3641,7 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.5.0",
+      "current_harness_version": "0.6.0",
       "harness_version": "0.3.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "icare-trace-v1",
@@ -3654,7 +3654,7 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.5.0",
+      "current_harness_version": "0.6.0",
       "harness_version": "0.3.0",
       "judge_model": "gpt-5.6-terra",
       "judge_prompt_version": "icare-trace-v1",
@@ -3667,7 +3667,7 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.5.0",
+      "current_harness_version": "0.6.0",
       "harness_version": "0.4.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "icare-trace-v1",
@@ -3680,7 +3680,7 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.5.0",
+      "current_harness_version": "0.6.0",
       "harness_version": "0.4.0",
       "judge_model": "gpt-5.6-terra",
       "judge_prompt_version": "icare-trace-v1",
@@ -3693,7 +3693,7 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.5.0",
+      "current_harness_version": "0.6.0",
       "harness_version": "0.4.0",
       "judge_model": null,
       "judge_prompt_version": null,
@@ -3706,7 +3706,46 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.5.0",
+      "current_harness_version": "0.6.0",
+      "harness_version": "0.5.0",
+      "judge_model": "gemini-3.1-pro-preview",
+      "judge_prompt_version": "icare-trace-v1",
+      "prompt_version": "icare-zeroshot-v1",
+      "reasons": [
+        "harness"
+      ],
+      "rows": 16,
+      "scored_at": "2026-08-27T15:24:40Z",
+      "track": "icare"
+    },
+    {
+      "current_harness_version": "0.6.0",
+      "harness_version": "0.5.0",
+      "judge_model": "gpt-5.6-terra",
+      "judge_prompt_version": "icare-trace-v1",
+      "prompt_version": "icare-zeroshot-v1",
+      "reasons": [
+        "harness"
+      ],
+      "rows": 16,
+      "scored_at": "2026-08-27T15:26:19Z",
+      "track": "icare"
+    },
+    {
+      "current_harness_version": "0.6.0",
+      "harness_version": "0.5.0",
+      "judge_model": null,
+      "judge_prompt_version": null,
+      "prompt_version": "icare-zeroshot-v1",
+      "reasons": [
+        "harness"
+      ],
+      "rows": 16,
+      "scored_at": "",
+      "track": "icare"
+    },
+    {
+      "current_harness_version": "0.6.0",
       "harness_version": "0.3.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "pdsqi9-note-v1",
@@ -3719,7 +3758,7 @@
       "track": "pdsqi-soap"
     },
     {
-      "current_harness_version": "0.5.0",
+      "current_harness_version": "0.6.0",
       "harness_version": "0.3.0",
       "judge_model": "gpt-5.6-terra",
       "judge_prompt_version": "pdsqi9-note-v1",
@@ -3732,7 +3771,7 @@
       "track": "pdsqi-soap"
     },
     {
-      "current_harness_version": "0.5.0",
+      "current_harness_version": "0.6.0",
       "harness_version": "0.4.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "pdsqi9-note-v1",
@@ -3745,7 +3784,7 @@
       "track": "pdsqi-soap"
     },
     {
-      "current_harness_version": "0.5.0",
+      "current_harness_version": "0.6.0",
       "harness_version": "0.4.0",
       "judge_model": "gpt-5.6-terra",
       "judge_prompt_version": "pdsqi9-note-v1",
@@ -3758,7 +3797,33 @@
       "track": "pdsqi-soap"
     },
     {
-      "current_harness_version": "0.5.0",
+      "current_harness_version": "0.6.0",
+      "harness_version": "0.5.0",
+      "judge_model": "gemini-3.1-pro-preview",
+      "judge_prompt_version": "pdsqi9-note-v1",
+      "prompt_version": "tneval-soap-v1",
+      "reasons": [
+        "harness"
+      ],
+      "rows": 19,
+      "scored_at": "2026-08-27T15:25:59Z",
+      "track": "pdsqi-soap"
+    },
+    {
+      "current_harness_version": "0.6.0",
+      "harness_version": "0.5.0",
+      "judge_model": "gpt-5.6-terra",
+      "judge_prompt_version": "pdsqi9-note-v1",
+      "prompt_version": "tneval-soap-v1",
+      "reasons": [
+        "harness"
+      ],
+      "rows": 19,
+      "scored_at": "2026-08-27T15:27:36Z",
+      "track": "pdsqi-soap"
+    },
+    {
+      "current_harness_version": "0.6.0",
       "harness_version": "0.1.0",
       "judge_model": null,
       "judge_prompt_version": null,
@@ -3785,7 +3850,7 @@
       "track": "tneval-soap"
     },
     {
-      "current_harness_version": "0.5.0",
+      "current_harness_version": "0.6.0",
       "harness_version": "0.1.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "tneval-rubric-v1",
@@ -3799,7 +3864,7 @@
       "track": "tneval-soap"
     },
     {
-      "current_harness_version": "0.5.0",
+      "current_harness_version": "0.6.0",
       "harness_version": "0.1.0",
       "judge_model": "gpt-5.6-terra",
       "judge_prompt_version": "tneval-rubric-v1",
@@ -3813,7 +3878,7 @@
       "track": "tneval-soap"
     },
     {
-      "current_harness_version": "0.5.0",
+      "current_harness_version": "0.6.0",
       "harness_version": "0.2.0",
       "judge_model": null,
       "judge_prompt_version": null,
@@ -3826,7 +3891,7 @@
       "track": "tneval-soap"
     },
     {
-      "current_harness_version": "0.5.0",
+      "current_harness_version": "0.6.0",
       "harness_version": "0.2.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "tneval-rubric-v1",
@@ -3840,7 +3905,7 @@
       "track": "tneval-soap"
     },
     {
-      "current_harness_version": "0.5.0",
+      "current_harness_version": "0.6.0",
       "harness_version": "0.2.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "tneval-rubric-v1",
@@ -3853,7 +3918,7 @@
       "track": "tneval-soap"
     },
     {
-      "current_harness_version": "0.5.0",
+      "current_harness_version": "0.6.0",
       "harness_version": "0.2.0",
       "judge_model": "gpt-5.6-terra",
       "judge_prompt_version": "tneval-rubric-v1",
@@ -3866,7 +3931,7 @@
       "track": "tneval-soap"
     },
     {
-      "current_harness_version": "0.5.0",
+      "current_harness_version": "0.6.0",
       "harness_version": "0.3.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "tneval-rubric-v1",
@@ -3879,7 +3944,7 @@
       "track": "tneval-soap"
     },
     {
-      "current_harness_version": "0.5.0",
+      "current_harness_version": "0.6.0",
       "harness_version": "0.3.0",
       "judge_model": "gpt-5.6-terra",
       "judge_prompt_version": "tneval-rubric-v1",
@@ -3892,7 +3957,7 @@
       "track": "tneval-soap"
     },
     {
-      "current_harness_version": "0.5.0",
+      "current_harness_version": "0.6.0",
       "harness_version": "0.4.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "tneval-rubric-v1",
@@ -3905,7 +3970,7 @@
       "track": "tneval-soap"
     },
     {
-      "current_harness_version": "0.5.0",
+      "current_harness_version": "0.6.0",
       "harness_version": "0.4.0",
       "judge_model": "gpt-5.6-terra",
       "judge_prompt_version": "tneval-rubric-v1",
@@ -3918,8 +3983,47 @@
       "track": "tneval-soap"
     },
     {
-      "current_harness_version": "0.5.0",
+      "current_harness_version": "0.6.0",
       "harness_version": "0.4.0",
+      "judge_model": null,
+      "judge_prompt_version": null,
+      "prompt_version": "tneval-soap-v1",
+      "reasons": [
+        "harness"
+      ],
+      "rows": 16,
+      "scored_at": "",
+      "track": "tneval-soap"
+    },
+    {
+      "current_harness_version": "0.6.0",
+      "harness_version": "0.5.0",
+      "judge_model": "gemini-3.1-pro-preview",
+      "judge_prompt_version": "tneval-rubric-v1",
+      "prompt_version": "tneval-soap-v1",
+      "reasons": [
+        "harness"
+      ],
+      "rows": 19,
+      "scored_at": "2026-08-27T15:32:56Z",
+      "track": "tneval-soap"
+    },
+    {
+      "current_harness_version": "0.6.0",
+      "harness_version": "0.5.0",
+      "judge_model": "gpt-5.6-terra",
+      "judge_prompt_version": "tneval-rubric-v1",
+      "prompt_version": "tneval-soap-v1",
+      "reasons": [
+        "harness"
+      ],
+      "rows": 19,
+      "scored_at": "2026-08-27T15:24:45Z",
+      "track": "tneval-soap"
+    },
+    {
+      "current_harness_version": "0.6.0",
+      "harness_version": "0.5.0",
       "judge_model": null,
       "judge_prompt_version": null,
       "prompt_version": "tneval-soap-v1",
@@ -5514,7 +5618,7 @@
       "has_effort": true,
       "has_thinking": true,
       "has_words": true,
-      "id": "tneval-soap-gemini-3.1-pro-preview-0.5.0-102129",
+      "id": "tneval-soap-gemini-3.1-pro-preview-0.6.0-102129",
       "judge_prompt_versions": [
         "tneval-rubric-v1",
         "pdsqi9-note-v1"
@@ -5610,7 +5714,7 @@
           "note_words": 518,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:32:56Z",
+          "scored_at": "2026-08-27T20:06:16Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5710,7 +5814,7 @@
           "note_words": 273,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:32:56Z",
+          "scored_at": "2026-08-27T20:06:16Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5810,7 +5914,7 @@
           "note_words": 443,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:32:56Z",
+          "scored_at": "2026-08-27T20:06:16Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5910,7 +6014,7 @@
           "note_words": 350,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-27T15:32:56Z",
+          "scored_at": "2026-08-27T20:06:16Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6010,7 +6114,7 @@
           "note_words": 266,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-27T15:32:56Z",
+          "scored_at": "2026-08-27T20:06:16Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6110,7 +6214,7 @@
           "note_words": 358,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:32:56Z",
+          "scored_at": "2026-08-27T20:06:16Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6210,7 +6314,7 @@
           "note_words": 365,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:32:56Z",
+          "scored_at": "2026-08-27T20:06:16Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6310,7 +6414,7 @@
           "note_words": 372,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T15:32:56Z",
+          "scored_at": "2026-08-27T20:06:16Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6410,7 +6514,7 @@
           "note_words": 430,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T15:32:56Z",
+          "scored_at": "2026-08-27T20:06:16Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6512,7 +6616,7 @@
           "note_words": 438,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:32:56Z",
+          "scored_at": "2026-08-27T20:06:16Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6612,7 +6716,7 @@
           "note_words": 379,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:32:56Z",
+          "scored_at": "2026-08-27T20:06:16Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6712,7 +6816,7 @@
           "note_words": 374,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T15:32:56Z",
+          "scored_at": "2026-08-27T20:06:16Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6812,7 +6916,7 @@
           "note_words": 296,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:32:56Z",
+          "scored_at": "2026-08-27T20:06:16Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6912,7 +7016,7 @@
           "note_words": 340,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:32:56Z",
+          "scored_at": "2026-08-27T20:06:16Z",
           "section_order": [
             "subjective",
             "objective",
@@ -7012,7 +7116,7 @@
           "note_words": 311,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:32:56Z",
+          "scored_at": "2026-08-27T20:06:16Z",
           "section_order": [
             "subjective",
             "objective",
@@ -7112,7 +7216,7 @@
           "note_words": 328,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:32:56Z",
+          "scored_at": "2026-08-27T20:06:16Z",
           "section_order": [
             "subjective",
             "objective",
@@ -7212,7 +7316,7 @@
           "note_words": null,
           "provider": "tneval",
           "scored": true,
-          "scored_at": "2026-08-27T15:32:56Z",
+          "scored_at": "2026-08-27T20:06:16Z",
           "section_order": [
             "subjective",
             "objective",
@@ -7312,7 +7416,7 @@
           "note_words": null,
           "provider": "tneval",
           "scored": true,
-          "scored_at": "2026-08-27T15:32:56Z",
+          "scored_at": "2026-08-27T20:06:16Z",
           "section_order": [
             "subjective",
             "objective",
@@ -7412,7 +7516,7 @@
           "note_words": null,
           "provider": "tneval",
           "scored": true,
-          "scored_at": "2026-08-27T15:32:56Z",
+          "scored_at": "2026-08-27T20:06:16Z",
           "section_order": [
             "subjective",
             "objective",
@@ -7434,7 +7538,7 @@
       "title": "SOAP notes on AnnoMI · two instruments, the same notes",
       "track": "tneval-soap",
       "versions": {
-        "harness_version": "0.5.0",
+        "harness_version": "0.6.0",
         "judge_model": "gemini-3.1-pro-preview",
         "judge_prompt_version": "tneval-rubric-v1",
         "judge_settings": {
@@ -7610,7 +7714,7 @@
       "has_effort": true,
       "has_thinking": true,
       "has_words": true,
-      "id": "tneval-soap-gpt-5.6-terra-0.5.0-acf643",
+      "id": "tneval-soap-gpt-5.6-terra-0.6.0-acf643",
       "judge_prompt_versions": [
         "tneval-rubric-v1",
         "pdsqi9-note-v1"
@@ -7706,7 +7810,7 @@
           "note_words": 518,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:45Z",
+          "scored_at": "2026-08-27T20:09:46Z",
           "section_order": [
             "subjective",
             "objective",
@@ -7806,7 +7910,7 @@
           "note_words": 443,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:45Z",
+          "scored_at": "2026-08-27T20:09:46Z",
           "section_order": [
             "subjective",
             "objective",
@@ -7906,7 +8010,7 @@
           "note_words": 350,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:45Z",
+          "scored_at": "2026-08-27T20:09:46Z",
           "section_order": [
             "subjective",
             "objective",
@@ -8008,7 +8112,7 @@
           "note_words": 438,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:45Z",
+          "scored_at": "2026-08-27T20:09:46Z",
           "section_order": [
             "subjective",
             "objective",
@@ -8108,7 +8212,7 @@
           "note_words": 273,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:45Z",
+          "scored_at": "2026-08-27T20:09:46Z",
           "section_order": [
             "subjective",
             "objective",
@@ -8208,7 +8312,7 @@
           "note_words": 430,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:45Z",
+          "scored_at": "2026-08-27T20:09:46Z",
           "section_order": [
             "subjective",
             "objective",
@@ -8308,7 +8412,7 @@
           "note_words": 372,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:45Z",
+          "scored_at": "2026-08-27T20:09:46Z",
           "section_order": [
             "subjective",
             "objective",
@@ -8408,7 +8512,7 @@
           "note_words": 266,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:45Z",
+          "scored_at": "2026-08-27T20:09:46Z",
           "section_order": [
             "subjective",
             "objective",
@@ -8508,7 +8612,7 @@
           "note_words": 379,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:45Z",
+          "scored_at": "2026-08-27T20:09:46Z",
           "section_order": [
             "subjective",
             "objective",
@@ -8608,7 +8712,7 @@
           "note_words": 358,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:45Z",
+          "scored_at": "2026-08-27T20:09:46Z",
           "section_order": [
             "subjective",
             "objective",
@@ -8708,7 +8812,7 @@
           "note_words": 365,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:45Z",
+          "scored_at": "2026-08-27T20:09:46Z",
           "section_order": [
             "subjective",
             "objective",
@@ -8808,7 +8912,7 @@
           "note_words": 374,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:45Z",
+          "scored_at": "2026-08-27T20:09:46Z",
           "section_order": [
             "subjective",
             "objective",
@@ -8908,7 +9012,7 @@
           "note_words": 328,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:45Z",
+          "scored_at": "2026-08-27T20:09:46Z",
           "section_order": [
             "subjective",
             "objective",
@@ -9008,7 +9112,7 @@
           "note_words": 340,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:45Z",
+          "scored_at": "2026-08-27T20:09:46Z",
           "section_order": [
             "subjective",
             "objective",
@@ -9108,7 +9212,7 @@
           "note_words": 311,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:45Z",
+          "scored_at": "2026-08-27T20:09:46Z",
           "section_order": [
             "subjective",
             "objective",
@@ -9208,7 +9312,7 @@
           "note_words": 296,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:45Z",
+          "scored_at": "2026-08-27T20:09:46Z",
           "section_order": [
             "subjective",
             "objective",
@@ -9308,7 +9412,7 @@
           "note_words": null,
           "provider": "tneval",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:45Z",
+          "scored_at": "2026-08-27T20:09:46Z",
           "section_order": [
             "subjective",
             "objective",
@@ -9408,7 +9512,7 @@
           "note_words": null,
           "provider": "tneval",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:45Z",
+          "scored_at": "2026-08-27T20:09:46Z",
           "section_order": [
             "subjective",
             "objective",
@@ -9508,7 +9612,7 @@
           "note_words": null,
           "provider": "tneval",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:45Z",
+          "scored_at": "2026-08-27T20:09:46Z",
           "section_order": [
             "subjective",
             "objective",
@@ -9530,7 +9634,7 @@
       "title": "SOAP notes on AnnoMI · two instruments, the same notes",
       "track": "tneval-soap",
       "versions": {
-        "harness_version": "0.5.0",
+        "harness_version": "0.6.0",
         "judge_model": "gpt-5.6-terra",
         "judge_prompt_version": "tneval-rubric-v1",
         "judge_settings": {
@@ -9602,7 +9706,7 @@
       "has_effort": true,
       "has_thinking": true,
       "has_words": false,
-      "id": "icare-gemini-3.1-pro-preview-0.5.0-102129",
+      "id": "icare-gemini-3.1-pro-preview-0.6.0-102129",
       "ranking_measure": null,
       "rows": [
         {
@@ -9637,7 +9741,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:40Z",
+          "scored_at": "2026-08-27T20:06:35Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -9679,7 +9783,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:40Z",
+          "scored_at": "2026-08-27T20:06:35Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -9721,7 +9825,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:40Z",
+          "scored_at": "2026-08-27T20:06:35Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -9763,7 +9867,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:40Z",
+          "scored_at": "2026-08-27T20:06:35Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -9805,7 +9909,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:40Z",
+          "scored_at": "2026-08-27T20:06:35Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -9847,7 +9951,7 @@
           "note_words": null,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:40Z",
+          "scored_at": "2026-08-27T20:06:35Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -9889,7 +9993,7 @@
           "note_words": null,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:40Z",
+          "scored_at": "2026-08-27T20:06:35Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -9931,7 +10035,7 @@
           "note_words": null,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:40Z",
+          "scored_at": "2026-08-27T20:06:35Z",
           "section_order": [],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
@@ -9973,7 +10077,7 @@
           "note_words": null,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:40Z",
+          "scored_at": "2026-08-27T20:06:35Z",
           "section_order": [],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
@@ -10015,7 +10119,7 @@
           "note_words": null,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:40Z",
+          "scored_at": "2026-08-27T20:06:35Z",
           "section_order": [],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
@@ -10057,7 +10161,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:40Z",
+          "scored_at": "2026-08-27T20:06:35Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -10099,7 +10203,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:40Z",
+          "scored_at": "2026-08-27T20:06:35Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -10141,7 +10245,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:40Z",
+          "scored_at": "2026-08-27T20:06:35Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -10183,7 +10287,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:40Z",
+          "scored_at": "2026-08-27T20:06:35Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -10225,7 +10329,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:40Z",
+          "scored_at": "2026-08-27T20:06:35Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -10269,7 +10373,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:24:40Z",
+          "scored_at": "2026-08-27T20:06:35Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -10286,7 +10390,7 @@
       "title": "iCARE form on the iHOPE corpus · 17 sections per session",
       "track": "icare",
       "versions": {
-        "harness_version": "0.5.0",
+        "harness_version": "0.6.0",
         "judge_model": "gemini-3.1-pro-preview",
         "judge_prompt_version": "icare-trace-v1",
         "judge_settings": {
@@ -10358,7 +10462,7 @@
       "has_effort": true,
       "has_thinking": true,
       "has_words": false,
-      "id": "icare-gpt-5.6-terra-0.5.0-acf643",
+      "id": "icare-gpt-5.6-terra-0.6.0-acf643",
       "ranking_measure": null,
       "rows": [
         {
@@ -10393,7 +10497,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:26:19Z",
+          "scored_at": "2026-08-27T20:10:05Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -10435,7 +10539,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:26:19Z",
+          "scored_at": "2026-08-27T20:10:05Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -10477,7 +10581,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:26:19Z",
+          "scored_at": "2026-08-27T20:10:05Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -10519,7 +10623,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:26:19Z",
+          "scored_at": "2026-08-27T20:10:05Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -10561,7 +10665,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:26:19Z",
+          "scored_at": "2026-08-27T20:10:05Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -10603,7 +10707,7 @@
           "note_words": null,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-27T15:26:19Z",
+          "scored_at": "2026-08-27T20:10:05Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -10645,7 +10749,7 @@
           "note_words": null,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-27T15:26:19Z",
+          "scored_at": "2026-08-27T20:10:05Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -10687,7 +10791,7 @@
           "note_words": null,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T15:26:19Z",
+          "scored_at": "2026-08-27T20:10:05Z",
           "section_order": [],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
@@ -10729,7 +10833,7 @@
           "note_words": null,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T15:26:19Z",
+          "scored_at": "2026-08-27T20:10:05Z",
           "section_order": [],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
@@ -10771,7 +10875,7 @@
           "note_words": null,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T15:26:19Z",
+          "scored_at": "2026-08-27T20:10:05Z",
           "section_order": [],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
@@ -10813,7 +10917,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:26:19Z",
+          "scored_at": "2026-08-27T20:10:05Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -10855,7 +10959,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:26:19Z",
+          "scored_at": "2026-08-27T20:10:05Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -10897,7 +11001,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:26:19Z",
+          "scored_at": "2026-08-27T20:10:05Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -10939,7 +11043,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:26:19Z",
+          "scored_at": "2026-08-27T20:10:05Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -10981,7 +11085,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:26:19Z",
+          "scored_at": "2026-08-27T20:10:05Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -11025,7 +11129,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T15:26:19Z",
+          "scored_at": "2026-08-27T20:10:05Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -11042,7 +11146,7 @@
       "title": "iCARE form on the iHOPE corpus · 17 sections per session",
       "track": "icare",
       "versions": {
-        "harness_version": "0.5.0",
+        "harness_version": "0.6.0",
         "judge_model": "gpt-5.6-terra",
         "judge_prompt_version": "icare-trace-v1",
         "judge_settings": {
