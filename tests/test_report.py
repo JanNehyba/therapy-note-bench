@@ -1042,3 +1042,31 @@ def test_an_analysis_written_before_the_track_was_recorded_is_tn_evals():
         report._groups_for({"track": results.TRACK_ICARE, "judge_model": "a-judge"}, [older])
         is None
     )
+
+
+def test_the_words_column_carries_the_length_and_not_a_correlation():
+    """Completeness counts coverage, so a longer note covers more: within every
+    one of the sixteen systems, under both judges, a longer note scores higher.
+    Holding the transcript fixed the effect survives under one judge and not the
+    other, so the page publishes the length — a fact a reader can discount for —
+    and not the correlation, which depends on which judge is asked.
+
+    Borrowed from the coverage row, because `Settings.note_words` describes what
+    the model wrote rather than the run that scored it, and every row already in
+    the append-only file predates the field.
+    """
+    coverage = _row(system_id="m", judge_model="", settings=results.Settings(note_words=412))
+    scored = _scored("m", 0.5)
+    assert scored.settings.note_words is None
+
+    table = next(t for t in report.build([coverage, scored])["tables"] if t["scored"])
+    assert table["has_words"] is True
+    assert table["rows"][0]["note_words"] == 412
+
+
+def test_a_table_whose_rows_have_no_measured_length_draws_no_words_column():
+    """A column drawn for every row and filled for none is the `show-published`
+    mistake again."""
+    table = next(t for t in report.build([_scored("m", 0.5)])["tables"] if t["scored"])
+    assert table["has_words"] is False
+    assert table["rows"][0]["note_words"] is None

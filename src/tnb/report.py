@@ -782,6 +782,29 @@ def _with_borrowed_reasons(rows: list[Row]) -> list[Row]:
     ]
 
 
+def _with_note_words(rows: list[Row]) -> list[Row]:
+    """Give a scored row the note length its coverage row measured.
+
+    `Settings.note_words` is a property of what the model wrote, not of the run
+    that scored it, so it is measured once by `index_generations` and read from
+    there. Borrowed rather than required, for the same reason the failure
+    reasons are: `results/` is append-only and every row already on disk was
+    written before the field existed.
+    """
+    measured = {
+        (row.provider, row.system_id, row.track): row.settings.note_words
+        for row in rows
+        if not row.judge_model and row.settings.note_words
+    }
+    return [
+        replace(row, settings=replace(row.settings, note_words=found))
+        if row.settings.note_words is None
+        and (found := measured.get((row.provider, row.system_id, row.track)))
+        else row
+        for row in rows
+    ]
+
+
 def build(rows: list[Row], saturations: list[dict] | None = None) -> dict:
     """Shape the rows into the JSON both presentations read.
 
@@ -794,7 +817,7 @@ def build(rows: list[Row], saturations: list[dict] | None = None) -> dict:
     older ones are named in `superseded` so a stale number is explainable rather
     than silently gone.
     """
-    current = _with_borrowed_reasons(results.latest(rows))
+    current = _with_note_words(_with_borrowed_reasons(results.latest(rows)))
     tables = []
 
     saturations = saturations or []
@@ -850,6 +873,7 @@ def build(rows: list[Row], saturations: list[dict] | None = None) -> dict:
                 # cells is worse than no column: it reads as missing data rather
                 # than as a control this provider does not have.
                 "has_effort": any(row["effort"] for row in rendered),
+                "has_words": any(row["note_words"] for row in rendered),
                 "has_thinking": any(row["thinking_tokens"] for row in rendered),
             }
         )
@@ -1000,6 +1024,11 @@ def _render_row(row: Row) -> dict:
         # on one line spent 1620 and 13 tokens thinking before writing, and a
         # reader who cannot see that is comparing two different experiments.
         "thinking_tokens": row.settings.thinking_tokens,
+        # A column, not a caveat. Completeness counts coverage, so a longer note
+        # covers more; publishing the length lets a reader see that for
+        # themselves without the page asserting a correlation that turned out to
+        # hold under one judge and not the other.
+        "note_words": row.settings.note_words,
         "settings": row.settings.summary,
         # A row produced under conditions the rest of the table did not share is
         # marked in place rather than dropped or silently normalised -- WMT's

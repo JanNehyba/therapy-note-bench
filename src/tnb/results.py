@@ -26,6 +26,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+import statistics
 from collections import defaultdict
 from collections.abc import Mapping
 from dataclasses import asdict, dataclass, field, replace
@@ -155,6 +156,16 @@ class Settings:
     temperature_forced: bool = False
     max_tokens: int | None = None
     thinking_tokens: int | None = None
+    #: How long this model's notes are, as a median over the ones it wrote.
+    #: Measured like `thinking_tokens` rather than configured, and published as
+    #: a column because completeness counts coverage: within every one of the
+    #: sixteen systems, under both judges, a longer note scores higher (median
+    #: Spearman +0.35 and +0.45). Holding the transcript fixed the effect
+    #: survives under `gpt-5.6-terra` and not under `gemini-3.1-pro-preview`, so
+    #: the page publishes the length and not the correlation -- the fact a
+    #: reader can discount for, rather than a claim that turned out to depend on
+    #: which judge is asked.
+    note_words: int | None = None
 
     def is_empty(self) -> bool:
         return self.temperature is None and self.max_tokens is None and not self.effort
@@ -724,7 +735,10 @@ def settings_by_system(
 
 
 def _settings_from(
-    observed: set[tuple], budgets: set[int], thinking: list[int] | None = None
+    observed: set[tuple],
+    budgets: set[int],
+    thinking: list[int] | None = None,
+    words: list[int] | None = None,
 ) -> Settings:
     """One `Settings` for a model's notes, or nothing if they disagree.
 
@@ -743,8 +757,11 @@ def _settings_from(
     # from the notes rather than configured, so it describes them whatever they
     # were asked with.
     spent = round(sum(thinking) / len(thinking)) if thinking else None
+    # Median, not mean: one note that repeats the transcript back is real and
+    # should not move the figure a reader compares across models.
+    length = round(statistics.median(words)) if words else None
     if len(observed) != 1:
-        return Settings(thinking_tokens=spent)
+        return Settings(thinking_tokens=spent, note_words=length)
     effort, temperature, forced = next(iter(observed))
     return Settings(
         effort=effort or "",
@@ -752,6 +769,7 @@ def _settings_from(
         temperature_forced=forced,
         max_tokens=max(budgets) if budgets else None,
         thinking_tokens=spent,
+        note_words=length,
     )
 
 
@@ -774,6 +792,7 @@ def _coverage_row(
     observed: set[tuple] = set()
     budgets: set[int] = set()
     thinking: list[int] = []
+    words: list[int] = []
     unreached_sessions = 0
 
     for session_dir in sessions:
@@ -804,6 +823,14 @@ def _coverage_row(
                 details = (record.get("usage") or {}).get("completion_tokens_details") or {}
                 if details.get("reasoning_tokens") is not None:
                     thinking.append(int(details["reasoning_tokens"]))
+                # The note itself, not the reply that carried it: `text` holds
+                # the model's whole answer including any scaffolding it wrote
+                # around the note, and the rubric only ever sees the note.
+                note = record.get("note")
+                if isinstance(note, dict):
+                    words.append(len(" ".join(str(v) for v in note.values()).split()))
+                elif isinstance(note, str) and note:
+                    words.append(len(note.split()))
             elif not is_the_models_fault(record.get("error")):
                 # Counted apart and NOT charged to the model. Splitting the
                 # reasons without splitting the count left glm-5 published as
@@ -828,7 +855,7 @@ def _coverage_row(
         system_type="model",
         provider=provider,
         prompt_version=prompt_version,
-        settings=_settings_from(observed, budgets, thinking),
+        settings=_settings_from(observed, budgets, thinking, words),
         n_sessions_attempted=len(sessions),
         n_sessions_generated=complete,
         # What the *model* failed to produce. A call the endpoint never

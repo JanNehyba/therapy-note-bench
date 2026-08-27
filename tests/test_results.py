@@ -782,3 +782,31 @@ def test_settings_are_read_from_the_track_that_was_asked_for(tmp_path):
     both = results.settings_by_system(tmp_path)[key]
     assert both.thinking_tokens in (100, 900)
     assert (both.thinking_tokens == 900) != (both.thinking_tokens == 100)
+
+
+def test_note_length_is_measured_from_the_notes_and_is_a_median(tmp_path):
+    """Measured like `thinking_tokens`, not configured. Median rather than mean:
+    one note that repeats the transcript back is real and must not move the
+    figure a reader compares across models.
+    """
+    directory = tmp_path / "einfra" / "soap" / "tneval-soap-v1" / "mymodel"
+    for session, words in enumerate((10, 20, 300)):
+        path = directory / str(session)
+        path.mkdir(parents=True)
+        (path / "note.json").write_text(
+            json.dumps(
+                {
+                    "ok": True,
+                    "generated_at": "2026-01-01T00:00:00Z",
+                    "effort": "",
+                    "temperature": 0,
+                    "temperature_forced": False,
+                    "max_tokens": 4096,
+                    "note": {"subjective": " ".join(["w"] * words)},
+                }
+            ),
+            encoding="utf-8",
+        )
+
+    settings = results.settings_by_system(tmp_path, track=results.TRACK_TNEVAL)
+    assert settings[("einfra", "mymodel")].note_words == 20, "median of 10, 20, 300"

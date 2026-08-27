@@ -248,6 +248,7 @@ function detailRow(row, table) {
 
   const span =
     table.columns.length + 1 + (coverageVaries(table) ? 1 : 0) +
+    (table.has_words ? 1 : 0) +
     (table.groups ? 1 : 0) + (table.has_effort ? 1 : 0);
   return `<tr class="detail" hidden><td colspan="${span}">${parts.join('')}</td></tr>`;
 }
@@ -371,6 +372,12 @@ function renderTable(table, index) {
         `, whose self-preference is measured in the panel below">judge's own ` +
         `${esc(row.judges_own_family)}</span>`
       : '';
+    // How long this model's notes are. A property of the notes, next to the
+    // scores they earned, because completeness counts coverage: a reader who
+    // wonders whether the winner just wrote more can read it off the row.
+    const wordsCell = table.has_words
+      ? `<td>${row.note_words ?? '<span class="dash">—</span>'}</td>`
+      : '';
     const effortCell = table.has_effort
       ? `<td>${row.effort ? esc(row.effort) : '<span class="dash" title="this provider has no effort control">—</span>'}</td>`
       : '';
@@ -385,7 +392,7 @@ function renderTable(table, index) {
       ` data-row="${index}-${position}" data-type="${row.system_type}">
         ${rankCell}
         <td class="name"><span class="arrow">▸</span>${esc(row.label)}${chip}${oddOneOut}${ownFamily}</td>
-        ${effortCell}${cells}${showCoverage ? `<td>${coverage}</td>` : ''}
+        ${effortCell}${cells}${wordsCell}${showCoverage ? `<td>${coverage}</td>` : ''}
       </tr>` + detailRow(row, table);
   }).join('');
 
@@ -400,7 +407,9 @@ function renderTable(table, index) {
           ? '<th title="systems this evidence cannot tell apart share a rank">Rank</th>'
           : ''}<th data-sort="label">System</th>${
           table.has_effort ? '<th data-sort="effort" title="Reasoning effort the note was written at. Blank where the provider has no such control.">Effort</th>' : '' }${
-          ''}${head}${showCoverage ? '<th data-sort="coverage">Notes</th>' : ''}</tr></thead>
+          ''}${head}${table.has_words
+            ? '<th data-sort="note_words" title="Median words in this model’s notes. Completeness counts coverage, so a longer note covers more.">Words</th>'
+            : ''}${showCoverage ? '<th data-sort="coverage">Notes</th>' : ''}</tr></thead>
         <tbody>${body}</tbody>
       </table></div>
       <p class="ranking-note">${rankingNote}</p>
