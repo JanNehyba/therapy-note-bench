@@ -189,7 +189,10 @@ def test_note_length_is_recorded_but_is_not_a_column():
     """The answer to "does this model just write longer notes", which is the
     first objection to any of these numbers."""
     scores = czech.aggregate(NOTE, _answers())
-    assert scores.headline["note_words"] == float(len(NOTE.split()))
+    # The headings do not count. `render_note` writes them whether or not the
+    # section has anything under it, so counting them would report an empty note
+    # as four words long.
+    assert scores.headline["note_words"] == float(len(NOTE.split()) - 4)
     assert "note_words" in czech.INTERNAL_MEASURES
     assert "note_words" not in czech.MEASURES
     assert "note_words" not in czech.JUDGE_MEASURES

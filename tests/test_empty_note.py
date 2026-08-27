@@ -64,6 +64,21 @@ EMPTY_NOTE = {
     "organized": (1.0, False),
     "comprehensible": (1.0, False),
     "synthesized": (1.0, False),
+    # --- Czech criteria ---------------------------------------------------
+    # None, and not because nobody ran it: an empty note is never put to this
+    # judge at all. Every one of the seven asks whether a fault is present, so
+    # an empty note would answer "no" to all seven and score a clean sweep --
+    # the same shape as `accurate` and `succinct` above, and worse, because
+    # this track has no companion measure that scores an empty note zero the
+    # way completeness does. `czech.build_tasks` returns no questions for a note
+    # with no content, so there is nothing to record but the refusal.
+    "diacritics": (None, False),
+    "calque": (None, False),
+    "untranslated": (None, False),
+    "agreement": (None, False),
+    "register": (None, False),
+    "quotes": (None, False),
+    "nonword": (None, False),
 }
 
 EMPTY_SOAP = {"subjective": "", "objective": "", "assessment": "", "plan": ""}
@@ -94,6 +109,29 @@ def test_the_measures_that_reward_an_empty_note_are_named():
     tops_out = {name for name, (_score, top) in EMPTY_NOTE.items() if top}
 
     assert tops_out == {"faithfulness", "accurate", "succinct", "stigmatizing"}
+
+
+def test_an_empty_note_is_asked_no_czech_question_at_all():
+    """The Czech track's answer to the same problem, and a stricter one.
+
+    `faithfulness` and PDSQI's three are instruments this repository reproduces
+    and may not redefine, so an empty note is rated and the rating is published
+    with a warning. The Czech criteria are this repository's own, all seven ask
+    about the absence of a fault, and nothing else on the track would score an
+    empty note zero -- so the honest answer is not to ask. The note still counts
+    as partial; it does not vanish.
+    """
+    from tnb.scoring import czech
+    from tnb.tasks import czech as czech_task
+
+    rendered = czech_task.render_note(EMPTY_SOAP)
+    assert czech.build_tasks(rendered) == []
+
+    scores = czech.aggregate(rendered, {})
+    assert not scores.is_complete
+    assert scores.headline == {"note_words": 0.0}
+    for key in czech.CRITERION_KEYS:
+        assert EMPTY_NOTE[key] == (None, False), key
 
 
 def test_an_empty_soap_note_still_scores_zero_for_coverage():

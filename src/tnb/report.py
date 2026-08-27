@@ -22,10 +22,11 @@ import re
 from dataclasses import replace
 from pathlib import Path
 
-from tnb import corpus, judge, results
+from tnb import corpus, i18n, judge, results
 from tnb.config import REPO_ROOT
 from tnb.results import Row
 from tnb.scoring import concordance, pdsqi
+from tnb.scoring import czech as czech_scorer
 from tnb.scoring import icare as icare_scorer
 from tnb.scoring import tneval as rubric
 from tnb.tasks import icare, soap
@@ -110,6 +111,10 @@ COLUMNS: dict[str, tuple[tuple[str, int], ...]] = {
     results.TRACK_PDSQI: tuple(
         (key, 3 if key == "stigmatizing" else 2) for key in pdsqi.ATTRIBUTE_KEYS
     ),
+    # Two decimals, not three. Every column is a share of ten or twenty notes,
+    # so the third place is a digit that cannot exist.
+    results.TRACK_CZECH_REAL: tuple((key, 2) for key in czech_scorer.CRITERION_KEYS),
+    results.TRACK_CZECH_TRANSLATED: tuple((key, 2) for key in czech_scorer.CRITERION_KEYS),
 }
 
 #: Where each track's measure definitions live. Both scorers own their own --
@@ -123,6 +128,8 @@ MEASURE_TABLES = {
     results.TRACK_TNEVAL: rubric.MEASURES,
     results.TRACK_ICARE: icare_scorer.MEASURES,
     results.TRACK_PDSQI: pdsqi.MEASURES,
+    results.TRACK_CZECH_REAL: czech_scorer.MEASURES,
+    results.TRACK_CZECH_TRANSLATED: czech_scorer.MEASURES,
 }
 
 #: Which measure each track is ranked by, and the honest `None` where the
@@ -139,6 +146,13 @@ RANKING_MEASURES: dict[str, str | None] = {
     # its attributes separately, and a mean of seven 1-5 ratings with a yes/no
     # would be a composite nobody validated.
     results.TRACK_PDSQI: pdsqi.RANKING_MEASURE,
+    # None again, and for a third reason. Weighting spelling against clinical
+    # terminology is a linguistic decision rather than a measurement, and the
+    # correlation this track exists to look for is more useful per criterion:
+    # English completeness may predict terminology and say nothing about
+    # quotation marks.
+    results.TRACK_CZECH_REAL: czech_scorer.RANKING_MEASURE,
+    results.TRACK_CZECH_TRANSLATED: czech_scorer.RANKING_MEASURE,
 }
 
 
@@ -154,6 +168,10 @@ JUDGE_MEASURES: dict[str, tuple[str, ...]] = {
     # text alone, so all eight columns are a judge's opinion and all eight can
     # be compared between two of them.
     results.TRACK_PDSQI: pdsqi.JUDGE_MEASURES,
+    # All seven, and it matters more here than anywhere else: this track has no
+    # human anchor at all, so two judges disagreeing is the only control it has.
+    results.TRACK_CZECH_REAL: czech_scorer.JUDGE_MEASURES,
+    results.TRACK_CZECH_TRANSLATED: czech_scorer.JUDGE_MEASURES,
 }
 
 
@@ -214,6 +232,8 @@ TRACK_TITLES = {
     # which corpus these notes were written from -- was the one thing it did
     # not say. The other two tracks name theirs.
     results.TRACK_PDSQI: "PDSQI-9 · the SOAP notes on AnnoMI, rated for quality",
+    results.TRACK_CZECH_REAL: "Czech · ten real sessions, one client",
+    results.TRACK_CZECH_TRANSLATED: "Czech · AnnoMI conversations, translated",
 }
 
 #: The same tracks, short enough to be a button. Separate from the titles rather
@@ -223,6 +243,8 @@ TRACK_SWITCH_LABELS = {
     results.TRACK_TNEVAL: "TN-Eval SOAP",
     results.TRACK_ICARE: "iCARE / iHOPE",
     results.TRACK_PDSQI: "PDSQI-9 on SOAP",
+    results.TRACK_CZECH_REAL: "Czech, real sessions",
+    results.TRACK_CZECH_TRANSLATED: "Czech, translated",
 }
 
 TRACK_BLURBS = {
@@ -249,6 +271,19 @@ TRACK_BLURBS = {
         "averaged, because the instrument reports them that way and because one "
         "of the eight is a 0-1 column: a mean over it and seven 1-5 scales would "
         "be a number with no unit."
+    ),
+    results.TRACK_CZECH_REAL: (
+        "Seven yes/no criteria about the Czech, asked of the note alone. Each column "
+        "is the share of notes free of that fault. **Ten sessions with one client, so "
+        "adjacent positions are not separable** -- and the generation prompt is a "
+        "translation of TN-Eval's rather than a reproduction of anything."
+    ),
+    results.TRACK_CZECH_TRANSLATED: (
+        "The same criteria on notes written from AnnoMI conversations translated into "
+        "Czech. **The two halves differ by more than language** -- AnnoMI is "
+        "motivational interviewing about substance use and the real sessions are not "
+        "-- so a model doing worse here may be doing worse at motivational "
+        "interviewing rather than at translated Czech."
     ),
 }
 
@@ -335,6 +370,60 @@ TRACK_DESIGN = {
             "faithfulness. A judge cannot be asked to agree with a person better "
             "than people agree with each other -- but a ceiling is not a "
             "measurement, and these columns have not been checked against anyone."
+        ),
+    },
+    results.TRACK_CZECH_REAL: {
+        "scored_against": (
+            "The note alone. Seven yes/no questions about the Czech itself -- "
+            "diacritics, calques, untranslated English terms, agreement, register, "
+            "quotation marks, non-words -- and each column is the share of notes "
+            "free of that fault. The judge is never shown the transcript, which is "
+            "why a confidential session can be scored at all."
+        ),
+        "human_role": (
+            "None. No human wrote a comparison note in Czech and no human has rated "
+            "these notes on these criteria. That is one row this table does not have "
+            "and the two English tables do."
+        ),
+        "human_role_short": "none",
+        # False, and worse than either English track. iCARE has an expert note as
+        # an answer key and unpublished ratings; PDSQI-9 publishes an inter-rater
+        # ceiling. This instrument has neither -- it is one this repository wrote,
+        # which is the thing pdsqi.py argues the project does not do. The answer
+        # is that no Czech note-quality instrument exists to reproduce, and that
+        # is a reason rather than an excuse.
+        "calibrated": False,
+        "calibration": (
+            "Not possible yet, and weaker than either English track. There is no "
+            "published Czech note-quality instrument to reproduce, so these criteria "
+            "are this repository's own; no human has rated these notes on them, and "
+            "unlike PDSQI-9 there is not even a published figure for how well two "
+            "people would agree. Two independent judges answer every question, and "
+            "where they disagree is the only control this track has -- which is also "
+            "why a criterion every model passes is reported as unmeasured rather "
+            "than as agreement."
+        ),
+    },
+    results.TRACK_CZECH_TRANSLATED: {
+        "scored_against": (
+            "The same seven criteria as the real-session table, on notes written "
+            "from AnnoMI conversations translated into Czech. The translation is "
+            "identical for every model, so it cancels when models are compared; it "
+            "does not cancel for any claim about how well models write Czech."
+        ),
+        "human_role": (
+            "None. No human wrote a comparison note in Czech and no human has rated "
+            "these notes on these criteria. That is one row this table does not have "
+            "and the two English tables do."
+        ),
+        "human_role_short": "none",
+        "calibrated": False,
+        "calibration": (
+            "Not possible yet, for the reasons the real-session table gives. What "
+            "this half adds is a join: the same conversations carry English numbers "
+            "on the TN-Eval track, so a model's standing there and its Czech here "
+            "are about the same sessions. Whether one predicts the other is the "
+            "question this track was built to answer."
         ),
     },
 }
@@ -1583,9 +1672,19 @@ def concordance_payload(rows: list[Row], **overrides) -> dict:
     }
 
 
+def _localise(page: str) -> str:
+    """The Czech lookup, inlined the same way the payload is.
+
+    Not part of the payload, on purpose: `docs/leaderboard.json` is also the
+    mirror API, and a machine reading the numbers has no use for a second
+    language's wording of the caveats. It is a property of the page.
+    """
+    return page.replace("__I18N__", _inline(i18n.dictionary()))
+
+
 def render_page(data: dict) -> str:
     """The standalone page: the data inlined, no build step, no dependency."""
-    return PAGE_TEMPLATE.replace("__DATA__", _inline(data))
+    return _localise(PAGE_TEMPLATE.replace("__DATA__", _inline(data)))
 
 
 def render_methods(data: dict) -> str:
@@ -1601,7 +1700,7 @@ def render_methods(data: dict) -> str:
     for marker, name in FIGURE_MARKERS.items():
         if marker in page:
             page = page.replace(marker, _figure(name))
-    return page.replace("__DATA__", _inline(data))
+    return _localise(page.replace("__DATA__", _inline(data)))
 
 
 TEMPLATE_DIR = Path(__file__).parent / "templates"

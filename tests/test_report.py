@@ -298,15 +298,28 @@ def test_the_page_keeps_the_caveats_attached_to_the_numbers():
     # the third one through.
     assert set(report.COLUMNS) == set(results.TRACKS)
 
+    # Every column of every track needs a caveat, including the tracks that are
+    # measured and not published.
     for track, columns in report.COLUMNS.items():
         table = report.MEASURE_TABLES[track]
         for key, _decimals in columns:
             caveat = (table[key].get("caveat") or "").strip()
             assert caveat, f"{track}.{key} is drawn with no caveat at all"
+
+    # But only the published tracks can have their caveats *on the page*. The
+    # Czech rows go to `results.LOCAL_ROWS_PATH`, so `report.build` reading the
+    # committed record cannot draw them -- which is the whole of the local-only
+    # decision, and is asserted below rather than worked around here.
+    for track in results.PUBLISHED_TRACKS:
+        table = report.MEASURE_TABLES[track]
+        for key, _decimals in report.COLUMNS[track]:
             # A distinctive fragment rather than the whole sentence, which the
             # renderer is free to wrap.
-            fragment = caveat.split(".")[0][:40]
+            fragment = (table[key]["caveat"]).strip().split(".")[0][:40]
             assert fragment in page, f"{track}.{key}'s caveat is not on the page"
+
+    for track in results.LOCAL_TRACKS:
+        assert track not in page, f"{track} is measured locally and must not be published"
 
     # The two the docstring names, by the words a reader would look for.
     assert "Krippendorff" in page

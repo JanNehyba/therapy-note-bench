@@ -42,6 +42,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from tnb.scoring import pdsqi
+from tnb.tasks import czech as _task
 
 #: Bumped whenever anything reaching the judge changes. Rows carry it and the
 #: leaderboard never mixes two versions.
@@ -227,6 +228,11 @@ Odpověz pouze slovem „ano“ nebo „ne“ a nic jiného:"""
 #: Czech answers, normalised to what `pdsqi.parse_yes_no` reads.
 _ANSWERS = {"ano": "yes", "ne": "no"}
 
+#: The section headings `tasks.czech.render_note` writes, so that `_content`
+#: can tell what the model wrote from what the renderer added. Imported rather
+#: than repeated: two lists of four Czech words would drift.
+_LABELS = frozenset(_task.SECTION_LABELS.values())
+
 
 @dataclass(frozen=True)
 class CriterionTask:
@@ -292,8 +298,28 @@ def has_content(note: str) -> bool:
 
     So an empty note is not scored. It is not *dropped* either -- see
     `aggregate`. A model that wrote nothing must not have its worst note vanish.
+
+    Judged on the values and not on the string, because the string is not empty:
+    `tasks.czech.render_note` writes every section heading whether or not the
+    section has anything under it, so a note with four blank sections still
+    renders as four labels. Caught by a test rather than by reading, which is
+    how `pdsqi.has_content` came by the same line.
     """
-    return bool((note or "").strip())
+    return bool(_content(note).strip())
+
+
+def _content(note: str) -> str:
+    """What the model wrote, without the headings the renderer added.
+
+    A line with no colon is content in its own right -- a model that ignored the
+    template still wrote something, and counting it as a heading would report
+    its note as empty.
+    """
+    parts = []
+    for line in (note or "").splitlines():
+        head, sep, tail = line.partition(":")
+        parts.append(tail if sep and head.strip() in _LABELS else line)
+    return "\n".join(parts)
 
 
 def has_quotes(note: str) -> bool:
@@ -336,7 +362,8 @@ def build_tasks(note: str) -> list[CriterionTask]:
 
 
 def note_words(note: str) -> int:
-    return len((note or "").split())
+    """How long the note is, not counting the headings the renderer wrote."""
+    return len(_content(note).split())
 
 
 def aggregate(note: str, answers: dict[str, str]) -> Scores:
