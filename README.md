@@ -52,22 +52,22 @@ written for somebody building or buying one:
 
 | Model | Provider | Completeness (0-1) | Conciseness (0-1) | Faithfulness (1-5) | Notes | Scored |
 |---|---|---|---|---|---|---|
-| `kimi-k3` | einfra | 0.546 | 0.885 | 4.98 | 50/50 | 50 |
-| `qwen3.5-int4` | einfra | 0.535 | 0.848 | 4.92 | 50/50 | 50 |
-| `qwen3.5-122b` | einfra | 0.526 | 0.814 | 4.76 | 50/50 | 50 |
-| `google_gemini-3.1-pro-preview` | vertex | 0.525 | 0.878 | 4.97 | 50/50 | 50 |
-| `google_gemini-3.7-flash` | vertex | 0.524 | 0.872 | 4.98 | 50/50 | 50 |
-| `glm-5` | einfra | 0.502 | 0.860 | 4.96 | 50/50 | 50 |
-| `glm-5.2` | einfra | 0.499 | 0.875 | 4.97 | 50/50 | 50 |
+| `kimi-k3` | einfra | 0.546 | 0.886 | 4.98 | 50/50 | 50 |
+| `qwen3.5-int4` | einfra | 0.535 | 0.878 | 4.92 | 50/50 | 50 |
+| `qwen3.5-122b` | einfra | 0.526 | 0.904 | 4.76 | 50/50 | 50 |
+| `google_gemini-3.1-pro-preview` | vertex | 0.525 | 0.893 | 4.97 | 50/50 | 50 |
+| `google_gemini-3.7-flash` | vertex | 0.524 | 0.931 | 4.98 | 50/50 | 50 |
+| `glm-5` | einfra | 0.502 | 0.863 | 4.96 | 50/50 | 50 |
+| `glm-5.2` | einfra | 0.499 | 0.877 | 4.97 | 50/50 | 50 |
 | `gpt-5.6-sol` | openai | 0.497 | 0.882 | 4.95 | 50/50 | 50 |
 | `gpt-5.6-terra` | openai | 0.493 | 0.888 | 5.00 | 50/50 | 50 |
-| `gpt-oss-120b` | einfra | 0.482 | 0.827 | 4.29 | 42/50 (8 unusable) | 42 |
-| `deepseek-v4-flash-thinking` | einfra | 0.477 | 0.895 | 4.84 | 50/50 | 50 |
+| `gpt-oss-120b` | einfra | 0.482 | 0.905 | 4.29 | 42/50 (8 unusable) | 42 |
+| `deepseek-v4-flash-thinking` | einfra | 0.477 | 0.900 | 4.84 | 50/50 | 50 |
 | `gpt-5.6-luna` | openai | 0.476 | 0.888 | 4.93 | 50/50 | 50 |
-| `gemma4` | einfra | 0.475 | 0.898 | 4.95 | 50/50 | 50 |
+| `gemma4` | einfra | 0.475 | 0.897 | 4.95 | 50/50 | 50 |
 | `qwen3.8-27b` | einfra | 0.471 | 0.836 | 4.94 | 50/50 | 50 |
-| `mistral-medium-3.5` | einfra | 0.456 | 0.901 | 4.89 | 50/50 | 50 |
-| `deepseek-v4-flash` | einfra | 0.446 | 0.915 | 4.88 | 50/50 | 50 |
+| `mistral-medium-3.5` | einfra | 0.456 | 0.908 | 4.89 | 50/50 | 50 |
+| `deepseek-v4-flash` | einfra | 0.446 | 0.919 | 4.88 | 50/50 | 50 |
 
 *Ordered by **Completeness**. Every other column is context.*
 - **Completeness** (0-1) — Fraction of the section's rubric criteria the judge found present. 0.65 means about two thirds of the required items are in the note. Counts coverage of a checklist, not judgement. A therapist writes what matters for the next session and leaves out what does not; the rubric sees what is present and cannot see why anything was left out -- which is why every model here scores above the therapist on it. This is the column the table is ordered by, so the caveat travels with the ranking: quote the number with this sentence attached, or do not quote it.
@@ -78,22 +78,22 @@ written for somebody building or buying one:
 
 | Model | Provider | ROUGE-L (0-1) | BERTScore (0-1) | TRACE (1-5) | Looks back (0-1) | Looks forward (0-1) | Notes | Scored |
 |---|---|---|---|---|---|---|---|---|
-| `deepseek-v4-flash` | einfra | 0.168 | — | 4.78 | 1.000 | 0.091 | 40/40 | 40 |
-| `deepseek-v4-flash-thinking` | einfra | 0.170 | — | 4.87 | 1.000 | 0.091 | 40/40 | 40 |
-| `gemma4` | einfra | 0.202 | — | 4.83 | 1.000 | 0.364 | 40/40 | 40 |
-| `glm-5` | einfra | 0.179 | — | 4.88 | 1.000 | 0.364 | 40/40 | 40 |
-| `glm-5.2` | einfra | 0.173 | — | 4.92 | 1.000 | 0.364 | 40/40 | 40 |
-| `google_gemini-3.1-pro-preview` | vertex | 0.182 | — | 4.96 | 1.000 | 0.455 | 40/40 | 40 |
-| `google_gemini-3.7-flash` | vertex | 0.186 | — | 4.97 | 0.971 | 0.364 | 40/40 | 40 |
-| `gpt-5.6-luna` | openai | 0.150 | — | 4.92 | 1.000 | 0.273 | 40/40 | 40 |
-| `gpt-5.6-sol` | openai | 0.169 | — | 4.99 | 1.000 | 0.545 | 40/40 | 40 |
-| `gpt-5.6-terra` | openai | 0.155 | — | 4.97 | 0.971 | 0.455 | 40/40 | 40 |
-| `gpt-oss-120b` | einfra | 0.159 | — | 4.79 | 1.000 | 0.000 | 40/40 | 40 |
-| `kimi-k3` | einfra | 0.109 | — | 4.98 | 1.000 | 0.364 | 40/40 | 40 |
-| `mistral-medium-3.5` | einfra | 0.186 | — | 4.87 | 1.000 | 0.182 | 40/40 | 40 |
-| `qwen3.5-122b` | einfra | 0.140 | — | 4.76 | 1.000 | 0.273 | 40/40 | 40 |
-| `qwen3.5-int4` | einfra | 0.183 | — | 4.97 | 1.000 | 0.091 | 39/40 (1 unreached) | 39 |
-| `qwen3.8-27b` | einfra | 0.186 | — | 4.95 | 1.000 | 0.273 | 40/40 | 40 |
+| `deepseek-v4-flash` | einfra | 0.168 | 0.816 | 4.78 | 1.000 | 0.091 | 40/40 | 40 |
+| `deepseek-v4-flash-thinking` | einfra | 0.170 | 0.811 | 4.87 | 1.000 | 0.091 | 40/40 | 40 |
+| `gemma4` | einfra | 0.202 | 0.820 | 4.83 | 1.000 | 0.364 | 40/40 | 40 |
+| `glm-5` | einfra | 0.179 | 0.820 | 4.88 | 1.000 | 0.364 | 40/40 | 40 |
+| `glm-5.2` | einfra | 0.173 | 0.820 | 4.92 | 1.000 | 0.364 | 40/40 | 40 |
+| `google_gemini-3.1-pro-preview` | vertex | 0.182 | 0.817 | 4.96 | 1.000 | 0.455 | 40/40 | 40 |
+| `google_gemini-3.7-flash` | vertex | 0.186 | 0.819 | 4.97 | 0.971 | 0.364 | 40/40 | 40 |
+| `gpt-5.6-luna` | openai | 0.150 | 0.811 | 4.92 | 1.000 | 0.273 | 40/40 | 40 |
+| `gpt-5.6-sol` | openai | 0.169 | 0.816 | 4.99 | 1.000 | 0.545 | 40/40 | 40 |
+| `gpt-5.6-terra` | openai | 0.155 | 0.815 | 4.97 | 0.971 | 0.455 | 40/40 | 40 |
+| `gpt-oss-120b` | einfra | 0.159 | 0.808 | 4.79 | 1.000 | 0.000 | 40/40 | 40 |
+| `kimi-k3` | einfra | 0.109 | 0.812 | 4.98 | 1.000 | 0.364 | 40/40 | 40 |
+| `mistral-medium-3.5` | einfra | 0.186 | 0.815 | 4.87 | 1.000 | 0.182 | 40/40 | 40 |
+| `qwen3.5-122b` | einfra | 0.140 | 0.815 | 4.76 | 1.000 | 0.273 | 40/40 | 40 |
+| `qwen3.5-int4` | einfra | 0.183 | 0.818 | 4.97 | 1.000 | 0.091 | 39/40 (1 unreached) | 39 |
+| `qwen3.8-27b` | einfra | 0.186 | 0.819 | 4.95 | 1.000 | 0.273 | 40/40 | 40 |
 
 *Deliberately not ranked: these columns measure different things and the source paper found they disagree.*
 - **ROUGE-L** (0-1) — Longest-common-subsequence overlap with the expert note, F-measure. Rewards using the same words in the same order. Not the source paper's ROUGE-L and not comparable with their published table. Theirs compares the whole rendered note, which puts our own field labels and every `Nil` the expert wrote on both sides -- a note where the model wrote nothing at all scores 0.379 that way, above most real notes. This compares the field values of the sections the expert answered, where the same empty note scores 0.000, and every model's figure fell by about a third. It also cannot tell a good paraphrase from a wrong answer, and the source paper found it disagrees with what clinicians preferred.
@@ -135,42 +135,63 @@ written for somebody building or buying one:
 
 **Do the two judges agree?** (TN-Eval SOAP · AnnoMI conversations)
 
-`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on conciseness (+0.905) and place 11 of 19 systems differently on it anyway. They agree least on faithfulness (+0.733, 15 of 19 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. 14 system(s) beat at least one other on every measure under both judges, which needs no weighting to be true: `google_gemini-3.1-pro-preview` beats 4. 12 of 19 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner. Ordering by completeness says little about conciseness (`gemini-3.1-pro-preview` -0.38, `gpt-5.6-terra` -0.33). Ordering by completeness says different things to the two judges about faithfulness (`gemini-3.1-pro-preview` +0.56, `gpt-5.6-terra` +0.04). The two judges disagree about whether those columns are related at all, so neither reading is this benchmark's answer.
+`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on completeness (+0.895) and place 13 of 19 systems differently on it anyway. They agree least on faithfulness (+0.733, 15 of 19 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. 14 system(s) beat at least one other on every measure under both judges, which needs no weighting to be true: `google_gemini-3.7-flash` beats 10. 8 of 19 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner. Ordering by completeness says little about conciseness (`gemini-3.1-pro-preview` -0.02, `gpt-5.6-terra` +0.05). Ordering by completeness says different things to the two judges about faithfulness (`gemini-3.1-pro-preview` +0.56, `gpt-5.6-terra` +0.04). The two judges disagree about whether those columns are related at all, so neither reading is this benchmark's answer.
 
 **Do the two judges agree?** (iCARE form on the iHOPE corpus · 17 sections per session)
 
-`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on trace (+0.826) and place 11 of 16 systems differently on it anyway. The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. 16 of 16 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner.
+`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on trace (+0.826) and place 11 of 16 systems differently on it anyway. The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. 9 system(s) beat at least one other on every measure under both judges, which needs no weighting to be true: `gpt-5.6-sol` beats 6. 8 of 16 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner.
 
-*16 icare row(s) of generation coverage at harness `0.1.0` are no longer shown: the measures were redefined in `0.2.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+**Do the two judges agree?** (PDSQI-9 · the same notes, rated for quality)
 
-*16 icare row(s) scored by `gemini-3.1-pro-preview` at harness `0.1.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.3.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on thorough (+0.833) and place 18 of 19 systems differently on it anyway. They agree least on succinct (+0.446, 18 of 19 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. No agreement figure is given for comprehensible (18 of 19 share one value), organized (18 of 19 share one value), synthesized (18 of 19 share one value), useful (18 of 19 share one value): most systems print the same number there, so there are no orderings for the two judges to agree about, and a correlation over them would be decided by the few that differ. 4 system(s) beat at least one other on every measure under both judges, which needs no weighting to be true: `gpt-5.6-sol` beats 7. 11 of 19 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner.
 
-*16 icare row(s) scored by `gemini-3.1-pro-preview` at harness `0.2.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.3.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 icare row(s) of generation coverage at harness `0.1.0` are no longer shown: the measures were redefined in `0.4.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*16 icare row(s) scored by `gpt-5.6-terra` at harness `0.2.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.3.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 icare row(s) scored by `gemini-3.1-pro-preview` at harness `0.1.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.4.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*16 icare row(s) scored by `gemini-3.1-pro-preview` at harness `0.2.0` are no longer shown: the measures were redefined in `0.3.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 icare row(s) of generation coverage at harness `0.2.0` are no longer shown: the measures were redefined in `0.4.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*16 icare row(s) scored by `gpt-5.6-terra` at harness `0.2.0` are no longer shown: the measures were redefined in `0.3.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 icare row(s) scored by `gemini-3.1-pro-preview` at harness `0.2.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.4.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*16 tneval-soap row(s) of generation coverage at harness `0.1.0` are no longer shown: the measures were redefined in `0.2.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 icare row(s) scored by `gpt-5.6-terra` at harness `0.2.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.4.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+
+*16 icare row(s) scored by `gemini-3.1-pro-preview` at harness `0.2.0` are no longer shown: the measures were redefined in `0.4.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+
+*16 icare row(s) scored by `gpt-5.6-terra` at harness `0.2.0` are no longer shown: the measures were redefined in `0.4.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+
+*16 icare row(s) scored by `gemini-3.1-pro-preview` at harness `0.3.0` are no longer shown: the measures were redefined in `0.4.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+
+*16 icare row(s) scored by `gpt-5.6-terra` at harness `0.3.0` are no longer shown: the measures were redefined in `0.4.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+
+*19 pdsqi-soap row(s) scored by `gemini-3.1-pro-preview` at harness `0.3.0` are no longer shown: the measures were redefined in `0.4.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+
+*19 pdsqi-soap row(s) scored by `gpt-5.6-terra` at harness `0.3.0` are no longer shown: the measures were redefined in `0.4.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+
+*16 tneval-soap row(s) of generation coverage at harness `0.1.0` are no longer shown: the measures were redefined in `0.4.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
 *14 tneval-soap row(s) scored by `gemini-2.5-pro` at harness `0.1.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.2.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*19 tneval-soap row(s) scored by `gemini-3.1-pro-preview` at harness `0.1.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.3.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*19 tneval-soap row(s) scored by `gemini-3.1-pro-preview` at harness `0.1.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.4.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*19 tneval-soap row(s) scored by `gpt-5.6-terra` at harness `0.1.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.3.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*19 tneval-soap row(s) scored by `gpt-5.6-terra` at harness `0.1.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.4.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*19 tneval-soap row(s) scored by `gemini-3.1-pro-preview` at harness `0.2.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.3.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 tneval-soap row(s) of generation coverage at harness `0.2.0` are no longer shown: the measures were redefined in `0.4.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*19 tneval-soap row(s) scored by `gemini-3.1-pro-preview` at harness `0.2.0` are no longer shown: the measures were redefined in `0.3.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*19 tneval-soap row(s) scored by `gemini-3.1-pro-preview` at harness `0.2.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.4.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*19 tneval-soap row(s) scored by `gpt-5.6-terra` at harness `0.2.0` are no longer shown: the measures were redefined in `0.3.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*19 tneval-soap row(s) scored by `gemini-3.1-pro-preview` at harness `0.2.0` are no longer shown: the measures were redefined in `0.4.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+
+*19 tneval-soap row(s) scored by `gpt-5.6-terra` at harness `0.2.0` are no longer shown: the measures were redefined in `0.4.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+
+*19 tneval-soap row(s) scored by `gemini-3.1-pro-preview` at harness `0.3.0` are no longer shown: the measures were redefined in `0.4.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+
+*19 tneval-soap row(s) scored by `gpt-5.6-terra` at harness `0.3.0` are no longer shown: the measures were redefined in `0.4.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
 **Also scored, and not printed here.** Two judges are two instruments and two tables; the site draws one at a time and this file cannot, so it shows the one the site opens with.
 - **TN-Eval SOAP · AnnoMI conversations**, scored by gemini-2.5-pro (max_output_tokens 160, temperature 0, thinking_budget 128) — measured by harness `0.2.0`, whose columns may not mean what the newer tables' columns mean — [open it](https://jannehyba.github.io/therapy-note-bench/#tneval-soap-gemini-2.5-pro-0.2.0-345ec0)
-- **TN-Eval SOAP · AnnoMI conversations**, scored by gpt-5.6-terra (backend openai, effort medium, max_output_tokens 672) — [open it](https://jannehyba.github.io/therapy-note-bench/#tneval-soap-gpt-5.6-terra-0.3.0-acf643)
-- **iCARE form on the iHOPE corpus · 17 sections per session**, scored by gpt-5.6-terra (backend openai, effort medium, max_output_tokens 672) — [open it](https://jannehyba.github.io/therapy-note-bench/#icare-gpt-5.6-terra-0.3.0-acf643)
+- **TN-Eval SOAP · AnnoMI conversations**, scored by gpt-5.6-terra (backend openai, effort medium, max_output_tokens 672) — [open it](https://jannehyba.github.io/therapy-note-bench/#tneval-soap-gpt-5.6-terra-0.4.0-acf643)
+- **iCARE form on the iHOPE corpus · 17 sections per session**, scored by gpt-5.6-terra (backend openai, effort medium, max_output_tokens 672) — [open it](https://jannehyba.github.io/therapy-note-bench/#icare-gpt-5.6-terra-0.4.0-acf643)
+- **PDSQI-9 · the same notes, rated for quality**, scored by gpt-5.6-terra (backend openai, effort medium, max_output_tokens 672) — [open it](https://jannehyba.github.io/therapy-note-bench/#pdsqi-soap-gpt-5.6-terra-0.4.0-acf643)
 
 See the [full leaderboard](https://jannehyba.github.io/therapy-note-bench/) for per-section detail, the reference systems and the published numbers, and [how it was measured](https://jannehyba.github.io/therapy-note-bench/methods.html) for the judge, the corpora and what the two judges disagree about.
 <!-- LEADERBOARD:END -->

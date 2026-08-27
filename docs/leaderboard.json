@@ -186,7 +186,86 @@
   },
   "concordance": {
     "icare": {
-      "dominance": [],
+      "dominance": [
+        {
+          "beats": [
+            "deepseek-v4-flash",
+            "gpt-5.6-luna",
+            "gpt-5.6-terra",
+            "gpt-oss-120b",
+            "kimi-k3",
+            "qwen3.5-122b"
+          ],
+          "system": "gpt-5.6-sol"
+        },
+        {
+          "beats": [
+            "deepseek-v4-flash",
+            "deepseek-v4-flash-thinking",
+            "gpt-5.6-luna",
+            "gpt-oss-120b",
+            "mistral-medium-3.5",
+            "qwen3.5-122b"
+          ],
+          "system": "qwen3.8-27b"
+        },
+        {
+          "beats": [
+            "deepseek-v4-flash",
+            "deepseek-v4-flash-thinking",
+            "gpt-oss-120b",
+            "qwen3.5-122b"
+          ],
+          "system": "glm-5"
+        },
+        {
+          "beats": [
+            "deepseek-v4-flash",
+            "deepseek-v4-flash-thinking",
+            "gpt-oss-120b",
+            "qwen3.5-122b"
+          ],
+          "system": "glm-5.2"
+        },
+        {
+          "beats": [
+            "deepseek-v4-flash",
+            "deepseek-v4-flash-thinking",
+            "gpt-oss-120b",
+            "qwen3.5-122b"
+          ],
+          "system": "google_gemini-3.1-pro-preview"
+        },
+        {
+          "beats": [
+            "deepseek-v4-flash",
+            "gpt-oss-120b",
+            "qwen3.5-122b"
+          ],
+          "system": "gemma4"
+        },
+        {
+          "beats": [
+            "deepseek-v4-flash",
+            "deepseek-v4-flash-thinking",
+            "gpt-oss-120b"
+          ],
+          "system": "qwen3.5-int4"
+        },
+        {
+          "beats": [
+            "deepseek-v4-flash-thinking",
+            "gpt-oss-120b"
+          ],
+          "system": "mistral-medium-3.5"
+        },
+        {
+          "beats": [
+            "gpt-oss-120b"
+          ],
+          "system": "deepseek-v4-flash-thinking"
+        }
+      ],
       "judge_a": "gemini-3.1-pro-preview",
       "judge_b": "gpt-5.6-terra",
       "judge_measures": [
@@ -202,14 +281,26 @@
           "measure": "trace",
           "moved": 11,
           "n_systems": 16,
+          "rankable": true,
           "rho": 0.8261,
-          "stable": 5
+          "stable": 5,
+          "tied": 3
         }
       ],
       "n_systems": 16,
       "ranking_measure": null,
-      "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on trace (+0.826) and place 11 of 16 systems differently on it anyway. The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. 16 of 16 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner.",
+      "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on trace (+0.826) and place 11 of 16 systems differently on it anyway. The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. 9 system(s) beat at least one other on every measure under both judges, which needs no weighting to be true: `gpt-5.6-sol` beats 6. 8 of 16 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner.",
       "tensions": [
+        {
+          "agrees": true,
+          "first": "rouge_l",
+          "n_systems": 16,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.6981,
+            "gpt-5.6-terra": 0.6981
+          },
+          "second": "bertscore"
+        },
         {
           "agrees": false,
           "first": "rouge_l",
@@ -237,6 +328,36 @@
           "rho_by_judge": {
             "gemini-3.1-pro-preview": 0.0256,
             "gpt-5.6-terra": 0.0256
+          },
+          "second": "temporal_next"
+        },
+        {
+          "agrees": false,
+          "first": "bertscore",
+          "n_systems": 16,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.0648,
+            "gpt-5.6-terra": 0.162
+          },
+          "second": "trace"
+        },
+        {
+          "agrees": false,
+          "first": "bertscore",
+          "n_systems": 16,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.0,
+            "gpt-5.6-terra": 0.0
+          },
+          "second": "temporal_past"
+        },
+        {
+          "agrees": false,
+          "first": "bertscore",
+          "n_systems": 16,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.3384,
+            "gpt-5.6-terra": 0.3384
           },
           "second": "temporal_next"
         },
@@ -274,20 +395,469 @@
       "track": "icare",
       "track_label": "iCARE form on the iHOPE corpus · 17 sections per session",
       "undominated": [
-        "deepseek-v4-flash",
-        "deepseek-v4-flash-thinking",
         "gemma4",
         "glm-5",
+        "glm-5.2",
+        "google_gemini-3.1-pro-preview",
+        "google_gemini-3.7-flash",
+        "gpt-5.6-sol",
+        "qwen3.5-int4",
+        "qwen3.8-27b"
+      ]
+    },
+    "pdsqi-soap": {
+      "dominance": [
+        {
+          "beats": [
+            "deepseek-v4-flash",
+            "deepseek-v4-flash-thinking",
+            "glm-5",
+            "gpt-oss-120b",
+            "kimi-k3",
+            "mistral-medium-3.5",
+            "qwen3.5-122b"
+          ],
+          "system": "gpt-5.6-sol"
+        },
+        {
+          "beats": [
+            "kimi-k3",
+            "qwen3.5-122b"
+          ],
+          "system": "gpt-5.6-terra"
+        },
+        {
+          "beats": [
+            "glm-5"
+          ],
+          "system": "glm-5.2"
+        },
+        {
+          "beats": [
+            "therapist-written (TN-Eval)"
+          ],
+          "system": "google_gemini-3.7-flash"
+        }
+      ],
+      "judge_a": "gemini-3.1-pro-preview",
+      "judge_b": "gpt-5.6-terra",
+      "judge_measures": [
+        "accurate",
+        "thorough",
+        "useful",
+        "organized",
+        "comprehensible",
+        "succinct",
+        "synthesized",
+        "stigmatizing"
+      ],
+      "measures": [
+        {
+          "furthest": {
+            "rank_a": 19,
+            "rank_b": 6,
+            "system": "therapist-written (TN-Eval)"
+          },
+          "measure": "accurate",
+          "moved": 18,
+          "n_systems": 19,
+          "rankable": true,
+          "rho": 0.6605,
+          "stable": 1,
+          "tied": 7
+        },
+        {
+          "furthest": {
+            "rank_a": 4,
+            "rank_b": 14,
+            "system": "glm-5"
+          },
+          "measure": "thorough",
+          "moved": 18,
+          "n_systems": 19,
+          "rankable": true,
+          "rho": 0.8332,
+          "stable": 1,
+          "tied": 4
+        },
+        {
+          "furthest": {
+            "rank_a": 1,
+            "rank_b": 18,
+            "system": "llama-3.1-70b (TN-Eval, 2025)"
+          },
+          "measure": "useful",
+          "moved": 15,
+          "n_systems": 19,
+          "rankable": false,
+          "rho": 0.3892,
+          "stable": 4,
+          "tied": 18
+        },
+        {
+          "furthest": null,
+          "measure": "organized",
+          "moved": 0,
+          "n_systems": 19,
+          "rankable": false,
+          "rho": 1.0,
+          "stable": 19,
+          "tied": 18
+        },
+        {
+          "furthest": {
+            "rank_a": 1,
+            "rank_b": 19,
+            "system": "qwen3.5-122b"
+          },
+          "measure": "comprehensible",
+          "moved": 18,
+          "n_systems": 19,
+          "rankable": false,
+          "rho": 0.3019,
+          "stable": 1,
+          "tied": 18
+        },
+        {
+          "furthest": {
+            "rank_a": 18,
+            "rank_b": 4,
+            "system": "therapist-written (TN-Eval)"
+          },
+          "measure": "succinct",
+          "moved": 18,
+          "n_systems": 19,
+          "rankable": true,
+          "rho": 0.4459,
+          "stable": 1,
+          "tied": 3
+        },
+        {
+          "furthest": {
+            "rank_a": 1,
+            "rank_b": 18,
+            "system": "mistral-large-v2 (TN-Eval, 2025)"
+          },
+          "measure": "synthesized",
+          "moved": 11,
+          "n_systems": 19,
+          "rankable": false,
+          "rho": 0.3988,
+          "stable": 8,
+          "tied": 18
+        },
+        {
+          "furthest": {
+            "rank_a": 5,
+            "rank_b": 14,
+            "system": "deepseek-v4-flash"
+          },
+          "measure": "stigmatizing",
+          "moved": 17,
+          "n_systems": 19,
+          "rankable": true,
+          "rho": 0.7363,
+          "stable": 2,
+          "tied": 4
+        }
+      ],
+      "n_systems": 19,
+      "ranking_measure": null,
+      "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on thorough (+0.833) and place 18 of 19 systems differently on it anyway. They agree least on succinct (+0.446, 18 of 19 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. No agreement figure is given for comprehensible (18 of 19 share one value), organized (18 of 19 share one value), synthesized (18 of 19 share one value), useful (18 of 19 share one value): most systems print the same number there, so there are no orderings for the two judges to agree about, and a correlation over them would be decided by the few that differ. 4 system(s) beat at least one other on every measure under both judges, which needs no weighting to be true: `gpt-5.6-sol` beats 7. 11 of 19 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner.",
+      "tensions": [
+        {
+          "agrees": true,
+          "first": "accurate",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.7119,
+            "gpt-5.6-terra": 0.5743
+          },
+          "second": "thorough"
+        },
+        {
+          "agrees": false,
+          "first": "accurate",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.3972,
+            "gpt-5.6-terra": 0.6104
+          },
+          "second": "useful"
+        },
+        {
+          "agrees": false,
+          "first": "accurate",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.3972,
+            "gpt-5.6-terra": -0.1729
+          },
+          "second": "organized"
+        },
+        {
+          "agrees": false,
+          "first": "accurate",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.353,
+            "gpt-5.6-terra": 0.3196
+          },
+          "second": "comprehensible"
+        },
+        {
+          "agrees": false,
+          "first": "accurate",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.3358,
+            "gpt-5.6-terra": 0.2531
+          },
+          "second": "succinct"
+        },
+        {
+          "agrees": false,
+          "first": "accurate",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.3972,
+            "gpt-5.6-terra": 0.1842
+          },
+          "second": "synthesized"
+        },
+        {
+          "agrees": false,
+          "first": "accurate",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.1903,
+            "gpt-5.6-terra": 0.3024
+          },
+          "second": "stigmatizing"
+        },
+        {
+          "agrees": false,
+          "first": "thorough",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.3453,
+            "gpt-5.6-terra": 0.6623
+          },
+          "second": "useful"
+        },
+        {
+          "agrees": false,
+          "first": "thorough",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.3453,
+            "gpt-5.6-terra": 0.3444
+          },
+          "second": "organized"
+        },
+        {
+          "agrees": false,
+          "first": "thorough",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.259,
+            "gpt-5.6-terra": 0.204
+          },
+          "second": "comprehensible"
+        },
+        {
+          "agrees": false,
+          "first": "thorough",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": -0.0066,
+            "gpt-5.6-terra": -0.1975
+          },
+          "second": "succinct"
+        },
+        {
+          "agrees": false,
+          "first": "thorough",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.3453,
+            "gpt-5.6-terra": 0.568
+          },
+          "second": "synthesized"
+        },
+        {
+          "agrees": false,
+          "first": "thorough",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.1516,
+            "gpt-5.6-terra": 0.3658
+          },
+          "second": "stigmatizing"
+        },
+        {
+          "agrees": false,
+          "first": "useful",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 1.0,
+            "gpt-5.6-terra": 0.3892
+          },
+          "second": "organized"
+        },
+        {
+          "agrees": false,
+          "first": "useful",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": -0.0556,
+            "gpt-5.6-terra": 0.3724
+          },
+          "second": "comprehensible"
+        },
+        {
+          "agrees": false,
+          "first": "useful",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.3446,
+            "gpt-5.6-terra": 0.1427
+          },
+          "second": "succinct"
+        },
+        {
+          "agrees": false,
+          "first": "useful",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 1.0,
+            "gpt-5.6-terra": 0.4067
+          },
+          "second": "synthesized"
+        },
+        {
+          "agrees": false,
+          "first": "useful",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.3469,
+            "gpt-5.6-terra": 0.4562
+          },
+          "second": "stigmatizing"
+        },
+        {
+          "agrees": false,
+          "first": "organized",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": -0.0556,
+            "gpt-5.6-terra": 0.345
+          },
+          "second": "comprehensible"
+        },
+        {
+          "agrees": false,
+          "first": "organized",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.3446,
+            "gpt-5.6-terra": -0.2589
+          },
+          "second": "succinct"
+        },
+        {
+          "agrees": false,
+          "first": "organized",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 1.0,
+            "gpt-5.6-terra": 0.3988
+          },
+          "second": "synthesized"
+        },
+        {
+          "agrees": false,
+          "first": "organized",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.3469,
+            "gpt-5.6-terra": 0.3904
+          },
+          "second": "stigmatizing"
+        },
+        {
+          "agrees": false,
+          "first": "comprehensible",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.0,
+            "gpt-5.6-terra": 0.4487
+          },
+          "second": "succinct"
+        },
+        {
+          "agrees": false,
+          "first": "comprehensible",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": -0.0556,
+            "gpt-5.6-terra": -0.1657
+          },
+          "second": "synthesized"
+        },
+        {
+          "agrees": false,
+          "first": "comprehensible",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": -0.3252,
+            "gpt-5.6-terra": 0.3128
+          },
+          "second": "stigmatizing"
+        },
+        {
+          "agrees": false,
+          "first": "succinct",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.3446,
+            "gpt-5.6-terra": -0.49
+          },
+          "second": "synthesized"
+        },
+        {
+          "agrees": false,
+          "first": "succinct",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.046,
+            "gpt-5.6-terra": -0.0638
+          },
+          "second": "stigmatizing"
+        },
+        {
+          "agrees": false,
+          "first": "synthesized",
+          "n_systems": 19,
+          "rho_by_judge": {
+            "gemini-3.1-pro-preview": 0.3469,
+            "gpt-5.6-terra": -0.1011
+          },
+          "second": "stigmatizing"
+        }
+      ],
+      "track": "pdsqi-soap",
+      "track_label": "PDSQI-9 · the same notes, rated for quality",
+      "undominated": [
+        "gemma4",
         "glm-5.2",
         "google_gemini-3.1-pro-preview",
         "google_gemini-3.7-flash",
         "gpt-5.6-luna",
         "gpt-5.6-sol",
         "gpt-5.6-terra",
-        "gpt-oss-120b",
-        "kimi-k3",
-        "mistral-medium-3.5",
-        "qwen3.5-122b",
+        "llama-3.1-70b (TN-Eval, 2025)",
+        "mistral-large-v2 (TN-Eval, 2025)",
         "qwen3.5-int4",
         "qwen3.8-27b"
       ]
@@ -296,20 +866,27 @@
       "dominance": [
         {
           "beats": [
+            "deepseek-v4-flash",
+            "deepseek-v4-flash-thinking",
+            "gemma4",
             "glm-5",
-            "gpt-oss-120b",
-            "qwen3.8-27b",
-            "therapist-written (TN-Eval)"
-          ],
-          "system": "google_gemini-3.1-pro-preview"
-        },
-        {
-          "beats": [
-            "glm-5",
+            "glm-5.2",
+            "llama-3.1-70b (TN-Eval, 2025)",
+            "mistral-large-v2 (TN-Eval, 2025)",
+            "mistral-medium-3.5",
             "qwen3.8-27b",
             "therapist-written (TN-Eval)"
           ],
           "system": "google_gemini-3.7-flash"
+        },
+        {
+          "beats": [
+            "glm-5",
+            "glm-5.2",
+            "qwen3.8-27b",
+            "therapist-written (TN-Eval)"
+          ],
+          "system": "google_gemini-3.1-pro-preview"
         },
         {
           "beats": [
@@ -318,14 +895,6 @@
             "therapist-written (TN-Eval)"
           ],
           "system": "gpt-5.6-terra"
-        },
-        {
-          "beats": [
-            "gpt-oss-120b",
-            "qwen3.5-122b",
-            "therapist-written (TN-Eval)"
-          ],
-          "system": "kimi-k3"
         },
         {
           "beats": [
@@ -369,6 +938,12 @@
           "beats": [
             "therapist-written (TN-Eval)"
           ],
+          "system": "kimi-k3"
+        },
+        {
+          "beats": [
+            "therapist-written (TN-Eval)"
+          ],
           "system": "mistral-large-v2 (TN-Eval, 2025)"
         },
         {
@@ -407,20 +982,24 @@
           "measure": "completeness",
           "moved": 13,
           "n_systems": 19,
+          "rankable": true,
           "rho": 0.8947,
-          "stable": 6
+          "stable": 6,
+          "tied": 2
         },
         {
           "furthest": {
-            "rank_a": 6,
-            "rank_b": 14,
-            "system": "gpt-5.6-luna"
+            "rank_a": 12,
+            "rank_b": 5,
+            "system": "mistral-large-v2 (TN-Eval, 2025)"
           },
           "measure": "conciseness",
-          "moved": 11,
+          "moved": 10,
           "n_systems": 19,
-          "rho": 0.9053,
-          "stable": 8
+          "rankable": true,
+          "rho": 0.8877,
+          "stable": 9,
+          "tied": 2
         },
         {
           "furthest": {
@@ -431,21 +1010,23 @@
           "measure": "faithfulness",
           "moved": 15,
           "n_systems": 19,
+          "rankable": true,
           "rho": 0.7333,
-          "stable": 4
+          "stable": 4,
+          "tied": 2
         }
       ],
       "n_systems": 19,
       "ranking_measure": "completeness",
-      "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on conciseness (+0.905) and place 11 of 19 systems differently on it anyway. They agree least on faithfulness (+0.733, 15 of 19 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. 14 system(s) beat at least one other on every measure under both judges, which needs no weighting to be true: `google_gemini-3.1-pro-preview` beats 4. 12 of 19 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner. Ordering by completeness says little about conciseness (`gemini-3.1-pro-preview` -0.38, `gpt-5.6-terra` -0.33). Ordering by completeness says different things to the two judges about faithfulness (`gemini-3.1-pro-preview` +0.56, `gpt-5.6-terra` +0.04). The two judges disagree about whether those columns are related at all, so neither reading is this benchmark's answer.",
+      "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on completeness (+0.895) and place 13 of 19 systems differently on it anyway. They agree least on faithfulness (+0.733, 15 of 19 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. 14 system(s) beat at least one other on every measure under both judges, which needs no weighting to be true: `google_gemini-3.7-flash` beats 10. 8 of 19 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner. Ordering by completeness says little about conciseness (`gemini-3.1-pro-preview` -0.02, `gpt-5.6-terra` +0.05). Ordering by completeness says different things to the two judges about faithfulness (`gemini-3.1-pro-preview` +0.56, `gpt-5.6-terra` +0.04). The two judges disagree about whether those columns are related at all, so neither reading is this benchmark's answer.",
       "tensions": [
         {
           "agrees": false,
           "first": "completeness",
           "n_systems": 19,
           "rho_by_judge": {
-            "gemini-3.1-pro-preview": -0.3754,
-            "gpt-5.6-terra": -0.3263
+            "gemini-3.1-pro-preview": -0.0246,
+            "gpt-5.6-terra": 0.0526
           },
           "second": "conciseness"
         },
@@ -464,8 +1045,8 @@
           "first": "conciseness",
           "n_systems": 19,
           "rho_by_judge": {
-            "gemini-3.1-pro-preview": 0.0807,
-            "gpt-5.6-terra": -0.0211
+            "gemini-3.1-pro-preview": -0.1947,
+            "gpt-5.6-terra": -0.3947
           },
           "second": "faithfulness"
         }
@@ -473,17 +1054,13 @@
       "track": "tneval-soap",
       "track_label": "TN-Eval SOAP · AnnoMI conversations",
       "undominated": [
-        "deepseek-v4-flash",
-        "deepseek-v4-flash-thinking",
-        "gemma4",
-        "glm-5.2",
         "google_gemini-3.1-pro-preview",
         "google_gemini-3.7-flash",
         "gpt-5.6-sol",
         "gpt-5.6-terra",
+        "gpt-oss-120b",
         "kimi-k3",
-        "mistral-large-v2 (TN-Eval, 2025)",
-        "mistral-medium-3.5",
+        "qwen3.5-122b",
         "qwen3.5-int4"
       ]
     }
@@ -851,12 +1428,12 @@
             "statistic": "Cohen's kappa"
           },
           {
-            "alpha": 0.056705478280929755,
-            "alpha_humans": 0.12758026424718016,
+            "alpha": 0.05674403080822199,
+            "alpha_humans": 0.12625947874040733,
             "alpha_level": "ordinal",
-            "humans": 0.12764563728451947,
-            "judge": 0.3268523494183857,
-            "n": 594,
+            "humans": 0.12641279286972015,
+            "judge": 0.32718397176593234,
+            "n": 596,
             "name": "likert_completeness",
             "statistic": "Spearman rho"
           },
@@ -871,12 +1448,12 @@
             "statistic": "Spearman rho"
           },
           {
-            "alpha": 0.026836221135689342,
-            "alpha_humans": 0.18302139102822457,
+            "alpha": 0.03140733341103075,
+            "alpha_humans": 0.17848828230314173,
             "alpha_level": "ordinal",
-            "humans": 0.18704052871253657,
-            "judge": 0.06059279593780228,
-            "n": 582,
+            "humans": 0.18198425956376676,
+            "judge": 0.06059703237929171,
+            "n": 590,
             "name": "likert_faithfulness",
             "statistic": "Spearman rho"
           }
@@ -1187,14 +1764,23 @@
     }
   ],
   "preference": {
+    "difference": {
+      "detected": false,
+      "estimate": 0.0092,
+      "high": 0.0581,
+      "judge_a": "gemini-3.1-pro-preview",
+      "judge_b": "gpt-5.6-terra",
+      "low": -0.0389,
+      "summary": "The two leans are not distinguishable from each other: `gpt-5.6-terra` minus `gemini-3.1-pro-preview` is +0.009 completeness [-0.039 to +0.058]. Neither judge is the more partial one on this evidence, and the larger of the two numbers above should not be read as though it were."
+    },
     "effects": [
       {
         "detected": false,
         "estimate": 0.0176,
         "family": "google",
-        "high": 0.0476,
+        "high": 0.0471,
         "judge": "gemini-3.1-pro-preview",
-        "low": -0.0111,
+        "low": -0.0102,
         "n_neutral": 12,
         "n_own": 3,
         "n_sessions": 25,
@@ -1212,15 +1798,15 @@
           "qwen3.8-27b",
           "therapist"
         ],
-        "summary": "`gemini-3.1-pro-preview` shows no detectable preference for Google models: +0.018 completeness [-0.011 to +0.048], an interval that includes zero. Not detected is not the same as absent — 3 system(s) against 12 neutral one(s) over 25 conversations is what this run could see."
+        "summary": "`gemini-3.1-pro-preview` shows no detectable preference for Google models: +0.018 completeness [-0.010 to +0.047], an interval that includes zero. Not detected is not the same as absent — 3 system(s) against 12 neutral one(s) over 25 conversations is what this run could see."
       },
       {
         "detected": false,
         "estimate": 0.0268,
         "family": "openai",
-        "high": 0.0586,
+        "high": 0.0584,
         "judge": "gpt-5.6-terra",
-        "low": -0.0021,
+        "low": -0.0044,
         "n_neutral": 12,
         "n_own": 4,
         "n_sessions": 25,
@@ -1238,7 +1824,7 @@
           "qwen3.8-27b",
           "therapist"
         ],
-        "summary": "`gpt-5.6-terra` shows no detectable preference for OpenAI models: +0.027 completeness [-0.002 to +0.059], an interval that includes zero. Not detected is not the same as absent — 4 system(s) against 12 neutral one(s) over 25 conversations is what this run could see."
+        "summary": "`gpt-5.6-terra` shows no detectable preference for OpenAI models: +0.027 completeness [-0.004 to +0.058], an interval that includes zero. Not detected is not the same as absent — 4 system(s) against 12 neutral one(s) over 25 conversations is what this run could see."
       }
     ],
     "judge_a": "gemini-3.1-pro-preview",
@@ -2884,10 +3470,10 @@
     }
   },
   "selection": {
-    "default": "tneval-soap-gemini-3.1-pro-preview-0.3.0-102129",
+    "default": "tneval-soap-gemini-3.1-pro-preview-0.4.0-102129",
     "tracks": [
       {
-        "default": "tneval-soap-gemini-3.1-pro-preview-0.3.0-102129",
+        "default": "tneval-soap-gemini-3.1-pro-preview-0.4.0-102129",
         "judges": [
           {
             "judge_model": "gemini-3.1-pro-preview",
@@ -2895,7 +3481,7 @@
             "settings_differ": false,
             "settings_label": "",
             "stale_harness": false,
-            "table": "tneval-soap-gemini-3.1-pro-preview-0.3.0-102129"
+            "table": "tneval-soap-gemini-3.1-pro-preview-0.4.0-102129"
           },
           {
             "judge_model": "gpt-5.6-terra",
@@ -2903,7 +3489,7 @@
             "settings_differ": false,
             "settings_label": "",
             "stale_harness": false,
-            "table": "tneval-soap-gpt-5.6-terra-0.3.0-acf643"
+            "table": "tneval-soap-gpt-5.6-terra-0.4.0-acf643"
           },
           {
             "judge_model": "gemini-2.5-pro",
@@ -2926,7 +3512,7 @@
         "track": "tneval-soap"
       },
       {
-        "default": "icare-gemini-3.1-pro-preview-0.3.0-102129",
+        "default": "icare-gemini-3.1-pro-preview-0.4.0-102129",
         "judges": [
           {
             "judge_model": "gemini-3.1-pro-preview",
@@ -2934,7 +3520,7 @@
             "settings_differ": false,
             "settings_label": "",
             "stale_harness": false,
-            "table": "icare-gemini-3.1-pro-preview-0.3.0-102129"
+            "table": "icare-gemini-3.1-pro-preview-0.4.0-102129"
           },
           {
             "judge_model": "gpt-5.6-terra",
@@ -2942,14 +3528,14 @@
             "settings_differ": false,
             "settings_label": "",
             "stale_harness": false,
-            "table": "icare-gpt-5.6-terra-0.3.0-acf643"
+            "table": "icare-gpt-5.6-terra-0.4.0-acf643"
           }
         ],
         "label": "iCARE / iHOPE",
         "track": "icare"
       },
       {
-        "default": "pdsqi-soap-gemini-3.1-pro-preview-0.3.0-102129",
+        "default": "pdsqi-soap-gemini-3.1-pro-preview-0.4.0-102129",
         "judges": [
           {
             "judge_model": "gemini-3.1-pro-preview",
@@ -2957,7 +3543,15 @@
             "settings_differ": false,
             "settings_label": "",
             "stale_harness": false,
-            "table": "pdsqi-soap-gemini-3.1-pro-preview-0.3.0-102129"
+            "table": "pdsqi-soap-gemini-3.1-pro-preview-0.4.0-102129"
+          },
+          {
+            "judge_model": "gpt-5.6-terra",
+            "label": "gpt-5.6-terra",
+            "settings_differ": false,
+            "settings_label": "",
+            "stale_harness": false,
+            "table": "pdsqi-soap-gpt-5.6-terra-0.4.0-acf643"
           }
         ],
         "label": "PDSQI-9 quality",
@@ -2976,7 +3570,7 @@
   },
   "superseded": [
     {
-      "current_harness_version": "0.2.0",
+      "current_harness_version": "0.4.0",
       "harness_version": "0.1.0",
       "judge_model": null,
       "judge_prompt_version": null,
@@ -2989,7 +3583,7 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.3.0",
+      "current_harness_version": "0.4.0",
       "harness_version": "0.1.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "icare-trace-v1",
@@ -3003,7 +3597,20 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.3.0",
+      "current_harness_version": "0.4.0",
+      "harness_version": "0.2.0",
+      "judge_model": null,
+      "judge_prompt_version": null,
+      "prompt_version": "icare-zeroshot-v1",
+      "reasons": [
+        "harness"
+      ],
+      "rows": 16,
+      "scored_at": "",
+      "track": "icare"
+    },
+    {
+      "current_harness_version": "0.4.0",
       "harness_version": "0.2.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "icare-trace-v1",
@@ -3017,7 +3624,7 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.3.0",
+      "current_harness_version": "0.4.0",
       "harness_version": "0.2.0",
       "judge_model": "gpt-5.6-terra",
       "judge_prompt_version": "icare-trace-v1",
@@ -3031,7 +3638,7 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.3.0",
+      "current_harness_version": "0.4.0",
       "harness_version": "0.2.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "icare-trace-v1",
@@ -3044,7 +3651,7 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.3.0",
+      "current_harness_version": "0.4.0",
       "harness_version": "0.2.0",
       "judge_model": "gpt-5.6-terra",
       "judge_prompt_version": "icare-trace-v1",
@@ -3057,7 +3664,59 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.2.0",
+      "current_harness_version": "0.4.0",
+      "harness_version": "0.3.0",
+      "judge_model": "gemini-3.1-pro-preview",
+      "judge_prompt_version": "icare-trace-v1",
+      "prompt_version": "icare-zeroshot-v1",
+      "reasons": [
+        "harness"
+      ],
+      "rows": 16,
+      "scored_at": "2026-08-27T11:14:37Z",
+      "track": "icare"
+    },
+    {
+      "current_harness_version": "0.4.0",
+      "harness_version": "0.3.0",
+      "judge_model": "gpt-5.6-terra",
+      "judge_prompt_version": "icare-trace-v1",
+      "prompt_version": "icare-zeroshot-v1",
+      "reasons": [
+        "harness"
+      ],
+      "rows": 16,
+      "scored_at": "2026-08-27T11:15:17Z",
+      "track": "icare"
+    },
+    {
+      "current_harness_version": "0.4.0",
+      "harness_version": "0.3.0",
+      "judge_model": "gemini-3.1-pro-preview",
+      "judge_prompt_version": "pdsqi9-note-v1",
+      "prompt_version": "tneval-soap-v1",
+      "reasons": [
+        "harness"
+      ],
+      "rows": 19,
+      "scored_at": "2026-08-27T13:07:08Z",
+      "track": "pdsqi-soap"
+    },
+    {
+      "current_harness_version": "0.4.0",
+      "harness_version": "0.3.0",
+      "judge_model": "gpt-5.6-terra",
+      "judge_prompt_version": "pdsqi9-note-v1",
+      "prompt_version": "tneval-soap-v1",
+      "reasons": [
+        "harness"
+      ],
+      "rows": 19,
+      "scored_at": "2026-08-27T14:21:09Z",
+      "track": "pdsqi-soap"
+    },
+    {
+      "current_harness_version": "0.4.0",
       "harness_version": "0.1.0",
       "judge_model": null,
       "judge_prompt_version": null,
@@ -3084,7 +3743,7 @@
       "track": "tneval-soap"
     },
     {
-      "current_harness_version": "0.3.0",
+      "current_harness_version": "0.4.0",
       "harness_version": "0.1.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "tneval-rubric-v1",
@@ -3098,7 +3757,7 @@
       "track": "tneval-soap"
     },
     {
-      "current_harness_version": "0.3.0",
+      "current_harness_version": "0.4.0",
       "harness_version": "0.1.0",
       "judge_model": "gpt-5.6-terra",
       "judge_prompt_version": "tneval-rubric-v1",
@@ -3112,7 +3771,20 @@
       "track": "tneval-soap"
     },
     {
-      "current_harness_version": "0.3.0",
+      "current_harness_version": "0.4.0",
+      "harness_version": "0.2.0",
+      "judge_model": null,
+      "judge_prompt_version": null,
+      "prompt_version": "tneval-soap-v1",
+      "reasons": [
+        "harness"
+      ],
+      "rows": 16,
+      "scored_at": "",
+      "track": "tneval-soap"
+    },
+    {
+      "current_harness_version": "0.4.0",
       "harness_version": "0.2.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "tneval-rubric-v1",
@@ -3126,7 +3798,7 @@
       "track": "tneval-soap"
     },
     {
-      "current_harness_version": "0.3.0",
+      "current_harness_version": "0.4.0",
       "harness_version": "0.2.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "tneval-rubric-v1",
@@ -3139,7 +3811,7 @@
       "track": "tneval-soap"
     },
     {
-      "current_harness_version": "0.3.0",
+      "current_harness_version": "0.4.0",
       "harness_version": "0.2.0",
       "judge_model": "gpt-5.6-terra",
       "judge_prompt_version": "tneval-rubric-v1",
@@ -3149,6 +3821,32 @@
       ],
       "rows": 19,
       "scored_at": "2026-08-26T12:36:18Z",
+      "track": "tneval-soap"
+    },
+    {
+      "current_harness_version": "0.4.0",
+      "harness_version": "0.3.0",
+      "judge_model": "gemini-3.1-pro-preview",
+      "judge_prompt_version": "tneval-rubric-v1",
+      "prompt_version": "tneval-soap-v1",
+      "reasons": [
+        "harness"
+      ],
+      "rows": 19,
+      "scored_at": "2026-08-27T13:53:25Z",
+      "track": "tneval-soap"
+    },
+    {
+      "current_harness_version": "0.4.0",
+      "harness_version": "0.3.0",
+      "judge_model": "gpt-5.6-terra",
+      "judge_prompt_version": "tneval-rubric-v1",
+      "prompt_version": "tneval-soap-v1",
+      "reasons": [
+        "harness"
+      ],
+      "rows": 19,
+      "scored_at": "2026-08-27T10:06:56Z",
       "track": "tneval-soap"
     }
   ],
@@ -4652,7 +5350,7 @@
       "has_effort": true,
       "has_thinking": true,
       "has_words": true,
-      "id": "tneval-soap-gemini-3.1-pro-preview-0.3.0-102129",
+      "id": "tneval-soap-gemini-3.1-pro-preview-0.4.0-102129",
       "ranking_measure": "completeness",
       "rows": [
         {
@@ -4680,7 +5378,7 @@
             },
             "subjective": {
               "completeness": 0.6867,
-              "conciseness": 0.8771,
+              "conciseness": 0.8788,
               "faithfulness": 5.0,
               "likert_completeness": 4.98,
               "likert_conciseness": 4.68
@@ -4716,7 +5414,7 @@
           "generated_at": "",
           "headline": {
             "completeness": 0.5459,
-            "conciseness": 0.8855,
+            "conciseness": 0.8859,
             "faithfulness": 4.9844
           },
           "judges_own_family": "",
@@ -4732,7 +5430,7 @@
           "note_words": 518,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:22Z",
+          "scored_at": "2026-08-27T15:01:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -4758,21 +5456,21 @@
             },
             "objective": {
               "completeness": 0.5714,
-              "conciseness": 0.86,
+              "conciseness": 0.8613,
               "faithfulness": 4.96,
               "likert_completeness": 3.2,
               "likert_conciseness": 4.76
             },
             "plan": {
               "completeness": 0.56,
-              "conciseness": 0.6851,
+              "conciseness": 0.8027,
               "faithfulness": 4.82,
               "likert_completeness": 4.68,
               "likert_conciseness": 5.0
             },
             "subjective": {
               "completeness": 0.61,
-              "conciseness": 0.8687,
+              "conciseness": 0.8698,
               "faithfulness": 4.96,
               "likert_completeness": 4.54,
               "likert_conciseness": 5.0
@@ -4808,7 +5506,7 @@
           "generated_at": "",
           "headline": {
             "completeness": 0.5355,
-            "conciseness": 0.8476,
+            "conciseness": 0.8782,
             "faithfulness": 4.9235
           },
           "judges_own_family": "",
@@ -4824,7 +5522,7 @@
           "note_words": 273,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:22Z",
+          "scored_at": "2026-08-27T15:01:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -4857,14 +5555,14 @@
             },
             "plan": {
               "completeness": 0.49,
-              "conciseness": 0.5043,
+              "conciseness": 0.8575,
               "faithfulness": 4.44,
               "likert_completeness": 4.4,
               "likert_conciseness": 4.98
             },
             "subjective": {
               "completeness": 0.6633,
-              "conciseness": 0.8479,
+              "conciseness": 0.8472,
               "faithfulness": 4.94,
               "likert_completeness": 4.7,
               "likert_conciseness": 4.94
@@ -4900,7 +5598,7 @@
           "generated_at": "",
           "headline": {
             "completeness": 0.5262,
-            "conciseness": 0.8142,
+            "conciseness": 0.9043,
             "faithfulness": 4.7556
           },
           "judges_own_family": "",
@@ -4916,7 +5614,7 @@
           "note_words": 443,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:22Z",
+          "scored_at": "2026-08-27T15:01:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -4942,21 +5640,21 @@
             },
             "objective": {
               "completeness": 0.5592,
-              "conciseness": 0.8901,
+              "conciseness": 0.8942,
               "faithfulness": 4.96,
               "likert_completeness": 3.1,
               "likert_conciseness": 4.98
             },
             "plan": {
               "completeness": 0.475,
-              "conciseness": 0.735,
+              "conciseness": 0.7977,
               "faithfulness": 4.94,
               "likert_completeness": 4.36,
               "likert_conciseness": 5.0
             },
             "subjective": {
               "completeness": 0.6458,
-              "conciseness": 0.888,
+              "conciseness": 0.8926,
               "faithfulness": 5.0,
               "likert_completeness": 4.7,
               "likert_conciseness": 5.0
@@ -4992,7 +5690,7 @@
           "generated_at": "",
           "headline": {
             "completeness": 0.5251,
-            "conciseness": 0.8779,
+            "conciseness": 0.8932,
             "faithfulness": 4.9716
           },
           "judges_own_family": "google",
@@ -5008,7 +5706,7 @@
           "note_words": 350,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:22Z",
+          "scored_at": "2026-08-27T15:01:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5041,14 +5739,14 @@
             },
             "plan": {
               "completeness": 0.515,
-              "conciseness": 0.6969,
+              "conciseness": 0.926,
               "faithfulness": 4.96,
               "likert_completeness": 4.7,
               "likert_conciseness": 5.0
             },
             "subjective": {
               "completeness": 0.6033,
-              "conciseness": 0.8694,
+              "conciseness": 0.8728,
               "faithfulness": 5.0,
               "likert_completeness": 4.5,
               "likert_conciseness": 5.0
@@ -5084,7 +5782,7 @@
           "generated_at": "",
           "headline": {
             "completeness": 0.5245,
-            "conciseness": 0.8719,
+            "conciseness": 0.9312,
             "faithfulness": 4.9796
           },
           "judges_own_family": "google",
@@ -5100,7 +5798,7 @@
           "note_words": 266,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:22Z",
+          "scored_at": "2026-08-27T15:01:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5133,14 +5831,14 @@
             },
             "plan": {
               "completeness": 0.475,
-              "conciseness": 0.6908,
+              "conciseness": 0.6988,
               "faithfulness": 4.86,
               "likert_completeness": 4.44,
               "likert_conciseness": 4.94
             },
             "subjective": {
               "completeness": 0.63,
-              "conciseness": 0.8554,
+              "conciseness": 0.8609,
               "faithfulness": 4.98,
               "likert_completeness": 4.64,
               "likert_conciseness": 4.96
@@ -5176,7 +5874,7 @@
           "generated_at": "",
           "headline": {
             "completeness": 0.5018,
-            "conciseness": 0.8599,
+            "conciseness": 0.8634,
             "faithfulness": 4.9592
           },
           "judges_own_family": "",
@@ -5192,7 +5890,7 @@
           "note_words": 358,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:22Z",
+          "scored_at": "2026-08-27T15:01:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5225,14 +5923,14 @@
             },
             "plan": {
               "completeness": 0.485,
-              "conciseness": 0.6779,
+              "conciseness": 0.6874,
               "faithfulness": 4.92,
               "likert_completeness": 4.28,
               "likert_conciseness": 4.88
             },
             "subjective": {
               "completeness": 0.6233,
-              "conciseness": 0.8775,
+              "conciseness": 0.8765,
               "faithfulness": 5.0,
               "likert_completeness": 4.58,
               "likert_conciseness": 5.0
@@ -5268,7 +5966,7 @@
           "generated_at": "",
           "headline": {
             "completeness": 0.4987,
-            "conciseness": 0.875,
+            "conciseness": 0.8772,
             "faithfulness": 4.9745
           },
           "judges_own_family": "",
@@ -5284,7 +5982,7 @@
           "note_words": 365,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:22Z",
+          "scored_at": "2026-08-27T15:01:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5376,7 +6074,7 @@
           "note_words": 372,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:22Z",
+          "scored_at": "2026-08-27T15:01:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5409,7 +6107,7 @@
             },
             "plan": {
               "completeness": 0.46,
-              "conciseness": 0.8287,
+              "conciseness": 0.8387,
               "faithfulness": 5.0,
               "likert_completeness": 4.58,
               "likert_conciseness": 4.92
@@ -5468,7 +6166,7 @@
           "note_words": 430,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:22Z",
+          "scored_at": "2026-08-27T15:01:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5487,7 +6185,7 @@
           "by_section": {
             "assessment": {
               "completeness": 0.3423,
-              "conciseness": 0.9171,
+              "conciseness": 0.929,
               "faithfulness": 4.7857,
               "likert_completeness": 3.881,
               "likert_conciseness": 4.9524
@@ -5501,14 +6199,14 @@
             },
             "plan": {
               "completeness": 0.5893,
-              "conciseness": 0.5531,
+              "conciseness": 0.8471,
               "faithfulness": 2.9762,
               "likert_completeness": 4.5238,
               "likert_conciseness": 3.1667
             },
             "subjective": {
               "completeness": 0.6151,
-              "conciseness": 0.854,
+              "conciseness": 0.852,
               "faithfulness": 4.6905,
               "likert_completeness": 4.5238,
               "likert_conciseness": 4.881
@@ -5546,7 +6244,7 @@
           "generated_at": "",
           "headline": {
             "completeness": 0.4821,
-            "conciseness": 0.827,
+            "conciseness": 0.9049,
             "faithfulness": 4.2866
           },
           "judges_own_family": "",
@@ -5562,7 +6260,7 @@
           "note_words": 438,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:22Z",
+          "scored_at": "2026-08-27T15:01:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5595,14 +6293,14 @@
             },
             "plan": {
               "completeness": 0.45,
-              "conciseness": 0.8402,
+              "conciseness": 0.8602,
               "faithfulness": 4.68,
               "likert_completeness": 4.18,
               "likert_conciseness": 4.78
             },
             "subjective": {
               "completeness": 0.6054,
-              "conciseness": 0.855,
+              "conciseness": 0.8539,
               "faithfulness": 4.96,
               "likert_completeness": 4.56,
               "likert_conciseness": 4.98
@@ -5638,7 +6336,7 @@
           "generated_at": "",
           "headline": {
             "completeness": 0.4766,
-            "conciseness": 0.895,
+            "conciseness": 0.8998,
             "faithfulness": 4.8367
           },
           "judges_own_family": "",
@@ -5654,7 +6352,7 @@
           "note_words": 379,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:22Z",
+          "scored_at": "2026-08-27T15:01:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5746,7 +6444,7 @@
           "note_words": 374,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:22Z",
+          "scored_at": "2026-08-27T15:01:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5779,14 +6477,14 @@
             },
             "plan": {
               "completeness": 0.415,
-              "conciseness": 0.6612,
+              "conciseness": 0.6575,
               "faithfulness": 4.8,
               "likert_completeness": 4.12,
               "likert_conciseness": 4.96
             },
             "subjective": {
               "completeness": 0.6389,
-              "conciseness": 0.951,
+              "conciseness": 0.954,
               "faithfulness": 5.0,
               "likert_completeness": 4.54,
               "likert_conciseness": 5.0
@@ -5822,7 +6520,7 @@
           "generated_at": "",
           "headline": {
             "completeness": 0.475,
-            "conciseness": 0.8976,
+            "conciseness": 0.8974,
             "faithfulness": 4.9468
           },
           "judges_own_family": "google",
@@ -5838,7 +6536,7 @@
           "note_words": 296,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:22Z",
+          "scored_at": "2026-08-27T15:01:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5930,7 +6628,7 @@
           "note_words": 340,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:22Z",
+          "scored_at": "2026-08-27T15:01:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5963,7 +6661,7 @@
             },
             "plan": {
               "completeness": 0.52,
-              "conciseness": 0.8953,
+              "conciseness": 0.9227,
               "faithfulness": 4.86,
               "likert_completeness": 4.52,
               "likert_conciseness": 4.98
@@ -6006,7 +6704,7 @@
           "generated_at": "",
           "headline": {
             "completeness": 0.4557,
-            "conciseness": 0.9013,
+            "conciseness": 0.9083,
             "faithfulness": 4.8878
           },
           "judges_own_family": "",
@@ -6022,7 +6720,7 @@
           "note_words": 311,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:22Z",
+          "scored_at": "2026-08-27T15:01:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6055,7 +6753,7 @@
             },
             "plan": {
               "completeness": 0.41,
-              "conciseness": 0.8274,
+              "conciseness": 0.8454,
               "faithfulness": 4.8,
               "likert_completeness": 3.92,
               "likert_conciseness": 4.84
@@ -6098,7 +6796,7 @@
           "generated_at": "",
           "headline": {
             "completeness": 0.4457,
-            "conciseness": 0.9147,
+            "conciseness": 0.9193,
             "faithfulness": 4.8776
           },
           "judges_own_family": "",
@@ -6114,7 +6812,7 @@
           "note_words": 328,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:22Z",
+          "scored_at": "2026-08-27T15:01:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6206,7 +6904,7 @@
           "note_words": null,
           "provider": "tneval",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:22Z",
+          "scored_at": "2026-08-27T15:01:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6239,7 +6937,7 @@
             },
             "plan": {
               "completeness": 0.36,
-              "conciseness": 0.753,
+              "conciseness": 0.752,
               "faithfulness": 4.12,
               "likert_completeness": 3.18,
               "likert_conciseness": 4.66
@@ -6282,7 +6980,7 @@
           "generated_at": "",
           "headline": {
             "completeness": 0.3637,
-            "conciseness": 0.9006,
+            "conciseness": 0.9003,
             "faithfulness": 4.455
           },
           "judges_own_family": "",
@@ -6298,7 +6996,7 @@
           "note_words": null,
           "provider": "tneval",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:22Z",
+          "scored_at": "2026-08-27T15:01:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6390,7 +7088,7 @@
           "note_words": null,
           "provider": "tneval",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:22Z",
+          "scored_at": "2026-08-27T15:01:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6412,7 +7110,7 @@
       "title": "TN-Eval SOAP · AnnoMI conversations",
       "track": "tneval-soap",
       "versions": {
-        "harness_version": "0.3.0",
+        "harness_version": "0.4.0",
         "judge_model": "gemini-3.1-pro-preview",
         "judge_prompt_version": "tneval-rubric-v1",
         "judge_settings": {
@@ -6505,7 +7203,7 @@
       "has_effort": true,
       "has_thinking": true,
       "has_words": true,
-      "id": "tneval-soap-gpt-5.6-terra-0.3.0-acf643",
+      "id": "tneval-soap-gpt-5.6-terra-0.4.0-acf643",
       "ranking_measure": "completeness",
       "rows": [
         {
@@ -6533,7 +7231,7 @@
             },
             "subjective": {
               "completeness": 0.69,
-              "conciseness": 0.9438,
+              "conciseness": 0.9435,
               "faithfulness": 4.86,
               "likert_completeness": 4.26,
               "likert_conciseness": 3.86
@@ -6569,7 +7267,7 @@
           "generated_at": "",
           "headline": {
             "completeness": 0.5136,
-            "conciseness": 0.8966,
+            "conciseness": 0.8965,
             "faithfulness": 4.325
           },
           "judges_own_family": "",
@@ -6585,7 +7283,7 @@
           "note_words": 518,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:56Z",
+          "scored_at": "2026-08-27T15:02:59Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6618,7 +7316,7 @@
             },
             "plan": {
               "completeness": 0.595,
-              "conciseness": 0.4966,
+              "conciseness": 0.8455,
               "faithfulness": 3.38,
               "likert_completeness": 3.64,
               "likert_conciseness": 4.18
@@ -6661,7 +7359,7 @@
           "generated_at": "",
           "headline": {
             "completeness": 0.5081,
-            "conciseness": 0.8346,
+            "conciseness": 0.9219,
             "faithfulness": 3.9
           },
           "judges_own_family": "",
@@ -6677,7 +7375,7 @@
           "note_words": 443,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:56Z",
+          "scored_at": "2026-08-27T15:02:59Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6703,21 +7401,21 @@
             },
             "objective": {
               "completeness": 0.364,
-              "conciseness": 0.8943,
+              "conciseness": 0.8983,
               "faithfulness": 4.6,
               "likert_completeness": 2.32,
               "likert_conciseness": 4.54
             },
             "plan": {
               "completeness": 0.495,
-              "conciseness": 0.7007,
+              "conciseness": 0.7653,
               "faithfulness": 4.26,
               "likert_completeness": 3.66,
               "likert_conciseness": 4.54
             },
             "subjective": {
               "completeness": 0.63,
-              "conciseness": 0.9564,
+              "conciseness": 0.9588,
               "faithfulness": 4.76,
               "likert_completeness": 3.9,
               "likert_conciseness": 4.56
@@ -6753,7 +7451,7 @@
           "generated_at": "",
           "headline": {
             "completeness": 0.5035,
-            "conciseness": 0.882,
+            "conciseness": 0.8998,
             "faithfulness": 4.485
           },
           "judges_own_family": "",
@@ -6769,7 +7467,7 @@
           "note_words": 350,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:56Z",
+          "scored_at": "2026-08-27T15:02:59Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6788,7 +7486,7 @@
           "by_section": {
             "assessment": {
               "completeness": 0.3512,
-              "conciseness": 0.8607,
+              "conciseness": 0.8726,
               "faithfulness": 3.7857,
               "likert_completeness": 2.6905,
               "likert_conciseness": 4.2619
@@ -6802,14 +7500,14 @@
             },
             "plan": {
               "completeness": 0.7202,
-              "conciseness": 0.5503,
+              "conciseness": 0.84,
               "faithfulness": 2.3095,
               "likert_completeness": 3.7381,
               "likert_conciseness": 2.1667
             },
             "subjective": {
               "completeness": 0.5992,
-              "conciseness": 0.9456,
+              "conciseness": 0.9443,
               "faithfulness": 4.381,
               "likert_completeness": 3.8571,
               "likert_conciseness": 4.4524
@@ -6847,7 +7545,7 @@
           "generated_at": "",
           "headline": {
             "completeness": 0.4938,
-            "conciseness": 0.8365,
+            "conciseness": 0.9115,
             "faithfulness": 3.3869
           },
           "judges_own_family": "openai",
@@ -6863,7 +7561,7 @@
           "note_words": 438,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:56Z",
+          "scored_at": "2026-08-27T15:02:59Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6889,21 +7587,21 @@
             },
             "objective": {
               "completeness": 0.38,
-              "conciseness": 0.8439,
+              "conciseness": 0.8452,
               "faithfulness": 4.54,
               "likert_completeness": 2.42,
               "likert_conciseness": 4.12
             },
             "plan": {
               "completeness": 0.53,
-              "conciseness": 0.6643,
+              "conciseness": 0.7907,
               "faithfulness": 3.92,
               "likert_completeness": 3.8,
               "likert_conciseness": 4.62
             },
             "subjective": {
               "completeness": 0.6,
-              "conciseness": 0.9395,
+              "conciseness": 0.9367,
               "faithfulness": 4.76,
               "likert_completeness": 3.66,
               "likert_conciseness": 4.62
@@ -6939,7 +7637,7 @@
           "generated_at": "",
           "headline": {
             "completeness": 0.49,
-            "conciseness": 0.8445,
+            "conciseness": 0.8757,
             "faithfulness": 4.37
           },
           "judges_own_family": "",
@@ -6955,7 +7653,7 @@
           "note_words": 273,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:56Z",
+          "scored_at": "2026-08-27T15:02:59Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6988,7 +7686,7 @@
             },
             "plan": {
               "completeness": 0.565,
-              "conciseness": 0.8175,
+              "conciseness": 0.8275,
               "faithfulness": 4.48,
               "likert_completeness": 3.78,
               "likert_conciseness": 4.12
@@ -7031,7 +7729,7 @@
           "generated_at": "",
           "headline": {
             "completeness": 0.4875,
-            "conciseness": 0.8916,
+            "conciseness": 0.8941,
             "faithfulness": 4.73
           },
           "judges_own_family": "openai",
@@ -7047,7 +7745,7 @@
           "note_words": 430,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:56Z",
+          "scored_at": "2026-08-27T15:02:59Z",
           "section_order": [
             "subjective",
             "objective",
@@ -7139,7 +7837,7 @@
           "note_words": 372,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:56Z",
+          "scored_at": "2026-08-27T15:02:59Z",
           "section_order": [
             "subjective",
             "objective",
@@ -7172,7 +7870,7 @@
             },
             "plan": {
               "completeness": 0.495,
-              "conciseness": 0.6819,
+              "conciseness": 0.9027,
               "faithfulness": 4.12,
               "likert_completeness": 3.84,
               "likert_conciseness": 4.9
@@ -7215,7 +7913,7 @@
           "generated_at": "",
           "headline": {
             "completeness": 0.4751,
-            "conciseness": 0.8894,
+            "conciseness": 0.9445,
             "faithfulness": 4.53
           },
           "judges_own_family": "",
@@ -7231,7 +7929,7 @@
           "note_words": 266,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:56Z",
+          "scored_at": "2026-08-27T15:02:59Z",
           "section_order": [
             "subjective",
             "objective",
@@ -7264,14 +7962,14 @@
             },
             "plan": {
               "completeness": 0.515,
-              "conciseness": 0.8058,
+              "conciseness": 0.8258,
               "faithfulness": 3.82,
               "likert_completeness": 3.46,
               "likert_conciseness": 3.76
             },
             "subjective": {
               "completeness": 0.59,
-              "conciseness": 0.9555,
+              "conciseness": 0.9573,
               "faithfulness": 4.82,
               "likert_completeness": 3.7,
               "likert_conciseness": 4.68
@@ -7307,7 +8005,7 @@
           "generated_at": "",
           "headline": {
             "completeness": 0.4729,
-            "conciseness": 0.9054,
+            "conciseness": 0.9109,
             "faithfulness": 4.09
           },
           "judges_own_family": "",
@@ -7323,7 +8021,7 @@
           "note_words": 379,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:56Z",
+          "scored_at": "2026-08-27T15:02:59Z",
           "section_order": [
             "subjective",
             "objective",
@@ -7356,7 +8054,7 @@
             },
             "plan": {
               "completeness": 0.43,
-              "conciseness": 0.6395,
+              "conciseness": 0.6475,
               "faithfulness": 4.1,
               "likert_completeness": 3.48,
               "likert_conciseness": 4.4
@@ -7399,7 +8097,7 @@
           "generated_at": "",
           "headline": {
             "completeness": 0.4592,
-            "conciseness": 0.8724,
+            "conciseness": 0.8744,
             "faithfulness": 4.47
           },
           "judges_own_family": "",
@@ -7415,7 +8113,7 @@
           "note_words": 358,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:56Z",
+          "scored_at": "2026-08-27T15:02:59Z",
           "section_order": [
             "subjective",
             "objective",
@@ -7448,7 +8146,7 @@
             },
             "plan": {
               "completeness": 0.455,
-              "conciseness": 0.6635,
+              "conciseness": 0.673,
               "faithfulness": 4.08,
               "likert_completeness": 3.52,
               "likert_conciseness": 4.34
@@ -7491,7 +8189,7 @@
           "generated_at": "",
           "headline": {
             "completeness": 0.4587,
-            "conciseness": 0.8864,
+            "conciseness": 0.8888,
             "faithfulness": 4.41
           },
           "judges_own_family": "",
@@ -7507,7 +8205,7 @@
           "note_words": 365,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:56Z",
+          "scored_at": "2026-08-27T15:02:59Z",
           "section_order": [
             "subjective",
             "objective",
@@ -7599,7 +8297,7 @@
           "note_words": 374,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:56Z",
+          "scored_at": "2026-08-27T15:02:59Z",
           "section_order": [
             "subjective",
             "objective",
@@ -7632,7 +8330,7 @@
             },
             "plan": {
               "completeness": 0.445,
-              "conciseness": 0.8155,
+              "conciseness": 0.8335,
               "faithfulness": 4.22,
               "likert_completeness": 3.4,
               "likert_conciseness": 4.18
@@ -7675,7 +8373,7 @@
           "generated_at": "",
           "headline": {
             "completeness": 0.4382,
-            "conciseness": 0.9276,
+            "conciseness": 0.9321,
             "faithfulness": 4.255
           },
           "judges_own_family": "",
@@ -7691,7 +8389,7 @@
           "note_words": 328,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:56Z",
+          "scored_at": "2026-08-27T15:02:59Z",
           "section_order": [
             "subjective",
             "objective",
@@ -7783,7 +8481,7 @@
           "note_words": 340,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:56Z",
+          "scored_at": "2026-08-27T15:02:59Z",
           "section_order": [
             "subjective",
             "objective",
@@ -7816,7 +8514,7 @@
             },
             "plan": {
               "completeness": 0.53,
-              "conciseness": 0.8635,
+              "conciseness": 0.8932,
               "faithfulness": 3.88,
               "likert_completeness": 3.62,
               "likert_conciseness": 4.32
@@ -7859,7 +8557,7 @@
           "generated_at": "",
           "headline": {
             "completeness": 0.4289,
-            "conciseness": 0.9174,
+            "conciseness": 0.9248,
             "faithfulness": 4.245
           },
           "judges_own_family": "",
@@ -7875,7 +8573,7 @@
           "note_words": 311,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:56Z",
+          "scored_at": "2026-08-27T15:02:59Z",
           "section_order": [
             "subjective",
             "objective",
@@ -7908,14 +8606,14 @@
             },
             "plan": {
               "completeness": 0.355,
-              "conciseness": 0.6413,
+              "conciseness": 0.6433,
               "faithfulness": 4.06,
               "likert_completeness": 3.3,
               "likert_conciseness": 4.92
             },
             "subjective": {
               "completeness": 0.6133,
-              "conciseness": 0.9893,
+              "conciseness": 0.9933,
               "faithfulness": 4.8,
               "likert_completeness": 3.58,
               "likert_conciseness": 4.84
@@ -7951,7 +8649,7 @@
           "generated_at": "",
           "headline": {
             "completeness": 0.409,
-            "conciseness": 0.8988,
+            "conciseness": 0.9003,
             "faithfulness": 4.46
           },
           "judges_own_family": "",
@@ -7967,7 +8665,7 @@
           "note_words": 296,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:56Z",
+          "scored_at": "2026-08-27T15:02:59Z",
           "section_order": [
             "subjective",
             "objective",
@@ -8059,7 +8757,7 @@
           "note_words": null,
           "provider": "tneval",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:56Z",
+          "scored_at": "2026-08-27T15:02:59Z",
           "section_order": [
             "subjective",
             "objective",
@@ -8092,7 +8790,7 @@
             },
             "plan": {
               "completeness": 0.31,
-              "conciseness": 0.738,
+              "conciseness": 0.737,
               "faithfulness": 3.76,
               "likert_completeness": 2.8,
               "likert_conciseness": 4.18
@@ -8135,7 +8833,7 @@
           "generated_at": "",
           "headline": {
             "completeness": 0.3147,
-            "conciseness": 0.9128,
+            "conciseness": 0.9126,
             "faithfulness": 4.16
           },
           "judges_own_family": "",
@@ -8151,7 +8849,7 @@
           "note_words": null,
           "provider": "tneval",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:56Z",
+          "scored_at": "2026-08-27T15:02:59Z",
           "section_order": [
             "subjective",
             "objective",
@@ -8243,7 +8941,7 @@
           "note_words": null,
           "provider": "tneval",
           "scored": true,
-          "scored_at": "2026-08-27T10:06:56Z",
+          "scored_at": "2026-08-27T15:02:59Z",
           "section_order": [
             "subjective",
             "objective",
@@ -8265,7 +8963,7 @@
       "title": "TN-Eval SOAP · AnnoMI conversations",
       "track": "tneval-soap",
       "versions": {
-        "harness_version": "0.3.0",
+        "harness_version": "0.4.0",
         "judge_model": "gpt-5.6-terra",
         "judge_prompt_version": "tneval-rubric-v1",
         "judge_settings": {
@@ -8337,7 +9035,7 @@
       "has_effort": true,
       "has_thinking": true,
       "has_words": false,
-      "id": "icare-gemini-3.1-pro-preview-0.3.0-102129",
+      "id": "icare-gemini-3.1-pro-preview-0.4.0-102129",
       "ranking_measure": null,
       "rows": [
         {
@@ -8353,6 +9051,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.8163,
             "rouge_l": 0.1675,
             "temporal_next": 0.0909,
             "temporal_past": 1.0,
@@ -8371,7 +9070,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T11:14:37Z",
+          "scored_at": "2026-08-27T14:52:39Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -8394,6 +9093,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.8114,
             "rouge_l": 0.1696,
             "temporal_next": 0.0909,
             "temporal_past": 1.0,
@@ -8412,7 +9112,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T11:14:37Z",
+          "scored_at": "2026-08-27T14:52:39Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -8435,6 +9135,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.8197,
             "rouge_l": 0.2022,
             "temporal_next": 0.3636,
             "temporal_past": 1.0,
@@ -8453,7 +9154,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T11:14:37Z",
+          "scored_at": "2026-08-27T14:52:39Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -8476,6 +9177,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.8204,
             "rouge_l": 0.1788,
             "temporal_next": 0.3636,
             "temporal_past": 1.0,
@@ -8494,7 +9196,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T11:14:37Z",
+          "scored_at": "2026-08-27T14:52:39Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -8517,6 +9219,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.8204,
             "rouge_l": 0.1729,
             "temporal_next": 0.3636,
             "temporal_past": 1.0,
@@ -8535,7 +9238,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T11:14:37Z",
+          "scored_at": "2026-08-27T14:52:39Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -8558,6 +9261,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.817,
             "rouge_l": 0.1824,
             "temporal_next": 0.4545,
             "temporal_past": 1.0,
@@ -8576,7 +9280,7 @@
           "note_words": null,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-27T11:14:37Z",
+          "scored_at": "2026-08-27T14:52:39Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -8599,6 +9303,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.8189,
             "rouge_l": 0.186,
             "temporal_next": 0.3636,
             "temporal_past": 0.9706,
@@ -8617,7 +9322,7 @@
           "note_words": null,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-27T11:14:37Z",
+          "scored_at": "2026-08-27T14:52:39Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -8640,6 +9345,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.8113,
             "rouge_l": 0.1504,
             "temporal_next": 0.2727,
             "temporal_past": 1.0,
@@ -8658,7 +9364,7 @@
           "note_words": null,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T11:14:37Z",
+          "scored_at": "2026-08-27T14:52:39Z",
           "section_order": [],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
@@ -8681,6 +9387,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.816,
             "rouge_l": 0.1692,
             "temporal_next": 0.5455,
             "temporal_past": 1.0,
@@ -8699,7 +9406,7 @@
           "note_words": null,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T11:14:37Z",
+          "scored_at": "2026-08-27T14:52:39Z",
           "section_order": [],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
@@ -8722,6 +9429,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.8145,
             "rouge_l": 0.1553,
             "temporal_next": 0.4545,
             "temporal_past": 0.9706,
@@ -8740,7 +9448,7 @@
           "note_words": null,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T11:14:37Z",
+          "scored_at": "2026-08-27T14:52:39Z",
           "section_order": [],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
@@ -8763,6 +9471,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.8083,
             "rouge_l": 0.1586,
             "temporal_next": 0.0,
             "temporal_past": 1.0,
@@ -8781,7 +9490,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T11:14:37Z",
+          "scored_at": "2026-08-27T14:52:39Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -8804,6 +9513,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.8124,
             "rouge_l": 0.1089,
             "temporal_next": 0.3636,
             "temporal_past": 1.0,
@@ -8822,7 +9532,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T11:14:37Z",
+          "scored_at": "2026-08-27T14:52:39Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -8845,6 +9555,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.8152,
             "rouge_l": 0.186,
             "temporal_next": 0.1818,
             "temporal_past": 1.0,
@@ -8863,7 +9574,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T11:14:37Z",
+          "scored_at": "2026-08-27T14:52:39Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -8886,6 +9597,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.8151,
             "rouge_l": 0.1402,
             "temporal_next": 0.2727,
             "temporal_past": 1.0,
@@ -8904,7 +9616,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T11:14:37Z",
+          "scored_at": "2026-08-27T14:52:39Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -8927,6 +9639,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.8176,
             "rouge_l": 0.1828,
             "temporal_next": 0.0909,
             "temporal_past": 1.0,
@@ -8945,7 +9658,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T11:14:37Z",
+          "scored_at": "2026-08-27T14:52:39Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -8970,6 +9683,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.8191,
             "rouge_l": 0.1861,
             "temporal_next": 0.2727,
             "temporal_past": 1.0,
@@ -8988,7 +9702,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T11:14:37Z",
+          "scored_at": "2026-08-27T14:52:39Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -9005,7 +9719,7 @@
       "title": "iCARE form on the iHOPE corpus · 17 sections per session",
       "track": "icare",
       "versions": {
-        "harness_version": "0.3.0",
+        "harness_version": "0.4.0",
         "judge_model": "gemini-3.1-pro-preview",
         "judge_prompt_version": "icare-trace-v1",
         "judge_settings": {
@@ -9077,7 +9791,7 @@
       "has_effort": true,
       "has_thinking": true,
       "has_words": false,
-      "id": "icare-gpt-5.6-terra-0.3.0-acf643",
+      "id": "icare-gpt-5.6-terra-0.4.0-acf643",
       "ranking_measure": null,
       "rows": [
         {
@@ -9093,6 +9807,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.8163,
             "rouge_l": 0.1675,
             "temporal_next": 0.0909,
             "temporal_past": 1.0,
@@ -9111,7 +9826,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T11:15:17Z",
+          "scored_at": "2026-08-27T14:56:16Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -9134,6 +9849,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.8114,
             "rouge_l": 0.1696,
             "temporal_next": 0.0909,
             "temporal_past": 1.0,
@@ -9152,7 +9868,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T11:15:17Z",
+          "scored_at": "2026-08-27T14:56:16Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -9175,6 +9891,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.8197,
             "rouge_l": 0.2022,
             "temporal_next": 0.3636,
             "temporal_past": 1.0,
@@ -9193,7 +9910,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T11:15:17Z",
+          "scored_at": "2026-08-27T14:56:16Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -9216,6 +9933,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.8204,
             "rouge_l": 0.1788,
             "temporal_next": 0.3636,
             "temporal_past": 1.0,
@@ -9234,7 +9952,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T11:15:17Z",
+          "scored_at": "2026-08-27T14:56:16Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -9257,6 +9975,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.8204,
             "rouge_l": 0.1729,
             "temporal_next": 0.3636,
             "temporal_past": 1.0,
@@ -9275,7 +9994,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T11:15:17Z",
+          "scored_at": "2026-08-27T14:56:16Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -9298,6 +10017,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.817,
             "rouge_l": 0.1824,
             "temporal_next": 0.4545,
             "temporal_past": 1.0,
@@ -9316,7 +10036,7 @@
           "note_words": null,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-27T11:15:17Z",
+          "scored_at": "2026-08-27T14:56:16Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -9339,6 +10059,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.8189,
             "rouge_l": 0.186,
             "temporal_next": 0.3636,
             "temporal_past": 0.9706,
@@ -9357,7 +10078,7 @@
           "note_words": null,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-27T11:15:17Z",
+          "scored_at": "2026-08-27T14:56:16Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -9380,6 +10101,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.8113,
             "rouge_l": 0.1504,
             "temporal_next": 0.2727,
             "temporal_past": 1.0,
@@ -9398,7 +10120,7 @@
           "note_words": null,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T11:15:17Z",
+          "scored_at": "2026-08-27T14:56:16Z",
           "section_order": [],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
@@ -9421,6 +10143,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.816,
             "rouge_l": 0.1692,
             "temporal_next": 0.5455,
             "temporal_past": 1.0,
@@ -9439,7 +10162,7 @@
           "note_words": null,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T11:15:17Z",
+          "scored_at": "2026-08-27T14:56:16Z",
           "section_order": [],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
@@ -9462,6 +10185,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.8145,
             "rouge_l": 0.1553,
             "temporal_next": 0.4545,
             "temporal_past": 0.9706,
@@ -9480,7 +10204,7 @@
           "note_words": null,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T11:15:17Z",
+          "scored_at": "2026-08-27T14:56:16Z",
           "section_order": [],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
@@ -9503,6 +10227,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.8083,
             "rouge_l": 0.1586,
             "temporal_next": 0.0,
             "temporal_past": 1.0,
@@ -9521,7 +10246,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T11:15:17Z",
+          "scored_at": "2026-08-27T14:56:16Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -9544,6 +10269,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.8124,
             "rouge_l": 0.1089,
             "temporal_next": 0.3636,
             "temporal_past": 1.0,
@@ -9562,7 +10288,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T11:15:17Z",
+          "scored_at": "2026-08-27T14:56:16Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -9585,6 +10311,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.8152,
             "rouge_l": 0.186,
             "temporal_next": 0.1818,
             "temporal_past": 1.0,
@@ -9603,7 +10330,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T11:15:17Z",
+          "scored_at": "2026-08-27T14:56:16Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -9626,6 +10353,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.8151,
             "rouge_l": 0.1402,
             "temporal_next": 0.2727,
             "temporal_past": 1.0,
@@ -9644,7 +10372,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T11:15:17Z",
+          "scored_at": "2026-08-27T14:56:16Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -9667,6 +10395,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.8176,
             "rouge_l": 0.1828,
             "temporal_next": 0.0909,
             "temporal_past": 1.0,
@@ -9685,7 +10414,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T11:15:17Z",
+          "scored_at": "2026-08-27T14:56:16Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -9710,6 +10439,7 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
+            "bertscore": 0.8191,
             "rouge_l": 0.1861,
             "temporal_next": 0.2727,
             "temporal_past": 1.0,
@@ -9728,7 +10458,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T11:15:17Z",
+          "scored_at": "2026-08-27T14:56:16Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -9745,7 +10475,7 @@
       "title": "iCARE form on the iHOPE corpus · 17 sections per session",
       "track": "icare",
       "versions": {
-        "harness_version": "0.3.0",
+        "harness_version": "0.4.0",
         "judge_model": "gpt-5.6-terra",
         "judge_prompt_version": "icare-trace-v1",
         "judge_settings": {
@@ -9844,7 +10574,7 @@
       "has_effort": true,
       "has_thinking": true,
       "has_words": true,
-      "id": "pdsqi-soap-gemini-3.1-pro-preview-0.3.0-102129",
+      "id": "pdsqi-soap-gemini-3.1-pro-preview-0.4.0-102129",
       "ranking_measure": null,
       "rows": [
         {
@@ -9876,7 +10606,7 @@
           "note_words": 328,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T13:07:08Z",
+          "scored_at": "2026-08-27T14:57:19Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -9915,7 +10645,7 @@
           "note_words": 379,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T13:07:08Z",
+          "scored_at": "2026-08-27T14:57:19Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -9954,7 +10684,7 @@
           "note_words": 296,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T13:07:08Z",
+          "scored_at": "2026-08-27T14:57:19Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -9993,7 +10723,7 @@
           "note_words": 358,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T13:07:08Z",
+          "scored_at": "2026-08-27T14:57:19Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -10032,7 +10762,7 @@
           "note_words": 365,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T13:07:08Z",
+          "scored_at": "2026-08-27T14:57:19Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -10071,7 +10801,7 @@
           "note_words": 350,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-27T13:07:08Z",
+          "scored_at": "2026-08-27T14:57:19Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -10110,7 +10840,7 @@
           "note_words": 266,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-27T13:07:08Z",
+          "scored_at": "2026-08-27T14:57:19Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -10149,7 +10879,7 @@
           "note_words": 374,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T13:07:08Z",
+          "scored_at": "2026-08-27T14:57:19Z",
           "section_order": [],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
@@ -10188,7 +10918,7 @@
           "note_words": 372,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T13:07:08Z",
+          "scored_at": "2026-08-27T14:57:19Z",
           "section_order": [],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
@@ -10227,7 +10957,7 @@
           "note_words": 430,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T13:07:08Z",
+          "scored_at": "2026-08-27T14:57:19Z",
           "section_order": [],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
@@ -10268,7 +10998,7 @@
           "note_words": 438,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T13:07:08Z",
+          "scored_at": "2026-08-27T14:57:19Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -10307,7 +11037,7 @@
           "note_words": 518,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T13:07:08Z",
+          "scored_at": "2026-08-27T14:57:19Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -10346,7 +11076,7 @@
           "note_words": null,
           "provider": "tneval",
           "scored": true,
-          "scored_at": "2026-08-27T13:07:08Z",
+          "scored_at": "2026-08-27T14:57:19Z",
           "section_order": [],
           "settings": "",
           "settings_differ": false,
@@ -10385,7 +11115,7 @@
           "note_words": null,
           "provider": "tneval",
           "scored": true,
-          "scored_at": "2026-08-27T13:07:08Z",
+          "scored_at": "2026-08-27T14:57:19Z",
           "section_order": [],
           "settings": "",
           "settings_differ": false,
@@ -10424,7 +11154,7 @@
           "note_words": 311,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T13:07:08Z",
+          "scored_at": "2026-08-27T14:57:19Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -10463,7 +11193,7 @@
           "note_words": 443,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T13:07:08Z",
+          "scored_at": "2026-08-27T14:57:19Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -10502,7 +11232,7 @@
           "note_words": 273,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T13:07:08Z",
+          "scored_at": "2026-08-27T14:57:19Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -10541,7 +11271,7 @@
           "note_words": 340,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T13:07:08Z",
+          "scored_at": "2026-08-27T14:57:19Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -10580,7 +11310,7 @@
           "note_words": null,
           "provider": "tneval",
           "scored": true,
-          "scored_at": "2026-08-27T13:07:08Z",
+          "scored_at": "2026-08-27T14:57:19Z",
           "section_order": [],
           "settings": "",
           "settings_differ": false,
@@ -10597,7 +11327,7 @@
       "title": "PDSQI-9 · the same notes, rated for quality",
       "track": "pdsqi-soap",
       "versions": {
-        "harness_version": "0.3.0",
+        "harness_version": "0.4.0",
         "judge_model": "gemini-3.1-pro-preview",
         "judge_prompt_version": "pdsqi9-note-v1",
         "judge_settings": {
@@ -10605,6 +11335,858 @@
           "model": "gemini-3.1-pro-preview",
           "temperature": 0,
           "thinking_budget": 256
+        },
+        "prompt_version": "tneval-soap-v1"
+      }
+    },
+    {
+      "blurb": "A published instrument, asked about the very notes the rubric above scores for coverage. Eight attributes, reported separately and never averaged, because the instrument reports them that way.",
+      "columns": [
+        {
+          "caveat": "PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.",
+          "definition": "The note is true and free of incorrect information. PDSQI-9 item 2, rated 1 (not at all) to 5 (extremely).",
+          "digits": 2,
+          "key": "accurate",
+          "label": "Accurate",
+          "ranking": false,
+          "scale": "1-5"
+        },
+        {
+          "caveat": "PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.",
+          "definition": "The note should thoroughly cover all critical patient issues. PDSQI-9 item 3, rated 1 (not at all) to 5 (extremely).",
+          "digits": 2,
+          "key": "thorough",
+          "label": "Thorough",
+          "ranking": false,
+          "scale": "1-5"
+        },
+        {
+          "caveat": "PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.",
+          "definition": "All the information is in there that is useful to the target provider/intended audience. The note is extremely relevant, providing valuable information and/or analysis. PDSQI-9 item 4, rated 1 (not at all) to 5 (extremely).",
+          "digits": 2,
+          "key": "useful",
+          "label": "Useful",
+          "ranking": false,
+          "scale": "1-5"
+        },
+        {
+          "caveat": "PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.",
+          "definition": "The note is well-formed and structured in a way that helps the reader understand the patient's clinical course. PDSQI-9 item 5, rated 1 (not at all) to 5 (extremely).",
+          "digits": 2,
+          "key": "organized",
+          "label": "Organized",
+          "ranking": false,
+          "scale": "1-5"
+        },
+        {
+          "caveat": "PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.",
+          "definition": "The note is clear, without ambiguity or sections that are difficult to understand. PDSQI-9 item 6, rated 1 (not at all) to 5 (extremely).",
+          "digits": 2,
+          "key": "comprehensible",
+          "label": "Comprehensible",
+          "ranking": false,
+          "scale": "1-5"
+        },
+        {
+          "caveat": "PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.",
+          "definition": "The note is brief, to the point, and without redundancy. PDSQI-9 item 7, rated 1 (not at all) to 5 (extremely).",
+          "digits": 2,
+          "key": "succinct",
+          "label": "Succinct",
+          "ranking": false,
+          "scale": "1-5"
+        },
+        {
+          "caveat": "PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.",
+          "definition": "The note reflects an understanding of the patient's status and ability to develop a plan of care. PDSQI-9 item 8, rated 1 (not at all) to 5 (extremely).",
+          "digits": 2,
+          "key": "synthesized",
+          "label": "Synthesized",
+          "ranking": false,
+          "scale": "1-5"
+        },
+        {
+          "caveat": "PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.",
+          "definition": "The note is free of discrediting or exaggerated words, of judgment or labelling, and uses person-first language. PDSQI-9 item 9, answered yes or no and reported as the fraction of notes free of it.",
+          "digits": 3,
+          "key": "stigmatizing",
+          "label": "Free of stigmatizing language",
+          "ranking": false,
+          "scale": "0-1"
+        }
+      ],
+      "design": {
+        "calibrated": false,
+        "calibration": "No human has rated these notes on this instrument, so there is no agreement figure for this judge. What the instrument publishes instead is a ceiling: trained physicians agreed with each other at Krippendorff's alpha 0.575, against the 0.18 two therapists reach on faithfulness. A judge cannot be asked to agree with a person better than people agree with each other -- but a ceiling is not a measurement, and these columns have not been checked against anyone.",
+        "human_role": "The therapist's note is scored by the identical protocol and sits in the table as its own row, exactly as it does on the rubric track. That is the reason this table exists next to that one: the same notes, two instruments, and a reader can see where they disagree about who wrote well.",
+        "human_role_short": "competitor",
+        "scored_against": "The note itself, and for two of the eight attributes the transcript as well -- accurate and thorough ask whether the note is true and complete, which cannot be answered without the session. There is no gold note, so this track is reference-free in the same sense the rubric track is."
+      },
+      "groups": null,
+      "has_effort": true,
+      "has_thinking": true,
+      "has_words": true,
+      "id": "pdsqi-soap-gpt-5.6-terra-0.4.0-acf643",
+      "ranking_measure": null,
+      "rows": [
+        {
+          "by_section": {},
+          "detail": {},
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "accurate": 3.2,
+            "comprehensible": 4.6,
+            "organized": 5.0,
+            "stigmatizing": 0.9,
+            "succinct": 2.14,
+            "synthesized": 4.98,
+            "thorough": 3.22,
+            "useful": 4.92
+          },
+          "judges_own_family": "",
+          "label": "deepseek-v4-flash",
+          "metrics_note": "PDSQI-9, adapted: see docs/landscape.md. Physicians agree with each other on this instrument at Krippendorff's alpha 0.575, which is the ceiling these columns are read against -- no human has rated these notes on it.",
+          "n_attempted": 50,
+          "n_complete": 50,
+          "n_failed": 0,
+          "n_generated": 50,
+          "n_partial": 0,
+          "n_scored": 50,
+          "n_unreached": 0,
+          "note_words": 328,
+          "provider": "einfra",
+          "scored": true,
+          "scored_at": "2026-08-27T14:58:45Z",
+          "section_order": [],
+          "settings": "temperature 0, max tokens 4096",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "deepseek-v4-flash",
+          "system_type": "model",
+          "thinking_tokens": null,
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {},
+          "detail": {},
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "accurate": 3.1,
+            "comprehensible": 4.52,
+            "organized": 5.0,
+            "stigmatizing": 0.92,
+            "succinct": 2.02,
+            "synthesized": 4.98,
+            "thorough": 2.72,
+            "useful": 4.84
+          },
+          "judges_own_family": "",
+          "label": "deepseek-v4-flash-thinking",
+          "metrics_note": "PDSQI-9, adapted: see docs/landscape.md. Physicians agree with each other on this instrument at Krippendorff's alpha 0.575, which is the ceiling these columns are read against -- no human has rated these notes on it.",
+          "n_attempted": 50,
+          "n_complete": 50,
+          "n_failed": 0,
+          "n_generated": 50,
+          "n_partial": 0,
+          "n_scored": 50,
+          "n_unreached": 0,
+          "note_words": 379,
+          "provider": "einfra",
+          "scored": true,
+          "scored_at": "2026-08-27T14:58:45Z",
+          "section_order": [],
+          "settings": "temperature 0, max tokens 4096",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "deepseek-v4-flash-thinking",
+          "system_type": "model",
+          "thinking_tokens": null,
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {},
+          "detail": {},
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "accurate": 3.7,
+            "comprehensible": 4.56,
+            "organized": 5.0,
+            "stigmatizing": 0.94,
+            "succinct": 2.36,
+            "synthesized": 4.96,
+            "thorough": 3.08,
+            "useful": 4.96
+          },
+          "judges_own_family": "",
+          "label": "gemma4",
+          "metrics_note": "PDSQI-9, adapted: see docs/landscape.md. Physicians agree with each other on this instrument at Krippendorff's alpha 0.575, which is the ceiling these columns are read against -- no human has rated these notes on it.",
+          "n_attempted": 50,
+          "n_complete": 50,
+          "n_failed": 0,
+          "n_generated": 50,
+          "n_partial": 0,
+          "n_scored": 50,
+          "n_unreached": 0,
+          "note_words": 296,
+          "provider": "einfra",
+          "scored": true,
+          "scored_at": "2026-08-27T14:58:45Z",
+          "section_order": [],
+          "settings": "temperature 0, max tokens 4096",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "gemma4",
+          "system_type": "model",
+          "thinking_tokens": null,
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {},
+          "detail": {},
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "accurate": 3.82,
+            "comprehensible": 4.54,
+            "organized": 5.0,
+            "stigmatizing": 0.88,
+            "succinct": 2.12,
+            "synthesized": 5.0,
+            "thorough": 2.84,
+            "useful": 4.96
+          },
+          "judges_own_family": "",
+          "label": "glm-5",
+          "metrics_note": "PDSQI-9, adapted: see docs/landscape.md. Physicians agree with each other on this instrument at Krippendorff's alpha 0.575, which is the ceiling these columns are read against -- no human has rated these notes on it.",
+          "n_attempted": 50,
+          "n_complete": 50,
+          "n_failed": 0,
+          "n_generated": 50,
+          "n_partial": 0,
+          "n_scored": 50,
+          "n_unreached": 0,
+          "note_words": 358,
+          "provider": "einfra",
+          "scored": true,
+          "scored_at": "2026-08-27T14:58:45Z",
+          "section_order": [],
+          "settings": "temperature 0, max tokens 4096",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "glm-5",
+          "system_type": "model",
+          "thinking_tokens": 1502,
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {},
+          "detail": {},
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "accurate": 3.84,
+            "comprehensible": 4.68,
+            "organized": 5.0,
+            "stigmatizing": 0.88,
+            "succinct": 2.2,
+            "synthesized": 5.0,
+            "thorough": 3.46,
+            "useful": 5.0
+          },
+          "judges_own_family": "",
+          "label": "glm-5.2",
+          "metrics_note": "PDSQI-9, adapted: see docs/landscape.md. Physicians agree with each other on this instrument at Krippendorff's alpha 0.575, which is the ceiling these columns are read against -- no human has rated these notes on it.",
+          "n_attempted": 50,
+          "n_complete": 50,
+          "n_failed": 0,
+          "n_generated": 50,
+          "n_partial": 0,
+          "n_scored": 50,
+          "n_unreached": 0,
+          "note_words": 365,
+          "provider": "einfra",
+          "scored": true,
+          "scored_at": "2026-08-27T14:58:45Z",
+          "section_order": [],
+          "settings": "temperature 0, max tokens 4096",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "glm-5.2",
+          "system_type": "model",
+          "thinking_tokens": 1552,
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {},
+          "detail": {},
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "accurate": 4.1,
+            "comprehensible": 4.74,
+            "organized": 5.0,
+            "stigmatizing": 0.92,
+            "succinct": 2.14,
+            "synthesized": 4.98,
+            "thorough": 3.4,
+            "useful": 4.88
+          },
+          "judges_own_family": "",
+          "label": "google_gemini-3.1-pro-preview",
+          "metrics_note": "PDSQI-9, adapted: see docs/landscape.md. Physicians agree with each other on this instrument at Krippendorff's alpha 0.575, which is the ceiling these columns are read against -- no human has rated these notes on it.",
+          "n_attempted": 50,
+          "n_complete": 50,
+          "n_failed": 0,
+          "n_generated": 50,
+          "n_partial": 0,
+          "n_scored": 50,
+          "n_unreached": 0,
+          "note_words": 350,
+          "provider": "vertex",
+          "scored": true,
+          "scored_at": "2026-08-27T14:58:45Z",
+          "section_order": [],
+          "settings": "temperature 0, max tokens 4096",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "google_gemini-3.1-pro-preview",
+          "system_type": "model",
+          "thinking_tokens": 1244,
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {},
+          "detail": {},
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "accurate": 3.92,
+            "comprehensible": 4.58,
+            "organized": 5.0,
+            "stigmatizing": 0.98,
+            "succinct": 2.6,
+            "synthesized": 4.96,
+            "thorough": 3.16,
+            "useful": 5.0
+          },
+          "judges_own_family": "",
+          "label": "google_gemini-3.7-flash",
+          "metrics_note": "PDSQI-9, adapted: see docs/landscape.md. Physicians agree with each other on this instrument at Krippendorff's alpha 0.575, which is the ceiling these columns are read against -- no human has rated these notes on it.",
+          "n_attempted": 50,
+          "n_complete": 50,
+          "n_failed": 0,
+          "n_generated": 50,
+          "n_partial": 0,
+          "n_scored": 50,
+          "n_unreached": 0,
+          "note_words": 266,
+          "provider": "vertex",
+          "scored": true,
+          "scored_at": "2026-08-27T14:58:45Z",
+          "section_order": [],
+          "settings": "temperature 0, max tokens 4096",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "google_gemini-3.7-flash",
+          "system_type": "model",
+          "thinking_tokens": 687,
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {},
+          "detail": {},
+          "effort": "medium",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "accurate": 4.08,
+            "comprehensible": 4.56,
+            "organized": 5.0,
+            "stigmatizing": 0.98,
+            "succinct": 2.2,
+            "synthesized": 4.94,
+            "thorough": 3.64,
+            "useful": 4.98
+          },
+          "judges_own_family": "openai",
+          "label": "gpt-5.6-luna",
+          "metrics_note": "PDSQI-9, adapted: see docs/landscape.md. Physicians agree with each other on this instrument at Krippendorff's alpha 0.575, which is the ceiling these columns are read against -- no human has rated these notes on it.",
+          "n_attempted": 50,
+          "n_complete": 50,
+          "n_failed": 0,
+          "n_generated": 50,
+          "n_partial": 0,
+          "n_scored": 50,
+          "n_unreached": 0,
+          "note_words": 374,
+          "provider": "openai",
+          "scored": true,
+          "scored_at": "2026-08-27T14:58:45Z",
+          "section_order": [],
+          "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
+          "settings_differ": true,
+          "source": "",
+          "system_id": "gpt-5.6-luna",
+          "system_type": "model",
+          "thinking_tokens": 71,
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {},
+          "detail": {},
+          "effort": "medium",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "accurate": 4.2,
+            "comprehensible": 4.6,
+            "organized": 5.0,
+            "stigmatizing": 1.0,
+            "succinct": 2.26,
+            "synthesized": 5.0,
+            "thorough": 3.6,
+            "useful": 5.0
+          },
+          "judges_own_family": "openai",
+          "label": "gpt-5.6-sol",
+          "metrics_note": "PDSQI-9, adapted: see docs/landscape.md. Physicians agree with each other on this instrument at Krippendorff's alpha 0.575, which is the ceiling these columns are read against -- no human has rated these notes on it.",
+          "n_attempted": 50,
+          "n_complete": 50,
+          "n_failed": 0,
+          "n_generated": 50,
+          "n_partial": 0,
+          "n_scored": 50,
+          "n_unreached": 0,
+          "note_words": 372,
+          "provider": "openai",
+          "scored": true,
+          "scored_at": "2026-08-27T14:58:45Z",
+          "section_order": [],
+          "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
+          "settings_differ": true,
+          "source": "",
+          "system_id": "gpt-5.6-sol",
+          "system_type": "model",
+          "thinking_tokens": 89,
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {},
+          "detail": {},
+          "effort": "medium",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "accurate": 4.42,
+            "comprehensible": 4.72,
+            "organized": 5.0,
+            "stigmatizing": 1.0,
+            "succinct": 2.1,
+            "synthesized": 5.0,
+            "thorough": 3.94,
+            "useful": 4.98
+          },
+          "judges_own_family": "openai",
+          "label": "gpt-5.6-terra",
+          "metrics_note": "PDSQI-9, adapted: see docs/landscape.md. Physicians agree with each other on this instrument at Krippendorff's alpha 0.575, which is the ceiling these columns are read against -- no human has rated these notes on it.",
+          "n_attempted": 50,
+          "n_complete": 50,
+          "n_failed": 0,
+          "n_generated": 50,
+          "n_partial": 0,
+          "n_scored": 50,
+          "n_unreached": 0,
+          "note_words": 430,
+          "provider": "openai",
+          "scored": true,
+          "scored_at": "2026-08-27T14:58:45Z",
+          "section_order": [],
+          "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
+          "settings_differ": true,
+          "source": "",
+          "system_id": "gpt-5.6-terra",
+          "system_type": "model",
+          "thinking_tokens": 13,
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {},
+          "detail": {},
+          "effort": "",
+          "failure_reasons": {
+            "answer did not contain a SOAP dictionary": 8
+          },
+          "generated_at": "",
+          "headline": {
+            "accurate": 1.381,
+            "comprehensible": 4.381,
+            "organized": 5.0,
+            "stigmatizing": 0.9762,
+            "succinct": 2.0476,
+            "synthesized": 4.9524,
+            "thorough": 2.0714,
+            "useful": 4.7619
+          },
+          "judges_own_family": "openai",
+          "label": "gpt-oss-120b",
+          "metrics_note": "PDSQI-9, adapted: see docs/landscape.md. Physicians agree with each other on this instrument at Krippendorff's alpha 0.575, which is the ceiling these columns are read against -- no human has rated these notes on it.",
+          "n_attempted": 50,
+          "n_complete": 42,
+          "n_failed": 8,
+          "n_generated": 42,
+          "n_partial": 0,
+          "n_scored": 42,
+          "n_unreached": 0,
+          "note_words": 438,
+          "provider": "einfra",
+          "scored": true,
+          "scored_at": "2026-08-27T14:58:45Z",
+          "section_order": [],
+          "settings": "temperature 0, max tokens 4096",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "gpt-oss-120b",
+          "system_type": "model",
+          "thinking_tokens": 252,
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {},
+          "detail": {},
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "accurate": 3.7,
+            "comprehensible": 4.42,
+            "organized": 5.0,
+            "stigmatizing": 0.94,
+            "succinct": 1.92,
+            "synthesized": 5.0,
+            "thorough": 3.52,
+            "useful": 4.92
+          },
+          "judges_own_family": "",
+          "label": "kimi-k3",
+          "metrics_note": "PDSQI-9, adapted: see docs/landscape.md. Physicians agree with each other on this instrument at Krippendorff's alpha 0.575, which is the ceiling these columns are read against -- no human has rated these notes on it.",
+          "n_attempted": 50,
+          "n_complete": 50,
+          "n_failed": 0,
+          "n_generated": 50,
+          "n_partial": 0,
+          "n_scored": 50,
+          "n_unreached": 0,
+          "note_words": 518,
+          "provider": "einfra",
+          "scored": true,
+          "scored_at": "2026-08-27T14:58:45Z",
+          "section_order": [],
+          "settings": "temperature 0, max tokens 4096",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "kimi-k3",
+          "system_type": "model",
+          "thinking_tokens": 670,
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {},
+          "detail": {},
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "accurate": 3.18,
+            "comprehensible": 4.9,
+            "organized": 5.0,
+            "stigmatizing": 0.9,
+            "succinct": 2.46,
+            "synthesized": 4.54,
+            "thorough": 2.38,
+            "useful": 4.62
+          },
+          "judges_own_family": "",
+          "label": "llama-3.1-70b (TN-Eval, 2025)",
+          "metrics_note": "PDSQI-9, adapted: see docs/landscape.md. Physicians agree with each other on this instrument at Krippendorff's alpha 0.575, which is the ceiling these columns are read against -- no human has rated these notes on it.",
+          "n_attempted": 50,
+          "n_complete": 50,
+          "n_failed": 0,
+          "n_generated": 50,
+          "n_partial": 0,
+          "n_scored": 50,
+          "n_unreached": 0,
+          "note_words": null,
+          "provider": "tneval",
+          "scored": true,
+          "scored_at": "2026-08-27T14:58:45Z",
+          "section_order": [],
+          "settings": "",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "llama-3.1-70b",
+          "system_type": "reference-model",
+          "thinking_tokens": null,
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {},
+          "detail": {},
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "accurate": 3.7,
+            "comprehensible": 4.96,
+            "organized": 5.0,
+            "stigmatizing": 0.98,
+            "succinct": 2.32,
+            "synthesized": 4.46,
+            "thorough": 2.68,
+            "useful": 4.84
+          },
+          "judges_own_family": "",
+          "label": "mistral-large-v2 (TN-Eval, 2025)",
+          "metrics_note": "PDSQI-9, adapted: see docs/landscape.md. Physicians agree with each other on this instrument at Krippendorff's alpha 0.575, which is the ceiling these columns are read against -- no human has rated these notes on it.",
+          "n_attempted": 50,
+          "n_complete": 50,
+          "n_failed": 0,
+          "n_generated": 50,
+          "n_partial": 0,
+          "n_scored": 50,
+          "n_unreached": 0,
+          "note_words": null,
+          "provider": "tneval",
+          "scored": true,
+          "scored_at": "2026-08-27T14:58:45Z",
+          "section_order": [],
+          "settings": "",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "mistral-large-v2",
+          "system_type": "reference-model",
+          "thinking_tokens": null,
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {},
+          "detail": {},
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "accurate": 3.4,
+            "comprehensible": 4.5,
+            "organized": 5.0,
+            "stigmatizing": 0.92,
+            "succinct": 2.14,
+            "synthesized": 4.96,
+            "thorough": 3.28,
+            "useful": 4.8
+          },
+          "judges_own_family": "",
+          "label": "mistral-medium-3.5",
+          "metrics_note": "PDSQI-9, adapted: see docs/landscape.md. Physicians agree with each other on this instrument at Krippendorff's alpha 0.575, which is the ceiling these columns are read against -- no human has rated these notes on it.",
+          "n_attempted": 50,
+          "n_complete": 50,
+          "n_failed": 0,
+          "n_generated": 50,
+          "n_partial": 0,
+          "n_scored": 50,
+          "n_unreached": 0,
+          "note_words": 311,
+          "provider": "einfra",
+          "scored": true,
+          "scored_at": "2026-08-27T14:58:45Z",
+          "section_order": [],
+          "settings": "temperature 0, max tokens 4096",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "mistral-medium-3.5",
+          "system_type": "model",
+          "thinking_tokens": null,
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {},
+          "detail": {},
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "accurate": 2.9184,
+            "comprehensible": 4.2449,
+            "organized": 5.0,
+            "stigmatizing": 0.9184,
+            "succinct": 1.9388,
+            "synthesized": 5.0,
+            "thorough": 3.2857,
+            "useful": 4.7959
+          },
+          "judges_own_family": "",
+          "label": "qwen3.5-122b",
+          "metrics_note": "PDSQI-9, adapted: see docs/landscape.md. Physicians agree with each other on this instrument at Krippendorff's alpha 0.575, which is the ceiling these columns are read against -- no human has rated these notes on it.",
+          "n_attempted": 50,
+          "n_complete": 49,
+          "n_failed": 0,
+          "n_generated": 50,
+          "n_partial": 1,
+          "n_scored": 50,
+          "n_unreached": 0,
+          "note_words": 443,
+          "provider": "einfra",
+          "scored": true,
+          "scored_at": "2026-08-27T14:58:45Z",
+          "section_order": [],
+          "settings": "temperature 0, max tokens 4096",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "qwen3.5-122b",
+          "system_type": "model",
+          "thinking_tokens": null,
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {},
+          "detail": {},
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "accurate": 3.7,
+            "comprehensible": 4.56,
+            "organized": 5.0,
+            "stigmatizing": 0.86,
+            "succinct": 2.4,
+            "synthesized": 5.0,
+            "thorough": 3.3,
+            "useful": 4.9
+          },
+          "judges_own_family": "",
+          "label": "qwen3.5-int4",
+          "metrics_note": "PDSQI-9, adapted: see docs/landscape.md. Physicians agree with each other on this instrument at Krippendorff's alpha 0.575, which is the ceiling these columns are read against -- no human has rated these notes on it.",
+          "n_attempted": 50,
+          "n_complete": 50,
+          "n_failed": 0,
+          "n_generated": 50,
+          "n_partial": 0,
+          "n_scored": 50,
+          "n_unreached": 0,
+          "note_words": 273,
+          "provider": "einfra",
+          "scored": true,
+          "scored_at": "2026-08-27T14:58:45Z",
+          "section_order": [],
+          "settings": "temperature 0, max tokens 16384",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "qwen3.5-int4",
+          "system_type": "model",
+          "thinking_tokens": null,
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {},
+          "detail": {},
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "accurate": 3.54,
+            "comprehensible": 4.84,
+            "organized": 5.0,
+            "stigmatizing": 0.98,
+            "succinct": 2.36,
+            "synthesized": 4.94,
+            "thorough": 3.3,
+            "useful": 4.98
+          },
+          "judges_own_family": "",
+          "label": "qwen3.8-27b",
+          "metrics_note": "PDSQI-9, adapted: see docs/landscape.md. Physicians agree with each other on this instrument at Krippendorff's alpha 0.575, which is the ceiling these columns are read against -- no human has rated these notes on it.",
+          "n_attempted": 50,
+          "n_complete": 50,
+          "n_failed": 0,
+          "n_generated": 50,
+          "n_partial": 0,
+          "n_scored": 50,
+          "n_unreached": 0,
+          "note_words": 340,
+          "provider": "einfra",
+          "scored": true,
+          "scored_at": "2026-08-27T14:58:45Z",
+          "section_order": [],
+          "settings": "temperature 0, max tokens 16384",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "qwen3.8-27b",
+          "system_type": "model",
+          "thinking_tokens": 1620,
+          "unreached_reasons": {}
+        },
+        {
+          "by_section": {},
+          "detail": {},
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "accurate": 3.88,
+            "comprehensible": 4.38,
+            "organized": 4.9,
+            "stigmatizing": 0.82,
+            "succinct": 2.38,
+            "synthesized": 3.98,
+            "thorough": 2.32,
+            "useful": 4.5
+          },
+          "judges_own_family": "",
+          "label": "therapist-written (TN-Eval)",
+          "metrics_note": "PDSQI-9, adapted: see docs/landscape.md. Physicians agree with each other on this instrument at Krippendorff's alpha 0.575, which is the ceiling these columns are read against -- no human has rated these notes on it.",
+          "n_attempted": 50,
+          "n_complete": 50,
+          "n_failed": 0,
+          "n_generated": 50,
+          "n_partial": 0,
+          "n_scored": 50,
+          "n_unreached": 0,
+          "note_words": null,
+          "provider": "tneval",
+          "scored": true,
+          "scored_at": "2026-08-27T14:58:45Z",
+          "section_order": [],
+          "settings": "",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "therapist",
+          "system_type": "reference-human",
+          "thinking_tokens": null,
+          "unreached_reasons": {}
+        }
+      ],
+      "scored": true,
+      "stale_harness": false,
+      "subtitle": "scored by gpt-5.6-terra",
+      "title": "PDSQI-9 · the same notes, rated for quality",
+      "track": "pdsqi-soap",
+      "versions": {
+        "harness_version": "0.4.0",
+        "judge_model": "gpt-5.6-terra",
+        "judge_prompt_version": "pdsqi9-note-v1",
+        "judge_settings": {
+          "backend": "openai",
+          "effort": "medium",
+          "max_output_tokens": 672,
+          "model": "gpt-5.6-terra"
         },
         "prompt_version": "tneval-soap-v1"
       }

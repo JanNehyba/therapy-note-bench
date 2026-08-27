@@ -1,12 +1,21 @@
 {
+  "difference": {
+    "detected": false,
+    "estimate": 0.0092,
+    "high": 0.0581,
+    "judge_a": "gemini-3.1-pro-preview",
+    "judge_b": "gpt-5.6-terra",
+    "low": -0.0389,
+    "summary": "The two leans are not distinguishable from each other: `gpt-5.6-terra` minus `gemini-3.1-pro-preview` is +0.009 completeness [-0.039 to +0.058]. Neither judge is the more partial one on this evidence, and the larger of the two numbers above should not be read as though it were."
+  },
   "effects": [
     {
       "detected": false,
       "estimate": 0.0176,
       "family": "google",
-      "high": 0.0476,
+      "high": 0.0471,
       "judge": "gemini-3.1-pro-preview",
-      "low": -0.0111,
+      "low": -0.0102,
       "n_neutral": 12,
       "n_own": 3,
       "n_sessions": 25,
@@ -24,15 +33,15 @@
         "qwen3.8-27b",
         "therapist"
       ],
-      "summary": "`gemini-3.1-pro-preview` shows no detectable preference for Google models: +0.018 completeness [-0.011 to +0.048], an interval that includes zero. Not detected is not the same as absent \u2014 3 system(s) against 12 neutral one(s) over 25 conversations is what this run could see."
+      "summary": "`gemini-3.1-pro-preview` shows no detectable preference for Google models: +0.018 completeness [-0.010 to +0.047], an interval that includes zero. Not detected is not the same as absent \u2014 3 system(s) against 12 neutral one(s) over 25 conversations is what this run could see."
     },
     {
       "detected": false,
       "estimate": 0.0268,
       "family": "openai",
-      "high": 0.0586,
+      "high": 0.0584,
       "judge": "gpt-5.6-terra",
-      "low": -0.0021,
+      "low": -0.0044,
       "n_neutral": 12,
       "n_own": 4,
       "n_sessions": 25,
@@ -50,7 +59,7 @@
         "qwen3.8-27b",
         "therapist"
       ],
-      "summary": "`gpt-5.6-terra` shows no detectable preference for OpenAI models: +0.027 completeness [-0.002 to +0.059], an interval that includes zero. Not detected is not the same as absent \u2014 4 system(s) against 12 neutral one(s) over 25 conversations is what this run could see."
+      "summary": "`gpt-5.6-terra` shows no detectable preference for OpenAI models: +0.027 completeness [-0.004 to +0.058], an interval that includes zero. Not detected is not the same as absent \u2014 4 system(s) against 12 neutral one(s) over 25 conversations is what this run could see."
     }
   ],
   "judge_a": "gemini-3.1-pro-preview",
