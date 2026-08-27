@@ -1095,3 +1095,42 @@ def test_every_page_offers_a_route_to_the_background_documents():
 
     for name in wanted:
         assert (REPO_ROOT / "docs" / name).exists(), f"{name} is linked and must exist"
+
+
+def test_the_length_panel_is_drawn_and_not_merely_computed(tmp_path):
+    """Testing `saturation.length_effect` is not testing the page.
+
+    The first version of this change tested the analysis and left the panel
+    unwired — removing `lengthEffect(s)` from `renderSaturation` kept every test
+    green. Same defect class as the borrowed failure reasons, one commit later.
+    """
+    from tnb import report
+
+    data = report.build([_row("x", "a-judge", 0.5)])
+    data["saturation"] = {
+        "judge_model": "a-judge",
+        "sessions": 25,
+        "corpus_sessions": 50,
+        "verdict_counts": {"discriminating": 13},
+        "criteria": [],
+        "intervals": [],
+        "indistinguishable": [["x"]],
+        "narrowed_by": {},
+        "still_scoring": [],
+        "bootstrap": {"samples": 2000, "seed": 1, "paired": True},
+        "length_effect": {
+            "within_system": [{"system": "x", "rho": 0.35, "n": 49}],
+            "within_conversation": {
+                "median": 0.122,
+                "positive": 31,
+                "n": 50,
+                "sign_test_p": 0.119,
+            },
+        },
+    }
+    drawn = _run(report.render_methods(data), tmp_path, panel="saturation-body")
+
+    assert "Does completeness rise with how much the model wrote?" in drawn
+    assert "31 of 50" in drawn
+    assert "does not survive" in drawn, "p = 0.119 is not a surviving effect"
+    assert "publishes the <strong>length</strong>" in drawn or "publishes the" in drawn
