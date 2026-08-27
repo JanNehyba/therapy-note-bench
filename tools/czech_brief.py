@@ -1,0 +1,286 @@
+"""Write the Czech track's briefing: the document that becomes the PDF.
+
+The tables answer "which model". This answers "what was measured, and what may
+not be concluded from it" -- which is the half a table cannot carry and the half
+that matters when the numbers leave the machine they were computed on.
+
+It reads `local/czech-rows.jsonl` and writes `local/czech-brief.html`, and both
+of those are gitignored. `tools/pdf.py --source local/czech-brief.html --target
+local/czech-report.pdf` turns it into the single file that can be sent to
+people who have no checkout.
+
+**Two rules the document is built to keep.** The caveats travel with the
+numbers, in the same document rather than in a link somebody may not follow: a
+team handed a table without them will supply their own, and theirs will be
+generous. And no transcript text appears anywhere -- only scores, counts and
+model names. `local/` is outside the reach of
+`tests/test_no_clinical_content.py`, so that property is asserted here instead,
+in `check_no_clinical_text`, before the file is written.
+"""
+
+from __future__ import annotations
+
+import argparse
+import html
+import re
+import sys
+from collections import defaultdict
+from pathlib import Path
+
+from tnb import results
+from tnb.report import COLUMNS, MEASURE_TABLES, TRACK_BLURBS, TRACK_TITLES
+
+REPO = Path(__file__).resolve().parent.parent
+DEFAULT_SOURCE = REPO / "local" / "czech-rows.jsonl"
+DEFAULT_TARGET = REPO / "local" / "czech-brief.html"
+
+#: Words that would only be in this document if a transcript had leaked into it.
+#: Not a Czech-diacritic scan: the criteria have Czech labels and the model ids
+#: are ASCII, so what is checked is length -- no free-text field on a row is
+#: long enough to be a sentence of a session.
+MAX_FIELD_CHARS = 200
+
+STYLE = """
+:root { --ink:#14161a; --muted:#5b6270; --rule:#d8dce3; --accent:#1c4e80; }
+* { box-sizing: border-box; }
+body { font: 11pt/1.5 "Source Serif 4", Georgia, serif; color: var(--ink);
+       max-width: 52rem; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+h1 { font-size: 1.9rem; line-height: 1.2; margin: 0 0 .3rem; }
+h2 { font-size: 1.15rem; margin: 2.4rem 0 .6rem; padding-bottom: .25rem;
+     border-bottom: 2px solid var(--rule); }
+h3 { font-size: 1rem; margin: 1.6rem 0 .4rem; }
+.sub { color: var(--muted); margin: 0 0 2rem; font-size: .95rem; }
+table { border-collapse: collapse; width: 100%; font-size: .85rem;
+        font-family: "Source Sans 3", system-ui, sans-serif; margin: .8rem 0 1.4rem; }
+th, td { padding: .35rem .5rem; text-align: right; border-bottom: 1px solid var(--rule); }
+th:first-child, td:first-child { text-align: left; white-space: nowrap; }
+thead th { border-bottom: 2px solid var(--ink); font-weight: 600; vertical-align: bottom; }
+tbody tr:nth-child(even) { background: #f6f7f9; }
+.dash { color: var(--muted); }
+dl { margin: .6rem 0 0; }
+dt { font-weight: 600; font-family: "Source Sans 3", system-ui, sans-serif;
+     font-size: .85rem; margin-top: .7rem; }
+dd { margin: .1rem 0 0; color: var(--muted); font-size: .9rem; }
+.warn { border-left: 3px solid var(--accent); padding: .1rem 0 .1rem .9rem; margin: 1rem 0; }
+.warn p { margin: .4rem 0; }
+footer { margin-top: 3rem; padding-top: .8rem; border-top: 1px solid var(--rule);
+         color: var(--muted); font-size: .8rem; }
+code { font-family: ui-monospace, monospace; font-size: .9em; }
+@media print {
+  body { max-width: none; padding: 0; font-size: 10pt; }
+  h2 { break-after: avoid; } table { break-inside: auto; }
+  tr { break-inside: avoid; } .warn { break-inside: avoid; }
+}
+"""
+
+LIMITS = [
+    (
+        "Ten sessions, and they are all one client",
+        "Every model wrote a note from every transcript, which is what makes the "
+        "comparison between models valid at all -- the first attempt gave each model a "
+        "different session and could not tell a worse model from a harder session. But "
+        "ten notes per model is a small number, and the real half is one client with "
+        "one therapist. Read the ordering, not the gaps between neighbours.",
+    ),
+    (
+        "The two halves differ by more than language",
+        "AnnoMI is motivational interviewing about substance use; the real sessions are "
+        "not. They differ in topic, in length and in who transcribed them. A model that "
+        "does worse on the translated half may be doing worse at motivational "
+        "interviewing rather than at translated Czech.",
+    ),
+    (
+        "Nothing here says whether a note is true",
+        "The criteria ask about the Czech and nothing else. A fluent, correctly typeset, "
+        "entirely invented note passes all seven. Whether the note says what the session "
+        "contained is a different measurement and this is not it.",
+    ),
+    (
+        "The instrument has never been checked against a person",
+        "These seven criteria are this repository's own, because no published Czech "
+        "note-quality instrument exists to reproduce. Nobody has rated these notes by "
+        "hand, and unlike PDSQI-9 there is not even a published figure for how well two "
+        "people would agree on them. Two independent judges answer every question, and "
+        "where they disagree is the only control there is.",
+    ),
+    (
+        "SOAP is not what a Czech psychologist writes",
+        "The prompt is a translation of TN-Eval's, so that the task is the same task in "
+        "another language and the English numbers mean something beside these. It is not "
+        "a reproduction of any Czech documentation standard -- there is none to "
+        "reproduce. The notes are therefore formally artificial, equally so for every "
+        "model.",
+    ),
+    (
+        "A criterion every model passes is not agreement",
+        "Where every model scores the same, two judges agreeing about it says nothing: a "
+        "correlation over a column of identical values is a coin. Such columns are "
+        "reported as unmeasured rather than as unanimous.",
+    ),
+]
+
+
+def _fmt(value, digits: int) -> str:
+    if value is None:
+        return '<span class="dash">--</span>'
+    return f"{value:.{digits}f}"
+
+
+def _table(track: str, rows: list[results.Row]) -> str:
+    columns = COLUMNS[track]
+    measures = MEASURE_TABLES[track]
+    head = "".join(f"<th>{html.escape(measures[key]['label'])}</th>" for key, _ in columns)
+    body = []
+    for row in sorted(rows, key=lambda r: r.system_id):
+        cells = "".join(
+            f"<td>{_fmt(row.metrics.headline.get(key), digits)}</td>" for key, digits in columns
+        )
+        body.append(
+            f"<tr><td>{html.escape(row.system_id)}</td><td>{row.n_sessions_scored}</td>{cells}</tr>"
+        )
+    return (
+        f"<table><thead><tr><th>Model</th><th>Notes</th>{head}</tr></thead>"
+        f"<tbody>{''.join(body)}</tbody></table>"
+    )
+
+
+def _definitions(track: str) -> str:
+    measures = MEASURE_TABLES[track]
+    items = []
+    for key, _digits in COLUMNS[track]:
+        measure = measures[key]
+        items.append(
+            f"<dt>{html.escape(measure['label'])} "
+            f"<span class='dash'>({measure['scale']})</span></dt>"
+            f"<dd>{html.escape(measure['definition'])}</dd>"
+        )
+    return "<dl>" + "".join(items) + "</dl>"
+
+
+def check_no_clinical_text(rows: list[results.Row]) -> list[str]:
+    """Whether any row carries something long enough to be a sentence of a session.
+
+    `local/` is outside `tests/test_no_clinical_content.py`, which scans tracked
+    files. This is the same guarantee for a document that is going to be sent to
+    people: scores, counts and model names only.
+    """
+    problems = []
+    for row in rows:
+        # Pairs, not a dict. Keyed by field name, every failure reason after the
+        # first would overwrite the one before it and only the last would ever
+        # be checked -- in a function whose whole job is to check all of them.
+        fields = [
+            ("system_id", row.system_id),
+            ("system_label", row.system_label),
+            *(("failure_reason", key) for key in row.failure_reasons),
+            *(("unreached_reason", key) for key in row.unreached_reasons),
+        ]
+        for name, value in fields:
+            if len(str(value)) > MAX_FIELD_CHARS:
+                problems.append(f"{row.track}/{row.system_id}: {name} is {len(value)} characters")
+        if re.search(r"\d{4,}", row.system_id):
+            problems.append(f"{row.track}: a system id carries a run of digits")
+    return problems
+
+
+def build(rows: list[results.Row]) -> str:
+    by_track: dict[str, list[results.Row]] = defaultdict(list)
+    for row in results.latest(rows):
+        if row.is_scored:
+            by_track[row.track].append(row)
+
+    judges = sorted({row.judge_model for row in rows if row.judge_model})
+    sections = []
+    for track in results.LOCAL_TRACKS:
+        drawn = by_track.get(track, [])
+        if not drawn:
+            continue
+        notes = sum(row.n_sessions_scored for row in drawn)
+        sections.append(
+            f"<h2>{html.escape(TRACK_TITLES.get(track, track))}</h2>"
+            f"<p class='sub'>{html.escape(re.sub(r'[*]{2}', '', TRACK_BLURBS.get(track, '')))}</p>"
+            f"<p>{len(drawn)} models, {notes} notes, judged by "
+            f"{html.escape(' and '.join(judges))}.</p>"
+            + _table(track, drawn)
+            + "<h3>What each column is</h3>"
+            + _definitions(track)
+        )
+
+    limits = "".join(
+        f"<h3>{html.escape(title)}</h3><p>{html.escape(body)}</p>" for title, body in LIMITS
+    )
+
+    return f"""<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Czech note quality</title><style>{STYLE}</style></head><body>
+<h1>Does an English leaderboard say anything about clinical Czech?</h1>
+<p class="sub">therapy-note-bench &middot; Czech track &middot; measured, not published</p>
+
+<p>The benchmark this belongs to scores model-written psychotherapy notes on two
+English corpora. A model's standing there is a statement about English. This
+track asks whether it carries over: the same models write notes in Czech, from
+real sessions and from translated ones, and seven yes/no criteria ask whether the
+Czech is right.</p>
+
+<div class="warn"><p><strong>These numbers are not on the public site and this
+document is not a publication.</strong> They were measured from confidential
+clinical material and the decision to publish anything from them has not been
+made. The transcripts were de-identified before any model saw them, and no
+transcript text appears in this document or in any file it was built from.</p></div>
+
+{"".join(sections)}
+
+<h2>What these numbers cannot be used for</h2>
+{limits}
+
+<h2>How it was measured</h2>
+<p>Ten real sessions with one client, de-identified by hand and read only from a
+directory that is not in version control, plus ten AnnoMI counselling
+conversations translated into spoken Czech. Every model wrote a note from every
+transcript. Notes were generated on e-INFRA; the judges never see a transcript,
+only the note a model wrote, which is why a confidential session can be scored at
+all.</p>
+<p>Each criterion is one question, answered yes or no, asked in its own call. A
+column is the share of notes free of that fault, so higher is better throughout.
+A judge that answered neither yes nor no is recorded as not having answered --
+never as "no fault" -- and a note with no content is not asked at all, because
+every one of the seven asks about the absence of a fault and an empty note would
+pass all seven.</p>
+
+<footer>Generated by <code>tools/czech_brief.py</code> from
+<code>local/czech-rows.jsonl</code>. Both are gitignored.</footer>
+</body></html>
+"""
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("--source", type=Path, default=DEFAULT_SOURCE)
+    parser.add_argument("--target", type=Path, default=DEFAULT_TARGET)
+    args = parser.parse_args(argv)
+
+    if not args.source.exists():
+        print(f"{args.source} is not there. Run `tnb score-czech` first.", file=sys.stderr)
+        return 1
+
+    rows = results.load(args.source)
+    if not rows:
+        print(f"{args.source} is empty.", file=sys.stderr)
+        return 1
+
+    problems = check_no_clinical_text(rows)
+    if problems:
+        print("Refusing to write: a row carries something that is not a score.", file=sys.stderr)
+        for problem in problems:
+            print(f"  {problem}", file=sys.stderr)
+        return 1
+
+    args.target.parent.mkdir(parents=True, exist_ok=True)
+    args.target.write_text(build(rows), encoding="utf-8")
+    scored = sum(1 for row in results.latest(rows) if row.is_scored)
+    print(f"wrote {args.target}  ({scored} scored row(s) from {len(rows)})")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

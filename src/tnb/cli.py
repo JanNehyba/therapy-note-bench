@@ -832,6 +832,45 @@ def cmd_score_czech(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_czech_report(args: argparse.Namespace) -> int:
+    """Draw the Czech tables from the local record, into a local directory.
+
+    Deliberately not `tnb report`. That one reads `results/rows.jsonl` and
+    writes `docs/`, both of which are published; this one reads
+    `results.LOCAL_ROWS_PATH` and writes `local/`, neither of which is. The
+    renderer is the same, so the page a reader gets is the same page -- track
+    switch, judge switch, expandable rows, the definitions under the table.
+
+    A page in `docs/` with no link to it would not be private. Anything served
+    from that directory is on the public site whether or not anything points at
+    it, so "hidden page" is not a thing this repository can offer.
+    """
+    rows = results.load(results.LOCAL_ROWS_PATH)
+    if not rows:
+        print(
+            f"No rows in {results.LOCAL_ROWS_PATH.name} yet. Run 'tnb score-czech' first.",
+            file=sys.stderr,
+        )
+        return 1
+
+    out = args.out or results.LOCAL_DIR
+    out.mkdir(parents=True, exist_ok=True)
+    data = report.build(rows)
+    (out / "czech.json").write_text(
+        json.dumps(data, indent=2, ensure_ascii=False, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    (out / "czech.html").write_text(report.render_page(data), encoding="utf-8")
+
+    drawn = [table["track"] for table in data["tables"]]
+    print(f"Wrote {out.name}/czech.html and {out.name}/czech.json.")
+    print(f"  {len(rows)} row(s), {len(drawn)} table(s): {', '.join(drawn) or 'none'}")
+    for table in data["tables"]:
+        scored = sum(1 for row in table["rows"] if row.get("scored"))
+        print(f"    {table['track']:20} {len(table['rows']):3} system(s), {scored} scored")
+    return 0
+
+
 def cmd_calibrate(args: argparse.Namespace) -> int:
     """Check the judge against the two therapists who rated the same notes.
 
@@ -1588,6 +1627,15 @@ def build_parser() -> argparse.ArgumentParser:
     )
     score_czech.add_argument("--run-id", help="label these rows with a run id")
     score_czech.set_defaults(func=cmd_score_czech)
+
+    czech_report = subparsers.add_parser(
+        "czech-report",
+        help="draw the Czech tables from the local record, into local/ (not published)",
+    )
+    czech_report.add_argument(
+        "--out", type=Path, help="where to write; default local/, which is gitignored"
+    )
+    czech_report.set_defaults(func=cmd_czech_report)
 
     calibrate = subparsers.add_parser(
         "calibrate", help="check the judge against TN-Eval's two human annotators (phase 4)"
