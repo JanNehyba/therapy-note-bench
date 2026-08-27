@@ -310,3 +310,72 @@ Generation runs on e-INFRA and costs quota, not money. Judging costs money, so:
 - `--max-judge-usd` is a hard ceiling. The run stops rather than exceeding it.
 - Results are content-addressed on `(provider, model, task, session, prompt_version)`,
   so adding one model re-generates and re-scores only that model.
+
+## The Czech criteria, and why they are yes/no
+
+The Czech track asks seven questions about a note, each answered yes or no, and
+publishes each as the share of notes free of that fault. It began as six 1-5
+scales and was rewritten before it ever ran, on this repository's own published
+calibration.
+
+**1-5 is the weakest shape here and the numbers say so.** Two therapists agree
+at kappa 0.50 on a criterion checklist and at rho 0.13 to 0.19 on the 1-5
+scales; the judge reaches alpha 0.60 against 0.03 to 0.11. That is already why
+the leaderboard ranks on the rubric rather than on the Likert columns, and there
+was no reason to build a third instrument out of the half that does not work.
+
+**And the consequence was already visible on the PDSQI table.** All sixteen
+models score exactly 5.00 on four of its eight columns, and `concordance`
+declines an agreement figure for each, because a correlation over a column of
+identical values is a coin rather than a finding. A proportion over ten notes
+has eleven values.
+
+**It fixes half the problem.** Where a column is flat because the *judge* cannot
+see a difference, a concrete question can recover it -- one of the two judges
+separates `comprehensible` where the other does not. Where a column is flat
+because the *task* prescribes the answer, no wording helps: every model writes
+into the same four-part template, so nothing distinguishes them on structure.
+None of the seven criteria therefore asks about anything the prompt dictates,
+and a test holds them to it by the words that named those four PDSQI columns.
+
+**Each criterion carries a counter-example, in the prompt.** Without one,
+`diacritics` and `nonword` answer the same question and their columns then
+correlate for that reason rather than a real one: `sebepece` is a diacritic that
+went missing, not a word Czech does not have.
+
+**A criterion with no opportunity is not a pass.** A note that quotes nothing
+cannot use the wrong quotation marks, and counting it clean would let a model
+score for never citing the client. Quotation marks are asked only of notes that
+quote something; the denominator is smaller and is published beside the number.
+
+**An empty note is asked nothing.** All seven ask about the absence of a fault,
+so a note with four blank sections would pass every one -- the same shape that
+gives an empty note 5.00 on PDSQI's `accurate` and `succinct`, and worse,
+because this track has no companion measure that scores an empty note zero the
+way completeness does. It is not scored and not dropped: it counts as partial,
+and `note_words` records the zero.
+
+### The judge's thinking budget, measured
+
+A budget is part of the instrument, so it was measured rather than chosen:
+
+| thinking budget | answers that were not a rating |
+|---|---|
+| 256 | 9.3 % |
+| 512 | 4.0 % |
+| 1024 | 9.6 % |
+| **2048** | **0.0 %** |
+| 4096 | 0.0 % |
+
+At the default of 256 the judge ran out of room mid-sentence and returned a
+fragment of the note it was quoting. What made it worth chasing rather than
+absorbing is that the loss is **not random**: the answers that went missing had
+a median prompt of 4566 characters against 3278 for the ones that came back, so
+truncation clusters on the longest notes. Dropping those from a denominator
+would have been biased in a direction nobody chose, and excluding the whole note
+would have excluded the long ones. Raising the budget was the only option that
+did neither. Residual loss at 2048 is about 0.3 %, and what is lost is named on
+the row rather than filled in.
+
+`judge_settings` carries the budget, and it is part of `COMPARABILITY_KEYS`, so
+the Czech tables cannot be read beside a run at any other budget.
