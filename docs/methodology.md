@@ -18,7 +18,15 @@ unchanged in wording. Scoring reproduces TN-Eval's reference-free protocol:
   (subjective 6, objective 5, assessment 8, plan 4). One judge call per
   criterion: does this note segment contain this item?
 - **Conciseness** — one judge call per sentence: does this sentence fit any
-  rubric item? The score is the fraction that do.
+  rubric item? The score is the fraction that do. **What counts as a sentence
+  is part of the measure**, because it is the denominator. TN-Eval used
+  `nltk.sent_tokenize`; this repository splits on `.!?` followed by whitespace,
+  holding back common abbreviations ("Dr.") and list markers ("1."). The list
+  markers were added in harness `0.4.0`: before that, a numbered plan was cut
+  into pieces that were bare numerals, each one a question the judge was asked
+  and a numeral cannot pass. It was 65% of one model's conciseness failures and
+  0% for the models that write prose, so the column was partly measuring
+  markdown.
 - **Faithfulness** — a Likert rating against the full transcript.
 
 Likert completeness and conciseness are also recorded, but **only for
