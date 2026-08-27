@@ -15,6 +15,7 @@ from __future__ import annotations
 import re
 import shutil
 import subprocess
+from dataclasses import replace
 from pathlib import Path
 
 import pytest
@@ -1244,3 +1245,54 @@ def test_the_agreement_table_does_not_print_a_correlation_it_has_disowned(tmp_pa
     )
     assert "18 of 19 systems print the same number" in output
     assert "does not order them" in output
+
+
+def test_a_row_with_part_answered_notes_says_why_its_sections_do_not_add_up(tmp_path):
+    """Open a row and the four section figures do not average to the number
+    above them. Nothing said why.
+
+    They answer different questions: the row averages each note's own sections
+    first, a section averages the notes that have it, and a part-answered note
+    enters one denominator and not the other. Measured across the published
+    tables, 34 rows with no partial notes agree to five decimal places and all
+    18 rows with partial notes differ -- up to 0.029 on the therapist's row,
+    which is visible at the precision printed.
+    """
+    from tnb import report
+
+    partial = _row("x", "a-judge", 0.5)
+    partial = replace(partial, n_sessions_partial=3, n_sessions_scored=50)
+    partial = replace(
+        partial,
+        metrics=results.Metrics(
+            headline={"completeness": 0.5},
+            by_section={"plan": {"completeness": 0.6}, "subjective": {"completeness": 0.4}},
+        ),
+    )
+    data = report.build([partial])
+
+    host = _flat(_run(report.render_page(data), tmp_path, panel="table-host"))
+
+    assert "will not average to the figure in the row above" in host
+    assert "3 part-answered notes" in host, "the count is the size of the gap"
+
+
+def test_a_row_with_no_part_answered_notes_says_nothing_of_the_kind(tmp_path):
+    """Because there it does add up, and a caveat over a sum that is right
+    teaches a reader to distrust a correct number."""
+    from tnb import report
+
+    whole = _row("x", "a-judge", 0.5)
+    whole = replace(
+        whole,
+        n_sessions_partial=0,
+        metrics=results.Metrics(
+            headline={"completeness": 0.5},
+            by_section={"plan": {"completeness": 0.5}, "subjective": {"completeness": 0.5}},
+        ),
+    )
+    data = report.build([whole])
+
+    host = _flat(_run(report.render_page(data), tmp_path, panel="table-host"))
+
+    assert "will not average to the figure" not in host
