@@ -18,6 +18,7 @@ this at all.
 
 from __future__ import annotations
 
+import argparse
 import os
 import shutil
 import subprocess
@@ -50,9 +51,18 @@ def find_browser() -> str | None:
     return None
 
 
-def main() -> int:
-    if not SOURCE.exists():
-        print(f"{SOURCE.relative_to(REPO)} is not there. Run `make brief` first.", file=sys.stderr)
+def main(argv: list[str] | None = None) -> int:
+    # `--source` and `--target` exist because the Czech track needs the same
+    # step for a document that is not published: it prints `local/` to `local/`,
+    # where nothing is committed. Defaults unchanged, so `make pdf` is untouched.
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("--source", type=Path, default=SOURCE, help="the HTML to print")
+    parser.add_argument("--target", type=Path, default=TARGET, help="where the PDF goes")
+    args = parser.parse_args(argv)
+    source, target = args.source, args.target
+
+    if not source.exists():
+        print(f"{source} is not there. Run `make brief` first.", file=sys.stderr)
         return 1
 
     browser = find_browser()
@@ -74,8 +84,8 @@ def main() -> int:
             "--disable-gpu",
             "--no-pdf-header-footer",
             "--virtual-time-budget=4000",
-            f"--print-to-pdf={TARGET}",
-            SOURCE.as_uri(),
+            f"--print-to-pdf={target}",
+            source.as_uri(),
         ],
         capture_output=True,
         text=True,
@@ -85,13 +95,14 @@ def main() -> int:
         # Chrome writes a profile somewhere whatever you ask it to do.
         env={**os.environ, "HOME": os.environ.get("TEMP", str(REPO))},
     )
-    if not TARGET.exists():
+    target.parent.mkdir(parents=True, exist_ok=True)
+    if not target.exists():
         print(finished.stdout + finished.stderr, file=sys.stderr)
         print("Chrome ran and wrote no file.", file=sys.stderr)
         return 1
 
-    size = TARGET.stat().st_size
-    print(f"wrote {TARGET.relative_to(REPO)}  {size:>9,} bytes  (via {Path(browser).name})")
+    size = target.stat().st_size
+    print(f"wrote {target}  {size:>9,} bytes  (via {Path(browser).name})")
     return 0
 
 
