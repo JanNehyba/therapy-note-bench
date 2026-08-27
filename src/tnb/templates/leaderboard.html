@@ -61,12 +61,13 @@ const DATA = __DATA__;
 
 __HELPERS__// Which system types are hidden by default, and what the box that shows them
 // says. `model` is not here: the models are what the table is for.
+// The therapist's note used to be behind a tick box. It is the only human-written
+// note on the page and the one row a reader most wants to see -- hiding it by
+// default made the table read as models-only and put the most interesting
+// comparison one click away, where most readers never went. The rows carry a
+// chip saying what they are, and a sentence under the table says what that
+// means, which is what the tick box was standing in for.
 const FILTERS = [
-  {
-    id: 'show-reference',
-    types: ['reference-human', 'reference-model'],
-    label: 'Show reference systems (therapist-written and the papers\u2019 own models)',
-  },
   {
     id: 'show-published',
     types: ['published'],
@@ -284,6 +285,31 @@ function renderQueue(table) {
     </section>`;
 }
 
+// What the non-model rows are, said once under the table that has them. Drawn
+// from the rows, so a table with no reference rows gets no sentence -- the
+// iCARE table has sixteen models and nothing else.
+function referenceNote(table) {
+  const types = new Set((table.rows || []).map(r => r.system_type));
+  const human = types.has('reference-human');
+  const model = types.has('reference-model');
+  if (!human && !model) return '';
+  const parts = [];
+  if (human) {
+    parts.push(`the row marked <span class="chip">therapist</span> is a
+      <strong>note a human clinician wrote</strong>, scored by the identical protocol`);
+  }
+  if (model) {
+    parts.push(`rows marked <span class="chip">reference model</span> are the
+      <strong>source paper&rsquo;s own systems</strong>, scored here so this table can be
+      read against theirs`);
+  }
+  return `<p class="note">Not every row is a model under test: ${parts.join(', and ')}.
+    They sit in the ranking because they were measured the same way, and a human
+    note placing low says something about the measure rather than about the
+    clinician &mdash; the rubric counts what a note contains and cannot see what a
+    clinician chose to leave out.</p>`;
+}
+
 function renderTable(table, index) {
   if (!table.scored) return renderQueue(table);
   const versions = table.versions;
@@ -421,6 +447,7 @@ function renderTable(table, index) {
         <tbody>${body}</tbody>
       </table></div>
       <p class="ranking-note">${rankingNote}</p>
+      ${referenceNote(table)}
       ${groupNote}
       ${table.has_thinking ? `<p class="note">Each row also records how many tokens its
          model spent <strong>reasoning</strong> before writing — open a row to see it. It is
@@ -545,6 +572,7 @@ function renderSwitch() {
 
   const trackButtons = tracks.length < 2 ? '' : `
     <div class="pick" role="group" aria-label="Track">
+      <span class="pick-label">Track</span>
       ${tracks.map(t => {
         // Keep the judge across the switch where that judge scored this track
         // too, so changing track does not silently change the referee.

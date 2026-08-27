@@ -501,8 +501,14 @@ def test_a_filter_is_drawn_only_when_it_has_something_to_filter(tmp_path):
     assert controls.strip() == "", f"expected no controls at all, got {controls!r}"
 
 
-def test_a_filter_appears_for_the_rows_that_need_one(tmp_path):
-    """The mirror: a reference row brings its control with it."""
+def test_the_therapist_is_drawn_without_being_asked_for(tmp_path):
+    """The therapist's note used to be behind a tick box, unticked.
+
+    It is the only human-written note on the page and the row a reader most
+    wants to see, and hiding it by default made the table read as models-only
+    and put the most interesting comparison one click away. It is drawn now, and
+    no control offers to hide it.
+    """
     from tnb import report
 
     data = report.build(
@@ -511,10 +517,17 @@ def test_a_filter_appears_for_the_rows_that_need_one(tmp_path):
             _row("therapist", "a-judge", 0.3, system_type="reference-human"),
         ]
     )
-    controls = _run(report.render_page(data), tmp_path, panel="controls")
+    page = report.render_page(data)
 
-    assert "show-reference" in controls
+    controls = _run(page, tmp_path, panel="controls")
+    assert "show-reference" not in controls, "the therapist is not something to opt into"
     assert "show-published" not in controls, "still nothing published to show"
+
+    table = _flat(_run(page, tmp_path, panel="table-host"))
+    assert "therapist" in table, "the human note was hidden by default"
+    assert "note a human clinician wrote" in table, (
+        "the chip says what the row is; a reader also needs to know what that means"
+    )
 
 
 def test_a_row_of_a_type_nothing_offers_to_hide_is_still_shown(tmp_path):

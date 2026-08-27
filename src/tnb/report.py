@@ -208,7 +208,12 @@ TRACK_TITLES = {
     # literature. `docs/datasets.md` has the version mismatch in full. The slash
     # alone said nothing about either.
     results.TRACK_ICARE: "iCARE form on the iHOPE corpus · 17 sections per session",
-    results.TRACK_PDSQI: "PDSQI-9 · the same notes, rated for quality",
+    # "the same notes" and "the rubric above" are true of a reader who walked
+    # here from the first tab and of nobody else. The switch means a reader can
+    # land on this table first, and then the one thing the title has to say --
+    # which corpus these notes were written from -- was the one thing it did
+    # not say. The other two tracks name theirs.
+    results.TRACK_PDSQI: "PDSQI-9 · the SOAP notes on AnnoMI, rated for quality",
 }
 
 #: The same tracks, short enough to be a button. Separate from the titles rather
@@ -217,7 +222,7 @@ TRACK_TITLES = {
 TRACK_SWITCH_LABELS = {
     results.TRACK_TNEVAL: "TN-Eval SOAP",
     results.TRACK_ICARE: "iCARE / iHOPE",
-    results.TRACK_PDSQI: "PDSQI-9 quality",
+    results.TRACK_PDSQI: "PDSQI-9 on SOAP",
 }
 
 TRACK_BLURBS = {
@@ -233,9 +238,13 @@ TRACK_BLURBS = {
         "August 2026, sixteen months later."
     ),
     results.TRACK_PDSQI: (
-        "A published instrument, asked about the very notes the rubric above scores "
-        "for coverage. Eight attributes, reported separately and never averaged, "
-        "because the instrument reports them that way."
+        "A published instrument asked about the same notes as the TN-Eval SOAP "
+        "track: the SOAP notes written from the 50 AnnoMI conversations. Not a "
+        "third corpus -- one corpus, two instruments, so the two tables can be "
+        "read against each other. Eight attributes, reported separately and never "
+        "averaged, because the instrument reports them that way and because one "
+        "of the eight is a 0-1 column: a mean over it and seven 1-5 scales would "
+        "be a number with no unit."
     ),
 }
 

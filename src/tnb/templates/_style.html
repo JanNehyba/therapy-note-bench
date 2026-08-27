@@ -214,7 +214,10 @@ p.settings { margin-top: .2rem; }
     padding: .32rem .7rem; border: 1px solid var(--line); border-radius: 6px;
     background: var(--card); color: var(--fg);
   }
-  .pick button:hover { border-color: var(--muted); }
+  /* A border that shifts one shade is not a signal. These read as labels
+     until the pointer is already on them, and a reader who does not know
+     they are buttons never puts it there. */
+  .pick button:hover { border-color: var(--accent); background: var(--chip); }
   /* The pressed state is read off `aria-pressed`, so the announcement and the
      appearance are the same fact rather than two that can disagree. */
   .pick button[aria-pressed="true"] {
