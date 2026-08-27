@@ -354,12 +354,34 @@ const FILTERS = [
 // filter. `show-published` was in the page as static HTML and no row has ever
 // carried that type: a switch wired to nothing, which teaches a reader who
 // ticks it that the page is broken.
-const present = new Set(
-  (DATA.tables || []).flatMap(t => (t.rows || []).map(r => r.system_type))
-);
-const active = FILTERS.filter(f => f.types.some(type => present.has(type)));
-document.getElementById('controls').innerHTML = active.map(f =>
-  `<label><input type="checkbox" id="${f.id}"> ${f.label}</label>`).join('');
+//
+// Per table, not per page. The rule was applied across `DATA.tables` at load,
+// which was right while the page drew one table; the track and judge switch
+// made it a per-table question and this was not moved. So "Show reference
+// systems" was offered above the iCARE table, which has sixteen model rows and
+// no reference rows at all -- the same switch wired to nothing, one switch
+// later.
+function filtersFor(table) {
+  const present = new Set((table.rows || []).map(r => r.system_type));
+  return FILTERS.filter(f => f.types.some(type => present.has(type)));
+}
+
+let active = [];
+
+function drawControls(table) {
+  // Whatever the reader ticked survives the switch. Redrawing the controls
+  // resets the boxes, and a reader who asked to see the therapist and then
+  // changed judge should not have to ask again.
+  const checked = {};
+  active.forEach(f => {
+    const box = document.getElementById(f.id);
+    if (box) checked[f.id] = box.checked;
+  });
+  active = filtersFor(table);
+  document.getElementById('controls').innerHTML = active.map(f =>
+    `<label><input type="checkbox" id="${f.id}"${checked[f.id] ? ' checked' : ''}> ${
+      f.label}</label>`).join('');
+}
 
 function rowVisible(row) {
   const filter = active.find(f => f.types.includes(row.system_type));
@@ -833,6 +855,7 @@ function show(id) {
   document.getElementById('table-host').innerHTML =
     renderTable(table, index) + agreementNote(table.track);
   renderSwitch();
+  drawControls(table);
   applyFilters();
   if (location.hash.replace(/^#/, '') !== id) {
     history.replaceState(null, '', '#' + id);
@@ -865,8 +888,10 @@ if (DATA.tables.length) {
     if (button) show(button.dataset.target);
   });
 
-  active.forEach(f =>
-    document.getElementById(f.id).addEventListener('change', applyFilters));
+  // Delegated for the same reason the row and sort handlers are: the boxes are
+  // redrawn on every switch, so a listener bound to one of them is holding a
+  // node that left the document.
+  document.getElementById('controls').addEventListener('change', applyFilters);
 
   window.addEventListener('hashchange', () => show(wanted()));
   show(current);

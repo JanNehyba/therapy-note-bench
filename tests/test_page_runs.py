@@ -926,3 +926,39 @@ def test_the_saturation_tooltip_quotes_the_table_it_names(tmp_path):
     assert "the table shows 0.546" in body, "the figure comes from the table"
     assert "0.550" not in body, "and not from a second computation of it"
     assert "48 notes the judge finished" in body, "with the denominator that produced it"
+
+
+def test_a_filter_is_offered_for_the_table_on_screen_and_not_for_another(tmp_path):
+    """The rule was applied per page and the switch made it a per-table question.
+
+    `present` was computed across `DATA.tables` at load, so a reference row in
+    *any* table drew the control above *every* table. On the live site that put
+    "Show reference systems (therapist-written and the papers' own models)"
+    above the iCARE table, which has sixteen model rows and no reference rows at
+    all -- the same switch wired to nothing that `show-published` was, one
+    switch later.
+
+    Two tables here, and the one drawn first has no reference row. Under the
+    defect its control came from the other table.
+    """
+    from tnb import report
+
+    data = report.build(
+        [
+            # Two comparability groups: different judges, so two tables.
+            _row("x", "a-judge", 0.5),
+            _row("y", "a-judge", 0.4),
+            _row("x", "b-judge", 0.5),
+            _row("therapist", "b-judge", 0.3, system_type="reference-human"),
+        ]
+    )
+    assert len(data["tables"]) == 2, "the fixture is only about two tables"
+    drawn_first = data["tables"][0]
+    assert not any(row["system_type"] != "model" for row in drawn_first["rows"]), (
+        "the table the page opens on must be the one with nothing to filter"
+    )
+
+    controls = _run(report.render_page(data), tmp_path, panel="controls")
+    assert "show-reference" not in controls, (
+        "the control belongs to the other table, not to this one"
+    )
