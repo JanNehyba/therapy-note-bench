@@ -40,6 +40,7 @@ from tnb.config import REPO_ROOT, Provider
 from tnb.datasets.base import Session, checksums
 from tnb.providers import openai_compatible as client
 from tnb.tasks import TASKS, Task
+from tnb.tasks import czech as czech_task
 from tnb.tasks import soap as soap_task
 
 CACHE_DIR = REPO_ROOT / "generations"
@@ -236,10 +237,17 @@ def _record(
         "dataset_checksums": checksums(),
     }
 
-    if job.task == soap_task.NAME:
-        # Parsed here rather than at scoring time so that a note which never
-        # parsed is visible in the cache instead of surfacing as a zero later.
-        record["note"] = soap_task.parse_note(completion.text) if completion.text else None
+    # Parsed here rather than at scoring time so that a note which never parsed
+    # is visible in the cache instead of surfacing as a zero later. The Czech
+    # tasks ask for the same four sections under Czech headings, so they parse
+    # with their own reader and fail the same way.
+    parsers = {
+        soap_task.NAME: soap_task.parse_note,
+        czech_task.NAME_REAL: czech_task.parse_note,
+        czech_task.NAME_TRANSLATED: czech_task.parse_note,
+    }
+    if job.task in parsers:
+        record["note"] = parsers[job.task](completion.text) if completion.text else None
         if record["note"] is None:
             record["ok"] = False
             record["error"] = record["error"] or "answer did not contain a SOAP dictionary"

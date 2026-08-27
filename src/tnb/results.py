@@ -40,6 +40,17 @@ from tnb.config import REPO_ROOT
 RESULTS_DIR = REPO_ROOT / "results"
 ROWS_PATH = RESULTS_DIR / "rows.jsonl"
 
+#: Rows that are measured and not published, in a gitignored directory.
+#:
+#: The Czech tracks read ten real sessions with one client. Their scores carry
+#: no text and would be safe to commit, but "safe to commit" and "decided to
+#: publish" are different sentences and only Jan gets to write the second one.
+#: Keeping them in a different file is what makes the separation structural:
+#: `report.write` reads `ROWS_PATH`, so the published page cannot draw a Czech
+#: row even by accident, whatever is registered in `report.COLUMNS`.
+LOCAL_DIR = REPO_ROOT / "local"
+LOCAL_ROWS_PATH = LOCAL_DIR / "czech-rows.jsonl"
+
 #: The two tracks. They measure different things on different scales and are
 #: never averaged together -- see docs/methodology.md.
 TRACK_TNEVAL = "tneval-soap"
@@ -49,12 +60,40 @@ TRACK_ICARE = "icare"
 #: rubric counts what a note covers, PDSQI-9 rates how good it is, and one table
 #: holding both would invite a reader to average them.
 TRACK_PDSQI = "pdsqi-soap"
-TRACKS = (TRACK_TNEVAL, TRACK_ICARE, TRACK_PDSQI)
+#: The Czech tracks. Two, not one: ten real sessions with a single client and
+#: ten AnnoMI conversations translated into Czech answer different questions,
+#: and the whole design rests on their never being averaged. Two tracks put that
+#: beyond the reach of a careless `setdefault`.
+TRACK_CZECH_REAL = "czech-real"
+TRACK_CZECH_TRANSLATED = "czech-translated"
+
+TRACKS = (
+    TRACK_TNEVAL,
+    TRACK_ICARE,
+    TRACK_PDSQI,
+    TRACK_CZECH_REAL,
+    TRACK_CZECH_TRANSLATED,
+)
+
+#: Tracks whose rows are written to `LOCAL_ROWS_PATH` and never to `ROWS_PATH`.
+#: A test asserts the committed file holds none of them.
+LOCAL_TRACKS = (TRACK_CZECH_REAL, TRACK_CZECH_TRANSLATED)
+
+#: Everything else. What `tnb report` draws and what the coverage sweep writes.
+PUBLISHED_TRACKS = tuple(track for track in TRACKS if track not in LOCAL_TRACKS)
 
 #: Generation tasks are named for what they produce, tracks for what they
 #: measure. One task feeds one track, but the names differ because the TN-Eval
 #: track is more than its SOAP prompt once scoring lands.
-TRACK_BY_TASK = {"soap": TRACK_TNEVAL, "icare": TRACK_ICARE}
+TRACK_BY_TASK = {
+    "soap": TRACK_TNEVAL,
+    "icare": TRACK_ICARE,
+    # The Czech tasks are named for their tracks. `pdsqi-soap` is deliberately
+    # absent: it scores the SOAP notes rather than generating any, so it has no
+    # directory here to index.
+    "czech-real": TRACK_CZECH_REAL,
+    "czech-translated": TRACK_CZECH_TRANSLATED,
+}
 
 #: What produced the note this row scores.
 #:
@@ -676,6 +715,13 @@ def index_generations(cache_dir: Path | None = None, *, run_id: str = "") -> lis
     for provider_dir in sorted(p for p in cache_dir.iterdir() if p.is_dir()):
         for task_dir in sorted(p for p in provider_dir.iterdir() if p.is_dir()):
             track = TRACK_BY_TASK.get(task_dir.name)
+            # The Czech tracks are measured and not published, so their
+            # coverage rows belong in `LOCAL_ROWS_PATH` and never here. Skipped
+            # rather than filtered afterwards: `cmd_report` appends whatever
+            # this returns, and a filter one caller away is a filter somebody
+            # forgets.
+            if track in LOCAL_TRACKS:
+                continue
             if track is None:
                 continue
             for version_dir in sorted(p for p in task_dir.iterdir() if p.is_dir()):

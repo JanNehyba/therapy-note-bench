@@ -25,6 +25,7 @@ from tnb.providers.openai_compatible import (
     fingerprint,
     group_by_fingerprint,
 )
+from tnb.tasks import czech as czech_task
 
 SNAPSHOT_PATH = REPO_ROOT / "docs" / "models-snapshot.md"
 
@@ -699,6 +700,136 @@ def cmd_score_pdsqi(args: argparse.Namespace) -> int:
     if not scored:
         return 0
     return append(scored)
+
+
+CZECH_CORPORA = {
+    "real": (results.TRACK_CZECH_REAL, "czech-real"),
+    "translated": (results.TRACK_CZECH_TRANSLATED, "czech-translated"),
+}
+
+
+def cmd_score_czech(args: argparse.Namespace) -> int:
+    """Ask the seven Czech criteria about the Czech notes.
+
+    Two corpora, scored separately and written to a file the published page
+    does not read. Ten real sessions with one client and ten AnnoMI
+    conversations translated into Czech answer different questions -- is this
+    model bad at Czech, or is it bad at what my translation did to AnnoMI --
+    and averaging them would answer neither.
+
+    The rows go to `results.LOCAL_ROWS_PATH`. Their numbers carry no text and
+    would be safe to publish; publishing them is a decision that has not been
+    made, and keeping them in a different file is what makes the difference
+    structural rather than remembered.
+    """
+    from tnb.scoring import czech
+    from tnb.scoring import czech_run as scoring_czech
+
+    overrides = {"model": args.judge_model}
+    if getattr(args, "concurrency", None):
+        overrides["concurrency"] = args.concurrency
+    if getattr(args, "thinking_budget", None) is not None:
+        overrides["thinking_budget"] = args.thinking_budget
+    config = judge.config_from_env(**overrides)
+
+    wanted = ["real", "translated"] if args.corpus == "both" else [args.corpus]
+    plan: list[tuple[str, str, list]] = []
+    for corpus in wanted:
+        track, task_name = CZECH_CORPORA[corpus]
+        loader = czech_task.load_real if corpus == "real" else czech_task.load_translated
+        try:
+            sessions = loader(args.limit)
+        except RuntimeError as error:
+            print(f"{corpus}: {error}", file=sys.stderr)
+            continue
+        candidates = list(scoring_czech.from_generations(sessions, task_name=task_name))
+        if args.models:
+            names = {name.strip() for name in args.models.split(",") if name.strip()}
+            candidates = [c for c in candidates if c.system_id in names]
+        plan.append((track, corpus, candidates))
+
+    if not any(candidates for _, _, candidates in plan):
+        raise RuntimeError(
+            "Nothing to score. Run 'tnb generate --tasks czech-real,czech-translated' first."
+        )
+
+    total = sum(len(c) for _, _, c in plan)
+    questions = sum(
+        len(czech.build_tasks(czech_task.render_note(candidate.note)))
+        for _, _, candidates in plan
+        for candidate in candidates
+    )
+    print(
+        f"{total} note(s) over {len(plan)} corpus(es), {questions} judge questions.\n"
+        f"judge {config.model}, thinking budget {config.thinking_budget}, "
+        f"ceiling ${args.max_judge_usd:.2f}"
+    )
+    for track, _corpus, candidates in plan:
+        systems = sorted({c.system_id for c in candidates})
+        print(f"  {track:18} {len(candidates):4} note(s), {len(systems)} system(s)")
+
+    if args.dry_run:
+        print("\nDry run: the judge was not called.")
+        return 0
+
+    client = judge.Judge(config)
+    spend = judge.Spend(limit_usd=args.max_judge_usd)
+    written = 0
+
+    for track, _corpus, candidates in plan:
+        if not candidates:
+            continue
+        coverage = _generated_per_system(candidates)
+        done = 0
+
+        expected = len(candidates)
+
+        def on_note(result, total=expected) -> None:
+            nonlocal done
+            done += 1
+            print(
+                f"  [{done}/{total}] {result.candidate.system_id[:26]:26} "
+                f"{result.candidate.session_id:>14}  "
+                f"diakritika {_measure_cell(result.scored.get('diacritics'))}  "
+                f"shoda {_measure_cell(result.scored.get('agreement'))}  "
+                f"asked {result.asked:2} cached {result.cached:2}"
+                + (f" missing {len(result.missing)}" if result.missing else "")
+                + (" EMPTY" if result.empty else "")
+                + f"  {_money(spend.usd(config.model))}",
+                flush=True,
+            )
+
+        print(f"\n{track}:")
+        scored = scoring_czech.score_many(
+            candidates, client, spend, force=args.force, on_note=on_note
+        )
+        if not scored:
+            continue
+
+        rows = scoring_czech.to_rows(
+            scored,
+            track=track,
+            judge_model=config.model,
+            judge_settings=config.fingerprint(),
+            n_generated=coverage,
+            n_attempted=coverage,
+            run_id=args.run_id or "",
+        )
+        if args.no_write:
+            print(f"  --no-write: {len(rows)} row(s) not appended.")
+            continue
+        results.LOCAL_DIR.mkdir(parents=True, exist_ok=True)
+        path = results.append(rows, results.LOCAL_ROWS_PATH)
+        written += len(rows)
+        print(f"  appended {len(rows)} row(s) to {path.relative_to(REPO_ROOT)}")
+
+    print(
+        f"\n{spend.calls} judge calls, {spend.input_tokens} in / {spend.output_tokens} out, "
+        f"{_money(spend.usd(config.model))} at list price."
+    )
+    if written:
+        print("Run 'tnb czech-report' to rebuild the local page.")
+    return 0
 
 
 def cmd_calibrate(args: argparse.Namespace) -> int:
@@ -1419,6 +1550,44 @@ def build_parser() -> argparse.ArgumentParser:
     )
     score_pdsqi.add_argument("--run-id", help="label these rows with a run id")
     score_pdsqi.set_defaults(func=cmd_score_pdsqi)
+
+    score_czech = subparsers.add_parser(
+        "score-czech",
+        help="ask the seven Czech criteria about the Czech notes (local only)",
+    )
+    score_czech.add_argument(
+        "--corpus",
+        choices=["real", "translated", "both"],
+        default="both",
+        help=(
+            "which half. Both by default: a model scored on one and not the other "
+            "makes the comparison the track exists for impossible"
+        ),
+    )
+    score_czech.add_argument("--models", help="comma-separated system ids to rate")
+    score_czech.add_argument("--limit", type=int, help="use only the first N sessions")
+    score_czech.add_argument(
+        "--judge-model", default=judge.DEFAULT_MODEL, help="which judge to run"
+    )
+    score_czech.add_argument(
+        "--max-judge-usd",
+        type=float,
+        default=250.0,
+        help="runaway guard; the run stops rather than exceeding it",
+    )
+    score_czech.add_argument("--concurrency", type=int, help="parallel judge calls; default 4")
+    score_czech.add_argument(
+        "--thinking-budget",
+        type=int,
+        help="how much room the judge gets to think; default 256, part of the cache key",
+    )
+    score_czech.add_argument("--force", action="store_true", help="re-ask cached questions")
+    score_czech.add_argument("--dry-run", action="store_true", help="print the job, ask nothing")
+    score_czech.add_argument(
+        "--no-write", action="store_true", help="rate but do not append result rows"
+    )
+    score_czech.add_argument("--run-id", help="label these rows with a run id")
+    score_czech.set_defaults(func=cmd_score_czech)
 
     calibrate = subparsers.add_parser(
         "calibrate", help="check the judge against TN-Eval's two human annotators (phase 4)"

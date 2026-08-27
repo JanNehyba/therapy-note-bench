@@ -29,3 +29,6 @@ scores/
 
 # Working handoff notes. Kept on disk, not published.
 HANDOFF-*.md
+
+# Czech track output: rows, pages and the report. Not published.
+local/
