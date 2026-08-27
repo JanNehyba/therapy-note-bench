@@ -1314,3 +1314,30 @@ def test_the_table_says_what_earned_the_ranking_column_its_job(tmp_path):
 
     assert "only column checked against people" in host
     assert "0.60" in host and "0.50" in host, "the reader needs the two numbers, not the claim"
+
+
+def test_a_judge_tried_and_not_chosen_is_named_rather_than_drawn(tmp_path):
+    """`gemini-2.5-pro` was a calibration candidate. It put two extra tables of
+    11 and 3 rows behind the judge switch -- two buttons offering a run nobody
+    publishes from, one differing from the other only in a thinking budget.
+
+    Withdrawn only where a panel judge has scored the same track: a candidate's
+    rows are the only thing on a track nobody else has scored, and withdrawing
+    them there would leave the track blank, which is worse than an extra button.
+    """
+    from tnb import judge, report
+
+    panel = _row("x", judge.DEFAULT_MODEL, 0.5)
+    candidate = _row("x", "gemini-2.5-pro", 0.4)
+
+    both = report.build([panel, candidate])
+    drawn = {t["versions"]["judge_model"] for t in both["tables"] if t["scored"]}
+    assert drawn == {judge.DEFAULT_MODEL}, "a candidate judge was offered beside the panel"
+    assert any(
+        "tried during calibration" in report._superseded_sentence(gone)
+        for gone in both["superseded"]
+    ), "and the reader is not told where it went"
+
+    alone = report.build([candidate])
+    drawn = {t["versions"]["judge_model"] for t in alone["tables"] if t["scored"]}
+    assert drawn == {"gemini-2.5-pro"}, "the only judge on a track is drawn, panel or not"

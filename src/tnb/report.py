@@ -22,7 +22,7 @@ import re
 from dataclasses import replace
 from pathlib import Path
 
-from tnb import corpus, results
+from tnb import corpus, judge, results
 from tnb.config import REPO_ROOT
 from tnb.results import Row
 from tnb.scoring import concordance, pdsqi
@@ -235,7 +235,11 @@ TRACK_BLURBS = {
         "found they disagree. That disagreement is a result, not an error. "
         "iCARE and iHOPE are one project under two names: the code "
         "was released as iCARE in April 2025 and the preprint renamed it iHOPE in "
-        "August 2026, sixteen months later."
+        "August 2026, sixteen months later. **PDSQI-9 has no columns here**, and "
+        "that is deliberate rather than missing: it rates how a clinical note is "
+        "written, and these are 17 form fields rather than a written note. It runs "
+        "on the SOAP notes, where it can be read against the rubric that scores "
+        "the same text."
     ),
     results.TRACK_PDSQI: (
         "A published instrument asked about the same notes as the TN-Eval SOAP "
@@ -612,6 +616,11 @@ def _selection(tables: list[dict]) -> dict:
     }
 
 
+#: The two judges the site publishes from. A table from any other judge is
+#: named rather than drawn -- see `_current_groups`.
+PANEL = (judge.DEFAULT_MODEL, judge.SECOND_JUDGE)
+
+
 def _current_groups(groups: dict[tuple, list[Row]]) -> tuple[dict[tuple, list[Row]], list[dict]]:
     """Split comparability groups into the ones to draw and the ones to name.
 
@@ -681,6 +690,15 @@ def _current_groups(groups: dict[tuple, list[Row]]) -> tuple[dict[tuple, list[Ro
             lane = lane_of(key)
             best[lane] = max(best.get(lane, ("", False)), rank(key))
 
+    # Only where the panel actually has a table. A candidate judge's rows are the
+    # only thing on a track nobody else has scored, and withdrawing them would
+    # leave the track blank -- which is worse than an extra button.
+    covered_by_panel = {
+        field(key, "track")
+        for key in groups
+        if field(key, "judge_model") in PANEL and records_its_instrument(key)
+    }
+
     keep: dict[tuple, list[Row]] = {}
     superseded = []
     for key, group in groups.items():
@@ -699,6 +717,18 @@ def _current_groups(groups: dict[tuple, list[Row]]) -> tuple[dict[tuple, list[Ro
         # instruments and both belong on the page.
         if current and rank(key) < best[lane] and harness < current:
             reasons.append("harness")
+        # A judge that was tried during calibration and not chosen. Its rows are
+        # real and stay in `results/`, but the leaderboard is the panel's, and
+        # `gemini-2.5-pro` put two extra tables of 11 and 3 rows behind the judge
+        # switch -- two buttons offering a run nobody publishes from, one of them
+        # differing from the other only in a thinking budget. `tnb judges` is
+        # where the candidates belong, and it draws all of them.
+        if (
+            field(key, "judge_model")
+            and field(key, "judge_model") not in PANEL
+            and (field(key, "track") in covered_by_panel)
+        ):
+            reasons.append("not on the panel")
 
         if not reasons:
             keep[key] = group
@@ -1385,6 +1415,11 @@ def _superseded_reasons(gone: dict) -> list[str]:
         "settings": (
             "the judge's settings were not recorded, so the rows cannot be shown to "
             "have come from one instrument"
+        ),
+        "not on the panel": (
+            "this judge was tried during calibration and is not one of the two the "
+            "leaderboard publishes from -- every candidate is compared against the two "
+            "human annotators under *Which judge* on the methods page"
         ),
     }
     # Older rows carry no `reasons`; before this field existed there was only one.

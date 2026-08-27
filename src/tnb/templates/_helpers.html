@@ -26,6 +26,12 @@ const TYPE_LABEL = {
 // `backticks` are code, and here, where they are backticks. Converting keeps
 // one source of words rather than two that drift apart.
 function code(text) {
-  return String(text).replace(/`([^`]+)`/g, '<code>$1</code>');
+  // Backticks and **emphasis**, because the same sentence is authored once and
+  // printed in two places: the README, where both are markdown, and here, where
+  // they are literal characters. A blurb written with `**Nothing is averaged**`
+  // reached the page with the asterisks showing.
+  return String(text)
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
 }
 
