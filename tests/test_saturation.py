@@ -439,3 +439,26 @@ def test_a_system_with_nothing_of_its_own_reports_no_mean_rather_than_zero():
         system="y", mean=0.5, low=0.4, high=0.6, sessions=10, own_sessions=12, own_mean=0.5123
     )
     assert saturation.interval_json(measured)["own_mean"] == 0.5123, "a real one still arrives"
+
+
+def test_own_mean_is_not_claimed_to_be_the_tables_figure():
+    """It is not, for 10 of the 19 rows under the first judge, by up to 0.0070.
+
+    The leaderboard admits a note on `Scores.is_complete` -- all four sections
+    of every measure -- and this analysis, which reads only the answer cache,
+    admits it on `rests_on_every_section("completeness")`, because the note text
+    is not in the cache and which conciseness questions should have been asked
+    cannot be reconstructed. The weaker test keeps more notes and produces a
+    different mean over them.
+
+    Held on the prose, because the defect was the prose.
+    """
+    import inspect
+
+    source = inspect.getsource(saturation.Interval)
+    assert "what the table shows" not in source, (
+        "own_mean is not the table's figure and the comment must not say it is"
+    )
+    assert "is_complete" in source and "rests_on_every_section" in source, (
+        "the comment has to say which two tests differ, or the next reader repeats it"
+    )

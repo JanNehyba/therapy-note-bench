@@ -101,11 +101,21 @@ class Interval:
     #: whenever some *other* system lost notes, which is why this mean and the
     #: leaderboard's differ: same measure, different denominator.
     own_sessions: int = 0
-    #: The mean over this system's own conversations -- what the table shows.
-    #: `None` when there is nothing to average, never 0.0: the page prints this
-    #: figure, and a zero there reads as a score rather than as an absence. The
-    #: page has always guarded on `!= null`; this side was the one that would
-    #: not say it.
+    #: The mean over this system's own conversations. **Not the table's figure**,
+    #: which this comment claimed until 2026-08-27 and which is wrong for 10 of
+    #: the 19 rows under the first judge, by up to 0.0070.
+    #:
+    #: The two admit a note on different tests. The leaderboard averages the
+    #: notes `Scores.is_complete` accepts, which needs all four sections of
+    #: *every* measure -- completeness, conciseness and faithfulness. This
+    #: analysis reads only the answer cache, where the note text is not, so it
+    #: cannot know which conciseness questions should have been asked and admits
+    #: a note on `rests_on_every_section("completeness")` instead. That is a
+    #: weaker test, so it keeps more notes: 49 against the table's 48 for
+    #: `kimi-k3`, and a different mean over them.
+    #:
+    #: `None` when there is nothing to average, never 0.0: a zero there reads as
+    #: a score rather than as an absence.
     own_mean: float | None = None
 
 
@@ -506,6 +516,16 @@ def build(root: Path | None = None, judge_model: str = judge.DEFAULT_MODEL) -> d
         ],
         "verdict_counts": {name: len(keys) for name, keys in sorted(verdicts.items())},
         "intervals": [interval_json(i) for i in intervals],
+        #: For every ordered pair, the fraction of resamples in which the first
+        #: scored above the second. This is the bootstrap's own answer to "can
+        #: these two be told apart", it was computed here and thrown away, and
+        #: the figure that needed it read `indistinguishable` instead -- a
+        #: greedy grouping whose own docstring says it is not an equivalence
+        #: class, so two systems in different bands need not be separated at all.
+        "beats": {
+            first: {second: round(value, 4) for second, value in sorted(row.items())}
+            for first, row in sorted(beats.items())
+        },
         "indistinguishable": indistinguishable(intervals, beats),
         "bootstrap": {"samples": BOOTSTRAP_SAMPLES, "seed": BOOTSTRAP_SEED, "paired": True},
     }
