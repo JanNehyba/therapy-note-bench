@@ -35,7 +35,7 @@ from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 
-from tnb import judge
+from tnb import judge, results
 from tnb.scoring import tneval
 
 #: Fixed so the published intervals do not move when nothing else did.
@@ -464,6 +464,14 @@ def build(root: Path | None = None, judge_model: str = judge.DEFAULT_MODEL) -> d
     }
 
     return {
+        # Which track these groups belong to. This module reads
+        # `rubric_completeness` units out of the TN-Eval cache and knows nothing
+        # about any other corpus, but it never said so, and `report._groups_for`
+        # matched an analysis to a table on the judge alone -- so both iCARE
+        # tables were drawn with a Rank column whose bands come from 50 AnnoMI
+        # conversations scored on a 23-item checklist the iCARE track does not
+        # have.
+        "track": results.TRACK_TNEVAL,
         "judge_model": judge_model,
         # Which *settings* of that judge, and what else was in the cache. The
         # model name alone does not identify the instrument: the same judge at

@@ -1003,3 +1003,42 @@ def test_the_icare_title_says_which_name_is_which():
     blurb = report.TRACK_BLURBS[results.TRACK_ICARE]
     assert "one project under two names" in blurb or "one project" in blurb
     assert "2025" in blurb and "2026" in blurb, "the rename is dated, not asserted"
+
+
+def _saturation(judge_model: str, **overrides) -> dict:
+    base = {
+        "track": results.TRACK_TNEVAL,
+        "judge_model": judge_model,
+        "judge_fingerprint": None,
+        "sessions": 25,
+        "corpus_sessions": 50,
+        "indistinguishable": [["x"], ["y"]],
+    }
+    return {**base, **overrides}
+
+
+def test_a_tables_groups_come_from_its_own_track():
+    """`saturation` reads `rubric_completeness` out of the TN-Eval cache and
+    knows nothing about any other corpus. `_groups_for` matched an analysis to a
+    table on the judge alone, so both iCARE tables were published with a Rank
+    column ranking them by 50 AnnoMI conversations on a measure the iCARE track
+    does not have — over rows sorted by name, under a caption saying "over the 25
+    conversations every system here was scored on" for a track that ran 40.
+    """
+    sat = [_saturation("a-judge")]
+    assert report._groups_for({"track": results.TRACK_TNEVAL, "judge_model": "a-judge"}, sat)
+    assert report._groups_for({"track": results.TRACK_ICARE, "judge_model": "a-judge"}, sat) is None
+    assert report._groups_for({"track": results.TRACK_PDSQI, "judge_model": "a-judge"}, sat) is None
+
+
+def test_an_analysis_written_before_the_track_was_recorded_is_tn_evals():
+    """`docs/saturation-*.json` on disk predates the field. It is TN-Eval's,
+    because that is the only thing the module has ever produced — but the
+    fallback must not make it match everything."""
+    older = _saturation("a-judge")
+    older.pop("track")
+    assert report._groups_for({"track": results.TRACK_TNEVAL, "judge_model": "a-judge"}, [older])
+    assert (
+        report._groups_for({"track": results.TRACK_ICARE, "judge_model": "a-judge"}, [older])
+        is None
+    )

@@ -715,12 +715,22 @@ def current_rows(rows: list[Row]) -> list[Row]:
 def _groups_for(versions: dict, saturations: list[dict]) -> dict | None:
     """The indistinguishable groups belonging to one table, or None.
 
-    Matched on the judge *and its settings*, not on the judge's name: the same
-    judge at two thinking budgets is two instruments, and drawing one's groups
-    over the other's numbers is the error this file spends most of its comments
-    on.
+    Matched on the **track**, the judge and the judge's settings. The same judge
+    at two thinking budgets is two instruments, and drawing one's groups over the
+    other's numbers is the error this file spends most of its comments on -- and
+    the track was missing from that list, which is the same error one axis over.
+    `saturation` analyses TN-Eval SOAP completeness over AnnoMI conversations and
+    nothing else, so both iCARE tables were published with a Rank column ranking
+    them by a different corpus on a measure they do not have, scattered over rows
+    sorted by name, under a caption reading "over the 25 conversations every
+    system here was scored on" -- on a track that ran 40.
+
+    An analysis written before `track` was recorded is TN-Eval's, because that is
+    the only thing this module has ever produced.
     """
     for item in saturations:
+        if item.get("track", results.TRACK_TNEVAL) != versions.get("track"):
+            continue
         if item.get("judge_model") != versions.get("judge_model"):
             continue
         recorded = item.get("judge_fingerprint")

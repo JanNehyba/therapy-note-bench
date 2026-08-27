@@ -7816,46 +7816,7 @@
         "human_role_short": "answer key",
         "scored_against": "An expert note written by the clinician who saw the session. ROUGE-L and BERTScore measure how closely the model reproduced it; TRACE asks a judge to rate the note itself, the way the paper's experts did."
       },
-      "groups": {
-        "corpus_sessions": 50,
-        "measure": "completeness",
-        "of": [
-          [
-            "kimi-k3",
-            "qwen3.5-int4",
-            "qwen3.5-122b",
-            "google_gemini-3.1-pro-preview"
-          ],
-          [
-            "google_gemini-3.7-flash",
-            "glm-5.2"
-          ],
-          [
-            "gpt-5.6-terra",
-            "glm-5",
-            "gpt-5.6-sol",
-            "gpt-oss-120b",
-            "qwen3.8-27b",
-            "gemma4"
-          ],
-          [
-            "gpt-5.6-luna",
-            "deepseek-v4-flash-thinking",
-            "mistral-medium-3.5"
-          ],
-          [
-            "deepseek-v4-flash"
-          ],
-          [
-            "mistral-large-v2",
-            "llama-3.1-70b"
-          ],
-          [
-            "therapist"
-          ]
-        ],
-        "sessions": 25
-      },
+      "groups": null,
       "has_effort": true,
       "has_thinking": true,
       "id": "icare-gemini-3.1-pro-preview-0.2.0-102129",
@@ -8754,46 +8715,7 @@
         "human_role_short": "answer key",
         "scored_against": "An expert note written by the clinician who saw the session. ROUGE-L and BERTScore measure how closely the model reproduced it; TRACE asks a judge to rate the note itself, the way the paper's experts did."
       },
-      "groups": {
-        "corpus_sessions": 50,
-        "measure": "completeness",
-        "of": [
-          [
-            "kimi-k3",
-            "qwen3.5-122b",
-            "google_gemini-3.1-pro-preview",
-            "qwen3.5-int4",
-            "gpt-oss-120b"
-          ],
-          [
-            "gpt-5.6-terra",
-            "gpt-5.6-sol",
-            "deepseek-v4-flash-thinking",
-            "google_gemini-3.7-flash",
-            "glm-5",
-            "glm-5.2"
-          ],
-          [
-            "gpt-5.6-luna",
-            "qwen3.8-27b",
-            "deepseek-v4-flash",
-            "mistral-medium-3.5"
-          ],
-          [
-            "gemma4"
-          ],
-          [
-            "mistral-large-v2"
-          ],
-          [
-            "llama-3.1-70b"
-          ],
-          [
-            "therapist"
-          ]
-        ],
-        "sessions": 42
-      },
+      "groups": null,
       "has_effort": true,
       "has_thinking": true,
       "id": "icare-gpt-5.6-terra-0.2.0-acf643",
