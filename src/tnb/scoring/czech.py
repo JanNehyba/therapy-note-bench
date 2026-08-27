@@ -281,9 +281,27 @@ def parse_answer(answer: str) -> bool | None:
     None for anything else, never False. Reading "not yes" as "no" would declare
     every unanswered note free of the fault, which is the one failure a rubric
     of absences cannot afford.
+
+    **The last line counts, and only the last line.** Measured on this corpus: a
+    judge sometimes leaks its own deliberation into the answer and then answers
+    anyway --
+
+        '" - wait, no.\\n\\n    I will output "ne".\\nne'
+
+    -- which is a rating, written where the prompt asked for it, preceded by
+    text the prompt did not ask for. Taking the final line reads it; refusing
+    would throw away an answer that is there. This is deliberately *not*
+    `tneval.parse_likert`'s fallback, which scans the whole string for any digit
+    and reads "4 (Patient says 2" as 2. Anywhere is a guess. The last line is
+    where the answer was asked for.
     """
-    normalised = (answer or "").strip().strip(".!?„“”\"'").lower()
-    return pdsqi.parse_yes_no(_ANSWERS.get(normalised, normalised))
+    text = (answer or "").strip()
+    for candidate in (text, text.splitlines()[-1] if text else ""):
+        normalised = candidate.strip().strip(".!?„“”\"'").lower()
+        verdict = pdsqi.parse_yes_no(_ANSWERS.get(normalised, normalised))
+        if verdict is not None:
+            return verdict
+    return None
 
 
 def has_content(note: str) -> bool:

@@ -267,3 +267,20 @@ def test_a_note_that_does_not_parse_is_none_and_not_four_empty_sections():
     assert task.parse_note('{"Subjektivně":"","Objektivně":"","Hodnocení":"","Plán":""}') == {
         key: "" for key in task.SECTIONS
     }
+
+
+def test_a_judge_that_deliberated_and_then_answered_is_read():
+    """Measured on the corpus: a judge sometimes leaks its reasoning into the
+    answer and answers anyway, on the final line, where the prompt asked for it.
+    Refusing would throw away an answer that is there."""
+    assert czech.parse_answer('" - wait, no.\n\n    I will output "ne".\nne') is False
+    assert czech.parse_answer("Uvazuji...\nano") is True
+
+
+def test_only_the_last_line_counts_and_not_anywhere_in_the_text():
+    """The narrowing that keeps this from becoming TN-Eval's digit scan, which
+    reads "4 (Patient says 2" as 2. Anywhere is a guess; the last line is where
+    the answer was asked for."""
+    assert czech.parse_answer("ne, ale zaroven ano") is None
+    assert czech.parse_answer("The note contains no error, so the answer is no") is None
+    assert czech.parse_answer("ano\nnevim") is None
