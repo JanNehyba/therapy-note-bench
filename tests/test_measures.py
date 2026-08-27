@@ -449,3 +449,31 @@ def test_a_numbered_list_is_still_cut_into_bare_numerals_and_why():
     assert "2." in pieces, "the defect, pinned; closing it needs the questions re-asked"
     assert "Continue weekly sessions." in pieces
     assert split_sentences("He was calm. She agreed.") == ["He was calm.", "She agreed."]
+
+
+def test_the_docs_say_that_nothing_verifies_the_icare_answer_key():
+    """ "The form does not fit the material" and "nothing checks the answer key"
+    are different claims. The second bounds what ROUGE-L and BERTScore can mean:
+    a model is scored by distance from one unreviewed document.
+
+    `data/ihope_test.json` holds one `summary` per session and no second
+    version, so human disagreement is not measurable here at all — against
+    TN-Eval, where two annotators rated every note and the disagreement is
+    published.
+    """
+    import json
+
+    from tnb.config import REPO_ROOT
+
+    limitations = (REPO_ROOT / "docs" / "limitations.md").read_text(encoding="utf-8")
+    assert "Nothing verifies the answer key" in limitations
+    assert "not measurable" in limitations
+
+    corpus = REPO_ROOT / "data" / "ihope_test.json"
+    if not corpus.exists():
+        pytest.skip("the corpus is fetched at run time and is not on this machine")
+    sessions = json.loads(corpus.read_text(encoding="utf-8"))
+    assert len({s["id"] for s in sessions}) == len(sessions), (
+        "one record per session; a second expert note would show up as a repeated id "
+        "and would make the claim in the docs false"
+    )

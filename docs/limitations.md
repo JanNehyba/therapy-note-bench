@@ -255,6 +255,36 @@ clinical note". The sections that carry real signal are the ones the transcripts
 can actually answer: presenting complaints, mental status, and what was
 discussed, which the experts filled in 37, 39 and 39 times out of 40.
 
+
+## Nothing verifies the answer key
+
+The previous section says the iCARE form does not fit the material. This one is a
+different claim about the same document: **nothing checks that the expert note is
+right.**
+
+`data/ihope_test.json` holds one `summary` per session — 40 sessions, 40 unique
+ids, one note each. There is no second version, so the question *would another
+clinician have written this?* cannot be asked here, let alone answered.
+
+Set against the other track, the asymmetry is total:
+
+| | TN-Eval | iCARE |
+|---|---|---|
+| Human documents per item | note + **two** annotators' ratings | **one** expert note |
+| Human disagreement | **measured**: Krippendorff's alpha 0.50 on the rubric, 0.13 / 0.19 / 0.18 on the three Likert scales | **not measurable** |
+| Judge anchored against a human | yes, and the figure is published whatever it says | no — the TRACE ratings are [not published anywhere](landscape.md#where-the-trace-data-is-not) |
+
+So on this track **ROUGE-L and BERTScore measure distance from a single
+unreviewed document**, and that document is 46% empty. They do not say a note is
+good; they say it resembles that one. The instrument's authority rests on the
+source paper's description of who wrote it and on nothing that can be checked
+from the data.
+
+This is not a reason to drop the track. It is the reason its two automatic
+columns are reported beside TRACE rather than instead of it, and the reason
+neither is a ranking: the source paper's own finding is that the two disagree,
+and with no human anchor there is no third thing to say which is closer to right.
+
 ## Seven of nine things a clinician means by "quality" are not measured
 
 The field has an instrument for this: [PDSQI-9](https://arxiv.org/abs/2501.08977),

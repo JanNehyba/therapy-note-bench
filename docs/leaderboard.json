@@ -186,85 +186,7 @@
   },
   "concordance": {
     "icare": {
-      "dominance": [
-        {
-          "beats": [
-            "deepseek-v4-flash",
-            "gpt-5.6-luna",
-            "gpt-5.6-terra",
-            "gpt-oss-120b",
-            "kimi-k3",
-            "qwen3.5-122b"
-          ],
-          "system": "gpt-5.6-sol"
-        },
-        {
-          "beats": [
-            "deepseek-v4-flash",
-            "deepseek-v4-flash-thinking",
-            "gpt-5.6-luna",
-            "gpt-oss-120b",
-            "mistral-medium-3.5",
-            "qwen3.5-122b"
-          ],
-          "system": "qwen3.8-27b"
-        },
-        {
-          "beats": [
-            "deepseek-v4-flash",
-            "deepseek-v4-flash-thinking",
-            "gpt-oss-120b",
-            "qwen3.5-122b"
-          ],
-          "system": "glm-5"
-        },
-        {
-          "beats": [
-            "deepseek-v4-flash",
-            "deepseek-v4-flash-thinking",
-            "gpt-oss-120b",
-            "qwen3.5-122b"
-          ],
-          "system": "glm-5.2"
-        },
-        {
-          "beats": [
-            "deepseek-v4-flash",
-            "deepseek-v4-flash-thinking",
-            "gpt-oss-120b",
-            "qwen3.5-122b"
-          ],
-          "system": "google_gemini-3.1-pro-preview"
-        },
-        {
-          "beats": [
-            "deepseek-v4-flash",
-            "gpt-oss-120b",
-            "qwen3.5-122b"
-          ],
-          "system": "gemma4"
-        },
-        {
-          "beats": [
-            "deepseek-v4-flash-thinking",
-            "gpt-oss-120b"
-          ],
-          "system": "mistral-medium-3.5"
-        },
-        {
-          "beats": [
-            "deepseek-v4-flash",
-            "gpt-oss-120b"
-          ],
-          "system": "qwen3.5-int4"
-        },
-        {
-          "beats": [
-            "gpt-oss-120b"
-          ],
-          "system": "deepseek-v4-flash-thinking"
-        }
-      ],
+      "dominance": [],
       "judge_a": "gemini-3.1-pro-preview",
       "judge_b": "gpt-5.6-terra",
       "judge_measures": [
@@ -286,18 +208,8 @@
       ],
       "n_systems": 16,
       "ranking_measure": null,
-      "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on trace (+0.826) and place 11 of 16 systems differently on it anyway. The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. 9 system(s) beat at least one other on every measure under both judges, which needs no weighting to be true: `gpt-5.6-sol` beats 6. 8 of 16 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner.",
+      "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on trace (+0.826) and place 11 of 16 systems differently on it anyway. The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. 16 of 16 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner.",
       "tensions": [
-        {
-          "agrees": true,
-          "first": "rouge_l",
-          "n_systems": 16,
-          "rho_by_judge": {
-            "gemini-3.1-pro-preview": 0.6981,
-            "gpt-5.6-terra": 0.6981
-          },
-          "second": "bertscore"
-        },
         {
           "agrees": false,
           "first": "rouge_l",
@@ -323,38 +235,8 @@
           "first": "rouge_l",
           "n_systems": 16,
           "rho_by_judge": {
-            "gemini-3.1-pro-preview": 0.0143,
-            "gpt-5.6-terra": 0.0143
-          },
-          "second": "temporal_next"
-        },
-        {
-          "agrees": false,
-          "first": "bertscore",
-          "n_systems": 16,
-          "rho_by_judge": {
-            "gemini-3.1-pro-preview": 0.0648,
-            "gpt-5.6-terra": 0.162
-          },
-          "second": "trace"
-        },
-        {
-          "agrees": false,
-          "first": "bertscore",
-          "n_systems": 16,
-          "rho_by_judge": {
-            "gemini-3.1-pro-preview": 0.0,
-            "gpt-5.6-terra": 0.0
-          },
-          "second": "temporal_past"
-        },
-        {
-          "agrees": false,
-          "first": "bertscore",
-          "n_systems": 16,
-          "rho_by_judge": {
-            "gemini-3.1-pro-preview": 0.3109,
-            "gpt-5.6-terra": 0.3109
+            "gemini-3.1-pro-preview": 0.0256,
+            "gpt-5.6-terra": 0.0256
           },
           "second": "temporal_next"
         },
@@ -373,8 +255,8 @@
           "first": "trace",
           "n_systems": 16,
           "rho_by_judge": {
-            "gemini-3.1-pro-preview": 0.6169,
-            "gpt-5.6-terra": 0.7088
+            "gemini-3.1-pro-preview": 0.6224,
+            "gpt-5.6-terra": 0.7129
           },
           "second": "temporal_next"
         },
@@ -383,8 +265,8 @@
           "first": "temporal_past",
           "n_systems": 16,
           "rho_by_judge": {
-            "gemini-3.1-pro-preview": -0.3556,
-            "gpt-5.6-terra": -0.3556
+            "gemini-3.1-pro-preview": -0.3561,
+            "gpt-5.6-terra": -0.3561
           },
           "second": "temporal_next"
         }
@@ -392,12 +274,20 @@
       "track": "icare",
       "track_label": "iCARE form on the iHOPE corpus · 17 sections per session",
       "undominated": [
+        "deepseek-v4-flash",
+        "deepseek-v4-flash-thinking",
         "gemma4",
         "glm-5",
         "glm-5.2",
         "google_gemini-3.1-pro-preview",
         "google_gemini-3.7-flash",
+        "gpt-5.6-luna",
         "gpt-5.6-sol",
+        "gpt-5.6-terra",
+        "gpt-oss-120b",
+        "kimi-k3",
+        "mistral-medium-3.5",
+        "qwen3.5-122b",
         "qwen3.5-int4",
         "qwen3.8-27b"
       ]
@@ -2946,23 +2836,23 @@
         "track": "tneval-soap"
       },
       {
-        "default": "icare-gemini-3.1-pro-preview-0.2.0-102129",
+        "default": "icare-gemini-3.1-pro-preview-0.3.0-102129",
         "judges": [
           {
             "judge_model": "gemini-3.1-pro-preview",
             "label": "gemini-3.1-pro-preview",
             "settings_differ": false,
             "settings_label": "",
-            "stale_harness": true,
-            "table": "icare-gemini-3.1-pro-preview-0.2.0-102129"
+            "stale_harness": false,
+            "table": "icare-gemini-3.1-pro-preview-0.3.0-102129"
           },
           {
             "judge_model": "gpt-5.6-terra",
             "label": "gpt-5.6-terra",
             "settings_differ": false,
             "settings_label": "",
-            "stale_harness": true,
-            "table": "icare-gpt-5.6-terra-0.2.0-acf643"
+            "stale_harness": false,
+            "table": "icare-gpt-5.6-terra-0.3.0-acf643"
           }
         ],
         "label": "iCARE / iHOPE",
@@ -2994,7 +2884,7 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.2.0",
+      "current_harness_version": "0.3.0",
       "harness_version": "0.1.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "icare-trace-v1",
@@ -3008,29 +2898,57 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "",
+      "current_harness_version": "0.3.0",
       "harness_version": "0.2.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "icare-trace-v1",
       "prompt_version": "icare-zeroshot-v1",
       "reasons": [
-        "settings"
+        "settings",
+        "harness"
       ],
       "rows": 16,
       "scored_at": "2026-08-25T23:09:09Z",
       "track": "icare"
     },
     {
-      "current_harness_version": "",
+      "current_harness_version": "0.3.0",
       "harness_version": "0.2.0",
       "judge_model": "gpt-5.6-terra",
       "judge_prompt_version": "icare-trace-v1",
       "prompt_version": "icare-zeroshot-v1",
       "reasons": [
-        "settings"
+        "settings",
+        "harness"
       ],
       "rows": 16,
       "scored_at": "2026-08-25T23:45:39Z",
+      "track": "icare"
+    },
+    {
+      "current_harness_version": "0.3.0",
+      "harness_version": "0.2.0",
+      "judge_model": "gemini-3.1-pro-preview",
+      "judge_prompt_version": "icare-trace-v1",
+      "prompt_version": "icare-zeroshot-v1",
+      "reasons": [
+        "harness"
+      ],
+      "rows": 16,
+      "scored_at": "2026-08-26T12:27:30Z",
+      "track": "icare"
+    },
+    {
+      "current_harness_version": "0.3.0",
+      "harness_version": "0.2.0",
+      "judge_model": "gpt-5.6-terra",
+      "judge_prompt_version": "icare-trace-v1",
+      "prompt_version": "icare-zeroshot-v1",
+      "reasons": [
+        "harness"
+      ],
+      "rows": 16,
+      "scored_at": "2026-08-26T12:28:42Z",
       "track": "icare"
     },
     {
@@ -8314,19 +8232,11 @@
       "has_effort": true,
       "has_thinking": true,
       "has_words": false,
-      "id": "icare-gemini-3.1-pro-preview-0.2.0-102129",
+      "id": "icare-gemini-3.1-pro-preview-0.3.0-102129",
       "ranking_measure": null,
       "rows": [
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 4.55,
-              "comprehensiveness": 4.825,
-              "expression": 5.0,
-              "relevance": 4.975,
-              "trustworthiness": 4.55
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 4.55,
             "comprehensiveness": 4.825,
@@ -8338,7 +8248,6 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8163,
             "rouge_l": 0.1675,
             "temporal_next": 0.0909,
             "temporal_past": 1.0,
@@ -8357,10 +8266,8 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-26T12:27:30Z",
-          "section_order": [
-            "trace"
-          ],
+          "scored_at": "2026-08-27T11:14:37Z",
+          "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -8370,15 +8277,7 @@
           "unreached_reasons": {}
         },
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 4.9,
-              "comprehensiveness": 4.8,
-              "expression": 4.85,
-              "relevance": 4.95,
-              "trustworthiness": 4.825
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 4.9,
             "comprehensiveness": 4.8,
@@ -8390,9 +8289,8 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8114,
-            "rouge_l": 0.1695,
-            "temporal_next": 0.1818,
+            "rouge_l": 0.1696,
+            "temporal_next": 0.0909,
             "temporal_past": 1.0,
             "trace": 4.865
           },
@@ -8409,11 +8307,9 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-26T12:27:30Z",
-          "section_order": [
-            "trace"
-          ],
-          "settings": "temperature 0, max tokens 4096",
+          "scored_at": "2026-08-27T11:14:37Z",
+          "section_order": [],
+          "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
           "source": "",
           "system_id": "deepseek-v4-flash-thinking",
@@ -8422,15 +8318,7 @@
           "unreached_reasons": {}
         },
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 4.7,
-              "comprehensiveness": 4.825,
-              "expression": 5.0,
-              "relevance": 4.95,
-              "trustworthiness": 4.675
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 4.7,
             "comprehensiveness": 4.825,
@@ -8442,7 +8330,6 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8197,
             "rouge_l": 0.2022,
             "temporal_next": 0.3636,
             "temporal_past": 1.0,
@@ -8461,10 +8348,8 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-26T12:27:30Z",
-          "section_order": [
-            "trace"
-          ],
+          "scored_at": "2026-08-27T11:14:37Z",
+          "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -8474,15 +8359,7 @@
           "unreached_reasons": {}
         },
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 4.85,
-              "comprehensiveness": 4.9,
-              "expression": 5.0,
-              "relevance": 4.95,
-              "trustworthiness": 4.7
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 4.85,
             "comprehensiveness": 4.9,
@@ -8494,7 +8371,6 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8204,
             "rouge_l": 0.1788,
             "temporal_next": 0.3636,
             "temporal_past": 1.0,
@@ -8513,28 +8389,18 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-26T12:27:30Z",
-          "section_order": [
-            "trace"
-          ],
-          "settings": "temperature 0, max tokens 4096",
+          "scored_at": "2026-08-27T11:14:37Z",
+          "section_order": [],
+          "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
           "source": "",
           "system_id": "glm-5",
           "system_type": "model",
-          "thinking_tokens": 1502,
+          "thinking_tokens": 1192,
           "unreached_reasons": {}
         },
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 4.825,
-              "comprehensiveness": 4.925,
-              "expression": 4.975,
-              "relevance": 4.975,
-              "trustworthiness": 4.9
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 4.825,
             "comprehensiveness": 4.925,
@@ -8546,7 +8412,6 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8204,
             "rouge_l": 0.1729,
             "temporal_next": 0.3636,
             "temporal_past": 1.0,
@@ -8565,28 +8430,18 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-26T12:27:30Z",
-          "section_order": [
-            "trace"
-          ],
-          "settings": "temperature 0, max tokens 4096",
+          "scored_at": "2026-08-27T11:14:37Z",
+          "section_order": [],
+          "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
           "source": "",
           "system_id": "glm-5.2",
           "system_type": "model",
-          "thinking_tokens": 1552,
+          "thinking_tokens": 1188,
           "unreached_reasons": {}
         },
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 4.95,
-              "comprehensiveness": 4.95,
-              "expression": 4.975,
-              "relevance": 5.0,
-              "trustworthiness": 4.95
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 4.95,
             "comprehensiveness": 4.95,
@@ -8598,7 +8453,6 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.817,
             "rouge_l": 0.1824,
             "temporal_next": 0.4545,
             "temporal_past": 1.0,
@@ -8617,28 +8471,18 @@
           "note_words": null,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-26T12:27:30Z",
-          "section_order": [
-            "trace"
-          ],
+          "scored_at": "2026-08-27T11:14:37Z",
+          "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
           "system_id": "google_gemini-3.1-pro-preview",
           "system_type": "model",
-          "thinking_tokens": 1244,
+          "thinking_tokens": 970,
           "unreached_reasons": {}
         },
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 5.0,
-              "comprehensiveness": 4.85,
-              "expression": 5.0,
-              "relevance": 5.0,
-              "trustworthiness": 5.0
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 5.0,
             "comprehensiveness": 4.85,
@@ -8650,7 +8494,6 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8189,
             "rouge_l": 0.186,
             "temporal_next": 0.3636,
             "temporal_past": 0.9706,
@@ -8669,28 +8512,18 @@
           "note_words": null,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-26T12:27:30Z",
-          "section_order": [
-            "trace"
-          ],
+          "scored_at": "2026-08-27T11:14:37Z",
+          "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
           "system_id": "google_gemini-3.7-flash",
           "system_type": "model",
-          "thinking_tokens": 687,
+          "thinking_tokens": 390,
           "unreached_reasons": {}
         },
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 4.875,
-              "comprehensiveness": 4.975,
-              "expression": 4.95,
-              "relevance": 4.975,
-              "trustworthiness": 4.85
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 4.875,
             "comprehensiveness": 4.975,
@@ -8702,7 +8535,6 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8113,
             "rouge_l": 0.1504,
             "temporal_next": 0.2727,
             "temporal_past": 1.0,
@@ -8721,28 +8553,18 @@
           "note_words": null,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-26T12:27:30Z",
-          "section_order": [
-            "trace"
-          ],
+          "scored_at": "2026-08-27T11:14:37Z",
+          "section_order": [],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
           "source": "",
           "system_id": "gpt-5.6-luna",
           "system_type": "model",
-          "thinking_tokens": 71,
+          "thinking_tokens": 108,
           "unreached_reasons": {}
         },
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 4.975,
-              "comprehensiveness": 4.975,
-              "expression": 5.0,
-              "relevance": 5.0,
-              "trustworthiness": 4.975
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 4.975,
             "comprehensiveness": 4.975,
@@ -8754,7 +8576,6 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.816,
             "rouge_l": 0.1692,
             "temporal_next": 0.5455,
             "temporal_past": 1.0,
@@ -8773,28 +8594,18 @@
           "note_words": null,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-26T12:27:30Z",
-          "section_order": [
-            "trace"
-          ],
+          "scored_at": "2026-08-27T11:14:37Z",
+          "section_order": [],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
           "source": "",
           "system_id": "gpt-5.6-sol",
           "system_type": "model",
-          "thinking_tokens": 89,
+          "thinking_tokens": 80,
           "unreached_reasons": {}
         },
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 4.925,
-              "comprehensiveness": 5.0,
-              "expression": 4.975,
-              "relevance": 5.0,
-              "trustworthiness": 4.95
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 4.925,
             "comprehensiveness": 5.0,
@@ -8806,7 +8617,6 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8145,
             "rouge_l": 0.1553,
             "temporal_next": 0.4545,
             "temporal_past": 0.9706,
@@ -8825,28 +8635,18 @@
           "note_words": null,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-26T12:27:30Z",
-          "section_order": [
-            "trace"
-          ],
+          "scored_at": "2026-08-27T11:14:37Z",
+          "section_order": [],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
           "source": "",
           "system_id": "gpt-5.6-terra",
           "system_type": "model",
-          "thinking_tokens": 13,
+          "thinking_tokens": 41,
           "unreached_reasons": {}
         },
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 4.6,
-              "comprehensiveness": 4.925,
-              "expression": 4.975,
-              "relevance": 4.9,
-              "trustworthiness": 4.525
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 4.6,
             "comprehensiveness": 4.925,
@@ -8858,7 +8658,6 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8083,
             "rouge_l": 0.1586,
             "temporal_next": 0.0,
             "temporal_past": 1.0,
@@ -8877,28 +8676,18 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-26T12:27:30Z",
-          "section_order": [
-            "trace"
-          ],
-          "settings": "temperature 0, max tokens 4096",
+          "scored_at": "2026-08-27T11:14:37Z",
+          "section_order": [],
+          "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
           "source": "",
           "system_id": "gpt-oss-120b",
           "system_type": "model",
-          "thinking_tokens": 252,
+          "thinking_tokens": 263,
           "unreached_reasons": {}
         },
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 4.975,
-              "comprehensiveness": 5.0,
-              "expression": 5.0,
-              "relevance": 4.925,
-              "trustworthiness": 5.0
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 4.975,
             "comprehensiveness": 5.0,
@@ -8910,7 +8699,6 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8124,
             "rouge_l": 0.1089,
             "temporal_next": 0.3636,
             "temporal_past": 1.0,
@@ -8929,28 +8717,18 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-26T12:27:30Z",
-          "section_order": [
-            "trace"
-          ],
+          "scored_at": "2026-08-27T11:14:37Z",
+          "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
           "system_id": "kimi-k3",
           "system_type": "model",
-          "thinking_tokens": 670,
+          "thinking_tokens": 596,
           "unreached_reasons": {}
         },
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 4.75,
-              "comprehensiveness": 4.85,
-              "expression": 5.0,
-              "relevance": 5.0,
-              "trustworthiness": 4.725
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 4.75,
             "comprehensiveness": 4.85,
@@ -8962,7 +8740,6 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8152,
             "rouge_l": 0.186,
             "temporal_next": 0.1818,
             "temporal_past": 1.0,
@@ -8981,10 +8758,8 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-26T12:27:30Z",
-          "section_order": [
-            "trace"
-          ],
+          "scored_at": "2026-08-27T11:14:37Z",
+          "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -8994,15 +8769,7 @@
           "unreached_reasons": {}
         },
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 4.575,
-              "comprehensiveness": 4.875,
-              "expression": 5.0,
-              "relevance": 4.825,
-              "trustworthiness": 4.525
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 4.575,
             "comprehensiveness": 4.875,
@@ -9014,7 +8781,6 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8151,
             "rouge_l": 0.1402,
             "temporal_next": 0.2727,
             "temporal_past": 1.0,
@@ -9033,10 +8799,8 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-26T12:27:30Z",
-          "section_order": [
-            "trace"
-          ],
+          "scored_at": "2026-08-27T11:14:37Z",
+          "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -9046,15 +8810,7 @@
           "unreached_reasons": {}
         },
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 4.9744,
-              "comprehensiveness": 4.8718,
-              "expression": 5.0,
-              "relevance": 5.0,
-              "trustworthiness": 5.0
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 4.9744,
             "comprehensiveness": 4.8718,
@@ -9066,7 +8822,6 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8176,
             "rouge_l": 0.1828,
             "temporal_next": 0.0909,
             "temporal_past": 1.0,
@@ -9085,10 +8840,8 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-26T12:27:30Z",
-          "section_order": [
-            "trace"
-          ],
+          "scored_at": "2026-08-27T11:14:37Z",
+          "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
           "source": "",
@@ -9100,15 +8853,7 @@
           }
         },
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 4.9,
-              "comprehensiveness": 4.975,
-              "expression": 5.0,
-              "relevance": 4.975,
-              "trustworthiness": 4.9
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 4.9,
             "comprehensiveness": 4.975,
@@ -9120,7 +8865,6 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8191,
             "rouge_l": 0.1861,
             "temporal_next": 0.2727,
             "temporal_past": 1.0,
@@ -9139,26 +8883,24 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-26T12:27:30Z",
-          "section_order": [
-            "trace"
-          ],
+          "scored_at": "2026-08-27T11:14:37Z",
+          "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
           "source": "",
           "system_id": "qwen3.8-27b",
           "system_type": "model",
-          "thinking_tokens": 1620,
+          "thinking_tokens": 1610,
           "unreached_reasons": {}
         }
       ],
       "scored": true,
-      "stale_harness": true,
+      "stale_harness": false,
       "subtitle": "scored by gemini-3.1-pro-preview",
       "title": "iCARE form on the iHOPE corpus · 17 sections per session",
       "track": "icare",
       "versions": {
-        "harness_version": "0.2.0",
+        "harness_version": "0.3.0",
         "judge_model": "gemini-3.1-pro-preview",
         "judge_prompt_version": "icare-trace-v1",
         "judge_settings": {
@@ -9230,19 +8972,11 @@
       "has_effort": true,
       "has_thinking": true,
       "has_words": false,
-      "id": "icare-gpt-5.6-terra-0.2.0-acf643",
+      "id": "icare-gpt-5.6-terra-0.3.0-acf643",
       "ranking_measure": null,
       "rows": [
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 3.325,
-              "comprehensiveness": 3.4,
-              "expression": 3.875,
-              "relevance": 3.925,
-              "trustworthiness": 3.375
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 3.325,
             "comprehensiveness": 3.4,
@@ -9254,7 +8988,6 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8163,
             "rouge_l": 0.1675,
             "temporal_next": 0.0909,
             "temporal_past": 1.0,
@@ -9273,10 +9006,8 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-26T12:28:42Z",
-          "section_order": [
-            "trace"
-          ],
+          "scored_at": "2026-08-27T11:15:17Z",
+          "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -9286,15 +9017,7 @@
           "unreached_reasons": {}
         },
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 3.625,
-              "comprehensiveness": 3.55,
-              "expression": 3.9,
-              "relevance": 4.0,
-              "trustworthiness": 3.625
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 3.625,
             "comprehensiveness": 3.55,
@@ -9306,9 +9029,8 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8114,
-            "rouge_l": 0.1695,
-            "temporal_next": 0.1818,
+            "rouge_l": 0.1696,
+            "temporal_next": 0.0909,
             "temporal_past": 1.0,
             "trace": 3.74
           },
@@ -9325,11 +9047,9 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-26T12:28:42Z",
-          "section_order": [
-            "trace"
-          ],
-          "settings": "temperature 0, max tokens 4096",
+          "scored_at": "2026-08-27T11:15:17Z",
+          "section_order": [],
+          "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
           "source": "",
           "system_id": "deepseek-v4-flash-thinking",
@@ -9338,15 +9058,7 @@
           "unreached_reasons": {}
         },
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 3.85,
-              "comprehensiveness": 3.475,
-              "expression": 4.0,
-              "relevance": 4.275,
-              "trustworthiness": 3.975
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 3.85,
             "comprehensiveness": 3.475,
@@ -9358,7 +9070,6 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8197,
             "rouge_l": 0.2022,
             "temporal_next": 0.3636,
             "temporal_past": 1.0,
@@ -9377,10 +9088,8 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-26T12:28:42Z",
-          "section_order": [
-            "trace"
-          ],
+          "scored_at": "2026-08-27T11:15:17Z",
+          "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -9390,15 +9099,7 @@
           "unreached_reasons": {}
         },
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 3.675,
-              "comprehensiveness": 3.675,
-              "expression": 4.025,
-              "relevance": 4.0,
-              "trustworthiness": 3.7
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 3.675,
             "comprehensiveness": 3.675,
@@ -9410,7 +9111,6 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8204,
             "rouge_l": 0.1788,
             "temporal_next": 0.3636,
             "temporal_past": 1.0,
@@ -9429,28 +9129,18 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-26T12:28:42Z",
-          "section_order": [
-            "trace"
-          ],
-          "settings": "temperature 0, max tokens 4096",
+          "scored_at": "2026-08-27T11:15:17Z",
+          "section_order": [],
+          "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
           "source": "",
           "system_id": "glm-5",
           "system_type": "model",
-          "thinking_tokens": 1502,
+          "thinking_tokens": 1192,
           "unreached_reasons": {}
         },
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 3.775,
-              "comprehensiveness": 3.7,
-              "expression": 4.1,
-              "relevance": 4.1,
-              "trustworthiness": 3.575
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 3.775,
             "comprehensiveness": 3.7,
@@ -9462,7 +9152,6 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8204,
             "rouge_l": 0.1729,
             "temporal_next": 0.3636,
             "temporal_past": 1.0,
@@ -9481,28 +9170,18 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-26T12:28:42Z",
-          "section_order": [
-            "trace"
-          ],
-          "settings": "temperature 0, max tokens 4096",
+          "scored_at": "2026-08-27T11:15:17Z",
+          "section_order": [],
+          "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
           "source": "",
           "system_id": "glm-5.2",
           "system_type": "model",
-          "thinking_tokens": 1552,
+          "thinking_tokens": 1188,
           "unreached_reasons": {}
         },
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 3.775,
-              "comprehensiveness": 3.6,
-              "expression": 4.0,
-              "relevance": 4.35,
-              "trustworthiness": 3.9
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 3.775,
             "comprehensiveness": 3.6,
@@ -9514,7 +9193,6 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.817,
             "rouge_l": 0.1824,
             "temporal_next": 0.4545,
             "temporal_past": 1.0,
@@ -9533,28 +9211,18 @@
           "note_words": null,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-26T12:28:42Z",
-          "section_order": [
-            "trace"
-          ],
+          "scored_at": "2026-08-27T11:15:17Z",
+          "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
           "system_id": "google_gemini-3.1-pro-preview",
           "system_type": "model",
-          "thinking_tokens": 1244,
+          "thinking_tokens": 970,
           "unreached_reasons": {}
         },
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 3.95,
-              "comprehensiveness": 3.55,
-              "expression": 4.1,
-              "relevance": 4.375,
-              "trustworthiness": 3.975
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 3.95,
             "comprehensiveness": 3.55,
@@ -9566,7 +9234,6 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8189,
             "rouge_l": 0.186,
             "temporal_next": 0.3636,
             "temporal_past": 0.9706,
@@ -9585,28 +9252,18 @@
           "note_words": null,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-26T12:28:42Z",
-          "section_order": [
-            "trace"
-          ],
+          "scored_at": "2026-08-27T11:15:17Z",
+          "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
           "system_id": "google_gemini-3.7-flash",
           "system_type": "model",
-          "thinking_tokens": 687,
+          "thinking_tokens": 390,
           "unreached_reasons": {}
         },
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 3.6,
-              "comprehensiveness": 4.225,
-              "expression": 4.2,
-              "relevance": 3.95,
-              "trustworthiness": 3.825
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 3.6,
             "comprehensiveness": 4.225,
@@ -9618,7 +9275,6 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8113,
             "rouge_l": 0.1504,
             "temporal_next": 0.2727,
             "temporal_past": 1.0,
@@ -9637,28 +9293,18 @@
           "note_words": null,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-26T12:28:42Z",
-          "section_order": [
-            "trace"
-          ],
+          "scored_at": "2026-08-27T11:15:17Z",
+          "section_order": [],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
           "source": "",
           "system_id": "gpt-5.6-luna",
           "system_type": "model",
-          "thinking_tokens": 71,
+          "thinking_tokens": 108,
           "unreached_reasons": {}
         },
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 3.775,
-              "comprehensiveness": 4.3,
-              "expression": 4.25,
-              "relevance": 4.35,
-              "trustworthiness": 3.875
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 3.775,
             "comprehensiveness": 4.3,
@@ -9670,7 +9316,6 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.816,
             "rouge_l": 0.1692,
             "temporal_next": 0.5455,
             "temporal_past": 1.0,
@@ -9689,28 +9334,18 @@
           "note_words": null,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-26T12:28:42Z",
-          "section_order": [
-            "trace"
-          ],
+          "scored_at": "2026-08-27T11:15:17Z",
+          "section_order": [],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
           "source": "",
           "system_id": "gpt-5.6-sol",
           "system_type": "model",
-          "thinking_tokens": 89,
+          "thinking_tokens": 80,
           "unreached_reasons": {}
         },
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 3.8,
-              "comprehensiveness": 4.25,
-              "expression": 4.2,
-              "relevance": 4.2,
-              "trustworthiness": 3.775
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 3.8,
             "comprehensiveness": 4.25,
@@ -9722,7 +9357,6 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8145,
             "rouge_l": 0.1553,
             "temporal_next": 0.4545,
             "temporal_past": 0.9706,
@@ -9741,28 +9375,18 @@
           "note_words": null,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-26T12:28:42Z",
-          "section_order": [
-            "trace"
-          ],
+          "scored_at": "2026-08-27T11:15:17Z",
+          "section_order": [],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
           "source": "",
           "system_id": "gpt-5.6-terra",
           "system_type": "model",
-          "thinking_tokens": 13,
+          "thinking_tokens": 41,
           "unreached_reasons": {}
         },
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 3.3,
-              "comprehensiveness": 3.725,
-              "expression": 4.0,
-              "relevance": 3.925,
-              "trustworthiness": 3.4
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 3.3,
             "comprehensiveness": 3.725,
@@ -9774,7 +9398,6 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8083,
             "rouge_l": 0.1586,
             "temporal_next": 0.0,
             "temporal_past": 1.0,
@@ -9793,28 +9416,18 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-26T12:28:42Z",
-          "section_order": [
-            "trace"
-          ],
-          "settings": "temperature 0, max tokens 4096",
+          "scored_at": "2026-08-27T11:15:17Z",
+          "section_order": [],
+          "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
           "source": "",
           "system_id": "gpt-oss-120b",
           "system_type": "model",
-          "thinking_tokens": 252,
+          "thinking_tokens": 263,
           "unreached_reasons": {}
         },
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 3.5,
-              "comprehensiveness": 4.5,
-              "expression": 4.175,
-              "relevance": 3.75,
-              "trustworthiness": 3.575
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 3.5,
             "comprehensiveness": 4.5,
@@ -9826,7 +9439,6 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8124,
             "rouge_l": 0.1089,
             "temporal_next": 0.3636,
             "temporal_past": 1.0,
@@ -9845,28 +9457,18 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-26T12:28:42Z",
-          "section_order": [
-            "trace"
-          ],
+          "scored_at": "2026-08-27T11:15:17Z",
+          "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
           "system_id": "kimi-k3",
           "system_type": "model",
-          "thinking_tokens": 670,
+          "thinking_tokens": 596,
           "unreached_reasons": {}
         },
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 3.55,
-              "comprehensiveness": 3.475,
-              "expression": 4.1,
-              "relevance": 4.15,
-              "trustworthiness": 3.475
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 3.55,
             "comprehensiveness": 3.475,
@@ -9878,7 +9480,6 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8152,
             "rouge_l": 0.186,
             "temporal_next": 0.1818,
             "temporal_past": 1.0,
@@ -9897,10 +9498,8 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-26T12:28:42Z",
-          "section_order": [
-            "trace"
-          ],
+          "scored_at": "2026-08-27T11:15:17Z",
+          "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -9910,15 +9509,7 @@
           "unreached_reasons": {}
         },
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 3.1,
-              "comprehensiveness": 3.825,
-              "expression": 4.075,
-              "relevance": 3.65,
-              "trustworthiness": 3.275
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 3.1,
             "comprehensiveness": 3.825,
@@ -9930,7 +9521,6 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8151,
             "rouge_l": 0.1402,
             "temporal_next": 0.2727,
             "temporal_past": 1.0,
@@ -9949,10 +9539,8 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-26T12:28:42Z",
-          "section_order": [
-            "trace"
-          ],
+          "scored_at": "2026-08-27T11:15:17Z",
+          "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
           "source": "",
@@ -9962,15 +9550,7 @@
           "unreached_reasons": {}
         },
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 3.7436,
-              "comprehensiveness": 3.5128,
-              "expression": 4.0513,
-              "relevance": 4.2051,
-              "trustworthiness": 3.7949
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 3.7436,
             "comprehensiveness": 3.5128,
@@ -9982,7 +9562,6 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8176,
             "rouge_l": 0.1828,
             "temporal_next": 0.0909,
             "temporal_past": 1.0,
@@ -10001,10 +9580,8 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-26T12:28:42Z",
-          "section_order": [
-            "trace"
-          ],
+          "scored_at": "2026-08-27T11:15:17Z",
+          "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
           "source": "",
@@ -10016,15 +9593,7 @@
           }
         },
         {
-          "by_section": {
-            "trace": {
-              "accuracy": 3.875,
-              "comprehensiveness": 3.775,
-              "expression": 4.15,
-              "relevance": 4.175,
-              "trustworthiness": 3.975
-            }
-          },
+          "by_section": {},
           "detail": {
             "accuracy": 3.875,
             "comprehensiveness": 3.775,
@@ -10036,7 +9605,6 @@
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
-            "bertscore": 0.8191,
             "rouge_l": 0.1861,
             "temporal_next": 0.2727,
             "temporal_past": 1.0,
@@ -10055,26 +9623,24 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-26T12:28:42Z",
-          "section_order": [
-            "trace"
-          ],
+          "scored_at": "2026-08-27T11:15:17Z",
+          "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
           "source": "",
           "system_id": "qwen3.8-27b",
           "system_type": "model",
-          "thinking_tokens": 1620,
+          "thinking_tokens": 1610,
           "unreached_reasons": {}
         }
       ],
       "scored": true,
-      "stale_harness": true,
+      "stale_harness": false,
       "subtitle": "scored by gpt-5.6-terra",
       "title": "iCARE form on the iHOPE corpus · 17 sections per session",
       "track": "icare",
       "versions": {
-        "harness_version": "0.2.0",
+        "harness_version": "0.3.0",
         "judge_model": "gpt-5.6-terra",
         "judge_prompt_version": "icare-trace-v1",
         "judge_settings": {

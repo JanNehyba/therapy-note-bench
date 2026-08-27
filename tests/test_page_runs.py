@@ -20,6 +20,7 @@ from pathlib import Path
 import pytest
 
 from tnb import report, results
+from tnb.config import REPO_ROOT
 from tnb.results import Metrics, Row
 
 RUNNER = Path(__file__).parent / "support" / "run_page.js"
@@ -1060,3 +1061,37 @@ def test_the_calibration_panel_says_whose_notes_the_judge_was_checked_on(tmp_pat
     assert "No human has read a note written by any of the models" in drawn
     assert "0.078" in drawn, "the spread across the three, which exceeds the margin"
     assert "therapist" in drawn and "weakest on" in drawn
+
+
+def test_every_page_offers_a_route_to_the_background_documents():
+    """`docs/datasets.md`, `methodology.md`, `landscape.md` and `limitations.md`
+    carry everything the tables rest on — where the corpora came from, that two
+    of the three publish no licence, that the sessions are counselling
+    demonstrations, that the iCARE expert note is 46% empty — and until
+    2026-08-27 **not one of them was linked from anywhere on the site**.
+
+    `limitations.md` was named three times and linked zero: prose inside a
+    `<code>` tag is a file name, not a route. A reader on the leaderboard had no
+    way to reach any of it.
+    """
+    from tnb import report
+
+    data = report.build([_row("x", "a-judge", 0.5)])
+    pages = {"index.html": report.render_page(data), "methods.html": report.render_methods(data)}
+    try:
+        import sys
+
+        sys.path.insert(0, str(REPO_ROOT / "tools"))
+        import brief
+
+        pages["brief.html"] = brief.render(brief.Data.load())
+    except Exception:  # the briefing needs the published payload; skip if absent
+        pass
+
+    wanted = {"datasets.md", "methodology.md", "landscape.md", "limitations.md"}
+    for name, html in pages.items():
+        linked = {target for target, _ in _links_in(html, name) if target.endswith(".md")}
+        assert wanted <= linked, f"{name} does not link {sorted(wanted - linked)}"
+
+    for name in wanted:
+        assert (REPO_ROOT / "docs" / name).exists(), f"{name} is linked and must exist"

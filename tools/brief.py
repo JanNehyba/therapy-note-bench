@@ -587,6 +587,12 @@ def how_to_check(data: Data) -> str:
   <p>Every figure and every number in this document is generated from two published
      files. Nothing was typed in, and nothing here can drift from the site without the
      tests failing.</p>
+  <p>And four pages carry what the numbers rest on:
+     <a href="datasets.md">the datasets</a> &mdash; where each came from, what licence it
+     publishes (two of the three publish none) and the traps in them;
+     <a href="methodology.md">the method</a>;
+     <a href="limitations.md">what a result cannot claim</a>; and
+     <a href="landscape.md">what exists in this field</a> and what does not.</p>
   <ul>
     <li><code>docs/leaderboard.json</code> &mdash; every row, every measure, and the six
         version fields a row has to agree on before it may be compared with another.</li>
