@@ -24,9 +24,13 @@ unchanged in wording. Scoring reproduces TN-Eval's reference-free protocol:
   holding back common abbreviations ("Dr.") and list markers ("1."). The list
   markers were added in harness `0.4.0`: before that, a numbered plan was cut
   into pieces that were bare numerals, each one a question the judge was asked
-  and a numeral cannot pass. It was 65% of one model's conciseness failures and
-  0% for the models that write prose, so the column was partly measuring
-  markdown.
+  and a numeral cannot pass. Measured before the repair it was 65% of one
+  model's conciseness failures and 0% for the models that write prose, so the
+  column was partly measuring markdown — a figure recorded at the time and not
+  reproducible now, because applying the repair re-asked the answers it was
+  computed from. The effect is in `results/` and is checkable: conciseness rose
+  by 0.090, 0.075 and 0.059 for the three models that write numbered plans, and
+  by 0.000 for the five that write prose, under both judges.
 - **Faithfulness** — a Likert rating against the full transcript.
 
 Likert completeness and conciseness are also recorded, but **only for

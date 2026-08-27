@@ -30,8 +30,12 @@
 #: followed by a space, so a numbered plan was cut into pieces that were bare
 #: numerals, each one a question the judge was asked and a numeral cannot pass:
 #: a certain No in the numerator and a certain +1 in the denominator of
-#: `conciseness`. It was 65% of `qwen3.5-122b`'s conciseness failures and 0% for
-#: the models that write prose, so the column was partly measuring markdown.
+#: `conciseness`. Measured before the repair it was 65% of `qwen3.5-122b`'s
+#: conciseness failures and 0% for the models that write prose -- a recorded
+#: observation rather than a reproducible one, because applying the repair
+#: re-asked the answers it was computed from. What is checkable is in
+#: `results/`: conciseness rose +0.090 for that model and 0.000 for the five
+#: that write prose, under both judges.
 #: 0.5.0 -- a Likert answer that is not a rating is left out rather than read
 #: as a 3. `parse_likert` returns the middle of the scale for anything it cannot
 #: read, which is TN-Eval's arithmetic and is kept, but theirs was applied to

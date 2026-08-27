@@ -427,9 +427,18 @@ def test_a_numbered_list_is_not_cut_into_bare_numerals():
     into pieces that were bare numerals -- and every piece became a question put
     to the judge: does this sentence serve a rubric criterion? A numeral cannot,
     so it was a certain No in the numerator and a certain +1 in the denominator.
-    The numerals were 65% of `qwen3.5-122b`'s conciseness failures, 62% of
-    `google_gemini-3.7-flash`'s and 56% of `gpt-oss-120b`'s, against 0% for the
-    five models that write prose.
+    Measured before the repair, the numerals were 65% of `qwen3.5-122b`'s
+    conciseness failures, 62% of `google_gemini-3.7-flash`'s and 56% of
+    `gpt-oss-120b`'s, against 0% for the five models that write prose.
+
+    **Those shares cannot be recomputed.** Applying the repair re-asked the
+    conciseness questions on every note whose sentence list changed -- 215 of
+    `qwen3.5-122b`'s 1 225 conciseness answers were overwritten -- so the
+    evidence they were computed from is gone, and reading today's answers
+    against the old split reproduces the very mis-pairing this repair prevents.
+    They are a recorded observation, not a reproducible figure. The effect is
+    checkable and is in `results/`: +0.090, +0.075 and +0.059 on those three,
+    0.000 on the five that write prose, under both judges.
 
     **This took two attempts, and the first one is the reason for the digest.**
     A conciseness answer is cached under the sentence's *index*,

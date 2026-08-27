@@ -300,6 +300,22 @@ _ABBREVIATIONS = ("Dr", "Mr", "Mrs", "Ms", "e.g", "i.e", "vs", "etc", "St", "Pro
 #: `google_gemini-3.7-flash`'s, 56% of `gpt-oss-120b`'s, and 0% for the five
 #: models that write prose. The column was partly measuring markdown.
 #:
+#: **Those three shares cannot be recomputed today, and the reason is worth
+#: knowing.** They were measured against the cache as it stood before the
+#: repair. Applying the repair re-asked the conciseness questions on every note
+#: whose sentence list changed -- 215 of `qwen3.5-122b`'s 1 225 conciseness
+#: answers were overwritten -- so the answers the shares were computed from are
+#: gone, and pairing today's answers with the old split re-creates exactly the
+#: mis-pairing this repair exists to prevent. The measurement that justified the
+#: change was destroyed by the change. They stand as a recorded observation,
+#: not as a reproducible figure, and are marked as such wherever they appear.
+#:
+#: What *is* checkable is the effect, and it is in `results/`: conciseness rose
+#: +0.090 for `qwen3.5-122b`, +0.075 for `gpt-oss-120b` and +0.059 for
+#: `google_gemini-3.7-flash` under `gemini-3.1-pro-preview`, by nearly the same
+#: amounts under `gpt-5.6-terra`, and by 0.000 for the five that write prose
+#: under both.
+#:
 #: A piece ending in a standalone one- or two-digit numeral and a full stop is
 #: joined to the piece after it, which is the same repair `_ABBREVIATIONS`
 #: already makes for "Dr." and lands the marker where a reader would put it.
