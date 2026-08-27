@@ -298,6 +298,9 @@ These come up in searches for "therapy benchmark" and are not about notes:
 ## What does not exist at all
 
 Nothing in Czech. Nothing on real clinical sessions — the entire field runs on
-YouTube demonstration videos and role-play. Nothing on payer or insurer
+YouTube demonstration videos and role-play. (This repository now has an
+unpublished exception on both counts: a Czech track over ten real sessions with
+one client. The corpus cannot be released, so it does not change what is
+*available* to the field, which is what this section is about.) Nothing on payer or insurer
 compliance requirements. And human agreement is either low or openly fragile
 everywhere you look. That is the state of the field, not a gap in this survey.

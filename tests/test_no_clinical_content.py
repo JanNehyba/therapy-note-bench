@@ -55,6 +55,7 @@ ALLOWED_CZECH = {
     "src/tnb/tasks/czech.py": "the note-generation prompt is Czech",
     "tests/test_czech_scoring.py": "an invented note, used to exercise the rubric",
     "tests/test_czech_datasets.py": "asserts on the invented fixtures",
+    "tests/test_czech_run.py": "an invented note, used to exercise the runner",
     "tests/fixtures/czech/real/999001.txt": "invented transcript, marked as such",
     "tests/fixtures/czech/translated/ukazka-b.txt": "invented transcript, marked as such",
     "src/tnb/i18n.py": "the Czech translations of the two published pages",

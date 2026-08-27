@@ -171,12 +171,28 @@ last session" in 34, which is why those are two columns rather than one. Eleven
 is a small denominator: a score of 0.09 there is one session, and the gap
 between two models a few tenths apart is not evidence.
 
-## Nothing here is in Czech
+## Nothing published here is in Czech
 
-Both corpora are English. A model that performs well on this leaderboard has
-told you nothing about how it handles a Czech therapy session — a different
-language, different clinical vocabulary, different documentation conventions,
-and a training-data distribution where Czech clinical text barely exists.
+Both published corpora are English. A model that performs well on this
+leaderboard has told you nothing about how it handles a Czech therapy session —
+a different language, different clinical vocabulary, different documentation
+conventions, and a training-data distribution where Czech clinical text barely
+exists.
+
+That sentence used to be about the whole repository and is now only about the
+page. A Czech track exists: ten real psychotherapy sessions with one client, and
+ten AnnoMI conversations translated into Czech, scored on seven yes/no criteria
+about the Czech itself. **Its numbers are not published and are not in
+`results/rows.jsonl`.** They are measured into a directory that is not in
+version control, because the corpus is confidential clinical material and the
+decision to publish anything derived from it has not been made.
+
+What that track will be able to say, when it says anything, is narrow. Ten
+sessions with one client; an instrument this repository wrote, because no
+published Czech note-quality instrument exists to reproduce; no human has rated
+those notes; and the generation prompt is a translation of TN-Eval's rather than
+a reproduction of any Czech documentation standard, of which there is none. See
+`docs/datasets.md` for the corpus and the de-identification.
 
 ## Nothing here measures compliance
 

@@ -191,3 +191,54 @@ consented to a therapy session; there is no protected health information in
 either corpus. That is why the judge can be an external API here, and it is also
 the ceiling on what any result from this benchmark can claim. See
 [limitations.md](limitations.md).
+
+## The Czech corpus, which is not fetched and not published
+
+The two English corpora are downloaded at run time and never vendored. The Czech
+corpus is the opposite in every respect and needs its own rules.
+
+**What it is.** Ten transcripts of real psychotherapy sessions with a single
+client, recorded and transcribed in Czech, held by the therapist who ran them.
+Plus ten AnnoMI conversations translated into spoken Czech, which are derived
+from a public corpus and carry AnnoMI's terms.
+
+**Where it lives.** `data/czech/`, which is gitignored like everything else under
+`data/`. Nothing fetches it; it was already there. `datasets/czech.py` reads only
+`data/czech/anonymised/` and **refuses the parent directory outright** — both
+parse, so pointing at the wrong one would have produced a corpus that still names
+a client and produced it silently.
+
+**De-identification.** `tools/anonymise_czech.py`, from a replacement table in
+`data/czech/anonymisation.json` that is not in this repository, because it names
+real people and places. What went: a first name in eight transcription variants,
+two Prague districts, a psychiatric hospital, a country, and the recording's own
+identifier read aloud in the opening turn of all ten. Five of those turns held
+nothing else and were dropped, so five transcripts begin with the client.
+
+Substitutions rather than redactions. A placeholder like `[NAME]` would be safer
+to write and would wreck the measurement: this corpus feeds a benchmark of Czech
+*language quality*, and a bracketed token is not Czech. Every replacement is a
+real word in the case its sentence needs.
+
+Three things were checked and deliberately kept. `/HES/` is the transcriber's own
+marker and appears 180 times across all ten. "Erichla Frouma" is Erich Fromm, an
+author. Praha stays: a city of 1.3 million, and cutting it would gut a passage
+about where the client wants to live — what identifies is the district, and the
+districts are gone.
+
+**Session ids are digests of the file's bytes**, not its name. The originals are
+named after clinical record numbers, and a filename travels further than it looks
+— into generation and judge cache directory names, into progress output, into the
+summary printed after a failed call. A digest carries which bytes were scored and
+names nobody. The map back is written inside `data/`.
+
+**What may leave.** Scores, counts and model names. Not text. The transcripts are
+read only by the model that writes the note, on e-INFRA; the judge is never shown
+one, because `scoring/czech.py` takes a note and has no parameter a transcript
+could arrive through. `tests/test_no_clinical_content.py` holds the tracked files
+to that, and `tools/czech_brief.py` holds the exported document to it.
+
+**And it is not published.** Czech rows go to `local/czech-rows.jsonl`, which is
+gitignored; `results/rows.jsonl` holds none and a test says so. See
+[methodology.md](methodology.md) for what that cost, and
+[limitations.md](limitations.md) for what the track will not be able to claim.

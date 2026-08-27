@@ -155,11 +155,30 @@ faithfulness slightly (−0.021), and moved six systems on completeness and
 sixteen on conciseness. So a run at one budget and a run at another are two
 instruments, they never share a table, and each table says which it is.
 
-**Why external models.** Both corpora are transcripts of public YouTube videos.
-There are no patient data involved, so keeping inference inside e-INFRA buys
-nothing here. If real session data are ever added to this benchmark, the judge
-must move inside the infrastructure that holds them — which is why the provider
-layer is swappable from the start.
+**Why external models.** Both published corpora are transcripts of public
+YouTube videos. There are no patient data involved, so keeping inference inside
+e-INFRA buys nothing there.
+
+**And what changed when real session data arrived.** This paragraph used to end
+"if real session data are ever added to this benchmark, the judge must move
+inside the infrastructure that holds them". Real session data have now been
+added, in an unpublished Czech track, and the commitment has been *narrowed
+rather than kept* — which is a change and is written here as one rather than
+read into the old sentence.
+
+The transcripts are de-identified before anything sees them, and they are read
+only by the model that writes the note, on e-INFRA. The judge is never shown a
+transcript: `scoring/czech.py`'s questions take a note and have no parameter a
+transcript could arrive through, so the confidential text cannot reach an
+external provider even by mistake. What does reach one is the note a model wrote
+from an already de-identified session.
+
+That is weaker than "the judge moves inside the infrastructure". The reason for
+not keeping the stronger promise is that an e-INFRA judge would have no
+calibration, no second judge to disagree with it, and no comparability with any
+number this repository already publishes — and a track whose only control is two
+judges disagreeing cannot give that up. The trade is deliberate and it is the
+reader's to disagree with.
 
 **Why not the newest one.** Judge quality here does not follow release order,
 and mostly it does not follow anything: measured over the same 150 notes with
