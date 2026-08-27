@@ -390,6 +390,28 @@ function rowVisible(row) {
   return filter ? document.getElementById(filter.id).checked : true;
 }
 
+// The Notes column earns its place only when the rows disagree. On the iCARE
+// table fifteen of sixteen read 40/40 and one reads 39/39 -- one bit of
+// information spread over sixteen header cells, and a reader who scans it
+// learns nothing fifteen times. When every row says the same thing the count
+// moves into the row's detail, where the other invariant facts live.
+//
+// "The same thing" is both halves: what the model wrote, and whether the judge
+// has finished with it. A table mid-judging keeps its column, because then the
+// rows really do differ.
+//
+// Asked in two places -- the header and the detail row's colspan -- so it is
+// one function. A colspan computed from a column that is not there leaves the
+// detail row a cell short, and the table silently loses its last column's
+// alignment on every expanded row.
+function coverageVaries(table) {
+  const of = row =>
+    `${row.n_generated}/${row.n_attempted}` +
+    (row.n_scored < row.n_generated ? ` ${row.n_scored} judged` : '') +
+    (row.n_failed ? ' !' : '');
+  return new Set((table.rows || []).map(of)).size > 1;
+}
+
 function detailRow(row, table) {
   const parts = [];
   if (row.metrics_note) parts.push(`<p class="note">${row.metrics_note}</p>`);
@@ -499,10 +521,18 @@ function detailRow(row, table) {
   }
 
   if (row.source) parts.push(`<p class="note">Source: ${row.source}</p>`);
+  // Said here when it is not a column, so the fact does not vanish with it.
+  if (!coverageVaries(table) && row.n_attempted) {
+    parts.push(`<p class="note">Wrote <strong>${row.n_generated}</strong> of the
+      ${row.n_attempted} notes the protocol asked for — the same as every other row in
+      this table, which is why there is no Notes column.</p>`);
+  }
+
   if (!parts.length) parts.push('<p class="note">Nothing to break down yet — this row has no scores.</p>');
 
   const span =
-    table.columns.length + 2 + (table.groups ? 1 : 0) + (table.has_effort ? 1 : 0);
+    table.columns.length + 1 + (coverageVaries(table) ? 1 : 0) +
+    (table.groups ? 1 : 0) + (table.has_effort ? 1 : 0);
   return `<tr class="detail" hidden><td colspan="${span}">${parts.join('')}</td></tr>`;
 }
 
@@ -591,6 +621,8 @@ function renderTable(table, index) {
     members.forEach(name => { band[name] = i + 1; });
   });
 
+  const showCoverage = coverageVaries(table);
+
   const body = table.rows.map((row, position) => {
     const cells = table.columns
       .map(c => `<td>${fmt(row.headline[c.key], c.digits)}</td>`)
@@ -637,7 +669,7 @@ function renderTable(table, index) {
       ` data-row="${index}-${position}" data-type="${row.system_type}">
         ${rankCell}
         <td class="name"><span class="arrow">▸</span>${esc(row.label)}${chip}${oddOneOut}${ownFamily}</td>
-        ${effortCell}${cells}<td>${coverage}</td>
+        ${effortCell}${cells}${showCoverage ? `<td>${coverage}</td>` : ''}
       </tr>` + detailRow(row, table);
   }).join('');
 
@@ -652,7 +684,7 @@ function renderTable(table, index) {
           ? '<th title="systems this evidence cannot tell apart share a rank">Rank</th>'
           : ''}<th data-sort="label">System</th>${
           table.has_effort ? '<th data-sort="effort" title="Reasoning effort the note was written at. Blank where the provider has no such control.">Effort</th>' : '' }${
-          ''}${head}<th data-sort="coverage">Notes</th></tr></thead>
+          ''}${head}${showCoverage ? '<th data-sort="coverage">Notes</th>' : ''}</tr></thead>
         <tbody>${body}</tbody>
       </table></div>
       <p class="ranking-note">${rankingNote}</p>

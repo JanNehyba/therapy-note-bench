@@ -962,3 +962,56 @@ def test_a_filter_is_offered_for_the_table_on_screen_and_not_for_another(tmp_pat
     assert "show-reference" not in controls, (
         "the control belongs to the other table, not to this one"
     )
+
+
+def test_the_notes_column_goes_when_every_row_says_the_same_thing(tmp_path):
+    """One bit of information over sixteen header cells is not a column.
+
+    On the iCARE table fifteen rows read 40/40 and one reads 39/39. A reader who
+    scans that learns nothing fifteen times, so when the rows agree the count
+    moves into the row's detail, where the other invariant facts live.
+    """
+    from tnb import report
+
+    same = report.build([_row(s, "a-judge", 0.5) for s in ("x", "y", "z")])
+    drawn = _run(report.render_page(same), tmp_path, panel="table-host")
+    assert ">Notes<" not in drawn, "every row wrote the same number of notes"
+    assert "which is why there is no Notes column" in drawn, "the fact moves, it does not vanish"
+
+
+def test_the_notes_column_stays_when_one_row_differs(tmp_path):
+    """The mirror, and the reason the column exists at all: the one row that is
+    not like the others is exactly what it is for."""
+    from tnb import report
+
+    data = report.build(
+        [
+            _row("x", "a-judge", 0.5),
+            _row("y", "a-judge", 0.5),
+            _row("z", "a-judge", 0.5, n_sessions_generated=49),
+        ]
+    )
+    drawn = _run(report.render_page(data), tmp_path, panel="table-host")
+    assert ">Notes<" in drawn
+    assert "49/50" in drawn
+
+
+def test_an_expanded_row_spans_the_columns_the_table_actually_drew(tmp_path):
+    """The colspan is computed from the columns, and hiding one without telling
+    it leaves every expanded row a cell short.
+
+    Counted from the rendered header rather than from the formula, so the test
+    cannot agree with the bug by using the same arithmetic.
+    """
+    import re
+
+    from tnb import report
+
+    for rows in (
+        [_row(s, "a-judge", 0.5) for s in ("x", "y", "z")],
+        [_row("x", "a-judge", 0.5), _row("y", "a-judge", 0.5, n_sessions_generated=49)],
+    ):
+        drawn = _run(report.render_page(report.build(rows)), tmp_path, panel="table-host")
+        headers = len(re.findall(r"<th\b", drawn.split("</thead>")[0]))
+        spans = {int(n) for n in re.findall(r'class="detail" hidden><td colspan="(\d+)"', drawn)}
+        assert spans == {headers}, f"colspan {spans} against {headers} headers"
