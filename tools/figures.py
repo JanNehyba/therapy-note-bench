@@ -168,6 +168,21 @@ class Data:
             return {}
         return {short(s): i for i, group in enumerate(found["indistinguishable"], 1) for s in group}
 
+    def beats(self, judge: str) -> dict[str, dict[str, float]]:
+        """For every ordered pair, the fraction of resamples the first won.
+
+        The bootstrap's own answer to "can these two be told apart". It was
+        computed in `paired_intervals` and thrown away until 2026-08-27, which
+        is why the pair statistic below used the bands instead.
+        """
+        found = self.saturation.get(judge)
+        if not found:
+            return {}
+        return {
+            short(first): {short(second): value for second, value in row.items()}
+            for first, row in (found.get("beats") or {}).items()
+        }
+
     def shared_means(self, judge: str) -> dict[str, float]:
         """Each system's mean over the conversations every system shares.
 
@@ -204,30 +219,41 @@ def ranked(scores: dict[str, float], digits: int = 3) -> dict[str, int]:
 def agreeing_pairs(data: Data, track: str, measure: str) -> tuple[int, int]:
     """(pairs both judges can separate, pairs they order the same way).
 
-    "Can separate" means the two systems are in different bootstrap bands under
-    that judge -- the site's own test for whether a difference is real. Pairs
-    either judge cannot call are left out rather than counted as agreement,
-    which would reward an instrument for being blunt.
+    **Separated by the bootstrap, ordered by the table.** Two different
+    questions, and each is answered by the instrument that answers it.
 
-    Both halves are computed from the bootstrap's own means over the shared
-    conversations, not from the table. Deciding which pairs are separable with
-    one set of means and which way round they go with another is two
-    instruments in one sentence, and it moved this count by three.
+    "Can separate" is `beats >= 0.95` under that judge -- the bootstrap's own
+    test, the one `indistinguishable` is built out of. It used to be "in
+    different bands", which is not that test and is not a test for separability
+    at all: the grouping is greedy and its own docstring says it is not an
+    equivalence class, so systems in different bands need not be separated by
+    anything. Measured on the published payload, the band test admitted 20 pairs
+    under one judge and 18 under the other that neither bootstrap can call --
+    win rates as low as 0.858 -- and no pair went the other way. The headline was
+    118 of 125 where the evidence supports 100 of 101, and six of the seven
+    "disagreements" it reported were pairs nothing can separate.
 
-    `track` and `measure` are unused today -- the saturation analysis is
-    completeness on the TN-Eval track and there is no second one to ask -- and
-    are kept so the signature says what the number is about.
+    Which way round a pair goes is read from the **table**, because that is the
+    ordering the sentence is about and the one beside it on the page counts
+    systems that changed place in the table. Reading one from the bootstrap's
+    means over the shared conversations and the other from the table put two
+    instruments in one sentence: the published pair "118 of 125" and "13 of 19"
+    is produced by neither on its own.
     """
-    a, b = data.shared_means(JUDGE_A), data.shared_means(JUDGE_B)
-    ba, bb = data.bands(JUDGE_A), data.bands(JUDGE_B)
-    names = sorted(set(a) & set(b) & set(ba) & set(bb))
+    ta, tb = data.scores(track, JUDGE_A, measure), data.scores(track, JUDGE_B, measure)
+    wa, wb = data.beats(JUDGE_A), data.beats(JUDGE_B)
+    names = sorted(set(ta) & set(tb) & set(wa) & set(wb))
+
+    def told_apart(wins: dict[str, dict[str, float]], x: str, y: str) -> bool:
+        return max(wins.get(x, {}).get(y, 0.0), wins.get(y, {}).get(x, 0.0)) >= 0.95
+
     separable = agree = 0
     for index, x in enumerate(names):
         for y in names[index + 1 :]:
-            if ba[x] == ba[y] or bb[x] == bb[y]:
+            if not (told_apart(wa, x, y) and told_apart(wb, x, y)):
                 continue
             separable += 1
-            agree += (a[x] > a[y]) == (b[x] > b[y])
+            agree += (ta[x] > ta[y]) == (tb[x] > tb[y])
     return separable, agree
 
 
