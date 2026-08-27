@@ -370,6 +370,38 @@ def append(rows: list[Row], path: Path | None = None) -> Path:
     return path
 
 
+def unrecorded(candidates: list[Row], existing: list[Row] | None = None) -> list[Row]:
+    """The candidates that say something `results/` does not already record.
+
+    `tnb report` re-reads `generations/` on every run, which is right: the page
+    used to report iCARE as "3/3" for two days after 7 480 sections had been
+    written, because indexing was a second command somebody had to remember.
+    Re-reading cannot be stale by construction.
+
+    Appending the result unconditionally is a different thing, and it was
+    wrong. Coverage changes only when notes are generated, so a reporting
+    command run five times in an afternoon wrote five identical copies of every
+    coverage row into a file that is append-only and therefore keeps all of
+    them. 96 of them arrived in one afternoon this way, carrying no measurement
+    anybody made.
+
+    Compared on the body rather than on `row_id`, which digests the identity
+    fields only -- two coverage rows for the same system share it whatever their
+    counts say, so it cannot tell "already recorded" from "changed". `run_id` is
+    excluded because it is stamped with the day the report ran and would make
+    every row look new tomorrow.
+    """
+    known = load() if existing is None else existing
+
+    def body(row: Row) -> dict:
+        return {k: v for k, v in row.to_dict().items() if k not in ("run_id", "row_id")}
+
+    latest: dict[str, dict] = {}
+    for row in known:
+        latest[row.row_id] = body(row)
+    return [row for row in candidates if latest.get(row.row_id) != body(row)]
+
+
 def load(path: Path | None = None) -> list[Row]:
     """Read every row ever written, oldest first."""
     path = path or ROWS_PATH

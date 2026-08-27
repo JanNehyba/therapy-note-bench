@@ -351,9 +351,15 @@ def cmd_report(args: argparse.Namespace) -> int:
     """
     if not args.no_index:
         coverage = results.index_generations(run_id=args.run_id or _today_run_id())
-        if coverage:
-            fresh = results.append(coverage)
-            print(f"indexed {len(coverage)} coverage row(s) into {fresh.relative_to(REPO_ROOT)}")
+        # Only what is new. Re-reading the cache on every report is deliberate;
+        # writing it out again when it says exactly what the file already says
+        # was not, and `results/` keeps every copy.
+        changed = results.unrecorded(coverage)
+        if changed:
+            fresh = results.append(changed)
+            print(f"indexed {len(changed)} coverage row(s) into {fresh.relative_to(REPO_ROOT)}")
+        elif coverage:
+            print(f"coverage unchanged: {len(coverage)} row(s) already recorded")
 
     rows = results.load()
     if not rows:

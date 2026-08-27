@@ -810,3 +810,56 @@ def test_note_length_is_measured_from_the_notes_and_is_a_median(tmp_path):
 
     settings = results.settings_by_system(tmp_path, track=results.TRACK_TNEVAL)
     assert settings[("einfra", "mymodel")].note_words == 20, "median of 10, 20, 300"
+
+
+def test_reporting_twice_does_not_record_the_same_coverage_twice(tmp_path):
+    """`tnb report` re-reads `generations/` on every run, which is right: the
+    page once reported iCARE as "3/3" for two days after 7 480 sections had been
+    written, because indexing was a second command somebody had to remember.
+
+    Appending the result unconditionally is a different thing. Coverage changes
+    only when notes are generated, so a reporting command run five times in an
+    afternoon wrote five identical copies of every coverage row into a file that
+    is append-only and keeps all of them. 96 arrived that way in one afternoon,
+    carrying no measurement anybody made.
+    """
+    coverage = [_coverage_row("a-model", generated=40)]
+
+    assert results.unrecorded(coverage, existing=[]) == coverage, "nothing recorded yet"
+    assert results.unrecorded(coverage, existing=coverage) == [], (
+        "the same coverage was recorded a second time"
+    )
+
+
+def test_coverage_that_has_actually_moved_is_still_recorded(tmp_path):
+    """The guard must not swallow a real change: a model that wrote ten more
+    notes has to reach the file, or the page goes stale in the other direction
+    and the re-read was pointless."""
+    before = [_coverage_row("a-model", generated=30)]
+    after = [_coverage_row("a-model", generated=40)]
+
+    assert results.unrecorded(after, existing=before) == after
+
+
+def test_the_day_the_report_ran_does_not_make_coverage_look_new(tmp_path):
+    """`run_id` is stamped `report-YYYY-MM-DD`, so comparing it would make every
+    row look new tomorrow and put the defect back on a daily timer."""
+    yesterday = [_coverage_row("a-model", generated=40, run_id="report-2026-08-26")]
+    today = [_coverage_row("a-model", generated=40, run_id="report-2026-08-27")]
+
+    assert results.unrecorded(today, existing=yesterday) == []
+
+
+def _coverage_row(system: str, *, generated: int, run_id: str = "report-2026-08-27") -> results.Row:
+    """A row of the shape `index_generations` produces: no judge, no metrics."""
+    return results.Row(
+        track=results.TRACK_TNEVAL,
+        system_id=system,
+        system_type="model",
+        provider="einfra",
+        prompt_version="tneval-soap-v1",
+        harness_version="0.5.0",
+        n_sessions_attempted=50,
+        n_sessions_generated=generated,
+        run_id=run_id,
+    )
