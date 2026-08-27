@@ -172,12 +172,12 @@
           "statistic": "Cohen's kappa"
         },
         {
-          "alpha": 0.05674403080822199,
-          "alpha_humans": 0.12625947874040733,
+          "alpha": 0.06000644474441952,
+          "alpha_humans": 0.1294624190518957,
           "alpha_level": "ordinal",
-          "humans": 0.12641279286972015,
-          "judge": 0.32718397176593234,
-          "n": 596,
+          "humans": 0.12971574704059122,
+          "judge": 0.32995274720583234,
+          "n": 597,
           "name": "likert_completeness",
           "statistic": "Spearman rho"
         },
@@ -192,12 +192,12 @@
           "statistic": "Spearman rho"
         },
         {
-          "alpha": 0.03140733341103075,
-          "alpha_humans": 0.17848828230314173,
+          "alpha": 0.030046721026036005,
+          "alpha_humans": 0.17805512155293102,
           "alpha_level": "ordinal",
-          "humans": 0.18198425956376676,
-          "judge": 0.06059703237929171,
-          "n": 590,
+          "humans": 0.18185859353042091,
+          "judge": 0.05799564269534758,
+          "n": 596,
           "name": "likert_faithfulness",
           "statistic": "Spearman rho"
         }
