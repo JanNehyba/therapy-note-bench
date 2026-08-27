@@ -1068,3 +1068,52 @@ def _score_args(*, cache_only: bool, no_write: bool):
         max_judge_usd=1.0,
         force=False,
     )
+
+
+def test_a_likert_answer_that_is_not_a_rating_is_left_out_rather_than_read_as_three():
+    """`parse_likert` returns 3 for anything it cannot read, and faithfulness is
+    a headline column, so a judge that ran out of room mid-sentence was
+    published as a considered middle-of-the-scale rating.
+
+    One answer in the cache is exactly this: a fragment of the transcript the
+    judge was quoting, 1 of 11 304 Likert answers under
+    `gemini-3.1-pro-preview`. The rubric branch has refused fragments since
+    `is_an_answer` was written and the conciseness branch since the one after
+    that; this was the third place that needed it and the last to get it.
+    """
+    keys = tneval.criteria_keys("plan")
+    answers = {f"plan.rubric_completeness.{key}": "Yes" for key in keys}
+    answers["plan.likert_faithfulness"] = 't like lectures about it", "I'
+    answers["plan.likert_completeness"] = "4"
+
+    scores = tneval.aggregate(answers)
+
+    assert "faithfulness" not in scores.by_section["plan"], (
+        "a transcript fragment was published as a faithfulness of 3"
+    )
+    assert scores.by_section["plan"]["likert_completeness"] == 4.0, "a real rating still counts"
+    assert any("likert_faithfulness" in reason for reason in scores.incomplete.get("plan", [])), (
+        "the omission has to be named, or it is indistinguishable from never asking"
+    )
+
+
+def test_a_real_likert_rating_is_still_read_the_way_tn_eval_reads_it():
+    """The guard is about answers that are not ratings, and `is_a_rating` is the
+    strict test: the whole answer has to be a digit with punctuation around it.
+
+    That is stricter than `parse_likert`, which would read "2, the note omits
+    most of it" as a 2 -- so in principle the guard can drop a rating the parser
+    could have used. Measured across the cache it drops none: 11 303 of the
+    11 304 Likert answers are bare ratings, and the one that is not is a
+    fragment of the transcript that `parse_likert` cannot read either. The same
+    helper already guards TRACE and PDSQI, so using it here keeps one definition
+    of "the judge gave a rating" rather than three.
+    """
+    keys = tneval.criteria_keys("plan")
+    answers = {f"plan.rubric_completeness.{key}": "Yes" for key in keys}
+    answers["plan.likert_faithfulness"] = "[4]"
+
+    scores = tneval.aggregate(answers)
+
+    assert scores.by_section["plan"]["faithfulness"] == 4.0
+    assert "plan" not in scores.incomplete

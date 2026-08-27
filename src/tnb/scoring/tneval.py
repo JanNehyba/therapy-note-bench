@@ -671,10 +671,28 @@ def aggregate(answers: dict[str, str], tasks: list[JudgeTask] | None = None) -> 
             # and named below.
             section_scores["conciseness"] = 0.0
 
+        # The third place this rule is needed, and the last one to get it.
+        # `parse_likert` returns 3 for anything it cannot read, because that is
+        # TN-Eval's arithmetic and our numbers are compared with theirs -- but
+        # theirs was applied to answers from their protocol, not to our
+        # infrastructure's failures. A judge that ran out of room mid-sentence
+        # was published as a considered 3, and `faithfulness` is a headline
+        # column, so it went straight onto the page.
+        #
+        # One answer in the cache is such a fragment: `'t like lectures about
+        # it", "I` -- a piece of the transcript the judge was quoting -- in
+        # `gemini-3.1-pro-preview`, 1 of 11 304 Likert answers. Small, and it is
+        # a measurement nobody made. Named in `incomplete` like an unanswered
+        # criterion rather than averaged in.
         for kind in ("likert_completeness", "likert_conciseness", "likert_faithfulness"):
             unit = f"{section}.{kind}"
-            if unit in answers:
+            if unit not in answers:
+                continue
+            if is_a_rating(answers[unit]):
                 section_scores[MEASURE_OF_UNIT.get(kind, kind)] = float(parse_likert(answers[unit]))
+            else:
+                incomplete.setdefault(section, [])
+                incomplete[section].append(f"{kind}: answered, but not with a rating")
 
         if section_scores:
             by_section[section] = section_scores

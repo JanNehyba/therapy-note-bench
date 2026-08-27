@@ -32,4 +32,12 @@
 #: a certain No in the numerator and a certain +1 in the denominator of
 #: `conciseness`. It was 65% of `qwen3.5-122b`'s conciseness failures and 0% for
 #: the models that write prose, so the column was partly measuring markdown.
-__version__ = "0.4.0"
+#: 0.5.0 -- a Likert answer that is not a rating is left out rather than read
+#: as a 3. `parse_likert` returns the middle of the scale for anything it cannot
+#: read, which is TN-Eval's arithmetic and is kept, but theirs was applied to
+#: answers from their protocol rather than to our infrastructure's failures.
+#: `faithfulness` is a headline column, so a judge cut off mid-sentence went
+#: onto the page as a considered 3. One answer in the cache is such a fragment.
+#: The rubric and conciseness branches have refused fragments since
+#: `is_an_answer`; this was the third place that needed it.
+__version__ = "0.5.0"
