@@ -474,3 +474,85 @@ def test_an_effect_every_system_shows_is_still_detected():
 
     assert effect.estimate == pytest.approx(0.10, abs=1e-9)
     assert effect.detected, "unanimous within the family, so the interval holds"
+
+
+def _paired_scores() -> dict[str, dict[str, dict[str, float]]]:
+    """Two judges whose leans are mirror images, over a neutral group that agrees.
+
+    `d = A - B` is zero on every neutral system, so the base both effects are
+    measured against is zero under any resample of that group. On the judges'
+    own systems `d` varies by conversation, and Google's pattern is exactly
+    OpenAI's negated -- so both judges lean by the same amount, whichever
+    conversations are drawn, and the difference between the two leans is zero
+    in every draw.
+    """
+    sessions = [f"s{n:02d}" for n in range(20)]
+    lean = {x: (0.1 if n % 2 else 0.3) for n, x in enumerate(sessions)}
+    scores_a: dict[str, dict[str, float]] = {}
+    scores_b: dict[str, dict[str, float]] = {}
+    for name in ("gemini-a", "gemini-b", "gemma-c"):
+        scores_a[name] = {x: lean[x] for x in sessions}
+        scores_b[name] = dict.fromkeys(sessions, 0.0)
+    for name in ("gpt-a", "gpt-b", "gpt-c"):
+        scores_a[name] = dict.fromkeys(sessions, 0.0)
+        scores_b[name] = {x: lean[x] for x in sessions}
+    for name in ("llama-1", "qwen-2", "mistral-3"):
+        scores_a[name] = dict.fromkeys(sessions, 0.5)
+        scores_b[name] = dict.fromkeys(sessions, 0.5)
+    return {"gemini-3.1-pro-preview": scores_a, "gpt-5.6-terra": scores_b}
+
+
+def test_the_two_effects_come_from_one_draw_rather_than_two_runs():
+    """The difference is only meaningful if both effects saw the same draw.
+
+    Each judge used to get its own bootstrap from the same seed, which gave
+    them the same conversations and -- because the two `own` groups differ in
+    size and so consume different amounts of the random stream -- different
+    resamples of the neutral group they are both measured against. On the
+    fixture the two leans are equal in every draw by construction, so a paired
+    bootstrap puts their difference at exactly zero with an interval of zero
+    width. Two separate runs cannot, whatever the seed.
+    """
+    effects, spread = preference.compare_with_spread(
+        _paired_scores(), judge_a="gemini-3.1-pro-preview", judge_b="gpt-5.6-terra"
+    )
+
+    assert len(effects) == 2, "both judges have a family among these systems"
+    assert spread is not None
+    assert spread.low == spread.high == 0.0, "the two effects were not differenced inside the draw"
+    assert spread.estimate == pytest.approx(0.0, abs=1e-12)
+    assert not spread.detected
+
+
+def test_the_difference_is_the_two_published_estimates_subtracted():
+    """A reader who subtracts the two numbers in the table must get this one.
+
+    The interval comes from the bootstrap; the point estimate must not, or the
+    sentence under the table would disagree with the table above it.
+    """
+    effects, spread = preference.compare_with_spread(
+        _paired_scores(), judge_a="gemini-3.1-pro-preview", judge_b="gpt-5.6-terra"
+    )
+    by_name = {effect.judge: effect for effect in effects}
+
+    assert spread is not None
+    assert spread.estimate == pytest.approx(
+        by_name["gpt-5.6-terra"].estimate - by_name["gemini-3.1-pro-preview"].estimate
+    )
+
+
+def test_a_lopsided_pair_is_reported_as_a_difference_between_the_judges():
+    """And when they do differ, the sentence names which way round it is."""
+    scores = _paired_scores()
+    for name in ("gpt-a", "gpt-b", "gpt-c"):
+        scores["gpt-5.6-terra"][name] = {
+            x: value + 0.4 for x, value in scores["gpt-5.6-terra"][name].items()
+        }
+
+    _, spread = preference.compare_with_spread(
+        scores, judge_a="gemini-3.1-pro-preview", judge_b="gpt-5.6-terra"
+    )
+
+    assert spread is not None and spread.detected
+    sentence = preference.describe_spread(spread)
+    assert "gpt-5.6-terra" in sentence and "more than" in sentence

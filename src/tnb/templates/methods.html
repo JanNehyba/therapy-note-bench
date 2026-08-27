@@ -693,6 +693,9 @@ function renderPreference(data) {
       </tr>`).join('')}</tbody>
     </table></div>
     ${data.effects.map(e => `<p class="note">${code(e.summary)}</p>`).join('')}
+    ${data.difference
+      ? `<p class="note"><strong>And the two against each other.</strong> ${code(data.difference.summary)}</p>`
+      : ''}
     ${(data.effects[0] && data.effects[0].neutral || []).length
       ? `<p class="note">Measured against the ${data.effects[0].neutral.length} systems
          neither judge's vendor wrote: ${data.effects[0].neutral.map(code).join(', ')}. Named

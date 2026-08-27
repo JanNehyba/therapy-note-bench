@@ -996,10 +996,15 @@ def _judges_own_family(row: Row) -> str:
 
     `docs/limitations.md` has promised since the second judge was added that
     these cells are "marked in the table where they sit", and nothing marked
-    them -- not `renderTable`, not the row data it draws from. The effect the
-    mark warns about is no longer hypothetical: with the comparison group
-    corrected to the vendor that built each model, `gpt-5.6-terra` shows a
-    detected self-preference of +0.027 completeness.
+    them -- not `renderTable`, not the row data it draws from.
+
+    What the mark warns about is a lean, not a verdict. Each judge rates its own
+    vendor about 0.02 completeness higher -- +0.018 for `gemini-3.1-pro-preview`
+    and +0.027 for `gpt-5.6-terra` -- and once the models are resampled as well
+    as the conversations, neither interval clears zero, so `preference.py`
+    reports `detected: false` for both. This docstring used to call the +0.027
+    "detected", which was true only of an earlier estimator that resampled
+    conversations alone and so treated four models as the whole of OpenAI.
 
     The row is marked, never dropped. A missing row would be the worse
     distortion, and a reader who can see which cells to discount can do the

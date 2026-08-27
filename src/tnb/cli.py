@@ -835,7 +835,9 @@ def cmd_preference(args: argparse.Namespace) -> int:
             return 1
         by_judge[judge_model] = saturation.per_session_scores(answers, args.measure)
 
-    effects = preference.compare(by_judge, judge_a=args.judge_a, judge_b=args.judge_b)
+    effects, spread = preference.compare_with_spread(
+        by_judge, judge_a=args.judge_a, judge_b=args.judge_b
+    )
     if not effects:
         print(
             "Nothing to report: neither judge has a family among the scored systems, "
@@ -847,6 +849,9 @@ def cmd_preference(args: argparse.Namespace) -> int:
     for effect in effects:
         print()
         print(preference.describe(effect, args.measure))
+    if spread is not None:
+        print()
+        print(preference.describe_spread(spread, args.measure))
 
     if args.dry_run:
         print("\nDry run: nothing written.")
@@ -875,6 +880,20 @@ def cmd_preference(args: argparse.Namespace) -> int:
             }
             for effect in effects
         ],
+        # The two effects are printed in one table, so the reader compares
+        # them. Publishing only the two makes that comparison happen by eye,
+        # on intervals that overlap.
+        "difference": None
+        if spread is None
+        else {
+            "judge_a": spread.judge_a,
+            "judge_b": spread.judge_b,
+            "estimate": round(spread.estimate, 4),
+            "low": round(spread.low, 4),
+            "high": round(spread.high, 4),
+            "detected": spread.detected,
+            "summary": preference.describe_spread(spread, args.measure),
+        },
     }
     report.DOCS_DIR.mkdir(parents=True, exist_ok=True)
     report.PREFERENCE_PATH.write_text(

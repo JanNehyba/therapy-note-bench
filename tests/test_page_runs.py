@@ -1134,3 +1134,63 @@ def test_the_length_panel_is_drawn_and_not_merely_computed(tmp_path):
     assert "31 of 50" in drawn
     assert "does not survive" in drawn, "p = 0.119 is not a surviving effect"
     assert "publishes the <strong>length</strong>" in drawn or "publishes the" in drawn
+
+
+def test_the_panel_says_whether_the_two_leans_differ_from_each_other(tmp_path):
+    """Two numbers in one table get compared, and +0.027 beside +0.018 reads as
+    "GPT is the more partial judge". Their difference is +0.009 with an interval
+    four times its own width, so it licenses nothing -- and the page said so
+    nowhere, which left the comparison to be made by eye on two intervals that
+    overlap."""
+    data = report.build([_row("x", "a-judge", 0.5)])
+    data["calibration"] = None
+    data["similarity_example"] = None
+    data["saturation"] = None
+    data["judges"] = None
+    data["concordance"] = {}
+    data["preference"] = {
+        "measure": "completeness",
+        "judge_a": "gemini-3.1-pro-preview",
+        "judge_b": "gpt-5.6-terra",
+        "effects": [
+            {
+                "judge": "gemini-3.1-pro-preview",
+                "family": "google",
+                "estimate": 0.018,
+                "low": -0.010,
+                "high": 0.047,
+                "detected": False,
+                "n_own": 3,
+                "n_neutral": 12,
+                "n_sessions": 25,
+                "summary": "no detectable preference for Google models",
+            },
+            {
+                "judge": "gpt-5.6-terra",
+                "family": "openai",
+                "estimate": 0.027,
+                "low": -0.004,
+                "high": 0.058,
+                "detected": False,
+                "n_own": 4,
+                "n_neutral": 12,
+                "n_sessions": 25,
+                "summary": "no detectable preference for OpenAI models",
+            },
+        ],
+        "difference": {
+            "judge_a": "gemini-3.1-pro-preview",
+            "judge_b": "gpt-5.6-terra",
+            "estimate": 0.0092,
+            "low": -0.0389,
+            "high": 0.0578,
+            "detected": False,
+            "summary": "The two leans are not distinguishable from each other.",
+        },
+    }
+
+    output = _run(report.render_methods(data), tmp_path, "preference")
+
+    assert "not distinguishable from each other" in output, (
+        "the difference between the two judges was computed and not drawn"
+    )

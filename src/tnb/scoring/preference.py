@@ -134,6 +134,36 @@ class Effect:
         return self.low > NEGLIGIBLE or self.high < -NEGLIGIBLE
 
 
+@dataclass(frozen=True)
+class Spread:
+    """How far apart two judges' self-preferences are, with an interval.
+
+    The panel prints +0.018 and +0.027 side by side, and side by side is how
+    they get compared: the larger number reads as the more partial judge. Two
+    overlapping intervals do not license that, and the difference has an
+    interval of its own, which is this.
+
+    It is not the two effects subtracted and their intervals eyeballed. It is
+    the difference taken inside every bootstrap draw, so the correlation
+    between the two effects -- they share every conversation and the same
+    neutral group -- is carried rather than thrown away. Subtracting
+    independent intervals would give a wider one and would be wrong in a
+    direction that flatters the conclusion.
+    """
+
+    judge_a: str
+    judge_b: str
+    #: `judge_b`'s effect minus `judge_a`'s, in the units of the measure.
+    estimate: float
+    low: float
+    high: float
+
+    @property
+    def detected(self) -> bool:
+        """Whether the two judges lean by detectably different amounts."""
+        return self.low > NEGLIGIBLE or self.high < -NEGLIGIBLE
+
+
 def _mean(values: list[float]) -> float:
     return sum(values) / len(values) if values else 0.0
 
@@ -148,14 +178,14 @@ MIN_COVERAGE = 0.8
 MIN_SESSIONS = 10
 
 
-def compare(
+def compare_with_spread(
     by_judge: dict[str, dict[str, dict[str, float]]],
     *,
     judge_a: str,
     judge_b: str,
     samples: int = BOOTSTRAP_SAMPLES,
     seed: int = BOOTSTRAP_SEED,
-) -> list[Effect]:
+) -> tuple[list[Effect], Spread | None]:
     """Estimate each judge's self-preference from two judges' per-session scores.
 
     ``by_judge`` is ``{judge_model: {system_id: {session_id: score}}}`` — the
@@ -171,7 +201,7 @@ def compare(
 
     systems = sorted(set(scores_a) & set(scores_b))
     if len(systems) < 2:
-        return []
+        return [], None
 
     # A system still being scored is dropped before the intersection below, the
     # same rule and threshold `saturation.usable_systems` applies and for the
@@ -183,79 +213,94 @@ def compare(
     best = max(covered.values())
     systems = [s for s in systems if covered[s] >= MIN_COVERAGE * best]
     if len(systems) < 2:
-        return []
+        return [], None
 
     # Only conversations every remaining system was scored on by both judges: a
     # difference taken over two different session sets is not a difference.
     shared = sorted(set.intersection(*(set(scores_a[s]) & set(scores_b[s]) for s in systems)))
     if len(shared) < MIN_SESSIONS:
-        return []
+        return [], None
 
-    effects = []
+    families: dict[str, tuple[str, list[str], float]] = {}
     for judge_model in (judge_a, judge_b):
         family = family_of_judge(judge_model)
         if family is None:
             continue
         own = [s for s in systems if family_of(s) == family]
-        # Systems neither judge wrote. Not "everyone else": including the other
-        # judge's family makes the two effects inseparable -- see the module
-        # docstring for the arithmetic.
-        neutral = [s for s in systems if family_of(s) is None]
-        if not own or not neutral:
+        if not own:
             continue
+        # A's effect is measured on d = A - B; B's is the same quantity with
+        # the sign flipped, because d is antisymmetric in the two judges.
+        families[judge_model] = (family, own, 1.0 if judge_model == judge_a else -1.0)
 
-        def difference(system: str, sessions: list[str]) -> float:
-            """Mean of score_A - score_B for one system over these conversations."""
-            return _mean([scores_a[system][x] - scores_b[system][x] for x in sessions])
+    # Systems neither judge wrote. Not "everyone else": including the other
+    # judge's family makes the two effects inseparable -- see the module
+    # docstring for the arithmetic.
+    neutral = [s for s in systems if family_of(s) is None]
+    if not families or not neutral:
+        return [], None
 
-        def estimate(sessions: list[str], own=own, neutral=neutral) -> float:
-            """The point estimate, over the systems as observed.
+    def difference(system: str, sessions: list[str]) -> float:
+        """Mean of score_A - score_B for one system over these conversations."""
+        return _mean([scores_a[system][x] - scores_b[system][x] for x in sessions])
 
-            The interval below resamples the systems as well; this does not,
-            because the point estimate is a statement about the systems that
-            were scored and the interval is a statement about the vendor.
-            """
-            return _mean([difference(s, sessions) for s in own]) - _mean(
-                [difference(s, sessions) for s in neutral]
-            )
+    def observed(own: list[str], sign: float) -> float:
+        """The point estimate, over the systems as they were actually scored.
 
-        # A's effect is measured on d = A - B; B's is the same quantity with the
-        # sign flipped, because d is antisymmetric in the two judges.
-        sign = 1.0 if judge_model == judge_a else -1.0
-        point = sign * estimate(shared)
+        The interval below resamples the systems as well; this does not,
+        because the point estimate is a statement about the systems that were
+        scored and the interval is a statement about the vendor.
+        """
+        return sign * (
+            _mean([difference(s, shared) for s in own])
+            - _mean([difference(s, shared) for s in neutral])
+        )
 
-        # Conversations *and* systems. The claim this interval supports is
-        # "this judge scores its own vendor's models higher", which generalises
-        # past the three or four models the mean is over -- the page marks rows
-        # with it, and a row is a vendor's model rather than one of these four.
-        # Resampling conversations alone treats those four as the whole of
-        # OpenAI, and that is what produced the one "detected" verdict this
-        # repository published: widened properly it is
-        # [-0.0014, +0.0572] and includes zero.
-        rng = random.Random(seed)
-        draws = []
-        for _ in range(samples):
-            picked = [shared[rng.randrange(len(shared))] for _ in shared]
+    # Conversations *and* systems. The claim this interval supports is "this
+    # judge scores its own vendor's models higher", which generalises past the
+    # three or four models the mean is over -- the page marks rows with it, and
+    # a row is a vendor's model rather than one of these four. Resampling
+    # conversations alone treats those four as the whole of OpenAI, and that is
+    # what produced the one "detected" verdict this repository published:
+    # widened properly it is [-0.0014, +0.0572] and includes zero.
+    #
+    # **One loop for both judges, and that is the point.** Each judge used to
+    # get its own bootstrap from the same seed, which gave them the same
+    # conversation draws and -- because the two `own` groups differ in size and
+    # so consume different amounts of the stream -- different draws of the
+    # neutral group they are both measured against. Their difference could not
+    # be read off two runs like that at all. Here one draw picks the
+    # conversations and the neutral group once and scores both judges on them,
+    # so the effects are paired and their difference can be taken inside the
+    # draw. The individual intervals move by Monte-Carlo noise only; what they
+    # estimate is unchanged.
+    rng = random.Random(seed)
+    draws: dict[str, list[float]] = {name: [] for name in families}
+    gap: list[float] = []
+    for _ in range(samples):
+        picked = [shared[rng.randrange(len(shared))] for _ in shared]
+        neutral_sample = [neutral[rng.randrange(len(neutral))] for _ in neutral]
+        base = _mean([difference(s, picked) for s in neutral_sample])
+        drawn: dict[str, float] = {}
+        for name, (_family, own, sign) in families.items():
             own_sample = [own[rng.randrange(len(own))] for _ in own]
-            neutral_sample = [neutral[rng.randrange(len(neutral))] for _ in neutral]
-            draws.append(
-                sign
-                * (
-                    _mean([difference(s, picked) for s in own_sample])
-                    - _mean([difference(s, picked) for s in neutral_sample])
-                )
-            )
-        draws.sort()
+            drawn[name] = sign * (_mean([difference(s, picked) for s in own_sample]) - base)
+            draws[name].append(drawn[name])
+        if len(drawn) == 2:
+            gap.append(drawn[judge_b] - drawn[judge_a])
 
+    effects = []
+    for name, (family, own, sign) in families.items():
+        ordered = sorted(draws[name])
         effects.append(
             Effect(
-                judge=judge_model,
+                judge=name,
                 family=family,
                 own=sign * _mean([difference(s, shared) for s in own]),
                 others=sign * _mean([difference(s, shared) for s in neutral]),
-                estimate=point,
-                low=draws[int(0.025 * samples)],
-                high=draws[int(0.975 * samples) - 1],
+                estimate=observed(own, sign),
+                low=ordered[int(0.025 * samples)],
+                high=ordered[int(0.975 * samples) - 1],
                 n_own=len(own),
                 n_others=len(neutral),
                 n_neutral=len(neutral),
@@ -263,7 +308,32 @@ def compare(
                 n_sessions=len(shared),
             )
         )
-    return effects
+
+    if not gap:
+        return effects, None
+    gap.sort()
+    by_name = {effect.judge: effect for effect in effects}
+    return effects, Spread(
+        judge_a=judge_a,
+        judge_b=judge_b,
+        estimate=by_name[judge_b].estimate - by_name[judge_a].estimate,
+        low=gap[int(0.025 * samples)],
+        high=gap[int(0.975 * samples) - 1],
+    )
+
+
+def compare(
+    by_judge: dict[str, dict[str, dict[str, float]]],
+    *,
+    judge_a: str,
+    judge_b: str,
+    samples: int = BOOTSTRAP_SAMPLES,
+    seed: int = BOOTSTRAP_SEED,
+) -> list[Effect]:
+    """The effects alone, for callers with no use for their difference."""
+    return compare_with_spread(
+        by_judge, judge_a=judge_a, judge_b=judge_b, samples=samples, seed=seed
+    )[0]
 
 
 #: How each vendor is written in a sentence. The family key is a slug because
@@ -302,4 +372,31 @@ def describe(effect: Effect, measure: str = "completeness") -> str:
         f"relative to how the two differ on the {effect.n_neutral} systems neither of "
         f"them wrote [{effect.low:+.3f} to {effect.high:+.3f}]. Read its column for a "
         f"{family_name(effect.family)} model with that in mind."
+    )
+
+
+def describe_spread(spread: Spread, measure: str = "completeness") -> str:
+    """One sentence about the two effects side by side, rather than each alone.
+
+    The two numbers are printed in one table, and a reader compares what is
+    printed together. Without this the comparison happens anyway, by eye, on
+    two intervals that overlap.
+    """
+    if not spread.detected:
+        return (
+            f"The two leans are not distinguishable from each other: "
+            f"`{spread.judge_b}` minus `{spread.judge_a}` is {spread.estimate:+.3f} "
+            f"{measure} [{spread.low:+.3f} to {spread.high:+.3f}]. Neither judge is "
+            f"the more partial one on this evidence, and the larger of the two "
+            f"numbers above should not be read as though it were."
+        )
+    ahead, behind = (
+        (spread.judge_b, spread.judge_a)
+        if spread.estimate > 0
+        else (spread.judge_a, spread.judge_b)
+    )
+    return (
+        f"`{ahead}` leans toward its own vendor by {abs(spread.estimate):.3f} {measure} "
+        f"more than `{behind}` does [{spread.low:+.3f} to {spread.high:+.3f}], so the "
+        f"difference between the two numbers above is itself a finding."
     )
