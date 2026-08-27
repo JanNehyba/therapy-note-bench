@@ -1,4 +1,4 @@
-"""The Czech language rubric: its parser, its prompts and its arithmetic.
+"""The Czech criteria: their parser, their prompts and their arithmetic.
 
 Nothing here reaches the network and nothing reads `data/czech`. The note used
 throughout is invented.
@@ -6,9 +6,7 @@ throughout is invented.
 
 from __future__ import annotations
 
-import pytest
-
-from tnb.scoring import czech, tneval
+from tnb.scoring import czech, pdsqi, tneval
 
 NOTE = """\
 Subjektivně: Klientka popisuje zvýšené napětí před zkouškou.
@@ -16,159 +14,182 @@ Objektivně: V kontaktu spolupracující, afekt přiléhavý.
 Hodnocení: Pokračuje práce na zvládání úzkosti.
 Plán: Nácvik dýchání, kontrola za dva týdny."""
 
+QUOTING = NOTE + '\nKlientka uvedla: "nechci tam jít".'
+
 
 def _answers(**overrides: str) -> dict[str, str]:
-    """Six well-formed ratings, with any of them replaced."""
-    answers = {f"quality.{key}": "4" for key in czech.DIMENSION_KEYS}
-    answers.update({f"quality.{key}": value for key, value in overrides.items()})
+    """Every criterion answered "no fault", with any of them replaced."""
+    answers = {f"czech.{key}": "ne" for key in czech.CRITERION_KEYS}
+    answers.update({f"czech.{key}": value for key, value in overrides.items()})
     return answers
 
 
 # --- the parser ------------------------------------------------------------
 
 
-def test_the_whole_scale_survives_a_round_trip():
-    assert [czech.parse_rating(str(n)) for n in range(1, 6)] == [1, 2, 3, 4, 5]
-    assert all(czech.is_a_rating(str(n)) for n in range(1, 6))
+def test_czech_and_english_answers_are_both_read():
+    """The question is Czech because the criteria are about Czech quotation
+    marks and Czech terms, so a Czech answer is the expected case."""
+    assert czech.parse_answer("ano") is True
+    assert czech.parse_answer("ne") is False
+    assert czech.parse_answer("yes") is True
+    assert czech.parse_answer("no") is False
 
 
-def test_punctuation_around_the_rating_is_tolerated():
-    assert [czech.parse_rating(a) for a in ("  4 ", "[2]", "5.", "*3*")] == [4, 2, 5, 3]
+def test_punctuation_and_case_around_the_answer_are_tolerated():
+    assert czech.parse_answer("Ano.") is True
+    assert czech.parse_answer("NE") is False
+    assert czech.parse_answer("„ano“") is True
 
 
-def test_a_refusal_produces_no_number_at_all():
-    """Never a fabricated middle of the scale. A judge that wrote prose did not
-    rate, and the note is recorded as partial rather than as a 5."""
-    for answer in ("", "   ", "I cannot rate this.", "the note is fine", "4/5 overall"):
-        assert not czech.is_a_rating(answer)
-        assert czech.parse_rating(answer) is None
+def test_anything_else_is_no_answer_and_not_a_clean_note():
+    """The one failure a rubric of absences cannot afford. Reading "not yes" as
+    "no" would declare every unanswered note free of every fault."""
+    for answer in ("", "   ", "možná", "I cannot tell", "ano i ne", "5"):
+        assert czech.parse_answer(answer) is None
 
 
-def test_an_out_of_range_number_is_not_a_rating():
-    for answer in ("0", "6", "10", "-1", "42"):
-        assert czech.parse_rating(answer) is None
+def test_the_yes_no_parser_is_pdsqis_and_not_a_third_one():
+    """Two identical parsers drift. The only difference here is the language,
+    and that is handled by translating two words before delegating."""
+    assert pdsqi.parse_yes_no("yes") is True
+    assert czech.parse_answer("yes") is pdsqi.parse_yes_no("yes")
 
 
-def test_the_tneval_parser_fabricates_a_middle_and_this_one_does_not():
-    """The two parsers share a range; only one of them invents an answer.
-
-    This also pins TN-Eval's behaviour as a documented fact, because its 3 is
-    load-bearing there -- their published numbers were computed with it.
-    """
-    for refusal in ("", "I cannot rate this.", "the note is fine"):
+def test_this_track_does_not_inherit_tnevals_fabricated_middle():
+    for refusal in ("", "I cannot tell"):
         assert tneval.parse_likert(refusal) == 3
-        assert czech.parse_rating(refusal) is None
-    # And where the judge did answer, the two agree.
-    assert [tneval.parse_likert(str(n)) for n in range(1, 6)] == [1, 2, 3, 4, 5]
-    assert [czech.parse_rating(str(n)) for n in range(1, 6)] == [1, 2, 3, 4, 5]
+        assert czech.parse_answer(refusal) is None
 
 
 # --- the prompts -----------------------------------------------------------
 
 
-def test_every_dimension_is_asked_in_its_own_call():
-    """One call per dimension, never six ratings in one answer.
+def test_every_criterion_is_asked_in_its_own_call():
+    """One call per criterion, never seven answers in one reply.
     `judge.ANSWER_TOKENS` is inside the judge fingerprint, so raising it to fit
-    a longer reply would discard every cached answer of the other two tracks."""
-    tasks = czech.build_tasks(NOTE)
-    assert len(tasks) == len(czech.DIMENSION_KEYS) == 6
-    assert [task.dimension for task in tasks] == list(czech.DIMENSION_KEYS)
-    assert len({task.unit for task in tasks}) == 6
+    a longer answer would discard every cached answer of the other tracks."""
+    tasks = czech.build_tasks(QUOTING)
+    assert len(tasks) == len(czech.CRITERION_KEYS) == 7
+    assert len({task.unit for task in tasks}) == 7
 
 
-def test_a_prompt_names_one_dimension_and_not_the_others():
-    tasks = {task.dimension: task.prompt for task in czech.build_tasks(NOTE)}
-    assert "Typografie" in tasks["typography"]
-    assert "Typografie" not in tasks["spelling"]
-    assert "Pravopis" in tasks["spelling"]
+def test_a_prompt_carries_its_own_counter_example():
+    """Without one, `diacritics` and `nonword` answer the same question and
+    their columns correlate for that reason rather than for a real one."""
+    prompts = {task.criterion: task.prompt for task in czech.build_tasks(QUOTING)}
+    assert "sebepe" in prompts["diacritics"]
+    assert "Nepatří sem" in prompts["diacritics"]
+    assert "Nepatří sem" in prompts["nonword"]
+    assert prompts["diacritics"] != prompts["nonword"]
 
 
 def test_the_judge_is_never_shown_the_transcript():
     """The confidential sessions reach e-INFRA, because a model has to read one
-    to write a note. They must not reach the judge's provider as well, and the
-    rubric is built so there is nothing to pass: `build_tasks` takes the note
-    and has no parameter for a transcript."""
-    sentence = "Tak povidejte, co vas dneska privadi"
-    for task in czech.build_tasks(NOTE + "\n"):
-        assert sentence not in task.prompt
-        assert "transkript" not in task.prompt.lower() or "nemáš" in task.prompt
-
+    to write a note. They must not reach the judge's provider as well, and there
+    is nothing to pass: `build_tasks` takes the note and has no other parameter."""
     import inspect
 
-    assert "conversation" not in inspect.signature(czech.build_tasks).parameters
-    assert "transcript" not in inspect.signature(czech.build_tasks).parameters
+    for task in czech.build_tasks(QUOTING):
+        assert "T: " not in task.prompt
+    assert list(inspect.signature(czech.build_tasks).parameters) == ["note"]
 
 
-def test_the_prompt_asks_for_a_bare_number():
-    for task in czech.build_tasks(NOTE):
+def test_the_prompt_asks_for_one_word():
+    for task in czech.build_tasks(QUOTING):
         assert task.prompt.rstrip().endswith(":")
-        assert "1 do 5" in task.prompt
+        assert "ano" in task.prompt and "ne" in task.prompt
 
 
-def test_both_prompt_languages_carry_the_note_and_differ():
-    czech_prompt = czech.build_tasks(NOTE, language="cs")[0].prompt
-    english_prompt = czech.build_tasks(NOTE, language="en")[0].prompt
-    assert NOTE in czech_prompt and NOTE in english_prompt
-    assert czech_prompt != english_prompt
+# --- a criterion with nothing to judge -------------------------------------
 
 
-def test_the_prompt_language_is_part_of_the_instrument():
-    """`judge_prompt_version` is in COMPARABILITY_KEYS, so two languages can
-    never end up in one table however a run is invoked."""
-    assert czech.judge_prompt_version("cs") != czech.judge_prompt_version("en")
-    with pytest.raises(ValueError, match="unknown prompt language"):
-        czech.judge_prompt_version("de")
-    with pytest.raises(ValueError, match="unknown prompt language"):
-        czech.build_tasks(NOTE, language="de")
+def test_a_note_that_quotes_nothing_is_not_asked_about_quotation_marks():
+    """It cannot have the wrong ones. Counting it as clean would let a model
+    score on this column for never citing the client -- the same vacuity as an
+    empty note, smaller."""
+    asked = [task.criterion for task in czech.build_tasks(NOTE)]
+    assert "quotes" not in asked
+    assert len(asked) == 6
+
+    assert "quotes" in [task.criterion for task in czech.build_tasks(QUOTING)]
+
+
+def test_the_opportunity_is_decided_from_the_string_not_by_asking():
+    """A judge call would spend money to be less certain than `in` already is."""
+    assert not czech.has_quotes(NOTE)
+    assert czech.has_quotes(QUOTING)
+    assert czech.has_quotes("řekla „ano“")
+
+
+def test_a_criterion_with_no_opportunity_is_absent_and_not_clean():
+    scores = czech.aggregate(NOTE, _answers())
+    assert "quotes" not in scores.headline
+    assert scores.is_complete, "absent is not the same as unanswered"
+
+
+# --- the empty note --------------------------------------------------------
+
+
+def test_an_empty_note_is_not_asked_a_single_question():
+    """All seven criteria ask about the absence of a fault, so an empty note
+    passes all seven. PDSQI met the same shape on three of eight attributes;
+    here it is seven of seven, because nothing else scores an empty note."""
+    for empty in ("", "   ", "\n\n"):
+        assert czech.build_tasks(empty) == []
+        assert not czech.has_content(empty)
+
+
+def test_an_empty_note_is_partial_and_does_not_vanish():
+    """The half that is easy to get wrong. It must not be scored, and it must
+    not be dropped either -- a model that wrote nothing would have its worst
+    note disappear from the mean instead of counting."""
+    scores = czech.aggregate("", {})
+    assert not scores.is_complete
+    assert scores.incomplete["czech"] == list(czech.CRITERION_KEYS)
+    assert scores.headline == {"note_words": 0.0}
 
 
 # --- aggregation -----------------------------------------------------------
 
 
-def test_six_ratings_make_a_complete_note():
-    scores = czech.aggregate(NOTE, _answers())
+def test_a_clean_note_scores_one_on_every_criterion_it_was_asked():
+    scores = czech.aggregate(QUOTING, _answers())
     assert scores.is_complete
-    assert set(scores.by_criterion) == set(czech.DIMENSION_KEYS)
-    assert scores.headline["spelling"] == 4.0
+    assert set(scores.by_criterion) == set(czech.CRITERION_KEYS)
+    assert all(value == 1.0 for value in scores.by_criterion.values())
 
 
-def test_a_dimension_the_judge_refused_is_named_and_not_scored():
-    """An absence is not a measurement. It is not a zero, and the five that
-    were answered do not quietly become the note's score."""
-    scores = czech.aggregate(NOTE, _answers(typography="I cannot rate this."))
+def test_a_fault_found_scores_zero_so_higher_is_always_better():
+    """The judge is asked whether the fault is present; the column reports its
+    absence, so this table reads the same way as every other one."""
+    scores = czech.aggregate(QUOTING, _answers(diacritics="ano"))
+    assert scores.headline["diacritics"] == 0.0
+    assert scores.headline["register"] == 1.0
+
+
+def test_a_criterion_the_judge_refused_is_named_and_not_scored():
+    """An absence is not a measurement, and here it is not a pass either."""
+    scores = czech.aggregate(QUOTING, _answers(register="nevím"))
 
     assert not scores.is_complete
-    assert scores.incomplete["quality"] == ["typography"]
-    assert "typography" not in scores.headline
-    assert "typography" not in scores.by_criterion
-    assert scores.sections_used["quality"] == 5
+    assert scores.incomplete["czech"] == ["register"]
+    assert "register" not in scores.headline
+    assert scores.sections_used["czech"] == 6
 
 
 def test_a_missing_answer_is_treated_like_a_refusal():
     answers = _answers()
-    del answers["quality.grammar"]
-    scores = czech.aggregate(NOTE, answers)
-    assert scores.incomplete["quality"] == ["grammar"]
+    del answers["czech.agreement"]
+    scores = czech.aggregate(QUOTING, answers)
+    assert scores.incomplete["czech"] == ["agreement"]
 
 
-def test_the_bottom_of_the_scale_is_kept_and_is_not_missing():
-    """The worst Czech in the run must not vanish from the average. The check
-    downstream is `is None`, never falsiness, so 1 survives and so would 0 if
-    the scale ever grew one."""
-    scores = czech.aggregate(NOTE, _answers(spelling="1"))
-    assert scores.is_complete
-    assert scores.headline["spelling"] == 1.0
-
-
-def test_note_length_is_recorded_even_when_the_judge_failed():
-    """Not a judge measure and not a column -- it is the answer to "does this
-    model just write longer notes", and it costs nothing to keep."""
-    scores = czech.aggregate(NOTE, {})
+def test_note_length_is_recorded_but_is_not_a_column():
+    """The answer to "does this model just write longer notes", which is the
+    first objection to any of these numbers."""
+    scores = czech.aggregate(NOTE, _answers())
     assert scores.headline["note_words"] == float(len(NOTE.split()))
-    assert scores.incomplete["quality"] == list(czech.DIMENSION_KEYS)
-
-
-def test_note_length_is_not_one_of_the_published_columns():
     assert "note_words" in czech.INTERNAL_MEASURES
     assert "note_words" not in czech.MEASURES
     assert "note_words" not in czech.JUDGE_MEASURES
@@ -178,26 +199,28 @@ def test_note_length_is_not_one_of_the_published_columns():
 
 
 def test_the_track_declines_to_name_a_ranking_measure():
-    """Weighting spelling against terminology is a linguistic decision, not a
-    measurement."""
     assert czech.RANKING_MEASURE is None
 
 
-def test_every_dimension_is_documented_on_the_same_scale():
-    assert set(czech.MEASURES) == set(czech.DIMENSION_KEYS)
+def test_every_criterion_is_documented_as_a_proportion():
+    assert set(czech.MEASURES) == set(czech.CRITERION_KEYS)
     for key, measure in czech.MEASURES.items():
-        assert measure["scale"] == "1-5", key
+        assert measure["scale"] == "0-1", key
         assert len(measure["definition"]) > 40, key
-        assert measure["caveat"], key
+        assert "free of" in measure["definition"], key
 
 
 def test_every_measure_warns_that_content_is_not_checked():
-    """The one thing a reader must not conclude from any of these columns."""
     for key, measure in czech.MEASURES.items():
         assert "true or complete" in measure["caveat"], key
 
 
-def test_every_judge_measure_is_a_dimension():
-    """Unlike iCARE, nothing here is computed from a reference, so every column
-    is a judge decision and the two-judge panel is meaningful on all of them."""
-    assert set(czech.JUDGE_MEASURES) == set(czech.DIMENSION_KEYS)
+def test_no_criterion_asks_about_anything_the_prompt_dictates():
+    """The half of flatness that no wording can fix. A column is flat for good
+    when the task prescribes the answer -- every model writes into the same
+    four-part template, so a question about structure separates nobody. Each of
+    these words named a PDSQI attribute that came back at 5.00 for all sixteen."""
+    banned = ("struktur", "uspořád", "organiz", "sekc", "nadpis")
+    for criterion in czech.CRITERIA:
+        asked = (criterion.question + criterion.guidance).lower()
+        assert not any(word in asked for word in banned), criterion.key

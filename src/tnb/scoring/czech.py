@@ -1,118 +1,187 @@
-"""The Czech tracks' rubric: is the Czech right, judged from the note alone.
+"""Is the Czech right: seven yes/no questions, asked of the note alone.
 
 This scorer answers one question and refuses the rest. It does not ask whether
-the note is true, complete, or clinically useful -- it has no transcript and no
+the note is true, complete or clinically useful -- it has no transcript and no
 reference note, so it could not. A fluent, correctly typeset, entirely invented
-note scores well here. Every measure carries that caveat.
+note passes everything here. Every measure carries that caveat, and PDSQI-9 on
+the same notes is what asks the other question.
 
-That narrowness is what makes the track cheap. The two English tracks are
-expensive because they need a gold note or a 23-item rubric written by
-clinicians; no Czech gold notes exist and nobody is going to write fifty. A
-language rubric needs neither.
+**Yes/no rather than a 1-5 scale, on this repository's own published numbers.**
+An earlier version of this module rated six dimensions 1-5. The calibration
+block says what that shape is worth here: two therapists agree at kappa 0.50 on
+a criterion checklist and at rho 0.13 to 0.19 on 1-5 scales, and the judge
+reaches alpha 0.60 against 0.03 to 0.11. It is why the leaderboard ranks on the
+rubric and not on the Likert columns, and there was no reason to build a third
+instrument out of the weaker half.
 
-**Two prompt languages, and the choice is an instrument.** The note is Czech;
-the question about it can be asked in Czech or in English, and which one detects
-more real errors is not knowable from an armchair. Both are written here and
-each has its own `judge_prompt_version`, which is part of `COMPARABILITY_KEYS`
--- so the two can never share a leaderboard table, and a run always records
-which was used. `docs/methodology.md` records how the choice was decided.
+The measured consequence is on the page already. In the PDSQI-9 table all
+sixteen models score exactly 5.00 on four of eight columns, and
+`concordance.rankable` refuses an agreement figure for each -- a correlation of
++1.000 over a column of fives is not agreement, it is a coin. A proportion over
+ten notes has eleven values and 0.3 against 0.9 is a difference a reader can
+see.
 
-**No composite.** Six columns, no average. Weighting spelling against
-terminology is a linguistic decision, not a measurement, and the correlation
-this track exists to look for is more useful per dimension anyway: English
-completeness may predict terminology and say nothing about typography.
+**It fixes half the problem and it is worth being clear which half.** Where a
+column is flat because the *judge* cannot see a difference, a concrete question
+can recover it: one judge separates `comprehensible` where the other does not.
+Where a column is flat because the *task* prescribes the answer, no wording
+helps -- every model writes into the same four-part template, so nothing can
+distinguish them on structure. So none of the seven criteria asks about
+anything the prompt dictates. Diacritics, calques, terminology, register and
+quotation marks are choices a model makes; the shape of the note is not, and it
+is not asked about.
+
+**No composite.** Seven proportions, no average. Weighting spelling against
+terminology is a linguistic decision rather than a measurement, and the
+correlation this track exists to look for is more useful per criterion anyway:
+English completeness may predict terminology and say nothing about typography.
 """
 
 from __future__ import annotations
 
-import re
 from dataclasses import dataclass, field
 
-#: One per prompt language. Bumped whenever anything reaching the judge changes.
-#: Result rows carry it and the leaderboard never mixes two versions.
-JUDGE_PROMPT_VERSIONS = {
-    "cs": "czech-quality-cs-v1",
-    "en": "czech-quality-en-v1",
-}
+from tnb.scoring import pdsqi
 
-LANGUAGES = tuple(JUDGE_PROMPT_VERSIONS)
-
-#: What a run uses unless told otherwise. Settled by the planted-error control
-#: rather than by preference -- see `docs/methodology.md`.
-DEFAULT_LANGUAGE = "cs"
+#: Bumped whenever anything reaching the judge changes. Rows carry it and the
+#: leaderboard never mixes two versions.
+JUDGE_PROMPT_VERSION = "czech-criteria-v1"
 
 #: The shared caveat. Repeated on every measure because a reader meets one
 #: column at a time, and this is the limit that matters most about all of them.
 _NO_CONTENT_CHECK = (
-    "Judged from the note alone, with no transcript and no reference: this says "
-    "nothing about whether the note is true or complete. An invented note in "
-    "faultless Czech scores 5."
+    "Asked of the note alone, with no transcript and no reference: it says nothing "
+    "about whether the note is true or complete. An invented note in faultless Czech "
+    "passes. Reported as the share of notes free of the fault, so higher is better."
 )
 
-#: The six dimensions, in the order they are asked and shown.
+
+@dataclass(frozen=True)
+class Criterion:
+    """One fault, asked about as a yes/no question.
+
+    `guidance` carries an example and a counter-example, and both are in the
+    prompt on purpose. Without them two criteria blur into each other and their
+    columns then correlate because they are answering the same question:
+    `sebepece` is a diacritic that went missing, not a word Czech does not have,
+    and only a counter-example says which column it belongs in.
+    """
+
+    key: str
+    label: str
+    #: The question, in Czech. Answered yes when the fault is present.
+    question: str
+    #: What belongs in this criterion, and what belongs in a different one.
+    guidance: str
+    #: English, because this reaches the published page.
+    definition: str
+    #: Whether a note can lack the chance to make this mistake at all.
+    gated: bool = False
+
+
+CRITERIA: tuple[Criterion, ...] = (
+    Criterion(
+        key="diacritics",
+        label="Diacritics",
+        question="Je v poznámce české slovo s chybějící nebo špatnou délkou či háčkem?",
+        guidance=(
+            "Patří sem například „sebepeče“ místo „sebepéče“. Nepatří sem slovo, které "
+            "v češtině vůbec neexistuje, ani výraz přeložený z angličtiny — na ty se "
+            "ptáme jinde."
+        ),
+        definition=(
+            "Whether any Czech word in the note has a missing or wrong length mark or "
+            "hachek. A word Czech does not have at all belongs to another criterion."
+        ),
+    ),
+    Criterion(
+        key="calque",
+        label="Calques",
+        question="Je v poznámce výraz utvořený doslovným překladem z angličtiny?",
+        guidance=(
+            "Patří sem například „pres“ tam, kde se česky řekne „tlak“. Nepatří sem "
+            "anglické slovo ponechané v původní podobě — to je jiné kritérium."
+        ),
+        definition=(
+            "Whether the note contains a phrase built by translating English word for "
+            "word. An English word left as it was belongs to another criterion."
+        ),
+    ),
+    Criterion(
+        key="untranslated",
+        label="Untranslated terms",
+        question="Zůstal v poznámce anglický odborný termín nepřeložený?",
+        guidance=(
+            "Patří sem například „behavioral avoidance coping“ ponechané anglicky. "
+            "Nepatří sem mezinárodní zkratka, která se v české dokumentaci běžně "
+            "používá, jako CBT nebo PTSD."
+        ),
+        definition=(
+            "Whether an English clinical term was left in English. International "
+            "abbreviations that Czech documentation uses as they are do not count."
+        ),
+    ),
+    Criterion(
+        key="agreement",
+        label="Agreement",
+        question="Je v poznámce věta s chybnou shodou, špatným pádem nebo nedokončená?",
+        guidance=(
+            "Patří sem například „klientka uvedl“. Nepatří sem věta, která je "
+            "stylisticky těžkopádná, ale gramaticky správná."
+        ),
+        definition=(
+            "Whether any sentence has broken agreement, a wrong case, or is left "
+            "unfinished. A clumsy but grammatical sentence does not count."
+        ),
+    ),
+    Criterion(
+        key="register",
+        label="Register",
+        question="Je v poznámce hovorový nebo citově zabarvený výraz tam, kam patří odborný?",
+        guidance=(
+            "Patří sem například „ségra“ tam, kde patří „sestra“. Nepatří sem citace "
+            "klientovy vlastní řeči uvedená v uvozovkách."
+        ),
+        definition=(
+            "Whether the note slips out of the register of clinical documentation into "
+            "colloquial or emotive wording. A quotation of the client does not count."
+        ),
+    ),
+    Criterion(
+        key="quotes",
+        label="Quotation marks",
+        question='Jsou v poznámce rovné uvozovky " místo českých „ a “?',
+        guidance=("Ptáme se jen na tvar uvozovek, ne na to, co je v nich."),
+        definition=(
+            "Whether the note uses straight quotation marks where Czech uses its own. "
+            "Asked only of notes that quote anything at all."
+        ),
+        gated=True,
+    ),
+    Criterion(
+        key="nonword",
+        label="Non-words",
+        question="Je v poznámce slovo, které v češtině neexistuje?",
+        guidance=(
+            "Patří sem překlep nebo vymyšlený odborný termín. Nepatří sem vlastní "
+            "jméno, ani slovo, které je jen špatně napsané s diakritikou, ani anglický "
+            "termín ponechaný anglicky — na ty se ptáme jinde."
+        ),
+        definition=(
+            "Whether the note contains a word Czech does not have. A proper noun, a "
+            "diacritic slip and an English term left in English each belong elsewhere."
+        ),
+    ),
+)
+
+CRITERION_KEYS: tuple[str, ...] = tuple(c.key for c in CRITERIA)
+
+#: Every quotation mark a note might use, straight or typographic. What decides
+#: whether the `quotes` criterion had anything to judge.
 #:
-#: `key` reaches the page and is English. The Czech and English wordings are
-#: both here because the prompt language is part of the instrument. The example
-#: in each description is a real error found by hand in the first round of Czech
-#: notes, which is what keeps a dimension about something concrete rather than
-#: about a feeling.
-DIMENSIONS: tuple[tuple[str, str, str, str, str], ...] = (
-    (
-        "spelling",
-        "Pravopis a diakritika",
-        "všechna slova jsou napsaná správně, včetně délek a háčků "
-        "(například „sebepéče“, ne „sebepeče“)",
-        "Spelling and diacritics",
-        "every word is spelled correctly, including length marks and hacheks "
-        "(for example „sebepéče“, not „sebepeče“)",
-    ),
-    (
-        "grammar",
-        "Gramatika a stavba vět",
-        "pády, rody, čísla a časy se shodují a věty jsou dokončené",
-        "Grammar and sentence structure",
-        "cases, genders, numbers and tenses agree, and sentences are finished",
-    ),
-    (
-        "lexis",
-        "Volba slov",
-        "slova a spojení jsou česká, ne doslovně přeložená z angličtiny "
-        "(například „tlak“, ne „pres“)",
-        "Word choice",
-        "words and phrases are Czech rather than calqued from English "
-        "(for example „tlak“, not „pres“)",
-    ),
-    (
-        "terminology",
-        "Odborná terminologie",
-        "tam, kde má čeština zavedený odborný termín, poznámka ho používá a "
-        "nenechává anglický originál (například nepřeložené "
-        "„behavioral avoidance coping“)",
-        "Clinical terminology",
-        "where Czech has an established clinical term the note uses it rather than "
-        "leaving the English (for example an untranslated "
-        "„behavioral avoidance coping“)",
-    ),
-    (
-        "register",
-        "Rejstřík a stylová jednotnost",
-        "poznámka drží rejstřík zdravotnické dokumentace a nesklouzává do hovorové "
-        "řeči (například „sestra“, ne „ségra“)",
-        "Register and stylistic consistency",
-        "the note holds the register of clinical documentation and does not slip into "
-        "colloquial speech (for example „sestra“, not „ségra“)",
-    ),
-    (
-        "typography",
-        "Typografie",
-        "české uvozovky, pomlčky, mezery, zkratky a zápis čísel a dat odpovídají české normě",
-        "Typography",
-        "Czech quotation marks, dashes, spacing, abbreviations and the way numbers "
-        "and dates are written follow Czech convention",
-    ),
-)
-
-DIMENSION_KEYS: tuple[str, ...] = tuple(key for key, *_ in DIMENSIONS)
+#: Determined here rather than by asking, because it is a fact about the string
+#: and a judge call would spend money to be less certain about it.
+QUOTE_CHARACTERS = "\"'„“”«»’"
 
 #: How many words the note ran to. Written into the row, not shown as a column.
 #:
@@ -123,136 +192,60 @@ DIMENSION_KEYS: tuple[str, ...] = tuple(key for key, *_ in DIMENSIONS)
 INTERNAL_MEASURES: tuple[str, ...] = ("note_words",)
 
 MEASURES: dict[str, dict[str, str]] = {
-    key: {
-        "label": label_en,
-        "scale": "1-5",
-        "definition": (
-            f"{description_en[0].upper()}{description_en[1:]}. "
-            "Rated 1-5 by a judge reading only the note."
-        ),
+    criterion.key: {
+        "label": criterion.label,
+        "scale": "0-1",
+        "definition": f"{criterion.definition} Reported as the share of notes free of it.",
         "caveat": _NO_CONTENT_CHECK,
     }
-    for key, _name_cs, _description_cs, label_en, description_en in DIMENSIONS
+    for criterion in CRITERIA
 }
 
-#: Six measures, no average. See the module docstring.
+#: Seven measures, no average. See the module docstring.
 RANKING_MEASURE = None
 
-#: Every column here is a judge's decision -- unlike iCARE, where four of five
-#: are computed from the note and the reference and so are byte-identical under
-#: any judge. The two-judge agreement panel is therefore meaningful on all
-#: six, which matters more here than anywhere else: this track has no human
-#: anchor at all, and where the judges disagree is the only control it has.
-JUDGE_MEASURES: tuple[str, ...] = DIMENSION_KEYS
+#: Every criterion is a judge's decision, so all of them can be compared between
+#: judges -- which matters more here than anywhere else, because this track has
+#: no human anchor and disagreement is the only control it has. Where a column
+#: turns out flat, `concordance.rankable` will decline to report one, and that
+#: is the honest answer rather than a missing one.
+JUDGE_MEASURES: tuple[str, ...] = CRITERION_KEYS
 
-_SCALE_CS = """\
-5: v této vlastnosti bez jediné chyby
-4: jedna nebo dvě drobnosti, které čtenáře nezdrží
-3: několik chyb, text je ale pořád dobře čitelný
-2: chyby jsou časté a při čtení ruší
-1: chyby jsou skoro v každé větě a kazí dojem z dokumentace"""
-
-_SCALE_EN = """\
-5: no error of this kind at all
-4: one or two small things that do not slow a reader down
-3: several errors, but the text still reads well
-2: errors are frequent and get in the way
-1: errors in almost every sentence, and the documentation suffers for it"""
-
-PROMPT_CS = f"""\
+PROMPT = """\
 Níže je klinická poznámka z psychoterapeutického sezení, napsaná česky.
 
 ## Poznámka
-{{note}}
+{note}
 
-## Hodnocená vlastnost
-{{name}}: {{description}}
+## Otázka
+{question}
 
-## Stupnice
-{_SCALE_CS}
+{guidance}
 
-Ohodnoť poznámku jen v této jedné vlastnosti. Nehodnoť, jestli je obsah poznámky \
-správný nebo úplný -- transkript sezení k dispozici nemáš a posuzuje se pouze \
-čeština. Napiš pouze číslo od 1 do 5 a nic jiného:"""
+Odpověz pouze slovem „ano“ nebo „ne“ a nic jiného:"""
 
-PROMPT_EN = f"""\
-Below is a clinical note from a psychotherapy session, written in Czech.
-
-## Note
-{{note}}
-
-## Property being rated
-{{name}}: {{description}}
-
-## Scale
-{_SCALE_EN}
-
-Rate the note on this one property only. Do not judge whether the note's content \
-is correct or complete -- you do not have the session transcript, and only the \
-Czech is being assessed. Output only the rating [1, 2, 3, 4, 5]:"""
-
-#: A rating, and nothing but a rating. The same 1-5 range TN-Eval's Likert
-#: questions and iCARE's TRACE use, so the judges have answered thousands of
-#: questions on it inside this repository already.
-#:
-#: Brackets, quotes, asterisks and a trailing full stop are tolerated because a
-#: judge writes "[7]" or "7." often enough. A sign is not: `\W` would have
-#: swallowed the minus in "-1" and returned 1, which is the same trick that
-#: makes `tneval.parse_likert` read "10/10" as one.
-_RATING = re.compile(r"^[^\w+-]*([1-5])[^\w+-]*$")
-
-
-def judge_prompt_version(language: str = DEFAULT_LANGUAGE) -> str:
-    """The version string a run records, which says which prompt was used."""
-    if language not in JUDGE_PROMPT_VERSIONS:
-        raise ValueError(f"unknown prompt language {language!r}; expected one of {LANGUAGES}")
-    return JUDGE_PROMPT_VERSIONS[language]
-
-
-def is_a_rating(answer: str) -> bool:
-    """Whether a 1-5 question actually got a 1-5."""
-    return _RATING.match((answer or "").strip()) is not None
-
-
-def parse_rating(answer: str) -> int | None:
-    """The rating, or None. Never a fabricated middle of the scale.
-
-    `tneval.parse_likert` returns 3 for anything it cannot read, because that is
-    TN-Eval's own arithmetic and our numbers are compared against their published
-    ones. No such argument applies here: this rubric is this repository's own and
-    is compared against nothing, so an invented rating would buy comparability
-    with nobody and cost a measurement nobody took.
-
-    The range is the same, so the only difference is that one: a refusal here
-    is recorded as a refusal.
-
-        tneval.parse_likert("")                 ->  3
-        tneval.parse_likert("I cannot rate.")   ->  3
-        czech.parse_rating("")                  ->  None
-
-    """
-    match = _RATING.match((answer or "").strip())
-    return int(match.group(1)) if match else None
+#: Czech answers, normalised to what `pdsqi.parse_yes_no` reads.
+_ANSWERS = {"ano": "yes", "ne": "no"}
 
 
 @dataclass(frozen=True)
-class RubricTask:
-    """One dimension asked about one note, and where its answer is cached."""
+class CriterionTask:
+    """One criterion asked about one note, and where its answer is cached."""
 
-    dimension: str
+    criterion: str
     prompt: str
 
     @property
     def unit(self) -> str:
-        return f"quality.{self.dimension}"
+        return f"czech.{self.criterion}"
 
     @property
     def kind(self) -> str:
-        return "quality"
+        return "czech"
 
     @property
     def section(self) -> str:
-        return "quality"
+        return "czech"
 
 
 @dataclass
@@ -270,33 +263,75 @@ class Scores:
         return not self.incomplete
 
 
-def build_tasks(note: str, language: str = DEFAULT_LANGUAGE) -> list[RubricTask]:
-    """The six questions asked about one note -- one call each.
+def parse_answer(answer: str) -> bool | None:
+    """True when the fault is present, False when it is not, None otherwise.
 
-    Not one call returning six ratings, which would be cheaper and is wrong.
-    `judge.ANSWER_TOKENS` and `judge.OPENAI_OUTPUT_CEILING` are inside the judge
-    fingerprint, and `judge.load_cached` rejects any answer whose fingerprint
-    differs. Raising either to fit six ratings into one JSON reply would re-key
-    and throw away every cached answer belonging to the other two tracks.
+    Delegates to `pdsqi.parse_yes_no` after translating the two Czech words,
+    rather than writing a third yes/no parser. The question is Czech because the
+    criteria are about Czech quotation marks, Czech diacritics and Czech
+    clinical terms, so a judge answering in Czech is the expected case and an
+    English answer is still read.
 
-    The prompt carries the note and nothing else. There is no transcript in it,
-    which is why the confidential Czech sessions never reach the judge's
-    provider -- only the note a model wrote about them does.
+    None for anything else, never False. Reading "not yes" as "no" would declare
+    every unanswered note free of the fault, which is the one failure a rubric
+    of absences cannot afford.
     """
-    if language not in LANGUAGES:
-        raise ValueError(f"unknown prompt language {language!r}; expected one of {LANGUAGES}")
-    template = PROMPT_CS if language == "cs" else PROMPT_EN
+    normalised = (answer or "").strip().strip(".!?„“”\"'").lower()
+    return pdsqi.parse_yes_no(_ANSWERS.get(normalised, normalised))
+
+
+def has_content(note: str) -> bool:
+    """Whether there is a note here to judge at all.
+
+    Every one of the seven criteria asks about the *absence* of a fault, and a
+    note that says nothing has none of them: no misspelling, no calque, no slip
+    of register. It would pass all seven. PDSQI-9 met the same shape and three
+    of its eight attributes gave an empty note full marks against a therapist's
+    4.20; here it would be seven of seven, because there is no companion measure
+    of the kind that scores TN-Eval's empty note zero.
+
+    So an empty note is not scored. It is not *dropped* either -- see
+    `aggregate`. A model that wrote nothing must not have its worst note vanish.
+    """
+    return bool((note or "").strip())
+
+
+def has_quotes(note: str) -> bool:
+    """Whether the note quotes anything, and so could get the marks wrong.
+
+    A note with no quotation marks cannot have the wrong ones. Counting it as
+    clean would let a model score on `quotes` for never citing the client --
+    the same vacuity as an empty note, smaller. Notes without the opportunity
+    are left out of that column's denominator and counted beside it.
+    """
+    return any(character in note for character in QUOTE_CHARACTERS)
+
+
+def build_tasks(note: str) -> list[CriterionTask]:
+    """The questions asked about one note -- one call each.
+
+    Not one call returning seven answers. `judge.ANSWER_TOKENS` is inside the
+    judge fingerprint and `judge.load_cached` rejects any answer whose
+    fingerprint differs, so raising it to fit a longer reply would re-key and
+    throw away every cached answer belonging to the other tracks.
+
+    The prompt carries the note and nothing else. There is no transcript in it
+    and no parameter one could arrive through, which is why the confidential
+    Czech sessions never reach the judge's provider -- only the note a model
+    wrote about them does.
+    """
+    if not has_content(note):
+        return []
 
     return [
-        RubricTask(
-            dimension=key,
-            prompt=template.format(
-                note=note,
-                name=name_cs if language == "cs" else name_en,
-                description=description_cs if language == "cs" else description_en,
+        CriterionTask(
+            criterion=criterion.key,
+            prompt=PROMPT.format(
+                note=note, question=criterion.question, guidance=criterion.guidance
             ),
         )
-        for key, name_cs, description_cs, name_en, description_en in DIMENSIONS
+        for criterion in CRITERIA
+        if not criterion.gated or has_quotes(note)
     ]
 
 
@@ -305,30 +340,41 @@ def note_words(note: str) -> int:
 
 
 def aggregate(note: str, answers: dict[str, str]) -> Scores:
-    """One note's six ratings, or a named account of what is missing.
+    """One note's seven answers, or a named account of what is missing.
 
-    A dimension the judge did not rate is listed in `incomplete`, never scored
-    zero and never quietly dropped from a denominator. All six or the note is
-    partial, and `SystemAggregate` keeps a partial note out of every headline:
-    six columns computed over different numbers of notes, with nothing on the
-    page saying so, would be worse than six columns over fewer notes.
+    A criterion the judge did not answer is listed in `incomplete`, never scored
+    as clean and never quietly dropped from a denominator. A criterion the note
+    gave no chance to make -- quotation marks in a note that quotes nothing --
+    is neither: it is simply absent, and `_mean_of_dicts` averages the notes
+    that have a value.
+
+    An empty note has no answers at all and is therefore partial. That is the
+    honest treatment *here* and the opposite of TN-Eval's, where an empty note
+    must stay in the mean because completeness legitimately scores it zero. A
+    proportion of notes free of a diacritic error is a statement about notes
+    that have some Czech in them; an empty note is not bad Czech, it is missing
+    Czech, and `n_sessions_partial` and `note_words` are where it shows.
     """
     scores = Scores()
     missing: list[str] = []
+    asked = {task.criterion for task in build_tasks(note)}
 
-    for key in DIMENSION_KEYS:
-        rating = parse_rating(answers.get(f"quality.{key}", ""))
-        if rating is None:
-            missing.append(key)
+    for criterion in CRITERIA:
+        if criterion.key not in asked:
             continue
-        scores.headline[key] = float(rating)
-        scores.by_criterion[key] = float(rating)
+        present = parse_answer(answers.get(f"czech.{criterion.key}", ""))
+        if present is None:
+            missing.append(criterion.key)
+            continue
+        # The fault's absence, so that every column is better when higher.
+        scores.headline[criterion.key] = 0.0 if present else 1.0
+        scores.by_criterion[criterion.key] = scores.headline[criterion.key]
 
-    if missing:
-        scores.incomplete["quality"] = missing
+    if missing or not asked:
+        scores.incomplete["czech"] = missing or list(CRITERION_KEYS)
 
     # Not a judge measure and not a column, so it is recorded whatever the judge
-    # did or did not answer.
+    # did or did not answer -- including for the empty note it explains.
     scores.headline["note_words"] = float(note_words(note))
-    scores.sections_used["quality"] = len(DIMENSION_KEYS) - len(missing)
+    scores.sections_used["czech"] = len(asked) - len(missing)
     return scores
