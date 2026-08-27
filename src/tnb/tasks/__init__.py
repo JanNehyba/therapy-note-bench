@@ -14,8 +14,9 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from functools import cache
 
+from tnb.datasets import czech as czech_corpus
 from tnb.datasets.base import Session
-from tnb.tasks import icare, soap
+from tnb.tasks import czech, icare, soap
 
 
 @dataclass(frozen=True)
@@ -78,6 +79,21 @@ def _icare_units(session: Session) -> list[Unit]:
     ]
 
 
+def _czech_units(session: Session) -> list[Unit]:
+    # The task name comes from the corpus the session was loaded from, so the
+    # two halves land in two generation directories and therefore two tracks.
+    name = czech.NAME_REAL if session.source == czech_corpus.REAL else czech.NAME_TRANSLATED
+    return [
+        Unit(
+            task=name,
+            prompt_version=czech.PROMPT_VERSION,
+            session_id=session.id,
+            unit="note",
+            prompt=czech.build_prompt(session),
+        )
+    ]
+
+
 TASKS: dict[str, Task] = {
     soap.NAME: Task(
         name=soap.NAME,
@@ -94,6 +110,27 @@ TASKS: dict[str, Task] = {
         calls_per_session=17,
         load_sessions=icare.load_sessions,
         build_units=_icare_units,
+    ),
+    # Two tasks over one prompt, because `results.TRACK_BY_TASK` maps a
+    # generation directory to a track and one task could not tell the real
+    # sessions from the translated ones.
+    czech.NAME_REAL: Task(
+        name=czech.NAME_REAL,
+        prompt_version=czech.PROMPT_VERSION,
+        calls_per_session=1,
+        load_sessions=czech.load_real,
+        build_units=_czech_units,
+        repair_suffix=czech.REPAIR_SENTENCE,
+        parse_attempts=czech.PARSE_ATTEMPTS,
+    ),
+    czech.NAME_TRANSLATED: Task(
+        name=czech.NAME_TRANSLATED,
+        prompt_version=czech.PROMPT_VERSION,
+        calls_per_session=1,
+        load_sessions=czech.load_translated,
+        build_units=_czech_units,
+        repair_suffix=czech.REPAIR_SENTENCE,
+        parse_attempts=czech.PARSE_ATTEMPTS,
     ),
 }
 

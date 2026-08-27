@@ -58,6 +58,10 @@ select = ["E", "F", "I", "UP", "B", "SIM"]
 # Tests pin their sha256.
 "src/tnb/tasks/soap.py" = ["E501"]
 "src/tnb/scoring/tneval.py" = ["E501"]
+# The Czech SOAP prompt is a translation of soap.py's, and keeps its shape:
+# one paragraph per section, unwrapped, so the two prompts differ in language
+# and in nothing else.
+"src/tnb/tasks/czech.py" = ["E501"]
 # One field description per line reads better than a rewrapped paragraph, and
 # these are prose for the page rather than code.
 "src/tnb/tasks/icare.py" = ["E501"]

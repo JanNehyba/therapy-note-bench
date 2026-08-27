@@ -224,3 +224,43 @@ def test_no_criterion_asks_about_anything_the_prompt_dictates():
     for criterion in czech.CRITERIA:
         asked = (criterion.question + criterion.guidance).lower()
         assert not any(word in asked for word in banned), criterion.key
+
+
+# --- the generation prompt -------------------------------------------------
+
+
+def test_the_note_headings_are_czech_so_the_note_does_not_fail_its_own_prompt():
+    """English headings would put English words into every note, and
+    `untranslated` asks whether an English term was left in English. A model
+    would lose a criterion for obeying its instructions."""
+    from tnb.tasks import czech as task
+
+    rendered = task.render_note({key: "text" for key in task.SECTIONS})
+    assert "Subjektivně" in rendered
+    assert "Subjective" not in rendered
+    assert set(task.SECTION_LABELS) == set(task.SECTIONS)
+
+
+def test_the_czech_prompt_asks_for_czech_and_names_the_speakers():
+    """A model that has to infer what `K:` stands for is being measured on
+    something this benchmark is not asking about."""
+    from tnb.datasets.base import Session, Turn
+    from tnb.tasks import czech as task
+
+    session = Session(id="cz-t-0", source="czech-translated", turns=(Turn("client", "dobrý den"),))
+    prompt = task.build_prompt(session)
+    assert "Piš česky" in prompt
+    assert "Klient: dobrý den" in prompt
+    assert "SOAP" in prompt
+
+
+def test_a_note_that_does_not_parse_is_none_and_not_four_empty_sections():
+    """`scoring/czech.py` treats an empty note deliberately, and a refusal has
+    to stay distinguishable from one."""
+    from tnb.tasks import czech as task
+
+    assert task.parse_note("promiňte, to neumím") is None
+    assert task.parse_note('{"Subjektivně": "a"}') is None, "four sections or nothing"
+    assert task.parse_note('{"Subjektivně":"","Objektivně":"","Hodnocení":"","Plán":""}') == {
+        key: "" for key in task.SECTIONS
+    }
