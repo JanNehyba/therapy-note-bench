@@ -272,3 +272,52 @@ def test_a_dropped_criterion_is_not_a_dropped_note(monkeypatch):
 
     assert len(rubric) // 23 == 2, "the derivation this replaced loses a note"
     assert report.notes == 3, "the notes are counted, not divided out"
+
+
+def _judge_row(name: str, alpha: float, humans: float) -> dict:
+    return {
+        "judge_model": name,
+        "agreements": [{"name": "rubric_completeness", "alpha": alpha, "alpha_humans": humans}],
+    }
+
+
+def test_each_candidate_is_measured_against_its_own_human_ceiling():
+    """The ceiling is not one number. A candidate that refused two questions is
+    paired on 3448 items where another is paired on 3450, so the therapists'
+    agreement over *those* items differs -- three distinct ceilings among the
+    seven published.
+
+    This was `ceiling = number(...) or ceiling`, which kept whichever value came
+    last and measured everybody against it.
+    """
+    judges = [
+        _judge_row("strict-humans", 0.60, 0.50),
+        _judge_row("lenient-humans", 0.60, 0.80),
+    ]
+    out = calibration.separations(judges, "rubric_completeness", margin=0.05)
+
+    assert {row["judge"]: row["ceiling"] for row in out["ranked"]} == {
+        "strict-humans": 0.50,
+        "lenient-humans": 0.80,
+    }
+    # Same alpha, different ceilings: only the one that clears its own is named.
+    assert out["above_ceiling"] == ["strict-humans"]
+    assert out["all_at_or_above_ceiling"] is False
+    assert out["ceiling_span"] == [0.50, 0.80], "the spread is published, not averaged away"
+
+
+def test_a_measured_ceiling_of_zero_is_not_replaced_by_somebody_else_s():
+    """`0.0` is falsy. Under `or ceiling` a candidate whose two therapists agreed
+    at chance inherited the previous row's ceiling, and was reported as failing
+    to clear a bar that was never its own.
+    """
+    judges = [
+        _judge_row("has-a-ceiling", 0.60, 0.50),
+        _judge_row("humans-at-chance", 0.30, 0.0),
+    ]
+    out = calibration.separations(judges, "rubric_completeness", margin=0.05)
+
+    assert {row["judge"]: row["ceiling"] for row in out["ranked"]}["humans-at-chance"] == 0.0
+    assert "humans-at-chance" in out["above_ceiling"], (
+        "0.30 against a ceiling of 0.0 clears it by 0.30, whatever the other row says"
+    )

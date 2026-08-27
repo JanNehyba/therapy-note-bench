@@ -477,8 +477,15 @@ def separations(judges: list[dict], measure: str, margin: float = ALPHA_MARGIN) 
         except (TypeError, ValueError):
             return None
 
-    found: list[tuple[str, float]] = []
-    ceiling = None
+    # Each candidate against **its own** ceiling. They are not the same number:
+    # a candidate that refused two questions is paired on 3448 items where
+    # another is paired on 3450, so the therapists' agreement over those items
+    # differs too -- three distinct ceilings among the seven published here.
+    # This was `ceiling = number(...) or ceiling`, which kept the last truthy
+    # value and measured every candidate against whichever row happened to come
+    # last; and `0.0` is falsy, so a candidate whose therapists genuinely agreed
+    # at chance silently inherited somebody else's ceiling instead.
+    found: list[tuple[str, float, float | None]] = []
     for row in judges:
         agreement = next((a for a in row.get("agreements", []) if a.get("name") == measure), None)
         if agreement is None:
@@ -486,31 +493,36 @@ def separations(judges: list[dict], measure: str, margin: float = ALPHA_MARGIN) 
         alpha = number(agreement.get("alpha"))
         if alpha is None:
             continue
-        ceiling = number(agreement.get("alpha_humans")) or ceiling
-        found.append((row["judge_model"], alpha))
-    found.sort(key=lambda pair: (-pair[1], pair[0]))
+        found.append((row["judge_model"], alpha, number(agreement.get("alpha_humans"))))
+    found.sort(key=lambda entry: (-entry[1], entry[0]))
+
+    ceilings = [own for _, _, own in found if own is not None]
+    # One number still reaches the page, and it is only honest while the
+    # candidates agree about it to the precision the page prints. `span` says
+    # how far apart they really are, so the difference is visible rather than
+    # averaged away.
+    ceiling = sum(ceilings) / len(ceilings) if ceilings else None
+    span = [min(ceilings), max(ceilings)] if ceilings else None
 
     return {
         "measure": measure,
         "margin": margin,
         "ceiling": ceiling,
-        "ranked": [{"judge": name, "alpha": alpha} for name, alpha in found],
+        #: How far the candidates' own ceilings are apart, or `None` while they
+        #: agree exactly. A single ceiling is a summary; this says what it hides.
+        "ceiling_span": span if span and span[0] != span[1] else None,
+        "ranked": [{"judge": name, "alpha": alpha, "ceiling": own} for name, alpha, own in found],
         "separated": [
             {"better": better, "worse": worse, "by": round(first - second, 4)}
-            for index, (better, first) in enumerate(found)
-            for worse, second in found[index + 1 :]
+            for index, (better, first, _) in enumerate(found)
+            for worse, second, _ in found[index + 1 :]
             if first - second > margin
         ],
-        "above_ceiling": (
-            [name for name, alpha in found if alpha - ceiling > margin]
-            if ceiling is not None
-            else []
-        ),
-        "all_at_or_above_ceiling": (
-            bool(found) and all(alpha >= ceiling for _, alpha in found)
-            if ceiling is not None
-            else False
-        ),
+        "above_ceiling": [
+            name for name, alpha, own in found if own is not None and alpha - own > margin
+        ],
+        "all_at_or_above_ceiling": bool(found)
+        and all(own is not None and alpha >= own for _, alpha, own in found),
     }
 
 
