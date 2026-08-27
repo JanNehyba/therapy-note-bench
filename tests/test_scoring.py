@@ -999,3 +999,72 @@ def test_publishing_from_cache_still_accepts_answers_older_than_the_digest(tmp_p
         )
 
     assert len(scoring.from_cache([candidate], client, cache_root=tmp_path)) == 1
+
+
+def test_cache_only_honours_no_write(monkeypatch, capsys):
+    """`--no-write` is what you run when you want the numbers and not the record.
+
+    It was declared for `score` and obeyed on the branch that calls the judge,
+    and the `--cache-only` branch -- the free one, the one you reach for exactly
+    when you are checking something -- carried its own copy of the append and no
+    copy of the guard. It wrote 19 rows into an append-only file while saying
+    nothing had been asked.
+    """
+    from tnb import cli
+    from tnb.scoring import run as scoring
+
+    candidate = _one_candidate()
+    scored = [scoring.NoteResult(candidate=candidate, scores=tneval.Scores())]
+    appended: list[list] = []
+
+    monkeypatch.setattr(cli.judge, "config_from_env", lambda **kw: _AConfig())
+    monkeypatch.setattr(cli.judge, "Judge", lambda config: object())
+    monkeypatch.setattr(scoring, "load_sessions", lambda limit: {"s1": "a session"})
+    monkeypatch.setattr(scoring, "from_reference", lambda sessions: [])
+    monkeypatch.setattr(scoring, "from_generations", lambda sessions: [candidate])
+    monkeypatch.setattr(scoring, "from_cache", lambda candidates, client: scored)
+    monkeypatch.setattr(scoring, "to_rows", lambda scored, **kw: ["a row"])
+    monkeypatch.setattr(cli.results, "settings_by_system", lambda **kw: {})
+    monkeypatch.setattr(cli.results, "unreached_by_system", lambda track: {})
+
+    def _append(rows):
+        appended.append(rows)
+        return cli.REPO_ROOT / "results" / "rows.jsonl"
+
+    monkeypatch.setattr(cli.results, "append", _append)
+
+    assert cli.cmd_score(_score_args(cache_only=True, no_write=True)) == 0
+    assert appended == [], "--no-write asked for no record and got one anyway"
+    assert "--no-write" in capsys.readouterr().out, "and it says so, rather than staying silent"
+
+    assert cli.cmd_score(_score_args(cache_only=True, no_write=False)) == 0
+    assert appended == [["a row"]], "without the flag the same branch still records"
+
+
+class _AConfig:
+    model = "a-judge"
+    thinking_budget = 128
+    concurrency = 2
+
+    def fingerprint(self) -> dict:
+        return {"model": "a-judge"}
+
+
+def _score_args(*, cache_only: bool, no_write: bool):
+    import argparse
+
+    return argparse.Namespace(
+        judge_model="a-judge",
+        concurrency=None,
+        thinking_budget=None,
+        limit=None,
+        systems="models",
+        models="",
+        notes=None,
+        dry_run=False,
+        cache_only=cache_only,
+        no_write=no_write,
+        run_id="",
+        max_judge_usd=1.0,
+        force=False,
+    )

@@ -468,12 +468,14 @@ def cmd_score(args: argparse.Namespace) -> int:
 
     client = judge.Judge(config)
 
-    if args.cache_only:
-        scored = scoring.from_cache(candidates, client)
-        print(f"\n{len(scored)} note(s) already answered in full; nothing asked.")
-        if not scored:
-            print("Nothing complete yet.", file=sys.stderr)
-            return 1
+    def append(scored: list[scoring.NoteResult]) -> int:
+        """Turn results into rows and record them, unless asked not to.
+
+        Both branches below end here. They used to carry a copy each, and
+        the cache-only copy appended whatever `--no-write` said: the guard
+        was written once, in the branch that costs money, and the free one
+        never got it.
+        """
         rows = scoring.to_rows(
             scored,
             judge_model=config.model,
@@ -484,10 +486,21 @@ def cmd_score(args: argparse.Namespace) -> int:
             settings=settings,
             run_id=args.run_id or "",
         )
+        if args.no_write:
+            print("\n--no-write: rows were not appended.")
+            return 0
         path = results.append(rows)
-        print(f"Appended {len(rows)} row(s) to {path.relative_to(REPO_ROOT)}.")
+        print(f"\nAppended {len(rows)} row(s) to {path.relative_to(REPO_ROOT)}.")
         print("Run 'tnb report' to rebuild the page.")
         return 0
+
+    if args.cache_only:
+        scored = scoring.from_cache(candidates, client)
+        print(f"\n{len(scored)} note(s) already answered in full; nothing asked.")
+        if not scored:
+            print("Nothing complete yet.", file=sys.stderr)
+            return 1
+        return append(scored)
     spend = judge.Spend(limit_usd=args.max_judge_usd)
     done = 0
 
@@ -526,24 +539,7 @@ def cmd_score(args: argparse.Namespace) -> int:
     if args.dry_run or not scored:
         return 0
 
-    rows = scoring.to_rows(
-        scored,
-        judge_model=config.model,
-        judge_settings=config.fingerprint(),
-        n_generated=coverage,
-        n_attempted=attempted,
-        n_unreached=unreached,
-        settings=settings,
-        run_id=args.run_id or "",
-    )
-    if args.no_write:
-        print("\n--no-write: rows were not appended.")
-        return 0
-
-    path = results.append(rows)
-    print(f"\nAppended {len(rows)} row(s) to {path.relative_to(REPO_ROOT)}.")
-    print("Run 'tnb report' to rebuild the page.")
-    return 0
+    return append(scored)
 
 
 def cmd_score_pdsqi(args: argparse.Namespace) -> int:
