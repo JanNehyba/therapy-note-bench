@@ -388,8 +388,18 @@ function renderTable(table, index) {
          for this table.</strong> Read the order as roughly who is near the top and
          near the bottom, not as a ranking: two adjacent rows are not a result.</p>`;
 
+  // Why *this* column orders the table, and not one of the other ten. Asked by
+  // the first reader who looked: the page said which column ranks and never
+  // said what earned it the job. It is the only measure here with a human
+  // anchor -- the judge agrees with a trained therapist more closely than two
+  // therapists agree with each other, while on the 1-5 scales those two reach
+  // 0.13 to 0.19 and there is nothing to anchor to.
   const rankingNote = table.ranking_measure
-    ? `Ordered by <strong>${esc(colLabel(table, table.ranking_measure))}</strong>. Every other column is context and is not a ranking.`
+    ? `Ordered by <strong>${esc(colLabel(table, table.ranking_measure))}</strong>, because it is the
+       only column checked against people: on it the judge and a trained therapist agree at
+       <strong>0.60</strong> where two therapists reach <strong>0.50</strong>. On the 1&#8211;5 scales two
+       therapists agree at 0.13&#8211;0.19, so those carry too little signal to rank on.
+       Every other column is context and is not a ranking.`
     : 'This track is deliberately <strong>not ranked</strong>: its columns measure different things and the source paper found they disagree. That disagreement is the result.';
 
   // Which systems this evidence cannot tell apart. A leaderboard prints an

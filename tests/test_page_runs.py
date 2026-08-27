@@ -1296,3 +1296,21 @@ def test_a_row_with_no_part_answered_notes_says_nothing_of_the_kind(tmp_path):
     host = _flat(_run(report.render_page(data), tmp_path, panel="table-host"))
 
     assert "will not average to the figure" not in host
+
+
+def test_the_table_says_what_earned_the_ranking_column_its_job(tmp_path):
+    """The page said which column orders the table and never said why that one.
+
+    It is the only measure with a human anchor: on the rubric the judge agrees
+    with a trained therapist at 0.60 where two therapists reach 0.50, and on the
+    1-5 scales those two reach 0.13 to 0.19. A reader who is told "ordered by
+    completeness" and not told that has no way to know the choice was earned
+    rather than arbitrary -- and asked exactly that.
+    """
+    from tnb import report
+
+    data = report.build([_row("x", "a-judge", 0.5)])
+    host = _flat(_run(report.render_page(data), tmp_path, panel="table-host"))
+
+    assert "only column checked against people" in host
+    assert "0.60" in host and "0.50" in host, "the reader needs the two numbers, not the claim"
