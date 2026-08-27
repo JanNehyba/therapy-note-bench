@@ -201,7 +201,13 @@ def _and_list(values) -> str:
 #: -- a partial run must not sit under a heading claiming the full corpus.
 TRACK_TITLES = {
     results.TRACK_TNEVAL: "TN-Eval SOAP · AnnoMI conversations",
-    results.TRACK_ICARE: "iCARE / iHOPE · 17 sections per session",
+    # Both names, and which is which. They are not two things: the repository
+    # `proadhikary/iCARE` was last committed 2025-04-28 and preprint v2, dated
+    # 2026-08-19, renames the framework *iHOPE* -- so the published code
+    # predates the paper describing it, and a reader meets both names in the
+    # literature. `docs/datasets.md` has the version mismatch in full. The slash
+    # alone said nothing about either.
+    results.TRACK_ICARE: "iCARE form on the iHOPE corpus · 17 sections per session",
     results.TRACK_PDSQI: "PDSQI-9 · the same notes, rated for quality",
 }
 
@@ -221,7 +227,10 @@ TRACK_BLURBS = {
     ),
     results.TRACK_ICARE: (
         "Automatic metrics and a TRACE judge side by side, because the source paper "
-        "found they disagree. That disagreement is a result, not an error."
+        "found they disagree. That disagreement is a result, not an error. "
+        "iCARE and iHOPE are one project under two names: the code "
+        "was released as iCARE in April 2025 and the preprint renamed it iHOPE in "
+        "August 2026, sixteen months later."
     ),
     results.TRACK_PDSQI: (
         "A published instrument, asked about the very notes the rubric above scores "

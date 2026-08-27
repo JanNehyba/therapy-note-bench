@@ -984,3 +984,22 @@ def test_the_repair_is_wired_into_the_build_and_not_merely_available():
     assert drawn["failure_reasons"] == {"answer did not contain a SOAP dictionary": 8}, (
         "the page must never print a count of unusable notes with no reason beside it"
     )
+
+
+def test_the_icare_title_says_which_name_is_which():
+    """iCARE and iHOPE are one project under two names, not two things.
+
+    The repository `proadhikary/iCARE` was last committed 2025-04-28; preprint
+    v2, dated 2026-08-19, renames the framework iHOPE. So the code predates the
+    paper that describes it and a reader meets both names in the literature. The
+    title said "iCARE / iHOPE", which gives no clue that either is a name for
+    the other, nor which one the 17-section form belongs to.
+    """
+    title = report.TRACK_TITLES[results.TRACK_ICARE]
+    assert "iCARE" in title and "iHOPE" in title, "a reader meets both names; keep both"
+    assert "iCARE / iHOPE" not in title, "the slash says nothing about either"
+    assert "form" in title and "corpus" in title
+
+    blurb = report.TRACK_BLURBS[results.TRACK_ICARE]
+    assert "one project under two names" in blurb or "one project" in blurb
+    assert "2025" in blurb and "2026" in blurb, "the rename is dated, not asserted"
