@@ -1253,6 +1253,96 @@
     "thinking_budget": 256
   },
   "judge_model": "gemini-3.1-pro-preview",
+  "length_effect": {
+    "within_conversation": {
+      "median": 0.1223,
+      "n": 50,
+      "positive": 31,
+      "sign_test_p": 0.119
+    },
+    "within_system": [
+      {
+        "n": 49,
+        "rho": 0.5083,
+        "system": "kimi-k3"
+      },
+      {
+        "n": 45,
+        "rho": 0.4766,
+        "system": "qwen3.8-27b"
+      },
+      {
+        "n": 48,
+        "rho": 0.4652,
+        "system": "gpt-5.6-sol"
+      },
+      {
+        "n": 48,
+        "rho": 0.4106,
+        "system": "gemma4"
+      },
+      {
+        "n": 47,
+        "rho": 0.3988,
+        "system": "qwen3.5-122b"
+      },
+      {
+        "n": 42,
+        "rho": 0.3853,
+        "system": "gpt-oss-120b"
+      },
+      {
+        "n": 49,
+        "rho": 0.3694,
+        "system": "gpt-5.6-luna"
+      },
+      {
+        "n": 49,
+        "rho": 0.3537,
+        "system": "google_gemini-3.7-flash"
+      },
+      {
+        "n": 49,
+        "rho": 0.3476,
+        "system": "deepseek-v4-flash"
+      },
+      {
+        "n": 49,
+        "rho": 0.3386,
+        "system": "qwen3.5-int4"
+      },
+      {
+        "n": 49,
+        "rho": 0.3307,
+        "system": "gpt-5.6-terra"
+      },
+      {
+        "n": 49,
+        "rho": 0.3286,
+        "system": "mistral-medium-3.5"
+      },
+      {
+        "n": 45,
+        "rho": 0.3271,
+        "system": "google_gemini-3.1-pro-preview"
+      },
+      {
+        "n": 49,
+        "rho": 0.2622,
+        "system": "glm-5"
+      },
+      {
+        "n": 49,
+        "rho": 0.2593,
+        "system": "deepseek-v4-flash-thinking"
+      },
+      {
+        "n": 49,
+        "rho": 0.2443,
+        "system": "glm-5.2"
+      }
+    ]
+  },
   "narrowed_by": {
     "deepseek-v4-flash": 1,
     "deepseek-v4-flash-thinking": 1,

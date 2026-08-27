@@ -1253,6 +1253,96 @@
     "model": "gpt-5.6-terra"
   },
   "judge_model": "gpt-5.6-terra",
+  "length_effect": {
+    "within_conversation": {
+      "median": 0.3215,
+      "n": 50,
+      "positive": 47,
+      "sign_test_p": 3.71e-11
+    },
+    "within_system": [
+      {
+        "n": 42,
+        "rho": 0.6743,
+        "system": "gpt-oss-120b"
+      },
+      {
+        "n": 50,
+        "rho": 0.6199,
+        "system": "gpt-5.6-sol"
+      },
+      {
+        "n": 50,
+        "rho": 0.5648,
+        "system": "mistral-medium-3.5"
+      },
+      {
+        "n": 50,
+        "rho": 0.544,
+        "system": "qwen3.8-27b"
+      },
+      {
+        "n": 50,
+        "rho": 0.4986,
+        "system": "gpt-5.6-luna"
+      },
+      {
+        "n": 50,
+        "rho": 0.4797,
+        "system": "gemma4"
+      },
+      {
+        "n": 50,
+        "rho": 0.4719,
+        "system": "google_gemini-3.7-flash"
+      },
+      {
+        "n": 50,
+        "rho": 0.461,
+        "system": "kimi-k3"
+      },
+      {
+        "n": 50,
+        "rho": 0.4338,
+        "system": "qwen3.5-int4"
+      },
+      {
+        "n": 50,
+        "rho": 0.4013,
+        "system": "gpt-5.6-terra"
+      },
+      {
+        "n": 50,
+        "rho": 0.4002,
+        "system": "glm-5.2"
+      },
+      {
+        "n": 50,
+        "rho": 0.3942,
+        "system": "qwen3.5-122b"
+      },
+      {
+        "n": 50,
+        "rho": 0.3918,
+        "system": "deepseek-v4-flash"
+      },
+      {
+        "n": 50,
+        "rho": 0.3875,
+        "system": "glm-5"
+      },
+      {
+        "n": 50,
+        "rho": 0.3603,
+        "system": "deepseek-v4-flash-thinking"
+      },
+      {
+        "n": 50,
+        "rho": 0.2927,
+        "system": "google_gemini-3.1-pro-preview"
+      }
+    ]
+  },
   "narrowed_by": {
     "gpt-oss-120b": 8
   },

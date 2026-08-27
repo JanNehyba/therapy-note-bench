@@ -310,7 +310,7 @@ function renderSaturation(data) {
     <div class="scroll"><table class="sat-table">
       <thead><tr><th>Criterion</th><th>Models, worst to best</th><th></th></tr></thead>
       <tbody>${strips}</tbody>
-    </table></div>`;
+    </table></div>` + lengthEffect(s);
 }
 
 renderSaturation(DATA);
@@ -544,6 +544,40 @@ function whoseNotesWereRated(calibration) {
             the ceiling the two therapists set between them`
          : ''}. A score from this judge means slightly different things depending on whose note
        it read, and the leaderboard compares those scores in one column.</p>`;
+}
+
+// Completeness counts coverage, so a longer note covers more even under a
+// perfect judge. That is a property of the measure and no judge-versus-human
+// check can see it. Drawn here and not as a column, because the column carries
+// the length itself: a coefficient in a table is read as a grade.
+function lengthEffect(saturation) {
+  const effect = saturation && saturation.length_effect;
+  if (!effect) return '';
+  const within = effect.within_system || [];
+  const rhos = within.map(r => r.rho).sort((a, b) => a - b);
+  const median = rhos.length ? rhos[Math.floor(rhos.length / 2)] : null;
+  const positive = within.filter(r => r.rho > 0).length;
+  const conv = effect.within_conversation || {};
+  const survives = conv.sign_test_p !== undefined && conv.sign_test_p < 0.05;
+
+  return `<h3>Does completeness rise with how much the model wrote?</h3>
+    <p class="blurb"><strong>Within a system</strong>, across its own conversations, the
+       correlation is positive in ${positive} of ${within.length} systems, median
+       ${median === null ? '—' : median.toFixed(3)}. That cannot separate the note from the
+       transcript: a longer session yields both a longer note and more rubric material.</p>
+    <p class="blurb"><strong>Within one conversation</strong>, across the systems, the
+       transcript is held fixed and can explain nothing. Median
+       ${conv.median === undefined ? '—' : conv.median.toFixed(3)}, positive in
+       ${conv.positive} of ${conv.n} conversations, sign test
+       p&nbsp;=&nbsp;${conv.sign_test_p}. ${survives
+         ? `<strong>The effect survives here</strong>, so on this judge a longer note does
+            score higher for being longer.`
+         : `<strong>The effect does not survive here</strong>: most of the correlation above
+            is the transcript, not the note.`}</p>
+    <p class="blurb">The leaderboard therefore publishes the <strong>length</strong> and not
+       this coefficient. The length is a fact about the note a reader can discount for; the
+       correlation depends on which judge is asked, and the two judges do not agree about
+       it.</p>`;
 }
 
 renderCalibration(DATA.calibration);

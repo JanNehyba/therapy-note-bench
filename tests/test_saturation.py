@@ -462,3 +462,42 @@ def test_own_mean_is_not_claimed_to_be_the_tables_figure():
     assert "is_complete" in source and "rests_on_every_section" in source, (
         "the comment has to say which two tests differ, or the next reader repeats it"
     )
+
+
+def test_the_length_effect_separates_the_note_from_the_transcript():
+    """Completeness counts coverage, so a longer note covers more even under a
+    perfect judge. Two questions, and only the second is about the note.
+
+    Within a system the correlation cannot tell them apart: a longer session
+    yields both a longer note and more rubric material. Within one conversation
+    the transcript is held fixed and can explain nothing — and there the two
+    judges part company, which is why the leaderboard publishes the length and
+    the methods page publishes this.
+    """
+    # Two systems, twelve conversations. Length and completeness move together
+    # within each system, and within each conversation the longer note wins.
+    scores = {f"sys{n}": {str(c): 0.4 + 0.01 * c + 0.05 * n for c in range(12)} for n in range(14)}
+    words = {f"sys{n}": {str(c): 200 + 10 * c + 50 * n for c in range(12)} for n in range(14)}
+
+    effect = saturation.length_effect(scores, words)
+    assert effect is None, "fewer than 25 conversations per system: nothing to report"
+
+    scores = {f"sys{n}": {str(c): 0.4 + 0.005 * c + 0.05 * n for c in range(30)} for n in range(14)}
+    words = {f"sys{n}": {str(c): 200 + 5 * c + 50 * n for c in range(30)} for n in range(14)}
+    effect = saturation.length_effect(scores, words)
+
+    assert len(effect["within_system"]) == 14
+    assert all(row["rho"] > 0.9 for row in effect["within_system"])
+    conversation = effect["within_conversation"]
+    assert conversation["n"] == 30
+    assert conversation["positive"] == 30, "the longer note wins inside every conversation"
+    assert conversation["sign_test_p"] < 1e-6
+
+
+def test_the_sign_test_does_not_round_a_real_probability_to_zero():
+    """A p of 3.7e-11 rounded to six places is 0.0, and "p = 0" is a claim
+    nobody made."""
+    assert saturation._sign_test(25, 50) == 1.0
+    assert 0.1 < saturation._sign_test(31, 50) < 0.15
+    p = saturation._sign_test(47, 50)
+    assert 0 < p < 1e-9, f"small but not zero, got {p}"

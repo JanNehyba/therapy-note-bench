@@ -30,6 +30,7 @@ byte-identical and its diffs stay readable.
 from __future__ import annotations
 
 import json
+import math
 import random
 from collections import defaultdict
 from dataclasses import dataclass
@@ -437,6 +438,115 @@ def interval_json(interval: Interval) -> dict:
     }
 
 
+def note_words(cache_dir: Path | None = None) -> dict[str, dict[str, int]]:
+    """{system: {session: words}} for the SOAP notes, from the generation cache.
+
+    Read here rather than from the leaderboard because the length question is
+    asked per note, and the row carries only a median.
+    """
+    from tnb import generation
+
+    cache_dir = cache_dir or generation.CACHE_DIR
+    found: dict[str, dict[str, int]] = defaultdict(dict)
+    if not cache_dir.exists():
+        return found
+    for path in cache_dir.rglob("*.json"):
+        parts = path.relative_to(cache_dir).parts
+        if len(parts) != 6 or parts[1] != "soap":
+            continue
+        try:
+            record = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            continue
+        note = record.get("note")
+        if not record.get("ok") or not isinstance(note, dict):
+            continue
+        words = len(" ".join(str(value) for value in note.values()).split())
+        if words:
+            found[parts[3]][parts[4]] = words
+    return found
+
+
+def _sign_test(positive: int, total: int) -> float:
+    """Two-sided probability of this many or more one-way results by chance.
+
+    Written out rather than imported: this module is in the offline test suite
+    and carries no scientific stack.
+    """
+    if not total:
+        return 1.0
+    extreme = max(positive, total - positive)
+    tail = sum(math.comb(total, k) for k in range(extreme, total + 1))
+    return min(1.0, 2 * tail / (2**total))
+
+
+def length_effect(
+    scores: dict[str, dict[str, float]], words: dict[str, dict[str, int]]
+) -> dict | None:
+    """Does completeness rise with how much the model wrote?
+
+    Completeness counts coverage, so a longer note covers more even under a
+    perfect judge. That is a property of the measure and no judge-versus-human
+    check can see it.
+
+    Two questions, and only the second is about the note:
+
+    - **Within a system**, across its own conversations. Positive in all sixteen
+      under both judges — but it cannot separate the note from the transcript,
+      because a longer session yields both a longer note and more rubric
+      material.
+    - **Within a conversation**, across the systems. The transcript is held
+      fixed, so it can explain nothing. Here the two judges part company, and
+      that difference is not recorded anywhere else.
+
+    Reported as the length itself on the leaderboard and as this on the methods
+    page: the correlation depends on which judge is asked, and a coefficient in
+    a table would be read as a grade.
+    """
+    from tnb.scoring.calibration import spearman
+
+    within_system = []
+    for system in sorted(set(scores) & set(words) | {s for s in scores if s in words}):
+        per, length = scores.get(system) or {}, words.get(system) or {}
+        shared = sorted(set(per) & set(length))
+        if len(shared) < 25:
+            continue
+        rho = spearman([float(length[x]) for x in shared], [per[x] for x in shared])
+        if rho is not None:
+            within_system.append({"system": system, "rho": round(rho, 4), "n": len(shared)})
+
+    by_session: dict[str, list[tuple[int, float]]] = defaultdict(list)
+    for system, per in scores.items():
+        length = words.get(system) or {}
+        for session, value in per.items():
+            if session in length:
+                by_session[session].append((length[session], value))
+    within_conversation = []
+    for _session, pairs in sorted(by_session.items()):
+        if len(pairs) < 12:
+            continue
+        rho = spearman([float(w) for w, _ in pairs], [c for _, c in pairs])
+        if rho is not None:
+            within_conversation.append(rho)
+
+    if not within_system or not within_conversation:
+        return None
+
+    ordered = sorted(within_conversation)
+    positive = sum(1 for rho in within_conversation if rho > 0)
+    return {
+        "within_system": sorted(within_system, key=lambda row: -row["rho"]),
+        "within_conversation": {
+            "median": round(ordered[len(ordered) // 2], 4),
+            "positive": positive,
+            "n": len(within_conversation),
+            # Not rounded to a few places: a real p of 3.7e-11 becomes 0.0 at six,
+            # and "p = 0" is a claim nobody made.
+            "sign_test_p": float(f"{_sign_test(positive, len(within_conversation)):.3g}"),
+        },
+    }
+
+
 def build(root: Path | None = None, judge_model: str = judge.DEFAULT_MODEL) -> dict | None:
     """The whole analysis, as the page consumes it."""
     answers = load_answers(root, judge_model)
@@ -527,5 +637,8 @@ def build(root: Path | None = None, judge_model: str = judge.DEFAULT_MODEL) -> d
             for first, row in sorted(beats.items())
         },
         "indistinguishable": indistinguishable(intervals, beats),
+        #: Whether completeness rises with how much the model wrote. `None` when
+        #: the generation cache is not on this machine.
+        "length_effect": length_effect(scores, note_words()),
         "bootstrap": {"samples": BOOTSTRAP_SAMPLES, "seed": BOOTSTRAP_SEED, "paired": True},
     }
