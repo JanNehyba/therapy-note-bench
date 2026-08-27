@@ -225,16 +225,27 @@ scales, depending on the attribute. Validated on real EHR data — 200 patients
 with 3–5 prior encounters each, across 11 specialties — reaching an ICC of
 0.867 between raters.
 
-**This benchmark publishes two of those nine**, and reports a third under a
-name that means something else. An implementation of the instrument exists
-and has not been run:
+**The rubric track publishes two of those nine**, and reports a third under a
+name that means something else. That is what the leaderboard's own columns
+cover, and it is why PDSQI-9 was worth running separately:
 
 | PDSQI-9 attribute | Here |
 |---|---|
 | Thorough | `completeness` — **the column the leaderboard is ordered by** |
 | Accurate | `faithfulness`, on which two therapists reach an alpha of 0.18 |
 | Succinct | not measured. `conciseness` counts sentences that fit a rubric item, and its own definition says it "does not mean the note is short" |
-| Organized, synthesized, useful, comprehensible, citation, stigmatizing | not measured at all |
+| Organized, synthesized, useful, comprehensible, citation, stigmatizing | not measured by the rubric |
+
+**Eight of the nine are now measured directly.** PDSQI-9 was run on 2026-08-27
+by both judges over the same 942 SOAP notes, on its own track, and only `cited`
+is dropped — a note written from one transcript has no source documents to cite.
+So the table above is a statement about the *rubric*, not about the benchmark:
+the rubric still covers two of nine, and the instrument itself now covers eight.
+
+They are never averaged together, and not only because the instrument reports
+them separately: one of the eight is a 0–1 column and seven are 1–5 scales, so a
+mean over them would be a number with no unit. There is no single PDSQI figure
+here for the same reason there is no single figure in the instrument.
 
 **What adopting it does and does not buy.** PDSQI-9 was validated with
 *physicians* doing the rating, and the authors state they did not compare LLM
@@ -249,7 +260,21 @@ about *these* notes, which needs clinicians rating what is in `generations/`.
 `src/tnb/scoring/pdsqi.py` implements the instrument, with the "cited"
 attribute dropped (a note written from one transcript has no source documents
 to cite) and two wordings substituted, both named in the module and in
-`NOTICE`. It has not been run: no row in `results/` carries a PDSQI figure.
+`NOTICE`. It was run on 2026-08-27 by both judges over the 942 SOAP notes, and
+`results/` carries its rows on the `pdsqi-soap` track.
+
+**It has no human anchor for these notes**, which is why it sits beside the
+rubric rather than above it: nobody has rated this corpus on this instrument, so
+there is no agreement figure for either judge. What the instrument publishes is
+a ceiling — trained physicians agreed with each other at Krippendorff's alpha
+0.575 — and a ceiling is not a measurement. Every column carries that sentence.
+
+And it inherits the failure mode this repository keeps meeting: an empty note
+scores 5.00 on `accurate`, 5.00 on `succinct` and 1.00 on the stigmatising
+column, beating the therapist on all three, because a note that asserts nothing
+has nothing untrue, nothing superfluous and nothing stigmatising in it. The
+other five attributes correctly collapse to 1. `docs/limitations.md` has the
+measurement.
 
 The closest thing here is TRACE, whose five dimensions (trustworthiness,
 relevance, accuracy, comprehensiveness, expression) overlap PDSQI-9's

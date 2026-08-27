@@ -394,3 +394,52 @@ def test_pdsqi_asks_for_the_track_its_notes_were_generated_on(tmp_path):
     assert "settings_by_system(track=results.TRACK_TNEVAL)" in body, (
         "cmd_score_pdsqi must name the SOAP track rather than rely on sort order"
     )
+
+
+def test_the_docs_do_not_say_pdsqi_is_unrun_while_results_carry_it():
+    """Two paragraphs said "It has not been run: no row in `results/` carries a
+    PDSQI figure" for as long as it was true, and stayed on the site after the
+    run made them false. Nothing checked, because the claim was prose.
+
+    This ties the sentence to the thing it is about: the moment a PDSQI row
+    exists, a doc that says none does is a defect, and the other way round.
+    """
+    path = REPO_ROOT / "results" / "rows.jsonl"
+    rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
+    published = [r for r in rows if r.get("track") == results.TRACK_PDSQI]
+
+    for name in ("limitations.md", "landscape.md"):
+        text = (REPO_ROOT / "docs" / name).read_text(encoding="utf-8")
+        if published:
+            assert "has not been run" not in text, (
+                f"docs/{name} says PDSQI has not been run; results/ carries "
+                f"{len(published)} PDSQI row(s)"
+            )
+            assert "no row in `results/` carries a PDSQI figure" not in text, (
+                f"docs/{name} denies rows that exist"
+            )
+        else:
+            assert "has now been run" not in text, (
+                f"docs/{name} says PDSQI has been run and no row carries it"
+            )
+
+
+def test_the_docs_carry_what_an_empty_note_scores_on_this_instrument():
+    """The instrument rates a note with nothing in it as excellent on three of
+    its eight attributes -- accurate 5.00, succinct 5.00, free-of-stigmatising
+    1.00 -- because a note that asserts nothing has nothing untrue, nothing
+    superfluous and nothing stigmatising in it. All three beat the therapist.
+
+    Measured against `gemini-3.1-pro-preview` on 2026-08-27. It is the third
+    time this repository has met the shape (ROUGE-L's 0.379, `gemma4`'s temporal
+    1.000), and the two earlier ones are recorded where a reader meets the
+    number. This one has to be too, or the columns read as things a note can win.
+    """
+    text = (REPO_ROOT / "docs" / "limitations.md").read_text(encoding="utf-8")
+
+    assert "an empty note" in text
+    assert "never as things it can win" in text, (
+        "the reader needs the instruction, not only the table"
+    )
+    for figure in ("5.00", "4.20", "2.92", "0.90"):
+        assert figure in text, f"the measurement is quoted without {figure}"

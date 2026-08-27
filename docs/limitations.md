@@ -332,10 +332,31 @@ point:
 named rather than absorbed — the "cited" attribute dropped because a note
 written from one transcript has no source documents, the wording moved from
 "summary" to "note", and the stigmatising item asked as published and reported
-flipped so that every column runs the same way. It has not been run: no row in
-`results/` carries a PDSQI figure, and nothing on the site reports one. **When
-it is run, the ceiling belongs beside every column it produces**, exactly as
-the rubric's does.
+flipped so that every column runs the same way.
+
+**It has now been run**, on 2026-08-27, by both judges over the same 942 notes
+the rubric scores — the SOAP notes written from the 50 AnnoMI conversations,
+not a third corpus. It has its own track and its own tables, and the promise
+made here when it had not been run is kept: the ceiling sits beside every one
+of the eight columns, all eight of them, where the rubric's does.
+
+**And the first thing it says is that an empty note is excellent.** A SOAP note
+with all four sections blank, scored by `gemini-3.1-pro-preview` under the
+published settings:
+
+| | accurate | succinct | free of stigmatising language |
+|---|---|---|---|
+| an empty note | **5.00** | **5.00** | **1.00** |
+| the therapist | 4.20 | 2.92 | 0.90 |
+
+The other five attributes correctly collapse to 1, so this is not a judge saying
+yes to everything — it is the instrument's own anchor logic. A note that asserts
+nothing has nothing untrue in it, says everything it says in the fewest possible
+words, and stigmatises nobody. Vacuous truth scoring as excellence, and it is
+the third time this benchmark has met that shape: ROUGE-L gave an empty note
+0.379 before harness 0.2.0, and `gemma4` published a perfect temporal score for
+writing "Nil" four ways before 0.3.0. **Read `accurate`, `succinct` and the
+stigmatising column as things a note can fail, never as things it can win.**
 
 ## Two of the twenty-three criteria are on the floor for every system
 
