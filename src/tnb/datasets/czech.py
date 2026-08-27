@@ -30,6 +30,15 @@ from pathlib import Path
 from tnb.datasets.base import CACHE_DIR, Session, Turn, record_checksum
 
 CORPUS_DIR = CACHE_DIR / "czech"
+
+#: The de-identified transcripts, and the only ones anything here will read.
+#:
+#: The originals sit one directory up, named after clinical record numbers, and
+#: `tools/anonymise_czech.py` writes this directory from them. Reading the
+#: originals is refused rather than merely avoided -- see `_refuse_originals`.
+#: Names, Prague districts, countries and the recording identifier spoken in the
+#: first turn are all gone; what is left is the session.
+REAL_DIR = CORPUS_DIR / "anonymised"
 TRANSLATED_DIR = CORPUS_DIR / "translated"
 
 #: Where the digest ids map back to the files they were taken from. Inside
@@ -90,7 +99,25 @@ def _write_ids(corpus: str, names: dict[str, str]) -> None:
     )
 
 
+def _refuse_originals(directory: Path) -> None:
+    """Refuse to read the transcripts as they came off the recording.
+
+    The de-identified copies live one level down, so a hand that points this
+    at `data/czech` rather than `data/czech/anonymised` gets a corpus that
+    still names a client, a district and a hospital -- and gets it silently,
+    because both directories parse. Refusing is one comparison and it is the
+    difference between a rule and a habit.
+    """
+    if directory.resolve() == CORPUS_DIR.resolve():
+        raise RuntimeError(
+            f"{CORPUS_DIR} holds the transcripts as recorded, names and all. "
+            f"The de-identified corpus is {REAL_DIR}; run tools/anonymise_czech.py "
+            "if it is not there."
+        )
+
+
 def _load_dir(directory: Path, *, corpus: str, limit: int | None) -> list[Session]:
+    _refuse_originals(directory)
     if not directory.is_dir():
         raise RuntimeError(
             f"{corpus} was not found at {directory}. This track reads a local corpus "
@@ -144,8 +171,8 @@ def _load_dir(directory: Path, *, corpus: str, limit: int | None) -> list[Sessio
 
 
 def load_real(limit: int | None = None) -> list[Session]:
-    """The real Czech clinical sessions, from ``data/czech/*.txt``."""
-    return _load_dir(CORPUS_DIR, corpus=REAL, limit=limit)
+    """The real Czech clinical sessions, de-identified, from ``data/czech/anonymised``."""
+    return _load_dir(REAL_DIR, corpus=REAL, limit=limit)
 
 
 def load_translated(limit: int | None = None) -> list[Session]:

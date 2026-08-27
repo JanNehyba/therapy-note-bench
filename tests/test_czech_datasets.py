@@ -20,7 +20,7 @@ FIXTURES = Path(__file__).parent / "fixtures" / "czech"
 @pytest.fixture
 def offline_czech(monkeypatch, tmp_path):
     """Serve both halves from fixtures, and keep checksums out of the real file."""
-    monkeypatch.setattr(czech, "CORPUS_DIR", FIXTURES / "real")
+    monkeypatch.setattr(czech, "REAL_DIR", FIXTURES / "real")
     monkeypatch.setattr(czech, "TRANSLATED_DIR", FIXTURES / "translated")
     monkeypatch.setattr(czech, "IDS_PATH", tmp_path / "ids.json")
     monkeypatch.setattr(base, "CACHE_DIR", tmp_path)
@@ -117,14 +117,14 @@ def test_the_checksum_describes_the_corpus_not_the_slice(offline_czech):
 def test_a_missing_corpus_raises_rather_than_returning_nothing(monkeypatch, tmp_path):
     """An empty list generates no calls, and a run that measured nothing looks
     exactly like a run that succeeded."""
-    monkeypatch.setattr(czech, "CORPUS_DIR", tmp_path / "absent")
+    monkeypatch.setattr(czech, "REAL_DIR", tmp_path / "absent")
     with pytest.raises(RuntimeError, match="reads a local corpus"):
         czech.load_real()
 
 
 def test_an_empty_corpus_directory_raises(monkeypatch, tmp_path):
     (tmp_path / "empty").mkdir()
-    monkeypatch.setattr(czech, "CORPUS_DIR", tmp_path / "empty")
+    monkeypatch.setattr(czech, "REAL_DIR", tmp_path / "empty")
     with pytest.raises(RuntimeError, match="no .txt transcript"):
         czech.load_real()
 
@@ -137,7 +137,7 @@ def test_an_unexpected_line_raises_and_repeats_neither_the_line_nor_the_file(mon
     (corpus / "555002.txt").write_text(
         "T: dobrý den\n\nSPEAKER 3: klientka pláče\n\nK: dobrý den\n", encoding="utf-8"
     )
-    monkeypatch.setattr(czech, "CORPUS_DIR", corpus)
+    monkeypatch.setattr(czech, "REAL_DIR", corpus)
     monkeypatch.setattr(czech, "IDS_PATH", tmp_path / "ids.json")
 
     with pytest.raises(RuntimeError) as caught:
@@ -155,8 +155,23 @@ def test_two_identical_transcripts_are_refused(monkeypatch, tmp_path):
     corpus.mkdir()
     for name in ("a.txt", "b.txt"):
         (corpus / name).write_text("T: dobrý den\n\nK: dobrý den\n", encoding="utf-8")
-    monkeypatch.setattr(czech, "CORPUS_DIR", corpus)
+    monkeypatch.setattr(czech, "REAL_DIR", corpus)
     monkeypatch.setattr(czech, "IDS_PATH", tmp_path / "ids.json")
 
     with pytest.raises(RuntimeError, match="share the id"):
         czech.load_real()
+
+
+def test_the_originals_are_refused_rather_than_merely_avoided():
+    """The transcripts as recorded still name a client, a district and a
+    hospital. The de-identified copies are one directory down, so a hand that
+    points the loader at the parent gets the wrong corpus and gets it silently:
+    both directories parse. One comparison is the difference between a rule and
+    a habit."""
+    with pytest.raises(RuntimeError, match="as recorded"):
+        czech._load_dir(czech.CORPUS_DIR, corpus=czech.REAL, limit=None)
+
+
+def test_the_real_corpus_is_read_from_the_anonymised_directory():
+    assert czech.REAL_DIR.name == "anonymised"
+    assert czech.REAL_DIR.parent == czech.CORPUS_DIR
