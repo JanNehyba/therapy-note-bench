@@ -48,31 +48,39 @@ written for somebody building or buying one:
 ([PDF](https://jannehyba.github.io/therapy-note-bench/therapy-note-bench.pdf))
 
 <!-- LEADERBOARD:BEGIN -->
-**TN-Eval SOAP · AnnoMI conversations** — scored by gemini-3.1-pro-preview (max_output_tokens 288, temperature 0, thinking_budget 256)
+**SOAP notes on AnnoMI · two instruments, the same notes** — scored by gemini-3.1-pro-preview (max_output_tokens 288, temperature 0, thinking_budget 256)
 
-| Model | Provider | Completeness (0-1) | Conciseness (0-1) | Faithfulness (1-5) | Notes | Scored |
-|---|---|---|---|---|---|---|
-| `kimi-k3` | einfra | 0.546 | 0.886 | 4.98 | 50/50 | 50 |
-| `qwen3.5-int4` | einfra | 0.535 | 0.878 | 4.92 | 50/50 | 50 |
-| `qwen3.5-122b` | einfra | 0.526 | 0.904 | 4.76 | 50/50 | 50 |
-| `google_gemini-3.1-pro-preview` | vertex | 0.525 | 0.893 | 4.97 | 50/50 | 50 |
-| `google_gemini-3.7-flash` | vertex | 0.524 | 0.931 | 4.98 | 50/50 | 50 |
-| `glm-5` | einfra | 0.502 | 0.863 | 4.96 | 50/50 | 50 |
-| `glm-5.2` | einfra | 0.499 | 0.877 | 4.97 | 50/50 | 50 |
-| `gpt-5.6-sol` | openai | 0.497 | 0.882 | 4.96 | 50/50 | 50 |
-| `gpt-5.6-terra` | openai | 0.493 | 0.888 | 5.00 | 50/50 | 50 |
-| `gpt-oss-120b` | einfra | 0.482 | 0.905 | 4.29 | 42/50 (8 unusable) | 42 |
-| `deepseek-v4-flash-thinking` | einfra | 0.477 | 0.900 | 4.84 | 50/50 | 50 |
-| `gpt-5.6-luna` | openai | 0.476 | 0.888 | 4.93 | 50/50 | 50 |
-| `gemma4` | einfra | 0.475 | 0.897 | 4.95 | 50/50 | 50 |
-| `qwen3.8-27b` | einfra | 0.471 | 0.836 | 4.94 | 50/50 | 50 |
-| `mistral-medium-3.5` | einfra | 0.456 | 0.908 | 4.89 | 50/50 | 50 |
-| `deepseek-v4-flash` | einfra | 0.446 | 0.919 | 4.88 | 50/50 | 50 |
+| Model | Provider | Completeness (0-1) | Conciseness (0-1) | Faithfulness (1-5) | Accurate (1-5) | Thorough (1-5) | Useful (1-5) | Organized (1-5) | Comprehensible (1-5) | Succinct (1-5) | Synthesized (1-5) | Free of stigmatizing language (0-1) | Notes | Scored |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `kimi-k3` | einfra | 0.546 | 0.886 | 4.98 | 4.98 | 4.98 | 5.00 | 5.00 | 5.00 | 2.90 | 5.00 | 0.959 | 50/50 | 50 |
+| `qwen3.5-int4` | einfra | 0.535 | 0.878 | 4.92 | 4.94 | 4.90 | 5.00 | 5.00 | 5.00 | 4.00 | 5.00 | 0.940 | 50/50 | 50 |
+| `qwen3.5-122b` | einfra | 0.526 | 0.904 | 4.76 | 4.72 | 4.94 | 5.00 | 5.00 | 5.00 | 3.18 | 5.00 | 0.920 | 50/50 | 50 |
+| `google_gemini-3.1-pro-preview` | vertex | 0.525 | 0.893 | 4.97 | 4.98 | 4.94 | 5.00 | 5.00 | 5.00 | 3.84 | 5.00 | 0.940 | 50/50 | 50 |
+| `google_gemini-3.7-flash` | vertex | 0.524 | 0.931 | 4.98 | 5.00 | 4.96 | 5.00 | 5.00 | 5.00 | 4.00 | 5.00 | 0.957 | 50/50 | 50 |
+| `glm-5` | einfra | 0.502 | 0.863 | 4.96 | 4.94 | 4.96 | 5.00 | 5.00 | 5.00 | 3.73 | 5.00 | 0.939 | 50/50 | 50 |
+| `glm-5.2` | einfra | 0.499 | 0.877 | 4.97 | 5.00 | 4.96 | 5.00 | 5.00 | 5.00 | 3.73 | 5.00 | 0.939 | 50/50 | 50 |
+| `gpt-5.6-sol` | openai | 0.497 | 0.882 | 4.96 | 5.00 | 5.00 | 5.00 | 5.00 | 5.00 | 3.88 | 5.00 | 1.000 | 50/50 | 50 |
+| `gpt-5.6-terra` | openai | 0.493 | 0.888 | 5.00 | 5.00 | 4.98 | 5.00 | 5.00 | 5.00 | 3.35 | 5.00 | 1.000 | 50/50 | 50 |
+| `gpt-oss-120b` | einfra | 0.482 | 0.905 | 4.29 | 4.22 | 4.63 | 5.00 | 5.00 | 4.98 | 3.63 | 5.00 | 1.000 | 42/50 (8 unusable) | 42 |
+| `deepseek-v4-flash-thinking` | einfra | 0.477 | 0.900 | 4.84 | 4.80 | 4.86 | 5.00 | 5.00 | 5.00 | 3.44 | 5.00 | 0.980 | 50/50 | 50 |
+| `gpt-5.6-luna` | openai | 0.476 | 0.888 | 4.93 | 5.00 | 4.96 | 5.00 | 5.00 | 5.00 | 3.43 | 5.00 | 0.959 | 50/50 | 50 |
+| `gemma4` | einfra | 0.475 | 0.897 | 4.95 | 5.00 | 4.80 | 5.00 | 5.00 | 5.00 | 4.02 | 5.00 | 0.940 | 50/50 | 50 |
+| `qwen3.8-27b` | einfra | 0.471 | 0.836 | 4.94 | 5.00 | 4.92 | 5.00 | 5.00 | 5.00 | 3.55 | 5.00 | 0.980 | 50/50 | 50 |
+| `mistral-medium-3.5` | einfra | 0.456 | 0.908 | 4.89 | 4.86 | 4.90 | 5.00 | 5.00 | 5.00 | 3.76 | 5.00 | 0.960 | 50/50 | 50 |
+| `deepseek-v4-flash` | einfra | 0.446 | 0.919 | 4.88 | 4.63 | 4.78 | 5.00 | 5.00 | 5.00 | 3.78 | 5.00 | 0.980 | 50/50 | 50 |
 
 *Ordered by **Completeness**. Every other column is context.*
 - **Completeness** (0-1) — Fraction of the section's rubric criteria the judge found present. 0.65 means about two thirds of the required items are in the note. Counts coverage of a checklist, not judgement. A therapist writes what matters for the next session and leaves out what does not; the rubric sees what is present and cannot see why anything was left out -- which is why every model here scores above the therapist on it. This is the column the table is ordered by, so the caveat travels with the ranking: quote the number with this sentence attached, or do not quote it.
 - **Conciseness** (0-1) — Fraction of the note's sentences that fit at least one rubric item. 1.00 means nothing is off-topic; it does not mean the note is short. Not a length measure, despite the name: a note twice as long scores the same if every added sentence is on topic. It is also the measure most moved by the judge's own settings -- raising the thinking budget from 128 to 256 tokens shifted all nineteen systems and reordered sixteen of them.
 - **Faithfulness** (1-5) — Whether the note contradicts the transcript, rated 1 to 5, where 5 is no inaccuracies. TN-Eval's protocol has no criterion-based version of this one, so it stays a Likert scale. A different scale from the two columns beside it, and a weak one: TN-Eval measured Krippendorff's alpha of 0.18 between trained therapists on this rating. Read it as a flag for gross invention, not as a ranking.
+- **Accurate** (1-5) — The note is true and free of incorrect information. PDSQI-9 item 2, rated 1 (not at all) to 5 (extremely). PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.
+- **Thorough** (1-5) — The note should thoroughly cover all critical patient issues. PDSQI-9 item 3, rated 1 (not at all) to 5 (extremely). PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.
+- **Useful** (1-5) — All the information is in there that is useful to the target provider/intended audience. The note is extremely relevant, providing valuable information and/or analysis. PDSQI-9 item 4, rated 1 (not at all) to 5 (extremely). PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.
+- **Organized** (1-5) — The note is well-formed and structured in a way that helps the reader understand the patient's clinical course. PDSQI-9 item 5, rated 1 (not at all) to 5 (extremely). PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.
+- **Comprehensible** (1-5) — The note is clear, without ambiguity or sections that are difficult to understand. PDSQI-9 item 6, rated 1 (not at all) to 5 (extremely). PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.
+- **Succinct** (1-5) — The note is brief, to the point, and without redundancy. PDSQI-9 item 7, rated 1 (not at all) to 5 (extremely). PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.
+- **Synthesized** (1-5) — The note reflects an understanding of the patient's status and ability to develop a plan of care. PDSQI-9 item 8, rated 1 (not at all) to 5 (extremely). PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.
+- **Free of stigmatizing language** (0-1) — The note is free of discrediting or exaggerated words, of judgment or labelling, and uses person-first language. PDSQI-9 item 9, answered yes or no and reported as the fraction of notes free of it. PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.
 
 **iCARE form on the iHOPE corpus · 17 sections per session** — scored by gemini-3.1-pro-preview (max_output_tokens 288, temperature 0, thinking_budget 256)
 
@@ -101,37 +109,6 @@ written for somebody building or buying one:
 - **TRACE** (1-5) — Trustworthiness, relevance, accuracy, comprehensiveness and expression, each rated 1-5 by a judge and averaged. A re-implementation with no human anchor: the authors never published their ratings, so unlike the TN-Eval track this number is not calibrated against anybody.
 - **Looks back** (0-1) — Section 5 only -- what happened in the previous session. The fraction of the 34 sessions whose expert note answered it where the model did too. Kept out of any average. Every model scores 0.97-1.00 here, so this column separates nobody -- it is shown because its twin does.
 - **Looks forward** (0-1) — Section 17 only -- what happens at the next session. The fraction of the 11 sessions whose expert note answered it where the model did too. This is where the source paper reports every model it tested failing, and ours do too: 0.00 to 0.55. Reported apart from its twin because averaging the two turned 1.00 and 0.09 into 0.78 and hid exactly this.
-
-**PDSQI-9 · the SOAP notes on AnnoMI, rated for quality** — scored by gemini-3.1-pro-preview (max_output_tokens 288, temperature 0, thinking_budget 256)
-
-| Model | Provider | Accurate (1-5) | Thorough (1-5) | Useful (1-5) | Organized (1-5) | Comprehensible (1-5) | Succinct (1-5) | Synthesized (1-5) | Free of stigmatizing language (0-1) | Notes | Scored |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| `deepseek-v4-flash` | einfra | 4.63 | 4.78 | 5.00 | 5.00 | 5.00 | 3.78 | 5.00 | 0.980 | 50/50 | 50 |
-| `deepseek-v4-flash-thinking` | einfra | 4.80 | 4.86 | 5.00 | 5.00 | 5.00 | 3.44 | 5.00 | 0.980 | 50/50 | 50 |
-| `gemma4` | einfra | 5.00 | 4.80 | 5.00 | 5.00 | 5.00 | 4.02 | 5.00 | 0.940 | 50/50 | 50 |
-| `glm-5` | einfra | 4.94 | 4.96 | 5.00 | 5.00 | 5.00 | 3.73 | 5.00 | 0.939 | 50/50 | 50 |
-| `glm-5.2` | einfra | 5.00 | 4.96 | 5.00 | 5.00 | 5.00 | 3.73 | 5.00 | 0.939 | 50/50 | 50 |
-| `google_gemini-3.1-pro-preview` | vertex | 4.98 | 4.94 | 5.00 | 5.00 | 5.00 | 3.84 | 5.00 | 0.940 | 50/50 | 50 |
-| `google_gemini-3.7-flash` | vertex | 5.00 | 4.96 | 5.00 | 5.00 | 5.00 | 4.00 | 5.00 | 0.957 | 50/50 | 50 |
-| `gpt-5.6-luna` | openai | 5.00 | 4.96 | 5.00 | 5.00 | 5.00 | 3.43 | 5.00 | 0.959 | 50/50 | 50 |
-| `gpt-5.6-sol` | openai | 5.00 | 5.00 | 5.00 | 5.00 | 5.00 | 3.88 | 5.00 | 1.000 | 50/50 | 50 |
-| `gpt-5.6-terra` | openai | 5.00 | 4.98 | 5.00 | 5.00 | 5.00 | 3.35 | 5.00 | 1.000 | 50/50 | 50 |
-| `gpt-oss-120b` | einfra | 4.22 | 4.63 | 5.00 | 5.00 | 4.98 | 3.63 | 5.00 | 1.000 | 42/50 (8 unusable) | 42 |
-| `kimi-k3` | einfra | 4.98 | 4.98 | 5.00 | 5.00 | 5.00 | 2.90 | 5.00 | 0.959 | 50/50 | 50 |
-| `mistral-medium-3.5` | einfra | 4.86 | 4.90 | 5.00 | 5.00 | 5.00 | 3.76 | 5.00 | 0.960 | 50/50 | 50 |
-| `qwen3.5-122b` | einfra | 4.72 | 4.94 | 5.00 | 5.00 | 5.00 | 3.18 | 5.00 | 0.920 | 50/50 | 50 |
-| `qwen3.5-int4` | einfra | 4.94 | 4.90 | 5.00 | 5.00 | 5.00 | 4.00 | 5.00 | 0.940 | 50/50 | 50 |
-| `qwen3.8-27b` | einfra | 5.00 | 4.92 | 5.00 | 5.00 | 5.00 | 3.55 | 5.00 | 0.980 | 50/50 | 50 |
-
-*Deliberately not ranked: these columns measure different things and the source paper found they disagree.*
-- **Accurate** (1-5) — The note is true and free of incorrect information. PDSQI-9 item 2, rated 1 (not at all) to 5 (extremely). PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.
-- **Thorough** (1-5) — The note should thoroughly cover all critical patient issues. PDSQI-9 item 3, rated 1 (not at all) to 5 (extremely). PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.
-- **Useful** (1-5) — All the information is in there that is useful to the target provider/intended audience. The note is extremely relevant, providing valuable information and/or analysis. PDSQI-9 item 4, rated 1 (not at all) to 5 (extremely). PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.
-- **Organized** (1-5) — The note is well-formed and structured in a way that helps the reader understand the patient's clinical course. PDSQI-9 item 5, rated 1 (not at all) to 5 (extremely). PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.
-- **Comprehensible** (1-5) — The note is clear, without ambiguity or sections that are difficult to understand. PDSQI-9 item 6, rated 1 (not at all) to 5 (extremely). PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.
-- **Succinct** (1-5) — The note is brief, to the point, and without redundancy. PDSQI-9 item 7, rated 1 (not at all) to 5 (extremely). PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.
-- **Synthesized** (1-5) — The note reflects an understanding of the patient's status and ability to develop a plan of care. PDSQI-9 item 8, rated 1 (not at all) to 5 (extremely). PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.
-- **Free of stigmatizing language** (0-1) — The note is free of discrediting or exaggerated words, of judgment or labelling, and uses person-first language. PDSQI-9 item 9, answered yes or no and reported as the fraction of notes free of it. PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.
 
 **Do the two judges agree?** (TN-Eval SOAP · AnnoMI conversations)
 
@@ -205,9 +182,8 @@ written for somebody building or buying one:
 
 **Also scored, and not printed here.** Two judges are two instruments and two tables; the site draws one at a time and this file cannot, so it shows the one the site opens with.
 - **TN-Eval SOAP · AnnoMI conversations**, scored by gemini-2.5-pro (max_output_tokens 160, temperature 0, thinking_budget 128) — measured by harness `0.2.0`, whose columns may not mean what the newer tables' columns mean — [open it](https://jannehyba.github.io/therapy-note-bench/#tneval-soap-gemini-2.5-pro-0.2.0-345ec0)
-- **TN-Eval SOAP · AnnoMI conversations**, scored by gpt-5.6-terra (backend openai, effort medium, max_output_tokens 672) — [open it](https://jannehyba.github.io/therapy-note-bench/#tneval-soap-gpt-5.6-terra-0.5.0-acf643)
+- **SOAP notes on AnnoMI · two instruments, the same notes**, scored by gpt-5.6-terra (backend openai, effort medium, max_output_tokens 672) — [open it](https://jannehyba.github.io/therapy-note-bench/#tneval-soap-gpt-5.6-terra-0.5.0-acf643)
 - **iCARE form on the iHOPE corpus · 17 sections per session**, scored by gpt-5.6-terra (backend openai, effort medium, max_output_tokens 672) — [open it](https://jannehyba.github.io/therapy-note-bench/#icare-gpt-5.6-terra-0.5.0-acf643)
-- **PDSQI-9 · the SOAP notes on AnnoMI, rated for quality**, scored by gpt-5.6-terra (backend openai, effort medium, max_output_tokens 672) — [open it](https://jannehyba.github.io/therapy-note-bench/#pdsqi-soap-gpt-5.6-terra-0.5.0-acf643)
 
 See the [full leaderboard](https://jannehyba.github.io/therapy-note-bench/) for per-section detail, the reference systems and the published numbers, and [how it was measured](https://jannehyba.github.io/therapy-note-bench/methods.html) for the judge, the corpora and what the two judges disagree about.
 <!-- LEADERBOARD:END -->
