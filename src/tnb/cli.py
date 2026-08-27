@@ -774,6 +774,17 @@ def cmd_calibrate(args: argparse.Namespace) -> int:
             {"criterion": key, "judge": judge_value, "humans": humans}
             for key, judge_value, humans in report_data.per_criterion
         ],
+        # Split by whose note was being read. The pooled figure is one number
+        # for the instrument; this says whether it is the same instrument on
+        # every kind of note. It is not: the spread across the three systems
+        # TN-Eval rated is 0.078 under the leaderboard's judge, larger than the
+        # margin this repository uses to decide that two agreement figures are
+        # separable at all -- and the judge is worst on the therapist's notes,
+        # which is the row the most-quoted comparison depends on.
+        "per_system": [
+            {"system": system, "judge": judge_value, "humans": humans, "n": count}
+            for system, judge_value, humans, count in report_data.per_system
+        ],
     }
     report.DOCS_DIR.mkdir(parents=True, exist_ok=True)
     report.CALIBRATION_PATH.write_text(

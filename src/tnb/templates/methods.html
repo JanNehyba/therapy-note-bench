@@ -494,7 +494,48 @@ function renderCalibration(calibration) {
        so the comparison below is made on <strong>Krippendorff's alpha</strong> — defined for
        both, nominal for the rubric and ordinal for the scales, and the statistic TN-Eval used
        to reach the finding in the first place.</p>
-    ${finding}`;
+    ${finding}
+    ${whoseNotesWereRated(calibration)}`;
+}
+
+// One number for the instrument hides whether it is the same instrument on
+// every kind of note. It is not, and the row it is worst on is the one the
+// most-quoted comparison depends on.
+function whoseNotesWereRated(calibration) {
+  const per = calibration.per_system || [];
+  if (per.length < 2) return '';
+  const rated = per.map(r => `<code>${r.system}</code>`).join(', ');
+  const alphas = per.map(r => r.judge).filter(a => a !== null);
+  const spread = Math.max(...alphas) - Math.min(...alphas);
+  const worst = per.reduce((a, b) => (a.judge <= b.judge ? a : b));
+  const below = per.filter(r => r.judge !== null && r.humans !== null && r.judge < r.humans);
+
+  const rows = per.map(r => `<tr><td><code>${r.system}</code></td>
+    <td class="num">${r.judge === null ? '—' : r.judge.toFixed(3)}</td>
+    <td class="num">${r.humans === null ? '—' : r.humans.toFixed(3)}</td>
+    <td class="num">${r.n}</td></tr>`).join('');
+
+  return `<h3>Whose notes the judge was checked on</h3>
+    <p class="blurb">Human ratings exist for ${per.length} systems and no others: ${rated}.
+       <strong>No human has read a note written by any of the models the leaderboard
+       ranks</strong>, so the figure above is measured on one set of notes and applied to
+       another.</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Notes written by</th>
+                 <th class="num" title="Krippendorff's alpha, judge vs therapist">Judge</th>
+                 <th class="num" title="Krippendorff's alpha, therapist vs therapist">Therapists</th>
+                 <th class="num">n</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div>
+    <p class="blurb">The judge does not agree with a person equally well on all of them: the
+       spread is <strong>${spread.toFixed(3)}</strong>, larger than the ${'' + (DATA.judges &&
+       DATA.judges.separable ? DATA.judges.separable.margin : 0.05)} this page uses to decide
+       that two agreement figures are separable at all. It is weakest on
+       <code>${worst.system}</code>${below.length
+         ? `, and on ${below.map(r => `<code>${r.system}</code>`).join(' and ')} it does not reach
+            the ceiling the two therapists set between them`
+         : ''}. A score from this judge means slightly different things depending on whose note
+       it read, and the leaderboard compares those scores in one column.</p>`;
 }
 
 renderCalibration(DATA.calibration);

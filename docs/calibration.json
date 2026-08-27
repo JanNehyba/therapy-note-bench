@@ -161,5 +161,25 @@
       "judge": 0.4441337727068402
     }
   ],
+  "per_system": [
+    {
+      "humans": 0.4396240092290665,
+      "judge": 0.6064261196497226,
+      "n": 1150,
+      "system": "llama-3.1-70b"
+    },
+    {
+      "humans": 0.5228727270104835,
+      "judge": 0.6314599820418874,
+      "n": 1150,
+      "system": "mistral-large-v2"
+    },
+    {
+      "humans": 0.5439305599614952,
+      "judge": 0.5539864077806755,
+      "n": 1148,
+      "system": "therapist"
+    }
+  ],
   "rubric_beats_likert": true
 }

@@ -295,6 +295,11 @@ def collect(
     """
     pairs: dict[str, Paired] = defaultdict(Paired)
     per_criterion: dict[str, Paired] = defaultdict(Paired)
+    #: The same rubric judgements split by whose note was being read. The pooled
+    #: figure is one number for the instrument; this says whether the instrument
+    #: is the same one on every kind of note, and it is not -- the spread across
+    #: the three systems TN-Eval rated is larger than `ALPHA_MARGIN`.
+    per_system: dict[str, Paired] = defaultdict(Paired)
     seen: Counter = Counter()
     #: Every (conversation, system) that contributed at least one paired
     #: judgement. Counted rather than derived from the number of pairs: the
@@ -335,6 +340,7 @@ def collect(
                     humans = [float(entry[key]) for entry in raw]
                     pairs["rubric_completeness"].add(value, humans)
                     per_criterion[key].add(value, humans)
+                    per_system[system_id].add(value, humans)
                     notes.add((session.id, system_id))
 
                 for measure in ("likert_completeness", "likert_conciseness", "likert_faithfulness"):
@@ -347,6 +353,7 @@ def collect(
                     )
 
     pairs["_per_criterion"] = per_criterion  # type: ignore[assignment]
+    pairs["_per_system"] = per_system  # type: ignore[assignment]
     pairs["_settings"] = seen  # type: ignore[assignment]
     pairs["_notes"] = notes  # type: ignore[assignment]
     return pairs
@@ -405,6 +412,10 @@ class Report:
     notes: int
     agreements: list[Agreement]
     per_criterion: list[tuple[str, float | None, float | None]] = field(default_factory=list)
+    #: (system, judge-vs-human alpha, human-vs-human alpha, items). Only the
+    #: three systems TN-Eval released ratings for can have one; the sixteen the
+    #: leaderboard ranks cannot, because no human has read their notes.
+    per_system: list[tuple[str, float | None, float | None, int]] = field(default_factory=list)
 
     #: The judge settings these answers were produced at, so two candidates
     #: measured differently are not silently compared. `None` for a report read
@@ -557,6 +568,7 @@ def separations(judges: list[dict], measure: str, margin: float = ALPHA_MARGIN) 
 def calibrate(sessions: list[Session], judge_model: str, *, root: Path | None = None) -> Report:
     pairs = collect(sessions, judge_model, root=root)
     per_criterion = pairs.pop("_per_criterion", {})  # type: ignore[arg-type]
+    per_system_pairs = pairs.pop("_per_system", {})  # type: ignore[arg-type]
     settings = pairs.pop("_settings", Counter())  # type: ignore[arg-type]
     notes = len(pairs.pop("_notes", set()))  # type: ignore[arg-type]
 
@@ -578,6 +590,32 @@ def calibrate(sessions: list[Session], judge_model: str, *, root: Path | None = 
         agreement = score_agreement(key, paired, binary=True)
         detail.append((key, agreement.judge_mean, agreement.human_vs_human))
 
+    by_system = []
+    for system_id, paired in sorted(per_system_pairs.items()):
+        if not len(paired):
+            continue
+        # Nominal alpha, the same statistic the pooled figure uses, so the two
+        # are the same quantity at two grains.
+        judge_alpha = [
+            krippendorff_alpha(
+                [[j, h] for j, h in zip(paired.judge, human, strict=True)], ordinal=False
+            )
+            for human in paired.humans
+        ]
+        usable = [value for value in judge_alpha if value is not None]
+        humans_alpha = krippendorff_alpha(
+            [[a, b] for a, b in zip(paired.humans[0], paired.humans[1], strict=True)],
+            ordinal=False,
+        )
+        by_system.append(
+            (
+                system_id,
+                sum(usable) / len(usable) if usable else None,
+                humans_alpha,
+                len(paired),
+            )
+        )
+
     return Report(
         judge_model=judge_model,
         judge_prompt_version=tneval.JUDGE_PROMPT_VERSION,
@@ -591,6 +629,7 @@ def calibrate(sessions: list[Session], judge_model: str, *, root: Path | None = 
         notes=notes,
         agreements=agreements,
         per_criterion=detail,
+        per_system=by_system,
     )
 
 

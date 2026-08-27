@@ -1015,3 +1015,48 @@ def test_an_expanded_row_spans_the_columns_the_table_actually_drew(tmp_path):
         headers = len(re.findall(r"<th\b", drawn.split("</thead>")[0]))
         spans = {int(n) for n in re.findall(r'class="detail" hidden><td colspan="(\d+)"', drawn)}
         assert spans == {headers}, f"colspan {spans} against {headers} headers"
+
+
+def test_the_calibration_panel_says_whose_notes_the_judge_was_checked_on(tmp_path):
+    """One number for the instrument hides whether it is the same instrument on
+    every kind of note.
+
+    Human ratings exist for three systems and no others, all three of them at
+    the bottom of the table and all writing shorter notes than any ranked model.
+    Split by whose note was read, the judge's agreement varies by more than the
+    margin this page uses to call two agreement figures separable — and it is
+    weakest on the therapist's notes, which is the row the most-quoted
+    comparison depends on.
+    """
+    from tnb import report
+
+    data = report.build([_row("x", "a-judge", 0.5)])
+    data["calibration"] = {
+        "judge_model": "a-judge",
+        "judge_prompt_version": "v1",
+        "notes": 150,
+        "agreements": [
+            {
+                "name": "rubric_completeness",
+                "statistic": "Cohen's kappa",
+                "alpha": 0.60,
+                "alpha_humans": 0.50,
+                "judge": 0.60,
+                "humans": 0.50,
+                "n": 3448,
+                "alpha_level": "nominal",
+            }
+        ],
+        "per_criterion": [],
+        "per_system": [
+            {"system": "llama-3.1-70b", "judge": 0.606, "humans": 0.440, "n": 1150},
+            {"system": "mistral-large-v2", "judge": 0.632, "humans": 0.523, "n": 1150},
+            {"system": "therapist", "judge": 0.554, "humans": 0.544, "n": 1148},
+        ],
+    }
+    drawn = _run(report.render_methods(data), tmp_path, panel="calibration-body")
+
+    assert "Whose notes the judge was checked on" in drawn
+    assert "No human has read a note written by any of the models" in drawn
+    assert "0.078" in drawn, "the spread across the three, which exceeds the margin"
+    assert "therapist" in drawn and "weakest on" in drawn
