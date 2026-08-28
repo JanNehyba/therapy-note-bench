@@ -151,3 +151,34 @@ def test_the_method_is_recorded_and_does_not_overclaim():
     assert "decided every answer" in czech_anchor.METHOD
     assert "no human-against-human ceiling" in czech_anchor.CEILING
     assert "not an accuracy" in czech_anchor.CEILING
+
+
+# --- the two sheets ---------------------------------------------------------
+
+
+def test_both_sheets_draw_the_same_notes_in_different_orders():
+    """The same twenty, so one person's two afternoons cover one sample. A
+    different order, because rating a note for typos and then for quality lets
+    the typos colour the quality -- free to avoid, so avoided."""
+    import czech_pdsqi_sheet
+    import czech_rating_sheet
+
+    pairs = [(f"cz-r-{n:08x}", f"model-{n % 4}") for n in range(40)]
+
+    drawn_language = sorted(pairs, key=lambda p: czech_rating_sheet._rank(*p))[:20]
+    drawn_quality = sorted(pairs, key=lambda p: czech_pdsqi_sheet._rank(*p))[:20]
+    assert set(drawn_language) == set(drawn_quality), "the two sheets rate one sample"
+
+    shown_quality = sorted(drawn_quality, key=lambda p: czech_pdsqi_sheet._order(*p))
+    assert shown_quality != drawn_language, "and present it in a different order"
+
+
+def test_the_draw_is_independent_of_every_score():
+    """Judge A had already run when the first sheet was written. Choosing by
+    hand -- or by anything downstream of a score -- would let the sample be
+    picked to flatter the result."""
+    import czech_rating_sheet
+
+    first = czech_rating_sheet._rank("cz-r-0000abcd", "a-model")
+    assert first == czech_rating_sheet._rank("cz-r-0000abcd", "a-model"), "reproduces exactly"
+    assert first != czech_rating_sheet._rank("cz-r-0000abcd", "b-model")
