@@ -106,6 +106,9 @@ def _row(**over):
         "prompt_version": "czech-soap-v1",
         "judge_model": "gemini-3.1-pro-preview",
         "judge_prompt_version": "czech-criteria-v1",
+        # A group that names a judge and records no settings for it is
+        # withdrawn rather than drawn, so the fixture has to record some.
+        "judge_settings": {"model": "gemini-3.1-pro-preview", "thinking_budget": 2048},
         "n_sessions_attempted": 10,
         "n_sessions_generated": 10,
         "n_sessions_scored": 10,
@@ -145,3 +148,23 @@ def test_one_rubric_needs_no_version_label():
 
     page = czech_brief.build([_row(), _row(system_id="b-model")])
     assert "rubric czech-criteria" not in page
+
+
+def test_two_rubric_versions_do_not_collide_into_one_table_id():
+    """`report.build` asserts that table ids are distinct, and the id was built
+    from four things where six decide a group. Two rubric versions of one track
+    under one judge produced one id, and the page stopped rather than drawing
+    them -- which is the assert doing its job and the id not doing its own."""
+    from tnb import report
+
+    rows = [
+        _row(judge_prompt_version="czech-criteria-v1"),
+        _row(judge_prompt_version="czech-criteria-v2"),
+    ]
+    data = report.build(rows)
+
+    ids = [table["id"] for table in data["tables"]]
+    assert len(ids) == 2
+    assert len(set(ids)) == 2
+    assert any("czech-criteria-v1" in table_id for table_id in ids)
+    assert any("czech-criteria-v2" in table_id for table_id in ids)

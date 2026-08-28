@@ -680,6 +680,14 @@ def _table_id(table: dict) -> str:
     parts = [
         table["track"],
         versions["judge_model"] or "unjudged",
+        # One of the six fields that make a group a group, and it was missing.
+        # Two rubric versions of one track under one judge produced two tables
+        # with one id, and `build`'s collision assert -- written because the
+        # author expected this -- stopped the page rather than drawing them.
+        # Adding it changes every existing id, so a deep link into a table
+        # bookmarked before this no longer resolves. That cost is paid once; a
+        # colliding id is a link that silently goes to the wrong instrument.
+        versions.get("judge_prompt_version") or "unrubriced",
         versions["harness_version"] or "0",
     ]
     if settings:
