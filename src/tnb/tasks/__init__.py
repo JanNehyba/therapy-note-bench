@@ -16,7 +16,7 @@ from functools import cache
 
 from tnb.datasets import czech as czech_corpus
 from tnb.datasets.base import Session
-from tnb.tasks import czech, icare, soap
+from tnb.tasks import czech, deepsy, icare, soap
 
 
 @dataclass(frozen=True)
@@ -94,6 +94,27 @@ def _czech_units(session: Session) -> list[Unit]:
     ]
 
 
+def _deepsy_units(session: Session) -> list[Unit]:
+    """One call per section, three per session.
+
+    Not one call for all three: the application makes three, and a unit is what
+    the cache is keyed on -- a session whose `plan` timed out resumes at `plan`
+    rather than re-asking the two that answered.
+    """
+    name = deepsy.NAME_REAL if session.source == czech_corpus.REAL else deepsy.NAME_TRANSLATED
+    return [
+        Unit(
+            task=name,
+            prompt_version=deepsy.PROMPT_VERSION,
+            session_id=session.id,
+            unit=section,
+            prompt=deepsy.build_prompt(session, section),
+            meta={"section": section, "system": deepsy.system_message(section)},
+        )
+        for section in deepsy.SECTIONS
+    ]
+
+
 TASKS: dict[str, Task] = {
     soap.NAME: Task(
         name=soap.NAME,
@@ -131,6 +152,24 @@ TASKS: dict[str, Task] = {
         build_units=_czech_units,
         repair_suffix=czech.REPAIR_SENTENCE,
         parse_attempts=czech.PARSE_ATTEMPTS,
+    ),
+    deepsy.NAME_REAL: Task(
+        name=deepsy.NAME_REAL,
+        prompt_version=deepsy.PROMPT_VERSION,
+        calls_per_session=len(deepsy.SECTIONS),
+        load_sessions=deepsy.load_real,
+        build_units=_deepsy_units,
+        repair_suffix=deepsy.REPAIR_SENTENCE,
+        parse_attempts=deepsy.PARSE_ATTEMPTS,
+    ),
+    deepsy.NAME_TRANSLATED: Task(
+        name=deepsy.NAME_TRANSLATED,
+        prompt_version=deepsy.PROMPT_VERSION,
+        calls_per_session=len(deepsy.SECTIONS),
+        load_sessions=deepsy.load_translated,
+        build_units=_deepsy_units,
+        repair_suffix=deepsy.REPAIR_SENTENCE,
+        parse_attempts=deepsy.PARSE_ATTEMPTS,
     ),
 }
 

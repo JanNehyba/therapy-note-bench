@@ -80,6 +80,13 @@ TRACK_CZECH_TRANSLATED = "czech-translated"
 #: six-attribute mean beside an eight-attribute one under one heading.
 TRACK_CZECH_REAL_PDSQI = "czech-real-pdsqi"
 TRACK_CZECH_TRANSLATED_PDSQI = "czech-translated-pdsqi"
+#: The same models and the same sessions, asked for the note format the Deepsy
+#: application actually writes -- three of its eleven sections, the three that
+#: have a SOAP counterpart. The point of the track is the comparison: what
+#: changes between this and `czech-real` is the shape the model was asked for
+#: and nothing else, so a difference between them is a fact about the format.
+TRACK_DEEPSY_REAL = "deepsy-real"
+TRACK_DEEPSY_TRANSLATED = "deepsy-translated"
 
 TRACKS = (
     TRACK_TNEVAL,
@@ -89,6 +96,8 @@ TRACKS = (
     TRACK_CZECH_TRANSLATED,
     TRACK_CZECH_REAL_PDSQI,
     TRACK_CZECH_TRANSLATED_PDSQI,
+    TRACK_DEEPSY_REAL,
+    TRACK_DEEPSY_TRANSLATED,
 )
 
 #: Tracks whose rows are written to `LOCAL_ROWS_PATH` and never to `ROWS_PATH`.
@@ -98,6 +107,8 @@ LOCAL_TRACKS = (
     TRACK_CZECH_TRANSLATED,
     TRACK_CZECH_REAL_PDSQI,
     TRACK_CZECH_TRANSLATED_PDSQI,
+    TRACK_DEEPSY_REAL,
+    TRACK_DEEPSY_TRANSLATED,
 )
 
 #: Everything else. What `tnb report` draws and what the coverage sweep writes.
@@ -114,6 +125,8 @@ TRACK_BY_TASK = {
     # directory here to index.
     "czech-real": TRACK_CZECH_REAL,
     "czech-translated": TRACK_CZECH_TRANSLATED,
+    "deepsy-real": TRACK_DEEPSY_REAL,
+    "deepsy-translated": TRACK_DEEPSY_TRANSLATED,
 }
 
 #: What produced the note this row scores.

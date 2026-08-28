@@ -183,6 +183,8 @@ def test_the_czech_tracks_are_named_as_local():
         results.TRACK_CZECH_TRANSLATED,
         results.TRACK_CZECH_REAL_PDSQI,
         results.TRACK_CZECH_TRANSLATED_PDSQI,
+        results.TRACK_DEEPSY_REAL,
+        results.TRACK_DEEPSY_TRANSLATED,
     }
     assert not set(results.LOCAL_TRACKS) & set(results.PUBLISHED_TRACKS)
 

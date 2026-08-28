@@ -53,9 +53,12 @@ DIACRITIC = re.compile(
 ALLOWED_CZECH = {
     "src/tnb/scoring/czech.py": "the six language questions are put to the judge in Czech",
     "src/tnb/tasks/czech.py": "the note-generation prompt is Czech",
+    "src/tnb/tasks/deepsy.py": "the macros the Deepsy application fills its prompts with",
+    "src/tnb/tasks/deepsy_prompts.py": "the Deepsy prompts, reproduced verbatim",
     "tests/test_czech_scoring.py": "an invented note, used to exercise the rubric",
     "tests/test_czech_datasets.py": "asserts on the invented fixtures",
     "tests/test_czech_run.py": "an invented note, used to exercise the runner",
+    "tests/test_deepsy.py": "an invented session, and the prompt fragments it checks for",
     "tests/test_czech_pdsqi.py": "an invented note, and an invented line of a session "
     "that must not reach the judge",
     "tests/test_czech_anchor.py": "an invented note, quoted two ways, to exercise the "

@@ -147,6 +147,8 @@ def test_resolve_defaults_to_every_task():
         "icare",
         "czech-real",
         "czech-translated",
+        "deepsy-real",
+        "deepsy-translated",
     ]
 
 

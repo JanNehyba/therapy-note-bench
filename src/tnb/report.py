@@ -116,6 +116,12 @@ COLUMNS: dict[str, tuple[tuple[str, int], ...]] = {
     # so the third place is a digit that cannot exist.
     results.TRACK_CZECH_REAL: tuple((key, 2) for key in czech_scorer.CRITERION_KEYS),
     results.TRACK_CZECH_TRANSLATED: tuple((key, 2) for key in czech_scorer.CRITERION_KEYS),
+    # The Deepsy sections are scored by the same seven criteria: the question
+    # is whether the Czech is right, and that does not change with the shape
+    # the note was asked for. Changing the instrument as well as the format
+    # would leave nothing to attribute a difference to.
+    results.TRACK_DEEPSY_REAL: tuple((key, 2) for key in czech_scorer.CRITERION_KEYS),
+    results.TRACK_DEEPSY_TRANSLATED: tuple((key, 2) for key in czech_scorer.CRITERION_KEYS),
     # PDSQI-9 over the same Czech notes, in the instrument's own order. The real
     # half declares six columns and the translated eight: `accurate` and
     # `thorough` need the session, and the real sessions are never sent to the
@@ -145,6 +151,8 @@ MEASURE_TABLES = {
     results.TRACK_PDSQI: pdsqi.MEASURES,
     results.TRACK_CZECH_REAL: czech_scorer.MEASURES,
     results.TRACK_CZECH_TRANSLATED: czech_scorer.MEASURES,
+    results.TRACK_DEEPSY_REAL: czech_scorer.MEASURES,
+    results.TRACK_DEEPSY_TRANSLATED: czech_scorer.MEASURES,
     results.TRACK_CZECH_REAL_PDSQI: czech_pdsqi.measures(czech_task.NAME_REAL),
     results.TRACK_CZECH_TRANSLATED_PDSQI: czech_pdsqi.measures(czech_task.NAME_TRANSLATED),
 }
@@ -170,6 +178,8 @@ RANKING_MEASURES: dict[str, str | None] = {
     # quotation marks.
     results.TRACK_CZECH_REAL: czech_scorer.RANKING_MEASURE,
     results.TRACK_CZECH_TRANSLATED: czech_scorer.RANKING_MEASURE,
+    results.TRACK_DEEPSY_REAL: czech_scorer.RANKING_MEASURE,
+    results.TRACK_DEEPSY_TRANSLATED: czech_scorer.RANKING_MEASURE,
     # The instrument's reason again, unchanged by the language it is asked in.
     results.TRACK_CZECH_REAL_PDSQI: pdsqi.RANKING_MEASURE,
     results.TRACK_CZECH_TRANSLATED_PDSQI: pdsqi.RANKING_MEASURE,
@@ -192,6 +202,8 @@ JUDGE_MEASURES: dict[str, tuple[str, ...]] = {
     # human anchor at all, so two judges disagreeing is the only control it has.
     results.TRACK_CZECH_REAL: czech_scorer.JUDGE_MEASURES,
     results.TRACK_CZECH_TRANSLATED: czech_scorer.JUDGE_MEASURES,
+    results.TRACK_DEEPSY_REAL: czech_scorer.JUDGE_MEASURES,
+    results.TRACK_DEEPSY_TRANSLATED: czech_scorer.JUDGE_MEASURES,
     # Every attribute the corpus was asked, and no more. Naming one the two
     # judges never answered would ask the concordance panel to compare a column
     # that does not exist on either side.
@@ -264,6 +276,8 @@ TRACK_TITLES = {
     # rather than whether they are good Czech.
     results.TRACK_CZECH_REAL_PDSQI: "PDSQI-9 · the Czech notes from the real sessions",
     results.TRACK_CZECH_TRANSLATED_PDSQI: "PDSQI-9 · the Czech notes from translated AnnoMI",
+    results.TRACK_DEEPSY_REAL: "Deepsy format · ten real sessions, one client",
+    results.TRACK_DEEPSY_TRANSLATED: "Deepsy format · AnnoMI conversations, translated",
 }
 
 #: The same tracks, short enough to be a button. Separate from the titles rather
@@ -277,6 +291,8 @@ TRACK_SWITCH_LABELS = {
     results.TRACK_CZECH_TRANSLATED: "Czech, translated",
     results.TRACK_CZECH_REAL_PDSQI: "PDSQI-9, real sessions",
     results.TRACK_CZECH_TRANSLATED_PDSQI: "PDSQI-9, translated",
+    results.TRACK_DEEPSY_REAL: "Deepsy, real sessions",
+    results.TRACK_DEEPSY_TRANSLATED: "Deepsy, translated",
 }
 
 TRACK_BLURBS = {
@@ -325,6 +341,20 @@ TRACK_BLURBS = {
         "attributes, not eight:** `accurate` and `thorough` need the session, and "
         "these sessions never leave the infrastructure that holds them, so the two "
         "columns are absent because the question could not be put."
+    ),
+    results.TRACK_DEEPSY_REAL: (
+        "The same models and the same ten sessions, asked for the note format the "
+        "Deepsy application actually writes rather than for SOAP. Three of its eleven "
+        "sections, the three with a SOAP counterpart, scored by the same seven "
+        "criteria. **What changes between this table and the Czech one is the shape "
+        "the model was asked for and nothing else**, so a difference between them is "
+        "a fact about the format."
+    ),
+    results.TRACK_DEEPSY_TRANSLATED: (
+        "The Deepsy sections on notes written from translated AnnoMI. The same "
+        "comparison as the real half, on conversations that are public -- and the "
+        "same warning: the two halves differ in length by a factor of seven before "
+        "any question of format arises."
     ),
     results.TRACK_CZECH_TRANSLATED_PDSQI: (
         "PDSQI-9 on the notes written from translated AnnoMI. All eight attributes "
@@ -493,6 +523,38 @@ TRACK_DESIGN = {
             "read against -- but nobody has rated these notes, so there is no "
             "agreement figure for this table, only the ceiling one would be read "
             "against if it existed."
+        ),
+    },
+    results.TRACK_DEEPSY_REAL: {
+        "scored_against": (
+            "The note alone, on the same seven Czech criteria as the SOAP tracks. "
+            "The prompts are reproduced from the Deepsy application word for word, "
+            "with its questionnaire blocks removed the way the application removes "
+            "them for a client who has filled nothing in."
+        ),
+        "human_role": (
+            "None. Nobody has rated these notes, and the therapist wrote no "
+            "comparison note in this format either."
+        ),
+        "human_role_short": "none",
+        "calibrated": False,
+        "calibration": (
+            "Not calibrated, like the Czech criteria it shares. What this track adds "
+            "is not a calibration but a control: the same models and sessions in a "
+            "second format, so that what a criterion measures about a model can be "
+            "told apart from what it measures about the shape of the note."
+        ),
+    },
+    results.TRACK_DEEPSY_TRANSLATED: {
+        "scored_against": (
+            "The note alone, on the same seven criteria, over the translated AnnoMI conversations."
+        ),
+        "human_role": "None, in the same two senses as the real half.",
+        "human_role_short": "none",
+        "calibrated": False,
+        "calibration": (
+            "Not calibrated. Read against the Czech SOAP table on the same "
+            "conversations, which is the comparison this track exists for."
         ),
     },
     results.TRACK_CZECH_TRANSLATED_PDSQI: {

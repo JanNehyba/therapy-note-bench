@@ -1343,6 +1343,70 @@ _TRACK_REGISTRIES = {
     "Czech, real sessions": "Čeština, skutečná sezení",
     "Czech · AnnoMI conversations, translated": "Čeština · rozhovory AnnoMI, přeložené",
     "Czech, translated": "Čeština, přeložená",
+    # --- the Deepsy format ------------------------------------------------
+    "Deepsy format \u00b7 ten real sessions, one client": (
+        "Formát Deepsy \u00b7 deset skutečných sezení, jeden klient"
+    ),
+    "Deepsy format \u00b7 AnnoMI conversations, translated": (
+        "Formát Deepsy \u00b7 rozhovory AnnoMI, přeložené"
+    ),
+    "Deepsy, real sessions": "Deepsy, skutečná sezení",
+    "Deepsy, translated": "Deepsy, přeložená",
+    "The same models and the same ten sessions, asked for the note format the Deepsy"
+    " application actually writes rather than for SOAP. Three of its eleven sections,"
+    " the three with a SOAP counterpart, scored by the same seven criteria. **What"
+    " changes between this table and the Czech one is the shape the model was asked"
+    " for and nothing else**, so a difference between them is a fact about the"
+    " format.": (
+        "Tytéž modely a tatáž desítka sezení, ale požádané o formát zápisu, který "
+        "aplikace Deepsy opravdu píše, místo o SOAP. Tři z jejích jedenácti sekcí — "
+        "ty tři, které mají protějšek v SOAP — hodnocené týmiž sedmi kritérii. **Mezi "
+        "touto tabulkou a tou českou se mění tvar, o který byl model požádán, a nic "
+        "jiného**, takže rozdíl mezi nimi je výrok o formátu."
+    ),
+    "The Deepsy sections on notes written from translated AnnoMI. The same comparison"
+    " as the real half, on conversations that are public -- and the same warning: the"
+    " two halves differ in length by a factor of seven before any question of format"
+    " arises.": (
+        "Sekce Deepsy na zápisech psaných z přeloženého AnnoMI. Totéž srovnání jako "
+        "u skutečné půlky, na rozhovorech, které jsou veřejné — a totéž varování: ty "
+        "dvě půlky se liší délkou sedmkrát, ještě než přijde na řadu otázka formátu."
+    ),
+    "The note alone, on the same seven Czech criteria as the SOAP tracks. The prompts"
+    " are reproduced from the Deepsy application word for word, with its questionnaire"
+    " blocks removed the way the application removes them for a client who has filled"
+    " nothing in.": (
+        "Samotný zápis, na týchž sedmi českých kritériích jako tracky SOAP. Prompty "
+        "jsou reprodukované z aplikace Deepsy slovo od slova, s odstraněnými "
+        "dotazníkovými bloky — tak, jak je aplikace odstraňuje klientovi, který nic "
+        "nevyplnil."
+    ),
+    "None. Nobody has rated these notes, and the therapist wrote no comparison note in"
+    " this format either.": (
+        "Žádná. Tyhle zápisy nikdo nehodnotil a terapeut v tomhle formátu srovnávací "
+        "zápis nenapsal."
+    ),
+    "Not calibrated, like the Czech criteria it shares. What this track adds is not a"
+    " calibration but a control: the same models and sessions in a second format, so"
+    " that what a criterion measures about a model can be told apart from what it"
+    " measures about the shape of the note.": (
+        "Nekalibrováno, stejně jako česká kritéria, která sdílí. Co tenhle track "
+        "přidává, není kalibrace, ale kontrola: tytéž modely a sezení ve druhém "
+        "formátu, aby šlo odlišit, co kritérium měří na modelu, od toho, co měří na "
+        "tvaru zápisu."
+    ),
+    "The note alone, on the same seven criteria, over the translated AnnoMI"
+    " conversations.": (
+        "Samotný zápis, na týchž sedmi kritériích, přes přeložené rozhovory AnnoMI."
+    ),
+    "None, in the same two senses as the real half.": (
+        "Žádná, ve stejných dvou smyslech jako u skutečné půlky."
+    ),
+    "Not calibrated. Read against the Czech SOAP table on the same conversations,"
+    " which is the comparison this track exists for.": (
+        "Nekalibrováno. Čte se proti české tabulce SOAP na týchž rozhovorech, což je "
+        "srovnání, kvůli kterému tenhle track existuje."
+    ),
     # --- PDSQI-9 over the Czech notes -----------------------------------
     "PDSQI-9 · the Czech notes from the real sessions": (
         "PDSQI-9 · české poznámky ze skutečných sezení"
