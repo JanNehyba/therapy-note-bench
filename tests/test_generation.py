@@ -470,3 +470,61 @@ def test_a_record_stored_before_the_truncation_rule_is_not_a_cache_hit(tmp_path,
 
     assert generation.load_cached(job, PROVIDER) is None
     assert path.exists(), "kept, so the failure can still be explained"
+
+
+# --- the registry that lets a task fall through -----------------------------
+
+
+def test_every_task_whose_output_is_structured_is_parsed_at_generation():
+    """The parser table is a dict, and a task that is not in it is not an
+    error -- it is a task whose replies are never checked.
+
+    That is how the Deepsy sections shipped: they asked for JSON, matched
+    nothing, and were stored `ok: true` with no note, so the repair suffix
+    never fired and `PARSE_ATTEMPTS` was dead. The missing line was the
+    symptom; the absence of this check was the defect.
+
+    `icare` is deliberately absent and stays absent: its sections are prose,
+    there is no structure to fail to parse, and it has its own careful
+    handling in `icare_run` for a section the infrastructure lost. So the test
+    asks the question that actually matters -- does the task's own module
+    define a parser? -- rather than counting entries.
+    """
+    import importlib
+
+    from tnb import generation
+    from tnb.config import GenerationPolicy, Provider
+    from tnb.providers.openai_compatible import Completion
+    from tnb.tasks import TASKS
+
+    provider = Provider(
+        name="einfra",
+        base_url="https://example.invalid/v1",
+        token_env="EINFRA_API_TOKEN",
+        generation=GenerationPolicy(temperature=0.0, max_tokens=4096, concurrency=2),
+    )
+
+    for name, task in sorted(TASKS.items()):
+        module = importlib.import_module(f"tnb.tasks.{name.split('-')[0]}")
+        if not hasattr(module, "parse_note"):
+            continue
+
+        unit = task.build_units.__name__  # only to make a failure readable
+        job = generation.Job(
+            provider="einfra",
+            model_id="m",
+            task=name,
+            prompt_version=task.prompt_version,
+            session_id="s",
+            # A unit name the Deepsy parser will recognise; ignored by the rest.
+            unit="data" if name.startswith("deepsy") else "note",
+            prompt="...",
+        )
+        record = generation._record(
+            job, provider, Completion(model="m", text="I cannot do that.", ok=True), "now", "..."
+        )
+        assert record["ok"] is False, (
+            f"{name} defines parse_note ({unit}) and generation accepted a reply that "
+            "is not a note. Add it to the parser table, or its replies are never checked."
+        )
+        assert record["note"] is None, name
