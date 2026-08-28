@@ -7,6 +7,8 @@ from __future__ import annotations
 
 import sys
 
+import pytest
+
 from tnb.config import REPO_ROOT
 
 sys.path.insert(0, str(REPO_ROOT / "tools"))
@@ -215,3 +217,50 @@ def test_both_judges_of_the_current_rubric_survive_finishing_apart():
     assert "gemini-3.1-pro-preview" in page
     assert "gpt-5.6-terra" in page
     assert page.count("rubric czech-criteria-v2") == 2
+
+
+# --- the Czech briefing -----------------------------------------------------
+
+
+def test_the_briefing_renders_in_czech_with_nothing_left_in_english():
+    """The document is handed to Czech readers, so it is written in Czech --
+    and `_t` raises rather than falling back, because the failure that matters
+    is a page that is Czech where a reader looks first and English in the
+    caveats, which is where the reader who most needs them stops."""
+    import czech_brief
+
+    rows = [_row(), _row(system_id="b-model")]
+    before = czech_brief.LANG
+    try:
+        czech_brief.LANG = "cs"
+        page = czech_brief.build(rows)
+    finally:
+        czech_brief.LANG = before
+
+    # The expected Czech comes from the dictionary rather than being retyped
+    # here: a literal would drift from it, and this file would then need to be
+    # on the diacritic scanner's allow-list to hold a copy of it.
+    from czech_brief_cs import CS
+
+    heading = "Does it separate the models?"
+    assert CS[heading] in page, "a table heading is in Czech"
+    assert heading not in page
+
+
+def test_a_missing_translation_stops_the_run_rather_than_leaking_english():
+    import czech_brief
+
+    before = czech_brief.LANG
+    try:
+        czech_brief.LANG = "cs"
+        with pytest.raises(czech_brief.Untranslated):
+            czech_brief._t("a sentence nobody has translated yet")
+    finally:
+        czech_brief.LANG = before
+
+
+def test_english_stays_english_and_costs_no_lookup():
+    import czech_brief
+
+    assert czech_brief.LANG == "en"
+    assert czech_brief._t("anything at all") == "anything at all"

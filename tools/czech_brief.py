@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import argparse
 import collections
+import functools
 import html
 import json
 import re
@@ -29,12 +30,54 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
-from tnb import results
+from tnb import i18n, results
 from tnb.report import COLUMNS, MEASURE_TABLES, TRACK_BLURBS, TRACK_TITLES
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from czech_brief_cs import CS  # noqa: E402
 
 REPO = Path(__file__).resolve().parent.parent
 DEFAULT_SOURCE = REPO / "local" / "czech-rows.jsonl"
 DEFAULT_TARGET = REPO / "local" / "czech-brief.html"
+
+#: The language the document is written in for this run. A module-level switch
+#: rather than a parameter threaded through fifteen functions: every one of them
+#: renders prose, and the alternative is fifteen signatures that exist to carry
+#: one word.
+LANG = "en"
+
+
+class Untranslated(RuntimeError):
+    """A sentence that would have gone to a Czech reader in English."""
+
+
+def _t(text: str) -> str:
+    """One phrase in the language this run is writing.
+
+    **Strict on purpose.** A missing translation raises rather than falling back
+    to English, because the failure it prevents is the one that matters: a
+    document that is Czech everywhere a reader looks first and English in the
+    caveats, which is where the reader who most needs them stops reading.
+
+    Two dictionaries, in order. `tnb.i18n` already holds every column label,
+    definition and caveat, because the published pages are bilingual and those
+    strings are the same strings. `czech_brief_cs` holds this document's own
+    prose. Nothing is duplicated between them.
+    """
+    if LANG == "en":
+        return text
+    found = _index().get(i18n.norm(text))
+    if found is None:
+        raise Untranslated(f"no {LANG} for: {text[:120]}")
+    return found
+
+
+@functools.cache
+def _index() -> dict[str, str]:
+    """Both dictionaries, normalised once. This document's own prose wins."""
+    return {i18n.norm(k): v for k, v in i18n.CS.items()} | {
+        i18n.norm(k): v for k, v in CS.items()
+    }
 
 #: Words that would only be in this document if a transcript had leaked into it.
 #: Not a Czech-diacritic scan: the criteria have Czech labels and the model ids
@@ -74,6 +117,67 @@ code { font-family: ui-monospace, monospace; font-size: .9em; }
   tr { break-inside: avoid; } .warn { break-inside: avoid; }
 }
 """
+
+#: The document's own sentences, named so they can be translated. Inlined in
+#: the template they could not be: an f-string cannot carry a call around a
+#: paragraph without becoming unreadable, and a paragraph that cannot be wrapped
+#: is a paragraph that stays English.
+TITLE = "Czech note quality"
+HEADLINE = "Does an English leaderboard say anything about clinical Czech?"
+SUBTITLE = "therapy-note-bench \u00b7 Czech track \u00b7 measured, not published"
+INTRO = (
+    "The benchmark this belongs to scores model-written psychotherapy notes on two "
+    "English corpora. A model's standing there is a statement about English. This "
+    "track asks whether it carries over: the same models write notes in Czech, from "
+    "real sessions and from translated ones, and two instruments are asked about the "
+    "result. Seven yes/no criteria ask whether the Czech is right. PDSQI-9, a "
+    "published instrument, asks whether the note is any good -- because the criteria "
+    "cannot: a flawless Czech sentence about nothing passes all seven."
+)
+NOT_PUBLIC = "These numbers are not on the public site and this document is not a publication."
+NOT_PUBLIC_WHY = (
+    "They were measured from confidential clinical material and the decision to "
+    "publish anything from them has not been made. The transcripts were de-identified "
+    "before any model saw them, and no transcript text appears in this document or in "
+    "any file it was built from."
+)
+METHOD_CORPORA = (
+    "Two halves, both read only from a directory that is not in version control. "
+    "Every model wrote a note from every transcript, on e-INFRA."
+)
+METHOD_SIZE = (
+    "a real session runs seven times longer than a translated AnnoMI conversation, so "
+    "the two halves differ in how hard the summarising is before language is "
+    "considered at all."
+)
+METHOD_BOUNDARY = (
+    "What leaves for the judge's provider is the note a model wrote, which is what "
+    "lets a confidential session be scored at all. The one place a transcript is sent "
+    "is the PDSQI table on the translated half: those transcripts are AnnoMI, "
+    "published under CC-BY, and sending them buys the two attributes -- is the note "
+    "accurate, is it thorough -- that cannot be answered without the session. The real "
+    "half is asked the other six and those two columns are absent from it, because the "
+    "question could not be put rather than because a note failed."
+)
+METHOD_CRITERIA = (
+    "Each criterion is one question, answered yes or no, asked in its own call. A "
+    "column is the share of notes free of that fault, so higher is better throughout. "
+    "A judge that answered neither yes nor no is recorded as not having answered -- "
+    'never as "no fault" -- and a note with no content is not asked at all, because '
+    "every one of the seven asks about the absence of a fault and an empty note would "
+    "pass all seven."
+)
+METHOD_PDSQI = (
+    "PDSQI-9 is reproduced in English, word for word, because a translated instrument "
+    "is a different instrument with nothing validating it. The note it rates is Czech "
+    "and is shown with the Czech headings the model wrote. Seven of its eight "
+    "attributes are rated 1 to 5 and the eighth is a yes/no; they are reported "
+    "separately and never averaged, which is how the instrument's own authors report "
+    "them."
+)
+FOOTER = (
+    "Generated by tools/czech_brief.py from local/czech-rows.jsonl. Both are gitignored."
+)
 
 LIMITS = [
     (
@@ -152,7 +256,9 @@ def _table(track: str, rows: list[results.Row]) -> str:
     """
     columns = COLUMNS[track]
     measures = MEASURE_TABLES[track]
-    head = "".join(f"<th>{html.escape(measures[key]['label'])}</th>" for key, _ in columns)
+    head = "".join(
+        f"<th>{html.escape(_t(measures[key]['label']))}</th>" for key, _ in columns
+    )
     body, thin = [], []
     for row in sorted(rows, key=lambda r: r.system_id):
         complete = row.n_sessions_scored - row.n_sessions_partial
@@ -160,9 +266,14 @@ def _table(track: str, rows: list[results.Row]) -> str:
             f"<td>{_fmt(row.metrics.headline.get(key), digits)}</td>" for key, digits in columns
         )
         if row.n_sessions_partial:
-            count = f"<strong>{complete}</strong> of {row.n_sessions_scored}"
+            count = (
+                f"<strong>{complete}</strong> "
+                f"{_t('of')} {row.n_sessions_scored}"
+            )
             if complete < THIN * row.n_sessions_scored:
-                thin.append(f"{row.system_id} ({complete} of {row.n_sessions_scored})")
+                thin.append(
+                    f"{row.system_id} ({complete} {_t('of')} {row.n_sessions_scored})"
+                )
         else:
             count = str(complete)
         body.append(f"<tr><td>{html.escape(row.system_id)}</td><td>{count}</td>{cells}</tr>")
@@ -170,15 +281,27 @@ def _table(track: str, rows: list[results.Row]) -> str:
     warning = ""
     if thin:
         warning = (
-            "<div class='warn'><p>These rows are an average of well under all their "
-            "notes, because the judge left some questions unanswered and a note is "
-            "only counted when every criterion of it was answered: "
-            f"{html.escape(', '.join(thin))}. Unanswered questions cluster on the "
-            "longer notes, so what is missing is not a random sample of the corpus. "
-            "Read these rows as provisional.</p></div>"
+            "<div class='warn'><p>"
+            + html.escape(
+                _t(
+                    "These rows are an average of well under all their notes, "
+                    "because the judge left some questions unanswered and a note "
+                    "is only counted when every criterion of it was answered:"
+                )
+            )
+            + f" {html.escape(', '.join(thin))}. "
+            + html.escape(
+                _t(
+                    "Unanswered questions cluster on the longer notes, so what is "
+                    "missing is not a random sample of the corpus. Read these rows "
+                    "as provisional."
+                )
+            )
+            + "</p></div>"
         )
     return (
-        "<table><thead><tr><th>Model</th><th>Notes in the mean</th>"
+        f"<table><thead><tr><th>{_t('Model')}</th>"
+        f"<th>{_t('Notes in the mean')}</th>"
         f"{head}</tr></thead><tbody>{''.join(body)}</tbody></table>{warning}"
     )
 
@@ -189,9 +312,9 @@ def _definitions(track: str) -> str:
     for key, _digits in COLUMNS[track]:
         measure = measures[key]
         items.append(
-            f"<dt>{html.escape(measure['label'])} "
+            f"<dt>{html.escape(_t(measure['label']))} "
             f"<span class='dash'>({measure['scale']})</span></dt>"
-            f"<dd>{html.escape(measure['definition'])}</dd>"
+            f"<dd>{html.escape(_t(measure['definition']))}</dd>"
         )
     return "<dl>" + "".join(items) + "</dl>"
 
@@ -296,6 +419,17 @@ WHAT_IT_CATCHES = {
 }
 
 
+def _catch(key: str) -> str:
+    """What a column catches, in this run's language, or nothing.
+
+    A column with no sentence written for it renders an empty cell rather than
+    raising: the verdict beside it is still counted and still worth reading, and
+    a missing sentence is a gap in the prose rather than in the measurement.
+    """
+    written = WHAT_IT_CATCHES.get(key, "")
+    return _t(written) if written else ""
+
+
 def _corpus() -> str:
     """What the two halves are, counted rather than asserted.
 
@@ -334,17 +468,18 @@ def _corpus() -> str:
         turns = sorted(len(session.turns) for session in sessions)
         middle = len(words) // 2
         rows.append(
-            f"<tr><td>{html.escape(label)}</td><td>{len(sessions)}</td>"
+            f"<tr><td>{html.escape(_t(label))}</td><td>{len(sessions)}</td>"
             f"<td>{words[middle]:,}</td><td>{words[0]:,}&ndash;{words[-1]:,}</td>"
             f"<td>{turns[middle]}</td>"
-            f"<td class='sub'>{html.escape(note)}</td></tr>"
+            f"<td class='sub'>{html.escape(_t(note))}</td></tr>"
         )
     if not rows:
         return ""
     return (
-        "<h3>The two corpora</h3>"
-        "<table><thead><tr><th>Half</th><th>Sessions</th><th>Words, median</th>"
-        "<th>Words, range</th><th>Turns, median</th><th></th></tr></thead>"
+        f"<h3>{_t('The two corpora')}</h3>"
+        f"<table><thead><tr><th>{_t('Half')}</th><th>{_t('Sessions')}</th>"
+        f"<th>{_t('Words, median')}</th><th>{_t('Words, range')}</th>"
+        f"<th>{_t('Turns, median')}</th><th></th></tr></thead>"
         f"<tbody>{''.join(rows)}</tbody></table>"
     )
 
@@ -382,33 +517,45 @@ def _verdicts(rows: list[results.Row]) -> str:
                 continue
             separates = n >= 2 and worst_tied * 2 <= n
             verdict = (
-                f"tells {n - worst_tied} of {n} apart"
+                f"{_t('tells')} {n - worst_tied} {_t('of')} {n} {_t('apart')}"
                 if separates
-                else f"<strong>cannot rank</strong> — {worst_tied} of {n} share one value"
+                else (
+                    f"<strong>{_t('cannot rank')}</strong> — {worst_tied} "
+                    f"{_t('of')} {n} {_t('share one value')}"
+                )
             )
             lines.append(
-                f"<tr><td>{html.escape(MEASURE_TABLES[track][key]['label'])}</td>"
+                f"<tr><td>{html.escape(_t(MEASURE_TABLES[track][key]['label']))}</td>"
                 f"<td>{verdict}</td>"
-                f"<td class='sub'>{html.escape(WHAT_IT_CATCHES.get(key, ''))}</td></tr>"
+                f"<td class='sub'>{html.escape(_catch(key))}</td></tr>"
             )
         if lines:
             blocks.append(
-                f"<h3>{html.escape(TRACK_TITLES.get(track, track))}</h3>"
-                "<table><thead><tr><th>Column</th><th>Does it separate the models?</th>"
-                "<th>What is behind the number</th></tr></thead>"
+                f"<h3>{html.escape(_t(TRACK_TITLES.get(track, track)))}</h3>"
+                f"<table><thead><tr><th>{_t('Column')}</th>"
+                f"<th>{_t('Does it separate the models?')}</th>"
+                f"<th>{_t('What is behind the number')}</th></tr></thead>"
                 f"<tbody>{''.join(lines)}</tbody></table>"
             )
 
     if not blocks:
         return ""
     return (
-        "<h2>What is behind each number</h2>"
-        "<p>A column that gives most models the same value cannot rank them, however "
-        "confidently it is printed, and the first thing worth knowing about any column "
-        "here is whether it separates anything at all. That half is counted from the "
-        "rows. The second half — what the column actually catches, and how far two "
-        "judges and one native speaker agreed about it — is written down rather than "
-        "computed, because no arithmetic supplies it.</p>" + "".join(blocks)
+        f"<h2>{_t('What is behind each number')}</h2>"
+        + "<p>"
+        + html.escape(
+            _t(
+                "A column that gives most models the same value cannot rank them, "
+                "however confidently it is printed, and the first thing worth "
+                "knowing about any column here is whether it separates anything at "
+                "all. That half is counted from the rows. The second half — what the "
+                "column actually catches, and how far two judges and one native "
+                "speaker agreed about it — is written down rather than computed, "
+                "because no arithmetic supplies it."
+            )
+        )
+        + "</p>"
+        + "".join(blocks)
     )
 
 
@@ -447,7 +594,7 @@ def _join() -> str:
             for name in judges:
                 entry = data["judges"][name].get(field, {}).get(key)
                 if not entry:
-                    cells.append("<td class='dash'>flat</td>")
+                    cells.append(f"<td class='dash'>{_t('flat')}</td>")
                     continue
                 strong = "<strong>" if entry["p"] < 0.05 else ""
                 close = "</strong>" if entry["p"] < 0.05 else ""
@@ -455,12 +602,12 @@ def _join() -> str:
                     f"<td>{strong}{entry['rho']:+.2f}{close}"
                     f" <span class='dash'>p={entry['p']:.3f}</span></td>"
                 )
-            label = labels.get(key, {}).get("label", key)
+            label = _t(labels.get(key, {}).get("label", key))
             rows.append(f"<tr><td>{html.escape(label)}</td>" + "".join(cells) + "</tr>")
         head = "".join(f"<th>{html.escape(name)}</th>" for name in judges)
         return (
             f"<h3>{html.escape(heading)}</h3><p>{html.escape(lead)}</p>"
-            f"<table><thead><tr><th>Attribute</th>{head}</tr></thead>"
+            f"<table><thead><tr><th>{_t('Attribute')}</th>{head}</tr></thead>"
             f"<tbody>{''.join(rows)}</tbody></table>"
         )
 
@@ -469,32 +616,44 @@ def _join() -> str:
     systems = len(data["judges"][judges[0]].get("systems", []))
 
     return (
-        "<h2>Does the English leaderboard predict the Czech?</h2>"
-        f"<p>The two tables share {systems} models. Whether a standing in one predicts a "
-        "standing in the other has two answers, and which one a reader gets depends on "
-        "which English number they were looking at. Bold is a correlation that survives "
-        "an exact permutation test at p &lt; 0.05.</p>"
+        f"<h2>{_t('Does the English leaderboard predict the Czech?')}</h2>"
+        + f"<p>{systems} "
+        + html.escape(
+            _t(
+                "models. Whether a standing in one predicts a standing in the other "
+                "has two answers, and which one a reader gets depends on which "
+                "English number they were looking at. Bold is a correlation that "
+                "survives an exact permutation test at p < 0.05."
+            )
+        )
+        + "</p>"
         + block(
             "same_instrument",
-            "Asked the same question, quality transfers",
-            "PDSQI-9 on the English notes against PDSQI-9 on the Czech ones. Same "
-            "attributes, same anchors, same judge; only the language of the note differs.",
+            _t("Asked the same question, quality transfers"),
+            _t(
+                "PDSQI-9 on the English notes against PDSQI-9 on the Czech ones. Same "
+                "attributes, same anchors, same judge; only the language of the note "
+                "differs."
+            ),
         )
         + block(
             "leaderboard_ranking",
-            "Asked the leaderboard's own measure, it does not",
-            f"English {ranking} -- what the page sorts by, so what a position means -- "
-            "against the Czech quality columns. Nothing here survives the test, and the "
-            "two judges do not agree even on the sign.",
+            _t("Asked the leaderboard's own measure, it does not"),
+            f"{ranking} "
+            + _t(
+                "-- what the page sorts by, so what a position means -- against the "
+                "Czech quality columns. Nothing here survives the test, and the two "
+                "judges do not agree even on the sign."
+            ),
         )
         + (
-            f"<p class='sub'>Flat on one side and therefore not correlated: "
+            f"<p class='sub'>{_t('Flat on one side and therefore not correlated:')} "
             f"{html.escape(', '.join(flat))}.</p>"
             if flat
             else ""
         )
-        + f"<div class='warn'><p>{html.escape(data.get('confound', ''))} "
-        f"{html.escape(data.get('reading', ''))}</p></div>"
+        + f"<div class='warn'><p>{html.escape(_t(data.get('confound', '')))} "
+        f"{html.escape(_t(data.get('reading', '')))}</p></div>"
     )
 
 
@@ -528,17 +687,18 @@ def _anchor() -> str:
         for name in judges:
             entry = data["judges"][name]["criteria"].get(key)
             if not entry or entry["rate"] is None:
-                cells.append("<td class='dash'>not answered yet</td>")
+                cells.append(f"<td class='dash'>{_t('not answered yet')}</td>")
             else:
                 gap = (
-                    f" <span class='dash'>({entry['unanswered']} unanswered)</span>"
+                    f" <span class='dash'>({entry['unanswered']} "
+                    f"{_t('unanswered')})</span>"
                     if entry["unanswered"]
                     else ""
                 )
                 cells.append(f"<td>{entry['rate']:.2f}{gap}</td>")
-        label = MEASURE_TABLES[results.TRACK_CZECH_REAL][key]["label"]
+        label = _t(MEASURE_TABLES[results.TRACK_CZECH_REAL][key]["label"])
         counted = (
-            " <span class='dash'>(counted, not judged)</span>"
+            f" <span class='dash'>({_t('counted, not judged')})</span>"
             if (data["judges"][judges[0]]["criteria"].get(key, {}).get("computed"))
             else ""
         )
@@ -550,17 +710,27 @@ def _anchor() -> str:
         totals.append(
             f"<td><strong>{rate:.2f}</strong></td>" if rate else "<td class='dash'>--</td>"
         )
-    body.append("<tr><td><strong>All questions</strong></td>" + "".join(totals) + "</tr>")
+    body.append(
+        f"<tr><td><strong>{_t('All questions')}</strong></td>"
+        + "".join(totals)
+        + "</tr>"
+    )
 
     head = "".join(f"<th>{html.escape(name)}</th>" for name in judges)
     return (
-        "<h2>How often a judge and one native speaker said the same thing</h2>"
-        f"<p>{html.escape(data.get('method', ''))}</p>"
-        f"<div class='warn'><p>{html.escape(data.get('ceiling', ''))}</p></div>"
-        f"<table><thead><tr><th>Criterion</th>{head}</tr></thead>"
+        f"<h2>{_t('How often a judge and one native speaker said the same thing')}</h2>"
+        f"<p>{html.escape(_t(data.get('method', '')))}</p>"
+        f"<div class='warn'><p>{html.escape(_t(data.get('ceiling', '')))}</p></div>"
+        f"<table><thead><tr><th>{_t('Criterion')}</th>{head}</tr></thead>"
         f"<tbody>{''.join(body)}</tbody></table>"
-        f"<p class='sub'>{data.get('notes_rated', 0)} notes, drawn by a hash of the session "
-        "and the model so that no score could influence which ones were rated.</p>"
+        f"<p class='sub'>{data.get('notes_rated', 0)} "
+        + html.escape(
+            _t(
+                "notes, drawn by a hash of the session and the model so that no "
+                "score could influence which ones were rated."
+            )
+        )
+        + "</p>"
     )
 
 
@@ -605,25 +775,44 @@ def _controls() -> str:
     verdict = (
         "<div class='warn'><p><strong>"
         + html.escape(", ".join(unreliable))
-        + "</strong>: at least one judge reports this fault in a note that does not "
-        "have it, or misses it in a note that does. Read that column as a question "
-        "rather than as an answer -- the disagreement is the finding.</p></div>"
+        + "</strong>: "
+        + html.escape(
+            _t(
+                "at least one judge reports this fault in a note that does not have "
+                "it, or misses it in a note that does. Read that column as a question "
+                "rather than as an answer -- the disagreement is the finding."
+            )
+        )
+        + "</p></div>"
         if unreliable
-        else "<p>Every criterion found its own fault under every judge, and none "
-        "fired on the clean note.</p>"
+        else "<p>"
+        + html.escape(
+            _t(
+                "Every criterion found its own fault under every judge, and none fired "
+                "on the clean note."
+            )
+        )
+        + "</p>"
     )
 
     head = "".join(
-        f"<th>{html.escape(MEASURE_TABLES[results.TRACK_CZECH_REAL][k]['label'])}</th>"
+        f"<th>{html.escape(_t(MEASURE_TABLES[results.TRACK_CZECH_REAL][k]['label']))}</th>"
         for k in keys
     )
     return (
-        "<h2>Does each column detect what it claims?</h2>"
-        "<p>One clean note and seven variants, each carrying exactly one "
-        "deliberate fault of one kind. This is the only check that can tell a "
-        "column that measures something from a column that produces numbers.</p>"
-        f"<table><thead><tr><th>Judge</th>{head}</tr></thead>"
-        f"<tbody>{''.join(rows)}</tbody></table>" + verdict
+        f"<h2>{_t('Does each column detect what it claims?')}</h2>"
+        + "<p>"
+        + html.escape(
+            _t(
+                "One clean note and seven variants, each carrying exactly one "
+                "deliberate fault of one kind. This is the only check that can tell a "
+                "column that measures something from a column that produces numbers."
+            )
+        )
+        + "</p>"
+        + f"<table><thead><tr><th>{_t('Judge')}</th>{head}</tr></thead>"
+        + f"<tbody>{''.join(rows)}</tbody></table>"
+        + verdict
     )
 
 
@@ -675,8 +864,9 @@ def build(rows: list[results.Row]) -> str:
         if not groups:
             continue
         sections.append(
-            f"<h2>{html.escape(TRACK_TITLES.get(track, track))}</h2>"
-            f"<p class='sub'>{html.escape(re.sub(r'[*]{2}', '', TRACK_BLURBS.get(track, '')))}</p>"
+            f"<h2>{html.escape(_t(TRACK_TITLES.get(track, track)))}</h2>"
+            f"<p class='sub'>"
+            f"{html.escape(re.sub(r'[*]{2}', '', _t(TRACK_BLURBS.get(track, ''))))}</p>"
         )
         # Only the newest rubric is drawn. An older one is named instead, which
         # is what the published English page does with a superseded harness:
@@ -698,49 +888,57 @@ def build(rows: list[results.Row]) -> str:
             first = drawn[0]
             notes = sum(row.n_sessions_scored for row in drawn)
             sections.append(
-                f"<h3>Judged by {html.escape(first.judge_model or 'unknown')}</h3>"
-                f"<p>{len(drawn)} models, {notes} notes, "
-                f"rubric {html.escape(first.judge_prompt_version)}.</p>" + _table(track, drawn)
+                f"<h3>{_t('Judged by')} "
+                f"{html.escape(first.judge_model or 'unknown')}</h3>"
+                f"<p>{len(drawn)} {_t('models')}, {notes} {_t('notes')}, "
+                f"{_t('rubric')} {html.escape(first.judge_prompt_version)}.</p>"
+                + _table(track, drawn)
             )
         if len({drawn[0].judge_model for drawn in ordered}) > 1:
             sections.append(
-                "<div class='warn'><p>Two judges, two tables, and they are not "
-                "averaged. Where they disagree about a model is the only control "
-                "this track has, so the disagreement is the thing to read.</p></div>"
+                "<div class='warn'><p>"
+                + html.escape(
+                    _t(
+                        "Two judges, two tables, and they are not averaged. Where "
+                        "they disagree about a model is the only control this track "
+                        "has, so the disagreement is the thing to read."
+                    )
+                )
+                + "</p></div>"
             )
         if withdrawn:
             sections.append(
-                "<div class='warn'><p>Not drawn: this track was also scored under "
-                f"{html.escape(', '.join(sorted(withdrawn)))}, an earlier version of "
-                "the rubric. Those rows are a different instrument rather than an "
-                "earlier attempt at this one, so they are named here and not placed "
-                "beside these. They remain in the local record.</p></div>"
+                "<div class='warn'><p>"
+                + html.escape(_t("Not drawn: this track was also scored under"))
+                + f" {html.escape(', '.join(sorted(withdrawn)))}"
+                + html.escape(
+                    _t(
+                        ", an earlier version of the rubric. Those rows are a "
+                        "different instrument rather than an earlier attempt at this "
+                        "one, so they are named here and not placed beside these. "
+                        "They remain in the local record."
+                    )
+                )
+                + "</p></div>"
             )
-        sections.append("<h3>What each column is</h3>" + _definitions(track))
+        sections.append(
+            f"<h3>{_t('What each column is')}</h3>" + _definitions(track)
+        )
 
     limits = "".join(
-        f"<h3>{html.escape(title)}</h3><p>{html.escape(body)}</p>" for title, body in LIMITS
+        f"<h3>{html.escape(_t(title))}</h3><p>{html.escape(_t(body))}</p>"
+        for title, body in LIMITS
     )
 
     return f"""<!doctype html>
-<html lang="en"><head><meta charset="utf-8">
-<title>Czech note quality</title><style>{STYLE}</style></head><body>
-<h1>Does an English leaderboard say anything about clinical Czech?</h1>
-<p class="sub">therapy-note-bench &middot; Czech track &middot; measured, not published</p>
+<html lang="{LANG}"><head><meta charset="utf-8">
+<title>{_t(TITLE)}</title><style>{STYLE}</style></head><body>
+<h1>{_t(HEADLINE)}</h1>
+<p class="sub">{_t(SUBTITLE)}</p>
 
-<p>The benchmark this belongs to scores model-written psychotherapy notes on two
-English corpora. A model's standing there is a statement about English. This
-track asks whether it carries over: the same models write notes in Czech, from
-real sessions and from translated ones, and two instruments are asked about the
-result. Seven yes/no criteria ask whether the Czech is right. PDSQI-9, a
-published instrument, asks whether the note is any good -- because the criteria
-cannot: a flawless Czech sentence about nothing passes all seven.</p>
+<p>{_t(INTRO)}</p>
 
-<div class="warn"><p><strong>These numbers are not on the public site and this
-document is not a publication.</strong> They were measured from confidential
-clinical material and the decision to publish anything from them has not been
-made. The transcripts were de-identified before any model saw them, and no
-transcript text appears in this document or in any file it was built from.</p></div>
+<div class="warn"><p><strong>{_t(NOT_PUBLIC)}</strong> {_t(NOT_PUBLIC_WHY)}</p></div>
 
 {"".join(sections)}
 
@@ -752,48 +950,40 @@ transcript text appears in this document or in any file it was built from.</p></
 
 {_controls()}
 
-<h2>What these numbers cannot be used for</h2>
+<h2>{_t("What these numbers cannot be used for")}</h2>
 {limits}
 
-<h2>How it was measured</h2>
-<p>Two halves, both read only from a directory that is not in version control.
-Every model wrote a note from every transcript, on e-INFRA. <strong>They are not
-the same size:</strong> a real session runs seven times longer than a translated
-AnnoMI conversation, so the two halves differ in how hard the summarising is
-before language is considered at all.</p>
+<h2>{_t("How it was measured")}</h2>
+<p>{_t(METHOD_CORPORA)} <strong>{_t("They are not the same size:")}</strong>
+{_t(METHOD_SIZE)}</p>
 {_corpus()}
-<p><strong>No judge is ever shown a real session.</strong> What leaves for the
-judge's provider is the note a model wrote, which is what lets a confidential
-session be scored at all. The one place a transcript is sent is the PDSQI table
-on the translated half: those transcripts are AnnoMI, published under CC-BY, and
-sending them buys the two attributes -- is the note accurate, is it thorough --
-that cannot be answered without the session. The real half is asked the other
-six and those two columns are absent from it, because the question could not be
-put rather than because a note failed.</p>
-<p>Each criterion is one question, answered yes or no, asked in its own call. A
-column is the share of notes free of that fault, so higher is better throughout.
-A judge that answered neither yes nor no is recorded as not having answered --
-never as "no fault" -- and a note with no content is not asked at all, because
-every one of the seven asks about the absence of a fault and an empty note would
-pass all seven.</p>
-<p>PDSQI-9 is reproduced in English, word for word, because a translated
-instrument is a different instrument with nothing validating it. The note it
-rates is Czech and is shown with the Czech headings the model wrote. Seven of
-its eight attributes are rated 1 to 5 and the eighth is a yes/no; they are
-reported separately and never averaged, which is how the instrument's own
-authors report them.</p>
+<p><strong>{_t("No judge is ever shown a real session.")}</strong> {_t(METHOD_BOUNDARY)}</p>
+<p>{_t(METHOD_CRITERIA)}</p>
+<p>{_t(METHOD_PDSQI)}</p>
 
-<footer>Generated by <code>tools/czech_brief.py</code> from
-<code>local/czech-rows.jsonl</code>. Both are gitignored.</footer>
+<footer>{_t(FOOTER)}</footer>
 </body></html>
 """
 
 
 def main(argv: list[str] | None = None) -> int:
+    global LANG
+
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--source", type=Path, default=DEFAULT_SOURCE)
     parser.add_argument("--target", type=Path, default=DEFAULT_TARGET)
+    parser.add_argument(
+        "--language",
+        choices=i18n.LANGUAGES,
+        default=i18n.DEFAULT_LANG,
+        help=(
+            "which language to write the document in. Czech is for the readers it is "
+            "handed to; a missing translation stops the run rather than leaving one "
+            "paragraph in English"
+        ),
+    )
     args = parser.parse_args(argv)
+    LANG = args.language
 
     if not args.source.exists():
         print(f"{args.source} is not there. Run `tnb score-czech` first.", file=sys.stderr)

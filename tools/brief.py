@@ -65,6 +65,16 @@ def inline_figure(name: str) -> str:
     return svg[svg.index("<svg") :]
 
 
+def signed(value: float) -> str:
+    """A signed effect with the typographic minus the rest of the document uses.
+
+    The hand-typed interval this replaced was written with ``&minus;``; a plain
+    format specifier gives a hyphen, which sets differently and reads as a range
+    separator beside a comma.
+    """
+    return f"{value:+.3f}".replace("-", "&minus;")
+
+
 def pct(part: int, whole: int) -> str:
     return f"{part / whole:.0%}" if whole else "—"
 
@@ -271,37 +281,70 @@ def what_was_measured(data: Data) -> str:
 
 
 def the_judges(data: Data) -> str:
+    """The calibration table, carrying both statistics the payload holds.
+
+    It used to print the Krippendorff pair alone, under the heading the README
+    and the methods page use for the kappa/rho pair. Same words, different
+    statistic, opposite conclusion: by rho the judge agrees with a therapist
+    better than the therapists agree with each other, and by alpha it does not.
+    A reader with the PDF and the site in front of them saw a contradiction that
+    was really a missing column, so the column is here now.
+    """
     calibration = json.loads((DOCS / "calibration.json").read_text(encoding="utf-8"))
     rows = []
     for entry in calibration["agreements"]:
         name = entry["name"].replace("_", " ").replace("rubric ", "").replace("likert ", "")
         kind = "checklist" if entry["name"].startswith("rubric") else "1&ndash;5 rating"
         rows.append(
-            f"<tr><td>{esc(name)}</td><td>{kind}</td>"
+            f"<tr><td>{esc(name)}</td><td>{kind}</td><td>{esc(entry['statistic'])}</td>"
+            f'<td class="num">{entry["judge"]:.2f}</td>'
+            f'<td class="num">{entry["humans"]:.2f}</td>'
             f'<td class="num">{entry["alpha"]:.2f}</td>'
             f'<td class="num">{entry["alpha_humans"]:.2f}</td></tr>'
         )
+
+    # Every figure in the prose below is lifted from the same payload the table
+    # is built from. All five were typed in, and stayed right only because the
+    # calibration has not been re-run since they were typed.
+    checklist = next(e for e in calibration["agreements"] if e["name"].startswith("rubric"))
+    likert = [e for e in calibration["agreements"] if e["name"].startswith("likert")]
+    ceilings = ", ".join(f"{e['alpha_humans']:.2f}" for e in likert[:-1])
+    ceilings = f"{ceilings} and {likert[-1]['alpha_humans']:.2f}" if likert else ""
+    completeness = next(e for e in likert if e["name"] == "likert_completeness")
+    by_rho = "above" if completeness["judge"] > completeness["humans"] else "below"
+    by_alpha = "above" if completeness["alpha"] > completeness["alpha_humans"] else "below"
+
     return f"""
   <h2>The judge is a model, so the judge is measured first</h2>
   <p>TN-Eval released 150 notes that two trained therapists had already rated. Every
      candidate judge answers the same questions about the same notes before it is
      allowed near the leaderboard, and the agreement is published whatever it says.</p>
   <table>
-    <thead><tr><th>Measure</th><th>Form</th><th class="num">Judge vs therapist</th>
-      <th class="num">Therapist vs therapist</th></tr></thead>
+    <thead><tr><th>Measure</th><th>Form</th><th>Statistic</th>
+      <th class="num">Judge vs therapist</th><th class="num">Therapist vs therapist</th>
+      <th class="num">Alpha, judge</th><th class="num">Alpha, therapists</th></tr></thead>
     <tbody>{"".join(rows)}</tbody>
   </table>
-  <p>The right-hand column is the ceiling, not a target. <strong>Two trained therapists
-     rating the same notes barely agree on the 1&ndash;5 scales</strong> &mdash; 0.13,
-     0.19 and 0.18, where 1.00 is perfect and 0 is chance. On the 23-item checklist they
-     reach 0.50, and the judge reaches 0.60.</p>
+  <p>Both therapist-vs-therapist columns are a ceiling, not a target. <strong>Two trained
+     therapists rating the same notes barely agree on the 1&ndash;5 scales</strong>
+     &mdash; {ceilings} by alpha, where 1.00 is perfect and 0 is chance. On the 23-item
+     checklist they reach {checklist["alpha_humans"]:.2f}, and the judge reaches
+     {checklist["alpha"]:.2f}.</p>
+  <p><strong>Why two pairs.</strong> Cohen&rsquo;s kappa suits a yes/no criterion and
+     Spearman&rsquo;s rho an ordered scale, so those are the statistics the leaderboard
+     and the methods page report. Krippendorff&rsquo;s alpha sits beside them because it
+     is what TN-Eval used, and a comparison with their finding has to be on their
+     statistic. The two do not agree: on likert completeness the judge scores
+     {completeness["judge"]:.2f} by rho against a ceiling of {completeness["humans"]:.2f},
+     and {completeness["alpha"]:.2f} by alpha against a ceiling of
+     {completeness["alpha_humans"]:.2f} &mdash; {by_rho} the therapists on one and
+     {by_alpha} them on the other. Which statistic is quoted decides the answer, so both
+     are printed.</p>
   <p><strong>That is why the ranking uses the checklist and nothing else.</strong> The
      other three columns are reported because the protocol produces them, and ordering
      anything by them would be ordering by noise.</p>
   <p class="note">Measured across {calibration["notes"]} of those notes, judge
-     <code>{esc(calibration["judge_model"])}</code>. Krippendorff&rsquo;s alpha, the
-     statistic the source paper used, so the comparison is with their finding rather
-     than with a re-definition of it.</p>
+     <code>{esc(calibration["judge_model"])}</code>.</p>
 """
 
 
@@ -310,6 +353,35 @@ def what_it_means(data: Data) -> str:
     preference = data.preference or {}
     effects = {entry["judge"]: entry for entry in preference.get("effects", [])}
     detected = [entry for entry in effects.values() if entry["detected"]]
+
+    # Three figures below this line were typed into the prose. The range was
+    # right; the fraction of it was wrong by 4.5x, which made the bias the
+    # section reports look far smaller than the section's own numbers show; and
+    # the judge-vs-judge interval was the one a superseded estimator produced,
+    # 2.5 times narrower than the interval the payload beside it carries. All
+    # three are read from that payload now.
+    spread_a = data.scores("tneval-soap", JUDGE_A, "completeness")
+    shares = []
+    for judge in (JUDGE_A, JUDGE_B):
+        entry = effects.get(judge)
+        scores = data.scores("tneval-soap", judge, "completeness")
+        if not entry or not scores:
+            continue
+        width = max(scores.values()) - min(scores.values())
+        shares.append(f"{entry['estimate'] / width:.0%}")
+    shares = " and ".join(shares)
+
+    # Named rather than dropped when it is missing. A sentence that says two
+    # judges "do not" differ, with the evidence for it silently absent, is the
+    # shape this repository keeps finding and refusing.
+    difference = preference.get("difference")
+    if difference:
+        judges_differ = (
+            f"asked directly, they do not &mdash; {signed(difference['estimate'])} "
+            f"[{signed(difference['low'])}, {signed(difference['high'])}]"
+        )
+    else:
+        judges_differ = "and this payload carries no answer to that question"
     # Was "One of the two is detected." It was, until the interval was widened
     # to cover the three or four systems each mean is taken over -- which is
     # what the sentence generalises to, since the leaderboard marks *rows*.
@@ -323,8 +395,8 @@ def what_it_means(data: Data) -> str:
             "<tr>"
             f"<td><code>{esc(entry['judge'])}</code></td>"
             f"<td>{esc(entry['family'])}</td>"
-            f'<td class="num">{entry["estimate"]:+.3f}</td>'
-            f'<td class="num">{entry["low"]:+.3f} to {entry["high"]:+.3f}</td>'
+            f'<td class="num">{signed(entry["estimate"])}</td>'
+            f'<td class="num">{signed(entry["low"])} to {signed(entry["high"])}</td>'
             f"<td>{verdict}</td></tr>"
         )
     found = (
@@ -355,8 +427,9 @@ def what_it_means(data: Data) -> str:
   <p>The two judges see the same notes, ask the same 23 questions and reach almost the
      same conclusions about which of any two systems is better. And the two orderings
      they produce are visibly different. Both of those are true, and the reason is
-     arithmetic rather than disagreement: nineteen systems are packed into a range of
-     0.22, so a handful of genuine moves renumbers everyone below them.</p>
+     arithmetic rather than disagreement: {len(spread_a)} systems are packed into a
+     range of {max(spread_a.values()) - min(spread_a.values()):.2f}, so a handful of
+     genuine moves renumbers everyone below them.</p>
   <p><strong>What to do with that.</strong> Read a leaderboard as bands, not as an
      order. &ldquo;In the top group&rdquo; is a claim this kind of evidence supports;
      &ldquo;ninth rather than tenth&rdquo; is not, on this benchmark or on anybody
@@ -379,9 +452,9 @@ def what_it_means(data: Data) -> str:
       <th class="num">95% interval</th><th>Detected</th></tr></thead>
     <tbody>{"".join(rows)}</tbody>
   </table>
-  <p>{found}The units are completeness, so an effect of about 0.02 is a fiftieth of
-     the range the models occupy &mdash; enough to move a system several places in an
-     ordering this tight, and not enough to make a bad note look good. Both point
+  <p>{found}The units are completeness, so these effects are {shares} of the range the
+     models occupy under their own judge &mdash; enough to move a system several places
+     in an ordering this tight, and not enough to make a bad note look good. Both point
      estimates are positive and neither interval clears zero.</p>
   <p><strong>What to do with that.</strong> If you evaluate models with a model, run
      this check. Two judges from two vendors is the cheapest way to have it; one judge
@@ -391,8 +464,7 @@ def what_it_means(data: Data) -> str:
      definition change moved into these groups on 2026-08-26: dropping
      <code>gemma4</code> takes the Gemini figure from +0.018 to +0.008, and dropping
      <code>gpt-oss-120b</code> takes the GPT one from +0.027 to +0.018. Nothing here
-     tests whether the two judges differ from each other; asked directly, they do not
-     &mdash; +0.010 [&minus;0.015, +0.033].</p>
+     tests whether the two judges differ from each other; {judges_differ}.</p>
 
   <h2 class="page-break">Three: nothing here can tell you what happens next</h2>
   <p>The iCARE form has two time-bearing sections: what happened at the previous
@@ -584,9 +656,16 @@ def how_to_check(data: Data) -> str:
 
     return f"""
   <h2 class="page-break">How to check any of this</h2>
-  <p>Every figure and every number in this document is generated from two published
-     files. Nothing was typed in, and nothing here can drift from the site without the
-     tests failing.</p>
+  <p>Every figure in this document is drawn from the files the site publishes, and
+     every table is built from them row by row. Four files rather than two:
+     <code>leaderboard.json</code>, the two <code>saturation-*.json</code>, and
+     <code>calibration.json</code>.</p>
+  <p><strong>The prose around them is written by hand.</strong> Where a sentence states
+     a figure, that figure is computed from the same payload and a test fails if it
+     drifts &mdash; but the test names the sentences it covers, and a sentence it does
+     not name is a sentence nobody is checking. This paragraph used to say that nothing
+     here was typed in. That was false in this file more than thirty times, and it read
+     as an instruction not to look.</p>
   <p>And four pages carry what the numbers rest on:
      <a href="datasets.md">the datasets</a> &mdash; where each came from, what licence it
      publishes (two of the three publish none) and the traps in them;

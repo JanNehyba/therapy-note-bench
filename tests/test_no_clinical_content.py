@@ -61,6 +61,7 @@ ALLOWED_CZECH = {
     "tests/test_czech_anchor.py": "an invented note, quoted two ways, to exercise the "
     "counted column",
     "tools/czech_control.py": "an invented clean note, and seven faults planted in it",
+    "tools/czech_brief_cs.py": "the Czech text of the briefing that goes to the team",
     "tests/fixtures/czech/real/999001.txt": "invented transcript, marked as such",
     "tests/fixtures/czech/translated/ukazka-b.txt": "invented transcript, marked as such",
     "src/tnb/i18n.py": "the Czech translations of the two published pages",

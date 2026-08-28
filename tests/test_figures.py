@@ -255,11 +255,16 @@ def test_the_briefing_quotes_the_published_calibration(brief_html):
 def test_the_briefing_quotes_the_published_self_preference(data, brief_html):
     """The document's third headline claim is a measured effect, so every digit
     of it is checked against the file it came from."""
+    brief = pytest.importorskip("brief")
     effects = (data.preference or {}).get("effects") or []
     assert effects, "the fixture needs a self-preference panel"
     for entry in effects:
-        assert f"{entry['estimate']:+.3f}" in brief_html
-        assert f"{entry['low']:+.3f} to {entry['high']:+.3f}" in brief_html
+        # Through `brief.signed`, not a format specifier repeated here. The
+        # document sets a negative bound with a typographic minus, and a test
+        # that spells the format itself is a second copy of the rule that can
+        # disagree with the first.
+        assert brief.signed(entry["estimate"]) in brief_html
+        assert f"{brief.signed(entry['low'])} to {brief.signed(entry['high'])}" in brief_html
 
 
 def test_the_briefing_headline_matches_the_bootstrap(data, brief_html):
@@ -298,13 +303,21 @@ def test_the_briefing_has_no_unrendered_placeholder(brief_html):
     """A conditional written inside an f-string is not a conditional — it is
     four words of literal text in the document, and that shipped once.
 
+    Matched as the pair it always leaks as: an `if` with its `else` before the
+    sentence ends. It used to forbid the word `if` outright, which is a word an
+    English document is entitled to -- it already carried one exemption for
+    "if you", and the sentence "a test fails if it drifts" earned it a second.
+    An exemption list that grows with the prose stops guarding the prose.
+
     Every `<style>` block is stripped first, including the four the figures
     bring with them: CSS is made of braces and the first version of this test
     found them all.
     """
     prose = re.sub(r"<style>.*?</style>", "", brief_html, flags=re.S)
 
-    assert " if " not in re.sub(r"<[^>]+>", " ", prose).replace(" if you ", " ")
+    visible = re.sub(r"<[^>]+>", " ", prose)
+    leaked = re.findall(r"\bif\b[^.!?]{0,160}?\belse\b", visible)
+    assert not leaked, f"an f-string conditional reached the page: {leaked}"
     for leak in ("{", "}"):
         assert leak not in prose, f"the body carries an unrendered {leak!r}"
 
