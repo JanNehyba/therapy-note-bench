@@ -225,21 +225,57 @@ class SystemAggregate:
         return sum(1 for note in self.notes if note.empty)
 
     def metrics(self) -> results.Metrics:
-        """The share of notes free of each fault.
+        """The share of notes free of each fault, column by column.
 
-        Averaged over the notes that have a value for that criterion, which is
-        not always every complete note: quotation marks are asked only of a note
-        that quotes something, so its denominator is smaller and is published
-        beside it rather than quietly assumed.
+        **A note counts in the columns it answered, not only in the columns of
+        notes that answered everything.** Each column already carries its own
+        denominator beside it -- quotation marks are only asked of a note that
+        quotes something -- so per-column denominators are what this track was
+        built on, and this extends that rule rather than departing from it.
+
+        It replaces a worse rule, and the difference was measured before it was
+        changed. Requiring every criterion meant one unanswered question threw
+        the note out of all seven columns, including the five it had answered
+        cleanly. On the real half that removed 18 of 104 notes; `gpt-oss-120b`
+        published a mean over five of its ten.
+
+        **And what was removed was not a random sample.** The lost answers are
+        the longer notes -- median 658 words against 468 -- and length predicts
+        faults: among notes that did count, the shorter half scores 0.694 free
+        of fault and the longer half 0.430. Dropping the long ones inflated
+        every mean, and inflated most the models that lost most notes.
+
+        The loss also concentrates by criterion. `diacritics` went unanswered on
+        8.7% of notes and `nonword` on 4.8%, while `untranslated` and `register`
+        lost none -- so those two columns were being shrunk by failures that had
+        nothing to do with them.
+
+        `n_sessions_partial` still counts notes that answered less than
+        everything, so the gap stays visible; it is no longer also a deletion.
+
+        **And why `__version__` did not move for it.** The rule says to bump
+        whenever a measure's definition changes, and by that rule this earns
+        one. It was tried and reverted: `harness_version` is global, so 0.7.0
+        put "measured by harness 0.6.0, whose columns may not mean what the
+        newer tables' columns mean" on the *published English* tables, where
+        nothing had changed. A true statement about the Czech columns became a
+        false one about the English ones, on the page people actually read.
+
+        What makes that safe to leave is that no Czech number is published and
+        the old rows are superseded rather than compared: `results.latest`
+        draws the newest row per identity, the earlier ones stay in the
+        append-only local record, and nothing draws them beside these. If the
+        Czech track is ever published, this needs a bump and `report.py` needs
+        to say which measures a version redefined instead of warning about all
+        of them.
         """
-        complete = self.complete
-        if not complete:
+        if not self.notes:
             return results.Metrics()
 
         headline = {}
         detail = {}
         for key in czech.CRITERION_KEYS:
-            values = [note.scored[key] for note in complete if key in note.scored]
+            values = [note.scored[key] for note in self.notes if key in note.scored]
             if values:
                 headline[key] = round(sum(values) / len(values), 4)
                 detail[f"{key}.notes"] = len(values)

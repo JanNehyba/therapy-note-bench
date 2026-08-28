@@ -125,15 +125,36 @@ def test_the_denominator_of_each_column_is_published_beside_it():
     assert metrics.headline["quotes"] == 1.0
 
 
-def test_a_partial_note_is_counted_and_left_out_of_the_mean():
+def test_a_partial_note_counts_in_the_columns_it_did_answer():
+    """It used to count in none of them, and that was a deletion rather than an
+    abstention. This note answered `diacritics` and failed it; leaving it out of
+    the `diacritics` column because a *different* question went unanswered threw
+    away a measurement that had been made.
+
+    Measured on the real half before the rule changed: 18 of 104 notes deleted,
+    `gpt-oss-120b` publishing a mean over five of its ten, and the deleted notes
+    systematically the longer ones -- which score worse, so every mean was
+    inflated and the models that lost most notes were inflated most."""
     good = _result()
     partial = _result(diacritics=0.0)
+    # `czech.aggregate` leaves an unanswered criterion out of `scored` and names
+    # it in `missing`. The fixture has to do both or it is not the shape the
+    # runner produces.
     partial.missing = ["register"]
+    del partial.scored["register"]
 
     aggregate = czech_run.SystemAggregate(notes=[good, partial])
+    metrics = aggregate.metrics()
+
+    # Still counted as partial: the gap stays visible.
     assert aggregate.n_partial == 1
-    # The failing note is not in the mean, so the mean is the good one's.
-    assert aggregate.metrics().headline["diacritics"] == 1.0
+    # And still in the column it answered, so the mean is over both notes.
+    assert metrics.headline["diacritics"] == 0.5
+    assert metrics.detail["diacritics.notes"] == 2
+    # But absent from the column it did not answer, with the smaller
+    # denominator published beside it rather than quietly assumed.
+    assert metrics.headline["register"] == 1.0
+    assert metrics.detail["register.notes"] == 1
 
 
 def test_an_empty_note_is_counted_as_partial_and_does_not_vanish():
