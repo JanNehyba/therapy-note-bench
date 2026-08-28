@@ -131,10 +131,12 @@ def test_a_partial_note_counts_in_the_columns_it_did_answer():
     the `diacritics` column because a *different* question went unanswered threw
     away a measurement that had been made.
 
-    Measured on the real half before the rule changed: 18 of 104 notes deleted,
-    `gpt-oss-120b` publishing a mean over five of its ten, and the deleted notes
-    systematically the longer ones -- which score worse, so every mean was
-    inflated and the models that lost most notes were inflated most."""
+    Measured on the real half before the rule changed: 18 of 104 notes deleted
+    and `gpt-oss-120b` publishing a mean over five of its ten. The effect of
+    undoing it was measured too, because the obvious prediction was wrong: over
+    76 model-by-criterion values the mean moves +0.011, 31 up and 19 down, but
+    single cells move by up to 0.20 on a mean over ten notes. The deletion added
+    noise rather than a direction."""
     good = _result()
     partial = _result(diacritics=0.0)
     # `czech.aggregate` leaves an unanswered criterion out of `scored` and names

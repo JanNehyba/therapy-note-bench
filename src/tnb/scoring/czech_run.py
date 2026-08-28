@@ -239,11 +239,24 @@ class SystemAggregate:
         cleanly. On the real half that removed 18 of 104 notes; `gpt-oss-120b`
         published a mean over five of its ten.
 
-        **And what was removed was not a random sample.** The lost answers are
-        the longer notes -- median 658 words against 468 -- and length predicts
-        faults: among notes that did count, the shorter half scores 0.694 free
-        of fault and the longer half 0.430. Dropping the long ones inflated
-        every mean, and inflated most the models that lost most notes.
+        **What it cost was measured, and it is not what it looked like.** The
+        deleted notes are the longer ones -- median 658 words against 468 --
+        and length predicts faults: among notes that did count, the shorter
+        half scores 0.694 free of fault and the longer half 0.430. That reads
+        like a one-directional inflation, and it was written down as one here
+        before it was checked.
+
+        Checking it against the rows says otherwise. Over 76 model-by-criterion
+        values on the real half, the repair moves the mean by +0.011 -- 31 up,
+        19 down -- so the deletion was not shifting the table in one direction.
+        What it was doing is worse-behaved and easier to miss: individual cells
+        move by as much as 0.20, a fifth of the scale, on means over ten notes.
+        `gpt-oss-120b` rises from 0.00 to 0.20 on `untranslated`, so the rule
+        that was supposed to be flattering it was in fact holding it down.
+
+        The repair is right because deleting an answered measurement is wrong
+        and because the noise it added is large, not because it was biased in a
+        direction anybody had established.
 
         The loss also concentrates by criterion. `diacritics` went unanswered on
         8.7% of notes and `nonword` on 4.8%, while `untranslated` and `register`
