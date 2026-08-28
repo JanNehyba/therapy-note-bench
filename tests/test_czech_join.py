@@ -264,3 +264,33 @@ def test_english_stays_english_and_costs_no_lookup():
 
     assert czech_brief.LANG == "en"
     assert czech_brief._t("anything at all") == "anything at all"
+
+
+# --- printing ---------------------------------------------------------------
+
+
+def test_the_pdf_step_refuses_to_report_a_file_it_did_not_write(tmp_path, monkeypatch):
+    """Existence was the whole check, so a locked target -- a PDF open in a
+    viewer, which Windows locks -- left the previous document in place and the
+    step reported it as this run's output. That happened to a document that had
+    already been handed over."""
+    import subprocess
+
+    import pdf
+
+    source = tmp_path / "page.html"
+    source.write_text("<p>hello</p>", encoding="utf-8")
+    target = tmp_path / "out.pdf"
+    target.write_bytes(b"the previous document")
+
+    monkeypatch.setattr(pdf, "find_browser", lambda: "chrome")
+    monkeypatch.setattr(
+        subprocess,
+        "run",
+        lambda *a, **k: subprocess.CompletedProcess(a[0], 0, "", "could not write"),
+    )
+
+    code = pdf.main(["--source", str(source), "--target", str(target)])
+
+    assert code == 1, "a stale file is not a successful print"
+    assert target.read_bytes() == b"the previous document", "and it is left alone"

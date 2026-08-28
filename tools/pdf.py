@@ -77,6 +77,13 @@ def main(argv: list[str] | None = None) -> int:
         )
         return 1
 
+    # What the file was before, so that "Chrome wrote it" can be checked rather
+    # than assumed. Existence is not the check: a PDF open in a viewer is locked
+    # on Windows, Chrome cannot replace it, and a tool that only asks whether
+    # the path exists then reports the *previous* document as this run's output.
+    # That happened, to a document that had already been handed over.
+    before = target.stat().st_mtime_ns if target.exists() else None
+
     # `--headless=new` rather than the old mode: the old one silently ignores
     # `print-color-adjust`, and every figure comes out white.
     finished = subprocess.run(
@@ -101,6 +108,18 @@ def main(argv: list[str] | None = None) -> int:
     if not target.exists():
         print(finished.stdout + finished.stderr, file=sys.stderr)
         print("Chrome ran and wrote no file.", file=sys.stderr)
+        return 1
+
+    if before is not None and target.stat().st_mtime_ns == before:
+        print(finished.stdout + finished.stderr, file=sys.stderr)
+        print(
+            f"Chrome ran and did not replace {target.name}; what is there is the "
+            "previous document.\n"
+            "  The usual cause is that the PDF is open in a viewer, which locks it "
+            "on Windows.\n"
+            "  Close it and run this again.",
+            file=sys.stderr,
+        )
         return 1
 
     size = target.stat().st_size

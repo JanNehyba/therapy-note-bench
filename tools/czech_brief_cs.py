@@ -504,6 +504,33 @@ CS: dict[str, str] = {
         "s tím, který ne, zacházej jako s nezměřeným, ne jako se slabým "
         "důkazem."
     ),
+    # --- how far apart is far enough ---------------------------------------
+    "How far apart is far enough?": "Jak daleko od sebe je dost daleko?",
+    "Ten notes per model. The sessions were resampled two thousand times, paired on "
+    "the transcript because every model wrote from all ten, and each pair of models "
+    "compared on the middle 95% of the result. Two numbers per column: how many of "
+    "the model pairs come out apart, and how large a gap it takes. A difference "
+    "smaller than that is the same reading printed twice, whichever way round it "
+    "fell.": (
+        "Deset zápisů na model. Sezení byla dva tisíckrát převzorkována, "
+        "párově podle přepisu, protože každý model psal ze všech deseti, "
+        "a každá dvojice modelů porovnána na prostředních 95 % výsledku. "
+        "Dvě čísla na sloupec: kolik dvojic modelů vyjde odlišně a jak velký "
+        "rozdíl je na to potřeba. Menší rozdíl je totéž měření vytištěné "
+        "dvakrát, ať vyšlo v kterémkoli pořadí."
+    ),
+    "pairs apart": "odlišené dvojice",
+    "gap needed": "potřebný rozdíl",
+    "These columns order the transcripts, not the models.": (
+        "Tyto sloupce řadí přepisy, ne modely."
+    ),
+    "The ten sessions differ from each other more than the eleven models do, so "
+    "whatever order the rows come out in is a fact about which transcripts were "
+    "drawn. No threshold rescues them; do not read them:": (
+        "Těch deset sezení se od sebe liší víc než těch jedenáct modelů, "
+        "takže ať řádky vyjdou v jakémkoli pořadí, je to výrok o tom, které "
+        "přepisy padly. Žádná mez je nezachrání; nečtěte je:"
+    ),
     # --- refusals ----------------------------------------------------------
     "Refusing to write: a row carries something that is not a score.": (
         "Odmítám zapsat: řádek nese něco, co není skóre."
