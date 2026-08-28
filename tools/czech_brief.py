@@ -627,6 +627,28 @@ def _controls() -> str:
     )
 
 
+def _same_rubric_cutoff(groups: dict, newest: str) -> str:
+    """The scoring time of the newest rubric version, for every group in it.
+
+    Two judges finish minutes apart, so "newest" cannot be a single timestamp
+    without dropping whichever judge finished first. What is wanted is the
+    newest *rubric*: find the version the newest row belongs to, then keep
+    every group scored under that version whenever it ran.
+    """
+    version = None
+    for drawn in groups.values():
+        if max(row.scored_at or "" for row in drawn) == newest:
+            version = drawn[0].judge_prompt_version
+            break
+    if version is None:
+        return ""
+    return min(
+        max(row.scored_at or "" for row in drawn)
+        for drawn in groups.values()
+        if drawn[0].judge_prompt_version == version
+    )
+
+
 def build(rows: list[results.Row]) -> str:
     """One table per comparability group -- all six fields of it, not two.
 
@@ -656,24 +678,29 @@ def build(rows: list[results.Row]) -> str:
             f"<h2>{html.escape(TRACK_TITLES.get(track, track))}</h2>"
             f"<p class='sub'>{html.escape(re.sub(r'[*]{2}', '', TRACK_BLURBS.get(track, '')))}</p>"
         )
-        # Newest first, so a superseded rubric sits below the one in use.
-        ordered = sorted(
-            groups.values(),
-            key=lambda drawn: (drawn[0].judge_prompt_version, drawn[0].judge_model or ""),
-            reverse=True,
-        )
-        versions = {drawn[0].judge_prompt_version for drawn in ordered}
+        # Only the newest rubric is drawn. An older one is named instead, which
+        # is what the published English page does with a superseded harness:
+        # drawing both would put two instruments side by side under one track
+        # and invite the reader to compare them, and the older is superseded
+        # rather than alternative. Newest by when it was scored, not by how its
+        # version string sorts.
+        newest = max(max(row.scored_at or "" for row in drawn) for drawn in groups.values())
+        current = {
+            key: drawn
+            for key, drawn in groups.items()
+            if max(row.scored_at or "" for row in drawn) >= _same_rubric_cutoff(groups, newest)
+        }
+        withdrawn = {
+            drawn[0].judge_prompt_version for key, drawn in groups.items() if key not in current
+        }
+        ordered = sorted(current.values(), key=lambda drawn: drawn[0].judge_model or "")
         for drawn in ordered:
             first = drawn[0]
             notes = sum(row.n_sessions_scored for row in drawn)
-            rubric = (
-                f" <span class='dash'>· rubric {html.escape(first.judge_prompt_version)}</span>"
-                if len(versions) > 1
-                else ""
-            )
             sections.append(
-                f"<h3>Judged by {html.escape(first.judge_model or 'unknown')}{rubric}</h3>"
-                f"<p>{len(drawn)} models, {notes} notes.</p>" + _table(track, drawn)
+                f"<h3>Judged by {html.escape(first.judge_model or 'unknown')}</h3>"
+                f"<p>{len(drawn)} models, {notes} notes, "
+                f"rubric {html.escape(first.judge_prompt_version)}.</p>" + _table(track, drawn)
             )
         if len({drawn[0].judge_model for drawn in ordered}) > 1:
             sections.append(
@@ -681,13 +708,13 @@ def build(rows: list[results.Row]) -> str:
                 "averaged. Where they disagree about a model is the only control "
                 "this track has, so the disagreement is the thing to read.</p></div>"
             )
-        if len(versions) > 1:
+        if withdrawn:
             sections.append(
-                "<div class='warn'><p>More than one version of the rubric is shown. "
-                "They are separate tables because they are separate instruments -- "
-                f"{html.escape(', '.join(sorted(versions)))} -- and a model's rows "
-                "under two of them are not two measurements of one thing. The newest "
-                "is first.</p></div>"
+                "<div class='warn'><p>Not drawn: this track was also scored under "
+                f"{html.escape(', '.join(sorted(withdrawn)))}, an earlier version of "
+                "the rubric. Those rows are a different instrument rather than an "
+                "earlier attempt at this one, so they are named here and not placed "
+                "beside these. They remain in the local record.</p></div>"
             )
         sections.append("<h3>What each column is</h3>" + _definitions(track))
 

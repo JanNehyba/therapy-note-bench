@@ -128,26 +128,32 @@ def test_one_table_per_comparability_group_not_per_judge():
     import czech_brief
 
     rows = [
-        _row(judge_prompt_version="czech-criteria-v1"),
-        _row(judge_prompt_version="czech-criteria-v2"),
+        _row(judge_prompt_version="czech-criteria-v1", scored_at="2026-08-28T10:00:00Z"),
+        _row(judge_prompt_version="czech-criteria-v2", scored_at="2026-08-28T12:00:00Z"),
+        _row(
+            system_id="b-model",
+            judge_prompt_version="czech-criteria-v2",
+            scored_at="2026-08-28T12:00:00Z",
+        ),
     ]
     page = czech_brief.build(rows)
 
     tables = re.findall(r"<tbody>(.*?)</tbody>", page, re.S)
+    assert tables, "something was drawn"
     for body in tables:
         models = re.findall(r"<tr><td>([a-z0-9.\-]+)</td>", body)
         assert len(models) == len(set(models)), "a model appears twice in one table"
 
-    assert "czech-criteria-v1" in page and "czech-criteria-v2" in page
-    assert "separate instruments" in page
 
-
-def test_one_rubric_needs_no_version_label():
-    """The label is noise when there is nothing to distinguish."""
+def test_the_rubric_a_table_was_measured_with_is_always_named():
+    """It used to be printed only when two versions were on the page, which is
+    the wrong way round: a reader cannot tell from a lone table which
+    instrument produced it, and that is exactly when they would assume."""
     import czech_brief
 
     page = czech_brief.build([_row(), _row(system_id="b-model")])
-    assert "rubric czech-criteria" not in page
+    assert "rubric czech-criteria-v1" in page
+    assert "Not drawn" not in page, "nothing was superseded"
 
 
 def test_two_rubric_versions_do_not_collide_into_one_table_id():
@@ -168,3 +174,44 @@ def test_two_rubric_versions_do_not_collide_into_one_table_id():
     assert len(set(ids)) == 2
     assert any("czech-criteria-v1" in table_id for table_id in ids)
     assert any("czech-criteria-v2" in table_id for table_id in ids)
+
+
+def test_a_superseded_rubric_is_named_and_not_drawn():
+    """What the published English page does with an older harness: name it,
+    do not put it beside the current one. Drawing both invites a reader to
+    compare two instruments as if they were two attempts at one."""
+    import czech_brief
+
+    old = _row(judge_prompt_version="czech-criteria-v1", scored_at="2026-08-28T10:00:00Z")
+    new = _row(judge_prompt_version="czech-criteria-v2", scored_at="2026-08-28T12:00:00Z")
+    page = czech_brief.build([old, new])
+
+    assert page.count("rubric czech-criteria-v2") == 1
+    assert "rubric czech-criteria-v1" not in page
+    assert "Not drawn" in page and "czech-criteria-v1" in page
+
+
+def test_both_judges_of_the_current_rubric_survive_finishing_apart():
+    """Two judges finish minutes apart, so "newest" cannot be one timestamp
+    without dropping whichever finished first. It is the newest *rubric*."""
+    import czech_brief
+
+    page = czech_brief.build(
+        [
+            _row(judge_prompt_version="czech-criteria-v1", scored_at="2026-08-28T10:00:00Z"),
+            _row(
+                judge_prompt_version="czech-criteria-v2",
+                judge_model="gemini-3.1-pro-preview",
+                scored_at="2026-08-28T12:00:00Z",
+            ),
+            _row(
+                judge_prompt_version="czech-criteria-v2",
+                judge_model="gpt-5.6-terra",
+                judge_settings={"model": "gpt-5.6-terra", "effort": "medium"},
+                scored_at="2026-08-28T11:55:00Z",
+            ),
+        ]
+    )
+    assert "gemini-3.1-pro-preview" in page
+    assert "gpt-5.6-terra" in page
+    assert page.count("rubric czech-criteria-v2") == 2
