@@ -9,6 +9,20 @@ than saying so: it carries its own `PROMPT_VERSION`, it is labelled a
 translation wherever it is published, and `tasks/fidelity.py` is deliberately
 not extended to it, because there is nothing to verify it against.
 
+**And the translation has a cost this found out the hard way: it kept the
+English punctuation.** There is no Czech quotation mark anywhere in this
+prompt -- sixteen straight ones and not a single `„`. The Deepsy track asks the
+same models for the same sessions with a prompt a Czech wrote, whose sections
+carry three to five, and three of the first four models go from 0.00 on the
+`quotes` criterion here to 0.90-1.00 there.
+
+That is consistent with models copying the punctuation they are shown, and it
+is not proof of it: nothing has varied the prompt's quotation marks while
+holding the rest still, and the fourth model moves the other way. What it does
+establish is that a near-zero on that column was not a fact about the models.
+Fixing it means a new `PROMPT_VERSION` and re-generating both halves, so it is
+a decision rather than an edit.
+
 Why translate theirs rather than write one. The question this track exists to
 answer is whether a model's standing on the English leaderboard says anything
 about the Czech it writes. That only means something if the task is the same

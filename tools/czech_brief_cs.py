@@ -399,11 +399,18 @@ CS: dict[str, str] = {
         "se shodnou u 75 % zápisů; rodilý mluvčí souhlasil s "
         "prvním soudcem u 19 z 20 a s druhým u 15."
     ),
+    "Read this one against the prompt, not against the models. The same models on the "
+    "same sessions score 0.00 here and 0.90 to 1.00 in the Deepsy format, and the "
+    "prompt behind this table contains no Czech quotation mark at all while the Deepsy "
+    "one does. "
     "Exact. It is not a judgement at all any more -- the characters in the note are "
     "counted. It became a count after a native speaker and a judge disagreed on nearly "
     "half the notes and neither was wrong: the question named only the straight double "
     "mark, and 45 of the 75 notes that quote anything use an apostrophe instead. The "
     "question now names both.": (
+        "Tenhle sloupec čti proti promptu, ne proti modelům. Tytéž modely na týchž "
+        "sezeních tu mají 0.00 a ve formátu Deepsy 0.90 až 1.00, a prompt za touhle "
+        "tabulkou neobsahuje jedinou českou uvozovku, zatímco ten od Deepsy ano. "
         "Přesné. Už to vůbec není úsudek — "
         "počítají se znaky v zápisu. Počítáním "
         "se to stalo poté, co se rodilý mluvčí a soudce "

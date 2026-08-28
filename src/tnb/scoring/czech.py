@@ -164,6 +164,20 @@ CRITERIA: tuple[Criterion, ...] = (
         # a straight mark and the judge did not, and 45 of the 75 notes that
         # quote anything use exactly that -- so the two answered different
         # questions and their 0.55 agreement was the wording, not the Czech.
+        #
+        # **And on the SOAP tracks this column measured our own prompt.** The
+        # Deepsy track asks the same models for the same sessions with a prompt
+        # a Czech wrote, and three of the first four models go from 0.00 to
+        # 0.90-1.00 here; the fourth moves the other way on an incomplete ten.
+        # `tasks/czech.py`'s prompt contains no Czech quotation mark anywhere
+        # and the Deepsy prompts contain three to five, which is consistent
+        # with models copying the punctuation they were shown -- consistent
+        # with, not demonstrated by: nothing has varied the prompt's
+        # punctuation while holding everything else still.
+        #
+        # What is demonstrated is narrower and enough: a near-zero on this
+        # column is not evidence about a model until the prompt it was given
+        # has been ruled out.
         question=("Jsou v poznámce rovné uvozovky \" nebo apostrofy ' místo českých „ a “?"),
         guidance=(
             "Ptáme se jen na tvar uvozovek, ne na to, co je v nich. Apostrof "

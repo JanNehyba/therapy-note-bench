@@ -376,6 +376,10 @@ WHAT_IT_CATCHES = {
         "with the second on 15."
     ),
     "quotes": (
+        "Read this one against the prompt, not against the models. The same models "
+        "on the same sessions score 0.00 here and 0.90 to 1.00 in the Deepsy format, "
+        "and the prompt behind this table contains no Czech quotation mark at all "
+        "while the Deepsy one does. "
         "Exact. It is not a judgement at all any more -- the characters in the note "
         "are counted. It became a count after a native speaker and a judge disagreed "
         "on nearly half the notes and neither was wrong: the question named only the "
