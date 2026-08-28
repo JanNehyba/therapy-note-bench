@@ -630,6 +630,9 @@ HARNESS_REASONS = (
     "truncated at max_tokens",
     "empty content",
     "answer did not contain a SOAP dictionary",
+    # The same failure under a name that fits every task rather than only SOAP.
+    # The older phrase stays: results/ is append-only and rows already carry it.
+    "answer was not a note",
     "unreadable cache file",
 )
 
@@ -653,7 +656,12 @@ def reason_vocabulary() -> tuple[str, ...]:
     return (
         tuple(http_reason(status) for status in sorted(_HTTP_PHRASES()))
         + _transport_errors()
-        + ("empty content", "answer did not contain a SOAP dictionary", "unreadable cache file")
+        + (
+            "empty content",
+            "answer did not contain a SOAP dictionary",
+            "answer was not a note",
+            "unreadable cache file",
+        )
         + (UNRECOGNISED,)
     )
 

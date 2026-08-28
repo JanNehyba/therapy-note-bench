@@ -174,7 +174,7 @@ def test_an_answer_without_a_soap_dictionary_is_a_failure(answers):
 
     assert outcome.status == "failed"
     assert outcome.record["note"] is None
-    assert "SOAP dictionary" in outcome.record["error"]
+    assert outcome.record["error"] == generation.NOT_A_NOTE
 
 
 def test_force_regenerates_a_cached_note(answers):

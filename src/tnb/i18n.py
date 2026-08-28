@@ -661,6 +661,9 @@ _PAYLOAD = {
         "úsilí medium, teplota 1 (vynuceno poskytovatelem), max tokenů 4096"
     ),
     "answer did not contain a SOAP dictionary": "odpověď neobsahovala slovník SOAP",
+    "answer was not a note": "odpověď nebyla zápis",
+    "empty content": "prázdná odpověď",
+    "unreadable cache file": "nečitelný soubor v cache",
     "truncated at max_tokens=16384": "uťato na max_tokens=16384",
     "subjective": "subjektivní",
     "objective": "objektivní",

@@ -40,11 +40,15 @@ from tnb.config import REPO_ROOT, Provider
 from tnb.datasets.base import Session, checksums
 from tnb.providers import openai_compatible as client
 from tnb.tasks import TASKS, Task
-from tnb.tasks import czech as czech_task
-from tnb.tasks import deepsy as deepsy_task
-from tnb.tasks import soap as soap_task
 
 CACHE_DIR = REPO_ROOT / "generations"
+
+#: What a reply that is not a note is recorded as. One fixed phrase rather than
+#: one naming the unit: `results.HARNESS_REASONS` is a closed set, written that
+#: way after a provider's error body reached the published page, and a phrase
+#: with a value interpolated into it can never be in a closed set. The unit is
+#: already a field on the record, so naming it here would add nothing.
+NOT_A_NOTE = "answer was not a note"
 
 _UNSAFE = re.compile(r"[^A-Za-z0-9._-]")
 
@@ -242,31 +246,17 @@ def _record(
     # is visible in the cache instead of surfacing as a zero later. The Czech
     # tasks ask for the same four sections under Czech headings, so they parse
     # with their own reader and fail the same way.
-    parsers = {
-        soap_task.NAME: soap_task.parse_note,
-        czech_task.NAME_REAL: czech_task.parse_note,
-        czech_task.NAME_TRANSLATED: czech_task.parse_note,
-    }
-    # The Deepsy sections need to know which section they are: each names its own
-    # keys and a reply is checked against those and nothing else. It is the one
-    # task whose parser takes a second argument, which is why it is not in the
-    # table above rather than being wedged into it with a lambda.
-    deepsy_tasks = (deepsy_task.NAME_REAL, deepsy_task.NAME_TRANSLATED)
-
-    if job.task in parsers:
-        record["note"] = parsers[job.task](completion.text) if completion.text else None
+    # Asked of the task rather than looked up here. A table in this module was
+    # a table a task could be missing from, and a task missing from it was one
+    # whose replies were never checked -- stored as a success, never repaired.
+    # `Task.parse` is required, so a task that has no structure to check says
+    # so out loud.
+    task = TASKS.get(job.task)
+    if task is not None and task.parse is not None:
+        record["note"] = task.parse(completion.text, job.unit) if completion.text else None
         if record["note"] is None:
             record["ok"] = False
-            record["error"] = record["error"] or "answer did not contain a SOAP dictionary"
-    elif job.task in deepsy_tasks:
-        record["note"] = (
-            deepsy_task.parse_note(completion.text, job.unit) if completion.text else None
-        )
-        if record["note"] is None:
-            record["ok"] = False
-            record["error"] = record["error"] or (
-                f"answer was not a JSON object with the {job.unit} keys"
-            )
+            record["error"] = record["error"] or NOT_A_NOTE
     return record
 
 

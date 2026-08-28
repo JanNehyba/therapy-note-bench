@@ -437,11 +437,19 @@ def test_no_czech_entry_answers_a_sentence_that_no_longer_exists(templates):
     English is the design, and a stale key is indistinguishable from a sentence
     nobody has translated yet.
     """
+    from tnb import results
+
+    # A failure reason is translated before it has ever happened, on purpose:
+    # discovering the gap the first time a model fails means discovering it on
+    # the page. They are exempt by rule rather than by list, so a reason added
+    # later does not need remembering here as well.
+    in_advance = set(ANSWERED_IN_ADVANCE) | set(results.HARNESS_REASONS)
+
     live = live_strings(templates)
     orphans = sorted(
         key
         for key in i18n.CS
-        if key not in ANSWERED_IN_ADVANCE and key not in live and i18n.norm(key) not in live
+        if key not in in_advance and key not in live and i18n.norm(key) not in live
     )
     assert not orphans, (
         "Czech entries that answer nothing on either page -- the English was edited and the "
@@ -551,3 +559,26 @@ def test_every_string_a_track_registry_holds_has_a_czech_entry():
         "registered on a track and drawable on a page with no Czech behind it: "
         + "; ".join(f"{where} ({text}...)" for where, text in sorted(missing.items()))
     )
+
+
+def test_every_failure_reason_the_harness_writes_has_a_czech_entry():
+    """A failure reason reaches the page, so an untranslated one is an English
+    sentence in the middle of a Czech table -- and `HARNESS_REASONS` is a
+    closed list somebody adds to when they add a way to fail.
+
+    The same shape as the parser table that let two tasks fall through: a list
+    nothing checks is a list something falls out of. That one was caught by a
+    person reading a commit; this one is caught here.
+    """
+    from tnb import results
+
+    have = {i18n.norm(key) for key in i18n.CS}
+    missing = [
+        reason
+        for reason in results.HARNESS_REASONS
+        # The truncation reason carries the budget, so the phrase on the page is
+        # a prefix with a number after it and is translated as its own string.
+        if not reason.startswith("truncated at max_tokens")
+        and i18n.norm(reason) not in have
+    ]
+    assert not missing, f"failure reasons with no Czech: {missing}"

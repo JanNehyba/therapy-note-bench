@@ -225,7 +225,9 @@ def test_indexing_shows_a_model_that_lost_sessions_to_its_output_format(cache, m
     assert row.n_sessions_attempted == 2
     assert row.n_sessions_generated == 0
     assert row.n_failed == 2
-    assert "SOAP dictionary" in " ".join(row.failure_reasons)
+    # The phrase generation writes now. The SOAP-specific one is still
+    # recognised because results/ is append-only and older rows carry it.
+    assert "answer was not a note" in " ".join(row.failure_reasons)
 
 
 def test_a_coverage_row_carries_no_judge_and_no_metrics(cache, monkeypatch):

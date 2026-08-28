@@ -223,7 +223,11 @@ def test_generation_parses_a_deepsy_section_and_marks_a_bad_one_failed():
     bad = generation._record(job, provider, _completion("tady je vase poznamka:"), "now", "...")
     assert bad["note"] is None
     assert bad["ok"] is False
-    assert "clinical_hypotheses" in bad["error"]
+    # One fixed phrase, not one naming the unit: `results.HARNESS_REASONS`
+    # is a closed set and an interpolated value can never belong to one.
+    # The unit is a field on the record already.
+    assert bad["error"] == generation.NOT_A_NOTE
+    assert bad["unit"] == "clinical_hypotheses"
 
 
 def _provider():

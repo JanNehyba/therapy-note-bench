@@ -40,6 +40,21 @@ class Task:
     calls_per_session: int
     load_sessions: Callable[[int | None], list[Session]]
     build_units: Callable[[Session], list[Unit]]
+    #: How a reply becomes a note, or ``None`` when the task has no structure to
+    #: check. **Required, and deliberately not defaulted.**
+    #:
+    #: It used to be a dict in :mod:`tnb.generation` keyed on the task name, and
+    #: a task absent from that dict was not an error -- it was a task whose
+    #: replies were never checked, so a reply that was not a note was stored as
+    #: a success and the repair loop never ran. Two Deepsy tasks shipped that
+    #: way. Here the field cannot be omitted: leaving it out is a TypeError when
+    #: the module is imported, not a silence three hundred calls into a run.
+    #:
+    #: Takes the answer and the unit, because the Deepsy sections each name
+    #: their own keys and a reply is checked against the ones its own section
+    #: asked for. ``None`` is a real answer, given by `icare`: its sections are
+    #: prose and there is nothing to fail to parse.
+    parse: Callable[[str, str], dict | None] | None
     #: Appended and re-asked when an answer arrives but cannot be parsed, as
     #: many times as :attr:`parse_attempts`. TN-Eval do this; iCARE do not, and
     #: neither does this harness on its own initiative.
@@ -122,6 +137,7 @@ TASKS: dict[str, Task] = {
         calls_per_session=1,
         load_sessions=soap.load_sessions,
         build_units=_soap_units,
+        parse=lambda text, unit: soap.parse_note(text),
         repair_suffix=soap.REPAIR_SENTENCE,
         parse_attempts=soap.PARSE_ATTEMPTS,
     ),
@@ -131,6 +147,11 @@ TASKS: dict[str, Task] = {
         calls_per_session=17,
         load_sessions=icare.load_sessions,
         build_units=_icare_units,
+        # Prose, not a structure. A section that came back as a refusal is
+        # rendered "Nil" by `icare_run`, which is the honest reading of a
+        # field the model declined to fill; a section the infrastructure lost
+        # is skipped there instead. Neither is a parse.
+        parse=None,
     ),
     # Two tasks over one prompt, because `results.TRACK_BY_TASK` maps a
     # generation directory to a track and one task could not tell the real
@@ -141,6 +162,7 @@ TASKS: dict[str, Task] = {
         calls_per_session=1,
         load_sessions=czech.load_real,
         build_units=_czech_units,
+        parse=lambda text, unit: czech.parse_note(text),
         repair_suffix=czech.REPAIR_SENTENCE,
         parse_attempts=czech.PARSE_ATTEMPTS,
     ),
@@ -150,6 +172,7 @@ TASKS: dict[str, Task] = {
         calls_per_session=1,
         load_sessions=czech.load_translated,
         build_units=_czech_units,
+        parse=lambda text, unit: czech.parse_note(text),
         repair_suffix=czech.REPAIR_SENTENCE,
         parse_attempts=czech.PARSE_ATTEMPTS,
     ),
@@ -159,6 +182,7 @@ TASKS: dict[str, Task] = {
         calls_per_session=len(deepsy.SECTIONS),
         load_sessions=deepsy.load_real,
         build_units=_deepsy_units,
+        parse=deepsy.parse_note,
         repair_suffix=deepsy.REPAIR_SENTENCE,
         parse_attempts=deepsy.PARSE_ATTEMPTS,
     ),
@@ -168,6 +192,7 @@ TASKS: dict[str, Task] = {
         calls_per_session=len(deepsy.SECTIONS),
         load_sessions=deepsy.load_translated,
         build_units=_deepsy_units,
+        parse=deepsy.parse_note,
         repair_suffix=deepsy.REPAIR_SENTENCE,
         parse_attempts=deepsy.PARSE_ATTEMPTS,
     ),
