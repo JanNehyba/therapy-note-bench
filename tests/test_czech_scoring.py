@@ -71,10 +71,9 @@ def test_every_criterion_is_asked_in_its_own_call():
     `judge.ANSWER_TOKENS` is inside the judge fingerprint, so raising it to fit
     a longer answer would discard every cached answer of the other tracks."""
     tasks = czech.build_tasks(QUOTING)
-    assert len(czech.CRITERION_KEYS) == 7
-    assert len(tasks) == 6, "quotes is read off the note, not asked"
+    assert len(czech.CRITERION_KEYS) == 6
+    assert len(tasks) == 6
     assert len({task.unit for task in tasks}) == 6
-    assert "quotes" not in {task.criterion for task in tasks}
 
 
 def test_a_prompt_carries_its_own_counter_example():
@@ -107,59 +106,8 @@ def test_the_prompt_asks_for_one_word():
 # --- a criterion with nothing to judge -------------------------------------
 
 
-def test_a_note_that_quotes_nothing_has_no_value_in_that_column():
-    """It cannot have the wrong marks. Counting it as clean would let a model
-    score on this column for never citing the client -- the same vacuity as an
-    empty note, smaller. The opportunity rule outlived the judge call."""
-    assert "quotes" not in czech.aggregate(NOTE, _answers()).headline
-    assert "quotes" in czech.aggregate(QUOTING, _answers()).headline
-    assert "quotes" in czech.aggregate(CZECH_QUOTING, _answers()).headline
-
-
-def test_quotation_marks_are_counted_and_not_asked_about():
-    """Measured before it was changed: on the 75 real notes that quote
-    anything, `gemini-3.1-pro-preview` matched this function 75 times out of 75
-    and `gpt-5.6-terra` 65, reporting straight marks in nine notes with none.
-    A judge that at best equals `in` and at worst contradicts it is buying
-    error."""
-    assert czech.aggregate(QUOTING, _answers()).headline["quotes"] == 0.0
-    assert czech.aggregate(CZECH_QUOTING, _answers()).headline["quotes"] == 1.0
-
-    # And the fixture cannot override it: the answers say "no fault" throughout.
-    assert _answers()["czech.quotes"] == "ne"
-
-
-def test_an_apostrophe_standing_in_for_a_quotation_mark_is_the_fault():
-    """The wording that cost a measurement. A native speaker rating twenty notes
-    counted `'slovo'` as a straight mark and the judge did not, and 45 of the 75
-    notes that quote anything use exactly that -- so the 0.55 agreement between
-    them was the question, not the Czech. Czech uses no apostrophe here: 348
-    apostrophe pairs stand where quotation marks belong on the real half and one
-    apostrophe sits inside a word."""
-    assert czech.has_straight_quotes("uvedla 'nechci tam jít'")
-    assert not czech.has_straight_quotes("uvedla „nechci tam jít“")
-    assert "apostrof" in dict((c.key, c.question) for c in czech.CRITERIA)["quotes"]
-
-
-def test_a_computed_column_is_not_compared_between_judges():
-    """ "The two judges agree perfectly on quotation marks" would dress `in` ==
-    `in` as a finding. `icare` keeps ROUGE-L out of this tuple for the same
-    reason."""
-    assert "quotes" not in czech.JUDGE_MEASURES
-    assert "quotes" in czech.MEASURES
-    assert set(czech.JUDGE_MEASURES) | {"quotes"} == set(czech.CRITERION_KEYS)
-
-
-def test_the_opportunity_is_decided_from_the_string_not_by_asking():
-    """A judge call would spend money to be less certain than `in` already is."""
-    assert not czech.has_quotes(NOTE)
-    assert czech.has_quotes(QUOTING)
-    assert czech.has_quotes("řekla „ano“")
-
-
 def test_a_criterion_with_no_opportunity_is_absent_and_not_clean():
     scores = czech.aggregate(NOTE, _answers())
-    assert "quotes" not in scores.headline
     assert scores.is_complete, "absent is not the same as unanswered"
 
 
@@ -213,9 +161,7 @@ def test_a_criterion_the_judge_refused_is_named_and_not_scored():
     assert not scores.is_complete
     assert scores.incomplete["czech"] == ["register"]
     assert "register" not in scores.headline
-    # Five of the six questions answered. `quotes` is scored and is not one.
     assert scores.sections_used["czech"] == 5
-    assert "quotes" in scores.headline
 
 
 def test_a_missing_answer_is_treated_like_a_refusal():

@@ -72,75 +72,12 @@ def test_the_overall_rate_is_withheld_while_most_answers_are_missing():
     assert empty["unanswered"] > empty["compared"]
     assert empty["rate"] is None
 
-    # The rater has to be right about the quotation marks too, because that
-    # column is read off the note and a fixture cannot talk it round: one of
-    # the three notes uses straight marks and one uses Czech ones.
-    human = _human()
-    human[("m", "s1", "quotes")] = None
-    human[("m", "s2", "quotes")] = True
-    human[("m", "s3", "quotes")] = False
-
-    full = czech_anchor.agreement(human, NOTES, _verdicts())
+    full = czech_anchor.agreement(_human(), NOTES, _verdicts())
     assert full["unanswered"] == 0
     assert full["rate"] == 1.0
 
 
-# --- the computed column ----------------------------------------------------
-
-
-def test_the_counted_column_needs_no_judge_answer():
-    """`quotes` is read off the note, so it can never be unanswered -- which is
-    why it is the only column that still reports when a run is half done."""
-    result = czech_anchor.agreement(_human(), NOTES, {})
-    quotes = result["criteria"]["quotes"]
-
-    assert quotes["computed"] is True
-    assert quotes["unanswered"] == 0
-    assert quotes["compared"] == 3
-
-
-def test_the_person_and_the_count_are_compared_on_the_marks_themselves():
-    """One note quotes nothing, one uses straight marks, one uses Czech ones.
-    A rater who says so on all three agrees three times."""
-    human = _human()
-    human[("m", "s1", "quotes")] = None  # nothing quoted: "--"
-    human[("m", "s2", "quotes")] = True  # straight marks: "ano"
-    human[("m", "s3", "quotes")] = False  # Czech marks: "ne"
-
-    result = czech_anchor.agreement(human, NOTES, {})
-    assert result["criteria"]["quotes"]["agreed"] == 3
-
-
-def test_no_opportunity_on_both_sides_counts_as_agreement():
-    """The person wrote `--` and the instrument has no value. They agree that
-    the question did not apply, and that is an answer -- the sheet says so."""
-    human = _human()
-    human[("m", "s1", "quotes")] = None
-
-    result = czech_anchor.agreement(human, NOTES, {})
-    assert result["criteria"]["quotes"]["agreed"] >= 1
-
-
 # --- reading the sheet ------------------------------------------------------
-
-
-def test_the_sheet_is_read_by_its_own_footer(tmp_path):
-    """The note-to-model table at the bottom, not a recomputed sample. A sheet
-    drawn from a different draw still lines up with the cache."""
-    sheet = tmp_path / "sheet.md"
-    sheet.write_text(
-        "# a sheet\n\n"
-        "## Note 1\n\n| criterion | ano / ne / -- |\n|---|---|\n"
-        "| diacritics | ano |\n| calque | ne |\n| quotes | -- |\n\n"
-        "## Which note was whose\n\n| note | model | session |\n|---|---|---|\n"
-        "| 1 | `a-model` | `cz-r-0000abcd` |\n",
-        encoding="utf-8",
-    )
-
-    answers = czech_anchor.read_sheet(sheet)
-    assert answers[("a-model", "cz-r-0000abcd", "diacritics")] is True
-    assert answers[("a-model", "cz-r-0000abcd", "calque")] is False
-    assert answers[("a-model", "cz-r-0000abcd", "quotes")] is None
 
 
 def test_the_method_is_recorded_and_does_not_overclaim():

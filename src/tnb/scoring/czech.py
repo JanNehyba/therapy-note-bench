@@ -157,41 +157,6 @@ CRITERIA: tuple[Criterion, ...] = (
         ),
     ),
     Criterion(
-        key="quotes",
-        label="Quotation marks",
-        # The apostrophe is named because leaving it unnamed cost this project a
-        # measurement. A native speaker rating twenty notes counted `'slovo'` as
-        # a straight mark and the judge did not, and 45 of the 75 notes that
-        # quote anything use exactly that -- so the two answered different
-        # questions and their 0.55 agreement was the wording, not the Czech.
-        #
-        # **And on the SOAP tracks this column measured our own prompt.** The
-        # Deepsy track asks the same models for the same sessions with a prompt
-        # a Czech wrote, and three of the first four models go from 0.00 to
-        # 0.90-1.00 here; the fourth moves the other way on an incomplete ten.
-        # `tasks/czech.py`'s prompt contains no Czech quotation mark anywhere
-        # and the Deepsy prompts contain three to five, which is consistent
-        # with models copying the punctuation they were shown -- consistent
-        # with, not demonstrated by: nothing has varied the prompt's
-        # punctuation while holding everything else still.
-        #
-        # What is demonstrated is narrower and enough: a near-zero on this
-        # column is not evidence about a model until the prompt it was given
-        # has been ruled out.
-        question=("Jsou v poznámce rovné uvozovky \" nebo apostrofy ' místo českých „ a “?"),
-        guidance=(
-            "Ptáme se jen na tvar uvozovek, ne na to, co je v nich. Apostrof "
-            "použitý místo uvozovky sem patří."
-        ),
-        definition=(
-            "Whether the note uses a straight quotation mark or an apostrophe where "
-            "Czech uses its own marks. Counted from the characters in the note rather "
-            "than asked of a judge, and only of notes that quote anything at all."
-        ),
-        gated=True,
-        computed=True,
-    ),
-    Criterion(
         key="nonword",
         label="Non-words",
         question="Je v poznámce slovo, které v češtině neexistuje?",
@@ -384,29 +349,6 @@ def _content(note: str) -> str:
     return "\n".join(parts)
 
 
-def has_quotes(note: str) -> bool:
-    """Whether the note quotes anything, and so could get the marks wrong.
-
-    A note with no quotation marks cannot have the wrong ones. Counting it as
-    clean would let a model score on `quotes` for never citing the client --
-    the same vacuity as an empty note, smaller. Notes without the opportunity
-    are left out of that column's denominator and counted beside it.
-    """
-    return any(character in note for character in QUOTE_CHARACTERS)
-
-
-def has_straight_quotes(note: str) -> bool:
-    """Whether the note uses a typewriter mark where Czech uses its own.
-
-    The `quotes` criterion's answer, read off the string. It was a judge's
-    answer until the two were compared: on the 75 notes that quote anything,
-    `gemini-3.1-pro-preview` matched this function 75 times out of 75 and
-    `gpt-5.6-terra` 65, reporting straight marks in nine notes that have none.
-    Nothing is bought by asking.
-    """
-    return any(character in note for character in STRAIGHT_QUOTE_CHARACTERS)
-
-
 def build_tasks(note: str) -> list[CriterionTask]:
     """The questions asked about one note -- one call each.
 
@@ -431,7 +373,7 @@ def build_tasks(note: str) -> list[CriterionTask]:
             ),
         )
         for criterion in CRITERIA
-        if not criterion.computed and (not criterion.gated or has_quotes(note))
+        if not criterion.computed
     ]
 
 
@@ -459,17 +401,14 @@ def aggregate(note: str, answers: dict[str, str]) -> Scores:
     scores = Scores()
     missing: list[str] = []
     asked = {task.criterion for task in build_tasks(note)}
-    content = has_content(note)
 
     for criterion in CRITERIA:
+        # No criterion is computed at the moment. `computed` and `gated` stay on
+        # the dataclass because the one that was -- quotation marks -- proved
+        # both were needed, and the next column read off the note rather than
+        # asked of a judge should not have to rediscover that an opportunity a
+        # note never had is not a mark it earned.
         if criterion.computed:
-            # Read off the note, but under the same two rules as the rest: an
-            # empty note is not rated at all, and a note with no quotation marks
-            # is absent from this column rather than clean in it.
-            if content and (not criterion.gated or has_quotes(note)):
-                fault = has_straight_quotes(note)
-                scores.headline[criterion.key] = 0.0 if fault else 1.0
-                scores.by_criterion[criterion.key] = scores.headline[criterion.key]
             continue
         if criterion.key not in asked:
             continue

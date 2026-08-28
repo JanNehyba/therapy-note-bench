@@ -183,19 +183,6 @@ METHOD_CRITERIA = (
     "every one of the seven asks about the absence of a fault and an empty note would "
     "pass all seven."
 )
-#: The seventh criterion, measured and not drawn, and why. One statement here
-#: instead of a column nobody could read in four tables.
-METHOD_QUOTES = (
-    "A seventh criterion was measured and is not in the tables. It counts whether a "
-    "note uses straight quotation marks where Czech uses its own, and it turned out to "
-    "be a fact about the prompt rather than about the models: the Czech prompt is a "
-    "translation whose punctuation was translated wrongly -- sixteen straight marks and "
-    "no Czech one anywhere -- and the same models on the same sessions score 0.00 on it "
-    "here and 0.90 to 1.00 in a second format whose prompt a Czech wrote. A column that "
-    "moves with the instrument rather than with what it measures does not belong beside "
-    "six that do. The measurement is kept; it is simply not a ranking."
-)
-
 METHOD_PDSQI = (
     "PDSQI-9 is reproduced in English, word for word, because a translated instrument "
     "is a different instrument with nothing validating it. The note it rates is Czech "
@@ -1964,12 +1951,7 @@ def _anchor() -> str:
                 )
                 cells.append(f"<td>{entry['rate']:.2f}{gap}</td>")
         label = _t(MEASURE_TABLES[results.TRACK_CZECH_REAL][key]["label"])
-        counted = (
-            f" <span class='dash'>({_t('counted, not judged')})</span>"
-            if (data["judges"][judges[0]]["criteria"].get(key, {}).get("computed"))
-            else ""
-        )
-        body.append(f"<tr><td>{html.escape(label)}{counted}</td>" + "".join(cells) + "</tr>")
+        body.append(f"<tr><td>{html.escape(label)}</td>" + "".join(cells) + "</tr>")
 
     totals = []
     for name in judges:
@@ -2359,7 +2341,6 @@ def build(rows: list[results.Row]) -> str:
 {_scale(rows)}
 <p><strong>{_t("No judge is ever shown a real session.")}</strong> {_t(METHOD_BOUNDARY)}</p>
 <p>{_t(METHOD_CRITERIA)}</p>
-<p>{_t(METHOD_QUOTES)}</p>
 <p>{_t(METHOD_PDSQI)}</p>
 
 <footer>{_t(FOOTER)}</footer>

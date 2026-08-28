@@ -87,19 +87,9 @@ SITE_URL = "https://jannehyba.github.io/therapy-note-bench/"
 JUDGES_PATH = DOCS_DIR / "judges.json"
 PREFERENCE_PATH = DOCS_DIR / "preference.json"
 
-#: The criteria a Czech table draws. `quotes` is measured and not drawn.
-#:
-#: It turned out to be a fact about the prompt rather than about the models: the
-#: Czech SOAP prompt is a translation and its punctuation was translated wrongly
-#: -- sixteen straight quotation marks and no `„` anywhere -- and the same models
-#: on the same sessions score 0.00 here and 0.90 to 1.00 in the Deepsy format,
-#: whose prompt a Czech wrote. A column that moves with the instrument and not
-#: with what it measures does not belong beside six that do.
-#:
-#: The measurement stays in the rows, which are append-only, and the finding is
-#: stated once in the briefing's method rather than printed four times as a
-#: column nobody can read.
-DRAWN_CRITERIA = tuple(key for key in czech_scorer.CRITERION_KEYS if key != "quotes")
+#: The criteria a Czech table draws, which is now all of them. The name
+#: stays: a seventh was drawn here once and the next one will be too.
+DRAWN_CRITERIA = czech_scorer.CRITERION_KEYS
 
 #: Column order per track: (key, how many decimals).
 #:

@@ -117,18 +117,18 @@ def test_the_row_says_the_instrument_has_no_anchor():
 
 
 def test_the_denominator_of_each_column_is_published_beside_it():
-    """Quotation marks are asked only of a note that quotes something, so that
+    """A criterion a judge left unanswered is absent from that column, so that
     column is a mean over fewer notes. Saying so costs one number."""
-    quoting = _result()
+    answered = _result()
     silent = _result()
-    del silent.scored["quotes"]
+    del silent.scored["register"]
 
-    aggregate = czech_run.SystemAggregate(notes=[quoting, silent])
+    aggregate = czech_run.SystemAggregate(notes=[answered, silent])
     metrics = aggregate.metrics()
 
-    assert metrics.detail["quotes.notes"] == 1
+    assert metrics.detail["register.notes"] == 1
     assert metrics.detail["diacritics.notes"] == 2
-    assert metrics.headline["quotes"] == 1.0
+    assert metrics.headline["register"] == 1.0
 
 
 def test_a_partial_note_counts_in_the_columns_it_did_answer():

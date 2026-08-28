@@ -207,7 +207,6 @@ CS: dict[str, str] = {
     ),
     "not answered yet": "zatím bez odpovědi",
     "unanswered": "bez odpovědi",
-    "counted, not judged": "počítáno, nehodnoceno",
     "All questions": "Všechny otázky",
     "notes, drawn by a hash of the session and the model so that no score could "
     "influence which ones were rated.": (
@@ -660,23 +659,6 @@ CS: dict[str, str] = {
         "závěr."
     ),
     # --- the criterion measured but not drawn ------------------------------
-    "A seventh criterion was measured and is not in the tables. It counts whether a "
-    "note uses straight quotation marks where Czech uses its own, and it turned out to "
-    "be a fact about the prompt rather than about the models: the Czech prompt is a "
-    "translation whose punctuation was translated wrongly -- sixteen straight marks and "
-    "no Czech one anywhere -- and the same models on the same sessions score 0.00 on it "
-    "here and 0.90 to 1.00 in a second format whose prompt a Czech wrote. A column that "
-    "moves with the instrument rather than with what it measures does not belong beside "
-    "six that do. The measurement is kept; it is simply not a ranking.": (
-        "Sedmé kritérium jsme změřili a v tabulkách není. Počítá, jestli zápis používá "
-        "rovné uvozovky tam, kde má čeština své vlastní — a ukázalo se, že je to výrok "
-        "o promptu, ne o modelech: český prompt je překlad, ve kterém se špatně "
-        "přeložila i interpunkce (šestnáct rovných uvozovek a ani jedna česká), a tytéž "
-        "modely na týchž sezeních v něm mají 0.00, kdežto ve druhém formátu, jehož "
-        "prompt psal Čech, 0.90 až 1.00. Sloupec, který se hýbe s nástrojem a ne s tím, "
-        "co měří, nepatří vedle šesti, které se hýbou správně. Měření zůstává; jen "
-        "z něj není pořadí."
-    ),
     # --- what it took ------------------------------------------------------
     "What it took": "Kolik to bylo práce",
     "Judges": "Soudci",

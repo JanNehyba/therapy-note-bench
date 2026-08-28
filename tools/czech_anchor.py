@@ -21,11 +21,6 @@ against, precisely so that "0.84" is not mistaken for "84% correct"; with a
 single rater there is no such ceiling, so what comes out is "how often a judge
 and one native speaker said the same thing" and must be published as that.
 
-One column is no longer a judgement at all. `quotes` is counted from the
-characters in the note, so its row here compares the person against arithmetic
-rather than against a judge -- which is how the count came to exist: he and the
-judge disagreed on nearly half the notes and neither was wrong.
-
 Reads the filled sheet, asks the judges nothing, and writes
 `local/czech-anchor.json` for `tools/czech_brief.py` to draw. The sheet itself
 stays gitignored -- it carries whole notes -- and this file carries only counts.
@@ -122,23 +117,17 @@ def agreement(
     """
     per_criterion: dict[str, dict] = {}
     for key in czech.CRITERION_KEYS:
-        computed = czech.CRITERIA[czech.CRITERION_KEYS.index(key)].computed
         compared = agreed = unanswered = 0
         for (model, session, criterion), person in human.items():
             if criterion != key or (model, session) not in notes:
                 continue
             note = notes[(model, session)]
 
-            if computed:
-                # Counted, not asked, so it cannot be missing -- absent only
-                # where the note quotes nothing, which is what `--` means too.
-                verdict = czech.has_straight_quotes(note) if czech.has_quotes(note) else None
-            else:
-                asked = key in {task.criterion for task in czech.build_tasks(note)}
-                verdict = verdicts.get((model, session, key))
-                if asked and verdict is None:
-                    unanswered += 1
-                    continue
+            asked = key in {task.criterion for task in czech.build_tasks(note)}
+            verdict = verdicts.get((model, session, key))
+            if asked and verdict is None:
+                unanswered += 1
+                continue
 
             compared += 1
             agreed += int(verdict == person)
@@ -149,7 +138,6 @@ def agreement(
                 "agreed": agreed,
                 "unanswered": unanswered,
                 "rate": round(agreed / compared, 4) if compared else None,
-                "computed": computed,
             }
 
     total = sum(v["compared"] for v in per_criterion.values())

@@ -1638,14 +1638,6 @@ _TRACK_REGISTRIES = {
         "zabarveného vyjadřování. Citace klienta se nepočítá. Vykázáno jako podíl zápisů, které "
         "tím netrpí."
     ),
-    "Quotation marks": "Uvozovky",
-    "Whether the note uses a straight quotation mark or an apostrophe where Czech uses its own"
-    " marks. Counted from the characters in the note rather than asked of a judge, and only of"
-    " notes that quote anything at all. Reported as the share of notes free of it.": (
-        "Zda zápis používá rovnou uvozovku nebo apostrof tam, kde má čeština své vlastní "
-        "znaky. Počítáno ze znaků v zápisu, nikoli dotazem na soudce, a jen u zápisů, které "
-        "vůbec něco citují. Vykázáno jako podíl zápisů, které tím netrpí."
-    ),
     "Non-words": "Neslova",
     "Whether the note contains a word Czech does not have. A proper noun, a diacritic slip and an"
     " English term left in English each belong elsewhere. Reported as the share of notes free of"
