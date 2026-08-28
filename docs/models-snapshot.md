@@ -131,7 +131,12 @@ being copies.
 - Endpoint: `https://llm.ai.e-infra.cz/v1/` (OpenAI-compatible, LiteLLM-fronted)
 - Status page: <https://llm.ai.e-infra.cz/status/>
 - Usage dashboard: <https://llm.ai.e-infra.cz/usage>
-- Inference runs entirely inside e-INFRA CZ infrastructure.
+- Inference through **this endpoint** runs inside e-INFRA CZ infrastructure.
+  Not all of the benchmark does: 38% of the published notes were written
+  elsewhere — 17% OpenAI, 11% Vertex, and the 10% that are TN-Eval's released
+  reference notes, which are not inference at all — and **both judges run
+  outside e-INFRA**. What may be sent where is in
+  [datasets.md](datasets.md).
 - **API keys must not be shared.** In CI the token lives in a repository secret,
   which GitHub does not expose to forks or to pull requests from forks — and the
   benchmark workflow has no `pull_request` trigger for that reason.

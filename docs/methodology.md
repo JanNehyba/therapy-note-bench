@@ -136,9 +136,9 @@ moved `gemini-3.1-pro-preview` from +0.005 to +0.018 and `gpt-5.6-terra` from
 resampled conversations and not systems, so the interval described three or
 four models rather than a vendor — while the sentence it supported, and the
 mark on each affected row, are about the vendor. Resampling both:
-`gemini-3.1-pro-preview` +0.018 [−0.011, +0.048] and `gpt-5.6-terra` +0.027
-[−0.002, +0.059]. Neither is detected, and asked directly whether the two
-judges differ, they do not: +0.010 [−0.015, +0.033].
+`gemini-3.1-pro-preview` +0.018 [−0.010, +0.047] and `gpt-5.6-terra` +0.027
+[−0.004, +0.058]. Neither is detected, and asked directly whether the two
+judges differ, they do not: +0.009 [−0.039, +0.058].
 
 Two systems carry most of the estimate, and they are the two that the vendor
 redefinition moved into these groups: without `gemma4` the Gemini figure is
@@ -303,10 +303,11 @@ compare the fingerprints. It is the same check that caught `command-a` returning
 
 Generation runs on e-INFRA and costs quota, not money. Judging costs money, so:
 
-- Scoring is grouped **by session, not by model** — the transcript is identical
-  across every model and every prompt for a given session, so it is sent once as
-  a cached prefix and reused across roughly a hundred calls.
-- The Batch API is used where latency does not matter.
+- Scoring walks provider, then task, then **model**, then session. Grouping by
+  session instead would send each transcript once as a cached prefix and reuse
+  it across roughly a hundred calls; that is worth doing and is **not what the
+  code does today**. This entry claimed the saving as though it were already
+  made, which is exactly what stops anyone from making it.
 - `--max-judge-usd` is a hard ceiling. The run stops rather than exceeding it.
 - Results are content-addressed on `(provider, model, task, session, prompt_version)`,
   so adding one model re-generates and re-scores only that model.

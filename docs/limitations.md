@@ -60,8 +60,9 @@ not a result of this benchmark.
 
 The one claim that survives is dominance: a system at least as good on *every*
 measure under *both* judges is better however a reader weights the measures.
-Most systems are beaten outright by nobody, which is why no single winner is
-named.
+Eight of the nineteen are beaten outright by nobody — a minority, but a
+minority with no one system in it that beats the rest, which is why no single
+winner is named.
 
 **And it is not only two judges disagreeing — one judge disagrees with
 itself.** Gemini's thinking budget was raised from 128 to 256 tokens and all
@@ -79,7 +80,8 @@ compared on, and why each table's heading names them.
 ## The columns do not agree with each other either
 
 Ordering by completeness says little about conciseness — the correlation is
-negative under both judges — and something the two judges cannot agree on about
+near zero and the two judges do not even agree on its sign — and something the
+two judges cannot agree on about
 faithfulness, where one sees a moderate positive relationship and the other
 sees none. The current figures are on [the methods page](https://jannehyba.github.io/therapy-note-bench/methods.html), under *Do the columns agree
 with each other?*, where a run keeps them right.
@@ -169,7 +171,7 @@ that is the smaller of the two costs.
 answered "what happens at the next session" in 11 of 40 notes and "what happened
 last session" in 34, which is why those are two columns rather than one. Eleven
 is a small denominator: a score of 0.09 there is one session, and the gap
-between two models a few tenths apart is not evidence.
+between two models a few hundredths apart is not evidence.
 
 ## Nothing published here is in Czech
 
@@ -291,7 +293,7 @@ Set against the other track, the asymmetry is total:
 | Judge anchored against a human | yes, and the figure is published whatever it says | no — the TRACE ratings are [not published anywhere](landscape.md#where-the-trace-data-is-not) |
 
 So on this track **ROUGE-L and BERTScore measure distance from a single
-unreviewed document**, and that document is 46% empty. They do not say a note is
+unreviewed document**, and that document is 54% empty. They do not say a note is
 good; they say it resembles that one. The instrument's authority rests on the
 source paper's description of who wrote it and on nothing that can be checked
 from the data.
@@ -301,23 +303,30 @@ columns are reported beside TRACE rather than instead of it, and the reason
 neither is a ranking: the source paper's own finding is that the two disagree,
 and with no human anchor there is no third thing to say which is closer to right.
 
-## Seven of nine things a clinician means by "quality" are not measured
+## The ranking rubric measures two of the nine things a clinician means by "quality"
 
 The field has an instrument for this: [PDSQI-9](https://arxiv.org/abs/2501.08977),
 validated on real EHR data with physicians doing the rating. It has nine
-attributes. **This benchmark measures two of them.**
+attributes. **The TN-Eval rubric the leaderboard is ordered by reaches two of
+them.**
 
-| PDSQI-9 attribute | Measured here? |
-|---|---|
-| **Thorough** — covers all pertinent issues | **Yes.** `completeness`, and the leaderboard is ordered by it |
-| **Accurate** — true, free of incorrect information | **Yes.** `faithfulness` — on which two trained therapists reach an alpha of 0.18 |
-| **Succinct** — brief, to the point, without redundancy | **No.** `conciseness` counts sentences that fit a rubric item; a note twice as long scores the same |
-| **Organized** — structured so the reader follows the clinical course | No |
-| **Synthesized** — shows understanding and an ability to plan care | No |
-| **Useful** — relevant, provides value | No |
-| **Comprehensible** — clear, unambiguous | No |
-| **Citation** — sources present and appropriate | No |
-| **Stigmatizing** — free of stigmatising language | No |
+PDSQI-9 itself has since been run over the same notes and reaches eight; the
+ninth is dropped for a reason given below. The two are kept in separate columns
+here because they are separate instruments — the second does not fill the gap
+the first leaves, for the reason set out under *Adopting PDSQI-9 helps, and less
+than it looks*, and no number here is ever an average across the two.
+
+| PDSQI-9 attribute | By the ranking rubric | By PDSQI-9 |
+|---|---|---|
+| **Thorough** — covers all pertinent issues | **Yes.** `completeness`, and the leaderboard is ordered by it | Yes, as `thorough` |
+| **Accurate** — true, free of incorrect information | **Yes.** `faithfulness` — on which two trained therapists reach an alpha of 0.18 | Yes, as `accurate` |
+| **Succinct** — brief, to the point, without redundancy | **No.** `conciseness` counts sentences that fit a rubric item; a note twice as long scores the same | Yes, as `succinct` |
+| **Organized** — structured so the reader follows the clinical course | No | Yes |
+| **Synthesized** — shows understanding and an ability to plan care | No | Yes |
+| **Useful** — relevant, provides value | No | Yes |
+| **Comprehensible** — clear, unambiguous | No | Yes |
+| **Citation** — sources present and appropriate | No | **No, and on purpose** — a note written from one transcript has no source documents to cite |
+| **Stigmatizing** — free of stigmatising language | No | Yes, as `stigmatizing` |
 
 So the ranking column is the one attribute of nine that most rewards writing
 more, and the seven it does not measure are the ones that separate a good note
