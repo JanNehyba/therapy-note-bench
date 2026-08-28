@@ -1341,3 +1341,25 @@ def test_a_judge_tried_and_not_chosen_is_named_rather_than_drawn(tmp_path):
     alone = report.build([candidate])
     drawn = {t["versions"]["judge_model"] for t in alone["tables"] if t["scored"]}
     assert drawn == {"gemini-2.5-pro"}, "the only judge on a track is drawn, panel or not"
+
+
+def test_the_blurb_is_not_measured_in_characters():
+    """A measure in `ch` shrinks with the font size, and the blurb is set at
+    .9rem -- so `max-width: 68ch` came out around half the card, next to a table
+    and a lede that both run its full width. It read as a broken column.
+
+    Pinned because the fix is invisible in the rendered HTML: the runner has no
+    layout engine, so nothing else here would notice it coming back.
+    """
+    style = (REPO_ROOT / "src" / "tnb" / "templates" / "_style.html").read_text(encoding="utf-8")
+
+    for selector in ("p.blurb", "footer"):
+        rule = next(
+            (line for line in style.splitlines() if line.strip().startswith(f"{selector} {{")),
+            None,
+        )
+        assert rule, f"{selector} has no rule to check"
+        assert "ch;" not in rule, (
+            f"{selector} is measured in characters again: at this font size that is about "
+            "half the card, beside a full-width table"
+        )
