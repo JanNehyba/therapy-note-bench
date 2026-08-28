@@ -128,21 +128,53 @@ def _fmt(value, digits: int) -> str:
     return f"{value:.{digits}f}"
 
 
+#: Below this share of its notes, a row's mean is reported with a mark rather
+#: than plainly. Four fifths is a line and not a law; what matters is that a
+#: reader can see which rows are thin without doing the subtraction.
+THIN = 0.8
+
+
 def _table(track: str, rows: list[results.Row]) -> str:
+    """One comparability group, with the count each mean is actually over.
+
+    **The count is of complete notes, not of scored ones.** A note with even one
+    criterion the judge did not answer is left out of every mean, so printing
+    the scored count beside the mean overstates what the mean rests on -- this
+    column said `10` for a model whose row was an average of five notes, which
+    is the shape this repository keeps meeting. Measured on the real half: one
+    judge left 14% of notes incomplete, and the notes it lost were the longer
+    ones, so the loss is not spread evenly over the corpus.
+    """
     columns = COLUMNS[track]
     measures = MEASURE_TABLES[track]
     head = "".join(f"<th>{html.escape(measures[key]['label'])}</th>" for key, _ in columns)
-    body = []
+    body, thin = [], []
     for row in sorted(rows, key=lambda r: r.system_id):
+        complete = row.n_sessions_scored - row.n_sessions_partial
         cells = "".join(
             f"<td>{_fmt(row.metrics.headline.get(key), digits)}</td>" for key, digits in columns
         )
-        body.append(
-            f"<tr><td>{html.escape(row.system_id)}</td><td>{row.n_sessions_scored}</td>{cells}</tr>"
+        if row.n_sessions_partial:
+            count = f"<strong>{complete}</strong> of {row.n_sessions_scored}"
+            if complete < THIN * row.n_sessions_scored:
+                thin.append(f"{row.system_id} ({complete} of {row.n_sessions_scored})")
+        else:
+            count = str(complete)
+        body.append(f"<tr><td>{html.escape(row.system_id)}</td><td>{count}</td>{cells}</tr>")
+
+    warning = ""
+    if thin:
+        warning = (
+            "<div class='warn'><p>These rows are an average of well under all their "
+            "notes, because the judge left some questions unanswered and a note is "
+            "only counted when every criterion of it was answered: "
+            f"{html.escape(', '.join(thin))}. Unanswered questions cluster on the "
+            "longer notes, so what is missing is not a random sample of the corpus. "
+            "Read these rows as provisional.</p></div>"
         )
     return (
-        f"<table><thead><tr><th>Model</th><th>Notes</th>{head}</tr></thead>"
-        f"<tbody>{''.join(body)}</tbody></table>"
+        "<table><thead><tr><th>Model</th><th>Notes in the mean</th>"
+        f"{head}</tr></thead><tbody>{''.join(body)}</tbody></table>{warning}"
     )
 
 
