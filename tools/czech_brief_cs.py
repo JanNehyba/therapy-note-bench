@@ -584,6 +584,37 @@ CS: dict[str, str] = {
         "čtení jako úroveň — jak často se ta chyba vůbec objevuje — ale ne jako "
         "pořadí:"
     ),
+    # --- general capability against these numbers --------------------------
+    "Does general capability predict any of this?": (
+        "Předpovídá obecná schopnost něco z tohohle?"
+    ),
+    "Nothing in this repository records how big a model is or when it shipped, so this "
+    "comes from outside it. Bold survives a permutation test at p < 0.05.": (
+        "Nic v tomhle repozitáři nezaznamenává, jak velký model je ani kdy vyšel, "
+        "takže tohle pochází zvenčí. Tučné obstálo v permutačním testu na p < 0.05."
+    ),
+    "Measured here": "Měřeno tady",
+    "Intelligence index": "Index inteligence",
+    "Release date": "Datum vydání",
+    "English completeness": "Anglická úplnost",
+    "English quality (PDSQI-9)": "Anglická kvalita (PDSQI-9)",
+    "Czech quality (PDSQI-9)": "Česká kvalita (PDSQI-9)",
+    "Czech language (the seven criteria)": "Čeština (sedm kritérií)",
+    "None of this was measured here.": "Nic z toho jsme neměřili my.",
+    "The models are matched to the public ones by name, and a name on the endpoint is "
+    "not evidence about which model is behind it -- this project's first working rule "
+    "exists because one returned another's output. Models whose name does not identify "
+    "a variant are absent rather than guessed:": (
+        "Modely jsou k těm veřejným přiřazené podle jména a jméno na endpointu není "
+        "důkaz o tom, který model za ním stojí — první pracovní pravidlo tohohle "
+        "projektu vzniklo proto, že jeden vracel výstup jiného. Modely, jejichž jméno "
+        "neurčuje variantu, tu nejsou, místo aby se hádaly:"
+    ),
+    "The external score is versioned like the measures here are, so it is recorded "
+    "with the version and the day it was read:": (
+        "Externí skóre má verzi stejně jako měřidla tady, takže se zaznamenává "
+        "s verzí a dnem, kdy bylo přečteno:"
+    ),
     # --- refusals ----------------------------------------------------------
     "Refusing to write: a row carries something that is not a score.": (
         "Odmítám zapsat: řádek nese něco, co není skóre."

@@ -653,6 +653,106 @@ def _join() -> str:
     )
 
 
+def _external() -> str:
+    """Whether a model's general capability predicts the notes it writes.
+
+    Written by `tools/czech_external.py`. The section exists at all only
+    because the answer differs between the two languages, and it carries its
+    provenance in the same breath as its numbers because none of the data
+    behind it was measured here.
+
+    Three caveats travel with it and none is decoration. The match is by name,
+    and this repository's first working rule exists because a name lied. The
+    external score is versioned, so a figure without its index version and
+    fetch date is unattributable in a month. And the models that could not be
+    matched are named rather than quietly dropped.
+    """
+    path = REPO / "local" / "czech-external.json"
+    if not path.exists():
+        return ""
+    data = json.loads(path.read_text(encoding="utf-8"))
+    judges = sorted(data.get("judges", {}))
+    if not judges:
+        return ""
+
+    labels = {
+        "english_completeness": "English completeness",
+        "english_quality": "English quality (PDSQI-9)",
+        "czech_quality": "Czech quality (PDSQI-9)",
+        "czech_language": "Czech language (the seven criteria)",
+    }
+    outside = {
+        "intelligence_index": "Intelligence index",
+        "release_date": "Release date",
+    }
+
+    blocks = []
+    for label, heading in outside.items():
+        rows = []
+        for measure, name in labels.items():
+            cells = []
+            drawn = False
+            for judge_model in judges:
+                entry = (data["judges"][judge_model].get(measure) or {}).get(label)
+                if not entry:
+                    cells.append("<td class='dash'>--</td>")
+                    continue
+                drawn = True
+                strong = "<strong>" if entry["p"] < 0.05 else ""
+                close = "</strong>" if entry["p"] < 0.05 else ""
+                cells.append(
+                    f"<td>{strong}{entry['rho']:+.2f}{close}"
+                    f" <span class='dash'>p={entry['p']:.3f}, n={entry['n']}</span></td>"
+                )
+            if drawn:
+                rows.append(f"<tr><td>{html.escape(_t(name))}</td>" + "".join(cells) + "</tr>")
+        if rows:
+            head = "".join(f"<th>{html.escape(j)}</th>" for j in judges)
+            blocks.append(
+                f"<h3>{html.escape(_t(heading))}</h3>"
+                f"<table><thead><tr><th>{_t('Measured here')}</th>{head}</tr></thead>"
+                f"<tbody>{''.join(rows)}</tbody></table>"
+            )
+    if not blocks:
+        return ""
+
+    unmatched = ", ".join(data.get("unmatched", []))
+    return (
+        f"<h2>{_t('Does general capability predict any of this?')}</h2>"
+        + "<p>"
+        + html.escape(
+            _t(
+                "Nothing in this repository records how big a model is or when it "
+                "shipped, so this comes from outside it. Bold survives a permutation "
+                "test at p < 0.05."
+            )
+        )
+        + "</p>"
+        + "".join(blocks)
+        + "<div class='warn'><p><strong>"
+        + html.escape(_t("None of this was measured here."))
+        + "</strong> "
+        + html.escape(
+            _t(
+                "The models are matched to the public ones by name, and a name on the "
+                "endpoint is not evidence about which model is behind it -- this "
+                "project's first working rule exists because one returned another's "
+                "output. Models whose name does not identify a variant are absent "
+                "rather than guessed:"
+            )
+        )
+        + f" {html.escape(unmatched)}. "
+        + html.escape(
+            _t(
+                "The external score is versioned like the measures here are, so it is "
+                "recorded with the version and the day it was read:"
+            )
+        )
+        + f" {html.escape(data.get('index_version', ''))}, "
+        + f"{html.escape(data.get('fetched', ''))}.</p></div>"
+    )
+
+
 def _bands() -> str:
     """The models grouped, because ordering eleven of them over ten notes is
     mostly ordering noise.
@@ -1218,6 +1318,8 @@ def build(rows: list[results.Row]) -> str:
 {_verdicts(rows)}
 
 {_bands()}
+
+{_external()}
 
 {_dominance(rows)}
 
