@@ -833,6 +833,10 @@ def cmd_score_czech(args: argparse.Namespace) -> int:
             judge_settings=config.fingerprint(),
             n_generated=coverage,
             n_attempted=sessions,
+            # Why a note is missing, not only that it is. Without this a model
+            # e-INFRA had no healthy deployment for is indistinguishable from
+            # one nobody asked.
+            n_unreached=results.unreached_by_system(track),
             run_id=args.run_id or "",
         )
         if args.no_write:
@@ -969,6 +973,10 @@ def cmd_score_czech_pdsqi(args: argparse.Namespace) -> int:
             judge_settings=config.fingerprint(),
             n_generated=coverage,
             n_attempted=sessions,
+            # Why a note is missing, not only that it is. Without this a model
+            # e-INFRA had no healthy deployment for is indistinguishable from
+            # one nobody asked.
+            n_unreached=results.unreached_by_system(track),
             run_id=args.run_id or "",
             track=track,
             prompt_version=czech_task.PROMPT_VERSION,
@@ -1143,6 +1151,10 @@ def cmd_score_deepsy(args: argparse.Namespace) -> int:
             judge_settings=config.fingerprint(),
             n_generated=coverage,
             n_attempted=sessions,
+            # Why a note is missing, not only that it is. Without this a model
+            # e-INFRA had no healthy deployment for is indistinguishable from
+            # one nobody asked.
+            n_unreached=results.unreached_by_system(track),
             run_id=args.run_id or "",
             prompt_version=deepsy_task.PROMPT_VERSION,
             render=deepsy_task.render_note,

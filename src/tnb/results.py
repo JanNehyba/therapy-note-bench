@@ -738,7 +738,9 @@ def canonical_reasons(reasons: Mapping[str, int] | None) -> dict[str, int]:
     return merged
 
 
-def index_generations(cache_dir: Path | None = None, *, run_id: str = "") -> list[Row]:
+def index_generations(
+    cache_dir: Path | None = None, *, run_id: str = "", include_local: bool = False
+) -> list[Row]:
     """Turn what is in ``generations/`` into one coverage row per model and track.
 
     These rows carry no metrics. They exist so the leaderboard can be published
@@ -759,7 +761,14 @@ def index_generations(cache_dir: Path | None = None, *, run_id: str = "") -> lis
             # rather than filtered afterwards: `cmd_report` appends whatever
             # this returns, and a filter one caller away is a filter somebody
             # forgets.
-            if track in LOCAL_TRACKS:
+            #
+            # `include_local` is for a caller that wants the reasons rather than
+            # the rows -- `unreached_by_system`, which the local scorers need so
+            # that a model with no note carries WHY it has none. e-INFRA
+            # answered `glm-5.3-flash` with "there are no healthy deployments
+            # for this model" sixty times; without this the Deepsy table simply
+            # would not have contained it, which reads as "not run".
+            if track in LOCAL_TRACKS and not include_local:
                 continue
             if track is None:
                 continue
@@ -805,7 +814,7 @@ def unreached_by_system(
     that separation into the rows that get published with scores on them.
     """
     found: dict[tuple[str, str], Unreached] = {}
-    for row in index_generations(cache_dir):
+    for row in index_generations(cache_dir, include_local=track in LOCAL_TRACKS):
         if row.track != track:
             continue
         sessions = row.n_sessions_attempted - row.n_sessions_generated - row.n_failed
