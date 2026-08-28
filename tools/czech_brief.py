@@ -660,7 +660,7 @@ def _rater(key: str) -> str:
     if not pairs:
         return ""
     return _t("One native speaker agreed with the two judges on {pairs} notes.").format(
-        pairs=_t(" and ").join(pairs)
+        pairs=_join_words(pairs)
     )
 
 
@@ -1185,6 +1185,171 @@ def _external() -> str:
         + f" {html.escape(data.get('index_version', ''))}, "
         + f"{html.escape(data.get('fetched', ''))}.</p></div>"
     )
+
+
+def _conclusion(rows: list[results.Row]) -> str:
+    """What eleven models did, before the reader meets a single table.
+
+    The document used to close on its own limitations and its method, and the
+    first sentence anywhere stating a RESULT arrived pages in. A clinical team
+    handed thirty tables and no conclusion writes its own, and theirs will be
+    more generous than the evidence.
+
+    **Every sentence here is computed from a payload already on disk.** Nothing
+    is typed. That is not tidiness: the last time this document carried
+    hand-written figures, four of five had drifted away from the table printing
+    the same measurement three sections below.
+
+    It is deliberately short, and it deliberately leads with the finding that
+    changes how every table below is read rather than with the winner.
+    """
+    said = []
+
+    bands = _payload("czech-variance.json").get("bands", {})
+    language = {t: j for t, j in bands.items() if not t.endswith("-pdsqi")}
+    quality = {t: j for t, j in bands.items() if t.endswith("-pdsqi")}
+
+    def shared(group: dict, index: int) -> tuple[list[str], int]:
+        seen = [set(g["bands"][index]["models"]) for j in group.values() for g in j.values()]
+        return (sorted(set.intersection(*seen)) if seen else []), len(seen)
+
+    # 1. Who is ahead, and only where every table agrees.
+    top, tables = shared(language, 0)
+    bottom, _ = shared(language, -1)
+    if tables:
+        said.append(
+            _t(
+                "On writing correct Czech, {top} are in the top band of all {tables} "
+                "tables -- both halves, both judges. {bottom} is in the bottom band of "
+                "all {tables}. Between those two ends the tables disagree with each "
+                "other, so nothing else here is a ranking."
+            ).format(
+                top=_join_words(top) or _t("no models"),
+                bottom=_join_words(bottom) or _t("No model"),
+                tables=tables,
+            )
+        )
+
+    # 2. The same question asked of note quality, which does not answer.
+    top_q, tables_q = shared(quality, 0)
+    if tables_q and not top_q:
+        said.append(
+            _t(
+                "On whether the note is any good, no model is in the top band of all "
+                "{tables} tables and none is in the bottom band of all {tables}. The "
+                "quality instrument does not agree with itself from one judge or one "
+                "half to the next, and no model can be called better on it."
+            ).format(tables=tables_q)
+        )
+
+    # 3. Which columns of that instrument can rank anything at all.
+    dead, total, alive, worst = _dead_columns(rows)
+    if dead:
+        said.append(
+            _t(
+                "Part of why: {dead} of its {total} columns are the same for every "
+                "model, so they order nothing. Of the {moving} that do move, the one no "
+                "model does well on is {alive} -- the best of the eleven reaches "
+                "{worst} out of 5."
+            ).format(
+                dead=dead,
+                total=total,
+                moving=total - dead,
+                alive=_join_words(alive) or "-",
+                worst=f"{worst:.2f}",
+            )
+        )
+
+    # 4. The finding that changes how the tables below are read.
+    length = _payload("czech-length.json")
+    tail = length.get("tail") or {}
+    checks = [
+        found
+        for track, block in tail.items()
+        if not track.endswith("-pdsqi")
+        for found in block.get("judges", {}).values()
+    ]
+    hit = sum(1 for found in checks if found["all_in_the_tail"])
+    if checks and hit == len(checks):
+        said.append(
+            _t(
+                "Read the bottom of those tables carefully: the three models that write "
+                "the longest notes take the last three places in all {total} of them. "
+                "Each criterion asks whether there is a fault anywhere in a note, and a "
+                "longer note has more places to hide one. On the quality instrument, "
+                "rating the very same notes, those three models are not at the bottom."
+            ).format(total=len(checks))
+        )
+
+    # 5. Whether the English leaderboard says anything about this.
+    join = _payload("czech-join.json").get("judges", {})
+    if join:
+        measure = next(iter(join.values())).get("ranking_measure")
+        if measure:
+            label = measure
+            for measures in MEASURE_TABLES.values():
+                if measure in measures:
+                    label = measures[measure]["label"]
+                    break
+            said.append(
+                _t(
+                    "And the English leaderboard does not predict this. The same "
+                    "instrument asked in both languages transfers; the single measure "
+                    "the English page ranks by -- {measure} -- does not. A model's "
+                    "standing there says nothing about the Czech it writes."
+                ).format(measure=_t(label))
+            )
+
+    if not said:
+        return ""
+    body = "".join(f"<p>{html.escape(sentence)}</p>" for sentence in said)
+    return f"<h2>{_t('What eleven models did, in five sentences')}</h2>{body}"
+
+
+def _payload(name: str) -> dict:
+    """One of the precomputed local payloads, or nothing if it was not built."""
+    path = REPO / "local" / name
+    if not path.exists():
+        return {}
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+
+
+def _dead_columns(rows: list[results.Row]) -> tuple[int, int, list[str], float]:
+    """How many quality columns are the same for every model, and what is left.
+
+    Counted on the real half, where the instrument has the fewest columns and
+    the question "can this rank anything" is sharpest. The best score on the
+    surviving column is returned with it, because "one column still works" and
+    "and every model fails it" are one finding rather than two.
+    """
+    track = results.TRACK_CZECH_REAL_PDSQI
+    latest = [row for row in results.latest(rows) if row.is_scored and row.track == track]
+    if not latest:
+        return 0, 0, [], 0.0
+    newest = max(row.judge_prompt_version for row in latest)
+    latest = [row for row in latest if row.judge_prompt_version == newest]
+    judges = sorted({row.judge_model or "" for row in latest})
+    if not judges:
+        return 0, 0, [], 0.0
+    here = [row for row in latest if (row.judge_model or "") == judges[0]]
+    varying = _varying(track, here)
+    dead = len(COLUMNS[track]) - len(varying)
+    labels = MEASURE_TABLES[track]
+    # The strongest of the surviving columns, and the best any model reached on
+    # it -- across both judges, because a ceiling one judge sees and the other
+    # does not is not a ceiling.
+    ranking = [key for key in varying if labels[key]["scale"] == "1-5"]
+    if not ranking:
+        return dead, len(COLUMNS[track]), [], 0.0
+    key = min(
+        ranking,
+        key=lambda k: max(row.metrics.headline.get(k, 0) for row in latest),
+    )
+    best = max(row.metrics.headline.get(key, 0) for row in latest)
+    return dead, len(COLUMNS[track]), [_t(labels[key]["label"])], best
 
 
 def _length() -> str:
@@ -1941,6 +2106,8 @@ def build(rows: list[results.Row]) -> str:
 <p>{_t(INTRO_SECOND)}</p>
 
 <div class="warn"><p><strong>{_t(NOT_PUBLIC)}</strong> {_t(NOT_PUBLIC_WHY)}</p></div>
+
+{_conclusion(rows)}
 
 {"".join(sections)}
 

@@ -48,7 +48,7 @@ from dotenv import load_dotenv
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO / "tools"))
 
-from tnb import judge, results  # noqa: E402
+from tnb import judge, report, results  # noqa: E402
 from tnb.scoring import czech, czech_run  # noqa: E402
 from tnb.tasks import czech as czech_task  # noqa: E402
 
@@ -167,8 +167,14 @@ def separable(cells: dict, criterion: str, rng: random.Random) -> dict | None:
 #: on does not change who is ahead, but it shrinks every difference against the
 #: threshold and would merge bands that are really apart.
 COMPOSITES = {
-    "czech-real": None,
-    "czech-translated": None,
+    # The six the tables draw, not all seven the scorer answers. `None` here
+    # meant "every criterion", which silently included `quotes` -- withdrawn
+    # from the tables because it turned out to measure the prompt's punctuation
+    # rather than the models. A band built on a column the tables refuse to draw
+    # ranks models on something the reader is never shown and is told not to
+    # believe.
+    "czech-real": report.DRAWN_CRITERIA,
+    "czech-translated": report.DRAWN_CRITERIA,
     "czech-real-pdsqi": ("accurate", "thorough", "succinct"),
     "czech-translated-pdsqi": ("accurate", "thorough", "succinct"),
 }

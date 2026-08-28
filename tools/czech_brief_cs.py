@@ -803,7 +803,6 @@ CS: dict[str, str] = {
     "One native speaker agreed with the two judges on {pairs} notes.": (
         "Jeden rodilý mluvčí se s oběma soudci shodl u {pairs} zápisů."
     ),
-    " and ": " a ",
     "Reliable: the two judges answered the same way on 79% of notes.": (
         "Spolehlivé: oba soudci odpověděli stejně u 79 % zápisů."
     ),
@@ -826,6 +825,53 @@ CS: dict[str, str] = {
     ),
     "The strongest agreement with a person of the seven.": (
         "Ze sedmi kritérií nejsilnější shoda s člověkem."
+    ),
+    # --- the conclusion, before the tables ---------------------------------
+    "What eleven models did, in five sentences": ("Co jedenáct modelů dokázalo, v pěti větách"),
+    "no models": "žádné modely",
+    "No model": "Žádný model",
+    "On writing correct Czech, {top} are in the top band of all {tables} tables -- "
+    "both halves, both judges. {bottom} is in the bottom band of all {tables}. Between "
+    "those two ends the tables disagree with each other, so nothing else here is a "
+    "ranking.": (
+        "Ve psaní správné češtiny jsou {top} v nejvyšším pásmu všech {tables} tabulek "
+        "— obě půlky, oba soudci. {bottom} je v nejnižším pásmu všech {tables}. Mezi "
+        "těmito dvěma konci si tabulky odporují, takže nic dalšího tu není pořadí."
+    ),
+    "On whether the note is any good, no model is in the top band of all {tables} "
+    "tables and none is in the bottom band of all {tables}. The quality instrument "
+    "does not agree with itself from one judge or one half to the next, and no model "
+    "can be called better on it.": (
+        "V tom, jestli je zápis k něčemu, není v nejvyšším pásmu všech {tables} tabulek "
+        "žádný model a v nejnižším také žádný. Nástroj na kvalitu se neshodne sám se "
+        "sebou mezi soudci ani mezi půlkami, a žádný model podle něj nelze označit za "
+        "lepší."
+    ),
+    "Part of why: {dead} of its {total} columns are the same for every model, so they "
+    "order nothing. Of the {moving} that do move, the one no model does well on is "
+    "{alive} -- the best of the eleven reaches {worst} out of 5.": (
+        "Zčásti proto, že {dead} z jeho {total} sloupců mají všechny modely stejné, "
+        "takže nic neřadí. Ze zbylých {moving}, které se hýbou, je ten, v němž si "
+        "nevede dobře nikdo, {alive} — nejlepší z jedenácti dosáhne {worst} z 5."
+    ),
+    "Read the bottom of those tables carefully: the three models that write the "
+    "longest notes take the last three places in all {total} of them. Each criterion "
+    "asks whether there is a fault anywhere in a note, and a longer note has more "
+    "places to hide one. On the quality instrument, rating the very same notes, those "
+    "three models are not at the bottom.": (
+        "Spodek těch tabulek čti opatrně: tři modely, které píšou nejdelší zápisy, "
+        "obsazují poslední tři místa ve všech {total}. Každé kritérium se ptá, jestli "
+        "je v zápisu někde chyba, a delší zápis má víc míst, kde ji schovat. Na "
+        "nástroji na kvalitu, který hodnotí úplně tytéž zápisy, ty tři modely na "
+        "spodku nejsou."
+    ),
+    "And the English leaderboard does not predict this. The same instrument asked in "
+    "both languages transfers; the single measure the English page ranks by -- "
+    "{measure} -- does not. A model's standing there says nothing about the Czech it "
+    "writes.": (
+        "A anglický leaderboard tohle nepředpovídá. Týž nástroj položený v obou "
+        "jazycích se přenáší; jediné měřítko, podle kterého anglická stránka řadí — "
+        "{measure} — nikoli. Postavení modelu tam neříká nic o češtině, kterou píše."
     ),
     # --- refusals ----------------------------------------------------------
     "Refusing to write: a row carries something that is not a score.": (
