@@ -1997,6 +1997,128 @@ def _anchor() -> str:
     )
 
 
+def _pdsqi_control() -> str:
+    """Whether a quality column CAN come back below 5, from the damaged notes.
+
+    Written by `tools/czech_pdsqi_control.py`. It answers the one question the
+    tables cannot: three of these six columns give every model the same value,
+    and a flat column is either a property of the task -- every model writes
+    into the structure the prompt dictates, so a question about structure has
+    nothing to separate -- or a property of the instrument, which would mean the
+    figures are not measurements at all and should be withdrawn.
+
+    Nothing already measured tells those apart, because nothing already measured
+    contains a badly organised note. One invented note and three damaged copies
+    do, and the prediction for each was written into the tool before it was run.
+    """
+    path = REPO / "local" / "czech-pdsqi-control.json"
+    if not path.exists():
+        return ""
+    runs = json.loads(path.read_text(encoding="utf-8"))
+    if not runs:
+        return ""
+
+    judges = sorted(runs)
+    first = runs[judges[0]]
+    keys = [key for key in first["clean"] if first["clean"][key] is not None]
+    labels = MEASURE_TABLES[results.TRACK_CZECH_REAL_PDSQI]
+
+    lines = []
+    for name in ("clean",) + tuple(first["variants"]):
+        cells = ""
+        for judge_model in judges:
+            run = runs[judge_model]
+            answers = run["clean"] if name == "clean" else run["variants"].get(name, {})
+            for key in keys:
+                value = answers.get(key)
+                cells += (
+                    "<td class='dash'>&mdash;</td>" if value is None else f"<td>{value:.0f}</td>"
+                )
+        lines.append(f"<tr><td>{_t(CONTROL_NOTES.get(name, name))}</td>{cells}</tr>")
+
+    head = ""
+    for _judge_model in judges:
+        for key in keys:
+            head += f"<th>{html.escape(_t(labels[key]['label']))}</th>"
+    band = "".join(f"<th colspan='{len(keys)}'>{html.escape(name)}</th>" for name in judges)
+
+    # The verdict, computed. A column that moves under both judges on the
+    # variant built to attack it is doing its job; one that does not is the
+    # finding, and either way the sentence is read off the numbers rather than
+    # written under them.
+    works, blind = [], []
+    for key in keys:
+        attacked = [name for name, targets in first.get("expected", {}).items() if key in targets]
+        if not attacked:
+            continue
+        moved = []
+        for judge_model in judges:
+            run = runs[judge_model]
+            for name in attacked:
+                before = run["clean"].get(key)
+                after = run["variants"].get(name, {}).get(key)
+                if before is not None and after is not None:
+                    moved.append(after < before)
+        label = _t(labels[key]["label"])
+        (works if moved and all(moved) else blind).append(label)
+
+    verdict = ""
+    if works:
+        verdict = f"<p>{html.escape(_t(CONTROL_WORKS).format(columns=_join_words(works)))}</p>"
+    if blind:
+        verdict += (
+            "<div class='warn'><p>"
+            + html.escape(_t(CONTROL_BLIND).format(columns=_join_words(blind)))
+            + "</p></div>"
+        )
+
+    return (
+        f"<h3>{_t('Can a quality column come back below 5?')}</h3>"
+        + f"<p>{html.escape(_t(CONTROL_LEAD))}</p>"
+        + f"<table><thead><tr><th></th>{band}</tr><tr><th>{_t('Note')}</th>{head}</tr></thead>"
+        + f"<tbody>{''.join(lines)}</tbody></table>"
+        + verdict
+        + f"<p class='dash'>{html.escape(_t(CONTROL_CAVEAT))}</p>"
+    )
+
+
+#: What each damaged note is, to a reader who will not open the tool.
+CONTROL_NOTES = {
+    "clean": "the clean note",
+    "shuffled": "same sentences, wrong sections",
+    "truncated": "first section only, no assessment or plan",
+    "padded": "every sentence said three times",
+}
+
+CONTROL_LEAD = (
+    "One invented note, and three copies each damaged in one named way. No model "
+    "and no session is involved: the question is not who writes well but whether "
+    "the instrument can see a fault at all. What each variant was expected to move "
+    "was written down before it was asked."
+)
+CONTROL_WORKS = (
+    "It can, and this settles the flat columns: {columns} all drop under both "
+    "judges on the note built to attack them. The judge is looking. These eleven "
+    "models score the same because they write into the same dictated four-part "
+    "structure and genuinely do not differ, not because the question goes "
+    "unanswered -- so those columns stay in the tables, as an honest measurement "
+    "of something that does not vary here."
+)
+CONTROL_BLIND = (
+    "{columns} did not move even on the note built to attack them. A column whose "
+    "value does not change when the fault it names is put in front of it is not "
+    "measuring that fault, and its figures in the tables above should be read as "
+    "unmeasured rather than as full marks."
+)
+CONTROL_CAVEAT = (
+    "The damage is deliberate and extreme -- every sentence in the wrong section, "
+    "a note with no plan at all. This says the instrument responds, not that it "
+    "tells two ordinary notes apart. And no person has yet rated any of these "
+    "notes on this instrument, so nothing here says a 5 is what a clinician would "
+    "give."
+)
+
+
 def _controls() -> str:
     """What each column detects, from the planted-error runs.
 
@@ -2216,6 +2338,8 @@ def build(rows: list[results.Row]) -> str:
 {_verdicts(rows)}
 
 {_controls()}
+
+{_pdsqi_control()}
 
 {_anchor()}
 

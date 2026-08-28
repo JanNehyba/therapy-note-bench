@@ -888,6 +888,54 @@ CS: dict[str, str] = {
         "{human} slov na poznámku, a žádný model tady se tomu nepřiblíží na žádném "
         "korpusu."
     ),
+    # --- the PDSQI control --------------------------------------------------
+    "Can a quality column come back below 5?": ("Umí sloupec o kvalitě vůbec spadnout pod pětku?"),
+    "Note": "Zápis",
+    "the clean note": "čistý zápis",
+    "same sentences, wrong sections": "tytéž věty, špatné sekce",
+    "first section only, no assessment or plan": ("jen první sekce, bez hodnocení a bez plánu"),
+    "every sentence said three times": "každá věta řečená třikrát",
+    "One invented note, and three copies each damaged in one named way. No model "
+    "and no session is involved: the question is not who writes well but whether "
+    "the instrument can see a fault at all. What each variant was expected to move "
+    "was written down before it was asked.": (
+        "Jeden vymyšlený zápis a tři jeho kopie, každá poškozená jedním "
+        "pojmenovaným způsobem. Nefiguruje v tom žádný model ani žádné sezení: "
+        "otázka nezní, kdo píše dobře, ale jestli nástroj chybu vůbec uvidí. Co má "
+        "která varianta pohnout, bylo zapsáno dřív, než se soudce zeptal."
+    ),
+    "It can, and this settles the flat columns: {columns} all drop under both "
+    "judges on the note built to attack them. The judge is looking. These eleven "
+    "models score the same because they write into the same dictated four-part "
+    "structure and genuinely do not differ, not because the question goes "
+    "unanswered -- so those columns stay in the tables, as an honest measurement "
+    "of something that does not vary here.": (
+        "Umí, a tím jsou ploché sloupce vysvětlené: {columns} klesnou u obou soudců "
+        "na tom zápisu, který je na ně ušitý. Soudce se tedy dívá. Těch jedenáct "
+        "modelů má stejné skóre proto, že píšou do téže předepsané čtyřdílné "
+        "struktury a doopravdy se neliší — ne proto, že by otázka zůstala "
+        "nezodpovězená. Ty sloupce tedy v tabulkách zůstávají jako poctivé měření "
+        "něčeho, co tady nekolísá."
+    ),
+    "{columns} did not move even on the note built to attack them. A column whose "
+    "value does not change when the fault it names is put in front of it is not "
+    "measuring that fault, and its figures in the tables above should be read as "
+    "unmeasured rather than as full marks.": (
+        "{columns} se nehnuly ani na zápisu, který je na ně ušitý. Sloupec, jehož "
+        "hodnota se nezmění, když mu člověk podstrčí přesně tu chybu, kterou "
+        "pojmenovává, tu chybu neměří — a jeho čísla v tabulkách výše se mají číst "
+        "jako nezměřeno, ne jako plný počet."
+    ),
+    "The damage is deliberate and extreme -- every sentence in the wrong section, "
+    "a note with no plan at all. This says the instrument responds, not that it "
+    "tells two ordinary notes apart. And no person has yet rated any of these "
+    "notes on this instrument, so nothing here says a 5 is what a clinician would "
+    "give.": (
+        "To poškození je záměrné a hrubé — každá věta ve špatné sekci, zápis úplně "
+        "bez plánu. Říká to, že nástroj reaguje, ne že rozliší dva obyčejné zápisy. "
+        "A tímhle nástrojem zatím nehodnotil žádný člověk, takže odsud neplyne nic o "
+        "tom, jestli by pětku dal i klinik."
+    ),
     # --- refusals ----------------------------------------------------------
     "Refusing to write: a row carries something that is not a score.": (
         "Odmítám zapsat: řádek nese něco, co není skóre."
