@@ -691,6 +691,27 @@ CS: dict[str, str] = {
         "endpointech Googlu a OpenAI. Cena tu není — ceníková cena je výrok o jednom "
         "dodavateli v jeden den a bez toho dne je za rok nečitelná."
     ),
+    "The two instruments rated the same notes, so the rows do not add up: "
+    "{models} models wrote {written} notes in all, and each note was read twice by "
+    "each judge -- once against the criteria and once against PDSQI-9.": (
+        "Oba nástroje hodnotily tytéž zápisy, takže se řádky nesčítají: {models} "
+        "modelů napsalo celkem {written} zápisů a každý z nich četl každý soudce "
+        "dvakrát — jednou podle kritérií a jednou podle PDSQI-9."
+    ),
+    # --- what it took, the second pass ---------------------------------------
+    "Calls to write them": ("Volání, aby vznikly"),
+    "Every note was written on e-INFRA, the infrastructure that holds the sessions. Only "
+    "the notes went anywhere else: each was put to two judges, one question per "
+    "criterion, on Google's and OpenAI's endpoints.": (
+        "Každý zápis vznikl na e-INFRA, tedy na infrastruktuře, která ta sezení drží. Ven šly "
+        "jen zápisy: každý dostali dva soudci, jedna otázka na kritérium, na endpointech "
+        "Googlu a OpenAI."
+    ),
+    "The Deepsy format is asked for one section at a time, so a note there is three "
+    "answers rather than one: the same number of notes costs three times the calls.": (
+        "Formát Deepsy se ptá po jedné sekci zvlášť, takže zápis v něm nejsou jedna, ale tři "
+        "odpovědi: za týž počet zápisů se zaplatí trojnásobkem volání."
+    ),
     # --- refusals ----------------------------------------------------------
     "Refusing to write: a row carries something that is not a score.": (
         "Odmítám zapsat: řádek nese něco, co není skóre."

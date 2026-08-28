@@ -33,6 +33,7 @@ from pathlib import Path
 from tnb import i18n, results
 from tnb.report import COLUMNS, MEASURE_TABLES, TRACK_BLURBS, TRACK_TITLES
 from tnb.scoring import czech as czech_scorer
+from tnb.tasks import TASKS
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from czech_brief_cs import CS  # noqa: E402
@@ -148,6 +149,13 @@ NOT_PUBLIC_WHY = (
     "publish anything from them has not been made. The transcripts were de-identified "
     "before any model saw them, and no transcript text appears in this document or in "
     "any file it was built from."
+)
+#: Placeholders, because the alternative is two numbers typed into a sentence
+#: that a later run silently makes false. Both translations carry the same two.
+SCALE_NOT_ADDITIVE = (
+    "The two instruments rated the same notes, so the rows do not add up: "
+    "{models} models wrote {written} notes in all, and each note was read twice by "
+    "each judge -- once against the criteria and once against PDSQI-9."
 )
 METHOD_CORPORA = (
     "Two halves, both read only from a directory that is not in version control. "
@@ -504,6 +512,103 @@ def _catch(key: str) -> str:
     """
     written = WHAT_IT_CATCHES.get(key, "")
     return _t(written) if written else ""
+
+
+def _calls(track: str, notes: int) -> str:
+    """How many answers a model had to give to produce that many notes.
+
+    Read off the task rather than typed, because it is the one number here that
+    is not one per note: the Deepsy format asks for each section separately, so
+    220 notes are 660 calls. A track that rates notes somebody else generated --
+    both PDSQI tracks -- generated nothing and says so with a dash.
+    """
+    task = next((t for name, t in TASKS.items() if results.TRACK_BY_TASK.get(name) == track), None)
+    if task is None:
+        return "<span class='dash'>&mdash;</span>"
+    return str(notes * task.calls_per_session)
+
+
+def _scale(rows: list[results.Row]) -> str:
+    """How many notes and how many questions, and on whose machines.
+
+    Counted from the rows rather than typed, so it cannot drift from what was
+    actually run. It belongs in the method for two reasons: a reader judging
+    whether ten notes per model is enough needs the number in front of them,
+    and **where each step ran is the confidentiality boundary** -- the notes
+    were written on the infrastructure that holds the sessions, and only the
+    notes went anywhere else.
+
+    No money. A price is a fact about a vendor's list on one day, not about
+    this benchmark, and a figure without that day attached is unreadable a year
+    later -- the same reason the external index carries its version.
+    """
+    latest = [row for row in results.latest(rows) if row.is_scored]
+    if not latest:
+        return ""
+
+    # The two corpus tracks only. The PDSQI tracks rate the notes those two
+    # generated, so counting their rows too would report every note twice.
+    corpora = (results.TRACK_CZECH_REAL, results.TRACK_CZECH_TRANSLATED)
+    written, systems, drawn_tracks = 0, set(), set()
+
+    lines = []
+    for track in results.LOCAL_TRACKS:
+        here = [row for row in latest if row.track == track]
+        if not here:
+            continue
+        newest = max(row.judge_prompt_version for row in here)
+        drawn = [row for row in here if row.judge_prompt_version == newest]
+        drawn_tracks.add(track)
+        rating = sorted({row.judge_model or "" for row in drawn})
+        notes = sum(row.n_sessions_scored for row in drawn) // max(1, len(rating))
+        models = len({row.system_id for row in drawn})
+        if track in corpora:
+            # Per judge: a note written once is scored by each of them, so the
+            # rows repeat it. Divided here rather than over the whole set,
+            # because a superseded rubric adds a third and fourth row per note.
+            written += sum(row.n_sessions_generated for row in drawn) // max(1, len(rating))
+            systems |= {row.system_id for row in drawn}
+        lines.append(
+            f"<tr><td>{html.escape(_t(TRACK_TITLES.get(track, track)))}</td>"
+            f"<td>{models}</td><td>{notes}</td><td>{_calls(track, notes)}</td>"
+            f"<td>{len(rating)}</td></tr>"
+        )
+    if not lines:
+        return ""
+
+    footnote = _t(SCALE_NOT_ADDITIVE).format(models=len(systems), written=written)
+    # Said only when the rows it points at are drawn. A sentence explaining why
+    # two rows below cost three times the calls is a puzzle, not an
+    # explanation, on a run where those two rows have not been scored yet.
+    deepsy = {results.TRACK_DEEPSY_REAL, results.TRACK_DEEPSY_TRANSLATED}
+    deepsy_note = ""
+    if drawn_tracks & deepsy:
+        deepsy_note = " " + html.escape(
+            _t(
+                "The Deepsy format is asked for one section at a time, so a note there "
+                "is three answers rather than one: the same number of notes costs three "
+                "times the calls."
+            )
+        )
+    return (
+        f"<h3>{_t('What it took')}</h3>"
+        + "<p>"
+        + html.escape(
+            _t(
+                "Every note was written on e-INFRA, the infrastructure that holds the "
+                "sessions. Only the notes went anywhere else: each was put to two "
+                "judges, one question per criterion, on Google's and OpenAI's "
+                "endpoints."
+            )
+        )
+        + deepsy_note
+        + "</p>"
+        + f"<table><thead><tr><th>{_t('Track')}</th><th>{_t('Models')}</th>"
+        + f"<th>{_t('Notes')}</th><th>{_t('Calls to write them')}</th>"
+        + f"<th>{_t('Judges')}</th></tr></thead>"
+        + f"<tbody>{''.join(lines)}</tbody></table>"
+        + f"<p class='dash'>{html.escape(footnote)}</p>"
+    )
 
 
 def _corpus() -> str:
@@ -1511,6 +1616,7 @@ def build(rows: list[results.Row]) -> str:
 <p>{_t(METHOD_CORPORA)} <strong>{_t("They are not the same size:")}</strong>
 {_t(METHOD_SIZE)}</p>
 {_corpus()}
+{_scale(rows)}
 <p><strong>{_t("No judge is ever shown a real session.")}</strong> {_t(METHOD_BOUNDARY)}</p>
 <p>{_t(METHOD_CRITERIA)}</p>
 <p>{_t(METHOD_QUOTES)}</p>
