@@ -100,10 +100,18 @@ def score_note(
     *,
     force: bool = False,
     cache_root=None,
+    render=task.render_note,
+    judge_prompt_version: str = czech.JUDGE_PROMPT_VERSION,
 ) -> NoteResult:
-    """Ask one note's criteria, reusing whatever was asked before."""
+    """Ask one note's criteria, reusing whatever was asked before.
+
+    `render` is a parameter because the Deepsy track scores the same seven
+    criteria over a note with different sections. The instrument does not
+    change; what it is shown does, and a renderer hard-coded here would have
+    meant a second copy of this function to change one line of it.
+    """
     fingerprint = client.config.fingerprint()
-    note = task.render_note(candidate.note)
+    note = render(candidate.note)
     tasks = czech.build_tasks(note)
     answers: dict[str, str] = {}
     result = NoteResult(candidate=candidate, empty=not czech.has_content(note))
@@ -111,7 +119,7 @@ def score_note(
     for question in tasks:
         path = judge.cache_path(
             client.config.model,
-            czech.JUDGE_PROMPT_VERSION,
+            judge_prompt_version,
             candidate.provider,
             candidate.system_id,
             candidate.session_id,
@@ -136,7 +144,7 @@ def score_note(
             path,
             {
                 "judge_model": client.config.model,
-                "judge_prompt_version": czech.JUDGE_PROMPT_VERSION,
+                "judge_prompt_version": judge_prompt_version,
                 "judge_fingerprint": fingerprint,
                 "provider": candidate.provider,
                 "system_id": candidate.system_id,
@@ -177,6 +185,8 @@ def score_many(
     *,
     force: bool = False,
     cache_root=None,
+    render=task.render_note,
+    judge_prompt_version: str = czech.JUDGE_PROMPT_VERSION,
     on_note=None,
 ) -> list[NoteResult]:
     """Score notes concurrently, stopping rather than crossing the ceiling."""
@@ -186,7 +196,15 @@ def score_many(
     def work(candidate: Candidate) -> NoteResult | None:
         if stopped is not None:
             return None
-        return score_note(candidate, client, spend, force=force, cache_root=cache_root)
+        return score_note(
+            candidate,
+            client,
+            spend,
+            force=force,
+            cache_root=cache_root,
+            render=render,
+            judge_prompt_version=judge_prompt_version,
+        )
 
     with ThreadPoolExecutor(max_workers=max(1, client.config.concurrency)) as pool:
         for future in [pool.submit(work, candidate) for candidate in candidates]:
@@ -211,6 +229,10 @@ class SystemAggregate:
     """Every note one system was scored on, and the mean of the complete ones."""
 
     notes: list[NoteResult] = field(default_factory=list)
+    #: How a note is turned into text, for the length column. The Deepsy track
+    #: has different sections, and counting its words with the SOAP renderer
+    #: would count the wrong headings.
+    render: object = task.render_note
 
     @property
     def complete(self) -> list[NoteResult]:
@@ -293,7 +315,7 @@ class SystemAggregate:
                 headline[key] = round(sum(values) / len(values), 4)
                 detail[f"{key}.notes"] = len(values)
 
-        words = [czech.note_words(task.render_note(note.candidate.note)) for note in self.notes]
+        words = [czech.note_words(self.render(note.candidate.note)) for note in self.notes]
         if words:
             detail["note_words"] = round(sum(words) / len(words), 1)
         return results.Metrics(headline=headline, detail=detail)
@@ -310,6 +332,10 @@ def to_rows(
     n_unreached: dict | None = None,
     settings: dict | None = None,
     run_id: str = "",
+    prompt_version: str = task.PROMPT_VERSION,
+    judge_prompt_version: str = czech.JUDGE_PROMPT_VERSION,
+    render=task.render_note,
+    metrics_note: str | None = None,
 ) -> list[results.Row]:
     """One row per (provider, system), on the track it was scored for.
 
@@ -317,14 +343,20 @@ def to_rows(
     the endpoint never answered is not the model's failure, and a count of
     unusable notes travels with the reason it was unusable.
     """
-    if track not in (results.TRACK_CZECH_REAL, results.TRACK_CZECH_TRANSLATED):
-        raise ValueError(f"{track!r} is not a Czech track.")
+    allowed = (
+        results.TRACK_CZECH_REAL,
+        results.TRACK_CZECH_TRANSLATED,
+        results.TRACK_DEEPSY_REAL,
+        results.TRACK_DEEPSY_TRANSLATED,
+    )
+    if track not in allowed:
+        raise ValueError(f"{track!r} is not scored by the Czech criteria.")
 
     groups: dict[tuple[str, str], SystemAggregate] = {}
     labels: dict[tuple[str, str], Candidate] = {}
     for note in scored:
         key = (note.candidate.provider, note.candidate.system_id)
-        groups.setdefault(key, SystemAggregate()).notes.append(note)
+        groups.setdefault(key, SystemAggregate(render=render)).notes.append(note)
         labels[key] = note.candidate
 
     now = dt.datetime.now(dt.UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -348,10 +380,10 @@ def to_rows(
                 system_label=candidate.system_label,
                 provider=candidate.provider,
                 harness_version=__version__,
-                prompt_version=task.PROMPT_VERSION,
+                prompt_version=prompt_version,
                 judge_model=judge_model,
                 judge_settings=dict(judge_settings or {}),
-                judge_prompt_version=czech.JUDGE_PROMPT_VERSION,
+                judge_prompt_version=judge_prompt_version,
                 settings=(settings or {}).get(key, results.Settings()),
                 n_sessions_attempted=attempted,
                 n_sessions_generated=generated,

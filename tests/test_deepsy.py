@@ -241,3 +241,74 @@ def _completion(text: str):
     from tnb.providers.openai_compatible import Completion
 
     return Completion(model="m", text=text, ok=True, finish_reason="stop")
+
+
+# --- assembling three files into one note ------------------------------------
+
+
+def _section_file(directory, section, note, ok=True):
+    directory.mkdir(parents=True, exist_ok=True)
+    (directory / f"{section}.json").write_text(
+        json.dumps({"ok": ok, "note": note, "unit": section}), encoding="utf-8"
+    )
+
+
+def _full(section):
+    return {key: "x" for key in deepsy.KEYS[section]}
+
+
+def test_a_note_needs_all_three_sections(tmp_path):
+    """Two of three is a shorter note, not a note. Scoring it would put a model
+    judged on two thirds of its text beside models judged on all of it."""
+    from tnb.scoring import deepsy_run
+
+    session = Session(id="cz-r-0000abcd", source="czech-real", turns=())
+    unit = tmp_path / "einfra" / deepsy.NAME_REAL / deepsy.PROMPT_VERSION / "m" / session.id
+
+    _section_file(unit, "data", _full("data"))
+    _section_file(unit, "plan", _full("plan"))
+    assert not list(
+        deepsy_run.from_generations([session], task_name=deepsy.NAME_REAL, cache_dir=tmp_path)
+    )
+
+    _section_file(unit, "clinical_hypotheses", _full("clinical_hypotheses"))
+    candidates = list(
+        deepsy_run.from_generations([session], task_name=deepsy.NAME_REAL, cache_dir=tmp_path)
+    )
+    assert len(candidates) == 1
+    assert set(candidates[0].note) == {
+        key for section in deepsy.SECTIONS for key in deepsy.KEYS[section]
+    }
+
+
+def test_a_section_the_generator_marked_failed_is_not_assembled(tmp_path):
+    """The generator already decided it did not parse. Reading it again here
+    could disagree with that, and then the cache and the table would say
+    different things about the same reply."""
+    from tnb.scoring import deepsy_run
+
+    session = Session(id="cz-r-0000abcd", source="czech-real", turns=())
+    unit = tmp_path / "einfra" / deepsy.NAME_REAL / deepsy.PROMPT_VERSION / "m" / session.id
+    for section in deepsy.SECTIONS:
+        _section_file(unit, section, _full(section))
+    _section_file(unit, "plan", None, ok=False)
+
+    assert not list(
+        deepsy_run.from_generations([session], task_name=deepsy.NAME_REAL, cache_dir=tmp_path)
+    )
+
+
+def test_a_candidate_never_carries_a_transcript(tmp_path):
+    """The same guarantee the Czech track makes: what reaches the judge is the
+    note, never the session."""
+    from tnb.scoring import deepsy_run
+
+    session = Session(id="cz-r-0000abcd", source="czech-real", turns=())
+    unit = tmp_path / "einfra" / deepsy.NAME_REAL / deepsy.PROMPT_VERSION / "m" / session.id
+    for section in deepsy.SECTIONS:
+        _section_file(unit, section, _full(section))
+
+    candidate = next(
+        deepsy_run.from_generations([session], task_name=deepsy.NAME_REAL, cache_dir=tmp_path)
+    )
+    assert candidate.conversation == ""

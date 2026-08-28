@@ -972,6 +972,144 @@ def cmd_score_czech_pdsqi(args: argparse.Namespace) -> int:
     return 0
 
 
+DEEPSY_CORPORA = {
+    "real": (results.TRACK_DEEPSY_REAL, "deepsy-real"),
+    "translated": (results.TRACK_DEEPSY_TRANSLATED, "deepsy-translated"),
+}
+
+
+def cmd_score_deepsy(args: argparse.Namespace) -> int:
+    """Ask the seven Czech criteria about the Deepsy-format notes.
+
+    The same instrument as `score-czech`, over notes with different sections.
+    That is the design: what changes between the two tables is the shape the
+    model was asked for, so a difference between them is a fact about the
+    format rather than about the measurement.
+
+    A session is scored only when all three of its sections parsed. Two of
+    three is a shorter note, not a note, and scoring it would put a model
+    judged on two thirds of its text beside models judged on all of it.
+    """
+    from tnb.scoring import czech, deepsy_run
+    from tnb.scoring import czech_run as scoring_czech
+    from tnb.tasks import deepsy as deepsy_task
+
+    overrides = {"model": args.judge_model}
+    if getattr(args, "concurrency", None):
+        overrides["concurrency"] = args.concurrency
+    if getattr(args, "thinking_budget", None) is not None:
+        overrides["thinking_budget"] = args.thinking_budget
+    config = judge.config_from_env(**overrides)
+
+    wanted = ["real", "translated"] if args.corpus == "both" else [args.corpus]
+    plan: list[tuple[str, list]] = []
+    for corpus in wanted:
+        track, task_name = DEEPSY_CORPORA[corpus]
+        loader = czech_task.load_real if corpus == "real" else czech_task.load_translated
+        try:
+            sessions = loader(args.limit)
+        except RuntimeError as error:
+            print(f"{corpus}: {error}", file=sys.stderr)
+            continue
+        candidates = list(deepsy_run.from_generations(sessions, task_name=task_name))
+        if args.models:
+            names = {name.strip() for name in args.models.split(",") if name.strip()}
+            candidates = [c for c in candidates if c.system_id in names]
+        plan.append((track, candidates))
+
+    if not any(candidates for _, candidates in plan):
+        raise RuntimeError(
+            "Nothing to score. Run 'tnb generate --tasks deepsy-real,deepsy-translated' first."
+        )
+
+    total = sum(len(c) for _, c in plan)
+    questions = sum(
+        len(czech.build_tasks(deepsy_task.render_note(candidate.note)))
+        for _, candidates in plan
+        for candidate in candidates
+    )
+    print(
+        f"{total} note(s) over {len(plan)} corpus(es), {questions} judge questions.",
+    )
+    print(
+        f"judge {config.model}, thinking budget {config.thinking_budget}, "
+        f"ceiling ${args.max_judge_usd:.2f}"
+    )
+    for track, candidates in plan:
+        systems = sorted({c.system_id for c in candidates})
+        print(f"  {track:20} {len(candidates):4} note(s), {len(systems)} system(s)")
+
+    if args.dry_run:
+        print("Dry run: the judge was not called.")
+        return 0
+
+    client = judge.Judge(config)
+    spend = judge.Spend(limit_usd=args.max_judge_usd)
+    written = 0
+
+    for track, candidates in plan:
+        if not candidates:
+            continue
+        coverage = _generated_per_system(candidates)
+        done = 0
+        expected = len(candidates)
+
+        def on_note(result, total=expected) -> None:
+            nonlocal done
+            done += 1
+            print(
+                f"  [{done}/{total}] {result.candidate.system_id[:26]:26} "
+                f"{result.candidate.session_id:>14}  "
+                f"diakritika {_measure_cell(result.scored.get('diacritics'))}  "
+                f"shoda {_measure_cell(result.scored.get('agreement'))}  "
+                f"asked {result.asked:2} cached {result.cached:2}"
+                + (f" missing {len(result.missing)}" if result.missing else "")
+                + (" EMPTY" if result.empty else "")
+                + f"  {_money(spend.usd(config.model))}",
+                flush=True,
+            )
+
+        print(f"{track}:")
+        scored = scoring_czech.score_many(
+            candidates,
+            client,
+            spend,
+            force=args.force,
+            render=deepsy_task.render_note,
+            judge_prompt_version=czech.JUDGE_PROMPT_VERSION,
+            on_note=on_note,
+        )
+        if not scored:
+            continue
+
+        rows = scoring_czech.to_rows(
+            scored,
+            track=track,
+            judge_model=config.model,
+            judge_settings=config.fingerprint(),
+            n_generated=coverage,
+            n_attempted=coverage,
+            run_id=args.run_id or "",
+            prompt_version=deepsy_task.PROMPT_VERSION,
+            render=deepsy_task.render_note,
+        )
+        if args.no_write:
+            print(f"  --no-write: {len(rows)} row(s) not appended.")
+            continue
+        results.LOCAL_DIR.mkdir(parents=True, exist_ok=True)
+        path = results.append(rows, results.LOCAL_ROWS_PATH)
+        written += len(rows)
+        print(f"  appended {len(rows)} row(s) to {path.relative_to(REPO_ROOT)}")
+
+    print(
+        f"{spend.calls} judge calls, {spend.input_tokens} in / {spend.output_tokens} out, "
+        f"{_money(spend.usd(config.model))} at list price."
+    )
+    if written:
+        print("Run 'tnb czech-report' to rebuild the local page.")
+    return 0
+
+
 def cmd_czech_report(args: argparse.Namespace) -> int:
     """Draw the Czech tables from the local record, into a local directory.
 
@@ -1809,6 +1947,36 @@ def build_parser() -> argparse.ArgumentParser:
     )
     score_czech_pdsqi.add_argument("--run-id", help="label these rows with a run id")
     score_czech_pdsqi.set_defaults(func=cmd_score_czech_pdsqi)
+
+    score_deepsy = subparsers.add_parser(
+        "score-deepsy",
+        help="ask the seven Czech criteria about the Deepsy-format notes (local only)",
+    )
+    score_deepsy.add_argument("--corpus", choices=["real", "translated", "both"], default="both")
+    score_deepsy.add_argument("--models", help="comma-separated system ids to rate")
+    score_deepsy.add_argument("--limit", type=int, help="use only the first N sessions")
+    score_deepsy.add_argument(
+        "--judge-model", default=judge.DEFAULT_MODEL, help="which judge to run"
+    )
+    score_deepsy.add_argument(
+        "--max-judge-usd",
+        type=float,
+        default=250.0,
+        help="runaway guard; the run stops rather than exceeding it",
+    )
+    score_deepsy.add_argument("--concurrency", type=int, help="parallel judge calls; default 4")
+    score_deepsy.add_argument(
+        "--thinking-budget",
+        type=int,
+        help="how much room the judge gets to think; part of the cache key",
+    )
+    score_deepsy.add_argument("--force", action="store_true", help="re-ask cached questions")
+    score_deepsy.add_argument("--dry-run", action="store_true", help="print the job, ask nothing")
+    score_deepsy.add_argument(
+        "--no-write", action="store_true", help="rate but do not append result rows"
+    )
+    score_deepsy.add_argument("--run-id", help="label these rows with a run id")
+    score_deepsy.set_defaults(func=cmd_score_deepsy)
 
     czech_report = subparsers.add_parser(
         "czech-report",

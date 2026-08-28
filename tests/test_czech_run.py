@@ -97,9 +97,15 @@ def test_the_track_is_a_parameter_and_two_calls_give_two_tracks():
     assert real.comparability_key() != translated.comparability_key()
 
 
-def test_a_row_refuses_a_track_that_is_not_czech():
-    with pytest.raises(ValueError, match="not a Czech track"):
+def test_a_row_refuses_a_track_these_criteria_do_not_score():
+    """Four tracks are scored by the seven criteria -- the two Czech SOAP halves
+    and the two Deepsy ones. An English track is not one of them, and a runner
+    that accepted it would file a row under an instrument that never ran."""
+    with pytest.raises(ValueError, match="not scored by the Czech criteria"):
         czech_run.to_rows([_result()], track=results.TRACK_TNEVAL, judge_model="j")
+
+    for track in (results.TRACK_DEEPSY_REAL, results.TRACK_DEEPSY_TRANSLATED):
+        assert czech_run.to_rows([_result()], track=track, judge_model="j")[0].track == track
 
 
 def test_the_row_says_the_instrument_has_no_anchor():
