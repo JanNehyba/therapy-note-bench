@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import argparse
 import html
+import json
 import re
 import sys
 from collections import defaultdict
@@ -183,6 +184,69 @@ def check_no_clinical_text(rows: list[results.Row]) -> list[str]:
     return problems
 
 
+def _controls() -> str:
+    """What each column detects, from the planted-error runs.
+
+    A table of proportions says which model scored higher. It cannot say whether
+    the column measures what its heading claims -- for that somebody has to put
+    a known fault in front of the judge and see whether it comes back. The
+    result belongs beside the numbers rather than in a file the reader would
+    have to be told about.
+    """
+    found = sorted(REPO.joinpath("local").glob("czech-control*.json"))
+    if not found:
+        return ""
+
+    runs = [json.loads(path.read_text(encoding="utf-8")) for path in found]
+    keys = [key for key, _ in COLUMNS[results.TRACK_CZECH_REAL]]
+
+    rows = []
+    for run in runs:
+        cells = []
+        for key in keys:
+            detected = run["variants"].get(key, {}).get(key)
+            false_alarm = run["clean"].get(key)
+            if detected and not false_alarm:
+                cells.append("<td>found it</td>")
+            elif detected and false_alarm:
+                cells.append("<td><strong>also fires on a clean note</strong></td>")
+            else:
+                cells.append("<td><strong>did not find it</strong></td>")
+        rows.append(f"<tr><td>{html.escape(run['judge_model'])}</td>{''.join(cells)}</tr>")
+
+    unreliable = sorted(
+        {
+            key
+            for run in runs
+            for key in keys
+            if run["clean"].get(key) or not run["variants"].get(key, {}).get(key)
+        }
+    )
+    verdict = (
+        "<div class='warn'><p><strong>"
+        + html.escape(", ".join(unreliable))
+        + "</strong>: at least one judge reports this fault in a note that does not "
+        "have it, or misses it in a note that does. Read that column as a question "
+        "rather than as an answer -- the disagreement is the finding.</p></div>"
+        if unreliable
+        else "<p>Every criterion found its own fault under every judge, and none "
+        "fired on the clean note.</p>"
+    )
+
+    head = "".join(
+        f"<th>{html.escape(MEASURE_TABLES[results.TRACK_CZECH_REAL][k]['label'])}</th>"
+        for k in keys
+    )
+    return (
+        "<h2>Does each column detect what it claims?</h2>"
+        "<p>One clean note and seven variants, each carrying exactly one "
+        "deliberate fault of one kind. This is the only check that can tell a "
+        "column that measures something from a column that produces numbers.</p>"
+        f"<table><thead><tr><th>Judge</th>{head}</tr></thead>"
+        f"<tbody>{''.join(rows)}</tbody></table>" + verdict
+    )
+
+
 def build(rows: list[results.Row]) -> str:
     # One table per (track, judge). Two judges are two instruments and their
     # rows are two comparability groups; merging them would print every model
@@ -239,6 +303,8 @@ made. The transcripts were de-identified before any model saw them, and no
 transcript text appears in this document or in any file it was built from.</p></div>
 
 {"".join(sections)}
+
+{_controls()}
 
 <h2>What these numbers cannot be used for</h2>
 {limits}

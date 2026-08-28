@@ -32,6 +32,7 @@ variant does not earn.
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from pathlib import Path
 
@@ -155,7 +156,27 @@ def main(argv: list[str] | None = None) -> int:
 
     args.target.parent.mkdir(parents=True, exist_ok=True)
     args.target.write_text(_report(config.model, clean, variants, spend), encoding="utf-8")
-    print(f"\nwrote {args.target}  ({spend.calls} calls, ${spend.usd(config.model):.2f})")
+
+    # Beside the prose, so `tools/czech_brief.py` can put this next to the
+    # numbers rather than in a file somebody has to be told about. What a column
+    # is worth belongs in the same document as the column.
+    payload = args.target.with_suffix(".json")
+    payload.write_text(
+        json.dumps(
+            {
+                "judge_model": config.model,
+                "thinking_budget": config.thinking_budget,
+                "clean": clean,
+                "variants": variants,
+                "calls": spend.calls,
+            },
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    print(f"\nwrote {args.target} and {payload.name}  ({spend.calls} calls)")
     return 0
 
 
