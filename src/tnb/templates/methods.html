@@ -3,13 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>therapy-note-bench — how this was measured</title>
+<title data-t="methods.title">therapy-note-bench — how this was measured</title>
 __STYLE__
 </head>
 <body>
 <main>
-  <h1>How this was measured</h1>
-  <p class="sub">
+  <div class="lang" id="lang"></div>
+  <h1 data-t="methods.h1">How this was measured</h1>
+  <p class="sub" data-t="methods.sub">
     The instrument behind <a href="index.html">the leaderboard</a>: which judge, checked
     against whom, over which corpora, and what the two judges disagree about. Every panel
     here is drawn from the same run that produced the tables — nothing on this page is
@@ -18,9 +19,9 @@ __STYLE__
   </p>
 
   <div class="box pending" id="calibration">
-    <h2>Judge calibration</h2>
+    <h2 data-t="methods.calibration.h2">Judge calibration</h2>
     <div id="calibration-body">
-      <p class="blurb">
+      <p class="blurb" data-t="methods.calibration.pending">
         Before any number here is trusted, the judge is scored against the two human
         annotators TN-Eval released, and the agreement appears here — including if it is bad.
         <strong>Not yet measured.</strong>
@@ -32,7 +33,7 @@ __STYLE__
        and buried them; on a page a reader opens on purpose, a collapsed panel
        is content nobody sees. They still close on a click. -->
   <details class="box" open id="judges">
-    <summary><strong>Why these two judges, and not the newest models</strong></summary>
+    <summary data-t="methods.judges.summary"><strong>Why these two judges, and not the newest models</strong></summary>
     <div id="judges-body"></div>
   </details>
 
@@ -41,9 +42,9 @@ __STYLE__
   <div class="box" id="concordance"></div>
 
   <details class="box" open id="saturation">
-    <summary><strong>Is there anything left to measure?</strong></summary>
+    <summary data-t="methods.saturation.summary"><strong>Is there anything left to measure?</strong></summary>
     <figure class="wide">__FIGURE_ROOM_LEFT__
-      <figcaption>How much of each measure&rsquo;s range the models actually occupy.
+      <figcaption data-t="methods.saturation.figure">How much of each measure&rsquo;s range the models actually occupy.
         Left: one strip per rubric criterion, worst model to best, with the therapist
         marked. Right: the same reading of TRACE, where one strip is every model at
         once. Drawn by <code>tools/figures.py</code> from the files named in its
@@ -53,50 +54,50 @@ __STYLE__
   </details>
 
   <details class="box" open id="protocol">
-    <summary><strong>What is a note here, and what is it scored against?</strong></summary>
+    <summary data-t="methods.protocol.summary"><strong>What is a note here, and what is it scored against?</strong></summary>
     <div id="protocol-body"></div>
   </details>
 
   <div class="box" id="similarity-example"></div>
 
   <details class="box" open id="corpora">
-    <summary><strong>What the two corpora are, and how much of the form the experts filled in</strong></summary>
+    <summary data-t="methods.corpora.summary"><strong>What the two corpora are, and how much of the form the experts filled in</strong></summary>
     <div id="corpora-body"></div>
   </details>
 
   <div id="withdrawn"></div>
 
   <details class="box" open id="licences">
-    <summary><strong>Where every input comes from, and on what terms</strong></summary>
+    <summary data-t="methods.licences.summary"><strong>Where every input comes from, and on what terms</strong></summary>
     <div id="licences-body"></div>
   </details>
 
-  <p class="methods-link"><a href="brief.html">The eight-page briefing →</a>
+  <p class="methods-link" data-t="methods.brief-link"><a href="brief.html">The eight-page briefing →</a>
      What a leaderboard of these models can and cannot tell you, for somebody
      building or buying one — four claims, four figures, and the file each number
      came from. Also as a <a href="therapy-note-bench.pdf">PDF</a>.</p>
 
   <footer>
-    <p>Each column's range, what it counts and what it must not be read as are printed
+    <p data-t="methods.foot.columns">Each column's range, what it counts and what it must not be read as are printed
        under the table it belongs to on <a href="index.html">the leaderboard</a> — including
        the near-zero human agreement on <strong>Faithfulness</strong> (Krippendorff's alpha
        0.18) and the fact that <strong>TRACE</strong> is a re-implementation with
        <em>no human anchor</em>. A number and its caveat should not be separated by a scroll,
        which is why they are there and this page is here.</p>
-    <p><strong>Notes</strong> counts the notes a protocol could actually read. A model that
+    <p data-t="page.foot.notes"><strong>Notes</strong> counts the notes a protocol could actually read. A model that
        writes a good note in the wrong shape loses notes to its format, not to its
        clinical content — read the count before comparing the score.</p>
-    <p>The chip after a model name is the <strong>provider</strong> that served it. The same
+    <p data-t="methods.foot.provider">The chip after a model name is the <strong>provider</strong> that served it. The same
        model id on two providers can be two different builds — a different quantisation,
        different weights, a different system prompt — so they are two rows there, never one.</p>
-    <p>Rows are only ever compared when they agree on all six of track, harness version,
+    <p data-t="methods.foot.comparability">Rows are only ever compared when they agree on all six of track, harness version,
        prompt version, judge model, judge prompt version and <strong>the settings the judge
        ran at</strong>. A changed judge — or a judge given a different budget to think with —
        starts a new table rather than rewriting this one. A group that names a judge and
        cannot say how it was set is withdrawn: two rows that both record nothing are not
        thereby the same instrument.</p>
     <p id="provenance"></p>
-      <p><strong>What the corpora are, and what they are not.</strong> Four pages
+      <p data-t="page.foot.background"><strong>What the corpora are, and what they are not.</strong> Four pages
        carry the background these tables rest on, and until 2026-08-27 nothing on
        this site linked to any of them:
        <a href="datasets.md">the datasets</a> — where each came from, what licence
@@ -112,11 +113,30 @@ const DATA = __DATA__;
 
 __HELPERS__
 
+// A panel with nothing to say takes itself off the page. That used to happen
+// once, at load; the language switch draws every panel again, and the second
+// pass would find the node gone and throw on `null.remove()` -- blanking the
+// whole page, because it is one script. So removal is idempotent and every
+// panel that writes into a box it might have removed checks first.
+function drop(id) {
+  const el = document.getElementById(id);
+  if (el) el.remove();
+}
+
 const VERDICTS = {
   discriminating: ['--v-discriminating', 'still separates models'],
   saturated:      ['--v-saturated',      'every model already does this'],
   mixed:          ['--v-mixed',          'partly, weakly'],
   unreachable:    ['--v-unreachable',    'nobody can, the therapist included'],
+};
+
+// The verdict words themselves, drawn in the legend and in the last column.
+// Kept out of the mapping above so the token and the gloss stay one pair.
+const VERDICT_LABEL = {
+  discriminating: 'discriminating',
+  saturated: 'saturated',
+  mixed: 'mixed',
+  unreachable: 'unreachable',
 };
 
 // What the leaderboard prints for one system under one judge, or null.
@@ -155,10 +175,10 @@ function intervalPlot(rows, human, judgeModel, measure) {
     const y = top + i * rowH + rowH / 2;
     const colour = r.system === 'therapist' ? 'var(--muted)' : 'var(--accent)';
     return `<g>
-      <title>${r.system}: ${r.mean.toFixed(3)} over the shared conversations (95% interval ${r.low.toFixed(3)} to ${r.high.toFixed(3)})${(() => {
+      <title>${T`${r.system}: ${r.mean.toFixed(3)} over the shared conversations (95% interval ${r.low.toFixed(3)} to ${r.high.toFixed(3)})`}${(() => {
         const shown = asTheTableShows(judgeModel, r.system, measure);
         return shown && shown.notes !== r.sessions
-          ? ` — the table shows ${shown.value.toFixed(3)}, over the ${shown.notes} notes the judge finished`
+          ? T` — the table shows ${shown.value.toFixed(3)}, over the ${shown.notes} notes the judge finished`
           : '';
       })()}</title>
       <text class="name" x="${padL - 12}" y="${y + 4}" text-anchor="end">${r.system}</text>
@@ -178,20 +198,21 @@ function intervalPlot(rows, human, judgeModel, measure) {
   // scaling a 720-wide plot into a 360px phone renders every label at ~5px.
   return `<div class="scroll"><svg class="plot fixed" width="${W}" height="${H}"
        viewBox="0 0 ${W} ${H}" role="img"
-       aria-label="Completeness with 95% bootstrap intervals, best first">
+       aria-label="${T`Completeness with 95% bootstrap intervals, best first`}">
     ${ticks.join('')}${humanRule}${marks}
   </svg></div>`;
 }
 
 function renderSaturation(data) {
   const s = data.saturation;
-  if (!s) { document.getElementById('saturation').remove(); return; }
+  if (!s) { drop('saturation'); return; }
+  if (!document.getElementById('saturation-body')) return;
 
   const counts = s.verdict_counts || {};
   const legend = Object.entries(VERDICTS)
     .filter(([name]) => counts[name])
     .map(([name, [token, gloss]]) =>
-      `<span><i style="background:var(${token})"></i>${name} (${counts[name]}) — ${gloss}</span>`)
+      `<span><i style="background:var(${token})"></i>${T`${tr(VERDICT_LABEL[name])} (${counts[name]}) — ${tr(gloss)}`}</span>`)
     .join('');
 
   const strips = s.criteria.map(c => {
@@ -203,35 +224,35 @@ function renderSaturation(data) {
       `<line x1="${(c.human * 100).toFixed(1)}%" x2="${(c.human * 100).toFixed(1)}%" y1="1" y2="15"
              stroke="var(--muted)" stroke-width="2"></line>`;
     return `<tr>
-      <td>${c.text} <span class="dash">${c.section}</span></td>
+      <td>${c.text} <span class="dash">${tr(c.section)}</span></td>
       <td class="mark"><svg class="plot" viewBox="0 0 100 16" preserveAspectRatio="none"
               style="height:16px" role="img"
-              aria-label="${c.text}: models ${Math.round(lo*100)} to ${Math.round(hi*100)} percent">
-          <title>${c.text}: models ${Math.round(lo*100)}–${Math.round(hi*100)}%${
-            c.human === null ? '' : `, therapist ${Math.round(c.human*100)}%`}</title>
+              aria-label="${T`${c.text}: models ${Math.round(lo*100)} to ${Math.round(hi*100)} percent`}">
+          <title>${T`${c.text}: models ${Math.round(lo*100)}–${Math.round(hi*100)}%`}${
+            c.human === null ? '' : T`, therapist ${Math.round(c.human*100)}%`}</title>
           <line x1="0" x2="100" y1="8" y2="8" stroke="var(--line)" stroke-width="2"></line>
           <line x1="${(lo*100).toFixed(1)}" x2="${(hi*100).toFixed(1)}" y1="8" y2="8"
                 stroke="var(${token})" stroke-width="6" stroke-linecap="round"
                 vector-effect="non-scaling-stroke"></line>
           ${human}
         </svg></td>
-      <td class="verdict" style="color:var(${token})">${c.verdict}</td>
+      <td class="verdict" style="color:var(${token})">${tr(VERDICT_LABEL[c.verdict] || c.verdict)}</td>
     </tr>`;
   }).join('');
 
   const all = s.indistinguishable || [];
   const groups = all.map(g =>
-    `<li>${g.join(', ')}${g.length > 1 ? ' <span class="dash">— not separable</span>' : ''}</li>`).join('');
+    `<li>${g.join(', ')}${g.length > 1 ? ` <span class="dash">${T`— not separable`}</span>` : ''}</li>`).join('');
   // With one system there are no comparisons, so there is nothing to claim.
   const separable = all.length > 1 && all.every(g => g.length === 1)
-    ? `<p class="blurb">On this evidence <strong>every system is distinguishable from every
-       other</strong> — the benchmark has not run out of resolution yet.</p>`
+    ? `<p class="blurb">${T`On this evidence <strong>every system is distinguishable from every
+       other</strong> — the benchmark has not run out of resolution yet.`}</p>`
     : '';
 
   const pending = (s.still_scoring || []).length
-    ? `<p class="note">Left out of this section because they are still being scored:
+    ? `<p class="note">${T`Left out of this section because they are still being scored:
        ${s.still_scoring.join(', ')}. Including a half-scored system would shrink the shared
-       corpus for everyone else.</p>` : '';
+       corpus for everyone else.`}</p>` : '';
 
   // Two Completeness figures on one page is a contradiction unless the page
   // says why. The table averages each system over its own notes; this panel
@@ -247,7 +268,7 @@ function renderSaturation(data) {
   const narrowedNames = Object.keys(narrowedBy)
     .sort((a, b) => narrowedBy[b] - narrowedBy[a] || a.localeCompare(b));
   const denominator = s.corpus_sessions && s.corpus_sessions > s.sessions
-    ? `<p class="note"><strong>These numbers are not the table's numbers, and they should not
+    ? `<p class="note">${T`<strong>These numbers are not the table's numbers, and they should not
          be.</strong> The table above averages each system over its own notes; this section
          averages every system over the <strong>${s.sessions} of ${s.corpus_sessions}</strong>
          conversations they <em>all</em> have, because a paired comparison is only paired on a
@@ -257,16 +278,16 @@ function renderSaturation(data) {
            // cannot see from the count above -- so it gives the shape instead:
            // who cost the most, and how small the rest are.
            const worst = narrowedNames.slice(0, 3).map(n =>
-             `${esc(n)} was scored on ${narrowedBy[n]} fewer`);
+             T`${esc(n)} was scored on ${narrowedBy[n]} fewer`);
            if (narrowedNames.length <= 3) return worst.join(', ');
            const rest = narrowedNames.slice(3).map(n => narrowedBy[n]);
            const most = Math.max(...rest);
-           return `${worst.join(', ')}, and the other ${rest.length} on ` +
-             `${most === 1 ? 'one each' : `no more than ${most} each`}`;
+           return T`${worst.join(', ')}, and the other ${rest.length} on ${
+             most === 1 ? T`one each` : T`no more than ${most} each`}`;
          })()}. Expect small
          differences from the table, and expect closely-matched systems to change places: that
          two orderings disagree over which 42 of 50 conversations you use is itself a result
-         about how tightly packed these models are.</p>`
+         about how tightly packed these models are.`}</p>`
     : '';
 
   // Which instrument produced these numbers. The panel used to say nothing:
@@ -275,40 +296,40 @@ function renderSaturation(data) {
   const settings = s.judge_fingerprint
     ? Object.entries(s.judge_fingerprint).map(([k, v]) => `${k} ${v}`).join(', ')
     : '';
-  const instrument = `<p class="note">Computed from
-     <code>${s.judge_model}</code>'s individual answers${settings ? ` at ${settings}` : ''}.
+  const instrument = `<p class="note">${T`Computed from
+     <code>${s.judge_model}</code>'s individual answers${settings ? T` at ${esc(settings)}` : ''}.`}
      ${Object.keys(s.ignored_fingerprints || {}).length
-        ? 'The cache also held answers at other settings; they are two instruments and were not mixed in.'
+        ? T`The cache also held answers at other settings; they are two instruments and were not mixed in.`
         : ''}</p>`;
 
   document.getElementById('saturation-body').innerHTML = instrument + `
-    <p class="blurb">A ranking always prints an order. This asks whether the evidence supports one.
+    <p class="blurb">${T`A ranking always prints an order. This asks whether the evidence supports one.
        Both parts read the individual judgements, not the averages, over the
-       <strong>${s.sessions} conversations every system wrote a note for</strong>.</p>
+       <strong>${s.sessions} conversations every system wrote a note for</strong>.`}</p>
     ${denominator}
     ${pending}
 
-    <h4>Completeness over the shared conversations, with the range the evidence supports</h4>
-    <p class="blurb">95% intervals from a paired bootstrap over conversations — the same resample
+    <h4>${T`Completeness over the shared conversations, with the range the evidence supports`}</h4>
+    <p class="blurb">${T`95% intervals from a paired bootstrap over conversations — the same resample
        scores every system, so a hard conversation counts as difficulty rather than disagreement.
-       The dashed line is the therapist. Hover a bar for the table's figure beside this one.</p>
+       The dashed line is the therapist. Hover a bar for the table's figure beside this one.`}</p>
     ${intervalPlot(s.intervals.filter(r => r.system !== 'therapist'),
                    s.intervals.find(r => r.system === 'therapist'),
                    s.judge_model, 'completeness')}
-    <p class="blurb" style="margin-top:.9rem">Ranked, with systems the evidence cannot separate
+    <p class="blurb" style="margin-top:.9rem">${T`Ranked, with systems the evidence cannot separate
        grouped on one line. These are groups, not equivalence classes: being inseparable is not
-       transitive, so the boundary between adjacent lines is a convention.</p>
+       transitive, so the boundary between adjacent lines is a convention.`}</p>
     <ol class="sections">${groups}</ol>
     ${separable}
 
-    <h4 style="margin-top:1.8rem">What each rubric criterion is still doing</h4>
-    <p class="blurb">The bar spans lowest to highest model; the grey tick is the therapist. A bar
+    <h4 style="margin-top:1.8rem">${T`What each rubric criterion is still doing`}</h4>
+    <p class="blurb">${T`The bar spans lowest to highest model; the grey tick is the therapist. A bar
        pinned right means every model already satisfies it. A bar pinned left where the therapist
        is pinned left too means the question has no answer in a counselling transcript — that is a
-       fact about the corpus, not about the models.</p>
+       fact about the corpus, not about the models.`}</p>
     <div class="legend">${legend}</div>
     <div class="scroll"><table class="sat-table">
-      <thead><tr><th>Criterion</th><th>Models, worst to best</th><th></th></tr></thead>
+      <thead><tr><th>${T`Criterion`}</th><th>${T`Models, worst to best`}</th><th></th></tr></thead>
       <tbody>${strips}</tbody>
     </table></div>` + lengthEffect(s);
 }
@@ -317,7 +338,8 @@ renderSaturation(DATA);
 
 function renderCorpora(data) {
   const c = data.corpus;
-  if (!c) { document.getElementById('corpora').remove(); return; }
+  if (!c) { drop('corpora'); return; }
+  if (!document.getElementById('corpora-body')) return;
 
   const shape = (d, label) => d ? `<tr>
       <td>${label}</td>
@@ -331,57 +353,58 @@ function renderCorpora(data) {
   const fill = (c.sections || []).slice().sort((a, b) => a.rate - b.rate).map(s => {
     const pct = Math.round(s.rate * 100);
     return `<tr>
-      <td>${s.title}${s.temporal ? ' <span class="chip">temporal</span>' : ''}</td>
+      <td>${s.title}${s.temporal ? ` <span class="chip">${T`temporal`}</span>` : ''}</td>
       <td>${s.filled}/${s.total}</td>
       <td><span class="${pct < 25 ? 'short' : ''}">${pct}%</span></td>
     </tr>`;
   }).join('');
 
   document.getElementById('corpora-body').innerHTML = `
-    <p class="blurb">Both corpora are transcripts of published counselling demonstrations, not
+    <p class="blurb">${T`Both corpora are transcripts of published counselling demonstrations, not
        clinical sessions. Sizes are of the splits this benchmark actually scores; lengths are in
-       words of transcript, which is what a model has to read.</p>
+       words of transcript, which is what a model has to read.`}</p>
     <div class="scroll"><table>
-      <thead><tr><th>Track</th><th>Sessions</th><th>Words / session (range)</th>
-                 <th>Turns (range)</th><th>Words in the expert note</th></tr></thead>
+      <thead><tr><th>${T`Track`}</th><th>${T`Sessions`}</th><th>${T`Words / session (range)`}</th>
+                 <th>${T`Turns (range)`}</th><th>${T`Words in the expert note`}</th></tr></thead>
       <tbody>
         ${shape(sets.tneval, 'TN-Eval SOAP \u00b7 AnnoMI')}
         ${shape(sets.icare, 'iCARE \u00b7 iHOPE')}
       </tbody>
     </table></div>
 
-    <h4 style="margin-top:1.6rem">How much of the iCARE form has an answer at all</h4>
-    <p class="blurb">Across the expert notes, <strong>${c.fields_filled} of ${c.fields_total}
+    <h4 style="margin-top:1.6rem">${T`How much of the iCARE form has an answer at all`}</h4>
+    <p class="blurb">${T`Across the expert notes, <strong>${c.fields_filled} of ${c.fields_total}
        fields (${Math.round(c.fill_rate * 100)}%)</strong> say something; the rest are
        <code>Nil</code>. A published counselling video has no hospital id and no referring
        clinician, so several fields cannot be answered by anyone. On those, a model scores by
        staying quiet rather than by writing a good note \u2014 read the low rows as
-       <em>no signal</em>, not as a hard test.</p>
+       <em>no signal</em>, not as a hard test.`}</p>
     <div class="scroll"><table>
-      <thead><tr><th>Section</th><th>Filled by the expert</th><th></th></tr></thead>
+      <thead><tr><th>${T`Section`}</th><th>${T`Filled by the expert`}</th><th></th></tr></thead>
       <tbody>${fill}</tbody>
     </table></div>`;
 }
 
 function renderLicences(data) {
-  if (!data.licences) { document.getElementById('licences').remove(); return; }
+  if (!data.licences) { drop('licences'); return; }
+  if (!document.getElementById('licences-body')) return;
   const rows = data.licences.map(l => `<tr>
       <td><a href="${l.url}">${l.source}</a></td>
-      <td>${l.used_for}</td>
+      <td>${tr(l.used_for)}</td>
       <td>${l.licence === 'Apache-2.0'
             ? '<strong>Apache-2.0</strong>'
             : `<span class="short">${l.licence}</span>`}</td>
-      <td>${l.note}</td>
+      <td>${tr(l.note)}</td>
     </tr>`).join('');
 
   document.getElementById('licences-body').innerHTML = `
-    <p class="blurb">Checked repository by repository \u2014 licence field, file tree and README
+    <p class="blurb">${T`Checked repository by repository \u2014 licence field, file tree and README
        \u2014 rather than assumed from a sibling project. <strong>Only one of the five carries a
        licence.</strong> Nothing here redistributes a corpus: every dataset is fetched from its
        origin when a run needs it, and this page shows field names and scores, never transcripts,
-       notes, or somebody else's prompt.</p>
+       notes, or somebody else's prompt.`}</p>
     <div class="scroll"><table>
-      <thead><tr><th>Source</th><th>Used for</th><th>Licence</th><th></th></tr></thead>
+      <thead><tr><th>${T`Source`}</th><th>${T`Used for`}</th><th>${T`Licence`}</th><th></th></tr></thead>
       <tbody>${rows}</tbody>
     </table></div>`;
 }
@@ -390,8 +413,11 @@ renderCorpora(DATA);
 renderLicences(DATA);
 
 function renderProtocol(protocol) {
-  if (!protocol) { document.getElementById('protocol').remove(); return; }
+  if (!protocol) { drop('protocol'); return; }
+  if (!document.getElementById('protocol-body')) return;
 
+  // Verbatim from TN-Eval's own prompt, so it is not translated: the Czech
+  // page shows the instruction the models were actually given.
   const soap = protocol.sections.map(s =>
     `<div><dt>${s.name}</dt><dd>${s.description}</dd></div>`).join('');
 
@@ -399,34 +425,34 @@ function renderProtocol(protocol) {
   protocol.criteria.forEach(c => (bySection[c.section] ||= []).push(c));
   const criteria = Object.entries(bySection).map(([section, items]) => `
       <div>
-        <h4>${section} — ${items.length} criteria</h4>
+        <h4>${T`${tr(section)} — ${items.length} criteria`}</h4>
         <ol>${items.map(c =>
           `<li><b>${c.title}.</b> <span>${c.description}</span></li>`).join('')}</ol>
       </div>`).join('');
 
   document.getElementById('protocol-body').innerHTML = `
-    <p class="blurb">A note here is a <strong>SOAP note</strong>: four sections, in this order.
-       The descriptions are the ones the models are given, quoted from TN-Eval's own prompt.</p>
+    <p class="blurb">${T`A note here is a <strong>SOAP note</strong>: four sections, in this order.
+       The descriptions are the ones the models are given, quoted from TN-Eval's own prompt.`}</p>
     <dl class="soap">${soap}</dl>
-    <p class="blurb">Completeness is scored by asking the judge, once per item, whether that
+    <p class="blurb">${T`Completeness is scored by asking the judge, once per item, whether that
        item is present in the matching section. These are TN-Eval's
        <strong>${protocol.criteria.length} criteria</strong>, reproduced verbatim — a note
-       scoring 0.50 contained half of them.</p>
+       scoring 0.50 contained half of them.`}</p>
     <div class="criteria">${criteria}</div>
 
-    <h4 style="margin-top:1.6rem">The other track: iCARE's 17 sections</h4>
-    <p class="blurb">The iCARE note is not four paragraphs but a <strong>form</strong>. Each of these
+    <h4 style="margin-top:1.6rem">${T`The other track: iCARE's 17 sections`}</h4>
+    <p class="blurb">${T`The iCARE note is not four paragraphs but a <strong>form</strong>. Each of these
        17 fields is filled by its own model call, using an instruction written by clinicians at
        AIIMS Delhi, and the correct answer is <code>Nil</code> when the transcript does not say.
        The two marked sections ask what happened <em>last</em> time and what happens <em>next</em>
        time — the source paper reports that every model it tested failed on them, so they get
-       their own column rather than being averaged away.</p>
+       their own column rather than being averaged away.`}</p>
     <ol class="sections">${protocol.icare_sections.map(s =>
         `<li><b>${s.title}.</b> <span>${s.description}</span>${
-          s.temporal ? ' <span class="chip">temporal</span>' : ''}</li>`).join('')}</ol>
-    <p class="blurb">The instructions themselves are fetched from
+          s.temporal ? ` <span class="chip">${T`temporal`}</span>` : ''}</li>`).join('')}</ol>
+    <p class="blurb">${T`The instructions themselves are fetched from
        <a href="https://github.com/proadhikary/iCARE">the iCARE repository</a> at run time and used
-       unchanged; this page shows the field names only, because that repository publishes no licence.</p>`;
+       unchanged; this page shows the field names only, because that repository publishes no licence.`}</p>`;
 }
 
 renderProtocol(DATA.protocol);
@@ -438,29 +464,30 @@ function renderSimilarityExample(example) {
   if (!host) return;
   if (!example || !example.expert) { host.remove(); return; }
   host.innerHTML = `
-    <p class="blurb">Two of the four iCARE columns measure how closely a model
+    <p class="blurb">${T`Two of the four iCARE columns measure how closely a model
        reproduced the clinician's wording. Here is what that misses — section
        <strong>${esc(example.section)}</strong> of session ${esc(example.session)},
        written by the clinician who saw it and by <code>${esc(example.model)}</code>,
-       both verbatim.</p>
+       both verbatim.`}</p>
     <div class="pair">
-      <div><h4>The clinician wrote</h4><p>${esc(example.expert)}</p></div>
-      <div><h4>${esc(example.model)} wrote</h4><p>${esc(example.generated)}</p></div>
+      <div><h4>${T`The clinician wrote`}</h4><p>${esc(example.expert)}</p></div>
+      <div><h4>${T`${esc(example.model)} wrote`}</h4><p>${esc(example.generated)}</p></div>
     </div>
-    <p class="note">ROUGE-L: <strong>${example.rouge_l.toFixed(3)}</strong> — near zero.
-       ${esc(example.note)}</p>`;
+    <p class="note">${T`ROUGE-L: <strong>${example.rouge_l.toFixed(3)}</strong> — near zero.
+       ${esc(tr(example.note))}`}</p>`;
 }
 
 renderSimilarityExample(DATA.similarity_example);
 
 function renderCalibration(calibration) {
   if (!calibration || !calibration.agreements || !calibration.agreements.length) return;
+  if (!document.getElementById('calibration')) return;
 
   const cell = value => value === null || value === undefined
     ? '<span class="dash">—</span>' : value.toFixed(2);
   const rows = calibration.agreements.map(a => `<tr>
-      <td>${esc(a.name.replace(/_/g, ' '))}</td>
-      <td>${esc(a.statistic)}</td>
+      <td>${esc(tr(a.name.replace(/_/g, ' ')))}</td>
+      <td>${esc(tr(a.statistic))}</td>
       <td>${cell(a.judge)}</td>
       <td>${cell(a.humans)}</td>
       <td>${cell(a.alpha)}</td>
@@ -472,36 +499,36 @@ function renderCalibration(calibration) {
     const find = name => calibration.agreements.find(a => a.name === name);
     const rubric = find('rubric_completeness'), likert = find('likert_completeness');
     return rubric && likert && rubric.alpha != null && likert.alpha != null
-      ? ` (alpha ${rubric.alpha.toFixed(2)} against ${likert.alpha.toFixed(2)})` : '';
+      ? T` (alpha ${rubric.alpha.toFixed(2)} against ${likert.alpha.toFixed(2)})` : '';
   })();
 
   const finding = calibration.rubric_beats_likert === true
-    ? `<p class="blurb">The judge reproduces TN-Eval's central finding: criterion checklists agree far better than 1–5 scales${alphaFigures}. That is why the ranking uses the rubric and the Likert columns carry a caveat.</p>`
+    ? `<p class="blurb">${T`The judge reproduces TN-Eval's central finding: criterion checklists agree far better than 1–5 scales${alphaFigures}. That is why the ranking uses the rubric and the Likert columns carry a caveat.`}</p>`
     : calibration.rubric_beats_likert === false
-      ? `<p class="note">The judge does <strong>not</strong> reproduce TN-Eval's finding that criterion checklists agree better than 1–5 scales${alphaFigures}. Reported rather than explained away.</p>`
-      : `<p class="note">The two instruments <strong>cannot be separated</strong> here${alphaFigures}, so this run neither reproduces nor contradicts TN-Eval's finding. Reported as undecided rather than rounded into a verdict.</p>`;
+      ? `<p class="note">${T`The judge does <strong>not</strong> reproduce TN-Eval's finding that criterion checklists agree better than 1–5 scales${alphaFigures}. Reported rather than explained away.`}</p>`
+      : `<p class="note">${T`The two instruments <strong>cannot be separated</strong> here${alphaFigures}, so this run neither reproduces nor contradicts TN-Eval's finding. Reported as undecided rather than rounded into a verdict.`}</p>`;
 
   document.getElementById('calibration').classList.remove('pending');
   document.getElementById('calibration-body').innerHTML = `
-    <p class="blurb">Judge <code>${calibration.judge_model}</code> against the two therapists
-       TN-Eval had rate the same ${calibration.notes} notes.</p>
+    <p class="blurb">${T`Judge <code>${calibration.judge_model}</code> against the two therapists
+       TN-Eval had rate the same ${calibration.notes} notes.`}</p>
     <div class="scroll"><table>
-      <thead><tr><th>Measure</th><th>Statistic</th><th>Judge vs therapist</th>
-                 <th>Therapist vs therapist</th>
-                 <th title="Krippendorff's alpha, judge vs therapist">Alpha, judge</th>
-                 <th title="Krippendorff's alpha, therapist vs therapist">Alpha, therapists</th>
+      <thead><tr><th>${T`Measure`}</th><th>${T`Statistic`}</th><th>${T`Judge vs therapist`}</th>
+                 <th>${T`Therapist vs therapist`}</th>
+                 <th title="${T`Krippendorff's alpha, judge vs therapist`}">${T`Alpha, judge`}</th>
+                 <th title="${T`Krippendorff's alpha, therapist vs therapist`}">${T`Alpha, therapists`}</th>
                  <th>n</th></tr></thead>
       <tbody>${rows}</tbody>
     </table></div>
-    <p class="blurb"><strong>The right-hand column is the ceiling, not a target to beat.</strong>
+    <p class="blurb">${T`<strong>The right-hand column is the ceiling, not a target to beat.</strong>
        Two trained therapists disagree with each other about these notes; a judge that agrees with
-       a therapist as often as the other therapist does has done as well as the task allows.</p>
-    <p class="blurb"><strong>Why two statistics.</strong> Cohen's kappa suits a yes/no criterion
+       a therapist as often as the other therapist does has done as well as the task allows.`}</p>
+    <p class="blurb">${T`<strong>Why two statistics.</strong> Cohen's kappa suits a yes/no criterion
        and Spearman suits a 1–5 scale, so each measure is reported under the one a reader
        expects. Those two are different quantities and an inequality between them means nothing,
        so the comparison below is made on <strong>Krippendorff's alpha</strong> — defined for
        both, nominal for the rubric and ordinal for the scales, and the statistic TN-Eval used
-       to reach the finding in the first place.</p>
+       to reach the finding in the first place.`}</p>
     ${finding}
     ${whoseNotesWereRated(calibration)}`;
 }
@@ -523,27 +550,27 @@ function whoseNotesWereRated(calibration) {
     <td class="num">${r.humans === null ? '—' : r.humans.toFixed(3)}</td>
     <td class="num">${r.n}</td></tr>`).join('');
 
-  return `<h3>Whose notes the judge was checked on</h3>
-    <p class="blurb">Human ratings exist for ${per.length} systems and no others: ${rated}.
+  return `<h3>${T`Whose notes the judge was checked on`}</h3>
+    <p class="blurb">${T`Human ratings exist for ${per.length} systems and no others: ${rated}.
        <strong>No human has read a note written by any of the models the leaderboard
        ranks</strong>, so the figure above is measured on one set of notes and applied to
-       another.</p>
+       another.`}</p>
     <div class="scroll"><table>
-      <thead><tr><th>Notes written by</th>
-                 <th class="num" title="Krippendorff's alpha, judge vs therapist">Judge</th>
-                 <th class="num" title="Krippendorff's alpha, therapist vs therapist">Therapists</th>
+      <thead><tr><th>${T`Notes written by`}</th>
+                 <th class="num" title="${T`Krippendorff's alpha, judge vs therapist`}">${T`Judge`}</th>
+                 <th class="num" title="${T`Krippendorff's alpha, therapist vs therapist`}">${T`Therapists`}</th>
                  <th class="num">n</th></tr></thead>
       <tbody>${rows}</tbody>
     </table></div>
-    <p class="blurb">The judge does not agree with a person equally well on all of them: the
+    <p class="blurb">${T`The judge does not agree with a person equally well on all of them: the
        spread is <strong>${spread.toFixed(3)}</strong>, larger than the ${'' + (DATA.judges &&
        DATA.judges.separable ? DATA.judges.separable.margin : 0.05)} this page uses to decide
        that two agreement figures are separable at all. It is weakest on
        <code>${worst.system}</code>${below.length
-         ? `, and on ${below.map(r => `<code>${r.system}</code>`).join(' and ')} it does not reach
+         ? T`, and on ${below.map(r => `<code>${r.system}</code>`).join(T` and `)} it does not reach
             the ceiling the two therapists set between them`
          : ''}. A score from this judge means slightly different things depending on whose note
-       it read, and the leaderboard compares those scores in one column.</p>`;
+       it read, and the leaderboard compares those scores in one column.`}</p>`;
 }
 
 // Completeness counts coverage, so a longer note covers more even under a
@@ -560,24 +587,24 @@ function lengthEffect(saturation) {
   const conv = effect.within_conversation || {};
   const survives = conv.sign_test_p !== undefined && conv.sign_test_p < 0.05;
 
-  return `<h3>Does completeness rise with how much the model wrote?</h3>
-    <p class="blurb"><strong>Within a system</strong>, across its own conversations, the
+  return `<h3>${T`Does completeness rise with how much the model wrote?`}</h3>
+    <p class="blurb">${T`<strong>Within a system</strong>, across its own conversations, the
        correlation is positive in ${positive} of ${within.length} systems, median
        ${median === null ? '—' : median.toFixed(3)}. That cannot separate the note from the
-       transcript: a longer session yields both a longer note and more rubric material.</p>
-    <p class="blurb"><strong>Within one conversation</strong>, across the systems, the
+       transcript: a longer session yields both a longer note and more rubric material.`}</p>
+    <p class="blurb">${T`<strong>Within one conversation</strong>, across the systems, the
        transcript is held fixed and can explain nothing. Median
        ${conv.median === undefined ? '—' : conv.median.toFixed(3)}, positive in
        ${conv.positive} of ${conv.n} conversations, sign test
-       p&nbsp;=&nbsp;${conv.sign_test_p}. ${survives
-         ? `<strong>The effect survives here</strong>, so on this judge a longer note does
+       p&nbsp;=&nbsp;${conv.sign_test_p}.`} ${survives
+         ? T`<strong>The effect survives here</strong>, so on this judge a longer note does
             score higher for being longer.`
-         : `<strong>The effect does not survive here</strong>: most of the correlation above
+         : T`<strong>The effect does not survive here</strong>: most of the correlation above
             is the transcript, not the note.`}</p>
-    <p class="blurb">The leaderboard therefore publishes the <strong>length</strong> and not
+    <p class="blurb">${T`The leaderboard therefore publishes the <strong>length</strong> and not
        this coefficient. The length is a fact about the note a reader can discount for; the
        correlation depends on which judge is asked, and the two judges do not agree about
-       it.</p>`;
+       it.`}</p>`;
 }
 
 renderCalibration(DATA.calibration);
@@ -588,15 +615,27 @@ renderCalibration(DATA.calibration);
 // to arrive first.
 // "not related" is the wrong label for a pair the two judges read differently:
 // one of them found +0.72. Saying which of the three cases it is costs a word.
+// Three paragraphs on this page are not written in a template: they are
+// assembled in `concordance.describe` and `preference.describe` out of the
+// numbers they are about, a dozen fragments deep. A dictionary keyed on the
+// finished sentence would answer today's numbers and silently fall back to
+// English the next time one moved -- so they are not translated at all, and
+// the paragraph says which language it is in. Every claim in them is also
+// drawn as a table directly below.
+function summaryLang(summary) {
+  return tr(summary) === summary ? 'en' : LANG;
+}
+
 function relation(tension) {
   const found = Object.values(tension.rho_by_judge).filter(rho => rho !== null);
   if (!found.length) return '—';
-  if (tension.agrees) return 'related';
-  return Math.max(...found) - Math.min(...found) >= 0.4 ? 'judges disagree' : 'not related';
+  if (tension.agrees) return T`related`;
+  return Math.max(...found) - Math.min(...found) >= 0.4 ? T`judges disagree` : T`not related`;
 }
 
 function renderConcordance(all) {
   const box = document.getElementById('concordance');
+  if (!box) return;
   // In the order the tables are in, not the order the keys are in: the payload
   // is serialised with sorted keys, so `icare` comes before `tneval-soap`
   // whatever order Python built it in, and the SOAP track leads everywhere
@@ -608,7 +647,7 @@ function renderConcordance(all) {
   });
   if (!tracks.length) { box.remove(); return; }
 
-  box.innerHTML = '<h2>Do the two judges agree?</h2>' + tracks.map(track => {
+  box.innerHTML = `<h2>${T`Do the two judges agree?`}</h2>` + tracks.map(track => {
     const c = all[track];
     // A measure most systems tie on has a correlation and no ordering for it
     // to be about. `organized` printed 1.000 and "0 of 19 placed differently"
@@ -617,67 +656,67 @@ function renderConcordance(all) {
     // The prose stopped quoting those; the table went on printing them.
     const rows = c.measures.map(m => m.rankable === false
       ? `<tr>
-      <td>${m.measure}</td>
+      <td>${tr(m.measure)}</td>
       <td class="num">—</td>
-      <td colspan="2">${m.tied} of ${m.n_systems} systems print the same number, so this
-        measure does not order them and there is no agreement to report</td>
+      <td colspan="2">${T`${m.tied} of ${m.n_systems} systems print the same number, so this
+        measure does not order them and there is no agreement to report`}</td>
     </tr>`
       : `<tr>
-      <td>${m.measure}</td>
+      <td>${tr(m.measure)}</td>
       <td class="num">${m.rho === null ? '—' : m.rho.toFixed(3)}</td>
-      <td class="num">${m.moved} of ${m.n_systems}</td>
+      <td class="num">${T`${m.moved} of ${m.n_systems}`}</td>
       <td>${m.furthest
             ? `<code>${m.furthest.system}</code> ${m.furthest.rank_a} &rarr; ${m.furthest.rank_b}`
-            : 'nobody moved'}</td>
+            : T`nobody moved`}</td>
     </tr>`).join('');
 
     const beaten = c.dominance.length
       ? `<ul class="dominance">${c.dominance.map(d =>
-          `<li><code>${d.system}</code> beats ${d.beats.length}: ${
-            d.beats.map(b => `<code>${b}</code>`).join(', ')}</li>`).join('')}</ul>`
-      : '<p class="note">No system beats another on every measure under both judges.</p>';
+          `<li>${T`<code>${d.system}</code> beats ${d.beats.length}: ${
+            d.beats.map(b => `<code>${b}</code>`).join(', ')}`}</li>`).join('')}</ul>`
+      : `<p class="note">${T`No system beats another on every measure under both judges.`}</p>`;
 
     return `${tracks.length > 1
         ? `<h3 class="track-head">${esc(c.track_label || track)}</h3>`
         : ''}
-      <p class="blurb">${code(c.summary)}</p>
+      <p class="blurb" lang="${summaryLang(c.summary)}">${code(tr(c.summary))}</p>
       <div class="scroll"><table class="concordance">
         <thead><tr>
-          <th>Measure</th><th>Rank correlation</th><th>Systems placed differently</th>
-          <th>Moved furthest</th>
+          <th>${T`Measure`}</th><th>${T`Rank correlation`}</th><th>${T`Systems placed differently`}</th>
+          <th>${T`Moved furthest`}</th>
         </tr></thead>
         <tbody>${rows}</tbody>
       </table></div>
-      <p class="note">Rank correlation is between <code>${c.judge_a}</code>'s ordering and
+      <p class="note">${T`Rank correlation is between <code>${c.judge_a}</code>'s ordering and
          <code>${c.judge_b}</code>'s, over the ${c.n_systems} systems both have scored.
          Scores that print the same are treated as tied rather than ordered by a digit
          the table does not show. Only measures a judge decides are compared here:
          ${c.judge_measures.map(m => `<code>${m}</code>`).join(', ')}. The rest are
          computed from the note and the expert note, so they are identical under every
-         judge and agreeing about them would say nothing.</p>
-      ${c.tensions.length ? `<h3>Do the columns agree with each other?</h3>
-      <p class="note">A separate question from whether the judges do, and the one that
+         judge and agreeing about them would say nothing.`}</p>
+      ${c.tensions.length ? `<h3>${T`Do the columns agree with each other?`}</h3>
+      <p class="note">${T`A separate question from whether the judges do, and the one that
          decides whether the ordering column can be read as "quality". A model that
-         answers every question satisfies more criteria <em>and</em> invents more.</p>
+         answers every question satisfies more criteria <em>and</em> invents more.`}</p>
       <div class="scroll"><table class="concordance">
-        <thead><tr><th>Pair</th>${Object.keys(c.tensions[0].rho_by_judge).map(
+        <thead><tr><th>${T`Pair`}</th>${Object.keys(c.tensions[0].rho_by_judge).map(
           j => `<th>${j}</th>`).join('')}<th></th></tr></thead>
         <tbody>${c.tensions.map(t => `<tr>
-          <td>${t.first} &times; ${t.second}</td>
+          <td>${tr(t.first)} &times; ${tr(t.second)}</td>
           ${Object.values(t.rho_by_judge).map(rho =>
             `<td>${rho === null ? '—' : rho.toFixed(3)}</td>`).join('')}
           <td>${relation(t)}</td>
         </tr>`).join('')}</tbody>
       </table></div>` : ''}
 
-      <h3>Better with no weighting required</h3>
-      <p class="note">A system that is at least as good on <em>every</em> measure under
+      <h3>${T`Better with no weighting required`}</h3>
+      <p class="note">${T`A system that is at least as good on <em>every</em> measure under
          <em>both</em> judges, and strictly better somewhere, is better however a reader
          weighs the measures — and weighing them is a clinical decision, not a
-         measurement. Everything else on this page is a column, not a verdict.</p>
+         measurement. Everything else on this page is a column, not a verdict.`}</p>
       ${beaten}
-      <p class="note"><strong>${c.undominated.length} of ${c.n_systems} systems are beaten
-         outright by nobody.</strong> That is why there is no single winner named here.</p>`;
+      <p class="note">${T`<strong>${c.undominated.length} of ${c.n_systems} systems are beaten
+         outright by nobody.</strong> That is why there is no single winner named here.`}</p>`;
   }).join('');
 }
 
@@ -686,35 +725,39 @@ function renderConcordance(all) {
 // table -- and which, until now, did not exist.
 function renderPreference(data) {
   const box = document.getElementById('preference');
+  if (!box) return;
   if (!data || !data.effects || !data.effects.length) { box.remove(); return; }
 
-  box.innerHTML = `<h2>Does either judge favour its own models?</h2>
-    <p class="note">Measured, not disclaimed. Both judges score everything, and the
+  box.innerHTML = `<h2>${T`Does either judge favour its own models?`}</h2>
+    <p class="note">${T`Measured, not disclaimed. Both judges score everything, and the
        difference between their tables for a judge's own family — against the systems
-       <em>neither</em> of them wrote — is the effect, in ${data.measure}, with a paired
-       bootstrap over conversations.</p>
+       <em>neither</em> of them wrote — is the effect, in ${tr(data.measure)}, with a paired
+       bootstrap over conversations.`}</p>
     <div class="scroll"><table class="concordance">
-      <thead><tr><th>Judge</th><th>Its family</th><th>Effect</th><th>95% interval</th>
-        <th>Detected</th></tr></thead>
+      <thead><tr><th>${T`Judge`}</th><th>${T`Its family`}</th><th>${T`Effect`}</th><th>${T`95% interval`}</th>
+        <th>${T`Detected`}</th></tr></thead>
       <tbody>${data.effects.map(e => `<tr>
         <td><code>${e.judge}</code></td>
         <td>${e.family}</td>
         <td>${e.estimate >= 0 ? '+' : ''}${e.estimate.toFixed(3)}</td>
-        <td>${e.low >= 0 ? '+' : ''}${e.low.toFixed(3)} to ${e.high >= 0 ? '+' : ''}${e.high.toFixed(3)}</td>
-        <td>${e.detected ? '<strong>yes</strong>' : 'no'}</td>
+        <td>${T`${e.low >= 0 ? '+' : ''}${e.low.toFixed(3)} to ${e.high >= 0 ? '+' : ''}${e.high.toFixed(3)}`}</td>
+        <td>${e.detected ? `<strong>${T`yes`}</strong>` : T`no`}</td>
       </tr>`).join('')}</tbody>
     </table></div>
-    ${data.effects.map(e => `<p class="note">${code(e.summary)}</p>`).join('')}
+    ${data.effects.map(e => `<p class="note" lang="${
+        summaryLang(e.summary)}">${code(tr(e.summary))}</p>`).join('')}
     ${data.difference
-      ? `<p class="note"><strong>And the two against each other.</strong> ${code(data.difference.summary)}</p>`
+      ? `<p class="note" lang="${summaryLang(data.difference.summary)}">${
+          T`<strong>And the two against each other.</strong> ${
+          code(tr(data.difference.summary))}`}</p>`
       : ''}
     ${(data.effects[0] && data.effects[0].neutral || []).length
-      ? `<p class="note">Measured against the ${data.effects[0].neutral.length} systems
+      ? `<p class="note">${T`Measured against the ${data.effects[0].neutral.length} systems
          neither judge's vendor wrote: ${data.effects[0].neutral.map(code).join(', ')}. Named
          rather than counted, because the estimate is only as good as this group — two of
          these were the judges' own vendors under a name their model families did not share
          (<code>gemma4</code> is Google's, <code>gpt-oss-120b</code> is OpenAI's), and both
-         pulled the answer toward zero.</p>`
+         pulled the answer toward zero.`}</p>`
       : ''}`;
 }
 
@@ -754,7 +797,7 @@ function whatTheCalibrationSeparates(sep) {
 
   const led = [...names].map(better => {
     const under = sep.separated.filter(s => s.better === better).map(s => s.worse);
-    return `<code>${better}</code> over ${under.map(w => `<code>${w}</code>`).join(', ')}`;
+    return T`<code>${better}</code> over ${under.map(w => `<code>${w}</code>`).join(', ')}`;
   });
 
   // A separation between two candidates asked at different settings is a
@@ -765,35 +808,35 @@ function whatTheCalibrationSeparates(sep) {
   // share.
   const crossing = sep.separated.filter(s => s.crosses_instrument);
   const instrumentNote = crossing.length
-    ? ` <strong>${crossing.length} of those ${sep.separated.length} compare two
+    ? ' ' + T`<strong>${crossing.length} of those ${sep.separated.length} compare two
         different instruments</strong>: the candidates were not all asked at the same
         settings, and the alphas below are over slightly different item sets. What
         each ran at is in the table above.`
     : '';
 
-  return `<p class="note">Read as bands, not as an order. Two candidates closer than
+  return `<p class="note">${T`Read as bands, not as an order. Two candidates closer than
     ${sep.margin} are reported here as inseparable rather than ranked — the rule the
-    tables above use for models, applied to the judges for the same reason.
+    tables above use for models, applied to the judges for the same reason.`}
     ${led.length
-      ? `Of the ${(sep.ranked.length * (sep.ranked.length - 1)) / 2} pairs, ${sep.separated.length}
+      ? T`Of the ${(sep.ranked.length * (sep.ranked.length - 1)) / 2} pairs, ${sep.separated.length}
          are separated by more than that: ${led.join('; ')}. Every other pair is not,
          including all three <code>flash</code> candidates among themselves and the two
          GPT candidates against each other — so price does not buy a better judge here.${instrumentNote}`
-      : `No pair is separated by more than that: this measurement orders them and cannot
+      : T`No pair is separated by more than that: this measurement orders them and cannot
          tell them apart.`}
     ${sep.ceiling !== null && sep.ceiling !== undefined
-      ? ` ${sep.all_at_or_above_ceiling
-            ? `Every candidate agrees with a therapist at least as often as the two
+      ? ' ' + T`${sep.all_at_or_above_ceiling
+            ? T`Every candidate agrees with a therapist at least as often as the two
                therapists agree with each other`
-            : `Not every candidate reaches the ceiling the two therapists set between them`}
+            : T`Not every candidate reaches the ceiling the two therapists set between them`}
           (${sep.ceiling.toFixed(3)}), but only
           ${sep.above_ceiling.length
-            ? sep.above_ceiling.map(n => `<code>${n}</code>`).join(' and ')
-            : 'none of them'} clear${sep.above_ceiling.length === 1 ? 's' : ''} it by the margin.`
+            ? sep.above_ceiling.map(n => `<code>${n}</code>`).join(T` and `)
+            : T`none of them`} clear${sep.above_ceiling.length === 1 ? 's' : ''} it by the margin.`
       : ''}
-    The spread from <code>${best.judge}</code> ${best.alpha.toFixed(3)} to
+    ${T`The spread from <code>${best.judge}</code> ${best.alpha.toFixed(3)} to
     <code>${worst.judge}</code> ${worst.alpha.toFixed(3)} is
-    ${(best.alpha - worst.alpha).toFixed(3)}.</p>`;
+    ${(best.alpha - worst.alpha).toFixed(3)}.`}</p>`;
 }
 
 function whereTheCeilingIsCleared(data, measures, ceiling) {
@@ -803,9 +846,9 @@ function whereTheCeilingIsCleared(data, measures, ceiling) {
     data.judges.every(j => { const a = alphaOf(j, m); return a === null || a < ceiling[m]; }));
   if (!cleared.length && !none.length) return '';
   return `<p class="note">
-    ${cleared.length ? `Every judge clears the human ceiling on
+    ${cleared.length ? T`Every judge clears the human ceiling on
       ${cleared.map(m => `<code>${m}</code>`).join(', ')}.` : ''}
-    ${none.length ? ` None of them does on
+    ${none.length ? ' ' + T`None of them does on
       ${none.map(m => `<code>${m}</code>`).join(', ')}, which is why those columns carry the
       caveat they do in every table above — the two therapists barely agree there either.` : ''}
     </p>`;
@@ -813,6 +856,7 @@ function whereTheCeilingIsCleared(data, measures, ceiling) {
 
 function renderJudges(data) {
   const box = document.getElementById('judges');
+  if (!box) return;
   if (!data || !data.judges || !data.judges.length) { box.remove(); return; }
 
   const measures = data.judges[0].agreements.map(a => a.name);
@@ -832,7 +876,8 @@ function renderJudges(data) {
       const beats = alpha !== null && alpha >= ceiling[name];
       return `<td${beats ? ' class="beats"' : ''}>${alpha === null ? '—' : alpha.toFixed(3)}</td>`;
     }).join('');
-    const mark = chosen.has(j.judge_model) ? ' <span class="dash">— in the panel</span>' : '';
+    const mark = chosen.has(j.judge_model)
+      ? ` <span class="dash">${T`— in the panel`}</span>` : '';
     // What each candidate was measured at. Two of these at two thinking
     // budgets are two instruments, and a row that hides that invites the
     // reader to compare them anyway.
@@ -849,10 +894,10 @@ function renderJudges(data) {
     .map(name => `<td>${ceiling[name].toFixed(3)}</td>`).join('');
 
   document.getElementById('judges-body').innerHTML = `
-    <p class="blurb">Krippendorff's alpha against the two therapists who annotated TN-Eval's
+    <p class="blurb">${T`Krippendorff's alpha against the two therapists who annotated TN-Eval's
        own data, over the same ${data.notes} notes. The bottom row is what those two
        therapists reach <em>with each other</em> — the ceiling any judge is measured against,
-       and it is not high.</p>
+       and it is not high.`}</p>
     ${(() => {
       // Grouped by backend before comparing. A Gemini thinking budget and a
       // GPT reasoning effort are different controls, so their settings can
@@ -869,25 +914,26 @@ function renderJudges(data) {
       });
       const mixed = Object.entries(byBackend).filter(([, kinds]) => kinds.size > 1);
       if (mixed.length) {
-        return `<p class="note"><strong>Some of these rows were measured at different
+        return `<p class="note">${T`<strong>Some of these rows were measured at different
            settings from others of the same kind.</strong> Each candidate is shown at the
            settings its answers were produced at, under its name. A judge's settings change
            its answers — measured here, one judge's thinking budget going from 128 to 256
            moved every model's completeness and reversed the order of the three
-           <code>flash</code> candidates — so those rows are not strictly comparable.</p>`;
+           <code>flash</code> candidates — so those rows are not strictly comparable.`}</p>`;
       }
       return Object.keys(byBackend).length > 1
-        ? `<p class="note">Every candidate of a kind was measured at one setting. Across
+        ? `<p class="note">${T`Every candidate of a kind was measured at one setting. Across
              kinds there is no such thing: a thinking budget and a reasoning effort are
              different controls, and no value of one is the same as a value of the other.
              That is a limit of comparing judges from two vendors, not a gap in this
-             run.</p>`
+             run.`}</p>`
         : '';
     })()}
     <div class="scroll"><table class="concordance">
-      <thead><tr><th>Judge</th>${measures.map(m => `<th>${m}</th>`).join('')}</tr></thead>
+      <thead><tr><th>${T`Judge`}</th>${measures.map(m =>
+        `<th>${esc(tr(m))}</th>`).join('')}</tr></thead>
       <tbody>${rows}
-        <tr class="humans"><td><strong>the two therapists</strong></td>${humans}</tr>
+        <tr class="humans"><td><strong>${T`the two therapists`}</strong></td>${humans}</tr>
       </tbody>
     </table></div>
     ${whatTheCalibrationSeparates(data.separable)}
@@ -902,35 +948,54 @@ function renderSuperseded(gone) {
   // A group with no judge is coverage -- what was generated, before anything was
   // scored. Calling those "scored by null" was both ugly and untrue.
   const what = gone.judge_model
-    ? `scored by <code>${gone.judge_model}</code>`
-    : 'of generation coverage';
+    ? T`scored by <code>${gone.judge_model}</code>`
+    : T`of generation coverage`;
   // Both reasons can be true at once. Reporting only the first printed
   // "at harness 0.2.0 ... redefined in 0.2.0", which contradicts itself.
   const said = {
-    harness: `the measures were redefined in <code>${gone.current_harness_version}</code>
+    harness: T`the measures were redefined in <code>${gone.current_harness_version}</code>
       and the two are not comparable`,
-    settings: `the judge's settings were not recorded, so the rows cannot be shown to
+    settings: T`the judge's settings were not recorded, so the rows cannot be shown to
       have come from one instrument`,
   };
-  const why = (gone.reasons || ['harness']).map(name => said[name]).filter(Boolean).join('; and ');
-  return `<p class="note">${gone.rows} row(s) on <strong>${gone.track}</strong>, ${what},
+  const why = (gone.reasons || ['harness']).map(name => said[name]).filter(Boolean)
+    .join(T`; and `);
+  return `<p class="note">${T`${gone.rows} row(s) on <strong>${tr(gone.track)}</strong>, ${what},
     at harness <code>${gone.harness_version}</code>, are no longer shown: ${why}.
-    They are still in <code>results/rows.jsonl</code>.</p>`;
+    They are still in <code>results/rows.jsonl</code>.`}</p>`;
 }
 
 
 // Nothing withdrawn is the good case and needs no heading saying so.
 if ((DATA.superseded || []).length) {
   document.getElementById('withdrawn').innerHTML =
-    `<div class="box"><h2>Withdrawn from the tables</h2>
+    `<div class="box"><h2>${T`Withdrawn from the tables`}</h2>
      ${DATA.superseded.map(renderSuperseded).join('')}</div>`;
 } else {
   document.getElementById('withdrawn').remove();
 }
 
+function drawAll() {
+  renderSaturation(DATA);
+  renderCorpora(DATA);
+  renderLicences(DATA);
+  renderProtocol(DATA.protocol);
+  renderSimilarityExample(DATA.similarity_example);
+  renderCalibration(DATA.calibration);
+  renderJudges(DATA.judges);
+  renderPreference(DATA.preference);
+  renderConcordance(DATA.concordance);
+}
+
 renderJudges(DATA.judges);
 renderPreference(DATA.preference);
 renderConcordance(DATA.concordance);
+
+// Last, so every panel above has drawn once in the reader's language already.
+// On a change it redraws them all: a panel that removed itself for want of data
+// stays removed, because `drawAll` calls exactly the functions that decided
+// that, and they decide it the same way again.
+installLanguageSwitch(drawAll);
 </script>
 </body>
 </html>

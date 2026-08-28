@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>therapy-note-bench — leaderboard</title>
+<title data-t="page.title">therapy-note-bench — leaderboard</title>
 <style>
   :root {
     --bg: #fbfbfa; --fg: #1a1a19; --muted: #6b6b66; --line: #e2e2dd;
@@ -38,8 +38,30 @@
   h1 { font-size: 1.6rem; margin: 0 0 .3rem; letter-spacing: -.01em; }
   h2 { font-size: 1.1rem; margin: 0 0 .2rem; }
   p.sub { color: var(--muted); margin: 0 0 2rem; }
-  p.blurb { color: var(--muted); margin: .1rem 0 .9rem; font-size: .9rem; max-width: 68ch; }
+  /* A measure in `ch` shrinks with the font size, and these are set at .9rem
+     and .85rem -- so 68ch and 72ch came out around half the card, next to a
+     table and a lede that both run its full width. It read as a broken column
+     rather than as a comfortable line. Set in `rem`, so the measure no longer
+     depends on how small the text is, and wide enough to look deliberate
+     beside the table below it. */
+  p.blurb { color: var(--muted); margin: .1rem 0 .9rem; font-size: .9rem; max-width: 58rem; }
   a { color: var(--accent); }
+
+  /* The language switch. Deliberately quiet: it sits in the corner above the
+     title, reads as two three-letter words, and never competes with the thing
+     the reader came for. English is the default and is not a preference the
+     page guesses -- see `chosenLanguage` in the helpers. */
+  .lang { float: right; display: flex; gap: .15rem; margin: .15rem 0 0; }
+  .lang:empty { display: none; }
+  .lang button {
+    font: inherit; font-size: .74rem; letter-spacing: .05em; cursor: pointer;
+    padding: .1rem .4rem; border-radius: 5px; border: 1px solid transparent;
+    background: none; color: var(--muted);
+  }
+  .lang button:hover { color: var(--fg); }
+  .lang button[aria-pressed="true"] {
+    color: var(--fg); background: var(--chip); border-color: var(--line);
+  }
 
   .box {
     background: var(--card); border: 1px solid var(--line); border-radius: 10px;
@@ -157,7 +179,7 @@
   svg.plot .grid { stroke: var(--line); stroke-width: 1; }
   svg.plot .rule { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3; }
 
-  footer { color: var(--muted); font-size: .85rem; margin-top: 2.5rem; max-width: 72ch; }
+  footer { color: var(--muted); font-size: .85rem; margin-top: 2.5rem; max-width: 58rem; }
   footer p { margin: .4rem 0; }
 
 .scale { display: inline-block; margin-left: .4em; font-size: .72em; font-weight: 500;
@@ -296,8 +318,9 @@ p.settings { margin-top: .2rem; }
 </head>
 <body>
 <main>
+  <div class="lang" id="lang"></div>
   <h1>therapy-note-bench</h1>
-  <p class="sub">
+  <p class="sub" data-t="page.sub">
     LLM-written psychotherapy session notes, scored on two published protocols —
     TN-Eval's SOAP rubric and iCARE's 17 sections — and re-run as models change.
     <a href="https://github.com/JanNehyba/therapy-note-bench">Code and data on GitHub</a>.
@@ -307,32 +330,32 @@ p.settings { margin-top: .2rem; }
 
   <div id="tables"></div>
 
-  <p class="methods-link"><a href="methods.html">How this was measured →</a>
+  <p class="methods-link" data-t="page.methods-link"><a href="methods.html">How this was measured →</a>
      Every column defined, which judge and how closely it agrees with two therapists,
      how far the two judges disagree with each other, what the two corpora are and
      where they came from, and which rows are no longer drawn.</p>
 
-  <p class="methods-link"><a href="brief.html">Reading these numbers without being misled →</a>
+  <p class="methods-link" data-t="page.brief-link"><a href="brief.html">Reading these numbers without being misled →</a>
      What a leaderboard of these models can and cannot tell you, for somebody
      building or buying one — four claims, four figures, and the file each number
      came from. Also as a <a href="therapy-note-bench.pdf">PDF</a>.</p>
 
   <footer>
-    <p>Every column's range, what it counts and what it must not be read as are printed
+    <p data-t="page.foot.columns">Every column's range, what it counts and what it must not be read as are printed
        under the table it belongs to, not down here — including the near-zero agreement
        between two therapists on <strong>Faithfulness</strong> (Krippendorff's alpha 0.18).</p>
-    <p><strong>Notes</strong> counts the notes a protocol could actually read. A model that
+    <p data-t="page.foot.notes"><strong>Notes</strong> counts the notes a protocol could actually read. A model that
        writes a good note in the wrong shape loses notes to its format, not to its
        clinical content — read the count before comparing the score.</p>
-    <p>The chip after a model name is the <strong>provider</strong> that served it. The same
+    <p data-t="page.foot.provider">The chip after a model name is the <strong>provider</strong> that served it. The same
        model id on two providers can be two different builds — a different quantisation,
        different weights, a different system prompt — so they are two rows here, never one.</p>
-    <p>Rows are only ever compared when they agree on all six of track, harness version,
+    <p data-t="page.foot.comparability">Rows are only ever compared when they agree on all six of track, harness version,
        prompt version, judge model, judge prompt version and <strong>the settings the judge
        ran at</strong> — which is why the judge is a switch above and not a column here.
        What has been withdrawn from the tables, and why, is
        <a href="methods.html#withdrawn">on the methods page</a>.</p>
-    <p><strong>What the corpora are, and what they are not.</strong> Four pages
+    <p data-t="page.foot.background"><strong>What the corpora are, and what they are not.</strong> Four pages
        carry the background these tables rest on, and until 2026-08-27 nothing on
        this site linked to any of them:
        <a href="datasets.md">the datasets</a> — where each came from, what licence
@@ -357,7 +380,7 @@ const esc = value => String(value ?? '').replace(/[&<>"']/g, ch =>
 // The heading for a measure key, from the table's own columns -- so the
 // "ordered by X" sentence and the column it names can never disagree.
 const colLabel = (table, key) =>
-  (table.columns.find(c => c.key === key) || {}).label || key;
+  tr((table.columns.find(c => c.key === key) || {}).label || key);
 
 const fmt = (value, digits) =>
   value === undefined || value === null
@@ -384,6 +407,137 @@ function code(text) {
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
 }
 
+
+// --- two languages, one page ------------------------------------------------
+//
+// English is the source and Czech is a lookup beside it. Three shapes of string
+// reach a reader and each has its own path in, but they share one dictionary
+// and one rule: **a key with no Czech draws its English**. A half-translated
+// page is a page; a page that throws on a missing key is not.
+//
+//   tr(s)      one string out of the payload -- a column heading, a caveat, a
+//              track title. Keyed by the English itself.
+//   the tag    a sentence written in the script, wrapped in the tagged template
+//              below. Keyed by the English with each hole written {0}, {1}, so
+//              Czech may reorder them -- it has to.
+//   data-t     prose that is HTML in the template, keyed by the id the
+//              attribute names: a paragraph with three links in it is not a
+//              good dictionary key.
+//
+// Keys are whitespace-normalised on both sides: a sentence in a template
+// literal carries the template's indentation, and a dictionary that had to
+// reproduce it would break on a re-indent.
+const I18N = {"cs": {"(alpha {0} against {1})": " (alfa {0} proti {1})", ", and": " a ", ", and on {0} it does not reach the ceiling the two therapists set between them": ", a na {0} nedosahuje stropu, který mezi sebou nastavili ti dva terapeuti", ", therapist {0}%": ", terapeut {0} %", "150 notes and the ratings of two human annotators": "150 zápisů a hodnocení dvou lidských anotátorů", "95% interval": "95% interval", "95% intervals from a paired bootstrap over conversations — the same resample scores every system, so a hard conversation counts as difficulty rather than disagreement. The dashed line is the therapist. Hover a bar for the table's figure beside this one.": "95% intervaly z párového bootstrapu přes rozhovory — týž převzorek boduje každý systém, takže těžký rozhovor se počítá jako obtížnost, ne jako neshoda. Čárkovaná čára je terapeut. Najeďte na pruh a uvidíte vedle tohoto čísla i to z tabulky.", "; and": "; a ", "\u003ccode\u003e{0}\u003c/code\u003e beats {1}: {2}": "\u003ccode\u003e{0}\u003c/code\u003e poráží {1}: {2}", "\u003ccode\u003e{0}\u003c/code\u003e over {1}": "\u003ccode\u003e{0}\u003c/code\u003e nad {1}", "\u003cstrong\u003eAnd the two against each other.\u003c/strong\u003e {0}": "\u003cstrong\u003eA ti dva proti sobě.\u003c/strong\u003e {0}", "\u003cstrong\u003eSome of these rows were measured at different settings from others of the same kind.\u003c/strong\u003e Each candidate is shown at the settings its answers were produced at, under its name. A judge's settings change its answers — measured here, one judge's thinking budget going from 128 to 256 moved every model's completeness and reversed the order of the three \u003ccode\u003eflash\u003c/code\u003e candidates — so those rows are not strictly comparable.": "\u003cstrong\u003eNěkteré z těchto řádků byly změřeny při jiném nastavení než jiné řádky téhož druhu.\u003c/strong\u003e Každý kandidát je ukázán při nastavení, ve kterém vznikly jeho odpovědi, pod svým jménem. Nastavení hodnotitele mění jeho odpovědi — změřeno tady: rozpočet na přemýšlení jednoho hodnotitele šel ze 128 na 256 a pohnul úplností každého modelu a obrátil pořadí tří kandidátů \u003ccode\u003eflash\u003c/code\u003e — takže ty řádky nejsou striktně srovnatelné.", "\u003cstrong\u003eSystems that share a rank cannot be told apart by this evidence.\u003c/strong\u003e {0} of {1} ranks are shared, and the top one has {2} system(s) in it. Measured on \u003cstrong\u003e{3}\u003c/strong\u003e over the {4} conversations every system here was scored on, by resampling those conversations — not by whether two intervals overlap, which is a weaker test.": "\u003cstrong\u003eSystémy, které sdílejí příčku, tato evidence od sebe nerozliší.\u003c/strong\u003e Sdílených příček je {0} z {1} a na té nejvyšší stojí systémů: {2}. Změřeno na \u003cstrong\u003e{3}\u003c/strong\u003e přes {4} rozhovorů, na kterých byl obodován každý zdejší systém, převzorkováním těch rozhovorů — ne tím, zda se dva intervaly překrývají, což je slabší test.", "\u003cstrong\u003eThe effect does not survive here\u003c/strong\u003e: most of the correlation above is the transcript, not the note.": "\u003cstrong\u003eEfekt tady nepřežívá\u003c/strong\u003e: většina korelace výše je přepis, ne zápis.", "\u003cstrong\u003eThe effect survives here\u003c/strong\u003e, so on this judge a longer note does score higher for being longer.": "\u003cstrong\u003eEfekt tady přežívá\u003c/strong\u003e, takže u tohoto hodnotitele delší zápis skutečně boduje výš za to, že je delší.", "\u003cstrong\u003eThe right-hand column is the ceiling, not a target to beat.\u003c/strong\u003e Two trained therapists disagree with each other about these notes; a judge that agrees with a therapist as often as the other therapist does has done as well as the task allows.": "\u003cstrong\u003ePravý sloupec je strop, ne cíl, který se má překonat.\u003c/strong\u003e Dva školení terapeuti se o těchto zápisech neshodnou mezi sebou; hodnotitel, který se s terapeutem shodne stejně často jako ten druhý terapeut, udělal maximum, co úloha dovoluje.", "\u003cstrong\u003eThe two judges agree on the shape of this ranking and not on its order.\u003c/strong\u003e On {0}, {1} of {2} systems land somewhere else under \u003ccode\u003e{3}\u003c/code\u003e{4}. Near the top and near the bottom are claims this table supports; ninth against tenth is not.": "\u003cstrong\u003eOba hodnotitelé se shodnou na tvaru tohoto pořadí, ne na jeho sledu.\u003c/strong\u003e Na sloupci {0} přistane pod hodnotitelem \u003ccode\u003e{3}\u003c/code\u003e jinde {1} z {2} systémů{4}. Blízko vrcholu a blízko dna jsou tvrzení, která tato tabulka unese; devátý proti desátému ne.", "\u003cstrong\u003eThese numbers are not the table's numbers, and they should not be.\u003c/strong\u003e The table above averages each system over its own notes; this section averages every system over the \u003cstrong\u003e{0} of {1}\u003c/strong\u003e conversations they \u003cem\u003eall\u003c/em\u003e have, because a paired comparison is only paired on a shared set. The set is smaller because {2}. Expect small differences from the table, and expect closely-matched systems to change places: that two orderings disagree over which 42 of 50 conversations you use is itself a result about how tightly packed these models are.": "\u003cstrong\u003eTato čísla nejsou čísla z tabulky, a ani být nemají.\u003c/strong\u003e Tabulka výše průměruje každý systém přes jeho vlastní zápisy; tento oddíl průměruje každý systém přes \u003cstrong\u003e{0} z {1}\u003c/strong\u003e rozhovorů, které mají \u003cem\u003evšechny\u003c/em\u003e, protože párové srovnání je párové jen na sdílené množině. Ta množina je menší proto, že {2}. Očekávejte drobné rozdíly oproti tabulce a očekávejte, že si těsně vyrovnané systémy prohodí místa: to, že se dvě uspořádání neshodnou podle toho, kterých 42 z 50 rozhovorů použijete, je samo o sobě výsledek o tom, jak nahusto tyto modely stojí.", "\u003cstrong\u003eWhich of these can be told apart has not been measured for this table.\u003c/strong\u003e Read the order as roughly who is near the top and near the bottom, not as a ranking: two adjacent rows are not a result.": "\u003cstrong\u003eU této tabulky nebylo změřeno, které systémy od sebe lze rozlišit.\u003c/strong\u003e Čtěte to pořadí jen zhruba jako to, kdo je blízko vrcholu a kdo blízko dna, ne jako žebříček: dva sousední řádky nejsou výsledek.", "\u003cstrong\u003eWhy two statistics.\u003c/strong\u003e Cohen's kappa suits a yes/no criterion and Spearman suits a 1–5 scale, so each measure is reported under the one a reader expects. Those two are different quantities and an inequality between them means nothing, so the comparison below is made on \u003cstrong\u003eKrippendorff's alpha\u003c/strong\u003e — defined for both, nominal for the rubric and ordinal for the scales, and the statistic TN-Eval used to reach the finding in the first place.": "\u003cstrong\u003eProč dvě statistiky.\u003c/strong\u003e Cohenova kappa sedí na kritérium ano/ne a Spearman na škálu 1–5, takže se každá míra vykazuje pod tou, kterou čtenář čeká. Jsou to dvě různé veličiny a nerovnost mezi nimi neznamená nic, takže srovnání níže stojí na \u003cstrong\u003eKrippendorffově alfě\u003c/strong\u003e — definované pro obojí, nominální pro rubriku a ordinální pro škály, a je to ta statistika, kterou k tomu zjištění došel sám TN-Eval.", "\u003cstrong\u003eWithin a system\u003c/strong\u003e, across its own conversations, the correlation is positive in {0} of {1} systems, median {2}. That cannot separate the note from the transcript: a longer session yields both a longer note and more rubric material.": "\u003cstrong\u003eUvnitř systému\u003c/strong\u003e, napříč jeho vlastními rozhovory, je korelace kladná u {0} z {1} systémů, medián {2}. To neoddělí zápis od přepisu: delší sezení dá zároveň delší zápis i víc materiálu pro rubriku.", "\u003cstrong\u003eWithin one conversation\u003c/strong\u003e, across the systems, the transcript is held fixed and can explain nothing. Median {0}, positive in {1} of {2} conversations, sign test p\u0026nbsp;=\u0026nbsp;{3}.": "\u003cstrong\u003eUvnitř jednoho rozhovoru\u003c/strong\u003e, napříč systémy, je přepis pevně držen a nemůže vysvětlit nic. Medián {0}, kladná u {1} z {2} rozhovorů, znaménkový test p\u0026nbsp;=\u0026nbsp;{3}.", "\u003cstrong\u003eolder harness\u003c/strong\u003e, columns may differ from the tables above": "\u003cstrong\u003estarší harness\u003c/strong\u003e, sloupce se mohou lišit od tabulek výše", "\u003cstrong\u003e{0} of those {1} compare two different instruments\u003c/strong\u003e: the candidates were not all asked at the same settings, and the alphas below are over slightly different item sets. What each ran at is in the table above.": "\u003cstrong\u003e{0} z těch {1} srovnává dva různé nástroje\u003c/strong\u003e: kandidáti nebyli všichni dotazováni při stejném nastavení a alfy níže jsou nad mírně odlišnými množinami položek. Při čem který běžel, je v tabulce výše.", "\u003cstrong\u003e{0} of {1} systems are beaten outright by nobody.\u003c/strong\u003e That is why there is no single winner named here.": "\u003cstrong\u003e{0} z {1} systémů neporáží naplno nikdo.\u003c/strong\u003e Proto tu není jmenován jediný vítěz.", "A badge on a code repository, for a corpus collected elsewhere. Treated as no licence for the data.": "Odznak na repozitáři s kódem, pro korpus posbíraný jinde. Bereme to tak, že data licenci nemají.", "A different scale from the two columns beside it, and a weak one: TN-Eval measured Krippendorff's alpha of 0.18 between trained therapists on this rating. Read it as a flag for gross invention, not as a ranking.": "Jiná škála než u dvou sloupců vedle, a slabá: TN-Eval na tomto hodnocení naměřil mezi školenými terapeuty Krippendorffovu alfu 0.18. Čtěte to jako signál hrubého výmyslu, ne jako pořadí.", "A fluent note about the wrong session still scores well.": "Plynulý zápis o špatném sezení boduje pořád dobře.", "A note here is a \u003cstrong\u003eSOAP note\u003c/strong\u003e: four sections, in this order. The descriptions are the ones the models are given, quoted from TN-Eval's own prompt.": "Zápis je tu \u003cstrong\u003ezápis SOAP\u003c/strong\u003e: čtyři oddíly, v tomto pořadí. Popisy jsou ty, které dostávají modely, citované z vlastního promptu TN-Eval — a proto zůstávají anglicky.", "A published instrument asked about the same notes as the TN-Eval SOAP track: the SOAP notes written from the 50 AnnoMI conversations. Not a third corpus -- one corpus, two instruments, so the two tables can be read against each other. Eight attributes, reported separately and never averaged, because the instrument reports them that way and because one of the eight is a 0-1 column: a mean over it and seven 1-5 scales would be a number with no unit.": "Publikovaný nástroj položený na tytéž zápisy jako větev TN-Eval SOAP: na zápisy SOAP napsané z 50 rozhovorů AnnoMI. Není to třetí korpus — jeden korpus, dva nástroje, aby se ty dvě tabulky daly číst proti sobě. Osm atributů, vykazovaných zvlášť a nikdy neprůměrovaných, protože je tak vykazuje sám nástroj a protože jeden z těch osmi je sloupec 0-1: průměr přes něj a přes sedm škál 1-5 by bylo číslo bez jednotky.", "A ranking always prints an order. This asks whether the evidence supports one. Both parts read the individual judgements, not the averages, over the \u003cstrong\u003e{0} conversations every system wrote a note for\u003c/strong\u003e.": "Žebříček vždycky vytiskne nějaké pořadí. Tady se ptáme, jestli ho evidence unese. Obě části čtou jednotlivé soudy, ne průměry, přes \u003cstrong\u003e{0} rozhovorů, ke kterým napsal zápis každý systém\u003c/strong\u003e.", "A rate limit, a backend error or a timeout; re-running the generation fills those in.": "Rate limit, chyba backendu nebo timeout; opakované generování je doplní.", "A re-implementation with no human anchor: the authors never published their ratings, so unlike the TN-Eval track this number is not calibrated against anybody.": "Reimplementace bez lidské kotvy: autoři svá hodnocení nikdy nezveřejnili, takže na rozdíl od větve TN-Eval není toto číslo zkalibrováno proti nikomu.", "A separate question from whether the judges do, and the one that decides whether the ordering column can be read as \"quality\". A model that answers every question satisfies more criteria \u003cem\u003eand\u003c/em\u003e invents more.": "Jiná otázka než ta, zda se shodnou hodnotitelé, a právě ona rozhoduje, jestli se dá řadicí sloupec číst jako „kvalita“. Model, který odpoví na každou otázku, splní víc kritérií \u003cem\u003ea zároveň\u003c/em\u003e si víc vymyslí.", "A system that is at least as good on \u003cem\u003eevery\u003c/em\u003e measure under \u003cem\u003eboth\u003c/em\u003e judges, and strictly better somewhere, is better however a reader weighs the measures — and weighing them is a clinical decision, not a measurement. Everything else on this page is a column, not a verdict.": "Systém, který je aspoň tak dobrý na \u003cem\u003ekaždé\u003c/em\u003e míře pod \u003cem\u003eoběma\u003c/em\u003e hodnotiteli a někde je ostře lepší, je lepší, ať už čtenář ty míry váží jakkoli — a vážit je je klinické rozhodnutí, ne měření. Všechno ostatní na této stránce je sloupec, ne verdikt.", "Accurate": "Přesnost", "Across the expert notes, \u003cstrong\u003e{0} of {1} fields ({2}%)\u003c/strong\u003e say something; the rest are \u003ccode\u003eNil\u003c/code\u003e. A published counselling video has no hospital id and no referring clinician, so several fields cannot be answered by anyone. On those, a model scores by staying quiet rather than by writing a good note — read the low rows as \u003cem\u003eno signal\u003c/em\u003e, not as a hard test.": "Napříč expertními zápisy něco říká \u003cstrong\u003e{0} z {1} polí ({2} %)\u003c/strong\u003e; zbytek je \u003ccode\u003eNil\u003c/code\u003e. Publikované poradenské video nemá číslo hospitalizace ani odesílajícího lékaře, takže na několik polí nemůže odpovědět nikdo. Na těch model boduje tím, že mlčí, ne tím, že napíše dobrý zápis — nízké řádky čtěte jako \u003cem\u003ežádný signál\u003c/em\u003e, ne jako těžkou zkoušku.", "Agreement": "Shoda", "All the information is in there that is useful to the target provider/intended audience. The note is extremely relevant, providing valuable information and/or analysis. PDSQI-9 item 4, rated 1 (not at all) to 5 (extremely).": "Je v něm všechna informace, která je užitečná cílovému poskytovateli péče / zamýšlenému čtenáři. Zápis je krajně relevantní a přináší cennou informaci a/nebo analýzu. PDSQI-9, položka 4, hodnoceno 1 (vůbec) až 5 (zcela).", "Alpha, judge": "Alfa, hodnotitel", "Alpha, therapists": "Alfa, terapeuti", "An expert note written by the clinician who saw the session. ROUGE-L and BERTScore measure how closely the model reproduced it; TRACE asks a judge to rate the note itself, the way the paper's experts did.": "Expertní zápis, který napsal klinik, jenž to sezení viděl. ROUGE-L a BERTScore měří, jak těsně jej model zreprodukoval; TRACE žádá hodnotitele, aby ohodnotil samotný zápis, tak jako to dělali experti v tom článku.", "Asked of the note alone, with no transcript and no reference: it says nothing about whether the note is true or complete. An invented note in faultless Czech passes. Reported as the share of notes free of the fault, so higher is better.": "Kladeno samotnému zápisu, bez přepisu a bez reference: neříká to nic o tom, zda je zápis pravdivý nebo úplný. Vymyšlený zápis v bezchybné češtině projde. Vykázáno jako podíl zápisů, které tou vadou netrpí, takže vyšší je lepší.", "Automatic metrics and a TRACE judge side by side, because the source paper found they disagree. That disagreement is a result, not an error. iCARE and iHOPE are one project under two names: the code was released as iCARE in April 2025 and the preprint renamed it iHOPE in August 2026, sixteen months later. **PDSQI-9 has no columns here**, and that is deliberate rather than missing: it rates how a clinical note is written, and these are 17 form fields rather than a written note. It runs on the SOAP notes, where it can be read against the rubric that scores the same text.": "Automatické metriky a hodnotitel TRACE vedle sebe, protože zdrojový článek zjistil, že si odporují. Ten rozpor je výsledek, ne chyba. iCARE a iHOPE jsou jeden projekt pod dvěma jmény: kód vyšel jako iCARE v dubnu 2025 a preprint jej v srpnu 2026, o šestnáct měsíců později, přejmenoval na iHOPE. **PDSQI-9 tu nemá žádné sloupce**, a to záměrně, ne omylem: hodnotí, jak je klinický zápis napsán, a tohle je 17 polí formuláře, ne napsaný zápis. Běží na zápisech SOAP, kde se dá číst proti rubrice, která boduje týž text.", "BERTScore": "BERTScore", "Band": "Pásmo", "Band on {0}: rows this evidence cannot tell apart share a band. It does not follow the sort -- sorting by another column reorders the rows, not what the bootstrap could separate.": "Pásmo podle sloupce {0}: řádky, které tato evidence nedokáže rozlišit, sdílejí pásmo. Neřídí se řazením — seřazení podle jiného sloupce přeskládá řádky, ne to, co bootstrap dokázal oddělit.", "Better with no weighting required": "Lepší, aniž je třeba cokoli vážit", "Both corpora are transcripts of published counselling demonstrations, not clinical sessions. Sizes are of the splits this benchmark actually scores; lengths are in words of transcript, which is what a model has to read.": "Oba korpusy jsou přepisy publikovaných poradenských ukázek, ne klinických sezení. Velikosti jsou velikosti těch částí, které tento benchmark opravdu boduje; délky jsou ve slovech přepisu, což je to, co musí model přečíst.", "By section": "Po oddílech", "Calques": "Kalky", "Can the judge be checked?": "Lze hodnotitele ověřit?", "Checked repository by repository — licence field, file tree and README — rather than assumed from a sibling project. \u003cstrong\u003eOnly one of the five carries a licence.\u003c/strong\u003e Nothing here redistributes a corpus: every dataset is fetched from its origin when a run needs it, and this page shows field names and scores, never transcripts, notes, or somebody else's prompt.": "Ověřeno repozitář po repozitáři — pole s licencí, strom souborů a README — ne odhadnuto podle sousedního projektu. \u003cstrong\u003eLicenci nese jen jeden z pěti.\u003c/strong\u003e Nic tady korpus dál nešíří: každá datová sada se stahuje ze svého zdroje, až když ji běh potřebuje, a tato stránka ukazuje názvy polí a skóre, nikdy ne přepisy, zápisy nebo cizí prompt.", "Cohen's kappa": "Cohenova kappa", "Completeness": "Úplnost", "Completeness is scored by asking the judge, once per item, whether that item is present in the matching section. These are TN-Eval's \u003cstrong\u003e{0} criteria\u003c/strong\u003e, reproduced verbatim — a note scoring 0.50 contained half of them.": "Úplnost se boduje tak, že se hodnotitele u každé položky zvlášť zeptáme, jestli je ta položka v odpovídajícím oddílu. Tohle je \u003cstrong\u003e{0} kritérií\u003c/strong\u003e z TN-Eval, reprodukovaných doslova — zápis se skóre 0.50 jich obsahoval polovinu.", "Completeness over the shared conversations, with the range the evidence supports": "Úplnost přes sdílené rozhovory, s rozpětím, které evidence unese", "Completeness with 95% bootstrap intervals, best first": "Úplnost s 95% bootstrapovými intervaly, nejlepší první", "Comprehensible": "Srozumitelnost", "Computed from \u003ccode\u003e{0}\u003c/code\u003e's individual answers{1}.": "Spočteno z jednotlivých odpovědí modelu \u003ccode\u003e{0}\u003c/code\u003e{1}.", "Conciseness": "Stručnost", "Counts coverage of a checklist, not judgement. A therapist writes what matters for the next session and leaves out what does not; the rubric sees what is present and cannot see why anything was left out -- which is why every model here scores above the therapist on it. This is the column the table is ordered by, so the caveat travels with the ranking: quote the number with this sentence attached, or do not quote it.": "Počítá pokrytí seznamu položek, ne úsudek. Terapeut píše to, co je důležité pro příští sezení, a co není, vynechá; rubrika vidí, co v zápise je, a nevidí, proč bylo něco vynecháno — a právě proto tu na ní každý model boduje výš než terapeut. Podle tohoto sloupce je tabulka seřazena, takže tato výhrada cestuje spolu s pořadím: citujte to číslo i s touto větou, nebo je necitujte.", "Criterion": "Kritérium", "Czech · AnnoMI conversations, translated": "Čeština · rozhovory AnnoMI, přeložené", "Czech · ten real sessions, one client": "Čeština · deset skutečných sezení, jeden klient", "Czech, real sessions": "Čeština, skutečná sezení", "Czech, translated": "Čeština, přeložená", "Detected": "Detekováno", "Diacritics": "Diakritika", "Do the columns agree with each other?": "Shodnou se sloupce mezi sebou?", "Do the two judges agree?": "Shodnou se ti dva hodnotitelé?", "Does completeness rise with how much the model wrote?": "Roste úplnost s tím, kolik toho model napsal?", "Does either judge favour its own models?": "Nadržuje některý z hodnotitelů vlastním modelům?", "Each row also records how many tokens its model spent \u003cstrong\u003ereasoning\u003c/strong\u003e before writing — open a row to see it. It is not a column because it is not comparable between providers: vLLM, which serves the e-INFRA models, reports zero for models whose reasoning is text-delimited even when they reason, and OpenAI counts differently again. A gap there can be bookkeeping rather than behaviour.": "Každý řádek také zaznamenává, kolik tokenů jeho model strávil \u003cstrong\u003euvažováním\u003c/strong\u003e před psaním — rozbalte řádek a uvidíte to. Není to sloupec, protože to není srovnatelné mezi poskytovateli: vLLM, které obsluhuje modely e-INFRA, hlásí nulu u modelů, jejichž uvažování je vymezeno textem, i když uvažují, a OpenAI to zase počítá jinak. Rozdíl tam může být účetnictví, ne chování.", "Effect": "Efekt", "Effort": "Úsilí", "Eleven columns from two instruments over one set of notes, so the question both were run for can be read off one row. The first three are TN-Eval's rubric: it counts what a note contains. The other eight are PDSQI-9, a published instrument that rates how a clinical note is written. **Nothing is averaged across them** — they are different questions on different scales, and there is no eleven-column total here for the same reason neither instrument publishes one.": "Jedenáct sloupců ze dvou nástrojů nad jednou sadou zápisů, aby se otázka, kvůli které oba běžely, dala přečíst z jednoho řádku. První tři jsou rubrika z TN-Eval: ta počítá, co zápis obsahuje. Dalších osm je PDSQI-9, publikovaný nástroj, který hodnotí, jak je klinický zápis napsán. **Nic se přes ně neprůměruje** — jsou to různé otázky na různých škálách a není tu žádný součet přes jedenáct sloupců ze stejného důvodu, z jakého ho nepublikuje ani jeden z těch nástrojů.", "Embedding similarity to the expert note. Tolerates paraphrase.": "Podobnost embeddingů s expertním zápisem. Snese parafrázi.", "Every candidate agrees with a therapist at least as often as the two therapists agree with each other": "Každý kandidát se s terapeutem shodne aspoň tak často, jako se ti dva terapeuti shodnou mezi sebou", "Every candidate of a kind was measured at one setting. Across kinds there is no such thing: a thinking budget and a reasoning effort are different controls, and no value of one is the same as a value of the other. That is a limit of comparing judges from two vendors, not a gap in this run.": "Každý kandidát daného druhu byl změřen při jednom nastavení. Napříč druhy nic takového neexistuje: rozpočet na přemýšlení a míra uvažování jsou různé ovladače a žádná hodnota jednoho není totéž co hodnota druhého. To je mez srovnávání hodnotitelů od dvou dodavatelů, ne mezera v tomto běhu.", "Every figure on this page is generated from \u003ccode\u003eresults/{0}\u003c/code\u003e, which is append-only: a re-run adds rows beside the old ones rather than replacing them, and what is drawn here is the newest of each.": "Každé číslo na této stránce je vygenerováno ze souboru \u003ccode\u003eresults/{0}\u003c/code\u003e, do kterého se jen přidává: opakovaný běh přidá řádky vedle starých, místo aby je nahradil, a kreslí se tu z každého ten nejnovější.", "Every judge clears the human ceiling on {0}.": "Každý hodnotitel překonává lidský strop na {0}.", "Faithfulness": "Věrnost", "Filled by the expert": "Vyplněno expertem", "Fraction of the note's sentences that fit at least one rubric item. 1.00 means nothing is off-topic; it does not mean the note is short.": "Podíl vět zápisu, které padnou aspoň na jednu položku rubriky. 1.00 znamená, že nic není mimo téma; neznamená to, že je zápis krátký.", "Fraction of the section's rubric criteria the judge found present. 0.65 means about two thirds of the required items are in the note.": "Podíl kritérií rubriky daného oddílu, která hodnotitel našel přítomná. 0.65 znamená, že v zápise jsou zhruba dvě třetiny požadovaných položek.", "Free of stigmatizing language": "Bez stigmatizujícího jazyka", "Generated with \u003cstrong\u003e{0}\u003c/strong\u003e.": "Vygenerováno s nastavením \u003cstrong\u003e{0}\u003c/strong\u003e.", "Generation settings were not recorded for this row.": "U tohoto řádku nebylo nastavení generování zaznamenáno.", "How much of the iCARE form has an answer at all": "Jak velká část formuláře iCARE má vůbec odpověď", "Human ratings exist for {0} systems and no others: {1}. \u003cstrong\u003eNo human has read a note written by any of the models the leaderboard ranks\u003c/strong\u003e, so the figure above is measured on one set of notes and applied to another.": "Lidská hodnocení existují pro {0} systémy a pro žádné jiné: {1}. \u003cstrong\u003eŽádný člověk nečetl zápis od kteréhokoli z modelů, které žebříček řadí\u003c/strong\u003e, takže číslo výše je změřeno na jedné sadě zápisů a použito na jinou.", "Its family": "Jeho rodina", "Judge": "Hodnotitel", "Judge \u003ccode\u003e{0}\u003c/code\u003e against the two therapists TN-Eval had rate the same {1} notes.": "Hodnotitel \u003ccode\u003e{0}\u003c/code\u003e proti dvěma terapeutům, které nechal TN-Eval ohodnotit týchž {1} zápisů.", "Judge vs therapist": "Hodnotitel vs. terapeut", "Kept out of any average. Every model scores 0.97-1.00 here, so this column separates nobody -- it is shown because its twin does.": "Drženo mimo jakýkoli průměr. Každý model tu boduje 0.97–1.00, takže tento sloupec nikoho neodliší — je vidět proto, že jeho dvojče ano.", "Krippendorff's alpha against the two therapists who annotated TN-Eval's own data, over the same {0} notes. The bottom row is what those two therapists reach \u003cem\u003ewith each other\u003c/em\u003e — the ceiling any judge is measured against, and it is not high.": "Krippendorffova alfa proti dvěma terapeutům, kteří anotovali vlastní data TN-Eval, přes týchž {0} zápisů. Spodní řádek je to, čeho ti dva terapeuti dosáhnou \u003cem\u003emezi sebou\u003c/em\u003e — strop, proti kterému se měří každý hodnotitel, a není vysoký.", "Krippendorff's alpha, judge vs therapist": "Krippendorffova alfa, hodnotitel vs. terapeut", "Krippendorff's alpha, therapist vs therapist": "Krippendorffova alfa, terapeut vs. terapeut", "Left out of this section because they are still being scored: {0}. Including a half-scored system would shrink the shared corpus for everyone else.": "Z tohoto oddílu vynecháno, protože se to ještě boduje: {0}. Zahrnout napůl obodovaný systém by zmenšilo sdílený korpus všem ostatním.", "Licence": "Licence", "Longest-common-subsequence overlap with the expert note, F-measure. Rewards using the same words in the same order.": "Překryv s expertním zápisem podle nejdelší společné podposloupnosti, F-míra. Odměňuje užití týchž slov v témže pořadí.", "Looks back": "Ohlédnutí zpět", "Looks forward": "Výhled dopředu", "Measure": "Míra", "Measured against the {0} systems neither judge's vendor wrote: {1}. Named rather than counted, because the estimate is only as good as this group — two of these were the judges' own vendors under a name their model families did not share (\u003ccode\u003egemma4\u003c/code\u003e is Google's, \u003ccode\u003egpt-oss-120b\u003c/code\u003e is OpenAI's), and both pulled the answer toward zero.": "Měřeno proti {0} systémům, které nenapsal dodavatel ani jednoho z hodnotitelů: {1}. Vyjmenováno, ne spočítáno, protože odhad je jen tak dobrý jako tahle skupina — dva z nich byli vlastní dodavatelé hodnotitelů pod jménem, které jejich rodiny modelů nesdílely (\u003ccode\u003egemma4\u003c/code\u003e je od Googlu, \u003ccode\u003egpt-oss-120b\u003c/code\u003e od OpenAI), a oba táhli odpověď k nule.", "Measured, not disclaimed. Both judges score everything, and the difference between their tables for a judge's own family — against the systems \u003cem\u003eneither\u003c/em\u003e of them wrote — is the effect, in {0}, with a paired bootstrap over conversations.": "Změřeno, ne odbyto poznámkou pod čarou. Oba hodnotitelé bodují všechno a rozdíl mezi jejich tabulkami pro hodnotitelovu vlastní rodinu — proti systémům, které nenapsal \u003cem\u003eani jeden\u003c/em\u003e z nich — je ten efekt, v míře {0}, s párovým bootstrapem přes rozhovory.", "Median words in this model’s notes. Completeness counts coverage, so a longer note covers more.": "Medián počtu slov v zápisech tohoto modelu. Úplnost počítá pokrytí, takže delší zápis pokryje víc.", "Models, worst to best": "Modely, od nejhoršího k nejlepšímu", "Moved furthest": "Nejdál se pohnul", "No human has rated these notes on this instrument, so there is no agreement figure for this judge. What the instrument publishes instead is a ceiling: trained physicians agreed with each other at Krippendorff's alpha 0.575, against the 0.18 two therapists reach on faithfulness. A judge cannot be asked to agree with a person better than people agree with each other -- but a ceiling is not a measurement, and these columns have not been checked against anyone.": "Na tento nástroj tyto zápisy nikdo z lidí nehodnotil, takže pro tohoto hodnotitele žádné číslo shody neexistuje. Co nástroj publikuje místo toho, je strop: školení lékaři se mezi sebou shodli na Krippendorffově alfě 0.575, proti 0.18, na které se dva terapeuti dostanou u věrnosti. Po hodnotiteli nelze chtít, aby se s člověkem shodl líp, než se lidé shodnou mezi sebou — jenže strop není měření a tyto sloupce nebyly ověřeny proti nikomu.", "No licence file and no statement of terms. The instructions are fetched at run time and never shown here.": "Žádný licenční soubor a žádné prohlášení o podmínkách. Instrukce se stahují za běhu a tady se nikdy nezobrazují.", "No pair is separated by more than that: this measurement orders them and cannot tell them apart.": "Žádná dvojice není oddělená o víc než to: toto měření je sice seřadí, ale rozlišit je nedokáže.", "No runs yet": "Zatím žádný běh", "No system beats another on every measure under both judges.": "Žádný systém neporáží jiný na každé míře pod oběma hodnotiteli.", "Non-words": "Neslova", "None of them does on {0}, which is why those columns carry the caveat they do in every table above — the two therapists barely agree there either.": "Na {0} to nezvládne ani jeden, a proto ty sloupce nesou v každé tabulce výše tu výhradu, kterou nesou — vždyť ani ti dva terapeuti se tam skoro neshodnou.", "None. No human wrote a comparison note in Czech and no human has rated these notes on these criteria. That is one row this table does not have and the two English tables do.": "Nikde. Žádný člověk nenapsal srovnávací zápis v češtině a žádný člověk tyto zápisy podle těchto kritérií nehodnotil. To je řádek, který tato tabulka nemá a obě anglické mají.", "Not a length measure, despite the name: a note twice as long scores the same if every added sentence is on topic. It is also the measure most moved by the judge's own settings -- raising the thinking budget from 128 to 256 tokens shifted all nineteen systems and reordered sixteen of them.": "Navzdory jménu to není míra délky: dvakrát delší zápis boduje stejně, pokud je každá přidaná věta k tématu. Je to také míra, kterou nejvíc hýbe vlastní nastavení hodnotitele — zvednutí rozpočtu na přemýšlení ze 128 na 256 tokenů posunulo všech devatenáct systémů a šestnácti z nich změnilo pořadí.", "Not every candidate reaches the ceiling the two therapists set between them": "Ne každý kandidát dosáhne stropu, který mezi sebou nastavili ti dva terapeuti", "Not every row is a model under test: {0}. They sit in the ranking because they were measured the same way, and a human note placing low says something about the measure rather than about the clinician \u0026mdash; the rubric counts what a note contains and cannot see what a clinician chose to leave out.": "Ne každý řádek je testovaný model: {0}. V pořadí stojí proto, že byly změřeny stejně, a nízko umístěný lidský zápis vypovídá spíš o měřítku než o klinikovi \u0026mdash; rubrika počítá, co zápis obsahuje, a nevidí, co se klinik rozhodl vynechat.", "Not possible here. The authors' expert ratings are not in the public repository, so there is nothing to check this judge against. Two independent judges score every note instead, and where they disagree is the only control this track can have.": "Tady to nejde. Expertní hodnocení autorů nejsou ve veřejném repozitáři, takže není proti čemu tohoto hodnotitele ověřit. Místo toho každý zápis boduje dvojice nezávislých hodnotitelů a to, kde se neshodnou, je jediná kontrola, kterou tato větev mít může.", "Not possible yet, and weaker than either English track. There is no published Czech note-quality instrument to reproduce, so these criteria are this repository's own; no human has rated these notes on them, and unlike PDSQI-9 there is not even a published figure for how well two people would agree. Two independent judges answer every question, and where they disagree is the only control this track has -- which is also why a criterion every model passes is reported as unmeasured rather than as agreement.": "Zatím to nejde, a je to slabší než u kterékoli anglické větve. Neexistuje publikovaný český nástroj na kvalitu zápisu, který by se dal reprodukovat, takže tato kritéria jsou vlastní tomuto repozitáři; nikdo z lidí podle nich tyto zápisy nehodnotil a na rozdíl od PDSQI-9 tu není ani publikované číslo o tom, jak moc by se shodli dva lidé. Na každou otázku odpovídají dva nezávislí hodnotitelé a to, kde se neshodnou, je jediná kontrola, kterou tato větev má — a proto se také kritérium, které projde každému modelu, vykazuje jako nezměřené, ne jako shoda.", "Not possible yet, for the reasons the real-session table gives. What this half adds is a join: the same conversations carry English numbers on the TN-Eval track, so a model's standing there and its Czech here are about the same sessions. Whether one predicts the other is the question this track was built to answer.": "Zatím to nejde, z důvodů, které uvádí tabulka se skutečnými sezeními. Co tato polovina přidává, je spojka: tytéž rozhovory nesou anglická čísla ve větvi TN-Eval, takže postavení modelu tam a jeho čeština tady jsou o týchž sezeních. Jestli jedno předpovídá druhé, je otázka, kvůli které tato větev vznikla.", "Not the model's doing, and not counted against it.": "Není to vina modelu a nepočítá se mu to k tíži.", "Not the source paper's ROUGE-L and not comparable with their published table. Theirs compares the whole rendered note, which puts our own field labels and every `Nil` the expert wrote on both sides -- a note where the model wrote nothing at all scores 0.379 that way, above most real notes. This compares the field values of the sections the expert answered, where the same empty note scores 0.000, and every model's figure fell by about a third. It also cannot tell a good paraphrase from a wrong answer, and the source paper found it disagrees with what clinicians preferred.": "Není to ROUGE-L ze zdrojového článku a s jejich publikovanou tabulkou to není srovnatelné. Ta jejich srovnává celý vykreslený zápis, což staví naše vlastní názvy polí a každé `Nil`, které expert napsal, na obě strany — zápis, do kterého model nenapsal vůbec nic, tak boduje 0.379, výš než většina skutečných zápisů. Tady se srovnávají hodnoty polí těch oddílů, které expert vyplnil; tentýž prázdný zápis tam boduje 0.000 a číslo každého modelu kleslo asi o třetinu. Metrika také neodliší dobrou parafrázi od špatné odpovědi a zdrojový článek zjistil, že si odporuje s tím, čemu dávali přednost kliničtí experti.", "Notes": "Zápisy", "Notes written by": "Zápisy napsal", "Nothing to break down yet — this row has no scores.": "Zatím není co rozebírat — tento řádek nemá žádná skóre.", "Of the {0} pairs, {1} are separated by more than that: {2}. Every other pair is not, including all three \u003ccode\u003eflash\u003c/code\u003e candidates among themselves and the two GPT candidates against each other — so price does not buy a better judge here.{3}": "Z {0} dvojic je jich {1} oddělených o víc než to: {2}. Žádná další dvojice ne, včetně všech tří kandidátů \u003ccode\u003eflash\u003c/code\u003e mezi sebou a obou kandidátů GPT proti sobě — cena tady tedy lepšího hodnotitele nekoupí.{3}", "On this evidence \u003cstrong\u003eevery system is distinguishable from every other\u003c/strong\u003e — the benchmark has not run out of resolution yet.": "Na této evidenci je \u003cstrong\u003ekaždý systém odlišitelný od každého jiného\u003c/strong\u003e — benchmarku zatím nedošlo rozlišení.", "Ordered by \u003cstrong\u003e{0}\u003c/strong\u003e, because it is the only column checked against people: on it the judge and a trained therapist agree at \u003cstrong\u003e0.60\u003c/strong\u003e where two therapists reach \u003cstrong\u003e0.50\u003c/strong\u003e. On the 1\u0026#8211;5 scales two therapists agree at 0.13\u0026#8211;0.19, so those carry too little signal to rank on. Every other column is context and is not a ranking.": "Seřazeno podle sloupce \u003cstrong\u003e{0}\u003c/strong\u003e, protože je to jediný sloupec ověřený proti lidem: na něm se hodnotitel a školený terapeut shodnou na \u003cstrong\u003e0.60\u003c/strong\u003e tam, kde dva terapeuti dosáhnou \u003cstrong\u003e0.50\u003c/strong\u003e. Na škálách 1\u0026#8211;5 se dva terapeuti shodnou na 0.13\u0026#8211;0.19, takže ty nesou příliš málo signálu, než aby se podle nich dalo řadit. Každý další sloupec je kontext, ne žebříček.", "Organized": "Uspořádanost", "PDSQI-9 on SOAP": "PDSQI-9 na SOAP", "PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.": "PDSQI-9 byl validován na klinických souhrnech z korpusu, který psychiatrické zápisy vylučoval, a hodnotí souhrn několika dřívějších zápisů, ne zápis psaný z jednoho sezení. Školení lékaři se mezi sebou shodli na Krippendorffově alfě 0.575, což je strop toho, co lze po hodnotiteli chtít.", "PDSQI-9 · the SOAP notes on AnnoMI, rated for quality": "PDSQI-9 · zápisy SOAP na AnnoMI, hodnocené na kvalitu", "Pair": "Dvojice", "Quotation marks": "Uvozovky", "ROUGE-L": "ROUGE-L", "ROUGE-L: \u003cstrong\u003e{0}\u003c/strong\u003e — near zero. {1}": "ROUGE-L: \u003cstrong\u003e{0}\u003c/strong\u003e — skoro nula. {1}", "Rank correlation": "Korelace pořadí", "Rank correlation is between \u003ccode\u003e{0}\u003c/code\u003e's ordering and \u003ccode\u003e{1}\u003c/code\u003e's, over the {2} systems both have scored. Scores that print the same are treated as tied rather than ordered by a digit the table does not show. Only measures a judge decides are compared here: {3}. The rest are computed from the note and the expert note, so they are identical under every judge and agreeing about them would say nothing.": "Korelace pořadí je mezi uspořádáním od \u003ccode\u003e{0}\u003c/code\u003e a od \u003ccode\u003e{1}\u003c/code\u003e, přes {2} systémů, které obodovali oba. Skóre, která se tisknou stejně, se berou jako shodná, místo aby je řadila číslice, kterou tabulka neukazuje. Srovnávají se tu jen míry, o kterých rozhoduje hodnotitel: {3}. Zbytek se počítá ze zápisu a z expertního zápisu, takže je pod každým hodnotitelem stejný a shoda o něm by neřekla nic.", "Ranked, with systems the evidence cannot separate grouped on one line. These are groups, not equivalence classes: being inseparable is not transitive, so the boundary between adjacent lines is a convention.": "Seřazeno, přičemž systémy, které evidence neoddělí, stojí na jednom řádku. Jsou to skupiny, ne třídy ekvivalence: nerozlišitelnost není tranzitivní, takže hranice mezi sousedními řádky je konvence.", "Read as bands, not as an order. Two candidates closer than {0} are reported here as inseparable rather than ranked — the rule the tables above use for models, applied to the judges for the same reason.": "Čtěte jako pásma, ne jako pořadí. Dva kandidáti blíž než {0} se tu vykazují jako neoddělitelní, místo aby byli seřazeni — je to pravidlo, které tabulky výše používají na modely, tady použité na hodnotitele ze stejného důvodu.", "Read the two. Tingling in the stomach and butterflies in the stomach are the same symptom; palpitations and a rapid heartbeat are the same symptom; trembling hands appear in both. The model also records how long each has lasted and when it happens, which the expert note does not. It shares almost no *words* with the clinician, and a metric that counts shared words scores it accordingly.": "Přečtěte si obojí. Mravenčení v žaludku a motýlci v břiše jsou tentýž příznak; palpitace a zrychlený tep jsou tentýž příznak; třesoucí se ruce jsou v obou. Model navíc zaznamenává, jak dlouho co trvá a kdy k tomu dochází, což expertní zápis neuvádí. S klinikem nesdílí skoro žádná *slova* a metrika, která sdílená slova počítá, ho podle toho i oboduje.", "Reasoning effort the note was written at. Blank where the provider has no such control.": "Míra uvažování, na které byl zápis napsán. Prázdné tam, kde poskytovatel takový ovladač nemá.", "Reference-free. 23 completeness criteria, conciseness scored sentence by sentence, faithfulness against the full transcript.": "Bez referenčního zápisu. 23 kritérií úplnosti, stručnost bodovaná větu po větě, věrnost proti celému přepisu.", "Register": "Rejstřík", "Released “to benefit research community”, with a citation requested. Fetchedat run time.": "Vydáno „to benefit research community“, s prosbou o citaci. Stahuje se za běhu.", "Reproduced verbatim in this repository, with attribution in NOTICE.": "Reprodukováno v tomto repozitáři doslova, s uvedením zdroje v NOTICE.", "Rubric criteria": "Kritéria rubriky", "SOAP notes on AnnoMI · two instruments, the same notes": "Zápisy SOAP na AnnoMI · dva nástroje, tytéž zápisy", "SOAP prompt, the five scoring prompts, the 23-item rubric": "prompt SOAP, pět bodovacích promptů, rubrika o 23 položkách", "Scored against": "Hodnoceno proti", "Section": "Oddíl", "Section 17 only -- what happens at the next session. The fraction of the 11 sessions whose expert note answered it where the model did too.": "Jen oddíl 17 — co bude na příštím sezení. Podíl z 11 sezení, jejichž expertní zápis na něj odpověděl, kde odpověděl i model.", "Section 5 only -- what happened in the previous session. The fraction of the 34 sessions whose expert note answered it where the model did too.": "Jen oddíl 5 — co se stalo na minulém sezení. Podíl z 34 sezení, jejichž expertní zápis na něj odpověděl, kde odpověděl i model.", "Sessions": "Sezení", "Seven yes/no criteria about the Czech, asked of the note alone. Each column is the share of notes free of that fault. **Ten sessions with one client, so adjacent positions are not separable** -- and the generation prompt is a translation of TN-Eval's rather than a reproduction of anything.": "Sedm kritérií ano/ne o té češtině, kladených samotnému zápisu. Každý sloupec je podíl zápisů, které tou vadou netrpí. **Deset sezení s jedním klientem, takže sousední pozice nejsou oddělitelné** — a generovací prompt je překlad promptu z TN-Eval, ne reprodukce čehokoli.", "Source": "Zdroj", "Source: {0}": "Zdroj: {0}", "Spearman rho": "Spearmanovo rhó", "Spent about \u003cstrong\u003e{0} tokens reasoning\u003c/strong\u003e before writing, averaged over its notes — as reported by the provider. \u003cem\u003eNot comparable across providers:\u003c/em\u003e what counts as a reasoning token depends on the serving stack, not only on the model.": "Před psaním strávil \u003cstrong\u003easi {0} tokenů uvažováním\u003c/strong\u003e, v průměru přes své zápisy — tak, jak to hlásí poskytovatel. \u003cem\u003eMezi poskytovateli to není srovnatelné:\u003c/em\u003e co se počítá jako token uvažování, závisí na obslužné vrstvě, ne jen na modelu.", "Statistic": "Statistika", "Succinct": "Úspornost", "Synthesized": "Syntéza", "System": "Systém", "Systems placed differently": "Systémy umístěné jinam", "TN-Eval SOAP": "TN-Eval SOAP", "TN-Eval SOAP · AnnoMI conversations": "TN-Eval SOAP · rozhovory AnnoMI", "TN-Eval released 150 notes that two therapists had already rated -- 50 written by a therapist, 50 by Llama 3.1 70B, 50 by Mistral Large V2. Every judge here answers those same questions about those same notes first, so how far it agrees with a person is a published number and not a hope.": "TN-Eval zveřejnil 150 zápisů, které už dva terapeuti ohodnotili — 50 napsal terapeut, 50 Llama 3.1 70B a 50 Mistral Large V2. Každý zdejší hodnotitel nejdřív odpoví na tytéž otázky o týchž zápisech, takže to, jak moc se shoduje s člověkem, je publikované číslo, a ne naděje.", "TRACE": "TRACE", "TRACE dimensions": "Dimenze TRACE", "TRACE is a re-implementation with no human anchor -- the authors never published their ratings. See docs/limitations.md": "TRACE je reimplementace bez lidské kotvy — autoři svá hodnocení nikdy nezveřejnili. Viz docs/limitations.md", "The Apache licence is on the code repository, not this one. Fetched at run time, neverredistributed.": "Licence Apache je na repozitáři s kódem, ne na tomhle. Stahuje se za běhu, nikdy se nešíří dál.", "The bar spans lowest to highest model; the grey tick is the therapist. A bar pinned right means every model already satisfies it. A bar pinned left where the therapist is pinned left too means the question has no answer in a counselling transcript — that is a fact about the corpus, not about the models.": "Pruh sahá od nejnižšího modelu k nejvyššímu; šedá ryska je terapeut. Pruh přilepený vpravo znamená, že to už splní každý model. Pruh přilepený vlevo tam, kde je vlevo přilepený i terapeut, znamená, že ta otázka v poradenském přepisu nemá odpověď — a to je fakt o korpusu, ne o modelech.", "The cache also held answers at other settings; they are two instruments and were not mixed in.": "Cache držela i odpovědi z jiných nastavení; jsou to dva nástroje a nebyly do sebe míchány.", "The clinician wrote": "Klinik napsal", "The expert note is the answer key and never competes. In the source paper the experts compared models with each other -- a smaller Mistral was preferred over the model leading on the automatic metrics -- and the expert note was what those metrics measured against, not an entry.": "Expertní zápis je vzor a nikdy nesoutěží. Ve zdrojovém článku experti srovnávali modely mezi sebou — menšímu Mistralu dali přednost před modelem, který vedl v automatických metrikách — a expertní zápis byl to, proti čemu se ty metriky měřily, ne soutěžící.", "The first run will populate this page.": "První běh tuto stránku naplní.", "The iCARE note is not four paragraphs but a \u003cstrong\u003eform\u003c/strong\u003e. Each of these 17 fields is filled by its own model call, using an instruction written by clinicians at AIIMS Delhi, and the correct answer is \u003ccode\u003eNil\u003c/code\u003e when the transcript does not say. The two marked sections ask what happened \u003cem\u003elast\u003c/em\u003e time and what happens \u003cem\u003enext\u003c/em\u003e time — the source paper reports that every model it tested failed on them, so they get their own column rather than being averaged away.": "Zápis iCARE nejsou čtyři odstavce, ale \u003cstrong\u003eformulář\u003c/strong\u003e. Každé z těch 17 polí vyplňuje vlastní volání modelu podle instrukce, kterou napsali kliničtí lékaři z AIIMS Dillí, a správná odpověď je \u003ccode\u003eNil\u003c/code\u003e, když to přepis neříká. Dva označené oddíly se ptají, co bylo \u003cem\u003eminule\u003c/em\u003e a co bude \u003cem\u003epříště\u003c/em\u003e — zdrojový článek hlásí, že na nich selhal každý model, který testoval, takže dostávají vlastní sloupec, místo aby se rozpustily v průměru.", "The instructions themselves are fetched from \u003ca href=\"https://github.com/proadhikary/iCARE\"\u003ethe iCARE repository\u003c/a\u003e at run time and used unchanged; this page shows the field names only, because that repository publishes no licence.": "Samotné instrukce se za běhu stahují z \u003ca href=\"https://github.com/proadhikary/iCARE\"\u003erepozitáře iCARE\u003c/a\u003e a používají se beze změny; tato stránka ukazuje jen názvy polí, protože ten repozitář nepublikuje žádnou licenci.", "The judge does \u003cstrong\u003enot\u003c/strong\u003e reproduce TN-Eval's finding that criterion checklists agree better than 1–5 scales{0}. Reported rather than explained away.": "Hodnotitel \u003cstrong\u003enereprodukuje\u003c/strong\u003e zjištění TN-Eval, že se seznamy kritérií shodují lépe než škály 1–5{0}. Vykázáno, ne vysvětleno pryč.", "The judge does not agree with a person equally well on all of them: the spread is \u003cstrong\u003e{0}\u003c/strong\u003e, larger than the {1} this page uses to decide that two agreement figures are separable at all. It is weakest on \u003ccode\u003e{2}\u003c/code\u003e{3}. A score from this judge means slightly different things depending on whose note it read, and the leaderboard compares those scores in one column.": "Hodnotitel se s člověkem neshoduje na všech stejně dobře: rozpětí je \u003cstrong\u003e{0}\u003c/strong\u003e, větší než {1}, což je hranice, kterou tato stránka používá pro rozhodnutí, že dvě čísla shody jsou vůbec oddělitelná. Nejslabší je na \u003ccode\u003e{2}\u003c/code\u003e{3}. Skóre od tohoto hodnotitele znamená mírně odlišné věci podle toho, čí zápis četl, a žebříček ta skóre srovnává v jednom sloupci.", "The judge reproduces TN-Eval's central finding: criterion checklists agree far better than 1–5 scales{0}. That is why the ranking uses the rubric and the Likert columns carry a caveat.": "Hodnotitel reprodukuje ústřední zjištění TN-Eval: seznamy kritérií se shodují mnohem lépe než škály 1–5{0}. Proto pořadí staví na rubrice a likertovské sloupce nesou výhradu.", "The leaderboard therefore publishes the \u003cstrong\u003elength\u003c/strong\u003e and not this coefficient. The length is a fact about the note a reader can discount for; the correlation depends on which judge is asked, and the two judges do not agree about it.": "Žebříček proto publikuje \u003cstrong\u003edélku\u003c/strong\u003e, a ne tento koeficient. Délka je fakt o zápise, na který si čtenář může udělat korekci; korelace závisí na tom, kterého hodnotitele se zeptáte, a ti dva se na ní neshodnou.", "The note alone. Seven yes/no questions about the Czech itself -- diacritics, calques, untranslated English terms, agreement, register, quotation marks, non-words -- and each column is the share of notes free of that fault. The judge is never shown the transcript, which is why a confidential session can be scored at all.": "Samotný zápis. Sedm otázek ano/ne o té češtině — diakritika, kalky, nepřeložené anglické termíny, shoda, rejstřík, uvozovky, neslova — a každý sloupec je podíl zápisů, které tou vadou netrpí. Hodnotiteli se přepis nikdy neukáže, a právě proto se důvěrné sezení vůbec dá obodovat.", "The note is brief, to the point, and without redundancy. PDSQI-9 item 7, rated 1 (not at all) to 5 (extremely).": "Zápis je krátký, věcný a bez nadbytečností. PDSQI-9, položka 7, hodnoceno 1 (vůbec) až 5 (zcela).", "The note is clear, without ambiguity or sections that are difficult to understand. PDSQI-9 item 6, rated 1 (not at all) to 5 (extremely).": "Zápis je jasný, bez dvojznačností a bez pasáží, kterým je těžké porozumět. PDSQI-9, položka 6, hodnoceno 1 (vůbec) až 5 (zcela).", "The note is free of discrediting or exaggerated words, of judgment or labelling, and uses person-first language. PDSQI-9 item 9, answered yes or no and reported as the fraction of notes free of it.": "Zápis je prostý znevažujících či přehnaných slov, soudů a nálepkování a mluví nejdřív o člověku. PDSQI-9, položka 9, odpověď ano/ne, vykázáno jako podíl zápisů, které jsou ho prosté.", "The note is true and free of incorrect information. PDSQI-9 item 2, rated 1 (not at all) to 5 (extremely).": "Zápis je pravdivý a bez nesprávných informací. PDSQI-9, položka 2, hodnoceno 1 (vůbec) až 5 (zcela).", "The note is well-formed and structured in a way that helps the reader understand the patient's clinical course. PDSQI-9 item 5, rated 1 (not at all) to 5 (extremely).": "Zápis je dobře utvořený a strukturovaný tak, aby čtenáři pomohl porozumět klinickému průběhu u pacienta. PDSQI-9, položka 5, hodnoceno 1 (vůbec) až 5 (zcela).", "The note itself, and for two of the eight attributes the transcript as well -- accurate and thorough ask whether the note is true and complete, which cannot be answered without the session. There is no gold note, so this track is reference-free in the same sense the rubric track is.": "Samotný zápis, a u dvou z osmi atributů i přepis — přesnost a důkladnost se ptají, zda je zápis pravdivý a úplný, což bez sezení odpovědět nelze. Není tu žádný zlatý zápis, takže je tato větev bez reference v témž smyslu jako větev s rubrikou.", "The note reflects an understanding of the patient's status and ability to develop a plan of care. PDSQI-9 item 8, rated 1 (not at all) to 5 (extremely).": "Zápis odráží porozumění stavu pacienta a schopnost vytvořit plán péče. PDSQI-9, položka 8, hodnoceno 1 (vůbec) až 5 (zcela).", "The note should thoroughly cover all critical patient issues. PDSQI-9 item 3, rated 1 (not at all) to 5 (extremely).": "Zápis by měl důkladně pokrýt všechny kritické potíže pacienta. PDSQI-9, položka 3, hodnoceno 1 (vůbec) až 5 (zcela).", "The other track: iCARE's 17 sections": "Ta druhá větev: 17 oddílů iCARE", "The same criteria on notes written from AnnoMI conversations translated into Czech. **The two halves differ by more than language** -- AnnoMI is motivational interviewing about substance use and the real sessions are not -- so a model doing worse here may be doing worse at motivational interviewing rather than at translated Czech.": "Táž kritéria na zápisech psaných z rozhovorů AnnoMI přeložených do češtiny. **Ty dvě poloviny se liší víc než jazykem** — AnnoMI je motivační rozhovor o užívání návykových látek a skutečná sezení nejsou — takže model, kterému to tu jde hůř, může být horší v motivačním rozhovoru, a ne v přeložené češtině.", "The same seven criteria as the real-session table, on notes written from AnnoMI conversations translated into Czech. The translation is identical for every model, so it cancels when models are compared; it does not cancel for any claim about how well models write Czech.": "Týchž sedm kritérií jako v tabulce se skutečnými sezeními, na zápisech psaných z rozhovorů AnnoMI přeložených do češtiny. Překlad je pro každý model stejný, takže se při srovnávání modelů vyruší; nevyruší se u žádného tvrzení o tom, jak dobře modely píší česky.", "The scores above rest on \u003cstrong\u003e{0}\u003c/strong\u003e of the {1} notes the judge started: {2} came back with part of the protocol unanswered and {3} left out rather than averaged over a smaller denominator.": "Skóre výše stojí na \u003cstrong\u003e{0}\u003c/strong\u003e z {1} zápisů, které hodnotitel začal hodnotit: u {2} z nich se část protokolu vrátila nezodpovězená, a ty jsou vynechány, místo aby se průměrovaly přes menší jmenovatel.", "The scores above rest on all {0} notes the judge finished.": "Skóre výše stojí na všech {0} zápisech, které hodnotitel dokončil.", "The spread from \u003ccode\u003e{0}\u003c/code\u003e {1} to \u003ccode\u003e{2}\u003c/code\u003e {3} is {4}.": "Rozpětí od \u003ccode\u003e{0}\u003c/code\u003e {1} po \u003ccode\u003e{2}\u003c/code\u003e {3} je {4}.", "The therapist's note is scored by the identical protocol and sits in the table as its own row, exactly as it does on the rubric track. That is the reason this table exists next to that one: the same notes, two instruments, and a reader can see where they disagree about who wrote well.": "Terapeutův zápis je obodován týmž protokolem a stojí v tabulce jako vlastní řádek, přesně jako ve větvi s rubrikou. Právě proto tato tabulka stojí vedle té druhé: tytéž zápisy, dva nástroje, a čtenář vidí, kde se ty dva neshodnou v tom, kdo psal dobře.", "The therapist's note is scored by the identical protocol and sits in the table as its own row. It is a competitor, not the answer key.": "Terapeutův zápis je obodován týmž protokolem a stojí v tabulce jako vlastní řádek. Je to soutěžící, ne vzor.", "The transcript and a 23-item rubric. There is no gold note to copy, so any new model can be measured without anyone writing one.": "Přepis a rubrika o 23 položkách. Není tu žádný zlatý zápis ke zkopírování, takže libovolný nový model lze změřit, aniž by ho někdo musel napsat.", "The two instruments \u003cstrong\u003ecannot be separated\u003c/strong\u003e here{0}, so this run neither reproduces nor contradicts TN-Eval's finding. Reported as undecided rather than rounded into a verdict.": "Ty dva nástroje tu \u003cstrong\u003enelze oddělit\u003c/strong\u003e{0}, takže tento běh zjištění TN-Eval ani nereprodukuje, ani mu neodporuje. Vykázáno jako nerozhodnuté, ne zaokrouhleno na verdikt.", "Therapist vs therapist": "Terapeut vs. terapeut", "Therapists": "Terapeuti", "These sections will not average to the figure in the row above, and the gap is the {0} part-answered {1}: the row's figure averages each note's own sections first, while a section here averages the notes that have it. A note missing one section counts in one and not the other. Rows with no part-answered notes agree exactly.": "Tyto oddíly se nezprůměrují na číslo v řádku výše a ten rozdíl dělají zápisy zodpovězené jen zčásti — je jich {0}: číslo v řádku průměruje nejdřív oddíly každého zápisu zvlášť, kdežto oddíl tady průměruje ty zápisy, které ho mají. Zápis, kterému jeden oddíl chybí, se počítá do jednoho, a do druhého ne. Řádky bez částečně zodpovězených zápisů souhlasí přesně.", "This is where the source paper reports every model it tested failing, and ours do too: 0.00 to 0.55. Reported apart from its twin because averaging the two turned 1.00 and 0.09 into 0.78 and hid exactly this.": "Právě tady zdrojový článek hlásí selhání každého modelu, který testoval, a ty naše selhávají také: 0.00 až 0.55. Vykazuje se odděleně od svého dvojčete, protože průměr těch dvou udělal z 1.00 a 0.09 hodnotu 0.78 a zakryl přesně tohle.", "This track is deliberately \u003cstrong\u003enot ranked\u003c/strong\u003e: its columns measure different things and the source paper found they disagree. That disagreement is the result.": "Tato větev \u003cstrong\u003ezáměrně nemá pořadí\u003c/strong\u003e: její sloupce měří různé věci a zdrojový článek zjistil, že si odporují. Ten rozpor je ten výsledek.", "Thorough": "Důkladnost", "Track": "Větev", "Trustworthiness, relevance, accuracy, comprehensiveness and expression, each rated 1-5 by a judge and averaged.": "Důvěryhodnost, relevance, přesnost, komplexnost a vyjadřování, každé hodnoceno hodnotitelem 1–5 a zprůměrováno.", "Turns (range)": "Replik (rozsah)", "Two of the four iCARE columns measure how closely a model reproduced the clinician's wording. Here is what that misses — section \u003cstrong\u003e{0}\u003c/strong\u003e of session {1}, written by the clinician who saw it and by \u003ccode\u003e{2}\u003c/code\u003e, both verbatim.": "Dva ze čtyř sloupců iCARE měří, jak těsně model zreprodukoval klinikovo znění. Tady je to, co jim uniká — oddíl \u003cstrong\u003e{0}\u003c/strong\u003e sezení {1}, napsaný klinikem, který ho viděl, a modelem \u003ccode\u003e{2}\u003c/code\u003e, obojí doslova.", "Untranslated terms": "Nepřeložené termíny", "Used for": "Použito na", "Useful": "Užitečnost", "What each rubric criterion is still doing": "Co které kritérium rubriky ještě dělá", "Where the human note sits": "Kde stojí lidský zápis", "Where the reason is a token ceiling it is ours: the call had already had its one escalation, and past that we stopped it.": "Tam, kde je důvodem strop tokenů, je to naše věc: volání už mělo svou jedinou eskalaci a za ní jsme ho zastavili.", "Whether an English clinical term was left in English. International abbreviations that Czech documentation uses as they are do not count. Reported as the share of notes free of it.": "Zda byl anglický klinický termín ponechán anglicky. Mezinárodní zkratky, které česká dokumentace používá tak, jak jsou, se nepočítají. Vykázáno jako podíl zápisů, které tím netrpí.", "Whether any Czech word in the note has a missing or wrong length mark or hachek. A word Czech does not have at all belongs to another criterion. Reported as the share of notes free of it.": "Zda má některé české slovo v zápise chybějící nebo špatnou čárku či háček. Slovo, které čeština vůbec nemá, patří k jinému kritériu. Vykázáno jako podíl zápisů, které tím netrpí.", "Whether any sentence has broken agreement, a wrong case, or is left unfinished. A clumsy but grammatical sentence does not count. Reported as the share of notes free of it.": "Zda má některá věta porušenou shodu, špatný pád, nebo zůstala nedokončená. Neobratná, ale gramatická věta se nepočítá. Vykázáno jako podíl zápisů, které tím netrpí.", "Whether the note contains a phrase built by translating English word for word. An English word left as it was belongs to another criterion. Reported as the share of notes free of it.": "Zda zápis obsahuje obrat vzniklý překladem angličtiny slovo od slova. Anglické slovo ponechané tak, jak bylo, patří k jinému kritériu. Vykázáno jako podíl zápisů, které tím netrpí.", "Whether the note contains a word Czech does not have. A proper noun, a diacritic slip and an English term left in English each belong elsewhere. Reported as the share of notes free of it.": "Zda zápis obsahuje slovo, které čeština nemá. Vlastní jméno, přehlédnutá diakritika a anglický termín ponechaný anglicky patří každé jinam. Vykázáno jako podíl zápisů, které tím netrpí.", "Whether the note contradicts the transcript, rated 1 to 5, where 5 is no inaccuracies. TN-Eval's protocol has no criterion-based version of this one, so it stays a Likert scale.": "Zda zápis odporuje přepisu, hodnoceno 1 až 5, kde 5 je bez nepřesností. Protokol TN-Eval nemá verzi této otázky založenou na kritériích, takže zůstává Likertovou škálou.", "Whether the note slips out of the register of clinical documentation into colloquial or emotive wording. A quotation of the client does not count. Reported as the share of notes free of it.": "Zda zápis vypadává z rejstříku klinické dokumentace do hovorového nebo citově zabarveného vyjadřování. Citace klienta se nepočítá. Vykázáno jako podíl zápisů, které tím netrpí.", "Whether the note uses straight quotation marks where Czech uses its own. Asked only of notes that quote anything at all. Reported as the share of notes free of it.": "Zda zápis používá rovné uvozovky tam, kde má čeština své vlastní. Kladeno jen zápisům, které vůbec něco citují. Vykázáno jako podíl zápisů, které tím netrpí.", "Whose notes the judge was checked on": "Na čích zápisech byl hodnotitel ověřen", "Withdrawn from the tables": "Staženo z tabulek", "Words": "Slova", "Words / session (range)": "Slov na sezení (rozsah)", "Words in the expert note": "Slov v expertním zápise", "Wrote \u003cstrong\u003e{0}\u003c/strong\u003e of the {1} notes the protocol asked for — the same as every other row in this table, which is why there is no Notes column.": "Napsal \u003cstrong\u003e{0}\u003c/strong\u003e z {1} zápisů, které protokol žádal — stejně jako každý další řádek v této tabulce, a proto tu není sloupec Zápisy.", "accurate": "přesnost", "and": " a ", "answer did not contain a SOAP dictionary": "odpověď neobsahovala slovník SOAP", "are": "jsou", "as published": "jak bylo publikováno", "assessment": "hodnocení", "at {0}": " při nastavení {0}", "bertscore": "bertscore", "completeness": "úplnost", "comprehensible": "srozumitelnost", "conciseness": "stručnost", "discriminating": "rozlišuje", "effort medium, temperature 1 (forced by the provider), max tokens 4096": "úsilí medium, teplota 1 (vynuceno poskytovatelem), max tokenů 4096", "every model already does this": "tohle už zvládne každý model", "faithfulness": "věrnost", "faithfulness is a Likert rating; TN-Eval measured weak human agreement on it -- see docs/limitations.md": "věrnost je Likertovo hodnocení; TN-Eval na ní naměřil slabou shodu mezi lidmi — viz docs/limitations.md", "harness \u003ccode\u003e{0}\u003c/code\u003e": "harness \u003ccode\u003e{0}\u003c/code\u003e", "iCARE / iHOPE": "iCARE / iHOPE", "iCARE form on the iHOPE corpus · 17 sections per session": "Formulář iCARE na korpusu iHOPE · 17 oddílů na sezení", "icare": "icare", "is": "je", "judge \u003ccode\u003e{0}\u003c/code\u003e{1}": "hodnotitel \u003ccode\u003e{0}\u003c/code\u003e{1}", "judge cannot be checked": "hodnotitele nelze ověřit", "judge checked against people": "hodnotitel ověřen proti lidem", "judge prompt {0}": "hodnoticí prompt {0}", "judge prompts {0}": "hodnoticí prompty {0}", "judge's own {0}": "hodnotitelova vlastní {0}", "judges disagree": "hodnotitelé se neshodnou", "likert completeness": "úplnost na Likertově škále", "likert conciseness": "stručnost na Likertově škále", "likert faithfulness": "věrnost na Likertově škále", "likert_completeness": "úplnost na Likertově škále", "likert_conciseness": "stručnost na Likertově škále", "likert_faithfulness": "věrnost na Likertově škále", "methods.brief-link": "\u003ca href=\"brief.html\"\u003eOsmistránkový briefing →\u003c/a\u003e Co žebříček těchto modelů může a nemůže říct tomu, kdo takový systém staví nebo kupuje — čtyři tvrzení, čtyři obrázky a soubor, ze kterého každé číslo pochází. Také jako \u003ca href=\"therapy-note-bench.pdf\"\u003ePDF\u003c/a\u003e.", "methods.calibration.h2": "Kalibrace hodnotitele", "methods.calibration.pending": "Než se kterémukoli zdejšímu číslu začne věřit, hodnotitel se obodová proti dvěma lidským anotátorům, které TN-Eval zveřejnil, a shoda se objeví tady — i když bude špatná. \u003cstrong\u003eZatím nezměřeno.\u003c/strong\u003e", "methods.corpora.summary": "\u003cstrong\u003eCo jsou ty dva korpusy a jak velkou část formuláře experti vyplnili\u003c/strong\u003e", "methods.foot.columns": "Rozsah každého sloupce, co počítá a jak se nesmí číst, stojí pod tou tabulkou, ke které patří, na \u003ca href=\"index.html\"\u003ežebříčku\u003c/a\u003e — včetně téměř nulové lidské shody na \u003cstrong\u003evěrnosti\u003c/strong\u003e (Krippendorffova alfa 0.18) a toho, že \u003cstrong\u003eTRACE\u003c/strong\u003e je reimplementace \u003cem\u003ebez lidské kotvy\u003c/em\u003e. Číslo a jeho výhradu by nemělo dělit rolování, a proto jsou ony tam a tato stránka je tady.", "methods.foot.comparability": "Řádky se srovnávají jedině tehdy, když se shodují ve všech šesti: větev, verze harnessu, verze promptu, hodnoticí model, verze hodnoticího promptu a \u003cstrong\u003enastavení, ve kterém hodnotitel běžel\u003c/strong\u003e. Změněný hodnotitel — nebo hodnotitel s jiným rozpočtem na přemýšlení — zakládá novou tabulku, místo aby přepsal tuhle. Skupina, která jmenuje hodnotitele a neumí říct, jak byl nastaven, se stahuje: dva řádky, které oba nezaznamenávají nic, tím ještě nejsou týž nástroj.", "methods.foot.provider": "Štítek za názvem modelu je \u003cstrong\u003eposkytovatel\u003c/strong\u003e, který ho obsluhoval. Stejné id modelu u dvou poskytovatelů mohou být dvě různá sestavení — jiná kvantizace, jiné váhy, jiný systémový prompt — proto jsou tam vždy dva řádky, nikdy jeden.", "methods.h1": "Jak se to měřilo", "methods.judges.summary": "\u003cstrong\u003eProč zrovna tito dva hodnotitelé, a ne ty nejnovější modely\u003c/strong\u003e", "methods.licences.summary": "\u003cstrong\u003eOdkud pochází každý vstup a za jakých podmínek\u003c/strong\u003e", "methods.protocol.summary": "\u003cstrong\u003eCo je tady zápis a proti čemu se hodnotí?\u003c/strong\u003e", "methods.saturation.figure": "Jak velkou část rozsahu každé míry modely skutečně obsadí. Vlevo: jeden pruh na každé kritérium rubriky, od nejhoršího modelu k nejlepšímu, s vyznačeným terapeutem. Vpravo: totéž čtení TRACE, kde jeden pruh jsou všechny modely najednou. Kreslí \u003ccode\u003etools/figures.py\u003c/code\u003e ze souborů jmenovaných v patičce obrázku.", "methods.saturation.summary": "\u003cstrong\u003eZbývá vůbec co měřit?\u003c/strong\u003e", "methods.sub": "Nástroj, který stojí za \u003ca href=\"index.html\"\u003ežebříčkem\u003c/a\u003e: který hodnotitel, ověřený proti komu, nad kterými korpusy a v čem se ti dva hodnotitelé neshodnou. Každý zdejší panel je vykreslen z téhož běhu, který vyrobil ty tabulky — nic na této stránce není psáno ručně. \u003ca href=\"https://github.com/JanNehyba/therapy-note-bench\"\u003eZdroj a metoda\u003c/a\u003e.", "methods.title": "therapy-note-bench — jak se to měřilo", "mixed": "smíšeně", "no": "ne", "no more than {0} each": "nejvýš {0} každý", "nobody can, the therapist included": "nedokáže to nikdo, terapeuta nevyjímaje", "nobody moved": "nikdo se nepohnul", "none of them": "žádný z nich", "not related": "nesouvisí", "not yet judged": "zatím neohodnoceno", "note": "zápis", "notes": "zápisy", "notes written {0}": "napsané zápisy {0}", "objective": "objektivní", "of generation coverage": "o pokrytí generování", "older harness": "starší harness", "one each": "jeden každý", "organized": "uspořádanost", "page.brief-link": "\u003ca href=\"brief.html\"\u003eJak tato čísla číst a nenechat se zmást →\u003c/a\u003e Co žebříček těchto modelů může a nemůže říct tomu, kdo takový systém staví nebo kupuje — čtyři tvrzení, čtyři obrázky a soubor, ze kterého každé číslo pochází. Také jako \u003ca href=\"therapy-note-bench.pdf\"\u003ePDF\u003c/a\u003e.", "page.foot.background": "\u003cstrong\u003eCo ty korpusy jsou a co nejsou.\u003c/strong\u003e Čtyři stránky nesou pozadí, na kterém tyto tabulky stojí, a až do 27. 8. 2026 na ně z tohoto webu nevedl jediný odkaz: \u003ca href=\"datasets.md\"\u003edatové sady\u003c/a\u003e — odkud každá pochází, jakou licenci publikuje (dvě ze tří žádnou) a jaké pasti v nich jsou; \u003ca href=\"methodology.md\"\u003emetoda\u003c/a\u003e; \u003ca href=\"limitations.md\"\u003eco výsledek nesmí tvrdit\u003c/a\u003e; a \u003ca href=\"landscape.md\"\u003eco v tomto oboru existuje\u003c/a\u003e a co ne.", "page.foot.columns": "Rozsah každého sloupce, co počítá a jak se nesmí číst, stojí pod tou tabulkou, ke které patří, ne tady dole — včetně téměř nulové shody dvou terapeutů na \u003cstrong\u003evěrnosti\u003c/strong\u003e (Krippendorffova alfa 0.18).", "page.foot.comparability": "Řádky se srovnávají jedině tehdy, když se shodují ve všech šesti: větev, verze harnessu, verze promptu, hodnoticí model, verze hodnoticího promptu a \u003cstrong\u003enastavení, ve kterém hodnotitel běžel\u003c/strong\u003e — proto je hodnotitel přepínačem nahoře a ne sloupcem tady. Co bylo z tabulek staženo a proč, stojí \u003ca href=\"methods.html#withdrawn\"\u003ena stránce o metodě\u003c/a\u003e.", "page.foot.notes": "\u003cstrong\u003eZápisy\u003c/strong\u003e počítají, kolik zápisů dokázal protokol vůbec přečíst. Model, který napíše dobrý zápis ve špatném tvaru, ztrácí zápisy na formátu, ne na klinickém obsahu — přečtěte si ten počet dřív, než začnete srovnávat skóre.", "page.foot.provider": "Štítek za názvem modelu je \u003cstrong\u003eposkytovatel\u003c/strong\u003e, který ho obsluhoval. Stejné id modelu u dvou poskytovatelů mohou být dvě různá sestavení — jiná kvantizace, jiné váhy, jiný systémový prompt — proto jsou to tady vždy dva řádky, nikdy jeden.", "page.methods-link": "\u003ca href=\"methods.html\"\u003eJak se to měřilo →\u003c/a\u003e Definice každého sloupce, který hodnotitel a jak těsně se shoduje se dvěma terapeuty, jak daleko od sebe jsou oba hodnotitelé, co jsou ty dva korpusy a odkud pocházejí, a které řádky se už nekreslí.", "page.sub": "Zápisy z psychoterapeutických sezení psané jazykovými modely, hodnocené podle dvou publikovaných protokolů — rubriky SOAP z TN-Eval a 17 oddílů z iCARE — a přeměřované, jak se modely mění. \u003ca href=\"https://github.com/JanNehyba/therapy-note-bench\"\u003eKód a data na GitHubu\u003c/a\u003e.", "page.title": "therapy-note-bench — žebříček", "partly, weakly": "zčásti, slabě", "pdsqi-soap": "pdsqi-soap", "plan": "plán", "prompt \u003ccode\u003e{0}\u003c/code\u003e": "prompt \u003ccode\u003e{0}\u003c/code\u003e", "ranks": "řadí", "ranks this table": "řadí tuto tabulku", "reference model": "referenční model", "related": "souvisí", "rouge_l": "rouge_l", "rows marked \u003cspan class=\"chip\"\u003e{0}\u003c/span\u003e are the \u003cstrong\u003esource paper\u0026rsquo;s own systems\u003c/strong\u003e, scored here so this table can be read against theirs": "řádky označené \u003cspan class=\"chip\"\u003e{0}\u003c/span\u003e jsou \u003cstrong\u003evlastní systémy zdrojového článku\u003c/strong\u003e, obodované tady, aby se tato tabulka dala číst proti té jejich", "rubric completeness": "úplnost podle rubriky", "rubric_completeness": "úplnost podle rubriky", "saturated": "nasyceno", "scored by \u003ccode\u003e{0}\u003c/code\u003e": "obodovaných modelem \u003ccode\u003e{0}\u003c/code\u003e", "scored by a judge from the same vendor, whose self-preference is measured in the panel below": "obodováno hodnotitelem od téhož dodavatele; jak moc nadržuje sám sobě, je změřeno v panelu níže", "settings": "nastavení", "stigmatizing": "bez stigmatizujícího jazyka", "still separates models": "modely od sebe stále odděluje", "subjective": "subjektivní", "succinct": "úspornost", "synthesized": "syntéza", "temperature 0, max tokens 16384": "teplota 0, max tokenů 16384", "temperature 0, max tokens 4096": "teplota 0, max tokenů 4096", "temporal": "časové", "temporal_next": "temporal_next", "temporal_past": "temporal_past", "the 133 transcripts, 50 of which are scored": "133 přepisů, z nichž 50 se boduje", "the 17 section instructions": "instrukce k 17 oddílům", "the human note competes": "lidský zápis soutěží", "the human note is the answer key": "lidský zápis je vzorem", "the iHOPE transcripts and expert notes": "přepisy iHOPE a expertní zápisy", "the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument": "nastavení hodnotitele nebylo zaznamenáno, takže se nedá ukázat, že ty řádky pocházejí z jednoho nástroje", "the measures were redefined in \u003ccode\u003e{0}\u003c/code\u003e and the two are not comparable": "míry byly předefinovány ve verzi \u003ccode\u003e{0}\u003c/code\u003e a ty dvě nejsou srovnatelné", "the row marked \u003cspan class=\"chip\"\u003e{0}\u003c/span\u003e is a \u003cstrong\u003enote a human clinician wrote\u003c/strong\u003e, scored by the identical protocol": "řádek označený \u003cspan class=\"chip\"\u003e{0}\u003c/span\u003e je \u003cstrong\u003ezápis, který napsal člověk — klinik\u003c/strong\u003e, obodovaný týmž protokolem", "the table is ordered by this column": "tabulka je seřazena podle tohoto sloupce", "the two therapists": "ti dva terapeuti", "therapist": "terapeut", "this provider has no effort control": "tento poskytovatel nemá ovladač míry uvažování", "thorough": "důkladnost", "tneval-soap": "tneval-soap", "trace": "trace", "truncated at max_tokens=16384": "uťato na max_tokens=16384", "unreachable": "nedosažitelné", "useful": "užitečnost", "waiting for the judge": "čeká na hodnotitele", "yes": "ano", "{0} ({1}) — {2}": "{0} ({1}) — {2}", "{0} ({1}), but only {2} clear{3} it by the margin.": "{0} ({1}), ale o tu hranici ho překonává jen {2}.", "{0} call(s) the endpoint never answered": "Volání, která endpoint nikdy nezodpověděl: {0}", "{0} call(s) this harness cut off": "Volání, která uťal tento harness: {0}", "{0} call(s) unanswered or cut off": "Volání nezodpovězená nebo uťatá: {0}", "{0} judged": "ohodnoceno {0}", "{0} note(s) missing, with no recorded reason.": "Chybějící zápisy bez zaznamenaného důvodu: {0}.", "{0} note(s) the protocol could not read": "Zápisy, které protokol nedokázal přečíst: {0}", "{0} of this system's notes are still being judged.": "U tohoto systému se ještě hodnotí {0} z jeho zápisů.", "{0} of {1}": "{0} z {1}", "{0} of {1} systems print the same number, so this measure does not order them and there is no agreement to report": "{0} z {1} systémů tiskne totéž číslo, takže je tato míra neseřadí a není co vykazovat jako shodu", "{0} row(s) on \u003cstrong\u003e{1}\u003c/strong\u003e, {2}, at harness \u003ccode\u003e{3}\u003c/code\u003e, are no longer shown: {4}. They are still in \u003ccode\u003eresults/rows.jsonl\u003c/code\u003e.": "Řádky ve větvi \u003cstrong\u003e{1}\u003c/strong\u003e, {2}, při harnessu \u003ccode\u003e{3}\u003c/code\u003e — je jich {0} — se už nekreslí: {4}. Pořád jsou v \u003ccode\u003eresults/rows.jsonl\u003c/code\u003e.", "{0} system(s) have written their notes; nothing has been scored yet, so there is nothing to rank. The count is what has been measured — how many notes each one produced that the protocol could read.": "Počet systémů, které už napsaly své zápisy: {0}. Nic zatím nebylo obodováno, takže není co řadit. Změřený je zatím jen ten počet — kolik zápisů každý z nich vytvořil tak, aby je protokol dokázal přečíst.", "{0} was scored on {1} fewer": "{0} byl obodován o {1} méně", "{0} wrote": "{0} napsal", "{0} — {1} criteria": "{0} — {1} kritérií", "{0}, and the other {1} on {2}": "{0}, a zbývajících {1} o {2}", "{0}: models {1} to {2} percent": "{0}: modely {1} až {2} procent", "{0}: models {1}–{2}%": "{0}: modely {1}–{2} %", "{0}: {1} over the shared conversations (95% interval {2} to {3})": "{0}: {1} přes sdílené rozhovory (95% interval {2} až {3})", "{0}{1} to {2}{3}": "{0}{1} až {2}{3}", "{ordinal-suffix}": ".", "— \u003ccode\u003e{0}\u003c/code\u003e furthest, {1}{2} in this table and {3}{4} in that one": " — nejdál \u003ccode\u003e{0}\u003c/code\u003e, {1}{2} v této tabulce a {3}{4} v té druhé", "— in the panel": "— v panelu", "— not separable": "— nerozlišitelné", "— the table shows {0}, over the {1} notes the judge finished": " — tabulka ukazuje {0}, přes {1} zápisů, které hodnotitel dokončil"}};
+const DEFAULT_LANG = 'en';
+const NORM = value => String(value).replace(/\s+/g, ' ').trim();
+
+// Read once here, not on every lookup: the switch sets it and the page redraws.
+let LANG = DEFAULT_LANG;
+
+const dict = () => (LANG === DEFAULT_LANG ? null : I18N[LANG]) || null;
+
+function tr(text) {
+  if (text === null || text === undefined) return text;
+  const table = dict();
+  if (!table) return text;
+  const found = table[NORM(text)];
+  return found === undefined ? text : found;
+}
+
+function T(strings, ...values) {
+  // The cooked strings, not `.raw`: a sentence written with `—` in the
+  // template has an em dash in it as far as a reader is concerned, and a key
+  // spelling out the escape would have to be typed that way in the dictionary.
+  const english = strings.reduce(
+    (out, part, i) => out + part + (i < values.length ? `{${i}}` : ''), '');
+  const table = dict();
+  // The English is returned as written, not as normalised: only the *key* is,
+  // so the dictionary never has to reproduce a template's indentation while the
+  // page it falls back to keeps the wrapping it was authored with.
+  const shape = (table && table[NORM(english)]) || english;
+  // A function, not a replacement string: a value containing `$&` or `$1` --
+  // and provider error bodies are passed through verbatim -- would otherwise be
+  // read as a backreference rather than printed.
+  return shape.replace(/\{(\d+)\}/g, (whole, index) =>
+    values[index] === undefined ? '' : values[index]);
+}
+
+//: The languages offered, in the order the switch draws them. English first
+//: and English by default: the benchmark, both corpora and every prompt in it
+//: are English, so a reader who lands here with no preference gets the language
+//: the numbers were made in. The browser's own language is deliberately not
+//: consulted -- a Czech-speaking reader who wants the English wording of a
+//: caveat should not have to fight the page for it.
+const LANGUAGES = { en: 'EN', cs: 'CS' };
+const LANGUAGE_NAMES = { en: 'English', cs: 'Čeština' };
+const LANGUAGE_KEY = 'tnb-lang';
+
+function chosenLanguage() {
+  // `?lang=cs` wins, so a link can name a language. Then what this reader last
+  // picked. Then English.
+  const asked = new URLSearchParams(location.search || '').get('lang');
+  if (asked && asked in LANGUAGES) return asked;
+  try {
+    const kept = localStorage.getItem(LANGUAGE_KEY);
+    if (kept && kept in LANGUAGES) return kept;
+  } catch (error) {
+    // Storage switched off, or a file:// page in a browser that treats it as
+    // opaque. The page still reads; it just forgets.
+  }
+  return DEFAULT_LANG;
+}
+
+// The prose that is HTML in the template. The English is kept on the node the
+// first time it is seen, so switching back is a restore rather than a second
+// dictionary that could disagree with the page it came from.
+function drawStaticText() {
+  document.querySelectorAll('[data-t]').forEach(el => {
+    if (el.dataset.tEn === undefined) el.dataset.tEn = el.innerHTML;
+    const table = dict();
+    const found = table ? table[el.dataset.t] : undefined;
+    el.innerHTML = found === undefined ? el.dataset.tEn : found;
+  });
+}
+
+function drawLanguageSwitch() {
+  const host = document.getElementById('lang');
+  if (!host) return;
+  host.innerHTML = Object.keys(LANGUAGES).map(code =>
+    `<button type="button" data-lang="${code}" lang="${code}"` +
+    ` aria-pressed="${code === LANG}" title="${LANGUAGE_NAMES[code]}">${
+      LANGUAGES[code]}</button>`).join('');
+}
+
+//: Everything that has to happen again when the language changes. The page
+//: passes its own redraw: the leaderboard rebuilds the table on screen, the
+//: methods page rebuilds its panels, and neither knows about the other.
+//:
+//: Called after the page has drawn itself once. `LANG` is already set by then
+//: -- see the line under this function -- so the first draw is in the reader's
+//: language and there is no flash of English to replace.
+function installLanguageSwitch(redraw) {
+  const apply = () => {
+    if (document.documentElement) document.documentElement.lang = LANG;
+    drawStaticText();
+    drawLanguageSwitch();
+    if (redraw) redraw();
+  };
+  const host = document.getElementById('lang');
+  if (host) {
+    host.addEventListener('click', event => {
+      const button = event.target.closest('button[data-lang]');
+      if (!button || button.dataset.lang === LANG) return;
+      LANG = button.dataset.lang;
+      try { localStorage.setItem(LANGUAGE_KEY, LANG); } catch (error) { /* see above */ }
+      apply();
+    });
+  }
+  apply();
+}
+
+// Before a single render function runs. Every one of them asks the dictionary
+// something, and a language decided afterwards would mean drawing twice.
+LANG = chosenLanguage();
 // Which system types are hidden by default, and what the box that shows them
 // says. `model` is not here: the models are what the table is for.
 // The therapist's note used to be behind a tick box. It is the only human-written
@@ -430,7 +584,7 @@ function drawControls(table) {
   active = filtersFor(table);
   document.getElementById('controls').innerHTML = active.map(f =>
     `<label><input type="checkbox" id="${f.id}"${checked[f.id] ? ' checked' : ''}> ${
-      f.label}</label>`).join('');
+      tr(f.label)}</label>`).join('');
 }
 
 function rowVisible(row) {
@@ -464,11 +618,11 @@ function coverageVaries(table) {
 
 function detailRow(row, table) {
   const parts = [];
-  if (row.metrics_note) parts.push(`<p class="note">${row.metrics_note}</p>`);
+  if (row.metrics_note) parts.push(`<p class="note">${tr(row.metrics_note)}</p>`);
 
   if (row.n_scored < row.n_generated) {
-    parts.push(`<p class="note">${row.n_generated - row.n_scored} of this system's notes are
-      still being judged.</p>`);
+    parts.push(`<p class="note">${T`${row.n_generated - row.n_scored} of this system's notes
+      are still being judged.`}</p>`);
   }
 
   // The headline's real denominator. It used to say "over the N finished so
@@ -477,14 +631,14 @@ function detailRow(row, table) {
   // that N. Judge failures cluster on the long, messy transcripts, so the
   // difference is never random.
   if (row.n_partial) {
-    parts.push(`<p class="note">The scores above rest on
+    parts.push(`<p class="note">${T`The scores above rest on
       <strong>${row.n_complete}</strong> of the ${row.n_scored} notes the judge started:
       ${row.n_partial} came back with part of the protocol unanswered and
-      ${row.n_partial === 1 ? 'is' : 'are'} left out rather than averaged over a
-      smaller denominator.</p>`);
+      ${row.n_partial === 1 ? T`is` : T`are`} left out rather than averaged over a
+      smaller denominator.`}</p>`);
   } else if (row.n_scored) {
-    parts.push(`<p class="note">The scores above rest on all
-      ${row.n_scored} notes the judge finished.</p>`);
+    parts.push(`<p class="note">${T`The scores above rest on all
+      ${row.n_scored} notes the judge finished.`}</p>`);
   }
 
   // Only drawn when there is a reason to draw: a heading saying "N unusable"
@@ -492,11 +646,12 @@ function detailRow(row, table) {
   // recorded.
   const reasons = Object.entries(row.failure_reasons || {});
   if (row.n_failed && reasons.length) {
-    parts.push(`<h3>${row.n_failed} note(s) the protocol could not read</h3><div class="grid">${
+    parts.push(`<h3>${T`${row.n_failed} note(s) the protocol could not read`}</h3><div class="grid">${
       reasons.map(([reason, count]) =>
-        `<div><span>${esc(reason)}</span><span>${count}</span></div>`).join('')}</div>`);
+        `<div><span>${esc(tr(reason))}</span><span>${count}</span></div>`).join('')}</div>`);
   } else if (row.n_failed) {
-    parts.push(`<p class="note">${row.n_failed} note(s) missing, with no recorded reason.</p>`);
+    parts.push(`<p class="note">${
+      T`${row.n_failed} note(s) missing, with no recorded reason.`}</p>`);
   }
 
   // Notes that are missing and are not the model's doing. Two kinds, and the
@@ -511,26 +666,28 @@ function detailRow(row, table) {
     const ours = kinds.filter(k => k.startsWith('truncated at max_tokens'));
     const theirs = kinds.filter(k => !k.startsWith('truncated at max_tokens'));
     const heading = ours.length && !theirs.length
-      ? `${row.n_unreached} call(s) this harness cut off`
+      ? T`${row.n_unreached} call(s) this harness cut off`
       : ours.length
-        ? `${row.n_unreached} call(s) unanswered or cut off`
-        : `${row.n_unreached} call(s) the endpoint never answered`;
+        ? T`${row.n_unreached} call(s) unanswered or cut off`
+        : T`${row.n_unreached} call(s) the endpoint never answered`;
     parts.push(`<h3>${heading}</h3>
-      <p class="note">Not the model's doing, and not counted against it.${
-        theirs.length ? ' A rate limit, a backend error or a timeout; re-running the'
-                      + ' generation fills those in.' : ''}${
-        ours.length ? ' Where the reason is a token ceiling it is ours: the call had'
-                    + ' already had its one escalation, and past that we stopped it.' : ''}</p>
+      <p class="note">${T`Not the model's doing, and not counted against it.`}${
+        theirs.length ? ' ' + T`A rate limit, a backend error or a timeout; re-running the
+                        generation fills those in.` : ''}${
+        ours.length ? ' ' + T`Where the reason is a token ceiling it is ours: the call had
+                      already had its one escalation, and past that we stopped it.` : ''}</p>
       <div class="grid">${Object.entries(row.unreached_reasons).map(([reason, count]) =>
-        `<div><span>${esc(reason)}</span><span>${count}</span></div>`).join('')}</div>`);
+        `<div><span>${esc(tr(reason))}</span><span>${count}</span></div>`).join('')}</div>`);
   }
 
   // How it was asked, beside what it scored. A row that does not say this
   // cannot be reproduced, which is the same rule this benchmark already applies
   // to prompt_version and judge_model.
   parts.push(row.settings
-    ? `<p class="note settings">Generated with <strong>${esc(row.settings)}</strong>.</p>`
-    : '<p class="note settings">Generation settings were not recorded for this row.</p>');
+    ? `<p class="note settings">${
+        T`Generated with <strong>${esc(tr(row.settings))}</strong>.`}</p>`
+    : `<p class="note settings">${
+        T`Generation settings were not recorded for this row.`}</p>`);
 
   // Down here rather than in a column, on purpose. The figure is real, but it
   // is reported by whoever serves the model and the serving stacks do not
@@ -541,10 +698,10 @@ function detailRow(row, table) {
   // numbers side by side in a sortable column would invite a comparison that
   // is partly about bookkeeping.
   if (row.thinking_tokens) {
-    parts.push(`<p class="note">Spent about <strong>${row.thinking_tokens.toLocaleString('en')}
+    parts.push(`<p class="note">${T`Spent about <strong>${row.thinking_tokens.toLocaleString(LANG)}
        tokens reasoning</strong> before writing, averaged over its notes — as reported by the
        provider. <em>Not comparable across providers:</em> what counts as a reasoning token
-       depends on the serving stack, not only on the model.</p>`);
+       depends on the serving stack, not only on the model.`}</p>`);
   }
 
   // `section_order`, not the mapping's key order: the payload is serialised
@@ -561,12 +718,13 @@ function detailRow(row, table) {
     sections.some(([, values]) => values[c.key] !== undefined && values[c.key] !== null));
   if (sections.length && sectioned.length) {
     const head = sectioned.map(c =>
-      `<th title="${esc(c.definition)}">${esc(c.label)}<span class="scale">${esc(c.scale)}</span></th>`).join('');
+      `<th title="${esc(tr(c.definition))}">${esc(tr(c.label))}<span class="scale">${esc(c.scale)}</span></th>`).join('');
     const body = sections.map(([name, values]) => {
       const cells = sectioned.map(c => `<td>${fmt(values[c.key], c.digits)}</td>`).join('');
-      return `<tr><td>${name}</td>${cells}</tr>`;
+      return `<tr><td>${esc(tr(name))}</td>${cells}</tr>`;
     }).join('');
-    parts.push(`<h3>By section</h3><div class="scroll"><table><thead><tr><th>Section</th>${head}</tr></thead><tbody>${body}</tbody></table></div>`);
+    parts.push(`<h3>${T`By section`}</h3><div class="scroll"><table><thead><tr><th>${
+      T`Section`}</th>${head}</tr></thead><tbody>${body}</tbody></table></div>`);
     // These four do not average to the figure in the row above, and a reader who
     // adds them up deserves to know why rather than to find out. The row's
     // figure is the mean over notes of each note's own section-mean; a section
@@ -577,12 +735,12 @@ function detailRow(row, table) {
     // to five decimal places, and all 18 rows with partial notes differ -- up to
     // 0.029 on the therapist's row, which is visible at the precision printed.
     if (row.n_partial) {
-      parts.push(`<p class="note">These sections will not average to the figure in the
+      parts.push(`<p class="note">${T`These sections will not average to the figure in the
         row above, and the gap is the ${row.n_partial} part-answered
-        ${row.n_partial === 1 ? 'note' : 'notes'}: the row's figure averages each note's
+        ${row.n_partial === 1 ? T`note` : T`notes`}: the row's figure averages each note's
         own sections first, while a section here averages the notes that have it. A note
         missing one section counts in one and not the other. Rows with no part-answered
-        notes agree exactly.</p>`);
+        notes agree exactly.`}</p>`);
     }
   }
 
@@ -591,18 +749,22 @@ function detailRow(row, table) {
     const items = detail
       .map(([name, value]) => `<div><span>${name}</span><span>${fmt(value, 2)}</span></div>`)
       .join('');
-    parts.push(`<h3>${table.track === 'icare' ? 'TRACE dimensions' : 'Rubric criteria'}</h3><div class="grid">${items}</div>`);
+    parts.push(`<h3>${table.track === 'icare' ? T`TRACE dimensions` : T`Rubric criteria`
+      }</h3><div class="grid">${items}</div>`);
   }
 
-  if (row.source) parts.push(`<p class="note">Source: ${row.source}</p>`);
+  if (row.source) parts.push(`<p class="note">${T`Source: ${tr(row.source)}`}</p>`);
   // Said here when it is not a column, so the fact does not vanish with it.
   if (!coverageVaries(table) && row.n_attempted) {
-    parts.push(`<p class="note">Wrote <strong>${row.n_generated}</strong> of the
+    parts.push(`<p class="note">${T`Wrote <strong>${row.n_generated}</strong> of the
       ${row.n_attempted} notes the protocol asked for — the same as every other row in
-      this table, which is why there is no Notes column.</p>`);
+      this table, which is why there is no Notes column.`}</p>`);
   }
 
-  if (!parts.length) parts.push('<p class="note">Nothing to break down yet — this row has no scores.</p>');
+  if (!parts.length) {
+    parts.push(`<p class="note">${
+      T`Nothing to break down yet — this row has no scores.`}</p>`);
+  }
 
   const span =
     table.columns.length + 1 + (coverageVaries(table) ? 1 : 0) +
@@ -622,14 +784,15 @@ function renderQueue(table) {
       ? `<span class="short">${row.n_generated}/${row.n_attempted}</span>`
       : `${row.n_generated}/${row.n_attempted}`;
     const chip = row.provider ? `<span class="chip">${row.provider}</span>` : '';
-    return `<li><b>${row.label}</b>${chip} <span>notes written ${short}</span></li>`;
+    return `<li><b>${row.label}</b>${chip} <span>${
+      T`notes written ${short}`}</span></li>`;
   }).join('');
 
   return `<section class="box pending">
-      <h2>${table.title} <span class="subtitle">· waiting for the judge</span></h2>
-      <p class="blurb">${table.rows.length} system(s) have written their notes; nothing has been
-         scored yet, so there is nothing to rank. The count is what has been measured — how many
-         notes each one produced that the protocol could read.</p>
+      <h2>${tr(table.title)} <span class="subtitle">· ${T`waiting for the judge`}</span></h2>
+      <p class="blurb">${T`${table.rows.length} system(s) have written their notes; nothing has
+         been scored yet, so there is nothing to rank. The count is what has been measured —
+         how many notes each one produced that the protocol could read.`}</p>
       <ol class="sections queue">${items}</ol>
     </section>`;
 }
@@ -644,19 +807,19 @@ function referenceNote(table) {
   if (!human && !model) return '';
   const parts = [];
   if (human) {
-    parts.push(`the row marked <span class="chip">therapist</span> is a
+    parts.push(T`the row marked <span class="chip">${tr('therapist')}</span> is a
       <strong>note a human clinician wrote</strong>, scored by the identical protocol`);
   }
   if (model) {
-    parts.push(`rows marked <span class="chip">reference model</span> are the
+    parts.push(T`rows marked <span class="chip">${tr('reference model')}</span> are the
       <strong>source paper&rsquo;s own systems</strong>, scored here so this table can be
       read against theirs`);
   }
-  return `<p class="note">Not every row is a model under test: ${parts.join(', and ')}.
+  return `<p class="note">${T`Not every row is a model under test: ${parts.join(T`, and `)}.
     They sit in the ranking because they were measured the same way, and a human
     note placing low says something about the measure rather than about the
     clinician &mdash; the rubric counts what a note contains and cannot see what a
-    clinician chose to leave out.</p>`;
+    clinician chose to leave out.`}</p>`;
 }
 
 function renderTable(table, index) {
@@ -670,55 +833,58 @@ function renderTable(table, index) {
   const settings = Object.entries(versions.judge_settings || {})
     .filter(([k]) => k !== 'model')
     .map(([k, v]) => `${k} ${v}`).join(', ');
+  const prompts = (table.judge_prompt_versions || [versions.judge_prompt_version])
+    .map(v => `<code>${v}</code>`).join(T` and `);
   const judge = versions.judge_model
-    ? `judge <code>${versions.judge_model}</code>${settings ? ` (${esc(settings)})` : ''}` +
+    ? T`judge <code>${versions.judge_model}</code>${
+        settings ? ` (${esc(tr(settings))})` : ''}` +
       // Two instruments in one table were asked two different sets of
       // questions. Naming one of them would say the eight PDSQI columns
       // came from the rubric's prompt.
-      ` · judge prompt${(table.judge_prompt_versions || []).length > 1 ? 's' : ''} ` +
-      (table.judge_prompt_versions || [versions.judge_prompt_version])
-        .map(v => `<code>${v}</code>`).join(' and ') +
+      ' · ' + ((table.judge_prompt_versions || []).length > 1
+        ? T`judge prompts ${prompts}` : T`judge prompt ${prompts}`) +
       // A judge tried and not re-run keeps its table -- a different judge is a
       // different table -- but its columns are defined by an older harness and
       // may not mean what the newer tables' columns mean.
       (table.stale_harness
-        ? ` · <strong>older harness</strong>, columns may differ from the tables above`
+        ? ' · ' + T`<strong>older harness</strong>, columns may differ from the tables above`
         : '')
-    : 'not yet judged';
+    : T`not yet judged`;
 
   // The scale rides on the heading, not in a footnote. Two of these columns are
   // 0-1 fractions and one is a 1-5 rating; a reader comparing 0.65 with 4.98
   // has no way to know that unless the header says so at the point of use.
   const head = table.columns.map(c =>
-    `<th data-sort="${c.key}" title="${esc(c.definition)}">` +
+    `<th data-sort="${c.key}" title="${esc(tr(c.definition))}">` +
     // Which instrument asked for this column. Eleven columns from two
     // instruments read as eleven columns from one unless the header says
     // otherwise -- and then a reader compares a coverage count with a 1-5
     // quality rating as though they were two grades from the same exam.
     (c.instrument ? `<span class="instrument">${esc(c.instrument)}</span>` : '') +
-    `${esc(c.label)}` +
+    `${esc(tr(c.label))}` +
     `<span class="scale">${esc(c.scale)}</span>` +
-    (c.ranking ? '<span class="ranks" title="the table is ordered by this column">ranks</span>' : '') +
+    (c.ranking ? `<span class="ranks" title="${
+      T`the table is ordered by this column`}">${T`ranks`}</span>` : '') +
     `</th>`).join('');
   const legend = table.columns.map(c =>
-    `<div class="measure"><dt>${esc(c.label)} <span class="scale">${esc(c.scale)}</span>` +
-    (c.ranking ? '<span class="ranks">ranks this table</span>' : '') +
-    `</dt><dd>${esc(c.definition)}` +
-    (c.caveat ? ` <em>${esc(c.caveat)}</em>` : '') + `</dd></div>`).join('');
+    `<div class="measure"><dt>${esc(tr(c.label))} <span class="scale">${esc(c.scale)}</span>` +
+    (c.ranking ? `<span class="ranks">${T`ranks this table`}</span>` : '') +
+    `</dt><dd>${esc(tr(c.definition))}` +
+    (c.caveat ? ` <em>${esc(tr(c.caveat))}</em>` : '') + `</dd></div>`).join('');
   // Said under the table either way. A table with no grouping measured must not
   // read as a strict ranking just because nobody has checked.
   const groupNote = table.groups
-    ? `<p class="note"><strong>Systems that share a rank cannot be told apart by this
+    ? `<p class="note">${T`<strong>Systems that share a rank cannot be told apart by this
          evidence.</strong> ${table.groups.of.filter(g => g.length > 1).length} of
          ${table.groups.of.length} ranks are shared, and the top one has
          ${table.groups.of[0].length} system(s) in it. Measured on
-         <strong>${esc(table.groups.measure)}</strong> over the
+         <strong>${esc(tr(table.groups.measure))}</strong> over the
          ${table.groups.sessions} conversations every system here was scored on, by
          resampling those conversations — not by whether two intervals overlap, which
-         is a weaker test.</p>`
-    : `<p class="note"><strong>Which of these can be told apart has not been measured
+         is a weaker test.`}</p>`
+    : `<p class="note">${T`<strong>Which of these can be told apart has not been measured
          for this table.</strong> Read the order as roughly who is near the top and
-         near the bottom, not as a ranking: two adjacent rows are not a result.</p>`;
+         near the bottom, not as a ranking: two adjacent rows are not a result.`}</p>`;
 
   // Why *this* column orders the table, and not one of the other ten. Asked by
   // the first reader who looked: the page said which column ranks and never
@@ -727,12 +893,12 @@ function renderTable(table, index) {
   // therapists agree with each other, while on the 1-5 scales those two reach
   // 0.13 to 0.19 and there is nothing to anchor to.
   const rankingNote = table.ranking_measure
-    ? `Ordered by <strong>${esc(colLabel(table, table.ranking_measure))}</strong>, because it is the
+    ? T`Ordered by <strong>${esc(colLabel(table, table.ranking_measure))}</strong>, because it is the
        only column checked against people: on it the judge and a trained therapist agree at
        <strong>0.60</strong> where two therapists reach <strong>0.50</strong>. On the 1&#8211;5 scales two
        therapists agree at 0.13&#8211;0.19, so those carry too little signal to rank on.
        Every other column is context and is not a ranking.`
-    : 'This track is deliberately <strong>not ranked</strong>: its columns measure different things and the source paper found they disagree. That disagreement is the result.';
+    : T`This track is deliberately <strong>not ranked</strong>: its columns measure different things and the source paper found they disagree. That disagreement is the result.`;
 
   // Which systems this evidence cannot tell apart. A leaderboard prints an
   // order whether or not one exists; this gives every row the rank it actually
@@ -755,26 +921,25 @@ function renderTable(table, index) {
       ? `<span class="short">${row.n_generated}/${row.n_attempted}</span>`
       : `${row.n_generated}/${row.n_attempted}`;
     const judging = row.n_scored < row.n_generated
-      ? `<span class="pending-mark">${row.n_scored} judged</span>`
+      ? `<span class="pending-mark">${T`${row.n_scored} judged`}</span>`
       : '';
     const coverage = `${written}${judging ? '<br>' + judging : ''}`;
     // The provider is part of a model's identity: the same id on two endpoints
     // can be two different builds, so it is shown, never merged away.
     const label = TYPE_LABEL[row.system_type] || row.provider;
-    const chip = label ? `<span class="chip">${label}</span>` : '';
+    const chip = label ? `<span class="chip">${esc(tr(label))}</span>` : '';
     // A row produced under conditions the others did not share is marked where
     // it sits, never dropped and never normalised away. Today that is the GPT
     // family, whose provider refuses any temperature but 1.
     const oddOneOut = row.settings_differ
-      ? ' <span class="differs" title="' + esc(row.settings) + '">≠ settings</span>'
+      ? ' <span class="differs" title="' + esc(tr(row.settings)) + `">≠ ${T`settings`}</span>`
       : '';
     // A cell where the judge is grading its own vendor's model. Marked in
     // place, never dropped: a missing row would be the worse distortion, and
     // the self-preference panel below measures how much to discount it by.
     const ownFamily = row.judges_own_family
-      ? ` <span class="differs" title="scored by a judge from the same vendor` +
-        `, whose self-preference is measured in the panel below">judge's own ` +
-        `${esc(row.judges_own_family)}</span>`
+      ? ` <span class="differs" title="${T`scored by a judge from the same vendor, whose self-preference is measured in the panel below`}">${
+          T`judge's own ${esc(row.judges_own_family)}`}</span>`
       : '';
     // How long this model's notes are. A property of the notes, next to the
     // scores they earned, because completeness counts coverage: a reader who
@@ -783,7 +948,8 @@ function renderTable(table, index) {
       ? `<td>${row.note_words ?? '<span class="dash">—</span>'}</td>`
       : '';
     const effortCell = table.has_effort
-      ? `<td>${row.effort ? esc(row.effort) : '<span class="dash" title="this provider has no effort control">—</span>'}</td>`
+      ? `<td>${row.effort ? esc(tr(row.effort)) : `<span class="dash" title="${
+          T`this provider has no effort control`}">—</span>`}</td>`
       : '';
     
     // The rank, not the row number. Systems the evidence cannot separate share
@@ -801,30 +967,30 @@ function renderTable(table, index) {
   }).join('');
 
   return `<section class="box${table.scored ? '' : ' pending'}">
-      <h2>${table.title}</h2>
-      <p class="blurb">${code(table.blurb)}</p>
+      <h2>${tr(table.title)}</h2>
+      <p class="blurb">${code(tr(table.blurb))}</p>
       ${designBlock(table)}
-      <p class="versions">harness <code>${versions.harness_version}</code> ·
-         prompt <code>${versions.prompt_version}</code> · ${judge}</p>
+      <p class="versions">${T`harness <code>${versions.harness_version}</code>`} ·
+         ${T`prompt <code>${versions.prompt_version}</code>`} · ${judge}</p>
       <div class="scroll"><table data-table="${index}">
         <thead><tr>${table.groups
-          ? `<th title="Band on ${esc(colLabel(table, table.ranking_measure))}: rows this evidence cannot tell apart share a band. It does not follow the sort -- sorting by another column reorders the rows, not what the bootstrap could separate.">Band</th>`
-          : ''}<th data-sort="label">System</th>${
-          table.has_effort ? '<th data-sort="effort" title="Reasoning effort the note was written at. Blank where the provider has no such control.">Effort</th>' : '' }${
+          ? `<th title="${T`Band on ${esc(colLabel(table, table.ranking_measure))}: rows this evidence cannot tell apart share a band. It does not follow the sort -- sorting by another column reorders the rows, not what the bootstrap could separate.`}">${T`Band`}</th>`
+          : ''}<th data-sort="label">${T`System`}</th>${
+          table.has_effort ? `<th data-sort="effort" title="${T`Reasoning effort the note was written at. Blank where the provider has no such control.`}">${T`Effort`}</th>` : '' }${
           ''}${head}${table.has_words
-            ? '<th data-sort="note_words" title="Median words in this model’s notes. Completeness counts coverage, so a longer note covers more.">Words</th>'
-            : ''}${showCoverage ? '<th data-sort="coverage">Notes</th>' : ''}</tr></thead>
+            ? `<th data-sort="note_words" title="${T`Median words in this model’s notes. Completeness counts coverage, so a longer note covers more.`}">${T`Words`}</th>`
+            : ''}${showCoverage ? `<th data-sort="coverage">${T`Notes`}</th>` : ''}</tr></thead>
         <tbody>${body}</tbody>
       </table></div>
       <p class="ranking-note">${rankingNote}</p>
       ${referenceNote(table)}
       ${groupNote}
-      ${table.has_thinking ? `<p class="note">Each row also records how many tokens its
+      ${table.has_thinking ? `<p class="note">${T`Each row also records how many tokens its
          model spent <strong>reasoning</strong> before writing — open a row to see it. It is
          not a column because it is not comparable between providers: vLLM, which serves the
          e-INFRA models, reports zero for models whose reasoning is text-delimited even when
          they reason, and OpenAI counts differently again. A gap there can be bookkeeping
-         rather than behaviour.</p>` : ''}
+         rather than behaviour.`}</p>` : ''}
       <dl class="measures">${legend}</dl>
     </section>`;
 }
@@ -879,17 +1045,17 @@ function designBlock(table) {
   const d = table.design || {};
   if (!d.scored_against) return '';
   const role = d.human_role_short === 'competitor'
-    ? `<span class="role role-competitor">the human note competes</span>`
-    : `<span class="role role-key">the human note is the answer key</span>`;
+    ? `<span class="role role-competitor">${T`the human note competes`}</span>`
+    : `<span class="role role-key">${T`the human note is the answer key`}</span>`;
   const cal = d.calibrated
-    ? `<span class="role role-competitor">judge checked against people</span>`
-    : `<span class="role role-key">judge cannot be checked</span>`;
+    ? `<span class="role role-competitor">${T`judge checked against people`}</span>`
+    : `<span class="role role-key">${T`judge cannot be checked`}</span>`;
   return `<div class="design">
       <div class="design-marks">${role}${cal}</div>
       <dl>
-        <div><dt>Scored against</dt><dd>${esc(d.scored_against)}</dd></div>
-        <div><dt>Where the human note sits</dt><dd>${esc(d.human_role)}</dd></div>
-        <div><dt>Can the judge be checked?</dt><dd>${esc(d.calibration)}</dd></div>
+        <div><dt>${T`Scored against`}</dt><dd>${esc(tr(d.scored_against))}</dd></div>
+        <div><dt>${T`Where the human note sits`}</dt><dd>${esc(tr(d.human_role))}</dd></div>
+        <div><dt>${T`Can the judge be checked?`}</dt><dd>${esc(tr(d.calibration))}</dd></div>
       </dl>
     </div>`;
 }
@@ -901,11 +1067,15 @@ function designBlock(table) {
 
 // Where every number on this page came from. It was in the payload and drawn
 // nowhere, which for a provenance string is close to the opposite of the point.
-document.getElementById('provenance').innerHTML = DATA.generated_from
-  ? `Every figure on this page is generated from <code>results/${DATA.generated_from}</code>,
-     which is append-only: a re-run adds rows beside the old ones rather than replacing
-     them, and what is drawn here is the newest of each.`
-  : '';
+function drawProvenance() {
+  document.getElementById('provenance').innerHTML = DATA.generated_from
+    ? T`Every figure on this page is generated from
+       <code>results/${DATA.generated_from}</code>, which is append-only: a re-run adds rows
+       beside the old ones rather than replacing them, and what is drawn here is the newest
+       of each.`
+    : '';
+}
+drawProvenance();
 
 
 // --- which table is on screen -----------------------------------------------
@@ -941,26 +1111,27 @@ function renderSwitch() {
   if (!here || (tracks.length < 2 && here.judges.length < 2)) { host.innerHTML = ''; return; }
 
   const trackButtons = tracks.length < 2 ? '' : `
-    <div class="pick" role="group" aria-label="Track">
-      <span class="pick-label">Track</span>
+    <div class="pick" role="group" aria-label="${T`Track`}">
+      <span class="pick-label">${T`Track`}</span>
       ${tracks.map(t => {
         // Keep the judge across the switch where that judge scored this track
         // too, so changing track does not silently change the referee.
         const keep = t.judges.find(j => j.judge_model === currentJudge());
         const target = keep ? keep.table : t.default;
         return `<button type="button" data-target="${target}"
-                  aria-pressed="${t === here}">${esc(t.label)}</button>`;
+                  aria-pressed="${t === here}">${esc(tr(t.label))}</button>`;
       }).join('')}
     </div>`;
 
   const judgeButtons = here.judges.length < 2 ? '' : `
-    <div class="pick" role="group" aria-label="Judge">
-      <span class="pick-label">Judge</span>
+    <div class="pick" role="group" aria-label="${T`Judge`}">
+      <span class="pick-label">${T`Judge`}</span>
       ${here.judges.map(j => `<button type="button" data-target="${j.table}"
           aria-pressed="${j.table === current}"
-          ${j.settings_differ ? `title="${esc(j.settings_label)}"` : ''}>${esc(j.label)}${
-            j.settings_differ ? `<span class="scale">${esc(j.settings_label)}</span>` : ''
-          }${j.stale_harness ? '<span class="scale">older harness</span>' : ''}</button>`).join('')}
+          ${j.settings_differ ? `title="${esc(tr(j.settings_label))}"` : ''}>${esc(j.label)}${
+            j.settings_differ ? `<span class="scale">${esc(tr(j.settings_label))}</span>` : ''
+          }${j.stale_harness ? `<span class="scale">${T`older harness`}</span>` : ''
+          }</button>`).join('')}
     </div>`;
 
   host.innerHTML = trackButtons + judgeButtons;
@@ -993,19 +1164,24 @@ function agreementNote(track) {
   const here = far && (found.judge_a === showing ? far.rank_a : far.rank_b);
   const there = far && (found.judge_a === showing ? far.rank_b : far.rank_a);
 
-  return `<p class="note"><strong>The two judges agree on the shape of this ranking and not
+  const furthest = far
+    ? T` — <code>${esc(far.system)}</code> furthest, ${here}${ordinal(here)} in this table
+             and ${there}${ordinal(there)} in that one`
+    : '';
+  return `<p class="note">${T`<strong>The two judges agree on the shape of this ranking and not
     on its order.</strong> On ${esc(colLabel(DATA.tables[INDEX_OF[current]], ranking.measure))},
     ${ranking.moved} of ${ranking.n_systems} systems land somewhere else under
-    <code>${esc(other)}</code>${
-      far ? ` — <code>${esc(far.system)}</code> furthest, ${here}${ordinal(here)} in this table
-             and ${there}${ordinal(there)} in that one` : ''
-    }. Near the top and near the bottom are claims this table supports; ninth against tenth
-    is not.</p>`;
+    <code>${esc(other)}</code>${furthest}. Near the top and near the bottom are claims this table supports; ninth against tenth
+    is not.`}</p>`;
 }
 
 // 1st, 2nd, 3rd, 4th. Only ever applied to a rank, so the teens are the whole
-// of the special case.
+// of the special case. Czech writes every ordinal the same way -- `4.` -- so the
+// suffix is a dictionary entry like any other sentence, and the English rule
+// runs only for English.
 function ordinal(n) {
+  const suffix = tr('{ordinal-suffix}');
+  if (suffix !== '{ordinal-suffix}') return suffix;
   if (n % 100 >= 11 && n % 100 <= 13) return 'th';
   return ['th', 'st', 'nd', 'rd'][n % 10] || 'th';
 }
@@ -1025,9 +1201,13 @@ function show(id) {
   }
 }
 
-document.getElementById('tables').innerHTML = DATA.tables.length
-  ? '<div id="switch" class="switch"></div><div id="table-host"></div>'
-  : '<div class="box pending"><h2>No runs yet</h2><p class="blurb">The first run will populate this page.</p></div>';
+function drawFrame() {
+  document.getElementById('tables').innerHTML = DATA.tables.length
+    ? '<div id="switch" class="switch"></div><div id="table-host"></div>'
+    : `<div class="box pending"><h2>${T`No runs yet`}</h2><p class="blurb">${
+        T`The first run will populate this page.`}</p></div>`;
+}
+drawFrame();
 
 if (DATA.tables.length) {
   // Delegated, not bound at load. The listeners used to be attached once by
@@ -1059,6 +1239,18 @@ if (DATA.tables.length) {
   window.addEventListener('hashchange', () => show(wanted()));
   show(current);
 }
+
+// Last, so the first draw above already happened in the reader's language and
+// this only has to redraw what a *change* of language moves: the frame, the
+// table on screen and the provenance line under it.
+installLanguageSwitch(() => {
+  drawProvenance();
+  // `show` redraws the table, the switch and the controls inside a frame that
+  // stays put. Redrawing the frame itself would replace the two nodes the click
+  // handlers above are bound to, and the page would go quiet on the second
+  // switch -- which is the bug those handlers were made delegated to avoid.
+  if (DATA.tables.length) show(current); else drawFrame();
+});
 </script>
 </body>
 </html>

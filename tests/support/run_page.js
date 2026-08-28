@@ -28,11 +28,18 @@ global.document = {
   createElement(tag) { return new El(tag); },
   addEventListener() {},
   body: new El('body'),
+  // The language switch stamps the chosen language on the root element.
+  documentElement: new El('html'),
 };
 // Before the script runs, not after: the leaderboard reads `location.hash` to
 // decide which table to draw, and a missing stub throws on the first line of
 // every page test at once rather than in the one that cares.
-global.location = { hash: '', href: 'https://example.invalid/', search: '' };
+// `PAGE_SEARCH=?lang=cs` runs the page in the other language: the switch
+// reads it there, and a render function that throws only in Czech is a
+// render function that throws.
+global.location = {
+  hash: '', href: 'https://example.invalid/', search: process.env.PAGE_SEARCH || '',
+};
 global.history = { replaceState() {}, pushState() {} };
 global.window = {
   addEventListener() {},

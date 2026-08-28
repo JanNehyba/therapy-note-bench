@@ -1,0 +1,553 @@
+"""Does the Czech dictionary still answer the pages, or only look as though it does?
+
+A translation that falls behind does not throw. `tr` and the tagged template
+both hand back their English when a key is missing, which is the right failure
+-- a reader gets a sentence rather than a blank -- and it is exactly why nothing
+would notice a whole panel reverting to English after somebody rewrote it.
+
+So the keys are extracted from the templates and from a rendered payload, and
+every one of them has to be in `i18n.CS`. Three shapes of key, three ways in,
+one dictionary:
+
+- ``data-t="page.sub"`` in the HTML, keyed by the id;
+- ``T`...` `` in the script, keyed by the English with numbered holes;
+- a string out of the payload, keyed by the English itself.
+
+The tagged sentences are scanned rather than matched with a regex. They nest --
+one of them picks its own singular and plural with a second tag inside a hole --
+and a regex stopping at the first backtick reads the shape wrong and would pass
+while asserting on nothing.
+"""
+
+from __future__ import annotations
+
+import re
+import shutil
+import subprocess
+from pathlib import Path
+
+import pytest
+
+from tnb import i18n, report, results
+from tnb.results import Metrics, Row
+
+RUNNER = Path(__file__).parent / "support" / "run_page.js"
+
+#: Fields of the payload a page passes through `tr`. Kept as a list here rather
+#: than discovered, because that is the point: a new column, blurb or caveat is
+#: a new sentence for a reader, and this test is where it is noticed.
+#:
+#: What is *not* here is as deliberate. TN-Eval's prompt and rubric and iCARE's
+#: field names are quoted, not written, and the pages draw them without asking
+#: the dictionary: a Czech paraphrase of an instruction would show a reader
+#: something no model was ever given.
+PAYLOAD_FIELDS = (
+    "tables[].title",
+    "tables[].blurb",
+    "tables[].design.scored_against",
+    "tables[].design.human_role",
+    "tables[].design.calibration",
+    "tables[].columns[].label",
+    "tables[].columns[].definition",
+    "tables[].columns[].caveat",
+    "tables[].groups.measure",
+    "tables[].rows[].metrics_note",
+    "tables[].rows[].settings",
+    "tables[].rows[].source",
+    "tables[].rows[].section_order[]",
+    "selection.tracks[].label",
+    "selection.tracks[].judges[].settings_label",
+    "licences[].used_for",
+    "licences[].note",
+    "similarity_example.note",
+    "concordance.*.track_label",
+    "concordance.*.measures[].measure",
+    "concordance.*.tensions[].first",
+    "concordance.*.tensions[].second",
+    "preference.measure",
+)
+
+
+def _walk(value, path: list[str]):
+    """Every string a dotted field path names, however deep it is nested."""
+    if not path:
+        if isinstance(value, str) and value:
+            yield value
+        return
+    step, rest = path[0], path[1:]
+    if step == "[]":
+        for item in value or []:
+            yield from _walk(item, rest)
+    elif step == "*":
+        for item in (value or {}).values():
+            yield from _walk(item, rest)
+    elif isinstance(value, dict):
+        yield from _walk(value.get(step), rest)
+
+
+def _steps(field: str) -> list[str]:
+    return [part for part in re.split(r"\.|(\[\])", field) if part]
+
+
+def payload_strings(data: dict) -> list[str]:
+    return [text for field in PAYLOAD_FIELDS for text in _walk(data, _steps(field)) if text.strip()]
+
+
+def tagged_keys(source: str) -> list[str]:
+    """The key of every tagged sentence in a script, holes numbered.
+
+    Hand-scanned, for the reason in this module's docstring. `\\uXXXX` is
+    decoded because the tag reads the cooked strings: a sentence written with
+    `\\u2014` has an em dash in it as far as the dictionary is concerned.
+    """
+    keys: list[str] = []
+    opening = re.compile(r"(?<![\w$.])T`")
+    index = 0
+    while (found := opening.search(source, index)) is not None:
+        start = found.end()
+        out: list[str] = []
+        holes = 0
+        i = start
+        while i < len(source):
+            char = source[i]
+            if char == "\\":
+                out.append(source[i : i + 2])
+                i += 2
+                continue
+            if char == "`":
+                break
+            if char == "$" and source[i + 1 : i + 2] == "{":
+                depth, i = 1, i + 2
+                while i < len(source) and depth:
+                    if source[i] == "`":  # a template literal inside the hole
+                        i = _skip_literal(source, i + 1)
+                        continue
+                    depth += source[i] == "{"
+                    depth -= source[i] == "}"
+                    i += 1
+                out.append(f"{{{holes}}}")
+                holes += 1
+                continue
+            out.append(char)
+            i += 1
+        keys.append(
+            re.sub(r"\\u([0-9a-fA-F]{4})", lambda m: chr(int(m.group(1), 16)), "".join(out))
+        )
+        # From just inside this one, so a tag nested in a hole is found too.
+        index = start
+    return keys
+
+
+def _skip_literal(source: str, i: int) -> int:
+    """Past the end of a nested template literal, holes and all."""
+    depth = 0
+    while i < len(source):
+        if source[i] == "\\":
+            i += 2
+            continue
+        if source[i] == "`" and not depth:
+            return i + 1
+        if source[i] == "$" and source[i + 1 : i + 2] == "{":
+            depth += 1
+            i += 1
+        elif source[i] == "}" and depth:
+            depth -= 1
+        i += 1
+    return i
+
+
+@pytest.fixture(scope="module")
+def templates() -> str:
+    return "\n".join(
+        path.read_text(encoding="utf-8") for path in sorted(report.TEMPLATE_DIR.glob("*.html"))
+    )
+
+
+def _row(system: str, judge_model: str, value: float) -> Row:
+    return Row(
+        track=results.TRACK_TNEVAL,
+        system_id=system,
+        system_type="model",
+        provider="einfra",
+        prompt_version="tneval-soap-v1",
+        judge_model=judge_model,
+        judge_prompt_version="tneval-rubric-v1",
+        judge_settings={"model": judge_model, "thinking_budget": 256},
+        n_sessions_attempted=50,
+        n_sessions_generated=50,
+        n_sessions_scored=50,
+        metrics=Metrics(
+            headline={"completeness": value, "conciseness": value, "faithfulness": value * 5},
+            by_section={"subjective": {"completeness": value}},
+            detail={"subjective-symptoms": value},
+        ),
+    )
+
+
+def test_every_marked_paragraph_has_a_czech_entry(templates):
+    """`data-t` names an id and nothing checks that the id exists."""
+    missing = sorted(
+        key for key in set(re.findall(r'data-t="([^"]+)"', templates)) if key not in i18n.CS
+    )
+    assert not missing, f"marked for translation and not translated: {missing}"
+
+
+def test_every_tagged_sentence_has_a_czech_entry(templates):
+    keys = {i18n.norm(key) for key in tagged_keys(templates) if key.strip()}
+    assert len(keys) > 100, "the scanner found almost nothing, so it is the scanner that broke"
+    dictionary = {i18n.norm(key) for key in i18n.CS}
+    missing = sorted(keys - dictionary)
+    assert not missing, f"sentences on the page with no Czech: {missing}"
+
+
+def test_every_payload_string_the_page_draws_has_a_czech_entry():
+    """The other half of the page, and the half that grows on its own.
+
+    A track, a column or a caveat is authored in Python and reaches the reader
+    through the payload. Adding one is exactly the change that leaves a Czech
+    page with an English sentence in the middle of it, and nothing else would
+    say so.
+    """
+    rows = [_row("x", "a-judge", 0.5)]
+    data = report.build(rows)
+    data["licences"] = report.LICENCES
+    data["similarity_example"] = report.similarity_example()
+    data["concordance"] = report.concordance_payload(rows)
+
+    dictionary = {i18n.norm(key) for key in i18n.CS}
+    missing = sorted({s for s in payload_strings(data) if i18n.norm(s) not in dictionary})
+    assert not missing, f"drawn from the payload with no Czech: {missing}"
+
+
+def test_the_published_pages_have_a_czech_entry_for_everything_they_draw():
+    """The same question asked of the run that is actually published.
+
+    The fixture above is three rows and cannot produce a failure reason, a
+    withdrawn group or a settings label. `docs/leaderboard.json` is the real
+    one, and it is in the repository, so the test can be exact about the page
+    a reader will open.
+    """
+    import json
+
+    from tnb.config import REPO_ROOT
+
+    path = REPO_ROOT / "docs" / "leaderboard.json"
+    if not path.exists():
+        pytest.skip("no published payload in this checkout")
+    data = json.loads(path.read_text(encoding="utf-8"))
+
+    dictionary = {i18n.norm(key) for key in i18n.CS}
+    missing = sorted({s for s in payload_strings(data) if i18n.norm(s) not in dictionary})
+    assert not missing, f"published and untranslated: {missing}"
+
+
+def test_a_missing_key_leaves_english_rather_than_a_hole():
+    """The rule the whole design rests on, asserted rather than assumed."""
+    node = shutil.which("node")
+    if node is None:
+        pytest.skip("node is not installed; the page cannot be executed here")
+
+    script = """
+      const I18N = {cs: {'Only this one': 'Jenom tahle'}};
+      const DEFAULT_LANG = 'en';
+      const NORM = v => String(v).replace(/\\s+/g, ' ').trim();
+      let LANG = 'cs';
+      const dict = () => (LANG === DEFAULT_LANG ? null : I18N[LANG]) || null;
+      function tr(text) {
+        if (text === null || text === undefined) return text;
+        const table = dict();
+        if (!table) return text;
+        const found = table[NORM(text)];
+        return found === undefined ? text : found;
+      }
+      function T(strings, ...values) {
+        const english = strings.reduce(
+          (out, part, i) => out + part + (i < values.length ? `{${i}}` : ''), '');
+        const table = dict();
+        const shape = (table && table[NORM(english)]) || english;
+        return shape.replace(/\\{(\\d+)\\}/g, (whole, index) =>
+          values[index] === undefined ? '' : values[index]);
+      }
+      console.log(tr('Only this one'));
+      console.log(tr('Nobody translated this'));
+      console.log(T`A sentence with ${7} in it`);
+    """
+    finished = subprocess.run(
+        [node, "-e", script], capture_output=True, text=True, encoding="utf-8", timeout=30
+    )
+    assert finished.returncode == 0, finished.stderr
+    said = finished.stdout.splitlines()
+    assert said[0] == "Jenom tahle", "a key that is there is used"
+    assert said[1] == "Nobody translated this", "a key that is not there keeps its English"
+    assert said[2] == "A sentence with 7 in it", "and so does a sentence with a hole in it"
+
+
+def test_the_helpers_read_the_dictionary_the_module_writes():
+    """One inlined blob, one shape. `dictionary()` normalises keys and not values."""
+    table = i18n.dictionary()
+    assert set(table) == {"cs"}, "English is the source, not an entry"
+    assert all(key == i18n.norm(key) for key in table["cs"]), "keys are normalised on the way in"
+    assert table["cs"][i18n.norm("and")] == " a ", (
+        "a joiner keeps the spaces a trimmed key cannot carry"
+    )
+
+
+def test_both_pages_run_in_czech(tmp_path):
+    """A render function that only throws in Czech is a render function that throws.
+
+    The page is one inline script, so a `null` where a string was expected
+    blanks it with no error anywhere a reader would look -- and the Czech path
+    goes through code the English path does not.
+    """
+    node = shutil.which("node")
+    if node is None:
+        pytest.skip("node is not installed; the page cannot be executed here")
+
+    rows = [
+        _row(system, judge, value)
+        for judge, scores in (("a-judge", {"x": 0.9, "y": 0.4}), ("b-judge", {"x": 0.5, "y": 0.8}))
+        for system, value in scores.items()
+    ]
+    data = report.build(rows)
+    data["concordance"] = report.concordance_payload(rows)
+    data["licences"] = report.LICENCES
+    data["similarity_example"] = report.similarity_example()
+    data["protocol"] = report.protocol()
+
+    for name, render in (("index", report.render_page), ("methods", report.render_methods)):
+        script = tmp_path / f"{name}.js"
+        script.write_text(
+            "\n".join(re.findall(r"<script[^>]*>(.*?)</script>", render(data), re.S)),
+            encoding="utf-8",
+        )
+        finished = subprocess.run(
+            [node, str(RUNNER), str(script)],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            timeout=60,
+            env={**__import__("os").environ, "PAGE_SEARCH": "?lang=cs"},
+        )
+        assert finished.returncode == 0, finished.stdout + finished.stderr
+        assert "RAN." in finished.stdout, f"{name} did not finish in Czech"
+        assert "lang: " in finished.stdout, f"{name} drew no language switch"
+
+
+# --- the other direction ----------------------------------------------------
+#
+# Every test above asks "does this sentence on the page have a Czech entry?".
+# Reversed, the question is "does this Czech entry still answer a sentence on
+# the page?" -- and it is the one that catches a source somebody edited.
+#
+# Two of the three key shapes invalidate themselves: a tagged sentence and a
+# payload string *are* their own key, so editing the English breaks the lookup
+# and the coverage tests above fail. What they do not do is say that the old
+# translation is now an orphan, which is the fact a maintainer needs. The third
+# shape does not even do that: `data-t` is keyed by an id, so editing the prose
+# under it changes nothing, the Czech keeps saying what it always said, and the
+# two languages quietly disagree. Four of those paragraphs carry a hand-typed
+# number.
+
+
+#: Keys answered before their string can appear in a run. Each is a decision
+#: made in advance rather than an oversight, and the reason is what makes it
+#: one -- the same shape as the allow-list in `test_no_clinical_content.py`.
+ANSWERED_IN_ADVANCE = {
+    "therapist": "a system-type chip, drawn from TYPE_LABEL rather than from the payload",
+    "reference model": "the same, for a source paper's own system",
+    "as published": "the same, for a row from an older harness",
+    "{ordinal-suffix}": "a sentinel, not a sentence: Czech writes every ordinal `4.`",
+    "answer did not contain a SOAP dictionary": "a failure reason, only there when one failed",
+    "truncated at max_tokens=16384": "an unreached reason, only there when a call was cut off",
+    "tneval-soap": "a track id, printed only where a withdrawn group is named",
+    "pdsqi-soap": "the same",
+    "icare": "the same",
+    "still separates models": "a verdict gloss, a JS constant rather than a marked sentence",
+    "every model already does this": "the same",
+    "partly, weakly": "the same",
+    "nobody can, the therapist included": "the same",
+}
+
+
+def live_strings(templates: str) -> set[str]:
+    """Every English string the pages can ask the dictionary about.
+
+    Read from where each one is authored -- a measure table, a track title, a
+    licence row -- rather than from a run. A run shows only what today's data
+    happens to contain, and the sentence this test exists for is the one nobody
+    looked at.
+    """
+    import json
+
+    live = set(re.findall(r'data-t="([^"]+)"', templates))
+    live |= {i18n.norm(key) for key in tagged_keys(templates) if key.strip()}
+    live |= {i18n.norm(title) for title in report.TRACK_TITLES.values()}
+    live |= {i18n.norm(blurb) for blurb in report.TRACK_BLURBS.values()}
+    live |= {i18n.norm(label) for label in report.TRACK_SWITCH_LABELS.values()}
+    for design in report.TRACK_DESIGN.values():
+        live |= {i18n.norm(value) for value in design.values() if isinstance(value, str)}
+    # Every measure table the registry names, not a list of three. A track
+    # added to `report.MEASURE_TABLES` brings its columns with it, and a test
+    # that had to be edited to notice would not have noticed.
+    for table in report.MEASURE_TABLES.values():
+        for key, meta in table.items():
+            live.add(i18n.norm(key))
+            live |= {i18n.norm(meta[f]) for f in ("label", "definition", "caveat") if meta.get(f)}
+    for licence in report.LICENCES:
+        live |= {i18n.norm(licence[f]) for f in ("used_for", "note") if licence.get(f)}
+    live.add(i18n.norm(report.SIMILARITY_EXAMPLE["note"]))
+    live |= {i18n.norm(name) for name in report.SECTION_ORDER}
+    # The merged table's title and blurb, which no single track owns.
+    published = report.DOCS_DIR / "leaderboard.json"
+    if published.exists():
+        payload = json.loads(published.read_text(encoding="utf-8"))
+        live |= {i18n.norm(text) for text in payload_strings(payload)}
+
+    # The methods page's other panels come from their own tracked files, and
+    # every one of those files is in the repository -- so the measure names, the
+    # statistics and the saturation verdicts are checkable rather than taken on
+    # trust. Each is read where the page reads it.
+    calibration = _json(report.DOCS_DIR / "calibration.json")
+    for agreement in (calibration or {}).get("agreements", []):
+        live.add(i18n.norm(agreement["name"].replace("_", " ")))
+        live.add(i18n.norm(agreement["name"]))
+        live.add(i18n.norm(agreement["statistic"]))
+    for judge in (_json(report.DOCS_DIR / "judges.json") or {}).get("judges", []):
+        live |= {i18n.norm(a["name"]) for a in judge.get("agreements", [])}
+    for path in report.DOCS_DIR.glob("saturation-*.json"):
+        for criterion in (_json(path) or {}).get("criteria", []):
+            live.add(i18n.norm(criterion["section"]))
+            live.add(i18n.norm(criterion["verdict"]))
+    live.add(i18n.norm((_json(report.DOCS_DIR / "preference.json") or {}).get("measure", "")))
+    return live
+
+
+def _json(path):
+    import json
+
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
+
+
+def test_no_czech_entry_answers_a_sentence_that_no_longer_exists(templates):
+    """A key that matches nothing is a source somebody edited.
+
+    The failure this exists for: a number is corrected in a template or in a
+    scorer, the English key stops matching, and the Czech page silently reverts
+    that one sentence to English. Nothing else says so -- falling back to the
+    English is the design, and a stale key is indistinguishable from a sentence
+    nobody has translated yet.
+    """
+    live = live_strings(templates)
+    orphans = sorted(
+        key
+        for key in i18n.CS
+        if key not in ANSWERED_IN_ADVANCE and key not in live and i18n.norm(key) not in live
+    )
+    assert not orphans, (
+        "Czech entries that answer nothing on either page -- the English was edited and the "
+        f"translation was not, so these sentences now draw in English: {orphans}"
+    )
+
+
+def test_the_advance_answers_are_all_still_needed(templates):
+    """And the allow-list does not outlive what it was written for."""
+    live = live_strings(templates)
+    stale = sorted(key for key in ANSWERED_IN_ADVANCE if key in live or i18n.norm(key) in live)
+    assert not stale, f"listed as answered in advance and now drawn from a live source: {stale}"
+
+    gone = sorted(key for key in ANSWERED_IN_ADVANCE if key not in i18n.CS)
+    assert not gone, f"answered in advance and no longer in the dictionary: {gone}"
+
+
+#: A number, however it is written: `0.18`, `2026`, `1.00`, `0.6.0`.
+NUMBER = re.compile(r"\d+(?:\.\d+)*")
+#: A numbered hole, stripped first -- otherwise `{0}` counts as the number zero.
+HOLE = re.compile(r"\{\d+\}")
+
+
+def numbers_in(text: str) -> list:
+    """The numbers in a sentence, compared by value rather than by spelling.
+
+    `08` and `8` are one number written two ways, and the Czech date format
+    writes the second where the English writes the first.
+    """
+    found = NUMBER.findall(HOLE.sub(" ", text))
+    return sorted(float(n) if n.count(".") < 2 else n for n in found)
+
+
+def english_of(key: str, templates: str) -> str | None:
+    """What a `data-t` id actually marks, read out of the template.
+
+    The other two key shapes are their own English. This one is an id, so the
+    English has to be fetched -- and fetching it is the point: it is the half
+    that can change without the key changing with it.
+    """
+    found = re.search(rf'<(\w+)[^>]*\bdata-t="{re.escape(key)}"[^>]*>', templates)
+    if not found:
+        return None
+    tag, start = found.group(1), found.end()
+    end = templates.find(f"</{tag}>", start)
+    return templates[start:end] if end != -1 else None
+
+
+def test_a_translation_carries_the_same_numbers_as_its_english(templates):
+    """The hole the two directions above still leave open.
+
+    `data-t` is keyed by an id, so a number corrected in the marked paragraph
+    leaves the key intact and the Czech untouched: no fallback, no orphan, two
+    languages stating different figures. Four of these paragraphs carry a
+    hand-typed number -- Krippendorff's alpha twice, a date and a section count
+    -- and every one of them is written down somewhere else in this repository
+    as well.
+
+    Applied to all three shapes and not only to `data-t`, because a mistyped
+    digit in a translation is the same defect arriving from the other side.
+    """
+    marked = set(re.findall(r'data-t="([^"]+)"', templates))
+    wrong = []
+    for key, czech in i18n.CS.items():
+        english = english_of(key, templates) if key in marked else key
+        assert english is not None, f"{key} is marked in a template and could not be read back"
+        if numbers_in(english) != numbers_in(czech):
+            wrong.append(f"{key}: English {numbers_in(english)} against Czech {numbers_in(czech)}")
+    assert not wrong, "a translation states different numbers from its English: " + "; ".join(wrong)
+
+
+def test_every_string_a_track_registry_holds_has_a_czech_entry():
+    """The claim the payload test cannot make, and the one that matters.
+
+    `test_every_payload_string_the_page_draws_has_a_czech_entry` builds a
+    payload and checks what came out. That only ever sees a track with rows in
+    `results/rows.jsonl` -- so a track registered in `report.COLUMNS` whose rows
+    live somewhere else is invisible to it, and its title, its blurb and its
+    seven columns can reach a page with no Czech behind them while every test
+    passes. The Czech track is exactly that shape: it is registered so a local
+    report can draw it, and its rows never reach the published file.
+
+    So this asks the registries instead. Registering a track is the moment the
+    strings exist; it should also be the moment they are answered.
+    """
+    missing = {}
+    for track in report.COLUMNS:
+        authored = {
+            "title": report.TRACK_TITLES.get(track),
+            "switch label": report.TRACK_SWITCH_LABELS.get(track),
+            "blurb": report.TRACK_BLURBS.get(track),
+        }
+        for field, value in (report.TRACK_DESIGN.get(track) or {}).items():
+            # `human_role_short` is a discriminator, not a sentence: `designBlock`
+            # tests it against 'competitor' to pick which of two chips to draw,
+            # and the chip's own words are a tagged sentence like any other.
+            if isinstance(value, str) and field != "human_role_short":
+                authored[f"design.{field}"] = value
+        for key, _digits in report.COLUMNS[track]:
+            meta = report.measure_table(track).get(key, {})
+            for field in ("label", "definition", "caveat"):
+                authored[f"{key}.{field}"] = meta.get(field)
+        for field, value in authored.items():
+            if value and i18n.norm(value) not in {i18n.norm(k) for k in i18n.CS}:
+                missing[f"{track}.{field}"] = value[:70]
+    assert not missing, (
+        "registered on a track and drawable on a page with no Czech behind it: "
+        + "; ".join(f"{where} ({text}...)" for where, text in sorted(missing.items()))
+    )

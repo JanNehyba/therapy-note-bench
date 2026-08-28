@@ -22,7 +22,7 @@ import re
 from dataclasses import replace
 from pathlib import Path
 
-from tnb import corpus, judge, results
+from tnb import corpus, i18n, judge, results
 from tnb.config import REPO_ROOT
 from tnb.results import Row
 from tnb.scoring import concordance, pdsqi
@@ -1672,9 +1672,19 @@ def concordance_payload(rows: list[Row], **overrides) -> dict:
     }
 
 
+def _localise(page: str) -> str:
+    """The Czech lookup, inlined the same way the payload is.
+
+    Not part of the payload, on purpose: `docs/leaderboard.json` is also the
+    mirror API, and a machine reading the numbers has no use for a second
+    language's wording of the caveats. It is a property of the page.
+    """
+    return page.replace("__I18N__", _inline(i18n.dictionary()))
+
+
 def render_page(data: dict) -> str:
     """The standalone page: the data inlined, no build step, no dependency."""
-    return PAGE_TEMPLATE.replace("__DATA__", _inline(data))
+    return _localise(PAGE_TEMPLATE.replace("__DATA__", _inline(data)))
 
 
 def render_methods(data: dict) -> str:
@@ -1690,7 +1700,7 @@ def render_methods(data: dict) -> str:
     for marker, name in FIGURE_MARKERS.items():
         if marker in page:
             page = page.replace(marker, _figure(name))
-    return page.replace("__DATA__", _inline(data))
+    return _localise(page.replace("__DATA__", _inline(data)))
 
 
 TEMPLATE_DIR = Path(__file__).parent / "templates"

@@ -3,13 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>therapy-note-bench — leaderboard</title>
+<title data-t="page.title">therapy-note-bench — leaderboard</title>
 __STYLE__
 </head>
 <body>
 <main>
+  <div class="lang" id="lang"></div>
   <h1>therapy-note-bench</h1>
-  <p class="sub">
+  <p class="sub" data-t="page.sub">
     LLM-written psychotherapy session notes, scored on two published protocols —
     TN-Eval's SOAP rubric and iCARE's 17 sections — and re-run as models change.
     <a href="https://github.com/JanNehyba/therapy-note-bench">Code and data on GitHub</a>.
@@ -19,32 +20,32 @@ __STYLE__
 
   <div id="tables"></div>
 
-  <p class="methods-link"><a href="methods.html">How this was measured →</a>
+  <p class="methods-link" data-t="page.methods-link"><a href="methods.html">How this was measured →</a>
      Every column defined, which judge and how closely it agrees with two therapists,
      how far the two judges disagree with each other, what the two corpora are and
      where they came from, and which rows are no longer drawn.</p>
 
-  <p class="methods-link"><a href="brief.html">Reading these numbers without being misled →</a>
+  <p class="methods-link" data-t="page.brief-link"><a href="brief.html">Reading these numbers without being misled →</a>
      What a leaderboard of these models can and cannot tell you, for somebody
      building or buying one — four claims, four figures, and the file each number
      came from. Also as a <a href="therapy-note-bench.pdf">PDF</a>.</p>
 
   <footer>
-    <p>Every column's range, what it counts and what it must not be read as are printed
+    <p data-t="page.foot.columns">Every column's range, what it counts and what it must not be read as are printed
        under the table it belongs to, not down here — including the near-zero agreement
        between two therapists on <strong>Faithfulness</strong> (Krippendorff's alpha 0.18).</p>
-    <p><strong>Notes</strong> counts the notes a protocol could actually read. A model that
+    <p data-t="page.foot.notes"><strong>Notes</strong> counts the notes a protocol could actually read. A model that
        writes a good note in the wrong shape loses notes to its format, not to its
        clinical content — read the count before comparing the score.</p>
-    <p>The chip after a model name is the <strong>provider</strong> that served it. The same
+    <p data-t="page.foot.provider">The chip after a model name is the <strong>provider</strong> that served it. The same
        model id on two providers can be two different builds — a different quantisation,
        different weights, a different system prompt — so they are two rows here, never one.</p>
-    <p>Rows are only ever compared when they agree on all six of track, harness version,
+    <p data-t="page.foot.comparability">Rows are only ever compared when they agree on all six of track, harness version,
        prompt version, judge model, judge prompt version and <strong>the settings the judge
        ran at</strong> — which is why the judge is a switch above and not a column here.
        What has been withdrawn from the tables, and why, is
        <a href="methods.html#withdrawn">on the methods page</a>.</p>
-    <p><strong>What the corpora are, and what they are not.</strong> Four pages
+    <p data-t="page.foot.background"><strong>What the corpora are, and what they are not.</strong> Four pages
        carry the background these tables rest on, and until 2026-08-27 nothing on
        this site linked to any of them:
        <a href="datasets.md">the datasets</a> — where each came from, what licence
@@ -105,7 +106,7 @@ function drawControls(table) {
   active = filtersFor(table);
   document.getElementById('controls').innerHTML = active.map(f =>
     `<label><input type="checkbox" id="${f.id}"${checked[f.id] ? ' checked' : ''}> ${
-      f.label}</label>`).join('');
+      tr(f.label)}</label>`).join('');
 }
 
 function rowVisible(row) {
@@ -139,11 +140,11 @@ function coverageVaries(table) {
 
 function detailRow(row, table) {
   const parts = [];
-  if (row.metrics_note) parts.push(`<p class="note">${row.metrics_note}</p>`);
+  if (row.metrics_note) parts.push(`<p class="note">${tr(row.metrics_note)}</p>`);
 
   if (row.n_scored < row.n_generated) {
-    parts.push(`<p class="note">${row.n_generated - row.n_scored} of this system's notes are
-      still being judged.</p>`);
+    parts.push(`<p class="note">${T`${row.n_generated - row.n_scored} of this system's notes
+      are still being judged.`}</p>`);
   }
 
   // The headline's real denominator. It used to say "over the N finished so
@@ -152,14 +153,14 @@ function detailRow(row, table) {
   // that N. Judge failures cluster on the long, messy transcripts, so the
   // difference is never random.
   if (row.n_partial) {
-    parts.push(`<p class="note">The scores above rest on
+    parts.push(`<p class="note">${T`The scores above rest on
       <strong>${row.n_complete}</strong> of the ${row.n_scored} notes the judge started:
       ${row.n_partial} came back with part of the protocol unanswered and
-      ${row.n_partial === 1 ? 'is' : 'are'} left out rather than averaged over a
-      smaller denominator.</p>`);
+      ${row.n_partial === 1 ? T`is` : T`are`} left out rather than averaged over a
+      smaller denominator.`}</p>`);
   } else if (row.n_scored) {
-    parts.push(`<p class="note">The scores above rest on all
-      ${row.n_scored} notes the judge finished.</p>`);
+    parts.push(`<p class="note">${T`The scores above rest on all
+      ${row.n_scored} notes the judge finished.`}</p>`);
   }
 
   // Only drawn when there is a reason to draw: a heading saying "N unusable"
@@ -167,11 +168,12 @@ function detailRow(row, table) {
   // recorded.
   const reasons = Object.entries(row.failure_reasons || {});
   if (row.n_failed && reasons.length) {
-    parts.push(`<h3>${row.n_failed} note(s) the protocol could not read</h3><div class="grid">${
+    parts.push(`<h3>${T`${row.n_failed} note(s) the protocol could not read`}</h3><div class="grid">${
       reasons.map(([reason, count]) =>
-        `<div><span>${esc(reason)}</span><span>${count}</span></div>`).join('')}</div>`);
+        `<div><span>${esc(tr(reason))}</span><span>${count}</span></div>`).join('')}</div>`);
   } else if (row.n_failed) {
-    parts.push(`<p class="note">${row.n_failed} note(s) missing, with no recorded reason.</p>`);
+    parts.push(`<p class="note">${
+      T`${row.n_failed} note(s) missing, with no recorded reason.`}</p>`);
   }
 
   // Notes that are missing and are not the model's doing. Two kinds, and the
@@ -186,26 +188,28 @@ function detailRow(row, table) {
     const ours = kinds.filter(k => k.startsWith('truncated at max_tokens'));
     const theirs = kinds.filter(k => !k.startsWith('truncated at max_tokens'));
     const heading = ours.length && !theirs.length
-      ? `${row.n_unreached} call(s) this harness cut off`
+      ? T`${row.n_unreached} call(s) this harness cut off`
       : ours.length
-        ? `${row.n_unreached} call(s) unanswered or cut off`
-        : `${row.n_unreached} call(s) the endpoint never answered`;
+        ? T`${row.n_unreached} call(s) unanswered or cut off`
+        : T`${row.n_unreached} call(s) the endpoint never answered`;
     parts.push(`<h3>${heading}</h3>
-      <p class="note">Not the model's doing, and not counted against it.${
-        theirs.length ? ' A rate limit, a backend error or a timeout; re-running the'
-                      + ' generation fills those in.' : ''}${
-        ours.length ? ' Where the reason is a token ceiling it is ours: the call had'
-                    + ' already had its one escalation, and past that we stopped it.' : ''}</p>
+      <p class="note">${T`Not the model's doing, and not counted against it.`}${
+        theirs.length ? ' ' + T`A rate limit, a backend error or a timeout; re-running the
+                        generation fills those in.` : ''}${
+        ours.length ? ' ' + T`Where the reason is a token ceiling it is ours: the call had
+                      already had its one escalation, and past that we stopped it.` : ''}</p>
       <div class="grid">${Object.entries(row.unreached_reasons).map(([reason, count]) =>
-        `<div><span>${esc(reason)}</span><span>${count}</span></div>`).join('')}</div>`);
+        `<div><span>${esc(tr(reason))}</span><span>${count}</span></div>`).join('')}</div>`);
   }
 
   // How it was asked, beside what it scored. A row that does not say this
   // cannot be reproduced, which is the same rule this benchmark already applies
   // to prompt_version and judge_model.
   parts.push(row.settings
-    ? `<p class="note settings">Generated with <strong>${esc(row.settings)}</strong>.</p>`
-    : '<p class="note settings">Generation settings were not recorded for this row.</p>');
+    ? `<p class="note settings">${
+        T`Generated with <strong>${esc(tr(row.settings))}</strong>.`}</p>`
+    : `<p class="note settings">${
+        T`Generation settings were not recorded for this row.`}</p>`);
 
   // Down here rather than in a column, on purpose. The figure is real, but it
   // is reported by whoever serves the model and the serving stacks do not
@@ -216,10 +220,10 @@ function detailRow(row, table) {
   // numbers side by side in a sortable column would invite a comparison that
   // is partly about bookkeeping.
   if (row.thinking_tokens) {
-    parts.push(`<p class="note">Spent about <strong>${row.thinking_tokens.toLocaleString('en')}
+    parts.push(`<p class="note">${T`Spent about <strong>${row.thinking_tokens.toLocaleString(LANG)}
        tokens reasoning</strong> before writing, averaged over its notes — as reported by the
        provider. <em>Not comparable across providers:</em> what counts as a reasoning token
-       depends on the serving stack, not only on the model.</p>`);
+       depends on the serving stack, not only on the model.`}</p>`);
   }
 
   // `section_order`, not the mapping's key order: the payload is serialised
@@ -236,12 +240,13 @@ function detailRow(row, table) {
     sections.some(([, values]) => values[c.key] !== undefined && values[c.key] !== null));
   if (sections.length && sectioned.length) {
     const head = sectioned.map(c =>
-      `<th title="${esc(c.definition)}">${esc(c.label)}<span class="scale">${esc(c.scale)}</span></th>`).join('');
+      `<th title="${esc(tr(c.definition))}">${esc(tr(c.label))}<span class="scale">${esc(c.scale)}</span></th>`).join('');
     const body = sections.map(([name, values]) => {
       const cells = sectioned.map(c => `<td>${fmt(values[c.key], c.digits)}</td>`).join('');
-      return `<tr><td>${name}</td>${cells}</tr>`;
+      return `<tr><td>${esc(tr(name))}</td>${cells}</tr>`;
     }).join('');
-    parts.push(`<h3>By section</h3><div class="scroll"><table><thead><tr><th>Section</th>${head}</tr></thead><tbody>${body}</tbody></table></div>`);
+    parts.push(`<h3>${T`By section`}</h3><div class="scroll"><table><thead><tr><th>${
+      T`Section`}</th>${head}</tr></thead><tbody>${body}</tbody></table></div>`);
     // These four do not average to the figure in the row above, and a reader who
     // adds them up deserves to know why rather than to find out. The row's
     // figure is the mean over notes of each note's own section-mean; a section
@@ -252,12 +257,12 @@ function detailRow(row, table) {
     // to five decimal places, and all 18 rows with partial notes differ -- up to
     // 0.029 on the therapist's row, which is visible at the precision printed.
     if (row.n_partial) {
-      parts.push(`<p class="note">These sections will not average to the figure in the
+      parts.push(`<p class="note">${T`These sections will not average to the figure in the
         row above, and the gap is the ${row.n_partial} part-answered
-        ${row.n_partial === 1 ? 'note' : 'notes'}: the row's figure averages each note's
+        ${row.n_partial === 1 ? T`note` : T`notes`}: the row's figure averages each note's
         own sections first, while a section here averages the notes that have it. A note
         missing one section counts in one and not the other. Rows with no part-answered
-        notes agree exactly.</p>`);
+        notes agree exactly.`}</p>`);
     }
   }
 
@@ -266,18 +271,22 @@ function detailRow(row, table) {
     const items = detail
       .map(([name, value]) => `<div><span>${name}</span><span>${fmt(value, 2)}</span></div>`)
       .join('');
-    parts.push(`<h3>${table.track === 'icare' ? 'TRACE dimensions' : 'Rubric criteria'}</h3><div class="grid">${items}</div>`);
+    parts.push(`<h3>${table.track === 'icare' ? T`TRACE dimensions` : T`Rubric criteria`
+      }</h3><div class="grid">${items}</div>`);
   }
 
-  if (row.source) parts.push(`<p class="note">Source: ${row.source}</p>`);
+  if (row.source) parts.push(`<p class="note">${T`Source: ${tr(row.source)}`}</p>`);
   // Said here when it is not a column, so the fact does not vanish with it.
   if (!coverageVaries(table) && row.n_attempted) {
-    parts.push(`<p class="note">Wrote <strong>${row.n_generated}</strong> of the
+    parts.push(`<p class="note">${T`Wrote <strong>${row.n_generated}</strong> of the
       ${row.n_attempted} notes the protocol asked for — the same as every other row in
-      this table, which is why there is no Notes column.</p>`);
+      this table, which is why there is no Notes column.`}</p>`);
   }
 
-  if (!parts.length) parts.push('<p class="note">Nothing to break down yet — this row has no scores.</p>');
+  if (!parts.length) {
+    parts.push(`<p class="note">${
+      T`Nothing to break down yet — this row has no scores.`}</p>`);
+  }
 
   const span =
     table.columns.length + 1 + (coverageVaries(table) ? 1 : 0) +
@@ -297,14 +306,15 @@ function renderQueue(table) {
       ? `<span class="short">${row.n_generated}/${row.n_attempted}</span>`
       : `${row.n_generated}/${row.n_attempted}`;
     const chip = row.provider ? `<span class="chip">${row.provider}</span>` : '';
-    return `<li><b>${row.label}</b>${chip} <span>notes written ${short}</span></li>`;
+    return `<li><b>${row.label}</b>${chip} <span>${
+      T`notes written ${short}`}</span></li>`;
   }).join('');
 
   return `<section class="box pending">
-      <h2>${table.title} <span class="subtitle">· waiting for the judge</span></h2>
-      <p class="blurb">${table.rows.length} system(s) have written their notes; nothing has been
-         scored yet, so there is nothing to rank. The count is what has been measured — how many
-         notes each one produced that the protocol could read.</p>
+      <h2>${tr(table.title)} <span class="subtitle">· ${T`waiting for the judge`}</span></h2>
+      <p class="blurb">${T`${table.rows.length} system(s) have written their notes; nothing has
+         been scored yet, so there is nothing to rank. The count is what has been measured —
+         how many notes each one produced that the protocol could read.`}</p>
       <ol class="sections queue">${items}</ol>
     </section>`;
 }
@@ -319,19 +329,19 @@ function referenceNote(table) {
   if (!human && !model) return '';
   const parts = [];
   if (human) {
-    parts.push(`the row marked <span class="chip">therapist</span> is a
+    parts.push(T`the row marked <span class="chip">${tr('therapist')}</span> is a
       <strong>note a human clinician wrote</strong>, scored by the identical protocol`);
   }
   if (model) {
-    parts.push(`rows marked <span class="chip">reference model</span> are the
+    parts.push(T`rows marked <span class="chip">${tr('reference model')}</span> are the
       <strong>source paper&rsquo;s own systems</strong>, scored here so this table can be
       read against theirs`);
   }
-  return `<p class="note">Not every row is a model under test: ${parts.join(', and ')}.
+  return `<p class="note">${T`Not every row is a model under test: ${parts.join(T`, and `)}.
     They sit in the ranking because they were measured the same way, and a human
     note placing low says something about the measure rather than about the
     clinician &mdash; the rubric counts what a note contains and cannot see what a
-    clinician chose to leave out.</p>`;
+    clinician chose to leave out.`}</p>`;
 }
 
 function renderTable(table, index) {
@@ -345,55 +355,58 @@ function renderTable(table, index) {
   const settings = Object.entries(versions.judge_settings || {})
     .filter(([k]) => k !== 'model')
     .map(([k, v]) => `${k} ${v}`).join(', ');
+  const prompts = (table.judge_prompt_versions || [versions.judge_prompt_version])
+    .map(v => `<code>${v}</code>`).join(T` and `);
   const judge = versions.judge_model
-    ? `judge <code>${versions.judge_model}</code>${settings ? ` (${esc(settings)})` : ''}` +
+    ? T`judge <code>${versions.judge_model}</code>${
+        settings ? ` (${esc(tr(settings))})` : ''}` +
       // Two instruments in one table were asked two different sets of
       // questions. Naming one of them would say the eight PDSQI columns
       // came from the rubric's prompt.
-      ` · judge prompt${(table.judge_prompt_versions || []).length > 1 ? 's' : ''} ` +
-      (table.judge_prompt_versions || [versions.judge_prompt_version])
-        .map(v => `<code>${v}</code>`).join(' and ') +
+      ' · ' + ((table.judge_prompt_versions || []).length > 1
+        ? T`judge prompts ${prompts}` : T`judge prompt ${prompts}`) +
       // A judge tried and not re-run keeps its table -- a different judge is a
       // different table -- but its columns are defined by an older harness and
       // may not mean what the newer tables' columns mean.
       (table.stale_harness
-        ? ` · <strong>older harness</strong>, columns may differ from the tables above`
+        ? ' · ' + T`<strong>older harness</strong>, columns may differ from the tables above`
         : '')
-    : 'not yet judged';
+    : T`not yet judged`;
 
   // The scale rides on the heading, not in a footnote. Two of these columns are
   // 0-1 fractions and one is a 1-5 rating; a reader comparing 0.65 with 4.98
   // has no way to know that unless the header says so at the point of use.
   const head = table.columns.map(c =>
-    `<th data-sort="${c.key}" title="${esc(c.definition)}">` +
+    `<th data-sort="${c.key}" title="${esc(tr(c.definition))}">` +
     // Which instrument asked for this column. Eleven columns from two
     // instruments read as eleven columns from one unless the header says
     // otherwise -- and then a reader compares a coverage count with a 1-5
     // quality rating as though they were two grades from the same exam.
     (c.instrument ? `<span class="instrument">${esc(c.instrument)}</span>` : '') +
-    `${esc(c.label)}` +
+    `${esc(tr(c.label))}` +
     `<span class="scale">${esc(c.scale)}</span>` +
-    (c.ranking ? '<span class="ranks" title="the table is ordered by this column">ranks</span>' : '') +
+    (c.ranking ? `<span class="ranks" title="${
+      T`the table is ordered by this column`}">${T`ranks`}</span>` : '') +
     `</th>`).join('');
   const legend = table.columns.map(c =>
-    `<div class="measure"><dt>${esc(c.label)} <span class="scale">${esc(c.scale)}</span>` +
-    (c.ranking ? '<span class="ranks">ranks this table</span>' : '') +
-    `</dt><dd>${esc(c.definition)}` +
-    (c.caveat ? ` <em>${esc(c.caveat)}</em>` : '') + `</dd></div>`).join('');
+    `<div class="measure"><dt>${esc(tr(c.label))} <span class="scale">${esc(c.scale)}</span>` +
+    (c.ranking ? `<span class="ranks">${T`ranks this table`}</span>` : '') +
+    `</dt><dd>${esc(tr(c.definition))}` +
+    (c.caveat ? ` <em>${esc(tr(c.caveat))}</em>` : '') + `</dd></div>`).join('');
   // Said under the table either way. A table with no grouping measured must not
   // read as a strict ranking just because nobody has checked.
   const groupNote = table.groups
-    ? `<p class="note"><strong>Systems that share a rank cannot be told apart by this
+    ? `<p class="note">${T`<strong>Systems that share a rank cannot be told apart by this
          evidence.</strong> ${table.groups.of.filter(g => g.length > 1).length} of
          ${table.groups.of.length} ranks are shared, and the top one has
          ${table.groups.of[0].length} system(s) in it. Measured on
-         <strong>${esc(table.groups.measure)}</strong> over the
+         <strong>${esc(tr(table.groups.measure))}</strong> over the
          ${table.groups.sessions} conversations every system here was scored on, by
          resampling those conversations — not by whether two intervals overlap, which
-         is a weaker test.</p>`
-    : `<p class="note"><strong>Which of these can be told apart has not been measured
+         is a weaker test.`}</p>`
+    : `<p class="note">${T`<strong>Which of these can be told apart has not been measured
          for this table.</strong> Read the order as roughly who is near the top and
-         near the bottom, not as a ranking: two adjacent rows are not a result.</p>`;
+         near the bottom, not as a ranking: two adjacent rows are not a result.`}</p>`;
 
   // Why *this* column orders the table, and not one of the other ten. Asked by
   // the first reader who looked: the page said which column ranks and never
@@ -402,12 +415,12 @@ function renderTable(table, index) {
   // therapists agree with each other, while on the 1-5 scales those two reach
   // 0.13 to 0.19 and there is nothing to anchor to.
   const rankingNote = table.ranking_measure
-    ? `Ordered by <strong>${esc(colLabel(table, table.ranking_measure))}</strong>, because it is the
+    ? T`Ordered by <strong>${esc(colLabel(table, table.ranking_measure))}</strong>, because it is the
        only column checked against people: on it the judge and a trained therapist agree at
        <strong>0.60</strong> where two therapists reach <strong>0.50</strong>. On the 1&#8211;5 scales two
        therapists agree at 0.13&#8211;0.19, so those carry too little signal to rank on.
        Every other column is context and is not a ranking.`
-    : 'This track is deliberately <strong>not ranked</strong>: its columns measure different things and the source paper found they disagree. That disagreement is the result.';
+    : T`This track is deliberately <strong>not ranked</strong>: its columns measure different things and the source paper found they disagree. That disagreement is the result.`;
 
   // Which systems this evidence cannot tell apart. A leaderboard prints an
   // order whether or not one exists; this gives every row the rank it actually
@@ -430,26 +443,25 @@ function renderTable(table, index) {
       ? `<span class="short">${row.n_generated}/${row.n_attempted}</span>`
       : `${row.n_generated}/${row.n_attempted}`;
     const judging = row.n_scored < row.n_generated
-      ? `<span class="pending-mark">${row.n_scored} judged</span>`
+      ? `<span class="pending-mark">${T`${row.n_scored} judged`}</span>`
       : '';
     const coverage = `${written}${judging ? '<br>' + judging : ''}`;
     // The provider is part of a model's identity: the same id on two endpoints
     // can be two different builds, so it is shown, never merged away.
     const label = TYPE_LABEL[row.system_type] || row.provider;
-    const chip = label ? `<span class="chip">${label}</span>` : '';
+    const chip = label ? `<span class="chip">${esc(tr(label))}</span>` : '';
     // A row produced under conditions the others did not share is marked where
     // it sits, never dropped and never normalised away. Today that is the GPT
     // family, whose provider refuses any temperature but 1.
     const oddOneOut = row.settings_differ
-      ? ' <span class="differs" title="' + esc(row.settings) + '">≠ settings</span>'
+      ? ' <span class="differs" title="' + esc(tr(row.settings)) + `">≠ ${T`settings`}</span>`
       : '';
     // A cell where the judge is grading its own vendor's model. Marked in
     // place, never dropped: a missing row would be the worse distortion, and
     // the self-preference panel below measures how much to discount it by.
     const ownFamily = row.judges_own_family
-      ? ` <span class="differs" title="scored by a judge from the same vendor` +
-        `, whose self-preference is measured in the panel below">judge's own ` +
-        `${esc(row.judges_own_family)}</span>`
+      ? ` <span class="differs" title="${T`scored by a judge from the same vendor, whose self-preference is measured in the panel below`}">${
+          T`judge's own ${esc(row.judges_own_family)}`}</span>`
       : '';
     // How long this model's notes are. A property of the notes, next to the
     // scores they earned, because completeness counts coverage: a reader who
@@ -458,7 +470,8 @@ function renderTable(table, index) {
       ? `<td>${row.note_words ?? '<span class="dash">—</span>'}</td>`
       : '';
     const effortCell = table.has_effort
-      ? `<td>${row.effort ? esc(row.effort) : '<span class="dash" title="this provider has no effort control">—</span>'}</td>`
+      ? `<td>${row.effort ? esc(tr(row.effort)) : `<span class="dash" title="${
+          T`this provider has no effort control`}">—</span>`}</td>`
       : '';
     
     // The rank, not the row number. Systems the evidence cannot separate share
@@ -476,30 +489,30 @@ function renderTable(table, index) {
   }).join('');
 
   return `<section class="box${table.scored ? '' : ' pending'}">
-      <h2>${table.title}</h2>
-      <p class="blurb">${code(table.blurb)}</p>
+      <h2>${tr(table.title)}</h2>
+      <p class="blurb">${code(tr(table.blurb))}</p>
       ${designBlock(table)}
-      <p class="versions">harness <code>${versions.harness_version}</code> ·
-         prompt <code>${versions.prompt_version}</code> · ${judge}</p>
+      <p class="versions">${T`harness <code>${versions.harness_version}</code>`} ·
+         ${T`prompt <code>${versions.prompt_version}</code>`} · ${judge}</p>
       <div class="scroll"><table data-table="${index}">
         <thead><tr>${table.groups
-          ? `<th title="Band on ${esc(colLabel(table, table.ranking_measure))}: rows this evidence cannot tell apart share a band. It does not follow the sort -- sorting by another column reorders the rows, not what the bootstrap could separate.">Band</th>`
-          : ''}<th data-sort="label">System</th>${
-          table.has_effort ? '<th data-sort="effort" title="Reasoning effort the note was written at. Blank where the provider has no such control.">Effort</th>' : '' }${
+          ? `<th title="${T`Band on ${esc(colLabel(table, table.ranking_measure))}: rows this evidence cannot tell apart share a band. It does not follow the sort -- sorting by another column reorders the rows, not what the bootstrap could separate.`}">${T`Band`}</th>`
+          : ''}<th data-sort="label">${T`System`}</th>${
+          table.has_effort ? `<th data-sort="effort" title="${T`Reasoning effort the note was written at. Blank where the provider has no such control.`}">${T`Effort`}</th>` : '' }${
           ''}${head}${table.has_words
-            ? '<th data-sort="note_words" title="Median words in this model’s notes. Completeness counts coverage, so a longer note covers more.">Words</th>'
-            : ''}${showCoverage ? '<th data-sort="coverage">Notes</th>' : ''}</tr></thead>
+            ? `<th data-sort="note_words" title="${T`Median words in this model’s notes. Completeness counts coverage, so a longer note covers more.`}">${T`Words`}</th>`
+            : ''}${showCoverage ? `<th data-sort="coverage">${T`Notes`}</th>` : ''}</tr></thead>
         <tbody>${body}</tbody>
       </table></div>
       <p class="ranking-note">${rankingNote}</p>
       ${referenceNote(table)}
       ${groupNote}
-      ${table.has_thinking ? `<p class="note">Each row also records how many tokens its
+      ${table.has_thinking ? `<p class="note">${T`Each row also records how many tokens its
          model spent <strong>reasoning</strong> before writing — open a row to see it. It is
          not a column because it is not comparable between providers: vLLM, which serves the
          e-INFRA models, reports zero for models whose reasoning is text-delimited even when
          they reason, and OpenAI counts differently again. A gap there can be bookkeeping
-         rather than behaviour.</p>` : ''}
+         rather than behaviour.`}</p>` : ''}
       <dl class="measures">${legend}</dl>
     </section>`;
 }
@@ -554,17 +567,17 @@ function designBlock(table) {
   const d = table.design || {};
   if (!d.scored_against) return '';
   const role = d.human_role_short === 'competitor'
-    ? `<span class="role role-competitor">the human note competes</span>`
-    : `<span class="role role-key">the human note is the answer key</span>`;
+    ? `<span class="role role-competitor">${T`the human note competes`}</span>`
+    : `<span class="role role-key">${T`the human note is the answer key`}</span>`;
   const cal = d.calibrated
-    ? `<span class="role role-competitor">judge checked against people</span>`
-    : `<span class="role role-key">judge cannot be checked</span>`;
+    ? `<span class="role role-competitor">${T`judge checked against people`}</span>`
+    : `<span class="role role-key">${T`judge cannot be checked`}</span>`;
   return `<div class="design">
       <div class="design-marks">${role}${cal}</div>
       <dl>
-        <div><dt>Scored against</dt><dd>${esc(d.scored_against)}</dd></div>
-        <div><dt>Where the human note sits</dt><dd>${esc(d.human_role)}</dd></div>
-        <div><dt>Can the judge be checked?</dt><dd>${esc(d.calibration)}</dd></div>
+        <div><dt>${T`Scored against`}</dt><dd>${esc(tr(d.scored_against))}</dd></div>
+        <div><dt>${T`Where the human note sits`}</dt><dd>${esc(tr(d.human_role))}</dd></div>
+        <div><dt>${T`Can the judge be checked?`}</dt><dd>${esc(tr(d.calibration))}</dd></div>
       </dl>
     </div>`;
 }
@@ -576,11 +589,15 @@ function designBlock(table) {
 
 // Where every number on this page came from. It was in the payload and drawn
 // nowhere, which for a provenance string is close to the opposite of the point.
-document.getElementById('provenance').innerHTML = DATA.generated_from
-  ? `Every figure on this page is generated from <code>results/${DATA.generated_from}</code>,
-     which is append-only: a re-run adds rows beside the old ones rather than replacing
-     them, and what is drawn here is the newest of each.`
-  : '';
+function drawProvenance() {
+  document.getElementById('provenance').innerHTML = DATA.generated_from
+    ? T`Every figure on this page is generated from
+       <code>results/${DATA.generated_from}</code>, which is append-only: a re-run adds rows
+       beside the old ones rather than replacing them, and what is drawn here is the newest
+       of each.`
+    : '';
+}
+drawProvenance();
 
 
 // --- which table is on screen -----------------------------------------------
@@ -616,26 +633,27 @@ function renderSwitch() {
   if (!here || (tracks.length < 2 && here.judges.length < 2)) { host.innerHTML = ''; return; }
 
   const trackButtons = tracks.length < 2 ? '' : `
-    <div class="pick" role="group" aria-label="Track">
-      <span class="pick-label">Track</span>
+    <div class="pick" role="group" aria-label="${T`Track`}">
+      <span class="pick-label">${T`Track`}</span>
       ${tracks.map(t => {
         // Keep the judge across the switch where that judge scored this track
         // too, so changing track does not silently change the referee.
         const keep = t.judges.find(j => j.judge_model === currentJudge());
         const target = keep ? keep.table : t.default;
         return `<button type="button" data-target="${target}"
-                  aria-pressed="${t === here}">${esc(t.label)}</button>`;
+                  aria-pressed="${t === here}">${esc(tr(t.label))}</button>`;
       }).join('')}
     </div>`;
 
   const judgeButtons = here.judges.length < 2 ? '' : `
-    <div class="pick" role="group" aria-label="Judge">
-      <span class="pick-label">Judge</span>
+    <div class="pick" role="group" aria-label="${T`Judge`}">
+      <span class="pick-label">${T`Judge`}</span>
       ${here.judges.map(j => `<button type="button" data-target="${j.table}"
           aria-pressed="${j.table === current}"
-          ${j.settings_differ ? `title="${esc(j.settings_label)}"` : ''}>${esc(j.label)}${
-            j.settings_differ ? `<span class="scale">${esc(j.settings_label)}</span>` : ''
-          }${j.stale_harness ? '<span class="scale">older harness</span>' : ''}</button>`).join('')}
+          ${j.settings_differ ? `title="${esc(tr(j.settings_label))}"` : ''}>${esc(j.label)}${
+            j.settings_differ ? `<span class="scale">${esc(tr(j.settings_label))}</span>` : ''
+          }${j.stale_harness ? `<span class="scale">${T`older harness`}</span>` : ''
+          }</button>`).join('')}
     </div>`;
 
   host.innerHTML = trackButtons + judgeButtons;
@@ -668,19 +686,24 @@ function agreementNote(track) {
   const here = far && (found.judge_a === showing ? far.rank_a : far.rank_b);
   const there = far && (found.judge_a === showing ? far.rank_b : far.rank_a);
 
-  return `<p class="note"><strong>The two judges agree on the shape of this ranking and not
+  const furthest = far
+    ? T` — <code>${esc(far.system)}</code> furthest, ${here}${ordinal(here)} in this table
+             and ${there}${ordinal(there)} in that one`
+    : '';
+  return `<p class="note">${T`<strong>The two judges agree on the shape of this ranking and not
     on its order.</strong> On ${esc(colLabel(DATA.tables[INDEX_OF[current]], ranking.measure))},
     ${ranking.moved} of ${ranking.n_systems} systems land somewhere else under
-    <code>${esc(other)}</code>${
-      far ? ` — <code>${esc(far.system)}</code> furthest, ${here}${ordinal(here)} in this table
-             and ${there}${ordinal(there)} in that one` : ''
-    }. Near the top and near the bottom are claims this table supports; ninth against tenth
-    is not.</p>`;
+    <code>${esc(other)}</code>${furthest}. Near the top and near the bottom are claims this table supports; ninth against tenth
+    is not.`}</p>`;
 }
 
 // 1st, 2nd, 3rd, 4th. Only ever applied to a rank, so the teens are the whole
-// of the special case.
+// of the special case. Czech writes every ordinal the same way -- `4.` -- so the
+// suffix is a dictionary entry like any other sentence, and the English rule
+// runs only for English.
 function ordinal(n) {
+  const suffix = tr('{ordinal-suffix}');
+  if (suffix !== '{ordinal-suffix}') return suffix;
   if (n % 100 >= 11 && n % 100 <= 13) return 'th';
   return ['th', 'st', 'nd', 'rd'][n % 10] || 'th';
 }
@@ -700,9 +723,13 @@ function show(id) {
   }
 }
 
-document.getElementById('tables').innerHTML = DATA.tables.length
-  ? '<div id="switch" class="switch"></div><div id="table-host"></div>'
-  : '<div class="box pending"><h2>No runs yet</h2><p class="blurb">The first run will populate this page.</p></div>';
+function drawFrame() {
+  document.getElementById('tables').innerHTML = DATA.tables.length
+    ? '<div id="switch" class="switch"></div><div id="table-host"></div>'
+    : `<div class="box pending"><h2>${T`No runs yet`}</h2><p class="blurb">${
+        T`The first run will populate this page.`}</p></div>`;
+}
+drawFrame();
 
 if (DATA.tables.length) {
   // Delegated, not bound at load. The listeners used to be attached once by
@@ -734,6 +761,18 @@ if (DATA.tables.length) {
   window.addEventListener('hashchange', () => show(wanted()));
   show(current);
 }
+
+// Last, so the first draw above already happened in the reader's language and
+// this only has to redraw what a *change* of language moves: the frame, the
+// table on screen and the provenance line under it.
+installLanguageSwitch(() => {
+  drawProvenance();
+  // `show` redraws the table, the switch and the controls inside a frame that
+  // stays put. Redrawing the frame itself would replace the two nodes the click
+  // handlers above are bound to, and the page would go quiet on the second
+  // switch -- which is the bug those handlers were made delegated to avoid.
+  if (DATA.tables.length) show(current); else drawFrame();
+});
 </script>
 </body>
 </html>
