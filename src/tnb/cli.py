@@ -382,6 +382,23 @@ def cmd_report(args: argparse.Namespace) -> int:
     return 0
 
 
+def _attempted_systems(task_name: str) -> set[str]:
+    """Every model the generator actually asked for this task.
+
+    Read from the answer cache rather than from `models.yaml`: the question is
+    who was asked on the run that produced these notes, not who would be asked
+    today. A model that answered nothing still has a directory.
+    """
+    root = generation.CACHE_DIR
+    found: set[str] = set()
+    if not root.exists():
+        return found
+    for path in root.glob(f"*/{task_name}/*/*"):
+        if path.is_dir():
+            found.add(path.name)
+    return found
+
+
 def _generated_per_system(candidates) -> dict[tuple[str, str], int]:
     """How many usable notes each system wrote.
 
@@ -733,7 +750,10 @@ def cmd_score_czech(args: argparse.Namespace) -> int:
     config = judge.config_from_env(**overrides)
 
     wanted = ["real", "translated"] if args.corpus == "both" else [args.corpus]
-    plan: list[tuple[str, str, list]] = []
+    # The corpus size travels with the plan: it is the denominator every
+    # model shares, and reading it off the candidates instead makes a model
+    # that failed half its sessions look complete.
+    plan: list[tuple[str, str, list, int]] = []
     for corpus in wanted:
         track, task_name = CZECH_CORPORA[corpus]
         loader = czech_task.load_real if corpus == "real" else czech_task.load_translated
@@ -746,17 +766,17 @@ def cmd_score_czech(args: argparse.Namespace) -> int:
         if args.models:
             names = {name.strip() for name in args.models.split(",") if name.strip()}
             candidates = [c for c in candidates if c.system_id in names]
-        plan.append((track, corpus, candidates))
+        plan.append((track, corpus, candidates, len(sessions)))
 
-    if not any(candidates for _, _, candidates in plan):
+    if not any(candidates for _, _, candidates, _n in plan):
         raise RuntimeError(
             "Nothing to score. Run 'tnb generate --tasks czech-real,czech-translated' first."
         )
 
-    total = sum(len(c) for _, _, c in plan)
+    total = sum(len(c) for _, _, c, _n in plan)
     questions = sum(
         len(czech.build_tasks(czech_task.render_note(candidate.note)))
-        for _, _, candidates in plan
+        for _, _, candidates, _n in plan
         for candidate in candidates
     )
     print(
@@ -764,7 +784,7 @@ def cmd_score_czech(args: argparse.Namespace) -> int:
         f"judge {config.model}, thinking budget {config.thinking_budget}, "
         f"ceiling ${args.max_judge_usd:.2f}"
     )
-    for track, _corpus, candidates in plan:
+    for track, _corpus, candidates, _sessions in plan:
         systems = sorted({c.system_id for c in candidates})
         print(f"  {track:18} {len(candidates):4} note(s), {len(systems)} system(s)")
 
@@ -776,7 +796,7 @@ def cmd_score_czech(args: argparse.Namespace) -> int:
     spend = judge.Spend(limit_usd=args.max_judge_usd)
     written = 0
 
-    for track, _corpus, candidates in plan:
+    for track, _corpus, candidates, sessions in plan:
         if not candidates:
             continue
         coverage = _generated_per_system(candidates)
@@ -812,7 +832,7 @@ def cmd_score_czech(args: argparse.Namespace) -> int:
             judge_model=config.model,
             judge_settings=config.fingerprint(),
             n_generated=coverage,
-            n_attempted=coverage,
+            n_attempted=sessions,
             run_id=args.run_id or "",
         )
         if args.no_write:
@@ -858,7 +878,7 @@ def cmd_score_czech_pdsqi(args: argparse.Namespace) -> int:
     config = judge.config_from_env(**overrides)
 
     wanted = ["real", "translated"] if args.corpus == "both" else [args.corpus]
-    plan: list[tuple[str, str, list]] = []
+    plan: list[tuple[str, str, list, int]] = []
     for corpus in wanted:
         _, task_name = CZECH_CORPORA[corpus]
         loader = czech_task.load_real if corpus == "real" else czech_task.load_translated
@@ -871,24 +891,24 @@ def cmd_score_czech_pdsqi(args: argparse.Namespace) -> int:
         if args.models:
             names = {name.strip() for name in args.models.split(",") if name.strip()}
             candidates = [c for c in candidates if c.system_id in names]
-        plan.append((czech_pdsqi.BY_TASK[task_name], task_name, candidates))
+        plan.append((czech_pdsqi.BY_TASK[task_name], task_name, candidates, len(sessions)))
 
-    if not any(candidates for _, _, candidates in plan):
+    if not any(candidates for _, _, candidates, _n in plan):
         raise RuntimeError(
             "Nothing to score. Run 'tnb generate --tasks czech-real,czech-translated' first."
         )
 
-    total = sum(len(c) for _, _, c in plan)
+    total = sum(len(c) for _, _, c, _n in plan)
     questions = sum(
         len(candidates) * len(czech_pdsqi.attribute_keys(task_name))
-        for _, task_name, candidates in plan
+        for _, task_name, candidates, _n in plan
     )
     print(
         f"{total} note(s) over {len(plan)} corpus(es), about {questions} judge questions.\n"
         f"judge {config.model}, thinking budget {config.thinking_budget}, "
         f"ceiling ${args.max_judge_usd:.2f}"
     )
-    for track, task_name, candidates in plan:
+    for track, task_name, candidates, _sessions in plan:
         systems = sorted({c.system_id for c in candidates})
         asked = len(czech_pdsqi.attribute_keys(task_name))
         transcript = (
@@ -907,7 +927,7 @@ def cmd_score_czech_pdsqi(args: argparse.Namespace) -> int:
     spend = judge.Spend(limit_usd=args.max_judge_usd)
     written = 0
 
-    for track, task_name, candidates in plan:
+    for track, task_name, candidates, sessions in plan:
         if not candidates:
             continue
         with_transcript = czech_pdsqi.transcripts_may_leave(task_name)
@@ -948,7 +968,7 @@ def cmd_score_czech_pdsqi(args: argparse.Namespace) -> int:
             judge_model=config.model,
             judge_settings=config.fingerprint(),
             n_generated=coverage,
-            n_attempted=coverage,
+            n_attempted=sessions,
             run_id=args.run_id or "",
             track=track,
             prompt_version=czech_task.PROMPT_VERSION,
@@ -1002,7 +1022,7 @@ def cmd_score_deepsy(args: argparse.Namespace) -> int:
     config = judge.config_from_env(**overrides)
 
     wanted = ["real", "translated"] if args.corpus == "both" else [args.corpus]
-    plan: list[tuple[str, list]] = []
+    plan: list[tuple[str, list, int, str]] = []
     for corpus in wanted:
         track, task_name = DEEPSY_CORPORA[corpus]
         loader = czech_task.load_real if corpus == "real" else czech_task.load_translated
@@ -1015,17 +1035,17 @@ def cmd_score_deepsy(args: argparse.Namespace) -> int:
         if args.models:
             names = {name.strip() for name in args.models.split(",") if name.strip()}
             candidates = [c for c in candidates if c.system_id in names]
-        plan.append((track, candidates))
+        plan.append((track, candidates, len(sessions), task_name))
 
-    if not any(candidates for _, candidates in plan):
+    if not any(candidates for _, candidates, _n, _t in plan):
         raise RuntimeError(
             "Nothing to score. Run 'tnb generate --tasks deepsy-real,deepsy-translated' first."
         )
 
-    total = sum(len(c) for _, c in plan)
+    total = sum(len(c) for _, c, _n, _t in plan)
     questions = sum(
         len(czech.build_tasks(deepsy_task.render_note(candidate.note)))
-        for _, candidates in plan
+        for _, candidates, _sessions, _task in plan
         for candidate in candidates
     )
     print(
@@ -1035,9 +1055,32 @@ def cmd_score_deepsy(args: argparse.Namespace) -> int:
         f"judge {config.model}, thinking budget {config.thinking_budget}, "
         f"ceiling ${args.max_judge_usd:.2f}"
     )
-    for track, candidates in plan:
+    for track, candidates, sessions, task_name in plan:
         systems = sorted({c.system_id for c in candidates})
         print(f"  {track:20} {len(candidates):4} note(s), {len(systems)} system(s)")
+        # A model whose every note failed to assemble contributes no candidate,
+        # so it gets no row and vanishes from the table -- which reads as "not
+        # run" when it means "ran and produced nothing". It cannot be given a
+        # row here (there is no score to put in one), so it is named, loudly,
+        # where the person starting the run will see it.
+        attempted = _attempted_systems(task_name)
+        silent = sorted(attempted - set(systems))
+        if silent:
+            print(
+                f"  {'':20} NO COMPLETE NOTE, so no row and no trace in the "
+                f"table: {', '.join(silent)}"
+            )
+        thin = sorted(
+            system
+            for system in systems
+            if sum(1 for c in candidates if c.system_id == system) < sessions
+        )
+        if thin:
+            counts = ", ".join(
+                f"{system} ({sum(1 for c in candidates if c.system_id == system)}/{sessions})"
+                for system in thin
+            )
+            print(f"  {'':20} fewer notes than the corpus: {counts}")
 
     if args.dry_run:
         print("Dry run: the judge was not called.")
@@ -1047,7 +1090,7 @@ def cmd_score_deepsy(args: argparse.Namespace) -> int:
     spend = judge.Spend(limit_usd=args.max_judge_usd)
     written = 0
 
-    for track, candidates in plan:
+    for track, candidates, sessions, _task in plan:
         if not candidates:
             continue
         coverage = _generated_per_system(candidates)
@@ -1099,7 +1142,7 @@ def cmd_score_deepsy(args: argparse.Namespace) -> int:
             judge_model=config.model,
             judge_settings=config.fingerprint(),
             n_generated=coverage,
-            n_attempted=coverage,
+            n_attempted=sessions,
             run_id=args.run_id or "",
             prompt_version=deepsy_task.PROMPT_VERSION,
             render=deepsy_task.render_note,
