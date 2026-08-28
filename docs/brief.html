@@ -129,28 +129,39 @@
      candidate judge answers the same questions about the same notes before it is
      allowed near the leaderboard, and the agreement is published whatever it says.</p>
   <table>
-    <thead><tr><th>Measure</th><th>Form</th><th class="num">Judge vs therapist</th>
-      <th class="num">Therapist vs therapist</th></tr></thead>
-    <tbody><tr><td>completeness</td><td>checklist</td><td class="num">0.60</td><td class="num">0.50</td></tr><tr><td>completeness</td><td>1&ndash;5 rating</td><td class="num">0.11</td><td class="num">0.13</td></tr><tr><td>conciseness</td><td>1&ndash;5 rating</td><td class="num">0.03</td><td class="num">0.19</td></tr><tr><td>faithfulness</td><td>1&ndash;5 rating</td><td class="num">0.09</td><td class="num">0.18</td></tr></tbody>
+    <thead><tr><th>Measure</th><th>Form</th><th>Statistic</th>
+      <th class="num">Judge vs therapist</th><th class="num">Therapist vs therapist</th>
+      <th class="num">Alpha, judge</th><th class="num">Alpha, therapists</th></tr></thead>
+    <tbody><tr><td>completeness</td><td>checklist</td><td>Cohen's kappa</td><td class="num">0.60</td><td class="num">0.50</td><td class="num">0.60</td><td class="num">0.50</td></tr><tr><td>completeness</td><td>1&ndash;5 rating</td><td>Spearman rho</td><td class="num">0.24</td><td class="num">0.13</td><td class="num">0.11</td><td class="num">0.13</td></tr><tr><td>conciseness</td><td>1&ndash;5 rating</td><td>Spearman rho</td><td class="num">0.11</td><td class="num">0.19</td><td class="num">0.03</td><td class="num">0.19</td></tr><tr><td>faithfulness</td><td>1&ndash;5 rating</td><td>Spearman rho</td><td class="num">0.09</td><td class="num">0.18</td><td class="num">0.09</td><td class="num">0.18</td></tr></tbody>
   </table>
-  <p>The right-hand column is the ceiling, not a target. <strong>Two trained therapists
-     rating the same notes barely agree on the 1&ndash;5 scales</strong> &mdash; 0.13,
-     0.19 and 0.18, where 1.00 is perfect and 0 is chance. On the 23-item checklist they
-     reach 0.50, and the judge reaches 0.60.</p>
+  <p>Both therapist-vs-therapist columns are a ceiling, not a target. <strong>Two trained
+     therapists rating the same notes barely agree on the 1&ndash;5 scales</strong>
+     &mdash; 0.13, 0.19 and 0.18 by alpha, where 1.00 is perfect and 0 is chance. On the 23-item
+     checklist they reach 0.50, and the judge reaches
+     0.60.</p>
+  <p><strong>Why two pairs.</strong> Cohen&rsquo;s kappa suits a yes/no criterion and
+     Spearman&rsquo;s rho an ordered scale, so those are the statistics the leaderboard
+     and the methods page report. Krippendorff&rsquo;s alpha sits beside them because it
+     is what TN-Eval used, and a comparison with their finding has to be on their
+     statistic. The two do not agree: on likert completeness the judge scores
+     0.24 by rho against a ceiling of 0.13,
+     and 0.11 by alpha against a ceiling of
+     0.13 &mdash; above the therapists on one and
+     below them on the other. Which statistic is quoted decides the answer, so both
+     are printed.</p>
   <p><strong>That is why the ranking uses the checklist and nothing else.</strong> The
      other three columns are reported because the protocol produces them, and ordering
      anything by them would be ordering by noise.</p>
   <p class="note">Measured across 150 of those notes, judge
-     <code>gemini-3.1-pro-preview</code>. Krippendorff&rsquo;s alpha, the
-     statistic the source paper used, so the comparison is with their finding rather
-     than with a re-definition of it.</p>
+     <code>gemini-3.1-pro-preview</code>.</p>
 
   <h2 class="page-break">One: a leaderboard position is not a measurement</h2>
   <p>The two judges see the same notes, ask the same 23 questions and reach almost the
      same conclusions about which of any two systems is better. And the two orderings
      they produce are visibly different. Both of those are true, and the reason is
-     arithmetic rather than disagreement: nineteen systems are packed into a range of
-     0.22, so a handful of genuine moves renumbers everyone below them.</p>
+     arithmetic rather than disagreement: 19 systems are packed into a
+     range of 0.22, so a handful of
+     genuine moves renumbers everyone below them.</p>
   <p><strong>What to do with that.</strong> Read a leaderboard as bands, not as an
      order. &ldquo;In the top group&rdquo; is a claim this kind of evidence supports;
      &ldquo;ninth rather than tenth&rdquo; is not, on this benchmark or on anybody
@@ -265,11 +276,11 @@
   <table>
     <thead><tr><th>Judge</th><th>Its vendor</th><th class="num">Effect</th>
       <th class="num">95% interval</th><th>Detected</th></tr></thead>
-    <tbody><tr><td><code>gemini-3.1-pro-preview</code></td><td>google</td><td class="num">+0.018</td><td class="num">-0.010 to +0.047</td><td>no</td></tr><tr><td><code>gpt-5.6-terra</code></td><td>openai</td><td class="num">+0.027</td><td class="num">-0.004 to +0.058</td><td>no</td></tr></tbody>
+    <tbody><tr><td><code>gemini-3.1-pro-preview</code></td><td>google</td><td class="num">+0.018</td><td class="num">&minus;0.010 to +0.047</td><td>no</td></tr><tr><td><code>gpt-5.6-terra</code></td><td>openai</td><td class="num">+0.027</td><td class="num">&minus;0.004 to +0.058</td><td>no</td></tr></tbody>
   </table>
-  <p><strong>Neither is detected once the models are treated as a sample rather than as the whole vendor.</strong> The units are completeness, so an effect of about 0.02 is a fiftieth of
-     the range the models occupy &mdash; enough to move a system several places in an
-     ordering this tight, and not enough to make a bad note look good. Both point
+  <p><strong>Neither is detected once the models are treated as a sample rather than as the whole vendor.</strong> The units are completeness, so these effects are 8% and 11% of the range the
+     models occupy under their own judge &mdash; enough to move a system several places
+     in an ordering this tight, and not enough to make a bad note look good. Both point
      estimates are positive and neither interval clears zero.</p>
   <p><strong>What to do with that.</strong> If you evaluate models with a model, run
      this check. Two judges from two vendors is the cheapest way to have it; one judge
@@ -279,8 +290,7 @@
      definition change moved into these groups on 2026-08-26: dropping
      <code>gemma4</code> takes the Gemini figure from +0.018 to +0.008, and dropping
      <code>gpt-oss-120b</code> takes the GPT one from +0.027 to +0.018. Nothing here
-     tests whether the two judges differ from each other; asked directly, they do not
-     &mdash; +0.010 [&minus;0.015, +0.033].</p>
+     tests whether the two judges differ from each other; asked directly, they do not &mdash; +0.009 [&minus;0.039, +0.058].</p>
 
   <h2 class="page-break">Three: nothing here can tell you what happens next</h2>
   <p>The iCARE form has two time-bearing sections: what happened at the previous
@@ -524,9 +534,16 @@
      yourself.</p>
 
   <h2 class="page-break">How to check any of this</h2>
-  <p>Every figure and every number in this document is generated from two published
-     files. Nothing was typed in, and nothing here can drift from the site without the
-     tests failing.</p>
+  <p>Every figure in this document is drawn from the files the site publishes, and
+     every table is built from them row by row. Four files rather than two:
+     <code>leaderboard.json</code>, the two <code>saturation-*.json</code>, and
+     <code>calibration.json</code>.</p>
+  <p><strong>The prose around them is written by hand.</strong> Where a sentence states
+     a figure, that figure is computed from the same payload and a test fails if it
+     drifts &mdash; but the test names the sentences it covers, and a sentence it does
+     not name is a sentence nobody is checking. This paragraph used to say that nothing
+     here was typed in. That was false in this file more than thirty times, and it read
+     as an instruction not to look.</p>
   <p>And four pages carry what the numbers rest on:
      <a href="datasets.md">the datasets</a> &mdash; where each came from, what licence it
      publishes (two of the three publish none) and the traps in them;
