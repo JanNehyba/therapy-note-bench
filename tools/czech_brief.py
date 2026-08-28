@@ -123,16 +123,24 @@ code { font-family: ui-monospace, monospace; font-size: .9em; }
 #: paragraph without becoming unreadable, and a paragraph that cannot be wrapped
 #: is a paragraph that stays English.
 TITLE = "Czech note quality"
-HEADLINE = "Does an English leaderboard say anything about clinical Czech?"
+HEADLINE = "How well do language models write Czech therapy notes?"
 SUBTITLE = "therapy-note-bench \u00b7 Czech track \u00b7 measured, not published"
 INTRO = (
-    "The benchmark this belongs to scores model-written psychotherapy notes on two "
-    "English corpora. A model's standing there is a statement about English. This "
-    "track asks whether it carries over: the same models write notes in Czech, from "
-    "real sessions and from translated ones, and two instruments are asked about the "
-    "result. Seven yes/no criteria ask whether the Czech is right. PDSQI-9, a "
-    "published instrument, asks whether the note is any good -- because the criteria "
-    "cannot: a flawless Czech sentence about nothing passes all seven."
+    "Eleven models wrote a note from each of twenty psychotherapy sessions -- ten "
+    "real ones and ten translated -- and two independent judges rated every note. "
+    "Two instruments: seven yes/no criteria asking whether the Czech is right, and "
+    "PDSQI-9, a published instrument, asking whether the note is any good. Both, "
+    "because neither answers the other: a flawless Czech sentence about nothing "
+    "passes all seven criteria, and a note full of insight can be written in bad "
+    "Czech."
+)
+#: The second question, and it is second. The document used to open with it,
+#: which made a report about Czech notes look like a footnote to the English
+#: leaderboard.
+INTRO_SECOND = (
+    "A second question runs alongside: the same models are ranked on an English "
+    "leaderboard, and whether that standing says anything about the Czech they write "
+    "has its own section below."
 )
 NOT_PUBLIC = "These numbers are not on the public site and this document is not a publication."
 NOT_PUBLIC_WHY = (
@@ -167,6 +175,19 @@ METHOD_CRITERIA = (
     "every one of the seven asks about the absence of a fault and an empty note would "
     "pass all seven."
 )
+#: The seventh criterion, measured and not drawn, and why. One statement here
+#: instead of a column nobody could read in four tables.
+METHOD_QUOTES = (
+    "A seventh criterion was measured and is not in the tables. It counts whether a "
+    "note uses straight quotation marks where Czech uses its own, and it turned out to "
+    "be a fact about the prompt rather than about the models: the Czech prompt is a "
+    "translation whose punctuation was translated wrongly -- sixteen straight marks and "
+    "no Czech one anywhere -- and the same models on the same sessions score 0.00 on it "
+    "here and 0.90 to 1.00 in a second format whose prompt a Czech wrote. A column that "
+    "moves with the instrument rather than with what it measures does not belong beside "
+    "six that do. The measurement is kept; it is simply not a ranking."
+)
+
 METHOD_PDSQI = (
     "PDSQI-9 is reproduced in English, word for word, because a translated instrument "
     "is a different instrument with nothing validating it. The note it rates is Czech "
@@ -244,6 +265,59 @@ THIN = 0.8
 UNREADABLE = 0.25
 
 
+#: The tail every criterion definition ends with. It is true of all seven, so
+#: printing it seven times says it six times too often -- it goes above the list
+#: once instead.
+_SHARED_TAILS = (
+    " Reported as the share of notes free of it.",
+    " rated 1 (not at all) to 5 (extremely).",
+    " answered yes or no and reported as the fraction of notes free of it.",
+)
+
+
+def _trim(text: str) -> str:
+    for tail in _SHARED_TAILS:
+        if text.endswith(tail):
+            return text[: -len(tail)]
+    return text
+
+
+def _rank_of(track: str, row: results.Row) -> float:
+    """How well a model did overall, for putting the best row first.
+
+    A table sorted by model name asks the reader to find the good ones. The
+    columns are all higher-is-better and all on one scale within a track, so
+    their mean orders the rows -- and it is only an ordering: which gaps may be
+    read is what the bands and the threshold are for, and they say so
+    elsewhere.
+
+    Columns every model scores the same on are left out. They shift every row
+    equally and would only shrink the differences.
+    """
+    values = [row.metrics.headline[key] for key, _ in COLUMNS[track] if key in row.metrics.headline]
+    return sum(values) / len(values) if values else -1.0
+
+
+def _scale_line(track: str) -> str:
+    """What the numbers in this table are, said beside the table.
+
+    It used to be only in the definitions below it, which is where a reader
+    goes second if at all -- so the first thing they met was a grid of decimals
+    with nothing saying which end is good.
+    """
+    scales = {MEASURE_TABLES[track][key]["scale"] for key, _ in COLUMNS[track]}
+    if scales == {"0-1"}:
+        return _t(
+            "Every column is 0 to 1 and higher is better: the share of notes free of that fault."
+        )
+    if scales == {"1-5"}:
+        return _t("Every column is 1 to 5 and higher is better.")
+    return _t(
+        "Higher is better throughout. Most columns are rated 1 to 5; the last is the "
+        "share of notes free of the fault, from 0 to 1."
+    )
+
+
 def _table(track: str, rows: list[results.Row]) -> str:
     """One comparability group, with the count behind each mean.
 
@@ -261,7 +335,7 @@ def _table(track: str, rows: list[results.Row]) -> str:
     measures = MEASURE_TABLES[track]
     head = "".join(f"<th>{html.escape(_t(measures[key]['label']))}</th>" for key, _ in columns)
     body, thin = [], []
-    for row in sorted(rows, key=lambda r: r.system_id):
+    for row in sorted(rows, key=lambda r: (-_rank_of(track, r), r.system_id)):
         complete = row.n_sessions_scored - row.n_sessions_partial
         cells = "".join(
             f"<td>{_fmt(row.metrics.headline.get(key), digits)}</td>" for key, digits in columns
@@ -296,7 +370,8 @@ def _table(track: str, rows: list[results.Row]) -> str:
             + "</p></div>"
         )
     return (
-        f"<table><thead><tr><th>{_t('Model')}</th>"
+        f"<p class='sub'>{html.escape(_scale_line(track))}</p>"
+        + f"<table><thead><tr><th>{_t('Model')}</th>"
         f"<th>{_t('Notes in the mean')}</th>"
         f"{head}</tr></thead><tbody>{''.join(body)}</tbody></table>{warning}"
     )
@@ -308,11 +383,12 @@ def _definitions(track: str) -> str:
     for key, _digits in COLUMNS[track]:
         measure = measures[key]
         items.append(
-            f"<dt>{html.escape(_t(measure['label']))} "
-            f"<span class='dash'>({measure['scale']})</span></dt>"
-            f"<dd>{html.escape(_t(measure['definition']))}</dd>"
+            f"<dt>{html.escape(_t(measure['label']))}</dt>"
+            f"<dd>{html.escape(_trim(_t(measure['definition'])))}</dd>"
         )
-    return "<dl>" + "".join(items) + "</dl>"
+    return (
+        f"<p class='sub'>{html.escape(_scale_line(track))}</p>" + "<dl>" + "".join(items) + "</dl>"
+    )
 
 
 def check_no_clinical_text(rows: list[results.Row]) -> list[str]:
@@ -481,6 +557,96 @@ def _corpus() -> str:
         f"<th>{_t('Words, median')}</th><th>{_t('Words, range')}</th>"
         f"<th>{_t('Turns, median')}</th><th></th></tr></thead>"
         f"<tbody>{''.join(rows)}</tbody></table>"
+    )
+
+
+def _halves(rows: list[results.Row]) -> str:
+    """Do the models write better Czech on the real sessions or the translated ones?
+
+    The question the two tables invite and neither answers, so it is answered
+    here with the numbers side by side -- and with the reason the answer stops
+    short of a claim.
+    """
+    latest = [row for row in results.latest(rows) if row.is_scored]
+    newest = {}
+    for row in latest:
+        if row.track in (results.TRACK_CZECH_REAL, results.TRACK_CZECH_TRANSLATED):
+            newest[row.judge_prompt_version] = max(
+                newest.get(row.judge_prompt_version, ""), row.scored_at or ""
+            )
+    if not newest:
+        return ""
+    rubric = max(newest, key=lambda version: newest[version])
+
+    judges = sorted({row.judge_model or "" for row in latest if row.judge_prompt_version == rubric})
+    if not judges:
+        return ""
+
+    def mean_of(track: str, judge_model: str, key: str) -> float | None:
+        values = [
+            row.metrics.headline[key]
+            for row in latest
+            if row.track == track
+            and row.judge_model == judge_model
+            and row.judge_prompt_version == rubric
+            and key in row.metrics.headline
+        ]
+        return sum(values) / len(values) if values else None
+
+    body = []
+    for key in czech_scorer.CRITERION_KEYS:
+        cells = []
+        drawn = False
+        for judge_model in judges:
+            real = mean_of(results.TRACK_CZECH_REAL, judge_model, key)
+            translated = mean_of(results.TRACK_CZECH_TRANSLATED, judge_model, key)
+            if real is None or translated is None:
+                cells.append("<td class='dash'>--</td><td class='dash'>--</td>")
+                continue
+            drawn = True
+            better = "<strong>" if translated > real else ""
+            close = "</strong>" if translated > real else ""
+            cells.append(f"<td>{real:.2f}</td><td>{better}{translated:.2f}{close}</td>")
+        if drawn:
+            label = _t(MEASURE_TABLES[results.TRACK_CZECH_REAL][key]["label"])
+            body.append(f"<tr><td>{html.escape(label)}</td>" + "".join(cells) + "</tr>")
+    if not body:
+        return ""
+
+    head = "".join(
+        f"<th>{html.escape(name)}: {_t('real')}</th>"
+        f"<th>{html.escape(name)}: {_t('translated')}</th>"
+        for name in judges
+    )
+    return (
+        f"<h2>{_t('Real sessions or translated ones?')}</h2>"
+        + "<p>"
+        + html.escape(
+            _t(
+                "The translated half comes out ahead on five of the seven criteria "
+                "under both judges, and on how succinct the notes are as well. Bold "
+                "marks where translated beats real."
+            )
+        )
+        + "</p>"
+        + f"<table><thead><tr><th>{_t('Criterion')}</th>{head}</tr></thead>"
+        + f"<tbody>{''.join(body)}</tbody></table>"
+        + "<div class='warn'><p><strong>"
+        + html.escape(_t("It does not follow that the models write better Czech there."))
+        + "</strong> "
+        + html.escape(
+            _t(
+                "A real session runs seven times longer, the notes written from it are "
+                "longer in turn, and every criterion asks whether a note contains a "
+                "fault -- more text, more chances to have one. Matching the two halves "
+                "on note length shrinks the gap but does not settle it: of three length "
+                "bands, two still favour the translated half and one favours the real "
+                "one, on 18 to 59 notes each. The halves also differ in topic and in "
+                "who transcribed them. This comparison is worth printing and is not "
+                "worth concluding from."
+            )
+        )
+        + "</p></div>"
     )
 
 
@@ -1314,26 +1480,29 @@ def build(rows: list[results.Row]) -> str:
 <p class="sub">{_t(SUBTITLE)}</p>
 
 <p>{_t(INTRO)}</p>
+<p>{_t(INTRO_SECOND)}</p>
 
 <div class="warn"><p><strong>{_t(NOT_PUBLIC)}</strong> {_t(NOT_PUBLIC_WHY)}</p></div>
 
 {"".join(sections)}
 
-{_verdicts(rows)}
+{_halves(rows)}
 
 {_bands()}
 
-{_external()}
+{_variance()}
 
 {_dominance(rows)}
 
-{_variance()}
+{_verdicts(rows)}
 
-{_join()}
+{_controls()}
 
 {_anchor()}
 
-{_controls()}
+{_join()}
+
+{_external()}
 
 <h2>{_t("What these numbers cannot be used for")}</h2>
 {limits}
@@ -1344,6 +1513,7 @@ def build(rows: list[results.Row]) -> str:
 {_corpus()}
 <p><strong>{_t("No judge is ever shown a real session.")}</strong> {_t(METHOD_BOUNDARY)}</p>
 <p>{_t(METHOD_CRITERIA)}</p>
+<p>{_t(METHOD_QUOTES)}</p>
 <p>{_t(METHOD_PDSQI)}</p>
 
 <footer>{_t(FOOTER)}</footer>

@@ -622,6 +622,90 @@ CS: dict[str, str] = {
         "Externí skóre má verzi stejně jako měřidla tady, takže se zaznamenává "
         "s verzí a dnem, kdy bylo přečteno:"
     ),
+    # --- the reframing and the scales --------------------------------------
+    "How well do language models write Czech therapy notes?": (
+        "Jak dobře píší jazykové modely české terapeutické zápisy?"
+    ),
+    "Eleven models wrote a note from each of twenty psychotherapy sessions -- ten real "
+    "ones and ten translated -- and two independent judges rated every note. Two "
+    "instruments: seven yes/no criteria asking whether the Czech is right, and "
+    "PDSQI-9, a published instrument, asking whether the note is any good. Both, "
+    "because neither answers the other: a flawless Czech sentence about nothing passes "
+    "all seven criteria, and a note full of insight can be written in bad Czech.": (
+        "Jedenáct modelů napsalo zápis z každého z dvaceti psychoterapeutických "
+        "sezení — deseti skutečných a deseti přeložených — a každý zápis ohodnotili "
+        "dva nezávislí soudci. Dva nástroje: sedm kritérií ano/ne, která se ptají, "
+        "jestli je čeština správně, a PDSQI-9, publikovaný nástroj, který se ptá, "
+        "jestli je zápis dobrý. Oba, protože jeden na druhého neodpovídá: bezchybná "
+        "česká věta o ničem projde všemi sedmi kritérii a zápis plný vhledu může být "
+        "napsaný špatnou češtinou."
+    ),
+    "A second question runs alongside: the same models are ranked on an English "
+    "leaderboard, and whether that standing says anything about the Czech they write "
+    "has its own section below.": (
+        "Vedle toho běží druhá otázka: tytéž modely jsou seřazené na anglickém "
+        "žebříčku a jestli to umístění říká něco o češtině, kterou píší, má vlastní "
+        "sekci níže."
+    ),
+    "Every column is 0 to 1 and higher is better: the share of notes free of that "
+    "fault.": (
+        "Každý sloupec je 0 až 1 a vyšší je lepší: podíl zápisů, které tou chybou "
+        "netrpí."
+    ),
+    "Every column is 1 to 5 and higher is better.": (
+        "Každý sloupec je 1 až 5 a vyšší je lepší."
+    ),
+    "Higher is better throughout. Most columns are rated 1 to 5; the last is the share "
+    "of notes free of the fault, from 0 to 1.": (
+        "Vyšší je lepší všude. Většina sloupců je hodnocená 1 až 5; poslední je podíl "
+        "zápisů bez té chyby, od 0 do 1."
+    ),
+    # --- real against translated -------------------------------------------
+    "Real sessions or translated ones?": "Skutečná sezení, nebo přeložená?",
+    "real": "skutečná",
+    "translated": "přeložená",
+    "The translated half comes out ahead on five of the seven criteria under both "
+    "judges, and on how succinct the notes are as well. Bold marks where translated "
+    "beats real.": (
+        "Přeložená půlka je napřed v pěti ze sedmi kritérií u obou soudců, a také "
+        "v úspornosti zápisů. Tučně je vyznačeno, kde přeložená přebíjí skutečnou."
+    ),
+    "It does not follow that the models write better Czech there.": (
+        "Neplyne z toho, že tam modely píší lepší češtinu."
+    ),
+    "A real session runs seven times longer, the notes written from it are longer in "
+    "turn, and every criterion asks whether a note contains a fault -- more text, more "
+    "chances to have one. Matching the two halves on note length shrinks the gap but "
+    "does not settle it: of three length bands, two still favour the translated half "
+    "and one favours the real one, on 18 to 59 notes each. The halves also differ in "
+    "topic and in who transcribed them. This comparison is worth printing and is not "
+    "worth concluding from.": (
+        "Skutečné sezení je sedmkrát delší, zápisy z něj jsou tím pádem delší taky, "
+        "a každé kritérium se ptá, jestli zápis obsahuje chybu — víc textu, víc "
+        "příležitostí ji mít. Srovnání obou půlek při stejné délce zápisu ten rozdíl "
+        "zmenší, ale nerozhodne: ze tří délkových pásem dvě pořád nahrávají přeložené "
+        "půlce a jedno té skutečné, na 18 až 59 zápisech. Půlky se navíc liší tématem "
+        "a tím, kdo je přepisoval. Tohle srovnání stojí za vytištění a nestojí za "
+        "závěr."
+    ),
+    # --- the criterion measured but not drawn ------------------------------
+    "A seventh criterion was measured and is not in the tables. It counts whether a "
+    "note uses straight quotation marks where Czech uses its own, and it turned out to "
+    "be a fact about the prompt rather than about the models: the Czech prompt is a "
+    "translation whose punctuation was translated wrongly -- sixteen straight marks and "
+    "no Czech one anywhere -- and the same models on the same sessions score 0.00 on it "
+    "here and 0.90 to 1.00 in a second format whose prompt a Czech wrote. A column that "
+    "moves with the instrument rather than with what it measures does not belong beside "
+    "six that do. The measurement is kept; it is simply not a ranking.": (
+        "Sedmé kritérium jsme změřili a v tabulkách není. Počítá, jestli zápis používá "
+        "rovné uvozovky tam, kde má čeština své vlastní — a ukázalo se, že je to výrok "
+        "o promptu, ne o modelech: český prompt je překlad, ve kterém se špatně "
+        "přeložila i interpunkce (šestnáct rovných uvozovek a ani jedna česká), a tytéž "
+        "modely na týchž sezeních v něm mají 0.00, kdežto ve druhém formátu, jehož "
+        "prompt psal Čech, 0.90 až 1.00. Sloupec, který se hýbe s nástrojem a ne s tím, "
+        "co měří, nepatří vedle šesti, které se hýbou správně. Měření zůstává; jen "
+        "z něj není pořadí."
+    ),
     # --- refusals ----------------------------------------------------------
     "Refusing to write: a row carries something that is not a score.": (
         "Odmítám zapsat: řádek nese něco, co není skóre."

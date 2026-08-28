@@ -87,6 +87,20 @@ SITE_URL = "https://jannehyba.github.io/therapy-note-bench/"
 JUDGES_PATH = DOCS_DIR / "judges.json"
 PREFERENCE_PATH = DOCS_DIR / "preference.json"
 
+#: The criteria a Czech table draws. `quotes` is measured and not drawn.
+#:
+#: It turned out to be a fact about the prompt rather than about the models: the
+#: Czech SOAP prompt is a translation and its punctuation was translated wrongly
+#: -- sixteen straight quotation marks and no `„` anywhere -- and the same models
+#: on the same sessions score 0.00 here and 0.90 to 1.00 in the Deepsy format,
+#: whose prompt a Czech wrote. A column that moves with the instrument and not
+#: with what it measures does not belong beside six that do.
+#:
+#: The measurement stays in the rows, which are append-only, and the finding is
+#: stated once in the briefing's method rather than printed four times as a
+#: column nobody can read.
+DRAWN_CRITERIA = tuple(key for key in czech_scorer.CRITERION_KEYS if key != "quotes")
+
 #: Column order per track: (key, how many decimals).
 #:
 #: The heading is *not* here. It lives in the track's measure table below,
@@ -114,14 +128,14 @@ COLUMNS: dict[str, tuple[tuple[str, int], ...]] = {
     ),
     # Two decimals, not three. Every column is a share of ten or twenty notes,
     # so the third place is a digit that cannot exist.
-    results.TRACK_CZECH_REAL: tuple((key, 2) for key in czech_scorer.CRITERION_KEYS),
-    results.TRACK_CZECH_TRANSLATED: tuple((key, 2) for key in czech_scorer.CRITERION_KEYS),
+    results.TRACK_CZECH_REAL: tuple((key, 2) for key in DRAWN_CRITERIA),
+    results.TRACK_CZECH_TRANSLATED: tuple((key, 2) for key in DRAWN_CRITERIA),
     # The Deepsy sections are scored by the same seven criteria: the question
     # is whether the Czech is right, and that does not change with the shape
     # the note was asked for. Changing the instrument as well as the format
     # would leave nothing to attribute a difference to.
-    results.TRACK_DEEPSY_REAL: tuple((key, 2) for key in czech_scorer.CRITERION_KEYS),
-    results.TRACK_DEEPSY_TRANSLATED: tuple((key, 2) for key in czech_scorer.CRITERION_KEYS),
+    results.TRACK_DEEPSY_REAL: tuple((key, 2) for key in DRAWN_CRITERIA),
+    results.TRACK_DEEPSY_TRANSLATED: tuple((key, 2) for key in DRAWN_CRITERIA),
     # PDSQI-9 over the same Czech notes, in the instrument's own order. The real
     # half declares six columns and the translated eight: `accurate` and
     # `thorough` need the session, and the real sessions are never sent to the
