@@ -124,7 +124,7 @@ def instructions() -> dict[str, dict]:
         blob = _prompt_text(module)
         hits = sorted({" ".join(m.group(0).split()) for m in LENGTH_WORDS.finditer(blob)})
         out[label] = {"has_limit": bool(hits), "phrases": hits}
-    out["deepsy"]["limit_words"] = deepsy.DEFAULT_LENGTH
+    out["deepsy"]["limit_words"] = deepsy.default_length()
     out["deepsy"]["sections"] = list(deepsy.SECTIONS)
     return out
 
@@ -320,7 +320,7 @@ def deepsy_compliance() -> dict:
     corpus that is exactly what happens -- so reporting only the first would
     read as "the instruction was followed".
     """
-    limit = deepsy.DEFAULT_LENGTH
+    limit = deepsy.default_length()
     out: dict[str, dict] = {}
     for track in (results.TRACK_DEEPSY_REAL, results.TRACK_DEEPSY_TRANSLATED):
         task_name = TASK_OF_TRACK[track]

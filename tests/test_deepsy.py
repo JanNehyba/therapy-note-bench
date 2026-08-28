@@ -15,13 +15,15 @@ from tnb import results
 from tnb.datasets.base import Session, Turn
 from tnb.tasks import deepsy, deepsy_prompts
 
-UPSTREAM = deepsy_prompts.__file__ and (
-    __import__("pathlib").Path(__file__).resolve().parent.parent.parent
-    / "monitor-notes"
-    / "app"
-    / "Config"
-    / "TherapyNote"
-    / "prompts"
+#: The application's prompt directory, or None when it is not on this machine.
+#: There is no copy in this repository to compare against any more -- the
+#: prompts are read from the application, so the fidelity these tests used to
+#: guard is now structural. What is left to check is that the loader reads the
+#: YAML the way `PromptLoader` does.
+UPSTREAM = deepsy_prompts.root() if deepsy_prompts.available() else None
+needs_upstream = pytest.mark.skipif(
+    not deepsy_prompts.available(),
+    reason=f"the Deepsy prompts are not at {deepsy_prompts.root()}",
 )
 
 SESSION = Session(
@@ -34,32 +36,22 @@ SESSION = Session(
 # --- the reproduction -------------------------------------------------------
 
 
-@pytest.mark.skipif(
-    not (UPSTREAM and UPSTREAM.exists()),
-    reason="the Deepsy repository is not beside this one",
-)
-def test_the_prompts_are_the_ones_upstream_holds():
-    """A prompt is reproduced word for word or it is a different prompt.
-
-    Checked against the source rather than trusted, because these were copied
-    by a script and a script can be re-run against a file that has since moved
-    on. `tasks/fidelity.py` does the same for TN-Eval and iCARE; the difference
-    is that this upstream is a directory on the same machine, so the check is
-    exact instead of being a recorded digest.
-    """
+@needs_upstream
+def test_the_loader_reads_what_the_application_declares():
+    """The prompts are read from the application, not copied here, so there is
+    no reproduction to check. What is left to check is the reading: the two keys
+    `PromptLoader` uses, taken from the section's own block rather than from the
+    top of the file."""
     yaml = pytest.importorskip("yaml")
 
     for section in deepsy.SECTIONS:
         loaded = yaml.safe_load((UPSTREAM / f"{section}.yaml").read_text(encoding="utf-8"))
         upstream = loaded[section]
-        assert deepsy_prompts.SYSTEM[section] == upstream["system_message"], section
-        assert deepsy_prompts.TEMPLATE[section] == upstream["user_message_template"], section
+        assert deepsy_prompts.system(section) == upstream["system_message"], section
+        assert deepsy_prompts.template(section) == upstream["user_message_template"], section
 
 
-@pytest.mark.skipif(
-    not (UPSTREAM and UPSTREAM.exists()),
-    reason="the Deepsy repository is not beside this one",
-)
+@needs_upstream
 def test_the_settings_are_the_ones_the_application_would_use():
     """`PromptLoader` takes the settings from the first section file and uses
     them for all of them. All three of these declare the same, so there is no
@@ -71,8 +63,8 @@ def test_the_settings_are_the_ones_the_application_would_use():
         settings = yaml.safe_load((UPSTREAM / f"{section}.yaml").read_text(encoding="utf-8"))[
             "settings"
         ]
-        assert settings["default_length"] == deepsy_prompts.DEFAULT_LENGTH, section
-        assert settings["default_format"] == deepsy_prompts.DEFAULT_FORMAT, section
+        assert settings["default_length"] == deepsy_prompts.default_length(), section
+        assert settings["default_format"] == deepsy_prompts.default_format(), section
 
 
 # --- building one -----------------------------------------------------------

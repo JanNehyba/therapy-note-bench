@@ -53,7 +53,7 @@ import json
 import re
 
 from tnb.datasets.base import Session
-from tnb.tasks.deepsy_prompts import DEFAULT_LENGTH, SYSTEM, TEMPLATE
+from tnb.tasks import deepsy_prompts
 
 #: Not a reproduction of anything upstream: `monitor-notes` has no version on
 #: its prompts, so this names the day they were copied and which three.
@@ -163,15 +163,18 @@ def build_prompt(session: Session, section: str, options: dict | None = None) ->
     empty string still sits inside `{if_questionnaire_data}`, and it is that
     second pass which removes the sentence around it.
     """
-    if section not in TEMPLATE:
+    if section not in SECTIONS:
         raise ValueError(f"{section!r} is not one of {SECTIONS}.")
     options = options or {}
 
-    message = TEMPLATE[section].replace("{transcript}", render_transcript(session))
+    message = deepsy_prompts.template(section).replace("{transcript}", render_transcript(session))
     for placeholder, value in (
         ("{client_info}", options.get("client_info", "")),
         ("{modality_macro}", options.get("modality_macro", "")),
-        ("{length}", LENGTH_MACRO.format(length=options.get("length", DEFAULT_LENGTH))),
+        (
+            "{length}",
+            LENGTH_MACRO.format(length=options.get("length", deepsy_prompts.default_length())),
+        ),
         ("{format_macro}", FORMAT_MACRO),
         ("{format_instruction}", FORMAT_INSTRUCTION),
         ("{questionnaire_data}", options.get("questionnaire_data", "")),
@@ -185,8 +188,17 @@ def build_prompt(session: Session, section: str, options: dict | None = None) ->
     return _BLANK_RUN.sub("\n\n", message)
 
 
+def default_length() -> int:
+    """The word limit the Deepsy prompt sets, read from the application.
+
+    Exposed here because `tools/czech_length.py` measures compliance against it
+    and should not have to know where the prompts come from.
+    """
+    return deepsy_prompts.default_length()
+
+
 def system_message(section: str) -> str:
-    return SYSTEM[section]
+    return deepsy_prompts.system(section)
 
 
 def parse_note(text: str, section: str) -> dict[str, str] | None:
