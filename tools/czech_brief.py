@@ -21,6 +21,7 @@ in `check_no_clinical_text`, before the file is written.
 from __future__ import annotations
 
 import argparse
+import collections
 import html
 import json
 import re
@@ -184,6 +185,143 @@ def check_no_clinical_text(rows: list[results.Row]) -> list[str]:
     return problems
 
 
+#: What a column catches once it has met a hundred real notes, in words.
+#:
+#: The verdict beside each one in the table is computed from the rows; this is
+#: the half a computation cannot supply. Both halves are on the page because a
+#: reader handed "0.67" without either will supply their own reading, and theirs
+#: will be more generous than the evidence.
+WHAT_IT_CATCHES = {
+    "diacritics": (
+        "Reliable. The two judges answered the same way on 79% of notes and one "
+        "native speaker agreed with them on 18 of 20."
+    ),
+    "calque": (
+        "The weakest column here, and it should be read as a flag rather than a "
+        "score. The two judges agree on only 67% of notes -- the lowest of the "
+        "seven -- and a native speaker agreed with them on 11 of 20 and 7 of 20. "
+        "Whether a Czech phrase is a literal translation from English is a "
+        "judgement people make differently, and these numbers show that rather "
+        "than hiding it."
+    ),
+    "untranslated": (
+        "Reliable, and the fault it catches is unambiguous: an English term sitting "
+        "in a Czech sentence. Judges agree on 87% of notes, the native speaker on "
+        "19 of 20."
+    ),
+    "agreement": (
+        "Catches real grammatical faults, but the two judges answer differently on "
+        "a quarter of notes. A gap of one or two notes between models is inside "
+        "that noise."
+    ),
+    "register": (
+        "Catches colloquial words where clinical ones belong. Judges agree on 75% "
+        "of notes; the native speaker agreed with the first judge on 19 of 20 and "
+        "with the second on 15."
+    ),
+    "quotes": (
+        "Exact. It is not a judgement at all any more -- the characters in the note "
+        "are counted. It became a count after a native speaker and a judge disagreed "
+        "on nearly half the notes and neither was wrong: the question named only the "
+        "straight double mark, and 45 of the 75 notes that quote anything use an "
+        "apostrophe instead. The question now names both."
+    ),
+    "nonword": (
+        "The strongest agreement with a person of the seven: 20 of 20 against the "
+        "first judge, 17 against the second."
+    ),
+    "accurate": (
+        "The most informative column in this document, and it exists only on the "
+        "translated half, because answering it means reading the session. The two "
+        "judges order the models almost identically here."
+    ),
+    "thorough": (
+        "Also only on the translated half. The judges agree far less about it than "
+        "about accuracy, so read large gaps and ignore small ones."
+    ),
+    "useful": ("Says almost nothing. One judge gave 5.00 to every model."),
+    "organized": (
+        "Says nothing, and this was written down before the run rather than after. "
+        "Every model writes into the same four-part template because the prompt "
+        "tells it to, so a question about structure has nothing left to separate."
+    ),
+    "comprehensible": ("Does not separate the models: most of them print the same value."),
+    "succinct": (
+        "Works, and every model fails it. No model reaches the middle of the scale "
+        "under either judge. This is the one column on the real half that tells the "
+        "models apart at all."
+    ),
+    "synthesized": ("Says nothing. 5.00 for every model under both judges on both halves."),
+    "stigmatizing": (
+        "Does not separate the models. Most of them are free of it, which is the "
+        "good news and also why the column cannot rank anything."
+    ),
+}
+
+
+def _verdicts(rows: list[results.Row]) -> str:
+    """Which columns tell the models apart, counted rather than asserted.
+
+    The tie count is the largest group of systems printing the same value, taken
+    on whichever judge ties worst -- `concordance.MeasureAgreement.rankable`'s
+    rule, applied here so the briefing states it in the same terms the page
+    does. A column on which most systems are indistinguishable cannot rank them,
+    whatever the rest of the table does.
+    """
+    latest = [row for row in results.latest(rows) if row.is_scored]
+    blocks = []
+    for track in results.LOCAL_TRACKS:
+        here = [row for row in latest if row.track == track]
+        if not here:
+            continue
+        judges = sorted({row.judge_model or "" for row in here})
+        lines = []
+        for key, digits in COLUMNS[track]:
+            worst_tied, n = 0, 0
+            for judge_model in judges:
+                printed = collections.Counter(
+                    f"{row.metrics.headline[key]:.{digits}f}"
+                    for row in here
+                    if judge_model == (row.judge_model or "") and key in row.metrics.headline
+                )
+                if not printed:
+                    continue
+                n = max(n, sum(printed.values()))
+                worst_tied = max(worst_tied, printed.most_common(1)[0][1])
+            if not n:
+                continue
+            separates = n >= 2 and worst_tied * 2 <= n
+            verdict = (
+                f"tells {n - worst_tied} of {n} apart"
+                if separates
+                else f"<strong>cannot rank</strong> — {worst_tied} of {n} share one value"
+            )
+            lines.append(
+                f"<tr><td>{html.escape(MEASURE_TABLES[track][key]['label'])}</td>"
+                f"<td>{verdict}</td>"
+                f"<td class='sub'>{html.escape(WHAT_IT_CATCHES.get(key, ''))}</td></tr>"
+            )
+        if lines:
+            blocks.append(
+                f"<h3>{html.escape(TRACK_TITLES.get(track, track))}</h3>"
+                "<table><thead><tr><th>Column</th><th>Does it separate the models?</th>"
+                "<th>What is behind the number</th></tr></thead>"
+                f"<tbody>{''.join(lines)}</tbody></table>"
+            )
+
+    if not blocks:
+        return ""
+    return (
+        "<h2>What is behind each number</h2>"
+        "<p>A column that gives most models the same value cannot rank them, however "
+        "confidently it is printed, and the first thing worth knowing about any column "
+        "here is whether it separates anything at all. That half is counted from the "
+        "rows. The second half — what the column actually catches, and how far two "
+        "judges and one native speaker agreed about it — is written down rather than "
+        "computed, because no arithmetic supplies it.</p>" + "".join(blocks)
+    )
+
+
 def _controls() -> str:
     """What each column detects, from the planted-error runs.
 
@@ -305,6 +443,8 @@ made. The transcripts were de-identified before any model saw them, and no
 transcript text appears in this document or in any file it was built from.</p></div>
 
 {"".join(sections)}
+
+{_verdicts(rows)}
 
 {_controls()}
 
