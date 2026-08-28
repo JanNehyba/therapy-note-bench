@@ -25,10 +25,11 @@ from pathlib import Path
 from tnb import corpus, i18n, judge, results
 from tnb.config import REPO_ROOT
 from tnb.results import Row
-from tnb.scoring import concordance, pdsqi
+from tnb.scoring import concordance, czech_pdsqi, pdsqi
 from tnb.scoring import czech as czech_scorer
 from tnb.scoring import icare as icare_scorer
 from tnb.scoring import tneval as rubric
+from tnb.tasks import czech as czech_task
 from tnb.tasks import icare, soap
 
 DOCS_DIR = REPO_ROOT / "docs"
@@ -115,6 +116,20 @@ COLUMNS: dict[str, tuple[tuple[str, int], ...]] = {
     # so the third place is a digit that cannot exist.
     results.TRACK_CZECH_REAL: tuple((key, 2) for key in czech_scorer.CRITERION_KEYS),
     results.TRACK_CZECH_TRANSLATED: tuple((key, 2) for key in czech_scorer.CRITERION_KEYS),
+    # PDSQI-9 over the same Czech notes, in the instrument's own order. The real
+    # half declares six columns and the translated eight: `accurate` and
+    # `thorough` need the session, and the real sessions are never sent to the
+    # judge. Declaring a column that could not be asked would leave an empty
+    # heading, which reads as a model that failed rather than a question nobody
+    # was allowed to put.
+    results.TRACK_CZECH_REAL_PDSQI: tuple(
+        (key, 3 if key == "stigmatizing" else 2)
+        for key in czech_pdsqi.attribute_keys(czech_task.NAME_REAL)
+    ),
+    results.TRACK_CZECH_TRANSLATED_PDSQI: tuple(
+        (key, 3 if key == "stigmatizing" else 2)
+        for key in czech_pdsqi.attribute_keys(czech_task.NAME_TRANSLATED)
+    ),
 }
 
 #: Where each track's measure definitions live. Both scorers own their own --
@@ -130,6 +145,8 @@ MEASURE_TABLES = {
     results.TRACK_PDSQI: pdsqi.MEASURES,
     results.TRACK_CZECH_REAL: czech_scorer.MEASURES,
     results.TRACK_CZECH_TRANSLATED: czech_scorer.MEASURES,
+    results.TRACK_CZECH_REAL_PDSQI: czech_pdsqi.measures(czech_task.NAME_REAL),
+    results.TRACK_CZECH_TRANSLATED_PDSQI: czech_pdsqi.measures(czech_task.NAME_TRANSLATED),
 }
 
 #: Which measure each track is ranked by, and the honest `None` where the
@@ -153,6 +170,9 @@ RANKING_MEASURES: dict[str, str | None] = {
     # quotation marks.
     results.TRACK_CZECH_REAL: czech_scorer.RANKING_MEASURE,
     results.TRACK_CZECH_TRANSLATED: czech_scorer.RANKING_MEASURE,
+    # The instrument's reason again, unchanged by the language it is asked in.
+    results.TRACK_CZECH_REAL_PDSQI: pdsqi.RANKING_MEASURE,
+    results.TRACK_CZECH_TRANSLATED_PDSQI: pdsqi.RANKING_MEASURE,
 }
 
 
@@ -172,6 +192,11 @@ JUDGE_MEASURES: dict[str, tuple[str, ...]] = {
     # human anchor at all, so two judges disagreeing is the only control it has.
     results.TRACK_CZECH_REAL: czech_scorer.JUDGE_MEASURES,
     results.TRACK_CZECH_TRANSLATED: czech_scorer.JUDGE_MEASURES,
+    # Every attribute the corpus was asked, and no more. Naming one the two
+    # judges never answered would ask the concordance panel to compare a column
+    # that does not exist on either side.
+    results.TRACK_CZECH_REAL_PDSQI: czech_pdsqi.attribute_keys(czech_task.NAME_REAL),
+    results.TRACK_CZECH_TRANSLATED_PDSQI: czech_pdsqi.attribute_keys(czech_task.NAME_TRANSLATED),
 }
 
 
@@ -234,6 +259,11 @@ TRACK_TITLES = {
     results.TRACK_PDSQI: "PDSQI-9 · the SOAP notes on AnnoMI, rated for quality",
     results.TRACK_CZECH_REAL: "Czech · ten real sessions, one client",
     results.TRACK_CZECH_TRANSLATED: "Czech · AnnoMI conversations, translated",
+    # Named for the instrument first, because that is what separates these two
+    # from the two above: the same notes, asked whether they are good notes
+    # rather than whether they are good Czech.
+    results.TRACK_CZECH_REAL_PDSQI: "PDSQI-9 · the Czech notes from the real sessions",
+    results.TRACK_CZECH_TRANSLATED_PDSQI: "PDSQI-9 · the Czech notes from translated AnnoMI",
 }
 
 #: The same tracks, short enough to be a button. Separate from the titles rather
@@ -245,6 +275,8 @@ TRACK_SWITCH_LABELS = {
     results.TRACK_PDSQI: "PDSQI-9 on SOAP",
     results.TRACK_CZECH_REAL: "Czech, real sessions",
     results.TRACK_CZECH_TRANSLATED: "Czech, translated",
+    results.TRACK_CZECH_REAL_PDSQI: "PDSQI-9, real sessions",
+    results.TRACK_CZECH_TRANSLATED_PDSQI: "PDSQI-9, translated",
 }
 
 TRACK_BLURBS = {
@@ -284,6 +316,22 @@ TRACK_BLURBS = {
         "motivational interviewing about substance use and the real sessions are not "
         "-- so a model doing worse here may be doing worse at motivational "
         "interviewing rather than at translated Czech."
+    ),
+    results.TRACK_CZECH_REAL_PDSQI: (
+        "The same Czech notes as the real-session table, asked a published quality "
+        "instrument instead of the seven language criteria. The criteria cannot say "
+        "whether a note is any good -- a flawless Czech sentence about nothing passes "
+        "all seven -- and this is the half of the question they leave out. **Six "
+        "attributes, not eight:** `accurate` and `thorough` need the session, and "
+        "these sessions never leave the infrastructure that holds them, so the two "
+        "columns are absent because the question could not be put."
+    ),
+    results.TRACK_CZECH_TRANSLATED_PDSQI: (
+        "PDSQI-9 on the notes written from translated AnnoMI. All eight attributes "
+        "here: these transcripts are public, so the judge may read the session and "
+        "answer whether the note is accurate and thorough. **Eight columns against "
+        "the real half's six is two instruments, not one**, and the two tables are "
+        "not rows of each other."
     ),
 }
 
@@ -424,6 +472,46 @@ TRACK_DESIGN = {
             "on the TN-Eval track, so a model's standing there and its Czech here "
             "are about the same sessions. Whether one predicts the other is the "
             "question this track was built to answer."
+        ),
+    },
+    results.TRACK_CZECH_REAL_PDSQI: {
+        "scored_against": (
+            "The note alone, on six of PDSQI-9's eight attributes. The instrument "
+            "and its prompt are reproduced in English; the note is Czech and is "
+            "shown with the Czech headings the model wrote, because rendering it "
+            "under English ones would rate an artefact nobody produced."
+        ),
+        "human_role": (
+            "None. No human has rated these notes on PDSQI-9, and the therapist "
+            "wrote no comparison note here."
+        ),
+        "human_role_short": "none",
+        "calibrated": False,
+        "calibration": (
+            "Not calibrated. Physicians agree with each other on this instrument at "
+            "Krippendorff's alpha 0.575, which is the ceiling any judge would be "
+            "read against -- but nobody has rated these notes, so there is no "
+            "agreement figure for this table, only the ceiling one would be read "
+            "against if it existed."
+        ),
+    },
+    results.TRACK_CZECH_TRANSLATED_PDSQI: {
+        "scored_against": (
+            "The note and the session, on all eight attributes. These transcripts "
+            "are AnnoMI translated into Czech and carry nothing confidential, which "
+            "is the whole reason `accurate` and `thorough` can be asked here and "
+            "not of the real half."
+        ),
+        "human_role": (
+            "None, in the same two senses as the real half: no comparison note and no human rating."
+        ),
+        "human_role_short": "none",
+        "calibrated": False,
+        "calibration": (
+            "Not calibrated, and read against the same 0.575 ceiling. What this "
+            "half adds is the join: the same conversations carry PDSQI-9 numbers in "
+            "English on the `pdsqi-soap` track, so a model's quality there and its "
+            "quality here are about the same sessions on the same instrument."
         ),
     },
 }

@@ -16,6 +16,13 @@ instrument -- `accurate` and `thorough` cannot be judged without the session --
 and it is carried here rather than smoothed over: a note scored without a
 transcript is recorded as having been asked six questions, not as having failed
 two.
+
+**The note's presentation is a parameter, because the Czech track reuses this
+runner.** A Czech note carries Czech headings, and showing it under English ones
+would rate an artefact no model wrote -- `organized` and `comprehensible` are
+exactly the attributes a heading language could move. `render_note`'s docstring
+says the joining is part of the prompt, so a different joining travels with a
+different `judge_prompt_version` rather than quietly sharing one.
 """
 
 from __future__ import annotations
@@ -57,10 +64,12 @@ def score_note(
     force: bool = False,
     cache_root=None,
     with_transcript: bool = True,
+    render=pdsqi.render_note,
+    judge_prompt_version: str = pdsqi.JUDGE_PROMPT_VERSION,
 ) -> NoteResult:
     """Ask one note's eight questions, reusing whatever was asked before."""
     fingerprint = client.config.fingerprint()
-    note = pdsqi.render_note(candidate.note)
+    note = render(candidate.note)
     transcript = candidate.conversation if with_transcript else None
     tasks = pdsqi.build_tasks(note, transcript)
     answers: dict[str, str] = {}
@@ -69,7 +78,7 @@ def score_note(
     for task in tasks:
         path = judge.cache_path(
             client.config.model,
-            pdsqi.JUDGE_PROMPT_VERSION,
+            judge_prompt_version,
             candidate.provider,
             candidate.system_id,
             candidate.session_id,
@@ -94,7 +103,7 @@ def score_note(
             path,
             {
                 "judge_model": client.config.model,
-                "judge_prompt_version": pdsqi.JUDGE_PROMPT_VERSION,
+                "judge_prompt_version": judge_prompt_version,
                 "judge_fingerprint": fingerprint,
                 "provider": candidate.provider,
                 "system_id": candidate.system_id,
@@ -133,6 +142,8 @@ def score_many(
     force: bool = False,
     cache_root=None,
     with_transcript: bool = True,
+    render=pdsqi.render_note,
+    judge_prompt_version: str = pdsqi.JUDGE_PROMPT_VERSION,
     on_note=None,
 ) -> list[NoteResult]:
     """Score notes concurrently, stopping rather than crossing the ceiling."""
@@ -149,6 +160,8 @@ def score_many(
             force=force,
             cache_root=cache_root,
             with_transcript=with_transcript,
+            render=render,
+            judge_prompt_version=judge_prompt_version,
         )
 
     with ThreadPoolExecutor(max_workers=max(1, client.config.concurrency)) as pool:
@@ -175,6 +188,8 @@ def from_cache(
     *,
     cache_root=None,
     with_transcript: bool = True,
+    render=pdsqi.render_note,
+    judge_prompt_version: str = pdsqi.JUDGE_PROMPT_VERSION,
 ) -> list[NoteResult]:
     """Score whatever is already answered on disk, asking the judge nothing.
 
@@ -189,7 +204,7 @@ def from_cache(
     scored: list[NoteResult] = []
 
     for candidate in candidates:
-        note = pdsqi.render_note(candidate.note)
+        note = render(candidate.note)
         transcript = candidate.conversation if with_transcript else None
         tasks = pdsqi.build_tasks(note, transcript)
 
@@ -198,7 +213,7 @@ def from_cache(
             record = judge.load_cached(
                 judge.cache_path(
                     client.config.model,
-                    pdsqi.JUDGE_PROMPT_VERSION,
+                    judge_prompt_version,
                     candidate.provider,
                     candidate.system_id,
                     candidate.session_id,
@@ -260,6 +275,18 @@ class SystemAggregate:
         return results.Metrics(headline=headline)
 
 
+#: What the rows say about themselves on the SOAP track. The Czech tracks pass
+#: their own, because "no human has rated these notes" is true of both but the
+#: rest is not: those notes are in Czech, and two of the eight attributes are
+#: not asked of the real half at all.
+METRICS_NOTE = (
+    "PDSQI-9, adapted: see docs/landscape.md. Physicians agree with each "
+    "other on this instrument at Krippendorff's alpha 0.575, which is the "
+    "ceiling these columns are read against -- no human has rated these "
+    "notes on it."
+)
+
+
 def to_rows(
     scored: list[NoteResult],
     *,
@@ -270,12 +297,22 @@ def to_rows(
     n_unreached: dict | None = None,
     settings: dict | None = None,
     run_id: str = "",
+    track: str = results.TRACK_PDSQI,
+    prompt_version: str = soap.PROMPT_VERSION,
+    judge_prompt_version: str = pdsqi.JUDGE_PROMPT_VERSION,
+    metrics_note: str = METRICS_NOTE,
 ) -> list[results.Row]:
     """One row per (provider, system), on its own comparability group.
 
     The counting rules are `scoring/run.to_rows`'s, for the same reasons: a
     note the endpoint never answered is not the model's failure, and a count of
     unusable notes travels with the reason it was unusable.
+
+    `track` and the two version fields are parameters because the same
+    instrument is asked of three corpora. They are four of the six fields
+    `results.COMPARABILITY_KEYS` compares, so passing them wrongly would merge
+    tables that must not merge -- which is why the Czech caller passes all four
+    together rather than inheriting any.
     """
     groups: dict[tuple[str, str], SystemAggregate] = {}
     labels: dict[tuple[str, str], Candidate] = {}
@@ -299,16 +336,16 @@ def to_rows(
         blameless = min(missing, unreached.sessions if unreached else 0)
         rows.append(
             results.Row(
-                track=results.TRACK_PDSQI,
+                track=track,
                 system_id=candidate.system_id,
                 system_type=candidate.system_type,
                 system_label=candidate.system_label,
                 provider=candidate.provider,
                 harness_version=__version__,
-                prompt_version=soap.PROMPT_VERSION,
+                prompt_version=prompt_version,
                 judge_model=judge_model,
                 judge_settings=dict(judge_settings or {}),
-                judge_prompt_version=pdsqi.JUDGE_PROMPT_VERSION,
+                judge_prompt_version=judge_prompt_version,
                 settings=(settings or {}).get(key, results.Settings()),
                 n_sessions_attempted=attempted,
                 n_sessions_generated=generated,
@@ -318,12 +355,7 @@ def to_rows(
                 failure_reasons=dict(unreached.failure_reasons) if unreached else {},
                 unreached_reasons=dict(unreached.reasons) if unreached else {},
                 metrics=aggregate.metrics(),
-                metrics_note=(
-                    "PDSQI-9, adapted: see docs/landscape.md. Physicians agree with each "
-                    "other on this instrument at Krippendorff's alpha 0.575, which is the "
-                    "ceiling these columns are read against -- no human has rated these "
-                    "notes on it."
-                ),
+                metrics_note=metrics_note,
                 dataset_checksums=checksums(),
                 scored_at=now,
                 run_id=run_id,

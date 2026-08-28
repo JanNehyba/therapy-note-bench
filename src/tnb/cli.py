@@ -832,6 +832,146 @@ def cmd_score_czech(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_score_czech_pdsqi(args: argparse.Namespace) -> int:
+    """Ask PDSQI-9 about the Czech notes: is the note good, not is the Czech good.
+
+    The companion to `score-czech` and not a replacement for it. The seven
+    criteria there ask whether the Czech is any good and cannot ask whether the
+    note is -- a flawless sentence about nothing passes all seven. These rows
+    land on their own two tracks and, like the criteria's, go to a file the
+    published page does not read.
+
+    The real half is asked six attributes and the translated half eight, and
+    that asymmetry is the confidentiality promise showing through the
+    instrument: `accurate` and `thorough` need the session, and the real
+    sessions never leave e-INFRA. `czech_pdsqi.transcripts_may_leave` decides
+    it from the corpus name, so there is no flag here to set wrongly.
+    """
+    from tnb.scoring import czech_pdsqi
+    from tnb.scoring import pdsqi_run as scoring_pdsqi
+
+    overrides = {"model": args.judge_model}
+    if getattr(args, "concurrency", None):
+        overrides["concurrency"] = args.concurrency
+    if getattr(args, "thinking_budget", None) is not None:
+        overrides["thinking_budget"] = args.thinking_budget
+    config = judge.config_from_env(**overrides)
+
+    wanted = ["real", "translated"] if args.corpus == "both" else [args.corpus]
+    plan: list[tuple[str, str, list]] = []
+    for corpus in wanted:
+        _, task_name = CZECH_CORPORA[corpus]
+        loader = czech_task.load_real if corpus == "real" else czech_task.load_translated
+        try:
+            sessions = loader(args.limit)
+        except RuntimeError as error:
+            print(f"{corpus}: {error}", file=sys.stderr)
+            continue
+        candidates = list(czech_pdsqi.from_generations(sessions, task_name=task_name))
+        if args.models:
+            names = {name.strip() for name in args.models.split(",") if name.strip()}
+            candidates = [c for c in candidates if c.system_id in names]
+        plan.append((czech_pdsqi.BY_TASK[task_name], task_name, candidates))
+
+    if not any(candidates for _, _, candidates in plan):
+        raise RuntimeError(
+            "Nothing to score. Run 'tnb generate --tasks czech-real,czech-translated' first."
+        )
+
+    total = sum(len(c) for _, _, c in plan)
+    questions = sum(
+        len(candidates) * len(czech_pdsqi.attribute_keys(task_name))
+        for _, task_name, candidates in plan
+    )
+    print(
+        f"{total} note(s) over {len(plan)} corpus(es), about {questions} judge questions.\n"
+        f"judge {config.model}, thinking budget {config.thinking_budget}, "
+        f"ceiling ${args.max_judge_usd:.2f}"
+    )
+    for track, task_name, candidates in plan:
+        systems = sorted({c.system_id for c in candidates})
+        asked = len(czech_pdsqi.attribute_keys(task_name))
+        transcript = (
+            "with transcript" if czech_pdsqi.transcripts_may_leave(task_name) else "note only"
+        )
+        print(
+            f"  {track:26} {len(candidates):4} note(s), {len(systems)} system(s), "
+            f"{asked} attributes, {transcript}"
+        )
+
+    if args.dry_run:
+        print("\nDry run: the judge was not called.")
+        return 0
+
+    client = judge.Judge(config)
+    spend = judge.Spend(limit_usd=args.max_judge_usd)
+    written = 0
+
+    for track, task_name, candidates in plan:
+        if not candidates:
+            continue
+        with_transcript = czech_pdsqi.transcripts_may_leave(task_name)
+        coverage = _generated_per_system(candidates)
+        done = 0
+        expected = len(candidates)
+
+        def on_note(result, total=expected) -> None:
+            nonlocal done
+            done += 1
+            print(
+                f"  [{done}/{total}] {result.candidate.system_id[:26]:26} "
+                f"{result.candidate.session_id:>14}  "
+                f"useful {_measure_cell(result.scored.get('useful'))}  "
+                f"succinct {_measure_cell(result.scored.get('succinct'))}  "
+                f"asked {result.asked:2} cached {result.cached:2}"
+                + (f" missing {len(result.missing)}" if result.missing else "")
+                + f"  {_money(spend.usd(config.model))}",
+                flush=True,
+            )
+
+        print(f"\n{track}:")
+        scored = scoring_pdsqi.score_many(
+            candidates,
+            client,
+            spend,
+            force=args.force,
+            with_transcript=with_transcript,
+            render=czech_task.render_note,
+            judge_prompt_version=czech_pdsqi.JUDGE_PROMPT_VERSION,
+            on_note=on_note,
+        )
+        if not scored:
+            continue
+
+        rows = scoring_pdsqi.to_rows(
+            scored,
+            judge_model=config.model,
+            judge_settings=config.fingerprint(),
+            n_generated=coverage,
+            n_attempted=coverage,
+            run_id=args.run_id or "",
+            track=track,
+            prompt_version=czech_task.PROMPT_VERSION,
+            judge_prompt_version=czech_pdsqi.JUDGE_PROMPT_VERSION,
+            metrics_note=czech_pdsqi.metrics_note(task_name),
+        )
+        if args.no_write:
+            print(f"  --no-write: {len(rows)} row(s) not appended.")
+            continue
+        results.LOCAL_DIR.mkdir(parents=True, exist_ok=True)
+        path = results.append(rows, results.LOCAL_ROWS_PATH)
+        written += len(rows)
+        print(f"  appended {len(rows)} row(s) to {path.relative_to(REPO_ROOT)}")
+
+    print(
+        f"\n{spend.calls} judge calls, {spend.input_tokens} in / {spend.output_tokens} out, "
+        f"{_money(spend.usd(config.model))} at list price."
+    )
+    if written:
+        print("Run 'tnb czech-report' to rebuild the local page.")
+    return 0
+
+
 def cmd_czech_report(args: argparse.Namespace) -> int:
     """Draw the Czech tables from the local record, into a local directory.
 
@@ -1627,6 +1767,48 @@ def build_parser() -> argparse.ArgumentParser:
     )
     score_czech.add_argument("--run-id", help="label these rows with a run id")
     score_czech.set_defaults(func=cmd_score_czech)
+
+    score_czech_pdsqi = subparsers.add_parser(
+        "score-czech-pdsqi",
+        help="ask PDSQI-9 about the Czech notes -- note quality, not Czech (local only)",
+    )
+    score_czech_pdsqi.add_argument(
+        "--corpus",
+        choices=["real", "translated", "both"],
+        default="both",
+        help=(
+            "which half. The real half is asked six attributes and the translated "
+            "half eight; the two that need a session are never asked of the real one"
+        ),
+    )
+    score_czech_pdsqi.add_argument("--models", help="comma-separated system ids to rate")
+    score_czech_pdsqi.add_argument("--limit", type=int, help="use only the first N sessions")
+    score_czech_pdsqi.add_argument(
+        "--judge-model", default=judge.DEFAULT_MODEL, help="which judge to run"
+    )
+    score_czech_pdsqi.add_argument(
+        "--max-judge-usd",
+        type=float,
+        default=250.0,
+        help="runaway guard; the run stops rather than exceeding it",
+    )
+    score_czech_pdsqi.add_argument(
+        "--concurrency", type=int, help="parallel judge calls; default 4"
+    )
+    score_czech_pdsqi.add_argument(
+        "--thinking-budget",
+        type=int,
+        help="how much room the judge gets to think; default 256, part of the cache key",
+    )
+    score_czech_pdsqi.add_argument("--force", action="store_true", help="re-ask cached questions")
+    score_czech_pdsqi.add_argument(
+        "--dry-run", action="store_true", help="print the job, ask nothing"
+    )
+    score_czech_pdsqi.add_argument(
+        "--no-write", action="store_true", help="rate but do not append result rows"
+    )
+    score_czech_pdsqi.add_argument("--run-id", help="label these rows with a run id")
+    score_czech_pdsqi.set_defaults(func=cmd_score_czech_pdsqi)
 
     czech_report = subparsers.add_parser(
         "czech-report",

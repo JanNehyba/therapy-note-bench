@@ -56,6 +56,8 @@ ALLOWED_CZECH = {
     "tests/test_czech_scoring.py": "an invented note, used to exercise the rubric",
     "tests/test_czech_datasets.py": "asserts on the invented fixtures",
     "tests/test_czech_run.py": "an invented note, used to exercise the runner",
+    "tests/test_czech_pdsqi.py": "an invented note, and an invented line of a session "
+    "that must not reach the judge",
     "tools/czech_control.py": "an invented clean note, and seven faults planted in it",
     "tests/fixtures/czech/real/999001.txt": "invented transcript, marked as such",
     "tests/fixtures/czech/translated/ukazka-b.txt": "invented transcript, marked as such",

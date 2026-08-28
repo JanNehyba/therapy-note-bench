@@ -66,6 +66,20 @@ TRACK_PDSQI = "pdsqi-soap"
 #: beyond the reach of a careless `setdefault`.
 TRACK_CZECH_REAL = "czech-real"
 TRACK_CZECH_TRANSLATED = "czech-translated"
+#: The same Czech notes, asked PDSQI-9 instead. The seven criteria ask whether
+#: the Czech is any good; they do not ask whether the note is any good, and a
+#: flawless sentence about nothing passes all seven. This is the quality half of
+#: the question, and it is separate for the same reason `TRACK_PDSQI` is
+#: separate from `TRACK_TNEVAL`.
+#:
+#: **The two halves are not asked the same number of questions.** `accurate` and
+#: `thorough` need the session, and the real sessions never leave e-INFRA, so
+#: the real half is asked the six attributes that read the note alone. The
+#: translated half is AnnoMI, which is public, so it is asked all eight. Two
+#: column sets are two instruments and get two tracks; merging them would put a
+#: six-attribute mean beside an eight-attribute one under one heading.
+TRACK_CZECH_REAL_PDSQI = "czech-real-pdsqi"
+TRACK_CZECH_TRANSLATED_PDSQI = "czech-translated-pdsqi"
 
 TRACKS = (
     TRACK_TNEVAL,
@@ -73,11 +87,18 @@ TRACKS = (
     TRACK_PDSQI,
     TRACK_CZECH_REAL,
     TRACK_CZECH_TRANSLATED,
+    TRACK_CZECH_REAL_PDSQI,
+    TRACK_CZECH_TRANSLATED_PDSQI,
 )
 
 #: Tracks whose rows are written to `LOCAL_ROWS_PATH` and never to `ROWS_PATH`.
 #: A test asserts the committed file holds none of them.
-LOCAL_TRACKS = (TRACK_CZECH_REAL, TRACK_CZECH_TRANSLATED)
+LOCAL_TRACKS = (
+    TRACK_CZECH_REAL,
+    TRACK_CZECH_TRANSLATED,
+    TRACK_CZECH_REAL_PDSQI,
+    TRACK_CZECH_TRANSLATED_PDSQI,
+)
 
 #: Everything else. What `tnb report` draws and what the coverage sweep writes.
 PUBLISHED_TRACKS = tuple(track for track in TRACKS if track not in LOCAL_TRACKS)
