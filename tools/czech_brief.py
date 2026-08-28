@@ -425,6 +425,49 @@ def check_no_clinical_text(rows: list[results.Row]) -> list[str]:
     return problems
 
 
+#: The length section's own sentences. Every number in them is a placeholder
+#: filled from `local/czech-length.json`, because a length that is typed into a
+#: sentence is a length that a later run makes quietly false.
+LENGTH_ASKED = (
+    "Three of the four prompts say nothing at all about how long a note should be. "
+    "The Deepsy prompt says it twice: a ceiling of {limit} words per section, which "
+    "the prompt itself calls invalid to exceed, and a target of the same {limit} words."
+)
+LENGTH_HUMAN = (
+    "The therapist who wrote the {n} reference notes for the English corpus used "
+    "{human} words. Not one of the {systems} models comes near that: they write "
+    "between {low} and {high} words, which is {share_low} to {share_high} of what the "
+    "person wrote. Nobody set any of them a length, so this is what they do when left "
+    "alone. It is the one place in this project where a human note can be compared "
+    "with a model's at all, and the whole field of models sits on one side of it."
+)
+LENGTH_DEEPSY = (
+    "Where a length WAS set, the ceiling was kept and the target was not. Only {over} "
+    "of {answers} answers exceed the {limit}-word limit -- but {section} uses {share} "
+    "of the length it was asked for. The models read \u201cmust not exceed\u201d and "
+    "did not read \u201cthe target is {limit} words\u201d."
+)
+LENGTH_BUYS = (
+    "The two languages then pull in opposite directions, and this is the most useful "
+    "thing to know before reading any table above. In English a longer note scores "
+    "higher for completeness under both judges. In Czech a longer note scores lower on "
+    "every language criterion under both judges. A column is printed here only when "
+    "both judges agree on the direction and at least one of them reaches 0.40; both "
+    "numbers are shown, so a column the two judges feel differently strongly about is "
+    "visible as that rather than averaged away."
+)
+LENGTH_WARNING = (
+    "Before reading that as \u201cthese models write worse Czech\u201d: each Czech "
+    "criterion asks one yes/no question about a whole note -- is there a fault "
+    "ANYWHERE in it. A note of {longest} words offers more places for one to be found "
+    "than a note of {shortest}. The check is what happens to the same models under the "
+    "other instrument: on the language criteria the three longest-writing models take "
+    "the last three places {hit} times out of {total}, and on PDSQI-9, rating the very "
+    "same notes, they do not. Part of the bottom of the Czech tables is length, not "
+    "Czech."
+)
+
+
 #: What a column catches once it has met a hundred real notes, in words.
 #:
 #: The verdict beside each one in the table is computed from the rows; this is
@@ -1028,6 +1071,200 @@ def _external() -> str:
     )
 
 
+def _length() -> str:
+    """How long a note the models write, and whether the tables reward it.
+
+    Written by `tools/czech_length.py`. It is here rather than in the method
+    because it is a result: **the two languages pull in opposite directions.**
+    English completeness rises with length under both judges, and every Czech
+    language criterion falls with it under both. A reader who does not know that
+    will read the bottom of the Czech table as "this model writes bad Czech"
+    when part of what it says is "this model writes a lot".
+
+    The correlations are printed without p-values on purpose. Eleven or sixteen
+    points make a threshold theatre; the reading rule this document uses
+    everywhere else -- believe a column that says the same thing under both
+    judges -- is the honest test and is the one stated beside the table.
+    """
+    path = REPO / "local" / "czech-length.json"
+    if not path.exists():
+        return ""
+    data = json.loads(path.read_text(encoding="utf-8"))
+
+    parts = [f"<h2>{_t('How long the notes are, and whether length is rewarded')}</h2>"]
+
+    # --- what was asked for -------------------------------------------------
+    asked = data.get("instructions", {})
+    deepsy_limit = (asked.get("deepsy") or {}).get("limit_words")
+    if asked:
+        parts.append("<p>" + html.escape(_t(LENGTH_ASKED).format(limit=deepsy_limit)) + "</p>")
+
+    # --- the human anchor ---------------------------------------------------
+    human = (data.get("human") or {}).get("human")
+    english = data.get("english") or {}
+    if human and english:
+        block = next(iter(english.values()))
+        parts.append(
+            "<p>"
+            + html.escape(
+                _t(LENGTH_HUMAN).format(
+                    human=human["median"],
+                    n=human["n"],
+                    low=block["min"],
+                    high=block["max"],
+                    systems=block["systems"],
+                    share_low=f"{block['min'] / human['median']:.0%}",
+                    share_high=f"{block['max'] / human['median']:.0%}",
+                )
+            )
+            + "</p>"
+        )
+
+    # --- the one prompt that set a limit ------------------------------------
+    for _track, block in (data.get("deepsy") or {}).items():
+        sections = block.get("sections") or {}
+        if not sections:
+            continue
+        worst = min(sections.items(), key=lambda kv: kv[1]["share_of_target"])
+        parts.append(
+            "<p>"
+            + html.escape(
+                _t(LENGTH_DEEPSY).format(
+                    limit=block["limit_words"],
+                    over=block["over_limit"],
+                    answers=block["answers"],
+                    section=_t(DEEPSY_SECTION_LABELS.get(worst[0], worst[0])),
+                    share=f"{worst[1]['share_of_target']:.0%}",
+                )
+            )
+            + "</p>"
+        )
+        break
+
+    # --- what length buys ---------------------------------------------------
+    table = _length_table(data)
+    if table:
+        parts.append("<p>" + html.escape(_t(LENGTH_BUYS)) + "</p>")
+        parts.append(table)
+        warning = _length_warning(data)
+        if warning:
+            parts.append(f"<div class='warn'><p>{html.escape(warning)}</p></div>")
+    return "\n".join(parts)
+
+
+def _length_warning(data: dict) -> str:
+    """The caveat, with its own evidence counted rather than asserted.
+
+    It claims two things a run could make false: that the longest writers sit at
+    the bottom of the language tables, and that they do not on PDSQI-9. Both are
+    counted from `tools/czech_length.py`'s tail block, and if the first stops
+    holding in every table that checked it, the sentence is not printed at all.
+    A caveat that survives its own evidence going away is not a caveat.
+    """
+    tail = data.get("tail") or {}
+    language = {
+        track: block
+        for track, block in tail.items()
+        if not track.endswith("-pdsqi") and block.get("judges")
+    }
+    if not language:
+        return ""
+    checks = [found for block in language.values() for found in block["judges"].values()]
+    hit = sum(1 for found in checks if found["all_in_the_tail"])
+    if not hit:
+        return ""
+    lengths = [
+        value
+        for track, block in (data.get("czech") or {}).items()
+        if not track.endswith("-pdsqi")
+        for value in block["by_system"].values()
+    ]
+    return _t(LENGTH_WARNING).format(
+        longest=max(lengths),
+        shortest=min(lengths),
+        hit=hit,
+        total=len(checks),
+    )
+
+
+#: How each Deepsy section is named to a reader. The keys are the application's
+#: own, in English, and a Czech clinical team should not have to read them.
+DEEPSY_SECTION_LABELS = {
+    "data": "the data section",
+    "clinical_hypotheses": "the hypotheses section",
+    "plan": "the plan section",
+}
+
+#: Below this a column is not entangled enough with length to be worth a row.
+#: **Both judges must agree on the direction and at least one must reach this**,
+#: rather than both reaching it. Requiring both dropped English completeness --
+#: +0.24 and +0.56, two judges saying the same thing at different strengths --
+#: which is exactly the row the paragraph above the table is about. A rule that
+#: hides the example its own prose cites is the wrong rule.
+LENGTH_ENTANGLED = 0.40
+
+#: Columns where moving against length is the measure working, not failing.
+#: `succinct` asks whether the note says it in as few words as it can; a note
+#: that is twice as long and no fuller SHOULD score lower. Printed in the same
+#: table because the reader needs to see it is not entangled by accident, and
+#: marked because otherwise it reads as one more broken column.
+LENGTH_BY_DESIGN = ("succinct", "conciseness")
+
+
+def _length_table(data: dict) -> str:
+    """Only the columns that move with length, and only where both judges agree.
+
+    Everything else would be a wall of coefficients a reader cannot act on. A
+    column that moves under one judge and not the other is a fact about that
+    judge, and this document has a section for those already.
+    """
+    lines = []
+    blocks = [(_t("English · TN-Eval SOAP"), data.get("english") or {})]
+    for track, block in (data.get("czech") or {}).items():
+        judges = {name: found["correlations"] for name, found in block["judges"].items()}
+        blocks.append((_t(TRACK_TITLES.get(track, track)), judges))
+
+    for title, judges in blocks:
+        if len(judges) < 2:
+            continue
+        names = sorted(judges)
+        first = judges[names[0]]
+        first = first.get("correlations", first) if isinstance(first, dict) else {}
+        for key in sorted(first):
+            values = []
+            for name in names:
+                found = judges[name]
+                found = found.get("correlations", found)
+                values.append(found.get(key))
+            if any(v is None for v in values):
+                continue
+            if max(abs(v) for v in values) < LENGTH_ENTANGLED:
+                continue
+            if len({v > 0 for v in values}) != 1:
+                continue
+            label = key
+            for measures in MEASURE_TABLES.values():
+                if key in measures:
+                    label = measures[key]["label"]
+                    break
+            mark = ""
+            if key in LENGTH_BY_DESIGN:
+                mark = f" <span class='dash'>({_t('by design')})</span>"
+            cells = "".join(f"<td>{v:+.2f}</td>" for v in values)
+            lines.append(
+                f"<tr><td>{html.escape(title)}</td>"
+                f"<td>{html.escape(_t(label))}{mark}</td>{cells}</tr>"
+            )
+    if not lines:
+        return ""
+    judges = sorted({n for _, j in blocks for n in j})
+    head = "".join(f"<th>{html.escape(n)}</th>" for n in judges)
+    return (
+        f"<table><thead><tr><th>{_t('Track')}</th><th>{_t('Column')}</th>"
+        f"{head}</tr></thead><tbody>{''.join(lines)}</tbody></table>"
+    )
+
+
 def _bands() -> str:
     """The models grouped, because ordering eleven of them over ten notes is
     mostly ordering noise.
@@ -1608,6 +1845,8 @@ def build(rows: list[results.Row]) -> str:
 {_join()}
 
 {_external()}
+
+{_length()}
 
 <h2>{_t("What these numbers cannot be used for")}</h2>
 {limits}

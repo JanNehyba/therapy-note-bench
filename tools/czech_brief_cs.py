@@ -120,7 +120,6 @@ CS: dict[str, str] = {
     "Words, median": "Slov, medián",
     "Words, range": "Slov, rozsah",
     "Turns, median": "Replik, medián",
-    "Column": "Sloupec",
     "Does it separate the models?": "Rozliší modely?",
     "What is behind the number": "Co je za tím číslem",
     "Criterion": "Kritérium",
@@ -712,6 +711,78 @@ CS: dict[str, str] = {
         "Formát Deepsy se ptá po jedné sekci zvlášť, takže zápis v něm nejsou jedna, ale tři "
         "odpovědi: za týž počet zápisů se zaplatí trojnásobkem volání."
     ),
+    # --- length ------------------------------------------------------------
+    "How long the notes are, and whether length is rewarded": (
+        "Jak dlouhé zápisy modely píšou a jestli se délka vyplácí"
+    ),
+    "Column": "Sloupec",
+    "English \u00b7 TN-Eval SOAP": "Angličtina \u00b7 TN-Eval SOAP",
+    "the data section": "sekce data",
+    "the hypotheses section": "sekce hypotézy",
+    "the plan section": "sekce plán",
+    "Three of the four prompts say nothing at all about how long a note should be. "
+    "The Deepsy prompt says it twice: a ceiling of {limit} words per section, which "
+    "the prompt itself calls invalid to exceed, and a target of the same {limit} "
+    "words.": (
+        "Tři ze čtyř promptů o délce zápisu neříkají vůbec nic. Deepsy prompt to říká "
+        "dvakrát: strop {limit} slov na sekci, jehož překročení sám označuje za "
+        "nevalidní, a cílovou délku týchž {limit} slov."
+    ),
+    "The therapist who wrote the {n} reference notes for the English corpus used "
+    "{human} words. Not one of the {systems} models comes near that: they write "
+    "between {low} and {high} words, which is {share_low} to {share_high} of what the "
+    "person wrote. Nobody set any of them a length, so this is what they do when left "
+    "alone. It is the one place in this project where a human note can be compared "
+    "with a model's at all, and the whole field of models sits on one side of "
+    "it.": (
+        "Terapeut, který napsal {n} referenčních poznámek k anglickému korpusu, "
+        "použil {human} slov. Ani jeden z {systems} modelů se tomu nepřiblíží: píšou "
+        "{low} až {high} slov, tedy {share_low} až {share_high} toho, co napsal "
+        "člověk. Délku nikomu z nich nikdo nezadal, takže tohle dělají, když je "
+        "necháme být. Je to jediné místo v celém projektu, kde jde lidskou poznámku s "
+        "modelovou vůbec porovnat — a celé pole modelů leží na jedné straně."
+    ),
+    "Where a length WAS set, the ceiling was kept and the target was not. Only {over} "
+    "of {answers} answers exceed the {limit}-word limit -- but {section} uses {share} "
+    "of the length it was asked for. The models read \u201cmust not exceed\u201d and "
+    "did not read \u201cthe target is {limit} words\u201d.": (
+        "Tam, kde délka zadaná BYLA, se dodržel strop a nedodržel cíl. Limit {limit} "
+        "slov překračuje jen {over} z {answers} odpovědí — ale {section} využívá "
+        "{share} délky, o kterou si prompt řekl. Modely si přečetly „nesmí "
+        "překročit“ a nepřečetly si „cílová délka je {limit} slov“."
+    ),
+    "The two languages then pull in opposite directions, and this is the most useful "
+    "thing to know before reading any table above. In English a longer note scores "
+    "higher for completeness under both judges. In Czech a longer note scores lower on "
+    "every language criterion under both judges. A column is printed here only when "
+    "both judges agree on the direction and at least one of them reaches 0.40; both "
+    "numbers are shown, so a column the two judges feel differently strongly about is "
+    "visible as that rather than averaged away.": (
+        "Oba jazyky pak táhnou na opačné strany a tohle je to nejužitečnější, co je "
+        "dobré vědět dřív, než se člověk pustí do kterékoli tabulky výše. V angličtině "
+        "delší zápis dostává vyšší úplnost, a to u obou soudců. V češtině má delší "
+        "zápis horší skóre na každém jazykovém kritériu, a to také u obou soudců. "
+        "Sloupec je tu vypsaný jen tehdy, když se oba soudci shodnou na směru a aspoň "
+        "jeden z nich dosáhne 0,40; ukázaná jsou obě čísla, takže sloupec, který každý "
+        "ze soudců cítí jinak silně, je vidět právě takový, a ne zprůměrovaný."
+    ),
+    "Before reading that as \u201cthese models write worse Czech\u201d: each Czech "
+    "criterion asks one yes/no question about a whole note -- is there a fault "
+    "ANYWHERE in it. A note of {longest} words offers more places for one to be found "
+    "than a note of {shortest}. The check is what happens to the same models under the "
+    "other instrument: on the language criteria the three longest-writing models take "
+    "the last three places {hit} times out of {total}, and on PDSQI-9, rating the very "
+    "same notes, they do not. Part of the bottom of the Czech tables is length, not "
+    "Czech.": (
+        "Než si to někdo přečte jako „tyhle modely píšou horší češtinu“: každé české "
+        "kritérium klade jednu otázku ano/ne o celém zápisu — je v něm někde chyba? "
+        "Zápis o {longest} slovech nabízí víc míst, kde ji najít, než zápis o "
+        "{shortest} slovech. Kontrolou je, co se s týmiž modely stane pod druhým "
+        "nástrojem: na jazykových kritériích obsadí tři nejdelší pisatelé poslední tři "
+        "místa {hit}krát ze {total}, kdežto na PDSQI-9, které hodnotí úplně tytéž "
+        "zápisy, ne. Část spodku českých tabulek je délka, ne čeština."
+    ),
+    "by design": "tak to má být",
     # --- refusals ----------------------------------------------------------
     "Refusing to write: a row carries something that is not a score.": (
         "Odmítám zapsat: řádek nese něco, co není skóre."
