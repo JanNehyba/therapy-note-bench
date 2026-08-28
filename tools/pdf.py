@@ -59,7 +59,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--source", type=Path, default=SOURCE, help="the HTML to print")
     parser.add_argument("--target", type=Path, default=TARGET, help="where the PDF goes")
     args = parser.parse_args(argv)
-    source, target = args.source, args.target
+    # Resolved, because `as_uri()` refuses a relative path and the obvious way
+    # to call this from a script is `--source local/x.html`.
+    source, target = args.source.resolve(), args.target.resolve()
 
     if not source.exists():
         print(f"{source} is not there. Run `make brief` first.", file=sys.stderr)

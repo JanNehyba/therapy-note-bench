@@ -184,27 +184,37 @@ def check_no_clinical_text(rows: list[results.Row]) -> list[str]:
 
 
 def build(rows: list[results.Row]) -> str:
-    by_track: dict[str, list[results.Row]] = defaultdict(list)
+    # One table per (track, judge). Two judges are two instruments and their
+    # rows are two comparability groups; merging them would print every model
+    # twice under one heading and quietly average nothing.
+    by_group: dict[tuple[str, str], list[results.Row]] = defaultdict(list)
     for row in results.latest(rows):
         if row.is_scored:
-            by_track[row.track].append(row)
+            by_group[(row.track, row.judge_model or "")].append(row)
 
-    judges = sorted({row.judge_model for row in rows if row.judge_model})
     sections = []
     for track in results.LOCAL_TRACKS:
-        drawn = by_track.get(track, [])
-        if not drawn:
+        judges = sorted(judge for (t, judge) in by_group if t == track)
+        if not judges:
             continue
-        notes = sum(row.n_sessions_scored for row in drawn)
         sections.append(
             f"<h2>{html.escape(TRACK_TITLES.get(track, track))}</h2>"
             f"<p class='sub'>{html.escape(re.sub(r'[*]{2}', '', TRACK_BLURBS.get(track, '')))}</p>"
-            f"<p>{len(drawn)} models, {notes} notes, judged by "
-            f"{html.escape(' and '.join(judges))}.</p>"
-            + _table(track, drawn)
-            + "<h3>What each column is</h3>"
-            + _definitions(track)
         )
+        for judge in judges:
+            drawn = by_group[(track, judge)]
+            notes = sum(row.n_sessions_scored for row in drawn)
+            sections.append(
+                f"<h3>Judged by {html.escape(judge)}</h3>"
+                f"<p>{len(drawn)} models, {notes} notes.</p>" + _table(track, drawn)
+            )
+        if len(judges) > 1:
+            sections.append(
+                "<div class='warn'><p>Two judges, two tables, and they are not "
+                "averaged. Where they disagree about a model is the only control "
+                "this track has, so the disagreement is the thing to read.</p></div>"
+            )
+        sections.append("<h3>What each column is</h3>" + _definitions(track))
 
     limits = "".join(
         f"<h3>{html.escape(title)}</h3><p>{html.escape(body)}</p>" for title, body in LIMITS
