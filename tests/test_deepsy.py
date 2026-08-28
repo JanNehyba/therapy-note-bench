@@ -192,3 +192,52 @@ def test_the_three_sections_are_the_three_with_a_soap_counterpart():
     assert deepsy.SECTIONS == ("data", "clinical_hypotheses", "plan")
     assert "dekurz" not in deepsy.SECTIONS
     assert "questionnaire_summary" not in deepsy.SECTIONS
+
+
+# --- the parse must run at generation time, or the repair never fires --------
+
+
+def test_generation_parses_a_deepsy_section_and_marks_a_bad_one_failed():
+    """The parse belongs in generation, not in scoring. Without it a reply that
+    is not JSON is stored as `ok: true` with no note, the repair suffix never
+    fires, and `PARSE_ATTEMPTS` is dead code -- which is how this shipped for
+    thirteen calls before it was caught."""
+    from tnb import generation
+
+    job = generation.Job(
+        provider="einfra",
+        model_id="m",
+        task=deepsy.NAME_REAL,
+        prompt_version=deepsy.PROMPT_VERSION,
+        session_id="cz-r-0000abcd",
+        unit="clinical_hypotheses",
+        prompt="...",
+    )
+
+    provider = _provider()
+
+    good = generation._record(job, provider, _completion('{"hypotheses": "- a"}'), "now", "...")
+    assert good["note"] == {"hypotheses": "- a"}
+    assert good["ok"] is True
+
+    bad = generation._record(job, provider, _completion("tady je vase poznamka:"), "now", "...")
+    assert bad["note"] is None
+    assert bad["ok"] is False
+    assert "clinical_hypotheses" in bad["error"]
+
+
+def _provider():
+    from tnb.config import GenerationPolicy, Provider
+
+    return Provider(
+        name="einfra",
+        base_url="https://example.invalid/v1",
+        token_env="EINFRA_API_TOKEN",
+        generation=GenerationPolicy(temperature=0.0, max_tokens=4096, concurrency=2),
+    )
+
+
+def _completion(text: str):
+    from tnb.providers.openai_compatible import Completion
+
+    return Completion(model="m", text=text, ok=True, finish_reason="stop")

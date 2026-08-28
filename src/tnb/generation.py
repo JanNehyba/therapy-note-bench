@@ -41,6 +41,7 @@ from tnb.datasets.base import Session, checksums
 from tnb.providers import openai_compatible as client
 from tnb.tasks import TASKS, Task
 from tnb.tasks import czech as czech_task
+from tnb.tasks import deepsy as deepsy_task
 from tnb.tasks import soap as soap_task
 
 CACHE_DIR = REPO_ROOT / "generations"
@@ -246,11 +247,26 @@ def _record(
         czech_task.NAME_REAL: czech_task.parse_note,
         czech_task.NAME_TRANSLATED: czech_task.parse_note,
     }
+    # The Deepsy sections need to know which section they are: each names its own
+    # keys and a reply is checked against those and nothing else. It is the one
+    # task whose parser takes a second argument, which is why it is not in the
+    # table above rather than being wedged into it with a lambda.
+    deepsy_tasks = (deepsy_task.NAME_REAL, deepsy_task.NAME_TRANSLATED)
+
     if job.task in parsers:
         record["note"] = parsers[job.task](completion.text) if completion.text else None
         if record["note"] is None:
             record["ok"] = False
             record["error"] = record["error"] or "answer did not contain a SOAP dictionary"
+    elif job.task in deepsy_tasks:
+        record["note"] = (
+            deepsy_task.parse_note(completion.text, job.unit) if completion.text else None
+        )
+        if record["note"] is None:
+            record["ok"] = False
+            record["error"] = record["error"] or (
+                f"answer was not a JSON object with the {job.unit} keys"
+            )
     return record
 
 
