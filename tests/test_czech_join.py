@@ -87,3 +87,61 @@ def test_the_confound_is_written_down_rather_than_left_to_the_reader():
     assert "50 AnnoMI conversations" in czech_join.CONFOUND
     assert "both judges" in czech_join.READING
     assert "unmeasured" in czech_join.READING
+
+
+# --- the briefing's grouping ------------------------------------------------
+
+
+def _row(**over):
+    """A minimal scored Czech row."""
+    from tnb import results
+
+    fields = {
+        "track": results.TRACK_CZECH_REAL,
+        "system_id": "a-model",
+        "system_type": "model",
+        "system_label": "a-model",
+        "provider": "einfra",
+        "harness_version": "0.6.0",
+        "prompt_version": "czech-soap-v1",
+        "judge_model": "gemini-3.1-pro-preview",
+        "judge_prompt_version": "czech-criteria-v1",
+        "n_sessions_attempted": 10,
+        "n_sessions_generated": 10,
+        "n_sessions_scored": 10,
+        "metrics": results.Metrics(headline={"diacritics": 1.0}),
+    }
+    fields.update(over)
+    return results.Row(**fields)
+
+
+def test_one_table_per_comparability_group_not_per_judge():
+    """Two rubric versions under one heading print every model twice, from two
+    instruments. The briefing keyed its tables on the track and the judge --
+    two of the six fields `COMPARABILITY_KEYS` names -- and that held only
+    while there was one rubric. `quotes` becoming a count made a second."""
+    import re
+
+    import czech_brief
+
+    rows = [
+        _row(judge_prompt_version="czech-criteria-v1"),
+        _row(judge_prompt_version="czech-criteria-v2"),
+    ]
+    page = czech_brief.build(rows)
+
+    tables = re.findall(r"<tbody>(.*?)</tbody>", page, re.S)
+    for body in tables:
+        models = re.findall(r"<tr><td>([a-z0-9.\-]+)</td>", body)
+        assert len(models) == len(set(models)), "a model appears twice in one table"
+
+    assert "czech-criteria-v1" in page and "czech-criteria-v2" in page
+    assert "separate instruments" in page
+
+
+def test_one_rubric_needs_no_version_label():
+    """The label is noise when there is nothing to distinguish."""
+    import czech_brief
+
+    page = czech_brief.build([_row(), _row(system_id="b-model")])
+    assert "rubric czech-criteria" not in page

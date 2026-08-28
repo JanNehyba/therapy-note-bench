@@ -628,35 +628,66 @@ def _controls() -> str:
 
 
 def build(rows: list[results.Row]) -> str:
-    # One table per (track, judge). Two judges are two instruments and their
-    # rows are two comparability groups; merging them would print every model
-    # twice under one heading and quietly average nothing.
-    by_group: dict[tuple[str, str], list[results.Row]] = defaultdict(list)
+    """One table per comparability group -- all six fields of it, not two.
+
+    The rule was stated here and half-implemented: the grouping keyed on the
+    track and the judge, which are two of the six fields
+    `results.COMPARABILITY_KEYS` names. It held while there was one rubric.
+    When `quotes` became a count the rubric became `czech-criteria-v2`, and a
+    table keyed on two fields put both versions under one heading -- every
+    model twice, from two instruments, exactly the thing the comment above it
+    warned about.
+
+    Keyed on `Row.comparability_key()` now, so the six fields decide. A group
+    that differs from another only in its rubric version gets its own table and
+    its own heading saying which.
+    """
+    by_group: dict[tuple, list[results.Row]] = defaultdict(list)
     for row in results.latest(rows):
         if row.is_scored:
-            by_group[(row.track, row.judge_model or "")].append(row)
+            by_group[row.comparability_key()].append(row)
 
     sections = []
     for track in results.LOCAL_TRACKS:
-        judges = sorted(judge for (t, judge) in by_group if t == track)
-        if not judges:
+        groups = {key: drawn for key, drawn in by_group.items() if drawn[0].track == track}
+        if not groups:
             continue
         sections.append(
             f"<h2>{html.escape(TRACK_TITLES.get(track, track))}</h2>"
             f"<p class='sub'>{html.escape(re.sub(r'[*]{2}', '', TRACK_BLURBS.get(track, '')))}</p>"
         )
-        for judge in judges:
-            drawn = by_group[(track, judge)]
+        # Newest first, so a superseded rubric sits below the one in use.
+        ordered = sorted(
+            groups.values(),
+            key=lambda drawn: (drawn[0].judge_prompt_version, drawn[0].judge_model or ""),
+            reverse=True,
+        )
+        versions = {drawn[0].judge_prompt_version for drawn in ordered}
+        for drawn in ordered:
+            first = drawn[0]
             notes = sum(row.n_sessions_scored for row in drawn)
+            rubric = (
+                f" <span class='dash'>· rubric {html.escape(first.judge_prompt_version)}</span>"
+                if len(versions) > 1
+                else ""
+            )
             sections.append(
-                f"<h3>Judged by {html.escape(judge)}</h3>"
+                f"<h3>Judged by {html.escape(first.judge_model or 'unknown')}{rubric}</h3>"
                 f"<p>{len(drawn)} models, {notes} notes.</p>" + _table(track, drawn)
             )
-        if len(judges) > 1:
+        if len({drawn[0].judge_model for drawn in ordered}) > 1:
             sections.append(
                 "<div class='warn'><p>Two judges, two tables, and they are not "
                 "averaged. Where they disagree about a model is the only control "
                 "this track has, so the disagreement is the thing to read.</p></div>"
+            )
+        if len(versions) > 1:
+            sections.append(
+                "<div class='warn'><p>More than one version of the rubric is shown. "
+                "They are separate tables because they are separate instruments -- "
+                f"{html.escape(', '.join(sorted(versions)))} -- and a model's rows "
+                "under two of them are not two measurements of one thing. The newest "
+                "is first.</p></div>"
             )
         sections.append("<h3>What each column is</h3>" + _definitions(track))
 
