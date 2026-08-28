@@ -47,6 +47,12 @@ PAYLOAD_FIELDS = (
     "tables[].design.scored_against",
     "tables[].design.human_role",
     "tables[].design.calibration",
+    # The two lines above every table saying what the corpus is and what a note
+    # is. Added to the payload without being added here, so they drew in English
+    # on the Czech page and nothing said so -- which is the whole job of this
+    # list, and the reason it is a list rather than a walk of every string.
+    "tables[].terms[].term",
+    "tables[].terms[].gloss",
     "tables[].columns[].label",
     "tables[].columns[].definition",
     "tables[].columns[].caveat",

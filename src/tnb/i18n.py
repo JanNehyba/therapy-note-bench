@@ -251,12 +251,6 @@ _SENTENCES = {
     ),
     "Band": "Pásmo",
     "System": "Systém",
-    "Reasoning effort the note was written at. Blank where the provider has no such control.": (
-        "Míra uvažování, na které byl zápis napsán. Prázdné tam, kde poskytovatel takový "
-        "ovladač nemá."
-    ),
-    "Effort": "Úsilí",
-    "this provider has no effort control": "tento poskytovatel nemá ovladač míry uvažování",
     "Median words in this model’s notes. Completeness counts coverage, so a longer note covers"
     " more.": (
         "Medián počtu slov v zápisech tohoto modelu. Úplnost počítá pokrytí, takže delší zápis "
@@ -272,8 +266,6 @@ _SENTENCES = {
         "v panelu níže"
     ),
     "judge's own {0}": "hodnotitelova vlastní {0}",
-    "the table is ordered by this column": "tabulka je seřazena podle tohoto sloupce",
-    "ranks": "řadí",
     "ranks this table": "řadí tuto tabulku",
     # -- the sentences under the grid ----------------------------------------
     "<strong>Systems that share a rank cannot be told apart by this evidence.</strong> {0} of {1}"
@@ -321,6 +313,81 @@ _SENTENCES = {
         "publikovaná</strong>, takže číslo, které do téhle věty patří, chybí — místo aby se "
         "půjčilo od jiného hodnotitele. Každý další sloupec je kontext, ne žebříček."
     ),
+    "Provider": "Poskytovatel",
+    "The endpoint that served the model. The same id on two endpoints can be two different"
+    " builds.": (
+        "Endpoint, který model obsloužil. Totéž id na dvou endpointech mohou být dvě různá "
+        "sestavení."
+    ),
+    "Marks": "Značky",
+    "Conditions this row did not share with the others, and whether its judge shares a vendor"
+    " with it.": (
+        "Podmínky, které tenhle řádek nesdílel s ostatními, a jestli jeho hodnotitel sdílí "
+        "dodavatele s ním."
+    ),
+    "reasoning effort the note was written at": "úsilí na uvažování, se kterým byl zápis napsán",
+    "judge cannot be checked against people": "hodnotitele nelze ověřit proti lidem",
+    "both": "oba",
+    "Keep this judge's figures and add, beside each one, how far the other judge was from it."
+    " Nothing is averaged: the second number is the other judge's own score, written as a"
+    " distance.": (
+        "Ponechá čísla tohoto hodnotitele a k každému připíše, jak daleko od něj byl ten "
+        "druhý. Nic se neprůměruje: to druhé číslo je vlastní skóre druhého hodnotitele, "
+        "napsané jako vzdálenost."
+    ),
+    "<strong>Sources:</strong> {0} — every prompt and rubric here is reproduced verbatim"
+    ' from them. <a href="methods.html#licences">What each is used for, and on what terms</a>:'
+    " two of them publish no licence at all.": (
+        "<strong>Zdroje:</strong> {0} — každý zdejší prompt i rubrika jsou z nich "
+        'převzaté doslova. <a href="methods.html#licences">K čemu se každý používá a za '
+        "jakých podmínek</a>: dva z nich nezveřejňují žádnou licenci."
+    ),
+    "The instrument is reproduced verbatim, anchors included, so a score here answers the"
+    " published question and not a rewritten one.": (
+        "Nástroj je převzatý doslova včetně kotev, takže zdejší skóre odpovídá na "
+        "publikovanou otázku, ne na přepsanou."
+    ),
+    "the nine attributes and their anchors, eight of which are scored": (
+        "devět atributů a jejich kotvy, z nichž osm se hodnotí"
+    ),
+    # -- what the corpus is and what a note is, above each table -------------
+    "AnnoMI": "AnnoMI",
+    "133 publicly released motivational-interviewing sessions, transcribed and annotated by"
+    " therapists. 50 of them are scored here.": (
+        "133 veřejně vydaných nahrávek motivačních rozhovorů, přepsaných a anotovaných "
+        "terapeuty. Hodnotí se z nich 50."
+    ),
+    "SOAP note": "Zápis SOAP",
+    "The standard clinical note format: subjective, objective, assessment, plan. Every model"
+    " writes into the same four headings.": (
+        "Standardní formát klinického zápisu: subjektivní, objektivní, hodnocení, plán. "
+        "Všechny modely píší do týchž čtyř nadpisů."
+    ),
+    "PDSQI-9": "PDSQI-9",
+    "A published instrument for rating how a clinical note is written, validated on real"
+    " records with physicians doing the rating.": (
+        "Publikovaný nástroj na hodnocení toho, jak je klinický zápis napsaný, ověřený na "
+        "skutečné dokumentaci s lékaři jako hodnotiteli."
+    ),
+    "iHOPE": "iHOPE",
+    "40 counselling sessions, each with one note written by the clinician who saw it. That note"
+    " is the answer key, not an entry.": (
+        "40 poradenských sezení, u každého jeden zápis od klinika, který ho vedl. Ten zápis "
+        "je klíč k odpovědím, ne soutěžící."
+    ),
+    "The iCARE form": "Formulář iCARE",
+    "17 fields to fill in rather than a note to write, so a blank field is a different thing"
+    " from a short sentence.": (
+        "17 políček k vyplnění místo zápisu k napsání, takže prázdné políčko je něco jiného "
+        "než krátká věta."
+    ),
+    "The first three columns count what a note contains — TN-Eval's rubric. The other eight"
+    " rate how it is written — PDSQI-9. **Nothing is averaged across them**: different"
+    " questions on different scales, and neither instrument publishes a total either.": (
+        "První tři sloupce počítají, co zápis obsahuje — rubrika TN-Eval. Dalších osm "
+        "hodnotí, jak je napsaný — PDSQI-9. **Nic se přes ně neprůměruje**: jsou to jiné "
+        "otázky na jiných škálách a ani jeden nástroj sám žádný souhrn nezveřejňuje."
+    ),
     "This track is deliberately <strong>not ranked</strong>: its columns measure different things"
     " and the source paper found they disagree. That disagreement is the result.": (
         "Tato větev <strong>záměrně nemá pořadí</strong>: její sloupce měří různé věci a zdrojový "
@@ -341,7 +408,6 @@ _SENTENCES = {
     "the human note competes": "lidský zápis soutěží",
     "the human note is the answer key": "lidský zápis je vzorem",
     "judge checked against people": "hodnotitel ověřen proti lidem",
-    "judge cannot be checked": "hodnotitele nelze ověřit",
     "Scored against": "Hodnoceno proti",
     "Where the human note sits": "Kde stojí lidský zápis",
     "Can the judge be checked?": "Lze hodnotitele ověřit?",
@@ -388,19 +454,6 @@ _PAYLOAD = {
     # -- track titles and blurbs ---------------------------------------------
     "SOAP notes on AnnoMI · two instruments, the same notes": (
         "Zápisy SOAP na AnnoMI · dva nástroje, tytéž zápisy"
-    ),
-    "Eleven columns from two instruments over one set of notes, so the question both were run"
-    " for can be read off one row. The first three are TN-Eval's rubric: it counts what a note"
-    " contains. The other eight are PDSQI-9, a published instrument that rates how a clinical"
-    " note is written. **Nothing is averaged across them** — they are different questions on"
-    " different scales, and there is no eleven-column total here for the same reason neither"
-    " instrument publishes one.": (
-        "Jedenáct sloupců ze dvou nástrojů nad jednou sadou zápisů, aby se otázka, kvůli které "
-        "oba běžely, dala přečíst z jednoho řádku. První tři jsou rubrika z TN-Eval: ta počítá, "
-        "co zápis obsahuje. Dalších osm je PDSQI-9, publikovaný nástroj, který hodnotí, jak je "
-        "klinický zápis napsán. **Nic se přes ně neprůměruje** — jsou to různé otázky na různých "
-        "škálách a není tu žádný součet přes jedenáct sloupců ze stejného důvodu, z jakého ho "
-        "nepublikuje ani jeden z těch nástrojů."
     ),
     "iCARE form on the iHOPE corpus · 17 sections per session": (
         "Formulář iCARE na korpusu iHOPE · 17 oddílů na sezení"
@@ -720,6 +773,9 @@ _METHODS = {
         "<code>tools/figures.py</code> ze souborů jmenovaných v patičce obrázku."
     ),
     "methods.protocol.summary": ("<strong>Co je tady zápis a proti čemu se hodnotí?</strong>"),
+    "methods.design.summary": (
+        "<strong>S čím každá větev zápis porovnává a jestli jde její hodnotitel ověřit</strong>"
+    ),
     "methods.corpora.summary": (
         "<strong>Co jsou ty dva korpusy a jak velkou část formuláře experti vyplnili</strong>"
     ),

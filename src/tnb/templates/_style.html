@@ -28,7 +28,12 @@
     margin: 0; padding: 2rem 1.25rem 5rem; background: var(--bg); color: var(--fg);
     font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   }
-  main { max-width: 1080px; margin: 0 auto; }
+  /* The table is what the page is for, and it was reading through a 1080px
+     letterbox with a scrollbar under it while the window had room to spare.
+     The column widens; the prose in it does not, because a line of text 1500px
+     wide is unreadable however much room there is. */
+  main { max-width: 1600px; margin: 0 auto; }
+  p.sub, p.note, p.ranking-note, p.versions, dl.measures { max-width: 58rem; }
   h1 { font-size: 1.6rem; margin: 0 0 .3rem; letter-spacing: -.01em; }
   h2 { font-size: 1.1rem; margin: 0 0 .2rem; }
   p.sub { color: var(--muted); margin: 0 0 2rem; }
@@ -98,7 +103,32 @@
   @media (max-width: 40rem) { ol.sections { columns: 1; } }
   .subtitle { font-weight: 400; color: var(--muted); }
 
+  /* The second judge's figure, written as a distance from the first. Quiet
+     and small: it is context for the number beside it, not a number in its own
+     right, and a reader scanning a column must still see the column. */
+  .gap { margin-left: .4em; font-size: .82em; white-space: nowrap; }
+  .gap.up { color: var(--up, #2f7d4f); }
+  .gap.down { color: var(--down, #b4472f); }
+  .gap.same, .gap.dash { color: var(--muted); }
+  @media (prefers-color-scheme: dark) {
+    .gap.up { color: #6fce97; }
+    .gap.down { color: #f0866a; }
+  }
   .scroll { overflow-x: auto; }
+  /* A sideways scrollbar sits under the table, which on a long table is a
+     screen away from the columns it scrolls. This is the same bar above it:
+     an empty strip as wide as the table, scrolled in step with it. It is
+     removed rather than shown empty when the table fits. */
+  .scroll-top { overflow-x: auto; overflow-y: hidden; }
+  .scroll-top > div { height: 1px; }
+  .scroll-top[hidden] { display: none; }
+  /* Which column is doing the sorting, on the column itself. The header was
+     already clickable and said so only by turning the cursor into a hand. */
+  th[data-sort]::after { content: '\2195'; opacity: .25; margin-left: .35em; font-size: .9em; }
+  th[data-sort]:hover::after { opacity: .6; }
+  th[aria-sort="descending"]::after { content: '\25BC'; opacity: 1; color: var(--accent); }
+  th[aria-sort="ascending"]::after { content: '\25B2'; opacity: 1; color: var(--accent); }
+  th[aria-sort] { color: var(--fg); }
   /* On a narrow screen the table scrolls sideways and the first column is the
      one that must not leave: a row of dashes with no name on it says nothing.
      Pinned, with its own background so the scrolling columns pass underneath. */

@@ -379,7 +379,14 @@ def test_the_page_carries_the_licence_of_every_input():
     data = report.build([_row()])
     sources = {entry["source"] for entry in data["licences"]}
 
-    assert {"TN-Eval (code)", "TN-Eval-Data", "AnnoMI", "iCARE", "TheraFuse"} == sources
+    assert {
+        "PDSQI-9",
+        "TN-Eval (code)",
+        "TN-Eval-Data",
+        "AnnoMI",
+        "iCARE",
+        "TheraFuse",
+    } == sources
     licensed = [e for e in data["licences"] if e["licence"] == "Apache-2.0"]
     assert len(licensed) == 1, "only the TN-Eval code repository carries one"
 

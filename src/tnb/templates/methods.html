@@ -65,6 +65,11 @@ __STYLE__
     <div id="corpora-body"></div>
   </details>
 
+  <details class="box" open id="design">
+    <summary data-t="methods.design.summary"><strong>What each track compares a note with, and whether its judge can be checked</strong></summary>
+    <div id="design-body"></div>
+  </details>
+
   <div id="withdrawn"></div>
 
   <details class="box" open id="licences">
@@ -336,6 +341,44 @@ function renderSaturation(data) {
 
 renderSaturation(DATA);
 
+// Every table's three answers in one place. It used to sit above each table on
+// the leaderboard, where a reader who did not yet know what AnnoMI was could
+// not use any of it. The caveat half -- a judge with no human anchor -- stayed
+// there, because a caveat belongs beside the number it qualifies.
+function renderTrackDesign(data) {
+  if (!document.getElementById('design-body')) return;
+
+  // One entry per track, not per table: two judges are two tables and the
+  // design is a property of the track, so listing tables would print each
+  // answer twice and read as two different findings.
+  const seen = new Set();
+  const blocks = [];
+  (data.tables || []).forEach(table => {
+    const d = table.design || {};
+    if (!d.scored_against || seen.has(table.track)) return;
+    seen.add(table.track);
+    const mark = d.calibrated
+      ? `<span class="role role-competitor">${T`judge checked against people`}</span>`
+      : `<span class="role role-key">${T`judge cannot be checked against people`}</span>`;
+    const role = d.human_role_short === 'competitor'
+      ? `<span class="role role-competitor">${T`the human note competes`}</span>`
+      : `<span class="role role-key">${T`the human note is the answer key`}</span>`;
+    blocks.push(`<div class="design">
+        <h3>${esc(tr(table.title))}</h3>
+        <p class="design-marks">${role}${mark}</p>
+        <dl>
+          <div><dt>${T`Scored against`}</dt><dd>${esc(tr(d.scored_against))}</dd></div>
+          <div><dt>${T`Where the human note sits`}</dt><dd>${esc(tr(d.human_role))}</dd></div>
+          <div><dt>${T`Can the judge be checked?`}</dt><dd>${esc(tr(d.calibration))}</dd></div>
+        </dl>
+      </div>`);
+  });
+
+  if (!blocks.length) { drop('design'); return; }
+  document.getElementById('design-body').innerHTML = blocks.join('');
+}
+
+
 function renderCorpora(data) {
   const c = data.corpus;
   if (!c) { drop('corpora'); return; }
@@ -409,6 +452,7 @@ function renderLicences(data) {
     </table></div>`;
 }
 
+renderTrackDesign(DATA);
 renderCorpora(DATA);
 renderLicences(DATA);
 
@@ -986,6 +1030,7 @@ if ((DATA.superseded || []).length) {
 
 function drawAll() {
   renderSaturation(DATA);
+  renderTrackDesign(DATA);
   renderCorpora(DATA);
   renderLicences(DATA);
   renderProtocol(DATA.protocol);

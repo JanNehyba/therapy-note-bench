@@ -16,6 +16,12 @@ __STYLE__
     <a href="https://github.com/JanNehyba/therapy-note-bench">Code and data on GitHub</a>.
   </p>
 
+  <!-- Above the table, because it is what to read before the numbers rather
+       than after them. It was the last thing on the page, under the footer. -->
+  <p class="methods-link" data-t="page.brief-link"><a href="brief.html">What this leaderboard can and cannot tell you →</a>
+     Four claims, four figures, and the file each number came from — for somebody
+     building or buying one of these. Also as a <a href="therapy-note-bench.pdf">PDF</a>.</p>
+
   <div class="controls" id="controls"></div>
 
   <div id="tables"></div>
@@ -25,10 +31,7 @@ __STYLE__
      how far the two judges disagree with each other, what the two corpora are and
      where they came from, and which rows are no longer drawn.</p>
 
-  <p class="methods-link" data-t="page.brief-link"><a href="brief.html">Reading these numbers without being misled →</a>
-     What a leaderboard of these models can and cannot tell you, for somebody
-     building or buying one — four claims, four figures, and the file each number
-     came from. Also as a <a href="therapy-note-bench.pdf">PDF</a>.</p>
+  <p class="methods-link" id="sources"></p>
 
   <footer>
     <p data-t="page.foot.columns">Every column's range, what it counts and what it must not be read as are printed
@@ -37,7 +40,7 @@ __STYLE__
     <p data-t="page.foot.notes"><strong>Notes</strong> counts the notes a protocol could actually read. A model that
        writes a good note in the wrong shape loses notes to its format, not to its
        clinical content — read the count before comparing the score.</p>
-    <p data-t="page.foot.provider">The chip after a model name is the <strong>provider</strong> that served it. The same
+    <p data-t="page.foot.provider">The last-but-one column is the <strong>provider</strong> that served the model. The same
        model id on two providers can be two different builds — a different quantisation,
        different weights, a different system prompt — so they are two rows here, never one.</p>
     <p data-t="page.foot.comparability">Rows are only ever compared when they agree on all six of track, harness version,
@@ -288,10 +291,12 @@ function detailRow(row, table) {
       T`Nothing to break down yet — this row has no scores.`}</p>`);
   }
 
+  // Name, provider and marks are always drawn; the rest are conditional. The
+  // effort column is gone -- two of nineteen rows carried one, so it sat on the
+  // model's name instead -- and its term goes with it.
   const span =
-    table.columns.length + 1 + (coverageVaries(table) ? 1 : 0) +
-    (table.has_words ? 1 : 0) +
-    (table.groups ? 1 : 0) + (table.has_effort ? 1 : 0);
+    table.columns.length + 3 + (coverageVaries(table) ? 1 : 0) +
+    (table.has_words ? 1 : 0) + (table.groups ? 1 : 0);
   return `<tr class="detail" hidden><td colspan="${span}">${parts.join('')}</td></tr>`;
 }
 
@@ -385,8 +390,6 @@ function renderTable(table, index) {
     (c.instrument ? `<span class="instrument">${esc(c.instrument)}</span>` : '') +
     `${esc(tr(c.label))}` +
     `<span class="scale">${esc(c.scale)}</span>` +
-    (c.ranking ? `<span class="ranks" title="${
-      T`the table is ordered by this column`}">${T`ranks`}</span>` : '') +
     `</th>`).join('');
   const legend = table.columns.map(c =>
     `<div class="measure"><dt>${esc(tr(c.label))} <span class="scale">${esc(c.scale)}</span>` +
@@ -457,10 +460,29 @@ function renderTable(table, index) {
 
   const showCoverage = coverageVaries(table);
 
+  // The other judge's rows for this same track, keyed by the name that is
+  // drawn. Only when the reader asked for both: it is the other half of a
+  // comparison, not a default, because the ranking a table publishes is one
+  // judge's ranking and must stay readable as that.
+  const against = compare ? otherTableOf(table.id) : null;
+  const theirs = {};
+  if (against) against.rows.forEach(r => { theirs[r.label] = r.headline; });
+
   const body = table.rows.map((row, position) => {
-    const cells = table.columns
-      .map(c => `<td>${fmt(row.headline[c.key], c.digits)}</td>`)
-      .join('');
+    const cells = table.columns.map(c => {
+      const mine = row.headline[c.key];
+      const other = theirs[row.label] ? theirs[row.label][c.key] : undefined;
+      // Nothing invented where the other judge has no answer: a blank delta
+      // says the comparison was not available, and a 0.000 would say the two
+      // judges agreed exactly.
+      const gap = against && mine !== undefined && mine !== null
+          && other !== undefined && other !== null
+        ? `<span class="gap ${other > mine ? 'up' : other < mine ? 'down' : 'same'}">${
+            other > mine ? '▴' : other < mine ? '▾' : '='}${
+            fmt(Math.abs(other - mine), c.digits)}</span>`
+        : (against ? '<span class="gap dash">—</span>' : '');
+      return `<td>${fmt(mine, c.digits)}${gap}</td>`;
+    }).join('');
     // Two different facts, never merged: how many notes the model wrote that the
     // protocol could read, and how many of those the judge has finished. A model
     // mid-judging must not read as a model that could not write.
@@ -471,22 +493,40 @@ function renderTable(table, index) {
       ? `<span class="pending-mark">${T`${row.n_scored} judged`}</span>`
       : '';
     const coverage = `${written}${judging ? '<br>' + judging : ''}`;
-    // The provider is part of a model's identity: the same id on two endpoints
-    // can be two different builds, so it is shown, never merged away.
-    const label = TYPE_LABEL[row.system_type] || row.provider;
+    // Beside the name: what this row *is*. A therapist's note and a reference
+    // system are not models, and reading the table without knowing that is
+    // reading a person as a competitor by accident.
+    const label = TYPE_LABEL[row.system_type];
     const chip = label ? `<span class="chip">${esc(tr(label))}</span>` : '';
-    // A row produced under conditions the others did not share is marked where
-    // it sits, never dropped and never normalised away. Today that is the GPT
-    // family, whose provider refuses any temperature but 1.
-    const oddOneOut = row.settings_differ
-      ? ' <span class="differs" title="' + esc(tr(row.settings)) + `">≠ ${T`settings`}</span>`
-      : '';
-    // A cell where the judge is grading its own vendor's model. Marked in
-    // place, never dropped: a missing row would be the worse distortion, and
-    // the self-preference panel below measures how much to discount it by.
-    const ownFamily = row.judges_own_family
-      ? ` <span class="differs" title="${T`scored by a judge from the same vendor, whose self-preference is measured in the panel below`}">${
-          T`judge's own ${esc(row.judges_own_family)}`}</span>`
+    // The provider is part of a model's identity -- the same id on two
+    // endpoints can be two different builds -- so it is shown and never merged
+    // away. In its own column at the end rather than as a badge on the name:
+    // it is the same fact for every row from one endpoint, which is what a
+    // column is for and what a badge repeated nineteen times is not.
+    const providerCell = `<td class="meta">${esc(tr(row.provider || '—'))}</td>`;
+    // A row produced under conditions the others did not share is marked,
+    // never dropped and never normalised away. Today that is the GPT family,
+    // whose provider refuses any temperature but 1. And a cell where the judge
+    // grades its own vendor's model is marked too: dropping it would be the
+    // worse distortion, and the self-preference panel measures how much to
+    // discount it by. Both were badges trailing the model's name, where they
+    // read as part of it; they are one column of their own now.
+    const marks = [
+      row.settings_differ
+        ? `<span class="differs" title="${esc(tr(row.settings))}">≠ ${T`settings`}</span>`
+        : '',
+      row.judges_own_family
+        ? `<span class="differs" title="${T`scored by a judge from the same vendor, whose self-preference is measured in the panel below`}">${
+            T`judge's own ${esc(row.judges_own_family)}`}</span>`
+        : '',
+    ].filter(Boolean).join(' ');
+    const marksCell = `<td class="meta">${marks || '<span class="dash">—</span>'}</td>`;
+    // Two of nineteen rows carry a reasoning effort and the rest carry a dash,
+    // so it was a column of dashes. Written where it belongs instead: on the
+    // name of the model it was set on.
+    const effortMark = row.effort
+      ? ` <span class="effort" title="${T`reasoning effort the note was written at`}">${
+          esc(tr(row.effort))}</span>`
       : '';
     // How long this model's notes are. A property of the notes, next to the
     // scores they earned, because completeness counts coverage: a reader who
@@ -494,11 +534,7 @@ function renderTable(table, index) {
     const wordsCell = table.has_words
       ? `<td>${row.note_words ?? '<span class="dash">—</span>'}</td>`
       : '';
-    const effortCell = table.has_effort
-      ? `<td>${row.effort ? esc(tr(row.effort)) : `<span class="dash" title="${
-          T`this provider has no effort control`}">—</span>`}</td>`
-      : '';
-    
+
     // The rank, not the row number. Systems the evidence cannot separate share
     // one, and the top of the table is a group rather than a winner.
     const rank = band[row.label];
@@ -508,8 +544,8 @@ function renderTable(table, index) {
     return `<tr class="system${rank === 1 ? ' first-group' : ''}"` +
       ` data-row="${index}-${position}" data-type="${row.system_type}">
         ${rankCell}
-        <td class="name"><span class="arrow">▸</span>${esc(row.label)}${chip}${oddOneOut}${ownFamily}</td>
-        ${effortCell}${cells}${wordsCell}${showCoverage ? `<td>${coverage}</td>` : ''}
+        <td class="name"><span class="arrow">▸</span>${esc(row.label)}${effortMark}${chip}</td>
+        ${cells}${wordsCell}${showCoverage ? `<td>${coverage}</td>` : ''}${providerCell}${marksCell}
       </tr>` + detailRow(row, table);
   }).join('');
 
@@ -517,16 +553,17 @@ function renderTable(table, index) {
       <h2>${tr(table.title)}</h2>
       <p class="blurb">${code(tr(table.blurb))}</p>
       ${designBlock(table)}
-      <p class="versions">${T`harness <code>${versions.harness_version}</code>`} ·
-         ${T`prompt <code>${versions.prompt_version}</code>`} · ${judge}</p>
-      <div class="scroll"><table data-table="${index}">
+      <div class="scroll-top" aria-hidden="true"><div></div></div>
+      <div class="scroll"><table data-table="${index}" data-sorted="${
+        table.ranking_measure || ''}" data-descending="1">
         <thead><tr>${table.groups
           ? `<th title="${T`Band on ${esc(colLabel(table, table.ranking_measure))}: rows this evidence cannot tell apart share a band. It does not follow the sort -- sorting by another column reorders the rows, not what the bootstrap could separate.`}">${T`Band`}</th>`
-          : ''}<th data-sort="label">${T`System`}</th>${
-          table.has_effort ? `<th data-sort="effort" title="${T`Reasoning effort the note was written at. Blank where the provider has no such control.`}">${T`Effort`}</th>` : '' }${
-          ''}${head}${table.has_words
+          : ''}<th data-sort="label">${T`System`}</th>${head}${table.has_words
             ? `<th data-sort="note_words" title="${T`Median words in this model’s notes. Completeness counts coverage, so a longer note covers more.`}">${T`Words`}</th>`
-            : ''}${showCoverage ? `<th data-sort="coverage">${T`Notes`}</th>` : ''}</tr></thead>
+            : ''}${showCoverage ? `<th data-sort="coverage">${T`Notes`}</th>` : ''}<th
+            data-sort="provider" title="${T`The endpoint that served the model. The same id on two endpoints can be two different builds.`}">${
+            T`Provider`}</th><th title="${T`Conditions this row did not share with the others, and whether its judge shares a vendor with it.`}">${
+            T`Marks`}</th></tr></thead>
         <tbody>${body}</tbody>
       </table></div>
       <p class="ranking-note">${rankingNote}</p>
@@ -539,6 +576,12 @@ function renderTable(table, index) {
          they reason, and OpenAI counts differently again. A gap there can be bookkeeping
          rather than behaviour.`}</p>` : ''}
       <dl class="measures">${legend}</dl>
+      <!-- Under the table, not over it. A reader arriving at a leaderboard
+           wants to know which model, and the first line they met was four
+           version strings. It is the answer to "is this the same instrument as
+           last time", which is a question asked after the numbers. -->
+      <p class="versions">${T`harness <code>${versions.harness_version}</code>`} ·
+         ${T`prompt <code>${versions.prompt_version}</code>`} · ${judge}</p>
     </section>`;
 }
 
@@ -560,25 +603,34 @@ function sortBy(table, key) {
   const value = tr => {
     const row = data.rows[Number(tr.dataset.row.split('-')[1])];
     if (key === 'label') return row.label.toLowerCase();
+    if (key === 'provider') return (row.provider || '').toLowerCase();
     if (key === 'coverage') return -row.n_generated;
-    // Effort is ordinal, not alphabetical: sorting it as text would put xhigh
-    // between none and low. A provider with no such control sorts last.
-    if (key === 'effort') {
-      const rank = {none: 0, low: 1, medium: 2, high: 3, xhigh: 4};
-      return row.effort in rank ? rank[row.effort] : 99;
-    }
+    if (key === 'note_words') return -(row.note_words ?? -Infinity);
     const score = row.headline[key];
     return score === undefined || score === null ? Infinity : -score;
   };
 
-  const ascending = table.dataset.sorted === key;
+  const ascending = table.dataset.sorted === key && table.dataset.descending === '1';
   pairs.sort((a, b) => {
     const left = value(a[0]), right = value(b[0]);
     const order = left < right ? -1 : left > right ? 1 : 0;
     return ascending ? -order : order;
   });
-  table.dataset.sorted = ascending ? '' : key;
+  table.dataset.sorted = key;
+  table.dataset.descending = ascending ? '' : '1';
+  markSorted(table);
   pairs.forEach(([system, detail]) => { tbody.append(system); tbody.append(detail); });
+}
+
+// Every `value()` above returns the negated score, so the first click on a
+// measure puts the best at the top and `data-descending` means "best first".
+function markSorted(table) {
+  const key = table.dataset.sorted;
+  const how = table.dataset.descending === '1' ? 'descending' : 'ascending';
+  table.querySelectorAll('th[data-sort]').forEach(th => {
+    if (th.dataset.sort === key) th.setAttribute('aria-sort', how);
+    else th.removeAttribute('aria-sort');
+  });
 }
 
 
@@ -589,22 +641,20 @@ function sortBy(table, key) {
 // worked it out only by asking, and every number in the table means something
 // different depending on the answer.
 function designBlock(table) {
+  const terms = table.terms || [];
   const d = table.design || {};
-  if (!d.scored_against) return '';
-  const role = d.human_role_short === 'competitor'
-    ? `<span class="role role-competitor">${T`the human note competes`}</span>`
-    : `<span class="role role-key">${T`the human note is the answer key`}</span>`;
-  const cal = d.calibrated
-    ? `<span class="role role-competitor">${T`judge checked against people`}</span>`
-    : `<span class="role role-key">${T`judge cannot be checked`}</span>`;
-  return `<div class="design">
-      <div class="design-marks">${role}${cal}</div>
-      <dl>
-        <div><dt>${T`Scored against`}</dt><dd>${esc(tr(d.scored_against))}</dd></div>
-        <div><dt>${T`Where the human note sits`}</dt><dd>${esc(tr(d.human_role))}</dd></div>
-        <div><dt>${T`Can the judge be checked?`}</dt><dd>${esc(tr(d.calibration))}</dd></div>
-      </dl>
-    </div>`;
+  // The one mark that stays. A judge nobody has put in front of a person is a
+  // caveat, and a caveat belongs beside the numbers it qualifies -- the rest of
+  // the methodology moved to the methods page, and this did not go with it.
+  // Its opposite is not here: a reassurance has no such claim on the space.
+  const warn = d.scored_against && !d.calibrated
+    ? `<p class="design-marks"><span class="role role-key" title="${
+        esc(tr(d.calibration || ''))}">${T`judge cannot be checked against people`}</span></p>`
+    : '';
+  if (!terms.length) return warn;
+  const list = terms.map(t =>
+    `<div><dt>${esc(tr(t.term))}</dt><dd>${esc(tr(t.gloss))}</dd></div>`).join('');
+  return `${warn}<div class="design"><dl>${list}</dl></div>`;
 }
 
 
@@ -614,6 +664,25 @@ function designBlock(table) {
 
 // Where every number on this page came from. It was in the payload and drawn
 // nowhere, which for a provenance string is close to the opposite of the point.
+// Every instrument and corpus this page rests on, linked. They were listed on
+// the methods page and nowhere on the leaderboard, so a reader looking at a
+// PDSQI-9 column had no way from here to the instrument it names. Drawn from
+// the same list the licences table uses, so a source cannot be credited on one
+// page and missing from the other.
+function drawSources() {
+  const host = document.getElementById('sources');
+  if (!host) return;
+  const links = (DATA.licences || []).map(l =>
+    `<a href="${esc(l.url)}">${esc(l.source)}</a>`).join(' · ');
+  // Removed rather than left blank. A footer rule over nothing reads as a
+  // section somebody forgot to finish.
+  if (!links) { host.remove(); return; }
+  host.innerHTML = T`<strong>Sources:</strong> ${links} — every prompt and rubric here is
+     reproduced verbatim from them. <a href="methods.html#licences">What each is used for, and
+     on what terms</a>: two of them publish no licence at all.`;
+}
+drawSources();
+
 function drawProvenance() {
   document.getElementById('provenance').innerHTML = DATA.generated_from
     ? T`Every figure on this page is generated from
@@ -648,6 +717,30 @@ function wanted() {
 
 let current = wanted();
 
+// Off by default. The table publishes one judge's ranking; the comparison is a
+// thing a reader turns on when they have a row in mind -- and then wants to
+// send to somebody, so it is in the address rather than only in the session.
+const COMPARE_PARAM = /(?:^|[?&])compare=1(?:&|$)/;
+let compare = COMPARE_PARAM.test(location.search || '');
+
+function rememberCompare() {
+  const search = (location.search || '').replace(/^\?/, '');
+  const parts = search ? search.split('&').filter(p => p && p !== 'compare=1') : [];
+  if (compare) parts.push('compare=1');
+  const query = parts.length ? '?' + parts.join('&') : '';
+  history.replaceState(null, '', query + (location.hash || ''));
+}
+
+// The other judge's table for the same track. Only where there are exactly two:
+// with three the delta would have to name which of the others it came from, and
+// this benchmark publishes a panel of two.
+function otherTableOf(id) {
+  const here = trackOf(id);
+  if (!here || here.judges.length !== 2) return null;
+  const other = here.judges.find(j => j.table !== id);
+  return other && other.table in INDEX_OF ? DATA.tables[INDEX_OF[other.table]] : null;
+}
+
 function renderSwitch() {
   const host = document.getElementById('switch');
   if (!host) return;
@@ -679,6 +772,10 @@ function renderSwitch() {
             j.settings_differ ? `<span class="scale">${esc(tr(j.settings_label))}</span>` : ''
           }${j.stale_harness ? `<span class="scale">${T`older harness`}</span>` : ''
           }</button>`).join('')}
+      ${here.judges.length === 2 ? `<button type="button" data-compare="1"
+          aria-pressed="${compare}"
+          title="${T`Keep this judge's figures and add, beside each one, how far the other judge was from it. Nothing is averaged: the second number is the other judge's own score, written as a distance.`}">${
+          T`both`}</button>` : ''}
     </div>`;
 
   host.innerHTML = trackButtons + judgeButtons;
@@ -743,9 +840,51 @@ function show(id) {
   renderSwitch();
   drawControls(table);
   applyFilters();
+  document.querySelectorAll('table[data-table]').forEach(markSorted);
+  pairScrollbars();
   if (location.hash.replace(/^#/, '') !== id) {
-    history.replaceState(null, '', '#' + id);
+    // Through the same writer, or switching judge would drop `compare=1` and
+    // the mode would turn itself off whenever a reader changed anything.
+    location.hash = '#' + id;
+    rememberCompare();
   }
+}
+
+// The scrollbar under a wide table is a screen away from the columns it moves,
+// so there is a second one above it. It is an empty strip the same width as the
+// table, scrolled in step both ways, and it removes itself when the table fits
+// -- an inert scrollbar over a table that does not scroll is a control that
+// lies about what it does.
+function pairScrollbars() {
+  document.querySelectorAll('.scroll-top').forEach(top => {
+    const bottom = top.nextElementSibling;
+    const table = bottom && bottom.querySelector('table');
+    if (!table) { top.hidden = true; return; }
+
+    const measure = () => {
+      const overflows = table.scrollWidth > bottom.clientWidth + 1;
+      top.hidden = !overflows;
+      top.firstElementChild.style.width = table.scrollWidth + 'px';
+    };
+    measure();
+    // The table is laid out from the payload, so its width is not final until
+    // the browser has done the layout. Measured again on the next frame, or a
+    // table that turns out to overflow gets no bar at all. Guarded, because
+    // the page is also executed against a DOM stub with no animation frames.
+    if (typeof requestAnimationFrame === 'function') requestAnimationFrame(measure);
+    if (typeof window !== 'undefined') window.addEventListener('resize', measure);
+
+    // Guarded against the echo: setting one bar's position fires the other's
+    // scroll event, which would set this one back.
+    let syncing = false;
+    const follow = (from, to) => from.addEventListener('scroll', () => {
+      if (syncing) { syncing = false; return; }
+      syncing = true;
+      to.scrollLeft = from.scrollLeft;
+    });
+    follow(top, bottom);
+    follow(bottom, top);
+  });
 }
 
 function drawFrame() {
@@ -774,6 +913,8 @@ if (DATA.tables.length) {
   });
 
   document.getElementById('switch').addEventListener('click', event => {
+    const toggle = event.target.closest('button[data-compare]');
+    if (toggle) { compare = !compare; rememberCompare(); show(current); return; }
     const button = event.target.closest('button[data-target]');
     if (button) show(button.dataset.target);
   });

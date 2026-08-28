@@ -393,6 +393,49 @@ TRACK_BLURBS = {
 #: - On iCARE the expert note is **the answer key**. It never competes. Two of
 #:   the four columns measure how closely a model reproduced it, which is
 #:   similarity, not quality.
+#: What the corpus is and what a note is, in one line each. Above the table,
+#: because every column means something different depending on the answers and
+#: two readers in a row worked them out only by asking.
+TRACK_TERMS = {
+    results.TRACK_TNEVAL: (
+        (
+            "AnnoMI",
+            "133 publicly released motivational-interviewing sessions, transcribed "
+            "and annotated by therapists. 50 of them are scored here.",
+        ),
+        (
+            "SOAP note",
+            "The standard clinical note format: subjective, objective, assessment, "
+            "plan. Every model writes into the same four headings.",
+        ),
+    ),
+    results.TRACK_PDSQI: (
+        (
+            "AnnoMI",
+            "133 publicly released motivational-interviewing sessions, transcribed "
+            "and annotated by therapists. 50 of them are scored here.",
+        ),
+        (
+            "PDSQI-9",
+            "A published instrument for rating how a clinical note is written, "
+            "validated on real records with physicians doing the rating.",
+        ),
+    ),
+    results.TRACK_ICARE: (
+        (
+            "iHOPE",
+            "40 counselling sessions, each with one note written by the clinician "
+            "who saw it. That note is the answer key, not an entry.",
+        ),
+        (
+            "The iCARE form",
+            "17 fields to fill in rather than a note to write, so a blank field is "
+            "a different thing from a short sentence.",
+        ),
+    ),
+}
+
+
 TRACK_DESIGN = {
     results.TRACK_TNEVAL: {
         "scored_against": (
@@ -651,6 +694,16 @@ SECTION_ORDER = ("subjective", "objective", "assessment", "plan")
 #: repository on 2026-08-24 rather than assumed. Published on the page because a
 #: reader deciding whether to reuse any of this needs it before the numbers.
 LICENCES = [
+    {
+        "source": "PDSQI-9",
+        "url": "https://arxiv.org/abs/2501.08977",
+        "used_for": "the nine attributes and their anchors, eight of which are scored",
+        "licence": "arXiv preprint",
+        "note": (
+            "The instrument is reproduced verbatim, anchors included, so a score here "
+            "answers the published question and not a rewritten one."
+        ),
+    },
     {
         "source": "TN-Eval (code)",
         "url": "https://github.com/amazon-science/TN-Eval",
@@ -1186,16 +1239,30 @@ def _merge_instruments(tables: list[dict]) -> list[dict]:
             other["versions"]["judge_prompt_version"],
         ]
         table["merged_from"] = [table["track"], other["track"]]
+        # Both instruments named above the table they share. The terms came from
+        # the absorbing track alone, so PDSQI-9 wrote eight of the eleven
+        # columns and was defined nowhere a reader would meet it.
+        known = {term["term"] for term in table.get("terms") or []}
+        table["terms"] = (table.get("terms") or []) + [
+            term for term in other.get("terms") or [] if term["term"] not in known
+        ]
+        # Both instruments named above the table they share. The terms came from
+        # the absorbing track alone, so PDSQI-9 wrote eight of the eleven
+        # columns and was defined nowhere a reader would meet it.
+        known = {term["term"] for term in table.get("terms") or []}
+        table["terms"] = (table.get("terms") or []) + [
+            term for term in other.get("terms") or [] if term["term"] not in known
+        ]
         table["title"] = "SOAP notes on AnnoMI · two instruments, the same notes"
+        # Was three sentences establishing that eleven columns from two
+        # instruments is a deliberate arrangement. A reader can see that it is
+        # eleven columns. What they cannot see is that adding them up is
+        # meaningless, so that is what the line says now.
         table["blurb"] = (
-            "Eleven columns from two instruments over one set of notes, so the "
-            "question both were run for can be read off one row. The first three "
-            "are TN-Eval's rubric: it counts what a note contains. The other "
-            "eight are PDSQI-9, a published instrument that rates how a clinical "
-            "note is written. **Nothing is averaged across them** — they are "
-            "different questions on different scales, and there is no eleven-"
-            "column total here for the same reason neither instrument publishes "
-            "one."
+            "The first three columns count what a note contains — TN-Eval's "
+            "rubric. The other eight rate how it is written — PDSQI-9. "
+            "**Nothing is averaged across them**: different questions on "
+            "different scales, and neither instrument publishes a total either."
         )
         absorbed.add(other["id"])
 
@@ -1238,6 +1305,9 @@ def build(rows: list[Row], saturations: list[dict] | None = None) -> dict:
                 "title": TRACK_TITLES.get(track, track),
                 "blurb": TRACK_BLURBS.get(track, ""),
                 "design": TRACK_DESIGN.get(track, {}),
+                "terms": [
+                    {"term": term, "gloss": gloss} for term, gloss in TRACK_TERMS.get(track, ())
+                ],
                 # Every comparability field, so a reader can see exactly what
                 # this table's rows had to agree on. Named from the tuple
                 # rather than listed here: the list grew a sixth entry once and

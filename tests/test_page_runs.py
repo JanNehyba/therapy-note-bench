@@ -12,6 +12,7 @@ loud enough to fail. Skipped, not guessed, where node is absent.
 
 from __future__ import annotations
 
+import os
 import re
 import shutil
 import subprocess
@@ -95,7 +96,7 @@ def _flat(html: str) -> str:
     return re.sub(r"\s+", " ", html)
 
 
-def _run(page: str, tmp_path: Path, panel: str | None = None) -> str:
+def _run(page: str, tmp_path: Path, panel: str | None = None, search: str = "") -> str:
     node = shutil.which("node")
     if node is None:
         pytest.skip("node is not installed; the page cannot be executed here")
@@ -106,6 +107,9 @@ def _run(page: str, tmp_path: Path, panel: str | None = None) -> str:
     )
     finished = subprocess.run(
         [node, str(RUNNER), str(script), *([panel] if panel else [])],
+        # The page reads its mode out of the address, so a test drives it the
+        # way a reader would. There is no button to press in this DOM.
+        env={**os.environ, "PAGE_SEARCH": search} if search else None,
         capture_output=True,
         text=True,
         # Node writes UTF-8; without this Python decodes it with the
@@ -1391,6 +1395,90 @@ def test_the_table_says_what_earned_the_ranking_column_its_job(tmp_path):
     assert "0.61" in host and "0.50" in host, "the reader needs the two numbers, not the claim"
     assert "0.13" in host and "0.19" in host, "and the ceiling on the scales it did not pick"
     assert "0.52" not in host, "that is the other judge's agreement, and this is not its table"
+
+
+def test_the_table_says_which_column_is_sorting_it_from_the_first_paint(tmp_path):
+    """The header was clickable and said so only by turning the cursor.
+
+    It carried a static "ranks" badge on the ranking column instead, which says
+    which column the table *arrived* sorted by and goes on saying it after a
+    reader sorts by another one. The badge is gone and the state is on the
+    table, so the arrow can follow the click.
+    """
+    from tnb import report
+
+    data = report.build([_row("x", "a-judge", 0.5)])
+    host = _flat(_run(report.render_page(data), tmp_path, panel="table-host"))
+
+    ranking = data["tables"][0]["ranking_measure"]
+    assert ranking, "this fixture is meant to have a ranking column"
+    assert f'data-sorted="{ranking}"' in host, "the table does not say what sorted it"
+    assert 'data-descending="1"' in host, "and which way round"
+    assert 'class="ranks"' not in host.split("<tbody>")[0], "the badge outlived its job"
+
+
+def test_a_wide_table_gets_a_scrollbar_a_reader_can_reach(tmp_path):
+    """The only sideways scrollbar was under the table, a screen down from the
+    columns it moves. The strip above it is the same bar, synced both ways.
+
+    Only its presence and its place are checked here. Whether the two stay in
+    step is a scroll event against a real layout, and the runner has neither --
+    so that half is not covered by any test and is not claimed to be.
+    """
+    from tnb import report
+
+    data = report.build([_row("x", "a-judge", 0.5)])
+    host = _flat(_run(report.render_page(data), tmp_path, panel="table-host"))
+
+    assert 'class="scroll-top"' in host, "no scrollbar above the table"
+    assert host.index('class="scroll-top"') < host.index('class="scroll"'), (
+        "the second scrollbar is below the table, where the first one already is"
+    )
+    assert 'aria-hidden="true"' in host, "an empty strip must not be read out as content"
+
+
+def test_the_leaderboard_links_the_instruments_it_names(tmp_path):
+    """A PDSQI-9 column with no way from this page to PDSQI-9.
+
+    The licences table has always carried the links and it is on the other
+    page, so a reader looking at a column had to know the methods page existed
+    before they could find out what the column was. Drawn from the same list,
+    so a source cannot be credited on one page and missing from the other.
+    """
+    data = _page_data(tmp_path)
+    sources = _flat(_run(report.render_page(data), tmp_path, panel="sources"))
+
+    for entry in report.LICENCES:
+        assert entry["url"] in sources, f"{entry['source']} is credited nowhere on this page"
+        assert entry["source"] in sources
+
+
+def test_both_judges_can_be_read_off_one_row(tmp_path):
+    """Two judges were two tables, so "do these two agree about this row" meant
+    opening two tabs and subtracting by hand.
+
+    The second figure is the other judge's own score written as a distance, not
+    an average of the two: this project does not average two instruments, and a
+    single blended number would be exactly that.
+    """
+    data = _page_data(tmp_path)
+    host = _flat(_run(report.render_page(data), tmp_path, panel="table-host", search="?compare=1"))
+
+    # `_page_data` gives system x 0.9 under the first judge and 0.5 under the
+    # second, so the distance is four tenths and it points down.
+    assert "0.900" in host, "the judge whose table this is still owns the column"
+    assert "0.400" in host, "the other judge's distance is not drawn"
+    assert "▾" in host, "a gap with no direction is half a comparison"
+    assert "0.700" not in host, "that is the mean of the two, which is not a number here"
+
+
+def test_one_judge_at_a_time_stays_the_default(tmp_path):
+    """The published ranking is one judge's ranking and has to read as that."""
+    data = _page_data(tmp_path)
+    host = _flat(_run(report.render_page(data), tmp_path, panel="table-host"))
+
+    assert "0.900" in host
+    assert 'class="gap' not in host, "the comparison drew itself without being asked"
 
 
 def test_a_judge_with_no_published_calibration_gets_no_borrowed_figure(tmp_path):
