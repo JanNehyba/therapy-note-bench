@@ -46,7 +46,7 @@ from tnb.tasks import czech as _task
 
 #: Bumped whenever anything reaching the judge changes. Rows carry it and the
 #: leaderboard never mixes two versions.
-JUDGE_PROMPT_VERSION = "czech-criteria-v1"
+JUDGE_PROMPT_VERSION = "czech-criteria-v2"
 
 #: The shared caveat. Repeated on every measure because a reader meets one
 #: column at a time, and this is the limit that matters most about all of them.
@@ -78,6 +78,14 @@ class Criterion:
     definition: str
     #: Whether a note can lack the chance to make this mistake at all.
     gated: bool = False
+    #: Whether the answer is read off the note instead of asked of a judge.
+    #:
+    #: Only `quotes`, and it was asked of a judge until it was checked against
+    #: the characters in the note: `gemini-3.1-pro-preview` was right on 75 of
+    #: 75 and `gpt-5.6-terra` on 65, with nine notes it reported straight marks
+    #: in that have none. A judge that at best matches `in` and at worst
+    #: contradicts it is spending money to add error.
+    computed: bool = False
 
 
 CRITERIA: tuple[Criterion, ...] = (
@@ -151,13 +159,23 @@ CRITERIA: tuple[Criterion, ...] = (
     Criterion(
         key="quotes",
         label="Quotation marks",
-        question='Jsou v poznámce rovné uvozovky " místo českých „ a “?',
-        guidance=("Ptáme se jen na tvar uvozovek, ne na to, co je v nich."),
+        # The apostrophe is named because leaving it unnamed cost this project a
+        # measurement. A native speaker rating twenty notes counted `'slovo'` as
+        # a straight mark and the judge did not, and 45 of the 75 notes that
+        # quote anything use exactly that -- so the two answered different
+        # questions and their 0.55 agreement was the wording, not the Czech.
+        question=("Jsou v poznámce rovné uvozovky \" nebo apostrofy ' místo českých „ a “?"),
+        guidance=(
+            "Ptáme se jen na tvar uvozovek, ne na to, co je v nich. Apostrof "
+            "použitý místo uvozovky sem patří."
+        ),
         definition=(
-            "Whether the note uses straight quotation marks where Czech uses its own. "
-            "Asked only of notes that quote anything at all."
+            "Whether the note uses a straight quotation mark or an apostrophe where "
+            "Czech uses its own marks. Counted from the characters in the note rather "
+            "than asked of a judge, and only of notes that quote anything at all."
         ),
         gated=True,
+        computed=True,
     ),
     Criterion(
         key="nonword",
@@ -184,6 +202,14 @@ CRITERION_KEYS: tuple[str, ...] = tuple(c.key for c in CRITERIA)
 #: and a judge call would spend money to be less certain about it.
 QUOTE_CHARACTERS = "\"'„“”«»’"
 
+#: The subset that is the fault. Everything else in `QUOTE_CHARACTERS` is a
+#: typographic mark; these two are the typewriter ones Czech does not use.
+#:
+#: Measured on the real half: 348 apostrophe pairs stand where quotation marks
+#: belong and exactly one apostrophe sits inside a word, so treating `'` as a
+#: quotation mark mistakes almost nothing.
+STRAIGHT_QUOTE_CHARACTERS = "\"'"
+
 #: How many words the note ran to. Written into the row, not shown as a column.
 #:
 #: A longer note has more chances to misspell something, so "this model writes
@@ -205,12 +231,16 @@ MEASURES: dict[str, dict[str, str]] = {
 #: Seven measures, no average. See the module docstring.
 RANKING_MEASURE = None
 
-#: Every criterion is a judge's decision, so all of them can be compared between
-#: judges -- which matters more here than anywhere else, because this track has
-#: no human anchor and disagreement is the only control it has. Where a column
-#: turns out flat, `concordance.rankable` will decline to report one, and that
-#: is the honest answer rather than a missing one.
-JUDGE_MEASURES: tuple[str, ...] = CRITERION_KEYS
+#: The criteria a judge decides, which is every one except `quotes`. Comparing
+#: two judges on a column computed from the characters in the note would report
+#: perfect agreement and mean nothing -- the same tautology `icare` avoids by
+#: keeping ROUGE-L out of this tuple.
+#:
+#: Disagreement matters more on this track than anywhere else, because it has no
+#: human anchor and is the only control it has. Where a column turns out flat,
+#: `concordance.rankable` declines to report a figure, which is the honest
+#: answer rather than a missing one.
+JUDGE_MEASURES: tuple[str, ...] = tuple(c.key for c in CRITERIA if not c.computed)
 
 PROMPT = """\
 Níže je klinická poznámka z psychoterapeutického sezení, napsaná česky.
@@ -351,6 +381,18 @@ def has_quotes(note: str) -> bool:
     return any(character in note for character in QUOTE_CHARACTERS)
 
 
+def has_straight_quotes(note: str) -> bool:
+    """Whether the note uses a typewriter mark where Czech uses its own.
+
+    The `quotes` criterion's answer, read off the string. It was a judge's
+    answer until the two were compared: on the 75 notes that quote anything,
+    `gemini-3.1-pro-preview` matched this function 75 times out of 75 and
+    `gpt-5.6-terra` 65, reporting straight marks in nine notes that have none.
+    Nothing is bought by asking.
+    """
+    return any(character in note for character in STRAIGHT_QUOTE_CHARACTERS)
+
+
 def build_tasks(note: str) -> list[CriterionTask]:
     """The questions asked about one note -- one call each.
 
@@ -375,7 +417,7 @@ def build_tasks(note: str) -> list[CriterionTask]:
             ),
         )
         for criterion in CRITERIA
-        if not criterion.gated or has_quotes(note)
+        if not criterion.computed and (not criterion.gated or has_quotes(note))
     ]
 
 
@@ -403,8 +445,18 @@ def aggregate(note: str, answers: dict[str, str]) -> Scores:
     scores = Scores()
     missing: list[str] = []
     asked = {task.criterion for task in build_tasks(note)}
+    content = has_content(note)
 
     for criterion in CRITERIA:
+        if criterion.computed:
+            # Read off the note, but under the same two rules as the rest: an
+            # empty note is not rated at all, and a note with no quotation marks
+            # is absent from this column rather than clean in it.
+            if content and (not criterion.gated or has_quotes(note)):
+                fault = has_straight_quotes(note)
+                scores.headline[criterion.key] = 0.0 if fault else 1.0
+                scores.by_criterion[criterion.key] = scores.headline[criterion.key]
+            continue
         if criterion.key not in asked:
             continue
         present = parse_answer(answers.get(f"czech.{criterion.key}", ""))

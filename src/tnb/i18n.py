@@ -1525,10 +1525,12 @@ _TRACK_REGISTRIES = {
         "tím netrpí."
     ),
     "Quotation marks": "Uvozovky",
-    "Whether the note uses straight quotation marks where Czech uses its own. Asked only of notes"
-    " that quote anything at all. Reported as the share of notes free of it.": (
-        "Zda zápis používá rovné uvozovky tam, kde má čeština své vlastní. Kladeno jen zápisům, "
-        "které vůbec něco citují. Vykázáno jako podíl zápisů, které tím netrpí."
+    "Whether the note uses a straight quotation mark or an apostrophe where Czech uses its own"
+    " marks. Counted from the characters in the note rather than asked of a judge, and only of"
+    " notes that quote anything at all. Reported as the share of notes free of it.": (
+        "Zda zápis používá rovnou uvozovku nebo apostrof tam, kde má čeština své vlastní "
+        "znaky. Počítáno ze znaků v zápisu, nikoli dotazem na soudce, a jen u zápisů, které "
+        "vůbec něco citují. Vykázáno jako podíl zápisů, které tím netrpí."
     ),
     "Non-words": "Neslova",
     "Whether the note contains a word Czech does not have. A proper noun, a diacritic slip and an"
