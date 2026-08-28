@@ -238,6 +238,11 @@ def _fmt(value, digits: int) -> str:
 #: reader can see which rows are thin without doing the subtraction.
 THIN = 0.8
 
+#: Below this share of separable pairs, a column's ordering is named as one not
+#: to read. A quarter is a line and not a law; what it buys is that a reader
+#: does not have to divide 13 by 54 to notice.
+UNREADABLE = 0.25
+
 
 def _table(track: str, rows: list[results.Row]) -> str:
     """One comparability group, with the count behind each mean.
@@ -648,6 +653,166 @@ def _join() -> str:
     )
 
 
+def _bands() -> str:
+    """The models grouped, because ordering eleven of them over ten notes is
+    mostly ordering noise.
+
+    A ranking invites the one reading it cannot support -- is the fourth better
+    than the fifth -- and no caveat beside it declines the invitation. Bands
+    say the same measurement without making the offer: within a band nothing
+    separates the models, between bands something does.
+
+    A band starts where the gap from the band's best exceeds what resampling
+    the sessions can rule out, so the width of a band is the measurement's own
+    resolution rather than a choice about presentation.
+    """
+    path = REPO / "local" / "czech-variance.json"
+    if not path.exists():
+        return ""
+    data = json.loads(path.read_text(encoding="utf-8")).get("bands") or {}
+    if not data:
+        return ""
+
+    blocks = []
+    for track in results.LOCAL_TRACKS:
+        judges = data.get(track) or {}
+        if not judges:
+            continue
+        for judge_model in sorted(judges):
+            grouped = judges[judge_model]
+            rows = "".join(
+                f"<tr><td>{number}</td>"
+                f"<td>{band['high']:.2f}&ndash;{band['low']:.2f}</td>"
+                f"<td class='sub'>{html.escape(', '.join(band['models']))}</td></tr>"
+                for number, band in enumerate(grouped["bands"], start=1)
+            )
+            blocks.append(
+                f"<h3>{html.escape(_t(TRACK_TITLES.get(track, track)))} "
+                f"<span class='dash'>&middot; {html.escape(judge_model)}</span></h3>"
+                f"<p class='sub'>{_t('a band is')} {grouped['threshold']:.2f} "
+                f"{_t('wide, over')} {grouped['sessions']} {_t('sessions')}</p>"
+                f"<table><thead><tr><th>{_t('Band')}</th><th>{_t('Score')}</th>"
+                f"<th>{_t('Models')}</th></tr></thead><tbody>{rows}</tbody></table>"
+            )
+
+    if not blocks:
+        return ""
+    return (
+        f"<h2>{_t('Bands, not places')}</h2>"
+        + "<p>"
+        + html.escape(
+            _t(
+                "Eleven models over ten notes cannot be put in order, and a table that "
+                "prints them in one invites a comparison it cannot support. These are "
+                "the same numbers grouped instead: within a band nothing separates the "
+                "models, between bands something does. A band ends where the gap "
+                "exceeds what resampling the sessions can rule out, so its width is "
+                "the measurement's own resolution."
+            )
+        )
+        + "</p>"
+        + "".join(blocks)
+    )
+
+
+def _dominance(rows: list[results.Row]) -> str:
+    """The only claim about "better" this project makes, and it was missing.
+
+    `docs/methodology.md` states it: the ranking is a shape, not an order, and
+    the one comparison that survives two judges is **dominance** -- at least as
+    good on every measure under both of them, and strictly better on one. It is
+    the strongest thing in the document and it was the thing not in it, which is
+    how a reader ends up comparing adjacent rows instead.
+
+    Computed over the criteria a model was scored on under both judges. A pair
+    where either judge has no value for a criterion is simply not compared on
+    it, rather than being counted either way.
+    """
+    latest = [row for row in results.latest(rows) if row.is_scored]
+    blocks = []
+    for track in (results.TRACK_CZECH_REAL, results.TRACK_CZECH_TRANSLATED):
+        here = [row for row in latest if row.track == track]
+        if not here:
+            continue
+        newest = max(row.judge_prompt_version for row in here)
+        tables = {}
+        for row in here:
+            if row.judge_prompt_version == newest:
+                tables.setdefault(row.judge_model or "", {})[row.system_id] = row.metrics.headline
+        if len(tables) < 2:
+            continue
+
+        systems = sorted(set.intersection(*(set(t) for t in tables.values())))
+        found = []
+        for first in systems:
+            for second in systems:
+                if first == second:
+                    continue
+                at_least, strictly = True, False
+                for table in tables.values():
+                    for key in czech_scorer.CRITERION_KEYS:
+                        a = table[first].get(key)
+                        b = table[second].get(key)
+                        if a is None or b is None:
+                            continue
+                        if a < b - 1e-9:
+                            at_least = False
+                            break
+                        if a > b + 1e-9:
+                            strictly = True
+                    if not at_least:
+                        break
+                if at_least and strictly:
+                    found.append((first, second))
+
+        title = html.escape(_t(TRACK_TITLES.get(track, track)))
+        if not found:
+            blocks.append(
+                f"<h3>{title}</h3><p>"
+                + html.escape(
+                    _t(
+                        "No model here is at least as good as another on every "
+                        "criterion under both judges."
+                    )
+                )
+                + "</p>"
+            )
+            continue
+        beaten = defaultdict(list)
+        for first, second in found:
+            beaten[first].append(second)
+        items = "".join(
+            f"<dt>{html.escape(winner)}</dt><dd>{html.escape(_t('is at least as good as'))} "
+            f"{html.escape(', '.join(sorted(losers)))}</dd>"
+            for winner, losers in sorted(beaten.items(), key=lambda kv: -len(kv[1]))
+        )
+        pairs = len(systems) * (len(systems) - 1) // 2
+        blocks.append(
+            f"<h3>{title}</h3>"
+            f"<p>{len(found)} {_t('of')} {pairs} "
+            + html.escape(_t("possible pairs."))
+            + f"</p><dl>{items}</dl>"
+        )
+
+    if not blocks:
+        return ""
+    return (
+        f"<h2>{_t('The only claim about better that survives')}</h2>"
+        + "<p>"
+        + html.escape(
+            _t(
+                "Two judges order the models differently, so a position in a table is "
+                "not a claim. What survives both of them is dominance: one model at "
+                "least as good as another on every criterion, under each judge "
+                "separately, and strictly better on at least one. Everything not "
+                "listed here is a pair this project cannot separate."
+            )
+        )
+        + "</p>"
+        + "".join(blocks)
+    )
+
+
 def _variance() -> str:
     """How far apart two rows must be before their order means anything.
 
@@ -709,6 +874,35 @@ def _variance() -> str:
 
     if not blocks:
         return ""
+
+    thin = []
+    for track, judges in tracks.items():
+        for name, block in judges.items():
+            for criterion, entry in block.items():
+                gaps = entry.get("gaps")
+                if gaps and gaps["share"] < UNREADABLE:
+                    thin.append(
+                        f"{MEASURE_TABLES[track][criterion]['label']} "
+                        f"({TRACK_TITLES.get(track, track)}, {name}, "
+                        f"{gaps['separable']}/{gaps['pairs']})"
+                    )
+    thin_note = ""
+    if thin:
+        thin_note = (
+            "<div class='warn'><p><strong>"
+            + html.escape(_t("These columns do not order the models either."))
+            + "</strong> "
+            + html.escape(
+                _t(
+                    "Fewer than a quarter of the model pairs come apart, so the "
+                    "sequence of rows is mostly the order chance put them in. The "
+                    "column may still be worth reading as a level -- how often the "
+                    "fault appears at all -- but not as a ranking:"
+                )
+            )
+            + f" {html.escape('; '.join(sorted(set(thin))))}.</p></div>"
+        )
+
     warning = ""
     if unreadable:
         warning = (
@@ -740,6 +934,7 @@ def _variance() -> str:
         + "</p>"
         + "".join(blocks)
         + warning
+        + thin_note
     )
 
 
@@ -1021,6 +1216,10 @@ def build(rows: list[results.Row]) -> str:
 {"".join(sections)}
 
 {_verdicts(rows)}
+
+{_bands()}
+
+{_dominance(rows)}
 
 {_variance()}
 

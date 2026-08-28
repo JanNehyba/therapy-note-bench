@@ -531,6 +531,59 @@ CS: dict[str, str] = {
         "takže ať řádky vyjdou v jakémkoli pořadí, je to výrok o tom, které "
         "přepisy padly. Žádná mez je nezachrání; nečtěte je:"
     ),
+    # --- bands, not places -------------------------------------------------
+    "Bands, not places": "Pásma, ne pořadí",
+    "Eleven models over ten notes cannot be put in order, and a table that prints "
+    "them in one invites a comparison it cannot support. These are the same numbers "
+    "grouped instead: within a band nothing separates the models, between bands "
+    "something does. A band ends where the gap exceeds what resampling the sessions "
+    "can rule out, so its width is the measurement's own resolution.": (
+        "Jedenáct modelů na deseti zápisech nejde seřadit a tabulka, která je "
+        "v pořadí vytiskne, zve ke srovnání, které neunese. Tady jsou tatáž čísla "
+        "seskupená: uvnitř pásma modely nic neodlišuje, mezi pásmy ano. Pásmo končí "
+        "tam, kde rozdíl přesáhne to, co převzorkování sezení dokáže vyloučit — "
+        "jeho šířka je tedy rozlišovací schopnost samotného měření."
+    ),
+    "a band is": "pásmo je široké",
+    "wide, over": "a stojí na",
+    "sessions": "sezeních",
+    "Band": "Pásmo",
+    "Score": "Skóre",
+    "Models": "Modely",
+    # --- dominance ---------------------------------------------------------
+    "The only claim about better that survives": (
+        "Jediné tvrzení o lepším, které obstojí"
+    ),
+    "Two judges order the models differently, so a position in a table is not a "
+    "claim. What survives both of them is dominance: one model at least as good as "
+    "another on every criterion, under each judge separately, and strictly better on "
+    "at least one. Everything not listed here is a pair this project cannot "
+    "separate.": (
+        "Dva soudci řadí modely různě, takže umístění v tabulce není tvrzení. Co "
+        "obstojí u obou, je dominance: model, který je aspoň tak dobrý jako jiný "
+        "v každém kritériu, u každého soudce zvlášť, a aspoň v jednom je striktně "
+        "lepší. Všechno, co tu není vypsané, je dvojice, kterou tenhle projekt "
+        "neumí odlišit."
+    ),
+    "is at least as good as": "je aspoň tak dobrý jako",
+    "possible pairs.": "možných dvojic.",
+    "No model here is at least as good as another on every criterion under both "
+    "judges.": (
+        "Žádný zdejší model není aspoň tak dobrý jako jiný ve všech kritériích "
+        "u obou soudců."
+    ),
+    # --- the columns that do not order -------------------------------------
+    "These columns do not order the models either.": (
+        "Ani tyto sloupce modely neseřadí."
+    ),
+    "Fewer than a quarter of the model pairs come apart, so the sequence of rows is "
+    "mostly the order chance put them in. The column may still be worth reading as a "
+    "level -- how often the fault appears at all -- but not as a ranking:": (
+        "Odliší se méně než čtvrtina dvojic modelů, takže posloupnost řádků je "
+        "většinou pořadí, do kterého je dala náhoda. Sloupec může pořád stát za "
+        "čtení jako úroveň — jak často se ta chyba vůbec objevuje — ale ne jako "
+        "pořadí:"
+    ),
     # --- refusals ----------------------------------------------------------
     "Refusing to write: a row carries something that is not a score.": (
         "Odmítám zapsat: řádek nese něco, co není skóre."

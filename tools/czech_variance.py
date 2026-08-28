@@ -161,6 +161,117 @@ def separable(cells: dict, criterion: str, rng: random.Random) -> dict | None:
     }
 
 
+#: What a track's models are banded on. The criteria tracks average all seven,
+#: which is what "how good is the Czech" means here. The PDSQI tracks average
+#: the attributes that are not flat -- adding a column every model scores 5.00
+#: on does not change who is ahead, but it shrinks every difference against the
+#: threshold and would merge bands that are really apart.
+COMPOSITES = {
+    "czech-real": None,
+    "czech-translated": None,
+    "czech-real-pdsqi": ("accurate", "thorough", "succinct"),
+    "czech-translated-pdsqi": ("accurate", "thorough", "succinct"),
+}
+
+
+def bands(per_note: dict, rng: random.Random) -> dict | None:
+    """Models grouped so that within a band nothing separates them.
+
+    A ranking of eleven models over ten notes is mostly an ordering of noise,
+    and printing it invites the one reading it cannot support. Bands say the
+    same measurement without the invitation: a new band starts where the gap
+    from the band's best exceeds what resampling the sessions can rule out.
+
+    The threshold is the median half-width of the interval on a pairwise
+    difference, the same quantity `separable` reports, computed on the
+    composite rather than on a single column.
+    """
+    models = sorted({m for m, _ in per_note})
+    sessions = sorted({s for _, s in per_note})
+    if len(models) < 2 or len(sessions) < 3:
+        return None
+
+    score = {m: mean([per_note[(m, s)] for s in sessions if (m, s) in per_note]) for m in models}
+    order = sorted(models, key=lambda m: -score[m])
+
+    half_widths = []
+    for index, first in enumerate(order):
+        for second in order[index + 1 :]:
+            paired = [
+                (per_note[(first, s)], per_note[(second, s)])
+                for s in sessions
+                if (first, s) in per_note and (second, s) in per_note
+            ]
+            if len(paired) < 5:
+                continue
+            differences = []
+            for _ in range(DRAWS):
+                draw = [paired[rng.randrange(len(paired))] for _ in paired]
+                differences.append(mean(a for a, _ in draw) - mean(b for _, b in draw))
+            differences.sort()
+            half_widths.append(
+                (differences[int(0.975 * DRAWS)] - differences[int(0.025 * DRAWS)]) / 2
+            )
+    if not half_widths:
+        return None
+    half_widths.sort()
+    threshold = half_widths[len(half_widths) // 2]
+
+    grouped, current = [], [order[0]]
+    for model in order[1:]:
+        if score[current[0]] - score[model] > threshold:
+            grouped.append(current)
+            current = [model]
+        else:
+            current.append(model)
+    grouped.append(current)
+
+    return {
+        "threshold": round(threshold, 3),
+        "sessions": len(sessions),
+        "bands": [
+            {
+                "models": band,
+                "high": round(score[band[0]], 3),
+                "low": round(score[band[-1]], 3),
+            }
+            for band in grouped
+        ],
+    }
+
+
+def _composite(cells: dict, keys) -> dict:
+    """One number per (model, session): the mean of the columns that count."""
+    grouped = defaultdict(list)
+    for (model, session, criterion), value in cells.items():
+        if keys is None or criterion in keys:
+            grouped[(model, session)].append(value)
+    return {pair: mean(values) for pair, values in grouped.items() if values}
+
+
+def _pdsqi_cells(task_name: str, judge_model: str, budget: int) -> dict:
+    """Every (model, session, attribute) PDSQI score, from the cache."""
+    from tnb.scoring import czech_pdsqi, pdsqi_run
+
+    loader = (
+        czech_task.load_real if task_name == czech_task.NAME_REAL else czech_task.load_translated
+    )
+    candidates = list(czech_pdsqi.from_generations(loader(), task_name=task_name))
+    client = judge.Judge(judge.config_from_env(model=judge_model, thinking_budget=budget))
+    scored = pdsqi_run.from_cache(
+        candidates,
+        client,
+        with_transcript=czech_pdsqi.transcripts_may_leave(task_name),
+        render=czech_task.render_note,
+        judge_prompt_version=czech_pdsqi.JUDGE_PROMPT_VERSION,
+    )
+    return {
+        (note.candidate.system_id, note.candidate.session_id, key): value
+        for note in scored
+        for key, value in note.scored.items()
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--thinking-budget", type=int, default=2048)
@@ -187,6 +298,27 @@ def main(argv: list[str] | None = None) -> int:
                     block[criterion] = {"spread": spread, "gaps": gaps}
             if block:
                 payload["tracks"].setdefault(track, {})[judge_model] = block
+            grouped = bands(_composite(cells, COMPOSITES[track]), rng)
+            if grouped:
+                payload.setdefault("bands", {}).setdefault(track, {})[judge_model] = grouped
+
+    # The quality tracks band too. Their per-note scores come from the PDSQI
+    # cache rather than the criteria's, and they are banded on the attributes
+    # that vary: adding a column every model scores 5.00 on does not change who
+    # is ahead, but it shrinks every difference against the threshold and would
+    # merge bands that are really apart.
+    for track, task_name in (
+        (results.TRACK_CZECH_REAL_PDSQI, czech_task.NAME_REAL),
+        (results.TRACK_CZECH_TRANSLATED_PDSQI, czech_task.NAME_TRANSLATED),
+    ):
+        for judge_model in (judge.DEFAULT_MODEL, judge.SECOND_JUDGE):
+            cells = _pdsqi_cells(task_name, judge_model, args.thinking_budget)
+            if not cells:
+                continue
+            rng = random.Random(SEED)  # noqa: S311 -- a threshold, not a secret
+            grouped = bands(_composite(cells, COMPOSITES[track]), rng)
+            if grouped:
+                payload.setdefault("bands", {}).setdefault(track, {})[judge_model] = grouped
 
     args.target.parent.mkdir(parents=True, exist_ok=True)
     args.target.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -207,6 +339,18 @@ def main(argv: list[str] | None = None) -> int:
                     f"{spread['between_sessions']:>10.3f}{spread['ratio']:>7.2f}"
                     f"{gaps['separable']:>5}/{gaps['pairs']:<5}{gaps['threshold']:>12.2f}"
                 )
+    for track, judges in (payload.get("bands") or {}).items():
+        for judge_model, grouped in judges.items():
+            print(
+                f"\n### bands: {track} | {judge_model}"
+                f"  (threshold {grouped['threshold']:.2f}, {grouped['sessions']} sessions)"
+            )
+            for number, band in enumerate(grouped["bands"], start=1):
+                print(
+                    f"  band {number}  {band['high']:.2f}-{band['low']:.2f}  "
+                    + ", ".join(band["models"])
+                )
+
     print(f"\nwrote {args.target}")
     return 0
 
