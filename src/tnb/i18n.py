@@ -1405,8 +1405,7 @@ _TRACK_REGISTRIES = {
         "formátu, aby šlo odlišit, co kritérium měří na modelu, od toho, co měří na "
         "tvaru zápisu."
     ),
-    "The note alone, on the same seven criteria, over the translated AnnoMI"
-    " conversations.": (
+    "The note alone, on the same seven criteria, over the translated AnnoMI conversations.": (
         "Samotný zápis, na týchž sedmi kritériích, přes přeložené rozhovory AnnoMI."
     ),
     "None, in the same two senses as the real half.": (

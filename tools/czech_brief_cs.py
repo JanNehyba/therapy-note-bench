@@ -45,8 +45,7 @@ CS: dict[str, str] = {
         "nástroj, se ptá, jestli je zápis dobrý — protože kritéria to neumějí: "
         "bezchybná česká věta o ničem projde všemi sedmi."
     ),
-    "These numbers are not on the public site and this document is not a "
-    "publication.": (
+    "These numbers are not on the public site and this document is not a publication.": (
         "Tato čísla nejsou na veřejném webu a tento dokument není publikace."
     ),
     "They were measured from confidential clinical material and the decision to "
@@ -184,12 +183,8 @@ CS: dict[str, str] = {
     "tells": "rozliší",
     "apart": "z",
     # --- the join section --------------------------------------------------
-    "Does the English leaderboard predict the Czech?": (
-        "Předpovídá anglický žebříček tu češtinu?"
-    ),
-    "Asked the same question, quality transfers": (
-        "Při stejně položené otázce se kvalita přenáší"
-    ),
+    "Does the English leaderboard predict the Czech?": ("Předpovídá anglický žebříček tu češtinu?"),
+    "Asked the same question, quality transfers": ("Při stejně položené otázce se kvalita přenáší"),
     "Asked the leaderboard's own measure, it does not": (
         "Při měřítku, podle kterého žebříček řadí, se nepřenáší"
     ),
@@ -264,9 +259,7 @@ CS: dict[str, str] = {
         "rodilý mluvčí totéž."
     ),
     # --- what these numbers cannot be used for -----------------------------
-    "Ten sessions, and they are all one client": (
-        "Deset sezení, a všechna jsou jeden klient"
-    ),
+    "Ten sessions, and they are all one client": ("Deset sezení, a všechna jsou jeden klient"),
     "Every model wrote a note from every transcript, which is what makes the "
     "comparison between models valid at all -- the first attempt gave each model a "
     "different session and could not tell a worse model from a harder session. But "
@@ -282,8 +275,7 @@ CS: dict[str, str] = {
         "sousedy."
     ),
     "The two halves differ by more than language, and mostly by size": (
-        "Ty dvě půlky se liší víc než jazykem, a "
-        "hlavně velikostí"
+        "Ty dvě půlky se liší víc než jazykem, a hlavně velikostí"
     ),
     "A real session runs to a median of 5,266 words and 113 turns; a translated AnnoMI "
     "conversation to 699 words and 52 turns. Seven times the material, so the "
@@ -304,9 +296,7 @@ CS: dict[str, str] = {
         "motivačním rozhovoru, nebo v češtině, a tato "
         "čísla ty tři věci neumějí oddělit."
     ),
-    "Nothing here says whether a note is true": (
-        "Nic tady neříká, jestli je zápis pravdivý"
-    ),
+    "Nothing here says whether a note is true": ("Nic tady neříká, jestli je zápis pravdivý"),
     "The criteria ask about the Czech and nothing else. A fluent, correctly typeset, "
     "entirely invented note passes all seven. Whether the note says what the session "
     "contained is a different measurement and this is not it.": (
@@ -333,9 +323,7 @@ CS: dict[str, str] = {
         "nezávislí soudci a to, kde se neshodnou, je jediná kontrola, "
         "která tu je."
     ),
-    "SOAP is not what a Czech psychologist writes": (
-        "SOAP není to, co píše český psycholog"
-    ),
+    "SOAP is not what a Czech psychologist writes": ("SOAP není to, co píše český psycholog"),
     "The prompt is a translation of TN-Eval's, so that the task is the same task in "
     "another language and the English numbers mean something beside these. It is not a "
     "reproduction of any Czech documentation standard -- there is none to reproduce. "
@@ -421,8 +409,7 @@ CS: dict[str, str] = {
     ),
     "The strongest agreement with a person of the seven: 20 of 20 against the first "
     "judge, 17 against the second.": (
-        "Nejsilnější shoda s člověkem ze sedmi: 20 z 20 proti "
-        "prvnímu soudci, 17 proti druhému."
+        "Nejsilnější shoda s člověkem ze sedmi: 20 z 20 proti prvnímu soudci, 17 proti druhému."
     ),
     "Says almost nothing. One judge gave 5.00 to every model.": (
         "Neříká skoro nic. Jeden soudce dal 5.00 všem modelům."
@@ -437,8 +424,7 @@ CS: dict[str, str] = {
         "co rozlišovat."
     ),
     "Does not separate the models: most of them print the same value.": (
-        "Neodliší modely: většina jich má tutéž "
-        "hodnotu."
+        "Neodliší modely: většina jich má tutéž hodnotu."
     ),
     "Works, and every model fails it. No model reaches the middle of the scale under "
     "either judge. This is the one column on the real half that tells the models apart "
@@ -449,8 +435,7 @@ CS: dict[str, str] = {
         "rozlišuje."
     ),
     "Says nothing. 5.00 for every model under both judges on both halves.": (
-        "Neříká nic. 5.00 pro každý model u obou soudců "
-        "na obou půlkách."
+        "Neříká nic. 5.00 pro každý model u obou soudců na obou půlkách."
     ),
     "Does not separate the models. Most of them are free of it, which is the good news "
     "and also why the column cannot rank anything.": (
@@ -489,8 +474,7 @@ CS: dict[str, str] = {
         "nebo ji přehlédne v zápisu, který ji má. Čti ten sloupec "
         "jako otázku, ne jako odpověď — ta neshoda je ten nález."
     ),
-    "Every criterion found its own fault under every judge, and none fired on the "
-    "clean note.": (
+    "Every criterion found its own fault under every judge, and none fired on the clean note.": (
         "Každé kritérium našlo svou vlastní chybu u každého soudce "
         "a žádné se nespustilo na čistém zápisu."
     ),
@@ -558,9 +542,7 @@ CS: dict[str, str] = {
     "Score": "Skóre",
     "Models": "Modely",
     # --- dominance ---------------------------------------------------------
-    "The only claim about better that survives": (
-        "Jediné tvrzení o lepším, které obstojí"
-    ),
+    "The only claim about better that survives": ("Jediné tvrzení o lepším, které obstojí"),
     "Two judges order the models differently, so a position in a table is not a "
     "claim. What survives both of them is dominance: one model at least as good as "
     "another on every criterion, under each judge separately, and strictly better on "
@@ -574,15 +556,11 @@ CS: dict[str, str] = {
     ),
     "is at least as good as": "je aspoň tak dobrý jako",
     "possible pairs.": "možných dvojic.",
-    "No model here is at least as good as another on every criterion under both "
-    "judges.": (
-        "Žádný zdejší model není aspoň tak dobrý jako jiný ve všech kritériích "
-        "u obou soudců."
+    "No model here is at least as good as another on every criterion under both judges.": (
+        "Žádný zdejší model není aspoň tak dobrý jako jiný ve všech kritériích u obou soudců."
     ),
     # --- the columns that do not order -------------------------------------
-    "These columns do not order the models either.": (
-        "Ani tyto sloupce modely neseřadí."
-    ),
+    "These columns do not order the models either.": ("Ani tyto sloupce modely neseřadí."),
     "Fewer than a quarter of the model pairs come apart, so the sequence of rows is "
     "mostly the order chance put them in. The column may still be worth reading as a "
     "level -- how often the fault appears at all -- but not as a ranking:": (
@@ -592,9 +570,7 @@ CS: dict[str, str] = {
         "pořadí:"
     ),
     # --- general capability against these numbers --------------------------
-    "Does general capability predict any of this?": (
-        "Předpovídá obecná schopnost něco z tohohle?"
-    ),
+    "Does general capability predict any of this?": ("Předpovídá obecná schopnost něco z tohohle?"),
     "Nothing in this repository records how big a model is or when it shipped, so this "
     "comes from outside it. Bold survives a permutation test at p < 0.05.": (
         "Nic v tomhle repozitáři nezaznamenává, jak velký model je ani kdy vyšel, "
@@ -647,14 +623,10 @@ CS: dict[str, str] = {
         "žebříčku a jestli to umístění říká něco o češtině, kterou píší, má vlastní "
         "sekci níže."
     ),
-    "Every column is 0 to 1 and higher is better: the share of notes free of that "
-    "fault.": (
-        "Každý sloupec je 0 až 1 a vyšší je lepší: podíl zápisů, které tou chybou "
-        "netrpí."
+    "Every column is 0 to 1 and higher is better: the share of notes free of that fault.": (
+        "Každý sloupec je 0 až 1 a vyšší je lepší: podíl zápisů, které tou chybou netrpí."
     ),
-    "Every column is 1 to 5 and higher is better.": (
-        "Každý sloupec je 1 až 5 a vyšší je lepší."
-    ),
+    "Every column is 1 to 5 and higher is better.": ("Každý sloupec je 1 až 5 a vyšší je lepší."),
     "Higher is better throughout. Most columns are rated 1 to 5; the last is the share "
     "of notes free of the fault, from 0 to 1.": (
         "Vyšší je lepší všude. Většina sloupců je hodnocená 1 až 5; poslední je podíl "
@@ -706,13 +678,24 @@ CS: dict[str, str] = {
         "co měří, nepatří vedle šesti, které se hýbou správně. Měření zůstává; jen "
         "z něj není pořadí."
     ),
+    # --- what it took ------------------------------------------------------
+    "What it took": "Kolik to bylo práce",
+    "Judges": "Soudci",
+    "Every note was written on e-INFRA, the infrastructure that holds the sessions. "
+    "Only the notes went anywhere else: each was put to two judges, one question per "
+    "criterion, on Google's and OpenAI's endpoints. No price is given here -- a list "
+    "price is a fact about a vendor on one day and is unreadable a year later without "
+    "it.": (
+        "Každý zápis vznikl na e-INFRA, tedy na infrastruktuře, která ta sezení drží. "
+        "Ven šly jen zápisy: každý dostali dva soudci, jedna otázka na kritérium, na "
+        "endpointech Googlu a OpenAI. Cena tu není — ceníková cena je výrok o jednom "
+        "dodavateli v jeden den a bez toho dne je za rok nečitelná."
+    ),
     # --- refusals ----------------------------------------------------------
     "Refusing to write: a row carries something that is not a score.": (
         "Odmítám zapsat: řádek nese něco, co není skóre."
     ),
-    "is not there. Run `tnb score-czech` first.": (
-        "tam není. Spusťte nejdřív `tnb score-czech`."
-    ),
+    "is not there. Run `tnb score-czech` first.": ("tam není. Spusťte nejdřív `tnb score-czech`."),
     ": a system id carries a run of digits": ": id systému nese řadu číslic",
     "scored row(s) from": "hodnocených řádků z",
 }

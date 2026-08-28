@@ -578,7 +578,6 @@ def test_every_failure_reason_the_harness_writes_has_a_czech_entry():
         for reason in results.HARNESS_REASONS
         # The truncation reason carries the budget, so the phrase on the page is
         # a prefix with a number after it and is translated as its own string.
-        if not reason.startswith("truncated at max_tokens")
-        and i18n.norm(reason) not in have
+        if not reason.startswith("truncated at max_tokens") and i18n.norm(reason) not in have
     ]
     assert not missing, f"failure reasons with no Czech: {missing}"
