@@ -85,11 +85,14 @@ LIMITS = [
         "one therapist. Read the ordering, not the gaps between neighbours.",
     ),
     (
-        "The two halves differ by more than language",
-        "AnnoMI is motivational interviewing about substance use; the real sessions are "
-        "not. They differ in topic, in length and in who transcribed them. A model that "
-        "does worse on the translated half may be doing worse at motivational "
-        "interviewing rather than at translated Czech.",
+        "The two halves differ by more than language, and mostly by size",
+        "A real session runs to a median of 5,266 words and 113 turns; a translated "
+        "AnnoMI conversation to 699 words and 52 turns. Seven times the material, so "
+        "the summarising is a harder task before any question of Czech arises. They "
+        "differ in topic too -- AnnoMI is motivational interviewing about substance "
+        "use and the real sessions are not -- and in who transcribed them. A model "
+        "that does worse on one half may be doing worse at length, at motivational "
+        "interviewing, or at Czech, and these numbers cannot separate the three.",
     ),
     (
         "Nothing here says whether a note is true",
@@ -135,15 +138,17 @@ THIN = 0.8
 
 
 def _table(track: str, rows: list[results.Row]) -> str:
-    """One comparability group, with the count each mean is actually over.
+    """One comparability group, with the count behind each mean.
 
-    **The count is of complete notes, not of scored ones.** A note with even one
-    criterion the judge did not answer is left out of every mean, so printing
-    the scored count beside the mean overstates what the mean rests on -- this
-    column said `10` for a model whose row was an average of five notes, which
-    is the shape this repository keeps meeting. Measured on the real half: one
-    judge left 14% of notes incomplete, and the notes it lost were the longer
-    ones, so the loss is not spread evenly over the corpus.
+    **The count is of complete notes, not of scored ones**, and the two differ
+    whenever a judge left a question unanswered. A note now counts in the
+    columns it did answer -- it used to count in none of them -- so a row can be
+    complete on six columns and thin on the seventh, and the per-column
+    denominators under the table say which.
+
+    The header count is still worth printing because it is the honest summary of
+    how much of a model's corpus was answered end to end. This column once said
+    `10` beside a row that averaged five notes.
     """
     columns = COLUMNS[track]
     measures = MEASURE_TABLES[track]
@@ -289,6 +294,59 @@ WHAT_IT_CATCHES = {
         "good news and also why the column cannot rank anything."
     ),
 }
+
+
+def _corpus() -> str:
+    """What the two halves are, counted rather than asserted.
+
+    The sentence this replaces said "ten real sessions ... plus ten AnnoMI
+    conversations translated into spoken Czech", which is true and hides the
+    thing a reader most needs: **the real sessions are seven times longer.**
+    A median of 5,266 words against 699, and 113 turns against 52. Summarising
+    an hour of talk and summarising ten minutes of it are not the same task, so
+    any sentence comparing the two halves is comparing that too.
+
+    Counts only -- session totals, medians, ranges. No transcript text reaches
+    this document, which `check_no_clinical_text` asserts separately.
+    """
+    from tnb.tasks import czech as czech_task
+
+    rows = []
+    for label, load, note in (
+        (
+            "Real sessions",
+            czech_task.load_real,
+            "one client, de-identified by hand, never released",
+        ),
+        (
+            "Translated AnnoMI",
+            czech_task.load_translated,
+            "public counselling conversations, translated for this track",
+        ),
+    ):
+        try:
+            sessions = load()
+        except (RuntimeError, OSError):
+            continue
+        if not sessions:
+            continue
+        words = sorted(session.word_count for session in sessions)
+        turns = sorted(len(session.turns) for session in sessions)
+        middle = len(words) // 2
+        rows.append(
+            f"<tr><td>{html.escape(label)}</td><td>{len(sessions)}</td>"
+            f"<td>{words[middle]:,}</td><td>{words[0]:,}&ndash;{words[-1]:,}</td>"
+            f"<td>{turns[middle]}</td>"
+            f"<td class='sub'>{html.escape(note)}</td></tr>"
+        )
+    if not rows:
+        return ""
+    return (
+        "<h3>The two corpora</h3>"
+        "<table><thead><tr><th>Half</th><th>Sessions</th><th>Words, median</th>"
+        "<th>Words, range</th><th>Turns, median</th><th></th></tr></thead>"
+        f"<tbody>{''.join(rows)}</tbody></table>"
+    )
 
 
 def _verdicts(rows: list[results.Row]) -> str:
@@ -640,10 +698,12 @@ transcript text appears in this document or in any file it was built from.</p></
 {limits}
 
 <h2>How it was measured</h2>
-<p>Ten real sessions with one client, de-identified by hand and read only from a
-directory that is not in version control, plus ten AnnoMI counselling
-conversations translated into spoken Czech. Every model wrote a note from every
-transcript, on e-INFRA.</p>
+<p>Two halves, both read only from a directory that is not in version control.
+Every model wrote a note from every transcript, on e-INFRA. <strong>They are not
+the same size:</strong> a real session runs seven times longer than a translated
+AnnoMI conversation, so the two halves differ in how hard the summarising is
+before language is considered at all.</p>
+{_corpus()}
 <p><strong>No judge is ever shown a real session.</strong> What leaves for the
 judge's provider is the note a model wrote, which is what lets a confidential
 session be scored at all. The one place a transcript is sent is the PDSQI table
