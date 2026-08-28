@@ -99,36 +99,6 @@ That decision is clinical, not statistical, so this benchmark does not make it.
 What it would take to settle it is a clinician reading two notes and saying
 which they would sign — which is a different study.
 
-## How much a model "thought" is partly bookkeeping
-
-Each row records how many tokens its model spent reasoning before writing.
-Measured over the notes: `qwen3.8-27b` 1620, `glm-5.2` 1552,
-`gemini-3.1-pro-preview` 1244, `kimi-k3` 670, `gpt-5.6-terra` 13 — and six
-models report nothing at all.
-
-**Do not read that as "GPT thinks a hundred times less".** Two things make the
-figure incomparable across providers:
-
-- **vLLM**, which serves the e-INFRA models, documents that it reports
-  `reasoning_tokens: 0` for models whose reasoning is text-delimited — Qwen3
-  and DeepSeek R1 among them — *even when the model reasons*. It counts
-  normally for others. So "reports nothing" and "reasoned nothing" look
-  identical here and are not the same.
-- **OpenAI** counts differently again: its output-token count can exceed the
-  visible tokens while `reasoning_tokens` reads 0.
-
-Checked directly rather than assumed: the `reasoning_effort` parameter *is*
-sent and *does* move the number — on one note, `gpt-5.6-sol` went 0 / 32 / 103
-at low / medium / high. But published GPT-5 figures at the same three levels
-are roughly 172 / 437 / 1087, an order of magnitude higher, and those were
-measured on reasoning-heavy question answering. Writing a note from a
-transcript is extraction, not reasoning, so a low figure here is expected — but
-that explanation cannot also account for the open models spending 1500 on the
-same task.
-
-Which is why the figure sits in the expanded row and not in a sortable column:
-it is real, and a gap in it can be accounting rather than behaviour.
-
 ## The judge is a model
 
 For the TN-Eval track each judge is calibrated against two human annotators and

@@ -222,12 +222,6 @@ function detailRow(row, table) {
   // can exceed the visible tokens while reasoning_tokens reads 0. Two of these
   // numbers side by side in a sortable column would invite a comparison that
   // is partly about bookkeeping.
-  if (row.thinking_tokens) {
-    parts.push(`<p class="note">${T`Spent about <strong>${row.thinking_tokens.toLocaleString(LANG)}
-       tokens reasoning</strong> before writing, averaged over its notes — as reported by the
-       provider. <em>Not comparable across providers:</em> what counts as a reasoning token
-       depends on the serving stack, not only on the model.`}</p>`);
-  }
 
   // `section_order`, not the mapping's key order: the payload is serialised
   // with sorted keys, so reading the keys printed a SOAP note as A, O, P, S.
@@ -569,12 +563,6 @@ function renderTable(table, index) {
       <p class="ranking-note">${rankingNote}</p>
       ${referenceNote(table)}
       ${groupNote}
-      ${table.has_thinking ? `<p class="note">${T`Each row also records how many tokens its
-         model spent <strong>reasoning</strong> before writing — open a row to see it. It is
-         not a column because it is not comparable between providers: vLLM, which serves the
-         e-INFRA models, reports zero for models whose reasoning is text-delimited even when
-         they reason, and OpenAI counts differently again. A gap there can be bookkeeping
-         rather than behaviour.`}</p>` : ''}
       <dl class="measures">${legend}</dl>
       <!-- Under the table, not over it. A reader arriving at a leaderboard
            wants to know which model, and the first line they met was four

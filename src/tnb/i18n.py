@@ -166,14 +166,6 @@ _SENTENCES = {
     "Generation settings were not recorded for this row.": (
         "U tohoto řádku nebylo nastavení generování zaznamenáno."
     ),
-    "Spent about <strong>{0} tokens reasoning</strong> before writing, averaged over its notes"
-    " — as reported by the provider. <em>Not comparable across providers:</em> what counts as a"
-    " reasoning token depends on the serving stack, not only on the model.": (
-        "Před psaním strávil <strong>asi {0} tokenů uvažováním</strong>, v průměru přes své "
-        "zápisy — tak, jak to hlásí poskytovatel. <em>Mezi poskytovateli to není "
-        "srovnatelné:</em> co se počítá jako token uvažování, závisí na obslužné vrstvě, "
-        "ne jen na modelu."
-    ),
     "By section": "Po oddílech",
     "Section": "Oddíl",
     "These sections will not average to the figure in the row above, and the gap is the {0}"
@@ -392,17 +384,6 @@ _SENTENCES = {
     " and the source paper found they disagree. That disagreement is the result.": (
         "Tato větev <strong>záměrně nemá pořadí</strong>: její sloupce měří různé věci a zdrojový "
         "článek zjistil, že si odporují. Ten rozpor je ten výsledek."
-    ),
-    "Each row also records how many tokens its model spent <strong>reasoning</strong> before"
-    " writing — open a row to see it. It is not a column because it is not comparable between"
-    " providers: vLLM, which serves the e-INFRA models, reports zero for models whose reasoning"
-    " is text-delimited even when they reason, and OpenAI counts differently again. A gap there"
-    " can be bookkeeping rather than behaviour.": (
-        "Každý řádek také zaznamenává, kolik tokenů jeho model strávil <strong>uvažováním</strong> "
-        "před psaním — rozbalte řádek a uvidíte to. Není to sloupec, protože to není srovnatelné "
-        "mezi poskytovateli: vLLM, které obsluhuje modely e-INFRA, hlásí nulu u modelů, jejichž "
-        "uvažování je vymezeno textem, i když uvažují, a OpenAI to zase počítá jinak. Rozdíl tam "
-        "může být účetnictví, ne chování."
     ),
     # -- what a note here is scored against -----------------------------------
     "the human note competes": "lidský zápis soutěží",

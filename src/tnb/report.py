@@ -1343,7 +1343,6 @@ def build(rows: list[Row], saturations: list[dict] | None = None) -> dict:
                 # than as a control this provider does not have.
                 "has_effort": any(row["effort"] for row in rendered),
                 "has_words": any(row["note_words"] for row in rendered),
-                "has_thinking": any(row["thinking_tokens"] for row in rendered),
             }
         )
 
@@ -1501,7 +1500,6 @@ def _render_row(row: Row) -> dict:
         # In its own column, not only in the row's detail. Two models compared
         # on one line spent 1620 and 13 tokens thinking before writing, and a
         # reader who cannot see that is comparing two different experiments.
-        "thinking_tokens": row.settings.thinking_tokens,
         # A column, not a caveat. Completeness counts coverage, so a longer note
         # covers more; publishing the length lets a reader see that for
         # themselves without the page asserting a correlation that turned out to

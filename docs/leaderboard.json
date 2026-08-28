@@ -4216,7 +4216,6 @@
         "sessions": 25
       },
       "has_effort": true,
-      "has_thinking": true,
       "has_words": true,
       "id": "tneval-soap-gemini-3.1-pro-preview-tneval-rubric-v1-0.6.0-102129",
       "judge_prompt_versions": [
@@ -4326,7 +4325,6 @@
           "source": "",
           "system_id": "kimi-k3",
           "system_type": "model",
-          "thinking_tokens": 670,
           "unreached_reasons": {}
         },
         {
@@ -4426,7 +4424,6 @@
           "source": "",
           "system_id": "qwen3.5-int4",
           "system_type": "model",
-          "thinking_tokens": null,
           "unreached_reasons": {}
         },
         {
@@ -4526,7 +4523,6 @@
           "source": "",
           "system_id": "qwen3.5-122b",
           "system_type": "model",
-          "thinking_tokens": null,
           "unreached_reasons": {}
         },
         {
@@ -4626,7 +4622,6 @@
           "source": "",
           "system_id": "google_gemini-3.1-pro-preview",
           "system_type": "model",
-          "thinking_tokens": 1244,
           "unreached_reasons": {}
         },
         {
@@ -4726,7 +4721,6 @@
           "source": "",
           "system_id": "google_gemini-3.7-flash",
           "system_type": "model",
-          "thinking_tokens": 687,
           "unreached_reasons": {}
         },
         {
@@ -4826,7 +4820,6 @@
           "source": "",
           "system_id": "glm-5",
           "system_type": "model",
-          "thinking_tokens": 1502,
           "unreached_reasons": {}
         },
         {
@@ -4926,7 +4919,6 @@
           "source": "",
           "system_id": "glm-5.2",
           "system_type": "model",
-          "thinking_tokens": 1552,
           "unreached_reasons": {}
         },
         {
@@ -5026,7 +5018,6 @@
           "source": "",
           "system_id": "gpt-5.6-sol",
           "system_type": "model",
-          "thinking_tokens": 89,
           "unreached_reasons": {}
         },
         {
@@ -5126,7 +5117,6 @@
           "source": "",
           "system_id": "gpt-5.6-terra",
           "system_type": "model",
-          "thinking_tokens": 13,
           "unreached_reasons": {}
         },
         {
@@ -5228,7 +5218,6 @@
           "source": "",
           "system_id": "gpt-oss-120b",
           "system_type": "model",
-          "thinking_tokens": 252,
           "unreached_reasons": {}
         },
         {
@@ -5328,7 +5317,6 @@
           "source": "",
           "system_id": "deepseek-v4-flash-thinking",
           "system_type": "model",
-          "thinking_tokens": null,
           "unreached_reasons": {}
         },
         {
@@ -5428,7 +5416,6 @@
           "source": "",
           "system_id": "gpt-5.6-luna",
           "system_type": "model",
-          "thinking_tokens": 71,
           "unreached_reasons": {}
         },
         {
@@ -5528,7 +5515,6 @@
           "source": "",
           "system_id": "gemma4",
           "system_type": "model",
-          "thinking_tokens": null,
           "unreached_reasons": {}
         },
         {
@@ -5628,7 +5614,6 @@
           "source": "",
           "system_id": "qwen3.8-27b",
           "system_type": "model",
-          "thinking_tokens": 1620,
           "unreached_reasons": {}
         },
         {
@@ -5728,7 +5713,6 @@
           "source": "",
           "system_id": "mistral-medium-3.5",
           "system_type": "model",
-          "thinking_tokens": null,
           "unreached_reasons": {}
         },
         {
@@ -5828,7 +5812,6 @@
           "source": "",
           "system_id": "deepseek-v4-flash",
           "system_type": "model",
-          "thinking_tokens": null,
           "unreached_reasons": {}
         },
         {
@@ -5928,7 +5911,6 @@
           "source": "",
           "system_id": "mistral-large-v2",
           "system_type": "reference-model",
-          "thinking_tokens": null,
           "unreached_reasons": {}
         },
         {
@@ -6028,7 +6010,6 @@
           "source": "",
           "system_id": "llama-3.1-70b",
           "system_type": "reference-model",
-          "thinking_tokens": null,
           "unreached_reasons": {}
         },
         {
@@ -6128,7 +6109,6 @@
           "source": "",
           "system_id": "therapist",
           "system_type": "reference-human",
-          "thinking_tokens": null,
           "unreached_reasons": {}
         }
       ],
@@ -6326,7 +6306,6 @@
         "sessions": 42
       },
       "has_effort": true,
-      "has_thinking": true,
       "has_words": true,
       "id": "tneval-soap-gpt-5.6-terra-tneval-rubric-v1-0.6.0-acf643",
       "judge_prompt_versions": [
@@ -6436,7 +6415,6 @@
           "source": "",
           "system_id": "kimi-k3",
           "system_type": "model",
-          "thinking_tokens": 670,
           "unreached_reasons": {}
         },
         {
@@ -6536,7 +6514,6 @@
           "source": "",
           "system_id": "qwen3.5-122b",
           "system_type": "model",
-          "thinking_tokens": null,
           "unreached_reasons": {}
         },
         {
@@ -6636,7 +6613,6 @@
           "source": "",
           "system_id": "google_gemini-3.1-pro-preview",
           "system_type": "model",
-          "thinking_tokens": 1244,
           "unreached_reasons": {}
         },
         {
@@ -6738,7 +6714,6 @@
           "source": "",
           "system_id": "gpt-oss-120b",
           "system_type": "model",
-          "thinking_tokens": 252,
           "unreached_reasons": {}
         },
         {
@@ -6838,7 +6813,6 @@
           "source": "",
           "system_id": "qwen3.5-int4",
           "system_type": "model",
-          "thinking_tokens": null,
           "unreached_reasons": {}
         },
         {
@@ -6938,7 +6912,6 @@
           "source": "",
           "system_id": "gpt-5.6-terra",
           "system_type": "model",
-          "thinking_tokens": 13,
           "unreached_reasons": {}
         },
         {
@@ -7038,7 +7011,6 @@
           "source": "",
           "system_id": "gpt-5.6-sol",
           "system_type": "model",
-          "thinking_tokens": 89,
           "unreached_reasons": {}
         },
         {
@@ -7138,7 +7110,6 @@
           "source": "",
           "system_id": "google_gemini-3.7-flash",
           "system_type": "model",
-          "thinking_tokens": 687,
           "unreached_reasons": {}
         },
         {
@@ -7238,7 +7209,6 @@
           "source": "",
           "system_id": "deepseek-v4-flash-thinking",
           "system_type": "model",
-          "thinking_tokens": null,
           "unreached_reasons": {}
         },
         {
@@ -7338,7 +7308,6 @@
           "source": "",
           "system_id": "glm-5",
           "system_type": "model",
-          "thinking_tokens": 1502,
           "unreached_reasons": {}
         },
         {
@@ -7438,7 +7407,6 @@
           "source": "",
           "system_id": "glm-5.2",
           "system_type": "model",
-          "thinking_tokens": 1552,
           "unreached_reasons": {}
         },
         {
@@ -7538,7 +7506,6 @@
           "source": "",
           "system_id": "gpt-5.6-luna",
           "system_type": "model",
-          "thinking_tokens": 71,
           "unreached_reasons": {}
         },
         {
@@ -7638,7 +7605,6 @@
           "source": "",
           "system_id": "deepseek-v4-flash",
           "system_type": "model",
-          "thinking_tokens": null,
           "unreached_reasons": {}
         },
         {
@@ -7738,7 +7704,6 @@
           "source": "",
           "system_id": "qwen3.8-27b",
           "system_type": "model",
-          "thinking_tokens": 1620,
           "unreached_reasons": {}
         },
         {
@@ -7838,7 +7803,6 @@
           "source": "",
           "system_id": "mistral-medium-3.5",
           "system_type": "model",
-          "thinking_tokens": null,
           "unreached_reasons": {}
         },
         {
@@ -7938,7 +7902,6 @@
           "source": "",
           "system_id": "gemma4",
           "system_type": "model",
-          "thinking_tokens": null,
           "unreached_reasons": {}
         },
         {
@@ -8038,7 +8001,6 @@
           "source": "",
           "system_id": "mistral-large-v2",
           "system_type": "reference-model",
-          "thinking_tokens": null,
           "unreached_reasons": {}
         },
         {
@@ -8138,7 +8100,6 @@
           "source": "",
           "system_id": "llama-3.1-70b",
           "system_type": "reference-model",
-          "thinking_tokens": null,
           "unreached_reasons": {}
         },
         {
@@ -8238,7 +8199,6 @@
           "source": "",
           "system_id": "therapist",
           "system_type": "reference-human",
-          "thinking_tokens": null,
           "unreached_reasons": {}
         }
       ],
@@ -8332,7 +8292,6 @@
       },
       "groups": null,
       "has_effort": true,
-      "has_thinking": true,
       "has_words": false,
       "id": "icare-gemini-3.1-pro-preview-icare-trace-v1-0.6.0-102129",
       "ranking_measure": null,
@@ -8376,7 +8335,6 @@
           "source": "",
           "system_id": "deepseek-v4-flash",
           "system_type": "model",
-          "thinking_tokens": null,
           "unreached_reasons": {}
         },
         {
@@ -8418,7 +8376,6 @@
           "source": "",
           "system_id": "deepseek-v4-flash-thinking",
           "system_type": "model",
-          "thinking_tokens": null,
           "unreached_reasons": {}
         },
         {
@@ -8460,7 +8417,6 @@
           "source": "",
           "system_id": "gemma4",
           "system_type": "model",
-          "thinking_tokens": null,
           "unreached_reasons": {}
         },
         {
@@ -8502,7 +8458,6 @@
           "source": "",
           "system_id": "glm-5",
           "system_type": "model",
-          "thinking_tokens": 1192,
           "unreached_reasons": {}
         },
         {
@@ -8544,7 +8499,6 @@
           "source": "",
           "system_id": "glm-5.2",
           "system_type": "model",
-          "thinking_tokens": 1188,
           "unreached_reasons": {}
         },
         {
@@ -8586,7 +8540,6 @@
           "source": "",
           "system_id": "google_gemini-3.1-pro-preview",
           "system_type": "model",
-          "thinking_tokens": 970,
           "unreached_reasons": {}
         },
         {
@@ -8628,7 +8581,6 @@
           "source": "",
           "system_id": "google_gemini-3.7-flash",
           "system_type": "model",
-          "thinking_tokens": 390,
           "unreached_reasons": {}
         },
         {
@@ -8670,7 +8622,6 @@
           "source": "",
           "system_id": "gpt-5.6-luna",
           "system_type": "model",
-          "thinking_tokens": 108,
           "unreached_reasons": {}
         },
         {
@@ -8712,7 +8663,6 @@
           "source": "",
           "system_id": "gpt-5.6-sol",
           "system_type": "model",
-          "thinking_tokens": 80,
           "unreached_reasons": {}
         },
         {
@@ -8754,7 +8704,6 @@
           "source": "",
           "system_id": "gpt-5.6-terra",
           "system_type": "model",
-          "thinking_tokens": 41,
           "unreached_reasons": {}
         },
         {
@@ -8796,7 +8745,6 @@
           "source": "",
           "system_id": "gpt-oss-120b",
           "system_type": "model",
-          "thinking_tokens": 263,
           "unreached_reasons": {}
         },
         {
@@ -8838,7 +8786,6 @@
           "source": "",
           "system_id": "kimi-k3",
           "system_type": "model",
-          "thinking_tokens": 596,
           "unreached_reasons": {}
         },
         {
@@ -8880,7 +8827,6 @@
           "source": "",
           "system_id": "mistral-medium-3.5",
           "system_type": "model",
-          "thinking_tokens": null,
           "unreached_reasons": {}
         },
         {
@@ -8922,7 +8868,6 @@
           "source": "",
           "system_id": "qwen3.5-122b",
           "system_type": "model",
-          "thinking_tokens": null,
           "unreached_reasons": {}
         },
         {
@@ -8964,7 +8909,6 @@
           "source": "",
           "system_id": "qwen3.5-int4",
           "system_type": "model",
-          "thinking_tokens": null,
           "unreached_reasons": {
             "truncated at max_tokens=16384": 1
           }
@@ -9008,7 +8952,6 @@
           "source": "",
           "system_id": "qwen3.8-27b",
           "system_type": "model",
-          "thinking_tokens": 1610,
           "unreached_reasons": {}
         }
       ],
@@ -9098,7 +9041,6 @@
       },
       "groups": null,
       "has_effort": true,
-      "has_thinking": true,
       "has_words": false,
       "id": "icare-gpt-5.6-terra-icare-trace-v1-0.6.0-acf643",
       "ranking_measure": null,
@@ -9142,7 +9084,6 @@
           "source": "",
           "system_id": "deepseek-v4-flash",
           "system_type": "model",
-          "thinking_tokens": null,
           "unreached_reasons": {}
         },
         {
@@ -9184,7 +9125,6 @@
           "source": "",
           "system_id": "deepseek-v4-flash-thinking",
           "system_type": "model",
-          "thinking_tokens": null,
           "unreached_reasons": {}
         },
         {
@@ -9226,7 +9166,6 @@
           "source": "",
           "system_id": "gemma4",
           "system_type": "model",
-          "thinking_tokens": null,
           "unreached_reasons": {}
         },
         {
@@ -9268,7 +9207,6 @@
           "source": "",
           "system_id": "glm-5",
           "system_type": "model",
-          "thinking_tokens": 1192,
           "unreached_reasons": {}
         },
         {
@@ -9310,7 +9248,6 @@
           "source": "",
           "system_id": "glm-5.2",
           "system_type": "model",
-          "thinking_tokens": 1188,
           "unreached_reasons": {}
         },
         {
@@ -9352,7 +9289,6 @@
           "source": "",
           "system_id": "google_gemini-3.1-pro-preview",
           "system_type": "model",
-          "thinking_tokens": 970,
           "unreached_reasons": {}
         },
         {
@@ -9394,7 +9330,6 @@
           "source": "",
           "system_id": "google_gemini-3.7-flash",
           "system_type": "model",
-          "thinking_tokens": 390,
           "unreached_reasons": {}
         },
         {
@@ -9436,7 +9371,6 @@
           "source": "",
           "system_id": "gpt-5.6-luna",
           "system_type": "model",
-          "thinking_tokens": 108,
           "unreached_reasons": {}
         },
         {
@@ -9478,7 +9412,6 @@
           "source": "",
           "system_id": "gpt-5.6-sol",
           "system_type": "model",
-          "thinking_tokens": 80,
           "unreached_reasons": {}
         },
         {
@@ -9520,7 +9453,6 @@
           "source": "",
           "system_id": "gpt-5.6-terra",
           "system_type": "model",
-          "thinking_tokens": 41,
           "unreached_reasons": {}
         },
         {
@@ -9562,7 +9494,6 @@
           "source": "",
           "system_id": "gpt-oss-120b",
           "system_type": "model",
-          "thinking_tokens": 263,
           "unreached_reasons": {}
         },
         {
@@ -9604,7 +9535,6 @@
           "source": "",
           "system_id": "kimi-k3",
           "system_type": "model",
-          "thinking_tokens": 596,
           "unreached_reasons": {}
         },
         {
@@ -9646,7 +9576,6 @@
           "source": "",
           "system_id": "mistral-medium-3.5",
           "system_type": "model",
-          "thinking_tokens": null,
           "unreached_reasons": {}
         },
         {
@@ -9688,7 +9617,6 @@
           "source": "",
           "system_id": "qwen3.5-122b",
           "system_type": "model",
-          "thinking_tokens": null,
           "unreached_reasons": {}
         },
         {
@@ -9730,7 +9658,6 @@
           "source": "",
           "system_id": "qwen3.5-int4",
           "system_type": "model",
-          "thinking_tokens": null,
           "unreached_reasons": {
             "truncated at max_tokens=16384": 1
           }
@@ -9774,7 +9701,6 @@
           "source": "",
           "system_id": "qwen3.8-27b",
           "system_type": "model",
-          "thinking_tokens": 1610,
           "unreached_reasons": {}
         }
       ],

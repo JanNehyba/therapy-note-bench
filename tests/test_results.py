@@ -743,8 +743,8 @@ def test_the_providers_earlier_cut_cannot_leave_half_a_secret(monkeypatch):
 
 
 def test_settings_are_read_from_the_track_that_was_asked_for(tmp_path):
-    """`thinking_tokens` is measured from that track's notes and `max_tokens`
-    records whether the escalation fired on it. Both differ between a model's
+    """`max_tokens` records whether the escalation to 16384 fired on that track,
+    and `note_words` is measured from its notes. Both differ between a model's
     SOAP run and its iCARE run, and not because of the harness.
 
     Unfiltered, the mapping walked both tracks and let the later write win.
@@ -775,19 +775,17 @@ def test_settings_are_read_from_the_track_that_was_asked_for(tmp_path):
     soap_settings = results.settings_by_system(tmp_path, track=results.TRACK_TNEVAL)[key]
     icare_settings = results.settings_by_system(tmp_path, track=results.TRACK_ICARE)[key]
 
-    assert soap_settings.thinking_tokens == 100
-    assert icare_settings.thinking_tokens == 900, "the iCARE row must not carry SOAP's figure"
     assert soap_settings.max_tokens == 4096
-    assert icare_settings.max_tokens == 16384
+    assert icare_settings.max_tokens == 16384, "the iCARE row must not carry SOAP's figure"
 
     # And the shape the defect had: unfiltered, one of the two wins silently.
     both = results.settings_by_system(tmp_path)[key]
-    assert both.thinking_tokens in (100, 900)
-    assert (both.thinking_tokens == 900) != (both.thinking_tokens == 100)
+    assert both.max_tokens in (4096, 16384)
+    assert (both.max_tokens == 16384) != (both.max_tokens == 4096)
 
 
 def test_note_length_is_measured_from_the_notes_and_is_a_median(tmp_path):
-    """Measured like `thinking_tokens`, not configured. Median rather than mean:
+    """Measured from the notes, not configured. Median rather than mean:
     one note that repeats the transcript back is real and must not move the
     figure a reader compares across models.
     """

@@ -211,26 +211,23 @@ class Settings:
     - **max_tokens** -- 4096, escalating to 16384 for a model that spent its
       whole budget thinking. A truncated note scores as an incomplete one.
 
-    And one that is **measured rather than set**:
-
-    - **thinking_tokens** -- how many tokens the model actually spent reasoning
-      before it wrote anything, averaged over its notes. Nothing here sets a
-      thinking budget for a *generating* model, so each one uses its own
-      default, and those defaults differ by two orders of magnitude: 1620 for
-      `qwen3.8-27b` against 13 for `gpt-5.6-terra`. Since raising the *judge's*
-      budget from 128 to 256 moved every system's completeness by +0.017 and
-      reordered sixteen of nineteen on conciseness, a reader comparing two
-      models has to be able to see this. It is `None` for a provider that does
-      not report it, which is not the same as zero.
+    A generating model's own reasoning tokens were recorded here and are not any
+    more. The figure was never comparable between models: nothing in this
+    benchmark sets a thinking budget for a generating model, so each one used
+    its provider's default, and those defaults differ by two orders of magnitude
+    -- 1620 for `qwen3.8-27b` against 13 for `gpt-5.6-terra`. A column whose
+    values are set by whoever deployed the model, published beside columns this
+    benchmark controls, invited a comparison it could not support. Historic rows
+    keep the field; `from_dict` drops settings keys it does not know, so
+    `results/` stays append-only and is not rewritten.
     """
 
     effort: str = ""
     temperature: float | None = None
     temperature_forced: bool = False
     max_tokens: int | None = None
-    thinking_tokens: int | None = None
     #: How long this model's notes are, as a median over the ones it wrote.
-    #: Measured like `thinking_tokens` rather than configured, and published as
+    #: Measured rather than configured, and published as
     #: a column because completeness counts coverage: within every one of the
     #: sixteen systems, under both judges, a longer note scores higher (median
     #: Spearman +0.35 and +0.45). Holding the transcript fixed the effect
@@ -831,7 +828,7 @@ def settings_by_system(
     **`track` is not optional in practice.** The key is (provider, system_id),
     which is right for `temperature` and `effort` -- a model is configured per
     provider -- and wrong for the other two fields the block carries.
-    `thinking_tokens` is *measured* from that track's notes, and `max_tokens`
+    `note_words` is *measured* from that track's notes, and `max_tokens`
     records whether the escalation to 16384 fired on that track. Both differ
     between a model's SOAP run and its iCARE run, and not because of the
     harness.
@@ -857,7 +854,6 @@ def settings_by_system(
 def _settings_from(
     observed: set[tuple],
     budgets: set[int],
-    thinking: list[int] | None = None,
     words: list[int] | None = None,
 ) -> Settings:
     """One `Settings` for a model's notes, or nothing if they disagree.
@@ -873,22 +869,17 @@ def _settings_from(
     so the *largest* is reported: it is the ceiling the model was allowed, which
     is what a reader needs in order to know whether a note could be truncated.
     """
-    # The thinking figure survives disagreement about the rest: it is measured
-    # from the notes rather than configured, so it describes them whatever they
-    # were asked with.
-    spent = round(sum(thinking) / len(thinking)) if thinking else None
     # Median, not mean: one note that repeats the transcript back is real and
     # should not move the figure a reader compares across models.
     length = round(statistics.median(words)) if words else None
     if len(observed) != 1:
-        return Settings(thinking_tokens=spent, note_words=length)
+        return Settings(note_words=length)
     effort, temperature, forced = next(iter(observed))
     return Settings(
         effort=effort or "",
         temperature=temperature,
         temperature_forced=forced,
         max_tokens=max(budgets) if budgets else None,
-        thinking_tokens=spent,
         note_words=length,
     )
 
@@ -911,7 +902,6 @@ def _coverage_row(
     # say how the note was written, not how the config would write it now.
     observed: set[tuple] = set()
     budgets: set[int] = set()
-    thinking: list[int] = []
     words: list[int] = []
     unreached_sessions = 0
 
@@ -938,11 +928,6 @@ def _coverage_row(
                 )
                 if record.get("max_tokens"):
                     budgets.add(int(record["max_tokens"]))
-                # Measured, not configured: nothing sets a thinking budget for
-                # a generating model, so this is what each one chose to spend.
-                details = (record.get("usage") or {}).get("completion_tokens_details") or {}
-                if details.get("reasoning_tokens") is not None:
-                    thinking.append(int(details["reasoning_tokens"]))
                 # The note itself, not the reply that carried it: `text` holds
                 # the model's whole answer including any scaffolding it wrote
                 # around the note, and the rubric only ever sees the note.
@@ -975,7 +960,7 @@ def _coverage_row(
         system_type="model",
         provider=provider,
         prompt_version=prompt_version,
-        settings=_settings_from(observed, budgets, thinking, words),
+        settings=_settings_from(observed, budgets, words),
         n_sessions_attempted=len(sessions),
         n_sessions_generated=complete,
         # What the *model* failed to produce. A call the endpoint never
