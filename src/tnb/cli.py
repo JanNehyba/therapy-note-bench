@@ -1075,6 +1075,17 @@ def cmd_score_deepsy(args: argparse.Namespace) -> int:
             client,
             spend,
             force=args.force,
+            # Its own cache root, and this is not tidiness. `judge.cache_path`
+            # is keyed on judge, rubric, provider, system, session and unit --
+            # and Deepsy shares every one of those six with the Czech SOAP
+            # track: the same sessions, the same models, the same seven
+            # criteria, the same `czech-criteria-v2`. Only the note differs.
+            # Under one root the two tracks would write to identical paths and
+            # each run would overwrite the other's answers, forever, because
+            # `load_cached` would reject what it found on the prompt digest and
+            # then replace it. The digest check makes a wrong answer
+            # unreadable; it does not stop it being written over a right one.
+            cache_root=judge.CACHE_DIR / deepsy_task.PROMPT_VERSION,
             render=deepsy_task.render_note,
             judge_prompt_version=czech.JUDGE_PROMPT_VERSION,
             on_note=on_note,
