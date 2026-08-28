@@ -873,6 +873,21 @@ CS: dict[str, str] = {
         "jazycích se přenáší; jediné měřítko, podle kterého anglická stránka řadí — "
         "{measure} — nikoli. Postavení modelu tam neříká nic o češtině, kterou píše."
     ),
+    # --- the plain length table --------------------------------------------
+    "How long each model writes": "Jak dlouhé zápisy píše který model",
+    "The median length of one note, in words, for every model and every corpus it "
+    "wrote for. These are the notes the models generated -- not anything a judge "
+    "wrote. Everything the rest of this section claims is about these numbers.": (
+        "Medián délky jednoho zápisu ve slovech, pro každý model a každý korpus, do "
+        "kterého psal. Jsou to zápisy, které vygenerovaly modely — ne nic, co by psal "
+        "soudce. Všechno, co zbytek téhle sekce tvrdí, se týká těchhle čísel."
+    ),
+    "For scale: the therapist who wrote TN-Eval's reference notes used {human} words a "
+    "note, and no model here reaches that on any corpus.": (
+        "Pro měřítko: terapeut, který psal referenční poznámky pro TN-Eval, použil "
+        "{human} slov na poznámku, a žádný model tady se tomu nepřiblíží na žádném "
+        "korpusu."
+    ),
     # --- refusals ----------------------------------------------------------
     "Refusing to write: a row carries something that is not a score.": (
         "Odmítám zapsat: řádek nese něco, co není skóre."

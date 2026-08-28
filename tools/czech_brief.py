@@ -506,6 +506,17 @@ def check_no_clinical_text(rows: list[results.Row]) -> list[str]:
     return problems
 
 
+#: The plain length table's own sentences.
+LENGTH_TABLE_LEAD = (
+    "The median length of one note, in words, for every model and every corpus it "
+    "wrote for. These are the notes the models generated -- not anything a judge "
+    "wrote. Everything the rest of this section claims is about these numbers."
+)
+LENGTH_TABLE_HUMAN = (
+    "For scale: the therapist who wrote TN-Eval's reference notes used {human} words a "
+    "note, and no model here reaches that on any corpus."
+)
+
 #: The length section's own sentences. Every number in them is a placeholder
 #: filled from `local/czech-length.json`, because a length that is typed into a
 #: sentence is a length that a later run makes quietly false.
@@ -1352,6 +1363,86 @@ def _dead_columns(rows: list[results.Row]) -> tuple[int, int, list[str], float]:
     return dead, len(COLUMNS[track]), [_t(labels[key]["label"])], best
 
 
+def _length_by_model(data: dict) -> str:
+    """How many words each model writes, per corpus. One row per model.
+
+    This was missing, and its absence made the section unreadable: the only
+    table in it was a grid of correlations whose columns are the two judges'
+    names, so it looked like a statement about how long the JUDGES write. The
+    number a reader wants first is the plain one -- this model writes 289 words,
+    that one writes 812 -- and every claim the section makes rests on it.
+
+    Medians, and the count behind each is the notes that parsed. A model with
+    fewer notes on a corpus is shown with that count rather than dropped, so a
+    short row is visible as thin rather than as absent.
+    """
+    czech = data.get("czech") or {}
+    deepsy = data.get("deepsy") or {}
+    corpora = [
+        (results.TRACK_CZECH_REAL, czech.get(results.TRACK_CZECH_REAL)),
+        (results.TRACK_CZECH_TRANSLATED, czech.get(results.TRACK_CZECH_TRANSLATED)),
+        (results.TRACK_DEEPSY_REAL, deepsy.get(results.TRACK_DEEPSY_REAL)),
+        (results.TRACK_DEEPSY_TRANSLATED, deepsy.get(results.TRACK_DEEPSY_TRANSLATED)),
+    ]
+    corpora = [(track, block) for track, block in corpora if block]
+    if not corpora:
+        return ""
+
+    def cell(block: dict, system: str, most: int) -> str:
+        """The median, and the count when it rests on less than the corpus.
+
+        A median of three answers is not a median, and while a corpus is still
+        being generated some rows rest on three. Printing the bare number would
+        put one model's provisional length beside another's finished one and
+        invite the reader to compare them.
+        """
+        found = block["by_system"].get(system)
+        if found is None:
+            return "<td class='dash'>&mdash;</td>"
+        if not isinstance(found, dict):
+            return f"<td>{found}</td>"
+        if found["answers"] < most:
+            return (
+                f"<td>{found['median']} <span class='dash'>({found['answers']}/{most})</span></td>"
+            )
+        return f"<td>{found['median']}</td>"
+
+    systems = sorted({s for _, block in corpora for s in block["by_system"]})
+    head = "".join(
+        f"<th>{html.escape(_t(TRACK_TITLES.get(track, track)))}</th>" for track, _ in corpora
+    )
+    body = []
+    for system in systems:
+        cells = ""
+        for _track, block in corpora:
+            most = max(
+                (v["answers"] for v in block["by_system"].values() if isinstance(v, dict)),
+                default=0,
+            )
+            cells += cell(block, system, most)
+        body.append(f"<tr><td>{html.escape(system)}</td>{cells}</tr>")
+
+    english = data.get("english") or {}
+    human = (data.get("human") or {}).get("human")
+    extra = []
+    if english:
+        block = next(iter(english.values()))
+        for system, value in sorted(block["by_system"].items()):
+            extra.append((system, value))
+
+    note = ""
+    if human:
+        line = _t(LENGTH_TABLE_HUMAN).format(human=human["median"])
+        note = f"<p class='dash'>{html.escape(line)}</p>"
+    return (
+        f"<h3>{_t('How long each model writes')}</h3>"
+        + f"<p>{html.escape(_t(LENGTH_TABLE_LEAD))}</p>"
+        + f"<table><thead><tr><th>{_t('Model')}</th>{head}</tr></thead>"
+        + f"<tbody>{''.join(body)}</tbody></table>"
+        + note
+    )
+
+
 def _length() -> str:
     """How long a note the models write, and whether the tables reward it.
 
@@ -1421,6 +1512,9 @@ def _length() -> str:
             + "</p>"
         )
         break
+
+    # --- how long each model writes -----------------------------------------
+    parts.append(_length_by_model(data))
 
     # --- what length buys ---------------------------------------------------
     table = _length_table(data)
