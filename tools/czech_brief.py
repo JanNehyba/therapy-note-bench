@@ -322,6 +322,92 @@ def _verdicts(rows: list[results.Row]) -> str:
     )
 
 
+def _join() -> str:
+    """The question the track was built for, answered in the document that leaves.
+
+    Written by `tools/czech_join.py`. Two tables, because there are two answers:
+    the same instrument asked in both languages transfers, and the measure the
+    English page actually ranks by does not. Printing only the first would be
+    the more flattering half.
+
+    A cell carries its p-value because nine models invite over-reading, and the
+    two judges sit side by side because the reading rule is "believe a column
+    that says the same thing under both".
+    """
+    path = REPO / "local" / "czech-join.json"
+    if not path.exists():
+        return ""
+    data = json.loads(path.read_text(encoding="utf-8"))
+    judges = sorted(data.get("judges", {}))
+    if not judges:
+        return ""
+
+    labels = MEASURE_TABLES[results.TRACK_CZECH_TRANSLATED_PDSQI]
+
+    def block(field: str, heading: str, lead: str) -> str:
+        keys, rows = [], []
+        for name in judges:
+            for key in data["judges"][name].get(field, {}):
+                if key not in keys:
+                    keys.append(key)
+        if not keys:
+            return ""
+        for key in keys:
+            cells = []
+            for name in judges:
+                entry = data["judges"][name].get(field, {}).get(key)
+                if not entry:
+                    cells.append("<td class='dash'>flat</td>")
+                    continue
+                strong = "<strong>" if entry["p"] < 0.05 else ""
+                close = "</strong>" if entry["p"] < 0.05 else ""
+                cells.append(
+                    f"<td>{strong}{entry['rho']:+.2f}{close}"
+                    f" <span class='dash'>p={entry['p']:.3f}</span></td>"
+                )
+            label = labels.get(key, {}).get("label", key)
+            rows.append(f"<tr><td>{html.escape(label)}</td>" + "".join(cells) + "</tr>")
+        head = "".join(f"<th>{html.escape(name)}</th>" for name in judges)
+        return (
+            f"<h3>{html.escape(heading)}</h3><p>{html.escape(lead)}</p>"
+            f"<table><thead><tr><th>Attribute</th>{head}</tr></thead>"
+            f"<tbody>{''.join(rows)}</tbody></table>"
+        )
+
+    flat = sorted({key for name in judges for key in data["judges"][name].get("flat", [])})
+    ranking = data["judges"][judges[0]].get("ranking_measure", "the ranking measure")
+    systems = len(data["judges"][judges[0]].get("systems", []))
+
+    return (
+        "<h2>Does the English leaderboard predict the Czech?</h2>"
+        f"<p>The two tables share {systems} models. Whether a standing in one predicts a "
+        "standing in the other has two answers, and which one a reader gets depends on "
+        "which English number they were looking at. Bold is a correlation that survives "
+        "an exact permutation test at p &lt; 0.05.</p>"
+        + block(
+            "same_instrument",
+            "Asked the same question, quality transfers",
+            "PDSQI-9 on the English notes against PDSQI-9 on the Czech ones. Same "
+            "attributes, same anchors, same judge; only the language of the note differs.",
+        )
+        + block(
+            "leaderboard_ranking",
+            "Asked the leaderboard's own measure, it does not",
+            f"English {ranking} -- what the page sorts by, so what a position means -- "
+            "against the Czech quality columns. Nothing here survives the test, and the "
+            "two judges do not agree even on the sign.",
+        )
+        + (
+            f"<p class='sub'>Flat on one side and therefore not correlated: "
+            f"{html.escape(', '.join(flat))}.</p>"
+            if flat
+            else ""
+        )
+        + f"<div class='warn'><p>{html.escape(data.get('confound', ''))} "
+        f"{html.escape(data.get('reading', ''))}</p></div>"
+    )
+
+
 def _anchor() -> str:
     """The one figure this track has that the other three do not.
 
@@ -511,6 +597,8 @@ transcript text appears in this document or in any file it was built from.</p></
 {"".join(sections)}
 
 {_verdicts(rows)}
+
+{_join()}
 
 {_anchor()}
 
