@@ -352,9 +352,11 @@ TRACK_BLURBS = {
         "instrument instead of the seven language criteria. The criteria cannot say "
         "whether a note is any good -- a flawless Czech sentence about nothing passes "
         "all seven -- and this is the half of the question they leave out. **Six "
-        "attributes, not eight:** `accurate` and `thorough` need the session, and "
-        "these sessions never leave the infrastructure that holds them, so the two "
-        "columns are absent because the question could not be put."
+        "attributes, not eight:** `accurate` and `thorough` can only be answered "
+        "by reading the session, and both judges run at Google and at OpenAI -- "
+        "outside the university infrastructure the sessions sit on. Asking those "
+        "two would mean sending a real session out to them. The columns are absent "
+        "because of where the judge is, not because of anything the notes lack."
     ),
     results.TRACK_DEEPSY_REAL: (
         "The same models and the same ten sessions, asked for the note format the "
