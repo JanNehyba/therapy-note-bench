@@ -730,6 +730,46 @@ def load_cached(path: Path, fingerprint: dict, prompt: str | None = None) -> dic
     return record
 
 
-def write_cached(path: Path, record: dict) -> None:
+class Reinstrumented(RuntimeError):
+    """An answer from one instrument was about to overwrite another's."""
+
+
+def write_cached(path: Path, record: dict, *, allow_reinstrument: bool = False) -> None:
+    """Store one answer, refusing to overwrite an answer from a different judge.
+
+    **This guard exists because the thing it prevents happened.** A scoring run
+    started without `--thinking-budget` took the default 256 where the stored
+    answers were asked at 2048. `load_cached` correctly rejected all 1 272 of
+    them -- a different budget is a different instrument, which is why
+    `judge_settings` is one of `results.COMPARABILITY_KEYS` -- so the run re-asked
+    every question, and this function then overwrote 943 good answers with
+    answers from an instrument nobody wanted. `scores/` is gitignored, so there
+    was nothing to restore from; they had to be asked again.
+
+    Re-instrumenting on purpose is a real thing to want and stays possible, but
+    it has to be said out loud. Deciding to measure with a new budget starts a
+    new table by the project's own rules, and a decision that large should not
+    be reachable by leaving a flag off.
+
+    The comparison is on the fingerprint alone. Re-asking the same question of
+    the same instrument -- what `--force` does, and what a truncated answer
+    causes on the next run -- overwrites freely, because that is the same
+    instrument answering again.
+    """
+    if not allow_reinstrument and path.exists():
+        try:
+            stored = json.loads(path.read_text(encoding="utf-8")).get("judge_fingerprint")
+        except (OSError, json.JSONDecodeError):
+            stored = None
+        fresh = record.get("judge_fingerprint")
+        if stored is not None and fresh is not None and stored != fresh:
+            raise Reinstrumented(
+                f"{path} holds an answer from a different judge instrument.\n"
+                f"  stored: {json.dumps(stored, sort_keys=True)}\n"
+                f"  asking: {json.dumps(fresh, sort_keys=True)}\n"
+                "A different budget or model is a different instrument and starts a "
+                "new table. Re-run with the settings the cache was built at, or pass "
+                "--reinstrument to replace it deliberately."
+            )
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(record, indent=2, ensure_ascii=False), encoding="utf-8")

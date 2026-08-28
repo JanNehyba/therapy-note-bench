@@ -251,6 +251,7 @@ def score_note(
                 "latency_s": round(answer.latency_s, 3),
                 "scored_at": dt.datetime.now(dt.UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
             },
+            allow_reinstrument=force,
         )
 
         if answer.ok:
