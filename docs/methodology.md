@@ -380,3 +380,34 @@ the row rather than filled in.
 
 `judge_settings` carries the budget, and it is part of `COMPARABILITY_KEYS`, so
 the Czech tables cannot be read beside a run at any other budget.
+
+## The Deepsy format, and what it is for
+
+The Czech tracks ask for a SOAP note, because SOAP is what TN-Eval asks for and
+reusing its prompt is what makes the English and Czech numbers comparable at
+all. No Czech psychologist writes SOAP.
+
+So a second format runs beside it: the note the Deepsy application actually
+writes, with its prompts reproduced from that application's own YAML rather than
+retyped — `tests/test_deepsy_fidelity.py` reads the YAML back and fails if the
+strings have drifted. Three of its eleven sections, the three with a SOAP
+counterpart: `data`, `clinical_hypotheses`, `plan`. The others are out for
+stated reasons — `dekurz` and the questionnaires by decision, `episode_summary`
+and `progress` because they read a previous note rather than a transcript, and
+this benchmark scores single sessions.
+
+**Same models, same sessions, same seven criteria, different format.** That is
+what makes the comparison a comparison of formats rather than of tasks, and it
+is why the criteria's `judge_prompt_version` is deliberately the same: the
+instrument does not change, only what it is shown. The generation
+`prompt_version` differs, so the rows are not comparable and the tables are
+separate — which is correct, and is enforced by `COMPARABILITY_KEYS` rather
+than by care.
+
+Two things this format has that SOAP does not. It sets a **length**: 500 words a
+section, which the prompt itself calls invalid to exceed. And it asks for
+**JSON**, so a reply that is not a JSON object with the expected keys is a
+failure rather than a note — the repair loop asks up to five times before giving
+up, and about one answer in twelve needs it.
+
+It is asked one section at a time, so a note is three calls rather than one.

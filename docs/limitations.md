@@ -160,10 +160,16 @@ version control, because the corpus is confidential clinical material and the
 decision to publish anything derived from it has not been made.
 
 What that track will be able to say, when it says anything, is narrow. Ten
-sessions with one client; an instrument this repository wrote, because no
-published Czech note-quality instrument exists to reproduce; no human has rated
-those notes; and the generation prompt is a translation of TN-Eval's rather than
-a reproduction of any Czech documentation standard, of which there is none. See
+sessions with one client; a language instrument this repository wrote, because
+no published Czech one exists to reproduce; and a generation prompt that is a
+translation of TN-Eval's rather than a reproduction of any Czech documentation
+standard, of which there is none.
+
+One native speaker has since rated twenty of those notes on all seven language
+criteria -- 140 answers, and the agreement with each judge is reported beside the
+tables. It is one rater, so it is a comparison and not a ceiling. **PDSQI-9 on
+those notes still has no human rating of any kind**, which is the gap that
+matters most: the sheet exists with every cell empty. See
 `docs/datasets.md` for the corpus and the de-identification.
 
 ## Nothing here measures compliance
