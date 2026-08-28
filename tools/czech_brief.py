@@ -322,6 +322,72 @@ def _verdicts(rows: list[results.Row]) -> str:
     )
 
 
+def _anchor() -> str:
+    """The one figure this track has that the other three do not.
+
+    Written by `tools/czech_anchor.py` from the filled rating sheet. Absent
+    until somebody fills one in, and the section simply does not appear rather
+    than appearing empty -- a heading with no number under it reads as a
+    measurement that failed.
+
+    Three things travel with the figure and none of them is optional. How the
+    ratings were made, because "one native speaker rated twenty notes" would be
+    a larger claim than the truth. That one rater gives no ceiling, so the
+    number is not an accuracy. And the count of questions that have no answer
+    on disk, because a rate computed over the answered ones is only as good as
+    how few were not.
+    """
+    path = REPO / "local" / "czech-anchor.json"
+    if not path.exists():
+        return ""
+    data = json.loads(path.read_text(encoding="utf-8"))
+    judges = sorted(data.get("judges", {}))
+    if not judges:
+        return ""
+
+    keys = [key for key, _ in COLUMNS[results.TRACK_CZECH_REAL]]
+    body = []
+    for key in keys:
+        cells = []
+        for name in judges:
+            entry = data["judges"][name]["criteria"].get(key)
+            if not entry or entry["rate"] is None:
+                cells.append("<td class='dash'>not answered yet</td>")
+            else:
+                gap = (
+                    f" <span class='dash'>({entry['unanswered']} unanswered)</span>"
+                    if entry["unanswered"]
+                    else ""
+                )
+                cells.append(f"<td>{entry['rate']:.2f}{gap}</td>")
+        label = MEASURE_TABLES[results.TRACK_CZECH_REAL][key]["label"]
+        counted = (
+            " <span class='dash'>(counted, not judged)</span>"
+            if (data["judges"][judges[0]]["criteria"].get(key, {}).get("computed"))
+            else ""
+        )
+        body.append(f"<tr><td>{html.escape(label)}{counted}</td>" + "".join(cells) + "</tr>")
+
+    totals = []
+    for name in judges:
+        rate = data["judges"][name].get("rate")
+        totals.append(
+            f"<td><strong>{rate:.2f}</strong></td>" if rate else "<td class='dash'>--</td>"
+        )
+    body.append("<tr><td><strong>All questions</strong></td>" + "".join(totals) + "</tr>")
+
+    head = "".join(f"<th>{html.escape(name)}</th>" for name in judges)
+    return (
+        "<h2>How often a judge and one native speaker said the same thing</h2>"
+        f"<p>{html.escape(data.get('method', ''))}</p>"
+        f"<div class='warn'><p>{html.escape(data.get('ceiling', ''))}</p></div>"
+        f"<table><thead><tr><th>Criterion</th>{head}</tr></thead>"
+        f"<tbody>{''.join(body)}</tbody></table>"
+        f"<p class='sub'>{data.get('notes_rated', 0)} notes, drawn by a hash of the session "
+        "and the model so that no score could influence which ones were rated.</p>"
+    )
+
+
 def _controls() -> str:
     """What each column detects, from the planted-error runs.
 
@@ -445,6 +511,8 @@ transcript text appears in this document or in any file it was built from.</p></
 {"".join(sections)}
 
 {_verdicts(rows)}
+
+{_anchor()}
 
 {_controls()}
 
