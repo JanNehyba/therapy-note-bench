@@ -3470,10 +3470,10 @@
     }
   },
   "selection": {
-    "default": "tneval-soap-gemini-3.1-pro-preview-0.6.0-102129",
+    "default": "tneval-soap-gemini-3.1-pro-preview-tneval-rubric-v1-0.6.0-102129",
     "tracks": [
       {
-        "default": "tneval-soap-gemini-3.1-pro-preview-0.6.0-102129",
+        "default": "tneval-soap-gemini-3.1-pro-preview-tneval-rubric-v1-0.6.0-102129",
         "judges": [
           {
             "judge_model": "gemini-3.1-pro-preview",
@@ -3481,7 +3481,7 @@
             "settings_differ": false,
             "settings_label": "",
             "stale_harness": false,
-            "table": "tneval-soap-gemini-3.1-pro-preview-0.6.0-102129"
+            "table": "tneval-soap-gemini-3.1-pro-preview-tneval-rubric-v1-0.6.0-102129"
           },
           {
             "judge_model": "gpt-5.6-terra",
@@ -3489,14 +3489,14 @@
             "settings_differ": false,
             "settings_label": "",
             "stale_harness": false,
-            "table": "tneval-soap-gpt-5.6-terra-0.6.0-acf643"
+            "table": "tneval-soap-gpt-5.6-terra-tneval-rubric-v1-0.6.0-acf643"
           }
         ],
         "label": "TN-Eval SOAP",
         "track": "tneval-soap"
       },
       {
-        "default": "icare-gemini-3.1-pro-preview-0.6.0-102129",
+        "default": "icare-gemini-3.1-pro-preview-icare-trace-v1-0.6.0-102129",
         "judges": [
           {
             "judge_model": "gemini-3.1-pro-preview",
@@ -3504,7 +3504,7 @@
             "settings_differ": false,
             "settings_label": "",
             "stale_harness": false,
-            "table": "icare-gemini-3.1-pro-preview-0.6.0-102129"
+            "table": "icare-gemini-3.1-pro-preview-icare-trace-v1-0.6.0-102129"
           },
           {
             "judge_model": "gpt-5.6-terra",
@@ -3512,7 +3512,7 @@
             "settings_differ": false,
             "settings_label": "",
             "stale_harness": false,
-            "table": "icare-gpt-5.6-terra-0.6.0-acf643"
+            "table": "icare-gpt-5.6-terra-icare-trace-v1-0.6.0-acf643"
           }
         ],
         "label": "iCARE / iHOPE",
@@ -4211,7 +4211,7 @@
       "has_effort": true,
       "has_thinking": true,
       "has_words": true,
-      "id": "tneval-soap-gemini-3.1-pro-preview-0.6.0-102129",
+      "id": "tneval-soap-gemini-3.1-pro-preview-tneval-rubric-v1-0.6.0-102129",
       "judge_prompt_versions": [
         "tneval-rubric-v1",
         "pdsqi9-note-v1"
@@ -6307,7 +6307,7 @@
       "has_effort": true,
       "has_thinking": true,
       "has_words": true,
-      "id": "tneval-soap-gpt-5.6-terra-0.6.0-acf643",
+      "id": "tneval-soap-gpt-5.6-terra-tneval-rubric-v1-0.6.0-acf643",
       "judge_prompt_versions": [
         "tneval-rubric-v1",
         "pdsqi9-note-v1"
@@ -8299,7 +8299,7 @@
       "has_effort": true,
       "has_thinking": true,
       "has_words": false,
-      "id": "icare-gemini-3.1-pro-preview-0.6.0-102129",
+      "id": "icare-gemini-3.1-pro-preview-icare-trace-v1-0.6.0-102129",
       "ranking_measure": null,
       "rows": [
         {
@@ -9055,7 +9055,7 @@
       "has_effort": true,
       "has_thinking": true,
       "has_words": false,
-      "id": "icare-gpt-5.6-terra-0.6.0-acf643",
+      "id": "icare-gpt-5.6-terra-icare-trace-v1-0.6.0-acf643",
       "ranking_measure": null,
       "rows": [
         {

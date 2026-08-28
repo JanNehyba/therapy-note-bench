@@ -293,16 +293,33 @@ _SENTENCES = {
         "Čtěte to pořadí jen zhruba jako to, kdo je blízko vrcholu a kdo blízko dna, ne jako "
         "žebříček: dva sousední řádky nejsou výsledek."
     ),
+    "Measured against the {0} systems neither judge's vendor wrote: {1}. Named rather than"
+    " counted, because the estimate is only as good as this group.": (
+        "Měřeno proti {0} systémům, které nenapsal dodavatel ani jednoho z hodnotitelů: {1}. "
+        "Vyjmenováno, ne spočítáno, protože odhad je jen tak dobrý jako tahle skupina."
+    ),
+    "{0} are in it under a name their model family does not share, and pull the answer toward"
+    " zero.": (
+        "{0} v ní jsou pod jménem, které jejich rodina modelů nesdílí, a táhnou odpověď k nule."
+    ),
     "Ordered by <strong>{0}</strong>, because it is the only column checked against people: on"
-    " it the judge and a trained therapist agree at <strong>0.60</strong> where two therapists"
-    " reach <strong>0.50</strong>. On the 1&#8211;5 scales two therapists agree at"
-    " 0.13&#8211;0.19, so those carry too little signal to rank on. Every other column is context"
-    " and is not a ranking.": (
+    " it the judge and a trained therapist agree at <strong>{1}</strong> where two therapists"
+    " reach <strong>{2}</strong>. On the 1&#8211;5 scales two therapists agree at {3}, so those"
+    " carry too little signal to rank on. Every other column is context and is not a ranking.": (
         "Seřazeno podle sloupce <strong>{0}</strong>, protože je to jediný sloupec ověřený proti "
-        "lidem: na něm se hodnotitel a školený terapeut shodnou na <strong>0.60</strong> tam, "
-        "kde dva terapeuti dosáhnou <strong>0.50</strong>. Na škálách 1&#8211;5 se dva terapeuti "
-        "shodnou na 0.13&#8211;0.19, takže ty nesou příliš málo signálu, než aby se podle nich "
-        "dalo řadit. Každý další sloupec je kontext, ne žebříček."
+        "lidem: na něm se hodnotitel a školený terapeut shodnou na <strong>{1}</strong> tam, "
+        "kde dva terapeuti dosáhnou <strong>{2}</strong>. Na škálách 1&#8211;5 se dva terapeuti "
+        "shodnou na {3}, takže ty nesou příliš málo signálu, než aby se podle nich dalo řadit. "
+        "Každý další sloupec je kontext, ne žebříček."
+    ),
+    "Ordered by <strong>{0}</strong>, because it is the only column with a human anchor at all."
+    " <strong>This judge's agreement with the two therapists is not published here</strong>, so"
+    " the figure that belongs in this sentence is missing rather than borrowed from another"
+    " judge. Every other column is context and is not a ranking.": (
+        "Seřazeno podle sloupce <strong>{0}</strong>, protože je to jediný sloupec, který má "
+        "vůbec lidskou kotvu. <strong>Shoda tohoto hodnotitele s oběma terapeuty tu není "
+        "publikovaná</strong>, takže číslo, které do téhle věty patří, chybí — místo aby se "
+        "půjčilo od jiného hodnotitele. Každý další sloupec je kontext, ne žebříček."
     ),
     "This track is deliberately <strong>not ranked</strong>: its columns measure different things"
     " and the source paper found they disagree. That disagreement is the result.": (
@@ -1118,16 +1135,6 @@ _METHODS = {
     "no": "ne",
     "<strong>And the two against each other.</strong> {0}": (
         "<strong>A ti dva proti sobě.</strong> {0}"
-    ),
-    "Measured against the {0} systems neither judge's vendor wrote: {1}. Named rather than"
-    " counted, because the estimate is only as good as this group — two of these were the judges'"
-    " own vendors under a name their model families did not share (<code>gemma4</code> is"
-    " Google's, <code>gpt-oss-120b</code> is OpenAI's), and both pulled the answer toward zero.": (
-        "Měřeno proti {0} systémům, které nenapsal dodavatel ani jednoho z hodnotitelů: {1}. "
-        "Vyjmenováno, ne spočítáno, protože odhad je jen tak dobrý jako tahle skupina — dva "
-        "z nich byli vlastní dodavatelé hodnotitelů pod jménem, které jejich rodiny modelů "
-        "nesdílely (<code>gemma4</code> je od Googlu, <code>gpt-oss-120b</code> od OpenAI), "
-        "a oba táhli odpověď k nule."
     ),
     # -- which judges this measurement separates ----------------------------------------
     "<code>{0}</code> over {1}": "<code>{0}</code> nad {1}",

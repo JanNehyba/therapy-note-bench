@@ -414,13 +414,38 @@ function renderTable(table, index) {
   // anchor -- the judge agrees with a trained therapist more closely than two
   // therapists agree with each other, while on the 1-5 scales those two reach
   // 0.13 to 0.19 and there is nothing to anchor to.
-  const rankingNote = table.ranking_measure
+  // Read for the judge whose table this is, not for whichever was measured
+  // first. Both clear the therapists' ceiling, so the argument holds either
+  // way -- but the figure was gemini's 0.60 printed under `gpt-5.6-terra`'s
+  // table too, where the answer is 0.52. Three numbers were in the sentence
+  // and none of them came from the payload it sits on.
+  const anchor = (() => {
+    const entry = (DATA.judges || []).find(j => j.judge_model === table.versions.judge_model);
+    const rows = entry ? entry.agreements || [] : [];
+    const checklist = rows.find(a => a.name === 'rubric_completeness');
+    const scales = rows.filter(a => a.name.startsWith('likert')).map(a => Number(a.humans));
+    if (!checklist || !scales.length) return null;
+    const two = v => Number(v).toFixed(2);
+    return {
+      judge: two(checklist.judge),
+      humans: two(checklist.humans),
+      scales: `${two(Math.min(...scales))}&#8211;${two(Math.max(...scales))}`,
+    };
+  })();
+
+  const rankingNote = !table.ranking_measure
+    ? T`This track is deliberately <strong>not ranked</strong>: its columns measure different things and the source paper found they disagree. That disagreement is the result.`
+    : anchor
     ? T`Ordered by <strong>${esc(colLabel(table, table.ranking_measure))}</strong>, because it is the
        only column checked against people: on it the judge and a trained therapist agree at
-       <strong>0.60</strong> where two therapists reach <strong>0.50</strong>. On the 1&#8211;5 scales two
-       therapists agree at 0.13&#8211;0.19, so those carry too little signal to rank on.
-       Every other column is context and is not a ranking.`
-    : T`This track is deliberately <strong>not ranked</strong>: its columns measure different things and the source paper found they disagree. That disagreement is the result.`;
+       <strong>${anchor.judge}</strong> where two therapists reach <strong>${anchor.humans}</strong>.
+       On the 1&#8211;5 scales two therapists agree at ${anchor.scales}, so those carry too little
+       signal to rank on. Every other column is context and is not a ranking.`
+    : T`Ordered by <strong>${esc(colLabel(table, table.ranking_measure))}</strong>, because it is the
+       only column with a human anchor at all. <strong>This judge's agreement with the two
+       therapists is not published here</strong>, so the figure that belongs in this sentence is
+       missing rather than borrowed from another judge. Every other column is context and is
+       not a ranking.`;
 
   // Which systems this evidence cannot tell apart. A leaderboard prints an
   // order whether or not one exists; this gives every row the rank it actually

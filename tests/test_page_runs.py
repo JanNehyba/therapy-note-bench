@@ -183,6 +183,61 @@ def test_the_self_preference_panel_draws_when_there_is_an_effect_to_report(tmp_p
     assert "preference: " in output, "the panel rendered nothing"
 
 
+def _preference_with(neutral: list[str]) -> dict:
+    return {
+        "measure": "completeness",
+        "judge_a": "gemini-3.1-pro-preview",
+        "judge_b": "gpt-5.6-terra",
+        "effects": [
+            {
+                "judge": "gemini-3.1-pro-preview",
+                "family": "gemini",
+                "estimate": 0.006,
+                "low": -0.008,
+                "high": 0.019,
+                "detected": False,
+                "n_own": 2,
+                "n_neutral": len(neutral),
+                "n_sessions": 50,
+                "neutral": neutral,
+                "summary": "`gemini-3.1-pro-preview` shows no detectable preference.",
+            }
+        ],
+    }
+
+
+def _methods_note(tmp_path: Path, neutral: list[str]) -> str:
+    data = report.build([_row("x", "a-judge", 0.5)])
+    data["calibration"] = None
+    data["similarity_example"] = None
+    data["saturation"] = None
+    data["judges"] = None
+    data["concordance"] = {}
+    data["preference"] = _preference_with(neutral)
+    return _flat(_run(report.render_methods(data), tmp_path, panel="preference"))
+
+
+def test_the_contamination_warning_names_only_systems_that_are_in_the_group(tmp_path):
+    """It warned about two systems a definition change had already taken out.
+
+    `gemma4` is Google's and `gpt-oss-120b` is OpenAI's under names their model
+    families do not share, so while they sat in the group that is supposed to be
+    neutral they pulled the estimate toward zero. Both were moved out of it on
+    2026-08-26 and the sentence stayed behind, telling a reader to discount a
+    result that is sound. Checked against the group rather than remembered.
+    """
+    clean = ["glm-5", "kimi-k3", "qwen3.5-122b", "therapist"]
+
+    note = _methods_note(tmp_path, clean)
+    assert "Measured against the 4 systems" in note
+    assert "gemma4" not in note and "gpt-oss-120b" not in note
+    assert "toward zero" not in note, "nothing in this group pulls the answer anywhere"
+
+    note = _methods_note(tmp_path, [*clean, "gemma4"])
+    assert "gemma4" in note and "toward zero" in note, "a stray in the group must be named"
+    assert "gpt-oss-120b" not in note, "and only the stray that is actually in it"
+
+
 def test_the_self_preference_panel_removes_itself_when_there_is_nothing(tmp_path):
     """A heading over an empty box reads as a section nobody finished."""
     data = report.build([_row("x", "a-judge", 0.5)])
@@ -1298,22 +1353,62 @@ def test_a_row_with_no_part_answered_notes_says_nothing_of_the_kind(tmp_path):
     assert "will not average to the figure" not in host
 
 
+def _calibrated(name: str, judge: float, humans: float, scales: list[float]) -> dict:
+    """A `docs/judges.json` entry, as `report.write` attaches it to the payload."""
+    return {
+        "judge_model": name,
+        "agreements": [
+            {"name": "rubric_completeness", "judge": judge, "humans": humans},
+            *({"name": f"likert_{n}", "judge": v, "humans": v} for n, v in enumerate(scales)),
+        ],
+    }
+
+
 def test_the_table_says_what_earned_the_ranking_column_its_job(tmp_path):
     """The page said which column orders the table and never said why that one.
 
     It is the only measure with a human anchor: on the rubric the judge agrees
-    with a trained therapist at 0.60 where two therapists reach 0.50, and on the
-    1-5 scales those two reach 0.13 to 0.19. A reader who is told "ordered by
-    completeness" and not told that has no way to know the choice was earned
-    rather than arbitrary -- and asked exactly that.
+    with a trained therapist more closely than two therapists agree with each
+    other, while on the 1-5 scales those two barely agree at all. A reader who
+    is told "ordered by completeness" and not told that has no way to know the
+    choice was earned rather than arbitrary -- and asked exactly that.
+
+    The two figures were written into the sentence, so the same 0.60 was drawn
+    under `gpt-5.6-terra`'s table, where the judge and a therapist agree at
+    0.52. Both clear the therapists' ceiling, so the argument held either way
+    and only the number was wrong -- which is the kind that survives a reading.
     """
     from tnb import report
 
     data = report.build([_row("x", "a-judge", 0.5)])
+    data["judges"] = [
+        _calibrated("a-judge", 0.61, 0.50, [0.13, 0.19, 0.18]),
+        _calibrated("another-judge", 0.52, 0.50, [0.11, 0.17, 0.16]),
+    ]
     host = _flat(_run(report.render_page(data), tmp_path, panel="table-host"))
 
     assert "only column checked against people" in host
-    assert "0.60" in host and "0.50" in host, "the reader needs the two numbers, not the claim"
+    assert "0.61" in host and "0.50" in host, "the reader needs the two numbers, not the claim"
+    assert "0.13" in host and "0.19" in host, "and the ceiling on the scales it did not pick"
+    assert "0.52" not in host, "that is the other judge's agreement, and this is not its table"
+
+
+def test_a_judge_with_no_published_calibration_gets_no_borrowed_figure(tmp_path):
+    """The sentence names its gap rather than printing another judge's number.
+
+    An absence is never a measurement: a table whose judge was never put in
+    front of the two therapists has no anchor to quote, and quoting the judge
+    that was is how one judge's 0.60 came to stand under another's table.
+    """
+    from tnb import report
+
+    data = report.build([_row("x", "a-judge", 0.5)])
+    data["judges"] = [_calibrated("a-different-judge", 0.61, 0.50, [0.13, 0.19, 0.18])]
+    host = _flat(_run(report.render_page(data), tmp_path, panel="table-host"))
+
+    assert "is not published here" in host
+    assert "only column checked against people" not in host
+    assert "0.61" not in host, "the figure belongs to a judge that did not write this table"
 
 
 def test_a_judge_tried_and_not_chosen_is_named_rather_than_drawn(tmp_path):

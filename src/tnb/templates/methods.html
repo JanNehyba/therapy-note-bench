@@ -752,12 +752,21 @@ function renderPreference(data) {
           code(tr(data.difference.summary))}`}</p>`
       : ''}
     ${(data.effects[0] && data.effects[0].neutral || []).length
-      ? `<p class="note">${T`Measured against the ${data.effects[0].neutral.length} systems
-         neither judge's vendor wrote: ${data.effects[0].neutral.map(code).join(', ')}. Named
-         rather than counted, because the estimate is only as good as this group — two of
-         these were the judges' own vendors under a name their model families did not share
-         (<code>gemma4</code> is Google's, <code>gpt-oss-120b</code> is OpenAI's), and both
-         pulled the answer toward zero.`}</p>`
+      ? (() => {
+          const neutral = data.effects[0].neutral;
+          // The sentence named `gemma4` and `gpt-oss-120b` as contamination
+          // inside this group. A definition change moved both out of it on
+          // 2026-08-26 and the warning stayed behind, arguing against a
+          // result that is sound and telling a reader to discount it. Checked
+          // against the group it describes rather than remembered.
+          const strays = ['gemma4', 'gpt-oss-120b'].filter(name => neutral.includes(name));
+          return `<p class="note">${T`Measured against the ${neutral.length} systems neither
+         judge's vendor wrote: ${neutral.map(code).join(', ')}. Named rather than counted,
+         because the estimate is only as good as this group.`}${strays.length
+            ? ` ${T`${strays.map(code).join(' and ')} are in it under a name their model family
+         does not share, and pull the answer toward zero.`}`
+            : ''}</p>`;
+        })()
       : ''}`;
 }
 
