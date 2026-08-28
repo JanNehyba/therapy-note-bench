@@ -783,6 +783,50 @@ CS: dict[str, str] = {
         "zápisy, ne. Část spodku českých tabulek je délka, ne čeština."
     ),
     "by design": "tak to má být",
+    # --- the sort, named beside the table ----------------------------------
+    "and": "a",
+    "Nothing here separates these models: no column takes two different values.": (
+        "Tady modely nerozlišuje nic: žádný sloupec nemá dvě různé hodnoty."
+    ),
+    "Sorted best first, by the one column that separates these models: {names}.": (
+        "Seřazeno od nejlepšího, podle jediného sloupce, který tyhle modely rozlišuje: {names}."
+    ),
+    "Sorted best first, by the mean of these {count} columns: {names}.": (
+        "Seřazeno od nejlepšího, podle průměru těchto {count} sloupců: {names}."
+    ),
+    "The other {dropped} are the same for every model here, so they order nothing "
+    "and are left out.": (
+        "Ostatní sloupce ({dropped}) mají všechny modely stejné, takže nic neřadí a do "
+        "pořadí nevstupují."
+    ),
+    # --- the rater figure, read rather than written ------------------------
+    "One native speaker agreed with the two judges on {pairs} notes.": (
+        "Jeden rodilý mluvčí se s oběma soudci shodl u {pairs} zápisů."
+    ),
+    " and ": " a ",
+    "Reliable: the two judges answered the same way on 79% of notes.": (
+        "Spolehlivé: oba soudci odpověděli stejně u 79 % zápisů."
+    ),
+    "The weakest column here, and it should be read as a flag rather than a score. "
+    "The two judges agree on only 67% of notes, the lowest of the seven. Whether a "
+    "Czech phrase is a literal translation from English is a judgement people make "
+    "differently, and these numbers show that rather than hiding it.": (
+        "Nejslabší sloupec tady, a je lepší číst ho jako upozornění než jako známku. "
+        "Oba soudci se shodnou jen u 67 % zápisů, což je ze sedmi nejméně. Jestli je "
+        "nějaké české spojení doslovný překlad z angličtiny, posuzují lidé různě, a "
+        "tahle čísla to ukazují, místo aby to schovávala."
+    ),
+    "Reliable, and the fault it catches is unambiguous: an English term sitting in a "
+    "Czech sentence. Judges agree on 87% of notes.": (
+        "Spolehlivé a chyba, kterou chytá, je jednoznačná: anglický termín uprostřed "
+        "české věty. Soudci se shodnou u 87 % zápisů."
+    ),
+    "Catches colloquial words where clinical ones belong. Judges agree on 75% of notes.": (
+        "Chytá hovorová slova tam, kam patří odborná. Soudci se shodnou u 75 % zápisů."
+    ),
+    "The strongest agreement with a person of the seven.": (
+        "Ze sedmi kritérií nejsilnější shoda s člověkem."
+    ),
     # --- refusals ----------------------------------------------------------
     "Refusing to write: a row carries something that is not a score.": (
         "Odmítám zapsat: řádek nese něco, co není skóre."

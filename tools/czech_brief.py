@@ -290,20 +290,94 @@ def _trim(text: str) -> str:
     return text
 
 
-def _rank_of(track: str, row: results.Row) -> float:
+def _varying(track: str, rows: list[results.Row]) -> tuple[str, ...]:
+    """The columns that actually separate these models.
+
+    A column every model scores the same on tells the reader nothing about who
+    is ahead, and averaging it in only shrinks the differences that are left.
+    `tools/czech_variance.py` already states this for the bands; the table sort
+    claimed it in a docstring and never did it.
+
+    Computed per comparability group rather than per track, because whether a
+    column is flat is a fact about the group. `organized` is 5.00 for every
+    model under one judge and moves under the other.
+    """
+    varying = []
+    for key, digits in COLUMNS[track]:
+        seen = {
+            round(row.metrics.headline[key], digits) for row in rows if key in row.metrics.headline
+        }
+        if len(seen) > 1:
+            varying.append(key)
+    return tuple(varying)
+
+
+def _rank_of(track: str, row: results.Row, varying: tuple[str, ...]) -> float:
     """How well a model did overall, for putting the best row first.
 
-    A table sorted by model name asks the reader to find the good ones. The
-    columns are all higher-is-better and all on one scale within a track, so
-    their mean orders the rows -- and it is only an ordering: which gaps may be
-    read is what the bands and the threshold are for, and they say so
-    elsewhere.
+    A table sorted by model name asks the reader to find the good ones. The mean
+    of the columns that separate these models orders the rows -- and it is only
+    an ordering: which gaps may be *read* is what the bands and the threshold
+    are for, and they say so elsewhere.
 
-    Columns every model scores the same on are left out. They shift every row
-    equally and would only shrink the differences.
+    **Every column is put on one axis first, and that is a repair rather than a
+    refinement.** A PDSQI table mixes five ratings from 1 to 5 with one share
+    from 0 to 1, and this function used to average them raw -- so the worst
+    stigmatising rate in a group, 0.70, sat below the entire Likert range and
+    barely moved the mean. Measured on the real Czech PDSQI table under
+    `gpt-5.6-terra`, correcting it moves seven of eleven models, and
+    `qwen3.5-int4` falls from fourth to tenth. The published order was wrong,
+    not merely unexplained.
     """
-    values = [row.metrics.headline[key] for key, _ in COLUMNS[track] if key in row.metrics.headline]
+    measures = MEASURE_TABLES[track]
+    values = []
+    for key in varying:
+        if key not in row.metrics.headline:
+            continue
+        value = row.metrics.headline[key]
+        values.append(1 + 4 * value if measures[key]["scale"] == "0-1" else value)
     return sum(values) / len(values) if values else -1.0
+
+
+def _sort_line(track: str, varying: tuple[str, ...]) -> str:
+    """Which columns put this table in this order, named beside it.
+
+    The list is computed, so it stays true when a column goes flat -- and when
+    only one column is left it says so, which is the case a reader most needs.
+    On the real Czech PDSQI half under one judge, five of the six columns are
+    the same for every model and the order the reader sees is very nearly an
+    order by note length. A caption that said "sorted by the mean of six
+    columns" would be true and would hide that.
+    """
+    labels = MEASURE_TABLES[track]
+    names = _join_words([_t(labels[key]["label"]) for key in varying])
+    if not varying:
+        return _t("Nothing here separates these models: no column takes two different values.")
+    if len(varying) == 1:
+        line = _t(
+            "Sorted best first, by the one column that separates these models: {names}."
+        ).format(names=names)
+    else:
+        line = _t("Sorted best first, by the mean of these {count} columns: {names}.").format(
+            count=len(varying), names=names
+        )
+    # Only when something was actually left out. The sentence used to be part of
+    # the one above it and so was printed over tables where every column varies,
+    # where it says that some of them do not.
+    dropped = len(COLUMNS[track]) - len(varying)
+    if dropped:
+        line += " " + _t(
+            "The other {dropped} are the same for every model here, so they order nothing "
+            "and are left out."
+        ).format(dropped=dropped)
+    return line
+
+
+def _join_words(items: list[str]) -> str:
+    """A, B and C -- in the document's language, not English's."""
+    if len(items) < 2:
+        return "".join(items)
+    return f"{', '.join(items[:-1])} {_t('and')} {items[-1]}"
 
 
 def _scale_line(track: str) -> str:
@@ -338,12 +412,19 @@ def _table(track: str, rows: list[results.Row]) -> str:
     The header count is still worth printing because it is the honest summary of
     how much of a model's corpus was answered end to end. This column once said
     `10` beside a row that averaged five notes.
+
+    **The sort is named above the table.** A reader met an eight-column grid of
+    decimals with nothing saying whether the top row was the best one, the first
+    alphabetically, or the first by some column they had to guess. The rule is
+    printed, and the columns it uses are listed, so a table where one column is
+    doing all the work says so instead of looking like a verdict on six.
     """
     columns = COLUMNS[track]
     measures = MEASURE_TABLES[track]
+    varying = _varying(track, rows)
     head = "".join(f"<th>{html.escape(_t(measures[key]['label']))}</th>" for key, _ in columns)
     body, thin = [], []
-    for row in sorted(rows, key=lambda r: (-_rank_of(track, r), r.system_id)):
+    for row in sorted(rows, key=lambda r: (-_rank_of(track, r, varying), r.system_id)):
         complete = row.n_sessions_scored - row.n_sessions_partial
         cells = "".join(
             f"<td>{_fmt(row.metrics.headline.get(key), digits)}</td>" for key, digits in columns
@@ -378,8 +459,8 @@ def _table(track: str, rows: list[results.Row]) -> str:
             + "</p></div>"
         )
     return (
-        f"<p class='sub'>{html.escape(_scale_line(track))}</p>"
-        + f"<table><thead><tr><th>{_t('Model')}</th>"
+        f"<p class='sub'>{html.escape(_sort_line(track, varying))} "
+        f"{html.escape(_scale_line(track))}</p>" + f"<table><thead><tr><th>{_t('Model')}</th>"
         f"<th>{_t('Notes in the mean')}</th>"
         f"{head}</tr></thead><tbody>{''.join(body)}</tbody></table>{warning}"
     )
@@ -474,23 +555,24 @@ LENGTH_WARNING = (
 #: the half a computation cannot supply. Both halves are on the page because a
 #: reader handed "0.67" without either will supply their own reading, and theirs
 #: will be more generous than the evidence.
+#:
+#: **No rater figure is written here.** Five of them were, and four disagreed
+#: with `local/czech-anchor.json` -- which this same document prints three
+#: sections later. One measurement, twice in one document, two sets of numbers.
+#: The agreement with the native speaker is now appended from the payload by
+#: `_catch`, so the two can no longer drift apart.
 WHAT_IT_CATCHES = {
-    "diacritics": (
-        "Reliable. The two judges answered the same way on 79% of notes and one "
-        "native speaker agreed with them on 18 of 20."
-    ),
+    "diacritics": ("Reliable: the two judges answered the same way on 79% of notes."),
     "calque": (
         "The weakest column here, and it should be read as a flag rather than a "
-        "score. The two judges agree on only 67% of notes -- the lowest of the "
-        "seven -- and a native speaker agreed with them on 11 of 20 and 7 of 20. "
+        "score. The two judges agree on only 67% of notes, the lowest of the seven. "
         "Whether a Czech phrase is a literal translation from English is a "
         "judgement people make differently, and these numbers show that rather "
         "than hiding it."
     ),
     "untranslated": (
         "Reliable, and the fault it catches is unambiguous: an English term sitting "
-        "in a Czech sentence. Judges agree on 87% of notes, the native speaker on "
-        "19 of 20."
+        "in a Czech sentence. Judges agree on 87% of notes."
     ),
     "agreement": (
         "Catches real grammatical faults, but the two judges answer differently on "
@@ -498,9 +580,7 @@ WHAT_IT_CATCHES = {
         "that noise."
     ),
     "register": (
-        "Catches colloquial words where clinical ones belong. Judges agree on 75% "
-        "of notes; the native speaker agreed with the first judge on 19 of 20 and "
-        "with the second on 15."
+        "Catches colloquial words where clinical ones belong. Judges agree on 75% of notes."
     ),
     "quotes": (
         "Read this one against the prompt, not against the models. The same models "
@@ -513,10 +593,7 @@ WHAT_IT_CATCHES = {
         "straight double mark, and 45 of the 75 notes that quote anything use an "
         "apostrophe instead. The question now names both."
     ),
-    "nonword": (
-        "The strongest agreement with a person of the seven: 20 of 20 against the "
-        "first judge, 17 against the second."
-    ),
+    "nonword": ("The strongest agreement with a person of the seven."),
     "accurate": (
         "The most informative column in this document, and it exists only on the "
         "translated half, because answering it means reading the session. The two "
@@ -552,9 +629,39 @@ def _catch(key: str) -> str:
     A column with no sentence written for it renders an empty cell rather than
     raising: the verdict beside it is still counted and still worth reading, and
     a missing sentence is a gap in the prose rather than in the measurement.
+
+    The agreement with the one native speaker is appended from
+    `local/czech-anchor.json` rather than written into the sentence, because
+    when it was written into the sentence four of the five figures went stale
+    and contradicted the table three sections below.
     """
     written = WHAT_IT_CATCHES.get(key, "")
-    return _t(written) if written else ""
+    if not written:
+        return ""
+    return f"{_t(written)} {_rater(key)}".strip()
+
+
+def _rater(key: str) -> str:
+    """How often the one native speaker said what each judge said, from the payload.
+
+    Empty when the criterion was not in the sample, which is a gap in the anchor
+    rather than in the column -- and an empty string says that better than a
+    zero would.
+    """
+    path = REPO / "local" / "czech-anchor.json"
+    if not path.exists():
+        return ""
+    data = json.loads(path.read_text(encoding="utf-8"))
+    pairs = []
+    for judge in sorted(data.get("judges", {})):
+        found = data["judges"][judge].get("criteria", {}).get(key)
+        if found and found.get("compared"):
+            pairs.append(f"{found['agreed']}/{found['compared']}")
+    if not pairs:
+        return ""
+    return _t("One native speaker agreed with the two judges on {pairs} notes.").format(
+        pairs=_t(" and ").join(pairs)
+    )
 
 
 def _calls(track: str, notes: int) -> str:
@@ -806,6 +913,13 @@ def _verdicts(rows: list[results.Row]) -> str:
     rule, applied here so the briefing states it in the same terms the page
     does. A column on which most systems are indistinguishable cannot rank them,
     whatever the rest of the table does.
+
+    **Newest rubric only.** This selected on the track alone, so where a
+    criterion had been redefined it counted both versions and reported 22
+    systems where the page draws 11 -- while two sections earlier the document
+    says the older rows are a different instrument and are named rather than
+    drawn beside these. It drew them beside these, invisibly, and the
+    unexplained denominator was the only sign.
     """
     latest = [row for row in results.latest(rows) if row.is_scored]
     blocks = []
@@ -813,6 +927,8 @@ def _verdicts(rows: list[results.Row]) -> str:
         here = [row for row in latest if row.track == track]
         if not here:
             continue
+        newest = max(row.judge_prompt_version for row in here)
+        here = [row for row in here if row.judge_prompt_version == newest]
         judges = sorted({row.judge_model or "" for row in here})
         lines = []
         for key, digits in COLUMNS[track]:
