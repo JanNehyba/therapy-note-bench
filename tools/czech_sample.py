@@ -49,19 +49,36 @@ DEFAULT_TARGET = REPO / "local" / "czech-sample.md"
 Answers = dict[tuple[str, str, str], bool | None]
 
 
-def _read(candidates: list, judge_model: str, budget: int) -> Answers:
+def _read(
+    candidates: list,
+    judge_model: str,
+    budget: int,
+    *,
+    render=czech_task.render_note,
+    cache_root: Path | None = None,
+) -> Answers:
     """Every cached answer this judge gave, without asking it anything.
 
     The prompt is rebuilt and passed to `load_cached`, so an answer about a note
     that has since been regenerated is treated as absent rather than reused --
     the same rule the scorer runs under.
+
+    `render` and `cache_root` are parameters for the reason `czech_run.score_note`
+    already carries them: Deepsy scores the same six criteria under the same
+    `czech-criteria-v2` rubric, over a note with three sections instead of SOAP,
+    and its answers live under a cache root of their own. Both default to the
+    SOAP track, so every existing caller is unchanged.
+
+    **They move together or not at all.** `load_cached` checks the prompt digest,
+    and the prompt is what `render` produced. A root without its renderer finds
+    files it then rejects; a renderer without its root finds nothing.
     """
     config = judge.config_from_env(model=judge_model, thinking_budget=budget)
     fingerprint = config.fingerprint()
     out: Answers = {}
 
     for candidate in candidates:
-        note = czech_task.render_note(candidate.note)
+        note = render(candidate.note)
         for task in czech.build_tasks(note):
             record = judge.load_cached(
                 judge.cache_path(
@@ -71,6 +88,7 @@ def _read(candidates: list, judge_model: str, budget: int) -> Answers:
                     candidate.system_id,
                     candidate.session_id,
                     task.unit,
+                    root=cache_root,
                 ),
                 fingerprint,
                 task.prompt,
