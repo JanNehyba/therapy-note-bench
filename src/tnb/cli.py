@@ -215,6 +215,18 @@ def cmd_generate(args: argparse.Namespace) -> int:
 
         jobs: list[generation.Job] = []
         for task in tasks.resolve(args.tasks):
+            # A task whose corpus is confidential names the providers it may be
+            # sent to, and this is where that is enforced. Skipped and said out
+            # loud rather than raised: asking for the Czech and the English
+            # tracks in one command is reasonable, and the English half should
+            # still run.
+            if task.confined_to and provider.name not in task.confined_to:
+                print(
+                    f"{provider.name:10} {task.name:6} SKIPPED -- this corpus may only "
+                    f"be sent to {', '.join(task.confined_to)}",
+                    file=sys.stderr,
+                )
+                continue
             sessions = task.load_sessions(args.limit)
             jobs.extend(generation.build_jobs(provider.name, model_ids, task, sessions))
             print(

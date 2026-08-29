@@ -55,6 +55,21 @@ class Task:
     #: asked for. ``None`` is a real answer, given by `icare`: its sections are
     #: prose and there is nothing to fail to parse.
     parse: Callable[[str, str], dict | None] | None
+
+    #: Providers this task's sessions may be sent to, or ``None`` for any.
+    #:
+    #: **The Czech and Deepsy corpora are confidential clinical sessions**, and
+    #: they may be read only by the university's own infrastructure. This is not
+    #: advice and not a flag: `cmd_generate` refuses to build a job for a
+    #: provider outside this set, so the restriction holds whatever a command
+    #: line says or omits.
+    #:
+    #: It exists because omitting `--providers` sent all ten real sessions to
+    #: OpenAI and to Google Vertex -- 150 calls, every one answered. The prompt
+    #: carries the transcript, so a default that meant "every provider with a
+    #: token" was one forgotten flag away from a disclosure, and the published
+    #: methodology said in the same breath that the transcripts never leave.
+    confined_to: tuple[str, ...] | None = None
     #: Appended and re-asked when an answer arrives but cannot be parsed, as
     #: many times as :attr:`parse_attempts`. TN-Eval do this; iCARE do not, and
     #: neither does this harness on its own initiative.
@@ -158,6 +173,7 @@ TASKS: dict[str, Task] = {
     # sessions from the translated ones.
     czech.NAME_REAL: Task(
         name=czech.NAME_REAL,
+        confined_to=("einfra",),
         prompt_version=czech.PROMPT_VERSION,
         calls_per_session=1,
         load_sessions=czech.load_real,
@@ -168,6 +184,7 @@ TASKS: dict[str, Task] = {
     ),
     czech.NAME_TRANSLATED: Task(
         name=czech.NAME_TRANSLATED,
+        confined_to=("einfra",),
         prompt_version=czech.PROMPT_VERSION,
         calls_per_session=1,
         load_sessions=czech.load_translated,
@@ -178,6 +195,7 @@ TASKS: dict[str, Task] = {
     ),
     deepsy.NAME_REAL: Task(
         name=deepsy.NAME_REAL,
+        confined_to=("einfra",),
         prompt_version=deepsy.PROMPT_VERSION,
         calls_per_session=len(deepsy.SECTIONS),
         load_sessions=deepsy.load_real,
@@ -188,6 +206,7 @@ TASKS: dict[str, Task] = {
     ),
     deepsy.NAME_TRANSLATED: Task(
         name=deepsy.NAME_TRANSLATED,
+        confined_to=("einfra",),
         prompt_version=deepsy.PROMPT_VERSION,
         calls_per_session=len(deepsy.SECTIONS),
         load_sessions=deepsy.load_translated,
