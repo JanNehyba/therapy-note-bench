@@ -97,10 +97,47 @@ def _order(session_id: str, system_id: str) -> str:
     return hashlib.sha256(f"pdsqi/{session_id}/{system_id}".encode()).hexdigest()
 
 
+def _transcript(session) -> str:
+    """The session behind a note, folded away until it is wanted.
+
+    **Why the form did not have this and now does.** `useful`, `organized` and
+    `synthesized` were chosen precisely because they can be judged from the note
+    alone -- which is what lets the JUDGE rate them without a transcript leaving
+    the university. That reasoning does not transfer to the person: Jan is
+    reading his own sessions on his own machine, and a note saying the client
+    rested after lunch on the 25th cannot be called useful or synthesised by
+    somebody who does not know what the session contained.
+
+    So the transcript is here for the human and still never for the judge. It is
+    the anonymised text -- `czech.REAL_DIR` is `data/czech/anonymised` and the
+    loader reads nothing else -- and this file stays under `local/`, which is
+    gitignored, for the same reason it always did: it carries whole notes, and
+    now whole sessions too.
+    """
+    turns = "".join(
+        '<p class="turn {who}"><span class="lbl">{tag}</span>'
+        '<span class="said">{text}</span></p>'.format(
+            who=turn.speaker,
+            tag="T" if turn.speaker == "therapist" else "K",
+            text=html.escape(turn.text),
+        )
+        for turn in session.turns
+    )
+    return (
+        f'<details class="tr"><summary>p\u0159epis sezen\xed &mdash; {len(session.turns)} replik, '
+        f"{session.word_count} slov</summary>"
+        f'<div class="turns">{turns}</div></details>'
+    )
+
+
 def build(notes: int, corpus: str) -> str:
     loader = czech_task.load_real if corpus == "real" else czech_task.load_translated
     task_name = czech_task.NAME_REAL if corpus == "real" else czech_task.NAME_TRANSLATED
-    candidates = list(czech_run.from_generations(loader(), task_name=task_name))
+    sessions = loader()
+    # Kept, not discarded. The transcript is what makes two of the three
+    # attributes answerable by a person at all.
+    behind = {session.id: session for session in sessions}
+    candidates = list(czech_run.from_generations(sessions, task_name=task_name))
     if not candidates:
         raise SystemExit(f"Nothing generated for {corpus} yet.")
 
@@ -130,12 +167,14 @@ def build(notes: int, corpus: str) -> str:
                 f"</details>"
                 f'<div class="opts">{buttons}</div></div>'
             )
+        session = behind.get(candidate.session_id)
         cards.append(
             f'<article class="note" id="n{index}" data-i="{index}">'
             f'<header><span class="num">{index} / {len(shown)}</span>'
             f'<span class="done" aria-hidden="true"></span></header>'
             f"<pre>{rendered}</pre>"
-            f'<div class="qs">{"".join(questions)}</div></article>'
+            + (_transcript(session) if session else "")
+            + f'<div class="qs">{"".join(questions)}</div></article>'
         )
 
     key_rows = "".join(
@@ -195,6 +234,19 @@ TEMPLATE = """<!doctype html>
   pre {{ background:var(--soft); border-radius:3px; padding:.9rem 1rem; margin:0 0 1.2rem;
     white-space:pre-wrap; font:400 .88rem/1.55 ui-monospace,monospace;
     max-height:22rem; overflow:auto; }}
+  .tr {{ margin:0 0 1.2rem; border:1px solid var(--rule); border-radius:3px;
+    background:var(--soft); }}
+  .tr > summary {{ cursor:pointer; padding:.55rem .9rem; font-size:.85rem;
+    color:var(--accent); font-weight:600; }}
+  .tr[open] > summary {{ border-bottom:1px solid var(--rule); }}
+  .turns {{ max-height:30rem; overflow:auto; padding:.7rem .9rem 1rem; }}
+  .turn {{ margin:0 0 .55rem; display:flex; gap:.6rem; align-items:baseline;
+    font-size:.9rem; line-height:1.55; }}
+  .turn .lbl {{ flex:0 0 1.15rem; height:1.15rem; border-radius:50%; text-align:center;
+    font:600 .68rem/1.15rem ui-monospace,monospace; background:var(--rule);
+    color:var(--muted); }}
+  .turn.therapist .lbl {{ background:var(--accent-soft); color:var(--accent); }}
+  .turn.client .said {{ font-weight:500; }}
   .q {{ border-top:1px solid var(--rule); padding-top:.9rem; margin-top:.9rem; }}
   .q:first-child {{ border-top:none; padding-top:0; margin-top:0; }}
   .qt {{ font-weight:600; margin:0 0 .1rem; }}
