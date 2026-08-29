@@ -284,19 +284,38 @@ p.settings { margin-top: .2rem; }
      scrolls sideways -- and a row of eleven numbers with the model's name
      scrolled off the left is unreadable. The name column stays put. Applied to
      the leaderboard only: the section breakdown inside an opened row is four
-     rows deep and narrow enough not to need it. */
-  table[data-table] th:first-child,
-  table[data-table] td:first-child {
+     rows deep and narrow enough not to need it.
+
+     Named by class, not by position. This said `:first-child` and was written
+     when the name was the first column; the Band column then went in to the
+     left of it, and what a phone kept pinned became a 2.5rem strip of bare band
+     digits while the model's name scrolled away -- the exact failure the rule
+     exists to prevent. The same off-by-one is why `th:first-child { text-align:
+     left }` was landing on the band cell and leaving the System heading and
+     every model name right-aligned, and why the narrow-screen width cap was
+     being applied to a column 2.5rem wide. */
+  table[data-table] th.rank,
+  table[data-table] td.rank {
+    position: static;
+    box-shadow: none;
+  }
+  table[data-table] th.name,
+  table[data-table] td.name {
     position: sticky;
     left: 0;
     background: var(--card);
+    text-align: left;
     z-index: 1;
   }
-  table[data-table] thead th:first-child { z-index: 2; }
+  table[data-table] thead th.name { z-index: 2; }
+  tbody tr.system:hover td.name { background: var(--chip); }
+  @media (max-width: 34rem) {
+    table[data-table] th.name, table[data-table] td.name { max-width: 9.5rem; }
+  }
   /* The scrolled-under edge, so a reader can see that the name is pinned and
      the numbers are moving behind it rather than that the table is broken. */
-  table[data-table] th:first-child::after,
-  table[data-table] td:first-child::after {
+  table[data-table] th.name::after,
+  table[data-table] td.name::after {
     content: '';
     position: absolute;
     top: 0; right: 0; bottom: 0;

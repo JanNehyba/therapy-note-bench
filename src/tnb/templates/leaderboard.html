@@ -636,8 +636,8 @@ function renderTable(table, index) {
       <div class="scroll"><table data-table="${index}" data-sorted="${
         table.ranking_measure || ''}" data-descending="1">
         <thead><tr>${table.groups
-          ? `<th title="${T`Band on ${esc(colLabel(table, table.ranking_measure))}: rows this evidence cannot tell apart share a band. It does not follow the sort -- sorting by another column reorders the rows, not what the bootstrap could separate.`}">${T`Band`}</th>`
-          : ''}<th data-sort="label">${T`System`}</th>${head}${table.has_words
+          ? `<th class="rank" title="${T`Band on ${esc(colLabel(table, table.ranking_measure))}: rows this evidence cannot tell apart share a band. It does not follow the sort -- sorting by another column reorders the rows, not what the bootstrap could separate.`}">${T`Band`}</th>`
+          : ''}<th class="name" data-sort="label">${T`System`}</th>${head}${table.has_words
             ? `<th data-sort="note_words" title="${T`Median words in this model’s notes. Completeness counts coverage, so a longer note covers more.`}">${T`Words`}</th>`
             : ''}${showCoverage ? `<th data-sort="coverage">${T`Notes`}</th>` : ''}<th
             data-sort="provider" title="${T`The endpoint that served the model. The same id on two endpoints can be two different builds.`}">${

@@ -1149,6 +1149,31 @@ def test_a_row_drawn_under_a_label_still_finds_the_band_it_was_measured_for(tmp_
     assert 'class="rank"><span class="dash">' not in drawn, "a measured band drawn as absent"
 
 
+def test_the_column_a_phone_keeps_on_screen_is_the_model_s_name(tmp_path):
+    """The stylesheet's own comment says "The name column stays put".
+
+    It pinned `:first-child`, which was the name until the Band column went in
+    ahead of it. After that, a reader scrolling seventeen columns sideways on a
+    phone kept a 2.5rem strip of bare band digits and lost the name -- the exact
+    failure the rule was written to prevent. No test can see a selector pointing
+    one column over by running the page, so this reads the selector.
+    """
+    from tnb import report
+
+    style = _flat(report.render_page(report.build([_row("x", "a-judge", 0.5)])))
+
+    assert "table[data-table] th.name, table[data-table] td.name { position: sticky;" in style, (
+        "the pinned column is not the name column"
+    )
+    assert "table[data-table] th.rank, table[data-table] td.rank { position: static;" in style, (
+        "the band cell is still pinned as well, and two columns cannot both be at left: 0"
+    )
+    assert "table[data-table] td:first-child {" not in style, (
+        "pinned by position again, which is what put the band cell there"
+    )
+    assert '<th class="name" data-sort="label">' in style, "the heading carries no name class"
+
+
 def test_the_band_column_explains_itself_where_a_phone_can_read_it(tmp_path):
     """A `title=` cannot be opened on a touch screen at all.
 
