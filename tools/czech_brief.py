@@ -2778,9 +2778,14 @@ def _variance() -> str:
                 drawn = True
                 ratio = (spread or {}).get("ratio")
                 if ratio is not None and ratio < 1:
+                    # Translated. These two lists name a track and a column
+                    # inside a warning box, and drew them raw -- so the Czech
+                    # document warned in Czech and then listed what it was
+                    # warning about in English, in the caveat, which is where
+                    # the reader who most needs it stops reading.
                     unreadable.append(
-                        f"{TRACK_TITLES.get(track, track)} / "
-                        f"{MEASURE_TABLES[track][criterion]['label']} / {name}"
+                        f"{_t(TRACK_TITLES.get(track, track))} / "
+                        f"{_t(MEASURE_TABLES[track][criterion]['label'])} / {name}"
                     )
                 share = f"{gaps['separable']}/{gaps['pairs']}"
                 cells.append(f"<td>{share}</td><td>{gaps['threshold']:.2f}</td>")
@@ -2811,8 +2816,8 @@ def _variance() -> str:
                 gaps = entry.get("gaps")
                 if gaps and gaps["share"] < UNREADABLE:
                     thin.append(
-                        f"{MEASURE_TABLES[track][criterion]['label']} "
-                        f"({TRACK_TITLES.get(track, track)}, {name}, "
+                        f"{_t(MEASURE_TABLES[track][criterion]['label'])} "
+                        f"({_t(TRACK_TITLES.get(track, track))}, {name}, "
                         f"{gaps['separable']}/{gaps['pairs']})"
                     )
     thin_note = ""
