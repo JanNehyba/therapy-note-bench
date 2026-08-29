@@ -40,8 +40,10 @@ import json
 import random
 import sys
 from collections import defaultdict
+from collections.abc import Callable
 from pathlib import Path
 from statistics import mean, pstdev
+from typing import NamedTuple
 
 from dotenv import load_dotenv
 
@@ -49,8 +51,9 @@ REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO / "tools"))
 
 from tnb import judge, report, results  # noqa: E402
-from tnb.scoring import czech, czech_run  # noqa: E402
+from tnb.scoring import czech, czech_run, deepsy_run  # noqa: E402
 from tnb.tasks import czech as czech_task  # noqa: E402
+from tnb.tasks import deepsy as deepsy_task  # noqa: E402
 
 DEFAULT_TARGET = REPO / "local" / "czech-variance.json"
 
@@ -62,26 +65,104 @@ DRAWS = 2000
 SEED = 0
 
 
-def _cells(task_name: str, judge_model: str, budget: int) -> dict:
+class Spec(NamedTuple):
+    """How one criteria track's notes are found, rendered and looked up.
+
+    A table rather than a branch on the track name. `_cells` used to pick its
+    corpus with `task_name == czech_task.NAME_REAL` -- that is `"czech-real"`,
+    so `"deepsy-real"` compares false and would have silently loaded the
+    *translated* sessions, pairing every note with the wrong transcript. That is
+    the exact failure `CLAUDE.md` records against TN-Eval's stated selection.
+    """
+
+    #: The generation cache's task directory: `czech-real`, `deepsy-translated`.
+    task_name: str
+    #: The corpus this track's notes were written from.
+    load: Callable[[], list]
+    #: Which assembler turns generations into candidates. Deepsy needs its own:
+    #: a note is three separate calls and two of three is not a note.
+    assemble: Callable[..., object]
+    #: SOAP headings, or Deepsy's three sections. Whatever wrote the prompt the
+    #: cached answer was keyed on.
+    render: Callable[[dict], str]
+    #: Where this track's judge answers live. Deepsy needs a root of its own:
+    #: `judge.cache_path` is keyed on judge, rubric, provider, system, session
+    #: and unit, and Deepsy shares every one of those six with the SOAP track --
+    #: same sessions, same models, same six criteria, same `czech-criteria-v2`.
+    #: Only the note differs. See `tests/test_judge_cache_collision.py`.
+    cache_root: Path | None = None
+
+
+#: The four criteria tracks, in the order they are drawn.
+CRITERIA_TRACKS = {
+    results.TRACK_CZECH_REAL: Spec(
+        czech_task.NAME_REAL,
+        czech_task.load_real,
+        czech_run.from_generations,
+        czech_task.render_note,
+    ),
+    results.TRACK_CZECH_TRANSLATED: Spec(
+        czech_task.NAME_TRANSLATED,
+        czech_task.load_translated,
+        czech_run.from_generations,
+        czech_task.render_note,
+    ),
+    results.TRACK_DEEPSY_REAL: Spec(
+        deepsy_task.NAME_REAL,
+        deepsy_task.load_real,
+        deepsy_run.from_generations,
+        deepsy_task.render_note,
+        judge.CACHE_DIR / deepsy_task.PROMPT_VERSION,
+    ),
+    results.TRACK_DEEPSY_TRANSLATED: Spec(
+        deepsy_task.NAME_TRANSLATED,
+        deepsy_task.load_translated,
+        deepsy_run.from_generations,
+        deepsy_task.render_note,
+        judge.CACHE_DIR / deepsy_task.PROMPT_VERSION,
+    ),
+}
+
+
+class Read(NamedTuple):
+    """The cells, and how much of what was asked for came back.
+
+    The coverage travels with the cells because a band drawn over 98% of the
+    questions and a band drawn over all of them are different claims, and the
+    difference is invisible once the cells are a bare dict.
+    """
+
+    cells: dict[tuple[str, str, str], float]
+    #: (model, session, criterion) triples the notes on disk imply.
+    expected: int
+    #: How many of them the cache answers.
+    answered: int
+
+
+def _cells(spec: Spec, judge_model: str, budget: int) -> Read:
     """Every (model, session, criterion) score, from the cache, asking nothing."""
     import czech_sample
 
-    loader = (
-        czech_task.load_real if task_name == czech_task.NAME_REAL else czech_task.load_translated
+    candidates = list(spec.assemble(spec.load(), task_name=spec.task_name))
+    answers = czech_sample._read(
+        candidates, judge_model, budget, render=spec.render, cache_root=spec.cache_root
     )
-    candidates = list(czech_run.from_generations(loader(), task_name=task_name))
-    answers = czech_sample._read(candidates, judge_model, budget)
 
     cells: dict[tuple[str, str, str], float] = {}
+    expected = 0
     for candidate in candidates:
-        note = czech_task.render_note(candidate.note)
+        # The same renderer that `_read` asked with. If these two ever drift
+        # apart the prompt handed to `load_cached` stops matching the one its
+        # path was keyed on, and every answer is rejected on the digest.
+        note = spec.render(candidate.note)
         for task in czech.build_tasks(note):
+            expected += 1
             verdict = answers.get((candidate.system_id, candidate.session_id, task.criterion))
             if verdict is not None:
                 cells[(candidate.system_id, candidate.session_id, task.criterion)] = (
                     0.0 if verdict else 1.0
                 )
-    return cells
+    return Read(cells, expected, len(cells))
 
 
 def spreads(cells: dict, criterion: str) -> dict | None:
@@ -170,6 +251,16 @@ COMPOSITES = {
     # believe.
     "czech-real": report.DRAWN_CRITERIA,
     "czech-translated": report.DRAWN_CRITERIA,
+    # The same six, deliberately, and not the PDSQI subset. Deepsy is scored by
+    # `czech.build_tasks` under `czech-criteria-v2` -- the identical instrument --
+    # and `report.COLUMNS` draws all six of `DRAWN_CRITERIA` in its tables, so
+    # this is exactly the set the reader is shown. The reason the PDSQI tracks
+    # drop columns does not apply: no Deepsy criterion is flat, the
+    # between-model spread running 0.067 to 0.303 across the four (track, judge)
+    # tables. Banding Deepsy on a different set would turn any SOAP-to-Deepsy
+    # difference into a fact about the two composites rather than the formats.
+    "deepsy-real": report.DRAWN_CRITERIA,
+    "deepsy-translated": report.DRAWN_CRITERIA,
     "czech-real-pdsqi": ("accurate", "thorough", "succinct"),
     "czech-translated-pdsqi": ("accurate", "thorough", "succinct"),
 }
@@ -282,26 +373,60 @@ def main(argv: list[str] | None = None) -> int:
     load_dotenv(REPO / ".env")
     payload: dict = {"draws": DRAWS, "seed": SEED, "tracks": {}}
 
-    for track, task_name in (
-        (results.TRACK_CZECH_REAL, czech_task.NAME_REAL),
-        (results.TRACK_CZECH_TRANSLATED, czech_task.NAME_TRANSLATED),
-    ):
+    for track, spec in CRITERIA_TRACKS.items():
         for judge_model in (judge.DEFAULT_MODEL, judge.SECOND_JUDGE):
-            cells = _cells(task_name, judge_model, args.thinking_budget)
-            if not cells:
+            read = _cells(spec, judge_model, args.thinking_budget)
+            root = spec.cache_root or judge.CACHE_DIR
+            # Loud, not `continue`. A track that produced nothing used to vanish
+            # from the payload in silence, and the document then said no figure
+            # had been computed for it -- true, and indistinguishable from a
+            # wrong cache root or a renderer that emits headings the task
+            # builder strips. Both of those return exactly zero cells.
+            if not read.cells:
+                print(
+                    f"!! {track} | {judge_model}: 0 of {read.expected} answers under {root}"
+                    " -- nothing banded, nothing separability-tested.",
+                    flush=True,
+                )
                 continue
             rng = random.Random(SEED)  # noqa: S311 -- a threshold, not a secret
             block = {}
             for criterion in czech.CRITERION_KEYS:
-                spread = spreads(cells, criterion)
-                gaps = separable(cells, criterion, rng)
+                spread = spreads(read.cells, criterion)
+                gaps = separable(read.cells, criterion, rng)
                 if spread or gaps:
                     block[criterion] = {"spread": spread, "gaps": gaps}
             if block:
                 payload["tracks"].setdefault(track, {})[judge_model] = block
-            grouped = bands(_composite(cells, COMPOSITES[track]), rng)
+            else:
+                print(f"!! {track} | {judge_model}: no criterion cleared the guards.", flush=True)
+
+            keys = COMPOSITES[track]
+            per_note = _composite(read.cells, keys)
+            grouped = bands(per_note, rng)
             if grouped:
                 payload.setdefault("bands", {}).setdefault(track, {})[judge_model] = grouped
+            else:
+                print(
+                    f"!! {track} | {judge_model}: too few models or sessions to band.", flush=True
+                )
+
+            # What the figures above were computed over. A band drawn on 98% of
+            # the questions and one drawn on all of them are different claims,
+            # and `_composite` averages a note over whatever criteria came back,
+            # so `partial` is the count of notes that entered the band on fewer
+            # than the full set of columns.
+            drawn: dict[tuple[str, str], int] = defaultdict(int)
+            for model, session, criterion in read.cells:
+                if criterion in keys:
+                    drawn[(model, session)] += 1
+            payload.setdefault("coverage", {}).setdefault(track, {})[judge_model] = {
+                "expected": read.expected,
+                "answered": read.answered,
+                "notes": len(per_note),
+                "columns": len(keys),
+                "partial": sum(1 for count in drawn.values() if count < len(keys)),
+            }
 
     # The quality tracks band too. Their per-note scores come from the PDSQI
     # cache rather than the criteria's, and they are banded on the attributes
