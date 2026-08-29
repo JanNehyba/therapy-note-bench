@@ -2549,7 +2549,11 @@ def _length_effect(data: dict) -> str:
                     low=f"{sizes[0] * 100:.0f}",
                     high=f"{sizes[-1] * 100:.0f}",
                     systems=max(block["systems"] for block in fits),
-                    resamples=f"{max(block['resamples'] for block in fits):,}",
+                    # `_grouped`, not a comma. A comma is the Czech DECIMAL
+                    # separator, so "4,000 times" printed to a Czech reader
+                    # reads as four -- and this sentence is about how many
+                    # resamples the interval rests on.
+                    resamples=_grouped(max(block["resamples"] for block in fits)),
                     wrong=f"{max(block['wrong_sign'] for block in fits):.0%}",
                 )
             )
