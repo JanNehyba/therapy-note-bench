@@ -242,6 +242,21 @@ _SENTENCES = {
         "dokázal oddělit."
     ),
     "Band": "Pásmo",
+    # The same thing said where a reader can read it. The tooltip above stays
+    # for a mouse; this is the entry in the legend under the table, which is
+    # where every other column's meaning is repeated in visible text and where
+    # the Band column's was not.
+    "Rows this evidence cannot tell apart share a band. Measured on {0} by resampling the"
+    " conversations every system here was scored on, so the numbers need not run in order down"
+    " the column — a band is a group, not a position, and the column beside it averages each"
+    " system over its own notes instead. There is no ↕ on this heading and it does not sort: a"
+    " grouping has no order to sort by.": (
+        "Řádky, které tato evidence nedokáže rozlišit, sdílejí pásmo. Změřeno na {0} "
+        "převzorkováním rozhovorů, na kterých byl obodován každý zdejší systém, takže čísla "
+        "ve sloupci nemusí jít popořadě — pásmo je skupina, ne pozice, a sloupec vedle "
+        "průměruje každý systém přes jeho vlastní zápisy. U tohoto záhlaví není ↕ a neřadí se "
+        "podle něj: skupina nemá pořadí, podle kterého by se dalo řadit."
+    ),
     "System": "Systém",
     "Median words in this model’s notes. Completeness counts coverage, so a longer note covers"
     " more.": (
@@ -260,12 +275,16 @@ _SENTENCES = {
     "judge's own {0}": "hodnotitelova vlastní {0}",
     "ranks this table": "řadí tuto tabulku",
     # -- the sentences under the grid ----------------------------------------
-    "<strong>Systems that share a rank cannot be told apart by this evidence.</strong> {0} of {1}"
-    " ranks are shared, and the top one has {2} system(s) in it. Measured on <strong>{3}</strong>"
+    # "Band" in the heading and "rank" in the sentence under it were one concept
+    # under two words -- three, counting the `td.rank` class -- and in Czech
+    # *pásmo* and *příčka* are not obviously the same thing at all. The heading
+    # is the word that stays, because it is the word a reader points at.
+    "<strong>Systems that share a Band cannot be told apart by this evidence.</strong> {0} of {1}"
+    " bands are shared, and the top one has {2} system(s) in it. Measured on <strong>{3}</strong>"
     " over the {4} conversations every system here was scored on, by resampling those"
     " conversations — not by whether two intervals overlap, which is a weaker test.": (
-        "<strong>Systémy, které sdílejí příčku, tato evidence od sebe nerozliší.</strong> "
-        "Sdílených příček je {0} z {1} a na té nejvyšší stojí systémů: {2}. Změřeno na "
+        "<strong>Systémy, které sdílejí pásmo, tato evidence od sebe nerozliší.</strong> "
+        "Sdílených pásem je {0} z {1} a na tom nejvyšším stojí systémů: {2}. Změřeno na "
         "<strong>{3}</strong> přes {4} rozhovorů, na kterých byl obodován každý zdejší systém, "
         "převzorkováním těch rozhovorů — ne tím, zda se dva intervaly překrývají, což je slabší "
         "test."

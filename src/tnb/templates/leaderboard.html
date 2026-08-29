@@ -386,6 +386,33 @@ function denominatorNote(table) {
         note a human clinician wrote is row ${human + 1} of ${rows.length}.`}</span>`;
 }
 
+// The Band column, explained where every other column is explained. It is the
+// only heading whose meaning lived in a `title=` and nowhere else, and a
+// `title=` cannot be opened on a touch screen at all: on a phone the column was
+// a bare digit with nothing anywhere saying what it counted.
+//
+// Prepended to the legend as a string rather than added to `table.columns`:
+// the columns list drives the header row, the body cells, the section
+// breakdown and the detail row's colspan, so an entry there would grow a real
+// empty column four ways over.
+//
+// Kept deliberately unsortable, and now saying so. A band is a partition, not a
+// position -- there is no order in it to sort by -- and the bands are measured
+// over the conversations every system shares while the ranking column averages
+// each system over its own notes, so the two disagree: on the published gemini
+// table `gemma4` is band 3 at 0.475 and sits below `deepseek-v4-flash-thinking`
+// at band 4 and 0.477. Sorting by band would print an order contradicting the
+// sentence that says what the table is ordered by.
+function bandLegend(table) {
+  const label = esc(colLabel(table, table.ranking_measure));
+  return `<div class="measure"><dt>${T`Band`}</dt><dd>${
+    T`Rows this evidence cannot tell apart share a band. Measured on ${label} by resampling
+      the conversations every system here was scored on, so the numbers need not run in order
+      down the column — a band is a group, not a position, and the column beside it
+      averages each system over its own notes instead. There is no ↕ on this heading
+      and it does not sort: a grouping has no order to sort by.`}</dd></div>`;
+}
+
 function renderTable(table, index) {
   if (!table.scored) return renderQueue(table);
   const versions = table.versions;
@@ -428,7 +455,7 @@ function renderTable(table, index) {
     `${esc(tr(c.label))}` +
     `<span class="scale">${esc(c.scale)}</span>` +
     `</th>`).join('');
-  const legend = table.columns.map(c =>
+  const legend = (table.groups ? bandLegend(table) : '') + table.columns.map(c =>
     `<div class="measure"><dt>${esc(tr(c.label))} <span class="scale">${esc(c.scale)}</span>` +
     (c.ranking ? `<span class="ranks">${T`ranks this table`}</span>` : '') +
     `</dt><dd>${esc(tr(c.definition))}` +
@@ -437,9 +464,9 @@ function renderTable(table, index) {
   // Said under the table either way. A table with no grouping measured must not
   // read as a strict ranking just because nobody has checked.
   const groupNote = table.groups
-    ? `<p class="note">${T`<strong>Systems that share a rank cannot be told apart by this
+    ? `<p class="note">${T`<strong>Systems that share a Band cannot be told apart by this
          evidence.</strong> ${table.groups.of.filter(g => g.length > 1).length} of
-         ${table.groups.of.length} ranks are shared, and the top one has
+         ${table.groups.of.length} bands are shared, and the top one has
          ${table.groups.of[0].length} system(s) in it. Measured on
          <strong>${esc(tr(table.groups.measure))}</strong> over the
          ${table.groups.sessions} conversations every system here was scored on, by

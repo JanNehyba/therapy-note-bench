@@ -1149,6 +1149,47 @@ def test_a_row_drawn_under_a_label_still_finds_the_band_it_was_measured_for(tmp_
     assert 'class="rank"><span class="dash">' not in drawn, "a measured band drawn as absent"
 
 
+def test_the_band_column_explains_itself_where_a_phone_can_read_it(tmp_path):
+    """A `title=` cannot be opened on a touch screen at all.
+
+    Band was the one heading whose meaning lived in a tooltip and nowhere else:
+    every measure's tooltip is repeated in the legend under the table, and this
+    one was not. On a phone the first column of both ranked tables was a bare
+    digit. So the assertion strips every `title=` first -- a test that passes on
+    the tooltip is the test that let this ship.
+
+    It also has to say the thing a reader trips on before the meaning: the
+    heading is not clickable when ten beside it are.
+    """
+    from tnb import report
+
+    rows = [_row("kimi-k3", "a-judge", 0.55), _row("gemma4", "a-judge", 0.44)]
+    saturations = [
+        {
+            "track": results.TRACK_TNEVAL,
+            "judge_model": "a-judge",
+            "judge_fingerprint": {"model": "a-judge", "thinking_budget": 256},
+            "sessions": 50,
+            "corpus_sessions": 50,
+            "indistinguishable": [["kimi-k3"], ["gemma4"]],
+        }
+    ]
+    drawn = _flat(_run(report.render_page(report.build(rows, saturations)), tmp_path,
+                       panel="table-host"))
+    visible = re.sub(r'title="[^"]*"', "", drawn)
+
+    assert "Rows this evidence cannot tell apart share a band" in visible
+    assert "it does not sort" in visible, "the one unclickable column never says why"
+    assert "Systems that share a Band" in visible, (
+        "the heading and the sentence under it are one concept and must be one word"
+    )
+
+    # And nothing about bands where none were measured: the legend entry is the
+    # column's, and the column is only drawn when the bootstrap has run.
+    alone = _flat(_run(report.render_page(report.build(rows)), tmp_path, panel="table-host"))
+    assert "share a band" not in re.sub(r'title="[^"]*"', "", alone)
+
+
 def test_the_completeness_caveat_reads_its_two_figures_off_the_table(tmp_path):
     """A denominator a reader cannot see the consequence of is a word, not a warning.
 
