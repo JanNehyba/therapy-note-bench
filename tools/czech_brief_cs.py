@@ -61,9 +61,13 @@ CS: dict[str, str] = {
     "How it was measured": "Jak se to měřilo",
     "The two corpora": "Dva korpusy",
     "Two halves, both read only from a directory that is not in version control. "
-    "Every model wrote a note from every transcript, on e-INFRA.": (
+    "Every model was asked for a note from every transcript, on e-INFRA -- that is the "
+    "design, and {written} of the {asked} notes are the outcome. Where a model wrote "
+    "fewer, it is named: {short}.": (
         "Dvě půlky, obě čtené jen z adresáře, který není ve verzovacím systému. Každý "
-        "model napsal zápis z každého přepisu, na e-INFRA."
+        "model dostal zadání napsat zápis z každého přepisu, na e-INFRA — to je záměr "
+        "a výsledek je {written} zápisů z {asked}. Kde model napsal míň, je "
+        "jmenovaný: {short}."
     ),
     "They are not the same size:": "Nejsou stejně velké:",
     "a real session runs seven times longer than a translated AnnoMI conversation, so "
@@ -258,16 +262,20 @@ CS: dict[str, str] = {
     ),
     # --- what these numbers cannot be used for -----------------------------
     "Ten sessions, and they are all one client": ("Deset sezení, a všechna jsou jeden klient"),
-    "Every model wrote a note from every transcript, which is what makes the "
-    "comparison between models valid at all -- the first attempt gave each model a "
-    "different session and could not tell a worse model from a harder session. But "
+    "Every model was asked for a note from every transcript, which is what makes "
+    "the comparison between models valid at all -- the first attempt gave each "
+    "model a different session and could not tell a worse model from a harder "
+    "session. The asking held and the answering did not always: {written} of the "
+    "{asked} notes came back, and the shortfalls are {short}. But "
     "ten notes per model is a small number, and the real half is one client with one "
     "therapist. Read the ordering, not the gaps between neighbours.": (
-        "Každý model napsal zápis z každého přepisu, a "
-        "právě to dělá srovnání mezi modely vůbec "
+        "Každý model dostal zadání napsat zápis z každého "
+        "přepisu, a právě to dělá srovnání mezi modely vůbec "
         "platným — první pokus dal každému modelu jiné "
         "sezení a neuměl odlišit horší model od "
-        "těžšího sezení. Deset zápisů na model je "
+        "těžšího sezení. Zadání drželo, odpovědi ne vždycky: "
+        "vrátilo se {written} zápisů z {asked} a chybějící jsou tyhle: {short}. "
+        "Deset zápisů na model je "
         "ale málo a skutečná půlka je jeden klient s "
         "jedním terapeutem. Čti pořadí, ne rozestupy mezi "
         "sousedy."
@@ -611,21 +619,26 @@ CS: dict[str, str] = {
     "How well do language models write Czech therapy notes?": (
         "Jak dobře píší jazykové modely české terapeutické zápisy?"
     ),
-    "{models} models were each asked for a note from twenty psychotherapy sessions -- "
-    "ten real and ten translated -- and two independent judges rated every note that "
-    "came back. {written} of the {asked} notes were written; the rest are named where "
-    "they are missing. Two "
+    "{models} models were asked for notes from twenty psychotherapy sessions -- "
+    "ten real and ten translated -- in two note formats, SOAP and the one the Deepsy "
+    "application writes, and two independent judges rated every note that came back. "
+    "Not every model was asked in both formats, and {written} of the {asked} notes "
+    "were written; the rest are named where they are missing. Two "
     "instruments: six yes/no criteria asking whether the Czech is right, and "
-    "PDSQI-9, a published instrument, asking whether the note is any good. Both, "
+    "PDSQI-9, a published instrument, asking whether the note is any good -- and "
+    "PDSQI-9 was put only to the SOAP notes. Both, "
     "because neither answers the other: a flawless Czech sentence about nothing passes "
     "all six criteria, and a note full of insight can be written in bad Czech.": (
-        "{models} modelů dostalo zadání napsat zápis z dvaceti psychoterapeutických "
-        "sezení — deseti skutečných a deseti přeložených — a každý zápis, který "
-        "přišel, ohodnotili dva nezávislí soudci. Napsáno bylo {written} zápisů z "
+        "{models} modelů dostalo zadání napsat zápisy z dvaceti psychoterapeutických "
+        "sezení — deseti skutečných a deseti přeložených — ve dvou formátech zápisu: "
+        "SOAP a v tom, který píše aplikace Deepsy; každý zápis, který "
+        "přišel, ohodnotili dva nezávislí soudci. Ne každý model dostal obě zadání "
+        "a napsáno bylo {written} zápisů z "
         "{asked}; kde některý chybí, je to napsané u té tabulky. Dva nástroje: šest "
         "kritérií ano/ne, která se ptají, "
         "jestli je čeština správně, a PDSQI-9, publikovaný nástroj, který se ptá, "
-        "jestli je zápis dobrý. Oba, protože jeden na druhého neodpovídá: bezchybná "
+        "jestli je zápis dobrý — a PDSQI-9 dostaly jen zápisy SOAP. "
+        "Oba, protože jeden na druhého neodpovídá: bezchybná "
         "česká věta o ničem projde všemi šesti kritérii a zápis plný vhledu může být "
         "napsaný špatnou češtinou."
     ),
@@ -692,12 +705,20 @@ CS: dict[str, str] = {
         "endpointech Googlu a OpenAI. Cena tu není — ceníková cena je výrok o jednom "
         "dodavateli v jeden den a bez toho dne je za rok nečitelná."
     ),
-    "The two instruments rated the same notes, so the rows do not add up: "
-    "{models} models wrote {written} notes in all, and each note was read twice by "
-    "each judge -- once against the criteria and once against PDSQI-9.": (
-        "Oba nástroje hodnotily tytéž zápisy, takže se řádky nesčítají: {models} "
-        "modelů napsalo celkem {written} zápisů a každý z nich četl každý soudce "
-        "dvakrát — jednou podle kritérií a jednou podle PDSQI-9."
+    "The two instruments did not read the same notes, so the rows do not add up: "
+    "{models} models wrote {written} notes in all, and the {soap} SOAP notes among "
+    "them were each read twice by each judge -- once against the criteria and once "
+    "against PDSQI-9.": (
+        "Oba nástroje nečetly tytéž zápisy, takže se řádky nesčítají: {models} "
+        "modelů napsalo celkem {written} zápisů a {soap} zápisů SOAP z nich četl "
+        "každý soudce dvakrát — jednou podle kritérií a jednou podle PDSQI-9."
+    ),
+    "The {deepsy} notes in the Deepsy format were read against the criteria only. "
+    "PDSQI-9 was never asked about a Deepsy note, so no quality figure anywhere in "
+    "this document is about one.": (
+        "{deepsy} zápisů ve formátu Deepsy prošlo jen kritérii. Na zápis v Deepsy se "
+        "PDSQI-9 nikdy nikdo neptal, takže žádné číslo o kvalitě v tomhle dokumentu "
+        "není o něm."
     ),
     # --- what it took, the second pass ---------------------------------------
     "Calls to write them": ("Volání, aby vznikly"),
