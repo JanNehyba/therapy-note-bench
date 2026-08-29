@@ -77,7 +77,15 @@ def _page_data(tmp_path: Path) -> dict:
     data["calibration"] = None
     data["similarity_example"] = None
     data["saturation"] = None
-    data["judges"] = None
+    # The SHAPE the page is served, not None. `docs/judges.json` is a wrapper --
+    # {notes, separable, judges: [...]} -- and the leaderboard read the wrapper
+    # as if it were the list. `.find` is not a function on an object, so the one
+    # inline script died on the first table and the published page served a
+    # heading and no leaderboard. Every test here passed throughout, because
+    # this line handed the page a None the code guards against and never the
+    # object it actually gets. A fixture that removes the field under test is
+    # not a fixture, it is a hole.
+    data["judges"] = _judges_payload(_calibrated(judge.DEFAULT_MODEL, 0.60, 0.50, [0.11, 0.03]))
     data["concordance"] = report.concordance_payload(rows)
     return data
 
@@ -1372,7 +1380,7 @@ def test_a_row_with_no_part_answered_notes_says_nothing_of_the_kind(tmp_path):
 
 
 def _calibrated(name: str, judge: float, humans: float, scales: list[float]) -> dict:
-    """A `docs/judges.json` entry, as `report.write` attaches it to the payload."""
+    """One `docs/judges.json` entry. Wrap it with `_judges_payload` before use."""
     return {
         "judge_model": name,
         "agreements": [
@@ -1380,6 +1388,21 @@ def _calibrated(name: str, judge: float, humans: float, scales: list[float]) -> 
             *({"name": f"likert_{n}", "judge": v, "humans": v} for n, v in enumerate(scales)),
         ],
     }
+
+
+def _judges_payload(*entries: dict) -> dict:
+    """The payload the page is actually served.
+
+    `docs/judges.json` is a WRAPPER -- {notes, separable, judges: [...]} -- and
+    `report.build` attaches the whole file. Two tests here handed the page a
+    bare list instead, which is the shape the leaderboard's own lookup assumed,
+    so the test and the bug agreed with each other and the published page threw
+    `.find is not a function` on the first table and drew nothing at all.
+
+    A helper rather than a literal in each test, so the next one cannot get it
+    wrong in a way that agrees with a mistake in the template.
+    """
+    return {"notes": 150, "separable": {"margin": 0.05, "groups": []}, "judges": list(entries)}
 
 
 def test_the_table_says_what_earned_the_ranking_column_its_job(tmp_path):
@@ -1399,10 +1422,10 @@ def test_the_table_says_what_earned_the_ranking_column_its_job(tmp_path):
     from tnb import report
 
     data = report.build([_row("x", "a-judge", 0.5)])
-    data["judges"] = [
+    data["judges"] = _judges_payload(
         _calibrated("a-judge", 0.61, 0.50, [0.13, 0.19, 0.18]),
         _calibrated("another-judge", 0.52, 0.50, [0.11, 0.17, 0.16]),
-    ]
+    )
     host = _flat(_run(report.render_page(data), tmp_path, panel="table-host"))
 
     assert "only column checked against people" in host
@@ -1508,7 +1531,9 @@ def test_a_judge_with_no_published_calibration_gets_no_borrowed_figure(tmp_path)
     from tnb import report
 
     data = report.build([_row("x", "a-judge", 0.5)])
-    data["judges"] = [_calibrated("a-different-judge", 0.61, 0.50, [0.13, 0.19, 0.18])]
+    data["judges"] = _judges_payload(
+        _calibrated("a-different-judge", 0.61, 0.50, [0.13, 0.19, 0.18])
+    )
     host = _flat(_run(report.render_page(data), tmp_path, panel="table-host"))
 
     assert "is not published here" in host
@@ -1625,3 +1650,35 @@ def test_the_published_page_keeps_the_header_it_was_written_with(tmp_path):
     removed = next((line for line in summary.splitlines() if line.startswith("removed:")), "")
     assert "methods-link" not in removed, "the published page dropped its methods link"
     assert "e-INFRA" not in _flat(_run(report.render_page(data), tmp_path, panel="page-sub"))
+
+
+def test_the_published_page_actually_runs(tmp_path):
+    """The strongest form of this file's question, asked of the real artefact.
+
+    Every other test here builds a payload from fixtures. This one executes the
+    script out of `docs/index.html` exactly as it was published, because the
+    failure it exists for is one no fixture reproduced: `docs/judges.json` is a
+    wrapper object, the leaderboard read it as a list, and the inline script
+    died on the first table. The site served a title, three link boxes and no
+    leaderboard -- for long enough that a reader reported it -- while this file
+    was green, because `_page_data` set that field to None.
+
+    Skipped rather than guessed when the page has not been built.
+    """
+    page = REPO_ROOT / "docs" / "index.html"
+    if not page.exists():
+        pytest.skip("docs/index.html is not built in this checkout")
+
+    scripts = re.findall(r"<script[^>]*>(.*?)</script>", page.read_text(encoding="utf-8"), re.S)
+    script = tmp_path / "published.js"
+    script.write_text("\n".join(scripts), encoding="utf-8")
+
+    node = shutil.which("node")
+    if node is None:
+        pytest.skip("node is not installed; the page cannot be executed here")
+    finished = subprocess.run(
+        [node, str(RUNNER), str(script)], capture_output=True, text=True, timeout=120
+    )
+    output = finished.stdout + finished.stderr
+    assert "THREW" not in output, f"the published page throws: {output}"
+    assert "table-host:" in output, f"the published page drew no table: {output}"

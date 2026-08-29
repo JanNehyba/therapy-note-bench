@@ -430,7 +430,14 @@ function renderTable(table, index) {
   // table too, where the answer is 0.52. Three numbers were in the sentence
   // and none of them came from the payload it sits on.
   const anchor = (() => {
-    const entry = (DATA.judges || []).find(j => j.judge_model === table.versions.judge_model);
+    // `docs/judges.json` is a wrapper -- {notes, separable, judges: [...]} --
+    // and this read the wrapper as if it were the list. `.find` is not a
+    // function on an object, the whole inline script died on the first table,
+    // and the published page served a heading and no leaderboard. The methods
+    // page had the shape right (`DATA.judges.separable`), which is what makes
+    // it a typo rather than a misunderstanding.
+    const measured = (DATA.judges && DATA.judges.judges) || [];
+    const entry = measured.find(j => j.judge_model === table.versions.judge_model);
     const rows = entry ? entry.agreements || [] : [];
     const checklist = rows.find(a => a.name === 'rubric_completeness');
     const scales = rows.filter(a => a.name.startsWith('likert')).map(a => Number(a.humans));
