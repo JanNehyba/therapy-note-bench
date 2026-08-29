@@ -340,9 +340,7 @@ class VertexBackend(Backend):
             "contents": [{"role": "user", "parts": [{"text": prompt}]}],
             "generationConfig": {
                 "temperature": 0,
-                "maxOutputTokens": output_ceiling(
-                    config.thinking_budget, config.answer_tokens
-                ),
+                "maxOutputTokens": output_ceiling(config.thinking_budget, config.answer_tokens),
                 "thinkingConfig": {"thinkingBudget": config.thinking_budget},
             },
         }
@@ -383,9 +381,7 @@ class VertexBackend(Backend):
         return {
             "model": config.model,
             "thinking_budget": config.thinking_budget,
-            "max_output_tokens": output_ceiling(
-                config.thinking_budget, config.answer_tokens
-            ),
+            "max_output_tokens": output_ceiling(config.thinking_budget, config.answer_tokens),
             "temperature": 0,
         }
 

@@ -1072,9 +1072,7 @@ def _current_groups(groups: dict[tuple, list[Row]]) -> tuple[dict[tuple, list[Ro
                 "track": field(key, "track"),
                 "harness_version": harness,
                 "current_harness_version": current if "harness" in reasons else "",
-                "current_judge_prompt_version": (
-                    current_rubric if "rubric" in reasons else ""
-                ),
+                "current_judge_prompt_version": (current_rubric if "rubric" in reasons else ""),
                 "judge_model": field(key, "judge_model"),
                 "prompt_version": field(key, "prompt_version"),
                 "judge_prompt_version": field(key, "judge_prompt_version"),

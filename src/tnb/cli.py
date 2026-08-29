@@ -411,6 +411,28 @@ def _attempted_systems(task_name: str) -> set[str]:
     return found
 
 
+def _cache_root(args, base=None):
+    """Where this run's answers live, given how much answer room it asked for.
+
+    `--answer-room` changes the judge fingerprint, which is the point: it is a
+    different instrument and starts a new comparability group. But the cache
+    path does not carry the fingerprint, so without this the new instrument's
+    answers land on the old ones' paths and `write_cached` refuses the whole run
+    -- correctly, because the rows already published were computed from what is
+    there, and replacing it makes those tables unreproducible.
+
+    So the room goes in the path. A run at the default writes where it always
+    has and nothing on disk moves; a run with extra room writes under
+    `room-<n>/`. Both instruments keep a cache and both sets of tables stay
+    reproducible.
+    """
+    from tnb import judge
+
+    root = base or judge.CACHE_DIR
+    room = getattr(args, "answer_room", 0)
+    return root / f"room-{room}" if room else root
+
+
 def _generated_per_system(candidates) -> dict[tuple[str, str], int]:
     """How many usable notes each system wrote.
 
@@ -564,7 +586,14 @@ def cmd_score(args: argparse.Namespace) -> int:
         )
 
     print()
-    scored = scoring.score_many(candidates, client, spend, force=args.force, on_note=on_note)
+    scored = scoring.score_many(
+        candidates,
+        client,
+        spend,
+        force=args.force,
+        on_note=on_note,
+        cache_root=_cache_root(args),
+    )
 
     # None when the judge model has no recorded price. No total is printed
     # at all then, rather than a $0.00 that reads as a measurement.
@@ -728,6 +757,7 @@ def cmd_score_pdsqi(args: argparse.Namespace) -> int:
         force=args.force,
         with_transcript=with_transcript,
         on_note=on_note,
+        cache_root=_cache_root(args),
     )
 
     total = spend.usd(config.model)
@@ -851,7 +881,12 @@ def cmd_score_czech(args: argparse.Namespace) -> int:
 
         print(f"\n{track}:")
         scored = scoring_czech.score_many(
-            candidates, client, spend, force=args.force, on_note=on_note
+            candidates,
+            client,
+            spend,
+            force=args.force,
+            on_note=on_note,
+            cache_root=_cache_root(args),
         )
         if not scored:
             continue
@@ -999,6 +1034,7 @@ def cmd_score_czech_pdsqi(args: argparse.Namespace) -> int:
             render=czech_task.render_note,
             judge_prompt_version=czech_pdsqi.JUDGE_PROMPT_VERSION,
             on_note=on_note,
+            cache_root=_cache_root(args),
         )
         if not scored:
             continue
@@ -1178,7 +1214,7 @@ def cmd_score_deepsy(args: argparse.Namespace) -> int:
             # `load_cached` would reject what it found on the prompt digest and
             # then replace it. The digest check makes a wrong answer
             # unreadable; it does not stop it being written over a right one.
-            cache_root=judge.CACHE_DIR / deepsy_task.PROMPT_VERSION,
+            cache_root=_cache_root(args, judge.CACHE_DIR / deepsy_task.PROMPT_VERSION),
             render=deepsy_task.render_note,
             judge_prompt_version=czech.JUDGE_PROMPT_VERSION,
             on_note=on_note,
@@ -1725,6 +1761,7 @@ def cmd_score_icare(args: argparse.Namespace) -> int:
             force=args.force,
             bert=bert_values,
             on_note=on_note,
+            cache_root=_cache_root(args),
         )
     except icare_run.BudgetExceeded as stop:
         # Nothing is appended. A truncated run's averages depend on how far the
