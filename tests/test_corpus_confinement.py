@@ -71,3 +71,55 @@ def test_the_restriction_survives_a_task_being_added():
     for name, task in tasks.TASKS.items():
         assert hasattr(task, "confined_to"), name
         assert task.confined_to is None or isinstance(task.confined_to, tuple), name
+
+
+def test_nothing_draws_a_row_from_a_provider_that_may_not_read_the_corpus():
+    """The rows exist -- the record is append-only and a run that happened is a
+    fact -- and nothing may draw them. `results.drawable` is the one place that
+    decides, because when it was two places they disagreed: `tnb czech-report`
+    drew seventeen systems while `tools/czech_brief.py` refused five, on the
+    same morning, from the same file."""
+    from tnb import results
+
+    row = _row(track="deepsy-real", provider="openai")
+    kept, refused = results.drawable([row])
+
+    assert kept == []
+    assert refused and "openai" in refused[0] and "deepsy-real" in refused[0]
+    # And a permitted one survives, or the guard is a wall.
+    allowed = _row(track="deepsy-real", provider="einfra")
+    kept, refused = results.drawable([allowed])
+    assert kept == [allowed] and not refused
+
+
+def test_both_readers_go_through_it():
+    """A guard one of two callers applies is the bug it was written for."""
+    from tnb.config import REPO_ROOT
+
+    cli = (REPO_ROOT / "src" / "tnb" / "cli.py").read_text(encoding="utf-8")
+    brief = (REPO_ROOT / "tools" / "czech_brief.py").read_text(encoding="utf-8")
+    assert "results.drawable(" in cli, "tnb czech-report does not filter"
+    assert "results.drawable(" in brief, "the briefing does not filter"
+
+
+def _row(**over):
+    from tnb import results
+
+    fields = {
+        "track": "deepsy-real",
+        "system_id": "a-model",
+        "system_type": "model",
+        "system_label": "a-model",
+        "provider": "einfra",
+        "harness_version": "0.6.0",
+        "prompt_version": "deepsy-3section-v1",
+        "judge_model": "a-judge",
+        "judge_prompt_version": "czech-criteria-v2",
+        "judge_settings": {"model": "a-judge", "thinking_budget": 2048},
+        "n_sessions_attempted": 10,
+        "n_sessions_generated": 10,
+        "n_sessions_scored": 10,
+        "metrics": results.Metrics(headline={"diacritics": 1.0}),
+    }
+    fields.update(over)
+    return results.Row(**fields)

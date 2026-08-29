@@ -2394,40 +2394,6 @@ def build(rows: list[results.Row]) -> str:
 """
 
 
-def _permitted(rows: list[results.Row]) -> tuple[list[results.Row], list[str]]:
-    """Rows whose note was generated where that corpus is allowed to be read.
-
-    On 2026-08-29 a generation run without `--providers` sent all ten real Czech
-    sessions to OpenAI and to Google Vertex, and ten rows were scored from the
-    notes that came back. The rows stay in the record -- it is append-only, and
-    a run that happened is a fact -- but they are not a measurement this document
-    may draw: they exist because a corpus went somewhere it may not go.
-
-    Not a filter one caller applies. `Task.confined_to` is the same field
-    `cmd_generate` now refuses on, so the page and the generator cannot disagree
-    about what is allowed, and the exclusion is printed rather than silent.
-    """
-    from tnb.tasks import TASKS
-
-    allowed_by_track = {
-        results.TRACK_BY_TASK[name]: task.confined_to
-        for name, task in TASKS.items()
-        if name in results.TRACK_BY_TASK and task.confined_to
-    }
-    kept, dropped = [], collections.Counter()
-    for row in rows:
-        allowed = allowed_by_track.get(row.track)
-        if allowed and row.provider not in allowed:
-            dropped[(row.track, row.provider)] += 1
-            continue
-        kept.append(row)
-    lines = [
-        f"{count} row(s) on {track} from {provider}, which may not read that corpus"
-        for (track, provider), count in sorted(dropped.items())
-    ]
-    return kept, lines
-
-
 def main(argv: list[str] | None = None) -> int:
     global LANG
 
@@ -2456,7 +2422,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"{args.source} is empty.", file=sys.stderr)
         return 1
 
-    rows, disallowed = _permitted(rows)
+    rows, disallowed = results.drawable(rows)
     for line in disallowed:
         print(f"  not drawn: {line}", file=sys.stderr)
 

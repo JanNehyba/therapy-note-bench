@@ -1202,6 +1202,9 @@ def cmd_czech_report(args: argparse.Namespace) -> int:
     it, so "hidden page" is not a thing this repository can offer.
     """
     rows = results.load(results.LOCAL_ROWS_PATH)
+    rows, refused = results.drawable(rows)
+    for line in refused:
+        print(f"  not drawn: {line}", file=sys.stderr)
     if not rows:
         print(
             f"No rows in {results.LOCAL_ROWS_PATH.name} yet. Run 'tnb score-czech' first.",

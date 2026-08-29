@@ -27,7 +27,7 @@ import hashlib
 import json
 import re
 import statistics
-from collections import defaultdict
+from collections import Counter, defaultdict
 from collections.abc import Mapping
 from dataclasses import asdict, dataclass, field, replace
 from pathlib import Path
@@ -801,6 +801,46 @@ class Unreached(NamedTuple):
     #: A read-only mapping rather than `{}`: a mutable default on a NamedTuple
     #: is one object shared by every instance that takes it.
     failure_reasons: Mapping[str, int] = MappingProxyType({})
+
+
+def drawable(rows: list[Row]) -> tuple[list[Row], list[str]]:
+    """Rows whose note was generated where that corpus is allowed to be read.
+
+    On 2026-08-29 a generation run without `--providers` sent all ten real Czech
+    sessions to OpenAI and to Google Vertex, and rows were scored from the notes
+    that came back. The rows stay in the record -- it is append-only, and a run
+    that happened is a fact -- but they are not a measurement anything may draw.
+
+    Here rather than in each caller, because there are two and a filter one of
+    them applies is a filter the other forgets: `tnb czech-report` drew them
+    while `tools/czech_brief.py` refused, on the same morning, from the same
+    file. The permission is `tasks.Task.confined_to`, the same field
+    `cmd_generate` refuses on, so the generator and every reader agree by
+    construction rather than by being kept in step.
+
+    Returns what may be drawn and a line per group refused, for printing. Never
+    silent: a row dropped without a word is the shape this project keeps
+    finding.
+    """
+    from tnb.tasks import TASKS
+
+    allowed = {
+        TRACK_BY_TASK[name]: task.confined_to
+        for name, task in TASKS.items()
+        if name in TRACK_BY_TASK and task.confined_to
+    }
+    kept: list[Row] = []
+    dropped: Counter[tuple[str, str]] = Counter()
+    for row in rows:
+        permitted = allowed.get(row.track)
+        if permitted and row.provider not in permitted:
+            dropped[(row.track, row.provider)] += 1
+            continue
+        kept.append(row)
+    return kept, [
+        f"{count} row(s) on {track} from {provider}, which may not read that corpus"
+        for (track, provider), count in sorted(dropped.items())
+    ]
 
 
 def unreached_by_system(
