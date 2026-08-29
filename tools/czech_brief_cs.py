@@ -600,15 +600,19 @@ CS: dict[str, str] = {
     "How well do language models write Czech therapy notes?": (
         "Jak dobře píší jazykové modely české terapeutické zápisy?"
     ),
-    "Eleven models wrote a note from each of twenty psychotherapy sessions -- ten real "
-    "ones and ten translated -- and two independent judges rated every note. Two "
+    "{models} models were each asked for a note from twenty psychotherapy sessions -- "
+    "ten real and ten translated -- and two independent judges rated every note that "
+    "came back. {written} of the {asked} notes were written; the rest are named where "
+    "they are missing. Two "
     "instruments: six yes/no criteria asking whether the Czech is right, and "
     "PDSQI-9, a published instrument, asking whether the note is any good. Both, "
     "because neither answers the other: a flawless Czech sentence about nothing passes "
     "all six criteria, and a note full of insight can be written in bad Czech.": (
-        "Jedenáct modelů napsalo zápis z každého z dvaceti psychoterapeutických "
-        "sezení — deseti skutečných a deseti přeložených — a každý zápis ohodnotili "
-        "dva nezávislí soudci. Dva nástroje: šest kritérií ano/ne, která se ptají, "
+        "{models} modelů dostalo zadání napsat zápis z dvaceti psychoterapeutických "
+        "sezení — deseti skutečných a deseti přeložených — a každý zápis, který "
+        "přišel, ohodnotili dva nezávislí soudci. Napsáno bylo {written} zápisů z "
+        "{asked}; kde některý chybí, je to napsané u té tabulky. Dva nástroje: šest "
+        "kritérií ano/ne, která se ptají, "
         "jestli je čeština správně, a PDSQI-9, publikovaný nástroj, který se ptá, "
         "jestli je zápis dobrý. Oba, protože jeden na druhého neodpovídá: bezchybná "
         "česká věta o ničem projde všemi šesti kritérii a zápis plný vhledu může být "
@@ -778,6 +782,9 @@ CS: dict[str, str] = {
     "Sorted best first, by the mean of these {count} columns: {names}.": (
         "Seřazeno od nejlepšího, podle průměru těchto {count} sloupců: {names}."
     ),
+    "One more is the same for every model here, so it orders nothing and is left out.": (
+        "Ještě jeden mají všechny modely stejný, takže nic neřadí a do pořadí nevstupuje."
+    ),
     "The other {dropped} are the same for every model here, so they order nothing "
     "and are left out.": (
         "Ostatní sloupce ({dropped}) mají všechny modely stejné, takže nic neřadí a do "
@@ -807,8 +814,8 @@ CS: dict[str, str] = {
     "Catches colloquial words where clinical ones belong. Judges agree on 75% of notes.": (
         "Chytá hovorová slova tam, kam patří odborná. Soudci se shodnou u 75 % zápisů."
     ),
-    "The strongest agreement with a person of the six.": (
-        "Ze šesti kritérií nejsilnější shoda s člověkem."
+    "The strongest agreement with a person under one judge, and tied with Diacritics over both.": (
+        "U jednoho soudce nejsilnější shoda s člověkem, přes oba je na tom stejně jako Diakritika."
     ),
     # --- the conclusion, before the tables ---------------------------------
     "What eleven models did, in five sentences": ("Co jedenáct modelů dokázalo, v pěti větách"),
@@ -831,12 +838,16 @@ CS: dict[str, str] = {
         "sebou mezi soudci ani mezi půlkami, a žádný model podle něj nelze označit za "
         "lepší."
     ),
-    "Part of why: {dead} of its {total} columns are the same for every model, so they "
-    "order nothing. Of the {moving} that do move, the one no model does well on is "
-    "{alive} -- the best of the eleven reaches {worst} out of 5.": (
-        "Zčásti proto, že {dead} z jeho {total} sloupců mají všechny modely stejné, "
-        "takže nic neřadí. Ze zbylých {moving}, které se hýbou, je ten, v němž si "
-        "nevede dobře nikdo, {alive} — nejlepší z jedenácti dosáhne {worst} z 5."
+    "Part of why: under {judge}, {dead} of its {total} columns are the same for every "
+    "model, so they order nothing. Of the {moving} that do move, the one no model does "
+    "well on is {alive} -- the best reaches {worst} out of 5. The other judge separates "
+    "more of them, and that the two disagree about which columns work is itself the "
+    "finding.": (
+        "Zčásti proto, že podle soudce {judge} mají {dead} z jeho {total} sloupců "
+        "všechny modely stejné, takže nic neřadí. Ze zbylých {moving}, které se "
+        "hýbou, je ten, v němž si nevede dobře nikdo, {alive} — nejlepší dosáhne "
+        "{worst} z 5. Druhý soudce jich rozliší víc, a to, že se ti dva neshodnou na "
+        "tom, které sloupce fungují, je samo o sobě nález."
     ),
     "Read the bottom of those tables carefully: the three models that write the "
     "longest notes take the last three places in all {total} of them. Each criterion "
@@ -944,12 +955,14 @@ CS: dict[str, str] = {
     "Judge": "Soudce",
     "difference": "rozdíl",
     "worse in Deepsy": "horší v Deepsy",
-    "Eleven models wrote from the same ten sessions twice: once as a SOAP note, "
+    "{models} models wrote from the same sessions twice, on both corpora: once as a "
+    "SOAP note, "
     "which is what TN-Eval asks for and what makes the English comparison possible, "
     "and once in the format the Deepsy application actually writes. The same six "
     "criteria, the same judges, the same rubric version -- only the format differs. "
     "Every one of the four comparisons goes the same way.": (
-        "Jedenáct modelů psalo z týchž deseti sezení dvakrát: jednou jako SOAP zápis, "
+        "{models} modelů psalo z týchž sezení dvakrát, na obou korpusech: jednou jako "
+        "SOAP zápis, "
         "což je to, oč si říká TN-Eval a co teprve umožňuje srovnání s angličtinou, a "
         "jednou ve formátu, který skutečně píše aplikace Deepsy. Táž šestice kritérií, "
         "titíž soudci, táž verze rubriky — liší se jen formát. Všechna čtyři srovnání "

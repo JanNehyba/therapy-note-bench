@@ -129,8 +129,10 @@ TITLE = "Czech note quality"
 HEADLINE = "How well do language models write Czech therapy notes?"
 SUBTITLE = "therapy-note-bench \u00b7 Czech track \u00b7 measured, not published"
 INTRO = (
-    "Eleven models wrote a note from each of twenty psychotherapy sessions -- ten "
-    "real ones and ten translated -- and two independent judges rated every note. "
+    "{models} models were each asked for a note from twenty psychotherapy sessions -- "
+    "ten real and ten translated -- and two independent judges rated every note that "
+    "came back. {written} of the {asked} notes were written; the rest are named "
+    "where they are missing. "
     "Two instruments: six yes/no criteria asking whether the Czech is right, and "
     "PDSQI-9, a published instrument, asking whether the note is any good. Both, "
     "because neither answers the other: a flawless Czech sentence about nothing "
@@ -370,6 +372,8 @@ def _sort_line(track: str, varying: tuple[str, ...]) -> str:
         line += " " + _t(
             "The other {dropped} are the same for every model here, so they order nothing "
             "and are left out."
+            if dropped > 1
+            else "One more is the same for every model here, so it orders nothing and is left out."
         ).format(dropped=dropped)
     return line
 
@@ -399,6 +403,20 @@ def _scale_line(track: str) -> str:
         "Higher is better throughout. Most columns are rated 1 to 5; the last is the "
         "share of notes free of the fault, from 0 to 1."
     )
+
+
+def _notes_cell(row: results.Row) -> str:
+    """How many notes are behind this row's means, out of the corpus.
+
+    Three numbers exist and only one of them is the denominator a reader wants:
+    the corpus was `n_sessions_attempted`, the model wrote `n_sessions_generated`
+    of it, and the judge answered every question of `scored - partial`. Printing
+    the last on its own turned "six of ten sessions, four fully answered" into
+    "4", which reads like a small number and not like a hole.
+    """
+    complete = row.n_sessions_scored - row.n_sessions_partial
+    corpus = row.n_sessions_attempted or row.n_sessions_scored
+    return str(complete) if complete == corpus else f"{complete}/{corpus}"
 
 
 def _dominates(first: dict, second: dict, keys, tables: dict) -> bool:
@@ -504,13 +522,19 @@ def _merged_table(track: str, groups: list[list[results.Row]]) -> str:
         index = " / ".join(
             f"{_rank_of(track, rows_by_judge[judge][system], varying):.2f}" for judge in judges
         )
-        notes = " / ".join(
-            str(
-                rows_by_judge[judge][system].n_sessions_scored
-                - rows_by_judge[judge][system].n_sessions_partial
-            )
-            for judge in judges
-        )
+        # Complete of the corpus, not of what this model managed to write.
+        # Generation loss used to render as a bare "6" in the same column that
+        # renders judge loss as "7 of 10", so a model that never wrote four of
+        # its notes read as complete. The corpus is stated once, because both
+        # judges read the same notes -- "8/10 / 9/10" made the slash mean two
+        # things in one cell.
+        rows_here = [rows_by_judge[judge][system] for judge in judges]
+        complete = [r.n_sessions_scored - r.n_sessions_partial for r in rows_here]
+        corpus = max(r.n_sessions_attempted or r.n_sessions_scored for r in rows_here)
+        if len(set(complete)) == 1 and complete[0] == corpus:
+            notes = str(corpus)
+        else:
+            notes = f"{' / '.join(str(c) for c in complete)} {_t('of')} {corpus}"
         body.append(
             f"<tr{mark}><td>{html.escape(system)}</td><td>{notes}</td>"
             f"<td><strong>{index}</strong></td>{''.join(cells)}</tr>"
@@ -763,7 +787,9 @@ WHAT_IT_CATCHES = {
         "straight double mark, and 45 of the 75 notes that quote anything use an "
         "apostrophe instead. The question now names both."
     ),
-    "nonword": ("The strongest agreement with a person of the six."),
+    "nonword": (
+        "The strongest agreement with a person under one judge, and tied with Diacritics over both."
+    ),
     "accurate": (
         "The most informative column in this document, and it exists only on the "
         "translated half, because answering it means reading the session. The two "
@@ -1403,6 +1429,28 @@ INSTRUMENT_OF = {
 }
 
 
+def _intro(rows: list[results.Row]) -> str:
+    """The opening sentence, with what was actually written rather than asked.
+
+    It said "eleven models wrote a note from each of twenty sessions" four times
+    over, and two models did not: `qwen3.8-flash-next` produced six of ten on
+    the real corpus and `qwen3.8-27b` eight. The claim is the one the whole
+    model-to-model comparison rests on -- every model seeing every transcript --
+    so stating it where it is false is the worst place in the document to have
+    a hand-typed number.
+    """
+    latest = [row for row in results.latest(rows) if row.is_scored]
+    corpora = (results.TRACK_CZECH_REAL, results.TRACK_CZECH_TRANSLATED)
+    here = [row for row in latest if row.track in corpora]
+    if not here:
+        return html.escape(_t(INTRO).format(models="?", written="?", asked="?"))
+    judges = len({row.judge_model for row in here}) or 1
+    models = len({row.system_id for row in here})
+    written = sum(row.n_sessions_generated for row in here) // judges
+    asked = sum(row.n_sessions_attempted for row in here) // judges
+    return html.escape(_t(INTRO).format(models=models, written=written, asked=asked))
+
+
 def _conclusion(rows: list[results.Row]) -> str:
     """What eleven models did, before the reader meets a single table.
 
@@ -1459,15 +1507,17 @@ def _conclusion(rows: list[results.Row]) -> str:
         )
 
     # 3. Which columns of that instrument can rank anything at all.
-    dead, total, alive, worst = _dead_columns(rows)
+    dead, total, alive, worst, judge = _dead_columns(rows)
     if dead:
         said.append(
             _t(
-                "Part of why: {dead} of its {total} columns are the same for every "
-                "model, so they order nothing. Of the {moving} that do move, the one no "
-                "model does well on is {alive} -- the best of the eleven reaches "
-                "{worst} out of 5."
+                "Part of why: under {judge}, {dead} of its {total} columns are the same "
+                "for every model, so they order nothing. Of the {moving} that do move, "
+                "the one no model does well on is {alive} -- the best reaches {worst} "
+                "out of 5. The other judge separates more of them, and that the two "
+                "disagree about which columns work is itself the finding."
             ).format(
+                judge=judge,
                 dead=dead,
                 total=total,
                 moving=total - dead,
@@ -1534,7 +1584,7 @@ def _payload(name: str) -> dict:
         return {}
 
 
-def _dead_columns(rows: list[results.Row]) -> tuple[int, int, list[str], float]:
+def _dead_columns(rows: list[results.Row]) -> tuple[int, int, list[str], float, str]:
     """How many quality columns are the same for every model, and what is left.
 
     Counted on the real half, where the instrument has the fewest columns and
@@ -1545,12 +1595,12 @@ def _dead_columns(rows: list[results.Row]) -> tuple[int, int, list[str], float]:
     track = results.TRACK_CZECH_REAL_PDSQI
     latest = [row for row in results.latest(rows) if row.is_scored and row.track == track]
     if not latest:
-        return 0, 0, [], 0.0
+        return 0, 0, [], 0.0, ''
     newest = max(row.judge_prompt_version for row in latest)
     latest = [row for row in latest if row.judge_prompt_version == newest]
     judges = sorted({row.judge_model or "" for row in latest})
     if not judges:
-        return 0, 0, [], 0.0
+        return 0, 0, [], 0.0, ''
     here = [row for row in latest if (row.judge_model or "") == judges[0]]
     varying = _varying(track, here)
     dead = len(COLUMNS[track]) - len(varying)
@@ -1560,13 +1610,13 @@ def _dead_columns(rows: list[results.Row]) -> tuple[int, int, list[str], float]:
     # does not is not a ceiling.
     ranking = [key for key in varying if labels[key]["scale"] == "1-5"]
     if not ranking:
-        return dead, len(COLUMNS[track]), [], 0.0
+        return dead, len(COLUMNS[track]), [], 0.0, judges[0]
     key = min(
         ranking,
         key=lambda k: max(row.metrics.headline.get(k, 0) for row in latest),
     )
     best = max(row.metrics.headline.get(key, 0) for row in latest)
-    return dead, len(COLUMNS[track]), [_t(labels[key]["label"])], best
+    return dead, len(COLUMNS[track]), [_t(labels[key]["label"])], best, judges[0]
 
 
 def _length_by_model(data: dict) -> str:
@@ -1783,7 +1833,8 @@ def _deepsy_words(payload: dict) -> dict[str, int]:
 
 
 FORMATS_LEAD = (
-    "Eleven models wrote from the same ten sessions twice: once as a SOAP note, "
+    "{models} models wrote from the same sessions twice, on both corpora: once as a "
+    "SOAP note, "
     "which is what TN-Eval asks for and what makes the English comparison possible, "
     "and once in the format the Deepsy application actually writes. The same six "
     "criteria, the same judges, the same rubric version -- only the format differs. "
@@ -2718,7 +2769,7 @@ def build(rows: list[results.Row]) -> str:
 <h1>{_t(HEADLINE)}</h1>
 <p class="sub">{_t(SUBTITLE)}</p>
 
-<p>{_t(INTRO)}</p>
+<p>{_intro(rows)}</p>
 <p>{_t(INTRO_SECOND)}</p>
 
 <div class="warn"><p><strong>{_t(NOT_PUBLIC)}</strong> {_t(NOT_PUBLIC_WHY)}</p></div>
