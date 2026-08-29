@@ -71,5 +71,12 @@ const rendered = Object.entries(nodes)
   .map(([id, el]) => `${id}: ${el.innerHTML.length} chars`);
 console.log('RAN. panels rendered:');
 rendered.forEach(line => console.log('  ' + line));
+// Removal is a render decision like any other -- the Czech page takes out
+// the paragraph linking a methods page that is not beside it -- and a node
+// that is gone is indistinguishable from one that was never asked for
+// unless the runner says so. Printed BEFORE the empty list: three tests read
+// everything after that marker and would see this line as an empty panel.
+const gone = Object.entries(nodes).filter(([, el]) => el.removed).map(([id]) => id);
+if (gone.length) console.log('removed: ' + gone.join(', '));
 const empty = Object.entries(nodes).filter(([, el]) => !el.innerHTML && !el.removed).map(([id]) => id);
 if (empty.length) console.log('empty and not removed: ' + empty.join(', '));

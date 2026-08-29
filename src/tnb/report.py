@@ -253,6 +253,51 @@ NOT_RANKED_REASONS: dict[str, str] = {
 }
 
 
+#: The header a page writes about itself, when it is not the published one.
+#:
+#: The template's own header is the published page's: "scored on two published
+#: protocols -- TN-Eval's SOAP rubric and iCARE's 17 sections". The Czech page
+#: is drawn by the same renderer and inherited it, so it opened by naming two
+#: instruments no table on it uses, and then offered three links -- the brief,
+#: the PDF and the methods page -- to files that do not exist beside it. A dead
+#: link on a page nobody published is still a page that lies about itself.
+#:
+#: `links` is keyed by the id of the paragraph it replaces. None
+#: removes the paragraph: there is no local methods page, and an empty one
+#: would be worse than none.
+PAGE_CZECH = {
+    "title": "therapy-note-bench \u2014 Czech track",
+    "sub": (
+        "Czech psychotherapy notes written by the models e-INFRA CZ deploys, from ten real "
+        "sessions and ten AnnoMI conversations translated into Czech. Two independent judges "
+        "rate every note: six yes/no criteria about the Czech itself, and PDSQI-9 about "
+        "whether the note is any good. <strong>Measured, not published</strong> \u2014 these "
+        "tables are not on the public site and the transcripts never leave this machine."
+    ),
+    "links": {
+        "brief-link": (
+            '<a href="czech-brief.html">What these numbers can and cannot say \u2192</a> '
+            "The same tables with the caveats around them, written to be read by somebody "
+            'who was not here. Also as a <a href="czech-report.pdf">PDF</a>.'
+        ),
+        "methods-link": None,
+    },
+}
+
+#: Which tracks make a page the Czech one. Membership, not a count: a page that
+#: draws a Czech table is the Czech page whatever else is on it.
+CZECH_PAGE_TRACKS = frozenset(
+    {
+        results.TRACK_CZECH_REAL,
+        results.TRACK_CZECH_TRANSLATED,
+        results.TRACK_CZECH_REAL_PDSQI,
+        results.TRACK_CZECH_TRANSLATED_PDSQI,
+        results.TRACK_DEEPSY_REAL,
+        results.TRACK_DEEPSY_TRANSLATED,
+    }
+)
+
+
 #: What the expandable row's second block holds, per track. It is not the same
 #: thing on every track and it used to be headed "Rubric criteria" everywhere
 #: but iCARE.
@@ -1614,6 +1659,9 @@ def build(
         # `rows.jsonl` anyway, which is the one claim a provenance line
         # must never get wrong.
         "generated_from": source or str(results.ROWS_PATH.name),
+        # None on the published page, which keeps the header the template
+        # was written with.
+        "page": PAGE_CZECH if drawn & CZECH_PAGE_TRACKS else None,
     }
 
 

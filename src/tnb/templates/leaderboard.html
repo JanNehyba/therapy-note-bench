@@ -10,7 +10,7 @@ __STYLE__
 <main>
   <div class="lang" id="lang"></div>
   <h1>therapy-note-bench</h1>
-  <p class="sub" data-t="page.sub">
+  <p class="sub" id="page-sub" data-t="page.sub">
     LLM-written psychotherapy session notes, scored on two published protocols —
     TN-Eval's SOAP rubric and iCARE's 17 sections — and re-run as models change.
     <a href="https://github.com/JanNehyba/therapy-note-bench">Code and data on GitHub</a>.
@@ -18,7 +18,7 @@ __STYLE__
 
   <!-- Above the table, because it is what to read before the numbers rather
        than after them. It was the last thing on the page, under the footer. -->
-  <p class="methods-link" data-t="page.brief-link"><a href="brief.html">What this leaderboard can and cannot tell you →</a>
+  <p class="methods-link" id="brief-link" data-t="page.brief-link"><a href="brief.html">What this leaderboard can and cannot tell you →</a>
      Four claims, four figures, and the file each number came from — for somebody
      building or buying one of these. Also as a <a href="therapy-note-bench.pdf">PDF</a>.</p>
 
@@ -26,7 +26,7 @@ __STYLE__
 
   <div id="tables"></div>
 
-  <p class="methods-link" data-t="page.methods-link"><a href="methods.html">How this was measured →</a>
+  <p class="methods-link" id="methods-link" data-t="page.methods-link"><a href="methods.html">How this was measured →</a>
      Every column defined, which judge and how closely it agrees with two therapists,
      how far the two judges disagree with each other, what the two corpora are and
      where they came from, and which rows are no longer drawn.</p>
@@ -932,7 +932,29 @@ if (DATA.tables.length) {
 // Last, so the first draw above already happened in the reader's language and
 // this only has to redraw what a *change* of language moves: the frame, the
 // table on screen and the provenance line under it.
+// What the page says it is. Runs after `drawStaticText`, so it wins in both
+// languages, and inside the redraw so it survives a language switch. The
+// published page carries no `page` block and keeps the header it was authored
+// with, which is why `docs/` does not move when this is added.
+function drawHeader() {
+  const page = DATA.page;
+  if (!page) return;
+  if (page.title) document.title = TS(page.title);
+  // By id, like everything else on this page. The header paragraphs were
+  // reachable only by class, which no test can look inside.
+  const sub = document.getElementById('page-sub');
+  if (sub && page.sub) sub.innerHTML = TS(page.sub);
+  Object.entries(page.links || {}).forEach(([id, link]) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    // null means the page this one points at is not beside it.
+    if (link === null) el.remove();
+    else el.innerHTML = TS(link);
+  });
+}
+
 installLanguageSwitch(() => {
+  drawHeader();
   drawProvenance();
   // `show` redraws the table, the switch and the controls inside a frame that
   // stays put. Redrawing the frame itself would replace the two nodes the click

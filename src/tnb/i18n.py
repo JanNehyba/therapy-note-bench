@@ -407,6 +407,30 @@ _SENTENCES = {
     "What each average is over": "Z čeho je každý průměr",
     "{0} · notes answered": "{0} · zodpovězených zápisů",
     "mean words per note": "průměrný počet slov na zápis",
+    # The Czech page's own header. Not in `_STATIC`, because it is chosen per
+    # page in Python rather than authored in the template.
+    "therapy-note-bench \u2014 Czech track": "therapy-note-bench \u2014 \u010desk\xfd track",
+    "Czech psychotherapy notes written by the models e-INFRA CZ deploys, from ten real"
+    " sessions and ten AnnoMI conversations translated into Czech. Two independent judges rate"
+    " every note: six yes/no criteria about the Czech itself, and PDSQI-9 about whether the"
+    " note is any good. <strong>Measured, not published</strong> \u2014 these tables are not on"
+    " the public site and the transcripts never leave this machine.": (
+        "\u010cesk\xe9 psychoterapeutick\xe9 z\xe1pisy napsan\xe9 modely, kter\xe9 nasazuje "
+        "e-INFRA CZ, z deseti skute\u010dn\xfdch sezen\xed a deseti rozhovor\u016f AnnoMI "
+        "p\u0159elo\u017een\xfdch do \u010de\u0161tiny. Ka\u017ed\xfd z\xe1pis hodnot\xed "
+        "dva nez\xe1visl\xed soudci: \u0161est krit\xe9ri\xed ano/ne o samotn\xe9 "
+        "\u010de\u0161tin\u011b a PDSQI-9 o tom, jestli za n\u011bco stoj\xed. "
+        "<strong>Zm\u011b\u0159eno, nepublikov\xe1no</strong> \u2014 tyhle tabulky nejsou na "
+        "ve\u0159ejn\xe9m webu a p\u0159episy z tohohle po\u010d\xedta\u010de neodch\xe1zej\xed."
+    ),
+    '<a href="czech-brief.html">What these numbers can and cannot say \u2192</a> The same tables'
+    " with the caveats around them, written to be read by somebody who was not here. Also as a"
+    ' <a href="czech-report.pdf">PDF</a>.': (
+        '<a href="czech-brief-cs.html">Co tahle \u010d\xedsla mohou a nemohou \u0159\xedct '
+        "\u2192</a> Tyt\xe9\u017e tabulky i s v\xfdhradami kolem nich, napsan\xe9 tak, aby "
+        "je p\u0159e\u010detl i n\u011bkdo, kdo u toho nebyl. Tak\xe9 jako "
+        '<a href="czech-report-cs.pdf">PDF</a>.'
+    ),
     # -- what a note here is scored against -----------------------------------
     "the human note competes": "lidský zápis soutěží",
     "the human note is the answer key": "lidský zápis je vzorem",

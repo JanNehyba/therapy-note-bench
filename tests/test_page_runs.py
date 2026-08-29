@@ -96,6 +96,20 @@ def _flat(html: str) -> str:
     return re.sub(r"\s+", " ", html)
 
 
+def _still_empty(output: str) -> str:
+    """The runner's list of panels that rendered nothing and were not removed.
+
+    Read as its own line. The tests used to take everything after the marker,
+    which quietly means "the whole output" whenever no panel is empty -- so the
+    assertion passed for the right reason and would have failed for a wrong one
+    the moment the runner printed anything else. It then did.
+    """
+    for line in output.splitlines():
+        if line.startswith("empty and not removed:"):
+            return line.partition(":")[2].strip()
+    return ""
+
+
 def _run(page: str, tmp_path: Path, panel: str | None = None, search: str = "") -> str:
     node = shutil.which("node")
     if node is None:
@@ -149,7 +163,7 @@ def test_a_panel_with_no_data_removes_itself_rather_than_leaving_an_empty_box(tm
 
     output = _run(report.render_methods(data), tmp_path)
 
-    assert "concordance" not in output.split("empty and not removed:")[-1]
+    assert "concordance" not in _still_empty(output)
 
 
 def test_the_self_preference_panel_draws_when_there_is_an_effect_to_report(tmp_path):
@@ -254,7 +268,7 @@ def test_the_self_preference_panel_removes_itself_when_there_is_nothing(tmp_path
 
     output = _run(report.render_methods(data), tmp_path)
 
-    assert "preference" not in output.split("empty and not removed:")[-1]
+    assert "preference" not in _still_empty(output)
 
 
 def test_the_saturation_panel_names_the_judge_that_produced_it(tmp_path):
@@ -754,9 +768,9 @@ def test_neither_page_leaves_a_panel_as_an_empty_frame(tmp_path):
     ALLOWED = {"controls", "switch"}
     for name, render in (("leaderboard", report.render_page), ("methods", report.render_methods)):
         output = _run(render(data), tmp_path)
-        if "empty and not removed:" not in output:
+        left = _still_empty(output)
+        if not left:
             continue
-        left = output.split("empty and not removed:")[-1].strip()
         stayed = {part.strip() for part in left.split(",") if part.strip()}
         assert stayed <= ALLOWED, f"{name} left an empty frame: {sorted(stayed - ALLOWED)}"
 
@@ -1549,3 +1563,65 @@ def test_the_blurb_is_not_measured_in_characters():
             f"{selector} is measured in characters again: at this font size that is about "
             "half the card, beside a full-width table"
         )
+
+
+def test_a_local_page_writes_its_own_header(tmp_path):
+    """The template's header belongs to the published page.
+
+    It names TN-Eval's SOAP rubric and iCARE's 17 sections, and offers the
+    brief, the PDF and the methods page. The Czech page is drawn by the same
+    renderer and inherited all of it: it opened by naming two instruments no
+    table on it uses, and then linked three files that do not exist beside it.
+
+    Run rather than read. `drawHeader` is the only function on the page that
+    does nothing at all on the published payload, so a string test would pass
+    on a version of it that throws.
+    """
+    rows = [
+        Row(
+            track=results.TRACK_CZECH_REAL,
+            system_id="gemma4",
+            system_type="model",
+            provider="einfra",
+            prompt_version="czech-soap-v1",
+            n_sessions_attempted=10,
+            n_sessions_generated=10,
+        )
+    ]
+    data = report.build(rows, source="czech-rows.jsonl")
+    assert data["page"], "the fixture did not produce a Czech page"
+
+    page = report.render_page(data)
+    sub = _flat(_run(page, tmp_path, panel="page-sub"))
+    assert "iCARE" not in sub, "the Czech page still names iCARE's sections"
+    assert "e-INFRA" in sub, "the Czech page does not say what it is"
+
+    brief = _flat(_run(page, tmp_path, panel="brief-link"))
+    assert "czech-brief.html" in brief
+    assert "czech-report.pdf" in brief
+
+    # The methods page has no local twin, so the paragraph goes rather than
+    # pointing at a file that is not there. The runner names what was removed,
+    # because a node that is gone and a node nobody asked for look the same.
+    summary = _run(page, tmp_path)
+    assert "THREW" not in summary
+    removed = next((line for line in summary.splitlines() if line.startswith("removed:")), "")
+    assert "methods-link" in removed, f"the methods link was not taken out: {summary}"
+
+
+def test_the_published_page_keeps_the_header_it_was_written_with(tmp_path):
+    """The other direction, and the reason `page` is None rather than a copy of
+    the published header: a payload that carried it would put the published
+    page's own words through the same substitution and let a typo there change
+    what `docs/` says."""
+    data = _page_data(tmp_path)
+    assert data["page"] is None
+    summary = _run(report.render_page(data), tmp_path)
+    assert "THREW" not in summary
+    # `drawHeader` returns before touching anything, so the two header nodes are
+    # never written to and never removed. That is the whole assertion: on this
+    # payload the header is the template's, and the template is not reachable
+    # from the script the runner executes.
+    removed = next((line for line in summary.splitlines() if line.startswith("removed:")), "")
+    assert "methods-link" not in removed, "the published page dropped its methods link"
+    assert "e-INFRA" not in _flat(_run(report.render_page(data), tmp_path, panel="page-sub"))
