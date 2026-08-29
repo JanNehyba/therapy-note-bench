@@ -129,10 +129,10 @@ SUBTITLE = "therapy-note-bench \u00b7 Czech track \u00b7 measured, not published
 INTRO = (
     "Eleven models wrote a note from each of twenty psychotherapy sessions -- ten "
     "real ones and ten translated -- and two independent judges rated every note. "
-    "Two instruments: seven yes/no criteria asking whether the Czech is right, and "
+    "Two instruments: six yes/no criteria asking whether the Czech is right, and "
     "PDSQI-9, a published instrument, asking whether the note is any good. Both, "
     "because neither answers the other: a flawless Czech sentence about nothing "
-    "passes all seven criteria, and a note full of insight can be written in bad "
+    "passes all six criteria, and a note full of insight can be written in bad "
     "Czech."
 )
 #: The second question, and it is second. The document used to open with it,
@@ -220,7 +220,7 @@ LIMITS = [
     ),
     (
         "The instrument has never been checked against a person",
-        "These seven criteria are this repository's own, because no published Czech "
+        "These six criteria are this repository's own, because no published Czech "
         "note-quality instrument exists to reproduce. Nobody has rated these notes by "
         "hand, and unlike PDSQI-9 there is not even a published figure for how well two "
         "people would agree on them. Two independent judges answer every question, and "
@@ -317,12 +317,20 @@ def _rank_of(track: str, row: results.Row, varying: tuple[str, ...]) -> float:
     not merely unexplained.
     """
     measures = MEASURE_TABLES[track]
+    scales = {measures[key]["scale"] for key in varying}
+    # Rescale only where the table actually mixes scales. On the language
+    # tables every column is 0-1, and putting them all on the Likert axis
+    # printed an index of 4.60 beside columns reading 0.90 -- a number in a
+    # unit none of the columns beside it use.
+    mixed = len(scales) > 1
     values = []
     for key in varying:
         if key not in row.metrics.headline:
             continue
         value = row.metrics.headline[key]
-        values.append(1 + 4 * value if measures[key]["scale"] == "0-1" else value)
+        if mixed and measures[key]["scale"] == "0-1":
+            value = 1 + 4 * value
+        values.append(value)
     return sum(values) / len(values) if values else -1.0
 
 
@@ -342,12 +350,16 @@ def _sort_line(track: str, varying: tuple[str, ...]) -> str:
         return _t("Nothing here separates these models: no column takes two different values.")
     if len(varying) == 1:
         line = _t(
-            "Sorted best first, by the one column that separates these models: {names}."
+            "The Order column is {names}, the one column that separates these models at "
+            "all, and it is what the rows are sorted by."
         ).format(names=names)
     else:
-        line = _t("Sorted best first, by the mean of these {count} columns: {names}.").format(
-            count=len(varying), names=names
-        )
+        line = _t(
+            "The Order column is the mean of these {count}: {names}. It is what the rows "
+            "are sorted by and it is not a measurement -- weighting spelling against "
+            "clinical terminology is a judgement, which is why no such index is "
+            "published. It is here so the order can be checked rather than trusted."
+        ).format(count=len(varying), names=names)
     # Only when something was actually left out. The sentence used to be part of
     # the one above it and so was printed over tables where every column varies,
     # where it says that some of them do not.
@@ -409,11 +421,20 @@ def _table(track: str, rows: list[results.Row]) -> str:
     columns = COLUMNS[track]
     measures = MEASURE_TABLES[track]
     varying = _varying(track, rows)
-    head = "".join(f"<th>{html.escape(_t(measures[key]['label']))}</th>" for key, _ in columns)
+    # The number the rows are ordered by, printed. Sorting by a figure and not
+    # showing it asks the reader to take the order on trust -- and this project
+    # sets `RANKING_MEASURE = None` for these tracks precisely because weighting
+    # spelling against clinical terminology is a judgement rather than a
+    # measurement. Both of those are reasons to SHOW it and say what it is, not
+    # reasons to hide it: an unexplained order is the judgement made silently.
+    head = f"<th>{_t('Order')}</th>" + "".join(
+        f"<th>{html.escape(_t(measures[key]['label']))}</th>" for key, _ in columns
+    )
     body, thin = [], []
     for row in sorted(rows, key=lambda r: (-_rank_of(track, r, varying), r.system_id)):
         complete = row.n_sessions_scored - row.n_sessions_partial
-        cells = "".join(
+        index = _rank_of(track, row, varying)
+        cells = f"<td><strong>{index:.2f}</strong></td>" + "".join(
             f"<td>{_fmt(row.metrics.headline.get(key), digits)}</td>" for key, digits in columns
         )
         if row.n_sessions_partial:
@@ -500,15 +521,23 @@ LENGTH_TABLE_LEAD = (
     "wrote. Everything the rest of this section claims is about these numbers."
 )
 LENGTH_TABLE_HUMAN = (
-    "For scale: the therapist who wrote TN-Eval's reference notes used {human} words a "
-    "note, and no model here reaches that on any corpus."
+    "For scale: the therapist who wrote TN-Eval's reference notes used {human} words a note. {over}"
+)
+#: Filled by whether any model actually beats the therapist on any corpus. The
+#: sentence used to end "and no model here reaches that", nine rows above a
+#: table showing `glm-5.2` at 812 on the Czech real corpus.
+LENGTH_TABLE_UNDER = "No model here reaches that on any corpus."
+LENGTH_TABLE_OVER = (
+    "Every model writes less than that on the English corpus, where nobody was given a "
+    "length; on the Czech ones {names} write more."
 )
 
 #: The length section's own sentences. Every number in them is a placeholder
 #: filled from `local/czech-length.json`, because a length that is typed into a
 #: sentence is a length that a later run makes quietly false.
 LENGTH_ASKED = (
-    "Three of the four prompts say nothing at all about how long a note should be. "
+    "{quiet} of the {families} prompt families say nothing at all about how long a "
+    "note should be. "
     "The Deepsy prompt says it twice: a ceiling of {limit} words per section, which "
     "the prompt itself calls invalid to exceed, and a target of the same {limit} words."
 )
@@ -591,7 +620,7 @@ WHAT_IT_CATCHES = {
         "straight double mark, and 45 of the 75 notes that quote anything use an "
         "apostrophe instead. The question now names both."
     ),
-    "nonword": ("The strongest agreement with a person of the seven."),
+    "nonword": ("The strongest agreement with a person of the six."),
     "accurate": (
         "The most informative column in this document, and it exists only on the "
         "translated half, because answering it means reading the session. The two "
@@ -876,7 +905,7 @@ def _halves(rows: list[results.Row]) -> str:
         + "<p>"
         + html.escape(
             _t(
-                "The translated half comes out ahead on five of the seven criteria "
+                "The translated half comes out ahead on five of the six criteria "
                 "under both judges, and on how succinct the notes are as well. Bold "
                 "marks where translated beats real."
             )
@@ -1112,7 +1141,7 @@ def _external() -> str:
         "english_completeness": "English completeness",
         "english_quality": "English quality (PDSQI-9)",
         "czech_quality": "Czech quality (PDSQI-9)",
-        "czech_language": "Czech language (the seven criteria)",
+        "czech_language": "Czech language (the six criteria)",
     }
     outside = {
         "intelligence_index": "Intelligence index",
@@ -1315,7 +1344,8 @@ def _conclusion(rows: list[results.Row]) -> str:
     if not said:
         return ""
     body = "".join(f"<p>{html.escape(sentence)}</p>" for sentence in said)
-    return f"<h2>{_t('What eleven models did, in five sentences')}</h2>{body}"
+    heading = _t("What the Czech track found, in {count} short paragraphs").format(count=len(said))
+    return f"<h2>{heading}</h2>{body}"
 
 
 def _payload(name: str) -> dict:
@@ -1396,7 +1426,17 @@ def _length_by_model(data: dict) -> str:
         being generated some rows rest on three. Printing the bare number would
         put one model's provisional length beside another's finished one and
         invite the reader to compare them.
+
+        **A whole note, for every column.** The Deepsy block records a median
+        per section, because that is the unit its word limit applies to, and
+        this table's own lead calls every column "one note". Printing the
+        section here showed glm-5.2 at 406 beside its 812-word SOAP note when
+        its Deepsy note is 1182, so the table appeared to refute the paragraph
+        six above it -- and the paragraph was the one that was right.
         """
+        by_note = block.get("by_note") or {}
+        if system in by_note:
+            return f"<td>{by_note[system]}</td>"
         found = block["by_system"].get(system)
         if found is None:
             return "<td class='dash'>&mdash;</td>"
@@ -1433,7 +1473,24 @@ def _length_by_model(data: dict) -> str:
 
     note = ""
     if human:
-        line = _t(LENGTH_TABLE_HUMAN).format(human=human["median"])
+        # Which models beat the therapist, on any corpus, read off the same
+        # table. The sentence used to assert that none did, nine rows above a
+        # row that does.
+        over = sorted(
+            {
+                system
+                for _track, block in corpora
+                for system, found in block["by_system"].items()
+                for value in [found["median"] if isinstance(found, dict) else found]
+                if value and value > human["median"]
+            }
+        )
+        tail = (
+            _t(LENGTH_TABLE_OVER).format(names=_join_words(over))
+            if over
+            else _t(LENGTH_TABLE_UNDER)
+        )
+        line = _t(LENGTH_TABLE_HUMAN).format(human=human["median"], over=tail)
         note = f"<p class='dash'>{html.escape(line)}</p>"
     return (
         f"<h3>{_t('How long each model writes')}</h3>"
@@ -1564,9 +1621,7 @@ FORMATS_CONFOUND = (
     "{deepsy} words against {soap} -- and this document has already measured that a "
     "longer note scores lower on every one of these criteria, because each asks "
     "whether there is a fault ANYWHERE in it. Format and length point the same way "
-    "here and ten models cannot separate them. The one model that writes fewer words "
-    "in Deepsy also scores lower there, which is a hint and not evidence: it is one "
-    "model."
+    "here and ten models cannot separate them."
 )
 
 
@@ -1596,7 +1651,16 @@ def _length() -> str:
     asked = data.get("instructions", {})
     deepsy_limit = (asked.get("deepsy") or {}).get("limit_words")
     if asked:
-        parts.append("<p>" + html.escape(_t(LENGTH_ASKED).format(limit=deepsy_limit)) + "</p>")
+        quiet = sum(1 for found in asked.values() if not found.get("has_limit"))
+        parts.append(
+            "<p>"
+            + html.escape(
+                _t(LENGTH_ASKED).format(
+                    limit=deepsy_limit, quiet=quiet, families=len(asked)
+                )
+            )
+            + "</p>"
+        )
 
     # --- the human anchor ---------------------------------------------------
     human = (data.get("human") or {}).get("human")

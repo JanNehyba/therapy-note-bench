@@ -3539,6 +3539,7 @@
   "superseded": [
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.1.0",
       "judge_model": null,
       "judge_prompt_version": null,
@@ -3552,6 +3553,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.1.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "icare-trace-v1",
@@ -3566,6 +3568,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.2.0",
       "judge_model": null,
       "judge_prompt_version": null,
@@ -3579,6 +3582,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.2.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "icare-trace-v1",
@@ -3593,6 +3597,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.2.0",
       "judge_model": "gpt-5.6-terra",
       "judge_prompt_version": "icare-trace-v1",
@@ -3607,6 +3612,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.2.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "icare-trace-v1",
@@ -3620,6 +3626,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.2.0",
       "judge_model": "gpt-5.6-terra",
       "judge_prompt_version": "icare-trace-v1",
@@ -3633,6 +3640,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.3.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "icare-trace-v1",
@@ -3646,6 +3654,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.3.0",
       "judge_model": "gpt-5.6-terra",
       "judge_prompt_version": "icare-trace-v1",
@@ -3659,6 +3668,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.4.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "icare-trace-v1",
@@ -3672,6 +3682,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.4.0",
       "judge_model": "gpt-5.6-terra",
       "judge_prompt_version": "icare-trace-v1",
@@ -3685,6 +3696,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.4.0",
       "judge_model": null,
       "judge_prompt_version": null,
@@ -3698,6 +3710,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.5.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "icare-trace-v1",
@@ -3711,6 +3724,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.5.0",
       "judge_model": "gpt-5.6-terra",
       "judge_prompt_version": "icare-trace-v1",
@@ -3724,6 +3738,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.5.0",
       "judge_model": null,
       "judge_prompt_version": null,
@@ -3737,6 +3752,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.3.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "pdsqi9-note-v1",
@@ -3750,6 +3766,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.3.0",
       "judge_model": "gpt-5.6-terra",
       "judge_prompt_version": "pdsqi9-note-v1",
@@ -3763,6 +3780,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.4.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "pdsqi9-note-v1",
@@ -3776,6 +3794,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.4.0",
       "judge_model": "gpt-5.6-terra",
       "judge_prompt_version": "pdsqi9-note-v1",
@@ -3789,6 +3808,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.5.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "pdsqi9-note-v1",
@@ -3802,6 +3822,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.5.0",
       "judge_model": "gpt-5.6-terra",
       "judge_prompt_version": "pdsqi9-note-v1",
@@ -3815,6 +3836,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.1.0",
       "judge_model": null,
       "judge_prompt_version": null,
@@ -3828,6 +3850,7 @@
     },
     {
       "current_harness_version": "0.2.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.1.0",
       "judge_model": "gemini-2.5-pro",
       "judge_prompt_version": "tneval-rubric-v1",
@@ -3843,6 +3866,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.1.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "tneval-rubric-v1",
@@ -3857,6 +3881,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.1.0",
       "judge_model": "gpt-5.6-terra",
       "judge_prompt_version": "tneval-rubric-v1",
@@ -3871,6 +3896,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.2.0",
       "judge_model": null,
       "judge_prompt_version": null,
@@ -3884,6 +3910,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.2.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "tneval-rubric-v1",
@@ -3898,6 +3925,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.2.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "tneval-rubric-v1",
@@ -3911,6 +3939,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.2.0",
       "judge_model": "gpt-5.6-terra",
       "judge_prompt_version": "tneval-rubric-v1",
@@ -3924,6 +3953,7 @@
     },
     {
       "current_harness_version": "",
+      "current_judge_prompt_version": "",
       "harness_version": "0.2.0",
       "judge_model": "gemini-2.5-pro",
       "judge_prompt_version": "tneval-rubric-v1",
@@ -3937,6 +3967,7 @@
     },
     {
       "current_harness_version": "",
+      "current_judge_prompt_version": "",
       "harness_version": "0.2.0",
       "judge_model": "gemini-2.5-pro",
       "judge_prompt_version": "tneval-rubric-v1",
@@ -3950,6 +3981,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.3.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "tneval-rubric-v1",
@@ -3963,6 +3995,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.3.0",
       "judge_model": "gpt-5.6-terra",
       "judge_prompt_version": "tneval-rubric-v1",
@@ -3976,6 +4009,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.4.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "tneval-rubric-v1",
@@ -3989,6 +4023,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.4.0",
       "judge_model": "gpt-5.6-terra",
       "judge_prompt_version": "tneval-rubric-v1",
@@ -4002,6 +4037,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.4.0",
       "judge_model": null,
       "judge_prompt_version": null,
@@ -4015,6 +4051,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.5.0",
       "judge_model": "gemini-3.1-pro-preview",
       "judge_prompt_version": "tneval-rubric-v1",
@@ -4028,6 +4065,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.5.0",
       "judge_model": "gpt-5.6-terra",
       "judge_prompt_version": "tneval-rubric-v1",
@@ -4041,6 +4079,7 @@
     },
     {
       "current_harness_version": "0.6.0",
+      "current_judge_prompt_version": "",
       "harness_version": "0.5.0",
       "judge_model": null,
       "judge_prompt_version": null,

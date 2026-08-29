@@ -1401,13 +1401,13 @@ _TRACK_REGISTRIES = {
     "Deepsy, translated": "Deepsy, přeložená",
     "The same models and the same ten sessions, asked for the note format the Deepsy"
     " application actually writes rather than for SOAP. Three of its eleven sections,"
-    " the three with a SOAP counterpart, scored by the same seven criteria. **What"
+    " the three with a SOAP counterpart, scored by the same six criteria. **What"
     " changes between this table and the Czech one is the shape the model was asked"
     " for and nothing else**, so a difference between them is a fact about the"
     " format.": (
         "Tytéž modely a tatáž desítka sezení, ale požádané o formát zápisu, který "
         "aplikace Deepsy opravdu píše, místo o SOAP. Tři z jejích jedenácti sekcí — "
-        "ty tři, které mají protějšek v SOAP — hodnocené týmiž sedmi kritérii. **Mezi "
+        "ty tři, které mají protějšek v SOAP — hodnocené týmiž šesti kritérii. **Mezi "
         "touto tabulkou a tou českou se mění tvar, o který byl model požádán, a nic "
         "jiného**, takže rozdíl mezi nimi je výrok o formátu."
     ),
@@ -1419,11 +1419,11 @@ _TRACK_REGISTRIES = {
         "u skutečné půlky, na rozhovorech, které jsou veřejné — a totéž varování: ty "
         "dvě půlky se liší délkou sedmkrát, ještě než přijde na řadu otázka formátu."
     ),
-    "The note alone, on the same seven Czech criteria as the SOAP tracks. The prompts"
+    "The note alone, on the same six Czech criteria as the SOAP tracks. The prompts"
     " are reproduced from the Deepsy application word for word, with its questionnaire"
     " blocks removed the way the application removes them for a client who has filled"
     " nothing in.": (
-        "Samotný zápis, na týchž sedmi českých kritériích jako tracky SOAP. Prompty "
+        "Samotný zápis, na týchž šesti českých kritériích jako tracky SOAP. Prompty "
         "jsou reprodukované z aplikace Deepsy slovo od slova, s odstraněnými "
         "dotazníkovými bloky — tak, jak je aplikace odstraňuje klientovi, který nic "
         "nevyplnil."
@@ -1442,8 +1442,8 @@ _TRACK_REGISTRIES = {
         "formátu, aby šlo odlišit, co kritérium měří na modelu, od toho, co měří na "
         "tvaru zápisu."
     ),
-    "The note alone, on the same seven criteria, over the translated AnnoMI conversations.": (
-        "Samotný zápis, na týchž sedmi kritériích, přes přeložené rozhovory AnnoMI."
+    "The note alone, on the same six criteria, over the translated AnnoMI conversations.": (
+        "Samotný zápis, na týchž šesti kritériích, přes přeložené rozhovory AnnoMI."
     ),
     "None, in the same two senses as the real half.": (
         "Žádná, ve stejných dvou smyslech jako u skutečné půlky."
@@ -1463,7 +1463,7 @@ _TRACK_REGISTRIES = {
     ),
     "PDSQI-9, translated": "PDSQI-9, přeložená",
     "The same Czech notes as the real-session table, asked a published quality "
-    "instrument instead of the seven language criteria. The criteria cannot say "
+    "instrument instead of the six language criteria. The criteria cannot say "
     "whether a note is any good -- a flawless Czech sentence about nothing passes "
     "all seven -- and this is the half of the question they leave out. **Six "
     "attributes, not eight:** `accurate` and `thorough` can only be answered "
@@ -1563,11 +1563,11 @@ _TRACK_REGISTRIES = {
         "které tou vadou netrpí. Hodnotiteli se přepis nikdy neukáže, a právě proto se důvěrné "
         "sezení vůbec dá obodovat."
     ),
-    "The same seven criteria as the real-session table, on notes written from AnnoMI"
+    "The same six criteria as the real-session table, on notes written from AnnoMI"
     " conversations translated into Czech. The translation is identical for every model, so it"
     " cancels when models are compared; it does not cancel for any claim about how well models"
     " write Czech.": (
-        "Týchž sedm kritérií jako v tabulce se skutečnými sezeními, na zápisech psaných "
+        "Týchž šest kritérií jako v tabulce se skutečnými sezeními, na zápisech psaných "
         "z rozhovorů AnnoMI přeložených do češtiny. Překlad je pro každý model stejný, takže se "
         "při srovnávání modelů vyruší; nevyruší se u žádného tvrzení o tom, jak dobře modely píší "
         "česky."

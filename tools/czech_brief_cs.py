@@ -307,12 +307,12 @@ CS: dict[str, str] = {
     "The instrument has never been checked against a person": (
         "Nástroj nebyl nikdy ověřen proti člověku"
     ),
-    "These seven criteria are this repository's own, because no published Czech "
+    "These six criteria are this repository's own, because no published Czech "
     "note-quality instrument exists to reproduce. Nobody has rated these notes by "
     "hand, and unlike PDSQI-9 there is not even a published figure for how well two "
     "people would agree on them. Two independent judges answer every question, and "
     "where they disagree is the only control there is.": (
-        "Těch sedm kritérií je vlastních tomuto "
+        "Těch šest kritérií je vlastních tomuto "
         "repozitáři, protože žádný publikovaný "
         "český nástroj na kvalitu zápisů neexistuje. Tyto "
         "zápisy nikdo ručně nehodnotil a na rozdíl od PDSQI-9 "
@@ -580,7 +580,7 @@ CS: dict[str, str] = {
     "English completeness": "Anglická úplnost",
     "English quality (PDSQI-9)": "Anglická kvalita (PDSQI-9)",
     "Czech quality (PDSQI-9)": "Česká kvalita (PDSQI-9)",
-    "Czech language (the seven criteria)": "Čeština (sedm kritérií)",
+    "Czech language (the six criteria)": "Čeština (šest kritérií)",
     "None of this was measured here.": "Nic z toho jsme neměřili my.",
     "The models are matched to the public ones by name, and a name on the endpoint is "
     "not evidence about which model is behind it -- this project's first working rule "
@@ -602,16 +602,16 @@ CS: dict[str, str] = {
     ),
     "Eleven models wrote a note from each of twenty psychotherapy sessions -- ten real "
     "ones and ten translated -- and two independent judges rated every note. Two "
-    "instruments: seven yes/no criteria asking whether the Czech is right, and "
+    "instruments: six yes/no criteria asking whether the Czech is right, and "
     "PDSQI-9, a published instrument, asking whether the note is any good. Both, "
     "because neither answers the other: a flawless Czech sentence about nothing passes "
-    "all seven criteria, and a note full of insight can be written in bad Czech.": (
+    "all six criteria, and a note full of insight can be written in bad Czech.": (
         "Jedenáct modelů napsalo zápis z každého z dvaceti psychoterapeutických "
         "sezení — deseti skutečných a deseti přeložených — a každý zápis ohodnotili "
-        "dva nezávislí soudci. Dva nástroje: sedm kritérií ano/ne, která se ptají, "
+        "dva nezávislí soudci. Dva nástroje: šest kritérií ano/ne, která se ptají, "
         "jestli je čeština správně, a PDSQI-9, publikovaný nástroj, který se ptá, "
         "jestli je zápis dobrý. Oba, protože jeden na druhého neodpovídá: bezchybná "
-        "česká věta o ničem projde všemi sedmi kritérii a zápis plný vhledu může být "
+        "česká věta o ničem projde všemi šesti kritérii a zápis plný vhledu může být "
         "napsaný špatnou češtinou."
     ),
     "A second question runs alongside: the same models are ranked on an English "
@@ -634,10 +634,10 @@ CS: dict[str, str] = {
     "Real sessions or translated ones?": "Skutečná sezení, nebo přeložená?",
     "real": "skutečná",
     "translated": "přeložená",
-    "The translated half comes out ahead on five of the seven criteria under both "
+    "The translated half comes out ahead on five of the six criteria under both "
     "judges, and on how succinct the notes are as well. Bold marks where translated "
     "beats real.": (
-        "Přeložená půlka je napřed v pěti ze sedmi kritérií u obou soudců, a také "
+        "Přeložená půlka je napřed v pěti ze šesti kritérií u obou soudců, a také "
         "v úspornosti zápisů. Tučně je vyznačeno, kde přeložená přebíjí skutečnou."
     ),
     "It does not follow that the models write better Czech there.": (
@@ -702,11 +702,13 @@ CS: dict[str, str] = {
     "the data section": "sekce data",
     "the hypotheses section": "sekce hypotézy",
     "the plan section": "sekce plán",
-    "Three of the four prompts say nothing at all about how long a note should be. "
+    "{quiet} of the {families} prompt families say nothing at all about how long a "
+    "note should be. "
     "The Deepsy prompt says it twice: a ceiling of {limit} words per section, which "
     "the prompt itself calls invalid to exceed, and a target of the same {limit} "
     "words.": (
-        "Tři ze čtyř promptů o délce zápisu neříkají vůbec nic. Deepsy prompt to říká "
+        "{quiet} ze {families} rodin promptů o délce zápisu neříkají vůbec nic. Deepsy "
+        "prompt to říká "
         "dvakrát: strop {limit} slov na sekci, jehož překročení sám označuje za "
         "nevalidní, a cílovou délku týchž {limit} slov."
     ),
@@ -805,8 +807,8 @@ CS: dict[str, str] = {
     "Catches colloquial words where clinical ones belong. Judges agree on 75% of notes.": (
         "Chytá hovorová slova tam, kam patří odborná. Soudci se shodnou u 75 % zápisů."
     ),
-    "The strongest agreement with a person of the seven.": (
-        "Ze sedmi kritérií nejsilnější shoda s člověkem."
+    "The strongest agreement with a person of the six.": (
+        "Ze šesti kritérií nejsilnější shoda s člověkem."
     ),
     # --- the conclusion, before the tables ---------------------------------
     "What eleven models did, in five sentences": ("Co jedenáct modelů dokázalo, v pěti větách"),
@@ -865,10 +867,17 @@ CS: dict[str, str] = {
         "soudce. Všechno, co zbytek téhle sekce tvrdí, se týká těchhle čísel."
     ),
     "For scale: the therapist who wrote TN-Eval's reference notes used {human} words a "
-    "note, and no model here reaches that on any corpus.": (
+    "note. {over}": (
         "Pro měřítko: terapeut, který psal referenční poznámky pro TN-Eval, použil "
-        "{human} slov na poznámku, a žádný model tady se tomu nepřiblíží na žádném "
-        "korpusu."
+        "{human} slov na poznámku. {over}"
+    ),
+    "No model here reaches that on any corpus.": (
+        "Žádný model se tomu tady na žádném korpusu nepřiblíží."
+    ),
+    "Every model writes less than that on the English corpus, where nobody was given a "
+    "length; on the Czech ones {names} write more.": (
+        "Na anglickém korpusu, kde délku nikdo nezadal, píšou všechny modely méně; na "
+        "těch českých píšou víc {names}."
     ),
     # --- the PDSQI control --------------------------------------------------
     "Can a quality column come back below 5?": ("Umí sloupec o kvalitě vůbec spadnout pod pětku?"),
@@ -952,17 +961,32 @@ CS: dict[str, str] = {
     "{deepsy} words against {soap} -- and this document has already measured that a "
     "longer note scores lower on every one of these criteria, because each asks "
     "whether there is a fault ANYWHERE in it. Format and length point the same way "
-    "here and ten models cannot separate them. The one model that writes fewer words "
-    "in Deepsy also scores lower there, which is a hint and not evidence: it is one "
-    "model.": (
+    "here and ten models cannot separate them.": (
         "Nečti to jako „formát Deepsy vede k horší češtině“. Může, a tahle čísla to "
         "říct neumějí, protože se obojí hýbe společně: zápis v Deepsy je DELŠÍ — "
         "{longer} z {models} modelů v něm píše víc, medián {deepsy} slov proti {soap} "
         "— a tenhle dokument už změřil, že delší zápis má horší skóre na každém z "
         "těchto kritérií, protože každé se ptá, jestli je v něm chyba NĚKDE. Formát a "
-        "délka tady ukazují týmž směrem a deset modelů je od sebe neoddělí. Jediný "
-        "model, který v Deepsy píše kratší zápisy, má i tam horší skóre — což je "
-        "náznak, ne důkaz: je to jeden model."
+        "délka tady ukazují týmž směrem a deset modelů je od sebe neoddělí."
+    ),
+    # --- the order column ---------------------------------------------------
+    "Order": "Pořadí",
+    "The Order column is the mean of these {count}: {names}. It is what the rows "
+    "are sorted by and it is not a measurement -- weighting spelling against "
+    "clinical terminology is a judgement, which is why no such index is "
+    "published. It is here so the order can be checked rather than trusted.": (
+        "Sloupec Pořadí je průměr těchto {count}: {names}. Podle něj jsou řádky "
+        "seřazené a není to měření — vážit pravopis proti odborné terminologii je "
+        "úsudek, a proto se žádný takový index nepublikuje. Je tu proto, aby se dalo "
+        "pořadí ověřit, ne aby se mu muselo věřit."
+    ),
+    "The Order column is {names}, the one column that separates these models at "
+    "all, and it is what the rows are sorted by.": (
+        "Sloupec Pořadí je {names} — jediný sloupec, který tyhle modely vůbec "
+        "rozlišuje, a řádky jsou seřazené podle něj."
+    ),
+    "What the Czech track found, in {count} short paragraphs": (
+        "Co český track zjistil, v {count} odstavcích"
     ),
     # --- refusals ----------------------------------------------------------
     "Refusing to write: a row carries something that is not a score.": (

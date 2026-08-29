@@ -120,7 +120,7 @@ COLUMNS: dict[str, tuple[tuple[str, int], ...]] = {
     # so the third place is a digit that cannot exist.
     results.TRACK_CZECH_REAL: tuple((key, 2) for key in DRAWN_CRITERIA),
     results.TRACK_CZECH_TRANSLATED: tuple((key, 2) for key in DRAWN_CRITERIA),
-    # The Deepsy sections are scored by the same seven criteria: the question
+    # The Deepsy sections are scored by the same six criteria: the question
     # is whether the Czech is right, and that does not change with the shape
     # the note was asked for. Changing the instrument as well as the format
     # would leave nothing to attribute a difference to.
@@ -339,7 +339,7 @@ TRACK_BLURBS = {
     ),
     results.TRACK_CZECH_REAL_PDSQI: (
         "The same Czech notes as the real-session table, asked a published quality "
-        "instrument instead of the seven language criteria. The criteria cannot say "
+        "instrument instead of the six language criteria. The criteria cannot say "
         "whether a note is any good -- a flawless Czech sentence about nothing passes "
         "all seven -- and this is the half of the question they leave out. **Six "
         "attributes, not eight:** `accurate` and `thorough` can only be answered "
@@ -351,7 +351,7 @@ TRACK_BLURBS = {
     results.TRACK_DEEPSY_REAL: (
         "The same models and the same ten sessions, asked for the note format the "
         "Deepsy application actually writes rather than for SOAP. Three of its eleven "
-        "sections, the three with a SOAP counterpart, scored by the same seven "
+        "sections, the three with a SOAP counterpart, scored by the same six "
         "criteria. **What changes between this table and the Czech one is the shape "
         "the model was asked for and nothing else**, so a difference between them is "
         "a fact about the format."
@@ -533,7 +533,7 @@ TRACK_DESIGN = {
     },
     results.TRACK_CZECH_TRANSLATED: {
         "scored_against": (
-            "The same seven criteria as the real-session table, on notes written "
+            "The same six criteria as the real-session table, on notes written "
             "from AnnoMI conversations translated into Czech. The translation is "
             "identical for every model, so it cancels when models are compared; it "
             "does not cancel for any claim about how well models write Czech."
@@ -576,7 +576,7 @@ TRACK_DESIGN = {
     },
     results.TRACK_DEEPSY_REAL: {
         "scored_against": (
-            "The note alone, on the same seven Czech criteria as the SOAP tracks. "
+            "The note alone, on the same six Czech criteria as the SOAP tracks. "
             "The prompts are reproduced from the Deepsy application word for word, "
             "with its questionnaire blocks removed the way the application removes "
             "them for a client who has filled nothing in."
@@ -596,7 +596,7 @@ TRACK_DESIGN = {
     },
     results.TRACK_DEEPSY_TRANSLATED: {
         "scored_against": (
-            "The note alone, on the same seven criteria, over the translated AnnoMI conversations."
+            "The note alone, on the same six criteria, over the translated AnnoMI conversations."
         ),
         "human_role": "None, in the same two senses as the real half.",
         "human_role_short": "none",
