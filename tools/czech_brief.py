@@ -853,12 +853,22 @@ LENGTH_BUYS = (
 LENGTH_WARNING = (
     "Before reading that as \u201cthese models write worse Czech\u201d: each Czech "
     "criterion asks one yes/no question about a whole note -- is there a fault "
-    "ANYWHERE in it. A note of {longest} words offers more places for one to be found "
-    "than a note of {shortest}. The check is what happens to the same models under the "
-    "other instrument: on the language criteria the three longest-writing models take "
-    "the last three places {hit} times out of {total}, and on PDSQI-9, rating the very "
-    "same notes, they do not. Part of the bottom of the Czech tables is length, not "
-    "Czech."
+    "ANYWHERE in it. A SOAP note of {longest} words offers more places for one to be "
+    "found than a SOAP note of {shortest}. The check is what happens to the same models "
+    "under the other instrument: on the SOAP language criteria the three "
+    "longest-writing models take the last three places {hit} times out of {total}, and "
+    "on PDSQI-9, rating the very same notes, they do not. Part of the bottom of the "
+    "Czech SOAP tables is length, not Czech."
+)
+#: The same test on the other note format, said rather than folded into the
+#: count above it. Folded in, the sentence read "4 times out of 8" -- half the
+#: time -- when the truth is every SOAP table and no Deepsy one, which is a
+#: result about the formats rather than a weaker version of the SOAP finding.
+LENGTH_WARNING_DEEPSY = (
+    "The same test in the Deepsy format comes out {hit} of its {total} tables, and the "
+    "three models that write longest there are a different three, because the two "
+    "formats were not asked of the same models. Where the last three places go is a "
+    "fact about the SOAP halves rather than a law about length."
 )
 
 
@@ -2511,31 +2521,49 @@ def _length_warning(data: dict) -> str:
     counted from `tools/czech_length.py`'s tail block, and if the first stops
     holding in every table that checked it, the sentence is not printed at all.
     A caveat that survives its own evidence going away is not a caveat.
+
+    **One note format at a time, in both halves of it.** This filtered on "not
+    PDSQI", which swept the Deepsy tables in the moment they were measured: the
+    claim came out "4 times out of 8", read as half the time, when the split is
+    4 of 4 on the SOAP halves and 0 of 4 on Deepsy. "Half the time" is the one
+    reading the data does not support, and the 4-0 / 0-4 split is the finding.
+
+    The word counts are SOAP-only for the same reason. Pooled, the range ran
+    from a 812-word SOAP note to a 127-word *section* of a Deepsy note --
+    crossing the format, the corpus and the unit at once, and inflating a 3.2x
+    spread to 6.4x inside a paragraph arguing about the bottom of the SOAP
+    tables.
     """
     tail = data.get("tail") or {}
-    language = {
-        track: block
-        for track, block in tail.items()
-        if not track.endswith("-pdsqi") and block.get("judges")
-    }
-    if not language:
-        return ""
-    checks = [found for block in language.values() for found in block["judges"].values()]
-    hit = sum(1 for found in checks if found["all_in_the_tail"])
-    if not hit:
+
+    def counted(tracks: tuple[str, ...]) -> tuple[int, int]:
+        found = [
+            check
+            for track in tracks
+            for check in ((tail.get(track) or {}).get("judges") or {}).values()
+        ]
+        return sum(1 for check in found if check["all_in_the_tail"]), len(found)
+
+    hit, total = counted(SOAP_CRITERIA_TRACKS)
+    if not total or not hit:
         return ""
     lengths = [
         value
-        for track, block in (data.get("czech") or {}).items()
-        if not track.endswith("-pdsqi")
-        for value in block["by_system"].values()
+        for track in SOAP_CRITERIA_TRACKS
+        for value in ((data.get("czech") or {}).get(track) or {}).get("by_system", {}).values()
     ]
-    return _t(LENGTH_WARNING).format(
+    if not lengths:
+        return ""
+    said = _t(LENGTH_WARNING).format(
         longest=max(lengths),
         shortest=min(lengths),
         hit=hit,
-        total=len(checks),
+        total=total,
     )
+    hit_d, total_d = counted(DEEPSY_CRITERIA_TRACKS)
+    if total_d:
+        said += " " + _t(LENGTH_WARNING_DEEPSY).format(hit=hit_d, total=total_d)
+    return said
 
 
 #: How each Deepsy section is named to a reader. The keys are the application's

@@ -781,19 +781,28 @@ CS: dict[str, str] = {
     "no column at all": "žádné",
     "Before reading that as \u201cthese models write worse Czech\u201d: each Czech "
     "criterion asks one yes/no question about a whole note -- is there a fault "
-    "ANYWHERE in it. A note of {longest} words offers more places for one to be found "
-    "than a note of {shortest}. The check is what happens to the same models under the "
-    "other instrument: on the language criteria the three longest-writing models take "
-    "the last three places {hit} times out of {total}, and on PDSQI-9, rating the very "
-    "same notes, they do not. Part of the bottom of the Czech tables is length, not "
-    "Czech.": (
+    "ANYWHERE in it. A SOAP note of {longest} words offers more places for one to be "
+    "found than a SOAP note of {shortest}. The check is what happens to the same models "
+    "under the other instrument: on the SOAP language criteria the three "
+    "longest-writing models take the last three places {hit} times out of {total}, and "
+    "on PDSQI-9, rating the very same notes, they do not. Part of the bottom of the "
+    "Czech SOAP tables is length, not Czech.": (
         "Než si to někdo přečte jako „tyhle modely píšou horší češtinu“: každé české "
         "kritérium klade jednu otázku ano/ne o celém zápisu — je v něm někde chyba? "
-        "Zápis o {longest} slovech nabízí víc míst, kde ji najít, než zápis o "
-        "{shortest} slovech. Kontrolou je, co se s týmiž modely stane pod druhým "
-        "nástrojem: na jazykových kritériích obsadí tři nejdelší pisatelé poslední tři "
-        "místa {hit}krát ze {total}, kdežto na PDSQI-9, které hodnotí úplně tytéž "
-        "zápisy, ne. Část spodku českých tabulek je délka, ne čeština."
+        "Zápis SOAP o {longest} slovech nabízí víc míst, kde ji najít, než zápis SOAP "
+        "o {shortest} slovech. Kontrolou je, co se s týmiž modely stane pod druhým "
+        "nástrojem: na jazykových kritériích SOAP obsadí tři nejdelší pisatelé poslední "
+        "tři místa {hit}krát ze {total}, kdežto na PDSQI-9, které hodnotí úplně tytéž "
+        "zápisy, ne. Část spodku českých tabulek SOAP je délka, ne čeština."
+    ),
+    "The same test in the Deepsy format comes out {hit} of its {total} tables, and the "
+    "three models that write longest there are a different three, because the two "
+    "formats were not asked of the same models. Where the last three places go is a "
+    "fact about the SOAP halves rather than a law about length.": (
+        "Táž zkouška ve formátu Deepsy vychází {hit} z jeho {total} tabulek a tři "
+        "modely, které tam píšou nejdéle, jsou jiné tři, protože oba formáty nedostaly "
+        "tytéž modely. Kam padnou poslední tři místa, je výrok o půlkách SOAP, ne "
+        "zákon o délce."
     ),
     "by design": "tak to má být",
     # --- the sort, named beside the table ----------------------------------
