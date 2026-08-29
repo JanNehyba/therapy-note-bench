@@ -2035,7 +2035,171 @@ def _length() -> str:
         warning = _length_warning(data)
         if warning:
             parts.append(f"<div class='warn'><p>{html.escape(warning)}</p></div>")
+    effect = _length_effect(data)
+    if effect:
+        parts.append(effect)
     return "\n".join(parts)
+
+
+#: Two paragraphs and a table, written from `tools/czech_length.py`. They answer
+#: the question a reader has as soon as the correlations above are on the page:
+#: fine, so take the length out. The first says how large the effect is, the
+#: second says why the obvious correction is not printed, and the table is what
+#: is left when nothing is fitted at all.
+LENGTH_SIZE = (
+    "How large is it? Fitting each judge's composite of the criteria against the "
+    "model's median note length costs {low} to {high} hundredths of a point per "
+    "hundred words, across the four track-and-judge combinations. Drawing the "
+    "{systems} models again with replacement {resamples} times, the ninety per cent "
+    "interval clears zero on all four and the sign reverses in at most {wrong} of the "
+    "draws. The direction is settled: on this corpus a longer note scores lower on "
+    "Czech."
+)
+LENGTH_NO_ADJUSTED = (
+    "So why is there no length-adjusted column here? It was computed, and it will not "
+    "hold still. Subtracting what length predicts and re-ranking gives an order whose "
+    "safest position -- the last place -- survives redrawing the same models only "
+    "{holds} of the time. A well-measured slope and a dependable order are different "
+    "things: the slope is one number fitted to every model at once, while the adjusted "
+    "order is {systems} small residuals competing with each other. The second reason "
+    "would apply even if it held: length was not assigned to the models, they chose "
+    "it. A model may write long BECAUSE it summarises badly, and then removing what "
+    "length predicts removes the result along with the artefact."
+)
+LENGTH_HANDICAP = (
+    "What can be said without fitting anything is in the table. A pair of models "
+    "counts as decided when one beats the other by more than {separation} on the "
+    "composite under BOTH judges, and it survives the handicap when the winner also "
+    "wrote at least as many words as the loser -- so the longer note had more places "
+    "for a fault to be found and had fewer of them anyway. That leaves {survived} of "
+    "the {decided} decided pairs, counting the two halves separately. What survives "
+    "is a partial order and not a ranking, "
+    "and how little of it there is is the finding."
+)
+
+#: Short column headings for the handicap table. `TRACK_TITLES` names the corpus
+#: and the client, which is right everywhere else and over a two-word cell would
+#: be the widest thing in the document.
+HANDICAP_COLUMNS = {
+    results.TRACK_CZECH_REAL: "on the real sessions",
+    results.TRACK_CZECH_TRANSLATED: "on the translated ones",
+}
+
+
+def _length_effect(data: dict) -> str:
+    """How large the length effect is, and what survives being handicapped by it.
+
+    **Every number here is read from the payload and none is typed.** The
+    interval, the share of draws that reverse the sign and the stability of the
+    adjusted last place are what `czech_length.adjusted` measured; the pairs are
+    what `czech_length.handicapped` counted. If a rebuild moves them, this moves.
+
+    The paragraph about the adjusted column exists because the column does not.
+    A reader who has just been told that length explains a third of the variance
+    between models will ask why it was not simply subtracted, and the answer --
+    it was, and the result will not hold still -- is a finding rather than an
+    omission. Saying nothing would leave them to assume nobody tried.
+    """
+    fits = [
+        block
+        for judges in (data.get("adjusted") or {}).values()
+        for block in judges.values()
+        if block.get("interval_90")
+    ]
+    parts: list[str] = []
+    if fits:
+        sizes = sorted(abs(block["slope_per_100_words"]) for block in fits)
+        parts.append(
+            "<p>"
+            + html.escape(
+                _t(LENGTH_SIZE).format(
+                    low=f"{sizes[0] * 100:.0f}",
+                    high=f"{sizes[-1] * 100:.0f}",
+                    systems=max(block["systems"] for block in fits),
+                    resamples=f"{max(block['resamples'] for block in fits):,}",
+                    wrong=f"{max(block['wrong_sign'] for block in fits):.0%}",
+                )
+            )
+            + "</p>"
+        )
+        held = [block["last_place_holds"] for block in fits if "last_place_holds" in block]
+        if held:
+            parts.append(
+                "<p>"
+                + html.escape(
+                    _t(LENGTH_NO_ADJUSTED).format(
+                        holds=f"{min(held):.0%}–{max(held):.0%}",
+                        systems=max(block["systems"] for block in fits),
+                    )
+                )
+                + "</p>"
+            )
+    table = _handicap_table(data)
+    if table:
+        blocks = data.get("handicapped") or {}
+        parts.append(
+            "<p>"
+            + html.escape(
+                _t(LENGTH_HANDICAP).format(
+                    separation=next(iter(blocks.values()))["separation"],
+                    survived=sum(block["survived"] for block in blocks.values()),
+                    decided=sum(block["decided"] for block in blocks.values()),
+                )
+            )
+            + "</p>"
+        )
+        parts.append(table)
+    return "\n".join(parts)
+
+
+def _handicap_table(data: dict) -> str:
+    """One row per surviving pair, both halves in the same table.
+
+    Merged rather than drawn twice: most surviving pairs hold on both halves,
+    and two tables would print each of those twice for no reader who benefits.
+    A dash is not a defeat. It means the pair was not separated on that half, or
+    was separated in the direction length would explain.
+    """
+    blocks = data.get("handicapped") or {}
+    order = [track for track in results.TRACKS if track in blocks]
+    seen: dict[tuple[str, str], dict[str, dict]] = {}
+    for track in order:
+        for pair in blocks[track]["pairs"]:
+            seen.setdefault((pair["winner"], pair["loser"]), {})[track] = pair
+    if not seen:
+        return ""
+    head = "".join(
+        f"<th>{html.escape(_t(HANDICAP_COLUMNS.get(track, track)))}</th>" for track in order
+    )
+    rows = []
+    for (winner, loser), found in sorted(
+        seen.items(), key=lambda kv: (-len(kv[1]), kv[0][0], kv[0][1])
+    ):
+        cells = []
+        for track in order:
+            pair = found.get(track)
+            if pair:
+                cell = html.escape(
+                    _t("{margin} · {winner} vs {loser} words").format(
+                        margin=f"+{pair['margin']:.2f}",
+                        winner=pair["winner_words"],
+                        loser=pair["loser_words"],
+                    )
+                )
+            else:
+                cell = "–"
+            cells.append(f"<td>{cell}</td>")
+        rows.append(
+            f"<tr><td>{html.escape(winner)}</td><td>{html.escape(loser)}</td>"
+            + "".join(cells)
+            + "</tr>"
+        )
+    return (
+        "<table class='handicap'><thead><tr>"
+        f"<th>{html.escape(_t('Beats'))}</th>"
+        f"<th>{html.escape(_t('this model'))}</th>{head}"
+        "</tr></thead><tbody>" + "".join(rows) + "</tbody></table>"
+    )
 
 
 def _length_warning(data: dict) -> str:
@@ -2795,9 +2959,7 @@ def build(rows: list[results.Row]) -> str:
             # header said twice what exists -- "208 notes" over a corpus of 110,
             # with the true 104 printed in this document's own "What it took"
             # table further down. `_scale` had it right and this did not.
-            notes = sum(row.n_sessions_scored for group in ordered for row in group) // len(
-                ordered
-            )
+            notes = sum(row.n_sessions_scored for group in ordered for row in group) // len(ordered)
             sections.append(
                 f"<p class='sub'>{len(ordered[0])} {_t('models')}, {notes} {_t('notes')}, "
                 f"{_t('rubric')} {html.escape(first.judge_prompt_version)}</p>"

@@ -1069,4 +1069,62 @@ CS: dict[str, str] = {
     "is not there. Run `tnb score-czech` first.": ("tam není. Spusťte nejdřív `tnb score-czech`."),
     ": a system id carries a run of digits": ": id systému nese řadu číslic",
     "scored row(s) from": "hodnocených řádků z",
+    # --- how large the length effect is, and what survives it --------------
+    "How large is it? Fitting each judge's composite of the criteria against the "
+    "model's median note length costs {low} to {high} hundredths of a point per "
+    "hundred words, across the four track-and-judge combinations. Drawing the "
+    "{systems} models again with replacement {resamples} times, the ninety per cent "
+    "interval clears zero on all four and the sign reverses in at most {wrong} of the "
+    "draws. The direction is settled: on this corpus a longer note scores lower on "
+    "Czech.": (
+        "Jak je ten vliv velký? Když se u každého soudce proloží složené skóre "
+        "kritérií mediánovou délkou zápisu, stojí to {low} až {high} setiny bodu na "
+        "sto slov, a to ve všech čtyřech kombinacích tracku a soudce. Když se těch "
+        "{systems} modelů vylosuje znovu s vracením ({resamples} losování), "
+        "devadesátiprocentní interval se ve všech čtyřech vyhne nule a znaménko se "
+        "obrátí nejvýš v {wrong} losování. Směr je tedy rozhodnutý: na tomhle korpusu "
+        "má delší zápis nižší skóre v češtině."
+    ),
+    "So why is there no length-adjusted column here? It was computed, and it will not "
+    "hold still. Subtracting what length predicts and re-ranking gives an order whose "
+    "safest position -- the last place -- survives redrawing the same models only "
+    "{holds} of the time. A well-measured slope and a dependable order are different "
+    "things: the slope is one number fitted to every model at once, while the adjusted "
+    "order is {systems} small residuals competing with each other. The second reason "
+    "would apply even if it held: length was not assigned to the models, they chose "
+    "it. A model may write long BECAUSE it summarises badly, and then removing what "
+    "length predicts removes the result along with the artefact.": (
+        "Proč tu tedy není sloupec očištěný o délku? Spočítaný byl a neudrží se na "
+        "místě. Když se odečte to, co délka předpovídá, a pořadí se sestaví znovu, "
+        "vydrží i jeho nejjistější místo — poslední příčka — jen v {holds} případů, "
+        "kdy se tytéž modely vylosují znovu. Dobře změřený sklon a spolehlivé pořadí "
+        "jsou dvě různé věci: sklon je jedno číslo proložené všemi modely najednou, "
+        "kdežto očištěné pořadí je {systems} malých zbytků, které spolu soupeří. "
+        "Druhý důvod by platil, i kdyby se pořadí drželo: délka nebyla modelům "
+        "přidělena, zvolily si ji samy. Model může psát dlouze PROTOŽE špatně "
+        "shrnuje, a pak odečtení toho, co délka předpovídá, odečte spolu s artefaktem "
+        "i výsledek."
+    ),
+    "What can be said without fitting anything is in the table. A pair of models "
+    "counts as decided when one beats the other by more than {separation} on the "
+    "composite under BOTH judges, and it survives the handicap when the winner also "
+    "wrote at least as many words as the loser -- so the longer note had more places "
+    "for a fault to be found and had fewer of them anyway. That leaves {survived} of "
+    "the {decided} decided pairs, counting the two halves separately. What survives "
+    "is a partial order and not a ranking, "
+    "and how little of it there is is the finding.": (
+        "Co se dá říct, aniž by se cokoli prokládalo, je v tabulce. Dvojice modelů se "
+        "počítá za rozhodnutou, když jeden porazí druhého o víc než {separation} ve "
+        "složeném skóre u OBOU soudců, a handicap přežije tehdy, když vítěz zároveň "
+        "napsal aspoň tolik slov jako poražený — delší zápis tedy nabízel víc míst, "
+        "kde chybu najít, a přesto jich měl míň. Takových je {survived} z {decided} "
+        "rozhodnutých dvojic, počítáno na obou polovinách zvlášť. Co zbude, je "
+        "částečné uspořádání, ne žebříček, a nález "
+        "je právě to, jak málo toho je."
+    ),
+    "on the real sessions": "na skutečných sezeních",
+    "on the translated ones": "na přeložených",
+    "{margin} · {winner} vs {loser} words": "{margin} · {winner} vs {loser} slov",
+    "Beats": "Poráží",
+    "this model": "tento model",
 }

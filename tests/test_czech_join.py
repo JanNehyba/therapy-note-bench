@@ -140,7 +140,12 @@ def test_one_table_per_comparability_group_not_per_judge():
     ]
     page = czech_brief.build(rows)
 
-    tables = re.findall(r"<tbody>(.*?)</tbody>", page, re.S)
+    # Score tables only. The handicap table under the length section has one row
+    # per BEATEN PAIR, so a model that beats three others is in its first column
+    # three times -- correctly. Matching it here would have made the assertion
+    # below fail for a reason that has nothing to do with comparability groups,
+    # and the obvious repair would have been to loosen the assertion.
+    tables = re.findall(r"<table(?! class='handicap')[^>]*>.*?<tbody>(.*?)</tbody>", page, re.S)
     assert tables, "something was drawn"
     for body in tables:
         models = re.findall(r"<tr><td>([a-z0-9.\-]+)</td>", body)

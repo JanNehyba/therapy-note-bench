@@ -53,6 +53,7 @@ from __future__ import annotations
 import argparse
 import collections
 import json
+import random
 import re
 import statistics
 import sys
@@ -91,6 +92,16 @@ LENGTH_WORDS = re.compile(
 #: How many measured points before a correlation is worth printing. Below this
 #: the coefficient is decided by one model.
 MIN_SYSTEMS = 8
+
+# Resampling is seeded, so rebuilding the payload gives the same file back.
+# The seed is the date it was written and means nothing else.
+RESAMPLE_SEED = 20260829
+RESAMPLES = 4000
+
+# Two systems count as separated only above this, on a 0-1 composite of the
+# six criteria. Ten notes per model cannot resolve a hundredth of a point,
+# and a pair below it is left undecided rather than decided quietly.
+SEPARATION = 0.05
 
 
 def _words(value: object) -> int:
@@ -431,6 +442,279 @@ def longest_writers(payload: dict, how_many: int = 3) -> dict:
     return out
 
 
+def _line(xs: list[float], ys: list[float]) -> tuple[float, float]:
+    """Least squares, written out. No scientific stack in the offline suite."""
+    n = len(xs)
+    mx, my = sum(xs) / n, sum(ys) / n
+    sxx = sum((x - mx) ** 2 for x in xs)
+    if not sxx:
+        return 0.0, my
+    slope = sum((x - mx) * (y - my) for x, y in zip(xs, ys, strict=True)) / sxx
+    return slope, my - slope * mx
+
+
+def _distinct(sample: list[tuple]) -> list[tuple]:
+    """One entry per system, whatever the resample happened to draw twice."""
+    return list({item[0]: item for item in sample}.values())
+
+
+def _residuals(sample: list[tuple], keys: list[str]) -> dict[str, float] | None:
+    """Each system's mean residual after a line through the resample.
+
+    The line is fitted on the sample *with* its duplicates, because that is what
+    weights a resample. The ranking is then taken over the distinct systems: a
+    model drawn twice is one model, not two, and adding its residual twice would
+    let the draw decide the order instead of the fit.
+    """
+    xs = [item[1] for item in sample]
+    if len({round(x, 6) for x in xs}) < 2:
+        return None
+    here = _distinct(sample)
+    out = {item[0]: 0.0 for item in here}
+    for key in keys:
+        slope, intercept = _line(xs, [item[2][key] for item in sample])
+        for item in here:
+            out[item[0]] += (item[2][key] - (intercept + slope * item[1])) / len(keys)
+    return out
+
+
+def _percentile(values: list[float], fraction: float) -> float:
+    return values[min(len(values) - 1, int(fraction * len(values)))]
+
+
+def _resampled(sample: list[tuple], keys: list[str]) -> dict:
+    """The slope and the adjusted last place, with the models drawn again.
+
+    **The models are what gets resampled, not the notes.** The claim under test
+    is about models -- "the ones this endpoint deploys sit on a line" -- so the
+    models are the sample. Resampling notes inside a model would answer a
+    different question and give a narrower interval for it.
+
+    Two numbers come back and they are *not* required to agree, which is the
+    reason both are here. `slope` says whether the effect has a direction; it is
+    one number fitted to every point. `last_place_holds` says whether the order
+    that effect implies can be relied on; it is eleven residuals, each of them
+    small, competing with each other. A well-measured average is perfectly
+    compatible with an order that will not sit still, and here it is exactly
+    that -- which is why this file publishes the first and withholds the second.
+    """
+    rng = random.Random(RESAMPLE_SEED)
+    xs = [item[1] for item in sample]
+    slope, _ = _line(xs, [sum(item[2][k] for k in keys) / len(keys) for item in sample])
+    base = _residuals(sample, keys)
+    if base is None:
+        return {}
+    lowest = min(base, key=base.get)
+    slopes: list[float] = []
+    holds = 0
+    degenerate = 0
+    for _ in range(RESAMPLES):
+        drawn = [rng.choice(sample) for _ in sample]
+        if len({round(item[1], 6) for item in drawn}) < 2:
+            degenerate += 1
+            continue
+        drawn_x = [item[1] for item in drawn]
+        drawn_y = [sum(item[2][k] for k in keys) / len(keys) for item in drawn]
+        slopes.append(_line(drawn_x, drawn_y)[0])
+        residual = _residuals(drawn, keys)
+        if residual and min(residual, key=residual.get) == lowest:
+            holds += 1
+    if not slopes:
+        return {}
+    slopes.sort()
+    return {
+        "slope_per_100_words": round(slope * 100, 4),
+        "interval_90": [
+            round(_percentile(slopes, 0.05) * 100, 4),
+            round(_percentile(slopes, 0.95) * 100, 4),
+        ],
+        "wrong_sign": round(sum(1 for value in slopes if value > 0) / len(slopes), 4),
+        "last_place": lowest,
+        "last_place_holds": round(holds / len(slopes), 4),
+        "resamples": len(slopes),
+        "degenerate": degenerate,
+    }
+
+
+def adjusted() -> dict:
+    """What is left of a Czech score once note length is taken out of it.
+
+    **Why this is worth computing.** Every Czech criterion asks one yes/no
+    question about a whole note -- is there a fault anywhere in it -- so a
+    longer note offers more places for one to be found. Measured rather than
+    argued: on the composite of the six criteria, length accounts for 32 to 41
+    per cent of the variance between models across the four track-and-judge
+    combinations, at seven to nine hundredths of a point per hundred words.
+
+    Per criterion it is far less even, and the composite hides that. Across the
+    same twenty-four fits it runs from 0.00 to 0.73, and eleven of the
+    twenty-four reach a quarter. `untranslated` is flat everywhere (0.00 to
+    0.05) -- leaving an English term in is not something a longer note does more
+    of -- while `diacritics` reaches 0.73 on one of the four. So "these columns
+    are partly a length measurement" is true of the set and not of each member
+    of it, and the per-criterion slopes are returned for that reason.
+
+    **What this publishes, and what it withholds.** The slope, its interval and
+    its direction are published: the direction is settled, with the ninety per
+    cent interval clear of zero on all four fits and the sign reversing in about
+    one resample in a hundred. The *adjusted ordering* is computed here and is
+    not for publication, and `_resampled` records why -- even the safest
+    position in it, the last place, survives redrawing the models only about
+    half the time. An order that moves when the same models are drawn again is
+    not a result, and printing it beside the real one would invite the reader to
+    prefer it.
+
+    **And it would not be trustworthy even if it were stable.** Length was not
+    assigned at random. A model may write long *because* it summarises badly,
+    and subtracting what length predicts then subtracts real signal along with
+    the artefact. Eleven points, one predictor, and the ends of the range do not
+    overlap: the correction for the shortest writer is an extrapolation from
+    where no model sits. The honest use of this fit is to say how large the
+    entanglement is, which `tools/czech_brief.py` prints beside the table, and
+    then to hand the reader `handicapped()` for the orderings that need no fit
+    at all.
+    """
+    rows = [row for row in results.latest(results.load(results.LOCAL_ROWS_PATH)) if row.is_scored]
+    out: dict[str, dict] = {}
+    for track in (results.TRACK_CZECH_REAL, results.TRACK_CZECH_TRANSLATED):
+        words = note_lengths(TASK_OF_TRACK[track])
+        medians = {model: statistics.median(v) for model, v in words.items() if v}
+        judges: dict[str, dict] = {}
+        for judge in sorted({row.judge_model or "" for row in rows if row.track == track}):
+            here = [
+                row
+                for row in rows
+                if row.track == track and row.judge_model == judge and row.system_id in medians
+            ]
+            if len(here) < MIN_SYSTEMS:
+                continue
+            newest = max(row.judge_prompt_version for row in here)
+            here = [row for row in here if row.judge_prompt_version == newest]
+            keys = sorted(
+                {k for row in here for k in row.metrics.headline}
+                - set(getattr(czech_task, "INTERNAL_MEASURES", ()))
+            )
+            keys = [k for k in keys if all(k in row.metrics.headline for row in here)]
+            if not keys:
+                continue
+            sample = [
+                (
+                    row.system_id,
+                    float(medians[row.system_id]),
+                    {k: float(row.metrics.headline[k]) for k in keys},
+                )
+                for row in here
+            ]
+            xs = [item[1] for item in sample]
+            raw = {item[0]: sum(item[2][k] for k in keys) / len(keys) for item in sample}
+            slopes = {}
+            for key in keys:
+                slope, _ = _line(xs, [item[2][key] for item in sample])
+                slopes[key] = round(slope * 100, 4)
+            residual = _residuals(sample, keys)
+            if residual is None:
+                continue
+            centre = sum(raw.values()) / len(raw)
+            adj = {model: value + centre for model, value in residual.items()}
+            order_raw = [m for m, _ in sorted(raw.items(), key=lambda kv: -kv[1])]
+            order_adj = [m for m, _ in sorted(adj.items(), key=lambda kv: -kv[1])]
+            judges[judge] = {
+                "judge_prompt_version": newest,
+                "systems": len(here),
+                "slope_per_criterion_per_100_words": slopes,
+                "raw": {m: round(v, 4) for m, v in raw.items()},
+                # Kept so the claim in the docstring can be checked, and named
+                # so that nothing renders it by accident.
+                "not_for_publication_adjusted": {m: round(v, 4) for m, v in adj.items()},
+                "not_for_publication_order": order_adj,
+                "moved": sum(1 for m in order_raw if order_raw.index(m) != order_adj.index(m)),
+                **_resampled(sample, keys),
+            }
+        if judges:
+            out[track] = judges
+    return out
+
+
+def handicapped() -> dict:
+    """Which models beat which without length being able to explain it.
+
+    The adjusted column is a fitted model and inherits every assumption in one.
+    This is not: nothing is fitted, nothing is extrapolated, and a pair the data
+    cannot separate is left out rather than resolved.
+
+    A pair of systems is **decided** when one beats the other by more than
+    `SEPARATION` on the composite under *both* judges -- one judge is an
+    opinion, and ten notes cannot resolve a hundredth of a point. A decided pair
+    **survives the handicap** when the winner also wrote at least as many words
+    as the loser. Then the longer note had more places for a fault to be found
+    and still had fewer of them, so the shape of the question cannot be what
+    produced the result.
+
+    What survives is a partial order and not a ranking, and it is deliberately
+    small: most pairs are either too close to call or are exactly the case the
+    handicap exists to catch. That it is small is the finding.
+    """
+    rows = [row for row in results.latest(results.load(results.LOCAL_ROWS_PATH)) if row.is_scored]
+    out: dict[str, dict] = {}
+    for track in (results.TRACK_CZECH_REAL, results.TRACK_CZECH_TRANSLATED):
+        words = note_lengths(TASK_OF_TRACK[track])
+        medians = {model: statistics.median(v) for model, v in words.items() if v}
+        here = [row for row in rows if row.track == track and row.system_id in medians]
+        composite: dict[str, dict[str, float]] = {}
+        for judge in sorted({row.judge_model or "" for row in here}):
+            mine = [row for row in here if row.judge_model == judge]
+            newest = max(row.judge_prompt_version for row in mine)
+            mine = [row for row in mine if row.judge_prompt_version == newest]
+            keys = sorted(
+                {k for row in mine for k in row.metrics.headline}
+                - set(getattr(czech_task, "INTERNAL_MEASURES", ()))
+            )
+            keys = [k for k in keys if all(k in row.metrics.headline for row in mine)]
+            if not keys:
+                continue
+            composite[judge] = {
+                row.system_id: sum(float(row.metrics.headline[k]) for k in keys) / len(keys)
+                for row in mine
+            }
+        if len(composite) < 2:
+            continue
+        systems = sorted(set.intersection(*(set(v) for v in composite.values())))
+        decided, pairs = 0, []
+        for first in systems:
+            for second in systems:
+                if first >= second:
+                    continue
+                margins = [composite[j][first] - composite[j][second] for j in composite]
+                if all(m > SEPARATION for m in margins):
+                    winner, loser = first, second
+                elif all(m < -SEPARATION for m in margins):
+                    winner, loser = second, first
+                else:
+                    continue
+                decided += 1
+                if medians[winner] >= medians[loser]:
+                    pairs.append(
+                        {
+                            "winner": winner,
+                            "loser": loser,
+                            "winner_words": int(medians[winner]),
+                            "loser_words": int(medians[loser]),
+                            "margin": round(min(abs(m) for m in margins), 4),
+                        }
+                    )
+        wins = collections.Counter(pair["winner"] for pair in pairs)
+        out[track] = {
+            "systems": len(systems),
+            "judges": sorted(composite),
+            "separation": SEPARATION,
+            "decided": decided,
+            "survived": len(pairs),
+            "pairs": sorted(pairs, key=lambda p: (-p["margin"], p["winner"])),
+            "wins_by_system": dict(sorted(wins.items(), key=lambda kv: (-kv[1], kv[0]))),
+        }
+    return out
+
+
 def build() -> dict:
     payload = {
         "instructions": instructions(),
@@ -440,6 +724,8 @@ def build() -> dict:
         "human": human_lengths(),
     }
     payload["tail"] = longest_writers(payload)
+    payload["adjusted"] = adjusted()
+    payload["handicapped"] = handicapped()
     return payload
 
 
