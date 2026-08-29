@@ -144,17 +144,33 @@ def main(argv: list[str] | None = None) -> int:
         for name, rows, track, keys in measures:
             table = _tables(rows, track, judge_model)
             for label, outside in (("intelligence_index", index), ("release_date", released)):
-                shared = sorted(set(outside) & set(table))
-                pairs = [
-                    (outside[m], mean([table[m][k] for k in keys if k in table[m]]))
-                    for m in shared
-                    if any(k in table[m] for k in keys)
-                ]
-                if len(pairs) < 4:
+                # One loop, and the model's name comes out of it with its two
+                # numbers. The pairs used to be built by one comprehension and
+                # the names by nothing at all, so the points a figure needs did
+                # not exist and the correlation could not be drawn -- and two
+                # comprehensions over one filter is how a name and a number
+                # come apart without anything saying so.
+                points = []
+                for model in sorted(set(outside) & set(table)):
+                    found = [table[model][key] for key in keys if key in table[model]]
+                    if not found:
+                        continue
+                    # Unrounded. A composite rounded to four places puts two
+                    # models that differ in the fifth onto the same rank, and
+                    # the rho then belongs to a tie nobody measured: rounding
+                    # here moved this tool's Czech-criteria coefficient from
+                    # +0.31 to +0.33. What is stored is what was fitted.
+                    points.append({"system": model, "outside": outside[model], "here": mean(found)})
+                if len(points) < 4:
                     continue
-                result = correlate([x for x, _ in pairs], [y for _, y in pairs])
+                result = correlate(
+                    [point["outside"] for point in points], [point["here"] for point in points]
+                )
                 if result:
-                    block.setdefault(name, {})[label] = result
+                    # The points travel with the coefficient they produced.
+                    # Additive: everything that reads this file reads `rho`,
+                    # `p` and `n`, and they are where they were.
+                    block.setdefault(name, {})[label] = {**result, "points": points}
         if block:
             payload["judges"][judge_model] = block
 

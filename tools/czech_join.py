@@ -140,6 +140,31 @@ def correlate(a: list[float], b: list[float]) -> dict | None:
     }
 
 
+def _points(
+    shared: list[str],
+    english: dict[str, float | None],
+    key: str,
+    czech: dict[str, dict[str, float]],
+) -> list[dict] | None:
+    """One model, one English number, one Czech number -- or None if any is missing.
+
+    The correlation was computed from two lists built by two comprehensions and
+    the model names were never built at all, so the points behind every
+    coefficient this tool prints existed only for as long as it took to
+    correlate them. They are kept now, because a figure has to be able to draw
+    the nine points a rho was fitted to, and a reader has to be able to see
+    which model is which.
+
+    One list of triples rather than two lists side by side: two lists that are
+    aligned only because they were written in the same order is a shape this
+    repository has been bitten by, and there is nothing in it that says so.
+    """
+    found = [(system, english[system], czech[system].get(key)) for system in shared]
+    if any(value is None for _system, *values in found for value in values):
+        return None
+    return [{"system": system, "english": a, "czech": b} for system, a, b in found]
+
+
 def _table(rows, track: str, judge_model: str) -> dict[str, dict[str, float]]:
     return {
         row.system_id: row.metrics.headline
@@ -179,26 +204,27 @@ def main(argv: list[str] | None = None) -> int:
 
         same_instrument, flat = {}, []
         for key in pdsqi.ATTRIBUTE_KEYS:
-            a = [english_pdsqi[s].get(key) for s in shared]
-            b = [czech_pdsqi[s].get(key) for s in shared]
-            if None in a or None in b:
+            points = _points(
+                shared, {s: english_pdsqi[s].get(key) for s in shared}, key, czech_pdsqi
+            )
+            if points is None:
                 continue
-            result = correlate(a, b)
+            result = correlate([p["english"] for p in points], [p["czech"] for p in points])
             if result is None:
                 flat.append(key)
             else:
-                same_instrument[key] = result
+                same_instrument[key] = {**result, "points": points}
 
         leaderboard = {}
-        ranking = [english_rubric.get(s, {}).get(ENGLISH_RANKING[1]) for s in shared]
-        if None not in ranking:
+        ranking = {s: english_rubric.get(s, {}).get(ENGLISH_RANKING[1]) for s in shared}
+        if all(value is not None for value in ranking.values()):
             for key in pdsqi.ATTRIBUTE_KEYS:
-                b = [czech_pdsqi[s].get(key) for s in shared]
-                if None in b:
+                points = _points(shared, ranking, key, czech_pdsqi)
+                if points is None:
                     continue
-                result = correlate(ranking, b)
+                result = correlate([p["english"] for p in points], [p["czech"] for p in points])
                 if result is not None:
-                    leaderboard[key] = result
+                    leaderboard[key] = {**result, "points": points}
 
         payload["judges"][judge_model] = {
             "systems": shared,
