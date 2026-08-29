@@ -770,8 +770,11 @@ LENGTH_DEEPSY = (
 LENGTH_BUYS = (
     "The two languages then pull in opposite directions, and this is the most useful "
     "thing to know before reading any table above. In English a longer note scores "
-    "higher for completeness under both judges. In Czech a longer note scores lower on "
-    "every language criterion under both judges. A column is printed here only when "
+    "higher for completeness under both judges. In Czech it scores lower on 38 of the "
+    "48 criterion-judge coefficients, and the exceptions are named rather than rounded "
+    "away: two hold under BOTH judges, and both are in the Deepsy format -- calques on "
+    "the real half and agreement on the translated one. A column is printed here only "
+    "when "
     "both judges agree on the direction and at least one of them reaches 0.40; both "
     "numbers are shown, so a column the two judges feel differently strongly about is "
     "visible as that rather than averaged away."
@@ -1132,9 +1135,11 @@ def _halves(rows: list[results.Row]) -> str:
         + "<p>"
         + html.escape(
             _t(
-                "The translated half comes out ahead on five of the six criteria "
-                "under both judges, and on how succinct the notes are as well. Bold "
-                "marks where translated beats real."
+                "The translated half comes out ahead on four of the six criteria "
+                "under both judges. Each judge alone gives it five, but not the same "
+                "five: gemini-3.1-pro-preview puts the real half ahead on Register and "
+                "gpt-5.6-terra on Untranslated terms, and neither reversal is rounding. "
+                "Bold marks where translated beats real."
             )
         )
         + "</p>"
@@ -1502,10 +1507,26 @@ def _intro(rows: list[results.Row]) -> str:
     here = [row for row in latest if row.track in corpora]
     if not here:
         return html.escape(_t(INTRO).format(models="?", written="?", asked="?"))
+    # The newest rubric only, and per judge. Summing over both rubric versions
+    # AND both judges counted every note four times: the sentence read "424 of
+    # 428 notes" over a corpus of 220, and then promised to name four missing
+    # notes when eight are missing.
+    newest = {}
+    for row in here:
+        best = newest.get(row.track)
+        if best is None or row.judge_prompt_version > best:
+            newest[row.track] = row.judge_prompt_version
+    here = [row for row in here if row.judge_prompt_version == newest[row.track]]
     judges = len({row.judge_model for row in here}) or 1
     models = len({row.system_id for row in here})
     written = sum(row.n_sessions_generated for row in here) // judges
-    asked = sum(row.n_sessions_attempted for row in here) // judges
+    # The corpus, not what the rows say they attempted -- the two judges do not
+    # agree on that (110 against 104 on the real half), because a judge that
+    # scored fewer notes recorded fewer as attempted.
+    sessions = {row.track: 0 for row in here}
+    for row in here:
+        sessions[row.track] = max(sessions[row.track], row.n_sessions_attempted)
+    asked = models * sum(sessions.values())
     return html.escape(_t(INTRO).format(models=models, written=written, asked=asked))
 
 
@@ -1761,12 +1782,23 @@ def _length_by_model(data: dict) -> str:
         # Which models beat the therapist, on any corpus, read off the same
         # table. The sentence used to assert that none did, nine rows above a
         # row that does.
+        # From the value the cell prints, not from `by_system`. The Deepsy
+        # blocks record a median PER SECTION there, whose largest value is 428,
+        # so no Deepsy model could ever clear 750 and the sentence named one
+        # model where the table above it shows six.
         over = sorted(
             {
                 system
                 for _track, block in corpora
-                for system, found in block["by_system"].items()
-                for value in [found["median"] if isinstance(found, dict) else found]
+                for system in block["by_system"]
+                for value in [
+                    (block.get("by_note") or {}).get(system)
+                    or (
+                        block["by_system"][system]["median"]
+                        if isinstance(block["by_system"][system], dict)
+                        else block["by_system"][system]
+                    )
+                ]
                 if value and value > human["median"]
             }
         )
@@ -1830,6 +1862,7 @@ def _formats() -> str:
         return ""
 
     lines, every_drop, total_worse, total_models = [], [], 0, 0
+    shared_models = 0
     for soap_track, deepsy_track in pairs:
         for judge in judges:
             soap, deepsy = mean_of(soap_track, judge), mean_of(deepsy_track, judge)
@@ -1842,6 +1875,7 @@ def _formats() -> str:
             every_drop.append(b - a)
             total_worse += worse
             total_models += len(shared)
+            shared_models = max(shared_models, len(shared))
             lines.append(
                 f"<tr><td>{html.escape(_t(TRACK_TITLES.get(soap_track, soap_track)))}</td>"
                 f"<td>{html.escape(judge)}</td><td>{len(shared)}</td>"
@@ -1864,7 +1898,9 @@ def _formats() -> str:
     )
     return (
         f"<h2>{_t('The same models, the same sessions, two note formats')}</h2>"
-        + f"<p>{html.escape(_t(FORMATS_LEAD))}</p>"
+        # The count the table below actually compares on: the two rosters differ,
+        # so it is their intersection and not either track's model count.
+        + f"<p>{html.escape(_t(FORMATS_LEAD).format(models=shared_models))}</p>"
         + f"<table><thead>{head}</thead><tbody>{''.join(lines)}</tbody></table>"
         + "<div class='warn'><p>"
         + html.escape(
@@ -2754,7 +2790,14 @@ def build(rows: list[results.Row]) -> str:
         # this track has -- was the thing that flipping hid.
         if len(ordered) > 1:
             first = ordered[0][0]
-            notes = sum(row.n_sessions_scored for group in ordered for row in group)
+            # Per judge, not summed over them. Both judges read the SAME notes,
+            # so adding their rows counted every note once per judge and every
+            # header said twice what exists -- "208 notes" over a corpus of 110,
+            # with the true 104 printed in this document's own "What it took"
+            # table further down. `_scale` had it right and this did not.
+            notes = sum(row.n_sessions_scored for group in ordered for row in group) // len(
+                ordered
+            )
             sections.append(
                 f"<p class='sub'>{len(ordered[0])} {_t('models')}, {notes} {_t('notes')}, "
                 f"{_t('rubric')} {html.escape(first.judge_prompt_version)}</p>"

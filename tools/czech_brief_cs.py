@@ -638,11 +638,16 @@ CS: dict[str, str] = {
     "Real sessions or translated ones?": "Skutečná sezení, nebo přeložená?",
     "real": "skutečná",
     "translated": "přeložená",
-    "The translated half comes out ahead on five of the six criteria under both "
-    "judges, and on how succinct the notes are as well. Bold marks where translated "
+    "The translated half comes out ahead on four of the six criteria under both "
+    "judges. Each judge alone gives it five, but not the same five: "
+    "gemini-3.1-pro-preview puts the real half ahead on Register and gpt-5.6-terra on "
+    "Untranslated terms, and neither reversal is rounding. Bold marks where translated "
     "beats real.": (
-        "Přeložená půlka je napřed v pěti ze šesti kritérií u obou soudců, a také "
-        "v úspornosti zápisů. Tučně je vyznačeno, kde přeložená přebíjí skutečnou."
+        "Přeložená půlka je napřed ve čtyřech ze šesti kritérií u obou soudců. Každý "
+        "soudce sám jí dá pět, ale pokaždé jiných pět: gemini-3.1-pro-preview dává "
+        "skutečnou půlku napřed v Rejstříku a gpt-5.6-terra v Nepřeložených termínech, "
+        "a ani jedno obrácení není zaokrouhlení. Tučně je vyznačeno, kde přeložená "
+        "přebíjí skutečnou."
     ),
     "It does not follow that the models write better Czech there.": (
         "Neplyne z toho, že tam modely píší lepší češtinu."
@@ -741,15 +746,20 @@ CS: dict[str, str] = {
     ),
     "The two languages then pull in opposite directions, and this is the most useful "
     "thing to know before reading any table above. In English a longer note scores "
-    "higher for completeness under both judges. In Czech a longer note scores lower on "
-    "every language criterion under both judges. A column is printed here only when "
+    "higher for completeness under both judges. In Czech it scores lower on 38 of the "
+    "48 criterion-judge coefficients, and the exceptions are named rather than rounded "
+    "away: two hold under BOTH judges, and both are in the Deepsy format -- calques on "
+    "the real half and agreement on the translated one. A column is printed here only "
+    "when "
     "both judges agree on the direction and at least one of them reaches 0.40; both "
     "numbers are shown, so a column the two judges feel differently strongly about is "
     "visible as that rather than averaged away.": (
         "Oba jazyky pak táhnou na opačné strany a tohle je to nejužitečnější, co je "
         "dobré vědět dřív, než se člověk pustí do kterékoli tabulky výše. V angličtině "
-        "delší zápis dostává vyšší úplnost, a to u obou soudců. V češtině má delší "
-        "zápis horší skóre na každém jazykovém kritériu, a to také u obou soudců. "
+        "delší zápis dostává vyšší úplnost, a to u obou soudců. V češtině má horší "
+        "skóre v 38 z 48 kombinací kritéria a soudce — a výjimky se jmenují, ne "
+        "zaokrouhlují: dvě platí u OBOU soudců a obě jsou ve formátu Deepsy, kalky na "
+        "skutečné půlce a shoda na přeložené. "
         "Sloupec je tu vypsaný jen tehdy, když se oba soudci shodnou na směru a aspoň "
         "jeden z nich dosáhne 0,40; ukázaná jsou obě čísla, takže sloupec, který každý "
         "ze soudců cítí jinak silně, je vidět právě takový, a ne zprůměrovaný."
