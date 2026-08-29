@@ -1444,6 +1444,132 @@ def _length_by_model(data: dict) -> str:
     )
 
 
+def _formats() -> str:
+    """The same models and sessions in two note formats, and what separates them.
+
+    This is what the Deepsy track was built to answer, and the answer arrives
+    with a confound it cannot shake off. Both halves are printed because
+    printing only the first would be the flattering one.
+
+    Written from `local/czech-length.json` and the rows, so the two halves of
+    the finding are computed from the same run rather than remembered from two.
+    """
+    payload = _payload("czech-length.json")
+    czech = payload.get("czech") or {}
+    if not czech:
+        return ""
+
+    rows, _refused = results.drawable(results.load(results.LOCAL_ROWS_PATH))
+    latest = [row for row in results.latest(rows) if row.is_scored]
+    keys = czech_scorer.CRITERION_KEYS
+
+    def mean_of(track: str, judge: str) -> dict[str, float]:
+        found = {}
+        for row in latest:
+            if row.track != track or row.judge_model != judge:
+                continue
+            values = [row.metrics.headline[k] for k in keys if k in row.metrics.headline]
+            if values:
+                found[row.system_id] = sum(values) / len(values)
+        return found
+
+    pairs = (
+        (results.TRACK_CZECH_REAL, results.TRACK_DEEPSY_REAL),
+        (results.TRACK_CZECH_TRANSLATED, results.TRACK_DEEPSY_TRANSLATED),
+    )
+    judges = sorted(
+        {
+            row.judge_model or ""
+            for row in latest
+            if row.track in {results.TRACK_DEEPSY_REAL, results.TRACK_DEEPSY_TRANSLATED}
+        }
+    )
+    if not judges:
+        return ""
+
+    lines, every_drop, total_worse, total_models = [], [], 0, 0
+    for soap_track, deepsy_track in pairs:
+        for judge in judges:
+            soap, deepsy = mean_of(soap_track, judge), mean_of(deepsy_track, judge)
+            shared = sorted(set(soap) & set(deepsy))
+            if len(shared) < 5:
+                continue
+            a = sum(soap[m] for m in shared) / len(shared)
+            b = sum(deepsy[m] for m in shared) / len(shared)
+            worse = sum(1 for m in shared if deepsy[m] < soap[m])
+            every_drop.append(b - a)
+            total_worse += worse
+            total_models += len(shared)
+            lines.append(
+                f"<tr><td>{html.escape(_t(TRACK_TITLES.get(soap_track, soap_track)))}</td>"
+                f"<td>{html.escape(judge)}</td><td>{len(shared)}</td>"
+                f"<td>{a:.2f}</td><td>{b:.2f}</td><td>{b - a:+.2f}</td>"
+                f"<td>{worse}/{len(shared)}</td></tr>"
+            )
+    if not lines:
+        return ""
+
+    # The confound, measured from the same payload.
+    soap_words = (czech.get(results.TRACK_CZECH_REAL) or {}).get("by_system", {})
+    deepsy_words = _deepsy_words(payload)
+    both = sorted(set(soap_words) & set(deepsy_words))
+    longer = sum(1 for m in both if deepsy_words[m] > soap_words[m])
+
+    head = (
+        f"<tr><th>{_t('Corpus')}</th><th>{_t('Judge')}</th><th>{_t('Models')}</th>"
+        f"<th>SOAP</th><th>Deepsy</th><th>{_t('difference')}</th>"
+        f"<th>{_t('worse in Deepsy')}</th></tr>"
+    )
+    return (
+        f"<h2>{_t('The same models, the same sessions, two note formats')}</h2>"
+        + f"<p>{html.escape(_t(FORMATS_LEAD))}</p>"
+        + f"<table><thead>{head}</thead><tbody>{''.join(lines)}</tbody></table>"
+        + "<div class='warn'><p>"
+        + html.escape(
+            _t(FORMATS_CONFOUND).format(
+                longer=longer,
+                models=len(both),
+                soap=int(sorted(soap_words[m] for m in both)[len(both) // 2]),
+                deepsy=int(sorted(deepsy_words[m] for m in both)[len(both) // 2]),
+            )
+        )
+        + "</p></div>"
+    )
+
+
+def _deepsy_words(payload: dict) -> dict[str, int]:
+    """Words in a whole Deepsy note: the three sections of one session, added.
+
+    Read from `by_note` rather than derived. The first version multiplied a
+    section's median by three, which is not the median of the sums, and it
+    printed "11 of 11 models write more, 762 words against 538" where the truth
+    is 9 of 11 and 662 -- two wrong numbers inside a caveat, which is the shape
+    this document has spent the night removing.
+    """
+    block = (payload.get("deepsy") or {}).get(results.TRACK_DEEPSY_REAL) or {}
+    return dict(block.get("by_note") or {})
+
+
+FORMATS_LEAD = (
+    "Eleven models wrote from the same ten sessions twice: once as a SOAP note, "
+    "which is what TN-Eval asks for and what makes the English comparison possible, "
+    "and once in the format the Deepsy application actually writes. The same six "
+    "criteria, the same judges, the same rubric version -- only the format differs. "
+    "Every one of the four comparisons goes the same way."
+)
+FORMATS_CONFOUND = (
+    "Do not read that as the Deepsy format producing worse Czech. It might, and "
+    "these numbers cannot say so, because the two things move together: a Deepsy "
+    "note is LONGER -- {longer} of {models} models write more in it, a median of "
+    "{deepsy} words against {soap} -- and this document has already measured that a "
+    "longer note scores lower on every one of these criteria, because each asks "
+    "whether there is a fault ANYWHERE in it. Format and length point the same way "
+    "here and ten models cannot separate them. The one model that writes fewer words "
+    "in Deepsy also scores lower there, which is a hint and not evidence: it is one "
+    "model."
+)
+
+
 def _length() -> str:
     """How long a note the models write, and whether the tables reward it.
 
@@ -2374,6 +2500,8 @@ def build(rows: list[results.Row]) -> str:
 {_join()}
 
 {_external()}
+
+{_formats()}
 
 {_length()}
 

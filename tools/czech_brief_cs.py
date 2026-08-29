@@ -927,6 +927,43 @@ CS: dict[str, str] = {
     "the six Czech criteria": "šest českých kritérií",
     "PDSQI-9, without the session": "PDSQI-9, bez sezení",
     "PDSQI-9, with the session": "PDSQI-9, se sezením",
+    # --- two formats --------------------------------------------------------
+    "The same models, the same sessions, two note formats": (
+        "Tytéž modely, táž sezení, dva formáty zápisu"
+    ),
+    "Corpus": "Korpus",
+    "Judge": "Soudce",
+    "difference": "rozdíl",
+    "worse in Deepsy": "horší v Deepsy",
+    "Eleven models wrote from the same ten sessions twice: once as a SOAP note, "
+    "which is what TN-Eval asks for and what makes the English comparison possible, "
+    "and once in the format the Deepsy application actually writes. The same six "
+    "criteria, the same judges, the same rubric version -- only the format differs. "
+    "Every one of the four comparisons goes the same way.": (
+        "Jedenáct modelů psalo z týchž deseti sezení dvakrát: jednou jako SOAP zápis, "
+        "což je to, oč si říká TN-Eval a co teprve umožňuje srovnání s angličtinou, a "
+        "jednou ve formátu, který skutečně píše aplikace Deepsy. Táž šestice kritérií, "
+        "titíž soudci, táž verze rubriky — liší se jen formát. Všechna čtyři srovnání "
+        "vycházejí stejným směrem."
+    ),
+    "Do not read that as the Deepsy format producing worse Czech. It might, and "
+    "these numbers cannot say so, because the two things move together: a Deepsy "
+    "note is LONGER -- {longer} of {models} models write more in it, a median of "
+    "{deepsy} words against {soap} -- and this document has already measured that a "
+    "longer note scores lower on every one of these criteria, because each asks "
+    "whether there is a fault ANYWHERE in it. Format and length point the same way "
+    "here and ten models cannot separate them. The one model that writes fewer words "
+    "in Deepsy also scores lower there, which is a hint and not evidence: it is one "
+    "model.": (
+        "Nečti to jako „formát Deepsy vede k horší češtině“. Může, a tahle čísla to "
+        "říct neumějí, protože se obojí hýbe společně: zápis v Deepsy je DELŠÍ — "
+        "{longer} z {models} modelů v něm píše víc, medián {deepsy} slov proti {soap} "
+        "— a tenhle dokument už změřil, že delší zápis má horší skóre na každém z "
+        "těchto kritérií, protože každé se ptá, jestli je v něm chyba NĚKDE. Formát a "
+        "délka tady ukazují týmž směrem a deset modelů je od sebe neoddělí. Jediný "
+        "model, který v Deepsy píše kratší zápisy, má i tam horší skóre — což je "
+        "náznak, ne důkaz: je to jeden model."
+    ),
     # --- refusals ----------------------------------------------------------
     "Refusing to write: a row carries something that is not a score.": (
         "Odmítám zapsat: řádek nese něco, co není skóre."

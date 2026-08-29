@@ -326,6 +326,13 @@ def deepsy_compliance() -> dict:
         task_name = TASK_OF_TRACK[track]
         per_section: dict[str, list[int]] = collections.defaultdict(list)
         per_model: dict[str, list[int]] = collections.defaultdict(list)
+        # A whole note is the three sections of one session added up. Three
+        # times a section's median is not that, and using it overstated the
+        # corpus by a hundred words a note in the one place it was compared
+        # against SOAP.
+        per_note: dict[str, dict[str, int]] = collections.defaultdict(
+            lambda: collections.defaultdict(int)
+        )
         for path in CACHE.glob(f"{task_name}/**/*.json"):
             try:
                 record = json.loads(path.read_text(encoding="utf-8"))
@@ -338,6 +345,7 @@ def deepsy_compliance() -> dict:
             count = sum(_words(note.get(key)) for key in deepsy.KEYS[section])
             per_section[section].append(count)
             per_model[record["model"]].append(count)
+            per_note[record["model"]][record.get("session_id") or path.parts[-2]] += count
         if not per_section:
             continue
         sections = {
@@ -356,6 +364,11 @@ def deepsy_compliance() -> dict:
             "answers": len(every),
             "over_limit": sum(1 for x in every if x > limit),
             "sections": sections,
+            "by_note": {
+                model: int(statistics.median(sessions.values()))
+                for model, sessions in sorted(per_note.items())
+                if sessions
+            },
             "by_system": {
                 model: {
                     "answers": len(v),
