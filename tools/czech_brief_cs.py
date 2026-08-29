@@ -953,6 +953,12 @@ CS: dict[str, str] = {
         "a nevrátila žádný. Sečtěním obou počtů dohromady by zmizel ze dna tabulky "
         "díky výpadku."
     ),
+    "Read the two names carefully: {refused} and {near} differ by one suffix and are "
+    "different models. {near} is in the Deepsy bands above and in none of the SOAP "
+    "ones.": (
+        "Ta dvě jména čti pozorně: {refused} a {near} se liší o jednu příponu a jsou "
+        "to jiné modely. {near} je v pásmech Deepsy výše a v žádném z pásem SOAP."
+    ),
     "On whether the note is any good, no model is in the top band of all {tables} "
     "tables and none is in the bottom band of all {tables}. The quality instrument "
     "does not agree with itself from one judge or one half to the next, and no model "

@@ -1897,6 +1897,35 @@ def _conclusion(rows: list[results.Row]) -> str:
                     calls=sum(refused.values()),
                 )
             )
+            # And the name one suffix away, when the bands list one. The two
+            # paragraphs above and below this one say `glm-5.3-flash` is in no
+            # Deepsy band and then list `glm-5.3` in one, which reads as a
+            # contradiction to anybody not counting characters. Computed by
+            # prefix rather than typed, so it appears only while both names are
+            # actually on the page.
+            banded_soap = {
+                model
+                for judges in soap.values()
+                for grouped in judges.values()
+                for band in grouped["bands"]
+                for model in band["models"]
+            }
+            near = sorted(
+                {
+                    model
+                    for model in banded_deepsy - banded_soap
+                    for name in refused
+                    if name.startswith(f"{model}-") or model.startswith(f"{name}-")
+                }
+            )
+            if near:
+                said.append(
+                    _t(
+                        "Read the two names carefully: {refused} and {near} differ by "
+                        "one suffix and are different models. {near} is in the Deepsy "
+                        "bands above and in none of the SOAP ones."
+                    ).format(refused=_join_words(sorted(refused)), near=_join_words(near))
+                )
 
     # 2. The same question asked of note quality, which does not answer.
     top_q, tables_q = shared(quality, 0)
