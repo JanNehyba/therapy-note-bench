@@ -105,7 +105,7 @@ def score_note(
 ) -> NoteResult:
     """Ask one note's criteria, reusing whatever was asked before.
 
-    `render` is a parameter because the Deepsy track scores the same seven
+    `render` is a parameter because the Deepsy track scores the same six
     criteria over a note with different sections. The instrument does not
     change; what it is shown does, and a renderer hard-coded here would have
     meant a second copy of this function to change one line of it.
@@ -177,6 +177,74 @@ def score_note(
     result.scored = dict(scores.by_criterion)
     result.missing = list(scores.incomplete.get("czech", []))
     return result
+
+
+def from_cache(
+    candidates: list[Candidate],
+    client: judge.Judge,
+    *,
+    cache_root=None,
+    render=task.render_note,
+    judge_prompt_version: str = czech.JUDGE_PROMPT_VERSION,
+) -> list[NoteResult]:
+    """Score every note whose answers are already on disk, asking nothing.
+
+    The same route `tnb score --cache-only` has had since the TN-Eval track
+    existed, and the Czech track went without it for a reason that is worth
+    writing down: it was never needed to *publish* early, because the Czech run
+    is short. It is needed to **rebuild a row without re-asking a question**.
+
+    A result row records more than its numbers -- which instrument produced
+    them, how many notes were scored, and what the measures mean. When one of
+    those descriptions is corrected in code, the rows already written keep the
+    old one, and `results/` is append-only, so the only honest repair is to
+    derive the rows again and append them. Doing that through a normal run
+    would put ~1,700 questions back in front of a judge to change a sentence.
+
+    **A note answered only in part is kept, and this differs from `run.py`'s
+    version on purpose.** That one skips it, because it exists to publish a
+    run while the run is still going and a half-answered note there is one
+    the judge has not finished with. This one exists to rebuild a run that
+    already ended, so it has to reach the same numbers a live run reached --
+    and a live run does not drop such a note either. `czech.aggregate`
+    returns None for a criterion with no answer, the mean is taken over the
+    criteria that have one, and the criterion that does not is named in
+    `missing` rather than counted as passed. Dropping the whole note instead
+    would drop five answers to avoid reporting one gap, and it moved four
+    notes on each half the first time this was written.
+    """
+    fingerprint = client.config.fingerprint()
+    scored: list[NoteResult] = []
+
+    for candidate in candidates:
+        note = render(candidate.note)
+        result = NoteResult(candidate=candidate, empty=not czech.has_content(note))
+        tasks = czech.build_tasks(note)
+        answers: dict[str, str] = {}
+        for question in tasks:
+            record = judge.load_cached(
+                judge.cache_path(
+                    client.config.model,
+                    judge_prompt_version,
+                    candidate.provider,
+                    candidate.system_id,
+                    candidate.session_id,
+                    question.unit,
+                    root=cache_root,
+                ),
+                fingerprint,
+                # The question, so a re-generated note is not published carrying
+                # the judgement of the text it replaced.
+                question.prompt,
+            )
+            if record is not None:
+                answers[question.unit] = record["answer"]
+        result.cached = len(answers)
+        scores = czech.aggregate(note, answers)
+        result.scored = dict(scores.by_criterion)
+        result.missing = list(scores.incomplete.get("czech", []))
+        scored.append(result)
+    return scored
 
 
 def score_many(
@@ -395,7 +463,7 @@ def to_rows(
                 unreached_reasons=dict(unreached.reasons) if unreached else {},
                 metrics=aggregate.metrics(),
                 metrics_note=(
-                    "Seven yes/no criteria about the Czech, asked of the note alone. "
+                    "Six yes/no criteria about the Czech, asked of the note alone. "
                     "This instrument is this repository's own and no human has rated "
                     "these notes on it, so there is no agreement figure and no ceiling "
                     "to read one against. The generation prompt is a translation of "

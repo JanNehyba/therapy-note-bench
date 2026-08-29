@@ -780,7 +780,7 @@ CZECH_CORPORA = {
 
 
 def cmd_score_czech(args: argparse.Namespace) -> int:
-    """Ask the seven Czech criteria about the Czech notes.
+    """Ask the six Czech criteria about the Czech notes.
 
     Two corpora, scored separately and written to a file the published page
     does not read. Ten real sessions with one client and ten AnnoMI
@@ -880,14 +880,18 @@ def cmd_score_czech(args: argparse.Namespace) -> int:
             )
 
         print(f"\n{track}:")
-        scored = scoring_czech.score_many(
-            candidates,
-            client,
-            spend,
-            force=args.force,
-            on_note=on_note,
-            cache_root=_cache_root(args),
-        )
+        if args.cache_only:
+            scored = scoring_czech.from_cache(candidates, client, cache_root=_cache_root(args))
+            print(f"  {len(scored)} of {expected} note(s) answered in full; nothing asked.")
+        else:
+            scored = scoring_czech.score_many(
+                candidates,
+                client,
+                spend,
+                force=args.force,
+                on_note=on_note,
+                cache_root=_cache_root(args),
+            )
         if not scored:
             continue
 
@@ -1079,7 +1083,7 @@ DEEPSY_CORPORA = {
 
 
 def cmd_score_deepsy(args: argparse.Namespace) -> int:
-    """Ask the seven Czech criteria about the Deepsy-format notes.
+    """Ask the six Czech criteria about the Deepsy-format notes.
 
     The same instrument as `score-czech`, over notes with different sections.
     That is the design: what changes between the two tables is the shape the
@@ -1199,26 +1203,36 @@ def cmd_score_deepsy(args: argparse.Namespace) -> int:
             )
 
         print(f"{track}:")
-        scored = scoring_czech.score_many(
-            candidates,
-            client,
-            spend,
-            force=args.force,
-            # Its own cache root, and this is not tidiness. `judge.cache_path`
-            # is keyed on judge, rubric, provider, system, session and unit --
-            # and Deepsy shares every one of those six with the Czech SOAP
-            # track: the same sessions, the same models, the same seven
-            # criteria, the same `czech-criteria-v2`. Only the note differs.
-            # Under one root the two tracks would write to identical paths and
-            # each run would overwrite the other's answers, forever, because
-            # `load_cached` would reject what it found on the prompt digest and
-            # then replace it. The digest check makes a wrong answer
-            # unreadable; it does not stop it being written over a right one.
-            cache_root=_cache_root(args, judge.CACHE_DIR / deepsy_task.PROMPT_VERSION),
-            render=deepsy_task.render_note,
-            judge_prompt_version=czech.JUDGE_PROMPT_VERSION,
-            on_note=on_note,
-        )
+        if args.cache_only:
+            scored = scoring_czech.from_cache(
+                candidates,
+                client,
+                cache_root=_cache_root(args, judge.CACHE_DIR / deepsy_task.PROMPT_VERSION),
+                render=deepsy_task.render_note,
+                judge_prompt_version=czech.JUDGE_PROMPT_VERSION,
+            )
+            print(f"  {len(scored)} note(s) read from cache; nothing asked.")
+        else:
+            scored = scoring_czech.score_many(
+                candidates,
+                client,
+                spend,
+                force=args.force,
+                # Its own cache root, and this is not tidiness. `judge.cache_path`
+                # is keyed on judge, rubric, provider, system, session and unit --
+                # and Deepsy shares every one of those six with the Czech SOAP
+                # track: the same sessions, the same models, the same six
+                # criteria, the same `czech-criteria-v2`. Only the note differs.
+                # Under one root the two tracks would write to identical paths and
+                # each run would overwrite the other's answers, forever, because
+                # `load_cached` would reject what it found on the prompt digest and
+                # then replace it. The digest check makes a wrong answer
+                # unreadable; it does not stop it being written over a right one.
+                cache_root=_cache_root(args, judge.CACHE_DIR / deepsy_task.PROMPT_VERSION),
+                render=deepsy_task.render_note,
+                judge_prompt_version=czech.JUDGE_PROMPT_VERSION,
+                on_note=on_note,
+            )
         if not scored:
             continue
 
@@ -1280,7 +1294,7 @@ def cmd_czech_report(args: argparse.Namespace) -> int:
 
     out = args.out or results.LOCAL_DIR
     out.mkdir(parents=True, exist_ok=True)
-    data = report.build(rows)
+    data = report.build(rows, source=results.LOCAL_ROWS_PATH.name)
     (out / "czech.json").write_text(
         json.dumps(data, indent=2, ensure_ascii=False, sort_keys=True) + "\n",
         encoding="utf-8",
@@ -2083,6 +2097,15 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     score_czech.add_argument("--force", action="store_true", help="re-ask cached questions")
+    score_czech.add_argument(
+        "--cache-only",
+        action="store_true",
+        help=(
+            "derive rows from answers already on disk and ask the judge nothing. A "
+            "note whose answers are not all cached is left out rather than scored on "
+            "the ones that are"
+        ),
+    )
     score_czech.add_argument("--dry-run", action="store_true", help="print the job, ask nothing")
     score_czech.add_argument(
         "--no-write", action="store_true", help="rate but do not append result rows"
@@ -2179,6 +2202,15 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     score_deepsy.add_argument("--force", action="store_true", help="re-ask cached questions")
+    score_deepsy.add_argument(
+        "--cache-only",
+        action="store_true",
+        help=(
+            "derive rows from answers already on disk and ask the judge nothing. A "
+            "note whose answers are not all cached is left out rather than scored on "
+            "the ones that are"
+        ),
+    )
     score_deepsy.add_argument("--dry-run", action="store_true", help="print the job, ask nothing")
     score_deepsy.add_argument(
         "--no-write", action="store_true", help="rate but do not append result rows"
