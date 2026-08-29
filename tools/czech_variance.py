@@ -1,23 +1,27 @@
 """How big a gap between two models has to be before it is a gap.
 
-A table of proportions invites its reader to compare neighbouring rows. With ten
-notes per model, most of those comparisons are reading noise, and saying so with
-a number is the difference between a caveat somebody skips and a threshold they
-can apply to the row in front of them.
+A table of proportions invites its reader to compare neighbouring rows. With at
+most ten notes per model, most of those comparisons are reading noise, and
+saying so with a number is the difference between a caveat somebody skips and a
+threshold they can apply to the row in front of them.
 
 Two questions, in the order they matter.
 
-**Is the table reading models or sessions?** Every model wrote a note from every
-transcript -- that design is what makes the comparison possible at all -- but if
-sessions differ from each other more than models do, the ordering is a fact
-about which transcripts were drawn. Measured: the spread between model means
-against the spread between session means, criterion by criterion.
+**Is the table reading models or sessions?** The design asks every model for a
+note from every transcript -- that is what makes the comparison possible at all
+-- but if sessions differ from each other more than models do, the ordering is a
+fact about which transcripts were drawn. Measured: the spread between model
+means against the spread between session means, criterion by criterion.
 
 **Which pairs of models are actually separable?** The sessions are resampled with
 replacement, both models rescored on each resample, and the difference between
 them read off the middle 95% of the resulting distribution. **Paired on the
-session**, because both models wrote from the same ten transcripts and a test
-that ignored that would throw away the design's whole advantage.
+session**, on the sessions both models of a pair actually have -- a pair with
+fewer than five in common is not compared at all -- because a test that ignored
+the pairing would throw away the design's whole advantage. The design is not the
+outcome: e-INFRA refused some calls and some answers never parsed, so what each
+model has is counted per model and written into the `coverage` block rather than
+assumed.
 
 The number this produces is the one a reader needs: the width of that interval
 is how far apart two rows must be before their order means anything. Everything
@@ -26,9 +30,12 @@ narrower is the same reading twice.
 Sessions are resampled and models are not. `docs/limitations.md` records a
 published "detected" verdict that came from resampling conversations only, which
 treated four models as the whole of OpenAI -- that was a claim about a *family*
-of models, where the models are the sample. Here the eleven models are the whole
-population being compared, named individually, and the ten sessions are the
-sample that could have been drawn differently.
+of models, where the models are the sample. Here the models are the whole
+population being compared, named individually, and the sessions are the sample
+that could have been drawn differently. How many models that is differs by
+track and is not stated here: it was written as "the eleven models" and the
+Deepsy tracks have twelve, which is the kind of sentence a later run makes
+quietly false.
 
 Writes `local/czech-variance.json` for `tools/czech_brief.py`.
 """
@@ -269,10 +276,14 @@ COMPOSITES = {
 def bands(per_note: dict, rng: random.Random) -> dict | None:
     """Models grouped so that within a band nothing separates them.
 
-    A ranking of eleven models over ten notes is mostly an ordering of noise,
+    A ranking of a dozen models over ten notes is mostly an ordering of noise,
     and printing it invites the one reading it cannot support. Bands say the
     same measurement without the invitation: a new band starts where the gap
     from the band's best exceeds what resampling the sessions can rule out.
+
+    A model's score is the mean of the notes it has, and the models do not all
+    have the same ones -- so the bands rest on unequal denominators and the
+    `coverage` block says whose, per model, for the document to mark.
 
     The threshold is the median half-width of the interval on a pairwise
     difference, the same quantity `separable` reports, computed on the
@@ -341,8 +352,14 @@ def _composite(cells: dict, keys) -> dict:
     return {pair: mean(values) for pair, values in grouped.items() if values}
 
 
-def _pdsqi_cells(task_name: str, judge_model: str, budget: int) -> dict:
-    """Every (model, session, attribute) PDSQI score, from the cache."""
+def _pdsqi_cells(task_name: str, judge_model: str, budget: int) -> Read:
+    """Every (model, session, attribute) PDSQI score, from the cache.
+
+    A `Read` like the criteria tracks', and for the same reason: a band drawn
+    over 98% of the questions and one drawn over all of them are different
+    claims, so the coverage travels with the cells rather than being recovered
+    later from a bare dict.
+    """
     from tnb.scoring import czech_pdsqi, pdsqi_run
 
     loader = (
@@ -357,10 +374,62 @@ def _pdsqi_cells(task_name: str, judge_model: str, budget: int) -> dict:
         render=czech_task.render_note,
         judge_prompt_version=czech_pdsqi.JUDGE_PROMPT_VERSION,
     )
-    return {
+    cells = {
         (note.candidate.system_id, note.candidate.session_id, key): value
         for note in scored
         for key, value in note.scored.items()
+    }
+    # What the notes on disk imply, the same quantity `_cells` counts: one
+    # question per candidate per attribute this corpus is allowed to ask.
+    expected = len(candidates) * len(czech_pdsqi.attribute_keys(task_name))
+    return Read(cells, expected, len(cells))
+
+
+def _coverage(read: Read, keys, per_note: dict) -> dict:
+    """What a band was computed over, for the track and for each model in it.
+
+    The track totals answer "is this drawn over all the questions". The
+    per-model block answers the one a reader needs at the row: the bands rest
+    on unequal denominators -- one model's nine notes beside another's ten, one
+    model's note averaged over five columns instead of six -- and a band table
+    printed without that is an uneven comparison the reader is not told is
+    uneven. `tools/czech_brief.py` marks these rows the way its score tables
+    already mark a thin one.
+
+    **A column nobody was allowed to ask is not a missing answer.** `COMPOSITES`
+    names three attributes for each PDSQI track and the real corpus is rated
+    from the note alone, so `accurate` and `thorough` -- the two that need the
+    session -- are never put to a judge there and that band is built on
+    `succinct` by itself. Counting them as unanswered would have called all 104
+    notes partial and hidden the real finding, which is that the composite is
+    one column wide. So `columns` is what the track actually has and
+    `columns_absent` names what it does not, beside the `columns_named` the
+    composite asked for.
+    """
+    present = {criterion for _model, _session, criterion in read.cells}
+    available = tuple(key for key in keys if key in present)
+    drawn: dict[tuple[str, str], int] = defaultdict(int)
+    for model, session, criterion in read.cells:
+        if criterion in available:
+            drawn[(model, session)] += 1
+
+    systems: dict[str, dict[str, int]] = {}
+    for (model, _session), count in drawn.items():
+        block = systems.setdefault(model, {"notes": 0, "answered": 0, "partial": 0})
+        block["notes"] += 1
+        block["answered"] += count
+        block["partial"] += 1 if count < len(available) else 0
+
+    return {
+        "expected": read.expected,
+        "answered": read.answered,
+        "notes": len(per_note),
+        "sessions": len({session for _model, session in per_note}),
+        "columns": len(available),
+        "columns_named": len(keys),
+        "columns_absent": [key for key in keys if key not in present],
+        "partial": sum(1 for count in drawn.values() if count < len(available)),
+        "systems": dict(sorted(systems.items())),
     }
 
 
@@ -416,17 +485,9 @@ def main(argv: list[str] | None = None) -> int:
             # and `_composite` averages a note over whatever criteria came back,
             # so `partial` is the count of notes that entered the band on fewer
             # than the full set of columns.
-            drawn: dict[tuple[str, str], int] = defaultdict(int)
-            for model, session, criterion in read.cells:
-                if criterion in keys:
-                    drawn[(model, session)] += 1
-            payload.setdefault("coverage", {}).setdefault(track, {})[judge_model] = {
-                "expected": read.expected,
-                "answered": read.answered,
-                "notes": len(per_note),
-                "columns": len(keys),
-                "partial": sum(1 for count in drawn.values() if count < len(keys)),
-            }
+            payload.setdefault("coverage", {}).setdefault(track, {})[judge_model] = _coverage(
+                read, keys, per_note
+            )
 
     # The quality tracks band too. Their per-note scores come from the PDSQI
     # cache rather than the criteria's, and they are banded on the attributes
@@ -438,13 +499,22 @@ def main(argv: list[str] | None = None) -> int:
         (results.TRACK_CZECH_TRANSLATED_PDSQI, czech_task.NAME_TRANSLATED),
     ):
         for judge_model in (judge.DEFAULT_MODEL, judge.SECOND_JUDGE):
-            cells = _pdsqi_cells(task_name, judge_model, args.thinking_budget)
-            if not cells:
+            read = _pdsqi_cells(task_name, judge_model, args.thinking_budget)
+            if not read.cells:
                 continue
+            keys = COMPOSITES[track]
+            per_note = _composite(read.cells, keys)
             rng = random.Random(SEED)  # noqa: S311 -- a threshold, not a secret
-            grouped = bands(_composite(cells, COMPOSITES[track]), rng)
+            grouped = bands(per_note, rng)
             if grouped:
                 payload.setdefault("bands", {}).setdefault(track, {})[judge_model] = grouped
+            # These four tables are drawn from the same panel as the criteria
+            # ones, so they carry the same denominators or the panel has a hole
+            # where two of its six tracks should be -- which is the shape this
+            # whole block exists to close.
+            payload.setdefault("coverage", {}).setdefault(track, {})[judge_model] = _coverage(
+                read, keys, per_note
+            )
 
     args.target.parent.mkdir(parents=True, exist_ok=True)
     args.target.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
