@@ -43,6 +43,7 @@ from dataclasses import dataclass, field
 
 from tnb.scoring import pdsqi
 from tnb.tasks import czech as _task
+from tnb.tasks import deepsy as _deepsy
 
 #: Bumped whenever anything reaching the judge changes. Rows carry it and the
 #: leaderboard never mixes two versions.
@@ -237,10 +238,26 @@ Odpověz pouze slovem „ano“ nebo „ne“ a nic jiného:"""
 #: Czech answers, normalised to what `pdsqi.parse_yes_no` reads.
 _ANSWERS = {"ano": "yes", "ne": "no"}
 
-#: The section headings `tasks.czech.render_note` writes, so that `_content`
-#: can tell what the model wrote from what the renderer added. Imported rather
-#: than repeated: two lists of four Czech words would drift.
-_LABELS = frozenset(_task.SECTION_LABELS.values())
+#: Every heading a renderer on this rubric writes, so that `_content` can tell
+#: what the model wrote from what the renderer added. Imported rather than
+#: repeated: two lists of the same words would drift.
+#:
+#: **Both formats, because the same six criteria are asked of both.** This held
+#: only SOAP's four Czech labels while `tasks.deepsy.render_note` was writing
+#: eleven `key: value` lines that nothing here stripped, so a Deepsy note with
+#: every field empty rendered as eleven key names, `has_content` called it a
+#: note and `note_words` called it eleven words long. That is the shape
+#: `has_content` exists to stop -- an empty note passing six criteria that all
+#: ask about the absence of a fault -- and on this format the guard was not
+#: there at all.
+#:
+#: One set rather than one per format, because `_content` is handed a string
+#: and cannot tell which renderer produced it. Safe because the two vocabularies
+#: are disjoint: four Czech words against eleven English snake_case identifiers,
+#: and neither renderer can emit the other's.
+_LABELS = frozenset(_task.SECTION_LABELS.values()) | {
+    key for keys in _deepsy.KEYS.values() for key in keys
+}
 
 
 @dataclass(frozen=True)
@@ -327,10 +344,11 @@ def has_content(note: str) -> bool:
     `aggregate`. A model that wrote nothing must not have its worst note vanish.
 
     Judged on the values and not on the string, because the string is not empty:
-    `tasks.czech.render_note` writes every section heading whether or not the
-    section has anything under it, so a note with four blank sections still
-    renders as four labels. Caught by a test rather than by reading, which is
-    how `pdsqi.has_content` came by the same line.
+    both renderers write every heading whether or not the section has anything
+    under it, so a note with four blank SOAP sections still renders as four
+    Czech labels and an empty Deepsy note as its eleven key names. `_LABELS`
+    carries both sets for that reason. Caught by a test rather than by reading,
+    which is how `pdsqi.has_content` came by the same line.
     """
     return bool(_content(note).strip())
 
@@ -378,7 +396,13 @@ def build_tasks(note: str) -> list[CriterionTask]:
 
 
 def note_words(note: str) -> int:
-    """How long the note is, not counting the headings the renderer wrote."""
+    """How long the note is, not counting the headings the renderer wrote.
+
+    Both renderers' headings, which is the point. While `_LABELS` held only the
+    four Czech SOAP labels, every Deepsy note was counted eleven words longer
+    than it is -- its key names -- and length is exactly the variable the
+    SOAP-against-Deepsy comparison has to hold still.
+    """
     return len(_content(note).split())
 
 

@@ -134,6 +134,53 @@ def test_an_empty_note_is_asked_no_czech_question_at_all():
         assert EMPTY_NOTE[key] == (None, False), key
 
 
+def test_an_empty_deepsy_note_is_asked_no_czech_question_either():
+    """The same guard on the other note format, where it did not exist.
+
+    The six criteria are asked of a Deepsy note under the identical rubric, and
+    `czech._content` stripped only the four Czech SOAP labels. So an all-empty
+    Deepsy note rendered as its eleven JSON key names, `has_content` saw eleven
+    words of content and `build_tasks` asked six questions about a note with
+    nothing in it -- every one of which it would pass, because all six ask about
+    the absence of a fault.
+
+    Not live: the shortest Deepsy note in the corpus runs to hundreds of words.
+    That is what makes it worth pinning here rather than leaving to be found
+    the fifth time, which is what this file is for.
+    """
+    from tnb.scoring import czech
+    from tnb.tasks import deepsy
+
+    empty = {key: "" for keys in deepsy.KEYS.values() for key in keys}
+    rendered = deepsy.render_note(empty)
+
+    assert rendered.strip(), "the renderer writes its headings whatever the note holds"
+    assert not czech.has_content(rendered)
+    assert czech.build_tasks(rendered) == []
+    assert czech.note_words(rendered) == 0
+
+    scores = czech.aggregate(rendered, {})
+    assert not scores.is_complete
+    assert scores.headline == {"note_words": 0.0}
+
+
+def test_a_deepsy_note_is_not_measured_eleven_words_longer_than_it_is():
+    """The same cause, and the half that was biasing a live figure.
+
+    `note_words` is the length behind every claim that a Deepsy note is longer
+    than a SOAP one. Counting the key names put eleven words on each of them --
+    a constant, so it never looked wrong, and it fell entirely on one side of
+    the one comparison the number exists to make.
+    """
+    from tnb.scoring import czech
+    from tnb.tasks import deepsy
+
+    note = {key: "slovo" for keys in deepsy.KEYS.values() for key in keys}
+    written = len(note)
+
+    assert czech.note_words(deepsy.render_note(note)) == written
+
+
 def test_an_empty_soap_note_still_scores_zero_for_coverage():
     """The two measures that count what a note contains, recomputed rather than
     remembered. A note with nothing in it satisfies no criterion and has no
