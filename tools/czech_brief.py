@@ -102,10 +102,23 @@ SOAP_CRITERIA_TRACKS = (results.TRACK_CZECH_REAL, results.TRACK_CZECH_TRANSLATED
 DEEPSY_CRITERIA_TRACKS = (results.TRACK_DEEPSY_REAL, results.TRACK_DEEPSY_TRANSLATED)
 
 STYLE = """
+/* The page this becomes. `tools/pdf.py` prints through Chrome, and without a
+   @page rule Chrome picks the paper and the margins from whatever the machine
+   printed to last -- so the document that goes to the team was a different
+   shape depending on who made it. `tools/brief.py` has said A4 since it was
+   written and this file never did. */
+@page { size: A4; margin: 17mm 15mm 15mm; }
+@page :first { margin-top: 15mm; }
 :root { --ink:#14161a; --muted:#5b6270; --rule:#d8dce3; --accent:#1c4e80; }
 * { box-sizing: border-box; }
+/* `print-color-adjust` here rather than `!important` on each tinted block. The
+   browser drops backgrounds when it prints, to save ink; saying once that this
+   document means its colours is the supported way to ask for them, and the
+   alternative is one `!important` per block that a reader of the stylesheet
+   has to recognise as a workaround rather than as a decision. */
 body { font: 11pt/1.5 "Source Serif 4", Georgia, serif; color: var(--ink);
-       max-width: 52rem; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+       max-width: 52rem; margin: 0 auto; padding: 2.5rem 1.5rem 4rem;
+       -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 h1 { font-size: 1.9rem; line-height: 1.2; margin: 0 0 .3rem; }
 h2 { font-size: 1.15rem; margin: 2.4rem 0 .6rem; padding-bottom: .25rem;
      border-bottom: 2px solid var(--rule); }
@@ -125,14 +138,39 @@ dt { font-weight: 600; font-family: "Source Sans 3", system-ui, sans-serif;
      font-size: .85rem; margin-top: .7rem; }
 dd { margin: .1rem 0 0; color: var(--muted); font-size: .9rem; }
 .warn { border-left: 3px solid var(--accent); padding: .1rem 0 .1rem .9rem; margin: 1rem 0; }
-/* The summary, and the only tinted block in the document. It is the one
-   thing a reader who reads nothing else should read, so it is above the
-   first table and looks unlike the prose around it. */
-.summary { background: #f4f6f9; border: 1px solid var(--rule); border-radius: 3px;
+/* The three tinted blocks: the summary a reader who reads nothing else should
+   read, the findings that close a chapter, and the closing summary at the end.
+   One rule for the shape and one line each for the tint, because they are the
+   same kind of thing and a reader who learns the shape once should not have to
+   learn it three times. The finding carries a rule down its left edge so that
+   it reads as a conclusion rather than as a second introduction -- at the same
+   weight as the summary, which is the point of it: what a chapter concluded is
+   not a smaller claim than what the front page promised. */
+.summary, .finding, .closing { border: 1px solid var(--rule); border-radius: 3px;
            padding: .2rem 1.1rem 1rem; margin: 1.4rem 0 1.8rem; }
-.summary h2 { margin-top: 1.2rem; border-bottom: none; }
-.summary p:last-child { margin-bottom: 0; }
+.summary { background: #f4f6f9; }
+.finding { background: #f2f6f2; border-left: 3px solid var(--accent); }
+.closing { background: #f7f6f2; }
+.summary h2, .finding h2, .closing h2 { margin-top: 1.2rem; border-bottom: none; }
+.summary h3, .finding h3, .closing h3 { margin-top: 1rem; }
+.summary p:last-child, .finding p:last-child, .closing p:last-child { margin-bottom: 0; }
 .warn p { margin: .4rem 0; }
+/* A figure is inline SVG, drawn at a fixed canvas size and scaled to whatever
+   width the page has. Without the `width: 100%` it prints at its own pixel
+   width and runs off the paper; without `height: auto` it keeps the pixel
+   height and the drawing distorts. */
+figure { margin: 1.2rem 0 1.4rem; break-inside: avoid; }
+figure svg { width: 100%; height: auto; }
+figcaption { font-size: .82rem; color: var(--muted); margin-top: .4rem; }
+/* `summary` the element, not `.summary` the tinted block above -- HTML gave
+   them the same word. Every toggle in this document is written open, because a
+   closed one prints as a bare heading with its contents gone, so the marker is
+   the only thing saying there is anything to collapse at all. */
+details { margin: .8rem 0 1.2rem; padding: .1rem 0 .1rem .9rem;
+          border-left: 1px solid var(--rule); }
+details > summary { font-weight: 600; font-family: "Source Sans 3", system-ui, sans-serif;
+          font-size: .85rem; cursor: pointer; margin: .2rem 0 .4rem; }
+details > summary::marker { color: var(--muted); }
 footer { margin-top: 3rem; padding-top: .8rem; border-top: 1px solid var(--rule);
          color: var(--muted); font-size: .8rem; }
 code { font-family: ui-monospace, monospace; font-size: .9em; }
@@ -140,7 +178,8 @@ code { font-family: ui-monospace, monospace; font-size: .9em; }
   body { max-width: none; padding: 0; font-size: 10pt; }
   h2 { break-after: avoid; } table { break-inside: auto; }
   tr { break-inside: avoid; } .warn { break-inside: avoid; }
-  .summary { break-inside: avoid; background: #f4f6f9 !important; }
+  .summary, .finding, .closing { break-inside: avoid; }
+  details { break-inside: avoid; }
 }
 """
 
