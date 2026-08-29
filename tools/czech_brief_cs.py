@@ -174,13 +174,24 @@ CS: dict[str, str] = {
     "here is whether it separates anything at all. That half is counted from the rows. "
     "The second half — what the column actually catches, and how far two judges and "
     "one native speaker agreed about it — is written down rather than computed, "
-    "because no arithmetic supplies it.": (
+    "because no arithmetic supplies it. It exists for one table only: both agreement "
+    "figures were measured on the real Czech sessions under the six criteria, and "
+    "nobody has read a Deepsy note, a translated one or a PDSQI answer against a "
+    "person at all. Every other table says so in the cell rather than leaving it "
+    "blank, because carrying a number across would report one table's measurement "
+    "under another's heading.": (
         "Sloupec, který dává většině modelů tutéž hodnotu, je nemůže seřadit, ať je "
         "vytištěný sebejistěji — a první, co se o kterémkoli sloupci vyplatí vědět, je, "
         "jestli vůbec něco rozlišuje. Tuhle půlku počítáme z řádků. Druhou půlku — co "
         "ten sloupec doopravdy chytá a nakolik se na něm shodli dva soudci a jeden "
-        "rodilý mluvčí — píšeme, ne počítáme, protože ji žádná aritmetika nedodá."
+        "rodilý mluvčí — píšeme, ne počítáme, protože ji žádná aritmetika nedodá. "
+        "Existuje jen k jedné tabulce: obě čísla o shodě byla změřena na skutečných "
+        "českých sezeních podle šesti kritérií a zápis v Deepsy, přeložený zápis ani "
+        "odpověď PDSQI nikdo proti člověku nečetl. Každá další tabulka to říká přímo "
+        "v buňce, místo aby ji nechala prázdnou, protože přenést číslo jinam by "
+        "znamenalo ohlásit měření jedné tabulky pod hlavičkou druhé."
     ),
+    "not measured on this track": "na této větvi neměřeno",
     "cannot rank": "nedokáže seřadit",
     "share one value": "sdílí jednu hodnotu",
     "tells": "rozliší",

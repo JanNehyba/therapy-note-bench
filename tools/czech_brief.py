@@ -972,25 +972,35 @@ WHAT_IT_CATCHES = {
 #: and "reliable", which inverts the row's verdict.
 ANCHORED_ON = results.TRACK_CZECH_REAL
 
+#: What the cell says where there is nothing to put in it. An empty cell is not
+#: an omission a reader can read: thirty-six of them sat under a heading
+#: promising what is behind the number and under a lead promising it for "any
+#: column here", and a blank says neither "measured and unremarkable" nor "never
+#: measured". Omitting the figure is right; leaving the gap unnamed is not.
+NOT_MEASURED_HERE = "not measured on this track"
+
 
 def _catch(key: str, track: str) -> str:
-    """What a column catches, in this run's language, or nothing.
+    """What a column catches, in this run's language, or where it was not asked.
 
-    A column with no sentence written for it renders an empty cell rather than
-    raising: the verdict beside it is still counted and still worth reading, and
-    a missing sentence is a gap in the prose rather than in the measurement.
+    A column with no sentence written for it says so rather than raising: the
+    verdict beside it is still counted and still worth reading, and a missing
+    sentence is a gap in the prose rather than in the measurement.
 
     **Only under the track it was measured on.** These sentences quote judge
     agreement and a native speaker's; both were measured on the real Czech
     sessions under the criteria rubric, and nobody has rated a Deepsy note or a
-    translated one by hand at all. Elsewhere the cell is empty, which is what
-    "not measured here" looks like.
+    translated one by hand at all. Importing them would be reporting one
+    table's number under another's heading -- on the Deepsy notes `untranslated`
+    agrees on 63% and was being described as 87% and "reliable".
+
+    So the figure is omitted and the gap is named, which is this repository's
+    rule about a missing measurement and was two thirds kept: the omitting was
+    done and the naming was not.
     """
-    if track != ANCHORED_ON:
-        return ""
-    written = WHAT_IT_CATCHES.get(key, "")
+    written = WHAT_IT_CATCHES.get(key, "") if track == ANCHORED_ON else ""
     if not written:
-        return ""
+        return _t(NOT_MEASURED_HERE)
     return f"{_t(written)} {_rater(key)}".strip()
 
 
@@ -1336,7 +1346,13 @@ def _verdicts(rows: list[results.Row]) -> str:
                 "all. That half is counted from the rows. The second half — what the "
                 "column actually catches, and how far two judges and one native "
                 "speaker agreed about it — is written down rather than computed, "
-                "because no arithmetic supplies it."
+                "because no arithmetic supplies it. It exists for one table only: "
+                "both agreement figures were measured on the real Czech sessions "
+                "under the six criteria, and nobody has read a Deepsy note, a "
+                "translated one or a PDSQI answer against a person at all. Every "
+                "other table says so in the cell rather than leaving it blank, "
+                "because carrying a number across would report one table's "
+                "measurement under another's heading."
             )
         )
         + "</p>"
