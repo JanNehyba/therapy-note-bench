@@ -116,6 +116,18 @@ CS: dict[str, str] = {
         "1 až 5 a osmý je ano/ne; vykazují se zvlášť a nikdy se neprůměrují, jak je "
         "vykazují sami autoři nástroje."
     ),
+    # --- the sentence every definition of one instrument ends with ---------
+    # Cut off the end of each definition and said once above the list instead.
+    # Keyed by the English tail, because that is what `czech_brief._SHARED_TAILS`
+    # holds and what `_trim` looks up: without these three the Czech list
+    # printed the same closing sentence under all six criteria.
+    " Reported as the share of notes free of it.": (
+        "Vykázáno jako podíl zápisů, které tím netrpí."
+    ),
+    " rated 1 (not at all) to 5 (extremely).": "hodnoceno 1 (vůbec) až 5 (zcela).",
+    " answered yes or no and reported as the fraction of notes free of it.": (
+        "odpověď ano/ne, vykázáno jako podíl zápisů, které jsou ho prosté."
+    ),
     # --- table headings ----------------------------------------------------
     "Model": "Model",
     "Notes in the mean": "Zápisů v průměru",

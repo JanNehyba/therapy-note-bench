@@ -407,9 +407,28 @@ _SHARED_TAILS = (
 
 
 def _trim(text: str) -> str:
+    """A definition without the sentence all of them end with.
+
+    Two repairs, and both were only visible once the definitions moved above
+    the tables and became the first thing a reader meets.
+
+    **The tail is matched in the language the definition is written in.** The
+    list of tails is English and the definition arrives translated, so in Czech
+    nothing ever matched: the English list lost its six repetitions and the
+    Czech list kept all six -- and the Czech list is the one that goes to the
+    readers this document is written for. Each tail is now also looked up
+    through `_t`, which means a missing Czech tail stops the build rather than
+    printing the sentence six times again.
+
+    **And the cut lands mid-sentence.** "PDSQI-9 item 2, rated 1 to 5." leaves
+    a comma standing where the full stop was, in both languages. Eight
+    definitions ended on a hanging comma.
+    """
     for tail in _SHARED_TAILS:
-        if text.endswith(tail):
-            return text[: -len(tail)]
+        for ending in (tail.strip(), _t(tail).strip()):
+            if text.endswith(ending):
+                kept = text[: -len(ending)].rstrip(" ,;")
+                return kept if kept.endswith(".") else kept + "."
     return text
 
 
