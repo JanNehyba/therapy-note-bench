@@ -831,16 +831,30 @@ CS: dict[str, str] = {
     "What eleven models did, in five sentences": ("Co jedenáct modelů dokázalo, v pěti větách"),
     "no models": "žádné modely",
     "No model": "Žádný model",
-    "On writing correct Czech, {top} are in the top band of all {tables} tables the "
-    "bands cover -- the SOAP halves, both judges. {bottom} is in the bottom band of all "
-    "{tables}. Between those two ends the tables disagree with each other, so nothing "
-    "else here is a ranking. The Deepsy tables are not in this: no band, dominance or "
-    "separability figure has been computed for them.": (
-        "Ve psaní správné češtiny jsou {top} v nejvyšším pásmu všech {tables} tabulek, "
-        "které pásma pokrývají — půlky SOAP, oba soudci. {bottom} je v nejnižším pásmu "
-        "všech {tables}. Mezi těmito dvěma konci si tabulky odporují, takže nic "
-        "dalšího tu není pořadí. Deepsy tabulky v tom nejsou: nemají spočítané pásmo, "
-        "dominanci ani odlišitelnost."
+    "is": "je",
+    "are": "jsou",
+    "Part of what those language tables measure is length, and how much was measured "
+    "rather than argued: each extra hundred words costs {low} to {high} hundredths of "
+    "a point, under every judge on both halves. "
+    "Subtracting it does not give an order that holds still, so none is printed. What "
+    "survives a handicap that never lets the shorter writer win is {survived} of {decided} "
+    "decided pairs.": (
+        "Kolik z toho, co ty jazykové tabulky měří, je délka, je změřeno, ne dohadováno: "
+        "každých sto slov navíc stojí {low} až {high} setin bodu, u každého soudce a na "
+        "obou polovinách. Odečíst to "
+        "nedá pořadí, které by se drželo, takže se žádné netiskne. Handicap, který kratšího "
+        "pisatele nikdy nenechá vyhrát, přežije {survived} z {decided} rozhodnutých dvojic."
+    ),
+    "On writing correct Czech, {top} {top_verb} in the top band of all {tables} tables "
+    "the bands cover -- the SOAP halves, both judges. {bottom} {bottom_verb} in the "
+    "bottom band of all {tables}. Between those two ends the tables disagree with each "
+    "other, so nothing else here is a ranking. The Deepsy tables are not in this: no "
+    "band, dominance or separability figure has been computed for them.": (
+        "Ve psaní správné češtiny {top_verb} {top} v nejvyšším pásmu všech {tables} "
+        "tabulek, které pásma pokrývají — půlky SOAP, oba soudci. {bottom} {bottom_verb} "
+        "v nejnižším pásmu všech {tables}. Mezi těmito dvěma konci si tabulky odporují, "
+        "takže nic dalšího tu není pořadí. Deepsy tabulky v tom nejsou: nemají spočítané "
+        "pásmo, dominanci ani odlišitelnost."
     ),
     "On whether the note is any good, no model is in the top band of all {tables} "
     "tables and none is in the bottom band of all {tables}. The quality instrument "
@@ -1012,7 +1026,7 @@ CS: dict[str, str] = {
         "rozlišuje, a řádky jsou seřazené podle něj."
     ),
     "What the Czech track found, in {count} short paragraphs": (
-        "Co český track zjistil, v {count} odstavcích"
+        "Co český track zjistil, ve {count} odstavcích"
     ),
     # --- one table, both judges --------------------------------------------
     "Every cell holds both judges, {judges}, in that order and never averaged: "
@@ -1078,7 +1092,7 @@ CS: dict[str, str] = {
     "draws. The direction is settled: on this corpus a longer note scores lower on "
     "Czech.": (
         "Jak je ten vliv velký? Když se u každého soudce proloží složené skóre "
-        "kritérií mediánovou délkou zápisu, stojí to {low} až {high} setiny bodu na "
+        "kritérií mediánovou délkou zápisu, stojí to {low} až {high} setin bodu na "
         "sto slov, a to ve všech čtyřech kombinacích tracku a soudce. Když se těch "
         "{systems} modelů vylosuje znovu s vracením ({resamples} losování), "
         "devadesátiprocentní interval se ve všech čtyřech vyhne nule a znaménko se "

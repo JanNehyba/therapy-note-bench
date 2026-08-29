@@ -110,6 +110,13 @@ dt { font-weight: 600; font-family: "Source Sans 3", system-ui, sans-serif;
      font-size: .85rem; margin-top: .7rem; }
 dd { margin: .1rem 0 0; color: var(--muted); font-size: .9rem; }
 .warn { border-left: 3px solid var(--accent); padding: .1rem 0 .1rem .9rem; margin: 1rem 0; }
+/* The summary, and the only tinted block in the document. It is the one
+   thing a reader who reads nothing else should read, so it is above the
+   first table and looks unlike the prose around it. */
+.summary { background: #f4f6f9; border: 1px solid var(--rule); border-radius: 3px;
+           padding: .2rem 1.1rem 1rem; margin: 1.4rem 0 1.8rem; }
+.summary h2 { margin-top: 1.2rem; border-bottom: none; }
+.summary p:last-child { margin-bottom: 0; }
 .warn p { margin: .4rem 0; }
 footer { margin-top: 3rem; padding-top: .8rem; border-top: 1px solid var(--rule);
          color: var(--muted); font-size: .8rem; }
@@ -118,6 +125,7 @@ code { font-family: ui-monospace, monospace; font-size: .9em; }
   body { max-width: none; padding: 0; font-size: 10pt; }
   h2 { break-after: avoid; } table { break-inside: auto; }
   tr { break-inside: avoid; } .warn { break-inside: avoid; }
+  .summary { break-inside: avoid; background: #f4f6f9 !important; }
 }
 """
 
@@ -1562,15 +1570,20 @@ def _conclusion(rows: list[results.Row]) -> str:
     if tables:
         said.append(
             _t(
-                "On writing correct Czech, {top} are in the top band of all {tables} "
-                "tables the bands cover -- the SOAP halves, both judges. {bottom} is in "
-                "the bottom band of all {tables}. Between those two ends the tables "
-                "disagree with each other, so nothing else here is a ranking. The "
-                "Deepsy tables are not in this: no band, dominance or separability "
-                "figure has been computed for them."
+                "On writing correct Czech, {top} {top_verb} in the top band of all "
+                "{tables} tables the bands cover -- the SOAP halves, both judges. "
+                "{bottom} {bottom_verb} in the bottom band of all {tables}. Between "
+                "those two ends the tables disagree with each other, so nothing else "
+                "here is a ranking. The Deepsy tables are not in this: no band, "
+                "dominance or separability figure has been computed for them."
             ).format(
                 top=_join_words(top) or _t("no models"),
                 bottom=_join_words(bottom) or _t("No model"),
+                # One model is, two models are. The sentence named both ends and
+                # conjugated for one of them, so it read wrong whenever the other
+                # end had a different number of models in it -- which is most runs.
+                top_verb=_t("is") if len(top) == 1 else _t("are"),
+                bottom_verb=_t("is") if len(bottom) == 1 else _t("are"),
                 tables=tables,
             )
         )
@@ -1626,6 +1639,36 @@ def _conclusion(rows: list[results.Row]) -> str:
                 "longer note has more places to hide one. On the quality instrument, "
                 "rating the very same notes, those three models are not at the bottom."
             ).format(total=len(checks))
+        )
+
+    # 4b. How big that is, and what is left of the ordering once it is
+    #     handicapped. Prints whether or not the sentence above did: the tail
+    #     claim holds on the SOAP halves and not on Deepsy, and the size holds
+    #     everywhere. A reader who is told a column is entangled with length
+    #     and not by how much has been warned and not informed.
+    fits = [
+        block
+        for judges in (length.get("adjusted") or {}).values()
+        for block in judges.values()
+        if block.get("interval_90")
+    ]
+    handicap = length.get("handicapped") or {}
+    if fits and handicap:
+        sizes = sorted(abs(block["slope_per_100_words"]) for block in fits)
+        said.append(
+            _t(
+                "Part of what those language tables measure is length, and how much was "
+                "measured rather than argued: each extra hundred words costs {low} to "
+                "{high} hundredths of a point, under every "
+                "judge on both halves. Subtracting it does not give an order that holds "
+                "still, so none is printed. What survives a handicap that never lets the "
+                "shorter writer win is {survived} of {decided} decided pairs."
+            ).format(
+                low=f"{sizes[0] * 100:.0f}",
+                high=f"{sizes[-1] * 100:.0f}",
+                survived=sum(block["survived"] for block in handicap.values()),
+                decided=sum(block["decided"] for block in handicap.values()),
+            )
         )
 
     # 5. Whether the English leaderboard says anything about this.
@@ -3034,12 +3077,12 @@ def build(rows: list[results.Row]) -> str:
 <h1>{_t(HEADLINE)}</h1>
 <p class="sub">{_t(SUBTITLE)}</p>
 
+<div class="summary">{_conclusion(rows)}</div>
+
 <p>{_intro(rows)}</p>
 <p>{_t(INTRO_SECOND)}</p>
 
 <div class="warn"><p><strong>{_t(NOT_PUBLIC)}</strong> {_t(NOT_PUBLIC_WHY)}</p></div>
-
-{_conclusion(rows)}
 
 {"".join(sections)}
 
