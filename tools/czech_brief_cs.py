@@ -138,6 +138,12 @@ CS: dict[str, str] = {
     ),
     "What each column is": "Co který sloupec je",
     # --- per-table prose ---------------------------------------------------
+    "How to read the tables": "Jak číst tabulky",
+    "Each row is one language model. People wrote and transcribed the sessions; the "
+    "models wrote the notes from them.": (
+        "Každý řádek je jeden jazykový model. Sezení vedli a přepisy pořídili lidé; "
+        "modely z nich napsaly zápisy."
+    ),
     "Judged by": "Hodnotil",
     "Two judges, two tables, and they are not averaged. Where they disagree about a "
     "model is the only control this track has, so the disagreement is the thing to "

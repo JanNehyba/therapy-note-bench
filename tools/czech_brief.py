@@ -582,7 +582,7 @@ def _dominance_places(systems: list[str], keys, tables: dict) -> dict[str, int]:
     return {system: beaten_by(system) for system in systems}
 
 
-def _merged_table(track: str, groups: list[list[results.Row]]) -> str:
+def _merged_table(track: str, groups: list[list[results.Row]], *, lead: bool = False) -> str:
     """One table for a track, with every judge's value in every cell.
 
     Twelve tables became six. Nothing is averaged: the two numbers sit side by
@@ -592,6 +592,12 @@ def _merged_table(track: str, groups: list[list[results.Row]]) -> str:
     Rows are ordered by dominance and models nothing separates share a place.
     Within a shared place they are alphabetical, which is arbitrary and says so
     by being alphabetical rather than by looking like a ranking.
+
+    `lead` says whether this table has to name its own two judges. Normally it
+    does not, because every table on the page holds the same pair and
+    `_how_to_read` names them once above all of them. It is set only where that
+    is not true -- two tracks judged by different pairs -- and there one
+    sentence above the page could not be true of both.
     """
     rows_by_judge: dict[str, dict[str, results.Row]] = {}
     for group in groups:
@@ -680,7 +686,9 @@ def _merged_table(track: str, groups: list[list[results.Row]]) -> str:
                 break
 
     ties = sum(1 for place in set(shared) if shared.count(place) > 1)
-    lead = _t(MERGED_LEAD).format(judges=_join_words(judges))
+    # What the two judges in a cell are, what the notes column counts and what
+    # range the numbers run over is said once above all the tables, by
+    # `_how_to_read`. What is left here is what this table alone can say.
     order_line = _t(MERGED_ORDER).format(places=len(set(shared)), systems=len(systems), tied=ties)
     warning = ""
     if thin:
@@ -689,10 +697,11 @@ def _merged_table(track: str, groups: list[list[results.Row]]) -> str:
             + html.escape(_t(THIN_ROWS))
             + f" {html.escape(', '.join(thin))}.</p></div>"
         )
+    caption = f"{_t(ROWS_ARE_MODELS)} {order_line}"
+    if lead:
+        caption = f"{_t(MERGED_LEAD).format(judges=_join_words(judges))} {caption}"
     return (
-        f"<p class='sub'>{html.escape(lead)} {html.escape(order_line)} "
-        f"{html.escape(_t(NOTES_COLUMN))} {html.escape(_scale_line(track))}</p>"
-        + f"<table><thead><tr><th>{_t('Model')}</th>"
+        f"<p class='sub'>{html.escape(caption)}</p>" + f"<table><thead><tr><th>{_t('Model')}</th>"
         f"<th>{_t('Notes in the mean')}</th>{head}</tr></thead>"
         f"<tbody>{''.join(body)}</tbody></table>{warning}"
     )
@@ -726,6 +735,68 @@ MERGED_ORDER = (
     "of which {tied} hold more than one. Within a place the order is alphabetical "
     "and means nothing."
 )
+
+#: Who the rows are, above every one of the score tables. Ten words, and they
+#: are not decoration: the person this document was written for read the model
+#: column as the list of people whose sessions these were, and came away
+#: believing a model had generated the transcripts. The heading names a corpus,
+#: the first column names models, and nothing between them said which was
+#: which. It is repeated over each table rather than said once with the rest of
+#: the caption, because it is the sentence that stops a misreading of the table
+#: directly under it.
+ROWS_ARE_MODELS = (
+    "Each row is one language model. People wrote and transcribed the sessions; the "
+    "models wrote the notes from them."
+)
+
+#: How a scale line is attached to the instrument it describes when more than
+#: one instrument is on the page. Not put through `_t`: it is punctuation
+#: joining two already-translated halves, and an em dash is an em dash in both
+#: languages. A colon would do the same job and the scale line contains one.
+SCALE_OF = "{names} — {line}"
+
+
+def _how_to_read(tracks: list[str], judges: list[str]) -> str:
+    """The half of the table caption that is the same under all of them.
+
+    Three things used to be printed under every score table: how the two judges
+    share a cell, what the notes column counts, and what range the numbers are
+    on. Six tables, six copies, six hundred words -- and a reader who learns
+    that the caption is the same one they already read stops reading captions,
+    including the per-table line below each table that says the rows are
+    ordered by dominance and neighbours may not be compared.
+
+    So the invariant half is said once, here, above the tables it governs. What
+    stays with each table is what differs between them: how many places that
+    table's models fall into, and which columns put it in that order.
+
+    `judges` is empty when no table holds two of them, and then the sentence
+    about the two-judge cell is not printed -- it would be describing a layout
+    that is not on the page.
+    """
+    said = []
+    if judges:
+        said.append(_t(MERGED_LEAD).format(judges=_join_words(judges)))
+    said.append(_t(NOTES_COLUMN))
+    # One line per scale actually drawn, named by the instrument it belongs to.
+    # The criteria tables are all shares from 0 to 1 and the PDSQI tables mix a
+    # Likert range with one share, so a single sentence covering both would
+    # have to be vaguer than either of them is.
+    by_line: dict[str, list[str]] = {}
+    for track in tracks:
+        name = _t(INSTRUMENT_OF.get(track, TRACK_TITLES.get(track, track)))
+        by_line.setdefault(_scale_line(track), []).append(name)
+    for line, names in by_line.items():
+        if len(by_line) == 1:
+            said.append(line)
+            continue
+        # The instrument names are written lower case because they are read
+        # inside a sentence elsewhere, and here one opens a sentence. Safe to
+        # recase, unlike a model id: `deepseek-v4-flash` is deployed under that
+        # spelling and does not become `Deepseek-v4-flash` after a full stop.
+        label = _join_words(list(dict.fromkeys(names)))
+        said.append(SCALE_OF.format(names=label[:1].upper() + label[1:], line=line))
+    return f"<p class='sub'>{html.escape(' '.join(said))}</p>"
 
 
 def _table(track: str, rows: list[results.Row]) -> str:
@@ -803,8 +874,9 @@ def _table(track: str, rows: list[results.Row]) -> str:
             + "</p></div>"
         )
     return (
-        f"<p class='sub'>{html.escape(_sort_line(track, varying))} "
-        f"{html.escape(_scale_line(track))}</p>" + f"<table><thead><tr><th>{_t('Model')}</th>"
+        f"<p class='sub'>{html.escape(_t(ROWS_ARE_MODELS))} "
+        f"{html.escape(_sort_line(track, varying))}</p>"
+        + f"<table><thead><tr><th>{_t('Model')}</th>"
         f"<th>{_t('Notes in the mean')}</th>"
         f"{head}</tr></thead><tbody>{''.join(body)}</tbody></table>{warning}"
     )
@@ -3749,16 +3821,15 @@ def build(rows: list[results.Row]) -> str:
     withdrawn_from: dict[str, set[str]] = {}
     drawn_instruments: list[tuple[tuple, str]] = []
 
-    sections = []
+    # Which tables will be drawn, decided before any of them is. The caption
+    # above them names the judges every cell holds and the scales the columns
+    # run on, and neither can be written until it is known what is on the page:
+    # a run with one judge must not be handed a sentence about two.
+    plan: list[tuple[str, list[list[results.Row]], set[str]]] = []
     for track in results.LOCAL_TRACKS:
         groups = {key: drawn for key, drawn in by_group.items() if drawn[0].track == track}
         if not groups:
             continue
-        sections.append(
-            f"<h2>{html.escape(_t(TRACK_TITLES.get(track, track)))}</h2>"
-            f"<p class='sub'>"
-            f"{html.escape(re.sub(r'[*]{2}', '', _t(TRACK_BLURBS.get(track, ''))))}</p>"
-        )
         # Only the newest rubric is drawn. An older one is named instead, which
         # is what the published English page does with a superseded harness:
         # drawing both would put two instruments side by side under one track
@@ -3775,6 +3846,31 @@ def build(rows: list[results.Row]) -> str:
             drawn[0].judge_prompt_version for key, drawn in groups.items() if key not in current
         }
         ordered = sorted(current.values(), key=lambda drawn: drawn[0].judge_model or "")
+        plan.append((track, ordered, withdrawn))
+
+    # The judges named in the shared caption, and only when every merged table
+    # holds the same pair. Two tracks judged by different pairs would make one
+    # sentence naming a pair false of half the page, so then nothing is named
+    # and the disagreement mark speaks for itself.
+    pairs = {
+        tuple(group[0].judge_model or "?" for group in ordered)
+        for _track, ordered, _withdrawn in plan
+        if len(ordered) > 1
+    }
+    shared_judges = sorted(next(iter(pairs))) if len(pairs) == 1 else []
+
+    sections = []
+    if plan:
+        sections.append(
+            f"<h2>{_t('How to read the tables')}</h2>"
+            + _how_to_read([track for track, _ordered, _withdrawn in plan], shared_judges)
+        )
+    for track, ordered, withdrawn in plan:
+        sections.append(
+            f"<h2>{html.escape(_t(TRACK_TITLES.get(track, track)))}</h2>"
+            f"<p class='sub'>"
+            f"{html.escape(re.sub(r'[*]{2}', '', _t(TRACK_BLURBS.get(track, ''))))}</p>"
+        )
         # One table a track, with both judges in every cell, when there are two.
         # Twelve tables for six tracks made a reader flip between two grids to
         # compare one model, and the judges' disagreement -- the only control
@@ -3790,7 +3886,7 @@ def build(rows: list[results.Row]) -> str:
             sections.append(
                 f"<p class='sub'>{len(ordered[0])} {_t('models')}, {notes} {_t('notes')}, "
                 f"{_t('rubric')} {html.escape(first.judge_prompt_version)}</p>"
-                + _merged_table(track, ordered)
+                + _merged_table(track, ordered, lead=not shared_judges)
             )
             two_judges = True
         else:
