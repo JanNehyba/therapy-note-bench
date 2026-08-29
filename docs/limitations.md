@@ -165,6 +165,16 @@ no published Czech one exists to reproduce; and a generation prompt that is a
 translation of TN-Eval's rather than a reproduction of any Czech documentation
 standard, of which there is none.
 
+**The translated half was translated by a language model.** Claude did it, from
+a family no model on that track and neither judge belongs to, so nothing is
+scored on Czech its own family wrote. Every model read the same translated text,
+so the translation cancels when the models are compared with each other. It does
+not cancel for the absolute claim — "models write bad Czech" — because
+clumsiness the translation introduced can come back out of the note written from
+it, and no measurement here separates the two. A fault that shows on both halves
+is the model's; a fault that shows only on the translated half is the input's,
+and that is the only reason the real half exists.
+
 One native speaker has since rated twenty of those notes on all seven language
 criteria -- 140 answers, and the agreement with each judge is reported beside the
 tables. It is one rater, so it is a comparison and not a ceiling. **PDSQI-9 on

@@ -1513,6 +1513,54 @@ CORPORA_LEAD = (
     "de-identified by hand and never released. The other is public counselling "
     "conversations from the AnnoMI corpus, translated into spoken Czech for this track."
 )
+#: Who translated the half that was translated, and what that does and does
+#: not contaminate. It was recorded in one handoff file and in no document
+#: anybody outside this repository would ever read, and it bears directly on
+#: the one claim this whole track exists to make.
+#:
+#: **Both halves of it, or neither.** Comparing the models with each other the
+#: translation cancels, because every model read the same translated text.
+#: The absolute claim -- "these models write bad Czech" -- it does not touch,
+#: because a clumsiness the translation put into the transcript can come back
+#: out of the note. Saying only the first is an excuse; saying only the second
+#: is a reason to throw the half away, and it is neither.
+TRANSLATION_CANCELS = (
+    "The same translated text went to every model, and that matters in two opposite "
+    "ways. Comparing the models with each other, the translation cancels: whatever it "
+    "did to the Czech, it did equally to all of them, so a difference between two "
+    "models on this half is still a difference between the models. For an absolute "
+    'claim -- "these models write bad Czech" -- it does not cancel at all, because '
+    "clumsiness the translation put into a transcript can come back out of the note "
+    "written from it. That is what the real half is for: a fault that shows on both "
+    "halves is the model's, and one that shows only on the translated half is the "
+    "input's."
+)
+#: The version printed while the translator is outside every family on the
+#: tables. Which families those are is discovered at run time and never typed
+#: here, so the claim is checked against the rows rather than asserted.
+TRANSLATED_BY_OUTSIDER = (
+    "The translating was done by Claude, which is itself a language model, and anyone "
+    "reading these numbers should know that before they read them. It was picked for "
+    "being an outsider: no model in any table here, and neither judge, belongs to the "
+    "family that wrote this Czech, so nothing is being marked on prose its own "
+    "relatives produced."
+)
+#: And the version printed when that stops being true. Not silence: the reader
+#: who was told the translator is an outsider is the reader who has to be told
+#: when it is not.
+TRANSLATED_BY_INSIDER = (
+    "The translating was done by Claude, which is itself a language model, and anyone "
+    "reading these numbers should know that before they read them. It was picked for "
+    "being an outsider, and that no longer holds: a model from the same family is in "
+    "the tables below, so on this half it is being scored on Czech its own family "
+    "wrote. Read its translated column against its real-session column rather than on "
+    "its own."
+)
+#: The translator's family, matched against the model ids and judge names the
+#: tables actually draw. A substring rather than a list of ids, because ids are
+#: discovered at run time and a list typed here would go stale silently.
+TRANSLATOR_FAMILY = "claude"
+
 #: The size difference, with the multiple computed from the same medians the
 #: table prints. It was a typed "seven times" in the method section, three
 #: screens away from the two medians it is the ratio of.
@@ -1524,7 +1572,26 @@ CORPORA_SIZE = (
 )
 
 
-def _corpus() -> str:
+def _translator(drawn: list[results.Row]) -> str:
+    """Who translated the AnnoMI half, and whether the choice still holds.
+
+    The translator was picked for being outside every family on the tables, so
+    that no model would be marked on Czech its own relatives wrote. Whether
+    that is still true is a fact about the rows, not about the sentence: models
+    are discovered at run time here, and a paragraph naming the families it
+    considered would be one deployment away from being false while still
+    reading as a reassurance.
+    """
+    names = {row.system_id.lower() for row in drawn}
+    names |= {(row.judge_model or "").lower() for row in drawn}
+    inside = any(TRANSLATOR_FAMILY in name for name in names)
+    return (
+        f"<p>{html.escape(_t(TRANSLATED_BY_INSIDER if inside else TRANSLATED_BY_OUTSIDER))}</p>"
+        f"<p>{html.escape(_t(TRANSLATION_CANCELS))}</p>"
+    )
+
+
+def _corpus(drawn: list[results.Row]) -> str:
     """What the two halves are, counted rather than asserted.
 
     The sentence this replaces said "ten real sessions ... plus ten AnnoMI
@@ -1585,10 +1652,13 @@ def _corpus() -> str:
     return (
         f"<details open><summary>{_t('The two corpora')}</summary>"
         f"<p>{html.escape(_t(CORPORA_LEAD))}</p>"
-        f"<table><thead><tr><th>{_t('Half')}</th><th>{_t('Sessions')}</th>"
-        f"<th>{_t('Words, median')}</th><th>{_t('Words, range')}</th>"
-        f"<th>{_t('Turns, median')}</th><th></th></tr></thead>"
-        f"<tbody>{''.join(rows)}</tbody></table>{size}</details>"
+        + _translator(drawn)
+        + (
+            f"<table><thead><tr><th>{_t('Half')}</th><th>{_t('Sessions')}</th>"
+            f"<th>{_t('Words, median')}</th><th>{_t('Words, range')}</th>"
+            f"<th>{_t('Turns, median')}</th><th></th></tr></thead>"
+            f"<tbody>{''.join(rows)}</tbody></table>{size}</details>"
+        )
     )
 
 
@@ -3924,7 +3994,7 @@ def build(rows: list[results.Row]) -> str:
         # contents gone.
         sections.append(
             f"<h2>{_t('What was measured, and on what')}</h2>"
-            + _corpus()
+            + _corpus([row for _t2, ordered, _w in plan for group in ordered for row in group])
             + _column_definitions(drawn_tracks)
         )
         sections.append(

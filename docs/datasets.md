@@ -202,6 +202,20 @@ client, recorded and transcribed in Czech, held by the therapist who ran them.
 Plus ten AnnoMI conversations translated into spoken Czech, which are derived
 from a public corpus and carry AnnoMI's terms.
 
+**Who translated the AnnoMI half.** Claude, and the choice was deliberate: every
+model measured on this track comes from a different family, and so do both
+judges, so no model is scored on Czech its own family wrote. Recorded here
+because it was recorded nowhere a reader outside this repository would find it,
+and because it decides what the translated half can be used for. The same
+translated text went to every model, so **the translation cancels when models
+are compared with each other** — a difference between two models on that half is
+still a difference between the models. It does **not** cancel for any absolute
+claim about how well models write Czech, because clumsiness the translation put
+into a transcript can come back out of the note written from it. That is what
+the real half is for: a fault on both halves is the model's, a fault on the
+translated half only is the input's. Say both halves of that wherever the
+absolute claim appears.
+
 **Where it lives.** `data/czech/`, which is gitignored like everything else under
 `data/`. Nothing fetches it; it was already there. `datasets/czech.py` reads only
 `data/czech/anonymised/` and **refuses the parent directory outright** — both

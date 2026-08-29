@@ -164,6 +164,47 @@ CS: dict[str, str] = {
         "anonymizované, nikdy nezveřejněné. Druhá jsou veřejné poradenské rozhovory "
         "z korpusu AnnoMI, přeložené pro tenhle track do mluvené češtiny."
     ),
+    "The translating was done by Claude, which is itself a language model, and anyone "
+    "reading these numbers should know that before they read them. It was picked for "
+    "being an outsider: no model in any table here, and neither judge, belongs to the "
+    "family that wrote this Czech, so nothing is being marked on prose its own "
+    "relatives produced.": (
+        "Překládal Claude, což je sám o sobě jazykový model, a kdokoli tahle čísla čte, "
+        "by to měl vědět dřív, než je začne číst. Vybrali jsme ho proto, že stojí "
+        "mimo: žádný model v žádné zdejší tabulce ani jeden ze soudců nepatří do rodiny, "
+        "která tuhle češtinu napsala, takže se nikomu neznámkuje text, který vyrobili "
+        "jeho vlastní příbuzní."
+    ),
+    "The translating was done by Claude, which is itself a language model, and anyone "
+    "reading these numbers should know that before they read them. It was picked for "
+    "being an outsider, and that no longer holds: a model from the same family is in "
+    "the tables below, so on this half it is being scored on Czech its own family "
+    "wrote. Read its translated column against its real-session column rather than on "
+    "its own.": (
+        "Překládal Claude, což je sám o sobě jazykový model, a kdokoli tahle čísla čte, "
+        "by to měl vědět dřív, než je začne číst. Vybrali jsme ho proto, že stojí mimo — "
+        "a to už neplatí: v tabulkách níže je model ze stejné rodiny, takže se mu na "
+        "téhle půlce známkuje čeština, kterou napsala jeho vlastní rodina. Jeho sloupec "
+        "z přeložené půlky čtěte proti jeho sloupci ze skutečných sezení, ne samostatně."
+    ),
+    "The same translated text went to every model, and that matters in two opposite "
+    "ways. Comparing the models with each other, the translation cancels: whatever it "
+    "did to the Czech, it did equally to all of them, so a difference between two "
+    "models on this half is still a difference between the models. For an absolute "
+    'claim -- "these models write bad Czech" -- it does not cancel at all, because '
+    "clumsiness the translation put into a transcript can come back out of the note "
+    "written from it. That is what the real half is for: a fault that shows on both "
+    "halves is the model's, and one that shows only on the translated half is the "
+    "input's.": (
+        "Každý model dostal tentýž přeložený text, a to má dva opačné důsledky. Při "
+        "srovnávání modelů mezi sebou se překlad vyruší: cokoli s tou češtinou udělal, "
+        "udělal to všem stejně, takže rozdíl mezi dvěma modely na téhle půlce je pořád "
+        "rozdílem mezi modely. U absolutního tvrzení — „tyhle modely píšou špatnou "
+        "češtinu“ — se nevyruší vůbec, protože neobratnost, kterou překlad dostal do "
+        "přepisu, může vylézt ven i ze zápisu, který z něj vznikl. Právě na tohle je "
+        "tam ta skutečná půlka: vada, která se ukáže na obou půlkách, je vada modelu, "
+        "a vada, která se ukáže jen na přeložené, je vada vstupu."
+    ),
     "The two halves are nothing like the same size: by the median word count a real "
     "session runs about {ratio} times as long as a translated conversation. The longer "
     "half is a harder summarising task before any question of Czech arises, so every "
