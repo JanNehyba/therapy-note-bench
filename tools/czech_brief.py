@@ -1665,9 +1665,11 @@ def _conclusion(rows: list[results.Row]) -> str:
         sentence held different numbers of models, and had no branch at all for
         an empty end. An empty end became reachable the moment a second group of
         tables could be intersected. Subject and verb are one translated unit
-        because the empty case is not a conjugation of the others: English needs
-        "No model is" and Czech needs "Žádný model není", and a shared "is"
-        cannot be both "je" and "není".
+        because the empty case is not a conjugation of the others: English picks
+        a verb form, Czech negates the verb instead, so the word standing where
+        "is" stands cannot be the same word in both the empty and the one-model
+        case. The Czech itself lives in `czech_brief_cs.py`, which is the only
+        tool file allowed to hold it.
 
         `lead` says whether the phrase opens its sentence. Only the empty case
         is ever recased -- a model id is written the way it is deployed, and
