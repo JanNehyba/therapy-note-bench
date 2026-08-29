@@ -119,10 +119,16 @@ API_LOCATION = "global"
 DEFAULT_THINKING_BUDGET = 256
 
 #: Room for the answer itself, which is "Yes", "No" or a single digit.
+#:
+#: **The default is load-bearing.** It is inside the judge fingerprint, so this
+#: number is part of what makes a cached answer reusable: 169,000 answers are
+#: keyed on it. Changing it here re-asks all of them. `JudgeConfig.answer_tokens`
+#: exists so one run can have more room without doing that -- see the docstring
+#: there for what it is for and what it costs.
 ANSWER_TOKENS = 32
 
 
-def output_ceiling(thinking_budget: int) -> int:
+def output_ceiling(thinking_budget: int, answer_tokens: int = ANSWER_TOKENS) -> int:
     """The output cap, which must leave room for the answer *after* the thinking.
 
     Gemini counts thinking tokens against ``maxOutputTokens``. Setting the cap
@@ -132,7 +138,7 @@ def output_ceiling(thinking_budget: int) -> int:
     of 142 questions came back empty at a cap of 64 against a 128-token thinking
     budget. Unused ceiling is not billed, so this is generous on purpose.
     """
-    return thinking_budget + ANSWER_TOKENS
+    return thinking_budget + answer_tokens
 
 
 #: What each provider calls "I ran out of room". Both spellings are checked
@@ -169,6 +175,27 @@ class JudgeConfig:
     credentials_path: str
     model: str = DEFAULT_MODEL
     thinking_budget: int = DEFAULT_THINKING_BUDGET
+    #: How much room the answer gets after the thinking, and part of the
+    #: fingerprint.
+    #:
+    #: A reasoning judge that spends its whole thinking budget has nothing left
+    #: to answer with, and returns `MAX_TOKENS` and no text. Measured on the
+    #: Czech criteria at a budget of 2048: 41 of 2,544 questions, and asking
+    #: again at temperature 0 reproduces them rather than clearing them.
+    #:
+    #: Raising it costs a new comparability group for whatever it is raised for,
+    #: because it changes the fingerprint -- which is the point of it being here
+    #: rather than a module constant. A track that leaves it alone keeps its
+    #: cache; a track that raises it re-asks its own questions and nobody
+    #: else's.
+    answer_tokens: int = ANSWER_TOKENS
+    #: The same room, for the backend that has no thinking budget to add it to.
+    #: `OPENAI_OUTPUT_CEILING` is pinned at the value its 51,000 cached answers
+    #: were produced under and must stay there; this is added on top, so a run
+    #: that leaves it at zero is byte-identical and every existing answer still
+    #: matches. Measured: 10 of terra's 1,272 Czech answers truncate at the
+    #: pinned ceiling.
+    extra_answer_room: int = 0
     timeout_s: int = 120
     retries: int = 3
     backoff_s: int = 4
@@ -313,7 +340,9 @@ class VertexBackend(Backend):
             "contents": [{"role": "user", "parts": [{"text": prompt}]}],
             "generationConfig": {
                 "temperature": 0,
-                "maxOutputTokens": output_ceiling(config.thinking_budget),
+                "maxOutputTokens": output_ceiling(
+                    config.thinking_budget, config.answer_tokens
+                ),
                 "thinkingConfig": {"thinkingBudget": config.thinking_budget},
             },
         }
@@ -354,7 +383,9 @@ class VertexBackend(Backend):
         return {
             "model": config.model,
             "thinking_budget": config.thinking_budget,
-            "max_output_tokens": output_ceiling(config.thinking_budget),
+            "max_output_tokens": output_ceiling(
+                config.thinking_budget, config.answer_tokens
+            ),
             "temperature": 0,
         }
 
@@ -401,7 +432,7 @@ class OpenAIBackend(Backend):
             # Room for the reasoning as well as the answer, the same reason the
             # Vertex ceiling exists. Measured on terra: a Likert question spends
             # up to ~170 reasoning tokens at medium, a rubric question spends 0.
-            "max_completion_tokens": OPENAI_OUTPUT_CEILING,
+            "max_completion_tokens": OPENAI_OUTPUT_CEILING + config.extra_answer_room,
         }
         if config.effort:
             body["reasoning_effort"] = config.effort
@@ -442,7 +473,7 @@ class OpenAIBackend(Backend):
             "backend": self.name,
             "model": config.model,
             "effort": config.effort,
-            "max_output_tokens": OPENAI_OUTPUT_CEILING,
+            "max_output_tokens": OPENAI_OUTPUT_CEILING + config.extra_answer_room,
         }
 
     def count_tokens(self, config: JudgeConfig, prompt: str) -> int:

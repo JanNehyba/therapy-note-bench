@@ -450,6 +450,12 @@ def cmd_score(args: argparse.Namespace) -> int:
         overrides["concurrency"] = args.concurrency
     if getattr(args, "thinking_budget", None) is not None:
         overrides["thinking_budget"] = args.thinking_budget
+    # Both backends, because a judge that runs out of room does it whichever
+    # API it speaks: Vertex adds the room after its thinking budget, OpenAI has
+    # no budget to add it to and gets it on top of a ceiling that is pinned.
+    if getattr(args, "answer_room", 0):
+        overrides["answer_tokens"] = judge.ANSWER_TOKENS + args.answer_room
+        overrides["extra_answer_room"] = args.answer_room
     config = judge.config_from_env(**overrides)
     sessions = scoring.load_sessions(args.limit)
 
@@ -601,6 +607,12 @@ def cmd_score_pdsqi(args: argparse.Namespace) -> int:
         overrides["concurrency"] = args.concurrency
     if getattr(args, "thinking_budget", None) is not None:
         overrides["thinking_budget"] = args.thinking_budget
+    # Both backends, because a judge that runs out of room does it whichever
+    # API it speaks: Vertex adds the room after its thinking budget, OpenAI has
+    # no budget to add it to and gets it on top of a ceiling that is pinned.
+    if getattr(args, "answer_room", 0):
+        overrides["answer_tokens"] = judge.ANSWER_TOKENS + args.answer_room
+        overrides["extra_answer_room"] = args.answer_room
     config = judge.config_from_env(**overrides)
     sessions = scoring.load_sessions(args.limit)
 
@@ -759,6 +771,12 @@ def cmd_score_czech(args: argparse.Namespace) -> int:
         overrides["concurrency"] = args.concurrency
     if getattr(args, "thinking_budget", None) is not None:
         overrides["thinking_budget"] = args.thinking_budget
+    # Both backends, because a judge that runs out of room does it whichever
+    # API it speaks: Vertex adds the room after its thinking budget, OpenAI has
+    # no budget to add it to and gets it on top of a ceiling that is pinned.
+    if getattr(args, "answer_room", 0):
+        overrides["answer_tokens"] = judge.ANSWER_TOKENS + args.answer_room
+        overrides["extra_answer_room"] = args.answer_room
     config = judge.config_from_env(**overrides)
 
     wanted = ["real", "translated"] if args.corpus == "both" else [args.corpus]
@@ -891,6 +909,12 @@ def cmd_score_czech_pdsqi(args: argparse.Namespace) -> int:
         overrides["concurrency"] = args.concurrency
     if getattr(args, "thinking_budget", None) is not None:
         overrides["thinking_budget"] = args.thinking_budget
+    # Both backends, because a judge that runs out of room does it whichever
+    # API it speaks: Vertex adds the room after its thinking budget, OpenAI has
+    # no budget to add it to and gets it on top of a ceiling that is pinned.
+    if getattr(args, "answer_room", 0):
+        overrides["answer_tokens"] = judge.ANSWER_TOKENS + args.answer_room
+        overrides["extra_answer_room"] = args.answer_room
     config = judge.config_from_env(**overrides)
 
     wanted = ["real", "translated"] if args.corpus == "both" else [args.corpus]
@@ -1039,6 +1063,12 @@ def cmd_score_deepsy(args: argparse.Namespace) -> int:
         overrides["concurrency"] = args.concurrency
     if getattr(args, "thinking_budget", None) is not None:
         overrides["thinking_budget"] = args.thinking_budget
+    # Both backends, because a judge that runs out of room does it whichever
+    # API it speaks: Vertex adds the room after its thinking budget, OpenAI has
+    # no budget to add it to and gets it on top of a ceiling that is pinned.
+    if getattr(args, "answer_room", 0):
+        overrides["answer_tokens"] = judge.ANSWER_TOKENS + args.answer_room
+        overrides["extra_answer_room"] = args.answer_room
     config = judge.config_from_env(**overrides)
 
     wanted = ["real", "translated"] if args.corpus == "both" else [args.corpus]
@@ -1885,6 +1915,18 @@ def build_parser() -> argparse.ArgumentParser:
             "back into the two tables it always was."
         ),
     )
+    score.add_argument(
+        "--answer-room",
+        type=int,
+        default=0,
+        help=(
+            "extra tokens for the answer after the thinking; default 0. A reasoning "
+            "judge that spends its whole thinking budget has nothing left to answer "
+            "with and returns nothing -- 41 of 2544 Czech answers. It is part of the "
+            "cache key, so raising it starts a new comparability group and re-asks "
+            "that track's questions, and only that track's."
+        ),
+    )
     score.add_argument("--force", action="store_true", help="re-ask cached questions")
     score.add_argument(
         "--cache-only",
@@ -1936,6 +1978,18 @@ def build_parser() -> argparse.ArgumentParser:
         type=int,
         help="how much room the judge gets to think; default 256, part of the cache key",
     )
+    score_pdsqi.add_argument(
+        "--answer-room",
+        type=int,
+        default=0,
+        help=(
+            "extra tokens for the answer after the thinking; default 0. A reasoning "
+            "judge that spends its whole thinking budget has nothing left to answer "
+            "with and returns nothing -- 41 of 2544 Czech answers. It is part of the "
+            "cache key, so raising it starts a new comparability group and re-asks "
+            "that track's questions, and only that track's."
+        ),
+    )
     score_pdsqi.add_argument("--force", action="store_true", help="re-ask cached questions")
     score_pdsqi.add_argument(
         "--cache-only",
@@ -1979,6 +2033,18 @@ def build_parser() -> argparse.ArgumentParser:
         type=int,
         help="how much room the judge gets to think; default 256, part of the cache key",
     )
+    score_czech.add_argument(
+        "--answer-room",
+        type=int,
+        default=0,
+        help=(
+            "extra tokens for the answer after the thinking; default 0. A reasoning "
+            "judge that spends its whole thinking budget has nothing left to answer "
+            "with and returns nothing -- 41 of 2544 Czech answers. It is part of the "
+            "cache key, so raising it starts a new comparability group and re-asks "
+            "that track's questions, and only that track's."
+        ),
+    )
     score_czech.add_argument("--force", action="store_true", help="re-ask cached questions")
     score_czech.add_argument("--dry-run", action="store_true", help="print the job, ask nothing")
     score_czech.add_argument(
@@ -2019,6 +2085,18 @@ def build_parser() -> argparse.ArgumentParser:
         type=int,
         help="how much room the judge gets to think; default 256, part of the cache key",
     )
+    score_czech_pdsqi.add_argument(
+        "--answer-room",
+        type=int,
+        default=0,
+        help=(
+            "extra tokens for the answer after the thinking; default 0. A reasoning "
+            "judge that spends its whole thinking budget has nothing left to answer "
+            "with and returns nothing -- 41 of 2544 Czech answers. It is part of the "
+            "cache key, so raising it starts a new comparability group and re-asks "
+            "that track's questions, and only that track's."
+        ),
+    )
     score_czech_pdsqi.add_argument("--force", action="store_true", help="re-ask cached questions")
     score_czech_pdsqi.add_argument(
         "--dry-run", action="store_true", help="print the job, ask nothing"
@@ -2050,6 +2128,18 @@ def build_parser() -> argparse.ArgumentParser:
         "--thinking-budget",
         type=int,
         help="how much room the judge gets to think; part of the cache key",
+    )
+    score_deepsy.add_argument(
+        "--answer-room",
+        type=int,
+        default=0,
+        help=(
+            "extra tokens for the answer after the thinking; default 0. A reasoning "
+            "judge that spends its whole thinking budget has nothing left to answer "
+            "with and returns nothing -- 41 of 2544 Czech answers. It is part of the "
+            "cache key, so raising it starts a new comparability group and re-asks "
+            "that track's questions, and only that track's."
+        ),
     )
     score_deepsy.add_argument("--force", action="store_true", help="re-ask cached questions")
     score_deepsy.add_argument("--dry-run", action="store_true", help="print the job, ask nothing")
