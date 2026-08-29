@@ -1020,9 +1020,16 @@ function renderTable(table, index) {
   // Which systems this evidence cannot tell apart. A leaderboard prints an
   // order whether or not one exists; this gives every row the rank it actually
   // earned, so several systems can share first place -- which here they do.
+  // Keyed by `system_id`, which is what `saturation` names its members by --
+  // and what this read was `row.label`, which is the *printed* name. Three rows
+  // carry a label the id does not match: `therapist` is drawn as
+  // "therapist-written (TN-Eval)" and the two reference models carry the paper
+  // and the year. All three looked the band up, missed, and printed a dash --
+  // "not measured" over a measurement the bootstrap had made, under a sentence
+  // saying 5 of 7 bands are shared beside a column that stopped at 5.
   const band = {};
   (table.groups ? table.groups.of : []).forEach((members, i) => {
-    members.forEach(name => { band[name] = i + 1; });
+    members.forEach(id => { band[id] = i + 1; });
   });
 
   const showCoverage = coverageVaries(table);
@@ -1104,7 +1111,7 @@ function renderTable(table, index) {
 
     // The rank, not the row number. Systems the evidence cannot separate share
     // one, and the top of the table is a group rather than a winner.
-    const rank = band[row.label];
+    const rank = band[row.system_id];
     const rankCell = table.groups
       ? `<td class="rank${rank === 1 ? ' top' : ''}">${rank || '<span class="dash">—</span>'}</td>`
       : '';

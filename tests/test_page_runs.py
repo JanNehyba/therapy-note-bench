@@ -1113,6 +1113,42 @@ def test_an_expanded_row_spans_the_columns_the_table_actually_drew(tmp_path):
         assert spans == {headers}, f"colspan {spans} against {headers} headers"
 
 
+def test_a_row_drawn_under_a_label_still_finds_the_band_it_was_measured_for(tmp_path):
+    """`saturation` names its members by `system_id`; the table prints `label`.
+
+    Three published rows carry a label their id does not match -- the therapist's
+    note is drawn as "therapist-written (TN-Eval)" and the two reference models
+    carry the paper and the year -- and the band cell looked itself up by the
+    printed name. All three missed and printed a dash, which on this page means
+    "not measured", over a band the bootstrap had measured. The sentence under
+    the same table said 5 of 7 bands are shared while the column stopped at 5.
+    """
+    from tnb import report
+
+    rows = [
+        _row("kimi-k3", "a-judge", 0.55),
+        _row("therapist", "a-judge", 0.33, system_type="reference-human",
+             system_label="therapist-written (TN-Eval)"),
+    ]
+    saturations = [
+        {
+            "track": results.TRACK_TNEVAL,
+            "judge_model": "a-judge",
+            "judge_fingerprint": {"model": "a-judge", "thinking_budget": 256},
+            "sessions": 50,
+            "corpus_sessions": 50,
+            "indistinguishable": [["kimi-k3"], ["therapist"]],
+        }
+    ]
+    drawn = _flat(_run(report.render_page(report.build(rows, saturations)), tmp_path,
+                       panel="table-host"))
+
+    assert '<td class="rank">2</td> <td class="name">' in drawn or (
+        '<td class="rank">2</td><td class="name">' in drawn
+    ), "the labelled row lost the band it was measured for"
+    assert 'class="rank"><span class="dash">' not in drawn, "a measured band drawn as absent"
+
+
 def test_the_completeness_caveat_reads_its_two_figures_off_the_table(tmp_path):
     """A denominator a reader cannot see the consequence of is a word, not a warning.
 
