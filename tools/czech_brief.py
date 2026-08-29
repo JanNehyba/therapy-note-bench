@@ -1629,7 +1629,7 @@ def _refused_on_deepsy(models: set[str]) -> dict[str, int]:
     """
     refused: dict[str, int] = {}
     for track in DEEPSY_CRITERIA_TRACKS:
-        for (_provider, system_id), unreached in results.unreached_by_system(track).items():
+        for (_provider, system_id), unreached in _unreached(track).items():
             if system_id not in models:
                 continue
             errors = sum(unreached.reasons.values()) + sum(unreached.failure_reasons.values())
@@ -1639,7 +1639,7 @@ def _refused_on_deepsy(models: set[str]) -> dict[str, int]:
 
 
 def _wrote(rows: list[results.Row]) -> dict[str, dict]:
-    """Per criteria track: how many notes each model wrote, out of the corpus.
+    """Per track: how many notes each model wrote, out of the corpus.
 
     Two questions, and this document has answered the wrong one. What a model
     wrote comes from the rows. What it was ASKED for cannot: a model the
@@ -1655,7 +1655,7 @@ def _wrote(rows: list[results.Row]) -> dict[str, dict]:
     """
     latest = [row for row in results.latest(rows) if row.is_scored]
     out: dict[str, dict] = {}
-    for track in SOAP_CRITERIA_TRACKS + DEEPSY_CRITERIA_TRACKS:
+    for track in results.LOCAL_TRACKS:
         here = [row for row in latest if row.track == track]
         if not here:
             continue
@@ -1665,10 +1665,26 @@ def _wrote(rows: list[results.Row]) -> dict[str, dict]:
         for row in drawn:
             wrote[row.system_id] = max(wrote.get(row.system_id, 0), row.n_sessions_generated)
         corpus = max(row.n_sessions_attempted or row.n_sessions_generated for row in drawn)
-        for system_id in _refused_entirely(track, set(wrote)):
-            wrote[system_id] = 0
+        # Only the tracks that generate. A PDSQI track rates notes the SOAP
+        # tracks wrote, so "the endpoint refused this model" is a question about
+        # the track that asked for the note and not about the one rating it.
+        if track in SOAP_CRITERIA_TRACKS + DEEPSY_CRITERIA_TRACKS:
+            for system_id in _refused_entirely(track, set(wrote)):
+                wrote[system_id] = 0
         out[track] = {"corpus": corpus, "wrote": wrote}
     return out
+
+
+@functools.cache
+def _unreached(track: str) -> dict[tuple[str, str], results.Unreached]:
+    """What never got written on one track, read once per run.
+
+    `results.unreached_by_system` walks the whole generation cache, and this
+    document now asks it about six tracks from five places -- which took the
+    build from five seconds to nearly a minute. The answer cannot change while
+    one document is being written, so it is read once and kept.
+    """
+    return results.unreached_by_system(track)
 
 
 def _refused_entirely(track: str, wrote: set[str]) -> dict[str, int]:
@@ -1679,7 +1695,7 @@ def _refused_entirely(track: str, wrote: set[str]) -> dict[str, int]:
     the endpoint was asked on this track, what produced no row.
     """
     refused: dict[str, int] = {}
-    for (_provider, system_id), unreached in results.unreached_by_system(track).items():
+    for (_provider, system_id), unreached in _unreached(track).items():
         if system_id in wrote:
             continue
         errors = sum(unreached.reasons.values()) + sum(unreached.failure_reasons.values())
@@ -1698,7 +1714,10 @@ def _written_figures(rows: list[results.Row]) -> dict[str, str]:
     named -- which is what the intro already promises when it says the missing
     notes are named where they are missing.
     """
-    found = _wrote(rows)
+    # The four criteria tracks. A PDSQI track rates notes those wrote rather
+    # than writing any, so counting its rows too reports every SOAP note twice.
+    written_on = SOAP_CRITERIA_TRACKS + DEEPSY_CRITERIA_TRACKS
+    found = {t: b for t, b in _wrote(rows).items() if t in written_on}
     written = sum(sum(block["wrote"].values()) for block in found.values())
     asked = sum(block["corpus"] * len(block["wrote"]) for block in found.values())
     models = {system for block in found.values() for system in block["wrote"]}
@@ -2731,7 +2750,16 @@ def _length_table(data: dict) -> str:
     )
 
 
-def _bands() -> str:
+#: The caption's second clause, printed only where a model in the table wrote
+#: fewer notes than the corpus holds. The first clause says "over at most N
+#: sessions" because N is the union of what the models between them wrote --
+#: `czech_variance.bands` pairs each pair on the sessions BOTH of them wrote --
+#: and printing it as "over 10 sessions" stated a corpus as if it were every
+#: model's denominator, over tables holding a model with six.
+BAND_SHORTFALL = "a pair is compared on the sessions both models wrote, and {names} wrote fewer"
+
+
+def _bands(rows: list[results.Row]) -> str:
     """The models grouped, because ordering eleven of them over ten notes is
     mostly ordering noise.
 
@@ -2743,6 +2771,10 @@ def _bands() -> str:
     A band starts where the gap from the band's best exceeds what resampling
     the sessions can rule out, so the width of a band is the measurement's own
     resolution rather than a choice about presentation.
+
+    The caption takes `rows` for one clause: how many notes each banded model
+    actually wrote. The session count in the payload is the union across
+    models, which is the corpus and not anybody's denominator.
     """
     path = REPO / "local" / "czech-variance.json"
     if not path.exists():
@@ -2751,6 +2783,7 @@ def _bands() -> str:
     if not data:
         return ""
 
+    counts = _wrote(rows)
     blocks = []
     for track in results.LOCAL_TRACKS:
         judges = data.get(track) or {}
@@ -2758,20 +2791,36 @@ def _bands() -> str:
             continue
         for judge_model in sorted(judges):
             grouped = judges[judge_model]
-            rows = "".join(
+            rows_html = "".join(
                 f"<tr><td>{number}</td>"
                 f"<td>{band['high']:.2f}&ndash;{band['low']:.2f}</td>"
                 f"<td class='sub'>{html.escape(', '.join(band['models']))}</td></tr>"
                 for number, band in enumerate(grouped["bands"], start=1)
             )
+            # Only models this table draws. A model the endpoint refused wrote
+            # nothing and is in no band, and naming it here would explain a row
+            # that is not on the page.
+            drawn = {model for band in grouped["bands"] for model in band["models"]}
+            short = [
+                f"{system} {count}"
+                for system, count in sorted((counts.get(track) or {}).get("wrote", {}).items())
+                if system in drawn and count < grouped["sessions"]
+            ]
+            caption = (
+                f"{_t('a band is')} {grouped['threshold']:.2f} "
+                f"{_t('wide, over at most')} {grouped['sessions']} {_t('sessions')}"
+            )
+            if short:
+                caption += " &middot; " + html.escape(
+                    _t(BAND_SHORTFALL).format(names=_join_words(short))
+                )
             blocks.append(
                 f"<h3>{html.escape(_t(TRACK_TITLES.get(track, track)))} "
                 f"<span class='dash'>&mdash; {_t('who is ahead')}</span> "
                 f"<span class='dash'>&middot; {html.escape(judge_model)}</span></h3>"
-                f"<p class='sub'>{_t('a band is')} {grouped['threshold']:.2f} "
-                f"{_t('wide, over')} {grouped['sessions']} {_t('sessions')}</p>"
+                f"<p class='sub'>{caption}</p>"
                 f"<table><thead><tr><th>{_t('Band')}</th><th>{_t('Score')}</th>"
-                f"<th>{_t('Models')}</th></tr></thead><tbody>{rows}</tbody></table>"
+                f"<th>{_t('Models')}</th></tr></thead><tbody>{rows_html}</tbody></table>"
             )
 
     if not blocks:
@@ -2932,7 +2981,7 @@ def _dominance(rows: list[results.Row]) -> str:
     )
 
 
-def _variance() -> str:
+def _variance(rows: list[results.Row]) -> str:
     """How far apart two rows must be before their order means anything.
 
     Written by `tools/czech_variance.py`. It belongs above the caveats rather
@@ -2953,10 +3002,11 @@ def _variance() -> str:
     if not tracks:
         return ""
 
+    counts = _wrote(rows)
     blocks, unreadable = [], []
     for track, judges in tracks.items():
         names = sorted(judges)
-        rows = []
+        body = []
         for criterion in czech_scorer.CRITERION_KEYS:
             cells = []
             drawn = False
@@ -2982,8 +3032,8 @@ def _variance() -> str:
                 cells.append(f"<td>{share}</td><td>{gaps['threshold']:.2f}</td>")
             if drawn:
                 label = _t(MEASURE_TABLES[track][criterion]["label"])
-                rows.append(f"<tr><td>{html.escape(label)}</td>" + "".join(cells) + "</tr>")
-        if not rows:
+                body.append(f"<tr><td>{html.escape(label)}</td>" + "".join(cells) + "</tr>")
+        if not body:
             continue
         head = "".join(
             f"<th>{html.escape(name)}: {_t('pairs apart')}</th>"
@@ -2994,7 +3044,7 @@ def _variance() -> str:
             f"<h3>{html.escape(_t(TRACK_TITLES.get(track, track)))} "
             f"<span class='dash'>&mdash; {_t('how far apart is far enough')}</span></h3>"
             f"<table><thead><tr><th>{_t('Criterion')}</th>{head}</tr></thead>"
-            f"<tbody>{''.join(rows)}</tbody></table>"
+            f"<tbody>{''.join(body)}</tbody></table>"
         )
 
     if not blocks:
@@ -3043,20 +3093,42 @@ def _variance() -> str:
             )
             + f" {html.escape('; '.join(sorted(set(unreadable))))}.</p></div>"
         )
-    return (
-        f"<h2>{_t('How far apart is far enough?')}</h2>"
-        + "<p>"
-        + html.escape(
-            _t(
-                "Ten notes per model. The sessions were resampled two thousand times, "
-                "paired on the transcript because every model wrote from all ten, and "
-                "each pair of models compared on the middle 95% of the result. Two "
-                "numbers per column: how many of the model pairs come out apart, and "
-                "how large a gap it takes. A difference smaller than that is the same "
-                "reading printed twice, whichever way round it fell."
+    lead = html.escape(
+        _t(
+            "Ten notes per model at most. The sessions were resampled two thousand "
+            "times and paired on the transcript, so a pair of models is compared only "
+            "on the sessions both of them wrote and a pair with fewer than five in "
+            "common is not compared at all. Each pair is then read on the middle 95% "
+            "of the result. Two "
+            "numbers per column: how many of the model pairs come out apart, and "
+            "how large a gap it takes. A difference smaller than that is the same "
+            "reading printed twice, whichever way round it fell."
+        )
+    )
+    # Which models that applies to, rather than left as a possibility. The
+    # sentence used to say the pairing was safe "because every model wrote from
+    # all ten"; two Deepsy models wrote nine and one banded SOAP model wrote six.
+    short = []
+    for track in tracks:
+        names = [
+            f"{system} {count}"
+            for system, count in sorted((counts.get(track) or {}).get("wrote", {}).items())
+            if 0 < count < (counts.get(track) or {})["corpus"]
+        ]
+        if names:
+            short.append(
+                f"{_t(TRACK_SWITCH_LABELS.get(track, track))} — "
+                f"{_join_words(names)} {_t('of')} {counts[track]['corpus']}"
+            )
+    if short:
+        lead += " " + html.escape(
+            _t("Where a model wrote fewer than the corpus holds, that is where: {short}.").format(
+                short="; ".join(short)
             )
         )
-        + "</p>"
+    return (
+        f"<h2>{_t('How far apart is far enough?')}</h2>"
+        + f"<p>{lead}</p>"
         + "".join(blocks)
         + warning
         + thin_note
@@ -3512,9 +3584,9 @@ def build(rows: list[results.Row]) -> str:
 
 {_halves(rows)}
 
-{_bands()}
+{_bands(rows)}
 
-{_variance()}
+{_variance(rows)}
 
 {_dominance(rows)}
 

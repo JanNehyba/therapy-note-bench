@@ -504,18 +504,25 @@ CS: dict[str, str] = {
     ),
     # --- how far apart is far enough ---------------------------------------
     "How far apart is far enough?": "Jak daleko od sebe je dost daleko?",
-    "Ten notes per model. The sessions were resampled two thousand times, paired on "
-    "the transcript because every model wrote from all ten, and each pair of models "
-    "compared on the middle 95% of the result. Two numbers per column: how many of "
-    "the model pairs come out apart, and how large a gap it takes. A difference "
-    "smaller than that is the same reading printed twice, whichever way round it "
-    "fell.": (
-        "Deset zápisů na model. Sezení byla dva tisíckrát převzorkována, "
-        "párově podle přepisu, protože každý model psal ze všech deseti, "
-        "a každá dvojice modelů porovnána na prostředních 95 % výsledku. "
+    "Ten notes per model at most. The sessions were resampled two thousand "
+    "times and paired on the transcript, so a pair of models is compared only "
+    "on the sessions both of them wrote and a pair with fewer than five in "
+    "common is not compared at all. Each pair is then read on the middle 95% "
+    "of the result. Two "
+    "numbers per column: how many of the model pairs come out apart, and "
+    "how large a gap it takes. A difference smaller than that is the same "
+    "reading printed twice, whichever way round it fell.": (
+        "Nanejvýš deset zápisů na model. Sezení byla dva tisíckrát převzorkována "
+        "a párována podle přepisu, takže dvojice modelů se porovnává jen na "
+        "sezeních, ze kterých psaly obě, a dvojice, která jich má společných méně "
+        "než pět, se neporovnává vůbec. Každá dvojice se pak čte na prostředních "
+        "95 % výsledku. "
         "Dvě čísla na sloupec: kolik dvojic modelů vyjde odlišně a jak velký "
         "rozdíl je na to potřeba. Menší rozdíl je totéž měření vytištěné "
         "dvakrát, ať vyšlo v kterémkoli pořadí."
+    ),
+    "Where a model wrote fewer than the corpus holds, that is where: {short}.": (
+        "Kde model napsal míň, než kolik korpus obsahuje, je to tady: {short}."
     ),
     "pairs apart": "odlišené dvojice",
     "gap needed": "potřebný rozdíl",
@@ -543,8 +550,11 @@ CS: dict[str, str] = {
         "jeho šířka je tedy rozlišovací schopnost samotného měření."
     ),
     "a band is": "pásmo je široké",
-    "wide, over": "a stojí na",
+    "wide, over at most": "a stojí nejvýš na",
     "sessions": "sezeních",
+    "a pair is compared on the sessions both models wrote, and {names} wrote fewer": (
+        "dvojice se porovnává na sezeních, ze kterých psaly oba modely, a {names} napsaly míň"
+    ),
     "Band": "Pásmo",
     "Score": "Skóre",
     "Models": "Modely",
