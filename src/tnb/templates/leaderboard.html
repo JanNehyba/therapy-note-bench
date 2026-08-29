@@ -266,10 +266,23 @@ function detailRow(row, table) {
   const detail = Object.entries(row.detail);
   if (detail.length) {
     const items = detail
-      .map(([name, value]) => `<div><span>${name}</span><span>${fmt(value, 2)}</span></div>`)
+      .map(([name, value]) => {
+        // `agreement.notes` is the DENOMINATOR of the agreement column for this
+        // row: how many of the model's notes that criterion got an answer for.
+        // Printed under its own column heading rather than as a raw key,
+        // because the question a reader has is "is this ten, or did one go
+        // missing", and `agreement.notes` does not answer it.
+        const base = name.endsWith('.notes') ? name.slice(0, -6) : null;
+        const label = base
+          ? T`${esc(colLabel(table, base))} · notes answered`
+          : name === 'note_words'
+          ? T`mean words per note`
+          : esc(name);
+        return `<div><span>${label}</span><span>${
+          fmt(value, base || name === 'note_words' ? 0 : 2)}</span></div>`;
+      })
       .join('');
-    parts.push(`<h3>${table.track === 'icare' ? T`TRACE dimensions` : T`Rubric criteria`
-      }</h3><div class="grid">${items}</div>`);
+    parts.push(`<h3>${TS(table.detail_label)}</h3><div class="grid">${items}</div>`);
   }
 
   if (row.source) parts.push(`<p class="note">${T`Source: ${tr(row.source)}`}</p>`);
@@ -431,7 +444,7 @@ function renderTable(table, index) {
   })();
 
   const rankingNote = !table.ranking_measure
-    ? T`This track is deliberately <strong>not ranked</strong>: its columns measure different things and the source paper found they disagree. That disagreement is the result.`
+    ? TS(table.not_ranked_reason)
     : anchor
     ? T`Ordered by <strong>${esc(colLabel(table, table.ranking_measure))}</strong>, because it is the
        only column checked against people: on it the judge and a trained therapist agree at

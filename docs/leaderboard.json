@@ -4214,6 +4214,7 @@
         "human_role_short": "competitor",
         "scored_against": "The transcript and a 23-item rubric. There is no gold note to copy, so any new model can be measured without anyone writing one."
       },
+      "detail_label": "Rubric criteria",
       "groups": {
         "corpus_sessions": 50,
         "measure": "completeness",
@@ -4265,6 +4266,7 @@
         "tneval-soap",
         "pdsqi-soap"
       ],
+      "not_ranked_reason": "This track is deliberately <strong>not ranked</strong>: its columns measure different things and the source paper found they disagree. That disagreement is the result.",
       "ranking_measure": "completeness",
       "rows": [
         {
@@ -6304,6 +6306,7 @@
         "human_role_short": "competitor",
         "scored_against": "The transcript and a 23-item rubric. There is no gold note to copy, so any new model can be measured without anyone writing one."
       },
+      "detail_label": "Rubric criteria",
       "groups": {
         "corpus_sessions": 50,
         "measure": "completeness",
@@ -6355,6 +6358,7 @@
         "tneval-soap",
         "pdsqi-soap"
       ],
+      "not_ranked_reason": "This track is deliberately <strong>not ranked</strong>: its columns measure different things and the source paper found they disagree. That disagreement is the result.",
       "ranking_measure": "completeness",
       "rows": [
         {
@@ -8329,10 +8333,12 @@
         "human_role_short": "answer key",
         "scored_against": "An expert note written by the clinician who saw the session. ROUGE-L and BERTScore measure how closely the model reproduced it; TRACE asks a judge to rate the note itself, the way the paper's experts did."
       },
+      "detail_label": "TRACE dimensions",
       "groups": null,
       "has_effort": true,
       "has_words": false,
       "id": "icare-gemini-3.1-pro-preview-icare-trace-v1-0.6.0-102129",
+      "not_ranked_reason": "This track is deliberately <strong>not ranked</strong>: its columns measure different things and the source paper found they disagree. That disagreement is the result.",
       "ranking_measure": null,
       "rows": [
         {
@@ -9078,10 +9084,12 @@
         "human_role_short": "answer key",
         "scored_against": "An expert note written by the clinician who saw the session. ROUGE-L and BERTScore measure how closely the model reproduced it; TRACE asks a judge to rate the note itself, the way the paper's experts did."
       },
+      "detail_label": "TRACE dimensions",
       "groups": null,
       "has_effort": true,
       "has_words": false,
       "id": "icare-gpt-5.6-terra-icare-trace-v1-0.6.0-acf643",
+      "not_ranked_reason": "This track is deliberately <strong>not ranked</strong>: its columns measure different things and the source paper found they disagree. That disagreement is the result.",
       "ranking_measure": null,
       "rows": [
         {

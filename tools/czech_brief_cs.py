@@ -34,7 +34,7 @@ CS: dict[str, str] = {
     "English corpora. A model's standing there is a statement about English. This "
     "track asks whether it carries over: the same models write notes in Czech, from "
     "real sessions and from translated ones, and two instruments are asked about the "
-    "result. Seven yes/no criteria ask whether the Czech is right. PDSQI-9, a "
+    "result. Six yes/no criteria ask whether the Czech is right. PDSQI-9, a "
     "published instrument, asks whether the note is any good -- because the criteria "
     "cannot: a flawless Czech sentence about nothing passes all seven.": (
         "Benchmark, ke kterému tohle patří, hodnotí modely psané psychoterapeutické "

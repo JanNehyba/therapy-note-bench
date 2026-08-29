@@ -373,21 +373,41 @@ def test_the_json_is_the_only_thing_a_mirror_would_need():
 # --- provenance the reader needs before the numbers -------------------------
 
 
-def test_the_page_carries_the_licence_of_every_input():
-    """One of the five inputs has a licence. A reader deciding whether to reuse
-    any of this needs that before the scores, not in a file they never open."""
-    data = report.build([_row()])
-    sources = {entry["source"] for entry in data["licences"]}
+def test_the_page_carries_the_licence_of_every_input_it_uses():
+    """A reader deciding whether to reuse any of this needs the terms before the
+    scores, not in a file they never open -- and needs them for the inputs this
+    page actually used.
 
-    assert {
-        "PDSQI-9",
-        "TN-Eval (code)",
-        "TN-Eval-Data",
-        "AnnoMI",
-        "iCARE",
-        "TheraFuse",
-    } == sources
-    licensed = [e for e in data["licences"] if e["licence"] == "Apache-2.0"]
+    The assertion used to be the flat set of all six against a one-row TN-Eval
+    page, which passed happily while the Czech page credited TN-Eval's two human
+    annotators and the iHOPE corpus, neither of which any Czech table touches. A
+    source that is listed reads as a source that was used.
+    """
+    for track in (
+        results.TRACK_TNEVAL,
+        results.TRACK_ICARE,
+        results.TRACK_CZECH_REAL,
+        results.TRACK_CZECH_TRANSLATED,
+    ):
+        data = report.build([_row(track=track)])
+        sources = {entry["source"] for entry in data["licences"]}
+        expected = {
+            source
+            for source, tracks in report.LICENCE_TRACKS.items()
+            if track in tracks
+        }
+        assert sources == expected, f"{track} credits the wrong set"
+        assert sources, f"{track} credits nothing at all"
+
+    # And nothing is credited everywhere by accident: every published source
+    # has to say which tracks use it, or it is drawn on every page.
+    unclaimed = [e["source"] for e in report.LICENCES if e["source"] not in report.LICENCE_TRACKS]
+    assert not unclaimed, f"sources with no tracks named, so drawn everywhere: {unclaimed}"
+
+    everything = report.build(
+        [_row(track=track) for track in report.LICENCE_TRACKS.values() for track in track]
+    )
+    licensed = [e for e in everything["licences"] if e["licence"] == "Apache-2.0"]
     assert len(licensed) == 1, "only the TN-Eval code repository carries one"
 
 

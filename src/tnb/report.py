@@ -190,6 +190,167 @@ RANKING_MEASURES: dict[str, str | None] = {
 }
 
 
+#: Why a track without a ranking column has none. Rendered under the table.
+#:
+#: **Three tracks are unranked for three different reasons**, and the page used
+#: to print iCARE's under all of them: "the source paper found they disagree",
+#: which is true of iCARE, is not a statement anybody made about PDSQI-9 or
+#: about Czech spelling. The reasons were written as comments beside
+#: `RANKING_MEASURES` and never reached a reader.
+#:
+#: A track whose `RANKING_MEASURES` entry is None and which is missing here
+#: falls back to iCARE's sentence, which is how the wrong one got everywhere;
+#: `tests/test_report.py` holds every unranked track to having its own.
+NOT_RANKED_REASONS: dict[str, str] = {
+    results.TRACK_ICARE: (
+        "This track is deliberately <strong>not ranked</strong>: its columns measure "
+        "different things and the source paper found they disagree. That disagreement "
+        "is the result."
+    ),
+    results.TRACK_PDSQI: (
+        "This track is deliberately <strong>not ranked</strong>: PDSQI-9's authors "
+        "report its attributes separately, and a mean of them would be a composite "
+        "nobody validated."
+    ),
+    results.TRACK_CZECH_REAL_PDSQI: (
+        "This track is deliberately <strong>not ranked</strong>: PDSQI-9's authors "
+        "report its attributes separately, and a mean of them would be a composite "
+        "nobody validated."
+    ),
+    results.TRACK_CZECH_TRANSLATED_PDSQI: (
+        "This track is deliberately <strong>not ranked</strong>: PDSQI-9's authors "
+        "report its attributes separately, and a mean of them would be a composite "
+        "nobody validated."
+    ),
+    results.TRACK_CZECH_REAL: (
+        "This track is deliberately <strong>not ranked</strong>: weighting spelling "
+        "against clinical terminology is a linguistic decision rather than a "
+        "measurement. The correlation this track exists to look for is more useful per "
+        "criterion anyway -- English completeness may predict terminology and say "
+        "nothing about diacritics."
+    ),
+    results.TRACK_CZECH_TRANSLATED: (
+        "This track is deliberately <strong>not ranked</strong>: weighting spelling "
+        "against clinical terminology is a linguistic decision rather than a "
+        "measurement. The correlation this track exists to look for is more useful per "
+        "criterion anyway -- English completeness may predict terminology and say "
+        "nothing about diacritics."
+    ),
+    results.TRACK_DEEPSY_REAL: (
+        "This track is deliberately <strong>not ranked</strong>: weighting spelling "
+        "against clinical terminology is a linguistic decision rather than a "
+        "measurement. The correlation this track exists to look for is more useful per "
+        "criterion anyway -- English completeness may predict terminology and say "
+        "nothing about diacritics."
+    ),
+    results.TRACK_DEEPSY_TRANSLATED: (
+        "This track is deliberately <strong>not ranked</strong>: weighting spelling "
+        "against clinical terminology is a linguistic decision rather than a "
+        "measurement. The correlation this track exists to look for is more useful per "
+        "criterion anyway -- English completeness may predict terminology and say "
+        "nothing about diacritics."
+    ),
+}
+
+
+#: What the expandable row's second block holds, per track. It is not the same
+#: thing on every track and it used to be headed "Rubric criteria" everywhere
+#: but iCARE.
+#:
+#: On the Czech and Deepsy tracks that block is not criteria at all: it is the
+#: **denominator**, one entry per criterion saying how many of that model's
+#: notes the criterion got an answer for, next to the mean note length. It is
+#: the number a reader checks to see whether an average is over ten notes or
+#: over nine, which is this repository's oldest failure mode -- and it was
+#: printed under the name of an instrument that scores English SOAP notes.
+DETAIL_LABELS: dict[str, str] = {
+    results.TRACK_TNEVAL: "Rubric criteria",
+    results.TRACK_ICARE: "TRACE dimensions",
+    results.TRACK_CZECH_REAL: "What each average is over",
+    results.TRACK_CZECH_TRANSLATED: "What each average is over",
+    results.TRACK_DEEPSY_REAL: "What each average is over",
+    results.TRACK_DEEPSY_TRANSLATED: "What each average is over",
+}
+
+
+#: Which tracks each source, corpus profile and protocol section belongs to.
+#:
+#: **Why this exists at all.** `build` used to attach every one of them to
+#: every page, which was harmless while there was one page and it drew every
+#: track. There are two now, and the Czech page credited TN-Eval's two human
+#: annotators, printed TN-Eval's 23-item rubric under a heading of its own, and
+#: profiled the iHOPE corpus -- none of which any Czech table uses. A reader
+#: cannot tell a source that was used from one that was merely listed, so
+#: listing it is a claim, and it was the wrong one.
+#:
+#: A source missing from here is drawn on every page, which is the old
+#: behaviour and the safe direction: a source over-credited is a nuisance, a
+#: source used and not credited is a licence problem.
+LICENCE_TRACKS: dict[str, tuple[str, ...]] = {
+    "PDSQI-9": (
+        results.TRACK_PDSQI,
+        results.TRACK_CZECH_REAL_PDSQI,
+        results.TRACK_CZECH_TRANSLATED_PDSQI,
+    ),
+    # The Czech generation prompt is a translation of TN-Eval's SOAP prompt,
+    # so the code licence applies to the Czech tables too. The Deepsy tracks
+    # use the application's own prompts and are not on this line.
+    "TN-Eval (code)": (
+        results.TRACK_TNEVAL,
+        results.TRACK_PDSQI,
+        results.TRACK_CZECH_REAL,
+        results.TRACK_CZECH_TRANSLATED,
+    ),
+    # The 150 rated notes and the therapist's row that comes from them.
+    "TN-Eval-Data": (results.TRACK_TNEVAL, results.TRACK_PDSQI),
+    "AnnoMI": (
+        results.TRACK_TNEVAL,
+        results.TRACK_PDSQI,
+        results.TRACK_CZECH_TRANSLATED,
+        results.TRACK_CZECH_TRANSLATED_PDSQI,
+        results.TRACK_DEEPSY_TRANSLATED,
+    ),
+    "iCARE": (results.TRACK_ICARE,),
+    "TheraFuse": (results.TRACK_ICARE,),
+}
+
+#: Same idea for the corpus profiles. `corpus.build` measures the two English
+#: corpora; everything else it returns -- the fill rate and the seventeen
+#: sections -- is iHOPE, so the whole block goes when no iCARE table is drawn.
+DATASET_TRACKS: dict[str, tuple[str, ...]] = {
+    "tneval": (
+        results.TRACK_TNEVAL,
+        results.TRACK_PDSQI,
+        results.TRACK_CZECH_TRANSLATED,
+        results.TRACK_CZECH_TRANSLATED_PDSQI,
+        results.TRACK_DEEPSY_TRANSLATED,
+    ),
+    "icare": (results.TRACK_ICARE,),
+}
+
+#: And for the protocol. The four SOAP sections are shown wherever a note is a
+#: SOAP note, the Czech translation included; the 23 criteria are TN-Eval's
+#: scoring instrument and are shown only where that instrument was used.
+PROTOCOL_TRACKS: dict[str, tuple[str, ...]] = {
+    "sections": (
+        results.TRACK_TNEVAL,
+        results.TRACK_PDSQI,
+        results.TRACK_CZECH_REAL,
+        results.TRACK_CZECH_TRANSLATED,
+        results.TRACK_CZECH_REAL_PDSQI,
+        results.TRACK_CZECH_TRANSLATED_PDSQI,
+    ),
+    "criteria": (results.TRACK_TNEVAL,),
+    "icare_sections": (results.TRACK_ICARE,),
+}
+
+
+def _used_by(owners: dict[str, tuple[str, ...]], key: str, drawn: set[str]) -> bool:
+    """True when a page drawing `drawn` uses `key`, or when nothing is claimed."""
+    tracks = owners.get(key)
+    return True if tracks is None else bool(set(tracks) & drawn)
+
+
 #: Which measures each track's judge actually decides. Only these can be
 #: compared *between* two judges: on the iCARE track four of the five columns
 #: are computed from the note and the expert note alone, so they are identical
@@ -501,10 +662,10 @@ TRACK_DESIGN = {
     },
     results.TRACK_CZECH_REAL: {
         "scored_against": (
-            "The note alone. Seven yes/no questions about the Czech itself -- "
+            "The note alone. Six yes/no questions about the Czech itself -- "
             "diacritics, calques, untranslated English terms, agreement, register, "
-            "quotation marks, non-words -- and each column is the share of notes "
-            "free of that fault. The judge is never shown the transcript, which is "
+            "non-words -- and each column is the share of notes free of that "
+            "fault. The judge is never shown the transcript, which is "
             "why a confidential session can be scored at all."
         ),
         "human_role": (
@@ -1290,7 +1451,12 @@ def _merge_instruments(tables: list[dict]) -> list[dict]:
     return [table for table in tables if table["id"] not in absorbed]
 
 
-def build(rows: list[Row], saturations: list[dict] | None = None) -> dict:
+def build(
+    rows: list[Row],
+    saturations: list[dict] | None = None,
+    *,
+    source: str | None = None,
+) -> dict:
     """Shape the rows into the JSON both presentations read.
 
     `saturations` carries, per judge, which systems that judge's evidence
@@ -1356,6 +1522,10 @@ def build(rows: list[Row], saturations: list[dict] | None = None) -> dict:
                     for key_, digits in COLUMNS[track]
                 ],
                 "ranking_measure": RANKING_MEASURES.get(track),
+                "detail_label": DETAIL_LABELS.get(track, "Rubric criteria"),
+                "not_ranked_reason": NOT_RANKED_REASONS.get(
+                    track, NOT_RANKED_REASONS[results.TRACK_ICARE]
+                ),
                 "rows": rendered,
                 # Drawn only where something to show exists. A column of empty
                 # cells is worse than no column: it reads as missing data rather
@@ -1419,6 +1589,13 @@ def build(rows: list[Row], saturations: list[dict] | None = None) -> dict:
     # `_selection`, which decides what the switch offers.
     tables = _merge_instruments(tables)
 
+    # Withdrawn groups count too. `superseded` names a track on the page --
+    # "this was published and is not any more" -- and a reader who reads that
+    # name still needs to know what it was measured with. A page that names
+    # PDSQI-9 and links nothing is the same gap as one that credits a source
+    # it never used, pointing the other way.
+    drawn = {table["track"] for table in tables}
+    drawn |= {entry["track"] for entry in superseded if entry.get("track")}
     return {
         "tables": tables,
         # Which one to draw and what may be switched to. Decided here, because
@@ -1427,14 +1604,41 @@ def build(rows: list[Row], saturations: list[dict] | None = None) -> dict:
         # Not drawn, but named. A number that used to be published and is not
         # any more should be explainable rather than silently gone.
         "superseded": superseded,
-        "protocol": protocol(),
-        "corpus": corpus.load_or_build(),
-        "licences": LICENCES,
-        "generated_from": str(results.ROWS_PATH.name),
+        "protocol": protocol(drawn),
+        "corpus": _corpus_for(drawn),
+        "licences": [
+            licence for licence in LICENCES if _used_by(LICENCE_TRACKS, licence["source"], drawn)
+        ],
+        # The file these numbers came out of, not the published one. The
+        # Czech page is built from a different record and used to name
+        # `rows.jsonl` anyway, which is the one claim a provenance line
+        # must never get wrong.
+        "generated_from": source or str(results.ROWS_PATH.name),
     }
 
 
-def protocol() -> dict:
+def _corpus_for(drawn: set[str]) -> dict | None:
+    """The corpus profile, with the datasets this page does not use removed.
+
+    Everything in the profile other than `datasets` describes iHOPE -- the fill
+    rate, the seventeen sections and their headings -- so a page with no iCARE
+    table keeps the dataset medians and drops the rest rather than printing a
+    corpus nothing on it was measured on.
+    """
+    profile = corpus.load_or_build()
+    if not profile:
+        return profile
+    datasets = {
+        name: block
+        for name, block in (profile.get("datasets") or {}).items()
+        if _used_by(DATASET_TRACKS, name, drawn)
+    }
+    if _used_by(DATASET_TRACKS, "icare", drawn):
+        return {**profile, "datasets": datasets}
+    return {"datasets": datasets} if datasets else None
+
+
+def protocol(drawn: set[str] | None = None) -> dict:
     """What a note is and what the judge is asked, straight from the source.
 
     Both come out of the modules that hold TN-Eval's own wording, so the page
@@ -1469,10 +1673,15 @@ def protocol() -> dict:
         for number, (title, description) in enumerate(icare.SECTIONS, start=1)
     ]
 
+    # Empty rather than absent: the page checks the length and skips the
+    # block, and a missing key would be a TypeError in the renderer instead.
+    here = drawn if drawn is not None else set(results.TRACKS)
     return {
-        "sections": sections,
-        "criteria": criteria,
-        "icare_sections": icare_sections,
+        "sections": sections if _used_by(PROTOCOL_TRACKS, "sections", here) else [],
+        "criteria": criteria if _used_by(PROTOCOL_TRACKS, "criteria", here) else [],
+        "icare_sections": (
+            icare_sections if _used_by(PROTOCOL_TRACKS, "icare_sections", here) else []
+        ),
     }
 
 

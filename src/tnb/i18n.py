@@ -385,6 +385,28 @@ _SENTENCES = {
         "Tato větev <strong>záměrně nemá pořadí</strong>: její sloupce měří různé věci a zdrojový "
         "článek zjistil, že si odporují. Ten rozpor je ten výsledek."
     ),
+    # The other two reasons a track carries no ranking column. All three used
+    # to be the sentence above, which is a statement about the iCARE paper and
+    # was drawn under the Czech and PDSQI tables as well.
+    "This track is deliberately <strong>not ranked</strong>: PDSQI-9's authors report its"
+    " attributes separately, and a mean of them would be a composite nobody validated.": (
+        "Tato větev <strong>záměrně nemá pořadí</strong>: autoři PDSQI-9 vykazují jeho "
+        "atributy odděleně a průměr z nich by byl souhrn, který nikdo nevalidoval."
+    ),
+    "This track is deliberately <strong>not ranked</strong>: weighting spelling against"
+    " clinical terminology is a linguistic decision rather than a measurement. The correlation"
+    " this track exists to look for is more useful per criterion anyway -- English completeness"
+    " may predict terminology and say nothing about diacritics.": (
+        "Tato větev <strong>záměrně nemá pořadí</strong>: vážit pravopis proti klinické "
+        "terminologii je jazykové rozhodnutí, ne měření. A souvislost, kvůli které tahle "
+        "větev vznikla, je stejně užitečnější po jednotlivých kritériích — anglická "
+        "úplnost může předpovídat terminologii a o diakritice neříkat nic."
+    ),
+    # The expandable row's second block, which is a denominator on the Czech
+    # tracks and an instrument's own items on the English ones.
+    "What each average is over": "Z čeho je každý průměr",
+    "{0} · notes answered": "{0} · zodpovězených zápisů",
+    "mean words per note": "průměrný počet slov na zápis",
     # -- what a note here is scored against -----------------------------------
     "the human note competes": "lidský zápis soutěží",
     "the human note is the answer key": "lidský zápis je vzorem",
@@ -1554,12 +1576,12 @@ _TRACK_REGISTRIES = {
         "látek a skutečná sezení nejsou — takže model, kterému to tu jde hůř, může být horší "
         "v motivačním rozhovoru, a ne v přeložené češtině."
     ),
-    "The note alone. Seven yes/no questions about the Czech itself -- diacritics, calques,"
-    " untranslated English terms, agreement, register, quotation marks, non-words -- and each"
+    "The note alone. Six yes/no questions about the Czech itself -- diacritics, calques,"
+    " untranslated English terms, agreement, register, non-words -- and each"
     " column is the share of notes free of that fault. The judge is never shown the transcript,"
     " which is why a confidential session can be scored at all.": (
-        "Samotný zápis. Sedm otázek ano/ne o té češtině — diakritika, kalky, nepřeložené "
-        "anglické termíny, shoda, rejstřík, uvozovky, neslova — a každý sloupec je podíl zápisů, "
+        "Samotný zápis. Šest otázek ano/ne o té češtině — diakritika, kalky, nepřeložené "
+        "anglické termíny, shoda, rejstřík, neslova — a každý sloupec je podíl zápisů, "
         "které tou vadou netrpí. Hodnotiteli se přepis nikdy neukáže, a právě proto se důvěrné "
         "sezení vůbec dá obodovat."
     ),

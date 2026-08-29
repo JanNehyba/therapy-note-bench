@@ -1448,7 +1448,10 @@ def test_the_leaderboard_links_the_instruments_it_names(tmp_path):
     data = _page_data(tmp_path)
     sources = _flat(_run(report.render_page(data), tmp_path, panel="sources"))
 
-    for entry in report.LICENCES:
+    # The page's own list, not the whole registry: a page credits the sources
+    # its tables use, and this asserts none of those is missing from it.
+    assert data["licences"], "the page credits nothing at all"
+    for entry in data["licences"]:
         assert entry["url"] in sources, f"{entry['source']} is credited nowhere on this page"
         assert entry["source"] in sources
 

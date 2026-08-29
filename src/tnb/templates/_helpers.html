@@ -90,6 +90,16 @@ function T(strings, ...values) {
     values[index] === undefined ? '' : values[index]);
 }
 
+// A sentence that arrives in the payload rather than in the source. The tagged
+// template above fixes its key when the page is written, which is right
+// for everything authored here; a reason chosen per track is picked in Python
+// and has to be looked up at run time. Same dictionary, same normalisation --
+// only the call shape differs, so a payload sentence is translated or it is not
+// drawn in Czech at all, exactly like an authored one.
+function TS(text) {
+  return T([text]);
+}
+
 //: The languages offered, in the order the switch draws them. English first
 //: and English by default: the benchmark, both corpora and every prompt in it
 //: are English, so a reader who lands here with no preference gets the language

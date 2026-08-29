@@ -399,6 +399,12 @@ def live_strings(templates: str) -> set[str]:
         for key, meta in table.items():
             live.add(i18n.norm(key))
             live |= {i18n.norm(meta[f]) for f in ("label", "definition", "caveat") if meta.get(f)}
+    # Sentences the payload carries rather than the template. They are chosen
+    # per track in Python -- which reason a table has for not being ranked,
+    # what its expandable block holds -- so `tagged_keys` cannot see them and
+    # every one of them would read as an orphan.
+    live |= {i18n.norm(reason) for reason in report.NOT_RANKED_REASONS.values()}
+    live |= {i18n.norm(label) for label in report.DETAIL_LABELS.values()}
     for licence in report.LICENCES:
         live |= {i18n.norm(licence[f]) for f in ("used_for", "note") if licence.get(f)}
     live.add(i18n.norm(report.SIMILARITY_EXAMPLE["note"]))
