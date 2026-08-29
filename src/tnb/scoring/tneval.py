@@ -35,9 +35,16 @@ MEASURES: dict[str, dict[str, str]] = {
     "completeness": {
         "label": "Completeness",
         "scale": "0-1",
+        # The worked example is a figure the column reaches. It read "0.65 means
+        # about two thirds", which no row on either published table has ever
+        # come near -- the best is 0.546 -- so the one number a reader was given
+        # to calibrate against taught them that two thirds is an ordinary score
+        # and that everything on the page is a poor one. "Required" went with
+        # it: nothing required these items of this session, which is the whole
+        # of the caveat below.
         "definition": (
             "Fraction of the section's rubric criteria the judge found present. "
-            "0.65 means about two thirds of the required items are in the note."
+            "0.50 means half of that section's rubric items were found in the note."
         ),
         # The denominator, said out loud. This is TN-Eval's own arithmetic and
         # it is reproduced rather than repaired -- but a reader cannot tell from

@@ -568,10 +568,10 @@ _PAYLOAD = {
     # -- the rubric's three columns -------------------------------------------
     "Completeness": "Úplnost",
     "completeness": "úplnost",
-    "Fraction of the section's rubric criteria the judge found present. 0.65 means about two"
-    " thirds of the required items are in the note.": (
-        "Podíl kritérií rubriky daného oddílu, která hodnotitel našel přítomná. 0.65 znamená, že "
-        "v zápise jsou zhruba dvě třetiny požadovaných položek."
+    "Fraction of the section's rubric criteria the judge found present. 0.50 means half of that"
+    " section's rubric items were found in the note.": (
+        "Podíl kritérií rubriky daného oddílu, která hodnotitel našel přítomná. 0.50 znamená, že "
+        "v zápise byla nalezena polovina položek rubriky pro daný oddíl."
     ),
     # Keyed by the *formatted* English: `report.column_meta` fills `{criteria}`
     # from the rubric before the caveat reaches the payload, so 23 is in the key

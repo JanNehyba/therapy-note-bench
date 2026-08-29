@@ -4099,7 +4099,7 @@
       "columns": [
         {
           "caveat": "Counts coverage of a checklist, not judgement. The denominator is the whole 23-item rubric on every note, whatever the session was about, so an item the session never called for counts as absent exactly like one the note forgot -- a clinician who leaves out what does not matter for the next session loses the same mark as a note that missed it. This is the column the table is ordered by, so the caveat travels with the ranking: quote the number with this sentence attached, or do not quote it.",
-          "definition": "Fraction of the section's rubric criteria the judge found present. 0.65 means about two thirds of the required items are in the note.",
+          "definition": "Fraction of the section's rubric criteria the judge found present. 0.50 means half of that section's rubric items were found in the note.",
           "digits": 3,
           "instrument": "TN-Eval rubric",
           "key": "completeness",
@@ -6191,7 +6191,7 @@
       "columns": [
         {
           "caveat": "Counts coverage of a checklist, not judgement. The denominator is the whole 23-item rubric on every note, whatever the session was about, so an item the session never called for counts as absent exactly like one the note forgot -- a clinician who leaves out what does not matter for the next session loses the same mark as a note that missed it. This is the column the table is ordered by, so the caveat travels with the ranking: quote the number with this sentence attached, or do not quote it.",
-          "definition": "Fraction of the section's rubric criteria the judge found present. 0.65 means about two thirds of the required items are in the note.",
+          "definition": "Fraction of the section's rubric criteria the judge found present. 0.50 means half of that section's rubric items were found in the note.",
           "digits": 3,
           "instrument": "TN-Eval rubric",
           "key": "completeness",
