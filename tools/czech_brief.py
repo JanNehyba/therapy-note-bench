@@ -86,6 +86,15 @@ def _index() -> dict[str, str]:
 #: long enough to be a sentence of a session.
 MAX_FIELD_CHARS = 200
 
+#: The criteria tracks, split by note format. Named rather than derived from
+#: "everything that is not PDSQI": the two formats are measured with the same
+#: six criteria but are never counted together, because not every model was
+#: asked in both and because a Deepsy note is longer under a length ceiling a
+#: SOAP note does not have. A filter that says what a track is *not* quietly
+#: pools whatever is added next.
+SOAP_CRITERIA_TRACKS = (results.TRACK_CZECH_REAL, results.TRACK_CZECH_TRANSLATED)
+DEEPSY_CRITERIA_TRACKS = (results.TRACK_DEEPSY_REAL, results.TRACK_DEEPSY_TRANSLATED)
+
 STYLE = """
 :root { --ink:#14161a; --muted:#5b6270; --rule:#d8dce3; --accent:#1c4e80; }
 * { box-sizing: border-box; }
@@ -1586,6 +1595,36 @@ def _intro(rows: list[results.Row]) -> str:
     return html.escape(_t(INTRO).format(models=models, written=written, asked=asked))
 
 
+def _refused_on_deepsy(models: set[str]) -> dict[str, int]:
+    """Of these models, which wrote no Deepsy note because the endpoint refused.
+
+    Counted from the generation cache rather than from the tables, because a
+    model that produced nothing has no row to carry the reason. Only models the
+    endpoint actually refused are returned: one that was simply never asked is
+    not the same claim, and neither is one that answered and wrote badly.
+
+    This exists so a band can say why a name is missing from it. `glm-5.3-flash`
+    is in the bottom band of all four SOAP tables and in none of the Deepsy
+    ones, and the difference is 57 errors from e-INFRA, not a better note.
+    Left unsaid, its absence reads as a measurement nobody made.
+
+    Both counters are summed. `reasons` holds what the endpoint never answered
+    and `failure_reasons` what the model is charged with, but for this model
+    both hold HTTP 400s and 500s -- the request refused before anything was
+    written. Counting only the first would report 25 of the 57 errors and let
+    the rest read as bad notes.
+    """
+    refused: dict[str, int] = {}
+    for track in DEEPSY_CRITERIA_TRACKS:
+        for (_provider, system_id), unreached in results.unreached_by_system(track).items():
+            if system_id not in models:
+                continue
+            errors = sum(unreached.reasons.values()) + sum(unreached.failure_reasons.values())
+            if errors:
+                refused[system_id] = refused.get(system_id, 0) + errors
+    return refused
+
+
 def _conclusion(rows: list[results.Row]) -> str:
     """What eleven models did, before the reader meets a single table.
 
@@ -1605,36 +1644,108 @@ def _conclusion(rows: list[results.Row]) -> str:
     said = []
 
     bands = _payload("czech-variance.json").get("bands", {})
-    language = {t: j for t, j in bands.items() if not t.endswith("-pdsqi")}
+    # Named tracks, not "everything that is not PDSQI". That filter was written
+    # when the only criteria tracks were the two SOAP halves, and it silently
+    # swept the Deepsy tables into the same intersection the moment they were
+    # banded -- pooling two note formats into one "all N tables" claim, which
+    # section 4 of this document spends a page refusing to do.
+    soap = {t: j for t, j in bands.items() if t in SOAP_CRITERIA_TRACKS}
+    deepsy = {t: j for t, j in bands.items() if t in DEEPSY_CRITERIA_TRACKS}
     quality = {t: j for t, j in bands.items() if t.endswith("-pdsqi")}
 
     def shared(group: dict, index: int) -> tuple[list[str], int]:
         seen = [set(g["bands"][index]["models"]) for j in group.values() for g in j.values()]
         return (sorted(set.intersection(*seen)) if seen else []), len(seen)
 
-    # 1. Who is ahead, and only where every table agrees.
-    top, tables = shared(language, 0)
-    bottom, _ = shared(language, -1)
+    def end(models: list[str], *, lead: bool = False) -> str:
+        """`X is`, `X and Y are`, or `No model is` -- subject and verb together.
+
+        One model is, two models are, and no model *is*. The verb used to be a
+        separate placeholder, which read wrong whenever the two ends of the
+        sentence held different numbers of models, and had no branch at all for
+        an empty end. An empty end became reachable the moment a second group of
+        tables could be intersected. Subject and verb are one translated unit
+        because the empty case is not a conjugation of the others: English needs
+        "No model is" and Czech needs "Žádný model není", and a shared "is"
+        cannot be both "je" and "není".
+
+        `lead` says whether the phrase opens its sentence. Only the empty case
+        is ever recased -- a model id is written the way it is deployed, and
+        `deepseek-v4-flash` does not become `Deepseek-v4-flash` at a full stop.
+        """
+        if not models:
+            phrase = _t("No model is")
+            return phrase if lead else phrase[:1].lower() + phrase[1:]
+        return f"{_join_words(models)} {_t('is') if len(models) == 1 else _t('are')}"
+
+    # 1. Who is ahead on the SOAP halves, and only where every table agrees.
+    top, tables = shared(soap, 0)
+    bottom, _ = shared(soap, -1)
     if tables:
         said.append(
             _t(
-                "On writing correct Czech, {top} {top_verb} in the top band of all "
-                "{tables} tables the bands cover -- the SOAP halves, both judges. "
-                "{bottom} {bottom_verb} in the bottom band of all {tables}. Between "
-                "those two ends the tables disagree with each other, so nothing else "
-                "here is a ranking. The Deepsy tables are not in this: no band, "
-                "dominance or separability figure has been computed for them."
-            ).format(
-                top=_join_words(top) or _t("no models"),
-                bottom=_join_words(bottom) or _t("No model"),
-                # One model is, two models are. The sentence named both ends and
-                # conjugated for one of them, so it read wrong whenever the other
-                # end had a different number of models in it -- which is most runs.
-                top_verb=_t("is") if len(top) == 1 else _t("are"),
-                bottom_verb=_t("is") if len(bottom) == 1 else _t("are"),
-                tables=tables,
-            )
+                "On writing correct Czech, {top} in the top band of all {tables} tables "
+                "the bands cover -- the SOAP halves, both judges. {bottom} in the "
+                "bottom band of all {tables}. Between those two ends the tables "
+                "disagree with each other, so nothing else here is a ranking."
+            ).format(top=end(top), bottom=end(bottom, lead=True), tables=tables)
         )
+
+    # 1b. The same question of the Deepsy format, counted over its own tables
+    #     and never pooled with the ones above. Two reasons, and the first is
+    #     the one this repository cares about most: three models were asked in
+    #     only one of the two formats, so an intersection across both would
+    #     demote a model for a question nobody put to it. The second is that
+    #     section 4 measures Deepsy notes as longer and length as costing points
+    #     on every one of these criteria, so a pooled claim would quietly do the
+    #     concluding that section refuses to do.
+    top_d, tables_d = shared(deepsy, 0)
+    bottom_d, _ = shared(deepsy, -1)
+    if tables_d:
+        said.append(
+            _t(
+                "The Deepsy format was asked the same question over its own {tables} "
+                "tables, and it is counted separately rather than pooled with the four "
+                "above: {top} in the top band of all of them and {bottom} in the bottom "
+                "band of all of them. The two formats are not added together because "
+                "not every model was asked in both, and because a Deepsy note is longer "
+                "than a SOAP one -- which this document measures below as costing "
+                "points on every one of these criteria."
+            ).format(top=end(top_d), bottom=end(bottom_d), tables=tables_d)
+        )
+
+    # 1c. And who is missing from that count, with the reason. A model that
+    #     wrote no Deepsy note is absent from every Deepsy band, and absence is
+    #     not a low score. `glm-5.3-flash` sits in the bottom band of all four
+    #     SOAP tables and e-INFRA answered it with an error every time it was
+    #     asked for a Deepsy note, so a pooled bottom-band claim would have
+    #     dropped it and reported an outage as an exoneration.
+    if tables and tables_d and bottom:
+        banded_deepsy = {
+            model
+            for judges in deepsy.values()
+            for grouped in judges.values()
+            for band in grouped["bands"]
+            for model in band["models"]
+        }
+        # Only the models the pooled claim would actually have dropped: in the
+        # bottom band of every SOAP table, and in no Deepsy band at all.
+        refused = _refused_on_deepsy(set(bottom) - banded_deepsy)
+        if refused:
+            said.append(
+                _t(
+                    "One caution about that second count. {subject} in the bottom band "
+                    "of all {tables} SOAP tables and in no Deepsy band at all -- not "
+                    "because of anything written, but because e-INFRA answered {calls} "
+                    "of the calls asking for those notes with an error and returned no "
+                    "note. Adding the two counts together would have removed it from "
+                    "the bottom of the table on the strength of an outage."
+                ).format(
+                    subject=end(sorted(refused), lead=True),
+                    tables=tables,
+                    calls=sum(refused.values()),
+                )
+            )
 
     # 2. The same question asked of note quality, which does not answer.
     top_q, tables_q = shared(quality, 0)
@@ -1671,11 +1782,15 @@ def _conclusion(rows: list[results.Row]) -> str:
     # 4. The finding that changes how the tables below are read.
     length = _payload("czech-length.json")
     tail = length.get("tail") or {}
+    # The SOAP tracks by name. This was "everything that is not PDSQI", and the
+    # Deepsy entries -- where the check comes out false -- were being counted
+    # into the same total, so `hit == len(checks)` stopped holding and the whole
+    # paragraph silently disappeared. The finding is true of the four SOAP
+    # tables and was going unsaid because it is not true of two others.
     checks = [
         found
-        for track, block in tail.items()
-        if not track.endswith("-pdsqi")
-        for found in block.get("judges", {}).values()
+        for track in SOAP_CRITERIA_TRACKS
+        for found in (tail.get(track) or {}).get("judges", {}).values()
     ]
     hit = sum(1 for found in checks if found["all_in_the_tail"])
     if checks and hit == len(checks):
@@ -1687,6 +1802,28 @@ def _conclusion(rows: list[results.Row]) -> str:
                 "longer note has more places to hide one. On the quality instrument, "
                 "rating the very same notes, those three models are not at the bottom."
             ).format(total=len(checks))
+        )
+
+    # 4a. And where it does not hold, said rather than allowed to mute the line
+    #     above. On Deepsy the three longest-writing models are a different
+    #     three -- the rosters differ -- and they do not all land in the last
+    #     three places. A rule that holds on one format and not the other is a
+    #     result, and it is also the reason the two are not counted together.
+    deepsy_checks = [
+        found
+        for track in DEEPSY_CRITERIA_TRACKS
+        for found in (tail.get(track) or {}).get("judges", {}).values()
+    ]
+    if checks and deepsy_checks and not any(f["all_in_the_tail"] for f in deepsy_checks):
+        said.append(
+            _t(
+                "That pattern is not a law: on the {total} Deepsy tables the three "
+                "longest-writing models -- a different three, because the two formats "
+                "were not asked of the same set of models -- do not all land in the "
+                "last three places under either judge. Length and rank travel together "
+                "on the SOAP halves and more loosely here, which is one more reason the "
+                "two formats are counted apart rather than added up."
+            ).format(total=len(deepsy_checks))
         )
 
     # 4b. How big that is, and what is left of the ordering once it is
@@ -2451,18 +2588,35 @@ def _bands() -> str:
 
     if not blocks:
         return ""
+    # Counted, not typed. This lead sat above four tables of eleven models and
+    # said "eleven"; it now sits above six, two of which have twelve, and a
+    # count typed into a sentence is a count a later run makes quietly false.
+    # The largest table's roster, because the claim is about the widest ordering
+    # the reader is offered.
+    widest = max(
+        (
+            sum(len(band["models"]) for band in g["bands"])
+            for judges in data.values()
+            for g in judges.values()
+        ),
+        default=0,
+    )
+    notes = max(
+        (g["sessions"] for judges in data.values() for g in judges.values()),
+        default=0,
+    )
     return (
         f"<h2>{_t('Bands, not places')}</h2>"
         + "<p>"
         + html.escape(
             _t(
-                "Eleven models over ten notes cannot be put in order, and a table that "
-                "prints them in one invites a comparison it cannot support. These are "
-                "the same numbers grouped instead: within a band nothing separates the "
-                "models, between bands something does. A band ends where the gap "
-                "exceeds what resampling the sessions can rule out, so its width is "
-                "the measurement's own resolution."
-            )
+                "As many as {models} models over {notes} notes cannot be put in order, "
+                "and a table that prints them in one invites a comparison it cannot "
+                "support. These are the same numbers grouped instead: within a band "
+                "nothing separates the models, between bands something does. A band "
+                "ends where the gap exceeds what resampling the sessions can rule out, "
+                "so its width is the measurement's own resolution."
+            ).format(models=widest, notes=notes)
         )
         + "</p>"
         + "".join(blocks)
@@ -2686,8 +2840,8 @@ def _variance() -> str:
             + "</strong> "
             + html.escape(
                 _t(
-                    "The ten sessions differ from each other more than the eleven models "
-                    "do, so whatever order the rows come out in is a fact about which "
+                    "The sessions differ from each other more than the models do, so "
+                    "whatever order the rows come out in is a fact about which "
                     "transcripts were drawn. No threshold rescues them; do not read them:"
                 )
             )

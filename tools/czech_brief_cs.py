@@ -514,21 +514,21 @@ CS: dict[str, str] = {
     "These columns order the transcripts, not the models.": (
         "Tyto sloupce řadí přepisy, ne modely."
     ),
-    "The ten sessions differ from each other more than the eleven models do, so "
-    "whatever order the rows come out in is a fact about which transcripts were "
-    "drawn. No threshold rescues them; do not read them:": (
-        "Těch deset sezení se od sebe liší víc než těch jedenáct modelů, "
+    "The sessions differ from each other more than the models do, so whatever order "
+    "the rows come out in is a fact about which transcripts were drawn. No threshold "
+    "rescues them; do not read them:": (
+        "Sezení se od sebe liší víc než modely, "
         "takže ať řádky vyjdou v jakémkoli pořadí, je to výrok o tom, které "
         "přepisy padly. Žádná mez je nezachrání; nečtěte je:"
     ),
     # --- bands, not places -------------------------------------------------
     "Bands, not places": "Pásma, ne pořadí",
-    "Eleven models over ten notes cannot be put in order, and a table that prints "
-    "them in one invites a comparison it cannot support. These are the same numbers "
-    "grouped instead: within a band nothing separates the models, between bands "
-    "something does. A band ends where the gap exceeds what resampling the sessions "
-    "can rule out, so its width is the measurement's own resolution.": (
-        "Jedenáct modelů na deseti zápisech nejde seřadit a tabulka, která je "
+    "As many as {models} models over {notes} notes cannot be put in order, and a "
+    "table that prints them in one invites a comparison it cannot support. These are "
+    "the same numbers grouped instead: within a band nothing separates the models, "
+    "between bands something does. A band ends where the gap exceeds what resampling "
+    "the sessions can rule out, so its width is the measurement's own resolution.": (
+        "Až {models} modelů na {notes} zápisech nejde seřadit a tabulka, která je "
         "v pořadí vytiskne, zve ke srovnání, které neunese. Tady jsou tatáž čísla "
         "seskupená: uvnitř pásma modely nic neodlišuje, mezi pásmy ano. Pásmo končí "
         "tam, kde rozdíl přesáhne to, co převzorkování sezení dokáže vyloučit — "
@@ -836,8 +836,10 @@ CS: dict[str, str] = {
     ),
     # --- the conclusion, before the tables ---------------------------------
     "What eleven models did, in five sentences": ("Co jedenáct modelů dokázalo, v pěti větách"),
-    "no models": "žádné modely",
-    "No model": "Žádný model",
+    # Subject and verb in one key. English conjugates "No model IS", Czech
+    # negates the verb -- "Žádný model NENÍ" -- so the empty end cannot be built
+    # from the same "is" the one- and two-model cases use.
+    "No model is": "Žádný model není",
     "is": "je",
     "are": "jsou",
     "Part of what those language tables measure is length, and how much was measured "
@@ -852,16 +854,37 @@ CS: dict[str, str] = {
         "nedá pořadí, které by se drželo, takže se žádné netiskne. Handicap, který kratšího "
         "pisatele nikdy nenechá vyhrát, přežije {survived} z {decided} rozhodnutých dvojic."
     ),
-    "On writing correct Czech, {top} {top_verb} in the top band of all {tables} tables "
-    "the bands cover -- the SOAP halves, both judges. {bottom} {bottom_verb} in the "
-    "bottom band of all {tables}. Between those two ends the tables disagree with each "
-    "other, so nothing else here is a ranking. The Deepsy tables are not in this: no "
-    "band, dominance or separability figure has been computed for them.": (
-        "Ve psaní správné češtiny {top_verb} {top} v nejvyšším pásmu všech {tables} "
-        "tabulek, které pásma pokrývají — půlky SOAP, oba soudci. {bottom} {bottom_verb} "
-        "v nejnižším pásmu všech {tables}. Mezi těmito dvěma konci si tabulky odporují, "
-        "takže nic dalšího tu není pořadí. Deepsy tabulky v tom nejsou: nemají spočítané "
-        "pásmo, dominanci ani odlišitelnost."
+    "On writing correct Czech, {top} in the top band of all {tables} tables the bands "
+    "cover -- the SOAP halves, both judges. {bottom} in the bottom band of all "
+    "{tables}. Between those two ends the tables disagree with each other, so nothing "
+    "else here is a ranking.": (
+        "Ve psaní správné češtiny {top} v nejvyšším pásmu všech {tables} tabulek, které "
+        "pásma pokrývají — půlky SOAP, oba soudci. {bottom} v nejnižším pásmu všech "
+        "{tables}. Mezi těmito dvěma konci si tabulky odporují, takže nic dalšího tu není "
+        "pořadí."
+    ),
+    "The Deepsy format was asked the same question over its own {tables} tables, and "
+    "it is counted separately rather than pooled with the four above: {top} in the top "
+    "band of all of them and {bottom} in the bottom band of all of them. The two "
+    "formats are not added together because not every model was asked in both, and "
+    "because a Deepsy note is longer than a SOAP one -- which this document measures "
+    "below as costing points on every one of these criteria.": (
+        "Formát Deepsy dostal tutéž otázku nad svými vlastními {tables} tabulkami a počítá "
+        "se zvlášť, ne dohromady se čtyřmi výše: {top} v nejvyšším pásmu všech z nich "
+        "a {bottom} v nejnižším pásmu všech z nich. Oba formáty se nesčítají, protože ne "
+        "každý model dostal obě zadání — a protože zápis Deepsy je delší než SOAP, což tenhle "
+        "dokument níž měří jako ztrátu bodů v každém z těchto kritérií."
+    ),
+    "One caution about that second count. {subject} in the bottom band of all {tables} "
+    "SOAP tables and in no Deepsy band at all -- not because of anything written, but "
+    "because e-INFRA answered {calls} of the calls asking for those notes with an "
+    "error and returned no note. Adding the two counts together would have removed it "
+    "from the bottom of the table on the strength of an outage.": (
+        "Jedna výstraha k tomu druhému počtu. {subject} v nejnižším pásmu všech {tables} "
+        "tabulek SOAP a zároveň v žádném pásmu Deepsy — ne kvůli tomu, co napsal, ale "
+        "protože e-INFRA odpověděla na {calls} volání žádajících o tyhle zápisy chybou "
+        "a nevrátila žádný. Sečtěním obou počtů dohromady by zmizel ze dna tabulky "
+        "díky výpadku."
     ),
     "On whether the note is any good, no model is in the top band of all {tables} "
     "tables and none is in the bottom band of all {tables}. The quality instrument "
@@ -893,6 +916,16 @@ CS: dict[str, str] = {
         "je v zápisu někde chyba, a delší zápis má víc míst, kde ji schovat. Na "
         "nástroji na kvalitu, který hodnotí úplně tytéž zápisy, ty tři modely na "
         "spodku nejsou."
+    ),
+    "That pattern is not a law: on the {total} Deepsy tables the three longest-writing "
+    "models -- a different three, because the two formats were not asked of the same "
+    "set of models -- do not all land in the last three places under either judge. "
+    "Length and rank travel together on the SOAP halves and more loosely here, which "
+    "is one more reason the two formats are counted apart rather than added up.": (
+        "Ten vzorec není zákon: na {total} tabulkách Deepsy tři modely s nejdelšími zápisy "
+        "— jsou to jiné tři, protože oba formáty nedostaly tutéž sadu modelů — neobsadí "
+        "poslední tři místa ani u jednoho soudce. Délka a příčka jdou spolu na půlkách SOAP "
+        "a tady volněji, což je další důvod, proč se oba formáty počítají zvlášť a nesčítají."
     ),
     "And the English leaderboard does not predict this. The same instrument asked in "
     "both languages transfers; the single measure the English page ranks by -- "
