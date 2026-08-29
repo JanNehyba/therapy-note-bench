@@ -4,7 +4,7 @@ Offline. Every path here is computed, nothing is written.
 
 `judge.cache_path` is keyed on judge, rubric, provider, system, session and
 unit. The Deepsy track shares all six with the Czech SOAP track -- the same ten
-sessions, the same eleven models, the same seven criteria, the same
+sessions, overlapping models, the same six criteria, the same
 `czech-criteria-v2`. Only the note differs, and the note is not in the key.
 
 Under one root each run would overwrite the other's answers and neither track
@@ -18,7 +18,7 @@ from __future__ import annotations
 
 import ast
 
-from tnb import judge
+from tnb import judge, results
 from tnb.config import REPO_ROOT
 from tnb.scoring import czech
 from tnb.tasks import czech as czech_task
@@ -85,3 +85,50 @@ def test_the_deepsy_scorer_actually_passes_it():
             assert roots, "cmd_score_deepsy calls score_many with no cache_root"
             found = True
     assert found, "cmd_score_deepsy no longer calls score_many"
+
+
+def test_the_variance_tool_reads_the_deepsy_root_with_the_deepsy_renderer():
+    """The other reader of that cache, and it used to read neither.
+
+    `tools/czech_variance.py` asks the same six-field question `cmd_score_deepsy`
+    answers, so it needs the same root and the same renderer. It had both
+    hardcoded to the SOAP track, and the two must move together: `load_cached`
+    checks the digest of the prompt the renderer produced, so the right root with
+    the wrong renderer finds files it then rejects.
+    """
+    import sys
+
+    sys.path.insert(0, str(REPO_ROOT / "tools"))
+    import czech_variance
+
+    for track in (results.TRACK_DEEPSY_REAL, results.TRACK_DEEPSY_TRANSLATED):
+        spec = czech_variance.CRITERIA_TRACKS[track]
+        assert spec.cache_root == judge.CACHE_DIR / deepsy.PROMPT_VERSION
+        assert spec.render is deepsy.render_note
+        # And the corpus is carried rather than derived from the track name.
+        # `_cells` used to pick its loader with `task_name == "czech-real"`, so
+        # `"deepsy-real"` compared false and would have loaded the TRANSLATED
+        # sessions -- every note paired with the wrong transcript.
+        assert spec.task_name == track
+
+    for track in (results.TRACK_CZECH_REAL, results.TRACK_CZECH_TRANSLATED):
+        spec = czech_variance.CRITERIA_TRACKS[track]
+        assert spec.cache_root is None
+        assert spec.render is czech_task.render_note
+
+
+def test_the_soap_renderer_over_a_deepsy_note_asks_the_judge_nothing():
+    """Why the wrong renderer failed silently instead of loudly.
+
+    This is the regression that kept the Deepsy panels out of the document with
+    nothing printed. `czech_task.render_note` reads `subjective`/`objective`/
+    `assessment`/`plan`; a Deepsy note has none of those keys, so it renders four
+    empty headings, `czech.has_content` strips them, and `build_tasks` returns
+    an empty list. Zero tasks means zero cells, and the caller's `if not cells`
+    skipped the track without a word -- indistinguishable from a judge that was
+    never asked.
+    """
+    note = {key: "Text." for keys in deepsy.KEYS.values() for key in keys}
+
+    assert czech.build_tasks(deepsy.render_note(note)), "the Deepsy renderer asks questions"
+    assert czech.build_tasks(czech_task.render_note(note)) == []
