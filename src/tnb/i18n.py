@@ -573,16 +573,33 @@ _PAYLOAD = {
         "Podíl kritérií rubriky daného oddílu, která hodnotitel našel přítomná. 0.65 znamená, že "
         "v zápise jsou zhruba dvě třetiny požadovaných položek."
     ),
-    "Counts coverage of a checklist, not judgement. A therapist writes what matters for the next"
-    " session and leaves out what does not; the rubric sees what is present and cannot see why"
-    " anything was left out -- which is why every model here scores above the therapist on it."
-    " This is the column the table is ordered by, so the caveat travels with the ranking: quote"
-    " the number with this sentence attached, or do not quote it.": (
-        "Počítá pokrytí seznamu položek, ne úsudek. Terapeut píše to, co je důležité pro příští "
-        "sezení, a co není, vynechá; rubrika vidí, co v zápise je, a nevidí, proč bylo něco "
-        "vynecháno — a právě proto tu na ní každý model boduje výš než terapeut. Podle tohoto "
-        "sloupce je tabulka seřazena, takže tato výhrada cestuje spolu s pořadím: citujte to "
-        "číslo i s touto větou, nebo je necitujte."
+    # Keyed by the *formatted* English: `report.column_meta` fills `{criteria}`
+    # from the rubric before the caveat reaches the payload, so 23 is in the key
+    # the same way "temperature 0, max tokens 4096" is further down this file.
+    "Counts coverage of a checklist, not judgement. The denominator is the whole 23-item rubric"
+    " on every note, whatever the session was about, so an item the session never called for"
+    " counts as absent exactly like one the note forgot -- a clinician who leaves out what does"
+    " not matter for the next session loses the same mark as a note that missed it. This is the"
+    " column the table is ordered by, so the caveat travels with the ranking: quote the number"
+    " with this sentence attached, or do not quote it.": (
+        "Počítá pokrytí seznamu položek, ne úsudek. Jmenovatelem je vždy celá rubrika o 23 "
+        "položkách, ať bylo sezení o čemkoli, takže položka, kterou si sezení nikdy nevyžádalo, "
+        "se počítá jako chybějící úplně stejně jako ta, na kterou zápis zapomněl — klinik, který "
+        "vynechá to, co pro příští sezení není důležité, ztrácí stejný bod jako zápis, který to "
+        "přehlédl. Podle tohoto sloupce je tabulka seřazena, takže tato výhrada cestuje spolu "
+        "s pořadím: citujte to číslo i s touto větou, nebo je necitujte."
+    ),
+    # The computed half of that caveat, authored in the leaderboard's script
+    # because its two figures are read off the table the sentence is printed
+    # under. Kept here beside the caveat rather than with the other sentences:
+    # a translator changing one of them has to see the other.
+    "On the table above, the highest {0} is {1} out of a possible 1.00.": (
+        "V tabulce výše je nejvyšší {0} {1} z možných 1.00."
+    ),
+    "On the table above, the highest {0} is {1} out of a possible 1.00, and the note a human"
+    " clinician wrote is row {2} of {3}.": (
+        "V tabulce výše je nejvyšší {0} {1} z možných 1.00 a zápis, který napsal člověk-klinik, "
+        "je {2}. řádek z {3}."
     ),
     "Conciseness": "Stručnost",
     "Fraction of the note's sentences that fit at least one rubric item. 1.00 means nothing is"

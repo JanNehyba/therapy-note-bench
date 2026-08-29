@@ -39,14 +39,24 @@ MEASURES: dict[str, dict[str, str]] = {
             "Fraction of the section's rubric criteria the judge found present. "
             "0.65 means about two thirds of the required items are in the note."
         ),
+        # The denominator, said out loud. This is TN-Eval's own arithmetic and
+        # it is reproduced rather than repaired -- but a reader cannot tell from
+        # a 0-1 fraction that the whole rubric is asked of every note, so a
+        # criterion no counselling session ever raises costs a note the same
+        # mark as one it forgot. The caveat used to end "which is why every
+        # model here scores above the therapist on it", which is a claim about
+        # the data typed into a sentence: true in both tables today and false
+        # the first time a re-score moved one row. The page computes that half
+        # from the table it is printed under instead.
         "caveat": (
-            "Counts coverage of a checklist, not judgement. A therapist writes "
-            "what matters for the next session and leaves out what does not; "
-            "the rubric sees what is present and cannot see why anything was "
-            "left out -- which is why every model here scores above the "
-            "therapist on it. This is the column the table is ordered by, so "
-            "the caveat travels with the ranking: quote the number with this "
-            "sentence attached, or do not quote it."
+            "Counts coverage of a checklist, not judgement. The denominator is "
+            "the whole {criteria}-item rubric on every note, whatever the "
+            "session was about, so an item the session never called for counts "
+            "as absent exactly like one the note forgot -- a clinician who "
+            "leaves out what does not matter for the next session loses the "
+            "same mark as a note that missed it. This is the column the table "
+            "is ordered by, so the caveat travels with the ranking: quote the "
+            "number with this sentence attached, or do not quote it."
         ),
     },
     "conciseness": {

@@ -1113,6 +1113,33 @@ def test_an_expanded_row_spans_the_columns_the_table_actually_drew(tmp_path):
         assert spans == {headers}, f"colspan {spans} against {headers} headers"
 
 
+def test_the_completeness_caveat_reads_its_two_figures_off_the_table(tmp_path):
+    """A denominator a reader cannot see the consequence of is a word, not a warning.
+
+    The caveat says the denominator is the whole rubric on every note. The half
+    that makes that checkable -- how high the column actually goes, and where
+    the note a human wrote landed under the same rule -- is computed from the
+    rows the sentence is printed under. It used to be typed: the caveat ended
+    "which is why every model here scores above the therapist on it", which is a
+    claim about the data that no test held to the data and that a re-score could
+    falsify without touching a character of it.
+    """
+    from tnb import report
+
+    rows = [
+        _row("x", "a-judge", 0.55),
+        _row("y", "a-judge", 0.44),
+        _row("therapist", "a-judge", 0.33, system_type="reference-human"),
+    ]
+    drawn = _flat(_run(report.render_page(report.build(rows)), tmp_path, panel="table-host"))
+
+    assert "the whole 23-item rubric on every note" in drawn, (
+        "the caveat does not say what the denominator is"
+    )
+    assert "the highest Completeness is 0.550 out of a possible 1.00" in drawn
+    assert "the note a human clinician wrote is row 3 of 3" in drawn
+
+
 def test_the_calibration_panel_says_whose_notes_the_judge_was_checked_on(tmp_path):
     """One number for the instrument hides whether it is the same instrument on
     every kind of note.

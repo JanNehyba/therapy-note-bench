@@ -565,7 +565,13 @@ def test_every_string_a_track_registry_holds_has_a_czech_entry():
             if isinstance(value, str) and field != "human_role_short":
                 authored[f"design.{field}"] = value
         for key, _digits in report.COLUMNS[track]:
-            meta = report.measure_table(track).get(key, {})
+            # Through `column_meta`, not out of the raw table: a definition or a
+            # caveat may hold a placeholder the report fills before the string
+            # reaches a reader -- the rubric's criterion count is counted rather
+            # than typed -- and the dictionary is keyed by what is drawn. Asking
+            # the raw table would demand a Czech entry for a sentence with a
+            # `{hole}` still in it and accept one whose filled form is missing.
+            meta = report.column_meta(track, key)
             for field in ("label", "definition", "caveat"):
                 authored[f"{key}.{field}"] = meta.get(field)
         for field, value in authored.items():

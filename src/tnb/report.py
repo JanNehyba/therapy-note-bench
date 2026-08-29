@@ -444,12 +444,20 @@ def column_meta(track: str, key: str) -> dict:
     definition = meta["definition"]
     if "{sections}" in definition:
         definition = definition.format(sections=_and_list(ihope_temporal()))
+    # How many criteria the rubric holds, counted rather than typed. It is the
+    # denominator of every completeness figure on the page, and a caveat naming
+    # it has to name whatever `CHECKBOX_MAPPING` actually contains -- a hand-
+    # written 23 beside a mapping somebody added a criterion to is the caveat
+    # that reads most convincingly and is wrong.
+    caveat = meta["caveat"]
+    if "{criteria}" in caveat:
+        caveat = caveat.format(criteria=len(rubric.CHECKBOX_MAPPING))
     return {
         "key": key,
         "label": meta["label"],
         "scale": meta["scale"],
         "definition": definition,
-        "caveat": meta["caveat"],
+        "caveat": caveat,
         "ranking": key == RANKING_MEASURES.get(track),
     }
 

@@ -356,6 +356,36 @@ function referenceNote(table) {
     clinician chose to leave out.`}</p>`;
 }
 
+// What the completeness denominator does to the numbers, read off the table it
+// is printed under. The caveat beside this can say what the denominator *is* --
+// the whole rubric, asked of every note -- but a reader believes a denominator
+// when they can see its consequence in the rows above the sentence, and those
+// two figures are the consequence: a 0-1 column where the best row is near a
+// half, and a human clinician's note measured by the same rule.
+//
+// Computed, never typed. The caveat used to end "which is why every model here
+// scores above the therapist on it": a claim about the data, in a sentence no
+// test could hold to the data, that a re-score could falsify without touching
+// a word of it.
+function denominatorNote(table) {
+  const column = (table.columns || []).find(c => c.key === 'completeness');
+  if (!column) return '';
+  const rows = table.rows || [];
+  const scored = rows.filter(r => typeof (r.headline || {}).completeness === 'number');
+  if (!scored.length) return '';
+  const best = fmt(Math.max(...scored.map(r => r.headline.completeness)), column.digits);
+  const label = esc(tr(column.label));
+  // The rows arrive in the order the table draws them, so a position here is a
+  // position a reader can count to. Said only where a human wrote one of them:
+  // the point is that the clinician is measured by this denominator too, and a
+  // table of models alone has nothing to say about that.
+  const human = rows.findIndex(r => r.system_type === 'reference-human');
+  return ` <span class="measured">${human === -1
+    ? T`On the table above, the highest ${label} is ${best} out of a possible 1.00.`
+    : T`On the table above, the highest ${label} is ${best} out of a possible 1.00, and the
+        note a human clinician wrote is row ${human + 1} of ${rows.length}.`}</span>`;
+}
+
 function renderTable(table, index) {
   if (!table.scored) return renderQueue(table);
   const versions = table.versions;
@@ -402,7 +432,8 @@ function renderTable(table, index) {
     `<div class="measure"><dt>${esc(tr(c.label))} <span class="scale">${esc(c.scale)}</span>` +
     (c.ranking ? `<span class="ranks">${T`ranks this table`}</span>` : '') +
     `</dt><dd>${esc(tr(c.definition))}` +
-    (c.caveat ? ` <em>${esc(tr(c.caveat))}</em>` : '') + `</dd></div>`).join('');
+    (c.caveat ? ` <em>${esc(tr(c.caveat))}</em>` : '') +
+    (c.key === 'completeness' ? denominatorNote(table) : '') + `</dd></div>`).join('');
   // Said under the table either way. A table with no grouping measured must not
   // read as a strict ranking just because nobody has checked.
   const groupNote = table.groups

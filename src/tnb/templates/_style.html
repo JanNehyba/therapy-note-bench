@@ -219,6 +219,10 @@ dl.measures .measure { display: grid; grid-template-columns: minmax(9rem, 12rem)
 dl.measures dt { font-weight: 600; color: var(--fg); }
 dl.measures dd { margin: 0; color: var(--muted); }
 dl.measures em { font-style: normal; color: var(--warn); }
+/* The half of a caveat that was read off the table rather than written into it.
+   Full contrast, because those are the two figures a reader can check against
+   the rows a finger-scroll above the sentence. */
+dl.measures .measured { color: var(--fg); }
 @media (max-width: 620px) { dl.measures .measure { grid-template-columns: 1fr; } }
 
 .differs { display: inline-block; margin-left: .45em; padding: .05em .4em; border-radius: 3px;
