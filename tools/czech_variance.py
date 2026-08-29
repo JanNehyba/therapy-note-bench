@@ -81,11 +81,6 @@ def _cells(task_name: str, judge_model: str, budget: int) -> dict:
                 cells[(candidate.system_id, candidate.session_id, task.criterion)] = (
                     0.0 if verdict else 1.0
                 )
-        # The counted column has no cached answer to find.
-        if czech.has_content(note) and czech.has_quotes(note):
-            cells[(candidate.system_id, candidate.session_id, "quotes")] = (
-                0.0 if czech.has_straight_quotes(note) else 1.0
-            )
     return cells
 
 
