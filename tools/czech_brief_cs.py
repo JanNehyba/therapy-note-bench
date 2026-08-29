@@ -1299,4 +1299,114 @@ CS: dict[str, str] = {
     "{margin} · {winner} vs {loser} words": "{margin} · {winner} vs {loser} slov",
     "Beats": "Poráží",
     "this model": "tento model",
+    # --- the four figures ---------------------------------------------------
+    # `tools/czech_figures.py` may hold no Czech at all -- it is scanned for
+    # diacritics like every other tool -- so every title, caption, axis label
+    # and footnote it draws is here. Each entry is a whole sentence, never a
+    # clause: a Czech sentence assembled from pieces at drawing time does not
+    # decline, and a count glued to a noun declines differently at two, at five
+    # and at nine.
+    "The Deepsy note scores lower in {worse} of {compared} model-and-judge pairs": (
+        "Zápis ve formátu Deepsy dopadl hůř v {worse} z {compared} dvojic model–soudce"
+    ),
+    "Each line is one model: on the left its SOAP note, on the right its Deepsy note "
+    "from the same sessions, read against the same six criteria by the same judge.": (
+        "Každá čára je jeden model: vlevo jeho zápis SOAP, vpravo jeho zápis ve formátu "
+        "Deepsy z týchž sezení, posuzované stejnými šesti kritérii a stejným soudcem."
+    ),
+    "{worse} of {models} models score lower": "{worse} z {models} modelů má horší skóre",
+    "A Deepsy note is also longer, and length runs against most of these criteria, so "
+    "the format and the length point the same way here and {models} models cannot "
+    "separate them. Which of the two the drop belongs to is not measured.": (
+        "Zápis ve formátu Deepsy je zároveň delší a délka jde proti většině těchto "
+        "kritérií, takže formát a délka tu ukazují stejným směrem a {models} modelů je "
+        "od sebe neodliší. Kterému z těch dvou ten propad patří, změřené není."
+    ),
+    "Source: local/czech-rows.jsonl, rubric {rubric}. Nothing in this figure is on the "
+    "public site.": (
+        "Zdroj: local/czech-rows.jsonl, rubrika {rubric}. Nic z tohoto grafu není na veřejném webu."
+    ),
+    "The SOAP note and the Deepsy note of each model, side by side": (
+        "Zápis SOAP a zápis ve formátu Deepsy u každého modelu vedle sebe"
+    ),
+    "General capability tracks the English notes more closely than the Czech ones": (
+        "Obecná schopnost modelu jde s anglickými zápisy víc než s českými"
+    ),
+    "Each dot is one model: its score on a published capability index against the "
+    "quality a judge gave its notes. The dashed line is least squares, drawn rather "
+    "than described.": (
+        "Každý bod je jeden model: jeho skóre v publikovaném indexu schopností proti "
+        "kvalitě, kterou jeho zápisům dal soudce. Čárkovaná čára je metoda nejmenších "
+        "čtverců, nakreslená, ne popsaná."
+    ),
+    "The English SOAP notes": "Anglické zápisy SOAP",
+    "The Czech notes, translated half": "České zápisy, přeložená polovina",
+    "PDSQI-9 quality, 1 to 5": "Kvalita podle PDSQI-9, 1 až 5",
+    "Spearman {rho}, p {p}, {n} models": "Spearman {rho}, p {p}, {n} modelů",
+    "Matched by name, and the name is the weak link: on this endpoint one id has "
+    "already returned another model's output, so every dot is an assumption. These "
+    "could not be matched to a public model at all and are absent rather than guessed: "
+    "{names}.": (
+        "Párováno podle jména a jméno je slabý článek: na tomhle endpointu už jedno id "
+        "vrátilo výstup jiného modelu, takže každý bod je předpoklad. Tyhle se s žádným "
+        "veřejným modelem spárovat nepodařilo, a proto tu nejsou, místo aby se "
+        "odhadovaly: {names}."
+    ),
+    "Source: local/czech-external.json, {version}, fetched {fetched}. Nothing on this "
+    "axis was measured by this project.": (
+        "Zdroj: local/czech-external.json, {version}, staženo {fetched}. Nic na této ose "
+        "tento projekt neměřil."
+    ),
+    "A published capability index against the quality of the notes": (
+        "Publikovaný index schopností proti kvalitě zápisů"
+    ),
+    "A place in English is not a place in Czech: {moved} of {models} change": (
+        "Místo v angličtině není místo v češtině: {moved} z {models} se mění"
+    ),
+    "PDSQI-9 on the English SOAP notes against PDSQI-9 on the Czech ones, averaged over "
+    "the three attributes that are not the same for every model. Same instrument, same "
+    "judge, only the language of the note differs.": (
+        "PDSQI-9 na anglických zápisech SOAP proti PDSQI-9 na českých, zprůměrováno přes "
+        "tři vlastnosti, které nejsou u všech modelů stejné. Stejný nástroj, stejný "
+        "soudce, liší se jen jazyk zápisu."
+    ),
+    "In English": "V angličtině",
+    "In Czech": "V češtině",
+    "changed place: {moved}": "změna pořadí: {moved}",
+    "held their place: {held}": "beze změny: {held}",
+    "Source: local/czech-join.json, both judges, the models both tables hold.": (
+        "Zdroj: local/czech-join.json, oba soudci, modely, které mají obě tabulky."
+    ),
+    "Each model's place in English against its place in Czech": (
+        "Místo každého modelu v angličtině proti jeho místu v češtině"
+    ),
+    "The longer a model's note, the worse it does on the Czech criteria": (
+        "Čím delší zápis model píše, tím hůř dopadá v českých kritériích"
+    ),
+    "Each dot is one model: the median length of its notes against the mean of the six "
+    "criteria under one judge. The dashed line is least squares, drawn rather than "
+    "described.": (
+        "Každý bod je jeden model: medián délky jeho zápisů proti průměru šesti kritérií "
+        "u jednoho soudce. Čárkovaná čára je metoda nejmenších čtverců, nakreslená, ne "
+        "popsaná."
+    ),
+    "Median words in one note": "Medián počtu slov v jednom zápisu",
+    "The six criteria, averaged": "Šest kritérií, zprůměrovaných",
+    "Length was not assigned to the models, they chose it, so this is not a correction "
+    "to apply -- a model may write long BECAUSE it summarises badly, and subtracting "
+    "what length predicts would take the result away with the artefact. It is a reason "
+    "not to read the bottom of the table as bad Czech and nothing else.": (
+        "Délka modelům nebyla přidělena, zvolily si ji samy, takže tohle není oprava, "
+        "kterou by šlo použít — model může psát dlouze PROTOŽE špatně shrnuje, a "
+        "odečtení toho, co délka předpovídá, by spolu s artefaktem odečetlo i výsledek. "
+        "Je to důvod nečíst spodek tabulky jen jako špatnou češtinu."
+    ),
+    "Source: local/czech-length.json and local/czech-rows.jsonl, rubric {rubric}. The "
+    "lengths are medians over the notes that parsed.": (
+        "Zdroj: local/czech-length.json a local/czech-rows.jsonl, rubrika {rubric}. "
+        "Délky jsou mediány přes zápisy, které se podařilo rozebrat."
+    ),
+    "Note length against the criteria score, one dot per model": (
+        "Délka zápisu proti skóre v kritériích, jeden bod na model"
+    ),
 }
