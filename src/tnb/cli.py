@@ -930,7 +930,7 @@ def cmd_score_czech_pdsqi(args: argparse.Namespace) -> int:
 
     The companion to `score-czech` and not a replacement for it. The seven
     criteria there ask whether the Czech is any good and cannot ask whether the
-    note is -- a flawless sentence about nothing passes all seven. These rows
+    note is -- a flawless sentence about nothing passes all six. These rows
     land on their own two tracks and, like the criteria's, go to a file the
     published page does not read.
 

@@ -45,7 +45,7 @@ class NoteResult:
     cached: int = 0
     failed: int = 0
     #: A note with no content at all. Not scored -- every criterion asks about
-    #: the absence of a fault, so it would pass all seven -- and not dropped
+    #: the absence of a fault, so it would pass all six -- and not dropped
     #: either, or a model that wrote nothing would lose its worst note.
     empty: bool = False
 
@@ -326,7 +326,8 @@ class SystemAggregate:
 
         It replaces a worse rule, and the difference was measured before it was
         changed. Requiring every criterion meant one unanswered question threw
-        the note out of all seven columns, including the five it had answered
+        the note out of all seven columns the instrument then had, including the five
+        it had answered
         cleanly. On the real half that removed 18 of 104 notes; `gpt-oss-120b`
         published a mean over five of its ten.
 

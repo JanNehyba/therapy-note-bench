@@ -2,7 +2,7 @@
 
 The seven criteria in `scoring/czech.py` ask whether the Czech is any good. They
 do not ask whether the *note* is any good, and they cannot: a flawless Czech
-sentence about nothing passes all seven. This module is the other half of the
+sentence about nothing passes all six. This module is the other half of the
 question, and it was in the plan from the start -- including a prediction to be
 tested, that `organized` would come back flat here for the same reason it is
 flat in English, because the prompt dictates the structure.

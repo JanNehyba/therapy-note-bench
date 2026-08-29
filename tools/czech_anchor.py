@@ -6,7 +6,7 @@ notes on PDSQI-9, so `docs/limitations.md` says of both that they have no human
 anchor. This one can have a small one, because the notes are in Czech and there
 is a native speaker on the project.
 
-**What the number is, exactly.** One person answered the same seven questions
+**What the number is, exactly.** One person answered the same six questions
 the judge answered, about twenty notes drawn by a hash of the session and the
 model. He was not reading cold: a language model walked him through each note,
 pointed at candidate faults and asked; he decided every answer. That shapes what
@@ -50,7 +50,7 @@ DEFAULT_TARGET = REPO / "local" / "czech-anchor.json"
 #: twenty notes" and "a model proposed candidates and one native speaker ruled on
 #: each" are different claims, and only the second one is true.
 METHOD = (
-    "One native speaker answered all seven questions for each of twenty notes. A "
+    "One native speaker answered all six questions for each of twenty notes. A "
     "language model presented each note, pointed at candidate faults and asked; the "
     "person decided every answer, including one where he overruled the model. The "
     "sample was drawn by a hash of the session and the model, so no score could "

@@ -192,8 +192,8 @@ METHOD_CRITERIA = (
     "column is the share of notes free of that fault, so higher is better throughout. "
     "A judge that answered neither yes nor no is recorded as not having answered -- "
     'never as "no fault" -- and a note with no content is not asked at all, because '
-    "every one of the seven asks about the absence of a fault and an empty note would "
-    "pass all seven."
+    "every one of the six asks about the absence of a fault and an empty note would "
+    "pass all six."
 )
 METHOD_PDSQI = (
     "PDSQI-9 is reproduced in English, word for word, because a translated instrument "
@@ -216,8 +216,9 @@ LIMITS = [
     ),
     (
         "The two halves differ by more than language, and mostly by size",
-        "A real session runs to a median of 5,266 words and 113 turns; a translated "
-        "AnnoMI conversation to 699 words and 52 turns. Seven times the material, so "
+        "A real session runs to a median of {real_words} words and {real_turns} turns; "
+        "a translated AnnoMI conversation to {other_words} words and {other_turns} turns. "
+        "Seven times the material, so "
         "the summarising is a harder task before any question of Czech arises. They "
         "differ in topic too -- AnnoMI is motivational interviewing about substance "
         "use and the real sessions are not -- and in who transcribed them. A model "
@@ -227,7 +228,7 @@ LIMITS = [
     (
         "Nothing here says whether a note is true",
         "The criteria ask about the Czech and nothing else. A fluent, correctly typeset, "
-        "entirely invented note passes all seven. Whether the note says what the session "
+        "entirely invented note passes all six. Whether the note says what the session "
         "contained is a different measurement and this is not it.",
     ),
     (
@@ -255,6 +256,52 @@ LIMITS = [
 ]
 
 
+def _grouped(value: int) -> str:
+    """A thousands separator the reader's language uses.
+
+    English groups with a comma and Czech with a space, and the document had
+    both: the prose said 5 266 and the table beside it said 5,266, which a
+    Czech reader reads as five and a quarter. A non-breaking space, so the
+    print does not wrap a number in half.
+    """
+    text = f"{value:,}"
+    return text if LANG == "en" else text.replace(",", "\u00a0")
+
+
+def _fill(body: str) -> str:
+    """Fill a caveat's placeholders, if it has any. Most do not."""
+    return body.format(**_corpus_sizes()) if "{" in body else body
+
+
+def _corpus_sizes() -> dict[str, str]:
+    """The two corpora's medians, measured rather than typed.
+
+    The sentence about them carried its own figures for a while. This document
+    has been through that before -- four of five hand-written numbers had
+    drifted from the table printing the same measurement three sections below --
+    and a caveat with a stale number in it is worse than no caveat, because it
+    is the paragraph a reader trusts.
+    """
+    # Imported here, as `_corpus` does: the loaders touch the data directory
+    # and a document built without it should still draw everything else.
+    from tnb.tasks import czech as czech_task
+
+    out = {}
+    halves = (("real", czech_task.load_real), ("other", czech_task.load_translated))
+    for prefix, load in halves:
+        try:
+            sessions = load()
+        except (RuntimeError, OSError):
+            sessions = []
+        if not sessions:
+            return dict.fromkeys(("real_words", "real_turns", "other_words", "other_turns"), "?")
+        words = sorted(session.word_count for session in sessions)
+        turns = sorted(len(session.turns) for session in sessions)
+        out[f"{prefix}_words"] = _grouped(words[len(words) // 2])
+        out[f"{prefix}_turns"] = _grouped(turns[len(turns) // 2])
+    return out
+
+
 def _fmt(value, digits: int) -> str:
     if value is None:
         return '<span class="dash">--</span>'
@@ -272,8 +319,8 @@ THIN = 0.8
 UNREADABLE = 0.25
 
 
-#: The tail every criterion definition ends with. It is true of all seven, so
-#: printing it seven times says it six times too often -- it goes above the list
+#: The tail every criterion definition ends with. It is true of all six, so
+#: printing it six times says it five times too often -- it goes above the list
 #: once instead.
 _SHARED_TAILS = (
     " Reported as the share of notes free of it.",
@@ -815,7 +862,7 @@ WHAT_IT_CATCHES = {
     "diacritics": ("Reliable: the two judges answered the same way on 79% of notes."),
     "calque": (
         "The weakest column here, and it should be read as a flag rather than a "
-        "score. The two judges agree on only 67% of notes, the lowest of the seven. "
+        "score. The two judges agree on only 67% of notes, the lowest of the six. "
         "Whether a Czech phrase is a literal translation from English is a "
         "judgement people make differently, and these numbers show that rather "
         "than hiding it."
@@ -1065,7 +1112,8 @@ def _corpus() -> str:
         middle = len(words) // 2
         rows.append(
             f"<tr><td>{html.escape(_t(label))}</td><td>{len(sessions)}</td>"
-            f"<td>{words[middle]:,}</td><td>{words[0]:,}&ndash;{words[-1]:,}</td>"
+            f"<td>{_grouped(words[middle])}</td>"
+            f"<td>{_grouped(words[0])}&ndash;{_grouped(words[-1])}</td>"
             f"<td>{turns[middle]}</td>"
             f"<td class='sub'>{html.escape(_t(note))}</td></tr>"
         )
@@ -2904,10 +2952,10 @@ def _controls() -> str:
         + "<p>"
         + html.escape(
             _t(
-                "One clean note and seven variants, each carrying exactly one "
+                "One clean note and {variants} variants, each carrying exactly one "
                 "deliberate fault of one kind. This is the only check that can tell a "
                 "column that measures something from a column that produces numbers."
-            )
+            ).format(variants=len(keys))
         )
         + "</p>"
         + f"<table><thead><tr><th>{_t('Judge')}</th>{head}</tr></thead>"
@@ -3068,7 +3116,8 @@ def build(rows: list[results.Row]) -> str:
     sections.extend(once)
 
     limits = "".join(
-        f"<h3>{html.escape(_t(title))}</h3><p>{html.escape(_t(body))}</p>" for title, body in LIMITS
+        f"<h3>{html.escape(_t(title))}</h3><p>{html.escape(_t(body).format(**_corpus_sizes()))}</p>"
+        for title, body in LIMITS
     )
 
     return f"""<!doctype html>

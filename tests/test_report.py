@@ -391,11 +391,7 @@ def test_the_page_carries_the_licence_of_every_input_it_uses():
     ):
         data = report.build([_row(track=track)])
         sources = {entry["source"] for entry in data["licences"]}
-        expected = {
-            source
-            for source, tracks in report.LICENCE_TRACKS.items()
-            if track in tracks
-        }
+        expected = {source for source, tracks in report.LICENCE_TRACKS.items() if track in tracks}
         assert sources == expected, f"{track} credits the wrong set"
         assert sources, f"{track} credits nothing at all"
 

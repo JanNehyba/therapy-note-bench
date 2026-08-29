@@ -36,14 +36,14 @@ CS: dict[str, str] = {
     "real sessions and from translated ones, and two instruments are asked about the "
     "result. Six yes/no criteria ask whether the Czech is right. PDSQI-9, a "
     "published instrument, asks whether the note is any good -- because the criteria "
-    "cannot: a flawless Czech sentence about nothing passes all seven.": (
+    "cannot: a flawless Czech sentence about nothing passes all six.": (
         "Benchmark, ke kterému tohle patří, hodnotí modely psané psychoterapeutické "
         "zápisy na dvou anglických korpusech. Umístění modelu tam je výrok o angličtině. "
         "Tenhle track se ptá, jestli se to přenáší: tytéž modely píší zápisy česky, ze "
         "skutečných sezení i z přeložených, a na výsledek se ptají dva nástroje. Sedm "
         "kritérií ano/ne se ptá, jestli je čeština správně. PDSQI-9, publikovaný "
         "nástroj, se ptá, jestli je zápis dobrý — protože kritéria to neumějí: "
-        "bezchybná česká věta o ničem projde všemi sedmi."
+        "bezchybná česká věta o ničem projde všemi šesti."
     ),
     "These numbers are not on the public site and this document is not a publication.": (
         "Tato čísla nejsou na veřejném webu a tento dokument není publikace."
@@ -92,12 +92,12 @@ CS: dict[str, str] = {
     "column is the share of notes free of that fault, so higher is better throughout. "
     "A judge that answered neither yes nor no is recorded as not having answered -- "
     'never as "no fault" -- and a note with no content is not asked at all, because '
-    "every one of the seven asks about the absence of a fault and an empty note would "
-    "pass all seven.": (
+    "every one of the six asks about the absence of a fault and an empty note would "
+    "pass all six.": (
         "Každé kritérium je jedna otázka, odpověď ano nebo ne, každá ve vlastním dotazu. "
         "Sloupec je podíl zápisů, které tou chybou netrpí, takže vyšší je vždy lepší. "
         "Soudce, který neodpověděl ani ano ani ne, je veden jako bez odpovědi — nikdy "
-        "jako „bez chyby“ — a na zápis bez obsahu se neptáme vůbec, protože všech sedm "
+        "jako „bez chyby“ — a na zápis bez obsahu se neptáme vůbec, protože všech šest "
         "kritérií se ptá na nepřítomnost chyby a prázdný zápis by prošel všemi."
     ),
     "PDSQI-9 is reproduced in English, word for word, because a translated instrument "
@@ -235,12 +235,12 @@ CS: dict[str, str] = {
         "p < 0.05."
     ),
     # --- the human anchor's own sentences ----------------------------------
-    "One native speaker answered all seven questions for each of twenty notes. A "
+    "One native speaker answered all six questions for each of twenty notes. A "
     "language model presented each note, pointed at candidate faults and asked; the "
     "person decided every answer, including one where he overruled the model. The "
     "sample was drawn by a hash of the session and the model, so no score could "
     "influence which notes were rated.": (
-        "Jeden rodilý mluvčí odpověděl na všech sedm "
+        "Jeden rodilý mluvčí odpověděl na všech šest "
         "otázek u každého z dvaceti zápisů. Jazykový model "
         "mu každý zápis předložil, ukázal na "
         "možné chyby a zeptal se; člověk rozhodl každou "
@@ -275,15 +275,16 @@ CS: dict[str, str] = {
     "The two halves differ by more than language, and mostly by size": (
         "Ty dvě půlky se liší víc než jazykem, a hlavně velikostí"
     ),
-    "A real session runs to a median of 5,266 words and 113 turns; a translated AnnoMI "
-    "conversation to 699 words and 52 turns. Seven times the material, so the "
+    "A real session runs to a median of {real_words} words and {real_turns} turns; a "
+    "translated AnnoMI conversation to {other_words} words and {other_turns} turns. Seven "
+    "times the material, so the "
     "summarising is a harder task before any question of Czech arises. They differ in "
     "topic too -- AnnoMI is motivational interviewing about substance use and the real "
     "sessions are not -- and in who transcribed them. A model that does worse on one "
     "half may be doing worse at length, at motivational interviewing, or at Czech, and "
     "these numbers cannot separate the three.": (
-        "Skutečné sezení má medián 5 266 slov a 113 replik; "
-        "přeložený rozhovor AnnoMI 699 slov a 52 replik. Sedmkrát "
+        "Skutečné sezení má medián {real_words} slov a {real_turns} replik; "
+        "přeložený rozhovor AnnoMI {other_words} slov a {other_turns} replik. Sedmkrát "
         "víc materiálu, takže shrnování je těžší "
         "úkol ještě před jakoukoli otázkou o "
         "češtině. Liší se i tématem — AnnoMI je "
@@ -296,11 +297,11 @@ CS: dict[str, str] = {
     ),
     "Nothing here says whether a note is true": ("Nic tady neříká, jestli je zápis pravdivý"),
     "The criteria ask about the Czech and nothing else. A fluent, correctly typeset, "
-    "entirely invented note passes all seven. Whether the note says what the session "
+    "entirely invented note passes all six. Whether the note says what the session "
     "contained is a different measurement and this is not it.": (
         "Kritéria se ptají na češtinu a na nic jiného. "
         "Plynulý, správně vysazený a úplně vymyšlený "
-        "zápis projde všemi sedmi. Zda zápis říká to, co "
+        "zápis projde všemi šesti. Zda zápis říká to, co "
         "sezení obsahovalo, je jiné měření a tohle to "
         "není."
     ),
@@ -457,10 +458,10 @@ CS: dict[str, str] = {
     ),
     # --- the planted-error control -----------------------------------------
     "Does each column detect what it claims?": "Chytá každý sloupec to, co tvrdí?",
-    "One clean note and seven variants, each carrying exactly one deliberate fault of "
+    "One clean note and {variants} variants, each carrying exactly one deliberate fault of "
     "one kind. This is the only check that can tell a column that measures something "
     "from a column that produces numbers.": (
-        "Jeden čistý zápis a sedm variant, každá s právě jednou "
+        "Jeden čistý zápis a {variants} variant, každá s právě jednou "
         "záměrnou chybou jednoho druhu. Je to jediná kontrola, "
         "která umí odlišit sloupec, jenž něco měří, od sloupce, "
         "jenž jen vyrábí čísla."
@@ -808,11 +809,11 @@ CS: dict[str, str] = {
         "Spolehlivé: oba soudci odpověděli stejně u 79 % zápisů."
     ),
     "The weakest column here, and it should be read as a flag rather than a score. "
-    "The two judges agree on only 67% of notes, the lowest of the seven. Whether a "
+    "The two judges agree on only 67% of notes, the lowest of the six. Whether a "
     "Czech phrase is a literal translation from English is a judgement people make "
     "differently, and these numbers show that rather than hiding it.": (
         "Nejslabší sloupec tady, a je lepší číst ho jako upozornění než jako známku. "
-        "Oba soudci se shodnou jen u 67 % zápisů, což je ze sedmi nejméně. Jestli je "
+        "Oba soudci se shodnou jen u 67 % zápisů, což je ze šesti nejméně. Jestli je "
         "nějaké české spojení doslovný překlad z angličtiny, posuzují lidé různě, a "
         "tahle čísla to ukazují, místo aby to schovávala."
     ),

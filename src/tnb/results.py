@@ -68,7 +68,7 @@ TRACK_CZECH_REAL = "czech-real"
 TRACK_CZECH_TRANSLATED = "czech-translated"
 #: The same Czech notes, asked PDSQI-9 instead. The seven criteria ask whether
 #: the Czech is any good; they do not ask whether the note is any good, and a
-#: flawless sentence about nothing passes all seven. This is the quality half of
+#: flawless sentence about nothing passes all six. This is the quality half of
 #: the question, and it is separate for the same reason `TRACK_PDSQI` is
 #: separate from `TRACK_TNEVAL`.
 #:

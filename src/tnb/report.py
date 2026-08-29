@@ -547,7 +547,7 @@ TRACK_BLURBS = {
         "The same Czech notes as the real-session table, asked a published quality "
         "instrument instead of the six language criteria. The criteria cannot say "
         "whether a note is any good -- a flawless Czech sentence about nothing passes "
-        "all seven -- and this is the half of the question they leave out. **Six "
+        "all six -- and this is the half of the question they leave out. **Six "
         "attributes, not eight:** `accurate` and `thorough` can only be answered "
         "by reading the session, and both judges run at Google and at OpenAI -- "
         "outside the university infrastructure the sessions sit on. Asking those "

@@ -156,14 +156,14 @@ def separable(cells: dict, criterion: str, rng: random.Random) -> dict | None:
     }
 
 
-#: What a track's models are banded on. The criteria tracks average all seven,
+#: What a track's models are banded on. The criteria tracks average all six,
 #: which is what "how good is the Czech" means here. The PDSQI tracks average
 #: the attributes that are not flat -- adding a column every model scores 5.00
 #: on does not change who is ahead, but it shrinks every difference against the
 #: threshold and would merge bands that are really apart.
 COMPOSITES = {
-    # The six the tables draw, not all seven the scorer answers. `None` here
-    # meant "every criterion", which silently included `quotes` -- withdrawn
+    # Named rather than left to the scorer. `None` here meant "every criterion",
+    # which silently included `quotes` -- withdrawn
     # from the tables because it turned out to measure the prompt's punctuation
     # rather than the models. A band built on a column the tables refuse to draw
     # ranks models on something the reader is never shown and is told not to

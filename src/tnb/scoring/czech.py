@@ -318,7 +318,7 @@ def has_content(note: str) -> bool:
 
     Every one of the seven criteria asks about the *absence* of a fault, and a
     note that says nothing has none of them: no misspelling, no calque, no slip
-    of register. It would pass all seven. PDSQI-9 met the same shape and three
+    of register. It would pass all six. PDSQI-9 met the same shape and three
     of its eight attributes gave an empty note full marks against a therapist's
     4.20; here it would be seven of seven, because there is no companion measure
     of the kind that scores TN-Eval's empty note zero.
