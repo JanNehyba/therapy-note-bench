@@ -630,8 +630,15 @@ def _merged_table(track: str, groups: list[list[results.Row]], *, lead: bool = F
 
     ordered = sorted(systems, key=lambda s: (places[s], -index_of(s), s))
 
-    head = f"<th>{_t('Order')}</th>" + "".join(
-        f"<th>{html.escape(_t(measures[key]['label']))}</th>" for key, _ in columns
+    # The band a model falls in, folded into the table it is a grouping of. It
+    # had a panel of its own -- twelve more tables, the same models, on another
+    # page -- and a reader comparing one model had to hold both layouts at once.
+    numbers = _band_numbers(track)
+    banded = _banded(numbers, judges, systems)
+    head = (
+        f"<th>{_t('Order')}</th>"
+        + (f"<th>{_t('Band')}</th>" if banded else "")
+        + "".join(f"<th>{html.escape(_t(measures[key]['label']))}</th>" for key, _ in columns)
     )
     body, shared = [], []
     previous = None
@@ -665,9 +672,10 @@ def _merged_table(track: str, groups: list[list[results.Row]], *, lead: bool = F
             notes = str(corpus)
         else:
             notes = f"{' / '.join(str(c) for c in complete)} {_t('of')} {corpus}"
+        band = _band_cell(numbers, judges, system) if banded else ""
         body.append(
             f"<tr{mark}><td>{html.escape(system)}</td><td>{notes}</td>"
-            f"<td><strong>{index}</strong></td>{''.join(cells)}</tr>"
+            f"<td><strong>{index}</strong></td>{band}{''.join(cells)}</tr>"
         )
         shared.append(place)
 
@@ -736,6 +744,117 @@ MERGED_ORDER = (
     "and means nothing."
 )
 
+#: The Band column, explained once above the tables that carry it. It replaces
+#: a panel of twelve tables that drew the same grouping the score tables draw,
+#: over again and on another page, so that a reader comparing one model had to
+#: hold two layouts in mind at once.
+#:
+#: **The second sentence is the one that has to be there.** A band is keyed on
+#: the track AND the judge, and the score table holds both judges in every
+#: cell, so the Band cell holds two numbers and they can be 1 and 3. Read as a
+#: rank -- which is what a single small integer beside a model's name looks
+#: like -- it is exactly the ordering this document spends a page declining to
+#: print, and it would be an ordering two judges do not agree on.
+BAND_COLUMN = (
+    "The Band column groups the models rather than ordering them: within a band nothing "
+    "separates them, and a band ends where the gap exceeds what resampling the sessions "
+    "can rule out, so a band's width is this measurement's own resolution."
+)
+BAND_TWO_JUDGES = (
+    "Like every other cell it holds one value per judge, so a model can be in band 1 "
+    "under one judge and band 3 under the other; a marked Band cell is that "
+    "disagreement, and the number in it is not a rank."
+)
+
+#: The other reason a band is provisional, and it applies to a full row as much
+#: as to a thin one. The boundary is drawn at a threshold the resampling
+#: reproduces only so far, and a model whose gap sits inside that is drawn in a
+#: band because the table has to draw it somewhere -- not because it was placed
+#: there. `czech_variance.THRESHOLD_JITTER` carries the measurement.
+#:
+#: It is the only sentence anywhere saying a band boundary reproduces to about
+#: a hundredth, so without it the Band column would claim a precision its own
+#: payload denies.
+BAND_UNRESOLVED = (
+    "A band boundary is drawn at a threshold that resampling the sessions reproduces "
+    "only to about {jitter}. These models sit within that of one, so this measurement "
+    "does not place them: a different resample puts them in the next band along."
+)
+
+
+def _band_numbers(track: str) -> dict[str, dict[str, int]]:
+    """Which band each model falls in on this track, per judge.
+
+    Read through `_payload`, which returns nothing when `local/` has not been
+    built -- the tables have to draw from rows alone, and a page built from
+    fixture rows has no payload beside it. A `json.loads` here would stop the
+    document rather than draw it without the column.
+    """
+    judges = (_payload("czech-variance.json").get("bands") or {}).get(track) or {}
+    return {
+        judge: {
+            model: number
+            for number, band in enumerate(grouped["bands"], start=1)
+            for model in band["models"]
+        }
+        for judge, grouped in judges.items()
+    }
+
+
+def _banded(numbers: dict[str, dict[str, int]], judges: list[str], systems) -> bool:
+    """Whether a Band column would say anything about the models in this table.
+
+    Not merely whether the payload has bands for the track. A column of dashes
+    is an absence dressed as a measurement, and it is what a page built before
+    the bands were recomputed -- or from rows the payload has never seen --
+    would otherwise draw.
+    """
+    drawn = set(systems)
+    return any(numbers.get(judge, {}).keys() & drawn for judge in judges)
+
+
+def _band_cell(numbers: dict[str, dict[str, int]], judges: list[str], system: str) -> str:
+    """One Band cell: a number per judge, marked where they differ.
+
+    Marked by the same rule and the same class as every score cell, because it
+    is the same kind of fact. A model in no band under a judge -- it wrote
+    nothing that judge could place -- shows the dash the score columns show,
+    rather than a number borrowed from the other judge.
+    """
+    values = [str(numbers.get(judge, {}).get(system, "--")) for judge in judges]
+    differ = len({v for v in values if v != "--"}) > 1
+    css = " class='differ'" if differ else ""
+    return f"<td{css}>{' / '.join(values)}</td>"
+
+
+def _band_unresolved(tracks: list[str]) -> str:
+    """The one warn box saying how far a band boundary can be trusted.
+
+    Per track and judge, because the models it moves are not the same ones
+    twice. Nothing is claimed when a payload was written before this was
+    measured: a table with no `unresolved` key is not a table where nothing
+    moves.
+    """
+    data = _payload("czech-variance.json").get("bands") or {}
+    named, jitter = [], 0.0
+    for track in tracks:
+        for judge_model, grouped in sorted((data.get(track) or {}).items()):
+            if not grouped.get("unresolved"):
+                continue
+            jitter = max(jitter, grouped.get("jitter") or 0.0)
+            named.append(
+                f"{_t(TRACK_SWITCH_LABELS.get(track, track))} / {judge_model}: "
+                + _join_words(sorted(grouped["unresolved"]))
+            )
+    if not named:
+        return ""
+    return (
+        "<div class='warn'><p>"
+        + html.escape(_t(BAND_UNRESOLVED).format(jitter=f"{jitter:.2f}"))
+        + f" {html.escape('; '.join(named))}.</p></div>"
+    )
+
+
 #: Who the rows are, above every one of the score tables. Ten words, and they
 #: are not decoration: the person this document was written for read the model
 #: column as the list of people whose sessions these were, and came away
@@ -756,7 +875,7 @@ ROWS_ARE_MODELS = (
 SCALE_OF = "{names} — {line}"
 
 
-def _how_to_read(tracks: list[str], judges: list[str]) -> str:
+def _how_to_read(tracks: list[str], judges: list[str], *, banded: bool) -> str:
     """The half of the table caption that is the same under all of them.
 
     Three things used to be printed under every score table: how the two judges
@@ -772,7 +891,8 @@ def _how_to_read(tracks: list[str], judges: list[str]) -> str:
 
     `judges` is empty when no table holds two of them, and then the sentence
     about the two-judge cell is not printed -- it would be describing a layout
-    that is not on the page.
+    that is not on the page. `banded` says the same about the Band column,
+    which is drawn only where `local/czech-variance.json` has been built.
     """
     said = []
     if judges:
@@ -796,6 +916,10 @@ def _how_to_read(tracks: list[str], judges: list[str]) -> str:
         # spelling and does not become `Deepseek-v4-flash` after a full stop.
         label = _join_words(list(dict.fromkeys(names)))
         said.append(SCALE_OF.format(names=label[:1].upper() + label[1:], line=line))
+    if banded:
+        said.append(_t(BAND_COLUMN))
+        if judges:
+            said.append(_t(BAND_TWO_JUDGES))
     return f"<p class='sub'>{html.escape(' '.join(said))}</p>"
 
 
@@ -827,14 +951,20 @@ def _table(track: str, rows: list[results.Row]) -> str:
     # spelling against clinical terminology is a judgement rather than a
     # measurement. Both of those are reasons to SHOW it and say what it is, not
     # reasons to hide it: an unexplained order is the judgement made silently.
-    head = f"<th>{_t('Order')}</th>" + "".join(
-        f"<th>{html.escape(_t(measures[key]['label']))}</th>" for key, _ in columns
+    judges = [rows[0].judge_model or "?"]
+    numbers = _band_numbers(track)
+    banded = _banded(numbers, judges, [row.system_id for row in rows])
+    head = (
+        f"<th>{_t('Order')}</th>"
+        + (f"<th>{_t('Band')}</th>" if banded else "")
+        + "".join(f"<th>{html.escape(_t(measures[key]['label']))}</th>" for key, _ in columns)
     )
     body, thin = [], []
     for row in sorted(rows, key=lambda r: (-_rank_of(track, r, varying), r.system_id)):
         complete = row.n_sessions_scored - row.n_sessions_partial
         index = _rank_of(track, row, varying)
-        cells = f"<td><strong>{index:.2f}</strong></td>" + "".join(
+        band = _band_cell(numbers, judges, row.system_id) if banded else ""
+        cells = f"<td><strong>{index:.2f}</strong></td>{band}" + "".join(
             f"<td>{_fmt(row.metrics.headline.get(key), digits)}</td>" for key, digits in columns
         )
         # Against the corpus, not against what this row happened to score. The
@@ -2032,8 +2162,8 @@ def _conclusion(rows: list[results.Row]) -> str:
                 "Those names do not all rest on the same amount, and the thinnest of "
                 "them is worth reading beside the claim: {named}. That count is the "
                 "notes answered on every criterion the band averages, out of the "
-                "sessions its table has, and the band panel below marks every row it "
-                "applies to."
+                "sessions its table has, and the notes column of the tables below "
+                "prints it beside every row it applies to."
             ).format(named="; ".join(named))
         )
 
@@ -2971,261 +3101,6 @@ def _length_table(data: dict) -> str:
     )
 
 
-#: The caption's second clause, printed only where a model in the table wrote
-#: fewer notes than the corpus holds. The first clause says "over at most N
-#: sessions" because N is the union of what the models between them wrote --
-#: `czech_variance.bands` pairs each pair on the sessions BOTH of them wrote --
-#: and printing it as "over 10 sessions" stated a corpus as if it were every
-#: model's denominator, over tables holding a model with six.
-BAND_SHORTFALL = "a pair is compared on the sessions both models wrote, and {names} wrote fewer"
-
-#: What the band was actually computed over, per table. `czech_variance` has
-#: written this since the bands were added and nothing read it, so the panel
-#: named neither the notes a judge left part-answered nor the models that have
-#: one session fewer than the rest -- which is an absence that is neither
-#: omitted nor named, the one treatment `CLAUDE.md` rules out.
-BAND_COVERAGE = "{answered} of {expected} judge answers"
-#: The count last, so the sentence needs no plural agreement. Czech has three
-#: forms for one, two-to-four and five-or-more, and "1 notes" was what putting
-#: the number first produced in both languages.
-BAND_PARTIAL = "notes entered on fewer than {columns} criteria: {partial}"
-#: Named, not left blank, when a table's denominators were not recorded.
-BAND_NO_COVERAGE = "how much each row rests on was not recorded for this table"
-
-#: A column the composite names and the corpus never allowed to be asked. The
-#: real half is rated from the note alone, so PDSQI's `accurate` and `thorough`
-#: are not put to a judge there and its band is built on `succinct` by itself --
-#: a fact about the width of the composite, printed where the band is read.
-BAND_ABSENT = "{absent} not asked on this corpus, so this band averages {columns} of {named}"
-
-#: Why a count appears beside a model's name at all.
-BAND_UNEVEN = (
-    "The rows do not rest on the same amount. A model's place is the mean of the "
-    "notes it has, and where that is fewer than the table's sessions -- the model "
-    "wrote no note, or the judge answered only part of one -- the count is printed "
-    "beside its name."
-)
-#: The same warning the score tables carry, on the panel that ranks. Its
-#: threshold is `THIN`, and the sentence after it is shared with `_table`: what
-#: goes missing clusters on the long notes either way.
-BAND_PROVISIONAL = (
-    "These models are placed on well under the table's sessions, so the band they "
-    "fall in is provisional:"
-)
-
-#: The other reason a band is provisional, and it applies to a full row as much
-#: as to a thin one. The boundary is drawn at a threshold the resampling
-#: reproduces only so far, and a model whose gap sits inside that is drawn in a
-#: band because the table has to draw it somewhere -- not because it was placed
-#: there. `czech_variance.THRESHOLD_JITTER` carries the measurement.
-BAND_UNRESOLVED = (
-    "A band boundary is drawn at a threshold that resampling the sessions reproduces "
-    "only to about {jitter}. These models sit within that of one, so this measurement "
-    "does not place them: a different resample puts them in the next band along."
-)
-
-
-def _bands(rows: list[results.Row]) -> str:
-    """The models grouped, because ordering a dozen of them over ten notes is
-    mostly ordering noise.
-
-    A ranking invites the one reading it cannot support -- is the fourth better
-    than the fifth -- and no caveat beside it declines the invitation. Bands
-    say the same measurement without making the offer: within a band nothing
-    separates the models, between bands something does.
-
-    A band starts where the gap from the band's best exceeds what resampling
-    the sessions can rule out, so the width of a band is the measurement's own
-    resolution rather than a choice about presentation.
-
-    The caption takes `rows` for one clause: how many notes each banded model
-    actually wrote. The session count in the payload is the union across
-    models, which is the corpus and not anybody's denominator.
-
-    **And the denominators are drawn, not assumed.** `czech_variance` writes a
-    `coverage` block beside the bands -- how many of the questions came back,
-    per track and per model -- and this panel read only the bands. So the model
-    at the top of both Deepsy tables was also the one with the most
-    part-answered notes and the table said nothing, which is neither omitting
-    the number nor naming the gap. Each row now carries the count behind it
-    where that is short, the way `_table` marks a thin row, and a table whose
-    coverage was not recorded says so rather than looking complete.
-    """
-    payload = _payload("czech-variance.json")
-    data = payload.get("bands") or {}
-    if not data:
-        return ""
-    coverage = payload.get("coverage") or {}
-
-    counts = _wrote(rows)
-    blocks, provisional, unresolved, jitter = [], [], [], 0.0
-    for track in results.LOCAL_TRACKS:
-        judges = data.get(track) or {}
-        if not judges:
-            continue
-        for judge_model in sorted(judges):
-            grouped = judges[judge_model]
-            cover = (coverage.get(track) or {}).get(judge_model) or {}
-            per_system = cover.get("systems") or {}
-            # The table's own sessions, from the same block as the per-model
-            # counts. Falling back to the band payload keeps the two numbers
-            # comparable when only one of them was written.
-            sessions = cover.get("sessions") or grouped["sessions"]
-
-            def cell(
-                model: str,
-                per_system=per_system,
-                sessions=sessions,
-                track=track,
-                judge_model=judge_model,
-            ) -> str:
-                """One model's name, with the count behind it when it is short."""
-                block = per_system.get(model)
-                if not block:
-                    return html.escape(model)
-                complete = block["notes"] - block["partial"]
-                if complete >= sessions:
-                    return html.escape(model)
-                if complete < THIN * sessions:
-                    # The judge belongs in the name. Two judges answered the same
-                    # model on the same track by different amounts, and without
-                    # it the warning listed one model twice with two counts and
-                    # no way to tell which reading was which.
-                    provisional.append(
-                        f"{model} ({complete} {_t('of')} {sessions}, "
-                        f"{_t(TRACK_SWITCH_LABELS.get(track, track))} / {judge_model})"
-                    )
-                return f"{html.escape(model)} (<strong>{complete}</strong> {_t('of')} {sessions})"
-
-            rows_html = "".join(
-                f"<tr><td>{number}</td>"
-                f"<td>{band['high']:.2f}&ndash;{band['low']:.2f}</td>"
-                f"<td class='sub'>{', '.join(cell(model) for model in band['models'])}</td></tr>"
-                for number, band in enumerate(grouped["bands"], start=1)
-            )
-            # Only models this table draws. A model the endpoint refused wrote
-            # nothing and is in no band, and naming it here would explain a row
-            # that is not on the page.
-            drawn = {model for band in grouped["bands"] for model in band["models"]}
-            short = [
-                f"{system} {count}"
-                for system, count in sorted((counts.get(track) or {}).get("wrote", {}).items())
-                if system in drawn and count < grouped["sessions"]
-            ]
-            caption = (
-                f"{_t('a band is')} {grouped['threshold']:.2f} "
-                f"{_t('wide, over at most')} {grouped['sessions']} {_t('sessions')}"
-            )
-            if short:
-                caption += " &middot; " + html.escape(
-                    _t(BAND_SHORTFALL).format(names=_join_words(short))
-                )
-            # `expected` decides, not the block: a payload written before this
-            # was measured has no counts to print, and saying so is the honest
-            # cell. Half a block would print "None of None".
-            if cover.get("expected") is not None:
-                caption += " &middot; " + html.escape(
-                    _t(BAND_COVERAGE).format(
-                        answered=_grouped(cover["answered"]), expected=_grouped(cover["expected"])
-                    )
-                )
-                if cover["partial"]:
-                    caption += ", " + html.escape(
-                        _t(BAND_PARTIAL).format(
-                            partial=_grouped(cover["partial"]), columns=cover["columns"]
-                        )
-                    )
-                if cover.get("columns_absent"):
-                    labels = [
-                        _t(MEASURE_TABLES.get(track, {}).get(key, {}).get("label", key))
-                        for key in cover["columns_absent"]
-                    ]
-                    caption += " &middot; " + html.escape(
-                        _t(BAND_ABSENT).format(
-                            absent=_join_words(labels),
-                            columns=cover["columns"],
-                            named=cover["columns_named"],
-                        )
-                    )
-            else:
-                caption += " &middot; " + html.escape(_t(BAND_NO_COVERAGE))
-            # Whom the threshold's own imprecision moves, named per table. A
-            # payload written before this was measured carries neither key, and
-            # then nothing is claimed rather than "nothing moves".
-            if grouped.get("unresolved"):
-                jitter = max(jitter, grouped.get("jitter") or 0.0)
-                unresolved.append(
-                    f"{_t(TRACK_SWITCH_LABELS.get(track, track))} / {judge_model}: "
-                    + _join_words(sorted(grouped["unresolved"]))
-                )
-            blocks.append(
-                f"<h3>{html.escape(_t(TRACK_TITLES.get(track, track)))} "
-                f"<span class='dash'>&mdash; {_t('who is ahead')}</span> "
-                f"<span class='dash'>&middot; {html.escape(judge_model)}</span></h3>"
-                f"<p class='sub'>{caption}</p>"
-                f"<table><thead><tr><th>{_t('Band')}</th><th>{_t('Score')}</th>"
-                f"<th>{_t('Models')}</th></tr></thead><tbody>{rows_html}</tbody></table>"
-            )
-
-    if not blocks:
-        return ""
-    # Counted, not typed. This lead sat above four tables of eleven models and
-    # said "eleven"; it now sits above six, two of which have twelve, and a
-    # count typed into a sentence is a count a later run makes quietly false.
-    # The largest table's roster, because the claim is about the widest ordering
-    # the reader is offered.
-    widest = max(
-        (
-            sum(len(band["models"]) for band in g["bands"])
-            for judges in data.values()
-            for g in judges.values()
-        ),
-        default=0,
-    )
-    notes = max(
-        (g["sessions"] for judges in data.values() for g in judges.values()),
-        default=0,
-    )
-    warning = ""
-    if provisional:
-        warning = (
-            "<div class='warn'><p>"
-            + html.escape(_t(BAND_PROVISIONAL))
-            + f" {html.escape('; '.join(sorted(set(provisional))))}. "
-            + html.escape(
-                _t(
-                    "Unanswered questions cluster on the longer notes, so what is "
-                    "missing is not a random sample of the corpus. Read these rows "
-                    "as provisional."
-                )
-            )
-            + "</p></div>"
-        )
-    if unresolved:
-        warning += (
-            "<div class='warn'><p>"
-            + html.escape(_t(BAND_UNRESOLVED).format(jitter=f"{jitter:.2f}"))
-            + f" {html.escape('; '.join(unresolved))}.</p></div>"
-        )
-    return (
-        f"<h2>{_t('Bands, not places')}</h2>"
-        + "<p>"
-        + html.escape(
-            _t(
-                "As many as {models} models over {notes} notes cannot be put in order, "
-                "and a table that prints them in one invites a comparison it cannot "
-                "support. These are the same numbers grouped instead: within a band "
-                "nothing separates the models, between bands something does. A band "
-                "ends where the gap exceeds what resampling the sessions can rule out, "
-                "so its width is the measurement's own resolution."
-            ).format(models=widest, notes=notes)
-        )
-        + f"</p><p>{html.escape(_t(BAND_UNEVEN))}</p>"
-        + "".join(blocks)
-        + warning
-    )
-
-
 def _dominance(rows: list[results.Row]) -> str:
     """The only claim about "better" this project makes, and it was missing.
 
@@ -3859,11 +3734,18 @@ def build(rows: list[results.Row]) -> str:
     }
     shared_judges = sorted(next(iter(pairs))) if len(pairs) == 1 else []
 
+    drawn_tracks = [track for track, _ordered, _withdrawn in plan]
+    banded = any(
+        _banded(_band_numbers(track), [group[0].judge_model or "?"], [r.system_id for r in group])
+        for track, ordered, _withdrawn in plan
+        for group in ordered
+    )
+
     sections = []
     if plan:
         sections.append(
             f"<h2>{_t('How to read the tables')}</h2>"
-            + _how_to_read([track for track, _ordered, _withdrawn in plan], shared_judges)
+            + _how_to_read(drawn_tracks, shared_judges, banded=banded)
         )
     for track, ordered, withdrawn in plan:
         sections.append(
@@ -3909,7 +3791,10 @@ def build(rows: list[results.Row]) -> str:
             drawn_instruments.append((signature, track))
 
     # --- the caveats and the definitions, once each -------------------------
-    once = []
+    # How far a band boundary can be trusted, under the tables that draw one.
+    # It is the only sentence in the document giving that figure, so the Band
+    # column would otherwise claim a precision the payload behind it denies.
+    once = [_band_unresolved(drawn_tracks)] if banded else []
     if two_judges:
         once.append(
             "<div class='warn'><p>"
@@ -3974,7 +3859,6 @@ def build(rows: list[results.Row]) -> str:
 
 {_halves(rows)}
 
-{_bands(rows)}
 
 {_variance(rows)}
 

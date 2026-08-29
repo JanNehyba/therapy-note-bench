@@ -139,6 +139,20 @@ CS: dict[str, str] = {
     "What each column is": "Co který sloupec je",
     # --- per-table prose ---------------------------------------------------
     "How to read the tables": "Jak číst tabulky",
+    "The Band column groups the models rather than ordering them: within a band nothing "
+    "separates them, and a band ends where the gap exceeds what resampling the sessions "
+    "can rule out, so a band's width is this measurement's own resolution.": (
+        "Sloupec Pásmo modely seskupuje, ne řadí: uvnitř pásma je nic neodlišuje a "
+        "pásmo končí tam, kde je rozdíl větší než to, co dokáže převzorkování sezení "
+        "vyloučit — šířka pásma je tedy vlastní rozlišovací schopnost tohoto měření."
+    ),
+    "Like every other cell it holds one value per judge, so a model can be in band 1 "
+    "under one judge and band 3 under the other; a marked Band cell is that "
+    "disagreement, and the number in it is not a rank.": (
+        "Stejně jako každá jiná buňka drží jednu hodnotu za každého soudce, takže model "
+        "může být u jednoho soudce v pásmu 1 a u druhého v pásmu 3; zvýrazněná buňka "
+        "Pásmo je právě tahle neshoda a číslo v ní není pořadí."
+    ),
     "Each row is one language model. People wrote and transcribed the sessions; the "
     "models wrote the notes from them.": (
         "Každý řádek je jeden jazykový model. Sezení vedli a přepisy pořídili lidé; "
@@ -600,11 +614,12 @@ CS: dict[str, str] = {
     "Those names do not all rest on the same amount, and the thinnest of them is "
     "worth reading beside the claim: {named}. That count is the notes answered on "
     "every criterion the band averages, out of the sessions its table has, and the "
-    "band panel below marks every row it applies to.": (
+    "notes column of the tables below prints it beside every row it applies to.": (
         "Ta jména nestojí všechna na stejném množství a to nejtenčí z nich stojí za "
         "přečtení vedle tvrzení samotného: {named}. Ten počet jsou zápisy zodpovězené "
         "na všech kritériích, která pásmo průměruje, z počtu sezení, která jeho tabulka "
-        "má — a panel s pásmy níže označuje každý řádek, kterého se to týká."
+        "má — a sloupec se zápisy v tabulkách níže ho vypisuje u každého řádku, kterého "
+        "se to týká."
     ),
     "A band boundary is drawn at a threshold that resampling the sessions reproduces "
     "only to about {jitter}. These models sit within that of one, so this measurement "
