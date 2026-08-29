@@ -210,7 +210,7 @@ CS: dict[str, str] = {
     "half is a harder summarising task before any question of Czech arises, so every "
     "comparison between the halves in this document is comparing that too.": (
         "Ty dvě půlky nejsou ani zdaleka stejně velké: podle mediánu počtu slov je "
-        "skutečné sezení asi {ratio}krát delší než přeložený rozhovor. Delší půlka je "
+        "skutečné sezení asi {ratio}× delší než přeložený rozhovor. Delší půlka je "
         "těžší úkol na shrnutí ještě dřív, než přijde na řadu čeština — takže každé "
         "srovnání těch dvou půlek v tomhle dokumentu porovnává i tohle."
     ),
