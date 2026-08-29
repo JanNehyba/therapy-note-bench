@@ -821,13 +821,16 @@ CS: dict[str, str] = {
     "What eleven models did, in five sentences": ("Co jedenáct modelů dokázalo, v pěti větách"),
     "no models": "žádné modely",
     "No model": "Žádný model",
-    "On writing correct Czech, {top} are in the top band of all {tables} tables -- "
-    "both halves, both judges. {bottom} is in the bottom band of all {tables}. Between "
-    "those two ends the tables disagree with each other, so nothing else here is a "
-    "ranking.": (
-        "Ve psaní správné češtiny jsou {top} v nejvyšším pásmu všech {tables} tabulek "
-        "— obě půlky, oba soudci. {bottom} je v nejnižším pásmu všech {tables}. Mezi "
-        "těmito dvěma konci si tabulky odporují, takže nic dalšího tu není pořadí."
+    "On writing correct Czech, {top} are in the top band of all {tables} tables the "
+    "bands cover -- the SOAP halves, both judges. {bottom} is in the bottom band of all "
+    "{tables}. Between those two ends the tables disagree with each other, so nothing "
+    "else here is a ranking. The Deepsy tables are not in this: no band, dominance or "
+    "separability figure has been computed for them.": (
+        "Ve psaní správné češtiny jsou {top} v nejvyšším pásmu všech {tables} tabulek, "
+        "které pásma pokrývají — půlky SOAP, oba soudci. {bottom} je v nejnižším pásmu "
+        "všech {tables}. Mezi těmito dvěma konci si tabulky odporují, takže nic "
+        "dalšího tu není pořadí. Deepsy tabulky v tom nejsou: nemají spočítané pásmo, "
+        "dominanci ani odlišitelnost."
     ),
     "On whether the note is any good, no model is in the top band of all {tables} "
     "tables and none is in the bottom band of all {tables}. The quality instrument "
@@ -1031,6 +1034,23 @@ CS: dict[str, str] = {
         "leží uvnitř toho, co při téhle velikosti vzorku vyrobí náhoda, a to u obou "
         "soudců. Napsané větou místo mřížkou čísel, ze které si čtenář musí sám "
         "odvodit, že neříká nic."
+    ),
+    # --- what the notes column counts, and which rows are thin --------------
+    "The notes column counts the ones every criterion of was answered, out of "
+    "the sessions the model was asked for; a single column may average over more, "
+    "because a note missing one answer still has the others.": (
+        "Sloupec se zápisy počítá ty, u kterých bylo zodpovězeno každé kritérium, "
+        "z počtu sezení, o která byl model požádán; jednotlivý sloupec může "
+        "průměrovat přes víc zápisů, protože zápis, kterému chybí jedna odpověď, má "
+        "ty ostatní."
+    ),
+    "These rows rest on well under their corpus, either because the model did not "
+    "write the note or because the judge did not answer it. What goes missing "
+    "clusters on the longest sessions, so it is not a random sample. Read them as "
+    "provisional:": (
+        "Tyhle řádky stojí na výrazně menším počtu, než je korpus — buď model zápis "
+        "nenapsal, nebo na něj soudce neodpověděl. To, co chybí, se hromadí u "
+        "nejdelších sezení, takže to není náhodný výběr. Čti je jako předběžné:"
     ),
     # --- refusals ----------------------------------------------------------
     "Refusing to write: a row carries something that is not a score.": (

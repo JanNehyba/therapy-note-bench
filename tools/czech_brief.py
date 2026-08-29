@@ -541,16 +541,54 @@ def _merged_table(track: str, groups: list[list[results.Row]]) -> str:
         )
         shared.append(place)
 
+    # Rows resting on well under their corpus, named. Measured against the
+    # corpus and not against what the row happened to score: the single-judge
+    # table used to test `complete < THIN * n_sessions_scored`, which marked a
+    # model with nine notes of ten and never even considered one with six.
+    thin = []
+    for system in ordered:
+        for judge in judges:
+            row = rows_by_judge[judge][system]
+            complete = row.n_sessions_scored - row.n_sessions_partial
+            corpus = row.n_sessions_attempted or row.n_sessions_scored
+            if corpus and complete < THIN * corpus:
+                thin.append(f"{system} ({complete} {_t('of')} {corpus})")
+                break
+
     ties = sum(1 for place in set(shared) if shared.count(place) > 1)
     lead = _t(MERGED_LEAD).format(judges=_join_words(judges))
     order_line = _t(MERGED_ORDER).format(places=len(set(shared)), systems=len(systems), tied=ties)
+    warning = ""
+    if thin:
+        warning = (
+            "<div class='warn'><p>"
+            + html.escape(_t(THIN_ROWS))
+            + f" {html.escape(', '.join(thin))}.</p></div>"
+        )
     return (
         f"<p class='sub'>{html.escape(lead)} {html.escape(order_line)} "
-        f"{html.escape(_scale_line(track))}</p>" + f"<table><thead><tr><th>{_t('Model')}</th>"
+        f"{html.escape(_t(NOTES_COLUMN))} {html.escape(_scale_line(track))}</p>"
+        + f"<table><thead><tr><th>{_t('Model')}</th>"
         f"<th>{_t('Notes in the mean')}</th>{head}</tr></thead>"
-        f"<tbody>{''.join(body)}</tbody></table>"
+        f"<tbody>{''.join(body)}</tbody></table>{warning}"
     )
 
+
+#: What the notes column counts, said where it is read. It is the notes
+#: complete on EVERY criterion, so an individual column may be a mean over
+#: more of them -- a distinction the code's own docstring promised to print
+#: under the table and never did.
+NOTES_COLUMN = (
+    "The notes column counts the ones every criterion of was answered, out of "
+    "the sessions the model was asked for; a single column may average over more, "
+    "because a note missing one answer still has the others."
+)
+THIN_ROWS = (
+    "These rows rest on well under their corpus, either because the model did not "
+    "write the note or because the judge did not answer it. What goes missing "
+    "clusters on the longest sessions, so it is not a random sample. Read them as "
+    "provisional:"
+)
 
 MERGED_LEAD = (
     "Every cell holds both judges, {judges}, in that order and never averaged: "
@@ -604,12 +642,19 @@ def _table(track: str, rows: list[results.Row]) -> str:
         cells = f"<td><strong>{index:.2f}</strong></td>" + "".join(
             f"<td>{_fmt(row.metrics.headline.get(key), digits)}</td>" for key, digits in columns
         )
-        if row.n_sessions_partial:
-            count = f"<strong>{complete}</strong> {_t('of')} {row.n_sessions_scored}"
-            if complete < THIN * row.n_sessions_scored:
-                thin.append(f"{row.system_id} ({complete} {_t('of')} {row.n_sessions_scored})")
-        else:
-            count = str(complete)
+        # Against the corpus, not against what this row happened to score. The
+        # test used to be `complete < THIN * n_sessions_scored` inside `if
+        # n_sessions_partial`, so a model that wrote six notes of ten and had
+        # all six answered was never even considered -- and one with nine of ten
+        # answered was marked. It pointed at the wrong row.
+        corpus = row.n_sessions_attempted or row.n_sessions_scored
+        count = (
+            str(complete)
+            if complete == corpus
+            else (f"<strong>{complete}</strong> {_t('of')} {corpus}")
+        )
+        if complete < THIN * corpus:
+            thin.append(f"{row.system_id} ({complete} {_t('of')} {corpus})")
         body.append(f"<tr><td>{html.escape(row.system_id)}</td><td>{count}</td>{cells}</tr>")
 
     warning = ""
@@ -819,18 +864,31 @@ WHAT_IT_CATCHES = {
 }
 
 
-def _catch(key: str) -> str:
+#: The one track these hand-written verdicts and the rater figure were measured
+#: on. Everything in `WHAT_IT_CATCHES` about how often the judges agree, and
+#: every number in `local/czech-anchor.json`, comes from the ten real Czech
+#: sessions scored by the criteria. Printed under the PDSQI and Deepsy tables it
+#: said something measured elsewhere about a table it was not measured on -- on
+#: the Deepsy notes `untranslated` agrees on 63% and was being described as 87%
+#: and "reliable", which inverts the row's verdict.
+ANCHORED_ON = results.TRACK_CZECH_REAL
+
+
+def _catch(key: str, track: str) -> str:
     """What a column catches, in this run's language, or nothing.
 
     A column with no sentence written for it renders an empty cell rather than
     raising: the verdict beside it is still counted and still worth reading, and
     a missing sentence is a gap in the prose rather than in the measurement.
 
-    The agreement with the one native speaker is appended from
-    `local/czech-anchor.json` rather than written into the sentence, because
-    when it was written into the sentence four of the five figures went stale
-    and contradicted the table three sections below.
+    **Only under the track it was measured on.** These sentences quote judge
+    agreement and a native speaker's; both were measured on the real Czech
+    sessions under the criteria rubric, and nobody has rated a Deepsy note or a
+    translated one by hand at all. Elsewhere the cell is empty, which is what
+    "not measured here" looks like.
     """
+    if track != ANCHORED_ON:
+        return ""
     written = WHAT_IT_CATCHES.get(key, "")
     if not written:
         return ""
@@ -1153,7 +1211,7 @@ def _verdicts(rows: list[results.Row]) -> str:
             lines.append(
                 f"<tr><td>{html.escape(_t(MEASURE_TABLES[track][key]['label']))}</td>"
                 f"<td>{verdict}</td>"
-                f"<td class='sub'>{html.escape(_catch(key))}</td></tr>"
+                f"<td class='sub'>{html.escape(_catch(key, track))}</td></tr>"
             )
         if lines:
             blocks.append(
@@ -1484,9 +1542,11 @@ def _conclusion(rows: list[results.Row]) -> str:
         said.append(
             _t(
                 "On writing correct Czech, {top} are in the top band of all {tables} "
-                "tables -- both halves, both judges. {bottom} is in the bottom band of "
-                "all {tables}. Between those two ends the tables disagree with each "
-                "other, so nothing else here is a ranking."
+                "tables the bands cover -- the SOAP halves, both judges. {bottom} is in "
+                "the bottom band of all {tables}. Between those two ends the tables "
+                "disagree with each other, so nothing else here is a ranking. The "
+                "Deepsy tables are not in this: no band, dominance or separability "
+                "figure has been computed for them."
             ).format(
                 top=_join_words(top) or _t("no models"),
                 bottom=_join_words(bottom) or _t("No model"),
@@ -1595,12 +1655,12 @@ def _dead_columns(rows: list[results.Row]) -> tuple[int, int, list[str], float, 
     track = results.TRACK_CZECH_REAL_PDSQI
     latest = [row for row in results.latest(rows) if row.is_scored and row.track == track]
     if not latest:
-        return 0, 0, [], 0.0, ''
+        return 0, 0, [], 0.0, ""
     newest = max(row.judge_prompt_version for row in latest)
     latest = [row for row in latest if row.judge_prompt_version == newest]
     judges = sorted({row.judge_model or "" for row in latest})
     if not judges:
-        return 0, 0, [], 0.0, ''
+        return 0, 0, [], 0.0, ""
     here = [row for row in latest if (row.judge_model or "") == judges[0]]
     varying = _varying(track, here)
     dead = len(COLUMNS[track]) - len(varying)
