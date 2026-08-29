@@ -273,6 +273,48 @@ COMPOSITES = {
 }
 
 
+#: How far the threshold moves between resampling seeds. Not a preference: band
+#: membership depends on the seed ONLY through this one number, because the
+#: scores and their order are arithmetic and the banding rule compares a fixed
+#: gap against it. So a bound on the threshold bounds every way a seed can
+#: redraw a band.
+#:
+#: **Measured, over 25 seeds on the eight criteria tables.** The widest ranges
+#: were 0.133-0.142 (`czech-translated`, `gpt-5.6-terra`) and 0.158-0.167
+#: (`deepsy-translated`, `gemini-3.1-pro-preview`); the narrowest did not move
+#: at all. Rounded up to 0.01, and checked against what those seeds did rather
+#: than assumed: banding at plus and minus this flags every model that actually
+#: changed band -- `glm-5`, `glm-5.2` and `qwen3.8-27b` on `deepsy-real` under
+#: `gemini-3.1-pro-preview`, `gemma4`, `glm-5.2` and `gpt-oss-120b` on
+#: `deepsy-translated` under the same judge -- and some besides.
+#:
+#: The extra ones are not slack. On `czech-real` under `gpt-5.6-terra` the
+#: threshold is 0.167 and the nearest value that redraws a band is 0.170, three
+#: thousandths away: those 25 seeds never landed on the far side of it, and a
+#: separate run that seeded the whole loop reported exactly that table's
+#: `gemma4` and `kimi-k3` as unstable. A model three thousandths from a boundary
+#: is not placed by this measurement whether or not a particular draw notices.
+THRESHOLD_JITTER = 0.01
+
+
+def _split(order: list[str], score: dict[str, float], threshold: float) -> list[list[str]]:
+    """The banding rule itself: a new band where the gap from its best exceeds `threshold`."""
+    grouped, current = [], [order[0]]
+    for model in order[1:]:
+        if score[current[0]] - score[model] > threshold:
+            grouped.append(current)
+            current = [model]
+        else:
+            current.append(model)
+    grouped.append(current)
+    return grouped
+
+
+def _places(grouped: list[list[str]]) -> dict[str, int]:
+    """Which band each model landed in, counting from one."""
+    return {model: number for number, band in enumerate(grouped, start=1) for model in band}
+
+
 def bands(per_note: dict, rng: random.Random) -> dict | None:
     """Models grouped so that within a band nothing separates them.
 
@@ -288,6 +330,20 @@ def bands(per_note: dict, rng: random.Random) -> dict | None:
     The threshold is the median half-width of the interval on a pairwise
     difference, the same quantity `separable` reports, computed on the
     composite rather than on a single column.
+
+    **`rng` is this function's own, never the separability loop's.** `main`
+    used to hand one generator to the six `separable` calls and then to this
+    one, so the threshold depended on how much randomness those six had already
+    drawn -- a quantity about the criteria loop and not about the data being
+    banded. Measured: on `deepsy-real` under `gemini-3.1-pro-preview` the
+    leftover state gave 0.160 where a fresh generator gives 0.162, and
+    `qwen3.8-27b` fell between the two.
+
+    **Decoupling them does not make the bands stable, and the payload says so.**
+    The threshold still moves with the seed, and `unresolved` names the models
+    that a move of `THRESHOLD_JITTER` either way puts in a different band. They
+    are drawn in a band because the table has to draw them somewhere; the
+    measurement does not place them.
     """
     models = sorted({m for m, _ in per_note})
     sessions = sorted({s for _, s in per_note})
@@ -320,18 +376,21 @@ def bands(per_note: dict, rng: random.Random) -> dict | None:
     half_widths.sort()
     threshold = half_widths[len(half_widths) // 2]
 
-    grouped, current = [], [order[0]]
-    for model in order[1:]:
-        if score[current[0]] - score[model] > threshold:
-            grouped.append(current)
-            current = [model]
-        else:
-            current.append(model)
-    grouped.append(current)
+    grouped = _split(order, score, threshold)
+    # Which models the threshold's own imprecision moves. Band membership is a
+    # step function of the threshold and of nothing else -- the scores and their
+    # order are arithmetic -- so banding at each end of `THRESHOLD_JITTER`
+    # enumerates every model a different resample could redraw, cascades
+    # included, and costs no further resampling.
+    low = _places(_split(order, score, threshold - THRESHOLD_JITTER))
+    high = _places(_split(order, score, threshold + THRESHOLD_JITTER))
+    unresolved = sorted(model for model in order if low[model] != high[model])
 
     return {
         "threshold": round(threshold, 3),
         "sessions": len(sessions),
+        "jitter": THRESHOLD_JITTER,
+        "unresolved": unresolved,
         "bands": [
             {
                 "models": band,
@@ -472,7 +531,11 @@ def main(argv: list[str] | None = None) -> int:
 
             keys = COMPOSITES[track]
             per_note = _composite(read.cells, keys)
-            grouped = bands(per_note, rng)
+            # Its own generator. Passing `rng` on from the loop above made the
+            # band threshold depend on how much randomness six `separable` calls
+            # had already drawn, which is a fact about the criteria loop and not
+            # about the models being banded -- and it moved a model.
+            grouped = bands(per_note, random.Random(SEED))  # noqa: S311 -- not a secret
             if grouped:
                 payload.setdefault("bands", {}).setdefault(track, {})[judge_model] = grouped
             else:
@@ -504,8 +567,7 @@ def main(argv: list[str] | None = None) -> int:
                 continue
             keys = COMPOSITES[track]
             per_note = _composite(read.cells, keys)
-            rng = random.Random(SEED)  # noqa: S311 -- a threshold, not a secret
-            grouped = bands(per_note, rng)
+            grouped = bands(per_note, random.Random(SEED))  # noqa: S311 -- not a secret
             if grouped:
                 payload.setdefault("bands", {}).setdefault(track, {})[judge_model] = grouped
             # These four tables are drawn from the same panel as the criteria
@@ -545,6 +607,11 @@ def main(argv: list[str] | None = None) -> int:
                 print(
                     f"  band {number}  {band['high']:.2f}-{band['low']:.2f}  "
                     + ", ".join(band["models"])
+                )
+            if grouped["unresolved"]:
+                print(
+                    f"  not placed by this measurement (a threshold "
+                    f"+/-{grouped['jitter']} moves them): " + ", ".join(grouped["unresolved"])
                 )
 
     print(f"\nwrote {args.target}")
