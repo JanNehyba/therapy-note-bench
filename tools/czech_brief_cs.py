@@ -600,6 +600,13 @@ CS: dict[str, str] = {
         "na všech kritériích, která pásmo průměruje, z počtu sezení, která jeho tabulka "
         "má — a panel s pásmy níže označuje každý řádek, kterého se to týká."
     ),
+    "A band boundary is drawn at a threshold that resampling the sessions reproduces "
+    "only to about {jitter}. These models sit within that of one, so this measurement "
+    "does not place them: a different resample puts them in the next band along.": (
+        "Hranice pásma se kreslí na mezi, kterou převzorkování sezení reprodukuje jen "
+        "asi na {jitter}. Tyto modely leží od některé hranice blíž než to, takže je "
+        "toto měření neumísťuje: jiné převzorkování je posune do sousedního pásma."
+    ),
     "Band": "Pásmo",
     "Score": "Skóre",
     "Models": "Modely",

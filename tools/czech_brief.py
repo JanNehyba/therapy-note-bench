@@ -2902,6 +2902,17 @@ BAND_PROVISIONAL = (
     "fall in is provisional:"
 )
 
+#: The other reason a band is provisional, and it applies to a full row as much
+#: as to a thin one. The boundary is drawn at a threshold the resampling
+#: reproduces only so far, and a model whose gap sits inside that is drawn in a
+#: band because the table has to draw it somewhere -- not because it was placed
+#: there. `czech_variance.THRESHOLD_JITTER` carries the measurement.
+BAND_UNRESOLVED = (
+    "A band boundary is drawn at a threshold that resampling the sessions reproduces "
+    "only to about {jitter}. These models sit within that of one, so this measurement "
+    "does not place them: a different resample puts them in the next band along."
+)
+
 
 def _bands(rows: list[results.Row]) -> str:
     """The models grouped, because ordering a dozen of them over ten notes is
@@ -2936,7 +2947,7 @@ def _bands(rows: list[results.Row]) -> str:
     coverage = payload.get("coverage") or {}
 
     counts = _wrote(rows)
-    blocks, provisional = [], []
+    blocks, provisional, unresolved, jitter = [], [], [], 0.0
     for track in results.LOCAL_TRACKS:
         judges = data.get(track) or {}
         if not judges:
@@ -3027,6 +3038,15 @@ def _bands(rows: list[results.Row]) -> str:
                     )
             else:
                 caption += " &middot; " + html.escape(_t(BAND_NO_COVERAGE))
+            # Whom the threshold's own imprecision moves, named per table. A
+            # payload written before this was measured carries neither key, and
+            # then nothing is claimed rather than "nothing moves".
+            if grouped.get("unresolved"):
+                jitter = max(jitter, grouped.get("jitter") or 0.0)
+                unresolved.append(
+                    f"{_t(TRACK_SWITCH_LABELS.get(track, track))} / {judge_model}: "
+                    + _join_words(sorted(grouped["unresolved"]))
+                )
             blocks.append(
                 f"<h3>{html.escape(_t(TRACK_TITLES.get(track, track)))} "
                 f"<span class='dash'>&mdash; {_t('who is ahead')}</span> "
@@ -3069,6 +3089,12 @@ def _bands(rows: list[results.Row]) -> str:
                 )
             )
             + "</p></div>"
+        )
+    if unresolved:
+        warning += (
+            "<div class='warn'><p>"
+            + html.escape(_t(BAND_UNRESOLVED).format(jitter=f"{jitter:.2f}"))
+            + f" {html.escape('; '.join(unresolved))}.</p></div>"
         )
     return (
         f"<h2>{_t('Bands, not places')}</h2>"
