@@ -138,6 +138,51 @@ CS: dict[str, str] = {
     ),
     "What each column is": "Co který sloupec je",
     # --- per-table prose ---------------------------------------------------
+    "What was measured, and on what": "Co se měřilo a na čem",
+    "PDSQI-9": "PDSQI-9",
+    "Every model was asked for a note from every one of these transcripts, in both "
+    "halves, so no two models are ever compared on sessions of different difficulty. "
+    "One half is recordings of real therapy with a single client, transcribed and "
+    "de-identified by hand and never released. The other is public counselling "
+    "conversations from the AnnoMI corpus, translated into spoken Czech for this "
+    "track.": (
+        "Každý model dostal za úkol napsat zápis z každého z těchto přepisů, v obou "
+        "půlkách — takže se nikdy neporovnávají dva modely na různě těžkých sezeních. "
+        "Jedna půlka jsou nahrávky skutečné terapie s jedním klientem, přepsané a ručně "
+        "anonymizované, nikdy nezveřejněné. Druhá jsou veřejné poradenské rozhovory "
+        "z korpusu AnnoMI, přeložené pro tenhle track do mluvené češtiny."
+    ),
+    "The two halves are nothing like the same size: by the median word count a real "
+    "session runs about {ratio} times as long as a translated conversation. The longer "
+    "half is a harder summarising task before any question of Czech arises, so every "
+    "comparison between the halves in this document is comparing that too.": (
+        "Ty dvě půlky nejsou ani zdaleka stejně velké: podle mediánu počtu slov je "
+        "skutečné sezení asi {ratio}krát delší než přeložený rozhovor. Delší půlka je "
+        "těžší úkol na shrnutí ještě dřív, než přijde na řadu čeština — takže každé "
+        "srovnání těch dvou půlek v tomhle dokumentu porovnává i tohle."
+    ),
+    "One difference between the PDSQI tables, and it is an absence with a reason. Some "
+    "of these attributes cannot be answered from the note alone: the judge has to read "
+    "the session beside it. A real session is confidential and never leaves for a "
+    "judge's provider, while the AnnoMI conversations are published under CC-BY and can "
+    "be sent -- so on the real sessions those questions were never put. What is missing "
+    "there is the question and not an answer a note did badly on, and the columns are "
+    "absent rather than low: {columns}.": (
+        "Jeden rozdíl mezi tabulkami PDSQI — a je to nepřítomnost s důvodem. Na některé "
+        "z těchto atributů se nedá odpovědět ze samotného zápisu: soudce si k němu musí "
+        "přečíst i sezení. Skutečné sezení je ale důvěrné a k poskytovateli soudce nikdy "
+        "neodchází, zatímco rozhovory AnnoMI jsou publikované pod CC-BY a poslat se "
+        "dají — takže u skutečných sezení se ty otázky nikdy nepoložily. Chybí tam ta "
+        "otázka, ne odpověď, ve které by zápis propadl: tyhle sloupce tam nejsou vůbec, "
+        "nejsou nízké: {columns}."
+    ),
+    "These columns are absent from one of these tables and this document does not "
+    "record why. An absent column is a question that was not put, never a note that "
+    "answered it badly: {columns}.": (
+        "Tyhle sloupce v jedné z těch tabulek chybí a tenhle dokument nezaznamenává "
+        "proč. Chybějící sloupec je otázka, která nebyla položena, nikdy ne zápis, "
+        "který v ní propadl: {columns}."
+    ),
     "How to read the tables": "Jak číst tabulky",
     "The Band column groups the models rather than ordering them: within a band nothing "
     "separates them, and a band ends where the gap exceeds what resampling the sessions "

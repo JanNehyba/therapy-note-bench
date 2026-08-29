@@ -240,11 +240,6 @@ METHOD_CORPORA = (
     "design, and {written} of the {asked} notes are the outcome. Where a model wrote "
     "fewer, it is named: {short}."
 )
-METHOD_SIZE = (
-    "a real session runs seven times longer than a translated AnnoMI conversation, so "
-    "the two halves differ in how hard the summarising is before language is "
-    "considered at all."
-)
 METHOD_BOUNDARY = (
     "What leaves for the judge's provider is the note a model wrote, which is what "
     "lets a confidential session be scored at all. The one place a transcript is sent "
@@ -375,6 +370,19 @@ def _fmt(value, digits: int) -> str:
     if value is None:
         return '<span class="dash">--</span>'
     return f"{value:.{digits}f}"
+
+
+def _decimal(value: float, digits: int) -> str:
+    """A decimal inside a sentence, in the reader's language.
+
+    English writes 7.5 and Czech writes 7,5. The tables print a full stop in
+    both languages, which is a convention a grid of figures can carry; a Czech
+    sentence saying a session runs "7.5krat" longer reads as a typo.
+    `czech_crosscheck` normalises the separator before comparing the two
+    documents, so they still print the same set of figures.
+    """
+    text = f"{value:.{digits}f}"
+    return text if LANG == "en" else text.replace(".", ",")
 
 
 #: Below this share of its notes, a row's mean is reported with a mark rather
@@ -1013,6 +1021,12 @@ def _table(track: str, rows: list[results.Row]) -> str:
 
 
 def _definitions(track: str) -> str:
+    """What each column of one instrument means.
+
+    No scale line at the top any more: `_how_to_read` prints it above the
+    tables, once per instrument on the page, and printing it here as well put
+    the same sentence twice on one screen.
+    """
     measures = MEASURE_TABLES[track]
     items = []
     for key, _digits in COLUMNS[track]:
@@ -1021,9 +1035,113 @@ def _definitions(track: str) -> str:
             f"<dt>{html.escape(_t(measure['label']))}</dt>"
             f"<dd>{html.escape(_trim(_t(measure['definition'])))}</dd>"
         )
-    return (
-        f"<p class='sub'>{html.escape(_scale_line(track))}</p>" + "<dl>" + "".join(items) + "</dl>"
-    )
+    return "<dl>" + "".join(items) + "</dl>"
+
+
+#: The instrument a track's columns belong to, with the variant dropped. Two
+#: tables whose columns are one a subset of the other are one instrument asked
+#: twice, so they share a definition list and what separates them is written
+#: under it rather than being left for a reader to find by counting columns.
+INSTRUMENT_FAMILY = {
+    **dict.fromkeys(SOAP_CRITERIA_TRACKS + DEEPSY_CRITERIA_TRACKS, "the six Czech criteria"),
+    results.TRACK_CZECH_REAL_PDSQI: "PDSQI-9",
+    results.TRACK_CZECH_TRANSLATED_PDSQI: "PDSQI-9",
+}
+
+#: Why the real-session PDSQI table is short of two columns, said where the
+#: columns are defined.
+#:
+#: **It is an absence with a reason and it is written as one.** Read as "the
+#: other table also asks about accuracy" it becomes the shape `CLAUDE.md`
+#: rules out: a gap smoothed into a difference of emphasis. The judge cannot
+#: answer whether a note is accurate or thorough without reading the session
+#: beside it, a real session is confidential and never leaves for a judge's
+#: provider, and so the question was never put. There is no number there --
+#: not a low one, and nothing about those two columns is a verdict on any note.
+ABSENT_NO_TRANSCRIPT = (
+    "One difference between the PDSQI tables, and it is an absence with a reason. Some "
+    "of these attributes cannot be answered from the note alone: the judge has to read "
+    "the session beside it. A real session is confidential and never leaves for a "
+    "judge's provider, while the AnnoMI conversations are published under CC-BY and can "
+    "be sent -- so on the real sessions those questions were never put. What is missing "
+    "there is the question and not an answer a note did badly on, and the columns are "
+    "absent rather than low: {columns}."
+)
+#: The same shape where nothing here records the reason. The gap is still
+#: named: a reader who counts the columns will find it, and the conclusion to
+#: head off is that a note scored badly on the one that is not there.
+ABSENT_UNEXPLAINED = (
+    "These columns are absent from one of these tables and this document does not "
+    "record why. An absent column is a question that was not put, never a note that "
+    "answered it badly: {columns}."
+)
+#: Which table lacks a column its instrument names, and why. Keyed on the
+#: table, because the reason is a fact about the corpus rather than about the
+#: instrument and cannot be derived from the columns.
+ABSENT_BECAUSE = {results.TRACK_CZECH_REAL_PDSQI: ABSENT_NO_TRANSCRIPT}
+
+
+def _column_blocks(tracks: list[str]) -> list[tuple[str, str, list[str]]]:
+    """One definition block per instrument: its name, the table with the fullest
+    column list, and every table the block covers.
+
+    Six tables drew three lists between them and two of the three were the same
+    seven definitions with two added. What a reader needed was not the list
+    twice; it was the difference, which nothing said.
+    """
+    by_family: dict[str, list[str]] = {}
+    for track in tracks:
+        by_family.setdefault(INSTRUMENT_FAMILY.get(track, track), []).append(track)
+
+    blocks: list[tuple[str, str, list[str]]] = []
+    for family, members in by_family.items():
+        keys = {track: {key for key, _ in COLUMNS[track]} for track in members}
+        widest = max(members, key=lambda track: len(keys[track]))
+        # Folded only where the tables really are one instrument asked twice.
+        # Two that share a name and disagree about a column are two
+        # instruments, and describing one as the other minus something would
+        # be false of both.
+        if all(keys[track] <= keys[widest] for track in members):
+            blocks.append((family, widest, members))
+            continue
+        drawn: list[str] = []
+        for track in members:
+            if not any(keys[track] == keys[other] for other in drawn):
+                drawn.append(track)
+                blocks.append((family, track, [track]))
+    return blocks
+
+
+def _column_definitions(tracks: list[str]) -> str:
+    """The column definitions, above the tables they explain rather than below.
+
+    They used to sit under all six tables, which is where a reader arrives
+    after having already read a grid of decimals whose column headings meant
+    nothing to them. Written open, always: a closed `<details>` prints to PDF
+    as a bare heading with its contents gone.
+    """
+    out = []
+    for family, widest, members in _column_blocks(tracks):
+        body = _definitions(widest)
+        full = [key for key, _ in COLUMNS[widest]]
+        for track in members:
+            here = {key for key, _ in COLUMNS[track]}
+            missing = [key for key in full if key not in here]
+            if not missing:
+                continue
+            labels = _join_words([_t(MEASURE_TABLES[widest][key]["label"]) for key in missing])
+            body += (
+                "<p>"
+                + html.escape(
+                    _t(ABSENT_BECAUSE.get(track, ABSENT_UNEXPLAINED)).format(columns=labels)
+                )
+                + "</p>"
+            )
+        out.append(
+            f"<details open><summary>{html.escape(_t('What each column is'))} &mdash; "
+            f"{html.escape(_t(family))}</summary>{body}</details>"
+        )
+    return "".join(out)
 
 
 def check_no_clinical_text(rows: list[results.Row]) -> list[str]:
@@ -1363,22 +1481,47 @@ def _scale(rows: list[results.Row]) -> str:
     )
 
 
+#: What the corpora are, above the table that counts them. A reader who has
+#: never seen this project meets a column of model names first, and this is the
+#: paragraph that says what those models were given. The one claim in it that
+#: the whole comparison rests on is the first: every model was asked for a note
+#: from every transcript, so no two models are ever being compared on different
+#: sessions.
+CORPORA_LEAD = (
+    "Every model was asked for a note from every one of these transcripts, in both "
+    "halves, so no two models are ever compared on sessions of different difficulty. "
+    "One half is recordings of real therapy with a single client, transcribed and "
+    "de-identified by hand and never released. The other is public counselling "
+    "conversations from the AnnoMI corpus, translated into spoken Czech for this track."
+)
+#: The size difference, with the multiple computed from the same medians the
+#: table prints. It was a typed "seven times" in the method section, three
+#: screens away from the two medians it is the ratio of.
+CORPORA_SIZE = (
+    "The two halves are nothing like the same size: by the median word count a real "
+    "session runs about {ratio} times as long as a translated conversation. The longer "
+    "half is a harder summarising task before any question of Czech arises, so every "
+    "comparison between the halves in this document is comparing that too."
+)
+
+
 def _corpus() -> str:
     """What the two halves are, counted rather than asserted.
 
     The sentence this replaces said "ten real sessions ... plus ten AnnoMI
     conversations translated into spoken Czech", which is true and hides the
-    thing a reader most needs: **the real sessions are seven times longer.**
-    A median of 5,266 words against 699, and 113 turns against 52. Summarising
-    an hour of talk and summarising ten minutes of it are not the same task, so
-    any sentence comparing the two halves is comparing that too.
+    thing a reader most needs: **the real sessions are several times longer.**
+    Summarising an hour of talk and summarising ten minutes of it are not the
+    same task, so any sentence comparing the two halves is comparing that too --
+    and the multiple is divided out of the table's own medians rather than
+    written into the prose, where it would go stale on the next corpus.
 
     Counts only -- session totals, medians, ranges. No transcript text reaches
     this document, which `check_no_clinical_text` asserts separately.
     """
     from tnb.tasks import czech as czech_task
 
-    rows = []
+    rows, medians = [], []
     for label, load, note in (
         (
             "Real sessions",
@@ -1400,6 +1543,7 @@ def _corpus() -> str:
         words = sorted(session.word_count for session in sessions)
         turns = sorted(len(session.turns) for session in sessions)
         middle = len(words) // 2
+        medians.append(words[middle])
         rows.append(
             f"<tr><td>{html.escape(_t(label))}</td><td>{len(sessions)}</td>"
             f"<td>{_grouped(words[middle])}</td>"
@@ -1409,12 +1553,23 @@ def _corpus() -> str:
         )
     if not rows:
         return ""
+    # Only when both halves loaded and the shorter one is not empty. One half
+    # on its own has nothing to be a multiple of, and a ratio printed from one
+    # median and a guess is the kind of number this document exists to avoid.
+    size = ""
+    if len(medians) == 2 and medians[1]:
+        size = (
+            "<p>"
+            + html.escape(_t(CORPORA_SIZE).format(ratio=_decimal(medians[0] / medians[1], 1)))
+            + "</p>"
+        )
     return (
-        f"<h3>{_t('The two corpora')}</h3>"
+        f"<details open><summary>{_t('The two corpora')}</summary>"
+        f"<p>{html.escape(_t(CORPORA_LEAD))}</p>"
         f"<table><thead><tr><th>{_t('Half')}</th><th>{_t('Sessions')}</th>"
         f"<th>{_t('Words, median')}</th><th>{_t('Words, range')}</th>"
         f"<th>{_t('Turns, median')}</th><th></th></tr></thead>"
-        f"<tbody>{''.join(rows)}</tbody></table>"
+        f"<tbody>{''.join(rows)}</tbody></table>{size}</details>"
     )
 
 
@@ -3694,7 +3849,6 @@ def build(rows: list[results.Row]) -> str:
     # including the ones that are genuinely different.
     two_judges = False
     withdrawn_from: dict[str, set[str]] = {}
-    drawn_instruments: list[tuple[tuple, str]] = []
 
     # Which tables will be drawn, decided before any of them is. The caption
     # above them names the judges every cell holds and the scales the columns
@@ -3743,6 +3897,17 @@ def build(rows: list[results.Row]) -> str:
 
     sections = []
     if plan:
+        # What the tables were measured on, and what their columns mean, above
+        # the tables rather than under them. Both used to sit below all six: a
+        # reader met an eight-column grid of decimals and could find out what
+        # the headings meant only after having already read them. Written open,
+        # always -- a closed toggle prints to PDF as a bare heading with its
+        # contents gone.
+        sections.append(
+            f"<h2>{_t('What was measured, and on what')}</h2>"
+            + _corpus()
+            + _column_definitions(drawn_tracks)
+        )
         sections.append(
             f"<h2>{_t('How to read the tables')}</h2>"
             + _how_to_read(drawn_tracks, shared_judges, banded=banded)
@@ -3784,11 +3949,6 @@ def build(rows: list[results.Row]) -> str:
                 )
         for version in withdrawn:
             withdrawn_from.setdefault(version, set()).add(_t(TRACK_TITLES.get(track, track)))
-        # One definition list per instrument. Four of the six tracks ask the
-        # same six criteria and printed the same list four times.
-        signature = tuple(COLUMNS[track])
-        if signature not in {sig for sig, _ in drawn_instruments}:
-            drawn_instruments.append((signature, track))
 
     # --- the caveats and the definitions, once each -------------------------
     # How far a band boundary can be trusted, under the tables that draw one.
@@ -3823,12 +3983,6 @@ def build(rows: list[results.Row]) -> str:
                 )
             )
             + "</p></div>"
-        )
-    for _signature, track in drawn_instruments:
-        once.append(
-            f"<h3>{_t('What each column is')} &mdash; "
-            f"{html.escape(_t(INSTRUMENT_OF.get(track, TRACK_TITLES.get(track, track))))}</h3>"
-            + _definitions(track)
         )
     sections.extend(once)
 
@@ -3884,9 +4038,7 @@ def build(rows: list[results.Row]) -> str:
 {limits}
 
 <h2>{_t("How it was measured")}</h2>
-<p>{_t(METHOD_CORPORA).format(**figures)} <strong>{_t("They are not the same size:")}</strong>
-{_t(METHOD_SIZE)}</p>
-{_corpus()}
+<p>{_t(METHOD_CORPORA).format(**figures)}</p>
 {_scale(rows)}
 <p><strong>{_t("No judge is ever shown a real session.")}</strong> {_t(METHOD_BOUNDARY)}</p>
 <p>{_t(METHOD_CRITERIA)}</p>
