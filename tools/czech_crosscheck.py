@@ -35,21 +35,78 @@ def note(passing: bool, message: str) -> None:
         problems.append(message)
 
 
+#: The spaces Czech groups thousands with. Removed from every side before
+#: anything is compared, so a figure that is one token in English is not two
+#: in Czech.
+GROUPING_SPACE = re.compile(r"[\u00a0\u202f\u2009]")
+
+
 def text_of(page: pathlib.Path) -> str:
-    """The page as a reader sees it: no markup, no style, no thin spaces.
+    """The page as a reader sees it: no markup, no style, no chart, no thin spaces.
 
     The thin space matters. Czech groups thousands with U+202F, so a figure
     that is one token in English is two in Czech and a naive comparison reports
     a difference where the two pages agree.
+
+    A chart's numbers are dropped along with its markup, for a reason that is
+    about the printer rather than about the chart. `pdftotext` rebuilds text
+    runs from where the glyphs landed on the page, so an axis tick that sits
+    beside a data label comes back as one token -- "0.6" next to "0.62" prints
+    as "0.6 0.62" on the page and can arrive as "0.60.62" from the PDF. Pass 6
+    would then report a figure lost and a figure invented, and both would be
+    artefacts of the layout. The numbers inside a figure are checked instead by
+    `tests/test_czech_figures.py`, against the payload they were drawn from,
+    which is the stronger check anyway: it compares them with the record rather
+    than with themselves.
     """
     raw = page.read_text(encoding="utf-8")
     raw = re.sub(r"(?s)<style.*?</style>", " ", raw)
     raw = re.sub(r"(?s)<script.*?</script>", " ", raw)
+    raw = re.sub(r"(?s)<svg.*?</svg>", " ", raw)
     flat = htmllib.unescape(re.sub(r"<[^>]+>", " ", raw))
-    return re.sub(r"\s+", " ", re.sub(r"[\u00a0\u202f\u2009]", "", flat))
+    return re.sub(r"\s+", " ", GROUPING_SPACE.sub("", flat))
+
+
+def chart_text(page: pathlib.Path) -> str:
+    """Only what the charts print, which is what `text_of` throws away.
+
+    Pass 6 reads the print and cannot tell a chart's text from the prose around
+    it, so the two sides would disagree about every figure in every chart if
+    only the page were stripped. This is the other half of the same cut: what
+    it returns is subtracted from the print before the print is asked to
+    account for itself.
+    """
+    raw = page.read_text(encoding="utf-8")
+    inside = " ".join(re.findall(r"(?s)<svg.*?</svg>", raw))
+    inside = re.sub(r"(?s)<style.*?</style>", " ", inside)
+    flat = htmllib.unescape(re.sub(r"<[^>]+>", " ", inside))
+    return re.sub(r"\s+", " ", GROUPING_SPACE.sub("", flat))
 
 
 NUMBER = re.compile(r"\d+(?:[.,]\d+)*")
+
+
+def runs_on(token: str, parts: Counter) -> bool:
+    """Is this token two or more of `parts` printed hard against each other?
+
+    The merge the charts are cut out for, arriving from the other side. A print
+    can only be asked what it holds, not where a glyph came from, so a chart's
+    "0.6" and "0.62" reach `pdftotext` as "0.60.62" and look like a figure the
+    print invented. Forgiven only where the token comes apart exactly into
+    figures a chart drew: a number that is genuinely new still fails, because
+    it will not decompose.
+    """
+    if token in parts:
+        return True
+    return any(
+        part
+        and len(part) < len(token)
+        and token.startswith(part)
+        # `parts` holds a handful of short tokens and `token` is shorter still,
+        # so the recursion is bounded by the length of the token.
+        and runs_on(token[len(part) :], parts)
+        for part in parts
+    )
 
 
 def figures(text: str, *, grouped: bool = True) -> Counter:
@@ -232,8 +289,20 @@ for source, pdf in (
         and big not in re.sub(r"(?<=\d)[ ,](?=\d{3}(?!\d))", "", printed)
     ]
     note(not missing_big, f"{pdf}: every grouped figure survives the print ({missing_big or '-'})")
+    # What the charts drew, taken off the print's side of the ledger. `text_of`
+    # has already taken it off the page's side; leaving it here would turn one
+    # false alarm into the opposite one, with every value in every chart
+    # reported as invented by the printer.
+    charted = figures(chart_text(LOCAL / source), grouped=False)
+    invented = Counter(
+        {
+            token: count
+            for token, count in (in_pdf - in_html - charted).items()
+            if not runs_on(token, charted)
+        }
+    )
     lost = dict((in_html - in_pdf).most_common(12))
-    gained = dict((in_pdf - in_html).most_common(12))
+    gained = dict(invented.most_common(12))
     note(not lost, f"{pdf}: nothing on the page is missing from the print ({lost or '-'})")
     note(not gained, f"{pdf}: the print invents nothing ({gained or '-'})")
     note(sum(in_pdf.values()) > 400, f"{pdf}: {sum(in_pdf.values())} figures compared")
