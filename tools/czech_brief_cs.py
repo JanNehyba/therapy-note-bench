@@ -918,6 +918,15 @@ CS: dict[str, str] = {
         "A tímhle nástrojem zatím nehodnotil žádný člověk, takže odsud neplyne nic o "
         "tom, jestli by pětku dal i klinik."
     ),
+    # --- said once, and named by what each section does ---------------------
+    "Not drawn:": "Nevykresleno:",
+    "were also scored under": "byly hodnoceny také podle",
+    "which columns can rank": "které sloupce umí řadit",
+    "who is ahead": "kdo je napřed",
+    "how far apart is far enough": "jak daleko je dost daleko",
+    "the six Czech criteria": "šest českých kritérií",
+    "PDSQI-9, without the session": "PDSQI-9, bez sezení",
+    "PDSQI-9, with the session": "PDSQI-9, se sezením",
     # --- refusals ----------------------------------------------------------
     "Refusing to write: a row carries something that is not a score.": (
         "Odmítám zapsat: řádek nese něco, co není skóre."

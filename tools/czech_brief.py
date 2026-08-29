@@ -959,7 +959,8 @@ def _verdicts(rows: list[results.Row]) -> str:
             )
         if lines:
             blocks.append(
-                f"<h3>{html.escape(_t(TRACK_TITLES.get(track, track)))}</h3>"
+                f"<h3>{html.escape(_t(TRACK_TITLES.get(track, track)))} "
+                f"<span class='dash'>&mdash; {_t('which columns can rank')}</span></h3>"
                 f"<table><thead><tr><th>{_t('Column')}</th>"
                 f"<th>{_t('Does it separate the models?')}</th>"
                 f"<th>{_t('What is behind the number')}</th></tr></thead>"
@@ -1183,6 +1184,19 @@ def _external() -> str:
         + f" {html.escape(data.get('index_version', ''))}, "
         + f"{html.escape(data.get('fetched', ''))}.</p></div>"
     )
+
+
+#: What to call each set of columns, so the one definition list per instrument
+#: has a name a reader recognises rather than the name of whichever track
+#: happened to be drawn first.
+INSTRUMENT_OF = {
+    results.TRACK_CZECH_REAL: "the six Czech criteria",
+    results.TRACK_CZECH_TRANSLATED: "the six Czech criteria",
+    results.TRACK_DEEPSY_REAL: "the six Czech criteria",
+    results.TRACK_DEEPSY_TRANSLATED: "the six Czech criteria",
+    results.TRACK_CZECH_REAL_PDSQI: "PDSQI-9, without the session",
+    results.TRACK_CZECH_TRANSLATED_PDSQI: "PDSQI-9, with the session",
+}
 
 
 def _conclusion(rows: list[results.Row]) -> str:
@@ -1662,6 +1676,7 @@ def _bands() -> str:
             )
             blocks.append(
                 f"<h3>{html.escape(_t(TRACK_TITLES.get(track, track)))} "
+                f"<span class='dash'>&mdash; {_t('who is ahead')}</span> "
                 f"<span class='dash'>&middot; {html.escape(judge_model)}</span></h3>"
                 f"<p class='sub'>{_t('a band is')} {grouped['threshold']:.2f} "
                 f"{_t('wide, over')} {grouped['sessions']} {_t('sessions')}</p>"
@@ -1841,7 +1856,8 @@ def _variance() -> str:
             for name in names
         )
         blocks.append(
-            f"<h3>{html.escape(_t(TRACK_TITLES.get(track, track)))}</h3>"
+            f"<h3>{html.escape(_t(TRACK_TITLES.get(track, track)))} "
+            f"<span class='dash'>&mdash; {_t('how far apart is far enough')}</span></h3>"
             f"<table><thead><tr><th>{_t('Criterion')}</th>{head}</tr></thead>"
             f"<tbody>{''.join(rows)}</tbody></table>"
         )
@@ -2225,6 +2241,13 @@ def build(rows: list[results.Row]) -> str:
         if row.is_scored:
             by_group[row.comparability_key()].append(row)
 
+    # Said once, before the tables they govern, rather than under each of them.
+    # Four copies of one caveat is what teaches a reader to skip the boxes --
+    # including the ones that are genuinely different.
+    two_judges = False
+    withdrawn_from: dict[str, set[str]] = {}
+    drawn_instruments: list[tuple[tuple, str]] = []
+
     sections = []
     for track in results.LOCAL_TRACKS:
         groups = {key: drawn for key, drawn in by_group.items() if drawn[0].track == track}
@@ -2254,41 +2277,64 @@ def build(rows: list[results.Row]) -> str:
         for drawn in ordered:
             first = drawn[0]
             notes = sum(row.n_sessions_scored for row in drawn)
+            # The judge is a caption, not a heading. As a heading it appeared
+            # once per track per judge -- eight identical entries a reader
+            # cannot navigate by, in a document whose complaint was repetition.
             sections.append(
-                f"<h3>{_t('Judged by')} "
-                f"{html.escape(first.judge_model or 'unknown')}</h3>"
-                f"<p>{len(drawn)} {_t('models')}, {notes} {_t('notes')}, "
-                f"{_t('rubric')} {html.escape(first.judge_prompt_version)}.</p>"
+                f"<p class='sub'><strong>{_t('Judged by')} "
+                f"{html.escape(first.judge_model or 'unknown')}</strong> &middot; "
+                f"{len(drawn)} {_t('models')}, {notes} {_t('notes')}, "
+                f"{_t('rubric')} {html.escape(first.judge_prompt_version)}</p>"
                 + _table(track, drawn)
             )
         if len({drawn[0].judge_model for drawn in ordered}) > 1:
-            sections.append(
-                "<div class='warn'><p>"
-                + html.escape(
-                    _t(
-                        "Two judges, two tables, and they are not averaged. Where "
-                        "they disagree about a model is the only control this track "
-                        "has, so the disagreement is the thing to read."
-                    )
+            two_judges = True
+        for version in withdrawn:
+            withdrawn_from.setdefault(version, set()).add(_t(TRACK_TITLES.get(track, track)))
+        # One definition list per instrument. Four of the six tracks ask the
+        # same six criteria and printed the same list four times.
+        signature = tuple(COLUMNS[track])
+        if signature not in {sig for sig, _ in drawn_instruments}:
+            drawn_instruments.append((signature, track))
+
+    # --- the caveats and the definitions, once each -------------------------
+    once = []
+    if two_judges:
+        once.append(
+            "<div class='warn'><p>"
+            + html.escape(
+                _t(
+                    "Two judges, two tables, and they are not averaged. Where "
+                    "they disagree about a model is the only control this track "
+                    "has, so the disagreement is the thing to read."
                 )
-                + "</p></div>"
             )
-        if withdrawn:
-            sections.append(
-                "<div class='warn'><p>"
-                + html.escape(_t("Not drawn: this track was also scored under"))
-                + f" {html.escape(', '.join(sorted(withdrawn)))}"
-                + html.escape(
-                    _t(
-                        ", an earlier version of the rubric. Those rows are a "
-                        "different instrument rather than an earlier attempt at this "
-                        "one, so they are named here and not placed beside these. "
-                        "They remain in the local record."
-                    )
+            + "</p></div>"
+        )
+    for version, tracks in sorted(withdrawn_from.items()):
+        once.append(
+            "<div class='warn'><p>"
+            + html.escape(_t("Not drawn:"))
+            + f" {html.escape(_join_words(sorted(tracks)))} "
+            + html.escape(_t("were also scored under"))
+            + f" {html.escape(version)}"
+            + html.escape(
+                _t(
+                    ", an earlier version of the rubric. Those rows are a "
+                    "different instrument rather than an earlier attempt at this "
+                    "one, so they are named here and not placed beside these. "
+                    "They remain in the local record."
                 )
-                + "</p></div>"
             )
-        sections.append(f"<h3>{_t('What each column is')}</h3>" + _definitions(track))
+            + "</p></div>"
+        )
+    for _signature, track in drawn_instruments:
+        once.append(
+            f"<h3>{_t('What each column is')} &mdash; "
+            f"{html.escape(_t(INSTRUMENT_OF.get(track, TRACK_TITLES.get(track, track))))}</h3>"
+            + _definitions(track)
+        )
+    sections.extend(once)
 
     limits = "".join(
         f"<h3>{html.escape(_t(title))}</h3><p>{html.escape(_t(body))}</p>" for title, body in LIMITS
