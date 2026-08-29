@@ -566,6 +566,40 @@ CS: dict[str, str] = {
     "a pair is compared on the sessions both models wrote, and {names} wrote fewer": (
         "dvojice se porovnává na sezeních, ze kterých psaly oba modely, a {names} napsaly míň"
     ),
+    "{answered} of {expected} judge answers": "{answered} z {expected} odpovědí soudce",
+    "notes entered on fewer than {columns} criteria: {partial}": (
+        "zápisů vstoupilo na méně než {columns} kritériích: {partial}"
+    ),
+    "how much each row rests on was not recorded for this table": (
+        "u této tabulky nebylo zaznamenáno, na kolika zápisech každý řádek stojí"
+    ),
+    "{absent} not asked on this corpus, so this band averages {columns} of {named}": (
+        "{absent} se na tomto korpusu neptáme, takže toto pásmo průměruje {columns} z {named}"
+    ),
+    "The rows do not rest on the same amount. A model's place is the mean of the "
+    "notes it has, and where that is fewer than the table's sessions -- the model "
+    "wrote no note, or the judge answered only part of one -- the count is printed "
+    "beside its name.": (
+        "Řádky nestojí na stejném množství. Místo modelu je průměrem zápisů, které má, "
+        "a tam, kde je jich méně než sezení v tabulce — model zápis nenapsal, nebo "
+        "soudce odpověděl jen na jeho část — je počet vytištěn vedle jeho jména."
+    ),
+    "These models are placed on well under the table's sessions, so the band they "
+    "fall in is provisional:": (
+        "Tyto modely stojí na výrazně méně než na sezeních tabulky, takže pásmo, "
+        "do kterého padnou, je předběžné:"
+    ),
+    "the SOAP halves": "poloviny SOAP",
+    "the Deepsy format": "formát Deepsy",
+    "Those names do not all rest on the same amount, and the thinnest of them is "
+    "worth reading beside the claim: {named}. That count is the notes answered on "
+    "every criterion the band averages, out of the sessions its table has, and the "
+    "band panel below marks every row it applies to.": (
+        "Ta jména nestojí všechna na stejném množství a to nejtenčí z nich stojí za "
+        "přečtení vedle tvrzení samotného: {named}. Ten počet jsou zápisy zodpovězené "
+        "na všech kritériích, která pásmo průměruje, z počtu sezení, která jeho tabulka "
+        "má — a panel s pásmy níže označuje každý řádek, kterého se to týká."
+    ),
     "Band": "Pásmo",
     "Score": "Skóre",
     "Models": "Modely",

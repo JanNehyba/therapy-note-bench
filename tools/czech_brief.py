@@ -1764,6 +1764,42 @@ def _written_figures(rows: list[results.Row]) -> dict[str, str]:
     }
 
 
+def _thinnest_banded(models: list[str], tracks: tuple[str, ...]) -> str:
+    """Of these models, the one placed on the fewest complete notes, and where.
+
+    A band names a model as ahead; it does not say how much is behind the name.
+    On the Deepsy tables the model in the top band under both judges is also the
+    one the judge left the most notes part-answered on -- so the summary named a
+    winner and the count that qualifies it was in a payload nothing read.
+
+    Complete means answered on every criterion the band averages, which is the
+    same quantity the score tables count in their notes column. Returns an empty
+    string when every one of these models has its table's full corpus, because
+    then there is nothing to qualify.
+    """
+    coverage = _payload("czech-variance.json").get("coverage") or {}
+    worst = None
+    for track in tracks:
+        for judge_model, cover in sorted((coverage.get(track) or {}).items()):
+            sessions = cover.get("sessions") or 0
+            for model in models:
+                block = (cover.get("systems") or {}).get(model)
+                if not block or not sessions:
+                    continue
+                complete = block["notes"] - block["partial"]
+                if complete >= sessions:
+                    continue
+                if worst is None or complete / sessions < worst[0]:
+                    worst = (complete / sessions, model, complete, sessions, track, judge_model)
+    if worst is None:
+        return ""
+    _share, model, complete, sessions, track, judge_model = worst
+    return (
+        f"{model}, {complete} {_t('of')} {sessions} "
+        f"({_t(TRACK_SWITCH_LABELS.get(track, track))}, {judge_model})"
+    )
+
+
 def _conclusion(rows: list[results.Row]) -> str:
     """What eleven models did, before the reader meets a single table.
 
@@ -1863,6 +1899,31 @@ def _conclusion(rows: list[results.Row]) -> str:
                 "Deepsy format, so it is not the uniform penalty one number could stand "
                 "for."
             ).format(top=end(top_d), bottom=end(bottom_d), tables=tables_d, **_length_signs())
+        )
+
+    # 1b-tail. What is behind the names just given. A band says a model is
+    #     ahead and says nothing about how much of the corpus put it there, and
+    #     on the Deepsy tables the model in the top band under both judges is
+    #     also the one the judge left the most notes part-answered on. Counted
+    #     per format and never pooled, for the reason 1b gives.
+    behind = [
+        (label, _thinnest_banded(models, tracks))
+        for label, models, tracks in (
+            (_t("the SOAP halves"), top, SOAP_CRITERIA_TRACKS),
+            (_t("the Deepsy format"), top_d, DEEPSY_CRITERIA_TRACKS),
+        )
+        if models
+    ]
+    named = [f"{label} — {found}" for label, found in behind if found]
+    if named:
+        said.append(
+            _t(
+                "Those names do not all rest on the same amount, and the thinnest of "
+                "them is worth reading beside the claim: {named}. That count is the "
+                "notes answered on every criterion the band averages, out of the "
+                "sessions its table has, and the band panel below marks every row it "
+                "applies to."
+            ).format(named="; ".join(named))
         )
 
     # 1c. And who is missing from that count, with the reason. A model that
@@ -2807,9 +2868,43 @@ def _length_table(data: dict) -> str:
 #: model's denominator, over tables holding a model with six.
 BAND_SHORTFALL = "a pair is compared on the sessions both models wrote, and {names} wrote fewer"
 
+#: What the band was actually computed over, per table. `czech_variance` has
+#: written this since the bands were added and nothing read it, so the panel
+#: named neither the notes a judge left part-answered nor the models that have
+#: one session fewer than the rest -- which is an absence that is neither
+#: omitted nor named, the one treatment `CLAUDE.md` rules out.
+BAND_COVERAGE = "{answered} of {expected} judge answers"
+#: The count last, so the sentence needs no plural agreement. Czech has three
+#: forms for one, two-to-four and five-or-more, and "1 notes" was what putting
+#: the number first produced in both languages.
+BAND_PARTIAL = "notes entered on fewer than {columns} criteria: {partial}"
+#: Named, not left blank, when a table's denominators were not recorded.
+BAND_NO_COVERAGE = "how much each row rests on was not recorded for this table"
+
+#: A column the composite names and the corpus never allowed to be asked. The
+#: real half is rated from the note alone, so PDSQI's `accurate` and `thorough`
+#: are not put to a judge there and its band is built on `succinct` by itself --
+#: a fact about the width of the composite, printed where the band is read.
+BAND_ABSENT = "{absent} not asked on this corpus, so this band averages {columns} of {named}"
+
+#: Why a count appears beside a model's name at all.
+BAND_UNEVEN = (
+    "The rows do not rest on the same amount. A model's place is the mean of the "
+    "notes it has, and where that is fewer than the table's sessions -- the model "
+    "wrote no note, or the judge answered only part of one -- the count is printed "
+    "beside its name."
+)
+#: The same warning the score tables carry, on the panel that ranks. Its
+#: threshold is `THIN`, and the sentence after it is shared with `_table`: what
+#: goes missing clusters on the long notes either way.
+BAND_PROVISIONAL = (
+    "These models are placed on well under the table's sessions, so the band they "
+    "fall in is provisional:"
+)
+
 
 def _bands(rows: list[results.Row]) -> str:
-    """The models grouped, because ordering eleven of them over ten notes is
+    """The models grouped, because ordering a dozen of them over ten notes is
     mostly ordering noise.
 
     A ranking invites the one reading it cannot support -- is the fourth better
@@ -2824,26 +2919,66 @@ def _bands(rows: list[results.Row]) -> str:
     The caption takes `rows` for one clause: how many notes each banded model
     actually wrote. The session count in the payload is the union across
     models, which is the corpus and not anybody's denominator.
+
+    **And the denominators are drawn, not assumed.** `czech_variance` writes a
+    `coverage` block beside the bands -- how many of the questions came back,
+    per track and per model -- and this panel read only the bands. So the model
+    at the top of both Deepsy tables was also the one with the most
+    part-answered notes and the table said nothing, which is neither omitting
+    the number nor naming the gap. Each row now carries the count behind it
+    where that is short, the way `_table` marks a thin row, and a table whose
+    coverage was not recorded says so rather than looking complete.
     """
-    path = REPO / "local" / "czech-variance.json"
-    if not path.exists():
-        return ""
-    data = json.loads(path.read_text(encoding="utf-8")).get("bands") or {}
+    payload = _payload("czech-variance.json")
+    data = payload.get("bands") or {}
     if not data:
         return ""
+    coverage = payload.get("coverage") or {}
 
     counts = _wrote(rows)
-    blocks = []
+    blocks, provisional = [], []
     for track in results.LOCAL_TRACKS:
         judges = data.get(track) or {}
         if not judges:
             continue
         for judge_model in sorted(judges):
             grouped = judges[judge_model]
+            cover = (coverage.get(track) or {}).get(judge_model) or {}
+            per_system = cover.get("systems") or {}
+            # The table's own sessions, from the same block as the per-model
+            # counts. Falling back to the band payload keeps the two numbers
+            # comparable when only one of them was written.
+            sessions = cover.get("sessions") or grouped["sessions"]
+
+            def cell(
+                model: str,
+                per_system=per_system,
+                sessions=sessions,
+                track=track,
+                judge_model=judge_model,
+            ) -> str:
+                """One model's name, with the count behind it when it is short."""
+                block = per_system.get(model)
+                if not block:
+                    return html.escape(model)
+                complete = block["notes"] - block["partial"]
+                if complete >= sessions:
+                    return html.escape(model)
+                if complete < THIN * sessions:
+                    # The judge belongs in the name. Two judges answered the same
+                    # model on the same track by different amounts, and without
+                    # it the warning listed one model twice with two counts and
+                    # no way to tell which reading was which.
+                    provisional.append(
+                        f"{model} ({complete} {_t('of')} {sessions}, "
+                        f"{_t(TRACK_SWITCH_LABELS.get(track, track))} / {judge_model})"
+                    )
+                return f"{html.escape(model)} (<strong>{complete}</strong> {_t('of')} {sessions})"
+
             rows_html = "".join(
                 f"<tr><td>{number}</td>"
                 f"<td>{band['high']:.2f}&ndash;{band['low']:.2f}</td>"
-                f"<td class='sub'>{html.escape(', '.join(band['models']))}</td></tr>"
+                f"<td class='sub'>{', '.join(cell(model) for model in band['models'])}</td></tr>"
                 for number, band in enumerate(grouped["bands"], start=1)
             )
             # Only models this table draws. A model the endpoint refused wrote
@@ -2863,6 +2998,35 @@ def _bands(rows: list[results.Row]) -> str:
                 caption += " &middot; " + html.escape(
                     _t(BAND_SHORTFALL).format(names=_join_words(short))
                 )
+            # `expected` decides, not the block: a payload written before this
+            # was measured has no counts to print, and saying so is the honest
+            # cell. Half a block would print "None of None".
+            if cover.get("expected") is not None:
+                caption += " &middot; " + html.escape(
+                    _t(BAND_COVERAGE).format(
+                        answered=_grouped(cover["answered"]), expected=_grouped(cover["expected"])
+                    )
+                )
+                if cover["partial"]:
+                    caption += ", " + html.escape(
+                        _t(BAND_PARTIAL).format(
+                            partial=_grouped(cover["partial"]), columns=cover["columns"]
+                        )
+                    )
+                if cover.get("columns_absent"):
+                    labels = [
+                        _t(MEASURE_TABLES.get(track, {}).get(key, {}).get("label", key))
+                        for key in cover["columns_absent"]
+                    ]
+                    caption += " &middot; " + html.escape(
+                        _t(BAND_ABSENT).format(
+                            absent=_join_words(labels),
+                            columns=cover["columns"],
+                            named=cover["columns_named"],
+                        )
+                    )
+            else:
+                caption += " &middot; " + html.escape(_t(BAND_NO_COVERAGE))
             blocks.append(
                 f"<h3>{html.escape(_t(TRACK_TITLES.get(track, track)))} "
                 f"<span class='dash'>&mdash; {_t('who is ahead')}</span> "
@@ -2891,6 +3055,21 @@ def _bands(rows: list[results.Row]) -> str:
         (g["sessions"] for judges in data.values() for g in judges.values()),
         default=0,
     )
+    warning = ""
+    if provisional:
+        warning = (
+            "<div class='warn'><p>"
+            + html.escape(_t(BAND_PROVISIONAL))
+            + f" {html.escape('; '.join(sorted(set(provisional))))}. "
+            + html.escape(
+                _t(
+                    "Unanswered questions cluster on the longer notes, so what is "
+                    "missing is not a random sample of the corpus. Read these rows "
+                    "as provisional."
+                )
+            )
+            + "</p></div>"
+        )
     return (
         f"<h2>{_t('Bands, not places')}</h2>"
         + "<p>"
@@ -2904,8 +3083,9 @@ def _bands(rows: list[results.Row]) -> str:
                 "so its width is the measurement's own resolution."
             ).format(models=widest, notes=notes)
         )
-        + "</p>"
+        + f"</p><p>{html.escape(_t(BAND_UNEVEN))}</p>"
         + "".join(blocks)
+        + warning
     )
 
 
