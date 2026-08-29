@@ -267,10 +267,13 @@ _SENTENCES = {
     "Notes": "Zápisy",
     "{0} judged": "ohodnoceno {0}",
     "settings": "nastavení",
-    "scored by a judge from the same vendor, whose self-preference is measured in the panel"
-    " below": (
+    # "in the panel below" was true until the eight panels moved to the methods
+    # page, and then it pointed a reader at a panel that is not there -- from
+    # inside a tooltip a phone cannot open, at that.
+    "scored by a judge from the same vendor, whose self-preference is measured on the methods"
+    " page": (
         "obodováno hodnotitelem od téhož dodavatele; jak moc nadržuje sám sobě, je změřeno "
-        "v panelu níže"
+        "na stránce s metodikou"
     ),
     "judge's own {0}": "hodnotitelova vlastní {0}",
     "ranks this table": "řadí tuto tabulku",
@@ -336,6 +339,28 @@ _SENTENCES = {
         "Podmínky, které tenhle řádek nesdílel s ostatními, a jestli jeho hodnotitel sdílí "
         "dodavatele s ním."
     ),
+    # The half a tooltip had no room for, in the legend under the table: what
+    # the two badges in the Marks column mean, and that the heading does not
+    # sort. It is the other column with no arrow on it.
+    "A row marked ≠ settings ran under conditions the rest of the table did not, and the"
+    " settings themselves are in the row's own detail, one tap below it. A row marked judge's"
+    " own was scored by a judge from the same vendor as the model it graded; how much that is"
+    " worth is measured on the methods page. Like Band, this heading carries no ↕ and does not"
+    " sort: these are labels, not an order.": (
+        "Řádek se značkou ≠ nastavení běžel za podmínek, které zbytek tabulky neměl, a samotné "
+        "nastavení je v detailu toho řádku, jedno klepnutí pod ním. Řádek se značkou "
+        "hodnotitelova vlastní obodoval hodnotitel od téhož dodavatele, jako je model, který "
+        "známkoval; kolik to vydá, je změřeno na stránce s metodikou. Stejně jako u Pásma není "
+        "u tohoto záhlaví ↕ a neřadí se podle něj: jsou to štítky, ne pořadí."
+    ),
+    "Effort": "Úsilí",
+    "A model that takes a reasoning-effort setting carries it beside its name. It is the effort"
+    " the note was written at, not a score, and a model with no badge has no such control — which"
+    " is not the same as one set to low.": (
+        "Model, který má nastavitelné úsilí na uvažování, ho nese vedle svého jména. Je to úsilí, "
+        "se kterým byl zápis napsán, ne skóre, a model bez značky takové nastavení nemá — což "
+        "není totéž jako mít ho na nízké."
+    ),
     "reasoning effort the note was written at": "úsilí na uvažování, se kterým byl zápis napsán",
     "judge cannot be checked against people": "hodnotitele nelze ověřit proti lidem",
     "both": "oba",
@@ -345,6 +370,17 @@ _SENTENCES = {
         "Ponechá čísla tohoto hodnotitele a k každému připíše, jak daleko od něj byl ten "
         "druhý. Nic se neprůměruje: to druhé číslo je vlastní skóre druhého hodnotitele, "
         "napsané jako vzdálenost."
+    ),
+    # The same thing, above the cells it applies to and only while they carry a
+    # second figure. The button explained itself in a `title=`, so tapping it on
+    # a phone sprinkled a triangle and a number into every one of seventeen
+    # columns with nothing anywhere saying what they were.
+    "Every figure now carries a second one: how far <code>{0}</code> was from this judge on the"
+    " same row. Nothing is averaged — ▴ is the other judge scoring it higher and ▾ lower, and"
+    " the number is the distance between the two.": (
+        "Každé číslo teď nese ještě druhé: jak daleko od tohoto hodnotitele byl na témž řádku "
+        "<code>{0}</code>. Nic se neprůměruje — ▴ znamená, že druhý hodnotitel dal víc, ▾ že "
+        "míň, a to číslo je vzdálenost mezi nimi."
     ),
     "<strong>Sources:</strong> {0} — every prompt and rubric here is reproduced verbatim"
     ' from them. <a href="methods.html#licences">What each is used for, and on what terms</a>:'

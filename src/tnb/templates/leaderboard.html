@@ -413,6 +413,53 @@ function bandLegend(table) {
       and it does not sort: a grouping has no order to sort by.`}</dd></div>`;
 }
 
+// The rest of what had nowhere to live but a `title=`. Words and Marks are
+// columns with no entry in `table.columns`, so the loop that repeats every
+// measure's tooltip in visible text never reached them; the effort badge is not
+// a column at all, and prints a bare "high" beside three model names.
+//
+// Each keeps the words its tooltip already carried -- the same dictionary key,
+// so the Czech is the Czech that was already written -- with the part a tooltip
+// had no room for added: what the two badges in Marks mean, and that Marks does
+// not sort. Marks is the other heading with no ↕, and a heading that ignores a
+// tap while ten beside it answer reads as a broken page rather than as a column
+// with nothing to order.
+//
+// Left as they are, deliberately: the ≠ settings badge's tooltip, which is the
+// row's own settings and is repeated in full in the detail row one tap below
+// it; the Provider heading, repeated in the footer; and the calibration warning
+// in `designBlock`, which is never drawn on a table whose judge is calibrated
+// and is the wrong thing to explain on the tables that are.
+function extraLegend(table) {
+  const entries = [];
+  if (table.has_words) {
+    entries.push([
+      T`Words`,
+      T`Median words in this model’s notes. Completeness counts coverage, so a longer note covers more.`,
+    ]);
+  }
+  entries.push([
+    T`Marks`,
+    T`Conditions this row did not share with the others, and whether its judge shares a vendor with it.` +
+    ' ' +
+    T`A row marked ≠ settings ran under conditions the rest of the table did not, and the settings
+      themselves are in the row's own detail, one tap below it. A row marked judge's own was
+      scored by a judge from the same vendor as the model it graded; how much that is worth is
+      measured on the methods page. Like Band, this heading carries no ↕ and does not sort:
+      these are labels, not an order.`,
+  ]);
+  if (table.has_effort) {
+    entries.push([
+      T`Effort`,
+      T`A model that takes a reasoning-effort setting carries it beside its name. It is the
+        effort the note was written at, not a score, and a model with no badge has no such
+        control — which is not the same as one set to low.`,
+    ]);
+  }
+  return entries.map(([term, gloss]) =>
+    `<div class="measure"><dt>${term}</dt><dd>${gloss}</dd></div>`).join('');
+}
+
 function renderTable(table, index) {
   if (!table.scored) return renderQueue(table);
   const versions = table.versions;
@@ -460,7 +507,8 @@ function renderTable(table, index) {
     (c.ranking ? `<span class="ranks">${T`ranks this table`}</span>` : '') +
     `</dt><dd>${esc(tr(c.definition))}` +
     (c.caveat ? ` <em>${esc(tr(c.caveat))}</em>` : '') +
-    (c.key === 'completeness' ? denominatorNote(table) : '') + `</dd></div>`).join('');
+    (c.key === 'completeness' ? denominatorNote(table) : '') + `</dd></div>`).join('')
+    + extraLegend(table);
   // Said under the table either way. A table with no grouping measured must not
   // read as a strict ranking just because nobody has checked.
   const groupNote = table.groups
@@ -547,6 +595,18 @@ function renderTable(table, index) {
   const theirs = {};
   if (against) against.rows.forEach(r => { theirs[r.label] = r.headline; });
 
+  // What the second figure in every cell is, said above the cells and only
+  // while they are on screen. The `both` button's own explanation was a
+  // `title=`, so a reader who tapped it on a phone -- where a `title=` cannot
+  // be opened at all -- got a triangle and a number in every one of seventeen
+  // columns with nothing anywhere saying what they were.
+  const compareNote = against
+    ? `<p class="note">${T`Every figure now carries a second one: how far
+        <code>${esc(against.versions.judge_model)}</code> was from this judge on the same row.
+        Nothing is averaged — ▴ is the other judge scoring it higher and ▾ lower, and the number
+        is the distance between the two.`}</p>`
+    : '';
+
   const body = table.rows.map((row, position) => {
     const cells = table.columns.map(c => {
       const mine = row.headline[c.key];
@@ -595,7 +655,7 @@ function renderTable(table, index) {
         ? `<span class="differs" title="${esc(tr(row.settings))}">≠ ${T`settings`}</span>`
         : '',
       row.judges_own_family
-        ? `<span class="differs" title="${T`scored by a judge from the same vendor, whose self-preference is measured in the panel below`}">${
+        ? `<span class="differs" title="${T`scored by a judge from the same vendor, whose self-preference is measured on the methods page`}">${
             T`judge's own ${esc(row.judges_own_family)}`}</span>`
         : '',
     ].filter(Boolean).join(' ');
@@ -632,6 +692,7 @@ function renderTable(table, index) {
       <h2>${tr(table.title)}</h2>
       <p class="blurb">${code(tr(table.blurb))}</p>
       ${designBlock(table)}
+      ${compareNote}
       <div class="scroll-top" aria-hidden="true"><div></div></div>
       <div class="scroll"><table data-table="${index}" data-sorted="${
         table.ranking_measure || ''}" data-descending="1">

@@ -23,7 +23,7 @@ import pytest
 
 from tnb import report, results
 from tnb.config import REPO_ROOT
-from tnb.results import Metrics, Row
+from tnb.results import Metrics, Row, Settings
 
 RUNNER = Path(__file__).parent / "support" / "run_page.js"
 
@@ -1127,8 +1127,13 @@ def test_a_row_drawn_under_a_label_still_finds_the_band_it_was_measured_for(tmp_
 
     rows = [
         _row("kimi-k3", "a-judge", 0.55),
-        _row("therapist", "a-judge", 0.33, system_type="reference-human",
-             system_label="therapist-written (TN-Eval)"),
+        _row(
+            "therapist",
+            "a-judge",
+            0.33,
+            system_type="reference-human",
+            system_label="therapist-written (TN-Eval)",
+        ),
     ]
     saturations = [
         {
@@ -1140,8 +1145,9 @@ def test_a_row_drawn_under_a_label_still_finds_the_band_it_was_measured_for(tmp_
             "indistinguishable": [["kimi-k3"], ["therapist"]],
         }
     ]
-    drawn = _flat(_run(report.render_page(report.build(rows, saturations)), tmp_path,
-                       panel="table-host"))
+    drawn = _flat(
+        _run(report.render_page(report.build(rows, saturations)), tmp_path, panel="table-host")
+    )
 
     assert '<td class="rank">2</td> <td class="name">' in drawn or (
         '<td class="rank">2</td><td class="name">' in drawn
@@ -1199,8 +1205,9 @@ def test_the_band_column_explains_itself_where_a_phone_can_read_it(tmp_path):
             "indistinguishable": [["kimi-k3"], ["gemma4"]],
         }
     ]
-    drawn = _flat(_run(report.render_page(report.build(rows, saturations)), tmp_path,
-                       panel="table-host"))
+    drawn = _flat(
+        _run(report.render_page(report.build(rows, saturations)), tmp_path, panel="table-host")
+    )
     visible = re.sub(r'title="[^"]*"', "", drawn)
 
     assert "Rows this evidence cannot tell apart share a band" in visible
@@ -1213,6 +1220,55 @@ def test_the_band_column_explains_itself_where_a_phone_can_read_it(tmp_path):
     # column's, and the column is only drawn when the bootstrap has run.
     alone = _flat(_run(report.render_page(report.build(rows)), tmp_path, panel="table-host"))
     assert "share a band" not in re.sub(r'title="[^"]*"', "", alone)
+
+
+def test_nothing_on_the_table_is_explained_only_by_hovering(tmp_path):
+    """`title=` is a mouse affordance and this page is read on phones.
+
+    Words, Marks and the reasoning-effort badge were the rest of what a tooltip
+    was the only carrier of, after Band. Each says it in the legend now, and
+    Marks says the two things a tooltip had no room for: what its badges mean,
+    and that -- like Band -- it does not sort. The stripped-tooltip trick again:
+    an assertion that can be satisfied by a `title=` proves nothing here.
+    """
+    from tnb import report
+
+    rows = [
+        _row("kimi-k3", "a-judge", 0.55),
+        _row("gpt-5.6-sol", "a-judge", 0.44, settings=Settings(effort="high", note_words=300)),
+    ]
+    drawn = _flat(_run(report.render_page(report.build(rows)), tmp_path, panel="table-host"))
+    visible = re.sub(r'title="[^"]*"', "", drawn)
+
+    assert "Median words in this model" in visible, "the Words column is a heading and a number"
+    assert "Conditions this row did not share with the others" in visible
+    assert "these are labels, not an order" in visible, "Marks never says why it will not sort"
+    assert "measured on the methods page" in visible, (
+        "the self-preference panel moved and the pointer to it did not"
+    )
+    assert "in the panel below" not in drawn, "pointing at a panel this page no longer has"
+    assert "reasoning-effort setting carries it beside its name" in visible
+
+
+def test_the_second_figure_in_every_cell_says_what_it_is(tmp_path):
+    """`both` sprinkles a triangle and a number into every cell of the table.
+
+    What the second number is lived in the button's `title=`, which is the one
+    place a reader who tapped that button cannot look.
+    """
+    from tnb import report
+
+    data = _page_data(tmp_path)
+    drawn = _flat(_run(report.render_page(data), tmp_path, panel="table-host", search="?compare=1"))
+    visible = re.sub(r'title="[^"]*"', "", drawn)
+
+    assert "Every figure now carries a second one" in visible
+    assert "Nothing is averaged" in visible
+
+    alone = _flat(_run(report.render_page(data), tmp_path, panel="table-host"))
+    assert "Every figure now carries a second one" not in alone, (
+        "said while no second figure is drawn"
+    )
 
 
 def test_the_completeness_caveat_reads_its_two_figures_off_the_table(tmp_path):
