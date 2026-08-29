@@ -396,10 +396,20 @@ stated reasons — `dekurz` and the questionnaires by decision, `episode_summary
 and `progress` because they read a previous note rather than a transcript, and
 this benchmark scores single sessions.
 
-**Same models, same sessions, same seven criteria, different format.** That is
-what makes the comparison a comparison of formats rather than of tasks, and it
-is why the criteria's `judge_prompt_version` is deliberately the same: the
-instrument does not change, only what it is shown. The generation
+**Same models, same sessions, same criteria, different format.** That is what
+makes the comparison a comparison of formats rather than of tasks, and it is why
+the criteria's `judge_prompt_version` is deliberately the same: the instrument
+does not change, only what it is shown.
+
+**"Same models" holds for eleven of them and has to be checked, not assumed.**
+e-INFRA's deployment changed between the SOAP run and the Deepsy one: `glm-5`
+came back and a `glm-5.3` appeared that had not existed two days earlier, so the
+Deepsy tracks carry thirteen models where the SOAP tracks carry eleven. Every
+SOAP model is among them, so the format comparison stands on the eleven they
+share -- but it stands on those eleven and not on a table's worth of rows, and
+anything read across the two tables has to be read on the intersection. This is
+the same reason `tnb models --probe` exists: what the endpoint serves today is
+not what it served on Tuesday. The generation
 `prompt_version` differs, so the rows are not comparable and the tables are
 separate — which is correct, and is enforced by `COMPARABILITY_KEYS` rather
 than by care.
