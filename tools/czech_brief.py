@@ -176,6 +176,14 @@ footer { margin-top: 3rem; padding-top: .8rem; border-top: 1px solid var(--rule)
 code { font-family: ui-monospace, monospace; font-size: .9em; }
 @media print {
   body { max-width: none; padding: 0; font-size: 10pt; }
+  /* `rem` is the ROOT font size and the root has none set, so a table sized in
+     rem printed at the browser default -- about 10.2pt beside 10pt of prose,
+     on paper 15mm narrower than the screen it was laid out for. The widest
+     table lost its last two columns off the right edge of the Czech print,
+     where the headings are long words. In `em` the tables scale with the
+     printed body, which is what the screen rule meant all along. */
+  table { font-size: .85em; }
+  th, td { padding: .3rem .35rem; }
   h2 { break-after: avoid; } table { break-inside: auto; }
   tr { break-inside: avoid; } .warn { break-inside: avoid; }
   .summary, .finding, .closing { break-inside: avoid; }
