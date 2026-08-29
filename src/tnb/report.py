@@ -947,13 +947,27 @@ def _current_groups(groups: dict[tuple, list[Row]]) -> tuple[dict[tuple, list[Ro
     def field(key: tuple, name: str):
         return key[results.COMPARABILITY_KEYS.index(name)]
 
-    #: Fields a lane is *not* keyed on. `harness_version` because that is what
-    #: this function chooses between. `judge_settings` because a row written
-    #: before that field existed records none, and an absent record of the
-    #: settings is not a different instrument -- it is the same instrument,
-    #: less well described. Leaving it in the lane drew two identical Gemini
-    #: tables side by side, one from each side of the commit that added it.
-    CHOSEN_BETWEEN = ("harness_version", "judge_settings")
+    #: Fields a lane is *not* keyed on -- the ones this function chooses
+    #: between rather than separates by.
+    #:
+    #: `harness_version`, because that is the thing it was written to choose.
+    #:
+    #: `judge_settings`, because a row written before that field existed records
+    #: none, and an absent record of the settings is not a different instrument
+    #: -- it is the same instrument, less well described. Leaving it in the lane
+    #: drew two identical Gemini tables side by side, one from each side of the
+    #: commit that added it.
+    #:
+    #: `judge_prompt_version`, for the reason a superseded harness is chosen
+    #: between: a rubric version is bumped when the questions change, and the
+    #: older one is then a previous attempt at the same measurement rather than
+    #: a second measurement worth drawing. The Czech tables showed this: two
+    #: rubric versions produced four tables per track, two judge buttons each
+    #: carrying the same words, and nothing on the page saying which button held
+    #: the older questions. It stays in `COMPARABILITY_KEYS` -- two versions
+    #: still may not be averaged -- and the older is now named rather than
+    #: drawn, which is what the briefing already did and the tables did not.
+    CHOSEN_BETWEEN = ("harness_version", "judge_settings", "judge_prompt_version")
 
     def lane_of(key: tuple) -> tuple:
         return tuple(
@@ -981,11 +995,15 @@ def _current_groups(groups: dict[tuple, list[Row]]) -> tuple[dict[tuple, list[Ro
         return not field(key, "judge_model") or bool(groups[key][0].judge_settings)
 
     def rank(key: tuple) -> tuple:
-        # Newer harness wins; at the same harness, the group that records its
-        # judge settings beats the one that does not. Strictly more informative
-        # supersedes strictly less, which is the same rule `latest` applies to
-        # a re-run.
-        return (field(key, "harness_version"), bool(groups[key][0].judge_settings))
+        # Newer harness wins; at the same harness, the newer rubric; at the same
+        # rubric, the group that records its judge settings beats the one that
+        # does not. Strictly more informative supersedes strictly less, which is
+        # the same rule `latest` applies to a re-run.
+        return (
+            field(key, "harness_version"),
+            field(key, "judge_prompt_version"),
+            bool(groups[key][0].judge_settings),
+        )
 
     # Only a drawable group can set the bar. A lane whose every group is
     # unpublishable leaves `best` empty for that lane, and nothing there is
@@ -994,7 +1012,7 @@ def _current_groups(groups: dict[tuple, list[Row]]) -> tuple[dict[tuple, list[Ro
     for key in groups:
         if records_its_instrument(key):
             lane = lane_of(key)
-            best[lane] = max(best.get(lane, ("", False)), rank(key))
+            best[lane] = max(best.get(lane, ("", "", False)), rank(key))
 
     # Only where the panel actually has a table. A candidate judge's rows are the
     # only thing on a track nobody else has scored, and withdrawing them would
@@ -1010,7 +1028,8 @@ def _current_groups(groups: dict[tuple, list[Row]]) -> tuple[dict[tuple, list[Ro
     for key, group in groups.items():
         harness = field(key, "harness_version")
         lane = lane_of(key)
-        current = best.get(lane, ("", False))[0]
+        current = best.get(lane, ("", "", False))[0]
+        current_rubric = best.get(lane, ("", "", False))[1]
 
         #: Why this group is not drawn. Both can be true at once, and reporting
         #: only the first produced the line "at harness 0.2.0 ... redefined in
@@ -1023,6 +1042,15 @@ def _current_groups(groups: dict[tuple, list[Row]]) -> tuple[dict[tuple, list[Ro
         # instruments and both belong on the page.
         if current and rank(key) < best[lane] and harness < current:
             reasons.append("harness")
+        # A rubric that was superseded. Bumping `judge_prompt_version` means the
+        # questions changed, so the older rows are a previous attempt at this
+        # measurement rather than a second measurement -- named, not drawn beside
+        # it. Its own reason rather than the harness one, because that rule
+        # deliberately keeps two groups at the same harness so two different
+        # judge settings can both be shown.
+        rubric = field(key, "judge_prompt_version")
+        if current_rubric and rubric and rubric < current_rubric:
+            reasons.append("rubric")
         # A judge that was tried during calibration and not chosen. Its rows are
         # real and stay in `results/`, but the leaderboard is the panel's, and
         # `gemini-2.5-pro` put two extra tables of 11 and 3 rows behind the judge
@@ -1044,6 +1072,9 @@ def _current_groups(groups: dict[tuple, list[Row]]) -> tuple[dict[tuple, list[Ro
                 "track": field(key, "track"),
                 "harness_version": harness,
                 "current_harness_version": current if "harness" in reasons else "",
+                "current_judge_prompt_version": (
+                    current_rubric if "rubric" in reasons else ""
+                ),
                 "judge_model": field(key, "judge_model"),
                 "prompt_version": field(key, "prompt_version"),
                 "judge_prompt_version": field(key, "judge_prompt_version"),
@@ -1732,6 +1763,11 @@ def _superseded_reasons(gone: dict) -> list[str]:
         "harness": (
             f"the measures were redefined in `{gone.get('current_harness_version')}` "
             "and the two are not comparable"
+        ),
+        "rubric": (
+            "the questions were rewritten in "
+            f"`{gone.get('current_judge_prompt_version')}`, so these rows answer an "
+            "earlier version of them"
         ),
         "settings": (
             "the judge's settings were not recorded, so the rows cannot be shown to "

@@ -162,20 +162,52 @@ def test_two_rubric_versions_do_not_collide_into_one_table_id():
     """`report.build` asserts that table ids are distinct, and the id was built
     from four things where six decide a group. Two rubric versions of one track
     under one judge produced one id, and the page stopped rather than drawing
-    them -- which is the assert doing its job and the id not doing its own."""
+    them -- which is the assert doing its job and the id not doing its own.
+
+    The older version is no longer drawn beside the newer, so this exercises the
+    id rather than the page: the property that matters is that the version is
+    part of the id at all, and it would matter again the moment two versions are
+    both current -- which is what a second corpus at a new rubric would be.
+    """
     from tnb import report
 
-    rows = [
-        _row(judge_prompt_version="czech-criteria-v1"),
-        _row(judge_prompt_version="czech-criteria-v2"),
-    ]
-    data = report.build(rows)
+    def table_of(version: str) -> dict:
+        row = _row(judge_prompt_version=version)
+        return {
+            "track": row.track,
+            "versions": {
+                "judge_model": row.judge_model,
+                "judge_prompt_version": row.judge_prompt_version,
+                "harness_version": row.harness_version,
+                "prompt_version": row.prompt_version,
+                "judge_settings": row.judge_settings,
+            },
+        }
 
-    ids = [table["id"] for table in data["tables"]]
-    assert len(ids) == 2
-    assert len(set(ids)) == 2
-    assert any("czech-criteria-v1" in table_id for table_id in ids)
-    assert any("czech-criteria-v2" in table_id for table_id in ids)
+    first = report._table_id(table_of("czech-criteria-v1"))
+    second = report._table_id(table_of("czech-criteria-v2"))
+
+    assert first != second
+    assert "czech-criteria-v1" in first
+    assert "czech-criteria-v2" in second
+
+
+def test_a_superseded_rubric_is_named_by_the_tables_too():
+    """The briefing named the older rubric and the tables drew it, from the same
+    file on the same morning: four tables a track, two judge buttons each
+    carrying the same words, and nothing saying which held the older questions.
+    """
+    from tnb import report, results
+
+    old = _row(judge_prompt_version="czech-criteria-v1", scored_at="2026-08-28T10:00:00Z")
+    new = _row(judge_prompt_version="czech-criteria-v2", scored_at="2026-08-28T12:00:00Z")
+    groups = results.comparable_groups(results.latest([old, new]))
+    drawn, gone = report._current_groups(groups)
+
+    assert len(drawn) == 1
+    assert next(iter(drawn.values()))[0].judge_prompt_version == "czech-criteria-v2"
+    assert len(gone) == 1 and gone[0]["reasons"] == ["rubric"]
+    assert gone[0]["current_judge_prompt_version"] == "czech-criteria-v2"
 
 
 def test_a_superseded_rubric_is_named_and_not_drawn():
