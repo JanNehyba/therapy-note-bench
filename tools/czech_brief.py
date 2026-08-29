@@ -31,7 +31,13 @@ from collections import defaultdict
 from pathlib import Path
 
 from tnb import i18n, results
-from tnb.report import COLUMNS, MEASURE_TABLES, TRACK_BLURBS, TRACK_TITLES
+from tnb.report import (
+    COLUMNS,
+    MEASURE_TABLES,
+    TRACK_BLURBS,
+    TRACK_SWITCH_LABELS,
+    TRACK_TITLES,
+)
 from tnb.scoring import czech as czech_scorer
 from tnb.tasks import TASKS
 
@@ -834,11 +840,12 @@ LENGTH_DEEPSY = (
 LENGTH_BUYS = (
     "The two languages then pull in opposite directions, and this is the most useful "
     "thing to know before reading any table above. In English a longer note scores "
-    "higher for completeness under both judges. In Czech it scores lower on 38 of the "
-    "48 criterion-judge coefficients, and the exceptions are named rather than rounded "
-    "away: two hold under BOTH judges, and both are in the Deepsy format -- calques on "
-    "the real half and agreement on the translated one. A column is printed here only "
-    "when "
+    "higher for completeness under both judges. In Czech it scores lower on {against} "
+    "of the {total} criterion-and-judge coefficients -- {soap_against} of "
+    "{soap_total} on the SOAP halves and {deepsy_against} of {deepsy_total} in the "
+    "Deepsy format, which is one reason the two are never pooled -- and the exceptions "
+    "are named rather than rounded away: the columns where the coefficient stays "
+    "positive under BOTH judges are {positive}. A column is printed here only when "
     "both judges agree on the direction and at least one of them reaches 0.40; both "
     "numbers are shown, so a column the two judges feel differently strongly about is "
     "visible as that rather than averaged away."
@@ -1698,9 +1705,14 @@ def _conclusion(rows: list[results.Row]) -> str:
     #     the one this repository cares about most: three models were asked in
     #     only one of the two formats, so an intersection across both would
     #     demote a model for a question nobody put to it. The second is that
-    #     section 4 measures Deepsy notes as longer and length as costing points
-    #     on every one of these criteria, so a pooled claim would quietly do the
-    #     concluding that section refuses to do.
+    #     nobody has rated a Deepsy note by hand, so the two formats do not have
+    #     the same evidence behind them.
+    #
+    #     What this sentence used to give as the reason -- Deepsy notes are
+    #     longer and length costs points on every one of these criteria -- is
+    #     refuted by section 4 of the same document, and refuted hardest on the
+    #     Deepsy side: two of the coefficients hold positive under both judges
+    #     and both of them are Deepsy. `_length_signs` counts what was measured.
     top_d, tables_d = shared(deepsy, 0)
     bottom_d, _ = shared(deepsy, -1)
     if tables_d:
@@ -1710,10 +1722,15 @@ def _conclusion(rows: list[results.Row]) -> str:
                 "tables, and it is counted separately rather than pooled with the four "
                 "above: {top} in the top band of all of them and {bottom} in the bottom "
                 "band of all of them. The two formats are not added together because "
-                "not every model was asked in both, and because a Deepsy note is longer "
-                "than a SOAP one -- which this document measures below as costing "
-                "points on every one of these criteria."
-            ).format(top=end(top_d), bottom=end(bottom_d), tables=tables_d)
+                "not every model was asked in both, because a Deepsy note is written to "
+                "a different prompt and comes out a different shape, and because the "
+                "one native-speaker anchor this project has was measured on SOAP notes "
+                "alone. Length does not settle it either way: it runs against "
+                "{soap_against} of the {soap_total} criterion-and-judge coefficients on "
+                "the SOAP halves and against {deepsy_against} of {deepsy_total} in the "
+                "Deepsy format, so it is not the uniform penalty one number could stand "
+                "for."
+            ).format(top=end(top_d), bottom=end(bottom_d), tables=tables_d, **_length_signs())
         )
 
     # 1c. And who is missing from that count, with the reason. A model that
@@ -1893,6 +1910,53 @@ def _payload(name: str) -> dict:
         return json.loads(path.read_text(encoding="utf-8"))
     except (OSError, ValueError):
         return {}
+
+
+def _length_signs() -> dict[str, str]:
+    """How the length coefficients actually run, counted per note format.
+
+    Three sentences in this document said length costs points on EVERY one of
+    these criteria, and one of them was the reason given for not pooling the two
+    formats -- so the claim was worst exactly where it was load-bearing.
+    Section 4 measures otherwise: on the SOAP halves most coefficients run
+    against length, on the Deepsy ones fewer do, and the coefficients that hold
+    positive under BOTH judges are in the Deepsy format. A uniform penalty is
+    not what was measured.
+
+    Counted from `local/czech-length.json` rather than typed, for the reason
+    every other figure here is: a sentence carrying its own number is a sentence
+    the next run makes quietly false, and this one had already gone false twice.
+    Only the four criteria tracks, because a PDSQI column is a different
+    instrument and `succinct` is *supposed* to fall with length.
+    """
+    blocks = _payload("czech-length.json").get("czech") or {}
+    counts = {"soap": [0, 0], "deepsy": [0, 0]}
+    positive: list[str] = []
+    for name, tracks in (("soap", SOAP_CRITERIA_TRACKS), ("deepsy", DEEPSY_CRITERIA_TRACKS)):
+        for track in tracks:
+            judges = (blocks.get(track) or {}).get("judges") or {}
+            seen: dict[str, list[float]] = {}
+            for found in judges.values():
+                for key, value in (found.get("correlations") or {}).items():
+                    seen.setdefault(key, []).append(value)
+            for key, values in sorted(seen.items()):
+                counts[name][0] += sum(1 for value in values if value < 0)
+                counts[name][1] += len(values)
+                # Under BOTH judges, never under one: the reading rule this
+                # document applies everywhere else. One judge alone is a fact
+                # about that judge and this document has a section for those.
+                if len(values) > 1 and all(value > 0 for value in values):
+                    label = MEASURE_TABLES.get(track, {}).get(key, {}).get("label", key)
+                    positive.append(f"{_t(label)} ({_t(TRACK_SWITCH_LABELS.get(track, track))})")
+    return {
+        "against": str(counts["soap"][0] + counts["deepsy"][0]),
+        "total": str(counts["soap"][1] + counts["deepsy"][1]),
+        "soap_against": str(counts["soap"][0]),
+        "soap_total": str(counts["soap"][1]),
+        "deepsy_against": str(counts["deepsy"][0]),
+        "deepsy_total": str(counts["deepsy"][1]),
+        "positive": _join_words(positive) if positive else _t("no column at all"),
+    }
 
 
 def _dead_columns(rows: list[results.Row]) -> tuple[int, int, list[str], float, str]:
@@ -2137,8 +2201,13 @@ def _formats() -> str:
             _t(FORMATS_CONFOUND).format(
                 longer=longer,
                 models=len(both),
+                # The roster the criteria table above compares on, which is not
+                # the roster the word counts intersect to: the sentence said
+                # "ten models" as a word, beside a placeholder holding eleven.
+                compared=shared_models,
                 soap=int(sorted(soap_words[m] for m in both)[len(both) // 2]),
                 deepsy=int(sorted(deepsy_words[m] for m in both)[len(both) // 2]),
+                **_length_signs(),
             )
         )
         + "</p></div>"
@@ -2170,10 +2239,12 @@ FORMATS_CONFOUND = (
     "Do not read that as the Deepsy format producing worse Czech. It might, and "
     "these numbers cannot say so, because the two things move together: a Deepsy "
     "note is LONGER -- {longer} of {models} models write more in it, a median of "
-    "{deepsy} words against {soap} -- and this document has already measured that a "
-    "longer note scores lower on every one of these criteria, because each asks "
-    "whether there is a fault ANYWHERE in it. Format and length point the same way "
-    "here and ten models cannot separate them."
+    "{deepsy} words against {soap} -- and this document measures below that length "
+    "runs against most of these criteria, {soap_against} of the {soap_total} "
+    "criterion-and-judge coefficients on the SOAP halves and {deepsy_against} of "
+    "{deepsy_total} in the Deepsy format, because each asks whether there is a fault "
+    "ANYWHERE in it. Format and length point the same way here and {compared} models "
+    "cannot separate them."
 )
 
 
@@ -2260,7 +2331,7 @@ def _length() -> str:
     # --- what length buys ---------------------------------------------------
     table = _length_table(data)
     if table:
-        parts.append("<p>" + html.escape(_t(LENGTH_BUYS)) + "</p>")
+        parts.append("<p>" + html.escape(_t(LENGTH_BUYS).format(**_length_signs())) + "</p>")
         parts.append(table)
         warning = _length_warning(data)
         if warning:
@@ -2639,10 +2710,10 @@ def _dominance(rows: list[results.Row]) -> str:
     it, rather than being counted either way.
 
     **Inside one note format, never across the two.** Each track gets its own
-    block. A SOAP note and a Deepsy note are different lengths under different
-    instructions, and this document has already measured that a longer note
-    loses points on every one of these criteria, so a pair read across the two
-    formats would be reporting that confound as a verdict.
+    block. The two formats were not asked of the same models, a Deepsy note is
+    written to a different prompt, and length does not weigh on them alike --
+    `_length_signs` counts how differently -- so a pair read across the two
+    formats would be reporting those differences as a verdict.
     """
     latest = [row for row in results.latest(rows) if row.is_scored]
     blocks = []
@@ -2732,11 +2803,14 @@ def _dominance(rows: list[results.Row]) -> str:
                 "least as good as another on every criterion, under each judge "
                 "separately, and strictly better on at least one. Everything not "
                 "listed here is a pair this project cannot separate. Each block "
-                "below is one note format, and a pair holds only inside it: a "
-                "Deepsy note is longer than a SOAP one, and length costs points on "
-                "every one of these criteria, so a pair read across the two would be "
-                "reporting that confound as a verdict."
-            )
+                "below is one note format, and a pair holds only inside it: the two "
+                "formats were not asked of the same models, a Deepsy note is written to "
+                "a different prompt, and length does not weigh on them alike -- it runs "
+                "against {soap_against} of the {soap_total} criterion-and-judge "
+                "coefficients on the SOAP halves and against {deepsy_against} of "
+                "{deepsy_total} in the Deepsy format. A pair read across the two would "
+                "be reporting those differences as a verdict."
+            ).format(**_length_signs())
         )
         + "</p>"
         + "".join(blocks)
