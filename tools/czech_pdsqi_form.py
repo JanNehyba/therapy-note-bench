@@ -51,38 +51,67 @@ ASKED = ("useful", "organized", "synthesized")
 #: and is shown beside the Czech rather than replaced by it: the judge was asked
 #: in English, and a rater answering a paraphrase is not answering the same
 #: question. The Czech is a reading aid, and it says so on the page.
+#: Czech for the three attributes asked here: the question, a gloss, and the
+#: five anchors.
+#:
+#: **These are translations, not rewordings, and the difference cost something.**
+#: The rater and the judge have to be answering the same question or the
+#: agreement figure between them measures nothing. The first version of this
+#: table paraphrased: `useful` lost that PDSQI-9 counts individual ASSERTIONS
+#: rather than the note as a whole, `organized` dropped the parenthetical that
+#: DEFINES what may count as a grouping, and `synthesized` was not a translation
+#: at all -- it ran along an invented axis (context, reasoning, joined-up)
+#: instead of the published one, and its anchor 1 said there was no reasoning
+#: where the instrument says the reasoning is WRONG. Two different notes.
+#:
+#: Jan caught it by reading anchor 4 of `useful` and finding it unusable. That
+#: one is a faithful translation: the instrument's own wording is what is
+#: opaque, and it is not ours to fix -- see `pdsqi.ATTRIBUTES`. So the form now
+#: shows the English beside every Czech anchor, and this is checkable by eye
+#: instead of taken on trust.
 CS = {
     "useful": (
         "Je zápis užitečný?",
-        "Je v něm všechno, co potřebuje ten, kdo ho bude číst — a nic navíc.",
+        "Obsahuje všechno, co je užitečné pro toho, komu je určen — a nic navíc.",
         [
-            "Nic v zápisu není pro čtenáře podstatné.",
-            "Něco v zápisu podstatné je.",
-            "Podstatné to je, ale míra podrobnosti nesedí (moc, nebo málo).",
-            "Nic nepodstatného navíc, ale něco je jen možná podstatné.",
-            "Nic nepodstatného navíc a podrobnost přesně sedí.",
+            "Žádné z tvrzení není pro cílového čtenáře relevantní.",
+            "Některá tvrzení jsou pro cílového čtenáře relevantní.",
+            "Tvrzení jsou pro cílového čtenáře relevantní, ale míra podrobnosti "
+            "není přiměřená (příliš podrobné, nebo málo podrobné).",
+            "Nepřidává žádná nerelevantní tvrzení, ale některá jsou pro cílového "
+            "čtenáře relevantní jen možná.",
+            "Nepřidává žádná nerelevantní tvrzení a míra podrobnosti je pro "
+            "cílového čtenáře přiměřená.",
         ],
     ),
     "organized": (
         "Je zápis dobře uspořádaný?",
-        "Je poskládaný tak, že čtenář pochopí průběh.",
+        "Je utvořený a strukturovaný tak, aby čtenář pochopil klinický průběh.",
         [
-            "Všechno je přeházené a seskupení nedává smysl.",
-            "Něco je přeházené NEBO seskupení nedává smysl.",
-            "Pořadí ani seskupení se nijak neliší od přepisu sezení.",
-            "Logické pořadí NEBO logické seskupení, ale ne obojí.",
-            "Logické pořadí i seskupení, všechno.",
+            "Všechna tvrzení jsou uvedena mimo pořadí a seskupení nedávají smysl "
+            "(zcela neuspořádané).",
+            "Některá tvrzení jsou mimo pořadí, NEBO seskupení nedává smysl.",
+            "Pořadí ani seskupení (časové, nebo podle okruhů či problémů) se nijak "
+            "neliší od přepisu sezení.",
+            "Logické pořadí NEBO logické seskupení (časové, nebo podle okruhů či "
+            "problémů) u všech tvrzení, ale ne obojí.",
+            "Všechna tvrzení mají logické pořadí i seskupení (časové, nebo podle "
+            "okruhů či problémů) — zcela uspořádané.",
         ],
     ),
     "synthesized": (
-        "Je v zápisu syntéza?",
-        "Je z něj zřejmé, kde klient je a proč — ne jen výčet toho, co padlo.",
+        "Je v zápisu potřeba zobecnění?",
+        "Zápis dává najevo porozumění stavu klienta a schopnost sestavit plán péče.",
         [
-            "Není tam žádný kontext ani zdůvodnění.",
-            "Trochu kontextu, ale zdůvodnění chybí.",
-            "Kontext i zdůvodnění, ale nespojené dohromady.",
-            "Spojené, ale něco podstatného chybí.",
-            "Celistvý obraz: kde klient je, proč, a co z toho plyne.",
+            "Spojení mezi tvrzeními jsou chybně odvozená nebo chybně seskupená.",
+            "Zobecňuje se tam, kde to není potřeba, NEBO jsou tvrzení seskupena "
+            "správně, ale nevhodně.",
+            "Tvrzení stojí samostatně, bez jakéhokoli odvození či seskupení, "
+            "přestože se nabízelo (promarněná příležitost zobecnit).",
+            "Tvrzení jsou seskupena do témat, ale odvození k závěrečné, klinicky "
+            "významné diagnóze či léčbě je jen omezené.",
+            "Jde za pouhé seskupení souvisejících událostí a odvozuje z nich zápis, "
+            "který je plně integrovaný do celkového klinického obrazu.",
         ],
     ),
 }
@@ -152,6 +181,10 @@ def build(notes: int, corpus: str) -> str:
         for key in ASKED:
             attribute = attributes[key]
             question, gloss, anchors = CS[key]
+            # The published anchors beside the Czech ones. The instrument is the
+            # English; the Czech is a translation of it, and a translation that
+            # drifts is only visible if both are on the page.
+            english = "".join(f"<li>{html.escape(text)}</li>" for text in attribute.anchors)
             buttons = "".join(
                 f'<label class="opt"><input type="radio" name="{index}-{key}" value="{n}">'
                 f'<span class="n">{n}</span>'
@@ -162,9 +195,11 @@ def build(notes: int, corpus: str) -> str:
                 f'<div class="q" data-key="{key}">'
                 f'<p class="qt">{html.escape(question)}</p>'
                 f'<p class="qg">{html.escape(gloss)}</p>'
-                f"<details><summary>anglické znění, které dostal soudce</summary>"
-                f"<p>{html.escape(attribute.question)} {html.escape(attribute.definition)}</p>"
-                f"</details>"
+                f'<details class="orig"><summary>anglický originál, '
+                f"který dostal soudce</summary>"
+                f"<p>{html.escape(attribute.question)} "
+                f"{html.escape(attribute.definition)}</p>"
+                f"<ol>{english}</ol></details>"
                 f'<div class="opts">{buttons}</div></div>'
             )
         session = behind.get(candidate.session_id)
@@ -247,6 +282,9 @@ TEMPLATE = """<!doctype html>
     color:var(--muted); }}
   .turn.therapist .lbl {{ background:var(--accent-soft); color:var(--accent); }}
   .turn.client .said {{ font-weight:500; }}
+  .orig ol {{ margin:.4rem 0 0; padding-left:1.4rem; color:var(--muted);
+    font-size:.82rem; line-height:1.5; }}
+  .orig li {{ margin:0 0 .2rem; }}
   .q {{ border-top:1px solid var(--rule); padding-top:.9rem; margin-top:.9rem; }}
   .q:first-child {{ border-top:none; padding-top:0; margin-top:0; }}
   .qt {{ font-weight:600; margin:0 0 .1rem; }}
