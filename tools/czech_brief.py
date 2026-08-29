@@ -2481,10 +2481,21 @@ def _dominance(rows: list[results.Row]) -> str:
     Computed over the criteria a model was scored on under both judges. A pair
     where either judge has no value for a criterion is simply not compared on
     it, rather than being counted either way.
+
+    **Inside one note format, never across the two.** Each track gets its own
+    block. A SOAP note and a Deepsy note are different lengths under different
+    instructions, and this document has already measured that a longer note
+    loses points on every one of these criteria, so a pair read across the two
+    formats would be reporting that confound as a verdict.
     """
     latest = [row for row in results.latest(rows) if row.is_scored]
     blocks = []
-    for track in (results.TRACK_CZECH_REAL, results.TRACK_CZECH_TRANSLATED):
+    for track in (
+        results.TRACK_CZECH_REAL,
+        results.TRACK_CZECH_TRANSLATED,
+        results.TRACK_DEEPSY_REAL,
+        results.TRACK_DEEPSY_TRANSLATED,
+    ):
         here = [row for row in latest if row.track == track]
         if not here:
             continue
@@ -2497,6 +2508,11 @@ def _dominance(rows: list[results.Row]) -> str:
             continue
 
         systems = sorted(set.intersection(*(set(t) for t in tables.values())))
+        # The columns this track's table actually draws, not every criterion the
+        # scorer knows. They are the same six on all four criteria tracks today,
+        # but reading them from `COLUMNS` is what keeps a pair from being judged
+        # on a column the reader was never shown.
+        compared = [key for key, _ in COLUMNS[track]]
         found = []
         for first in systems:
             for second in systems:
@@ -2504,7 +2520,7 @@ def _dominance(rows: list[results.Row]) -> str:
                     continue
                 at_least, strictly = True, False
                 for table in tables.values():
-                    for key in czech_scorer.CRITERION_KEYS:
+                    for key in compared:
                         a = table[first].get(key)
                         b = table[second].get(key)
                         if a is None or b is None:
@@ -2559,7 +2575,11 @@ def _dominance(rows: list[results.Row]) -> str:
                 "not a claim. What survives both of them is dominance: one model at "
                 "least as good as another on every criterion, under each judge "
                 "separately, and strictly better on at least one. Everything not "
-                "listed here is a pair this project cannot separate."
+                "listed here is a pair this project cannot separate. Each block "
+                "below is one note format, and a pair holds only inside it: a "
+                "Deepsy note is longer than a SOAP one, and length costs points on "
+                "every one of these criteria, so a pair read across the two would be "
+                "reporting that confound as a verdict."
             )
         )
         + "</p>"

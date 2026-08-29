@@ -546,12 +546,18 @@ CS: dict[str, str] = {
     "claim. What survives both of them is dominance: one model at least as good as "
     "another on every criterion, under each judge separately, and strictly better on "
     "at least one. Everything not listed here is a pair this project cannot "
-    "separate.": (
+    "separate. Each block below is one note format, and a pair holds only inside it: "
+    "a Deepsy note is longer than a SOAP one, and length costs points on every one of "
+    "these criteria, so a pair read across the two would be reporting that confound "
+    "as a verdict.": (
         "Dva soudci řadí modely různě, takže umístění v tabulce není tvrzení. Co "
         "obstojí u obou, je dominance: model, který je aspoň tak dobrý jako jiný "
         "v každém kritériu, u každého soudce zvlášť, a aspoň v jednom je striktně "
         "lepší. Všechno, co tu není vypsané, je dvojice, kterou tenhle projekt "
-        "neumí odlišit."
+        "neumí odlišit. Každý blok níž je jeden formát zápisu a dvojice platí jen "
+        "uvnitř něj: zápis Deepsy je delší než SOAP a délka stojí body v každém "
+        "z těchto kritérií, takže dvojice čtená napříč oběma formáty by ohlašovala "
+        "tenhle zmatek jako výsledek."
     ),
     "is at least as good as": "je aspoň tak dobrý jako",
     "possible pairs.": "možných dvojic.",
