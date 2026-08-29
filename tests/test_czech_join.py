@@ -248,7 +248,9 @@ def test_both_judges_of_the_current_rubric_survive_finishing_apart():
     )
     assert "gemini-3.1-pro-preview" in page
     assert "gpt-5.6-terra" in page
-    assert page.count("rubric czech-criteria-v2") == 2
+    # One caption now, not one per judge: both judges share a table, so the
+    # rubric is stated once and each cell carries both of their numbers.
+    assert page.count("rubric czech-criteria-v2") == 1
 
 
 # --- the Czech briefing -----------------------------------------------------

@@ -1536,11 +1536,11 @@ _TRACK_REGISTRIES = {
         "takže kvalita modelu tam a jeho kvalita tady jsou o týchž sezeních a o témž "
         "přístroji."
     ),
-    "Seven yes/no criteria about the Czech, asked of the note alone. Each column is the share of"
+    "Six yes/no criteria about the Czech, asked of the note alone. Each column is the share of"
     " notes free of that fault. **Ten sessions with one client, so adjacent positions are not"
     " separable** -- and the generation prompt is a translation of TN-Eval's rather than a"
     " reproduction of anything.": (
-        "Sedm kritérií ano/ne o té češtině, kladených samotnému zápisu. Každý sloupec je podíl "
+        "Šest kritérií ano/ne o té češtině, kladených samotnému zápisu. Každý sloupec je podíl "
         "zápisů, které tou vadou netrpí. **Deset sezení s jedním klientem, takže sousední pozice "
         "nejsou oddělitelné** — a generovací prompt je překlad promptu z TN-Eval, ne reprodukce "
         "čehokoli."

@@ -103,6 +103,8 @@ th:first-child, td:first-child { text-align: left; white-space: nowrap; }
 thead th { border-bottom: 2px solid var(--ink); font-weight: 600; vertical-align: bottom; }
 tbody tr:nth-child(even) { background: #f6f7f9; }
 .dash { color: var(--muted); }
+td.differ { background: #fdf4e8; }
+tr.place td { border-top: 2px solid var(--rule); }
 dl { margin: .6rem 0 0; }
 dt { font-weight: 600; font-family: "Source Sans 3", system-ui, sans-serif;
      font-size: .85rem; margin-top: .7rem; }
@@ -397,6 +399,147 @@ def _scale_line(track: str) -> str:
         "Higher is better throughout. Most columns are rated 1 to 5; the last is the "
         "share of notes free of the fault, from 0 to 1."
     )
+
+
+def _dominates(first: dict, second: dict, keys, tables: dict) -> bool:
+    """Whether `first` is at least as good as `second` everywhere, and better once.
+
+    Under every judge, on every column both were scored on. A column where
+    either has no value is not compared rather than counted either way -- an
+    absence is not a win and it is not a loss.
+    """
+    strictly = False
+    for table in tables.values():
+        left, right = table.get(first), table.get(second)
+        if left is None or right is None:
+            return False
+        for key in keys:
+            a, b = left.get(key), right.get(key)
+            if a is None or b is None:
+                continue
+            if a < b - 1e-9:
+                return False
+            if a > b + 1e-9:
+                strictly = True
+    return strictly
+
+
+def _dominance_places(systems: list[str], keys, tables: dict) -> dict[str, int]:
+    """A place per system: how many other systems dominate it.
+
+    Not a rank from 1 to n. Two systems neither of which dominates the other get
+    the same number, which is the point -- the evidence does not order them, and
+    a table that numbers them anyway invents the part the reader most wants.
+    """
+
+    def beaten_by(system: str) -> int:
+        return sum(
+            1 for other in systems if other != system and _dominates(other, system, keys, tables)
+        )
+
+    return {system: beaten_by(system) for system in systems}
+
+
+def _merged_table(track: str, groups: list[list[results.Row]]) -> str:
+    """One table for a track, with every judge's value in every cell.
+
+    Twelve tables became six. Nothing is averaged: the two numbers sit side by
+    side, so a model the judges disagree about shows it in the cell rather than
+    on another page.
+
+    Rows are ordered by dominance and models nothing separates share a place.
+    Within a shared place they are alphabetical, which is arbitrary and says so
+    by being alphabetical rather than by looking like a ranking.
+    """
+    rows_by_judge: dict[str, dict[str, results.Row]] = {}
+    for group in groups:
+        judge = group[0].judge_model or "?"
+        rows_by_judge[judge] = {row.system_id: row for row in group}
+    judges = sorted(rows_by_judge)
+    if not judges:
+        return ""
+
+    columns = COLUMNS[track]
+    measures = MEASURE_TABLES[track]
+    every = [row for group in groups for row in group]
+    varying = _varying(track, every)
+    keys = [key for key, _ in columns]
+
+    systems = sorted(set.intersection(*(set(v) for v in rows_by_judge.values())))
+    tables = {
+        judge: {system: rows_by_judge[judge][system].metrics.headline for system in systems}
+        for judge in judges
+    }
+    places = _dominance_places(systems, varying or keys, tables)
+
+    def index_of(system: str) -> float:
+        found = [
+            _rank_of(track, rows_by_judge[judge][system], varying)
+            for judge in judges
+            if system in rows_by_judge[judge]
+        ]
+        return sum(found) / len(found) if found else -1.0
+
+    ordered = sorted(systems, key=lambda s: (places[s], -index_of(s), s))
+
+    head = f"<th>{_t('Order')}</th>" + "".join(
+        f"<th>{html.escape(_t(measures[key]['label']))}</th>" for key, _ in columns
+    )
+    body, shared = [], []
+    previous = None
+    for system in ordered:
+        place = places[system]
+        mark = "" if place == previous else " class='place'"
+        previous = place
+        cells = []
+        for key, digits in columns:
+            values = [
+                _fmt(rows_by_judge[judge][system].metrics.headline.get(key), digits)
+                for judge in judges
+            ]
+            differ = len({v for v in values if v != "--"}) > 1
+            joined = " / ".join(values)
+            css = " class='differ'" if differ else ""
+            cells.append(f"<td{css}>{joined}</td>")
+        index = " / ".join(
+            f"{_rank_of(track, rows_by_judge[judge][system], varying):.2f}" for judge in judges
+        )
+        notes = " / ".join(
+            str(
+                rows_by_judge[judge][system].n_sessions_scored
+                - rows_by_judge[judge][system].n_sessions_partial
+            )
+            for judge in judges
+        )
+        body.append(
+            f"<tr{mark}><td>{html.escape(system)}</td><td>{notes}</td>"
+            f"<td><strong>{index}</strong></td>{''.join(cells)}</tr>"
+        )
+        shared.append(place)
+
+    ties = sum(1 for place in set(shared) if shared.count(place) > 1)
+    lead = _t(MERGED_LEAD).format(judges=_join_words(judges))
+    order_line = _t(MERGED_ORDER).format(places=len(set(shared)), systems=len(systems), tied=ties)
+    return (
+        f"<p class='sub'>{html.escape(lead)} {html.escape(order_line)} "
+        f"{html.escape(_scale_line(track))}</p>" + f"<table><thead><tr><th>{_t('Model')}</th>"
+        f"<th>{_t('Notes in the mean')}</th>{head}</tr></thead>"
+        f"<tbody>{''.join(body)}</tbody></table>"
+    )
+
+
+MERGED_LEAD = (
+    "Every cell holds both judges, {judges}, in that order and never averaged: "
+    "where they disagree about a model is the only control this track has, so it "
+    "is shown rather than smoothed. A cell whose two numbers differ is marked."
+)
+MERGED_ORDER = (
+    "The rows are ordered by dominance -- a model is above another only when it is "
+    "at least as good on every column under BOTH judges -- so models the evidence "
+    "cannot separate share a place, and {systems} models fall into {places} places "
+    "of which {tied} hold more than one. Within a place the order is alphabetical "
+    "and means nothing."
+)
 
 
 def _table(track: str, rows: list[results.Row]) -> str:
@@ -1115,6 +1258,15 @@ def _join() -> str:
     )
 
 
+#: What to say instead of a table in which nothing cleared the test.
+EXTERNAL_NOTHING = (
+    "Nothing here. All {cells} coefficients between {what} and what this project "
+    "measures are inside what chance produces at this sample size, under both "
+    "judges. Printed as a sentence rather than as a grid of numbers a reader has "
+    "to work out says nothing."
+)
+
+
 def _external() -> str:
     """Whether a model's general capability predicts the notes it writes.
 
@@ -1151,6 +1303,7 @@ def _external() -> str:
     blocks = []
     for label, heading in outside.items():
         rows = []
+        significant = 0
         for measure, name in labels.items():
             cells = []
             drawn = False
@@ -1160,6 +1313,7 @@ def _external() -> str:
                     cells.append("<td class='dash'>--</td>")
                     continue
                 drawn = True
+                significant += entry["p"] < 0.05
                 strong = "<strong>" if entry["p"] < 0.05 else ""
                 close = "</strong>" if entry["p"] < 0.05 else ""
                 cells.append(
@@ -1168,13 +1322,34 @@ def _external() -> str:
                 )
             if drawn:
                 rows.append(f"<tr><td>{html.escape(_t(name))}</td>" + "".join(cells) + "</tr>")
-        if rows:
-            head = "".join(f"<th>{html.escape(j)}</th>" for j in judges)
+        if not rows:
+            continue
+        # A table where nothing cleared the test is a grid of noise. Say the
+        # result in a sentence instead: eight coefficients, none of them
+        # separable from chance, is a finding and not a table.
+        if not significant:
             blocks.append(
-                f"<h3>{html.escape(_t(heading))}</h3>"
-                f"<table><thead><tr><th>{_t('Measured here')}</th>{head}</tr></thead>"
-                f"<tbody>{''.join(rows)}</tbody></table>"
+                f"<h3>{html.escape(_t(heading))}</h3><p>"
+                + html.escape(
+                    _t(EXTERNAL_NOTHING).format(
+                        what=_t(heading).lower(), cells=len(rows) * len(judges)
+                    )
+                )
+                + "</p>"
             )
+            continue
+        # The judge is the COLUMN, and the header used to be the bare model
+        # name -- so a table about model capability appeared to have two of the
+        # vendors' models as its subjects. They are not measured here; they are
+        # who was asked.
+        head = "".join(
+            f"<th>{html.escape(_t('as {judge} sees it').format(judge=j))}</th>" for j in judges
+        )
+        blocks.append(
+            f"<h3>{html.escape(_t(heading))}</h3>"
+            f"<table><thead><tr><th>{_t('Measured here')}</th>{head}</tr></thead>"
+            f"<tbody>{''.join(rows)}</tbody></table>"
+        )
     if not blocks:
         return ""
 
@@ -1655,9 +1830,7 @@ def _length() -> str:
         parts.append(
             "<p>"
             + html.escape(
-                _t(LENGTH_ASKED).format(
-                    limit=deepsy_limit, quiet=quiet, families=len(asked)
-                )
+                _t(LENGTH_ASKED).format(limit=deepsy_limit, quiet=quiet, families=len(asked))
             )
             + "</p>"
         )
@@ -2464,21 +2637,30 @@ def build(rows: list[results.Row]) -> str:
             drawn[0].judge_prompt_version for key, drawn in groups.items() if key not in current
         }
         ordered = sorted(current.values(), key=lambda drawn: drawn[0].judge_model or "")
-        for drawn in ordered:
-            first = drawn[0]
-            notes = sum(row.n_sessions_scored for row in drawn)
-            # The judge is a caption, not a heading. As a heading it appeared
-            # once per track per judge -- eight identical entries a reader
-            # cannot navigate by, in a document whose complaint was repetition.
+        # One table a track, with both judges in every cell, when there are two.
+        # Twelve tables for six tracks made a reader flip between two grids to
+        # compare one model, and the judges' disagreement -- the only control
+        # this track has -- was the thing that flipping hid.
+        if len(ordered) > 1:
+            first = ordered[0][0]
+            notes = sum(row.n_sessions_scored for group in ordered for row in group)
             sections.append(
-                f"<p class='sub'><strong>{_t('Judged by')} "
-                f"{html.escape(first.judge_model or 'unknown')}</strong> &middot; "
-                f"{len(drawn)} {_t('models')}, {notes} {_t('notes')}, "
+                f"<p class='sub'>{len(ordered[0])} {_t('models')}, {notes} {_t('notes')}, "
                 f"{_t('rubric')} {html.escape(first.judge_prompt_version)}</p>"
-                + _table(track, drawn)
+                + _merged_table(track, ordered)
             )
-        if len({drawn[0].judge_model for drawn in ordered}) > 1:
             two_judges = True
+        else:
+            for drawn in ordered:
+                first = drawn[0]
+                notes = sum(row.n_sessions_scored for row in drawn)
+                sections.append(
+                    f"<p class='sub'><strong>{_t('Judged by')} "
+                    f"{html.escape(first.judge_model or 'unknown')}</strong> &middot; "
+                    f"{len(drawn)} {_t('models')}, {notes} {_t('notes')}, "
+                    f"{_t('rubric')} {html.escape(first.judge_prompt_version)}</p>"
+                    + _table(track, drawn)
+                )
         for version in withdrawn:
             withdrawn_from.setdefault(version, set()).add(_t(TRACK_TITLES.get(track, track)))
         # One definition list per instrument. Four of the six tracks ask the

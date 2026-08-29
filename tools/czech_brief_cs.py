@@ -988,6 +988,37 @@ CS: dict[str, str] = {
     "What the Czech track found, in {count} short paragraphs": (
         "Co český track zjistil, v {count} odstavcích"
     ),
+    # --- one table, both judges --------------------------------------------
+    "Every cell holds both judges, {judges}, in that order and never averaged: "
+    "where they disagree about a model is the only control this track has, so it "
+    "is shown rather than smoothed. A cell whose two numbers differ is marked.": (
+        "V každé buňce jsou oba soudci, {judges}, v tomto pořadí a nikdy se "
+        "neprůměrují: to, kde se na modelu neshodnou, je jediná kontrola, kterou "
+        "tenhle track má, takže je vidět místo aby se zahladila. Buňka, kde se ta "
+        "dvě čísla liší, je zvýrazněná."
+    ),
+    "The rows are ordered by dominance -- a model is above another only when it is "
+    "at least as good on every column under BOTH judges -- so models the evidence "
+    "cannot separate share a place, and {systems} models fall into {places} places "
+    "of which {tied} hold more than one. Within a place the order is alphabetical "
+    "and means nothing.": (
+        "Řádky jsou seřazené podle dominance — model je výš jen tehdy, když je "
+        "aspoň tak dobrý v každém sloupci u OBOU soudců — takže modely, které "
+        "důkazy neoddělí, sdílejí místo: {systems} modelů padne do {places} míst, "
+        "z toho {tied} drží víc než jeden model. Uvnitř místa je pořadí abecední a "
+        "neznamená nic."
+    ),
+    # --- the external index, whose columns are judges ----------------------
+    "as {judge} sees it": "jak to vidí {judge}",
+    "Nothing here. All {cells} coefficients between {what} and what this project "
+    "measures are inside what chance produces at this sample size, under both "
+    "judges. Printed as a sentence rather than as a grid of numbers a reader has "
+    "to work out says nothing.": (
+        "Nic. Všech {cells} korelací mezi „{what}“ a tím, co tenhle projekt měří, "
+        "leží uvnitř toho, co při téhle velikosti vzorku vyrobí náhoda, a to u obou "
+        "soudců. Napsané větou místo mřížkou čísel, ze které si čtenář musí sám "
+        "odvodit, že neříká nic."
+    ),
     # --- refusals ----------------------------------------------------------
     "Refusing to write: a row carries something that is not a score.": (
         "Odmítám zapsat: řádek nese něco, co není skóre."
