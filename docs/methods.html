@@ -5,9 +5,47 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title data-t="methods.title">therapy-note-bench — how this was measured</title>
 <style>
+  /* ---------------------------------------------------------------------
+     A report, not a dashboard.
+
+     This sheet was a stack of rounded cards on a grey ground, and the prose
+     inside them was set at nine sizes and three column widths. Measured at a
+     1440px viewport: a paragraph in the footer ran from x=20 to x=948, the
+     identical paragraph inside a card ran from x=39 to x=967, and the heading
+     above that paragraph ran to x=1370. Three left edges and three right edges
+     on one page, none of them agreeing, which is what a reader means when they
+     say a page looks generated.
+
+     So the rules below are one column, one scale of sizes, one scale of
+     spaces, and hairlines instead of boxes. Only two things are allowed to be
+     wider than the column: the table, which is what the page is for, and a
+     figure. Everything else lines up with everything else.
+     --------------------------------------------------------------------- */
   :root {
-    --bg: #fbfbfa; --fg: #1a1a19; --muted: #6b6b66; --line: #e2e2dd;
-    --card: #ffffff; --accent: #2f6f4f; --warn: #8a5a00; --chip: #f0f0eb;
+    color-scheme: light dark;
+
+    /* Paper and ink. Warm rather than blue-grey: this page is read for
+       minutes at a time and is almost entirely text. */
+    --bg: #fdfcf8;
+    /* Kept, and equal to the page: the saturation plot strokes a halo around
+       an overlapping dot in the colour behind it. */
+    --card: #fdfcf8;
+    --raise: #f3f0e7;
+    --fg: #1b1a17;
+    /* Body text that is not the loudest thing on the page but is still text.
+       Whole paragraphs used to be set in `--muted`, which is a label colour --
+       at 13px on paper that is a caption, not an argument. */
+    --ink: #3b3931;
+    --muted: #6c695f;
+    --line: #e4e0d5;
+    --line-strong: #b9b4a4;
+    --accent: #1e5c44;
+    --accent-tint: #eef3f0;
+    --warn: #8a5a00;
+    --chip: #efece2;
+    --up: #2f7d4f;
+    --down: #b4472f;
+
     /* Verdict colours. Chosen with the palette validator rather than by eye.
        The three that signal -- discriminating, saturated, unreachable -- clear
        the lightness band, the chroma floor, the CVD separation threshold and
@@ -20,106 +58,191 @@
        channel either way. */
     --v-discriminating: #00806a; --v-saturated: #c05a10; --v-unreachable: #4a4fb8;
     --v-mixed: #7d8a85;
+
+    /* Two faces, and the split is the one a journal uses: the argument is set
+       in a serif, the apparatus -- column headings, switches, chips, every
+       figure in a table -- in a sans. A page set end to end in the system UI
+       font is the look this was asked to stop having. */
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
+             Georgia, Cambria, serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Roboto,
+            Arial, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas,
+            "Liberation Mono", monospace;
+
+    /* One scale. There were nine sizes here, four of them inside 0.6px of each
+       other -- 13.76, 13.6, 13.44, 13.12 -- which no reader can see as a
+       hierarchy and every reader can see as noise. */
+    --t-xs: .6875rem;    /* 11px -- column headings, chips */
+    --t-sm: .8125rem;    /* 13px -- captions, metadata */
+    --t-md: .9375rem;    /* 15px -- tables, apparatus */
+    --t-body: 1.0625rem; /* 17px -- prose */
+    --t-lg: 1.25rem;     /* 20px -- section heading */
+    --t-xl: 2rem;        /* 32px -- the title */
+
+    /* One scale for space, so a gap is a decision and not a leftover. The
+       margins on this page were 1.6, 3.2, 6.4, 9.6, 12.8, 14.4, 16, 17.6,
+       22.4, 24, 32 and 40 pixels. */
+    --s1: .25rem; --s2: .5rem;  --s3: .75rem; --s4: 1rem;
+    --s5: 1.5rem; --s6: 2rem;   --s7: 3rem;   --s8: 4.5rem;
+
+    /* The column, and the frame the two wide things may fill. 42rem of serif
+       is about 78 characters; the old 58rem at 15px sans was about 120, which
+       is past the width at which a reader reliably finds the next line. */
+    --measure: 42rem;
+    --wide: 76rem;
+
+    --radius: 3px;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #17181a; --fg: #e8e8e4; --muted: #9a9a94; --line: #2c2e31;
-      --card: #1e1f22; --accent: #7fc0a0; --warn: #d5a03c; --chip: #26282b;
+      --bg: #15161a; --card: #15161a; --raise: #1e2025;
+      --fg: #ece9e2; --ink: #c6c2b8; --muted: #918d84;
+      --line: #2b2d32; --line-strong: #474a51;
+      --accent: #7fc0a0; --accent-tint: #1c2622; --warn: #d5a03c; --chip: #23252a;
+      --up: #6fce97; --down: #f0866a;
       --v-discriminating: #22a184; --v-saturated: #c9701f; --v-unreachable: #7c80e0;
       --v-mixed: #7d8a85;
     }
   }
+
   * { box-sizing: border-box; }
+
   body {
-    margin: 0; padding: 2rem 1.25rem 5rem; background: var(--bg); color: var(--fg);
-    font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    margin: 0;
+    padding: var(--s7) var(--s5) var(--s8);
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--serif);
+    font-size: var(--t-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
   }
-  /* The table is what the page is for, and it was reading through a 1080px
-     letterbox with a scrollbar under it while the window had room to spare.
-     The column widens; the prose in it does not, because a line of text 1500px
-     wide is unreadable however much room there is. */
-  main { max-width: 1600px; margin: 0 auto; }
-  p.sub, p.note, p.ranking-note, p.versions, dl.measures { max-width: 58rem; }
-  h1 { font-size: 1.6rem; margin: 0 0 .3rem; letter-spacing: -.01em; }
-  h2 { font-size: 1.1rem; margin: 0 0 .2rem; }
-  p.sub { color: var(--muted); margin: 0 0 2rem; }
-  /* A measure in `ch` shrinks with the font size, and these are set at .9rem
-     and .85rem -- so 68ch and 72ch came out around half the card, next to a
-     table and a lede that both run its full width. It read as a broken column
-     rather than as a comfortable line. Set in `rem`, so the measure no longer
-     depends on how small the text is, and wide enough to look deliberate
-     beside the table below it. */
-  p.blurb { color: var(--muted); margin: .1rem 0 .9rem; font-size: .9rem; max-width: 58rem; }
-  a { color: var(--accent); }
+
+  /* The frame. Everything sits inside it; almost nothing fills it. */
+  main { max-width: var(--wide); margin: 0 auto; }
+
+  /* The column. Declared once and applied to every block of prose on both
+     pages, so that "where does a paragraph end" has one answer. The list is
+     long because the two templates are long -- but a selector missing from it
+     is a block that goes back to running the whole frame, which is the defect
+     this file was rewritten to remove. */
+  p, ul, ol, dl, footer, h2, h3, h4, summary, figcaption, .legend, .design,
+  .pair, .soap, .criteria, .switch, .controls, .track-head {
+    max-width: var(--measure);
+  }
+
+  a { color: var(--accent); text-underline-offset: .15em; }
+  a:hover { text-decoration-thickness: 2px; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  code { font-family: var(--mono); font-size: .88em; }
+
+  /* --- the masthead ----------------------------------------------------- */
+
+  h1 {
+    font-size: var(--t-xl); line-height: 1.15; letter-spacing: -.015em;
+    font-weight: 600; margin: 0 0 var(--s3);
+  }
+  p.sub { color: var(--ink); margin: 0 0 var(--s6); max-width: var(--measure); }
 
   /* The language switch. Deliberately quiet: it sits in the corner above the
      title, reads as two three-letter words, and never competes with the thing
      the reader came for. English is the default and is not a preference the
      page guesses -- see `chosenLanguage` in the helpers. */
-  .lang { float: right; display: flex; gap: .15rem; margin: .15rem 0 0; }
+  .lang { float: right; display: flex; gap: var(--s1); margin: var(--s1) 0 0; }
   .lang:empty { display: none; }
   .lang button {
-    font: inherit; font-size: .74rem; letter-spacing: .05em; cursor: pointer;
-    padding: .1rem .4rem; border-radius: 5px; border: 1px solid transparent;
-    background: none; color: var(--muted);
+    font-family: var(--sans); font-size: var(--t-xs); letter-spacing: .08em;
+    cursor: pointer; padding: .2rem .45rem; border: 1px solid transparent;
+    border-radius: var(--radius); background: none; color: var(--muted);
   }
   .lang button:hover { color: var(--fg); }
   .lang button[aria-pressed="true"] {
-    color: var(--fg); background: var(--chip); border-color: var(--line);
+    color: var(--accent); border-color: var(--line-strong);
   }
 
+  /* --- sections --------------------------------------------------------- */
+
+  /* Was a filled, rounded, bordered card. A card puts everything inside it
+     19px to the right of everything outside it, which is half of why nothing
+     on this page lined up; and eleven cards down a page is a layout with no
+     hierarchy in it at all. A rule and a large space say the same thing and
+     cost no alignment. */
   .box {
-    background: var(--card); border: 1px solid var(--line); border-radius: 10px;
-    padding: 1rem 1.1rem; margin-bottom: 1.5rem;
+    margin: var(--s7) 0 0;
+    padding: var(--s6) 0 0;
+    border-top: 1px solid var(--line);
   }
-  .box.pending { border-style: dashed; }
-  .box h2 .badge { font-weight: 400; }
+  /* A panel with nothing measured in it yet. Dashed, so it reads as "not
+     filled in" rather than as a section somebody abandoned. */
+  .box.pending { border-top-style: dashed; }
 
-  .controls { display: flex; flex-wrap: wrap; gap: .75rem 1.25rem; margin-bottom: 1.5rem; }
-  .controls label { display: inline-flex; align-items: center; gap: .4rem; font-size: .9rem; }
+  h2 {
+    font-size: var(--t-lg); line-height: 1.3; font-weight: 600;
+    margin: 0 0 var(--s3); letter-spacing: -.005em;
+  }
+  h2 .badge { font-weight: 400; }
 
-  details#protocol > summary {
-    cursor: pointer; font-size: 1.05rem; padding: .1rem 0;
+  details.box > summary {
+    cursor: pointer; font-size: var(--t-lg); line-height: 1.3;
+    margin: 0 0 var(--s3);
   }
-  details#protocol[open] > summary { margin-bottom: 1rem; }
-  .soap { display: grid; gap: .6rem; margin-bottom: 1.5rem; }
-  .soap div {
-    display: grid; grid-template-columns: 7.5rem 1fr; gap: .8rem;
-    padding-bottom: .6rem; border-bottom: 1px solid var(--line);
+  details.box > summary strong { font-weight: 600; }
+  details.box[open] > summary { margin-bottom: var(--s4); }
+
+  /* The lede under a section heading. Measured in `rem`, never in `ch`: a `ch`
+     measure shrinks with the font size, and at .9rem the old 68ch came out
+     around half the frame beside a table running all of it, which read as a
+     broken column rather than as a comfortable line. */
+  p.blurb {
+    color: var(--ink);
+    margin: 0 0 var(--s4);
+    max-width: var(--measure);
   }
-  .soap dt { font-weight: 600; }
-  .soap dd { margin: 0; color: var(--muted); font-size: .92rem; }
-  .criteria { display: grid; gap: 1.1rem; }
-  .criteria h4 {
-    margin: 0 0 .4rem; font-size: .78rem; text-transform: uppercase;
-    letter-spacing: .06em; color: var(--muted);
+
+  /* --- prose ------------------------------------------------------------ */
+
+  p { margin: 0 0 var(--s4); }
+
+  /* Commentary on the table above it. This used to set the whole paragraph in
+     `--warn`, and the methods page carries thirty-seven of them: ten
+     consecutive paragraphs of orange body text, which is hard to read and,
+     worse, means the colour has stopped marking anything. The sentence is now
+     ink like every other sentence and a quiet rule in the margin sets it off;
+     consecutive notes share one unbroken rule rather than drawing a ladder of
+     stripes. The rule is grey and not amber because `note` is what nearly
+     every explanatory paragraph on the methods page is: a mark carried by
+     almost every block marks nothing. Amber is left to the two places that
+     really do name a caveat -- the bold clause a note opens with, and the
+     `<em>` a column's definition ends with. */
+  p.note {
+    color: var(--ink);
+    border-left: 2px solid var(--line-strong);
+    padding: 0 0 0 var(--s4);
+    margin: var(--s5) 0;
   }
-  .criteria ol { margin: 0; padding-left: 1.4rem; display: grid; gap: .35rem; font-size: .9rem; }
-  .criteria li::marker { color: var(--muted); }
-  .criteria b { font-weight: 600; }
-  .criteria span { color: var(--muted); }
-  ol.sections {
-    margin: 0; padding-left: 1.4rem; font-size: .9rem; display: grid; gap: .4rem;
+  p.note + p.note { margin-top: 0; padding-top: var(--s4); }
+  p.note strong { color: var(--warn); }
+
+  p.ranking-note { color: var(--ink); margin: var(--s5) 0 var(--s4); }
+
+  p.versions {
+    font-family: var(--sans); color: var(--muted); font-size: var(--t-sm);
+    margin: var(--s5) 0 0;
   }
-  ol.sections b { font-weight: 600; }
-  ol.sections span { color: var(--muted); }
-  ol.queue { line-height: 1.9; }
-  ol.queue .chip { margin-left: .4rem; }
-  ol.sections li { break-inside: avoid; }
-  @media (max-width: 40rem) { ol.sections { columns: 1; } }
+  .versions code {
+    background: var(--chip); padding: .1em .35em; border-radius: var(--radius);
+  }
   .subtitle { font-weight: 400; color: var(--muted); }
 
-  /* The second judge's figure, written as a distance from the first. Quiet
-     and small: it is context for the number beside it, not a number in its own
-     right, and a reader scanning a column must still see the column. */
-  .gap { margin-left: .4em; font-size: .82em; white-space: nowrap; }
-  .gap.up { color: var(--up, #2f7d4f); }
-  .gap.down { color: var(--down, #b4472f); }
-  .gap.same, .gap.dash { color: var(--muted); }
-  @media (prefers-color-scheme: dark) {
-    .gap.up { color: #6fce97; }
-    .gap.down { color: #f0866a; }
-  }
+  /* --- the wide two ----------------------------------------------------- */
+
+  /* The table and a figure are the only blocks that outgrow the column, and
+     they fill the frame rather than a width of their own. Their left edge is
+     the column's left edge, so a reader reads down one edge the whole page. */
+  .scroll, .scroll-top, figure.wide { max-width: none; width: 100%; }
+
   .scroll { overflow-x: auto; }
   /* A sideways scrollbar sits under the table, which on a long table is a
      screen away from the columns it scrolls. This is the same bar above it:
@@ -128,178 +251,90 @@
   .scroll-top { overflow-x: auto; overflow-y: hidden; }
   .scroll-top > div { height: 1px; }
   .scroll-top[hidden] { display: none; }
-  /* Which column is doing the sorting, on the column itself. The header was
-     already clickable and said so only by turning the cursor into a hand. */
-  th[data-sort]::after { content: '\2195'; opacity: .25; margin-left: .35em; font-size: .9em; }
-  th[data-sort]:hover::after { opacity: .6; }
-  th[aria-sort="descending"]::after { content: '\25BC'; opacity: 1; color: var(--accent); }
-  th[aria-sort="ascending"]::after { content: '\25B2'; opacity: 1; color: var(--accent); }
-  th[aria-sort] { color: var(--fg); }
-  /* On a narrow screen the table scrolls sideways and the first column is the
-     one that must not leave: a row of dashes with no name on it says nothing.
-     Pinned, with its own background so the scrolling columns pass underneath. */
-  table th:first-child, table td:first-child {
-    position: sticky; left: 0; z-index: 1;
-    background: var(--card);
-    box-shadow: 1px 0 0 var(--line);
+
+  /* A generated figure. It scrolls rather than shrinking: the labels are 12px
+     and a 940px drawing squeezed into a phone renders them at about five. */
+  figure.wide { margin: var(--s5) 0 var(--s6); }
+  figure.wide svg { display: block; max-width: 100%; height: auto; }
+  figure.wide figcaption {
+    font-size: var(--t-sm); color: var(--muted); margin-top: var(--s2);
+    max-width: var(--measure);
   }
-  tbody tr.system:hover td:first-child { background: var(--chip); }
-  tr.detail > td:first-child { background: var(--chip); }
-  @media (max-width: 34rem) {
-    table th:first-child, table td:first-child { max-width: 9.5rem; }
-    td.name { font-size: .88rem; }
+
+  /* --- tables ----------------------------------------------------------- */
+
+  table {
+    border-collapse: collapse;
+    font-family: var(--sans); font-size: var(--t-md);
+    font-variant-numeric: tabular-nums;
+    /* `width: 100%` across seventeen columns makes the browser squeeze
+       whatever will wrap, and what wraps is the model's name: rows came out
+       one, two and three lines tall down the same table, which reads as a
+       broken table rather than as a wide one. It is as wide as its contents
+       and it scrolls. */
+    width: max-content; min-width: 100%;
   }
-  /* The judge-comparison table is read left to right as prose, not scanned as a
-     column of figures, so its last column stays left-aligned. */
-  table.concordance td:last-child, table.concordance th:last-child { text-align: left; }
-  ul.dominance { margin: .4rem 0 0; padding-left: 1.2rem; font-size: .9rem; line-height: 1.7; }
-  /* A judge that clears the human ceiling on a measure. Marked rather than
-     stated per row: the comparison is per column and the eye reads it that way. */
-  td.beats { font-weight: 600; }
-  /* The rank, not the row number. Systems the evidence cannot separate share
-     one, so the column repeats a number rather than counting up -- which is the
-     point, and looks wrong until you know that. */
-  td.rank { color: var(--muted); font-variant-numeric: tabular-nums; width: 2.5rem; }
-  td.rank.top { color: var(--fg); font-weight: 700; }
-  tbody tr.first-group td { background: var(--chip); }
-  tbody tr.first-group td.name { background: var(--chip); }
-  tr.humans td { border-top: 2px solid var(--line); }
-  ul.dominance code { font-size: .85rem; }
-  table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
-  th, td { text-align: right; padding: .45rem .6rem; border-bottom: 1px solid var(--line); }
+  th, td {
+    text-align: right; padding: .5rem .7rem;
+    border-bottom: 1px solid var(--line);
+  }
   th:first-child, td:first-child { text-align: left; }
-  th { font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); font-weight: 600; }
+  thead th {
+    font-size: var(--t-xs); text-transform: uppercase; letter-spacing: .07em;
+    color: var(--muted); font-weight: 600; vertical-align: bottom;
+    padding-bottom: .45rem;
+    border-bottom: 1px solid var(--line-strong);
+  }
+  tbody tr:last-child td { border-bottom: 1px solid var(--line-strong); }
   th[data-sort] { cursor: pointer; user-select: none; white-space: nowrap; }
   th[data-sort]:hover { color: var(--fg); }
+  /* Which column is doing the sorting, on the column itself. The header was
+     already clickable and said so only by turning the cursor into a hand. */
+  th[data-sort]::after { content: '\2195'; opacity: .3; margin-left: .35em; font-size: .9em; }
+  th[data-sort]:hover::after { opacity: .7; }
+  th[aria-sort="descending"]::after { content: '\25BC'; opacity: 1; color: var(--accent); }
+  th[aria-sort="ascending"]::after { content: '\25B2'; opacity: 1; color: var(--accent); }
+  th[aria-sort] { color: var(--accent); }
+
   tbody tr.system { cursor: pointer; }
-  tbody tr.system:hover { background: var(--chip); }
-  td.name { font-weight: 600; }
+  tbody tr.system:hover td { background: var(--raise); }
+  td.name { font-weight: 600; color: var(--fg); white-space: nowrap; }
   td.name .arrow { color: var(--muted); font-weight: 400; display: inline-block; width: 1em; }
-  .chip {
-    display: inline-block; margin-left: .5rem; padding: .05rem .45rem; border-radius: 999px;
-    background: var(--chip); color: var(--muted); font-size: .72rem; font-weight: 500;
-    letter-spacing: .02em; vertical-align: 1px;
+  /* The band the row was measured into, not its position. Systems the evidence
+     cannot separate share one, so the column repeats a number rather than
+     counting up -- which is the point, and looks wrong until you know it. */
+  td.rank { color: var(--muted); width: 2.5rem; }
+  td.rank.top { color: var(--fg); font-weight: 700; }
+  /* The top band, marked with a tint rather than the grey slab that used to
+     sit here: four rows of filled cells read as a selected range. */
+  tbody tr.first-group td { background: var(--accent-tint); }
+  tr.humans td { border-top: 2px solid var(--line-strong); }
+  /* A judge that clears the human ceiling on a measure. Marked rather than
+     stated per row: the comparison is per column and the eye reads it that
+     way. Weight only, no colour: a green cell reads as "good", and clearing
+     an agreement ceiling is not a verdict about a model. */
+  td.beats { font-weight: 700; }
+  /* The provider, and the marks. Apparatus, not findings. */
+  td.meta { color: var(--muted); font-size: var(--t-sm); white-space: nowrap; }
+
+  /* The instrument a column belongs to, above its name. Quieter than the
+     label and louder than nothing: a reader scanning eleven headings has to
+     see the seam between the two without reading a footnote. */
+  th .instrument {
+    display: block; font-size: var(--t-xs); letter-spacing: .07em;
+    text-transform: uppercase; color: var(--accent); font-weight: 600;
+    opacity: .85; margin-bottom: .15rem;
   }
-  .short { color: var(--warn); }
-  .pending-mark { color: var(--muted); font-size: .78rem; }
-  .dash { color: var(--muted); }
 
-  tr.detail > td { background: var(--chip); padding: .9rem 1rem 1.1rem; }
-  tr.detail h3 { font-size: .8rem; text-transform: uppercase; letter-spacing: .04em;
-                 color: var(--muted); margin: 0 0 .5rem; font-weight: 600; }
-  tr.detail table { margin-bottom: 1rem; background: var(--card); }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: .3rem .9rem; }
-  .grid div { display: flex; justify-content: space-between; gap: .5rem;
-              border-bottom: 1px solid var(--line); padding: .2rem 0; font-size: .87rem; }
-  .grid span:last-child { font-variant-numeric: tabular-nums; }
-  .note { color: var(--warn); font-size: .85rem; margin: .2rem 0 .8rem; }
-  .versions { color: var(--muted); font-size: .8rem; margin: .1rem 0 .9rem; }
-  .versions code { background: var(--chip); padding: .05rem .3rem; border-radius: 4px; }
-  /* --- saturation --- */
-  .legend { display: flex; flex-wrap: wrap; gap: .25rem 1.1rem; margin: .2rem 0 1rem; font-size: .82rem; }
-  .legend span { display: inline-flex; align-items: center; gap: .4rem; color: var(--muted); }
-  .legend i { width: 11px; height: 11px; border-radius: 2px; display: inline-block; }
-  .sat-table td.mark { width: 42%; padding-right: 0; }
-  .sat-table .verdict { font-size: .74rem; letter-spacing: .03em; white-space: nowrap; }
-  svg.plot { display: block; width: 100%; height: auto; overflow: visible; }
-  svg.plot.fixed { width: auto; max-width: none; min-width: 30rem; }
-  svg.plot text { font-family: inherit; fill: var(--muted); font-size: 11px; }
-  svg.plot text.name { fill: var(--fg); font-size: 12px; font-weight: 600; }
-  svg.plot text.value { font-variant-numeric: tabular-nums; }
-  svg.plot .grid { stroke: var(--line); stroke-width: 1; }
-  svg.plot .rule { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3; }
-
-  footer { color: var(--muted); font-size: .85rem; margin-top: 2.5rem; max-width: 58rem; }
-  footer p { margin: .4rem 0; }
-
-.scale { display: inline-block; margin-left: .4em; font-size: .72em; font-weight: 500;
-         letter-spacing: .02em; color: var(--muted); font-variant-numeric: tabular-nums; }
-.ranks { display: inline-block; margin-left: .4em; padding: .05em .4em; border-radius: 3px;
-         font-size: .66em; font-weight: 600; text-transform: uppercase; letter-spacing: .04em;
-         background: var(--chip); color: var(--accent); }
-.ranking-note { margin: .9rem 0 .2rem; font-size: .86rem; color: var(--muted); }
-dl.measures { display: grid; gap: .55rem .75rem; margin: .4rem 0 0; padding: .75rem .9rem;
-              border: 1px solid var(--line); border-radius: 6px; background: var(--card);
-              font-size: .82rem; }
-dl.measures .measure { display: grid; grid-template-columns: minmax(9rem, 12rem) 1fr; gap: .1rem .9rem; }
-dl.measures dt { font-weight: 600; color: var(--fg); }
-dl.measures dd { margin: 0; color: var(--muted); }
-dl.measures em { font-style: normal; color: var(--warn); }
-/* The half of a caveat that was read off the table rather than written into it.
-   Full contrast, because those are the two figures a reader can check against
-   the rows a finger-scroll above the sentence. */
-dl.measures .measured { color: var(--fg); }
-@media (max-width: 620px) { dl.measures .measure { grid-template-columns: 1fr; } }
-
-.differs { display: inline-block; margin-left: .45em; padding: .05em .4em; border-radius: 3px;
-           font-size: .68em; font-weight: 600; letter-spacing: .02em;
-           background: var(--chip); color: var(--warn); white-space: nowrap; }
-p.settings { margin-top: .2rem; }
-
-.design { margin: .6rem 0 1rem; padding: .8rem .95rem; border: 1px solid var(--line);
-          border-radius: 6px; background: var(--card); font-size: .84rem; }
-.design-marks { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: .6rem; }
-.role { display: inline-block; padding: .12em .5em; border-radius: 3px; font-size: .92em;
-        font-weight: 600; letter-spacing: .01em; }
-.role-competitor { background: var(--chip); color: var(--accent); }
-.role-key { background: var(--chip); color: var(--warn); }
-.design dl { display: grid; gap: .5rem .9rem; margin: 0; }
-.design dl > div { display: grid; grid-template-columns: minmax(9rem, 12rem) 1fr; gap: .1rem .9rem; }
-.design dt { font-weight: 600; color: var(--fg); }
-.design dd { margin: 0; color: var(--muted); }
-.pair { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; margin: .7rem 0; }
-.pair > div { padding: .7rem .85rem; border: 1px solid var(--line); border-radius: 6px;
-              background: var(--card); }
-.pair h4 { margin: 0 0 .35rem; font-size: .8rem; text-transform: uppercase;
-           letter-spacing: .04em; color: var(--muted); }
-.pair p { margin: 0; font-size: .84rem; line-height: 1.5; }
-@media (max-width: 720px) {
-  .pair { grid-template-columns: 1fr; }
-  .design dl > div { grid-template-columns: 1fr; }
-}
-
-  /* --- picking a table ------------------------------------------------- */
-
-  .switch { display: flex; flex-wrap: wrap; gap: .6rem 1.5rem; margin: 0 0 1.1rem; }
-  /* Both are written on every render and are legitimately empty when there is
-     one table and nothing to filter. Their margins are not: an empty container
-     leaves a gap that reads as a missing control. */
-  .switch:empty, .controls:empty { display: none; margin: 0; }
-  .pick { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; }
-  .pick-label {
-    font-size: .72rem; letter-spacing: .04em; text-transform: uppercase;
-    color: var(--muted); margin-right: .2rem;
-  }
-  .pick button {
-    font: inherit; font-size: .88rem; line-height: 1.2; cursor: pointer;
-    display: inline-flex; flex-direction: column; align-items: flex-start;
-    padding: .32rem .7rem; border: 1px solid var(--line); border-radius: 6px;
-    background: var(--card); color: var(--fg);
-  }
-  /* A border that shifts one shade is not a signal. These read as labels
-     until the pointer is already on them, and a reader who does not know
-     they are buttons never puts it there. */
-  .pick button:hover { border-color: var(--accent); background: var(--chip); }
-  /* The pressed state is read off `aria-pressed`, so the announcement and the
-     appearance are the same fact rather than two that can disagree. */
-  .pick button[aria-pressed="true"] {
-    background: var(--chip); border-color: var(--accent); color: var(--accent);
-    font-weight: 600;
-  }
   /* Eleven columns from two instruments do not fit a screen, so the table
      scrolls sideways -- and a row of eleven numbers with the model's name
-     scrolled off the left is unreadable. The name column stays put. Applied to
-     the leaderboard only: the section breakdown inside an opened row is four
-     rows deep and narrow enough not to need it.
+     scrolled off the left is unreadable. The name column stays put.
 
      Named by class, not by position. This said `:first-child` and was written
      when the name was the first column; the Band column then went in to the
-     left of it, and what a phone kept pinned became a 2.5rem strip of bare band
-     digits while the model's name scrolled away -- the exact failure the rule
-     exists to prevent. The same off-by-one is why `th:first-child { text-align:
-     left }` was landing on the band cell and leaving the System heading and
-     every model name right-aligned, and why the narrow-screen width cap was
-     being applied to a column 2.5rem wide. */
+     left of it, and what a phone kept pinned became a 2.5rem strip of bare
+     band digits while the model's name scrolled away -- the exact failure the
+     rule exists to prevent. */
   table[data-table] th.rank,
   table[data-table] td.rank {
     position: static;
@@ -309,15 +344,13 @@ p.settings { margin-top: .2rem; }
   table[data-table] td.name {
     position: sticky;
     left: 0;
-    background: var(--card);
+    background: var(--bg);
     text-align: left;
     z-index: 1;
   }
   table[data-table] thead th.name { z-index: 2; }
-  tbody tr.system:hover td.name { background: var(--chip); }
-  @media (max-width: 34rem) {
-    table[data-table] th.name, table[data-table] td.name { max-width: 9.5rem; }
-  }
+  tbody tr.system:hover td.name { background: var(--raise); }
+  tbody tr.first-group td.name { background: var(--accent-tint); }
   /* The scrolled-under edge, so a reader can see that the name is pinned and
      the numbers are moving behind it rather than that the table is broken. */
   table[data-table] th.name::after,
@@ -328,46 +361,302 @@ p.settings { margin-top: .2rem; }
     width: 1px;
     background: var(--line);
   }
+  @media (max-width: 34rem) {
+    table[data-table] th.name, table[data-table] td.name {
+      max-width: 9.5rem; white-space: normal;
+    }
+    td.name { font-size: var(--t-sm); }
+  }
 
-  /* The instrument a column belongs to, above its name. Quieter than the
-     label and louder than nothing: a reader scanning eleven headings has to
-     see the seam between the two without reading a footnote. */
-  th .instrument {
-    display: block; font-size: .64rem; letter-spacing: .04em;
-    text-transform: uppercase; color: var(--accent); font-weight: 600;
-    margin-bottom: .12rem;
+  /* The judge-comparison table is read left to right as prose, not scanned as a
+     column of figures, so its last column stays left-aligned. */
+  table.concordance td:last-child, table.concordance th:last-child { text-align: left; }
+  /* Every figure in the calibration and concordance tables. */
+  td.num, th.num { text-align: right; }
+
+  /* --- the row a reader opened ------------------------------------------ */
+
+  tr.detail > td {
+    background: var(--raise); padding: var(--s4) var(--s4) var(--s5);
+    font-family: var(--serif);
+  }
+  tr.detail h3 {
+    font-family: var(--sans); font-size: var(--t-xs); text-transform: uppercase;
+    letter-spacing: .07em; color: var(--muted); margin: 0 0 var(--s2);
+    font-weight: 600;
+  }
+  tr.detail table { margin-bottom: var(--s4); background: var(--bg); width: 100%; min-width: 0; }
+  tr.detail p.note { margin: var(--s3) 0; font-size: var(--t-md); }
+  .grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 0 var(--s5); max-width: none;
+  }
+  .grid div {
+    display: flex; justify-content: space-between; gap: var(--s2);
+    border-bottom: 1px solid var(--line); padding: .25rem 0;
+    font-family: var(--sans); font-size: var(--t-sm);
+  }
+  .grid span:last-child { font-variant-numeric: tabular-nums; }
+
+  /* --- marks in a cell -------------------------------------------------- */
+
+  /* Was a grey pill. A pill is a button's shape and none of these do anything;
+     squared and hairlined, they read as what they are -- a label stuck to a
+     name. */
+  .chip {
+    display: inline-block; margin-left: var(--s2); padding: .05rem .35rem;
+    border: 1px solid var(--line-strong); border-radius: var(--radius);
+    background: none; color: var(--muted);
+    font-family: var(--sans); font-size: var(--t-xs); font-weight: 500;
+    letter-spacing: .03em; text-transform: uppercase; white-space: nowrap;
+    vertical-align: 1px;
+  }
+  /* The reasoning effort a note was written at. It had no rule at all, so it
+     printed at full weight straight after the model id and read as part of
+     the model's name. */
+  .effort {
+    margin-left: .4em; color: var(--muted); font-weight: 400;
+    font-size: var(--t-sm);
+  }
+  .short { color: var(--warn); }
+  .pending-mark { color: var(--muted); font-size: var(--t-sm); }
+  .dash { color: var(--muted); }
+  .scale {
+    display: inline-block; margin-left: .4em; font-size: var(--t-xs);
+    font-weight: 500; letter-spacing: .03em; color: var(--muted);
+    font-variant-numeric: tabular-nums; text-transform: none;
+  }
+  .ranks {
+    display: inline-block; margin-left: .4em; padding: .05em .35em;
+    border-radius: var(--radius); font-size: var(--t-xs); font-weight: 600;
+    text-transform: uppercase; letter-spacing: .05em;
+    background: var(--accent-tint); color: var(--accent);
+  }
+  .differs {
+    display: inline-block; margin-left: .45em; padding: .05em .35em;
+    border-radius: var(--radius); font-family: var(--sans);
+    font-size: var(--t-xs); font-weight: 600; letter-spacing: .03em;
+    background: var(--chip); color: var(--warn); white-space: nowrap;
+  }
+
+  /* The second judge's figure, written as a distance from the first. Quiet
+     and small: it is context for the number beside it, not a number in its own
+     right, and a reader scanning a column must still see the column. */
+  .gap { margin-left: .4em; font-size: .82em; white-space: nowrap; }
+  .gap.up { color: var(--up); }
+  .gap.down { color: var(--down); }
+  .gap.same, .gap.dash { color: var(--muted); }
+
+  /* --- picking a table -------------------------------------------------- */
+
+  .switch {
+    display: flex; flex-wrap: wrap; gap: var(--s3) var(--s6);
+    margin: var(--s5) 0 var(--s6); max-width: none;
+  }
+  /* Both are written on every render and are legitimately empty when there is
+     one table and nothing to filter. Their margins are not: an empty container
+     leaves a gap that reads as a missing control. */
+  .switch:empty, .controls:empty { display: none; margin: 0; }
+  .pick { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s1); }
+  .pick-label {
+    font-family: var(--sans); font-size: var(--t-xs); letter-spacing: .08em;
+    text-transform: uppercase; color: var(--muted); margin-right: var(--s2);
+  }
+  /* Was a row of rounded outlined pills, which is the shape a generated page
+     uses for everything. These are tabs: a word, and a rule under the one that
+     is showing. */
+  .pick button {
+    font-family: var(--sans); font-size: var(--t-md); line-height: 1.3;
+    cursor: pointer; display: inline-flex; flex-direction: column;
+    align-items: flex-start; padding: .3rem .1rem; margin-right: var(--s4);
+    border: 0; border-bottom: 2px solid transparent; border-radius: 0;
+    background: none; color: var(--muted);
+  }
+  .pick button:hover { color: var(--fg); border-bottom-color: var(--line-strong); }
+  /* The pressed state is read off `aria-pressed`, so the announcement and the
+     appearance are the same fact rather than two that can disagree. */
+  .pick button[aria-pressed="true"] {
+    color: var(--fg); border-bottom-color: var(--accent); font-weight: 600;
   }
   .pick button .scale { margin: .1rem 0 0; font-weight: 400; }
-  .pick button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-  /* A generated figure inside a panel. It scrolls rather than shrinking: the
-     labels are 12px and a 940px drawing squeezed into a phone renders them at
-     about five. */
-  figure.wide { margin: .9rem 0 1.2rem; }
-  figure.wide svg { display: block; max-width: 100%; height: auto; }
-  figure.wide figcaption {
-    font-size: .82rem; color: var(--muted); margin-top: .4rem; max-width: 68ch;
+  .controls {
+    display: flex; flex-wrap: wrap; gap: var(--s2) var(--s5);
+    margin: 0 0 var(--s5); max-width: none;
+  }
+  .controls label {
+    display: inline-flex; align-items: center; gap: var(--s2);
+    font-family: var(--sans); font-size: var(--t-md); color: var(--ink);
   }
 
-  /* One section per track inside a panel that has a single heading. */
-  .track-head {
-    margin: 1.6rem 0 .4rem; font-size: 1rem; font-weight: 600; color: var(--muted);
-    letter-spacing: .01em;
-  }
-  .track-head:first-child { margin-top: .2rem; }
+  /* --- the legend under a table ----------------------------------------- */
 
+  /* Was a bordered panel of two-column rows, 928px wide, ending 19px to the
+     right of every paragraph around it. It is a glossary: the term on its own
+     line, the definition under it in the column every other sentence uses, and
+     a hairline between entries. Two columns where there is room for two. */
+  dl.measures {
+    margin: var(--s5) 0 0; padding: 0; max-width: none;
+    column-gap: var(--s7);
+  }
+  @media (min-width: 68rem) { dl.measures { columns: 2; } }
+  dl.measures .measure {
+    break-inside: avoid; padding: var(--s3) 0;
+    border-top: 1px solid var(--line);
+    max-width: var(--measure);
+  }
+  dl.measures dt {
+    font-family: var(--sans); font-size: var(--t-sm); font-weight: 600;
+    letter-spacing: .02em; color: var(--fg); margin-bottom: var(--s1);
+  }
+  dl.measures dd { margin: 0; color: var(--ink); font-size: var(--t-md); }
+  /* A caveat inside a definition. It is always the tail of the entry and it is
+     often longer than the definition it qualifies, so setting it in `--warn`
+     put three or four amber sentences under every one of eleven columns. Same
+     answer as `p.note`: ink, and a rule in the margin. */
+  dl.measures em, dl.measures .measured {
+    display: block; font-style: normal;
+    border-left: 2px solid var(--warn); padding-left: var(--s3);
+  }
+  dl.measures em { color: var(--ink); margin-top: var(--s2); }
+  /* The half of a caveat that was read off the table rather than written into
+     it. Full contrast, because those are the two figures a reader can check
+     against the rows a finger-scroll above the sentence. It continues the
+     caveat's rule rather than starting a second one. */
+  dl.measures .measured { color: var(--fg); font-weight: 600; }
+
+  /* --- the two links out ------------------------------------------------ */
+
+  /* Was a rounded card with `margin: 1.4rem 0 0` -- no bottom margin at all,
+     so the brief sat flush against the track switch under it with a measured
+     gap of zero pixels. A left rule, and space on both sides of it. */
   .methods-link {
-    margin: 1.4rem 0 0; padding: .9rem 1.1rem; font-size: .9rem;
-    border: 1px solid var(--line); border-radius: 8px; background: var(--card);
-    color: var(--muted);
+    margin: var(--s6) 0; padding: var(--s2) 0 var(--s2) var(--s4);
+    border-left: 2px solid var(--accent);
+    font-size: var(--t-md); color: var(--ink); max-width: var(--measure);
   }
   .methods-link a { font-weight: 600; }
 
-  @media (max-width: 640px) {
-    .switch { gap: .5rem; }
-    .pick button { font-size: .82rem; }
+  /* --- panels inside a section ------------------------------------------ */
+
+  .design { margin: var(--s4) 0 var(--s5); font-size: var(--t-md); }
+  .design-marks { display: flex; gap: var(--s2); flex-wrap: wrap; margin-bottom: var(--s3); }
+  .role {
+    display: inline-block; padding: .12em .45em; border-radius: var(--radius);
+    font-family: var(--sans); font-size: var(--t-xs); font-weight: 600;
+    letter-spacing: .04em; text-transform: uppercase;
+  }
+  .role-competitor { background: var(--accent-tint); color: var(--accent); }
+  .role-key { background: var(--chip); color: var(--warn); }
+  .design dl { display: grid; gap: var(--s2) var(--s4); margin: 0; max-width: none; }
+  .design dl > div {
+    display: grid; grid-template-columns: minmax(8rem, 10rem) 1fr; gap: 0 var(--s4);
+    padding-bottom: var(--s2); border-bottom: 1px solid var(--line);
+  }
+  .design dt {
+    font-family: var(--sans); font-size: var(--t-sm); font-weight: 600; color: var(--fg);
+  }
+  .design dd { margin: 0; color: var(--ink); }
+
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s5); margin: var(--s4) 0; }
+  .pair > div { padding-left: var(--s4); border-left: 1px solid var(--line); }
+  .pair h4 {
+    margin: 0 0 var(--s2); font-family: var(--sans); font-size: var(--t-xs);
+    text-transform: uppercase; letter-spacing: .07em; color: var(--muted);
+  }
+  .pair p { margin: 0; font-size: var(--t-md); line-height: 1.55; }
+  @media (max-width: 45rem) {
+    .pair { grid-template-columns: 1fr; }
+    .design dl > div { grid-template-columns: 1fr; }
+  }
+
+  /* --- the protocol panel ----------------------------------------------- */
+
+  .soap { display: grid; gap: 0; margin-bottom: var(--s5); }
+  .soap div {
+    display: grid; grid-template-columns: 7rem 1fr; gap: 0 var(--s4);
+    padding: var(--s2) 0; border-bottom: 1px solid var(--line);
+  }
+  .soap dt { font-family: var(--sans); font-size: var(--t-sm); font-weight: 600; }
+  .soap dd { margin: 0; color: var(--ink); font-size: var(--t-md); }
+  .criteria { display: grid; gap: var(--s5); }
+  .criteria h4 {
+    margin: 0 0 var(--s2); font-family: var(--sans); font-size: var(--t-xs);
+    text-transform: uppercase; letter-spacing: .07em; color: var(--muted);
+  }
+  .criteria ol {
+    margin: 0; padding-left: var(--s5); display: grid; gap: var(--s2);
+    font-size: var(--t-md);
+  }
+  .criteria li::marker { color: var(--muted); }
+  .criteria b { font-weight: 600; }
+  .criteria span { color: var(--muted); }
+  ol.sections {
+    margin: 0; padding-left: var(--s5); font-size: var(--t-md);
+    display: grid; gap: var(--s2);
+  }
+  ol.sections b { font-weight: 600; }
+  ol.sections span { color: var(--muted); }
+  ol.queue { line-height: 1.9; }
+  ol.queue .chip { margin-left: var(--s2); }
+  ol.sections li { break-inside: avoid; }
+  @media (max-width: 40rem) { ol.sections { columns: 1; } }
+
+  ul.dominance {
+    margin: var(--s2) 0 0; padding-left: var(--s4); font-size: var(--t-md);
+    line-height: 1.7;
+  }
+  ul.dominance code { font-size: .88em; }
+
+  /* --- saturation ------------------------------------------------------- */
+
+  .legend {
+    display: flex; flex-wrap: wrap; gap: var(--s1) var(--s5);
+    margin: var(--s2) 0 var(--s4); font-family: var(--sans);
+    font-size: var(--t-sm); max-width: none;
+  }
+  .legend span { display: inline-flex; align-items: center; gap: var(--s2); color: var(--muted); }
+  .legend i { width: 11px; height: 11px; border-radius: 2px; display: inline-block; }
+  .sat-table td.mark { width: 42%; padding-right: 0; }
+  .sat-table .verdict {
+    font-size: var(--t-xs); letter-spacing: .04em; white-space: nowrap;
+    text-transform: uppercase; font-weight: 600;
+  }
+  svg.plot { display: block; width: 100%; height: auto; overflow: visible; }
+  svg.plot.fixed { width: auto; max-width: none; min-width: 30rem; }
+  svg.plot text { font-family: var(--sans); fill: var(--muted); font-size: 11px; }
+  svg.plot text.name { fill: var(--fg); font-size: 12px; font-weight: 600; }
+  svg.plot text.value { font-variant-numeric: tabular-nums; }
+  svg.plot .grid { stroke: var(--line); stroke-width: 1; }
+  svg.plot .rule { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3; }
+
+  /* One section per track inside a panel that has a single heading. */
+  .track-head {
+    margin: var(--s6) 0 var(--s3); font-family: var(--sans);
+    font-size: var(--t-md); font-weight: 600; text-transform: uppercase;
+    letter-spacing: .07em; color: var(--muted);
+  }
+  .track-head:first-child { margin-top: var(--s2); }
+
+  /* --- the foot --------------------------------------------------------- */
+
+  /* Ink, not `--muted`: five paragraphs of caveat about what these tables may
+     be compared with is an argument, and it was set in a caption colour. */
+  footer {
+    color: var(--ink); font-size: var(--t-md); margin-top: var(--s8);
+    padding-top: var(--s5); border-top: 1px solid var(--line);
+    max-width: var(--measure);
+  }
+  footer p { margin: 0 0 var(--s3); max-width: var(--measure); }
+  footer strong { color: var(--fg); }
+
+  @media (max-width: 48rem) {
+    :root { --t-xl: 1.625rem; --t-body: 1rem; }
+    body { padding: var(--s5) var(--s4) var(--s7); }
+    .pick button { margin-right: var(--s3); }
   }
 </style>
+
 </head>
 <body>
 <main>
