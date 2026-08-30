@@ -65,6 +65,10 @@ select = ["E", "F", "I", "UP", "B", "SIM"]
 # One field description per line reads better than a rewrapped paragraph, and
 # these are prose for the page rather than code.
 "src/tnb/tasks/icare.py" = ["E501"]
+# The coder prompts are Czech instructions sent to a model. Their line breaks
+# are part of the string, so rewrapping them to fit a column would change what
+# was asked -- and the prompt digest every cached answer is keyed on with it.
+"tools/czech_code.py" = ["E501"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
