@@ -303,10 +303,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     between = payload["between_judges"]
     if between:
-        print(
-            f"\njudge against judge, {between['notes']} real notes "
-            f"under {between['rubric']}\n"
-        )
+        print(f"\njudge against judge, {between['notes']} real notes under {between['rubric']}\n")
         for key, entry in sorted(between["criteria"].items()):
             gap = f"  (+{entry['unanswered']} answered by only one)" if entry["unanswered"] else ""
             rate = f"{entry['rate']:.2f}" if entry["rate"] is not None else "--"

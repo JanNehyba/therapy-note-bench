@@ -110,7 +110,22 @@ def krippendorff_alpha(units: list[list[str]]) -> float | None:
     return round(1 - (grand - observed) / (grand - expected), 4)
 
 
-def load(source: Path, mode: str) -> list[dict]:
+#: Which corpus a row belongs to, read off the session id. See the twin of this
+#: in ``czech_graduate``: the file holds every corpus the panel has read and a
+#: row says which one only through its session id.
+TRACK_PREFIX = {"czech-real": "cz-r-", "czech-translated": "cz-t-"}
+
+
+def load(source: Path, mode: str, track: str | None = None) -> list[dict]:
+    """The coded rows of one corpus, or of all of them.
+
+    An agreement figure pooled over two corpora is not an agreement figure about
+    either. Where the coders agree more about one half than the other, pooling
+    hides exactly the thing worth knowing.
+    """
+    prefix = TRACK_PREFIX.get(track) if track else None
+    if track and prefix is None:
+        raise ValueError(f"{track} has no session prefix. Known: {', '.join(TRACK_PREFIX)}")
     rows = []
     with source.open(encoding="utf-8") as handle:
         for line in handle:
@@ -118,8 +133,11 @@ def load(source: Path, mode: str) -> list[dict]:
             if not line:
                 continue
             row = json.loads(line)
-            if row.get("mode") == mode:
-                rows.append(row)
+            if row.get("mode") != mode:
+                continue
+            if prefix and not str(row.get("session_id", "")).startswith(prefix):
+                continue
+            rows.append(row)
     return rows
 
 
@@ -219,10 +237,11 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Agreement across the coder panel.")
     parser.add_argument("--source", type=Path, default=DEFAULT_SOURCE)
     parser.add_argument("--mode", default="deductive")
+    parser.add_argument("--track", default="czech-real")
     parser.add_argument("--target", type=Path, default=DEFAULT_TARGET)
     args = parser.parse_args()
 
-    rows = load(args.source, args.mode)
+    rows = load(args.source, args.mode, track=args.track)
     payload = {"caveat": CAVEAT, "mode": args.mode, "rows": len(rows), "categories": measure(rows)}
     args.target.write_text(
         json.dumps(payload, indent=2, ensure_ascii=False, sort_keys=True) + "\n",

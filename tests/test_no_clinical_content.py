@@ -72,6 +72,16 @@ ALLOWED_CZECH = {
     "tools/czech_brief_cs.py": "the Czech text of the briefing that goes to the team",
     "tests/fixtures/czech/real/999001.txt": "invented transcript, marked as such",
     "tests/fixtures/czech/translated/ukazka-b.txt": "invented transcript, marked as such",
+    "tools/czech_code.py": "the two coder prompts, in the language of the notes "
+    "they are asked about",
+    "tools/czech_units.py": "the abbreviations a full stop does not end a sentence "
+    "after, the openers that only qualify what came before, and the subordinators "
+    "that open a second clause -- all of them Czech grammar, none of them a note",
+    "tools/czech_structure.py": "the Czech a regular expression has to match to "
+    "count a paralinguistic claim, a refusal to judge, or a stopword",
+    "tests/test_czech_code.py": "an invented note, used to exercise the span check",
+    "tests/test_czech_units.py": "invented sentences, used to exercise the cut",
+    "tests/test_czech_structure.py": "an invented note, used to exercise the census",
     "src/tnb/i18n.py": "the Czech translations of the two published pages",
     "src/tnb/templates/_helpers.html": "the language switch names its own languages",
     # The two generated pages carry Czech deliberately, and a blanket pass here

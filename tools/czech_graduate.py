@@ -51,15 +51,38 @@ GATES = {
 }
 
 
-def load_rows(path: Path, mode: str = "deductive") -> list[dict]:
+#: Which corpus a row belongs to, read off the session id. The ids are digests
+#: prefixed by their half, so this needs no lookup and cannot drift from the
+#: corpus the row was actually coded from.
+TRACK_PREFIX = {"czech-real": "cz-r-", "czech-translated": "cz-t-"}
+
+
+def load_rows(path: Path, mode: str = "deductive", track: str | None = None) -> list[dict]:
+    """The coded rows of one corpus, or of all of them.
+
+    **The track filter is not optional in practice, and it was missing.** The
+    file holds every corpus the panel has read, and nothing in a row says which
+    one it came from except its session id. Reading the file whole and averaging
+    it produced one number over two corpora -- for a panel whose own heading says
+    "the real sessions". Two corpora that differ by a factor of seven in
+    transcript length are not one corpus, and this repository already refuses to
+    pool them anywhere else.
+    """
+    prefix = TRACK_PREFIX.get(track) if track else None
+    if track and prefix is None:
+        raise ValueError(f"{track} has no session prefix. Known: {', '.join(TRACK_PREFIX)}")
     rows = []
     with path.open(encoding="utf-8") as handle:
         for line in handle:
             line = line.strip()
-            if line:
-                row = json.loads(line)
-                if row.get("mode") == mode:
-                    rows.append(row)
+            if not line:
+                continue
+            row = json.loads(line)
+            if row.get("mode") != mode:
+                continue
+            if prefix and not str(row.get("session_id", "")).startswith(prefix):
+                continue
+            rows.append(row)
     return rows
 
 
@@ -367,7 +390,7 @@ def main() -> None:
     parser.add_argument("--target", type=Path, default=DEFAULT_TARGET)
     args = parser.parse_args()
 
-    rows = load_rows(args.codes)
+    rows = load_rows(args.codes, track=args.track)
     shares = per_note_share(rows)
     reliability = (
         json.loads(args.reliability.read_text(encoding="utf-8"))["categories"]
