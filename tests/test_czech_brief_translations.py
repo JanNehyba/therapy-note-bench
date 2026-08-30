@@ -113,3 +113,26 @@ def test_no_czech_entry_answers_a_sentence_the_briefing_no_longer_prints() -> No
         "If that is because a paragraph was reworded, re-key it; if a paragraph "
         "was deleted, delete its translation."
     )
+
+
+def test_the_czech_document_does_not_write_over_the_english_one() -> None:
+    """`--language cs` without `--target` used to overwrite `czech-brief.html`.
+
+    The default target was one constant for both languages, so building Czech
+    put a Czech document at the English document's path and left the Czech
+    path holding whatever was last built there. Nothing raised, both files
+    existed, and the only symptom was English readers opening Czech.
+    """
+    import czech_brief  # noqa: PLC0415
+
+    from tnb import i18n as _i18n  # noqa: PLC0415
+
+    english = czech_brief.default_target(_i18n.DEFAULT_LANG)
+    assert english.name == "czech-brief.html"
+
+    others = {
+        czech_brief.default_target(lang) for lang in _i18n.LANGUAGES if lang != _i18n.DEFAULT_LANG
+    }
+    assert others, "there is only one language, so this test is checking nothing"
+    assert english not in others
+    assert len(others) == len(_i18n.LANGUAGES) - 1, "two languages share one file"

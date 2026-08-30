@@ -52,6 +52,20 @@ DEFAULT_SOURCE = REPO / "local" / "czech-rows.jsonl"
 DEFAULT_TARGET = REPO / "local" / "czech-brief.html"
 
 
+def default_target(language: str) -> Path:
+    """Where the document goes when `--target` is not given.
+
+    It has to depend on the language. When it did not, `--language cs` wrote
+    over `czech-brief.html` -- the English document -- and left the Czech one
+    stale at whatever hour it was last built by hand. Nothing failed and both
+    files existed, so the only way to notice was to open the English one and
+    find Czech in it.
+    """
+    if language == i18n.DEFAULT_LANG:
+        return DEFAULT_TARGET
+    return DEFAULT_TARGET.with_name(f"{DEFAULT_TARGET.stem}-{language}.html")
+
+
 #: The language the document is written in for this run. A module-level switch
 #: rather than a parameter threaded through fifteen functions: every one of them
 #: renders prose, and the alternative is fifteen signatures that exist to carry
@@ -5669,7 +5683,7 @@ def main(argv: list[str] | None = None) -> int:
 
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--source", type=Path, default=DEFAULT_SOURCE)
-    parser.add_argument("--target", type=Path, default=DEFAULT_TARGET)
+    parser.add_argument("--target", type=Path, default=None)
     parser.add_argument(
         "--language",
         choices=i18n.LANGUAGES,
@@ -5682,6 +5696,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
     LANG = args.language
+    target = args.target or default_target(LANG)
 
     if not args.source.exists():
         print(f"{args.source} is not there. Run `tnb score-czech` first.", file=sys.stderr)
@@ -5703,10 +5718,10 @@ def main(argv: list[str] | None = None) -> int:
             print(f"  {problem}", file=sys.stderr)
         return 1
 
-    args.target.parent.mkdir(parents=True, exist_ok=True)
-    args.target.write_text(build(rows), encoding="utf-8")
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(build(rows), encoding="utf-8")
     scored = sum(1 for row in results.latest(rows) if row.is_scored)
-    print(f"wrote {args.target}  ({scored} scored row(s) from {len(rows)})")
+    print(f"wrote {target}  ({scored} scored row(s) from {len(rows)})")
     return 0
 
 
