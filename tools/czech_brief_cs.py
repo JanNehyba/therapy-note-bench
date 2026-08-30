@@ -325,16 +325,56 @@ CS: dict[str, str] = {
         "Vygenerováno nástrojem tools/czech_brief.py z local/czech-rows.jsonl. "
         "Oba soubory jsou mimo verzování."
     ),
-    "models. Whether a standing in one predicts a standing in the other has two "
-    "answers, and which one a reader gets depends on which English number they were "
-    "looking at. Bold is a correlation that survives an exact permutation test at "
-    "p < 0.05.": (
-        "modelů. Zda umístění v jedné předpovídá "
-        "umístění v druhé, má dvě odpovědi, a kterou "
-        "čtenář dostane, závisí na tom, na které "
-        "anglické číslo se díval. Tučně je korelace, "
-        "která obstojí v přesném permutačním testu na "
-        "p < 0.05."
+    # --- what the numbers from outside say ---------------------------------
+    "What the numbers from outside say": "Co říkají čísla zvenčí",
+    "Two numbers about these models exist outside this document, and both are the kind "
+    "of thing somebody reaches for instead of running a benchmark: this project's own "
+    "English leaderboard, and a published index of general capability. This chapter "
+    "asks what either one tells a reader about the Czech notes. Each half opens with "
+    "its chart, because a chart is the part of this that can be read without "
+    "arithmetic, and the tables under it ask the same question one column at a time. "
+    "Bold in those tables marks a correlation that survives an exact permutation test "
+    "at p < 0.05; the rest failed it and are printed anyway, because how little there "
+    "is to see is the result here, and dropping the weak cells would flatter it.": (
+        "O těchhle modelech existují mimo tenhle dokument dvě čísla a po obou by "
+        "člověk sáhl místo toho, aby benchmark spouštěl: vlastní anglický žebříček "
+        "tohohle projektu a publikovaný index obecné schopnosti. Tahle kapitola se "
+        "ptá, co z kteréhokoli z nich plyne pro české zápisy. Každá polovina začíná "
+        "svým grafem, protože graf je ta část, která se dá přečíst bez počítání, "
+        "a tabulky pod ním kladou tutéž otázku po jednotlivých sloupcích. Tučně je "
+        "v nich korelace, která obstojí v přesném permutačním testu na p < 0.05; "
+        "ostatní neobstály a jsou vytištěné stejně, protože výsledkem je tady právě "
+        "to, jak málo je vidět, a vypustit slabé buňky by ho přikrášlilo."
+    ),
+    "{systems} models, and whether a standing in one language predicts a standing in "
+    "the other has two answers -- which one a reader gets depends on which English "
+    "number they happened to be looking at.": (
+        "{systems} modelů — a otázka, jestli umístění v jednom jazyce předpovídá "
+        "umístění v druhém, má dvě odpovědi. Kterou z nich čtenář dostane, závisí na "
+        "tom, na které anglické číslo se zrovna díval."
+    ),
+    "One block per judge, one line per model: its place among these models on the "
+    "English notes, joined to the place the same instrument gave it in Czech. A level "
+    "grey line is a model that kept its place. Each model is counted once under each "
+    "judge, so the count in the title is over placings rather than over models. And a "
+    "place is not a measurement -- two models a hundredth apart are drawn a whole "
+    "place apart -- which is the point of drawing it: a leaderboard hands a reader a "
+    "place, and this is what that place is worth in the other language.": (
+        "Jeden blok na soudce, jedna čára na model: jeho místo mezi těmito modely na "
+        "anglických zápisech, spojené s místem, které mu tentýž nástroj dal v češtině. "
+        "Vodorovná šedá čára je model, který si své místo udržel. Každý model se "
+        "počítá jednou u každého soudce, takže počet v nadpisu je počet umístění, ne "
+        "počet modelů. A místo není měření — dva modely vzdálené o setinu jsou "
+        "nakreslené o celé místo od sebe — a právě proto to stojí za nakreslení: "
+        "žebříček podává čtenáři místo a tohle je to, co takové místo vydrží "
+        "v druhém jazyce."
+    ),
+    "The English page sorts by one measure -- {measure} -- and a position on that page "
+    "means what that measure says. Here it stands against the Czech quality columns. "
+    "Nothing survives the test, and the two judges do not agree even on the sign.": (
+        "Anglická stránka řadí podle jediného měřítka — {measure} — a umístění na ní "
+        "znamená to, co říká ono měřítko. Tady stojí proti sloupcům české kvality. "
+        "Nic z toho testem neprojde a soudci se neshodnou ani na znaménku."
     ),
     # --- the human anchor's own sentences ----------------------------------
     "One native speaker answered all six questions for each of twenty notes. A "
@@ -726,10 +766,29 @@ CS: dict[str, str] = {
     ),
     # --- general capability against these numbers --------------------------
     "Does general capability predict any of this?": ("Předpovídá obecná schopnost něco z tohohle?"),
-    "Nothing in this repository records how big a model is or when it shipped, so this "
-    "comes from outside it. Bold survives a permutation test at p < 0.05.": (
-        "Nic v tomhle repozitáři nezaznamenává, jak velký model je ani kdy vyšel, "
-        "takže tohle pochází zvenčí. Tučné obstálo v permutačním testu na p < 0.05."
+    "Nothing in this repository records how big a model is, how it was trained or when "
+    "it shipped, so this half has to come from outside it. The index used here is a "
+    "published one that scores models on general capability -- the kind of number a "
+    "team reads before choosing one. The question is whether it says anything about "
+    "the notes, and whether it says the same thing in both languages.": (
+        "Nic v tomhle repozitáři nezaznamenává, jak velký model je, jak byl trénovaný "
+        "ani kdy vyšel, takže tahle polovina musí přijít zvenčí. Použitý index je "
+        "publikovaný a hodnotí modely podle obecné schopnosti — je to ten druh čísla, "
+        "podle kterého si tým model vybírá. Otázka zní, jestli říká něco o zápisech "
+        "a jestli říká totéž v obou jazycích."
+    ),
+    "On the left the English notes, on the right the Czech ones, one dot per model and "
+    "one colour per judge. The vertical axis runs the whole of PDSQI-9, from 1 to 5, "
+    "rather than the part these models occupy, so how little of the instrument is in "
+    "use is visible before the slope across it is read. Each judge's correlation and "
+    "the number of models behind it are both in the legend, and the second number "
+    "matters as much as the first.": (
+        "Vlevo anglické zápisy, vpravo české, jeden bod na model a jedna barva na "
+        "soudce. Svislá osa jde přes celé PDSQI-9, od 1 do 5, a ne jen přes tu část, "
+        "kterou modely obsazují — je tedy vidět, jak málo se z nástroje využívá, dřív "
+        "než se začne číst sklon přes něj. V legendě je u každého soudce jeho korelace "
+        "i počet modelů, na kterých stojí, a to druhé číslo je stejně důležité jako "
+        "to první."
     ),
     "Measured here": "Měřeno tady",
     "Intelligence index": "Index inteligence",
@@ -738,15 +797,22 @@ CS: dict[str, str] = {
     "English quality (PDSQI-9)": "Anglická kvalita (PDSQI-9)",
     "Czech quality (PDSQI-9)": "Česká kvalita (PDSQI-9)",
     "Czech language (the six criteria)": "Čeština (šest kritérií)",
-    "None of this was measured here.": "Nic z toho jsme neměřili my.",
-    "The models are matched to the public ones by name, and a name on the endpoint is "
-    "not evidence about which model is behind it -- this project's first working rule "
-    "exists because one returned another's output. Models whose name does not identify "
-    "a variant are absent rather than guessed:": (
-        "Modely jsou k těm veřejným přiřazené podle jména a jméno na endpointu není "
-        "důkaz o tom, který model za ním stojí — první pracovní pravidlo tohohle "
-        "projektu vzniklo proto, že jeden vracel výstup jiného. Modely, jejichž jméno "
-        "neurčuje variantu, tu nejsou, místo aby se hádaly:"
+    "Neither of the outside numbers in this chapter was measured by this project, and "
+    "each is joined to it at a weak point.": (
+        "Ani jedno z čísel zvenčí, která jsou v téhle kapitole, jsme neměřili my, "
+        "a obě jsou k našim číslům připojená ve slabém místě."
+    ),
+    "The capability index is a published third-party score, and the join to it is "
+    "nothing but the model's name: a name on this endpoint is not evidence about which "
+    "model is behind it, and this project's first working rule exists because one id "
+    "there returned another model's output.": (
+        "Index schopnosti je publikované skóre třetí strany a spojkou k němu není nic "
+        "než jméno modelu: jméno na tomhle endpointu není důkaz o tom, který model za "
+        "ním stojí, a první pracovní pravidlo tohohle projektu vzniklo proto, že jedno "
+        "z tamních id vracelo výstup jiného modelu."
+    ),
+    "Models whose name does not identify a variant are absent rather than guessed:": (
+        "Modely, jejichž jméno neurčuje variantu, tu nejsou, místo aby se hádaly:"
     ),
     "The external score is versioned like the measures here are, so it is recorded "
     "with the version and the day it was read:": (

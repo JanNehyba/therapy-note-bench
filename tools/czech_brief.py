@@ -2400,6 +2400,134 @@ def _criteria_prose(rows: list[results.Row]) -> str:
     )
 
 
+#: The chapter both outside comparisons live in. They were two chapters with a
+#: caveat box each, and the two boxes said the same thing twice: that the number
+#: on the outside was not measured here. One chapter, one box.
+OUTSIDE_TITLE = "What the numbers from outside say"
+OUTSIDE_LEAD = (
+    "Two numbers about these models exist outside this document, and both are the kind "
+    "of thing somebody reaches for instead of running a benchmark: this project's own "
+    "English leaderboard, and a published index of general capability. This chapter "
+    "asks what either one tells a reader about the Czech notes. Each half opens with "
+    "its chart, because a chart is the part of this that can be read without "
+    "arithmetic, and the tables under it ask the same question one column at a time. "
+    "Bold in those tables marks a correlation that survives an exact permutation test "
+    "at p < 0.05; the rest failed it and are printed anyway, because how little there "
+    "is to see is the result here, and dropping the weak cells would flatter it."
+)
+JOIN_LEAD = (
+    "{systems} models, and whether a standing in one language predicts a standing in "
+    "the other has two answers -- which one a reader gets depends on which English "
+    "number they happened to be looking at."
+)
+JOIN_RANKING_LEAD = (
+    "The English page sorts by one measure -- {measure} -- and a position on that page "
+    "means what that measure says. Here it stands against the Czech quality columns. "
+    "Nothing survives the test, and the two judges do not agree even on the sign."
+)
+JOIN_FIGURE_CAPTION = (
+    "One block per judge, one line per model: its place among these models on the "
+    "English notes, joined to the place the same instrument gave it in Czech. A level "
+    "grey line is a model that kept its place. Each model is counted once under each "
+    "judge, so the count in the title is over placings rather than over models. And a "
+    "place is not a measurement -- two models a hundredth apart are drawn a whole "
+    "place apart -- which is the point of drawing it: a leaderboard hands a reader a "
+    "place, and this is what that place is worth in the other language."
+)
+EXTERNAL_LEAD = (
+    "Nothing in this repository records how big a model is, how it was trained or when "
+    "it shipped, so this half has to come from outside it. The index used here is a "
+    "published one that scores models on general capability -- the kind of number a "
+    "team reads before choosing one. The question is whether it says anything about "
+    "the notes, and whether it says the same thing in both languages."
+)
+EXTERNAL_FIGURE_CAPTION = (
+    "On the left the English notes, on the right the Czech ones, one dot per model and "
+    "one colour per judge. The vertical axis runs the whole of PDSQI-9, from 1 to 5, "
+    "rather than the part these models occupy, so how little of the instrument is in "
+    "use is visible before the slope across it is read. Each judge's correlation and "
+    "the number of models behind it are both in the legend, and the second number "
+    "matters as much as the first."
+)
+#: The one caveat, where there were two. The first two sentences are the two
+#: weak joins, one per half; the rest is the provenance of the outside index,
+#: which is the half that came from somebody else entirely.
+OUTSIDE_CAVEAT_LEAD = (
+    "Neither of the outside numbers in this chapter was measured by this project, and "
+    "each is joined to it at a weak point."
+)
+OUTSIDE_MATCH = (
+    "The capability index is a published third-party score, and the join to it is "
+    "nothing but the model's name: a name on this endpoint is not evidence about which "
+    "model is behind it, and this project's first working rule exists because one id "
+    "there returned another model's output."
+)
+OUTSIDE_UNMATCHED = "Models whose name does not identify a variant are absent rather than guessed:"
+
+
+def _outside() -> str:
+    """Both outside comparisons under one heading, with one caveat under both.
+
+    They were two chapters, each ending in a warn box, and the two boxes
+    overlapped on the thing that matters most in either: the number on the
+    outside was measured somewhere else, by somebody else, on something else.
+    Said twice, a caveat teaches a reader to skip caveats.
+
+    Each half now opens with its chart. The tables are correlation grids with a
+    p-value in every cell, which is the form the answer has and not a form a
+    clinical reader can act on; the charts carry the same two answers in a
+    shape that can be read, and the tables stay under them for anyone who wants
+    the coefficient.
+    """
+    halves = [half for half in (_join(), _external()) if half]
+    if not halves:
+        return ""
+    return (
+        f"<h2>{html.escape(_t(OUTSIDE_TITLE))}</h2>"
+        + f"<p>{html.escape(_t(OUTSIDE_LEAD))}</p>"
+        + "".join(halves)
+        + _outside_caveat()
+    )
+
+
+def _outside_caveat() -> str:
+    """The one warn box the chapter ends on, built from what is in this checkout.
+
+    Each sentence is printed only where the thing it warns about is: a document
+    built without the external payload does not carry a sentence about a name
+    match nobody made, and the unmatched models are named only when there are
+    any -- a colon with nothing after it reads as a list that went missing.
+    """
+    join = _payload("czech-join.json")
+    external = _payload("czech-external.json")
+    if not join and not external:
+        return ""
+    said = [f"<strong>{html.escape(_t(OUTSIDE_CAVEAT_LEAD))}</strong>"]
+    confound = join.get("confound") or ""
+    if confound:
+        said.append(html.escape(_t(confound)))
+    if external:
+        said.append(html.escape(_t(OUTSIDE_MATCH)))
+        unmatched = ", ".join(external.get("unmatched") or [])
+        if unmatched:
+            said.append(html.escape(_t(OUTSIDE_UNMATCHED)) + f" {html.escape(unmatched)}.")
+        version, fetched = external.get("index_version", ""), external.get("fetched", "")
+        if version or fetched:
+            said.append(
+                html.escape(
+                    _t(
+                        "The external score is versioned like the measures here are, "
+                        "so it is recorded with the version and the day it was read:"
+                    )
+                )
+                + f" {html.escape(version)}, {html.escape(fetched)}."
+            )
+    reading = join.get("reading") or ""
+    if reading:
+        said.append(html.escape(_t(reading)))
+    return "<div class='warn'><p>" + " ".join(said) + "</p></div>"
+
+
 def _join() -> str:
     """The question the track was built for, answered in the document that leaves.
 
@@ -2410,7 +2538,12 @@ def _join() -> str:
 
     A cell carries its p-value because nine models invite over-reading, and the
     two judges sit side by side because the reading rule is "believe a column
-    that says the same thing under both".
+    that says the same thing under both". Both of those are said once for the
+    whole chapter now, above it, rather than once per half.
+
+    The chart comes before the tables because it answers the same question in
+    the form a reader asked it: not "what is the rank correlation of Thorough"
+    but "does a model that is third in English stay third in Czech".
     """
     path = REPO / "local" / "czech-join.json"
     if not path.exists():
@@ -2446,28 +2579,32 @@ def _join() -> str:
             label = _t(labels.get(key, {}).get("label", key))
             rows.append(f"<tr><td>{html.escape(label)}</td>" + "".join(cells) + "</tr>")
         head = "".join(f"<th>{html.escape(name)}</th>" for name in judges)
+        # The claim opens its own paragraph instead of standing as a heading
+        # over it. Under a chapter these two are halves of a half, and a third
+        # level of heading over a six-row table reads as more structure than
+        # there is.
         return (
-            f"<h3>{html.escape(heading)}</h3><p>{html.escape(lead)}</p>"
+            f"<p><strong>{html.escape(heading)}.</strong> {html.escape(lead)}</p>"
             f"<table><thead><tr><th>{_t('Attribute')}</th>{head}</tr></thead>"
             f"<tbody>{''.join(rows)}</tbody></table>"
         )
 
     flat = sorted({key for name in judges for key in data["judges"][name].get("flat", [])})
+    # The label a reader of this document has already met, not the payload's
+    # key. The summary at the top names the same measure through the same
+    # table, so the raw key here made one measure appear under two names --
+    # "completeness" in this sentence and "Uplnost" three pages above it.
     ranking = data["judges"][judges[0]].get("ranking_measure", "the ranking measure")
+    for measures in MEASURE_TABLES.values():
+        if ranking in measures:
+            ranking = _t(measures[ranking]["label"])
+            break
     systems = len(data["judges"][judges[0]].get("systems", []))
 
     return (
-        f"<h2>{_t('Does the English leaderboard predict the Czech?')}</h2>"
-        + f"<p>{systems} "
-        + html.escape(
-            _t(
-                "models. Whether a standing in one predicts a standing in the other "
-                "has two answers, and which one a reader gets depends on which "
-                "English number they were looking at. Bold is a correlation that "
-                "survives an exact permutation test at p < 0.05."
-            )
-        )
-        + "</p>"
+        f"<h3>{_t('Does the English leaderboard predict the Czech?')}</h3>"
+        + f"<p>{html.escape(_t(JOIN_LEAD).format(systems=systems))}</p>"
+        + _figure("join", JOIN_FIGURE_CAPTION)
         + block(
             "same_instrument",
             _t("Asked the same question, quality transfers"),
@@ -2480,12 +2617,7 @@ def _join() -> str:
         + block(
             "leaderboard_ranking",
             _t("Asked the leaderboard's own measure, it does not"),
-            f"{ranking} "
-            + _t(
-                "-- what the page sorts by, so what a position means -- against the "
-                "Czech quality columns. Nothing here survives the test, and the two "
-                "judges do not agree even on the sign."
-            ),
+            _t(JOIN_RANKING_LEAD).format(measure=ranking),
         )
         + (
             f"<p class='sub'>{_t('Flat on one side and therefore not correlated:')} "
@@ -2493,8 +2625,6 @@ def _join() -> str:
             if flat
             else ""
         )
-        + f"<div class='warn'><p>{html.escape(_t(data.get('confound', '')))} "
-        f"{html.escape(_t(data.get('reading', '')))}</p></div>"
     )
 
 
@@ -2519,7 +2649,9 @@ def _external() -> str:
     and this repository's first working rule exists because a name lied. The
     external score is versioned, so a figure without its index version and
     fetch date is unattributable in a month. And the models that could not be
-    matched are named rather than quietly dropped.
+    matched are named rather than quietly dropped. All three are now in the
+    chapter's one caveat box, under both halves, and in the chart's own
+    footnote -- a picture has to carry its provenance wherever it is looked at.
     """
     path = REPO / "local" / "czech-external.json"
     if not path.exists():
@@ -2569,7 +2701,7 @@ def _external() -> str:
         # separable from chance, is a finding and not a table.
         if not significant:
             blocks.append(
-                f"<h3>{html.escape(_t(heading))}</h3><p>"
+                f"<p><strong>{html.escape(_t(heading))}:</strong> "
                 + html.escape(
                     _t(EXTERNAL_NOTHING).format(
                         what=_t(heading).lower(), cells=len(rows) * len(judges)
@@ -2586,47 +2718,18 @@ def _external() -> str:
             f"<th>{html.escape(_t('as {judge} sees it').format(judge=j))}</th>" for j in judges
         )
         blocks.append(
-            f"<h3>{html.escape(_t(heading))}</h3>"
+            f"<p><strong>{html.escape(_t(heading))}</strong></p>"
             f"<table><thead><tr><th>{_t('Measured here')}</th>{head}</tr></thead>"
             f"<tbody>{''.join(rows)}</tbody></table>"
         )
     if not blocks:
         return ""
 
-    unmatched = ", ".join(data.get("unmatched", []))
     return (
-        f"<h2>{_t('Does general capability predict any of this?')}</h2>"
-        + "<p>"
-        + html.escape(
-            _t(
-                "Nothing in this repository records how big a model is or when it "
-                "shipped, so this comes from outside it. Bold survives a permutation "
-                "test at p < 0.05."
-            )
-        )
-        + "</p>"
+        f"<h3>{_t('Does general capability predict any of this?')}</h3>"
+        + f"<p>{html.escape(_t(EXTERNAL_LEAD))}</p>"
+        + _figure("external", EXTERNAL_FIGURE_CAPTION)
         + "".join(blocks)
-        + "<div class='warn'><p><strong>"
-        + html.escape(_t("None of this was measured here."))
-        + "</strong> "
-        + html.escape(
-            _t(
-                "The models are matched to the public ones by name, and a name on the "
-                "endpoint is not evidence about which model is behind it -- this "
-                "project's first working rule exists because one returned another's "
-                "output. Models whose name does not identify a variant are absent "
-                "rather than guessed:"
-            )
-        )
-        + f" {html.escape(unmatched)}. "
-        + html.escape(
-            _t(
-                "The external score is versioned like the measures here are, so it is "
-                "recorded with the version and the day it was read:"
-            )
-        )
-        + f" {html.escape(data.get('index_version', ''))}, "
-        + f"{html.escape(data.get('fetched', ''))}.</p></div>"
     )
 
 
@@ -4739,9 +4842,7 @@ def build(rows: list[results.Row]) -> str:
 
 {_anchor()}
 
-{_join()}
-
-{_external()}
+{_outside()}
 
 {_length()}
 
