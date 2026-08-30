@@ -29,6 +29,7 @@ import sys
 from collections import defaultdict
 from itertools import combinations
 from pathlib import Path
+from typing import NamedTuple
 
 from tnb import i18n, results
 from tnb.report import (
@@ -1870,17 +1871,45 @@ def _at_the_ceiling(rows: list[results.Row], tracks: tuple[str, ...]) -> list[st
     return sorted(key for key, answers in seen.items() if answers == {True})
 
 
-def _halves_split(
-    cells: dict, tracks: tuple[str, str], keys: list[str]
-) -> tuple[list[str], list[str], list[str]]:
+class Halves(NamedTuple):
+    """Which half each column is ahead on, and the three ways it can be neither.
+
+    The three used to be one list under one sentence, and the sentence was the
+    split. So a box announced that "the two judges do not both point the same
+    way on Synthesized" three lines under its own paragraph saying every model
+    scores 5.00 on Synthesized in all four tables: the judges point the same
+    way there, at nothing. They are different findings and they read
+    differently -- a split says the question is one people answer differently,
+    a column flat under both says the halves are the same there, and a column
+    flat under one says only that one judge saw something.
+    """
+
+    #: Ahead on the second track of the pair, under every judge.
+    ahead_other: list[str]
+    #: Ahead on the first, under every judge.
+    ahead_real: list[str]
+    #: One judge says one half, the other says the other.
+    split: list[str]
+    #: Neither judge sees a difference at all.
+    flat_both: list[str]
+    #: One judge sees a difference and the other sees none.
+    flat_one: list[str]
+
+
+def _halves_split(cells: dict, tracks: tuple[str, str], keys: list[str]) -> Halves:
     """Which half each column is ahead on, under every judge that read both.
 
     A difference smaller than the last digit the table prints is not a
     difference a reader can see, and it counts for neither half: two columns of
-    5.00 are not the translated half winning by a rounding error. Where the
-    judges point different ways -- or one of them sees no difference at all --
-    the column goes in neither list, because the reading rule everywhere else
-    in this document is to believe what both judges say.
+    5.00 are not the translated half winning by a rounding error. A column the
+    judges do not both put on the same side is not put on either, because the
+    reading rule everywhere else in this document is to believe what both
+    judges say -- but which way it failed is a fact of its own, so the three
+    ways are kept apart rather than swept into one list.
+
+    A genuine split wins over a flat judge when both are present: two judges
+    pointing opposite ways is the stronger fact, and it is the one this
+    document reports.
     """
     real_track, other_track = tracks
     judges = sorted(
@@ -1888,7 +1917,7 @@ def _halves_split(
         & {judge for track, judge in cells if track == other_track}
     )
     digits = dict(COLUMNS[real_track])
-    ahead_other, ahead_real, rest = [], [], []
+    found = Halves([], [], [], [], [])
     for key in keys:
         signs = []
         for judge in judges:
@@ -1902,12 +1931,16 @@ def _halves_split(
         if not signs:
             continue
         if all(sign > 0 for sign in signs):
-            ahead_other.append(key)
+            found.ahead_other.append(key)
         elif all(sign < 0 for sign in signs):
-            ahead_real.append(key)
+            found.ahead_real.append(key)
+        elif any(sign > 0 for sign in signs) and any(sign < 0 for sign in signs):
+            found.split.append(key)
+        elif all(sign == 0 for sign in signs):
+            found.flat_both.append(key)
         else:
-            rest.append(key)
-    return ahead_other, ahead_real, rest
+            found.flat_one.append(key)
+    return found
 
 
 def _shared_keys(tracks: tuple[str, str]) -> list[str]:
@@ -1919,6 +1952,27 @@ def _shared_keys(tracks: tuple[str, str]) -> list[str]:
 def _labels(track: str, keys: list[str]) -> str:
     """Column names, in the reader's language, joined the way a sentence needs."""
     return _join_words([_t(MEASURE_TABLES[track][key]["label"]) for key in keys])
+
+
+def _halves_rest(track: str, halves: Halves) -> list[str]:
+    """The columns that landed on neither half, each under the sentence it earns.
+
+    In a fixed order, worst first: a genuine split between the judges is a
+    finding, one judge seeing what the other does not is weaker, and both
+    judges seeing nothing is not a disagreement at all. Each sentence prints
+    only where there is a column for it, so a chapter whose columns all landed
+    on one half or the other says nothing here rather than three empty
+    sentences.
+    """
+    return [
+        _t(sentence).format(names=_labels(track, keys))
+        for sentence, keys in (
+            (HALVES_REST, halves.split),
+            (HALVES_FLAT_ONE, halves.flat_one),
+            (HALVES_FLAT_BOTH, halves.flat_both),
+        )
+        if keys
+    ]
 
 
 def _rosters(rows: list[results.Row], tracks: tuple[str, ...]) -> set[str]:
@@ -1960,9 +2014,29 @@ def _box(title: str, said: list[str], *, kind: str = "finding", level: int = 3) 
 #: same kind of fact each time: a column the two judges push in opposite
 #: directions has no answer between the halves, and averaging over it would
 #: manufacture one.
+#:
+#: **Three sentences where there was one.** This one was printed over every
+#: column that landed on neither half, and two of the three ways that happens
+#: are not a disagreement at all. It told a reader that the judges did not both
+#: point the same way on Synthesized, three lines under the same box saying
+#: every model scores 5.00 on Synthesized in every one of these tables.
 HALVES_REST = (
-    "The two judges do not both point the same way on {names}, so between the halves "
-    "there is no answer there at all."
+    "The two judges point opposite ways on {names}, so between the halves there is no "
+    "answer there at all."
+)
+#: A column both judges read as the same on both halves. Not a disagreement and
+#: not a result about either half: it is the halves being indistinguishable
+#: there, to the last digit the tables print.
+HALVES_FLAT_BOTH = (
+    "Neither judge sees any difference between the halves on {names}: to the last digit "
+    "these tables print, the two halves are the same there."
+)
+#: And the third way. One judge saw a difference and the other saw none, which
+#: is weaker than a split -- nobody contradicted anybody -- and still not an
+#: answer, because one judge alone is not what this document reads.
+HALVES_FLAT_ONE = (
+    "On {names} one judge sees a difference between the halves and the other sees none, "
+    "so there is nothing there that both of them say."
 )
 #: The confound, said under both criteria chapters. It is the same confound,
 #: it is not a small one, and a box that printed the comparison without it
@@ -2100,10 +2174,13 @@ def _box_a(rows: list[results.Row]) -> str:
     else:
         said.append(_t(WORST_UNSETTLED).format(tables=tables))
 
-    other, real, rest = _halves_split(cells, tracks, keys)
-    said.append(_t(BOX_A_HALVES).format(other=len(other), total=len(keys), real=len(real)))
-    if rest:
-        said.append(_t(HALVES_REST).format(names=_labels(tracks[0], rest)))
+    halves = _halves_split(cells, tracks, keys)
+    said.append(
+        _t(BOX_A_HALVES).format(
+            other=len(halves.ahead_other), total=len(keys), real=len(halves.ahead_real)
+        )
+    )
+    said += _halves_rest(tracks[0], halves)
     said.append(_t(HALVES_GUARD))
     return _box(BOX_A_TITLE, said)
 
@@ -2144,10 +2221,13 @@ def _box_b(rows: list[results.Row]) -> str:
         said.append(_t(BOX_B_WORST_UNSETTLED).format(tables=tables))
 
     keys = _shared_keys(tracks)
-    other, real, rest = _halves_split(cells, tracks, keys)
-    said.append(_t(BOX_B_HALVES).format(other=len(other), total=len(keys), real=len(real)))
-    if rest:
-        said.append(_t(HALVES_REST).format(names=_labels(tracks[0], rest)))
+    halves = _halves_split(cells, tracks, keys)
+    said.append(
+        _t(BOX_B_HALVES).format(
+            other=len(halves.ahead_other), total=len(keys), real=len(halves.ahead_real)
+        )
+    )
+    said += _halves_rest(tracks[0], halves)
 
     # The columns the real half was never asked, named as an absence with its
     # reason. A reader comparing a six-column table with an eight-column one
@@ -2182,10 +2262,13 @@ def _box_c(rows: list[results.Row]) -> str:
     else:
         said.append(_t(WORST_UNSETTLED).format(tables=tables))
 
-    other, real, rest = _halves_split(cells, tracks, keys)
-    said.append(_t(BOX_C_HALVES).format(other=len(other), total=len(keys), real=len(real)))
-    if rest:
-        said.append(_t(HALVES_REST).format(names=_labels(tracks[0], rest)))
+    halves = _halves_split(cells, tracks, keys)
+    said.append(
+        _t(BOX_C_HALVES).format(
+            other=len(halves.ahead_other), total=len(keys), real=len(halves.ahead_real)
+        )
+    )
+    said += _halves_rest(tracks[0], halves)
     said.append(_t(BOX_C_GUARD))
 
     # The two rosters, because they are not the same roster and the chapter

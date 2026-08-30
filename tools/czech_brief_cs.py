@@ -1232,10 +1232,20 @@ CS: dict[str, str] = {
     "from SOAP to Deepsy on the real half": "ze SOAP do Deepsy na skutečné půlce",
     "from SOAP to Deepsy on the translated half": "ze SOAP do Deepsy na přeložené půlce",
     # --- what each chapter came to --------------------------------------------
-    "The two judges do not both point the same way on {names}, so between the halves there is no "
+    "The two judges point opposite ways on {names}, so between the halves there is no "
     "answer there at all.": (
-        "Tady se oba soudci neshodnou ani na směru — {names} — takže mezi půlkami tam žádná "
+        "Tady ukazují oba soudci opačnými směry — {names} — takže mezi půlkami tam žádná "
         "odpověď není."
+    ),
+    "Neither judge sees any difference between the halves on {names}: to the last digit "
+    "these tables print, the two halves are the same there.": (
+        "Rozdíl mezi půlkami tu nevidí ani jeden ze soudců — {names} — na poslední "
+        "číslici, kterou tyhle tabulky tisknou, jsou obě půlky stejné."
+    ),
+    "On {names} one judge sees a difference between the halves and the other sees none, "
+    "so there is nothing there that both of them say.": (
+        "Tady vidí rozdíl mezi půlkami jeden soudce a druhý žádný — {names} — takže tam "
+        "není nic, co by říkali oba."
     ),
     "It does not follow that the models write better Czech on either half. The two differ in size, "
     "in topic and in who transcribed them, so a model that does worse on one may be doing worse at "
