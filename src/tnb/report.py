@@ -1595,6 +1595,15 @@ def build(
                     name: versions[name] for name in results.COMPARABILITY_KEYS if name != "track"
                 },
                 "scored": any(row.is_scored for row in group),
+                # When this group was last judged. Per group and not per page:
+                # four switchable tables carry different dates, and a
+                # page-level string would be a second copy of the run line.
+                #
+                # Omitted entirely when no row in the group carries one --
+                # 1133 of 2161 rows on disk carry none, and dating a group from
+                # the subset that happens to have a date is the shape this
+                # project refuses everywhere else.
+                "scored_at": max((row.scored_at or "") for row in group)[:10],
                 # Which systems this evidence cannot tell apart, from the
                 # saturation analysis of *this* table's judge at *these*
                 # settings. None when nobody has run it for this table, and

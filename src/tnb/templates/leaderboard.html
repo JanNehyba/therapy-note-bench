@@ -52,6 +52,11 @@ __STYLE__
        <a href="limitations.md">what a result cannot claim</a>;
        <a href="landscape.md">what exists in this field and what does not</a>.</p>
     <p id="provenance"></p>
+    <p data-t="page.foot.data">The drawn numbers are in
+       <a href="leaderboard.json">leaderboard.json</a>; every run ever made is in
+       <code>results/rows.jsonl</code> in the repository.</p>
+    <p data-t="page.foot.author">Maintained by Jan Nehyba. Corrections and disputed numbers:
+       <a href="https://github.com/JanNehyba/therapy-note-bench/issues">open an issue</a>.</p>
   </footer>
 </main>
 
@@ -749,7 +754,8 @@ function renderTable(table, index) {
            last time", which is a question asked after the numbers. -->
       <p class="versions">${T`The instrument these rows share:`}
          ${T`harness <code>${versions.harness_version}</code>`} ·
-         ${T`prompt <code>${versions.prompt_version}</code>`} · ${judge}</p>
+         ${T`prompt <code>${versions.prompt_version}</code>`} · ${judge}${
+         table.scored_at ? ' · ' + T`scored up to <code>${table.scored_at}</code>` : ''}</p>
     </section>`;
 }
 

@@ -104,6 +104,8 @@ __STYLE__
        <a href="methodology.md">the method</a>;
        <a href="limitations.md">what a result cannot claim</a>;
        <a href="landscape.md">what exists in this field and what does not</a>.</p>
+    <p data-t="page.foot.author">Maintained by Jan Nehyba. Corrections and disputed numbers:
+       <a href="https://github.com/JanNehyba/therapy-note-bench/issues">open an issue</a>.</p>
 </footer>
 </main>
 
@@ -419,7 +421,12 @@ function renderCorpora(data) {
     <div class="scroll"><table>
       <thead><tr><th>${T`Section`}</th><th>${T`Filled by the expert`}</th><th></th></tr></thead>
       <tbody>${fill}</tbody>
-    </table></div>`;
+    </table></div>
+
+    <p class="note">${T`<strong>Contamination is not measured.</strong> Both corpora are public
+       files on GitHub — the transcripts, the expert notes and the rubric — so any model here
+       may have read them during training. A score earned from the transcript cannot be told
+       apart from one recalled from it.`}</p>`;
 }
 
 function renderLicences(data) {

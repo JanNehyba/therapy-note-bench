@@ -91,6 +91,16 @@ _STATIC = {
         "každé číslo pochází. "
         'Také jako <a href="therapy-note-bench.pdf">PDF</a>.'
     ),
+    "page.foot.data": (
+        'Vykreslená čísla jsou v souboru <a href="leaderboard.json">leaderboard.json</a>; '
+        "všechny běhy, které kdy proběhly, jsou v <code>results/rows.jsonl</code> "
+        "v repozitáři."
+    ),
+    "page.foot.author": (
+        "Tento benchmark spravuje Jan Nehyba. Opravy a sporná čísla: "
+        '<a href="https://github.com/JanNehyba/therapy-note-bench/issues">založte issue</a>.'
+    ),
+    "scored up to <code>{0}</code>": "obodováno nejpozději <code>{0}</code>",
     "page.foot.notes": (
         "<strong>Zápisy</strong> počítají, kolik zápisů dokázal protokol vůbec přečíst. Model, "
         "který napíše dobrý zápis ve špatném tvaru, ztrácí zápisy na formátu, ne na klinickém "
@@ -1048,6 +1058,15 @@ _METHODS = {
         "těžkou zkoušku."
     ),
     "Filled by the expert": "Vyplněno expertem",
+    "<strong>Contamination is not measured.</strong> Both corpora are public files on GitHub —"
+    " the transcripts, the expert notes and the rubric — so any model here may have read them"
+    " during training. A score earned from the transcript cannot be told apart from one recalled"
+    " from it.": (
+        "<strong>Kontaminace se tu neměří.</strong> Oba korpusy jsou veřejné soubory na "
+        "GitHubu — přepisy, expertní zápisy i rubrika — takže kterýkoli zdejší model je mohl "
+        "číst při trénování. Skóre získané z přepisu se nedá odlišit od skóre vybaveného "
+        "z paměti."
+    ),
     # -- licences -------------------------------------------------------------
     "Licence field, file tree and README checked for each source on 2026-08-24. <strong>Two of"
     " the six carry a licence; three publish none, and the sixth shows a badge with no LICENSE"

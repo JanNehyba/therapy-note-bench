@@ -6161,6 +6161,7 @@
         }
       ],
       "scored": true,
+      "scored_at": "2026-08-27",
       "stale_harness": false,
       "subtitle": "scored by gemini-3.1-pro-preview",
       "terms": [
@@ -8253,6 +8254,7 @@
         }
       ],
       "scored": true,
+      "scored_at": "2026-08-27",
       "stale_harness": false,
       "subtitle": "scored by gpt-5.6-terra",
       "terms": [
@@ -9008,6 +9010,7 @@
         }
       ],
       "scored": true,
+      "scored_at": "2026-08-27",
       "stale_harness": false,
       "subtitle": "scored by gemini-3.1-pro-preview",
       "terms": [
@@ -9759,6 +9762,7 @@
         }
       ],
       "scored": true,
+      "scored_at": "2026-08-27",
       "stale_harness": false,
       "subtitle": "scored by gpt-5.6-terra",
       "terms": [
