@@ -35,6 +35,28 @@ from tnb import i18n  # noqa: E402
 BRIEF = Path(__file__).resolve().parent.parent / "tools" / "czech_brief.py"
 
 
+def _strings_in(value: object) -> set[str]:
+    """Prose anywhere inside a nested tuple, list, set or dict.
+
+    A container of pairs is the usual shape here -- `CATEGORY_LABELS` is
+    `(("restatement", "Restatement"), ...)` -- and only the second half of each
+    pair is ever handed to `_t`. Telling the two apart from the AST alone would
+    mean following a loop variable through the function that iterates it; the
+    cheap rule is that prose has a space in it and an identifier does not.
+
+    It costs a false negative on a translated term of one word, which is why
+    this is not the only check: `test_czech_dictionary.py` reads the pair the
+    other way round and would catch one of those going stale.
+    """
+    if isinstance(value, str):
+        return {value} if " " in value.strip() else set()
+    if isinstance(value, dict):
+        return {s for item in value.items() for s in _strings_in(item)}
+    if isinstance(value, (tuple, list, set, frozenset)):
+        return {s for item in value for s in _strings_in(item)}
+    return set()
+
+
 def _translatable() -> set[str]:
     """Every string the briefing can hand to ``_t``.
 
@@ -50,18 +72,31 @@ def _translatable() -> set[str]:
     tree = ast.parse(BRIEF.read_text(encoding="utf-8"))
 
     constants: dict[str, str] = {}
+    #: Strings inside a module-level tuple or list of strings, which reach `_t`
+    #: through a loop variable rather than by name. `GLOSSARY` is eight pairs
+    #: iterated over, and none of its sixteen strings was visible to this
+    #: reader: the Czech briefing would have failed to build on the first of
+    #: them, which is the failure this file exists to move earlier.
+    from_containers: set[str] = set()
     for node in tree.body:
         if isinstance(node, ast.Assign) and len(node.targets) == 1:
             target = node.targets[0]
-            if isinstance(target, ast.Name):
-                try:
-                    value = ast.literal_eval(node.value)
-                except Exception:
-                    continue
-                if isinstance(value, str):
-                    constants[target.id] = value
+        elif isinstance(node, ast.AnnAssign):
+            target = node.target
+        else:
+            continue
+        if not isinstance(target, ast.Name) or node.value is None:
+            continue
+        try:
+            value = ast.literal_eval(node.value)
+        except Exception:
+            continue
+        if isinstance(value, str):
+            constants[target.id] = value
+        else:
+            from_containers |= _strings_in(value)
 
-    found: set[str] = set()
+    found: set[str] = set(from_containers)
     for node in ast.walk(tree):
         if not (isinstance(node, ast.Call) and getattr(node.func, "id", "") == "_t"):
             continue
