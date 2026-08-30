@@ -269,6 +269,9 @@ CS: dict[str, str] = {
     "Asked the leaderboard's own measure, it does not": (
         "Při měřítku, podle kterého žebříček řadí, se nepřenáší"
     ),
+    # Printed only if a payload records no ranking measure at all. Translated in
+    # advance so that the day it does, the sentence around it stays Czech.
+    "the ranking measure": "měřítko, podle kterého se řadí",
     "PDSQI-9 on the English notes against PDSQI-9 on the Czech ones. Same attributes, "
     "same anchors, same judge; only the language of the note differs.": (
         "PDSQI-9 na anglických zápisech proti PDSQI-9 na českých. Tytéž atributy, tytéž "

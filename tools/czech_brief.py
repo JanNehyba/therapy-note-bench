@@ -2705,6 +2705,28 @@ def _outside_caveat() -> str:
     return "<div class='warn'><p>" + " ".join(said) + "</p></div>"
 
 
+def _measure_label(key: str) -> str:
+    """The name this document has already given a measure, from its payload key.
+
+    A payload records `organized`; the tables three pages above call it
+    Usporadanost (spelled here without its diacritics, because this file carries
+    no Czech). Printing the key inside a sentence gives one measure two names
+    with nothing to tell a reader it is one measure -- and worse in the Czech
+    document, where the sentence around the key is Czech and the key is not.
+
+    Every measure table is searched, because a payload names columns from both
+    instruments: the flat attributes are PDSQI-9 and the measure the English
+    page ranks by is not. A key no table has a label for goes to `_t` as it
+    stands, which stops a Czech build rather than printing English -- a key with
+    no label is a column this document has never drawn, and guessing is worse
+    than stopping.
+    """
+    for measures in MEASURE_TABLES.values():
+        if key in measures:
+            return _t(measures[key]["label"])
+    return _t(key)
+
+
 def _join() -> str:
     """The question the track was built for, answered in the document that leaves.
 
@@ -2766,16 +2788,11 @@ def _join() -> str:
             f"<tbody>{''.join(rows)}</tbody></table>"
         )
 
-    flat = sorted({key for name in judges for key in data["judges"][name].get("flat", [])})
-    # The label a reader of this document has already met, not the payload's
-    # key. The summary at the top names the same measure through the same
-    # table, so the raw key here made one measure appear under two names --
-    # "completeness" in this sentence and "Uplnost" three pages above it.
-    ranking = data["judges"][judges[0]].get("ranking_measure", "the ranking measure")
-    for measures in MEASURE_TABLES.values():
-        if ranking in measures:
-            ranking = _t(measures[ranking]["label"])
-            break
+    flat = sorted(
+        {_measure_label(key) for name in judges for key in data["judges"][name].get("flat", [])}
+    )
+    ranking = data["judges"][judges[0]].get("ranking_measure")
+    ranking = _measure_label(ranking) if ranking else _t("the ranking measure")
     systems = len(data["judges"][judges[0]].get("systems", []))
 
     return (

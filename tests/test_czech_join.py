@@ -294,6 +294,34 @@ def test_the_briefing_renders_in_czech_with_nothing_left_in_english():
     assert heading not in page
 
 
+def test_a_payload_key_is_printed_as_the_name_the_tables_gave_it():
+    """The join chapter called the same three columns two things at once.
+
+    `local/czech-join.json` names a flat attribute `organized`, and the tables a
+    few pages above the sentence that lists it call it by its PDSQI-9 label. So
+    the Czech chapter ended in three English keys, directly under headings that
+    had just named the same three columns in Czech.
+
+    A key no measure table has a label for stops the Czech build rather than
+    printing itself: a column this document has never drawn is not a column it
+    knows how to name.
+    """
+    import czech_brief
+
+    from tnb import i18n
+
+    assert czech_brief._measure_label("organized") == "Organized"
+
+    before = czech_brief.LANG
+    try:
+        czech_brief.LANG = "cs"
+        assert czech_brief._measure_label("organized") == i18n.CS["Organized"]
+        with pytest.raises(czech_brief.Untranslated):
+            czech_brief._measure_label("a column no measure table has a label for")
+    finally:
+        czech_brief.LANG = before
+
+
 def test_a_missing_translation_stops_the_run_rather_than_leaking_english():
     import czech_brief
 
