@@ -27,6 +27,7 @@ import json
 import re
 import sys
 from collections import defaultdict
+from itertools import combinations
 from pathlib import Path
 
 from tnb import i18n, results
@@ -774,12 +775,17 @@ MERGED_LEAD = (
     "where they disagree about a model is the only control this track has, so it "
     "is shown rather than smoothed. A cell whose two numbers differ is marked."
 )
+#: **The whole rule, because there is nowhere else to read it.** The chapter
+#: that defined dominance is gone, and this caption uses the word over all six
+#: tables -- so the clause it was missing, that the model above must also be
+#: better on at least one column, moved here. `_dominates` has always required
+#: it; the caption said only half of what the sort does.
 MERGED_ORDER = (
     "The rows are ordered by dominance -- a model is above another only when it is "
-    "at least as good on every column under BOTH judges -- so models the evidence "
-    "cannot separate share a place, and {systems} models fall into {places} places "
-    "of which {tied} hold more than one. Within a place the order is alphabetical "
-    "and means nothing."
+    "at least as good on every column under BOTH judges, and better than it on at "
+    "least one -- so models the evidence cannot separate share a place, and "
+    "{systems} models fall into {places} places of which {tied} hold more than one. "
+    "Within a place the order is alphabetical and means nothing."
 )
 
 #: The Band column, explained once above the tables that carry it. It replaces
@@ -3905,125 +3911,451 @@ DEEPSY_SECTION_LABELS = {
 }
 
 
-def _dominance(rows: list[results.Row]) -> str:
-    """The only claim about "better" this project makes, and it was missing.
+#: The three views this document takes of one question, in the order it takes
+#: them. Each is the pair of tracks it was measured on, the real half first and
+#: the translated half second -- the order every other block here uses.
+PERSPECTIVES = (
+    ("the six Czech criteria on the SOAP notes", SOAP_CRITERIA_TRACKS),
+    ("PDSQI-9 on the same SOAP notes", PDSQI_TRACKS),
+    ("the six Czech criteria on the Deepsy notes", DEEPSY_CRITERIA_TRACKS),
+)
 
-    `docs/methodology.md` states it: the ranking is a shape, not an order, and
-    the one comparison that survives two judges is **dominance** -- at least as
-    good on every measure under both of them, and strictly better on one. It is
-    the strongest thing in the document and it was the thing not in it, which is
-    how a reader ends up comparing adjacent rows instead.
+PERSPECTIVES_TITLE = "Three views of one question"
+PERSPECTIVES_LEAD = (
+    "This document has now asked one question three times over, and a reader who has come "
+    "this far is holding three sets of tables with nothing saying whether they are three "
+    "answers or one answer printed three ways. The question is the same every time: which "
+    "of these models writes a note worth having. What changes is what is asked about the "
+    "note, and which note was written. This chapter says what differs between the three, "
+    "what follows from that, whether any one of them could be dropped, and what keeping all "
+    "three costs."
+)
+PERSPECTIVES_DIFFER = "What differs between them"
+PERSPECTIVE_CRITERIA_SOAP = (
+    "Six yes/no questions about the Czech itself, put to the note each model wrote in the "
+    "SOAP format from both halves of the corpus: {models} models, {notes} notes. It cannot "
+    "say whether a note is any good. A flawless Czech sentence about nothing passes all six "
+    "of them."
+)
+PERSPECTIVE_QUALITY = (
+    "A published instrument asking whether the note is worth filing -- whether it is useful, "
+    "whether it is organised, whether it says what it says in as few words as it can. It "
+    "reads the notes the criteria have already read, {notes} of them from {models} models, "
+    "and writes none of its own."
+)
+PERSPECTIVE_QUALITY_HALVES = (
+    "Its two halves are not even the same questions: {missing} of its attributes cannot be "
+    "asked about a real session, because answering them means reading the transcript and no "
+    "transcript is ever sent to a judge. On that half those attributes are missing rather "
+    "than low."
+)
+PERSPECTIVE_DEEPSY = (
+    "The same six questions about the Czech, put to the note format the Deepsy application "
+    "actually writes: {models} models, {notes} notes. Same criteria as the first view with a "
+    "different note under them, so where those two disagree it is the note that changed."
+)
+PERSPECTIVES_ROSTER = (
+    "Those are not the same models, and that on its own forbids adding the three together. "
+    "{shared} of them are in all three views and {only} are in some views and not others -- "
+    "either the endpoint refused those notes or that view never asked for them. An average "
+    "over three views would be an average over three different fields of models, which is a "
+    "statement about who was present rather than about who writes well."
+)
 
-    Computed over the criteria a model was scored on under both judges. A pair
-    where either judge has no value for a criterion is simply not compared on
-    it, rather than being counted either way.
+PERSPECTIVES_FOLLOWS = "What follows from that"
+FOLLOWS_LEAD = (
+    "If the three were saying one thing, they would put the models in one order. The order "
+    "each view uses is the one its own tables print -- by dominance, which needs no scale "
+    "and can therefore be compared between instruments that do not share one -- and how far "
+    "two orders agree is a rank correlation over the models both views hold. There are "
+    "{comparisons} of those: each pair of views, on each half of the corpus, under each "
+    "judge separately. A correlation of 1 would mean the two put every model in the same "
+    "place; 0 would mean that knowing one order tells a reader nothing about the other."
+)
+FOLLOWS_RANGE = (
+    "The pair that agrees most -- {closest} -- stays between {closest_low} and "
+    "{closest_high} across its comparisons. The pair that agrees least -- {furthest} -- runs "
+    "from {furthest_low} to {furthest_high}."
+)
+FOLLOWS_ONE_PAIR = (
+    "There is one pair of views to compare here -- {pair} -- and it runs between {low} and "
+    "{high} across its comparisons."
+)
 
-    **Inside one note format, never across the two.** Each track gets its own
-    block. The two formats were not asked of the same models, a Deepsy note is
-    written to a different prompt, and length does not weigh on them alike --
-    `_length_signs` counts how differently -- so a pair read across the two
-    formats would be reporting those differences as a verdict.
+PERSPECTIVES_REDUNDANT = "Is any one of them redundant?"
+REDUNDANT_TEST = (
+    "Here is the test this chapter applies, written out so that a reader who disagrees with "
+    "it can say where. A view is redundant when two things are true at once: it puts the "
+    "models in the same order as some other view -- under both judges and on both halves, "
+    "not on average -- and it separates no pair of models that the other view leaves "
+    "together. The first half asks whether it says anything different; the second asks "
+    "whether it says anything more. Failing either one is enough to keep it."
+)
+REDUNDANT_ORDER_NO = (
+    "The first half: no two views put the models in the same order. The closest any single "
+    "comparison comes is {best}, where an identical order would be 1."
+)
+REDUNDANT_ORDER_YES = (
+    "The first half: {pairs} put the models in the same order, under both judges and on both "
+    "halves. No other pair of views does."
+)
+REDUNDANT_EXTRA_NO = (
+    "The second half: every view separates pairs of models that the others leave together. "
+    "The view that adds fewest still adds {fewest} of them, counted over the models the two "
+    "views share, and the one that adds most adds {most}."
+)
+REDUNDANT_EXTRA_YES = (
+    "The second half: {names} separates no pair of models that some other view does not "
+    "separate as well."
+)
+REDUNDANT_KEEP_ALL = (
+    "So none of the three can be dropped, and it fails on both halves of the test rather "
+    "than on a technicality: the views do not agree about the order, and each of them "
+    "separates models the others cannot. That is not a comfortable result. It means this "
+    "document holds three answers to one question with no honest way of reducing them to "
+    "one, and a team choosing a model has to decide first which of the three they are "
+    "choosing on."
+)
+REDUNDANT_DROP = (
+    "So one of them can be dropped: {redundant} adds nothing that {other} does not already "
+    "say. It puts the models in the same order, under both judges and on both halves, and it "
+    "separates no pair of models that the other one leaves together."
+)
+
+PERSPECTIVES_COST = "What keeping all three costs"
+COST_TEXT = (
+    "Keeping a view costs whatever its notes cost to write, and only two of the three write "
+    "any. The SOAP notes took {soap_calls} calls to e-INFRA for {soap_notes} notes. The "
+    "quality view cost no generation at all -- it reads those same notes, so keeping it "
+    "costs nothing that was not already spent. The Deepsy notes took {deepsy_calls} calls "
+    "for {deepsy_notes} notes, because that format is asked for one section at a time and a "
+    "note there is three answers rather than one. Set against three orders that will not "
+    "reduce to one, that is the cheap half of the problem."
+)
+
+
+def _view(latest: list[results.Row], tracks: tuple[str, ...]) -> dict[int, dict]:
+    """One view, keyed by which half of the corpus each part of it is.
+
+    Keyed rather than listed because two views are compared half against half,
+    and a run that scored the translated half of one view and both halves of
+    another would otherwise have compared the translated half of the first with
+    the real half of the second and called the difference a disagreement.
     """
-    latest = [row for row in results.latest(rows) if row.is_scored]
-    blocks = []
-    for track in (
-        results.TRACK_CZECH_REAL,
-        results.TRACK_CZECH_TRANSLATED,
-        results.TRACK_DEEPSY_REAL,
-        results.TRACK_DEEPSY_TRANSLATED,
-    ):
+    halves = {}
+    for index, track in enumerate(tracks):
         here = [row for row in latest if row.track == track]
         if not here:
             continue
         newest = max(row.judge_prompt_version for row in here)
-        tables = {}
+        here = [row for row in here if row.judge_prompt_version == newest]
+        tables: dict[str, dict[str, dict]] = {}
         for row in here:
-            if row.judge_prompt_version == newest:
-                tables.setdefault(row.judge_model or "", {})[row.system_id] = row.metrics.headline
-        if len(tables) < 2:
+            tables.setdefault(row.judge_model or "", {})[row.system_id] = row.metrics.headline
+        if not tables:
             continue
+        halves[index] = {
+            "track": track,
+            "tables": tables,
+            "keys": [key for key, _ in COLUMNS[track]],
+            # The models every judge scored, which is what the table draws and
+            # therefore what an order over it can be about.
+            "systems": sorted(set.intersection(*(set(t) for t in tables.values()))),
+            "notes": sum(row.n_sessions_scored for row in here) // len(tables),
+        }
+    return halves
 
-        systems = sorted(set.intersection(*(set(t) for t in tables.values())))
-        # The columns this track's table actually draws, not every criterion the
-        # scorer knows. They are the same six on all four criteria tracks today,
-        # but reading them from `COLUMNS` is what keeps a pair from being judged
-        # on a column the reader was never shown.
-        compared = [key for key, _ in COLUMNS[track]]
-        found = []
-        for first in systems:
-            for second in systems:
-                if first == second:
-                    continue
-                at_least, strictly = True, False
-                for table in tables.values():
-                    for key in compared:
-                        a = table[first].get(key)
-                        b = table[second].get(key)
-                        if a is None or b is None:
-                            continue
-                        if a < b - 1e-9:
-                            at_least = False
-                            break
-                        if a > b + 1e-9:
-                            strictly = True
-                    if not at_least:
-                        break
-                if at_least and strictly:
-                    found.append((first, second))
 
-        title = html.escape(_t(TRACK_TITLES.get(track, track)))
-        if not found:
-            blocks.append(
-                f"<h3>{title}</h3><p>"
+def _separates(half: dict) -> set[tuple[str, str]]:
+    """The pairs of models this half puts in an order, by the document's rule.
+
+    Dominance under both judges -- the same relation `_merged_table` sorts by,
+    so "separates" here means exactly what "is above" means in the tables.
+    """
+    found = set()
+    for first, second in combinations(half["systems"], 2):
+        if _dominates(first, second, half["keys"], half["tables"]) or _dominates(
+            second, first, half["keys"], half["tables"]
+        ):
+            found.add((first, second))
+    return found
+
+
+def _agreement(first: dict, second: dict) -> list[float]:
+    """How far two halves of two views agree about the order, one rho per judge.
+
+    Spearman through `czech_join.correlate` rather than a second implementation
+    of it: that function already carries this project's rules about what a
+    correlation over a flat column is worth and about how its p-value is
+    computed. Imported inside the call because it is the only thing here that
+    needs it and because `tools/czech_join.py` reaches into the judge module at
+    import time.
+
+    **This is the slow part of the build.** Each call permutes the models to
+    get a p-value, and there are a dozen of them: the document builds in eight
+    seconds without this chapter and in about a minute with it. That is what a
+    chapter whose whole claim is a set of correlations costs, and the
+    alternative -- a rho with no idea how easily chance produces it -- is the
+    thing this document refuses everywhere else.
+    """
+    from czech_join import correlate
+
+    shared = sorted(set(first["systems"]) & set(second["systems"]))
+    if len(shared) < 3:
+        return []
+    out = []
+    for judge in sorted(set(first["tables"]) & set(second["tables"])):
+        left = _dominance_places(shared, first["keys"], {judge: first["tables"][judge]})
+        right = _dominance_places(shared, second["keys"], {judge: second["tables"][judge]})
+        found = correlate([left[name] for name in shared], [right[name] for name in shared])
+        if found:
+            out.append(found["rho"])
+    return out
+
+
+def _extra_pairs(first: dict[int, dict], second: dict[int, dict]) -> int:
+    """How many model pairs the first view separates that the second does not.
+
+    Over the models the two share, half against matching half, summed. A pair
+    separated on one half and not the other still counts: it is something one
+    view knows about those two models and the other does not.
+    """
+    count = 0
+    for index in sorted(set(first) & set(second)):
+        left, right = first[index], second[index]
+        shared = set(left["systems"]) & set(right["systems"])
+        mine = {pair for pair in _separates(left) if pair[0] in shared and pair[1] in shared}
+        count += len(mine - _separates(right))
+    return count
+
+
+def _perspectives(rows: list[results.Row]) -> str:
+    """Three views of one question, and whether any of them is spare.
+
+    The document asks one thing three times -- is this good Czech, is it a good
+    note, and what happens in the format the application really writes -- and
+    it never said whether those are three answers or one answer three times. A
+    reader who arrives here holding three sets of tables and no such sentence
+    will average them in their head.
+
+    Every claim is computed, the verdict included. The test for a spare view is
+    printed rather than applied silently, and both halves of it can come out
+    either way: a run where two views agreed about the order and one of them
+    separated nothing the other did would print that instead.
+    """
+    latest = [row for row in results.latest(rows) if row.is_scored]
+    views = [(name, tracks, _view(latest, tracks)) for name, tracks in PERSPECTIVES]
+    views = [entry for entry in views if entry[2]]
+    if len(views) < 2:
+        return ""
+
+    rosters = {
+        name: {system for half in halves.values() for system in half["systems"]}
+        for name, _tracks, halves in views
+    }
+    shared_all = set.intersection(*rosters.values())
+    every = set.union(*rosters.values())
+
+    blurbs = {
+        SOAP_CRITERIA_TRACKS: PERSPECTIVE_CRITERIA_SOAP,
+        PDSQI_TRACKS: PERSPECTIVE_QUALITY,
+        DEEPSY_CRITERIA_TRACKS: PERSPECTIVE_DEEPSY,
+    }
+
+    # --- what differs -------------------------------------------------------
+    said = [
+        f"<h2>{html.escape(_t(PERSPECTIVES_TITLE))}</h2>",
+        f"<p>{html.escape(_t(PERSPECTIVES_LEAD))}</p>",
+        f"<h3>{html.escape(_t(PERSPECTIVES_DIFFER))}</h3>",
+    ]
+    for name, tracks, halves in views:
+        line = _t(blurbs[tracks]).format(
+            models=len(rosters[name]),
+            notes=_grouped(sum(half["notes"] for half in halves.values())),
+        )
+        # Which questions one half could not be asked, where the two halves of
+        # a view do not hold the same columns. Named as an absence with a
+        # reason and never as a low score: the PDSQI attributes missing on the
+        # real sessions are missing because a transcript may not be sent.
+        if 0 in halves and 1 in halves:
+            missing = set(halves[1]["keys"]) - set(halves[0]["keys"])
+            if missing and tracks == PDSQI_TRACKS:
+                line += " " + _t(PERSPECTIVE_QUALITY_HALVES).format(missing=len(missing))
+        # The names are written lower case because `_join_words` reads them
+        # inside a sentence two blocks below; here one opens a paragraph. Safe
+        # to recase, unlike a model id -- `deepseek-v4-flash` is deployed under
+        # that spelling and does not become `Deepseek-v4-flash` after a stop.
+        title = _t(name)
+        said.append(
+            f"<p><strong>{html.escape(title[:1].upper() + title[1:])}.</strong> "
+            f"{html.escape(line)}</p>"
+        )
+    said.append(
+        "<p>"
+        + html.escape(
+            _t(PERSPECTIVES_ROSTER).format(
+                shared=len(shared_all), only=len(every) - len(shared_all)
+            )
+        )
+        + "</p>"
+    )
+
+    # --- what follows -------------------------------------------------------
+    agreed: dict[tuple[str, str], list[float]] = {}
+    for (first, _ft, left), (second, _st, right) in combinations(views, 2):
+        rhos = [
+            rho
+            for index in sorted(set(left) & set(right))
+            for rho in _agreement(left[index], right[index])
+        ]
+        if rhos:
+            agreed[(first, second)] = rhos
+    if agreed:
+        said.append(f"<h3>{html.escape(_t(PERSPECTIVES_FOLLOWS))}</h3>")
+        said.append(
+            "<p>"
+            + html.escape(_t(FOLLOWS_LEAD).format(comparisons=sum(map(len, agreed.values()))))
+            + "</p>"
+        )
+        # Ordered by the weakest comparison a pair makes rather than by its
+        # best one: a pair that agrees perfectly under one judge and not at all
+        # under the other has not agreed, which is this document's rule
+        # everywhere else.
+        order = sorted(agreed, key=lambda pair: min(agreed[pair]))
+        if len(order) > 1:
+            worst, best = order[0], order[-1]
+            said.append(
+                "<p>"
                 + html.escape(
-                    _t(
-                        "No model here is at least as good as another on every "
-                        "criterion under both judges."
+                    _t(FOLLOWS_RANGE).format(
+                        closest=_join_words([_t(best[0]), _t(best[1])]),
+                        closest_low=_decimal(min(agreed[best]), 2),
+                        closest_high=_decimal(max(agreed[best]), 2),
+                        furthest=_join_words([_t(worst[0]), _t(worst[1])]),
+                        furthest_low=_decimal(min(agreed[worst]), 2),
+                        furthest_high=_decimal(max(agreed[worst]), 2),
                     )
                 )
                 + "</p>"
             )
-            continue
-        beaten = defaultdict(list)
-        for first, second in found:
-            beaten[first].append(second)
-        items = "".join(
-            f"<dt>{html.escape(winner)}</dt><dd>{html.escape(_t('is at least as good as'))} "
-            f"{html.escape(', '.join(sorted(losers)))}</dd>"
-            for winner, losers in sorted(beaten.items(), key=lambda kv: -len(kv[1]))
+        else:
+            only = order[0]
+            said.append(
+                "<p>"
+                + html.escape(
+                    _t(FOLLOWS_ONE_PAIR).format(
+                        pair=_join_words([_t(only[0]), _t(only[1])]),
+                        low=_decimal(min(agreed[only]), 2),
+                        high=_decimal(max(agreed[only]), 2),
+                    )
+                )
+                + "</p>"
+            )
+
+    # --- is any one of them redundant ---------------------------------------
+    said.append(f"<h3>{html.escape(_t(PERSPECTIVES_REDUNDANT))}</h3>")
+    said.append(f"<p>{html.escape(_t(REDUNDANT_TEST))}</p>")
+
+    same_order = [pair for pair, rhos in agreed.items() if all(rho >= 1.0 - 1e-9 for rho in rhos)]
+    if same_order:
+        said.append(
+            "<p>"
+            + html.escape(
+                _t(REDUNDANT_ORDER_YES).format(
+                    pairs=_join_words([f"{_t(a)} / {_t(b)}" for a, b in same_order])
+                )
+            )
+            + "</p>"
         )
-        pairs = len(systems) * (len(systems) - 1) // 2
-        blocks.append(
-            f"<h3>{title}</h3>"
-            f"<p>{len(found)} {_t('of')} {pairs} "
-            + html.escape(_t("possible pairs."))
-            + f"</p><dl>{items}</dl>"
+    elif agreed:
+        said.append(
+            "<p>"
+            + html.escape(
+                _t(REDUNDANT_ORDER_NO).format(
+                    best=_decimal(max(max(rhos) for rhos in agreed.values()), 2)
+                )
+            )
+            + "</p>"
         )
 
-    if not blocks:
-        return ""
-    return (
-        f"<h2>{_t('The only claim about better that survives')}</h2>"
-        + "<p>"
-        + html.escape(
-            _t(
-                "Two judges order the models differently, so a position in a table is "
-                "not a claim. What survives both of them is dominance: one model at "
-                "least as good as another on every criterion, under each judge "
-                "separately, and strictly better on at least one. Everything not "
-                "listed here is a pair this project cannot separate. Each block "
-                "below is one note format, and a pair holds only inside it: the two "
-                "formats were not asked of the same models, a Deepsy note is written to "
-                "a different prompt, and length does not weigh on them alike -- it runs "
-                "against {soap_against} of the {soap_total} criterion-and-judge "
-                "coefficients on the SOAP halves and against {deepsy_against} of "
-                "{deepsy_total} in the Deepsy format. A pair read across the two would "
-                "be reporting those differences as a verdict."
-            ).format(**_length_signs())
+    extra = {
+        (first, second): _extra_pairs(left, right)
+        for first, _ft, left in views
+        for second, _st, right in views
+        if first != second
+    }
+    fewest = {
+        first: min(count for (one, _other), count in extra.items() if one == first)
+        for first, _tracks, _halves in views
+    }
+    spare = sorted(name for name, count in fewest.items() if count == 0)
+    if spare:
+        said.append(
+            "<p>"
+            + html.escape(
+                _t(REDUNDANT_EXTRA_YES).format(names=_join_words([_t(name) for name in spare]))
+            )
+            + "</p>"
         )
-        + "</p>"
-        + "".join(blocks)
+    else:
+        said.append(
+            "<p>"
+            + html.escape(
+                _t(REDUNDANT_EXTRA_NO).format(
+                    fewest=min(fewest.values()), most=max(fewest.values())
+                )
+            )
+            + "</p>"
+        )
+
+    # The verdict, and it can come out either way. A view is spare only when it
+    # fails both halves of the test against the SAME other view.
+    dropped = next(
+        (
+            (one, other)
+            for pair in same_order
+            for one, other in (pair, pair[::-1])
+            if extra.get((one, other)) == 0
+        ),
+        None,
     )
+    if dropped:
+        said.append(
+            "<p>"
+            + html.escape(_t(REDUNDANT_DROP).format(redundant=_t(dropped[0]), other=_t(dropped[1])))
+            + "</p>"
+        )
+    else:
+        said.append(f"<p>{html.escape(_t(REDUNDANT_KEEP_ALL))}</p>")
+
+    # --- what keeping them costs --------------------------------------------
+    # `_calls` reads the number of answers a note costs off the task, and
+    # returns a dash for a track that rated notes somebody else wrote. That
+    # dash is the finding in this block rather than a gap in it: the quality
+    # view generated nothing.
+    cost = {}
+    for _name, tracks, halves in views:
+        calls = [_calls(half["track"], half["notes"]) for half in halves.values()]
+        cost[tracks] = (
+            sum(half["notes"] for half in halves.values()),
+            sum(int(call) for call in calls) if all(call.isdigit() for call in calls) else None,
+        )
+    soap, deepsy = cost.get(SOAP_CRITERIA_TRACKS), cost.get(DEEPSY_CRITERIA_TRACKS)
+    if soap and soap[1] and deepsy and deepsy[1] and cost.get(PDSQI_TRACKS, (0, 1))[1] is None:
+        said.append(f"<h3>{html.escape(_t(PERSPECTIVES_COST))}</h3>")
+        said.append(
+            "<p>"
+            + html.escape(
+                _t(COST_TEXT).format(
+                    soap_calls=_grouped(soap[1]),
+                    soap_notes=_grouped(soap[0]),
+                    deepsy_calls=_grouped(deepsy[1]),
+                    deepsy_notes=_grouped(deepsy[0]),
+                )
+            )
+            + "</p>"
+        )
+    return "".join(said)
 
 
 def _variance(rows: list[results.Row]) -> str:
@@ -4764,14 +5096,13 @@ def build(rows: list[results.Row]) -> str:
 
 {_variance(rows)}
 
-{_dominance(rows)}
-
-
 {_controls()}
 
 {_outside()}
 
 {_length()}
+
+{_perspectives(rows)}
 
 <h2>{_t("What these numbers cannot be used for")}</h2>
 {limits}

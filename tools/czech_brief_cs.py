@@ -693,33 +693,180 @@ CS: dict[str, str] = {
     "Band": "Pásmo",
     "Score": "Skóre",
     "Models": "Modely",
-    # --- dominance ---------------------------------------------------------
-    "The only claim about better that survives": ("Jediné tvrzení o lepším, které obstojí"),
-    "Two judges order the models differently, so a position in a table is not a "
-    "claim. What survives both of them is dominance: one model at least as good as "
-    "another on every criterion, under each judge separately, and strictly better on "
-    "at least one. Everything not listed here is a pair this project cannot "
-    "separate. Each block below is one note format, and a pair holds only inside it: "
-    "the two formats were not asked of the same models, a Deepsy note is written to a "
-    "different prompt, and length does not weigh on them alike -- it runs against "
-    "{soap_against} of the {soap_total} criterion-and-judge coefficients on the SOAP "
-    "halves and against {deepsy_against} of {deepsy_total} in the Deepsy format. A "
-    "pair read across the two would be reporting those differences as a verdict.": (
-        "Dva soudci řadí modely různě, takže umístění v tabulce není tvrzení. Co "
-        "obstojí u obou, je dominance: model, který je aspoň tak dobrý jako jiný "
-        "v každém kritériu, u každého soudce zvlášť, a aspoň v jednom je striktně "
-        "lepší. Všechno, co tu není vypsané, je dvojice, kterou tenhle projekt "
-        "neumí odlišit. Každý blok níž je jeden formát zápisu a dvojice platí jen "
-        "uvnitř něj: oba formáty nedostaly tytéž modely, zápis Deepsy vzniká z jiného "
-        "zadání a délka na ně nedoléhá stejně — jde proti {soap_against} "
-        "z {soap_total} koeficientů kritérium-soudce na půlkách SOAP a proti "
-        "{deepsy_against} z {deepsy_total} ve formátu Deepsy. Dvojice čtená napříč "
-        "oběma formáty by tyhle rozdíly ohlašovala jako výsledek."
+    # --- three views of one question ---------------------------------------
+    # The three names are written lower case and in the nominative, because
+    # they are read inside a list ("A and B") as often as at the head of a
+    # paragraph, and a Czech noun phrase built to decline in one place will be
+    # wrong in the other. `_perspectives` recases the first letter where one
+    # opens a paragraph.
+    "the six Czech criteria on the SOAP notes": "šest českých kritérií na zápisech SOAP",
+    "PDSQI-9 on the same SOAP notes": "PDSQI-9 na týchž zápisech SOAP",
+    "the six Czech criteria on the Deepsy notes": "šest českých kritérií na zápisech Deepsy",
+    "Three views of one question": "Tři pohledy na jednu otázku",
+    "This document has now asked one question three times over, and a reader who has come "
+    "this far is holding three sets of tables with nothing saying whether they are three "
+    "answers or one answer printed three ways. The question is the same every time: which "
+    "of these models writes a note worth having. What changes is what is asked about the "
+    "note, and which note was written. This chapter says what differs between the three, "
+    "what follows from that, whether any one of them could be dropped, and what keeping all "
+    "three costs.": (
+        "Tenhle dokument se teď na jednu otázku zeptal třikrát a čtenář, který došel až "
+        "sem, drží v ruce tři sady tabulek, aniž by mu kdokoli řekl, jestli jsou to tři "
+        "odpovědi, nebo jedna odpověď vytištěná třikrát. Otázka je pokaždé táž: který "
+        "z těch modelů napíše zápis, který stojí za to mít. Mění se to, na co se u zápisu "
+        "ptáme, a to, který zápis vlastně vznikl. Tahle kapitola říká, čím se ty tři "
+        "pohledy liší, co z toho plyne, jestli by se některý z nich dal vypustit a co "
+        "stojí držet všechny tři."
     ),
-    "is at least as good as": "je aspoň tak dobrý jako",
-    "possible pairs.": "možných dvojic.",
-    "No model here is at least as good as another on every criterion under both judges.": (
-        "Žádný zdejší model není aspoň tak dobrý jako jiný ve všech kritériích u obou soudců."
+    "What differs between them": "Čím se liší",
+    "Six yes/no questions about the Czech itself, put to the note each model wrote in the "
+    "SOAP format from both halves of the corpus: {models} models, {notes} notes. It cannot "
+    "say whether a note is any good. A flawless Czech sentence about nothing passes all six "
+    "of them.": (
+        "Šest otázek ano/ne o samotné češtině, položených nad zápisem, který každý model "
+        "napsal ve formátu SOAP z obou půlek korpusu: {models} modelů, {notes} zápisů. "
+        "Neumí říct, jestli je zápis dobrý. Bezchybná česká věta o ničem projde všemi "
+        "šesti."
+    ),
+    "A published instrument asking whether the note is worth filing -- whether it is useful, "
+    "whether it is organised, whether it says what it says in as few words as it can. It "
+    "reads the notes the criteria have already read, {notes} of them from {models} models, "
+    "and writes none of its own.": (
+        "Publikovaný nástroj, který se ptá, jestli zápis stojí za založení do dokumentace "
+        "— jestli je užitečný, jestli je uspořádaný, jestli říká to, co říká, tak stručně, "
+        "jak jen může. Čte zápisy, které už přečetla kritéria, {notes} zápisů od {models} "
+        "modelů, a žádný vlastní nepíše."
+    ),
+    "Its two halves are not even the same questions: {missing} of its attributes cannot be "
+    "asked about a real session, because answering them means reading the transcript and no "
+    "transcript is ever sent to a judge. On that half those attributes are missing rather "
+    "than low.": (
+        "Jeho dvě půlky nejsou ani tytéž otázky: na některé jeho atributy — je jich "
+        "{missing} — se u skutečného sezení zeptat nejde, protože odpovědět na ně znamená "
+        "přečíst si přepis a žádný přepis se soudci neposílá. Na téhle půlce ty atributy "
+        "chybí, ne že by byly nízké."
+    ),
+    "The same six questions about the Czech, put to the note format the Deepsy application "
+    "actually writes: {models} models, {notes} notes. Same criteria as the first view with a "
+    "different note under them, so where those two disagree it is the note that changed.": (
+        "Týchž šest otázek o češtině, položených nad formátem zápisu, který aplikace Deepsy "
+        "opravdu píše: {models} modelů, {notes} zápisů. Stejná kritéria jako v prvním "
+        "pohledu, jen pod nimi leží jiný zápis — takže kde se ty dva rozejdou, změnil se "
+        "zápis."
+    ),
+    "Those are not the same models, and that on its own forbids adding the three together. "
+    "{shared} of them are in all three views and {only} are in some views and not others -- "
+    "either the endpoint refused those notes or that view never asked for them. An average "
+    "over three views would be an average over three different fields of models, which is a "
+    "statement about who was present rather than about who writes well.": (
+        "Nejsou to tytéž modely a už jen to zakazuje ty tři pohledy sčítat. Ve všech třech "
+        "pohledech jich je {shared}; zbytek, tedy {only}, je v některých pohledech a "
+        "v jiných ne — buď endpoint ty zápisy odmítl, nebo si o ně ten pohled nikdy "
+        "neřekl. Průměr přes tři pohledy by "
+        "byl průměrem přes tři různá pole modelů, což je výrok o tom, kdo byl přítomen, ne "
+        "o tom, kdo píše dobře."
+    ),
+    "What follows from that": "Co z toho plyne",
+    "If the three were saying one thing, they would put the models in one order. The order "
+    "each view uses is the one its own tables print -- by dominance, which needs no scale "
+    "and can therefore be compared between instruments that do not share one -- and how far "
+    "two orders agree is a rank correlation over the models both views hold. There are "
+    "{comparisons} of those: each pair of views, on each half of the corpus, under each "
+    "judge separately. A correlation of 1 would mean the two put every model in the same "
+    "place; 0 would mean that knowing one order tells a reader nothing about the other.": (
+        "Kdyby ty tři pohledy říkaly jednu věc, seřadily by modely do jednoho pořadí. "
+        "Pořadí, které každý pohled používá, je to, které tisknou jeho vlastní tabulky — "
+        "podle dominance, která nepotřebuje žádnou škálu, a dá se tedy porovnávat i mezi "
+        "nástroji, které žádnou společnou nemají — a to, jak moc se dvě pořadí shodují, je "
+        "pořadová korelace přes modely, které mají oba pohledy. Takových porovnání je "
+        "{comparisons}: každá dvojice pohledů, na každé půlce korpusu, u každého soudce "
+        "zvlášť. Korelace 1 by znamenala, že oba dávají každý model na totéž místo; 0, že "
+        "z jednoho pořadí čtenář o tom druhém nezjistí nic."
+    ),
+    "The pair that agrees most -- {closest} -- stays between {closest_low} and "
+    "{closest_high} across its comparisons. The pair that agrees least -- {furthest} -- runs "
+    "from {furthest_low} to {furthest_high}.": (
+        "Dvojice, která se shoduje nejvíc — {closest} — se ve svých porovnáních drží mezi "
+        "{closest_low} a {closest_high}. Dvojice, která se shoduje nejmíň — {furthest} — "
+        "jde od {furthest_low} do {furthest_high}."
+    ),
+    "There is one pair of views to compare here -- {pair} -- and it runs between {low} and "
+    "{high} across its comparisons.": (
+        "Porovnat jde tady jediná dvojice pohledů — {pair} — a ve svých porovnáních jde od "
+        "{low} do {high}."
+    ),
+    "Is any one of them redundant?": "Je některý z nich zbytečný?",
+    "Here is the test this chapter applies, written out so that a reader who disagrees with "
+    "it can say where. A view is redundant when two things are true at once: it puts the "
+    "models in the same order as some other view -- under both judges and on both halves, "
+    "not on average -- and it separates no pair of models that the other view leaves "
+    "together. The first half asks whether it says anything different; the second asks "
+    "whether it says anything more. Failing either one is enough to keep it.": (
+        "Tady je zkouška, kterou tahle kapitola používá, vypsaná tak, aby čtenář, který "
+        "s ní nesouhlasí, mohl říct kde. Pohled je zbytečný, když platí zároveň dvě věci: "
+        "řadí modely stejně jako některý jiný pohled — u obou soudců a na obou půlkách, ne "
+        "v průměru — a neodliší žádnou dvojici modelů, kterou ten druhý pohled nechává "
+        "pohromadě. První půlka se ptá, jestli říká něco jiného; druhá, jestli říká něco "
+        "navíc. Stačí neprojít jednou z nich a pohled si necháváme."
+    ),
+    "The first half: no two views put the models in the same order. The closest any single "
+    "comparison comes is {best}, where an identical order would be 1.": (
+        "První půlka: žádné dva pohledy neřadí modely stejně. Nejblíž se k tomu dostane "
+        "jediné porovnání s hodnotou {best}, přičemž shodné pořadí by bylo 1."
+    ),
+    "The first half: {pairs} put the models in the same order, under both judges and on both "
+    "halves. No other pair of views does.": (
+        "První půlka: {pairs} — tyhle pohledy řadí modely stejně, u obou soudců a na obou "
+        "půlkách. Žádná jiná dvojice pohledů ne."
+    ),
+    "The second half: every view separates pairs of models that the others leave together. "
+    "The view that adds fewest still adds {fewest} of them, counted over the models the two "
+    "views share, and the one that adds most adds {most}.": (
+        "Druhá půlka: každý pohled odliší dvojice modelů, které ostatní nechávají "
+        "pohromadě. I ten pohled, který přidává nejmíň, jich přidá {fewest}, počítáno přes "
+        "modely, které mají oba pohledy společné, a ten, který přidává nejvíc, jich přidá "
+        "{most}."
+    ),
+    "The second half: {names} separates no pair of models that some other view does not "
+    "separate as well.": (
+        "Druhá půlka: {names} — tenhle pohled neodliší žádnou dvojici modelů, kterou by "
+        "neodlišil i některý jiný."
+    ),
+    "So none of the three can be dropped, and it fails on both halves of the test rather "
+    "than on a technicality: the views do not agree about the order, and each of them "
+    "separates models the others cannot. That is not a comfortable result. It means this "
+    "document holds three answers to one question with no honest way of reducing them to "
+    "one, and a team choosing a model has to decide first which of the three they are "
+    "choosing on.": (
+        "Vypustit tedy nejde ani jeden ze tří a neprojde to na obou půlkách zkoušky, ne na "
+        "nějaké formalitě: pohledy se neshodnou na pořadí a každý z nich odliší modely, "
+        "které ostatní odlišit neumějí. Není to pohodlný výsledek. Znamená to, že tenhle "
+        "dokument drží tři odpovědi na jednu otázku a nemá poctivý způsob, jak je smrštit "
+        "na jednu — a tým, který si vybírá model, se musí nejdřív rozhodnout, podle kterého "
+        "z těch tří pohledů si vybírá."
+    ),
+    "So one of them can be dropped: {redundant} adds nothing that {other} does not already "
+    "say. It puts the models in the same order, under both judges and on both halves, and it "
+    "separates no pair of models that the other one leaves together.": (
+        "Jeden z nich tedy vypustit jde: {redundant} nepřidává nic, co by {other} neříkal "
+        "už sám. Řadí modely stejně, u obou soudců a na obou půlkách, a neodliší žádnou "
+        "dvojici modelů, kterou ten druhý nechává pohromadě."
+    ),
+    "What keeping all three costs": "Co stojí držet všechny tři",
+    "Keeping a view costs whatever its notes cost to write, and only two of the three write "
+    "any. The SOAP notes took {soap_calls} calls to e-INFRA for {soap_notes} notes. The "
+    "quality view cost no generation at all -- it reads those same notes, so keeping it "
+    "costs nothing that was not already spent. The Deepsy notes took {deepsy_calls} calls "
+    "for {deepsy_notes} notes, because that format is asked for one section at a time and a "
+    "note there is three answers rather than one. Set against three orders that will not "
+    "reduce to one, that is the cheap half of the problem.": (
+        "Držet pohled stojí tolik, kolik stálo napsat jeho zápisy, a píše je jen jeden ze "
+        "tří. Zápisy SOAP stály {soap_calls} volání na e-INFRA za {soap_notes} zápisů. "
+        "Pohled na kvalitu nestál žádné generování — čte tytéž zápisy, takže jeho držení "
+        "nestojí nic, co už nebylo utraceno. Zápisy Deepsy stály {deepsy_calls} volání za "
+        "{deepsy_notes} zápisů, protože ten formát se ptá po jedné sekci zvlášť a zápis "
+        "v něm nejsou jedna, ale tři odpovědi. Proti třem pořadím, která se nedají smrštit "
+        "na jedno, je tohle ta levnější půlka problému."
     ),
     # --- the columns that do not order -------------------------------------
     "These columns do not order the models either.": ("Ani tyto sloupce modely neseřadí."),
@@ -1552,15 +1699,15 @@ CS: dict[str, str] = {
         "dvě čísla liší, je zvýrazněná."
     ),
     "The rows are ordered by dominance -- a model is above another only when it is "
-    "at least as good on every column under BOTH judges -- so models the evidence "
-    "cannot separate share a place, and {systems} models fall into {places} places "
-    "of which {tied} hold more than one. Within a place the order is alphabetical "
-    "and means nothing.": (
+    "at least as good on every column under BOTH judges, and better than it on at "
+    "least one -- so models the evidence cannot separate share a place, and "
+    "{systems} models fall into {places} places of which {tied} hold more than one. "
+    "Within a place the order is alphabetical and means nothing.": (
         "Řádky jsou seřazené podle dominance — model je výš jen tehdy, když je "
-        "aspoň tak dobrý v každém sloupci u OBOU soudců — takže modely, které "
-        "důkazy neoddělí, sdílejí místo: {systems} modelů padne do {places} míst, "
-        "z toho {tied} drží víc než jeden model. Uvnitř místa je pořadí abecední a "
-        "neznamená nic."
+        "aspoň tak dobrý v každém sloupci u OBOU soudců a aspoň v jednom sloupci je "
+        "lepší — takže modely, které důkazy neoddělí, sdílejí místo: {systems} "
+        "modelů padne do {places} míst, z toho {tied} drží víc než jeden model. "
+        "Uvnitř místa je pořadí abecední a neznamená nic."
     ),
     # --- the external index, whose columns are judges ----------------------
     "as {judge} sees it": "jak to vidí {judge}",
