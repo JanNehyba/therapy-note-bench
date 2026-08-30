@@ -828,38 +828,8 @@ CS: dict[str, str] = {
         "zápisů bez té chyby, od 0 do 1."
     ),
     # --- real against translated -------------------------------------------
-    "Real sessions or translated ones?": "Skutečná sezení, nebo přeložená?",
     "real": "skutečná",
     "translated": "přeložená",
-    "The translated half comes out ahead on four of the six criteria under both "
-    "judges. Each judge alone gives it five, but not the same five: "
-    "gemini-3.1-pro-preview puts the real half ahead on Register and gpt-5.6-terra on "
-    "Untranslated terms, and neither reversal is rounding. Bold marks where translated "
-    "beats real.": (
-        "Přeložená půlka je napřed ve čtyřech ze šesti kritérií u obou soudců. Každý "
-        "soudce sám jí dá pět, ale pokaždé jiných pět: gemini-3.1-pro-preview dává "
-        "skutečnou půlku napřed v Rejstříku a gpt-5.6-terra v Nepřeložených termínech, "
-        "a ani jedno obrácení není zaokrouhlení. Tučně je vyznačeno, kde přeložená "
-        "přebíjí skutečnou."
-    ),
-    "It does not follow that the models write better Czech there.": (
-        "Neplyne z toho, že tam modely píší lepší češtinu."
-    ),
-    "A real session runs seven times longer, the notes written from it are longer in "
-    "turn, and every criterion asks whether a note contains a fault -- more text, more "
-    "chances to have one. Matching the two halves on note length shrinks the gap but "
-    "does not settle it: of three length bands, two still favour the translated half "
-    "and one favours the real one, on 18 to 59 notes each. The halves also differ in "
-    "topic and in who transcribed them. This comparison is worth printing and is not "
-    "worth concluding from.": (
-        "Skutečné sezení je sedmkrát delší, zápisy z něj jsou tím pádem delší taky, "
-        "a každé kritérium se ptá, jestli zápis obsahuje chybu — víc textu, víc "
-        "příležitostí ji mít. Srovnání obou půlek při stejné délce zápisu ten rozdíl "
-        "zmenší, ale nerozhodne: ze tří délkových pásem dvě pořád nahrávají přeložené "
-        "půlce a jedno té skutečné, na 18 až 59 zápisech. Půlky se navíc liší tématem "
-        "a tím, kdo je přepisoval. Tohle srovnání stojí za vytištění a nestojí za "
-        "závěr."
-    ),
     # --- the criterion measured but not drawn ------------------------------
     # --- what it took ------------------------------------------------------
     "What it took": "Kolik to bylo práce",
@@ -1235,6 +1205,115 @@ CS: dict[str, str] = {
     "the six Czech criteria": "šest českých kritérií",
     "PDSQI-9, without the session": "PDSQI-9, bez sezení",
     "PDSQI-9, with the session": "PDSQI-9, se sezením",
+    # --- what each chapter came to --------------------------------------------
+    "The two judges do not both point the same way on {names}, so between the halves there is no "
+    "answer there at all.": (
+        "Tady se oba soudci neshodnou ani na směru — {names} — takže mezi půlkami tam žádná "
+        "odpověď není."
+    ),
+    "It does not follow that the models write better Czech on either half. The two differ in size, "
+    "in topic and in who transcribed them, so a model that does worse on one may be doing worse at "
+    "length, at motivational interviewing or at Czech, and nothing measured here separates the "
+    "three.": (
+        "Neplyne z toho, že by modely psaly na jedné z půlek lepší češtinu. Ty dvě půlky se liší "
+        "velikostí, tématem i tím, kdo je přepisoval, takže model, kterému jde jedna hůř, může být "
+        "horší v délce, v motivačních rozhovorech nebo v češtině — a nic z toho, co se tu měřilo, "
+        "ty tři od sebe neoddělí."
+    ),
+    "Which fault survives most often is not the same in all {tables} of these tables, so none is "
+    "named here: the weakest column changes with the table and with the judge.": (
+        "Která chyba přežívá nejčastěji, není ve všech {tables} těchto tabulkách totéž, takže se "
+        "tu žádná nejmenuje: nejslabší sloupec se mění s tabulkou i se soudcem."
+    ),
+    "What these two tables come to": "K čemu tyhle dvě tabulky došly",
+    "One fault survives more often than any other, and it is the same one in all {tables} of these "
+    "tables -- both halves, both judges. It is {worst}: averaged over the models, between {low} "
+    "and {high} of the notes are free of it, where 1.00 would mean every note was clean and 0.00 "
+    "that none was.": (
+        "Jedna chyba přežívá častěji než kterákoli jiná a ve všech {tables} těchto tabulkách je to "
+        "táž — obě půlky, oba soudci. Je to tahle: {worst}. V průměru přes modely je bez ní {low} "
+        "až {high} ze všech zápisů, kde 1,00 by znamenalo, že je čistý každý zápis, a 0,00, že "
+        "žádný."
+    ),
+    "Between the two halves, the translated conversations come out ahead on {other} of the {total} "
+    "criteria under both judges, and the real sessions on {real}.": (
+        "Mezi oběma půlkami: přeložené rozhovory vedou u obou soudců na {other} z {total} "
+        "kritérií, skutečná sezení na {real}."
+    ),
+    "What the two quality tables come to": "K čemu došly obě tabulky kvality",
+    "In all {tables} of these tables, every model scores {value} on {names} -- the top of the "
+    "scale. That is a ceiling rather than a result: an attribute no model can fail cannot tell the "
+    "models apart, and it should not be read as one they all did well on.": (
+        "Ve všech {tables} těchto tabulkách má každý model {value}, což je vrchol škály, a je to "
+        "pokaždé táž položka: {names}. To je strop, ne výsledek: položka, ve které nemůže žádný "
+        "model selhat, modely od sebe neodliší, a nemá se číst jako něco, v čem všechny obstály."
+    ),
+    "The attribute every model does worst on is {worst}, in all {tables} of these tables and under "
+    "both judges: {low} to {high} out of 5, averaged over the models in each of them.": (
+        "Položka, ve které dopadají všechny modely nejhůř, je tahle: {worst}. Ve všech {tables} "
+        "těchto tabulkách a u obou soudců z ní vychází {low} až {high} z 5, v průměru přes modely "
+        "v každé z nich."
+    ),
+    "These {tables} tables do not agree on which attribute the models do worst on, so none is "
+    "named here.": (
+        "Těchto {tables} tabulek se neshodne na tom, ve které položce dopadají modely nejhůř, "
+        "takže se tu žádná nejmenuje."
+    ),
+    "Between the two halves, on the {total} attributes both of them were asked: the translated "
+    "conversations come out ahead on {other} under both judges, and the real sessions on {real}.": (
+        "Mezi oběma půlkami, na {total} položkách, na které se ptaly obě: přeložené rozhovory "
+        "vedou u obou soudců na {other}, skutečná sezení na {real}."
+    ),
+    "Two attributes are missing from the real half rather than low. {names} can only be answered "
+    "by reading the session, and a real session is never sent to a judge, so there is no number "
+    "rather than a poor one. Nothing about the notes is being left out.": (
+        "Dvě položky u skutečné půlky nechybějí proto, že by vyšly nízko. {names} se dají "
+        "zodpovědět jen čtením sezení a skutečné sezení se soudci nikdy neposílá, takže tam není "
+        "špatné číslo, ale žádné. O zápisech se tím nic nezamlčuje."
+    ),
+    "What the two Deepsy tables come to": "K čemu došly obě tabulky Deepsy",
+    "The fault that survives most often in the Deepsy notes is {worst}, with between {low} and "
+    "{high} of them free of it. It is the same fault that survives most often in the SOAP notes "
+    "above, so what these models get wrong in Czech is not a fact about the format they were asked "
+    "for.": (
+        "Chyba, která v zápisech Deepsy přežívá nejčastěji, je tahle: {worst}. Bez ní je {low} až "
+        "{high} z nich. Je to táž chyba, která nejčastěji přežívá v zápisech SOAP výše, takže to, "
+        "co tyhle modely v češtině kazí, není vlastnost formátu, který se po nich chtěl."
+    ),
+    "The fault that survives most often in the Deepsy notes is {worst}, with between {low} and "
+    "{high} of them free of it. In the SOAP notes above it is {soap} instead, so what a model gets "
+    "wrong changes with the shape it was asked for.": (
+        "Chyba, která v zápisech Deepsy přežívá nejčastěji, je tahle: {worst}. Bez ní je {low} až "
+        "{high} z nich. V zápisech SOAP výše je nejčastější jiná — {soap} —, takže se to, co model "
+        "kazí, mění s tvarem, který se po něm chtěl."
+    ),
+    "No single fault dominates the Deepsy notes the way {soap} does the SOAP ones. Which column is "
+    "weakest changes with the table and with the judge, so none is named here.": (
+        "V zápisech SOAP převládá jedna chyba nad ostatními — {soap} — a v zápisech Deepsy nic "
+        "takového není: který sloupec je nejslabší, se mění s tabulkou i se soudcem, takže se tu "
+        "žádný nejmenuje."
+    ),
+    "That comparison carries the same confound as the one on the SOAP halves: the two halves "
+    "differ in size, in topic and in who transcribed them, and nothing measured here separates any "
+    "of the three from Czech.": (
+        "To srovnání s sebou nese tutéž potíž jako to na půlkách SOAP: obě půlky se liší "
+        "velikostí, tématem i tím, kdo je přepisoval, a nic z toho, co se tu měřilo, ani jedno od "
+        "češtiny neoddělí."
+    ),
+    "Between the two halves of the Deepsy notes, the translated conversations come out ahead on "
+    "{other} of the {total} criteria under both judges, and the real sessions on {real}.": (
+        "Mezi oběma půlkami zápisů Deepsy: přeložené rozhovory vedou u obou soudců na {other} z "
+        "{total} kritérií, skutečná sezení na {real}."
+    ),
+    "One thing to carry into any comparison with the tables above: these two tables hold {here} "
+    "models and the SOAP tables hold {there}, because what e-INFRA had deployed changed between "
+    "the two runs. Anything read across the two formats holds for the {shared} models they share, "
+    "and for those only.": (
+        "Jedna věc, kterou je třeba vzít do každého srovnání s tabulkami výše: tyhle dvě tabulky "
+        "mají {here} modelů a tabulky SOAP {there}, protože se mezi oběma běhy změnilo, co má "
+        "e-INFRA nasazené. Cokoli čteného napříč oběma formáty platí pro {shared} modelů, které "
+        "mají společné, a jen pro ně."
+    ),
     # --- the Deepsy chapter -------------------------------------------------
     "The note format the Deepsy application actually writes": (
         "Formát zápisu, který aplikace Deepsy opravdu píše"

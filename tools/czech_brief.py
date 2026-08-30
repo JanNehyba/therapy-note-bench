@@ -1681,96 +1681,416 @@ def _corpus(drawn: list[results.Row]) -> str:
     )
 
 
-def _halves(rows: list[results.Row]) -> str:
-    """Do the models write better Czech on the real sessions or the translated ones?
+#: The two PDSQI tables, named the way the two criteria pairs above are, and
+#: for the same reason: a filter that says what a track is *not* quietly pools
+#: whatever is added next.
+PDSQI_TRACKS = (results.TRACK_CZECH_REAL_PDSQI, results.TRACK_CZECH_TRANSLATED_PDSQI)
 
-    The question the two tables invite and neither answers, so it is answered
-    here with the numbers side by side -- and with the reason the answer stops
-    short of a claim.
+
+def _cells(rows: list[results.Row], tracks: tuple[str, ...]) -> dict[tuple[str, str], dict]:
+    """One cell per track and judge: each column's mean over the models drawn.
+
+    The newest rubric per track, which is what the tables draw. Four cells stay
+    four cells: nothing here is averaged across judges or across halves, so the
+    only kind of finding these boxes can state is one that holds in all of
+    them. A mean of four tables would be a number this document has spent a
+    page declining to take.
     """
     latest = [row for row in results.latest(rows) if row.is_scored]
-    newest = {}
-    for row in latest:
-        if row.track in (results.TRACK_CZECH_REAL, results.TRACK_CZECH_TRANSLATED):
-            newest[row.judge_prompt_version] = max(
-                newest.get(row.judge_prompt_version, ""), row.scored_at or ""
-            )
-    if not newest:
-        return ""
-    rubric = max(newest, key=lambda version: newest[version])
+    out: dict[tuple[str, str], dict] = {}
+    for track in tracks:
+        here = [row for row in latest if row.track == track]
+        if not here:
+            continue
+        newest = max(row.judge_prompt_version for row in here)
+        here = [row for row in here if row.judge_prompt_version == newest]
+        for judge in sorted({row.judge_model or "" for row in here}):
+            found = {}
+            for key, _digits in COLUMNS[track]:
+                values = [
+                    row.metrics.headline[key]
+                    for row in here
+                    if (row.judge_model or "") == judge and key in row.metrics.headline
+                ]
+                if values:
+                    found[key] = sum(values) / len(values)
+            if found:
+                out[(track, judge)] = found
+    return out
 
-    judges = sorted({row.judge_model or "" for row in latest if row.judge_prompt_version == rubric})
-    if not judges:
-        return ""
 
-    def mean_of(track: str, judge_model: str, key: str) -> float | None:
-        values = [
-            row.metrics.headline[key]
-            for row in latest
-            if row.track == track
-            and row.judge_model == judge_model
-            and row.judge_prompt_version == rubric
-            and key in row.metrics.headline
-        ]
-        return sum(values) / len(values) if values else None
+def _extremes(cells: dict, keys: set[str]) -> tuple[list[str], dict[str, list[float]]]:
+    """The columns that are lowest in EVERY cell, and every column's values.
 
-    body = []
-    for key in czech_scorer.CRITERION_KEYS:
-        cells = []
-        drawn = False
-        for judge_model in judges:
-            real = mean_of(results.TRACK_CZECH_REAL, judge_model, key)
-            translated = mean_of(results.TRACK_CZECH_TRANSLATED, judge_model, key)
-            if real is None or translated is None:
-                cells.append("<td class='dash'>--</td><td class='dash'>--</td>")
-                continue
-            drawn = True
-            better = "<strong>" if translated > real else ""
-            close = "</strong>" if translated > real else ""
-            cells.append(f"<td>{real:.2f}</td><td>{better}{translated:.2f}{close}</td>")
-        if drawn:
-            label = _t(MEASURE_TABLES[results.TRACK_CZECH_REAL][key]["label"])
-            body.append(f"<tr><td>{html.escape(label)}</td>" + "".join(cells) + "</tr>")
+    Intersected rather than averaged. A column that is the weakest in three of
+    four cells and second weakest in the fourth is not the weakest, and calling
+    it that would be taking the mean of four tables in order to report which
+    one of them to believe.
+    """
+    lowest: list[set[str]] = []
+    values: dict[str, list[float]] = {}
+    for found in cells.values():
+        here = {key: value for key, value in found.items() if key in keys}
+        if not here:
+            continue
+        floor = min(here.values())
+        lowest.append({key for key, value in here.items() if value == floor})
+        for key, value in here.items():
+            values.setdefault(key, []).append(value)
+    worst = sorted(set.intersection(*lowest)) if lowest else []
+    return worst, values
+
+
+def _at_the_ceiling(rows: list[results.Row], tracks: tuple[str, ...]) -> list[str]:
+    """Columns where every model in every one of these tables prints the top.
+
+    Not "the highest column", which every table has whether or not it means
+    anything. This is the stronger fact and the one worth a sentence: nobody
+    can score below it, so the column separates nothing and never could.
+    """
+    latest = [row for row in results.latest(rows) if row.is_scored]
+    seen: dict[str, set[bool]] = {}
+    for track in tracks:
+        here = [row for row in latest if row.track == track]
+        if not here:
+            continue
+        newest = max(row.judge_prompt_version for row in here)
+        here = [row for row in here if row.judge_prompt_version == newest]
+        measures = MEASURE_TABLES[track]
+        for judge in sorted({row.judge_model or "" for row in here}):
+            for key, digits in COLUMNS[track]:
+                top = float(measures[key]["scale"].split("-")[-1])
+                printed = {
+                    f"{row.metrics.headline[key]:.{digits}f}"
+                    for row in here
+                    if (row.judge_model or "") == judge and key in row.metrics.headline
+                }
+                if printed:
+                    seen.setdefault(key, set()).add(printed == {f"{top:.{digits}f}"})
+    return sorted(key for key, answers in seen.items() if answers == {True})
+
+
+def _halves_split(
+    cells: dict, tracks: tuple[str, str], keys: list[str]
+) -> tuple[list[str], list[str], list[str]]:
+    """Which half each column is ahead on, under every judge that read both.
+
+    A difference smaller than the last digit the table prints is not a
+    difference a reader can see, and it counts for neither half: two columns of
+    5.00 are not the translated half winning by a rounding error. Where the
+    judges point different ways -- or one of them sees no difference at all --
+    the column goes in neither list, because the reading rule everywhere else
+    in this document is to believe what both judges say.
+    """
+    real_track, other_track = tracks
+    judges = sorted(
+        {judge for track, judge in cells if track == real_track}
+        & {judge for track, judge in cells if track == other_track}
+    )
+    digits = dict(COLUMNS[real_track])
+    ahead_other, ahead_real, rest = [], [], []
+    for key in keys:
+        signs = []
+        for judge in judges:
+            here = cells[(real_track, judge)].get(key)
+            there = cells[(other_track, judge)].get(key)
+            if here is None or there is None:
+                signs = []
+                break
+            step = 0.5 * 10 ** -digits.get(key, 2)
+            signs.append(0 if abs(there - here) < step else (1 if there > here else -1))
+        if not signs:
+            continue
+        if all(sign > 0 for sign in signs):
+            ahead_other.append(key)
+        elif all(sign < 0 for sign in signs):
+            ahead_real.append(key)
+        else:
+            rest.append(key)
+    return ahead_other, ahead_real, rest
+
+
+def _shared_keys(tracks: tuple[str, str]) -> list[str]:
+    """The columns both halves of a chapter have, in the first half's order."""
+    other = {key for key, _digits in COLUMNS[tracks[1]]}
+    return [key for key, _digits in COLUMNS[tracks[0]] if key in other]
+
+
+def _labels(track: str, keys: list[str]) -> str:
+    """Column names, in the reader's language, joined the way a sentence needs."""
+    return _join_words([_t(MEASURE_TABLES[track][key]["label"]) for key in keys])
+
+
+def _rosters(rows: list[results.Row], tracks: tuple[str, ...]) -> set[str]:
+    """Every model these tracks drew, on the rubric each of them draws."""
+    latest = [row for row in results.latest(rows) if row.is_scored]
+    found: set[str] = set()
+    for track in tracks:
+        here = [row for row in latest if row.track == track]
+        if not here:
+            continue
+        newest = max(row.judge_prompt_version for row in here)
+        found |= {row.system_id for row in here if row.judge_prompt_version == newest}
+    return found
+
+
+def _box(title: str, said: list[str]) -> str:
+    """A chapter's closing box, in the same shape each time it closes one.
+
+    The document had no place where a chapter said what it came to. It had a
+    summary at the front and thirty tables after it, and the reader who worked
+    through two tables of decimals was handed a third with nothing in between
+    saying what the first two had shown. A box at the end of each chapter is
+    that sentence, and it is the same shape in all three so that a reader who
+    learns to look for it once finds it again.
+    """
+    body = "".join(f"<p>{html.escape(text)}</p>" for text in said if text)
     if not body:
         return ""
+    return f"<div class='finding'><h3>{html.escape(_t(title))}</h3>{body}</div>"
 
-    head = "".join(
-        f"<th>{html.escape(name)}: {_t('real')}</th>"
-        f"<th>{html.escape(name)}: {_t('translated')}</th>"
-        for name in judges
-    )
-    return (
-        f"<h2>{_t('Real sessions or translated ones?')}</h2>"
-        + "<p>"
-        + html.escape(
-            _t(
-                "The translated half comes out ahead on four of the six criteria "
-                "under both judges. Each judge alone gives it five, but not the same "
-                "five: gemini-3.1-pro-preview puts the real half ahead on Register and "
-                "gpt-5.6-terra on Untranslated terms, and neither reversal is rounding. "
-                "Bold marks where translated beats real."
+
+#: Said in every box that compares two halves, because the disagreement is the
+#: same kind of fact each time: a column the two judges push in opposite
+#: directions has no answer between the halves, and averaging over it would
+#: manufacture one.
+HALVES_REST = (
+    "The two judges do not both point the same way on {names}, so between the halves "
+    "there is no answer there at all."
+)
+#: The confound, said under both criteria chapters. It is the same confound,
+#: it is not a small one, and a box that printed the comparison without it
+#: would be handing a clinical team the one sentence they would remember.
+HALVES_GUARD = (
+    "It does not follow that the models write better Czech on either half. The two "
+    "differ in size, in topic and in who transcribed them, so a model that does worse "
+    "on one may be doing worse at length, at motivational interviewing or at Czech, "
+    "and nothing measured here separates the three."
+)
+#: When the tables do not agree on which column is weakest. It has never
+#: printed on the data this document was built from, and it is written and
+#: translated anyway: the alternative is a silence that reads as agreement.
+WORST_UNSETTLED = (
+    "Which fault survives most often is not the same in all {tables} of these tables, "
+    "so none is named here: the weakest column changes with the table and with the "
+    "judge."
+)
+
+BOX_A_TITLE = "What these two tables come to"
+BOX_A_WORST = (
+    "One fault survives more often than any other, and it is the same one in all "
+    "{tables} of these tables -- both halves, both judges. It is {worst}: averaged "
+    "over the models, between {low} and {high} of the notes are free of it, where 1.00 "
+    "would mean every note was clean and 0.00 that none was."
+)
+BOX_A_HALVES = (
+    "Between the two halves, the translated conversations come out ahead on {other} of "
+    "the {total} criteria under both judges, and the real sessions on {real}."
+)
+
+BOX_B_TITLE = "What the two quality tables come to"
+BOX_B_CEILING = (
+    "In all {tables} of these tables, every model scores {value} on {names} -- the top "
+    "of the scale. That is a ceiling rather than a result: an attribute no model can "
+    "fail cannot tell the models apart, and it should not be read as one they all did "
+    "well on."
+)
+BOX_B_WORST = (
+    "The attribute every model does worst on is {worst}, in all {tables} of these "
+    "tables and under both judges: {low} to {high} out of 5, averaged over the models "
+    "in each of them."
+)
+BOX_B_WORST_UNSETTLED = (
+    "These {tables} tables do not agree on which attribute the models do worst on, so "
+    "none is named here."
+)
+BOX_B_HALVES = (
+    "Between the two halves, on the {total} attributes both of them were asked: the "
+    "translated conversations come out ahead on {other} under both judges, and the "
+    "real sessions on {real}."
+)
+BOX_B_ABSENT = (
+    "Two attributes are missing from the real half rather than low. {names} can only "
+    "be answered by reading the session, and a real session is never sent to a judge, "
+    "so there is no number rather than a poor one. Nothing about the notes is being "
+    "left out."
+)
+
+BOX_C_TITLE = "What the two Deepsy tables come to"
+BOX_C_WORST_SAME = (
+    "The fault that survives most often in the Deepsy notes is {worst}, with between "
+    "{low} and {high} of them free of it. It is the same fault that survives most "
+    "often in the SOAP notes above, so what these models get wrong in Czech is not a "
+    "fact about the format they were asked for."
+)
+BOX_C_WORST_OTHER = (
+    "The fault that survives most often in the Deepsy notes is {worst}, with between "
+    "{low} and {high} of them free of it. In the SOAP notes above it is {soap} "
+    "instead, so what a model gets wrong changes with the shape it was asked for."
+)
+BOX_C_HALVES = (
+    "Between the two halves of the Deepsy notes, the translated conversations come out "
+    "ahead on {other} of the {total} criteria under both judges, and the real sessions "
+    "on {real}."
+)
+BOX_C_WORST_UNSETTLED = (
+    "No single fault dominates the Deepsy notes the way {soap} does the SOAP ones. "
+    "Which column is weakest changes with the table and with the judge, so none "
+    "is named here."
+)
+BOX_C_GUARD = (
+    "That comparison carries the same confound as the one on the SOAP halves: the two "
+    "halves differ in size, in topic and in who transcribed them, and nothing measured "
+    "here separates any of the three from Czech."
+)
+BOX_C_ROSTER = (
+    "One thing to carry into any comparison with the tables above: these two tables "
+    "hold {here} models and the SOAP tables hold {there}, because what e-INFRA had "
+    "deployed changed between the two runs. Anything read across the two formats holds "
+    "for the {shared} models they share, and for those only."
+)
+
+
+def _worst_sentences(rows: list[results.Row], tracks: tuple[str, ...], keys: set[str]) -> tuple:
+    """The weakest column of a chapter, its range, and how many cells agree.
+
+    Returns `(worst, low, high, tables)` with `worst` empty when the cells do
+    not agree on one -- which is a finding of its own and gets its own sentence
+    rather than a silence.
+    """
+    cells = _cells(rows, tracks)
+    if not cells:
+        return "", "", "", 0
+    worst, values = _extremes(cells, keys)
+    if len(worst) != 1:
+        return "", "", "", len(cells)
+    key = worst[0]
+    digits = dict(COLUMNS[tracks[0]]).get(key, 2)
+    found = sorted(values[key])
+    label = _t(MEASURE_TABLES[tracks[0]][key]["label"])
+    return label, _decimal(found[0], digits), _decimal(found[-1], digits), len(cells)
+
+
+def _box_a(rows: list[results.Row]) -> str:
+    """What the two Czech criteria tables came to, computed from them.
+
+    It absorbs the chapter this document used to end on -- "Real sessions or
+    translated ones?" -- whose lead paragraph typed out "four of the six
+    criteria under both judges" and "each judge alone gives it five, but not
+    the same five" over a table that computed exactly those numbers and could
+    have said them. That shape is the one this repository keeps finding, and
+    finding it in its own briefing was overdue.
+    """
+    tracks = SOAP_CRITERIA_TRACKS
+    cells = _cells(rows, tracks)
+    if not cells:
+        return ""
+    said = []
+
+    keys = _shared_keys(tracks)
+    worst, low, high, tables = _worst_sentences(rows, tracks, set(keys))
+    if worst:
+        said.append(_t(BOX_A_WORST).format(tables=tables, worst=worst, low=low, high=high))
+    else:
+        said.append(_t(WORST_UNSETTLED).format(tables=tables))
+
+    other, real, rest = _halves_split(cells, tracks, keys)
+    said.append(_t(BOX_A_HALVES).format(other=len(other), total=len(keys), real=len(real)))
+    if rest:
+        said.append(_t(HALVES_REST).format(names=_labels(tracks[0], rest)))
+    said.append(_t(HALVES_GUARD))
+    return _box(BOX_A_TITLE, said)
+
+
+def _box_b(rows: list[results.Row]) -> str:
+    """What the two quality tables came to. The ceiling is the finding."""
+    tracks = PDSQI_TRACKS
+    cells = _cells(rows, tracks)
+    if not cells:
+        return ""
+    said = []
+
+    measures = MEASURE_TABLES[tracks[0]]
+    likert = {key for key, _digits in COLUMNS[tracks[0]] if measures[key]["scale"] == "1-5"}
+    likert |= {
+        key
+        for key, _digits in COLUMNS[tracks[1]]
+        if MEASURE_TABLES[tracks[1]][key]["scale"] == "1-5"
+    }
+
+    ceiling = _at_the_ceiling(rows, tracks)
+    if ceiling:
+        track = tracks[0] if ceiling[0] in dict(COLUMNS[tracks[0]]) else tracks[1]
+        digits = dict(COLUMNS[track])[ceiling[0]]
+        top = float(MEASURE_TABLES[track][ceiling[0]]["scale"].split("-")[-1])
+        said.append(
+            _t(BOX_B_CEILING).format(
+                tables=len(cells),
+                value=_decimal(top, digits),
+                names=_labels(track, ceiling),
             )
         )
-        + "</p>"
-        + f"<table><thead><tr><th>{_t('Criterion')}</th>{head}</tr></thead>"
-        + f"<tbody>{''.join(body)}</tbody></table>"
-        + "<div class='warn'><p><strong>"
-        + html.escape(_t("It does not follow that the models write better Czech there."))
-        + "</strong> "
-        + html.escape(
-            _t(
-                "A real session runs seven times longer, the notes written from it are "
-                "longer in turn, and every criterion asks whether a note contains a "
-                "fault -- more text, more chances to have one. Matching the two halves "
-                "on note length shrinks the gap but does not settle it: of three length "
-                "bands, two still favour the translated half and one favours the real "
-                "one, on 18 to 59 notes each. The halves also differ in topic and in "
-                "who transcribed them. This comparison is worth printing and is not "
-                "worth concluding from."
-            )
-        )
-        + "</p></div>"
+
+    worst, low, high, tables = _worst_sentences(rows, tracks, likert)
+    if worst:
+        said.append(_t(BOX_B_WORST).format(tables=tables, worst=worst, low=low, high=high))
+    else:
+        said.append(_t(BOX_B_WORST_UNSETTLED).format(tables=tables))
+
+    keys = _shared_keys(tracks)
+    other, real, rest = _halves_split(cells, tracks, keys)
+    said.append(_t(BOX_B_HALVES).format(other=len(other), total=len(keys), real=len(real)))
+    if rest:
+        said.append(_t(HALVES_REST).format(names=_labels(tracks[0], rest)))
+
+    # The columns the real half was never asked, named as an absence with its
+    # reason. A reader comparing a six-column table with an eight-column one
+    # reads the two missing columns as something the notes failed at.
+    only_other = [key for key, _digits in COLUMNS[tracks[1]] if key not in set(keys)]
+    if only_other:
+        said.append(_t(BOX_B_ABSENT).format(names=_labels(tracks[1], only_other)))
+    return _box(BOX_B_TITLE, said)
+
+
+def _box_c(rows: list[results.Row]) -> str:
+    """What the two Deepsy tables came to, and what carries across to the SOAP ones."""
+    tracks = DEEPSY_CRITERIA_TRACKS
+    cells = _cells(rows, tracks)
+    if not cells:
+        return ""
+    said = []
+
+    keys = _shared_keys(tracks)
+    worst, low, high, tables = _worst_sentences(rows, tracks, set(keys))
+    soap, _low, _high, _tables = _worst_sentences(
+        rows, SOAP_CRITERIA_TRACKS, set(_shared_keys(SOAP_CRITERIA_TRACKS))
     )
+    if worst and soap == worst:
+        said.append(_t(BOX_C_WORST_SAME).format(worst=worst, low=low, high=high))
+    elif worst and soap:
+        said.append(_t(BOX_C_WORST_OTHER).format(worst=worst, low=low, high=high, soap=soap))
+    elif worst:
+        said.append(_t(BOX_A_WORST).format(tables=tables, worst=worst, low=low, high=high))
+    elif soap:
+        said.append(_t(BOX_C_WORST_UNSETTLED).format(soap=soap))
+    else:
+        said.append(_t(WORST_UNSETTLED).format(tables=tables))
+
+    other, real, rest = _halves_split(cells, tracks, keys)
+    said.append(_t(BOX_C_HALVES).format(other=len(other), total=len(keys), real=len(real)))
+    if rest:
+        said.append(_t(HALVES_REST).format(names=_labels(tracks[0], rest)))
+    said.append(_t(BOX_C_GUARD))
+
+    # The two rosters, because they are not the same roster and the chapter
+    # above it is the one a reader will compare these tables with.
+    here = _rosters(rows, tracks)
+    there = _rosters(rows, SOAP_CRITERIA_TRACKS)
+    if here and there:
+        said.append(
+            _t(BOX_C_ROSTER).format(here=len(here), there=len(there), shared=len(here & there))
+        )
+    return _box(BOX_C_TITLE, said)
 
 
 def _verdicts(rows: list[results.Row]) -> str:
@@ -4078,6 +4398,7 @@ DEEPSY_FIGURE_CAPTION = (
 
 
 def _deepsy_chapter(
+    rows: list[results.Row],
     entries: list[tuple[str, list[list[results.Row]], set[str]]],
     figures: dict[str, str],
     shared_judges: list[str],
@@ -4091,7 +4412,8 @@ def _deepsy_chapter(
 
     The order is the order a reader needs it in: what the format is, why it is
     in this document, what this chapter cannot answer, the picture, the table
-    the picture draws, and then the two tables everything else came from.
+    the picture draws, then the two tables everything else came from, and the
+    box saying what they came to.
     """
     limit = ((_payload("czech-length.json").get("instructions") or {}).get("deepsy") or {}).get(
         "limit_words"
@@ -4114,6 +4436,7 @@ def _deepsy_chapter(
     out.append(_formats())
     for track, ordered, _withdrawn in entries:
         out.append(_track_block(track, ordered, lead=not shared_judges, level=3))
+    out.append(_box_c(rows))
     return "".join(out)
 
 
@@ -4218,12 +4541,23 @@ def build(rows: list[results.Row]) -> str:
     # own. They are drawn where the second of them falls, which is last, so the
     # order of the document does not depend on this branch.
     deepsy_plan = [entry for entry in plan if entry[0] in DEEPSY_CRITERIA_TRACKS]
+    # The box that closes a chapter, drawn under the last table in it. Keyed on
+    # the last track actually drawn rather than on the one that comes last by
+    # design: a run that scored only half a chapter still gets its conclusion,
+    # and the box itself decides what it can say with one half.
+    closing = {}
+    for chapter, box in ((SOAP_CRITERIA_TRACKS, _box_a), (PDSQI_TRACKS, _box_b)):
+        drawn_here = [track for track in drawn_tracks if track in chapter]
+        if drawn_here:
+            closing[drawn_here[-1]] = box
     for track, ordered, _withdrawn in plan:
         if track in DEEPSY_CRITERIA_TRACKS:
             if track == deepsy_plan[-1][0]:
-                sections.append(_deepsy_chapter(deepsy_plan, figures, shared_judges))
+                sections.append(_deepsy_chapter(rows, deepsy_plan, figures, shared_judges))
             continue
         sections.append(_track_block(track, ordered, lead=not shared_judges, level=2))
+        if track in closing:
+            sections.append(closing[track](rows))
 
     # --- the caveats and the definitions, once each -------------------------
     # How far a band boundary can be trusted, under the tables that draw one.
@@ -4281,7 +4615,6 @@ def build(rows: list[results.Row]) -> str:
 
 {"".join(sections)}
 
-{_halves(rows)}
 
 
 {_variance(rows)}
