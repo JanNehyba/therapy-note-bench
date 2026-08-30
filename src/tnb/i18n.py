@@ -88,8 +88,7 @@ _STATIC = {
     "page.brief-link": (
         '<a href="brief.html">Jak číst tyto výsledky →</a> '
         "Čtyři tvrzení, která tabulky unesou, a čtyři, která ne, i se souborem, ze kterého "
-        "každé číslo pochází. "
-        'Také jako <a href="therapy-note-bench.pdf">PDF</a>.'
+        "každé číslo pochází."
     ),
     "page.foot.data": (
         'Vykreslená čísla jsou v souboru <a href="leaderboard.json">leaderboard.json</a>; '
@@ -918,10 +917,9 @@ _METHODS = {
     ),
     "methods.licences.summary": ("<strong>Odkud pochází každý vstup a za jakých podmínek</strong>"),
     "methods.brief-link": (
-        '<a href="brief.html">Osmistránkový briefing →</a> Co žebříček těchto modelů může '
-        "a nemůže říct tomu, kdo takový systém staví nebo kupuje — čtyři tvrzení, čtyři obrázky "
-        'a soubor, ze kterého každé číslo pochází. Také jako <a href="therapy-note-bench.pdf">'
-        "PDF</a>."
+        '<a href="brief.html">Jak číst tyto výsledky →</a> '
+        "Čtyři tvrzení, která tabulky unesou, a čtyři, která ne, i se souborem, ze kterého "
+        "každé číslo pochází."
     ),
     "methods.foot.columns": (
         "U <strong>věrnosti</strong> je lidská shoda téměř nulová — TN-Eval naměřil mezi "
