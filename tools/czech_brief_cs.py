@@ -1838,18 +1838,6 @@ CS: dict[str, str] = {
         "ano/ne. Buňka je podíl vět daného modelu, na které kategorie sedí, takže "
         "model, který píše dvakrát tolik, nemá dvakrát větší šanci dostat značku."
     ),
-    "Only {passed} of the {total} passed the gates that decide whether a column "
-    "is possible: does it vary, does it belong to the model rather than the "
-    "session, do the coders agree, is its evidence real, and is it separable from "
-    "length. The others are printed as description and are not measures. {failed} "
-    "fall outside the 20-80% band a column needs to tell ten notes per model "
-    "apart.": (
-        "Branami, které rozhodují, jestli je sloupec vůbec možný, prošla {passed} z "
-        "{total}: kolísá to; patří to modelu, ne sezení; shodnou se kodéři; je evidence "
-        "skutečná; a jde to oddělit od délky. Ostatní jsou vytištěné jako popis, ne "
-        "jako míra. Mimo pásmo 20–80 %, které sloupec potřebuje, aby rozlišil deset "
-        "zápisů na model, padá: {failed}."
-    ),
     "No person has read these notes as a clinician. Two models agreeing is "
     "evidence that a distinction is stable and codeable, and no evidence at all "
     "that it matters. Nothing here says a higher number is worse.": (
