@@ -60,14 +60,23 @@ CS: dict[str, str] = {
     "What these numbers cannot be used for": "K čemu tato čísla nejdou použít",
     "How it was measured": "Jak se to měřilo",
     "The two corpora": "Dva korpusy",
-    "Two halves, both read only from a directory that is not in version control. "
-    "Every model was asked for a note from every transcript, on e-INFRA -- that is the "
-    "design, and {written} of the {asked} notes are the outcome. Where a model wrote "
-    "fewer, it is named: {short}.": (
+    "Two halves, both read only from a directory that is not in version control. Every "
+    "model was asked for a note from every transcript, on e-INFRA -- that is the design, "
+    "and {written} of the {asked} notes are the outcome. Which models wrote fewer, and "
+    "how many fewer, is named in the first of the caveats above.": (
         "Dvě půlky, obě čtené jen z adresáře, který není ve verzovacím systému. Každý "
         "model dostal zadání napsat zápis z každého přepisu, na e-INFRA — to je záměr "
-        "a výsledek je {written} zápisů z {asked}. Kde model napsal míň, je "
-        "jmenovaný: {short}."
+        "a výsledek je {written} zápisů z {asked}. Které modely napsaly míň a o kolik, "
+        "je jmenované v první z výhrad výše."
+    ),
+    "Where each step ran is the confidentiality boundary of this whole project. Every "
+    "note was written on e-INFRA, the infrastructure that also holds the sessions, so no "
+    "transcript ever left it to be summarised. Only the notes went anywhere else: each "
+    "was put to two judges, one question at a time, on Google's and OpenAI's endpoints.": (
+        "Kde který krok běžel, to je hranice důvěrnosti celého tohohle projektu. Každý "
+        "zápis vznikl na e-INFRA, tedy na infrastruktuře, která drží i sezení — žádný "
+        "přepis ji tedy kvůli shrnování neopustil. Ven šly jen zápisy: každý dostali dva "
+        "soudci, po jedné otázce, na endpointech Googlu a OpenAI."
     ),
     "They are not the same size:": "Nejsou stejně velké:",
     "a real session runs seven times longer than a translated AnnoMI conversation, so "
@@ -367,84 +376,115 @@ CS: dict[str, str] = {
     ),
     # --- what these numbers cannot be used for -----------------------------
     "Ten sessions, and they are all one client": ("Deset sezení, a všechna jsou jeden klient"),
-    "Every model was asked for a note from every transcript, which is what makes "
-    "the comparison between models valid at all -- the first attempt gave each "
-    "model a different session and could not tell a worse model from a harder "
-    "session. The asking held and the answering did not always: {written} of the "
-    "{asked} notes came back, and the shortfalls are {short}. But "
-    "ten notes per model is a small number, and the real half is one client with one "
-    "therapist. Read the ordering, not the gaps between neighbours.": (
-        "Každý model dostal zadání napsat zápis z každého "
-        "přepisu, a právě to dělá srovnání mezi modely vůbec "
-        "platným — první pokus dal každému modelu jiné "
-        "sezení a neuměl odlišit horší model od "
-        "těžšího sezení. Zadání drželo, odpovědi ne vždycky: "
-        "vrátilo se {written} zápisů z {asked} a chybějící jsou tyhle: {short}. "
-        "Deset zápisů na model je "
-        "ale málo a skutečná půlka je jeden klient s "
-        "jedním terapeutem. Čti pořadí, ne rozestupy mezi "
-        "sousedy."
+    "Every model was asked for a note from every transcript, and that is what makes "
+    "comparing them valid at all -- the first attempt gave each model a different "
+    "session, and it could not tell a worse model from a harder session. The asking "
+    "held; the answering did not always. {written} of the {asked} notes came back, "
+    "and where a model wrote fewer it is named: {short}. But ten notes per model is "
+    "a small number. One note falling the other way moves a share by a tenth, which "
+    "is wider than most of the gaps between neighbouring rows in these tables, so "
+    "two models a few hundredths apart are not two models an extra week of "
+    "measurement would keep apart. And the real half is ten sessions with one "
+    "client and one therapist: everything measured there is also a fact about that "
+    "therapist's way of working and that client's way of talking. Read the ordering. "
+    "Do not read the gaps between neighbours.": (
+        "Každý model dostal zadání napsat zápis z každého přepisu a právě to dělá "
+        "srovnání mezi modely vůbec platným — první pokus dal každému modelu jiné "
+        "sezení a neuměl odlišit horší model od těžšího sezení. Zadání drželo, "
+        "odpovědi ne vždycky: vrátilo se {written} zápisů z {asked} a kde model "
+        "napsal míň, je jmenovaný: {short}. Deset zápisů na model je ale málo. Jediný "
+        "zápis, který by dopadl opačně, posune podíl o desetinu, a to je víc než "
+        "většina rozestupů mezi sousedními řádky v těchhle tabulkách — dva modely "
+        "vzdálené o pár setin tedy nejsou dva modely, které by od sebe udržel i další "
+        "týden měření. A skutečná půlka je deset sezení s jedním klientem a jedním "
+        "terapeutem: všechno, co je změřené na ní, je zároveň výrok o tom, jak "
+        "pracuje ten terapeut a jak mluví ten klient. Čti pořadí. Nečti rozestupy "
+        "mezi sousedy."
     ),
     "The two halves differ by more than language, and mostly by size": (
         "Ty dvě půlky se liší víc než jazykem, a hlavně velikostí"
     ),
     "A real session runs to a median of {real_words} words and {real_turns} turns; a "
-    "translated AnnoMI conversation to {other_words} words and {other_turns} turns. Seven "
-    "times the material, so the "
-    "summarising is a harder task before any question of Czech arises. They differ in "
-    "topic too -- AnnoMI is motivational interviewing about substance use and the real "
-    "sessions are not -- and in who transcribed them. A model that does worse on one "
-    "half may be doing worse at length, at motivational interviewing, or at Czech, and "
-    "these numbers cannot separate the three.": (
-        "Skutečné sezení má medián {real_words} slov a {real_turns} replik; "
-        "přeložený rozhovor AnnoMI {other_words} slov a {other_turns} replik. Sedmkrát "
-        "víc materiálu, takže shrnování je těžší "
-        "úkol ještě před jakoukoli otázkou o "
-        "češtině. Liší se i tématem — AnnoMI je "
-        "motivační rozhovor o návykových látkách a "
-        "skutečná sezení nejsou — a tím, kdo je "
-        "přepisoval. Model, který dopadne hůř na jedné "
-        "půlce, může být horší v délce, v "
-        "motivačním rozhovoru, nebo v češtině, a tato "
-        "čísla ty tři věci neumějí oddělit."
+    "translated AnnoMI conversation to {other_words} words and {other_turns} turns -- "
+    "{ratio} times the material to read before a word of Czech is written. "
+    "Summarising the longer one is a harder task on its own. They differ in subject "
+    "as well: AnnoMI is motivational interviewing about substance use, the real "
+    "sessions are not, and the two were transcribed by different hands to different "
+    "conventions. So a model that does worse on one half may be doing worse at "
+    "length, at motivational interviewing, or at Czech, and nothing here separates "
+    "the three. The one thing the two halves are good for is the comparison between "
+    "them: a fault that appears on both is the model's, and a fault that appears "
+    "only on the translated half belongs to the text it was given.": (
+        "Skutečné sezení má medián {real_words} slov a {real_turns} replik; přeložený "
+        "rozhovor AnnoMI {other_words} slov a {other_turns} replik — tedy {ratio}× víc "
+        "materiálu, který je potřeba přečíst dřív, než padne první české slovo. Shrnout "
+        "to delší je těžší úkol samo o sobě. Liší se i tématem: AnnoMI je motivační "
+        "rozhovor o návykových látkách, skutečná sezení nejsou, a přepisoval je někdo "
+        "jiný a podle jiných zvyklostí. Model, který dopadne hůř na jedné půlce, tedy "
+        "může být horší v délce, v motivačním rozhovoru, nebo v češtině, a nic tady ty "
+        "tři věci neoddělí. K jednomu jsou ty dvě půlky dobré: ke srovnání mezi sebou. "
+        "Chyba, která se objeví na obou, patří modelu; chyba, která se objeví jen na "
+        "přeložené půlce, patří textu, který dostal."
     ),
     "Nothing here says whether a note is true": ("Nic tady neříká, jestli je zápis pravdivý"),
-    "The criteria ask about the Czech and nothing else. A fluent, correctly typeset, "
-    "entirely invented note passes all six. Whether the note says what the session "
-    "contained is a different measurement and this is not it.": (
-        "Kritéria se ptají na češtinu a na nic jiného. "
-        "Plynulý, správně vysazený a úplně vymyšlený "
-        "zápis projde všemi šesti. Zda zápis říká to, co "
-        "sezení obsahovalo, je jiné měření a tohle to "
-        "není."
+    "This is the caveat to read first if these numbers are going anywhere near a "
+    "clinic. The six criteria ask about the Czech and nothing else -- are the "
+    "diacritics right, is this phrase a literal translation from English, is the "
+    "register a clinician's. A note that is fluent, correctly typeset and entirely "
+    "invented passes all six of them. The quality instrument does not close the gap "
+    "either: the two attributes that would ask whether the note is accurate and "
+    "whether it is thorough are exactly the ones that cannot be asked about a real "
+    "session here, because answering them means putting the transcript in front of a "
+    "judge and no transcript leaves the machine that holds it. So no number anywhere "
+    "in this document is evidence that a note says what happened in the session. For "
+    "a clinical team that is the first question, and it is the one measurement "
+    "nobody here has made.": (
+        "Tohle je výhrada, kterou je třeba přečíst první, pokud se tahle čísla mají "
+        "dostat kamkoli blízko ambulanci. Šest kritérií se ptá na češtinu a na nic "
+        "jiného — je diakritika správně, není tahle vazba doslovný překlad "
+        "z angličtiny, je rejstřík klinikův. Zápis, který je plynulý, správně vysazený "
+        "a úplně vymyšlený, projde všemi šesti. Nástroj na kvalitu tu mezeru "
+        "nezaplňuje: právě ty dva atributy, které by se zeptaly, jestli je zápis "
+        "přesný a jestli je důkladný, jsou ty, na které se u skutečného sezení zeptat "
+        "nejde — odpovědět na ně znamená položit soudci před oči přepis a žádný přepis "
+        "neopouští stroj, který ho drží. Žádné číslo v tomhle dokumentu tedy není "
+        "důkazem, že zápis říká to, co se v sezení stalo. Pro klinický tým je to "
+        "otázka první v pořadí a je to jediné měření, které tu nikdo neudělal."
     ),
-    "The instrument has never been checked against a person": (
-        "Nástroj nebyl nikdy ověřen proti člověku"
+    "Almost nothing here has been checked against a person": (
+        "Skoro nic z tohohle nebylo ověřeno proti člověku"
     ),
-    "These six criteria are this repository's own, because no published Czech "
-    "note-quality instrument exists to reproduce. Nobody has rated these notes by "
-    "hand, and unlike PDSQI-9 there is not even a published figure for how well two "
-    "people would agree on them. Two independent judges answer every question, and "
-    "where they disagree is the only control there is.": (
-        "Těch šest kritérií je vlastních tomuto "
-        "repozitáři, protože žádný publikovaný "
-        "český nástroj na kvalitu zápisů neexistuje. Tyto "
-        "zápisy nikdo ručně nehodnotil a na rozdíl od PDSQI-9 "
-        "není ani publikované číslo, jak dobře by se na nich "
-        "shodli dva lidé. Na každou otázku odpovídají dva "
-        "nezávislí soudci a to, kde se neshodnou, je jediná kontrola, "
-        "která tu je."
+    "These six criteria are this repository's own. No published Czech note-quality "
+    "instrument exists to reproduce, so they were written for this track -- and "
+    "unlike PDSQI-9 there is not even a published figure saying how often two people "
+    "answering them would agree with each other. What stands in for that here is two "
+    "independent judges answering every question separately, which is why this "
+    "document prints both of them in every cell and marks the cells where they "
+    "differ: the disagreement is the control.": (
+        "Těch šest kritérií je vlastních tomuhle repozitáři. Žádný publikovaný český "
+        "nástroj na kvalitu zápisů, který by se dal převzít, neexistuje, takže vznikla "
+        "pro tenhle track — a na rozdíl od PDSQI-9 u nich není ani publikované číslo, "
+        "jak často by se na odpovědi shodli dva lidé. Místo toho tu stojí dva nezávislí "
+        "soudci, kteří odpovídají na každou otázku zvlášť. Právě proto tenhle dokument "
+        "tiskne v každé buňce oba a buňky, kde se liší, zvýrazňuje: tou kontrolou je "
+        "právě jejich neshoda."
     ),
-    "A criterion every model passes is not agreement": (
-        "Kritérium, kterým projdou všechny modely, není shoda"
-    ),
-    "Where every model scores the same, two judges agreeing about it says nothing: a "
-    "correlation over a column of identical values is a coin. Such columns are "
-    "reported as unmeasured rather than as unanimous.": (
-        "Tam, kde mají všechny modely stejné skóre, "
-        "neříká shoda dvou soudců nic: korelace přes sloupec "
-        "shodných hodnot je hod mincí. Takové sloupce se vykazují "
-        "jako nezměřené, ne jako jednomyslné."
+    "One exception, and it is small enough to state exactly. A native speaker has "
+    "answered all {criteria} questions about {notes} of these notes, and the two judges "
+    "answered as he did on {low} and {high} of them. That is a comparison and not a "
+    "ceiling: with one rater there is no second person to say how far two people would "
+    "have agreed with each other, so where a judge and he differ, nothing here says "
+    "which of them was right. The count for each criterion is in the criterion-by-"
+    "criterion chapter above, and it is all there is -- nobody has rated a note in the "
+    "Deepsy format, a note from the translated half, or any note at all on PDSQI-9.": (
+        "Jedna výjimka, a je dost malá na to, aby se dala popsat přesně. Rodilý mluvčí "
+        "odpověděl na všech {criteria} otázek u {notes} těchhle zápisů a oba soudci "
+        "odpověděli stejně jako on u {low} a {high} z nich. Je to srovnání, ne strop: "
+        "když je hodnotitel jeden, není tu druhý člověk, který by řekl, jak moc by se "
+        "spolu dva lidé shodli — takže tam, kde se soudce a on rozejdou, odsud neplyne, "
+        "kdo z nich měl pravdu. Počet u každého kritéria je v kapitole kritérium po "
+        "kritériu výše a je to všechno, co existuje: nikdo nehodnotil zápis ve formátu "
+        "Deepsy, zápis z přeložené půlky ani jakýkoli zápis na PDSQI-9."
     ),
     # --- what each column catches ------------------------------------------
     "Reliable. The two judges answered the same way on 79% of notes and one native "
@@ -594,40 +634,6 @@ CS: dict[str, str] = {
         "Devět modelů. Čti sloupec, který říká totéž u obou soudců; "
         "s tím, který ne, zacházej jako s nezměřeným, ne jako se slabým "
         "důkazem."
-    ),
-    # --- how far apart is far enough ---------------------------------------
-    "How far apart is far enough?": "Jak daleko od sebe je dost daleko?",
-    "Ten notes per model at most. The sessions were resampled two thousand "
-    "times and paired on the transcript, so a pair of models is compared only "
-    "on the sessions both of them wrote and a pair with fewer than five in "
-    "common is not compared at all. Each pair is then read on the middle 95% "
-    "of the result. Two "
-    "numbers per column: how many of the model pairs come out apart, and "
-    "how large a gap it takes. A difference smaller than that is the same "
-    "reading printed twice, whichever way round it fell.": (
-        "Nanejvýš deset zápisů na model. Sezení byla dva tisíckrát převzorkována "
-        "a párována podle přepisu, takže dvojice modelů se porovnává jen na "
-        "sezeních, ze kterých psaly obě, a dvojice, která jich má společných méně "
-        "než pět, se neporovnává vůbec. Každá dvojice se pak čte na prostředních "
-        "95 % výsledku. "
-        "Dvě čísla na sloupec: kolik dvojic modelů vyjde odlišně a jak velký "
-        "rozdíl je na to potřeba. Menší rozdíl je totéž měření vytištěné "
-        "dvakrát, ať vyšlo v kterémkoli pořadí."
-    ),
-    "Where a model wrote fewer than the corpus holds, that is where: {short}.": (
-        "Kde model napsal míň, než kolik korpus obsahuje, je to tady: {short}."
-    ),
-    "pairs apart": "odlišené dvojice",
-    "gap needed": "potřebný rozdíl",
-    "These columns order the transcripts, not the models.": (
-        "Tyto sloupce řadí přepisy, ne modely."
-    ),
-    "The sessions differ from each other more than the models do, so whatever order "
-    "the rows come out in is a fact about which transcripts were drawn. No threshold "
-    "rescues them; do not read them:": (
-        "Sezení se od sebe liší víc než modely, "
-        "takže ať řádky vyjdou v jakémkoli pořadí, je to výrok o tom, které "
-        "přepisy padly. Žádná mez je nezachrání; nečtěte je:"
     ),
     # --- bands, not places -------------------------------------------------
     "Bands, not places": "Pásma, ne pořadí",
@@ -868,16 +874,6 @@ CS: dict[str, str] = {
         "v něm nejsou jedna, ale tři odpovědi. Proti třem pořadím, která se nedají smrštit "
         "na jedno, je tohle ta levnější půlka problému."
     ),
-    # --- the columns that do not order -------------------------------------
-    "These columns do not order the models either.": ("Ani tyto sloupce modely neseřadí."),
-    "Fewer than a quarter of the model pairs come apart, so the sequence of rows is "
-    "mostly the order chance put them in. The column may still be worth reading as a "
-    "level -- how often the fault appears at all -- but not as a ranking:": (
-        "Odliší se méně než čtvrtina dvojic modelů, takže posloupnost řádků je "
-        "většinou pořadí, do kterého je dala náhoda. Sloupec může pořád stát za "
-        "čtení jako úroveň — jak často se ta chyba vůbec objevuje — ale ne jako "
-        "pořadí:"
-    ),
     # --- general capability against these numbers --------------------------
     "Does general capability predict any of this?": ("Předpovídá obecná schopnost něco z tohohle?"),
     "Nothing in this repository records how big a model is, how it was trained or when "
@@ -980,47 +976,12 @@ CS: dict[str, str] = {
     "real": "skutečná",
     "translated": "přeložená",
     # --- the criterion measured but not drawn ------------------------------
-    # --- what it took ------------------------------------------------------
-    "What it took": "Kolik to bylo práce",
-    "Judges": "Soudci",
-    "Every note was written on e-INFRA, the infrastructure that holds the sessions. "
-    "Only the notes went anywhere else: each was put to two judges, one question per "
-    "criterion, on Google's and OpenAI's endpoints. No price is given here -- a list "
-    "price is a fact about a vendor on one day and is unreadable a year later without "
-    "it.": (
-        "Každý zápis vznikl na e-INFRA, tedy na infrastruktuře, která ta sezení drží. "
-        "Ven šly jen zápisy: každý dostali dva soudci, jedna otázka na kritérium, na "
-        "endpointech Googlu a OpenAI. Cena tu není — ceníková cena je výrok o jednom "
-        "dodavateli v jeden den a bez toho dne je za rok nečitelná."
-    ),
-    "The two instruments did not read the same notes, so the rows do not add up: "
-    "{models} models wrote {written} notes in all, and the {soap} SOAP notes among "
-    "them were each read twice by each judge -- once against the criteria and once "
-    "against PDSQI-9.": (
-        "Oba nástroje nečetly tytéž zápisy, takže se řádky nesčítají: {models} "
-        "modelů napsalo celkem {written} zápisů a {soap} zápisů SOAP z nich četl "
-        "každý soudce dvakrát — jednou podle kritérií a jednou podle PDSQI-9."
-    ),
     "The {deepsy} notes in the Deepsy format were read against the criteria only. "
     "PDSQI-9 was never asked about a Deepsy note, so no quality figure anywhere in "
     "this document is about one.": (
         "{deepsy} zápisů ve formátu Deepsy prošlo jen kritérii. Na zápis v Deepsy se "
         "PDSQI-9 nikdy nikdo neptal, takže žádné číslo o kvalitě v tomhle dokumentu "
         "není o něm."
-    ),
-    # --- what it took, the second pass ---------------------------------------
-    "Calls to write them": ("Volání, aby vznikly"),
-    "Every note was written on e-INFRA, the infrastructure that holds the sessions. Only "
-    "the notes went anywhere else: each was put to two judges, one question per "
-    "criterion, on Google's and OpenAI's endpoints.": (
-        "Každý zápis vznikl na e-INFRA, tedy na infrastruktuře, která ta sezení drží. Ven šly "
-        "jen zápisy: každý dostali dva soudci, jedna otázka na kritérium, na endpointech "
-        "Googlu a OpenAI."
-    ),
-    "The Deepsy format is asked for one section at a time, so a note there is three "
-    "answers rather than one: the same number of notes costs three times the calls.": (
-        "Formát Deepsy se ptá po jedné sekci zvlášť, takže zápis v něm nejsou jedna, ale tři "
-        "odpovědi: za týž počet zápisů se zaplatí trojnásobkem volání."
     ),
     # --- length ------------------------------------------------------------
     "How long the notes are, and whether length is rewarded": (
