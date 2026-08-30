@@ -459,18 +459,6 @@ CS: dict[str, str] = {
         "nezávislí soudci a to, kde se neshodnou, je jediná kontrola, "
         "která tu je."
     ),
-    "SOAP is not what a Czech psychologist writes": ("SOAP není to, co píše český psycholog"),
-    "The prompt is a translation of TN-Eval's, so that the task is the same task in "
-    "another language and the English numbers mean something beside these. It is not a "
-    "reproduction of any Czech documentation standard -- there is none to reproduce. "
-    "The notes are therefore formally artificial, equally so for every model.": (
-        "Prompt je překlad toho z TN-Eval, aby úkol byl týž "
-        "úkol v jiném jazyce a anglická čísla vedle "
-        "těchto něco znamenala. Není to reprodukce žádné "
-        "české dokumentační normy — žádná k "
-        "reprodukci není. Zápisy jsou proto formálně "
-        "umělé, stejně tak u každého modelu."
-    ),
     "A criterion every model passes is not agreement": (
         "Kritérium, kterým projdou všechny modely, není shoda"
     ),
@@ -1247,6 +1235,79 @@ CS: dict[str, str] = {
     "the six Czech criteria": "šest českých kritérií",
     "PDSQI-9, without the session": "PDSQI-9, bez sezení",
     "PDSQI-9, with the session": "PDSQI-9, se sezením",
+    # --- the Deepsy chapter -------------------------------------------------
+    "The note format the Deepsy application actually writes": (
+        "Formát zápisu, který aplikace Deepsy opravdu píše"
+    ),
+    "Every table so far has been about SOAP -- subjective, objective, assessment, "
+    "plan. That is the format TN-Eval published, and reusing it is what lets the "
+    "English numbers be read beside the Czech ones. It is not the format the Deepsy "
+    "application writes. Deepsy asks the model for a note in named sections, one call "
+    "per section, in its own words; {sections} of those sections are measured here, "
+    "and they are not a preference. They are the ones that have a SOAP counterpart: "
+    "the data section is SOAP's subjective and objective together, the "
+    "hypotheses section is its assessment, and the plan section is its plan. The "
+    "application writes more sections than these, and the rest either work from the "
+    "previous note rather than from a transcript or need data this benchmark does "
+    "not supply.": (
+        "Všechny dosavadní tabulky byly o SOAP — subjektivní, objektivní, hodnocení, "
+        "plán. To je formát, který publikoval TN-Eval, a právě jeho převzetí umožňuje "
+        "číst anglická čísla vedle českých. Není to formát, který píše aplikace "
+        "Deepsy. Deepsy si od modelu žádá zápis v pojmenovaných sekcích, jedno volání "
+        "na sekci, vlastními slovy; {sections} z těchto sekcí se měří tady a není to "
+        "výběr podle chuti. Jsou to ty, které mají protějšek v SOAP: sekce data je "
+        "subjektivní a objektivní část SOAP dohromady, sekce hypotéz je jeho "
+        "hodnocení a sekce plánu je jeho plán. Aplikace píše víc sekcí než tyhle a "
+        "zbytek buď vychází z předchozího zápisu místo z přepisu, nebo potřebuje "
+        "data, která tenhle benchmark nedodává."
+    ),
+    "Two things this format does that SOAP does not. It sets a ceiling of {limit} "
+    "words a section, which its own prompt calls invalid to exceed. And it asks for "
+    "the answer as structured data rather than as prose, so a reply that does not "
+    "parse is a failure rather than a poor note. Both are the application's "
+    "decisions, reproduced from its own prompt files rather than retyped.": (
+        "Dvě věci, které tenhle formát dělá a SOAP ne. Stanovuje strop {limit} slov "
+        "na sekci a jeho vlastní prompt označuje delší odpověď za neplatnou. A žádá "
+        "odpověď jako strukturovaná data, ne jako prózu, takže odpověď, kterou nelze "
+        "rozebrat, je selhání, ne špatný zápis. Obojí je rozhodnutí té aplikace, "
+        "převzaté z jejích vlastních souborů s prompty, ne přepsané rukou."
+    ),
+    "That is why this chapter is here, and it is worth reading before the tables "
+    "above are taken too literally. SOAP is not what a Czech psychologist writes. "
+    "The prompt behind every table so far is a translation of TN-Eval's, so that the "
+    "task is the same task in another language, and it reproduces no Czech "
+    "documentation standard because there is none to reproduce -- which makes those "
+    "notes formally artificial, equally so for every model, and that equality is "
+    "what keeps the comparison between them fair rather than what makes them less "
+    "artificial. Here the same models write from the same sessions and the only "
+    "thing that changes is the shape they were asked for. The figure below shows "
+    "what came of that, and the paragraph under it names the one thing the "
+    "comparison cannot hold still.": (
+        "Proto tahle kapitola je a stojí za to přečíst ji dřív, než se tabulky výše "
+        "vezmou příliš doslova. SOAP není to, co píše český psycholog. Prompt za "
+        "všemi dosavadními tabulkami je překlad toho z TN-Eval, aby úkol byl týž úkol "
+        "v jiném jazyce, a nereprodukuje žádnou českou dokumentační normu, protože "
+        "žádná k reprodukci není — tím jsou ty zápisy formálně umělé, u každého "
+        "modelu stejně, a právě ta stejnost drží srovnání mezi nimi poctivé; menší "
+        "umělost z ní neplyne. Tady tytéž modely píšou z týchž sezení a mění se "
+        "jediné: tvar, který se po nich chtěl. Obrázek níž ukazuje, co z toho vzešlo, "
+        "a odstavec pod ním pojmenovává jednu věc, kterou to srovnání neudrží."
+    ),
+    "This chapter says nothing about whether a Deepsy note is a good note. The six "
+    "criteria ask whether the Czech is right, and the instrument that asks whether a "
+    "note is worth filing was never put to these.": (
+        "Tahle kapitola neříká nic o tom, jestli je zápis v Deepsy dobrý zápis. Šest "
+        "kritérií se ptá, jestli je čeština správně, a nástroj, který se ptá, jestli "
+        "je zápis použitelný, na tyhle zápisy nikdo nepoužil."
+    ),
+    "Four panels rather than one average: the comparison was made on both halves of "
+    "the corpus and under both judges, and that all four go the same way is the "
+    "finding. Read the slope of the lines; which line is which model is in the "
+    "tables below.": (
+        "Čtyři panely místo jednoho průměru: srovnání proběhlo na obou půlkách "
+        "korpusu a u obou soudců a nález je, že všechny čtyři jdou stejným směrem. "
+        "Čtěte sklon čar; která čára je který model, je v tabulkách níž."
+    ),
     # --- two formats --------------------------------------------------------
     "The same models, the same sessions, two note formats": (
         "Tytéž modely, táž sezení, dva formáty zápisu"

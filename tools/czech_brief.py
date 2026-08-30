@@ -40,6 +40,7 @@ from tnb.report import (
 )
 from tnb.scoring import czech as czech_scorer
 from tnb.tasks import TASKS
+from tnb.tasks import deepsy as deepsy_task
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from czech_brief_cs import CS  # noqa: E402
@@ -237,6 +238,12 @@ SCALE_NOT_ADDITIVE = (
 #: Printed only where there are Deepsy rows to be printed about. It says which
 #: notes an instrument was never put to, and a document with no Deepsy rows in
 #: it would be naming a gap that is not there.
+#:
+#: It used to be a clause of the method's footnote, three screens past the last
+#: Deepsy table. It is the only sentence in the document saying that not one
+#: quality figure anywhere in it describes a Deepsy note, and a reader who has
+#: just read two Deepsy tables is the reader who needs to know that -- so it is
+#: printed in the Deepsy chapter, beside the tables it is about.
 SCALE_NO_PDSQI = (
     "The {deepsy} notes in the Deepsy format were read against the criteria only. "
     "PDSQI-9 was never asked about a Deepsy note, so no quality figure anywhere in "
@@ -311,14 +318,11 @@ LIMITS = [
         "people would agree on them. Two independent judges answer every question, and "
         "where they disagree is the only control there is.",
     ),
-    (
-        "SOAP is not what a Czech psychologist writes",
-        "The prompt is a translation of TN-Eval's, so that the task is the same task in "
-        "another language and the English numbers mean something beside these. It is not "
-        "a reproduction of any Czech documentation standard -- there is none to "
-        "reproduce. The notes are therefore formally artificial, equally so for every "
-        "model.",
-    ),
+    # "SOAP is not what a Czech psychologist writes" was the fifth caveat here.
+    # It is not a caveat: it is the reason the Deepsy chapter exists, and read
+    # as a caveat it arrived four pages after the tables it applies to and said
+    # only that something was wrong. It now opens that chapter, where the next
+    # sentence is what was done about it.
     (
         "A criterion every model passes is not agreement",
         "Where every model scores the same, two judges agreeing about it says nothing: a "
@@ -1483,7 +1487,10 @@ def _scale(rows: list[results.Row]) -> str:
     deepsy = {results.TRACK_DEEPSY_REAL, results.TRACK_DEEPSY_TRANSLATED}
     deepsy_note = ""
     if drawn_tracks & deepsy:
-        footnote += " " + _t(SCALE_NO_PDSQI).format(**figures)
+        # `SCALE_NO_PDSQI` was appended here and is now printed in the Deepsy
+        # chapter instead. It says no quality figure in this document describes
+        # a Deepsy note, which is a thing to be told while looking at a Deepsy
+        # table rather than in a footnote about how many calls the run cost.
         deepsy_note = " " + html.escape(
             _t(
                 "The Deepsy format is asked for one section at a time, so a note there "
@@ -2840,6 +2847,13 @@ def _formats() -> str:
 
     Written from `local/czech-length.json` and the rows, so the two halves of
     the finding are computed from the same run rather than remembered from two.
+
+    **No heading of its own any more.** It was a chapter four sections after
+    the last Deepsy table, so the comparison and the tables it compares were
+    separated by everything this document says about length, dominance and the
+    English leaderboard. It is now the middle of the Deepsy chapter, between
+    the figure that draws the same finding and the two tables it is drawn from,
+    and `_deepsy_chapter` supplies the heading.
     """
     payload = _payload("czech-length.json")
     czech = payload.get("czech") or {}
@@ -2910,7 +2924,7 @@ def _formats() -> str:
         f"<th>{_t('worse in Deepsy')}</th></tr>"
     )
     return (
-        f"<h2>{_t('The same models, the same sessions, two note formats')}</h2>"
+        f"<h3>{_t('The same models, the same sessions, two note formats')}</h3>"
         # The count the table below actually compares on: the two rosters differ,
         # so it is their intersection and not either track's model count.
         + f"<p>{html.escape(_t(FORMATS_LEAD).format(models=shared_models))}</p>"
@@ -3925,6 +3939,184 @@ def _same_rubric_cutoff(groups: dict, newest: str) -> str:
     )
 
 
+@functools.cache
+def _figure_data():
+    """Everything the four figures read, opened once for the whole run.
+
+    `czech_figures.Data.load` reads the local rows and three payloads off disk.
+    Four figures in two language builds is eight passes over the same files,
+    and none of it can change while one document is being written.
+    """
+    # Imported at the moment of use rather than at the top of this file:
+    # `czech_figures` reaches back into this module for `_t`, and a pair of
+    # top-level imports is a cycle. It is the same direction the figures
+    # already document.
+    from czech_figures import Data
+
+    return Data.load()
+
+
+def _figure(name: str, caption: str) -> str:
+    """One figure, inline, with the caption this document gives it.
+
+    Empty when the payload behind the figure is not in this checkout, which is
+    what every other payload-backed block here does: a document built from
+    fixture rows draws its tables and simply has no picture.
+
+    The SVG carries its own title, subtitle and source line, so the caption
+    under it says what to look at instead of repeating them.
+    """
+    from czech_figures import CZECH_FIGURES
+
+    drawn = CZECH_FIGURES[name](_figure_data())
+    if not drawn:
+        return ""
+    return f"<figure>{drawn}<figcaption>{html.escape(_t(caption))}</figcaption></figure>"
+
+
+def _track_block(track: str, ordered: list[list[results.Row]], *, lead: bool, level: int) -> str:
+    """One track: its heading, the sentence saying what it is, and its table.
+
+    `level` is 2 where the track is a chapter of its own and 3 where it is half
+    of one. The two Deepsy halves share a chapter, and a second `<h2>` inside it
+    would tell a reader the chapter had ended and another had begun.
+
+    One table a track, with both judges in every cell, when there are two.
+    Twelve tables for six tracks made a reader flip between two grids to
+    compare one model, and the judges' disagreement -- the only control this
+    track has -- was the thing that flipping hid.
+    """
+    tag = f"h{level}"
+    out = [
+        f"<{tag}>{html.escape(_t(TRACK_TITLES.get(track, track)))}</{tag}>"
+        f"<p class='sub'>"
+        f"{html.escape(re.sub(r'[*]{2}', '', _t(TRACK_BLURBS.get(track, ''))))}</p>"
+    ]
+    if len(ordered) > 1:
+        first = ordered[0][0]
+        # Per judge, not summed over them. Both judges read the SAME notes, so
+        # adding their rows counted every note once per judge and every header
+        # said twice what exists -- "208 notes" over a corpus of 110, with the
+        # true 104 printed in this document's own "What it took" table further
+        # down. `_scale` had it right and this did not.
+        notes = sum(row.n_sessions_scored for group in ordered for row in group) // len(ordered)
+        out.append(
+            f"<p class='sub'>{len(ordered[0])} {_t('models')}, {notes} {_t('notes')}, "
+            f"{_t('rubric')} {html.escape(first.judge_prompt_version)}</p>"
+            + _merged_table(track, ordered, lead=lead)
+        )
+    else:
+        for drawn in ordered:
+            first = drawn[0]
+            notes = sum(row.n_sessions_scored for row in drawn)
+            out.append(
+                f"<p class='sub'><strong>{_t('Judged by')} "
+                f"{html.escape(first.judge_model or 'unknown')}</strong> &middot; "
+                f"{len(drawn)} {_t('models')}, {notes} {_t('notes')}, "
+                f"{_t('rubric')} {html.escape(first.judge_prompt_version)}</p>"
+                + _table(track, drawn)
+            )
+    return "".join(out)
+
+
+#: The Deepsy chapter's own prose. A reader outside this project has never
+#: heard the word, and the two Deepsy tables used to arrive under two headings
+#: that assumed it -- "Deepsy format · ten real sessions" -- with the one
+#: paragraph explaining the format four sections further on.
+DEEPSY_TITLE = "The note format the Deepsy application actually writes"
+DEEPSY_WHAT = (
+    "Every table so far has been about SOAP -- subjective, objective, assessment, "
+    "plan. That is the format TN-Eval published, and reusing it is what lets the "
+    "English numbers be read beside the Czech ones. It is not the format the Deepsy "
+    "application writes. Deepsy asks the model for a note in named sections, one call "
+    "per section, in its own words; {sections} of those sections are measured here, "
+    "and they are not a preference. They are the ones that have a SOAP counterpart: "
+    "the data section is SOAP's subjective and objective together, the "
+    "hypotheses section is its assessment, and the plan section is its plan. The "
+    "application writes more sections than these, and the rest either work from the "
+    "previous note rather than from a transcript or need data this benchmark does "
+    "not supply."
+)
+#: The two differences that show up in every number below, so they are stated
+#: before the numbers rather than after them. The ceiling is read from the
+#: payload that measured compliance with it: it is the application's figure and
+#: not ours, and a run against a changed prompt would change it.
+DEEPSY_CEILING = (
+    "Two things this format does that SOAP does not. It sets a ceiling of {limit} "
+    "words a section, which its own prompt calls invalid to exceed. And it asks for "
+    "the answer as structured data rather than as prose, so a reply that does not "
+    "parse is a failure rather than a poor note. Both are the application's "
+    "decisions, reproduced from its own prompt files rather than retyped."
+)
+DEEPSY_WHY = (
+    "That is why this chapter is here, and it is worth reading before the tables "
+    "above are taken too literally. SOAP is not what a Czech psychologist writes. "
+    "The prompt behind every table so far is a translation of TN-Eval's, so that the "
+    "task is the same task in another language, and it reproduces no Czech "
+    "documentation standard because there is none to reproduce -- which makes those "
+    "notes formally artificial, equally so for every model, and that equality is "
+    "what keeps the comparison between them fair rather than what makes them less "
+    "artificial. Here the same models write from the same sessions and the only "
+    "thing that changes is the shape they were asked for. The figure below shows "
+    "what came of that, and the paragraph under it names the one thing the "
+    "comparison cannot hold still."
+)
+#: What this chapter does not answer, said in the chapter rather than in a
+#: method footnote three pages later. `SCALE_NO_PDSQI` follows it and carries
+#: the count.
+DEEPSY_NO_QUALITY = (
+    "This chapter says nothing about whether a Deepsy note is a good note. The six "
+    "criteria ask whether the Czech is right, and the instrument that asks whether a "
+    "note is worth filing was never put to these."
+)
+DEEPSY_FIGURE_CAPTION = (
+    "Four panels rather than one average: the comparison was made on both halves of "
+    "the corpus and under both judges, and that all four go the same way is the "
+    "finding. Read the slope of the lines; which line is which model is in the "
+    "tables below."
+)
+
+
+def _deepsy_chapter(
+    entries: list[tuple[str, list[list[results.Row]], set[str]]],
+    figures: dict[str, str],
+    shared_judges: list[str],
+) -> str:
+    """Both Deepsy halves under one heading, with the explanation they needed.
+
+    They were two chapters, and the comparison that gives them their point --
+    the same models and sessions in two formats -- was a third, four sections
+    later. A reader met "Deepsy format · ten real sessions, one client" as a
+    heading with no sentence anywhere above it saying what Deepsy is.
+
+    The order is the order a reader needs it in: what the format is, why it is
+    in this document, what this chapter cannot answer, the picture, the table
+    the picture draws, and then the two tables everything else came from.
+    """
+    limit = ((_payload("czech-length.json").get("instructions") or {}).get("deepsy") or {}).get(
+        "limit_words"
+    )
+    said = [_t(DEEPSY_WHAT).format(sections=len(deepsy_task.SECTIONS))]
+    if limit:
+        said.append(_t(DEEPSY_CEILING).format(limit=_grouped(int(limit))))
+    said.append(_t(DEEPSY_WHY))
+
+    out = [f"<h2>{html.escape(_t(DEEPSY_TITLE))}</h2>"]
+    out += [f"<p>{html.escape(text)}</p>" for text in said]
+    out.append(
+        "<div class='warn'><p><strong>"
+        + html.escape(_t(DEEPSY_NO_QUALITY))
+        + "</strong> "
+        + html.escape(_t(SCALE_NO_PDSQI).format(**figures))
+        + "</p></div>"
+    )
+    out.append(_figure("formats", DEEPSY_FIGURE_CAPTION))
+    out.append(_formats())
+    for track, ordered, _withdrawn in entries:
+        out.append(_track_block(track, ordered, lead=not shared_judges, level=3))
+    return "".join(out)
+
+
 def build(rows: list[results.Row]) -> str:
     """One table per comparability group -- all six fields of it, not two.
 
@@ -3944,12 +4136,6 @@ def build(rows: list[results.Row]) -> str:
     for row in results.latest(rows):
         if row.is_scored:
             by_group[row.comparability_key()].append(row)
-
-    # Said once, before the tables they govern, rather than under each of them.
-    # Four copies of one caveat is what teaches a reader to skip the boxes --
-    # including the ones that are genuinely different.
-    two_judges = False
-    withdrawn_from: dict[str, set[str]] = {}
 
     # Which tables will be drawn, decided before any of them is. The caption
     # above them names the judges every cell holds and the scales the columns
@@ -3995,6 +4181,21 @@ def build(rows: list[results.Row]) -> str:
         for track, ordered, _withdrawn in plan
         for group in ordered
     )
+    # Said once, before the tables they govern, rather than under each of them.
+    # Four copies of one caveat is what teaches a reader to skip the boxes --
+    # including the ones that are genuinely different.
+    two_judges = any(len(ordered) > 1 for _track, ordered, _withdrawn in plan)
+    withdrawn_from: dict[str, set[str]] = {}
+    for track, _ordered, withdrawn in plan:
+        for version in withdrawn:
+            withdrawn_from.setdefault(version, set()).add(_t(TRACK_TITLES.get(track, track)))
+
+    # Both dictionaries, because a caveat's figures come from two places: the
+    # corpora it describes and the run that produced the notes. Neither is
+    # typed into the sentence -- a caveat carrying a stale number is worse than
+    # no caveat, because it is the paragraph a reader trusts. Read here rather
+    # than at the end because the Deepsy chapter needs one of them too.
+    figures = {**_corpus_sizes(), **_written_figures(rows)}
 
     sections = []
     if plan:
@@ -4013,43 +4214,16 @@ def build(rows: list[results.Row]) -> str:
             f"<h2>{_t('How to read the tables')}</h2>"
             + _how_to_read(drawn_tracks, shared_judges, banded=banded)
         )
-    for track, ordered, withdrawn in plan:
-        sections.append(
-            f"<h2>{html.escape(_t(TRACK_TITLES.get(track, track)))}</h2>"
-            f"<p class='sub'>"
-            f"{html.escape(re.sub(r'[*]{2}', '', _t(TRACK_BLURBS.get(track, ''))))}</p>"
-        )
-        # One table a track, with both judges in every cell, when there are two.
-        # Twelve tables for six tracks made a reader flip between two grids to
-        # compare one model, and the judges' disagreement -- the only control
-        # this track has -- was the thing that flipping hid.
-        if len(ordered) > 1:
-            first = ordered[0][0]
-            # Per judge, not summed over them. Both judges read the SAME notes,
-            # so adding their rows counted every note once per judge and every
-            # header said twice what exists -- "208 notes" over a corpus of 110,
-            # with the true 104 printed in this document's own "What it took"
-            # table further down. `_scale` had it right and this did not.
-            notes = sum(row.n_sessions_scored for group in ordered for row in group) // len(ordered)
-            sections.append(
-                f"<p class='sub'>{len(ordered[0])} {_t('models')}, {notes} {_t('notes')}, "
-                f"{_t('rubric')} {html.escape(first.judge_prompt_version)}</p>"
-                + _merged_table(track, ordered, lead=not shared_judges)
-            )
-            two_judges = True
-        else:
-            for drawn in ordered:
-                first = drawn[0]
-                notes = sum(row.n_sessions_scored for row in drawn)
-                sections.append(
-                    f"<p class='sub'><strong>{_t('Judged by')} "
-                    f"{html.escape(first.judge_model or 'unknown')}</strong> &middot; "
-                    f"{len(drawn)} {_t('models')}, {notes} {_t('notes')}, "
-                    f"{_t('rubric')} {html.escape(first.judge_prompt_version)}</p>"
-                    + _table(track, drawn)
-                )
-        for version in withdrawn:
-            withdrawn_from.setdefault(version, set()).add(_t(TRACK_TITLES.get(track, track)))
+    # The two Deepsy halves are one chapter and every other track is one of its
+    # own. They are drawn where the second of them falls, which is last, so the
+    # order of the document does not depend on this branch.
+    deepsy_plan = [entry for entry in plan if entry[0] in DEEPSY_CRITERIA_TRACKS]
+    for track, ordered, _withdrawn in plan:
+        if track in DEEPSY_CRITERIA_TRACKS:
+            if track == deepsy_plan[-1][0]:
+                sections.append(_deepsy_chapter(deepsy_plan, figures, shared_judges))
+            continue
+        sections.append(_track_block(track, ordered, lead=not shared_judges, level=2))
 
     # --- the caveats and the definitions, once each -------------------------
     # How far a band boundary can be trusted, under the tables that draw one.
@@ -4087,11 +4261,6 @@ def build(rows: list[results.Row]) -> str:
         )
     sections.extend(once)
 
-    # Both dictionaries, because a caveat's figures come from two places: the
-    # corpora it describes and the run that produced the notes. Neither is
-    # typed into the sentence -- a caveat carrying a stale number is worse than
-    # no caveat, because it is the paragraph a reader trusts.
-    figures = {**_corpus_sizes(), **_written_figures(rows)}
     limits = "".join(
         f"<h3>{html.escape(_t(title))}</h3><p>{html.escape(_t(body).format(**figures))}</p>"
         for title, body in LIMITS
@@ -4130,8 +4299,6 @@ def build(rows: list[results.Row]) -> str:
 {_join()}
 
 {_external()}
-
-{_formats()}
 
 {_length()}
 
