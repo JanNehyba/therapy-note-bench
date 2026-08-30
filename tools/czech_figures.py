@@ -381,8 +381,14 @@ EXTERNAL_LABEL = "A published capability index against the quality of the notes"
 #: The two panels, and the block of `czech-external.json` each one reads.
 EXTERNAL_PANELS = (("english_quality", EXTERNAL_ENGLISH), ("czech_quality", EXTERNAL_CZECH))
 
-#: What the horizontal axis is. A product name, so it is not translated.
-EXTERNAL_X = "Intelligence Index"
+#: What the horizontal axis is, spelled the way the table under this figure
+#: spells it. It was "Intelligence Index" and drawn without going through the
+#: translator at all, on the grounds that a product name does not translate --
+#: but the document's own table three paragraphs below the chart calls it Index
+#: inteligence, so a Czech reader met one index under two names in one chapter.
+#: Whether to translate it is the document's decision to make; drawing it a
+#: second way here is not.
+EXTERNAL_X = "Intelligence index"
 
 
 def draw_external(data: Data, t: Translate) -> str:
@@ -452,7 +458,7 @@ def draw_external(data: Data, t: Translate) -> str:
             )
         body.append(
             f'<text class="value" x="{ox + panel_w / 2:.0f}" y="{top + panel_h + 40}" '
-            f'text-anchor="middle">{esc(EXTERNAL_X)}</text>'
+            f'text-anchor="middle">{esc(t(EXTERNAL_X))}</text>'
         )
 
         for index, judge in enumerate(judges):
@@ -473,7 +479,7 @@ def draw_external(data: Data, t: Translate) -> str:
                 )
             for point in entry["points"]:
                 body.append(
-                    f"<g><title>{esc(short(point['system']))}: {EXTERNAL_X} "
+                    f"<g><title>{esc(short(point['system']))}: {esc(t(EXTERNAL_X))} "
                     f"{point['outside']:.0f}, PDSQI-9 {point['here']:.2f}</title>"
                     + _dot(px(point["outside"], ox), py(point["here"]), ink)
                     + "</g>"

@@ -203,9 +203,11 @@ def _english_the_figures_draw() -> dict[str, str]:
     strings three ways: module constants, literals written straight into a
     `t(...)` call, and the track labels they borrow from `tnb.report`.
 
-    A phrase with no Czech is dropped rather than failed. `Intelligence Index`
-    is a product name, drawn the same in both languages, and `_t` says so by
-    raising.
+    A phrase with no Czech is dropped rather than failed: it would be a name
+    that is written the same in both languages, and `_t` says so by raising.
+    Nothing in the module is in that position today -- every phrase the figures
+    draw has a twin -- so this is a branch held open for a name that has not
+    been added yet rather than one the current data reaches.
     """
     found = {
         value
