@@ -939,7 +939,11 @@ def _how_to_read(tracks: list[str], judges: list[str], *, banded: bool) -> str:
     # have to be vaguer than either of them is.
     by_line: dict[str, list[str]] = {}
     for track in tracks:
-        name = _t(INSTRUMENT_OF.get(track, TRACK_TITLES.get(track, track)))
+        # The instrument without its variant, the same name the definition
+        # block above uses. Naming the variants here gave "PDSQI-9, without the
+        # session and PDSQI-9, with the session" for one scale both of them
+        # share, under a heading that had just called the whole thing PDSQI-9.
+        name = _t(INSTRUMENT_FAMILY.get(track, TRACK_TITLES.get(track, track)))
         by_line.setdefault(_scale_line(track), []).append(name)
     for line, names in by_line.items():
         if len(by_line) == 1:
