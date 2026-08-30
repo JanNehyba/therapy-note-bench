@@ -33,10 +33,14 @@ the comparison group to be the systems **neither judge wrote** returns *x*, and
 the two effects can be read separately. It also means the panel needs at least
 one neutral system to say anything at all, which it refuses to do otherwise.
 
-The interval comes from a
-paired bootstrap over **conversations**, not over systems: a hard conversation
-is hard for every system, and resampling conversations together keeps that where
-it belongs.
+The interval comes from a paired bootstrap over **conversations and systems**,
+2000 draws. Conversations are resampled together because a hard conversation is
+hard for every system; systems are resampled as well because the claim the
+interval supports is about a vendor, and a vendor is not the three or four of
+its models that happen to be in this run. This docstring said "not over
+systems" long after the code stopped doing that -- and conversations alone is
+exactly the estimator that produced the one "detected" verdict this repository
+published and then withdrew.
 
 A number here is not proof of a mechanism. It says the two judges disagree about
 one family more than about the others, which is what a reader needs before

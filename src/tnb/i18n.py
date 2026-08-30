@@ -91,11 +91,6 @@ _STATIC = {
         "každé číslo pochází. "
         'Také jako <a href="therapy-note-bench.pdf">PDF</a>.'
     ),
-    "page.foot.columns": (
-        "Rozsah každého sloupce, co počítá a jak se nesmí číst, stojí pod tou tabulkou, ke "
-        "které patří, ne tady dole — včetně téměř nulové shody dvou terapeutů na "
-        "<strong>věrnosti</strong> (Krippendorffova alfa 0.18)."
-    ),
     "page.foot.notes": (
         "<strong>Zápisy</strong> počítají, kolik zápisů dokázal protokol vůbec přečíst. Model, "
         "který napíše dobrý zápis ve špatném tvaru, ztrácí zápisy na formátu, ne na klinickém "
@@ -320,10 +315,8 @@ _SENTENCES = {
         "Čtěte to pořadí jen zhruba jako to, kdo je blízko vrcholu a kdo blízko dna, ne jako "
         "žebříček: dva sousední řádky nejsou výsledek."
     ),
-    "Measured against the {0} systems neither judge's vendor wrote: {1}. Named rather than"
-    " counted, because the estimate is only as good as this group.": (
-        "Měřeno proti {0} systémům, které nenapsal dodavatel ani jednoho z hodnotitelů: {1}. "
-        "Vyjmenováno, ne spočítáno, protože odhad je jen tak dobrý jako tahle skupina."
+    "Reference group — the {0} systems neither judge's vendor wrote: {1}.": (
+        "Referenční skupina — {0} systémů, které nenapsal dodavatel ani jednoho z hodnotitelů: {1}."
     ),
     "{0} are in it under a name their model family does not share, and pull the answer toward"
     " zero.": (
@@ -876,10 +869,8 @@ _METHODS = {
     "methods.h1": "Jak se to měřilo",
     "methods.sub": (
         'Nástroj, který stojí za <a href="index.html">žebříčkem</a>: který hodnotitel, ověřený '
-        "proti komu, nad kterými korpusy a v čem se ti dva hodnotitelé neshodnou. Každý zdejší "
-        "panel je vykreslen z téhož běhu, který vyrobil ty tabulky — nic na této stránce není "
-        'psáno ručně. <a href="https://github.com/JanNehyba/therapy-note-bench">Zdroj '
-        "a metoda</a>."
+        "proti komu, na kterých korpusech a v čem se ti dva hodnotitelé neshodnou. "
+        '<a href="https://github.com/JanNehyba/therapy-note-bench">Zdroj a metoda</a>.'
     ),
     "methods.calibration.h2": "Kalibrace hodnotitele",
     "methods.calibration.pending": (
@@ -912,11 +903,10 @@ _METHODS = {
         "PDF</a>."
     ),
     "methods.foot.columns": (
-        "Rozsah každého sloupce, co počítá a jak se nesmí číst, stojí pod tou tabulkou, ke které "
-        'patří, na <a href="index.html">žebříčku</a> — včetně téměř nulové lidské shody na '
-        "<strong>věrnosti</strong> (Krippendorffova alfa 0.18) a toho, že <strong>TRACE</strong> "
-        "je reimplementace <em>bez lidské kotvy</em>. Číslo a jeho výhradu by nemělo dělit "
-        "rolování, a proto jsou ony tam a tato stránka je tady."
+        "U <strong>věrnosti</strong> je lidská shoda téměř nulová — TN-Eval naměřil mezi "
+        "školenými terapeuty Krippendorffovu alfu 0.18 — a <strong>TRACE</strong> je "
+        "reimplementace <em>bez lidské kotvy</em>. Rozsah každého sloupce, co počítá a jak se "
+        'nesmí číst, stojí pod jeho vlastní tabulkou na <a href="index.html">žebříčku</a>.'
     ),
     "methods.foot.provider": (
         "Štítek za názvem modelu je <strong>poskytovatel</strong>, který ho obsluhoval. Stejné "
@@ -1290,22 +1280,24 @@ _METHODS = {
         "a někde je ostře lepší, je lepší, ať už čtenář ty míry váží jakkoli — a vážit je je "
         "klinické rozhodnutí, ne měření. Všechno ostatní na této stránce je sloupec, ne verdikt."
     ),
-    "<strong>{0} of {1} systems are beaten outright by nobody.</strong> That is why there is no"
-    " single winner named here.": (
-        "<strong>{0} z {1} systémů neporáží naplno nikdo.</strong> Proto tu není jmenován jediný "
-        "vítěz."
+    "<strong>{0} of {1} systems are beaten outright by nobody</strong>, so no single winner is"
+    " named.": (
+        "<strong>{0} z {1} systémů neporazí naplno nikdo</strong>, proto tu není jmenován "
+        "jediný vítěz."
     ),
     # -- does either judge favour its own? -------------------------------------------
     "Does either judge favour its own models?": (
         "Nadržuje některý z hodnotitelů vlastním modelům?"
     ),
-    "Measured, not disclaimed. Both judges score everything, and the difference between their"
-    " tables for a judge's own family — against the systems <em>neither</em> of them wrote — is"
-    " the effect, in {0}, with a paired bootstrap over conversations.": (
-        "Změřeno, ne odbyto poznámkou pod čarou. Oba hodnotitelé bodují všechno a rozdíl mezi "
-        "jejich tabulkami pro hodnotitelovu vlastní rodinu — proti systémům, které nenapsal "
-        "<em>ani jeden</em> z nich — je ten efekt, v míře {0}, s párovým bootstrapem přes "
-        "rozhovory."
+    "Both judges score every system. The effect is the difference between their tables for a"
+    " judge's own family, taken against the systems <em>neither</em> vendor wrote, in {0}, with a"
+    " paired bootstrap over conversations <em>and</em> systems — 2000 draws. Resampling"
+    " conversations alone would treat three or four models as the whole of a vendor.": (
+        "Oba hodnotitelé bodují každý systém. Efekt je rozdíl mezi jejich tabulkami pro vlastní "
+        "rodinu daného hodnotitele, vztažený k systémům, které nenapsal <em>ani jeden</em> "
+        "z dodavatelů, v míře {0}, s párovým bootstrapem přes rozhovory <em>i</em> přes systémy "
+        "— 2000 výběrů. Převzorkování samotných rozhovorů by považovalo tři čtyři modely za "
+        "celého dodavatele."
     ),
     "Its family": "Jeho rodina",
     "Effect": "Efekt",
@@ -1451,16 +1443,16 @@ _METHODS_PAYLOAD = {
         "Odznak na repozitáři s kódem, pro korpus posbíraný jinde. Bereme to tak, že data "
         "licenci nemají."
     ),
-    "Read the two. Tingling in the stomach and butterflies in the stomach are the same symptom;"
-    " palpitations and a rapid heartbeat are the same symptom; trembling hands appear in both."
-    " The model also records how long each has lasted and when it happens, which the expert note"
-    " does not. It shares almost no *words* with the clinician, and a metric that counts shared"
-    " words scores it accordingly.": (
-        "Přečtěte si obojí. Mravenčení v žaludku a motýlci v břiše jsou tentýž příznak; "
-        "palpitace a zrychlený tep jsou tentýž příznak; třesoucí se ruce jsou v obou. Model "
-        "navíc zaznamenává, jak dlouho co trvá a kdy k tomu dochází, což expertní zápis "
-        "neuvádí. S klinikem nesdílí skoro žádná *slova* a metrika, která sdílená slova počítá, "
-        "ho podle toho i oboduje."
+    "Tingling in the stomach and butterflies in the stomach are the same symptom, as are"
+    " palpitations and a rapid heartbeat; trembling hands appear in both. The model also records"
+    " how long each symptom has lasted and when it occurs, which the expert note does not. It"
+    " shares almost no *words* with the clinician, and a word-overlap metric scores it"
+    " accordingly.": (
+        "Mravenčení v žaludku a motýlci v břiše jsou tentýž příznak, stejně jako palpitace "
+        "a zrychlený tep; třesoucí se ruce jsou v obou. Model navíc zaznamenává, jak dlouho "
+        "každý příznak trvá a kdy k němu dochází, což expertní zápis neuvádí. S klinikem "
+        "nesdílí skoro žádná *slova* a metrika, která počítá shodná slova, ho podle toho "
+        "oboduje."
     ),
     "TN-Eval SOAP · AnnoMI conversations": "TN-Eval SOAP · rozhovory AnnoMI",
     "PDSQI-9 · the SOAP notes on AnnoMI, rated for quality": (

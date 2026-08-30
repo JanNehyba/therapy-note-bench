@@ -255,7 +255,7 @@ def test_the_contamination_warning_names_only_systems_that_are_in_the_group(tmp_
     clean = ["glm-5", "kimi-k3", "qwen3.5-122b", "therapist"]
 
     note = _methods_note(tmp_path, clean)
-    assert "Measured against the 4 systems" in note
+    assert "Reference group — the 4 systems" in note
     assert "gemma4" not in note and "gpt-oss-120b" not in note
     assert "toward zero" not in note, "nothing in this group pulls the answer anywhere"
 

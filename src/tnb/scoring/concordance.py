@@ -429,8 +429,7 @@ def describe(comparison: Comparison) -> str:
         )
     parts.append(
         f"{len(comparison.undominated)} of {comparison.n_systems} systems are beaten outright "
-        f"by nobody. That is a result too, and it is the reason this page does not name a "
-        f"single winner."
+        f"by nobody."
     )
 
     # The reason there is no single winner, stated as the measurement rather

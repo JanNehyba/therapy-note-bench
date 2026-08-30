@@ -872,12 +872,11 @@ SIMILARITY_EXAMPLE = {
         "he time, did not impair performance or grades)"
     ),
     "note": (
-        "Read the two. Tingling in the stomach and butterflies in the stomach are "
-        "the same symptom; palpitations and a rapid heartbeat are the same symptom; "
-        "trembling hands appear in both. The model also records how long each has "
-        "lasted and when it happens, which the expert note does not. It shares "
-        "almost no *words* with the clinician, and a metric that counts shared "
-        "words scores it accordingly."
+        "Tingling in the stomach and butterflies in the stomach are the same symptom, "
+        "as are palpitations and a rapid heartbeat; trembling hands appear in both. The "
+        "model also records how long each symptom has lasted and when it occurs, which "
+        "the expert note does not. It shares almost no *words* with the clinician, and a "
+        "word-overlap metric scores it accordingly."
     ),
 }
 

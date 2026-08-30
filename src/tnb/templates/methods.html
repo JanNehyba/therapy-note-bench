@@ -12,9 +12,7 @@ __STYLE__
   <h1 data-t="methods.h1">How this was measured</h1>
   <p class="sub" data-t="methods.sub">
     The instrument behind <a href="index.html">the leaderboard</a>: which judge, checked
-    against whom, over which corpora, and what the two judges disagree about. Every panel
-    here is drawn from the same run that produced the tables — nothing on this page is
-    written by hand.
+    against whom, over which corpora, and where the two judges disagree.
     <a href="https://github.com/JanNehyba/therapy-note-bench">Source and method</a>.
   </p>
 
@@ -82,12 +80,11 @@ __STYLE__
      came from. Also as a <a href="therapy-note-bench.pdf">PDF</a>.</p>
 
   <footer>
-    <p data-t="methods.foot.columns">Each column's range, what it counts and what it must not be read as are printed
-       under the table it belongs to on <a href="index.html">the leaderboard</a> — including
-       the near-zero human agreement on <strong>Faithfulness</strong> (Krippendorff's alpha
-       0.18) and the fact that <strong>TRACE</strong> is a re-implementation with
-       <em>no human anchor</em>. A number and its caveat should not be separated by a scroll,
-       which is why they are there and this page is here.</p>
+    <p data-t="methods.foot.columns"><strong>Faithfulness</strong> carries near-zero human agreement — TN-Eval
+       measured Krippendorff's alpha 0.18 between trained therapists — and
+       <strong>TRACE</strong> is a re-implementation with <em>no human anchor</em>. Each
+       column's range, what it counts and what it must not be read as are under its own
+       table on <a href="index.html">the leaderboard</a>.</p>
     <p data-t="page.foot.notes"><strong>Notes</strong> counts the notes a protocol could actually read. A model that
        writes a good note in the wrong shape loses notes to its format, not to its
        clinical content — read the count before comparing the score.</p>
@@ -770,7 +767,7 @@ function renderConcordance(all) {
          measurement. Everything else on this page is a column, not a verdict.`}</p>
       ${beaten}
       <p class="note">${T`<strong>${c.undominated.length} of ${c.n_systems} systems are beaten
-         outright by nobody.</strong> That is why there is no single winner named here.`}</p>`;
+         outright by nobody</strong>, so no single winner is named.`}</p>`;
   }).join('');
 }
 
@@ -783,10 +780,11 @@ function renderPreference(data) {
   if (!data || !data.effects || !data.effects.length) { box.remove(); return; }
 
   box.innerHTML = `<h2>${T`Does either judge favour its own models?`}</h2>
-    <p class="note">${T`Measured, not disclaimed. Both judges score everything, and the
-       difference between their tables for a judge's own family — against the systems
-       <em>neither</em> of them wrote — is the effect, in ${tr(data.measure)}, with a paired
-       bootstrap over conversations.`}</p>
+    <p class="note">${T`Both judges score every system. The effect is the difference between
+       their tables for a judge's own family, taken against the systems <em>neither</em> vendor
+       wrote, in ${tr(data.measure)}, with a paired bootstrap over conversations <em>and</em>
+       systems — 2000 draws. Resampling conversations alone would treat three or four models as
+       the whole of a vendor.`}</p>
     <div class="scroll"><table class="concordance">
       <thead><tr><th>${T`Judge`}</th><th>${T`Its family`}</th><th>${T`Effect`}</th><th>${T`95% interval`}</th>
         <th>${T`Detected`}</th></tr></thead>
@@ -814,9 +812,8 @@ function renderPreference(data) {
           // result that is sound and telling a reader to discount it. Checked
           // against the group it describes rather than remembered.
           const strays = ['gemma4', 'gpt-oss-120b'].filter(name => neutral.includes(name));
-          return `<p class="note">${T`Measured against the ${neutral.length} systems neither
-         judge's vendor wrote: ${neutral.map(code).join(', ')}. Named rather than counted,
-         because the estimate is only as good as this group.`}${strays.length
+          return `<p class="note">${T`Reference group — the ${neutral.length} systems neither
+         judge's vendor wrote: ${neutral.map(code).join(', ')}.`}${strays.length
             ? ` ${T`${strays.map(code).join(' and ')} are in it under a name their model family
          does not share, and pull the answer toward zero.`}`
             : ''}</p>`;

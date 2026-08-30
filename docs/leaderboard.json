@@ -289,7 +289,7 @@
       ],
       "n_systems": 16,
       "ranking_measure": null,
-      "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on trace (+0.826) and place 11 of 16 systems differently on it anyway. The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. 9 system(s) beat at least one other on every measure under both judges, which needs no weighting to be true: `gpt-5.6-sol` beats 6. 8 of 16 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner.",
+      "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on trace (+0.826) and place 11 of 16 systems differently on it anyway. The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. Systems beating at least one other on every measure under both judges, which needs no weighting to be true: 9. `gpt-5.6-sol` beats 6. 8 of 16 systems are beaten outright by nobody.",
       "tensions": [
         {
           "agrees": true,
@@ -563,7 +563,7 @@
       ],
       "n_systems": 19,
       "ranking_measure": null,
-      "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on thorough (+0.833) and place 18 of 19 systems differently on it anyway. They agree least on succinct (+0.446, 18 of 19 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. No agreement figure is given for comprehensible (18 of 19 share one value), organized (18 of 19 share one value), synthesized (18 of 19 share one value), useful (18 of 19 share one value): most systems print the same number there, so there are no orderings for the two judges to agree about, and a correlation over them would be decided by the few that differ. 4 system(s) beat at least one other on every measure under both judges, which needs no weighting to be true: `gpt-5.6-sol` beats 7. 11 of 19 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner.",
+      "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on thorough (+0.833) and place 18 of 19 systems differently on it anyway. They agree least on succinct (+0.446, 18 of 19 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. No agreement figure is given for comprehensible (18 of 19 share one value), organized (18 of 19 share one value), synthesized (18 of 19 share one value), useful (18 of 19 share one value): most systems print the same number there, so there are no orderings for the two judges to agree about, and a correlation over them would be decided by the few that differ. Systems beating at least one other on every measure under both judges, which needs no weighting to be true: 4. `gpt-5.6-sol` beats 7. 11 of 19 systems are beaten outright by nobody.",
       "tensions": [
         {
           "agrees": true,
@@ -1018,7 +1018,7 @@
       ],
       "n_systems": 19,
       "ranking_measure": "completeness",
-      "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on completeness (+0.895) and place 13 of 19 systems differently on it anyway. They agree least on faithfulness (+0.742, 16 of 19 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. 14 system(s) beat at least one other on every measure under both judges, which needs no weighting to be true: `google_gemini-3.7-flash` beats 10. 8 of 19 systems are beaten outright by nobody. That is a result too, and it is the reason this page does not name a single winner. Ordering by completeness says little about conciseness (`gemini-3.1-pro-preview` -0.02, `gpt-5.6-terra` +0.05). Ordering by completeness says different things to the two judges about faithfulness (`gemini-3.1-pro-preview` +0.56, `gpt-5.6-terra` +0.04). The two judges disagree about whether those columns are related at all, so neither reading is this benchmark's answer.",
+      "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on completeness (+0.895) and place 13 of 19 systems differently on it anyway. They agree least on faithfulness (+0.742, 16 of 19 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. Systems beating at least one other on every measure under both judges, which needs no weighting to be true: 14. `google_gemini-3.7-flash` beats 10. 8 of 19 systems are beaten outright by nobody. Ordering by completeness says little about conciseness (`gemini-3.1-pro-preview` -0.02, `gpt-5.6-terra` +0.05). Ordering by completeness says different things to the two judges about faithfulness (`gemini-3.1-pro-preview` +0.56, `gpt-5.6-terra` +0.04). The two judges disagree about whether those columns are related at all, so neither reading is this benchmark's answer.",
       "tensions": [
         {
           "agrees": false,
@@ -1728,13 +1728,15 @@
   },
   "licences": [
     {
-      "licence": "arXiv preprint",
+      "cite": "Croxford, E., Gao, Y., Pellegrino, N., et al. (2025). Development and validation of the Provider Documentation Summarization Quality Instrument for Large Language Models. arXiv:2501.08977. Adapted from the Physician Documentation Quality Instrument: Stetson, P. D., Bakken, S., Wrenn, J. O., & Siegler, E. L. (2012). Applied Clinical Informatics, PMC3347480.",
+      "licence": "CC BY 4.0 (arXiv version)",
       "note": "The instrument is reproduced verbatim, anchors included, so a score here answers the published question and not a rewritten one.",
       "source": "PDSQI-9",
       "url": "https://arxiv.org/abs/2501.08977",
       "used_for": "the nine attributes and their anchors, eight of which are scored"
     },
     {
+      "cite": "Shah, R. S., Xu, L., Liu, Q., Burnsky, J., Bertagnolli, D., & Shivade, C. (2025). TN-Eval: Rubric and evaluation protocols for measuring the quality of behavioral therapy notes. ACL 2025, Industry Track.",
       "licence": "Apache-2.0",
       "note": "Reproduced verbatim in this repository, with attribution in NOTICE.",
       "source": "TN-Eval (code)",
@@ -1742,20 +1744,23 @@
       "used_for": "SOAP prompt, the five scoring prompts, the 23-item rubric"
     },
     {
+      "cite": "Described in the TN-Eval paper above; the data repository publishes none.",
       "licence": "none published",
-      "note": "The Apache licence is on the code repository, not this one. Fetched at run time, neverredistributed.",
+      "note": "The Apache licence is on the code repository, not this one. Fetched at run time, never redistributed.",
       "source": "TN-Eval-Data",
       "url": "https://github.com/amazon-science/TN-Eval-Data",
       "used_for": "150 notes and the ratings of two human annotators"
     },
     {
+      "cite": "Wu, Z., Balloccu, S., Kumar, V., Helaoui, R., Reiter, E., Reforgiato Recupero, D., & Riboni, D. (2022). Anno-MI: A dataset of expert-annotated counselling dialogues. ICASSP 2022.",
       "licence": "none published",
-      "note": "Released “to benefit research community”, with a citation requested. Fetchedat run time.",
+      "note": "Released “to benefit research community”, with a citation requested. Fetched at run time.",
       "source": "AnnoMI",
       "url": "https://github.com/uccollab/AnnoMI",
       "used_for": "the 133 transcripts, 50 of which are scored"
     },
     {
+      "cite": "Adhikary, P. K., Singh, S., Singh, S., Sharma, P., Soni, P., Choudhary, R., Saxena, C., Chauhan, P., Gupta, S. K., Deb, K. S., Singh, S. M., & Chakraborty, T. (2026). Clinically grounded AI-scribing in psychotherapy: Benchmarking LLMs against expert documentation in the iCARE framework. medRxiv 2025.06.25.25330252 (v2).",
       "licence": "none published",
       "note": "No licence file and no statement of terms. The instructions are fetched at run time and never shown here.",
       "source": "iCARE",
@@ -1763,6 +1768,7 @@
       "used_for": "the 17 section instructions"
     },
     {
+      "cite": "No paper of its own. It carries the iHOPE corpus described in the iCARE paper above.",
       "licence": "MIT badge, no LICENSE file",
       "note": "A badge on a code repository, for a corpus collected elsewhere. Treated as no licence for the data.",
       "source": "TheraFuse",
@@ -3532,7 +3538,7 @@
     "expert": "1. Tingling sensation in stomach 2. Palpitations 3. Trembling hands 4. Restlessness and inability to relax",
     "generated": "**Presenting Symptoms:**\n\n1. Nervousness/anxiety before and during presentations at weekly work meetings: few weeks; 2. Butterflies in stomach: few weeks; 3. Rapid heartbeat (heart beating faster): few weeks; 4. Sweaty palms: few weeks; 5. Shaking/trembling hands: few weeks; 6. Shaky voice with stuttering and tripping over words: few weeks; 7. Difficulty concentrating/zoning out during others' presentations due to self-focused attention on physical symptoms: few weeks; 8. Persistent worry about negative evaluation by boss (post-presentation rumination about performance): few weeks; 9. Sadness and disappointment in self following presentations: few weeks; 10. Worry about coworkers' opinions of her: few weeks\n\n**Chief Complaints:**\n\n1. Nervousness when making presentations during undergraduate college years: NA (historical; perceived as normal at the time, did not impair performance or grades)",
     "model": "kimi-k3",
-    "note": "Read the two. Tingling in the stomach and butterflies in the stomach are the same symptom; palpitations and a rapid heartbeat are the same symptom; trembling hands appear in both. The model also records how long each has lasted and when it happens, which the expert note does not. It shares almost no *words* with the clinician, and a metric that counts shared words scores it accordingly.",
+    "note": "Tingling in the stomach and butterflies in the stomach are the same symptom, as are palpitations and a rapid heartbeat; trembling hands appear in both. The model also records how long each symptom has lasted and when it occurs, which the expert note does not. It shares almost no *words* with the clinician, and a word-overlap metric scores it accordingly.",
     "rouge_l": 0.111,
     "section": "Presenting symptoms",
     "session": "6"
