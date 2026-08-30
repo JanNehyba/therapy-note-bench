@@ -438,11 +438,11 @@ function renderLicences(data) {
     </tr>`).join('');
 
   document.getElementById('licences-body').innerHTML = `
-    <p class="blurb">${T`Checked repository by repository \u2014 licence field, file tree and README
-       \u2014 rather than assumed from a sibling project. <strong>Only one of the five carries a
-       licence.</strong> Nothing here redistributes a corpus: every dataset is fetched from its
-       origin when a run needs it, and this page shows field names and scores, never transcripts,
-       notes, or somebody else's prompt.`}</p>
+    <p class="blurb">${T`Licence field, file tree and README checked for each source on
+       2026-08-24. <strong>Two of the six carry a licence; three publish none, and the sixth
+       shows a badge with no LICENSE file behind it.</strong> Nothing here redistributes a
+       corpus: every dataset is fetched from its origin when a run needs it, and this page shows
+       field names and scores, never transcripts, notes, or somebody else's prompt.`}</p>
     <div class="scroll"><table>
       <thead><tr><th>${T`Source`}</th><th>${T`Used for`}</th><th>${T`Licence`}</th><th></th></tr></thead>
       <tbody>${rows}</tbody>
@@ -1011,33 +1011,42 @@ function renderSuperseded(gone) {
   // A group with no judge is coverage -- what was generated, before anything was
   // scored. Calling those "scored by null" was both ugly and untrue.
   const what = gone.judge_model
-    ? T`scored by <code>${gone.judge_model}</code>`
-    : T`of generation coverage`;
+    ? `<code>${esc(gone.judge_model)}</code>`
+    : T`generation coverage`;
   // Both reasons can be true at once. Reporting only the first printed
   // "at harness 0.2.0 ... redefined in 0.2.0", which contradicts itself.
   const said = {
-    harness: T`the measures were redefined in <code>${gone.current_harness_version}</code>
-      and the two are not comparable`,
-    settings: T`the judge's settings were not recorded, so the rows cannot be shown to
-      have come from one instrument`,
-    rubric: T`the questions were rewritten in <code>${gone.current_judge_prompt_version}</code>,
-      so these rows answer an earlier version of them`,
-    'not on the panel': T`this judge was tried during calibration and is not one of the two
-      the leaderboard publishes from`,
+    harness: T`measures redefined in <code>${gone.current_harness_version}</code>`,
+    settings: T`judge settings not recorded`,
+    rubric: T`questions rewritten in <code>${gone.current_judge_prompt_version}</code>`,
+    'not on the panel': T`judge tried during calibration, not on the panel`,
   };
   const why = (gone.reasons || ['harness']).map(name => said[name]).filter(Boolean)
-    .join(T`; and `);
-  return `<p class="note">${T`${gone.rows} row(s) on <strong>${tr(gone.track)}</strong>, ${what},
-    at harness <code>${gone.harness_version}</code>, are no longer shown: ${why}.
-    They are still in <code>results/rows.jsonl</code>.`}</p>`;
+    .join(T`; `);
+  return `<tr><td>${gone.rows}</td><td>${tr(gone.track)}</td><td>${what}</td>
+    <td><code>${esc(gone.harness_version)}</code></td><td>${why}</td></tr>`;
 }
 
 
 // Nothing withdrawn is the good case and needs no heading saying so.
+//
+// A table, not thirty-nine paragraphs. Each said the same two sentences with
+// three values swapped -- "They are still in results/rows.jsonl" was printed
+// thirty-nine times and "the measures were redefined in 0.6.0 and the two are
+// not comparable" thirty-eight. A changelog belongs on a benchmark; a
+// changelog written out as prose, once per row, does not. The sentence they
+// shared is said once, above the table.
 if ((DATA.superseded || []).length) {
   document.getElementById('withdrawn').innerHTML =
     `<div class="box"><h2>${T`Withdrawn from the tables`}</h2>
-     ${DATA.superseded.map(renderSuperseded).join('')}</div>`;
+     <p class="blurb">${T`These rows were measured under an instrument the current tables
+        cannot be compared with. All of them remain in
+        <code>results/rows.jsonl</code>.`}</p>
+     <div class="scroll"><table>
+       <thead><tr><th>${T`Rows`}</th><th>${T`Track`}</th><th>${T`Judge`}</th>
+         <th>${T`Harness`}</th><th>${T`Reason`}</th></tr></thead>
+       <tbody>${DATA.superseded.map(renderSuperseded).join('')}</tbody>
+     </table></div></div>`;
 } else {
   document.getElementById('withdrawn').remove();
 }

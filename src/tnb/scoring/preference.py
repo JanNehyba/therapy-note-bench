@@ -362,8 +362,8 @@ def describe(effect: Effect, measure: str = "completeness") -> str:
             f"`{effect.judge}` shows no detectable preference for {family_name(effect.family)} "
             f"models: {effect.estimate:+.3f} {measure} "
             f"[{effect.low:+.3f} to {effect.high:+.3f}], {why}. Not detected is not the same "
-            f"as absent — {effect.n_own} system(s) against {effect.n_neutral} neutral one(s) "
-            f"over {effect.n_sessions} conversations is what this run could see."
+            f"as absent — the comparison was {effect.n_own} of the vendor's own against "
+            f"{effect.n_neutral} neutral, over {effect.n_sessions} conversations."
         )
     direction = "higher" if effect.estimate > 0 else "lower"
     return (

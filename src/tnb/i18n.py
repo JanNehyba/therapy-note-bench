@@ -242,16 +242,6 @@ _SENTENCES = {
         "Neřídí se řazením — seřazení podle jiného sloupce přeskládá řádky, ne to, co bootstrap "
         "dokázal oddělit."
     ),
-    "the questions were rewritten in <code>{0}</code>, so these rows answer an earlier version"
-    " of them": (
-        "otázky byly přepsány ve verzi <code>{0}</code>, takže tyto řádky odpovídají na jejich "
-        "starší znění"
-    ),
-    "this judge was tried during calibration and is not one of the two the leaderboard publishes"
-    " from": (
-        "tento hodnotitel byl vyzkoušen při kalibraci a není jedním ze dvou, ze kterých žebříček "
-        "publikuje"
-    ),
     "References": "Literatura",
     "How to cite this benchmark": "Jak citovat tento benchmark",
     "A number quoted from these tables is a number from one judge at one setting &mdash; cite the"
@@ -259,6 +249,22 @@ _SENTENCES = {
         "Číslo citované z těchto tabulek je číslo od jednoho hodnotitele v jednom nastavení "
         "&mdash; citujte verzi, ne jen odkaz."
     ),
+    "generation coverage": "pokrytí generování",
+    "measures redefined in <code>{0}</code>": "míry předefinovány ve verzi <code>{0}</code>",
+    "judge settings not recorded": "nastavení hodnotitele nezaznamenáno",
+    "questions rewritten in <code>{0}</code>": "otázky přepsány ve verzi <code>{0}</code>",
+    "judge tried during calibration, not on the panel": (
+        "hodnotitel vyzkoušen při kalibraci, není v panelu"
+    ),
+    "; ": "; ",
+    "These rows were measured under an instrument the current tables cannot be compared with."
+    " All of them remain in <code>results/rows.jsonl</code>.": (
+        "Tyto řádky byly změřeny nástrojem, se kterým se současné tabulky srovnávat nedají. "
+        "Všechny zůstávají v <code>results/rows.jsonl</code>."
+    ),
+    "Rows": "Řádků",
+    "Harness": "Harness",
+    "Reason": "Důvod",
     "Band": "Pásmo",
     # The same thing said where a reader can read it. The tooltip above stays
     # for a mouse; this is the entry in the legend under the table, which is
@@ -1051,16 +1057,16 @@ _METHODS = {
     ),
     "Filled by the expert": "Vyplněno expertem",
     # -- licences -------------------------------------------------------------
-    "Checked repository by repository — licence field, file tree and README — rather than"
-    " assumed from a sibling project. <strong>Only one of the five carries a licence.</strong>"
-    " Nothing here redistributes a corpus: every dataset is fetched from its origin when a run"
-    " needs it, and this page shows field names and scores, never transcripts, notes, or"
-    " somebody else's prompt.": (
-        "Ověřeno repozitář po repozitáři — pole s licencí, strom souborů a README — ne "
-        "odhadnuto podle sousedního projektu. <strong>Licenci nese jen jeden z pěti.</strong> "
-        "Nic tady korpus dál nešíří: každá datová sada se stahuje ze svého zdroje, až když ji "
-        "běh potřebuje, a tato stránka ukazuje názvy polí a skóre, nikdy ne přepisy, zápisy "
-        "nebo cizí prompt."
+    "Licence field, file tree and README checked for each source on 2026-08-24. <strong>Two of"
+    " the six carry a licence; three publish none, and the sixth shows a badge with no LICENSE"
+    " file behind it.</strong> Nothing here redistributes a corpus: every dataset is fetched from"
+    " its origin when a run needs it, and this page shows field names and scores, never"
+    " transcripts, notes, or somebody else's prompt.": (
+        "U každého zdroje bylo 24. 8. 2026 ověřeno pole s licencí, strom souborů a README. "
+        "<strong>Licenci nesou dva ze šesti; tři žádnou nezveřejňují a šestý ukazuje odznak, "
+        "za kterým není soubor LICENSE.</strong> Nic tady korpus dál nešíří: každá datová sada "
+        "se stahuje ze svého zdroje, až když ji běh potřebuje, a tato stránka ukazuje názvy "
+        "polí a skóre, nikdy ne přepisy, zápisy nebo cizí prompt."
     ),
     "Source": "Zdroj",
     "Used for": "Použito na",
@@ -1393,22 +1399,6 @@ _METHODS = {
     ),
     "the two therapists": "ti dva terapeuti",
     # -- withdrawn ---------------------------------------------------------------------
-    "scored by <code>{0}</code>": "obodovaných modelem <code>{0}</code>",
-    "of generation coverage": "o pokrytí generování",
-    "the measures were redefined in <code>{0}</code> and the two are not comparable": (
-        "míry byly předefinovány ve verzi <code>{0}</code> a ty dvě nejsou srovnatelné"
-    ),
-    "the judge's settings were not recorded, so the rows cannot be shown to have come from one"
-    " instrument": (
-        "nastavení hodnotitele nebylo zaznamenáno, takže se nedá ukázat, že ty řádky pocházejí "
-        "z jednoho nástroje"
-    ),
-    "; and": "; a ",
-    "{0} row(s) on <strong>{1}</strong>, {2}, at harness <code>{3}</code>, are no longer shown:"
-    " {4}. They are still in <code>results/rows.jsonl</code>.": (
-        "Řádky ve větvi <strong>{1}</strong>, {2}, při harnessu <code>{3}</code> — je jich {0} — "
-        "se už nekreslí: {4}. Pořád jsou v <code>results/rows.jsonl</code>."
-    ),
     "Withdrawn from the tables": "Staženo z tabulek",
     # -- measure keys, wherever a panel prints one -------------------------------------
     "trace": "trace",
@@ -1441,12 +1431,12 @@ _METHODS_PAYLOAD = {
         "150 zápisů a hodnocení dvou lidských anotátorů"
     ),
     "The Apache licence is on the code repository, not this one. Fetched at run time, never"
-    "redistributed.": (
+    " redistributed.": (
         "Licence Apache je na repozitáři s kódem, ne na tomhle. Stahuje se za běhu, nikdy se "
         "nešíří dál."
     ),
     "the 133 transcripts, 50 of which are scored": ("133 přepisů, z nichž 50 se boduje"),
-    "Released “to benefit research community”, with a citation requested. Fetchedat run time.": (
+    "Released “to benefit research community”, with a citation requested. Fetched at run time.": (
         "Vydáno „to benefit research community“, s prosbou o citaci. Stahuje se za běhu."
     ),
     "the 17 section instructions": "instrukce k 17 oddílům",

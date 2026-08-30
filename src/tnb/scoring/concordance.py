@@ -423,9 +423,9 @@ def describe(comparison: Comparison) -> str:
     if comparison.dominance:
         leader = comparison.dominance[0]
         parts.append(
-            f"{len(comparison.dominance)} system(s) beat at least one other on every measure "
-            f"under both judges, which needs no weighting to be true: `{leader.system}` beats "
-            f"{len(leader.beats)}."
+            f"Systems beating at least one other on every measure under both judges, which "
+            f"needs no weighting to be true: {len(comparison.dominance)}. "
+            f"`{leader.system}` beats {len(leader.beats)}."
         )
     parts.append(
         f"{len(comparison.undominated)} of {comparison.n_systems} systems are beaten outright "

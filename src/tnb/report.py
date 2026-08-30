@@ -922,7 +922,10 @@ LICENCES = [
         ),
         "url": "https://arxiv.org/abs/2501.08977",
         "used_for": "the nine attributes and their anchors, eight of which are scored",
-        "licence": "arXiv preprint",
+        # "arXiv preprint" is a venue, not a licence, and it was printed under a
+        # heading that says Licence. `NOTICE` records the terms: CC BY 4.0, which
+        # is what permits the verbatim reproduction the note beside it describes.
+        "licence": "CC BY 4.0 (arXiv version)",
         "note": (
             "The instrument is reproduced verbatim, anchors included, so a score here "
             "answers the published question and not a rewritten one."
@@ -948,8 +951,7 @@ LICENCES = [
         "licence": "none published",
         "note": (
             "The Apache licence is on the code repository, not this one. Fetched at run "
-            "time, never"
-            "redistributed."
+            "time, never redistributed."
         ),
     },
     {
@@ -964,8 +966,7 @@ LICENCES = [
         "licence": "none published",
         "note": (
             "Released \u201cto benefit research community\u201d, with a citation "
-            "requested. Fetched"
-            "at run time."
+            "requested. Fetched at run time."
         ),
     },
     {
@@ -1930,8 +1931,8 @@ def render_readme_section(data: dict) -> str:
             names = ", ".join(f"`{row['label']}`" for row in models)
             blocks.append(
                 f"**{table['title']}** — *waiting for the judge.* "
-                f"{len(models)} system(s) have written their notes and none has been scored "
-                f"yet: {names}."
+                f"Notes are written and nothing is scored yet. Systems waiting: "
+                f"{len(models)}, namely {names}."
             )
             continue
 
