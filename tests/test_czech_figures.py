@@ -46,7 +46,10 @@ def data():
 
 @pytest.fixture(scope="module")
 def drawn(data) -> dict[str, str]:
-    return {name: draw(data) for name, draw in czech_figures.CZECH_FIGURES.items()}
+    return {
+        name: draw(data, czech_figures.identity)
+        for name, draw in czech_figures.CZECH_FIGURES.items()
+    }
 
 
 @pytest.fixture(scope="module")
@@ -55,7 +58,9 @@ def drawn_cs(data) -> dict[str, str]:
     before = czech_brief.LANG
     try:
         czech_brief.LANG = "cs"
-        return {name: draw(data) for name, draw in czech_figures.CZECH_FIGURES.items()}
+        return {
+            name: draw(data, czech_brief._t) for name, draw in czech_figures.CZECH_FIGURES.items()
+        }
     finally:
         czech_brief.LANG = before
 
@@ -94,7 +99,7 @@ def test_a_missing_czech_sentence_stops_the_figure_rather_than_leaking_english()
     try:
         czech_brief.LANG = "cs"
         with pytest.raises(czech_brief.Untranslated):
-            czech_figures._t("a caption nobody has translated yet")
+            czech_brief._t("a caption nobody has translated yet")
     finally:
         czech_brief.LANG = before
 
@@ -185,7 +190,8 @@ def test_every_mark_is_inside_the_canvas(drawn, drawn_cs):
 def test_a_figure_is_the_same_bytes_twice(data):
     """A figure that churns turns every rebuild into a diff nobody reads."""
     for name, draw in czech_figures.CZECH_FIGURES.items():
-        assert draw(data) == draw(data), f"{name} is not deterministic"
+        english = czech_figures.identity
+        assert draw(data, english) == draw(data, english), f"{name} is not deterministic"
 
 
 def test_every_figure_says_where_its_numbers_came_from(drawn):

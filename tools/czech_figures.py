@@ -17,11 +17,15 @@ the document in memory and they live nowhere else. That is also why they are
 not in `figures.FIGURES`: every entry there is asserted to be published, and
 none of these may be.
 
-**Every sentence goes through `_t`.** The document is built twice, once in each
-language, and `_t` raises rather than falling back -- so a figure with an
-untranslated caption stops the Czech build instead of printing English inside a
-Czech page. `tests/test_czech_figures.py` renders all four in Czech for exactly
-that reason.
+**Every sentence goes through the translator the caller hands in.** Each
+`draw_*` takes `(data, t)`; the document passes its own `_t`, which raises
+rather than falling back, so a figure with an untranslated caption stops the
+Czech build instead of printing English inside a Czech page. The translator is
+a parameter and never an import: `tools/czech_brief.py` runs as a script, so
+importing `_t` from it here loaded a second copy of that module whose language
+was still English, and the whole guarantee was bypassed silently.
+`tests/test_czech_figures.py` builds the document through its script entry
+point for exactly that reason.
 
 **Decimals are kept apart on purpose.** `pdftotext` rebuilds text runs from
 where the glyphs landed, so two numbers drawn close together can come back as
@@ -35,6 +39,7 @@ from __future__ import annotations
 
 import json
 import sys
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 from statistics import fmean
@@ -55,18 +60,27 @@ LOCAL = REPO / "local"
 WIDTH = 900
 
 
-def _t(text: str) -> str:
-    """This document's translator, imported at the moment of the call.
+#: The translator every figure is handed. `tools/czech_brief.py` passes its own
+#: `_t`, which raises `Untranslated` rather than falling back to English.
+Translate = Callable[[str], str]
 
-    Late on purpose, twice over. `tools/czech_brief.py` is the module that
-    inlines these figures, so importing it at the top of this file would be a
-    cycle. And `_t` reads the language from `czech_brief.LANG`, which the
-    command line sets after import -- so a figure drawn during the Czech build
-    is Czech only if the lookup happens when it is drawn.
+
+def identity(text: str) -> str:
+    """The English translator: every phrase in this file is already English.
+
+    Only for a caller that has no document around it -- `main` below, and a
+    test that wants the English drawing. A build passes the document's `_t`,
+    because that is the one that raises on a missing Czech sentence.
+
+    **The figures are handed a translator, never allowed to find one.** This
+    file used to do `from czech_brief import _t` at the moment of the call, and
+    `tools/czech_brief.py` is run as a script: it is `__main__`, so that import
+    loaded a *second* copy of the module under the name `czech_brief`, whose
+    `LANG` was still "en". Its `_t` returned the argument unchanged, nothing
+    raised, and all four figures printed English inside the Czech document for
+    as long as they existed. A parameter cannot pick up the wrong module.
     """
-    from czech_brief import _t as translate
-
-    return translate(text)
+    return text
 
 
 # --- the payloads ------------------------------------------------------------
@@ -228,7 +242,7 @@ FORMAT_PAIRS = (
 )
 
 
-def draw_formats(data: Data) -> str:
+def draw_formats(data: Data, t: Translate) -> str:
     """SOAP against the Deepsy format, one line per model, four panels.
 
     Four rather than one, because the comparison was made four times -- two
@@ -285,12 +299,12 @@ def draw_formats(data: Data) -> str:
             seen_row = row
             body.append(
                 f'<text class="name" x="0" y="{oy - 58}" style="font-weight:650">'
-                f"{esc(_t(TRACK_SWITCH_LABELS.get(soap_track, soap_track)))}</text>"
+                f"{esc(t(TRACK_SWITCH_LABELS.get(soap_track, soap_track)))}</text>"
                 + _rule(0, oy - 48, WIDTH, oy - 48)
             )
         body.append(
             f'<text class="value" x="{ox}" y="{oy - 26}">'
-            f"{esc(_t('Judge'))} &middot; {esc(judge)}</text>"
+            f"{esc(t('Judge'))} &middot; {esc(judge)}</text>"
         )
 
         for value in _decimal_ticks(low, high):
@@ -321,25 +335,25 @@ def draw_formats(data: Data) -> str:
             f'<text class="value" x="{ox + panel_w}" y="{oy + panel_h + 20}" '
             f'text-anchor="end">Deepsy</text>'
             f'<text class="value" x="{ox}" y="{oy + panel_h + 40}">'
-            f"{esc(_t(FORMATS_LOWER).format(worse=worse, models=len(shared)))}</text>"
+            f"{esc(t(FORMATS_LOWER).format(worse=worse, models=len(shared)))}</text>"
         )
 
     rubric = data.rubric(results.TRACK_DEEPSY_REAL) or ""
     smallest = min(len(entry[4]) for entry in panels)
     drawing = (
         heading(
-            _t(FORMATS_TITLE).format(worse=worse_total, compared=compared_total),
-            _t(FORMATS_SUB),
+            t(FORMATS_TITLE).format(worse=worse_total, compared=compared_total),
+            t(FORMATS_SUB),
             width_px=WIDTH,
         )
         + "\n"
         + "\n".join(body)
         + "\n"
-        + footnote(_t(FORMATS_CONFOUND).format(models=smallest), 0, height - 74, width_px=WIDTH)
+        + footnote(t(FORMATS_CONFOUND).format(models=smallest), 0, height - 74, width_px=WIDTH)
         + "\n"
-        + footnote(_t(FORMATS_SOURCE).format(rubric=rubric), 0, height - 20, width_px=WIDTH)
+        + footnote(t(FORMATS_SOURCE).format(rubric=rubric), 0, height - 20, width_px=WIDTH)
     )
-    return svg(WIDTH, height, drawing, label=_t(FORMATS_LABEL))
+    return svg(WIDTH, height, drawing, label=t(FORMATS_LABEL))
 
 
 # --- figure 2: capability from outside ---------------------------------------
@@ -371,7 +385,7 @@ EXTERNAL_PANELS = (("english_quality", EXTERNAL_ENGLISH), ("czech_quality", EXTE
 EXTERNAL_X = "Intelligence Index"
 
 
-def draw_external(data: Data) -> str:
+def draw_external(data: Data, t: Translate) -> str:
     """The capability index against PDSQI-9 quality, English and Czech.
 
     Two panels and two judges, because the answer differs by both: the index
@@ -419,7 +433,7 @@ def draw_external(data: Data) -> str:
         if field not in blocks:
             continue
         ox = left + column * (panel_w + gap)
-        body.append(f'<text class="name" x="{ox}" y="{top - 78}">{esc(_t(title))}</text>')
+        body.append(f'<text class="name" x="{ox}" y="{top - 78}">{esc(t(title))}</text>')
 
         value = x0
         while value <= x1:
@@ -469,7 +483,7 @@ def draw_external(data: Data) -> str:
                 _dot(ox + 5, legend_y - 4, ink, 4)
                 + f'<text class="value fill-{ink}" x="{ox + 16}" y="{legend_y}">'
                 + esc(
-                    _t(EXTERNAL_RHO).format(
+                    t(EXTERNAL_RHO).format(
                         rho=f"{entry['rho']:+.2f}", p=f"{entry['p']:.3f}", n=entry["n"]
                     )
                 )
@@ -479,25 +493,25 @@ def draw_external(data: Data) -> str:
     unmatched = data.external.get("unmatched") or []
     notes = []
     if unmatched:
-        notes.append(_t(EXTERNAL_MATCH).format(names=", ".join(unmatched)))
+        notes.append(t(EXTERNAL_MATCH).format(names=", ".join(unmatched)))
     notes.append(
-        _t(EXTERNAL_SOURCE).format(
+        t(EXTERNAL_SOURCE).format(
             version=data.external.get("index_version", ""),
             fetched=data.external.get("fetched", ""),
         )
     )
 
     drawing = (
-        heading(_t(EXTERNAL_TITLE), _t(EXTERNAL_SUB), width_px=WIDTH)
+        heading(t(EXTERNAL_TITLE), t(EXTERNAL_SUB), width_px=WIDTH)
         + f'\n<text class="value" x="{-(top + panel_h / 2):.0f}" y="16" '
-        + f'transform="rotate(-90)" text-anchor="middle">{esc(_t(EXTERNAL_Y))}</text>\n'
+        + f'transform="rotate(-90)" text-anchor="middle">{esc(t(EXTERNAL_Y))}</text>\n'
         + "\n".join(body)
         + "\n"
         + footnote(notes[0], 0, height - 74, width_px=WIDTH)
         + "\n"
         + footnote(notes[-1], 0, height - 20, width_px=WIDTH)
     )
-    return svg(WIDTH, height, drawing, label=_t(EXTERNAL_LABEL))
+    return svg(WIDTH, height, drawing, label=t(EXTERNAL_LABEL))
 
 
 # --- figure 3: the English standing against the Czech one --------------------
@@ -519,7 +533,7 @@ JOIN_SOURCE = "Source: local/czech-join.json, both judges, the models both table
 JOIN_LABEL = "Each model's place in English against its place in Czech"
 
 
-def draw_join(data: Data) -> str:
+def draw_join(data: Data, t: Translate) -> str:
     """Place in English against place in Czech, one block per judge.
 
     A place is not a measurement and this figure is about how little a place
@@ -593,14 +607,14 @@ def draw_join(data: Data) -> str:
         # two digits or a translation is longer than its English.
         body.append(
             f'<text class="name" x="0" y="{oy - 62}" style="font-weight:650">'
-            f"{esc(_t('Judge'))} &middot; {esc(judge)}</text>"
+            f"{esc(t('Judge'))} &middot; {esc(judge)}</text>"
             f'<text class="value" x="0" y="{oy - 42}">'
-            f"{esc(_t(JOIN_MOVED).format(moved=len(moved)))} &middot; "
-            f"{esc(_t(JOIN_HELD).format(held=len(names) - len(moved)))}</text>"
+            f"{esc(t(JOIN_MOVED).format(moved=len(moved)))} &middot; "
+            f"{esc(t(JOIN_HELD).format(held=len(names) - len(moved)))}</text>"
             f'<text class="value" x="{mid_l - 12}" y="{oy - 12}" text-anchor="end">'
-            f"{esc(_t(JOIN_ENGLISH))}</text>"
+            f"{esc(t(JOIN_ENGLISH))}</text>"
             f'<text class="value" x="{mid_r + 12}" y="{oy - 12}">'
-            f"{esc(_t(JOIN_CZECH))}</text>" + _rule(0, oy - 32, WIDTH, oy - 32)
+            f"{esc(t(JOIN_CZECH))}</text>" + _rule(0, oy - 32, WIDTH, oy - 32)
         )
         for name in names:
             y1, y2 = y_of(english_row[name]), y_of(czech_row[name])
@@ -620,21 +634,21 @@ def draw_join(data: Data) -> str:
 
     # The confound is the payload's own sentence, translated where the document
     # already translates it. Empty rather than absent means an older payload,
-    # and `_t("")` would stop the Czech build over a caption nobody wrote.
+    # and `t("")` would stop the Czech build over a caption nobody wrote.
     confound = data.join.get("confound") or ""
     drawing = (
         heading(
-            _t(JOIN_TITLE).format(moved=moved_total, models=models_total),
-            _t(JOIN_SUB),
+            t(JOIN_TITLE).format(moved=moved_total, models=models_total),
+            t(JOIN_SUB),
             width_px=WIDTH,
         )
         + "\n"
         + "\n".join(body)
         + "\n"
-        + (footnote(_t(confound), 0, height - 74, width_px=WIDTH) + "\n" if confound else "")
-        + footnote(_t(JOIN_SOURCE), 0, height - 20, width_px=WIDTH)
+        + (footnote(t(confound), 0, height - 74, width_px=WIDTH) + "\n" if confound else "")
+        + footnote(t(JOIN_SOURCE), 0, height - 20, width_px=WIDTH)
     )
-    return svg(WIDTH, height, drawing, label=_t(JOIN_LABEL))
+    return svg(WIDTH, height, drawing, label=t(JOIN_LABEL))
 
 
 # --- figure 4: length against score ------------------------------------------
@@ -663,7 +677,7 @@ LENGTH_LABEL = "Note length against the criteria score, one dot per model"
 LENGTH_TRACKS = (results.TRACK_CZECH_REAL, results.TRACK_CZECH_TRANSLATED)
 
 
-def draw_length(data: Data) -> str:
+def draw_length(data: Data, t: Translate) -> str:
     """How long each model writes against what the criteria gave it.
 
     One panel per half of the corpus and one ink per judge. Length does not
@@ -718,7 +732,7 @@ def draw_length(data: Data) -> str:
 
         body.append(
             f'<text class="name" x="{ox}" y="{top - 78}">'
-            f"{esc(_t(TRACK_SWITCH_LABELS.get(track, track)))}</text>"
+            f"{esc(t(TRACK_SWITCH_LABELS.get(track, track)))}</text>"
         )
         value = x0
         while value <= x1:
@@ -738,7 +752,7 @@ def draw_length(data: Data) -> str:
             )
         body.append(
             f'<text class="value" x="{ox + panel_w / 2:.0f}" y="{top + panel_h + 40}" '
-            f'text-anchor="middle">{esc(_t(LENGTH_X))}</text>'
+            f'text-anchor="middle">{esc(t(LENGTH_X))}</text>'
         )
 
         for index, (judge, ink, shared, scores) in enumerate(series):
@@ -764,21 +778,21 @@ def draw_length(data: Data) -> str:
             body.append(
                 _dot(ox + 5, legend_y - 4, ink, 4)
                 + f'<text class="value" x="{ox + 16}" y="{legend_y}">'
-                + f"{esc(_t('Judge'))} &middot; {esc(judge)}</text>"
+                + f"{esc(t('Judge'))} &middot; {esc(judge)}</text>"
             )
 
     rubric = data.rubric(results.TRACK_CZECH_REAL) or ""
     drawing = (
-        heading(_t(LENGTH_TITLE), _t(LENGTH_SUB), width_px=WIDTH)
+        heading(t(LENGTH_TITLE), t(LENGTH_SUB), width_px=WIDTH)
         + f'\n<text class="value" x="{-(top + panel_h / 2):.0f}" y="16" '
-        + f'transform="rotate(-90)" text-anchor="middle">{esc(_t(LENGTH_Y))}</text>\n'
+        + f'transform="rotate(-90)" text-anchor="middle">{esc(t(LENGTH_Y))}</text>\n'
         + "\n".join(body)
         + "\n"
-        + footnote(_t(LENGTH_WHY), 0, height - 74, width_px=WIDTH)
+        + footnote(t(LENGTH_WHY), 0, height - 74, width_px=WIDTH)
         + "\n"
-        + footnote(_t(LENGTH_SOURCE).format(rubric=rubric), 0, height - 20, width_px=WIDTH)
+        + footnote(t(LENGTH_SOURCE).format(rubric=rubric), 0, height - 20, width_px=WIDTH)
     )
-    return svg(WIDTH, height, drawing, label=_t(LENGTH_LABEL))
+    return svg(WIDTH, height, drawing, label=t(LENGTH_LABEL))
 
 
 #: The four, by the name the document refers to them by. Deliberately not added
@@ -793,10 +807,14 @@ CZECH_FIGURES = {
 
 
 def main() -> int:
-    """Render all four and report their size. Nothing is written anywhere."""
+    """Render all four in English and report their size. Nothing is written.
+
+    English because there is no document here to ask: a translator that raises
+    belongs to a build, and this entry point is a size check.
+    """
     data = Data.load()
     for name, draw in CZECH_FIGURES.items():
-        drawn = draw(data)
+        drawn = draw(data, identity)
         if not drawn:
             print(f"{name:10} no data in this checkout")
             continue

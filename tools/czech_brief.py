@@ -4757,10 +4757,8 @@ def _figure_data():
     Four figures in two language builds is eight passes over the same files,
     and none of it can change while one document is being written.
     """
-    # Imported at the moment of use rather than at the top of this file:
-    # `czech_figures` reaches back into this module for `_t`, and a pair of
-    # top-level imports is a cycle. It is the same direction the figures
-    # already document.
+    # Imported at the moment of use rather than at the top of this file, so
+    # that a checkout without the figures' payloads still builds its tables.
     from czech_figures import Data
 
     return Data.load()
@@ -4778,7 +4776,11 @@ def _figure(name: str, caption: str) -> str:
     """
     from czech_figures import CZECH_FIGURES
 
-    drawn = CZECH_FIGURES[name](_figure_data())
+    # `_t` is handed to the figure rather than fetched by it. This module is run
+    # as a script, so it is `__main__`; a figure that did `from czech_brief
+    # import _t` got a second copy of this module whose `LANG` was still "en",
+    # and every chart in the Czech document was drawn in English.
+    drawn = CZECH_FIGURES[name](_figure_data(), _t)
     if not drawn:
         return ""
     return f"<figure>{drawn}<figcaption>{html.escape(_t(caption))}</figcaption></figure>"
