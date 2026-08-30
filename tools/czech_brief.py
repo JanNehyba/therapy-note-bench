@@ -5011,9 +5011,41 @@ CATEGORIES_COVERAGE = (
 CATEGORIES_GATES = (
     "Only {passed} of the {total} passed the gates that decide whether a column is "
     "possible: does it vary, does it belong to the model rather than the session, "
-    "do the coders agree, is its evidence real, and is it separable from length. "
-    "The others are printed as description and are not measures. {failed} fall "
-    "outside the 20-80% band a column needs to tell ten notes per model apart."
+    "do the coders agree, is its evidence real, is it separable from length, and "
+    "does it fire on a sentence written to carry it. The others are printed as "
+    "description and are not measures. {failed} fall outside the 20-80% band a "
+    "column needs to tell ten notes per model apart."
+)
+
+#: Gate 7, said where a reader meets the numbers it licenses. Computed from the
+#: control payload rather than written, so a category that stops firing cannot
+#: leave a sentence behind saying it did.
+#:
+#: The last clause is the part that matters and it is the part that was got
+#: wrong. The gate first ran as a note-level question -- did the category appear
+#: anywhere in the clean note -- and read five of six as false alarms. The clean
+#: note is an ordinary therapy note, so it restates, quotes, describes speech and
+#: formulates, and five of the six are in it by construction. The verdict was
+#: about the stimulus, not the coders, and the number below is the unit-level one.
+CATEGORIES_CONTROL = (
+    "Gate 7 was run. One sentence was written for each category and planted in an "
+    "invented note, and {fired} of {total} were marked on the planted sentence by "
+    "both coders. Adding that one sentence changed {moved} of the {compared} "
+    "verdicts on the sentences around it, so a coder is reading one sentence at a "
+    "time rather than the note it sits in. The note the variants are built from is "
+    "an ordinary therapy note and carries five of the six categories itself, which "
+    "is why there is no note-level negative control here and why none of that is a "
+    "false alarm."
+)
+
+#: The overlap gate 7 found, printed because it is the one it was built to look
+#: for. `restatement` and `clinical_hypothesis` were written as near-mirrors --
+#: the same content, once reported and once interpreted -- and a category firing
+#: on both would mean the pair is not being separated.
+CATEGORIES_OVERLAP = (
+    "Two pairs share a planted sentence: {pairs}. Both are overlaps the codebook "
+    "declares, and the pair that had to stay apart did: nothing marked as "
+    "restatement was also marked as a clinical hypothesis."
 )
 
 CATEGORIES_CAVEAT = (
@@ -5269,7 +5301,60 @@ def _categories(rows: list[results.Row]) -> str:
             else ""
         )
         + split
+        + _planted_control()
     )
+
+
+def _planted_control() -> str:
+    """What gate 7 found, drawn once for both corpora because it is about neither.
+
+    Its stimulus is an invented note belonging to no session and no model, so
+    the answer is a fact about the instrument and would be the same sentence
+    printed twice if it went under each table.
+
+    Returns "" when the control has not been run. The chapter then says nothing
+    about gate 7 rather than saying it is unmeasured in a document whose tables
+    already print its verdict, and the graduation payload keeps its own NOT RUN.
+    """
+    payload = REPO / "local" / "czech-category-control.json"
+    if not payload.is_file():
+        return ""
+    data = json.loads(payload.read_text(encoding="utf-8")) or {}
+    verdicts = data.get("verdicts") or {}
+    stability = data.get("stability") or {}
+    if not verdicts or not stability:
+        return ""
+
+    fired = sum(1 for by in verdicts.values() if by and all(c["found_it"] for c in by.values()))
+    # The coder that moved most, not the average of the two: the claim is that
+    # no coder reads a sentence by its neighbours, and an average would let one
+    # that does hide behind one that does not.
+    worst = max(
+        (s for s in stability.values() if s.get("verdicts_compared")),
+        key=lambda s: s["verdicts_changed"],
+        default=None,
+    )
+    if worst is None:
+        return ""
+
+    labels = dict(CATEGORY_LABELS)
+    pairs = sorted(
+        {
+            " + ".join(sorted((_t(labels.get(name, name)), _t(labels.get(other, other)))))
+            for name, by in verdicts.items()
+            for coder in by.values()
+            for other in coder.get("also_fired_on_it", ())
+        }
+    )
+    said = _t(CATEGORIES_CONTROL).format(
+        fired=fired,
+        total=len(verdicts),
+        moved=worst["verdicts_changed"],
+        compared=worst["verdicts_compared"],
+    )
+    if pairs:
+        said += " " + _t(CATEGORIES_OVERLAP).format(pairs="; ".join(pairs))
+    return f"<p>{html.escape(said)}</p>"
 
 
 def _same_rubric_cutoff(groups: dict, newest: str) -> str:

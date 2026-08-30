@@ -1916,4 +1916,46 @@ CS: dict[str, str] = {
         "{high} na {low}, přičemž sloupec potřebuje 0,40 a trojnásobek podílu sezení. "
         "Je to míra skutečné půlky, a říct, že je to míra, by bylo víc, než se našlo."
     ),
+    (
+        "Only {passed} of the {total} passed the gates that decide whether a column is "
+        "possible: does it vary, does it belong to the model rather than the session, "
+        "do the coders agree, is its evidence real, is it separable from length, and "
+        "does it fire on a sentence written to carry it. The others are printed as "
+        "description and are not measures. {failed} fall outside the 20-80% band a "
+        "column needs to tell ten notes per model apart."
+    ): (
+        "Branami, které rozhodují, jestli je sloupec vůbec možný, prošlo jen {passed} z "
+        "{total}: kolísá to; patří to modelu, ne sezení; shodnou se kodéři; je ta "
+        "evidence skutečná; jde to oddělit od délky; a vystřelí to na větě napsané tak, "
+        "aby to nesla. Ostatní se tisknou jako popis a nejsou to míry. {failed} leží "
+        "mimo pásmo 20–80 %, které sloupec potřebuje, aby deset zápisů na model od sebe "
+        "odlišil."
+    ),
+    (
+        "Gate 7 was run. One sentence was written for each category and planted in an "
+        "invented note, and {fired} of {total} were marked on the planted sentence by "
+        "both coders. Adding that one sentence changed {moved} of the {compared} "
+        "verdicts on the sentences around it, so a coder is reading one sentence at a "
+        "time rather than the note it sits in. The note the variants are built from is "
+        "an ordinary therapy note and carries five of the six categories itself, which "
+        "is why there is no note-level negative control here and why none of that is a "
+        "false alarm."
+    ): (
+        "Brána 7 proběhla. Ke každé kategorii se napsala jedna věta a nastražila do "
+        "vymyšleného zápisu; {fired} z {total} kodéři na té nastražené větě označili "
+        "oba. Přidání té jediné věty změnilo {moved} z {compared} verdiktů na větách "
+        "kolem ní — kodér tedy čte jednu větu po druhé, ne zápis kolem ní. Zápis, ze "
+        "kterého varianty vznikly, je běžný terapeutický zápis a pět ze šesti kategorií "
+        "nese sám. Proto tady žádná negativní kontrola na úrovni zápisu být nemůže a "
+        "proto nic z toho není falešný poplach."
+    ),
+    (
+        "Two pairs share a planted sentence: {pairs}. Both are overlaps the codebook "
+        "declares, and the pair that had to stay apart did: nothing marked as "
+        "restatement was also marked as a clinical hypothesis."
+    ): (
+        "Dvě dvojice sdílejí nastraženou větu: {pairs}. Obojí je překryv, ke kterému se "
+        "codebook hlásí, a dvojice, která se rozejít musela, se rozešla: nic označeného "
+        "jako převyprávění nebylo zároveň označeno jako klinická hypotéza."
+    ),
 }
