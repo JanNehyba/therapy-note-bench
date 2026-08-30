@@ -72,6 +72,10 @@ ALLOWED_CZECH = {
     "tools/czech_brief_cs.py": "the Czech text of the briefing that goes to the team",
     "tests/fixtures/czech/real/999001.txt": "invented transcript, marked as such",
     "tests/fixtures/czech/translated/ukazka-b.txt": "invented transcript, marked as such",
+    "tools/czech_category_control.py": "one invented sentence per category, planted "
+    "in the invented clean note so gate 7 can ask whether a category fires on a note "
+    "built to carry it. Checked fragment by fragment against every transcript and "
+    "every coded span: none of them appears in real material",
     "tools/czech_code.py": "the two coder prompts, in the language of the notes "
     "they are asked about",
     "tools/czech_units.py": "the abbreviations a full stop does not end a sentence "

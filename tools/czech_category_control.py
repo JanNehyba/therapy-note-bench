@@ -68,7 +68,11 @@ PLANTED: dict[str, tuple[str, str]] = {
     ),
     "unsupported_observation": (
         "objective",
-        "Vzhled upravený, oční kontakt udržuje, tempo řeči mírně zrychlené, "
+        # `oční kontakt udržuje` was here and is not any more: it is a stock
+        # phrase, and it turned up in six coded spans of real model notes. A
+        # planted sentence has to share no wording with the corpus, or a coder
+        # could be recognising the corpus rather than the category.
+        "Vzhled upravený, pohled zvedá jen občas, tempo řeči mírně zrychlené, "
         "bez psychomotorického neklidu.",
     ),
     "verbal_expression": (
