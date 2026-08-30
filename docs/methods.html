@@ -86,11 +86,15 @@
     --s1: .25rem; --s2: .5rem;  --s3: .75rem; --s4: 1rem;
     --s5: 1.5rem; --s6: 2rem;   --s7: 3rem;   --s8: 4.5rem;
 
-    /* The column, and the frame the two wide things may fill. 42rem of serif
-       is about 78 characters; the old 58rem at 15px sans was about 120, which
-       is past the width at which a reader reliably finds the next line. */
-    --measure: 42rem;
-    --wide: 76rem;
+    /* The column IS the page. It was a 42rem column left-aligned inside a
+       76rem frame, which put every paragraph in the left half of the window
+       and left the right half empty -- the first thing anyone said about it
+       was that the text stops halfway across. Centring the page on the column
+       and letting only the table reach past it says the same thing without
+       the hole. */
+    --measure: 44rem;
+    --wide: 96rem;
+    --gutter: 1.5rem;
 
     --radius: 3px;
   }
@@ -110,7 +114,7 @@
 
   body {
     margin: 0;
-    padding: var(--s7) var(--s5) var(--s8);
+    padding: var(--s7) var(--gutter) var(--s8);
     background: var(--bg);
     color: var(--fg);
     font-family: var(--serif);
@@ -119,17 +123,17 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* The frame. Everything sits inside it; almost nothing fills it. */
-  main { max-width: var(--wide); margin: 0 auto; }
+  /* The page. Centred, and as wide as one column of prose: everything in it
+     fills it, so there is one left edge and one right edge and no block that
+     stops short of the others. */
+  main { max-width: var(--measure); margin: 0 auto; }
 
-  /* The column. Declared once and applied to every block of prose on both
-     pages, so that "where does a paragraph end" has one answer. The list is
-     long because the two templates are long -- but a selector missing from it
-     is a block that goes back to running the whole frame, which is the defect
-     this file was rewritten to remove. */
+  /* Every block fills the page and stops where the page stops. This was a
+     list of selectors each capped at its own measure inside a wider frame,
+     which is how the same sentence came to end in three different places. */
   p, ul, ol, dl, footer, h2, h3, h4, summary, figcaption, .legend, .design,
   .pair, .soap, .criteria, .switch, .controls, .track-head {
-    max-width: var(--measure);
+    max-width: 100%;
   }
 
   a { color: var(--accent); text-underline-offset: .15em; }
@@ -144,7 +148,7 @@
     font-size: var(--t-xl); line-height: 1.15; letter-spacing: -.015em;
     font-weight: 600; margin: 0 0 var(--s3);
   }
-  p.sub { color: var(--ink); margin: 0 0 var(--s6); max-width: var(--measure); }
+  p.sub { color: var(--ink); margin: 0 0 var(--s6); max-width: 100%; }
 
   /* The language switch. Deliberately quiet: it sits in the corner above the
      title, reads as two three-letter words, and never competes with the thing
@@ -198,7 +202,7 @@
   p.blurb {
     color: var(--ink);
     margin: 0 0 var(--s4);
-    max-width: var(--measure);
+    max-width: 100%;
   }
 
   /* --- prose ------------------------------------------------------------ */
@@ -238,10 +242,43 @@
 
   /* --- the wide two ----------------------------------------------------- */
 
-  /* The table and a figure are the only blocks that outgrow the column, and
-     they fill the frame rather than a width of their own. Their left edge is
-     the column's left edge, so a reader reads down one edge the whole page. */
-  .scroll, .scroll-top, figure.wide { max-width: none; width: 100%; }
+  /* The table and a figure are the only two blocks allowed past the page's
+     own width, and they reach out symmetrically on both sides of it rather
+     than growing to the right.
+
+     `100%` in a margin resolves against the parent, which is the page, so
+     `(wanted - 100%) / -2` is exactly the overhang, split in two. The extra
+     1.25rem subtracted from the viewport is the scrollbar: `100vw` counts it
+     and `clientWidth` does not, and without the allowance a wide table hands
+     the whole document a horizontal scrollbar of its own. Checked by
+     measurement at 390, 1440 and 1900: `scrollWidth === clientWidth`. */
+  .scroll, .scroll-top, figure.wide {
+    /* As wide as it needs and no wider. Sized to the content rather than to
+       the cap, because `width: <the cap>` stretched every small table to it
+       too -- the calibration table on the methods page has five columns, and
+       spreading five columns over 1216px is not a wide table, it is a sparse
+       one. */
+    width: max-content;
+    /* Never narrower than the page. A table sized purely to its content came
+       out at a different width on every panel of the methods page -- fourteen
+       tables, fourteen sets of edges, none of them lining up with the prose
+       above them or with each other. At `min-width: 100%` a small table is
+       exactly the column and sits inside the same two edges as every
+       paragraph; only a table that genuinely outgrows the column reaches
+       past it. */
+    min-width: 100%;
+    max-width: min(var(--wide), calc(100vw - 2 * var(--gutter) - 1.25rem));
+    /* Centred on the page without anyone having to know how wide it came out.
+       `margin-inline: auto` cannot do this -- an element wider than its parent
+       does not centre, it overflows to the right -- and a negative margin
+       would have to name the width, which is the thing we just stopped
+       naming. The 1.25rem above is the scrollbar: `100vw` counts it and
+       `clientWidth` does not, and without the allowance a wide table hands the
+       whole document a horizontal scrollbar of its own. */
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 
   .scroll { overflow-x: auto; }
   /* A sideways scrollbar sits under the table, which on a long table is a
@@ -257,7 +294,7 @@
   figure.wide { margin: var(--s5) 0 var(--s6); }
   figure.wide svg { display: block; max-width: 100%; height: auto; }
   figure.wide figcaption {
-    font-size: var(--t-sm); color: var(--muted); margin-top: var(--s2);
+    font-size: var(--t-sm); color: var(--muted); margin: var(--s2) auto 0;
     max-width: var(--measure);
   }
 
@@ -270,8 +307,8 @@
     /* `width: 100%` across seventeen columns makes the browser squeeze
        whatever will wrap, and what wraps is the model's name: rows came out
        one, two and three lines tall down the same table, which reads as a
-       broken table rather than as a wide one. It is as wide as its contents
-       and it scrolls. */
+       broken table rather than as a wide one. It is as wide as its contents,
+       and fills its container when the container is the wider of the two. */
     width: max-content; min-width: 100%;
   }
   th, td {
@@ -385,7 +422,15 @@
     letter-spacing: .07em; color: var(--muted); margin: 0 0 var(--s2);
     font-weight: 600;
   }
-  tr.detail table { margin-bottom: var(--s4); background: var(--bg); width: 100%; min-width: 0; }
+  tr.detail table { margin-bottom: var(--s4); background: var(--bg); width: 100%; }
+  /* The section breakdown inside an opened row is wrapped in a `.scroll` of
+     its own, and it must not take the breakout above: centring it on half of
+     its own cell would hang it off the side of the table it lives in. It is
+     four rows deep and fits its cell. */
+  tr.detail .scroll {
+    position: static; left: auto; transform: none;
+    width: 100%; max-width: 100%;
+  }
   tr.detail p.note { margin: var(--s3) 0; font-size: var(--t-md); }
   .grid {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
@@ -493,17 +538,19 @@
 
   /* Was a bordered panel of two-column rows, 928px wide, ending 19px to the
      right of every paragraph around it. It is a glossary: the term on its own
-     line, the definition under it in the column every other sentence uses, and
-     a hairline between entries. Two columns where there is room for two. */
+     line, the definition under it, and a hairline between entries.
+
+     One column, not two. It was set in `columns: 2` above 68rem, so on a wide
+     screen the page ran one column of prose everywhere and two here -- and
+     because the entries are of very different lengths, the two came out
+     ragged against each other. A reader asked why this one block was built
+     differently from the rest of the page, which is the whole answer. */
   dl.measures {
-    margin: var(--s5) 0 0; padding: 0; max-width: none;
-    column-gap: var(--s7);
+    margin: var(--s5) 0 0; padding: 0; max-width: 100%;
   }
-  @media (min-width: 68rem) { dl.measures { columns: 2; } }
   dl.measures .measure {
     break-inside: avoid; padding: var(--s3) 0;
     border-top: 1px solid var(--line);
-    max-width: var(--measure);
   }
   dl.measures dt {
     font-family: var(--sans); font-size: var(--t-sm); font-weight: 600;
@@ -533,7 +580,7 @@
   .methods-link {
     margin: var(--s6) 0; padding: var(--s2) 0 var(--s2) var(--s4);
     border-left: 2px solid var(--accent);
-    font-size: var(--t-md); color: var(--ink); max-width: var(--measure);
+    font-size: var(--t-md); color: var(--ink); max-width: 100%;
   }
   .methods-link a { font-weight: 600; }
 
@@ -645,14 +692,17 @@
   footer {
     color: var(--ink); font-size: var(--t-md); margin-top: var(--s8);
     padding-top: var(--s5); border-top: 1px solid var(--line);
-    max-width: var(--measure);
+    max-width: 100%;
   }
-  footer p { margin: 0 0 var(--s3); max-width: var(--measure); }
+  footer p { margin: 0 0 var(--s3); max-width: 100%; }
   footer strong { color: var(--fg); }
 
   @media (max-width: 48rem) {
-    :root { --t-xl: 1.625rem; --t-body: 1rem; }
-    body { padding: var(--s5) var(--s4) var(--s7); }
+    /* `--gutter` and not a literal: the breakout above subtracts the same
+       variable, and a padding changed here without it would push a wide table
+       past the edge of the screen. */
+    :root { --t-xl: 1.625rem; --t-body: 1rem; --gutter: 1rem; }
+    body { padding: var(--s5) var(--gutter) var(--s7); }
     .pick button { margin-right: var(--s3); }
   }
 </style>
