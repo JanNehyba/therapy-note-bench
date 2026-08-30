@@ -111,10 +111,51 @@ def test_gate_four_fails_a_coder_that_invents_its_evidence():
 
 
 def test_gate_seven_is_reported_as_not_run_rather_than_passed():
-    """No control note exists for these categories, and silence would read as a pass."""
+    """Without the control there is no verdict, and silence would read as a pass."""
     out = grad.grade("cat", {("m1", "s1"): 0.5}, None, {})
     assert out["gates"]["7_planted_control"]["passed"] is None
     assert "NOT RUN" in out["gates"]["7_planted_control"]["why"]
+
+
+def test_gate_seven_passes_only_when_every_coder_found_the_planted_instance():
+    control = {"cat": {"A": {"verdict": "found it"}, "B": {"verdict": "found it"}}}
+    out = grad.grade("cat", {("m1", "s1"): 0.5}, None, {}, control)
+    assert out["gates"]["7_planted_control"]["passed"] is True
+
+
+def test_gate_seven_fails_when_one_coder_missed_it():
+    """One coder is enough to fail it: the claim is about the category, not a vote."""
+    control = {"cat": {"A": {"verdict": "found it"}, "B": {"verdict": "missed it"}}}
+    out = grad.grade("cat", {("m1", "s1"): 0.5}, None, {}, control)
+    assert out["gates"]["7_planted_control"]["passed"] is False
+
+
+def test_gate_seven_fails_a_category_that_fires_on_the_clean_note():
+    """The worse failure of the two, and it must not be confusable with a pass.
+
+    A category that misses its planted instance measures nothing. One that
+    marks the note built WITHOUT it is producing a number from nothing, and
+    every share it ever contributed to is inflated by however often it does.
+    """
+    control = {"cat": {"A": {"verdict": "false alarm"}, "B": {"verdict": "found it"}}}
+    out = grad.grade("cat", {("m1", "s1"): 0.5}, None, {}, control)
+    assert out["gates"]["7_planted_control"]["passed"] is False
+
+
+def test_a_control_that_says_nothing_about_this_category_is_not_a_pass():
+    """The absence rule, at the one place a run could quietly skip a category."""
+    control = {"other": {"A": {"verdict": "found it"}}}
+    out = grad.grade("cat", {("m1", "s1"): 0.5}, None, {}, control)
+    assert out["gates"]["7_planted_control"]["passed"] is None
+    assert "NOT RUN" in out["gates"]["7_planted_control"]["why"]
+
+
+def test_the_control_verdict_reaches_the_decided_count():
+    """A gate that runs has to change the denominator, or running it changed nothing."""
+    control = {"cat": {"A": {"verdict": "found it"}, "B": {"verdict": "found it"}}}
+    without = grad.grade("cat", {("m1", "s1"): 0.5}, None, {})
+    with_it = grad.grade("cat", {("m1", "s1"): 0.5}, None, {}, control)
+    assert with_it["gates_decided"] == without["gates_decided"] + 1
 
 
 def test_an_undecided_gate_is_left_out_of_the_count_rather_than_assumed():

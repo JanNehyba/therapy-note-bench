@@ -33,6 +33,9 @@ DEFAULT_CODES = REPO / "local" / "czech-codes.jsonl"
 DEFAULT_RELIABILITY = REPO / "local" / "czech-reliability.json"
 DEFAULT_STRUCTURE = REPO / "local" / "czech-structure.json"
 DEFAULT_TARGET = REPO / "local" / "czech-graduation.json"
+#: Gate 7's answers. One file for every track: the stimulus is invented and
+#: belongs to no corpus, so there is nothing track-specific to key it on.
+DEFAULT_CONTROL = REPO / "local" / "czech-category-control.json"
 
 #: Every threshold, together, so that changing one is a visible act. All of them
 #: were written into the plan before the first coder ran.
@@ -233,11 +236,65 @@ def note_words(structure: dict, track: str) -> dict[tuple[str, str], float]:
     }
 
 
+def _planted_control(category: str, control: dict | None) -> dict:
+    """Gate 7, from `tools/czech_category_control.py` if it has been run.
+
+    **The gate is about the instrument, not about either corpus.** Its stimulus
+    is an invented note that belongs to no session and no model, so the same
+    answer applies to the real half and the translated one and this function is
+    handed the same file for both. That is why it takes no track.
+
+    Absent means unmeasured, and says so. The wording used to say no control
+    note had been written, which stopped being true the moment one was; a gate
+    that explains its own silence has to be told when the silence ends.
+    """
+    if not control:
+        return {
+            "value": None,
+            "passed": None,
+            "why": (
+                "NOT RUN. A note built to carry the feature must fire it and a note "
+                "built without it must not, under every coder. Reported as unmeasured "
+                "rather than assumed: `tools/czech_category_control.py` exists and has "
+                "not been run, or its output is not where this looked for it."
+            ),
+        }
+
+    by_coder = control.get(category) or {}
+    if not by_coder:
+        return {
+            "value": None,
+            "passed": None,
+            "why": (
+                f"NOT RUN for `{category}`. The control was run and this category is "
+                "not in its verdicts, so nothing is claimed about it either way."
+            ),
+        }
+
+    verdicts = {coder: found.get("verdict") for coder, found in by_coder.items()}
+    passed = bool(verdicts) and all(v == "found it" for v in verdicts.values())
+    said = ", ".join(f"{coder}: {verdict}" for coder, verdict in sorted(verdicts.items()))
+    return {
+        "value": said,
+        "passed": passed,
+        "why": (
+            f"A note built to carry `{category}` was put to every coder, and so was "
+            f"the clean note it was built from. {said}. A coder that misses the "
+            "planted instance is not answering the question its category asks; one "
+            "that fires on the clean note is producing a number from nothing, and "
+            "every share it contributed to is inflated by however often that "
+            "happens. A planted instance is unambiguous by construction and a real "
+            "one is not, so passing here is the floor and not the ceiling."
+        ),
+    }
+
+
 def grade(
     category: str,
     shares: dict[tuple[str, str], float],
     reliability: dict | None,
     words: dict[tuple[str, str], float],
+    control: dict | None = None,
 ) -> dict:
     present_rate = round(statistics.fmean(shares.values()), 4) if shares else None
     split = variance_split(shares)
@@ -346,16 +403,7 @@ def grade(
         ),
     }
 
-    checks["7_planted_control"] = {
-        "value": None,
-        "passed": None,
-        "why": (
-            "NOT RUN. A note built to carry the feature must fire it and a note "
-            "built without it must not, under every coder. Reported as unmeasured "
-            "rather than assumed: no control note has been written for these "
-            "categories."
-        ),
-    }
+    checks["7_planted_control"] = _planted_control(category, control)
 
     decided = [check for check in checks.values() if check["passed"] is not None]
     return {
@@ -388,6 +436,7 @@ def main() -> None:
     parser.add_argument("--structure", type=Path, default=DEFAULT_STRUCTURE)
     parser.add_argument("--track", default="czech-real")
     parser.add_argument("--target", type=Path, default=DEFAULT_TARGET)
+    parser.add_argument("--control", type=Path, default=DEFAULT_CONTROL)
     args = parser.parse_args()
 
     rows = load_rows(args.codes, track=args.track)
@@ -399,14 +448,20 @@ def main() -> None:
     )
     structure = json.loads(args.structure.read_text(encoding="utf-8"))
     words = note_words(structure, args.track)
+    control = (
+        json.loads(args.control.read_text(encoding="utf-8")).get("verdicts")
+        if args.control.is_file()
+        else None
+    )
 
     payload = {
         "caveat": CAVEAT,
         "gates": GATES,
         "track": args.track,
         "rows": len(rows),
+        "control": str(args.control.relative_to(REPO)) if control else None,
         "categories": {
-            category: grade(category, cells, reliability.get(category), words)
+            category: grade(category, cells, reliability.get(category), words, control)
             for category, cells in sorted(shares.items())
         },
         "by_model": per_model_counts(rows),
