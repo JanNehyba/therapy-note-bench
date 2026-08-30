@@ -252,6 +252,13 @@ _SENTENCES = {
         "tento hodnotitel byl vyzkoušen při kalibraci a není jedním ze dvou, ze kterých žebříček "
         "publikuje"
     ),
+    "References": "Literatura",
+    "How to cite this benchmark": "Jak citovat tento benchmark",
+    "A number quoted from these tables is a number from one judge at one setting &mdash; cite the"
+    " version, not just the link.": (
+        "Číslo citované z těchto tabulek je číslo od jednoho hodnotitele v jednom nastavení "
+        "&mdash; citujte verzi, ne jen odkaz."
+    ),
     "Band": "Pásmo",
     # The same thing said where a reader can read it. The tooltip above stays
     # for a mouse; this is the entry in the legend under the table, which is

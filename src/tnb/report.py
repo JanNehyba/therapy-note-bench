@@ -899,9 +899,27 @@ SECTION_ORDER = ("subjective", "objective", "assessment", "plan")
 #: Where every input comes from and what its terms are, checked repository by
 #: repository on 2026-08-24 rather than assumed. Published on the page because a
 #: reader deciding whether to reuse any of this needs it before the numbers.
+#: The published reference for each source, in APA form.
+#:
+#: Copied from `NOTICE`, which is where the check lives -- repository by
+#: repository, 2026-08-24 -- rather than written here from memory. Where NOTICE
+#: records "et al." this does too: a nineteen-name author list nobody in this
+#: checkout has verified is a fabrication however plausible it looks, and the
+#: rule this project holds itself to is that a source is asked, not assumed.
+#:
+#: Deliberately not in `PAYLOAD_FIELDS` in `tests/test_i18n.py`: a reference is
+#: quoted, not authored, and is the same in both languages -- like the rubric
+#: text, which is excluded there for the same reason.
 LICENCES = [
     {
         "source": "PDSQI-9",
+        "cite": (
+            "Croxford, E., Gao, Y., Pellegrino, N., et al. (2025). Development and "
+            "validation of the Provider Documentation Summarization Quality Instrument "
+            "for Large Language Models. arXiv:2501.08977. Adapted from the Physician "
+            "Documentation Quality Instrument: Stetson, P. D., Bakken, S., Wrenn, J. O., "
+            "& Siegler, E. L. (2012). Applied Clinical Informatics, PMC3347480."
+        ),
         "url": "https://arxiv.org/abs/2501.08977",
         "used_for": "the nine attributes and their anchors, eight of which are scored",
         "licence": "arXiv preprint",
@@ -912,6 +930,11 @@ LICENCES = [
     },
     {
         "source": "TN-Eval (code)",
+        "cite": (
+            "Shah, R. S., Xu, L., Liu, Q., Burnsky, J., Bertagnolli, D., & Shivade, C. "
+            "(2025). TN-Eval: Rubric and evaluation protocols for measuring the quality "
+            "of behavioral therapy notes. ACL 2025, Industry Track."
+        ),
         "url": "https://github.com/amazon-science/TN-Eval",
         "used_for": "SOAP prompt, the five scoring prompts, the 23-item rubric",
         "licence": "Apache-2.0",
@@ -919,6 +942,7 @@ LICENCES = [
     },
     {
         "source": "TN-Eval-Data",
+        "cite": "Described in the TN-Eval paper above; the data repository publishes none.",
         "url": "https://github.com/amazon-science/TN-Eval-Data",
         "used_for": "150 notes and the ratings of two human annotators",
         "licence": "none published",
@@ -930,6 +954,11 @@ LICENCES = [
     },
     {
         "source": "AnnoMI",
+        "cite": (
+            "Wu, Z., Balloccu, S., Kumar, V., Helaoui, R., Reiter, E., "
+            "Reforgiato Recupero, D., & Riboni, D. (2022). Anno-MI: A dataset of "
+            "expert-annotated counselling dialogues. ICASSP 2022."
+        ),
         "url": "https://github.com/uccollab/AnnoMI",
         "used_for": "the 133 transcripts, 50 of which are scored",
         "licence": "none published",
@@ -941,6 +970,13 @@ LICENCES = [
     },
     {
         "source": "iCARE",
+        "cite": (
+            "Adhikary, P. K., Singh, S., Singh, S., Sharma, P., Soni, P., Choudhary, R., "
+            "Saxena, C., Chauhan, P., Gupta, S. K., Deb, K. S., Singh, S. M., & "
+            "Chakraborty, T. (2026). Clinically grounded AI-scribing in psychotherapy: "
+            "Benchmarking LLMs against expert documentation in the iCARE framework. "
+            "medRxiv 2025.06.25.25330252 (v2)."
+        ),
         "url": "https://github.com/proadhikary/iCARE",
         "used_for": "the 17 section instructions",
         "licence": "none published",
@@ -951,6 +987,9 @@ LICENCES = [
     },
     {
         "source": "TheraFuse",
+        "cite": (
+            "No paper of its own. It carries the iHOPE corpus described in the iCARE paper above."
+        ),
         "url": "https://github.com/ai4mhx/TheraFuse",
         "used_for": "the iHOPE transcripts and expert notes",
         "licence": "MIT badge, no LICENSE file",

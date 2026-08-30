@@ -643,6 +643,17 @@
   ol.sections li { break-inside: avoid; }
   @media (max-width: 40rem) { ol.sections { columns: 1; } }
 
+  /* A reference list, set the way one is read: hanging indent, so the author
+     names are the only part flush left and the eye can run down them. */
+  ul.refs {
+    list-style: none; margin: var(--s3) 0 var(--s5); padding: 0;
+    font-size: var(--t-md); color: var(--ink);
+  }
+  ul.refs li {
+    padding-left: var(--s5); text-indent: calc(-1 * var(--s5));
+    margin-bottom: var(--s3); line-height: 1.5;
+  }
+
   ul.dominance {
     margin: var(--s2) 0 0; padding-left: var(--s4); font-size: var(--t-md);
     line-height: 1.7;

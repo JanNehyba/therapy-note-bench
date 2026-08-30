@@ -446,7 +446,20 @@ function renderLicences(data) {
     <div class="scroll"><table>
       <thead><tr><th>${T`Source`}</th><th>${T`Used for`}</th><th>${T`Licence`}</th><th></th></tr></thead>
       <tbody>${rows}</tbody>
-    </table></div>`;
+    </table></div>
+    <h3>${T`References`}</h3>
+    <ul class="refs">${data.licences.map(l =>
+      // The link last and spelled out, which is where APA puts it -- the short
+      // name trailing a full reference read as a word left behind.
+      `<li>${l.cite ? esc(l.cite) : ''} <a href="${l.url}">${
+        esc(l.url.replace(/^https?:\/\//, ''))}</a></li>`).join('')}</ul>
+    <h3>${T`How to cite this benchmark`}</h3>
+    <p>${T`A number quoted from these tables is a number from one judge at one setting &mdash;
+       cite the version, not just the link.`}</p>
+    <ul class="refs"><li>Nehyba, J. (2026). <em>therapy-note-bench: A reproducible benchmark of
+       LLM-written psychotherapy session notes</em> (Version ${
+       esc(DATA.harness_version || '')}) [Computer software].
+       <a href="https://github.com/JanNehyba/therapy-note-bench">github.com/JanNehyba/therapy-note-bench</a></li></ul>`;
 }
 
 renderTrackDesign(DATA);
