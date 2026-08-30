@@ -206,13 +206,11 @@ _SENTENCES = {
         'řádky označené <span class="chip">{0}</span> jsou <strong>vlastní systémy zdrojového '
         "článku</strong>, obodované tady, aby se tato tabulka dala číst proti té jejich"
     ),
-    "Not every row is a model under test: {0}. They sit in the ranking because they were"
-    " measured the same way, and a human note placing low says something about the measure"
-    " rather than about the clinician &mdash; the rubric counts what a note contains and cannot"
-    " see what a clinician chose to leave out.": (
-        "Ne každý řádek je testovaný model: {0}. V pořadí stojí proto, že byly změřeny stejně, "
-        "a nízko umístěný lidský zápis vypovídá spíš o měřítku než o klinikovi &mdash; rubrika "
-        "počítá, co zápis obsahuje, a nevidí, co se klinik rozhodl vynechat."
+    "Not every row is a model under test: {0}. Both are scored by the identical protocol, which"
+    " is why they sit in the ranking. A human note placing low is a fact about the measure, not"
+    " about the clinician.": (
+        "Ne každý řádek je testovaný model: {0}. Obojí je bodováno týmž protokolem, proto stojí "
+        "v pořadí. Nízko umístěný lidský zápis vypovídá o měřítku, ne o klinikovi."
     ),
     # Both keep their spaces: a key is trimmed on the way in and a value is not,
     # so a joiner has to carry its own. Czech puts no comma before "a".
@@ -650,18 +648,16 @@ _PAYLOAD = {
     # Keyed by the *formatted* English: `report.column_meta` fills `{criteria}`
     # from the rubric before the caveat reaches the payload, so 23 is in the key
     # the same way "temperature 0, max tokens 4096" is further down this file.
+    # The item count is interpolated in Python before the string reaches the
+    # payload, so the key carries `23` and not a hole.
     "Counts coverage of a checklist, not judgement. The denominator is the whole 23-item rubric"
     " on every note, whatever the session was about, so an item the session never called for"
-    " counts as absent exactly like one the note forgot -- a clinician who leaves out what does"
-    " not matter for the next session loses the same mark as a note that missed it. This is the"
-    " column the table is ordered by, so the caveat travels with the ranking: quote the number"
-    " with this sentence attached, or do not quote it.": (
+    " counts as absent exactly like one the note forgot. This is the column the table is"
+    " ordered by.": (
         "Počítá pokrytí seznamu položek, ne úsudek. Jmenovatelem je vždy celá rubrika o 23 "
         "položkách, ať bylo sezení o čemkoli, takže položka, kterou si sezení nikdy nevyžádalo, "
-        "se počítá jako chybějící úplně stejně jako ta, na kterou zápis zapomněl — klinik, který "
-        "vynechá to, co pro příští sezení není důležité, ztrácí stejný bod jako zápis, který to "
-        "přehlédl. Podle tohoto sloupce je tabulka seřazena, takže tato výhrada cestuje spolu "
-        "s pořadím: citujte to číslo i s touto větou, nebo je necitujte."
+        "se počítá jako chybějící stejně jako ta, na kterou zápis zapomněl. Podle tohoto "
+        "sloupce je tabulka seřazena."
     ),
     # The computed half of that caveat, authored in the leaderboard's script
     # because its two figures are read off the table the sentence is printed
@@ -681,14 +677,17 @@ _PAYLOAD = {
         "Podíl vět zápisu, které padnou aspoň na jednu položku rubriky. 1.00 znamená, že nic "
         "není mimo téma; neznamená to, že je zápis krátký."
     ),
-    "Not a length measure, despite the name: a note twice as long scores the same if every added"
-    " sentence is on topic. It is also the measure most moved by the judge's own settings --"
-    " raising the thinking budget from 128 to 256 tokens shifted all nineteen systems and"
-    " reordered sixteen of them.": (
+    "Not a length measure, despite the name: a note twice as long scores the same if every"
+    " added sentence is on topic. It is also the measure most moved by the judge's own settings"
+    " -- raising the thinking budget from 128 to 256 tokens shifted all nineteen systems and"
+    " reordered sixteen of them, measured on this benchmark's own rows at the two budgets, which"
+    " are in results/rows.jsonl and are drawn in no table above.": (
         "Navzdory jménu to není míra délky: dvakrát delší zápis boduje stejně, pokud je každá "
         "přidaná věta k tématu. Je to také míra, kterou nejvíc hýbe vlastní nastavení "
         "hodnotitele — zvednutí rozpočtu na přemýšlení ze 128 na 256 tokenů posunulo všech "
-        "devatenáct systémů a šestnácti z nich změnilo pořadí."
+        "devatenáct systémů a u šestnácti z nich změnilo pořadí; změřeno na vlastních řádcích "
+        "tohoto benchmarku při obou rozpočtech, které jsou v results/rows.jsonl a v žádné "
+        "tabulce výše se nekreslí."
     ),
     "Faithfulness": "Věrnost",
     "Whether the note contradicts the transcript, rated 1 to 5, where 5 is no inaccuracies."
@@ -698,12 +697,14 @@ _PAYLOAD = {
         "TN-Eval nemá verzi této otázky založenou na kritériích, takže zůstává Likertovou "
         "škálou."
     ),
-    "A different scale from the two columns beside it, and a weak one: TN-Eval measured"
-    " Krippendorff's alpha of 0.18 between trained therapists on this rating. Read it as a flag"
-    " for gross invention, not as a ranking.": (
-        "Jiná škála než u dvou sloupců vedle, a slabá: TN-Eval na tomto hodnocení naměřil mezi "
-        "školenými terapeuty Krippendorffovu alfu 0.18. Čtěte to jako signál hrubého výmyslu, "
-        "ne jako pořadí."
+    "A different scale from the two columns beside it, and a weak one: TN-Eval published"
+    " Krippendorff's alpha 0.18 between its two therapist annotators on this rating, and"
+    " recomputing it here from their released annotations gives the same. Read it as a flag for"
+    " gross invention, not as a ranking.": (
+        "Jiná škála než u dvou sloupců vedle, a slabá: TN-Eval zveřejnil mezi svými dvěma "
+        "terapeuty-anotátory na tomto hodnocení Krippendorffovu alfu 0.18 a přepočet zde "
+        "z jejich zveřejněných anotací dává totéž. Čtěte to jako signál hrubého výmyslu, ne "
+        "jako pořadí."
     ),
     # -- PDSQI-9 ---------------------------------------------------------------
     "Accurate": "Přesnost",
@@ -712,15 +713,16 @@ _PAYLOAD = {
         "Zápis je pravdivý a bez nesprávných informací. PDSQI-9, položka 2, hodnoceno 1 (vůbec) "
         "až 5 (zcela)."
     ),
-    "PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes,"
-    " and rates a summary of several earlier notes rather than a note written from one session."
-    " Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the"
-    " ceiling on what a judge can be asked for.": (
-        "PDSQI-9 byl validován na klinických souhrnech z korpusu, který psychiatrické zápisy "
-        "vylučoval, a hodnotí souhrn několika dřívějších zápisů, ne zápis psaný z jednoho "
-        "sezení. Školení lékaři se mezi sebou shodli na Krippendorffově alfě 0.575, což je "
-        "strop toho, co lze po hodnotiteli chtít."
+    "The instrument was validated on multi-note clinical summaries from a corpus that excluded"
+    " psychiatry, not on notes written from a single session. Its authors report Krippendorff's"
+    " alpha 0.575 between trained physicians on that material -- a published ceiling, not a"
+    " measurement of this judge on these notes.": (
+        "Nástroj byl validován na klinických souhrnech z několika zápisů, z korpusu, který "
+        "psychiatrii vylučoval, ne na zápisech z jednoho sezení. Jeho autoři uvádějí mezi "
+        "školenými lékaři na tomto materiálu Krippendorffovu alfu 0.575 — je to publikovaný "
+        "strop, ne měření tohoto hodnotitele na těchto zápisech."
     ),
+    "{0} columns": "Sloupce {0}",
     "Thorough": "Důkladnost",
     "The note should thoroughly cover all critical patient issues. PDSQI-9 item 3, rated 1 (not"
     " at all) to 5 (extremely).": (

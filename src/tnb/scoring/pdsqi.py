@@ -282,11 +282,14 @@ ATTRIBUTE_KEYS: tuple[str, ...] = tuple(a.key for a in ATTRIBUTES)
 NOTE_ONLY_KEYS: tuple[str, ...] = tuple(a.key for a in ATTRIBUTES if not a.needs_transcript)
 NEEDS_TRANSCRIPT_KEYS: tuple[str, ...] = tuple(a.key for a in ATTRIBUTES if a.needs_transcript)
 
+#: Printed once for the whole instrument, not once per column: it is a property
+#: of PDSQI-9 and not of any one attribute, and the leaderboard was printing it
+#: under all eight of them. The page groups it by `instrument`.
 _CAVEAT = (
-    "PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry "
-    "notes, and rates a summary of several earlier notes rather than a note written from "
-    "one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, "
-    "which is the ceiling on what a judge can be asked for."
+    "The instrument was validated on multi-note clinical summaries from a corpus that "
+    "excluded psychiatry, not on notes written from a single session. Its authors report "
+    "Krippendorff's alpha 0.575 between trained physicians on that material -- a published "
+    "ceiling, not a measurement of this judge on these notes."
 )
 
 MEASURES: dict[str, dict[str, str]] = {

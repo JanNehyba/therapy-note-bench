@@ -1990,9 +1990,23 @@ def render_readme_section(data: dict) -> str:
             else "*Deliberately not ranked: these columns measure different things and "
             "the source paper found they disagree.*"
         )
+        # A caveat every column of one instrument shares is that instrument's,
+        # not the column's. PDSQI-9's 47 words were repeated under all eight of
+        # its columns here, exactly as they were on the page. Said once, in the
+        # same place and by the same rule, so the two views agree.
+        shared: dict[str, str] = {}
+        for name in {c["instrument"] for c in columns if c.get("instrument") and c["caveat"]}:
+            same = [c["caveat"] for c in columns if c.get("instrument") == name and c["caveat"]]
+            if len(same) > 1 and len(set(same)) == 1:
+                shared[name] = same[0]
+        said: set[str] = set()
         for column in columns:
+            instrument = column.get("instrument") or ""
+            if instrument in shared and instrument not in said:
+                said.add(instrument)
+                lines.append(f"- **{instrument} columns** — {shared[instrument]}")
             note = f"**{column['label']}** ({column['scale']}) — {column['definition']}"
-            if column["caveat"]:
+            if column["caveat"] and shared.get(instrument) != column["caveat"]:
                 note += f" {column['caveat']}"
             lines.append(f"- {note}")
         blocks.append("\n".join(lines))

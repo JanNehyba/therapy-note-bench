@@ -59,11 +59,8 @@ MEASURES: dict[str, dict[str, str]] = {
             "Counts coverage of a checklist, not judgement. The denominator is "
             "the whole {criteria}-item rubric on every note, whatever the "
             "session was about, so an item the session never called for counts "
-            "as absent exactly like one the note forgot -- a clinician who "
-            "leaves out what does not matter for the next session loses the "
-            "same mark as a note that missed it. This is the column the table "
-            "is ordered by, so the caveat travels with the ranking: quote the "
-            "number with this sentence attached, or do not quote it."
+            "as absent exactly like one the note forgot. This is the column the "
+            "table is ordered by."
         ),
     },
     "conciseness": {
@@ -78,7 +75,9 @@ MEASURES: dict[str, dict[str, str]] = {
             "the same if every added sentence is on topic. It is also the measure "
             "most moved by the judge's own settings -- raising the thinking "
             "budget from 128 to 256 tokens shifted all nineteen systems and "
-            "reordered sixteen of them."
+            "reordered sixteen of them, measured on this benchmark's own rows "
+            "at the two budgets, which are in results/rows.jsonl and are drawn "
+            "in no table above."
         ),
     },
     "faithfulness": {
@@ -91,9 +90,10 @@ MEASURES: dict[str, dict[str, str]] = {
         ),
         "caveat": (
             "A different scale from the two columns beside it, and a weak one: "
-            "TN-Eval measured Krippendorff's alpha of 0.18 between trained "
-            "therapists on this rating. Read it as a flag for gross invention, "
-            "not as a ranking."
+            "TN-Eval published Krippendorff's alpha 0.18 between its two "
+            "therapist annotators on this rating, and recomputing it here from "
+            "their released annotations gives the same. Read it as a flag for "
+            "gross invention, not as a ranking."
         ),
     },
     "likert_completeness": {

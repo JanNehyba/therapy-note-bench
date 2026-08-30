@@ -344,11 +344,12 @@ function referenceNote(table) {
       <strong>source paper&rsquo;s own systems</strong>, scored here so this table can be
       read against theirs`);
   }
+  // The tail used to restate the Completeness caveat printed a few centimetres
+  // below it -- "the rubric counts what a note contains and cannot see what a
+  // clinician chose to leave out" is the same sentence as the denominator note.
   return `<p class="note">${T`Not every row is a model under test: ${parts.join(T`, and `)}.
-    They sit in the ranking because they were measured the same way, and a human
-    note placing low says something about the measure rather than about the
-    clinician &mdash; the rubric counts what a note contains and cannot see what a
-    clinician chose to leave out.`}</p>`;
+    Both are scored by the identical protocol, which is why they sit in the ranking. A
+    human note placing low is a fact about the measure, not about the clinician.`}</p>`;
 }
 
 // What the completeness denominator does to the numbers, read off the table it
@@ -497,13 +498,39 @@ function renderTable(table, index) {
     `${esc(tr(c.label))}` +
     `<span class="scale">${esc(c.scale)}</span>` +
     `</th>`).join('');
-  const legend = (table.groups ? bandLegend(table) : '') + table.columns.map(c =>
-    `<div class="measure"><dt>${esc(tr(c.label))} <span class="scale">${esc(c.scale)}</span>` +
-    (c.ranking ? `<span class="ranks">${T`ranks this table`}</span>` : '') +
-    `</dt><dd>${esc(tr(c.definition))}` +
-    (c.caveat ? ` <em>${esc(tr(c.caveat))}</em>` : '') +
-    (c.key === 'completeness' ? denominatorNote(table) : '') + `</dd></div>`).join('')
-    + extraLegend(table);
+  // A caveat that belongs to the instrument rather than to the column was
+  // printed under every column that instrument owns: PDSQI-9's 47 words, eight
+  // times, in one legend -- 376 words saying one thing. Where every column of
+  // an instrument carries the identical caveat it is said once, above the first
+  // of them, under the instrument's own name. Found from the data rather than
+  // listed here, so a second instrument that does the same is handled too and a
+  // caveat that stops being shared goes back to its column by itself.
+  const byInstrument = {};
+  table.columns.forEach(c => {
+    if (!c.caveat || !c.instrument) return;
+    (byInstrument[c.instrument] = byInstrument[c.instrument] || []).push(c.caveat);
+  });
+  const shared = {};
+  Object.keys(byInstrument).forEach(name => {
+    const all = byInstrument[name];
+    if (all.length > 1 && all.every(one => one === all[0])) shared[name] = all[0];
+  });
+  const said = {};
+  const legend = (table.groups ? bandLegend(table) : '') + table.columns.map(c => {
+    let head = '';
+    if (shared[c.instrument] && !said[c.instrument]) {
+      said[c.instrument] = true;
+      head = `<div class="measure"><dt>${T`${esc(c.instrument)} columns`}</dt><dd>${
+        esc(tr(shared[c.instrument]))}</dd></div>`;
+    }
+    return head +
+      `<div class="measure"><dt>${esc(tr(c.label))} <span class="scale">${esc(c.scale)}</span>` +
+      (c.ranking ? `<span class="ranks">${T`ranks this table`}</span>` : '') +
+      `</dt><dd>${esc(tr(c.definition))}` +
+      (c.caveat && shared[c.instrument] !== c.caveat
+        ? ` <em>${esc(tr(c.caveat))}</em>` : '') +
+      (c.key === 'completeness' ? denominatorNote(table) : '') + `</dd></div>`;
+  }).join('') + extraLegend(table);
   // Said under the table either way. A table with no grouping measured must not
   // read as a strict ranking just because nobody has checked.
   const groupNote = table.groups

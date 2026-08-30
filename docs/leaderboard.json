@@ -4104,7 +4104,7 @@
       "blurb": "The first three columns count what a note contains — TN-Eval's rubric. The other eight rate how it is written — PDSQI-9. **Nothing is averaged across them**: different questions on different scales, and neither instrument publishes a total either.",
       "columns": [
         {
-          "caveat": "Counts coverage of a checklist, not judgement. The denominator is the whole 23-item rubric on every note, whatever the session was about, so an item the session never called for counts as absent exactly like one the note forgot -- a clinician who leaves out what does not matter for the next session loses the same mark as a note that missed it. This is the column the table is ordered by, so the caveat travels with the ranking: quote the number with this sentence attached, or do not quote it.",
+          "caveat": "Counts coverage of a checklist, not judgement. The denominator is the whole 23-item rubric on every note, whatever the session was about, so an item the session never called for counts as absent exactly like one the note forgot. This is the column the table is ordered by.",
           "definition": "Fraction of the section's rubric criteria the judge found present. 0.50 means half of that section's rubric items were found in the note.",
           "digits": 3,
           "instrument": "TN-Eval rubric",
@@ -4114,7 +4114,7 @@
           "scale": "0-1"
         },
         {
-          "caveat": "Not a length measure, despite the name: a note twice as long scores the same if every added sentence is on topic. It is also the measure most moved by the judge's own settings -- raising the thinking budget from 128 to 256 tokens shifted all nineteen systems and reordered sixteen of them.",
+          "caveat": "Not a length measure, despite the name: a note twice as long scores the same if every added sentence is on topic. It is also the measure most moved by the judge's own settings -- raising the thinking budget from 128 to 256 tokens shifted all nineteen systems and reordered sixteen of them, measured on this benchmark's own rows at the two budgets, which are in results/rows.jsonl and are drawn in no table above.",
           "definition": "Fraction of the note's sentences that fit at least one rubric item. 1.00 means nothing is off-topic; it does not mean the note is short.",
           "digits": 3,
           "instrument": "TN-Eval rubric",
@@ -4124,7 +4124,7 @@
           "scale": "0-1"
         },
         {
-          "caveat": "A different scale from the two columns beside it, and a weak one: TN-Eval measured Krippendorff's alpha of 0.18 between trained therapists on this rating. Read it as a flag for gross invention, not as a ranking.",
+          "caveat": "A different scale from the two columns beside it, and a weak one: TN-Eval published Krippendorff's alpha 0.18 between its two therapist annotators on this rating, and recomputing it here from their released annotations gives the same. Read it as a flag for gross invention, not as a ranking.",
           "definition": "Whether the note contradicts the transcript, rated 1 to 5, where 5 is no inaccuracies. TN-Eval's protocol has no criterion-based version of this one, so it stays a Likert scale.",
           "digits": 2,
           "instrument": "TN-Eval rubric",
@@ -4134,7 +4134,7 @@
           "scale": "1-5"
         },
         {
-          "caveat": "PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes.",
           "definition": "The note is true and free of incorrect information. PDSQI-9 item 2, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
@@ -4144,7 +4144,7 @@
           "scale": "1-5"
         },
         {
-          "caveat": "PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes.",
           "definition": "The note should thoroughly cover all critical patient issues. PDSQI-9 item 3, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
@@ -4154,7 +4154,7 @@
           "scale": "1-5"
         },
         {
-          "caveat": "PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes.",
           "definition": "All the information is in there that is useful to the target provider/intended audience. The note is extremely relevant, providing valuable information and/or analysis. PDSQI-9 item 4, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
@@ -4164,7 +4164,7 @@
           "scale": "1-5"
         },
         {
-          "caveat": "PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes.",
           "definition": "The note is well-formed and structured in a way that helps the reader understand the patient's clinical course. PDSQI-9 item 5, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
@@ -4174,7 +4174,7 @@
           "scale": "1-5"
         },
         {
-          "caveat": "PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes.",
           "definition": "The note is clear, without ambiguity or sections that are difficult to understand. PDSQI-9 item 6, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
@@ -4184,7 +4184,7 @@
           "scale": "1-5"
         },
         {
-          "caveat": "PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes.",
           "definition": "The note is brief, to the point, and without redundancy. PDSQI-9 item 7, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
@@ -4194,7 +4194,7 @@
           "scale": "1-5"
         },
         {
-          "caveat": "PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes.",
           "definition": "The note reflects an understanding of the patient's status and ability to develop a plan of care. PDSQI-9 item 8, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
@@ -4204,7 +4204,7 @@
           "scale": "1-5"
         },
         {
-          "caveat": "PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes.",
           "definition": "The note is free of discrediting or exaggerated words, of judgment or labelling, and uses person-first language. PDSQI-9 item 9, answered yes or no and reported as the fraction of notes free of it.",
           "digits": 3,
           "instrument": "PDSQI-9",
@@ -6196,7 +6196,7 @@
       "blurb": "The first three columns count what a note contains — TN-Eval's rubric. The other eight rate how it is written — PDSQI-9. **Nothing is averaged across them**: different questions on different scales, and neither instrument publishes a total either.",
       "columns": [
         {
-          "caveat": "Counts coverage of a checklist, not judgement. The denominator is the whole 23-item rubric on every note, whatever the session was about, so an item the session never called for counts as absent exactly like one the note forgot -- a clinician who leaves out what does not matter for the next session loses the same mark as a note that missed it. This is the column the table is ordered by, so the caveat travels with the ranking: quote the number with this sentence attached, or do not quote it.",
+          "caveat": "Counts coverage of a checklist, not judgement. The denominator is the whole 23-item rubric on every note, whatever the session was about, so an item the session never called for counts as absent exactly like one the note forgot. This is the column the table is ordered by.",
           "definition": "Fraction of the section's rubric criteria the judge found present. 0.50 means half of that section's rubric items were found in the note.",
           "digits": 3,
           "instrument": "TN-Eval rubric",
@@ -6206,7 +6206,7 @@
           "scale": "0-1"
         },
         {
-          "caveat": "Not a length measure, despite the name: a note twice as long scores the same if every added sentence is on topic. It is also the measure most moved by the judge's own settings -- raising the thinking budget from 128 to 256 tokens shifted all nineteen systems and reordered sixteen of them.",
+          "caveat": "Not a length measure, despite the name: a note twice as long scores the same if every added sentence is on topic. It is also the measure most moved by the judge's own settings -- raising the thinking budget from 128 to 256 tokens shifted all nineteen systems and reordered sixteen of them, measured on this benchmark's own rows at the two budgets, which are in results/rows.jsonl and are drawn in no table above.",
           "definition": "Fraction of the note's sentences that fit at least one rubric item. 1.00 means nothing is off-topic; it does not mean the note is short.",
           "digits": 3,
           "instrument": "TN-Eval rubric",
@@ -6216,7 +6216,7 @@
           "scale": "0-1"
         },
         {
-          "caveat": "A different scale from the two columns beside it, and a weak one: TN-Eval measured Krippendorff's alpha of 0.18 between trained therapists on this rating. Read it as a flag for gross invention, not as a ranking.",
+          "caveat": "A different scale from the two columns beside it, and a weak one: TN-Eval published Krippendorff's alpha 0.18 between its two therapist annotators on this rating, and recomputing it here from their released annotations gives the same. Read it as a flag for gross invention, not as a ranking.",
           "definition": "Whether the note contradicts the transcript, rated 1 to 5, where 5 is no inaccuracies. TN-Eval's protocol has no criterion-based version of this one, so it stays a Likert scale.",
           "digits": 2,
           "instrument": "TN-Eval rubric",
@@ -6226,7 +6226,7 @@
           "scale": "1-5"
         },
         {
-          "caveat": "PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes.",
           "definition": "The note is true and free of incorrect information. PDSQI-9 item 2, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
@@ -6236,7 +6236,7 @@
           "scale": "1-5"
         },
         {
-          "caveat": "PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes.",
           "definition": "The note should thoroughly cover all critical patient issues. PDSQI-9 item 3, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
@@ -6246,7 +6246,7 @@
           "scale": "1-5"
         },
         {
-          "caveat": "PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes.",
           "definition": "All the information is in there that is useful to the target provider/intended audience. The note is extremely relevant, providing valuable information and/or analysis. PDSQI-9 item 4, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
@@ -6256,7 +6256,7 @@
           "scale": "1-5"
         },
         {
-          "caveat": "PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes.",
           "definition": "The note is well-formed and structured in a way that helps the reader understand the patient's clinical course. PDSQI-9 item 5, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
@@ -6266,7 +6266,7 @@
           "scale": "1-5"
         },
         {
-          "caveat": "PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes.",
           "definition": "The note is clear, without ambiguity or sections that are difficult to understand. PDSQI-9 item 6, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
@@ -6276,7 +6276,7 @@
           "scale": "1-5"
         },
         {
-          "caveat": "PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes.",
           "definition": "The note is brief, to the point, and without redundancy. PDSQI-9 item 7, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
@@ -6286,7 +6286,7 @@
           "scale": "1-5"
         },
         {
-          "caveat": "PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes.",
           "definition": "The note reflects an understanding of the patient's status and ability to develop a plan of care. PDSQI-9 item 8, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
@@ -6296,7 +6296,7 @@
           "scale": "1-5"
         },
         {
-          "caveat": "PDSQI-9 was validated on clinical summaries from a corpus that excluded psychiatry notes, and rates a summary of several earlier notes rather than a note written from one session. Trained physicians agreed with each other at Krippendorff's alpha 0.575, which is the ceiling on what a judge can be asked for.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes.",
           "definition": "The note is free of discrediting or exaggerated words, of judgment or labelling, and uses person-first language. PDSQI-9 item 9, answered yes or no and reported as the fraction of notes free of it.",
           "digits": 3,
           "instrument": "PDSQI-9",
