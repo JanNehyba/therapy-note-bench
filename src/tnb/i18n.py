@@ -103,12 +103,13 @@ _STATIC = {
     "scored up to <code>{0}</code>": "obodováno nejpozději <code>{0}</code>",
     "page.foot.notes": (
         "<strong>Zápisy</strong> počítají, kolik zápisů dokázal protokol vůbec přečíst. Model, "
-        "který napíše dobrý zápis ve špatném tvaru, ztrácí zápisy na formátu, ne na klinickém "
+        "který napíše dobrý zápis ve špatném tvaru, přichází o zápisy kvůli formátu, ne kvůli "
         "obsahu — přečtěte si ten počet dřív, než začnete srovnávat skóre."
     ),
     "page.foot.provider": (
-        "Štítek za názvem modelu je <strong>poskytovatel</strong>, který ho obsluhoval. Stejné "
-        "id modelu u dvou poskytovatelů mohou být dvě různá sestavení — jiná kvantizace, jiné "
+        "Předposlední sloupec je <strong>poskytovatel</strong>, který model obsluhoval. Totéž "
+        "id modelu u dvou poskytovatelů může znamenat dvě různá sestavení — jiná kvantizace, "
+        "jiné "
         "váhy, jiný systémový prompt — proto jsou to tady vždy dva řádky, nikdy jeden."
     ),
     "page.foot.comparability": (
@@ -308,7 +309,7 @@ _SENTENCES = {
         "obodováno hodnotitelem od téhož dodavatele; jak moc nadržuje sám sobě, je změřeno "
         "na stránce s metodikou"
     ),
-    "judge's own {0}": "hodnotitelova vlastní {0}",
+    "judge's own {0}": "stejný dodavatel jako hodnotitel: {0}",
     "ranks this table": "řadí tuto tabulku",
     # -- the sentences under the grid ----------------------------------------
     # "Band" in the heading and "rank" in the sentence under it were one concept
@@ -382,7 +383,8 @@ _SENTENCES = {
     " sort: these are labels, not an order.": (
         "Řádek se značkou ≠ nastavení běžel za podmínek, které zbytek tabulky neměl, a samotné "
         "nastavení je v detailu toho řádku, jedno klepnutí pod ním. Řádek se značkou "
-        "hodnotitelova vlastní obodoval hodnotitel od téhož dodavatele, jako je model, který "
+        "stejný dodavatel jako hodnotitel znamená, že řádek obodoval hodnotitel od téhož "
+        "dodavatele, jako je model, který "
         "známkoval; kolik to vydá, je změřeno na stránce s metodikou. Stejně jako u Pásma není "
         "u tohoto záhlaví ↕ a neřadí se podle něj: jsou to štítky, ne pořadí."
     ),
@@ -465,7 +467,7 @@ _SENTENCES = {
     " rate how it is written — PDSQI-9. **Nothing is averaged across them**: different"
     " questions on different scales, and neither instrument publishes a total either.": (
         "První tři sloupce počítají, co zápis obsahuje — rubrika TN-Eval. Dalších osm "
-        "hodnotí, jak je napsaný — PDSQI-9. **Nic se přes ně neprůměruje**: jsou to jiné "
+        "hodnotí, jak je napsaný — PDSQI-9. **Žádný souhrn se z nich nepočítá**: jsou to jiné "
         "otázky na jiných škálách a ani jeden nástroj sám žádný souhrn nezveřejňuje."
     ),
     "This track is deliberately <strong>not ranked</strong>: its columns measure different things"
@@ -690,7 +692,7 @@ _PAYLOAD = {
     "Conciseness": "Stručnost",
     "Fraction of the note's sentences that fit at least one rubric item. 1.00 means nothing is"
     " off-topic; it does not mean the note is short.": (
-        "Podíl vět zápisu, které padnou aspoň na jednu položku rubriky. 1.00 znamená, že nic "
+        "Podíl vět zápisu, které odpovídají aspoň jedné položce rubriky. 1.00 znamená, že nic "
         "není mimo téma; neznamená to, že je zápis krátký."
     ),
     "Not a length measure, despite the name: a note twice as long scores the same if every"
@@ -749,7 +751,8 @@ _PAYLOAD = {
     "All the information is in there that is useful to the target provider/intended audience. The"
     " note is extremely relevant, providing valuable information and/or analysis. PDSQI-9 item 4,"
     " rated 1 (not at all) to 5 (extremely).": (
-        "Je v něm všechna informace, která je užitečná cílovému poskytovateli péče / zamýšlenému "
+        "Zápis obsahuje všechny informace, které jsou užitečné cílovému poskytovateli péče / "
+        "zamýšlenému "
         "čtenáři. Zápis je krajně relevantní a přináší cennou informaci a/nebo analýzu. "
         "PDSQI-9, položka 4, hodnoceno 1 (vůbec) až 5 (zcela)."
     ),
@@ -927,8 +930,9 @@ _METHODS = {
         'nesmí číst, stojí pod jeho vlastní tabulkou na <a href="index.html">žebříčku</a>.'
     ),
     "methods.foot.provider": (
-        "Štítek za názvem modelu je <strong>poskytovatel</strong>, který ho obsluhoval. Stejné "
-        "id modelu u dvou poskytovatelů mohou být dvě různá sestavení — jiná kvantizace, jiné "
+        "Štítek za názvem modelu je <strong>poskytovatel</strong>, který ho obsluhoval. Totéž "
+        "id modelu u dvou poskytovatelů může znamenat dvě různá sestavení — jiná kvantizace, "
+        "jiné "
         "váhy, jiný systémový prompt — proto jsou tam vždy dva řádky, nikdy jeden."
     ),
     "methods.foot.comparability": (
@@ -1168,7 +1172,7 @@ _METHODS = {
     "The judge does <strong>not</strong> reproduce TN-Eval's finding that criterion checklists"
     " agree better than 1–5 scales{0}. Reported rather than explained away.": (
         "Hodnotitel <strong>nereprodukuje</strong> zjištění TN-Eval, že se seznamy kritérií "
-        "shodují lépe než škály 1–5{0}. Vykázáno, ne vysvětleno pryč."
+        "shodují lépe než škály 1–5{0}. Uvedeno, ne zamlčeno."
     ),
     "The two instruments <strong>cannot be separated</strong> here{0}, so this run neither"
     " reproduces nor contradicts TN-Eval's finding. Reported as undecided rather than rounded"
@@ -1206,7 +1210,7 @@ _METHODS = {
         "a Spearman na škálu 1–5, takže se každá míra vykazuje pod tou, kterou čtenář čeká. Jsou "
         "to dvě různé veličiny a nerovnost mezi nimi neznamená nic, takže srovnání níže stojí na "
         "<strong>Krippendorffově alfě</strong> — definované pro obojí, nominální pro rubriku "
-        "a ordinální pro škály, a je to ta statistika, kterou k tomu zjištění došel sám TN-Eval."
+        "a ordinální pro škály. Je to táž statistika, jakou k tomu zjištění došel sám TN-Eval."
     ),
     "Whose notes the judge was checked on": "Na čích zápisech byl hodnotitel ověřen",
     "Human ratings exist for {0} systems and no others: {1}. <strong>No human has read a note"
@@ -1273,7 +1277,7 @@ _METHODS = {
     "Do the two judges agree?": "Shodnou se ti dva hodnotitelé?",
     "{0} of {1} systems print the same number, so this measure does not order them and there is"
     " no agreement to report": (
-        "{0} z {1} systémů tiskne totéž číslo, takže je tato míra neseřadí a není co vykazovat "
+        "u {0} z {1} systémů vychází totéž číslo, takže je tato míra neseřadí a není co uvádět "
         "jako shodu"
     ),
     "{0} of {1}": "{0} z {1}",
@@ -1419,7 +1423,8 @@ _METHODS = {
     " same as a value of the other. That is a limit of comparing judges from two vendors, not a"
     " gap in this run.": (
         "Každý kandidát daného druhu byl změřen při jednom nastavení. Napříč druhy nic takového "
-        "neexistuje: rozpočet na přemýšlení a míra uvažování jsou různé ovladače a žádná hodnota "
+        "neexistuje: rozpočet na přemýšlení a míra uvažování jsou dva různé parametry a žádná "
+        "hodnota "
         "jednoho není totéž co hodnota druhého. To je mez srovnávání hodnotitelů od dvou "
         "dodavatelů, ne mezera v tomto běhu."
     ),

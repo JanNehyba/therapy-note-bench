@@ -755,7 +755,7 @@ function renderConcordance(all) {
       : `<p class="note">${T`No system beats another on every measure under both judges.`}</p>`;
 
     return `${tracks.length > 1
-        ? `<h3 class="track-head">${esc(c.track_label || track)}</h3>`
+        ? `<h3 class="track-head">${esc(tr(c.track_label || track))}</h3>`
         : ''}
       ${englishNote(c.summary)}
       <p class="blurb" lang="${summaryLang(c.summary)}">${code(tr(c.summary))}</p>
@@ -770,7 +770,7 @@ function renderConcordance(all) {
          <code>${c.judge_b}</code>'s, over the ${c.n_systems} systems both have scored.
          Scores that print the same are treated as tied rather than ordered by a digit
          the table does not show. Only measures a judge decides are compared here:
-         ${c.judge_measures.map(m => `<code>${m}</code>`).join(', ')}. The rest are
+         ${c.judge_measures.map(m => `<code>${tr(m)}</code>`).join(', ')}. The rest are
          computed from the note and the expert note, so they are identical under every
          judge and agreeing about them would say nothing.`}</p>
       ${c.tensions.length ? `<h3>${T`Do the columns agree with each other?`}</h3>
@@ -938,9 +938,9 @@ function whereTheCeilingIsCleared(data, measures, ceiling) {
   if (!cleared.length && !none.length) return '';
   return `<p class="note">
     ${cleared.length ? T`Every judge clears the human ceiling on
-      ${cleared.map(m => `<code>${m}</code>`).join(', ')}.` : ''}
+      ${cleared.map(m => `<code>${tr(m)}</code>`).join(', ')}.` : ''}
     ${none.length ? ' ' + T`None of them does on
-      ${none.map(m => `<code>${m}</code>`).join(', ')}, which is why those columns carry the
+      ${none.map(m => `<code>${tr(m)}</code>`).join(', ')}, which is why those columns carry the
       caveat they do in every table above — the two therapists barely agree there either.` : ''}
     </p>`;
 }
