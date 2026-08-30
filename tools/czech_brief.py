@@ -51,6 +51,7 @@ REPO = Path(__file__).resolve().parent.parent
 DEFAULT_SOURCE = REPO / "local" / "czech-rows.jsonl"
 DEFAULT_TARGET = REPO / "local" / "czech-brief.html"
 
+
 #: The language the document is written in for this run. A module-level switch
 #: rather than a parameter threaded through fifteen functions: every one of them
 #: renders prose, and the alternative is fifteen signatures that exist to carry
@@ -5008,8 +5009,8 @@ CATEGORIES_CAVEAT = (
 )
 
 CATEGORIES_SOURCE = (
-    "Source: local/czech-graduation.json, from local/czech-codes.jsonl. Coders "
-    "gemini-3.1-pro-preview and deepseek-v4-flash, prompt czech-open-v1, "
+    "Source: local/czech-graduation-{track}.json, from local/czech-codes.jsonl. "
+    "Coders gemini-3.1-pro-preview and deepseek-v4-flash, prompt czech-open-v1, "
     "temperature 0. The row order is the one the PDSQI-9 table above prints."
 )
 
@@ -5032,8 +5033,45 @@ def _percent(part: int, whole: int) -> int:
     return int(Decimal(100 * part) / Decimal(whole) + Decimal("0.5")) if whole else 0
 
 
-def _categories(rows: list[results.Row]) -> str:
-    """What the models write, asked one sentence at a time.
+#: Why there are two corpora at all, said once above both tables. It is the
+#: sentence a reader needs before the second table means anything: without it a
+#: second set of numbers looks like a repeat rather than the control it is.
+CATEGORIES_WHY_TWO = (
+    "There are two corpora so that a difference can be told apart from its cause. "
+    "The same eleven models wrote from real sessions with one client and from "
+    "public counselling conversations translated into Czech. A category that "
+    "behaves the same on both is telling you about the models. One that behaves "
+    "differently is telling you about the material, and this chapter is where "
+    "that shows."
+)
+
+#: What the second table is, and the two readings its result allows. Printed
+#: whichever way the numbers fall, because the reading is not a function of
+#: whether the result was the hoped-for one.
+CATEGORIES_SECOND = (
+    "The same six questions, on notes written from ten public counselling "
+    "conversations translated into Czech -- {units} sentences across {notes} "
+    "notes. These transcripts are a seventh the length of a real session, they "
+    "are motivational interviewing about substance use rather than therapy with "
+    "one client, and somebody else transcribed them. A category that weakens "
+    "here may be weakening because of any of those, or because it was partly "
+    "chance on the other half. These numbers cannot tell those apart."
+)
+
+#: Said when a category passes on one corpus and not the other, with the two
+#: numbers that differ, because "it passed" and "it passed on one half" are
+#: different claims and only the second one is true.
+CATEGORIES_SPLIT = (
+    "{name} passes every decided gate on the real sessions and fails on the "
+    "translated ones: the share of its variation belonging to the model rather "
+    "than to the session falls from {high} to {low}, where a column needs 0.40 "
+    "and three times the session's share. It is a measure of the real half, and "
+    "saying it is a measure would be saying more than was found."
+)
+
+
+def _categories_table(rows: list[results.Row], track: str, lead: str) -> str:
+    """One corpus's table of the six categories.
 
     A separate instrument from the six criteria and from PDSQI-9, and it is here
     rather than in a file of its own because a reader who has just been told the
@@ -5044,7 +5082,7 @@ def _categories(rows: list[results.Row]) -> str:
     one: a briefing built on a machine that has not run the coder panel should be
     a briefing without this chapter, not one with an empty heading.
     """
-    payload = REPO / "local" / "czech-graduation.json"
+    payload = REPO / "local" / f"czech-graduation-{track}.json"
     if not payload.is_file():
         return ""
     data = json.loads(payload.read_text(encoding="utf-8"))
@@ -5133,8 +5171,7 @@ def _categories(rows: list[results.Row]) -> str:
     ]
 
     return (
-        f"<h2>{_t('What the models write, one sentence at a time')}</h2>"
-        + f"<p>{html.escape(_t(CATEGORIES_LEAD).format(units=units, notes=notes_total))}</p>"
+        f"<p>{html.escape(_t(lead).format(units=units, notes=notes_total))}</p>"
         + f"<table><thead><tr><th>{_t('Model')}</th>{head}"
         + f"<th>{_t('Sentences')}</th><th>{_t('Notes')}</th></tr></thead>"
         + f"<tbody>{''.join(body)}</tbody></table>"
@@ -5154,7 +5191,70 @@ def _categories(rows: list[results.Row]) -> str:
         )
         + "</p>"
         + f"<div class='warn'><p>{html.escape(_t(CATEGORIES_CAVEAT))}</p></div>"
-        + f"<p class='note'>{html.escape(_t(CATEGORIES_SOURCE))}</p>"
+        + f"<p class='note'>{html.escape(_t(CATEGORIES_SOURCE).format(track=track))}</p>"
+    )
+
+
+def _categories(rows: list[results.Row]) -> str:
+    """Both corpora, one table each, with the reason there are two of them.
+
+    Never one table over both. The two halves differ by a factor of seven in
+    transcript length, in topic and in who transcribed them, and this repository
+    refuses to pool them everywhere else. A category that behaves differently on
+    the two is the finding the second corpus exists to produce, and pooling would
+    average it away.
+
+    The split verdict is computed, not written: whether a category passes on one
+    half and not the other is read off the two payloads, so it cannot disagree
+    with the tables under it.
+    """
+    real = _categories_table(rows, results.TRACK_CZECH_REAL, CATEGORIES_LEAD)
+    if not real:
+        return ""
+    translated = _categories_table(rows, results.TRACK_CZECH_TRANSLATED, CATEGORIES_SECOND)
+
+    split = ""
+    if translated:
+        graded = {
+            track: (
+                json.loads(
+                    (REPO / "local" / f"czech-graduation-{track}.json").read_text(encoding="utf-8")
+                )
+                or {}
+            ).get("categories")
+            or {}
+            for track in (results.TRACK_CZECH_REAL, results.TRACK_CZECH_TRANSLATED)
+        }
+        said = []
+        for key, label in CATEGORY_LABELS:
+            here = graded[results.TRACK_CZECH_REAL].get(key) or {}
+            there = graded[results.TRACK_CZECH_TRANSLATED].get(key) or {}
+            if not here or not there:
+                continue
+            if str(here.get("verdict", "")).startswith("would") and not str(
+                there.get("verdict", "")
+            ).startswith("would"):
+                said.append(
+                    _t(CATEGORIES_SPLIT).format(
+                        name=_t(label),
+                        high=_decimal((here["variance"] or {}).get("model", 0), 2),
+                        low=_decimal((there["variance"] or {}).get("model", 0), 2),
+                    )
+                )
+        if said:
+            split = "<div class='warn'><p>" + html.escape(" ".join(said)) + "</p></div>"
+
+    return (
+        f"<h2>{_t('What the models write, one sentence at a time')}</h2>"
+        + f"<p>{html.escape(_t(CATEGORIES_WHY_TWO))}</p>"
+        + f"<h3>{_t('Czech · ten real sessions, one client')}</h3>"
+        + real
+        + (
+            f"<h3>{_t('Czech · AnnoMI conversations, translated')}</h3>" + translated
+            if translated
+            else ""
+        )
+        + split
     )
 
 

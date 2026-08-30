@@ -1857,12 +1857,12 @@ CS: dict[str, str] = {
         "je rozlišení stabilní a zakódovatelné, a není to vůbec žádný důkaz, že na něm "
         "záleží. Nic tady neříká, že vyšší číslo je horší."
     ),
-    "Source: local/czech-graduation.json, from local/czech-codes.jsonl. Coders "
-    "gemini-3.1-pro-preview and deepseek-v4-flash, prompt czech-open-v1, "
+    "Source: local/czech-graduation-{track}.json, from local/czech-codes.jsonl. "
+    "Coders gemini-3.1-pro-preview and deepseek-v4-flash, prompt czech-open-v1, "
     "temperature 0. The row order is the one the PDSQI-9 table above prints.": (
-        "Zdroj: local/czech-graduation.json, z local/czech-codes.jsonl. Kodéři "
-        "gemini-3.1-pro-preview a deepseek-v4-flash, prompt czech-open-v1, teplota 0. "
-        "Pořadí řádků je totéž, které tiskne tabulka PDSQI-9 výše."
+        "Zdroj: local/czech-graduation-{track}.json, z local/czech-codes.jsonl. "
+        "Kodéři gemini-3.1-pro-preview a deepseek-v4-flash, prompt czech-open-v1, "
+        "teplota 0. Pořadí řádků je totéž, které tiskne tabulka PDSQI-9 výše."
     ),
     "Both coders answered {both} of the {units} sentences. The second coder "
     "returned nothing for {gap}, so those carry one reading rather than two, and "
@@ -1873,4 +1873,47 @@ CS: dict[str, str] = {
     ),
     "{name}, released {date}": "{name}, vydáno {date}",
     "That is the lowest of the six.": "Je to nejnižší ze šesti.",
+    (
+        "There are two corpora so that a difference can be told apart from its cause. "
+        "The same eleven models wrote from real sessions with one client and from "
+        "public counselling conversations translated into Czech. A category that "
+        "behaves the same on both is telling you about the models. One that behaves "
+        "differently is telling you about the material, and this chapter is where that "
+        "shows."
+    ): (
+        "Korpusy jsou dva proto, aby šlo odlišit rozdíl od jeho příčiny. Týchž jedenáct "
+        "modelů psalo ze skutečných sezení s jednou klientkou a z veřejných "
+        "poradenských rozhovorů přeložených do češtiny. Kategorie, která se chová "
+        "stejně na obojím, vypovídá o modelech. Ta, která se chová jinak, vypovídá o "
+        "materiálu — a tady je to vidět."
+    ),
+    (
+        "The same six questions, on notes written from ten public counselling "
+        "conversations translated into Czech -- {units} sentences across {notes} "
+        "notes. These transcripts are a seventh the length of a real session, they "
+        "are motivational interviewing about substance use rather than therapy with "
+        "one client, and somebody else transcribed them. A category that weakens "
+        "here may be weakening because of any of those, or because it was partly "
+        "chance on the other half. These numbers cannot tell those apart."
+    ): (
+        "Týchž šest otázek na zápisech psaných z deseti veřejných poradenských "
+        "rozhovorů přeložených do češtiny — {units} vět ve {notes} zápisech. Tyhle "
+        "přepisy jsou sedminou délky skutečného sezení, jsou to motivační rozhovory o "
+        "návykových látkách místo terapie s jednou klientkou, a přepisoval je někdo "
+        "jiný. Kategorie, která tady zeslábne, může slábnout kvůli kterékoliv z těch "
+        "věcí — nebo proto, že na druhé půlce byla zčásti náhoda. Tahle čísla to od "
+        "sebe odlišit neumějí."
+    ),
+    (
+        "{name} passes every decided gate on the real sessions and fails on the "
+        "translated ones: the share of its variation belonging to the model rather than "
+        "to the session falls from {high} to {low}, where a column needs 0.40 and three "
+        "times the session's share. It is a measure of the real half, and saying it is "
+        "a measure would be saying more than was found."
+    ): (
+        "{name} projde na skutečných sezeních všemi rozhodnutými branami a na "
+        "přeložených propadne: podíl kolísání, který patří modelu a ne sezení, klesne z "
+        "{high} na {low}, přičemž sloupec potřebuje 0,40 a trojnásobek podílu sezení. "
+        "Je to míra skutečné půlky, a říct, že je to míra, by bylo víc, než se našlo."
+    ),
 }
