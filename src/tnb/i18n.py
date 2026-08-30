@@ -268,6 +268,12 @@ _SENTENCES = {
     "Rows": "Řádků",
     "Harness": "Harness",
     "Reason": "Důvod",
+    "The summary below is in English: it is assembled from the numbers it reports. Every claim"
+    " in it is also in the table beside it.": (
+        "Souhrn níže je v angličtině: skládá se z čísel, o kterých mluví. Každé jeho tvrzení "
+        "je i v tabulce vedle něj."
+    ),
+    "And the two against each other.": "A ti dva proti sobě.",
     "Band": "Pásmo",
     # The same thing said where a reader can read it. The tooltip above stays
     # for a mouse; this is the entry in the legend under the table, which is
@@ -1079,6 +1085,13 @@ _METHODS = {
         "se stahuje ze svého zdroje, až když ji běh potřebuje, a tato stránka ukazuje názvy "
         "polí a skóre, nikdy ne přepisy, zápisy nebo cizí prompt."
     ),
+    # `Apache-2.0` and `CC BY 4.0` are identifiers and are the same in every
+    # language; they are listed so the guard can see they were decided and
+    # not forgotten.
+    "Apache-2.0": "Apache-2.0",
+    "none published": "žádná nezveřejněna",
+    "MIT badge, no LICENSE file": "odznak MIT, žádný soubor LICENSE",
+    "CC BY 4.0 (arXiv version)": "CC BY 4.0 (verze na arXivu)",
     "Source": "Zdroj",
     "Used for": "Použito na",
     "Licence": "Licence",

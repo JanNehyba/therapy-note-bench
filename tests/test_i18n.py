@@ -65,6 +65,7 @@ PAYLOAD_FIELDS = (
     "selection.tracks[].judges[].settings_label",
     "licences[].used_for",
     "licences[].note",
+    "licences[].licence",
     "similarity_example.note",
     "concordance.*.track_label",
     "concordance.*.measures[].measure",
@@ -410,7 +411,7 @@ def live_strings(templates: str) -> set[str]:
     live.add(i18n.norm(report.PAGE_CZECH["sub"]))
     live |= {i18n.norm(link) for link in report.PAGE_CZECH["links"].values() if link}
     for licence in report.LICENCES:
-        live |= {i18n.norm(licence[f]) for f in ("used_for", "note") if licence.get(f)}
+        live |= {i18n.norm(licence[f]) for f in ("used_for", "note", "licence") if licence.get(f)}
     live.add(i18n.norm(report.SIMILARITY_EXAMPLE["note"]))
     live |= {i18n.norm(name) for name in report.SECTION_ORDER}
     # The merged table's title and blurb, which no single track owns.

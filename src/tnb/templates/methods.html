@@ -437,7 +437,7 @@ function renderLicences(data) {
       <td>${tr(l.used_for)}</td>
       <td>${l.licence === 'Apache-2.0'
             ? '<strong>Apache-2.0</strong>'
-            : `<span class="short">${l.licence}</span>`}</td>
+            : `<span class="short">${tr(l.licence)}</span>`}</td>
       <td>${tr(l.note)}</td>
     </tr>`).join('');
 
@@ -684,6 +684,26 @@ function summaryLang(summary) {
   return tr(summary) === summary ? 'en' : LANG;
 }
 
+// These summaries are assembled in Python with their figures interpolated, so
+// the string differs on every run and an exact-text lookup can never hit them.
+// On the Czech page they are therefore English -- and they are the longest
+// paragraphs on it, which is where the caveats live. The page already knows
+// which ones fell through; this says so, once above each, instead of dropping
+// a reader into the wrong language with no explanation. It is a stopgap and it
+// is marked as one: the real fix is numbered holes, which costs a second
+// assembler for `uv run tnb preference`.
+function englishAhead(summary) {
+  return summaryLang(summary) === 'en' && LANG !== 'en'
+    ? T`The summary below is in English: it is assembled from the numbers it reports.
+        Every claim in it is also in the table beside it.`
+    : '';
+}
+
+function englishNote(summary) {
+  const said = englishAhead(summary);
+  return said ? `<p class="note">${said}</p>` : '';
+}
+
 function relation(tension) {
   const found = Object.values(tension.rho_by_judge).filter(rho => rho !== null);
   if (!found.length) return '—';
@@ -737,6 +757,7 @@ function renderConcordance(all) {
     return `${tracks.length > 1
         ? `<h3 class="track-head">${esc(c.track_label || track)}</h3>`
         : ''}
+      ${englishNote(c.summary)}
       <p class="blurb" lang="${summaryLang(c.summary)}">${code(tr(c.summary))}</p>
       <div class="scroll"><table class="concordance">
         <thead><tr>
@@ -803,12 +824,15 @@ function renderPreference(data) {
         <td>${e.detected ? `<strong>${T`yes`}</strong>` : T`no`}</td>
       </tr>`).join('')}</tbody>
     </table></div>
-    ${data.effects.map(e => `<p class="note" lang="${
+    ${data.effects.map(e => englishNote(e.summary) + `<p class="note" lang="${
         summaryLang(e.summary)}">${code(tr(e.summary))}</p>`).join('')}
     ${data.difference
-      ? `<p class="note" lang="${summaryLang(data.difference.summary)}">${
-          T`<strong>And the two against each other.</strong> ${
-          code(tr(data.difference.summary))}`}</p>`
+      ? (englishAhead(data.difference.summary)
+          ? `<p class="note"><strong>${T`And the two against each other.`}</strong> ${
+              englishAhead(data.difference.summary)}</p><p class="note" lang="en">${
+              code(tr(data.difference.summary))}</p>`
+          : `<p class="note">${T`<strong>And the two against each other.</strong> ${
+              code(tr(data.difference.summary))}`}</p>`)
       : ''}
     ${(data.effects[0] && data.effects[0].neutral || []).length
       ? (() => {
