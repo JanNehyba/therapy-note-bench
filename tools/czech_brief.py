@@ -1438,6 +1438,23 @@ LENGTH_WARNING_DEEPSY = (
 #: The agreement with the native speaker is now appended from the payload by
 #: `_catch`, so the two can no longer drift apart.
 #:
+#: **And no judge-against-judge figure either, for a worse reason.** Five of
+#: those were written here too -- "the same way on 79% of notes", "differently
+#: on a quarter", "67%, the lowest of the six" -- and every one of them was
+#: measured under `czech-criteria-v1` while the tables above the paragraph draw
+#: `czech-criteria-v2`. Under the rubric actually drawn, diacritics is 83% and
+#: not 79%, register 70% and not 75%, the judges differ on a third of the
+#: agreement notes and not a quarter, and calque's 67% is a tie with agreement
+#: rather than the lowest of anything. "The lowest of the six" was never even
+#: v1's frame: v1 had seven criteria. All five are appended from the payload
+#: now, and the payload carries the rubric it was measured under so the pairing
+#: cannot come apart again.
+#:
+#: What is left here is the half a computation cannot supply, and only where
+#: there is one. Two criteria have no entry: everything the document had to say
+#: about diacritics was the figure, and everything it had to say about non-words
+#: was a hand-typed ranking of the rater figures `_rater` prints properly.
+#:
 #: **One entry per Czech criterion and nothing else.** `_catch` is asked only
 #: about `czech.CRITERION_KEYS`, so a key outside them is prose no reader can
 #: reach -- and it is worse than dead code, because the reachability check in
@@ -1447,29 +1464,17 @@ LENGTH_WARNING_DEEPSY = (
 #: exactly that, carrying nine Czech translations of claims about a table this
 #: dictionary no longer describes.
 WHAT_IT_CATCHES = {
-    "diacritics": ("Reliable: the two judges answered the same way on 79% of notes."),
     "calque": (
-        "The weakest column here, and it should be read as a flag rather than a "
-        "score. The two judges agree on only 67% of notes, the lowest of the six. "
-        "Whether a Czech phrase is a literal translation from English is a "
-        "judgement people make differently, and these numbers show that rather "
-        "than hiding it."
+        "Read this column as a flag rather than as a score. Whether a Czech phrase "
+        "is a literal translation from English is a judgement people make "
+        "differently, and the count below shows that rather than hiding it."
     ),
     "untranslated": (
-        "Reliable, and the fault it catches is unambiguous: an English term sitting "
-        "in a Czech sentence. Judges agree on 87% of notes."
+        "The fault it catches is unambiguous: an English term left sitting in a "
+        "Czech sentence."
     ),
-    "agreement": (
-        "Catches real grammatical faults, but the two judges answer differently on "
-        "a quarter of notes. A gap of one or two notes between models is inside "
-        "that noise."
-    ),
-    "register": (
-        "Catches colloquial words where clinical ones belong. Judges agree on 75% of notes."
-    ),
-    "nonword": (
-        "The strongest agreement with a person under one judge, and tied with Diacritics over both."
-    ),
+    "agreement": ("Catches real grammatical faults."),
+    "register": ("Catches colloquial words where clinical ones belong."),
 }
 
 
@@ -1502,11 +1507,79 @@ def _catch(key: str, track: str) -> str:
     says what the agreement figures were measured on and where they were not
     measured at all. There is no longer a table of them anywhere -- these six
     sentences are the only place the anchor appears.
+
+    **The written half no longer gates the measured ones.** It did, and two
+    criteria then had to keep a hand-written sentence in order to be allowed to
+    print their own measurements. Each of the three parts is now asked for
+    separately and prints if it has something to say.
     """
-    written = WHAT_IT_CATCHES.get(key, "") if track == ANCHORED_ON else ""
-    if not written:
+    if track != ANCHORED_ON:
         return ""
-    return f"{_t(written)} {_rater(key)}".strip()
+    written = WHAT_IT_CATCHES.get(key, "")
+    parts = [_t(written) if written else "", _judges_agree(key), _rater(key)]
+    return " ".join(part for part in parts if part).strip()
+
+
+#: How often the two judges said the same thing about one criterion, from
+#: `local/czech-anchor.json`. The unanswered notes are named beside the rate
+#: instead of being folded into it: a note only one judge answered is a call
+#: the endpoint refused, and charging it to the judges as a disagreement is the
+#: shape this repository has met over and over.
+JUDGES_AGREE = (
+    "The two judges answered the same way on {agreed} of the {compared} notes both of "
+    "them answered, {rate}% of them."
+)
+#: Written so the count is never the subject of the sentence. "A further 1 were
+#: answered" and its Czech equivalent both need a different word for one, two
+#: and five, and the number here is a placeholder that will be any of them.
+JUDGES_AGREE_GAP = (
+    "Notes only one of the two answered are left out of that count rather than counted "
+    "against it: {unanswered} of them."
+)
+#: When the payload was measured under a rubric these tables do not draw. The
+#: figure is dropped and the mismatch is named, because the alternative is what
+#: this document did for a whole rebuild: print `czech-criteria-v1` agreement
+#: beside `czech-criteria-v2` levels, in the same sentence, with nothing saying
+#: they were two different instruments.
+JUDGES_AGREE_STALE = (
+    "How often the two judges answered the same way is not printed here: the answers "
+    "on disk were counted under {measured} and these tables draw {drawn}. Re-run "
+    "tools/czech_anchor.py."
+)
+
+
+def _judges_agree(key: str) -> str:
+    """How often the two judges said the same thing, or why it is not printed.
+
+    Read from the payload rather than written into `WHAT_IT_CATCHES`, and read
+    with its rubric, because the rubric is half of what the figure means. The
+    five that were written here were all `czech-criteria-v1` figures standing
+    beside `czech-criteria-v2` levels, in the same sentence, and nothing in the
+    document could have noticed: an agreement rate carries no mark saying which
+    instrument produced it.
+
+    Silent when there is no payload -- a checkout without `local/` draws the
+    chapter without this sentence -- and loud when there is one measured under
+    another rubric, which is the case a silence would hide.
+    """
+    between = _payload("czech-anchor.json").get("between_judges") or {}
+    if not between:
+        return ""
+    if between.get("rubric") != czech_scorer.JUDGE_PROMPT_VERSION:
+        return _t(JUDGES_AGREE_STALE).format(
+            measured=between.get("rubric") or "?", drawn=czech_scorer.JUDGE_PROMPT_VERSION
+        )
+    found = (between.get("criteria") or {}).get(key) or {}
+    if not found.get("compared"):
+        return ""
+    said = _t(JUDGES_AGREE).format(
+        agreed=found["agreed"],
+        compared=found["compared"],
+        rate=_decimal(100 * found["agreed"] / found["compared"], 0),
+    )
+    if found.get("unanswered"):
+        said += " " + _t(JUDGES_AGREE_GAP).format(unanswered=found["unanswered"])
+    return said
 
 
 def _rater(key: str) -> str:

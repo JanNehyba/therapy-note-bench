@@ -77,6 +77,51 @@ def test_the_overall_rate_is_withheld_while_most_answers_are_missing():
     assert full["rate"] == 1.0
 
 
+# --- the two judges against each other --------------------------------------
+
+
+def test_a_note_only_one_judge_answered_leaves_the_rate():
+    """The same rule as the human anchor, one counter over. A call e-INFRA never
+    answered is not the two judges disagreeing, and counting it as one charges
+    them for an outage."""
+    first, second = _verdicts(), _verdicts()
+    del first[("m", "s2", "register")]
+
+    found = czech_anchor.between_judges(NOTES, {"a": first, "b": second})["criteria"]["register"]
+
+    assert found["compared"] == 2
+    assert found["agreed"] == 2
+    assert found["unanswered"] == 1
+    assert found["rate"] == 1.0
+
+
+def test_the_two_judges_disagreeing_is_counted_as_a_disagreement():
+    first, second = _verdicts(), _verdicts(register=True)
+
+    found = czech_anchor.between_judges(NOTES, {"a": first, "b": second})["criteria"]["register"]
+
+    assert (found["agreed"], found["compared"], found["rate"]) == (0, 3, 0.0)
+
+
+def test_the_rate_is_stored_with_the_rubric_it_was_measured_under():
+    """The defect this block was written for. Five judge-against-judge figures
+    were typed into the briefing under `czech-criteria-v1` and printed beside
+    the levels `czech-criteria-v2` produces -- 79% where the drawn rubric says
+    83%, "a quarter" where it is a third. A rate carries no mark saying which
+    instrument made it, so the payload has to carry one."""
+    payload = czech_anchor.between_judges(NOTES, {"a": _verdicts(), "b": _verdicts()})
+
+    assert payload["rubric"] == czech.JUDGE_PROMPT_VERSION
+    assert payload["judges"] == ["a", "b"]
+    assert payload["notes"] == len(NOTES)
+
+
+def test_one_judge_alone_is_not_an_agreement():
+    """Two judges or nothing. A single judge compared with itself agrees on
+    everything, and that number would be drawn as if it meant something."""
+    assert czech_anchor.between_judges(NOTES, {"a": _verdicts()}) == {}
+
+
 # --- reading the sheet ------------------------------------------------------
 
 
@@ -119,3 +164,83 @@ def test_the_draw_is_independent_of_every_score():
     first = czech_rating_sheet._rank("cz-r-0000abcd", "a-model")
     assert first == czech_rating_sheet._rank("cz-r-0000abcd", "a-model"), "reproduces exactly"
     assert first != czech_rating_sheet._rank("cz-r-0000abcd", "b-model")
+
+
+# --- and what the briefing does with it -------------------------------------
+
+
+def _brief():
+    import czech_brief
+
+    return czech_brief
+
+
+def test_the_briefing_prints_the_rate_with_the_notes_behind_it(monkeypatch):
+    """Both halves of the figure, because one of them is the denominator. "87%"
+    over ten notes and over a hundred are different claims."""
+    brief = _brief()
+    monkeypatch.setattr(
+        brief,
+        "_payload",
+        lambda _name: {
+            "between_judges": {
+                "rubric": czech.JUDGE_PROMPT_VERSION,
+                "criteria": {"register": {"agreed": 73, "compared": 104, "unanswered": 0}},
+            }
+        },
+    )
+
+    said = brief._judges_agree("register")
+
+    assert "73 of the 104 notes" in said
+    assert "70%" in said
+
+
+def test_a_note_only_one_judge_answered_is_named_beside_the_rate(monkeypatch):
+    brief = _brief()
+    monkeypatch.setattr(
+        brief,
+        "_payload",
+        lambda _name: {
+            "between_judges": {
+                "rubric": czech.JUDGE_PROMPT_VERSION,
+                "criteria": {"calque": {"agreed": 68, "compared": 102, "unanswered": 2}},
+            }
+        },
+    )
+
+    said = brief._judges_agree("calque")
+
+    assert "68 of the 102" in said
+    assert "2 of them" in said
+    assert "rather than counted against it" in said
+
+
+def test_an_agreement_measured_under_another_rubric_is_not_printed(monkeypatch):
+    """The whole defect. Five of these were typed into the briefing from
+    `czech-criteria-v1` and printed beside `czech-criteria-v2` levels, and no
+    number can say which instrument made it. So the payload says, and a
+    mismatch drops the figure and names the mismatch instead of drawing it."""
+    brief = _brief()
+    monkeypatch.setattr(
+        brief,
+        "_payload",
+        lambda _name: {
+            "between_judges": {
+                "rubric": "czech-criteria-v1",
+                "criteria": {"diacritics": {"agreed": 77, "compared": 98, "unanswered": 0}},
+            }
+        },
+    )
+
+    said = brief._judges_agree("diacritics")
+
+    assert "79" not in said and "98" not in said, "a v1 rate must not reach a v2 table"
+    assert "czech-criteria-v1" in said and czech.JUDGE_PROMPT_VERSION in said
+
+
+def test_a_checkout_without_the_payload_says_nothing_rather_than_zero(monkeypatch):
+    brief = _brief()
+    monkeypatch.setattr(brief, "_payload", lambda _name: {})
+
+    assert brief._judges_agree("diacritics") == ""

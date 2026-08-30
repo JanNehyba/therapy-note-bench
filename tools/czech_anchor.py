@@ -1,4 +1,15 @@
-"""How often a judge and one native speaker say the same thing.
+"""How often the raters of the Czech criteria say the same thing.
+
+Two agreements, both read off answers already on disk and both about the ten
+real Czech sessions under `czech.JUDGE_PROMPT_VERSION`: a judge against one
+native speaker, and the two judges against each other.
+
+The second one lives here rather than in a tool of its own because it is the
+same read of the same cache over the same notes, and because keeping the two
+apart is what let them drift: the briefing carried five hand-typed
+judge-against-judge figures that were all measured under `czech-criteria-v1`
+and were printed beside the levels `czech-criteria-v2` produces. A rate stored
+beside the rubric it was measured under cannot be printed under another one.
 
 The one figure this track has that the other three do not. iCARE's expert
 ratings were never published and nobody has rated this repository's English
@@ -155,6 +166,67 @@ def agreement(
     }
 
 
+def between_judges(
+    notes: dict[tuple[str, str], str],
+    verdicts: dict[str, dict[tuple[str, str, str], bool | None]],
+) -> dict:
+    """How often the two judges said the same thing, criterion by criterion.
+
+    **Over every note, not over the twenty a person rated.** The human anchor is
+    bounded by how many notes one person could read; this one is not bounded by
+    anything, so it is measured on all of them and the count says so.
+
+    **The same rule about absence as `agreement` above.** A note only one judge
+    answered is left out of the rate and counted beside it. Counting it as a
+    disagreement would charge the judges for a call e-INFRA refused, and
+    counting it as agreement would invent an answer nobody gave.
+
+    A criterion a note gave no chance to make -- nothing in the note to ask
+    about -- is not asked of either judge and is not in the denominator. That
+    comes out of `czech.build_tasks`, so this counts the questions that were
+    put rather than the questions that could have been.
+
+    The rubric is returned with the counts because it is half of what the
+    figure means. Two judges agree on 79% of notes about diacritics under
+    `czech-criteria-v1` and 83% under `czech-criteria-v2`, and a table drawn
+    from one rubric with the other's agreement printed under it is two
+    measurements dressed as one.
+    """
+    names = sorted(verdicts)
+    if len(names) != 2:
+        return {}
+    first, second = (verdicts[name] for name in names)
+
+    per_criterion: dict[str, dict] = {}
+    for key in czech.CRITERION_KEYS:
+        compared = agreed = unanswered = 0
+        for (model, session), note in notes.items():
+            if key not in {task.criterion for task in czech.build_tasks(note)}:
+                continue
+            here = first.get((model, session, key))
+            there = second.get((model, session, key))
+            if here is None or there is None:
+                unanswered += 1
+                continue
+            compared += 1
+            agreed += int(here == there)
+
+        if compared or unanswered:
+            per_criterion[key] = {
+                "compared": compared,
+                "agreed": agreed,
+                "unanswered": unanswered,
+                "rate": round(agreed / compared, 4) if compared else None,
+            }
+
+    return {
+        "judges": names,
+        "rubric": czech.JUDGE_PROMPT_VERSION,
+        "notes": len(notes),
+        "criteria": per_criterion,
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--sheet", type=Path, default=DEFAULT_SHEET)
@@ -191,6 +263,7 @@ def main(argv: list[str] | None = None) -> int:
 
     for name in judges:
         payload["judges"][name] = agreement(human, notes, machine[name])
+    payload["between_judges"] = between_judges(notes, machine)
 
     args.target.parent.mkdir(parents=True, exist_ok=True)
     args.target.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -228,6 +301,17 @@ def main(argv: list[str] | None = None) -> int:
             for n in judges
         )
     )
+    between = payload["between_judges"]
+    if between:
+        print(
+            f"\njudge against judge, {between['notes']} real notes "
+            f"under {between['rubric']}\n"
+        )
+        for key, entry in sorted(between["criteria"].items()):
+            gap = f"  (+{entry['unanswered']} answered by only one)" if entry["unanswered"] else ""
+            rate = f"{entry['rate']:.2f}" if entry["rate"] is not None else "--"
+            print(f"{key:16}{entry['agreed']:>4}/{entry['compared']:<6} = {rate}{gap}")
+
     print(f"\nwrote {args.target}")
     print(CEILING)
     return 0

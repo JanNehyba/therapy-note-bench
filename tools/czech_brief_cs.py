@@ -454,14 +454,6 @@ CS: dict[str, str] = {
         "kritériu výše a je to všechno, co existuje: nikdo nehodnotil zápis ve formátu "
         "Deepsy, zápis z přeložené půlky ani jakýkoli zápis na PDSQI-9."
     ),
-    # --- what each column catches ------------------------------------------
-    "Catches real grammatical faults, but the two judges answer differently on a "
-    "quarter of notes. A gap of one or two notes between models is inside that noise.": (
-        "Chytá skutečné gramatické chyby, ale dva soudci "
-        "odpovídají různě u čtvrtiny zápisů. "
-        "Rozdíl jednoho nebo dvou zápisů mezi modely je uvnitř "
-        "tohohle šumu."
-    ),
     # --- the planted-error control -----------------------------------------
     "Does each column detect what it claims?": "Chytá každý sloupec to, co tvrdí?",
     "One clean note and {variants} variants, each carrying exactly one deliberate fault of "
@@ -934,28 +926,40 @@ CS: dict[str, str] = {
     "One native speaker agreed with the two judges on {pairs} notes.": (
         "Jeden rodilý mluvčí se s oběma soudci shodl u {pairs} zápisů."
     ),
-    "Reliable: the two judges answered the same way on 79% of notes.": (
-        "Spolehlivé: oba soudci odpověděli stejně u 79 % zápisů."
+    # --- how often the two judges agreed, read rather than written --------
+    "The two judges answered the same way on {agreed} of the {compared} notes both of "
+    "them answered, {rate}% of them.": (
+        "Oba soudci odpověděli stejně u {agreed} ze {compared} zápisů, které "
+        "zodpověděli oba, tedy u {rate} % z nich."
     ),
-    "The weakest column here, and it should be read as a flag rather than a score. "
-    "The two judges agree on only 67% of notes, the lowest of the six. Whether a "
-    "Czech phrase is a literal translation from English is a judgement people make "
-    "differently, and these numbers show that rather than hiding it.": (
-        "Nejslabší sloupec tady, a je lepší číst ho jako upozornění než jako známku. "
-        "Oba soudci se shodnou jen u 67 % zápisů, což je ze šesti nejméně. Jestli je "
-        "nějaké české spojení doslovný překlad z angličtiny, posuzují lidé různě, a "
-        "tahle čísla to ukazují, místo aby to schovávala."
+    "Notes only one of the two answered are left out of that count rather than counted "
+    "against it: {unanswered} of them.": (
+        "Zápisy, které zodpověděl jen jeden ze soudců, do toho počtu nevstupují, místo "
+        "aby se počítaly proti němu: {unanswered}."
     ),
-    "Reliable, and the fault it catches is unambiguous: an English term sitting in a "
-    "Czech sentence. Judges agree on 87% of notes.": (
-        "Spolehlivé a chyba, kterou chytá, je jednoznačná: anglický termín uprostřed "
-        "české věty. Soudci se shodnou u 87 % zápisů."
+    "How often the two judges answered the same way is not printed here: the answers "
+    "on disk were counted under {measured} and these tables draw {drawn}. Re-run "
+    "tools/czech_anchor.py.": (
+        "Jak často oba soudci odpověděli stejně, se tu netiskne: odpovědi na disku "
+        "byly spočítané pod {measured} a tyhle tabulky kreslí {drawn}. Spusťte znovu "
+        "tools/czech_anchor.py."
     ),
-    "Catches colloquial words where clinical ones belong. Judges agree on 75% of notes.": (
-        "Chytá hovorová slova tam, kam patří odborná. Soudci se shodnou u 75 % zápisů."
+    # --- what each criterion catches, without a figure in it --------------
+    "Read this column as a flag rather than as a score. Whether a Czech phrase is a "
+    "literal translation from English is a judgement people make differently, and the "
+    "count below shows that rather than hiding it.": (
+        "Tenhle sloupec čti jako upozornění, ne jako známku. Jestli je nějaké české "
+        "spojení doslovný překlad z angličtiny, posuzují lidé různě, a počet níže to "
+        "ukazuje, místo aby to schovával."
     ),
-    "The strongest agreement with a person under one judge, and tied with Diacritics over both.": (
-        "U jednoho soudce nejsilnější shoda s člověkem, přes oba je na tom stejně jako Diakritika."
+    "The fault it catches is unambiguous: an English term left sitting in a Czech "
+    "sentence.": (
+        "Chyba, kterou chytá, je jednoznačná: anglický termín ponechaný uprostřed "
+        "české věty."
+    ),
+    "Catches real grammatical faults.": "Chytá skutečné gramatické chyby.",
+    "Catches colloquial words where clinical ones belong.": (
+        "Chytá hovorová slova tam, kam patří odborná."
     ),
     # --- the conclusion, before the tables ---------------------------------
     # Subject and verb in one key. English conjugates "No model IS", Czech
