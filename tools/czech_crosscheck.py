@@ -265,7 +265,17 @@ print("\n6. brief -> PDF")
 for source, pdf in (
     ("czech-brief.html", "czech-report.pdf"),
     ("czech-brief-cs.html", "czech-report-cs.pdf"),
+    # The short version is the copy more likely to be forwarded, so it is the
+    # copy that most needs checking. It is built by `tools/czech_short.py` from
+    # `czech_brief`'s own functions, which is why no figure in it can differ
+    # from the long one -- and why a difference showing up here would mean that
+    # stopped being true.
+    ("czech-short.html", "czech-short.pdf"),
+    ("czech-short-cs.html", "czech-short-cs.pdf"),
 ):
+    if not (LOCAL / source).is_file() or not (LOCAL / pdf).is_file():
+        note(True, f"{pdf}: not built, nothing to compare")
+        continue
     out = subprocess.run(
         ["pdftotext", "-enc", "UTF-8", str(LOCAL / pdf), "-"],
         capture_output=True,

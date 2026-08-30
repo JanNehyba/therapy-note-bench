@@ -2049,4 +2049,154 @@ CS: dict[str, str] = {
         "vysvětlit převzorkování sezení. Úzké pásmo znamená, že měření rozlišuje jemně "
         "— ne že je model dobrý."
     ),
+    "Czech notes, the short version": "České zápisy, krátká verze",
+    ("the short version · measured, not published"): ("krátká verze · změřeno, nepublikováno"),
+    (
+        "Thirteen language models were each asked to write clinical notes from twenty "
+        "psychotherapy sessions. Ten of those sessions are real therapy with one "
+        "client, recorded, transcribed and de-identified by hand. Ten are public "
+        "counselling conversations translated into Czech. Every model wrote from the "
+        "same sessions, so no two models are being compared on different material. "
+        "{written} of the {asked} notes were written; where one is missing, this "
+        "document says so rather than leaving it out of an average."
+    ): (
+        "Třináct jazykových modelů dostalo za úkol napsat klinické zápisy z dvaceti "
+        "psychoterapeutických sezení. Deset z těch sezení je skutečná terapie s jednou "
+        "klientkou — nahraná, přepsaná a ručně anonymizovaná. Deset jsou veřejné "
+        "poradenské rozhovory přeložené do češtiny. Každý model psal z týchž sezení, "
+        "takže se nikdy neporovnávají dva modely na různém materiálu. Napsáno bylo "
+        "{written} zápisů z {asked}; kde některý chybí, je to tady napsané — místo aby "
+        "se prostě vynechal z průměru."
+    ),
+    (
+        "Every note was then read by two other language models, which answered the same "
+        "questions about it separately. Two sets of questions were asked. Six ask only "
+        "whether the Czech is correct. A published instrument called PDSQI-9 asks "
+        "something harder: whether the note is any good clinically. Both, because "
+        "neither answers the other -- a flawless Czech sentence about nothing passes "
+        "all six criteria, and a note full of insight can be written in bad Czech."
+    ): (
+        "Každý zápis pak přečetly dva další jazykové modely a nezávisle na sobě "
+        "odpověděly na tytéž otázky. Otázky byly dvojího druhu. Šest se ptá jen na to, "
+        "jestli je správně čeština. Publikovaný nástroj jménem PDSQI-9 se ptá na těžší "
+        "věc: jestli je ten zápis klinicky k něčemu. Obojí, protože jedno neodpoví na "
+        "druhé — bezchybná česká věta o ničem projde všemi šesti kritérii a zápis plný "
+        "vhledu se dá napsat špatnou češtinou."
+    ),
+    (
+        "No clinician has read these notes. Everything below is one machine's account "
+        "of what another machine wrote, and the only check on it is that the two "
+        "readers answered separately and are never averaged: where they disagree, this "
+        "document shows both numbers instead of splitting the difference."
+    ): (
+        "Žádný klinik tyhle zápisy nečetl. Všechno níž je zpráva jednoho stroje o tom, "
+        "co napsal jiný stroj. Jediná kontrola je, že ti dva čtenáři odpovídali "
+        "nezávisle a nikdy se neprůměrují: kde se neshodnou, ukazuje tenhle dokument "
+        "obě čísla místo toho, aby si to rozdělil napůl."
+    ),
+    "What came out of it": "Co z toho vyšlo",
+    "What the notes were written from": "Z čeho se ty zápisy psaly",
+    "The tables the findings come from": "Tabulky, ze kterých ty nálezy jsou",
+    ("Does the measurement react when a fault is put in on purpose?"): (
+        "Zareaguje to měření, když se do zápisu chyba nasadí schválně?"
+    ),
+    "What these numbers may not be used for": "K čemu se tahle čísla použít nesmějí",
+    (
+        "A column that never moves may be measuring something these models do not "
+        "differ on, or may be measuring nothing. Nothing already scored can tell those "
+        "apart, because none of it is a badly written note. So notes were written to be "
+        "bad: one clean invented note and one copy per fault, each damaged in exactly "
+        "one named way, with the expected answer written down before the readers were "
+        "asked."
+    ): (
+        "Sloupec, který se nikdy nehne, buď měří něco, v čem se tyhle modely doopravdy "
+        "neliší, nebo neměří nic. Nic z toho, co je už obodované, ty dvě možnosti "
+        "nerozliší — protože nic z toho není špatně napsaný zápis. Takže se špatné "
+        "zápisy napsaly schválně: jeden čistý vymyšlený zápis a k němu jedna kopie na "
+        "každou chybu, každá poškozená právě jedním pojmenovaným způsobem. Co se má u "
+        "které stát, bylo zapsáno dřív, než se čtenářů kdokoli zeptal."
+    ),
+    (
+        "Two tables, both on the real sessions. The first asks whether the Czech is "
+        "right, the second whether the note is any good. Every cell holds both readers' "
+        "answers in the same order, and a cell where they disagree is marked. The long "
+        "version of this document draws six more tables -- the translated half, and the "
+        "same four again in the other note format -- and says where they differ."
+    ): (
+        "Čtyři tabulky. První dvě jsou ze skutečných sezení, druhé dvě z přeložených "
+        "rozhovorů — a jsou tu obojí právě proto, aby šlo vidět, jestli to, co vyšlo na "
+        "jedné půlce, platí i na druhé. V každé dvojici se první tabulka ptá, jestli je "
+        "správně čeština, a druhá, jestli je zápis k něčemu. V každé buňce jsou "
+        "odpovědi obou čtenářů ve stejném pořadí a buňka, kde se neshodnou, je "
+        "označená. Dlouhá verze kreslí ještě čtyři tabulky pro druhý formát zápisu."
+    ),
+    ("Ten sessions, one client, one therapist."): (
+        "Deset sezení, jedna klientka, jedna terapeutka."
+    ),
+    (
+        "Everything measured on the real half is also a fact about how those two people "
+        "talk. A measure over ten notes per model has eleven possible values, so read "
+        "the ends of a table and never the gap between two neighbours."
+    ): (
+        "Všechno, co se změřilo na skutečné půlce, je zároveň fakt o tom, jak spolu ty "
+        "dvě ženy mluví. Míra přes deset zápisů na model má jedenáct možných hodnot — "
+        "čti tedy konce tabulky, nikdy ne rozdíl mezi dvěma sousedy."
+    ),
+    "Nothing here says a note is true.": "Nic tady neříká, že je zápis pravdivý.",
+    (
+        "The questions ask whether the Czech is right and how the note is built. "
+        "Whether what it says actually happened in the session is the question a "
+        "clinical team would ask first, and it is the one measurement nobody made -- "
+        "answering it means showing a judge the transcript, and no transcript leaves "
+        "this machine."
+    ): (
+        "Otázky se ptají, jestli je správně čeština a jak je zápis postavený. Jestli se "
+        "to, co se v něm píše, v sezení opravdu stalo, by klinický tým chtěl vědět jako "
+        "první — a je to jediné měření, které tu nikdo neudělal. Odpovědět na ně "
+        "znamená ukázat soudci přepis, a žádný přepis tenhle stroj neopouští."
+    ),
+    ("Longer notes score worse, and that is partly the instrument."): (
+        "Delší zápisy mají horší skóre a zčásti za to může samo měřidlo."
+    ),
+    (
+        "Each of the six criteria asks whether a fault appears ANYWHERE in the note, so "
+        "a longer note offers more places for one. Measured rather than guessed: every "
+        "hundred words costs a few hundredths of a point, under both readers and on "
+        "both halves."
+    ): (
+        "Každé z těch šesti kritérií se ptá, jestli je chyba NĚKDE v zápisu — a delší "
+        "zápis nabízí víc míst, kde být může. Není to dohad, je to změřené: každých sto "
+        "slov navíc stojí několik setin bodu, u obou čtenářů a na obou půlkách."
+    ),
+    ("Two readers agreeing is not evidence that a distinction matters."): (
+        "Shoda dvou čtenářů není důkaz, že na tom rozlišení záleží."
+    ),
+    (
+        "It is evidence that the distinction is stable and can be coded. Whether it is "
+        "something a psychologist would care about is a question no arrangement of "
+        "language models answers."
+    ): (
+        "Je to důkaz, že je to rozlišení stabilní a dá se zakódovat. Jestli je to něco, "
+        "na čem by psychologovi záleželo, neodpoví žádné uspořádání jazykových modelů."
+    ),
+    ("These models were what one provider had deployed on one day."): (
+        "Tyhle modely byly to, co měl jeden poskytovatel nasazené jeden den."
+    ),
+    (
+        "The line-up changed under this project once already. A result here is about "
+        "these systems at that moment, not about the companies behind them."
+    ): (
+        "Sestava se pod tímhle projektem už jednou změnila. Výsledek tady je o těchhle "
+        "systémech v tu chvíli, ne o firmách, které za nimi stojí."
+    ),
+    (
+        "The long version -- every table, every caveat and the file behind every figure "
+        "-- is local/czech-report-cs.pdf. Both are built from the same measurements by "
+        "the same code, so no figure here was retyped and none can drift from it."
+    ): (
+        "Dlouhá verze — všechny tabulky, všechny výhrady a u každého čísla soubor, ze "
+        "kterého pochází — je local/czech-report-cs.pdf. Obě vznikají z týchž měření "
+        "týmž kódem, takže se tady žádné číslo nepřepisovalo ručně a žádné se od té "
+        "dlouhé verze nemůže rozejít."
+    ),
 }

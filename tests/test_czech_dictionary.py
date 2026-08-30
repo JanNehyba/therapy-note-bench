@@ -49,7 +49,16 @@ from czech_brief_cs import CS  # noqa: E402
 #: is. `czech_join` writes its caveats into `local/czech-join.json` and the
 #: document reads them back out and translates them there, so its prose is
 #: never a literal in `czech_brief` and would otherwise read as dead.
-TRANSLATING = ("czech_brief.py", "czech_figures.py", "czech_join.py")
+#: `czech_short` writes the half-length version through the same dictionary,
+#: and until it was named here its twenty-three sentences read as orphans --
+#: the check would have told somebody to delete the Czech for a document that
+#: had just been built from it.
+TRANSLATING = (
+    "czech_brief.py",
+    "czech_figures.py",
+    "czech_join.py",
+    "czech_short.py",
+)
 
 
 def _sentences() -> set[str]:
