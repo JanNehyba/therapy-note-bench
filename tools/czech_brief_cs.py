@@ -136,8 +136,6 @@ CS: dict[str, str] = {
     "Words, median": "Slov, medián",
     "Words, range": "Slov, rozsah",
     "Turns, median": "Replik, medián",
-    "Does it separate the models?": "Rozliší modely?",
-    "What is behind the number": "Co je za tím číslem",
     "Criterion": "Kritérium",
     "Attribute": "Atribut",
     "Real sessions": "Skutečná sezení",
@@ -285,35 +283,6 @@ CS: dict[str, str] = {
         "o tenhle, takže jsou tu jmenovány a nekladou se vedle těchto. V lokálním "
         "záznamu zůstávají."
     ),
-    # --- the verdicts section ---------------------------------------------
-    "What is behind each number": "Co je za každým číslem",
-    "A column that gives most models the same value cannot rank them, however "
-    "confidently it is printed, and the first thing worth knowing about any column "
-    "here is whether it separates anything at all. That half is counted from the rows. "
-    "The second half — what the column actually catches, and how far two judges and "
-    "one native speaker agreed about it — is written down rather than computed, "
-    "because no arithmetic supplies it. It exists for one table only: both agreement "
-    "figures were measured on the real Czech sessions under the six criteria, and "
-    "nobody has read a Deepsy note, a translated one or a PDSQI answer against a "
-    "person at all. Every other table says so in the cell rather than leaving it "
-    "blank, because carrying a number across would report one table's measurement "
-    "under another's heading.": (
-        "Sloupec, který dává většině modelů tutéž hodnotu, je nemůže seřadit, ať je "
-        "vytištěný sebejistěji — a první, co se o kterémkoli sloupci vyplatí vědět, je, "
-        "jestli vůbec něco rozlišuje. Tuhle půlku počítáme z řádků. Druhou půlku — co "
-        "ten sloupec doopravdy chytá a nakolik se na něm shodli dva soudci a jeden "
-        "rodilý mluvčí — píšeme, ne počítáme, protože ji žádná aritmetika nedodá. "
-        "Existuje jen k jedné tabulce: obě čísla o shodě byla změřena na skutečných "
-        "českých sezeních podle šesti kritérií a zápis v Deepsy, přeložený zápis ani "
-        "odpověď PDSQI nikdo proti člověku nečetl. Každá další tabulka to říká přímo "
-        "v buňce, místo aby ji nechala prázdnou, protože přenést číslo jinam by "
-        "znamenalo ohlásit měření jedné tabulky pod hlavičkou druhé."
-    ),
-    "not measured on this track": "na této větvi neměřeno",
-    "cannot rank": "nedokáže seřadit",
-    "share one value": "sdílí jednu hodnotu",
-    "tells": "rozliší",
-    "apart": "z",
     # --- the join section --------------------------------------------------
     "Does the English leaderboard predict the Czech?": ("Předpovídá anglický žebříček tu češtinu?"),
     "Asked the same question, quality transfers": ("Při stejně položené otázce se kvalita přenáší"),
@@ -1199,12 +1168,79 @@ CS: dict[str, str] = {
     # --- said once, and named by what each section does ---------------------
     "Not drawn:": "Nevykresleno:",
     "were also scored under": "byly hodnoceny také podle",
-    "which columns can rank": "které sloupce umí řadit",
     "who is ahead": "kdo je napřed",
     "how far apart is far enough": "jak daleko je dost daleko",
     "the six Czech criteria": "šest českých kritérií",
     "PDSQI-9, without the session": "PDSQI-9, bez sezení",
     "PDSQI-9, with the session": "PDSQI-9, se sezením",
+    # --- criterion by criterion ------------------------------------------------
+    "Criterion by criterion": "Kritérium po kritériu",
+    "The six criteria one at a time. A table can say what a column scored and it cannot say what "
+    "the column is worth, and the second half is what a reader needs before acting on the first. "
+    "Each paragraph gives the same four things in the same order: the level, under both judges in "
+    "every table that has the criterion; the direction, which way the criterion moves from one "
+    "table to the next; where it breaks down; and what it is actually catching.": (
+        "Šest kritérií po jednom. Tabulka umí říct, kolik sloupec dostal, ale ne, jakou má ten "
+        "sloupec cenu — a ta druhá půlka je to, co čtenář potřebuje dřív, než podle té první začne "
+        "jednat. Každý odstavec dává tytéž čtyři věci ve stejném pořadí: úroveň, u obou soudců v "
+        "každé tabulce, která to kritérium má; směr, kterým se kritérium hýbe od jedné tabulky ke "
+        "druhé; kde se to láme; a co to vlastně zachycuje."
+    ),
+    "The order is computed rather than chosen. The criterion whose value changes most between one "
+    "table and the next comes first, because that is the order in which one number about a "
+    "criterion would mislead a reader furthest -- a column that reads the same everywhere can be "
+    "summarised and a column that does not, cannot.": (
+        "Pořadí je spočítané, ne zvolené. První je kritérium, jehož hodnota se mezi jednou "
+        "tabulkou a druhou mění nejvíc, protože přesně v tomhle pořadí by jedno číslo o kritériu "
+        "svedlo čtenáře nejdál — sloupec, který je všude stejný, se shrnout dá, a sloupec, který "
+        "stejný není, ne."
+    ),
+    "Every pair of numbers is the two judges, in the order the tables print them, and they are "
+    "never averaged: where the two point in opposite directions that is said rather than smoothed, "
+    "because a mean of two judges pointing opposite ways is a number neither of them stated. And "
+    "the last sentence of each paragraph -- what the criterion catches, and how often the two "
+    "judges and one native speaker said the same thing -- was measured on the ten real Czech "
+    "sessions under these six criteria and nowhere else. Nobody has read a Deepsy note or a "
+    "translated one against a person at all.": (
+        "Každá dvojice čísel jsou dva soudci v pořadí, ve kterém je tisknou tabulky, a nikdy se "
+        "neprůměrují: tam, kde ti dva ukazují opačnými směry, se to říká, ne uhlazuje, protože "
+        "průměr dvou soudců mířících proti sobě je číslo, které neřekl ani jeden z nich. A "
+        "poslední věta každého odstavce — co kritérium zachycuje a jak často řekli dva soudci a "
+        "jeden rodilý mluvčí totéž — byla změřena na deseti skutečných českých sezeních podle "
+        "těchto šesti kritérií a nikde jinde. Zápis v Deepsy ani přeložený zápis proti člověku "
+        "nikdo nečetl."
+    ),
+    "The level: {items}.": "Úroveň: {items}.",
+    "The direction: {items}.": "Směr: {items}.",
+    "up": "nahoru",
+    "down": "dolů",
+    "no change": "beze změny",
+    "the judges differ": "soudci se rozcházejí",
+    "Where it breaks down: the two judges do not both point the same way {names}.": (
+        "Kde se to láme: oba soudci neukazují stejným směrem {names}."
+    ),
+    "Where it breaks down: on {where} the resampling can tell only {separable} of the {pairs} "
+    "pairs of models apart, so the order this column puts them in there is not one to read, and it "
+    "is that thin in {places} of the {total} tables.": (
+        "Kde se to láme: v jedné z tabulek ({where}) odliší převzorkování jen {separable} z "
+        "{pairs} dvojic modelů, takže pořadí, do kterého je tam tenhle sloupec staví, není pořadí "
+        "ke čtení; takhle tenké je to v {places} z {total} tabulek."
+    ),
+    "Where it breaks down: on {names} the column falls as a model writes longer notes, under both "
+    "judges, between {low} and {high}, and whether that is the fault or the length is not "
+    "something this document can separate.": (
+        "Kde se to láme: délka. Sloupec klesá, čím delší zápisy model píše — {names} —, u obou "
+        "soudců, mezi {low} a {high}, a jestli za to může ta chyba, nebo délka, tenhle dokument "
+        "rozlišit neumí."
+    ),
+    "Nothing breaks it here: the judges point the same way in every comparison, the resampling can "
+    "tell the models apart, and length does not predict it.": (
+        "Tady se nic neláme: soudci ukazují ve všech srovnáních stejným směrem, převzorkování "
+        "dokáže modely odlišit a délka to nepředpovídá."
+    ),
+    "from the real sessions to the translated ones": "ze skutečných sezení do přeložených",
+    "from SOAP to Deepsy on the real half": "ze SOAP do Deepsy na skutečné půlce",
+    "from SOAP to Deepsy on the translated half": "ze SOAP do Deepsy na přeložené půlce",
     # --- what each chapter came to --------------------------------------------
     "The two judges do not both point the same way on {names}, so between the halves there is no "
     "answer there at all.": (

@@ -281,8 +281,11 @@ def test_the_briefing_renders_in_czech_with_nothing_left_in_english():
     # on the diacritic scanner's allow-list to hold a copy of it.
     from czech_brief_cs import CS
 
-    heading = "Does it separate the models?"
-    assert CS[heading] in page, "a table heading is in Czech"
+    # The chapter that answers "what is this column worth" -- the one place in
+    # the document where a criterion is described in prose rather than scored.
+    # It was a table heading until the table became six paragraphs.
+    heading = czech_brief.CRITERIA_TITLE
+    assert CS[heading] in page, "a chapter heading is in Czech"
     assert heading not in page
 
 

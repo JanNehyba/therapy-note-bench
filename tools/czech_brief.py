@@ -21,7 +21,6 @@ in `check_no_clinical_text`, before the file is written.
 from __future__ import annotations
 
 import argparse
-import collections
 import functools
 import html
 import json
@@ -1366,20 +1365,9 @@ WHAT_IT_CATCHES = {
 #: and "reliable", which inverts the row's verdict.
 ANCHORED_ON = results.TRACK_CZECH_REAL
 
-#: What the cell says where there is nothing to put in it. An empty cell is not
-#: an omission a reader can read: thirty-six of them sat under a heading
-#: promising what is behind the number and under a lead promising it for "any
-#: column here", and a blank says neither "measured and unremarkable" nor "never
-#: measured". Omitting the figure is right; leaving the gap unnamed is not.
-NOT_MEASURED_HERE = "not measured on this track"
-
 
 def _catch(key: str, track: str) -> str:
-    """What a column catches, in this run's language, or where it was not asked.
-
-    A column with no sentence written for it says so rather than raising: the
-    verdict beside it is still counted and still worth reading, and a missing
-    sentence is a gap in the prose rather than in the measurement.
+    """What a column catches, in this run's language, or nothing.
 
     **Only under the track it was measured on.** These sentences quote judge
     agreement and a native speaker's; both were measured on the real Czech
@@ -1388,13 +1376,17 @@ def _catch(key: str, track: str) -> str:
     table's number under another's heading -- on the Deepsy notes `untranslated`
     agrees on 63% and was being described as 87% and "reliable".
 
-    So the figure is omitted and the gap is named, which is this repository's
-    rule about a missing measurement and was two thirds kept: the omitting was
-    done and the naming was not.
+    **Empty rather than "not measured on this track".** That filler was written
+    for a table cell, where a blank says neither "measured and unremarkable"
+    nor "never measured" and something had to fill thirty-six of them. In a
+    paragraph the sentence simply is not there, and the paragraph reads as a
+    paragraph with one fewer sentence rather than as one ending in a shrug.
+    The gap is named where a reader meets it: the chapter above these
+    paragraphs says which table the agreement figures come from.
     """
     written = WHAT_IT_CATCHES.get(key, "") if track == ANCHORED_ON else ""
     if not written:
-        return _t(NOT_MEASURED_HERE)
+        return ""
     return f"{_t(written)} {_rater(key)}".strip()
 
 
@@ -2093,94 +2085,294 @@ def _box_c(rows: list[results.Row]) -> str:
     return _box(BOX_C_TITLE, said)
 
 
-def _verdicts(rows: list[results.Row]) -> str:
-    """Which columns tell the models apart, counted rather than asserted.
+#: The three moves a criterion can be watched over. Written as pairs rather
+#: than derived from "every track against every other": that would print six
+#: comparisons of which three are the other three read backwards, and two of
+#: the six -- the real SOAP half against the translated Deepsy one, and its
+#: mirror -- change the corpus and the format at once and so measure neither.
+#: Each name is a phrase rather than a label with an arrow in it, because it
+#: has to read inside a sentence -- "the two judges do not both point the same
+#: way from SOAP to Deepsy on the real half" -- as well as in the list of three.
+CRITERION_MOVES = (
+    (
+        "from the real sessions to the translated ones",
+        (results.TRACK_CZECH_REAL, results.TRACK_CZECH_TRANSLATED),
+    ),
+    (
+        "from SOAP to Deepsy on the real half",
+        (results.TRACK_CZECH_REAL, results.TRACK_DEEPSY_REAL),
+    ),
+    (
+        "from SOAP to Deepsy on the translated half",
+        (results.TRACK_CZECH_TRANSLATED, results.TRACK_DEEPSY_TRANSLATED),
+    ),
+)
 
-    The tie count is the largest group of systems printing the same value, taken
-    on whichever judge ties worst -- `concordance.MeasureAgreement.rankable`'s
-    rule, applied here so the briefing states it in the same terms the page
-    does. A column on which most systems are indistinguishable cannot rank them,
-    whatever the rest of the table does.
+#: What one move can come out as. Four words, translated whole and dropped into
+#: a list after a colon rather than into a sentence frame: a Czech verdict
+#: inside a frame has to decline, and no one frame fits all four.
+MOVE_UP = "up"
+MOVE_DOWN = "down"
+MOVE_FLAT = "no change"
+MOVE_SPLIT = "the judges differ"
 
-    **Newest rubric only.** This selected on the track alone, so where a
-    criterion had been redefined it counted both versions and reported 22
-    systems where the page draws 11 -- while two sections earlier the document
-    says the older rows are a different instrument and are named rather than
-    drawn beside these. It drew them beside these, invisibly, and the
-    unexplained denominator was the only sign.
+
+def _moved(cells: dict, key: str, pair: tuple[str, str], step: float) -> str:
+    """Which way a criterion goes between two tables, under every judge.
+
+    A change smaller than the last digit the tables print is no change: the
+    reader cannot see it, and a verdict resting on it would be a verdict about
+    rounding. Where the judges do not both point the same way the answer is
+    that they do not, which is a finding and not a missing one.
     """
-    latest = [row for row in results.latest(rows) if row.is_scored]
-    blocks = []
-    for track in results.LOCAL_TRACKS:
-        here = [row for row in latest if row.track == track]
-        if not here:
-            continue
-        newest = max(row.judge_prompt_version for row in here)
-        here = [row for row in here if row.judge_prompt_version == newest]
-        judges = sorted({row.judge_model or "" for row in here})
-        lines = []
-        for key, digits in COLUMNS[track]:
-            worst_tied, n = 0, 0
-            for judge_model in judges:
-                printed = collections.Counter(
-                    f"{row.metrics.headline[key]:.{digits}f}"
-                    for row in here
-                    if judge_model == (row.judge_model or "") and key in row.metrics.headline
-                )
-                if not printed:
-                    continue
-                n = max(n, sum(printed.values()))
-                worst_tied = max(worst_tied, printed.most_common(1)[0][1])
-            if not n:
-                continue
-            separates = n >= 2 and worst_tied * 2 <= n
-            verdict = (
-                f"{_t('tells')} {n - worst_tied} {_t('of')} {n} {_t('apart')}"
-                if separates
-                else (
-                    f"<strong>{_t('cannot rank')}</strong> — {worst_tied} "
-                    f"{_t('of')} {n} {_t('share one value')}"
-                )
-            )
-            lines.append(
-                f"<tr><td>{html.escape(_t(MEASURE_TABLES[track][key]['label']))}</td>"
-                f"<td>{verdict}</td>"
-                f"<td class='sub'>{html.escape(_catch(key, track))}</td></tr>"
-            )
-        if lines:
-            blocks.append(
-                f"<h3>{html.escape(_t(TRACK_TITLES.get(track, track)))} "
-                f"<span class='dash'>&mdash; {_t('which columns can rank')}</span></h3>"
-                f"<table><thead><tr><th>{_t('Column')}</th>"
-                f"<th>{_t('Does it separate the models?')}</th>"
-                f"<th>{_t('What is behind the number')}</th></tr></thead>"
-                f"<tbody>{''.join(lines)}</tbody></table>"
-            )
-
-    if not blocks:
+    first, second = pair
+    judges = sorted(
+        {judge for track, judge in cells if track == first}
+        & {judge for track, judge in cells if track == second}
+    )
+    signs = []
+    for judge in judges:
+        here = cells[(first, judge)].get(key)
+        there = cells[(second, judge)].get(key)
+        if here is None or there is None:
+            return ""
+        signs.append(0 if abs(there - here) < step else (1 if there > here else -1))
+    if not signs:
         return ""
-    return (
-        f"<h2>{_t('What is behind each number')}</h2>"
-        + "<p>"
-        + html.escape(
-            _t(
-                "A column that gives most models the same value cannot rank them, "
-                "however confidently it is printed, and the first thing worth "
-                "knowing about any column here is whether it separates anything at "
-                "all. That half is counted from the rows. The second half — what the "
-                "column actually catches, and how far two judges and one native "
-                "speaker agreed about it — is written down rather than computed, "
-                "because no arithmetic supplies it. It exists for one table only: "
-                "both agreement figures were measured on the real Czech sessions "
-                "under the six criteria, and nobody has read a Deepsy note, a "
-                "translated one or a PDSQI answer against a person at all. Every "
-                "other table says so in the cell rather than leaving it blank, "
-                "because carrying a number across would report one table's "
-                "measurement under another's heading."
+    if all(sign > 0 for sign in signs):
+        return MOVE_UP
+    if all(sign < 0 for sign in signs):
+        return MOVE_DOWN
+    if all(sign == 0 for sign in signs):
+        return MOVE_FLAT
+    return MOVE_SPLIT
+
+
+def _unreadable_at(key: str) -> tuple[list[tuple[str, str, int, int]], int]:
+    """Where this criterion cannot order the models, from the resampling.
+
+    `tools/czech_variance.py` counts, for every pair of models, whether
+    resampling the sessions leaves the gap between them in the same direction.
+    A column that separates a quarter of its pairs orders the rest by accident,
+    and this is the payload that says so rather than the prose guessing.
+    """
+    tracks = _payload("czech-variance.json").get("tracks") or {}
+    found, measured = [], 0
+    for track in SOAP_CRITERIA_TRACKS + DEEPSY_CRITERIA_TRACKS:
+        for judge, criteria in sorted((tracks.get(track) or {}).items()):
+            gaps = (criteria.get(key) or {}).get("gaps") or {}
+            share, pairs = gaps.get("share"), gaps.get("pairs")
+            if share is None or not pairs:
+                continue
+            measured += 1
+            if share < UNREADABLE:
+                found.append((track, judge, gaps.get("separable", 0), pairs))
+    return found, measured
+
+
+def _length_against(key: str) -> list[tuple[str, float, float]]:
+    """Tracks where this criterion falls with note length under BOTH judges.
+
+    Both, never one. A coefficient one judge sees and the other does not is a
+    fact about that judge, and this document has a section for those. The
+    threshold is the one the length chapter uses, so the two cannot disagree
+    about what counts as entangled.
+    """
+    blocks = _payload("czech-length.json").get("czech") or {}
+    found = []
+    for track in SOAP_CRITERIA_TRACKS + DEEPSY_CRITERIA_TRACKS:
+        judges = (blocks.get(track) or {}).get("judges") or {}
+        values = [
+            value
+            for block in judges.values()
+            if (value := (block.get("correlations") or {}).get(key)) is not None
+        ]
+        if len(values) > 1 and all(value <= -LENGTH_ENTANGLED for value in values):
+            found.append((track, min(values), max(values)))
+    return found
+
+
+CRITERIA_TITLE = "Criterion by criterion"
+CRITERIA_LEAD = (
+    "The six criteria one at a time. A table can say what a column scored and it cannot "
+    "say what the column is worth, and the second half is what a reader needs before "
+    "acting on the first. Each paragraph gives the same four things in the same order: "
+    "the level, under both judges in every table that has the criterion; the direction, "
+    "which way the criterion moves from one table to the next; where it breaks down; "
+    "and what it is actually catching."
+)
+#: The two rules the six paragraphs run on, said once above them rather than in
+#: each. The first was a clause inside the "where it breaks down" sentence and
+#: printed five times running; the second was nowhere at all, because it had
+#: been a table cell reading "not measured on this track" and there is no cell
+#: to put it in any more.
+CRITERIA_READING = (
+    "Every pair of numbers is the two judges, in the order the tables print them, and "
+    "they are never averaged: where the two point in opposite directions that is said "
+    "rather than smoothed, because a mean of two judges pointing opposite ways is a "
+    "number neither of them stated. And the last sentence of each paragraph -- what the "
+    "criterion catches, and how often the two judges and one native speaker said the "
+    "same thing -- was measured on the ten real Czech sessions under these six criteria "
+    "and nowhere else. Nobody has read a Deepsy note or a translated one against a "
+    "person at all."
+)
+CRITERIA_ORDER = (
+    "The order is computed rather than chosen. The criterion whose value changes most "
+    "between one table and the next comes first, because that is the order in which one "
+    "number about a criterion would mislead a reader furthest -- a column that reads the "
+    "same everywhere can be summarised and a column that does not, cannot."
+)
+CRITERION_LEVEL = "The level: {items}."
+CRITERION_DIRECTION = "The direction: {items}."
+BREAK_SPLIT = "Where it breaks down: the two judges do not both point the same way {names}."
+BREAK_UNSEPARABLE = (
+    "Where it breaks down: on {where} the resampling can tell only {separable} of the "
+    "{pairs} pairs of models apart, so the order this column puts them in there is not "
+    "one to read, and it is that thin in {places} of the {total} tables."
+)
+BREAK_LENGTH = (
+    "Where it breaks down: on {names} the column falls as a model writes longer notes, "
+    "under both judges, between {low} and {high}, and whether that is the fault or the "
+    "length is not something this document can separate."
+)
+BREAK_LEVEL = (
+    "Nothing breaks it here: the judges point the same way in every comparison, the "
+    "resampling can tell the models apart, and length does not predict it."
+)
+
+
+def _criterion_paragraph(key: str, cells: dict, digits: int) -> str:
+    """One criterion: how high, which way, where it fails, and what it catches.
+
+    Four sentences and not one of them typed. The chapter this replaces was a
+    table whose middle column counted ties and whose right-hand column carried
+    a paragraph written by hand -- which is the arrangement that let a sentence
+    measured on the real Czech sessions sit beside a Deepsy row and describe it.
+    In prose the sentence can say which table it came from.
+
+    `digits` is the column's own printed precision, and it decides two things:
+    how the level is written and what counts as a change rather than as
+    rounding. The two have to be the same number or the paragraph can report a
+    direction its own figures do not show.
+    """
+    step = 0.5 * 10**-digits
+    label = _t(MEASURE_TABLES[results.TRACK_CZECH_REAL][key]["label"])
+    said = []
+
+    items = "; ".join(
+        f"{_t(TRACK_SWITCH_LABELS.get(track, track))} "
+        + " / ".join(
+            _decimal(cells[(track, judge)][key], digits)
+            for judge in sorted(judge for other, judge in cells if other == track)
+            if key in cells[(track, judge)]
+        )
+        for track in SOAP_CRITERIA_TRACKS + DEEPSY_CRITERIA_TRACKS
+        if any(other == track and key in found for (other, _j), found in cells.items())
+    )
+    if items:
+        said.append(_t(CRITERION_LEVEL).format(items=items))
+
+    moves = [(name, _moved(cells, key, pair, step)) for name, pair in CRITERION_MOVES]
+    moves = [(name, verdict) for name, verdict in moves if verdict]
+    if moves:
+        said.append(
+            _t(CRITERION_DIRECTION).format(
+                items="; ".join(f"{_t(name)}, {_t(verdict)}" for name, verdict in moves)
             )
         )
-        + "</p>"
-        + "".join(blocks)
+
+    said.append(_breaks(key, moves))
+    said.append(_catch(key, ANCHORED_ON))
+    body = " ".join(part for part in said if part)
+    return f"<p><strong>{html.escape(label)}</strong> &mdash; {html.escape(body)}</p>"
+
+
+def _breaks(key: str, moves: list[tuple[str, str]]) -> str:
+    """The one thing that most limits what this criterion can be read for.
+
+    In a fixed order, and the order is the point. A split between the judges
+    comes first because it is a finding rather than a shortcoming: it says the
+    question itself is one people answer differently, and averaging over it
+    would hide exactly that. Only where the judges agree is it worth asking
+    whether the column can order the models, then whether it is measuring
+    length, and only when none of those bites is the level the thing to report.
+    """
+    split = [name for name, verdict in moves if verdict == MOVE_SPLIT]
+    if split:
+        return _t(BREAK_SPLIT).format(names=_join_words([_t(name) for name in split]))
+
+    unreadable, measured = _unreadable_at(key)
+    if unreadable:
+        track, judge, separable, pairs = min(unreadable, key=lambda found: found[2] / found[3])
+        return _t(BREAK_UNSEPARABLE).format(
+            where=f"{_t(TRACK_SWITCH_LABELS.get(track, track))} / {judge}",
+            separable=separable,
+            pairs=pairs,
+            places=len(unreadable),
+            total=measured,
+        )
+
+    against = _length_against(key)
+    if against:
+        return _t(BREAK_LENGTH).format(
+            names=_join_words([_t(TRACK_SWITCH_LABELS.get(t, t)) for t, _lo, _hi in against]),
+            low=_decimal(min(low for _t2, low, _high in against), 2),
+            high=_decimal(max(high for _t2, _low, high in against), 2),
+        )
+
+    return _t(BREAK_LEVEL)
+
+
+def _criteria_prose(rows: list[results.Row]) -> str:
+    """The six criteria in prose, most movable first, nothing typed.
+
+    It replaces a table with three columns -- the criterion, whether it can
+    rank, and a hand-written sentence about what it catches -- and the table
+    was the wrong shape twice over. Its middle column answered one question
+    about a column that has four things worth knowing, and its right-hand
+    column had a cell for every track while its sentences were measured on one,
+    which is why thirty-six of those cells said "not measured on this track"
+    and nothing else.
+
+    The ordering is the finding the table could not carry: a criterion that
+    reads the same in every context can be summarised in one number and one
+    that swings by a third of the scale cannot, so the swing decides which
+    paragraph a reader meets first.
+    """
+    cells = _cells(rows, SOAP_CRITERIA_TRACKS + DEEPSY_CRITERIA_TRACKS)
+    if not cells:
+        return ""
+    digits = dict(COLUMNS[results.TRACK_CZECH_REAL])
+    keys = [
+        key for key in czech_scorer.CRITERION_KEYS if any(key in found for found in cells.values())
+    ]
+    if not keys:
+        return ""
+
+    # How far a criterion travels between contexts, per judge and then the
+    # worse of them. Per judge because the two judges disagreeing is a
+    # different fact with its own sentence below, and a range taken over both
+    # at once would let that disagreement decide the order of the chapter.
+    def travel(key: str) -> float:
+        widest = 0.0
+        for judge in sorted({judge for _track, judge in cells}):
+            values = [
+                found[key]
+                for (_track, other), found in cells.items()
+                if other == judge and key in found
+            ]
+            if len(values) > 1:
+                widest = max(widest, max(values) - min(values))
+        return widest
+
+    ordered = sorted(keys, key=lambda key: (-travel(key), key))
+    paragraphs = [_criterion_paragraph(key, cells, digits.get(key, 2)) for key in ordered]
+    return (
+        f"<h2>{_t(CRITERIA_TITLE)}</h2>"
+        + f"<p>{html.escape(_t(CRITERIA_LEAD))}</p>"
+        + f"<p>{html.escape(_t(CRITERIA_ORDER))}</p>"
+        + f"<p>{html.escape(_t(CRITERIA_READING))}</p>"
+        + "".join(paragraphs)
     )
 
 
@@ -4615,13 +4807,14 @@ def build(rows: list[results.Row]) -> str:
 
 {"".join(sections)}
 
+{_criteria_prose(rows)}
+
 
 
 {_variance(rows)}
 
 {_dominance(rows)}
 
-{_verdicts(rows)}
 
 {_controls()}
 
