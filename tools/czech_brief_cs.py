@@ -24,26 +24,8 @@ from __future__ import annotations
 
 CS: dict[str, str] = {
     # --- the page itself ---------------------------------------------------
-    "Does an English leaderboard say anything about clinical Czech?": (
-        "Říká anglický žebříček něco o klinické češtině?"
-    ),
     "therapy-note-bench · Czech track · measured, not published": (
         "therapy-note-bench · český track · změřeno, nepublikováno"
-    ),
-    "The benchmark this belongs to scores model-written psychotherapy notes on two "
-    "English corpora. A model's standing there is a statement about English. This "
-    "track asks whether it carries over: the same models write notes in Czech, from "
-    "real sessions and from translated ones, and two instruments are asked about the "
-    "result. Six yes/no criteria ask whether the Czech is right. PDSQI-9, a "
-    "published instrument, asks whether the note is any good -- because the criteria "
-    "cannot: a flawless Czech sentence about nothing passes all six.": (
-        "Benchmark, ke kterému tohle patří, hodnotí modely psané psychoterapeutické "
-        "zápisy na dvou anglických korpusech. Umístění modelu tam je výrok o angličtině. "
-        "Tenhle track se ptá, jestli se to přenáší: tytéž modely píší zápisy česky, ze "
-        "skutečných sezení i z přeložených, a na výsledek se ptají dva nástroje. Sedm "
-        "kritérií ano/ne se ptá, jestli je čeština správně. PDSQI-9, publikovaný "
-        "nástroj, se ptá, jestli je zápis dobrý — protože kritéria to neumějí: "
-        "bezchybná česká věta o ničem projde všemi šesti."
     ),
     "These numbers are not on the public site and this document is not a publication.": (
         "Tato čísla nejsou na veřejném webu a tento dokument není publikace."
@@ -77,13 +59,6 @@ CS: dict[str, str] = {
         "zápis vznikl na e-INFRA, tedy na infrastruktuře, která drží i sezení — žádný "
         "přepis ji tedy kvůli shrnování neopustil. Ven šly jen zápisy: každý dostali dva "
         "soudci, po jedné otázce, na endpointech Googlu a OpenAI."
-    ),
-    "They are not the same size:": "Nejsou stejně velké:",
-    "a real session runs seven times longer than a translated AnnoMI conversation, so "
-    "the two halves differ in how hard the summarising is before language is "
-    "considered at all.": (
-        "skutečné sezení je sedmkrát delší než přeložený rozhovor AnnoMI, takže se ty "
-        "dvě půlky liší v tom, jak těžké je shrnování, ještě než přijde na řadu jazyk."
     ),
     "No judge is ever shown a real session.": "Žádný soudce nikdy neuvidí skutečné sezení.",
     "What leaves for the judge's provider is the note a model wrote, which is what "
@@ -145,7 +120,6 @@ CS: dict[str, str] = {
     "Words, median": "Slov, medián",
     "Words, range": "Slov, rozsah",
     "Turns, median": "Replik, medián",
-    "Criterion": "Kritérium",
     "Attribute": "Atribut",
     "Real sessions": "Skutečná sezení",
     "Translated AnnoMI": "Přeložené AnnoMI",
@@ -282,9 +256,6 @@ CS: dict[str, str] = {
         "Nezodpovězené otázky se hromadí u delších zápisů, takže to, co chybí, není "
         "náhodný vzorek korpusu. Čtěte tyto řádky jako předběžné."
     ),
-    "Not drawn: this track was also scored under": (
-        "Nevykresleno: tenhle track byl hodnocen také podle"
-    ),
     ", an earlier version of the rubric. Those rows are a different instrument rather "
     "than an earlier attempt at this one, so they are named here and not placed beside "
     "these. They remain in the local record.": (
@@ -302,12 +273,6 @@ CS: dict[str, str] = {
     "same anchors, same judge; only the language of the note differs.": (
         "PDSQI-9 na anglických zápisech proti PDSQI-9 na českých. Tytéž atributy, tytéž "
         "kotvy, týž soudce; liší se jen jazyk zápisu."
-    ),
-    "-- what the page sorts by, so what a position means -- against the Czech quality "
-    "columns. Nothing here survives the test, and the two judges do not agree even on "
-    "the sign.": (
-        "— podle čeho stránka řadí, tedy co znamená umístění — proti českým sloupcům "
-        "kvality. Nic z toho testem neprojde a dva soudci se neshodnou ani na znaménku."
     ),
     "Flat on one side and therefore not correlated:": (
         "Ploché na jedné straně, a proto nekorelováno:"
@@ -487,45 +452,12 @@ CS: dict[str, str] = {
         "Deepsy, zápis z přeložené půlky ani jakýkoli zápis na PDSQI-9."
     ),
     # --- what each column catches ------------------------------------------
-    "Reliable. The two judges answered the same way on 79% of notes and one native "
-    "speaker agreed with them on 18 of 20.": (
-        "Spolehlivé. Dva soudci odpověděli stejně u 79 % "
-        "zápisů a jeden rodilý mluvčí s nimi souhlasil u 18 "
-        "z 20."
-    ),
-    "The weakest column here, and it should be read as a flag rather than a score. The "
-    "two judges agree on only 67% of notes -- the lowest of the seven -- and a native "
-    "speaker agreed with them on 11 of 20 and 7 of 20. Whether a Czech phrase is a "
-    "literal translation from English is a judgement people make differently, and "
-    "these numbers show that rather than hiding it.": (
-        "Nejslabší sloupec tady a měl by se číst jako "
-        "upozornění, ne jako známka. Dva soudci se shodnou jen u 67 % "
-        "zápisů — nejméně ze sedmi — a rodilý "
-        "mluvčí s nimi souhlasil u 11 z 20 a 7 z 20. Zda je český "
-        "obrat doslovným překladem z angličtiny, posuzují lidé "
-        "různě, a tato čísla to ukazují, místo aby to "
-        "skrývala."
-    ),
-    "Reliable, and the fault it catches is unambiguous: an English term sitting in a "
-    "Czech sentence. Judges agree on 87% of notes, the native speaker on 19 of 20.": (
-        "Spolehlivé a chyba, kterou chytá, je jednoznačná: "
-        "anglický termín sedící v české větě. "
-        "Soudci se shodnou u 87 % zápisů, rodilý mluvčí u 19 "
-        "z 20."
-    ),
     "Catches real grammatical faults, but the two judges answer differently on a "
     "quarter of notes. A gap of one or two notes between models is inside that noise.": (
         "Chytá skutečné gramatické chyby, ale dva soudci "
         "odpovídají různě u čtvrtiny zápisů. "
         "Rozdíl jednoho nebo dvou zápisů mezi modely je uvnitř "
         "tohohle šumu."
-    ),
-    "Catches colloquial words where clinical ones belong. Judges agree on 75% of "
-    "notes; the native speaker agreed with the first judge on 19 of 20 and with the "
-    "second on 15.": (
-        "Chytá hovorová slova tam, kam patří odborná. Soudci "
-        "se shodnou u 75 % zápisů; rodilý mluvčí souhlasil s "
-        "prvním soudcem u 19 z 20 a s druhým u 15."
     ),
     "Read this one against the prompt, not against the models. The same models on the "
     "same sessions score 0.00 here and 0.90 to 1.00 in the Deepsy format, and the "
@@ -546,10 +478,6 @@ CS: dict[str, str] = {
         "otázka jmenovala jen rovnou dvojitou uvozovku a 45 ze 75 zápisů, "
         "které něco citují, místo ní používá "
         "apostrof. Otázka teď jmenuje obě."
-    ),
-    "The strongest agreement with a person of the seven: 20 of 20 against the first "
-    "judge, 17 against the second.": (
-        "Nejsilnější shoda s člověkem ze sedmi: 20 z 20 proti prvnímu soudci, 17 proti druhému."
     ),
     "Says almost nothing. One judge gave 5.00 to every model.": (
         "Neříká skoro nic. Jeden soudce dal 5.00 všem modelům."
@@ -636,47 +564,7 @@ CS: dict[str, str] = {
         "důkazem."
     ),
     # --- bands, not places -------------------------------------------------
-    "Bands, not places": "Pásma, ne pořadí",
-    "As many as {models} models over {notes} notes cannot be put in order, and a "
-    "table that prints them in one invites a comparison it cannot support. These are "
-    "the same numbers grouped instead: within a band nothing separates the models, "
-    "between bands something does. A band ends where the gap exceeds what resampling "
-    "the sessions can rule out, so its width is the measurement's own resolution.": (
-        "Až {models} modelů na {notes} zápisech nejde seřadit a tabulka, která je "
-        "v pořadí vytiskne, zve ke srovnání, které neunese. Tady jsou tatáž čísla "
-        "seskupená: uvnitř pásma modely nic neodlišuje, mezi pásmy ano. Pásmo končí "
-        "tam, kde rozdíl přesáhne to, co převzorkování sezení dokáže vyloučit — "
-        "jeho šířka je tedy rozlišovací schopnost samotného měření."
-    ),
-    "a band is": "pásmo je široké",
-    "wide, over at most": "a stojí nejvýš na",
     "sessions": "sezeních",
-    "a pair is compared on the sessions both models wrote, and {names} wrote fewer": (
-        "dvojice se porovnává na sezeních, ze kterých psaly oba modely, a {names} napsaly míň"
-    ),
-    "{answered} of {expected} judge answers": "{answered} z {expected} odpovědí soudce",
-    "notes entered on fewer than {columns} criteria: {partial}": (
-        "zápisů vstoupilo na méně než {columns} kritériích: {partial}"
-    ),
-    "how much each row rests on was not recorded for this table": (
-        "u této tabulky nebylo zaznamenáno, na kolika zápisech každý řádek stojí"
-    ),
-    "{absent} not asked on this corpus, so this band averages {columns} of {named}": (
-        "{absent} se na tomto korpusu neptáme, takže toto pásmo průměruje {columns} z {named}"
-    ),
-    "The rows do not rest on the same amount. A model's place is the mean of the "
-    "notes it has, and where that is fewer than the table's sessions -- the model "
-    "wrote no note, or the judge answered only part of one -- the count is printed "
-    "beside its name.": (
-        "Řádky nestojí na stejném množství. Místo modelu je průměrem zápisů, které má, "
-        "a tam, kde je jich méně než sezení v tabulce — model zápis nenapsal, nebo "
-        "soudce odpověděl jen na jeho část — je počet vytištěn vedle jeho jména."
-    ),
-    "These models are placed on well under the table's sessions, so the band they "
-    "fall in is provisional:": (
-        "Tyto modely stojí na výrazně méně než na sezeních tabulky, takže pásmo, "
-        "do kterého padnou, je předběžné:"
-    ),
     "the SOAP halves": "poloviny SOAP",
     "the Deepsy format": "formát Deepsy",
     "Those names do not all rest on the same amount, and the thinnest of them is "
@@ -697,7 +585,6 @@ CS: dict[str, str] = {
         "toto měření neumísťuje: jiné převzorkování je posune do sousedního pásma."
     ),
     "Band": "Pásmo",
-    "Score": "Skóre",
     "Models": "Modely",
     # --- three views of one question ---------------------------------------
     # The three names are written lower case and in the nominative, because
@@ -972,9 +859,6 @@ CS: dict[str, str] = {
         "Vyšší je lepší všude. Většina sloupců je hodnocená 1 až 5; poslední je podíl "
         "zápisů bez té chyby, od 0 do 1."
     ),
-    # --- real against translated -------------------------------------------
-    "real": "skutečná",
-    "translated": "přeložená",
     # --- the criterion measured but not drawn ------------------------------
     "The {deepsy} notes in the Deepsy format were read against the criteria only. "
     "PDSQI-9 was never asked about a Deepsy note, so no quality figure anywhere in "
@@ -1096,12 +980,6 @@ CS: dict[str, str] = {
     "Nothing here separates these models: no column takes two different values.": (
         "Tady modely nerozlišuje nic: žádný sloupec nemá dvě různé hodnoty."
     ),
-    "Sorted best first, by the one column that separates these models: {names}.": (
-        "Seřazeno od nejlepšího, podle jediného sloupce, který tyhle modely rozlišuje: {names}."
-    ),
-    "Sorted best first, by the mean of these {count} columns: {names}.": (
-        "Seřazeno od nejlepšího, podle průměru těchto {count} sloupců: {names}."
-    ),
     "One more is the same for every model here, so it orders nothing and is left out.": (
         "Ještě jeden mají všechny modely stejný, takže nic neřadí a do pořadí nevstupuje."
     ),
@@ -1138,7 +1016,6 @@ CS: dict[str, str] = {
         "U jednoho soudce nejsilnější shoda s člověkem, přes oba je na tom stejně jako Diakritika."
     ),
     # --- the conclusion, before the tables ---------------------------------
-    "What eleven models did, in five sentences": ("Co jedenáct modelů dokázalo, v pěti větách"),
     # Subject and verb in one key. English conjugates "No model IS", Czech
     # negates the verb -- "Žádný model NENÍ" -- so the empty end cannot be built
     # from the same "is" the one- and two-model cases use.
@@ -1337,8 +1214,6 @@ CS: dict[str, str] = {
     # --- said once, and named by what each section does ---------------------
     "Not drawn:": "Nevykresleno:",
     "were also scored under": "byly hodnoceny také podle",
-    "who is ahead": "kdo je napřed",
-    "how far apart is far enough": "jak daleko je dost daleko",
     "the six Czech criteria": "šest českých kritérií",
     "PDSQI-9, without the session": "PDSQI-9, bez sezení",
     "PDSQI-9, with the session": "PDSQI-9, se sezením",
@@ -1698,13 +1573,6 @@ CS: dict[str, str] = {
         "nenapsal, nebo na něj soudce neodpověděl. To, co chybí, se hromadí u "
         "nejdelších sezení, takže to není náhodný výběr. Čti je jako předběžné:"
     ),
-    # --- refusals ----------------------------------------------------------
-    "Refusing to write: a row carries something that is not a score.": (
-        "Odmítám zapsat: řádek nese něco, co není skóre."
-    ),
-    "is not there. Run `tnb score-czech` first.": ("tam není. Spusťte nejdřív `tnb score-czech`."),
-    ": a system id carries a run of digits": ": id systému nese řadu číslic",
-    "scored row(s) from": "hodnocených řádků z",
     # --- how large the length effect is, and what survives it --------------
     "How large is it? Fitting each judge's composite of the criteria against the "
     "model's median note length costs {low} to {high} hundredths of a point per "
