@@ -1878,4 +1878,81 @@ CS: dict[str, str] = {
     "Note length against the criteria score, one dot per model": (
         "Délka zápisu proti skóre v kritériích, jeden bod na model"
     ),
+    # --- the box that closes the document -----------------------------------
+    "Where this leaves a team choosing a model": ("Kde to nechává tým, který vybírá model"),
+    "Everything above is one run. {models} models -- whichever ones e-INFRA had "
+    "deployed the week it was measured -- were asked for {asked} notes, wrote "
+    "{written} of them from {sessions} sessions, and every note that came back was "
+    "read by both judges. Nothing here is averaged over runs, over judges or over the "
+    "two halves. And the list of models is a deployment rather than a field: rebuilt "
+    "after the next one, this document would hold different names, and in places a "
+    "different model behind the same name.": (
+        "Všechno výše je jeden běh. {models} modelů — ty, které měla e-INFRA nasazené "
+        "v týdnu, kdy se měřilo — dostalo zadání napsat {asked} zápisů, napsalo jich "
+        "{written} z {sessions} sezení a každý zápis, který se vrátil, přečetli oba "
+        "soudci. Nic se tu neprůměruje přes běhy, přes soudce ani přes obě půlky. "
+        "A ten seznam modelů je nasazení, ne startovní pole: sestavený znovu po dalším "
+        "nasazení by tenhle dokument měl jiná jména a místy jiný model pod stejným "
+        "jménem."
+    ),
+    "The finest distinction that survives both judges is a band and not a place -- and "
+    "even the band moves: of the {total} models these tables place, {differ} are put in "
+    "different bands by the two judges somewhere. Two models inside one band are two "
+    "models this measurement did not tell apart, and two models a band apart under one "
+    "judge may be that judge.": (
+        "Nejjemnější rozlišení, které přežije oba soudce, je pásmo, ne příčka — a i to "
+        "pásmo se hýbe: z {total} modelů, které tyhle tabulky umísťují, jich {differ} "
+        "dostane od obou soudců někde jiné pásmo. Dva modely v jednom pásmu jsou dva "
+        "modely, které tohle měření nerozlišilo, a dva modely vzdálené o jedno pásmo "
+        "u jednoho soudce můžou být rozdílem mezi soudci, ne mezi modely."
+    ),
+    "The finest distinction that survives both judges is a band and not a place, and "
+    "here the two of them agree: every one of the {total} models these tables place is "
+    "put in the same band by both. Two models inside one band are still two models this "
+    "measurement did not tell apart.": (
+        "Nejjemnější rozlišení, které přežije oba soudce, je pásmo, ne příčka — a tady "
+        "se oba shodnou: každý z {total} modelů, které tyhle tabulky umísťují, dostane "
+        "od obou stejné pásmo. Dva modely v jednom pásmu jsou i tak dva modely, které "
+        "tohle měření nerozlišilo."
+    ),
+    "What would let this document say more is more measuring, and what is missing is "
+    "short enough to list.": (
+        "Aby tenhle dokument mohl říct víc, muselo by se víc měřit — a to, co chybí, "
+        "se dá vyjmenovat."
+    ),
+    "The real half of these {sessions} sessions is one client and one therapist, so "
+    "everything measured there is also a fact about how those two people talk; more "
+    "sessions, with other clients and other therapists, is what would lift that.": (
+        "Skutečná půlka z těchhle {sessions} sezení je jeden klient a jeden terapeut, "
+        "takže všechno, co se na ní změřilo, je zároveň fakt o tom, jak spolu mluví ti "
+        "dva konkrétní lidé; zvednout by to šlo víc sezeními, s jinými klienty "
+        "a jinými terapeuty."
+    ),
+    "One Czech reader has checked {notes} of these notes by hand, and one reader cannot "
+    "say how far two would have agreed -- a second would turn every place where a judge "
+    "and he differ into a figure rather than an open question.": (
+        "{notes} z těchhle zápisů prošel ručně jeden český čtenář, a jeden čtenář neumí "
+        "říct, jak moc by se shodli dva — druhý by z každého místa, kde se soudce a on "
+        "rozcházejí, udělal číslo místo otevřené otázky."
+    ),
+    "And PDSQI-9 has never been put to a note in the Deepsy format: those {deepsy} "
+    "notes are already written, so asking would cost no generation at all, and it is "
+    "the only way to find out whether the format a clinic would actually use produces "
+    "a note worth filing.": (
+        "A PDSQI-9 se nikdy neptalo na zápis ve formátu Deepsy: těch {deepsy} zápisů už "
+        "je napsaných, takže by se kvůli tomu nic negenerovalo, a je to jediná cesta, "
+        "jak zjistit, jestli formát, který by klinika opravdu používala, dává zápis, "
+        "který stojí za založení do dokumentace."
+    ),
+    "Until then, the reading this document has taken throughout is the one to keep. "
+    "Decide first which of the three questions the choice is really about -- is the "
+    "Czech right, is the note worth filing, does the Deepsy format work -- because none "
+    "of the three answers the other two. Then read the ordering, read it as bands "
+    "rather than as places, and do not read the gaps between neighbours.": (
+        "Do té doby platí to čtení, kterého se tenhle dokument drží celou dobu. Nejdřív "
+        "se rozhodněte, o kterou ze tří otázek při výběru vlastně jde — jestli je "
+        "čeština správně, jestli zápis stojí za založení do dokumentace, jestli funguje "
+        "formát Deepsy — protože žádná z těch tří neodpovídá na zbylé dvě. Pak čtěte "
+        "pořadí, čtěte ho jako pásma, ne jako příčky, a nečtěte rozdíly mezi sousedy."
+    ),
 }

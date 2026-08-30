@@ -993,6 +993,37 @@ def _band_unresolved(tracks: list[str]) -> str:
     )
 
 
+def _band_agreement(tracks: list[str]) -> tuple[int, int]:
+    """Over every table that draws bands: how many models the judges place apart.
+
+    Returns `(differ, total)` -- how many of the models these tables place are
+    given different bands by the two judges in at least one table, out of how
+    many are placed by both judges everywhere they appear.
+
+    Counted per model rather than per cell, because that is the question a
+    reader has: not "how often do the two judges differ" but "is the band I am
+    reading about this model one both of them gave it". A model one judge could
+    not place at all -- it wrote nothing that judge could band -- is counted in
+    neither figure and left out of the total, because a band nobody gave it is
+    not a band the two judges agreed or disagreed about.
+    """
+    placed: dict[str, list[bool]] = {}
+    unplaced: set[str] = set()
+    for track in tracks:
+        numbers = _band_numbers(track)
+        judges = sorted(numbers)
+        if len(judges) < 2:
+            continue
+        for system in set().union(*(set(numbers[judge]) for judge in judges)):
+            found = [numbers[judge].get(system) for judge in judges]
+            if any(band is None for band in found):
+                unplaced.add(system)
+                continue
+            placed.setdefault(system, []).append(len(set(found)) == 1)
+    agreed = {system: seen for system, seen in placed.items() if system not in unplaced}
+    return sum(1 for seen in agreed.values() if not all(seen)), len(agreed)
+
+
 #: Who the rows are, above every one of the score tables. Ten words, and they
 #: are not decoration: the person this document was written for read the model
 #: column as the list of people whose sessions these were, and came away
@@ -1858,7 +1889,7 @@ def _rosters(rows: list[results.Row], tracks: tuple[str, ...]) -> set[str]:
     return found
 
 
-def _box(title: str, said: list[str]) -> str:
+def _box(title: str, said: list[str], *, kind: str = "finding", level: int = 3) -> str:
     """A chapter's closing box, in the same shape each time it closes one.
 
     The document had no place where a chapter said what it came to. It had a
@@ -1867,11 +1898,17 @@ def _box(title: str, said: list[str]) -> str:
     saying what the first two had shown. A box at the end of each chapter is
     that sentence, and it is the same shape in all three so that a reader who
     learns to look for it once finds it again.
+
+    `kind` and `level` are how the box that closes the whole document uses the
+    same shape as the three that close a chapter: a different tint, and a
+    heading at the weight of the summary on the front page rather than of a
+    section inside a chapter. It closes nothing smaller than the document, so
+    it should not look like it does.
     """
     body = "".join(f"<p>{html.escape(text)}</p>" for text in said if text)
     if not body:
         return ""
-    return f"<div class='finding'><h3>{html.escape(_t(title))}</h3>{body}</div>"
+    return f"<div class='{kind}'><h{level}>{html.escape(_t(title))}</h{level}>{body}</div>"
 
 
 #: Said in every box that compares two halves, because the disagreement is the
@@ -2115,6 +2152,128 @@ def _box_c(rows: list[results.Row]) -> str:
             _t(BOX_C_ROSTER).format(here=len(here), there=len(there), shared=len(here & there))
         )
     return _box(BOX_C_TITLE, said)
+
+
+# --- the box that closes the document ---------------------------------------
+#: Box D, and it is not a fourth chapter box. The three above say what two
+#: tables came to; this says what the whole document comes to for the person
+#: who has to act on it, and it is last on purpose. A reader handed fifteen
+#: chapters of measurement is owed one page saying what may be done with them.
+#: Every figure in it is read from the payloads the chapters were drawn from.
+CLOSING_TITLE = "Where this leaves a team choosing a model"
+
+CLOSING_RUN = (
+    "Everything above is one run. {models} models -- whichever ones e-INFRA had "
+    "deployed the week it was measured -- were asked for {asked} notes, wrote "
+    "{written} of them from {sessions} sessions, and every note that came back was "
+    "read by both judges. Nothing here is averaged over runs, over judges or over the "
+    "two halves. And the list of models is a deployment rather than a field: rebuilt "
+    "after the next one, this document would hold different names, and in places a "
+    "different model behind the same name."
+)
+
+#: How far the Band column can be leant on, counted rather than warned about.
+#: The tables mark a cell where the two judges disagree and nothing anywhere
+#: says how often that happens, so a reader who saw three marked cells could
+#: reasonably think it was three.
+CLOSING_BANDS = (
+    "The finest distinction that survives both judges is a band and not a place -- and "
+    "even the band moves: of the {total} models these tables place, {differ} are put in "
+    "different bands by the two judges somewhere. Two models inside one band are two "
+    "models this measurement did not tell apart, and two models a band apart under one "
+    "judge may be that judge."
+)
+#: The other outcome, written and translated although this data does not reach
+#: it. A silence where the judges agreed everywhere would read as though the
+#: count had been left out for being embarrassing.
+CLOSING_BANDS_AGREE = (
+    "The finest distinction that survives both judges is a band and not a place, and "
+    "here the two of them agree: every one of the {total} models these tables place is "
+    "put in the same band by both. Two models inside one band are still two models this "
+    "measurement did not tell apart."
+)
+
+#: What somebody could go and do, which is the half the caveats chapter does
+#: not carry: it says what may not be concluded, and this says what would have
+#: to be measured for more to be concludable. Each sentence prints only while
+#: the gap it names is still a gap.
+CLOSING_NEXT = (
+    "What would let this document say more is more measuring, and what is missing is "
+    "short enough to list."
+)
+CLOSING_NEXT_CORPUS = (
+    "The real half of these {sessions} sessions is one client and one therapist, so "
+    "everything measured there is also a fact about how those two people talk; more "
+    "sessions, with other clients and other therapists, is what would lift that."
+)
+CLOSING_NEXT_RATER = (
+    "One Czech reader has checked {notes} of these notes by hand, and one reader cannot "
+    "say how far two would have agreed -- a second would turn every place where a judge "
+    "and he differ into a figure rather than an open question."
+)
+CLOSING_NEXT_DEEPSY = (
+    "And PDSQI-9 has never been put to a note in the Deepsy format: those {deepsy} "
+    "notes are already written, so asking would cost no generation at all, and it is "
+    "the only way to find out whether the format a clinic would actually use produces "
+    "a note worth filing."
+)
+
+CLOSING_READING = (
+    "Until then, the reading this document has taken throughout is the one to keep. "
+    "Decide first which of the three questions the choice is really about -- is the "
+    "Czech right, is the note worth filing, does the Deepsy format work -- because none "
+    "of the three answers the other two. Then read the ordering, read it as bands "
+    "rather than as places, and do not read the gaps between neighbours."
+)
+
+
+def _sessions(rows: list[results.Row]) -> int:
+    """How many distinct sessions the whole run rests on.
+
+    Counted per half and across formats, never by adding the tracks up: the
+    same transcripts are written twice, once in each note format, so a sum over
+    the four criteria tracks reports forty sessions where there are twenty.
+    """
+    wrote = _wrote(rows)
+    halves = (
+        (results.TRACK_CZECH_REAL, results.TRACK_DEEPSY_REAL),
+        (results.TRACK_CZECH_TRANSLATED, results.TRACK_DEEPSY_TRANSLATED),
+    )
+    return sum(
+        max((wrote[track]["corpus"] for track in tracks if track in wrote), default=0)
+        for tracks in halves
+    )
+
+
+def _closing(rows: list[results.Row], tracks: list[str]) -> str:
+    """Box D: what the whole document comes to, for somebody who has to act on it."""
+    figures = _written_figures(rows)
+    sessions = _sessions(rows)
+    if not sessions or not figures.get("models"):
+        return ""
+    said = [_t(CLOSING_RUN).format(sessions=sessions, **figures)]
+
+    differ, total = _band_agreement(tracks)
+    if total:
+        said.append(
+            _t(CLOSING_BANDS if differ else CLOSING_BANDS_AGREE).format(differ=differ, total=total)
+        )
+
+    # One paragraph rather than four, because they are one thought: the list
+    # is what a reader would have to commission, and it is short.
+    missing = [_t(CLOSING_NEXT), _t(CLOSING_NEXT_CORPUS).format(sessions=sessions)]
+    rated = _payload("czech-anchor.json").get("notes_rated")
+    if rated:
+        missing.append(_t(CLOSING_NEXT_RATER).format(notes=rated))
+    # Asked of the constants that decide what a track is rather than typed: the
+    # day a Deepsy note is rated on PDSQI-9 there is a track in both of those
+    # tuples, and this sentence stops printing by itself.
+    if int(figures["deepsy"]) and not set(DEEPSY_CRITERIA_TRACKS) & set(PDSQI_TRACKS):
+        missing.append(_t(CLOSING_NEXT_DEEPSY).format(deepsy=figures["deepsy"]))
+    said.append(" ".join(missing))
+
+    said.append(_t(CLOSING_READING))
+    return _box(CLOSING_TITLE, said, kind="closing", level=2)
 
 
 #: The three moves a criterion can be watched over. Written as pairs rather
@@ -4962,6 +5121,8 @@ def build(rows: list[results.Row]) -> str:
 <p><strong>{_t("No judge is ever shown a real session.")}</strong> {_t(METHOD_BOUNDARY)}</p>
 <p>{_t(METHOD_CRITERIA)}</p>
 <p>{_t(METHOD_PDSQI)}</p>
+
+{_closing(rows, drawn_tracks)}
 
 <footer>{_t(FOOTER)}</footer>
 </body></html>
