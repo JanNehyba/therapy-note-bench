@@ -846,8 +846,6 @@ CS: dict[str, str] = {
     "How long the notes are, and whether length is rewarded": (
         "Jak dlouhé zápisy modely píšou a jestli se délka vyplácí"
     ),
-    "Column": "Sloupec",
-    "English \u00b7 TN-Eval SOAP": "Angličtina \u00b7 TN-Eval SOAP",
     "the data section": "sekce data",
     "the hypotheses section": "sekce hypotézy",
     "the plan section": "sekce plán",
@@ -891,10 +889,15 @@ CS: dict[str, str] = {
     "{soap_total} on the SOAP halves and {deepsy_against} of {deepsy_total} in the "
     "Deepsy format, which is one reason the two are never pooled -- and the exceptions "
     "are named rather than rounded away: the columns where the coefficient stays "
-    "positive under BOTH judges are {positive}. A column is printed here only when "
-    "both judges agree on the direction and at least one of them reaches 0.40; both "
-    "numbers are shown, so a column the two judges feel differently strongly about is "
-    "visible as that rather than averaged away.": (
+    "positive under BOTH judges are {positive}. The chart below says the same thing "
+    "without the coefficients. Each dot is one model: its median note length across "
+    "the bottom, the six criteria averaged up the side, one panel for each half of "
+    "the corpus. The two judges are drawn in separate colours and never averaged, so "
+    "a model they disagree about appears as two dots at different heights instead of "
+    "as one number somewhere between them. The dashed line is the straight line that "
+    "best fits one judge's dots -- drawn rather than described, because a slope is "
+    "easier to argue with when the points it was fitted to are on the page beside "
+    "it.": (
         "Oba jazyky pak táhnou na opačné strany a tohle je to nejužitečnější, co je "
         "dobré vědět dřív, než se člověk pustí do kterékoli tabulky výše. V angličtině "
         "delší zápis dostává vyšší úplnost, a to u obou soudců. V češtině má horší "
@@ -903,9 +906,23 @@ CS: dict[str, str] = {
         "Deepsy, což je jeden z důvodů, proč se obojí nikdy nesčítá — a výjimky se "
         "jmenují, ne zaokrouhlují: sloupce, ve kterých koeficient zůstává kladný "
         "u OBOU soudců, jsou {positive}. "
-        "Sloupec je tu vypsaný jen tehdy, když se oba soudci shodnou na směru a aspoň "
-        "jeden z nich dosáhne 0,40; ukázaná jsou obě čísla, takže sloupec, který každý "
-        "ze soudců cítí jinak silně, je vidět právě takový, a ne zprůměrovaný."
+        "Graf níže říká totéž bez koeficientů. Každý bod je jeden model: vodorovně "
+        "mediánová délka jeho zápisu, svisle průměr šesti kritérií, jeden panel pro "
+        "každou půlku korpusu. Oba soudci jsou vykreslení zvlášť, každý svou barvou, "
+        "a nikdy se neprůměrují — model, na kterém se neshodnou, je proto vidět jako "
+        "dva body v různé výšce, ne jako jedno číslo někde mezi nimi. Přerušovaná "
+        "čára je přímka, která nejlíp prokládá body jednoho soudce; je nakreslená, "
+        "a ne popsaná, protože se sklonem se lépe polemizuje, když má člověk na "
+        "stránce vedle něj i body, ze kterých vznikl."
+    ),
+    "Two panels, one for each half of the corpus, and one colour for each judge. The "
+    "thing to look at is whether the two dashed lines in a panel fall the same way: a "
+    "slope one judge sees and the other does not would be a fact about that judge "
+    "rather than about length.": (
+        "Dva panely, jeden pro každou půlku korpusu, a jedna barva pro každého soudce. "
+        "Dívat se je třeba na to, jestli obě přerušované čáry v panelu klesají stejně: "
+        "sklon, který vidí jeden soudce a druhý ne, by byl výrok o tom soudci, ne "
+        "o délce."
     ),
     "no column at all": "žádné",
     "Before reading that as \u201cthese models write worse Czech\u201d: each Czech "
@@ -933,7 +950,6 @@ CS: dict[str, str] = {
         "tytéž modely. Kam padnou poslední tři místa, je výrok o půlkách SOAP, ne "
         "zákon o délce."
     ),
-    "by design": "tak to má být",
     # --- the sort, named beside the table ----------------------------------
     "and": "a",
     "Nothing here separates these models: no column takes two different values.": (
@@ -1572,28 +1588,33 @@ CS: dict[str, str] = {
         "shrnuje, a pak odečtení toho, co délka předpovídá, odečte spolu s artefaktem "
         "i výsledek."
     ),
-    "What can be said without fitting anything is in the table. A pair of models "
-    "counts as decided when one beats the other by more than {separation} on the "
-    "composite under BOTH judges, and it survives the handicap when the winner also "
-    "wrote at least as many words as the loser -- so the longer note had more places "
-    "for a fault to be found and had fewer of them anyway. That leaves {survived} of "
-    "the {decided} decided pairs, counting the two halves separately. What survives "
-    "is a partial order and not a ranking, "
-    "and how little of it there is is the finding.": (
-        "Co se dá říct, aniž by se cokoli prokládalo, je v tabulce. Dvojice modelů se "
-        "počítá za rozhodnutou, když jeden porazí druhého o víc než {separation} ve "
-        "složeném skóre u OBOU soudců, a handicap přežije tehdy, když vítěz zároveň "
-        "napsal aspoň tolik slov jako poražený — delší zápis tedy nabízel víc míst, "
-        "kde chybu najít, a přesto jich měl míň. Takových je {survived} z {decided} "
-        "rozhodnutých dvojic, počítáno na obou polovinách zvlášť. Co zbude, je "
-        "částečné uspořádání, ne žebříček, a nález "
-        "je právě to, jak málo toho je."
+    "So what can be said about which model is better, without fitting anything at "
+    "all? Take the models two at a time. A pair counts as decided when one of them "
+    "beats the other by more than {separation} on the composite of the six criteria "
+    "under BOTH judges -- one judge on its own decides nothing here. A decided pair "
+    "then survives the handicap when the winner also wrote at least as many words as "
+    "the loser: the longer note offered more places for a fault to be found and had "
+    "fewer of them anyway, so length is not what won it. {survived} of the {decided} "
+    "decided pairs survive, counting the two halves of the corpus separately. That is "
+    "a partial order and not a ranking: it says which model beats which, and about "
+    "most pairs it says nothing at all. It also reaches only part of the field -- "
+    "{winners} models ever appear on the winning side of a surviving pair and "
+    "{losers} on the losing side, and a model can be in both lists, beaten by one "
+    "model and beating another. How little of this there is is the finding.": (
+        "Co se tedy dá říct o tom, který model je lepší, aniž by se cokoli prokládalo? "
+        "Vezměme modely po dvou. Dvojice se počítá za rozhodnutou, když jeden z nich "
+        "porazí druhého o víc než {separation} ve složeném skóre šesti kritérií "
+        "u OBOU soudců — jeden soudce sám o sobě tu nerozhoduje o ničem. Rozhodnutá "
+        "dvojice pak přežije handicap tehdy, když vítěz zároveň napsal aspoň tolik "
+        "slov jako poražený: delší zápis nabízel víc míst, kde chybu najít, a přesto "
+        "jich měl míň, takže to, co dvojici rozhodlo, není délka. Handicap přežije "
+        "{survived} z {decided} rozhodnutých dvojic, počítáno na obou půlkách korpusu "
+        "zvlášť. Je to částečné uspořádání, ne žebříček: říká, který model poráží "
+        "který, a o většině dvojic neříká vůbec nic. Navíc dosáhne jen na část pole — "
+        "na vítězné straně dvojice, která handicap přežila, se objeví {winners} "
+        "modelů a na poražené {losers}, a model může být v obou seznamech, jedním "
+        "poražený a jiný porážející. A nález je právě to, jak málo toho je."
     ),
-    "on the real sessions": "na skutečných sezeních",
-    "on the translated ones": "na přeložených",
-    "{margin} · {winner} vs {loser} words": "{margin} · {winner} vs {loser} slov",
-    "Beats": "Poráží",
-    "this model": "tento model",
     # --- the four figures ---------------------------------------------------
     # `tools/czech_figures.py` may hold no Czech at all -- it is scanned for
     # diacritics like every other tool -- so every title, caption, axis label

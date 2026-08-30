@@ -140,12 +140,12 @@ def test_one_table_per_comparability_group_not_per_judge():
     ]
     page = czech_brief.build(rows)
 
-    # Score tables only. The handicap table under the length section has one row
-    # per BEATEN PAIR, so a model that beats three others is in its first column
-    # three times -- correctly. Matching it here would have made the assertion
-    # below fail for a reason that has nothing to do with comparability groups,
-    # and the obvious repair would have been to loosen the assertion.
-    tables = re.findall(r"<table(?! class='handicap')[^>]*>.*?<tbody>(.*?)</tbody>", page, re.S)
+    # Every table in the document, because every table in the document has one
+    # row per model. The exclusion that used to stand here named the handicap
+    # table under the length section, which had one row per BEATEN PAIR and so
+    # repeated a winner legitimately; the length chapter draws a chart in its
+    # place now, and nothing left on the page prints a model twice on purpose.
+    tables = re.findall(r"<table[^>]*>.*?<tbody>(.*?)</tbody>", page, re.S)
     assert tables, "something was drawn"
     for body in tables:
         models = re.findall(r"<tr><td>([a-z0-9.\-]+)</td>", body)
@@ -225,7 +225,11 @@ def test_a_superseded_rubric_is_named_and_not_drawn():
     new = _row(judge_prompt_version="czech-criteria-v2", scored_at="2026-08-28T12:00:00Z")
     page = czech_brief.build([old, new])
 
-    assert page.count("rubric czech-criteria-v2") == 1
+    # The caption over a table, which is what "drawn" means here. A chart in
+    # the length chapter names in its source line the rubric it was drawn
+    # from, which is right and is not a table; matching the bare words counted
+    # that too, on any checkout that has a local record to draw from.
+    assert page.count("rubric czech-criteria-v2</p>") == 1
     assert "rubric czech-criteria-v1" not in page
     assert "Not drawn" in page and "czech-criteria-v1" in page
 
@@ -254,8 +258,9 @@ def test_both_judges_of_the_current_rubric_survive_finishing_apart():
     assert "gemini-3.1-pro-preview" in page
     assert "gpt-5.6-terra" in page
     # One caption now, not one per judge: both judges share a table, so the
-    # rubric is stated once and each cell carries both of their numbers.
-    assert page.count("rubric czech-criteria-v2") == 1
+    # rubric is stated once and each cell carries both of their numbers. The
+    # caption, not the bare words -- a chart's source line names its rubric too.
+    assert page.count("rubric czech-criteria-v2</p>") == 1
 
 
 # --- the Czech briefing -----------------------------------------------------

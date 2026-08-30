@@ -1253,10 +1253,24 @@ LENGTH_BUYS = (
     "{soap_total} on the SOAP halves and {deepsy_against} of {deepsy_total} in the "
     "Deepsy format, which is one reason the two are never pooled -- and the exceptions "
     "are named rather than rounded away: the columns where the coefficient stays "
-    "positive under BOTH judges are {positive}. A column is printed here only when "
-    "both judges agree on the direction and at least one of them reaches 0.40; both "
-    "numbers are shown, so a column the two judges feel differently strongly about is "
-    "visible as that rather than averaged away."
+    "positive under BOTH judges are {positive}. The chart below says the same thing "
+    "without the coefficients. Each dot is one model: its median note length across "
+    "the bottom, the six criteria averaged up the side, one panel for each half of "
+    "the corpus. The two judges are drawn in separate colours and never averaged, so "
+    "a model they disagree about appears as two dots at different heights instead of "
+    "as one number somewhere between them. The dashed line is the straight line that "
+    "best fits one judge's dots -- drawn rather than described, because a slope is "
+    "easier to argue with when the points it was fitted to are on the page beside it."
+)
+
+#: What to look at in the chart, said under the chart. The picture carries its
+#: own title, subtitle and source line, so the caption says the one thing they
+#: do not.
+LENGTH_FIGURE_CAPTION = (
+    "Two panels, one for each half of the corpus, and one colour for each judge. The "
+    "thing to look at is whether the two dashed lines in a panel fall the same way: a "
+    "slope one judge sees and the other does not would be a fact about that judge "
+    "rather than about length."
 )
 LENGTH_WARNING = (
     "Before reading that as \u201cthese models write worse Czech\u201d: each Czech "
@@ -2170,13 +2184,23 @@ def _unreadable_at(key: str) -> tuple[list[tuple[str, str, int, int]], int]:
     return found, measured
 
 
+#: Below this, a criterion does not count as falling with note length.
+#: **Both judges must reach it and both must fall**, never one: a coefficient
+#: one judge sees and the other does not is a fact about that judge, and this
+#: document has a chapter for those. It lived beside a grid of coefficients in
+#: the length chapter and was the rule for printing a row there; that grid is
+#: gone and the criterion paragraphs are the only thing left that asks the
+#: question, so the number lives with them. 0.40 is a line and not a law: what
+#: it buys is that "this one is entangled with length" is decided the same way
+#: for all six rather than by eye.
+LENGTH_ENTANGLED = 0.40
+
+
 def _length_against(key: str) -> list[tuple[str, float, float]]:
     """Tracks where this criterion falls with note length under BOTH judges.
 
     Both, never one. A coefficient one judge sees and the other does not is a
-    fact about that judge, and this document has a section for those. The
-    threshold is the one the length chapter uses, so the two cannot disagree
-    about what counts as entangled.
+    fact about that judge, and this document has a section for those.
     """
     blocks = _payload("czech-length.json").get("czech") or {}
     found = []
@@ -3503,10 +3527,13 @@ def _length() -> str:
     will read the bottom of the Czech table as "this model writes bad Czech"
     when part of what it says is "this model writes a lot".
 
-    The correlations are printed without p-values on purpose. Eleven or sixteen
-    points make a threshold theatre; the reading rule this document uses
-    everywhere else -- believe a column that says the same thing under both
-    judges -- is the honest test and is the one stated beside the table.
+    There is no grid of correlations here any more, and no p-values either.
+    Eleven or sixteen points make a threshold theatre, and two columns of
+    coefficients headed with the judges' names is the thing a reader of this
+    section could not act on. The chart says it better: one dot a model, one
+    panel a half of the corpus, one colour a judge -- so the reading rule this
+    document applies everywhere else, believe what both judges say and distrust
+    what only one of them says, is something a reader can carry out by eye.
     """
     path = REPO / "local" / "czech-length.json"
     if not path.exists():
@@ -3574,10 +3601,14 @@ def _length() -> str:
     parts.append(_length_by_model(data))
 
     # --- what length buys ---------------------------------------------------
-    table = _length_table(data)
-    if table:
-        parts.append("<p>" + html.escape(_t(LENGTH_BUYS).format(**_length_signs())) + "</p>")
-        parts.append(table)
+    # Guarded on the coefficients themselves rather than on a table that no
+    # longer exists. The paragraph is about them, so it prints when there are
+    # any: left gated on `if table:` with the table deleted, this paragraph and
+    # the caveat under it would have gone silently.
+    signs = _length_signs()
+    if int(signs["total"]):
+        parts.append("<p>" + html.escape(_t(LENGTH_BUYS).format(**signs)) + "</p>")
+        parts.append(_figure("length", LENGTH_FIGURE_CAPTION))
         warning = _length_warning(data)
         if warning:
             parts.append(f"<div class='warn'><p>{html.escape(warning)}</p></div>")
@@ -3613,23 +3644,20 @@ LENGTH_NO_ADJUSTED = (
     "length predicts removes the result along with the artefact."
 )
 LENGTH_HANDICAP = (
-    "What can be said without fitting anything is in the table. A pair of models "
-    "counts as decided when one beats the other by more than {separation} on the "
-    "composite under BOTH judges, and it survives the handicap when the winner also "
-    "wrote at least as many words as the loser -- so the longer note had more places "
-    "for a fault to be found and had fewer of them anyway. That leaves {survived} of "
-    "the {decided} decided pairs, counting the two halves separately. What survives "
-    "is a partial order and not a ranking, "
-    "and how little of it there is is the finding."
+    "So what can be said about which model is better, without fitting anything at "
+    "all? Take the models two at a time. A pair counts as decided when one of them "
+    "beats the other by more than {separation} on the composite of the six criteria "
+    "under BOTH judges -- one judge on its own decides nothing here. A decided pair "
+    "then survives the handicap when the winner also wrote at least as many words as "
+    "the loser: the longer note offered more places for a fault to be found and had "
+    "fewer of them anyway, so length is not what won it. {survived} of the {decided} "
+    "decided pairs survive, counting the two halves of the corpus separately. That is "
+    "a partial order and not a ranking: it says which model beats which, and about "
+    "most pairs it says nothing at all. It also reaches only part of the field -- "
+    "{winners} models ever appear on the winning side of a surviving pair and "
+    "{losers} on the losing side, and a model can be in both lists, beaten by one "
+    "model and beating another. How little of this there is is the finding."
 )
-
-#: Short column headings for the handicap table. `TRACK_TITLES` names the corpus
-#: and the client, which is right everywhere else and over a two-word cell would
-#: be the widest thing in the document.
-HANDICAP_COLUMNS = {
-    results.TRACK_CZECH_REAL: "on the real sessions",
-    results.TRACK_CZECH_TRANSLATED: "on the translated ones",
-}
 
 
 def _length_effect(data: dict) -> str:
@@ -3684,72 +3712,30 @@ def _length_effect(data: dict) -> str:
                 )
                 + "</p>"
             )
-    table = _handicap_table(data)
-    if table:
-        blocks = data.get("handicapped") or {}
+    # On the pairs the payload counted, not on a table that no longer exists.
+    # This paragraph is the only place in the document that says what "decided"
+    # and "survives the handicap" mean, and the summary at the top prints the
+    # same two counts -- so with it gone that summary would have no backing.
+    # Nothing is said when nothing was decided: "0 of 0 pairs" is an absence
+    # dressed as a measurement.
+    blocks = data.get("handicapped") or {}
+    decided = sum(block["decided"] for block in blocks.values())
+    if decided:
+        pairs = [pair for block in blocks.values() for pair in block["pairs"]]
         parts.append(
             "<p>"
             + html.escape(
                 _t(LENGTH_HANDICAP).format(
-                    separation=next(iter(blocks.values()))["separation"],
+                    separation=_decimal(next(iter(blocks.values()))["separation"], 2),
                     survived=sum(block["survived"] for block in blocks.values()),
-                    decided=sum(block["decided"] for block in blocks.values()),
+                    decided=decided,
+                    winners=len({pair["winner"] for pair in pairs}),
+                    losers=len({pair["loser"] for pair in pairs}),
                 )
             )
             + "</p>"
         )
-        parts.append(table)
     return "\n".join(parts)
-
-
-def _handicap_table(data: dict) -> str:
-    """One row per surviving pair, both halves in the same table.
-
-    Merged rather than drawn twice: most surviving pairs hold on both halves,
-    and two tables would print each of those twice for no reader who benefits.
-    A dash is not a defeat. It means the pair was not separated on that half, or
-    was separated in the direction length would explain.
-    """
-    blocks = data.get("handicapped") or {}
-    order = [track for track in results.TRACKS if track in blocks]
-    seen: dict[tuple[str, str], dict[str, dict]] = {}
-    for track in order:
-        for pair in blocks[track]["pairs"]:
-            seen.setdefault((pair["winner"], pair["loser"]), {})[track] = pair
-    if not seen:
-        return ""
-    head = "".join(
-        f"<th>{html.escape(_t(HANDICAP_COLUMNS.get(track, track)))}</th>" for track in order
-    )
-    rows = []
-    for (winner, loser), found in sorted(
-        seen.items(), key=lambda kv: (-len(kv[1]), kv[0][0], kv[0][1])
-    ):
-        cells = []
-        for track in order:
-            pair = found.get(track)
-            if pair:
-                cell = html.escape(
-                    _t("{margin} · {winner} vs {loser} words").format(
-                        margin=f"+{pair['margin']:.2f}",
-                        winner=pair["winner_words"],
-                        loser=pair["loser_words"],
-                    )
-                )
-            else:
-                cell = "–"
-            cells.append(f"<td>{cell}</td>")
-        rows.append(
-            f"<tr><td>{html.escape(winner)}</td><td>{html.escape(loser)}</td>"
-            + "".join(cells)
-            + "</tr>"
-        )
-    return (
-        "<table class='handicap'><thead><tr>"
-        f"<th>{html.escape(_t('Beats'))}</th>"
-        f"<th>{html.escape(_t('this model'))}</th>{head}"
-        "</tr></thead><tbody>" + "".join(rows) + "</tbody></table>"
-    )
 
 
 def _length_warning(data: dict) -> str:
@@ -3812,75 +3798,6 @@ DEEPSY_SECTION_LABELS = {
     "clinical_hypotheses": "the hypotheses section",
     "plan": "the plan section",
 }
-
-#: Below this a column is not entangled enough with length to be worth a row.
-#: **Both judges must agree on the direction and at least one must reach this**,
-#: rather than both reaching it. Requiring both dropped English completeness --
-#: +0.24 and +0.56, two judges saying the same thing at different strengths --
-#: which is exactly the row the paragraph above the table is about. A rule that
-#: hides the example its own prose cites is the wrong rule.
-LENGTH_ENTANGLED = 0.40
-
-#: Columns where moving against length is the measure working, not failing.
-#: `succinct` asks whether the note says it in as few words as it can; a note
-#: that is twice as long and no fuller SHOULD score lower. Printed in the same
-#: table because the reader needs to see it is not entangled by accident, and
-#: marked because otherwise it reads as one more broken column.
-LENGTH_BY_DESIGN = ("succinct", "conciseness")
-
-
-def _length_table(data: dict) -> str:
-    """Only the columns that move with length, and only where both judges agree.
-
-    Everything else would be a wall of coefficients a reader cannot act on. A
-    column that moves under one judge and not the other is a fact about that
-    judge, and this document has a section for those already.
-    """
-    lines = []
-    blocks = [(_t("English · TN-Eval SOAP"), data.get("english") or {})]
-    for track, block in (data.get("czech") or {}).items():
-        judges = {name: found["correlations"] for name, found in block["judges"].items()}
-        blocks.append((_t(TRACK_TITLES.get(track, track)), judges))
-
-    for title, judges in blocks:
-        if len(judges) < 2:
-            continue
-        names = sorted(judges)
-        first = judges[names[0]]
-        first = first.get("correlations", first) if isinstance(first, dict) else {}
-        for key in sorted(first):
-            values = []
-            for name in names:
-                found = judges[name]
-                found = found.get("correlations", found)
-                values.append(found.get(key))
-            if any(v is None for v in values):
-                continue
-            if max(abs(v) for v in values) < LENGTH_ENTANGLED:
-                continue
-            if len({v > 0 for v in values}) != 1:
-                continue
-            label = key
-            for measures in MEASURE_TABLES.values():
-                if key in measures:
-                    label = measures[key]["label"]
-                    break
-            mark = ""
-            if key in LENGTH_BY_DESIGN:
-                mark = f" <span class='dash'>({_t('by design')})</span>"
-            cells = "".join(f"<td>{v:+.2f}</td>" for v in values)
-            lines.append(
-                f"<tr><td>{html.escape(title)}</td>"
-                f"<td>{html.escape(_t(label))}{mark}</td>{cells}</tr>"
-            )
-    if not lines:
-        return ""
-    judges = sorted({n for _, j in blocks for n in j})
-    head = "".join(f"<th>{html.escape(n)}</th>" for n in judges)
-    return (
-        f"<table><thead><tr><th>{_t('Track')}</th><th>{_t('Column')}</th>"
-        f"{head}</tr></thead><tbody>{''.join(lines)}</tbody></table>"
-    )
 
 
 def _dominance(rows: list[results.Row]) -> str:
