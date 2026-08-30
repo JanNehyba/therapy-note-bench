@@ -244,3 +244,56 @@ def test_a_checkout_without_the_payload_says_nothing_rather_than_zero(monkeypatc
     monkeypatch.setattr(brief, "_payload", lambda _name: {})
 
     assert brief._judges_agree("diacritics") == ""
+
+
+def test_the_lowest_agreement_column_is_computed_not_typed():
+    """The claim deleted as false was true, and is now derived.
+
+    `c5faf9b` removed "67%, the lowest of the six" on the grounds that calque
+    ties with agreement. It does not: under `czech-criteria-v2` calque is 68/102
+    and agreement 71/104, which the document itself prints as 67 and 68. The
+    ranking is back and computed from the same payload the percentages come
+    from, so it can no longer disagree with them.
+    """
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "tools"))
+    import czech_brief
+
+    between = {
+        "criteria": {
+            "calque": {"agreed": 68, "compared": 102},
+            "agreement": {"agreed": 71, "compared": 104},
+            "register": {"agreed": 73, "compared": 104},
+        }
+    }
+    assert czech_brief._is_lowest("calque", between)
+    assert not czech_brief._is_lowest("agreement", between)
+    assert not czech_brief._is_lowest("register", between)
+
+
+def test_a_tie_at_the_bottom_names_nobody_the_lowest():
+    """Where two columns cannot be ordered, calling either one lowest invents it."""
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "tools"))
+    import czech_brief
+
+    tied = {
+        "criteria": {"a": {"agreed": 68, "compared": 102}, "b": {"agreed": 68, "compared": 102}}
+    }
+    assert not czech_brief._is_lowest("a", tied)
+    assert not czech_brief._is_lowest("b", tied)
+
+
+def test_the_lowest_needs_something_to_be_lowest_than():
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "tools"))
+    import czech_brief
+
+    assert not czech_brief._is_lowest("a", {"criteria": {"a": {"agreed": 1, "compared": 2}}})
+    assert not czech_brief._is_lowest("a", {})

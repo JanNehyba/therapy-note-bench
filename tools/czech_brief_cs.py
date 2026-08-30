@@ -900,10 +900,12 @@ CS: dict[str, str] = {
         "tři místa {hit}krát ze {total}, kdežto na PDSQI-9, které hodnotí úplně tytéž "
         "zápisy, ne. Část spodku českých tabulek SOAP je délka, ne čeština."
     ),
-    "The same test in the Deepsy format comes out {hit} of its {total} tables, and the "
-    "three models that write longest there are a different three, because the two "
-    "formats were not asked of the same models. Where the last three places go is a "
-    "fact about the SOAP halves rather than a law about length.": (
+    (
+        "The same test in the Deepsy format comes out {hit} of its {total} table-and-judge "
+        "combinations, and the three models that write longest there are a different three, "
+        "because the two formats were not asked of the same models. Where the last three "
+        "places go is a fact about the SOAP halves rather than a law about length."
+    ): (
         "Táž zkouška ve formátu Deepsy vychází {hit} z jeho {total} tabulek a tři "
         "modely, které tam píšou nejdéle, jsou jiné tři, protože oba formáty nedostaly "
         "tytéž modely. Kam padnou poslední tři místa, je výrok o půlkách SOAP, ne "
@@ -952,10 +954,8 @@ CS: dict[str, str] = {
         "spojení doslovný překlad z angličtiny, posuzují lidé různě, a počet níže to "
         "ukazuje, místo aby to schovával."
     ),
-    "The fault it catches is unambiguous: an English term left sitting in a Czech "
-    "sentence.": (
-        "Chyba, kterou chytá, je jednoznačná: anglický termín ponechaný uprostřed "
-        "české věty."
+    "The fault it catches is unambiguous: an English term left sitting in a Czech sentence.": (
+        "Chyba, kterou chytá, je jednoznačná: anglický termín ponechaný uprostřed české věty."
     ),
     "Catches real grammatical faults.": "Chytá skutečné gramatické chyby.",
     "Catches colloquial words where clinical ones belong.": (
@@ -980,25 +980,29 @@ CS: dict[str, str] = {
         "nedá pořadí, které by se drželo, takže se žádné netiskne. Handicap, který kratšího "
         "pisatele nikdy nenechá vyhrát, přežije {survived} z {decided} rozhodnutých dvojic."
     ),
-    "On writing correct Czech, {top} in the top band of all {tables} tables the bands "
-    "cover -- the SOAP halves, both judges. {bottom} in the bottom band of all "
-    "{tables}. Between those two ends the tables disagree with each other, so nothing "
-    "else here is a ranking.": (
+    (
+        "On writing correct Czech, {top} in the top band of all {tables} table-and-judge "
+        "combinations the bands cover -- the SOAP halves, both judges. {bottom} in the bottom "
+        "band of all {tables}. Between those two ends the tables disagree with each other, so "
+        "nothing else here is a ranking."
+    ): (
         "Ve psaní správné češtiny {top} v nejvyšším pásmu všech {tables} tabulek, které "
         "pásma pokrývají — půlky SOAP, oba soudci. {bottom} v nejnižším pásmu všech "
         "{tables}. Mezi těmito dvěma konci si tabulky odporují, takže nic dalšího tu není "
         "pořadí."
     ),
-    "The Deepsy format was asked the same question over its own {tables} tables, and "
-    "it is counted separately rather than pooled with the four above: {top} in the top "
-    "band of all of them and {bottom} in the bottom band of all of them. The two "
-    "formats are not added together because not every model was asked in both, because "
-    "a Deepsy note is written to a different prompt and comes out a different shape, "
-    "and because the one native-speaker anchor this project has was measured on SOAP "
-    "notes alone. Length does not settle it either way: it runs against {soap_against} "
-    "of the {soap_total} criterion-and-judge coefficients on the SOAP halves and "
-    "against {deepsy_against} of {deepsy_total} in the Deepsy format, so it is not the "
-    "uniform penalty one number could stand for.": (
+    (
+        "The Deepsy format was asked the same question over its own {tables} table-and-judge "
+        "combinations, and it is counted separately rather than pooled with the four above: "
+        "{top} in the top band of all of them and {bottom} in the bottom band of all of them. "
+        "The two formats are not added together because not every model was asked in both, "
+        "because a Deepsy note is written to a different prompt and comes out a different "
+        "shape, and because the one native-speaker anchor this project has was measured on "
+        "SOAP notes alone. Length does not settle it either way: it runs against "
+        "{soap_against} of the {soap_total} criterion-and-judge coefficients on the SOAP "
+        "halves and against {deepsy_against} of {deepsy_total} in the Deepsy format, so it is "
+        "not the uniform penalty one number could stand for."
+    ): (
         "Formát Deepsy dostal tutéž otázku nad svými vlastními {tables} tabulkami a počítá "
         "se zvlášť, ne dohromady se čtyřmi výše: {top} v nejvyšším pásmu všech z nich "
         "a {bottom} v nejnižším pásmu všech z nich. Oba formáty se nesčítají, protože ne "
@@ -1009,11 +1013,13 @@ CS: dict[str, str] = {
         "a proti {deepsy_against} z {deepsy_total} ve formátu Deepsy, takže to není "
         "jednotný postih, který by uneslo jedno číslo."
     ),
-    "One caution about that second count. {subject} in the bottom band of all {tables} "
-    "SOAP tables and in no Deepsy band at all -- not because of anything written, but "
-    "because e-INFRA answered {calls} of the calls asking for those notes with an "
-    "error and returned no note. Adding the two counts together would have removed it "
-    "from the bottom of the table on the strength of an outage.": (
+    (
+        "One caution about that second count. {subject} in the bottom band of all {tables} "
+        "SOAP table-and-judge combinations and in no Deepsy band at all -- not because of "
+        "anything written, but because e-INFRA answered {calls} of the calls asking for those "
+        "notes with an error and returned no note. Adding the two counts together would have "
+        "removed it from the bottom of the table on the strength of an outage."
+    ): (
         "Jedna výstraha k tomu druhému počtu. {subject} v nejnižším pásmu všech {tables} "
         "tabulek SOAP a zároveň v žádném pásmu Deepsy — ne kvůli tomu, co napsal, ale "
         "protože e-INFRA odpověděla na {calls} volání žádajících o tyhle zápisy chybou "
@@ -1026,10 +1032,12 @@ CS: dict[str, str] = {
         "Ta dvě jména čti pozorně: {refused} a {near} se liší o jednu příponu a jsou "
         "to jiné modely. {near} je v pásmech Deepsy výše a v žádném z pásem SOAP."
     ),
-    "On whether the note is any good, no model is in the top band of all {tables} "
-    "tables and none is in the bottom band of all {tables}. The quality instrument "
-    "does not agree with itself from one judge or one half to the next, and no model "
-    "can be called better on it.": (
+    (
+        "On whether the note is any good, no model is in the top band of all {tables} "
+        "table-and-judge combinations and none is in the bottom band of all {tables}. The "
+        "quality instrument does not agree with itself from one judge or one half to the "
+        "next, and no model can be called better on it."
+    ): (
         "V tom, jestli je zápis k něčemu, není v nejvyšším pásmu všech {tables} tabulek "
         "žádný model a v nejnižším také žádný. Nástroj na kvalitu se neshodne sám se "
         "sebou mezi soudci ani mezi půlkami, a žádný model podle něj nelze označit za "
@@ -1046,22 +1054,27 @@ CS: dict[str, str] = {
         "{worst} z 5. Druhý soudce jich rozliší víc, a to, že se ti dva neshodnou na "
         "tom, které sloupce fungují, je samo o sobě nález."
     ),
-    "Read the bottom of those tables carefully: the three models that write the "
-    "longest notes take the last three places in all {total} of them. Each criterion "
-    "asks whether there is a fault anywhere in a note, and a longer note has more "
-    "places to hide one. On the quality instrument, rating the very same notes, those "
-    "three models are not at the bottom.": (
+    (
+        "Read the bottom of those tables carefully: the three models that write the longest "
+        "notes take the last three places in all {total} table-and-judge combinations of "
+        "them. Each criterion asks whether there is a fault anywhere in a note, and a longer "
+        "note has more places to hide one. On the quality instrument, rating the very same "
+        "notes, those three models are not at the bottom."
+    ): (
         "Spodek těch tabulek čti opatrně: tři modely, které píšou nejdelší zápisy, "
         "obsazují poslední tři místa ve všech {total}. Každé kritérium se ptá, jestli "
         "je v zápisu někde chyba, a delší zápis má víc míst, kde ji schovat. Na "
         "nástroji na kvalitu, který hodnotí úplně tytéž zápisy, ty tři modely na "
         "spodku nejsou."
     ),
-    "That pattern is not a law: on the {total} Deepsy tables the three longest-writing "
-    "models -- a different three, because the two formats were not asked of the same "
-    "set of models -- do not all land in the last three places under either judge. "
-    "Length and rank travel together on the SOAP halves and more loosely here, which "
-    "is one more reason the two formats are counted apart rather than added up.": (
+    (
+        "That pattern is not a law: in the {total} Deepsy table-and-judge combinations the "
+        "three longest-writing models -- a different three, because the two formats were not "
+        "asked of the same set of models -- do not all land in the last three places under "
+        "either judge. Length and rank travel together on the SOAP halves and more loosely "
+        "here, which is one more reason the two formats are counted apart rather than added "
+        "up."
+    ): (
         "Ten vzorec není zákon: na {total} tabulkách Deepsy tři modely s nejdelšími zápisy "
         "— jsou to jiné tři, protože oba formáty nedostaly tutéž sadu modelů — neobsadí "
         "poslední tři místa ani u jednoho soudce. Délka a příčka jdou spolu na půlkách SOAP "
@@ -1209,9 +1222,12 @@ CS: dict[str, str] = {
     "Where it breaks down: the two judges do not both point the same way {names}.": (
         "Kde se to láme: oba soudci neukazují stejným směrem {names}."
     ),
-    "Where it breaks down: on {where} the resampling can tell only {separable} of the {pairs} "
-    "pairs of models apart, so the order this column puts them in there is not one to read, and it "
-    "is that thin in {places} of the {total} tables.": (
+    (
+        "Where it breaks down: on {where} the resampling can tell only {separable} of the "
+        "{pairs} pairs of models apart, so the order this column puts them in there is not "
+        "one to read, and it is that thin in {places} of the {total} table-and-judge "
+        "combinations."
+    ): (
         "Kde se to láme: v jedné z tabulek ({where}) odliší převzorkování jen {separable} z "
         "{pairs} dvojic modelů, takže pořadí, do kterého je tam tenhle sloupec staví, není pořadí "
         "ke čtení; takhle tenké je to v {places} z {total} tabulek."
@@ -1256,16 +1272,21 @@ CS: dict[str, str] = {
         "horší v délce, v motivačních rozhovorech nebo v češtině — a nic z toho, co se tu měřilo, "
         "ty tři od sebe neoddělí."
     ),
-    "Which fault survives most often is not the same in all {tables} of these tables, so none is "
-    "named here: the weakest column changes with the table and with the judge.": (
+    (
+        "Which fault survives most often is not the same in all {tables} table-and-judge "
+        "combinations, so none is named here: the weakest column changes with the table and "
+        "with the judge."
+    ): (
         "Která chyba přežívá nejčastěji, není ve všech {tables} těchto tabulkách totéž, takže se "
         "tu žádná nejmenuje: nejslabší sloupec se mění s tabulkou i se soudcem."
     ),
     "What these two tables come to": "K čemu tyhle dvě tabulky došly",
-    "One fault survives more often than any other, and it is the same one in all {tables} of these "
-    "tables -- both halves, both judges. It is {worst}: averaged over the models, between {low} "
-    "and {high} of the notes are free of it, where 1.00 would mean every note was clean and 0.00 "
-    "that none was.": (
+    (
+        "One fault survives more often than any other, and it is the same one in all {tables} "
+        "table-and-judge combinations -- both halves, both judges. It is {worst}: averaged "
+        "over the models, between {low} and {high} of the notes are free of it, where 1.00 "
+        "would mean every note was clean and 0.00 that none was."
+    ): (
         "Jedna chyba přežívá častěji než kterákoli jiná a ve všech {tables} těchto tabulkách je to "
         "táž — obě půlky, oba soudci. Je to tahle: {worst}. V průměru přes modely je bez ní {low} "
         "až {high} ze všech zápisů, kde 1,00 by znamenalo, že je čistý každý zápis, a 0,00, že "
@@ -1277,21 +1298,28 @@ CS: dict[str, str] = {
         "kritérií, skutečná sezení na {real}."
     ),
     "What the two quality tables come to": "K čemu došly obě tabulky kvality",
-    "In all {tables} of these tables, every model scores {value} on {names} -- the top of the "
-    "scale. That is a ceiling rather than a result: an attribute no model can fail cannot tell the "
-    "models apart, and it should not be read as one they all did well on.": (
+    (
+        "In all {tables} table-and-judge combinations, every model scores {value} on {names} "
+        "-- the top of the scale. That is a ceiling rather than a result: an attribute no "
+        "model can fail cannot tell the models apart, and it should not be read as one they "
+        "all did well on."
+    ): (
         "Ve všech {tables} těchto tabulkách má každý model {value}, což je vrchol škály, a je to "
         "pokaždé táž položka: {names}. To je strop, ne výsledek: položka, ve které nemůže žádný "
         "model selhat, modely od sebe neodliší, a nemá se číst jako něco, v čem všechny obstály."
     ),
-    "The attribute every model does worst on is {worst}, in all {tables} of these tables and under "
-    "both judges: {low} to {high} out of 5, averaged over the models in each of them.": (
+    (
+        "The attribute every model does worst on is {worst}, in all {tables} table-and-judge "
+        "combinations: {low} to {high} out of 5, averaged over the models in each of them."
+    ): (
         "Položka, ve které dopadají všechny modely nejhůř, je tahle: {worst}. Ve všech {tables} "
         "těchto tabulkách a u obou soudců z ní vychází {low} až {high} z 5, v průměru přes modely "
         "v každé z nich."
     ),
-    "These {tables} tables do not agree on which attribute the models do worst on, so none is "
-    "named here.": (
+    (
+        "These {tables} table-and-judge combinations do not agree on which attribute the "
+        "models do worst on, so none is named here."
+    ): (
         "Těchto {tables} tabulek se neshodne na tom, ve které položce dopadají modely nejhůř, "
         "takže se tu žádná nejmenuje."
     ),
@@ -1494,12 +1522,14 @@ CS: dict[str, str] = {
     "at least as good on every column under BOTH judges, and better than it on at "
     "least one -- so models the evidence cannot separate share a place, and "
     "{systems} models fall into {places} places of which {tied} hold more than one. "
-    "Within a place the order is alphabetical and means nothing.": (
+    "Within a place the rows are ordered by the mean of the columns that vary, "
+    "which puts a row somewhere without claiming the evidence separates it.": (
         "Řádky jsou seřazené podle dominance — model je výš jen tehdy, když je "
         "aspoň tak dobrý v každém sloupci u OBOU soudců a aspoň v jednom sloupci je "
         "lepší — takže modely, které důkazy neoddělí, sdílejí místo: {systems} "
         "modelů padne do {places} míst, z toho {tied} drží víc než jeden model. "
-        "Uvnitř místa je pořadí abecední a neznamená nic."
+        "Uvnitř místa řadí řádky průměr sloupců, které se hýbou — což řádek "
+        "někam postaví, ale netvrdí, že ho důkazy oddělují."
     ),
     # --- the external index, whose columns are judges ----------------------
     "as {judge} sees it": "jak to vidí {judge}",
@@ -1779,4 +1809,6 @@ CS: dict[str, str] = {
         "formát Deepsy — protože žádná z těch tří neodpovídá na zbylé dvě. Pak čtěte "
         "pořadí, čtěte ho jako pásma, ne jako příčky, a nečtěte rozdíly mezi sousedy."
     ),
+    "{name}, released {date}": "{name}, vydáno {date}",
+    "That is the lowest of the six.": "Je to nejnižší ze šesti.",
 }

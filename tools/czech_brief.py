@@ -724,8 +724,15 @@ def _merged_table(track: str, groups: list[list[results.Row]], *, lead: bool = F
     on another page.
 
     Rows are ordered by dominance and models nothing separates share a place.
-    Within a shared place they are alphabetical, which is arbitrary and says so
-    by being alphabetical rather than by looking like a ranking.
+    Within a shared place they are ordered by `_rank_of` -- the mean of the
+    columns that vary -- with the name only as the final tie-break.
+
+    **The caption used to say that within a place the order is alphabetical, and
+    that was not true of the sort beside it.** The key has always been
+    `(place, -index, name)`. A reader who believed the caption would have read
+    the four models sharing the top place as unordered when they are not, and
+    would have been unable to reproduce the published order from the rule they
+    were given.
 
     `lead` says whether this table has to name its own two judges. Normally it
     does not, because every table on the page holds the same pair and
@@ -880,7 +887,8 @@ MERGED_ORDER = (
     "at least as good on every column under BOTH judges, and better than it on at "
     "least one -- so models the evidence cannot separate share a place, and "
     "{systems} models fall into {places} places of which {tied} hold more than one. "
-    "Within a place the order is alphabetical and means nothing."
+    "Within a place the rows are ordered by the mean of the columns that vary, "
+    "which puts a row somewhere without claiming the evidence separates it."
 )
 
 #: The Band column, explained once above the tables that carry it. It replaces
@@ -1419,7 +1427,8 @@ LENGTH_WARNING = (
 #: time -- when the truth is every SOAP table and no Deepsy one, which is a
 #: result about the formats rather than a weaker version of the SOAP finding.
 LENGTH_WARNING_DEEPSY = (
-    "The same test in the Deepsy format comes out {hit} of its {total} tables, and the "
+    "The same test in the Deepsy format comes out {hit} of its {total} table-and-judge "
+    "combinations, and the "
     "three models that write longest there are a different three, because the two "
     "formats were not asked of the same models. Where the last three places go is a "
     "fact about the SOAP halves rather than a law about length."
@@ -1445,11 +1454,23 @@ LENGTH_WARNING_DEEPSY = (
 #: measured under `czech-criteria-v1` while the tables above the paragraph draw
 #: `czech-criteria-v2`. Under the rubric actually drawn, diacritics is 83% and
 #: not 79%, register 70% and not 75%, the judges differ on a third of the
-#: agreement notes and not a quarter, and calque's 67% is a tie with agreement
-#: rather than the lowest of anything. "The lowest of the six" was never even
-#: v1's frame: v1 had seven criteria. All five are appended from the payload
-#: now, and the payload carries the rubric it was measured under so the pairing
-#: cannot come apart again.
+#: agreement notes and not a quarter. All five are appended from the payload now,
+#: and the payload carries the rubric it was measured under so the pairing cannot
+#: come apart again.
+#:
+#: **Two of the five were right, and the sentence deleted with them was true.**
+#: This comment used to say that calque's 67% was "a tie with agreement rather
+#: than the lowest of anything". It is not: under `czech-criteria-v2` calque is
+#: 68/102 and agreement 71/104, which is 66.7% against 68.3% -- 1.6 points apart,
+#: and the document prints them as 67 and 68. Calque is the lowest of the six.
+#: `untranslated`'s typed 87% also survives v2, which reads 86.5%. So three of
+#: the five figures were wrong under the drawn rubric and two were not, and
+#: whether those two were *measured* under v1 cannot be told from a number that
+#: both rubrics produce. Reading the correction back off the data is the check
+#: the correction itself skipped.
+#:
+#: The ranking is therefore back, and computed rather than typed -- which is what
+#: the rest of this change was for.
 #:
 #: What is left here is the half a computation cannot supply, and only where
 #: there is one. Two criteria have no entry: everything the document had to say
@@ -1471,8 +1492,7 @@ WHAT_IT_CATCHES = {
         "differently, and the count below shows that rather than hiding it."
     ),
     "untranslated": (
-        "The fault it catches is unambiguous: an English term left sitting in a "
-        "Czech sentence."
+        "The fault it catches is unambiguous: an English term left sitting in a Czech sentence."
     ),
     "agreement": ("Catches real grammatical faults."),
     "register": ("Catches colloquial words where clinical ones belong."),
@@ -1549,6 +1569,11 @@ JUDGES_AGREE_STALE = (
 )
 
 
+#: Appended to the agreement sentence of whichever criterion the judges agree
+#: about least, when one of them is alone at the bottom.
+JUDGES_AGREE_LOWEST = "That is the lowest of the six."
+
+
 def _judges_agree(key: str) -> str:
     """How often the two judges said the same thing, or why it is not printed.
 
@@ -1580,7 +1605,33 @@ def _judges_agree(key: str) -> str:
     )
     if found.get("unanswered"):
         said += " " + _t(JUDGES_AGREE_GAP).format(unanswered=found["unanswered"])
+    if _is_lowest(key, between):
+        said += " " + _t(JUDGES_AGREE_LOWEST)
     return said
+
+
+def _is_lowest(key: str, between: dict) -> bool:
+    """Whether this criterion is the one the two judges agree about least.
+
+    Computed, not typed. A hand-written "the lowest of the six" is a claim about
+    every other column, and it was hand-written once and then deleted on the
+    grounds that it was a tie -- which the same payload refutes: the two lowest
+    are 1.6 points apart and the document prints them as different integers.
+    A ranking that is derived cannot drift from the numbers printed beside it.
+
+    Ties return False for every member. Where two columns genuinely cannot be
+    ordered, naming either of them the lowest would be the invention this exists
+    to prevent.
+    """
+    rates = {
+        name: found["agreed"] / found["compared"]
+        for name, found in (between.get("criteria") or {}).items()
+        if found.get("compared")
+    }
+    if len(rates) < 2 or key not in rates:
+        return False
+    ordered = sorted(rates.values())
+    return rates[key] == ordered[0] and ordered[0] < ordered[1]
 
 
 def _rater(key: str) -> str:
@@ -2051,16 +2102,17 @@ HALVES_GUARD = (
 #: printed on the data this document was built from, and it is written and
 #: translated anyway: the alternative is a silence that reads as agreement.
 WORST_UNSETTLED = (
-    "Which fault survives most often is not the same in all {tables} of these tables, "
-    "so none is named here: the weakest column changes with the table and with the "
-    "judge."
+    "Which fault survives most often is not the same in all {tables} table-and-judge "
+    "combinations, so none is named here: the weakest column changes with the table "
+    "and with the judge."
 )
 
 BOX_A_TITLE = "What these two tables come to"
 BOX_A_WORST = (
     "One fault survives more often than any other, and it is the same one in all "
-    "{tables} of these tables -- both halves, both judges. It is {worst}: averaged "
-    "over the models, between {low} and {high} of the notes are free of it, where 1.00 "
+    "{tables} table-and-judge combinations -- both halves, both judges. It is "
+    "{worst}: averaged over the models, between {low} and {high} of the notes are free "
+    "of it, where 1.00 "
     "would mean every note was clean and 0.00 that none was."
 )
 BOX_A_HALVES = (
@@ -2070,19 +2122,19 @@ BOX_A_HALVES = (
 
 BOX_B_TITLE = "What the two quality tables come to"
 BOX_B_CEILING = (
-    "In all {tables} of these tables, every model scores {value} on {names} -- the top "
-    "of the scale. That is a ceiling rather than a result: an attribute no model can "
-    "fail cannot tell the models apart, and it should not be read as one they all did "
-    "well on."
+    "In all {tables} table-and-judge combinations, every model scores {value} on "
+    "{names} -- the top of the scale. That is a ceiling rather than a result: an "
+    "attribute no model can fail cannot tell the models apart, and it should not be "
+    "read as one they all did well on."
 )
 BOX_B_WORST = (
-    "The attribute every model does worst on is {worst}, in all {tables} of these "
-    "tables and under both judges: {low} to {high} out of 5, averaged over the models "
+    "The attribute every model does worst on is {worst}, in all {tables} "
+    "table-and-judge combinations: {low} to {high} out of 5, averaged over the models "
     "in each of them."
 )
 BOX_B_WORST_UNSETTLED = (
-    "These {tables} tables do not agree on which attribute the models do worst on, so "
-    "none is named here."
+    "These {tables} table-and-judge combinations do not agree on which attribute the "
+    "models do worst on, so none is named here."
 )
 BOX_B_HALVES = (
     "Between the two halves, on the {total} attributes both of them were asked: the "
@@ -2557,7 +2609,8 @@ BREAK_SPLIT = "Where it breaks down: the two judges do not both point the same w
 BREAK_UNSEPARABLE = (
     "Where it breaks down: on {where} the resampling can tell only {separable} of the "
     "{pairs} pairs of models apart, so the order this column puts them in there is not "
-    "one to read, and it is that thin in {places} of the {total} tables."
+    "one to read, and it is that thin in {places} of the {total} table-and-judge "
+    "combinations."
 )
 BREAK_LENGTH = (
     "Where it breaks down: on {names} the column falls as a model writes longer notes, "
@@ -2770,6 +2823,29 @@ OUTSIDE_MATCH = (
 OUTSIDE_UNMATCHED = "Models whose name does not identify a variant are absent rather than guessed:"
 
 
+#: The external index carries its version and its release date in one label --
+#: "Artificial Analysis Intelligence Index v4.1.1, released 2026-08-06" -- and
+#: that label is data rather than a template, so `_t` never sees it and the word
+#: "released" printed in English inside the Czech document. The name and the
+#: version are the instrument's own and are reproduced verbatim; only the word
+#: joining them to the date is ours, so only that is translated.
+INDEX_RELEASED = "{name}, released {date}"
+
+
+def _index_version(label: str) -> str:
+    """The index label with its one English connector translated.
+
+    Returns the label unchanged when it does not carry the connector: a version
+    string this does not recognise is reproduced as it stands rather than guessed
+    at, which is the same rule the rest of this document applies to anything it
+    did not measure.
+    """
+    name, sep, date = label.partition(", released ")
+    if not sep:
+        return label
+    return _t(INDEX_RELEASED).format(name=name, date=date)
+
+
 def _outside() -> str:
     """Both outside comparisons under one heading, with one caveat under both.
 
@@ -2825,7 +2901,7 @@ def _outside_caveat() -> str:
                         "so it is recorded with the version and the day it was read:"
                     )
                 )
-                + f" {html.escape(version)}, {html.escape(fetched)}."
+                + f" {html.escape(_index_version(version))}, {html.escape(fetched)}."
             )
     reading = join.get("reading") or ""
     if reading:
@@ -3326,10 +3402,11 @@ def _conclusion(rows: list[results.Row]) -> str:
     if tables:
         said.append(
             _t(
-                "On writing correct Czech, {top} in the top band of all {tables} tables "
-                "the bands cover -- the SOAP halves, both judges. {bottom} in the "
-                "bottom band of all {tables}. Between those two ends the tables "
-                "disagree with each other, so nothing else here is a ranking."
+                "On writing correct Czech, {top} in the top band of all {tables} "
+                "table-and-judge combinations the bands cover -- the SOAP halves, both "
+                "judges. {bottom} in the bottom band of all {tables}. Between those two "
+                "ends the tables disagree with each other, so nothing else here is a "
+                "ranking."
             ).format(top=end(top), bottom=end(bottom, lead=True), tables=tables)
         )
 
@@ -3352,8 +3429,9 @@ def _conclusion(rows: list[results.Row]) -> str:
         said.append(
             _t(
                 "The Deepsy format was asked the same question over its own {tables} "
-                "tables, and it is counted separately rather than pooled with the four "
-                "above: {top} in the top band of all of them and {bottom} in the bottom "
+                "table-and-judge combinations, and it is counted separately rather than "
+                "pooled with the four above: {top} in the top band of all of them and "
+                "{bottom} in the bottom "
                 "band of all of them. The two formats are not added together because "
                 "not every model was asked in both, because a Deepsy note is written to "
                 "a different prompt and comes out a different shape, and because the "
@@ -3412,7 +3490,8 @@ def _conclusion(rows: list[results.Row]) -> str:
             said.append(
                 _t(
                     "One caution about that second count. {subject} in the bottom band "
-                    "of all {tables} SOAP tables and in no Deepsy band at all -- not "
+                    "of all {tables} SOAP table-and-judge combinations and in no Deepsy "
+                    "band at all -- not "
                     "because of anything written, but because e-INFRA answered {calls} "
                     "of the calls asking for those notes with an error and returned no "
                     "note. Adding the two counts together would have removed it from "
@@ -3459,7 +3538,8 @@ def _conclusion(rows: list[results.Row]) -> str:
         said.append(
             _t(
                 "On whether the note is any good, no model is in the top band of all "
-                "{tables} tables and none is in the bottom band of all {tables}. The "
+                "{tables} table-and-judge combinations and none is in the bottom band "
+                "of all {tables}. The "
                 "quality instrument does not agree with itself from one judge or one "
                 "half to the next, and no model can be called better on it."
             ).format(tables=tables_q)
@@ -3503,7 +3583,8 @@ def _conclusion(rows: list[results.Row]) -> str:
         said.append(
             _t(
                 "Read the bottom of those tables carefully: the three models that write "
-                "the longest notes take the last three places in all {total} of them. "
+                "the longest notes take the last three places in all {total} "
+                "table-and-judge combinations of them. "
                 "Each criterion asks whether there is a fault anywhere in a note, and a "
                 "longer note has more places to hide one. On the quality instrument, "
                 "rating the very same notes, those three models are not at the bottom."
@@ -3523,7 +3604,8 @@ def _conclusion(rows: list[results.Row]) -> str:
     if checks and deepsy_checks and not any(f["all_in_the_tail"] for f in deepsy_checks):
         said.append(
             _t(
-                "That pattern is not a law: on the {total} Deepsy tables the three "
+                "That pattern is not a law: in the {total} Deepsy table-and-judge "
+                "combinations the three "
                 "longest-writing models -- a different three, because the two formats "
                 "were not asked of the same set of models -- do not all land in the "
                 "last three places under either judge. Length and rank travel together "

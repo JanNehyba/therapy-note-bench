@@ -391,6 +391,13 @@ EXTERNAL_PANELS = (("english_quality", EXTERNAL_ENGLISH), ("czech_quality", EXTE
 EXTERNAL_X = "Intelligence index"
 
 
+def _index_version(t: Translate, label: str) -> str:
+    """The index label with its one English connector translated. See the twin
+    of this in `czech_brief.py`: the label is data, so `t` never reaches it."""
+    name, sep, date = label.partition(", released ")
+    return t("{name}, released {date}").format(name=name, date=date) if sep else label
+
+
 def draw_external(data: Data, t: Translate) -> str:
     """The capability index against PDSQI-9 quality, English and Czech.
 
@@ -502,7 +509,7 @@ def draw_external(data: Data, t: Translate) -> str:
         notes.append(t(EXTERNAL_MATCH).format(names=", ".join(unmatched)))
     notes.append(
         t(EXTERNAL_SOURCE).format(
-            version=data.external.get("index_version", ""),
+            version=_index_version(t, data.external.get("index_version", "")),
             fetched=data.external.get("fetched", ""),
         )
     )
