@@ -1395,8 +1395,10 @@ def _catch(key: str, track: str) -> str:
     nor "never measured" and something had to fill thirty-six of them. In a
     paragraph the sentence simply is not there, and the paragraph reads as a
     paragraph with one fewer sentence rather than as one ending in a shrug.
-    The gap is named where a reader meets it: the chapter above these
-    paragraphs says which table the agreement figures come from.
+    The gap is named where a reader meets it: the lead above these paragraphs
+    says what the agreement figures were measured on and where they were not
+    measured at all. There is no longer a table of them anywhere -- these six
+    sentences are the only place the anchor appears.
     """
     written = WHAT_IT_CATCHES.get(key, "") if track == ANCHORED_ON else ""
     if not written:
@@ -4178,73 +4180,6 @@ def _variance(rows: list[results.Row]) -> str:
     )
 
 
-def _anchor() -> str:
-    """The one figure this track has that the other three do not.
-
-    Written by `tools/czech_anchor.py` from the filled rating sheet. Absent
-    until somebody fills one in, and the section simply does not appear rather
-    than appearing empty -- a heading with no number under it reads as a
-    measurement that failed.
-
-    Three things travel with the figure and none of them is optional. How the
-    ratings were made, because "one native speaker rated twenty notes" would be
-    a larger claim than the truth. That one rater gives no ceiling, so the
-    number is not an accuracy. And the count of questions that have no answer
-    on disk, because a rate computed over the answered ones is only as good as
-    how few were not.
-    """
-    path = REPO / "local" / "czech-anchor.json"
-    if not path.exists():
-        return ""
-    data = json.loads(path.read_text(encoding="utf-8"))
-    judges = sorted(data.get("judges", {}))
-    if not judges:
-        return ""
-
-    keys = [key for key, _ in COLUMNS[results.TRACK_CZECH_REAL]]
-    body = []
-    for key in keys:
-        cells = []
-        for name in judges:
-            entry = data["judges"][name]["criteria"].get(key)
-            if not entry or entry["rate"] is None:
-                cells.append(f"<td class='dash'>{_t('not answered yet')}</td>")
-            else:
-                gap = (
-                    f" <span class='dash'>({entry['unanswered']} {_t('unanswered')})</span>"
-                    if entry["unanswered"]
-                    else ""
-                )
-                cells.append(f"<td>{entry['rate']:.2f}{gap}</td>")
-        label = _t(MEASURE_TABLES[results.TRACK_CZECH_REAL][key]["label"])
-        body.append(f"<tr><td>{html.escape(label)}</td>" + "".join(cells) + "</tr>")
-
-    totals = []
-    for name in judges:
-        rate = data["judges"][name].get("rate")
-        totals.append(
-            f"<td><strong>{rate:.2f}</strong></td>" if rate else "<td class='dash'>--</td>"
-        )
-    body.append(f"<tr><td><strong>{_t('All questions')}</strong></td>" + "".join(totals) + "</tr>")
-
-    head = "".join(f"<th>{html.escape(name)}</th>" for name in judges)
-    return (
-        f"<h2>{_t('How often a judge and one native speaker said the same thing')}</h2>"
-        f"<p>{html.escape(_t(data.get('method', '')))}</p>"
-        f"<div class='warn'><p>{html.escape(_t(data.get('ceiling', '')))}</p></div>"
-        f"<table><thead><tr><th>{_t('Criterion')}</th>{head}</tr></thead>"
-        f"<tbody>{''.join(body)}</tbody></table>"
-        f"<p class='sub'>{data.get('notes_rated', 0)} "
-        + html.escape(
-            _t(
-                "notes, drawn by a hash of the session and the model so that no "
-                "score could influence which ones were rated."
-            )
-        )
-        + "</p>"
-    )
-
-
 def _pdsqi_control() -> str:
     """Whether a quality column CAN come back below 5, from the damaged notes.
 
@@ -4258,6 +4193,12 @@ def _pdsqi_control() -> str:
     Nothing already measured tells those apart, because nothing already measured
     contains a badly organised note. One invented note and three damaged copies
     do, and the prediction for each was written into the tool before it was run.
+
+    **The grid of scores is gone and the verdict it supported is not.** Four
+    scores a column, over an invented note nobody will ever read, is a table a
+    reader cannot check anything against; what they can act on is which columns
+    moved when the fault was put in front of them, and that sentence was already
+    computed from the same numbers rather than written under them.
     """
     path = REPO / "local" / "czech-pdsqi-control.json"
     if not path.exists():
@@ -4270,25 +4211,6 @@ def _pdsqi_control() -> str:
     first = runs[judges[0]]
     keys = [key for key in first["clean"] if first["clean"][key] is not None]
     labels = MEASURE_TABLES[results.TRACK_CZECH_REAL_PDSQI]
-
-    lines = []
-    for name in ("clean",) + tuple(first["variants"]):
-        cells = ""
-        for judge_model in judges:
-            run = runs[judge_model]
-            answers = run["clean"] if name == "clean" else run["variants"].get(name, {})
-            for key in keys:
-                value = answers.get(key)
-                cells += (
-                    "<td class='dash'>&mdash;</td>" if value is None else f"<td>{value:.0f}</td>"
-                )
-        lines.append(f"<tr><td>{_t(CONTROL_NOTES.get(name, name))}</td>{cells}</tr>")
-
-    head = ""
-    for _judge_model in judges:
-        for key in keys:
-            head += f"<th>{html.escape(_t(labels[key]['label']))}</th>"
-    band = "".join(f"<th colspan='{len(keys)}'>{html.escape(name)}</th>" for name in judges)
 
     # The verdict, computed. A column that moves under both judges on the
     # variant built to attack it is doing its job; one that does not is the
@@ -4309,6 +4231,8 @@ def _pdsqi_control() -> str:
                     moved.append(after < before)
         label = _t(labels[key]["label"])
         (works if moved and all(moved) else blind).append(label)
+    if not works and not blind:
+        return ""
 
     verdict = ""
     if works:
@@ -4322,32 +4246,35 @@ def _pdsqi_control() -> str:
 
     return (
         f"<h3>{_t('Can a quality column come back below 5?')}</h3>"
-        + f"<p>{html.escape(_t(CONTROL_LEAD))}</p>"
-        + f"<table><thead><tr><th></th>{band}</tr><tr><th>{_t('Note')}</th>{head}</tr></thead>"
-        + f"<tbody>{''.join(lines)}</tbody></table>"
+        + "<p>"
+        + html.escape(_t(PDSQI_CONTROL_LEAD).format(variants=len(first["variants"])))
+        + "</p>"
         + verdict
         + f"<p class='dash'>{html.escape(_t(CONTROL_CAVEAT))}</p>"
     )
 
 
-#: What each damaged note is, to a reader who will not open the tool.
-CONTROL_NOTES = {
-    "clean": "the clean note",
-    "shuffled": "same sentences, wrong sections",
-    "truncated": "first section only, no assessment or plan",
-    "padded": "every sentence said three times",
-}
-
-CONTROL_LEAD = (
-    "One invented note, and three copies each damaged in one named way. No model "
-    "and no session is involved: the question is not who writes well but whether "
-    "the instrument can see a fault at all. What each variant was expected to move "
-    "was written down before it was asked."
+#: The lead the deleted grid used to caption. The count of damaged copies is
+#: read from the payload rather than written, and the kinds of damage are given
+#: as examples rather than as a list, so a fifth variant makes the sentence
+#: incomplete instead of making it false.
+PDSQI_CONTROL_LEAD = (
+    "The same question has to be put to the quality instrument a different way. "
+    "Several of its columns come back with the same score for every model in this "
+    "document, and how many of them depends on which judge is asked. A column that "
+    "never moves is either measuring something these models genuinely do not differ "
+    "on or measuring nothing at all, and nothing already scored can tell those apart, "
+    "because nothing already scored is a badly written note. So one was written: an "
+    "invented note with no model and no session behind it, and copies of it -- "
+    "{variants} of them -- each damaged in one named way, sentences put into the wrong "
+    "section or a note cut off before it reaches a plan. What each copy was expected "
+    "to move was written down before the judge was asked, and what follows is which "
+    "columns actually moved."
 )
 CONTROL_WORKS = (
     "It can, and this settles the flat columns: {columns} all drop under both "
-    "judges on the note built to attack them. The judge is looking. These eleven "
-    "models score the same because they write into the same dictated four-part "
+    "judges on the note built to attack them. The judge is looking. The models score "
+    "the same on those columns because they write into the same dictated four-part "
     "structure and genuinely do not differ, not because the question goes "
     "unanswered -- so those columns stay in the tables, as an honest measurement "
     "of something that does not vary here."
@@ -4432,6 +4359,9 @@ def _controls() -> str:
         f"<th>{html.escape(_t(MEASURE_TABLES[results.TRACK_CZECH_REAL][k]['label']))}</th>"
         for k in keys
     )
+    # Both controls under one heading. They ask the same question of the two
+    # instruments -- can this column see the fault it names -- and they were
+    # two chapters with a third between them.
     return (
         f"<h2>{_t('Does each column detect what it claims?')}</h2>"
         + "<p>"
@@ -4446,6 +4376,7 @@ def _controls() -> str:
         + f"<table><thead><tr><th>{_t('Judge')}</th>{head}</tr></thead>"
         + f"<tbody>{''.join(rows)}</tbody></table>"
         + verdict
+        + _pdsqi_control()
     )
 
 
@@ -4837,10 +4768,6 @@ def build(rows: list[results.Row]) -> str:
 
 
 {_controls()}
-
-{_pdsqi_control()}
-
-{_anchor()}
 
 {_outside()}
 

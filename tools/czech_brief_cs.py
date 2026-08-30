@@ -303,17 +303,6 @@ CS: dict[str, str] = {
     "Flat on one side and therefore not correlated:": (
         "Ploché na jedné straně, a proto nekorelováno:"
     ),
-    # --- the anchor section ------------------------------------------------
-    "How often a judge and one native speaker said the same thing": (
-        "Jak často řekli soudce a jeden rodilý mluvčí totéž"
-    ),
-    "not answered yet": "zatím bez odpovědi",
-    "unanswered": "bez odpovědi",
-    "All questions": "Všechny otázky",
-    "notes, drawn by a hash of the session and the model so that no score could "
-    "influence which ones were rated.": (
-        "zápisů, vybraných hashem sezení a modelu, aby výběr nemohlo ovlivnit žádné skóre."
-    ),
     # --- small words in composed lines -------------------------------------
     "models": "modelů",
     "notes": "zápisů",
@@ -375,28 +364,6 @@ CS: dict[str, str] = {
         "Anglická stránka řadí podle jediného měřítka — {measure} — a umístění na ní "
         "znamená to, co říká ono měřítko. Tady stojí proti sloupcům české kvality. "
         "Nic z toho testem neprojde a soudci se neshodnou ani na znaménku."
-    ),
-    # --- the human anchor's own sentences ----------------------------------
-    "One native speaker answered all six questions for each of twenty notes. A "
-    "language model presented each note, pointed at candidate faults and asked; the "
-    "person decided every answer, including one where he overruled the model. The "
-    "sample was drawn by a hash of the session and the model, so no score could "
-    "influence which notes were rated.": (
-        "Jeden rodilý mluvčí odpověděl na všech šest "
-        "otázek u každého z dvaceti zápisů. Jazykový model "
-        "mu každý zápis předložil, ukázal na "
-        "možné chyby a zeptal se; člověk rozhodl každou "
-        "odpověď, včetně jedné, kde model přehlasoval. "
-        "Vzorek byl vybrán hashem sezení a modelu, aby výběr "
-        "nemohlo ovlivnit žádné skóre."
-    ),
-    "There is one rater, so there is no human-against-human ceiling to read this "
-    "against. It is not an accuracy: it is how often a judge and one native speaker "
-    "said the same thing.": (
-        "Hodnotitel je jeden, takže neexistuje strop člověk proti "
-        "člověku, proti kterému by se to dalo číst. Není "
-        "to úspěšnost: je to, jak často řekli soudce a jeden "
-        "rodilý mluvčí totéž."
     ),
     # --- what these numbers cannot be used for -----------------------------
     "Ten sessions, and they are all one client": ("Deset sezení, a všechna jsou jeden klient"),
@@ -1201,29 +1168,41 @@ CS: dict[str, str] = {
     ),
     # --- the PDSQI control --------------------------------------------------
     "Can a quality column come back below 5?": ("Umí sloupec o kvalitě vůbec spadnout pod pětku?"),
-    "Note": "Zápis",
-    "the clean note": "čistý zápis",
-    "same sentences, wrong sections": "tytéž věty, špatné sekce",
-    "first section only, no assessment or plan": ("jen první sekce, bez hodnocení a bez plánu"),
-    "every sentence said three times": "každá věta řečená třikrát",
-    "One invented note, and three copies each damaged in one named way. No model "
-    "and no session is involved: the question is not who writes well but whether "
-    "the instrument can see a fault at all. What each variant was expected to move "
-    "was written down before it was asked.": (
-        "Jeden vymyšlený zápis a tři jeho kopie, každá poškozená jedním "
-        "pojmenovaným způsobem. Nefiguruje v tom žádný model ani žádné sezení: "
-        "otázka nezní, kdo píše dobře, ale jestli nástroj chybu vůbec uvidí. Co má "
-        "která varianta pohnout, bylo zapsáno dřív, než se soudce zeptal."
+    # The count of copies stands between dashes, as an apposition: a Czech noun
+    # after a numeral declines differently at three and at five, and a
+    # placeholder cannot know which the payload holds.
+    "The same question has to be put to the quality instrument a different way. "
+    "Several of its columns come back with the same score for every model in this "
+    "document, and how many of them depends on which judge is asked. A column that "
+    "never moves is either measuring something these models genuinely do not differ "
+    "on or measuring nothing at all, and nothing already scored can tell those apart, "
+    "because nothing already scored is a badly written note. So one was written: an "
+    "invented note with no model and no session behind it, and copies of it -- "
+    "{variants} of them -- each damaged in one named way, sentences put into the wrong "
+    "section or a note cut off before it reaches a plan. What each copy was expected "
+    "to move was written down before the judge was asked, and what follows is which "
+    "columns actually moved.": (
+        "Nástroji na kvalitu se tatáž otázka musí položit jinak. Několik jeho sloupců "
+        "vrací u každého modelu v tomhle dokumentu totéž skóre a kolik jich je, závisí "
+        "na tom, kterého soudce se zeptáme. Sloupec, který se nikdy nehne, buď měří "
+        "něco, v čem se tyhle modely doopravdy neliší, nebo neměří nic — a nic z toho, "
+        "co už je oskórované, tyhle dvě možnosti nerozliší, protože nic z toho není "
+        "špatně napsaný zápis. Jeden se tedy napsal: vymyšlený zápis, za kterým "
+        "nestojí žádný model ani žádné sezení, a jeho kopie — v počtu {variants} — "
+        "každá poškozená jedním pojmenovaným způsobem, třeba větami přesunutými do "
+        "špatné sekce nebo zápisem useknutým dřív, než dojde na plán. Co má která "
+        "kopie pohnout, bylo zapsáno dřív, než se soudce zeptal, a co následuje, je "
+        "to, které sloupce se opravdu pohnuly."
     ),
     "It can, and this settles the flat columns: {columns} all drop under both "
-    "judges on the note built to attack them. The judge is looking. These eleven "
-    "models score the same because they write into the same dictated four-part "
+    "judges on the note built to attack them. The judge is looking. The models score "
+    "the same on those columns because they write into the same dictated four-part "
     "structure and genuinely do not differ, not because the question goes "
     "unanswered -- so those columns stay in the tables, as an honest measurement "
     "of something that does not vary here.": (
         "Umí, a tím jsou ploché sloupce vysvětlené: {columns} klesnou u obou soudců "
-        "na tom zápisu, který je na ně ušitý. Soudce se tedy dívá. Těch jedenáct "
-        "modelů má stejné skóre proto, že píšou do téže předepsané čtyřdílné "
+        "na tom zápisu, který je na ně ušitý. Soudce se tedy dívá. Modely mají v těch "
+        "sloupcích stejné skóre proto, že píšou do téže předepsané čtyřdílné "
         "struktury a doopravdy se neliší — ne proto, že by otázka zůstala "
         "nezodpovězená. Ty sloupce tedy v tabulkách zůstávají jako poctivé měření "
         "něčeho, co tady nekolísá."

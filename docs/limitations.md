@@ -175,9 +175,12 @@ it, and no measurement here separates the two. A fault that shows on both halves
 is the model's; a fault that shows only on the translated half is the input's,
 and that is the only reason the real half exists.
 
-One native speaker has since rated twenty of those notes on all seven language
-criteria -- 140 answers, and the agreement with each judge is reported beside the
-tables. It is one rater, so it is a comparison and not a ceiling. **PDSQI-9 on
+One native speaker has since rated twenty of those notes on all six language
+criteria -- 120 answers. There is no table of that agreement anywhere and no
+single figure for it: what the local briefing prints is the count per criterion,
+in the paragraph that says what that criterion catches. It is one rater, so it is
+a comparison and not a ceiling, and a single percentage is the shape a ceiling
+comes in. **PDSQI-9 on
 those notes still has no human rating of any kind**, which is the gap that
 matters most: the sheet exists with every cell empty. See
 `docs/datasets.md` for the corpus and the de-identification.
