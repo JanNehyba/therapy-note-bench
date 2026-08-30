@@ -18,9 +18,9 @@ __STYLE__
 
   <!-- Above the table, because it is what to read before the numbers rather
        than after them. It was the last thing on the page, under the footer. -->
-  <p class="methods-link" id="brief-link" data-t="page.brief-link"><a href="brief.html">What this leaderboard can and cannot tell you →</a>
-     Four claims, four figures, and the file each number came from — for somebody
-     building or buying one of these. Also as a <a href="therapy-note-bench.pdf">PDF</a>.</p>
+  <p class="methods-link" id="brief-link" data-t="page.brief-link"><a href="brief.html">How to read these results →</a>
+     Four claims these tables support and four they do not, with the file each number
+     came from. Also as a <a href="therapy-note-bench.pdf">PDF</a>.</p>
 
   <div class="controls" id="controls"></div>
 
@@ -48,14 +48,12 @@ __STYLE__
        ran at</strong> — which is why the judge is a switch above and not a column here.
        What has been withdrawn from the tables, and why, is
        <a href="methods.html#withdrawn">on the methods page</a>.</p>
-    <p data-t="page.foot.background"><strong>What the corpora are, and what they are not.</strong> Four pages
-       carry the background these tables rest on, and until 2026-08-27 nothing on
-       this site linked to any of them:
-       <a href="datasets.md">the datasets</a> — where each came from, what licence
+    <p data-t="page.foot.background"><strong>Background.</strong>
+       <a href="datasets.md">The datasets</a> — where each came from, what licence
        it publishes (two of the three publish none), and the traps in them;
        <a href="methodology.md">the method</a>;
-       <a href="limitations.md">what a result cannot claim</a>; and
-       <a href="landscape.md">what exists in this field</a> and what does not.</p>
+       <a href="limitations.md">what a result cannot claim</a>;
+       <a href="landscape.md">what exists in this field and what does not</a>.</p>
     <p id="provenance"></p>
   </footer>
 </main>
@@ -406,7 +404,7 @@ function denominatorNote(table) {
 function bandLegend(table) {
   const label = esc(colLabel(table, table.ranking_measure));
   return `<div class="measure"><dt>${T`Band`}</dt><dd>${
-    T`Rows this evidence cannot tell apart share a band. Measured on ${label} by resampling
+    T`Rows the paired bootstrap cannot separate share a band. Measured on ${label} by resampling
       the conversations every system here was scored on, so the numbers need not run in order
       down the column — a band is a group, not a position, and the column beside it
       averages each system over its own notes instead. There is no ↕ on this heading
@@ -512,14 +510,12 @@ function renderTable(table, index) {
   // Said under the table either way. A table with no grouping measured must not
   // read as a strict ranking just because nobody has checked.
   const groupNote = table.groups
-    ? `<p class="note">${T`<strong>Systems that share a Band cannot be told apart by this
-         evidence.</strong> ${table.groups.of.filter(g => g.length > 1).length} of
-         ${table.groups.of.length} bands are shared, and the top one has
-         ${table.groups.of[0].length} system(s) in it. Measured on
+    ? `<p class="note">${T`<strong>Systems that share a Band are not separated by this
+         bootstrap.</strong> ${table.groups.of.filter(g => g.length > 1).length} of
+         ${table.groups.of.length} bands are shared and the top one holds
+         ${table.groups.of[0].length} of them. Paired bootstrap on
          <strong>${esc(tr(table.groups.measure))}</strong> over the
-         ${table.groups.sessions} conversations every system here was scored on, by
-         resampling those conversations — not by whether two intervals overlap, which
-         is a weaker test.`}</p>`
+         ${table.groups.sessions} conversations every system here was scored on.`}</p>`
     : `<p class="note">${T`<strong>Which of these can be told apart has not been measured
          for this table.</strong> Read the order as roughly who is near the top and
          near the bottom, not as a ranking: two adjacent rows are not a result.`}</p>`;
@@ -553,6 +549,15 @@ function renderTable(table, index) {
       judge: two(checklist.judge),
       humans: two(checklist.humans),
       scales: `${two(Math.min(...scales))}&#8211;${two(Math.max(...scales))}`,
+      // The statistic each figure is, and how many notes it was computed over.
+      // Four numbers were printed with neither: 0.60 and 0.50 are a kappa on a
+      // checklist and 0.13-0.19 is a rho on three rating scales, which is two
+      // different quantities in one sentence and no way for a reader to tell.
+      // Read from the payload like the figures themselves, so a judge measured
+      // under another statistic cannot inherit this one's name.
+      stat: tr(checklist.statistic),
+      scaleStat: tr((rows.find(a => a.name.startsWith('likert')) || {}).statistic),
+      notes: DATA.judges.notes,
     };
   })();
 
@@ -560,10 +565,13 @@ function renderTable(table, index) {
     ? TS(table.not_ranked_reason)
     : anchor
     ? T`Ordered by <strong>${esc(colLabel(table, table.ranking_measure))}</strong>, because it is the
-       only column checked against people: on it the judge and a trained therapist agree at
-       <strong>${anchor.judge}</strong> where two therapists reach <strong>${anchor.humans}</strong>.
-       On the 1&#8211;5 scales two therapists agree at ${anchor.scales}, so those carry too little
-       signal to rank on. Every other column is context and is not a ranking.`
+       only column checked against people: the judge and a trained therapist agree at
+       <strong>${anchor.judge}</strong> where two therapists reach <strong>${anchor.humans}</strong>
+       (${anchor.stat}). On the 1&#8211;5 ratings TN-Eval published beside that rubric, those two
+       therapists reach only ${anchor.scales} (${anchor.scaleStat}) &mdash; too little to rank on.
+       Both are computed here from TN-Eval's own annotations over ${anchor.notes} notes;
+       <a href="methods.html#calibration">how this was measured</a>. Every other column is context
+       and is not a ranking.`
     : T`Ordered by <strong>${esc(colLabel(table, table.ranking_measure))}</strong>, because it is the
        only column with a human anchor at all. <strong>This judge's agreement with the two
        therapists is not published here</strong>, so the figure that belongs in this sentence is
@@ -697,7 +705,7 @@ function renderTable(table, index) {
       <div class="scroll"><table data-table="${index}" data-sorted="${
         table.ranking_measure || ''}" data-descending="1">
         <thead><tr>${table.groups
-          ? `<th class="rank" title="${T`Band on ${esc(colLabel(table, table.ranking_measure))}: rows this evidence cannot tell apart share a band. It does not follow the sort -- sorting by another column reorders the rows, not what the bootstrap could separate.`}">${T`Band`}</th>`
+          ? `<th class="rank" title="${T`Band on ${esc(colLabel(table, table.ranking_measure))}: rows the paired bootstrap cannot separate share a band. It does not follow the sort -- sorting by another column reorders the rows, not what the bootstrap could separate.`}">${T`Band`}</th>`
           : ''}<th class="name" data-sort="label">${T`System`}</th>${head}${table.has_words
             ? `<th data-sort="note_words" title="${T`Median words in this model’s notes. Completeness counts coverage, so a longer note covers more.`}">${T`Words`}</th>`
             : ''}${showCoverage ? `<th data-sort="coverage">${T`Notes`}</th>` : ''}<th
@@ -709,12 +717,14 @@ function renderTable(table, index) {
       <p class="ranking-note">${rankingNote}</p>
       ${referenceNote(table)}
       ${groupNote}
+      ${agreementNote(table.track)}
       <dl class="measures">${legend}</dl>
       <!-- Under the table, not over it. A reader arriving at a leaderboard
            wants to know which model, and the first line they met was four
            version strings. It is the answer to "is this the same instrument as
            last time", which is a question asked after the numbers. -->
-      <p class="versions">${T`harness <code>${versions.harness_version}</code>`} ·
+      <p class="versions">${T`The instrument these rows share:`}
+         ${T`harness <code>${versions.harness_version}</code>`} ·
          ${T`prompt <code>${versions.prompt_version}</code>`} · ${judge}</p>
     </section>`;
 }
@@ -949,8 +959,8 @@ function agreementNote(track) {
   return `<p class="note">${T`<strong>The two judges agree on the shape of this ranking and not
     on its order.</strong> On ${esc(colLabel(DATA.tables[INDEX_OF[current]], ranking.measure))},
     ${ranking.moved} of ${ranking.n_systems} systems land somewhere else under
-    <code>${esc(other)}</code>${furthest}. Near the top and near the bottom are claims this table supports; ninth against tenth
-    is not.`}</p>`;
+    <code>${esc(other)}</code>${furthest} — so the top and the bottom are claims this table
+    supports, ninth against tenth is not.`}</p>`;
 }
 
 // 1st, 2nd, 3rd, 4th. Only ever applied to a rank, so the teens are the whole
@@ -970,7 +980,7 @@ function show(id) {
   const index = INDEX_OF[id];
   const table = DATA.tables[index];
   document.getElementById('table-host').innerHTML =
-    renderTable(table, index) + agreementNote(table.track);
+    renderTable(table, index);
   renderSwitch();
   drawControls(table);
   applyFilters();

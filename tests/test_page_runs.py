@@ -1210,7 +1210,7 @@ def test_the_band_column_explains_itself_where_a_phone_can_read_it(tmp_path):
     )
     visible = re.sub(r'title="[^"]*"', "", drawn)
 
-    assert "Rows this evidence cannot tell apart share a band" in visible
+    assert "Rows the paired bootstrap cannot separate share a band" in visible
     assert "it does not sort" in visible, "the one unclickable column never says why"
     assert "Systems that share a Band" in visible, (
         "the heading and the sentence under it are one concept and must be one word"

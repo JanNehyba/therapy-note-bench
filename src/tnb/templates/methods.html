@@ -77,9 +77,8 @@ __STYLE__
     <div id="licences-body"></div>
   </details>
 
-  <p class="methods-link" data-t="methods.brief-link"><a href="brief.html">The eight-page briefing →</a>
-     What a leaderboard of these models can and cannot tell you, for somebody
-     building or buying one — four claims, four figures, and the file each number
+  <p class="methods-link" data-t="methods.brief-link"><a href="brief.html">How to read these results →</a>
+     Four claims these tables support and four they do not, with the file each number
      came from. Also as a <a href="therapy-note-bench.pdf">PDF</a>.</p>
 
   <footer>
@@ -102,14 +101,12 @@ __STYLE__
        cannot say how it was set is withdrawn: two rows that both record nothing are not
        thereby the same instrument.</p>
     <p id="provenance"></p>
-      <p data-t="page.foot.background"><strong>What the corpora are, and what they are not.</strong> Four pages
-       carry the background these tables rest on, and until 2026-08-27 nothing on
-       this site linked to any of them:
-       <a href="datasets.md">the datasets</a> — where each came from, what licence
+      <p data-t="page.foot.background"><strong>Background.</strong>
+       <a href="datasets.md">The datasets</a> — where each came from, what licence
        it publishes (two of the three publish none), and the traps in them;
        <a href="methodology.md">the method</a>;
-       <a href="limitations.md">what a result cannot claim</a>; and
-       <a href="landscape.md">what exists in this field</a> and what does not.</p>
+       <a href="limitations.md">what a result cannot claim</a>;
+       <a href="landscape.md">what exists in this field and what does not</a>.</p>
 </footer>
 </main>
 
@@ -1010,6 +1007,10 @@ function renderSuperseded(gone) {
       and the two are not comparable`,
     settings: T`the judge's settings were not recorded, so the rows cannot be shown to
       have come from one instrument`,
+    rubric: T`the questions were rewritten in <code>${gone.current_judge_prompt_version}</code>,
+      so these rows answer an earlier version of them`,
+    'not on the panel': T`this judge was tried during calibration and is not one of the two
+      the leaderboard publishes from`,
   };
   const why = (gone.reasons || ['harness']).map(name => said[name]).filter(Boolean)
     .join(T`; and `);

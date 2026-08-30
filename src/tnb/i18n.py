@@ -86,9 +86,9 @@ _STATIC = {
         "a které řádky se už nekreslí."
     ),
     "page.brief-link": (
-        '<a href="brief.html">Jak tato čísla číst a nenechat se zmást →</a> '
-        "Co žebříček těchto modelů může a nemůže říct tomu, kdo takový systém staví nebo "
-        "kupuje — čtyři tvrzení, čtyři obrázky a soubor, ze kterého každé číslo pochází. "
+        '<a href="brief.html">Jak číst tyto výsledky →</a> '
+        "Čtyři tvrzení, která tabulky unesou, a čtyři, která ne, i se souborem, ze kterého "
+        "každé číslo pochází. "
         'Také jako <a href="therapy-note-bench.pdf">PDF</a>.'
     ),
     "page.foot.columns": (
@@ -114,13 +114,12 @@ _STATIC = {
         '<a href="methods.html#withdrawn">na stránce o metodě</a>.'
     ),
     "page.foot.background": (
-        "<strong>Co ty korpusy jsou a co nejsou.</strong> Čtyři stránky nesou pozadí, na kterém "
-        "tyto tabulky stojí, a až do 27. 8. 2026 na ně z tohoto webu nevedl jediný odkaz: "
-        '<a href="datasets.md">datové sady</a> — odkud každá pochází, jakou licenci publikuje '
+        "<strong>Pozadí.</strong> "
+        '<a href="datasets.md">Datové sady</a> — odkud každá pochází, jakou licenci publikuje '
         "(dvě ze tří žádnou) a jaké pasti v nich jsou; "
         '<a href="methodology.md">metoda</a>; '
-        '<a href="limitations.md">co výsledek nesmí tvrdit</a>; a '
-        '<a href="landscape.md">co v tomto oboru existuje</a> a co ne.'
+        '<a href="limitations.md">co výsledek nesmí tvrdit</a>; '
+        '<a href="landscape.md">co v oboru existuje a co ne</a>.'
     ),
 }
 
@@ -232,26 +231,38 @@ _SENTENCES = {
         "<strong>starší harness</strong>, sloupce se mohou lišit od tabulek výše"
     ),
     "not yet judged": "zatím neohodnoceno",
+    "The instrument these rows share:": "Nástroj, kterým byly tyto řádky změřeny:",
     "harness <code>{0}</code>": "harness <code>{0}</code>",
     "prompt <code>{0}</code>": "prompt <code>{0}</code>",
     # -- the grid itself ------------------------------------------------------
-    "Band on {0}: rows this evidence cannot tell apart share a band. It does not follow the sort"
-    " -- sorting by another column reorders the rows, not what the bootstrap could separate.": (
-        "Pásmo podle sloupce {0}: řádky, které tato evidence nedokáže rozlišit, sdílejí pásmo. "
+    "Band on {0}: rows the paired bootstrap cannot separate share a band. It does not follow the"
+    " sort -- sorting by another column reorders the rows, not what the bootstrap could"
+    " separate.": (
+        "Pásmo podle sloupce {0}: řádky, které párový bootstrap neoddělí, sdílejí pásmo. "
         "Neřídí se řazením — seřazení podle jiného sloupce přeskládá řádky, ne to, co bootstrap "
         "dokázal oddělit."
+    ),
+    "the questions were rewritten in <code>{0}</code>, so these rows answer an earlier version"
+    " of them": (
+        "otázky byly přepsány ve verzi <code>{0}</code>, takže tyto řádky odpovídají na jejich "
+        "starší znění"
+    ),
+    "this judge was tried during calibration and is not one of the two the leaderboard publishes"
+    " from": (
+        "tento hodnotitel byl vyzkoušen při kalibraci a není jedním ze dvou, ze kterých žebříček "
+        "publikuje"
     ),
     "Band": "Pásmo",
     # The same thing said where a reader can read it. The tooltip above stays
     # for a mouse; this is the entry in the legend under the table, which is
     # where every other column's meaning is repeated in visible text and where
     # the Band column's was not.
-    "Rows this evidence cannot tell apart share a band. Measured on {0} by resampling the"
+    "Rows the paired bootstrap cannot separate share a band. Measured on {0} by resampling the"
     " conversations every system here was scored on, so the numbers need not run in order down"
     " the column — a band is a group, not a position, and the column beside it averages each"
     " system over its own notes instead. There is no ↕ on this heading and it does not sort: a"
     " grouping has no order to sort by.": (
-        "Řádky, které tato evidence nedokáže rozlišit, sdílejí pásmo. Změřeno na {0} "
+        "Řádky, které párový bootstrap neoddělí, sdílejí pásmo. Měřeno na míře {0} "
         "převzorkováním rozhovorů, na kterých byl obodován každý zdejší systém, takže čísla "
         "ve sloupci nemusí jít popořadě — pásmo je skupina, ne pozice, a sloupec vedle "
         "průměruje každý systém přes jeho vlastní zápisy. U tohoto záhlaví není ↕ a neřadí se "
@@ -282,15 +293,12 @@ _SENTENCES = {
     # under two words -- three, counting the `td.rank` class -- and in Czech
     # *pásmo* and *příčka* are not obviously the same thing at all. The heading
     # is the word that stays, because it is the word a reader points at.
-    "<strong>Systems that share a Band cannot be told apart by this evidence.</strong> {0} of {1}"
-    " bands are shared, and the top one has {2} system(s) in it. Measured on <strong>{3}</strong>"
-    " over the {4} conversations every system here was scored on, by resampling those"
-    " conversations — not by whether two intervals overlap, which is a weaker test.": (
-        "<strong>Systémy, které sdílejí pásmo, tato evidence od sebe nerozliší.</strong> "
-        "Sdílených pásem je {0} z {1} a na tom nejvyšším stojí systémů: {2}. Změřeno na "
-        "<strong>{3}</strong> přes {4} rozhovorů, na kterých byl obodován každý zdejší systém, "
-        "převzorkováním těch rozhovorů — ne tím, zda se dva intervaly překrývají, což je slabší "
-        "test."
+    "<strong>Systems that share a Band are not separated by this bootstrap.</strong> {0} of {1}"
+    " bands are shared and the top one holds {2} of them. Paired bootstrap on"
+    " <strong>{3}</strong> over the {4} conversations every system here was scored on.": (
+        "<strong>Systémy ve stejném pásmu párový bootstrap od sebe neoddělil.</strong> "
+        "Sdílených pásem je {0} z {1} a v tom nejvyšším je jich {2}. Párový bootstrap na míře "
+        "<strong>{3}</strong> přes {4} rozhovorů, na kterých byl obodován každý zdejší systém."
     ),
     "<strong>Which of these can be told apart has not been measured for this table.</strong>"
     " Read the order as roughly who is near the top and near the bottom, not as a ranking: two"
@@ -308,15 +316,20 @@ _SENTENCES = {
     " zero.": (
         "{0} v ní jsou pod jménem, které jejich rodina modelů nesdílí, a táhnou odpověď k nule."
     ),
-    "Ordered by <strong>{0}</strong>, because it is the only column checked against people: on"
-    " it the judge and a trained therapist agree at <strong>{1}</strong> where two therapists"
-    " reach <strong>{2}</strong>. On the 1&#8211;5 scales two therapists agree at {3}, so those"
-    " carry too little signal to rank on. Every other column is context and is not a ranking.": (
+    "Ordered by <strong>{0}</strong>, because it is the only column checked against people: the"
+    " judge and a trained therapist agree at <strong>{1}</strong> where two therapists reach"
+    " <strong>{2}</strong> ({3}). On the 1&#8211;5 ratings TN-Eval published beside that rubric,"
+    " those two therapists reach only {4} ({5}) &mdash; too little to rank on. Both are computed"
+    " here from TN-Eval's own annotations over {6} notes; <a"
+    ' href="methods.html#calibration">how this was measured</a>. Every other column is context and'
+    " is not a ranking.": (
         "Seřazeno podle sloupce <strong>{0}</strong>, protože je to jediný sloupec ověřený proti "
-        "lidem: na něm se hodnotitel a školený terapeut shodnou na <strong>{1}</strong> tam, "
-        "kde dva terapeuti dosáhnou <strong>{2}</strong>. Na škálách 1&#8211;5 se dva terapeuti "
-        "shodnou na {3}, takže ty nesou příliš málo signálu, než aby se podle nich dalo řadit. "
-        "Každý další sloupec je kontext, ne žebříček."
+        "lidem: hodnotitel a školený terapeut se na něm shodnou na <strong>{1}</strong> tam, kde "
+        "se dva terapeuti shodnou na <strong>{2}</strong> ({3}). Na hodnoceních 1&#8211;5, která "
+        "TN-Eval zveřejnil vedle té rubriky, dosáhnou titíž dva terapeuti jen {4} ({5}) &mdash; "
+        "na řazení je to málo. Obojí je spočítané zde z anotací TN-Evalu přes {6} zápisů; "
+        '<a href="methods.html#calibration">jak se to měřilo</a>. Každý další sloupec je kontext, '
+        "ne žebříček."
     ),
     "Ordered by <strong>{0}</strong>, because it is the only column with a human anchor at all."
     " <strong>This judge's agreement with the two therapists is not published here</strong>, so"
@@ -510,12 +523,12 @@ _SENTENCES = {
         " — nejdál <code>{0}</code>, {1}{2} v této tabulce a {3}{4} v té druhé"
     ),
     "<strong>The two judges agree on the shape of this ranking and not on its order.</strong> On"
-    " {0}, {1} of {2} systems land somewhere else under <code>{3}</code>{4}. Near the top and"
-    " near the bottom are claims this table supports; ninth against tenth is not.": (
-        "<strong>Oba hodnotitelé se shodnou na tvaru tohoto pořadí, ne na jeho sledu.</strong> "
-        "Na sloupci {0} přistane pod hodnotitelem <code>{3}</code> jinde {1} z {2} systémů{4}. "
-        "Blízko vrcholu a blízko dna jsou tvrzení, která tato tabulka unese; devátý proti "
-        "desátému ne."
+    " {0}, {1} of {2} systems land somewhere else under <code>{3}</code>{4} — so the top and the"
+    " bottom are claims this table supports, ninth against tenth is not.": (
+        "<strong>Oba hodnotitelé se shodnou na tvaru tohoto pořadí, ne na konkrétním sledu "
+        "příček.</strong> Na sloupci {0} se pod hodnotitelem <code>{3}</code> umístí jinam {1} "
+        "z {2} systémů{4} — blízko vrcholu a blízko dna jsou tvrzení, která tato tabulka unese, "
+        "devátý proti desátému ne."
     ),
     "No runs yet": "Zatím žádný běh",
     "The first run will populate this page.": "První běh tuto stránku naplní.",
