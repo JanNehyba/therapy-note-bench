@@ -1809,6 +1809,68 @@ CS: dict[str, str] = {
         "formát Deepsy — protože žádná z těch tří neodpovídá na zbylé dvě. Pak čtěte "
         "pořadí, čtěte ho jako pásma, ne jako příčky, a nečtěte rozdíly mezi sousedy."
     ),
+    # --- what the models write, one sentence at a time ----------------------
+    "What the models write, one sentence at a time": "Co modely píšou, věta po větě",
+    "Restatement": "Převyprávění",
+    "Clinical hypothesis": "Klinická hypotéza",
+    "Client quotation": "Citace klientky",
+    "Unsupported observation": "Nepodložené pozorování",
+    "Verbal expression": "Hodnocení řeči",
+    "Declines to judge": "Odmítne posoudit",
+    "Sentences": "Vět",
+    "Notes": "Zápisů",
+    "None": "Žádná",
+    "not answered": "nezodpovězeno",
+    "A model with fewer than ten notes is marked: its share rests on less.": (
+        "Model s méně než deseti zápisy je označený hvězdičkou: jeho podíl stojí na méně datech."
+    ),
+    "The six criteria ask whether a fault appears ANYWHERE in a note, so a longer "
+    "note offers more places for one and the columns scale with length. These six "
+    "ask about one sentence at a time. Each note was cut into sentences -- "
+    "{units} of them across {notes} notes -- and two coders from two vendors were "
+    "asked the same yes/no question about every one. A cell is the share of the "
+    "ANSWERED verdicts that are yes, so a model that writes twice as much is not "
+    "twice as likely to be marked.": (
+        "Šest kritérií se ptá, jestli je chyba NĚKDE v zápisu, takže delší zápis nabízí "
+        "víc míst, kde být může, a sloupce rostou s délkou. Těchhle šest se ptá vždy na "
+        "jednu větu. Každý zápis se rozřezal na věty — {units} vět v {notes} zápisech — "
+        "a dva kodéři od dvou dodavatelů odpověděli u každé z nich na tutéž otázku "
+        "ano/ne. Buňka je podíl vět daného modelu, na které kategorie sedí, takže "
+        "model, který píše dvakrát tolik, nemá dvakrát větší šanci dostat značku."
+    ),
+    "Only {passed} of the {total} passed the gates that decide whether a column "
+    "is possible: does it vary, does it belong to the model rather than the "
+    "session, do the coders agree, is its evidence real, and is it separable from "
+    "length. The others are printed as description and are not measures. {failed} "
+    "fall outside the 20-80% band a column needs to tell ten notes per model "
+    "apart.": (
+        "Branami, které rozhodují, jestli je sloupec vůbec možný, prošla {passed} z "
+        "{total}: kolísá to; patří to modelu, ne sezení; shodnou se kodéři; je evidence "
+        "skutečná; a jde to oddělit od délky. Ostatní jsou vytištěné jako popis, ne "
+        "jako míra. Mimo pásmo 20–80 %, které sloupec potřebuje, aby rozlišil deset "
+        "zápisů na model, padá: {failed}."
+    ),
+    "No person has read these notes as a clinician. Two models agreeing is "
+    "evidence that a distinction is stable and codeable, and no evidence at all "
+    "that it matters. Nothing here says a higher number is worse.": (
+        "Žádný člověk tyhle zápisy nečetl jako klinik. Shoda dvou modelů je důkaz, že "
+        "je rozlišení stabilní a zakódovatelné, a není to vůbec žádný důkaz, že na něm "
+        "záleží. Nic tady neříká, že vyšší číslo je horší."
+    ),
+    "Source: local/czech-graduation.json, from local/czech-codes.jsonl. Coders "
+    "gemini-3.1-pro-preview and deepseek-v4-flash, prompt czech-open-v1, "
+    "temperature 0. The row order is the one the PDSQI-9 table above prints.": (
+        "Zdroj: local/czech-graduation.json, z local/czech-codes.jsonl. Kodéři "
+        "gemini-3.1-pro-preview a deepseek-v4-flash, prompt czech-open-v1, teplota 0. "
+        "Pořadí řádků je totéž, které tiskne tabulka PDSQI-9 výše."
+    ),
+    "Both coders answered {both} of the {units} sentences. The second coder "
+    "returned nothing for {gap}, so those carry one reading rather than two, and "
+    "the share for the models they belong to leans on the first coder.": (
+        "Oba kodéři odpověděli na {both} z {units} vět. Druhý kodér nevrátil nic u "
+        "{gap} z nich, takže ty nesou jedno čtení místo dvou a podíl u modelů, "
+        "kterým patří, se opírá o prvního kodéra."
+    ),
     "{name}, released {date}": "{name}, vydáno {date}",
     "That is the lowest of the six.": "Je to nejnižší ze šesti.",
 }

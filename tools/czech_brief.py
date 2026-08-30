@@ -27,6 +27,7 @@ import json
 import re
 import sys
 from collections import defaultdict
+from decimal import Decimal
 from itertools import combinations
 from pathlib import Path
 from typing import NamedTuple
@@ -4962,6 +4963,201 @@ def _controls() -> str:
     )
 
 
+#: The six candidate categories, in the order the panel prints them, with the
+#: heading each gets. The keys are the ones `tools/czech_graduate.py` writes.
+CATEGORY_LABELS = (
+    ("restatement", "Restatement"),
+    ("clinical_hypothesis", "Clinical hypothesis"),
+    ("client_quotation", "Client quotation"),
+    ("unsupported_observation", "Unsupported observation"),
+    ("verbal_expression", "Verbal expression"),
+    ("declines_to_judge", "Declines to judge"),
+)
+
+CATEGORIES_LEAD = (
+    "The six criteria ask whether a fault appears ANYWHERE in a note, so a longer "
+    "note offers more places for one and the columns scale with length. These six "
+    "ask about one sentence at a time. Each note was cut into sentences -- {units} "
+    "of them across {notes} notes -- and two coders from two vendors were asked the "
+    "same yes/no question about every one. A cell is the share of the ANSWERED "
+    "verdicts that are yes, so a model that writes twice as much is not twice as "
+    "likely to be marked."
+)
+
+#: How much of the grid the two coders actually both answered. Printed rather
+#: than assumed: the lead used to claim they answered every sentence, and for two
+#: notes that was not true -- the second coder returned nothing for 54 of 3367.
+CATEGORIES_COVERAGE = (
+    "Both coders answered {both} of the {units} sentences. The second coder "
+    "returned nothing for {gap}, so those carry one reading rather than two, and "
+    "the share for the models they belong to leans on the first coder."
+)
+
+CATEGORIES_GATES = (
+    "Only {passed} of the {total} passed the gates that decide whether a column is "
+    "possible: does it vary, does it belong to the model rather than the session, "
+    "do the coders agree, is its evidence real, and is it separable from length. "
+    "The others are printed as description and are not measures. {failed} fall "
+    "outside the 20-80% band a column needs to tell ten notes per model apart."
+)
+
+CATEGORIES_CAVEAT = (
+    "No person has read these notes as a clinician. Two models agreeing is "
+    "evidence that a distinction is stable and codeable, and no evidence at all "
+    "that it matters. Nothing here says a higher number is worse."
+)
+
+CATEGORIES_SOURCE = (
+    "Source: local/czech-graduation.json, from local/czech-codes.jsonl. Coders "
+    "gemini-3.1-pro-preview and deepseek-v4-flash, prompt czech-open-v1, "
+    "temperature 0. The row order is the one the PDSQI-9 table above prints."
+)
+
+CATEGORIES_THIN = "A model with fewer than ten notes is marked: its share rests on less."
+
+#: What a cell says when the coders never answered for that model. An empty cell
+#: would read as zero, which is the one thing it must not.
+CATEGORY_UNANSWERED = "not answered"
+
+
+def _percent(part: int, whole: int) -> int:
+    """A share as a whole percent, rounded half-up.
+
+    Python's `round` is banker's rounding, which sends an exact half to the even
+    neighbour: 41.5 became 42 and 4.5 became 4 in the same table row, so a reader
+    checking either by hand disagreed with one of them. Half-up is the rule a
+    reader applies, and applying two different rules in one row is worse than
+    applying the less principled one consistently.
+    """
+    return int(Decimal(100 * part) / Decimal(whole) + Decimal("0.5")) if whole else 0
+
+
+def _categories(rows: list[results.Row]) -> str:
+    """What the models write, asked one sentence at a time.
+
+    A separate instrument from the six criteria and from PDSQI-9, and it is here
+    rather than in a file of its own because a reader who has just been told the
+    criteria are entangled with length should see the measure that is not, on the
+    same models, without changing document.
+
+    It returns "" when the payload is absent, like every other panel that reads
+    one: a briefing built on a machine that has not run the coder panel should be
+    a briefing without this chapter, not one with an empty heading.
+    """
+    payload = REPO / "local" / "czech-graduation.json"
+    if not payload.is_file():
+        return ""
+    data = json.loads(payload.read_text(encoding="utf-8"))
+    by_model = data.get("by_model") or {}
+    graded = data.get("categories") or {}
+    if not by_model or not graded:
+        return ""
+
+    keys = [key for key, _ in CATEGORY_LABELS if key in by_model]
+    if not keys:
+        return ""
+
+    # The same row order the PDSQI table above prints, recomputed rather than
+    # copied: two orders that drift apart are worse than one that is derived.
+    track = results.TRACK_CZECH_REAL_PDSQI
+    groups = [
+        [row for row in rows if row.track == track and row.judge_model == judge]
+        for judge in sorted({row.judge_model for row in rows if row.track == track})
+    ]
+    order = list(by_model[keys[0]])
+    # `groups` is empty when no row carries the PDSQI track, and `all([])` is
+    # True -- which took `set.intersection()` with no arguments and crashed the
+    # whole briefing. The panel is meant to degrade to the alphabetical order
+    # there, not to take the document down with it.
+    if groups and all(groups):
+        by_judge = {g[0].judge_model or "?": {r.system_id: r for r in g} for g in groups}
+        systems = sorted(set.intersection(*(set(v) for v in by_judge.values())))
+        varying = _varying(track, [r for g in groups for r in g])
+        tables = {
+            judge: {s: by_judge[judge][s].metrics.headline for s in systems} for judge in by_judge
+        }
+        places = _dominance_places(systems, varying or [k for k, _ in COLUMNS[track]], tables)
+
+        def index_of(system: str) -> float:
+            found = [
+                _rank_of(track, by_judge[judge][system], varying)
+                for judge in by_judge
+                if system in by_judge[judge]
+            ]
+            return sum(found) / len(found) if found else -1.0
+
+        order = sorted(systems, key=lambda s: (places[s], -index_of(s), s))
+
+    thin = False
+    body = []
+    for system in order:
+        cells = []
+        for key in keys:
+            entry = by_model[key].get(system)
+            if entry is None or entry["rate"] is None:
+                cells.append(f"<td>{_t(CATEGORY_UNANSWERED)}</td>")
+                continue
+            value = f"{_percent(entry['present'], entry['verdicts'])}&nbsp;%"
+            cells.append(
+                f"<td><strong>{value}</strong></td>"
+                if key == "restatement"
+                else f"<td>{value}</td>"
+            )
+        first = by_model[keys[0]].get(system) or {}
+        notes = first.get("notes")
+        sentences = first.get("sentences")
+        mark = ""
+        if notes is not None and notes < 10:
+            thin = True
+            mark = " *"
+        body.append(
+            f"<tr><td>{html.escape(system)}</td>{''.join(cells)}"
+            f"<td>{sentences if sentences is not None else ''}</td>"
+            f"<td>{notes if notes is not None else ''}{mark}</td></tr>"
+        )
+
+    head = "".join(
+        f"<th>{html.escape(_t(label))}</th>" for key, label in CATEGORY_LABELS if key in by_model
+    )
+    units = sum((by_model[keys[0]][s] or {}).get("sentences") or 0 for s in by_model[keys[0]])
+    # How many of those sentences carry a reading from every coder. A share
+    # pooled over coders is not wrong where one of them is silent, but it is
+    # weighted, and a reader is owed the number rather than the word "two".
+    both = sum((by_model[keys[0]][s] or {}).get("both_coders") or 0 for s in by_model[keys[0]])
+    notes_total = sum((by_model[keys[0]][s] or {}).get("notes") or 0 for s in by_model[keys[0]])
+    passed = [k for k in keys if str(graded.get(k, {}).get("verdict", "")).startswith("would")]
+    failed = [
+        _t(label)
+        for key, label in CATEGORY_LABELS
+        if key in graded and graded[key]["gates"]["1_varies"]["passed"] is False
+    ]
+
+    return (
+        f"<h2>{_t('What the models write, one sentence at a time')}</h2>"
+        + f"<p>{html.escape(_t(CATEGORIES_LEAD).format(units=units, notes=notes_total))}</p>"
+        + f"<table><thead><tr><th>{_t('Model')}</th>{head}"
+        + f"<th>{_t('Sentences')}</th><th>{_t('Notes')}</th></tr></thead>"
+        + f"<tbody>{''.join(body)}</tbody></table>"
+        + (f"<p class='note'>{html.escape(_t(CATEGORIES_THIN))}</p>" if thin else "")
+        + (
+            "<p class='note'>"
+            + html.escape(_t(CATEGORIES_COVERAGE).format(both=both, units=units, gap=units - both))
+            + "</p>"
+            if both and both < units
+            else ""
+        )
+        + "<p>"
+        + html.escape(
+            _t(CATEGORIES_GATES).format(
+                passed=len(passed), total=len(keys), failed=", ".join(failed) or _t("None")
+            )
+        )
+        + "</p>"
+        + f"<div class='warn'><p>{html.escape(_t(CATEGORIES_CAVEAT))}</p></div>"
+        + f"<p class='note'>{html.escape(_t(CATEGORIES_SOURCE))}</p>"
+    )
+
+
 def _same_rubric_cutoff(groups: dict, newest: str) -> str:
     """The scoring time of the newest rubric version, for every group in it.
 
@@ -5342,6 +5538,8 @@ def build(rows: list[results.Row]) -> str:
 
 
 {_controls()}
+
+{_categories(rows)}
 
 {_outside()}
 
