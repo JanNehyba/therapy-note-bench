@@ -9,11 +9,15 @@ difference that does not exist. So the crosscheck deliberately does not look
 inside a chart. This file is what looks inside instead, and it compares what is
 drawn with the payload rather than with itself.
 
-The fifth rule is the one the English figures do not need: every figure is
-rendered a second time in Czech. `_t` raises rather than falling back, so an
-untranslated caption is a Czech build that stops -- and finding that here, at
-the moment a figure is written, beats finding a hundred of them on the last
-commit of the document.
+The fifth rule is the one the English figures do not need: the figures have to
+come out Czech in the Czech document. That is checked by **building the document
+with the script that builds it**, not by calling the four functions from a test.
+The difference is the whole reason this section was rewritten: the figures used
+to fetch the translator with `from czech_brief import _t`, and a test that
+imports `czech_brief` as a module is the one arrangement where that works. A
+real build runs the file as a script, so it is `__main__`, that import loaded a
+second copy whose language was still English, and all four charts printed
+English inside the Czech document while every test here passed.
 
 Everything read here is under `local/`, which is gitignored, so the whole file
 skips in a checkout that has not run the Czech track.
@@ -21,13 +25,18 @@ skips in a checkout that has not run the Czech track.
 
 from __future__ import annotations
 
+import ast
+import html
+import json
 import re
+import subprocess
 import sys
 from statistics import fmean
 
 import pytest
 
 from tnb.config import REPO_ROOT
+from tnb.report import TRACK_SWITCH_LABELS
 
 sys.path.insert(0, str(REPO_ROOT / "tools"))
 
@@ -76,25 +85,214 @@ def test_every_figure_draws_something(drawn):
         assert svg.startswith("<svg"), f"{name} drew nothing from this checkout"
 
 
-# --- the fifth rule: it has to survive the Czech build ------------------------
+# --- the fifth rule: the figures of a real Czech build are Czech --------------
+
+BRIEF = REPO_ROOT / "tools" / "czech_brief.py"
+LOCAL_ROWS = REPO_ROOT / "local" / "czech-rows.jsonl"
+
+#: How many models the document under test is built from. The figures read
+#: `local/czech-rows.jsonl` themselves and are drawn in full whatever this is,
+#: so cutting it costs the figures nothing. The tables are built from the source
+#: given here, and the chapter that permutes models for a p-value is a minute
+#: over all of them and eight seconds over five.
+BUILD_SYSTEMS = 5
+
+#: Czech letters no English word has. Enough to say a text node was translated;
+#: not enough to say it was translated well, which is a reader's job.
+CZECH_LETTERS = (
+    "\u00e1\u010d\u010f\u00e9\u011b\u00ed\u0148\u00f3\u0159\u0161\u0165\u00fa\u016f\u00fd\u017e"
+)
 
 
-def test_every_figure_renders_in_czech(drawn_cs):
-    """The whole point of the fixture above: `czech_brief._t` raises
-    `Untranslated` rather than falling back to English, so this test failing is
-    a caption that would have stopped the Czech document.
+@pytest.fixture(scope="module")
+def built_cs(tmp_path_factory) -> list[str]:
+    """The figures of a Czech document, built by running the script.
 
-    It is here rather than at the end of the work because a hundred missing
-    sentences found on the last commit is a day, and four found on this one is
-    an hour.
+    A subprocess, and that is the point rather than an accident: it is the
+    arrangement the bug needed. `tools/czech_brief.py` becomes `__main__` here,
+    exactly as it does for the person who runs it, so anything inside the build
+    that reaches for that module by name gets a second, English copy.
     """
-    for name, svg in drawn_cs.items():
-        assert svg.startswith("<svg"), f"{name} drew nothing in Czech"
+    if not LOCAL_ROWS.exists():
+        pytest.skip("no local Czech rows in this checkout")
+    rows = [
+        json.loads(line) for line in LOCAL_ROWS.read_text(encoding="utf-8").splitlines() if line
+    ]
+    keep = sorted({row["system_id"] for row in rows})[:BUILD_SYSTEMS]
+
+    work = tmp_path_factory.mktemp("czech-brief")
+    source, target = work / "czech-rows.jsonl", work / "czech-brief-cs.html"
+    source.write_text(
+        "".join(
+            json.dumps(row, ensure_ascii=False) + "\n" for row in rows if row["system_id"] in keep
+        ),
+        encoding="utf-8",
+    )
+    finished = subprocess.run(
+        [
+            sys.executable,
+            "-X",
+            "utf8",
+            str(BRIEF),
+            "--language",
+            "cs",
+            "--source",
+            str(source),
+            "--target",
+            str(target),
+        ],
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        timeout=600,
+    )
+    assert finished.returncode == 0, finished.stdout + finished.stderr
+    drawn = re.findall(r"<svg\b.*?</svg>", target.read_text(encoding="utf-8"), re.S)
+    if not drawn:
+        pytest.skip("this checkout has no payloads behind the figures")
+    return drawn
+
+
+def _said(svg: str) -> str:
+    """Every word the figure prints, on one line.
+
+    `figures.wrap` breaks a subtitle and a footnote into one `<text>` per line
+    at whatever width fits, so a whole sentence is never a substring of the SVG.
+    The text nodes rejoined in order are, and `wrap` splits on whitespace, so
+    the same normalisation on both sides makes the two comparable.
+    """
+    nodes = re.findall(r"<text\b[^>]*>(.*?)</text>", svg, re.S)
+    plain = " ".join(re.sub(r"<[^>]+>", " ", node) for node in nodes)
+    return " ".join(html.unescape(plain).split())
+
+
+def _longest_literal(text: str) -> str:
+    """The longest run of a phrase that carries no `{placeholder}`.
+
+    A template is never printed as written -- `"{worse} of {models} models score
+    lower"` reaches the page with numbers in it -- so what is checked is the
+    longest stretch that comes through `.format` unchanged.
+    """
+    return max(re.split(r"\{[^}]*\}", text), key=len).strip()
+
+
+def _marker(english: str, czech: str) -> str | None:
+    """The stretch of `english` whose presence on a figure means English.
+
+    Two things disqualify a stretch. One is a `{placeholder}`, which is filled
+    before the phrase is drawn. The other is the Czech itself: the translation
+    of "Spearman {rho}, p {p}, {n} models" keeps the word Spearman, because a
+    coefficient is named after a person in either language, so finding
+    "Spearman" on a chart says nothing about which language it is in.
+
+    `None` when nothing distinctive is left. That phrase is dropped rather than
+    guessed at.
+    """
+    for piece in sorted(re.split(r"\{[^}]*\}", english), key=len, reverse=True):
+        piece = piece.strip()
+        if len(piece) >= 4 and piece not in czech:
+            return piece
+    return None
+
+
+def _english_the_figures_draw() -> dict[str, str]:
+    """Every English phrase the figures draw, against the mark that gives it away.
+
+    Read out of the module, so a caption added tomorrow is swept without anybody
+    remembering to add it here. Three sources, because the figures name their
+    strings three ways: module constants, literals written straight into a
+    `t(...)` call, and the track labels they borrow from `tnb.report`.
+
+    A phrase with no Czech is dropped rather than failed. `Intelligence Index`
+    is a product name, drawn the same in both languages, and `_t` says so by
+    raising.
+    """
+    found = {
+        value
+        for name, value in vars(czech_figures).items()
+        if name.isupper() and isinstance(value, str)
+    }
+    tree = ast.parse((REPO_ROOT / "tools" / "czech_figures.py").read_text(encoding="utf-8"))
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call) or not isinstance(node.func, ast.Name):
+            continue
+        if node.func.id != "t" or not node.args:
+            continue
+        first = node.args[0]
+        if isinstance(first, ast.Constant) and isinstance(first.value, str):
+            found.add(first.value)
+    found |= set(TRACK_SWITCH_LABELS.values())
+
+    before, wanted = czech_brief.LANG, {}
+    try:
+        czech_brief.LANG = "cs"
+        for phrase in found:
+            try:
+                czech = czech_brief._t(phrase)
+            except czech_brief.Untranslated:
+                continue
+            mark = _marker(phrase, czech)
+            if mark:
+                wanted[phrase] = mark
+    finally:
+        czech_brief.LANG = before
+    return wanted
+
+
+def test_a_real_build_draws_every_figure(built_cs):
+    """Four charts in the document, or the sweep below is checking three."""
+    assert len(built_cs) == len(czech_figures.CZECH_FIGURES)
+
+
+def test_the_figures_of_a_real_build_are_in_czech(built_cs):
+    """The finding this section exists for: the charts printed English.
+
+    178 text nodes of it -- titles, subtitles, panel headings, axis labels,
+    legends, footnotes and source lines -- under Czech figcaptions, in a
+    document whose whole promise is that the caveats reach a Czech reader in
+    Czech.
+    """
+    swept = _english_the_figures_draw()
+    assert len(swept) >= 25, f"only {len(swept)} phrases were swept; the sweep found nothing"
+    for index, svg in enumerate(built_cs):
+        said = _said(svg)
+        leaked = sorted(phrase for phrase, mark in swept.items() if mark in said)
+        assert not leaked, f"figure {index} prints English: {leaked[:3]}"
+        assert any(letter in said for letter in CZECH_LETTERS), (
+            f"figure {index} carries no Czech letter at all"
+        )
+
+
+def test_a_real_build_prints_the_czech_title_of_every_figure(built_cs):
+    """The other direction. Absent English is also what a chart that printed
+    nothing would look like, so each title is looked for in the language it is
+    supposed to be in."""
+    titles = {
+        html.unescape(title)
+        for svg in built_cs
+        for title in re.findall(r'class="title"[^>]*>([^<]*)<', svg)
+    }
+    before = czech_brief.LANG
+    try:
+        czech_brief.LANG = "cs"
+        for name, english in (
+            ("formats", czech_figures.FORMATS_TITLE),
+            ("external", czech_figures.EXTERNAL_TITLE),
+            ("join", czech_figures.JOIN_TITLE),
+            ("length", czech_figures.LENGTH_TITLE),
+        ):
+            czech = _longest_literal(czech_brief._t(english))
+            assert any(czech in title for title in titles), (
+                f"the {name} figure does not print its Czech title"
+            )
+    finally:
+        czech_brief.LANG = before
 
 
 def test_a_missing_czech_sentence_stops_the_figure_rather_than_leaking_english():
-    """The guard the test above rests on. If `_t` ever gained a fallback, every
-    Czech assertion in this file would pass while the figures printed English."""
+    """The guard everything above rests on. If `_t` ever gained a fallback, the
+    Czech assertions in this file would pass while the figures printed English
+    -- which is exactly what happened, by a different route."""
     before = czech_brief.LANG
     try:
         czech_brief.LANG = "cs"
