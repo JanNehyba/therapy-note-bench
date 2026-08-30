@@ -1437,6 +1437,15 @@ LENGTH_WARNING_DEEPSY = (
 #: sections later. One measurement, twice in one document, two sets of numbers.
 #: The agreement with the native speaker is now appended from the payload by
 #: `_catch`, so the two can no longer drift apart.
+#:
+#: **One entry per Czech criterion and nothing else.** `_catch` is asked only
+#: about `czech.CRITERION_KEYS`, so a key outside them is prose no reader can
+#: reach -- and it is worse than dead code, because the reachability check in
+#: `tests/test_czech_dictionary.py` is textual: an English sentence sitting
+#: here keeps its Czech twin alive and current-looking in `czech_brief_cs.py`
+#: long after the chapter that printed it was deleted. Nine PDSQI entries did
+#: exactly that, carrying nine Czech translations of claims about a table this
+#: dictionary no longer describes.
 WHAT_IT_CATCHES = {
     "diacritics": ("Reliable: the two judges answered the same way on 79% of notes."),
     "calque": (
@@ -1458,45 +1467,8 @@ WHAT_IT_CATCHES = {
     "register": (
         "Catches colloquial words where clinical ones belong. Judges agree on 75% of notes."
     ),
-    "quotes": (
-        "Read this one against the prompt, not against the models. The same models "
-        "on the same sessions score 0.00 here and 0.90 to 1.00 in the Deepsy format, "
-        "and the prompt behind this table contains no Czech quotation mark at all "
-        "while the Deepsy one does. "
-        "Exact. It is not a judgement at all any more -- the characters in the note "
-        "are counted. It became a count after a native speaker and a judge disagreed "
-        "on nearly half the notes and neither was wrong: the question named only the "
-        "straight double mark, and 45 of the 75 notes that quote anything use an "
-        "apostrophe instead. The question now names both."
-    ),
     "nonword": (
         "The strongest agreement with a person under one judge, and tied with Diacritics over both."
-    ),
-    "accurate": (
-        "The most informative column in this document, and it exists only on the "
-        "translated half, because answering it means reading the session. The two "
-        "judges order the models almost identically here."
-    ),
-    "thorough": (
-        "Also only on the translated half. The judges agree far less about it than "
-        "about accuracy, so read large gaps and ignore small ones."
-    ),
-    "useful": ("Says almost nothing. One judge gave 5.00 to every model."),
-    "organized": (
-        "Says nothing, and this was written down before the run rather than after. "
-        "Every model writes into the same four-part template because the prompt "
-        "tells it to, so a question about structure has nothing left to separate."
-    ),
-    "comprehensible": ("Does not separate the models: most of them print the same value."),
-    "succinct": (
-        "Works, and every model fails it. No model reaches the middle of the scale "
-        "under either judge. This is the one column on the real half that tells the "
-        "models apart at all."
-    ),
-    "synthesized": ("Says nothing. 5.00 for every model under both judges on both halves."),
-    "stigmatizing": (
-        "Does not separate the models. Most of them are free of it, which is the "
-        "good news and also why the column cannot rank anything."
     ),
 }
 

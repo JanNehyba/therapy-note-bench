@@ -171,3 +171,30 @@ def test_the_check_would_notice_a_hand_written_cell():
     ]
 
     assert between == ["found it"]
+
+
+# --- the fourth direction: English no reader can reach ------------------------
+
+
+def test_every_column_verdict_is_one_the_document_can_ask_for():
+    """A verdict keyed on a column the document never asks about is unreachable
+    prose -- and unreachable prose is what keeps a stale translation alive.
+
+    The three checks above all pass on it. `_t` never raises, because nothing
+    looks the sentence up; the reachability check is textual, so the English
+    sitting in the dict answers the Czech and both survive. `WHAT_IT_CATCHES`
+    held nine entries keyed on PDSQI attributes after the chapter that printed
+    them became a table with no verdict column, and nine Czech translations of
+    claims about that table stayed in `czech_brief_cs.py` reading as current.
+    """
+    import czech_brief
+
+    from tnb.scoring import czech as czech_scorer
+
+    unreachable = sorted(set(czech_brief.WHAT_IT_CATCHES) - set(czech_scorer.CRITERION_KEYS))
+
+    assert not unreachable, (
+        "czech_brief.WHAT_IT_CATCHES is keyed on columns `_catch` is never asked "
+        f"about, so no reader can reach them: {unreachable}. Delete each with its "
+        "Czech twin, or say which column asks for it."
+    )
