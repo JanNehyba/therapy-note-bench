@@ -229,6 +229,73 @@ INTRO = (
     "passes all six criteria, and a note full of insight can be written in bad "
     "Czech."
 )
+#: Every word the summary uses before anything defines it, defined before the
+#: summary. The eleven paragraphs open with "in the top band of all 4 tables
+#: bands cover -- the SOAP halves, both judges", which is five terms deep and
+#: none of them had been introduced: the column definitions and the corpus
+#: description sat two screens below, under the tables they belong to. A reader
+#: who has never seen this project met the findings first and the vocabulary
+#: after, and the findings are unreadable in that order.
+#:
+#: Short entries on purpose. This is the thing a reader glances back at, not a
+#: chapter, and every entry that grew past two sentences moved into the chapter
+#: it belongs to.
+GLOSSARY_HEADING = "What each word here means"
+GLOSSARY = (
+    (
+        "a note",
+        "What a model writes after reading one session transcript. It is the thing "
+        "being measured; nothing here measures the therapy.",
+    ),
+    (
+        "a judge",
+        "Another language model, which reads a note and answers the questions about "
+        "it. There are two, from two different vendors, and they answer separately "
+        "and are never averaged. They are not people, and where they disagree is "
+        "the only check this study has.",
+    ),
+    (
+        "a criterion",
+        "One yes/no question about a note. Six of them, all about whether the Czech "
+        "itself is right -- diacritics, calques, untranslated terms, agreement, "
+        "register, non-words. A column is the share of notes free of that fault.",
+    ),
+    (
+        "PDSQI-9",
+        "A published instrument that asks something else: whether the note is any "
+        "good clinically. Eight attributes, six of them answerable here. It was put "
+        "only to the SOAP notes.",
+    ),
+    (
+        "SOAP and Deepsy",
+        "Two note formats. SOAP has four sections and every model has seen "
+        "thousands of them. Deepsy is the form the Deepsy application really "
+        "writes: eleven sections, and no model has seen it before. They are never "
+        "pooled.",
+    ),
+    (
+        "the two halves",
+        "The two sets of sessions. One is real therapy with one client, transcribed "
+        "and de-identified by hand and never published. The other is public "
+        "counselling conversations translated into Czech. Every model wrote from "
+        "both, so two models are never compared on different sessions.",
+    ),
+    (
+        "a track",
+        "One format on one half -- SOAP on the real sessions, SOAP on the "
+        "translated ones, and the same two for Deepsy. Four in all, and each is "
+        "judged twice, which is where the eight tables come from.",
+    ),
+    (
+        "a band",
+        "A group of models this measurement cannot tell apart. It is not a rank: "
+        "inside a band nothing separates them, and the band ends where the "
+        "difference is bigger than resampling the sessions can explain away. A "
+        "narrow band means the measurement resolves finely, not that a model is "
+        "good.",
+    ),
+)
+
 #: The second question, and it is second. The document used to open with it,
 #: which made a report about Czech notes look like a footnote to the English
 #: leaderboard.
@@ -3686,6 +3753,22 @@ def _conclusion(rows: list[results.Row]) -> str:
     return f"<h2>{heading}</h2>{body}"
 
 
+def _glossary() -> str:
+    """The vocabulary, above the findings that use it.
+
+    A definition list rather than prose: a reader glances back at this, and
+    prose is the wrong shape for something read out of order. It is authored
+    rather than computed, which is the exception in this document -- but the
+    numbers in it would be the count of tracks and tables, and those are said
+    with their figures where they are drawn.
+    """
+    items = "".join(
+        f"<dt>{html.escape(_t(term))}</dt><dd>{html.escape(_t(meaning))}</dd>"
+        for term, meaning in GLOSSARY
+    )
+    return f"<h2>{_t(GLOSSARY_HEADING)}</h2><dl class='measures'>{items}</dl>"
+
+
 def _payload(name: str) -> dict:
     """One of the precomputed local payloads, or nothing if it was not built."""
     path = REPO / "local" / name
@@ -5723,10 +5806,12 @@ def build(rows: list[results.Row]) -> str:
 <h1>{_t(HEADLINE)}</h1>
 <p class="sub">{_t(SUBTITLE)}</p>
 
-<div class="summary">{_conclusion(rows)}</div>
-
 <p>{_intro(rows)}</p>
 <p>{_t(INTRO_SECOND)}</p>
+
+{_glossary()}
+
+<div class="summary">{_conclusion(rows)}</div>
 
 <div class="warn"><p><strong>{_t(NOT_PUBLIC)}</strong> {_t(NOT_PUBLIC_WHY)}</p></div>
 

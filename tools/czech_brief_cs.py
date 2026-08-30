@@ -24,8 +24,8 @@ from __future__ import annotations
 
 CS: dict[str, str] = {
     # --- the page itself ---------------------------------------------------
-    "therapy-note-bench · Czech track · measured, not published": (
-        "therapy-note-bench · český track · změřeno, nepublikováno"
+    ("therapy-note-bench · Czech track · measured, not published"): (
+        "therapy-note-bench · česká větev · změřeno, nepublikováno"
     ),
     "These numbers are not on the public site and this document is not a publication.": (
         "Tato čísla nejsou na veřejném webu a tento dokument není publikace."
@@ -58,7 +58,7 @@ CS: dict[str, str] = {
         "Kde který krok běžel, to je hranice důvěrnosti celého tohohle projektu. Každý "
         "zápis vznikl na e-INFRA, tedy na infrastruktuře, která drží i sezení — žádný "
         "přepis ji tedy kvůli shrnování neopustil. Ven šly jen zápisy: každý dostali dva "
-        "soudci, po jedné otázce, na endpointech Googlu a OpenAI."
+        "soudci, po jedné otázce, na serverech Googlu a OpenAI."
     ),
     "No judge is ever shown a real session.": "Žádný soudce nikdy neuvidí skutečné sezení.",
     "What leaves for the judge's provider is the note a model wrote, which is what "
@@ -126,24 +126,26 @@ CS: dict[str, str] = {
     "one client, de-identified by hand, never released": (
         "jeden klient, anonymizováno ručně, nikdy nezveřejněno"
     ),
-    "public counselling conversations, translated for this track": (
-        "veřejné poradenské rozhovory, přeložené pro tenhle track"
+    ("public counselling conversations, translated for this track"): (
+        "veřejné poradenské rozhovory, přeložené pro tuhle větev"
     ),
     "What each column is": "Co který sloupec je",
     # --- per-table prose ---------------------------------------------------
     "What was measured, and on what": "Co se měřilo a na čem",
     "PDSQI-9": "PDSQI-9",
-    "Every model was asked for a note from every one of these transcripts, in both "
-    "halves, so no two models are ever compared on sessions of different difficulty. "
-    "One half is recordings of real therapy with a single client, transcribed and "
-    "de-identified by hand and never released. The other is public counselling "
-    "conversations from the AnnoMI corpus, translated into spoken Czech for this "
-    "track.": (
+    (
+        "Every model was asked for a note from every one of these transcripts, in both "
+        "halves, so no two models are ever compared on sessions of different "
+        "difficulty. One half is recordings of real therapy with a single client, "
+        "transcribed and de-identified by hand and never released. The other is public "
+        "counselling conversations from the AnnoMI corpus, translated into spoken Czech "
+        "for this track."
+    ): (
         "Každý model dostal za úkol napsat zápis z každého z těchto přepisů, v obou "
         "půlkách — takže se nikdy neporovnávají dva modely na různě těžkých sezeních. "
         "Jedna půlka jsou nahrávky skutečné terapie s jedním klientem, přepsané a ručně "
-        "anonymizované, nikdy nezveřejněné. Druhá jsou veřejné poradenské rozhovory "
-        "z korpusu AnnoMI, přeložené pro tenhle track do mluvené češtiny."
+        "anonymizované, nikdy nezveřejněné. Druhá jsou veřejné poradenské rozhovory z "
+        "korpusu AnnoMI, přeložené pro tuhle větev do mluvené češtiny."
     ),
     "The translating was done by Claude, which is itself a language model, and anyone "
     "reading these numbers should know that before they read them. It was picked for "
@@ -238,11 +240,14 @@ CS: dict[str, str] = {
         "modely z nich napsaly zápisy."
     ),
     "Judged by": "Hodnotil",
-    "Two judges, two tables, and they are not averaged. Where they disagree about a "
-    "model is the only control this track has, so the disagreement is the thing to "
-    "read.": (
+    (
+        "Two judges, two tables, and they are not averaged. Where they disagree about a "
+        "model is the only control this track has, so the disagreement is the thing to "
+        "read."
+    ): (
         "Dva soudci, dvě tabulky, a neprůměrují se. To, kde se na modelu neshodnou, je "
-        "jediná kontrola, kterou tenhle track má — takže ta neshoda je to, co se má číst."
+        "jediná kontrola, kterou tahle větev má — takže ta neshoda je to, co se má "
+        "číst."
     ),
     "These rows are an average of well under all their notes, because the judge left "
     "some questions unanswered and a note is only counted when every criterion of it "
@@ -267,11 +272,11 @@ CS: dict[str, str] = {
     "Does the English leaderboard predict the Czech?": ("Předpovídá anglický žebříček tu češtinu?"),
     "Asked the same question, quality transfers": ("Při stejně položené otázce se kvalita přenáší"),
     "Asked the leaderboard's own measure, it does not": (
-        "Při měřítku, podle kterého žebříček řadí, se nepřenáší"
+        "U míry, podle které žebříček řadí, se nepřenáší"
     ),
     # Printed only if a payload records no ranking measure at all. Translated in
     # advance so that the day it does, the sentence around it stays Czech.
-    "the ranking measure": "měřítko, podle kterého se řadí",
+    "the ranking measure": "míra, podle které se řadí",
     "PDSQI-9 on the English notes against PDSQI-9 on the Czech ones. Same attributes, "
     "same anchors, same judge; only the language of the note differs.": (
         "PDSQI-9 na anglických zápisech proti PDSQI-9 na českých. Tytéž atributy, tytéž "
@@ -303,7 +308,7 @@ CS: dict[str, str] = {
     "at p < 0.05; the rest failed it and are printed anyway, because how little there "
     "is to see is the result here, and dropping the weak cells would flatter it.": (
         "O těchhle modelech existují mimo tenhle dokument dvě čísla a po obou by "
-        "člověk sáhl místo toho, aby benchmark spouštěl: vlastní anglický žebříček "
+        "člověk sáhl místo toho, aby tohle měření spouštěl: vlastní anglický žebříček "
         "tohohle projektu a publikovaný index obecné schopnosti. Tahle kapitola se "
         "ptá, co z kteréhokoli z nich plyne pro české zápisy. Každá polovina začíná "
         "svým grafem, protože graf je ta část, která se dá přečíst bez počítání, "
@@ -338,8 +343,8 @@ CS: dict[str, str] = {
     "The English page sorts by one measure -- {measure} -- and a position on that page "
     "means what that measure says. Here it stands against the Czech quality columns. "
     "Nothing survives the test, and the two judges do not agree even on the sign.": (
-        "Anglická stránka řadí podle jediného měřítka — {measure} — a umístění na ní "
-        "znamená to, co říká ono měřítko. Tady stojí proti sloupcům české kvality. "
+        "Anglická stránka řadí podle jediné míry — {measure} — a umístění na ní "
+        "znamená to, co říká ona míra. Tady stojí proti sloupcům české kvality. "
         "Nic z toho testem neprojde a soudci se neshodnou ani na znaménku."
     ),
     # --- what these numbers cannot be used for -----------------------------
@@ -411,27 +416,29 @@ CS: dict[str, str] = {
         "dostat kamkoli blízko ambulanci. Šest kritérií se ptá na češtinu a na nic "
         "jiného — je diakritika správně, není tahle vazba doslovný překlad "
         "z angličtiny, je rejstřík klinikův. Zápis, který je plynulý, správně vysazený "
-        "a úplně vymyšlený, projde všemi šesti. Nástroj na kvalitu tu mezeru "
-        "nezaplňuje: právě ty dva atributy, které by se zeptaly, jestli je zápis "
-        "přesný a jestli je důkladný, jsou ty, na které se u skutečného sezení zeptat "
-        "nejde — odpovědět na ně znamená položit soudci před oči přepis a žádný přepis "
-        "neopouští stroj, který ho drží. Žádné číslo v tomhle dokumentu tedy není "
-        "důkazem, že zápis říká to, co se v sezení stalo. Pro klinický tým je to "
+        "a úplně vymyšlený, projde všemi šesti. Ani nástroj na kvalitu tuhle mezeru "
+        "nezaplní. Právě ty dva jeho atributy, které by se ptaly, jestli je zápis "
+        "PŘESNÝ a jestli je DŮKLADNÝ, se u skutečného sezení položit nedají: "
+        "odpovědět na ně znamená ukázat soudci přepis, a žádný přepis neopouští "
+        "tenhle stroj. Žádné číslo v tomhle dokumentu tedy není důkazem, že zápis "
+        "říká to, co se v sezení opravdu stalo. Pro klinický tým je to "
         "otázka první v pořadí a je to jediné měření, které tu nikdo neudělal."
     ),
     "Almost nothing here has been checked against a person": (
         "Skoro nic z tohohle nebylo ověřeno proti člověku"
     ),
-    "These six criteria are this repository's own. No published Czech note-quality "
-    "instrument exists to reproduce, so they were written for this track -- and "
-    "unlike PDSQI-9 there is not even a published figure saying how often two people "
-    "answering them would agree with each other. What stands in for that here is two "
-    "independent judges answering every question separately, which is why this "
-    "document prints both of them in every cell and marks the cells where they "
-    "differ: the disagreement is the control.": (
+    (
+        "These six criteria are this repository's own. No published Czech note-quality "
+        "instrument exists to reproduce, so they were written for this track -- and "
+        "unlike PDSQI-9 there is not even a published figure saying how often two "
+        "people answering them would agree with each other. What stands in for that "
+        "here is two independent judges answering every question separately, which is "
+        "why this document prints both of them in every cell and marks the cells where "
+        "they differ: the disagreement is the control."
+    ): (
         "Těch šest kritérií je vlastních tomuhle repozitáři. Žádný publikovaný český "
         "nástroj na kvalitu zápisů, který by se dal převzít, neexistuje, takže vznikla "
-        "pro tenhle track — a na rozdíl od PDSQI-9 u nich není ani publikované číslo, "
+        "pro tuhle větev — a na rozdíl od PDSQI-9 u nich není ani publikované číslo, "
         "jak často by se na odpovědi shodli dva lidé. Místo toho tu stojí dva nezávislí "
         "soudci, kteří odpovídají na každou otázku zvlášť. Právě proto tenhle dokument "
         "tiskne v každé buňce oba a buňky, kde se liší, zvýrazňuje: tou kontrolou je "
@@ -448,7 +455,7 @@ CS: dict[str, str] = {
         "Jedna výjimka, a je dost malá na to, aby se dala popsat přesně. Rodilý mluvčí "
         "odpověděl na všech {criteria} otázek u {notes} těchhle zápisů a oba soudci "
         "odpověděli stejně jako on u {low} a {high} z nich. Je to srovnání, ne strop: "
-        "když je hodnotitel jeden, není tu druhý člověk, který by řekl, jak moc by se "
+        "když je soudce jeden, není tu druhý člověk, který by řekl, jak moc by se "
         "spolu dva lidé shodli — takže tam, kde se soudce a on rozejdou, odsud neplyne, "
         "kdo z nich měl pravdu. Počet u každého kritéria je v kapitole kritérium po "
         "kritériu výše a je to všechno, co existuje: nikdo nehodnotil zápis ve formátu "
@@ -499,17 +506,18 @@ CS: dict[str, str] = {
     ),
     # --- bands, not places -------------------------------------------------
     "sessions": "sezeních",
-    "the SOAP halves": "poloviny SOAP",
+    "the SOAP halves": "české větve ve formátu SOAP",
     "the Deepsy format": "formát Deepsy",
     "Those names do not all rest on the same amount, and the thinnest of them is "
     "worth reading beside the claim: {named}. That count is the notes answered on "
     "every criterion the band averages, out of the sessions its table has, and the "
     "notes column of the tables below prints it beside every row it applies to.": (
-        "Ta jména nestojí všechna na stejném množství a to nejtenčí z nich stojí za "
-        "přečtení vedle tvrzení samotného: {named}. Ten počet jsou zápisy zodpovězené "
-        "na všech kritériích, která pásmo průměruje, z počtu sezení, která jeho tabulka "
-        "má — a sloupec se zápisy v tabulkách níže ho vypisuje u každého řádku, kterého "
-        "se to týká."
+        "Za každým z těch jmen ale nestojí stejně zápisů. U toho, za kterým jich stojí "
+        "nejmíň, je dobré to vědět, než se tvrzení výš vezme vážně: {named}. To číslo "
+        "znamená, "
+        "kolik zápisů daného modelu mělo zodpovězená všechna kritéria, ze kterých se "
+        "pásmo počítá — z počtu sezení, která ta tabulka má. V tabulkách níž je "
+        "u každého takového řádku ve sloupci se zápisy."
     ),
     "A band boundary is drawn at a threshold that resampling the sessions reproduces "
     "only to about {jitter}. These models sit within that of one, so this measurement "
@@ -588,7 +596,7 @@ CS: dict[str, str] = {
     "statement about who was present rather than about who writes well.": (
         "Nejsou to tytéž modely a už jen to zakazuje ty tři pohledy sčítat. Ve všech třech "
         "pohledech jich je {shared}; zbytek, tedy {only}, je v některých pohledech a "
-        "v jiných ne — buď endpoint ty zápisy odmítl, nebo si o ně ten pohled nikdy "
+        "v jiných ne — buď server ty zápisy odmítl, nebo si o ně ten pohled nikdy "
         "neřekl. Průměr přes tři pohledy by "
         "byl průměrem přes tři různá pole modelů, což je výrok o tom, kdo byl přítomen, ne "
         "o tom, kdo píše dobře."
@@ -738,7 +746,7 @@ CS: dict[str, str] = {
     "model is behind it, and this project's first working rule exists because one id "
     "there returned another model's output.": (
         "Index schopnosti je publikované skóre třetí strany a spojkou k němu není nic "
-        "než jméno modelu: jméno na tomhle endpointu není důkaz o tom, který model za "
+        "než jméno modelu: jméno na tomhle serveru není důkaz o tom, který model za "
         "ním stojí, a první pracovní pravidlo tohohle projektu vzniklo proto, že jedno "
         "z tamních id vracelo výstup jiného modelu."
     ),
@@ -813,8 +821,8 @@ CS: dict[str, str] = {
     "The Deepsy prompt says it twice: a ceiling of {limit} words per section, which "
     "the prompt itself calls invalid to exceed, and a target of the same {limit} "
     "words.": (
-        "{quiet} ze {families} rodin promptů o délce zápisu neříkají vůbec nic. Deepsy "
-        "prompt to říká "
+        "{quiet} ze {families} rodin zadání o délce zápisu neříkají vůbec nic. Zadání "
+        "pro Deepsy to říká "
         "dvakrát: strop {limit} slov na sekci, jehož překročení sám označuje za "
         "nevalidní, a cílovou délku týchž {limit} slov."
     ),
@@ -829,8 +837,8 @@ CS: dict[str, str] = {
         "použil {human} slov. Ani jeden z {systems} modelů se tomu nepřiblíží: píšou "
         "{low} až {high} slov, tedy {share_low} až {share_high} toho, co napsal "
         "člověk. Délku nikomu z nich nikdo nezadal, takže tohle dělají, když je "
-        "necháme být. Je to jediné místo v celém projektu, kde jde lidskou poznámku s "
-        "modelovou vůbec porovnat — a celé pole modelů leží na jedné straně."
+        "necháme být. Je to jediné místo v celém projektu, kde jde lidský zápis "
+        "s modelovým vůbec porovnat — a celé pole modelů leží na jedné straně."
     ),
     "Where a length WAS set, the ceiling was kept and the target was not. Only {over} "
     "of {answers} answers exceed the {limit}-word limit -- but {section} uses {share} "
@@ -838,7 +846,7 @@ CS: dict[str, str] = {
     "did not read \u201cthe target is {limit} words\u201d.": (
         "Tam, kde délka zadaná BYLA, se dodržel strop a nedodržel cíl. Limit {limit} "
         "slov překračuje jen {over} z {answers} odpovědí — ale {section} využívá "
-        "{share} délky, o kterou si prompt řekl. Modely si přečetly „nesmí "
+        "{share} délky, o kterou si zadání řeklo. Modely si přečetly „nesmí "
         "překročit“ a nepřečetly si „cílová délka je {limit} slov“."
     ),
     "The two languages then pull in opposite directions, and this is the most useful "
@@ -861,7 +869,7 @@ CS: dict[str, str] = {
         "dobré vědět dřív, než se člověk pustí do kterékoli tabulky výše. V angličtině "
         "delší zápis dostává vyšší úplnost, a to u obou soudců. V češtině má horší "
         "skóre v {against} z {total} kombinací kritéria a soudce — {soap_against} "
-        "z {soap_total} na půlkách SOAP a {deepsy_against} z {deepsy_total} ve formátu "
+        "z {soap_total} ve větvích SOAP a {deepsy_against} z {deepsy_total} ve formátu "
         "Deepsy, což je jeden z důvodů, proč se obojí nikdy nesčítá — a výjimky se "
         "jmenují, ne zaokrouhlují: sloupce, ve kterých koeficient zůstává kladný "
         "u OBOU soudců, jsou {positive}. "
@@ -908,7 +916,7 @@ CS: dict[str, str] = {
     ): (
         "Táž zkouška ve formátu Deepsy vychází {hit} z jeho {total} tabulek a tři "
         "modely, které tam píšou nejdéle, jsou jiné tři, protože oba formáty nedostaly "
-        "tytéž modely. Kam padnou poslední tři místa, je výrok o půlkách SOAP, ne "
+        "tytéž modely. Kam padnou poslední tři místa, je výrok o větvích SOAP, ne "
         "zákon o délce."
     ),
     # --- the sort, named beside the table ----------------------------------
@@ -974,11 +982,13 @@ CS: dict[str, str] = {
     "Subtracting it does not give an order that holds still, so none is printed. What "
     "survives a handicap that never lets the shorter writer win is {survived} of {decided} "
     "decided pairs.": (
-        "Kolik z toho, co ty jazykové tabulky měří, je délka, je změřeno, ne dohadováno: "
+        "Kolik z toho, co ty jazykové tabulky měří, je ve skutečnosti jen délka? Není to "
+        "odhad, je to změřené: "
         "každých sto slov navíc stojí {low} až {high} setin bodu, u každého soudce a na "
-        "obou polovinách. Odečíst to "
-        "nedá pořadí, které by se drželo, takže se žádné netiskne. Handicap, který kratšího "
-        "pisatele nikdy nenechá vyhrát, přežije {survived} z {decided} rozhodnutých dvojic."
+        "obou polovinách. Ten vliv se ale odečíst nedá tak, aby z toho vyšlo pořadí, "
+        "které by vydrželo — proto se žádné takové netiskne. Zbývá jen otázka, kolik "
+        "dvojic modelů obstojí i tehdy, když se delšímu pisateli přičte co největší "
+        "možný postih za délku: obstojí {survived} z {decided} rozhodnutých dvojic."
     ),
     (
         "On writing correct Czech, {top} in the top band of all {tables} table-and-judge "
@@ -986,10 +996,10 @@ CS: dict[str, str] = {
         "band of all {tables}. Between those two ends the tables disagree with each other, so "
         "nothing else here is a ranking."
     ): (
-        "Ve psaní správné češtiny {top} v nejvyšším pásmu všech {tables} tabulek, které "
-        "pásma pokrývají — půlky SOAP, oba soudci. {bottom} v nejnižším pásmu všech "
-        "{tables}. Mezi těmito dvěma konci si tabulky odporují, takže nic dalšího tu není "
-        "pořadí."
+        "Ve psaní správné češtiny: {top} v nejvyšším pásmu ve všech {tables} tabulkách "
+        "najednou. Ty tabulky jsou obě větve SOAP, každá očima obou soudců. Naopak "
+        "{bottom} v nejnižším pásmu ve všech {tables}. Mezi těmi dvěma konci si tabulky "
+        "odporují, takže nic mezi nimi pořadí není."
     ),
     (
         "The Deepsy format was asked the same question over its own {tables} table-and-judge "
@@ -1003,15 +1013,16 @@ CS: dict[str, str] = {
         "halves and against {deepsy_against} of {deepsy_total} in the Deepsy format, so it is "
         "not the uniform penalty one number could stand for."
     ): (
-        "Formát Deepsy dostal tutéž otázku nad svými vlastními {tables} tabulkami a počítá "
-        "se zvlášť, ne dohromady se čtyřmi výše: {top} v nejvyšším pásmu všech z nich "
-        "a {bottom} v nejnižším pásmu všech z nich. Oba formáty se nesčítají, protože ne "
-        "každý model dostal obě zadání, protože zápis Deepsy vzniká z jiného zadání a má "
-        "jiný tvar, a protože jediná opora u rodilého mluvčího, kterou tenhle projekt má, "
-        "byla změřena jen na zápisech SOAP. Délka to nerozhoduje ani na jednu stranu: jde "
-        "proti {soap_against} z {soap_total} koeficientů kritérium-soudce na půlkách SOAP "
-        "a proti {deepsy_against} z {deepsy_total} ve formátu Deepsy, takže to není "
-        "jednotný postih, který by uneslo jedno číslo."
+        "Tutéž otázku dostal i formát Deepsy, na svých vlastních tabulkách — je jich "
+        "{tables} a počítají se zvlášť, ne dohromady se čtyřmi výše. I tady platí "
+        "totéž: {top} v nejvyšším pásmu všech z nich a {bottom} v nejnižším. Oba "
+        "formáty se nesčítají ze tří důvodů: ne každý model dostal obě zadání; zápis "
+        "Deepsy vzniká z jiného zadání a má jiný tvar; a jediné srovnání s rodilým "
+        "mluvčím, které tenhle projekt má, proběhlo jen na zápisech SOAP. Délka to "
+        "nerozhoduje ani na jednu stranu: působí proti modelu u {soap_against} "
+        "z {soap_total} dvojic kritérium–soudce ve větvích SOAP a u {deepsy_against} "
+        "z {deepsy_total} ve formátu Deepsy. Není to tedy postih, který by platil "
+        "všude stejně a dal se shrnout jedním číslem."
     ),
     (
         "One caution about that second count. {subject} in the bottom band of all {tables} "
@@ -1038,10 +1049,11 @@ CS: dict[str, str] = {
         "quality instrument does not agree with itself from one judge or one half to the "
         "next, and no model can be called better on it."
     ): (
-        "V tom, jestli je zápis k něčemu, není v nejvyšším pásmu všech {tables} tabulek "
-        "žádný model a v nejnižším také žádný. Nástroj na kvalitu se neshodne sám se "
-        "sebou mezi soudci ani mezi půlkami, a žádný model podle něj nelze označit za "
-        "lepší."
+        "U otázky, jestli je zápis k něčemu, nestojí v nejvyšším pásmu všech {tables} "
+        "tabulek žádný model — a v nejnižším taky žádný. Nástroj na kvalitu se totiž "
+        "neshodne ani sám se sebou: jinak vychází u jednoho soudce než u druhého "
+        "a jinak na jedné půlce než na druhé. Podle něj tedy nelze žádný model "
+        "označit za lepší."
     ),
     "Part of why: under {judge}, {dead} of its {total} columns are the same for every "
     "model, so they order nothing. Of the {moving} that do move, the one no model does "
@@ -1050,8 +1062,9 @@ CS: dict[str, str] = {
     "finding.": (
         "Zčásti proto, že podle soudce {judge} mají {dead} z jeho {total} sloupců "
         "všechny modely stejné, takže nic neřadí. Ze zbylých {moving}, které se "
-        "hýbou, je ten, v němž si nevede dobře nikdo, {alive} — nejlepší dosáhne "
-        "{worst} z 5. Druhý soudce jich rozliší víc, a to, že se ti dva neshodnou na "
+        "hýbou, je jeden takový, že si v něm nevede dobře nikdo: {alive}. Nejlepší model "
+        "v něm dosáhne {worst} z 5. Druhý soudce jich rozliší víc, a to, že se ti dva "
+        "neshodnou na "
         "tom, které sloupce fungují, je samo o sobě nález."
     ),
     (
@@ -1077,15 +1090,15 @@ CS: dict[str, str] = {
     ): (
         "Ten vzorec není zákon: na {total} tabulkách Deepsy tři modely s nejdelšími zápisy "
         "— jsou to jiné tři, protože oba formáty nedostaly tutéž sadu modelů — neobsadí "
-        "poslední tři místa ani u jednoho soudce. Délka a příčka jdou spolu na půlkách SOAP "
+        "poslední tři místa ani u jednoho soudce. Délka a příčka jdou spolu ve větvích SOAP "
         "a tady volněji, což je další důvod, proč se oba formáty počítají zvlášť a nesčítají."
     ),
     "And the English leaderboard does not predict this. The same instrument asked in "
     "both languages transfers; the single measure the English page ranks by -- "
     "{measure} -- does not. A model's standing there says nothing about the Czech it "
     "writes.": (
-        "A anglický leaderboard tohle nepředpovídá. Týž nástroj položený v obou "
-        "jazycích se přenáší; jediné měřítko, podle kterého anglická stránka řadí — "
+        "A anglický žebříček tohle nepředpovídá. Týž nástroj položený v obou "
+        "jazycích se přenáší; jediná míra, podle které anglická stránka řadí — "
         "{measure} — nikoli. Postavení modelu tam neříká nic o češtině, kterou píše."
     ),
     # --- the plain length table --------------------------------------------
@@ -1099,8 +1112,8 @@ CS: dict[str, str] = {
     ),
     "For scale: the therapist who wrote TN-Eval's reference notes used {human} words a "
     "note. {over}": (
-        "Pro měřítko: terapeut, který psal referenční poznámky pro TN-Eval, použil "
-        "{human} slov na poznámku. {over}"
+        "Pro srovnání: terapeutka, která psala referenční zápisy pro TN-Eval, použila "
+        "{human} slov na zápis. {over}"
     ),
     "No model here reaches that on any corpus.": (
         "Žádný model se tomu tady na žádném korpusu nepřiblíží."
@@ -1360,7 +1373,7 @@ CS: dict[str, str] = {
     "That comparison carries the same confound as the one on the SOAP halves: the two halves "
     "differ in size, in topic and in who transcribed them, and nothing measured here separates any "
     "of the three from Czech.": (
-        "To srovnání s sebou nese tutéž potíž jako to na půlkách SOAP: obě půlky se liší "
+        "To srovnání s sebou nese tutéž potíž jako to ve větvích SOAP: obě půlky se liší "
         "velikostí, tématem i tím, kdo je přepisoval, a nic z toho, co se tu měřilo, ani jedno od "
         "češtiny neoddělí."
     ),
@@ -1402,7 +1415,7 @@ CS: dict[str, str] = {
         "subjektivní a objektivní část SOAP dohromady, sekce hypotéz je jeho "
         "hodnocení a sekce plánu je jeho plán. Aplikace píše víc sekcí než tyhle a "
         "zbytek buď vychází z předchozího zápisu místo z přepisu, nebo potřebuje "
-        "data, která tenhle benchmark nedodává."
+        "data, která tohle měření nedodává."
     ),
     "Two things this format does that SOAP does not. It sets a ceiling of {limit} "
     "words a section, which its own prompt calls invalid to exceed. And it asks for "
@@ -1410,10 +1423,10 @@ CS: dict[str, str] = {
     "parse is a failure rather than a poor note. Both are the application's "
     "decisions, reproduced from its own prompt files rather than retyped.": (
         "Dvě věci, které tenhle formát dělá a SOAP ne. Stanovuje strop {limit} slov "
-        "na sekci a jeho vlastní prompt označuje delší odpověď za neplatnou. A žádá "
+        "na sekci a jeho vlastní zadání označuje delší odpověď za neplatnou. A žádá "
         "odpověď jako strukturovaná data, ne jako prózu, takže odpověď, kterou nelze "
         "rozebrat, je selhání, ne špatný zápis. Obojí je rozhodnutí té aplikace, "
-        "převzaté z jejích vlastních souborů s prompty, ne přepsané rukou."
+        "převzaté z jejích vlastních souborů se zadáními, ne přepsané rukou."
     ),
     "That is why this chapter is here, and it is worth reading before the tables "
     "above are taken too literally. SOAP is not what a Czech psychologist writes. "
@@ -1481,14 +1494,15 @@ CS: dict[str, str] = {
     "{deepsy_total} in the Deepsy format, because each asks whether there is a fault "
     "ANYWHERE in it. Format and length point the same way here and {compared} models "
     "cannot separate them.": (
-        "Nečti to jako „formát Deepsy vede k horší češtině“. Může, a tahle čísla to "
-        "říct neumějí, protože se obojí hýbe společně: zápis v Deepsy je DELŠÍ — "
-        "{longer} z {models} modelů v něm píše víc, medián {deepsy} slov proti {soap} "
-        "— a tenhle dokument níž měří, že délka jde proti většině těchto kritérií: "
-        "proti {soap_against} z {soap_total} koeficientů kritérium-soudce na půlkách "
-        "SOAP a proti {deepsy_against} z {deepsy_total} ve formátu Deepsy, protože "
-        "každé se ptá, jestli je v něm chyba NĚKDE. Formát a délka tady ukazují týmž "
-        "směrem a {compared} modelů je od sebe neoddělí."
+        "Nečti to jako „formát Deepsy vede k horší češtině“. Může to tak být, ale "
+        "tahle čísla to říct neumějí. Formát a délka se totiž hýbou spolu. Zápis "
+        "v Deepsy je DELŠÍ: {longer} z {models} modelů v něm píše víc, medián "
+        "{deepsy} slov proti {soap}. A delší zápis je v těchhle kritériích ve "
+        "nevýhodě, protože každé se ptá, jestli je v něm chyba NĚKDE — čím delší "
+        "text, tím víc míst, kde být může. Níž je to změřené: délka působí proti "
+        "modelu u {soap_against} z {soap_total} dvojic kritérium–soudce ve větvích "
+        "SOAP a u {deepsy_against} z {deepsy_total} ve formátu Deepsy. Obojí tedy "
+        "ukazuje týmž směrem a {compared} modelů to od sebe neodliší."
     ),
     # --- the order column ---------------------------------------------------
     "Order": "Pořadí",
@@ -1506,17 +1520,19 @@ CS: dict[str, str] = {
         "Sloupec Pořadí je {names} — jediný sloupec, který tyhle modely vůbec "
         "rozlišuje, a řádky jsou seřazené podle něj."
     ),
-    "What the Czech track found, in {count} short paragraphs": (
-        "Co český track zjistil, ve {count} odstavcích"
+    ("What the Czech track found, in {count} short paragraphs"): (
+        "Co česká větev zjistil, ve {count} odstavcích"
     ),
     # --- one table, both judges --------------------------------------------
-    "Every cell holds both judges, {judges}, in that order and never averaged: "
-    "where they disagree about a model is the only control this track has, so it "
-    "is shown rather than smoothed. A cell whose two numbers differ is marked.": (
+    (
+        "Every cell holds both judges, {judges}, in that order and never averaged: "
+        "where they disagree about a model is the only control this track has, so it is "
+        "shown rather than smoothed. A cell whose two numbers differ is marked."
+    ): (
         "V každé buňce jsou oba soudci, {judges}, v tomto pořadí a nikdy se "
-        "neprůměrují: to, kde se na modelu neshodnou, je jediná kontrola, kterou "
-        "tenhle track má, takže je vidět místo aby se zahladila. Buňka, kde se ta "
-        "dvě čísla liší, je zvýrazněná."
+        "neprůměrují: to, kde se na modelu neshodnou, je jediná kontrola, kterou tahle "
+        "větev má, takže je vidět místo aby se zahladila. Buňka, kde se ta dvě čísla "
+        "liší, je zvýrazněná."
     ),
     "The rows are ordered by dominance -- a model is above another only when it is "
     "at least as good on every column under BOTH judges, and better than it on at "
@@ -1524,12 +1540,12 @@ CS: dict[str, str] = {
     "{systems} models fall into {places} places of which {tied} hold more than one. "
     "Within a place the rows are ordered by the mean of the columns that vary, "
     "which puts a row somewhere without claiming the evidence separates it.": (
-        "Řádky jsou seřazené podle dominance — model je výš jen tehdy, když je "
-        "aspoň tak dobrý v každém sloupci u OBOU soudců a aspoň v jednom sloupci je "
-        "lepší — takže modely, které důkazy neoddělí, sdílejí místo: {systems} "
-        "modelů padne do {places} míst, z toho {tied} drží víc než jeden model. "
-        "Uvnitř místa řadí řádky průměr sloupců, které se hýbou — což řádek "
-        "někam postaví, ale netvrdí, že ho důkazy oddělují."
+        "Řádky jsou seřazené podle dominance. Model je výš jen tehdy, když je aspoň "
+        "tak dobrý v každém sloupci u OBOU soudců a aspoň v jednom je lepší. Modely, "
+        "které se takhle oddělit nedají, tedy sdílejí místo: {systems} modelů padne "
+        "do {places} míst a {tied} z těch míst drží víc než jeden model. Uvnitř "
+        "jednoho místa řadí řádky průměr sloupců, které se hýbou — to řádek někam "
+        "postaví, ale netvrdí, že ho měření od sousedů odlišilo."
     ),
     # --- the external index, whose columns are judges ----------------------
     "as {judge} sees it": "jak to vidí {judge}",
@@ -1560,20 +1576,22 @@ CS: dict[str, str] = {
         "nejdelších sezení, takže to není náhodný výběr. Čti je jako předběžné:"
     ),
     # --- how large the length effect is, and what survives it --------------
-    "How large is it? Fitting each judge's composite of the criteria against the "
-    "model's median note length costs {low} to {high} hundredths of a point per "
-    "hundred words, across the four track-and-judge combinations. Drawing the "
-    "{systems} models again with replacement {resamples} times, the ninety per cent "
-    "interval clears zero on all four and the sign reverses in at most {wrong} of the "
-    "draws. The direction is settled: on this corpus a longer note scores lower on "
-    "Czech.": (
-        "Jak je ten vliv velký? Když se u každého soudce proloží složené skóre "
-        "kritérií mediánovou délkou zápisu, stojí to {low} až {high} setin bodu na "
-        "sto slov, a to ve všech čtyřech kombinacích tracku a soudce. Když se těch "
-        "{systems} modelů vylosuje znovu s vracením ({resamples} losování), "
-        "devadesátiprocentní interval se ve všech čtyřech vyhne nule a znaménko se "
-        "obrátí nejvýš v {wrong} losování. Směr je tedy rozhodnutý: na tomhle korpusu "
-        "má delší zápis nižší skóre v češtině."
+    (
+        "How large is it? Fitting each judge's composite of the criteria against the "
+        "model's median note length costs {low} to {high} hundredths of a point per "
+        "hundred words, across the four track-and-judge combinations. Drawing the "
+        "{systems} models again with replacement {resamples} times, the ninety per cent "
+        "interval clears zero on all four and the sign reverses in at most {wrong} of "
+        "the draws. The direction is settled: on this corpus a longer note scores lower "
+        "on Czech."
+    ): (
+        "Jak je ten vliv velký? Když se u každého soudce proloží složené skóre kritérií "
+        "mediánovou délkou zápisu, stojí to {low} až {high} setin bodu na sto slov, a "
+        "to ve všech čtyřech kombinacích větve a soudce. Když se těch {systems} modelů "
+        "vylosuje znovu s vracením ({resamples} losování), devadesátiprocentní interval "
+        "se ve všech čtyřech vyhne nule a znaménko se obrátí nejvýš v {wrong} losování. "
+        "Směr je tedy rozhodnutý: na tomhle korpusu má delší zápis nižší skóre v "
+        "češtině."
     ),
     "So why is there no length-adjusted column here? It was computed, and it will not "
     "hold still. Subtracting what length predicts and re-ranking gives an order whose "
@@ -1670,7 +1688,7 @@ CS: dict[str, str] = {
     "already returned another model's output, so every dot is an assumption. These "
     "could not be matched to a public model at all and are absent rather than guessed: "
     "{names}.": (
-        "Párováno podle jména a jméno je slabý článek: na tomhle endpointu už jedno id "
+        "Párováno podle jména a jméno je slabý článek: na tomhle serveru už jedno id "
         "vrátilo výstup jiného modelu, takže každý bod je předpoklad. Tyhle se s žádným "
         "veřejným modelem spárovat nepodařilo, a proto tu nejsou, místo aby se "
         "odhadovaly: {names}."
@@ -1945,5 +1963,90 @@ CS: dict[str, str] = {
         "Dvě dvojice sdílejí nastraženou větu: {pairs}. Obojí je překryv, ke kterému se "
         "codebook hlásí, a dvojice, která se rozejít musela, se rozešla: nic označeného "
         "jako převyprávění nebylo zároveň označeno jako klinická hypotéza."
+    ),
+    "What each word here means": "Co která slova znamenají",
+    "a note": "zápis",
+    (
+        "What a model writes after reading one session transcript. It is the thing "
+        "being measured; nothing here measures the therapy."
+    ): (
+        "To, co model napíše, když si přečte přepis jednoho sezení. Měří se právě tohle "
+        "— nic tady neměří samotnou terapii."
+    ),
+    "a judge": "soudce",
+    (
+        "Another language model, which reads a note and answers the questions about it. "
+        "There are two, from two different vendors, and they answer separately and are "
+        "never averaged. They are not people, and where they disagree is the only check "
+        "this study has."
+    ): (
+        "Další jazykový model, který si zápis přečte a odpoví na otázky o něm. Jsou "
+        "dva, od dvou různých firem, odpovídají nezávisle na sobě a nikdy se "
+        "neprůměrují. Nejsou to lidé — a to, kde se neshodnou, je jediná kontrola, "
+        "kterou tahle studie má."
+    ),
+    "a criterion": "kritérium",
+    (
+        "One yes/no question about a note. Six of them, all about whether the Czech "
+        "itself is right -- diacritics, calques, untranslated terms, agreement, "
+        "register, non-words. A column is the share of notes free of that fault."
+    ): (
+        "Jedna otázka ano/ne o zápisu. Je jich šest a všechny se ptají jen na to, "
+        "jestli je správně čeština: diakritika, kalky z angličtiny, nepřeložené "
+        "termíny, shoda, rejstřík, neslova. Sloupec je podíl zápisů, které tou chybou "
+        "netrpí."
+    ),
+    (
+        "A published instrument that asks something else: whether the note is any good "
+        "clinically. Eight attributes, six of them answerable here. It was put only to "
+        "the SOAP notes."
+    ): (
+        "Publikovaný nástroj, který se ptá na něco jiného: jestli je zápis k něčemu "
+        "klinicky. Má osm atributů, šest z nich jde tady zodpovědět. Byl použit jen na "
+        "zápisy ve formátu SOAP."
+    ),
+    "SOAP and Deepsy": "SOAP a Deepsy",
+    (
+        "Two note formats. SOAP has four sections and every model has seen thousands of "
+        "them. Deepsy is the form the Deepsy application really writes: eleven "
+        "sections, and no model has seen it before. They are never pooled."
+    ): (
+        "Dva formáty zápisu. SOAP má čtyři sekce a každý model jich viděl tisíce. "
+        "Deepsy je formulář, který opravdu píše aplikace Deepsy: jedenáct sekcí, a ten "
+        "žádný model předtím neviděl. Nikdy se nesčítají dohromady."
+    ),
+    "the two halves": "dvě půlky korpusu",
+    (
+        "The two sets of sessions. One is real therapy with one client, transcribed and "
+        "de-identified by hand and never published. The other is public counselling "
+        "conversations translated into Czech. Every model wrote from both, so two "
+        "models are never compared on different sessions."
+    ): (
+        "Dvě sady sezení. Jedna je skutečná terapie s jednou klientkou, přepsaná a "
+        "ručně anonymizovaná, nikdy nezveřejněná. Druhá jsou veřejné poradenské "
+        "rozhovory přeložené do češtiny. Každý model psal z obou, takže se nikdy "
+        "neporovnávají dva modely na různých sezeních."
+    ),
+    "a track": "větev",
+    (
+        "One format on one half -- SOAP on the real sessions, SOAP on the translated "
+        "ones, and the same two for Deepsy. Four in all, and each is judged twice, "
+        "which is where the eight tables come from."
+    ): (
+        "Jeden formát na jedné půlce — SOAP na skutečných sezeních, SOAP na "
+        "přeložených, a totéž dvakrát pro Deepsy. Dohromady čtyři, a každou hodnotí dva "
+        "soudci. Odtud je těch osm tabulek."
+    ),
+    "a band": "pásmo",
+    (
+        "A group of models this measurement cannot tell apart. It is not a rank: inside "
+        "a band nothing separates them, and the band ends where the difference is "
+        "bigger than resampling the sessions can explain away. A narrow band means the "
+        "measurement resolves finely, not that a model is good."
+    ): (
+        "Skupina modelů, které tohle měření od sebe neodliší. Není to pořadí: uvnitř "
+        "pásma je nic nerozlišuje a pásmo končí tam, kde je rozdíl větší, než co dokáže "
+        "vysvětlit převzorkování sezení. Úzké pásmo znamená, že měření rozlišuje jemně "
+        "— ne že je model dobrý."
     ),
 }
