@@ -4632,6 +4632,14 @@ CONTROL_BLIND = (
     "measuring that fault, and its figures in the tables above should be read as "
     "unmeasured rather than as full marks."
 )
+#: The three things one cell of the control table can say. Constants rather than
+#: literals inside the branch, because two of the three print only when a
+#: criterion fails: written and translated in advance, so the day one does fail
+#: the Czech reader is told so in Czech rather than the document falling into
+#: English in the one cell that changed.
+CONTROL_FOUND = "found it"
+CONTROL_FALSE_ALARM = "also fires on a clean note"
+CONTROL_MISSED = "did not find it"
 CONTROL_CAVEAT = (
     "The damage is deliberate and extreme -- every sentence in the wrong section, "
     "a note with no plan at all. This says the instrument responds, not that it "
@@ -4664,11 +4672,11 @@ def _controls() -> str:
             detected = run["variants"].get(key, {}).get(key)
             false_alarm = run["clean"].get(key)
             if detected and not false_alarm:
-                cells.append("<td>found it</td>")
+                cells.append(f"<td>{html.escape(_t(CONTROL_FOUND))}</td>")
             elif detected and false_alarm:
-                cells.append("<td><strong>also fires on a clean note</strong></td>")
+                cells.append(f"<td><strong>{html.escape(_t(CONTROL_FALSE_ALARM))}</strong></td>")
             else:
-                cells.append("<td><strong>did not find it</strong></td>")
+                cells.append(f"<td><strong>{html.escape(_t(CONTROL_MISSED))}</strong></td>")
         rows.append(f"<tr><td>{html.escape(run['judge_model'])}</td>{''.join(cells)}</tr>")
 
     unreliable = sorted(

@@ -546,6 +546,11 @@ CS: dict[str, str] = {
         "Každé kritérium našlo svou vlastní chybu u každého soudce "
         "a žádné se nespustilo na čistém zápisu."
     ),
+    # The three cells of the control table. The subject is the criterion, which
+    # is neuter in Czech, so the verb agrees with it and not with the fault.
+    "found it": "chybu našlo",
+    "also fires on a clean note": "spustí se i na čistém zápisu",
+    "did not find it": "chybu nenašlo",
     # --- the join's caveats ------------------------------------------------
     "The English scores are over all 50 AnnoMI conversations and the Czech over the 10 "
     "that were translated, so these are two standings rather than two scores on one "

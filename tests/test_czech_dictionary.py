@@ -31,6 +31,7 @@ once and would have to be swept by hand again.
 from __future__ import annotations
 
 import ast
+import re
 import sys
 
 from tnb import i18n
@@ -118,3 +119,55 @@ def test_every_tool_in_the_list_is_carrying_its_own_weight():
             "prose has moved, in which case take it out of the list, or the entries it "
             "answered have been deleted."
         )
+
+
+# --- the third direction: English that never reaches `_t` at all --------------
+
+#: Text between two HTML tags that is not prose a reader is being told something
+#: in. `&mdash;` and `&nbsp;` are punctuation; SOAP and Deepsy are the names of
+#: two note formats and are written the same way in Czech.
+NOT_PROSE = ("&mdash;", "&nbsp;", "SOAP", "Deepsy")
+
+
+def test_no_cell_of_the_briefing_is_written_straight_into_its_html():
+    """English that never reaches `_t` cannot be caught by a missing key.
+
+    Both checks above ask whether a sentence has a Czech twin. Neither can see a
+    sentence that is never looked up: three cells of the sabotage-control table
+    were written as `"<td>found it</td>"`, so the Czech document printed "found
+    it" twelve times, and the two cells that appear only when a criterion fails
+    would have told a Czech reader that in English on the day it happened.
+
+    What is checked is the text between two tags in a literal, which is where a
+    cell written by hand ends up. A phrase that is the same word in both
+    languages is named in `NOT_PROSE` rather than passed over silently.
+    """
+    tree = ast.parse((TOOLS / "czech_brief.py").read_text(encoding="utf-8"))
+    leaked = []
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Constant) or not isinstance(node.value, str):
+            continue
+        for between in re.findall(r">([^<>]+)<", node.value):
+            plain = re.sub(r"\{[^}]*\}", "", between).strip()
+            if re.search(r"[A-Za-z]{2}", plain) and plain not in NOT_PROSE:
+                leaked.append(f"line {node.lineno}: {plain!r}")
+
+    assert not leaked, (
+        "tools/czech_brief.py writes English into its own HTML, where `_t` never "
+        "sees it and the Czech build cannot stop:\n  " + "\n  ".join(leaked)
+    )
+
+
+def test_the_check_would_notice_a_hand_written_cell():
+    """The assertion above is a regex over literals and would pass on a file it
+    failed to read. A cell of the shape it is looking for is put in front of it
+    here."""
+    tree = ast.parse('CELL = "<td>found it</td>"')
+    between = [
+        text
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Constant) and isinstance(node.value, str)
+        for text in re.findall(r">([^<>]+)<", node.value)
+    ]
+
+    assert between == ["found it"]
