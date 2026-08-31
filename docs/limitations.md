@@ -73,6 +73,20 @@ on faithfulness (mean −0.021). Six systems changed position on completeness,
 sixteen on conciseness; the conciseness top three changed and so did the leader
 on faithfulness.
 
+**Where those rows are, checked rather than asserted.** They are not in this
+repository, and that is now established three ways. `results/rows.jsonl` has
+never held a budget-128 row for `gemini-3.1-pro-preview` -- in any revision of
+the file; the only budget-128 rows it has ever carried are eleven of
+`gemini-2.5-pro`'s, and that group shares no system with its 256 counterpart.
+The judge's answer cache cannot supply them either: its path carries no
+settings, so re-asking at 256 overwrote the answers it replaced, and of the
+65 902 cached `gemini-3.1-pro-preview` answers every single one records a
+fingerprint of budget 256. Under `gemini-2.5-pro` 30 252 answers survive at 128
+and 7 116 at 256, and not one unit -- and no system -- appears at both. So the
+figures above are a record of a measurement that was made, not something a
+reader can re-derive here. Read them as history, and do not quote them as a
+result this benchmark can reproduce.
+
 A setting a reader never sees moved the table more than most of the differences
 printed in it. That is why the judge's settings are part of what a table is
 compared on, and why each table's heading names them.

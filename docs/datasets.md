@@ -139,11 +139,18 @@ has said nothing, and reading only the whole string counted it as content
 because it is not literally "Nil". `gemma4` wrote exactly that into *what
 happens next* in 36 of 40 sessions — the four-field template appears in all 40,
 but in 36 every sub-value is Nil-ish — and was published with a perfect temporal
-score. Many distinct composite strings say nothing while looking like content,
-so no amount of adding phrases to the marker list would have caught them. The
-exact count is not restated here: it depends on where the line between decorated
-emptiness and content is drawn, and three defensible readings give three
-different numbers.
+score. Counted on 2026-08-31 against a written definition — a value where no
+sub-field carries content and yet the whole string is not the bare marker, so a
+reader checking only "is this literally Nil?" calls it content — there are **88
+distinct such strings over 486 model-written sections**, out of 10 879 sections
+read. No amount of adding phrases to the marker list would catch them: the shape
+is structural, not lexical.
+
+**It is entirely a model habit.** Of the 524 expert fields, 208 say nothing and
+**not one** of them is dressed up: the clinicians write the bare marker. The
+earlier figure here, "150 distinct composite strings over 534 records", stated no
+definition and matched neither population; it is replaced rather than
+reinterpreted.
 
 **The sessions are not Indian; the note format is.** This was checked in the
 data on 2026-08-24 rather than taken from the paper. Across the 40 test

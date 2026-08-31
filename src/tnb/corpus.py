@@ -94,9 +94,13 @@ def is_filled(value: str) -> bool:
     "Type: Nil; Mode: Individual" does say something.
 
     Measured on the corpus: this is a structural problem, not a vocabulary one.
-    150 distinct composite strings over 534 records say nothing while looking
-    like content, and no amount of adding phrases to `EMPTY_MARKERS` would
-    catch them.
+    A value counts as dressed-up empty when no sub-field carries content and yet
+    the whole string is not the bare marker -- so a reader checking only "is this
+    literally Nil?" reads it as content. Counted on 2026-08-31 with that
+    definition: **88 distinct such strings over 486 model-written sections**, of
+    10 879 read. Of the 524 expert fields, 208 say nothing and none is dressed
+    up -- the clinicians write the bare marker, and this is a model habit.
+    No amount of adding phrases to `EMPTY_MARKERS` would catch them.
 
     **It is punctuation-sensitive and deliberately left that way.** `"Nil"` is
     empty and `"Nil."` is not, because the marker set is matched exactly. That
