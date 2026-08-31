@@ -154,9 +154,17 @@ CSS = """
      inside its own box now, and at 178mm on paper nothing overflows, so print is
      unchanged. */
   .scroll { overflow-x: auto; margin: 6pt 0 10pt; }
-  @media print { .scroll { overflow-x: visible; } }
   table { width: 100%; border-collapse: collapse; font-size: 9.4pt; margin: 6pt 0 10pt; }
   .scroll > table { margin: 0; min-width: 100%; width: max-content; }
+  /* On paper the wrapper has nowhere to scroll, so the table goes back to the
+     column width and wraps. Leaving it at `max-content` printed a table wider
+     than the page and Chrome clipped it: two cells lost their last words
+     mid-sentence, and the row that says how the SOAP notes are scored ended at
+     "plus one rating per sente". */
+  @media print {
+    .scroll { overflow-x: visible; }
+    .scroll > table { width: 100%; min-width: 0; }
+  }
   th, td { text-align: left; padding: 3.5pt 6pt; border-bottom: 1px solid var(--line); }
   th { font-weight: 650; font-size: 8.4pt; text-transform: uppercase; letter-spacing: .04em;
        color: var(--muted); }
