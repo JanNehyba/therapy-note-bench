@@ -80,9 +80,12 @@ the file; the only budget-128 rows it has ever carried are eleven of
 `gemini-2.5-pro`'s, and that group shares no system with its 256 counterpart.
 The judge's answer cache cannot supply them either: its path carries no
 settings, so re-asking at 256 overwrote the answers it replaced, and of the
-65 902 cached `gemini-3.1-pro-preview` answers every single one records a
-fingerprint of budget 256. Under `gemini-2.5-pro` 30 252 answers survive at 128
-and 7 116 at 256, and not one unit -- and no system -- appears at both. So the
+51 000 cached `gemini-3.1-pro-preview` answers to the SOAP rubric every single
+one records a fingerprint of budget 256. (The same judge holds 4 166 more
+answers at budget 2048, but those are the Czech instruments, a different
+question set.) Under `gemini-2.5-pro` 30 252 answers survive at 128 and 7 116
+at 256, and no answer -- no question about one note by one system -- appears at
+both, nor does any of the fourteen systems. So the
 figures above are a record of a measurement that was made, not something a
 reader can re-derive here. Read them as history, and do not quote them as a
 result this benchmark can reproduce.
