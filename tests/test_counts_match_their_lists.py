@@ -32,7 +32,7 @@ from dataclasses import dataclass
 
 import pytest
 
-from tnb import report
+from tnb import report, results
 from tnb.config import REPO_ROOT
 from tnb.scoring import czech as czech_scorer
 
@@ -93,6 +93,12 @@ class Check:
     pattern: str
     expected: Callable[[], tuple[int, ...]]
     why: str
+    #: The list the expectation reads, as (module, attribute). Named rather
+    #: than inferred, because the guard below proves the dependency by growing
+    #: that list and requiring the expected value to move. A check that names
+    #: no list is a literal pinned against a literal, which is what this file
+    #: exists to forbid, so it may not be omitted.
+    reads: tuple[object, str] = ()
 
 
 CHECKS = (
@@ -101,48 +107,77 @@ CHECKS = (
         pattern=r"\*\*(\w+) of the (\w+) inputs carry a licence",
         expected=lambda: (carrying_a_licence(), len(report.LICENCES)),
         why="the table of sources is printed six lines below this sentence",
+        reads=(report, "LICENCES"),
     ),
     Check(
         where="src/tnb/templates/methods.html",
         pattern=r"<strong>(\w+) of the (\w+) carry a licence; (\w+) publish none",
         expected=lambda: (carrying_a_licence(), len(report.LICENCES), publishing_none()),
         why="the same list, drawn as a table directly underneath",
+        reads=(report, "LICENCES"),
     ),
     Check(
         where="src/tnb/templates/leaderboard.html",
         pattern=r"(\w+) of them publish no licence at all",
         expected=lambda: (publishing_none(),),
         why="the Sources line names every one of them in the same sentence",
+        reads=(report, "LICENCES"),
     ),
     Check(
         where="src/tnb/templates/methods.html",
         pattern=r"(\w+) of the (\w+) iCARE columns measure",
         expected=lambda: (2, len(report.MEASURE_TABLES["icare"])),
         why="ROUGE-L and BERTScore of five; the other three are drawn beside them",
+        reads=(report, "MEASURE_TABLES"),
     ),
     Check(
         where="docs/methodology.md",
         pattern=r"The Czech track asks (\w+) questions about a note",
         expected=lambda: (len(czech_scorer.CRITERIA),),
         why="said seven for three days after the seventh criterion was deleted",
+        reads=(czech_scorer, "CRITERIA"),
     ),
     Check(
         where="docs/methodology.md",
         pattern=r"None of the (\w+) criteria therefore asks",
         expected=lambda: (len(czech_scorer.CRITERIA),),
         why="the same count, in the same document, restated",
+        reads=(czech_scorer, "CRITERIA"),
     ),
     Check(
         where="docs/methodology.md",
         pattern=r"All (\w+) ask about the absence of a fault",
         expected=lambda: (len(czech_scorer.CRITERIA),),
         why="and again",
+        reads=(czech_scorer, "CRITERIA"),
+    ),
+    Check(
+        where="src/tnb/templates/leaderboard.html",
+        pattern=r"agree on all (\w+) of track, harness version",
+        expected=lambda: (len(results.COMPARABILITY_KEYS),),
+        why="the sentence then lists them, and the list is the comparability key itself",
+        reads=(results, "COMPARABILITY_KEYS"),
+    ),
+    Check(
+        where="src/tnb/templates/methods.html",
+        pattern=r"agree on all (\w+) of track, harness version",
+        expected=lambda: (len(results.COMPARABILITY_KEYS),),
+        why="the same sentence, on the other page",
+        reads=(results, "COMPARABILITY_KEYS"),
+    ),
+    Check(
+        where="src/tnb/report.py",
+        pattern=r"first three columns count what a note contains.{0,40}?rubric\. The other (\w+)",
+        expected=lambda: (len(report.MEASURE_TABLES["pdsqi-soap"]),),
+        why="the blurb over a table whose PDSQI half is drawn from that list",
+        reads=(report, "MEASURE_TABLES"),
     ),
     Check(
         where="docs/limitations.md",
         pattern=r"scored on (\w+) yes/no criteria",
         expected=lambda: (len(czech_scorer.CRITERIA),),
         why="the same instrument described on the page that bounds what it claims",
+        reads=(czech_scorer, "CRITERIA"),
     ),
 )
 
@@ -168,14 +203,61 @@ def test_the_count_matches_the_list(check: Check):
     )
 
 
-def test_every_check_is_about_a_number_that_can_move():
-    """A check whose expectation is a literal proves nothing.
+@pytest.mark.parametrize("check", CHECKS, ids=lambda c: f"{c.where}:{c.pattern[:34]}")
+def test_the_expectation_moves_when_its_list_does(check: Check, monkeypatch):
+    """A check whose expectation is a literal proves nothing, demonstrated.
 
-    Half of these would have passed while the page was wrong if the expected
-    value had been typed in beside the sentence instead of computed.
+    The first version of this test asked whether `expected.__code__.co_names`
+    was non-empty, which is true of *any* lambda that mentions a global -- so
+    replacing all eight expectations with `lambda: (int("2"), int("5"))`, a
+    literal pinned against a literal, left it green. It also tolerated one
+    check with a bare literal, on the theory that one is harmless.
+
+    So the dependency is proved instead of inspected: the list the check names
+    is grown by one entry and the expectation has to notice. Nothing is
+    published from the mutated list -- `monkeypatch` puts it back.
     """
-    computed = [c for c in CHECKS if c.expected.__code__.co_names]
-    assert len(computed) >= len(CHECKS) - 1, (
-        "checks with no call in their expectation are pinning a literal against "
-        "a literal: " + ", ".join(c.where for c in CHECKS if c not in computed)
+    module, attribute = check.reads
+    before = check.expected()
+    current = getattr(module, attribute)
+
+    moved = False
+    for grown in _grown(current):
+        monkeypatch.setattr(module, attribute, grown)
+        try:
+            moved = check.expected() != before
+        finally:
+            monkeypatch.setattr(module, attribute, current)
+        if moved:
+            break
+
+    assert moved, (
+        f"{check.where}: no way of growing {attribute} moved the expected value "
+        f"from {before}, so this check pins a literal against a literal and would "
+        "stay green while the page went wrong. Compute it from the list."
     )
+
+
+def _grown(current):
+    """Every way of adding one entry that might move a count.
+
+    More than one, because a count that filters does not move for every entry:
+    `publishing_none()` counts the sources with no licence, so duplicating a
+    licensed one leaves it where it was, and a single probe pronounced a working
+    check dead. A count that reads the list at all moves for *some* entry, so
+    the assertion is over the set rather than over one guess.
+    """
+    if isinstance(current, dict):
+        for key, value in current.items():
+            if isinstance(value, (list, tuple)):
+                yield {**current, key: type(value)([*value, value[0]])}
+            elif isinstance(value, dict) and value:
+                # A table of tables: `MEASURE_TABLES["icare"]` is the five iCARE
+                # columns, and only growing *that* moves a count of them.
+                probe = next(iter(value))
+                yield {**current, key: {**value, "__probe__": value[probe]}}
+        if current:
+            yield {**current, "__probe__": next(iter(current.values()))}
+        return
+    for element in current:
+        yield type(current)([*current, element])
