@@ -109,7 +109,7 @@ def main(argv: list[str] | None = None) -> int:
             }
 
     combos = list(product(*(RANGES[name] for name in RANGES)))
-    print(f"{len(combos)} přiřazení; neznámé: {', '.join(RANGES)}\n")
+    print(f"{len(combos)} assignments; unknown: {', '.join(RANGES)}\n")
 
     results_by_measure: dict[str, list[dict]] = {}
     for name in MEASURES:
@@ -137,16 +137,16 @@ def main(argv: list[str] | None = None) -> int:
 
         n = found[0]["judges"][judges[0]]["n"]
         wins = sum(1 for f in found if f["both_significant"])
-        print(f"=== {name}  (n = {n}, bylo 8)")
+        print(f"=== {name}  (n = {n}, was 8)")
         for judge_model in judges:
             rhos = [f["judges"][judge_model]["rho"] for f in found]
             ps = [f["judges"][judge_model]["p"] for f in found]
             print(
-                f"    {judge_model:26s} rho {min(rhos):+.2f} až {max(rhos):+.2f}"
-                f"   p {min(ps):.3f} až {max(ps):.3f}"
-                f"   průkazné v {sum(1 for p in ps if p < 0.05)}/{len(ps)}"
+                f"    {judge_model:26s} rho {min(rhos):+.2f} to {max(rhos):+.2f}"
+                f"   p {min(ps):.3f} to {max(ps):.3f}"
+                f"   significant in {sum(1 for p in ps if p < 0.05)}/{len(ps)}"
             )
-        print(f"    -> průkazné u OBOU soudců v {wins} z {len(found)} přiřazení\n")
+        print(f"    -> significant under BOTH judges in {wins} of {len(found)}\n")
 
     payload = {
         "what_this_is": __doc__.strip().split("\n\n")[0],
