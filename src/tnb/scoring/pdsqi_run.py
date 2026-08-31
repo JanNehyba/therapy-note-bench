@@ -83,6 +83,7 @@ def score_note(
             candidate.system_id,
             candidate.session_id,
             task.unit,
+            fingerprint=fingerprint,
             root=cache_root,
         )
 
@@ -219,6 +220,7 @@ def from_cache(
                     candidate.system_id,
                     candidate.session_id,
                     task.unit,
+                    fingerprint=fingerprint,
                     root=cache_root,
                 ),
                 fingerprint,

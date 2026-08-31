@@ -31,6 +31,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 import threading
 import time
 from dataclasses import dataclass, field
@@ -697,6 +698,33 @@ def _slug_model(model: str) -> str:
     return _slug(model)
 
 
+#: The directory that separates one instrument's answers from another's, and
+#: the pattern that recognises it again when reading.
+#:
+#: **This exists because a measurement disappeared the moment it was made.**
+#: The path used to carry no settings, so raising the judge's thinking budget
+#: from 128 to 256 and re-asking wrote the new answers over the old ones at the
+#: same filenames. `scores/` is gitignored, so nothing could be restored: the
+#: 128-budget answers for `gemini-3.1-pro-preview` are gone from the rows, from
+#: every revision of `results/rows.jsonl`, and from the cache, and the published
+#: "budget 128 against 256" comparison can no longer be re-derived by anybody.
+#: `Reinstrumented` was added afterwards and stops the *accidental* case; it
+#: cannot help the deliberate one, because re-measuring at a new budget is
+#: exactly what `--reinstrument` is for.
+#:
+#: Eight hex characters of the fingerprint's digest. Not the settings spelled
+#: out: `thinking_budget=256,temperature=0,max_output_tokens=288` is a directory
+#: name on Windows too, and the fingerprint gains fields.
+INSTRUMENT_PREFIX = "i-"
+_INSTRUMENT_DIR = re.compile(r"i-[0-9a-f]{8}\Z")
+
+
+def instrument_id(fingerprint: dict) -> str:
+    """One short, stable name for the judge-and-settings an answer came from."""
+    digest = hashlib.sha256(json.dumps(fingerprint, sort_keys=True).encode()).hexdigest()
+    return f"{INSTRUMENT_PREFIX}{digest[:8]}"
+
+
 def cache_path(
     judge_model: str,
     judge_prompt_version: str,
@@ -705,20 +733,33 @@ def cache_path(
     session_id: str,
     unit: str,
     *,
+    fingerprint: dict | None = None,
     root: Path | None = None,
 ) -> Path:
-    """Where one answer lives. Mirrors the generation cache, for the same reason."""
+    """Where one answer lives. Mirrors the generation cache, for the same reason.
+
+    With a `fingerprint`, the answer lives under that instrument's own
+    directory, so two budgets of the same judge no longer share a filename.
+    Without one the old settings-free path is returned, which is what every
+    answer written before 2026-08-31 sits at and what `load_cached` still
+    reads.
+    """
     from tnb.generation import _slug
 
-    return (
-        (root or CACHE_DIR)
-        / _slug(judge_model)
-        / _slug(judge_prompt_version)
-        / _slug(provider)
-        / _slug(system_id)
-        / _slug(session_id)
-        / f"{_slug(unit)}.json"
-    )
+    base = (root or CACHE_DIR) / _slug(judge_model) / _slug(judge_prompt_version)
+    if fingerprint:
+        base = base / instrument_id(fingerprint)
+    return base / _slug(provider) / _slug(system_id) / _slug(session_id) / f"{_slug(unit)}.json"
+
+
+def legacy_path(path: Path) -> Path | None:
+    """The same answer's pre-2026-08-31 location, or None if this is already it.
+
+    Read-only: nothing writes here again. It is what keeps 66 000 answers per
+    judge usable instead of re-asking them to gain a directory level.
+    """
+    parts = [part for part in path.parts if not _INSTRUMENT_DIR.fullmatch(part)]
+    return Path(*parts) if len(parts) != len(path.parts) else None
 
 
 def prompt_digest(prompt: str) -> str:
@@ -736,9 +777,19 @@ def prompt_digest(prompt: str) -> str:
 
 def load_cached(path: Path, fingerprint: dict, prompt: str | None = None) -> dict | None:
     """A previous answer, if it was produced by the same judge at the same
-    settings, about the same text."""
+    settings, about the same text.
+
+    Falls back to the pre-2026-08-31 settings-free path when the instrument
+    directory has nothing, and accepts what it finds only on the fingerprint
+    check below -- which is the same test that made those answers safe to reuse
+    before the directory existed. Without the fallback this change would have
+    re-asked every cached answer to gain a level of tree.
+    """
     if not path.exists():
-        return None
+        older = legacy_path(path)
+        if older is None or not older.exists():
+            return None
+        path = older
     try:
         record = json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError:

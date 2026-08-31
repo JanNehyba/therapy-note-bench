@@ -272,16 +272,30 @@ def _answers_for(
         "x",
         root=root,
     ).parent
-    if not path.exists():
-        return {}
+
+    # Answers written before 2026-08-31 sit directly under the prompt version;
+    # newer ones sit under their instrument's own directory beside it, so both
+    # have to be read. `seen` still counts the settings each answer came from,
+    # which is what stops two budgets being averaged together -- the directory
+    # separates them on disk and this keeps saying so out loud.
+    versioned = path.parents[2]                 # scores/<judge>/<prompt version>
+    tail = path.relative_to(versioned)          # <provider>/<system>/<session>
+    directories = [path] + sorted(
+        found / tail
+        for found in versioned.glob(f"{judge_module.INSTRUMENT_PREFIX}*")
+        if found.is_dir()
+    )
 
     answers = {}
-    for file in path.glob("*.json"):
-        record = json.loads(file.read_text(encoding="utf-8"))
-        if record.get("ok"):
-            answers[record["unit"]] = record["answer"]
-            if seen is not None:
-                seen[json.dumps(record.get("judge_fingerprint"), sort_keys=True)] += 1
+    for directory in directories:
+        if not directory.exists():
+            continue
+        for file in directory.glob("*.json"):
+            record = json.loads(file.read_text(encoding="utf-8"))
+            if record.get("ok"):
+                answers[record["unit"]] = record["answer"]
+                if seen is not None:
+                    seen[json.dumps(record.get("judge_fingerprint"), sort_keys=True)] += 1
     return answers
 
 
