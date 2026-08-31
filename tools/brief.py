@@ -283,6 +283,19 @@ def front(data: Data) -> str:
      write a note a clinician would sign. What is measured is narrower and checkable:
      how much of a published rubric a note covers, how much of a published form it
      fills, and how far two different judges agree about either.</p>
+  <p><strong>And the rubric the leaderboard is ordered by reaches two of the nine
+     things a clinician means by note quality.</strong> The field has an instrument for
+     that count &mdash; PDSQI-9, validated on real records with physicians rating &mdash;
+     and it is run over the same notes here, reaching eight. The two are never averaged,
+     because they are separate instruments and the second does not fill the gap the
+     first leaves. If you are choosing a model on the ordering, you are choosing on
+     coverage, which is the attribute that most rewards writing more.</p>
+  <p class="note">PDSQI-9 has its own trap, and it is the one this benchmark keeps
+     meeting: an empty SOAP note scores 5.00 on <em>accurate</em> and 5.00 on
+     <em>succinct</em> against the therapist&rsquo;s 4.20 and 2.92, because a note that
+     asserts nothing has nothing untrue in it and says what it says in the fewest
+     possible words. Read those columns as things a note can fail, never as things it
+     can win. <a href="limitations.md">What a result cannot claim</a> has the table.</p>
 """
 
 
