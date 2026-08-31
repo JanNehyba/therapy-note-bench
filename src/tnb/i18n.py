@@ -1863,6 +1863,34 @@ CS: dict[str, str] = {
     ),
     "PDSQI-9 on Deepsy, real sessions": "PDSQI-9 na Deepsy, skutečná sezení",
     "PDSQI-9 on Deepsy, translated": "PDSQI-9 na Deepsy, přeložené",
+    (
+        "PDSQI-9 over the notes the Deepsy application actually writes, rather than "
+        "over SOAP. The six criteria above ask whether the Czech is right; this asks "
+        "whether the note is worth filing, and until this table existed nobody had "
+        "put that question to this format at all. **Six attributes, not eight:** "
+        "`accurate` and `thorough` need the session, and the real sessions never "
+        "leave e-INFRA. The columns are absent because the question could not be put."
+    ): (
+        "PDSQI-9 na zápisech, které doopravdy píše aplikace Deepsy, místo na SOAP. "
+        "Šest kritérií výše se ptá, jestli je správně čeština; tohle se ptá, jestli "
+        "za ten zápis stojí ho založit do dokumentace — a než vznikla tahle tabulka, "
+        "tuhle otázku tomuhle formátu nikdo nepoložil. **Šest atributů, ne osm:** na "
+        "`accurate` a `thorough` je potřeba sezení a skutečná sezení e-INFRA nikdy "
+        "neopouštějí. Ty sloupce chybějí proto, že se ta otázka nedala položit."
+    ),
+    (
+        "The same instrument over the Deepsy notes written from translated AnnoMI. "
+        "All eight attributes here: these transcripts are public, so the judge may "
+        "read the session and answer whether the note is accurate and thorough. "
+        "**Eight columns against the real half's six are two instruments, not one**, "
+        "and the two tables are not rows of each other."
+    ): (
+        "Týž nástroj na zápisech Deepsy psaných z přeloženého AnnoMI. Tady se ptá na "
+        "všech osm atributů: tyhle přepisy jsou veřejné, takže soudce smí přečíst i "
+        "sezení a odpovědět, jestli je zápis přesný a důkladný. **Osm sloupců proti "
+        "šesti u skutečné půlky jsou dva přístroje, ne jeden**, a ty dvě tabulky "
+        "nejsou navzájem svými řádky."
+    ),
 }
 
 

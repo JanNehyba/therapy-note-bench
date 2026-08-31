@@ -630,6 +630,21 @@ TRACK_BLURBS = {
         "the real half's six is two instruments, not one**, and the two tables are "
         "not rows of each other."
     ),
+    results.TRACK_DEEPSY_REAL_PDSQI: (
+        "PDSQI-9 over the notes the Deepsy application actually writes, rather than "
+        "over SOAP. The six criteria above ask whether the Czech is right; this asks "
+        "whether the note is worth filing, and until this table existed nobody had "
+        "put that question to this format at all. **Six attributes, not eight:** "
+        "`accurate` and `thorough` need the session, and the real sessions never "
+        "leave e-INFRA. The columns are absent because the question could not be put."
+    ),
+    results.TRACK_DEEPSY_TRANSLATED_PDSQI: (
+        "The same instrument over the Deepsy notes written from translated AnnoMI. "
+        "All eight attributes here: these transcripts are public, so the judge may "
+        "read the session and answer whether the note is accurate and thorough. "
+        "**Eight columns against the real half's six are two instruments, not one**, "
+        "and the two tables are not rows of each other."
+    ),
 }
 
 #: What a note is compared with, what a human's note is doing in the comparison,
