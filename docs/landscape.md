@@ -18,7 +18,7 @@ eighteen months, and neither is an established standard:
 | Gold notes | Yes — expert-written, 17 sections | Yes — therapist-written, SOAP |
 | Evaluation | Reference-based + TRACE human framework | Rubric, **reference-free** |
 | Licence on data | **None published** | **None published** (Apache-2.0 covers the code) |
-| Models benchmarked | 11 (2025-era) | 8 (2024-era) |
+| Models benchmarked | 11 (2023–2024-era) | 8 (2024-era) |
 
 Nobody has re-run either of them on current models. That is the gap this
 repository fills.
@@ -285,7 +285,8 @@ measurement.
 The closest thing here is TRACE, whose five dimensions (trustworthiness,
 relevance, accuracy, comprehensiveness, expression) overlap PDSQI-9's
 construct more than the rubric does — and which has no human anchor and,
-measured on 2026-08-26, separates the sixteen models across 5.6% of its scale.
+measured on 2026-08-26, separates the sixteen models across 5.6% of its scale under
+`gemini-3.1-pro-preview` and 13.3% under `gpt-5.6-terra`.
 
 ## Adjacent, but a different task
 

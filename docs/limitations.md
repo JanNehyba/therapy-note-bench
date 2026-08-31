@@ -208,7 +208,7 @@ rubric is not completeness against a reimbursement requirement.
   first full generation run `gpt-oss-120b` answered 37 of 50 conversations with
   a nested `Plan` (sub-headings and lists), which that slice truncates. The
   repair loop recovered 29; **8 conversations stayed unrecoverable**, so that
-  model is scored on 42 notes and the other ten on 50.
+  model is scored on 42 notes and the other eighteen on 50.
 
   The notes themselves were good. What failed was instruction-following on the
   output shape — which is part of the task as TN-Eval defined it, so it is not

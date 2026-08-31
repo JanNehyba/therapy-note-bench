@@ -1079,7 +1079,7 @@ _METHODS = {
     " staying quiet rather than by writing a good note — read the low rows as <em>no signal</em>,"
     " not as a hard test.": (
         "Napříč expertními zápisy něco říká <strong>{0} z {1} polí ({2} %)</strong>; zbytek je "
-        "<code>Nil</code>. Publikované poradenské video nemá číslo hospitalizace ani odesílajícího "
+        "<code>Nil</code>. Publikované poradenské video nemá ID nemocnice ani odesílajícího "
         "lékaře, takže na několik polí nemůže odpovědět nikdo. Na těch model boduje tím, že mlčí, "
         "ne tím, že napíše dobrý zápis — nízké řádky čtěte jako <em>žádný signál</em>, ne jako "
         "těžkou zkoušku."

@@ -462,8 +462,14 @@ function renderLicences(data) {
     <p>${T`A number quoted from these tables is a number from one judge at one setting &mdash;
        cite the version, not just the link.`}</p>
     <ul class="refs"><li>Nehyba, J. (2026). <em>therapy-note-bench: A reproducible benchmark of
-       LLM-written psychotherapy session notes</em> (Version ${
-       esc(DATA.harness_version || '')}) [Computer software].
+       LLM-written psychotherapy session notes</em>${(() => {
+         // Per table: the payload has no page-level harness version, because
+         // four switchable tables are four instruments. Drawn only when every
+         // table agrees, and omitted rather than guessed when they do not.
+         const seen = [...new Set((DATA.tables || [])
+           .map(t => t.versions && t.versions.harness_version).filter(Boolean))];
+         return seen.length === 1 ? ` (Version ${esc(seen[0])})` : '';
+       })()} [Computer software].
        <a href="https://github.com/JanNehyba/therapy-note-bench">github.com/JanNehyba/therapy-note-bench</a></li></ul>`;
 }
 
@@ -642,7 +648,12 @@ function lengthEffect(saturation) {
   if (!effect) return '';
   const within = effect.within_system || [];
   const rhos = within.map(r => r.rho).sort((a, b) => a - b);
-  const median = rhos.length ? rhos[Math.floor(rhos.length / 2)] : null;
+  // The mean of the two middle values when the count is even. This took the
+  // upper of the two, which is not a median: with sixteen systems it printed
+  // the ninth value and called it the middle.
+  const mid = rhos.length >> 1;
+  const median = !rhos.length ? null
+    : rhos.length % 2 ? rhos[mid] : (rhos[mid - 1] + rhos[mid]) / 2;
   const positive = within.filter(r => r.rho > 0).length;
   const conv = effect.within_conversation || {};
   const survives = conv.sign_test_p !== undefined && conv.sign_test_p < 0.05;
