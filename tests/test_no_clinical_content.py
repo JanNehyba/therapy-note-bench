@@ -72,6 +72,10 @@ ALLOWED_CZECH = {
     "tools/czech_brief_cs.py": "the Czech text of the briefing that goes to the team",
     "tests/fixtures/czech/real/999001.txt": "invented transcript, marked as such",
     "tests/fixtures/czech/translated/ukazka-b.txt": "invented transcript, marked as such",
+    "tests/test_counts_match_their_lists.py": "four published Czech sentences, "
+    "quoted so their counts can be checked against the same list in code as their "
+    "English twins, and the Czech numerals those sentences spell. Nothing from a "
+    "session: every string is a page's own wording",
     "tools/czech_calques.py": "the prompt that asks a judge which expressions in a "
     "note are literal translations from English, plus the two examples it is given. "
     "Checked fragment by fragment against every transcript and both code files: "

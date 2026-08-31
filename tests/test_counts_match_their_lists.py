@@ -62,13 +62,39 @@ WORDS = {
 }
 
 
+#: The Czech forms these registered sentences actually use. Not a general
+#: table: Czech declines a numeral, and a complete one would start matching
+#: ordinary words. Each entry is here because a published sentence spells it.
+CZECH_WORDS = {
+    "dva": 2,
+    "dvě": 2,
+    "tři": 3,
+    "čtyři": 4,
+    "pět": 5,
+    "šest": 6,
+    "sedm": 7,
+    "osm": 8,
+    # The forms a Czech sentence uses after a preposition, so a stale count
+    # fails saying which number it is rather than that the word is unknown.
+    "dvou": 2,
+    "tří": 3,
+    "čtyř": 4,
+    "pěti": 5,
+    "šesti": 6,
+    "sedmi": 7,
+    "osmi": 8,
+}
+
+
 def as_number(token: str) -> int:
-    """`8`, `eight` and `Eight` are the same count differently spelled."""
+    """`8`, `eight`, `Eight` and `šesti` are the same count differently spelled."""
     token = token.strip().lower()
     if token.isdigit():
         return int(token)
     if token in WORDS:
         return WORDS[token]
+    if token in CZECH_WORDS:
+        return CZECH_WORDS[token]
     raise AssertionError(f"{token!r} is neither a digit nor a number word")
 
 
@@ -171,6 +197,44 @@ CHECKS = (
         expected=lambda: (len(report.MEASURE_TABLES["pdsqi-soap"]),),
         why="the blurb over a table whose PDSQI half is drawn from that list",
         reads=(report, "MEASURE_TABLES"),
+    ),
+    # --- and their Czech twins ------------------------------------------------
+    #
+    # `test_i18n` compares the digits in a translation against the digits in its
+    # English, which catches a mistyped figure and not a stale word: these
+    # sentences spell their counts. Comparing the *words* across the two
+    # languages does not work -- Czech declines a numeral, so "two" is `dvě`,
+    # `dva`, `dvou` or absent depending on the case, and a table of forms
+    # reported forty differences that are all correct Czech. Registered
+    # one by one instead, against the same list the English is registered
+    # against.
+    Check(
+        where="src/tnb/i18n.py",
+        pattern=r"(\w+) z nich nezveřejňují žádnou licenci a čtvrtý ukazuje jen",
+        expected=lambda: (publishing_none(),),
+        why="the Czech of the Sources line, whose English is registered above",
+        reads=(report, "LICENCES"),
+    ),
+    Check(
+        where="src/tnb/i18n.py",
+        pattern=r"Licenci nesou (\w+) ze (\w+); (\w+) žádnou nezveřejňují",
+        expected=lambda: (carrying_a_licence(), len(report.LICENCES), publishing_none()),
+        why="the Czech of the methods page's licence sentence",
+        reads=(report, "LICENCES"),
+    ),
+    Check(
+        where="src/tnb/i18n.py",
+        pattern=r"Samotný zápis, na týchž (\w+) kritériích",
+        expected=lambda: (len(czech_scorer.CRITERIA),),
+        why="the Czech blurb of a track whose criteria are the six in czech.CRITERIA",
+        reads=(czech_scorer, "CRITERIA"),
+    ),
+    Check(
+        where="src/tnb/i18n.py",
+        pattern=r"Týchž (\w+) kritérií jako v tabulce se skutečnými sezeními",
+        expected=lambda: (len(czech_scorer.CRITERIA),),
+        why="the same count, in the Czech of the other track's blurb",
+        reads=(czech_scorer, "CRITERIA"),
     ),
     Check(
         where="docs/limitations.md",
