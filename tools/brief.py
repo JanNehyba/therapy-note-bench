@@ -664,8 +664,8 @@ def how_to_check(data: Data) -> str:
   <p><strong>The prose around them is written by hand.</strong> Some figures in it are
      computed from the payload and a test fails if they drift; others are typed here
      beside the prose they belong to. The test names the sentences it covers, and a
-     sentence it does not name is a sentence nobody is checking. This paragraph used to say that nothing
-     here was typed in. That was false in this file more than thirty times, and it read
+     sentence it does not name is a sentence nobody is checking. This paragraph
+     used to say that nothing here was typed in. That was false in this file more than thirty times, and it read
      as an instruction not to look.</p>
   <p>And four pages carry what the numbers rest on:
      <a href="datasets.md">the datasets</a> &mdash; where each came from, what licence it
