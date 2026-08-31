@@ -88,6 +88,7 @@ def _read(
                     candidate.system_id,
                     candidate.session_id,
                     task.unit,
+                    fingerprint=fingerprint,
                     root=cache_root,
                 ),
                 fingerprint,

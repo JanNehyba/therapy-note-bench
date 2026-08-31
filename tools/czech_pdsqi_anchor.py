@@ -127,6 +127,7 @@ def judge_ratings(
                     candidate.system_id,
                     candidate.session_id,
                     task.unit,
+                    fingerprint=fingerprint,
                 ),
                 fingerprint,
                 task.prompt,

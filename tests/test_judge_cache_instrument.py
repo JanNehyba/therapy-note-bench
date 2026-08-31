@@ -7,8 +7,8 @@ re-asking wrote the new answers over the old ones. `scores/` is gitignored, so
 nothing could be restored, and the published "budget 128 against 256"
 comparison -- nineteen systems, mean +0.017 completeness -- can no longer be
 re-derived by anyone: not from `results/rows.jsonl`, in any revision, and not
-from the cache, where all 65 902 surviving `gemini-3.1-pro-preview` answers
-carry a fingerprint of budget 256.
+from the cache, where all 51 000 surviving `gemini-3.1-pro-preview` answers to
+the SOAP rubric carry a fingerprint of budget 256.
 
 `Reinstrumented` was added after that and stops the accidental case. It cannot
 stop the deliberate one, because re-measuring at a new budget is exactly what
@@ -23,6 +23,7 @@ cost a day of quota to learn nothing.
 from __future__ import annotations
 
 import json
+from collections import Counter
 
 from tnb import judge
 
@@ -94,21 +95,189 @@ def test_the_instrument_directory_is_recognised_again(tmp_path):
     assert judge.legacy_path(judge.cache_path(*WHERE, root=tmp_path)) is None
 
 
-def test_every_runner_asks_for_its_own_instrument():
-    """Four scorers write to this cache. One that leaves the fingerprint off
-    writes to the shared path again and re-opens the hole for its own track."""
+#: Callers allowed to build a settings-free path, each for a stated reason.
+#: `calibration` walks the directory itself rather than reading one answer, and
+#: `backfill_digests` is a one-shot migration over the pre-2026-08-31 layout,
+#: which is the only layout it is meant to see.
+MAY_OMIT_THE_FINGERPRINT = {
+    "src/tnb/scoring/calibration.py": "takes the parent directory and reads every instrument in it",
+    "tools/backfill_digests.py": "a migration over records written before instruments existed",
+}
+
+
+def _calls_without_a_fingerprint(source: str) -> int:
+    """`judge.cache_path(...)` calls that name no instrument.
+
+    Only this cache's function. `tools/czech_code.py` has a `cache_path` of its
+    own for the coder's answers, which has nothing to do with the judge's, and
+    matching on the bare name alone reported it.
+    """
     import ast
 
+    try:
+        tree = ast.parse(source)
+    except SyntaxError:
+        # A file caught half-written. `ruff` and every import in the suite
+        # already fail loudly on that; this check has nothing to add and
+        # should not turn red for somebody else's unsaved buffer.
+        return 0
+    imported = any(
+        isinstance(node, ast.ImportFrom)
+        and (node.module or "").endswith("judge")
+        and any(alias.name == "cache_path" for alias in node.names)
+        for node in ast.walk(tree)
+    )
+
+    found = 0
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call):
+            continue
+        if isinstance(node.func, ast.Attribute):
+            if node.func.attr != "cache_path":
+                continue
+        elif isinstance(node.func, ast.Name) and imported:
+            if node.func.id != "cache_path":
+                continue
+        else:
+            continue
+        if not any(word.arg == "fingerprint" for word in node.keywords):
+            found += 1
+    return found
+
+
+def test_every_caller_asks_for_its_own_instrument():
+    """Writers AND readers. A reader that leaves the fingerprint off is worse.
+
+    The writers were checked from the first version of this test, because one
+    that forgets writes to the shared path again and re-opens the hole. The
+    readers were not, and two of them -- `tools/czech_sample.py`, which the
+    Czech variance bands are built from, and `tools/czech_pdsqi_anchor.py` --
+    were left looking under the settings-free path while the scorer had moved
+    to the instrument's. `legacy_path` only strips an instrument component, so
+    there is no lookup in that direction: they would have found nothing, and
+    the partial case fails quietly rather than loudly.
+    """
     from tnb.config import REPO_ROOT
 
-    missing = []
-    for name in ("czech_run", "pdsqi_run", "run", "icare_run"):
-        source = (REPO_ROOT / "src" / "tnb" / "scoring" / f"{name}.py").read_text(encoding="utf-8")
-        for node in ast.walk(ast.parse(source)):
-            if not isinstance(node, ast.Call):
+    missing = {}
+    for where in ("src/tnb", "tools"):
+        for path in sorted((REPO_ROOT / where).rglob("*.py")):
+            relative = path.relative_to(REPO_ROOT).as_posix()
+            if relative in MAY_OMIT_THE_FINGERPRINT:
                 continue
-            if getattr(node.func, "attr", None) != "cache_path":
-                continue
-            if not any(word.arg == "fingerprint" for word in node.keywords):
-                missing.append(name)
-    assert not missing, f"cache_path called without a fingerprint in: {sorted(set(missing))}"
+            count = _calls_without_a_fingerprint(path.read_text(encoding="utf-8"))
+            if count:
+                missing[relative] = count
+    assert not missing, (
+        "cache_path called without a fingerprint, so this code reads or writes "
+        f"the settings-free path while the scorers use the instrument's: {missing}.\n"
+        "Pass `fingerprint=config.fingerprint()`, or add the file to "
+        "MAY_OMIT_THE_FINGERPRINT with the reason it is exempt."
+    )
+
+
+def test_the_exemptions_are_still_the_files_they_name():
+    """An allow-list nobody rereads becomes a list of what slipped through."""
+    from tnb.config import REPO_ROOT
+
+    for relative in MAY_OMIT_THE_FINGERPRINT:
+        path = REPO_ROOT / relative
+        assert path.exists(), f"{relative} is exempted from the fingerprint rule and does not exist"
+        assert _calls_without_a_fingerprint(path.read_text(encoding="utf-8")), (
+            f"{relative} no longer calls cache_path without a fingerprint; "
+            "drop it from MAY_OMIT_THE_FINGERPRINT rather than leaving a dead exemption"
+        )
+
+
+def test_the_superseded_copy_does_not_win_the_saturation_panel(tmp_path):
+    """A re-ask leaves two answers for one slot, and the newer one has to win.
+
+    The instrument directory is additive: the fresh answer goes under it and
+    the answer it replaced stays where it was. Both carry the same fingerprint
+    -- the settings did not change, the note did -- so grouping by fingerprint
+    cannot tell them apart, and `rglob` reached the superseded copy last for
+    every provider sorting before `i-`. The published saturation panel then
+    described a note that no longer exists.
+    """
+    from tnb import judge
+    from tnb.scoring import saturation, tneval
+
+    where = (judge.DEFAULT_MODEL, tneval.JUDGE_PROMPT_VERSION, "einfra", "kimi-k3", "42")
+    unit = "subjective.rubric_completeness.subjective-symptoms"
+    fingerprint = {"thinking_budget": 256}
+
+    for path, answer in (
+        (judge.cache_path(*where, unit, root=tmp_path), "Yes"),
+        (judge.cache_path(*where, unit, fingerprint=fingerprint, root=tmp_path), "No"),
+    ):
+        judge.write_cached(
+            path,
+            {
+                "ok": True,
+                "provider": "einfra",
+                "system_id": "kimi-k3",
+                "session_id": "42",
+                "unit": unit,
+                "answer": answer,
+                "judge_fingerprint": fingerprint,
+            },
+        )
+
+    answers = saturation.load_answers(root=tmp_path)
+    assert answers[("kimi-k3", "42")][unit] == "No", (
+        "the settings-free copy is the judgement of the note that was replaced; "
+        "the instrument's copy is the current one and has to be the one read"
+    )
+
+
+def test_one_report_never_averages_two_instruments(tmp_path):
+    """The calibration panel picks an instrument before it makes a single pair.
+
+    It used to read the settings-free directory and every instrument directory
+    into one dict, so a question answered at two budgets resolved to whichever
+    hash sorted last. Different questions about one note could then come from
+    different instruments, and `judge_settings` -- published in
+    `docs/judges.json` beside the agreement figures -- named whichever settings
+    were commonest on disk, which could be the ones that produced none of the
+    answers used.
+    """
+    from tnb import judge
+    from tnb.scoring import calibration, tneval
+
+    at_128 = {"thinking_budget": 128}
+    at_256 = {"thinking_budget": 256}
+    where = (judge.DEFAULT_MODEL, tneval.JUDGE_PROMPT_VERSION, "tneval", "therapist", "9")
+
+    # Three questions answered at 128, one of them re-asked at 256: the shape of
+    # a re-scoring run interrupted part way through.
+    for unit, fingerprint, answer in (
+        ("subjective.a", at_128, "Yes"),
+        ("subjective.b", at_128, "Yes"),
+        ("subjective.c", at_128, "Yes"),
+        ("subjective.a", at_256, "No"),
+    ):
+        judge.write_cached(
+            judge.cache_path(*where, unit, fingerprint=fingerprint, root=tmp_path),
+            {
+                "ok": True,
+                "provider": "tneval",
+                "system_id": "therapist",
+                "session_id": "9",
+                "unit": unit,
+                "answer": answer,
+                "judge_fingerprint": fingerprint,
+            },
+        )
+
+    instrument = calibration.dominant_instrument(judge.DEFAULT_MODEL, root=tmp_path)
+    assert instrument == json.dumps(at_128, sort_keys=True), "the larger set has to win"
+
+    seen: Counter = Counter()
+    answers = calibration._answers_for(
+        "9", "therapist", judge.DEFAULT_MODEL, root=tmp_path, seen=seen, instrument=instrument
+    )
+    assert set(answers.values()) == {"Yes"}, "an answer from the other instrument was used"
+    assert sum(seen.values()) == 4, "`seen` still records what was on disk, used or not"
+    assert calibration._the_settings_used(instrument, seen) == at_128, (
+        "the published settings must be the ones the figures came from"
+    )

@@ -182,7 +182,18 @@ def load_answers(root: Path | None = None, judge_model: str = judge.DEFAULT_MODE
 
     records = []
     by_fingerprint: dict[str, list[dict]] = defaultdict(list)
-    for path in base.rglob("*.json"):
+    # Settings-free paths first, so that where both exist for one slot the
+    # instrument's copy is the one that survives the assignment below.
+    #
+    # A re-ask writes the fresh answer under the instrument directory and does
+    # not delete the answer it replaces, which sits directly under the prompt
+    # version. Both carry the same fingerprint -- the settings did not change,
+    # the *note* did -- so the grouping cannot separate them, and in `rglob`
+    # order the superseded copy was reached last for every provider that sorts
+    # before `i-`. That published the judgement of a note that no longer
+    # exists, which is the fault the prompt digest was added to end.
+    found = sorted(base.rglob("*.json"), key=lambda path: judge.legacy_path(path) is not None)
+    for path in found:
         try:
             record = json.loads(path.read_text(encoding="utf-8"))
         except json.JSONDecodeError:

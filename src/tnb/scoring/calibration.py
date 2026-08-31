@@ -255,13 +255,20 @@ def _answers_for(
     provider: str = "tneval",
     root: Path | None = None,
     seen: Counter | None = None,
+    instrument: str | None = None,
 ) -> dict[str, str]:
     """Every cached judge answer for one note, keyed by question unit.
 
-    `seen` counts the settings the answers were produced at. A candidate
-    measured at one thinking budget and compared against a candidate measured
-    at another is the mistake this whole panel exists to avoid making about
-    models -- and the panel was making it about itself.
+    `instrument` is the fingerprint the whole report is being built from, as
+    JSON with sorted keys; answers produced at any other settings are counted
+    into `seen` and then dropped. Without it the dict below simply overwrote,
+    so a note answered at two budgets resolved to whichever directory sorted
+    last -- an arbitrary tie-break that could take different questions of one
+    note from different instruments, and then publish `judge_settings` naming
+    the instrument that produced none of the answers behind the figures.
+
+    `seen` counts the settings every answer on disk was produced at, used or
+    not, so `other_settings` can say what was left out.
     """
     path = judge_module.cache_path(
         judge_model,
@@ -275,11 +282,9 @@ def _answers_for(
 
     # Answers written before 2026-08-31 sit directly under the prompt version;
     # newer ones sit under their instrument's own directory beside it, so both
-    # have to be read. `seen` still counts the settings each answer came from,
-    # which is what stops two budgets being averaged together -- the directory
-    # separates them on disk and this keeps saying so out loud.
-    versioned = path.parents[2]                 # scores/<judge>/<prompt version>
-    tail = path.relative_to(versioned)          # <provider>/<system>/<session>
+    # have to be read.
+    versioned = path.parents[2]  # scores/<judge>/<prompt version>
+    tail = path.relative_to(versioned)  # <provider>/<system>/<session>
     directories = [path] + sorted(
         found / tail
         for found in versioned.glob(f"{judge_module.INSTRUMENT_PREFIX}*")
@@ -292,11 +297,47 @@ def _answers_for(
             continue
         for file in directory.glob("*.json"):
             record = json.loads(file.read_text(encoding="utf-8"))
-            if record.get("ok"):
+            if not record.get("ok"):
+                continue
+            settings = json.dumps(record.get("judge_fingerprint"), sort_keys=True)
+            if seen is not None:
+                seen[settings] += 1
+            if instrument is None or settings == instrument:
                 answers[record["unit"]] = record["answer"]
-                if seen is not None:
-                    seen[json.dumps(record.get("judge_fingerprint"), sort_keys=True)] += 1
     return answers
+
+
+def dominant_instrument(judge_model: str, *, root: Path | None = None) -> str | None:
+    """The settings most of this judge's cached rubric answers were given at.
+
+    One instrument for the whole report, decided before a single pair is made.
+    Deciding per note let two budgets into one agreement figure; deciding per
+    question let them into one *note*. The largest set wins, which during a
+    re-scoring run is the complete old instrument rather than the half-finished
+    new one -- the same rule, and the same reason, as `saturation.load_answers`.
+
+    None when the cache is empty or holds one instrument, which is every state
+    it has ever actually been in; this only bites the next time a budget moves.
+    """
+    base = (
+        (root or judge_module.CACHE_DIR)
+        / judge_module._slug_model(judge_model)
+        / judge_module._slug_model(tneval.JUDGE_PROMPT_VERSION)
+    )
+    if not base.exists():
+        return None
+
+    counted: Counter = Counter()
+    for file in base.rglob("*.json"):
+        try:
+            record = json.loads(file.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            continue
+        if record.get("ok"):
+            counted[json.dumps(record.get("judge_fingerprint"), sort_keys=True)] += 1
+    if len(counted) < 2:
+        return None
+    return max(sorted(counted), key=lambda key: counted[key])
 
 
 def collect(
@@ -315,6 +356,8 @@ def collect(
     #: the three systems TN-Eval rated is larger than `ALPHA_MARGIN`.
     per_system: dict[str, Paired] = defaultdict(Paired)
     seen: Counter = Counter()
+    #: Decided once, over the whole cache, before any pairing happens.
+    instrument = dominant_instrument(judge_model, root=root)
     #: Every (conversation, system) that contributed at least one paired
     #: judgement. Counted rather than derived from the number of pairs: the
     #: derivation was `len(rubric) // 23`, and the moment one criterion went
@@ -330,7 +373,14 @@ def collect(
             human = blob.get("metrics_human")
             if not isinstance(human, list) or len(human) != ANNOTATORS:
                 continue
-            answers = _answers_for(session.id, system_id, judge_model, root=root, seen=seen)
+            answers = _answers_for(
+                session.id,
+                system_id,
+                judge_model,
+                root=root,
+                seen=seen,
+                instrument=instrument,
+            )
             if not answers:
                 continue
 
@@ -369,6 +419,7 @@ def collect(
     pairs["_per_criterion"] = per_criterion  # type: ignore[assignment]
     pairs["_per_system"] = per_system  # type: ignore[assignment]
     pairs["_settings"] = seen  # type: ignore[assignment]
+    pairs["_instrument"] = instrument  # type: ignore[assignment]
     pairs["_notes"] = notes  # type: ignore[assignment]
     return pairs
 
@@ -579,11 +630,19 @@ def separations(judges: list[dict], measure: str, margin: float = ALPHA_MARGIN) 
     }
 
 
+def _the_settings_used(instrument: str | None, seen: Counter) -> dict | None:
+    """The chosen instrument, or the only one there was."""
+    if instrument is not None:
+        return json.loads(instrument)
+    return json.loads(seen.most_common(1)[0][0]) if seen else None
+
+
 def calibrate(sessions: list[Session], judge_model: str, *, root: Path | None = None) -> Report:
     pairs = collect(sessions, judge_model, root=root)
     per_criterion = pairs.pop("_per_criterion", {})  # type: ignore[arg-type]
     per_system_pairs = pairs.pop("_per_system", {})  # type: ignore[arg-type]
     settings = pairs.pop("_settings", Counter())  # type: ignore[arg-type]
+    instrument = pairs.pop("_instrument", None)  # type: ignore[arg-type]
     notes = len(pairs.pop("_notes", set()))  # type: ignore[arg-type]
 
     agreements = []
@@ -633,10 +692,14 @@ def calibrate(sessions: list[Session], judge_model: str, *, root: Path | None = 
     return Report(
         judge_model=judge_model,
         judge_prompt_version=tneval.JUDGE_PROMPT_VERSION,
-        # What this candidate was measured at. Comparing a judge at one thinking
-        # budget with a judge at another is exactly the confusion the panel is
-        # meant to resolve, and it was making it about its own rows.
-        judge_settings=(json.loads(settings.most_common(1)[0][0]) if settings else None),
+        # What the answers behind these figures were measured at -- the
+        # instrument `collect` chose, not whichever settings happen to be
+        # commonest on disk. Comparing a judge at one thinking budget with a
+        # judge at another is exactly the confusion the panel is meant to
+        # resolve, and it was making it about its own rows. `seen` counts every
+        # answer read, including the ones dropped for belonging to another
+        # instrument, so it cannot name the one that was used.
+        judge_settings=_the_settings_used(instrument, settings),
         other_settings={key: count for key, count in sorted(settings.items())}
         if len(settings) > 1
         else {},
