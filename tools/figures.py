@@ -172,6 +172,34 @@ class Data:
         )
         return " and ".join(found) if found else "unrecorded"
 
+    @property
+    def scored(self) -> str:
+        """The most recent date any drawn table was scored on.
+
+        The brief carried no date at all, on either the page or the PDF printed
+        from it, so a reader holding both had nothing to tell them which was
+        newer -- and the PDF was three days stale for three days without
+        anything saying so. Read from the tables rather than stamped at build
+        time: what matters is how old the numbers are, not when somebody last
+        ran `make brief`.
+        """
+        found = sorted(
+            table["scored_at"]
+            for (_track, judge), table in self.tables.items()
+            if judge in (JUDGE_A, JUDGE_B) and table.get("scored_at")
+        )
+        return found[-1][:10] if found else "undated"
+
+    def rows(self, track: str, judge: str) -> list[dict]:
+        """Every drawn row of one table, for the questions `scores` cannot answer.
+
+        `scores` keys on the printed name and drops the row, so a caller that
+        needs to know whether a row is a current model, a dated reference or the
+        therapist has nowhere to look. The self-preference share was divided by
+        a range that ran down to the therapist-written note because of that.
+        """
+        return list(self.tables[(track, judge)]["rows"])
+
     def scores(self, track: str, judge: str, measure: str) -> dict[str, float]:
         """{system: score}, keyed by the name the figures print.
 
@@ -242,6 +270,20 @@ def ranked(scores: dict[str, float], digits: int = 3) -> dict[str, int]:
         else:
             places[name] = index + 1
     return places
+
+
+def own_family(data, track: str, judge: str) -> set[str]:
+    """The systems a judge is scoring from its own vendor, as the figures name them.
+
+    The leaderboard marks these rows, for the reason the self-preference panel
+    exists. The two ranking figures drew them unmarked, so a reader met
+    `gemini-3.1-pro-preview` in fourth place under `gemini-3.1-pro-preview`
+    with nothing to say the judge was marking its own homework.
+    """
+    table = data.tables.get((track, judge))
+    if not table:
+        return set()
+    return {short(row["label"]) for row in table["rows"] if row.get("judges_own_family")}
 
 
 def agreeing_pairs(data: Data, track: str, measure: str) -> tuple[int, int]:
@@ -401,18 +443,27 @@ def figure_positions(data: Data) -> str:
             f'<circle cx="{mid_r}" cy="{y2:.1f}" r="4.5" class="fill-b"/></g>'
         )
 
-    for name in order:
-        y = y_of(ra[name])
-        labels.append(
-            f'<text class="name" x="{mid_l - 12}" y="{y + 4:.1f}" text-anchor="end">'
-            f"{ra[name]}. {esc(short(name))}</text>"
-        )
-    for name in sorted(names, key=lambda n: (rb[n], n)):
-        y = y_of(rb[name])
-        labels.append(
-            f'<text class="name" x="{mid_r + 12}" y="{y + 4:.1f}">'
-            f"{rb[name]}. {esc(short(name))}</text>"
-        )
+    # One label per *rank*, not per system. Tied systems share a rank, so they
+    # shared a y and their names were painted on top of each other: under the
+    # second judge "10. glm-5" sat underneath "10. glm-5.2" and vanished, and
+    # two more rendered as illegible overprint. The dots may share a point --
+    # that is what a tie is -- but the text may not, so the tied names are
+    # joined into the one label the tie deserves.
+    def marked(name: str, own: set[str]) -> str:
+        return esc(short(name)) + ("\u2009\u2020" if short(name) in own else "")
+
+    for places, x, anchor, own in (
+        (ra, mid_l - 12, ' text-anchor="end"', own_family(data, track, JUDGE_A)),
+        (rb, mid_r + 12, "", own_family(data, track, JUDGE_B)),
+    ):
+        at_rank: dict[int, list[str]] = {}
+        for name in sorted(names, key=lambda n: (places[n], n)):
+            at_rank.setdefault(places[name], []).append(name)
+        for place, tied in sorted(at_rank.items()):
+            labels.append(
+                f'<text class="name" x="{x}" y="{y_of(place) + 4:.1f}"{anchor}>'
+                f"{place}. {', '.join(marked(n, own) for n in tied)}</text>"
+            )
 
     held = len(names) - len(moved)
     header = (
@@ -449,7 +500,9 @@ def figure_positions(data: Data) -> str:
             "puts the two systems in different groups under that judge — over "
             f"{data.saturation[JUDGE_A]['sessions']} shared conversations for judge A and "
             f"{data.saturation[JUDGE_B]['sessions']} for judge B, because more of A's notes "
-            "went unfinished. Systems that print the same score share a place.",
+            "went unfinished. Systems that print the same score share a place, and a "
+            "shared place is drawn as one label. A dagger marks a system the judge on "
+            "that side shares a vendor with.",
             0,
             height - 62,
             width_px=width,
@@ -799,7 +852,8 @@ def figure_what_the_rubric_rewards(data: Data) -> str:
         heading(
             "Every model covers more of the rubric than the therapist does — "
             "which is not the same as writing a better note",
-            "Completeness: the fraction of 23 rubric criteria a judge found present. "
+            "Completeness: the equal-weighted mean of a note's four section fractions "
+            "over TN-Eval's 23 criteria, not the fraction of all 23. "
             f"Judge {judge}.",
         )
         + "\n"

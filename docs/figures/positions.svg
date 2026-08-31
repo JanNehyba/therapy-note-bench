@@ -59,8 +59,8 @@
 <text class="name" x="262" y="113.0" text-anchor="end">1. kimi-k3</text>
 <text class="name" x="262" y="139.0" text-anchor="end">2. qwen3.5-int4</text>
 <text class="name" x="262" y="165.0" text-anchor="end">3. qwen3.5-122b</text>
-<text class="name" x="262" y="191.0" text-anchor="end">4. gemini-3.1-pro-preview</text>
-<text class="name" x="262" y="217.0" text-anchor="end">5. gemini-3.7-flash</text>
+<text class="name" x="262" y="191.0" text-anchor="end">4. gemini-3.1-pro-preview †</text>
+<text class="name" x="262" y="217.0" text-anchor="end">5. gemini-3.7-flash †</text>
 <text class="name" x="262" y="243.0" text-anchor="end">6. glm-5</text>
 <text class="name" x="262" y="269.0" text-anchor="end">7. glm-5.2</text>
 <text class="name" x="262" y="295.0" text-anchor="end">8. gpt-5.6-sol</text>
@@ -68,7 +68,7 @@
 <text class="name" x="262" y="347.0" text-anchor="end">10. gpt-oss-120b</text>
 <text class="name" x="262" y="373.0" text-anchor="end">11. deepseek-v4-flash-thinking</text>
 <text class="name" x="262" y="399.0" text-anchor="end">12. gpt-5.6-luna</text>
-<text class="name" x="262" y="425.0" text-anchor="end">13. gemma4</text>
+<text class="name" x="262" y="425.0" text-anchor="end">13. gemma4 †</text>
 <text class="name" x="262" y="451.0" text-anchor="end">14. qwen3.8-27b</text>
 <text class="name" x="262" y="477.0" text-anchor="end">15. mistral-medium-3.5</text>
 <text class="name" x="262" y="503.0" text-anchor="end">16. deepseek-v4-flash</text>
@@ -78,23 +78,22 @@
 <text class="name" x="638" y="113.0">1. kimi-k3</text>
 <text class="name" x="638" y="139.0">2. qwen3.5-122b</text>
 <text class="name" x="638" y="165.0">3. gemini-3.1-pro-preview</text>
-<text class="name" x="638" y="191.0">4. gpt-oss-120b</text>
+<text class="name" x="638" y="191.0">4. gpt-oss-120b †</text>
 <text class="name" x="638" y="217.0">5. qwen3.5-int4</text>
-<text class="name" x="638" y="243.0">6. gpt-5.6-terra</text>
-<text class="name" x="638" y="269.0">7. gpt-5.6-sol</text>
+<text class="name" x="638" y="243.0">6. gpt-5.6-terra †</text>
+<text class="name" x="638" y="269.0">7. gpt-5.6-sol †</text>
 <text class="name" x="638" y="295.0">8. gemini-3.7-flash</text>
 <text class="name" x="638" y="321.0">9. deepseek-v4-flash-thinking</text>
-<text class="name" x="638" y="347.0">10. glm-5</text>
-<text class="name" x="638" y="347.0">10. glm-5.2</text>
-<text class="name" x="638" y="399.0">12. gpt-5.6-luna</text>
-<text class="name" x="638" y="425.0">13. deepseek-v4-flash</text>
-<text class="name" x="638" y="425.0">13. qwen3.8-27b</text>
+<text class="name" x="638" y="347.0">10. glm-5, glm-5.2</text>
+<text class="name" x="638" y="399.0">12. gpt-5.6-luna †</text>
+<text class="name" x="638" y="425.0">13. deepseek-v4-flash, qwen3.8-27b</text>
 <text class="name" x="638" y="477.0">15. mistral-medium-3.5</text>
 <text class="name" x="638" y="503.0">16. gemma4</text>
 <text class="name" x="638" y="529.0">17. mistral-large-v2</text>
 <text class="name" x="638" y="555.0">18. llama-3.1-70b</text>
 <text class="name" x="638" y="581.0">19. therapist</text>
 <text class="note" x="0" y="650">Grey lines held their place. A pair counts as separable when a paired bootstrap puts the two systems in different groups under that judge — over 25 shared</text>
-<text class="note" x="0" y="665">conversations for judge A and 42 for judge B, because more of A's notes went unfinished. Systems that print the same score share a place.</text>
+<text class="note" x="0" y="665">conversations for judge A and 42 for judge B, because more of A's notes went unfinished. Systems that print the same score share a place, and a shared</text>
+<text class="note" x="0" y="680">place is drawn as one label. A dagger marks a system the judge on that side shares a vendor with.</text>
 <text class="note" x="0" y="692">Source: docs/leaderboard.json and docs/saturation-*.json, harness 0.6.0.</text>
 </svg>
