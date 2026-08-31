@@ -13,9 +13,12 @@ thinking tokens, a tenfold difference. That is why this talks to the native API
 rather than reusing :mod:`tnb.providers.openai_compatible`.
 
 **Nothing is asked twice.** Every answer is cached under
-``scores/<judge>/<judge_prompt_version>/<provider>/<system>/<session>/<unit>.json``,
+``scores/<judge>/<judge_prompt_version>/i-<instrument>/<provider>/<system>/<session>/<unit>.json``,
 so a run that stops at question 20 000 resumes there, and re-scoring one model
-never re-scores the other ten.
+never re-scores the other ten. ``i-<instrument>`` is the first eight hex digits
+of the judge fingerprint's digest, added on 2026-08-31: without it a re-ask at
+a different thinking budget wrote over the answers it replaced. Answers written
+before that date sit one level up and are still read, never written.
 
 **The ceiling is real.** ``--max-judge-usd`` is checked against measured token
 counts before each call and the run stops rather than exceeding it.

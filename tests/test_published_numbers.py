@@ -199,8 +199,29 @@ NEARBY = 900
 
 
 def _tneval_undominated() -> tuple[float, ...]:
+    """Undominated systems, systems, and the measures dominance was read over.
+
+    The third figure is the point. "Eight of the nineteen are beaten outright by
+    nobody" was published with no instrument named, on a page whose SOAP table
+    draws eleven columns from two instruments -- and the payload carries three
+    concordances that answer the same sentence 8 of 19, 11 of 19 and 8 of 16.
+    """
     found = payload()["concordance"]["tneval-soap"]
-    return (float(len(found["undominated"])), float(found["n_systems"]))
+    return (
+        float(len(found["undominated"])),
+        float(found["n_systems"]),
+        float(len(found["measures"])),
+    )
+
+
+def _pdsqi_undominated() -> tuple[float, ...]:
+    """The same three figures for the other instrument on the same table."""
+    found = payload()["concordance"]["pdsqi-soap"]
+    return (
+        float(len(found["measures"])),
+        float(len(found["undominated"])),
+        float(found["n_systems"]),
+    )
 
 
 def _trace_spread() -> tuple[float, ...]:
@@ -229,7 +250,6 @@ def _trace_spread() -> tuple[float, ...]:
 
 _GOLD = REPO_ROOT / "data" / "ihope_test.json"
 _GENERATIONS = REPO_ROOT / "generations"
-_ANSWERS = REPO_ROOT / "scores" / "gemini-3.1-pro-preview"
 
 
 def _ihope_labels() -> tuple[float, ...]:
@@ -276,41 +296,27 @@ def _dressed_up_empties() -> tuple[float, ...]:
     return (float(len({value.strip() for value in hits})), float(len(hits)))
 
 
-def _the_other_instrument() -> tuple[float, ...]:
-    """How many of one judge's cached answers were not given at budget 256, and at what.
-
-    The sentence this checks exists because the one before it said "every
-    single one" of 65 902 answers records budget 256, and 4 166 of them record
-    2048 -- the Czech instruments, a different question set that happens to
-    share a judge. Counting them is the whole point, so the count is made here
-    rather than retyped.
-    """
-    from collections import Counter
-
-    budgets: Counter = Counter()
-    for path in _ANSWERS.rglob("*.json"):
-        try:
-            answer = json.loads(path.read_text(encoding="utf-8"))
-        except (OSError, ValueError):
-            continue
-        budget = (answer.get("judge_fingerprint") or {}).get("thinking_budget")
-        if budget is not None and budget != 256:
-            budgets[budget] += 1
-    assert len(budgets) == 1, (
-        f"the sentence names one other budget; the cache holds {dict(budgets)}"
-    )
-    budget, count = budgets.most_common(1)[0]
-    return (float(count), float(budget))
-
-
 CLAIMS = (
     Claim(
         where="docs/limitations.md",
-        phrase="Eight of the nineteen are beaten outright by nobody",
+        phrase=(
+            "Eight of the nineteen are beaten outright by nobody on TN-Eval's three rubric columns"
+        ),
         kind="computed",
         because="the dominance count is the reason no winner is named, and it moved once already",
-        covers=("Eight", "nineteen"),
+        covers=("Eight", "nineteen", "three"),
         expected=_tneval_undominated,
+    ),
+    Claim(
+        where="docs/limitations.md",
+        phrase="On PDSQI-9's eight columns, drawn on the same table, it is eleven of the nineteen",
+        kind="computed",
+        because=(
+            "the same sentence answered over the other instrument on the same table; "
+            "printing one without the other is what made the count read as the page's"
+        ),
+        covers=("eight", "eleven", "nineteen"),
+        expected=_pdsqi_undominated,
     ),
     Claim(
         where="docs/limitations.md",
@@ -330,17 +336,6 @@ CLAIMS = (
         because="the budget-128 answers were overwritten before the cache separated instruments",
         covers=("51 000",),
         caveat="not in this repository",
-    ),
-    Claim(
-        where="docs/limitations.md",
-        phrase="The same judge holds 4 166 more answers at budget 2048",
-        kind="corpus",
-        because=(
-            "the sentence above it used to say every one of 65 902 answers was at 256, "
-            "and this is the 4 166 that are not"
-        ),
-        covers=("4 166", "2048"),
-        expected=_the_other_instrument,
     ),
     Claim(
         where="docs/methodology.md",
@@ -392,7 +387,6 @@ CLAIMS = (
 _CORPUS_INPUT = {
     "_dressed_up_empties": (_GENERATIONS, "generations/"),
     "_ihope_labels": (_GOLD, "data/ihope_test.json"),
-    "_the_other_instrument": (_ANSWERS, "scores/gemini-3.1-pro-preview/"),
 }
 
 

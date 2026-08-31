@@ -32,8 +32,11 @@ models:
 prompts:
 	uv run tnb prompts --verify
 
-# Generation only, so this spends e-INFRA quota and no money: 2 models x 3
-# sessions x (1 SOAP + 17 iCARE) calls.
+# Generation only: 3 sessions x (1 SOAP + 17 iCARE) calls, 2 models PER
+# CREDENTIALLED PROVIDER. `--max-models` caps inside the loop over providers and
+# `Policy.resolve(None)` returns every provider with a token, so with
+# OPENAI_API_KEY or Vertex credentials in `.env` this spends their money too.
+# Add `--providers einfra` to keep it inside the e-INFRA quota.
 smoke:
 	uv run tnb generate --limit 3 --max-models 2
 

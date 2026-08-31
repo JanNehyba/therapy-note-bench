@@ -143,7 +143,11 @@ score. Counted on 2026-08-31 against a written definition — a value where no
 sub-field carries content and yet the whole string is not the bare marker, so a
 reader checking only "is this literally Nil?" calls it content — there are **88
 distinct such strings over 486 model-written sections**, out of 10 879 sections
-read. No amount of adding phrases to the marker list would catch them: the shape
+read. Counted by `tools/count_dressed_up_empties.py` over a local `generations/`
+tree, which is gitignored and not redistributed: unlike every other figure on
+this page, a fresh checkout cannot re-derive it without generating the notes
+again — and three of the sixteen models generate at a non-zero temperature, so
+a re-run would not return exactly this count either. No amount of adding phrases to the marker list would catch them: the shape
 is structural, not lexical.
 
 **It is entirely a model habit.** Of the 524 expert fields, 208 say nothing and

@@ -2,12 +2,14 @@
 
 A benchmark that reports how well models fill a form owes its reader one fact
 before any score: **how much of that form the human experts filled in.** On the
-iHOPE side the answer is 60% — the rest of every gold note is `Nil`, because a
-published counselling video has no hospital id and no referring clinician.
+iHOPE side the answer is 46% — 316 of 17 × 40 fields, counting every note as
+asked every field. The rest is either a clinician writing `Nil` or a field the
+note never carried at all; both mean unanswered, and a published counselling
+video has no hospital id and no referring clinician either way.
 
-Sections where the experts wrote `Nil` almost every time cannot separate a good
-model from a bad one; a model scores on them by staying quiet. Sections the
-experts filled in every time are where the track carries signal. The page shows
+Sections the experts left unanswered almost every time cannot separate a good
+model from a bad one. Sections they filled in every time are where the track
+carries signal. The page shows
 both, so nobody reads a high iCARE score as "writes a good clinical note".
 
 The profile is computed from the fetched corpus when it is present and cached to
@@ -34,7 +36,9 @@ FIELD_SEPARATOR = " ; "
 #: What the experts wrote when the transcript did not say. The protocol asks for
 #: exactly this word, and models are asked for it too.
 #:
-#: Measured across the 10 876 generated sections rather than guessed: a bare
+#: Measured across the 10 879 generated sections rather than guessed — 10 880
+#: files on disk less the one the endpoint refused, which is the count every
+#: figure in this module uses: a bare
 #: "Nil" is the *only* standalone marker any model writes. Not one section's
 #: whole value is "Not specified", "N/A", "Unknown" or any of the phrasings one
 #: would expect, so lengthening this set would change nothing.
@@ -84,8 +88,10 @@ def is_filled(value: str) -> bool:
         Bring anyone: Nil
 
     Reading only the whole string counted that as content, because it is not
-    literally "Nil". `gemma4` wrote exactly that into *what happens next* in 40
-    of 40 sessions and was published with a perfect temporal score of 1.000,
+    literally "Nil". `gemma4` wrote exactly that into *what happens next* in 36
+    of 40 sessions -- the four-field template appears in all 40, and in 36 every
+    sub-value is Nil-ish -- and was published with a perfect temporal score of
+    1.000,
     directly contradicting the finding this benchmark reproduces -- that every
     model tested fails on the time-bearing fields.
 
@@ -102,15 +108,14 @@ def is_filled(value: str) -> bool:
     up -- the clinicians write the bare marker, and this is a model habit.
     No amount of adding phrases to `EMPTY_MARKERS` would catch them.
 
-    **It is punctuation-sensitive and deliberately left that way.** `"Nil"` is
-    empty and `"Nil."` is not, because the marker set is matched exactly. That
-    is a real hole and it is not a live one: counted on 2026-08-26, it fires on
-    0 of 524 expert fields and 0 of 10 879 model-written sections. Closing it
-    would change the definition of a published measure -- which by this
-    repository's own rule means bumping `harness_version` and re-scoring both
-    tracks -- to move no number that anyone has ever computed. Re-count before
-    deciding differently; the scan is four lines and the numbers above are what
-    it returned.
+    **Trailing punctuation is stripped before the marker test**, so `"Nil"` and
+    `"Nil."` are both empty. It was not always. The marker set was matched
+    exactly, which was recorded here as a real hole that fired nowhere -- 0 of
+    524 expert fields and 0 of 10 879 model-written sections on 2026-08-26 --
+    and then it fired once, on a model section of eight `Nil` sub-fields whose
+    last one ended in a full stop. `_carries_content` strips `.;,!` and trailing
+    spaces before comparing, and this paragraph said the opposite for as long as
+    it took somebody to read the two together.
     """
     return any(_carries_content(part) for part in _SUB_FIELD.split(value))
 

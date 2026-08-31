@@ -1,4 +1,4 @@
-"""Is the Czech right: seven yes/no questions, asked of the note alone.
+"""Is the Czech right: six yes/no questions, asked of the note alone.
 
 This scorer answers one question and refuses the rest. It does not ask whether
 the note is true, complete or clinically useful -- it has no transcript and no
@@ -26,7 +26,7 @@ column is flat because the *judge* cannot see a difference, a concrete question
 can recover it: one judge separates `comprehensible` where the other does not.
 Where a column is flat because the *task* prescribes the answer, no wording
 helps -- every model writes into the same four-part template, so nothing can
-distinguish them on structure. So none of the seven criteria asks about
+distinguish them on structure. So none of the six criteria asks about
 anything the prompt dictates. Diacritics, calques, terminology, register and
 quotation marks are choices a model makes; the shape of the note is not, and it
 is not asked about.
@@ -333,11 +333,11 @@ def parse_answer(answer: str) -> bool | None:
 def has_content(note: str) -> bool:
     """Whether there is a note here to judge at all.
 
-    Every one of the seven criteria asks about the *absence* of a fault, and a
+    Every one of the six criteria asks about the *absence* of a fault, and a
     note that says nothing has none of them: no misspelling, no calque, no slip
     of register. It would pass all six. PDSQI-9 met the same shape and three
     of its eight attributes gave an empty note full marks against a therapist's
-    4.20; here it would be seven of seven, because there is no companion measure
+    4.20; here it would be six of six, because there is no companion measure
     of the kind that scores TN-Eval's empty note zero.
 
     So an empty note is not scored. It is not *dropped* either -- see
@@ -370,7 +370,7 @@ def _content(note: str) -> str:
 def build_tasks(note: str) -> list[CriterionTask]:
     """The questions asked about one note -- one call each.
 
-    Not one call returning seven answers. `judge.ANSWER_TOKENS` is inside the
+    Not one call returning six answers. `judge.ANSWER_TOKENS` is inside the
     judge fingerprint and `judge.load_cached` rejects any answer whose
     fingerprint differs, so raising it to fit a longer reply would re-key and
     throw away every cached answer belonging to the other tracks.
@@ -407,7 +407,7 @@ def note_words(note: str) -> int:
 
 
 def aggregate(note: str, answers: dict[str, str]) -> Scores:
-    """One note's seven answers, or a named account of what is missing.
+    """One note's six answers, or a named account of what is missing.
 
     A criterion the judge did not answer is listed in `incomplete`, never scored
     as clean and never quietly dropped from a denominator. A criterion the note

@@ -60,9 +60,12 @@ not a result of this benchmark.
 
 The one claim that survives is dominance: a system at least as good on *every*
 measure under *both* judges is better however a reader weights the measures.
-Eight of the nineteen are beaten outright by nobody — a minority, but a
-minority with no one system in it that beats the rest, which is why no single
-winner is named.
+The count depends on which instrument's measures are meant, so it is named:
+Eight of the nineteen are beaten outright by nobody on TN-Eval's three rubric
+columns — a minority, but a minority with no one system in it that beats the
+rest, which is why no single winner is named. On PDSQI-9's eight columns, drawn
+on the same table, it is eleven of the nineteen; more measures make dominance
+harder to establish, not easier.
 
 **And it is not only two judges disagreeing — one judge disagrees with
 itself.** Gemini's thinking budget was raised from 128 to 256 tokens and all
@@ -78,16 +81,19 @@ repository, and that is now established three ways. `results/rows.jsonl` has
 never held a budget-128 row for `gemini-3.1-pro-preview` -- in any revision of
 the file; the only budget-128 rows it has ever carried are eleven of
 `gemini-2.5-pro`'s, and that group shares no system with its 256 counterpart.
-The judge's answer cache cannot supply them either: its path carries no
-settings, so re-asking at 256 overwrote the answers it replaced, and of the
-51 000 cached `gemini-3.1-pro-preview` answers to the SOAP rubric every single
-one records a fingerprint of budget 256. (The same judge holds 4 166 more
-answers at budget 2048, but those are the Czech instruments, a different
-question set.) Under `gemini-2.5-pro` 30 252 answers survive at 128 and 7 116
-at 256, and no answer -- no question about one note by one system -- appears at
-both, nor does any of the fourteen systems. So the
-figures above are a record of a measurement that was made, not something a
-reader can re-derive here. Read them as history, and do not quote them as a
+The judge's answer cache cannot supply them either: its path carried no
+settings until 2026-08-31, so re-asking at 256 overwrote the answers it
+replaced. `judge.cache_path` keys on the instrument's fingerprint now, which
+stops it happening again and cannot bring back what it already cost. Of the
+51 000 cached `gemini-3.1-pro-preview` answers to the SOAP rubric, every single
+one records a fingerprint of budget 256. (The same judge also holds answers at a
+higher budget, but those are the Czech instruments — a different question set,
+still being scored, and not what this paragraph is about.) Under `gemini-2.5-pro` 30 252 answers survive at 128 and 7 116 at
+256, and no answer — no question about one note by one system — appears at both,
+nor does any of the fourteen systems.
+
+So the figures above are a record of a measurement that was made, not something
+a reader can re-derive here. Read them as history, and do not quote them as a
 result this benchmark can reproduce.
 
 A setting a reader never sees moved the table more than most of the differences
