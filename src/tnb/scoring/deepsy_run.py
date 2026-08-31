@@ -1,6 +1,6 @@
 """Read the Deepsy sections back out of the cache as one note each.
 
-Everything else about scoring this track is `czech_run`'s: the same seven
+Everything else about scoring this track is `czech_run`'s: the same six
 criteria, the same parser, the same treatment of an unanswered question. The
 instrument does not change because the format did -- if it did, a difference
 between this table and the Czech one would be a difference between two

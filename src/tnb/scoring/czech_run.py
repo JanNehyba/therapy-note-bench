@@ -1,4 +1,4 @@
-"""Ask the seven Czech criteria about the notes, and file the answers away.
+"""Ask the six Czech criteria about the notes, and file the answers away.
 
 The same shape as `scoring/pdsqi_run.py`, over a different corpus and a
 different instrument. Two things differ from every runner before it, and both

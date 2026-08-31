@@ -1,7 +1,7 @@
 """The second sheet: is the note any good, on the instrument the judge used.
 
 `tools/czech_rating_sheet.py` asks whether the Czech is right. It cannot ask
-whether the note is any good, and neither can its seven criteria -- a flawless
+whether the note is any good, and neither can its six criteria -- a flawless
 Czech sentence about nothing passes all of them. This is the other half, and it
 puts the same person against the same instrument PDSQI-9 put to the judges.
 

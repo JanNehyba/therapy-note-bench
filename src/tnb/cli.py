@@ -415,11 +415,13 @@ def _cache_root(args, base=None):
     """Where this run's answers live, given how much answer room it asked for.
 
     `--answer-room` changes the judge fingerprint, which is the point: it is a
-    different instrument and starts a new comparability group. But the cache
-    path does not carry the fingerprint, so without this the new instrument's
-    answers land on the old ones' paths and `write_cached` refuses the whole run
-    -- correctly, because the rows already published were computed from what is
-    there, and replacing it makes those tables unreproducible.
+    different instrument and starts a new comparability group. Since 2026-08-31
+    the cache path carries that fingerprint, so a Vertex run would separate
+    itself -- but `extra_answer_room` is in the *OpenAI* fingerprint only, and a
+    Vertex judge asked for more room produces a fingerprint identical to the
+    default one. Without this, its answers would land on the default
+    instrument's paths, and the rows already published were computed from what
+    is there.
 
     So the room goes in the path. A run at the default writes where it always
     has and nothing on disk moves; a run with extra room writes under
@@ -937,7 +939,7 @@ def cmd_score_czech(args: argparse.Namespace) -> int:
 def cmd_score_czech_pdsqi(args: argparse.Namespace) -> int:
     """Ask PDSQI-9 about the Czech notes: is the note good, not is the Czech good.
 
-    The companion to `score-czech` and not a replacement for it. The seven
+    The companion to `score-czech` and not a replacement for it. The six
     criteria there ask whether the Czech is any good and cannot ask whether the
     note is -- a flawless sentence about nothing passes all six. These rows
     land on their own two tracks and, like the criteria's, go to a file the
@@ -2076,7 +2078,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     score_czech = subparsers.add_parser(
         "score-czech",
-        help="ask the seven Czech criteria about the Czech notes (local only)",
+        help="ask the six Czech criteria about the Czech notes (local only)",
     )
     score_czech.add_argument(
         "--corpus",
@@ -2199,7 +2201,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     score_deepsy = subparsers.add_parser(
         "score-deepsy",
-        help="ask the seven Czech criteria about the Deepsy-format notes (local only)",
+        help="ask the six Czech criteria about the Deepsy-format notes (local only)",
     )
     score_deepsy.add_argument("--corpus", choices=["real", "translated", "both"], default="both")
     score_deepsy.add_argument("--models", help="comma-separated system ids to rate")

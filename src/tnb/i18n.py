@@ -1788,7 +1788,7 @@ _TRACK_REGISTRIES = {
         "postavení modelu tam a jeho čeština tady jsou o týchž sezeních. Jestli jedno předpovídá "
         "druhé, je otázka, kvůli které tato větev vznikla."
     ),
-    # -- the seven criteria ------------------------------------------------------
+    # -- the six criteria --------------------------------------------------------
     "Diacritics": "Diakritika",
     "Whether any Czech word in the note has a missing or wrong length mark or hachek. A word"
     " Czech does not have at all belongs to another criterion. Reported as the share of notes"
@@ -1834,7 +1834,7 @@ _TRACK_REGISTRIES = {
         "a anglický termín ponechaný anglicky patří každé jinam. Vykázáno jako podíl zápisů, "
         "které tím netrpí."
     ),
-    # One sentence, seven columns: the caveat is the same on every criterion,
+    # One sentence, six columns: the caveat is the same on every criterion,
     # because what it warns about is the shape of the question rather than the
     # fault it asks about.
     "Asked of the note alone, with no transcript and no reference: it says nothing about whether"

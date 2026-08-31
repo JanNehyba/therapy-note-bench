@@ -1,4 +1,4 @@
-"""A sheet for one person to answer the same seven questions the judge answered.
+"""A sheet for one person to answer the same six questions the judge answered.
 
 This track has no human anchor, and says so on every row. Neither of the other
 two can get one -- iCARE's expert ratings are unpublished and nobody has rated
@@ -61,14 +61,15 @@ def main(argv: list[str] | None = None) -> int:
     chosen = sorted(candidates, key=lambda c: _rank(c.session_id, c.system_id))[: args.notes]
 
     lines = [
-        "# Seven questions, the same seven the judge answered",
+        "# Six questions, the same six the judge answered",
         "",
         f"{len(chosen)} notes from the {args.corpus} half, drawn by a hash of the session",
         "and the model rather than by anything downstream of a score. Which model",
         "wrote which note is at the bottom, so it cannot colour the reading.",
         "",
         "Answer **ano** if the fault is present, **ne** if it is not. If a note gives",
-        "no chance to make the mistake -- no quotation marks at all, say -- write",
+        "no chance to make the mistake -- no foreign term to leave untranslated, say",
+        "-- write",
         "**--**; that is a real answer and is scored as one.",
         "",
         "One rater gives no ceiling. What comes out of this is how often a judge and",

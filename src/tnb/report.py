@@ -447,7 +447,7 @@ JUDGE_MEASURES: dict[str, tuple[str, ...]] = {
     # text alone, so all eight columns are a judge's opinion and all eight can
     # be compared between two of them.
     results.TRACK_PDSQI: pdsqi.JUDGE_MEASURES,
-    # All seven, and it matters more here than anywhere else: this track has no
+    # All six, and it matters more here than anywhere else: this track has no
     # human anchor at all, so two judges disagreeing is the only control it has.
     results.TRACK_CZECH_REAL: czech_scorer.JUDGE_MEASURES,
     results.TRACK_CZECH_TRANSLATED: czech_scorer.JUDGE_MEASURES,
