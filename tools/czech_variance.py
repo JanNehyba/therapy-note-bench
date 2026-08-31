@@ -131,6 +131,28 @@ CRITERIA_TRACKS = {
 }
 
 
+#: How each PDSQI track's notes are found, rendered and looked up: the same
+#: three facts `Spec` carries for the criteria tracks. The Deepsy pair needs a
+#: cache root of its own because `judge.cache_path` holds the judge, the prompt
+#: version, the provider, the system, the session and the attribute -- and the
+#: Deepsy PDSQI track shares all six with the SOAP one. Only the note differs,
+#: and the note is not in the path.
+PDSQI_CORPORA = {
+    czech_task.NAME_REAL: (czech_task.load_real, czech_task.render_note, None),
+    czech_task.NAME_TRANSLATED: (czech_task.load_translated, czech_task.render_note, None),
+    deepsy_task.NAME_REAL: (
+        deepsy_task.load_real,
+        deepsy_task.render_note,
+        judge.CACHE_DIR / deepsy_task.PROMPT_VERSION,
+    ),
+    deepsy_task.NAME_TRANSLATED: (
+        deepsy_task.load_translated,
+        deepsy_task.render_note,
+        judge.CACHE_DIR / deepsy_task.PROMPT_VERSION,
+    ),
+}
+
+
 class Read(NamedTuple):
     """The cells, and how much of what was asked for came back.
 
@@ -270,6 +292,13 @@ COMPOSITES = {
     "deepsy-translated": report.DRAWN_CRITERIA,
     "czech-real-pdsqi": ("accurate", "thorough", "succinct"),
     "czech-translated-pdsqi": ("accurate", "thorough", "succinct"),
+    # The same three, for the reason the Deepsy criteria tracks keep the same
+    # six: a SOAP-to-Deepsy difference read off two different composites is a
+    # fact about the composites and not about the formats. The real half is
+    # again `succinct` alone -- `accurate` and `thorough` need the session --
+    # and `_coverage` names the two it could not ask.
+    "deepsy-real-pdsqi": ("accurate", "thorough", "succinct"),
+    "deepsy-translated-pdsqi": ("accurate", "thorough", "succinct"),
 }
 
 
@@ -421,16 +450,21 @@ def _pdsqi_cells(task_name: str, judge_model: str, budget: int) -> Read:
     """
     from tnb.scoring import czech_pdsqi, pdsqi_run
 
-    loader = (
-        czech_task.load_real if task_name == czech_task.NAME_REAL else czech_task.load_translated
-    )
+    # A lookup that raises, not a conditional that falls through. The old
+    # form asked `task_name == czech_task.NAME_REAL` and took the translated
+    # loader otherwise, so a Deepsy task name -- which compares false -- would
+    # have paired every Deepsy note with a translated AnnoMI transcript and
+    # rendered it with the four-heading SOAP renderer, which emits nothing. The
+    # `Spec` docstring above records that same failure on the criteria side.
+    loader, render, cache_root = PDSQI_CORPORA[task_name]
     candidates = list(czech_pdsqi.from_generations(loader(), task_name=task_name))
     client = judge.Judge(judge.config_from_env(model=judge_model, thinking_budget=budget))
     scored = pdsqi_run.from_cache(
         candidates,
         client,
         with_transcript=czech_pdsqi.transcripts_may_leave(task_name),
-        render=czech_task.render_note,
+        render=render,
+        cache_root=cache_root,
         judge_prompt_version=czech_pdsqi.JUDGE_PROMPT_VERSION,
     )
     cells = {
@@ -496,12 +530,31 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--thinking-budget", type=int, default=2048)
     parser.add_argument("--target", type=Path, default=DEFAULT_TARGET)
+    parser.add_argument(
+        "--only",
+        nargs="+",
+        metavar="TRACK",
+        help=(
+            "compute these tracks and merge them into the payload already on disk, "
+            "leaving every other track's numbers exactly as they were"
+        ),
+    )
     args = parser.parse_args(argv)
 
     load_dotenv(REPO / ".env")
+    # With `--only`, start from what is already there. A band rests on the
+    # judge cache, and a cache can lose answers between two runs of this tool --
+    # recomputing an untouched track from a thinner cache would quietly narrow
+    # a published band. So the six sets computed on 2026-08-29 are carried
+    # forward rather than re-derived, and only the named tracks are written.
     payload: dict = {"draws": DRAWS, "seed": SEED, "tracks": {}}
+    if args.only and args.target.exists():
+        payload = json.loads(args.target.read_text(encoding="utf-8"))
+        payload["draws"], payload["seed"] = DRAWS, SEED
 
     for track, spec in CRITERIA_TRACKS.items():
+        if args.only and track not in args.only:
+            continue
         for judge_model in (judge.DEFAULT_MODEL, judge.SECOND_JUDGE):
             read = _cells(spec, judge_model, args.thinking_budget)
             root = spec.cache_root or judge.CACHE_DIR
@@ -560,7 +613,11 @@ def main(argv: list[str] | None = None) -> int:
     for track, task_name in (
         (results.TRACK_CZECH_REAL_PDSQI, czech_task.NAME_REAL),
         (results.TRACK_CZECH_TRANSLATED_PDSQI, czech_task.NAME_TRANSLATED),
+        (results.TRACK_DEEPSY_REAL_PDSQI, deepsy_task.NAME_REAL),
+        (results.TRACK_DEEPSY_TRANSLATED_PDSQI, deepsy_task.NAME_TRANSLATED),
     ):
+        if args.only and track not in args.only:
+            continue
         for judge_model in (judge.DEFAULT_MODEL, judge.SECOND_JUDGE):
             read = _pdsqi_cells(task_name, judge_model, args.thinking_budget)
             if not read.cells:
