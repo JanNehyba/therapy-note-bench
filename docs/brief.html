@@ -80,16 +80,19 @@
      unchanged. */
   .scroll { overflow-x: auto; margin: 6pt 0 10pt; }
   table { width: 100%; border-collapse: collapse; font-size: 9.4pt; margin: 6pt 0 10pt; }
-  .scroll > table { margin: 0; min-width: 100%; width: max-content; }
+  /* `width: max-content` was the obvious way to stop a narrow screen squashing
+     the columns, and it stops the table wrapping at *any* width: measured in
+     Chrome, the seven-column calibration table came out 3 166px wide inside a
+     649px desktop box, so a reader who had no scrolling to do was given some.
+     A table cannot shrink below its own min-content width anyway, so the
+     wrapper's `overflow-x` catches the narrow case on its own. */
+  .scroll > table { margin: 0; }
   /* On paper the wrapper has nowhere to scroll, so the table goes back to the
      column width and wraps. Leaving it at `max-content` printed a table wider
      than the page and Chrome clipped it: two cells lost their last words
      mid-sentence, and the row that says how the SOAP notes are scored ended at
      "plus one rating per sente". */
-  @media print {
-    .scroll { overflow-x: visible; }
-    .scroll > table { width: 100%; min-width: 0; }
-  }
+  @media print { .scroll { overflow-x: visible; } }
   th, td { text-align: left; padding: 3.5pt 6pt; border-bottom: 1px solid var(--line); }
   th { font-weight: 650; font-size: 8.4pt; text-transform: uppercase; letter-spacing: .04em;
        color: var(--muted); }
