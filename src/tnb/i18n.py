@@ -93,8 +93,9 @@ _STATIC = {
     ),
     "page.foot.data": (
         'Vykreslená čísla jsou v souboru <a href="leaderboard.json">leaderboard.json</a>; '
-        "všechny běhy, které kdy proběhly, jsou v <code>results/rows.jsonl</code> "
-        "v repozitáři."
+        "každý běh, který za nimi stojí, je v <code>results/rows.jsonl</code> "
+        "v repozitáři. Běhy, které jsou změřené a nepublikují se, jdou do souboru "
+        "mimo něj."
     ),
     "page.foot.author": (
         "Tento benchmark spravuje Jan Nehyba. Opravy a sporná čísla: "
@@ -122,7 +123,7 @@ _STATIC = {
     "page.foot.background": (
         "<strong>Pozadí.</strong> "
         '<a href="datasets.md">Datové sady</a> — odkud každá pochází, jakou licenci publikuje '
-        "(dvě ze tří žádnou) a jaké pasti v nich jsou; "
+        "(žádná ze tří) a jaké pasti v nich jsou; "
         '<a href="methodology.md">metoda</a>; '
         '<a href="limitations.md">co výsledek nesmí tvrdit</a>; '
         '<a href="landscape.md">co v oboru existuje a co ne</a>.'
