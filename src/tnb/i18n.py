@@ -1641,11 +1641,11 @@ _TRACK_REGISTRIES = {
     ),
     # --- PDSQI-9 over the Czech notes -----------------------------------
     "PDSQI-9 · the Czech notes from the real sessions": (
-        "PDSQI-9 · české poznámky ze skutečných sezení"
+        "PDSQI-9 · české zápisy ze skutečných sezení"
     ),
     "PDSQI-9, real sessions": "PDSQI-9, skutečná sezení",
     "PDSQI-9 · the Czech notes from translated AnnoMI": (
-        "PDSQI-9 · české poznámky z přeloženého AnnoMI"
+        "PDSQI-9 · české zápisy z přeloženého AnnoMI"
     ),
     "PDSQI-9, translated": "PDSQI-9, přeložená",
     "The same Czech notes as the real-session table, asked a published quality "
@@ -1657,15 +1657,15 @@ _TRACK_REGISTRIES = {
     "outside the university infrastructure the sessions sit on. Asking those "
     "two would mean sending a real session out to them. The columns are absent "
     "because of where the judge is, not because of anything the notes lack.": (
-        "Tytéž české poznámky jako v tabulce se skutečnými sezeními, ale místo šesti "
+        "Tytéž české zápisy jako v tabulce se skutečnými sezeními, ale místo šesti "
         "jazykových kritérií se jich ptá publikovaný nástroj na kvalitu. Kritéria "
-        "neumějí říct, jestli je poznámka dobrá — bezchybná česká věta o ničem projde "
+        "neumějí říct, jestli je zápis dobrý — bezchybná česká věta o ničem projde "
         "všemi šesti — a tohle je ta půlka otázky, kterou vynechávají. **Šest "
         "atributů, ne osm:** na `accurate` a `thorough` se dá odpovědět jen "
         "z přečteného sezení, a oba soudci běží u Googlu a u OpenAI — mimo "
         "univerzitní infrastrukturu, na které ta sezení leží. Zeptat se na ně by "
         "znamenalo poslat jim skutečné sezení. Ty dva sloupce chybějí kvůli tomu, "
-        "kde je soudce, ne kvůli něčemu, co by poznámkám chybělo."
+        "kde je soudce, ne kvůli něčemu, co by zápisům chybělo."
     ),
     "PDSQI-9 on the notes written from translated AnnoMI. All eight attributes "
     "here: these transcripts are public, so the judge may read the session and "
@@ -1682,15 +1682,15 @@ _TRACK_REGISTRIES = {
     "its prompt are reproduced in English; the note is Czech and is shown with "
     "the Czech headings the model wrote, because rendering it under English ones "
     "would rate an artefact nobody produced.": (
-        "Samotná poznámka, na šesti z osmi atributů PDSQI-9. Nástroj i jeho prompt jsou "
-        "reprodukované anglicky; poznámka je česky a ukazuje se s českými nadpisy, které "
+        "Samotný zápis, na šesti z osmi atributů PDSQI-9. Nástroj i jeho zadání jsou "
+        "reprodukované anglicky; zápis je česky a ukazuje se s českými nadpisy, které "
         "napsal model — vykreslit ji pod anglickými by znamenalo hodnotit útvar, jaký "
         "nikdo nenapsal."
     ),
     "None. No human has rated these notes on PDSQI-9, and the therapist wrote "
     "no comparison note here.": (
-        "Žádná. Tyhle poznámky nikdo z lidí na PDSQI-9 nehodnotil a terapeut sem "
-        "srovnávací poznámku nenapsal."
+        "Žádná. Tyhle zápisy nikdo z lidí na PDSQI-9 nehodnotil a terapeutka sem "
+        "srovnávací zápis nenapsala."
     ),
     "Not calibrated. Physicians agree with each other on this instrument at "
     "Krippendorff's alpha 0.575, which is the ceiling any judge would be read "
@@ -1699,20 +1699,20 @@ _TRACK_REGISTRIES = {
     "existed.": (
         "Nekalibrováno. Lékaři se na tomhle nástroji navzájem shodnou na "
         "Krippendorffově alfa 0.575, což je strop, proti kterému by se každý soudce "
-        "četl — jenže tyhle poznámky nikdo nehodnotil, takže pro tuhle tabulku žádné "
+        "četl — jenže tyhle zápisy nikdo nehodnotil, takže pro tuhle tabulku žádné "
         "číslo shody není, jen strop, proti kterému by se četlo, kdyby existovalo."
     ),
     "The note and the session, on all eight attributes. These transcripts are "
     "AnnoMI translated into Czech and carry nothing confidential, which is the "
     "whole reason `accurate` and `thorough` can be asked here and not of the "
     "real half.": (
-        "Poznámka i sezení, na všech osmi atributech. Tyhle přepisy jsou AnnoMI "
+        "Zápis i sezení, na všech osmi atributech. Tyhle přepisy jsou AnnoMI "
         "přeložené do češtiny a nenesou nic důvěrného — a přesně proto se tu `accurate` "
         "a `thorough` ptát smí a u skutečné půlky ne."
     ),
     "None, in the same two senses as the real half: no comparison note and no human rating.": (
-        "Žádná, ve stejných dvou smyslech jako u skutečné půlky: žádná srovnávací "
-        "poznámka a žádné lidské hodnocení."
+        "Žádná, ve stejných dvou smyslech jako u skutečné půlky: žádný srovnávací "
+        "zápis a žádné lidské hodnocení."
     ),
     "Not calibrated, and read against the same 0.575 ceiling. What this half "
     "adds is the join: the same conversations carry PDSQI-9 numbers in English "
