@@ -771,7 +771,7 @@ def figure_what_the_rubric_rewards(data: Data) -> str:
         fill = "flat" if kind.get(name) != "model" else "a"
         note = {
             "reference-human": " — written by a therapist",
-            "reference-model": " — a 2025 model, from the paper",
+            "reference-model": " — a 2024 model, from the 2025 paper",
         }.get(kind.get(name), "")
         bars.append(
             f"<g><title>{esc(name)}: {scores[name]:.3f}{note}</title>"

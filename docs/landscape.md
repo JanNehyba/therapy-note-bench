@@ -18,7 +18,7 @@ eighteen months, and neither is an established standard:
 | Gold notes | Yes — expert-written, 17 sections | Yes — therapist-written, SOAP |
 | Evaluation | Reference-based + TRACE human framework | Rubric, **reference-free** |
 | Licence on data | **None published** | **None published** (Apache-2.0 covers the code) |
-| Models benchmarked | 11 (2025-era) | 7 (2024-era) |
+| Models benchmarked | 11 (2025-era) | 8 (2024-era) |
 
 Nobody has re-run either of them on current models. That is the gap this
 repository fills.
@@ -109,8 +109,8 @@ see MEMO below.
 
 ### What the search did turn up
 
-Three datasets and one instrument from the same lab, none of which appear in any
-survey of this task:
+Three datasets from the same lab, none of which appear in any survey of this
+task:
 
 - **TheraFuse** — [ai4mhx/TheraFuse](https://github.com/ai4mhx/TheraFuse), IEEE
   Journal of Biomedical and Health Informatics 2026. Its `data/` directory ships
@@ -129,10 +129,16 @@ survey of this task:
   counseling summarization dataset released **on request**: a consent form plus
   an email. The repository contains nothing but those instructions. This is the
   precedent for how the group shares data.
-- **MASES** — *Development of a Standardized Clinician-Oriented Scale for
-  Evaluating AI-Generated Medical Summaries*, Indian Journal of Medical Research
-  2026. A clinician-facing evaluation scale from the same authors, plausibly
-  TRACE's published sibling.
+
+**A fourth entry was removed on 2026-08-31 and the removal is the finding.**
+This list carried *MASES — Development of a Standardized Clinician-Oriented
+Scale for Evaluating AI-Generated Medical Summaries, Indian Journal of Medical
+Research 2026*, described as plausibly TRACE's published sibling. It cannot be
+substantiated. Crossref returns no match for the exact title; PubMed indexes
+173 records for that journal and year and none for this; `Adhikary PK` returns
+three records and this is not among them. Either the venue is wrong or the
+paper does not exist, and a survey page is the wrong place to hold a citation
+nobody can follow. If it turns up, it belongs back here with a DOI.
 
 Aspect-based *counseling summarization* (MEMO, MentalCLOUDS) is a near neighbour
 of *note generation in a documentation format*, not the same task: the target is

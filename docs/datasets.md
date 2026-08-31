@@ -114,7 +114,7 @@ benchmark ignores.
 Known defect: one of the 174 sessions has an empty gold summary. The loader
 drops it and records the drop rather than scoring a model against nothing.
 
-**Most gold notes do not carry all 17 labels.** Measured on 2026-08-25 across
+**18 of the 40 gold notes do not carry all 17 labels.** Measured on 2026-08-25 across
 the 40 held-out notes: 22 carry all seventeen and 18 carry between seven and
 twelve. The sparsest fields are Clinical identifiers, Assessments and
 Reflections by the therapist, each labelled in 22 of 40. This is not the same as

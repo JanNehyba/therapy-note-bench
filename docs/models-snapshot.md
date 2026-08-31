@@ -37,9 +37,9 @@ duplicates under a second name, or unversioned labels.
 
 **As of this capture there was no `glm-5.3` and no `DeepSeek-V4` proper.** The
 newest GLM on the endpoint was `glm-5.2`; the DeepSeek was `deepseek-v4-flash`.
-That has changed and this capture has not been retaken: `glm-5.3-flash` and
-`qwen3.8-flash-next` have been writing notes since 2026-08-27, and `glm-5` and
-`qwen3.5-122b` no longer appear in any run. **This file is dated; read the date,
+That has changed and this capture has not been retaken: `glm-5.3-flash` has
+been writing notes since 2026-08-27 and `qwen3.8-flash-next` since 2026-08-28,
+and `glm-5` and `qwen3.5-122b` no longer appear in any run. **This file is dated; read the date,
 not the tense.** Note also the
 casing: the documentation writes `DeepSeek-V4-Flash`, the endpoint serves
 `deepseek-v4-flash`.

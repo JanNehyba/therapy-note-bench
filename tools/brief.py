@@ -586,7 +586,7 @@ def how_much_room_is_left(data: Data) -> str:
      averaged equally rather than 21 criteria out of 23.
      <strong>The best model here reaches {best:.3f}, which is
      {best / reachable:.0%} of that.</strong> There is room.</p>
-  <p>How fast it is being used up: the two 2025 models the source paper benchmarked
+  <p>How fast it is being used up: the two 2024 models the 2025 source paper benchmarked
      score {min(older):.3f} and {max(older):.3f}; the {len(current)} current ones span
      {min(current):.3f} to {best:.3f}. <strong>One model generation moved the top of
      the table by {best - max(older):+.3f}.</strong> Two or three more at that rate and
