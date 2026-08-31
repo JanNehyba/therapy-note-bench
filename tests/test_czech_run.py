@@ -181,9 +181,10 @@ def test_an_empty_note_is_counted_as_partial_and_does_not_vanish():
 
 
 def test_the_czech_tracks_are_named_as_local():
-    """All four: the seven criteria and PDSQI-9 over the same notes. The
-    instrument does not change where the rows may be written -- what makes a
-    track local is the corpus it was measured on."""
+    """All eight: two note formats, two corpus halves, two instruments. Neither
+    the instrument nor the format changes where the rows may be written -- what
+    makes a track local is the corpus it was measured on, and both formats read
+    the same ten recorded sessions."""
     assert set(results.LOCAL_TRACKS) == {
         results.TRACK_CZECH_REAL,
         results.TRACK_CZECH_TRANSLATED,
@@ -191,6 +192,8 @@ def test_the_czech_tracks_are_named_as_local():
         results.TRACK_CZECH_TRANSLATED_PDSQI,
         results.TRACK_DEEPSY_REAL,
         results.TRACK_DEEPSY_TRANSLATED,
+        results.TRACK_DEEPSY_REAL_PDSQI,
+        results.TRACK_DEEPSY_TRANSLATED_PDSQI,
     }
     assert not set(results.LOCAL_TRACKS) & set(results.PUBLISHED_TRACKS)
 

@@ -1303,6 +1303,8 @@ INSTRUMENT_FAMILY = {
     **dict.fromkeys(SOAP_CRITERIA_TRACKS + DEEPSY_CRITERIA_TRACKS, "the six Czech criteria"),
     results.TRACK_CZECH_REAL_PDSQI: "PDSQI-9",
     results.TRACK_CZECH_TRANSLATED_PDSQI: "PDSQI-9",
+    results.TRACK_DEEPSY_REAL_PDSQI: "PDSQI-9",
+    results.TRACK_DEEPSY_TRANSLATED_PDSQI: "PDSQI-9",
 }
 
 #: Why the real-session PDSQI table is short of two columns, said where the
@@ -1335,7 +1337,10 @@ ABSENT_UNEXPLAINED = (
 #: Which table lacks a column its instrument names, and why. Keyed on the
 #: table, because the reason is a fact about the corpus rather than about the
 #: instrument and cannot be derived from the columns.
-ABSENT_BECAUSE = {results.TRACK_CZECH_REAL_PDSQI: ABSENT_NO_TRANSCRIPT}
+ABSENT_BECAUSE = {
+    results.TRACK_CZECH_REAL_PDSQI: ABSENT_NO_TRANSCRIPT,
+    results.TRACK_DEEPSY_REAL_PDSQI: ABSENT_NO_TRANSCRIPT,
+}
 
 
 def _column_blocks(tracks: list[str]) -> list[tuple[str, str, list[str]]]:
@@ -1920,6 +1925,14 @@ def _corpus(drawn: list[results.Row]) -> str:
 #: for the same reason: a filter that says what a track is *not* quietly pools
 #: whatever is added next.
 PDSQI_TRACKS = (results.TRACK_CZECH_REAL_PDSQI, results.TRACK_CZECH_TRANSLATED_PDSQI)
+#: The same instrument over the Deepsy notes. Separate from the tuple above
+#: rather than added to it: that one labels a chapter `PDSQI-9 on the same
+#: SOAP notes` and drives the three-views comparison, and a Deepsy table
+#: inside it would make the label false.
+DEEPSY_PDSQI_TRACKS = (
+    results.TRACK_DEEPSY_REAL_PDSQI,
+    results.TRACK_DEEPSY_TRANSLATED_PDSQI,
+)
 
 
 def _cells(rows: list[results.Row], tracks: tuple[str, ...]) -> dict[tuple[str, str], dict]:
@@ -2531,7 +2544,7 @@ def _closing(rows: list[results.Row], tracks: list[str]) -> str:
     # Asked of the constants that decide what a track is rather than typed: the
     # day a Deepsy note is rated on PDSQI-9 there is a track in both of those
     # tuples, and this sentence stops printing by itself.
-    if int(figures["deepsy"]) and not set(DEEPSY_CRITERIA_TRACKS) & set(PDSQI_TRACKS):
+    if int(figures["deepsy"]) and not set(tracks) & set(DEEPSY_PDSQI_TRACKS):
         missing.append(_t(CLOSING_NEXT_DEEPSY).format(deepsy=figures["deepsy"]))
     said.append(" ".join(missing))
 

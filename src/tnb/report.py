@@ -30,6 +30,7 @@ from tnb.scoring import czech as czech_scorer
 from tnb.scoring import icare as icare_scorer
 from tnb.scoring import tneval as rubric
 from tnb.tasks import czech as czech_task
+from tnb.tasks import deepsy as deepsy_task
 from tnb.tasks import icare, soap
 
 DOCS_DIR = REPO_ROOT / "docs"
@@ -140,6 +141,17 @@ COLUMNS: dict[str, tuple[tuple[str, int], ...]] = {
         (key, 3 if key == "stigmatizing" else 2)
         for key in czech_pdsqi.attribute_keys(czech_task.NAME_TRANSLATED)
     ),
+    # The same instrument over the notes the Deepsy application actually
+    # writes. The attribute split follows the corpus and not the format, so
+    # these read from the same function the Czech tracks do.
+    results.TRACK_DEEPSY_REAL_PDSQI: tuple(
+        (key, 3 if key == "stigmatizing" else 2)
+        for key in czech_pdsqi.attribute_keys(deepsy_task.NAME_REAL)
+    ),
+    results.TRACK_DEEPSY_TRANSLATED_PDSQI: tuple(
+        (key, 3 if key == "stigmatizing" else 2)
+        for key in czech_pdsqi.attribute_keys(deepsy_task.NAME_TRANSLATED)
+    ),
 }
 
 #: Where each track's measure definitions live. Both scorers own their own --
@@ -159,6 +171,8 @@ MEASURE_TABLES = {
     results.TRACK_DEEPSY_TRANSLATED: czech_scorer.MEASURES,
     results.TRACK_CZECH_REAL_PDSQI: czech_pdsqi.measures(czech_task.NAME_REAL),
     results.TRACK_CZECH_TRANSLATED_PDSQI: czech_pdsqi.measures(czech_task.NAME_TRANSLATED),
+    results.TRACK_DEEPSY_REAL_PDSQI: czech_pdsqi.measures(deepsy_task.NAME_REAL),
+    results.TRACK_DEEPSY_TRANSLATED_PDSQI: czech_pdsqi.measures(deepsy_task.NAME_TRANSLATED),
 }
 
 #: Which measure each track is ranked by, and the honest `None` where the
@@ -187,6 +201,8 @@ RANKING_MEASURES: dict[str, str | None] = {
     # The instrument's reason again, unchanged by the language it is asked in.
     results.TRACK_CZECH_REAL_PDSQI: pdsqi.RANKING_MEASURE,
     results.TRACK_CZECH_TRANSLATED_PDSQI: pdsqi.RANKING_MEASURE,
+    results.TRACK_DEEPSY_REAL_PDSQI: pdsqi.RANKING_MEASURE,
+    results.TRACK_DEEPSY_TRANSLATED_PDSQI: pdsqi.RANKING_MEASURE,
 }
 
 
@@ -218,6 +234,16 @@ NOT_RANKED_REASONS: dict[str, str] = {
         "nobody validated."
     ),
     results.TRACK_CZECH_TRANSLATED_PDSQI: (
+        "This track is deliberately <strong>not ranked</strong>: PDSQI-9's authors "
+        "report its attributes separately, and a mean of them would be a composite "
+        "nobody validated."
+    ),
+    results.TRACK_DEEPSY_REAL_PDSQI: (
+        "This track is deliberately <strong>not ranked</strong>: PDSQI-9's authors "
+        "report its attributes separately, and a mean of them would be a composite "
+        "nobody validated."
+    ),
+    results.TRACK_DEEPSY_TRANSLATED_PDSQI: (
         "This track is deliberately <strong>not ranked</strong>: PDSQI-9's authors "
         "report its attributes separately, and a mean of them would be a composite "
         "nobody validated."
@@ -509,6 +535,12 @@ TRACK_TITLES = {
     results.TRACK_CZECH_TRANSLATED_PDSQI: "PDSQI-9 · the Czech notes from translated AnnoMI",
     results.TRACK_DEEPSY_REAL: "Deepsy format · ten real sessions, one client",
     results.TRACK_DEEPSY_TRANSLATED: "Deepsy format · AnnoMI conversations, translated",
+    # The quality instrument over the format the application writes. Until
+    # these two tracks existed, nothing in this project said whether a note
+    # in that format was worth filing -- PDSQI-9 had only ever been put to
+    # SOAP.
+    results.TRACK_DEEPSY_REAL_PDSQI: "PDSQI-9 · the Deepsy notes from the real sessions",
+    results.TRACK_DEEPSY_TRANSLATED_PDSQI: ("PDSQI-9 · the Deepsy notes from translated AnnoMI"),
 }
 
 #: The same tracks, short enough to be a button. Separate from the titles rather
@@ -524,6 +556,8 @@ TRACK_SWITCH_LABELS = {
     results.TRACK_CZECH_TRANSLATED_PDSQI: "PDSQI-9, translated",
     results.TRACK_DEEPSY_REAL: "Deepsy, real sessions",
     results.TRACK_DEEPSY_TRANSLATED: "Deepsy, translated",
+    results.TRACK_DEEPSY_REAL_PDSQI: "PDSQI-9 on Deepsy, real sessions",
+    results.TRACK_DEEPSY_TRANSLATED_PDSQI: "PDSQI-9 on Deepsy, translated",
 }
 
 TRACK_BLURBS = {

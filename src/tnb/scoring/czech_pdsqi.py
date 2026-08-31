@@ -54,6 +54,7 @@ from tnb.datasets.base import Session
 from tnb.scoring import pdsqi
 from tnb.scoring.run import Candidate
 from tnb.tasks import czech as czech_task
+from tnb.tasks import deepsy as deepsy_task
 
 #: The presentation, not the instrument. `pdsqi9-note-v1` names a note joined
 #: under English headings; these notes are joined under Czech ones. Same
@@ -66,6 +67,29 @@ JUDGE_PROMPT_VERSION = "pdsqi9-note-cs-v1"
 BY_TASK: dict[str, str] = {
     czech_task.NAME_REAL: results.TRACK_CZECH_REAL_PDSQI,
     czech_task.NAME_TRANSLATED: results.TRACK_CZECH_TRANSLATED_PDSQI,
+    deepsy_task.NAME_REAL: results.TRACK_DEEPSY_REAL_PDSQI,
+    deepsy_task.NAME_TRANSLATED: results.TRACK_DEEPSY_TRANSLATED_PDSQI,
+}
+
+#: Which corpus each task reads, and it is the corpus that decides everything
+#: about confidentiality. `deepsy-real` is a different note format over the same
+#: ten recorded sessions as `czech-real`, so it inherits the same answer, and
+#: writing that down here rather than pattern-matching on the name is the point:
+#: a task added later has to be classified by somebody rather than by a suffix.
+CORPUS_BY_TASK: dict[str, str] = {
+    czech_task.NAME_REAL: "real",
+    deepsy_task.NAME_REAL: "real",
+    czech_task.NAME_TRANSLATED: "translated",
+    deepsy_task.NAME_TRANSLATED: "translated",
+}
+
+#: How a task's notes are assembled. A SOAP note is one file and a Deepsy note
+#: is three, and the reader that knows the difference already exists for each.
+ASSEMBLER_BY_TASK: dict[str, str] = {
+    czech_task.NAME_REAL: "czech",
+    czech_task.NAME_TRANSLATED: "czech",
+    deepsy_task.NAME_REAL: "deepsy",
+    deepsy_task.NAME_TRANSLATED: "deepsy",
 }
 
 
@@ -86,9 +110,10 @@ def transcripts_may_leave(task_name: str) -> bool:
     a corpus nobody has decided this question for, and defaulting either way
     would decide it silently.
     """
-    if task_name == czech_task.NAME_REAL:
+    corpus = CORPUS_BY_TASK.get(task_name)
+    if corpus == "real":
         return False
-    if task_name == czech_task.NAME_TRANSLATED:
+    if corpus == "translated":
         return True
     raise ValueError(
         f"{task_name!r} is not a Czech corpus. Whether its transcripts may be "
@@ -146,14 +171,24 @@ def from_generations(
     is the safe default. This attaches the session text afterwards, and only
     for the corpus `transcripts_may_leave` permits.
     """
-    from tnb.scoring import czech_run
+    from tnb.scoring import czech_run, deepsy_run
+
+    # Which reader, decided from the same table the track and the confidentiality
+    # answer come from. A SOAP note is one file per session and a Deepsy note is
+    # three that are assembled or refused as a whole, and asking the SOAP reader
+    # for a Deepsy note yields nothing at all -- silently, which is why this is a
+    # lookup that raises rather than a default.
+    kind = ASSEMBLER_BY_TASK.get(task_name)
+    if kind is None:
+        raise ValueError(f"{task_name!r} has no note assembler registered.")
+    read = czech_run.from_generations if kind == "czech" else deepsy_run.from_generations
 
     if not transcripts_may_leave(task_name):
-        yield from czech_run.from_generations(sessions, task_name=task_name, cache_dir=cache_dir)
+        yield from read(sessions, task_name=task_name, cache_dir=cache_dir)
         return
 
     by_id = {session.id: session for session in sessions}
-    for candidate in czech_run.from_generations(sessions, task_name=task_name, cache_dir=cache_dir):
+    for candidate in read(sessions, task_name=task_name, cache_dir=cache_dir):
         session = by_id.get(candidate.session_id)
         if session is None:
             continue

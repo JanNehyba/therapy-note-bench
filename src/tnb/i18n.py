@@ -1855,6 +1855,14 @@ CS: dict[str, str] = {
     **_METHODS,
     **_METHODS_PAYLOAD,
     **_TRACK_REGISTRIES,
+    "PDSQI-9 · the Deepsy notes from the real sessions": (
+        "PDSQI-9 · zápisy Deepsy ze skutečných sezení"
+    ),
+    "PDSQI-9 · the Deepsy notes from translated AnnoMI": (
+        "PDSQI-9 · zápisy Deepsy z přeloženého AnnoMI"
+    ),
+    "PDSQI-9 on Deepsy, real sessions": "PDSQI-9 na Deepsy, skutečná sezení",
+    "PDSQI-9 on Deepsy, translated": "PDSQI-9 na Deepsy, přeložené",
 }
 
 

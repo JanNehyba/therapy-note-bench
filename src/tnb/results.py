@@ -87,6 +87,18 @@ TRACK_CZECH_TRANSLATED_PDSQI = "czech-translated-pdsqi"
 #: and nothing else, so a difference between them is a fact about the format.
 TRACK_DEEPSY_REAL = "deepsy-real"
 TRACK_DEEPSY_TRANSLATED = "deepsy-translated"
+#: PDSQI-9 over those same Deepsy notes. The six criteria ask whether the Czech
+#: is right and cannot ask whether the note is worth filing, and until these
+#: tracks existed that second question had been asked only of SOAP -- so
+#: nothing in this project said anything about the quality of a note in the
+#: format the application actually writes.
+#:
+#: Split by half for the reason the Czech PDSQI tracks are: the real half is
+#: asked six attributes and the translated half eight, because `accurate` and
+#: `thorough` need the session and a real session never leaves e-INFRA. Two
+#: column sets are two instruments.
+TRACK_DEEPSY_REAL_PDSQI = "deepsy-real-pdsqi"
+TRACK_DEEPSY_TRANSLATED_PDSQI = "deepsy-translated-pdsqi"
 
 TRACKS = (
     TRACK_TNEVAL,
@@ -98,6 +110,8 @@ TRACKS = (
     TRACK_CZECH_TRANSLATED_PDSQI,
     TRACK_DEEPSY_REAL,
     TRACK_DEEPSY_TRANSLATED,
+    TRACK_DEEPSY_REAL_PDSQI,
+    TRACK_DEEPSY_TRANSLATED_PDSQI,
 )
 
 #: Tracks whose rows are written to `LOCAL_ROWS_PATH` and never to `ROWS_PATH`.
@@ -109,6 +123,8 @@ LOCAL_TRACKS = (
     TRACK_CZECH_TRANSLATED_PDSQI,
     TRACK_DEEPSY_REAL,
     TRACK_DEEPSY_TRANSLATED,
+    TRACK_DEEPSY_REAL_PDSQI,
+    TRACK_DEEPSY_TRANSLATED_PDSQI,
 )
 
 #: Everything else. What `tnb report` draws and what the coverage sweep writes.

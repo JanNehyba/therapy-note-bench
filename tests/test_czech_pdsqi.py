@@ -209,3 +209,97 @@ def test_neither_track_generates_anything_of_its_own():
     every model as having attempted nothing."""
     assert results.TRACK_CZECH_REAL_PDSQI not in results.TRACK_BY_TASK.values()
     assert results.TRACK_CZECH_TRANSLATED_PDSQI not in results.TRACK_BY_TASK.values()
+
+
+# --- the Deepsy format, added later and inheriting the same boundary -------
+
+
+def test_the_deepsy_format_inherits_its_corpus_and_not_its_name():
+    """`deepsy-real` reads the same ten recorded sessions as `czech-real`.
+
+    The format changed and the corpus did not, so the confidentiality answer
+    must not change either. This is the assertion that would have caught a
+    `startswith("czech")` in the branch that decides it -- which is the shape
+    the function had before the Deepsy tracks existed.
+    """
+    from tnb.tasks import deepsy as deepsy_task
+
+    assert czech_pdsqi.transcripts_may_leave(deepsy_task.NAME_REAL) is False
+    assert czech_pdsqi.transcripts_may_leave(deepsy_task.NAME_TRANSLATED) is True
+
+
+def test_every_task_with_a_pdsqi_track_has_been_classified():
+    """A task that can be scored must have had its confidentiality decided.
+
+    The two tables are separate on purpose -- one names the track, the other
+    names the corpus -- and a task in the first but not the second would score
+    happily while `transcripts_may_leave` raised, or worse, would not raise.
+    """
+    assert set(czech_pdsqi.BY_TASK) == set(czech_pdsqi.CORPUS_BY_TASK)
+    assert set(czech_pdsqi.BY_TASK) == set(czech_pdsqi.ASSEMBLER_BY_TASK)
+    for task_name in czech_pdsqi.BY_TASK:
+        czech_pdsqi.transcripts_may_leave(task_name)
+
+
+def test_the_real_half_is_asked_six_attributes_in_either_format():
+    from tnb.tasks import deepsy as deepsy_task
+
+    assert len(czech_pdsqi.attribute_keys(deepsy_task.NAME_REAL)) == 6
+    assert len(czech_pdsqi.attribute_keys(deepsy_task.NAME_TRANSLATED)) == 8
+    for key in ("accurate", "thorough"):
+        assert key not in czech_pdsqi.attribute_keys(deepsy_task.NAME_REAL)
+
+
+def test_the_deepsy_tracks_are_local_and_never_published():
+    """A Czech row on the public page would be a decision nobody made."""
+    for track in (results.TRACK_DEEPSY_REAL_PDSQI, results.TRACK_DEEPSY_TRANSLATED_PDSQI):
+        assert track in results.TRACKS
+        assert track in results.LOCAL_TRACKS
+        assert track not in results.PUBLISHED_TRACKS
+
+
+def test_a_deepsy_note_is_read_by_the_reader_that_knows_its_shape():
+    """A SOAP note is one file and a Deepsy note is three.
+
+    Handing the Deepsy task to the SOAP reader yields nothing -- silently,
+    because a missing directory is not an error there -- so the run would report
+    "nothing to score" rather than failing. The assembler is chosen from a table
+    that raises on an unknown task for that reason.
+    """
+    from tnb.tasks import deepsy as deepsy_task
+
+    assert czech_pdsqi.ASSEMBLER_BY_TASK[deepsy_task.NAME_REAL] == "deepsy"
+    assert czech_pdsqi.ASSEMBLER_BY_TASK[czech_task.NAME_REAL] == "czech"
+    with pytest.raises(ValueError, match="no note assembler"):
+        list(czech_pdsqi.from_generations([], task_name="soap"))
+
+
+def test_a_deepsy_note_renders_to_something_the_judge_can_be_asked_about():
+    """The silent failure the smoke test caught, and the reason it exists.
+
+    `czech_task.render_note` joins the four SOAP sections. A Deepsy note has
+    eleven differently-named ones, so it rendered to an empty string,
+    `pdsqi.build_tasks` produced no questions, and the run appended a row with
+    no metrics while printing "asked 0 cached 0" -- indistinguishable from a
+    cache hit. Nothing raised and nothing was scored.
+    """
+    from tnb.scoring import pdsqi as pdsqi_module
+    from tnb.tasks import deepsy as deepsy_task
+
+    note = dict.fromkeys(deepsy_task.KEYS["data"], "Text sekce.")
+    note.update(dict.fromkeys(deepsy_task.KEYS["plan"], "Text sekce."))
+
+    soap_rendered = czech_task.render_note(note)
+    deepsy_rendered = deepsy_task.render_note(note)
+
+    # Not an empty string -- four Czech headings with nothing under them, which
+    # is why it looked like a note and asked like nothing.
+    assert "Text sekce" not in soap_rendered
+    assert "Text sekce" in deepsy_rendered
+    assert not pdsqi_module.build_tasks(soap_rendered, None), (
+        "an empty note yields no questions, which is the silent half of the bug: "
+        "the run reports 'asked 0' and appends a row rather than failing"
+    )
+    # Six, not eight: no transcript was passed, so the two that need the
+    # session are not built. That is the boundary showing through.
+    assert len(pdsqi_module.build_tasks(deepsy_rendered, None)) == len(pdsqi_module.NOTE_ONLY_KEYS)

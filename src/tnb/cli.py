@@ -778,6 +778,15 @@ CZECH_CORPORA = {
     "translated": (results.TRACK_CZECH_TRANSLATED, "czech-translated"),
 }
 
+#: The same two halves in the note format the Deepsy application writes. Which
+#: format `score-czech-pdsqi` asks about is a flag rather than a fifth corpus
+#: name, because the corpus is what decides confidentiality and the format is
+#: not: `deepsy-real` reads the same ten recorded sessions as `czech-real`.
+DEEPSY_CORPORA = {
+    "real": (results.TRACK_DEEPSY_REAL, "deepsy-real"),
+    "translated": (results.TRACK_DEEPSY_TRANSLATED, "deepsy-translated"),
+}
+
 
 def cmd_score_czech(args: argparse.Namespace) -> int:
     """Ask the six Czech criteria about the Czech notes.
@@ -957,9 +966,10 @@ def cmd_score_czech_pdsqi(args: argparse.Namespace) -> int:
     config = judge.config_from_env(**overrides)
 
     wanted = ["real", "translated"] if args.corpus == "both" else [args.corpus]
+    corpora = DEEPSY_CORPORA if args.format == "deepsy" else CZECH_CORPORA
     plan: list[tuple[str, str, list, int]] = []
     for corpus in wanted:
-        _, task_name = CZECH_CORPORA[corpus]
+        _, task_name = corpora[corpus]
         loader = czech_task.load_real if corpus == "real" else czech_task.load_translated
         try:
             sessions = loader(args.limit)
@@ -1028,6 +1038,16 @@ def cmd_score_czech_pdsqi(args: argparse.Namespace) -> int:
                 flush=True,
             )
 
+        # The renderer follows the shape of the note, not the module it sits
+        # beside. A Deepsy note has eleven named sections and the SOAP renderer
+        # joins four, so handing it one renders to nothing, produces no
+        # questions, and appends a row with no metrics -- reported as
+        # "asked 0 cached 0", which reads exactly like a cache hit.
+        from tnb.tasks import deepsy as deepsy_task_local
+
+        render = (
+            deepsy_task_local.render_note if args.format == "deepsy" else czech_task.render_note
+        )
         print(f"\n{track}:")
         scored = scoring_pdsqi.score_many(
             candidates,
@@ -1035,7 +1055,7 @@ def cmd_score_czech_pdsqi(args: argparse.Namespace) -> int:
             spend,
             force=args.force,
             with_transcript=with_transcript,
-            render=czech_task.render_note,
+            render=render,
             judge_prompt_version=czech_pdsqi.JUDGE_PROMPT_VERSION,
             on_note=on_note,
             cache_root=_cache_root(args),
@@ -2124,6 +2144,16 @@ def build_parser() -> argparse.ArgumentParser:
         help=(
             "which half. The real half is asked six attributes and the translated "
             "half eight; the two that need a session are never asked of the real one"
+        ),
+    )
+    score_czech_pdsqi.add_argument(
+        "--format",
+        choices=["soap", "deepsy"],
+        default="soap",
+        help=(
+            "which note format to rate. `deepsy` asks the same instrument about the "
+            "notes the application actually writes, which nothing had done before: "
+            "the quality half of the question had only ever been put to SOAP"
         ),
     )
     score_czech_pdsqi.add_argument("--models", help="comma-separated system ids to rate")
