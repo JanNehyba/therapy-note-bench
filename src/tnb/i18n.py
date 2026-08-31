@@ -548,12 +548,16 @@ _SENTENCES = {
     "Track": "Větev",
     "Judge": "Hodnotitel",
     "older harness": "starší harness",
-    "Every figure on this page is generated from <code>results/{0}</code>, which is append-only:"
-    " a re-run adds rows beside the old ones rather than replacing them, and what is drawn here"
-    " is the newest of each.": (
-        "Každé číslo na této stránce je vygenerováno ze souboru <code>results/{0}</code>, do "
+    "Every score in these tables is generated from <code>results/{0}</code>, which is"
+    " append-only: a re-run adds rows beside the old ones rather than replacing them, and what"
+    " is drawn here is the newest of each. Two things beside them are not from that file: the"
+    " Band column and its bootstrap, and the judge-against-therapist figures under the table,"
+    " both computed from the judge's individual answers.": (
+        "Každé skóre v těchto tabulkách je vygenerováno ze souboru <code>results/{0}</code>, do "
         "kterého se jen přidává: opakovaný běh přidá řádky vedle starých, místo aby je nahradil, "
-        "a kreslí se tu z každého ten nejnovější."
+        "a kreslí se tu z každého ten nejnovější. Dvě věci vedle nich z toho souboru nejsou: "
+        "sloupec Pásmo i jeho bootstrap a čísla o shodě hodnotitele s terapeutem pod tabulkou — "
+        "obojí se počítá z jednotlivých odpovědí hodnotitele."
     ),
     # Leading space, like the English fragment it replaces: it joins onto the
     # sentence before it and the key it is found by was trimmed.
@@ -1309,16 +1313,19 @@ _METHODS = {
     "Rank correlation": "Korelace pořadí",
     "Systems placed differently": "Systémy umístěné jinam",
     "Moved furthest": "Nejdál se pohnul",
-    "Rank correlation is between <code>{0}</code>'s ordering and <code>{1}</code>'s, over the {2}"
-    " systems both have scored. Scores that print the same are treated as tied rather than"
+    "Rank correlation is between <code>{0}</code>'s ordering and <code>{1}</code>'s, over the"
+    " {2} systems both have scored. Scores that print the same are treated as tied rather than"
     " ordered by a digit the table does not show. Only measures a judge decides are compared"
-    " here: {3}. The rest are computed from the note and the expert note, so they are identical"
-    " under every judge and agreeing about them would say nothing.": (
-        "Korelace pořadí je mezi uspořádáním od <code>{0}</code> a od <code>{1}</code>, přes {2} "
-        "systémů, které obodovali oba. Skóre, která se tisknou stejně, se berou jako shodná, "
-        "místo aby je řadila číslice, kterou tabulka neukazuje. Srovnávají se tu jen míry, "
-        "o kterých rozhoduje hodnotitel: {3}. Zbytek se počítá ze zápisu a z expertního zápisu, "
-        "takže je pod každým hodnotitelem stejný a shoda o něm by neřekla nic."
+    " here: {3}.{4}": (
+        "Pořadová korelace je mezi pořadím <code>{0}</code> a pořadím <code>{1}</code>, přes {2} "
+        "systémů, které obodovali oba. Skóre, která se zobrazují jako stejná, se berou jako "
+        "shodná, ne jako seřazená podle číslice, kterou tabulka neukazuje. Srovnávají se tu jen "
+        "míry, o kterých rozhoduje hodnotitel: {3}.{4}"
+    ),
+    "The rest are computed from the note and the expert note, so they are identical under every"
+    " judge and agreeing about them would say nothing.": (
+        "Zbytek se počítá ze zápisu a z expertního zápisu, takže jsou pod každým hodnotitelem "
+        "stejné a shoda na nich by neřekla nic."
     ),
     "Do the columns agree with each other?": "Shodnou se sloupce mezi sebou?",
     "A separate question from whether the judges do, and the one that decides whether the"

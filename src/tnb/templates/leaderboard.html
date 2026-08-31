@@ -54,8 +54,9 @@ __STYLE__
        <a href="landscape.md">what exists in this field and what does not</a>.</p>
     <p id="provenance"></p>
     <p data-t="page.foot.data">The drawn numbers are in
-       <a href="leaderboard.json">leaderboard.json</a>; every run ever made is in
-       <code>results/rows.jsonl</code> in the repository.</p>
+       <a href="leaderboard.json">leaderboard.json</a>; every run behind them is in
+       <code>results/rows.jsonl</code> in the repository. Runs that are measured and not
+       published go to a file outside it.</p>
     <p data-t="page.foot.author">Maintained by Jan Nehyba. Corrections and disputed numbers:
        <a href="https://github.com/JanNehyba/therapy-note-bench/issues">open an issue</a>.</p>
   </footer>
@@ -862,10 +863,12 @@ drawSources();
 
 function drawProvenance() {
   document.getElementById('provenance').innerHTML = DATA.generated_from
-    ? T`Every figure on this page is generated from
+    ? T`Every score in these tables is generated from
        <code>results/${DATA.generated_from}</code>, which is append-only: a re-run adds rows
        beside the old ones rather than replacing them, and what is drawn here is the newest
-       of each.`
+       of each. Two things beside them are not from that file: the Band column and its
+       bootstrap, and the judge-against-therapist figures under the table, both computed
+       from the judge's individual answers.`
     : '';
 }
 drawProvenance();

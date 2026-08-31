@@ -782,9 +782,14 @@ function renderConcordance(all) {
          <code>${c.judge_b}</code>'s, over the ${c.n_systems} systems both have scored.
          Scores that print the same are treated as tied rather than ordered by a digit
          the table does not show. Only measures a judge decides are compared here:
-         ${c.judge_measures.map(m => `<code>${tr(m)}</code>`).join(', ')}. The rest are
-         computed from the note and the expert note, so they are identical under every
-         judge and agreeing about them would say nothing.`}</p>
+         ${c.judge_measures.map(m => `<code>${tr(m)}</code>`).join(', ')}.${
+         // Said only where a measure really is excluded for that reason. On the
+         // two SOAP panels the excluded pair is the Likert forms of two drawn
+         // columns, which no judge-free computation produces.
+         c.excluded_are_computed
+           ? ' ' + T`The rest are computed from the note and the expert note, so they are
+             identical under every judge and agreeing about them would say nothing.`
+           : ''}`}</p>
       ${c.tensions.length ? `<h3>${T`Do the columns agree with each other?`}</h3>
       <p class="note">${T`A separate question from whether the judges do, and the one that
          decides whether the ordering column can be read as "quality". A model that

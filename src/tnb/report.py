@@ -401,6 +401,19 @@ def _used_by(owners: dict[str, tuple[str, ...]], key: str, drawn: set[str]) -> b
 #: are computed from the note and the expert note alone, so they are identical
 #: under every judge, and "the judges agree perfectly on ROUGE-L" would dress a
 #: tautology as a finding.
+#: The measures a scorer computes and deliberately does not draw. Only TN-Eval
+#: has any: the Likert forms of completeness and conciseness, kept out of the
+#: table because the rubric forms are the ones with a human anchor. It matters
+#: on the concordance panel, which says of the measures it leaves out that they
+#: are "computed from the note and the expert note" -- true of iCARE's four and
+#: false of these two.
+INTERNAL_MEASURES: dict[str, tuple[str, ...]] = {
+    results.TRACK_TNEVAL: getattr(rubric, "INTERNAL_MEASURES", ()),
+    results.TRACK_ICARE: getattr(icare_scorer, "INTERNAL_MEASURES", ()),
+    results.TRACK_PDSQI: getattr(pdsqi, "INTERNAL_MEASURES", ()),
+}
+
+
 JUDGE_MEASURES: dict[str, tuple[str, ...]] = {
     results.TRACK_TNEVAL: rubric.JUDGE_MEASURES,
     results.TRACK_ICARE: icare_scorer.JUDGE_MEASURES,
@@ -2274,7 +2287,22 @@ def concordance_payload(rows: list[Row], **overrides) -> dict:
         # The track's own title travels with it. The panel draws one section
         # per track and named neither, which was invisible with one track and
         # is two unlabelled tables with two.
-        track: {**found, "track": track, "track_label": TRACK_TITLES.get(track, track)}
+        track: {
+            **found,
+            "track": track,
+            "track_label": TRACK_TITLES.get(track, track),
+            # Whether the measures this panel leaves out are computed without a
+            # judge. On iCARE they are -- ROUGE-L, BERTScore and the two
+            # temporal columns come from the note and the expert note -- and
+            # the panel says so. On TN-Eval the excluded pair is the Likert
+            # forms of two drawn columns, which are a judge's opinion kept out
+            # of the table, so the same sentence printed there was false; on
+            # PDSQI-9 nothing is excluded at all and it had no referent.
+            "excluded_are_computed": bool(
+                set(MEASURE_TABLES.get(track, {})) - set(JUDGE_MEASURES.get(track) or ())
+            )
+            and not INTERNAL_MEASURES.get(track),
+        }
         for track in COLUMNS
         if (
             found := concordance.to_json(
