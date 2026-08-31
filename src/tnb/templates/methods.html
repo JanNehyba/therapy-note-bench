@@ -494,8 +494,9 @@ function renderProtocol(protocol) {
     <dl class="soap">${soap}</dl>
     <p class="blurb">${T`Completeness is scored by asking the judge, once per item, whether that
        item is present in the matching section. These are TN-Eval's
-       <strong>${protocol.criteria.length} criteria</strong>, reproduced verbatim — a note
-       scoring 0.50 contained half of them.`}</p>
+       <strong>${protocol.criteria.length} criteria</strong>, reproduced verbatim — a note's
+       figure is the equal-weighted mean of its section fractions, not the fraction of all
+       ${protocol.criteria.length} items; the per-criterion rates are in each row's detail.`}</p>
     <div class="criteria">${criteria}</div>
 
     <h4 style="margin-top:1.6rem">${T`The other track: iCARE's 17 sections`}</h4>

@@ -715,14 +715,15 @@ _PAYLOAD = {
     "Not a length measure, despite the name: a note twice as long scores the same if every"
     " added sentence is on topic. It is also the measure most moved by the judge's own settings"
     " -- raising the thinking budget from 128 to 256 tokens shifted all nineteen systems and"
-    " reordered sixteen of them, measured on this benchmark's own rows at the two budgets, which"
-    " are in results/rows.jsonl and are drawn in no table above.": (
-        "Navzdory jménu to není míra délky: dvakrát delší zápis boduje stejně, pokud je každá "
-        "přidaná věta k tématu. Je to také míra, kterou nejvíc hýbe vlastní nastavení "
+    " reordered sixteen of them. That comparison came from re-asking all 51 000 judge questions"
+    " at the higher budget; its rows are not in results/rows.jsonl and it is drawn in no table"
+    " above -- see docs/limitations.md.": (
+        "Navzdory jménu to není míra délky: dvakrát delší zápis dostane stejné skóre, pokud je "
+        "každá přidaná věta k tématu. Je to také míra, kterou nejvíc hýbe vlastní nastavení "
         "hodnotitele — zvednutí rozpočtu na přemýšlení ze 128 na 256 tokenů posunulo všech "
-        "devatenáct systémů a u šestnácti z nich změnilo pořadí; změřeno na vlastních řádcích "
-        "tohoto benchmarku při obou rozpočtech, které jsou v results/rows.jsonl a v žádné "
-        "tabulce výše se nekreslí."
+        "devatenáct systémů a u šestnácti z nich změnilo pořadí. To srovnání vzniklo tak, že se "
+        "všech 51 000 otázek položilo znovu s vyšším rozpočtem; jeho řádky v results/rows.jsonl "
+        "nejsou a v žádné tabulce výše se nekreslí — viz docs/limitations.md."
     ),
     "Faithfulness": "Věrnost",
     "Whether the note contradicts the transcript, rated 1 to 5, where 5 is no inaccuracies."
@@ -1125,10 +1126,13 @@ _METHODS = {
     ),
     "Completeness is scored by asking the judge, once per item, whether that item is present in"
     " the matching section. These are TN-Eval's <strong>{0} criteria</strong>, reproduced"
-    " verbatim — a note scoring 0.50 contained half of them.": (
+    " verbatim — a note's figure is the equal-weighted mean of its section fractions, not the"
+    " fraction of all {1} items; the per-criterion rates are in each row's detail.": (
         "Úplnost se boduje tak, že se hodnotitele u každé položky zvlášť zeptáme, jestli je ta "
         "položka v odpovídajícím oddílu. Tohle je <strong>{0} kritérií</strong> z TN-Eval, "
-        "reprodukovaných doslova — zápis se skóre 0.50 jich obsahoval polovinu."
+        "reprodukovaných doslova — číslo u zápisu je průměr podílů za jeho oddíly, každý se "
+        "stejnou vahou, ne podíl ze všech {1} položek; míry po jednotlivých kritériích jsou "
+        "v detailu každého řádku."
     ),
     "The other track: iCARE's 17 sections": "Ta druhá větev: 17 oddílů iCARE",
     "The iCARE note is not four paragraphs but a <strong>form</strong>. Each of these 17 fields"

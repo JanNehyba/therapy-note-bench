@@ -4114,7 +4114,7 @@
           "scale": "0-1"
         },
         {
-          "caveat": "Not a length measure, despite the name: a note twice as long scores the same if every added sentence is on topic. It is also the measure most moved by the judge's own settings -- raising the thinking budget from 128 to 256 tokens shifted all nineteen systems and reordered sixteen of them, measured on this benchmark's own rows at the two budgets, which are in results/rows.jsonl and are drawn in no table above.",
+          "caveat": "Not a length measure, despite the name: a note twice as long scores the same if every added sentence is on topic. It is also the measure most moved by the judge's own settings -- raising the thinking budget from 128 to 256 tokens shifted all nineteen systems and reordered sixteen of them. That comparison came from re-asking all 51 000 judge questions at the higher budget; its rows are not in results/rows.jsonl and it is drawn in no table above -- see docs/limitations.md.",
           "definition": "Fraction of the note's sentences that fit at least one rubric item. 1.00 means nothing is off-topic; it does not mean the note is short.",
           "digits": 3,
           "instrument": "TN-Eval rubric",
@@ -6211,7 +6211,7 @@
           "scale": "0-1"
         },
         {
-          "caveat": "Not a length measure, despite the name: a note twice as long scores the same if every added sentence is on topic. It is also the measure most moved by the judge's own settings -- raising the thinking budget from 128 to 256 tokens shifted all nineteen systems and reordered sixteen of them, measured on this benchmark's own rows at the two budgets, which are in results/rows.jsonl and are drawn in no table above.",
+          "caveat": "Not a length measure, despite the name: a note twice as long scores the same if every added sentence is on topic. It is also the measure most moved by the judge's own settings -- raising the thinking budget from 128 to 256 tokens shifted all nineteen systems and reordered sixteen of them. That comparison came from re-asking all 51 000 judge questions at the higher budget; its rows are not in results/rows.jsonl and it is drawn in no table above -- see docs/limitations.md.",
           "definition": "Fraction of the note's sentences that fit at least one rubric item. 1.00 means nothing is off-topic; it does not mean the note is short.",
           "digits": 3,
           "instrument": "TN-Eval rubric",
