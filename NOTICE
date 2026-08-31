@@ -60,7 +60,10 @@ iCARE / iHOPE  (17-section format, transcripts, expert gold notes)
   which displays an MIT badge but ships no LICENSE file; the corpus it
   redistributes was collected elsewhere, so that badge is not a licence for the
   data. This repository therefore reproduces neither the instructions nor the
-  notes -- only the section field names, and only for display.
+  notes, with one stated exception: the methods page quotes one section of one
+  iHOPE note, in the clinician's wording and one model's, as the worked example
+  that shows word overlap is not quality. Everything else is section field
+  names, and only for display.
   https://github.com/proadhikary/iCARE
   https://github.com/ai4mhx/TheraFuse
   Adhikary, Prottay Kumar; Singh, S.; Singh, S.; Sharma, P.; Soni, P.;

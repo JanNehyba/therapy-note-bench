@@ -310,9 +310,14 @@ Actions → **Benchmark** → *Run workflow*. Inputs: which providers and models
 
 **It writes notes and rebuilds the page. It does not score them.** Scoring
 needs a judge, and this workflow has only ever held one secret — the e-INFRA
-token. It commits the new coverage rows and the regenerated page; the scores
-come from `tnb score` and `tnb score-icare` run locally, and until those are
-run the page says a model is generated and not yet judged.
+token. It commits the new coverage rows, the refreshed model snapshot and the README
+table above. It does **not** commit the regenerated `docs/` pages — `tnb report`
+writes `docs/index.html`, `docs/methods.html` and `docs/leaderboard.json`, and
+the commit step stages only `results`, `docs/models-snapshot.md` and
+`README.md` — so the published site does not change until `tnb report` is run
+locally and `docs/` is committed by hand. The scores come from `tnb score` and
+`tnb score-icare` run locally, and until those are run the page says a model is
+generated and not yet judged.
 
 This section used to say the workflow "commits the new results and regenerates
 the table above", from a single `tnb run`. `tnb run` is a stub that exits 2:
@@ -330,9 +335,13 @@ uv sync --all-groups
 cp .env.example .env      # generation needs EINFRA_API_TOKEN; scoring needs a judge
 make models               # what is deployed right now
 uv run tnb models --probe # which ids are secretly the same model
-make smoke                # 3 sessions x 2 models, e-INFRA quota only
+make smoke                # 3 sessions x 2 models *per credentialled provider*
 make bench                # everything
 ```
+
+`--max-models` caps per provider, not in total: with `OPENAI_API_KEY` or
+Vertex credentials in `.env`, `make smoke` also generates on those and spends
+their money. Add `--providers einfra` to keep a run inside the e-INFRA quota.
 
 An e-INFRA token comes from <https://chat.ai.e-infra.cz> → Account → API keys
 and needs a MetaCentrum account or Masaryk University affiliation.
@@ -352,11 +361,12 @@ and needs a MetaCentrum account or Masaryk University affiliation.
 ## Data and licensing
 
 The MIT licence covers **this repository's code only.** No corpus is
-redistributed here. Checked repository by repository on 2026-08-24 — licence
-field, file tree and README — **one of the five inputs carries a licence:**
+redistributed here. Checked source by source on 2026-08-24 — licence
+field, file tree and README — **two of the six inputs carry a licence:**
 
 | Source | Used for | Licence |
 |---|---|---|
+| [PDSQI-9](https://arxiv.org/abs/2501.08977) | the nine attributes and their anchors, eight of which are scored | **CC BY 4.0** |
 | [TN-Eval](https://github.com/amazon-science/TN-Eval) (code) | SOAP prompt, scoring prompts, 23-item rubric | **Apache-2.0** |
 | [TN-Eval-Data](https://github.com/amazon-science/TN-Eval-Data) | 150 notes, two annotators' ratings | none published |
 | [AnnoMI](https://github.com/uccollab/AnnoMI) | 133 transcripts, 50 scored | none published, citation requested |
@@ -365,8 +375,11 @@ field, file tree and README — **one of the five inputs carries a licence:**
 
 So: prompts under Apache-2.0 are reproduced in source with attribution;
 everything else is fetched from its origin when a run needs it, checksummed, and
-cited. The published page shows scores and field names — never a transcript, a
-note, or somebody else's prompt. Detail and the two corrections this table
+cited. The published pages show scores, field names, TN-Eval's prompt and
+rubric text (Apache-2.0, reproduced with attribution), and one worked example —
+a single iHOPE note section quoted in both the clinician's and one model's
+wording, to show that word overlap is not quality. No transcript is
+published. Detail and the two corrections this table
 records: [docs/datasets.md](docs/datasets.md), [NOTICE](NOTICE).
 
 ### The two tracks are annotated differently, and it changes what they can claim
