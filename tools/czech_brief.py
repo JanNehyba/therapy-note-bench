@@ -3463,7 +3463,15 @@ def _conclusion(rows: list[results.Row]) -> str:
     # section 4 of this document spends a page refusing to do.
     soap = {t: j for t, j in bands.items() if t in SOAP_CRITERIA_TRACKS}
     deepsy = {t: j for t, j in bands.items() if t in DEEPSY_CRITERIA_TRACKS}
-    quality = {t: j for t, j in bands.items() if t.endswith("-pdsqi")}
+    # Named, not `endswith("-pdsqi")`. That filter was written when the only
+    # PDSQI tables were the two SOAP halves, and it swept the Deepsy pair in
+    # the moment they were banded -- turning `all {tables} combinations` from
+    # four into eight and pooling two note formats into one claim. The
+    # objection is the one section 1b makes: three models were asked in only
+    # one of the two formats, so an intersection across both would demote a
+    # model for a question nobody put to it.
+    quality = {t: j for t, j in bands.items() if t in PDSQI_TRACKS}
+    quality_deepsy = {t: j for t, j in bands.items() if t in DEEPSY_PDSQI_TRACKS}
 
     def shared(group: dict, index: int) -> tuple[list[str], int]:
         seen = [set(g["bands"][index]["models"]) for j in group.values() for g in j.values()]
@@ -3639,6 +3647,27 @@ def _conclusion(rows: list[results.Row]) -> str:
                 "quality instrument does not agree with itself from one judge or one "
                 "half to the next, and no model can be called better on it."
             ).format(tables=tables_q)
+        )
+
+    # 2b. The same instrument over the notes the application actually writes,
+    #     counted over its own tables for the reason 1b gives and never added to
+    #     the four above. This is the newest measurement in the document and the
+    #     only one that speaks to the format a reader might actually deploy.
+    top_qd, tables_qd = shared(quality_deepsy, 0)
+    bottom_qd, _ = shared(quality_deepsy, -1)
+    if tables_qd:
+        said.append(
+            _t(
+                "The same instrument was put to the notes in the Deepsy format over "
+                "{tables} table-and-judge combinations of its own: {top} in the top "
+                "band of all of them and {bottom} in the bottom band of all of them. "
+                "It is counted separately from the four above and not added to them, "
+                "for the reason the criteria are: not every model was asked in both "
+                "formats. On the real half this rests on one column rather than three "
+                "-- `accurate` and `thorough` need the session, and the real sessions "
+                "never leave e-INFRA -- so that half's band is a statement about "
+                "economy of language and about nothing else."
+            ).format(top=end(top_qd), bottom=end(bottom_qd), tables=tables_qd)
         )
 
     # 3. Which columns of that instrument can rank anything at all.
@@ -5607,6 +5636,20 @@ DEEPSY_NO_QUALITY = (
     "criteria ask whether the Czech is right, and the instrument that asks whether a "
     "note is worth filing was never put to these."
 )
+#: What replaces `DEEPSY_NO_QUALITY` once the quality tables exist. It does not
+#: state a result: the result is two tables and a conclusion sentence, and a
+#: third statement of it here would be a fourth place to keep in step.
+DEEPSY_HAS_QUALITY = (
+    "This chapter says nothing about whether a Deepsy note is a good note, but the "
+    "document now does."
+)
+DEEPSY_HAS_QUALITY_WHERE = (
+    "The six criteria here ask whether the Czech is right. PDSQI-9, which asks whether "
+    "a note is worth filing, was put to these same notes under both judges and has two "
+    "tables of its own further down. On the real half it answers on six of its eight "
+    "attributes rather than all eight, because `accurate` and `thorough` need the "
+    "session and the real sessions never leave e-INFRA."
+)
 DEEPSY_FIGURE_CAPTION = (
     "Four panels rather than one average: the comparison was made on both halves of "
     "the corpus and under both judges, and that all four go the same way is the "
@@ -5643,13 +5686,28 @@ def _deepsy_chapter(
 
     out = [f"<h2>{html.escape(_t(DEEPSY_TITLE))}</h2>"]
     out += [f"<p>{html.escape(text)}</p>" for text in said]
-    out.append(
-        "<div class='warn'><p><strong>"
-        + html.escape(_t(DEEPSY_NO_QUALITY))
-        + "</strong> "
-        + html.escape(_t(SCALE_NO_PDSQI).format(**figures))
-        + "</p></div>"
-    )
+    # Printed only while it is true. Both sentences say the quality instrument
+    # was never put to a Deepsy note, and on 2026-09-01 it was -- over both
+    # halves and under both judges. A document that names a gap it has since
+    # closed is worse than one that never named it: the reader takes the
+    # sentence as current and stops looking for the tables.
+    asked = any(row.track in DEEPSY_PDSQI_TRACKS and row.is_scored for row in rows)
+    if not asked:
+        out.append(
+            "<div class='warn'><p><strong>"
+            + html.escape(_t(DEEPSY_NO_QUALITY))
+            + "</strong> "
+            + html.escape(_t(SCALE_NO_PDSQI).format(**figures))
+            + "</p></div>"
+        )
+    else:
+        out.append(
+            "<div class='warn'><p><strong>"
+            + html.escape(_t(DEEPSY_HAS_QUALITY))
+            + "</strong> "
+            + html.escape(_t(DEEPSY_HAS_QUALITY_WHERE))
+            + "</p></div>"
+        )
     out.append(_figure("formats", DEEPSY_FIGURE_CAPTION))
     out.append(_formats())
     for track, ordered, _withdrawn in entries:

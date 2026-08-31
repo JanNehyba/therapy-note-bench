@@ -2209,4 +2209,45 @@ CS: dict[str, str] = {
         "týmž kódem, takže se tady žádné číslo nepřepisovalo ručně a žádné se od té "
         "dlouhé verze nemůže rozejít."
     ),
+    (
+        "The same instrument was put to the notes in the Deepsy format over "
+        "{tables} table-and-judge combinations of its own: {top} in the top band of "
+        "all of them and {bottom} in the bottom band of all of them. It is counted "
+        "separately from the four above and not added to them, for the reason the "
+        "criteria are: not every model was asked in both formats. On the real half "
+        "this rests on one column rather than three -- `accurate` and `thorough` "
+        "need the session, and the real sessions never leave e-INFRA -- so that "
+        "half's band is a statement about economy of language and about nothing "
+        "else."
+    ): (
+        "Týž nástroj dostaly i zápisy ve formátu Deepsy, a to ve {tables} vlastních "
+        "kombinacích tabulky a soudce: {top} v horním pásmu všech a {bottom} v "
+        "dolním pásmu všech. Počítá se to zvlášť od čtyř tabulek výše a nesčítá se "
+        "to s nimi, ze stejného důvodu jako u kritérií: ne každý model dostal obě "
+        "zadání. Na skutečné půlce za tím stojí jediný sloupec místo tří — na "
+        "`accurate` a `thorough` je potřeba sezení a skutečná sezení e-INFRA "
+        "neopouštějí — takže pásmo té půlky mluví o úspornosti jazyka a o ničem "
+        "jiném."
+    ),
+    (
+        "This chapter says nothing about whether a Deepsy note is a good note, but "
+        "the document now does."
+    ): (
+        "Tahle kapitola neříká nic o tom, jestli je zápis Deepsy dobrý zápis. "
+        "Zbytek dokumentu už ano."
+    ),
+    (
+        "The six criteria here ask whether the Czech is right. PDSQI-9, which asks "
+        "whether a note is worth filing, was put to these same notes under both "
+        "judges and has two tables of its own further down. On the real half it "
+        "answers on six of its eight attributes rather than all eight, because "
+        "`accurate` and `thorough` need the session and the real sessions never "
+        "leave e-INFRA."
+    ): (
+        "Šest kritérií se tady ptá, jestli je správně čeština. PDSQI-9, které se "
+        "ptá, jestli za zápis stojí ho založit do dokumentace, dostalo tytéž zápisy "
+        "pod oběma soudci a má níž dvě vlastní tabulky. Na skutečné půlce odpovídá "
+        "na šest svých osmi atributů místo na všech osm, protože na `accurate` a "
+        "`thorough` je potřeba sezení a skutečná sezení e-INFRA neopouštějí."
+    ),
 }
