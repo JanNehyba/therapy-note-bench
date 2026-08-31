@@ -29,8 +29,11 @@ unchanged in wording. Scoring reproduces TN-Eval's reference-free protocol:
   column was partly measuring markdown — a figure recorded at the time and not
   reproducible now, because applying the repair re-asked the answers it was
   computed from. The effect is in `results/` and is checkable: conciseness rose
-  by 0.090, 0.075 and 0.059 for the three models that write numbered plans, and
-  by 0.000 for the five that write prose, under both judges.
+  by 0.090, 0.078 and 0.059 under `gemini-3.1-pro-preview` and by 0.087, 0.075
+  and 0.055 under `gpt-5.6-terra` for the three models that write numbered
+  plans -- `qwen3.5-122b`, `gpt-oss-120b` and `google_gemini-3.7-flash` -- and
+  did not move at all under either judge for `qwen3.8-27b`, `gpt-5.6-sol`,
+  `gpt-5.6-luna`, `mistral-large-v2` and the therapist notes.
 - **Faithfulness** — a Likert rating against the full transcript.
 
 Likert completeness and conciseness are also recorded, but **only for

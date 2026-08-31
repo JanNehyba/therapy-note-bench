@@ -62,7 +62,8 @@ Two properties of AnnoMI-full that matter to the loader:
   Transcript 7 is one of the seven and is in the benchmark set.
 - **It has not changed since 2023-03-14.** The only commit ever to touch
   `AnnoMI-full.csv` predates TN-Eval, so the transcripts we score are the ones
-  they scored. Later commits to the repository touched documentation only.
+  they scored. It is also the newest commit the repository has: nothing has been pushed
+since (checked 2026-08-31).
 
 One unexplained discrepancy, recorded rather than smoothed over: the paper
 reports a median conversation length of 1067 words and 42 turns. Measured over

@@ -254,7 +254,7 @@ mean over them would be a number with no unit. There is no single PDSQI figure
 here for the same reason there is no single figure in the instrument.
 
 **What adopting it does and does not buy.** PDSQI-9 was validated with
-*physicians* doing the rating, and the authors state they did not compare LLM
+*physicians* doing the rating; the paper reports no comparison of LLM
 raters against human ones. So an LLM judge scoring these notes on it produces
 columns that are better anchored than TRACE and still not calibrated here.
 TRACE has no human agreement figure at all; PDSQI-9 publishes one — physicians

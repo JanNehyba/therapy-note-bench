@@ -321,7 +321,12 @@ def test_the_docs_name_what_is_not_measured():
         assert attribute in limitations.lower(), f"{attribute} is not accounted for"
 
     # What adopting it does and does not buy, which is the part a reader skips.
-    assert "did not compare LLM raters against human ones" in landscape
+    # The wording changed on 2026-08-31: the page used to say the authors
+    # "state they did not compare" LLM raters against human ones, which
+    # attributes a sentence the paper does not contain. What the test is
+    # about -- that the page says what adopting the instrument does not buy
+    # -- is unchanged.
+    assert "no comparison of LLM raters against human ones" in landscape
     assert "no human agreement figure at all" in landscape, "TRACE's position, stated"
     assert "0.575" in landscape, "and PDSQI-9's, which is not the same position"
 
