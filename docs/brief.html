@@ -2,22 +2,43 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>therapy-note-bench &mdash; what a leaderboard can tell you</title>
 <style>
   @page { size: A4; margin: 17mm 15mm 15mm; }
   @page :first { margin-top: 15mm; }
 
+  /* The page follows the reader's theme, because the figures inside it always
+     did. Each inlined SVG carries its own `prefers-color-scheme` block, so on a
+     dark-mode browser every title, model name and value turned near-white while
+     the page around them stayed `#fff` -- four figures at about 1.05:1 contrast,
+     which is invisible. The tokens move together now, and `color-scheme` tells
+     the browser to paint its own furniture to match. */
   :root {
+    color-scheme: light dark;
     --fg: #1a1a19; --muted: #57574f; --line: #dcdcd5; --accent: #00806a;
-    --warn: #8a5a00; --chip: #f2f2ec;
+    --warn: #8a5a00; --chip: #f2f2ec; --bg: #fff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #e8e8e4; --muted: #9a9a94; --line: #2c2e31; --accent: #22a184;
+      --warn: #d0a24a; --chip: #26282b; --bg: #1a1a19;
+    }
+  }
+  /* Print is paper: a dark page would put white text on white. */
+  @media print {
+    :root {
+      --fg: #1a1a19; --muted: #57574f; --line: #dcdcd5; --accent: #00806a;
+      --warn: #8a5a00; --chip: #f2f2ec; --bg: #fff;
+    }
   }
   * { box-sizing: border-box; }
   body {
-    margin: 0; color: var(--fg); background: #fff;
+    margin: 0; color: var(--fg); background: var(--bg);
     font: 10.5pt/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     -webkit-print-color-adjust: exact; print-color-adjust: exact;
   }
-  main { max-width: 178mm; margin: 0 auto; }
+  main { max-width: 178mm; margin: 0 auto; padding: 0 12px; }
 
   h1 { font-size: 21pt; line-height: 1.15; margin: 0 0 4pt; letter-spacing: -.015em; }
   h2 {
@@ -52,7 +73,15 @@
   figure svg { width: 100%; height: auto; }
   figcaption { font-size: 8.8pt; color: var(--muted); margin-top: 4pt; }
 
+  /* The seven-column calibration table does not fit below about 530px, and with
+     nothing to hold it the whole document got a horizontal scrollbar: every
+     paragraph shifted sideways and the last column went off-screen. It scrolls
+     inside its own box now, and at 178mm on paper nothing overflows, so print is
+     unchanged. */
+  .scroll { overflow-x: auto; margin: 6pt 0 10pt; }
+  @media print { .scroll { overflow-x: visible; } }
   table { width: 100%; border-collapse: collapse; font-size: 9.4pt; margin: 6pt 0 10pt; }
+  .scroll > table { margin: 0; min-width: 100%; width: max-content; }
   th, td { text-align: left; padding: 3.5pt 6pt; border-bottom: 1px solid var(--line); }
   th { font-weight: 650; font-size: 8.4pt; text-transform: uppercase; letter-spacing: .04em;
        color: var(--muted); }
@@ -76,65 +105,82 @@
      the exercise says about choosing a model &mdash; and about reading anybody's
      leaderboard, including this one.</p>
   <p class="meta">therapy-note-bench &middot; harness 0.6.0 &middot;
-     every figure here is generated from the files the site publishes &middot;
+     scored 2026-08-27 &middot; every table and figure here is generated from the
+     files the site publishes; the figures in the prose are listed in
+     <code>tests/test_brief.py</code> &middot;
      <a href="https://jannehyba.github.io/therapy-note-bench/">https://jannehyba.github.io/therapy-note-bench/</a></p>
 
   <div class="claims">
-    <div class="claim"><div class="figure">100/101<small>pairs, agreed</small></div><p>Where both judges can tell two systems apart, they agree on which is better in 100 of 101 pairs. The judges are not the problem.</p></div>
+    <div class="claim"><div class="figure">100/101<small>pairs, agreed</small></div><p>Where both judges can tell two systems apart, they agree on which is more complete in 100 of 101 pairs &mdash; one measure on one track. The judges are not the problem.</p></div>
     <div class="claim"><div class="figure">13/19<small>changed place</small></div><p>And this many systems still land somewhere else. A leaderboard position is not a measurement; it is a place in a queue, and a few real moves renumber everyone below them.</p></div>
-    <div class="claim"><div class="figure">±0.02<small>each judge's own vendor</small></div><p>Both judges score their own vendor&rsquo;s models higher by about this much, and the evidence cannot rule out zero for either. If you grade models with a model, measure this &mdash; and resample the models, not just the cases.</p></div>
-    <div class="claim"><div class="figure">0.00–0.55<small>the production gap</small></div><p>Every model reliably records what happened last session. Almost none can say what happens at the next one. That is a feature gap, not a scoring artefact.</p></div>
+    <div class="claim"><div class="figure">+0.02<small>each judge's own vendor</small></div><p>Both judges score their own vendor&rsquo;s models higher by about this much, and the evidence cannot rule out zero for either. If you grade models with a model, measure this &mdash; and resample the models, not just the cases.</p></div>
+    <div class="claim"><div class="figure">0.00–0.55<small>the production gap</small></div><p>Every model writes something where the expert wrote about the last session. Almost none writes anything about the next one, on the eleven sessions where an expert did. Both columns check that a field was answered, not that the answer is right.</p></div>
   </div>
 
   <h2>Read this if you are building or buying one of these</h2>
   <p>Two datasets exist for turning a therapy transcript into a clinical note. Both were
-     benchmarked once, on models from 2024 and 2025, and never re-run. This benchmark
-     re-runs them on 16 current models with the original prompts and the
-     original scoring protocols, reproduced word for word so the numbers mean what the
-     papers&rsquo; numbers meant.</p>
+     benchmarked once, on models of the 2023&ndash;2024 era, and never re-run. This
+     benchmark re-runs them on 16 current models with the generation prompts
+     reproduced word for word. On the SOAP track the scoring protocol is the paper&rsquo;s
+     too. On the iCARE track it is not, and this page says so where those numbers appear:
+     the word-overlap column is computed on the fields the expert answered and is not
+     comparable with the paper&rsquo;s table, and TRACE is a re-implementation with a
+     prompt of our own.</p>
+  <p class="note">Both corpora are English, and nothing here says anything about a
+     session held in another language. The 16 models are what one endpoint and
+     the two judges&rsquo; own vendors had deployed on the run date &mdash; not a survey
+     of the market, and nothing outside that deployment was tested.</p>
   <p>Nothing here is a clinical validation. No model in this benchmark has been shown to
      write a note a clinician would sign. What is measured is narrower and checkable:
      how much of a published rubric a note covers, how much of a published form it
      fills, and how far two different judges agree about either.</p>
 
   <h2 class="page-break">What was measured, and on what</h2>
-  <p>Two tracks and three published instruments, because the corpora and the
+  <p>Two corpora and four published instruments, because the corpora and the
      protocols on them ask different questions and disagree about the answers
      &mdash; which is itself a result the source papers reported.</p>
-  <table>
+  <div class="scroll"><table>
     <thead><tr><th>Track</th><th>What the model writes</th><th>How it is scored</th>
       <th class="num">Sessions</th></tr></thead>
     <tbody>
       <tr><td><strong>TN-Eval SOAP</strong></td>
           <td>One SOAP note per conversation, from a transcript</td>
           <td>A judge answers 23 yes/no rubric questions about it, plus one rating per
-              sentence and one for factual accuracy. No gold note is involved.</td>
+              sentence and one for factual accuracy. No gold note is involved. The same
+              notes are also rated on eight of PDSQI-9&rsquo;s nine attributes &mdash; an
+              instrument validated on discharge summaries rather than on session notes,
+              with no human anchor here, and eight of the eleven columns the published
+              table draws. The two are never averaged: they are separate instruments, and
+              the leaderboard is ordered by the rubric alone.</td>
           <td class="num">50</td></tr>
       <tr><td><strong>iCARE / iHOPE</strong></td>
           <td>A 17-section clinical form, one call per section</td>
           <td>Word overlap and embedding similarity against an expert-written note, plus
-              five judge-rated dimensions and two time-bearing sections counted
-              separately.</td>
+              TRACE &mdash; five dimensions rated 1 to 5, re-implemented here because the
+              authors published the dimension names and never a prompt &mdash; and two
+              time-bearing sections counted separately.</td>
           <td class="num">40</td></tr>
     </tbody>
-  </table>
+  </table></div>
   <p class="note">Both corpora are transcripts of published demonstration sessions,
      not of clinical practice. On the iCARE side the experts themselves left most of the
      form empty &mdash; 316 of 680 fields say anything at all
-     (46%). Fields the expert left blank are out of the denominator, so
-     nothing is scored on them either way &mdash; read the low rows as no signal
-     rather than as a hard test.</p>
+     (46%). On the overlap and time-bearing columns those blank fields are out of
+     the denominator, so nothing is scored on them either way; TRACE rates the whole
+     rendered note, so padding an empty field is still read there. Read a high iCARE
+     score as &ldquo;fills the form correctly, including knowing when not to&rdquo;,
+     not as &ldquo;writes a good clinical note&rdquo;.</p>
 
   <h2>The judge is a model, so the judge is measured first</h2>
   <p>TN-Eval released 150 notes that two trained therapists had already rated. Every
      candidate judge answers the same questions about the same notes before it is
      allowed near the leaderboard, and the agreement is published whatever it says.</p>
-  <table>
+  <div class="scroll"><table>
     <thead><tr><th>Measure</th><th>Form</th><th>Statistic</th>
       <th class="num">Judge vs therapist</th><th class="num">Therapist vs therapist</th>
       <th class="num">Alpha, judge</th><th class="num">Alpha, therapists</th></tr></thead>
     <tbody><tr><td>completeness</td><td>checklist</td><td>Cohen's kappa</td><td class="num">0.60</td><td class="num">0.50</td><td class="num">0.60</td><td class="num">0.50</td></tr><tr><td>completeness</td><td>1&ndash;5 rating</td><td>Spearman rho</td><td class="num">0.24</td><td class="num">0.13</td><td class="num">0.11</td><td class="num">0.13</td></tr><tr><td>conciseness</td><td>1&ndash;5 rating</td><td>Spearman rho</td><td class="num">0.11</td><td class="num">0.19</td><td class="num">0.03</td><td class="num">0.19</td></tr><tr><td>faithfulness</td><td>1&ndash;5 rating</td><td>Spearman rho</td><td class="num">0.09</td><td class="num">0.18</td><td class="num">0.09</td><td class="num">0.18</td></tr></tbody>
-  </table>
+  </table></div>
   <p>Both therapist-vs-therapist columns are a ceiling, not a target. <strong>Two trained
      therapists rating the same notes barely agree on the 1&ndash;5 scales</strong>
      &mdash; 0.13, 0.19 and 0.18 by alpha, where 1.00 is perfect and 0 is chance. On the 23-item
@@ -154,7 +200,7 @@
      other three columns are reported because the protocol produces them, and ordering
      anything by them would be ordering by noise.</p>
   <p class="note">Measured across 150 of those notes, judge
-     <code>gemini-3.1-pro-preview</code>.</p>
+     <code>gemini-3.1-pro-preview</code>. The second judge, <code>gpt-5.6-terra</code>, clears the same ceiling by less: 0.52 against 0.50 on the checklist. Both are in <code>docs/judges.json</code>.</p>
 
   <h2 class="page-break">One: a leaderboard position is not a measurement</h2>
   <p>The two judges see the same notes, ask the same 23 questions and reach almost the
@@ -228,8 +274,8 @@
 <text class="name" x="262" y="113.0" text-anchor="end">1. kimi-k3</text>
 <text class="name" x="262" y="139.0" text-anchor="end">2. qwen3.5-int4</text>
 <text class="name" x="262" y="165.0" text-anchor="end">3. qwen3.5-122b</text>
-<text class="name" x="262" y="191.0" text-anchor="end">4. gemini-3.1-pro-preview</text>
-<text class="name" x="262" y="217.0" text-anchor="end">5. gemini-3.7-flash</text>
+<text class="name" x="262" y="191.0" text-anchor="end">4. gemini-3.1-pro-preview †</text>
+<text class="name" x="262" y="217.0" text-anchor="end">5. gemini-3.7-flash †</text>
 <text class="name" x="262" y="243.0" text-anchor="end">6. glm-5</text>
 <text class="name" x="262" y="269.0" text-anchor="end">7. glm-5.2</text>
 <text class="name" x="262" y="295.0" text-anchor="end">8. gpt-5.6-sol</text>
@@ -237,7 +283,7 @@
 <text class="name" x="262" y="347.0" text-anchor="end">10. gpt-oss-120b</text>
 <text class="name" x="262" y="373.0" text-anchor="end">11. deepseek-v4-flash-thinking</text>
 <text class="name" x="262" y="399.0" text-anchor="end">12. gpt-5.6-luna</text>
-<text class="name" x="262" y="425.0" text-anchor="end">13. gemma4</text>
+<text class="name" x="262" y="425.0" text-anchor="end">13. gemma4 †</text>
 <text class="name" x="262" y="451.0" text-anchor="end">14. qwen3.8-27b</text>
 <text class="name" x="262" y="477.0" text-anchor="end">15. mistral-medium-3.5</text>
 <text class="name" x="262" y="503.0" text-anchor="end">16. deepseek-v4-flash</text>
@@ -247,42 +293,44 @@
 <text class="name" x="638" y="113.0">1. kimi-k3</text>
 <text class="name" x="638" y="139.0">2. qwen3.5-122b</text>
 <text class="name" x="638" y="165.0">3. gemini-3.1-pro-preview</text>
-<text class="name" x="638" y="191.0">4. gpt-oss-120b</text>
+<text class="name" x="638" y="191.0">4. gpt-oss-120b †</text>
 <text class="name" x="638" y="217.0">5. qwen3.5-int4</text>
-<text class="name" x="638" y="243.0">6. gpt-5.6-terra</text>
-<text class="name" x="638" y="269.0">7. gpt-5.6-sol</text>
+<text class="name" x="638" y="243.0">6. gpt-5.6-terra †</text>
+<text class="name" x="638" y="269.0">7. gpt-5.6-sol †</text>
 <text class="name" x="638" y="295.0">8. gemini-3.7-flash</text>
 <text class="name" x="638" y="321.0">9. deepseek-v4-flash-thinking</text>
-<text class="name" x="638" y="347.0">10. glm-5</text>
-<text class="name" x="638" y="347.0">10. glm-5.2</text>
-<text class="name" x="638" y="399.0">12. gpt-5.6-luna</text>
-<text class="name" x="638" y="425.0">13. deepseek-v4-flash</text>
-<text class="name" x="638" y="425.0">13. qwen3.8-27b</text>
+<text class="name" x="638" y="347.0">10. glm-5, glm-5.2</text>
+<text class="name" x="638" y="399.0">12. gpt-5.6-luna †</text>
+<text class="name" x="638" y="425.0">13. deepseek-v4-flash, qwen3.8-27b</text>
 <text class="name" x="638" y="477.0">15. mistral-medium-3.5</text>
 <text class="name" x="638" y="503.0">16. gemma4</text>
 <text class="name" x="638" y="529.0">17. mistral-large-v2</text>
 <text class="name" x="638" y="555.0">18. llama-3.1-70b</text>
 <text class="name" x="638" y="581.0">19. therapist</text>
 <text class="note" x="0" y="650">Grey lines held their place. A pair counts as separable when a paired bootstrap puts the two systems in different groups under that judge — over 25 shared</text>
-<text class="note" x="0" y="665">conversations for judge A and 42 for judge B, because more of A's notes went unfinished. Systems that print the same score share a place.</text>
+<text class="note" x="0" y="665">conversations for judge A and 42 for judge B, because more of A's notes went unfinished. Systems that print the same score share a place, and a shared</text>
+<text class="note" x="0" y="680">place is drawn as one label. A dagger marks a system the judge on that side shares a vendor with.</text>
 <text class="note" x="0" y="692">Source: docs/leaderboard.json and docs/saturation-*.json, harness 0.6.0.</text>
 </svg>
 <figcaption>Completeness under each of the two judges. Grey lines held their place. The top group holds 4 systems under one judge and 5 under the other; 4 are in both.</figcaption></figure>
 
-  <h2 class="page-break">Two: the judge has a vendor, and it shows</h2>
+  <h2 class="page-break">Two: the judge has a vendor, and nobody can rule out that it
+     shows</h2>
   <p>Both judges here also <em>write</em> notes in this benchmark, so each is marking
      some of its own homework. The size of that is measurable: take the difference
      between the two judges&rsquo; scores for each system, and compare the judges&rsquo;
      own vendors against the systems neither of them built.</p>
-  <table>
+  <div class="scroll"><table>
     <thead><tr><th>Judge</th><th>Its vendor</th><th class="num">Effect</th>
       <th class="num">95% interval</th><th>Detected</th></tr></thead>
     <tbody><tr><td><code>gemini-3.1-pro-preview</code></td><td>google</td><td class="num">+0.018</td><td class="num">&minus;0.010 to +0.047</td><td>no</td></tr><tr><td><code>gpt-5.6-terra</code></td><td>openai</td><td class="num">+0.027</td><td class="num">&minus;0.004 to +0.058</td><td>no</td></tr></tbody>
-  </table>
-  <p><strong>Neither is detected once the models are treated as a sample rather than as the whole vendor.</strong> The units are completeness, so these effects are 8% and 11% of the range the
-     models occupy under their own judge &mdash; enough to move a system several places
-     in an ordering this tight, and not enough to make a bad note look good. Both point
-     estimates are positive and neither interval clears zero.</p>
+  </table></div>
+  <p><strong>Neither is detected once the models are treated as a sample rather than as the whole vendor.</strong> The units are completeness, so these effects are 18% and 26% of the range the
+     current models occupy under their own judge &mdash; enough to move a system several
+     places in an ordering this tight, and not enough to make a bad note look good. Both
+     point estimates are positive and neither interval clears zero.</p>
+  <p class="note">What is behind them: 3 of google&rsquo;s own models against 12 neither judge wrote, over 25 conversations; 4 of openai&rsquo;s own models against 12 neither judge wrote, over 25 conversations. Not detected is not the same as absent,
+     and a comparison this small is one reason why.</p>
   <p><strong>What to do with that.</strong> If you evaluate models with a model, run
      this check. Two judges from two vendors is the cheapest way to have it; one judge
      cannot measure its own bias at all, and a caveat in the methods section is not a
@@ -290,12 +338,15 @@
   <p class="note">Each effect leans on one system more than the others, and they are
      the two that a definition change moved into these groups on 2026-08-26: dropping
      <code>gemma4</code> takes the Gemini figure from +0.018 to +0.008, and dropping
-     <code>gpt-oss-120b</code> takes the GPT one from +0.027 to +0.018. Nothing here
+     <code>gpt-oss-120b</code> (scored on 42 of 50 conversations; the rest were lost to an output format the rubric parser truncates) takes the GPT one from +0.027 to +0.018.
+     Nothing here
      tests whether the two judges differ from each other; asked directly, they do not &mdash; +0.009 [&minus;0.039, +0.058].</p>
 
   <h2 class="page-break">Three: nothing here can tell you what happens next</h2>
   <p>The iCARE form has two time-bearing sections: what happened at the previous
-     session, and what happens at the next one. Every model fills the first. Almost none
+     session, and what happens at the next one. Every model reliably fills the first
+     &mdash; fourteen of sixteen on all thirty-four sessions the experts answered, the
+     other two on thirty-three. Almost none
      fills the second, and the best of them manages it in just over half the sessions
      where an expert did.</p>
   <figure><svg xmlns="http://www.w3.org/2000/svg" class="fig" width="880" height="650" viewBox="0 0 880 650" role="img" aria-label="Looking back against looking forward, per model">
@@ -359,7 +410,7 @@
 <text class="note" x="0" y="630">Source: docs/leaderboard.json, iCARE track, judge gemini-3.1-pro-preview, harness 0.6.0. Neither column involves the judge: both are computed from the</text>
 <text class="note" x="0" y="645">note and the expert note alone.</text>
 </svg>
-<figcaption>The fraction of expert-answered sections each model also answered. Backward on the left of each pair, forward on the right.</figcaption></figure>
+<figcaption>The fraction of expert-answered sections each model also answered. Looking back and looking forward, one pair per model; which dot is which is in the legend, not in their order.</figcaption></figure>
   <p><strong>What to do with that.</strong> If your product promises continuity between
      sessions &mdash; a plan, a follow-up, something to pick up next time &mdash; that is
      the part no current model produces on its own, and it is the part a demo will not
@@ -369,10 +420,10 @@
   <p>A benchmark that everything passes has stopped measuring. This one has not, and
      it has not evenly: under <code>gemini-3.1-pro-preview</code> the twenty-three rubric
      criteria are in four different states at once.</p>
-  <table>
+  <div class="scroll"><table>
     <thead><tr><th>Criterion</th><th class="num">How many</th><th>What that means</th></tr></thead>
     <tbody><tr><td>Every model already does it</td><td class='num'>3 of 23</td><td>Free points. They raise every score by the same amount and separate nobody.</td></tr><tr><td>Nobody does it, the therapist included</td><td class='num'>2 of 23</td><td>Dead. These transcripts do not contain the answer, so the criterion measures the corpus rather than the model.</td></tr><tr><td>Still separates models</td><td class='num'>13 of 23</td><td>Where the benchmark is doing its job.</td></tr><tr><td>Partly</td><td class='num'>5 of 23</td><td>Separates some models and not others.</td></tr></tbody>
-  </table>
+  </table></div>
   <p><strong>These are one judge&rsquo;s verdicts.</strong> A verdict reads that
      judge&rsquo;s answers, and the second judge does not return the same reading:
      <code>gpt-5.6-terra</code> puts 3 criteria on the floor rather than
@@ -382,9 +433,10 @@
   <p>Strip out the 2 nobody reaches and the most a model could score is
      0.93 &mdash; weighted the way completeness is, four sections
      averaged equally rather than 21 criteria out of 23.
-     <strong>The best model here reaches 0.546, which is
+     <strong>The highest completeness here is 0.546, which is
      59% of that.</strong> There is room.</p>
-  <p>How fast it is being used up: the two 2024 models the 2025 source paper benchmarked
+  <p>How fast it is being used up: the two 2024 models whose notes the source paper
+     released
      score 0.364 and 0.389; the 16 current ones span
      0.446 to 0.546. <strong>One model generation moved the top of
      the table by +0.157.</strong> Two or three more at that rate and
@@ -392,7 +444,10 @@
      what the corpus and the protocol are now, not a reason to trust the ranking more.</p>
 
   <h3>The other track&rsquo;s judge-scored measure is nearly out of room</h3>
-  <p>TRACE rates five dimensions from 1 to 5. Under one judge all 16 models
+  <p>TRACE is a five-dimension framework from the iCARE paper, rated 1 to 5. Its
+     authors published the dimension names and never a prompt, so this column is a
+     re-implementation with a prompt of our own. Under one judge all 16
+     models
      land between 4.76 and 4.99 &mdash;
      6% of the scale. Under the other,
      3.58 to 4.11, which is
@@ -407,7 +462,8 @@
      for a long time after the parts of it have died.</p>
   <p class="note">Computed by a paired bootstrap over the conversations every system was
      scored on, published as <code>docs/saturation-&lt;judge&gt;.json</code> and drawn in
-     full on the methods page. TRACE has no human anchor at all: unlike the rubric, no
+     full on the methods page. TRACE is a re-implementation and has no human anchor at
+     all: unlike the rubric, no
      therapist ever rated these notes on it, and it is labelled that way wherever it
      appears.</p>
 
@@ -448,7 +504,7 @@
     .fig .ring { stroke: #1a1a19; }
   }
 </style>
-<text class="title" x="0" y="22">Every model covers more of the rubric than the therapist does — which is not the same as writing a better note</text><text class="sub" x="0" y="43">Completeness: the fraction of 23 rubric criteria a judge found present. Judge gemini-3.1-pro-preview.</text>
+<text class="title" x="0" y="22">Every model covers more of the rubric than the therapist does — which is not the same as writing a better note</text><text class="sub" x="0" y="43">Completeness: the equal-weighted mean of a note's four section fractions over TN-Eval's 23 criteria, not the fraction of all 23. Judge</text><text class="sub" x="0" y="60">gemini-3.1-pro-preview.</text>
 <line class="rule" x1="220.0" y1="98" x2="220.0" y2="564"/><text class="value" x="220.0" y="90" text-anchor="middle">0.0</text><line class="rule" x1="301.2" y1="98" x2="301.2" y2="564"/><text class="value" x="301.2" y="90" text-anchor="middle">0.1</text><line class="rule" x1="382.4" y1="98" x2="382.4" y2="564"/><text class="value" x="382.4" y="90" text-anchor="middle">0.2</text><line class="rule" x1="463.7" y1="98" x2="463.7" y2="564"/><text class="value" x="463.7" y="90" text-anchor="middle">0.3</text><line class="rule" x1="544.9" y1="98" x2="544.9" y2="564"/><text class="value" x="544.9" y="90" text-anchor="middle">0.4</text><line class="rule" x1="626.1" y1="98" x2="626.1" y2="564"/><text class="value" x="626.1" y="90" text-anchor="middle">0.5</text>
 <g><title>kimi-k3: 0.546</title><rect x="220" y="112" width="443.4" height="15" rx="4" class="fill-a" fill-opacity="0.9"/><text class="name" x="206" y="124.0" text-anchor="end">kimi-k3</text><text class="value" x="736" y="124.0" text-anchor="end">0.546</text></g>
 <g><title>qwen3.5-int4: 0.535</title><rect x="220" y="136" width="434.9" height="15" rx="4" class="fill-a" fill-opacity="0.9"/><text class="name" x="206" y="148.0" text-anchor="end">qwen3.5-int4</text><text class="value" x="736" y="148.0" text-anchor="end">0.535</text></g>
@@ -482,7 +538,10 @@
      the rubric counts what is present and cannot see why anything was left out.</p>
   <p>The one exception is the measure with the weakest human agreement: on factual
      accuracy, one of the two 2024 reference models scores <em>below</em> the therapist
-     under both panel judges and above her under a third. A column that changes sign
+     under both panel judges and above her under <code>gemini-2.5-pro</code> &mdash; a
+     candidate judge measured at harness 0.2.0 and withdrawn from the tables, so that
+     last comparison is not in the files this page is drawn from. A column that changes
+     sign
      when the referee changes is not measuring what the other two are.</p>
   <figure><svg xmlns="http://www.w3.org/2000/svg" class="fig" width="942" height="532" viewBox="0 0 942 532" role="img" aria-label="Completeness against faithfulness, one panel per judge">
 <style>
@@ -547,7 +606,7 @@
      than thirty times, and it read as an instruction not to look.</p>
   <p>And four pages carry what the numbers rest on:
      <a href="datasets.md">the datasets</a> &mdash; where each came from, what licence it
-     publishes (none of the three publishes one for its data) and the traps in them;
+     publishes (three of the six publish none for their data) and the traps in them;
      <a href="methodology.md">the method</a>;
      <a href="limitations.md">what a result cannot claim</a>; and
      <a href="landscape.md">what exists in this field</a> and what does not.</p>
@@ -560,21 +619,33 @@
         the old ones; what is drawn is the newest of each.</li>
   </ul>
   <p>The figures redraw with <code>make figures</code> and this document with
-     <code>make brief</code>. There are 5 of them, and each carries the
+     <code>make brief</code>. 5 are drawn and 4 of them
+     are here &mdash; the fifth sits beside the saturation panel on the methods page
+     &mdash; and each carries the
      file it came from in its own footer.</p>
 
   <h3>What a result here cannot claim</h3>
   <ul>
     <li>Two judges are two instruments. A number scored by one is never averaged with a
         number scored by the other, and a table that cannot say what settings its judge
-        ran at is withdrawn rather than drawn.</li>
+        ran at is withdrawn rather than drawn. <strong>The rule is not bookkeeping.</strong>
+        Raising one judge&rsquo;s thinking budget from 128 to 256 tokens, with nothing
+        else changed, moved every one of nineteen systems on completeness (mean +0.017)
+        and conciseness (+0.048), changed six positions on the first and sixteen on the
+        second, and reordered the conciseness top three. A setting no reader ever sees
+        moved the table further than most of the differences printed in it. Those rows
+        are history: they are not in this repository and cannot be re-derived from it,
+        which is the other half of the lesson.</li>
     <li>An absence is never counted as a zero. A note the judge did not finish is left
         out of the average and said so, rather than dragging a system down for a
         question nobody answered.</li>
-    <li>The corpora are demonstrations, not clinical practice, and not one of the
-        three sources publishes a licence for its data &mdash; a fourth shows an MIT
-        badge on a code repository with no LICENSE file behind it. Nothing is
-        redistributed here.</li>
+    <li>The corpora are demonstrations, not clinical practice. Of the six sources
+        this benchmark draws on, two carry a licence; three publish none at all for
+        their data, and the sixth shows an MIT badge on a code repository with no
+        LICENSE file behind it. <strong>No corpus is redistributed here</strong> &mdash;
+        the pages show scores, field names, TN-Eval&rsquo;s Apache-2.0 prompt and
+        rubric, and one worked example quoting a single iHOPE note section in the
+        clinician&rsquo;s wording and one model&rsquo;s.</li>
   </ul>
 
   <hr class="rule">

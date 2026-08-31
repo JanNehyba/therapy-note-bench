@@ -5,7 +5,7 @@ on three published instruments — TN-Eval's SOAP rubric, PDSQI-9 and iCARE's 17
 sections — and re-run as models change.**
 
 Two datasets exist for turning a therapy transcript into a clinical note. Both
-were benchmarked once, on models from 2024 and 2025, and never re-run. This
+were benchmarked once, on models of the 2023–2024 era, and never re-run. This
 repository re-runs them — one command per stage, with generation on a button —
 so the table stays true as models change.
 

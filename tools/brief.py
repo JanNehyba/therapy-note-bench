@@ -83,17 +83,37 @@ CSS = """
   @page { size: A4; margin: 17mm 15mm 15mm; }
   @page :first { margin-top: 15mm; }
 
+  /* The page follows the reader's theme, because the figures inside it always
+     did. Each inlined SVG carries its own `prefers-color-scheme` block, so on a
+     dark-mode browser every title, model name and value turned near-white while
+     the page around them stayed `#fff` -- four figures at about 1.05:1 contrast,
+     which is invisible. The tokens move together now, and `color-scheme` tells
+     the browser to paint its own furniture to match. */
   :root {
+    color-scheme: light dark;
     --fg: #1a1a19; --muted: #57574f; --line: #dcdcd5; --accent: #00806a;
-    --warn: #8a5a00; --chip: #f2f2ec;
+    --warn: #8a5a00; --chip: #f2f2ec; --bg: #fff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #e8e8e4; --muted: #9a9a94; --line: #2c2e31; --accent: #22a184;
+      --warn: #d0a24a; --chip: #26282b; --bg: #1a1a19;
+    }
+  }
+  /* Print is paper: a dark page would put white text on white. */
+  @media print {
+    :root {
+      --fg: #1a1a19; --muted: #57574f; --line: #dcdcd5; --accent: #00806a;
+      --warn: #8a5a00; --chip: #f2f2ec; --bg: #fff;
+    }
   }
   * { box-sizing: border-box; }
   body {
-    margin: 0; color: var(--fg); background: #fff;
+    margin: 0; color: var(--fg); background: var(--bg);
     font: 10.5pt/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     -webkit-print-color-adjust: exact; print-color-adjust: exact;
   }
-  main { max-width: 178mm; margin: 0 auto; }
+  main { max-width: 178mm; margin: 0 auto; padding: 0 12px; }
 
   h1 { font-size: 21pt; line-height: 1.15; margin: 0 0 4pt; letter-spacing: -.015em; }
   h2 {
@@ -128,7 +148,15 @@ CSS = """
   figure svg { width: 100%; height: auto; }
   figcaption { font-size: 8.8pt; color: var(--muted); margin-top: 4pt; }
 
+  /* The seven-column calibration table does not fit below about 530px, and with
+     nothing to hold it the whole document got a horizontal scrollbar: every
+     paragraph shifted sideways and the last column went off-screen. It scrolls
+     inside its own box now, and at 178mm on paper nothing overflows, so print is
+     unchanged. */
+  .scroll { overflow-x: auto; margin: 6pt 0 10pt; }
+  @media print { .scroll { overflow-x: visible; } }
   table { width: 100%; border-collapse: collapse; font-size: 9.4pt; margin: 6pt 0 10pt; }
+  .scroll > table { margin: 0; min-width: 100%; width: max-content; }
   th, td { text-align: left; padding: 3.5pt 6pt; border-bottom: 1px solid var(--line); }
   th { font-weight: 650; font-size: 8.4pt; text-transform: uppercase; letter-spacing: .04em;
        color: var(--muted); }
@@ -182,7 +210,9 @@ def front(data: Data) -> str:
      the exercise says about choosing a model &mdash; and about reading anybody's
      leaderboard, including this one.</p>
   <p class="meta">therapy-note-bench &middot; harness {data.harness} &middot;
-     every figure here is generated from the files the site publishes &middot;
+     scored {data.scored} &middot; every table and figure here is generated from the
+     files the site publishes; the figures in the prose are listed in
+     <code>tests/test_brief.py</code> &middot;
      <a href="{SITE}">{SITE}</a></p>
 
   <div class="claims">
@@ -190,8 +220,9 @@ def front(data: Data) -> str:
         claim(
             f"{agree}/{separable}",
             "pairs, agreed",
-            "Where both judges can tell two systems apart, they agree on which is better "
-            f"in {agree} of {separable} pairs. The judges are not the problem.",
+            "Where both judges can tell two systems apart, they agree on which is more "
+            f"complete in {agree} of {separable} pairs &mdash; one measure on one track. "
+            "The judges are not the problem.",
         )
     }
     {
@@ -205,7 +236,7 @@ def front(data: Data) -> str:
     }
     {
         claim(
-            "±0.02",
+            "+0.02",
             "each judge's own vendor",
             "Both judges score their own vendor&rsquo;s models higher by about this much, "
             "and the evidence cannot rule out zero for either. If you grade models with a "
@@ -216,18 +247,27 @@ def front(data: Data) -> str:
         claim(
             "0.00–0.55",
             "the production gap",
-            "Every model reliably records what happened last session. Almost none can say "
-            "what happens at the next one. That is a feature gap, not a scoring artefact.",
+            "Every model writes something where the expert wrote about the last session. "
+            "Almost none writes anything about the next one, on the eleven sessions where "
+            "an expert did. Both columns check that a field was answered, not that the "
+            "answer is right.",
         )
     }
   </div>
 
   <h2>Read this if you are building or buying one of these</h2>
   <p>Two datasets exist for turning a therapy transcript into a clinical note. Both were
-     benchmarked once, on models from 2024 and 2025, and never re-run. This benchmark
-     re-runs them on {len(models)} current models with the original prompts and the
-     original scoring protocols, reproduced word for word so the numbers mean what the
-     papers&rsquo; numbers meant.</p>
+     benchmarked once, on models of the 2023&ndash;2024 era, and never re-run. This
+     benchmark re-runs them on {len(models)} current models with the generation prompts
+     reproduced word for word. On the SOAP track the scoring protocol is the paper&rsquo;s
+     too. On the iCARE track it is not, and this page says so where those numbers appear:
+     the word-overlap column is computed on the fields the expert answered and is not
+     comparable with the paper&rsquo;s table, and TRACE is a re-implementation with a
+     prompt of our own.</p>
+  <p class="note">Both corpora are English, and nothing here says anything about a
+     session held in another language. The {len(models)} models are what one endpoint and
+     the two judges&rsquo; own vendors had deployed on the run date &mdash; not a survey
+     of the market, and nothing outside that deployment was tested.</p>
   <p>Nothing here is a clinical validation. No model in this benchmark has been shown to
      write a note a clinician would sign. What is measured is narrower and checkable:
      how much of a published rubric a note covers, how much of a published form it
@@ -252,32 +292,40 @@ def what_was_measured(data: Data) -> str:
     share = f"{fill:.0%}" if fill else "&mdash;"
     return f"""
   <h2 class="page-break">What was measured, and on what</h2>
-  <p>Two tracks and three published instruments, because the corpora and the
+  <p>Two corpora and four published instruments, because the corpora and the
      protocols on them ask different questions and disagree about the answers
      &mdash; which is itself a result the source papers reported.</p>
-  <table>
+  <div class="scroll"><table>
     <thead><tr><th>Track</th><th>What the model writes</th><th>How it is scored</th>
       <th class="num">Sessions</th></tr></thead>
     <tbody>
       <tr><td><strong>TN-Eval SOAP</strong></td>
           <td>One SOAP note per conversation, from a transcript</td>
           <td>A judge answers 23 yes/no rubric questions about it, plus one rating per
-              sentence and one for factual accuracy. No gold note is involved.</td>
+              sentence and one for factual accuracy. No gold note is involved. The same
+              notes are also rated on eight of PDSQI-9&rsquo;s nine attributes &mdash; an
+              instrument validated on discharge summaries rather than on session notes,
+              with no human anchor here, and eight of the eleven columns the published
+              table draws. The two are never averaged: they are separate instruments, and
+              the leaderboard is ordered by the rubric alone.</td>
           <td class="num">{sessions.get("tneval", "&mdash;")}</td></tr>
       <tr><td><strong>iCARE / iHOPE</strong></td>
           <td>A 17-section clinical form, one call per section</td>
           <td>Word overlap and embedding similarity against an expert-written note, plus
-              five judge-rated dimensions and two time-bearing sections counted
-              separately.</td>
+              TRACE &mdash; five dimensions rated 1 to 5, re-implemented here because the
+              authors published the dimension names and never a prompt &mdash; and two
+              time-bearing sections counted separately.</td>
           <td class="num">{sessions.get("icare", "&mdash;")}</td></tr>
     </tbody>
-  </table>
+  </table></div>
   <p class="note">Both corpora are transcripts of published demonstration sessions,
      not of clinical practice. On the iCARE side the experts themselves left most of the
      form empty &mdash; {filled} of {total} fields say anything at all
-     ({share}). Fields the expert left blank are out of the denominator, so
-     nothing is scored on them either way &mdash; read the low rows as no signal
-     rather than as a hard test.</p>
+     ({share}). On the overlap and time-bearing columns those blank fields are out of
+     the denominator, so nothing is scored on them either way; TRACE rates the whole
+     rendered note, so padding an empty field is still read there. Read a high iCARE
+     score as &ldquo;fills the form correctly, including knowing when not to&rdquo;,
+     not as &ldquo;writes a good clinical note&rdquo;.</p>
 """
 
 
@@ -292,6 +340,26 @@ def the_judges(data: Data) -> str:
     was really a missing column, so the column is here now.
     """
     calibration = json.loads((DOCS / "calibration.json").read_text(encoding="utf-8"))
+
+    # Half of every claim on this page is scored by the other judge, and its
+    # agreement with the therapists appeared nowhere: a reader took "0.60
+    # against a 0.50 ceiling" for the panel's calibration when it is the better
+    # half of it. Read from `judges.json`, which carries every candidate.
+    second = None
+    for entry in json.loads((DOCS / "judges.json").read_text(encoding="utf-8"))["judges"]:
+        if entry["judge_model"] != JUDGE_B:
+            continue
+        found = [a for a in entry["agreements"] if a["name"] == "rubric_completeness"]
+        second = found[0] if found else None
+    second_judge = (
+        f"The second judge, <code>{esc(JUDGE_B)}</code>, clears the same ceiling by less: "
+        f"{second['judge']:.2f} against {second['humans']:.2f} on the checklist. "
+        "Both are in <code>docs/judges.json</code>."
+        if second
+        else f"The second judge, <code>{esc(JUDGE_B)}</code>, has no published "
+        "calibration in <code>docs/judges.json</code>, which is itself a gap."
+    )
+
     rows = []
     for entry in calibration["agreements"]:
         name = entry["name"].replace("_", " ").replace("rubric ", "").replace("likert ", "")
@@ -320,12 +388,12 @@ def the_judges(data: Data) -> str:
   <p>TN-Eval released 150 notes that two trained therapists had already rated. Every
      candidate judge answers the same questions about the same notes before it is
      allowed near the leaderboard, and the agreement is published whatever it says.</p>
-  <table>
+  <div class="scroll"><table>
     <thead><tr><th>Measure</th><th>Form</th><th>Statistic</th>
       <th class="num">Judge vs therapist</th><th class="num">Therapist vs therapist</th>
       <th class="num">Alpha, judge</th><th class="num">Alpha, therapists</th></tr></thead>
     <tbody>{"".join(rows)}</tbody>
-  </table>
+  </table></div>
   <p>Both therapist-vs-therapist columns are a ceiling, not a target. <strong>Two trained
      therapists rating the same notes barely agree on the 1&ndash;5 scales</strong>
      &mdash; {ceilings} by alpha, where 1.00 is perfect and 0 is chance. On the 23-item
@@ -345,7 +413,7 @@ def the_judges(data: Data) -> str:
      other three columns are reported because the protocol produces them, and ordering
      anything by them would be ordering by noise.</p>
   <p class="note">Measured across {calibration["notes"]} of those notes, judge
-     <code>{esc(calibration["judge_model"])}</code>.</p>
+     <code>{esc(calibration["judge_model"])}</code>. {second_judge}</p>
 """
 
 
@@ -365,12 +433,51 @@ def what_it_means(data: Data) -> str:
     shares = []
     for judge in (JUDGE_A, JUDGE_B):
         entry = effects.get(judge)
-        scores = data.scores("tneval-soap", judge, "completeness")
-        if not entry or not scores:
+        # The width the *sentence* names: the current models. It used to be the
+        # width of every drawn row, which runs down to the therapist-written
+        # note and the two dated reference models, so the published shares were
+        # 8% and 11% where the models' own range gives 18% and 26% -- the
+        # section whose job is to size this bias understated it by more than
+        # half. That is the second time this denominator has been wrong; the
+        # first is recorded in the comment above.
+        width_of = [
+            row["headline"]["completeness"]
+            for row in data.rows("tneval-soap", judge)
+            if row.get("system_type") == "model" and row["headline"].get("completeness") is not None
+        ]
+        if not entry or not width_of:
             continue
-        width = max(scores.values()) - min(scores.values())
+        width = max(width_of) - min(width_of)
         shares.append(f"{entry['estimate'] / width:.0%}")
     shares = " and ".join(shares)
+
+    # What the estimate rests on, which the panel printed the verdict of and not
+    # the size of. Three and four models over half the corpus is the reason the
+    # intervals are as wide as they are.
+    counts = [
+        f"{entry['n_own']} of {entry['family']}&rsquo;s own models against "
+        f"{entry['n_neutral']} neither judge wrote, over {entry['n_sessions']} conversations"
+        for entry in (effects.get(JUDGE_A), effects.get(JUDGE_B))
+        if entry
+    ]
+    behind = "; ".join(counts) if counts else "not recorded in the payload"
+
+    # `limitations.md` requires the session count beside this system wherever it
+    # is drawn, and the brief draws it four times without one.
+    oss = next(
+        (
+            row
+            for row in data.rows("tneval-soap", JUDGE_A)
+            if row.get("system_id") == "gpt-oss-120b"
+        ),
+        None,
+    )
+    oss_note = (
+        f"scored on {oss['n_scored']} of {oss['n_attempted']} conversations; the rest were "
+        "lost to an output format the rubric parser truncates"
+        if oss and oss.get("n_scored") and oss.get("n_attempted")
+        else "session count not recorded"
+    )
 
     # Named rather than dropped when it is missing. A sentence that says two
     # judges "do not" differ, with the evidence for it silently absent, is the
@@ -443,20 +550,23 @@ def what_it_means(data: Data) -> str:
         )
     }
 
-  <h2 class="page-break">Two: the judge has a vendor, and it shows</h2>
+  <h2 class="page-break">Two: the judge has a vendor, and nobody can rule out that it
+     shows</h2>
   <p>Both judges here also <em>write</em> notes in this benchmark, so each is marking
      some of its own homework. The size of that is measurable: take the difference
      between the two judges&rsquo; scores for each system, and compare the judges&rsquo;
      own vendors against the systems neither of them built.</p>
-  <table>
+  <div class="scroll"><table>
     <thead><tr><th>Judge</th><th>Its vendor</th><th class="num">Effect</th>
       <th class="num">95% interval</th><th>Detected</th></tr></thead>
     <tbody>{"".join(rows)}</tbody>
-  </table>
+  </table></div>
   <p>{found}The units are completeness, so these effects are {shares} of the range the
-     models occupy under their own judge &mdash; enough to move a system several places
-     in an ordering this tight, and not enough to make a bad note look good. Both point
-     estimates are positive and neither interval clears zero.</p>
+     current models occupy under their own judge &mdash; enough to move a system several
+     places in an ordering this tight, and not enough to make a bad note look good. Both
+     point estimates are positive and neither interval clears zero.</p>
+  <p class="note">What is behind them: {behind}. Not detected is not the same as absent,
+     and a comparison this small is one reason why.</p>
   <p><strong>What to do with that.</strong> If you evaluate models with a model, run
      this check. Two judges from two vendors is the cheapest way to have it; one judge
      cannot measure its own bias at all, and a caveat in the methods section is not a
@@ -464,19 +574,23 @@ def what_it_means(data: Data) -> str:
   <p class="note">Each effect leans on one system more than the others, and they are
      the two that a definition change moved into these groups on 2026-08-26: dropping
      <code>gemma4</code> takes the Gemini figure from +0.018 to +0.008, and dropping
-     <code>gpt-oss-120b</code> takes the GPT one from +0.027 to +0.018. Nothing here
+     <code>gpt-oss-120b</code> ({oss_note}) takes the GPT one from +0.027 to +0.018.
+     Nothing here
      tests whether the two judges differ from each other; {judges_differ}.</p>
 
   <h2 class="page-break">Three: nothing here can tell you what happens next</h2>
   <p>The iCARE form has two time-bearing sections: what happened at the previous
-     session, and what happens at the next one. Every model fills the first. Almost none
+     session, and what happens at the next one. Every model reliably fills the first
+     &mdash; fourteen of sixteen on all thirty-four sessions the experts answered, the
+     other two on thirty-three. Almost none
      fills the second, and the best of them manages it in just over half the sessions
      where an expert did.</p>
   {
         figure_block(
             "temporal.svg",
             "The fraction of expert-answered sections each model also answered. "
-            "Backward on the left of each pair, forward on the right.",
+            "Looking back and looking forward, one pair per model; which dot is which "
+            "is in the legend, not in their order.",
         )
     }
   <p><strong>What to do with that.</strong> If your product promises continuity between
@@ -572,10 +686,10 @@ def how_much_room_is_left(data: Data) -> str:
   <p>A benchmark that everything passes has stopped measuring. This one has not, and
      it has not evenly: under <code>{esc(JUDGE_A)}</code> the twenty-three rubric
      criteria are in four different states at once.</p>
-  <table>
+  <div class="scroll"><table>
     <thead><tr><th>Criterion</th><th class="num">How many</th><th>What that means</th></tr></thead>
     <tbody>{rows}</tbody>
-  </table>
+  </table></div>
   <p><strong>These are one judge&rsquo;s verdicts.</strong> A verdict reads that
      judge&rsquo;s answers, and the second judge does not return the same reading:
      <code>{esc(JUDGE_B)}</code> puts {other_dead} criteria on the floor rather than
@@ -585,9 +699,10 @@ def how_much_room_is_left(data: Data) -> str:
   <p>Strip out the {dead} nobody reaches and the most a model could score is
      {reachable:.2f} &mdash; weighted the way completeness is, four sections
      averaged equally rather than 21 criteria out of 23.
-     <strong>The best model here reaches {best:.3f}, which is
+     <strong>The highest completeness here is {best:.3f}, which is
      {best / reachable:.0%} of that.</strong> There is room.</p>
-  <p>How fast it is being used up: the two 2024 models the 2025 source paper benchmarked
+  <p>How fast it is being used up: the two 2024 models whose notes the source paper
+     released
      score {min(older):.3f} and {max(older):.3f}; the {len(current)} current ones span
      {min(current):.3f} to {best:.3f}. <strong>One model generation moved the top of
      the table by {best - max(older):+.3f}.</strong> Two or three more at that rate and
@@ -595,7 +710,10 @@ def how_much_room_is_left(data: Data) -> str:
      what the corpus and the protocol are now, not a reason to trust the ranking more.</p>
 
   <h3>The other track&rsquo;s judge-scored measure is nearly out of room</h3>
-  <p>TRACE rates five dimensions from 1 to 5. Under one judge all {len(current)} models
+  <p>TRACE is a five-dimension framework from the iCARE paper, rated 1 to 5. Its
+     authors published the dimension names and never a prompt, so this column is a
+     re-implementation with a prompt of our own. Under one judge all {len(current)}
+     models
      land between {trace[JUDGE_A][0]:.2f} and {trace[JUDGE_A][1]:.2f} &mdash;
      {(trace[JUDGE_A][1] - trace[JUDGE_A][0]) / 4:.0%} of the scale. Under the other,
      {trace[JUDGE_B][0]:.2f} to {trace[JUDGE_B][1]:.2f}, which is
@@ -610,7 +728,8 @@ def how_much_room_is_left(data: Data) -> str:
      for a long time after the parts of it have died.</p>
   <p class="note">Computed by a paired bootstrap over the conversations every system was
      scored on, published as <code>docs/saturation-&lt;judge&gt;.json</code> and drawn in
-     full on the methods page. TRACE has no human anchor at all: unlike the rubric, no
+     full on the methods page. TRACE is a re-implementation and has no human anchor at
+     all: unlike the rubric, no
      therapist ever rated these notes on it, and it is labelled that way wherever it
      appears.</p>
 """
@@ -633,7 +752,10 @@ def what_it_does_not_mean(data: Data) -> str:
      the rubric counts what is present and cannot see why anything was left out.</p>
   <p>The one exception is the measure with the weakest human agreement: on factual
      accuracy, one of the two 2024 reference models scores <em>below</em> the therapist
-     under both panel judges and above her under a third. A column that changes sign
+     under both panel judges and above her under <code>gemini-2.5-pro</code> &mdash; a
+     candidate judge measured at harness 0.2.0 and withdrawn from the tables, so that
+     last comparison is not in the files this page is drawn from. A column that changes
+     sign
      when the referee changes is not measuring what the other two are.</p>
   {
         figure_block(
@@ -669,7 +791,7 @@ def how_to_check(data: Data) -> str:
      than thirty times, and it read as an instruction not to look.</p>
   <p>And four pages carry what the numbers rest on:
      <a href="datasets.md">the datasets</a> &mdash; where each came from, what licence it
-     publishes (none of the three publishes one for its data) and the traps in them;
+     publishes (three of the six publish none for their data) and the traps in them;
      <a href="methodology.md">the method</a>;
      <a href="limitations.md">what a result cannot claim</a>; and
      <a href="landscape.md">what exists in this field</a> and what does not.</p>
@@ -682,21 +804,33 @@ def how_to_check(data: Data) -> str:
         the old ones; what is drawn is the newest of each.</li>
   </ul>
   <p>The figures redraw with <code>make figures</code> and this document with
-     <code>make brief</code>. There are {len(FIGURES)} of them, and each carries the
+     <code>make brief</code>. {len(FIGURES)} are drawn and {len(BRIEF_FIGURES)} of them
+     are here &mdash; the fifth sits beside the saturation panel on the methods page
+     &mdash; and each carries the
      file it came from in its own footer.</p>
 
   <h3>What a result here cannot claim</h3>
   <ul>
     <li>Two judges are two instruments. A number scored by one is never averaged with a
         number scored by the other, and a table that cannot say what settings its judge
-        ran at is withdrawn rather than drawn.</li>
+        ran at is withdrawn rather than drawn. <strong>The rule is not bookkeeping.</strong>
+        Raising one judge&rsquo;s thinking budget from 128 to 256 tokens, with nothing
+        else changed, moved every one of nineteen systems on completeness (mean +0.017)
+        and conciseness (+0.048), changed six positions on the first and sixteen on the
+        second, and reordered the conciseness top three. A setting no reader ever sees
+        moved the table further than most of the differences printed in it. Those rows
+        are history: they are not in this repository and cannot be re-derived from it,
+        which is the other half of the lesson.</li>
     <li>An absence is never counted as a zero. A note the judge did not finish is left
         out of the average and said so, rather than dragging a system down for a
         question nobody answered.</li>
-    <li>The corpora are demonstrations, not clinical practice, and not one of the
-        three sources publishes a licence for its data &mdash; a fourth shows an MIT
-        badge on a code repository with no LICENSE file behind it. Nothing is
-        redistributed here.</li>
+    <li>The corpora are demonstrations, not clinical practice. Of the six sources
+        this benchmark draws on, two carry a licence; three publish none at all for
+        their data, and the sixth shows an MIT badge on a code repository with no
+        LICENSE file behind it. <strong>No corpus is redistributed here</strong> &mdash;
+        the pages show scores, field names, TN-Eval&rsquo;s Apache-2.0 prompt and
+        rubric, and one worked example quoting a single iHOPE note section in the
+        clinician&rsquo;s wording and one model&rsquo;s.</li>
   </ul>
 
   <hr class="rule">
@@ -709,6 +843,7 @@ def how_to_check(data: Data) -> str:
 def render(data: Data) -> str:
     return (
         '<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
+        '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
         "<title>therapy-note-bench &mdash; what a leaderboard can tell you</title>\n"
         f"<style>{CSS}</style>\n</head>\n<body>\n<main>\n"
         + front(data)

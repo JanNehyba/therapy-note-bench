@@ -27,9 +27,10 @@ from tnb.results import Metrics, Row
 from tnb.scoring import tneval
 from tnb.tasks import soap
 
-#: TN-Eval's released model notes, keyed as their data files key them. These
-#: are 2024/2025 models the paper ran; scoring them puts a dated anchor in the
-#: table next to today's models.
+#: TN-Eval's released model notes, keyed as their data files key them. Both are
+#: 2024 models -- Llama 3.1 70B and Mistral Large 2 shipped a day apart in July
+#: 2024 -- and the 2025 in each label is the paper's year, not the model's.
+#: Scoring them puts a dated anchor in the table next to today's models.
 REFERENCE_MODELS = {
     "llm_llama31_70B": ("llama-3.1-70b", "llama-3.1-70b (TN-Eval, 2025)"),
     "llm_mistral_large_v2": ("mistral-large-v2", "mistral-large-v2 (TN-Eval, 2025)"),

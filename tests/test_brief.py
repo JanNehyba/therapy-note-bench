@@ -162,6 +162,15 @@ def test_the_bias_is_stated_as_the_share_of_the_range_it_actually_is(prose, data
     An eleventh. The error made the effect the section exists to report look 4.5
     times smaller than the section's own table shows, and the next clause --
     "enough to move a system several places" -- contradicted it.
+
+    **And then it was wrong a second time, in the same direction, for a second
+    reason** -- and this test blessed it, because it built its expectation the
+    same way the code did. The denominator was every drawn row, which runs down
+    to the therapist-written note and the two dated reference models; the
+    sentence says "the range the current models occupy". Over the sixteen models
+    the effects are 18% and 26%, not 8% and 11%. So the width here is computed
+    from the population the *sentence* names, and a test that agrees with the
+    code by construction is not a test.
     """
     preference = data.preference or {}
     effects = {entry["judge"]: entry for entry in preference.get("effects", [])}
@@ -171,14 +180,50 @@ def test_the_bias_is_stated_as_the_share_of_the_range_it_actually_is(prose, data
     shares = []
     for judge in (figures.JUDGE_A, figures.JUDGE_B):
         entry = effects.get(judge)
-        scores = data.scores(TRACK, judge, RANKING)
-        if not entry or not scores:
+        models = [
+            row["headline"][RANKING]
+            for row in data.rows(TRACK, judge)
+            if row.get("system_type") == "model" and row["headline"].get(RANKING) is not None
+        ]
+        if not entry or not models:
             continue
-        width = max(scores.values()) - min(scores.values())
+        width = max(models) - min(models)
         shares.append(f"{entry['estimate'] / width:.0%}")
 
     assert f"these effects are {' and '.join(shares)} of the range" in prose
     assert "a fiftieth" not in prose
+
+
+def test_the_share_is_not_taken_over_a_range_that_includes_the_therapist(prose, data):
+    """The wider denominator halves the number, so it must not be the one used.
+
+    Pinned separately from the test above because the two are one edit apart: if
+    somebody restores `data.scores`, which returns every drawn row, the shares
+    become 8% and 11% again and only this assertion says so.
+    """
+    everyone = data.scores(TRACK, figures.JUDGE_A, RANKING)
+    models = [
+        row["headline"][RANKING]
+        for row in data.rows(TRACK, figures.JUDGE_A)
+        if row.get("system_type") == "model" and row["headline"].get(RANKING) is not None
+    ]
+    if not everyone or not models:
+        pytest.skip("no scored table in this checkout")
+
+    assert max(everyone.values()) - min(everyone.values()) > max(models) - min(models), (
+        "the two populations no longer differ, so this test proves nothing; "
+        "check whether the therapist row is still drawn"
+    )
+    effects = {e["judge"]: e for e in (data.preference or {}).get("effects", [])}
+    entry = effects.get(figures.JUDGE_A)
+    if not entry:
+        pytest.skip("no preference payload in this checkout")
+    wide = entry["estimate"] / (max(everyone.values()) - min(everyone.values()))
+    assert f"these effects are {wide:.0%} and" not in prose, (
+        "the share is divided by a range that includes the therapist-written note "
+        "and the two dated reference models, which halves the effect the section "
+        "exists to report"
+    )
 
 
 def test_the_judge_versus_judge_interval_is_the_published_one(prose, data):
@@ -226,3 +271,44 @@ def test_the_document_counts_the_files_it_reads(prose):
     ):
         assert name in prose
     assert "Five files rather than two" in prose
+
+
+def test_the_document_never_calls_completeness_a_fraction_of_23(prose):
+    """The headline figure's own subtitle said it, 68 lines under the prose that denies it.
+
+    Completeness is the equal-weighted mean of four section fractions over
+    sections holding 6, 5, 8 and 4 criteria. The two readings differ by more
+    than the gap between adjacent rows in the chart the caption sat on, so a
+    reader who did the arithmetic the caption invited got a different table.
+    Checked against the rendered document, figures included, because the
+    sentence was inside an inlined SVG and no test of `brief.py` could see it.
+    """
+    for wrong in ("fraction of 23", "fraction of all 23 criteria", "half of them"):
+        assert wrong not in prose, (
+            f"{wrong!r} is back. Completeness is the equal-weighted mean of the "
+            "four section fractions; see docs/methodology.md."
+        )
+
+
+def test_trace_is_labelled_a_re_implementation_wherever_it_appears(prose):
+    """`landscape.md` states the practice as a fact, and this page broke it.
+
+    "Our TRACE implementation is therefore a re-implementation with no human
+    anchor, and is labelled as such everywhere it appears." The brief carried
+    only the second half, and then asserted the labelling rule in a sentence the
+    page itself falsified.
+    """
+    if "TRACE" not in prose:
+        pytest.skip("this document does not draw TRACE")
+    assert "re-implementation" in prose, (
+        "TRACE is named without the word `re-implementation`, on a page that "
+        "claims the label is applied wherever it appears"
+    )
+
+
+def test_the_document_says_when_its_numbers_were_scored(prose, data):
+    """Undated, the PDF printed from it drifted three days without saying so."""
+    assert f"scored {data.scored}" in prose, (
+        f"the page does not carry its scoring date ({data.scored}), so a reader "
+        "holding the page and the PDF cannot tell which is newer"
+    )
