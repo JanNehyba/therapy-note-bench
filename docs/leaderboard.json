@@ -1768,7 +1768,7 @@
       "used_for": "the 17 section instructions"
     },
     {
-      "cite": "No paper of its own. It carries the iHOPE corpus described in the iCARE paper above.",
+      "cite": "Adhikary, P. K., Mukherjee, A., Deb, K. S., Singh, S., Singh, S. M., & Chakraborty, T. (2026). Discourse-guided summarisation of psychotherapy dialogues via graph-fused language models. IEEE Journal of Biomedical and Health Informatics. https://doi.org/10.1109/JBHI.2026.3726138 -- it also carries the iHOPE corpus described in the iCARE paper above.",
       "licence": "MIT badge, no LICENSE file",
       "note": "A badge on a code repository, for a corpus collected elsewhere. Treated as no licence for the data.",
       "source": "TheraFuse",

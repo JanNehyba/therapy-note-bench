@@ -1006,8 +1006,15 @@ LICENCES = [
     },
     {
         "source": "TheraFuse",
+        # It does have a paper of its own; this said it did not. Verified at
+        # Crossref on 2026-08-31: DOI 10.1109/jbhi.2026.3726138 returns the
+        # title, the journal, the year and the six authors below.
         "cite": (
-            "No paper of its own. It carries the iHOPE corpus described in the iCARE paper above."
+            "Adhikary, P. K., Mukherjee, A., Deb, K. S., Singh, S., Singh, S. M., & "
+            "Chakraborty, T. (2026). Discourse-guided summarisation of psychotherapy "
+            "dialogues via graph-fused language models. IEEE Journal of Biomedical and "
+            "Health Informatics. https://doi.org/10.1109/JBHI.2026.3726138 -- it also "
+            "carries the iHOPE corpus described in the iCARE paper above."
         ),
         "url": "https://github.com/ai4mhx/TheraFuse",
         "used_for": "the iHOPE transcripts and expert notes",

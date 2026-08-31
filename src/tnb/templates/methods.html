@@ -287,7 +287,8 @@ function renderSaturation(data) {
              most === 1 ? T`one each` : T`no more than ${most} each`}`;
          })()}. Expect small
          differences from the table, and expect closely-matched systems to change places: that
-         two orderings disagree over which 42 of 50 conversations you use is itself a result
+         two orderings disagree over which ${s.sessions} of ${s.corpus_sessions}
+         conversations you use is itself a result
          about how tightly packed these models are.`}</p>`
     : '';
 
@@ -399,9 +400,9 @@ function renderCorpora(data) {
   }).join('');
 
   document.getElementById('corpora-body').innerHTML = `
-    <p class="blurb">${T`Both corpora are transcripts of published counselling demonstrations, not
-       clinical sessions. Sizes are of the splits this benchmark actually scores; lengths are in
-       words of transcript, which is what a model has to read.`}</p>
+    <p class="blurb">${T`Both corpora are transcripts of published demonstration sessions, not
+       of clinical practice. Sizes are of the splits this benchmark actually scores; lengths are
+       in words of transcript, which is what a model has to read.`}</p>
     <div class="scroll"><table>
       <thead><tr><th>${T`Track`}</th><th>${T`Sessions`}</th><th>${T`Words / session (range)`}</th>
                  <th>${T`Turns (range)`}</th><th>${T`Words in the expert note`}</th></tr></thead>
@@ -523,7 +524,7 @@ function renderSimilarityExample(example) {
   if (!host) return;
   if (!example || !example.expert) { host.remove(); return; }
   host.innerHTML = `
-    <p class="blurb">${T`Two of the four iCARE columns measure how closely a model
+    <p class="blurb">${T`Two of the five iCARE columns measure how closely a model
        reproduced the clinician's wording. Here is what that misses — section
        <strong>${esc(example.section)}</strong> of session ${esc(example.session)},
        written by the clinician who saw it and by <code>${esc(example.model)}</code>,
@@ -695,8 +696,7 @@ function summaryLang(summary) {
 // assembler for `uv run tnb preference`.
 function englishAhead(summary) {
   return summaryLang(summary) === 'en' && LANG !== 'en'
-    ? T`The summary below is in English: it is assembled from the numbers it reports.
-        Every claim in it is also in the table beside it.`
+    ? T`The summary below is in English: it is assembled from the numbers it reports.`
     : '';
 }
 

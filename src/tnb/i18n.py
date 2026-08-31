@@ -269,10 +269,8 @@ _SENTENCES = {
     "Rows": "Řádků",
     "Harness": "Harness",
     "Reason": "Důvod",
-    "The summary below is in English: it is assembled from the numbers it reports. Every claim"
-    " in it is also in the table beside it.": (
-        "Souhrn níže je v angličtině: skládá se z čísel, o kterých mluví. Každé jeho tvrzení "
-        "je i v tabulce vedle něj."
+    "The summary below is in English: it is assembled from the numbers it reports.": (
+        "Souhrn níže je v angličtině: skládá se z čísel, o kterých mluví."
     ),
     "And the two against each other.": "A ti dva proti sobě.",
     "Band": "Pásmo",
@@ -419,10 +417,11 @@ _SENTENCES = {
     ),
     "<strong>Sources:</strong> {0} — every prompt and rubric here is reproduced verbatim"
     ' from them. <a href="methods.html#licences">What each is used for, and on what terms</a>:'
-    " two of them publish no licence at all.": (
+    " three of them publish no licence at all, and a fourth shows only a badge.": (
         "<strong>Zdroje:</strong> {0} — každý zdejší prompt i rubrika jsou z nich "
         'převzaté doslova. <a href="methods.html#licences">K čemu se každý používá a za '
-        "jakých podmínek</a>: dva z nich nezveřejňují žádnou licenci."
+        "jakých podmínek</a>: tři z nich nezveřejňují žádnou licenci a čtvrtý ukazuje jen "
+        "odznak."
     ),
     "The instrument is reproduced verbatim, anchors included, so a score here answers the"
     " published question and not a rewritten one.": (
@@ -444,7 +443,7 @@ _SENTENCES = {
     "The transcripts": "Přepisy",
     "AnnoMI: 133 publicly released motivational-interviewing sessions, transcribed and annotated"
     " by therapists. 50 of them are scored here.": (
-        "AnnoMI: 133 veřejně vydaných nahrávek motivačních rozhovorů, přepsaných "
+        "AnnoMI: 133 veřejně vydaných motivačních rozhovorů, přepsaných "
         "a anotovaných terapeuty. Hodnotí se z nich 50."
     ),
     "SOAP note": "Zápis SOAP",
@@ -463,15 +462,15 @@ _SENTENCES = {
     "This track. A model fills in a 17-field clinical form from a counselling transcript, and"
     " its answers are compared with the form the clinician who saw the session filled in. One"
     " project under two names: released as iCARE, renamed iHOPE in the preprint.": (
-        "Tato větev. Model vyplní ze zápisu poradenského rozhovoru klinický formulář o 17 "
+        "Tato větev. Model vyplní z přepisu poradenského rozhovoru klinický formulář o 17 "
         "polích a jeho odpovědi se porovnají s formulářem, který vyplnil klinik, jenž to "
-        "sezení vedl. Jeden projekt pod dvěma jmény: vydán jako iCARE, v preprintu "
+        "sezení viděl. Jeden projekt pod dvěma jmény: vydán jako iCARE, v preprintu "
         "přejmenován na iHOPE."
     ),
     "The sessions": "Sezení",
     "40 counselling sessions, each with one note written by the clinician who saw it. That note"
     " is the answer key, not an entry.": (
-        "40 poradenských sezení, u každého jeden zápis od klinika, který ho vedl. Ten zápis "
+        "40 poradenských sezení, u každého jeden zápis od klinika, který ho viděl. Ten zápis "
         "je klíč k odpovědím, ne soutěžící."
     ),
     "The form": "Formulář",
@@ -999,14 +998,15 @@ _METHODS = {
     " over the <strong>{0} of {1}</strong> conversations they <em>all</em> have, because a"
     " paired comparison is only paired on a shared set. The set is smaller because {2}. Expect"
     " small differences from the table, and expect closely-matched systems to change places:"
-    " that two orderings disagree over which 42 of 50 conversations you use is itself a result"
+    " that two orderings disagree over which {3} of {4} conversations you use is itself a"
+    " result"
     " about how tightly packed these models are.": (
         "<strong>Tato čísla nejsou čísla z tabulky, a ani být nemají.</strong> Tabulka výše "
         "průměruje každý systém přes jeho vlastní zápisy; tento oddíl průměruje každý systém "
         "přes <strong>{0} z {1}</strong> rozhovorů, které mají <em>všechny</em>, protože "
         "párové srovnání je párové jen na sdílené množině. Ta množina je menší proto, že {2}. "
         "Očekávejte drobné rozdíly oproti tabulce a očekávejte, že si těsně vyrovnané systémy "
-        "prohodí místa: to, že se dvě uspořádání neshodnou podle toho, kterých 42 z 50 "
+        "prohodí místa: to, že se dvě uspořádání neshodnou podle toho, kterých {3} z {4} "
         "rozhovorů použijete, je samo o sobě výsledek o tom, jak nahusto tyto modely stojí."
     ),
     "{0} was scored on {1} fewer": "{0} byl obodován o {1} méně",
@@ -1058,10 +1058,10 @@ _METHODS = {
     "Criterion": "Kritérium",
     "Models, worst to best": "Modely, od nejhoršího k nejlepšímu",
     # -- the corpora ----------------------------------------------------------
-    "Both corpora are transcripts of published counselling demonstrations, not clinical"
-    " sessions. Sizes are of the splits this benchmark actually scores; lengths are in words of"
+    "Both corpora are transcripts of published demonstration sessions, not of clinical"
+    " practice. Sizes are of the splits this benchmark actually scores; lengths are in words of"
     " transcript, which is what a model has to read.": (
-        "Oba korpusy jsou přepisy publikovaných poradenských ukázek, ne klinických sezení. "
+        "Oba korpusy jsou přepisy publikovaných ukázkových sezení, ne klinické praxe. "
         "Velikosti jsou velikosti těch částí, které tento benchmark opravdu boduje; délky jsou "
         "ve slovech přepisu, což je to, co musí model přečíst."
     ),
@@ -1156,10 +1156,10 @@ _METHODS = {
         "protože ten repozitář nepublikuje žádnou licenci."
     ),
     # -- similarity is not quality ---------------------------------------------
-    "Two of the four iCARE columns measure how closely a model reproduced the clinician's"
+    "Two of the five iCARE columns measure how closely a model reproduced the clinician's"
     " wording. Here is what that misses — section <strong>{0}</strong> of session {1}, written by"
     " the clinician who saw it and by <code>{2}</code>, both verbatim.": (
-        "Dva ze čtyř sloupců iCARE měří, jak těsně model zreprodukoval klinikovo znění. Tady je "
+        "Dva z pěti sloupců iCARE měří, jak těsně model zreprodukoval klinikovo znění. Tady je "
         "to, co jim uniká — oddíl <strong>{0}</strong> sezení {1}, napsaný klinikem, který ho "
         "viděl, a modelem <code>{2}</code>, obojí doslova."
     ),
