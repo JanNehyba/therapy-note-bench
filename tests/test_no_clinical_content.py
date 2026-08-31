@@ -72,6 +72,10 @@ ALLOWED_CZECH = {
     "tools/czech_brief_cs.py": "the Czech text of the briefing that goes to the team",
     "tests/fixtures/czech/real/999001.txt": "invented transcript, marked as such",
     "tests/fixtures/czech/translated/ukazka-b.txt": "invented transcript, marked as such",
+    "tools/czech_calques.py": "the prompt that asks a judge which expressions in a "
+    "note are literal translations from English, plus the two examples it is given. "
+    "Checked fragment by fragment against every transcript and both code files: "
+    "twenty fragments, thirty-six files, no match",
     "tools/czech_category_control.py": "one invented sentence per category, planted "
     "in the invented clean note so gate 7 can ask whether a category fires on a note "
     "built to carry it. Checked fragment by fragment against every transcript and "
