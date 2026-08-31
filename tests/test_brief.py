@@ -214,7 +214,15 @@ def test_the_document_does_not_tell_the_reader_not_to_check(prose):
 
 
 def test_the_document_counts_the_files_it_reads(prose):
-    """It said two. Data.load reads three, and the judges table a fourth."""
-    for name in ("leaderboard.json", "saturation-*.json", "calibration.json"):
+    """It said two, then four. `Data.load` reads three -- the payload and the two
+    saturation files -- and `brief.py` opens two more of its own,
+    `calibration.json` and `corpus-profile.json`. Five.
+    """
+    for name in (
+        "leaderboard.json",
+        "saturation-*.json",
+        "calibration.json",
+        "corpus-profile.json",
+    ):
         assert name in prose
-    assert "Four files rather than two" in prose
+    assert "Five files rather than two" in prose

@@ -182,7 +182,7 @@ def front(data: Data) -> str:
      the exercise says about choosing a model &mdash; and about reading anybody's
      leaderboard, including this one.</p>
   <p class="meta">therapy-note-bench &middot; harness {data.harness} &middot;
-     every figure here is generated from <code>docs/leaderboard.json</code> &middot;
+     every figure here is generated from the files the site publishes &middot;
      <a href="{SITE}">{SITE}</a></p>
 
   <div class="claims">
@@ -252,9 +252,9 @@ def what_was_measured(data: Data) -> str:
     share = f"{fill:.0%}" if fill else "&mdash;"
     return f"""
   <h2 class="page-break">What was measured, and on what</h2>
-  <p>Two tracks, because the two published protocols ask different questions and
-     disagree about the answers &mdash; which is itself a result the source papers
-     reported.</p>
+  <p>Two tracks and three published instruments, because the corpora and the
+     protocols on them ask different questions and disagree about the answers
+     &mdash; which is itself a result the source papers reported.</p>
   <table>
     <thead><tr><th>Track</th><th>What the model writes</th><th>How it is scored</th>
       <th class="num">Sessions</th></tr></thead>
@@ -272,11 +272,12 @@ def what_was_measured(data: Data) -> str:
           <td class="num">{sessions.get("icare", "&mdash;")}</td></tr>
     </tbody>
   </table>
-  <p class="note">Both corpora are transcripts of published counselling demonstrations,
-     not clinical sessions. On the iCARE side the experts themselves left most of the
+  <p class="note">Both corpora are transcripts of published demonstration sessions,
+     not of clinical practice. On the iCARE side the experts themselves left most of the
      form empty &mdash; {filled} of {total} fields say anything at all
-     ({share}). A model scores on those sections by staying
-     quiet, so read the low rows as no signal rather than as a hard test.</p>
+     ({share}). Fields the expert left blank are out of the denominator, so
+     nothing is scored on them either way &mdash; read the low rows as no signal
+     rather than as a hard test.</p>
 """
 
 
@@ -460,8 +461,8 @@ def what_it_means(data: Data) -> str:
      this check. Two judges from two vendors is the cheapest way to have it; one judge
      cannot measure its own bias at all, and a caveat in the methods section is not a
      measurement.</p>
-  <p class="note">Two systems carry most of it, and they are the two that a
-     definition change moved into these groups on 2026-08-26: dropping
+  <p class="note">Each effect leans on one system more than the others, and they are
+     the two that a definition change moved into these groups on 2026-08-26: dropping
      <code>gemma4</code> takes the Gemini figure from +0.018 to +0.008, and dropping
      <code>gpt-oss-120b</code> takes the GPT one from +0.027 to +0.018. Nothing here
      tests whether the two judges differ from each other; {judges_differ}.</p>
@@ -631,7 +632,7 @@ def what_it_does_not_mean(data: Data) -> str:
      therapist writes what matters for the next session and leaves out what does not;
      the rubric counts what is present and cannot see why anything was left out.</p>
   <p>The one exception is the measure with the weakest human agreement: on factual
-     accuracy, one of the two 2025 reference models scores <em>below</em> the therapist
+     accuracy, one of the two 2024 reference models scores <em>below</em> the therapist
      under both panel judges and above her under a third. A column that changes sign
      when the referee changes is not measuring what the other two are.</p>
   {
@@ -657,18 +658,18 @@ def how_to_check(data: Data) -> str:
     return f"""
   <h2 class="page-break">How to check any of this</h2>
   <p>Every figure in this document is drawn from the files the site publishes, and
-     every table is built from them row by row. Four files rather than two:
-     <code>leaderboard.json</code>, the two <code>saturation-*.json</code>, and
-     <code>calibration.json</code>.</p>
-  <p><strong>The prose around them is written by hand.</strong> Where a sentence states
-     a figure, that figure is computed from the same payload and a test fails if it
-     drifts &mdash; but the test names the sentences it covers, and a sentence it does
-     not name is a sentence nobody is checking. This paragraph used to say that nothing
+     every table is built from them row by row. Five files rather than two:
+     <code>leaderboard.json</code>, the two <code>saturation-*.json</code>,
+     <code>calibration.json</code> and <code>corpus-profile.json</code>.</p>
+  <p><strong>The prose around them is written by hand.</strong> Some figures in it are
+     computed from the payload and a test fails if they drift; others are typed here
+     beside the prose they belong to. The test names the sentences it covers, and a
+     sentence it does not name is a sentence nobody is checking. This paragraph used to say that nothing
      here was typed in. That was false in this file more than thirty times, and it read
      as an instruction not to look.</p>
   <p>And four pages carry what the numbers rest on:
      <a href="datasets.md">the datasets</a> &mdash; where each came from, what licence it
-     publishes (two of the three publish none) and the traps in them;
+     publishes (none of the three publishes one for its data) and the traps in them;
      <a href="methodology.md">the method</a>;
      <a href="limitations.md">what a result cannot claim</a>; and
      <a href="landscape.md">what exists in this field</a> and what does not.</p>
@@ -692,8 +693,10 @@ def how_to_check(data: Data) -> str:
     <li>An absence is never counted as a zero. A note the judge did not finish is left
         out of the average and said so, rather than dragging a system down for a
         question nobody answered.</li>
-    <li>The corpora are demonstrations, not clinical sessions, and two of the three
-        sources publish no licence at all. Nothing is redistributed here.</li>
+    <li>The corpora are demonstrations, not clinical practice, and not one of the
+        three sources publishes a licence for its data &mdash; a fourth shows an MIT
+        badge on a code repository with no LICENSE file behind it. Nothing is
+        redistributed here.</li>
   </ul>
 
   <hr class="rule">
