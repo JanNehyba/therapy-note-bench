@@ -1661,9 +1661,10 @@ _TRACK_REGISTRIES = {
     "answer whether the note is accurate and thorough. **Eight columns against "
     "the real half's six is two instruments, not one**, and the two tables are "
     "not rows of each other.": (
-        "PDSQI-9 na poznámkách psaných z přeloženého AnnoMI. Tady všech osm atributů: "
-        "tyhle přepisy jsou veřejné, takže soudce smí přečíst sezení a odpovědět, jestli "
-        "je poznámka přesná a důkladná. **Osm sloupců proti šesti u skutečné půlky jsou "
+        "PDSQI-9 na zápisech psaných z přeloženého AnnoMI. Tady se ptá na všech osm "
+        "atributů: tyhle přepisy jsou veřejné, takže soudce smí přečíst i sezení "
+        "a odpovědět, jestli je zápis přesný a důkladný. **Osm sloupců proti šesti "
+        "u skutečné půlky jsou "
         "dva přístroje, ne jeden**, a ty dvě tabulky nejsou navzájem svými řádky."
     ),
     "The note alone, on six of PDSQI-9's eight attributes. The instrument and "
@@ -1716,9 +1717,9 @@ _TRACK_REGISTRIES = {
     " separable** -- and the generation prompt is a translation of TN-Eval's rather than a"
     " reproduction of anything.": (
         "Šest kritérií ano/ne o té češtině, kladených samotnému zápisu. Každý sloupec je podíl "
-        "zápisů, které tou vadou netrpí. **Deset sezení s jedním klientem, takže sousední pozice "
-        "nejsou oddělitelné** — a generovací prompt je překlad promptu z TN-Eval, ne reprodukce "
-        "čehokoli."
+        "zápisů, které tou vadou netrpí. **Sezení je deset a klient jeden, takže "
+        "sousední pozice od sebe oddělit nejde.** Zadání, ze kterého zápisy vznikly, "
+        "je překlad toho z TN-Eval — žádnou českou normu nereprodukuje."
     ),
     "The same criteria on notes written from AnnoMI conversations translated into Czech. **The"
     " two halves differ by more than language** -- AnnoMI is motivational interviewing about"
