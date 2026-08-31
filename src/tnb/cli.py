@@ -1060,7 +1060,23 @@ def cmd_score_czech_pdsqi(args: argparse.Namespace) -> int:
             render=render,
             judge_prompt_version=czech_pdsqi.JUDGE_PROMPT_VERSION,
             on_note=on_note,
-            cache_root=_cache_root(args),
+            # A root of its own, for the reason the criteria tracks have one.
+            # `judge.cache_path` carries the judge, the prompt version, the
+            # provider, the system, the session and the attribute -- and the
+            # Deepsy PDSQI track shares every one of those with the Czech SOAP
+            # PDSQI track. Only the note differs, and the note is not in the
+            # path. Sharing the root does not publish a wrong number, because
+            # `load_cached` compares the prompt digest and a mismatch reads as
+            # unanswered; what it does is hide. The fallback to the
+            # pre-2026-08-31 path fires only when the instrument path is empty,
+            # so a Deepsy answer written there shadows an intact Czech answer
+            # underneath, and 2 684 of them went unreadable in one run.
+            cache_root=_cache_root(
+                args,
+                judge.CACHE_DIR / deepsy_task_local.PROMPT_VERSION
+                if args.format == "deepsy"
+                else None,
+            ),
         )
         if not scored:
             continue
