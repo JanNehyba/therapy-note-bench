@@ -314,7 +314,7 @@ Generation runs on e-INFRA and costs quota, not money. Judging costs money, so:
 
 ## The Czech criteria, and why they are yes/no
 
-The Czech track asks seven questions about a note, each answered yes or no, and
+The Czech track asks six questions about a note, each answered yes or no, and
 publishes each as the share of notes free of that fault. It began as six 1-5
 scales and was rewritten before it ever ran, on this repository's own published
 calibration.
@@ -336,7 +336,7 @@ see a difference, a concrete question can recover it -- one of the two judges
 separates `comprehensible` where the other does not. Where a column is flat
 because the *task* prescribes the answer, no wording helps: every model writes
 into the same four-part template, so nothing distinguishes them on structure.
-None of the seven criteria therefore asks about anything the prompt dictates,
+None of the six criteria therefore asks about anything the prompt dictates,
 and a test holds them to it by the words that named those four PDSQI columns.
 
 **Each criterion carries a counter-example, in the prompt.** Without one,
@@ -344,12 +344,15 @@ and a test holds them to it by the words that named those four PDSQI columns.
 correlate for that reason rather than a real one: `sebepece` is a diacritic that
 went missing, not a word Czech does not have.
 
-**A criterion with no opportunity is not a pass.** A note that quotes nothing
-cannot use the wrong quotation marks, and counting it clean would let a model
-score for never citing the client. Quotation marks are asked only of notes that
-quote something; the denominator is smaller and is published beside the number.
+**A criterion with no opportunity was not a pass, while there was one.** Until
+2026-08-28 a seventh criterion asked whether a note used the wrong quotation
+marks, and it was asked only of the notes that quote something: a note that
+quotes nothing cannot get the marks wrong, and counting it clean would have let
+a model score for never citing the client. It was removed in `05940f6` and no
+criterion is gated now. The rule it stood for still holds and is why the
+denominator of every measure here is published beside its number.
 
-**An empty note is asked nothing.** All seven ask about the absence of a fault,
+**An empty note is asked nothing.** All six ask about the absence of a fault,
 so a note with four blank sections would pass every one -- the same shape that
 gives an empty note 5.00 on PDSQI's `accurate` and `succinct`, and worse,
 because this track has no companion measure that scores an empty note zero the

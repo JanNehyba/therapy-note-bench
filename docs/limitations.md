@@ -153,7 +153,7 @@ exists.
 
 That sentence used to be about the whole repository and is now only about the
 page. A Czech track exists: ten real psychotherapy sessions with one client, and
-ten AnnoMI conversations translated into Czech, scored on seven yes/no criteria
+ten AnnoMI conversations translated into Czech, scored on six yes/no criteria
 about the Czech itself. **Its numbers are not published and are not in
 `results/rows.jsonl`.** They are measured into a directory that is not in
 version control, because the corpus is confidential clinical material and the
@@ -490,7 +490,7 @@ what fills the coverage is verified against the weakest instrument in the set.
 
 ## A rubric rewards coverage, not judgement
 
-Every judge that has scored this corpus puts both 2025 models **above** the
+Every judge that has scored this corpus puts both 2024 models **above** the
 therapist on rubric completeness, and above on conciseness — all three judges,
 no exception. TN-Eval reported the same direction from blinded expert
 comparison, so this is a reproduction, not an anomaly.

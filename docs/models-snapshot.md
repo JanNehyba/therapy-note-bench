@@ -39,8 +39,11 @@ duplicates under a second name, or unversioned labels.
 newest GLM on the endpoint was `glm-5.2`; the DeepSeek was `deepseek-v4-flash`.
 That has changed and this capture has not been retaken: `glm-5.3-flash` has
 been writing notes since 2026-08-27 and `qwen3.8-flash-next` since 2026-08-28,
-and `glm-5` and `qwen3.5-122b` no longer appear in any run. **This file is dated; read the date,
-not the tense.** Note also the
+and neither of them appears in any published table: `results/rows.jsonl` holds
+no row for either, and they write notes only on the unpublished Czech tracks.
+`glm-5` and `qwen3.5-122b` are still in the published runs -- 129 and 128 rows,
+including harness-0.6.0 rows on all three published tracks.
+**This file is dated; read the date, not the tense.** Note also the
 casing: the documentation writes `DeepSeek-V4-Flash`, the endpoint serves
 `deepseek-v4-flash`.
 

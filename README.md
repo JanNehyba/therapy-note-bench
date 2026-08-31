@@ -19,14 +19,16 @@ rather than a second benchmark.
 > therapists who annotated the source data; TRACE, on the iCARE track, has no
 > human anchor and says so wherever it appears.
 >
-> Every model scores above both 2025 models TN-Eval released *and* above the
-> therapist-written note — on a rubric that rewards coverage, which is not the
+> Every model scores above both models TN-Eval released notes for — Llama 3.1
+> 70B and Mistral Large v2, both from 2024 — *and* above the therapist-written
+> note — on a rubric that rewards coverage, which is not the
 > same as writing a better note.
 >
 > **The two judges agree on the shape of the ranking and not on the order**, so
 > "near the top" is a claim this benchmark supports and "ninth rather than
-> tenth" is not. Most systems are beaten outright by nobody, which is why no
-> single winner is named. The figures are on the methods page, where a run
+> tenth" is not. On the table the page opens with, 8 of 19 systems are beaten
+> outright by nobody — a minority, but one with no single system in it that
+> beats the rest, which is why no single winner is named. The figures are on the methods page, where a run
 > keeps them current. See [Roadmap](#roadmap).
 
 ---
@@ -42,7 +44,7 @@ much the two judges disagree with each other, what the corpora are, and which
 rows are no longer drawn:
 **<https://jannehyba.github.io/therapy-note-bench/methods.html>**
 
-Eight pages on what a leaderboard of these models can and cannot tell you,
+A briefing on what a leaderboard of these models can and cannot tell you,
 written for somebody building or buying one:
 **<https://jannehyba.github.io/therapy-note-bench/brief.html>**
 ([PDF](https://jannehyba.github.io/therapy-note-bench/therapy-note-bench.pdf))
@@ -240,7 +242,12 @@ The judge reproduces TN-Eval's central finding: criterion checklists agree far b
 | Track | Corpus | Protocol | Reference needed |
 |---|---|---|---|
 | **TN-Eval SOAP** | 50 AnnoMI conversations | 23 completeness criteria, per-sentence conciseness, faithfulness | No |
+| **PDSQI-9 on the same SOAP notes** | the same 50 AnnoMI conversations | eight of PDSQI-9's nine attributes — seven rated 1-5 and one answered yes/no; item 1 ("cited") is dropped, because a note written from a single transcript has no source documents to cite | No |
 | **iCARE / iHOPE** | 40 held-out sessions, 17 sections | ROUGE-L + BERTScore, TRACE, and two temporal columns -- looking back and looking forward | Yes |
+
+The two SOAP instruments are drawn side by side in one table and never
+averaged: different questions on different scales, and neither instrument
+publishes a total.
 
 The iCARE track reports automatic metrics and a TRACE judge **side by side
 because the source paper found they disagree** — experts preferred a smaller
@@ -266,9 +273,10 @@ Full detail: [docs/methodology.md](docs/methodology.md).
 ## What is *not* measured
 
 The two published corpora are transcripts of public YouTube demonstration
-videos, not real clinical sessions. Human agreement in the source data is weak
-(Krippendorff's alpha of 0.08 on Likert completeness between trained
-therapists). Nothing here measures payer compliance.
+videos, not real clinical sessions. Human agreement in the source data is weak:
+TN-Eval published a Krippendorff's alpha of 0.08 on Likert completeness between
+its two therapists, and recomputing it here from their released annotations
+gives 0.13. Nothing here measures payer compliance.
 
 A third corpus exists and is **not** published: ten real Czech sessions with one
 client, and ten AnnoMI conversations translated into Czech. Six tracks are
@@ -387,11 +395,12 @@ records: [docs/datasets.md](docs/datasets.md), [NOTICE](NOTICE).
 | | TN-Eval | iCARE |
 |---|---|---|
 | Expert-written reference note | 50, by therapists | 174, by named clinicians |
-| **Human ratings of what a model wrote** | **2 annotators × 150 notes** | **none published** |
+| **Human ratings of what a model wrote** | **2 annotators × 150 notes, 100 of them model-written** | **none published** |
 
 That second row is why the judge can be calibrated on one track and not the
 other. TN-Eval's annotators disagree with each other — Cohen's kappa 0.50 on the
-rubric, and *negative* correlation on some Likert scales — and our judge is
+rubric, and weak agreement on the three 1-5 scales (Spearman rho 0.13 to
+0.19) — and our judge is
 measured against that ceiling rather than against an imagined truth. The iCARE
 TRACE column has no such anchor and is labelled as a re-implementation
 everywhere it appears.
