@@ -605,9 +605,15 @@ TRACK_BLURBS = {
 TRACK_TERMS = {
     results.TRACK_TNEVAL: (
         (
-            "AnnoMI",
-            "133 publicly released motivational-interviewing sessions, transcribed "
-            "and annotated by therapists. 50 of them are scored here.",
+            "TN-Eval SOAP",
+            "This track. A model reads a counselling transcript and writes a SOAP "
+            "note; TN-Eval's published rubric then scores it. Named after the paper "
+            "the prompt and the rubric are taken from.",
+        ),
+        (
+            "The transcripts",
+            "AnnoMI: 133 publicly released motivational-interviewing sessions, "
+            "transcribed and annotated by therapists. 50 of them are scored here.",
         ),
         (
             "SOAP note",
@@ -617,9 +623,15 @@ TRACK_TERMS = {
     ),
     results.TRACK_PDSQI: (
         (
-            "AnnoMI",
-            "133 publicly released motivational-interviewing sessions, transcribed "
-            "and annotated by therapists. 50 of them are scored here.",
+            "TN-Eval SOAP",
+            "This track. A model reads a counselling transcript and writes a SOAP "
+            "note; TN-Eval's published rubric then scores it. Named after the paper "
+            "the prompt and the rubric are taken from.",
+        ),
+        (
+            "The transcripts",
+            "AnnoMI: 133 publicly released motivational-interviewing sessions, "
+            "transcribed and annotated by therapists. 50 of them are scored here.",
         ),
         (
             "PDSQI-9",
@@ -629,12 +641,19 @@ TRACK_TERMS = {
     ),
     results.TRACK_ICARE: (
         (
-            "iHOPE",
+            "iCARE / iHOPE",
+            "This track. A model fills in a 17-field clinical form from a counselling "
+            "transcript, and its answers are compared with the form the clinician who "
+            "saw the session filled in. One project under two names: released as "
+            "iCARE, renamed iHOPE in the preprint.",
+        ),
+        (
+            "The sessions",
             "40 counselling sessions, each with one note written by the clinician "
             "who saw it. That note is the answer key, not an entry.",
         ),
         (
-            "The iCARE form",
+            "The form",
             "17 fields to fill in rather than a note to write, so a blank field is "
             "a different thing from a short sentence.",
         ),

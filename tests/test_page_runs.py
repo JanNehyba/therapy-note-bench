@@ -153,7 +153,13 @@ def test_every_panel_with_data_puts_something_on_the_page(tmp_path):
     exactly like a section nobody wrote."""
     data = _page_data(tmp_path)
 
-    assert "tables: " in _run(report.render_page(data), tmp_path), "the tables are the leaderboard"
+    # `table-host` and not `tables`: the switch moved inside the section, so
+    # `#tables` now holds only `<div id="table-host"></div>` -- 27 characters,
+    # under the runner's 40-character floor. The leaderboard itself is in
+    # `table-host`, which is what this was always asking about.
+    assert "table-host: " in _run(report.render_page(data), tmp_path), (
+        "the table host is the leaderboard"
+    )
 
     methods = _run(report.render_methods(data), tmp_path)
     for panel in ("concordance", "protocol-body", "licences-body"):

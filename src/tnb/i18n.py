@@ -74,10 +74,11 @@ def norm(text: str) -> str:
 _STATIC = {
     "page.title": "therapy-note-bench — žebříček",
     "page.sub": (
-        "Zápisy z psychoterapeutických sezení psané jazykovými modely, hodnocené podle dvou "
-        "publikovaných protokolů — rubriky SOAP z TN-Eval a 17 oddílů z iCARE — a přeměřované, "
-        "jak se modely mění. "
-        '<a href="https://github.com/JanNehyba/therapy-note-bench">Kód a data na GitHubu</a>.'
+        "Zápisy z psychoterapeutických sezení psané jazykovými modely, hodnocené třemi "
+        "publikovanými nástroji — rubrikou SOAP z TN-Eval, PDSQI-9 a 17 oddíly z iCARE — "
+        "a přeměřované, jak se modely mění. "
+        '<a href="https://github.com/JanNehyba/therapy-note-bench">Kód a všechna skóre na '
+        "GitHubu</a>; korpusy se stahují z vlastních zdrojů a tady se dál nešíří."
     ),
     "page.methods-link": (
         '<a href="methods.html">Jak se to měřilo →</a> '
@@ -432,11 +433,19 @@ _SENTENCES = {
         "devět atributů a jejich kotvy, z nichž osm se hodnotí"
     ),
     # -- what the corpus is and what a note is, above each table -------------
-    "AnnoMI": "AnnoMI",
-    "133 publicly released motivational-interviewing sessions, transcribed and annotated by"
-    " therapists. 50 of them are scored here.": (
-        "133 veřejně vydaných nahrávek motivačních rozhovorů, přepsaných a anotovaných "
-        "terapeuty. Hodnotí se z nich 50."
+    "TN-Eval SOAP": "TN-Eval SOAP",
+    "This track. A model reads a counselling transcript and writes a SOAP note; TN-Eval's"
+    " published rubric then scores it. Named after the paper the prompt and the rubric are taken"
+    " from.": (
+        "Tato větev. Model si přečte přepis poradenského rozhovoru a napíše zápis SOAP; ten "
+        "pak obodovala publikovaná rubrika TN-Evalu. Pojmenováno podle článku, ze kterého "
+        "pochází prompt i rubrika."
+    ),
+    "The transcripts": "Přepisy",
+    "AnnoMI: 133 publicly released motivational-interviewing sessions, transcribed and annotated"
+    " by therapists. 50 of them are scored here.": (
+        "AnnoMI: 133 veřejně vydaných nahrávek motivačních rozhovorů, přepsaných "
+        "a anotovaných terapeuty. Hodnotí se z nich 50."
     ),
     "SOAP note": "Zápis SOAP",
     "The standard clinical note format: subjective, objective, assessment, plan. Every model"
@@ -450,13 +459,22 @@ _SENTENCES = {
         "Publikovaný nástroj na hodnocení toho, jak je klinický zápis napsaný, ověřený na "
         "skutečné dokumentaci s lékaři jako hodnotiteli."
     ),
-    "iHOPE": "iHOPE",
+    "iCARE / iHOPE": "iCARE / iHOPE",
+    "This track. A model fills in a 17-field clinical form from a counselling transcript, and"
+    " its answers are compared with the form the clinician who saw the session filled in. One"
+    " project under two names: released as iCARE, renamed iHOPE in the preprint.": (
+        "Tato větev. Model vyplní ze zápisu poradenského rozhovoru klinický formulář o 17 "
+        "polích a jeho odpovědi se porovnají s formulářem, který vyplnil klinik, jenž to "
+        "sezení vedl. Jeden projekt pod dvěma jmény: vydán jako iCARE, v preprintu "
+        "přejmenován na iHOPE."
+    ),
+    "The sessions": "Sezení",
     "40 counselling sessions, each with one note written by the clinician who saw it. That note"
     " is the answer key, not an entry.": (
         "40 poradenských sezení, u každého jeden zápis od klinika, který ho vedl. Ten zápis "
         "je klíč k odpovědím, ne soutěžící."
     ),
-    "The iCARE form": "Formulář iCARE",
+    "The form": "Formulář",
     "17 fields to fill in rather than a note to write, so a blank field is a different thing"
     " from a short sentence.": (
         "17 políček k vyplnění místo zápisu k napsání, takže prázdné políčko je něco jiného "

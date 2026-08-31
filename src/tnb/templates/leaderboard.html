@@ -11,9 +11,10 @@ __STYLE__
   <div class="lang" id="lang"></div>
   <h1>therapy-note-bench</h1>
   <p class="sub" id="page-sub" data-t="page.sub">
-    LLM-written psychotherapy session notes, scored on two published protocols —
-    TN-Eval's SOAP rubric and iCARE's 17 sections — and re-run as models change.
-    <a href="https://github.com/JanNehyba/therapy-note-bench">Code and data on GitHub</a>.
+    LLM-written psychotherapy session notes, scored on three published instruments —
+    TN-Eval's SOAP rubric, PDSQI-9 and iCARE's 17 sections — and re-run as models change.
+    <a href="https://github.com/JanNehyba/therapy-note-bench">Code and every score on
+    GitHub</a>; the corpora are fetched from their own sources and not redistributed here.
   </p>
 
   <!-- Above the table, because it is what to read before the numbers rather
@@ -730,6 +731,7 @@ function renderTable(table, index) {
       <p class="blurb">${code(tr(table.blurb))}</p>
       ${designBlock(table)}
       ${compareNote}
+      <div id="switch" class="switch"></div>
       <div class="scroll-top" aria-hidden="true"><div></div></div>
       <div class="scroll"><table data-table="${index}" data-sorted="${
         table.ranking_measure || ''}" data-descending="1">
@@ -1009,8 +1011,7 @@ function show(id) {
   current = id;
   const index = INDEX_OF[id];
   const table = DATA.tables[index];
-  document.getElementById('table-host').innerHTML =
-    renderTable(table, index);
+  document.getElementById('table-host').innerHTML = renderTable(table, index);
   renderSwitch();
   drawControls(table);
   applyFilters();
@@ -1063,7 +1064,7 @@ function pairScrollbars() {
 
 function drawFrame() {
   document.getElementById('tables').innerHTML = DATA.tables.length
-    ? '<div id="switch" class="switch"></div><div id="table-host"></div>'
+    ? '<div id="table-host"></div>'
     : `<div class="box pending"><h2>${T`No runs yet`}</h2><p class="blurb">${
         T`The first run will populate this page.`}</p></div>`;
 }
@@ -1086,7 +1087,9 @@ if (DATA.tables.length) {
     }
   });
 
-  document.getElementById('switch').addEventListener('click', event => {
+  // Bound to `#tables` and not to `#switch`: the switch is inside the section
+  // now, so `show()` replaces the node a listener on it would be holding.
+  document.getElementById('tables').addEventListener('click', event => {
     const toggle = event.target.closest('button[data-compare]');
     if (toggle) { compare = !compare; rememberCompare(); show(current); return; }
     const button = event.target.closest('button[data-target]');

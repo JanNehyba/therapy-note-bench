@@ -6166,8 +6166,12 @@
       "subtitle": "scored by gemini-3.1-pro-preview",
       "terms": [
         {
-          "gloss": "133 publicly released motivational-interviewing sessions, transcribed and annotated by therapists. 50 of them are scored here.",
-          "term": "AnnoMI"
+          "gloss": "This track. A model reads a counselling transcript and writes a SOAP note; TN-Eval's published rubric then scores it. Named after the paper the prompt and the rubric are taken from.",
+          "term": "TN-Eval SOAP"
+        },
+        {
+          "gloss": "AnnoMI: 133 publicly released motivational-interviewing sessions, transcribed and annotated by therapists. 50 of them are scored here.",
+          "term": "The transcripts"
         },
         {
           "gloss": "The standard clinical note format: subjective, objective, assessment, plan. Every model writes into the same four headings.",
@@ -8259,8 +8263,12 @@
       "subtitle": "scored by gpt-5.6-terra",
       "terms": [
         {
-          "gloss": "133 publicly released motivational-interviewing sessions, transcribed and annotated by therapists. 50 of them are scored here.",
-          "term": "AnnoMI"
+          "gloss": "This track. A model reads a counselling transcript and writes a SOAP note; TN-Eval's published rubric then scores it. Named after the paper the prompt and the rubric are taken from.",
+          "term": "TN-Eval SOAP"
+        },
+        {
+          "gloss": "AnnoMI: 133 publicly released motivational-interviewing sessions, transcribed and annotated by therapists. 50 of them are scored here.",
+          "term": "The transcripts"
         },
         {
           "gloss": "The standard clinical note format: subjective, objective, assessment, plan. Every model writes into the same four headings.",
@@ -9015,12 +9023,16 @@
       "subtitle": "scored by gemini-3.1-pro-preview",
       "terms": [
         {
+          "gloss": "This track. A model fills in a 17-field clinical form from a counselling transcript, and its answers are compared with the form the clinician who saw the session filled in. One project under two names: released as iCARE, renamed iHOPE in the preprint.",
+          "term": "iCARE / iHOPE"
+        },
+        {
           "gloss": "40 counselling sessions, each with one note written by the clinician who saw it. That note is the answer key, not an entry.",
-          "term": "iHOPE"
+          "term": "The sessions"
         },
         {
           "gloss": "17 fields to fill in rather than a note to write, so a blank field is a different thing from a short sentence.",
-          "term": "The iCARE form"
+          "term": "The form"
         }
       ],
       "title": "iCARE form on the iHOPE corpus · 17 sections per session",
@@ -9767,12 +9779,16 @@
       "subtitle": "scored by gpt-5.6-terra",
       "terms": [
         {
+          "gloss": "This track. A model fills in a 17-field clinical form from a counselling transcript, and its answers are compared with the form the clinician who saw the session filled in. One project under two names: released as iCARE, renamed iHOPE in the preprint.",
+          "term": "iCARE / iHOPE"
+        },
+        {
           "gloss": "40 counselling sessions, each with one note written by the clinician who saw it. That note is the answer key, not an entry.",
-          "term": "iHOPE"
+          "term": "The sessions"
         },
         {
           "gloss": "17 fields to fill in rather than a note to write, so a blank field is a different thing from a short sentence.",
-          "term": "The iCARE form"
+          "term": "The form"
         }
       ],
       "title": "iCARE form on the iHOPE corpus · 17 sections per session",
