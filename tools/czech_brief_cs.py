@@ -2383,4 +2383,26 @@ CS: dict[str, str] = {
         "otázku, ne jako odpověď — a JEN V TOM FORMÁTU: sloupec může být v pořádku "
         "u jednoho formátu zápisu a u druhého ne, a přesně to se tady stalo."
     ),
+    ("Asked a second time, the same judge about the same notes:"): (
+        "Položeno podruhé, týž soudce o týchž zápisech:"
+    ),
+    ("{judge} repeated {share} of its answers on {notes} notes"): (
+        "{judge} zopakoval {share} svých odpovědí na {notes} zápisech"
+    ),
+    (
+        "its least repeatable column is {measure}, identical on {share} of them, "
+        "with a median shift of {median} and a worst of {worst} on a scale of 1 to "
+        "5"
+    ): (
+        "nejméně opakovatelný sloupec je {measure}, shodný u {share} z nich, s "
+        "mediánem posunu {median} a nejhorším {worst} na škále 1 až 5"
+    ),
+    "every column identically": "každý sloupec shodně",
+    (
+        "The Deepsy halves were not asked twice, so nothing here says whether a "
+        "judge repeats itself on them."
+    ): (
+        "Půlky Deepsy nikdo podruhé nedotázal, takže tady nic neříká, jestli se na "
+        "nich soudce zopakuje."
+    ),
 }

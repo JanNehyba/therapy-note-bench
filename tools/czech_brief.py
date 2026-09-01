@@ -1060,6 +1060,46 @@ def _merged_table(track: str, groups: list[list[results.Row]], *, lead: bool = F
                 main=main,
             )
 
+        # And whether those numbers come back the same when the judge is asked
+        # again. Only for the halves that were actually asked twice.
+        repeat_line = ""
+        measured = (_payload("czech-repeatability.json").get("halves") or {}).get(track)
+        if measured:
+            parts = []
+            for judge in judges:
+                block = (measured.get(judge) or {}).get("attributes") or {}
+                if not block:
+                    continue
+                worst_key = min(block, key=lambda k: block[k]["identical_share"])
+                worst = block[worst_key]
+                overall = sum(c["identical"] for c in block.values()) / sum(
+                    c["n"] for c in block.values()
+                )
+                piece = _t(REPEAT_JUDGE).format(
+                    judge=judge,
+                    share=f"{overall:.0%}",
+                    notes=(measured.get(judge) or {}).get("notes", "?"),
+                )
+                if worst["identical_share"] >= 1.0:
+                    piece += f" — {_t(REPEAT_PERFECT)}"
+                else:
+                    label = _t(measures[worst_key]["label"]) if worst_key in measures else worst_key
+                    piece += " — " + _t(REPEAT_WORST).format(
+                        measure=label,
+                        share=f"{worst['identical_share']:.0%}",
+                        median=f"{worst['median_abs']:.2f}",
+                        worst=f"{worst['max_abs']:.2f}",
+                    )
+                parts.append(piece)
+            if parts:
+                repeat_line = (
+                    "<p class='note'>"
+                    + html.escape(f"{_t(REPEAT_LEAD)} {'; '.join(parts)}.")
+                    + "</p>"
+                )
+        elif track in DEEPSY_PDSQI_TRACKS:
+            repeat_line = "<p class='note'>" + html.escape(_t(REPEAT_ABSENT)) + "</p>"
+
         if said:
             # Joined with a semicolon and closed with a stop: the two judges'
             # clauses ran into each other and into the sentence after them,
@@ -1075,8 +1115,31 @@ def _merged_table(track: str, groups: list[list[results.Row]], *, lead: bool = F
     return (
         f"<p class='sub'>{html.escape(caption)}</p>" + f"<table><thead><tr><th>{_t('Model')}</th>"
         f"<th>{_t('Notes in the mean')}</th>{head}</tr></thead>"
-        f"<tbody>{''.join(body)}</tbody></table>{weights}{warning}"
+        f"<tbody>{''.join(body)}</tbody></table>{weights}{repeat_line}{warning}"
     )
+
+
+#: Whether the judge gives the same answer twice, said under the table whose
+#: numbers depend on it. Measured by `tools/czech_repeatability.py`, which asks
+#: both judges the same questions a second time into a cache root of its own.
+#:
+#: **This is the one measurement here that checks the instrument rather than the
+#: models**, and until now it reached no reader: the tool wrote a payload and
+#: nothing read it.
+REPEAT_LEAD = "Asked a second time, the same judge about the same notes:"
+REPEAT_JUDGE = "{judge} repeated {share} of its answers on {notes} notes"
+REPEAT_WORST = (
+    "its least repeatable column is {measure}, identical on {share} of them, with a "
+    "median shift of {median} and a worst of {worst} on a scale of 1 to 5"
+)
+REPEAT_PERFECT = "every column identically"
+#: The halves nobody asked twice. Said rather than left to the reader to assume
+#: the SOAP answer carries -- which is the mistake the planted-error control was
+#: repaired for making.
+REPEAT_ABSENT = (
+    "The Deepsy halves were not asked twice, so nothing here says whether a judge "
+    "repeats itself on them."
+)
 
 
 #: What the Band column rests on, said under the table it is drawn in.
