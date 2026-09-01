@@ -799,6 +799,24 @@ def _dominance_places(systems: list[str], keys, tables: dict) -> dict[str, int]:
     return {system: beaten_by(system) for system in systems}
 
 
+def _dominance_wins(systems: list[str], keys, tables: dict) -> dict[str, int]:
+    """How many other systems each one dominates outright.
+
+    The mirror of `_dominance_places`, and not derivable from it. Being beaten
+    by nobody and beating nobody are both common here and mean opposite things:
+    the first says no evidence puts anyone above you, the second says no
+    evidence puts you above anyone. A table showing only the first reads as
+    though everybody tied for first.
+    """
+
+    def beats(system: str) -> int:
+        return sum(
+            1 for other in systems if other != system and _dominates(system, other, keys, tables)
+        )
+
+    return {system: beats(system) for system in systems}
+
+
 def _merged_table(track: str, groups: list[list[results.Row]], *, lead: bool = False) -> str:
     """One table for a track, with every judge's value in every cell.
 
@@ -843,6 +861,11 @@ def _merged_table(track: str, groups: list[list[results.Row]], *, lead: bool = F
         for judge in judges
     }
     places = _dominance_places(systems, varying or keys, tables)
+    # The same columns, deliberately: a model that beats another on the
+    # varying columns and loses on a flat one has not lost anywhere a
+    # reader can see, and the two halves of the order must be computed
+    # over one set or they contradict each other.
+    wins = _dominance_wins(systems, varying or keys, tables)
 
     def index_of(system: str) -> float:
         found = [
@@ -861,6 +884,7 @@ def _merged_table(track: str, groups: list[list[results.Row]], *, lead: bool = F
     banded = _banded(numbers, judges, systems)
     head = (
         f"<th>{_t('Order')}</th>"
+        + f"<th>{_t('Beats')}</th>"
         + (f"<th>{_t('Band')}</th>" if banded else "")
         + "".join(f"<th>{html.escape(_t(measures[key]['label']))}</th>" for key, _ in columns)
     )
@@ -897,9 +921,13 @@ def _merged_table(track: str, groups: list[list[results.Row]], *, lead: bool = F
         else:
             notes = f"{_pair(complete)} {_t('of')} {corpus}"
         band = _band_cell(numbers, judges, system) if banded else ""
+        # How many systems this one beats outright. One number, not a pair: it
+        # is already defined across both judges, so splitting it per judge would
+        # be a different and weaker claim in the same column.
+        beats = f"<td>{wins[system]}</td>"
         body.append(
             f"<tr{mark}><td>{html.escape(system)}</td><td>{notes}</td>"
-            f"<td><strong>{index}</strong></td>{band}{''.join(cells)}</tr>"
+            f"<td><strong>{index}</strong></td>{beats}{band}{''.join(cells)}</tr>"
         )
         shared.append(place)
 
@@ -985,6 +1013,25 @@ MERGED_ORDER = (
 #: rank -- which is what a single small integer beside a model's name looks
 #: like -- it is exactly the ordering this document spends a page declining to
 #: print, and it would be an ordering two judges do not agree on.
+#: What the Beats column counts, said where it is read. Without this a 0 reads
+#: as a mark out of twelve. It is not a mark: it says no evidence puts this
+#: model above any other, which on a table whose columns disagree with each
+#: other is the ordinary case. The column exists because the `Order` column
+#: carries the mirror -- how many beat IT -- and that one is 0 for almost
+#: everybody here, so a reader seeing only it would read the table as a
+#: twelve-way tie for first.
+BEATS_COLUMN = (
+    "The Beats column counts how many of the other models this one beats outright: at "
+    "least as good on every column of this table, under both judges, and better on at "
+    "least one. Nothing is weighted and nothing is averaged, so no column is quietly "
+    "given more say than another -- which matters here, because the columns are on "
+    "different scales and do not agree with each other."
+)
+BEATS_COLUMN_ZERO = (
+    "A 0 is not a low score. It says the evidence does not place that model above any "
+    "other, and a model can be beaten by nobody and beat nobody at once. Where most of "
+    "a column is 0, that is the finding: these measures do not separate these models."
+)
 BAND_COLUMN = (
     "The Band column groups the models rather than ordering them: within a band nothing "
     "separates them, and a band ends where the gap exceeds what resampling the sessions "
@@ -1173,6 +1220,11 @@ def _how_to_read(tracks: list[str], judges: list[str], *, banded: bool) -> str:
     if judges:
         said.append(_t(MERGED_LEAD).format(judges=_join_words(judges)))
     said.append(_t(NOTES_COLUMN))
+    # Two sentences, because the second is the one that has to be there: a
+    # column that is 0 for most rows is read as a score unless it is told
+    # not to be.
+    said.append(_t(BEATS_COLUMN))
+    said.append(_t(BEATS_COLUMN_ZERO))
     # One line per scale actually drawn, named by the instrument it belongs to.
     # The criteria tables are all shares from 0 to 1 and the PDSQI tables mix a
     # Likert range with one share, so a single sentence covering both would
@@ -3612,6 +3664,14 @@ def _conclusion(rows: list[results.Row]) -> str:
         # bottom band of every SOAP table, and in no Deepsy band at all.
         refused = _refused_on_deepsy(set(bottom) - banded_deepsy)
         if refused:
+            # Withdrawn, or merely failed? The error on disk cannot tell them
+            # apart -- it is the same HTTP 400 either way -- so the answer comes
+            # from `tools/czech_roster.py`, which asks the endpoint what it
+            # still serves and writes it down. A retryable gap and a permanent
+            # one read identically in the tables and mean opposite things: one
+            # closes on the next run, the other never does, and somebody spent
+            # the endpoint's quota this morning finding that out.
+            gone = set(_payload("czech-roster.json").get("withdrawn") or {}) & set(refused)
             _say(
                 "who-is-missing",
                 _t(
@@ -3622,6 +3682,16 @@ def _conclusion(rows: list[results.Row]) -> str:
                     "of the calls asking for those notes with an error and returned no "
                     "note. Adding the two counts together would have removed it from "
                     "the bottom of the table on the strength of an outage."
+                    if not gone
+                    else "One caution about that second count. {subject} in the bottom "
+                    "band of all {tables} SOAP table-and-judge combinations and in no "
+                    "Deepsy band at all -- not because of anything written, but because "
+                    "e-INFRA answered {calls} of the calls asking for those notes with "
+                    "an error and returned no note. The endpoint no longer serves it at "
+                    "all, so this is not a gap that will close on a later run: the "
+                    "question can no longer be put. Adding the two counts together "
+                    "would have removed it from the bottom of the table on the strength "
+                    "of a model being retired."
                 ).format(
                     subject=end(sorted(refused), lead=True),
                     tables=tables,

@@ -90,17 +90,40 @@ def test_the_tables_come_from_the_long_document() -> None:
 
 
 def test_the_dropped_paragraphs_are_named_and_in_range() -> None:
-    """Dropping by index is brittle, so the indices are checked against reality.
+    """Dropping is by name now, and the names are checked against reality.
 
-    If the summary loses a paragraph, an index that used to point at a checking
-    aside starts pointing at a finding, and the short document quietly stops
-    saying something the long one says.
+    **This test used to check the indices, and the thing it feared happened
+    anyway.** Its own docstring said it: "if the summary loses a paragraph, an
+    index that used to point at a checking aside starts pointing at a finding".
+    The summary lost one -- section 1c writes a second paragraph only when there
+    is a second thing to say -- and `(3, 4, 5)` began removing the central
+    finding about the quality instrument. Every index was still in range, so
+    nothing here fired.
+
+    Checking a bound was never going to catch it. The defect was the index
+    itself, so the assertion is now that there are no indices, and that every
+    name dropped is a name `_conclusion` can actually write; a misspelling
+    drops nothing and reads as a decision. `tests/test_short_brief_drops_by_name.py`
+    holds the rest of the rule.
     """
-    assert czech_short._DROPPED, "nothing dropped means the split is not doing anything"
-    assert max(czech_short._DROPPED) < 11, (
-        "an index past the end of the summary drops nothing and hides that it dropped nothing"
+    assert czech_short._DROPPED, "nothing dropped means the trim is not doing anything"
+    assert all(isinstance(name, str) for name in czech_short._DROPPED), (
+        "positional indices into a variable-length list are the defect this "
+        "test failed to catch once already"
     )
-    assert 0 not in czech_short._DROPPED, "index 0 is the heading, removed by its own line"
+
+    import re
+
+    from tnb.config import REPO_ROOT
+
+    written = set(
+        re.findall(
+            r'_say\(\s*"([^"]+)"',
+            (REPO_ROOT / "tools" / "czech_brief.py").read_text(encoding="utf-8"),
+        )
+    )
+    unknown = sorted(set(czech_short._DROPPED) - written)
+    assert not unknown, f"dropped names the conclusion never writes: {unknown}"
 
 
 def test_it_refuses_before_it_writes() -> None:

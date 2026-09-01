@@ -31,6 +31,8 @@ gated on it.
 from __future__ import annotations
 
 import argparse
+import datetime as dt
+import json
 import sys
 from collections import defaultdict
 from pathlib import Path
@@ -76,6 +78,7 @@ def _drawn() -> dict[str, set[str]]:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--provider", default="einfra")
+    parser.add_argument("--target", type=Path, default=REPO / "local" / "czech-roster.json")
     args = parser.parse_args(argv)
 
     load_dotenv(REPO / ".env")
@@ -149,8 +152,33 @@ def main(argv: list[str] | None = None) -> int:
             "  'not among the best' when it means 'was not asked'."
         )
 
+    # Written for the document to read. `tools/czech_brief.py` is offline and
+    # cannot ask the endpoint anything, so without this it can only say that
+    # some calls came back as errors -- which it phrases as an outage. An
+    # outage is retryable and a withdrawal is not, and the difference is the
+    # whole of what a reader needs: one is a gap that may close and the other
+    # is a question that can never be put again.
+    args.target.parent.mkdir(parents=True, exist_ok=True)
+    args.target.write_text(
+        json.dumps(
+            {
+                "provider": args.provider,
+                "checked_on": dt.date.today().isoformat(),
+                "deployed": sorted(deployed),
+                "withdrawn": {system: sorted(drawn[system]) for system in withdrawn},
+                "arrived": arrived,
+                "ragged": ragged,
+            },
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    print(f"\nwrote {args.target}")
+
     problems = len(withdrawn) + len(arrived) + len(ragged)
-    print(f"\n{problems} disagreement(s) between the roster and the tables.")
+    print(f"{problems} disagreement(s) between the roster and the tables.")
     return 1 if problems else 0
 
 

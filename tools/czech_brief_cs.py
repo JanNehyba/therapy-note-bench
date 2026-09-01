@@ -2250,4 +2250,48 @@ CS: dict[str, str] = {
         "na šest svých osmi atributů místo na všech osm, protože na `accurate` a "
         "`thorough` je potřeba sezení a skutečná sezení e-INFRA neopouštějí."
     ),
+    (
+        "One caution about that second count. {subject} in the bottom band of all "
+        "{tables} SOAP table-and-judge combinations and in no Deepsy band at all -- "
+        "not because of anything written, but because e-INFRA answered {calls} of "
+        "the calls asking for those notes with an error and returned no note. The "
+        "endpoint no longer serves it at all, so this is not a gap that will close "
+        "on a later run: the question can no longer be put. Adding the two counts "
+        "together would have removed it from the bottom of the table on the "
+        "strength of a model being retired."
+    ): (
+        "Jedna výhrada k tomu druhému počtu. {subject} v dolním pásmu všech "
+        "{tables} kombinací tabulky a soudce u SOAP a v žádném pásmu Deepsy — ne "
+        "kvůli tomu, co napsal, ale protože e-INFRA na {calls} volání, která si o "
+        "ty zápisy říkala, odpověděla chybou a žádný zápis nevrátila. Endpoint ten "
+        "model už vůbec nenabízí, takže tohle není mezera, která se pozdějším během "
+        "zaplní: ta otázka se už nedá položit. Sečíst ty dva počty dohromady by ho "
+        "z konce tabulky odstranilo na základě toho, že byl model vyřazen."
+    ),
+    "Beats": "Poráží",
+    (
+        "The Beats column counts how many of the other models this one beats "
+        "outright: at least as good on every column of this table, under both "
+        "judges, and better on at least one. Nothing is weighted and nothing is "
+        "averaged, so no column is quietly given more say than another -- which "
+        "matters here, because the columns are on different scales and do not agree "
+        "with each other."
+    ): (
+        "Sloupec Poráží počítá, kolik ostatních modelů tenhle poráží naprosto: je "
+        "aspoň tak dobrý v každém sloupci téhle tabulky, pod oběma soudci, a aspoň "
+        "v jednom je lepší. Nic se neváží a nic se neprůměruje, takže žádný sloupec "
+        "nedostane tiše větší slovo než jiný — a na tom tady záleží, protože "
+        "sloupce mají různé stupnice a neshodují se spolu."
+    ),
+    (
+        "A 0 is not a low score. It says the evidence does not place that model "
+        "above any other, and a model can be beaten by nobody and beat nobody at "
+        "once. Where most of a column is 0, that is the finding: these measures do "
+        "not separate these models."
+    ): (
+        "Nula není špatná známka. Znamená, že důkazy ten model nestavějí nad žádný "
+        "jiný — a model může zároveň nikoho neporážet a nikým poražený nebýt. Kde "
+        "je většina sloupce nulová, je to nález: tyhle míry ty modely od sebe "
+        "neodliší."
+    ),
 }

@@ -171,7 +171,7 @@ def main(argv: list[str] | None = None) -> int:
             client = judge.Judge(
                 judge.config_from_env(model=judge_model, thinking_budget=BUDGETS[judge_model])
             )
-            spend = judge.Spend(ceiling_usd=args.max_judge_usd)
+            spend = judge.Spend(limit_usd=args.max_judge_usd)
 
             # 1. What was answered the first time. Read only; the live cache is
             #    never written to by this tool.
