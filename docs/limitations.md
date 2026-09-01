@@ -203,6 +203,26 @@ rubric is not completeness against a reimbursement requirement.
   rather than theirs. But a lower score for `gpt-oss-120b` partly measures
   formatting, not clinical content, and **any table showing it must show its
   session count next to it.**
+- **A judge can lose a note to its own reasoning, and the cache keeps the
+  loss.** Under `gemini-3.1-pro-preview`, 42 of the 942 SOAP notes are scored
+  on fewer than all four sections. Checked on 2026-09-01: no question is
+  missing from the judge's answer cache for any of them. In 43 cached answers
+  (0.11% of 39 696 rubric answers; 30 completeness, 13 conciseness) — counted
+  in the judge's answer cache, which is not in this repository — the text
+  in the answer slot is the judge's working — `Evaluate against Rubric
+  Item:**`, `Format Output:**`, `Conclusion:**` — and no yes or no ever came.
+  The provider returned no `finish_reason`, so the harness recorded the call
+  as complete and cached it as answered; the aggregator, correctly, reads
+  such an answer as missing and names the section incomplete rather than
+  averaging over what survived. Re-running `tnb score` over all 19 systems
+  that day made **0 judge calls and changed nothing**, because a cached
+  answer is by design not re-asked. Under `gpt-5.6-terra` there are none.
+  These 42 notes are what shrinks the set of conversations all 19 systems
+  share — the set the Band column's paired bootstrap runs on — from 50 to 25
+  under gemini (42 under gpt, where only `gpt-oss-120b`'s 8 are missing).
+  The repair is a cache rule, not a re-run: a rubric answer that is not an
+  answer must not count as one. Until it is in place, the 25 stands and is
+  named beside every figure that rests on it.
 
 ## The form does not fit the material
 

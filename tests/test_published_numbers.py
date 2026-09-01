@@ -198,6 +198,59 @@ class Claim:
 NEARBY = 900
 
 
+def _gemini_soap_table() -> dict:
+    """The SOAP table the leaderboard opens on: the default judge's."""
+    from tnb import judge
+
+    return next(
+        table
+        for table in payload()["tables"]
+        if table["track"] == "tneval-soap"
+        and table["versions"]["judge_model"] == judge.DEFAULT_MODEL
+    )
+
+
+def _part_answered_notes() -> tuple[float, ...]:
+    """Notes scored on fewer than all four sections, all notes, and the section count.
+
+    The 42 is what narrows the Band column's shared set from 50 to 25, and it
+    is the count a re-ask on 2026-09-01 left exactly where it was -- so it is
+    computed from the payload and never carried over.
+    """
+    rows = _gemini_soap_table()["rows"]
+    return (
+        float(sum(row.get("n_partial") or 0 for row in rows)),
+        float(sum(row.get("n_generated") or 0 for row in rows)),
+        4.0,
+    )
+
+
+def _systems_on_the_gemini_table() -> tuple[float, ...]:
+    return (float(len(_gemini_soap_table()["rows"])),)
+
+
+def _saturation(judge_model: str) -> dict:
+    import json as _json
+
+    with open(f"docs/saturation-{judge_model}.json", encoding="utf-8") as handle:
+        return _json.load(handle)
+
+
+def _shared_sets() -> tuple[float, ...]:
+    """Corpus, gemini's shared set, gpt's shared set: the Band column's denominators."""
+    gemini = _saturation("gemini-3.1-pro-preview")
+    gpt = _saturation("gpt-5.6-terra")
+    return (float(gemini["corpus_sessions"]), float(gemini["sessions"]), float(gpt["sessions"]))
+
+
+def _gpt_oss_missing_under_gpt() -> tuple[float, ...]:
+    return (float(_saturation("gpt-5.6-terra")["narrowed_by"]["gpt-oss-120b"]),)
+
+
+def _gemini_shared_set() -> tuple[float, ...]:
+    return (float(_saturation("gemini-3.1-pro-preview")["sessions"]),)
+
+
 def _tneval_undominated() -> tuple[float, ...]:
     """Undominated systems, systems, and the measures dominance was read over.
 
@@ -318,6 +371,84 @@ CLAIMS = (
         covers=("eight", "eleven", "nineteen"),
         expected=_pdsqi_undominated,
     ),
+    # The 42 part-answered notes: what they are, what a re-ask did, and what
+    # they cost the Band column. Computed where the payload or a committed
+    # analysis holds the figure; historical where it lives only in the judge's
+    # answer cache, which is gitignored.
+    Claim(
+        where="docs/limitations.md",
+        phrase="42 of the 942 SOAP notes are scored on fewer than all four sections",
+        kind="computed",
+        because="the count a re-ask on 2026-09-01 left unchanged; if it moves, this sentence must",
+        covers=("42", "942", "four"),
+        expected=_part_answered_notes,
+    ),
+    Claim(
+        where="docs/limitations.md",
+        phrase=(
+            "In 43 cached answers (0.11% of 39 696 rubric answers; 30 completeness, 13 conciseness)"
+        ),
+        kind="historical",
+        because="counted in scores/, which is gitignored; a reader cannot re-derive it here",
+        covers=("43", "0.11%", "39 696", "30", "13"),
+        caveat="not in this repository",
+    ),
+    Claim(
+        where="docs/limitations.md",
+        phrase="over all 19 systems",
+        kind="computed",
+        because="the systems on the table the re-ask covered",
+        covers=("19",),
+        expected=_systems_on_the_gemini_table,
+    ),
+    Claim(
+        where="docs/limitations.md",
+        phrase="made **0 judge calls and changed nothing**",
+        kind="historical",
+        because="a fact about one run on one day, recorded from its output",
+        covers=("0",),
+        caveat="not in this repository",
+    ),
+    Claim(
+        where="docs/limitations.md",
+        phrase="from 50 to 25 under gemini (42 under gpt",
+        kind="computed",
+        because="the Band column's denominators, read from the two committed saturation analyses",
+        covers=("50", "25", "42"),
+        expected=_shared_sets,
+    ),
+    Claim(
+        where="docs/limitations.md",
+        phrase="8 are missing",
+        kind="computed",
+        because="gpt-oss-120b's unrecoverable notes, as the gpt analysis records them",
+        covers=("8",),
+        expected=_gpt_oss_missing_under_gpt,
+    ),
+    Claim(
+        where="docs/limitations.md",
+        phrase="the 25 stands",
+        kind="computed",
+        because="the same denominator, restated where the paragraph closes",
+        covers=("25",),
+        expected=_gemini_shared_set,
+    ),
+    Claim(
+        where="docs/limitations.md",
+        phrase="These 42 notes are what shrinks",
+        kind="computed",
+        because="the part-answered count again, where the paragraph turns to what it costs",
+        covers=("42",),
+        expected=lambda: _part_answered_notes()[:1],
+    ),
+    Claim(
+        where="docs/limitations.md",
+        phrase="all 19 systems share",
+        kind="computed",
+        because="the systems whose intersection the Band column runs on",
+        covers=("19",),
+        expected=_systems_on_the_gemini_table,
+    ),
     Claim(
         where="docs/limitations.md",
         phrase="alpha of **0.08** between trained therapists",
@@ -360,10 +491,14 @@ CLAIMS = (
     ),
     Claim(
         where="docs/datasets.md",
-        phrase="88 distinct such strings over 486 model-written sections",
+        phrase="96 distinct such strings over 499 model-written sections",
         kind="corpus",
-        because="replaced a figure with no definition behind it; the definition is beside it now",
-        covers=("88", "486"),
+        because=(
+            "replaced a figure with no definition behind it; the definition is beside it now. "
+            "Moved 88/486 -> 96/499 on 2026-09-01 when two more models' iCARE notes landed in "
+            "generations/, re-derived with tools/count_dressed_up_empties.py"
+        ),
+        covers=("96", "499"),
         expected=_dressed_up_empties,
     ),
     Claim(

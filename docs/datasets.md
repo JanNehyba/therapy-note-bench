@@ -139,10 +139,10 @@ has said nothing, and reading only the whole string counted it as content
 because it is not literally "Nil". `gemma4` wrote exactly that into *what
 happens next* in 36 of 40 sessions — the four-field template appears in all 40,
 but in 36 every sub-value is Nil-ish — and was published with a perfect temporal
-score. Counted on 2026-08-31 against a written definition — a value where no
+score. Counted on 2026-09-01 against a written definition — a value where no
 sub-field carries content and yet the whole string is not the bare marker, so a
-reader checking only "is this literally Nil?" calls it content — there are **88
-distinct such strings over 486 model-written sections**, out of 10 879 sections
+reader checking only "is this literally Nil?" calls it content — there are **96
+distinct such strings over 499 model-written sections**, out of 12 238 sections
 read. Counted by `tools/count_dressed_up_empties.py` over a local `generations/`
 tree, which is gitignored and not redistributed: unlike every other figure on
 this page, a fresh checkout cannot re-derive it without generating the notes

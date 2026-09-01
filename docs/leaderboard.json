@@ -4947,7 +4947,7 @@
           "place": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:16Z",
+          "scored_at": "2026-09-01T21:21:28Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5048,7 +5048,7 @@
           "place": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:16Z",
+          "scored_at": "2026-09-01T21:21:28Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5149,7 +5149,7 @@
           "place": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:16Z",
+          "scored_at": "2026-09-01T21:21:28Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5250,7 +5250,7 @@
           "place": null,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:16Z",
+          "scored_at": "2026-09-01T21:21:28Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5351,7 +5351,7 @@
           "place": null,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:16Z",
+          "scored_at": "2026-09-01T21:21:28Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5452,7 +5452,7 @@
           "place": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:16Z",
+          "scored_at": "2026-09-01T21:21:28Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5553,7 +5553,7 @@
           "place": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:16Z",
+          "scored_at": "2026-09-01T21:21:28Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5654,7 +5654,7 @@
           "place": null,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:16Z",
+          "scored_at": "2026-09-01T21:21:28Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5755,7 +5755,7 @@
           "place": null,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:16Z",
+          "scored_at": "2026-09-01T21:21:28Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5858,7 +5858,7 @@
           "place": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:16Z",
+          "scored_at": "2026-09-01T21:21:28Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5959,7 +5959,7 @@
           "place": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:16Z",
+          "scored_at": "2026-09-01T21:21:28Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6060,7 +6060,7 @@
           "place": null,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:16Z",
+          "scored_at": "2026-09-01T21:21:28Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6161,7 +6161,7 @@
           "place": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:16Z",
+          "scored_at": "2026-09-01T21:21:28Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6262,7 +6262,7 @@
           "place": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:16Z",
+          "scored_at": "2026-09-01T21:21:28Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6363,7 +6363,7 @@
           "place": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:16Z",
+          "scored_at": "2026-09-01T21:21:28Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6464,7 +6464,7 @@
           "place": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:16Z",
+          "scored_at": "2026-09-01T21:21:28Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6565,7 +6565,7 @@
           "place": null,
           "provider": "tneval",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:16Z",
+          "scored_at": "2026-09-01T21:21:28Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6666,7 +6666,7 @@
           "place": null,
           "provider": "tneval",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:16Z",
+          "scored_at": "2026-09-01T21:21:28Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6767,7 +6767,7 @@
           "place": null,
           "provider": "tneval",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:16Z",
+          "scored_at": "2026-09-01T21:21:28Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6784,7 +6784,7 @@
         }
       ],
       "scored": true,
-      "scored_at": "2026-08-27",
+      "scored_at": "2026-09-01",
       "stale_harness": false,
       "subtitle": "scored by gemini-3.1-pro-preview",
       "terms": [
