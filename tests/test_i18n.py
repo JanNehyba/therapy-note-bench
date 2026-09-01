@@ -56,6 +56,15 @@ PAYLOAD_FIELDS = (
     "tables[].columns[].label",
     "tables[].columns[].definition",
     "tables[].columns[].caveat",
+    # Which instrument asked for a column. It rides on the column header, on the
+    # Beats-outright header and in that column's legend -- six places on the
+    # Czech page, all of which printed "TN-Eval rubric" in English while the
+    # blurb directly above the table called the same instrument "rubrika
+    # TN-Eval".
+    "tables[].columns[].instrument",
+    # The same label again, reached from the concordance rather than from a
+    # column, which is where the Beats-outright header gets it.
+    "concordance.*.instrument",
     "tables[].groups.measure",
     "tables[].rows[].metrics_note",
     "tables[].rows[].settings",

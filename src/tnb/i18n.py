@@ -365,13 +365,22 @@ _SENTENCES = {
     # The column that orders by the models beating each other rather than by a
     # weighted mean of columns that do not point the same way.
     "Beats outright": "Poráží naprosto",
+    # The one instrument label with no Czech. The blurb directly above the
+    # table already calls it "rubrika TN-Eval"; the column group tag and the
+    # Beats-outright header printed the English six times beside it.
+    "TN-Eval rubric": "rubrika TN-Eval",
+    # A proper name, so it does not change -- but it is drawn on the Czech
+    # page and the dictionary is the record of what was considered. Without
+    # the entry the check cannot tell "left in English on purpose" from
+    # "nobody looked".
+    "iCARE": "iCARE",
     "How many of the other {0} systems this one is at least as good as on every column of"
     " this instrument, under both judges, and strictly better than somewhere. It uses no"
     " weights, so it is the part of the ordering every weighting agrees on: a mean would"
     " have to decide what a point of one column is worth in another, and nobody has"
     " measured that.": (
         "Kolik z ostatních {0} systémů je tento aspoň tak dobrý na každém sloupci tohoto "
-        "nástroje pod oběma soudci, a aspoň v jednom lepší. Nepoužívá žádné vážení, takže "
+        "nástroje pod oběma hodnotiteli, a aspoň v jednom lepší. Nepoužívá žádné vážení, takže "
         "je to ta část pořadí, na které se shodne každé vážení: průměr by musel rozhodnout, "
         "kolik je bod jednoho sloupce v druhém, a to nikdo nezměřil."
     ),
@@ -393,12 +402,12 @@ _SENTENCES = {
     " already in it: switching the judge above does not change this column.": (
         "Kolik dalších systémů je tento aspoň tak dobrý na každém sloupci nástroje {0} pod "
         "oběma soudci, a aspoň v jednom lepší. Žádné vážení, takže to platí, ať si čtenář "
-        "sloupce váží jakkoli. Pod oběma soudci je hodnota stejná, protože oba jsou už v ní "
-        "zahrnuti: přepnutí soudce nahoře tímto sloupcem nehne."
+        "sloupce váží jakkoli. Pod oběma hodnotiteli je hodnota stejná, protože oba jsou už v ní "
+        "zahrnuti: přepnutí hodnotitele nahoře tímto sloupcem nehne."
     ),
     "Not in the compared population: one of the two judges has no score for this row on"
     " every column of this instrument, so there is no count. Not a nought.": (
-        "Není v porovnávané skupině: jeden ze dvou soudců nemá pro tento řádek skóre na "
+        "Není v porovnávané skupině: jeden ze dvou hodnotitelů nemá pro tento řádek skóre na "
         "každém sloupci tohoto nástroje, takže počet neexistuje. Není to nula."
     ),
     "The endpoint that served the model. The same id on two endpoints can be two different"
@@ -602,16 +611,34 @@ _SENTENCES = {
     ),
     # Leading space, like the English fragment it replaces: it joins onto the
     # sentence before it and the key it is found by was trimmed.
-    "— <code>{0}</code> furthest, {1}{2} in this table and {3}{4} in that one": (
-        " — nejdál <code>{0}</code>, {1}{2} v této tabulce a {3}{4} v té druhé"
+    # The rank is named on the *measure*, not on the drawn table: the iCARE
+    # rows are alphabetical, so "13. v této tabulce" sent a reader counting to a
+    # row that holds somebody else.
+    "— <code>{0}</code> furthest, {1}{2} on {3} under this judge and {4}{5} under that one": (
+        " — nejdál <code>{0}</code>, {1}{2} na sloupci {3} u tohoto hodnotitele a {4}{5} "
+        "u toho druhého"
     ),
     "<strong>The two judges agree on the shape of this ranking and not on its order.</strong> On"
-    " {0}, {1} of {2} systems land somewhere else under <code>{3}</code>{4} — so the top and the"
-    " bottom are claims this table supports, ninth against tenth is not.": (
+    " {0}, {1} of {2} systems land somewhere else under <code>{3}</code>{4}{5}": (
         "<strong>Oba hodnotitelé se shodnou na tvaru tohoto pořadí, ne na konkrétním sledu "
         "příček.</strong> Na sloupci {0} se pod hodnotitelem <code>{3}</code> umístí jinam {1} "
-        "z {2} systémů{4} — blízko vrcholu a blízko dna jsou tvrzení, která tato tabulka unese, "
-        "devátý proti desátému ne."
+        "z {2} systémů{4}{5}"
+    ),
+    "— so the top and the bottom are claims this table supports, ninth against tenth is not.": (
+        " — blízko vrcholu a blízko dna jsou tvrzení, která tato tabulka unese, devátý proti "
+        "desátému ne."
+    ),
+    # Drawn instead of the clause above where the table has no ranking column,
+    # because there it would contradict the sentence directly above it.
+    "— which is why this table is not ordered by any of them.": (
+        " — a právě proto není tato tabulka podle žádného z nich seřazená."
+    ),
+    "<strong>These rows are in alphabetical order.</strong> The columns measure different things"
+    " and the source paper found they disagree, so there is nothing to order them by — read each"
+    " column on its own.": (
+        "<strong>Tyto řádky jsou v abecedním pořadí.</strong> Sloupce měří různé věci a zdrojový "
+        "článek zjistil, že si odporují, takže není podle čeho je řadit — čtěte každý sloupec "
+        "zvlášť."
     ),
     "No runs yet": "Zatím žádný běh",
     "The first run will populate this page.": "První běh tuto stránku naplní.",
@@ -719,24 +746,26 @@ _PAYLOAD = {
     # -- the rubric's three columns -------------------------------------------
     "Completeness": "Úplnost",
     "completeness": "úplnost",
-    "Fraction of the section's rubric criteria the judge found present. 0.50 means half of that"
-    " section's rubric items were found in the note.": (
-        "Podíl kritérií rubriky daného oddílu, která hodnotitel našel přítomná. 0.50 znamená, že "
-        "v zápise byla nalezena polovina položek rubriky pro daný oddíl."
+    "The equal-weighted mean of the note's four SOAP section fractions. Per section, the fraction"
+    " of that section's criteria the judge found present.": (
+        "Rovnoměrný průměr čtyř oddílových podílů zápisu podle SOAP. V rámci oddílu je to podíl "
+        "kritérií daného oddílu, která hodnotitel našel přítomná."
     ),
     # Keyed by the *formatted* English: `report.column_meta` fills `{criteria}`
     # from the rubric before the caveat reaches the payload, so 23 is in the key
     # the same way "temperature 0, max tokens 4096" is further down this file.
     # The item count is interpolated in Python before the string reaches the
     # payload, so the key carries `23` and not a hole.
-    "Counts coverage of a checklist, not judgement. The denominator is the whole 23-item rubric"
-    " on every note, whatever the session was about, so an item the session never called for"
-    " counts as absent exactly like one the note forgot. This is the column the table is"
-    " ordered by.": (
-        "Počítá pokrytí seznamu položek, ne úsudek. Jmenovatelem je vždy celá rubrika o 23 "
-        "položkách, ať bylo sezení o čemkoli, takže položka, kterou si sezení nikdy nevyžádalo, "
-        "se počítá jako chybějící stejně jako ta, na kterou zápis zapomněl. Podle tohoto "
-        "sloupce je tabulka seřazena."
+    "Counts coverage of a checklist, not judgement. All 23 rubric items are asked of every note,"
+    " whatever the session was about, so an item the session never called for counts as absent"
+    " exactly like one the note forgot. The figure is the equal-weighted mean of the note's four"
+    " section fractions, not the fraction of all 23 items, so a four-item section counts as much"
+    " as an eight-item one. This is the column the table is ordered by.": (
+        "Počítá pokrytí seznamu položek, ne úsudek. Všech 23 položek rubriky se ptá u každého "
+        "zápisu, ať bylo sezení o čemkoli, takže položka, kterou si sezení nikdy nevyžádalo, se "
+        "počítá jako chybějící stejně jako ta, na kterou zápis zapomněl. To číslo je rovnoměrný "
+        "průměr čtyř oddílových podílů zápisu, ne podíl ze všech 23 položek — čtyřpoložkový "
+        "oddíl tedy váží stejně jako osmipoložkový. Podle tohoto sloupce je tabulka seřazena."
     ),
     # The computed half of that caveat, authored in the leaderboard's script
     # because its two figures are read off the table the sentence is printed

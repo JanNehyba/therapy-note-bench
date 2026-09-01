@@ -828,9 +828,21 @@ def test_the_sentence_under_the_table_names_this_table_s_rank_first(tmp_path):
         )
         assert finished.returncode == 0, finished.stdout + finished.stderr
 
+        # The sentence used to say "Nth in this table", which was a rank on the
+        # measure printed as a row position -- true only where the table is
+        # ordered by that measure, and the iCARE table is alphabetical. It says
+        # "Nth on <measure> under this judge" now; what this test holds is the
+        # part that was a real bug, that the first of the two ranks belongs to
+        # the judge the reader is looking at.
         here = far["rank_a"] if judge == found["judge_a"] else far["rank_b"]
-        assert f"{here}" in finished.stdout.split("in this table")[0][-12:], (
-            f"viewing {judge}, the rank before 'in this table' must be its own"
+        # Whitespace-normalised: the template wraps the sentence, so the rank and
+        # the measure are separated by a newline and an indent in the output.
+        flat = re.sub(r"\s+", " ", finished.stdout)
+        said = re.search(r"(\d+)\w* on [^<]*? under this judge", flat)
+        assert said, f"the sentence no longer names a rank under this judge: {flat[-400:]}"
+        assert said.group(1) == str(here), (
+            f"viewing {judge}, the first rank must be its own: the sentence says "
+            f"{said.group(1)} where this judge places it {here}"
         )
 
 
@@ -1280,13 +1292,20 @@ def test_the_second_figure_in_every_cell_says_what_it_is(tmp_path):
 def test_the_completeness_caveat_reads_its_two_figures_off_the_table(tmp_path):
     """A denominator a reader cannot see the consequence of is a word, not a warning.
 
-    The caveat says the denominator is the whole rubric on every note. The half
-    that makes that checkable -- how high the column actually goes, and where
-    the note a human wrote landed under the same rule -- is computed from the
-    rows the sentence is printed under. It used to be typed: the caveat ended
-    "which is why every model here scores above the therapist on it", which is a
-    claim about the data that no test held to the data and that a re-score could
+    The caveat says every rubric item is asked of every note. The half that
+    makes that checkable -- how high the column actually goes, and where the
+    note a human wrote landed under the same rule -- is computed from the rows
+    the sentence is printed under. It used to be typed: the caveat ended "which
+    is why every model here scores above the therapist on it", which is a claim
+    about the data that no test held to the data and that a re-score could
     falsify without touching a character of it.
+
+    **And the caveat itself was wrong until 2026-09-01**, which this test was
+    pinning: it said the denominator is the whole 23-item rubric, where the
+    figure is the equal-weighted mean of four section fractions over sections
+    of 6, 5, 8 and 4. Recomputed the way the sentence described, seven of the
+    nineteen systems change place. The assertion below is the corrected
+    arithmetic and refuses the old one by name.
     """
     from tnb import report
 
@@ -1297,8 +1316,16 @@ def test_the_completeness_caveat_reads_its_two_figures_off_the_table(tmp_path):
     ]
     drawn = _flat(_run(report.render_page(report.build(rows)), tmp_path, panel="table-host"))
 
-    assert "the whole 23-item rubric on every note" in drawn, (
-        "the caveat does not say what the denominator is"
+    assert "All 23 rubric items are asked of every note" in drawn, (
+        "the caveat does not say that no item is excluded as inapplicable"
+    )
+    # Without the apostrophe: `esc` turns it into an entity in the rendered page.
+    assert "equal-weighted mean of the note" in drawn and "four section fractions" in drawn, (
+        "the caveat does not say how the figure is computed"
+    )
+    assert "denominator is the whole 23-item rubric" not in drawn, (
+        "the caveat names a denominator the column does not use; recomputed that "
+        "way, seven of the nineteen systems change place"
     )
     assert "the highest Completeness is 0.550 out of a possible 1.00" in drawn
     assert "the note a human clinician wrote is row 3 of 3" in drawn

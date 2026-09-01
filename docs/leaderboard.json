@@ -4291,8 +4291,8 @@
       "blurb": "The first three columns count what a note contains — TN-Eval's rubric. The other eight rate how it is written — PDSQI-9. **Nothing is averaged across them**: different questions on different scales, and neither instrument publishes a total either.",
       "columns": [
         {
-          "caveat": "Counts coverage of a checklist, not judgement. The denominator is the whole 23-item rubric on every note, whatever the session was about, so an item the session never called for counts as absent exactly like one the note forgot. This is the column the table is ordered by.",
-          "definition": "Fraction of the section's rubric criteria the judge found present. 0.50 means half of that section's rubric items were found in the note.",
+          "caveat": "Counts coverage of a checklist, not judgement. All 23 rubric items are asked of every note, whatever the session was about, so an item the session never called for counts as absent exactly like one the note forgot. The figure is the equal-weighted mean of the note's four section fractions, not the fraction of all 23 items, so a four-item section counts as much as an eight-item one. This is the column the table is ordered by.",
+          "definition": "The equal-weighted mean of the note's four SOAP section fractions. Per section, the fraction of that section's criteria the judge found present.",
           "digits": 3,
           "instrument": "TN-Eval rubric",
           "key": "completeness",
@@ -6406,8 +6406,8 @@
       "blurb": "The first three columns count what a note contains — TN-Eval's rubric. The other eight rate how it is written — PDSQI-9. **Nothing is averaged across them**: different questions on different scales, and neither instrument publishes a total either.",
       "columns": [
         {
-          "caveat": "Counts coverage of a checklist, not judgement. The denominator is the whole 23-item rubric on every note, whatever the session was about, so an item the session never called for counts as absent exactly like one the note forgot. This is the column the table is ordered by.",
-          "definition": "Fraction of the section's rubric criteria the judge found present. 0.50 means half of that section's rubric items were found in the note.",
+          "caveat": "Counts coverage of a checklist, not judgement. All 23 rubric items are asked of every note, whatever the session was about, so an item the session never called for counts as absent exactly like one the note forgot. The figure is the equal-weighted mean of the note's four section fractions, not the fraction of all 23 items, so a four-item section counts as much as an eight-item one. This is the column the table is ordered by.",
+          "definition": "The equal-weighted mean of the note's four SOAP section fractions. Per section, the fraction of that section's criteria the judge found present.",
           "digits": 3,
           "instrument": "TN-Eval rubric",
           "key": "completeness",

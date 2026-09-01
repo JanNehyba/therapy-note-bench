@@ -43,24 +43,38 @@ MEASURES: dict[str, dict[str, str]] = {
         # it: nothing required these items of this session, which is the whole
         # of the caveat below.
         "definition": (
-            "Fraction of the section's rubric criteria the judge found present. "
-            "0.50 means half of that section's rubric items were found in the note."
+            "The equal-weighted mean of the note's four SOAP section fractions. "
+            "Per section, the fraction of that section's criteria the judge found "
+            "present."
         ),
-        # The denominator, said out loud. This is TN-Eval's own arithmetic and
-        # it is reproduced rather than repaired -- but a reader cannot tell from
-        # a 0-1 fraction that the whole rubric is asked of every note, so a
-        # criterion no counselling session ever raises costs a note the same
-        # mark as one it forgot. The caveat used to end "which is why every
-        # model here scores above the therapist on it", which is a claim about
-        # the data typed into a sentence: true in both tables today and false
-        # the first time a re-score moved one row. The page computes that half
-        # from the table it is printed under instead.
+        # What is applicable, said out loud -- and, since 2026-09-01, without
+        # naming a denominator this figure does not have. It said "the
+        # denominator is the whole 23-item rubric on every note", which is not
+        # the arithmetic `aggregate` performs: it averages the four sections
+        # equally, so a criterion in the four-item plan section is worth twice
+        # one in the eight-item assessment section. The two readings are not
+        # interchangeable -- recomputed item-weighted, seven of the nineteen
+        # systems change place, and `gpt-oss-120b` moves from fourth to tenth
+        # under one judge. The methods page and the briefing had already been
+        # corrected; this is the copy a reader meets under the ranking column.
+        #
+        # The applicability point is the true half and it stays: the whole
+        # rubric is asked of every note, so a criterion no counselling session
+        # ever raises costs a note the same mark as one it forgot.
+        #
+        # The caveat used to end "which is why every model here scores above the
+        # therapist on it", which is a claim about the data typed into a
+        # sentence: true in both tables today and false the first time a
+        # re-score moved one row. The page computes that half from the table it
+        # is printed under instead.
         "caveat": (
-            "Counts coverage of a checklist, not judgement. The denominator is "
-            "the whole {criteria}-item rubric on every note, whatever the "
-            "session was about, so an item the session never called for counts "
-            "as absent exactly like one the note forgot. This is the column the "
-            "table is ordered by."
+            "Counts coverage of a checklist, not judgement. All {criteria} rubric "
+            "items are asked of every note, whatever the session was about, so an "
+            "item the session never called for counts as absent exactly like one "
+            "the note forgot. The figure is the equal-weighted mean of the note's "
+            "four section fractions, not the fraction of all {criteria} items, so "
+            "a four-item section counts as much as an eight-item one. This is the "
+            "column the table is ordered by."
         ),
     },
     "conciseness": {

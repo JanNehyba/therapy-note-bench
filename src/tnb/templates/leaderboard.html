@@ -304,9 +304,13 @@ function detailRow(row, table) {
   // Name, provider and marks are always drawn; the rest are conditional. The
   // effort column is gone -- two of nineteen rows carried one, so it sat on the
   // model's name instead -- and its term goes with it.
-  const span =
-    table.columns.length + 3 + (coverageVaries(table) ? 1 : 0) +
-    (table.has_words ? 1 : 0) + (table.groups ? 1 : 0);
+  // Counted from the same helper the header and the body cells use, so the
+  // three cannot drift apart again. They did: the two Beats-outright columns
+  // were added to the header and to every row and not to this, and the raised
+  // detail panel stopped two columns short of its own row with the page
+  // background showing through under Provider and Marks.
+  const span = table.columns.length + instrumentsOf(table).length + 3 +
+    (coverageVaries(table) ? 1 : 0) + (table.has_words ? 1 : 0) + (table.groups ? 1 : 0);
   return `<tr class="detail" hidden><td colspan="${span}">${parts.join('')}</td></tr>`;
 }
 
@@ -502,7 +506,7 @@ function renderTable(table, index) {
     // instruments read as eleven columns from one unless the header says
     // otherwise -- and then a reader compares a coverage count with a 1-5
     // quality rating as though they were two grades from the same exam.
-    (c.instrument ? `<span class="instrument">${esc(c.instrument)}</span>` : '') +
+    (c.instrument ? `<span class="instrument">${esc(tr(c.instrument))}</span>` : '') +
     `${esc(tr(c.label))}` +
     `<span class="scale">${esc(c.scale)}</span>` +
     `</th>`).join('');
@@ -557,9 +561,20 @@ function renderTable(table, index) {
          ${table.groups.of[0].length} of them. Paired bootstrap on
          <strong>${esc(tr(table.groups.measure))}</strong> over the
          ${table.groups.sessions} conversations every system here was scored on.`}</p>`
-    : `<p class="note">${T`<strong>Which of these can be told apart has not been measured
-         for this table.</strong> Read the order as roughly who is near the top and
-         near the bottom, not as a ranking: two adjacent rows are not a result.`}</p>`;
+    // Two different cases used to share this branch, and the sentence fitted
+    // only one of them. A table with a ranking measure and no bootstrap does
+    // have a gradient to read roughly. A table with no ranking measure is in
+    // alphabetical order, and telling a reader to read *that* as roughly who is
+    // near the top is telling them to read the alphabet as merit -- printed
+    // directly under the sentence that says the track is deliberately not
+    // ranked.
+    : table.ranking_measure
+      ? `<p class="note">${T`<strong>Which of these can be told apart has not been measured
+           for this table.</strong> Read the order as roughly who is near the top and
+           near the bottom, not as a ranking: two adjacent rows are not a result.`}</p>`
+      : `<p class="note">${T`<strong>These rows are in alphabetical order.</strong> The
+           columns measure different things and the source paper found they disagree, so
+           there is nothing to order them by — read each column on its own.`}</p>`;
 
   // Why *this* column orders the table, and not one of the other ten. Asked by
   // the first reader who looked: the page said which column ranks and never
@@ -765,7 +780,7 @@ function renderTable(table, index) {
       <p class="ranking-note">${rankingNote}</p>
       ${referenceNote(table)}
       ${groupNote}
-      ${agreementNote(table.track)}
+      ${instrumentsOf(table).map(([track]) => agreementNote(track)).join('')}
       <dl class="measures">${legend}</dl>
       <!-- Under the table, not over it. A reader arriving at a leaderboard
            wants to know which model, and the first line they met was four
@@ -886,6 +901,15 @@ function sortBy(table, key) {
   const ascending = table.dataset.sorted === key && table.dataset.descending === '1';
   pairs.sort((a, b) => {
     const left = value(a[0]), right = value(b[0]);
+    // A row with no number sorts last in *both* directions, which is what the
+    // comment above `value` has always claimed and what the comparator did not
+    // do: `Infinity` was negated with everything else, so the second click put
+    // the absences at the top. Sorting Words shortest-first led with the three
+    // rows whose word count is unknown -- the therapist's among them -- which
+    // reads as "the therapist wrote the shortest notes", a measurement nobody
+    // made.
+    const missing = left === Infinity, otherMissing = right === Infinity;
+    if (missing || otherMissing) return missing && otherMissing ? 0 : missing ? 1 : -1;
     const order = left < right ? -1 : left > right ? 1 : 0;
     return ascending ? -order : order;
   });
@@ -1004,7 +1028,10 @@ function rememberCompare() {
   const parts = search ? search.split('&').filter(p => p && p !== 'compare=1') : [];
   if (compare) parts.push('compare=1');
   const query = parts.length ? '?' + parts.join('&') : '';
-  history.replaceState(null, '', query + (location.hash || ''));
+  // With the path. An empty string is "no change" to `replaceState`, so turning
+  // the mode off left `?compare=1` in the address: a reload or a shared link
+  // brought it back, and the one thing the address was used for was sharing.
+  history.replaceState(null, '', location.pathname + query + (location.hash || ''));
 }
 
 // The other judge's table for the same track. Only where there are exactly two:
@@ -1084,15 +1111,26 @@ function agreementNote(track) {
   const here = far && (found.judge_a === showing ? far.rank_a : far.rank_b);
   const there = far && (found.judge_a === showing ? far.rank_b : far.rank_a);
 
+  // "13th in this table" was a rank on the measure, and the iCARE table is
+  // drawn alphabetically -- so a reader counted to the thirteenth row and found
+  // somebody else. The rank is named on the measure now, which is true whatever
+  // order the rows are in.
+  const drawn = DATA.tables[INDEX_OF[current]];
+  const measure = esc(colLabel(drawn, ranking.measure));
   const furthest = far
-    ? T` — <code>${esc(far.system)}</code> furthest, ${here}${ordinal(here)} in this table
-             and ${there}${ordinal(there)} in that one`
+    ? T` — <code>${esc(far.system)}</code> furthest, ${here}${ordinal(here)} on
+             ${measure} under this judge and ${there}${ordinal(there)} under that one`
     : '';
+  // And the closing clause is about a table that is ordered. Where it is not,
+  // the sentence above it has already said so and this must not contradict it.
+  const supports = drawn.ranking_measure
+    ? T` — so the top and the bottom are claims this table supports, ninth against tenth
+         is not.`
+    : T` — which is why this table is not ordered by any of them.`;
   return `<p class="note">${T`<strong>The two judges agree on the shape of this ranking and not
-    on its order.</strong> On ${esc(colLabel(DATA.tables[INDEX_OF[current]], ranking.measure))},
+    on its order.</strong> On ${measure},
     ${ranking.moved} of ${ranking.n_systems} systems land somewhere else under
-    <code>${esc(other)}</code>${furthest} — so the top and the bottom are claims this table
-    supports, ninth against tenth is not.`}</p>`;
+    <code>${esc(other)}</code>${furthest}${supports}`}</p>`;
 }
 
 // 1st, 2nd, 3rd, 4th. Only ever applied to a rank, so the teens are the whole
@@ -1232,6 +1270,10 @@ function drawHeader() {
 installLanguageSwitch(() => {
   drawHeader();
   drawProvenance();
+  // Its neighbour was in this list and it was not, so a reader who switched
+  // language got a page in one language with the Sources paragraph in the
+  // other -- in both directions, and the Czech for it existed all along.
+  drawSources();
   // `show` redraws the table, the switch and the controls inside a frame that
   // stays put. Redrawing the frame itself would replace the two nodes the click
   // handlers above are bound to, and the page would go quiet on the second
