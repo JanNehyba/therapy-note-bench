@@ -3727,7 +3727,7 @@
     "model": "kimi-k3",
     "note": "Tingling in the stomach and butterflies in the stomach are the same symptom, as are palpitations and a rapid heartbeat; trembling hands appear in both. The model also records how long each symptom has lasted and when it occurs, which the expert note does not. It shares almost no *words* with the clinician, and a word-overlap metric scores it accordingly.",
     "rouge_l": 0.111,
-    "section": "Presenting symptoms",
+    "section": "Presenting complaints (symptoms)",
     "session": "6"
   },
   "superseded": [

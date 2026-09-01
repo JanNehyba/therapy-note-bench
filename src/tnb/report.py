@@ -931,7 +931,11 @@ TRACK_DESIGN = {
 #: it is. The score is computed from these strings on every render, so it cannot
 #: drift away from the text beside it.
 SIMILARITY_EXAMPLE = {
-    "section": "Presenting symptoms",
+    # The name the form uses. The page lists the seventeen sections a few
+    # panels above and calls this one `Presenting complaints (symptoms)`, as
+    # does the fill-rate table; the example called it something else and read
+    # as an eighteenth.
+    "section": "Presenting complaints (symptoms)",
     "session": "6",
     "model": "kimi-k3",
     "expert": (

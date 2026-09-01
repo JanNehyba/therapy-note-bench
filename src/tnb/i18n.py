@@ -969,7 +969,13 @@ _METHODS = {
         "Jak velkou část rozsahu každé míry modely skutečně obsadí. Vlevo: jeden pruh na každé "
         "kritérium rubriky, od nejhoršího modelu k nejlepšímu, s vyznačeným terapeutem. Vpravo: "
         "totéž čtení TRACE, kde jeden pruh jsou všechny modely najednou. Kreslí "
-        "<code>tools/figures.py</code> ze souborů jmenovaných v patičce obrázku."
+        "<code>tools/figures.py</code> ze souborů jmenovaných v patičce obrázku. "
+        "<strong>Obrázek sám je vysázený anglicky.</strong> V jeho legendě: "
+        "<em>every model does it</em> = zvládají to všechny modely, "
+        "<em>separates models</em> = rozlišuje modely, "
+        "<em>partly</em> = zčásti, "
+        "<em>nobody does it</em> = nezvládá to nikdo; a <em>% of the scale</em> je, "
+        "jakou část rozsahu míry modely obsadí."
     ),
     "methods.protocol.summary": ("<strong>Co je tady zápis a proti čemu se hodnotí?</strong>"),
     "methods.design.summary": (
@@ -1059,9 +1065,9 @@ _METHODS = {
     "{0} was scored on {1} fewer": "{0} byl obodován o {1} méně",
     "{0}, and the other {1} on {2}": "{0}, a zbývajících {1} o {2}",
     "one each": "jeden každý",
-    "no more than {0} each": "nejvýš {0} každý",
+    "no more than {0} each": "po nejvýš {0}",
     "Computed from <code>{0}</code>'s individual answers{1}.": (
-        "Spočteno z jednotlivých odpovědí modelu <code>{0}</code>{1}."
+        "Spočteno z jednotlivých odpovědí hodnotitele <code>{0}</code>{1}."
     ),
     "at {0}": " při nastavení {0}",
     "The cache also held answers at other settings; they are two instruments and were not mixed"
@@ -1168,7 +1174,11 @@ _METHODS = {
     "Used for": "Použito na",
     "Licence": "Licence",
     # -- the protocol ---------------------------------------------------------
-    "{0} — {1} criteria": "{0} — {1} kritérií",
+    # Written as a list rather than as a counted noun, because Czech takes a
+    # different case for 2-4 than for 5 and up and this renders both: the
+    # four-criterion section printed "plán — 4 kritérií", which is the
+    # genitive where the nominative belongs.
+    "{0} — {1} criteria": "{0} — kritérií: {1}",
     "A note here is a <strong>SOAP note</strong>: four sections, in this order. The descriptions"
     " are the ones the models are given, quoted from TN-Eval's own prompt.": (
         "Zápis je tu <strong>zápis SOAP</strong>: čtyři oddíly, v tomto pořadí. Popisy jsou ty, "
@@ -1296,6 +1306,15 @@ _METHODS = {
     ),
     "{0} of {1} print the same number": "{0} z {1} tiskne totéž číslo",
     "related, in reverse": "souvisí, obráceně",
+    "<strong>Not detected is not the same as absent.</strong> An interval that includes zero"
+    " means a run this size could not see an effect, not that there is none — and the"
+    " comparison is a vendor's three or four models against the systems neither of them"
+    " wrote.": (
+        "<strong>Nedetekováno není totéž co nepřítomno.</strong> Interval, který zahrnuje "
+        "nulu, znamená, že běh této velikosti efekt neuviděl, ne že žádný není — a srovnávají "
+        "se tři nebo čtyři modely jednoho dodavatele proti systémům, které nepsal ani jeden "
+        "z nich."
+    ),
     "The panels on this page are computed from {0} — the calibration and the bands from the"
     " judges' individual answers rather than from the rows, because an average cannot be"
     " resampled.": (
@@ -1332,18 +1351,27 @@ _METHODS = {
         "Roste úplnost s tím, kolik toho model napsal?"
     ),
     "<strong>Within a system</strong>, across its own conversations, the correlation is positive"
-    " in {0} of {1} systems, median {2}. That cannot separate the note from the transcript: a"
-    " longer session yields both a longer note and more rubric material.": (
+    " in {0} of the {1} models — the two dated reference systems and the therapist's note are"
+    " not in it — median {2}. That cannot separate the note from the transcript: a longer"
+    " session yields both a longer note and more rubric material.": (
         "<strong>Uvnitř systému</strong>, napříč jeho vlastními rozhovory, je korelace kladná "
-        "u {0} z {1} systémů, medián {2}. To neoddělí zápis od přepisu: delší sezení dá zároveň "
-        "delší zápis i víc materiálu pro rubriku."
+        "u {0} z {1} modelů — dva datované referenční systémy ani terapeutův zápis v tom "
+        "nejsou — medián {2}. To neoddělí zápis od přepisu: delší sezení dá zároveň delší "
+        "zápis i víc materiálu pro rubriku."
     ),
     "<strong>Within one conversation</strong>, across the systems, the transcript is held fixed"
-    " and can explain nothing. Median {0}, positive in {1} of {2} conversations, sign test"
-    " p&nbsp;=&nbsp;{3}.": (
+    " and can explain nothing. Median {0}, positive in {1} of all {2} conversations — not the"
+    " shared set the intervals above use — sign test p&nbsp;=&nbsp;{3}.": (
         "<strong>Uvnitř jednoho rozhovoru</strong>, napříč systémy, je přepis pevně držen "
-        "a nemůže vysvětlit nic. Medián {0}, kladná u {1} z {2} rozhovorů, znaménkový test "
-        "p&nbsp;=&nbsp;{3}."
+        "a nemůže vysvětlit nic. Medián {0}, kladná u {1} ze všech {2} rozhovorů — ne ze "
+        "sdílené množiny, kterou používají intervaly výše — znaménkový test p&nbsp;=&nbsp;{3}."
+    ),
+    "Every figure in this subsection is <code>{0}</code>'s. The other judge's is in its own"
+    " <code>docs/saturation-&lt;judge&gt;.json</code> and is not drawn here — which is why the"
+    " verdict above is one judge's and not the panel's.": (
+        "Každé číslo v tomto pododdílu patří hodnotiteli <code>{0}</code>. Číslo druhého "
+        "hodnotitele je ve vlastním <code>docs/saturation-&lt;judge&gt;.json</code> a tady se "
+        "nekreslí — proto je verdikt výše verdiktem jednoho hodnotitele, ne panelu."
     ),
     "<strong>The effect survives here</strong>, so on this judge a longer note does score higher"
     " for being longer.": (
@@ -1444,11 +1472,12 @@ _METHODS = {
     # -- which judges this measurement separates ----------------------------------------
     "<code>{0}</code> over {1}": "<code>{0}</code> nad {1}",
     "<strong>{0} of those {1} compare two different instruments</strong>: the candidates were not"
-    " all asked at the same settings, and the alphas below are over slightly different item sets."
-    " What each ran at is in the table above.": (
-        "<strong>{0} z těch {1} srovnává dva různé nástroje</strong>: kandidáti nebyli všichni "
-        "dotazováni při stejném nastavení a alfy níže jsou nad mírně odlišnými množinami "
-        "položek. Při čem který běžel, je v tabulce výše."
+    " all asked at the same settings, and the alphas above are over slightly different item"
+    " sets. What each ran at is in that table.": (
+        "<strong>V {0} z těchto {1} dvojic jde o dva různé nástroje</strong>: kandidáti nebyli "
+        "všichni "
+        "dotazováni při stejném nastavení a alfy výše jsou nad mírně odlišnými množinami "
+        "položek. Při čem který běžel, je v té tabulce."
     ),
     "Read as bands, not as an order. Two candidates closer than {0} are reported here as"
     ' inseparable rather than ranked — the rule <a href="index.html">the leaderboard</a> uses for'

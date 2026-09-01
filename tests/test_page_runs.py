@@ -1417,9 +1417,13 @@ def test_the_length_panel_is_drawn_and_not_merely_computed(tmp_path):
     drawn = _run(report.render_methods(data), tmp_path, panel="saturation-body")
 
     assert "Does completeness rise with how much the model wrote?" in drawn
-    assert "31 of 50" in drawn
+    assert "31 of all 50" in drawn, "the denominator has to say which 50 it is"
     assert "does not survive" in drawn, "p = 0.119 is not a surviving effect"
     assert "publishes the <strong>length</strong>" in drawn or "publishes the" in drawn
+    # The verdict above is one judge's, and the panel used to print it in bold
+    # one sentence above its own statement that the two judges disagree about
+    # it, with nothing to say whose it was.
+    assert "a-judge" in drawn, "the panel does not say whose figures these are"
 
 
 def test_the_panel_says_whether_the_two_leans_differ_from_each_other(tmp_path):

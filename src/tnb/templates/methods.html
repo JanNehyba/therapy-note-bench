@@ -682,14 +682,15 @@ function lengthEffect(saturation) {
 
   return `<h3>${T`Does completeness rise with how much the model wrote?`}</h3>
     <p class="blurb">${T`<strong>Within a system</strong>, across its own conversations, the
-       correlation is positive in ${positive} of ${within.length} systems, median
+       correlation is positive in ${positive} of the ${within.length} models — the two dated
+       reference systems and the therapist's note are not in it — median
        ${median === null ? '—' : median.toFixed(3)}. That cannot separate the note from the
        transcript: a longer session yields both a longer note and more rubric material.`}</p>
     <p class="blurb">${T`<strong>Within one conversation</strong>, across the systems, the
        transcript is held fixed and can explain nothing. Median
        ${conv.median === undefined ? '—' : conv.median.toFixed(3)}, positive in
-       ${conv.positive} of ${conv.n} conversations, sign test
-       p&nbsp;=&nbsp;${conv.sign_test_p}.`} ${survives
+       ${conv.positive} of all ${conv.n} conversations — not the shared set the intervals
+       above use — sign test p&nbsp;=&nbsp;${conv.sign_test_p}.`} ${survives
          ? T`<strong>The effect survives here</strong>, so on this judge a longer note does
             score higher for being longer.`
          : T`<strong>The effect does not survive here</strong>: most of the correlation above
@@ -697,7 +698,11 @@ function lengthEffect(saturation) {
     <p class="blurb">${T`The leaderboard therefore publishes the <strong>length</strong> and not
        this coefficient. The length is a fact about the note a reader can discount for; the
        correlation depends on which judge is asked, and the two judges do not agree about
-       it.`}</p>`;
+       it.`}</p>
+    <p class="note">${T`Every figure in this subsection is
+       <code>${saturation.judge_model}</code>'s. The other judge's is in its own
+       <code>docs/saturation-&lt;judge&gt;.json</code> and is not drawn here — which is why
+       the verdict above is one judge's and not the panel's.`}</p>`;
 }
 
 renderCalibration(DATA.calibration);
@@ -883,6 +888,10 @@ function renderPreference(data) {
         <td>${e.detected ? `<strong>${T`yes`}</strong>` : T`no`}</td>
       </tr>`).join('')}</tbody>
     </table></div>
+    <p class="note">${T`<strong>Not detected is not the same as absent.</strong> An interval
+       that includes zero means a run this size could not see an effect, not that there is
+       none — and the comparison is a vendor's three or four models against the systems
+       neither of them wrote.`}</p>
     ${data.effects.map(e => englishNote(e.summary) + `<p class="note" lang="${
         summaryLang(e.summary)}">${code(tr(e.summary))}</p>`).join('')}
     ${data.difference
@@ -960,8 +969,8 @@ function whatTheCalibrationSeparates(sep) {
   const instrumentNote = crossing.length
     ? ' ' + T`<strong>${crossing.length} of those ${sep.separated.length} compare two
         different instruments</strong>: the candidates were not all asked at the same
-        settings, and the alphas below are over slightly different item sets. What
-        each ran at is in the table above.`
+        settings, and the alphas above are over slightly different item sets. What
+        each ran at is in that table.`
     : '';
 
   return `<p class="note">${T`Read as bands, not as an order. Two candidates closer than
