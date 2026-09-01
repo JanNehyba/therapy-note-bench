@@ -24,7 +24,7 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
-from tnb.config import REPO_ROOT
+from tnb.config import REPO_ROOT, write_published
 from tnb.datasets.base import CACHE_DIR
 from tnb.tasks import icare
 
@@ -301,9 +301,18 @@ def load_or_build(docs_dir: Path | None = None) -> dict | None:
     path = (docs_dir or PROFILE_PATH.parent) / PROFILE_PATH.name
     fresh = build()
     if fresh is not None:
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps(fresh, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        write_published(path, json.dumps(fresh, indent=2, sort_keys=True) + "\n")
         return fresh
-    if path.exists():
+    if not path.exists():
+        return None
+    try:
         return json.loads(path.read_text(encoding="utf-8"))
-    return None
+    except (UnicodeDecodeError, json.JSONDecodeError) as broken:
+        # The published copy is the fallback for a checkout with no corpus --
+        # CI, or a reader with no token -- so a damaged one must say what is
+        # wrong rather than surface as a decode error from four frames down.
+        raise RuntimeError(
+            f"{path} is not readable JSON ({broken}). It is the cached corpus "
+            "profile, used where the corpus itself is absent. Restore it from "
+            "git or re-run `tnb report` on a machine that has `data/`."
+        ) from broken

@@ -308,3 +308,28 @@ def load_policy(path: Path | None = None) -> Policy:
     if not providers:
         raise RuntimeError(f"{path.name} configures no providers under 'providers:'.")
     return Policy(providers=tuple(providers))
+
+
+def write_published(path: Path, text: str) -> None:
+    """Write a file the site serves, or leave the old one untouched.
+
+    `Path.write_text` truncates first and fills after, so a process that dies
+    between the two leaves a file of the right length full of NUL bytes. That
+    is not hypothetical: `docs/corpus-profile.json` was found on 2026-09-01 at
+    3 696 bytes of nothing, having grown from 3 508 -- the length of the write
+    that never landed -- and it is a file the briefing links for a reader to
+    open. Two `*.stackdump` files in the tree say what killed it.
+
+    Written beside the target and renamed, which is atomic on one filesystem:
+    a reader gets the old file or the new one and never a hole. The temporary
+    file is removed if the write itself fails, so a crash leaves no litter for
+    the next run to trip over.
+    """
+    path.parent.mkdir(parents=True, exist_ok=True)
+    staged = path.with_name(f"{path.name}.writing")
+    try:
+        staged.write_text(text, encoding="utf-8")
+        staged.replace(path)
+    except BaseException:
+        staged.unlink(missing_ok=True)
+        raise
