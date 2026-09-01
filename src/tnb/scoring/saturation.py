@@ -428,6 +428,103 @@ def indistinguishable(
     return groups
 
 
+#: How close to the threshold a comparison has to be before this measurement
+#: stops answering which side of it the truth is on. Three standard errors of
+#: the bootstrap's own estimate -- about 0.015 at the cut with 2000 samples.
+#: Chosen rather than measured, and stated so a reader can widen it: raising it
+#: names more systems as ones the bands do not place, which is the safe
+#: direction.
+NEAR_THE_CUT_SIGMAS = 3.0
+
+
+def _monte_carlo_error(value: float, samples: int) -> float:
+    """The standard error of a fraction estimated from `samples` Bernoulli draws.
+
+    This is the estimator's imprecision, not the evidence's. It shrinks as the
+    sample count rises and says nothing about whether the two systems differ --
+    which is exactly why it is the right yardstick for "is this comparison
+    close enough to the cut that the cut decided it".
+    """
+    return math.sqrt(max(value * (1.0 - value), 0.0) / samples) if samples else 0.0
+
+
+def near_the_cut(
+    intervals: list[Interval],
+    beats: dict[str, dict[str, float]],
+    *,
+    threshold: float = 0.95,
+    samples: int = BOOTSTRAP_SAMPLES,
+    sigmas: float = NEAR_THE_CUT_SIGMAS,
+) -> dict:
+    """The comparisons that decide a band and sit too close to the cut to decide it.
+
+    For each, the systems that would land in a different band if it fell on the
+    other side -- computed by putting it there and re-running the grouping, so
+    the cascades are counted rather than reasoned about. `unplaced` is the union:
+    the systems whose band depends on at least one comparison this measurement
+    cannot call.
+
+    They are still drawn in a band, because the table has to draw them
+    somewhere. The measurement does not place them.
+    """
+    order = [interval.system for interval in intervals]
+    #: Only what the grouping asks. It walks best-first and puts a system in the
+    #: first group none of whose members beat it, so `beats[later][earlier]` is
+    #: never read and counting it would pad the denominator with comparisons the
+    #: rule cannot make.
+    decisive = [(a, b) for index, a in enumerate(order) for b in order[index + 1 :]]
+    base = _places(indistinguishable(intervals, beats, threshold=threshold))
+
+    found, unplaced = [], set()
+    for first, second in decisive:
+        value = beats.get(first, {}).get(second, 0.0)
+        error = _monte_carlo_error(value, samples)
+        if not error or abs(value - threshold) >= sigmas * error:
+            continue
+        # Put it on the other side and re-group. A hand-rolled "this pair would
+        # merge two bands" misses the cascade: one comparison moving collapses
+        # the group and every system after it shifts up.
+        flipped = {a: dict(row) for a, row in beats.items()}
+        flipped.setdefault(first, {})[second] = (
+            threshold - error if value >= threshold else threshold + error
+        )
+        moved = sorted(
+            system
+            for system, place in base.items()
+            if place
+            != _places(indistinguishable(intervals, flipped, threshold=threshold)).get(system)
+        )
+        unplaced.update(moved)
+        found.append(
+            {
+                "beats": first,
+                "loses": second,
+                "value": round(value, 4),
+                "sigmas": round(abs(value - threshold) / error, 2),
+                "moves": moved,
+            }
+        )
+
+    found.sort(key=lambda entry: entry["sigmas"])
+    return {
+        "threshold": threshold,
+        "samples": samples,
+        "sigmas": sigmas,
+        #: The error at the cut itself, so a reader can see what "close" means
+        #: without recomputing it.
+        "error": round(_monte_carlo_error(threshold, samples), 4),
+        #: How many comparisons the rule can make. The matrix holds twice this.
+        "comparisons": len(decisive),
+        "pairs": found,
+        "unplaced": sorted(unplaced),
+    }
+
+
+def _places(groups: list[list[str]]) -> dict[str, int]:
+    """Which band each system landed in, counted from one."""
+    return {system: index + 1 for index, group in enumerate(groups) for system in group}
+
+
 def interval_json(interval: Interval) -> dict:
     """One system's interval, as the page consumes it.
 
@@ -648,6 +745,11 @@ def build(root: Path | None = None, judge_model: str = judge.DEFAULT_MODEL) -> d
             for first, row in sorted(beats.items())
         },
         "indistinguishable": indistinguishable(intervals, beats),
+        #: Which of those bands rest on a comparison the bootstrap cannot call.
+        #: The grouping's threshold is a convention and the page has said so;
+        #: what it never said is that some comparisons land within a standard
+        #: error of it, and which systems move when they fall the other way.
+        "near_the_cut": near_the_cut(intervals, beats),
         #: Whether completeness rises with how much the model wrote. `None` when
         #: the generation cache is not on this machine.
         "length_effect": length_effect(scores, note_words()),

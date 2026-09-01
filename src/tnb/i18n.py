@@ -431,6 +431,38 @@ _SENTENCES = {
     "Not in the compared population, so this system holds no place here. Not a nought.": (
         "Není ve srovnávané skupině, takže tenhle systém tu žádné místo nedrží. Není to nula."
     ),
+    # The band rule's own threshold has a standard error, and some comparisons
+    # land inside it. The page said the boundary is a convention and never said
+    # which rows are standing on it.
+    "<strong>{0} of the {1} comparisons that decide a band land within {2} standard errors of"
+    " the {3} cut</strong> (the error is {4} at {5} resamples), the nearest {6} of one away. If"
+    " they fall"
+    " the other way, {7} of these rows change band &mdash; {8} on one comparison alone. Drawn in a"
+    " band because the table has to draw them somewhere; this measurement does not place them:"
+    " {9}.": (
+        "<strong>{0} z {1} porovnání, která o pásmu rozhodují, leží do {2} směrodatných chyb od "
+        "řezu {3}</strong> (ta chyba je {4} při {5} převzorkováních), nejbližší {6} od něj. Kdyby "
+        "dopadla opačně, změní pásmo {7} z těchto řádků &mdash; {8} kvůli jedinému porovnání. "
+        "Jsou nakreslené v nějakém pásmu proto, že je tabulka někam nakreslit musí; tohle měření "
+        "je nezařazuje: {9}."
+    ),
+    # The methods page's own table of the comparisons the band edges rest on.
+    "Comparisons the band boundary turns on": "Porovnání, na kterých hranice pásma stojí",
+    "Comparison": "Porovnání",
+    "Beats in": "Poráží v",
+    "From the cut": "Od řezu",
+    "Rows it would move": "Kolik řádků by posunulo",
+    "over": "nad",
+    "none": "žádné",
+    "Two systems are separated when one beats the other in at least {0} of resamples. That"
+    " fraction is estimated from {1} draws and carries a standard error of <strong>{2}</strong>,"
+    " so a comparison landing within a few of those is one the threshold decided rather than the"
+    " evidence. {3} of the {4} comparisons that can decide a band are inside {5} of them.": (
+        "Dva systémy se rozliší, když jeden poráží druhý aspoň v {0} převzorkování. Ten podíl je "
+        "odhadnutý z {1} tahů a nese vlastní směrodatnou chybu <strong>{2}</strong>, takže "
+        "porovnání, které padne do několika takových chyb od prahu, rozhodl práh, ne důkaz. "
+        "{3} ze {4} porovnání, která můžou o pásmu rozhodnout, leží uvnitř {5} z nich."
+    ),
     "Provider": "Poskytovatel",
     # The column that orders by the models beating each other rather than by a
     # weighted mean of columns that do not point the same way.

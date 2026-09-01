@@ -1346,6 +1346,57 @@
   "narrowed_by": {
     "gpt-oss-120b": 8
   },
+  "near_the_cut": {
+    "comparisons": 171,
+    "error": 0.0049,
+    "pairs": [
+      {
+        "beats": "gpt-5.6-terra",
+        "loses": "glm-5.2",
+        "moves": [
+          "glm-5.2",
+          "mistral-medium-3.5"
+        ],
+        "sigmas": 0.1,
+        "value": 0.9495
+      },
+      {
+        "beats": "qwen3.5-int4",
+        "loses": "google_gemini-3.7-flash",
+        "moves": [],
+        "sigmas": 0.7,
+        "value": 0.9465
+      },
+      {
+        "beats": "google_gemini-3.1-pro-preview",
+        "loses": "deepseek-v4-flash-thinking",
+        "moves": [],
+        "sigmas": 1.62,
+        "value": 0.9415
+      },
+      {
+        "beats": "gpt-oss-120b",
+        "loses": "glm-5.2",
+        "moves": [],
+        "sigmas": 2.54,
+        "value": 0.961
+      },
+      {
+        "beats": "mistral-medium-3.5",
+        "loses": "gemma4",
+        "moves": [],
+        "sigmas": 2.8,
+        "value": 0.9345
+      }
+    ],
+    "samples": 2000,
+    "sigmas": 3.0,
+    "threshold": 0.95,
+    "unplaced": [
+      "glm-5.2",
+      "mistral-medium-3.5"
+    ]
+  },
   "sessions": 42,
   "still_scoring": [],
   "track": "tneval-soap",

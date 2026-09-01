@@ -1592,6 +1592,11 @@ def _groups_for(versions: dict, saturations: list[dict]) -> dict | None:
             "sessions": item.get("sessions"),
             "corpus_sessions": item.get("corpus_sessions"),
             "of": item["indistinguishable"],
+            # Which of these bands rest on a comparison the bootstrap cannot
+            # call. Carried whole rather than summarised here: the page names
+            # the systems, and a count with no names is not something a reader
+            # can act on. `None` on an analysis written before it was measured.
+            "near_the_cut": item.get("near_the_cut"),
         }
     return None
 

@@ -1362,6 +1362,101 @@
     "qwen3.8-27b": 5,
     "therapist": 2
   },
+  "near_the_cut": {
+    "comparisons": 171,
+    "error": 0.0049,
+    "pairs": [
+      {
+        "beats": "google_gemini-3.7-flash",
+        "loses": "glm-5",
+        "moves": [
+          "glm-5"
+        ],
+        "sigmas": 0.1,
+        "value": 0.9505
+      },
+      {
+        "beats": "google_gemini-3.7-flash",
+        "loses": "gpt-5.6-terra",
+        "moves": [
+          "deepseek-v4-flash-thinking",
+          "gpt-5.6-terra"
+        ],
+        "sigmas": 0.53,
+        "value": 0.9525
+      },
+      {
+        "beats": "glm-5",
+        "loses": "gpt-5.6-luna",
+        "moves": [],
+        "sigmas": 1.66,
+        "value": 0.9575
+      },
+      {
+        "beats": "gpt-5.6-terra",
+        "loses": "gemma4",
+        "moves": [
+          "gemma4"
+        ],
+        "sigmas": 1.88,
+        "value": 0.94
+      },
+      {
+        "beats": "glm-5.2",
+        "loses": "qwen3.8-27b",
+        "moves": [],
+        "sigmas": 2.23,
+        "value": 0.938
+      },
+      {
+        "beats": "kimi-k3",
+        "loses": "google_gemini-3.7-flash",
+        "moves": [
+          "deepseek-v4-flash",
+          "deepseek-v4-flash-thinking",
+          "glm-5",
+          "google_gemini-3.7-flash",
+          "gpt-5.6-luna",
+          "gpt-5.6-sol",
+          "gpt-5.6-terra",
+          "gpt-oss-120b",
+          "llama-3.1-70b",
+          "mistral-large-v2",
+          "mistral-medium-3.5",
+          "qwen3.8-27b",
+          "therapist"
+        ],
+        "sigmas": 2.41,
+        "value": 0.9605
+      },
+      {
+        "beats": "google_gemini-3.1-pro-preview",
+        "loses": "gpt-5.6-terra",
+        "moves": [],
+        "sigmas": 2.94,
+        "value": 0.9625
+      }
+    ],
+    "samples": 2000,
+    "sigmas": 3.0,
+    "threshold": 0.95,
+    "unplaced": [
+      "deepseek-v4-flash",
+      "deepseek-v4-flash-thinking",
+      "gemma4",
+      "glm-5",
+      "google_gemini-3.7-flash",
+      "gpt-5.6-luna",
+      "gpt-5.6-sol",
+      "gpt-5.6-terra",
+      "gpt-oss-120b",
+      "llama-3.1-70b",
+      "mistral-large-v2",
+      "mistral-medium-3.5",
+      "qwen3.8-27b",
+      "therapist"
+    ]
+  },
   "sessions": 25,
   "still_scoring": [],
   "track": "tneval-soap",

@@ -256,6 +256,36 @@ function renderSaturation(data) {
        other</strong> — the benchmark has not run out of resolution yet.`}</p>`
     : '';
 
+  // Which comparisons the band edges turn on, and how close each is to the
+  // threshold in units of the bootstrap's own error. A pair at 0.9505 with an
+  // error of 0.0049 is a tenth of one away: the rule put it on one side and the
+  // measurement does not say it belongs there.
+  //
+  // The number of systems each one moves is computed by putting it on the other
+  // side and re-grouping, so the cascades are counted. One comparison under
+  // `gemini-3.1-pro-preview` moves thirteen of nineteen.
+  const cut = s.near_the_cut;
+  const cutRows = !cut || !(cut.pairs || []).length
+    ? ''
+    : `<h3>${T`Comparisons the band boundary turns on`}</h3>
+       <p class="note">${T`Two systems are separated when one beats the other in at least
+         ${cut.threshold} of resamples. That fraction is estimated from ${cut.samples} draws and
+         carries a standard error of <strong>${cut.error}</strong>, so a comparison landing
+         within a few of those is one the threshold decided rather than the evidence.
+         ${cut.pairs.length} of the ${cut.comparisons} comparisons that can decide a band are
+         inside ${cut.sigmas} of them.`}</p>
+       <table class="grid"><thead><tr>
+         <th scope="col">${T`Comparison`}</th><th scope="col">${T`Beats in`}</th>
+         <th scope="col">${T`From the cut`}</th><th scope="col">${T`Rows it would move`}</th>
+       </tr></thead><tbody>${cut.pairs.map(pair => `<tr>
+         <td><code>${esc(pair.beats)}</code> ${T`over`} <code>${esc(pair.loses)}</code></td>
+         <td>${pair.value.toFixed(4)}</td>
+         <td>${pair.sigmas}&#8239;&sigma;</td>
+         <td>${pair.moves.length
+           ? `${pair.moves.length} <span class="dash">(${pair.moves.map(esc).join(', ')})</span>`
+           : `<span class="dash">${T`none`}</span>`}</td>
+       </tr>`).join('')}</tbody></table>`;
+
   const pending = (s.still_scoring || []).length
     ? `<p class="note">${T`Left out of this section because they are still being scored:
        ${s.still_scoring.join(', ')}. Including a half-scored system would shrink the shared
@@ -333,6 +363,7 @@ function renderSaturation(data) {
        transitive, so the boundary between adjacent lines is a convention.`}</p>
     <ol class="sections">${groups}</ol>
     ${separable}
+    ${cutRows}
 
     <h4 style="margin-top:1.8rem">${T`What each rubric criterion is still doing`}</h4>
     <p class="blurb">${T`The bar spans lowest to highest model; the grey tick is the therapist. A bar

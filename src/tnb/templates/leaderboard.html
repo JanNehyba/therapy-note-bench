@@ -582,7 +582,8 @@ function renderTable(table, index) {
          ${table.groups.of.length} bands are shared and the top one holds
          ${table.groups.of[0].length} of them. Paired bootstrap on
          <strong>${esc(tr(table.groups.measure))}</strong> over the
-         ${table.groups.sessions} conversations every system here was scored on.`}</p>`
+         ${table.groups.sessions} conversations every system here was scored on.`}${
+         cutNote(table.groups.near_the_cut)}</p>`
     // Three cases, and the sentence used to fit one of them. A table with a
     // ranking measure and no bootstrap has a gradient to read roughly. A table
     // ordered by dominance has places, and how many of them there are is the
@@ -1248,6 +1249,30 @@ function rosterNote() {
       the models it serves.`);
   }
   return `<p class="note">${parts.join(' ')}</p>`;
+}
+
+// Which of those bands rest on a comparison this bootstrap cannot call.
+//
+// The band rule separates two systems when one beats the other in at least 0.95
+// of resamples. That fraction is estimated from a finite number of draws and
+// carries a standard error of its own, so a comparison landing at 0.9505 is a
+// tenth of one away from the threshold: which side the truth is on is not
+// something the measurement answers. The page already said the boundary is a
+// convention; it never said which rows are standing on it.
+//
+// Nothing where the analysis predates the measurement. A band with no statement
+// about its own edge is not a band that was checked and found firm.
+function cutNote(cut) {
+  if (!cut || !cut.pairs || !cut.pairs.length) return '';
+  const closest = cut.pairs[0];
+  const worst = cut.pairs.reduce((a, b) => (b.moves.length > a.moves.length ? b : a));
+  const names = cut.unplaced.map(system => `<code>${esc(system)}</code>`).join(', ');
+  return ' ' + T`<strong>${cut.pairs.length} of the ${cut.comparisons} comparisons that decide a
+    band land within ${cut.sigmas} standard errors of the ${cut.threshold} cut</strong> (the error is
+    ${cut.error} at ${cut.samples} resamples), the nearest ${closest.sigmas} of one away. If they fall the
+    other way, ${cut.unplaced.length} of these rows change band &mdash; ${worst.moves.length} on
+    one comparison alone. Drawn in a band because the table has to draw them somewhere; this
+    measurement does not place them: ${names}.`;
 }
 
 function agreementNote(track) {
