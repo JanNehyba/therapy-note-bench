@@ -265,12 +265,31 @@ def test_the_document_counts_the_files_it_reads(prose):
     """
     for name in (
         "leaderboard.json",
-        "saturation-*.json",
+        f"saturation-{figures.JUDGE_A}.json",
+        f"saturation-{figures.JUDGE_B}.json",
         "calibration.json",
         "corpus-profile.json",
     ):
-        assert name in prose
+        assert name in prose, f"{name} is not named in the section that says how to check"
     assert "Five files rather than two" in prose
+
+
+def test_every_file_the_document_names_is_one_a_reader_can_open(prose):
+    """A section headed "how to check" that names a file without linking it.
+
+    Six published files were named as code spans and none but the leaderboard
+    was a link: the two saturation files, `calibration.json`,
+    `corpus-profile.json`, `judges.json` and `models-snapshot.md`. The
+    instruction to check was given without the means.
+    """
+    named = set(re.findall(r"docs/([a-z0-9.\-]+\.(?:json|md))", prose))
+    named |= set(re.findall(r"<code>([a-z0-9.\-]+\.(?:json|md))</code>", prose))
+    linked = set(re.findall(r'href="([^"]+)"', prose))
+    missing = sorted(name for name in named if name not in linked)
+    assert not missing, (
+        "named in the document and not linked from it, so a reader cannot open "
+        f"what they are told to check: {missing}"
+    )
 
 
 def test_the_document_never_calls_completeness_a_fraction_of_23(prose):

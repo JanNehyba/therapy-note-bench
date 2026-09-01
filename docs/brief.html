@@ -224,7 +224,7 @@
      other three columns are reported because the protocol produces them, and ordering
      anything by them would be ordering by noise.</p>
   <p class="note">Measured across 150 of those notes, judge
-     <code>gemini-3.1-pro-preview</code>. The second judge, <code>gpt-5.6-terra</code>, clears the same ceiling by less: 0.52 against 0.50 on the checklist. Both are in <code>docs/judges.json</code>.</p>
+     <code>gemini-3.1-pro-preview</code>. The second judge, <code>gpt-5.6-terra</code>, clears the same ceiling by less: 0.52 against 0.50 on the checklist. Both are in <a href="judges.json"><code>docs/judges.json</code></a>.</p>
 
   <h2 class="page-break">One: a leaderboard position is not a measurement</h2>
   <p>The two judges see the same notes, ask the same 23 questions and reach almost the
@@ -485,7 +485,9 @@
      per-criterion breakdown is the thing to watch &mdash; an aggregate stays healthy
      for a long time after the parts of it have died.</p>
   <p class="note">Computed by a paired bootstrap over the conversations every system was
-     scored on, published as <code>docs/saturation-&lt;judge&gt;.json</code> and drawn in
+     scored on, published as
+     <a href="saturation-gemini-3.1-pro-preview.json"><code>docs/saturation-&lt;judge&gt;.json</code></a>
+     and drawn in
      full on the methods page. TRACE is a re-implementation and has no human anchor at
      all: unlike the rubric, no
      therapist ever rated these notes on it, and it is labelled that way wherever it
@@ -619,26 +621,37 @@
 
   <h2 class="page-break">How to check any of this</h2>
   <p>Every figure in this document is drawn from the files the site publishes, and
-     every table is built from them row by row. Five files rather than two:
-     <code>leaderboard.json</code>, the two <code>saturation-*.json</code>,
-     <code>calibration.json</code> and <code>corpus-profile.json</code>.</p>
+     every table is built from them row by row. Five files rather than two, and each
+     one is a link because a section headed &ldquo;how to check&rdquo; that names a file
+     without handing it over is not one:
+     <a href="leaderboard.json"><code>leaderboard.json</code></a>,
+     <a href="saturation-gemini-3.1-pro-preview.json"><code>saturation-gemini-3.1-pro-preview.json</code></a> and
+     <a href="saturation-gpt-5.6-terra.json"><code>saturation-gpt-5.6-terra.json</code></a>,
+     <a href="calibration.json"><code>calibration.json</code></a> and
+     <a href="corpus-profile.json"><code>corpus-profile.json</code></a>.</p>
   <p><strong>The prose around them is written by hand.</strong> Some figures in it are
      computed from the payload and a test fails if they drift; others are typed here
      beside the prose they belong to. The test names the sentences it covers, and a
      sentence it does not name is a sentence nobody is checking. This paragraph
      used to say that nothing here was typed in. That was false in this file more
      than thirty times, and it read as an instruction not to look.</p>
-  <p>And four pages carry what the numbers rest on:
+  <p>And five pages carry what the numbers rest on:
      <a href="datasets.md">the datasets</a> &mdash; where each came from, what licence it
      publishes (three of the six publish none for their data) and the traps in them;
      <a href="methodology.md">the method</a>;
-     <a href="limitations.md">what a result cannot claim</a>; and
-     <a href="landscape.md">what exists in this field</a> and what does not.</p>
+     <a href="limitations.md">what a result cannot claim</a>;
+     <a href="landscape.md">what exists in this field</a> and what does not; and
+     <a href="models-snapshot.md">what the endpoint had deployed when</a>, which is the
+     only record of what a model id meant on the day it was asked.</p>
   <ul>
-    <li><code>docs/leaderboard.json</code> &mdash; every row, every measure, and the six
-        version fields a row has to agree on before it may be compared with another.</li>
-    <li><code>docs/saturation-&lt;judge&gt;.json</code> &mdash; the paired bootstrap that
-        decides which systems this evidence can tell apart.</li>
+    <li><a href="leaderboard.json"><code>docs/leaderboard.json</code></a> &mdash; every
+        row, every measure, and the six version fields a row has to agree on before it
+        may be compared with another.</li>
+    <li><a href="saturation-gemini-3.1-pro-preview.json"><code>docs/saturation-&lt;judge&gt;.json</code></a>
+        &mdash; the paired bootstrap that decides which systems this evidence can tell
+        apart, one file per judge.</li>
+    <li><a href="judges.json"><code>docs/judges.json</code></a> &mdash; every candidate
+        judge against the two therapists, including the ones not used.</li>
     <li><code>results/rows.jsonl</code> &mdash; append-only. A re-run adds rows beside
         the old ones; what is drawn is the newest of each.</li>
   </ul>

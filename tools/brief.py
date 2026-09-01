@@ -378,10 +378,11 @@ def the_judges(data: Data) -> str:
     second_judge = (
         f"The second judge, <code>{esc(JUDGE_B)}</code>, clears the same ceiling by less: "
         f"{second['judge']:.2f} against {second['humans']:.2f} on the checklist. "
-        "Both are in <code>docs/judges.json</code>."
+        'Both are in <a href="judges.json"><code>docs/judges.json</code></a>.'
         if second
         else f"The second judge, <code>{esc(JUDGE_B)}</code>, has no published "
-        "calibration in <code>docs/judges.json</code>, which is itself a gap."
+        'calibration in <a href="judges.json"><code>docs/judges.json</code></a>, '
+        "which is itself a gap."
     )
 
     rows = []
@@ -625,6 +626,7 @@ def what_it_means(data: Data) -> str:
 
 
 def how_much_room_is_left(data: Data) -> str:
+    judge_a = JUDGE_A
     """Is the benchmark still measuring anything, and for how much longer.
 
     The question anybody who has watched a benchmark die asks first. It is
@@ -751,7 +753,9 @@ def how_much_room_is_left(data: Data) -> str:
      per-criterion breakdown is the thing to watch &mdash; an aggregate stays healthy
      for a long time after the parts of it have died.</p>
   <p class="note">Computed by a paired bootstrap over the conversations every system was
-     scored on, published as <code>docs/saturation-&lt;judge&gt;.json</code> and drawn in
+     scored on, published as
+     <a href="saturation-{judge_a}.json"><code>docs/saturation-&lt;judge&gt;.json</code></a>
+     and drawn in
      full on the methods page. TRACE is a re-implementation and has no human anchor at
      all: unlike the rubric, no
      therapist ever rated these notes on it, and it is labelled that way wherever it
@@ -801,29 +805,42 @@ def what_it_does_not_mean(data: Data) -> str:
 def how_to_check(data: Data) -> str:
     from figures import FIGURES
 
+    judge_a, judge_b = JUDGE_A, JUDGE_B
+
     return f"""
   <h2 class="page-break">How to check any of this</h2>
   <p>Every figure in this document is drawn from the files the site publishes, and
-     every table is built from them row by row. Five files rather than two:
-     <code>leaderboard.json</code>, the two <code>saturation-*.json</code>,
-     <code>calibration.json</code> and <code>corpus-profile.json</code>.</p>
+     every table is built from them row by row. Five files rather than two, and each
+     one is a link because a section headed &ldquo;how to check&rdquo; that names a file
+     without handing it over is not one:
+     <a href="leaderboard.json"><code>leaderboard.json</code></a>,
+     <a href="saturation-{judge_a}.json"><code>saturation-{judge_a}.json</code></a> and
+     <a href="saturation-{judge_b}.json"><code>saturation-{judge_b}.json</code></a>,
+     <a href="calibration.json"><code>calibration.json</code></a> and
+     <a href="corpus-profile.json"><code>corpus-profile.json</code></a>.</p>
   <p><strong>The prose around them is written by hand.</strong> Some figures in it are
      computed from the payload and a test fails if they drift; others are typed here
      beside the prose they belong to. The test names the sentences it covers, and a
      sentence it does not name is a sentence nobody is checking. This paragraph
      used to say that nothing here was typed in. That was false in this file more
      than thirty times, and it read as an instruction not to look.</p>
-  <p>And four pages carry what the numbers rest on:
+  <p>And five pages carry what the numbers rest on:
      <a href="datasets.md">the datasets</a> &mdash; where each came from, what licence it
      publishes (three of the six publish none for their data) and the traps in them;
      <a href="methodology.md">the method</a>;
-     <a href="limitations.md">what a result cannot claim</a>; and
-     <a href="landscape.md">what exists in this field</a> and what does not.</p>
+     <a href="limitations.md">what a result cannot claim</a>;
+     <a href="landscape.md">what exists in this field</a> and what does not; and
+     <a href="models-snapshot.md">what the endpoint had deployed when</a>, which is the
+     only record of what a model id meant on the day it was asked.</p>
   <ul>
-    <li><code>docs/leaderboard.json</code> &mdash; every row, every measure, and the six
-        version fields a row has to agree on before it may be compared with another.</li>
-    <li><code>docs/saturation-&lt;judge&gt;.json</code> &mdash; the paired bootstrap that
-        decides which systems this evidence can tell apart.</li>
+    <li><a href="leaderboard.json"><code>docs/leaderboard.json</code></a> &mdash; every
+        row, every measure, and the six version fields a row has to agree on before it
+        may be compared with another.</li>
+    <li><a href="saturation-{judge_a}.json"><code>docs/saturation-&lt;judge&gt;.json</code></a>
+        &mdash; the paired bootstrap that decides which systems this evidence can tell
+        apart, one file per judge.</li>
+    <li><a href="judges.json"><code>docs/judges.json</code></a> &mdash; every candidate
+        judge against the two therapists, including the ones not used.</li>
     <li><code>results/rows.jsonl</code> &mdash; append-only. A re-run adds rows beside
         the old ones; what is drawn is the newest of each.</li>
   </ul>

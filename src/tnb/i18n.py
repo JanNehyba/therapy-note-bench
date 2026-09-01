@@ -126,7 +126,8 @@ _STATIC = {
         "(žádná ze tří) a jaké pasti v nich jsou; "
         '<a href="methodology.md">metoda</a>; '
         '<a href="limitations.md">co výsledek nesmí tvrdit</a>; '
-        '<a href="landscape.md">co v oboru existuje a co ne</a>.'
+        '<a href="landscape.md">co v oboru existuje a co ne</a>; '
+        '<a href="models-snapshot.md">co měl endpoint kdy nasazené</a>.'
     ),
 }
 
