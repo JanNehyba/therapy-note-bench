@@ -3750,6 +3750,7 @@ def _conclusion(rows: list[results.Row]) -> str:
     top_qd, tables_qd = shared(quality_deepsy, 0)
     bottom_qd, _ = shared(quality_deepsy, -1)
     if tables_qd:
+        composites = _payload("czech-variance.json").get("composites") or {}
         _say(
             "deepsy-quality",
             _t(
@@ -3758,11 +3759,18 @@ def _conclusion(rows: list[results.Row]) -> str:
                 "band of all of them and {bottom} in the bottom band of all of them. "
                 "It is counted separately from the four above and not added to them, "
                 "for the reason the criteria are: not every model was asked in both "
-                "formats. On the real half this rests on one column rather than three "
-                "-- `accurate` and `thorough` need the session, and the real sessions "
-                "never leave e-INFRA -- so that half's band is a statement about "
-                "economy of language and about nothing else."
-            ).format(top=end(top_qd), bottom=end(bottom_qd), tables=tables_qd),
+                "formats. Every half's band is built from the columns that exist "
+                "there and separate models, the same set for both formats and both "
+                "judges: {real} on the real half, {translated} on the translated "
+                "one. The real half cannot ask `accurate` or `thorough` -- they need "
+                "the session, and the real sessions never leave e-INFRA."
+            ).format(
+                top=end(top_qd),
+                bottom=end(bottom_qd),
+                tables=tables_qd,
+                real=_join_words(composites.get("real") or []) or "-",
+                translated=_join_words(composites.get("translated") or []) or "-",
+            ),
         )
 
     # 3. Which columns of that instrument can rank anything at all.

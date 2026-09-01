@@ -290,15 +290,27 @@ COMPOSITES = {
     # difference into a fact about the two composites rather than the formats.
     "deepsy-real": report.DRAWN_CRITERIA,
     "deepsy-translated": report.DRAWN_CRITERIA,
-    "czech-real-pdsqi": ("accurate", "thorough", "succinct"),
-    "czech-translated-pdsqi": ("accurate", "thorough", "succinct"),
-    # The same three, for the reason the Deepsy criteria tracks keep the same
-    # six: a SOAP-to-Deepsy difference read off two different composites is a
-    # fact about the composites and not about the formats. The real half is
-    # again `succinct` alone -- `accurate` and `thorough` need the session --
-    # and `_coverage` names the two it could not ask.
-    "deepsy-real-pdsqi": ("accurate", "thorough", "succinct"),
-    "deepsy-translated-pdsqi": ("accurate", "thorough", "succinct"),
+}
+
+#: Which PDSQI tracks share a half, and therefore a composite. A fixed
+#: attribute list cannot serve all four: the real half is rated from the note
+#: alone, so `accurate` and `thorough` -- the two that need the session -- are
+#: never asked there, and the triple this used to name banded that half on
+#: `succinct` by itself while the table beside it drew six columns. Each half's
+#: composite is instead taken from the cells, by the same rule the `COMPOSITES`
+#: docstring states for flat columns: the attributes that exist there and
+#: separate models. One set per half, shared by SOAP and Deepsy and by both
+#: judges, so a difference between two tracks of a half is a fact about the
+#: formats and not about two composites.
+PDSQI_HALVES = {
+    "real": (
+        (results.TRACK_CZECH_REAL_PDSQI, czech_task.NAME_REAL),
+        (results.TRACK_DEEPSY_REAL_PDSQI, deepsy_task.NAME_REAL),
+    ),
+    "translated": (
+        (results.TRACK_CZECH_TRANSLATED_PDSQI, czech_task.NAME_TRANSLATED),
+        (results.TRACK_DEEPSY_TRANSLATED_PDSQI, deepsy_task.NAME_TRANSLATED),
+    ),
 }
 
 
@@ -440,6 +452,26 @@ def _composite(cells: dict, keys) -> dict:
     return {pair: mean(values) for pair, values in grouped.items() if values}
 
 
+def _varying(read: Read) -> set[str]:
+    """The attributes in `read` that separate models.
+
+    The rule the `COMPOSITES` docstring states, applied to the cells a run
+    actually holds: a column every model averages the same on cannot change an
+    order, and averaged into a composite it only shrinks every difference
+    against the threshold, merging bands the data holds apart. The fixed triple
+    this replaces never applied that rule to the real half, where two of its
+    three columns are never asked.
+    """
+    per: dict[str, dict[str, list[float]]] = defaultdict(lambda: defaultdict(list))
+    for (_model, _session, attribute), value in read.cells.items():
+        per[attribute][_model].append(value)
+    return {
+        attribute
+        for attribute, models in per.items()
+        if len({round(mean(values), 6) for values in models.values()}) > 1
+    }
+
+
 def _pdsqi_cells(task_name: str, judge_model: str, budget: int) -> Read:
     """Every (model, session, attribute) PDSQI score, from the cache.
 
@@ -489,14 +521,12 @@ def _coverage(read: Read, keys, per_note: dict) -> dict:
     uneven. `tools/czech_brief.py` marks these rows the way its score tables
     already mark a thin one.
 
-    **A column nobody was allowed to ask is not a missing answer.** `COMPOSITES`
-    names three attributes for each PDSQI track and the real corpus is rated
-    from the note alone, so `accurate` and `thorough` -- the two that need the
-    session -- are never put to a judge there and that band is built on
-    `succinct` by itself. Counting them as unanswered would have called all 104
-    notes partial and hidden the real finding, which is that the composite is
-    one column wide. So `columns` is what the track actually has and
-    `columns_absent` names what it does not, beside the `columns_named` the
+    **A column nobody was allowed to ask is not a missing answer.** The real
+    corpus is rated from the note alone, so `accurate` and `thorough` -- the two
+    that need the session -- are never put to a judge there. Counting them as
+    unanswered would have called every real note partial and hidden the columns
+    the band was actually built on. So `columns` is what the track really has
+    and `columns_absent` names what it does not, beside the `columns_named` the
     composite asked for.
     """
     present = {criterion for _model, _session, criterion in read.cells}
@@ -606,23 +636,32 @@ def main(argv: list[str] | None = None) -> int:
             )
 
     # The quality tracks band too. Their per-note scores come from the PDSQI
-    # cache rather than the criteria's, and they are banded on the attributes
-    # that vary: adding a column every model scores 5.00 on does not change who
-    # is ahead, but it shrinks every difference against the threshold and would
-    # merge bands that are really apart.
-    for track, task_name in (
-        (results.TRACK_CZECH_REAL_PDSQI, czech_task.NAME_REAL),
-        (results.TRACK_CZECH_TRANSLATED_PDSQI, czech_task.NAME_TRANSLATED),
-        (results.TRACK_DEEPSY_REAL_PDSQI, deepsy_task.NAME_REAL),
-        (results.TRACK_DEEPSY_TRANSLATED_PDSQI, deepsy_task.NAME_TRANSLATED),
-    ):
-        if args.only and track not in args.only:
+    # cache rather than the criteria's. Each half bands on the attributes that
+    # exist on it and separate models -- a column every model scores 5.00 on
+    # does not change who is ahead, but it shrinks every difference against
+    # the threshold and would merge bands that are really apart -- and the set
+    # is recorded under `composites`, so the document can name the columns a
+    # band was built from.
+    for half, tracks in PDSQI_HALVES.items():
+        # Both tracks of the half are read even under `--only`: the composite is
+        # the half's, so recomputing one track alone would band it on a
+        # different set of columns than the track the reader compares it with.
+        reads: dict[tuple[str, str], Read] = {}
+        for track, task_name in tracks:
+            for judge_model in (judge.DEFAULT_MODEL, judge.SECOND_JUDGE):
+                read = _pdsqi_cells(task_name, judge_model, args.thinking_budget)
+                if read.cells:
+                    reads[(track, judge_model)] = read
+        if not reads:
             continue
-        for judge_model in (judge.DEFAULT_MODEL, judge.SECOND_JUDGE):
-            read = _pdsqi_cells(task_name, judge_model, args.thinking_budget)
-            if not read.cells:
+        keys = tuple(sorted(set.union(*(_varying(read) for read in reads.values()))))
+        if not keys:
+            print(f"!! {half} half: no PDSQI attribute separates any model.", flush=True)
+            continue
+        payload.setdefault("composites", {})[half] = list(keys)
+        for (track, judge_model), read in reads.items():
+            if args.only and track not in args.only:
                 continue
-            keys = COMPOSITES[track]
             per_note = _composite(read.cells, keys)
             grouped = bands(per_note, random.Random(SEED))  # noqa: S311 -- not a secret
             if grouped:

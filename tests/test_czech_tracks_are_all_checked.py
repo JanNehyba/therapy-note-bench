@@ -64,9 +64,12 @@ def test_the_completeness_check_knows_every_track_pairing():
 
 def test_every_banded_track_has_a_composite():
     """`czech_variance.bands` needs one number per model, and `COMPOSITES` says
-    which columns make it. A track without an entry raises at run time, in the
-    middle of a long offline read, rather than here."""
-    missing = sorted(set(CZECH) - set(czech_variance.COMPOSITES))
+    which columns make it for the criteria tracks. The PDSQI tracks take theirs
+    from `PDSQI_HALVES`, computed from the cells at run time, so a track in
+    neither raises at run time, in the middle of a long offline read, rather
+    than here."""
+    in_halves = {track for tracks in czech_variance.PDSQI_HALVES.values() for track, _ in tracks}
+    missing = sorted(set(CZECH) - set(czech_variance.COMPOSITES) - in_halves)
     assert not missing, f"these tracks have no banding composite: {missing}"
 
 

@@ -145,22 +145,26 @@ def test_the_variance_tool_reads_each_pdsqi_corpus_with_its_own_root_and_rendere
         assert got_root == root, task_name
 
 
-def test_every_pdsqi_track_is_banded_on_the_same_composite():
+def test_every_pdsqi_half_bands_its_tracks_on_one_composite():
     """A SOAP-to-Deepsy difference read off two composites is a fact about the
-    composites. The four PDSQI tracks must name the same attributes."""
+    composites, so both tracks of a half take theirs from the same computed
+    set. The two halves need not agree: the real one cannot ask the attributes
+    that need the session."""
     import sys
 
     sys.path.insert(0, str(REPO_ROOT / "tools"))
     import czech_variance
 
-    tracks = (
+    pdsqi = {track for tracks in czech_variance.PDSQI_HALVES.values() for track, _ in tracks}
+    assert pdsqi == {
         results.TRACK_CZECH_REAL_PDSQI,
         results.TRACK_CZECH_TRANSLATED_PDSQI,
         results.TRACK_DEEPSY_REAL_PDSQI,
         results.TRACK_DEEPSY_TRANSLATED_PDSQI,
-    )
-    composites = {czech_variance.COMPOSITES[track] for track in tracks}
-    assert len(composites) == 1, composites
+    }
+    for half, tracks in czech_variance.PDSQI_HALVES.items():
+        names = {task for _track, task in tracks}
+        assert names == {f"czech-{half}", f"deepsy-{half}"}, (half, names)
 
 
 def test_the_soap_renderer_over_a_deepsy_note_asks_the_pdsqi_judge_nothing():
