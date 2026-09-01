@@ -877,10 +877,10 @@ def _merged_table(track: str, groups: list[list[results.Row]], *, lead: bool = F
                 for judge in judges
             ]
             differ = len({v for v in values if v != "--"}) > 1
-            joined = " / ".join(values)
+            joined = _pair(values)
             css = " class='differ'" if differ else ""
             cells.append(f"<td{css}>{joined}</td>")
-        index = " / ".join(
+        index = _pair(
             f"{_rank_of(track, rows_by_judge[judge][system], varying):.2f}" for judge in judges
         )
         # Complete of the corpus, not of what this model managed to write.
@@ -895,7 +895,7 @@ def _merged_table(track: str, groups: list[list[results.Row]], *, lead: bool = F
         if len(set(complete)) == 1 and complete[0] == corpus:
             notes = str(corpus)
         else:
-            notes = f"{' / '.join(str(c) for c in complete)} {_t('of')} {corpus}"
+            notes = f"{_pair(complete)} {_t('of')} {corpus}"
         band = _band_cell(numbers, judges, system) if banded else ""
         body.append(
             f"<tr{mark}><td>{html.escape(system)}</td><td>{notes}</td>"
@@ -1043,6 +1043,20 @@ def _banded(numbers: dict[str, dict[str, int]], judges: list[str], systems) -> b
     return any(numbers.get(judge, {}).keys() & drawn for judge in judges)
 
 
+#: The separator inside a cell that holds one value per judge. Non-breaking,
+#: because such a cell is a single reading under two instruments rather than
+#: two words, and a break between them is what put `4.32 /` and `3.72` on
+#: different lines of the Czech print -- where the PDF text layer then emitted
+#: the row's first lines before its second ones and glued a neighbouring `--`
+#: onto the number. See `tests/test_judge_pair_cannot_break.py`.
+JUDGE_PAIR = "&nbsp;/&nbsp;"
+
+
+def _pair(values) -> str:
+    """One cell's worth of per-judge values, joined so they cannot separate."""
+    return JUDGE_PAIR.join(str(value) for value in values)
+
+
 def _band_cell(numbers: dict[str, dict[str, int]], judges: list[str], system: str) -> str:
     """One Band cell: a number per judge, marked where they differ.
 
@@ -1054,7 +1068,7 @@ def _band_cell(numbers: dict[str, dict[str, int]], judges: list[str], system: st
     values = [str(numbers.get(judge, {}).get(system, "--")) for judge in judges]
     differ = len({v for v in values if v != "--"}) > 1
     css = " class='differ'" if differ else ""
-    return f"<td{css}>{' / '.join(values)}</td>"
+    return f"<td{css}>{_pair(values)}</td>"
 
 
 def _band_unresolved(tracks: list[str]) -> str:
@@ -3453,7 +3467,11 @@ def _conclusion(rows: list[results.Row]) -> str:
     It is deliberately short, and it deliberately leads with the finding that
     changes how every table below is read rather than with the winner.
     """
-    said = []
+    said: list[tuple[str, str]] = []
+
+    def _say(name: str, sentence: str) -> None:
+        """One paragraph, under a name the short document can ask for."""
+        said.append((name, sentence))
 
     bands = _payload("czech-variance.json").get("bands", {})
     # Named tracks, not "everything that is not PDSQI". That filter was written
@@ -3504,14 +3522,15 @@ def _conclusion(rows: list[results.Row]) -> str:
     top, tables = shared(soap, 0)
     bottom, _ = shared(soap, -1)
     if tables:
-        said.append(
+        _say(
+            "soap-ranking",
             _t(
                 "On writing correct Czech, {top} in the top band of all {tables} "
                 "table-and-judge combinations the bands cover -- the SOAP halves, both "
                 "judges. {bottom} in the bottom band of all {tables}. Between those two "
                 "ends the tables disagree with each other, so nothing else here is a "
                 "ranking."
-            ).format(top=end(top), bottom=end(bottom, lead=True), tables=tables)
+            ).format(top=end(top), bottom=end(bottom, lead=True), tables=tables),
         )
 
     # 1b. The same question of the Deepsy format, counted over its own tables
@@ -3530,7 +3549,8 @@ def _conclusion(rows: list[results.Row]) -> str:
     top_d, tables_d = shared(deepsy, 0)
     bottom_d, _ = shared(deepsy, -1)
     if tables_d:
-        said.append(
+        _say(
+            "deepsy-ranking",
             _t(
                 "The Deepsy format was asked the same question over its own {tables} "
                 "table-and-judge combinations, and it is counted separately rather than "
@@ -3545,7 +3565,7 @@ def _conclusion(rows: list[results.Row]) -> str:
                 "the SOAP halves and against {deepsy_against} of {deepsy_total} in the "
                 "Deepsy format, so it is not the uniform penalty one number could stand "
                 "for."
-            ).format(top=end(top_d), bottom=end(bottom_d), tables=tables_d, **_length_signs())
+            ).format(top=end(top_d), bottom=end(bottom_d), tables=tables_d, **_length_signs()),
         )
 
     # 1b-tail. What is behind the names just given. A band says a model is
@@ -3563,14 +3583,15 @@ def _conclusion(rows: list[results.Row]) -> str:
     ]
     named = [f"{label} — {found}" for label, found in behind if found]
     if named:
-        said.append(
+        _say(
+            "how-thin",
             _t(
                 "Those names do not all rest on the same amount, and the thinnest of "
                 "them is worth reading beside the claim: {named}. That count is the "
                 "notes answered on every criterion the band averages, out of the "
                 "sessions its table has, and the notes column of the tables below "
                 "prints it beside every row it applies to."
-            ).format(named="; ".join(named))
+            ).format(named="; ".join(named)),
         )
 
     # 1c. And who is missing from that count, with the reason. A model that
@@ -3591,7 +3612,8 @@ def _conclusion(rows: list[results.Row]) -> str:
         # bottom band of every SOAP table, and in no Deepsy band at all.
         refused = _refused_on_deepsy(set(bottom) - banded_deepsy)
         if refused:
-            said.append(
+            _say(
+                "who-is-missing",
                 _t(
                     "One caution about that second count. {subject} in the bottom band "
                     "of all {tables} SOAP table-and-judge combinations and in no Deepsy "
@@ -3604,7 +3626,7 @@ def _conclusion(rows: list[results.Row]) -> str:
                     subject=end(sorted(refused), lead=True),
                     tables=tables,
                     calls=sum(refused.values()),
-                )
+                ),
             )
             # And the name one suffix away, when the bands list one. The two
             # paragraphs above and below this one say `glm-5.3-flash` is in no
@@ -3628,25 +3650,27 @@ def _conclusion(rows: list[results.Row]) -> str:
                 }
             )
             if near:
-                said.append(
+                _say(
+                    "who-is-missing-also",
                     _t(
                         "Read the two names carefully: {refused} and {near} differ by "
                         "one suffix and are different models. {near} is in the Deepsy "
                         "bands above and in none of the SOAP ones."
-                    ).format(refused=_join_words(sorted(refused)), near=_join_words(near))
+                    ).format(refused=_join_words(sorted(refused)), near=_join_words(near)),
                 )
 
     # 2. The same question asked of note quality, which does not answer.
     top_q, tables_q = shared(quality, 0)
     if tables_q and not top_q:
-        said.append(
+        _say(
+            "soap-quality",
             _t(
                 "On whether the note is any good, no model is in the top band of all "
                 "{tables} table-and-judge combinations and none is in the bottom band "
                 "of all {tables}. The "
                 "quality instrument does not agree with itself from one judge or one "
                 "half to the next, and no model can be called better on it."
-            ).format(tables=tables_q)
+            ).format(tables=tables_q),
         )
 
     # 2b. The same instrument over the notes the application actually writes,
@@ -3656,7 +3680,8 @@ def _conclusion(rows: list[results.Row]) -> str:
     top_qd, tables_qd = shared(quality_deepsy, 0)
     bottom_qd, _ = shared(quality_deepsy, -1)
     if tables_qd:
-        said.append(
+        _say(
+            "deepsy-quality",
             _t(
                 "The same instrument was put to the notes in the Deepsy format over "
                 "{tables} table-and-judge combinations of its own: {top} in the top "
@@ -3667,13 +3692,14 @@ def _conclusion(rows: list[results.Row]) -> str:
                 "-- `accurate` and `thorough` need the session, and the real sessions "
                 "never leave e-INFRA -- so that half's band is a statement about "
                 "economy of language and about nothing else."
-            ).format(top=end(top_qd), bottom=end(bottom_qd), tables=tables_qd)
+            ).format(top=end(top_qd), bottom=end(bottom_qd), tables=tables_qd),
         )
 
     # 3. Which columns of that instrument can rank anything at all.
     dead, total, alive, worst, judge = _dead_columns(rows)
     if dead:
-        said.append(
+        _say(
+            "dead-columns",
             _t(
                 "Part of why: under {judge}, {dead} of its {total} columns are the same "
                 "for every model, so they order nothing. Of the {moving} that do move, "
@@ -3687,7 +3713,7 @@ def _conclusion(rows: list[results.Row]) -> str:
                 moving=total - dead,
                 alive=_join_words(alive) or "-",
                 worst=f"{worst:.2f}",
-            )
+            ),
         )
 
     # 4. The finding that changes how the tables below are read.
@@ -3705,7 +3731,8 @@ def _conclusion(rows: list[results.Row]) -> str:
     ]
     hit = sum(1 for found in checks if found["all_in_the_tail"])
     if checks and hit == len(checks):
-        said.append(
+        _say(
+            "length",
             _t(
                 "Read the bottom of those tables carefully: the three models that write "
                 "the longest notes take the last three places in all {total} "
@@ -3713,7 +3740,7 @@ def _conclusion(rows: list[results.Row]) -> str:
                 "Each criterion asks whether there is a fault anywhere in a note, and a "
                 "longer note has more places to hide one. On the quality instrument, "
                 "rating the very same notes, those three models are not at the bottom."
-            ).format(total=len(checks))
+            ).format(total=len(checks)),
         )
 
     # 4a. And where it does not hold, said rather than allowed to mute the line
@@ -3727,7 +3754,8 @@ def _conclusion(rows: list[results.Row]) -> str:
         for found in (tail.get(track) or {}).get("judges", {}).values()
     ]
     if checks and deepsy_checks and not any(f["all_in_the_tail"] for f in deepsy_checks):
-        said.append(
+        _say(
+            "length-exceptions",
             _t(
                 "That pattern is not a law: in the {total} Deepsy table-and-judge "
                 "combinations the three "
@@ -3736,7 +3764,7 @@ def _conclusion(rows: list[results.Row]) -> str:
                 "last three places under either judge. Length and rank travel together "
                 "on the SOAP halves and more loosely here, which is one more reason the "
                 "two formats are counted apart rather than added up."
-            ).format(total=len(deepsy_checks))
+            ).format(total=len(deepsy_checks)),
         )
 
     # 4b. How big that is, and what is left of the ordering once it is
@@ -3753,7 +3781,8 @@ def _conclusion(rows: list[results.Row]) -> str:
     handicap = length.get("handicapped") or {}
     if fits and handicap:
         sizes = sorted(abs(block["slope_per_100_words"]) for block in fits)
-        said.append(
+        _say(
+            "length-size",
             _t(
                 "Part of what those language tables measure is length, and how much was "
                 "measured rather than argued: each extra hundred words costs {low} to "
@@ -3766,7 +3795,7 @@ def _conclusion(rows: list[results.Row]) -> str:
                 high=f"{sizes[-1] * 100:.0f}",
                 survived=sum(block["survived"] for block in handicap.values()),
                 decided=sum(block["decided"] for block in handicap.values()),
-            )
+            ),
         )
 
     # 5. Whether the English leaderboard says anything about this.
@@ -3779,18 +3808,24 @@ def _conclusion(rows: list[results.Row]) -> str:
                 if measure in measures:
                     label = measures[measure]["label"]
                     break
-            said.append(
+            _say(
+                "english-leaderboard",
                 _t(
                     "And the English leaderboard does not predict this. The same "
                     "instrument asked in both languages transfers; the single measure "
                     "the English page ranks by -- {measure} -- does not. A model's "
                     "standing there says nothing about the Czech it writes."
-                ).format(measure=_t(label))
+                ).format(measure=_t(label)),
             )
 
     if not said:
         return ""
-    body = "".join(f"<p>{html.escape(sentence)}</p>" for sentence in said)
+    # The name travels with the paragraph. `czech_short` drops three of these
+    # and used to drop them by position, which is only correct while the list
+    # has a fixed length -- and it does not: 1c writes a second paragraph only
+    # when there is a second thing to say. The day it wrote one, the short
+    # document began dropping the quality finding instead.
+    body = "".join(f'<p data-part="{name}">{html.escape(sentence)}</p>' for name, sentence in said)
     heading = _t("What the Czech track found, in {count} short paragraphs").format(count=len(said))
     return f"<h2>{heading}</h2>{body}"
 

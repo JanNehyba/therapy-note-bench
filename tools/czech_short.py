@@ -27,6 +27,7 @@ from __future__ import annotations
 
 import argparse
 import html
+import re
 import sys
 from collections import defaultdict
 from pathlib import Path
@@ -179,22 +180,40 @@ def _findings(rows: list[results.Row]) -> str:
     that is the last section.
     """
     body = brief._conclusion(rows)
-    if not body:
-        return ""
+    return _trim_conclusion(body) if body else ""
+
+
+def _trim_conclusion(body: str) -> str:
+    """The conclusion without its heading and without the paragraphs named in
+    `_DROPPED`.
+
+    Separate from `_findings` so it can be checked on markup rather than on a
+    build: what it does wrong is invisible in the output and expensive to
+    reproduce, and it went wrong once already.
+    """
     # Its own heading goes: this document has already given the section one,
     # and two headings in a row is how a reader learns to skip both.
     body = body[body.index("</h2>") + len("</h2>") :] if "</h2>" in body else body
-    parts = body.split("<p>")
-    kept = [p for n, p in enumerate(parts) if n not in _DROPPED]
-    return "<p>".join(kept)
+    return "".join(
+        block
+        for block in re.findall(r'<p data-part="[^"]*">.*?</p>', body, re.S)
+        if re.search(r'data-part="([^"]*)"', block).group(1) not in _DROPPED
+    )
 
 
-#: Which of the eleven paragraphs a newcomer does not need. Indices into the
-#: split above, where 0 is the heading. Three go: the two about how many notes
-#: each named model rests on, which is a checking question, and the one warning
-#: that two model names differ by a suffix, which matters to somebody reading
-#: the tables closely and not to somebody reading the finding.
-_DROPPED = (3, 4, 5)
+#: Which of `_conclusion`'s paragraphs a newcomer does not need, BY NAME.
+#:
+#: These were indices -- `(3, 4, 5)` into the list split on `<p>` -- and that is
+#: only correct while the list has a fixed length. It does not: section 1c
+#: writes a second paragraph only when there is a second thing to say, and a
+#: section was added above these. The day 1c wrote one paragraph instead of two,
+#: every index below it shifted and this document silently dropped the central
+#: finding about the quality instrument rather than the checking note it meant
+#: to drop. It lost 846 words and printed no warning.
+#:
+#: A name that no longer exists drops nothing, which is the right failure: a
+#: paragraph that stopped being written removes itself from here too.
+_DROPPED = ("how-thin", "who-is-missing", "who-is-missing-also")
 
 
 def _limits() -> str:
