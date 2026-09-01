@@ -13,8 +13,9 @@ __STYLE__
   <p class="sub" id="page-sub" data-t="page.sub">
     LLM-written psychotherapy session notes, scored on three published instruments —
     TN-Eval's SOAP rubric, PDSQI-9 and iCARE's 17 sections — and re-run as models change.
-    <a href="https://github.com/JanNehyba/therapy-note-bench">Code and every score on
-    GitHub</a>; the corpora are fetched from their own sources and not redistributed here.
+    <a href="https://github.com/JanNehyba/therapy-note-bench">Code and every published
+    score on GitHub</a>; the corpora are fetched from their own sources and not
+    redistributed here.
   </p>
 
   <!-- Above the table, because it is what to read before the numbers rather
@@ -48,7 +49,8 @@ __STYLE__
        <a href="methods.html#withdrawn">on the methods page</a>.</p>
     <p data-t="page.foot.background"><strong>Background.</strong>
        <a href="datasets.md">The datasets</a> — where each came from, what licence
-       it publishes (none of the three publishes one), and the traps in them;
+       it publishes (two of the three publish none and the third only a badge), and the
+       traps in them;
        <a href="methodology.md">the method</a>;
        <a href="limitations.md">what a result cannot claim</a>;
        <a href="landscape.md">what exists in this field and what does not</a>;
@@ -140,6 +142,11 @@ function coverageVaries(table) {
   const of = row =>
     `${row.n_generated}/${row.n_attempted}` +
     (row.n_scored < row.n_generated ? ` ${row.n_scored} judged` : '') +
+    // The number the figures actually rest on. Left out, and a table where
+    // every row wrote 50 of 50 but the scores rest on 44 to 49 of them counted
+    // as one string repeated: the column vanished exactly when the only thing
+    // it had to say was the thing worth saying.
+    (row.n_partial ? ` ${row.n_complete} behind` : '') +
     (row.n_failed ? ' !' : '');
   return new Set((table.rows || []).map(of)).size > 1;
 }
@@ -383,15 +390,20 @@ function denominatorNote(table) {
   if (!scored.length) return '';
   const best = fmt(Math.max(...scored.map(r => r.headline.completeness)), column.digits);
   const label = esc(tr(column.label));
-  // The rows arrive in the order the table draws them, so a position here is a
-  // position a reader can count to. Said only where a human wrote one of them:
-  // the point is that the clinician is measured by this denominator too, and a
-  // table of models alone has nothing to say about that.
-  const human = rows.findIndex(r => r.system_type === 'reference-human');
-  return ` <span class="measured">${human === -1
+  // The clinician's own figure, not their row number. It said "row 19 of 19",
+  // which is read off the order the table happens to be drawn in and stops
+  // being true the moment a reader clicks a column heading -- and the legend is
+  // not redrawn by `sortBy`. The figure says the same thing and no sort can
+  // falsify it. Said only where a human wrote one of the notes: the point is
+  // that the clinician is measured by this rule too, and a table of models
+  // alone has nothing to say about that.
+  const human = rows.find(r => r.system_type === 'reference-human'
+    && typeof (r.headline || {}).completeness === 'number');
+  return ` <span class="measured">${!human
     ? T`On the table above, the highest ${label} is ${best} out of a possible 1.00.`
     : T`On the table above, the highest ${label} is ${best} out of a possible 1.00, and the
-        note a human clinician wrote is row ${human + 1} of ${rows.length}.`}</span>`;
+        note a human clinician wrote scores
+        ${fmt(human.headline.completeness, column.digits)} by the same rule.`}</span>`;
 }
 
 // The Band column, explained where every other column is explained. It is the
@@ -453,7 +465,8 @@ function extraLegend(table) {
     T`A row marked ≠ settings ran under conditions the rest of the table did not, and the settings
       themselves are in the row's own detail, one tap below it. A row marked judge's own was
       scored by a judge from the same vendor as the model it graded; how much that is worth is
-      measured on the methods page. Like Band, this heading carries no ↕ and does not sort:
+      measured on the methods page. ${table.groups ? T`Like Band, this` : T`This`} heading
+      carries no ↕ and does not sort:
       these are labels, not an order.`,
   ]);
   if (table.has_effort) {
@@ -501,7 +514,11 @@ function renderTable(table, index) {
   // 0-1 fractions and one is a 1-5 rating; a reader comparing 0.65 with 4.98
   // has no way to know that unless the header says so at the point of use.
   const head = table.columns.map(c =>
-    `<th data-sort="${c.key}" title="${esc(tr(c.definition))}">` +
+    `<th scope="col" data-sort="${c.key}" title="${esc(tr(c.definition))}">` +
+    // The sortable heading's contents in a real control, so the sort can be
+    // reached by keyboard and announced as something to press. The delegated
+    // handler matches `closest('th[data-sort]')`, so it keeps working.
+    `<button type="button">` +
     // Which instrument asked for this column. Eleven columns from two
     // instruments read as eleven columns from one unless the header says
     // otherwise -- and then a reader compares a coverage count with a 1-5
@@ -509,16 +526,17 @@ function renderTable(table, index) {
     (c.instrument ? `<span class="instrument">${esc(tr(c.instrument))}</span>` : '') +
     `${esc(tr(c.label))}` +
     `<span class="scale">${esc(c.scale)}</span>` +
-    `</th>`).join('');
+    `</button></th>`).join('');
   // After the measures and before the metadata: it is read off the table, so it
   // belongs beside what it is read off, and it is not one of them.
   const beatsHead = instrumentsOf(table).map(([track, found]) =>
-    `<th data-sort="beats:${track}" class="beats" title="${
+    `<th scope="col" data-sort="beats:${track}" class="beats" title="${
       esc(T`How many of the other systems this one is at least as good as on every ${
         found.instrument} column, under both judges, and strictly better than somewhere. No weighting, so it holds however a reader weights the columns. The same under either judge, because both are already in it: switching the judge above does not change this column.`)}">` +
+    `<button type="button">` +
     `<span class="instrument">${esc(tr(found.instrument))}</span>` +
     `${T`Beats outright`}<span class="scale">${T`of ${found.of}`}</span>` +
-    `</th>`).join('');
+    `</button></th>`).join('');
   // A caveat that belongs to the instrument rather than to the column was
   // printed under every column that instrument owns: PDSQI-9's 47 words, eight
   // times, in one legend -- 376 words saying one thing. Where every column of
@@ -583,10 +601,16 @@ function renderTable(table, index) {
   // therapists agree with each other, while on the 1-5 scales those two reach
   // 0.13 to 0.19 and there is nothing to anchor to.
   // Read for the judge whose table this is, not for whichever was measured
-  // first. Both clear the therapists' ceiling, so the argument holds either
-  // way -- but the figure was gemini's 0.60 printed under `gpt-5.6-terra`'s
-  // table too, where the answer is 0.52. Three numbers were in the sentence
-  // and none of them came from the payload it sits on.
+  // first: the figure was gemini's 0.60 printed under `gpt-5.6-terra`'s table
+  // too, where the answer is 0.52. Three numbers were in the sentence and none
+  // of them came from the payload it sits on.
+  //
+  // And the two are not the same argument. Resampled over the 150 rated notes,
+  // gemini leads the therapists by +0.096 (+0.068 to +0.123) and gpt by +0.017
+  // (-0.012 to +0.047) -- so under one of the two judges this page publishes,
+  // the only reason it gives for ordering by this column does not clear zero.
+  // Both sentences read identically at two decimal places, which is why the
+  // interval is drawn and not just the pair of figures.
   const anchor = (() => {
     // `docs/judges.json` is a wrapper -- {notes, separable, judges: [...]} --
     // and this read the wrapper as if it were the list. `.find` is not a
@@ -601,9 +625,25 @@ function renderTable(table, index) {
     const scales = rows.filter(a => a.name.startsWith('likert')).map(a => Number(a.humans));
     if (!checklist || !scales.length) return null;
     const two = v => Number(v).toFixed(2);
+    // Three places, and a real minus sign. The lead is 0.017 under one judge
+    // and 0.096 under the other; at two places the first prints as 0.02 and a
+    // reader cannot tell a measured lead from an unmeasured one.
+    const three = v => Number(v).toFixed(3).replace('-', '\u2212');
     return {
       judge: two(checklist.judge),
       humans: two(checklist.humans),
+      // How far the judge's agreement sits above the therapists' own, and what
+      // that distance does when the notes behind it are resampled. Null on a
+      // panel written before this was computed, and then no clause is drawn.
+      margin: checklist.margin === null || checklist.margin === undefined
+        ? null
+        : {
+            point: three(checklist.margin),
+            low: three(checklist.margin_low),
+            high: three(checklist.margin_high),
+            clears: checklist.clears_ceiling,
+            draws: checklist.margin_draws,
+          },
       scales: `${two(Math.min(...scales))}&#8211;${two(Math.max(...scales))}`,
       // The statistic each figure is, and how many notes it was computed over.
       // Four numbers were printed with neither: 0.60 and 0.50 are a kappa on a
@@ -617,6 +657,20 @@ function renderTable(table, index) {
     };
   })();
 
+  // The size of that lead, and whether it survives being resampled. Said on
+  // both judges: "clears the ceiling" and "does not" are the same sentence at
+  // two decimal places, and only one of them supports the order.
+  const marginClause = !anchor || !anchor.margin
+    ? ''
+    : anchor.margin.clears
+    ? ' ' + T`Resampling the ${anchor.notes} notes puts that lead at
+        <strong>${anchor.margin.point}</strong> (${anchor.margin.low} to ${anchor.margin.high}).`
+    : ' ' + T`<strong>That lead is ${anchor.margin.point} (${anchor.margin.low} to
+        ${anchor.margin.high} when the ${anchor.notes} notes are resampled), so under this judge
+        it does not clear zero.</strong> The column keeps the job because it is still the only one
+        with a human anchor at all &mdash; but on this judge's table, being closer to a therapist
+        than they are to each other is not something these notes establish.`;
+
   const rankingNote = !table.ranking_measure
     ? TS(table.not_ranked_reason)
     : anchor
@@ -627,7 +681,7 @@ function renderTable(table, index) {
        therapists reach only ${anchor.scales} (${anchor.scaleStat}) &mdash; too little to rank on.
        Both are computed here from TN-Eval's own annotations over ${anchor.notes} notes;
        <a href="methods.html#calibration">how this was measured</a>. Every other column is context
-       and is not a ranking.`
+       and is not a ranking.${marginClause}`
     : T`Ordered by <strong>${esc(colLabel(table, table.ranking_measure))}</strong>, because it is the
        only column with a human anchor at all. <strong>This judge's agreement with the two
        therapists is not published here</strong>, so the figure that belongs in this sentence is
@@ -682,7 +736,11 @@ function renderTable(table, index) {
           && other !== undefined && other !== null
         ? `<span class="gap ${other > mine ? 'up' : other < mine ? 'down' : 'same'}">${
             other > mine ? '▴' : other < mine ? '▾' : '='}${
-            fmt(Math.abs(other - mine), c.digits)}</span>`
+            // A gap smaller than the last printed digit is not zero, and an
+            // arrow beside 0.000 says the other judge scored higher by nothing.
+            other !== mine && Number(fmt(Math.abs(other - mine), c.digits)) === 0
+              ? '<' + fmt(Math.pow(10, -c.digits), c.digits)
+              : fmt(Math.abs(other - mine), c.digits)}</span>`
         : (against ? '<span class="gap dash">—</span>' : '');
       return `<td>${fmt(mine, c.digits)}${gap}</td>`;
     }).join('');
@@ -701,7 +759,20 @@ function renderTable(table, index) {
     const judging = row.n_scored < row.n_generated
       ? `<span class="pending-mark">${T`${row.n_scored} judged`}</span>`
       : '';
-    const coverage = `${written}${judging ? '<br>' + judging : ''}`;
+    // And how many of those the figures rest on. A note the judge began and
+    // left part-answered is dropped from the average rather than averaged over
+    // a smaller denominator -- which is the honest thing to do with it, and
+    // leaves the column saying 50 over a figure computed from 44.
+    // Muted, not the warning colour the generation failures carry: a note the
+    // judge left part-answered is the judge's doing, and the counter beside a
+    // model's name is read as an accusation.
+    const resting = row.n_partial
+      ? `<span class="pending-mark" title="${T`${row.n_partial} note(s) came back with part of the
+          protocol unanswered and are left out of the figures rather than averaged over a
+          smaller denominator. The row's detail says which.`}">${
+          T`${row.n_complete} behind the score`}</span>`
+      : '';
+    const coverage = [written, judging, resting].filter(Boolean).join('<br>');
     // Beside the name: what this row *is*. A therapist's note and a reference
     // system are not models, and reading the table without knowing that is
     // reading a person as a competitor by accident.
@@ -751,9 +822,13 @@ function renderTable(table, index) {
       ? `<td class="rank${rank === 1 ? ' top' : ''}">${rank || '<span class="dash">—</span>'}</td>`
       : '';
     return `<tr class="system${rank === 1 ? ' first-group' : ''}"` +
-      ` data-row="${index}-${position}" data-type="${row.system_type}">
+      ` data-row="${index}-${position}" data-type="${row.system_type}"` +
+      // The row opens a panel, so it is a control: reachable by keyboard and
+      // announcing whether it is open. Every figure beside it is announced with
+      // the system's name now, because the name is the row's header cell.
+      ` tabindex="0" role="button" aria-expanded="false">
         ${rankCell}
-        <td class="name"><span class="arrow">▸</span>${esc(row.label)}${effortMark}${chip}</td>
+        <th scope="row" class="name"><span class="arrow">▸</span>${esc(row.label)}${effortMark}${chip}</th>
         ${cells}${beatsCells}${wordsCell}${showCoverage ? `<td>${coverage}</td>` : ''}${providerCell}${marksCell}
       </tr>` + detailRow(row, table);
   }).join('');
@@ -768,12 +843,17 @@ function renderTable(table, index) {
       <div class="scroll"><table data-table="${index}" data-sorted="${
         table.ranking_measure || ''}" data-descending="1">
         <thead><tr>${table.groups
-          ? `<th class="rank" title="${T`Band on ${esc(colLabel(table, table.ranking_measure))}: rows the paired bootstrap cannot separate share a band. It does not follow the sort -- sorting by another column reorders the rows, not what the bootstrap could separate.`}">${T`Band`}</th>`
-          : ''}<th class="name" data-sort="label">${T`System`}</th>${head}${beatsHead}${table.has_words
-            ? `<th data-sort="note_words" title="${T`Median words in this model’s notes. Completeness counts coverage, so a longer note covers more.`}">${T`Words`}</th>`
-            : ''}${showCoverage ? `<th data-sort="coverage">${T`Notes`}</th>` : ''}<th
-            data-sort="provider" title="${T`The endpoint that served the model. The same id on two endpoints can be two different builds.`}">${
-            T`Provider`}</th><th title="${T`Conditions this row did not share with the others, and whether its judge shares a vendor with it.`}">${
+          ? `<th scope="col" class="rank" title="${T`Band on ${esc(colLabel(table, table.ranking_measure))}: rows the paired bootstrap cannot separate share a band. It does not follow the sort -- sorting by another column reorders the rows, not what the bootstrap could separate.`}">${T`Band`}</th>`
+          : ''}<th scope="col" class="name" data-sort="label"><button type="button">${
+            T`System`}</button></th>${head}${beatsHead}${table.has_words
+            ? `<th scope="col" data-sort="note_words" title="${T`Median words in this model’s notes. Completeness counts coverage, so a longer note covers more.`}"><button type="button">${T`Words`}</button></th>`
+            : ''}${showCoverage
+              ? `<th scope="col" data-sort="coverage" title="${T`Notes written of notes asked
+                  for, and where they differ, how many of them the figures in this row rest
+                  on.`}"><button type="button">${T`Notes`}</button></th>`
+              : ''}<th
+            scope="col" data-sort="provider" title="${T`The endpoint that served the model. The same id on two endpoints can be two different builds.`}"><button type="button">${
+            T`Provider`}</button></th><th scope="col" title="${T`Conditions this row did not share with the others, and whether its judge shares a vendor with it.`}">${
             T`Marks`}</th></tr></thead>
         <tbody>${body}</tbody>
       </table></div>
@@ -921,9 +1001,22 @@ function sortBy(table, key) {
 
 // Every `value()` above returns the negated score, so the first click on a
 // measure puts the best at the top and `data-descending` means "best first".
+function toggleDetail(tr) {
+  const detail = tr.nextElementSibling;
+  detail.hidden = !detail.hidden;
+  tr.setAttribute('aria-expanded', detail.hidden ? 'false' : 'true');
+  tr.querySelector('.arrow').textContent = detail.hidden ? '▸' : '▾';
+}
+
 function markSorted(table) {
   const key = table.dataset.sorted;
-  const how = table.dataset.descending === '1' ? 'descending' : 'ascending';
+  // `data-descending` means "best first", and for a measure the best is the
+  // largest, so the flag and the direction agree. On the two text columns they
+  // do not: `value()` returns the name itself, so "best first" is A to Z --
+  // which was announced to a screen reader, and drawn, as descending.
+  const text = key === 'label' || key === 'provider';
+  const best = table.dataset.descending === '1';
+  const how = best !== text ? 'descending' : 'ascending';
   table.querySelectorAll('th[data-sort]').forEach(th => {
     if (th.dataset.sort === key) th.setAttribute('aria-sort', how);
     else th.removeAttribute('aria-sort');
@@ -1218,11 +1311,17 @@ if (DATA.tables.length) {
     const th = event.target.closest('th[data-sort]');
     if (th) { sortBy(th.closest('table'), th.dataset.sort); return; }
     const tr = event.target.closest('tr.system');
-    if (tr && tr.dataset.row) {
-      const detail = tr.nextElementSibling;
-      detail.hidden = !detail.hidden;
-      tr.querySelector('.arrow').textContent = detail.hidden ? '▸' : '▾';
-    }
+    if (tr && tr.dataset.row) toggleDetail(tr);
+  });
+
+  // The same from the keyboard. Enter and Space are what a `role="button"`
+  // promises, and Space is prevented so the page does not scroll instead.
+  document.getElementById('table-host').addEventListener('keydown', event => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    const tr = event.target.closest && event.target.closest('tr.system');
+    if (!tr || !tr.dataset.row || event.target.closest('button')) return;
+    event.preventDefault();
+    toggleDetail(tr);
   });
 
   // Bound to `#tables` and not to `#switch`: the switch is inside the section

@@ -10,10 +10,18 @@ const esc = value => String(value ?? '').replace(/[&<>"']/g, ch =>
 const colLabel = (table, key) =>
   tr((table.columns.find(c => c.key === key) || {}).label || key);
 
-const fmt = (value, digits) =>
-  value === undefined || value === null
-    ? '<span class="dash">—</span>'
-    : Number(value).toFixed(digits);
+// Rounded half away from zero on the number the payload publishes, not on its
+// binary approximation. `toFixed` does the latter: 0.5355 is held as a little
+// under 0.5355, so `(0.5355).toFixed(3)` is "0.535" where the published figure
+// rounds to 0.536. Nineteen cells printed a last digit that was not the
+// rounding of the number the page tells the reader to check it against.
+// `toPrecision(15)` drops the binary noise before the rounding decision.
+const fmt = (value, digits) => {
+  if (value === undefined || value === null) return '<span class="dash">—</span>';
+  const scale = Math.pow(10, digits);
+  const magnitude = Math.round(Number((Math.abs(value) * scale).toPrecision(15))) / scale;
+  return (value < 0 ? -magnitude : magnitude).toFixed(digits);
+};
 
 const TYPE_LABEL = {
   'model': '',

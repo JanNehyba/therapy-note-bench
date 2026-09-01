@@ -1449,8 +1449,13 @@
             "alpha": 0.5744010609015743,
             "alpha_humans": 0.5037134105690964,
             "alpha_level": "nominal",
+            "clears_ceiling": true,
             "humans": 0.5037692102193586,
             "judge": 0.5746694109096591,
+            "margin": 0.07090020069030045,
+            "margin_draws": 2000,
+            "margin_high": 0.10011606080003965,
+            "margin_low": 0.03960021189912655,
             "n": 3450,
             "name": "rubric_completeness",
             "statistic": "Cohen's kappa"
@@ -1459,8 +1464,13 @@
             "alpha": 0.20141506184891667,
             "alpha_humans": 0.13053214160572235,
             "alpha_level": "ordinal",
+            "clears_ceiling": null,
             "humans": 0.13096836110903934,
             "judge": 0.2984987238922576,
+            "margin": null,
+            "margin_draws": 0,
+            "margin_high": null,
+            "margin_low": null,
             "n": 600,
             "name": "likert_completeness",
             "statistic": "Spearman rho"
@@ -1469,8 +1479,13 @@
             "alpha": 0.041432378217132526,
             "alpha_humans": 0.18712235103669383,
             "alpha_level": "ordinal",
+            "clears_ceiling": null,
             "humans": 0.19210453252909696,
             "judge": 0.0414106684078444,
+            "margin": null,
+            "margin_draws": 0,
+            "margin_high": null,
+            "margin_low": null,
             "n": 600,
             "name": "likert_conciseness",
             "statistic": "Spearman rho"
@@ -1479,8 +1494,13 @@
             "alpha": 0.04371123434447738,
             "alpha_humans": 0.17930428214514715,
             "alpha_level": "ordinal",
+            "clears_ceiling": null,
             "humans": 0.1830973712087935,
             "judge": 0.04714332931870898,
+            "margin": null,
+            "margin_draws": 0,
+            "margin_high": null,
+            "margin_low": null,
             "n": 600,
             "name": "likert_faithfulness",
             "statistic": "Spearman rho"
@@ -1502,8 +1522,13 @@
             "alpha": 0.5998072626406157,
             "alpha_humans": 0.5040964461994439,
             "alpha_level": "nominal",
+            "clears_ceiling": true,
             "humans": 0.5041571652036615,
             "judge": 0.5997766802795041,
+            "margin": 0.09561951507584265,
+            "margin_draws": 2000,
+            "margin_high": 0.1229674338147635,
+            "margin_low": 0.068339884845527,
             "n": 3448,
             "name": "rubric_completeness",
             "statistic": "Cohen's kappa"
@@ -1512,8 +1537,13 @@
             "alpha": 0.10943408363151369,
             "alpha_humans": 0.13053214160572235,
             "alpha_level": "ordinal",
+            "clears_ceiling": null,
             "humans": 0.13096836110903934,
             "judge": 0.24453266155975872,
+            "margin": null,
+            "margin_draws": 0,
+            "margin_high": null,
+            "margin_low": null,
             "n": 600,
             "name": "likert_completeness",
             "statistic": "Spearman rho"
@@ -1522,8 +1552,13 @@
             "alpha": 0.030139343524273998,
             "alpha_humans": 0.18712235103669383,
             "alpha_level": "ordinal",
+            "clears_ceiling": null,
             "humans": 0.19210453252909696,
             "judge": 0.11061336434027434,
+            "margin": null,
+            "margin_draws": 0,
+            "margin_high": null,
+            "margin_low": null,
             "n": 600,
             "name": "likert_conciseness",
             "statistic": "Spearman rho"
@@ -1532,8 +1567,13 @@
             "alpha": 0.09333623235527316,
             "alpha_humans": 0.17930428214514715,
             "alpha_level": "ordinal",
+            "clears_ceiling": null,
             "humans": 0.1830973712087935,
             "judge": 0.09390692033812073,
+            "margin": null,
+            "margin_draws": 0,
+            "margin_high": null,
+            "margin_low": null,
             "n": 600,
             "name": "likert_faithfulness",
             "statistic": "Spearman rho"
@@ -1555,8 +1595,13 @@
             "alpha": 0.5444454928308946,
             "alpha_humans": 0.5037134105690964,
             "alpha_level": "nominal",
+            "clears_ceiling": true,
             "humans": 0.5037692102193586,
             "judge": 0.5451929947315219,
+            "margin": 0.04142378451216333,
+            "margin_draws": 2000,
+            "margin_high": 0.07034956090542765,
+            "margin_low": 0.012758386569019842,
             "n": 3450,
             "name": "rubric_completeness",
             "statistic": "Cohen's kappa"
@@ -1565,8 +1610,13 @@
             "alpha": 0.1878043836441407,
             "alpha_humans": 0.13053214160572235,
             "alpha_level": "ordinal",
+            "clears_ceiling": null,
             "humans": 0.13096836110903934,
             "judge": 0.22409582663342958,
+            "margin": null,
+            "margin_draws": 0,
+            "margin_high": null,
+            "margin_low": null,
             "n": 600,
             "name": "likert_completeness",
             "statistic": "Spearman rho"
@@ -1575,8 +1625,13 @@
             "alpha": -0.024667553599459047,
             "alpha_humans": 0.18712235103669383,
             "alpha_level": "ordinal",
+            "clears_ceiling": null,
             "humans": 0.19210453252909696,
             "judge": 0.06458937688165407,
+            "margin": null,
+            "margin_draws": 0,
+            "margin_high": null,
+            "margin_low": null,
             "n": 600,
             "name": "likert_conciseness",
             "statistic": "Spearman rho"
@@ -1585,8 +1640,13 @@
             "alpha": 0.13472940769422131,
             "alpha_humans": 0.17930428214514715,
             "alpha_level": "ordinal",
+            "clears_ceiling": null,
             "humans": 0.1830973712087935,
             "judge": 0.14560209484727604,
+            "margin": null,
+            "margin_draws": 0,
+            "margin_high": null,
+            "margin_low": null,
             "n": 600,
             "name": "likert_faithfulness",
             "statistic": "Spearman rho"
@@ -1608,8 +1668,13 @@
             "alpha": 0.5361740471244403,
             "alpha_humans": 0.5034527634718307,
             "alpha_level": "nominal",
+            "clears_ceiling": true,
             "humans": 0.5035086757364534,
             "judge": 0.5362353291878434,
+            "margin": 0.03272665345139003,
+            "margin_draws": 2000,
+            "margin_high": 0.06329632797165224,
+            "margin_low": 0.003593524128504888,
             "n": 3449,
             "name": "rubric_completeness",
             "statistic": "Cohen's kappa"
@@ -1618,8 +1683,13 @@
             "alpha": 0.06000644474441952,
             "alpha_humans": 0.1294624190518957,
             "alpha_level": "ordinal",
+            "clears_ceiling": null,
             "humans": 0.12971574704059122,
             "judge": 0.32995274720583234,
+            "margin": null,
+            "margin_draws": 0,
+            "margin_high": null,
+            "margin_low": null,
             "n": 597,
             "name": "likert_completeness",
             "statistic": "Spearman rho"
@@ -1628,8 +1698,13 @@
             "alpha": -0.009130832946232514,
             "alpha_humans": 0.1896121741232445,
             "alpha_level": "ordinal",
+            "clears_ceiling": null,
             "humans": 0.19437264825464623,
             "judge": 0.09408917300562679,
+            "margin": null,
+            "margin_draws": 0,
+            "margin_high": null,
+            "margin_low": null,
             "n": 598,
             "name": "likert_conciseness",
             "statistic": "Spearman rho"
@@ -1638,8 +1713,13 @@
             "alpha": 0.030046721026036005,
             "alpha_humans": 0.17805512155293102,
             "alpha_level": "ordinal",
+            "clears_ceiling": null,
             "humans": 0.18185859353042091,
             "judge": 0.05799564269534758,
+            "margin": null,
+            "margin_draws": 0,
+            "margin_high": null,
+            "margin_low": null,
             "n": 596,
             "name": "likert_faithfulness",
             "statistic": "Spearman rho"
@@ -1661,8 +1741,13 @@
             "alpha": 0.537282136371755,
             "alpha_humans": 0.5037134105690964,
             "alpha_level": "nominal",
+            "clears_ceiling": true,
             "humans": 0.5037692102193586,
             "judge": 0.5372695819218237,
+            "margin": 0.033500371702465115,
+            "margin_draws": 2000,
+            "margin_high": 0.0623468271055142,
+            "margin_low": 0.005212244418316192,
             "n": 3450,
             "name": "rubric_completeness",
             "statistic": "Cohen's kappa"
@@ -1671,8 +1756,13 @@
             "alpha": 0.1155398431322599,
             "alpha_humans": 0.13053214160572235,
             "alpha_level": "ordinal",
+            "clears_ceiling": null,
             "humans": 0.13096836110903934,
             "judge": 0.3089164051265515,
+            "margin": null,
+            "margin_draws": 0,
+            "margin_high": null,
+            "margin_low": null,
             "n": 600,
             "name": "likert_completeness",
             "statistic": "Spearman rho"
@@ -1681,8 +1771,13 @@
             "alpha": -0.34845031388258896,
             "alpha_humans": 0.18712235103669383,
             "alpha_level": "ordinal",
+            "clears_ceiling": null,
             "humans": 0.19210453252909696,
             "judge": 0.11288090414630397,
+            "margin": null,
+            "margin_draws": 0,
+            "margin_high": null,
+            "margin_low": null,
             "n": 600,
             "name": "likert_conciseness",
             "statistic": "Spearman rho"
@@ -1691,8 +1786,13 @@
             "alpha": 0.13971161456842146,
             "alpha_humans": 0.17930428214514715,
             "alpha_level": "ordinal",
+            "clears_ceiling": null,
             "humans": 0.1830973712087935,
             "judge": 0.14200579251249817,
+            "margin": null,
+            "margin_draws": 0,
+            "margin_high": null,
+            "margin_low": null,
             "n": 600,
             "name": "likert_faithfulness",
             "statistic": "Spearman rho"
@@ -1714,8 +1814,13 @@
             "alpha": 0.5198903139267457,
             "alpha_humans": 0.5037134105690964,
             "alpha_level": "nominal",
+            "clears_ceiling": false,
             "humans": 0.5037692102193586,
             "judge": 0.5207392564959898,
+            "margin": 0.016970046276631234,
+            "margin_draws": 2000,
+            "margin_high": 0.047093599303462796,
+            "margin_low": -0.012319949969672339,
             "n": 3450,
             "name": "rubric_completeness",
             "statistic": "Cohen's kappa"
@@ -1724,8 +1829,13 @@
             "alpha": -0.010126775603597926,
             "alpha_humans": 0.13053214160572235,
             "alpha_level": "ordinal",
+            "clears_ceiling": null,
             "humans": 0.13096836110903934,
             "judge": 0.30244552741166736,
+            "margin": null,
+            "margin_draws": 0,
+            "margin_high": null,
+            "margin_low": null,
             "n": 600,
             "name": "likert_completeness",
             "statistic": "Spearman rho"
@@ -1734,8 +1844,13 @@
             "alpha": 0.02012166218416578,
             "alpha_humans": 0.18712235103669383,
             "alpha_level": "ordinal",
+            "clears_ceiling": null,
             "humans": 0.19210453252909696,
             "judge": 0.019391914235186283,
+            "margin": null,
+            "margin_draws": 0,
+            "margin_high": null,
+            "margin_low": null,
             "n": 600,
             "name": "likert_conciseness",
             "statistic": "Spearman rho"
@@ -1744,8 +1859,13 @@
             "alpha": -0.01458628464715006,
             "alpha_humans": 0.17930428214514715,
             "alpha_level": "ordinal",
+            "clears_ceiling": null,
             "humans": 0.1830973712087935,
             "judge": 0.08713374975989989,
+            "margin": null,
+            "margin_draws": 0,
+            "margin_high": null,
+            "margin_low": null,
             "n": 600,
             "name": "likert_faithfulness",
             "statistic": "Spearman rho"
@@ -1767,8 +1887,13 @@
             "alpha": 0.5103987801526486,
             "alpha_humans": 0.5037134105690964,
             "alpha_level": "nominal",
+            "clears_ceiling": false,
             "humans": 0.5037692102193586,
             "judge": 0.5104524673901194,
+            "margin": 0.006683257170760792,
+            "margin_draws": 2000,
+            "margin_high": 0.033695447706828696,
+            "margin_low": -0.021704138582636312,
             "n": 3450,
             "name": "rubric_completeness",
             "statistic": "Cohen's kappa"
@@ -1777,8 +1902,13 @@
             "alpha": 0.0020156005274819533,
             "alpha_humans": 0.13053214160572235,
             "alpha_level": "ordinal",
+            "clears_ceiling": null,
             "humans": 0.13096836110903934,
             "judge": 0.31225499301985515,
+            "margin": null,
+            "margin_draws": 0,
+            "margin_high": null,
+            "margin_low": null,
             "n": 600,
             "name": "likert_completeness",
             "statistic": "Spearman rho"
@@ -1787,8 +1917,13 @@
             "alpha": 0.06188941681560628,
             "alpha_humans": 0.18712235103669383,
             "alpha_level": "ordinal",
+            "clears_ceiling": null,
             "humans": 0.19210453252909696,
             "judge": 0.06506506463543313,
+            "margin": null,
+            "margin_draws": 0,
+            "margin_high": null,
+            "margin_low": null,
             "n": 600,
             "name": "likert_conciseness",
             "statistic": "Spearman rho"
@@ -1797,8 +1932,13 @@
             "alpha": -0.0054627372067836966,
             "alpha_humans": 0.17930428214514715,
             "alpha_level": "ordinal",
+            "clears_ceiling": null,
             "humans": 0.1830973712087935,
             "judge": 0.10211189365115197,
+            "margin": null,
+            "margin_draws": 0,
+            "margin_high": null,
+            "margin_low": null,
             "n": 600,
             "name": "likert_faithfulness",
             "statistic": "Spearman rho"
@@ -4301,7 +4441,7 @@
           "scale": "0-1"
         },
         {
-          "caveat": "Not a length measure, despite the name: a note twice as long scores the same if every added sentence is on topic. It is also the measure most moved by the judge's own settings -- raising the thinking budget from 128 to 256 tokens shifted all nineteen systems and reordered sixteen of them. That comparison came from re-asking all 51 000 judge questions at the higher budget; its rows are not in results/rows.jsonl and it is drawn in no table above -- see docs/limitations.md.",
+          "caveat": "Not a length measure, despite the name: a note twice as long scores the same if every added sentence is on topic. It is also the measure most moved by the judge's own settings -- raising the thinking budget from 128 to 256 tokens shifted all nineteen systems and reordered sixteen of them. The higher budget is what the table above is scored at; it was the budget-128 rows it was compared against that are gone -- not in results/rows.jsonl in any revision and not re-derivable, see docs/limitations.md.",
           "definition": "Fraction of the note's sentences that fit at least one rubric item. 1.00 means nothing is off-topic; it does not mean the note is short.",
           "digits": 3,
           "instrument": "TN-Eval rubric",
@@ -6375,7 +6515,7 @@
           "term": "TN-Eval SOAP"
         },
         {
-          "gloss": "AnnoMI: 133 publicly released motivational-interviewing sessions, transcribed and annotated by therapists. 50 of them are scored here.",
+          "gloss": "AnnoMI: 133 publicly released motivational-interviewing sessions, transcribed and annotated by therapists. They are demonstration sessions, not recordings of clinical practice. 50 are scored here.",
           "term": "The transcripts"
         },
         {
@@ -6416,7 +6556,7 @@
           "scale": "0-1"
         },
         {
-          "caveat": "Not a length measure, despite the name: a note twice as long scores the same if every added sentence is on topic. It is also the measure most moved by the judge's own settings -- raising the thinking budget from 128 to 256 tokens shifted all nineteen systems and reordered sixteen of them. That comparison came from re-asking all 51 000 judge questions at the higher budget; its rows are not in results/rows.jsonl and it is drawn in no table above -- see docs/limitations.md.",
+          "caveat": "Not a length measure, despite the name: a note twice as long scores the same if every added sentence is on topic. It is also the measure most moved by the judge's own settings -- raising the thinking budget from 128 to 256 tokens shifted all nineteen systems and reordered sixteen of them. The higher budget is what the table above is scored at; it was the budget-128 rows it was compared against that are gone -- not in results/rows.jsonl in any revision and not re-derivable, see docs/limitations.md.",
           "definition": "Fraction of the note's sentences that fit at least one rubric item. 1.00 means nothing is off-topic; it does not mean the note is short.",
           "digits": 3,
           "instrument": "TN-Eval rubric",
@@ -8490,7 +8630,7 @@
           "term": "TN-Eval SOAP"
         },
         {
-          "gloss": "AnnoMI: 133 publicly released motivational-interviewing sessions, transcribed and annotated by therapists. 50 of them are scored here.",
+          "gloss": "AnnoMI: 133 publicly released motivational-interviewing sessions, transcribed and annotated by therapists. They are demonstration sessions, not recordings of clinical practice. 50 are scored here.",
           "term": "The transcripts"
         },
         {
@@ -8521,7 +8661,7 @@
       "blurb": "Automatic metrics and a TRACE judge side by side, because the source paper found they disagree. That disagreement is a result, not an error. iCARE and iHOPE are one project under two names: the code was released as iCARE in April 2025 and the preprint renamed it iHOPE in August 2026, sixteen months later. **PDSQI-9 has no columns here**, and that is deliberate rather than missing: it rates how a clinical note is written, and these are 17 form fields rather than a written note. It runs on the SOAP notes, where it can be read against the rubric that scores the same text.",
       "columns": [
         {
-          "caveat": "Not the source paper's ROUGE-L and not comparable with their published table. Theirs compares the whole rendered note, which puts our own field labels and every `Nil` the expert wrote on both sides -- a note where the model wrote nothing at all scores 0.379 that way, above most real notes. This compares the field values of the sections the expert answered, where the same empty note scores 0.000, and every model's figure fell by about a third. It also cannot tell a good paraphrase from a wrong answer, and the source paper found it disagrees with what clinicians preferred.",
+          "caveat": "Not the source paper's ROUGE-L and not comparable with their published table. Theirs compares the whole rendered note, which puts our own field labels and every Nil the expert wrote on both sides -- a note where the model wrote nothing at all scores 0.379 that way, above most real notes. This compares the field values of the sections the expert answered, where the same empty note scores 0.000, and every model's figure fell by about a third. It also cannot tell a good paraphrase from a wrong answer, and the source paper found it disagrees with what clinicians preferred.",
           "definition": "Longest-common-subsequence overlap with the expert note, F-measure. Rewards using the same words in the same order.",
           "digits": 3,
           "key": "rouge_l",
@@ -8571,7 +8711,7 @@
         "calibration": "Not possible here. The authors' expert ratings are not in the public repository, so there is nothing to check this judge against. Two independent judges score every note instead, and where they disagree is the only control this track can have.",
         "human_role": "The expert note is the answer key and never competes. In the source paper the experts compared models with each other -- a smaller Mistral was preferred over the model leading on the automatic metrics -- and the expert note was what those metrics measured against, not an entry.",
         "human_role_short": "answer key",
-        "scored_against": "An expert note written by the clinician who saw the session. ROUGE-L and BERTScore measure how closely the model reproduced it; TRACE asks a judge to rate the note itself, the way the paper's experts did."
+        "scored_against": "An expert note written from the session by a clinician who was not in it. ROUGE-L and BERTScore measure how closely the model reproduced it; TRACE asks a judge to rate the note itself, the way the paper's experts did."
       },
       "detail_label": "TRACE dimensions",
       "groups": null,
@@ -9246,11 +9386,11 @@
       "subtitle": "scored by gemini-3.1-pro-preview",
       "terms": [
         {
-          "gloss": "This track. A model fills in a 17-field clinical form from a counselling transcript, and its answers are compared with the form the clinician who saw the session filled in. One project under two names: released as iCARE, renamed iHOPE in the preprint.",
+          "gloss": "This track. A model fills in a 17-field clinical form from a counselling transcript, and its answers are compared with the form an expert clinician filled in from the same session. One project under two names: released as iCARE, renamed iHOPE in the preprint.",
           "term": "iCARE / iHOPE"
         },
         {
-          "gloss": "40 counselling sessions, each with one note written by the clinician who saw it. That note is the answer key, not an entry.",
+          "gloss": "40 counselling demonstrations, each with one form an expert clinician filled in from it afterwards -- not the clinician who conducted it, who is not part of this corpus. That form is the answer key, not an entry.",
           "term": "The sessions"
         },
         {
@@ -9277,7 +9417,7 @@
       "blurb": "Automatic metrics and a TRACE judge side by side, because the source paper found they disagree. That disagreement is a result, not an error. iCARE and iHOPE are one project under two names: the code was released as iCARE in April 2025 and the preprint renamed it iHOPE in August 2026, sixteen months later. **PDSQI-9 has no columns here**, and that is deliberate rather than missing: it rates how a clinical note is written, and these are 17 form fields rather than a written note. It runs on the SOAP notes, where it can be read against the rubric that scores the same text.",
       "columns": [
         {
-          "caveat": "Not the source paper's ROUGE-L and not comparable with their published table. Theirs compares the whole rendered note, which puts our own field labels and every `Nil` the expert wrote on both sides -- a note where the model wrote nothing at all scores 0.379 that way, above most real notes. This compares the field values of the sections the expert answered, where the same empty note scores 0.000, and every model's figure fell by about a third. It also cannot tell a good paraphrase from a wrong answer, and the source paper found it disagrees with what clinicians preferred.",
+          "caveat": "Not the source paper's ROUGE-L and not comparable with their published table. Theirs compares the whole rendered note, which puts our own field labels and every Nil the expert wrote on both sides -- a note where the model wrote nothing at all scores 0.379 that way, above most real notes. This compares the field values of the sections the expert answered, where the same empty note scores 0.000, and every model's figure fell by about a third. It also cannot tell a good paraphrase from a wrong answer, and the source paper found it disagrees with what clinicians preferred.",
           "definition": "Longest-common-subsequence overlap with the expert note, F-measure. Rewards using the same words in the same order.",
           "digits": 3,
           "key": "rouge_l",
@@ -9327,7 +9467,7 @@
         "calibration": "Not possible here. The authors' expert ratings are not in the public repository, so there is nothing to check this judge against. Two independent judges score every note instead, and where they disagree is the only control this track can have.",
         "human_role": "The expert note is the answer key and never competes. In the source paper the experts compared models with each other -- a smaller Mistral was preferred over the model leading on the automatic metrics -- and the expert note was what those metrics measured against, not an entry.",
         "human_role_short": "answer key",
-        "scored_against": "An expert note written by the clinician who saw the session. ROUGE-L and BERTScore measure how closely the model reproduced it; TRACE asks a judge to rate the note itself, the way the paper's experts did."
+        "scored_against": "An expert note written from the session by a clinician who was not in it. ROUGE-L and BERTScore measure how closely the model reproduced it; TRACE asks a judge to rate the note itself, the way the paper's experts did."
       },
       "detail_label": "TRACE dimensions",
       "groups": null,
@@ -10002,11 +10142,11 @@
       "subtitle": "scored by gpt-5.6-terra",
       "terms": [
         {
-          "gloss": "This track. A model fills in a 17-field clinical form from a counselling transcript, and its answers are compared with the form the clinician who saw the session filled in. One project under two names: released as iCARE, renamed iHOPE in the preprint.",
+          "gloss": "This track. A model fills in a 17-field clinical form from a counselling transcript, and its answers are compared with the form an expert clinician filled in from the same session. One project under two names: released as iCARE, renamed iHOPE in the preprint.",
           "term": "iCARE / iHOPE"
         },
         {
-          "gloss": "40 counselling sessions, each with one note written by the clinician who saw it. That note is the answer key, not an entry.",
+          "gloss": "40 counselling demonstrations, each with one form an expert clinician filled in from it afterwards -- not the clinician who conducted it, who is not part of this corpus. That form is the answer key, not an entry.",
           "term": "The sessions"
         },
         {

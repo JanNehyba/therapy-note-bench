@@ -1167,8 +1167,8 @@ def test_a_row_drawn_under_a_label_still_finds_the_band_it_was_measured_for(tmp_
         _run(report.render_page(report.build(rows, saturations)), tmp_path, panel="table-host")
     )
 
-    assert '<td class="rank">2</td> <td class="name">' in drawn or (
-        '<td class="rank">2</td><td class="name">' in drawn
+    assert '<td class="rank">2</td> <th scope="row" class="name">' in drawn or (
+        '<td class="rank">2</td><th scope="row" class="name">' in drawn
     ), "the labelled row lost the band it was measured for"
     assert 'class="rank"><span class="dash">' not in drawn, "a measured band drawn as absent"
 
@@ -1195,7 +1195,9 @@ def test_the_column_a_phone_keeps_on_screen_is_the_model_s_name(tmp_path):
     assert "table[data-table] td:first-child {" not in style, (
         "pinned by position again, which is what put the band cell there"
     )
-    assert '<th class="name" data-sort="label">' in style, "the heading carries no name class"
+    assert '<th scope="col" class="name" data-sort="label">' in style, (
+        "the heading carries no name class"
+    )
 
 
 def test_the_band_column_explains_itself_where_a_phone_can_read_it(tmp_path):
@@ -1328,7 +1330,10 @@ def test_the_completeness_caveat_reads_its_two_figures_off_the_table(tmp_path):
         "way, seven of the nineteen systems change place"
     )
     assert "the highest Completeness is 0.550 out of a possible 1.00" in drawn
-    assert "the note a human clinician wrote is row 3 of 3" in drawn
+    assert "the note a human clinician wrote scores 0.330 by the same rule" in drawn, (
+        "the caveat gives the clinician's place in the drawn order, which any sort falsifies, "
+        "rather than the figure they scored"
+    )
 
 
 def test_the_calibration_panel_says_whose_notes_the_judge_was_checked_on(tmp_path):

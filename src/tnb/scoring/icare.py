@@ -52,7 +52,7 @@ MEASURES: dict[str, dict[str, str]] = {
         "caveat": (
             "Not the source paper's ROUGE-L and not comparable with their "
             "published table. Theirs compares the whole rendered note, which "
-            "puts our own field labels and every `Nil` the expert wrote on both "
+            "puts our own field labels and every Nil the expert wrote on both "
             "sides -- a note where the model wrote nothing at all scores 0.379 "
             "that way, above most real notes. This compares the field values of "
             "the sections the expert answered, where the same empty note scores "

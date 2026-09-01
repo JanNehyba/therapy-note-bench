@@ -385,6 +385,37 @@ ANSWERED_IN_ADVANCE = {
 }
 
 
+def filter_labels(templates: str) -> set[str]:
+    """The tick-box labels the leaderboard holds, whether or not a row needs one.
+
+    `FILTERS` is a JS constant, so `T` never touches it and the tagged-sentence
+    scanner cannot find it. Matched on the array's own shape so a filter added
+    later is covered by the same rule.
+    """
+    inside = re.search(r"const FILTERS = \[(.*?)\n\];", templates, re.S)
+    if not inside:
+        return set()
+    return {
+        found.group(1).encode().decode("unicode_escape")
+        for found in re.finditer(r"label:\s*'((?:[^'\\]|\\.)*)'", inside.group(1))
+    }
+
+
+def test_every_filter_the_table_offers_has_a_czech_label(templates):
+    """A control the page draws in one language is a control half the readers cannot read.
+
+    Not covered by the tagged-sentence test: these are constants, not `T`
+    templates. Not covered by the drawn-page tests either, because a filter is
+    only drawn when some row carries the type it filters, and `published` has
+    no rows yet.
+    """
+    labels = filter_labels(templates)
+    assert labels, "the scanner found no filter labels, so it is the scanner that broke"
+    dictionary = {i18n.norm(key) for key in i18n.CS}
+    missing = sorted(label for label in labels if i18n.norm(label) not in dictionary)
+    assert not missing, f"tick boxes with no Czech: {missing}"
+
+
 def live_strings(templates: str) -> set[str]:
     """Every English string the pages can ask the dictionary about.
 
@@ -469,7 +500,10 @@ def test_no_czech_entry_answers_a_sentence_that_no_longer_exists(templates):
     # discovering the gap the first time a model fails means discovering it on
     # the page. They are exempt by rule rather than by list, so a reason added
     # later does not need remembering here as well.
-    in_advance = set(ANSWERED_IN_ADVANCE) | set(results.HARNESS_REASONS)
+    # A tick box for a declared system type that has no rows yet is drawn by no
+    # page, and its translation is not stale -- it is early, for the same reason
+    # a failure reason is translated before it has ever happened.
+    in_advance = set(ANSWERED_IN_ADVANCE) | set(results.HARNESS_REASONS) | filter_labels(templates)
 
     live = live_strings(templates)
     orphans = sorted(

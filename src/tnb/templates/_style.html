@@ -322,6 +322,26 @@
   /* Which column is doing the sorting, on the column itself. The header was
      already clickable and said so only by turning the cursor into a hand. */
   th[data-sort]::after { content: '\2195'; opacity: .3; margin-left: .35em; font-size: .9em; }
+  /* The sortable headings are buttons now, so the sort can be reached without a
+     mouse. They must not look like buttons: the heading is the control, and a
+     chrome button in every column would read as nineteen things to press. */
+  th[data-sort] button {
+    all: unset;
+    display: inline;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+    text-align: inherit;
+  }
+  th[data-sort] button:focus-visible,
+  tr.system:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
+  /* The name is the row's header cell now, so the rules written for `td.name`
+     have to reach a `th` in the body as well. */
+  tbody th.name { font-weight: 600; color: var(--fg); white-space: nowrap; text-align: left; }
+  tbody th.name .arrow { color: var(--muted); font-weight: 400; display: inline-block; width: 1em; }
   th[data-sort]:hover::after { opacity: .7; }
   th[aria-sort="descending"]::after { content: '\25BC'; opacity: 1; color: var(--accent); }
   th[aria-sort="ascending"]::after { content: '\25B2'; opacity: 1; color: var(--accent); }
@@ -380,12 +400,16 @@
     z-index: 1;
   }
   table[data-table] thead th.name { z-index: 2; }
-  tbody tr.system:hover td.name { background: var(--raise); }
-  tbody tr.first-group td.name { background: var(--accent-tint); }
+  tbody tr.system:hover th.name, tbody tr.system:hover td.name { background: var(--raise); }
+  tbody tr.first-group th.name, tbody tr.first-group td.name { background: var(--accent-tint); }
   /* The scrolled-under edge, so a reader can see that the name is pinned and
-     the numbers are moving behind it rather than that the table is broken. */
-  table[data-table] th.name::after,
-  table[data-table] td.name::after {
+     the numbers are moving behind it rather than that the table is broken.
+     On `::before`, because `::after` is where every sortable heading draws its
+     sort glyph: taking it for the edge left the System heading with no arrow on
+     a page whose legend twice tells a reader that a heading without one does
+     not sort. It does sort. */
+  table[data-table] th.name::before,
+  table[data-table] td.name::before {
     content: '';
     position: absolute;
     top: 0; right: 0; bottom: 0;

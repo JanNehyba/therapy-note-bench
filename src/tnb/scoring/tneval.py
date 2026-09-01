@@ -89,10 +89,10 @@ MEASURES: dict[str, dict[str, str]] = {
             "the same if every added sentence is on topic. It is also the measure "
             "most moved by the judge's own settings -- raising the thinking "
             "budget from 128 to 256 tokens shifted all nineteen systems and "
-            "reordered sixteen of them. That comparison came from re-asking "
-            "all 51 000 judge questions at the higher budget; its rows are not "
-            "in results/rows.jsonl and it is drawn in no table above -- see "
-            "docs/limitations.md."
+            "reordered sixteen of them. The higher budget is what the table "
+            "above is scored at; it was the budget-128 rows it was compared "
+            "against that are gone -- not in results/rows.jsonl in any revision "
+            "and not re-derivable, see docs/limitations.md."
         ),
     },
     "faithfulness": {

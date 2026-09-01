@@ -675,7 +675,8 @@ TRACK_TERMS = {
         (
             "The transcripts",
             "AnnoMI: 133 publicly released motivational-interviewing sessions, "
-            "transcribed and annotated by therapists. 50 of them are scored here.",
+            "transcribed and annotated by therapists. They are demonstration "
+            "sessions, not recordings of clinical practice. 50 are scored here.",
         ),
         (
             "SOAP note",
@@ -693,7 +694,8 @@ TRACK_TERMS = {
         (
             "The transcripts",
             "AnnoMI: 133 publicly released motivational-interviewing sessions, "
-            "transcribed and annotated by therapists. 50 of them are scored here.",
+            "transcribed and annotated by therapists. They are demonstration "
+            "sessions, not recordings of clinical practice. 50 are scored here.",
         ),
         (
             "PDSQI-9",
@@ -705,14 +707,15 @@ TRACK_TERMS = {
         (
             "iCARE / iHOPE",
             "This track. A model fills in a 17-field clinical form from a counselling "
-            "transcript, and its answers are compared with the form the clinician who "
-            "saw the session filled in. One project under two names: released as "
-            "iCARE, renamed iHOPE in the preprint.",
+            "transcript, and its answers are compared with the form an expert "
+            "clinician filled in from the same session. One project under two names: "
+            "released as iCARE, renamed iHOPE in the preprint.",
         ),
         (
             "The sessions",
-            "40 counselling sessions, each with one note written by the clinician "
-            "who saw it. That note is the answer key, not an entry.",
+            "40 counselling demonstrations, each with one form an expert clinician "
+            "filled in from it afterwards -- not the clinician who conducted it, who "
+            "is not part of this corpus. That form is the answer key, not an entry.",
         ),
         (
             "The form",
@@ -745,9 +748,10 @@ TRACK_DESIGN = {
     },
     results.TRACK_ICARE: {
         "scored_against": (
-            "An expert note written by the clinician who saw the session. ROUGE-L "
-            "and BERTScore measure how closely the model reproduced it; TRACE asks "
-            "a judge to rate the note itself, the way the paper's experts did."
+            "An expert note written from the session by a clinician who was not in "
+            "it. ROUGE-L and BERTScore measure how closely the model reproduced it; "
+            "TRACE asks a judge to rate the note itself, the way the paper's experts "
+            "did."
         ),
         "human_role": (
             "The expert note is the answer key and never competes. In the source "

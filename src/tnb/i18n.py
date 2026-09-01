@@ -299,6 +299,19 @@ _SENTENCES = {
     ),
     "Words": "Slova",
     "Notes": "Zápisy",
+    # The column counted notes the figures do not rest on: 50 of 50 written,
+    # and an average computed from 44 of them. Czech uses the same three
+    # sentences the English does, in the same place.
+    "Notes written of notes asked for, and where they differ, how many of them the figures in"
+    " this row rest on.": (
+        "Napsané zápisy z vyžádaných, a kde se to liší, na kolika z nich stojí čísla v tomto řádku."
+    ),
+    "{0} behind the score": "za skóre stojí {0}",
+    "{0} note(s) came back with part of the protocol unanswered and are left out of the figures"
+    " rather than averaged over a smaller denominator. The row's detail says which.": (
+        "{0} zápisů se vrátilo s částí protokolu nezodpovězenou; do čísel se nezapočítávají, "
+        "místo aby se průměrovaly přes menší jmenovatel. Detail řádku říká které."
+    ),
     "{0} judged": "ohodnoceno {0}",
     "settings": "nastavení",
     # "in the panel below" was true until the eight panels moved to the methods
@@ -343,7 +356,7 @@ _SENTENCES = {
     " those two therapists reach only {4} ({5}) &mdash; too little to rank on. Both are computed"
     " here from TN-Eval's own annotations over {6} notes; <a"
     ' href="methods.html#calibration">how this was measured</a>. Every other column is context and'
-    " is not a ranking.": (
+    " is not a ranking.{7}": (
         "Seřazeno podle sloupce <strong>{0}</strong>, protože je to jediný sloupec ověřený proti "
         "lidem: hodnotitel a školený terapeut se na něm shodnou na <strong>{1}</strong> tam, kde "
         "se dva terapeuti shodnou na <strong>{2}</strong> ({3}). Na hodnoceních 1&#8211;5, která "
@@ -351,6 +364,21 @@ _SENTENCES = {
         "na řazení je to málo. Obojí je spočítané zde z anotací TN-Evalu přes {6} zápisů; "
         '<a href="methods.html#calibration">jak se to měřilo</a>. Každý další sloupec je kontext, '
         "ne žebříček."
+    ),
+    # The size of that lead, and what it does when the notes are resampled.
+    # Under one of the two published judges it does not clear zero, and at two
+    # decimal places the two cases print the same sentence.
+    "Resampling the {0} notes puts that lead at <strong>{1}</strong> ({2} to {3}).": (
+        "Po převzorkování {0} zápisů je ten náskok <strong>{1}</strong> ({2} až {3})."
+    ),
+    "<strong>That lead is {0} ({1} to {2} when the {3} notes are resampled), so under this judge"
+    " it does not clear zero.</strong> The column keeps the job because it is still the only one"
+    " with a human anchor at all &mdash; but on this judge's table, being closer to a therapist"
+    " than they are to each other is not something these notes establish.": (
+        "<strong>Ten náskok je {0} ({1} až {2} při převzorkování {3} zápisů), takže u tohoto "
+        "hodnotitele nepřekročí nulu.</strong> Sloupec si tu roli drží proto, že je pořád jediný "
+        "s jakýmkoli lidským ukotvením &mdash; ale v tabulce tohoto hodnotitele není to, že by byl "
+        "blíž terapeutovi než oni sobě navzájem, něco, co by tyto zápisy prokázaly."
     ),
     "Ordered by <strong>{0}</strong>, because it is the only column with a human anchor at all."
     " <strong>This judge's agreement with the two therapists is not published here</strong>, so"
@@ -427,15 +455,19 @@ _SENTENCES = {
     "A row marked ≠ settings ran under conditions the rest of the table did not, and the"
     " settings themselves are in the row's own detail, one tap below it. A row marked judge's"
     " own was scored by a judge from the same vendor as the model it graded; how much that is"
-    " worth is measured on the methods page. Like Band, this heading carries no ↕ and does not"
+    " worth is measured on the methods page. {0} heading carries no ↕ and does not"
     " sort: these are labels, not an order.": (
         "Řádek se značkou ≠ nastavení běžel za podmínek, které zbytek tabulky neměl, a samotné "
         "nastavení je v detailu toho řádku, jedno klepnutí pod ním. Řádek se značkou "
         "stejný dodavatel jako hodnotitel znamená, že řádek obodoval hodnotitel od téhož "
         "dodavatele, jako je model, který "
-        "známkoval; kolik to vydá, je změřeno na stránce s metodikou. Stejně jako u Pásma není "
-        "u tohoto záhlaví ↕ a neřadí se podle něj: jsou to štítky, ne pořadí."
+        "známkoval; kolik to vydá, je změřeno na stránce s metodikou. {0} záhlaví ↕ a neřadí se "
+        "podle něj: jsou to štítky, ne pořadí."
     ),
+    # Only the tables with a ranking column have a Band heading to point at.
+    # The iCARE tables do not, and the analogy sent a reader looking for it.
+    "Like Band, this": "Stejně jako u Pásma není u tohoto",
+    "This": "U tohoto není",
     "Effort": "Úsilí",
     "A model that takes a reasoning-effort setting carries it beside its name. It is the effort"
     " the note was written at, not a score, and a model with no badge has no such control — which"
@@ -492,9 +524,10 @@ _SENTENCES = {
     ),
     "The transcripts": "Přepisy",
     "AnnoMI: 133 publicly released motivational-interviewing sessions, transcribed and annotated"
-    " by therapists. 50 of them are scored here.": (
-        "AnnoMI: 133 veřejně vydaných motivačních rozhovorů, přepsaných "
-        "a anotovaných terapeuty. Hodnotí se z nich 50."
+    " by therapists. They are demonstration sessions, not recordings of clinical practice."
+    " 50 are scored here.": (
+        "AnnoMI: 133 veřejně vydaných motivačních rozhovorů, přepsaných a anotovaných terapeuty. "
+        "Jsou to ukázková sezení, ne záznamy klinické praxe. Hodnotí se z nich 50."
     ),
     "SOAP note": "Zápis SOAP",
     "The standard clinical note format: subjective, objective, assessment, plan. Every model"
@@ -510,18 +543,20 @@ _SENTENCES = {
     ),
     "iCARE / iHOPE": "iCARE / iHOPE",
     "This track. A model fills in a 17-field clinical form from a counselling transcript, and"
-    " its answers are compared with the form the clinician who saw the session filled in. One"
-    " project under two names: released as iCARE, renamed iHOPE in the preprint.": (
+    " its answers are compared with the form an expert clinician filled in from the same"
+    " session. One project under two names: released as iCARE, renamed iHOPE in the preprint.": (
         "Tato větev. Model vyplní z přepisu poradenského rozhovoru klinický formulář o 17 "
-        "polích a jeho odpovědi se porovnají s formulářem, který vyplnil klinik, jenž to "
-        "sezení viděl. Jeden projekt pod dvěma jmény: vydán jako iCARE, v preprintu "
+        "polích a jeho odpovědi se porovnají s formulářem, který z téhož sezení vyplnil "
+        "expertní klinik. Jeden projekt pod dvěma jmény: vydán jako iCARE, v preprintu "
         "přejmenován na iHOPE."
     ),
     "The sessions": "Sezení",
-    "40 counselling sessions, each with one note written by the clinician who saw it. That note"
-    " is the answer key, not an entry.": (
-        "40 poradenských sezení, u každého jeden zápis od klinika, který ho viděl. Ten zápis "
-        "je klíč k odpovědím, ne soutěžící."
+    "40 counselling demonstrations, each with one form an expert clinician filled in from it"
+    " afterwards -- not the clinician who conducted it, who is not part of this corpus. That"
+    " form is the answer key, not an entry.": (
+        "40 ukázkových poradenských sezení, u každého jeden formulář, který z něj dodatečně "
+        "vyplnil expertní klinik — ne ten, kdo sezení vedl; ten součástí korpusu není. Ten "
+        "formulář je klíč k odpovědím, ne soutěžící."
     ),
     "The form": "Formulář",
     "17 fields to fill in rather than a note to write, so a blank field is a different thing"
@@ -721,12 +756,20 @@ _PAYLOAD = {
         "otázky o týchž zápisech, takže to, jak moc se shoduje s člověkem, je publikované číslo, "
         "a ne naděje."
     ),
-    "An expert note written by the clinician who saw the session. ROUGE-L and BERTScore measure"
-    " how closely the model reproduced it; TRACE asks a judge to rate the note itself, the way"
-    " the paper's experts did.": (
-        "Expertní zápis, který napsal klinik, jenž to sezení viděl. ROUGE-L a BERTScore měří, "
-        "jak těsně jej model zreprodukoval; TRACE žádá hodnotitele, aby ohodnotil samotný zápis, "
-        "tak jako to dělali experti v tom článku."
+    "An expert note written from the session by a clinician who was not in it. ROUGE-L and"
+    " BERTScore measure how closely the model reproduced it; TRACE asks a judge to rate the note"
+    " itself, the way the paper's experts did.": (
+        "Expertní zápis, který ze sezení napsal klinik, jenž u něj nebyl. ROUGE-L a BERTScore "
+        "měří, jak těsně jej model zreprodukoval; TRACE žádá hodnotitele, aby ohodnotil samotný "
+        "zápis, tak jako to dělali experti v tom článku."
+    ),
+    # The one tick box on the leaderboard. It reaches the page through `tr()`
+    # like everything else, but it is a constant rather than a tagged sentence,
+    # so the scanner that finds untranslated text never looked at it and it
+    # would have drawn in English on a Czech page the first time a row of that
+    # type appeared.
+    "Show numbers as published (different harness — never ranked with ours)": (
+        "Ukázat čísla tak, jak byla publikována (jiný harness — nikdy se neřadí s našimi)"
     ),
     "The expert note is the answer key and never competes. In the source paper the experts"
     " compared models with each other -- a smaller Mistral was preferred over the model leading"
@@ -774,10 +817,13 @@ _PAYLOAD = {
     "On the table above, the highest {0} is {1} out of a possible 1.00.": (
         "V tabulce výše je nejvyšší {0} {1} z možných 1.00."
     ),
+    # The clinician's own figure rather than their row number: a row number is
+    # read off the order the table happens to be drawn in, and stops being true
+    # the moment a reader clicks a column heading.
     "On the table above, the highest {0} is {1} out of a possible 1.00, and the note a human"
-    " clinician wrote is row {2} of {3}.": (
+    " clinician wrote scores {2} by the same rule.": (
         "V tabulce výše je nejvyšší {0} {1} z možných 1.00 a zápis, který napsal člověk-klinik, "
-        "je {2}. řádek z {3}."
+        "má podle téhož pravidla {2}."
     ),
     "Conciseness": "Stručnost",
     "Fraction of the note's sentences that fit at least one rubric item. 1.00 means nothing is"
@@ -788,15 +834,16 @@ _PAYLOAD = {
     "Not a length measure, despite the name: a note twice as long scores the same if every"
     " added sentence is on topic. It is also the measure most moved by the judge's own settings"
     " -- raising the thinking budget from 128 to 256 tokens shifted all nineteen systems and"
-    " reordered sixteen of them. That comparison came from re-asking all 51 000 judge questions"
-    " at the higher budget; its rows are not in results/rows.jsonl and it is drawn in no table"
-    " above -- see docs/limitations.md.": (
+    " reordered sixteen of them. The higher budget is what the table above is scored at; it was"
+    " the budget-128 rows it was compared against that are gone -- not in results/rows.jsonl in"
+    " any revision and not re-derivable, see docs/limitations.md.": (
         "Navzdory jménu to není míra délky: dvakrát delší zápis dostane stejné skóre, pokud je "
         "každá přidaná věta k tématu. Je to také míra, kterou nejvíc hýbe vlastní nastavení "
         "hodnotitele — zvednutí rozpočtu na přemýšlení ze 128 na 256 tokenů posunulo všech "
-        "devatenáct systémů a u šestnácti z nich změnilo pořadí. To srovnání vzniklo tak, že se "
-        "všech 51 000 otázek položilo znovu s vyšším rozpočtem; jeho řádky v results/rows.jsonl "
-        "nejsou a v žádné tabulce výše se nekreslí — viz docs/limitations.md."
+        "devatenáct systémů a u šestnácti z nich změnilo pořadí. Vyšší rozpočet je ten, na kterém "
+        "je obodovaná tabulka výše; chybí ta druhá polovina — řádky s rozpočtem 128, proti "
+        "kterým se srovnávalo, nejsou v results/rows.jsonl v žádné revizi a nedají se odvodit, "
+        "viz docs/limitations.md."
     ),
     "Faithfulness": "Věrnost",
     "Whether the note contradicts the transcript, rated 1 to 5, where 5 is no inaccuracies."
@@ -887,7 +934,7 @@ _PAYLOAD = {
         "užití týchž slov v témže pořadí."
     ),
     "Not the source paper's ROUGE-L and not comparable with their published table. Theirs"
-    " compares the whole rendered note, which puts our own field labels and every `Nil` the"
+    " compares the whole rendered note, which puts our own field labels and every Nil the"
     " expert wrote on both sides -- a note where the model wrote nothing at all scores 0.379 that"
     " way, above most real notes. This compares the field values of the sections the expert"
     " answered, where the same empty note scores 0.000, and every model's figure fell by about a"
@@ -895,7 +942,7 @@ _PAYLOAD = {
     " found it disagrees with what clinicians preferred.": (
         "Není to ROUGE-L ze zdrojového článku a s jejich publikovanou tabulkou to není "
         "srovnatelné. Ta jejich srovnává celý vykreslený zápis, což staví naše vlastní názvy "
-        "polí a každé `Nil`, které expert napsal, na obě strany — zápis, do kterého model "
+        "polí a každé Nil, které expert napsal, na obě strany — zápis, do kterého model "
         "nenapsal vůbec nic, tak boduje 0.379, výš než většina skutečných zápisů. Tady se "
         "srovnávají hodnoty polí těch oddílů, které expert vyplnil; tentýž prázdný zápis tam "
         "boduje 0.000 a číslo každého modelu kleslo asi o třetinu. Metrika také neodliší dobrou "
