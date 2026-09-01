@@ -13,6 +13,49 @@ curl -s -H "Authorization: Bearer $EINFRA_API_TOKEN" \
 
 ---
 
+## 2026-09-01 — live capture, provider `einfra`
+
+`GET /v1/models` reported 33 models; 12 are benchmarkable after `models.yaml` filtering.
+
+| Model id | Benchmarked | Note |
+|---|---|---|
+| `agentic` | no | `alias:unversioned` |
+| `all-proxy-models` | no | `exclude:^all-proxy-models$` |
+| `auto-llm` | no | `alias:gemma4` |
+| `auto-llm-heuristic` | no | `alias:gemma4` |
+| `coder` | no | `alias:unversioned` |
+| `command-a` | no | `alias:gemma4` |
+| `deepseek` | no | `alias:deepseek-v4-flash` |
+| `deepseek-thinking` | no | `alias:unversioned` |
+| `deepseek-v4-flash` | yes |  |
+| `deepseek-v4-flash-thinking` | yes |  |
+| `gemma4` | yes |  |
+| `glm` | no | `alias:unversioned` |
+| `glm-5` | yes |  |
+| `glm-5.2` | yes |  |
+| `glm-5.3` | yes |  |
+| `gpt-oss-120b` | yes |  |
+| `kimi` | no | `alias:unversioned` |
+| `kimi-k3` | yes |  |
+| `mini` | no | `alias:gpt-oss-120b` |
+| `mistral-medium-3.5` | yes |  |
+| `multilingual-e5-large-instruct` | no | `exclude:e5-` |
+| `mxbai-embed-large:latest` | no | `exclude:embed` |
+| `nomic-embed-text-v1.5` | no | `exclude:embed` |
+| `nomic-embed-text-v2-moe` | no | `exclude:embed` |
+| `nrp` | no | `alias:unversioned` |
+| `qwen3-embedding-4b` | no | `exclude:embed` |
+| `qwen3-reranker-4b` | no | `exclude:-rerank` |
+| `qwen3.5` | no | `alias:qwen3.5-int4` |
+| `qwen3.5-int4` | yes |  |
+| `qwen3.8-27b` | yes |  |
+| `qwen3.8-flash-next` | yes |  |
+| `thinker` | no | `alias:deepseek-v4-flash-thinking` |
+| `whisper-large-v3` | no | `exclude:^whisper` |
+
+Excluded 21: embeddings, speech models and unversioned aliases. See `models.yaml` for the rules.
+
+
 ## 2026-08-23 — live capture
 
 `GET /v1/models` reported **31 ids**, which reduce to **11 distinct
