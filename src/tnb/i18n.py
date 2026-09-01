@@ -362,6 +362,40 @@ _SENTENCES = {
         "půjčilo od jiného hodnotitele. Každý další sloupec je kontext, ne žebříček."
     ),
     "Provider": "Poskytovatel",
+    # The column that orders by the models beating each other rather than by a
+    # weighted mean of columns that do not point the same way.
+    "Beats outright": "Poráží naprosto",
+    "How many of the other {0} systems this one is at least as good as on every column of"
+    " this instrument, under both judges, and strictly better than somewhere. It uses no"
+    " weights, so it is the part of the ordering every weighting agrees on: a mean would"
+    " have to decide what a point of one column is worth in another, and nobody has"
+    " measured that.": (
+        "Kolik z ostatních {0} systémů je tento aspoň tak dobrý na každém sloupci tohoto "
+        "nástroje pod oběma soudci, a aspoň v jednom lepší. Nepoužívá žádné vážení, takže "
+        "je to ta část pořadí, na které se shodne každé vážení: průměr by musel rozhodnout, "
+        "kolik je bod jednoho sloupce v druhém, a to nikdo nezměřil."
+    ),
+    "The price is silence. {0} of the {1} systems beat nobody outright here, and a tie"
+    " means the evidence does not say which is better without a preference somebody would"
+    " have to supply.": (
+        "Cena je mlčení. {0} z {1} systémů tu neporáží naprosto nikoho, a shoda znamená, "
+        "že důkazy neříkají, který je lepší — bez preference, kterou by někdo musel dodat."
+    ),
+    "of {0}": "z {0}",
+    "How many of the other systems this one is at least as good as on every {0} column,"
+    " under both judges, and strictly better than somewhere. No weighting, so it holds"
+    " however a reader weights the columns. The same under either judge, because both are"
+    " already in it: switching the judge above does not change this column.": (
+        "Kolik dalších systémů je tento aspoň tak dobrý na každém sloupci nástroje {0} pod "
+        "oběma soudci, a aspoň v jednom lepší. Žádné vážení, takže to platí, ať si čtenář "
+        "sloupce váží jakkoli. Pod oběma soudci je hodnota stejná, protože oba jsou už v ní "
+        "zahrnuti: přepnutí soudce nahoře tímto sloupcem nehne."
+    ),
+    "Not in the compared population: one of the two judges has no score for this row on"
+    " every column of this instrument, so there is no count. Not a nought.": (
+        "Není v porovnávané skupině: jeden ze dvou soudců nemá pro tento řádek skóre na "
+        "každém sloupci tohoto nástroje, takže počet neexistuje. Není to nula."
+    ),
     "The endpoint that served the model. The same id on two endpoints can be two different"
     " builds.": (
         "Endpoint, který model obsloužil. Totéž id na dvou endpointech mohou být dvě různá "

@@ -2280,6 +2280,18 @@ def write(rows: list[Row], *, docs_dir: Path | None = None, readme: Path | None 
     # From the rows a table would draw, not from every row in the file. Two
     # harness versions carry two definitions of the same column.
     data["concordance"] = concordance_payload(rows)
+    # Which instrument each comparison was made with. `track_label` describes
+    # the corpus and the form; a column headed "beats outright" has to name the
+    # instrument, because the same nineteen systems give a different answer
+    # under the rubric's three columns and under PDSQI-9's eight.
+    for track, found in data["concordance"].items():
+        found["instrument"] = INSTRUMENT_LABELS.get(track, track)
+    # Which instrument each comparison was made with. `track_label` describes
+    # the corpus and the form; a column headed "beats outright" has to name the
+    # instrument, because the same nineteen systems give a different answer
+    # under the rubric's three columns and under PDSQI-9's eight.
+    for track, found in data["concordance"].items():
+        found["instrument"] = INSTRUMENT_LABELS.get(track, track)
 
     docs_dir.mkdir(parents=True, exist_ok=True)
     (docs_dir / DATA_PATH.name).write_text(

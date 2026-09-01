@@ -130,6 +130,15 @@ class Comparison:
     #: winners' list: it includes everything nobody has separated from the rest.
     undominated: list[str]
     n_systems: int
+    #: Every system the comparison was made over: both judges scored it, so its
+    #: dominance count is a measurement. A system outside this list has no count
+    #: at all, and the difference matters -- a system that beats nobody and a
+    #: system nobody could compare must not print the same digit. Derivable from
+    #: `undominated` and the `beats` lists, and published rather than derived
+    #: because a reader of the page should not have to prove that identity, and
+    #: because the day it stops holding the page would silently print zero for
+    #: an absence.
+    systems: list[str] = field(default_factory=list)
     #: How the measures relate to each other, which is a different question from
     #: how the judges relate to each other and just as necessary before reading
     #: the ranking column as "the best model".
@@ -371,6 +380,7 @@ def compare(
         dominance=sorted(dominance, key=lambda d: (-len(d.beats), d.system)),
         undominated=sorted(set(shared) - dominated),
         n_systems=len(shared),
+        systems=list(shared),
     )
 
 
@@ -509,4 +519,5 @@ def to_json(comparison: Comparison | None) -> dict | None:
         ],
         "dominance": [{"system": d.system, "beats": d.beats} for d in comparison.dominance],
         "undominated": comparison.undominated,
+        "systems": comparison.systems,
     }

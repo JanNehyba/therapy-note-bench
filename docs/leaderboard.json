@@ -267,6 +267,7 @@
         }
       ],
       "excluded_are_computed": true,
+      "instrument": "iCARE",
       "judge_a": "gemini-3.1-pro-preview",
       "judge_b": "gpt-5.6-terra",
       "judge_measures": [
@@ -291,6 +292,24 @@
       "n_systems": 16,
       "ranking_measure": null,
       "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on trace (+0.826) and place 11 of 16 systems differently on it anyway. The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. Systems beating at least one other on every measure under both judges, which needs no weighting to be true: 9. `gpt-5.6-sol` beats 6. 8 of 16 systems are beaten outright by nobody.",
+      "systems": [
+        "deepseek-v4-flash",
+        "deepseek-v4-flash-thinking",
+        "gemma4",
+        "glm-5",
+        "glm-5.2",
+        "google_gemini-3.1-pro-preview",
+        "google_gemini-3.7-flash",
+        "gpt-5.6-luna",
+        "gpt-5.6-sol",
+        "gpt-5.6-terra",
+        "gpt-oss-120b",
+        "kimi-k3",
+        "mistral-medium-3.5",
+        "qwen3.5-122b",
+        "qwen3.5-int4",
+        "qwen3.8-27b"
+      ],
       "tensions": [
         {
           "agrees": true,
@@ -441,6 +460,7 @@
         }
       ],
       "excluded_are_computed": false,
+      "instrument": "PDSQI-9",
       "judge_a": "gemini-3.1-pro-preview",
       "judge_b": "gpt-5.6-terra",
       "judge_measures": [
@@ -566,6 +586,27 @@
       "n_systems": 19,
       "ranking_measure": null,
       "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on thorough (+0.833) and place 18 of 19 systems differently on it anyway. They agree least on succinct (+0.446, 18 of 19 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. No agreement figure is given for comprehensible (18 of 19 share one value), organized (18 of 19 share one value), synthesized (18 of 19 share one value), useful (18 of 19 share one value): most systems print the same number there, so there are no orderings for the two judges to agree about, and a correlation over them would be decided by the few that differ. Systems beating at least one other on every measure under both judges, which needs no weighting to be true: 4. `gpt-5.6-sol` beats 7. 11 of 19 systems are beaten outright by nobody.",
+      "systems": [
+        "deepseek-v4-flash",
+        "deepseek-v4-flash-thinking",
+        "gemma4",
+        "glm-5",
+        "glm-5.2",
+        "google_gemini-3.1-pro-preview",
+        "google_gemini-3.7-flash",
+        "gpt-5.6-luna",
+        "gpt-5.6-sol",
+        "gpt-5.6-terra",
+        "gpt-oss-120b",
+        "kimi-k3",
+        "llama-3.1-70b (TN-Eval, 2025)",
+        "mistral-large-v2 (TN-Eval, 2025)",
+        "mistral-medium-3.5",
+        "qwen3.5-122b",
+        "qwen3.5-int4",
+        "qwen3.8-27b",
+        "therapist-written (TN-Eval)"
+      ],
       "tensions": [
         {
           "agrees": true,
@@ -968,6 +1009,7 @@
         }
       ],
       "excluded_are_computed": false,
+      "instrument": "TN-Eval rubric",
       "judge_a": "gemini-3.1-pro-preview",
       "judge_b": "gpt-5.6-terra",
       "judge_measures": [
@@ -1022,6 +1064,27 @@
       "n_systems": 19,
       "ranking_measure": "completeness",
       "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on completeness (+0.895) and place 13 of 19 systems differently on it anyway. They agree least on faithfulness (+0.742, 16 of 19 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. Systems beating at least one other on every measure under both judges, which needs no weighting to be true: 14. `google_gemini-3.7-flash` beats 10. 8 of 19 systems are beaten outright by nobody. Ordering by completeness says little about conciseness (`gemini-3.1-pro-preview` -0.02, `gpt-5.6-terra` +0.05). Ordering by completeness says different things to the two judges about faithfulness (`gemini-3.1-pro-preview` +0.56, `gpt-5.6-terra` +0.04). The two judges disagree about whether those columns are related at all, so neither reading is this benchmark's answer.",
+      "systems": [
+        "deepseek-v4-flash",
+        "deepseek-v4-flash-thinking",
+        "gemma4",
+        "glm-5",
+        "glm-5.2",
+        "google_gemini-3.1-pro-preview",
+        "google_gemini-3.7-flash",
+        "gpt-5.6-luna",
+        "gpt-5.6-sol",
+        "gpt-5.6-terra",
+        "gpt-oss-120b",
+        "kimi-k3",
+        "llama-3.1-70b (TN-Eval, 2025)",
+        "mistral-large-v2 (TN-Eval, 2025)",
+        "mistral-medium-3.5",
+        "qwen3.5-122b",
+        "qwen3.5-int4",
+        "qwen3.8-27b",
+        "therapist-written (TN-Eval)"
+      ],
       "tensions": [
         {
           "agrees": false,

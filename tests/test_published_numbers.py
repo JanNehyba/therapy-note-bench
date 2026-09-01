@@ -516,7 +516,12 @@ UNACCOUNTED = {
     "docs/landscape.md": 66,
     "docs/limitations.md": 147,
     "docs/methodology.md": 105,
-    "docs/models-snapshot.md": 38,
+    # Raised from 38 on 2026-09-01: a live capture was retaken and recorded
+    # as its own dated section. Its counts -- how many ids the endpoint
+    # returned that day and how many survived the filter -- are a log of one
+    # capture, not a claim that can go stale, and registering each would say
+    # otherwise.
+    "docs/models-snapshot.md": 41,
     "README.md": 42,
     "NOTICE": 7,
 }
