@@ -154,6 +154,74 @@ def tagged_keys(source: str) -> list[str]:
     return keys
 
 
+def holes_that_pick_a_word(source: str) -> dict[str, set[str]]:
+    """Per tagged sentence, the holes whose filler is another tagged sentence.
+
+    `${row.n_partial === 1 ? T`note` : T`notes`}` is the English choosing a word
+    for its own number. A Czech sentence that says the same thing with one form
+    has nothing to put there, and dropping the hole is right. A hole carrying a
+    figure or a clause is not this, and dropping one silently removes what it
+    carried.
+    """
+    keys = tagged_keys(source)
+    opening = re.compile(r"(?<![\w$.])T`")
+    found_holes: dict[str, set[str]] = {}
+    index, order = 0, 0
+    while (found := opening.search(source, index)) is not None:
+        start = found.end()
+        holes, picks, i = 0, set(), start
+        while i < len(source):
+            char = source[i]
+            if char == "\\":
+                i += 2
+                continue
+            if char == "`":
+                break
+            if char == "$" and source[i + 1 : i + 2] == "{":
+                depth, opened, i = 1, i + 2, i + 2
+                while i < len(source) and depth:
+                    if source[i] == "`":
+                        i = _skip_literal(source, i + 1)
+                        continue
+                    depth += source[i] == "{"
+                    depth -= source[i] == "}"
+                    i += 1
+                if _only_inflects(source[opened : i - 1]):
+                    picks.add(str(holes))
+                holes += 1
+                continue
+            i += 1
+        if order < len(keys):
+            found_holes.setdefault(i18n.norm(keys[order]), set()).update(picks)
+        order += 1
+        index = start
+    return found_holes
+
+
+#: A branch of a ternary that can only ever produce English morphology: another
+#: tagged word, or a suffix of at most two characters. ``note` or
+#: `notes`` and ``s` or nothing` are the two shapes in the
+#: templates, and neither has anything for a Czech sentence to put anywhere.
+_INFLECTION = re.compile(r"^(?:T`[^`]*`|'[^']{0,2}'|\"[^\"]{0,2}\")$")
+
+
+def _only_inflects(filler: str) -> bool:
+    """Can this hole produce nothing but a word form?"""
+    if "?" not in filler:
+        return False
+    branches, depth, current = [], 0, []
+    for char in filler.split("?", 1)[1]:
+        depth += char in "([{"
+        depth -= char in ")]}"
+        if char == ":" and depth == 0:
+            branches.append("".join(current))
+            current = []
+            continue
+        current.append(char)
+    branches.append("".join(current))
+    return all(_INFLECTION.match(branch.strip()) for branch in branches)
+
+
 def _skip_literal(source: str, i: int) -> int:
     """Past the end of a nested template literal, holes and all."""
     depth = 0
@@ -647,3 +715,36 @@ def test_every_failure_reason_the_harness_writes_has_a_czech_entry():
         if not reason.startswith("truncated at max_tokens") and i18n.norm(reason) not in have
     ]
     assert not missing, f"failure reasons with no Czech: {missing}"
+
+
+def test_a_czech_sentence_holds_every_hole_its_english_does(templates):
+    """A translation that drops a hole drops whatever the hole was carrying.
+
+    Nothing else notices. `tr` fills the holes it finds and returns the string;
+    a value one hole short renders cleanly, reads well, and is missing a clause.
+    It happened to the sentence that gives the leaderboard's ordering column its
+    reason: the English gained a clause saying whether the judge's lead over the
+    two therapists clears zero, the Czech value was left as it was, and the
+    Czech page drew the sentence with the finding silently cut off the end --
+    the one fact that separates the two published judges.
+
+    An extra hole is as bad and louder: it renders as a literal `{7}`.
+    """
+    holes = re.compile(r"\{(\d+)\}")
+    inflections = holes_that_pick_a_word(templates)
+    wrong = {}
+    for key, value in i18n.CS.items():
+        if not isinstance(value, str):
+            continue
+        in_key, in_value = set(holes.findall(key)), set(holes.findall(value))
+        # A hole whose English filler is itself a tagged word -- the singular or
+        # the plural of a noun -- may go: Czech says the same thing with one
+        # form. Read out of the template, so a hole carrying a figure or a
+        # clause is never covered by it.
+        may_go = inflections.get(i18n.norm(key), set())
+        if in_value - in_key or (in_key - in_value) - may_go:
+            wrong[key[:60]] = f"key {sorted(in_key)} vs Czech {sorted(in_value)}"
+    assert not wrong, (
+        "Czech entries whose holes do not match their English -- whatever the missing hole "
+        f"carried is dropped from the page without a trace: {wrong}"
+    )

@@ -363,7 +363,11 @@ _SENTENCES = {
         "TN-Eval zveřejnil vedle té rubriky, dosáhnou titíž dva terapeuti jen {4} ({5}) &mdash; "
         "na řazení je to málo. Obojí je spočítané zde z anotací TN-Evalu přes {6} zápisů; "
         '<a href="methods.html#calibration">jak se to měřilo</a>. Každý další sloupec je kontext, '
-        "ne žebříček."
+        # {7} is the clause about the lead over the therapists' own agreement.
+        # Left out of this value while it was added to the key, so the Czech
+        # page drew the sentence and silently dropped the finding at the end of
+        # it -- which is the one thing that separates the two judges here.
+        "ne žebříček.{7}"
     ),
     # The size of that lead, and what it does when the notes are resampled.
     # Under one of the two published judges it does not clear zero, and at two
