@@ -799,6 +799,16 @@ function renderTable(table, index) {
         ? `<span class="differs" title="${T`scored by a judge from the same vendor, whose self-preference is measured on the methods page`}">${
             T`judge's own ${esc(row.judges_own_family)}`}</span>`
         : '',
+      // A row nobody can ask again. The model is gone from the endpoint, so
+      // these figures are final at whatever the endpoint last said -- they will
+      // not move when the benchmark is re-run, and a reader comparing them with
+      // a row that will has to know which is which.
+      row.withdrawn_on
+        ? `<span class="differs" title="${T`The endpoint no longer served this model when it was
+            last asked, on ${esc(row.withdrawn_on)}. Its figures are final: it cannot be asked
+            again, re-scored, or measured on anything added later. They are kept because the
+            measurements were made.`}">${T`withdrawn`}</span>`
+        : '',
     ].filter(Boolean).join(' ');
     const marksCell = `<td class="meta">${marks || '<span class="dash">—</span>'}</td>`;
     // Two of nineteen rows carry a reasoning effort and the rest carry a dash,
@@ -858,6 +868,7 @@ function renderTable(table, index) {
         <tbody>${body}</tbody>
       </table></div>
       <p class="ranking-note">${rankingNote}</p>
+      ${rosterNote()}
       ${referenceNote(table)}
       ${groupNote}
       ${instrumentsOf(table).map(([track]) => agreementNote(track)).join('')}
@@ -1186,6 +1197,41 @@ function currentJudge() {
 // One sentence of what the other judge would have shown, under the table it
 // qualifies. The panel itself is on the methods page; this is the part that
 // changes how the table above it should be read, so it stays with the table.
+// What the endpoints served the last time anyone asked, against what these
+// tables draw. Said on the page a reader lands on rather than only in the
+// roster file: a model with no row reads as a bad result, and a model with a
+// row reads as current. Neither is safe to leave to inference.
+//
+// Nothing at all when `tnb roster` has never run. An absence of the check is
+// not a clean bill, and printing "everything agrees" from no measurement is
+// the failure this repository names most often.
+function rosterNote() {
+  const roster = DATA.roster;
+  if (!roster) return '';
+  const missing = (roster.never_asked || []).map(entry => entry.system_id);
+  const gone = (roster.withdrawn || []).map(entry => entry.system_id);
+  const unreachable = Object.keys(roster.unreachable || {});
+  if (!missing.length && !gone.length && !unreachable.length) return '';
+  const parts = [];
+  if (gone.length) {
+    parts.push(T`<strong>${gone.join(', ')}</strong> is drawn here and was not served when the
+      endpoints were last asked, on ${roster.asked}: those figures are final and will not move
+      again.`);
+  }
+  if (missing.length) {
+    parts.push(T`<strong>${missing.join(', ')}</strong> was served on ${roster.asked} and has
+      never been asked to write a note, so its absence from these tables is a question nobody
+      put, not a result.`);
+  }
+  if (unreachable.length) {
+    // Named, because the alternative is a sentence that quietly speaks for
+    // providers nobody managed to ask.
+    parts.push(T`${unreachable.join(', ')} could not be asked, so nothing here is said about
+      the models it serves.`);
+  }
+  return `<p class="note">${parts.join(' ')}</p>`;
+}
+
 function agreementNote(track) {
   const found = (DATA.concordance || {})[track];
   if (!found || !found.measures || !found.measures.length) return '';

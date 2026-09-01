@@ -1,0 +1,50 @@
+{
+  "asked": "2026-09-01",
+  "exempt": [
+    "llama-3.1-70b",
+    "mistral-large-v2",
+    "therapist"
+  ],
+  "never_asked": [
+    {
+      "provider": "einfra",
+      "system_id": "glm-5.3"
+    },
+    {
+      "provider": "einfra",
+      "system_id": "qwen3.8-flash-next"
+    }
+  ],
+  "serves": {
+    "einfra": [
+      "deepseek-v4-flash",
+      "deepseek-v4-flash-thinking",
+      "gemma4",
+      "glm-5",
+      "glm-5.2",
+      "glm-5.3",
+      "gpt-oss-120b",
+      "kimi-k3",
+      "mistral-medium-3.5",
+      "qwen3.5-int4",
+      "qwen3.8-27b",
+      "qwen3.8-flash-next"
+    ],
+    "openai": [
+      "gpt-5.6-luna",
+      "gpt-5.6-sol",
+      "gpt-5.6-terra"
+    ],
+    "vertex": [
+      "google_gemini-3.1-pro-preview",
+      "google_gemini-3.7-flash"
+    ]
+  },
+  "unreachable": {},
+  "withdrawn": [
+    {
+      "provider": "einfra",
+      "system_id": "qwen3.5-122b"
+    }
+  ]
+}

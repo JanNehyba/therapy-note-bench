@@ -393,6 +393,30 @@ _SENTENCES = {
         "publikovaná</strong>, takže číslo, které do téhle věty patří, chybí — místo aby se "
         "půjčilo od jiného hodnotitele. Každý další sloupec je kontext, ne žebříček."
     ),
+    # What the endpoints served the last time anyone asked. A row nobody can
+    # ask again and a model nobody has asked yet are two different silences,
+    # and both were left to inference.
+    "withdrawn": "staženo",
+    "The endpoint no longer served this model when it was last asked, on {0}. Its figures are"
+    " final: it cannot be asked again, re-scored, or measured on anything added later. They are"
+    " kept because the measurements were made.": (
+        "Endpoint tento model už nenabízel, když se ho někdo naposledy ptal, {0}. Jeho čísla "
+        "jsou konečná: nejde se ho zeptat znovu, přebodovat ho ani ho změřit na něčem, co "
+        "přibude později. Zůstávají tu proto, že ta měření proběhla."
+    ),
+    "<strong>{0}</strong> is drawn here and was not served when the endpoints were last asked, on"
+    " {1}: those figures are final and will not move again.": (
+        "<strong>{0}</strong> se tu kreslí a při posledním dotazu na endpointy, {1}, už nabízen "
+        "nebyl: ta čísla jsou konečná a už se nepohnou."
+    ),
+    "<strong>{0}</strong> was served on {1} and has never been asked to write a note, so its"
+    " absence from these tables is a question nobody put, not a result.": (
+        "<strong>{0}</strong> byl {1} nabízen a nikdy nebyl požádán, aby napsal zápis — jeho "
+        "nepřítomnost v těchto tabulkách je tedy nepoložená otázka, ne výsledek."
+    ),
+    "{0} could not be asked, so nothing here is said about the models it serves.": (
+        "{0} se zeptat nešlo, takže se tu o modelech, které nabízí, neříká nic."
+    ),
     "Provider": "Poskytovatel",
     # The column that orders by the models beating each other rather than by a
     # weighted mean of columns that do not point the same way.

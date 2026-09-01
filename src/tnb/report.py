@@ -64,6 +64,16 @@ def saturation_path(judge_model: str, docs_dir: Path | None = None) -> Path:
     return (docs_dir or DOCS_DIR) / f"saturation-{_slug(judge_model)}.json"
 
 
+def load_roster(docs_dir: Path | None = None) -> dict | None:
+    """What the endpoints served when they were last asked, or None.
+
+    None where `tnb roster` has never run, and then the page says nothing about
+    any endpoint rather than implying every row is current. An absence of the
+    check is not a clean bill.
+    """
+    return _load_json((docs_dir or DOCS_DIR) / ROSTER_PATH.name)
+
+
 def load_saturations(docs_dir: Path | None = None) -> list[dict]:
     """Every judge's saturation analysis that has been run.
 
@@ -87,6 +97,11 @@ SITE_URL = "https://jannehyba.github.io/therapy-note-bench/"
 
 JUDGES_PATH = DOCS_DIR / "judges.json"
 PREFERENCE_PATH = DOCS_DIR / "preference.json"
+
+#: What the endpoints served, and when they were asked. Written by `tnb roster`,
+#: which needs three credentials; read here, which must not, because `make test`
+#: is offline and `tnb report` runs in it.
+ROSTER_PATH = DOCS_DIR / "roster.json"
 
 #: The criteria a Czech table draws, which is now all of them. The name
 #: stays: a seventh was drawn here once and the next one will be too.
@@ -1655,12 +1670,18 @@ def build(
     saturations: list[dict] | None = None,
     *,
     source: str | None = None,
+    roster: dict | None = None,
 ) -> dict:
     """Shape the rows into the JSON both presentations read.
 
     `saturations` carries, per judge, which systems that judge's evidence
     cannot tell apart. Optional because a coverage-only build has none, and
     absent is drawn as "not measured for this table" rather than as agreement.
+
+    `roster` carries what the endpoints served when `tnb roster` last asked
+    them. Optional for the same reason and drawn the same way: without it the
+    page says nothing about any endpoint, rather than implying every row can
+    still be re-asked.
 
     Groups that disagree on any version field become separate tables rather than
     separate rows in one table. The newest harness per track and judge is drawn;
@@ -1671,6 +1692,14 @@ def build(
     tables = []
 
     saturations = saturations or []
+    # {system_id: the day the endpoint was asked and did not offer it}. Keyed on
+    # the system rather than on (provider, system) because a row carries one of
+    # each and the roster records the pair, so the pair is checked when it is
+    # built and the row only has to find itself.
+    withdrawn = {
+        entry["system_id"]: (roster or {}).get("asked", "")
+        for entry in (roster or {}).get("withdrawn", [])
+    }
     groups, superseded = _current_groups(results.comparable_groups(current))
     newest_harness = max(
         (row.harness_version for group in groups.values() for row in group), default=""
@@ -1684,7 +1713,10 @@ def build(
         track = versions["track"]
         if track not in COLUMNS:
             continue
-        rendered = [_render_row(row) for row in sorted(group, key=lambda r: _sort_key(r, track))]
+        rendered = [
+            _render_row(row, withdrawn=withdrawn)
+            for row in sorted(group, key=lambda r: _sort_key(r, track))
+        ]
         tables.append(
             {
                 "track": track,
@@ -1929,9 +1961,14 @@ def _judges_own_family(row: Row) -> str:
     return family if family and family_of(row.system_id) == family else ""
 
 
-def _render_row(row: Row) -> dict:
+def _render_row(row: Row, *, withdrawn: dict[str, str] | None = None) -> dict:
     return {
         "system_id": row.system_id,
+        # The day an endpoint was asked for this model and did not offer it.
+        # Absent for every row where that has not happened, which is not the
+        # same as a row that was checked and is fine: `roster` being absent
+        # leaves this empty for everybody.
+        "withdrawn_on": (withdrawn or {}).get(row.system_id),
         "label": row.label,
         "system_type": row.system_type,
         "provider": row.provider,
@@ -2280,7 +2317,7 @@ def write(rows: list[Row], *, docs_dir: Path | None = None, readme: Path | None 
     """Write all three artefacts. Returns the data that was rendered."""
     docs_dir = docs_dir or DOCS_DIR
     saturations = load_saturations(docs_dir)
-    data = build(rows, saturations)
+    data = build(rows, saturations, roster=load_roster(docs_dir))
     data["calibration"] = load_calibration(docs_dir)
     data["similarity_example"] = similarity_example()
     # The panel shows one, and it is the judge the leaderboard is ranked by
@@ -2291,6 +2328,11 @@ def write(rows: list[Row], *, docs_dir: Path | None = None, readme: Path | None 
         (item for item in saturations if item.get("judge_model") == judge_module.DEFAULT_MODEL),
         saturations[0] if saturations else None,
     )
+    # What the endpoints served and when they were asked, carried whole so the
+    # page can name the models nobody has put the question to. `None` where the
+    # check has never run, and then the page says nothing rather than implying
+    # the tables and the endpoints agree.
+    data["roster"] = load_roster(docs_dir)
     data["judges"] = _load_json(docs_dir / JUDGES_PATH.name)
     data["preference"] = _load_json(docs_dir / PREFERENCE_PATH.name)
     # Computed here rather than cached in docs/, because it is a statement about
@@ -2299,12 +2341,6 @@ def write(rows: list[Row], *, docs_dir: Path | None = None, readme: Path | None 
     # From the rows a table would draw, not from every row in the file. Two
     # harness versions carry two definitions of the same column.
     data["concordance"] = concordance_payload(rows)
-    # Which instrument each comparison was made with. `track_label` describes
-    # the corpus and the form; a column headed "beats outright" has to name the
-    # instrument, because the same nineteen systems give a different answer
-    # under the rubric's three columns and under PDSQI-9's eight.
-    for track, found in data["concordance"].items():
-        found["instrument"] = INSTRUMENT_LABELS.get(track, track)
     # Which instrument each comparison was made with. `track_label` describes
     # the corpus and the form; a column headed "beats outright" has to name the
     # instrument, because the same nineteen systems give a different answer

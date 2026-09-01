@@ -29,6 +29,11 @@ from tnb.tasks import czech as czech_task
 
 SNAPSHOT_PATH = REPO_ROOT / "docs" / "models-snapshot.md"
 
+#: The provider of the three rows TN-Eval released: the therapist's note and
+#: the two the paper wrote. No endpoint serves them, so a roster comparison has
+#: nothing to say about them and must not report them as withdrawn.
+ROSTER_EXEMPT_PROVIDER = "tneval"
+
 
 def _render_snapshot(provider_name: str, models: list[DiscoveredModel], today: str) -> str:
     included = [model for model in models if model.included]
@@ -457,6 +462,104 @@ def _money(value: float | None) -> str:
 def _measure_cell(value: float | None) -> str:
     """One headline figure for the progress line, or a dash when there is none."""
     return "  -  " if value is None else f"{value:.2f}"
+
+
+def cmd_roster(args: argparse.Namespace) -> int:
+    """What every provider serves right now, against what the leaderboard draws.
+
+    Three answers, and the third is the one that costs the most to get wrong:
+
+    - **drawn and no longer served.** The row cannot be re-asked. Its numbers
+      are frozen at whatever the endpoint last said, and the page has to say so
+      or a reader reads a fossil as a current measurement.
+    - **served and never asked.** A model missing from a table reads as a bad
+      result. It is a question nobody put.
+    - **not asked at all.** A provider without a credential here is not a
+      provider serving nothing. Reporting its rows as withdrawn because this
+      machine could not log in would invent a withdrawal, so an unreachable
+      provider is named and its rows are left alone.
+
+    The three TN-Eval reference rows are exempt: the therapist's note and the
+    two notes the paper released are not served by any endpoint and never were.
+    """
+    import datetime as _dt
+    import json as _json
+
+    policy = load_policy()
+    payload = _json.loads(report.DATA_PATH.read_text(encoding="utf-8"))
+    drawn: dict[str, set[str]] = {}
+    for table in payload.get("tables", []):
+        for row in table.get("rows", []):
+            drawn.setdefault(row.get("provider") or "", set()).add(row["system_id"])
+    exempt = sorted(drawn.pop(ROSTER_EXEMPT_PROVIDER, set()))
+
+    serves: dict[str, list[str]] = {}
+    unreachable: dict[str, str] = {}
+    for provider in policy.providers:
+        if not provider.has_token():
+            unreachable[provider.name] = f"no {provider.token_env}"
+            continue
+        try:
+            found = discover(provider)
+        except Exception as error:  # noqa: BLE001 -- any failure is "we did not ask"
+            unreachable[provider.name] = type(error).__name__
+            continue
+        # Slugged, because that is what a row's `system_id` is: the endpoint
+        # serves `google/gemini-3.7-flash` and the table draws
+        # `google_gemini-3.7-flash`.
+        serves[provider.name] = sorted(
+            generation._slug(model.id) for model in found if model.included
+        )
+
+    withdrawn, never_asked = [], []
+    for name, offered in serves.items():
+        for system in sorted(drawn.get(name, set()) - set(offered)):
+            withdrawn.append({"provider": name, "system_id": system})
+        for system in sorted(set(offered) - drawn.get(name, set())):
+            never_asked.append({"provider": name, "system_id": system})
+
+    roster = {
+        # The date is the fact. "No longer served" is only ever true as of a
+        # day, and a page that prints it without one is claiming something
+        # about today that was measured whenever this last ran.
+        "asked": _dt.datetime.now(_dt.UTC).strftime("%Y-%m-%d"),
+        "serves": serves,
+        # Named, not omitted: a provider this machine could not ask is not a
+        # provider that serves nothing, and its drawn rows are not withdrawn.
+        "unreachable": unreachable,
+        "withdrawn": withdrawn,
+        "never_asked": never_asked,
+        "exempt": exempt,
+    }
+
+    for name in sorted(serves):
+        print(f"{name}: {len(serves[name])} served, {len(drawn.get(name, ()))} drawn")
+    for name, why in sorted(unreachable.items()):
+        print(f"{name}: not asked ({why}) -- {len(drawn.get(name, ()))} drawn rows left alone")
+    if exempt:
+        print(f"exempt reference rows: {', '.join(exempt)}")
+    for entry in withdrawn:
+        print(f"  drawn, no longer served : {entry['provider']} {entry['system_id']}")
+    for entry in never_asked:
+        print(f"  served, never asked     : {entry['provider']} {entry['system_id']}")
+
+    if args.dry_run:
+        print("\nDry run: nothing written.")
+    else:
+        write_published(
+            report.ROSTER_PATH,
+            _json.dumps(roster, indent=2, sort_keys=True) + "\n",
+        )
+        print(f"\nWrote {report.ROSTER_PATH.relative_to(REPO_ROOT)}.")
+
+    if withdrawn or never_asked:
+        print(
+            "\nThe published tables and the endpoints disagree. Re-run `tnb report` so the "
+            "page says so, or generate the missing models.",
+            file=sys.stderr,
+        )
+        return 1
+    return 0
 
 
 def cmd_score(args: argparse.Namespace) -> int:
@@ -2319,6 +2422,15 @@ def build_parser() -> argparse.ArgumentParser:
     )
     pref.add_argument("--dry-run", action="store_true", help="print, write nothing")
     pref.set_defaults(func=cmd_preference)
+
+    roster = subparsers.add_parser(
+        "roster",
+        help="what the endpoints serve against what the leaderboard draws; exits 1 on a mismatch",
+    )
+    roster.add_argument(
+        "--dry-run", action="store_true", help="print the comparison, write nothing"
+    )
+    roster.set_defaults(func=cmd_roster)
 
     judges = subparsers.add_parser(
         "judges", help="compare candidate judges against the two human annotators (phase 4)"
