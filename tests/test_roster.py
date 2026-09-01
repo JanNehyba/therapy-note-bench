@@ -148,3 +148,58 @@ def test_the_published_roster_and_the_published_tables_agree_about_what_is_marke
     assert marked == (gone & drawn), (
         f"the roster says {sorted(gone & drawn)} is withdrawn and the tables mark {sorted(marked)}"
     )
+
+
+def test_one_endpoints_withdrawal_does_not_mark_another_endpoints_row():
+    """`models.yaml` says the same id on two endpoints can be two builds.
+
+    Nothing merges them anywhere else in this benchmark, and the mark was keyed
+    on the id alone, so a withdrawal recorded against one provider would have
+    stamped "withdrawn" on a row still being served by the other.
+    """
+    rows = [
+        _row("shared-id", judge.DEFAULT_MODEL, 0.5, provider="einfra"),
+        _row("shared-id", judge.DEFAULT_MODEL, 0.4, provider="openai"),
+    ]
+    data = report.build(
+        rows, roster=_roster(withdrawn=[{"provider": "einfra", "system_id": "shared-id"}])
+    )
+    marked = {
+        (row["provider"], row.get("withdrawn_on"))
+        for table in data["tables"]
+        for row in table["rows"]
+    }
+    assert ("einfra", "2026-09-01") in marked
+    assert ("openai", None) in marked, (
+        "the row from the endpoint that still serves this id was marked as withdrawn"
+    )
+
+
+def test_asking_nobody_is_not_a_clean_result(monkeypatch, capsys):
+    """Exit 0 from a gate means the tables and the endpoints agree.
+
+    A run that reached no provider has established nothing at all, and returning
+    0 would let a publish proceed on the strength of a missing credential. An
+    unreadable catalogue is not an empty catalogue.
+    """
+    import argparse
+
+    from tnb import cli
+
+    class _Provider:
+        name = "einfra"
+        token_env = "EINFRA_API_TOKEN"
+
+        def has_token(self):
+            return False
+
+    class _Policy:
+        providers = (_Provider(),)
+
+    monkeypatch.setattr(cli, "load_policy", lambda: _Policy())
+    code = cli.cmd_roster(argparse.Namespace(dry_run=True))
+    assert code == 2, (
+        f"returned {code}; 0 reads as 'the tables and the endpoints agree' and 1 reads as "
+        "'they disagree', and neither was established"
+    )
+    assert "nothing is claimed" in capsys.readouterr().err

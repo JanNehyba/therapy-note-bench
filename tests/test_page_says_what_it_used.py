@@ -65,10 +65,25 @@ def test_every_unranked_track_says_why_in_its_own_words():
 @pytest.mark.parametrize("track", sorted(report.RANKING_MEASURES))
 def test_a_tables_reason_reaches_the_payload(track):
     """The map is only half of it: the renderer reads `not_ranked_reason` off
-    the table, so a table without one draws nothing where the sentence goes."""
+    the table, so a table without one draws nothing where the sentence goes.
+
+    And a table that *is* ranked must carry none. This asked every table for one
+    and `.get(track, <iCARE's>)` obliged, so both SOAP tables published "this
+    track is deliberately not ranked: its columns measure different things and
+    the source paper found they disagree" in `docs/leaderboard.json`, about a
+    table ordered by completeness, under the iCARE paper's reasoning. The page
+    guards on `ranking_measure` and never drew it; the JSON is published too and
+    has no guard.
+    """
     data = report.build([_row(track)])
     for table in data["tables"]:
-        assert table.get("not_ranked_reason"), f"{table['track']} carries no reason"
+        if report.RANKING_MEASURES.get(table["track"]) is None:
+            assert table.get("not_ranked_reason"), f"{table['track']} carries no reason"
+        else:
+            assert "not_ranked_reason" not in table, (
+                f"{table['track']} is ranked and carries a reason for not being ranked: "
+                f"{table.get('not_ranked_reason')!r}"
+            )
         assert table.get("detail_label"), f"{table['track']} carries no detail heading"
 
 

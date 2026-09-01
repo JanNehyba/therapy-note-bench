@@ -552,6 +552,16 @@ def cmd_roster(args: argparse.Namespace) -> int:
         )
         print(f"\nWrote {report.ROSTER_PATH.relative_to(REPO_ROOT)}.")
 
+    if not serves:
+        # Not zero. Zero from a gate reads as "the tables and the endpoints
+        # agree", and a run that reached no endpoint has established nothing at
+        # all. An unreadable catalogue is not an empty catalogue.
+        print(
+            "\nNo provider could be asked, so nothing is claimed about any row. "
+            "This is not a clean result.",
+            file=sys.stderr,
+        )
+        return 2
     if withdrawn or never_asked:
         print(
             "\nThe published tables and the endpoints disagree. Re-run `tnb report` so the "
