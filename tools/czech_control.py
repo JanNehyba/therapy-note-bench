@@ -41,6 +41,7 @@ from dotenv import load_dotenv
 from tnb import judge
 from tnb.scoring import czech
 from tnb.tasks import czech as czech_task
+from tnb.tasks import deepsy as deepsy_task
 
 REPO = Path(__file__).resolve().parent.parent
 DEFAULT_TARGET = REPO / "local" / "czech-control.md"
@@ -103,11 +104,123 @@ PLANTED: dict[str, tuple[str, str, str]] = {
 }
 
 
-def _variant(criterion: str) -> dict[str, str]:
-    section, old, new = PLANTED[criterion]
-    note = dict(CLEAN)
+#: The same control, in the format the Deepsy application writes. Eleven short
+#: labelled fields rather than four paragraphs, which is the point: the judge
+#: sees each fault with far less text around it, and a criterion that finds a
+#: missing length mark inside a paragraph need not find one inside a one-clause
+#: field. Invented like the SOAP note above, so no clinical text is here.
+#:
+#: Every field is filled. A control note with empty fields would be measuring
+#: what the judge does with an empty field, which is a different question and
+#: one the Deepsy tables already raise on their own.
+CLEAN_DEEPSY: dict[str, str] = {
+    "main_themes": (
+        "Zvýšené napětí před zkouškou a jeho dopad na spánek. Klientka téma "
+        "otevřela sama v úvodu sezení."
+    ),
+    "problems_symptoms": (
+        "Přerušovaný spánek v posledních dvou týdnech, večerní neklid. Chuť "
+        "k jídlu beze změny. Klientka uvádí: „nejhorší je to večer, když si "
+        "lehnu.“"
+    ),
+    "therapy_goals": (
+        "Zmírnit večerní napětí natolik, aby klientka usínala do půl hodiny. "
+        "Cíl formulovala klientka, terapeut jej přeformuloval do měřitelné "
+        "podoby."
+    ),
+    "client_resources": (
+        "Pravidelný denní režim, dokončené dva roky studia, ochota zkoušet "
+        "nová řešení. Sestra jí podle jejích slov nabídla pomoc s přípravou."
+    ),
+    "important_persons": (
+        "Sestra, se kterou je klientka v častém kontaktu. Spolubydlící, kterou zmiňuje neutrálně."
+    ),
+    "hypotheses": (
+        "Napětí se váže na očekávané hodnocení a udržuje se vyhýbáním se "
+        "přípravě. Vyhýbavé chování se zmírnilo po prvním nácviku, což "
+        "podporuje výklad přes udržovací kruh."
+    ),
+    "treatment_plan": (
+        "Pokračovat v nácviku bráničního dýchání před spaním a rozvrhnout "
+        "přípravu do kratších úseků."
+    ),
+    "unresolved_problems": (
+        "Vztah ke spolubydlící zůstává nezmapovaný. Klientka jej zatím neoznačila za téma."
+    ),
+    "between_session_tasks": (
+        "Denní záznam večerního napětí na škále od jedné do deseti, vždy před ulehnutím."
+    ),
+    "referrals": "Nezajištěna, klientka o odborné vyšetření nežádá.",
+    "crisis_planning": (
+        "V sezení nebyly zmíněny sebevražedné myšlenky ani jiné akutní riziko, "
+        "krizový plán proto nebyl sestavován."
+    ),
+}
+
+#: The same six faults, in fields chosen so each sits in ordinary prose rather
+#: than in a one-clause stub -- a fault planted in `referrals: nezajištěna` would
+#: be testing whether the judge reads stubs, not whether the criterion works.
+PLANTED_DEEPSY: dict[str, tuple[str, str, str]] = {
+    # criterion: (field, from, to)
+    "diacritics": ("hypotheses", "Vyhýbavé chování", "Vyhybave chovani"),
+    "calque": ("main_themes", "Zvýšené napětí", "Zvýšený pres"),
+    "untranslated": (
+        "hypotheses",
+        "Vyhýbavé chování se zmírnilo",
+        "Behavioral avoidance coping se zmírnilo",
+    ),
+    "agreement": (
+        "client_resources",
+        "Pravidelný denní režim",
+        "Pravidelným denním režimem byl",
+    ),
+    "register": ("client_resources", "Sestra jí", "Ségra jí"),
+    "quotes": (
+        "problems_symptoms",
+        "„nejhorší je to večer, když si lehnu.“",
+        '"nejhorší je to večer, když si lehnu."',
+    ),
+    "nonword": ("treatment_plan", "bráničního dýchání", "bráničního dýchánkování"),
+}
+
+
+#: **The prediction for the Deepsy run, written before it was made.**
+#:
+#: 1. Every criterion flags its own fault in the Deepsy format, as it does in
+#:    SOAP. The planted text is identical and each criterion asks whether the
+#:    fault appears ANYWHERE in the note, so the surrounding format should not
+#:    matter. A miss here would say the criterion depends on the prose around
+#:    the fault, which would be a finding about the instrument.
+#:
+#: 2. Cross-fire is LOWER in Deepsy than in SOAP. The SOAP control flags a fault
+#:    that is not there in 4 of 30 off-diagonal cells under
+#:    `gemini-3.1-pro-preview` and 5 of 30 under `gpt-5.6-terra`. A Deepsy note
+#:    is eleven short labelled fields rather than four paragraphs, so there is
+#:    less continuous prose from which to form a general impression of bad
+#:    Czech -- and cross-fire is what an impression looks like. If it comes back
+#:    HIGHER, this prediction is wrong and the shorter fields make the judge
+#:    more suspicious rather than less.
+#:
+#: 3. The clean Deepsy note flags nothing. If it does, the format itself reads
+#:    as faulty to the judge and every Deepsy criterion score carries that.
+#:
+#: Predictions 2 and 3 are the ones worth being wrong about; 1 is the floor.
+
+#: Which clean note and which faults each format uses. A table rather than a
+#: branch, for the reason the scorer's own corpus lookup is one: a format name
+#: that matches neither arm of an `if` silently gets the other format's note.
+FORMATS = {
+    "soap": (CLEAN, PLANTED),
+    "deepsy": (CLEAN_DEEPSY, PLANTED_DEEPSY),
+}
+
+
+def _variant(criterion: str, fmt: str = "soap") -> dict[str, str]:
+    clean, planted = FORMATS[fmt]
+    section, old, new = planted[criterion]
+    note = dict(clean)
     if old not in note[section]:
-        raise SystemExit(f"{criterion}: {old!r} is not in the {section} section any more.")
+        raise SystemExit(f"{criterion}: {old!r} is not in the {section} field any more.")
     note[section] = note[section].replace(old, new)
     return note
 
@@ -125,8 +238,28 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--judge-model", default=judge.DEFAULT_MODEL)
     parser.add_argument("--thinking-budget", type=int, default=2048)
-    parser.add_argument("--target", type=Path, default=DEFAULT_TARGET)
+    parser.add_argument("--target", type=Path, default=None)
+    parser.add_argument(
+        "--format",
+        choices=sorted(FORMATS),
+        default="soap",
+        help=(
+            "which note format to plant the faults in. `deepsy` is eleven short "
+            "labelled fields rather than four paragraphs, so the judge sees each "
+            "fault with far less text around it -- and the four Deepsy tracks had "
+            "no control at all until this existed"
+        ),
+    )
     args = parser.parse_args(argv)
+    # A separate file per format, never the same one: the two are different
+    # measurements, and overwriting one with the other would publish an answer
+    # about SOAP notes under the Deepsy tables.
+    if args.target is None:
+        args.target = (
+            DEFAULT_TARGET
+            if args.format == "soap"
+            else DEFAULT_TARGET.with_name("czech-control-deepsy.md")
+        )
 
     # `tnb.cli` does this at startup; a script run directly does not inherit it,
     # and the judge credentials live in `.env`.
@@ -139,7 +272,15 @@ def main(argv: list[str] | None = None) -> int:
     print(f"judge {config.model}, thinking budget {config.thinking_budget}")
     print("clean note first, then one variant per criterion\n")
 
-    clean = _ask(czech_task.render_note(CLEAN), client, spend)
+    # The renderer follows the note, not the module it sits beside: the SOAP
+    # renderer over a Deepsy note joins four headings that are not there and
+    # emits nothing, which asks the judge no questions and reports a clean
+    # sheet. `tests/test_pdsqi_cache_collision.py` records that failure.
+    render = czech_task.render_note if args.format == "soap" else deepsy_task.render_note
+    clean_note, _planted_here = FORMATS[args.format]
+    print(f"format {args.format}")
+
+    clean = _ask(render(clean_note), client, spend)
     print(
         f"  {'clean':14} "
         + " ".join(f"{k[:4]}={_cell(clean.get(k))}" for k in czech.CRITERION_KEYS)
@@ -147,7 +288,7 @@ def main(argv: list[str] | None = None) -> int:
 
     variants: dict[str, dict[str, bool | None]] = {}
     for criterion in czech.CRITERION_KEYS:
-        answers = _ask(czech_task.render_note(_variant(criterion)), client, spend)
+        answers = _ask(render(_variant(criterion, args.format)), client, spend)
         variants[criterion] = answers
         print(
             f"  {criterion:14} "
@@ -166,6 +307,7 @@ def main(argv: list[str] | None = None) -> int:
             {
                 "judge_model": config.model,
                 "thinking_budget": config.thinking_budget,
+                "format": args.format,
                 "clean": clean,
                 "variants": variants,
                 "calls": spend.calls,
