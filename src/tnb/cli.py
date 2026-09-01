@@ -18,7 +18,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 from tnb import generation, judge, report, results, tasks
-from tnb.config import REPO_ROOT, load_policy
+from tnb.config import REPO_ROOT, load_policy, write_published
 from tnb.providers.openai_compatible import (
     DiscoveredModel,
     discover,
@@ -1617,7 +1617,9 @@ def cmd_judges(args: argparse.Namespace) -> int:
     is of judges and nothing else.
 
     Scoring a candidate is resumable and cached: a judge already run costs
-    nothing to include again.
+    nothing to include again, and `--cache-only` asks nothing at all -- which is
+    how a change to what the panel computes gets published without re-running
+    seven judges over 640 notes.
     """
     import json as _json
 
@@ -1642,7 +1644,7 @@ def cmd_judges(args: argparse.Namespace) -> int:
         client = judge.Judge(config)
         spend = judge.Spend(limit_usd=args.max_judge_usd)
 
-        if not args.dry_run:
+        if not args.dry_run and not args.cache_only:
             done = 0
 
             def on_note(result, model=model) -> None:
@@ -1705,6 +1707,17 @@ def cmd_judges(args: argparse.Namespace) -> int:
                     "alpha_level": a.alpha_level,
                     "judge": a.judge_mean,
                     "humans": a.human_vs_human,
+                    # How far above the therapists' own agreement this judge
+                    # sits, and whether that distance survives resampling the
+                    # notes. Published because the leaderboard gives this
+                    # inequality as the sole reason for the column it orders
+                    # by, and one of the two judges it draws does not clear
+                    # zero: the page cannot say so from a point estimate.
+                    "margin": a.margin,
+                    "margin_low": a.margin_interval[0] if a.margin_interval else None,
+                    "margin_high": a.margin_interval[1] if a.margin_interval else None,
+                    "margin_draws": a.margin_draws,
+                    "clears_ceiling": a.clears_ceiling,
                     "n": a.n,
                 }
                 for a in r.agreements
@@ -1715,7 +1728,8 @@ def cmd_judges(args: argparse.Namespace) -> int:
     ]
 
     report.DOCS_DIR.mkdir(parents=True, exist_ok=True)
-    report.JUDGES_PATH.write_text(
+    write_published(
+        report.JUDGES_PATH,
         _json.dumps(
             {
                 "notes": reports[0].notes,
@@ -1732,7 +1746,6 @@ def cmd_judges(args: argparse.Namespace) -> int:
             sort_keys=True,
         )
         + "\n",
-        encoding="utf-8",
     )
     print(f"\nWrote {report.JUDGES_PATH.relative_to(REPO_ROOT)}.")
     return 0
@@ -2309,6 +2322,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     judges = subparsers.add_parser(
         "judges", help="compare candidate judges against the two human annotators (phase 4)"
+    )
+    judges.add_argument(
+        "--cache-only",
+        action="store_true",
+        help="re-derive the panel from cached answers and write it; ask the judges nothing",
     )
     judges.add_argument(
         "--models",

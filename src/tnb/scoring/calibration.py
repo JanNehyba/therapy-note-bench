@@ -26,6 +26,7 @@ suite with no scientific stack behind it.
 from __future__ import annotations
 
 import json
+import random
 from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -201,11 +202,24 @@ class Paired:
 
     judge: list[float] = field(default_factory=list)
     humans: list[list[float]] = field(default_factory=lambda: [[] for _ in range(ANNOTATORS)])
+    #: Which note each judgement was made about, parallel to `judge`. Kept so a
+    #: figure computed over these pairs can be resampled over the thing that
+    #: actually varies: there are 3450 criterion answers here but only 150
+    #: notes, and treating the answers as independent would report an interval
+    #: several times too narrow.
+    notes: list[tuple[str, str]] = field(default_factory=list)
 
-    def add(self, judge_value: float, human_values: list[float]) -> None:
+    def add(
+        self,
+        judge_value: float,
+        human_values: list[float],
+        note: tuple[str, str] | None = None,
+    ) -> None:
         self.judge.append(judge_value)
         for index, value in enumerate(human_values):
             self.humans[index].append(value)
+        if note is not None:
+            self.notes.append(note)
 
     def __len__(self) -> int:
         return len(self.judge)
@@ -238,6 +252,26 @@ class Agreement:
     def alpha_judge_mean(self) -> float | None:
         values = [value for value in self.alpha_judge_vs_human if value is not None]
         return sum(values) / len(values) if values else None
+
+    #: How far the judge's mean agreement sits above the therapists' own, and
+    #: the 95% interval of that distance over the notes it was measured on.
+    #: `None` where the pairs did not record their notes, which is what a
+    #: report read back from an older file looks like.
+    margin: float | None = None
+    margin_interval: tuple[float, float] | None = None
+    margin_draws: int = 0
+
+    @property
+    def clears_ceiling(self) -> bool | None:
+        """Does the margin over the therapists' ceiling clear zero once resampled?
+
+        Not the same question as `reaches_ceiling`, which compares two point
+        estimates and answers yes for a margin of 0.002. This one answers no
+        unless the whole interval is above zero.
+        """
+        if self.margin_interval is None:
+            return None
+        return self.margin_interval[0] > 0
 
     @property
     def reaches_ceiling(self) -> bool | None:
@@ -307,14 +341,31 @@ def _answers_for(
     return answers
 
 
+def calibration_systems() -> set[str]:
+    """Whose notes the calibration reads: the therapist's and TN-Eval's two models.
+
+    The 150 notes with human ratings, and nothing else. Named here because two
+    things need the same list -- what gets paired, and what the instrument is
+    decided from.
+    """
+    return {"therapist"} | {system_id for system_id, _label in scoring.REFERENCE_MODELS.values()}
+
+
 def dominant_instrument(judge_model: str, *, root: Path | None = None) -> str | None:
-    """The settings most of this judge's cached rubric answers were given at.
+    """The settings most of this judge's *calibration* answers were given at.
 
     One instrument for the whole report, decided before a single pair is made.
     Deciding per note let two budgets into one agreement figure; deciding per
     question let them into one *note*. The largest set wins, which during a
     re-scoring run is the complete old instrument rather than the half-finished
     new one -- the same rule, and the same reason, as `saturation.load_answers`.
+
+    Counted over the three systems `collect` pairs and no others. It used to
+    count the whole cache, and a judge that had scored the leaderboard at one
+    budget and the calibration set at another had its calibration answers voted
+    out by notes this report never opens: `gemini-2.5-pro` lost 3450 pairs to
+    30 252 answers about other models, returned no agreements at all, and was
+    dropped from the published panel in silence.
 
     None when the cache is empty or holds one instrument, which is every state
     it has ever actually been in; this only bites the next time a budget moves.
@@ -327,8 +378,13 @@ def dominant_instrument(judge_model: str, *, root: Path | None = None) -> str | 
     if not base.exists():
         return None
 
+    #: `<instrument>/<provider>/<system>/<session>/<unit>.json`, or the same
+    #: without the instrument directory for answers written before 2026-08-31.
+    wanted = calibration_systems()
     counted: Counter = Counter()
     for file in base.rglob("*.json"):
+        if file.parent.parent.name not in wanted or file.parent.parent.parent.name != "tneval":
+            continue
         try:
             record = json.loads(file.read_text(encoding="utf-8"))
         except json.JSONDecodeError:
@@ -402,9 +458,10 @@ def collect(
                         continue
                     value = float(tneval.parse_yes_no(answers[unit]))
                     humans = [float(entry[key]) for entry in raw]
-                    pairs["rubric_completeness"].add(value, humans)
-                    per_criterion[key].add(value, humans)
-                    per_system[system_id].add(value, humans)
+                    note = (session.id, system_id)
+                    pairs["rubric_completeness"].add(value, humans, note)
+                    per_criterion[key].add(value, humans, note)
+                    per_system[system_id].add(value, humans, note)
                     notes.add((session.id, system_id))
 
                 for measure in ("likert_completeness", "likert_conciseness", "likert_faithfulness"):
@@ -422,6 +479,71 @@ def collect(
     pairs["_instrument"] = instrument  # type: ignore[assignment]
     pairs["_notes"] = notes  # type: ignore[assignment]
     return pairs
+
+
+#: Draws behind every published interval on a calibration margin. Enough that
+#: the endpoints are stable to the third decimal, which is what the page prints.
+MARGIN_DRAWS = 2000
+#: Fixed, so re-running the panel does not move a published figure by chance.
+MARGIN_SEED = 20260901
+
+
+def _margin(judge: list[int], humans: list[list[int]]) -> float | None:
+    """The judge's mean kappa against the humans, less theirs against each other."""
+    against = [cohens_kappa(judge, human) for human in humans]
+    usable = [value for value in against if value is not None]
+    ceiling = cohens_kappa(humans[0], humans[1])
+    if not usable or ceiling is None:
+        return None
+    return sum(usable) / len(usable) - ceiling
+
+
+def margin_over_ceiling(paired: Paired) -> tuple[float | None, tuple[float, float] | None]:
+    """How far above the therapists' own agreement the judge sits, with an interval.
+
+    Resampled over notes and not over answers. The 23 criteria inside one note
+    are read off one piece of writing by one system, so they move together; a
+    reader told that a margin is 0.017 +- 0.006 when it is 0.017 +- 0.030 would
+    conclude the opposite of what the data supports.
+    """
+    if len(paired) < 2 or len(paired.notes) != len(paired):
+        return None, None
+    grouped: dict[tuple[str, str], tuple[list[int], list[int], list[int]]] = defaultdict(
+        lambda: ([], [], [])
+    )
+    for index, note in enumerate(paired.notes):
+        judge_v, first, second = grouped[note]
+        judge_v.append(int(paired.judge[index]))
+        first.append(int(paired.humans[0][index]))
+        second.append(int(paired.humans[1][index]))
+    bundles = list(grouped.values())
+    point = _margin(
+        [v for bundle in bundles for v in bundle[0]],
+        [
+            [v for bundle in bundles for v in bundle[1]],
+            [v for bundle in bundles for v in bundle[2]],
+        ],
+    )
+    if point is None or len(bundles) < 2:
+        return point, None
+
+    rng = random.Random(MARGIN_SEED)
+    drawn = []
+    for _ in range(MARGIN_DRAWS):
+        sample = [bundles[rng.randrange(len(bundles))] for _ in range(len(bundles))]
+        value = _margin(
+            [v for bundle in sample for v in bundle[0]],
+            [
+                [v for bundle in sample for v in bundle[1]],
+                [v for bundle in sample for v in bundle[2]],
+            ],
+        )
+        if value is not None:
+            drawn.append(value)
+    if len(drawn) < MARGIN_DRAWS // 2:
+        return point, None
+    drawn.sort()
+    return point, (drawn[int(0.025 * len(drawn))], drawn[int(0.975 * len(drawn)) - 1])
 
 
 def score_agreement(name: str, paired: Paired, *, binary: bool) -> Agreement:
@@ -458,9 +580,17 @@ def score_agreement(name: str, paired: Paired, *, binary: bool) -> Agreement:
         ordinal=ordinal,
     )
 
+    # Only for the rubric. The margin is a difference of two kappas, and the
+    # 1-5 scales are scored with a rho -- subtracting one from the other would
+    # be the rubric-versus-Likert confusion the alpha columns exist to avoid.
+    margin, interval = margin_over_ceiling(paired) if binary else (None, None)
+
     return Agreement(
         name=name,
         n=len(paired),
+        margin=margin,
+        margin_interval=interval,
+        margin_draws=MARGIN_DRAWS if interval else 0,
         judge_vs_human=judge_vs,
         human_vs_human=human_vs,
         statistic=statistic,
