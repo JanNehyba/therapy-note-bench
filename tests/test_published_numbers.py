@@ -338,13 +338,6 @@ CLAIMS = (
         caveat="not in this repository",
     ),
     Claim(
-        where="docs/methodology.md",
-        phrase="The Czech track asks six questions",
-        kind="elsewhere",
-        because="test_counts_match_their_lists.py recomputes it from czech.CRITERIA",
-        covers=("six",),
-    ),
-    Claim(
         where="docs/landscape.md",
         phrase="| Models benchmarked | 11 (2023–2024-era) | 8 (2024-era) |",
         kind="external",
@@ -512,17 +505,20 @@ def test_every_kind_is_one_the_docstring_explains():
 #: number in a published page fails until it is registered above or the budget
 #: is deliberately raised in a commit that says why.
 UNACCOUNTED = {
-    "docs/datasets.md": 55,
+    # Four budgets lowered on 2026-09-01, when the Czech branch left this
+    # repository and took its sections of these documents with it. The debt
+    # did not get paid; the documents got shorter.
+    "docs/datasets.md": 53,
     "docs/landscape.md": 66,
-    "docs/limitations.md": 147,
-    "docs/methodology.md": 105,
+    "docs/limitations.md": 146,
+    "docs/methodology.md": 82,
     # Raised from 38 on 2026-09-01: a live capture was retaken and recorded
     # as its own dated section. Its counts -- how many ids the endpoint
     # returned that day and how many survived the filter -- are a log of one
     # capture, not a claim that can go stale, and registering each would say
     # otherwise.
     "docs/models-snapshot.md": 41,
-    "README.md": 42,
+    "README.md": 40,
     "NOTICE": 7,
 }
 

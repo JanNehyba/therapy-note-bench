@@ -1440,29 +1440,7 @@ if (DATA.tables.length) {
 // Last, so the first draw above already happened in the reader's language and
 // this only has to redraw what a *change* of language moves: the frame, the
 // table on screen and the provenance line under it.
-// What the page says it is. Runs after `drawStaticText`, so it wins in both
-// languages, and inside the redraw so it survives a language switch. The
-// published page carries no `page` block and keeps the header it was authored
-// with, which is why `docs/` does not move when this is added.
-function drawHeader() {
-  const page = DATA.page;
-  if (!page) return;
-  if (page.title) document.title = TS(page.title);
-  // By id, like everything else on this page. The header paragraphs were
-  // reachable only by class, which no test can look inside.
-  const sub = document.getElementById('page-sub');
-  if (sub && page.sub) sub.innerHTML = TS(page.sub);
-  Object.entries(page.links || {}).forEach(([id, link]) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    // null means the page this one points at is not beside it.
-    if (link === null) el.remove();
-    else el.innerHTML = TS(link);
-  });
-}
-
 installLanguageSwitch(() => {
-  drawHeader();
   drawProvenance();
   // Its neighbour was in this list and it was not, so a reader who switched
   // language got a page in one language with the Sources paragraph in the

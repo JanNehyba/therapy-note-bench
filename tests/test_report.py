@@ -306,10 +306,7 @@ def test_the_page_keeps_the_caveats_attached_to_the_numbers():
             caveat = (table[key].get("caveat") or "").strip()
             assert caveat, f"{track}.{key} is drawn with no caveat at all"
 
-    # But only the published tracks can have their caveats *on the page*. The
-    # Czech rows go to `results.LOCAL_ROWS_PATH`, so `report.build` reading the
-    # committed record cannot draw them -- which is the whole of the local-only
-    # decision, and is asserted below rather than worked around here.
+    # Every track is published, so every caveat has to reach the page.
     for track in results.PUBLISHED_TRACKS:
         table = report.MEASURE_TABLES[track]
         for key, _decimals in report.COLUMNS[track]:
@@ -317,9 +314,6 @@ def test_the_page_keeps_the_caveats_attached_to_the_numbers():
             # renderer is free to wrap.
             fragment = (table[key]["caveat"]).strip().split(".")[0][:40]
             assert fragment in page, f"{track}.{key}'s caveat is not on the page"
-
-    for track in results.LOCAL_TRACKS:
-        assert track not in page, f"{track} is measured locally and must not be published"
 
     # The two the docstring names, by the words a reader would look for.
     assert "Krippendorff" in page
@@ -379,16 +373,14 @@ def test_the_page_carries_the_licence_of_every_input_it_uses():
     page actually used.
 
     The assertion used to be the flat set of all six against a one-row TN-Eval
-    page, which passed happily while the Czech page credited TN-Eval's two human
-    annotators and the iHOPE corpus, neither of which any Czech table touches. A
-    source that is listed reads as a source that was used.
+    page, which passed happily while a second page credited TN-Eval's two human
+    annotators and the iHOPE corpus while drawing neither. A source that is
+    listed reads as a source that was used.
+
+    Every published track, rather than a list: a track added and left off here
+    would be credited by whatever `build` happened to attach to it.
     """
-    for track in (
-        results.TRACK_TNEVAL,
-        results.TRACK_ICARE,
-        results.TRACK_CZECH_REAL,
-        results.TRACK_CZECH_TRANSLATED,
-    ):
+    for track in results.PUBLISHED_TRACKS:
         data = report.build([_row(track=track)])
         sources = {entry["source"] for entry in data["licences"]}
         expected = {source for source, tracks in report.LICENCE_TRACKS.items() if track in tracks}

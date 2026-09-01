@@ -279,13 +279,7 @@ TN-Eval published a Krippendorff's alpha of 0.08 on Likert completeness between
 its two therapists, and recomputing it here from their released annotations
 gives 0.13. Nothing here measures payer compliance.
 
-A third corpus exists and is **not** published: ten real Czech sessions with one
-client, and ten AnnoMI conversations translated into Czech. Six tracks are
-measured on it and none of their numbers is on this page or in
-`results/rows.jsonl` -- they are written to a gitignored directory instead. The
-sentence that used to stand here, "nothing here is in Czech", stopped being true
-on 2026-08-27. Small gaps between adjacent
-models are noise.
+Small gaps between adjacent models are noise.
 
 Read [docs/limitations.md](docs/limitations.md) before quoting a number.
 

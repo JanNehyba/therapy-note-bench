@@ -14,9 +14,8 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from functools import cache
 
-from tnb.datasets import czech as czech_corpus
 from tnb.datasets.base import Session
-from tnb.tasks import czech, deepsy, icare, soap
+from tnb.tasks import icare, soap
 
 
 @dataclass(frozen=True)
@@ -46,29 +45,33 @@ class Task:
     #: It used to be a dict in :mod:`tnb.generation` keyed on the task name, and
     #: a task absent from that dict was not an error -- it was a task whose
     #: replies were never checked, so a reply that was not a note was stored as
-    #: a success and the repair loop never ran. Two Deepsy tasks shipped that
-    #: way. Here the field cannot be omitted: leaving it out is a TypeError when
-    #: the module is imported, not a silence three hundred calls into a run.
+    #: a success and the repair loop never ran. Two tasks shipped that way.
+    #: Here the field cannot be omitted: leaving it out is a TypeError when the
+    #: module is imported, not a silence three hundred calls into a run.
     #:
-    #: Takes the answer and the unit, because the Deepsy sections each name
-    #: their own keys and a reply is checked against the ones its own section
-    #: asked for. ``None`` is a real answer, given by `icare`: its sections are
-    #: prose and there is nothing to fail to parse.
+    #: Takes the answer and the unit, because a task whose sections each name
+    #: their own keys has its reply checked against the ones that section asked
+    #: for. ``None`` is a real answer, given by `icare`: its sections are prose
+    #: and there is nothing to fail to parse.
     parse: Callable[[str, str], dict | None] | None
 
     #: Providers this task's sessions may be sent to, or ``None`` for any.
     #:
-    #: **The Czech and Deepsy corpora are confidential clinical sessions**, and
-    #: they may be read only by the university's own infrastructure. This is not
-    #: advice and not a flag: `cmd_generate` refuses to build a job for a
-    #: provider outside this set, so the restriction holds whatever a command
-    #: line says or omits.
+    #: **A corpus of confidential clinical sessions may be read only by the
+    #: infrastructure it is allowed to reach.** This is not advice and not a
+    #: flag: `cmd_generate` refuses to build a job for a provider outside this
+    #: set, so the restriction holds whatever a command line says or omits.
     #:
-    #: It exists because omitting `--providers` sent all ten real sessions to
-    #: OpenAI and to Google Vertex -- 150 calls, every one answered. The prompt
-    #: carries the transcript, so a default that meant "every provider with a
-    #: token" was one forgotten flag away from a disclosure, and the published
-    #: methodology said in the same breath that the transcripts never leave.
+    #: It exists because omitting `--providers` once sent every session of a
+    #: confidential corpus to two external providers -- 150 calls, every one
+    #: answered. The prompt carries the transcript, so a default meaning
+    #: "every provider with a token" was one forgotten flag away from a
+    #: disclosure, and the published methodology said in the same breath that
+    #: those transcripts never leave.
+    #:
+    #: No task here sets it today. That is a fact about the corpora currently
+    #: read, not a reason to drop the guard: a task that needs it would
+    #: otherwise have to remember to bring its own.
     confined_to: tuple[str, ...] | None = None
     #: Appended and re-asked when an answer arrives but cannot be parsed, as
     #: many times as :attr:`parse_attempts`. TN-Eval do this; iCARE do not, and
@@ -109,42 +112,6 @@ def _icare_units(session: Session) -> list[Unit]:
     ]
 
 
-def _czech_units(session: Session) -> list[Unit]:
-    # The task name comes from the corpus the session was loaded from, so the
-    # two halves land in two generation directories and therefore two tracks.
-    name = czech.NAME_REAL if session.source == czech_corpus.REAL else czech.NAME_TRANSLATED
-    return [
-        Unit(
-            task=name,
-            prompt_version=czech.PROMPT_VERSION,
-            session_id=session.id,
-            unit="note",
-            prompt=czech.build_prompt(session),
-        )
-    ]
-
-
-def _deepsy_units(session: Session) -> list[Unit]:
-    """One call per section, three per session.
-
-    Not one call for all three: the application makes three, and a unit is what
-    the cache is keyed on -- a session whose `plan` timed out resumes at `plan`
-    rather than re-asking the two that answered.
-    """
-    name = deepsy.NAME_REAL if session.source == czech_corpus.REAL else deepsy.NAME_TRANSLATED
-    return [
-        Unit(
-            task=name,
-            prompt_version=deepsy.PROMPT_VERSION,
-            session_id=session.id,
-            unit=section,
-            prompt=deepsy.build_prompt(session, section),
-            meta={"section": section, "system": deepsy.system_message(section)},
-        )
-        for section in deepsy.SECTIONS
-    ]
-
-
 TASKS: dict[str, Task] = {
     soap.NAME: Task(
         name=soap.NAME,
@@ -171,50 +138,6 @@ TASKS: dict[str, Task] = {
     # Two tasks over one prompt, because `results.TRACK_BY_TASK` maps a
     # generation directory to a track and one task could not tell the real
     # sessions from the translated ones.
-    czech.NAME_REAL: Task(
-        name=czech.NAME_REAL,
-        confined_to=("einfra",),
-        prompt_version=czech.PROMPT_VERSION,
-        calls_per_session=1,
-        load_sessions=czech.load_real,
-        build_units=_czech_units,
-        parse=lambda text, unit: czech.parse_note(text),
-        repair_suffix=czech.REPAIR_SENTENCE,
-        parse_attempts=czech.PARSE_ATTEMPTS,
-    ),
-    czech.NAME_TRANSLATED: Task(
-        name=czech.NAME_TRANSLATED,
-        confined_to=("einfra",),
-        prompt_version=czech.PROMPT_VERSION,
-        calls_per_session=1,
-        load_sessions=czech.load_translated,
-        build_units=_czech_units,
-        parse=lambda text, unit: czech.parse_note(text),
-        repair_suffix=czech.REPAIR_SENTENCE,
-        parse_attempts=czech.PARSE_ATTEMPTS,
-    ),
-    deepsy.NAME_REAL: Task(
-        name=deepsy.NAME_REAL,
-        confined_to=("einfra",),
-        prompt_version=deepsy.PROMPT_VERSION,
-        calls_per_session=len(deepsy.SECTIONS),
-        load_sessions=deepsy.load_real,
-        build_units=_deepsy_units,
-        parse=deepsy.parse_note,
-        repair_suffix=deepsy.REPAIR_SENTENCE,
-        parse_attempts=deepsy.PARSE_ATTEMPTS,
-    ),
-    deepsy.NAME_TRANSLATED: Task(
-        name=deepsy.NAME_TRANSLATED,
-        confined_to=("einfra",),
-        prompt_version=deepsy.PROMPT_VERSION,
-        calls_per_session=len(deepsy.SECTIONS),
-        load_sessions=deepsy.load_translated,
-        build_units=_deepsy_units,
-        parse=deepsy.parse_note,
-        repair_suffix=deepsy.REPAIR_SENTENCE,
-        parse_attempts=deepsy.PARSE_ATTEMPTS,
-    ),
 }
 
 

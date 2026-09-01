@@ -86,9 +86,7 @@ settings until 2026-08-31, so re-asking at 256 overwrote the answers it
 replaced. `judge.cache_path` keys on the instrument's fingerprint now, which
 stops it happening again and cannot bring back what it already cost. Of the
 51 000 cached `gemini-3.1-pro-preview` answers to the SOAP rubric, every single
-one records a fingerprint of budget 256. (The same judge also holds answers at a
-higher budget, but those are the Czech instruments — a different question set,
-still being scored, and not what this paragraph is about.) Under `gemini-2.5-pro` 30 252 answers survive at 128 and 7 116 at
+one records a fingerprint of budget 256. Under `gemini-2.5-pro` 30 252 answers survive at 128 and 7 116 at
 256, and no answer — no question about one note by one system — appears at both,
 nor does any of the fourteen systems.
 
@@ -173,40 +171,6 @@ leaderboard has told you nothing about how it handles a Czech therapy session �
 a different language, different clinical vocabulary, different documentation
 conventions, and a training-data distribution where Czech clinical text barely
 exists.
-
-That sentence used to be about the whole repository and is now only about the
-page. A Czech track exists: ten real psychotherapy sessions with one client, and
-ten AnnoMI conversations translated into Czech, scored on six yes/no criteria
-about the Czech itself. **Its numbers are not published and are not in
-`results/rows.jsonl`.** They are measured into a directory that is not in
-version control, because the corpus is confidential clinical material and the
-decision to publish anything derived from it has not been made.
-
-What that track will be able to say, when it says anything, is narrow. Ten
-sessions with one client; a language instrument this repository wrote, because
-no published Czech one exists to reproduce; and a generation prompt that is a
-translation of TN-Eval's rather than a reproduction of any Czech documentation
-standard, of which there is none.
-
-**The translated half was translated by a language model.** Claude did it, from
-a family no model on that track and neither judge belongs to, so nothing is
-scored on Czech its own family wrote. Every model read the same translated text,
-so the translation cancels when the models are compared with each other. It does
-not cancel for the absolute claim — "models write bad Czech" — because
-clumsiness the translation introduced can come back out of the note written from
-it, and no measurement here separates the two. A fault that shows on both halves
-is the model's; a fault that shows only on the translated half is the input's,
-and that is the only reason the real half exists.
-
-One native speaker has since rated twenty of those notes on all six language
-criteria -- 120 answers. There is no table of that agreement anywhere and no
-single figure for it: what the local briefing prints is the count per criterion,
-in the paragraph that says what that criterion catches. It is one rater, so it is
-a comparison and not a ceiling, and a single percentage is the shape a ceiling
-comes in. **PDSQI-9 on
-those notes still has no human rating of any kind**, which is the gap that
-matters most: the sheet exists with every cell empty. See
-`docs/datasets.md` for the corpus and the de-identification.
 
 ## Nothing here measures compliance
 

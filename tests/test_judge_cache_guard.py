@@ -80,17 +80,25 @@ def test_a_record_with_no_fingerprint_is_not_guessed_at(tmp_path):
 
 
 def test_every_runner_passes_the_escape_hatch():
-    """Four scorers write to this cache. A guard three of them route around is
+    """Every scorer writes to this cache. A guard all but one route around is
     not a guard, and the one left out would be found by an incident rather than
-    by a test."""
+    by a test.
+
+    Found rather than listed. A named list was four entries and is now three;
+    the next scorer added would not have been on it, and a guard that silently
+    stops covering the newest writer is the failure this test is about.
+    """
     import ast
     from pathlib import Path
 
     from tnb.config import REPO_ROOT
 
+    runners = sorted((REPO_ROOT / "src" / "tnb" / "scoring").glob("*run.py"))
+    assert len(runners) >= 3, f"only {len(runners)} scorer(s) found -- the glob stopped matching"
+
     missing = []
-    for name in ("czech_run", "pdsqi_run", "run", "icare_run"):
-        source = (REPO_ROOT / "src" / "tnb" / "scoring" / f"{name}.py").read_text(encoding="utf-8")
+    for path in runners:
+        source = path.read_text(encoding="utf-8")
         for node in ast.walk(ast.parse(source)):
             if not isinstance(node, ast.Call):
                 continue
@@ -98,6 +106,6 @@ def test_every_runner_passes_the_escape_hatch():
             if target != "write_cached":
                 continue
             if not any(word.arg == "allow_reinstrument" for word in node.keywords):
-                missing.append(name)
+                missing.append(path.stem)
     assert not missing, f"write_cached called without the guard's escape hatch in: {missing}"
     assert Path(REPO_ROOT / "src" / "tnb" / "judge.py").exists()

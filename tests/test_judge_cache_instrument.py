@@ -108,7 +108,7 @@ MAY_OMIT_THE_FINGERPRINT = {
 def _calls_without_a_fingerprint(source: str) -> int:
     """`judge.cache_path(...)` calls that name no instrument.
 
-    Only this cache's function. `tools/czech_code.py` has a `cache_path` of its
+    Only this cache's function. A tool with a `cache_path` of its
     own for the coder's answers, which has nothing to do with the judge's, and
     matching on the bare name alone reported it.
     """
@@ -150,10 +150,9 @@ def test_every_caller_asks_for_its_own_instrument():
 
     The writers were checked from the first version of this test, because one
     that forgets writes to the shared path again and re-opens the hole. The
-    readers were not, and two of them -- `tools/czech_sample.py`, which the
-    Czech variance bands are built from, and `tools/czech_pdsqi_anchor.py` --
-    were left looking under the settings-free path while the scorer had moved
-    to the instrument's. `legacy_path` only strips an instrument component, so
+    readers were not, and two of them were left looking under the settings-free
+    path while the scorer had moved to the instrument's. `legacy_path` only
+    strips an instrument component, so
     there is no lookup in that direction: they would have found nothing, and
     the partial case fails quietly rather than loudly.
     """

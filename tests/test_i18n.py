@@ -514,10 +514,6 @@ def live_strings(templates: str) -> set[str]:
     # every one of them would read as an orphan.
     live |= {i18n.norm(reason) for reason in report.NOT_RANKED_REASONS.values()}
     live |= {i18n.norm(label) for label in report.DETAIL_LABELS.values()}
-    # The header a non-published page writes about itself, links included.
-    live.add(i18n.norm(report.PAGE_CZECH["title"]))
-    live.add(i18n.norm(report.PAGE_CZECH["sub"]))
-    live |= {i18n.norm(link) for link in report.PAGE_CZECH["links"].values() if link}
     for licence in report.LICENCES:
         live |= {i18n.norm(licence[f]) for f in ("used_for", "note", "licence") if licence.get(f)}
     live.add(i18n.norm(report.SIMILARITY_EXAMPLE["note"]))

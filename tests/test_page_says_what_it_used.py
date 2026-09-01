@@ -5,12 +5,16 @@ here renders or runs a browser.
 
 **The failure these come from.** For a long time there was one page and it drew
 every track, so `build` attached the whole registry to it and was right by
-accident. There are two pages now. The Czech one credited TN-Eval's two human
-annotators and profiled the iHOPE corpus, neither of which any Czech table
-touches; it headed its expandable rows "Rubric criteria" over what is actually
-a denominator; it printed iCARE's reason for not being ranked under tables that
-are unranked for two other reasons; and it said it was built from
-`rows.jsonl`, which is the published record it is deliberately kept out of.
+accident. A second page was added and inherited all of it: it credited
+TN-Eval's two human annotators and profiled the iHOPE corpus while drawing
+neither; it headed its expandable rows "Rubric criteria" over what is actually
+a denominator; it printed iCARE's reason for not being ranked under tables
+unranked for other reasons; and it named `rows.jsonl` as the record it came
+from when it came from another file.
+
+That page has left this repository and these checks stay, because what they
+guard is `build` attaching a registry to a payload without asking whether the
+payload drew it -- which is a property of `build`, not of that page.
 
 None of those is a wrong number. Each is a sentence that reads as a claim about
 provenance, and provenance is the one thing a reader cannot check for
@@ -42,10 +46,9 @@ UNRANKED = [track for track, measure in report.RANKING_MEASURES.items() if measu
 
 
 def test_every_unranked_track_says_why_in_its_own_words():
-    """Three tracks carry no ranking column for three different reasons, and the
-    page printed iCARE's under all of them: "the source paper found they
-    disagree" is true of iCARE and is not a statement anybody has made about
-    PDSQI-9 or about Czech spelling.
+    """Two tracks carry no ranking column for two different reasons, and the
+    page printed iCARE's under both: "the source paper found they disagree" is
+    true of iCARE and is not a statement anybody has made about PDSQI-9.
 
     The reasons were written as comments beside `RANKING_MEASURES` and never
     reached a reader."""
@@ -87,26 +90,10 @@ def test_a_tables_reason_reaches_the_payload(track):
         assert table.get("detail_label"), f"{table['track']} carries no detail heading"
 
 
-def test_the_czech_tracks_do_not_call_their_denominator_a_rubric():
-    """On the Czech and Deepsy tracks the expandable block holds one entry per
-    criterion saying how many notes it was answered for -- the denominator, the
-    number this repository exists to keep visible. It was headed with the name
-    of TN-Eval's 23-item rubric, which scores English SOAP notes."""
-    for track in (
-        results.TRACK_CZECH_REAL,
-        results.TRACK_CZECH_TRANSLATED,
-        results.TRACK_DEEPSY_REAL,
-        results.TRACK_DEEPSY_TRANSLATED,
-    ):
-        label = report.DETAIL_LABELS[track]
-        assert label != "Rubric criteria", f"{track} still calls its denominator a rubric"
-        assert label != "TRACE dimensions", f"{track} borrows iCARE's heading"
-
-
 def test_a_page_credits_what_it_used_and_nothing_else():
     """Both directions. A source listed reads as a source used, and a source
     used and not listed is a licence problem, so neither is allowed to drift."""
-    for track in (results.TRACK_TNEVAL, results.TRACK_ICARE, results.TRACK_CZECH_REAL):
+    for track in results.PUBLISHED_TRACKS:
         data = report.build([_row(track)])
         got = {entry["source"] for entry in data["licences"]}
         want = {source for source, tracks in report.LICENCE_TRACKS.items() if track in tracks}
@@ -141,11 +128,15 @@ def test_a_withdrawn_track_keeps_its_sources():
 
 
 def test_a_page_names_the_record_it_was_built_from():
-    """The Czech page is built from `czech-rows.jsonl` and said `rows.jsonl`,
-    which is the published record it is structurally kept out of. Of every line
-    on a page, the one saying where the numbers came from is the one a reader
-    has no way to check."""
+    """A page built from one file and naming another. Of every line on a page,
+    the one saying where the numbers came from is the one a reader has no way to
+    check, so it is passed in rather than assumed.
+
+    The second record this was written for has left the repository. The
+    parameter has not, and neither has the default it overrides, so the check is
+    made against a name that is not the published one.
+    """
     assert report.build([_row(results.TRACK_TNEVAL)])["generated_from"] == results.ROWS_PATH.name
-    local = report.build([_row(results.TRACK_CZECH_REAL)], source=results.LOCAL_ROWS_PATH.name)
-    assert local["generated_from"] == results.LOCAL_ROWS_PATH.name
-    assert local["generated_from"] != results.ROWS_PATH.name
+    elsewhere = report.build([_row(results.TRACK_TNEVAL)], source="somewhere-else.jsonl")
+    assert elsewhere["generated_from"] == "somewhere-else.jsonl"
+    assert elsewhere["generated_from"] != results.ROWS_PATH.name

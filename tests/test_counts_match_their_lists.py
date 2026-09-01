@@ -7,7 +7,7 @@ below the list itself, and the list grows.
     "one of the five inputs carries a licence"      six, and two carry one
     "two of them publish no licence at all"         three, and a fourth has a badge
     "Two of the four iCARE columns"                 five
-    "The Czech track asks seven questions"          six since 2026-08-28
+    "scored on seven yes/no criteria"               six since 2026-08-28
 
 Each was true when written. Nothing tied it to the thing it counts, so each
 went quietly wrong the day that thing changed, and the same repository printed
@@ -34,7 +34,6 @@ import pytest
 
 from tnb import report, results
 from tnb.config import REPO_ROOT
-from tnb.scoring import czech as czech_scorer
 
 WORDS = {
     "no": 0,
@@ -157,27 +156,6 @@ CHECKS = (
         reads=(report, "MEASURE_TABLES"),
     ),
     Check(
-        where="docs/methodology.md",
-        pattern=r"The Czech track asks (\w+) questions about a note",
-        expected=lambda: (len(czech_scorer.CRITERIA),),
-        why="said seven for three days after the seventh criterion was deleted",
-        reads=(czech_scorer, "CRITERIA"),
-    ),
-    Check(
-        where="docs/methodology.md",
-        pattern=r"None of the (\w+) criteria therefore asks",
-        expected=lambda: (len(czech_scorer.CRITERIA),),
-        why="the same count, in the same document, restated",
-        reads=(czech_scorer, "CRITERIA"),
-    ),
-    Check(
-        where="docs/methodology.md",
-        pattern=r"All (\w+) ask about the absence of a fault",
-        expected=lambda: (len(czech_scorer.CRITERIA),),
-        why="and again",
-        reads=(czech_scorer, "CRITERIA"),
-    ),
-    Check(
         where="src/tnb/templates/leaderboard.html",
         pattern=r"agree on all (\w+) of track, harness version",
         expected=lambda: (len(results.COMPARABILITY_KEYS),),
@@ -221,27 +199,6 @@ CHECKS = (
         expected=lambda: (carrying_a_licence(), len(report.LICENCES), publishing_none()),
         why="the Czech of the methods page's licence sentence",
         reads=(report, "LICENCES"),
-    ),
-    Check(
-        where="src/tnb/i18n.py",
-        pattern=r"Samotný zápis, na týchž (\w+) kritériích",
-        expected=lambda: (len(czech_scorer.CRITERIA),),
-        why="the Czech blurb of a track whose criteria are the six in czech.CRITERIA",
-        reads=(czech_scorer, "CRITERIA"),
-    ),
-    Check(
-        where="src/tnb/i18n.py",
-        pattern=r"Týchž (\w+) kritérií jako v tabulce se skutečnými sezeními",
-        expected=lambda: (len(czech_scorer.CRITERIA),),
-        why="the same count, in the Czech of the other track's blurb",
-        reads=(czech_scorer, "CRITERIA"),
-    ),
-    Check(
-        where="docs/limitations.md",
-        pattern=r"scored on (\w+) yes/no criteria",
-        expected=lambda: (len(czech_scorer.CRITERIA),),
-        why="the same instrument described on the page that bounds what it claims",
-        reads=(czech_scorer, "CRITERIA"),
     ),
 )
 

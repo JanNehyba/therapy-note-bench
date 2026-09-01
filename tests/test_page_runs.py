@@ -1817,63 +1817,21 @@ def test_the_blurb_is_not_measured_in_characters():
         )
 
 
-def test_a_local_page_writes_its_own_header(tmp_path):
-    """The template's header belongs to the published page.
-
-    It names TN-Eval's SOAP rubric and iCARE's 17 sections, and offers the
-    brief, the PDF and the methods page. The Czech page is drawn by the same
-    renderer and inherited all of it: it opened by naming two instruments no
-    table on it uses, and then linked three files that do not exist beside it.
-
-    Run rather than read. `drawHeader` is the only function on the page that
-    does nothing at all on the published payload, so a string test would pass
-    on a version of it that throws.
-    """
-    rows = [
-        Row(
-            track=results.TRACK_CZECH_REAL,
-            system_id="gemma4",
-            system_type="model",
-            provider="einfra",
-            prompt_version="czech-soap-v1",
-            n_sessions_attempted=10,
-            n_sessions_generated=10,
-        )
-    ]
-    data = report.build(rows, source="czech-rows.jsonl")
-    assert data["page"], "the fixture did not produce a Czech page"
-
-    page = report.render_page(data)
-    sub = _flat(_run(page, tmp_path, panel="page-sub"))
-    assert "iCARE" not in sub, "the Czech page still names iCARE's sections"
-    assert "e-INFRA" in sub, "the Czech page does not say what it is"
-
-    brief = _flat(_run(page, tmp_path, panel="brief-link"))
-    assert "czech-brief.html" in brief
-    assert "czech-report.pdf" in brief
-
-    # The methods page has no local twin, so the paragraph goes rather than
-    # pointing at a file that is not there. The runner names what was removed,
-    # because a node that is gone and a node nobody asked for look the same.
-    summary = _run(page, tmp_path)
-    assert "THREW" not in summary
-    removed = next((line for line in summary.splitlines() if line.startswith("removed:")), "")
-    assert "methods-link" in removed, f"the methods link was not taken out: {summary}"
-
-
 def test_the_published_page_keeps_the_header_it_was_written_with(tmp_path):
-    """The other direction, and the reason `page` is None rather than a copy of
-    the published header: a payload that carried it would put the published
-    page's own words through the same substitution and let a typo there change
-    what `docs/` says."""
+    """The header is the template's, and nothing in the payload can say otherwise.
+
+    There used to be a `page` block a payload could carry to rewrite the title,
+    the sub-line and the links, and one page used it. It is gone, and this
+    asserts the removal rather than the old behaviour: a payload that could
+    carry a header would put the published page's own words through the same
+    substitution and let a typo there change what `docs/` says.
+    """
     data = _page_data(tmp_path)
-    assert data["page"] is None
+    assert "page" not in data, "the payload can still carry a header of its own"
     summary = _run(report.render_page(data), tmp_path)
     assert "THREW" not in summary
-    # `drawHeader` returns before touching anything, so the two header nodes are
-    # never written to and never removed. That is the whole assertion: on this
-    # payload the header is the template's, and the template is not reachable
-    # from the script the runner executes.
+    # Nothing writes to the two header nodes, so they are neither replaced nor
+    # removed. That is the whole assertion.
     removed = next((line for line in summary.splitlines() if line.startswith("removed:")), "")
     assert "methods-link" not in removed, "the published page dropped its methods link"
     assert "e-INFRA" not in _flat(_run(report.render_page(data), tmp_path, panel="page-sub"))

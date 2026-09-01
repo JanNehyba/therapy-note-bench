@@ -162,26 +162,12 @@ instruments, they never share a table, and each table says which it is.
 YouTube videos. There are no patient data involved, so keeping inference inside
 e-INFRA buys nothing there.
 
-**And what changed when real session data arrived.** This paragraph used to end
-"if real session data are ever added to this benchmark, the judge must move
-inside the infrastructure that holds them". Real session data have now been
-added, in an unpublished Czech track, and the commitment has been *narrowed
-rather than kept* — which is a change and is written here as one rather than
-read into the old sentence.
-
-The transcripts are de-identified before anything sees them, and they are read
-only by the model that writes the note, on e-INFRA. The judge is never shown a
-transcript: `scoring/czech.py`'s questions take a note and have no parameter a
-transcript could arrive through, so the confidential text cannot reach an
-external provider even by mistake. What does reach one is the note a model wrote
-from an already de-identified session.
-
-That is weaker than "the judge moves inside the infrastructure". The reason for
-not keeping the stronger promise is that an e-INFRA judge would have no
-calibration, no second judge to disagree with it, and no comparability with any
-number this repository already publishes — and a track whose only control is two
-judges disagreeing cannot give that up. The trade is deliberate and it is the
-reader's to disagree with.
+**And if that changes.** If real session data are ever added to this
+benchmark, the judge must move inside the infrastructure that holds them. The
+commitment is written here rather than assumed, because the enforcement is not:
+`tasks.Task.confined_to` refuses to build a generation job for a provider a
+corpus may not reach, and nothing equivalent stands between a confidential
+transcript and a judge.
 
 **Why not the newest one.** Judge quality here does not follow release order,
 and mostly it does not follow anything: measured over the same 150 notes with
@@ -314,116 +300,3 @@ Generation runs on e-INFRA and costs quota, not money. Judging costs money, so:
 - `--max-judge-usd` is a hard ceiling. The run stops rather than exceeding it.
 - Results are content-addressed on `(provider, model, task, session, prompt_version)`,
   so adding one model re-generates and re-scores only that model.
-
-## The Czech criteria, and why they are yes/no
-
-The Czech track asks six questions about a note, each answered yes or no, and
-publishes each as the share of notes free of that fault. It began as six 1-5
-scales and was rewritten before it ever ran, on this repository's own published
-calibration.
-
-**1-5 is the weakest shape here and the numbers say so.** Two therapists agree
-at kappa 0.50 on a criterion checklist and at rho 0.13 to 0.19 on the 1-5
-scales; the judge reaches alpha 0.60 against 0.03 to 0.11. That is already why
-the leaderboard ranks on the rubric rather than on the Likert columns, and there
-was no reason to build a third instrument out of the half that does not work.
-
-**And the consequence was already visible on the PDSQI table.** All sixteen
-models score exactly 5.00 on four of its eight columns, and `concordance`
-declines an agreement figure for each, because a correlation over a column of
-identical values is a coin rather than a finding. A proportion over ten notes
-has eleven values.
-
-**It fixes half the problem.** Where a column is flat because the *judge* cannot
-see a difference, a concrete question can recover it -- one of the two judges
-separates `comprehensible` where the other does not. Where a column is flat
-because the *task* prescribes the answer, no wording helps: every model writes
-into the same four-part template, so nothing distinguishes them on structure.
-None of the six criteria therefore asks about anything the prompt dictates,
-and a test holds them to it by the words that named those four PDSQI columns.
-
-**Each criterion carries a counter-example, in the prompt.** Without one,
-`diacritics` and `nonword` answer the same question and their columns then
-correlate for that reason rather than a real one: `sebepece` is a diacritic that
-went missing, not a word Czech does not have.
-
-**A criterion with no opportunity was not a pass, while there was one.** Until
-2026-08-28 a seventh criterion asked whether a note used the wrong quotation
-marks, and it was asked only of the notes that quote something: a note that
-quotes nothing cannot get the marks wrong, and counting it clean would have let
-a model score for never citing the client. It was removed in `05940f6` and no
-criterion is gated now. The rule it stood for still holds and is why the
-denominator of every measure here is published beside its number.
-
-**An empty note is asked nothing.** All six ask about the absence of a fault,
-so a note with four blank sections would pass every one -- the same shape that
-gives an empty note 5.00 on PDSQI's `accurate` and `succinct`, and worse,
-because this track has no companion measure that scores an empty note zero the
-way completeness does. It is not scored and not dropped: it counts as partial,
-and `note_words` records the zero.
-
-### The judge's thinking budget, measured
-
-A budget is part of the instrument, so it was measured rather than chosen:
-
-| thinking budget | answers that were not a rating |
-|---|---|
-| 256 | 9.3 % |
-| 512 | 4.0 % |
-| 1024 | 9.6 % |
-| **2048** | **0.0 %** |
-| 4096 | 0.0 % |
-
-At the default of 256 the judge ran out of room mid-sentence and returned a
-fragment of the note it was quoting. What made it worth chasing rather than
-absorbing is that the loss is **not random**: the answers that went missing had
-a median prompt of 4566 characters against 3278 for the ones that came back, so
-truncation clusters on the longest notes. Dropping those from a denominator
-would have been biased in a direction nobody chose, and excluding the whole note
-would have excluded the long ones. Raising the budget was the only option that
-did neither. Residual loss at 2048 is about 0.3 %, and what is lost is named on
-the row rather than filled in.
-
-`judge_settings` carries the budget, and it is part of `COMPARABILITY_KEYS`, so
-the Czech tables cannot be read beside a run at any other budget.
-
-## The Deepsy format, and what it is for
-
-The Czech tracks ask for a SOAP note, because SOAP is what TN-Eval asks for and
-reusing its prompt is what makes the English and Czech numbers comparable at
-all. No Czech psychologist writes SOAP.
-
-So a second format runs beside it: the note the Deepsy application actually
-writes, with its prompts reproduced from that application's own YAML rather than
-retyped — `tests/test_deepsy_fidelity.py` reads the YAML back and fails if the
-strings have drifted. Three of its eleven sections, the three with a SOAP
-counterpart: `data`, `clinical_hypotheses`, `plan`. The others are out for
-stated reasons — `dekurz` and the questionnaires by decision, `episode_summary`
-and `progress` because they read a previous note rather than a transcript, and
-this benchmark scores single sessions.
-
-**Same models, same sessions, same criteria, different format.** That is what
-makes the comparison a comparison of formats rather than of tasks, and it is why
-the criteria's `judge_prompt_version` is deliberately the same: the instrument
-does not change, only what it is shown.
-
-**"Same models" holds for eleven of them and has to be checked, not assumed.**
-e-INFRA's deployment changed between the SOAP run and the Deepsy one: `glm-5`
-came back and a `glm-5.3` appeared that had not existed two days earlier, so the
-Deepsy tracks carry thirteen models where the SOAP tracks carry eleven. Every
-SOAP model is among them, so the format comparison stands on the eleven they
-share -- but it stands on those eleven and not on a table's worth of rows, and
-anything read across the two tables has to be read on the intersection. This is
-the same reason `tnb models --probe` exists: what the endpoint serves today is
-not what it served on Tuesday. The generation
-`prompt_version` differs, so the rows are not comparable and the tables are
-separate — which is correct, and is enforced by `COMPARABILITY_KEYS` rather
-than by care.
-
-Two things this format has that SOAP does not. It sets a **length**: 500 words a
-section, which the prompt itself calls invalid to exceed. And it asks for
-**JSON**, so a reply that is not a JSON object with the expected keys is a
-failure rather than a note — the repair loop asks up to five times before giving
-up, and about one answer in twelve needs it.
-
-It is asked one section at a time, so a note is three calls rather than one.

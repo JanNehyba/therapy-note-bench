@@ -479,7 +479,7 @@ def test_every_task_whose_output_is_structured_is_parsed_at_generation():
     """The parser table is a dict, and a task that is not in it is not an
     error -- it is a task whose replies are never checked.
 
-    That is how the Deepsy sections shipped: they asked for JSON, matched
+    That is how a JSON-answering task once shipped: it asked for JSON, matched
     nothing, and were stored `ok: true` with no note, so the repair suffix
     never fired and `PARSE_ATTEMPTS` was dead. The missing line was the
     symptom; the absence of this check was the defect.
@@ -516,8 +516,7 @@ def test_every_task_whose_output_is_structured_is_parsed_at_generation():
             task=name,
             prompt_version=task.prompt_version,
             session_id="s",
-            # A unit name the Deepsy parser will recognise; ignored by the rest.
-            unit="data" if name.startswith("deepsy") else "note",
+            unit="note",
             prompt="...",
         )
         record = generation._record(

@@ -71,7 +71,7 @@ const rendered = Object.entries(nodes)
   .map(([id, el]) => `${id}: ${el.innerHTML.length} chars`);
 console.log('RAN. panels rendered:');
 rendered.forEach(line => console.log('  ' + line));
-// Removal is a render decision like any other -- the Czech page takes out
+// Removal is a render decision like any other -- a page may take out
 // the paragraph linking a methods page that is not beside it -- and a node
 // that is gone is indistinguishable from one that was never asked for
 // unless the runner says so. Printed BEFORE the empty list: three tests read

@@ -83,7 +83,9 @@ newest GLM on the endpoint was `glm-5.2`; the DeepSeek was `deepseek-v4-flash`.
 That has changed and this capture has not been retaken: `glm-5.3-flash` has
 been writing notes since 2026-08-27 and `qwen3.8-flash-next` since 2026-08-28,
 and neither of them appears in any published table: `results/rows.jsonl` holds
-no row for either, and they write notes only on the unpublished Czech tracks.
+no row for either. They have written notes and nobody has scored them, which is
+a different thing from a model that scored badly -- `tnb roster` is what tells
+the two apart.
 `glm-5` and `qwen3.5-122b` are still in the published runs -- 129 and 128 rows,
 including harness-0.6.0 rows on all three published tracks.
 **This file is dated; read the date, not the tense.** Note also the

@@ -310,16 +310,6 @@ def test_every_czech_string_on_the_page_is_a_translation():
 # --- the fixtures ----------------------------------------------------------
 
 
-def test_every_czech_fixture_says_it_is_invented(tracked_files):
-    """Closes the hole the allow-list opens: a real transcript dropped into an
-    allow-listed directory still fails, because it would not carry the marker."""
-    fixtures = [p for p in tracked_files if "tests/fixtures/czech/" in _relative(p)]
-    assert fixtures, "the Czech fixtures are missing"
-    for path in fixtures:
-        text = _readable_text(path) or ""
-        assert FIXTURE_MARKER in text, f"{_relative(path)} carries no {FIXTURE_MARKER} marker"
-
-
 # --- the corpus itself -----------------------------------------------------
 
 
@@ -327,62 +317,6 @@ def test_no_tracked_path_is_under_data(tracked_files):
     """`data/` is ignored, and this is what proves the rule still holds."""
     inside = [_relative(p) for p in tracked_files if _relative(p).startswith("data/")]
     assert not inside, f"corpus files are tracked: {inside}"
-
-
-def test_no_fragment_of_the_real_corpus_appears_in_a_tracked_file(tracked_files):
-    """The exact check, where the diacritic scan is only a net.
-
-    Skipped where the corpus is absent -- on CI, and on any checkout that is not
-    Jan's. That is a real limit and it is why the net above exists as well.
-    """
-    from tnb.datasets import czech
-
-    if not czech.CORPUS_DIR.is_dir():
-        pytest.skip("the Czech corpus is not present in this checkout")
-
-    sessions = czech.load_real()
-    haystacks = {
-        _relative(path): text
-        for path in tracked_files
-        if (text := _readable_text(path)) is not None
-    }
-
-    for session in sessions:
-        for turn in session.turns:
-            words = turn.text.split()
-            for start in range(0, max(1, len(words) - 5), 5):
-                fragment = " ".join(words[start : start + 6])
-                if len(fragment) < 30:
-                    continue
-                for name, text in haystacks.items():
-                    # The message names the file and the digest id, never the
-                    # fragment: a test report is written to a terminal and to CI.
-                    assert fragment not in text, (
-                        f"{name} contains a passage from session {session.id}"
-                    )
-
-
-def test_no_transcript_filename_reaches_a_tracked_file(tracked_files):
-    """The files are named after clinical record numbers. The loader derives
-    session ids from content precisely so a number cannot travel, and this is
-    what holds that to being true."""
-    from tnb.datasets import czech
-
-    if not czech.IDS_PATH.exists():
-        pytest.skip("the Czech corpus has not been loaded in this checkout")
-
-    names = json.loads(czech.IDS_PATH.read_text(encoding="utf-8"))
-    filenames = {name for mapping in names.values() for name in mapping.values()}
-
-    # The whole filename, not its stem. A six-digit stem occurs by chance inside
-    # the hex digests in uv.lock, and a check that cries wolf there is a check
-    # somebody switches off.
-    for path in tracked_files:
-        text = _readable_text(path)
-        if text is None:
-            continue
-        for filename in filenames:
-            assert filename not in text, f"{_relative(path)} carries a transcript filename"
 
 
 # --- what a run records about a failure ------------------------------------

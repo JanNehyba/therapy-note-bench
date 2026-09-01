@@ -140,26 +140,8 @@ def test_resolve_rejects_an_unknown_task():
 
 def test_resolve_defaults_to_every_task():
     """Named exactly, so adding one is a decision rather than a side effect.
-    `tnb generate` with no `--tasks` runs all of these, and the two Czech ones
-    read a local corpus that is not in this repository."""
-    assert [task.name for task in tasks.resolve(None)] == [
-        "soap",
-        "icare",
-        "czech-real",
-        "czech-translated",
-        "deepsy-real",
-        "deepsy-translated",
-    ]
-
-
-def test_the_two_czech_tasks_share_a_prompt_and_differ_in_corpus():
-    """One prompt, two tasks. `results.TRACK_BY_TASK` maps a generation
-    directory to a track, so a single task could not have kept the real
-    sessions and the translated ones in separate tables."""
-    real, translated = tasks.TASKS["czech-real"], tasks.TASKS["czech-translated"]
-    assert real.prompt_version == translated.prompt_version
-    assert real.load_sessions is not translated.load_sessions
-    assert real.calls_per_session == translated.calls_per_session == 1
+    `tnb generate` with no `--tasks` runs all of these."""
+    assert [task.name for task in tasks.resolve(None)] == ["soap", "icare"]
 
 
 def test_the_seventeen_section_labels_stay_in_step_with_the_prompts():

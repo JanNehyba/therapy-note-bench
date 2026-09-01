@@ -52,7 +52,7 @@ def find_browser() -> str | None:
 
 
 def main(argv: list[str] | None = None) -> int:
-    # `--source` and `--target` exist because the Czech track needs the same
+    # `--source` and `--target` exist because more than one document needs the same
     # step for a document that is not published: it prints `local/` to `local/`,
     # where nothing is committed. Defaults unchanged, so `make pdf` is untouched.
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])

@@ -27,7 +27,7 @@ import hashlib
 import json
 import re
 import statistics
-from collections import Counter, defaultdict
+from collections import defaultdict
 from collections.abc import Mapping
 from dataclasses import asdict, dataclass, field, replace
 from pathlib import Path
@@ -40,17 +40,6 @@ from tnb.config import REPO_ROOT
 RESULTS_DIR = REPO_ROOT / "results"
 ROWS_PATH = RESULTS_DIR / "rows.jsonl"
 
-#: Rows that are measured and not published, in a gitignored directory.
-#:
-#: The Czech tracks read ten real sessions with one client. Their scores carry
-#: no text and would be safe to commit, but "safe to commit" and "decided to
-#: publish" are different sentences and only Jan gets to write the second one.
-#: Keeping them in a different file is what makes the separation structural:
-#: `report.write` reads `ROWS_PATH`, so the published page cannot draw a Czech
-#: row even by accident, whatever is registered in `report.COLUMNS`.
-LOCAL_DIR = REPO_ROOT / "local"
-LOCAL_ROWS_PATH = LOCAL_DIR / "czech-rows.jsonl"
-
 #: The two tracks. They measure different things on different scales and are
 #: never averaged together -- see docs/methodology.md.
 TRACK_TNEVAL = "tneval-soap"
@@ -60,75 +49,20 @@ TRACK_ICARE = "icare"
 #: rubric counts what a note covers, PDSQI-9 rates how good it is, and one table
 #: holding both would invite a reader to average them.
 TRACK_PDSQI = "pdsqi-soap"
-#: The Czech tracks. Two, not one: ten real sessions with a single client and
-#: ten AnnoMI conversations translated into Czech answer different questions,
-#: and the whole design rests on their never being averaged. Two tracks put that
-#: beyond the reach of a careless `setdefault`.
-TRACK_CZECH_REAL = "czech-real"
-TRACK_CZECH_TRANSLATED = "czech-translated"
-#: The same Czech notes, asked PDSQI-9 instead. The six criteria ask whether
-#: the Czech is any good; they do not ask whether the note is any good, and a
-#: flawless sentence about nothing passes all six. This is the quality half of
-#: the question, and it is separate for the same reason `TRACK_PDSQI` is
-#: separate from `TRACK_TNEVAL`.
-#:
-#: **The two halves are not asked the same number of questions.** `accurate` and
-#: `thorough` need the session, and the real sessions never leave e-INFRA, so
-#: the real half is asked the six attributes that read the note alone. The
-#: translated half is AnnoMI, which is public, so it is asked all eight. Two
-#: column sets are two instruments and get two tracks; merging them would put a
-#: six-attribute mean beside an eight-attribute one under one heading.
-TRACK_CZECH_REAL_PDSQI = "czech-real-pdsqi"
-TRACK_CZECH_TRANSLATED_PDSQI = "czech-translated-pdsqi"
-#: The same models and the same sessions, asked for the note format the Deepsy
-#: application actually writes -- three of its eleven sections, the three that
-#: have a SOAP counterpart. The point of the track is the comparison: what
-#: changes between this and `czech-real` is the shape the model was asked for
-#: and nothing else, so a difference between them is a fact about the format.
-TRACK_DEEPSY_REAL = "deepsy-real"
-TRACK_DEEPSY_TRANSLATED = "deepsy-translated"
-#: PDSQI-9 over those same Deepsy notes. The six criteria ask whether the Czech
-#: is right and cannot ask whether the note is worth filing, and until these
-#: tracks existed that second question had been asked only of SOAP -- so
-#: nothing in this project said anything about the quality of a note in the
-#: format the application actually writes.
-#:
-#: Split by half for the reason the Czech PDSQI tracks are: the real half is
-#: asked six attributes and the translated half eight, because `accurate` and
-#: `thorough` need the session and a real session never leaves e-INFRA. Two
-#: column sets are two instruments.
-TRACK_DEEPSY_REAL_PDSQI = "deepsy-real-pdsqi"
-TRACK_DEEPSY_TRANSLATED_PDSQI = "deepsy-translated-pdsqi"
 
 TRACKS = (
     TRACK_TNEVAL,
     TRACK_ICARE,
     TRACK_PDSQI,
-    TRACK_CZECH_REAL,
-    TRACK_CZECH_TRANSLATED,
-    TRACK_CZECH_REAL_PDSQI,
-    TRACK_CZECH_TRANSLATED_PDSQI,
-    TRACK_DEEPSY_REAL,
-    TRACK_DEEPSY_TRANSLATED,
-    TRACK_DEEPSY_REAL_PDSQI,
-    TRACK_DEEPSY_TRANSLATED_PDSQI,
 )
 
-#: Tracks whose rows are written to `LOCAL_ROWS_PATH` and never to `ROWS_PATH`.
-#: A test asserts the committed file holds none of them.
-LOCAL_TRACKS = (
-    TRACK_CZECH_REAL,
-    TRACK_CZECH_TRANSLATED,
-    TRACK_CZECH_REAL_PDSQI,
-    TRACK_CZECH_TRANSLATED_PDSQI,
-    TRACK_DEEPSY_REAL,
-    TRACK_DEEPSY_TRANSLATED,
-    TRACK_DEEPSY_REAL_PDSQI,
-    TRACK_DEEPSY_TRANSLATED_PDSQI,
-)
-
-#: Everything else. What `tnb report` draws and what the coverage sweep writes.
-PUBLISHED_TRACKS = tuple(track for track in TRACKS if track not in LOCAL_TRACKS)
+#: What `tnb report` draws and what the coverage sweep writes.
+#:
+#: Every track is published. It was not always -- tracks have been measured
+#: here and deliberately kept off the page -- and this name is what decided
+#: which. There is nothing to exclude now, so it says so rather than deriving
+#: an identity from an empty exclusion.
+PUBLISHED_TRACKS = TRACKS
 
 #: Generation tasks are named for what they produce, tracks for what they
 #: measure. One task feeds one track, but the names differ because the TN-Eval
@@ -136,13 +70,8 @@ PUBLISHED_TRACKS = tuple(track for track in TRACKS if track not in LOCAL_TRACKS)
 TRACK_BY_TASK = {
     "soap": TRACK_TNEVAL,
     "icare": TRACK_ICARE,
-    # The Czech tasks are named for their tracks. `pdsqi-soap` is deliberately
-    # absent: it scores the SOAP notes rather than generating any, so it has no
-    # directory here to index.
-    "czech-real": TRACK_CZECH_REAL,
-    "czech-translated": TRACK_CZECH_TRANSLATED,
-    "deepsy-real": TRACK_DEEPSY_REAL,
-    "deepsy-translated": TRACK_DEEPSY_TRANSLATED,
+    # `pdsqi-soap` is deliberately absent: it scores the SOAP notes rather
+    # than generating any, so it has no directory here to index.
 }
 
 #: What produced the note this row scores.
@@ -701,9 +630,9 @@ def normalise_reason(error: str | None) -> str:
     the wrong question. Masking is shaped for things that look like credentials.
     Request *content* looks like prose, so none of the three passes touched it,
     and three rows in the committed `results/rows.jsonl` carry a verbatim 429
-    body from e-INFRA to prove it. The Czech track reads real clinical sessions
-    and e-INFRA is LiteLLM-fronted, which echoes an over-long request back in
-    the body of its refusal.
+    body from e-INFRA to prove it. e-INFRA is LiteLLM-fronted, which echoes an
+    over-long request back in the body of its refusal -- so a corpus that must
+    not leave can leave inside an error message.
 
     It is also a repairer. `results/` is append-only, so rows already on disk
     keep whatever they were written with; `Row.__post_init__` brings every one
@@ -754,9 +683,7 @@ def canonical_reasons(reasons: Mapping[str, int] | None) -> dict[str, int]:
     return merged
 
 
-def index_generations(
-    cache_dir: Path | None = None, *, run_id: str = "", include_local: bool = False
-) -> list[Row]:
+def index_generations(cache_dir: Path | None = None, *, run_id: str = "") -> list[Row]:
     """Turn what is in ``generations/`` into one coverage row per model and track.
 
     These rows carry no metrics. They exist so the leaderboard can be published
@@ -772,20 +699,6 @@ def index_generations(
     for provider_dir in sorted(p for p in cache_dir.iterdir() if p.is_dir()):
         for task_dir in sorted(p for p in provider_dir.iterdir() if p.is_dir()):
             track = TRACK_BY_TASK.get(task_dir.name)
-            # The Czech tracks are measured and not published, so their
-            # coverage rows belong in `LOCAL_ROWS_PATH` and never here. Skipped
-            # rather than filtered afterwards: `cmd_report` appends whatever
-            # this returns, and a filter one caller away is a filter somebody
-            # forgets.
-            #
-            # `include_local` is for a caller that wants the reasons rather than
-            # the rows -- `unreached_by_system`, which the local scorers need so
-            # that a model with no note carries WHY it has none. e-INFRA
-            # answered `glm-5.3-flash` with "there are no healthy deployments
-            # for this model" sixty times; without this the Deepsy table simply
-            # would not have contained it, which reads as "not run".
-            if track in LOCAL_TRACKS and not include_local:
-                continue
             if track is None:
                 continue
             for version_dir in sorted(p for p in task_dir.iterdir() if p.is_dir()):
@@ -819,46 +732,6 @@ class Unreached(NamedTuple):
     failure_reasons: Mapping[str, int] = MappingProxyType({})
 
 
-def drawable(rows: list[Row]) -> tuple[list[Row], list[str]]:
-    """Rows whose note was generated where that corpus is allowed to be read.
-
-    On 2026-08-29 a generation run without `--providers` sent all ten real Czech
-    sessions to OpenAI and to Google Vertex, and rows were scored from the notes
-    that came back. The rows stay in the record -- it is append-only, and a run
-    that happened is a fact -- but they are not a measurement anything may draw.
-
-    Here rather than in each caller, because there are two and a filter one of
-    them applies is a filter the other forgets: `tnb czech-report` drew them
-    while `tools/czech_brief.py` refused, on the same morning, from the same
-    file. The permission is `tasks.Task.confined_to`, the same field
-    `cmd_generate` refuses on, so the generator and every reader agree by
-    construction rather than by being kept in step.
-
-    Returns what may be drawn and a line per group refused, for printing. Never
-    silent: a row dropped without a word is the shape this project keeps
-    finding.
-    """
-    from tnb.tasks import TASKS
-
-    allowed = {
-        TRACK_BY_TASK[name]: task.confined_to
-        for name, task in TASKS.items()
-        if name in TRACK_BY_TASK and task.confined_to
-    }
-    kept: list[Row] = []
-    dropped: Counter[tuple[str, str]] = Counter()
-    for row in rows:
-        permitted = allowed.get(row.track)
-        if permitted and row.provider not in permitted:
-            dropped[(row.track, row.provider)] += 1
-            continue
-        kept.append(row)
-    return kept, [
-        f"{count} row(s) on {track} from {provider}, which may not read that corpus"
-        for (track, provider), count in sorted(dropped.items())
-    ]
-
-
 def unreached_by_system(
     track: str, cache_dir: Path | None = None
 ) -> dict[tuple[str, str], Unreached]:
@@ -870,7 +743,7 @@ def unreached_by_system(
     that separation into the rows that get published with scores on them.
     """
     found: dict[tuple[str, str], Unreached] = {}
-    for row in index_generations(cache_dir, include_local=track in LOCAL_TRACKS):
+    for row in index_generations(cache_dir):
         if row.track != track:
             continue
         sessions = row.n_sessions_attempted - row.n_sessions_generated - row.n_failed

@@ -25,12 +25,9 @@ from pathlib import Path
 from tnb import corpus, i18n, judge, results
 from tnb.config import REPO_ROOT, write_published
 from tnb.results import Row
-from tnb.scoring import concordance, czech_pdsqi, pdsqi
-from tnb.scoring import czech as czech_scorer
+from tnb.scoring import concordance, pdsqi
 from tnb.scoring import icare as icare_scorer
 from tnb.scoring import tneval as rubric
-from tnb.tasks import czech as czech_task
-from tnb.tasks import deepsy as deepsy_task
 from tnb.tasks import icare, soap
 
 DOCS_DIR = REPO_ROOT / "docs"
@@ -103,10 +100,6 @@ PREFERENCE_PATH = DOCS_DIR / "preference.json"
 #: is offline and `tnb report` runs in it.
 ROSTER_PATH = DOCS_DIR / "roster.json"
 
-#: The criteria a Czech table draws, which is now all of them. The name
-#: stays: a seventh was drawn here once and the next one will be too.
-DRAWN_CRITERIA = czech_scorer.CRITERION_KEYS
-
 #: Column order per track: (key, how many decimals).
 #:
 #: The heading is *not* here. It lives in the track's measure table below,
@@ -134,39 +127,6 @@ COLUMNS: dict[str, tuple[tuple[str, int], ...]] = {
     ),
     # Two decimals, not three. Every column is a share of ten or twenty notes,
     # so the third place is a digit that cannot exist.
-    results.TRACK_CZECH_REAL: tuple((key, 2) for key in DRAWN_CRITERIA),
-    results.TRACK_CZECH_TRANSLATED: tuple((key, 2) for key in DRAWN_CRITERIA),
-    # The Deepsy sections are scored by the same six criteria: the question
-    # is whether the Czech is right, and that does not change with the shape
-    # the note was asked for. Changing the instrument as well as the format
-    # would leave nothing to attribute a difference to.
-    results.TRACK_DEEPSY_REAL: tuple((key, 2) for key in DRAWN_CRITERIA),
-    results.TRACK_DEEPSY_TRANSLATED: tuple((key, 2) for key in DRAWN_CRITERIA),
-    # PDSQI-9 over the same Czech notes, in the instrument's own order. The real
-    # half declares six columns and the translated eight: `accurate` and
-    # `thorough` need the session, and the real sessions are never sent to the
-    # judge. Declaring a column that could not be asked would leave an empty
-    # heading, which reads as a model that failed rather than a question nobody
-    # was allowed to put.
-    results.TRACK_CZECH_REAL_PDSQI: tuple(
-        (key, 3 if key == "stigmatizing" else 2)
-        for key in czech_pdsqi.attribute_keys(czech_task.NAME_REAL)
-    ),
-    results.TRACK_CZECH_TRANSLATED_PDSQI: tuple(
-        (key, 3 if key == "stigmatizing" else 2)
-        for key in czech_pdsqi.attribute_keys(czech_task.NAME_TRANSLATED)
-    ),
-    # The same instrument over the notes the Deepsy application actually
-    # writes. The attribute split follows the corpus and not the format, so
-    # these read from the same function the Czech tracks do.
-    results.TRACK_DEEPSY_REAL_PDSQI: tuple(
-        (key, 3 if key == "stigmatizing" else 2)
-        for key in czech_pdsqi.attribute_keys(deepsy_task.NAME_REAL)
-    ),
-    results.TRACK_DEEPSY_TRANSLATED_PDSQI: tuple(
-        (key, 3 if key == "stigmatizing" else 2)
-        for key in czech_pdsqi.attribute_keys(deepsy_task.NAME_TRANSLATED)
-    ),
 }
 
 #: Where each track's measure definitions live. Both scorers own their own --
@@ -180,14 +140,6 @@ MEASURE_TABLES = {
     results.TRACK_TNEVAL: rubric.MEASURES,
     results.TRACK_ICARE: icare_scorer.MEASURES,
     results.TRACK_PDSQI: pdsqi.MEASURES,
-    results.TRACK_CZECH_REAL: czech_scorer.MEASURES,
-    results.TRACK_CZECH_TRANSLATED: czech_scorer.MEASURES,
-    results.TRACK_DEEPSY_REAL: czech_scorer.MEASURES,
-    results.TRACK_DEEPSY_TRANSLATED: czech_scorer.MEASURES,
-    results.TRACK_CZECH_REAL_PDSQI: czech_pdsqi.measures(czech_task.NAME_REAL),
-    results.TRACK_CZECH_TRANSLATED_PDSQI: czech_pdsqi.measures(czech_task.NAME_TRANSLATED),
-    results.TRACK_DEEPSY_REAL_PDSQI: czech_pdsqi.measures(deepsy_task.NAME_REAL),
-    results.TRACK_DEEPSY_TRANSLATED_PDSQI: czech_pdsqi.measures(deepsy_task.NAME_TRANSLATED),
 }
 
 #: Which measure each track is ranked by, and the honest `None` where the
@@ -204,37 +156,23 @@ RANKING_MEASURES: dict[str, str | None] = {
     # its attributes separately, and a mean of seven 1-5 ratings with a yes/no
     # would be a composite nobody validated.
     results.TRACK_PDSQI: pdsqi.RANKING_MEASURE,
-    # None again, and for a third reason. Weighting spelling against clinical
-    # terminology is a linguistic decision rather than a measurement, and the
-    # correlation this track exists to look for is more useful per criterion:
-    # English completeness may predict terminology and say nothing about
-    # quotation marks.
-    results.TRACK_CZECH_REAL: czech_scorer.RANKING_MEASURE,
-    results.TRACK_CZECH_TRANSLATED: czech_scorer.RANKING_MEASURE,
-    results.TRACK_DEEPSY_REAL: czech_scorer.RANKING_MEASURE,
-    results.TRACK_DEEPSY_TRANSLATED: czech_scorer.RANKING_MEASURE,
-    # The instrument's reason again, unchanged by the language it is asked in.
-    results.TRACK_CZECH_REAL_PDSQI: pdsqi.RANKING_MEASURE,
-    results.TRACK_CZECH_TRANSLATED_PDSQI: pdsqi.RANKING_MEASURE,
-    results.TRACK_DEEPSY_REAL_PDSQI: pdsqi.RANKING_MEASURE,
-    results.TRACK_DEEPSY_TRANSLATED_PDSQI: pdsqi.RANKING_MEASURE,
 }
 
 
 #: Why a track without a ranking column has none. Rendered under the table.
 #:
-#: **Three tracks are unranked for three different reasons**, and the page used
-#: to print iCARE's under all of them: "the source paper found they disagree",
-#: which is true of iCARE, is not a statement anybody made about PDSQI-9 or
-#: about Czech spelling. The reasons were written as comments beside
-#: `RANKING_MEASURES` and never reached a reader.
+#: **Two tracks are unranked for two different reasons**, and the page used to
+#: print iCARE's under both: "the source paper found they disagree", which is
+#: true of iCARE, is not a statement anybody made about PDSQI-9. The reasons
+#: were written as comments beside `RANKING_MEASURES` and never reached a
+#: reader.
 #:
 #: Unranked tracks whose rows are ordered by dominance instead of by name.
 #:
-#: Not every unranked track: `_sort_key` is shared with the Czech and Deepsy
-#: tracks, which belong to another lane of this repository and order their own
-#: tables. Listing the two published ones rather than deriving the set from
-#: `RANKING_MEASURES` keeps this change inside the tables it was measured on.
+#: Listed rather than derived from `RANKING_MEASURES`. Deriving it would order
+#: any future unranked track by dominance the day it was added, with nobody
+#: having established that dominance says anything about that instrument --
+#: which is the decision this constant exists to make one track at a time.
 #:
 #: The ordering is judge-independent by construction -- dominance holds only
 #: where both judges agree -- so both of a track's tables draw the same order,
@@ -257,158 +195,45 @@ NOT_RANKED_REASONS: dict[str, str] = {
         "report its attributes separately, and a mean of them would be a composite "
         "nobody validated."
     ),
-    results.TRACK_CZECH_REAL_PDSQI: (
-        "This track is deliberately <strong>not ranked</strong>: PDSQI-9's authors "
-        "report its attributes separately, and a mean of them would be a composite "
-        "nobody validated."
-    ),
-    results.TRACK_CZECH_TRANSLATED_PDSQI: (
-        "This track is deliberately <strong>not ranked</strong>: PDSQI-9's authors "
-        "report its attributes separately, and a mean of them would be a composite "
-        "nobody validated."
-    ),
-    results.TRACK_DEEPSY_REAL_PDSQI: (
-        "This track is deliberately <strong>not ranked</strong>: PDSQI-9's authors "
-        "report its attributes separately, and a mean of them would be a composite "
-        "nobody validated."
-    ),
-    results.TRACK_DEEPSY_TRANSLATED_PDSQI: (
-        "This track is deliberately <strong>not ranked</strong>: PDSQI-9's authors "
-        "report its attributes separately, and a mean of them would be a composite "
-        "nobody validated."
-    ),
-    results.TRACK_CZECH_REAL: (
-        "This track is deliberately <strong>not ranked</strong>: weighting spelling "
-        "against clinical terminology is a linguistic decision rather than a "
-        "measurement. The correlation this track exists to look for is more useful per "
-        "criterion anyway -- English completeness may predict terminology and say "
-        "nothing about diacritics."
-    ),
-    results.TRACK_CZECH_TRANSLATED: (
-        "This track is deliberately <strong>not ranked</strong>: weighting spelling "
-        "against clinical terminology is a linguistic decision rather than a "
-        "measurement. The correlation this track exists to look for is more useful per "
-        "criterion anyway -- English completeness may predict terminology and say "
-        "nothing about diacritics."
-    ),
-    results.TRACK_DEEPSY_REAL: (
-        "This track is deliberately <strong>not ranked</strong>: weighting spelling "
-        "against clinical terminology is a linguistic decision rather than a "
-        "measurement. The correlation this track exists to look for is more useful per "
-        "criterion anyway -- English completeness may predict terminology and say "
-        "nothing about diacritics."
-    ),
-    results.TRACK_DEEPSY_TRANSLATED: (
-        "This track is deliberately <strong>not ranked</strong>: weighting spelling "
-        "against clinical terminology is a linguistic decision rather than a "
-        "measurement. The correlation this track exists to look for is more useful per "
-        "criterion anyway -- English completeness may predict terminology and say "
-        "nothing about diacritics."
-    ),
 }
-
-
-#: The header a page writes about itself, when it is not the published one.
-#:
-#: The template's own header is the published page's: "scored on two published
-#: protocols -- TN-Eval's SOAP rubric and iCARE's 17 sections". The Czech page
-#: is drawn by the same renderer and inherited it, so it opened by naming two
-#: instruments no table on it uses, and then offered three links -- the brief,
-#: the PDF and the methods page -- to files that do not exist beside it. A dead
-#: link on a page nobody published is still a page that lies about itself.
-#:
-#: `links` is keyed by the id of the paragraph it replaces. None
-#: removes the paragraph: there is no local methods page, and an empty one
-#: would be worse than none.
-PAGE_CZECH = {
-    "title": "therapy-note-bench \u2014 Czech track",
-    "sub": (
-        "Czech psychotherapy notes written by the models e-INFRA CZ deploys, from ten real "
-        "sessions and ten AnnoMI conversations translated into Czech. Two independent judges "
-        "rate every note: six yes/no criteria about the Czech itself, and PDSQI-9 about "
-        "whether the note is any good. <strong>Measured, not published</strong> \u2014 these "
-        "tables are not on the public site and the transcripts never leave this machine."
-    ),
-    "links": {
-        "brief-link": (
-            '<a href="czech-brief.html">What these numbers can and cannot say \u2192</a> '
-            "The same tables with the caveats around them, written to be read by somebody "
-            'who was not here. Also as a <a href="czech-report.pdf">PDF</a>.'
-        ),
-        "methods-link": None,
-    },
-}
-
-#: Which tracks make a page the Czech one. Membership, not a count: a page that
-#: draws a Czech table is the Czech page whatever else is on it.
-CZECH_PAGE_TRACKS = frozenset(
-    {
-        results.TRACK_CZECH_REAL,
-        results.TRACK_CZECH_TRANSLATED,
-        results.TRACK_CZECH_REAL_PDSQI,
-        results.TRACK_CZECH_TRANSLATED_PDSQI,
-        results.TRACK_DEEPSY_REAL,
-        results.TRACK_DEEPSY_TRANSLATED,
-    }
-)
 
 
 #: What the expandable row's second block holds, per track. It is not the same
 #: thing on every track and it used to be headed "Rubric criteria" everywhere
 #: but iCARE.
 #:
-#: On the Czech and Deepsy tracks that block is not criteria at all: it is the
-#: **denominator**, one entry per criterion saying how many of that model's
-#: notes the criterion got an answer for, next to the mean note length. It is
-#: the number a reader checks to see whether an average is over ten notes or
-#: over nine, which is this repository's oldest failure mode -- and it was
-#: printed under the name of an instrument that scores English SOAP notes.
+#: A block headed for one instrument and filled from another is the failure
+#: this label exists to prevent: a reader who trusts the heading reads the
+#: wrong denominator, and the denominator -- whether an average is over ten
+#: notes or over nine -- is this repository's oldest failure mode.
 DETAIL_LABELS: dict[str, str] = {
     results.TRACK_TNEVAL: "Rubric criteria",
     results.TRACK_ICARE: "TRACE dimensions",
-    results.TRACK_CZECH_REAL: "What each average is over",
-    results.TRACK_CZECH_TRANSLATED: "What each average is over",
-    results.TRACK_DEEPSY_REAL: "What each average is over",
-    results.TRACK_DEEPSY_TRANSLATED: "What each average is over",
 }
 
 
 #: Which tracks each source, corpus profile and protocol section belongs to.
 #:
 #: **Why this exists at all.** `build` used to attach every one of them to
-#: every page, which was harmless while there was one page and it drew every
-#: track. There are two now, and the Czech page credited TN-Eval's two human
-#: annotators, printed TN-Eval's 23-item rubric under a heading of its own, and
-#: profiled the iHOPE corpus -- none of which any Czech table uses. A reader
-#: cannot tell a source that was used from one that was merely listed, so
-#: listing it is a claim, and it was the wrong one.
+#: every page, which is harmless only while every page draws every track. A
+#: page that credits TN-Eval's two human annotators, prints its 23-item rubric
+#: and profiles the iHOPE corpus while drawing none of them is making a claim,
+#: because a reader cannot tell a source that was used from one merely listed.
 #:
 #: A source missing from here is drawn on every page, which is the old
 #: behaviour and the safe direction: a source over-credited is a nuisance, a
 #: source used and not credited is a licence problem.
 LICENCE_TRACKS: dict[str, tuple[str, ...]] = {
-    "PDSQI-9": (
-        results.TRACK_PDSQI,
-        results.TRACK_CZECH_REAL_PDSQI,
-        results.TRACK_CZECH_TRANSLATED_PDSQI,
-    ),
-    # The Czech generation prompt is a translation of TN-Eval's SOAP prompt,
-    # so the code licence applies to the Czech tables too. The Deepsy tracks
-    # use the application's own prompts and are not on this line.
+    "PDSQI-9": (results.TRACK_PDSQI,),
     "TN-Eval (code)": (
         results.TRACK_TNEVAL,
         results.TRACK_PDSQI,
-        results.TRACK_CZECH_REAL,
-        results.TRACK_CZECH_TRANSLATED,
     ),
     # The 150 rated notes and the therapist's row that comes from them.
     "TN-Eval-Data": (results.TRACK_TNEVAL, results.TRACK_PDSQI),
     "AnnoMI": (
         results.TRACK_TNEVAL,
         results.TRACK_PDSQI,
-        results.TRACK_CZECH_TRANSLATED,
-        results.TRACK_CZECH_TRANSLATED_PDSQI,
-        results.TRACK_DEEPSY_TRANSLATED,
     ),
     "iCARE": (results.TRACK_ICARE,),
     "TheraFuse": (results.TRACK_ICARE,),
@@ -421,24 +246,17 @@ DATASET_TRACKS: dict[str, tuple[str, ...]] = {
     "tneval": (
         results.TRACK_TNEVAL,
         results.TRACK_PDSQI,
-        results.TRACK_CZECH_TRANSLATED,
-        results.TRACK_CZECH_TRANSLATED_PDSQI,
-        results.TRACK_DEEPSY_TRANSLATED,
     ),
     "icare": (results.TRACK_ICARE,),
 }
 
 #: And for the protocol. The four SOAP sections are shown wherever a note is a
-#: SOAP note, the Czech translation included; the 23 criteria are TN-Eval's
-#: scoring instrument and are shown only where that instrument was used.
+#: SOAP note; the 23 criteria are TN-Eval's scoring instrument and are shown
+#: only where that instrument was used.
 PROTOCOL_TRACKS: dict[str, tuple[str, ...]] = {
     "sections": (
         results.TRACK_TNEVAL,
         results.TRACK_PDSQI,
-        results.TRACK_CZECH_REAL,
-        results.TRACK_CZECH_TRANSLATED,
-        results.TRACK_CZECH_REAL_PDSQI,
-        results.TRACK_CZECH_TRANSLATED_PDSQI,
     ),
     "criteria": (results.TRACK_TNEVAL,),
     "icare_sections": (results.TRACK_ICARE,),
@@ -478,15 +296,9 @@ JUDGE_MEASURES: dict[str, tuple[str, ...]] = {
     results.TRACK_PDSQI: pdsqi.JUDGE_MEASURES,
     # All six, and it matters more here than anywhere else: this track has no
     # human anchor at all, so two judges disagreeing is the only control it has.
-    results.TRACK_CZECH_REAL: czech_scorer.JUDGE_MEASURES,
-    results.TRACK_CZECH_TRANSLATED: czech_scorer.JUDGE_MEASURES,
-    results.TRACK_DEEPSY_REAL: czech_scorer.JUDGE_MEASURES,
-    results.TRACK_DEEPSY_TRANSLATED: czech_scorer.JUDGE_MEASURES,
     # Every attribute the corpus was asked, and no more. Naming one the two
     # judges never answered would ask the concordance panel to compare a column
     # that does not exist on either side.
-    results.TRACK_CZECH_REAL_PDSQI: czech_pdsqi.attribute_keys(czech_task.NAME_REAL),
-    results.TRACK_CZECH_TRANSLATED_PDSQI: czech_pdsqi.attribute_keys(czech_task.NAME_TRANSLATED),
 }
 
 
@@ -555,21 +367,6 @@ TRACK_TITLES = {
     # which corpus these notes were written from -- was the one thing it did
     # not say. The other two tracks name theirs.
     results.TRACK_PDSQI: "PDSQI-9 · the SOAP notes on AnnoMI, rated for quality",
-    results.TRACK_CZECH_REAL: "Czech · ten real sessions, one client",
-    results.TRACK_CZECH_TRANSLATED: "Czech · AnnoMI conversations, translated",
-    # Named for the instrument first, because that is what separates these two
-    # from the two above: the same notes, asked whether they are good notes
-    # rather than whether they are good Czech.
-    results.TRACK_CZECH_REAL_PDSQI: "PDSQI-9 · the Czech notes from the real sessions",
-    results.TRACK_CZECH_TRANSLATED_PDSQI: "PDSQI-9 · the Czech notes from translated AnnoMI",
-    results.TRACK_DEEPSY_REAL: "Deepsy format · ten real sessions, one client",
-    results.TRACK_DEEPSY_TRANSLATED: "Deepsy format · AnnoMI conversations, translated",
-    # The quality instrument over the format the application writes. Until
-    # these two tracks existed, nothing in this project said whether a note
-    # in that format was worth filing -- PDSQI-9 had only ever been put to
-    # SOAP.
-    results.TRACK_DEEPSY_REAL_PDSQI: "PDSQI-9 · the Deepsy notes from the real sessions",
-    results.TRACK_DEEPSY_TRANSLATED_PDSQI: ("PDSQI-9 · the Deepsy notes from translated AnnoMI"),
 }
 
 #: The same tracks, short enough to be a button. Separate from the titles rather
@@ -579,14 +376,6 @@ TRACK_SWITCH_LABELS = {
     results.TRACK_TNEVAL: "TN-Eval SOAP",
     results.TRACK_ICARE: "iCARE / iHOPE",
     results.TRACK_PDSQI: "PDSQI-9 on SOAP",
-    results.TRACK_CZECH_REAL: "Czech, real sessions",
-    results.TRACK_CZECH_TRANSLATED: "Czech, translated",
-    results.TRACK_CZECH_REAL_PDSQI: "PDSQI-9, real sessions",
-    results.TRACK_CZECH_TRANSLATED_PDSQI: "PDSQI-9, translated",
-    results.TRACK_DEEPSY_REAL: "Deepsy, real sessions",
-    results.TRACK_DEEPSY_TRANSLATED: "Deepsy, translated",
-    results.TRACK_DEEPSY_REAL_PDSQI: "PDSQI-9 on Deepsy, real sessions",
-    results.TRACK_DEEPSY_TRANSLATED_PDSQI: "PDSQI-9 on Deepsy, translated",
 }
 
 TRACK_BLURBS = {
@@ -613,66 +402,6 @@ TRACK_BLURBS = {
         "averaged, because the instrument reports them that way and because one "
         "of the eight is a 0-1 column: a mean over it and seven 1-5 scales would "
         "be a number with no unit."
-    ),
-    results.TRACK_CZECH_REAL: (
-        "Six yes/no criteria about the Czech, asked of the note alone. Each column "
-        "is the share of notes free of that fault. **Ten sessions with one client, so "
-        "adjacent positions are not separable** -- and the generation prompt is a "
-        "translation of TN-Eval's rather than a reproduction of anything."
-    ),
-    results.TRACK_CZECH_TRANSLATED: (
-        "The same criteria on notes written from AnnoMI conversations translated into "
-        "Czech. **The two halves differ by more than language** -- AnnoMI is "
-        "motivational interviewing about substance use and the real sessions are not "
-        "-- so a model doing worse here may be doing worse at motivational "
-        "interviewing rather than at translated Czech."
-    ),
-    results.TRACK_CZECH_REAL_PDSQI: (
-        "The same Czech notes as the real-session table, asked a published quality "
-        "instrument instead of the six language criteria. The criteria cannot say "
-        "whether a note is any good -- a flawless Czech sentence about nothing passes "
-        "all six -- and this is the half of the question they leave out. **Six "
-        "attributes, not eight:** `accurate` and `thorough` can only be answered "
-        "by reading the session, and both judges run at Google and at OpenAI -- "
-        "outside the university infrastructure the sessions sit on. Asking those "
-        "two would mean sending a real session out to them. The columns are absent "
-        "because of where the judge is, not because of anything the notes lack."
-    ),
-    results.TRACK_DEEPSY_REAL: (
-        "The same models and the same ten sessions, asked for the note format the "
-        "Deepsy application actually writes rather than for SOAP. Three of its eleven "
-        "sections, the three with a SOAP counterpart, scored by the same six "
-        "criteria. **What changes between this table and the Czech one is the shape "
-        "the model was asked for and nothing else**, so a difference between them is "
-        "a fact about the format."
-    ),
-    results.TRACK_DEEPSY_TRANSLATED: (
-        "The Deepsy sections on notes written from translated AnnoMI. The same "
-        "comparison as the real half, on conversations that are public -- and the "
-        "same warning: the two halves differ in length by a factor of seven before "
-        "any question of format arises."
-    ),
-    results.TRACK_CZECH_TRANSLATED_PDSQI: (
-        "PDSQI-9 on the notes written from translated AnnoMI. All eight attributes "
-        "here: these transcripts are public, so the judge may read the session and "
-        "answer whether the note is accurate and thorough. **Eight columns against "
-        "the real half's six is two instruments, not one**, and the two tables are "
-        "not rows of each other."
-    ),
-    results.TRACK_DEEPSY_REAL_PDSQI: (
-        "PDSQI-9 over the notes the Deepsy application actually writes, rather than "
-        "over SOAP. The six criteria above ask whether the Czech is right; this asks "
-        "whether the note is worth filing, and until this table existed nobody had "
-        "put that question to this format at all. **Six attributes, not eight:** "
-        "`accurate` and `thorough` need the session, and the real sessions never "
-        "leave e-INFRA. The columns are absent because the question could not be put."
-    ),
-    results.TRACK_DEEPSY_TRANSLATED_PDSQI: (
-        "The same instrument over the Deepsy notes written from translated AnnoMI. "
-        "All eight attributes here: these transcripts are public, so the judge may "
-        "read the session and answer whether the note is accurate and thorough. "
-        "**Eight columns against the real half's six are two instruments, not one**, "
-        "and the two tables are not rows of each other."
     ),
 }
 
@@ -825,132 +554,6 @@ TRACK_DESIGN = {
             "faithfulness. A judge cannot be asked to agree with a person better "
             "than people agree with each other -- but a ceiling is not a "
             "measurement, and these columns have not been checked against anyone."
-        ),
-    },
-    results.TRACK_CZECH_REAL: {
-        "scored_against": (
-            "The note alone. Six yes/no questions about the Czech itself -- "
-            "diacritics, calques, untranslated English terms, agreement, register, "
-            "non-words -- and each column is the share of notes free of that "
-            "fault. The judge is never shown the transcript, which is "
-            "why a confidential session can be scored at all."
-        ),
-        "human_role": (
-            "None. No human wrote a comparison note in Czech and no human has rated "
-            "these notes on these criteria. That is one row this table does not have "
-            "and the two English tables do."
-        ),
-        "human_role_short": "none",
-        # False, and worse than either English track. iCARE has an expert note as
-        # an answer key and unpublished ratings; PDSQI-9 publishes an inter-rater
-        # ceiling. This instrument has neither -- it is one this repository wrote,
-        # which is the thing pdsqi.py argues the project does not do. The answer
-        # is that no Czech note-quality instrument exists to reproduce, and that
-        # is a reason rather than an excuse.
-        "calibrated": False,
-        "calibration": (
-            "Not possible yet, and weaker than either English track. There is no "
-            "published Czech note-quality instrument to reproduce, so these criteria "
-            "are this repository's own; no human has rated these notes on them, and "
-            "unlike PDSQI-9 there is not even a published figure for how well two "
-            "people would agree. Two independent judges answer every question, and "
-            "where they disagree is the only control this track has -- which is also "
-            "why a criterion every model passes is reported as unmeasured rather "
-            "than as agreement."
-        ),
-    },
-    results.TRACK_CZECH_TRANSLATED: {
-        "scored_against": (
-            "The same six criteria as the real-session table, on notes written "
-            "from AnnoMI conversations translated into Czech. The translation is "
-            "identical for every model, so it cancels when models are compared; it "
-            "does not cancel for any claim about how well models write Czech."
-        ),
-        "human_role": (
-            "None. No human wrote a comparison note in Czech and no human has rated "
-            "these notes on these criteria. That is one row this table does not have "
-            "and the two English tables do."
-        ),
-        "human_role_short": "none",
-        "calibrated": False,
-        "calibration": (
-            "Not possible yet, for the reasons the real-session table gives. What "
-            "this half adds is a join: the same conversations carry English numbers "
-            "on the TN-Eval track, so a model's standing there and its Czech here "
-            "are about the same sessions. Whether one predicts the other is the "
-            "question this track was built to answer."
-        ),
-    },
-    results.TRACK_CZECH_REAL_PDSQI: {
-        "scored_against": (
-            "The note alone, on six of PDSQI-9's eight attributes. The instrument "
-            "and its prompt are reproduced in English; the note is Czech and is "
-            "shown with the Czech headings the model wrote, because rendering it "
-            "under English ones would rate an artefact nobody produced."
-        ),
-        "human_role": (
-            "None. No human has rated these notes on PDSQI-9, and the therapist "
-            "wrote no comparison note here."
-        ),
-        "human_role_short": "none",
-        "calibrated": False,
-        "calibration": (
-            "Not calibrated. Physicians agree with each other on this instrument at "
-            "Krippendorff's alpha 0.575, which is the ceiling any judge would be "
-            "read against -- but nobody has rated these notes, so there is no "
-            "agreement figure for this table, only the ceiling one would be read "
-            "against if it existed."
-        ),
-    },
-    results.TRACK_DEEPSY_REAL: {
-        "scored_against": (
-            "The note alone, on the same six Czech criteria as the SOAP tracks. "
-            "The prompts are reproduced from the Deepsy application word for word, "
-            "with its questionnaire blocks removed the way the application removes "
-            "them for a client who has filled nothing in."
-        ),
-        "human_role": (
-            "None. Nobody has rated these notes, and the therapist wrote no "
-            "comparison note in this format either."
-        ),
-        "human_role_short": "none",
-        "calibrated": False,
-        "calibration": (
-            "Not calibrated, like the Czech criteria it shares. What this track adds "
-            "is not a calibration but a control: the same models and sessions in a "
-            "second format, so that what a criterion measures about a model can be "
-            "told apart from what it measures about the shape of the note."
-        ),
-    },
-    results.TRACK_DEEPSY_TRANSLATED: {
-        "scored_against": (
-            "The note alone, on the same six criteria, over the translated AnnoMI conversations."
-        ),
-        "human_role": "None, in the same two senses as the real half.",
-        "human_role_short": "none",
-        "calibrated": False,
-        "calibration": (
-            "Not calibrated. Read against the Czech SOAP table on the same "
-            "conversations, which is the comparison this track exists for."
-        ),
-    },
-    results.TRACK_CZECH_TRANSLATED_PDSQI: {
-        "scored_against": (
-            "The note and the session, on all eight attributes. These transcripts "
-            "are AnnoMI translated into Czech and carry nothing confidential, which "
-            "is the whole reason `accurate` and `thorough` can be asked here and "
-            "not of the real half."
-        ),
-        "human_role": (
-            "None, in the same two senses as the real half: no comparison note and no human rating."
-        ),
-        "human_role_short": "none",
-        "calibrated": False,
-        "calibration": (
-            "Not calibrated, and read against the same 0.575 ceiling. What this "
-            "half adds is the join: the same conversations carry PDSQI-9 numbers in "
-            "English on the `pdsqi-soap` track, so a model's quality there and its "
-            "quality here are about the same sessions on the same instrument."
         ),
     },
 }
@@ -1426,10 +1029,10 @@ def _current_groups(groups: dict[tuple, list[Row]]) -> tuple[dict[tuple, list[Ro
     #: `judge_prompt_version`, for the reason a superseded harness is chosen
     #: between: a rubric version is bumped when the questions change, and the
     #: older one is then a previous attempt at the same measurement rather than
-    #: a second measurement worth drawing. The Czech tables showed this: two
-    #: rubric versions produced four tables per track, two judge buttons each
-    #: carrying the same words, and nothing on the page saying which button held
-    #: the older questions. It stays in `COMPARABILITY_KEYS` -- two versions
+    #: a second measurement worth drawing. Two rubric versions otherwise produce
+    #: two tables per track and two judge buttons carrying the same words, with
+    #: nothing on the page saying which button holds the older questions. It
+    #: stays in `COMPARABILITY_KEYS` -- two versions
     #: still may not be averaged -- and the older is now named rather than
     #: drawn, which is what the briefing already did and the tables did not.
     CHOSEN_BETWEEN = ("harness_version", "judge_settings", "judge_prompt_version")
@@ -1990,14 +1593,12 @@ def build(
         "licences": [
             licence for licence in LICENCES if _used_by(LICENCE_TRACKS, licence["source"], drawn)
         ],
-        # The file these numbers came out of, not the published one. The
-        # Czech page is built from a different record and used to name
-        # `rows.jsonl` anyway, which is the one claim a provenance line
-        # must never get wrong.
+        # The file these numbers came out of. A page built from one record
+        # and naming another is the one claim a provenance line must never
+        # get wrong, so it is passed in rather than assumed.
         "generated_from": source or str(results.ROWS_PATH.name),
         # None on the published page, which keeps the header the template
         # was written with.
-        "page": PAGE_CZECH if drawn & CZECH_PAGE_TRACKS else None,
     }
 
 

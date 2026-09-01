@@ -24,8 +24,7 @@ TN-Eval  (rubric, SOAP prompt, scoring prompts)
   wording, with the model backend replaced (AWS Bedrock -> OpenAI-compatible).
 
 --------------------------------------------------------------------------
-PDSQI-9  (clinical note quality instrument, the pdsqi-soap track and the
-          Czech tracks)
+PDSQI-9  (clinical note quality instrument, the pdsqi-soap track)
   CC BY 4.0 -- https://arxiv.org/abs/2501.08977
   Croxford, Emma; Gao, Yanjun; Pellegrino, Nicholas; et al. "Development and
   Validation of the Provider Documentation Summarization Quality Instrument for

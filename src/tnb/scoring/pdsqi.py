@@ -39,10 +39,10 @@ published on the page rather than smoothed over.**
 **Two attributes need the transcript; six do not.** `Accurate` and `Thorough`
 ask whether the note is true and complete, which cannot be judged without the
 session. That is not a design choice here -- it falls out of the instrument --
-and it happens to be exactly the line the Czech corpus's confidentiality draws:
+and it happens to fall exactly where a confidential corpus draws its own line:
 the six note-only attributes can be asked about a real client's note without the
 transcript leaving the machine it was generated on, and the two that need the
-transcript are asked only where the transcript is public.
+transcript can be asked only where the transcript is public.
 
 **One polarity is inverted, deliberately.** The instrument asks "is there
 presence of stigmatizing language?", where yes is the bad answer. Every other

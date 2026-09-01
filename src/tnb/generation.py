@@ -243,9 +243,9 @@ def _record(
     }
 
     # Parsed here rather than at scoring time so that a note which never parsed
-    # is visible in the cache instead of surfacing as a zero later. The Czech
-    # tasks ask for the same four sections under Czech headings, so they parse
-    # with their own reader and fail the same way.
+    # is visible in the cache instead of surfacing as a zero later. A task that
+    # asks for the same sections in another language brings its own reader and
+    # fails the same way.
     # Asked of the task rather than looked up here. A table in this module was
     # a table a task could be missing from, and a task missing from it was one
     # whose replies were never checked -- stored as a success, never repaired.

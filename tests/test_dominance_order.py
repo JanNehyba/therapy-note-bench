@@ -17,8 +17,6 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import pytest
-
 from tests.test_page_runs import _flat, _judges_payload, _run
 from tnb import judge, report, results
 from tnb.results import Metrics, Row
@@ -179,19 +177,6 @@ def test_removing_a_row_cannot_reverse_two_others():
     kept = [row["system_id"] for row in without["rows"]]
     assert kept == [system for system in order if system != "twin"], (
         f"removing one row re-ordered the others: {order} -> {kept}"
-    )
-
-
-@pytest.mark.parametrize("track", sorted(results.LOCAL_TRACKS))
-def test_the_local_tracks_keep_the_order_they_had(track):
-    """`_sort_key` is shared with another lane of this repository.
-
-    The Czech and Deepsy tracks are unranked too and order their own tables.
-    Re-ordering them from here would be a change nobody asked for, arriving
-    silently in a table somebody else publishes.
-    """
-    assert track not in report.DOMINANCE_ORDERED, (
-        f"{track} belongs to the Czech lane and would be re-ordered by this change"
     )
 
 

@@ -17,8 +17,9 @@ and it is carried here rather than smoothed over: a note scored without a
 transcript is recorded as having been asked six questions, not as having failed
 two.
 
-**The note's presentation is a parameter, because the Czech track reuses this
-runner.** A Czech note carries Czech headings, and showing it under English ones
+**The note's presentation is a parameter, so a note in another language can be
+shown under its own headings.** Such a note carries its own headings, and
+showing it under English ones
 would rate an artefact no model wrote -- `organized` and `comprehensible` are
 exactly the attributes a heading language could move. `render_note`'s docstring
 says the joining is part of the prompt, so a different joining travels with a
@@ -278,7 +279,7 @@ class SystemAggregate:
         return results.Metrics(headline=headline)
 
 
-#: What the rows say about themselves on the SOAP track. The Czech tracks pass
+#: What the rows say about themselves on the SOAP track. Another caller passes
 #: their own, because "no human has rated these notes" is true of both but the
 #: rest is not: those notes are in Czech, and two of the eight attributes are
 #: not asked of the real half at all.
@@ -314,7 +315,7 @@ def to_rows(
     `track` and the two version fields are parameters because the same
     instrument is asked of three corpora. They are four of the six fields
     `results.COMPARABILITY_KEYS` compares, so passing them wrongly would merge
-    tables that must not merge -- which is why the Czech caller passes all four
+    tables that must not merge -- which is why a second caller passes all four
     together rather than inheriting any.
     """
     groups: dict[tuple[str, str], SystemAggregate] = {}

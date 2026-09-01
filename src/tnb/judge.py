@@ -183,9 +183,9 @@ class JudgeConfig:
     #: fingerprint.
     #:
     #: A reasoning judge that spends its whole thinking budget has nothing left
-    #: to answer with, and returns `MAX_TOKENS` and no text. Measured on the
-    #: Czech criteria at a budget of 2048: 41 of 2,544 questions, and asking
-    #: again at temperature 0 reproduces them rather than clearing them.
+    #: to answer with, and returns `MAX_TOKENS` and no text. It happens at every
+    #: budget that has been measured, at a rate of about one answer in sixty,
+    #: and asking again at temperature 0 reproduces it rather than clearing it.
     #:
     #: Raising it costs a new comparability group for whatever it is raised for,
     #: because it changes the fingerprint -- which is the point of it being here
@@ -197,8 +197,8 @@ class JudgeConfig:
     #: `OPENAI_OUTPUT_CEILING` is pinned at the value its 51,000 cached answers
     #: were produced under and must stay there; this is added on top, so a run
     #: that leaves it at zero is byte-identical and every existing answer still
-    #: matches. Measured: 10 of terra's 1,272 Czech answers truncate at the
-    #: pinned ceiling.
+    #: matches. Truncation at the pinned ceiling is rare and not zero, which is
+    #: why the room can be added rather than the ceiling raised.
     extra_answer_room: int = 0
     timeout_s: int = 120
     retries: int = 3

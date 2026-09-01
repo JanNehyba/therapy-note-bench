@@ -2,11 +2,11 @@
 
 Offline. Nothing here calls a provider.
 
-**The incident.** `tnb generate --tasks deepsy-real,deepsy-translated` was run
-without `--providers`. The default is every provider with a token, so all ten
-real Czech clinical transcripts went to OpenAI and to Google Vertex: 150 calls,
-every one answered, between 01:09 and 03:39 on 2026-08-29. The Deepsy prompt
-carries the transcript, so the disclosure was in the request itself.
+**The incident.** A generation run was started without `--providers`. The
+default is every provider with a token, so all ten sessions of a confidential
+clinical corpus went to OpenAI and to Google Vertex: 150 calls, every one
+answered, between 01:09 and 03:39 on 2026-08-29. The prompt carries the
+transcript, so the disclosure was in the request itself.
 
 The published methodology said in the same breath that those sessions never
 leave the university's infrastructure. It was true of every run before that one
@@ -23,19 +23,30 @@ import ast
 from tnb import tasks
 from tnb.config import REPO_ROOT
 
-#: Every task whose sessions are confidential. Named here rather than derived,
-#: so adding a task over the Czech corpus and forgetting to confine it fails
-#: this file rather than a future audit.
-MUST_BE_CONFINED = ("czech-real", "czech-translated", "deepsy-real", "deepsy-translated")
+#: The whole roster, named rather than derived. Every task here reads a public
+#: corpus and none is confined, which is a fact about today's corpora and not a
+#: reason to drop the guard -- so it is written down and checked.
+#:
+#: Named, because the empty case cannot be iterated. A loop over "every
+#: confidential task" passes when there are none, which is this repository's
+#: oldest failure: a test that stops measuring instead of failing.
+EVERY_TASK = ("soap", "icare")
 
 
-def test_every_confidential_task_names_where_it_may_go():
-    for name in MUST_BE_CONFINED:
-        task = tasks.TASKS[name]
-        assert task.confined_to == ("einfra",), (
-            f"{name} reads confidential clinical sessions and must be confined to "
-            f"the infrastructure that holds them; it says {task.confined_to!r}"
-        )
+def test_a_task_added_here_has_to_declare_its_corpus():
+    """The guard against the empty case.
+
+    No task reads a confidential corpus in this repository today. That makes
+    every other test in this file agree with a `None` it never had to look at,
+    so the roster itself is pinned: a task added without a line in this file is
+    a task nobody was made to answer the question about.
+    """
+    assert sorted(tasks.TASKS) == sorted(EVERY_TASK), (
+        "the task roster changed. Say here whether the new task's corpus may leave, "
+        "then add it above -- the field defaults to None and a default is not an answer"
+    )
+    confined = {name: t.confined_to for name, t in tasks.TASKS.items() if t.confined_to}
+    assert not confined, f"a confined task exists and this file does not test it: {confined}"
 
 
 def test_the_english_tasks_are_not_confined():
@@ -71,59 +82,3 @@ def test_the_restriction_survives_a_task_being_added():
     for name, task in tasks.TASKS.items():
         assert hasattr(task, "confined_to"), name
         assert task.confined_to is None or isinstance(task.confined_to, tuple), name
-
-
-def test_nothing_draws_a_row_from_a_provider_that_may_not_read_the_corpus():
-    """The rows exist -- the record is append-only and a run that happened is a
-    fact -- and nothing may draw them. `results.drawable` is the one place that
-    decides, because when it was two places they disagreed: `tnb czech-report`
-    drew seventeen systems while `tools/czech_brief.py` refused five, on the
-    same morning, from the same file."""
-    from tnb import results
-
-    row = _row(track="deepsy-real", provider="openai")
-    kept, refused = results.drawable([row])
-
-    assert kept == []
-    assert refused and "openai" in refused[0] and "deepsy-real" in refused[0]
-    # And a permitted one survives, or the guard is a wall.
-    allowed = _row(track="deepsy-real", provider="einfra")
-    kept, refused = results.drawable([allowed])
-    assert kept == [allowed] and not refused
-
-
-def test_the_reader_here_goes_through_it():
-    """A guard one of two callers applies is the bug it was written for.
-
-    The second caller was `tools/czech_brief.py`, which moved to the
-    `czech-therapy-notes` repository on 2026-09-01 along with the rest of the
-    Czech reporting. The pair is asserted there; this half stays because
-    `tnb czech-report` is still in this tree.
-    """
-    from tnb.config import REPO_ROOT
-
-    cli = (REPO_ROOT / "src" / "tnb" / "cli.py").read_text(encoding="utf-8")
-    assert "results.drawable(" in cli, "tnb czech-report does not filter"
-
-
-def _row(**over):
-    from tnb import results
-
-    fields = {
-        "track": "deepsy-real",
-        "system_id": "a-model",
-        "system_type": "model",
-        "system_label": "a-model",
-        "provider": "einfra",
-        "harness_version": "0.6.0",
-        "prompt_version": "deepsy-3section-v1",
-        "judge_model": "a-judge",
-        "judge_prompt_version": "czech-criteria-v2",
-        "judge_settings": {"model": "a-judge", "thinking_budget": 2048},
-        "n_sessions_attempted": 10,
-        "n_sessions_generated": 10,
-        "n_sessions_scored": 10,
-        "metrics": results.Metrics(headline={"diacritics": 1.0}),
-    }
-    fields.update(over)
-    return results.Row(**fields)
