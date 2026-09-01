@@ -29,11 +29,7 @@ import czech_variance  # noqa: E402
 
 #: The eight tracks the Czech branch draws. Read from `results` so that adding a
 #: ninth fails this file rather than passing quietly through every tool.
-CZECH = tuple(
-    track
-    for track in results.LOCAL_TRACKS
-    if track.startswith(("czech-", "deepsy-"))
-)
+CZECH = tuple(track for track in results.LOCAL_TRACKS if track.startswith(("czech-", "deepsy-")))
 
 
 def test_the_branch_really_has_eight_tracks():

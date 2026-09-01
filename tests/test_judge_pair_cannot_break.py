@@ -80,9 +80,7 @@ def test_no_built_table_cell_can_break_between_judges(path):
         pytest.skip(f"{path.name} has not been built in this checkout")
     html = path.read_text(encoding="utf-8")
     offenders = [
-        cell
-        for cell in re.findall(r"<td[^>]*>([^<]*)</td>", html)
-        if BREAKABLE.search(cell)
+        cell for cell in re.findall(r"<td[^>]*>([^<]*)</td>", html) if BREAKABLE.search(cell)
     ]
     assert not offenders, (
         f"{len(offenders)} cell(s) may wrap between the two judges' values, "
