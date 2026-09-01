@@ -23,7 +23,7 @@ from dataclasses import replace
 from pathlib import Path
 
 from tnb import corpus, i18n, judge, results
-from tnb.config import REPO_ROOT
+from tnb.config import REPO_ROOT, write_published
 from tnb.results import Row
 from tnb.scoring import concordance, czech_pdsqi, pdsqi
 from tnb.scoring import czech as czech_scorer
@@ -1615,6 +1615,17 @@ def _merge_instruments(tables: list[dict]) -> list[dict]:
         table["terms"] = (table.get("terms") or []) + [
             term for term in other.get("terms") or [] if term["term"] not in known
         ]
+        # "Can the judge be checked?" is a property of a (judge, instrument)
+        # pair, and a merged table has two. It carried the rubric's answer
+        # alone -- the green "judge checked against people" chip, over a table
+        # whose other eight columns nobody has rated on that instrument at all.
+        # The honest answer for PDSQI-9 was already written and had never been
+        # drawn, because the merge copied columns, rows, terms, title and blurb
+        # and not this.
+        table["designs"] = [
+            {**table["design"], "instrument": INSTRUMENT_LABELS[table["track"]]},
+            {**other["design"], "instrument": INSTRUMENT_LABELS[other["track"]]},
+        ]
         table["title"] = "SOAP notes on AnnoMI · two instruments, the same notes"
         # Was three sentences establishing that eleven columns from two
         # instruments is a deliberate arrangement. A reader can see that it is
@@ -2241,7 +2252,7 @@ def update_readme(
     updated = f"{head}{begin}\n{section}\n{end}{tail}"
     if updated == existing:
         return False
-    path.write_text(updated, encoding="utf-8")
+    write_published(path, updated)
     return True
 
 
@@ -2294,11 +2305,12 @@ def write(rows: list[Row], *, docs_dir: Path | None = None, readme: Path | None 
         found["instrument"] = INSTRUMENT_LABELS.get(track, track)
 
     docs_dir.mkdir(parents=True, exist_ok=True)
-    (docs_dir / DATA_PATH.name).write_text(
-        json.dumps(data, indent=2, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8"
+    write_published(
+        docs_dir / DATA_PATH.name,
+        json.dumps(data, indent=2, ensure_ascii=False, sort_keys=True) + "\n",
     )
-    (docs_dir / PAGE_PATH.name).write_text(render_page(data), encoding="utf-8")
-    (docs_dir / METHODS_PATH.name).write_text(render_methods(data), encoding="utf-8")
+    write_published(docs_dir / PAGE_PATH.name, render_page(data))
+    write_published(docs_dir / METHODS_PATH.name, render_methods(data))
     update_readme(render_readme_section(data), readme)
     return data
 

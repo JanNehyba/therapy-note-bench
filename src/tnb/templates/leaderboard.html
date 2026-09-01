@@ -845,7 +845,9 @@ function beatsLegend(table) {
         nobody has measured that.`} <em>${
       T`The price is silence. ${found.nobody} of the ${found.systems.size} systems beat nobody
         outright here, and a tie means the evidence does not say which is better without
-        a preference somebody would have to supply.`}</em></dd></div>`;
+        a preference somebody would have to supply. Compared on the stored figures, so two
+        rows printing the same number need not tie: rounding a narrow loss into a tie
+        would let a claim through rather than hold one back.`}</em></dd></div>`;
   }).join('');
 }
 

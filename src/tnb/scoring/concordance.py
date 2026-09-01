@@ -111,11 +111,47 @@ class Tension:
     #: One per judge, so a near-zero correlation cannot be blamed on one of them.
     rho_by_judge: dict[str, float | None]
     n_systems: int
+    #: The worst tie either column carries, on the judge where it is worst.
+    #: `MeasureAgreement` has had this since a measure that gives 5.00 to
+    #: eighteen of nineteen systems was reported as the two judges agreeing
+    #: perfectly about its ordering. The same defect lived on in this table for
+    #: as long again: the panel printed "no agreement figure is given for
+    #: organized (18 of 19 share one value)" and then, one table lower, printed
+    #: `useful` against `organized` at rho 1.000. The guard was written once
+    #: and applied to one of the two places that needed it.
+    tied: int = 0
+
+    @property
+    def rankable(self) -> bool:
+        """Whether both columns order the systems at all. Same line as above."""
+        return self.n_systems >= 2 and self.tied * 2 <= self.n_systems
 
     @property
     def agrees(self) -> bool:
+        """Whether the two columns move together, in either direction.
+
+        Magnitude, not value. `trace` against `temporal_past` is -0.411 and
+        -0.472: both judges find a moderate inverse relation, and the page's
+        verdict column called it "not related" -- denying a relationship it had
+        just measured, because the test read the sign as weakness.
+        """
         found = [rho for rho in self.rho_by_judge.values() if rho is not None]
-        return bool(found) and all(rho >= 0.5 for rho in found)
+        if not found or not self.rankable:
+            return False
+        if not all(abs(rho) >= 0.5 for rho in found):
+            return False
+        # And in the same direction. A first draft asked only for magnitude and
+        # swallowed the case this panel exists for: +1.000 under one judge and
+        # -1.000 under the other is the two judges reading the same pair of
+        # columns in opposite directions, which is maximal disagreement and was
+        # about to be printed as "related".
+        return all(rho > 0 for rho in found) or all(rho < 0 for rho in found)
+
+    @property
+    def inverse(self) -> bool:
+        """Whether the relation they agree on runs the other way."""
+        found = [rho for rho in self.rho_by_judge.values() if rho is not None]
+        return bool(found) and all(rho <= -0.5 for rho in found)
 
 
 @dataclass(frozen=True)
@@ -238,26 +274,41 @@ def _dominates(
     either system under either judge makes the comparison unavailable rather
     than favourable: an absent number is not a low one.
 
-    Compared as printed, for the same reason as `_positions`: "beaten outright"
-    is a sentence about the table, and a reader who checks it sees the printed
-    digits and nothing else.
+    **Compared as stored, not as printed, and the difference is not academic.**
+    It was printed until 2026-09-01, for the reason `_positions` still is: a
+    reader checking a claim about the table sees the digits and nothing else.
+    That reason does not survive contact with what rounding does *here*.
+    Dominance asks for "at least as good on every column", so rounding a narrow
+    **loss** into a tie removes an obstacle and lets the claim through --
+    rounding manufactures dominance rather than withholding it, which is the
+    one direction this repository may not err in. It fired once on the
+    published rows: `gemini-3.1-pro-preview` beat `glm-5.2` outright on the
+    strength of a 0.0029 faithfulness gap in `glm-5.2`'s favour that printed as
+    4.97 against 4.97. And the verifiability the printed form was chosen for
+    fails exactly there: a reader sees two equal figures, concludes a tie, and
+    is told one beats the other.
+
+    So the comparison is on the stored values, and two rows printing the same
+    figure may still not tie. The page says so where the count is defined.
+    Cost of the change, measured before it was made: one claim of the thirty on
+    the rubric, none of the eleven on PDSQI-9, and `undominated` -- which the
+    published "eight of the nineteen" comes from -- identical either way.
+
+    `_positions` keeps the printed comparison, and should: a shared *place* in
+    a ranking is a statement about the column as drawn, and two rows printing
+    the same figure share it.
     """
     strictly_better_somewhere = False
     for scores in by_judge.values():
-        for measure, places in decimals.items():
+        for measure in decimals:
             first = scores.get(better, {}).get(measure)
             second = scores.get(worse, {}).get(measure)
             if first is None or second is None:
                 return False
-            # Equality is decided by the printed form and order by the value.
-            # Comparing the strings for order would read "10.00" as below
-            # "4.96", which no measure here can produce today and every measure
-            # here could produce tomorrow.
-            if as_printed(first, places) == as_printed(second, places):
-                continue
             if first < second:
                 return False
-            strictly_better_somewhere = True
+            if first > second:
+                strictly_better_somewhere = True
     return strictly_better_somewhere
 
 
@@ -363,10 +414,24 @@ def compare(
                     if len(pairs) >= 2
                     else None
                 )
+            # The tie is a property of the columns, so it is read from the
+            # judge where it is worst, exactly as `MeasureAgreement` reads it.
+            tied = max(
+                (
+                    _largest_tie(scores, measure, shared, places[measure])
+                    for scores in by_judge.values()
+                    for measure in (first, second)
+                ),
+                default=0,
+            )
             if any(rho is not None for rho in rho_by_judge.values()):
                 tensions.append(
                     Tension(
-                        first=first, second=second, rho_by_judge=rho_by_judge, n_systems=counted
+                        first=first,
+                        second=second,
+                        rho_by_judge=rho_by_judge,
+                        n_systems=counted,
+                        tied=tied,
                     )
                 )
 
@@ -431,11 +496,24 @@ def describe(comparison: Comparison) -> str:
         )
 
     if comparison.dominance:
-        leader = comparison.dominance[0]
+        # Every system at the top, not the first one after an alphabetical
+        # tie-break. Until 2026-09-01 this printed "`gpt-5.6-sol` beats 6" on
+        # the iCARE track while `qwen3.8-27b` also beat 6 -- a page whose whole
+        # argument is that no single winner can be named, naming one, and
+        # picking it by the letter it starts with. Nothing revealed it: the
+        # sentence is true of the system it names, and the one it leaves out
+        # leaves no trace.
+        most = len(comparison.dominance[0].beats)
+        leaders = [d.system for d in comparison.dominance if len(d.beats) == most]
+        named = ", ".join(f"`{system}`" for system in leaders)
         parts.append(
             f"Systems beating at least one other on every measure under both judges, which "
             f"needs no weighting to be true: {len(comparison.dominance)}. "
-            f"`{leader.system}` beats {len(leader.beats)}."
+            + (
+                f"{named} beats {most}."
+                if len(leaders) == 1
+                else f"The most any of them beats is {most}, and {len(leaders)} do: {named}."
+            )
         )
     parts.append(
         f"{len(comparison.undominated)} of {comparison.n_systems} systems are beaten outright "
@@ -446,10 +524,19 @@ def describe(comparison: Comparison) -> str:
     # than as a policy. Reported for the column the table is *ordered by*,
     # because that is the one a reader is most likely to mistake for "quality".
     if comparison.ranking_measure:
+        # Both the pairs that say nothing and the pairs that say the opposite.
+        # A strongly inverse pair used to land in the first list and be
+        # described as "says little", which is the sign read as weakness; with
+        # that fixed it would have fallen out of the summary altogether, and a
+        # trade-off between the ordering column and another is the finding this
+        # whole panel exists to report -- a model that answers every question
+        # satisfies more criteria and invents more.
         against = [
             t
             for t in comparison.tensions
-            if comparison.ranking_measure in (t.first, t.second) and not t.agrees
+            if comparison.ranking_measure in (t.first, t.second)
+            and t.rankable
+            and (not t.agrees or t.inverse)
         ]
         for tension in against:
             other = tension.second if tension.first == comparison.ranking_measure else tension.first
@@ -462,6 +549,13 @@ def describe(comparison: Comparison) -> str:
             # story would be the thing this repository exists not to do.
             found = [rho for rho in tension.rho_by_judge.values() if rho is not None]
             split = len(found) > 1 and max(found) - min(found) >= 0.4
+            if tension.inverse:
+                parts.append(
+                    f"Ordering by {comparison.ranking_measure} orders {other} in reverse "
+                    f"({readings}): the two are a trade-off, and collapsing them into one "
+                    "number means deciding which of them matters."
+                )
+                continue
             parts.append(
                 f"Ordering by {comparison.ranking_measure} says "
                 f"{'little' if not split else 'different things to the two judges'} about "
@@ -510,6 +604,9 @@ def to_json(comparison: Comparison | None) -> dict | None:
                 "second": t.second,
                 "n_systems": t.n_systems,
                 "agrees": t.agrees,
+                "inverse": t.inverse,
+                "rankable": t.rankable,
+                "tied": t.tied,
                 "rho_by_judge": {
                     judge_model: None if rho is None else round(rho, 4)
                     for judge_model, rho in sorted(t.rho_by_judge.items())

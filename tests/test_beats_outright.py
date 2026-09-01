@@ -20,10 +20,16 @@ Neither holds for a mean. Measured on the published rows: a mean reverses 20
 pairs when the therapist's row is removed, and every one of the 141 pairs it
 orders by weight can be made to go either way by choosing the weights.
 
-Compared **as printed**, deliberately: "beaten outright" is a sentence about
-the table, and a reader checking it sees the digits and nothing else. So a raw
-difference smaller than the last published digit counts as a tie -- which is
-real, and `glm-5.2` against `gemini-3.1-pro-preview` is the pair where it bites.
+Compared on the **stored** figures, not the printed ones, and the direction is
+the reason. Dominance asks for "at least as good everywhere", so rounding a
+narrow *loss* into a tie removes an obstacle: it lets a claim through rather
+than holding one back. It fired once on the published rows --
+`gemini-3.1-pro-preview` beat `glm-5.2` outright on a 0.0029 faithfulness gap
+in `glm-5.2`'s favour that printed as 4.97 against 4.97 -- and the
+verifiability the printed comparison was chosen for failed exactly there: a
+reader sees two equal figures, concludes a tie, and is told otherwise. The
+change costs one claim of thirty on the rubric and none of eleven on PDSQI-9,
+and leaves `undominated` identical, so no published sentence moves.
 """
 
 from __future__ import annotations
@@ -182,11 +188,9 @@ def test_no_weighting_reverses_a_system_that_beats_another_outright(tracks, payl
                 winner, loser = b, a
             else:
                 continue
-            flipped = [w for w in draws if ahead(loser, winner, w)]
-            assert not flipped, (
-                f"{track}: {winner} beats {loser} outright, yet a weighting of the "
-                "printed figures puts the loser ahead -- the column's central claim "
-                "does not hold"
+            assert not [w for w in draws if ahead(loser, winner, w)], (
+                f"{track}: {winner} beats {loser} outright, yet a weighting puts the "
+                "loser ahead -- the column's central claim does not hold"
             )
 
 
@@ -215,6 +219,39 @@ def test_removing_a_system_cannot_reverse_the_order_of_two_others(tracks, payloa
                     f"{track}: removing {dropped} reversed {a} against {b} "
                     f"({before[a]}:{before[b]} became {after[a]}:{after[b]})"
                 )
+
+
+def test_rounding_cannot_manufacture_a_claim():
+    """The direction that matters: a tie made by rounding lets dominance through.
+
+    Two systems, one measure where B is ahead by less than the printed
+    precision and one where A is ahead by a lot. On the stored figures A does
+    not beat B, because it is not at least as good everywhere. Rounding the
+    first to two places would make it a tie, remove the obstacle, and publish a
+    claim the numbers do not support -- which is what happened, once, on the
+    real rows.
+    """
+    from tnb.scoring.concordance import _dominates
+
+    by_judge = {
+        "judge-a": {
+            "A": {"faithfulness": 4.9716, "completeness": 0.900},
+            "B": {"faithfulness": 4.9745, "completeness": 0.500},
+        },
+        "judge-b": {
+            "A": {"faithfulness": 4.5000, "completeness": 0.900},
+            "B": {"faithfulness": 4.5000, "completeness": 0.500},
+        },
+    }
+    decimals = {"faithfulness": 2, "completeness": 3}
+    assert not _dominates("A", "B", by_judge, decimals), (
+        "A is 0.0029 behind on faithfulness and dominance was granted anyway, so "
+        "the comparison is rounding again"
+    )
+    # With that one gap removed it does dominate, so the test is about the gap
+    # and not about something else in the fixture.
+    by_judge["judge-a"]["B"]["faithfulness"] = 4.9716
+    assert _dominates("A", "B", by_judge, decimals)
 
 
 def test_the_page_draws_the_column_and_can_sort_by_it():

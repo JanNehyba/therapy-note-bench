@@ -377,9 +377,14 @@ _SENTENCES = {
     ),
     "The price is silence. {0} of the {1} systems beat nobody outright here, and a tie"
     " means the evidence does not say which is better without a preference somebody would"
-    " have to supply.": (
+    " have to supply. Compared on the stored figures, so two rows printing the same number"
+    " need not tie: rounding a narrow loss into a tie would let a claim through rather than"
+    " hold one back.": (
         "Cena je mlčení. {0} z {1} systémů tu neporáží naprosto nikoho, a shoda znamená, "
-        "že důkazy neříkají, který je lepší — bez preference, kterou by někdo musel dodat."
+        "že důkazy neříkají, který je lepší — bez preference, kterou by někdo musel dodat. "
+        "Porovnává se na uložených hodnotách, takže dva řádky se stejně vytištěným číslem "
+        "nemusí být shodné: zaokrouhlení těsné prohry na shodu by tvrzení propustilo, ne "
+        "zadrželo."
     ),
     "of {0}": "z {0}",
     "How many of the other systems this one is at least as good as on every {0} column,"
@@ -1034,15 +1039,17 @@ _METHODS = {
         "systém by zmenšilo sdílený korpus všem ostatním."
     ),
     "<strong>These numbers are not the table's numbers, and they should not be.</strong> The"
-    " table above averages each system over its own notes; this section averages every system"
+    ' <a href="index.html">leaderboard table</a> averages each system'
+    " over its own notes; this section averages every system"
     " over the <strong>{0} of {1}</strong> conversations they <em>all</em> have, because a"
     " paired comparison is only paired on a shared set. The set is smaller because {2}. Expect"
     " small differences from the table, and expect closely-matched systems to change places:"
     " that two orderings disagree over which {3} of {4} conversations you use is itself a"
     " result"
     " about how tightly packed these models are.": (
-        "<strong>Tato čísla nejsou čísla z tabulky, a ani být nemají.</strong> Tabulka výše "
-        "průměruje každý systém přes jeho vlastní zápisy; tento oddíl průměruje každý systém "
+        "<strong>Tato čísla nejsou čísla z tabulky, a ani být nemají.</strong> "
+        '<a href="index.html">Tabulka žebříčku</a> průměruje každý systém přes jeho vlastní '
+        "zápisy; tento oddíl průměruje každý systém "
         "přes <strong>{0} z {1}</strong> rozhovorů, které mají <em>všechny</em>, protože "
         "párové srovnání je párové jen na sdílené množině. Ta množina je menší proto, že {2}. "
         "Očekávejte drobné rozdíly oproti tabulce a očekávejte, že si těsně vyrovnané systémy "
@@ -1062,11 +1069,15 @@ _METHODS = {
         "Cache držela i odpovědi z jiných nastavení; jsou to dva nástroje a nebyly do sebe míchány."
     ),
     "A ranking always prints an order. This asks whether the evidence supports one. Both parts"
-    " read the individual judgements, not the averages, over the <strong>{0} conversations every"
-    " system wrote a note for</strong>.": (
+    " read the individual judgements rather than the averages. The intervals below are over the"
+    " <strong>{0} conversations every system has a finished judgement for</strong>; the criterion"
+    " table underneath is over every conversation each system was scored on, which is why its"
+    " figures match the leaderboard's and these do not.": (
         "Žebříček vždycky vytiskne nějaké pořadí. Tady se ptáme, jestli ho evidence unese. Obě "
-        "části čtou jednotlivé soudy, ne průměry, přes <strong>{0} rozhovorů, ke kterým napsal "
-        "zápis každý systém</strong>."
+        "části čtou jednotlivé soudy, ne průměry. Intervaly níže jsou přes <strong>{0} "
+        "rozhovorů, u kterých má dokončený soud každý systém</strong>; tabulka kritérií pod nimi "
+        "je přes všechny rozhovory, na kterých byl každý systém obodován — proto její čísla "
+        "sedí se žebříčkem a tato ne."
     ),
     "Completeness over the shared conversations, with the range the evidence supports": (
         "Úplnost přes sdílené rozhovory, s rozpětím, které evidence unese"
@@ -1273,12 +1284,32 @@ _METHODS = {
         "a ordinální pro škály. Je to táž statistika, jakou k tomu zjištění došel sám TN-Eval."
     ),
     "Whose notes the judge was checked on": "Na čích zápisech byl hodnotitel ověřen",
+    # -- the dominance rule, the grid's withheld rows, and the page's provenance --
+    "Compared on the stored figures, not the printed ones: unlike the rank correlation above,"
+    " where two scores that print the same are tied, rounding a narrow loss into a tie here"
+    " would <em>let a claim through</em> rather than hold one back. So two rows printing the"
+    " same number need not tie.": (
+        "Porovnává se na uložených hodnotách, ne na vytištěných: na rozdíl od pořadové korelace "
+        "výše, kde jsou dvě stejně vytištěná čísla shodná, by tady zaokrouhlení těsné prohry na "
+        "shodu tvrzení <em>propustilo</em>, ne zadrželo. Dva řádky se stejně vytištěným číslem "
+        "tedy nemusí být shodné."
+    ),
+    "{0} of {1} print the same number": "{0} z {1} tiskne totéž číslo",
+    "related, in reverse": "souvisí, obráceně",
+    "The panels on this page are computed from {0} — the calibration and the bands from the"
+    " judges' individual answers rather than from the rows, because an average cannot be"
+    " resampled.": (
+        "Panely na této stránce jsou spočítané z {0} — kalibrace a pásma z jednotlivých "
+        "odpovědí hodnotitelů, ne z řádků, protože průměr se převzorkovat nedá."
+    ),
     "Human ratings exist for {0} systems and no others: {1}. <strong>No human has read a note"
-    " written by any of the models the leaderboard ranks</strong>, so the figure above is"
-    " measured on one set of notes and applied to another.": (
+    " written by any of the models this benchmark generated</strong> — the rows above are"
+    " TN-Eval's own released notes, which the leaderboard carries as dated reference rows. So the"
+    " figure is measured on those and applied to every other row.": (
         "Lidská hodnocení existují pro {0} systémy a pro žádné jiné: {1}. <strong>Žádný člověk "
-        "nečetl zápis od kteréhokoli z modelů, které žebříček řadí</strong>, takže číslo výše je "
-        "změřeno na jedné sadě zápisů a použito na jinou."
+        "nečetl zápis od kteréhokoli z modelů, které tento benchmark vygeneroval</strong> — "
+        "řádky výše jsou vlastní zveřejněné zápisy TN-Evalu, které žebříček vede jako datované "
+        "referenční řádky. Číslo je tedy změřeno na nich a použito na všechny ostatní řádky."
     ),
     "Notes written by": "Zápisy napsal",
     "Therapists": "Terapeuti",
@@ -1420,11 +1451,11 @@ _METHODS = {
         "položek. Při čem který běžel, je v tabulce výše."
     ),
     "Read as bands, not as an order. Two candidates closer than {0} are reported here as"
-    " inseparable rather than ranked — the rule the tables above use for models, applied to the"
-    " judges for the same reason.": (
+    ' inseparable rather than ranked — the rule <a href="index.html">the leaderboard</a> uses for'
+    " models, applied to the judges for the same reason.": (
         "Čtěte jako pásma, ne jako pořadí. Dva kandidáti blíž než {0} se tu vykazují jako "
-        "neoddělitelní, místo aby byli seřazeni — je to pravidlo, které tabulky výše používají "
-        "na modely, tady použité na hodnotitele ze stejného důvodu."
+        'neoddělitelní, místo aby byli seřazeni — je to pravidlo, které <a href="index.html">'
+        "žebříček</a> používá na modely, tady použité na hodnotitele ze stejného důvodu."
     ),
     "Of the {0} pairs, {1} are separated by more than that: {2}. Every other pair is not,"
     " including all three <code>flash</code> candidates among themselves and the two GPT"

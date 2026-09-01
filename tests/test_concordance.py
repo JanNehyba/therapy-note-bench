@@ -207,12 +207,20 @@ def test_the_summary_says_what_the_tables_cannot_do():
     assert "beaten outright by nobody" in sentence
 
 
-def test_two_measures_that_do_not_predict_each_other_are_reported_as_such():
+def test_a_trade_off_between_two_columns_is_reported_as_a_trade_off():
     """The reason the ranking column is not "quality", stated as a measurement.
 
     A model that answers every question satisfies more criteria and invents
     more. Where the two columns behave that way, collapsing them into one
     number means deciding which matters, and that is a clinical decision.
+
+    **This test asserted the opposite until 2026-09-01**, and the assertion was
+    the bug. Its fixture builds a perfect inverse relation -- exactly the
+    trade-off the docstring describes -- and then required `agrees` to be
+    False, because the test was written against a rule that read a negative
+    correlation as no correlation. The page printed "not related" over -0.472.
+    A trade-off is a relation; what it is not is agreement about direction, and
+    that is a different property.
     """
     rows = _panel(
         {
@@ -237,8 +245,11 @@ def test_two_measures_that_do_not_predict_each_other_are_reported_as_such():
     )
 
     assert all(rho == pytest.approx(-1.0) for rho in tension.rho_by_judge.values())
-    assert tension.agrees is False
-    assert "faithfulness" in concordance.describe(result)
+    assert tension.agrees is True, "a perfect inverse relation is a relation"
+    assert tension.inverse is True
+    sentence = concordance.describe(result)
+    assert "orders faithfulness in reverse" in sentence, sentence
+    assert "trade-off" in sentence
 
 
 def test_a_tension_the_two_judges_read_differently_is_not_resolved_for_the_reader():
@@ -345,7 +356,10 @@ def test_the_columns_are_still_compared_with_each_other_across_all_of_them():
 
     tension = next(t for t in result.tensions if {t.first, t.second} == {"rouge_l", "trace"})
     assert all(rho == pytest.approx(-1.0) for rho in tension.rho_by_judge.values())
-    assert tension.agrees is False
+    # ROUGE-L predicting the judge's rating perfectly in reverse is the source
+    # paper's finding at its strongest, not the absence of one.
+    assert tension.agrees is True
+    assert tension.inverse is True
 
 
 def test_one_judged_measure_is_not_described_as_the_best_and_the_worst():
@@ -475,13 +489,26 @@ def test_a_difference_the_table_does_show_is_still_a_difference():
     assert all(m.moved == 2 for m in result.measures)
 
 
-def test_beaten_outright_is_a_claim_about_the_printed_table():
-    """A reader checking "beaten outright by nobody" sees the printed digits
-    and nothing else, so a lead that rounds away is not a lead."""
-    # 0.0007 apart -- *above* the tolerance this replaced, so the old rule
-    # called it a lead -- and both print 0.974 on the three-decimal columns and
-    # 0.97 on the two-decimal one. `y` leads everywhere and the table shows it
-    # nowhere.
+def test_beaten_outright_is_decided_on_the_stored_figures():
+    """Third rule for this comparison, and the first that errs in the safe direction.
+
+    It was a tolerance, then the printed digits, and is now the stored values.
+    The printed rule was chosen so a reader could check the claim by eye, which
+    is a good reason that does not survive what rounding does *here*: dominance
+    needs "at least as good on every measure", so rounding a narrow **loss**
+    into a tie removes an obstacle and lets the claim through. Rounding
+    manufactured dominance rather than withholding it.
+
+    It fired twice on the published rows. `gemini-3.1-pro-preview` beat
+    `glm-5.2` outright on a 0.0029 faithfulness gap in `glm-5.2`'s favour that
+    printed 4.97 against 4.97; and on the iCARE track the summary named
+    `gpt-5.6-sol` as beating six when `qwen3.8-27b` also beat six and one of
+    `gpt-5.6-sol`'s six was a rounded loss.
+
+    So a lead too small to print is a lead. `y` leads `x` everywhere by 0.0007
+    and the table shows it nowhere -- and the page says, where the count is
+    defined, that two rows printing the same number need not tie.
+    """
     rows = _panel(
         {
             A: {"x": _flat(0.9735), "y": _flat(0.9742)},
@@ -491,8 +518,36 @@ def test_beaten_outright_is_a_claim_about_the_printed_table():
 
     result = concordance.compare(rows, results.TRACK_TNEVAL, MEASURES)
 
-    assert result.dominance == []
-    assert sorted(result.undominated) == ["x", "y"]
+    assert [(d.system, d.beats) for d in result.dominance] == [("y", ["x"])]
+    assert result.undominated == ["y"]
+
+
+def test_rounding_a_loss_into_a_tie_cannot_grant_dominance():
+    """The direction, stated as its own case rather than left implicit.
+
+    `x` is far ahead on one measure and behind on another by less than that
+    column prints. Under the printed rule the second became a tie, the obstacle
+    vanished and `x` dominated. It must not.
+    """
+    rows = _panel(
+        {
+            A: {
+                "x": {**_flat(0.5), "faithfulness": 4.9716},
+                "y": {**_flat(0.1), "faithfulness": 4.9745},
+            },
+            B: {
+                "x": {**_flat(0.5), "faithfulness": 4.9716},
+                "y": {**_flat(0.1), "faithfulness": 4.9745},
+            },
+        }
+    )
+
+    result = concordance.compare(rows, results.TRACK_TNEVAL, MEASURES)
+
+    assert result.dominance == [], (
+        "a loss smaller than the printed precision was rounded into a tie and let "
+        "a dominance claim through"
+    )
 
 
 def _ceiling_panel() -> list[Row]:

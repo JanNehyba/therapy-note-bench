@@ -152,7 +152,12 @@ function asTheTableShows(judgeModel, system, measure) {
   const table = (DATA.tables || []).find(t =>
     t.versions && t.versions.judge_model === judgeModel && t.ranking_measure === measure);
   if (!table) return null;
-  const row = (table.rows || []).find(r => (r.label || r.system_id) === system);
+  // The id first and the label only as a fallback. The saturation payload
+  // names a system `mistral-large-v2` where the table's label is
+  // `mistral-large-v2 (TN-Eval, 2025)`, so two of the nineteen bars matched
+  // nothing and quietly lost the "the table shows ..." half of their hover
+  // text -- the half that says the two numbers are over different note sets.
+  const row = (table.rows || []).find(r => r.system_id === system || r.label === system);
   if (!row || !row.headline || row.headline[measure] === undefined) return null;
   return {value: row.headline[measure], notes: row.n_complete};
 }
@@ -271,7 +276,8 @@ function renderSaturation(data) {
     .sort((a, b) => narrowedBy[b] - narrowedBy[a] || a.localeCompare(b));
   const denominator = s.corpus_sessions && s.corpus_sessions > s.sessions
     ? `<p class="note">${T`<strong>These numbers are not the table's numbers, and they should not
-         be.</strong> The table above averages each system over its own notes; this section
+         be.</strong> The <a href="index.html">leaderboard table</a> averages each system
+         over its own notes; this section
          averages every system over the <strong>${s.sessions} of ${s.corpus_sessions}</strong>
          conversations they <em>all</em> have, because a paired comparison is only paired on a
          shared set. The set is smaller because ${(() => {
@@ -307,8 +313,11 @@ function renderSaturation(data) {
 
   document.getElementById('saturation-body').innerHTML = instrument + `
     <p class="blurb">${T`A ranking always prints an order. This asks whether the evidence supports one.
-       Both parts read the individual judgements, not the averages, over the
-       <strong>${s.sessions} conversations every system wrote a note for</strong>.`}</p>
+       Both parts read the individual judgements rather than the averages. The intervals
+       below are over the <strong>${s.sessions} conversations every system has a finished
+       judgement for</strong>; the criterion table underneath is over every conversation
+       each system was scored on, which is why its figures match the leaderboard's and
+       these do not.`}</p>
     ${denominator}
     ${pending}
 
@@ -352,17 +361,27 @@ function renderTrackDesign(data) {
   const seen = new Set();
   const blocks = [];
   (data.tables || []).forEach(table => {
-    const d = table.design || {};
-    if (!d.scored_against || seen.has(table.track)) return;
+    if (seen.has(table.track)) return;
+    // One block per *instrument*, not per table. The SOAP table is two
+    // instruments merged, and answering "can the judge be checked?" once for
+    // it printed the rubric's yes over eight PDSQI-9 columns that no human has
+    // ever rated. `designs` is present only where a table has more than one.
+    const designs = (table.designs && table.designs.length ? table.designs : [table.design])
+      .filter(d => d && d.scored_against);
+    if (!designs.length) return;
     seen.add(table.track);
-    const mark = d.calibrated
-      ? `<span class="role role-competitor">${T`judge checked against people`}</span>`
-      : `<span class="role role-key">${T`judge cannot be checked against people`}</span>`;
-    const role = d.human_role_short === 'competitor'
-      ? `<span class="role role-competitor">${T`the human note competes`}</span>`
-      : `<span class="role role-key">${T`the human note is the answer key`}</span>`;
-    blocks.push(`<div class="design">
-        <h3>${esc(tr(table.title))}</h3>
+    designs.forEach(d => {
+      const mark = d.calibrated
+        ? `<span class="role role-competitor">${T`judge checked against people`}</span>`
+        : `<span class="role role-key">${T`judge cannot be checked against people`}</span>`;
+      const role = d.human_role_short === 'competitor'
+        ? `<span class="role role-competitor">${T`the human note competes`}</span>`
+        : `<span class="role role-key">${T`the human note is the answer key`}</span>`;
+      const heading = designs.length > 1 && d.instrument
+        ? `${esc(tr(table.title))} — ${esc(tr(d.instrument))}`
+        : esc(tr(table.title));
+      blocks.push(`<div class="design">
+        <h3>${heading}</h3>
         <p class="design-marks">${role}${mark}</p>
         <dl>
           <div><dt>${T`Scored against`}</dt><dd>${esc(tr(d.scored_against))}</dd></div>
@@ -370,6 +389,7 @@ function renderTrackDesign(data) {
           <div><dt>${T`Can the judge be checked?`}</dt><dd>${esc(tr(d.calibration))}</dd></div>
         </dl>
       </div>`);
+    });
   });
 
   if (!blocks.length) { drop('design'); return; }
@@ -619,9 +639,10 @@ function whoseNotesWereRated(calibration) {
 
   return `<h3>${T`Whose notes the judge was checked on`}</h3>
     <p class="blurb">${T`Human ratings exist for ${per.length} systems and no others: ${rated}.
-       <strong>No human has read a note written by any of the models the leaderboard
-       ranks</strong>, so the figure above is measured on one set of notes and applied to
-       another.`}</p>
+       <strong>No human has read a note written by any of the models this benchmark
+       generated</strong> — the rows above are TN-Eval's own released notes, which the
+       leaderboard carries as dated reference rows. So the figure is measured on those
+       and applied to every other row.`}</p>
     <div class="scroll"><table>
       <thead><tr><th>${T`Notes written by`}</th>
                  <th class="num" title="${T`Krippendorff's alpha, judge vs therapist`}">${T`Judge`}</th>
@@ -717,10 +738,15 @@ function englishNote(summary) {
   return said ? `<p class="note">${said}</p>` : '';
 }
 
+// The verdict word, which used to read the sign as weakness. `trace` against
+// `temporal_past` is -0.411 and -0.472 -- both judges finding a moderate
+// inverse relation -- and the column said "not related", denying a
+// relationship the row beside it had just measured. Magnitude decides whether
+// there is one; the sign says which way it runs, and both are printed.
 function relation(tension) {
   const found = Object.values(tension.rho_by_judge).filter(rho => rho !== null);
   if (!found.length) return '—';
-  if (tension.agrees) return T`related`;
+  if (tension.agrees) return tension.inverse ? T`related, in reverse` : T`related`;
   return Math.max(...found) - Math.min(...found) >= 0.4 ? T`judges disagree` : T`not related`;
 }
 
@@ -798,7 +824,18 @@ function renderConcordance(all) {
       <div class="scroll"><table class="concordance">
         <thead><tr><th>${T`Pair`}</th>${Object.keys(c.tensions[0].rho_by_judge).map(
           j => `<th>${j}</th>`).join('')}<th></th></tr></thead>
-        <tbody>${c.tensions.map(t => `<tr>
+        <tbody>${c.tensions.map(t => t.rankable === false
+          // The same rule as the measures table four lines up, and for the
+          // same reason: a column most systems tie on has a correlation and no
+          // ordering for it to be about. The panel printed "no agreement
+          // figure is given for organized (18 of 19 share one value)" and then
+          // reported `useful` against `organized` at 1.000 in this grid.
+          ? `<tr>
+          <td>${tr(t.first)} &times; ${tr(t.second)}</td>
+          <td class="num" colspan="${Object.keys(t.rho_by_judge).length}">—</td>
+          <td>${T`${t.tied} of ${t.n_systems} print the same number`}</td>
+        </tr>`
+          : `<tr>
           <td>${tr(t.first)} &times; ${tr(t.second)}</td>
           ${Object.values(t.rho_by_judge).map(rho =>
             `<td>${rho === null ? '—' : rho.toFixed(3)}</td>`).join('')}
@@ -810,7 +847,11 @@ function renderConcordance(all) {
       <p class="note">${T`A system that is at least as good on <em>every</em> measure under
          <em>both</em> judges, and strictly better somewhere, is better however a reader
          weighs the measures — and weighing them is a clinical decision, not a
-         measurement. Everything else on this page is a column, not a verdict.`}</p>
+         measurement. Everything else on this page is a column, not a verdict.`}
+         ${T`Compared on the stored figures, not the printed ones: unlike the rank
+         correlation above, where two scores that print the same are tied, rounding a
+         narrow loss into a tie here would <em>let a claim through</em> rather than hold
+         one back. So two rows printing the same number need not tie.`}</p>
       ${beaten}
       <p class="note">${T`<strong>${c.undominated.length} of ${c.n_systems} systems are beaten
          outright by nobody</strong>, so no single winner is named.`}</p>`;
@@ -924,8 +965,9 @@ function whatTheCalibrationSeparates(sep) {
     : '';
 
   return `<p class="note">${T`Read as bands, not as an order. Two candidates closer than
-    ${sep.margin} are reported here as inseparable rather than ranked — the rule the
-    tables above use for models, applied to the judges for the same reason.`}
+    ${sep.margin} are reported here as inseparable rather than ranked — the rule
+    <a href="index.html">the leaderboard</a> uses for models, applied to the judges for
+    the same reason.`}
     ${led.length
       ? T`Of the ${(sep.ranked.length * (sep.ranked.length - 1)) / 2} pairs, ${sep.separated.length}
          are separated by more than that: ${led.join('; ')}. Every other pair is not,
@@ -945,7 +987,7 @@ function whatTheCalibrationSeparates(sep) {
       : ''}
     ${T`The spread from <code>${best.judge}</code> ${best.alpha.toFixed(3)} to
     <code>${worst.judge}</code> ${worst.alpha.toFixed(3)} is
-    ${(best.alpha - worst.alpha).toFixed(3)}.`}</p>`;
+    ${(Number(best.alpha.toFixed(3)) - Number(worst.alpha.toFixed(3))).toFixed(3)}.`}</p>`;
 }
 
 function whereTheCeilingIsCleared(data, measures, ceiling) {
@@ -1113,6 +1155,30 @@ function drawAll() {
 renderJudges(DATA.judges);
 renderPreference(DATA.preference);
 renderConcordance(DATA.concordance);
+
+// The slot was in the markup from the start and nothing ever filled it, so the
+// page carried an empty paragraph where it promises to say where its numbers
+// come from. Not the leaderboard's line: that page draws one file, and this one
+// draws six -- the panels here are the reason the other page can be believed,
+// so a reader who wants to check them needs to be told which file each is in.
+function drawProvenance() {
+  const box = document.getElementById('provenance');
+  if (!box) return;
+  const files = [
+    DATA.generated_from ? `results/${DATA.generated_from}` : '',
+    'docs/leaderboard.json',
+    'docs/judges.json',
+    'docs/calibration.json',
+    'docs/preference.json',
+    'docs/corpus-profile.json',
+    'docs/saturation-&lt;judge&gt;.json',
+  ].filter(Boolean);
+  box.innerHTML = T`The panels on this page are computed from
+    ${files.map(name => `<code>${name}</code>`).join(', ')} — the calibration and the
+    bands from the judges' individual answers rather than from the rows, because an
+    average cannot be resampled.`;
+}
+drawProvenance();
 
 // Last, so every panel above has drawn once in the reader's language already.
 // On a change it redraws them all: a panel that removed itself for want of data

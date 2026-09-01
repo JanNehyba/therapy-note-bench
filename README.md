@@ -120,7 +120,7 @@ written for somebody building or buying one:
 
 **Do the two judges agree?** (iCARE form on the iHOPE corpus · 17 sections per session)
 
-`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on trace (+0.826) and place 11 of 16 systems differently on it anyway. The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. Systems beating at least one other on every measure under both judges, which needs no weighting to be true: 9. `gpt-5.6-sol` beats 6. 8 of 16 systems are beaten outright by nobody.
+`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on trace (+0.826) and place 11 of 16 systems differently on it anyway. The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. Systems beating at least one other on every measure under both judges, which needs no weighting to be true: 9. `qwen3.8-27b` beats 6. 8 of 16 systems are beaten outright by nobody.
 
 **Do the two judges agree?** (PDSQI-9 · the SOAP notes on AnnoMI, rated for quality)
 
