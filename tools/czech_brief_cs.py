@@ -2351,4 +2351,17 @@ CS: dict[str, str] = {
         "{odd} míň než u kteréhokoli jiného sloupce, ať měří cokoli. Nic je tady "
         "před tím průměrem nepřevádí na společnou škálu."
     ),
+    (
+        "And the one human check on this instrument does not reach them: a person "
+        "rated {notes} notes on {rated}, which under {judge} {verb} exactly the "
+        "columns that are the same for every model. {carries}, which supplies most "
+        "of what the real half's band is built from, has never been rated by a "
+        "person at all."
+    ): (
+        "A jediná lidská kontrola tohohle nástroje se k nim nedostane: člověk "
+        "ohodnotil {notes} zápisů v kritériích {rated}, což jsou pod {judge} přesně "
+        "ty sloupce, které mají všechny modely stejné. {carries}, které dodává "
+        "většinu toho, z čeho je postavené pásmo skutečné půlky, nehodnotil člověk "
+        "nikdy."
+    ),
 }

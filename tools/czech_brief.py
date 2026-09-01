@@ -3988,6 +3988,30 @@ def _conclusion(rows: list[results.Row]) -> str:
             ),
         )
 
+        # And whether the person who checked this instrument checked the part of
+        # it the tables rest on. Printed only when the answer is no.
+        rated_notes, rated = _human_pdsqi()
+        anchored_track = results.TRACK_CZECH_REAL_PDSQI
+        here = [r for r in rows if r.track == anchored_track and r.judge_model == judge]
+        flat = {key for key, _ in COLUMNS[anchored_track]} - set(_varying(anchored_track, here))
+        carries = "succinct"
+        if rated and set(rated) <= flat and carries not in rated:
+            measures = MEASURE_TABLES.get(anchored_track, {})
+
+            def label(key: str) -> str:
+                return _t(measures[key]["label"]) if key in measures else key
+
+            _say(
+                "anchor-misses",
+                _t(ANCHOR_MISSES).format(
+                    notes=rated_notes,
+                    rated=_join_words([label(k) for k in rated]),
+                    judge=judge,
+                    verb=_t("is") if len(rated) == 1 else _t("are"),
+                    carries=label(carries),
+                ),
+            )
+
     # 4. The finding that changes how the tables below are read.
     length = _payload("czech-length.json")
     tail = length.get("tail") or {}
@@ -4174,6 +4198,30 @@ def _length_signs() -> dict[str, str]:
         "deepsy_total": str(counts["deepsy"][1]),
         "positive": _join_words(positive) if positive else _t("no column at all"),
     }
+
+
+#: The gap between what a person checked and what the tables rest on. Printed
+#: only while it is true, and computed from the ratings file rather than typed,
+#: so it stops printing the day somebody rates a note on the column that
+#: carries the band.
+ANCHOR_MISSES = (
+    "And the one human check on this instrument does not reach them: a person rated "
+    "{notes} notes on {rated}, which under {judge} {verb} exactly the columns that are "
+    "the same for every model. {carries}, which supplies most of what the real half's "
+    "band is built from, has never been rated by a person at all."
+)
+
+
+def _human_pdsqi() -> tuple[int, list[str]]:
+    """How many notes a person rated on PDSQI-9, and on which attributes.
+
+    Fifteen answers over five notes sit in `local/czech-pdsqi-answers.json` and
+    nothing in this repository read them until now -- the file's own name is
+    the only mention of it in any source file.
+    """
+    found = _payload("czech-pdsqi-answers.json").get("answers") or []
+    notes = {(a.get("system"), a.get("session")) for a in found if a.get("attribute")}
+    return len(notes), sorted({a["attribute"] for a in found if a.get("attribute")})
 
 
 def _dead_columns(rows: list[results.Row]) -> tuple[int, int, list[str], float, str]:
