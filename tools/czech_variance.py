@@ -335,7 +335,24 @@ PDSQI_HALVES = {
 #: separate run that seeded the whole loop reported exactly that table's
 #: `gemma4` and `kimi-k3` as unstable. A model three thousandths from a boundary
 #: is not placed by this measurement whether or not a particular draw notices.
-THRESHOLD_JITTER = 0.01
+#: **Re-measured on the PDSQI tables, 2026-09-01, over 60 seeds each.** The
+#: paragraph above was measured on the eight CRITERIA tables only, and the
+#: quality tables move further: 0.0000 on `czech-real-pdsqi` under
+#: `gemini-3.1-pro-preview`, but 0.0120 on `czech-translated-pdsqi` and 0.0130
+#: on `deepsy-translated-pdsqi`, both under `gpt-5.6-terra`. Two of the eight
+#: therefore exceeded 0.01, so the bound is raised to cover every table it is
+#: applied to. A bound that some of its tables cross is not a bound.
+#:
+#: An earlier audit put the PDSQI figure at 0.05 -- five times this. That was
+#: measured on the fixed `(accurate, thorough, succinct)` composite, under which
+#: the real half was banded on `succinct` alone; widening each half's composite
+#: to the columns it actually has stabilised the threshold by roughly a factor
+#: of four. The 0.05 was true of the instrument it measured and is not true of
+#: this one.
+#:
+#: Raising it makes `unresolved` longer, which is the safe direction: it names
+#: more models as ones this measurement does not place, never fewer.
+THRESHOLD_JITTER = 0.02
 
 
 def _split(order: list[str], score: dict[str, float], threshold: float) -> list[list[str]]:
