@@ -2234,7 +2234,11 @@ def render_readme_section(data: dict) -> str:
 
         columns = table["columns"]
         multi_provider = len({row["provider"] for row in models}) > 1
-        header = ["Model"]
+        # Where dominance orders the table, the places lead it. Without the
+        # column the order is still there and the ties are not, so three systems
+        # holding third place read as third, fourth and fifth.
+        placed = bool(table.get("places"))
+        header = (["Place"] if placed else []) + ["Model"]
         if multi_provider:
             header.append("Provider")
         # The range goes in the heading. This table puts a 0-1 fraction beside a
@@ -2253,7 +2257,8 @@ def render_readme_section(data: dict) -> str:
             "|" + "---|" * len(header),
         ]
         for row in models:
-            cells = [f"`{row['label']}`"]
+            cells = [] if not placed else [str(row["place"]) if row["place"] else "—"]
+            cells.append(f"`{row['label']}`")
             if multi_provider:
                 cells.append(row["provider"])
             for column in columns:
@@ -2281,12 +2286,25 @@ def render_readme_section(data: dict) -> str:
         # nobody scrolls, so a column that must not be read as a ranking says so
         # right here, under the numbers it applies to.
         lines.append("")
-        lines.append(
-            f"*Ordered by **{_ranking_label(table)}**. Every other column is context.*"
-            if table["ranking_measure"]
-            else "*Deliberately not ranked: these columns measure different things and "
-            "the source paper found they disagree.*"
-        )
+        if table["ranking_measure"]:
+            caveat = f"*Ordered by **{_ranking_label(table)}**. Every other column is context.*"
+        elif table.get("places"):
+            # No column ranks it and the rows are ordered anyway. Both halves
+            # have to be said: the first is why there is no ranking column, the
+            # second is why the rows are not in alphabetical order.
+            caveat = (
+                "*No column ranks this: they measure different things and the source paper "
+                "found they disagree. Ordered instead by how many systems beat each one "
+                f"outright on every column under both judges — {table['places']['n']} "
+                f"places for {table['places']['of']} systems, and rows sharing a place are "
+                "ones the comparison does not separate.*"
+            )
+        else:
+            caveat = (
+                "*Deliberately not ranked: these columns measure different things and "
+                "the source paper found they disagree.*"
+            )
+        lines.append(caveat)
         # A caveat every column of one instrument shares is that instrument's,
         # not the column's. PDSQI-9's 47 words were repeated under all eight of
         # its columns here, exactly as they were on the page. Said once, in the
