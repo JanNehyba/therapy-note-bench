@@ -92,14 +92,18 @@ def test_nothing_draws_a_row_from_a_provider_that_may_not_read_the_corpus():
     assert kept == [allowed] and not refused
 
 
-def test_both_readers_go_through_it():
-    """A guard one of two callers applies is the bug it was written for."""
+def test_the_reader_here_goes_through_it():
+    """A guard one of two callers applies is the bug it was written for.
+
+    The second caller was `tools/czech_brief.py`, which moved to the
+    `czech-therapy-notes` repository on 2026-09-01 along with the rest of the
+    Czech reporting. The pair is asserted there; this half stays because
+    `tnb czech-report` is still in this tree.
+    """
     from tnb.config import REPO_ROOT
 
     cli = (REPO_ROOT / "src" / "tnb" / "cli.py").read_text(encoding="utf-8")
-    brief = (REPO_ROOT / "tools" / "czech_brief.py").read_text(encoding="utf-8")
     assert "results.drawable(" in cli, "tnb czech-report does not filter"
-    assert "results.drawable(" in brief, "the briefing does not filter"
 
 
 def _row(**over):
