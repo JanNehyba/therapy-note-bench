@@ -35,6 +35,7 @@ from typing import NamedTuple
 from tnb import i18n, results
 from tnb.report import (
     COLUMNS,
+    DRAWN_CRITERIA,
     MEASURE_TABLES,
     TRACK_BLURBS,
     TRACK_SWITCH_LABELS,
@@ -817,6 +818,54 @@ def _dominance_wins(systems: list[str], keys, tables: dict) -> dict[str, int]:
     return {system: beats(system) for system in systems}
 
 
+#: Which half's composite a PDSQI track's band was built from. The criteria
+#: tracks band on `DRAWN_CRITERIA`; the PDSQI tracks band on a set
+#: computed per half by `tools/czech_variance.py` and recorded in the payload,
+#: because the real half cannot ask the two attributes that need the session.
+_PDSQI_HALF = {
+    results.TRACK_CZECH_REAL_PDSQI: "real",
+    results.TRACK_DEEPSY_REAL_PDSQI: "real",
+    results.TRACK_CZECH_TRANSLATED_PDSQI: "translated",
+    results.TRACK_DEEPSY_TRANSLATED_PDSQI: "translated",
+}
+
+
+def _band_shares(track: str, rows_by_judge: dict) -> dict[str, list[tuple[str, float]]]:
+    """Per judge, what fraction of the band each composite column supplies.
+
+    A mean weights a column by how far it spreads, so the share is the column's
+    range over the sum of the ranges. A column every model scores the same on
+    has a range of zero and supplies nothing -- it is in the mean and cannot
+    move anything in it.
+
+    Computed from the rows the table already holds rather than from a payload,
+    so it cannot fall out of step with the numbers printed beside it.
+    """
+    half = _PDSQI_HALF.get(track)
+    if half is None:
+        keys = list(DRAWN_CRITERIA)
+    else:
+        keys = list((_payload("czech-variance.json").get("composites") or {}).get(half) or [])
+    if not keys:
+        return {}
+
+    out: dict[str, list[tuple[str, float]]] = {}
+    for judge, by_system in rows_by_judge.items():
+        spread = {}
+        for key in keys:
+            values = [
+                row.metrics.headline[key]
+                for row in by_system.values()
+                if row.metrics.headline.get(key) is not None
+            ]
+            spread[key] = (max(values) - min(values)) if values else 0.0
+        total = sum(spread.values())
+        if not total:
+            continue
+        out[judge] = sorted(((key, spread[key] / total) for key in keys), key=lambda kv: -kv[1])
+    return out
+
+
 def _merged_table(track: str, groups: list[list[results.Row]], *, lead: bool = False) -> str:
     """One table for a track, with every judge's value in every cell.
 
@@ -960,11 +1009,92 @@ def _merged_table(track: str, groups: list[list[results.Row]], *, lead: bool = F
     caption = f"{_t(ROWS_ARE_MODELS)} {order_line}"
     if lead:
         caption = f"{_t(MERGED_LEAD).format(judges=_join_words(judges))} {caption}"
+
+    # What the Band column actually rests on. Naming the columns is not enough:
+    # one of them can supply most of the band, and a column every model scores
+    # the same on supplies none of it while still sitting in the mean.
+    shares = _band_shares(track, rows_by_judge) if banded else {}
+    weights = ""
+    if shares:
+        said = []
+        for judge in judges:
+            ranked = shares.get(judge)
+            if not ranked:
+                continue
+            top, share = ranked[0]
+            mute = [key for key, part in ranked if part <= 0]
+            piece = _t(BAND_SHARE).format(
+                judge=judge,
+                measure=_t(measures[top]["label"]) if top in measures else top,
+                share=f"{share * 100:.0f}",
+            )
+            if mute:
+                phrase = BAND_SHARE_MUTE_ONE if len(mute) == 1 else BAND_SHARE_MUTE
+                piece += " " + _t(phrase).format(
+                    n=len(mute),
+                    total=len(ranked),
+                    measures=_join_words(
+                        [_t(measures[key]["label"]) if key in measures else key for key in mute]
+                    ),
+                )
+            said.append(piece)
+        if said:
+            # Joined with a semicolon and closed with a stop: the two judges'
+            # clauses ran into each other and into the sentence after them,
+            # which read as one sentence saying something neither says.
+            weights = (
+                "<p class='note'>"
+                + html.escape(f"{_t(BAND_SHARE_LEAD)} {'; '.join(said)}. {_t(BAND_SHARE_ORDER)}")
+                + "</p>"
+            )
+
     return (
         f"<p class='sub'>{html.escape(caption)}</p>" + f"<table><thead><tr><th>{_t('Model')}</th>"
         f"<th>{_t('Notes in the mean')}</th>{head}</tr></thead>"
-        f"<tbody>{''.join(body)}</tbody></table>{warning}"
+        f"<tbody>{''.join(body)}</tbody></table>{weights}{warning}"
     )
+
+
+#: What the Band column rests on, said under the table it is drawn in.
+#:
+#: **Naming the columns was not enough.** The document already lists the
+#: measures a band is built from, which reads as though they share the work.
+#: They do not: a mean weights each column by how far it happens to spread, and
+#: on one of these tables a single column supplies 78% of everything separating
+#: the models while two supply nothing at all. Spread is a fact about how widely
+#: the judge graded, not about what matters clinically, so that weighting is
+#: nobody's decision -- which is exactly why it has to be printed.
+BAND_SHARE_LEAD = "What the Band column rests on, measured rather than assumed:"
+#: The per-cent sign lives in the sentence, not in the number: Czech sets a
+#: space before it and English does not, and a preformatted "81%" forces one
+#: language to be wrong.
+BAND_SHARE = "under {judge}, {measure} supplies {share}% of what separates the models"
+BAND_SHARE_MUTE = (
+    "and {n} of the {total} sit in the mean supplying none of it, because every model "
+    "scores the same on them ({measures})"
+)
+#: The same, for the one table where exactly one column is mute. A count that is
+#: sometimes 1 and sometimes 3 needs both, and "1 of the 6 sit" is the kind of
+#: sentence a reader stops at.
+BAND_SHARE_MUTE_ONE = (
+    "and 1 of the {total} sits in the mean supplying none of it, because every model "
+    "scores the same on it ({measures})"
+)
+#: The consequence, and the reason a reader must not read a low Band cell as a
+#: verdict. The rows are ordered by dominance, which has no weights at all; the
+#: Band column is the weighted mean above. They can disagree, and on the Deepsy
+#: real table they do: a model no other model beats sits in the bottom band,
+#: because it writes long notes and the column that punishes that supplies most
+#: of the band.
+BAND_SHARE_ORDER = (
+    "The row order is not built this way: a model is above another only when it is at "
+    "least as good on every column under both judges, which uses no weights at all. The "
+    "two therefore disagree on some rows, and neither is the corrective for the other -- "
+    "they fail in opposite directions. A mean lets one wide column decide the order; an "
+    "every-column rule lets one narrow cell veto it, so a model beaten on eleven of "
+    "twelve cells can still be beaten by nobody on the strength of the twelfth. Read the "
+    "two together, and where they disagree read the columns themselves."
+)
 
 
 #: What the notes column counts, said where it is read. It is the notes

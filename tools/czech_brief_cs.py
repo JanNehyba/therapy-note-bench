@@ -2296,4 +2296,43 @@ CS: dict[str, str] = {
         "je většina sloupce nulová, je to nález: tyhle míry ty modely od sebe "
         "neodliší."
     ),
+    ("What the Band column rests on, measured rather than assumed:"): (
+        "Na čem sloupec Pásmo doopravdy stojí, změřeno a ne odhadnuto:"
+    ),
+    ("under {judge}, {measure} supplies {share}% of what separates the models"): (
+        "pod {judge} dodává {measure} {share} % všeho, co modely odlišuje"
+    ),
+    (
+        "and {n} of the {total} sit in the mean supplying none of it, because every "
+        "model scores the same on them ({measures})"
+    ): (
+        "a {n} z {total} sedí v tom průměru, aniž by dodaly cokoli, protože v nich "
+        "mají všechny modely totéž ({measures})"
+    ),
+    (
+        "and 1 of the {total} sits in the mean supplying none of it, because every "
+        "model scores the same on it ({measures})"
+    ): (
+        "a 1 z {total} sedí v tom průměru, aniž by dodal cokoli, protože v něm mají "
+        "všechny modely totéž ({measures})"
+    ),
+    (
+        "The row order is not built this way: a model is above another only when it "
+        "is at least as good on every column under both judges, which uses no "
+        "weights at all. The two therefore disagree on some rows, and neither is "
+        "the corrective for the other -- they fail in opposite directions. A mean "
+        "lets one wide column decide the order; an every-column rule lets one "
+        "narrow cell veto it, so a model beaten on eleven of twelve cells can still "
+        "be beaten by nobody on the strength of the twelfth. Read the two together, "
+        "and where they disagree read the columns themselves."
+    ): (
+        "Pořadí řádků takhle nevzniká: model je nad jiným, jen když je aspoň tak "
+        "dobrý v každém sloupci pod oběma soudci, a v tom nejsou žádné váhy. Obojí "
+        "si proto u některých řádků odporuje a ani jedno není opravou toho druhého "
+        "— selhávají v opačných směrech. U průměru může o pořadí rozhodnout jeden "
+        "široký sloupec; u pravidla „ve všech sloupcích“ může jedna úzká buňka "
+        "vetovat, takže model poražený v jedenácti buňkách z dvanácti nemusí být "
+        "poražený nikým, a to silou té dvanácté. Čti obojí dohromady, a kde si to "
+        "odporuje, čti rovnou ty sloupce."
+    ),
 }
