@@ -2221,7 +2221,10 @@ CS: dict[str, str] = {
         "set for both formats and both judges: {real} on the real half, "
         "{translated} on the translated one. The real half cannot ask `accurate` or "
         "`thorough` -- they need the session, and the real sessions never leave "
-        "e-INFRA."
+        "e-INFRA. Read the membership with the width beside it: across those "
+        "{tables} the top band runs from {narrowest} models to {widest} of the "
+        "{roster} placed, so on the widest of them being in it separates almost "
+        "nobody."
     ): (
         "Týž nástroj dostaly i zápisy ve formátu Deepsy, a to ve {tables} vlastních "
         "kombinacích tabulky a soudce: {top} v horním pásmu všech a {bottom} v "
@@ -2231,7 +2234,10 @@ CS: dict[str, str] = {
         "něco mezi modely rozlišují, a na týchž sloupcích pro oba formáty i oba "
         "soudce: {real} na skutečné půlce, {translated} na přeložené. Skutečná "
         "půlka se na `accurate` a `thorough` zeptat nemůže — k nim je potřeba "
-        "sezení a skutečná sezení e-INFRA neopouštějí."
+        "sezení a skutečná sezení e-INFRA neopouštějí. Čti tu příslušnost i se "
+        "šířkou: napříč těmi {tables} tabulkami má horní pásmo od {narrowest} "
+        "modelů po {widest} z {roster} zařazených, takže u té nejširší z nich už "
+        "být v něm neodlišuje skoro nikoho."
     ),
     (
         "This chapter says nothing about whether a Deepsy note is a good note, but "

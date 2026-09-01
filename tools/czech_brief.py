@@ -3943,6 +3943,20 @@ def _conclusion(rows: list[results.Row]) -> str:
     #     only one that speaks to the format a reader might actually deploy.
     top_qd, tables_qd = shared(quality_deepsy, 0)
     bottom_qd, _ = shared(quality_deepsy, -1)
+    # How wide the band that membership is shared with. "In the top band of all
+    # four" reads as a distinction held with nobody; on one of these four the
+    # top band holds two thirds of the roster, so the same sentence means very
+    # different things across the tables it intersects over.
+    widths = sorted(
+        len(grouped["bands"][0]["models"])
+        for judges_here in quality_deepsy.values()
+        for grouped in judges_here.values()
+    )
+    rosters = sorted(
+        len({m for band in grouped["bands"] for m in band["models"]})
+        for judges_here in quality_deepsy.values()
+        for grouped in judges_here.values()
+    )
     if tables_qd:
         composites = _payload("czech-variance.json").get("composites") or {}
         _say(
@@ -3957,13 +3971,19 @@ def _conclusion(rows: list[results.Row]) -> str:
                 "there and separate models, the same set for both formats and both "
                 "judges: {real} on the real half, {translated} on the translated "
                 "one. The real half cannot ask `accurate` or `thorough` -- they need "
-                "the session, and the real sessions never leave e-INFRA."
+                "the session, and the real sessions never leave e-INFRA. Read the "
+                "membership with the width beside it: across those {tables} the top "
+                "band runs from {narrowest} models to {widest} of the {roster} placed, "
+                "so on the widest of them being in it separates almost nobody."
             ).format(
                 top=end(top_qd),
                 bottom=end(bottom_qd),
                 tables=tables_qd,
                 real=_join_words(composites.get("real") or []) or "-",
                 translated=_join_words(composites.get("translated") or []) or "-",
+                narrowest=widths[0],
+                widest=widths[-1],
+                roster=rosters[-1],
             ),
         )
 
