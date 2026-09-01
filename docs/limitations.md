@@ -67,6 +67,20 @@ rest, which is why no single winner is named. On PDSQI-9's eight columns, drawn
 on the same table, it is eleven of the nineteen; more measures make dominance
 harder to establish, not easier.
 
+**Those counts were never tested, and this page says so before anything is
+built on them.** Each "beats outright" compares a pair of means over the notes
+both systems have, and until 2026-09-01 nobody asked whether the difference
+survives resampling the conversations. Asked that day, with a paired bootstrap
+over each pair's shared conversations at the threshold the Band column already
+uses, a substantial share of the rubric edges failed, and the edges whose
+tightest comparison is conciseness could not be tested at all, because
+conciseness is not stored per conversation. The counts above therefore
+describe the untested relation. No tested figure replaces them here until the
+test is committed as an artefact this page can be checked against — a figure
+typed from a scratch run is exactly what this file exists to keep out — and
+until then no table on the site orders its rows by these counts or draws them
+as a column.
+
 **And it is not only two judges disagreeing — one judge disagrees with
 itself.** Gemini's thinking budget was raised from 128 to 256 tokens and all
 51 000 questions were asked again. Nothing else changed: same model, same
