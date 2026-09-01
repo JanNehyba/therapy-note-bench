@@ -140,9 +140,38 @@ def instructions() -> dict[str, dict]:
     return out
 
 
+#: How many cache files make one note, per task. A SOAP note is a single call;
+#: a Deepsy note is three, assembled or refused as a whole.
+#:
+#: **This is here because counting files was counting sections.** The glob below
+#: returns one file per call, and summing each file on its own recorded three
+#: short notes for every long one on the Deepsy tracks -- 30 where there are 10,
+#: at about a third of the length. `qwen3.5-int4` went in as 138 words when its
+#: median note is 443, and every length figure and coefficient the document
+#: prints for that format was drawn from that vector. The two orderings
+#: correlate at 0.94, so nothing was upside down, but six models sat in the
+#: wrong place in the middle of it.
+UNITS_PER_NOTE = {
+    czech_task.NAME_REAL: 1,
+    czech_task.NAME_TRANSLATED: 1,
+    deepsy.NAME_REAL: len(deepsy.SECTIONS),
+    deepsy.NAME_TRANSLATED: len(deepsy.SECTIONS),
+}
+
+
 def note_lengths(task_name: str) -> dict[str, list[int]]:
-    """Words per note, per model, from the answer cache."""
-    per: dict[str, list[int]] = collections.defaultdict(list)
+    """Words per note, per model, from the answer cache.
+
+    A note is every section of one (model, session), and a note missing a
+    section is dropped rather than counted short: a partial note is not a
+    shorter note, and averaging it in would make the models that failed most
+    look like the ones that write most briefly.
+    """
+    expected = UNITS_PER_NOTE.get(task_name)
+    if expected is None:
+        raise ValueError(f"{task_name!r} has no unit-per-note count registered.")
+
+    sections: dict[tuple[str, str], dict[str, int]] = collections.defaultdict(dict)
     for path in CACHE.glob(f"{task_name}/**/*.json"):
         try:
             record = json.loads(path.read_text(encoding="utf-8"))
@@ -151,7 +180,15 @@ def note_lengths(task_name: str) -> dict[str, list[int]]:
         note = record.get("note")
         if not record.get("ok") or not isinstance(note, dict):
             continue
-        per[record["model"]].append(sum(_words(value) for value in note.values()))
+        key = (record["model"], record.get("session_id") or path.parent.name)
+        sections[key][record.get("unit") or path.stem] = sum(
+            _words(value) for value in note.values()
+        )
+
+    per: dict[str, list[int]] = collections.defaultdict(list)
+    for (model, _session), units in sections.items():
+        if len(units) == expected:
+            per[model].append(sum(units.values()))
     return dict(per)
 
 
