@@ -398,16 +398,22 @@ _SENTENCES = {
     # and both were left to inference.
     "withdrawn": "staženo",
     "The endpoint no longer served this model when it was last asked, on {0}. Its figures are"
-    " final: it cannot be asked again, re-scored, or measured on anything added later. They are"
-    " kept because the measurements were made.": (
+    " final &mdash; it cannot be asked again, re-scored, or measured on a column added later"
+    " &mdash; and they are kept and counted like every other row, because the measurements were"
+    " made.": (
         "Endpoint tento model už nenabízel, když se ho někdo naposledy ptal, {0}. Jeho čísla "
-        "jsou konečná: nejde se ho zeptat znovu, přebodovat ho ani ho změřit na něčem, co "
-        "přibude později. Zůstávají tu proto, že ta měření proběhla."
+        "jsou konečná &mdash; nejde se ho zeptat znovu, přebodovat ho ani ho změřit na sloupci, "
+        "který přibude později &mdash; a zůstávají tu a počítají se jako u každého jiného "
+        "řádku, protože ta měření proběhla."
     ),
     "<strong>{0}</strong> is drawn here and was not served when the endpoints were last asked, on"
-    " {1}: those figures are final and will not move again.": (
+    " {1}. Its figures are final rather than stale: the measurement was made, it counts in every"
+    " comparison on this page, and it is kept so that a model withdrawn from an endpoint does not"
+    " quietly leave the record.": (
         "<strong>{0}</strong> se tu kreslí a při posledním dotazu na endpointy, {1}, už nabízen "
-        "nebyl: ta čísla jsou konečná a už se nepohnou."
+        "nebyl. Jeho čísla nejsou zastaralá, ale konečná: to měření proběhlo, počítá se do "
+        "každého porovnání na této stránce a řádek tu zůstává proto, aby model stažený "
+        "z endpointu tiše nezmizel ze záznamu."
     ),
     "<strong>{0}</strong> was served on {1} and has never been asked to write a note, so its"
     " absence from these tables is a question nobody put, not a result.": (

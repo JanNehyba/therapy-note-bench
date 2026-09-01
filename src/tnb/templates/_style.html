@@ -495,12 +495,18 @@
     text-transform: uppercase; letter-spacing: .05em;
     background: var(--accent-tint); color: var(--accent);
   }
-  .differs {
+  .differs, .kept {
     display: inline-block; margin-left: .45em; padding: .05em .35em;
     border-radius: var(--radius); font-family: var(--sans);
     font-size: var(--t-xs); font-weight: 600; letter-spacing: .03em;
-    background: var(--chip); color: var(--warn); white-space: nowrap;
+    background: var(--chip); white-space: nowrap;
   }
+  /* Two marks qualify a comparison -- different conditions, a judge from the
+     model's own vendor -- and are drawn as warnings. A third says only that the
+     figures are finished, which is not a fault: the row it sits on is in the
+     top band of one table. Same shape, muted. */
+  .differs { color: var(--warn); }
+  .kept { color: var(--muted); }
 
   /* The second judge's figure, written as a distance from the first. Quiet
      and small: it is context for the number beside it, not a number in its own

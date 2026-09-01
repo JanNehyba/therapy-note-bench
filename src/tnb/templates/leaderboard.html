@@ -814,10 +814,11 @@ function renderTable(table, index) {
       // not move when the benchmark is re-run, and a reader comparing them with
       // a row that will has to know which is which.
       row.withdrawn_on
-        ? `<span class="differs" title="${T`The endpoint no longer served this model when it was
-            last asked, on ${esc(row.withdrawn_on)}. Its figures are final: it cannot be asked
-            again, re-scored, or measured on anything added later. They are kept because the
-            measurements were made.`}">${T`withdrawn`}</span>`
+        ? `<span class="kept" title="${T`The endpoint no longer served this model when it was
+            last asked, on ${esc(row.withdrawn_on)}. Its figures are final &mdash; it cannot be
+            asked again, re-scored, or measured on a column added later &mdash; and they are kept
+            and counted like every other row, because the measurements were made.`}">${
+            T`withdrawn`}</span>`
         : '',
     ].filter(Boolean).join(' ');
     const marksCell = `<td class="meta">${marks || '<span class="dash">—</span>'}</td>`;
@@ -1233,9 +1234,14 @@ function rosterNote() {
   if (!missing.length && !gone.length && !unreachable.length) return '';
   const parts = [];
   if (gone.length) {
+    // Said as what it is: a finished measurement, not a stale one. The row is
+    // in every comparison on this page and in the top band of one of them, and
+    // a sentence that only said "will not move again" left a reader to guess
+    // whether it should still be read.
     parts.push(T`<strong>${gone.join(', ')}</strong> is drawn here and was not served when the
-      endpoints were last asked, on ${roster.asked}: those figures are final and will not move
-      again.`);
+      endpoints were last asked, on ${roster.asked}. Its figures are final rather than stale:
+      the measurement was made, it counts in every comparison on this page, and it is kept so
+      that a model withdrawn from an endpoint does not quietly leave the record.`);
   }
   if (missing.length) {
     parts.push(T`<strong>${missing.join(', ')}</strong> was served on ${roster.asked} and has
