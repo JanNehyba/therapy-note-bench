@@ -53,10 +53,10 @@ WHAT_THIS_IS = (
     "Thirteen language models were each asked to write clinical notes from twenty "
     "psychotherapy sessions. Ten of those sessions are real therapy with one client, "
     "recorded, transcribed and de-identified by hand. Ten are public counselling "
-    "conversations translated into Czech. Every model wrote from the same sessions, so "
-    "no two models are being compared on different material. {written} of the {asked} "
-    "notes were written; where one is missing, this document says so rather than "
-    "leaving it out of an average."
+    "conversations translated into Czech. Every model was asked for all twenty, which is "
+    "what keeps two models from being compared on different material -- and {full} of "
+    "the {models} wrote all twenty. {written} of the {asked} notes were written; where "
+    "one is missing, this document says so rather than leaving it out of an average."
 )
 WHAT_WAS_ASKED = (
     "Every note was then read by two other language models, which answered the same "

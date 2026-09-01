@@ -772,7 +772,7 @@ CS: dict[str, str] = {
     "were written; the rest are named where they are missing. Two "
     "instruments: six yes/no criteria asking whether the Czech is right, and "
     "PDSQI-9, a published instrument, asking whether the note is any good -- and "
-    "PDSQI-9 was put only to the SOAP notes. Both, "
+    "PDSQI-9 was put to {pdsqi_formats}. Both, "
     "because neither answers the other: a flawless Czech sentence about nothing passes "
     "all six criteria, and a note full of insight can be written in bad Czech.": (
         "{models} modelů dostalo zadání napsat zápisy z dvaceti psychoterapeutických "
@@ -782,7 +782,7 @@ CS: dict[str, str] = {
         "zadání; napsáno bylo {written} zápisů z {asked} a kde některý chybí, je to "
         "napsané u té tabulky. Měřily se dvě různé věci. Šest kritérií ano/ne se "
         "ptá, jestli je čeština správně. PDSQI-9, publikovaný nástroj, se ptá, "
-        "jestli je zápis dobrý — a ten dostaly jen zápisy SOAP. "
+        "jestli je zápis dobrý — a ten dostaly {pdsqi_formats}. "
         "Oba, protože jeden na druhého neodpovídá: bezchybná "
         "česká věta o ničem projde všemi šesti kritérii a zápis plný vhledu může být "
         "napsaný špatnou češtinou."
@@ -2008,12 +2008,12 @@ CS: dict[str, str] = {
     ),
     (
         "A published instrument that asks something else: whether the note is any good "
-        "clinically. Eight attributes, six of them answerable here. It was put only to "
-        "the SOAP notes."
+        "clinically. Eight attributes, and on the real sessions six of them: `accurate` "
+        "and `thorough` need the transcript, which never leaves e-INFRA."
     ): (
         "Publikovaný nástroj, který se ptá na něco jiného: jestli je zápis k něčemu "
-        "klinicky. Má osm atributů, šest z nich jde tady zodpovědět. Byl použit jen na "
-        "zápisy ve formátu SOAP."
+        "klinicky. Má osm atributů a na skutečných sezeních jich jde zodpovědět šest: "
+        "`accurate` a `thorough` potřebují přepis, a ten e-INFRA nikdy neopouští."
     ),
     "SOAP and Deepsy": "SOAP a Deepsy",
     (
@@ -2065,16 +2065,18 @@ CS: dict[str, str] = {
         "Thirteen language models were each asked to write clinical notes from twenty "
         "psychotherapy sessions. Ten of those sessions are real therapy with one "
         "client, recorded, transcribed and de-identified by hand. Ten are public "
-        "counselling conversations translated into Czech. Every model wrote from the "
-        "same sessions, so no two models are being compared on different material. "
-        "{written} of the {asked} notes were written; where one is missing, this "
-        "document says so rather than leaving it out of an average."
+        "counselling conversations translated into Czech. Every model was asked for all "
+        "twenty, which is what keeps two models from being compared on different "
+        "material -- and {full} of the {models} wrote all twenty. {written} of the "
+        "{asked} notes were written; where one is missing, this document says so rather "
+        "than leaving it out of an average."
     ): (
         "Třináct jazykových modelů dostalo za úkol napsat klinické zápisy z dvaceti "
         "psychoterapeutických sezení. Deset z těch sezení je skutečná terapie s jednou "
         "klientkou — nahraná, přepsaná a ručně anonymizovaná. Deset jsou veřejné "
-        "poradenské rozhovory přeložené do češtiny. Každý model psal z týchž sezení, "
-        "takže se nikdy neporovnávají dva modely na různém materiálu. Napsáno bylo "
+        "poradenské rozhovory přeložené do češtiny. Každý model dostal zadání na všech "
+        "dvacet — což je to, co brání porovnávat dva modely na různém materiálu — a "
+        "všech dvacet jich napsalo {full} z {models}. Napsáno bylo "
         "{written} zápisů z {asked}; kde některý chybí, je to tady napsané — místo aby "
         "se prostě vynechal z průměru."
     ),
@@ -2334,5 +2336,19 @@ CS: dict[str, str] = {
         "vetovat, takže model poražený v jedenácti buňkách z dvanácti nemusí být "
         "poražený nikým, a to silou té dvanácté. Čti obojí dohromady, a kde si to "
         "odporuje, čti rovnou ty sloupce."
+    ),
+    "the notes in both formats": "zápisy v obou formátech",
+    "the {format} notes only": "jen zápisy {format}",
+    "no notes yet": "zatím žádné zápisy",
+    (
+        "The columns are also not on one ruler: {odd} {verb} scored {odd_scale} "
+        "while the rest run {main}, so the same disagreement counts for less on "
+        "{odd} than on any other column, whatever it measures. Nothing here "
+        "rescales them before the mean."
+    ): (
+        "Sloupce navíc nejsou na jednom měřítku: {odd} se známkuje {odd_scale}, "
+        "zatímco ostatní běží {main} — takže tentýž rozpor váží u "
+        "{odd} míň než u kteréhokoli jiného sloupce, ať měří cokoli. Nic je tady "
+        "před tím průměrem nepřevádí na společnou škálu."
     ),
 }

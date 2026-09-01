@@ -225,7 +225,7 @@ INTRO = (
     "were written; the rest are named where they are missing. "
     "Two instruments: six yes/no criteria asking whether the Czech is right, and "
     "PDSQI-9, a published instrument, asking whether the note is any good -- and "
-    "PDSQI-9 was put only to the SOAP notes. Both, "
+    "PDSQI-9 was put to {pdsqi_formats}. Both, "
     "because neither answers the other: a flawless Czech sentence about nothing "
     "passes all six criteria, and a note full of insight can be written in bad "
     "Czech."
@@ -264,8 +264,8 @@ GLOSSARY = (
     (
         "PDSQI-9",
         "A published instrument that asks something else: whether the note is any "
-        "good clinically. Eight attributes, six of them answerable here. It was put "
-        "only to the SOAP notes.",
+        "good clinically. Eight attributes, and on the real sessions six of them: "
+        "`accurate` and `thorough` need the transcript, which never leaves e-INFRA.",
     ),
     (
         "SOAP and Deepsy",
@@ -1038,13 +1038,37 @@ def _merged_table(track: str, groups: list[list[results.Row]], *, lead: bool = F
                     ),
                 )
             said.append(piece)
+        # Which of the composite's columns are measured on a different ruler from
+        # the rest. Read from `MEASURE_TABLES`, where every measure's scale is
+        # already recorded, rather than inferred from the values.
+        scale_line = ""
+        by_scale: dict[str, list[str]] = {}
+        for key, _part in next(iter(shares.values())):
+            scale = (measures.get(key) or {}).get("scale")
+            if scale:
+                by_scale.setdefault(scale, []).append(key)
+        if len(by_scale) > 1:
+            main = max(by_scale, key=lambda k: len(by_scale[k]))
+            odd = [key for scale, keys in by_scale.items() if scale != main for key in keys]
+            odd_scale = next(scale for scale in by_scale if scale != main)
+            scale_line = " " + _t(BAND_SHARE_SCALE).format(
+                odd=_join_words(
+                    [_t(measures[key]["label"]) if key in measures else key for key in odd]
+                ),
+                verb=_t("is") if len(odd) == 1 else _t("are"),
+                odd_scale=odd_scale,
+                main=main,
+            )
+
         if said:
             # Joined with a semicolon and closed with a stop: the two judges'
             # clauses ran into each other and into the sentence after them,
             # which read as one sentence saying something neither says.
             weights = (
                 "<p class='note'>"
-                + html.escape(f"{_t(BAND_SHARE_LEAD)} {'; '.join(said)}. {_t(BAND_SHARE_ORDER)}")
+                + html.escape(
+                    f"{_t(BAND_SHARE_LEAD)} {'; '.join(said)}.{scale_line} {_t(BAND_SHARE_ORDER)}"
+                )
                 + "</p>"
             )
 
@@ -1086,6 +1110,17 @@ BAND_SHARE_MUTE_ONE = (
 #: real table they do: a model no other model beats sits in the bottom band,
 #: because it writes long notes and the column that punishes that supplies most
 #: of the band.
+#: The part of the weighting that is not the judge's habit but the instrument's
+#: units. Said separately from the shares because it is a different kind of
+#: fault: a column can be given more say by spreading more, which is accidental,
+#: or by being measured on a longer ruler, which is structural and would go away
+#: if the columns were rescaled onto one range before the mean -- which is what
+#: HELM did when it moved its leaderboard back from win rates to a mean.
+BAND_SHARE_SCALE = (
+    "The columns are also not on one ruler: {odd} {verb} scored {odd_scale} while the "
+    "rest run {main}, so the same disagreement counts for less on {odd} than on any "
+    "other column, whatever it measures. Nothing here rescales them before the mean."
+)
 BAND_SHARE_ORDER = (
     "The row order is not built this way: a model is above another only when it is at "
     "least as good on every column under both judges, which uses no weights at all. The "
@@ -3587,13 +3622,42 @@ def _written_figures(rows: list[results.Row]) -> dict[str, str]:
                 f"{_t(TRACK_SWITCH_LABELS.get(track, track))} — "
                 f"{_join_words(names)} {_t('of')} {block['corpus']}"
             )
+    # Which note formats the quality instrument was actually put to, counted
+    # rather than typed. The sentence used to say "only to the SOAP notes" and
+    # went on saying it after PDSQI-9 was put to the Deepsy notes and given two
+    # tables in the same document -- a claim about the run that was not read
+    # from the run.
+    formats = sorted(
+        {
+            "SOAP" if row.track in PDSQI_TRACKS else "Deepsy"
+            for row in results.latest(rows)
+            if row.is_scored and row.track in PDSQI_TRACKS + DEEPSY_PDSQI_TRACKS
+        }
+    )
+    # How many models wrote every session they were asked for on the SOAP
+    # tracks, which is what the short document's opening claims. It used to
+    # claim all of them did -- and then said, two sentences later, that some
+    # notes are missing. Both cannot be true, and the counted one is this.
+    soap_blocks = [b for t, b in found.items() if t in SOAP_CRITERIA_TRACKS]
+    soap_models = {m for b in soap_blocks for m in b["wrote"]}
+    full = sum(
+        1 for m in soap_models if all(b["wrote"].get(m, 0) == b["corpus"] for b in soap_blocks)
+    )
     return {
         "models": str(len(models)),
+        "full": str(full),
         "written": str(written),
         "asked": str(asked),
         "soap": str(soap),
         "deepsy": str(written - soap),
         "short": "; ".join(short),
+        "pdsqi_formats": (
+            _t("the notes in both formats")
+            if len(formats) > 1
+            else _t("the {format} notes only").format(format=formats[0])
+            if formats
+            else _t("no notes yet")
+        ),
     }
 
 
