@@ -1015,6 +1015,10 @@ def _merged_table(track: str, groups: list[list[results.Row]], *, lead: bool = F
     # the same on supplies none of it while still sitting in the mean.
     shares = _band_shares(track, rows_by_judge) if banded else {}
     weights = ""
+    # Beside `weights`, not inside the `if shares` below it: whether a judge
+    # repeats itself does not depend on the table having a Band column, and
+    # nesting it there left the name unbound on every unbanded table.
+    repeat_line = ""
     if shares:
         said = []
         for judge in judges:
@@ -1062,7 +1066,6 @@ def _merged_table(track: str, groups: list[list[results.Row]], *, lead: bool = F
 
         # And whether those numbers come back the same when the judge is asked
         # again. Only for the halves that were actually asked twice.
-        repeat_line = ""
         measured = (_payload("czech-repeatability.json").get("halves") or {}).get(track)
         if measured:
             parts = []

@@ -472,13 +472,6 @@ CS: dict[str, str] = {
         "která umí odlišit sloupec, jenž něco měří, od sloupce, "
         "jenž jen vyrábí čísla."
     ),
-    "at least one judge reports this fault in a note that does not have it, or misses "
-    "it in a note that does. Read that column as a question rather than as an answer "
-    "-- the disagreement is the finding.": (
-        "aspoň jeden soudce hlásí tuto chybu v zápisu, který ji nemá, "
-        "nebo ji přehlédne v zápisu, který ji má. Čti ten sloupec "
-        "jako otázku, ne jako odpověď — ta neshoda je ten nález."
-    ),
     "Every criterion found its own fault under every judge, and none fired on the clean note.": (
         "Každé kritérium našlo svou vlastní chybu u každého soudce "
         "a žádné se nespustilo na čistém zápisu."
