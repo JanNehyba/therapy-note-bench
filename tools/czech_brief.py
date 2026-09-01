@@ -5392,6 +5392,12 @@ CONTROL_CAVEAT = (
 )
 
 
+#: What to call each note format where a control names one. The runs record
+#: `soap` or `deepsy`; a reader should not have to know those are the strings
+#: the tool writes.
+FORMAT_NAMES = {"soap": "the SOAP notes", "deepsy": "the Deepsy notes"}
+
+
 def _controls() -> str:
     """What each column detects, from the planted-error runs.
 
@@ -5420,25 +5426,47 @@ def _controls() -> str:
                 cells.append(f"<td><strong>{html.escape(_t(CONTROL_FALSE_ALARM))}</strong></td>")
             else:
                 cells.append(f"<td><strong>{html.escape(_t(CONTROL_MISSED))}</strong></td>")
-        rows.append(f"<tr><td>{html.escape(run['judge_model'])}</td>{''.join(cells)}</tr>")
+        # The format as well as the judge. Four runs labelled by judge alone
+        # give two rows saying `gemini-3.1-pro-preview` and two saying
+        # `gpt-5.6-terra`, with nothing to say which note each read.
+        who = run["judge_model"]
+        # A run written before the tool could render anything else was a SOAP
+        # run. Defaulting it keeps every row labelled the same way rather than
+        # leaving two rows with a format and two without.
+        fmt = run.get("format") or "soap"
+        label = f"{who} · {_t(FORMAT_NAMES.get(fmt, fmt))}"
+        rows.append(f"<tr><td>{html.escape(label)}</td>{''.join(cells)}</tr>")
 
-    unreliable = sorted(
-        {
+    # Per format, never pooled. `calque` fires on a clean note under one judge
+    # and one format only; one shared set would mark it unreliable on the SOAP
+    # tables as well, where both judges answered it correctly -- which is the
+    # pooling this document refuses everywhere else, arriving through a glob.
+    by_format: dict[str, list[str]] = {}
+    for run in runs:
+        fmt = run.get("format") or "soap"
+        bad = [
             key
-            for run in runs
             for key in keys
             if run["clean"].get(key) or not run["variants"].get(key, {}).get(key)
-        }
+        ]
+        if bad:
+            by_format[fmt] = sorted(set(by_format.get(fmt, [])) | set(bad))
+    unreliable = sorted({key for keys_here in by_format.values() for key in keys_here})
+    named = "; ".join(
+        f"{_t(FORMAT_NAMES.get(fmt, fmt))}: {', '.join(keys_here)}"
+        for fmt, keys_here in sorted(by_format.items())
     )
     verdict = (
         "<div class='warn'><p><strong>"
-        + html.escape(", ".join(unreliable))
-        + "</strong>: "
+        + html.escape(named)
+        + "</strong>. "
         + html.escape(
             _t(
-                "at least one judge reports this fault in a note that does not have "
-                "it, or misses it in a note that does. Read that column as a question "
-                "rather than as an answer -- the disagreement is the finding."
+                "In the format named, at least one judge reports this fault in a note "
+                "that does not have it, or misses it in a note that does. Read that "
+                "column as a question rather than as an answer, IN THAT FORMAT ONLY -- "
+                "a column can be sound on one note format and not on the other, and "
+                "here one is."
             )
         )
         + "</p></div>"

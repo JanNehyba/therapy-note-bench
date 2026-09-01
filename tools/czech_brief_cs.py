@@ -2370,4 +2370,17 @@ CS: dict[str, str] = {
         "většinu toho, z čeho je postavené pásmo skutečné půlky, nehodnotil člověk "
         "nikdy."
     ),
+    "the SOAP notes": "zápisy SOAP",
+    "the Deepsy notes": "zápisy Deepsy",
+    (
+        "In the format named, at least one judge reports this fault in a note that "
+        "does not have it, or misses it in a note that does. Read that column as a "
+        "question rather than as an answer, IN THAT FORMAT ONLY -- a column can be "
+        "sound on one note format and not on the other, and here one is."
+    ): (
+        "V uvedeném formátu aspoň jeden soudce hlásí tuhle chybu v zápise, který ji "
+        "nemá, nebo ji přehlédne v zápise, který ji má. Čti ten sloupec jako "
+        "otázku, ne jako odpověď — a JEN V TOM FORMÁTU: sloupec může být v pořádku "
+        "u jednoho formátu zápisu a u druhého ne, a přesně to se tady stalo."
+    ),
 }
