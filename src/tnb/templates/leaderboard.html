@@ -311,12 +311,12 @@ function detailRow(row, table) {
   // Name, provider and marks are always drawn; the rest are conditional. The
   // effort column is gone -- two of nineteen rows carried one, so it sat on the
   // model's name instead -- and its term goes with it.
-  // Counted from the same helper the header and the body cells use, so the
-  // three cannot drift apart again. They did: the two Beats-outright columns
-  // were added to the header and to every row and not to this, and the raised
-  // detail panel stopped two columns short of its own row with the page
-  // background showing through under Provider and Marks.
-  const span = table.columns.length + instrumentsOf(table).length + 3 +
+  // Counted from the same helpers the header and the body cells use, so the
+  // three cannot drift apart again. They did once: two columns were added to
+  // the header and to every row and not to this, and the raised detail panel
+  // stopped two columns short of its own row with the page background showing
+  // through under Provider and Marks.
+  const span = table.columns.length + 3 +
     (coverageVaries(table) ? 1 : 0) + (table.has_words ? 1 : 0) +
     // Band or Place. Counted here as one column either way, because the header
     // and the body draw one either way: the last time this count missed a
@@ -531,16 +531,6 @@ function renderTable(table, index) {
     `${esc(tr(c.label))}` +
     `<span class="scale">${esc(c.scale)}</span>` +
     `</button></th>`).join('');
-  // After the measures and before the metadata: it is read off the table, so it
-  // belongs beside what it is read off, and it is not one of them.
-  const beatsHead = instrumentsOf(table).map(([track, found]) =>
-    `<th scope="col" data-sort="beats:${track}" class="beats" title="${
-      esc(T`How many of the other systems this one is at least as good as on every ${
-        found.instrument} column, under both judges, and strictly better than somewhere. No weighting, so it holds however a reader weights the columns. The same under either judge, because both are already in it: switching the judge above does not change this column.`)}">` +
-    `<button type="button">` +
-    `<span class="instrument">${esc(tr(found.instrument))}</span>` +
-    `${T`Beats outright`}<span class="scale">${T`of ${found.of}`}</span>` +
-    `</button></th>`).join('');
   // A caveat that belongs to the instrument rather than to the column was
   // printed under every column that instrument owns: PDSQI-9's 47 words, eight
   // times, in one legend -- 376 words saying one thing. Where every column of
@@ -573,7 +563,7 @@ function renderTable(table, index) {
       (c.caveat && shared[c.instrument] !== c.caveat
         ? ` <em>${esc(tr(c.caveat))}</em>` : '') +
       (c.key === 'completeness' ? denominatorNote(table) : '') + `</dd></div>`;
-  }).join('') + beatsLegend(table) + extraLegend(table);
+  }).join('') + extraLegend(table);
   // Said under the table either way. A table with no grouping measured must not
   // read as a strict ranking just because nobody has checked.
   const groupNote = table.groups
@@ -754,12 +744,6 @@ function renderTable(table, index) {
         : (against ? '<span class="gap dash">—</span>' : '');
       return `<td>${fmt(mine, c.digits)}${gap}</td>`;
     }).join('');
-    const beatsCells = instrumentsOf(table).map(([, found]) =>
-      found.systems.has(row.label)
-        ? `<td class="beats">${found.beats.get(row.label) || 0}</td>`
-        : `<td class="beats"><span class="dash" title="${
-            T`Not in the compared population: one of the two judges has no score for this row on every column of this instrument, so there is no count. Not a nought.`
-          }">—</span></td>`).join('');
     // Two different facts, never merged: how many notes the model wrote that the
     // protocol could read, and how many of those the judge has finished. A model
     // mid-judging must not read as a model that could not write.
@@ -857,7 +841,7 @@ function renderTable(table, index) {
       ` tabindex="0" role="button" aria-expanded="false">
         ${rankCell}
         <th scope="row" class="name"><span class="arrow">▸</span>${esc(row.label)}${effortMark}${chip}</th>
-        ${cells}${beatsCells}${wordsCell}${showCoverage ? `<td>${coverage}</td>` : ''}${providerCell}${marksCell}
+        ${cells}${wordsCell}${showCoverage ? `<td>${coverage}</td>` : ''}${providerCell}${marksCell}
       </tr>` + detailRow(row, table);
   }).join('');
 
@@ -875,7 +859,7 @@ function renderTable(table, index) {
           : table.places
             ? `<th scope="col" class="rank" title="${T`How many systems beat this one outright, fewest first: at least as good on every column and better on one, under both judges. Rows the comparison cannot separate share a place and the next place is skipped. It does not follow the sort.`}">${T`Place`}</th>`
             : ''}<th scope="col" class="name" data-sort="label"><button type="button">${
-            T`System`}</button></th>${head}${beatsHead}${table.has_words
+            T`System`}</button></th>${head}${table.has_words
             ? `<th scope="col" data-sort="note_words" title="${T`Median words in this model’s notes. Completeness counts coverage, so a longer note covers more.`}"><button type="button">${T`Words`}</button></th>`
             : ''}${showCoverage
               ? `<th scope="col" data-sort="coverage" title="${T`Notes written of notes asked
@@ -914,68 +898,7 @@ function applyFilters() {
   });
 }
 
-// --- beaten outright --------------------------------------------------------
-//
-// **Not a measure of a note.** Every other column is something a judge or a
-// metric said about one note; this is a statement about the whole table, and
-// it is the only claim about "better" this project makes: at least as good on
-// EVERY column of one instrument under BOTH judges, and strictly better
-// somewhere. It needs no weights, no normalisation and no common unit, which
-// is why it can exist where an average cannot -- the rubric's three columns do
-// not predict each other and the two judges do not agree on the sign of one of
-// those relationships, so a mean of them would be ordered by the weights
-// rather than by the data. This repository has published a false conclusion
-// from exactly one such average before, when the two temporal columns were one.
-//
-// It lives outside `table.columns` on purpose. Everything that iterates the
-// columns -- the correlation grid, the legend, the per-section detail, the
-// ranking switch, the concordance itself -- would otherwise pick it up and
-// treat a count of comparisons as a score.
-//
-// Three states, and they must not look alike:
-//   a number  the system beats that many others outright
-//   0         it beats nobody -- a measurement
-//   —         it is not in the compared population, so there is no count.
-//             `_dominates` refuses a comparison where either system is missing
-//             a measure under either judge, so an absent row is not a low one.
-function dominanceOf(track) {
-  const found = (DATA.concordance || {})[track];
-  if (!found || !Array.isArray(found.systems) || found.systems.length < 2) return null;
-  const beats = new Map();
-  for (const entry of found.dominance || []) beats.set(entry.system, entry.beats.length);
-  return {
-    systems: new Set(found.systems),
-    beats,
-    of: found.systems.length - 1,
-    // How many beat nobody. The size of the tie group is the price of asking
-    // the question without weights, and it belongs beside the answer.
-    nobody: found.systems.length - (found.dominance || []).length,
-    instrument: found.instrument || track,
-  };
-}
 
-// What the column is, and what it costs, said where every other column is
-// defined. A tooltip is not enough for the only claim about "better" this page
-// makes, and the size of the tie group is the price of making it: on the
-// rubric most systems beat nobody, and on PDSQI-9 nearly all of them do. That
-// is not a defect of the column. It is what the evidence supports, and an
-// average would have covered it over with a number.
-function beatsLegend(table) {
-  return instrumentsOf(table).map(([, found]) => {
-    return `<div class="measure"><dt>${T`Beats outright`} <span class="scale">${
-      esc(tr(found.instrument))}</span></dt><dd>${
-      T`How many of the other ${found.of} systems this one is at least as good as on every
-        column of this instrument, under both judges, and strictly better than somewhere.
-        It uses no weights, so it is the part of the ordering every weighting agrees on:
-        a mean would have to decide what a point of one column is worth in another, and
-        nobody has measured that.`} <em>${
-      T`The price is silence. ${found.nobody} of the ${found.systems.size} systems beat nobody
-        outright here, and a tie means the evidence does not say which is better without
-        a preference somebody would have to supply. Compared on the stored figures, so two
-        rows printing the same number need not tie: rounding a narrow loss into a tie
-        would let a claim through rather than hold one back.`}</em></dd></div>`;
-  }).join('');
-}
 
 // One entry per instrument the table draws. A merged SOAP table asks the
 // question twice, and the two answers are different enough that merging them
@@ -984,7 +907,9 @@ function instrumentsOf(table) {
   const tracks = table.merged_from && table.merged_from.length
     ? table.merged_from
     : [table.track];
-  return tracks.map(track => [track, dominanceOf(track)]).filter(pair => pair[1]);
+  return tracks
+    .map(track => [track, (DATA.concordance || {})[track] || null])
+    .filter(pair => pair[1]);
 }
 
 function sortBy(table, key) {
@@ -998,13 +923,6 @@ function sortBy(table, key) {
     if (key === 'provider') return (row.provider || '').toLowerCase();
     if (key === 'coverage') return -row.n_generated;
     if (key === 'note_words') return -(row.note_words ?? -Infinity);
-    if (key.startsWith('beats:')) {
-      const found = dominanceOf(key.slice('beats:'.length));
-      // A row with no count sorts last under either direction, the way a row
-      // with no score does: it is not a nought, and it must not be read as one.
-      if (!found || !found.systems.has(row.label)) return Infinity;
-      return -(found.beats.get(row.label) || 0);
-    }
     const score = row.headline[key];
     return score === undefined || score === null ? Infinity : -score;
   };

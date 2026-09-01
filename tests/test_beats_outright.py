@@ -254,14 +254,29 @@ def test_rounding_cannot_manufacture_a_claim():
     assert _dominates("A", "B", by_judge, decimals)
 
 
-def test_the_page_draws_the_column_and_can_sort_by_it():
-    """The template, not the rendered page: the table is built in the browser."""
+def test_the_page_draws_no_beats_column_while_the_edges_are_untested():
+    """The relation is published; the column is not, until each edge has been tested.
+
+    Every claim it summed compares two stored means that nobody resampled. On
+    2026-09-01 a substantial share of them did not hold at the threshold the
+    Band column uses, and a count summing untested comparisons was drawn as a
+    number. The methods page still lists every claim; the payload still carries
+    the relation and the tests above still hold it. What must not come back
+    without a committed edges artefact is the column, its sort key and its
+    legend -- which is what this pins.
+    """
     template = (REPO_ROOT / "src" / "tnb" / "templates" / "leaderboard.html").read_text(
         encoding="utf-8"
     )
-    for needed in ("function dominanceOf", "beats:${track}", "beatsCells", "beatsLegend"):
-        assert needed in template, f"the beats column lost {needed!r}"
-    assert "found.systems.has(row.label)" in template, (
-        "the cell no longer distinguishes a system outside the compared "
-        "population from one that beats nobody"
-    )
+    for gone in ("beats:${track}", "beatsCells", "beatsLegend", "function dominanceOf"):
+        assert gone not in template, (
+            f"{gone!r} is back in the template; the dominance edges have not been tested, "
+            "and a count of untested comparisons must not be drawn as a column"
+        )
+    for reason in ("docs/edges-", "edges.py"):
+        # The day this fails because the artefact exists is the day the column
+        # may return, with tested edges behind it. Until then it documents why.
+        assert not list((REPO_ROOT / "docs").glob("edges-*.json")), (
+            f"docs/edges-*.json exists; re-instate the column from tested edges and "
+            f"retire this test ({reason})"
+        )
