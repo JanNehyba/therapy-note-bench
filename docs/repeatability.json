@@ -10,6 +10,9 @@
           "notes": 5,
           "questions": 269,
           "same": 265,
+          "systems": [
+            "deepseek-v4-flash"
+          ],
           "track": "tneval-soap",
           "unanswered": 0
         },
@@ -18,6 +21,9 @@
           "notes": 5,
           "questions": 39,
           "same": 37,
+          "systems": [
+            "deepseek-v4-flash"
+          ],
           "track": "pdsqi-soap",
           "unanswered": 1
         },
@@ -26,6 +32,9 @@
           "notes": 5,
           "questions": 25,
           "same": 24,
+          "systems": [
+            "deepseek-v4-flash"
+          ],
           "track": "icare",
           "unanswered": 0
         }
@@ -41,6 +50,9 @@
           "notes": 5,
           "questions": 269,
           "same": 243,
+          "systems": [
+            "deepseek-v4-flash"
+          ],
           "track": "tneval-soap",
           "unanswered": 0
         },
@@ -49,6 +61,9 @@
           "notes": 5,
           "questions": 40,
           "same": 31,
+          "systems": [
+            "deepseek-v4-flash"
+          ],
           "track": "pdsqi-soap",
           "unanswered": 0
         },
@@ -57,6 +72,9 @@
           "notes": 5,
           "questions": 25,
           "same": 19,
+          "systems": [
+            "deepseek-v4-flash"
+          ],
           "track": "icare",
           "unanswered": 0
         }
@@ -64,5 +82,8 @@
     }
   ],
   "notes": 5,
-  "repeat_root": "scores/repeatability-2"
+  "repeat_root": "scores/repeatability-2",
+  "systems": [
+    "deepseek-v4-flash"
+  ]
 }

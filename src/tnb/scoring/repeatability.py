@@ -41,6 +41,11 @@ class TrackRepeat:
     #: answered in only one. A number of its own because it is a different
     #: finding: a judge that will not answer is not a judge that disagrees.
     unanswered: int
+    #: Whose notes these were. The first N candidates in cache order are the
+    #: first N sessions of the first model, so a repeat of five notes is a
+    #: repeat of one model's notes, and the panel has to say so rather than
+    #: let "five notes" read as five models.
+    systems: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -174,6 +179,7 @@ def measure(
                 same=same,
                 questions=both,
                 unanswered=unanswered,
+                systems=tuple(sorted({candidate.system_id for candidate in candidates})),
             )
         )
     return JudgeRepeat(judge_model=judge_model, tracks=counted)
@@ -201,11 +207,16 @@ def to_json(repeats: list[JudgeRepeat], *, notes: int, repeat_root: str) -> dict
                         "same": track.same,
                         "questions": track.questions,
                         "unanswered": track.unanswered,
+                        "systems": list(track.systems),
                     }
                     for track in repeat.tracks
                 ],
             }
             for repeat in repeats
         ],
+        # Every system whose notes any instrument asked about twice, for the
+        # panel's one sentence about what the sample is.
+        "systems": sorted(
+            {system for repeat in repeats for track in repeat.tracks for system in track.systems}
+        ),
     }
-

@@ -9,19 +9,19 @@
   ],
   "counts": {
     "holds": {
-      "0.90": 7,
-      "0.95": 6,
-      "0.99": 4
+      "0.90": 12,
+      "0.95": 9,
+      "0.99": 6
     },
-    "stored": 32,
-    "tested": 32,
+    "stored": 40,
+    "tested": 40,
     "untestable": 0
   },
   "decimals": {
     "bertscore": 3,
     "rouge_l": 3,
-    "temporal_next": 3,
-    "temporal_past": 3,
+    "temporal_next": 2,
+    "temporal_past": 2,
     "trace": 2
   },
   "edges": [
@@ -3384,6 +3384,846 @@
         "p_not_behind": 0.8677
       },
       "winner": "qwen3.8-27b"
+    },
+    {
+      "holds": false,
+      "legs": [
+        {
+          "column": "rouge_l",
+          "difference": 0.021,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 39,
+          "p_ahead": 0.9847,
+          "p_not_behind": 0.9847,
+          "stored_difference": 0.0248
+        },
+        {
+          "column": "bertscore",
+          "difference": 0.0025,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 39,
+          "p_ahead": 0.9494,
+          "p_not_behind": 0.9494,
+          "stored_difference": 0.0042
+        },
+        {
+          "column": "trace",
+          "difference": 0.1273,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 39,
+          "p_ahead": 0.9991,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.1995
+        },
+        {
+          "column": "temporal_past",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 33,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "temporal_next",
+          "difference": 0.1818,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 11,
+          "p_ahead": 0.8887,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.1818
+        },
+        {
+          "column": "rouge_l",
+          "difference": 0.021,
+          "judge": "gpt-5.6-terra",
+          "n": 39,
+          "p_ahead": 0.9847,
+          "p_not_behind": 0.9847,
+          "stored_difference": 0.0248
+        },
+        {
+          "column": "bertscore",
+          "difference": 0.0025,
+          "judge": "gpt-5.6-terra",
+          "n": 39,
+          "p_ahead": 0.9494,
+          "p_not_behind": 0.9494,
+          "stored_difference": 0.0042
+        },
+        {
+          "column": "trace",
+          "difference": 0.4182,
+          "judge": "gpt-5.6-terra",
+          "n": 39,
+          "p_ahead": 0.9997,
+          "p_not_behind": 0.9997,
+          "stored_difference": 0.4354
+        },
+        {
+          "column": "temporal_past",
+          "difference": 0.0,
+          "judge": "gpt-5.6-terra",
+          "n": 33,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "temporal_next",
+          "difference": 0.1818,
+          "judge": "gpt-5.6-terra",
+          "n": 11,
+          "p_ahead": 0.8887,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.1818
+        }
+      ],
+      "loser": "deepseek-v4-flash",
+      "n_shared": 11,
+      "p_holds": 0.9382,
+      "thinnest": {
+        "column": "bertscore",
+        "difference": 0.0025,
+        "judge": "gemini-3.1-pro-preview",
+        "p_not_behind": 0.9494
+      },
+      "winner": "qwen3.8-flash-next"
+    },
+    {
+      "holds": false,
+      "legs": [
+        {
+          "column": "rouge_l",
+          "difference": 0.0138,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 39,
+          "p_ahead": 0.9142,
+          "p_not_behind": 0.9142,
+          "stored_difference": 0.0227
+        },
+        {
+          "column": "bertscore",
+          "difference": 0.0058,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 39,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0091
+        },
+        {
+          "column": "trace",
+          "difference": 0.1091,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 39,
+          "p_ahead": 0.8907,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.1145
+        },
+        {
+          "column": "temporal_past",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 33,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "temporal_next",
+          "difference": 0.1818,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 11,
+          "p_ahead": 0.8907,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.1818
+        },
+        {
+          "column": "rouge_l",
+          "difference": 0.0138,
+          "judge": "gpt-5.6-terra",
+          "n": 39,
+          "p_ahead": 0.9142,
+          "p_not_behind": 0.9142,
+          "stored_difference": 0.0227
+        },
+        {
+          "column": "bertscore",
+          "difference": 0.0058,
+          "judge": "gpt-5.6-terra",
+          "n": 39,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0091
+        },
+        {
+          "column": "trace",
+          "difference": 0.2545,
+          "judge": "gpt-5.6-terra",
+          "n": 39,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.2754
+        },
+        {
+          "column": "temporal_past",
+          "difference": 0.0,
+          "judge": "gpt-5.6-terra",
+          "n": 33,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "temporal_next",
+          "difference": 0.1818,
+          "judge": "gpt-5.6-terra",
+          "n": 11,
+          "p_ahead": 0.8907,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.1818
+        }
+      ],
+      "loser": "deepseek-v4-flash-thinking",
+      "n_shared": 11,
+      "p_holds": 0.9142,
+      "thinnest": {
+        "column": "rouge_l",
+        "difference": 0.0138,
+        "judge": "gemini-3.1-pro-preview",
+        "p_not_behind": 0.9142
+      },
+      "winner": "qwen3.8-flash-next"
+    },
+    {
+      "holds": true,
+      "legs": [
+        {
+          "column": "rouge_l",
+          "difference": 0.0411,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 39,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0419
+        },
+        {
+          "column": "bertscore",
+          "difference": 0.0053,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 39,
+          "p_ahead": 0.9914,
+          "p_not_behind": 0.9914,
+          "stored_difference": 0.0092
+        },
+        {
+          "column": "trace",
+          "difference": 0.0364,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 39,
+          "p_ahead": 0.649,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0545
+        },
+        {
+          "column": "temporal_past",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 33,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "temporal_next",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 11,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "rouge_l",
+          "difference": 0.0411,
+          "judge": "gpt-5.6-terra",
+          "n": 39,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0419
+        },
+        {
+          "column": "bertscore",
+          "difference": 0.0053,
+          "judge": "gpt-5.6-terra",
+          "n": 39,
+          "p_ahead": 0.9914,
+          "p_not_behind": 0.9914,
+          "stored_difference": 0.0092
+        },
+        {
+          "column": "trace",
+          "difference": 0.1091,
+          "judge": "gpt-5.6-terra",
+          "n": 39,
+          "p_ahead": 0.9833,
+          "p_not_behind": 0.992,
+          "stored_difference": 0.0554
+        },
+        {
+          "column": "temporal_past",
+          "difference": 0.0,
+          "judge": "gpt-5.6-terra",
+          "n": 33,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "temporal_next",
+          "difference": 0.0,
+          "judge": "gpt-5.6-terra",
+          "n": 11,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        }
+      ],
+      "loser": "gpt-5.6-luna",
+      "n_shared": 11,
+      "p_holds": 0.9834,
+      "thinnest": {
+        "column": "bertscore",
+        "difference": 0.0053,
+        "judge": "gemini-3.1-pro-preview",
+        "p_not_behind": 0.9914
+      },
+      "winner": "qwen3.8-flash-next"
+    },
+    {
+      "holds": true,
+      "legs": [
+        {
+          "column": "rouge_l",
+          "difference": 0.0435,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 39,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0337
+        },
+        {
+          "column": "bertscore",
+          "difference": 0.0092,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 39,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0122
+        },
+        {
+          "column": "trace",
+          "difference": 0.1273,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 39,
+          "p_ahead": 0.9929,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.1945
+        },
+        {
+          "column": "temporal_past",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 33,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "temporal_next",
+          "difference": 0.2727,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 11,
+          "p_ahead": 0.9689,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.2727
+        },
+        {
+          "column": "rouge_l",
+          "difference": 0.0435,
+          "judge": "gpt-5.6-terra",
+          "n": 39,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0337
+        },
+        {
+          "column": "bertscore",
+          "difference": 0.0092,
+          "judge": "gpt-5.6-terra",
+          "n": 39,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0122
+        },
+        {
+          "column": "trace",
+          "difference": 0.4182,
+          "judge": "gpt-5.6-terra",
+          "n": 39,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.3454
+        },
+        {
+          "column": "temporal_past",
+          "difference": 0.0,
+          "judge": "gpt-5.6-terra",
+          "n": 33,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "temporal_next",
+          "difference": 0.2727,
+          "judge": "gpt-5.6-terra",
+          "n": 11,
+          "p_ahead": 0.9689,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.2727
+        }
+      ],
+      "loser": "gpt-oss-120b",
+      "n_shared": 11,
+      "p_holds": 1.0,
+      "thinnest": {
+        "column": "temporal_past",
+        "difference": 0.0,
+        "judge": "gemini-3.1-pro-preview",
+        "p_not_behind": 1.0
+      },
+      "winner": "qwen3.8-flash-next"
+    },
+    {
+      "holds": false,
+      "legs": [
+        {
+          "column": "rouge_l",
+          "difference": 0.001,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 39,
+          "p_ahead": 0.5338,
+          "p_not_behind": 0.5338,
+          "stored_difference": 0.0063
+        },
+        {
+          "column": "bertscore",
+          "difference": 0.0047,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 39,
+          "p_ahead": 0.9925,
+          "p_not_behind": 0.9925,
+          "stored_difference": 0.0053
+        },
+        {
+          "column": "trace",
+          "difference": 0.0727,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 39,
+          "p_ahead": 0.8939,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.1145
+        },
+        {
+          "column": "temporal_past",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 33,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "temporal_next",
+          "difference": 0.0909,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 11,
+          "p_ahead": 0.6504,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0909
+        },
+        {
+          "column": "rouge_l",
+          "difference": 0.001,
+          "judge": "gpt-5.6-terra",
+          "n": 39,
+          "p_ahead": 0.5338,
+          "p_not_behind": 0.5338,
+          "stored_difference": 0.0063
+        },
+        {
+          "column": "bertscore",
+          "difference": 0.0047,
+          "judge": "gpt-5.6-terra",
+          "n": 39,
+          "p_ahead": 0.9925,
+          "p_not_behind": 0.9925,
+          "stored_difference": 0.0053
+        },
+        {
+          "column": "trace",
+          "difference": 0.2182,
+          "judge": "gpt-5.6-terra",
+          "n": 39,
+          "p_ahead": 0.9992,
+          "p_not_behind": 0.9995,
+          "stored_difference": 0.2654
+        },
+        {
+          "column": "temporal_past",
+          "difference": 0.0,
+          "judge": "gpt-5.6-terra",
+          "n": 33,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "temporal_next",
+          "difference": 0.0909,
+          "judge": "gpt-5.6-terra",
+          "n": 11,
+          "p_ahead": 0.6504,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0909
+        }
+      ],
+      "loser": "mistral-medium-3.5",
+      "n_shared": 11,
+      "p_holds": 0.5334,
+      "thinnest": {
+        "column": "rouge_l",
+        "difference": 0.001,
+        "judge": "gemini-3.1-pro-preview",
+        "p_not_behind": 0.5338
+      },
+      "winner": "qwen3.8-flash-next"
+    },
+    {
+      "holds": true,
+      "legs": [
+        {
+          "column": "rouge_l",
+          "difference": 0.0664,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 39,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0521
+        },
+        {
+          "column": "bertscore",
+          "difference": 0.0071,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 39,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0054
+        },
+        {
+          "column": "trace",
+          "difference": 0.0909,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 39,
+          "p_ahead": 0.9925,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.2195
+        },
+        {
+          "column": "temporal_past",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 33,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "temporal_next",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 11,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "rouge_l",
+          "difference": 0.0664,
+          "judge": "gpt-5.6-terra",
+          "n": 39,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0521
+        },
+        {
+          "column": "bertscore",
+          "difference": 0.0071,
+          "judge": "gpt-5.6-terra",
+          "n": 39,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0054
+        },
+        {
+          "column": "trace",
+          "difference": 0.4909,
+          "judge": "gpt-5.6-terra",
+          "n": 39,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.4304
+        },
+        {
+          "column": "temporal_past",
+          "difference": 0.0,
+          "judge": "gpt-5.6-terra",
+          "n": 33,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "temporal_next",
+          "difference": 0.0,
+          "judge": "gpt-5.6-terra",
+          "n": 11,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        }
+      ],
+      "loser": "qwen3.5-122b",
+      "n_shared": 11,
+      "p_holds": 1.0,
+      "thinnest": {
+        "column": "temporal_past",
+        "difference": 0.0,
+        "judge": "gemini-3.1-pro-preview",
+        "p_not_behind": 1.0
+      },
+      "winner": "qwen3.8-flash-next"
+    },
+    {
+      "holds": false,
+      "legs": [
+        {
+          "column": "rouge_l",
+          "difference": 0.0102,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 38,
+          "p_ahead": 0.9147,
+          "p_not_behind": 0.9147,
+          "stored_difference": 0.0095
+        },
+        {
+          "column": "bertscore",
+          "difference": 0.0026,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 38,
+          "p_ahead": 0.8608,
+          "p_not_behind": 0.8608,
+          "stored_difference": 0.0029
+        },
+        {
+          "column": "trace",
+          "difference": 0.0182,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 38,
+          "p_ahead": 0.6542,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0103
+        },
+        {
+          "column": "temporal_past",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 32,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "temporal_next",
+          "difference": 0.1818,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 11,
+          "p_ahead": 0.8892,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.1818
+        },
+        {
+          "column": "rouge_l",
+          "difference": 0.0102,
+          "judge": "gpt-5.6-terra",
+          "n": 38,
+          "p_ahead": 0.9147,
+          "p_not_behind": 0.9147,
+          "stored_difference": 0.0095
+        },
+        {
+          "column": "bertscore",
+          "difference": 0.0026,
+          "judge": "gpt-5.6-terra",
+          "n": 38,
+          "p_ahead": 0.8608,
+          "p_not_behind": 0.8608,
+          "stored_difference": 0.0029
+        },
+        {
+          "column": "trace",
+          "difference": 0.0727,
+          "judge": "gpt-5.6-terra",
+          "n": 38,
+          "p_ahead": 0.8684,
+          "p_not_behind": 0.9017,
+          "stored_difference": 0.1539
+        },
+        {
+          "column": "temporal_past",
+          "difference": 0.0,
+          "judge": "gpt-5.6-terra",
+          "n": 32,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "temporal_next",
+          "difference": 0.1818,
+          "judge": "gpt-5.6-terra",
+          "n": 11,
+          "p_ahead": 0.8892,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.1818
+        }
+      ],
+      "loser": "qwen3.5-int4",
+      "n_shared": 11,
+      "p_holds": 0.7034,
+      "thinnest": {
+        "column": "bertscore",
+        "difference": 0.0026,
+        "judge": "gemini-3.1-pro-preview",
+        "p_not_behind": 0.8608
+      },
+      "winner": "qwen3.8-flash-next"
+    },
+    {
+      "holds": false,
+      "legs": [
+        {
+          "column": "rouge_l",
+          "difference": 0.008,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 39,
+          "p_ahead": 0.9353,
+          "p_not_behind": 0.9353,
+          "stored_difference": 0.0062
+        },
+        {
+          "column": "bertscore",
+          "difference": -0.0005,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 39,
+          "p_ahead": 0.383,
+          "p_not_behind": 0.383,
+          "stored_difference": 0.0014
+        },
+        {
+          "column": "trace",
+          "difference": 0.0364,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 39,
+          "p_ahead": 0.6538,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0295
+        },
+        {
+          "column": "temporal_past",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 33,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "temporal_next",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 11,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "rouge_l",
+          "difference": 0.008,
+          "judge": "gpt-5.6-terra",
+          "n": 39,
+          "p_ahead": 0.9353,
+          "p_not_behind": 0.9353,
+          "stored_difference": 0.0062
+        },
+        {
+          "column": "bertscore",
+          "difference": -0.0005,
+          "judge": "gpt-5.6-terra",
+          "n": 39,
+          "p_ahead": 0.383,
+          "p_not_behind": 0.383,
+          "stored_difference": 0.0014
+        },
+        {
+          "column": "trace",
+          "difference": 0.1091,
+          "judge": "gpt-5.6-terra",
+          "n": 39,
+          "p_ahead": 0.8519,
+          "p_not_behind": 0.8587,
+          "stored_difference": 0.0254
+        },
+        {
+          "column": "temporal_past",
+          "difference": 0.0,
+          "judge": "gpt-5.6-terra",
+          "n": 33,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "temporal_next",
+          "difference": 0.0,
+          "judge": "gpt-5.6-terra",
+          "n": 11,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        }
+      ],
+      "loser": "qwen3.8-27b",
+      "n_shared": 11,
+      "p_holds": 0.2898,
+      "thinnest": {
+        "column": "bertscore",
+        "difference": -0.0005,
+        "judge": "gemini-3.1-pro-preview",
+        "p_not_behind": 0.383
+      },
+      "winner": "qwen3.8-flash-next"
     }
   ],
   "judges": [
@@ -3397,17 +4237,19 @@
       "gemma4",
       "glm-5",
       "glm-5.2",
+      "glm-5.3",
       "google_gemini-3.1-pro-preview",
       "google_gemini-3.7-flash",
-      "gpt-5.6-luna",
       "gpt-5.6-sol",
       "gpt-5.6-terra",
       "kimi-k3",
       "mistral-medium-3.5",
       "qwen3.5-int4",
-      "qwen3.8-27b"
+      "qwen3.8-27b",
+      "qwen3.8-flash-next"
     ],
     [
+      "gpt-5.6-luna",
       "gpt-oss-120b",
       "qwen3.5-122b"
     ]
@@ -3422,6 +4264,7 @@
     "gemma4",
     "glm-5",
     "glm-5.2",
+    "glm-5.3",
     "google_gemini-3.1-pro-preview",
     "google_gemini-3.7-flash",
     "gpt-5.6-luna",
@@ -3432,7 +4275,8 @@
     "mistral-medium-3.5",
     "qwen3.5-122b",
     "qwen3.5-int4",
-    "qwen3.8-27b"
+    "qwen3.8-27b",
+    "qwen3.8-flash-next"
   ],
   "tables": {
     "gemini-3.1-pro-preview": {
@@ -3475,15 +4319,16 @@
     "gemma4",
     "glm-5",
     "glm-5.2",
+    "glm-5.3",
     "google_gemini-3.1-pro-preview",
     "google_gemini-3.7-flash",
-    "gpt-5.6-luna",
     "gpt-5.6-sol",
     "gpt-5.6-terra",
     "kimi-k3",
     "mistral-medium-3.5",
     "qwen3.5-int4",
-    "qwen3.8-27b"
+    "qwen3.8-27b",
+    "qwen3.8-flash-next"
   ],
   "untestable": []
 }

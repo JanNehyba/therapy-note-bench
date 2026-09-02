@@ -1729,13 +1729,15 @@ _METHODS = {
     # -- the repeatability panel ----------------------------------------------
     "Does a judge repeat itself?": "Odpovídá hodnotitel dvakrát stejně?",
     "The questions behind the tables, asked again of the same judges at the same settings —"
-    " {0} notes per instrument — with the answers compared at the value the tables average, not"
-    " at the wording. Asked into a separate answer cache (<code>{1}</code>), so no table"
-    " anywhere is computed from the second asking.": (
-        "Otázky, za kterými stojí tabulky, položené znovu týmž hodnotitelům při týchž "
-        "nastaveních — {0} zápisů na nástroj — s odpověďmi porovnanými na hodnotě, kterou "
-        "tabulky průměrují, ne na znění. Položené do samostatné cache odpovědí "
-        "(<code>{1}</code>), takže žádná tabulka se nikde nepočítá z druhého kladení."
+    " {0} notes per instrument, all of them written by {1} — with the answers compared at the"
+    " value the tables average, not at the wording. Asked into a separate answer cache"
+    " (<code>{2}</code>), so no table anywhere is computed from the second asking. A repeat of"
+    " one model's notes measures the judge on those notes; it does not sample the field.": (
+        "Otázky, na nichž tabulky stojí, položené znovu týmž hodnotitelům při stejném nastavení — "
+        "{0} zápisů na nástroj, všechny napsané modelem {1} — a odpovědi porovnané na hodnotě, "
+        "kterou tabulky průměrují, ne na znění. Položené do oddělené cache odpovědí "
+        "(<code>{2}</code>), takže z druhého dotazování se nepočítá žádná tabulka. Opakování "
+        "zápisů jednoho modelu měří hodnotitele na těchto zápisech; nevzorkuje pole modelů."
     ),
     "Together": "Dohromady",
     "{0} for <code>{1}</code>": "{0} u <code>{1}</code>",

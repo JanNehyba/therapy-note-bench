@@ -450,31 +450,31 @@ CLAIMS = (
     Claim(
         where="docs/limitations.md",
         phrase=(
-            "kept only where it held in 0.95 of the draws. Of the 29 rubric claims 11 hold; of "
-            "PDSQI-9's 11 claims 1 holds; of iCARE's 32 claims 6 hold"
+            "kept only where it held in 0.95 of the draws. Of the 38 rubric claims 14 hold; of "
+            "PDSQI-9's 12 claims 1 holds; of iCARE's 40 claims 9 hold"
         ),
         kind="computed",
         because="the threshold and the counts in docs/edges-<track>.json, per track",
-        covers=("0.95", "29", "11", "11", "1", "32", "6"),
+        covers=("0.95", "38", "14", "12", "1", "40", "9"),
         expected=_tested_claims,
     ),
     Claim(
         where="docs/limitations.md",
         phrase=(
-            "on the rubric 15 of 19 systems share the top group, with 3 below them and the "
-            "therapist alone at the bottom; on PDSQI-9 18 of 19 share it; on iCARE 14 of 16"
+            "on the rubric 16 of 21 systems share the top group, with 4 below them and the "
+            "therapist alone at the bottom; on PDSQI-9 20 of 21 share it; on iCARE 15 of 18"
         ),
         kind="computed",
         because="the layers in docs/edges-<track>.json, per track",
-        covers=("15", "19", "3", "18", "19", "14", "16"),
+        covers=("16", "21", "4", "20", "21", "15", "18"),
         expected=_tested_groups,
     ),
     Claim(
         where="README.md",
-        phrase="15 of 19 systems share the top group",
+        phrase="16 of 21 systems share the top group",
         kind="computed",
         because="the rubric's top layer in docs/edges-tneval-soap.json",
-        covers=("15", "19"),
+        covers=("16", "21"),
         expected=_readme_top_group,
     ),
     # The judge's non-answers: what they were and what the re-ask changed.
@@ -531,10 +531,10 @@ CLAIMS = (
     ),
     Claim(
         where="docs/limitations.md",
-        phrase="27 of the 1040 SOAP notes are still scored on fewer than all four sections",
+        phrase="19 of the 1040 SOAP notes are still scored on fewer than all four sections",
         kind="computed",
         because="the part-answered count after the re-ask; if it moves, this sentence must",
-        covers=("27", "1040", "four"),
+        covers=("19", "1040", "four"),
         expected=_part_answered_notes,
     ),
     Claim(
@@ -547,10 +547,10 @@ CLAIMS = (
     ),
     Claim(
         where="docs/limitations.md",
-        phrase="is 33 of 50 under gemini and 40 under gpt",
+        phrase="is 36 of 50 under gemini and 40 under gpt",
         kind="computed",
         because="the band analysis's denominators, read from the two committed saturation analyses",
-        covers=("33", "50", "40"),
+        covers=("36", "50", "40"),
         expected=_shared_sets_stated,
     ),
     Claim(
@@ -591,19 +591,19 @@ CLAIMS = (
     Claim(
         where="docs/methodology.md",
         phrase=(
-            "`gemini-3.1-pro-preview` +0.017 [−0.011, +0.046] and `gpt-5.6-terra` +0.016 "
-            "[−0.008, +0.043]"
+            "`gemini-3.1-pro-preview` +0.018 [−0.009, +0.046] and `gpt-5.6-terra` +0.017 "
+            "[−0.007, +0.043]"
         ),
         kind="elsewhere",
         because="test_docs_figures.py recomputes both intervals from docs/preference.json",
-        covers=("0.017", "0.011", "0.046", "0.016", "0.008", "0.043"),
+        covers=("0.018", "0.009", "0.046", "0.017", "0.007", "0.043"),
     ),
     Claim(
         where="docs/methodology.md",
-        phrase="they do not: −0.002 [−0.042, +0.041]",
+        phrase="they do not: −0.000 [−0.041, +0.042]",
         kind="elsewhere",
         because="test_docs_figures.py recomputes the judges' difference from docs/preference.json",
-        covers=("0.002", "0.042", "0.041"),
+        covers=("0.000", "0.041", "0.042"),
     ),
     Claim(
         where="docs/methodology.md",

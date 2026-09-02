@@ -1174,10 +1174,12 @@ function renderRepeatability(data) {
 
   box.innerHTML = `<h2>${T`Does a judge repeat itself?`}</h2>
     <p class="blurb">${T`The questions behind the tables, asked again of the same judges at the
-       same settings — ${data.notes} notes per instrument — with the answers compared at the
-       value the tables average, not at the wording. Asked into a separate answer cache
-       (<code>${data.repeat_root}</code>), so no table anywhere is computed from the second
-       asking.`}</p>
+       same settings — ${data.notes} notes per instrument, all of them written by
+       ${(data.systems || []).map(s => `<code>${esc(s)}</code>`).join(', ') || '—'} — with the
+       answers compared at the value the tables average, not at the wording. Asked into a
+       separate answer cache (<code>${data.repeat_root}</code>), so no table anywhere is
+       computed from the second asking. A repeat of one model's notes measures the judge on
+       those notes; it does not sample the field.`}</p>
     <div class="scroll"><table class="concordance">
       <thead><tr><th>${T`Judge`}</th>${tracks.map(t => `<th>${esc(tr(t.label))}</th>`).join('')}
         <th>${T`Together`}</th></tr></thead>

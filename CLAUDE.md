@@ -22,7 +22,7 @@ jargon, and prove things in small verified steps rather than large ones.
 
 ## Where We Are
 
-Phases 0 to 5 are done. 16 models have written notes on both tracks — 50 AnnoMI
+Phases 0 to 5 are done. 18 models have written notes on both tracks — 50 AnnoMI
 conversations for TN-Eval SOAP, 40 iHOPE sessions for iCARE — and both tracks
 are scored by two independent judges, `gemini-3.1-pro-preview` and
 `gpt-5.6-terra`. `tnb report` writes four artefacts from `results/rows.jsonl`:
@@ -45,7 +45,7 @@ Read `docs/limitations.md` before adding a number to any view. Three findings
 bound what a table may claim: the two judges agree on the *shape* of the
 ranking and not on the order, the three TN-Eval columns do not predict each
 other, and **each judge scores its own vendor about 0.02 completeness higher**
-— +0.017 for `gemini-3.1-pro-preview` and +0.016 for `gpt-5.6-terra` after the
+— +0.018 for `gemini-3.1-pro-preview` and +0.017 for `gpt-5.6-terra` after the
 re-ask of 2026-09-02, neither interval clearing zero once the models are
 resampled as well as the conversations. The rows it applies to are marked in the table. A published
 "detected" verdict came from resampling conversations only, which treats four

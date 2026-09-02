@@ -80,12 +80,12 @@ harder to establish, not easier.
 Each "beats outright" compares a pair of means over the notes both systems
 have, and on 2026-09-02 every such claim was tested whole: all of its legs —
 one per judge and column — resampled together over the conversations the pair
-shares, and kept only where it held in 0.95 of the draws. Of the 29 rubric
-claims 11 hold; of PDSQI-9's 11 claims 1 holds; of iCARE's 32 claims 6 hold;
+shares, and kept only where it held in 0.95 of the draws. Of the 38 rubric
+claims 14 hold; of PDSQI-9's 12 claims 1 holds; of iCARE's 40 claims 9 hold;
 none was untestable. What the surviving claims separate is the Group column:
-on the rubric 15 of 19 systems share the top group, with 3 below them and the
-therapist alone at the bottom; on PDSQI-9 18 of 19 share it; on iCARE 14 of
-16. The artefacts behind the column are `docs/edges-<track>.json`, and every
+on the rubric 16 of 21 systems share the top group, with 4 below them and the
+therapist alone at the bottom; on PDSQI-9 20 of 21 share it; on iCARE 15 of
+18. The artefacts behind the column are `docs/edges-<track>.json`, and every
 tested claim is listed on
 [the methods page](https://jannehyba.github.io/therapy-note-bench/methods.html#groups).
 
@@ -244,10 +244,10 @@ rubric is not completeness against a reimbursement requirement.
   and the cache serves a record only if it passes the question's own test.
 - **What the re-ask changed, measured after it.** Re-asked at harness 0.7.0,
   62 of the 78 came back as answers and 16 did not (counted from the run's
-  output, which is not in this repository). So 27 of the 1040 SOAP notes are
+  output, which is not in this repository). So 19 of the 1040 SOAP notes are
   still scored on fewer than all four sections and stay out of their systems'
   means, and the set of conversations all 21 systems share — the set the band
-  analysis on the methods page resamples — is 33 of 50 under gemini and 40
+  analysis on the methods page resamples — is 36 of 50 under gemini and 40
   under gpt, where `gpt-oss-120b`'s 8 unrecoverable notes and
   `qwen3.8-flash-next`'s two notes with truncated judge answers are missing;
   under gemini it had been 25. Completeness moved on 16 of the 19 systems, by

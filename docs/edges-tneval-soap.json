@@ -7,12 +7,12 @@
   ],
   "counts": {
     "holds": {
-      "0.90": 14,
-      "0.95": 11,
-      "0.99": 5
+      "0.90": 18,
+      "0.95": 14,
+      "0.99": 6
     },
-    "stored": 29,
-    "tested": 29,
+    "stored": 38,
+    "tested": 38,
     "untestable": 0
   },
   "decimals": {
@@ -228,8 +228,8 @@
       "loser": "qwen3.8-27b",
       "n_shared": 49,
       "one_leg_completeness": {
-        "gemini-3.1-pro-preview": 0.887,
-        "gpt-5.6-terra": 0.9005
+        "gemini-3.1-pro-preview": 0.9095,
+        "gpt-5.6-terra": 0.8885
       },
       "p_holds": 0.4304,
       "thinnest": {
@@ -237,6 +237,79 @@
         "difference": 0.0204,
         "judge": "gpt-5.6-terra",
         "p_not_behind": 0.6704
+      },
+      "winner": "glm-5"
+    },
+    {
+      "holds": false,
+      "legs": [
+        {
+          "column": "completeness",
+          "difference": 0.0282,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 48,
+          "p_ahead": 0.9623,
+          "p_not_behind": 0.9623,
+          "stored_difference": 0.0274
+        },
+        {
+          "column": "conciseness",
+          "difference": 0.0119,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 48,
+          "p_ahead": 0.8365,
+          "p_not_behind": 0.8365,
+          "stored_difference": 0.0106
+        },
+        {
+          "column": "faithfulness",
+          "difference": 0.0833,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 48,
+          "p_ahead": 0.9454,
+          "p_not_behind": 0.9538,
+          "stored_difference": 0.085
+        },
+        {
+          "column": "completeness",
+          "difference": 0.0454,
+          "judge": "gpt-5.6-terra",
+          "n": 48,
+          "p_ahead": 0.998,
+          "p_not_behind": 0.998,
+          "stored_difference": 0.0466
+        },
+        {
+          "column": "conciseness",
+          "difference": 0.0275,
+          "judge": "gpt-5.6-terra",
+          "n": 48,
+          "p_ahead": 0.9759,
+          "p_not_behind": 0.9759,
+          "stored_difference": 0.026
+        },
+        {
+          "column": "faithfulness",
+          "difference": 0.0885,
+          "judge": "gpt-5.6-terra",
+          "n": 48,
+          "p_ahead": 0.9249,
+          "p_not_behind": 0.9357,
+          "stored_difference": 0.095
+        }
+      ],
+      "loser": "qwen3.8-flash-next",
+      "n_shared": 48,
+      "one_leg_completeness": {
+        "gemini-3.1-pro-preview": 0.9085,
+        "gpt-5.6-terra": 0.996
+      },
+      "p_holds": 0.7282,
+      "thinnest": {
+        "column": "conciseness",
+        "difference": 0.0119,
+        "judge": "gemini-3.1-pro-preview",
+        "p_not_behind": 0.8365
       },
       "winner": "glm-5"
     },
@@ -293,8 +366,8 @@
           "difference": 0.1649,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.9662,
-          "p_not_behind": 0.9707,
+          "p_ahead": 0.9668,
+          "p_not_behind": 0.9723,
           "stored_difference": 0.175
         }
       ],
@@ -304,14 +377,87 @@
         "gemini-3.1-pro-preview": 1.0,
         "gpt-5.6-terra": 1.0
       },
-      "p_holds": 0.9707,
+      "p_holds": 0.9723,
       "thinnest": {
         "column": "faithfulness",
         "difference": 0.1649,
         "judge": "gpt-5.6-terra",
-        "p_not_behind": 0.9707
+        "p_not_behind": 0.9723
       },
       "winner": "glm-5"
+    },
+    {
+      "holds": false,
+      "legs": [
+        {
+          "column": "completeness",
+          "difference": 0.0239,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 48,
+          "p_ahead": 0.9657,
+          "p_not_behind": 0.9659,
+          "stored_difference": 0.0235
+        },
+        {
+          "column": "conciseness",
+          "difference": 0.0201,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 48,
+          "p_ahead": 0.9171,
+          "p_not_behind": 0.9171,
+          "stored_difference": 0.0207
+        },
+        {
+          "column": "faithfulness",
+          "difference": 0.099,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 48,
+          "p_ahead": 0.9941,
+          "p_not_behind": 0.9962,
+          "stored_difference": 0.1
+        },
+        {
+          "column": "completeness",
+          "difference": 0.041,
+          "judge": "gpt-5.6-terra",
+          "n": 48,
+          "p_ahead": 0.9994,
+          "p_not_behind": 0.9994,
+          "stored_difference": 0.0461
+        },
+        {
+          "column": "conciseness",
+          "difference": 0.0403,
+          "judge": "gpt-5.6-terra",
+          "n": 48,
+          "p_ahead": 0.9981,
+          "p_not_behind": 0.9981,
+          "stored_difference": 0.0404
+        },
+        {
+          "column": "faithfulness",
+          "difference": 0.0469,
+          "judge": "gpt-5.6-terra",
+          "n": 48,
+          "p_ahead": 0.7555,
+          "p_not_behind": 0.7793,
+          "stored_difference": 0.035
+        }
+      ],
+      "loser": "qwen3.8-flash-next",
+      "n_shared": 48,
+      "one_leg_completeness": {
+        "gemini-3.1-pro-preview": 0.904,
+        "gpt-5.6-terra": 0.996
+      },
+      "p_holds": 0.6907,
+      "thinnest": {
+        "column": "faithfulness",
+        "difference": 0.0469,
+        "judge": "gpt-5.6-terra",
+        "p_not_behind": 0.7793
+      },
+      "winner": "glm-5.2"
     },
     {
       "holds": false,
@@ -366,8 +512,8 @@
           "difference": 0.1011,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.8787,
-          "p_not_behind": 0.891,
+          "p_ahead": 0.8835,
+          "p_not_behind": 0.8951,
           "stored_difference": 0.115
         }
       ],
@@ -377,14 +523,87 @@
         "gemini-3.1-pro-preview": 1.0,
         "gpt-5.6-terra": 1.0
       },
-      "p_holds": 0.891,
+      "p_holds": 0.8951,
       "thinnest": {
         "column": "faithfulness",
         "difference": 0.1011,
         "judge": "gpt-5.6-terra",
-        "p_not_behind": 0.891
+        "p_not_behind": 0.8951
       },
       "winner": "glm-5.2"
+    },
+    {
+      "holds": false,
+      "legs": [
+        {
+          "column": "completeness",
+          "difference": 0.2228,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 44,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.2099
+        },
+        {
+          "column": "conciseness",
+          "difference": 0.2025,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 44,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.1866
+        },
+        {
+          "column": "faithfulness",
+          "difference": 0.2784,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 44,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.3298
+        },
+        {
+          "column": "completeness",
+          "difference": 0.2568,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.2533
+        },
+        {
+          "column": "conciseness",
+          "difference": 0.1793,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.1753
+        },
+        {
+          "column": "faithfulness",
+          "difference": 0.0057,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.5119,
+          "p_not_behind": 0.5401,
+          "stored_difference": 0.075
+        }
+      ],
+      "loser": "therapist",
+      "n_shared": 44,
+      "one_leg_completeness": {
+        "gemini-3.1-pro-preview": 1.0,
+        "gpt-5.6-terra": 1.0
+      },
+      "p_holds": 0.5401,
+      "thinnest": {
+        "column": "faithfulness",
+        "difference": 0.0057,
+        "judge": "gpt-5.6-terra",
+        "p_not_behind": 0.5401
+      },
+      "winner": "glm-5.3"
     },
     {
       "holds": false,
@@ -394,8 +613,8 @@
           "difference": 0.0268,
           "judge": "gemini-3.1-pro-preview",
           "n": 49,
-          "p_ahead": 0.9878,
-          "p_not_behind": 0.9878,
+          "p_ahead": 0.9881,
+          "p_not_behind": 0.9881,
           "stored_difference": 0.0301
         },
         {
@@ -403,8 +622,8 @@
           "difference": 0.0268,
           "judge": "gemini-3.1-pro-preview",
           "n": 49,
-          "p_ahead": 0.9932,
-          "p_not_behind": 0.9932,
+          "p_ahead": 0.9943,
+          "p_not_behind": 0.9943,
           "stored_difference": 0.025
         },
         {
@@ -412,8 +631,8 @@
           "difference": 0.0153,
           "judge": "gemini-3.1-pro-preview",
           "n": 49,
-          "p_ahead": 0.6511,
-          "p_not_behind": 0.7134,
+          "p_ahead": 0.6496,
+          "p_not_behind": 0.7145,
           "stored_difference": 0.0145
         },
         {
@@ -421,8 +640,8 @@
           "difference": 0.0452,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.9999,
-          "p_not_behind": 0.9999,
+          "p_ahead": 0.9998,
+          "p_not_behind": 0.9998,
           "stored_difference": 0.0443
         },
         {
@@ -430,8 +649,8 @@
           "difference": 0.0246,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.9986,
-          "p_not_behind": 0.9986,
+          "p_ahead": 0.9988,
+          "p_not_behind": 0.9988,
           "stored_difference": 0.0254
         },
         {
@@ -439,23 +658,23 @@
           "difference": 0.0153,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.5929,
-          "p_not_behind": 0.6245,
+          "p_ahead": 0.5815,
+          "p_not_behind": 0.614,
           "stored_difference": 0.015
         }
       ],
       "loser": "glm-5",
       "n_shared": 49,
       "one_leg_completeness": {
-        "gemini-3.1-pro-preview": 0.9565,
-        "gpt-5.6-terra": 0.997
+        "gemini-3.1-pro-preview": 0.924,
+        "gpt-5.6-terra": 0.9855
       },
-      "p_holds": 0.4797,
+      "p_holds": 0.4651,
       "thinnest": {
         "column": "faithfulness",
         "difference": 0.0153,
         "judge": "gpt-5.6-terra",
-        "p_not_behind": 0.6245
+        "p_not_behind": 0.614
       },
       "winner": "google_gemini-3.1-pro-preview"
     },
@@ -485,8 +704,8 @@
           "difference": 0.0306,
           "judge": "gemini-3.1-pro-preview",
           "n": 49,
-          "p_ahead": 0.8661,
-          "p_not_behind": 0.9109,
+          "p_ahead": 0.8717,
+          "p_not_behind": 0.9131,
           "stored_difference": 0.0306
         },
         {
@@ -512,23 +731,96 @@
           "difference": 0.0357,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.7012,
-          "p_not_behind": 0.7289,
+          "p_ahead": 0.7011,
+          "p_not_behind": 0.7283,
           "stored_difference": 0.04
         }
       ],
       "loser": "qwen3.8-27b",
       "n_shared": 49,
       "one_leg_completeness": {
-        "gemini-3.1-pro-preview": 0.9985,
-        "gpt-5.6-terra": 1.0
+        "gemini-3.1-pro-preview": 0.998,
+        "gpt-5.6-terra": 0.9975
       },
-      "p_holds": 0.6904,
+      "p_holds": 0.6933,
       "thinnest": {
         "column": "faithfulness",
         "difference": 0.0357,
         "judge": "gpt-5.6-terra",
-        "p_not_behind": 0.7289
+        "p_not_behind": 0.7283
+      },
+      "winner": "google_gemini-3.1-pro-preview"
+    },
+    {
+      "holds": true,
+      "legs": [
+        {
+          "column": "completeness",
+          "difference": 0.0493,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 47,
+          "p_ahead": 0.9979,
+          "p_not_behind": 0.9979,
+          "stored_difference": 0.0575
+        },
+        {
+          "column": "conciseness",
+          "difference": 0.0362,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 47,
+          "p_ahead": 0.9939,
+          "p_not_behind": 0.9939,
+          "stored_difference": 0.0356
+        },
+        {
+          "column": "faithfulness",
+          "difference": 0.1011,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 47,
+          "p_ahead": 0.9855,
+          "p_not_behind": 0.9907,
+          "stored_difference": 0.0995
+        },
+        {
+          "column": "completeness",
+          "difference": 0.085,
+          "judge": "gpt-5.6-terra",
+          "n": 48,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0909
+        },
+        {
+          "column": "conciseness",
+          "difference": 0.0517,
+          "judge": "gpt-5.6-terra",
+          "n": 48,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0514
+        },
+        {
+          "column": "faithfulness",
+          "difference": 0.1117,
+          "judge": "gpt-5.6-terra",
+          "n": 48,
+          "p_ahead": 0.9696,
+          "p_not_behind": 0.9753,
+          "stored_difference": 0.11
+        }
+      ],
+      "loser": "qwen3.8-flash-next",
+      "n_shared": 47,
+      "one_leg_completeness": {
+        "gemini-3.1-pro-preview": 0.986,
+        "gpt-5.6-terra": 1.0
+      },
+      "p_holds": 0.9585,
+      "thinnest": {
+        "column": "faithfulness",
+        "difference": 0.1117,
+        "judge": "gpt-5.6-terra",
+        "p_not_behind": 0.9753
       },
       "winner": "google_gemini-3.1-pro-preview"
     },
@@ -585,8 +877,8 @@
           "difference": 0.163,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.9706,
-          "p_not_behind": 0.9742,
+          "p_ahead": 0.9732,
+          "p_not_behind": 0.9764,
           "stored_difference": 0.19
         }
       ],
@@ -596,12 +888,12 @@
         "gemini-3.1-pro-preview": 1.0,
         "gpt-5.6-terra": 1.0
       },
-      "p_holds": 0.9742,
+      "p_holds": 0.9764,
       "thinnest": {
         "column": "faithfulness",
         "difference": 0.163,
         "judge": "gpt-5.6-terra",
-        "p_not_behind": 0.9742
+        "p_not_behind": 0.9764
       },
       "winner": "google_gemini-3.1-pro-preview"
     },
@@ -622,8 +914,8 @@
           "difference": 0.0127,
           "judge": "gemini-3.1-pro-preview",
           "n": 50,
-          "p_ahead": 0.869,
-          "p_not_behind": 0.869,
+          "p_ahead": 0.8621,
+          "p_not_behind": 0.8621,
           "stored_difference": 0.0127
         },
         {
@@ -631,8 +923,8 @@
           "difference": 0.1,
           "judge": "gemini-3.1-pro-preview",
           "n": 50,
-          "p_ahead": 0.997,
-          "p_not_behind": 0.9981,
+          "p_ahead": 0.9979,
+          "p_not_behind": 0.9988,
           "stored_difference": 0.1
         },
         {
@@ -640,8 +932,8 @@
           "difference": 0.0369,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.9999,
-          "p_not_behind": 0.9999,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
           "stored_difference": 0.0369
         },
         {
@@ -649,8 +941,8 @@
           "difference": 0.0125,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.8774,
-          "p_not_behind": 0.8774,
+          "p_ahead": 0.8862,
+          "p_not_behind": 0.8862,
           "stored_difference": 0.0124
         },
         {
@@ -667,14 +959,14 @@
       "n_shared": 50,
       "one_leg_completeness": {
         "gemini-3.1-pro-preview": 1.0,
-        "gpt-5.6-terra": 0.9985
+        "gpt-5.6-terra": 0.9965
       },
-      "p_holds": 0.7976,
+      "p_holds": 0.7998,
       "thinnest": {
         "column": "conciseness",
         "difference": 0.0127,
         "judge": "gemini-3.1-pro-preview",
-        "p_not_behind": 0.869
+        "p_not_behind": 0.8621
       },
       "winner": "google_gemini-3.7-flash"
     },
@@ -695,8 +987,8 @@
           "difference": 0.0319,
           "judge": "gemini-3.1-pro-preview",
           "n": 48,
-          "p_ahead": 0.996,
-          "p_not_behind": 0.996,
+          "p_ahead": 0.9961,
+          "p_not_behind": 0.9961,
           "stored_difference": 0.0315
         },
         {
@@ -713,8 +1005,8 @@
           "difference": 0.0062,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.663,
-          "p_not_behind": 0.663,
+          "p_ahead": 0.6613,
+          "p_not_behind": 0.6613,
           "stored_difference": 0.0022
         },
         {
@@ -722,8 +1014,8 @@
           "difference": 0.0307,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.9979,
-          "p_not_behind": 0.9979,
+          "p_ahead": 0.9978,
+          "p_not_behind": 0.9978,
           "stored_difference": 0.0336
         },
         {
@@ -739,15 +1031,15 @@
       "loser": "deepseek-v4-flash-thinking",
       "n_shared": 48,
       "one_leg_completeness": {
-        "gemini-3.1-pro-preview": 0.999,
-        "gpt-5.6-terra": 0.4225
+        "gemini-3.1-pro-preview": 0.9985,
+        "gpt-5.6-terra": 0.349
       },
-      "p_holds": 0.659,
+      "p_holds": 0.6571,
       "thinnest": {
         "column": "completeness",
         "difference": 0.0062,
         "judge": "gpt-5.6-terra",
-        "p_not_behind": 0.663
+        "p_not_behind": 0.6613
       },
       "winner": "google_gemini-3.7-flash"
     },
@@ -759,8 +1051,8 @@
           "difference": 0.051,
           "judge": "gemini-3.1-pro-preview",
           "n": 48,
-          "p_ahead": 0.9997,
-          "p_not_behind": 0.9997,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
           "stored_difference": 0.0541
         },
         {
@@ -768,8 +1060,8 @@
           "difference": 0.0367,
           "judge": "gemini-3.1-pro-preview",
           "n": 48,
-          "p_ahead": 0.9993,
-          "p_not_behind": 0.9993,
+          "p_ahead": 0.9998,
+          "p_not_behind": 0.9998,
           "stored_difference": 0.0374
         },
         {
@@ -777,8 +1069,8 @@
           "difference": 0.0312,
           "judge": "gemini-3.1-pro-preview",
           "n": 48,
-          "p_ahead": 0.8408,
-          "p_not_behind": 0.8865,
+          "p_ahead": 0.8395,
+          "p_not_behind": 0.8888,
           "stored_difference": 0.0321
         },
         {
@@ -795,8 +1087,8 @@
           "difference": 0.0435,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.9997,
-          "p_not_behind": 0.9997,
+          "p_ahead": 0.9999,
+          "p_not_behind": 0.9999,
           "stored_difference": 0.0442
         },
         {
@@ -804,23 +1096,23 @@
           "difference": 0.0677,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.9075,
-          "p_not_behind": 0.9229,
+          "p_ahead": 0.9072,
+          "p_not_behind": 0.9236,
           "stored_difference": 0.07
         }
       ],
       "loser": "gemma4",
       "n_shared": 48,
       "one_leg_completeness": {
-        "gemini-3.1-pro-preview": 0.996,
+        "gemini-3.1-pro-preview": 0.994,
         "gpt-5.6-terra": 1.0
       },
-      "p_holds": 0.8201,
+      "p_holds": 0.8215,
       "thinnest": {
         "column": "faithfulness",
         "difference": 0.0312,
         "judge": "gemini-3.1-pro-preview",
-        "p_not_behind": 0.8865
+        "p_not_behind": 0.8888
       },
       "winner": "google_gemini-3.7-flash"
     },
@@ -832,8 +1124,8 @@
           "difference": 0.0225,
           "judge": "gemini-3.1-pro-preview",
           "n": 50,
-          "p_ahead": 0.9722,
-          "p_not_behind": 0.9722,
+          "p_ahead": 0.9739,
+          "p_not_behind": 0.9739,
           "stored_difference": 0.0225
         },
         {
@@ -850,8 +1142,8 @@
           "difference": 0.02,
           "judge": "gemini-3.1-pro-preview",
           "n": 50,
-          "p_ahead": 0.7487,
-          "p_not_behind": 0.8173,
+          "p_ahead": 0.7414,
+          "p_not_behind": 0.8135,
           "stored_difference": 0.02
         },
         {
@@ -859,8 +1151,8 @@
           "difference": 0.016,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.8493,
-          "p_not_behind": 0.8493,
+          "p_ahead": 0.8563,
+          "p_not_behind": 0.8563,
           "stored_difference": 0.0159
         },
         {
@@ -877,23 +1169,23 @@
           "difference": 0.06,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.843,
-          "p_not_behind": 0.861,
+          "p_ahead": 0.8359,
+          "p_not_behind": 0.8564,
           "stored_difference": 0.06
         }
       ],
       "loser": "glm-5",
       "n_shared": 50,
       "one_leg_completeness": {
-        "gemini-3.1-pro-preview": 0.9315,
-        "gpt-5.6-terra": 0.7975
+        "gemini-3.1-pro-preview": 0.8755,
+        "gpt-5.6-terra": 0.718
       },
-      "p_holds": 0.5932,
+      "p_holds": 0.5906,
       "thinnest": {
         "column": "faithfulness",
         "difference": 0.02,
         "judge": "gemini-3.1-pro-preview",
-        "p_not_behind": 0.8173
+        "p_not_behind": 0.8135
       },
       "winner": "google_gemini-3.7-flash"
     },
@@ -905,8 +1197,8 @@
           "difference": 0.0264,
           "judge": "gemini-3.1-pro-preview",
           "n": 50,
-          "p_ahead": 0.989,
-          "p_not_behind": 0.989,
+          "p_ahead": 0.9864,
+          "p_not_behind": 0.9864,
           "stored_difference": 0.0264
         },
         {
@@ -923,8 +1215,8 @@
           "difference": 0.005,
           "judge": "gemini-3.1-pro-preview",
           "n": 50,
-          "p_ahead": 0.542,
-          "p_not_behind": 0.644,
+          "p_ahead": 0.5426,
+          "p_not_behind": 0.6489,
           "stored_difference": 0.005
         },
         {
@@ -932,8 +1224,8 @@
           "difference": 0.0164,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.8588,
-          "p_not_behind": 0.8588,
+          "p_ahead": 0.8625,
+          "p_not_behind": 0.8625,
           "stored_difference": 0.0164
         },
         {
@@ -950,23 +1242,23 @@
           "difference": 0.12,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.9642,
-          "p_not_behind": 0.9699,
+          "p_ahead": 0.9612,
+          "p_not_behind": 0.9669,
           "stored_difference": 0.12
         }
       ],
       "loser": "glm-5.2",
       "n_shared": 50,
       "one_leg_completeness": {
-        "gemini-3.1-pro-preview": 0.947,
-        "gpt-5.6-terra": 0.838
+        "gemini-3.1-pro-preview": 0.911,
+        "gpt-5.6-terra": 0.8475
       },
-      "p_holds": 0.5279,
+      "p_holds": 0.5336,
       "thinnest": {
         "column": "faithfulness",
         "difference": 0.005,
         "judge": "gemini-3.1-pro-preview",
-        "p_not_behind": 0.644
+        "p_not_behind": 0.6489
       },
       "winner": "google_gemini-3.7-flash"
     },
@@ -987,8 +1279,8 @@
           "difference": 0.0339,
           "judge": "gemini-3.1-pro-preview",
           "n": 50,
-          "p_ahead": 0.9956,
-          "p_not_behind": 0.9956,
+          "p_ahead": 0.9951,
+          "p_not_behind": 0.9951,
           "stored_difference": 0.0339
         },
         {
@@ -1014,8 +1306,8 @@
           "difference": 0.032,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.9795,
-          "p_not_behind": 0.9795,
+          "p_ahead": 0.9809,
+          "p_not_behind": 0.9809,
           "stored_difference": 0.0319
         },
         {
@@ -1034,12 +1326,12 @@
         "gemini-3.1-pro-preview": 1.0,
         "gpt-5.6-terra": 1.0
       },
-      "p_holds": 0.977,
+      "p_holds": 0.9784,
       "thinnest": {
         "column": "conciseness",
         "difference": 0.032,
         "judge": "gpt-5.6-terra",
-        "p_not_behind": 0.9795
+        "p_not_behind": 0.9809
       },
       "winner": "google_gemini-3.7-flash"
     },
@@ -1060,8 +1352,8 @@
           "difference": 0.0467,
           "judge": "gemini-3.1-pro-preview",
           "n": 50,
-          "p_ahead": 0.9991,
-          "p_not_behind": 0.9991,
+          "p_ahead": 0.9993,
+          "p_not_behind": 0.9993,
           "stored_difference": 0.0467
         },
         {
@@ -1087,8 +1379,8 @@
           "difference": 0.0307,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.9844,
-          "p_not_behind": 0.9845,
+          "p_ahead": 0.9854,
+          "p_not_behind": 0.9854,
           "stored_difference": 0.0306
         },
         {
@@ -1096,8 +1388,8 @@
           "difference": 0.1,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.9493,
-          "p_not_behind": 0.9583,
+          "p_ahead": 0.9488,
+          "p_not_behind": 0.9581,
           "stored_difference": 0.1
         }
       ],
@@ -1107,12 +1399,12 @@
         "gemini-3.1-pro-preview": 1.0,
         "gpt-5.6-terra": 1.0
       },
-      "p_holds": 0.9428,
+      "p_holds": 0.9437,
       "thinnest": {
         "column": "faithfulness",
         "difference": 0.1,
         "judge": "gpt-5.6-terra",
-        "p_not_behind": 0.9583
+        "p_not_behind": 0.9581
       },
       "winner": "google_gemini-3.7-flash"
     },
@@ -1133,8 +1425,8 @@
           "difference": 0.0231,
           "judge": "gemini-3.1-pro-preview",
           "n": 50,
-          "p_ahead": 0.9828,
-          "p_not_behind": 0.9828,
+          "p_ahead": 0.9818,
+          "p_not_behind": 0.9818,
           "stored_difference": 0.0231
         },
         {
@@ -1142,8 +1434,8 @@
           "difference": 0.09,
           "judge": "gemini-3.1-pro-preview",
           "n": 50,
-          "p_ahead": 0.9975,
-          "p_not_behind": 0.9985,
+          "p_ahead": 0.9964,
+          "p_not_behind": 0.9976,
           "stored_difference": 0.09
         },
         {
@@ -1160,8 +1452,8 @@
           "difference": 0.0197,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.9678,
-          "p_not_behind": 0.9678,
+          "p_ahead": 0.9695,
+          "p_not_behind": 0.9695,
           "stored_difference": 0.0197
         },
         {
@@ -1180,12 +1472,12 @@
         "gemini-3.1-pro-preview": 1.0,
         "gpt-5.6-terra": 1.0
       },
-      "p_holds": 0.9548,
+      "p_holds": 0.9538,
       "thinnest": {
         "column": "conciseness",
         "difference": 0.0197,
         "judge": "gpt-5.6-terra",
-        "p_not_behind": 0.9678
+        "p_not_behind": 0.9695
       },
       "winner": "google_gemini-3.7-flash"
     },
@@ -1215,8 +1507,8 @@
           "difference": 0.0357,
           "judge": "gemini-3.1-pro-preview",
           "n": 49,
-          "p_ahead": 0.926,
-          "p_not_behind": 0.9545,
+          "p_ahead": 0.9304,
+          "p_not_behind": 0.9598,
           "stored_difference": 0.0361
         },
         {
@@ -1224,8 +1516,8 @@
           "difference": 0.035,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.9903,
-          "p_not_behind": 0.9903,
+          "p_ahead": 0.9873,
+          "p_not_behind": 0.9873,
           "stored_difference": 0.037
         },
         {
@@ -1242,23 +1534,96 @@
           "difference": 0.0867,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.9614,
-          "p_not_behind": 0.9691,
+          "p_ahead": 0.9561,
+          "p_not_behind": 0.9658,
           "stored_difference": 0.085
         }
       ],
       "loser": "qwen3.8-27b",
       "n_shared": 49,
       "one_leg_completeness": {
-        "gemini-3.1-pro-preview": 0.998,
-        "gpt-5.6-terra": 0.9775
+        "gemini-3.1-pro-preview": 0.9935,
+        "gpt-5.6-terra": 0.9575
       },
-      "p_holds": 0.9173,
+      "p_holds": 0.9167,
       "thinnest": {
         "column": "faithfulness",
         "difference": 0.0357,
         "judge": "gemini-3.1-pro-preview",
-        "p_not_behind": 0.9545
+        "p_not_behind": 0.9598
+      },
+      "winner": "google_gemini-3.7-flash"
+    },
+    {
+      "holds": true,
+      "legs": [
+        {
+          "column": "completeness",
+          "difference": 0.0462,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 48,
+          "p_ahead": 0.9992,
+          "p_not_behind": 0.9992,
+          "stored_difference": 0.0499
+        },
+        {
+          "column": "conciseness",
+          "difference": 0.0793,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 48,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0783
+        },
+        {
+          "column": "faithfulness",
+          "difference": 0.1042,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 48,
+          "p_ahead": 0.9944,
+          "p_not_behind": 0.9965,
+          "stored_difference": 0.105
+        },
+        {
+          "column": "completeness",
+          "difference": 0.0585,
+          "judge": "gpt-5.6-terra",
+          "n": 48,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0625
+        },
+        {
+          "column": "conciseness",
+          "difference": 0.0962,
+          "judge": "gpt-5.6-terra",
+          "n": 48,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0961
+        },
+        {
+          "column": "faithfulness",
+          "difference": 0.1562,
+          "judge": "gpt-5.6-terra",
+          "n": 48,
+          "p_ahead": 0.9993,
+          "p_not_behind": 0.9997,
+          "stored_difference": 0.155
+        }
+      ],
+      "loser": "qwen3.8-flash-next",
+      "n_shared": 48,
+      "one_leg_completeness": {
+        "gemini-3.1-pro-preview": 0.9915,
+        "gpt-5.6-terra": 1.0
+      },
+      "p_holds": 0.9954,
+      "thinnest": {
+        "column": "faithfulness",
+        "difference": 0.1042,
+        "judge": "gemini-3.1-pro-preview",
+        "p_not_behind": 0.9965
       },
       "winner": "google_gemini-3.7-flash"
     },
@@ -1315,8 +1680,8 @@
           "difference": 0.234,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.9961,
-          "p_not_behind": 0.9973,
+          "p_ahead": 0.996,
+          "p_not_behind": 0.9965,
           "stored_difference": 0.235
         }
       ],
@@ -1326,14 +1691,87 @@
         "gemini-3.1-pro-preview": 1.0,
         "gpt-5.6-terra": 1.0
       },
-      "p_holds": 0.9973,
+      "p_holds": 0.9965,
       "thinnest": {
         "column": "faithfulness",
         "difference": 0.234,
         "judge": "gpt-5.6-terra",
-        "p_not_behind": 0.9973
+        "p_not_behind": 0.9965
       },
       "winner": "google_gemini-3.7-flash"
+    },
+    {
+      "holds": false,
+      "legs": [
+        {
+          "column": "completeness",
+          "difference": 0.0038,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 48,
+          "p_ahead": 0.6556,
+          "p_not_behind": 0.6556,
+          "stored_difference": 0.005
+        },
+        {
+          "column": "conciseness",
+          "difference": 0.0346,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 48,
+          "p_ahead": 0.9939,
+          "p_not_behind": 0.9939,
+          "stored_difference": 0.0349
+        },
+        {
+          "column": "faithfulness",
+          "difference": 0.0521,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 48,
+          "p_ahead": 0.8119,
+          "p_not_behind": 0.8379,
+          "stored_difference": 0.055
+        },
+        {
+          "column": "completeness",
+          "difference": 0.0363,
+          "judge": "gpt-5.6-terra",
+          "n": 48,
+          "p_ahead": 0.9979,
+          "p_not_behind": 0.9979,
+          "stored_difference": 0.0366
+        },
+        {
+          "column": "conciseness",
+          "difference": 0.0178,
+          "judge": "gpt-5.6-terra",
+          "n": 48,
+          "p_ahead": 0.867,
+          "p_not_behind": 0.867,
+          "stored_difference": 0.0178
+        },
+        {
+          "column": "faithfulness",
+          "difference": 0.3125,
+          "judge": "gpt-5.6-terra",
+          "n": 48,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.315
+        }
+      ],
+      "loser": "qwen3.8-flash-next",
+      "n_shared": 48,
+      "one_leg_completeness": {
+        "gemini-3.1-pro-preview": 0.3835,
+        "gpt-5.6-terra": 0.9785
+      },
+      "p_holds": 0.459,
+      "thinnest": {
+        "column": "completeness",
+        "difference": 0.0038,
+        "judge": "gemini-3.1-pro-preview",
+        "p_not_behind": 0.6556
+      },
+      "winner": "gpt-5.6-luna"
     },
     {
       "holds": true,
@@ -1416,8 +1854,8 @@
           "difference": 0.0255,
           "judge": "gemini-3.1-pro-preview",
           "n": 47,
-          "p_ahead": 0.9841,
-          "p_not_behind": 0.9841,
+          "p_ahead": 0.9851,
+          "p_not_behind": 0.9851,
           "stored_difference": 0.0244
         },
         {
@@ -1434,8 +1872,8 @@
           "difference": 0.0213,
           "judge": "gemini-3.1-pro-preview",
           "n": 47,
-          "p_ahead": 0.7643,
-          "p_not_behind": 0.8185,
+          "p_ahead": 0.7583,
+          "p_not_behind": 0.8141,
           "stored_difference": 0.0196
         },
         {
@@ -1443,8 +1881,8 @@
           "difference": 0.0383,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.9982,
-          "p_not_behind": 0.9982,
+          "p_ahead": 0.9984,
+          "p_not_behind": 0.9984,
           "stored_difference": 0.0399
         },
         {
@@ -1452,8 +1890,8 @@
           "difference": 0.0501,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 1.0,
-          "p_not_behind": 1.0,
+          "p_ahead": 0.9999,
+          "p_not_behind": 0.9999,
           "stored_difference": 0.0422
         },
         {
@@ -1469,15 +1907,88 @@
       "loser": "qwen3.8-27b",
       "n_shared": 47,
       "one_leg_completeness": {
-        "gemini-3.1-pro-preview": 0.8655,
-        "gpt-5.6-terra": 0.997
+        "gemini-3.1-pro-preview": 0.816,
+        "gpt-5.6-terra": 0.986
       },
-      "p_holds": 0.8034,
+      "p_holds": 0.8003,
       "thinnest": {
         "column": "faithfulness",
         "difference": 0.0213,
         "judge": "gemini-3.1-pro-preview",
-        "p_not_behind": 0.8185
+        "p_not_behind": 0.8141
+      },
+      "winner": "gpt-5.6-sol"
+    },
+    {
+      "holds": false,
+      "legs": [
+        {
+          "column": "completeness",
+          "difference": 0.0187,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 46,
+          "p_ahead": 0.917,
+          "p_not_behind": 0.9171,
+          "stored_difference": 0.0253
+        },
+        {
+          "column": "conciseness",
+          "difference": 0.0341,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 46,
+          "p_ahead": 0.9986,
+          "p_not_behind": 0.9986,
+          "stored_difference": 0.0325
+        },
+        {
+          "column": "faithfulness",
+          "difference": 0.0924,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 46,
+          "p_ahead": 0.9836,
+          "p_not_behind": 0.9904,
+          "stored_difference": 0.0885
+        },
+        {
+          "column": "completeness",
+          "difference": 0.0613,
+          "judge": "gpt-5.6-terra",
+          "n": 48,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0654
+        },
+        {
+          "column": "conciseness",
+          "difference": 0.0409,
+          "judge": "gpt-5.6-terra",
+          "n": 48,
+          "p_ahead": 0.9952,
+          "p_not_behind": 0.9952,
+          "stored_difference": 0.0387
+        },
+        {
+          "column": "faithfulness",
+          "difference": 0.3641,
+          "judge": "gpt-5.6-terra",
+          "n": 48,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.385
+        }
+      ],
+      "loser": "qwen3.8-flash-next",
+      "n_shared": 46,
+      "one_leg_completeness": {
+        "gemini-3.1-pro-preview": 0.844,
+        "gpt-5.6-terra": 1.0
+      },
+      "p_holds": 0.9039,
+      "thinnest": {
+        "column": "completeness",
+        "difference": 0.0187,
+        "judge": "gemini-3.1-pro-preview",
+        "p_not_behind": 0.9171
       },
       "winner": "gpt-5.6-sol"
     },
@@ -1562,8 +2073,8 @@
           "difference": 0.0164,
           "judge": "gemini-3.1-pro-preview",
           "n": 49,
-          "p_ahead": 0.9424,
-          "p_not_behind": 0.9424,
+          "p_ahead": 0.9421,
+          "p_not_behind": 0.9421,
           "stored_difference": 0.0158
         },
         {
@@ -1571,8 +2082,8 @@
           "difference": 0.0031,
           "judge": "gemini-3.1-pro-preview",
           "n": 49,
-          "p_ahead": 0.6057,
-          "p_not_behind": 0.6057,
+          "p_ahead": 0.6061,
+          "p_not_behind": 0.6061,
           "stored_difference": 0.0022
         },
         {
@@ -1580,7 +2091,7 @@
           "difference": 0.0714,
           "judge": "gemini-3.1-pro-preview",
           "n": 49,
-          "p_ahead": 0.9941,
+          "p_ahead": 0.9951,
           "p_not_behind": 1.0,
           "stored_difference": 0.07
         },
@@ -1589,8 +2100,8 @@
           "difference": 0.0373,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.9989,
-          "p_not_behind": 0.9989,
+          "p_ahead": 0.9993,
+          "p_not_behind": 0.9993,
           "stored_difference": 0.0383
         },
         {
@@ -1598,8 +2109,8 @@
           "difference": 0.0291,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.9883,
-          "p_not_behind": 0.9883,
+          "p_ahead": 0.9892,
+          "p_not_behind": 0.9892,
           "stored_difference": 0.0279
         },
         {
@@ -1607,23 +2118,23 @@
           "difference": 0.0357,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.8015,
-          "p_not_behind": 0.8329,
+          "p_ahead": 0.8019,
+          "p_not_behind": 0.8357,
           "stored_difference": 0.04
         }
       ],
       "loser": "gpt-5.6-luna",
       "n_shared": 49,
       "one_leg_completeness": {
-        "gemini-3.1-pro-preview": 0.982,
-        "gpt-5.6-terra": 0.999
+        "gemini-3.1-pro-preview": 0.97,
+        "gpt-5.6-terra": 0.9985
       },
-      "p_holds": 0.4781,
+      "p_holds": 0.4844,
       "thinnest": {
         "column": "conciseness",
         "difference": 0.0031,
         "judge": "gemini-3.1-pro-preview",
-        "p_not_behind": 0.6057
+        "p_not_behind": 0.6061
       },
       "winner": "gpt-5.6-terra"
     },
@@ -1635,8 +2146,8 @@
           "difference": 0.0265,
           "judge": "gemini-3.1-pro-preview",
           "n": 48,
-          "p_ahead": 0.9947,
-          "p_not_behind": 0.9947,
+          "p_ahead": 0.9959,
+          "p_not_behind": 0.9959,
           "stored_difference": 0.0199
         },
         {
@@ -1644,8 +2155,8 @@
           "difference": 0.0559,
           "judge": "gemini-3.1-pro-preview",
           "n": 48,
-          "p_ahead": 0.9997,
-          "p_not_behind": 0.9997,
+          "p_ahead": 0.9999,
+          "p_not_behind": 0.9999,
           "stored_difference": 0.0562
         },
         {
@@ -1653,7 +2164,7 @@
           "difference": 0.0573,
           "judge": "gemini-3.1-pro-preview",
           "n": 48,
-          "p_ahead": 0.9996,
+          "p_ahead": 0.9994,
           "p_not_behind": 1.0,
           "stored_difference": 0.0561
         },
@@ -1671,8 +2182,8 @@
           "difference": 0.0493,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.9994,
-          "p_not_behind": 0.9994,
+          "p_ahead": 0.999,
+          "p_not_behind": 0.999,
           "stored_difference": 0.0492
         },
         {
@@ -1688,15 +2199,88 @@
       "loser": "qwen3.8-27b",
       "n_shared": 48,
       "one_leg_completeness": {
-        "gemini-3.1-pro-preview": 0.8635,
-        "gpt-5.6-terra": 0.998
+        "gemini-3.1-pro-preview": 0.8425,
+        "gpt-5.6-terra": 0.9975
       },
-      "p_holds": 0.9938,
+      "p_holds": 0.9948,
       "thinnest": {
         "column": "completeness",
         "difference": 0.0265,
         "judge": "gemini-3.1-pro-preview",
-        "p_not_behind": 0.9947
+        "p_not_behind": 0.9959
+      },
+      "winner": "gpt-5.6-terra"
+    },
+    {
+      "holds": false,
+      "legs": [
+        {
+          "column": "completeness",
+          "difference": 0.0197,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 47,
+          "p_ahead": 0.9523,
+          "p_not_behind": 0.9523,
+          "stored_difference": 0.0208
+        },
+        {
+          "column": "conciseness",
+          "difference": 0.0336,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 47,
+          "p_ahead": 0.9865,
+          "p_not_behind": 0.9865,
+          "stored_difference": 0.0371
+        },
+        {
+          "column": "faithfulness",
+          "difference": 0.117,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 47,
+          "p_ahead": 0.9996,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.125
+        },
+        {
+          "column": "completeness",
+          "difference": 0.0745,
+          "judge": "gpt-5.6-terra",
+          "n": 48,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0749
+        },
+        {
+          "column": "conciseness",
+          "difference": 0.0428,
+          "judge": "gpt-5.6-terra",
+          "n": 48,
+          "p_ahead": 0.9982,
+          "p_not_behind": 0.9982,
+          "stored_difference": 0.0457
+        },
+        {
+          "column": "faithfulness",
+          "difference": 0.3617,
+          "judge": "gpt-5.6-terra",
+          "n": 48,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.355
+        }
+      ],
+      "loser": "qwen3.8-flash-next",
+      "n_shared": 47,
+      "one_leg_completeness": {
+        "gemini-3.1-pro-preview": 0.9,
+        "gpt-5.6-terra": 1.0
+      },
+      "p_holds": 0.9396,
+      "thinnest": {
+        "column": "completeness",
+        "difference": 0.0197,
+        "judge": "gemini-3.1-pro-preview",
+        "p_not_behind": 0.9523
       },
       "winner": "gpt-5.6-terra"
     },
@@ -1826,8 +2410,8 @@
           "difference": 0.0109,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.5289,
-          "p_not_behind": 0.5519,
+          "p_ahead": 0.5336,
+          "p_not_behind": 0.5563,
           "stored_difference": 0.03
         }
       ],
@@ -1837,25 +2421,25 @@
         "gemini-3.1-pro-preview": 1.0,
         "gpt-5.6-terra": 1.0
       },
-      "p_holds": 0.5519,
+      "p_holds": 0.5563,
       "thinnest": {
         "column": "faithfulness",
         "difference": 0.0109,
         "judge": "gpt-5.6-terra",
-        "p_not_behind": 0.5519
+        "p_not_behind": 0.5563
       },
       "winner": "kimi-k3"
     },
     {
-      "holds": false,
+      "holds": true,
       "legs": [
         {
           "column": "completeness",
           "difference": 0.0573,
           "judge": "gemini-3.1-pro-preview",
           "n": 47,
-          "p_ahead": 0.9997,
-          "p_not_behind": 0.9997,
+          "p_ahead": 0.9995,
+          "p_not_behind": 0.9995,
           "stored_difference": 0.0627
         },
         {
@@ -1872,7 +2456,7 @@
           "difference": 0.1436,
           "judge": "gemini-3.1-pro-preview",
           "n": 47,
-          "p_ahead": 0.9575,
+          "p_ahead": 0.9586,
           "p_not_behind": 0.9628,
           "stored_difference": 0.1514
         },
@@ -1899,8 +2483,8 @@
           "difference": 0.133,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.9771,
-          "p_not_behind": 0.9815,
+          "p_ahead": 0.9777,
+          "p_not_behind": 0.9816,
           "stored_difference": 0.135
         }
       ],
@@ -1910,7 +2494,7 @@
         "gemini-3.1-pro-preview": 1.0,
         "gpt-5.6-terra": 1.0
       },
-      "p_holds": 0.9499,
+      "p_holds": 0.9501,
       "thinnest": {
         "column": "faithfulness",
         "difference": 0.1436,
@@ -1936,8 +2520,8 @@
           "difference": 0.0108,
           "judge": "gemini-3.1-pro-preview",
           "n": 50,
-          "p_ahead": 0.768,
-          "p_not_behind": 0.768,
+          "p_ahead": 0.7732,
+          "p_not_behind": 0.7732,
           "stored_difference": 0.0108
         },
         {
@@ -1963,8 +2547,8 @@
           "difference": 0.0122,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.8466,
-          "p_not_behind": 0.8466,
+          "p_ahead": 0.8469,
+          "p_not_behind": 0.8469,
           "stored_difference": 0.0122
         },
         {
@@ -1972,8 +2556,8 @@
           "difference": 0.085,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.86,
-          "p_not_behind": 0.8735,
+          "p_ahead": 0.8611,
+          "p_not_behind": 0.8773,
           "stored_difference": 0.085
         }
       ],
@@ -1983,12 +2567,12 @@
         "gemini-3.1-pro-preview": 1.0,
         "gpt-5.6-terra": 1.0
       },
-      "p_holds": 0.6153,
+      "p_holds": 0.6221,
       "thinnest": {
         "column": "conciseness",
         "difference": 0.0108,
         "judge": "gemini-3.1-pro-preview",
-        "p_not_behind": 0.768
+        "p_not_behind": 0.7732
       },
       "winner": "mistral-medium-3.5"
     },
@@ -2045,8 +2629,8 @@
           "difference": 0.0585,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.7293,
-          "p_not_behind": 0.748,
+          "p_ahead": 0.7336,
+          "p_not_behind": 0.7509,
           "stored_difference": 0.075
         }
       ],
@@ -2056,12 +2640,12 @@
         "gemini-3.1-pro-preview": 1.0,
         "gpt-5.6-terra": 1.0
       },
-      "p_holds": 0.748,
+      "p_holds": 0.7509,
       "thinnest": {
         "column": "faithfulness",
         "difference": 0.0585,
         "judge": "gpt-5.6-terra",
-        "p_not_behind": 0.748
+        "p_not_behind": 0.7509
       },
       "winner": "qwen3.5-int4"
     },
@@ -2118,8 +2702,8 @@
           "difference": 0.1359,
           "judge": "gpt-5.6-terra",
           "n": 50,
-          "p_ahead": 0.9521,
-          "p_not_behind": 0.9609,
+          "p_ahead": 0.9492,
+          "p_not_behind": 0.9562,
           "stored_difference": 0.15
         }
       ],
@@ -2129,14 +2713,87 @@
         "gemini-3.1-pro-preview": 1.0,
         "gpt-5.6-terra": 1.0
       },
-      "p_holds": 0.9609,
+      "p_holds": 0.9562,
       "thinnest": {
         "column": "faithfulness",
         "difference": 0.1359,
         "judge": "gpt-5.6-terra",
-        "p_not_behind": 0.9609
+        "p_not_behind": 0.9562
       },
       "winner": "qwen3.8-27b"
+    },
+    {
+      "holds": false,
+      "legs": [
+        {
+          "column": "completeness",
+          "difference": 0.1516,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 45,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.1513
+        },
+        {
+          "column": "conciseness",
+          "difference": 0.1607,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 45,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.1524
+        },
+        {
+          "column": "faithfulness",
+          "difference": 0.2333,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 45,
+          "p_ahead": 0.9965,
+          "p_not_behind": 0.9968,
+          "stored_difference": 0.2314
+        },
+        {
+          "column": "completeness",
+          "difference": 0.1359,
+          "judge": "gpt-5.6-terra",
+          "n": 48,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.14
+        },
+        {
+          "column": "conciseness",
+          "difference": 0.1322,
+          "judge": "gpt-5.6-terra",
+          "n": 48,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.1343
+        },
+        {
+          "column": "faithfulness",
+          "difference": 0.0667,
+          "judge": "gpt-5.6-terra",
+          "n": 48,
+          "p_ahead": 0.755,
+          "p_not_behind": 0.7731,
+          "stored_difference": 0.08
+        }
+      ],
+      "loser": "therapist",
+      "n_shared": 45,
+      "one_leg_completeness": {
+        "gemini-3.1-pro-preview": 1.0,
+        "gpt-5.6-terra": 1.0
+      },
+      "p_holds": 0.7726,
+      "thinnest": {
+        "column": "faithfulness",
+        "difference": 0.0667,
+        "judge": "gpt-5.6-terra",
+        "p_not_behind": 0.7731
+      },
+      "winner": "qwen3.8-flash-next"
     }
   ],
   "judges": [
@@ -2150,6 +2807,7 @@
       "gemma4",
       "glm-5",
       "glm-5.2",
+      "glm-5.3",
       "google_gemini-3.1-pro-preview",
       "google_gemini-3.7-flash",
       "gpt-5.6-luna",
@@ -2164,7 +2822,8 @@
     [
       "llama-3.1-70b",
       "mistral-medium-3.5",
-      "qwen3.8-27b"
+      "qwen3.8-27b",
+      "qwen3.8-flash-next"
     ],
     [
       "therapist"
@@ -2180,6 +2839,7 @@
     "gemma4",
     "glm-5",
     "glm-5.2",
+    "glm-5.3",
     "google_gemini-3.1-pro-preview",
     "google_gemini-3.7-flash",
     "gpt-5.6-luna",
@@ -2193,6 +2853,7 @@
     "qwen3.5-122b",
     "qwen3.5-int4",
     "qwen3.8-27b",
+    "qwen3.8-flash-next",
     "therapist"
   ],
   "tables": {
@@ -2236,6 +2897,7 @@
     "gemma4",
     "glm-5",
     "glm-5.2",
+    "glm-5.3",
     "google_gemini-3.1-pro-preview",
     "google_gemini-3.7-flash",
     "gpt-5.6-luna",

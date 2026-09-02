@@ -146,7 +146,7 @@ distinct such strings over 499 model-written sections**, out of 12 238 sections
 read. Counted by `tools/count_dressed_up_empties.py` over a local `generations/`
 tree, which is gitignored and not redistributed: unlike every other figure on
 this page, a fresh checkout cannot re-derive it without generating the notes
-again — and three of the sixteen models generate at a non-zero temperature, so
+again — and three of the eighteen models generate at a non-zero temperature, so
 a re-run would not return exactly this count either. No amount of adding phrases to the marker list would catch them: the shape
 is structural, not lexical.
 

@@ -172,9 +172,9 @@ and from +0.005 to +0.027 for `gpt-5.6-terra`; the figures after the re-ask of
 resampled conversations and not systems, so the interval described three or
 four models rather than a vendor — while the sentence it supported, and the
 mark on each affected row, are about the vendor. Resampling both:
-`gemini-3.1-pro-preview` +0.017 [−0.011, +0.046] and `gpt-5.6-terra` +0.016
-[−0.008, +0.043]. Neither is detected, and asked directly whether the two
-judges differ, they do not: −0.002 [−0.042, +0.041].
+`gemini-3.1-pro-preview` +0.018 [−0.009, +0.046] and `gpt-5.6-terra` +0.017
+[−0.007, +0.043]. Neither is detected, and asked directly whether the two
+judges differ, they do not: −0.000 [−0.041, +0.042].
 
 Two systems carry most of the estimate, and they are the two that the vendor
 redefinition moved into these groups: without `gemma4` the Gemini figure is

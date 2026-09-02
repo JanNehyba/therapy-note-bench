@@ -158,3 +158,24 @@ def test_the_artefact_matches_the_caches_it_names():
         for track in entry["tracks"]:
             assert track["same"] <= track["questions"]
             assert track["unanswered"] >= 0
+
+
+def test_the_artefact_names_whose_notes_were_repeated():
+    """Five notes in cache order are five sessions of one model. The panel's
+    sentence has to carry the model, or "five notes" reads as five models."""
+    found = repeatability.JudgeRepeat(
+        judge_model="judge-a",
+        tracks=[
+            repeatability.TrackRepeat(
+                track="tneval-soap",
+                notes=2,
+                same=1,
+                questions=2,
+                unanswered=0,
+                systems=("model-a",),
+            )
+        ],
+    )
+    payload = repeatability.to_json([found], notes=2, repeat_root="scores/repeat-x")
+    assert payload["systems"] == ["model-a"]
+    assert payload["judges"][0]["tracks"][0]["systems"] == ["model-a"]
