@@ -261,6 +261,12 @@ def _positions(
     return positions
 
 
+#: The same positions, for callers outside this module: `composite` places every
+#: system on every column by exactly this rule, so the two never disagree about
+#: what a shared place is.
+positions = _positions
+
+
 def _dominates(
     better: str,
     worse: str,
