@@ -296,6 +296,43 @@ def _tneval_undominated() -> tuple[float, ...]:
     )
 
 
+def _edges(track: str) -> dict:
+    import json as _json
+
+    with open(f"docs/edges-{track}.json", encoding="utf-8") as handle:
+        return _json.load(handle)
+
+
+def _tested_claims() -> tuple[float, ...]:
+    """Kept at the threshold; rubric stored and held, PDSQI stored and held,
+    iCARE stored and held -- in the order the sentence states them."""
+    out: list[float] = []
+    for track in ("tneval-soap", "pdsqi-soap", "icare"):
+        found = _edges(track)
+        out += [float(found["counts"]["stored"]), float(found["counts"]["holds"]["0.95"])]
+    return (0.95, *out)
+
+
+def _tested_groups() -> tuple[float, ...]:
+    """Top-group size, systems, systems below the top group (rubric), then the
+    same top-group and systems figures for PDSQI-9 and iCARE."""
+    rubric, pdsqi, icare = (_edges(t) for t in ("tneval-soap", "pdsqi-soap", "icare"))
+    return (
+        float(len(rubric["layers"][0])),
+        float(len(rubric["systems"])),
+        float(len(rubric["layers"][1])),
+        float(len(pdsqi["layers"][0])),
+        float(len(pdsqi["systems"])),
+        float(len(icare["layers"][0])),
+        float(len(icare["systems"])),
+    )
+
+
+def _readme_top_group() -> tuple[float, ...]:
+    found = _edges("tneval-soap")
+    return (float(len(found["layers"][0])), float(len(found["systems"])))
+
+
 def _pdsqi_undominated() -> tuple[float, ...]:
     """The same three figures for the other instrument on the same table."""
     found = payload()["concordance"]["pdsqi-soap"]
@@ -401,6 +438,37 @@ CLAIMS = (
         ),
         covers=("eight", "eleven", "nineteen"),
         expected=_pdsqi_undominated,
+    ),
+    # The tested dominance graph, read from the committed edges artefacts.
+    Claim(
+        where="docs/limitations.md",
+        phrase=(
+            "kept only where it held in 0.95 of the draws. Of the 29 rubric claims 11 hold; of "
+            "PDSQI-9's 11 claims 1 holds; of iCARE's 32 claims 6 hold"
+        ),
+        kind="computed",
+        because="the threshold and the counts in docs/edges-<track>.json, per track",
+        covers=("0.95", "29", "11", "11", "1", "32", "6"),
+        expected=_tested_claims,
+    ),
+    Claim(
+        where="docs/limitations.md",
+        phrase=(
+            "on the rubric 15 of 19 systems share the top group, with 3 below them and the "
+            "therapist alone at the bottom; on PDSQI-9 18 of 19 share it; on iCARE 14 of 16"
+        ),
+        kind="computed",
+        because="the layers in docs/edges-<track>.json, per track",
+        covers=("15", "19", "3", "18", "19", "14", "16"),
+        expected=_tested_groups,
+    ),
+    Claim(
+        where="README.md",
+        phrase="15 of 19 systems share the top group",
+        kind="computed",
+        because="the rubric's top layer in docs/edges-tneval-soap.json",
+        covers=("15", "19"),
+        expected=_readme_top_group,
     ),
     # The judge's non-answers: what they were and what the re-ask changed.
     # Historical where the figure lives in the gitignored answer cache or a

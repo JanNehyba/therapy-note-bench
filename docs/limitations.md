@@ -58,6 +58,15 @@ the copies is wrong.
 support "ninth rather than tenth".** A comparison between two adjacent rows is
 not a result of this benchmark.
 
+Every table is nonetheless ordered, and says how: by the mean of each system's
+places over the columns of its own instrument, every column counting once, ties
+sharing a place. That equal weight is a declared convention, not a measurement,
+and the page prints beside every table what the other weightings it tried do to
+the first place and to the order — the full table is on
+[the methods page](https://jannehyba.github.io/therapy-note-bench/methods.html#ordering).
+A place is a statement about the table, never about a note; two adjacent
+places are still not a result.
+
 The one claim that survives is dominance: a system at least as good on *every*
 measure under *both* judges is better however a reader weights the measures.
 The count depends on which instrument's measures are meant, so it is named:
@@ -67,19 +76,18 @@ rest, which is why no single winner is named. On PDSQI-9's eight columns, on
 its own table, it is eleven of the nineteen; more measures make dominance
 harder to establish, not easier.
 
-**Those counts were never tested, and this page says so before anything is
-built on them.** Each "beats outright" compares a pair of means over the notes
-both systems have, and until 2026-09-01 nobody asked whether the difference
-survives resampling the conversations. Asked that day, with a paired bootstrap
-over each pair's shared conversations at the threshold the Band column already
-uses, a substantial share of the rubric edges failed, and the edges whose
-tightest comparison is conciseness could not be tested at all, because
-conciseness is not stored per conversation. The counts above therefore
-describe the untested relation. No tested figure replaces them here until the
-test is committed as an artefact this page can be checked against — a figure
-typed from a scratch run is exactly what this file exists to keep out — and
-until then no table on the site orders its rows by these counts or draws them
-as a column.
+**Those counts describe the stored means; the tested relation is smaller.**
+Each "beats outright" compares a pair of means over the notes both systems
+have, and on 2026-09-02 every such claim was tested whole: all of its legs —
+one per judge and column — resampled together over the conversations the pair
+shares, and kept only where it held in 0.95 of the draws. Of the 29 rubric
+claims 11 hold; of PDSQI-9's 11 claims 1 holds; of iCARE's 32 claims 6 hold;
+none was untestable. What the surviving claims separate is the Group column:
+on the rubric 15 of 19 systems share the top group, with 3 below them and the
+therapist alone at the bottom; on PDSQI-9 18 of 19 share it; on iCARE 14 of
+16. The artefacts behind the column are `docs/edges-<track>.json`, and every
+tested claim is listed on
+[the methods page](https://jannehyba.github.io/therapy-note-bench/methods.html#groups).
 
 **And it is not only two judges disagreeing — one judge disagrees with
 itself.** Gemini's thinking budget was raised from 128 to 256 tokens and all
@@ -114,7 +122,7 @@ compared on, and why each table's heading names them.
 
 ## The columns do not agree with each other either
 
-Ordering by completeness says little about conciseness — the correlation is
+Completeness says little about conciseness — the correlation is
 near zero and the two judges do not even agree on its sign — and something the
 two judges cannot agree on about
 faithfulness, where one sees a moderate positive relationship and the other
@@ -127,12 +135,15 @@ two of them wrong by more than the difference they were describing, and all
 four stale within a fortnight.
 
 A model that answers every question satisfies more criteria and invents more;
-the two columns measure that trade, and collapsing them into one number means
-deciding which matters more.
+the two columns measure that trade, and collapsing their values into one
+number means deciding which matters more.
 
 That decision is clinical, not statistical, so this benchmark does not make it.
-What it would take to settle it is a clinician reading two notes and saying
-which they would sign — which is a different study.
+The order it prints is a mean of places with every column counting once — the
+mildest convention available, declared as one on the page, with what any other
+weighting does printed beside it. What it would take to settle the weights is
+a clinician reading two notes and saying which they would sign — which is a
+different study.
 
 ## The judge is a model
 

@@ -135,6 +135,16 @@ _STATIC = {
 #: Sentences written in the page script, keyed by their English with numbered
 #: holes. Read the module docstring for why a hole may go unused.
 _SENTENCES = {
+    "Measured for this judge: its own vendor's models score {0} completeness against the"
+    " reference group ({1} to {2}), an interval that does not include zero.": (
+        "Změřeno pro tohoto hodnotitele: modely jeho vlastního dodavatele bodují proti "
+        "referenční skupině o {0} úplnosti ({1} až {2}) — interval, který nulu neobsahuje."
+    ),
+    "Measured for this judge: its own vendor's models score {0} completeness against the"
+    " reference group ({1} to {2}), an interval that includes zero.": (
+        "Změřeno pro tohoto hodnotitele: modely jeho vlastního dodavatele bodují proti "
+        "referenční skupině o {0} úplnosti ({1} až {2}) — interval, který nulu obsahuje."
+    ),
     # -- the endpoints and the queue -----------------------------------------
     "<strong>{0}</strong> has written its notes and is waiting for the judge; its absence from"
     " the scored tables is a queue, not a result.": (

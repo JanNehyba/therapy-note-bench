@@ -27,10 +27,13 @@ rather than a second benchmark.
 >
 > **The two judges agree on the shape of the ranking and not on the order**, so
 > "near the top" is a claim this benchmark supports and "ninth rather than
-> tenth" is not. On the table the page opens with, 8 of 19 systems are beaten
-> outright by nobody — a minority, but one with no single system in it that
-> beats the rest, which is why no single winner is named. The figures are on the methods page, where a run
-> keeps them current. See [Roadmap](#roadmap).
+> tenth" is not. Every table is ordered by the mean of each system's places over
+> its instrument's columns — a declared convention, with what other weightings
+> do printed beside it — and a Group column says what the evidence separates
+> once every comparison is resampled: on the table the page opens with,
+> 15 of 19 systems share the top group, which is why no single winner is
+> named. The figures are on the methods page, where a run keeps them current. See
+> [Roadmap](#roadmap).
 
 ---
 

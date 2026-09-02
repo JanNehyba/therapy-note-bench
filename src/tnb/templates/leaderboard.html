@@ -464,6 +464,19 @@ function extraLegend(table) {
   if (table.has_words) {
     entries.push([T`Words`, wordsGloss(table)]);
   }
+  // The size of the self-preference the badge warns about, for the judge
+  // whose table this is, read off the preference panel's own numbers. A
+  // warning with no figure beside it is read as large.
+  const effect = ((DATA.preference || {}).effects || [])
+    .find(e => e.judge === (table.versions || {}).judge_model);
+  const signed = v => (v >= 0 ? '+' : '\u2212') + Math.abs(v).toFixed(3);
+  const measured = !effect ? '' : ' ' + (effect.detected
+    ? T`Measured for this judge: its own vendor's models score ${signed(effect.estimate)} completeness
+        against the reference group (${signed(effect.low)} to ${signed(effect.high)}), an interval
+        that does not include zero.`
+    : T`Measured for this judge: its own vendor's models score ${signed(effect.estimate)} completeness
+        against the reference group (${signed(effect.low)} to ${signed(effect.high)}), an interval
+        that includes zero.`);
   entries.push([
     T`Marks`,
     T`Conditions this row did not share with the others, and whether its judge shares a vendor with it.` +
@@ -473,7 +486,7 @@ function extraLegend(table) {
       scored by a judge from the same vendor as the model it graded; how much that is worth is
       measured on the methods page. ${T`This`} heading
       carries no ↕ and does not sort:
-      these are labels, not an order.`,
+      these are labels, not an order.` + measured,
   ]);
   if (table.has_effort) {
     entries.push([

@@ -107,8 +107,14 @@ models as the whole of OpenAI.
   prompt's digest, as the generation cache always has. Re-generating a note and
   re-scoring it used to reuse the judgement of the text it replaced.
 - **The ranking is a shape, not an order.** Two judges place most systems
-  differently. The only claim about "better" that survives is dominance —
-  at least as good on every measure under both judges.
+  differently. The only claim about "better" that needs no convention is
+  dominance — at least as good on every measure under both judges — and only
+  where it survives resampling (`docs/edges-<track>.json`, `tnb edges`). The
+  order every table prints is the mean of places over its instrument's
+  columns, equal weights, declared as a convention on the page with its
+  sensitivity beside it; the tested groups are drawn beside the order, never
+  as it. Nothing visible goes on `index.html` without a committed artefact and
+  a test binding the column to it.
 - Generation and scoring prompts are reproduced **verbatim** from TN-Eval and
   iCARE. Measure models on their task, not on ours.
 - The judge is calibrated against TN-Eval's two human annotators before any
@@ -154,6 +160,7 @@ uv run tnb score-icare      # ROUGE-L, BERTScore, TRACE, the two temporal column
 uv run tnb judges           # every candidate judge against the two therapists
 uv run tnb saturation       # is there anything left to measure?
 uv run tnb preference       # does either judge favour its own family?
+uv run tnb edges            # test every 'beats outright' claim; writes docs/edges-*.json
 uv run tnb report           # rebuild both pages, the JSON and the README table
 ```
 

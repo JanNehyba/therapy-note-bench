@@ -87,6 +87,38 @@ TRACE annotations and blinded expert review are not in the public repository, so
 we cannot calibrate it the way we calibrate the TN-Eval judge. Every table and
 column that carries a TRACE score says so.
 
+## How the tables are ordered
+
+Every table is ordered the same way. On each column of its instrument every
+system is placed first, second and so on, at the precision the table prints —
+rows that print the same figure share a place, because a reader checks a place
+against the digits in front of them. The places are averaged with every column
+counting once, and the rows are ordered by that mean, competition-style: a tie
+on the mean is a tie, and the next place is skipped.
+
+Places rather than values, for a measured reason. A mean of places agrees with
+a mean win rate almost exactly on these tables — the same order by a longer
+route — while a min-max mean of the values reverses many pairs of models when
+the reference rows are removed, because it is rescaled by whoever sits at the
+extremes. A place has no unit, so a fraction and a rating weigh the same, and
+removing a row moves every place below it and nothing else.
+
+The one convention the rule embeds is that every column counts equally, and
+the page treats that as a claim to be tested rather than a fact. Under every
+table it says who is first when each column is counted twice and when the
+reference rows are removed, how many systems change place and how far; the
+full table is on the methods page. A place is a statement about the table,
+never about a note: it is not a measure, it never enters a headline, and the
+two judges are never averaged into one order.
+
+Beside the order, where `docs/edges-<track>.json` exists, a Group column draws
+what the evidence separates: the layers of the dominance graph after every
+"beats outright" claim was resampled whole over the conversations the pair
+shares, kept at the band analysis's threshold. The first group is beaten by no
+kept claim, the second only by the first, and nothing breaks a tie. The column
+exists only where that artefact does, by construction: a Group drawn from an
+untested relation was built and taken down once.
+
 ## The judges
 
 **Two of them, and they mark each other's homework.** Scoring prompts are
