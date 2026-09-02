@@ -1344,11 +1344,22 @@ def build(
                 # columns under the instrument's name, and two SOAP-note tables
                 # sit under one switch; a reader who flips between them should
                 # not have to remember which eight columns were whose.
+                # `judged` says whether the judge named above decided this
+                # column or whether it was computed from the note and the
+                # expert note. Four of iCARE's five columns are the second
+                # kind: byte-identical under every judge, because no judge was
+                # ever asked. The page needs it for the two-judge comparison,
+                # which drew "= 0.000" beside ROUGE-L and so told a reader the
+                # judges had agreed exactly on a number neither of them
+                # produced -- the tautology `icare.JUDGE_MEASURES` exists to
+                # keep off the concordance panel, printed eighteen times a
+                # table instead.
                 "columns": [
                     {
                         **column_meta(track, key_),
                         "digits": digits,
                         "instrument": INSTRUMENT_LABELS[track],
+                        "judged": key_ in JUDGE_MEASURES.get(track, ()),
                     }
                     for key_, digits in COLUMNS[track]
                 ],
@@ -1813,8 +1824,16 @@ def render_readme_section(data: dict) -> str:
     # Named, not drawn. A number that was published and is not any more
     # should be explainable; a reader who remembers a different figure needs
     # to see that the measure changed, not wonder whether the model did.
-    for gone in data.get("superseded", []):
-        blocks.append(f"*{_superseded_sentence(gone)}*")
+    #
+    # As a table, and one row per reason rather than per group: the 47 groups
+    # withdrawn on 2026-09-02 carried 14 distinct reasons between them, and
+    # printing each group as its own sentence put 47 near-identical paragraphs
+    # under the tables -- the same clause about redefined measures nineteen
+    # times over. A reader scrolling past that learns less than one who reads a
+    # table, not more.
+    withdrawn = _withdrawn_table(data.get("superseded", []))
+    if withdrawn:
+        blocks.append(withdrawn)
 
     # Named, with a link each. Nothing is hidden by printing one table per
     # track -- it is moved to the page, which has a switch, from a file that
@@ -1930,6 +1949,43 @@ def _superseded_reasons(gone: dict) -> list[str]:
     }
     # Older rows carry no `reasons`; before this field existed there was only one.
     return [said[name] for name in gone.get("reasons") or ["harness"] if name in said]
+
+
+def _withdrawn_table(superseded: list[dict]) -> str:
+    """Every withdrawn group, one row per distinct reason, in Markdown.
+
+    Grouped on the track, the judge and the reasons -- which is what the reader
+    is being told -- with the harness versions it happened at listed in the row.
+    The row count is summed, so nothing is lost by the grouping: the totals add
+    up to the same number of rows as the sentences did.
+    """
+    if not superseded:
+        return ""
+    grouped: dict[tuple, list[dict]] = {}
+    for gone in superseded:
+        key = (
+            gone["track"],
+            gone["judge_model"] or "",
+            tuple(gone.get("reasons") or ["harness"]),
+        )
+        grouped.setdefault(key, []).append(gone)
+    lines = [
+        f"**Rows that were published and are no longer shown** — "
+        f"{sum(gone['rows'] for gone in superseded)} in "
+        f"{len(superseded)} group(s), every one still in `results/rows.jsonl`.",
+        "",
+        "| Rows | Track | Judge | At harness | Why |",
+        "|---|---|---|---|---|",
+    ]
+    for (track, judged_by, _), gones in sorted(grouped.items()):
+        versions = sorted({gone["harness_version"] for gone in gones})
+        why = "; and ".join(_superseded_reasons(gones[0]))
+        lines.append(
+            f"| {sum(gone['rows'] for gone in gones)} | {track} | "
+            f"{'`' + judged_by + '`' if judged_by else '*generation coverage*'} | "
+            f"{', '.join('`' + version + '`' for version in versions)} | {why} |"
+        )
+    return "\n".join(lines)
 
 
 def _superseded_sentence(gone: dict) -> str:

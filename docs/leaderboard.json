@@ -313,7 +313,7 @@
         "n_systems": 18,
         "rho": 0.951
       },
-      "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on trace (+0.769) and place 12 of 18 systems differently on it anyway. The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. Systems beating at least one other on every measure under both judges, which needs no weighting to be true: 10. `qwen3.8-flash-next` beats 8. 8 of 18 systems are beaten outright by nobody.",
+      "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on trace (+0.769) and place 12 of 18 systems differently on it anyway. The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. Systems beating at least one other on every measure under both judges, which needs no weighting to be true: 10. `qwen3.8-flash-next` beats 8. 8 of 18 systems are beaten outright by nobody on the figures as printed. The Group column asks the same question of the same comparisons and keeps a lead only where it also survives resampling, which is the stricter test: its top group is larger than this count, because a lead too small to survive leaves both systems unseparated.",
       "summary_measure": "trace",
       "systems": [
         "deepseek-v4-flash",
@@ -651,7 +651,7 @@
         "n_systems": 21,
         "rho": 0.904
       },
-      "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on thorough (+0.766) and place 18 of 21 systems differently on it anyway. They agree least on succinct (+0.490, 21 of 21 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. No agreement figure is given for comprehensible (20 of 21 share one value), organized (20 of 21 share one value), synthesized (20 of 21 share one value), useful (20 of 21 share one value): most systems print the same number there, so there are no orderings for the two judges to agree about, and a correlation over them would be decided by the few that differ. Systems beating at least one other on every measure under both judges, which needs no weighting to be true: 4. `gpt-5.6-sol` beats 8. 12 of 21 systems are beaten outright by nobody.",
+      "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on thorough (+0.766) and place 18 of 21 systems differently on it anyway. They agree least on succinct (+0.490, 21 of 21 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. No agreement figure is given for comprehensible (20 of 21 share one value), organized (20 of 21 share one value), synthesized (20 of 21 share one value), useful (20 of 21 share one value): most systems print the same number there, so there are no orderings for the two judges to agree about, and a correlation over them would be decided by the few that differ. Systems beating at least one other on every measure under both judges, which needs no weighting to be true: 4. `gpt-5.6-sol` beats 8. 12 of 21 systems are beaten outright by nobody on the figures as printed. The Group column asks the same question of the same comparisons and keeps a lead only where it also survives resampling, which is the stricter test: its top group is larger than this count, because a lead too small to survive leaves both systems unseparated.",
       "summary_measure": "thorough",
       "systems": [
         "deepseek-v4-flash",
@@ -1245,7 +1245,7 @@
         "n_systems": 21,
         "rho": 0.813
       },
-      "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on completeness (+0.894) and place 16 of 21 systems differently on it anyway. They agree least on faithfulness (+0.695, 19 of 21 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. Systems beating at least one other on every measure under both judges, which needs no weighting to be true: 16. `google_gemini-3.7-flash` beats 11. 9 of 21 systems are beaten outright by nobody. Completeness says little about conciseness (`gemini-3.1-pro-preview` -0.05, `gpt-5.6-terra` +0.10). Completeness says different things to the two judges about faithfulness (`gemini-3.1-pro-preview` +0.61, `gpt-5.6-terra` +0.01). The two judges disagree about whether those columns are related at all, so neither reading is this benchmark's answer.",
+      "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on completeness (+0.894) and place 16 of 21 systems differently on it anyway. They agree least on faithfulness (+0.695, 19 of 21 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. Systems beating at least one other on every measure under both judges, which needs no weighting to be true: 16. `google_gemini-3.7-flash` beats 11. 9 of 21 systems are beaten outright by nobody on the figures as printed. The Group column asks the same question of the same comparisons and keeps a lead only where it also survives resampling, which is the stricter test: its top group is larger than this count, because a lead too small to survive leaves both systems unseparated. Completeness says little about conciseness (`gemini-3.1-pro-preview` -0.05, `gpt-5.6-terra` +0.10). Completeness says different things to the two judges about faithfulness (`gemini-3.1-pro-preview` +0.61, `gpt-5.6-terra` +0.01). The two judges disagree about whether those columns are related at all, so neither reading is this benchmark's answer.",
       "summary_measure": "completeness",
       "systems": [
         "deepseek-v4-flash",
@@ -14302,16 +14302,18 @@
           "definition": "The equal-weighted mean of the note's four SOAP section fractions. Per section, the fraction of that section's criteria the judge found present.",
           "digits": 3,
           "instrument": "TN-Eval rubric",
+          "judged": true,
           "key": "completeness",
           "label": "Completeness",
           "scale": "0-1"
         },
         {
           "anchored": false,
-          "caveat": "Not a length measure, despite the name: a note twice as long scores the same if every added sentence is on topic. It is also the measure most moved by the judge's own settings -- raising the thinking budget from 128 to 256 tokens shifted all nineteen systems and reordered sixteen of them. The higher budget is what the table above is scored at; it was the budget-128 rows it was compared against that are gone -- not in results/rows.jsonl in any revision and not re-derivable, see docs/limitations.md.",
+          "caveat": "Not a length measure, despite the name: a note twice as long scores the same if every added sentence is on topic. It is also the measure most moved by the judge's own settings -- raising the thinking budget from 128 to 256 tokens shifted all nineteen systems on the table as it stood in August 2026 and reordered sixteen of them. The two systems added since were never scored at the lower budget, so the measurement is not re-run when the table grows. The higher budget is what the table above is scored at; it was the budget-128 rows it was compared against that are gone -- not in results/rows.jsonl in any revision and not re-derivable, see docs/limitations.md.",
           "definition": "The equal-weighted mean of the note's four section fractions: per section, the fraction of that section's sentences that fit at least one rubric item. 1.00 means nothing is off-topic; it does not mean the note is short.",
           "digits": 3,
           "instrument": "TN-Eval rubric",
+          "judged": true,
           "key": "conciseness",
           "label": "Conciseness",
           "scale": "0-1"
@@ -14322,6 +14324,7 @@
           "definition": "Whether the note contradicts the transcript, rated 1 to 5, where 5 is no inaccuracies. TN-Eval's protocol has no criterion-based version of this one, so it stays a Likert scale.",
           "digits": 2,
           "instrument": "TN-Eval rubric",
+          "judged": true,
           "key": "faithfulness",
           "label": "Faithfulness",
           "scale": "1-5"
@@ -16782,16 +16785,18 @@
           "definition": "The equal-weighted mean of the note's four SOAP section fractions. Per section, the fraction of that section's criteria the judge found present.",
           "digits": 3,
           "instrument": "TN-Eval rubric",
+          "judged": true,
           "key": "completeness",
           "label": "Completeness",
           "scale": "0-1"
         },
         {
           "anchored": false,
-          "caveat": "Not a length measure, despite the name: a note twice as long scores the same if every added sentence is on topic. It is also the measure most moved by the judge's own settings -- raising the thinking budget from 128 to 256 tokens shifted all nineteen systems and reordered sixteen of them. The higher budget is what the table above is scored at; it was the budget-128 rows it was compared against that are gone -- not in results/rows.jsonl in any revision and not re-derivable, see docs/limitations.md.",
+          "caveat": "Not a length measure, despite the name: a note twice as long scores the same if every added sentence is on topic. It is also the measure most moved by the judge's own settings -- raising the thinking budget from 128 to 256 tokens shifted all nineteen systems on the table as it stood in August 2026 and reordered sixteen of them. The two systems added since were never scored at the lower budget, so the measurement is not re-run when the table grows. The higher budget is what the table above is scored at; it was the budget-128 rows it was compared against that are gone -- not in results/rows.jsonl in any revision and not re-derivable, see docs/limitations.md.",
           "definition": "The equal-weighted mean of the note's four section fractions: per section, the fraction of that section's sentences that fit at least one rubric item. 1.00 means nothing is off-topic; it does not mean the note is short.",
           "digits": 3,
           "instrument": "TN-Eval rubric",
+          "judged": true,
           "key": "conciseness",
           "label": "Conciseness",
           "scale": "0-1"
@@ -16802,6 +16807,7 @@
           "definition": "Whether the note contradicts the transcript, rated 1 to 5, where 5 is no inaccuracies. TN-Eval's protocol has no criterion-based version of this one, so it stays a Likert scale.",
           "digits": 2,
           "instrument": "TN-Eval rubric",
+          "judged": true,
           "key": "faithfulness",
           "label": "Faithfulness",
           "scale": "1-5"
@@ -19261,6 +19267,7 @@
           "definition": "Longest-common-subsequence overlap with the expert note, F-measure. Rewards using the same words in the same order.",
           "digits": 3,
           "instrument": "iCARE",
+          "judged": false,
           "key": "rouge_l",
           "label": "ROUGE-L",
           "scale": "0-1"
@@ -19271,6 +19278,7 @@
           "definition": "Embedding similarity to the expert note. Tolerates paraphrase.",
           "digits": 3,
           "instrument": "iCARE",
+          "judged": false,
           "key": "bertscore",
           "label": "BERTScore",
           "scale": "0-1"
@@ -19281,6 +19289,7 @@
           "definition": "Trustworthiness, relevance, accuracy, comprehensiveness and expression, each rated 1-5 by a judge and averaged.",
           "digits": 2,
           "instrument": "iCARE",
+          "judged": true,
           "key": "trace",
           "label": "TRACE",
           "scale": "1-5"
@@ -19291,6 +19300,7 @@
           "definition": "Section 5 only -- what happened in the previous session. The fraction of the 34 sessions whose expert note answered it where the model did too.",
           "digits": 2,
           "instrument": "iCARE",
+          "judged": false,
           "key": "temporal_past",
           "label": "Looks back",
           "scale": "0-1"
@@ -19301,6 +19311,7 @@
           "definition": "Section 17 only -- what happens at the next session. The fraction of the 11 sessions whose expert note answered it where the model did too.",
           "digits": 2,
           "instrument": "iCARE",
+          "judged": false,
           "key": "temporal_next",
           "label": "Looks forward",
           "scale": "0-1"
@@ -20500,6 +20511,7 @@
           "definition": "Longest-common-subsequence overlap with the expert note, F-measure. Rewards using the same words in the same order.",
           "digits": 3,
           "instrument": "iCARE",
+          "judged": false,
           "key": "rouge_l",
           "label": "ROUGE-L",
           "scale": "0-1"
@@ -20510,6 +20522,7 @@
           "definition": "Embedding similarity to the expert note. Tolerates paraphrase.",
           "digits": 3,
           "instrument": "iCARE",
+          "judged": false,
           "key": "bertscore",
           "label": "BERTScore",
           "scale": "0-1"
@@ -20520,6 +20533,7 @@
           "definition": "Trustworthiness, relevance, accuracy, comprehensiveness and expression, each rated 1-5 by a judge and averaged.",
           "digits": 2,
           "instrument": "iCARE",
+          "judged": true,
           "key": "trace",
           "label": "TRACE",
           "scale": "1-5"
@@ -20530,6 +20544,7 @@
           "definition": "Section 5 only -- what happened in the previous session. The fraction of the 34 sessions whose expert note answered it where the model did too.",
           "digits": 2,
           "instrument": "iCARE",
+          "judged": false,
           "key": "temporal_past",
           "label": "Looks back",
           "scale": "0-1"
@@ -20540,6 +20555,7 @@
           "definition": "Section 17 only -- what happens at the next session. The fraction of the 11 sessions whose expert note answered it where the model did too.",
           "digits": 2,
           "instrument": "iCARE",
+          "judged": false,
           "key": "temporal_next",
           "label": "Looks forward",
           "scale": "0-1"
@@ -21737,6 +21753,7 @@
           "definition": "The note is true and free of incorrect information. PDSQI-9 item 2, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
+          "judged": true,
           "key": "accurate",
           "label": "Accurate",
           "scale": "1-5"
@@ -21747,6 +21764,7 @@
           "definition": "The note should thoroughly cover all critical patient issues. PDSQI-9 item 3, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
+          "judged": true,
           "key": "thorough",
           "label": "Thorough",
           "scale": "1-5"
@@ -21757,6 +21775,7 @@
           "definition": "All the information is in there that is useful to the target provider/intended audience. The note is extremely relevant, providing valuable information and/or analysis. PDSQI-9 item 4, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
+          "judged": true,
           "key": "useful",
           "label": "Useful",
           "scale": "1-5"
@@ -21767,6 +21786,7 @@
           "definition": "The note is well-formed and structured in a way that helps the reader understand the patient's clinical course. PDSQI-9 item 5, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
+          "judged": true,
           "key": "organized",
           "label": "Organized",
           "scale": "1-5"
@@ -21777,6 +21797,7 @@
           "definition": "The note is clear, without ambiguity or sections that are difficult to understand. PDSQI-9 item 6, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
+          "judged": true,
           "key": "comprehensible",
           "label": "Comprehensible",
           "scale": "1-5"
@@ -21787,6 +21808,7 @@
           "definition": "The note is brief, to the point, and without redundancy. PDSQI-9 item 7, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
+          "judged": true,
           "key": "succinct",
           "label": "Succinct",
           "scale": "1-5"
@@ -21797,6 +21819,7 @@
           "definition": "The note reflects an understanding of the patient's status and ability to develop a plan of care. PDSQI-9 item 8, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
+          "judged": true,
           "key": "synthesized",
           "label": "Synthesized",
           "scale": "1-5"
@@ -21807,6 +21830,7 @@
           "definition": "The note is free of discrediting or exaggerated words, of judgment or labelling, and uses person-first language. PDSQI-9 item 9, answered yes or no and reported as the fraction of notes free of it.",
           "digits": 3,
           "instrument": "PDSQI-9",
+          "judged": true,
           "key": "stigmatizing",
           "label": "Free of stigmatizing language",
           "scale": "0-1"
@@ -23227,6 +23251,7 @@
           "definition": "The note is true and free of incorrect information. PDSQI-9 item 2, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
+          "judged": true,
           "key": "accurate",
           "label": "Accurate",
           "scale": "1-5"
@@ -23237,6 +23262,7 @@
           "definition": "The note should thoroughly cover all critical patient issues. PDSQI-9 item 3, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
+          "judged": true,
           "key": "thorough",
           "label": "Thorough",
           "scale": "1-5"
@@ -23247,6 +23273,7 @@
           "definition": "All the information is in there that is useful to the target provider/intended audience. The note is extremely relevant, providing valuable information and/or analysis. PDSQI-9 item 4, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
+          "judged": true,
           "key": "useful",
           "label": "Useful",
           "scale": "1-5"
@@ -23257,6 +23284,7 @@
           "definition": "The note is well-formed and structured in a way that helps the reader understand the patient's clinical course. PDSQI-9 item 5, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
+          "judged": true,
           "key": "organized",
           "label": "Organized",
           "scale": "1-5"
@@ -23267,6 +23295,7 @@
           "definition": "The note is clear, without ambiguity or sections that are difficult to understand. PDSQI-9 item 6, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
+          "judged": true,
           "key": "comprehensible",
           "label": "Comprehensible",
           "scale": "1-5"
@@ -23277,6 +23306,7 @@
           "definition": "The note is brief, to the point, and without redundancy. PDSQI-9 item 7, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
+          "judged": true,
           "key": "succinct",
           "label": "Succinct",
           "scale": "1-5"
@@ -23287,6 +23317,7 @@
           "definition": "The note reflects an understanding of the patient's status and ability to develop a plan of care. PDSQI-9 item 8, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
+          "judged": true,
           "key": "synthesized",
           "label": "Synthesized",
           "scale": "1-5"
@@ -23297,6 +23328,7 @@
           "definition": "The note is free of discrediting or exaggerated words, of judgment or labelling, and uses person-first language. PDSQI-9 item 9, answered yes or no and reported as the fraction of notes free of it.",
           "digits": 3,
           "instrument": "PDSQI-9",
+          "judged": true,
           "key": "stigmatizing",
           "label": "Free of stigmatizing language",
           "scale": "0-1"

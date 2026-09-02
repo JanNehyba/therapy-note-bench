@@ -503,6 +503,11 @@ function extraLegend(table) {
 function renderTable(table, index) {
   if (!table.scored) return renderQueue(table);
   const versions = table.versions;
+  // The other judge's table, when the reader asked for both. Read this high
+  // up because the headings need it as well as the cells: a column carrying no
+  // second figure has to say so where the column is named, not leave eighteen
+  // cells looking short of a number.
+  const against = compare ? otherTableOf(table.id) : null;
   // The judge's settings, not only its name. Measured on this benchmark: the
   // same judge at a thinking budget of 128 and of 256 moved completeness by
   // +0.017 on every system and changed the conciseness top three. A table
@@ -551,6 +556,16 @@ function renderTable(table, index) {
       ? `<span class="instrument">${esc(tr(c.instrument))}</span>` : '') +
     `${esc(tr(c.label))}` +
     `<span class="scale">${esc(c.scale)}</span>` +
+    // Only while both judges are on screen, and only on the columns no judge
+    // decided. It answers the question the missing second figure raises --
+    // "did the comparison fail here?" -- with the reason it is not there:
+    // the column is computed from the note and the expert note, so the two
+    // tables hold the same number and always will.
+    (against && !c.judged
+      ? `<span class="scale" title="${T`Computed from the note and the expert note, not asked
+          of a judge. Both judges' tables carry the same figure, so there is nothing to
+          compare.`}">${T`same under both judges`}</span>`
+      : '') +
     `</button></th>`).join('');
   // The order and, where it has been tested, the group. Place is the mean of
   // the row's places over the instrument's columns; Group is what the tested
@@ -748,7 +763,6 @@ function renderTable(table, index) {
   // drawn. Only when the reader asked for both: it is the other half of a
   // comparison, not a default, because the ranking a table publishes is one
   // judge's ranking and must stay readable as that.
-  const against = compare ? otherTableOf(table.id) : null;
   const theirs = {};
   if (against) against.rows.forEach(r => { theirs[r.label] = r.headline; });
 
@@ -757,11 +771,41 @@ function renderTable(table, index) {
   // `title=`, so a reader who tapped it on a phone -- where a `title=` cannot
   // be opened at all -- got a triangle and a number in every one of seventeen
   // columns with nothing anywhere saying what they were.
+  //
+  // On the columns a judge decided, and nowhere else. It used to say "every
+  // figure", and every figure did carry one: on the iCARE table that put
+  // `= 0.000` beside ROUGE-L, BERTScore and both temporal columns, which are
+  // computed from the note and the expert note and are the same number in
+  // both tables because no judge was asked. Four of five columns then read as
+  // perfect agreement between the judges, and the one real comparison was the
+  // odd one out.
+  //
+  // And the last sentence, because it is the question this mode raises and
+  // does not answer: the rows move. Place is the mean over these columns, so
+  // changing judge re-sorts the table, and a reader watching one line of the
+  // screen sees the untouched columns change under it.
+  // Whole sentences on both branches, never a translated fragment glued to
+  // another: Czech orders a clause differently from English and a dictionary
+  // of halves cannot say so.
+  const judged = table.columns.filter(c => c.judged);
   const compareNote = against
-    ? `<p class="note">${T`Every figure now carries a second one: how far
-        <code>${esc(against.versions.judge_model)}</code> was from this judge on the same row.
-        Nothing is averaged — ▴ is the other judge scoring it higher and ▾ lower, and the number
-        is the distance between the two.`}</p>`
+    ? `<p class="note">${
+        judged.length === table.columns.length
+          ? T`Every figure now carries a second one: how far
+             <code>${esc(against.versions.judge_model)}</code> was from this judge on the same
+             row. Nothing is averaged — ▴ is the other judge scoring it higher and ▾ lower, and
+             the number is the distance between the two. The rows are ordered by place, which
+             moves with the judge, so changing judge re-sorts the table: follow a model by its
+             name, not by where it sits.`
+          : T`Only ${judged.map(c => esc(tr(c.label))).join(', ')} carries a second figure: how
+             far <code>${esc(against.versions.judge_model)}</code> was from this judge on the
+             same row. Nothing is averaged — ▴ is the other judge scoring it higher and ▾
+             lower, and the number is the distance between the two. The other columns are
+             computed from the note and the expert note rather than asked of a judge, so both
+             tables hold the same number and there is nothing to compare. The rows are ordered
+             by place, which moves with the judge, so changing judge re-sorts the table: follow
+             a model by its name, not by where it sits.`
+      }</p>`
     : '';
 
   const body = table.rows.map((row, position) => {
@@ -771,7 +815,14 @@ function renderTable(table, index) {
       // Nothing invented where the other judge has no answer: a blank delta
       // says the comparison was not available, and a 0.000 would say the two
       // judges agreed exactly.
-      const gap = against && mine !== undefined && mine !== null
+      //
+      // And nothing at all on a column no judge decided. Four of iCARE's five
+      // are computed from the note and the expert note, so the two tables hold
+      // the same figure by construction; the delta printed `=0.000` on every
+      // one of them, which reads as the strongest agreement on the page and is
+      // a restatement of the arithmetic. The heading says why the second
+      // figure is missing, once per column instead of once per cell.
+      const gap = against && c.judged && mine !== undefined && mine !== null
           && other !== undefined && other !== null
         ? `<span class="gap ${other > mine ? 'up' : other < mine ? 'down' : 'same'}">${
             other > mine ? '▴' : other < mine ? '▾' : '='}${
@@ -780,7 +831,10 @@ function renderTable(table, index) {
             other !== mine && Number(fmt(Math.abs(other - mine), c.digits)) === 0
               ? '<' + fmt(Math.pow(10, -c.digits), c.digits)
               : fmt(Math.abs(other - mine), c.digits)}</span>`
-        : (against ? '<span class="gap dash">—</span>' : '');
+        // A dash here means "this judge answered and the other did not". It
+        // must not appear on a column neither judge was asked: that would be a
+        // missing comparison where there is no comparison to miss.
+        : (against && c.judged ? '<span class="gap dash">—</span>' : '');
       return `<td>${fmt(mine, c.digits)}${gap}</td>`;
     }).join('');
     // Two different facts, never merged: how many notes the model wrote that the

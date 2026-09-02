@@ -518,3 +518,56 @@ def test_the_docs_say_that_nothing_verifies_the_icare_answer_key():
         "one record per session; a second expert note would show up as a repeated id "
         "and would make the claim in the docs false"
     )
+
+
+def test_every_column_says_whether_a_judge_decided_it():
+    """`judged` is the join between a scorer's `JUDGE_MEASURES` and the page.
+
+    Four of iCARE's five columns are computed from the note and the expert
+    note: they are byte-identical under every judge, because no judge was ever
+    asked. The two-judge comparison drew a delta on all five and so printed
+    `= 0.000` beside ROUGE-L, BERTScore and both temporal columns -- eighteen
+    rows of the two judges agreeing perfectly on a number neither produced.
+    That is the tautology `icare.JUDGE_MEASURES` already keeps off the
+    concordance panel, and the flag is what lets the table keep it off too.
+
+    Asserted against the scorers rather than against a list here: a measure
+    that moves from computed to judged, or the other way, must move in one
+    place.
+    """
+    row = lambda track, prompt: results.Row(  # noqa: E731
+        track=track,
+        system_id="x",
+        system_type="model",
+        prompt_version=prompt,
+        judge_model="judge-a",
+        judge_prompt_version=f"{track}-v1",
+        judge_settings={"model": "judge-a"},
+        n_sessions_attempted=1,
+        n_sessions_generated=1,
+        n_sessions_scored=1,
+        metrics=results.Metrics(
+            headline={key: 0.5 for key, _ in report.COLUMNS[track]},
+        ),
+    )
+    rows = [
+        row(results.TRACK_TNEVAL, "tneval-soap-v1"),
+        row(results.TRACK_ICARE, "icare-zeroshot-v1"),
+        row(results.TRACK_PDSQI, "tneval-soap-v1"),
+    ]
+    tables = report.build(rows)["tables"]
+    assert len(tables) == 3, "the fixture needs one table per track"
+
+    for table in tables:
+        decided = report.JUDGE_MEASURES[table["track"]]
+        assert {c["key"] for c in table["columns"] if c["judged"]} == set(decided), (
+            f"{table['track']}: the page's idea of what the judge decided is not the scorer's"
+        )
+
+    icare = next(t for t in tables if t["track"] == results.TRACK_ICARE)
+    assert [c["key"] for c in icare["columns"] if not c["judged"]] == [
+        "rouge_l",
+        "bertscore",
+        "temporal_past",
+        "temporal_next",
+    ], "the four columns computed from the note and the expert note"

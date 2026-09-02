@@ -522,9 +522,19 @@ def describe(comparison: Comparison) -> str:
                 else f"The most any of them beats is {most}, and {len(leaders)} do: {named}."
             )
         )
+    # "On the stored values", said out loud. This count and the Group column
+    # answer the same question with different evidence -- this one on the
+    # figures as printed, Group only where the lead survived resampling -- and
+    # the two numbers disagree by design: the rubric table says 9 here and 16
+    # in the Group column, and a reader met them a paragraph apart with nothing
+    # saying which was which. The stricter test is the one that governs Group,
+    # so this is the looser of the two and has to say so.
     parts.append(
         f"{len(comparison.undominated)} of {comparison.n_systems} systems are beaten outright "
-        f"by nobody."
+        f"by nobody on the figures as printed. The Group column asks the same question of "
+        f"the same comparisons and keeps a lead only where it also survives resampling, "
+        f"which is the stricter test: its top group is larger than this count, because a "
+        f"lead too small to survive leaves both systems unseparated."
     )
 
     # The reason there is no single winner, stated as the measurement rather

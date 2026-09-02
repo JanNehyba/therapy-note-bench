@@ -1828,3 +1828,79 @@ def test_no_table_is_laid_out_as_a_grid():
     for name in ("leaderboard.html", "methods.html"):
         text = (REPO_ROOT / "src" / "tnb" / "templates" / name).read_text(encoding="utf-8")
         assert '<table class="grid"' not in text, f"{name}: a table laid out as a grid"
+
+
+def _icare_two_judges() -> list[Row]:
+    """One iCARE table per judge: the same automatic figures, a different TRACE.
+
+    Which is not a fixture convenience -- it is what the rows on disk look
+    like. ROUGE-L, BERTScore and the two temporal columns are computed from the
+    note and the expert note, so re-scoring a note with another judge cannot
+    move them.
+    """
+    automatic = {"rouge_l": 0.19, "bertscore": 0.82, "temporal_past": 1.0, "temporal_next": 0.36}
+    return [
+        _row(
+            system,
+            judge_model,
+            0.5,
+            track=results.TRACK_ICARE,
+            prompt_version="icare-zeroshot-v1",
+            judge_prompt_version="icare-trace-v1",
+            metrics=Metrics(headline={**automatic, "trace": trace}),
+        )
+        for judge_model, traces in (
+            ("judge-a", {"x": 4.98, "y": 4.76}),
+            ("judge-b", {"x": 4.02, "y": 3.59}),
+        )
+        for system, trace in traces.items()
+    ]
+
+
+def test_a_column_no_judge_decided_carries_no_second_figure(tmp_path):
+    """`both` used to write a delta into every cell of the iCARE table.
+
+    Four of its five columns are computed from the note and the expert note, so
+    both judges' tables hold the same number and the delta read `= 0.000` --
+    the two judges agreeing perfectly, eighteen rows at a time, about a figure
+    neither of them produced. It is the tautology `icare.JUDGE_MEASURES` keeps
+    off the concordance panel, and it made the one real comparison on the table
+    look like the odd one out.
+    """
+    from tnb import report
+
+    data = report.build(_icare_two_judges())
+    data["calibration"] = None
+    data["similarity_example"] = None
+    data["saturation"] = None
+    data["judges"] = None
+    host = _flat(_run(report.render_page(data), tmp_path, panel="table-host", search="?compare=1"))
+    visible = re.sub(r'title="[^"]*"', "", host)
+
+    assert "4.98" in visible and "0.96" in visible, "TRACE is compared, and it is the point"
+    # `=` is how the delta writes "the two judges landed on the same number",
+    # and 0.000 is the only figure it could ever carry on these four columns.
+    # Matched with its sign because 0.000 is also a legend's example of what
+    # ROUGE-L does to a correct paraphrase.
+    assert "=0.000" not in visible, (
+        "a delta of zero on a column no judge answered reads as perfect agreement"
+    )
+    # One gap per row, on the one column a judge decided.
+    assert visible.count('class="gap') == 2, "a second figure appeared on an unjudged column"
+    # And the heading says why the others have none, rather than leaving four
+    # columns looking short of a number.
+    assert visible.count("same under both judges") == 4
+    assert "Only TRACE carries a second figure" in visible
+
+
+def test_a_table_whose_judge_decided_every_column_still_compares_all_of_them(tmp_path):
+    """The gate is `judged`, not the track. On the rubric the judge answers
+    every column, so every column keeps its second figure."""
+    from tnb import report
+
+    data = _page_data(tmp_path)
+    host = _flat(_run(report.render_page(data), tmp_path, panel="table-host", search="?compare=1"))
+    visible = re.sub(r'title="[^"]*"', "", host)
+
+    assert "Every figure now carries a second one" in visible
+    assert "same under both judges" not in visible, "said where nothing is exempt"

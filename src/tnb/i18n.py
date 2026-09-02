@@ -624,10 +624,41 @@ _SENTENCES = {
     # columns with nothing anywhere saying what they were.
     "Every figure now carries a second one: how far <code>{0}</code> was from this judge on the"
     " same row. Nothing is averaged — ▴ is the other judge scoring it higher and ▾ lower, and"
-    " the number is the distance between the two.": (
+    " the number is the distance between the two. The rows are ordered by place, which moves"
+    " with the judge, so changing judge re-sorts the table: follow a model by its name, not by"
+    " where it sits.": (
         "Každé číslo teď nese ještě druhé: jak daleko od tohoto hodnotitele byl na témž řádku "
         "<code>{0}</code>. Nic se neprůměruje — ▴ znamená, že druhý hodnotitel dal víc, ▾ že "
-        "míň, a to číslo je vzdálenost mezi nimi."
+        "míň, a to číslo je vzdálenost mezi nimi. Řádky jsou seřazené podle příčky, a ta se s "
+        "hodnotitelem mění, takže přepnutí hodnotitele tabulku přeskládá: sledujte model podle "
+        "jména, ne podle místa, na kterém stojí."
+    ),
+    # The same sentence for a table where the judge decides some of the columns
+    # and not others. On the iCARE track it decides one of five: the rest are
+    # computed from the note and the expert note, are the same number in both
+    # tables, and used to carry a delta of `= 0.000` that read as the two
+    # judges agreeing perfectly on a figure neither of them produced.
+    "Only {0} carries a second figure: how far <code>{1}</code> was from this judge on the same"
+    " row. Nothing is averaged — ▴ is the other judge scoring it higher and ▾ lower, and the"
+    " number is the distance between the two. The other columns are computed from the note and"
+    " the expert note rather than asked of a judge, so both tables hold the same number and"
+    " there is nothing to compare. The rows are ordered by place, which moves with the judge, so"
+    " changing judge re-sorts the table: follow a model by its name, not by where it sits.": (
+        "Druhé číslo nese jen {0}: jak daleko od tohoto hodnotitele byl na témž řádku "
+        "<code>{1}</code>. Nic se neprůměruje — ▴ znamená, že druhý hodnotitel dal víc, ▾ že "
+        "míň, a to číslo je vzdálenost mezi nimi. Ostatní sloupce se počítají ze zápisu a "
+        "expertního zápisu, hodnotitele se na ně nikdo neptal, takže obě tabulky mají totéž "
+        "číslo a není co porovnávat. Řádky jsou seřazené podle příčky, a ta se s hodnotitelem "
+        "mění, takže přepnutí hodnotitele tabulku přeskládá: sledujte model podle jména, ne "
+        "podle místa, na kterém stojí."
+    ),
+    # On the heading of such a column, while both judges are on screen. It
+    # answers the question the missing second figure raises.
+    "same under both judges": "stejné u obou hodnotitelů",
+    "Computed from the note and the expert note, not asked of a judge. Both judges' tables"
+    " carry the same figure, so there is nothing to compare.": (
+        "Počítá se ze zápisu a expertního zápisu, hodnotitele se na to nikdo neptal. Tabulky "
+        "obou hodnotitelů nesou totéž číslo, takže není co porovnávat."
     ),
     "Every prompt, rubric and instrument here is reproduced verbatim from the works above."
     ' <a href="methods.html#licences">What each is used for, and on what terms</a>:'
@@ -919,18 +950,22 @@ _PAYLOAD = {
         "odpovídají aspoň jedné položce rubriky. 1.00 znamená, že nic není mimo téma; neznamená "
         "to, že je zápis krátký."
     ),
-    "Not a length measure, despite the name: a note twice as long scores the same if every"
-    " added sentence is on topic. It is also the measure most moved by the judge's own settings"
-    " -- raising the thinking budget from 128 to 256 tokens shifted all nineteen systems and"
-    " reordered sixteen of them. The higher budget is what the table above is scored at; it was"
-    " the budget-128 rows it was compared against that are gone -- not in results/rows.jsonl in"
-    " any revision and not re-derivable, see docs/limitations.md.": (
-        "Navzdory jménu to není míra délky: dvakrát delší zápis dostane stejné skóre, pokud je "
-        "každá přidaná věta k tématu. Je to také míra, kterou nejvíc hýbe vlastní nastavení "
-        "hodnotitele — zvednutí rozpočtu na přemýšlení ze 128 na 256 tokenů posunulo všech "
-        "devatenáct systémů a u šestnácti z nich změnilo pořadí. Vyšší rozpočet je ten, na kterém "
-        "je obodovaná tabulka výše; chybí ta druhá polovina — řádky s rozpočtem 128, proti "
-        "kterým se srovnávalo, nejsou v results/rows.jsonl v žádné revizi a nedají se odvodit, "
+    "Not a length measure, despite the name: a note twice as long scores the same if every added"
+    " sentence is on topic. It is also the measure most moved by the judge's own settings --"
+    " raising the thinking budget from 128 to 256 tokens shifted all nineteen systems on the"
+    " table as it stood in August 2026 and reordered sixteen of them. The two systems added"
+    " since were never scored at the lower budget, so the measurement is not re-run when the"
+    " table grows. The higher budget is what the table above is scored at; it was the budget-128"
+    " rows it was compared against that are gone -- not in results/rows.jsonl in any revision"
+    " and not re-derivable, see docs/limitations.md.": (
+        "Navzdory jménu to není míra délky: dvakrát delší zápis dostane totéž skóre, pokud "
+        "je každá přidaná věta k tématu. Je to také míra, se kterou nejvíc hýbe nastavení "
+        "samotného hodnotitele — zvýšení rozpočtu na přemýšlení ze 128 na 256 tokenů "
+        "pohnulo všemi devatenácti systémy, jak tabulka vypadala v srpnu 2026, a šestnácti "
+        "z nich přeházelo pořadí. Dva systémy přidané potom už při nižším rozpočtu bodované "
+        "nebyly, takže se to měření s růstem tabulky neopakuje. Tabulka výše je obodovaná "
+        "při vyšším rozpočtu; zmizely ty řádky s rozpočtem 128, proti kterým se to "
+        "porovnávalo — nejsou v results/rows.jsonl v žádné revizi a nedají se dopočítat, "
         "viz docs/limitations.md."
     ),
     "Faithfulness": "Věrnost",
