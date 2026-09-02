@@ -890,8 +890,10 @@ function renderTable(table, index) {
 
   return `<section class="box${table.scored ? '' : ' pending'}">
       <h2>${tr(table.title)}</h2>
-      <p class="blurb">${code(tr(table.blurb))}</p>
-      ${designBlock(table)}
+      <div class="lede">
+        <p class="blurb">${code(tr(table.blurb))}</p>
+        <div class="lede-side">${designBlock(table)}</div>
+      </div>
       ${compareNote}
       <div id="switch" class="switch"></div>
       <div class="scroll-top" aria-hidden="true"><div></div></div>
@@ -909,11 +911,13 @@ function renderTable(table, index) {
             T`Marks`}</th></tr></thead>
         <tbody>${body}</tbody>
       </table></div>
+      <div class="notes">
       <p class="ranking-note">${rankingNote}</p>
       ${rosterNote()}
       ${referenceNote(table)}
       ${groupNote}
       ${instrumentsOf(table).map(([track]) => agreementNote(track)).join('')}
+      </div>
       <dl class="measures">${legend}</dl>
       <!-- Under the table, not over it. A reader arriving at a leaderboard
            wants to know which model, and the first line they met was four

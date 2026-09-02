@@ -290,7 +290,7 @@ function renderSaturation(data) {
          within a few of those is one the threshold decided rather than the evidence.
          ${cut.pairs.length} of the ${cut.comparisons} comparisons that can decide a band are
          inside ${cut.sigmas} of them.`}</p>
-       <table class="grid"><thead><tr>
+       <div class="scroll"><table><thead><tr>
          <th scope="col">${T`Comparison`}</th><th scope="col">${T`Beats in`}</th>
          <th scope="col">${T`From the cut`}</th><th scope="col">${T`Rows it would move`}</th>
        </tr></thead><tbody>${cut.pairs.map(pair => `<tr>
@@ -300,7 +300,7 @@ function renderSaturation(data) {
          <td>${pair.moves.length
            ? `${pair.moves.length} <span class="dash">(${pair.moves.map(esc).join(', ')})</span>`
            : `<span class="dash">${T`none`}</span>`}</td>
-       </tr>`).join('')}</tbody></table>`;
+       </tr>`).join('')}</tbody></table></div>`;
 
   const pending = (s.still_scoring || []).length
     ? `<p class="note">${T`Left out of this section because they are still being scored:

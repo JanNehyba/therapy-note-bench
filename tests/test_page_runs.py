@@ -1815,3 +1815,16 @@ def test_the_leaderboard_draws_no_band_column_and_the_payload_keeps_the_bands(tm
     assert (
         "beaten by no tested comparison" in drawn or "has not been tested for this table" in drawn
     ), "with the band column gone the table must still say what the evidence separates"
+
+
+def test_no_table_is_laid_out_as_a_grid():
+    """`.grid` is `display: grid` for the definition pairs inside an opened row.
+
+    A `<table class="grid">` on the methods page took that rule, and a table
+    laid out as a grid came out 2952px wide inside an 1888px window and dragged
+    the whole document sideways. The runner has no layout engine, so this reads
+    the templates rather than the page.
+    """
+    for name in ("leaderboard.html", "methods.html"):
+        text = (REPO_ROOT / "src" / "tnb" / "templates" / name).read_text(encoding="utf-8")
+        assert '<table class="grid"' not in text, f"{name}: a table laid out as a grid"

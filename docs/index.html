@@ -86,14 +86,24 @@
     --s1: .25rem; --s2: .5rem;  --s3: .75rem; --s4: 1rem;
     --s5: 1.5rem; --s6: 2rem;   --s7: 3rem;   --s8: 4.5rem;
 
-    /* The column IS the page. It was a 42rem column left-aligned inside a
-       76rem frame, which put every paragraph in the left half of the window
-       and left the right half empty -- the first thing anyone said about it
-       was that the text stops halfway across. Centring the page on the column
-       and letting only the table reach past it says the same thing without
-       the hole. */
+    /* One frame, one left edge. This has been two things, and each drew the
+       same complaint from the other side. A 42rem column left-aligned in a
+       76rem frame put the prose in the left half of the window, and the
+       reader said the text stops halfway across. A 44rem page with the table
+       breaking out symmetrically on both sides put a 704px column of prose
+       over a 1374px table, and the reader said the text is narrow and the
+       table is enormous. Measured at 1904px: prose 592-1296, table 257-1631,
+       nothing sharing an edge with anything.
+
+       So: the frame is as wide as the table needs (`--wide`), everything in
+       it starts at the same left edge, prose runs to a reading measure, a
+       table runs as far as it needs and no further than the frame, and above
+       76rem the blocks that belong to a table -- its lede beside its terms,
+       the sentences under it, its legend -- take the table's width in two
+       columns instead of leaving the right of the frame empty. Under 76rem it
+       is one column again and a wide table scrolls inside the frame. */
     --measure: 44rem;
-    --wide: 96rem;
+    --wide: 88rem;
     --gutter: 1.5rem;
 
     --radius: 3px;
@@ -123,18 +133,20 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* The page. Centred, and as wide as one column of prose: everything in it
-     fills it, so there is one left edge and one right edge and no block that
-     stops short of the others. */
-  main { max-width: var(--measure); margin: 0 auto; }
+  /* The frame. Centred in the window and as wide as the widest table needs;
+     the section rules and the footer rule run its full width. */
+  main { max-width: var(--wide); margin: 0 auto; }
 
-  /* Every block fills the page and stops where the page stops. This was a
-     list of selectors each capped at its own measure inside a wider frame,
-     which is how the same sentence came to end in three different places. */
-  p, ul, ol, dl, footer, h2, h3, h4, summary, figcaption, .legend, .design,
-  .pair, .soap, .criteria, .switch, .controls, .track-head {
-    max-width: 100%;
+  /* Prose runs to one measure from the frame's left edge. One value for every
+     block that is read as sentences, so a sentence ends in the same place
+     whichever block it is in. The blocks that are apparatus rather than prose
+     -- the switch, the controls, a legend of colours -- run the frame, and a
+     table is not in this list at all: it takes the width it needs, below. */
+  p, ul, ol, dl, h1, h2, h3, h4, summary, figcaption, .design, .pair, .soap,
+  .criteria, .track-head, .methods-link {
+    max-width: var(--measure);
   }
+  footer, .legend, .switch, .controls, .lede, .notes { max-width: 100%; }
 
   a { color: var(--accent); text-underline-offset: .15em; }
   a:hover { text-decoration-thickness: 2px; }
@@ -148,7 +160,7 @@
     font-size: var(--t-xl); line-height: 1.15; letter-spacing: -.015em;
     font-weight: 600; margin: 0 0 var(--s3);
   }
-  p.sub { color: var(--ink); margin: 0 0 var(--s6); max-width: 100%; }
+  p.sub { color: var(--ink); margin: 0 0 var(--s6); max-width: var(--measure); }
 
   /* The language switch. Deliberately quiet: it sits in the corner above the
      title, reads as two three-letter words, and never competes with the thing
@@ -202,7 +214,7 @@
   p.blurb {
     color: var(--ink);
     margin: 0 0 var(--s4);
-    max-width: 100%;
+    max-width: var(--measure);
   }
 
   /* --- prose ------------------------------------------------------------ */
@@ -242,42 +254,29 @@
 
   /* --- the wide two ----------------------------------------------------- */
 
-  /* The table and a figure are the only two blocks allowed past the page's
-     own width, and they reach out symmetrically on both sides of it rather
-     than growing to the right.
-
-     `100%` in a margin resolves against the parent, which is the page, so
-     `(wanted - 100%) / -2` is exactly the overhang, split in two. The extra
-     1.25rem subtracted from the viewport is the scrollbar: `100vw` counts it
-     and `clientWidth` does not, and without the allowance a wide table hands
-     the whole document a horizontal scrollbar of its own. Checked by
-     measurement at 390, 1440 and 1900: `scrollWidth === clientWidth`. */
+  /* The table and a figure are the only two blocks allowed past the prose
+     measure. They start at the same left edge as everything else and run
+     right as far as their content needs, and no further than the frame: a
+     table wider than the frame scrolls inside `.scroll`, with the name column
+     pinned, instead of handing the document a horizontal scrollbar. Checked
+     in headless Chrome at 390, 768, 1280, 1440 and 1904 on 2026-09-02:
+     `scrollWidth === clientWidth` on the document at every one, on both
+     pages -- the methods page had been 3544px wide in an 1888px window. */
   .scroll, .scroll-top, figure.wide {
     /* As wide as it needs and no wider. Sized to the content rather than to
-       the cap, because `width: <the cap>` stretched every small table to it
-       too -- the calibration table on the methods page has five columns, and
-       spreading five columns over 1216px is not a wide table, it is a sparse
-       one. */
+       the frame, because `width: <the frame>` stretched every small table to
+       it too -- the calibration table on the methods page has five columns,
+       and spreading five columns over 1400px is not a wide table, it is a
+       sparse one. */
     width: max-content;
-    /* Never narrower than the page. A table sized purely to its content came
+    /* Never narrower than the prose. A table sized purely to its content came
        out at a different width on every panel of the methods page -- fourteen
-       tables, fourteen sets of edges, none of them lining up with the prose
-       above them or with each other. At `min-width: 100%` a small table is
-       exactly the column and sits inside the same two edges as every
-       paragraph; only a table that genuinely outgrows the column reaches
-       past it. */
-    min-width: 100%;
-    max-width: min(var(--wide), calc(100vw - 2 * var(--gutter) - 1.25rem));
-    /* Centred on the page without anyone having to know how wide it came out.
-       `margin-inline: auto` cannot do this -- an element wider than its parent
-       does not centre, it overflows to the right -- and a negative margin
-       would have to name the width, which is the thing we just stopped
-       naming. The 1.25rem above is the scrollbar: `100vw` counts it and
-       `clientWidth` does not, and without the allowance a wide table hands the
-       whole document a horizontal scrollbar of its own. */
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
+       tables, fourteen sets of edges, none lining up with the prose above them
+       or with each other. At the measure a small table shares both edges with
+       the paragraph above it, and only a table that genuinely outgrows the
+       measure reaches past it. */
+    min-width: min(100%, var(--measure));
+    max-width: 100%;
   }
 
   .scroll { overflow-x: auto; }
@@ -294,7 +293,7 @@
   figure.wide { margin: var(--s5) 0 var(--s6); }
   figure.wide svg { display: block; max-width: 100%; height: auto; }
   figure.wide figcaption {
-    font-size: var(--t-sm); color: var(--muted); margin: var(--s2) auto 0;
+    font-size: var(--t-sm); color: var(--muted); margin: var(--s2) 0 0;
     max-width: var(--measure);
   }
 
@@ -448,13 +447,11 @@
   }
   tr.detail table { margin-bottom: var(--s4); background: var(--bg); width: 100%; }
   /* The section breakdown inside an opened row is wrapped in a `.scroll` of
-     its own, and it must not take the breakout above: centring it on half of
-     its own cell would hang it off the side of the table it lives in. It is
-     four rows deep and fits its cell. */
-  tr.detail .scroll {
-    position: static; left: auto; transform: none;
-    width: 100%; max-width: 100%;
-  }
+     its own, and it must not take the floor above: a cell can be narrower
+     than the measure, and a table held to the measure inside it would hang
+     off the side of the table it lives in. It is four rows deep and fits its
+     cell. */
+  tr.detail .scroll { width: 100%; min-width: 0; max-width: 100%; }
   tr.detail p.note { margin: var(--s3) 0; font-size: var(--t-md); }
   .grid {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
@@ -570,13 +567,16 @@
      right of every paragraph around it. It is a glossary: the term on its own
      line, the definition under it, and a hairline between entries.
 
-     One column, not two. It was set in `columns: 2` above 68rem, so on a wide
-     screen the page ran one column of prose everywhere and two here -- and
-     because the entries are of very different lengths, the two came out
-     ragged against each other. A reader asked why this one block was built
-     differently from the rest of the page, which is the whole answer. */
+     One column at the measure, like the prose, until the frame is wide
+     enough for two; then two columns as wide as the table it explains (the
+     rule is with the other wide-frame rules, at the foot of this sheet). It
+     was two columns once before, above 68rem, when everything else on the
+     page was one, and a reader asked why this one block was built
+     differently from the rest. Now the block above it -- the table -- and
+     the sentences between them are the same width, and it is the one-column
+     legend that would be the odd block out. */
   dl.measures {
-    margin: var(--s5) 0 0; padding: 0; max-width: 100%;
+    margin: var(--s5) 0 0; padding: 0; max-width: var(--measure);
   }
   dl.measures .measure {
     break-inside: avoid; padding: var(--s3) 0;
@@ -610,7 +610,7 @@
   .methods-link {
     margin: var(--s6) 0; padding: var(--s2) 0 var(--s2) var(--s4);
     border-left: 2px solid var(--accent);
-    font-size: var(--t-md); color: var(--ink); max-width: 100%;
+    font-size: var(--t-md); color: var(--ink); max-width: var(--measure);
   }
   .methods-link a { font-weight: 600; }
 
@@ -735,13 +735,41 @@
     padding-top: var(--s5); border-top: 1px solid var(--line);
     max-width: 100%;
   }
-  footer p { margin: 0 0 var(--s3); max-width: 100%; }
+  footer p { margin: 0 0 var(--s3); max-width: var(--measure); }
   footer strong { color: var(--fg); }
 
+  /* --- a table's section, above 76rem ------------------------------------ */
+
+  /* The lede of a table's section is the paragraph saying what the table
+     measures and the terms it uses. One column until the frame has room for
+     two; then side by side, the paragraph at the measure and the terms in
+     the rest, so the head of the section is as wide as the table under it.
+     The sentences under the table and the legend of its columns take the
+     table's width in two columns for the same reason: at one column they
+     were a strip of text at the measure beside an empty half of the frame.
+     A paragraph or a legend entry never splits across the two columns. */
+  .lede { display: grid; gap: 0 var(--s6); }
+  .lede > * { min-width: 0; }
+  .lede-side:empty { display: none; }
+  /* 76rem and not 80: a 1280px window reports 1264px once its scrollbar is
+     counted out, and the laptop this was first looked at on is 1280 wide. */
+  @media (min-width: 76rem) {
+    /* Two equal halves rather than the measure and the rest: at 1280px the
+       rest was 480px, and three terms glossed in 480px ran five lines each
+       beside a two-line paragraph. Half the frame is 592px at 1280 and 688px
+       at 1904, a reading measure either way. */
+    .lede { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+    .lede p.blurb { max-width: none; }
+    .lede-side .design { margin-top: 0; }
+    .notes, dl.measures { columns: 2; column-gap: var(--s6); max-width: 100%; }
+    .notes > p { break-inside: avoid; max-width: none; margin-top: 0; }
+    .notes { margin-top: var(--s5); }
+  }
+
   @media (max-width: 48rem) {
-    /* `--gutter` and not a literal: the breakout above subtracts the same
-       variable, and a padding changed here without it would push a wide table
-       past the edge of the screen. */
+    /* `--gutter` and not a literal: the body's padding and the frame are read
+       off the same variable, and a padding changed here without it would put
+       the frame's edge somewhere other than the screen's. */
     :root { --t-xl: 1.625rem; --t-body: 1rem; --gutter: 1rem; }
     body { padding: var(--s5) var(--gutter) var(--s7); }
     .pick button { margin-right: var(--s3); }
@@ -1819,8 +1847,10 @@ function renderTable(table, index) {
 
   return `<section class="box${table.scored ? '' : ' pending'}">
       <h2>${tr(table.title)}</h2>
-      <p class="blurb">${code(tr(table.blurb))}</p>
-      ${designBlock(table)}
+      <div class="lede">
+        <p class="blurb">${code(tr(table.blurb))}</p>
+        <div class="lede-side">${designBlock(table)}</div>
+      </div>
       ${compareNote}
       <div id="switch" class="switch"></div>
       <div class="scroll-top" aria-hidden="true"><div></div></div>
@@ -1838,11 +1868,13 @@ function renderTable(table, index) {
             T`Marks`}</th></tr></thead>
         <tbody>${body}</tbody>
       </table></div>
+      <div class="notes">
       <p class="ranking-note">${rankingNote}</p>
       ${rosterNote()}
       ${referenceNote(table)}
       ${groupNote}
       ${instrumentsOf(table).map(([track]) => agreementNote(track)).join('')}
+      </div>
       <dl class="measures">${legend}</dl>
       <!-- Under the table, not over it. A reader arriving at a leaderboard
            wants to know which model, and the first line they met was four
