@@ -713,6 +713,53 @@ LICENCES = [
 ]
 
 
+def _length_effects(track: str, rendered: list[dict]) -> dict | None:
+    """How a text-overlap column moves with note length, on this table.
+
+    ROUGE-L rewards using the expert's words, and a longer note has more
+    chances to; the page prints the correlation beside the Words column rather
+    than asserting it in prose, because on the rubric track the same claim --
+    completeness rises with length -- held under one judge and not the other.
+    Spearman over the rows that have both figures; None where fewer than three
+    do or where the track has no such column.
+    """
+    if not any(key == "rouge_l" for key, _ in COLUMNS[track]):
+        return None
+    pairs = [
+        (row["note_words"], row["headline"]["rouge_l"])
+        for row in rendered
+        if row["note_words"] and row["headline"].get("rouge_l") is not None
+    ]
+    if len(pairs) < 3:
+        return None
+    rho = calibration.spearman([words for words, _ in pairs], [value for _, value in pairs])
+    return {"rouge_l": {"rho": None if rho is None else round(rho, 3), "n": len(pairs)}}
+
+
+def _reconcile_roster(roster: dict | None, rows: list[Row]) -> dict | None:
+    """The roster against the rows: a model with notes on disk is not "never asked".
+
+    `tnb roster` compares the endpoints with the tables it can see and names
+    the models it finds nowhere. A model whose notes have been generated and
+    not yet judged has rows -- coverage rows -- and no table, and the page
+    called it "never been asked to write a note" while its notes sat in
+    `generations/`. Sorted here into three: still never asked, generated and
+    awaiting the judge, or scored (and then not named at all).
+    """
+    if not roster:
+        return roster
+    scored = {(row.provider, row.system_id) for row in rows if row.is_scored}
+    generated = {(row.provider, row.system_id) for row in rows if not row.is_scored}
+    never: list[dict] = []
+    awaiting: list[dict] = []
+    for entry in roster.get("never_asked") or []:
+        key = (entry.get("provider"), entry.get("system_id"))
+        if key in scored:
+            continue
+        (awaiting if key in generated else never).append(entry)
+    return {**roster, "never_asked": never, "awaiting_judge": awaiting}
+
+
 def _placed(group: list[Row], track: str) -> tuple[dict, dict, dict | None]:
     """The order of one table, its sensitivity, and the tested groups if they exist.
 
@@ -1322,6 +1369,13 @@ def build(
                 ),
                 "detail_label": DETAIL_LABELS.get(track, "Rubric criteria"),
                 "rows": rendered,
+                # How ROUGE-L moves with note length on this table, where the
+                # track has that column and enough rows carry a length.
+                **(
+                    {"length_effects": effects}
+                    if (effects := _length_effects(track, rendered))
+                    else {}
+                ),
                 # Drawn only where something to show exists. A column of empty
                 # cells is worse than no column: it reads as missing data rather
                 # than as a control this provider does not have.
@@ -1389,6 +1443,9 @@ def build(
     drawn |= {entry["track"] for entry in superseded if entry.get("track")}
     return {
         "tables": tables,
+        # What the endpoints served, read against these rows: a model with
+        # notes and no scores is awaiting the judge, not never asked.
+        "roster": _reconcile_roster(roster, current),
         # Which one to draw and what may be switched to. Decided here, because
         # every other ordering on this page is.
         "selection": _selection(tables),
@@ -1934,11 +1991,6 @@ def write(rows: list[Row], *, docs_dir: Path | None = None, readme: Path | None 
         (item for item in saturations if item.get("judge_model") == judge_module.DEFAULT_MODEL),
         saturations[0] if saturations else None,
     )
-    # What the endpoints served and when they were asked, carried whole so the
-    # page can name the models nobody has put the question to. `None` where the
-    # check has never run, and then the page says nothing rather than implying
-    # the tables and the endpoints agree.
-    data["roster"] = load_roster(docs_dir)
     data["judges"] = _load_json(docs_dir / JUDGES_PATH.name)
     data["preference"] = _load_json(docs_dir / PREFERENCE_PATH.name)
     # The tested comparisons, whole, for the methods page; the tables carry

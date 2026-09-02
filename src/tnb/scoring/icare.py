@@ -59,7 +59,9 @@ MEASURES: dict[str, dict[str, str]] = {
             "the sections the expert answered, where the same empty note scores "
             "0.000, and every model's figure fell by about a third. It also "
             "cannot tell a good paraphrase from a wrong answer, and the source "
-            "paper found it disagrees with what clinicians preferred."
+            "paper found it disagrees with what clinicians preferred. It also "
+            "falls as notes get longer; where this table has a Words column, the "
+            "correlation between the two is printed under it."
         ),
     },
     "bertscore": {

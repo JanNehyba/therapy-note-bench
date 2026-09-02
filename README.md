@@ -99,7 +99,7 @@ written for somebody building or buying one:
 | 16 | `gpt-oss-120b` | 2 | einfra | 0.159 | 0.808 | 4.79 | 1.00 | 0.00 | 40/40 | 40 |
 
 *Ordered by **mean place** over the 5 columns of this instrument, every column counting once — a convention, not a measurement: the columns do not predict each other. Under the other weightings tried (each column counted twice, and the reference rows removed) first place is held by `gemma4`, `gpt-5.6-sol`; at most 13 of 16 systems change place and none by more than 6 ([how the order was built](https://jannehyba.github.io/therapy-note-bench/methods.html#ordering)). Places are among all 16 rows of the table, the reference systems included, so the models' places can have gaps.* *Group: what the evidence separates. A system stands above another only when it is at least as good on every column under both judges in 0.95 of the resampled conversations; 2 group(s) for 16 systems, 14 of them beaten by no tested comparison ([how the comparisons were tested](https://jannehyba.github.io/therapy-note-bench/methods.html#groups)).*
-- **ROUGE-L** (0-1) — Longest-common-subsequence overlap with the expert note, F-measure. Rewards using the same words in the same order. Not the source paper's ROUGE-L and not comparable with their published table. Theirs compares the whole rendered note, which puts our own field labels and every Nil the expert wrote on both sides -- a note where the model wrote nothing at all scores 0.379 that way, above most real notes. This compares the field values of the sections the expert answered, where the same empty note scores 0.000, and every model's figure fell by about a third. It also cannot tell a good paraphrase from a wrong answer, and the source paper found it disagrees with what clinicians preferred.
+- **ROUGE-L** (0-1) — Longest-common-subsequence overlap with the expert note, F-measure. Rewards using the same words in the same order. Not the source paper's ROUGE-L and not comparable with their published table. Theirs compares the whole rendered note, which puts our own field labels and every Nil the expert wrote on both sides -- a note where the model wrote nothing at all scores 0.379 that way, above most real notes. This compares the field values of the sections the expert answered, where the same empty note scores 0.000, and every model's figure fell by about a third. It also cannot tell a good paraphrase from a wrong answer, and the source paper found it disagrees with what clinicians preferred. It also falls as notes get longer; where this table has a Words column, the correlation between the two is printed under it.
 - **BERTScore** (0-1) — Embedding similarity to the expert note. Tolerates paraphrase. A fluent note about the wrong session still scores well.
 - **TRACE** (1-5) — Trustworthiness, relevance, accuracy, comprehensiveness and expression, each rated 1-5 by a judge and averaged. A re-implementation with no human anchor: the authors never published their ratings, so unlike the TN-Eval track this number is not calibrated against anybody.
 - **Looks back** (0-1) — Section 5 only -- what happened in the previous session. The fraction of the 34 sessions whose expert note answered it where the model did too. Counts once in the order like every column, and moves it little: every model scores 0.97-1.00 here, so it separates nobody -- it is shown because its twin does.
@@ -149,11 +149,11 @@ written for somebody building or buying one:
 
 `gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on thorough (+0.833) and place 18 of 19 systems differently on it anyway. They agree least on succinct (+0.446, 18 of 19 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. No agreement figure is given for comprehensible (18 of 19 share one value), organized (18 of 19 share one value), synthesized (18 of 19 share one value), useful (18 of 19 share one value): most systems print the same number there, so there are no orderings for the two judges to agree about, and a correlation over them would be decided by the few that differ. Systems beating at least one other on every measure under both judges, which needs no weighting to be true: 4. `gpt-5.6-sol` beats 7. 11 of 19 systems are beaten outright by nobody.
 
-*16 icare row(s) of generation coverage at harness `0.1.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 icare row(s) of generation coverage at harness `0.1.0` are no longer shown: the measures were redefined in `0.7.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
 *16 icare row(s) scored by `gemini-3.1-pro-preview` at harness `0.1.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.7.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*16 icare row(s) of generation coverage at harness `0.2.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 icare row(s) of generation coverage at harness `0.2.0` are no longer shown: the measures were redefined in `0.7.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
 *16 icare row(s) scored by `gemini-3.1-pro-preview` at harness `0.2.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.7.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
@@ -171,17 +171,19 @@ written for somebody building or buying one:
 
 *16 icare row(s) scored by `gpt-5.6-terra` at harness `0.4.0` are no longer shown: the measures were redefined in `0.7.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*16 icare row(s) of generation coverage at harness `0.4.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 icare row(s) of generation coverage at harness `0.4.0` are no longer shown: the measures were redefined in `0.7.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
 *16 icare row(s) scored by `gemini-3.1-pro-preview` at harness `0.5.0` are no longer shown: the measures were redefined in `0.7.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
 *16 icare row(s) scored by `gpt-5.6-terra` at harness `0.5.0` are no longer shown: the measures were redefined in `0.7.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*16 icare row(s) of generation coverage at harness `0.5.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 icare row(s) of generation coverage at harness `0.5.0` are no longer shown: the measures were redefined in `0.7.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
 *16 icare row(s) scored by `gemini-3.1-pro-preview` at harness `0.6.0` are no longer shown: the measures were redefined in `0.7.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
 *16 icare row(s) scored by `gpt-5.6-terra` at harness `0.6.0` are no longer shown: the measures were redefined in `0.7.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+
+*16 icare row(s) of generation coverage at harness `0.6.0` are no longer shown: the measures were redefined in `0.7.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
 *19 pdsqi-soap row(s) scored by `gemini-3.1-pro-preview` at harness `0.3.0` are no longer shown: the measures were redefined in `0.7.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
@@ -199,7 +201,7 @@ written for somebody building or buying one:
 
 *19 pdsqi-soap row(s) scored by `gpt-5.6-terra` at harness `0.6.0` are no longer shown: the measures were redefined in `0.7.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*16 tneval-soap row(s) of generation coverage at harness `0.1.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 tneval-soap row(s) of generation coverage at harness `0.1.0` are no longer shown: the measures were redefined in `0.7.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
 *14 tneval-soap row(s) scored by `gemini-2.5-pro` at harness `0.1.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.2.0` and the two are not comparable; and this judge was tried during calibration and is not one of the two the leaderboard publishes from -- every candidate is compared against the two human annotators under *Which judge* on the methods page. They stay in `results/rows.jsonl`.*
 
@@ -207,7 +209,7 @@ written for somebody building or buying one:
 
 *19 tneval-soap row(s) scored by `gpt-5.6-terra` at harness `0.1.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.7.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*16 tneval-soap row(s) of generation coverage at harness `0.2.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 tneval-soap row(s) of generation coverage at harness `0.2.0` are no longer shown: the measures were redefined in `0.7.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
 *19 tneval-soap row(s) scored by `gemini-3.1-pro-preview` at harness `0.2.0` are no longer shown: the judge's settings were not recorded, so the rows cannot be shown to have come from one instrument; and the measures were redefined in `0.7.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
@@ -227,22 +229,26 @@ written for somebody building or buying one:
 
 *19 tneval-soap row(s) scored by `gpt-5.6-terra` at harness `0.4.0` are no longer shown: the measures were redefined in `0.7.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*16 tneval-soap row(s) of generation coverage at harness `0.4.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 tneval-soap row(s) of generation coverage at harness `0.4.0` are no longer shown: the measures were redefined in `0.7.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
 *19 tneval-soap row(s) scored by `gemini-3.1-pro-preview` at harness `0.5.0` are no longer shown: the measures were redefined in `0.7.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
 *19 tneval-soap row(s) scored by `gpt-5.6-terra` at harness `0.5.0` are no longer shown: the measures were redefined in `0.7.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
-*16 tneval-soap row(s) of generation coverage at harness `0.5.0` are no longer shown: the measures were redefined in `0.6.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+*16 tneval-soap row(s) of generation coverage at harness `0.5.0` are no longer shown: the measures were redefined in `0.7.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
 *19 tneval-soap row(s) scored by `gemini-3.1-pro-preview` at harness `0.6.0` are no longer shown: the measures were redefined in `0.7.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
 *19 tneval-soap row(s) scored by `gpt-5.6-terra` at harness `0.6.0` are no longer shown: the measures were redefined in `0.7.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
+*16 tneval-soap row(s) of generation coverage at harness `0.6.0` are no longer shown: the measures were redefined in `0.7.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
+
 **Also scored, and not printed here.** Two judges are two instruments and two tables; the site draws one at a time and this file cannot, so it shows the one the site opens with.
 - **TN-Eval SOAP · AnnoMI conversations**, scored by gpt-5.6-terra (backend openai, effort medium, max_output_tokens 672) — [open it](https://jannehyba.github.io/therapy-note-bench/#tneval-soap-gpt-5.6-terra-tneval-rubric-v1-0.7.0-acf643)
+- **TN-Eval SOAP · AnnoMI conversations**, not yet scored — [open it](https://jannehyba.github.io/therapy-note-bench/#tneval-soap-unjudged-unrubriced-0.7.0)
 - **iCARE form on the iHOPE corpus · 17 sections per session**, scored by gpt-5.6-terra (backend openai, effort medium, max_output_tokens 672) — [open it](https://jannehyba.github.io/therapy-note-bench/#icare-gpt-5.6-terra-icare-trace-v1-0.7.0-acf643)
 - **PDSQI-9 · the SOAP notes on AnnoMI, rated for quality**, scored by gpt-5.6-terra (backend openai, effort medium, max_output_tokens 672) — [open it](https://jannehyba.github.io/therapy-note-bench/#pdsqi-soap-gpt-5.6-terra-pdsqi9-note-v1-0.7.0-acf643)
+- **iCARE form on the iHOPE corpus · 17 sections per session**, not yet scored — [open it](https://jannehyba.github.io/therapy-note-bench/#icare-unjudged-unrubriced-0.7.0)
 
 See the [full leaderboard](https://jannehyba.github.io/therapy-note-bench/) for per-section detail, the reference systems and the published numbers, and [how it was measured](https://jannehyba.github.io/therapy-note-bench/methods.html) for the judge, the corpora and what the two judges disagree about.
 <!-- LEADERBOARD:END -->

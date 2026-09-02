@@ -10106,12 +10106,7 @@
   },
   "roster": {
     "asked": "2026-09-01",
-    "exempt": [
-      "llama-3.1-70b",
-      "mistral-large-v2",
-      "therapist"
-    ],
-    "never_asked": [
+    "awaiting_judge": [
       {
         "provider": "einfra",
         "system_id": "glm-5.3"
@@ -10121,6 +10116,12 @@
         "system_id": "qwen3.8-flash-next"
       }
     ],
+    "exempt": [
+      "llama-3.1-70b",
+      "mistral-large-v2",
+      "therapist"
+    ],
+    "never_asked": [],
     "serves": {
       "einfra": [
         "deepseek-v4-flash",
@@ -11658,6 +11659,14 @@
             "settings_label": "",
             "stale_harness": false,
             "table": "tneval-soap-gpt-5.6-terra-tneval-rubric-v1-0.7.0-acf643"
+          },
+          {
+            "judge_model": null,
+            "label": "not yet scored",
+            "settings_differ": false,
+            "settings_label": "",
+            "stale_harness": false,
+            "table": "tneval-soap-unjudged-unrubriced-0.7.0"
           }
         ],
         "label": "TN-Eval SOAP",
@@ -11681,6 +11690,14 @@
             "settings_label": "",
             "stale_harness": false,
             "table": "icare-gpt-5.6-terra-icare-trace-v1-0.7.0-acf643"
+          },
+          {
+            "judge_model": null,
+            "label": "not yet scored",
+            "settings_differ": false,
+            "settings_label": "",
+            "stale_harness": false,
+            "table": "icare-unjudged-unrubriced-0.7.0"
           }
         ],
         "label": "iCARE / iHOPE",
@@ -11722,7 +11739,7 @@
   },
   "superseded": [
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.1.0",
       "judge_model": null,
@@ -11751,7 +11768,7 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.2.0",
       "judge_model": null,
@@ -11879,7 +11896,7 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.4.0",
       "judge_model": null,
@@ -11921,7 +11938,7 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.5.0",
       "judge_model": null,
@@ -11960,6 +11977,20 @@
       ],
       "rows": 16,
       "scored_at": "2026-08-27T20:10:05Z",
+      "track": "icare"
+    },
+    {
+      "current_harness_version": "0.7.0",
+      "current_judge_prompt_version": "",
+      "harness_version": "0.6.0",
+      "judge_model": null,
+      "judge_prompt_version": null,
+      "prompt_version": "icare-zeroshot-v1",
+      "reasons": [
+        "harness"
+      ],
+      "rows": 16,
+      "scored_at": "",
       "track": "icare"
     },
     {
@@ -12075,7 +12106,7 @@
       "track": "pdsqi-soap"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.1.0",
       "judge_model": null,
@@ -12135,7 +12166,7 @@
       "track": "tneval-soap"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.2.0",
       "judge_model": null,
@@ -12276,7 +12307,7 @@
       "track": "tneval-soap"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.4.0",
       "judge_model": null,
@@ -12318,7 +12349,7 @@
       "track": "tneval-soap"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.5.0",
       "judge_model": null,
@@ -12357,6 +12388,20 @@
       ],
       "rows": 19,
       "scored_at": "2026-08-27T20:09:46Z",
+      "track": "tneval-soap"
+    },
+    {
+      "current_harness_version": "0.7.0",
+      "current_judge_prompt_version": "",
+      "harness_version": "0.6.0",
+      "judge_model": null,
+      "judge_prompt_version": null,
+      "prompt_version": "tneval-soap-v1",
+      "reasons": [
+        "harness"
+      ],
+      "rows": 16,
+      "scored_at": "",
       "track": "tneval-soap"
     }
   ],
@@ -16943,12 +16988,290 @@
       }
     },
     {
+      "anchor_measure": "completeness",
+      "blurb": "Reference-free. 23 completeness criteria, conciseness scored sentence by sentence, faithfulness against the full transcript.",
+      "columns": [
+        {
+          "anchored": true,
+          "caveat": "Counts coverage of a checklist, not judgement. All 23 rubric items are asked of every note, whatever the session was about, so an item the session never called for counts as absent exactly like one the note forgot. The figure is the equal-weighted mean of the note's four section fractions, not the fraction of all 23 items, so a four-item section counts as much as an eight-item one. It is the only column here checked against two therapists' ratings; the table's order is a mean of places over all its columns.",
+          "definition": "The equal-weighted mean of the note's four SOAP section fractions. Per section, the fraction of that section's criteria the judge found present.",
+          "digits": 3,
+          "instrument": "TN-Eval rubric",
+          "key": "completeness",
+          "label": "Completeness",
+          "scale": "0-1"
+        },
+        {
+          "anchored": false,
+          "caveat": "Not a length measure, despite the name: a note twice as long scores the same if every added sentence is on topic. It is also the measure most moved by the judge's own settings -- raising the thinking budget from 128 to 256 tokens shifted all nineteen systems and reordered sixteen of them. The higher budget is what the table above is scored at; it was the budget-128 rows it was compared against that are gone -- not in results/rows.jsonl in any revision and not re-derivable, see docs/limitations.md.",
+          "definition": "The equal-weighted mean of the note's four section fractions: per section, the fraction of that section's sentences that fit at least one rubric item. 1.00 means nothing is off-topic; it does not mean the note is short.",
+          "digits": 3,
+          "instrument": "TN-Eval rubric",
+          "key": "conciseness",
+          "label": "Conciseness",
+          "scale": "0-1"
+        },
+        {
+          "anchored": false,
+          "caveat": "A different scale from the two columns beside it, and a weak one: TN-Eval published Krippendorff's alpha 0.18 between its two therapist annotators on this rating, and recomputing it here from their released annotations gives the same. Read it as a flag for gross invention, not as a ranking.",
+          "definition": "Whether the note contradicts the transcript, rated 1 to 5, where 5 is no inaccuracies. TN-Eval's protocol has no criterion-based version of this one, so it stays a Likert scale.",
+          "digits": 2,
+          "instrument": "TN-Eval rubric",
+          "key": "faithfulness",
+          "label": "Faithfulness",
+          "scale": "1-5"
+        }
+      ],
+      "design": {
+        "calibrated": true,
+        "calibration": "TN-Eval released 150 notes that two therapists had already rated -- 50 written by a therapist, 50 by Llama 3.1 70B, 50 by Mistral Large V2. Every judge here answers those same questions about those same notes first, so how far it agrees with a person is a published number and not a hope.",
+        "human_role": "The therapist's note is scored by the identical protocol and sits in the table as its own row. It is a competitor, not the answer key.",
+        "human_role_short": "competitor",
+        "scored_against": "The transcript and a 23-item rubric. There is no gold note to copy, so any new model can be measured without anyone writing one."
+      },
+      "detail_label": "Rubric criteria",
+      "groups": null,
+      "groups_tested": {
+        "counts": {
+          "holds": {
+            "0.90": 14,
+            "0.95": 11,
+            "0.99": 5
+          },
+          "stored": 29,
+          "tested": 29,
+          "untestable": 0
+        },
+        "layers": [
+          [
+            "deepseek-v4-flash",
+            "deepseek-v4-flash-thinking",
+            "gemma4",
+            "glm-5",
+            "glm-5.2",
+            "google_gemini-3.1-pro-preview",
+            "google_gemini-3.7-flash",
+            "gpt-5.6-luna",
+            "gpt-5.6-sol",
+            "gpt-5.6-terra",
+            "gpt-oss-120b",
+            "kimi-k3",
+            "mistral-large-v2",
+            "qwen3.5-122b",
+            "qwen3.5-int4"
+          ],
+          [
+            "llama-3.1-70b",
+            "mistral-medium-3.5",
+            "qwen3.8-27b"
+          ],
+          [
+            "therapist"
+          ]
+        ],
+        "samples": 10000,
+        "source": "edges-tneval-soap.json",
+        "systems": [
+          "deepseek-v4-flash",
+          "deepseek-v4-flash-thinking",
+          "gemma4",
+          "glm-5",
+          "glm-5.2",
+          "google_gemini-3.1-pro-preview",
+          "google_gemini-3.7-flash",
+          "gpt-5.6-luna",
+          "gpt-5.6-sol",
+          "gpt-5.6-terra",
+          "gpt-oss-120b",
+          "kimi-k3",
+          "llama-3.1-70b",
+          "mistral-large-v2",
+          "mistral-medium-3.5",
+          "qwen3.5-122b",
+          "qwen3.5-int4",
+          "qwen3.8-27b",
+          "therapist"
+        ],
+        "threshold": 0.95,
+        "undominated": [
+          "deepseek-v4-flash",
+          "deepseek-v4-flash-thinking",
+          "gemma4",
+          "glm-5",
+          "glm-5.2",
+          "google_gemini-3.1-pro-preview",
+          "google_gemini-3.7-flash",
+          "gpt-5.6-luna",
+          "gpt-5.6-sol",
+          "gpt-5.6-terra",
+          "gpt-oss-120b",
+          "kimi-k3",
+          "mistral-large-v2",
+          "qwen3.5-122b",
+          "qwen3.5-int4"
+        ]
+      },
+      "has_effort": true,
+      "has_words": true,
+      "id": "tneval-soap-unjudged-unrubriced-0.7.0",
+      "ordering": {
+        "columns": [
+          "completeness",
+          "conciseness",
+          "faithfulness"
+        ],
+        "placed": 0,
+        "rule": "mean_place",
+        "sensitivity": {
+          "baseline": {
+            "first": [],
+            "second": []
+          },
+          "first_under_any": [],
+          "furthest": 0,
+          "most_moved": 0,
+          "n_systems": 0,
+          "variants": [
+            {
+              "column": "completeness",
+              "first": [],
+              "furthest": 0,
+              "moved": 0,
+              "name": "double:completeness",
+              "rho": null,
+              "second": []
+            },
+            {
+              "column": "conciseness",
+              "first": [],
+              "furthest": 0,
+              "moved": 0,
+              "name": "double:conciseness",
+              "rho": null,
+              "second": []
+            },
+            {
+              "column": "faithfulness",
+              "first": [],
+              "furthest": 0,
+              "moved": 0,
+              "name": "double:faithfulness",
+              "rho": null,
+              "second": []
+            }
+          ]
+        },
+        "unplaced": []
+      },
+      "rows": [
+        {
+          "by_section": {},
+          "detail": {},
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "2026-09-01T18:14:48Z",
+          "group": null,
+          "headline": {},
+          "judges_own_family": "",
+          "label": "glm-5.3",
+          "mean_place": null,
+          "metrics_note": "",
+          "n_attempted": 50,
+          "n_complete": 0,
+          "n_failed": 0,
+          "n_generated": 50,
+          "n_partial": 0,
+          "n_scored": 0,
+          "n_unreached": 0,
+          "note_words": 484,
+          "place": null,
+          "places": null,
+          "provider": "einfra",
+          "scored": false,
+          "scored_at": null,
+          "section_order": [],
+          "settings": "temperature 0, max tokens 4096",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "glm-5.3",
+          "system_type": "model",
+          "unplaced_because": null,
+          "unreached_reasons": {},
+          "withdrawn_on": null
+        },
+        {
+          "by_section": {},
+          "detail": {},
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "2026-09-01T18:22:50Z",
+          "group": null,
+          "headline": {},
+          "judges_own_family": "",
+          "label": "qwen3.8-flash-next",
+          "mean_place": null,
+          "metrics_note": "",
+          "n_attempted": 50,
+          "n_complete": 0,
+          "n_failed": 0,
+          "n_generated": 48,
+          "n_partial": 0,
+          "n_scored": 0,
+          "n_unreached": 2,
+          "note_words": 330,
+          "place": null,
+          "places": null,
+          "provider": "einfra",
+          "scored": false,
+          "scored_at": null,
+          "section_order": [],
+          "settings": "temperature 0, max tokens 16384",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "qwen3.8-flash-next",
+          "system_type": "model",
+          "unplaced_because": null,
+          "unreached_reasons": {
+            "truncated at max_tokens=16384": 2
+          },
+          "withdrawn_on": null
+        }
+      ],
+      "scored": false,
+      "scored_at": "",
+      "stale_harness": false,
+      "subtitle": "not yet scored",
+      "terms": [
+        {
+          "gloss": "This track. A model reads a counselling transcript and writes a SOAP note; TN-Eval's published rubric then scores it. Named after the paper the prompt and the rubric are taken from.",
+          "term": "TN-Eval SOAP"
+        },
+        {
+          "gloss": "AnnoMI: 133 publicly released motivational-interviewing sessions, transcribed and annotated by therapists. They are demonstration sessions, not recordings of clinical practice. 50 are scored here.",
+          "term": "The transcripts"
+        },
+        {
+          "gloss": "The standard clinical note format: subjective, objective, assessment, plan. Every model writes into the same four headings.",
+          "term": "SOAP note"
+        }
+      ],
+      "title": "TN-Eval SOAP · AnnoMI conversations",
+      "track": "tneval-soap",
+      "versions": {
+        "harness_version": "0.7.0",
+        "judge_model": null,
+        "judge_prompt_version": null,
+        "judge_settings": {},
+        "prompt_version": "tneval-soap-v1"
+      }
+    },
+    {
       "anchor_measure": null,
       "blurb": "Automatic metrics and a TRACE judge side by side, because the source paper found they disagree. That disagreement is a result, not an error. iCARE and iHOPE are one project under two names: the code was released as iCARE in April 2025 and the preprint renamed it iHOPE in August 2026, sixteen months later. **PDSQI-9 has no columns here**, and that is deliberate rather than missing: it rates how a clinical note is written, and these are 17 form fields rather than a written note. It runs on the SOAP notes, where it can be read against the rubric that scores the same text.",
       "columns": [
         {
           "anchored": false,
-          "caveat": "Not the source paper's ROUGE-L and not comparable with their published table. Theirs compares the whole rendered note, which puts our own field labels and every Nil the expert wrote on both sides -- a note where the model wrote nothing at all scores 0.379 that way, above most real notes. This compares the field values of the sections the expert answered, where the same empty note scores 0.000, and every model's figure fell by about a third. It also cannot tell a good paraphrase from a wrong answer, and the source paper found it disagrees with what clinicians preferred.",
+          "caveat": "Not the source paper's ROUGE-L and not comparable with their published table. Theirs compares the whole rendered note, which puts our own field labels and every Nil the expert wrote on both sides -- a note where the model wrote nothing at all scores 0.379 that way, above most real notes. This compares the field values of the sections the expert answered, where the same empty note scores 0.000, and every model's figure fell by about a third. It also cannot tell a good paraphrase from a wrong answer, and the source paper found it disagrees with what clinicians preferred. It also falls as notes get longer; where this table has a Words column, the correlation between the two is printed under it.",
           "definition": "Longest-common-subsequence overlap with the expert note, F-measure. Rewards using the same words in the same order.",
           "digits": 3,
           "instrument": "iCARE",
@@ -17078,8 +17401,14 @@
         ]
       },
       "has_effort": true,
-      "has_words": false,
+      "has_words": true,
       "id": "icare-gemini-3.1-pro-preview-icare-trace-v1-0.7.0-102129",
+      "length_effects": {
+        "rouge_l": {
+          "n": 16,
+          "rho": -0.851
+        }
+      },
       "ordering": {
         "columns": [
           "rouge_l",
@@ -17209,7 +17538,7 @@
           "n_partial": 0,
           "n_scored": 40,
           "n_unreached": 0,
-          "note_words": null,
+          "note_words": 357,
           "place": 1,
           "places": {
             "bertscore": 1,
@@ -17262,7 +17591,7 @@
           "n_partial": 0,
           "n_scored": 40,
           "n_unreached": 0,
-          "note_words": null,
+          "note_words": 498,
           "place": 2,
           "places": {
             "bertscore": 8,
@@ -17315,7 +17644,7 @@
           "n_partial": 0,
           "n_scored": 40,
           "n_unreached": 0,
-          "note_words": null,
+          "note_words": 503,
           "place": 3,
           "places": {
             "bertscore": 1,
@@ -17368,7 +17697,7 @@
           "n_partial": 0,
           "n_scored": 40,
           "n_unreached": 0,
-          "note_words": null,
+          "note_words": 466,
           "place": 3,
           "places": {
             "bertscore": 7,
@@ -17421,7 +17750,7 @@
           "n_partial": 0,
           "n_scored": 40,
           "n_unreached": 0,
-          "note_words": null,
+          "note_words": 486,
           "place": 5,
           "places": {
             "bertscore": 1,
@@ -17474,7 +17803,7 @@
           "n_partial": 0,
           "n_scored": 40,
           "n_unreached": 0,
-          "note_words": null,
+          "note_words": 422,
           "place": 5,
           "places": {
             "bertscore": 4,
@@ -17527,7 +17856,7 @@
           "n_partial": 0,
           "n_scored": 40,
           "n_unreached": 0,
-          "note_words": null,
+          "note_words": 414,
           "place": 7,
           "places": {
             "bertscore": 4,
@@ -17580,7 +17909,7 @@
           "n_partial": 0,
           "n_scored": 39,
           "n_unreached": 1,
-          "note_words": null,
+          "note_words": 425,
           "place": 7,
           "places": {
             "bertscore": 6,
@@ -17635,7 +17964,7 @@
           "n_partial": 0,
           "n_scored": 40,
           "n_unreached": 0,
-          "note_words": null,
+          "note_words": 1198,
           "place": 9,
           "places": {
             "bertscore": 13,
@@ -17688,7 +18017,7 @@
           "n_partial": 0,
           "n_scored": 40,
           "n_unreached": 0,
-          "note_words": null,
+          "note_words": 386,
           "place": 9,
           "places": {
             "bertscore": 10,
@@ -17741,7 +18070,7 @@
           "n_partial": 0,
           "n_scored": 40,
           "n_unreached": 0,
-          "note_words": null,
+          "note_words": 590,
           "place": 11,
           "places": {
             "bertscore": 10,
@@ -17794,7 +18123,7 @@
           "n_partial": 0,
           "n_scored": 40,
           "n_unreached": 0,
-          "note_words": null,
+          "note_words": 680,
           "place": 12,
           "places": {
             "bertscore": 14,
@@ -17847,7 +18176,7 @@
           "n_partial": 0,
           "n_scored": 40,
           "n_unreached": 0,
-          "note_words": null,
+          "note_words": 394,
           "place": 13,
           "places": {
             "bertscore": 8,
@@ -17900,7 +18229,7 @@
           "n_partial": 0,
           "n_scored": 40,
           "n_unreached": 0,
-          "note_words": null,
+          "note_words": 426,
           "place": 13,
           "places": {
             "bertscore": 14,
@@ -17953,7 +18282,7 @@
           "n_partial": 0,
           "n_scored": 40,
           "n_unreached": 0,
-          "note_words": null,
+          "note_words": 649,
           "place": 15,
           "places": {
             "bertscore": 10,
@@ -18006,7 +18335,7 @@
           "n_partial": 0,
           "n_scored": 40,
           "n_unreached": 0,
-          "note_words": null,
+          "note_words": 593,
           "place": 16,
           "places": {
             "bertscore": 16,
@@ -18068,7 +18397,7 @@
       "columns": [
         {
           "anchored": false,
-          "caveat": "Not the source paper's ROUGE-L and not comparable with their published table. Theirs compares the whole rendered note, which puts our own field labels and every Nil the expert wrote on both sides -- a note where the model wrote nothing at all scores 0.379 that way, above most real notes. This compares the field values of the sections the expert answered, where the same empty note scores 0.000, and every model's figure fell by about a third. It also cannot tell a good paraphrase from a wrong answer, and the source paper found it disagrees with what clinicians preferred.",
+          "caveat": "Not the source paper's ROUGE-L and not comparable with their published table. Theirs compares the whole rendered note, which puts our own field labels and every Nil the expert wrote on both sides -- a note where the model wrote nothing at all scores 0.379 that way, above most real notes. This compares the field values of the sections the expert answered, where the same empty note scores 0.000, and every model's figure fell by about a third. It also cannot tell a good paraphrase from a wrong answer, and the source paper found it disagrees with what clinicians preferred. It also falls as notes get longer; where this table has a Words column, the correlation between the two is printed under it.",
           "definition": "Longest-common-subsequence overlap with the expert note, F-measure. Rewards using the same words in the same order.",
           "digits": 3,
           "instrument": "iCARE",
@@ -18198,8 +18527,14 @@
         ]
       },
       "has_effort": true,
-      "has_words": false,
+      "has_words": true,
       "id": "icare-gpt-5.6-terra-icare-trace-v1-0.7.0-acf643",
+      "length_effects": {
+        "rouge_l": {
+          "n": 16,
+          "rho": -0.851
+        }
+      },
       "ordering": {
         "columns": [
           "rouge_l",
@@ -18328,7 +18663,7 @@
           "n_partial": 0,
           "n_scored": 40,
           "n_unreached": 0,
-          "note_words": null,
+          "note_words": 357,
           "place": 1,
           "places": {
             "bertscore": 1,
@@ -18381,7 +18716,7 @@
           "n_partial": 0,
           "n_scored": 40,
           "n_unreached": 0,
-          "note_words": null,
+          "note_words": 422,
           "place": 2,
           "places": {
             "bertscore": 4,
@@ -18434,7 +18769,7 @@
           "n_partial": 0,
           "n_scored": 40,
           "n_unreached": 0,
-          "note_words": null,
+          "note_words": 498,
           "place": 3,
           "places": {
             "bertscore": 8,
@@ -18487,7 +18822,7 @@
           "n_partial": 0,
           "n_scored": 40,
           "n_unreached": 0,
-          "note_words": null,
+          "note_words": 466,
           "place": 4,
           "places": {
             "bertscore": 7,
@@ -18540,7 +18875,7 @@
           "n_partial": 0,
           "n_scored": 40,
           "n_unreached": 0,
-          "note_words": null,
+          "note_words": 486,
           "place": 5,
           "places": {
             "bertscore": 1,
@@ -18593,7 +18928,7 @@
           "n_partial": 0,
           "n_scored": 40,
           "n_unreached": 0,
-          "note_words": null,
+          "note_words": 503,
           "place": 5,
           "places": {
             "bertscore": 1,
@@ -18646,7 +18981,7 @@
           "n_partial": 0,
           "n_scored": 40,
           "n_unreached": 0,
-          "note_words": null,
+          "note_words": 414,
           "place": 7,
           "places": {
             "bertscore": 4,
@@ -18699,7 +19034,7 @@
           "n_partial": 0,
           "n_scored": 39,
           "n_unreached": 1,
-          "note_words": null,
+          "note_words": 425,
           "place": 8,
           "places": {
             "bertscore": 6,
@@ -18754,7 +19089,7 @@
           "n_partial": 0,
           "n_scored": 40,
           "n_unreached": 0,
-          "note_words": null,
+          "note_words": 386,
           "place": 9,
           "places": {
             "bertscore": 10,
@@ -18807,7 +19142,7 @@
           "n_partial": 0,
           "n_scored": 40,
           "n_unreached": 0,
-          "note_words": null,
+          "note_words": 590,
           "place": 10,
           "places": {
             "bertscore": 10,
@@ -18860,7 +19195,7 @@
           "n_partial": 0,
           "n_scored": 40,
           "n_unreached": 0,
-          "note_words": null,
+          "note_words": 1198,
           "place": 10,
           "places": {
             "bertscore": 13,
@@ -18913,7 +19248,7 @@
           "n_partial": 0,
           "n_scored": 40,
           "n_unreached": 0,
-          "note_words": null,
+          "note_words": 680,
           "place": 12,
           "places": {
             "bertscore": 14,
@@ -18966,7 +19301,7 @@
           "n_partial": 0,
           "n_scored": 40,
           "n_unreached": 0,
-          "note_words": null,
+          "note_words": 394,
           "place": 13,
           "places": {
             "bertscore": 8,
@@ -19019,7 +19354,7 @@
           "n_partial": 0,
           "n_scored": 40,
           "n_unreached": 0,
-          "note_words": null,
+          "note_words": 426,
           "place": 14,
           "places": {
             "bertscore": 14,
@@ -19072,7 +19407,7 @@
           "n_partial": 0,
           "n_scored": 40,
           "n_unreached": 0,
-          "note_words": null,
+          "note_words": 649,
           "place": 14,
           "places": {
             "bertscore": 10,
@@ -19125,7 +19460,7 @@
           "n_partial": 0,
           "n_scored": 40,
           "n_unreached": 0,
-          "note_words": null,
+          "note_words": 593,
           "place": 16,
           "places": {
             "bertscore": 16,
@@ -21931,6 +22266,315 @@
           "model": "gpt-5.6-terra"
         },
         "prompt_version": "tneval-soap-v1"
+      }
+    },
+    {
+      "anchor_measure": null,
+      "blurb": "Automatic metrics and a TRACE judge side by side, because the source paper found they disagree. That disagreement is a result, not an error. iCARE and iHOPE are one project under two names: the code was released as iCARE in April 2025 and the preprint renamed it iHOPE in August 2026, sixteen months later. **PDSQI-9 has no columns here**, and that is deliberate rather than missing: it rates how a clinical note is written, and these are 17 form fields rather than a written note. It runs on the SOAP notes, where it can be read against the rubric that scores the same text.",
+      "columns": [
+        {
+          "anchored": false,
+          "caveat": "Not the source paper's ROUGE-L and not comparable with their published table. Theirs compares the whole rendered note, which puts our own field labels and every Nil the expert wrote on both sides -- a note where the model wrote nothing at all scores 0.379 that way, above most real notes. This compares the field values of the sections the expert answered, where the same empty note scores 0.000, and every model's figure fell by about a third. It also cannot tell a good paraphrase from a wrong answer, and the source paper found it disagrees with what clinicians preferred. It also falls as notes get longer; where this table has a Words column, the correlation between the two is printed under it.",
+          "definition": "Longest-common-subsequence overlap with the expert note, F-measure. Rewards using the same words in the same order.",
+          "digits": 3,
+          "instrument": "iCARE",
+          "key": "rouge_l",
+          "label": "ROUGE-L",
+          "scale": "0-1"
+        },
+        {
+          "anchored": false,
+          "caveat": "A fluent note about the wrong session still scores well.",
+          "definition": "Embedding similarity to the expert note. Tolerates paraphrase.",
+          "digits": 3,
+          "instrument": "iCARE",
+          "key": "bertscore",
+          "label": "BERTScore",
+          "scale": "0-1"
+        },
+        {
+          "anchored": false,
+          "caveat": "A re-implementation with no human anchor: the authors never published their ratings, so unlike the TN-Eval track this number is not calibrated against anybody.",
+          "definition": "Trustworthiness, relevance, accuracy, comprehensiveness and expression, each rated 1-5 by a judge and averaged.",
+          "digits": 2,
+          "instrument": "iCARE",
+          "key": "trace",
+          "label": "TRACE",
+          "scale": "1-5"
+        },
+        {
+          "anchored": false,
+          "caveat": "Counts once in the order like every column, and moves it little: every model scores 0.97-1.00 here, so it separates nobody -- it is shown because its twin does.",
+          "definition": "Section 5 only -- what happened in the previous session. The fraction of the 34 sessions whose expert note answered it where the model did too.",
+          "digits": 2,
+          "instrument": "iCARE",
+          "key": "temporal_past",
+          "label": "Looks back",
+          "scale": "0-1"
+        },
+        {
+          "anchored": false,
+          "caveat": "This is where the source paper reports every model it tested failing, and ours do too: 0.00 to 0.55. Reported apart from its twin because averaging the two turned 1.00 and 0.09 into 0.78 and hid exactly this.",
+          "definition": "Section 17 only -- what happens at the next session. The fraction of the 11 sessions whose expert note answered it where the model did too.",
+          "digits": 2,
+          "instrument": "iCARE",
+          "key": "temporal_next",
+          "label": "Looks forward",
+          "scale": "0-1"
+        }
+      ],
+      "design": {
+        "calibrated": false,
+        "calibration": "Not possible here. The authors' expert ratings are not in the public repository, so there is nothing to check this judge against. Two independent judges score every note instead, and where they disagree is the only control this track can have.",
+        "human_role": "The expert note is the answer key and never competes. In the source paper the experts compared models with each other -- a smaller Mistral was preferred over the model leading on the automatic metrics -- and the expert note was what those metrics measured against, not an entry.",
+        "human_role_short": "answer key",
+        "scored_against": "An expert note written from the session by a clinician who was not in it. ROUGE-L and BERTScore measure how closely the model reproduced it; TRACE asks a judge to rate the note itself, the way the paper's experts did."
+      },
+      "detail_label": "TRACE dimensions",
+      "groups": null,
+      "groups_tested": {
+        "counts": {
+          "holds": {
+            "0.90": 7,
+            "0.95": 6,
+            "0.99": 4
+          },
+          "stored": 32,
+          "tested": 32,
+          "untestable": 0
+        },
+        "layers": [
+          [
+            "deepseek-v4-flash",
+            "deepseek-v4-flash-thinking",
+            "gemma4",
+            "glm-5",
+            "glm-5.2",
+            "google_gemini-3.1-pro-preview",
+            "google_gemini-3.7-flash",
+            "gpt-5.6-luna",
+            "gpt-5.6-sol",
+            "gpt-5.6-terra",
+            "kimi-k3",
+            "mistral-medium-3.5",
+            "qwen3.5-int4",
+            "qwen3.8-27b"
+          ],
+          [
+            "gpt-oss-120b",
+            "qwen3.5-122b"
+          ]
+        ],
+        "samples": 10000,
+        "source": "edges-icare.json",
+        "systems": [
+          "deepseek-v4-flash",
+          "deepseek-v4-flash-thinking",
+          "gemma4",
+          "glm-5",
+          "glm-5.2",
+          "google_gemini-3.1-pro-preview",
+          "google_gemini-3.7-flash",
+          "gpt-5.6-luna",
+          "gpt-5.6-sol",
+          "gpt-5.6-terra",
+          "gpt-oss-120b",
+          "kimi-k3",
+          "mistral-medium-3.5",
+          "qwen3.5-122b",
+          "qwen3.5-int4",
+          "qwen3.8-27b"
+        ],
+        "threshold": 0.95,
+        "undominated": [
+          "deepseek-v4-flash",
+          "deepseek-v4-flash-thinking",
+          "gemma4",
+          "glm-5",
+          "glm-5.2",
+          "google_gemini-3.1-pro-preview",
+          "google_gemini-3.7-flash",
+          "gpt-5.6-luna",
+          "gpt-5.6-sol",
+          "gpt-5.6-terra",
+          "kimi-k3",
+          "mistral-medium-3.5",
+          "qwen3.5-int4",
+          "qwen3.8-27b"
+        ]
+      },
+      "has_effort": true,
+      "has_words": true,
+      "id": "icare-unjudged-unrubriced-0.7.0",
+      "ordering": {
+        "columns": [
+          "rouge_l",
+          "bertscore",
+          "trace",
+          "temporal_past",
+          "temporal_next"
+        ],
+        "placed": 0,
+        "rule": "mean_place",
+        "sensitivity": {
+          "baseline": {
+            "first": [],
+            "second": []
+          },
+          "first_under_any": [],
+          "furthest": 0,
+          "most_moved": 0,
+          "n_systems": 0,
+          "variants": [
+            {
+              "column": "rouge_l",
+              "first": [],
+              "furthest": 0,
+              "moved": 0,
+              "name": "double:rouge_l",
+              "rho": null,
+              "second": []
+            },
+            {
+              "column": "bertscore",
+              "first": [],
+              "furthest": 0,
+              "moved": 0,
+              "name": "double:bertscore",
+              "rho": null,
+              "second": []
+            },
+            {
+              "column": "trace",
+              "first": [],
+              "furthest": 0,
+              "moved": 0,
+              "name": "double:trace",
+              "rho": null,
+              "second": []
+            },
+            {
+              "column": "temporal_past",
+              "first": [],
+              "furthest": 0,
+              "moved": 0,
+              "name": "double:temporal_past",
+              "rho": null,
+              "second": []
+            },
+            {
+              "column": "temporal_next",
+              "first": [],
+              "furthest": 0,
+              "moved": 0,
+              "name": "double:temporal_next",
+              "rho": null,
+              "second": []
+            }
+          ]
+        },
+        "unplaced": []
+      },
+      "rows": [
+        {
+          "by_section": {},
+          "detail": {},
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "2026-09-01T18:41:04Z",
+          "group": null,
+          "headline": {},
+          "judges_own_family": "",
+          "label": "glm-5.3",
+          "mean_place": null,
+          "metrics_note": "",
+          "n_attempted": 40,
+          "n_complete": 0,
+          "n_failed": 0,
+          "n_generated": 40,
+          "n_partial": 0,
+          "n_scored": 0,
+          "n_unreached": 0,
+          "note_words": 1152,
+          "place": null,
+          "places": null,
+          "provider": "einfra",
+          "scored": false,
+          "scored_at": null,
+          "section_order": [],
+          "settings": "temperature 0, max tokens 4096",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "glm-5.3",
+          "system_type": "model",
+          "unplaced_because": null,
+          "unreached_reasons": {},
+          "withdrawn_on": null
+        },
+        {
+          "by_section": {},
+          "detail": {},
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "2026-09-01T19:48:36Z",
+          "group": null,
+          "headline": {},
+          "judges_own_family": "",
+          "label": "qwen3.8-flash-next",
+          "mean_place": null,
+          "metrics_note": "",
+          "n_attempted": 40,
+          "n_complete": 0,
+          "n_failed": 0,
+          "n_generated": 39,
+          "n_partial": 0,
+          "n_scored": 0,
+          "n_unreached": 1,
+          "note_words": 379,
+          "place": null,
+          "places": null,
+          "provider": "einfra",
+          "scored": false,
+          "scored_at": null,
+          "section_order": [],
+          "settings": "temperature 0, max tokens 16384",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "qwen3.8-flash-next",
+          "system_type": "model",
+          "unplaced_because": null,
+          "unreached_reasons": {
+            "truncated at max_tokens=16384": 1
+          },
+          "withdrawn_on": null
+        }
+      ],
+      "scored": false,
+      "scored_at": "",
+      "stale_harness": false,
+      "subtitle": "not yet scored",
+      "terms": [
+        {
+          "gloss": "This track. A model fills in a 17-field clinical form from a counselling transcript, and its answers are compared with the form an expert clinician filled in from the same session. One project under two names: released as iCARE, renamed iHOPE in the preprint.",
+          "term": "iCARE / iHOPE"
+        },
+        {
+          "gloss": "40 counselling demonstrations, each with one form an expert clinician filled in from it afterwards -- not the clinician who conducted it, who is not part of this corpus. That form is the answer key, not an entry.",
+          "term": "The sessions"
+        },
+        {
+          "gloss": "17 fields to fill in rather than a note to write, so a blank field is a different thing from a short sentence.",
+          "term": "The form"
+        }
+      ],
+      "title": "iCARE form on the iHOPE corpus · 17 sections per session",
+      "track": "icare",
+      "versions": {
+        "harness_version": "0.7.0",
+        "judge_model": null,
+        "judge_prompt_version": null,
+        "judge_settings": {},
+        "prompt_version": "icare-zeroshot-v1"
       }
     }
   ]

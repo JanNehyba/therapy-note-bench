@@ -847,6 +847,13 @@ def _coverage_row(
         units = sorted(session_dir.glob("*.json"))
         session_ok = bool(units)
         session_unreached = False
+        # One iCARE note is seventeen calls, one per section, and each record's
+        # `text` is that section's content -- what the note is rendered from.
+        # Summed per session, so the figure is the note's length and not a
+        # section's; on the SOAP track `text` carries the reply's scaffolding
+        # and the note is read from `note` instead.
+        session_words = 0
+        session_has_text = False
         for unit_path in units:
             try:
                 record = json.loads(unit_path.read_text(encoding="utf-8"))
@@ -874,6 +881,9 @@ def _coverage_row(
                     words.append(len(" ".join(str(v) for v in note.values()).split()))
                 elif isinstance(note, str) and note:
                     words.append(len(note.split()))
+                elif track == TRACK_ICARE and isinstance(record.get("text"), str):
+                    session_words += len(record["text"].split())
+                    session_has_text = True
             elif not is_the_models_fault(record.get("error")):
                 # Counted apart and NOT charged to the model. Splitting the
                 # reasons without splitting the count left glm-5 published as
@@ -888,6 +898,8 @@ def _coverage_row(
                 failures[normalise_reason(record.get("error"))] += 1
                 session_ok = False
         complete += session_ok
+        if session_ok and session_has_text:
+            words.append(session_words)
         # Not generated -- there is no usable note -- but not the model's doing
         # either, so it leaves `n_failed` below rather than joining it.
         unreached_sessions += session_unreached

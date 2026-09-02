@@ -317,7 +317,9 @@ def _trace_spread() -> tuple[float, ...]:
     spread: dict[str, float] = {}
     counted: set[int] = set()
     for table in payload()["tables"]:
-        if table["track"] != "icare":
+        # Scored tables only: the queue of models awaiting the judge is an
+        # iCARE table too, with nothing to spread.
+        if table["track"] != "icare" or not table["scored"]:
             continue
         values = [
             row["headline"]["trace"] for row in table["rows"] if "trace" in (row["headline"] or {})

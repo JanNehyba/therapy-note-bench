@@ -135,6 +135,19 @@ _STATIC = {
 #: Sentences written in the page script, keyed by their English with numbered
 #: holes. Read the module docstring for why a hole may go unused.
 _SENTENCES = {
+    # -- the endpoints and the queue -----------------------------------------
+    "<strong>{0}</strong> has written its notes and is waiting for the judge; its absence from"
+    " the scored tables is a queue, not a result.": (
+        "<strong>{0}</strong> má zápisy napsané a čeká na hodnotitele; jeho nepřítomnost v "
+        "obodovaných tabulkách je fronta, ne výsledek."
+    ),
+    "{0} unreached": "{0} nedosaženo",
+    "Median words in this model’s notes. ROUGE-L falls as notes get longer: on this table the"
+    " two correlate at ρ {0} over {1} systems.": (
+        "Medián slov v zápisech tohoto modelu. ROUGE-L s délkou zápisu klesá: v této tabulce "
+        "spolu ty dvě veličiny korelují na ρ {0} přes {1} systémů."
+    ),
+    "Median words in this model’s notes.": "Medián slov v zápisech tohoto modelu.",
     # -- the order and the groups -------------------------------------------
     "Place": "Místo",
     "Group": "Skupina",
@@ -487,14 +500,16 @@ _SENTENCES = {
     # ask again and a model nobody has asked yet are two different silences,
     # and both were left to inference.
     "withdrawn": "staženo",
-    "The endpoint no longer served this model when it was last asked, on {0}. Its figures are"
-    " final &mdash; it cannot be asked again, re-scored, or measured on a column added later"
-    " &mdash; and they are kept and counted like every other row, because the measurements were"
-    " made.": (
-        "Endpoint tento model už nenabízel, když se ho někdo naposledy ptal, {0}. Jeho čísla "
-        "jsou konečná &mdash; nejde se ho zeptat znovu, přebodovat ho ani ho změřit na sloupci, "
-        "který přibude později &mdash; a zůstávají tu a počítají se jako u každého jiného "
-        "řádku, protože ta měření proběhla."
+    "The endpoint no longer served this model when it was last asked, on {0}. It cannot write a"
+    " new note &mdash; on a new prompt or a new session &mdash; and any figure that needs one"
+    " will stay blank; the notes it did write can be re-scored and measured on a column"
+    " computed from them. Its figures are kept and counted like every other row, because the"
+    " measurements were made.": (
+        "Endpoint tento model už nenabízel, když se ho někdo naposledy ptal, {0}. Nemůže napsat "
+        "nový zápis &mdash; na nový prompt ani na nové sezení &mdash; a každé číslo, které by "
+        "takový zápis potřebovalo, zůstane prázdné; zápisy, které napsal, lze přebodovat a "
+        "změřit na sloupci, který se z nich počítá. Jeho čísla tu zůstávají a počítají se jako "
+        "u každého jiného řádku, protože ta měření proběhla."
     ),
     "<strong>{0}</strong> is drawn here and was not served when the endpoints were last asked, on"
     " {1}. Its figures are final rather than stale: the measurement was made, it counts in every"
@@ -997,7 +1012,9 @@ _PAYLOAD = {
     " way, above most real notes. This compares the field values of the sections the expert"
     " answered, where the same empty note scores 0.000, and every model's figure fell by about a"
     " third. It also cannot tell a good paraphrase from a wrong answer, and the source paper"
-    " found it disagrees with what clinicians preferred.": (
+    " found it disagrees with what clinicians preferred. It also falls as notes get longer;"
+    " where this table has a Words column, the correlation between the two is printed under"
+    " it.": (
         "Není to ROUGE-L ze zdrojového článku a s jejich publikovanou tabulkou to není "
         "srovnatelné. Ta jejich srovnává celý vykreslený zápis, což staví naše vlastní názvy "
         "polí a každé Nil, které expert napsal, na obě strany — zápis, do kterého model "
@@ -1005,7 +1022,8 @@ _PAYLOAD = {
         "srovnávají hodnoty polí těch oddílů, které expert vyplnil; tentýž prázdný zápis tam "
         "boduje 0.000 a číslo každého modelu kleslo asi o třetinu. Metrika také neodliší dobrou "
         "parafrázi od špatné odpovědi a zdrojový článek zjistil, že si odporuje s tím, čemu "
-        "dávali přednost kliničtí experti."
+        "dávali přednost kliničtí experti. Také klesá s délkou zápisu; kde má tato tabulka "
+        "sloupec Slova, je korelace obou vytištěna pod ní."
     ),
     "BERTScore": "BERTScore",
     "Embedding similarity to the expert note. Tolerates paraphrase.": (

@@ -346,8 +346,12 @@ function renderQueue(table) {
       ? `<span class="short">${row.n_generated}/${row.n_attempted}</span>`
       : `${row.n_generated}/${row.n_attempted}`;
     const chip = row.provider ? `<span class="chip">${row.provider}</span>` : '';
+    // Calls the endpoint never answered, apart from the model's own failures
+    // and uncoloured: the count is not an accusation.
+    const unreached = row.n_unreached
+      ? ` <span class="pending-mark">(${T`${row.n_unreached} unreached`})</span>` : '';
     return `<li><b>${row.label}</b>${chip} <span>${
-      T`notes written ${short}`}</span></li>`;
+      T`notes written ${short}`}${unreached}</span></li>`;
   }).join('');
 
   return `<section class="box pending">
@@ -438,13 +442,27 @@ function denominatorNote(table) {
 // it; the Provider heading, repeated in the footer; and the calibration warning
 // in `designBlock`, which is never drawn on a table whose judge is calibrated
 // and is the wrong thing to explain on the tables that are.
+// What the Words column means on this table. On the rubric track the
+// sentence is about completeness, which counts coverage; on iCARE it is about
+// ROUGE-L, which falls with length, and the correlation is read off the table
+// rather than asserted -- the rubric-track claim held under one judge and not
+// the other, which is the reason not to assert either.
+function wordsGloss(table) {
+  if (table.columns.some(c => c.key === 'completeness')) {
+    return T`Median words in this model’s notes. Completeness counts coverage, so a longer note covers more.`;
+  }
+  const effect = (table.length_effects || {}).rouge_l;
+  if (effect && effect.rho !== null && effect.rho !== undefined) {
+    return T`Median words in this model’s notes. ROUGE-L falls as notes get longer: on this table the
+      two correlate at ρ ${effect.rho.toFixed(2)} over ${effect.n} systems.`;
+  }
+  return T`Median words in this model’s notes.`;
+}
+
 function extraLegend(table) {
   const entries = [];
   if (table.has_words) {
-    entries.push([
-      T`Words`,
-      T`Median words in this model’s notes. Completeness counts coverage, so a longer note covers more.`,
-    ]);
+    entries.push([T`Words`, wordsGloss(table)]);
   }
   entries.push([
     T`Marks`,
@@ -791,9 +809,11 @@ function renderTable(table, index) {
       // a row that will has to know which is which.
       row.withdrawn_on
         ? `<span class="kept" title="${T`The endpoint no longer served this model when it was
-            last asked, on ${esc(row.withdrawn_on)}. Its figures are final &mdash; it cannot be
-            asked again, re-scored, or measured on a column added later &mdash; and they are kept
-            and counted like every other row, because the measurements were made.`}">${
+            last asked, on ${esc(row.withdrawn_on)}. It cannot write a new note &mdash; on a new
+            prompt or a new session &mdash; and any figure that needs one will stay blank; the
+            notes it did write can be re-scored and measured on a column computed from them. Its
+            figures are kept and counted like every other row, because the measurements were
+            made.`}">${
             T`withdrawn`}</span>`
         : '',
     ].filter(Boolean).join(' ');
@@ -849,7 +869,7 @@ function renderTable(table, index) {
       <div class="scroll"><table data-table="${index}" data-sorted="place" data-descending="1">
         <thead><tr><th scope="col" class="name" data-sort="label"><button type="button">${
             T`System`}</button></th>${placeHead}${head}${table.has_words
-            ? `<th scope="col" data-sort="note_words" title="${T`Median words in this model’s notes. Completeness counts coverage, so a longer note covers more.`}"><button type="button">${T`Words`}</button></th>`
+            ? `<th scope="col" data-sort="note_words" title="${wordsGloss(table)}"><button type="button">${T`Words`}</button></th>`
             : ''}${showCoverage
               ? `<th scope="col" data-sort="coverage" title="${T`Notes written of notes asked
                   for, and where they differ, how many of them the figures in this row rest
@@ -1142,9 +1162,10 @@ function rosterNote() {
   const roster = DATA.roster;
   if (!roster) return '';
   const missing = (roster.never_asked || []).map(entry => entry.system_id);
+  const waiting = (roster.awaiting_judge || []).map(entry => entry.system_id);
   const gone = (roster.withdrawn || []).map(entry => entry.system_id);
   const unreachable = Object.keys(roster.unreachable || {});
-  if (!missing.length && !gone.length && !unreachable.length) return '';
+  if (!missing.length && !waiting.length && !gone.length && !unreachable.length) return '';
   const parts = [];
   if (gone.length) {
     // Said as what it is: a finished measurement, not a stale one. The row is
@@ -1155,6 +1176,12 @@ function rosterNote() {
       endpoints were last asked, on ${roster.asked}. Its figures are final rather than stale:
       the measurement was made, it counts in every comparison on this page, and it is kept so
       that a model withdrawn from an endpoint does not quietly leave the record.`);
+  }
+  if (waiting.length) {
+    // Generated and not yet judged: a queue, which the page draws further
+    // down, and not a question nobody put.
+    parts.push(T`<strong>${waiting.join(', ')}</strong> has written its notes and is waiting for
+      the judge; its absence from the scored tables is a queue, not a result.`);
   }
   if (missing.length) {
     parts.push(T`<strong>${missing.join(', ')}</strong> was served on ${roster.asked} and has
