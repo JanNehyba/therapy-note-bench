@@ -194,3 +194,14 @@ def test_the_dropped_attribute_is_numbered_the_same_way_twice():
     doc = pdsqi.__doc__ or ""
     assert "ninth attribute" not in doc, "item 1 is not the ninth attribute"
     assert "first attribute" in doc
+
+
+def test_the_caveat_names_the_columns_an_empty_note_wins():
+    """`test_empty_note` pins which measures reward a note with nothing in it;
+    the instrument's caveat, printed under its columns, has to name the same
+    three or the columns read as things a note can win."""
+    from tnb.scoring.pdsqi import _CAVEAT
+
+    for name in ("accurate", "succinct", "stigmatising"):
+        assert name in _CAVEAT, f"the caveat does not name {name}"
+    assert "never as things it can win" in _CAVEAT

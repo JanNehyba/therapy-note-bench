@@ -291,7 +291,10 @@ _CAVEAT = (
     "The instrument was validated on multi-note clinical summaries from a corpus that "
     "excluded psychiatry, not on notes written from a single session. Its authors report "
     "Krippendorff's alpha 0.575 between trained physicians on that material -- a published "
-    "ceiling, not a measurement of this judge on these notes."
+    "ceiling, not a measurement of this judge on these notes. Three of the eight -- accurate, "
+    "succinct and free of stigmatising language -- can be won by saying nothing: an empty note "
+    "scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as "
+    "things it can win."
 )
 
 MEASURES: dict[str, dict[str, str]] = {

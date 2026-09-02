@@ -74,16 +74,19 @@ MEASURES: dict[str, dict[str, str]] = {
             "item the session never called for counts as absent exactly like one "
             "the note forgot. The figure is the equal-weighted mean of the note's "
             "four section fractions, not the fraction of all {criteria} items, so "
-            "a four-item section counts as much as an eight-item one. This is the "
-            "column the table is ordered by."
+            "a four-item section counts as much as an eight-item one. It is the only "
+            "column here checked against two therapists' ratings; the table's order "
+            "is a mean of places over all its columns."
         ),
     },
     "conciseness": {
         "label": "Conciseness",
         "scale": "0-1",
         "definition": (
-            "Fraction of the note's sentences that fit at least one rubric item. "
-            "1.00 means nothing is off-topic; it does not mean the note is short."
+            "The equal-weighted mean of the note's four section fractions: per "
+            "section, the fraction of that section's sentences that fit at least "
+            "one rubric item. 1.00 means nothing is off-topic; it does not mean the "
+            "note is short."
         ),
         "caveat": (
             "Not a length measure, despite the name: a note twice as long scores "

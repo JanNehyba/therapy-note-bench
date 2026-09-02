@@ -18,7 +18,7 @@ unchanged in wording. Scoring reproduces TN-Eval's reference-free protocol:
   (subjective 6, objective 5, assessment 8, plan 4). One judge call per
   criterion: does this note segment contain this item?
 - **Conciseness** — one judge call per sentence: does this sentence fit any
-  rubric item? The score is the fraction that do. **What counts as a sentence
+  rubric item? Per section, the score is the fraction that do; the note's figure averages its section fractions, every section counting once. **What counts as a sentence
   is part of the measure**, because it is the denominator. TN-Eval used
   `nltk.sent_tokenize`; this repository splits on `.!?` followed by whitespace,
   holding back common abbreviations ("Dr.") and list markers ("1."). The list

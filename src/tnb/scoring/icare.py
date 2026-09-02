@@ -89,8 +89,9 @@ MEASURES: dict[str, dict[str, str]] = {
             "of the 34 sessions whose expert note answered it where the model did too."
         ),
         "caveat": (
-            "Kept out of any average. Every model scores 0.97-1.00 here, so this "
-            "column separates nobody -- it is shown because its twin does."
+            "Counts once in the order like every column, and moves it little: every "
+            "model scores 0.97-1.00 here, so it separates nobody -- it is shown "
+            "because its twin does."
         ),
     },
     "temporal_next": {

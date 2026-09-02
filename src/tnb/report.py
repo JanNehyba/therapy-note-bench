@@ -115,8 +115,11 @@ COLUMNS: dict[str, tuple[tuple[str, int], ...]] = {
         ("rouge_l", 3),
         ("bertscore", 3),
         ("trace", 2),
-        ("temporal_past", 3),
-        ("temporal_next", 3),
+        # Two decimals: each is a share of 34 or 11 sessions, so the third
+        # place is a digit that cannot exist, and printing it let two rows
+        # that differ by one session look further apart than they are.
+        ("temporal_past", 2),
+        ("temporal_next", 2),
     ),
     # Built from the instrument's own order rather than retyped, so the columns
     # cannot drift out of the order a reader will find in the paper. Seven are
@@ -378,10 +381,11 @@ TRACK_BLURBS = {
         "A published instrument asked about the same notes as the TN-Eval SOAP "
         "track: the SOAP notes written from the 50 AnnoMI conversations. Not a "
         "third corpus -- one corpus, two instruments, so the two tables can be "
-        "read against each other. Eight attributes, reported separately and never "
-        "averaged, because the instrument reports them that way and because one "
-        "of the eight is a 0-1 column: a mean over it and seven 1-5 scales would "
-        "be a number with no unit."
+        "read against each other. Eight attributes, reported separately: the "
+        "ratings themselves are never averaged, because the instrument reports them "
+        "that way and because one of the eight is a 0-1 column, and a mean over it "
+        "and seven 1-5 scales would be a number with no unit. The order is a mean "
+        "of places, which has the same unit on every column."
     ),
 }
 

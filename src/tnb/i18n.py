@@ -756,14 +756,16 @@ _PAYLOAD = {
     "A published instrument asked about the same notes as the TN-Eval SOAP track: the SOAP notes"
     " written from the 50 AnnoMI conversations. Not a third corpus -- one corpus, two"
     " instruments, so the two tables can be read against each other. Eight attributes, reported"
-    " separately and never averaged, because the instrument reports them that way and because"
-    " one of the eight is a 0-1 column: a mean over it and seven 1-5 scales would be a number"
-    " with no unit.": (
+    " separately: the ratings themselves are never averaged, because the instrument reports them"
+    " that way and because one of the eight is a 0-1 column, and a mean over it and seven 1-5"
+    " scales would be a number with no unit. The order is a mean of places, which has the same"
+    " unit on every column.": (
         "Publikovaný nástroj položený na tytéž zápisy jako větev TN-Eval SOAP: na zápisy SOAP "
         "napsané z 50 rozhovorů AnnoMI. Není to třetí korpus — jeden korpus, dva nástroje, aby "
-        "se ty dvě tabulky daly číst proti sobě. Osm atributů, vykazovaných zvlášť a nikdy "
-        "neprůměrovaných, protože je tak vykazuje sám nástroj a protože jeden z těch osmi je "
-        "sloupec 0-1: průměr přes něj a přes sedm škál 1-5 by bylo číslo bez jednotky."
+        "se ty dvě tabulky daly číst proti sobě. Osm atributů, vykazovaných zvlášť: samotná "
+        "hodnocení se nikdy neprůměrují, protože je tak vykazuje sám nástroj a protože jeden z "
+        "těch osmi je sloupec 0-1 a průměr přes něj a přes sedm škál 1-5 by bylo číslo bez "
+        "jednotky. Pořadí je průměr míst, který má na každém sloupci stejnou jednotku."
     ),
     "Automatic metrics and a TRACE judge side by side, because the source paper found they"
     " disagree. That disagreement is a result, not an error. iCARE and iHOPE are one project"
@@ -849,12 +851,14 @@ _PAYLOAD = {
     " whatever the session was about, so an item the session never called for counts as absent"
     " exactly like one the note forgot. The figure is the equal-weighted mean of the note's four"
     " section fractions, not the fraction of all 23 items, so a four-item section counts as much"
-    " as an eight-item one. This is the column the table is ordered by.": (
+    " as an eight-item one. It is the only column here checked against two therapists' ratings;"
+    " the table's order is a mean of places over all its columns.": (
         "Počítá pokrytí seznamu položek, ne úsudek. Všech 23 položek rubriky se ptá u každého "
         "zápisu, ať bylo sezení o čemkoli, takže položka, kterou si sezení nikdy nevyžádalo, se "
         "počítá jako chybějící stejně jako ta, na kterou zápis zapomněl. To číslo je rovnoměrný "
         "průměr čtyř oddílových podílů zápisu, ne podíl ze všech 23 položek — čtyřpoložkový "
-        "oddíl tedy váží stejně jako osmipoložkový. Podle tohoto sloupce je tabulka seřazena."
+        "oddíl tedy váží stejně jako osmipoložkový. Je to jediný zdejší sloupec ověřený proti "
+        "hodnocení dvou terapeutů; pořadí tabulky je průměr míst přes všechny její sloupce."
     ),
     # The computed half of that caveat, authored in the leaderboard's script
     # because its two figures are read off the table the sentence is printed
@@ -872,10 +876,12 @@ _PAYLOAD = {
         "má podle téhož pravidla {2}."
     ),
     "Conciseness": "Stručnost",
-    "Fraction of the note's sentences that fit at least one rubric item. 1.00 means nothing is"
+    "The equal-weighted mean of the note's four section fractions: per section, the fraction of"
+    " that section's sentences that fit at least one rubric item. 1.00 means nothing is"
     " off-topic; it does not mean the note is short.": (
-        "Podíl vět zápisu, které odpovídají aspoň jedné položce rubriky. 1.00 znamená, že nic "
-        "není mimo téma; neznamená to, že je zápis krátký."
+        "Rovnoměrný průměr čtyř oddílových podílů zápisu: v každém oddílu podíl jeho vět, které "
+        "odpovídají aspoň jedné položce rubriky. 1.00 znamená, že nic není mimo téma; neznamená "
+        "to, že je zápis krátký."
     ),
     "Not a length measure, despite the name: a note twice as long scores the same if every"
     " added sentence is on topic. It is also the measure most moved by the judge's own settings"
@@ -918,11 +924,17 @@ _PAYLOAD = {
     "The instrument was validated on multi-note clinical summaries from a corpus that excluded"
     " psychiatry, not on notes written from a single session. Its authors report Krippendorff's"
     " alpha 0.575 between trained physicians on that material -- a published ceiling, not a"
-    " measurement of this judge on these notes.": (
+    " measurement of this judge on these notes. Three of the eight -- accurate, succinct and"
+    " free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00,"
+    " 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can"
+    " win.": (
         "Nástroj byl validován na klinických souhrnech z několika zápisů, z korpusu, který "
         "psychiatrii vylučoval, ne na zápisech z jednoho sezení. Jeho autoři uvádějí mezi "
         "školenými lékaři na tomto materiálu Krippendorffovu alfu 0.575 — je to publikovaný "
-        "strop, ne měření tohoto hodnotitele na těchto zápisech."
+        "strop, ne měření tohoto hodnotitele na těchto zápisech. Tři z osmi — přesnost, "
+        "stručnost a absence stigmatizujícího jazyka — se dají vyhrát mlčením: prázdný zápis na "
+        "nich dostane 5.00, 5.00 a 1.00, čtěte je tedy jako věci, v nichž zápis může propadnout, "
+        "nikdy jako věci, které může vyhrát."
     ),
     "{0} columns": "Sloupce {0}",
     "Thorough": "Důkladnost",
@@ -1019,10 +1031,10 @@ _PAYLOAD = {
         "Jen oddíl 5 — co se stalo na minulém sezení. Podíl z 34 sezení, jejichž expertní zápis "
         "na něj odpověděl, kde odpověděl i model."
     ),
-    "Kept out of any average. Every model scores 0.97-1.00 here, so this column separates nobody"
-    " -- it is shown because its twin does.": (
-        "Drženo mimo jakýkoli průměr. Každý model tu boduje 0.97–1.00, takže tento sloupec "
-        "nikoho neodliší — je vidět proto, že jeho dvojče ano."
+    "Counts once in the order like every column, and moves it little: every model scores"
+    " 0.97-1.00 here, so it separates nobody -- it is shown because its twin does.": (
+        "V pořadí počítá jednou jako každý sloupec a skoro s ním nehne: každý model tu boduje "
+        "0.97–1.00, takže nikoho neodliší — je vidět proto, že jeho dvojče ano."
     ),
     "Looks forward": "Výhled dopředu",
     "Section 17 only -- what happens at the next session. The fraction of the 11 sessions whose"
