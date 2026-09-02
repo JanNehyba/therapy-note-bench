@@ -22,6 +22,7 @@ import pytest
 
 from tests.test_page_runs import _flat, _judges_payload, _row, _run
 from tnb import judge, report
+from tnb.results import Metrics
 
 
 def _with_margin(margin: float, low: float, high: float) -> dict:
@@ -56,6 +57,34 @@ def _drawn(tmp_path: Path, entry: dict) -> str:
     data["similarity_example"] = None
     data["saturation"] = None
     data["judges"] = _judges_payload(entry)
+    return _flat(_run(report.render_page(data), tmp_path, panel="table-host"))
+
+
+def _tensions_drawn(tmp_path: Path, by_judge: dict[str, dict[str, dict[str, float]]]) -> str:
+    """A SOAP table for both judges, over the columns the caller invents.
+
+    The concordance the note quantifies is computed by `report.build` from the
+    same rows, so here the sentence and the grid behind it cannot be built from
+    different numbers.
+    """
+    rows = [
+        _row(
+            system,
+            judge_model,
+            headline.get("completeness", 0.5),
+            metrics=Metrics(headline=headline),
+        )
+        for judge_model, systems in by_judge.items()
+        for system, headline in systems.items()
+    ]
+    data = report.build(rows)
+    data["calibration"] = None
+    data["similarity_example"] = None
+    data["saturation"] = None
+    # What `write` computes for every page it serves: the two judges' tables,
+    # read together. Set by hand here for the same reason the panels above are
+    # nulled -- the helper renders the page, it does not run the pipeline.
+    data["concordance"] = report.concordance_payload(rows)
     return _flat(_run(report.render_page(data), tmp_path, panel="table-host"))
 
 
@@ -118,3 +147,96 @@ def test_the_published_panel_carries_an_interval_for_every_judge_it_draws():
         assert found["clears_ceiling"] == (found["margin_low"] > 0), (
             "the verdict and the interval it is read from disagree"
         )
+
+
+def test_do_not_predict_each_other_carries_the_number_behind_it(tmp_path):
+    """One pair coupled under both judges, one read differently by each.
+
+    "The columns do not predict each other" was the only claim in the ranking
+    note with no figure anywhere on the page behind it. The concordance panel
+    tabulates the pairs; this counts them into the sentence itself.
+    """
+    drawn = _tensions_drawn(
+        tmp_path,
+        {
+            judge.DEFAULT_MODEL: {
+                # completeness and conciseness agree with each other; faithfulness
+                # agrees with both -- until the second judge reverses it.
+                "x": {"completeness": 0.9, "conciseness": 0.9, "faithfulness": 0.3},
+                "y": {"completeness": 0.5, "conciseness": 0.5, "faithfulness": 0.2},
+                "z": {"completeness": 0.1, "conciseness": 0.1, "faithfulness": 0.1},
+            },
+            judge.SECOND_JUDGE: {
+                "x": {"completeness": 0.9, "conciseness": 0.9, "faithfulness": 0.1},
+                "y": {"completeness": 0.5, "conciseness": 0.5, "faithfulness": 0.2},
+                "z": {"completeness": 0.1, "conciseness": 0.1, "faithfulness": 0.3},
+            },
+        },
+    )
+    assert "(1 of 3 rankable column pairs move together under both judges)" in drawn, (
+        "the claim that the columns do not predict each other is printed without "
+        "the pair count the concordance already holds"
+    )
+
+
+def test_a_table_whose_pairs_never_rank_keeps_the_unquantified_sentence(tmp_path):
+    """Two columns everybody ties on rank nothing, so there is no denominator.
+
+    A clause without one would be a number pretending to a pair count, and a
+    tie is not a relation: the same sentence stands, without the parenthesis.
+    """
+    drawn = _tensions_drawn(
+        tmp_path,
+        {
+            judge.DEFAULT_MODEL: {
+                "x": {"completeness": 0.9, "conciseness": 0.5, "faithfulness": 0.5},
+                "y": {"completeness": 0.5, "conciseness": 0.5, "faithfulness": 0.5},
+                "z": {"completeness": 0.1, "conciseness": 0.5, "faithfulness": 0.5},
+            },
+            judge.SECOND_JUDGE: {
+                "x": {"completeness": 0.5, "conciseness": 0.5, "faithfulness": 0.5},
+                "y": {"completeness": 0.9, "conciseness": 0.5, "faithfulness": 0.5},
+                "z": {"completeness": 0.1, "conciseness": 0.5, "faithfulness": 0.5},
+            },
+        },
+    )
+    assert "the columns do not predict each other. Under the other weightings" in drawn, (
+        "the ranking note went missing entirely"
+    )
+    assert "rankable column pairs" not in drawn, (
+        "a pair count was drawn over pairs that tie too heavily to rank"
+    )
+
+
+@pytest.mark.skipif(
+    not (report.DOCS_DIR / "index.html").exists(), reason="the page has not been built"
+)
+def test_the_published_tables_carry_the_pair_counts_their_concordance_holds(tmp_path):
+    """Published, because this is the one claim in the ranking note that used
+    to have no figure anywhere behind it.
+
+    The count is read from `docs/leaderboard.json` -- the artefact the table is
+    drawn from -- for the table the page opens on, which is the only one the
+    runner's address selects. What this pins is that the page still says the
+    number, not that any particular pair agrees.
+    """
+    payload = json.loads((report.DOCS_DIR / "leaderboard.json").read_text(encoding="utf-8"))
+    track = payload["tables"][0]["track"]
+    rankable = [t for t in payload["concordance"][track]["tensions"] if t["rankable"]]
+    assert rankable, "the published payload holds no rankable pair, so there is nothing to draw"
+    together = sum(1 for t in rankable if t["agrees"])
+    sentence = (
+        f"({together} of {len(rankable)} rankable column pairs move together under both judges)"
+    )
+
+    drawn = _flat(
+        _run(
+            (report.DOCS_DIR / "index.html").read_text(encoding="utf-8"),
+            tmp_path,
+            panel="table-host",
+        )
+    )
+    assert sentence in drawn, (
+        f"{sentence} is the count docs/leaderboard.json holds, and the published table "
+        "does not say it"
+    )

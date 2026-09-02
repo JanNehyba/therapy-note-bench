@@ -191,16 +191,22 @@ _SENTENCES = {
     ),
     "Ordered by <strong>mean place</strong> over the {0} columns of this instrument, every column"
     " counting once &mdash; a convention, not a measurement: the columns do not predict each"
-    " other. Under the other weightings tried (each column counted twice, and the reference rows"
-    " removed) first place is held by {1}; at most {2} of {3} systems change place and none by"
-    ' more than {4} (<a href="methods.html#ordering">how the order was built</a>). Ties share a'
-    " place.": (
+    " other{1}. Under the other weightings tried (each column counted twice, and the reference"
+    " rows removed) first place is held by {2}; at most {3} of {4} systems change place and none"
+    ' by more than {5} (<a href="methods.html#ordering">how the order was built</a>). Ties share'
+    " a place.": (
         "Seřazeno podle <strong>průměrného místa</strong> přes {0} sloupců tohoto nástroje, "
         "každý sloupec počítá jednou &mdash; konvence, ne měření: sloupce se navzájem "
-        "nepředpovídají. Při ostatních vyzkoušených vahách (každý sloupec počítán dvakrát a "
-        "odebrané referenční řádky) drží první místo {1}; místo změní nejvýš {2} z {3} systémů "
-        'a žádný o víc než {4} (<a href="methods.html#ordering">jak pořadí vzniklo</a>). '
+        "nepředpovídají{1}. Při ostatních vyzkoušených vahách (každý sloupec počítán dvakrát a "
+        "odebrané referenční řádky) drží první místo {2}; místo změní nejvýš {3} z {4} systémů "
+        'a žádný o víc než {5} (<a href="methods.html#ordering">jak pořadí vzniklo</a>). '
         "Remízy sdílejí místo."
+    ),
+    # The clause inside the sentence above, when the instrument's columns have
+    # been compared under both judges at all. Czech says it with a verb whose
+    # form does not change with the count, so 1, 2 and 6 all read the same.
+    "({0} of {1} rankable column pairs move together under both judges)": (
+        "(pod oběma hodnotiteli spolu souvisí {0} z {1} seřaditelných párů sloupců)"
     ),
     "<strong>Group</strong> is what the evidence separates: a system stands above another only"
     " when it is at least as good on every column under both judges in {0} of {1} resampled"

@@ -701,9 +701,25 @@ function renderTable(table, index) {
   const labelOf = {};
   table.rows.forEach(r => { labelOf[r.system_id] = r.label; });
   const firstAny = sens.first_under_any.map(s => `<code>${esc(labelOf[s] || s)}</code>`).join(', ');
+  // "Do not predict each other", said with the number behind it: of the
+  // instrument's rankable column pairs -- the ones whose ties do not flatten
+  // both orderings -- how many move together under both judges. The same
+  // tensions the methods page tabulates, so the clause cannot drift from the
+  // grid it is read against, and "move together" is that panel's own term for
+  // a pair both judges find coupled, in either direction. A table with no
+  // rankable pair, or with no concordance payload, keeps the sentence as it
+  // stood: a clause with no denominator would be a number pretending to one.
+  const concordance = instrumentsOf(table);
+  const rankable = concordance.length === 1
+    ? (concordance[0][1].tensions || []).filter(t => t.rankable)
+    : [];
+  const tensionClause = !rankable.length
+    ? ''
+    : T` (${rankable.filter(t => t.agrees).length} of ${rankable.length} rankable column pairs
+        move together under both judges)`;
   const orderingNote = T`Ordered by <strong>mean place</strong> over the ${ordering.columns.length}
     columns of this instrument, every column counting once &mdash; a convention, not a
-    measurement: the columns do not predict each other. Under the other weightings tried (each
+    measurement: the columns do not predict each other${tensionClause}. Under the other weightings tried (each
     column counted twice, and the reference rows removed) first place is held by ${firstAny}; at
     most ${sens.most_moved} of ${sens.n_systems} systems change place and none by more than
     ${sens.furthest} (<a href="methods.html#ordering">how the order was built</a>). Ties share a
