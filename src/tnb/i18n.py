@@ -426,17 +426,6 @@ _SENTENCES = {
     # The Band column's counterpart where no measure ranks the table: a
     # position several systems hold together, from dominance rather than from a
     # bootstrap.
-    "Place": "Místo",
-    "How many systems beat this one outright, fewest first: at least as good on every column and"
-    " better on one, under both judges. Rows the comparison cannot separate share a place and the"
-    " next place is skipped. It does not follow the sort.": (
-        "Kolik systémů tenhle porazí na plné čáře, nejméně nahoře: jsou aspoň tak dobré v každém "
-        "sloupci a v jednom lepší, a to u obou hodnotitelů. Řádky, které srovnání neodliší, "
-        "sdílejí místo a následující místo se přeskočí. Neřídí se řazením."
-    ),
-    "Not in the compared population, so this system holds no place here. Not a nought.": (
-        "Není ve srovnávané skupině, takže tenhle systém tu žádné místo nedrží. Není to nula."
-    ),
     # The band rule's own threshold has a standard error, and some comparisons
     # land inside it. The page said the boundary is a convention and never said
     # which rows are standing on it.
@@ -612,27 +601,19 @@ _SENTENCES = {
         "hodnotí, jak je napsaný — PDSQI-9. **Žádný souhrn se z nich nepočítá**: jsou to jiné "
         "otázky na jiných škálách a ani jeden nástroj sám žádný souhrn nezveřejňuje."
     ),
-    # No column ranks it, and the rows are ordered anyway: dominance needs no
-    # weights, so it can order a table a mean may not.
+    # No column ranks it, and the rows are alphabetical until the comparison
+    # that could order them has been tested. Not "nothing to order them by":
+    # that was said, and it was not true.
     "<strong>No column ranks this track</strong>: its columns measure different things and the"
-    " source paper found they disagree, and that disagreement is the result. The rows are"
-    " ordered by how many systems each one beats outright &mdash; at least as good on every"
-    " column under both judges and better somewhere &mdash; which needs no weights and no common"
-    " unit.": (
+    " source paper found they disagree, and that disagreement is the result. The rows are in"
+    " alphabetical order until the comparison that could order them &mdash; at least as good on"
+    " every column under both judges &mdash; has been tested; what is known about it is on the"
+    " methods page.": (
         "<strong>Tuto větev neřadí žádný sloupec</strong>: její sloupce měří různé věci a "
         "zdrojový článek zjistil, že si odporují — a ten rozpor je ten výsledek. Řádky jsou "
-        "seřazené podle toho, kolik systémů každý z nich porazí na plné čáře &mdash; je aspoň "
-        "tak dobrý v každém sloupci u obou hodnotitelů a někde lepší &mdash; což nepotřebuje "
-        "žádné váhy ani společnou jednotku."
-    ),
-    "<strong>{0} places for {1} systems.</strong> Rows sharing a place are ones this comparison"
-    " does not separate, and the place is not a score: it counts how many systems beat this one"
-    " on every column at once, under both judges. Two rows one place apart are a result; two rows"
-    " sharing a place are not.": (
-        "<strong>{0} míst pro {1} systémů.</strong> Řádky, které sdílejí místo, jsou ty, které "
-        "tohle srovnání neodliší, a místo není skóre: počítá, kolik systémů daný řádek porazí "
-        "ve všech sloupcích naráz u obou hodnotitelů. Dva řádky o místo od sebe jsou výsledek, "
-        "dva řádky na témž místě ne."
+        "v abecedním pořadí, dokud nebude otestované porovnání, které by je seřadit mohlo "
+        "&mdash; aspoň tak dobrý v každém sloupci u obou hodnotitelů &mdash;; co se o něm ví, "
+        "je na stránce s metodikou."
     ),
     # The other two reasons a track carries no ranking column. All three used
     # to be the sentence above, which is a statement about the iCARE paper and
@@ -691,11 +672,13 @@ _SENTENCES = {
         " — a právě proto není tato tabulka podle žádného z nich seřazená."
     ),
     "<strong>These rows are in alphabetical order.</strong> The columns measure different things"
-    " and the source paper found they disagree, so there is nothing to order them by — read each"
-    " column on its own.": (
+    " and the source paper found they disagree, and the comparison that could order them &mdash;"
+    " at least as good on every column under both judges &mdash; has not been tested yet. Read"
+    " each column on its own.": (
         "<strong>Tyto řádky jsou v abecedním pořadí.</strong> Sloupce měří různé věci a zdrojový "
-        "článek zjistil, že si odporují, takže není podle čeho je řadit — čtěte každý sloupec "
-        "zvlášť."
+        "článek zjistil, že si odporují, a porovnání, které by je seřadit mohlo &mdash; aspoň tak "
+        "dobrý v každém sloupci u obou hodnotitelů &mdash; zatím není otestované. Čtěte každý "
+        "sloupec zvlášť."
     ),
     "No runs yet": "Zatím žádný běh",
     "The first run will populate this page.": "První běh tuto stránku naplní.",

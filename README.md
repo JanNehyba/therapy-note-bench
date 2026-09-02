@@ -88,26 +88,26 @@ written for somebody building or buying one:
 
 **iCARE form on the iHOPE corpus · 17 sections per session** — scored by gemini-3.1-pro-preview (max_output_tokens 288, temperature 0, thinking_budget 256)
 
-| Place | Model | Provider | ROUGE-L (0-1) | BERTScore (0-1) | TRACE (1-5) | Looks back (0-1) | Looks forward (0-1) | Notes | Scored |
-|---|---|---|---|---|---|---|---|---|---|
-| 1 | `qwen3.8-27b` | einfra | 0.186 | 0.819 | 4.95 | 1.000 | 0.273 | 40/40 | 40 |
-| 2 | `gpt-5.6-sol` | openai | 0.169 | 0.816 | 4.99 | 1.000 | 0.545 | 40/40 | 40 |
-| 3 | `glm-5` | einfra | 0.179 | 0.820 | 4.88 | 1.000 | 0.364 | 40/40 | 40 |
-| 3 | `glm-5.2` | einfra | 0.173 | 0.820 | 4.92 | 1.000 | 0.364 | 40/40 | 40 |
-| 3 | `google_gemini-3.1-pro-preview` | vertex | 0.182 | 0.817 | 4.96 | 1.000 | 0.455 | 40/40 | 40 |
-| 6 | `gemma4` | einfra | 0.202 | 0.820 | 4.83 | 1.000 | 0.364 | 40/40 | 40 |
-| 6 | `qwen3.5-int4` | einfra | 0.183 | 0.818 | 4.97 | 1.000 | 0.091 | 39/40 (1 unreached) | 39 |
-| 8 | `google_gemini-3.7-flash` | vertex | 0.186 | 0.819 | 4.97 | 0.971 | 0.364 | 40/40 | 40 |
-| 9 | `mistral-medium-3.5` | einfra | 0.186 | 0.815 | 4.87 | 1.000 | 0.182 | 40/40 | 40 |
-| 10 | `gpt-5.6-terra` | openai | 0.155 | 0.815 | 4.97 | 0.971 | 0.455 | 40/40 | 40 |
-| 10 | `kimi-k3` | einfra | 0.109 | 0.812 | 4.98 | 1.000 | 0.364 | 40/40 | 40 |
-| 12 | `gpt-5.6-luna` | openai | 0.150 | 0.811 | 4.92 | 1.000 | 0.273 | 40/40 | 40 |
-| 13 | `deepseek-v4-flash-thinking` | einfra | 0.170 | 0.811 | 4.87 | 1.000 | 0.091 | 40/40 | 40 |
-| 14 | `deepseek-v4-flash` | einfra | 0.168 | 0.816 | 4.78 | 1.000 | 0.091 | 40/40 | 40 |
-| 14 | `qwen3.5-122b` | einfra | 0.140 | 0.815 | 4.76 | 1.000 | 0.273 | 40/40 | 40 |
-| 16 | `gpt-oss-120b` | einfra | 0.159 | 0.808 | 4.79 | 1.000 | 0.000 | 40/40 | 40 |
+| Model | Provider | ROUGE-L (0-1) | BERTScore (0-1) | TRACE (1-5) | Looks back (0-1) | Looks forward (0-1) | Notes | Scored |
+|---|---|---|---|---|---|---|---|---|
+| `deepseek-v4-flash` | einfra | 0.168 | 0.816 | 4.78 | 1.000 | 0.091 | 40/40 | 40 |
+| `deepseek-v4-flash-thinking` | einfra | 0.170 | 0.811 | 4.87 | 1.000 | 0.091 | 40/40 | 40 |
+| `gemma4` | einfra | 0.202 | 0.820 | 4.83 | 1.000 | 0.364 | 40/40 | 40 |
+| `glm-5` | einfra | 0.179 | 0.820 | 4.88 | 1.000 | 0.364 | 40/40 | 40 |
+| `glm-5.2` | einfra | 0.173 | 0.820 | 4.92 | 1.000 | 0.364 | 40/40 | 40 |
+| `google_gemini-3.1-pro-preview` | vertex | 0.182 | 0.817 | 4.96 | 1.000 | 0.455 | 40/40 | 40 |
+| `google_gemini-3.7-flash` | vertex | 0.186 | 0.819 | 4.97 | 0.971 | 0.364 | 40/40 | 40 |
+| `gpt-5.6-luna` | openai | 0.150 | 0.811 | 4.92 | 1.000 | 0.273 | 40/40 | 40 |
+| `gpt-5.6-sol` | openai | 0.169 | 0.816 | 4.99 | 1.000 | 0.545 | 40/40 | 40 |
+| `gpt-5.6-terra` | openai | 0.155 | 0.815 | 4.97 | 0.971 | 0.455 | 40/40 | 40 |
+| `gpt-oss-120b` | einfra | 0.159 | 0.808 | 4.79 | 1.000 | 0.000 | 40/40 | 40 |
+| `kimi-k3` | einfra | 0.109 | 0.812 | 4.98 | 1.000 | 0.364 | 40/40 | 40 |
+| `mistral-medium-3.5` | einfra | 0.186 | 0.815 | 4.87 | 1.000 | 0.182 | 40/40 | 40 |
+| `qwen3.5-122b` | einfra | 0.140 | 0.815 | 4.76 | 1.000 | 0.273 | 40/40 | 40 |
+| `qwen3.5-int4` | einfra | 0.183 | 0.818 | 4.97 | 1.000 | 0.091 | 39/40 (1 unreached) | 39 |
+| `qwen3.8-27b` | einfra | 0.186 | 0.819 | 4.95 | 1.000 | 0.273 | 40/40 | 40 |
 
-*No column ranks this: they measure different things and the source paper found they disagree. Ordered instead by how many systems beat each one outright on every column under both judges — 11 places for 16 systems, and rows sharing a place are ones the comparison does not separate.*
+*Not ordered: no column ranks this track, and the comparison that could order it — at least as good on every column under both judges — has not been tested. Rows are alphabetical; read each column on its own.*
 - **ROUGE-L** (0-1) — Longest-common-subsequence overlap with the expert note, F-measure. Rewards using the same words in the same order. Not the source paper's ROUGE-L and not comparable with their published table. Theirs compares the whole rendered note, which puts our own field labels and every Nil the expert wrote on both sides -- a note where the model wrote nothing at all scores 0.379 that way, above most real notes. This compares the field values of the sections the expert answered, where the same empty note scores 0.000, and every model's figure fell by about a third. It also cannot tell a good paraphrase from a wrong answer, and the source paper found it disagrees with what clinicians preferred.
 - **BERTScore** (0-1) — Embedding similarity to the expert note. Tolerates paraphrase. A fluent note about the wrong session still scores well.
 - **TRACE** (1-5) — Trustworthiness, relevance, accuracy, comprehensiveness and expression, each rated 1-5 by a judge and averaged. A re-implementation with no human anchor: the authors never published their ratings, so unlike the TN-Eval track this number is not calibrated against anybody.

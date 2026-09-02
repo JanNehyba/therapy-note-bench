@@ -317,11 +317,7 @@ function detailRow(row, table) {
   // stopped two columns short of its own row with the page background showing
   // through under Provider and Marks.
   const span = table.columns.length + 3 +
-    (coverageVaries(table) ? 1 : 0) + (table.has_words ? 1 : 0) +
-    // Band or Place. Counted here as one column either way, because the header
-    // and the body draw one either way: the last time this count missed a
-    // column the raised detail panel stopped short of its own row.
-    (table.groups || table.places ? 1 : 0);
+    (coverageVaries(table) ? 1 : 0) + (table.has_words ? 1 : 0) + (table.groups ? 1 : 0);
   return `<tr class="detail" hidden><td colspan="${span}">${parts.join('')}</td></tr>`;
 }
 
@@ -574,25 +570,20 @@ function renderTable(table, index) {
          <strong>${esc(tr(table.groups.measure))}</strong> over the
          ${table.groups.sessions} conversations every system here was scored on.`}${
          cutNote(table.groups.near_the_cut)}</p>`
-    // Three cases, and the sentence used to fit one of them. A table with a
+    // Two cases, and the sentence used to fit one of them. A table with a
     // ranking measure and no bootstrap has a gradient to read roughly. A table
-    // ordered by dominance has places, and how many of them there are is the
-    // result worth printing. A table with neither is alphabetical, and telling
-    // a reader to read *that* as roughly who is near the top is telling them to
-    // read the alphabet as merit.
+    // with no ranking measure is alphabetical, and telling a reader to read
+    // *that* as roughly who is near the top is telling them to read the
+    // alphabet as merit. What it is not told is "there is nothing to order
+    // them by": there is a comparison that could, and it has not been tested.
     : table.ranking_measure
       ? `<p class="note">${T`<strong>Which of these can be told apart has not been measured
            for this table.</strong> Read the order as roughly who is near the top and
            near the bottom, not as a ranking: two adjacent rows are not a result.`}</p>`
-      : table.ordered_by === 'dominance' && table.places
-        ? `<p class="note">${T`<strong>${table.places.n} places for ${table.places.of}
-             systems.</strong> Rows sharing a place are ones this comparison does not
-             separate, and the place is not a score: it counts how many systems beat this
-             one on every column at once, under both judges. Two rows one place apart are
-             a result; two rows sharing a place are not.`}</p>`
-        : `<p class="note">${T`<strong>These rows are in alphabetical order.</strong> The
-             columns measure different things and the source paper found they disagree, so
-             there is nothing to order them by — read each column on its own.`}</p>`;
+      : `<p class="note">${T`<strong>These rows are in alphabetical order.</strong> The
+           columns measure different things and the source paper found they disagree, and
+           the comparison that could order them &mdash; at least as good on every column
+           under both judges &mdash; has not been tested yet. Read each column on its own.`}</p>`;
 
   // Why *this* column orders the table, and not one of the other ten. Asked by
   // the first reader who looked: the page said which column ranks and never
@@ -822,16 +813,9 @@ function renderTable(table, index) {
 
     // The rank, not the row number. Systems the evidence cannot separate share
     // one, and the top of the table is a group rather than a winner.
-    // Two things can fill this column and they are one claim under two
-    // instruments: a Band from the paired bootstrap, or a Place from dominance.
-    // Neither is a row number, and both let several systems hold one -- the
-    // fact that disappears when the column is left out, because consecutive
-    // rows then read as consecutive ranks.
-    const rank = table.groups ? band[row.system_id] : row.place;
-    const rankCell = (table.groups || table.places)
-      ? `<td class="rank${rank === 1 ? ' top' : ''}">${rank || `<span class="dash" title="${
-          T`Not in the compared population, so this system holds no place here. Not a nought.`
-        }">—</span>`}</td>`
+    const rank = band[row.system_id];
+    const rankCell = table.groups
+      ? `<td class="rank${rank === 1 ? ' top' : ''}">${rank || '<span class="dash">—</span>'}</td>`
       : '';
     return `<tr class="system${rank === 1 ? ' first-group' : ''}"` +
       ` data-row="${index}-${position}" data-type="${row.system_type}"` +
@@ -856,9 +840,7 @@ function renderTable(table, index) {
         table.ranking_measure || ''}" data-descending="1">
         <thead><tr>${table.groups
           ? `<th scope="col" class="rank" title="${T`Band on ${esc(colLabel(table, table.ranking_measure))}: rows the paired bootstrap cannot separate share a band. It does not follow the sort -- sorting by another column reorders the rows, not what the bootstrap could separate.`}">${T`Band`}</th>`
-          : table.places
-            ? `<th scope="col" class="rank" title="${T`How many systems beat this one outright, fewest first: at least as good on every column and better on one, under both judges. Rows the comparison cannot separate share a place and the next place is skipped. It does not follow the sort.`}">${T`Place`}</th>`
-            : ''}<th scope="col" class="name" data-sort="label"><button type="button">${
+          : ''}<th scope="col" class="name" data-sort="label"><button type="button">${
             T`System`}</button></th>${head}${table.has_words
             ? `<th scope="col" data-sort="note_words" title="${T`Median words in this model’s notes. Completeness counts coverage, so a longer note covers more.`}"><button type="button">${T`Words`}</button></th>`
             : ''}${showCoverage

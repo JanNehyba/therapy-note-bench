@@ -169,15 +169,15 @@ RANKING_MEASURES: dict[str, str | None] = {
 #:
 #: Unranked tracks whose rows are ordered by dominance instead of by name.
 #:
-#: Listed rather than derived from `RANKING_MEASURES`. Deriving it would order
-#: any future unranked track by dominance the day it was added, with nobody
-#: having established that dominance says anything about that instrument --
-#: which is the decision this constant exists to make one track at a time.
-#:
-#: The ordering is judge-independent by construction -- dominance holds only
-#: where both judges agree -- so both of a track's tables draw the same order,
-#: and switching the judge does not move a row. That is the point of it.
-DOMINANCE_ORDERED: frozenset[str] = frozenset({results.TRACK_ICARE, results.TRACK_PDSQI})
+#: Empty. iCARE and PDSQI-9 were ordered this way for one day, 2026-09-01, and
+#: taken back off the same day: the relation the order was read from -- at
+#: least as good on every column under both judges -- had never been tested,
+#: and when it was, a substantial share of its edges did not survive resampling
+#: the conversations. The constant stays so the day an edges artefact exists
+#: the ordering has one place to be switched back on, from tested layers and
+#: with nothing breaking ties; an empty set is a truer statement of what is
+#: ordered by dominance today than a deleted one.
+DOMINANCE_ORDERED: frozenset[str] = frozenset()
 
 #: A track whose `RANKING_MEASURES` entry is None and which is missing here
 #: falls back to iCARE's sentence, which is how the wrong one got everywhere;
@@ -186,9 +186,10 @@ NOT_RANKED_REASONS: dict[str, str] = {
     results.TRACK_ICARE: (
         "<strong>No column ranks this track</strong>: its columns measure different "
         "things and the source paper found they disagree, and that disagreement is "
-        "the result. The rows are ordered by how many systems each one beats "
-        "outright &mdash; at least as good on every column under both judges and "
-        "better somewhere &mdash; which needs no weights and no common unit."
+        "the result. The rows are in alphabetical order until the comparison that "
+        "could order them &mdash; at least as good on every column under both "
+        "judges &mdash; has been tested; what is known about it is on the methods "
+        "page."
     ),
     results.TRACK_PDSQI: (
         "This track is deliberately <strong>not ranked</strong>: PDSQI-9's authors "
@@ -729,82 +730,7 @@ LICENCES = [
 ]
 
 
-def dominance_places(rows: list[Row], track: str) -> dict[str, tuple[int, int]]:
-    """{system: (systems that beat it outright, systems it beats)} for one track.
-
-    Empty when the comparison cannot be made -- one judge, a coverage-only
-    build, a track with no dominance -- and then nothing is ordered by it. A
-    comparison that was not made is not a comparison everybody drew level in.
-
-    Both halves are counts of the same relation, so neither introduces a weight:
-    being beaten by nobody is a stronger position than being beaten by one, and
-    among systems nobody beats, beating six is a stronger position than beating
-    none. What it does *not* say is that the sixth is better than the seventh;
-    systems equal on both counts share a place.
-    """
-    if track not in DOMINANCE_ORDERED or track not in COLUMNS:
-        return {}
-    found = concordance.compare(
-        rows,
-        track,
-        COLUMNS[track],
-        judge_measures=JUDGE_MEASURES.get(track),
-        ranking_measure=RANKING_MEASURES.get(track),
-    )
-    if found is None or not found.systems:
-        return {}
-    beaten = dict.fromkeys(found.systems, 0)
-    beats = dict.fromkeys(found.systems, 0)
-    for entry in found.dominance:
-        beats[entry.system] = len(entry.beats)
-        for loser in entry.beats:
-            if loser in beaten:
-                beaten[loser] += 1
-    return {system: (beaten[system], beats[system]) for system in found.systems}
-
-
-def _comparison_key(row: Row) -> str:
-    """What `concordance` calls this row.
-
-    It keys on the printed label and falls back to the id, so a lookup by id
-    misses every row whose label differs from it -- the therapist's note and
-    TN-Eval's two, which are drawn as "therapist-written (TN-Eval)" and with
-    the paper and the year. On `pdsqi-soap` that is three of nineteen rows, and
-    they would have been sorted as systems the comparison could not place.
-    """
-    return row.system_label or row.system_id
-
-
-def _place_order(counts: dict[str, tuple[int, int]], system: str) -> tuple[int, int]:
-    """Best first: beaten by fewest, then beating most.
-
-    The one place this is written. `_sort_key` orders the rows and this numbers
-    them, and when they disagreed the table drew the best system first and
-    called it eighth.
-    """
-    beaten, beats = counts[system]
-    return (beaten, -beats)
-
-
-def _places_from(counts: dict[str, tuple[int, int]]) -> dict[str, int]:
-    """Which place each system holds, with ties sharing one and skipping the next.
-
-    Standard competition ranking: two systems the comparison cannot separate are
-    both third and nobody is fourth. Drawing them as third and fourth would be
-    an order the evidence does not contain.
-    """
-    ordered = sorted(counts, key=lambda system: _place_order(counts, system))
-    places: dict[str, int] = {}
-    last, place = None, 0
-    for index, system in enumerate(ordered):
-        key = _place_order(counts, system)
-        if key != last:
-            place, last = index + 1, key
-        places[system] = place
-    return places
-
-
-def _sort_key(row: Row, track: str, counts: dict[str, tuple[int, int]] | None = None):
+def _sort_key(row: Row, track: str):
     """Best first on the track's leading metric; unscored and unmeasured last.
 
     A track whose `RANKING_MEASURES` entry is None declines to be ranked -- the
@@ -821,18 +747,10 @@ def _sort_key(row: Row, track: str, counts: dict[str, tuple[int, int]] | None = 
         return (2, 0.0, 0.0, row.system_id)
     leading = RANKING_MEASURES.get(track)
     if leading is None:
-        if counts:
-            found = counts.get(_comparison_key(row))
-            # A row the comparison never placed does not sort as the best of
-            # them, and does not sort as the worst either. It goes after every
-            # system the evidence placed and before the unscored, where the
-            # "Beats outright" column already draws it a dash reading "not in
-            # the compared population". Sorting it to the top on a count of
-            # zero would publish an absence as a perfect record.
-            if found is None:
-                return (1, 0.0, 0.0, row.system_id)
-            beaten, beats = _place_order(counts, _comparison_key(row))
-            return (0, float(beaten), float(beats), row.system_id)
+        # Alphabetical, and said to be, until the comparison that could order
+        # these rows has been tested. `DOMINANCE_ORDERED` is where that turns
+        # back on; the middle bucket is kept free for rows a tested comparison
+        # could not place, so the shape of the key does not change again.
         return (0, 0.0, 0.0, row.system_id)
     value = row.metrics.headline.get(leading)
     if value is None:
@@ -1413,14 +1331,6 @@ def build(
         for entry in (roster or {}).get("withdrawn", [])
     }
     groups, superseded = _current_groups(results.comparable_groups(current))
-    # Before the rows are sorted, because the order is read off it. Computed
-    # from the same population the tables draw and the concordance panel
-    # measures, so the column a reader checks the order against and the order
-    # itself cannot come apart.
-    drawn = [row for group in groups.values() for row in group]
-    counts_by_track = {
-        track: dominance_places(drawn, track) for track in {row.track for row in drawn}
-    }
     newest_harness = max(
         (row.harness_version for group in groups.values() for row in group), default=""
     )
@@ -1433,16 +1343,10 @@ def build(
         track = versions["track"]
         if track not in COLUMNS:
             continue
-        counts = counts_by_track.get(track) or {}
-        places = _places_from(counts)
         rendered = [
-            _render_row(row, withdrawn=withdrawn, place=places.get(_comparison_key(row)))
-            for row in sorted(group, key=lambda r: _sort_key(r, track, counts))
+            _render_row(row, withdrawn=withdrawn)
+            for row in sorted(group, key=lambda r: _sort_key(r, track))
         ]
-        # Whether *this* table is in that comparison, not whether the track is.
-        # A coverage-only table -- one row, unjudged, no place -- was published
-        # with "11 places for 16 systems" over it.
-        ordered = bool(places) and any(row["place"] is not None for row in rendered)
         tables.append(
             {
                 "track": track,
@@ -1488,16 +1392,6 @@ def build(
                     for key_, digits in COLUMNS[track]
                 ],
                 "ranking_measure": RANKING_MEASURES.get(track),
-                # How these rows are ordered when no column ranks them. `None`
-                # where nothing does, and then the page keeps saying so: an
-                # ordering that could not be computed is not an ordering.
-                "ordered_by": "dominance" if ordered else None,
-                # How many places the evidence actually contains, and for how
-                # many systems. Ten places for sixteen models is the finding;
-                # sixteen rows in some order is what it looks like without it.
-                "places": (
-                    {"n": len(set(places.values())), "of": len(places)} if ordered else None
-                ),
                 "detail_label": DETAIL_LABELS.get(track, "Rubric criteria"),
                 # Only where there is one. `.get(track, <iCARE's>)` gave every
                 # ranked table iCARE's sentence -- "this track is deliberately
@@ -1703,17 +1597,9 @@ def _judges_own_family(row: Row) -> str:
     return family if family and family_of(row.system_id) == family else ""
 
 
-def _render_row(
-    row: Row,
-    *,
-    withdrawn: dict[tuple[str, str], str] | None = None,
-    place: int | None = None,
-) -> dict:
+def _render_row(row: Row, *, withdrawn: dict[tuple[str, str], str] | None = None) -> dict:
     return {
         "system_id": row.system_id,
-        # Where dominance puts it, ties sharing a place. `None` on a table with
-        # a ranking measure, and on any row the comparison could not place.
-        "place": place,
         # The day an endpoint was asked for this model and did not offer it.
         # Absent for every row where that has not happened, which is not the
         # same as a row that was checked and is fine: `roster` being absent
@@ -1840,11 +1726,7 @@ def render_readme_section(data: dict) -> str:
 
         columns = table["columns"]
         multi_provider = len({row["provider"] for row in models}) > 1
-        # Where dominance orders the table, the places lead it. Without the
-        # column the order is still there and the ties are not, so three systems
-        # holding third place read as third, fourth and fifth.
-        placed = bool(table.get("places"))
-        header = (["Place"] if placed else []) + ["Model"]
+        header = ["Model"]
         if multi_provider:
             header.append("Provider")
         # The range goes in the heading. This table puts a 0-1 fraction beside a
@@ -1863,8 +1745,7 @@ def render_readme_section(data: dict) -> str:
             "|" + "---|" * len(header),
         ]
         for row in models:
-            cells = [] if not placed else [str(row["place"]) if row["place"] else "—"]
-            cells.append(f"`{row['label']}`")
+            cells = [f"`{row['label']}`"]
             if multi_provider:
                 cells.append(row["provider"])
             for column in columns:
@@ -1894,21 +1775,15 @@ def render_readme_section(data: dict) -> str:
         lines.append("")
         if table["ranking_measure"]:
             caveat = f"*Ordered by **{_ranking_label(table)}**. Every other column is context.*"
-        elif table.get("places"):
-            # No column ranks it and the rows are ordered anyway. Both halves
-            # have to be said: the first is why there is no ranking column, the
-            # second is why the rows are not in alphabetical order.
-            caveat = (
-                "*No column ranks this: they measure different things and the source paper "
-                "found they disagree. Ordered instead by how many systems beat each one "
-                f"outright on every column under both judges — {table['places']['n']} "
-                f"places for {table['places']['of']} systems, and rows sharing a place are "
-                "ones the comparison does not separate.*"
-            )
         else:
+            # Alphabetical, and why. Not "nothing to order them by": there is a
+            # comparison that could -- at least as good on every column under
+            # both judges -- and it has not been tested, which is a different
+            # sentence and the true one.
             caveat = (
-                "*Deliberately not ranked: these columns measure different things and "
-                "the source paper found they disagree.*"
+                "*Not ordered: no column ranks this track, and the comparison that could "
+                "order it — at least as good on every column under both judges — has not "
+                "been tested. Rows are alphabetical; read each column on its own.*"
             )
         lines.append(caveat)
         # A caveat every column of one instrument shares is that instrument's,
