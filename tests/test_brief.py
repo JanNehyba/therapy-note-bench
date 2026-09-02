@@ -34,6 +34,7 @@ sentences. They are computed now, and each has a test below.
 
 from __future__ import annotations
 
+import collections
 import html
 import json
 import re
@@ -601,3 +602,108 @@ def test_the_claim_about_the_less_repeatable_judge_matches_the_calibration(
         assert claim not in prose, (
             "the two orderings no longer agree, so the sentence claiming they do is backwards"
         )
+
+
+# --- the second instrument, counted the way the first one is ------------------
+
+
+@pytest.fixture(scope="module")
+def pdsqi(data) -> dict[str, dict]:
+    """The largest tie in every PDSQI column, per judge, recomputed here.
+
+    Counted from the drawn rows rather than through `brief.flat_columns`: a
+    test that builds its expectation with the code it checks agrees with it by
+    construction, which this file has been caught doing once already.
+    """
+    if ("pdsqi-soap", figures.JUDGE_A) not in data.tables:
+        pytest.skip("no PDSQI table in this payload")
+
+    found = {}
+    for judge in (figures.JUDGE_A, figures.JUDGE_B):
+        rows = data.rows("pdsqi-soap", judge)
+        columns = {}
+        for measure in sorted(rows[0].get("headline", {})):
+            values = [
+                row["headline"][measure] for row in rows if row["headline"].get(measure) is not None
+            ]
+            if not values:
+                continue
+            top = collections.Counter(values).most_common(1)[0]
+            columns[measure] = {"value": top[0], "tie": top[1], "scored": len(values)}
+        found[judge] = columns
+    return found
+
+
+def _flat(columns: dict[str, dict]) -> dict[str, dict]:
+    """The columns where more than half the systems print one number.
+
+    The same line `tnb.scoring.concordance.MeasureAgreement.rankable` draws:
+    below it, a measure cannot order the systems whatever the remainder does.
+    """
+    return {name: entry for name, entry in columns.items() if entry["tie"] * 2 > entry["scored"]}
+
+
+def test_the_flat_pdsqi_columns_are_named_and_counted_from_the_payload(prose, pdsqi):
+    """Four of PDSQI-9's eight columns give one number to twenty of twenty-one
+    systems. The document introduced this instrument as the wider one -- "and it
+    is run over the same notes here, reaching eight" -- and never said how many
+    of the eight tell any two systems apart.
+    """
+    worst = max(pdsqi, key=lambda judge: len(_flat(pdsqi[judge])))
+    flat = _flat(pdsqi[worst])
+    if not flat:
+        pytest.skip("no flat PDSQI column under either judge")
+
+    columns = len(pdsqi[worst])
+    assert (
+        f"{brief.spelled(len(flat)).capitalize()} of the second instrument&rsquo;s "
+        f"{brief.spelled(columns)} columns separate nobody" in " ".join(prose.split())
+    )
+    assert f"the answer under <code>{worst}</code> is {brief.spelled(columns - len(flat))}" in prose
+    for name in flat:
+        assert f"<em>{name}</em>" in prose, f"{name} is flat and the document does not name it"
+
+
+def test_the_size_of_the_tie_is_the_published_one(prose, pdsqi):
+    """ "One number to 20 of the 21 systems" -- both halves from the table."""
+    worst = max(pdsqi, key=lambda judge: len(_flat(pdsqi[judge])))
+    flat = _flat(pdsqi[worst])
+    if not flat:
+        pytest.skip("no flat PDSQI column under either judge")
+    widest = max(flat.values(), key=lambda entry: (entry["tie"], entry["scored"]))
+    assert f"one number to {widest['tie']} of the {widest['scored']} systems" in prose
+
+
+def test_the_shared_value_is_stated_where_the_columns_share_one(prose, pdsqi):
+    """All four at 5.00, which is the top of the scale and the whole point.
+
+    A column at the ceiling is a thing a note can fail, not a way to choose
+    between notes -- the same trap the front page states for `accurate` and
+    `succinct` on an empty note.
+    """
+    worst = max(pdsqi, key=lambda judge: len(_flat(pdsqi[judge])))
+    flat = _flat(pdsqi[worst])
+    values = {entry["value"] for entry in flat.values()}
+    if len(values) != 1:
+        pytest.skip("the flat columns no longer share one value")
+    assert f"at {values.pop():.2f}, the top of the scale" in prose
+
+
+def test_the_other_judge_is_compared_rather_than_assumed(prose, pdsqi):
+    """Three of the four are flat under one judge only.
+
+    Which makes the count a fact about the pair, and a sentence that said "the
+    instrument is saturated" would be wrong about the second judge's table.
+    """
+    worst = max(pdsqi, key=lambda judge: len(_flat(pdsqi[judge])))
+    other = next(judge for judge in pdsqi if judge != worst)
+    both = sorted(set(_flat(pdsqi[worst])) & set(_flat(pdsqi[other])))
+    if not _flat(pdsqi[worst]):
+        pytest.skip("no flat PDSQI column under either judge")
+
+    if both:
+        assert f"Under <code>{other}</code> {brief.spelled(len(both))} of them" in prose
+        for name in both:
+            assert f"<em>{name}</em>" in prose
+    else:
+        assert f"Under <code>{other}</code> none of them is flat" in prose

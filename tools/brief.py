@@ -146,6 +146,44 @@ def corpus_profile() -> dict:
     return json.loads((DOCS / "corpus-profile.json").read_text(encoding="utf-8"))
 
 
+def flat_columns(
+    data: Data, track: str, judge: str
+) -> dict[str, tuple[int, int, float, int | None]]:
+    """Columns on which most systems print the same number, by judge.
+
+    "Most" is the line `tnb.scoring.concordance` already draws: a measure where
+    more than half the systems are indistinguishable cannot order them,
+    whatever the rest do. Returns the size of the largest tie, how many systems
+    were scored, the value they share, and the place that value is given --
+    because "twenty systems share first place" is a different sentence from
+    "twenty share last", and which is true is not decided by the size of the
+    tie.
+    """
+    rows = data.rows(track, judge)
+    if not rows:
+        return {}
+    found = {}
+    for measure in sorted(rows[0].get("headline", {})):
+        values = [
+            row["headline"][measure] for row in rows if row["headline"].get(measure) is not None
+        ]
+        if not values:
+            continue
+        value, count = Counter(values).most_common(1)[0]
+        if count * 2 <= len(values):
+            continue
+        place = next(
+            (
+                row["places"].get(measure)
+                for row in rows
+                if row["headline"].get(measure) == value and row.get("places")
+            ),
+            None,
+        )
+        found[measure] = (count, len(values), value, place)
+    return found
+
+
 def repeatability() -> dict | None:
     """`docs/repeatability.json` -- the same questions asked of the same judges twice.
 
@@ -412,7 +450,9 @@ def front(data: Data) -> str:
      <em>succinct</em> against the therapist&rsquo;s 4.20 and 2.92, because a note that
      asserts nothing has nothing untrue in it and says what it says in the fewest
      possible words. Read those columns as things a note can fail, never as things it
-     can win. <a href="limitations.md">What a result cannot claim</a> has the table.</p>
+     can win &mdash; and how many of the eight still separate any two systems is counted
+     further down, because the answer is not eight.
+     <a href="limitations.md">What a result cannot claim</a> has the table.</p>
 """
 
 
@@ -908,6 +948,71 @@ def what_it_means(data: Data) -> str:
 """
 
 
+def pdsqi_panel(flat: dict[str, dict], columns: list[str]) -> str:
+    """The second instrument, counted the way the first one is.
+
+    A benchmark does not saturate evenly, and neither does an instrument
+    brought in to fix one. Four of PDSQI-9's eight columns give the same number
+    to twenty of twenty-one systems under one judge -- all four at the top of
+    the scale -- so no ordering exists on them for the table to be built from,
+    and the order it prints is decided by the other four. Under the second
+    judge one of those four is flat and three are not, which makes this a fact
+    about the pair rather than about the instrument alone.
+
+    Left out rather than guessed at when the payload holds no PDSQI table.
+    """
+    worst, second = (JUDGE_A, JUDGE_B)
+    if not columns or not flat.get(worst) and not flat.get(second):
+        return ""
+    if len(flat.get(second, {})) > len(flat.get(worst, {})):
+        worst, second = second, worst
+
+    heaviest = flat[worst]
+    if not heaviest:
+        return ""
+    shared = {value for _count, _total, value, _place in heaviest.values()}
+    tie, scored, value, _place = max(heaviest.values())
+    places = {place for *_rest, place in heaviest.values()}
+    ranked = "first place" if places == {1} else "one place"
+    at_the_top = (
+        f"all {spelled(len(heaviest))} at {value:.2f}, the top of the scale"
+        if len(shared) == 1 and value >= 5.0
+        else f"the widest of them giving {value:.2f} to {tie} of them"
+    )
+    names = ", ".join(f"<em>{esc(name)}</em>" for name in sorted(heaviest))
+    also = sorted(set(heaviest) & set(flat.get(second, {})))
+    overlap = (
+        f"Under <code>{esc(second)}</code> {spelled(len(also))} of them "
+        f"{'is' if len(also) == 1 else 'are'} flat too &mdash; "
+        + ", ".join(f"<em>{esc(name)}</em>" for name in also)
+        + f" &mdash; and the other {spelled(len(heaviest) - len(also))} separate systems "
+        "normally."
+        if also
+        else f"Under <code>{esc(second)}</code> none of them is flat."
+    )
+
+    return f"""
+  <h3>{spelled(len(heaviest)).capitalize()} of the second instrument&rsquo;s
+     {spelled(len(columns))} columns separate nobody</h3>
+  <p>PDSQI-9 is on this page because the rubric that anchors the leaderboard reaches two
+     of the nine things a clinician means by note quality, and PDSQI-9 reaches eight. How
+     many of those eight tell the systems apart is a different question, and the answer
+     under <code>{esc(worst)}</code> is {spelled(len(columns) - len(heaviest))} of
+     {spelled(len(columns))}. The other {spelled(len(heaviest))} &mdash; {names} &mdash;
+     give one number to {tie} of the {scored} systems, {at_the_top}.</p>
+  <p>A column like that holds no ordering for a table to be built from: {tie} systems
+     share {ranked} on it, so it adds the same number to almost every row and the
+     order the table prints is decided by the columns that still vary. {overlap} Which
+     makes the count a fact about this pair of judges rather than about the instrument,
+     and one more reason the two tables are never averaged.</p>
+  <p class="note"><strong>What to do with that.</strong> Before trusting a mean over an
+     instrument&rsquo;s columns, count how many of them still separate anything. This one
+     was introduced on this page as the wider instrument and it is; wider is not the same
+     as sharper, and a column at the ceiling is a thing a note can fail rather than a way
+     to choose between notes.</p>
+"""
+
+
 def how_much_room_is_left(data: Data) -> str:
     judge_a = JUDGE_A
     """Is the benchmark still measuring anything, and for how much longer.
@@ -961,6 +1066,16 @@ def how_much_room_is_left(data: Data) -> str:
         if row["system_type"] == "reference-model"
     ]
     best = max(current)
+
+    # PDSQI-9: how many of its columns still tell the systems apart, and under
+    # which judge. The page introduces this instrument as the answer to the
+    # rubric reaching two of nine attributes -- "and it is run over the same
+    # notes here, reaching eight" -- and said nothing about how many of the
+    # eight separate anybody.
+    flat = {judge: flat_columns(data, "pdsqi-soap", judge) for judge in (JUDGE_A, JUDGE_B)}
+    pdsqi_rows = data.rows("pdsqi-soap", JUDGE_A)
+    pdsqi_columns = sorted(pdsqi_rows[0].get("headline", {})) if pdsqi_rows else []
+    pdsqi = pdsqi_panel(flat, pdsqi_columns)
 
     trace = {}
     for judge in (JUDGE_A, JUDGE_B):
@@ -1043,6 +1158,7 @@ def how_much_room_is_left(data: Data) -> str:
      the reachable part of this rubric is exhausted &mdash; which is a reason to record
      what the corpus and the protocol are now, not a reason to trust the ranking more.</p>
 
+{pdsqi}
   <h3>The other track&rsquo;s judge-scored measure is nearly out of room</h3>
   <p>TRACE is a five-dimension framework from the iCARE paper, rated 1 to 5. Its
      authors published the dimension names and never a prompt, so this column is a
