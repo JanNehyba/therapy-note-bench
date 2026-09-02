@@ -79,6 +79,92 @@ def pct(part: int, whole: int) -> str:
     return f"{part / whole:.0%}" if whole else "—"
 
 
+#: Numbers this document spells out rather than prints. A sentence opening with
+#: "18 models wrote" reads as a list item, so the lede spells it -- and the word
+#: was typed, and said "Sixteen" for the week after the payload went to
+#: eighteen. Spelled from the count instead, with digits as the fallback for
+#: anything this table does not reach.
+WORDS = {
+    0: "no",
+    1: "one",
+    2: "two",
+    3: "three",
+    4: "four",
+    5: "five",
+    6: "six",
+    7: "seven",
+    8: "eight",
+    9: "nine",
+    10: "ten",
+    11: "eleven",
+    12: "twelve",
+    13: "thirteen",
+    14: "fourteen",
+    15: "fifteen",
+    16: "sixteen",
+    17: "seventeen",
+    18: "eighteen",
+    19: "nineteen",
+    20: "twenty",
+    21: "twenty-one",
+    22: "twenty-two",
+    23: "twenty-three",
+    24: "twenty-four",
+    30: "thirty",
+    31: "thirty-one",
+    32: "thirty-two",
+    33: "thirty-three",
+    34: "thirty-four",
+    35: "thirty-five",
+    36: "thirty-six",
+    40: "forty",
+    50: "fifty",
+}
+
+
+def spelled(n: int) -> str:
+    return WORDS.get(n, str(n))
+
+
+#: How a sentence names a vendor whose slug is matched against model ids.
+#: `tnb.scoring.preference.FAMILY_NAMES` says the same thing for the CLI; this
+#: file reads the payload and never imports the package that wrote it.
+FAMILY_WORDS = {"google": "Gemini", "openai": "GPT"}
+
+
+def family_word(family: str) -> str:
+    return FAMILY_WORDS.get(family, family)
+
+
+def corpus_profile() -> dict:
+    """`docs/corpus-profile.json` -- what the corpora contain, not what a model did.
+
+    Read here as well as in `what_was_measured`, because the section about the
+    two time-bearing fields is a statement about how often the experts
+    themselves answered them, and that denominator lives in this file.
+    """
+    return json.loads((DOCS / "corpus-profile.json").read_text(encoding="utf-8"))
+
+
+def temporal_fields(corpus: dict) -> tuple[int, int]:
+    """How many sessions the experts answered the looking-back and looking-forward
+    sections on.
+
+    In section order, which is the same assumption `tnb.scoring.icare` makes
+    when it unpacks `ihope.TEMPORAL_SECTIONS` into `_LOOKS_BACK,
+    _LOOKS_FORWARD`. Both counts were typed into the prose as words -- "all
+    thirty-four sessions", "the eleven sessions" -- and they are the
+    denominators every temporal figure on this page is a fraction of.
+    """
+    marked = sorted(
+        (section for section in corpus.get("sections", []) if section.get("temporal")),
+        key=lambda section: section["number"],
+    )
+    if len(marked) != 2:
+        return 0, 0
+    return marked[0]["filled"], marked[1]["filled"]
+
+
 CSS = """
   @page { size: A4; margin: 17mm 15mm 15mm; }
   @page :first { margin-top: 15mm; }
@@ -214,9 +300,27 @@ def front(data: Data) -> str:
     ra, rb = ranked(comp_a), ranked(comp_b)
     moved = [n for n in ra if ra[n] != rb.get(n)]
 
+    # The looking-forward column, end to end. The card said "0.00-0.55" from
+    # the day it was written; two systems joined the payload, one of them
+    # answered the section in eight sessions of the eleven, and the headline a
+    # reader takes away from page one was a quarter of the scale short. The two
+    # temporal columns are computed rather than judged, so either judge's table
+    # carries the same values and JUDGE_A is not a choice about the instrument.
+    forward = [
+        row["headline"]["temporal_next"]
+        for row in data.rows("icare", JUDGE_A)
+        if row["headline"].get("temporal_next") is not None
+    ]
+    gap = f"{min(forward):.2f}–{max(forward):.2f}" if forward else "not recorded"
+    # Spelled into a local, not into the template: the formatter breaks a call
+    # inside a replacement field across three lines and the sentence stops
+    # being readable in the file it is written in.
+    how_many = spelled(len(models)).capitalize()
+    _, forward_asked = temporal_fields(corpus_profile())
+
     return f"""
   <h1>What a leaderboard of clinical-note models can and cannot tell you</h1>
-  <p class="lede">Sixteen models wrote psychotherapy session notes on two published
+  <p class="lede">{how_many} models wrote psychotherapy session notes on two published
      protocols, and two independent LLM judges scored every one of them. This is what
      the exercise says about choosing a model &mdash; and about reading anybody's
      leaderboard, including this one.</p>
@@ -256,12 +360,12 @@ def front(data: Data) -> str:
     }
     {
         claim(
-            "0.00–0.55",
+            gap,
             "the production gap",
             "Every model writes something where the expert wrote about the last session. "
-            "Almost none writes anything about the next one, on the eleven sessions where "
-            "an expert did. Both columns check that a field was answered, not that the "
-            "answer is right.",
+            f"Almost none writes anything about the next one, on the {spelled(forward_asked)} "
+            "sessions where an expert did. Both columns check that a field was answered, "
+            "not that the answer is right.",
         )
     }
   </div>
@@ -305,7 +409,7 @@ def figure_block(name: str, caption: str, *, page_break: bool = False) -> str:
 
 
 def what_was_measured(data: Data) -> str:
-    corpus = json.loads((DOCS / "corpus-profile.json").read_text(encoding="utf-8"))
+    corpus = corpus_profile()
     # Per corpus, not the top-level `sessions`, which is the iCARE count alone.
     datasets = corpus.get("datasets") or {}
     sessions = {name: entry.get("sessions") for name, entry in datasets.items()}
@@ -504,6 +608,69 @@ def what_it_means(data: Data) -> str:
         else "session count not recorded"
     )
 
+    # The looking-back and looking-forward columns, counted. Every number in
+    # this section was a word typed into the prose -- "fourteen of sixteen on
+    # all thirty-four sessions ... the other two on thirty-three" -- and two of
+    # the three were wrong within a week of two systems joining the payload,
+    # while the fourth, "just over half", described a system that now manages
+    # eight sessions of eleven.
+    asked_back, asked_forward = temporal_fields(corpus_profile())
+    icare = [
+        row
+        for row in data.rows("icare", JUDGE_A)
+        if row["headline"].get("temporal_past") is not None
+    ]
+    back = [row["headline"]["temporal_past"] for row in icare]
+    complete = [value for value in back if value >= 1.0]
+    partial = sorted({round(value * asked_back) for value in back if value < 1.0})
+    looking_back = (
+        f"{spelled(len(complete))} of {spelled(len(icare))} on all {spelled(asked_back)} "
+        "sessions the experts answered"
+    )
+    if partial:
+        looking_back += f", the other {spelled(len(icare) - len(complete))} on " + " and ".join(
+            spelled(n) for n in reversed(partial)
+        )
+    forward_best = max(
+        (row["headline"]["temporal_next"] for row in icare if row["headline"].get("temporal_next")),
+        default=0.0,
+    )
+    looking_forward = (
+        f"{spelled(round(forward_best * asked_forward))} of the {spelled(asked_forward)} "
+        "sessions where an expert did"
+    )
+
+    # How much of each effect one model was carrying. Typed until now, from a
+    # terminal run nobody could repeat: it said the GPT figure falls "from
+    # +0.027 to +0.018" while the table two paragraphs above printed +0.017,
+    # and the Gemini pair was a payload old. `docs/preference.json` carries the
+    # drop and which system it is, so the sentence cannot outlive either.
+    dropped = []
+    for entry in (effects.get(JUDGE_A), effects.get(JUDGE_B)):
+        lean = (entry or {}).get("leans_on")
+        if not entry or not lean:
+            continue
+        note = f" ({oss_note})" if lean["system"] == "gpt-oss-120b" else ""
+        dropped.append(
+            f"dropping <code>{esc(lean['system'])}</code>{note} takes the "
+            f"{family_word(entry['family'])} figure from {signed(entry['estimate'])} to "
+            f"{signed(lean['estimate'])}"
+        )
+    if dropped:
+        leans = (
+            "Each effect leans on one system more than the others, and they are the two "
+            "that a definition change moved into these groups on 2026-08-26: "
+            + ", and ".join(dropped)
+            + "."
+        )
+    else:
+        # Two models a vendor and nothing to drop: the panel says so rather
+        # than leaving the reader with an estimate whose width is unstated.
+        leans = (
+            "This payload does not say how much of either effect rests on a single "
+            "model, so read both as means over three or four."
+        )
+
     # Named rather than dropped when it is missing. A sentence that says two
     # judges "do not" differ, with the evidence for it silently absent, is the
     # shape this repository keeps finding and refusing.
@@ -596,20 +763,14 @@ def what_it_means(data: Data) -> str:
      this check. Two judges from two vendors is the cheapest way to have it; one judge
      cannot measure its own bias at all, and a caveat in the methods section is not a
      measurement.</p>
-  <p class="note">Each effect leans on one system more than the others, and they are
-     the two that a definition change moved into these groups on 2026-08-26: dropping
-     <code>gemma4</code> takes the Gemini figure from +0.018 to +0.008, and dropping
-     <code>gpt-oss-120b</code> ({oss_note}) takes the GPT one from +0.027 to +0.018.
-     Nothing here
+  <p class="note">{leans} Nothing here
      tests whether the two judges differ from each other; {judges_differ}.</p>
 
   <h2 class="page-break">Three: nothing here can tell you what happens next</h2>
   <p>The iCARE form has two time-bearing sections: what happened at the previous
      session, and what happens at the next one. Every model reliably fills the first
-     &mdash; fourteen of sixteen on all thirty-four sessions the experts answered, the
-     other two on thirty-three. Almost none
-     fills the second, and the best of them manages it in just over half the sessions
-     where an expert did.</p>
+     &mdash; {looking_back}. Almost none
+     fills the second, and the best of them manages it in {looking_forward}.</p>
   {
         figure_block(
             "temporal.svg",
@@ -688,6 +849,31 @@ def how_much_room_is_left(data: Data) -> str:
         ]
         trace[judge] = (min(values), max(values))
 
+    # How far the two judges agree about TRACE, and over how many systems. Both
+    # were typed -- "+0.83 and place 11 of 16 systems differently" -- and both
+    # went stale in the same week: the payload's own concordance says +0.77
+    # over 18. It is computed there, once, for every page that quotes it.
+    agreement = next(
+        (
+            measure
+            for measure in data.concordance.get("icare", {}).get("measures", [])
+            if measure.get("measure") == "trace" and measure.get("rankable")
+        ),
+        None,
+    )
+    if agreement:
+        trace_agreement = (
+            f"The two judges&rsquo; orderings correlate at {agreement['rho']:+.2f} and place "
+            f"{agreement['moved']} of {agreement['n_systems']} systems differently anyway."
+        )
+    else:
+        # An unrankable measure is one most systems share a value on, and no
+        # correlation over it means anything. Saying so beats printing one.
+        trace_agreement = (
+            "The payload gives no agreement figure for TRACE: too many systems share "
+            "one value there for an ordering to exist for the judges to agree about."
+        )
+
     rows = "".join(
         f"<tr><td>{label}</td><td class='num'>{count} of {total}</td><td>{meaning}</td></tr>"
         for label, count, meaning in (
@@ -743,12 +929,12 @@ def how_much_room_is_left(data: Data) -> str:
      land between {trace[JUDGE_A][0]:.2f} and {trace[JUDGE_A][1]:.2f} &mdash;
      {(trace[JUDGE_A][1] - trace[JUDGE_A][0]) / 4:.0%} of the scale. Under the other,
      {trace[JUDGE_B][0]:.2f} to {trace[JUDGE_B][1]:.2f}, which is
-     {(trace[JUDGE_B][1] - trace[JUDGE_B][0]) / 4:.0%}. The two judges&rsquo; orderings
-     correlate at +0.83 and place 11 of 16 systems differently anyway.</p>
+     {(trace[JUDGE_B][1] - trace[JUDGE_B][0]) / 4:.0%}. {trace_agreement}</p>
   <p><strong>What to do with that.</strong> A measure where every model scores within a
      few percent of every other is not evidence that the models are equally good; it is
      evidence that the measure is running out. That the two judges disagree about how
-     much room is left &mdash; 6% against 13% &mdash; is a fact about the judges, and it
+     much room is left &mdash; {(trace[JUDGE_A][1] - trace[JUDGE_A][0]) / 4:.0%} against
+     {(trace[JUDGE_B][1] - trace[JUDGE_B][0]) / 4:.0%} &mdash; is a fact about the judges, and it
      is why one judge is not enough to notice this happening. If you are building an evaluation, the
      per-criterion breakdown is the thing to watch &mdash; an aggregate stays healthy
      for a long time after the parts of it have died.</p>

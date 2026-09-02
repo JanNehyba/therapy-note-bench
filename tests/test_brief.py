@@ -19,6 +19,17 @@ So each figure the prose states is recomputed here from the published payload.
 The registry below is the list the briefing now promises: **a sentence this file
 does not name is a sentence nobody is checking**, and that is said out loud
 rather than left for a reader to discover.
+
+Six more sentences joined it on 2026-09-03, and they are why the promise is
+worth making. Two systems joined the payload and every hand-typed count in the
+document stayed where it was: the lede said sixteen models where eighteen had
+written notes; the front-page card sized the production gap at 0.00-0.55 where
+the column now runs to 0.73; the looking-back sentence said "fourteen of
+sixteen"; the TRACE paragraph quoted an agreement of +0.83 over 16 systems
+where the payload own concordance says +0.77 over 18; and the drop-one sentence
+quoted a GPT effect of +0.027 that contradicted the table two paragraphs above
+it. Every test in this file passed throughout, because none of them named these
+sentences. They are computed now, and each has a test below.
 """
 
 from __future__ import annotations
@@ -331,3 +342,155 @@ def test_the_document_says_when_its_numbers_were_scored(prose, data):
         f"the page does not carry its scoring date ({data.scored}), so a reader "
         "holding the page and the PDF cannot tell which is newer"
     )
+
+
+# --- the counts that grew when the payload did --------------------------------
+#
+# Every one of these was a word or a number typed beside the prose it belonged
+# to, and every one of them was still there a week after the payload it
+# described had changed underneath it.
+
+
+def test_the_lede_counts_the_models_it_says_wrote_the_notes(prose, data):
+    """ "Sixteen models wrote psychotherapy session notes." Eighteen did.
+
+    The first sentence of the document, and the first sentence of the PDF that
+    leaves this repository. It was written when sixteen was right and had no
+    way of hearing that two more had been scored.
+    """
+    models = [row for row in data.rows(TRACK, figures.JUDGE_A) if row.get("system_type") == "model"]
+    assert f"{brief.spelled(len(models)).capitalize()} models wrote" in prose
+
+
+def test_the_production_gap_card_spans_the_column_it_names(prose, data):
+    """The headline a reader takes from page one, against the column itself.
+
+    It said 0.00-0.55 while the best system answered the looking-forward
+    section in eight sessions of eleven, which is 0.73 -- a third of the
+    published range missing from the number the card exists to give.
+    """
+    forward = [
+        row["headline"]["temporal_next"]
+        for row in data.rows("icare", figures.JUDGE_A)
+        if row["headline"].get("temporal_next") is not None
+    ]
+    assert forward, "no looking-forward column in this payload"
+    assert f"{min(forward):.2f}–{max(forward):.2f}" in prose
+
+
+def test_both_temporal_denominators_come_from_the_corpus_profile(prose):
+    """How often the experts themselves answered each of the two sections.
+
+    Neither number is about a model: they are what the corpus contains, and
+    every temporal figure on the page is a fraction of them.
+    """
+    back, forward = brief.temporal_fields(brief.corpus_profile())
+    assert back and forward, "corpus-profile.json no longer marks the two temporal sections"
+    assert f"all {brief.spelled(back)} sessions the experts answered" in prose
+    assert f"the {brief.spelled(forward)} sessions where an expert did" in prose
+    assert f"{brief.spelled(forward)} sessions where an expert did. Both columns" in prose
+
+
+def test_the_looking_back_sentence_counts_the_models_that_answered_every_session(prose, data):
+    """ "Fourteen of sixteen on all thirty-four sessions", when it was sixteen of eighteen.
+
+    Two of the three numbers in one clause went stale together, and the clause
+    is the evidence for the claim the section opens with -- that the
+    looking-back field is the one models do reliably fill.
+    """
+    back = [
+        row["headline"]["temporal_past"]
+        for row in data.rows("icare", figures.JUDGE_A)
+        if row["headline"].get("temporal_past") is not None
+    ]
+    assert back, "no looking-back column in this payload"
+    complete = [value for value in back if value >= 1.0]
+    assert f"{brief.spelled(len(complete))} of {brief.spelled(len(back))} on all" in prose
+
+
+def test_the_looking_forward_sentence_is_the_best_system_counted(prose, data):
+    """ "Just over half" described a system managing eight sessions of eleven."""
+    _, asked = brief.temporal_fields(brief.corpus_profile())
+    forward = [
+        row["headline"]["temporal_next"]
+        for row in data.rows("icare", figures.JUDGE_A)
+        if row["headline"].get("temporal_next")
+    ]
+    assert forward and asked, "no looking-forward column in this payload"
+    best = brief.spelled(round(max(forward) * asked))
+    assert f"manages it in {best} of the {brief.spelled(asked)} sessions" in prose
+    assert "just over half" not in prose, (
+        "a fraction in words, which cannot go stale visibly: the column it "
+        "described has moved twice"
+    )
+
+
+def test_the_trace_agreement_is_the_one_the_payload_computed(prose, data):
+    """ "+0.83 and place 11 of 16 systems differently", against +0.77 over 18.
+
+    The same two judges, the same measure, and a figure the payload has
+    computed for every page since the concordance was added. The brief quoted
+    its own, from a run two systems ago.
+    """
+    measure = next(
+        (
+            entry
+            for entry in data.concordance.get("icare", {}).get("measures", [])
+            if entry.get("measure") == "trace" and entry.get("rankable")
+        ),
+        None,
+    )
+    if not measure:
+        pytest.skip("this payload gives no rankable TRACE agreement")
+    assert (
+        f"correlate at {measure['rho']:+.2f} and place "
+        f"{measure['moved']} of {measure['n_systems']} systems differently" in prose
+    )
+
+
+def test_the_two_trace_ranges_are_stated_once_and_restated_from_the_same_numbers(prose, data):
+    """ "6% against 13%" was typed under the two percentages it repeats.
+
+    Correct when written and one payload from being wrong. The paragraph that
+    tells a reader the two judges disagree about how much room is left is the
+    one place the two numbers have to match.
+    """
+    shares = []
+    for judge in (figures.JUDGE_A, figures.JUDGE_B):
+        values = [
+            row["headline"]["trace"]
+            for row in data.rows("icare", judge)
+            if row["headline"].get("trace") is not None
+        ]
+        if not values:
+            pytest.skip("no TRACE column in this payload")
+        shares.append(f"{(max(values) - min(values)) / 4:.0%}")
+    assert f"{shares[0]} against {shares[1]}" in prose
+
+
+def test_the_drop_one_sentence_is_the_published_leave_one_out(prose, data):
+    """ "Takes the GPT one from +0.027 to +0.018", under a table printing +0.017.
+
+    The one stale number in this document that contradicted another number on
+    the same page. It was hand-computed in a terminal, and `docs/methodology.md`
+    -- recomputed over the current payload and edited alone -- had said +0.011
+    for a week. `docs/preference.json` carries the leave-one-out now.
+    """
+    effects = {entry["judge"]: entry for entry in (data.preference or {}).get("effects", [])}
+    if not effects:
+        pytest.skip("no preference payload in this checkout")
+
+    seen = 0
+    for judge in (figures.JUDGE_A, figures.JUDGE_B):
+        entry = effects.get(judge)
+        lean = (entry or {}).get("leans_on")
+        if not entry or not lean:
+            continue
+        seen += 1
+        assert f"<code>{lean['system']}</code>" in prose
+        stated = (
+            f"takes the {brief.family_word(entry['family'])} figure from "
+            f"{brief.signed(entry['estimate'])} to {brief.signed(lean['estimate'])}"
+        )
+        assert stated in prose, f"the drop-one clause for {judge} is not the published one"
+    assert seen, "the payload carries no leave-one-out for either judge"

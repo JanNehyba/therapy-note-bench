@@ -111,7 +111,7 @@
 <main>
 
   <h1>What a leaderboard of clinical-note models can and cannot tell you</h1>
-  <p class="lede">Sixteen models wrote psychotherapy session notes on two published
+  <p class="lede">Eighteen models wrote psychotherapy session notes on two published
      protocols, and two independent LLM judges scored every one of them. This is what
      the exercise says about choosing a model &mdash; and about reading anybody's
      leaderboard, including this one.</p>
@@ -125,7 +125,7 @@
     <div class="claim"><div class="figure">124/127<small>pairs, agreed</small></div><p>Where both judges can tell two systems apart, they agree on which is more complete in 124 of 127 pairs &mdash; one measure on one track. The judges are not the problem.</p></div>
     <div class="claim"><div class="figure">16/21<small>changed place</small></div><p>And this many systems still land somewhere else. A leaderboard position is not a measurement; it is a place in a queue, and a few real moves renumber everyone below them.</p></div>
     <div class="claim"><div class="figure">+0.02<small>each judge's own vendor</small></div><p>Both judges score their own vendor&rsquo;s models higher by about this much, and the evidence cannot rule out zero for either. If you grade models with a model, measure this &mdash; and resample the models, not just the cases.</p></div>
-    <div class="claim"><div class="figure">0.00–0.55<small>the production gap</small></div><p>Every model writes something where the expert wrote about the last session. Almost none writes anything about the next one, on the eleven sessions where an expert did. Both columns check that a field was answered, not that the answer is right.</p></div>
+    <div class="claim"><div class="figure">0.00–0.73<small>the production gap</small></div><p>Every model writes something where the expert wrote about the last session. Almost none writes anything about the next one, on the eleven sessions where an expert did. Both columns check that a field was answered, not that the answer is right.</p></div>
   </div>
 
   <h2>Read this if you are building or buying one of these</h2>
@@ -363,20 +363,14 @@
      this check. Two judges from two vendors is the cheapest way to have it; one judge
      cannot measure its own bias at all, and a caveat in the methods section is not a
      measurement.</p>
-  <p class="note">Each effect leans on one system more than the others, and they are
-     the two that a definition change moved into these groups on 2026-08-26: dropping
-     <code>gemma4</code> takes the Gemini figure from +0.018 to +0.008, and dropping
-     <code>gpt-oss-120b</code> (scored on 42 of 50 conversations; the rest were lost to an output format the rubric parser truncates) takes the GPT one from +0.027 to +0.018.
-     Nothing here
+  <p class="note">Each effect leans on one system more than the others, and they are the two that a definition change moved into these groups on 2026-08-26: dropping <code>gemma4</code> takes the Gemini figure from +0.018 to +0.006, and dropping <code>gpt-oss-120b</code> (scored on 42 of 50 conversations; the rest were lost to an output format the rubric parser truncates) takes the GPT figure from +0.017 to +0.011. Nothing here
      tests whether the two judges differ from each other; asked directly, they do not &mdash; &minus;0.000 [&minus;0.041, +0.042].</p>
 
   <h2 class="page-break">Three: nothing here can tell you what happens next</h2>
   <p>The iCARE form has two time-bearing sections: what happened at the previous
      session, and what happens at the next one. Every model reliably fills the first
-     &mdash; fourteen of sixteen on all thirty-four sessions the experts answered, the
-     other two on thirty-three. Almost none
-     fills the second, and the best of them manages it in just over half the sessions
-     where an expert did.</p>
+     &mdash; sixteen of eighteen on all thirty-four sessions the experts answered, the other two on thirty-three. Almost none
+     fills the second, and the best of them manages it in eight of the eleven sessions where an expert did.</p>
   <figure><svg xmlns="http://www.w3.org/2000/svg" class="fig" width="880" height="702" viewBox="0 0 880 702" role="img" aria-label="Looking back against looking forward, per model">
 <style>
   .fig { font: 13px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
@@ -481,12 +475,12 @@
      land between 4.76 and 4.99 &mdash;
      6% of the scale. Under the other,
      3.58 to 4.11, which is
-     13%. The two judges&rsquo; orderings
-     correlate at +0.83 and place 11 of 16 systems differently anyway.</p>
+     13%. The two judges&rsquo; orderings correlate at +0.77 and place 12 of 18 systems differently anyway.</p>
   <p><strong>What to do with that.</strong> A measure where every model scores within a
      few percent of every other is not evidence that the models are equally good; it is
      evidence that the measure is running out. That the two judges disagree about how
-     much room is left &mdash; 6% against 13% &mdash; is a fact about the judges, and it
+     much room is left &mdash; 6% against
+     13% &mdash; is a fact about the judges, and it
      is why one judge is not enough to notice this happening. If you are building an evaluation, the
      per-criterion breakdown is the thing to watch &mdash; an aggregate stays healthy
      for a long time after the parts of it have died.</p>
