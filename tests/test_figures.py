@@ -68,7 +68,14 @@ def test_every_system_the_table_holds_is_in_the_figure(data, drawn):
     assert len(table) == 19
 
     labels = numbers_in(drawn["positions.svg"], "name")
-    drawn_names = {re.sub(r"^\d+\.\s*", "", label) for label in labels}
+    # One label per rank: tied systems are joined with ", " and a system from
+    # the judge's own vendor carries a dagger, so a label is split back into
+    # names before it is compared with the table.
+    drawn_names = {
+        name.replace(" †", "").strip()
+        for label in labels
+        for name in re.sub(r"^\d+\.\s*", "", label).split(", ")
+    }
     assert set(table) <= drawn_names, "a system in the table and not in the figure"
 
 

@@ -213,9 +213,9 @@ def _gemini_soap_table() -> dict:
 def _part_answered_notes() -> tuple[float, ...]:
     """Notes scored on fewer than all four sections, all notes, and the section count.
 
-    The 42 is what narrows the Band column's shared set from 50 to 25, and it
-    is the count a re-ask on 2026-09-01 left exactly where it was -- so it is
-    computed from the payload and never carried over.
+    The count that narrows the band analysis's shared set. It was 42 until the
+    re-ask of 2026-09-02 and is computed from the payload rather than carried
+    over, so the sentence moves when the notes do.
     """
     rows = _gemini_soap_table()["rows"]
     return (
@@ -236,19 +236,48 @@ def _saturation(judge_model: str) -> dict:
         return _json.load(handle)
 
 
-def _shared_sets() -> tuple[float, ...]:
-    """Corpus, gemini's shared set, gpt's shared set: the Band column's denominators."""
+def _shared_sets_stated() -> tuple[float, ...]:
+    """Gemini's shared set, the corpus, gpt's shared set -- the band analysis's
+    denominators, in the order the sentence states them."""
     gemini = _saturation("gemini-3.1-pro-preview")
     gpt = _saturation("gpt-5.6-terra")
-    return (float(gemini["corpus_sessions"]), float(gemini["sessions"]), float(gpt["sessions"]))
+    return (float(gemini["sessions"]), float(gemini["corpus_sessions"]), float(gpt["sessions"]))
 
 
 def _gpt_oss_missing_under_gpt() -> tuple[float, ...]:
     return (float(_saturation("gpt-5.6-terra")["narrowed_by"]["gpt-oss-120b"]),)
 
 
-def _gemini_shared_set() -> tuple[float, ...]:
-    return (float(_saturation("gemini-3.1-pro-preview")["sessions"]),)
+def _completeness_moved() -> tuple[float, ...]:
+    """Systems whose completeness moved between the gemini SOAP rows at 0.6.0 and
+    0.7.0, all systems compared, and the largest move down and up -- from
+    results/rows.jsonl, which is committed, so the sentence is re-derivable."""
+    rows = [
+        json.loads(line)
+        for line in (REPO_ROOT / "results" / "rows.jsonl").read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+
+    def latest(harness: str) -> dict[str, float | None]:
+        out: dict[str, float | None] = {}
+        for row in rows:
+            if (
+                row.get("track") == "tneval-soap"
+                and row.get("judge_model") == "gemini-3.1-pro-preview"
+                and row.get("harness_version") == harness
+                and (row.get("metrics") or {}).get("headline")
+            ):
+                out[row["system_id"]] = row["metrics"]["headline"].get("completeness")
+        return out
+
+    before, after = latest("0.6.0"), latest("0.7.0")
+    deltas = [
+        after[system] - before[system]
+        for system in after
+        if system in before and after[system] is not None and before[system] is not None
+    ]
+    moved = sum(1 for delta in deltas if abs(delta) >= 0.0005)
+    return (float(moved), float(len(deltas)), round(abs(min(deltas)), 3), round(max(deltas), 3))
 
 
 def _tneval_undominated() -> tuple[float, ...]:
@@ -371,55 +400,85 @@ CLAIMS = (
         covers=("eight", "eleven", "nineteen"),
         expected=_pdsqi_undominated,
     ),
-    # The 42 part-answered notes: what they are, what a re-ask did, and what
-    # they cost the Band column. Computed where the payload or a committed
-    # analysis holds the figure; historical where it lives only in the judge's
-    # answer cache, which is gitignored.
+    # The judge's non-answers: what they were and what the re-ask changed.
+    # Historical where the figure lives in the gitignored answer cache or a
+    # run's console output, said so beside each; computed where the payload,
+    # the saturation analyses or results/rows.jsonl hold it.
     Claim(
         where="docs/limitations.md",
-        phrase="42 of the 942 SOAP notes are scored on fewer than all four sections",
-        kind="computed",
-        because="the count a re-ask on 2026-09-01 left unchanged; if it moves, this sentence must",
-        covers=("42", "942", "four"),
-        expected=_part_answered_notes,
-    ),
-    Claim(
-        where="docs/limitations.md",
-        phrase=(
-            "In 43 cached answers (0.11% of 39 696 rubric answers; 30 completeness, 13 conciseness)"
-        ),
+        phrase="78 of 51 000 rubric answers were of this kind",
         kind="historical",
         because="counted in scores/, which is gitignored; a reader cannot re-derive it here",
-        covers=("43", "0.11%", "39 696", "30", "13"),
+        covers=("78", "51 000"),
         caveat="not in this repository",
     ),
     Claim(
         where="docs/limitations.md",
-        phrase="over all 19 systems",
+        phrase="The 43 fragments",
+        kind="historical",
+        because="the replies the aggregator refused all along, counted in the gitignored cache",
+        covers=("43",),
+        caveat="not in this repository",
+    ),
+    Claim(
+        where="docs/limitations.md",
+        phrase="left 42 notes scored on fewer than all four sections",
+        kind="historical",
+        because="the part-answered count before the re-ask; the rows behind it are superseded",
+        covers=("42", "four"),
+        caveat="not in this repository",
+    ),
+    Claim(
+        where="docs/limitations.md",
+        phrase="the 35 echoes",
+        kind="historical",
+        because="prompt echoes that passed the old answer test, counted in the gitignored cache",
+        covers=("35",),
+        caveat="not in this repository",
+    ),
+    Claim(
+        where="docs/limitations.md",
+        phrase="and 29 were scored as criteria the note met",
+        kind="historical",
+        because="the echoes `parse_yes_no` read as Yes, counted in the gitignored cache",
+        covers=("29",),
+        caveat="not in this repository",
+    ),
+    Claim(
+        where="docs/limitations.md",
+        phrase="62 of the 78 came back as answers and 16 did not",
+        kind="historical",
+        because="two passes of one run on 2026-09-02, counted from their console output",
+        covers=("62", "78", "16"),
+        caveat="not in this repository",
+    ),
+    Claim(
+        where="docs/limitations.md",
+        phrase="16 of the 942 SOAP notes are still scored on fewer than all four sections",
         kind="computed",
-        because="the systems on the table the re-ask covered",
+        because="the part-answered count after the re-ask; if it moves, this sentence must",
+        covers=("16", "942", "four"),
+        expected=_part_answered_notes,
+    ),
+    Claim(
+        where="docs/limitations.md",
+        phrase="all 19 systems share",
+        kind="computed",
+        because="the systems whose intersection the band analysis runs on",
         covers=("19",),
         expected=_systems_on_the_gemini_table,
     ),
     Claim(
         where="docs/limitations.md",
-        phrase="made **0 judge calls and changed nothing**",
-        kind="historical",
-        because="a fact about one run on one day, recorded from its output",
-        covers=("0",),
-        caveat="not in this repository",
-    ),
-    Claim(
-        where="docs/limitations.md",
-        phrase="from 50 to 25 under gemini (42 under gpt",
+        phrase="is 37 of 50 under gemini and 42 under gpt",
         kind="computed",
-        because="the Band column's denominators, read from the two committed saturation analyses",
-        covers=("50", "25", "42"),
-        expected=_shared_sets,
+        because="the band analysis's denominators, read from the two committed saturation analyses",
+        covers=("37", "50", "42"),
+        expected=_shared_sets_stated,
     ),
     Claim(
         where="docs/limitations.md",
-        phrase="8 are missing",
+        phrase="8 unrecoverable notes are missing",
         kind="computed",
         because="gpt-oss-120b's unrecoverable notes, as the gpt analysis records them",
         covers=("8",),
@@ -427,27 +486,55 @@ CLAIMS = (
     ),
     Claim(
         where="docs/limitations.md",
-        phrase="the 25 stands",
-        kind="computed",
-        because="the same denominator, restated where the paragraph closes",
+        phrase="under gemini it had been 25",
+        kind="historical",
+        because="the shared set before the re-ask; the analysis that held it was overwritten",
         covers=("25",),
-        expected=_gemini_shared_set,
+        caveat="not in this repository",
     ),
     Claim(
         where="docs/limitations.md",
-        phrase="These 42 notes are what shrinks",
+        phrase="Completeness moved on 16 of the 19 systems, by between −0.003 and +0.009",
         kind="computed",
-        because="the part-answered count again, where the paragraph turns to what it costs",
-        covers=("42",),
-        expected=lambda: _part_answered_notes()[:1],
+        because="the 0.6.0 and 0.7.0 gemini rows both sit in results/rows.jsonl",
+        covers=("16", "19", "0.003", "0.009"),
+        expected=_completeness_moved,
+    ),
+    # The self-preference intervals are recomputed against docs/preference.json
+    # by tests/test_docs_figures.py::test_the_self_preference_intervals_are_the_published_ones,
+    # so they are named here and checked there.
+    Claim(
+        where="docs/methodology.md",
+        phrase=(
+            "`gemini-3.1-pro-preview` +0.017 [−0.011, +0.046] and `gpt-5.6-terra` +0.016 "
+            "[−0.008, +0.043]"
+        ),
+        kind="elsewhere",
+        because="test_docs_figures.py recomputes both intervals from docs/preference.json",
+        covers=("0.017", "0.011", "0.046", "0.016", "0.008", "0.043"),
     ),
     Claim(
-        where="docs/limitations.md",
-        phrase="all 19 systems share",
-        kind="computed",
-        because="the systems whose intersection the Band column runs on",
-        covers=("19",),
-        expected=_systems_on_the_gemini_table,
+        where="docs/methodology.md",
+        phrase="they do not: −0.002 [−0.042, +0.041]",
+        kind="elsewhere",
+        because="test_docs_figures.py recomputes the judges' difference from docs/preference.json",
+        covers=("0.002", "0.042", "0.041"),
+    ),
+    Claim(
+        where="docs/methodology.md",
+        phrase="0.15% (78 of 51 000)",
+        kind="historical",
+        because="the non-answer rate at budget 256, counted in the gitignored cache",
+        covers=("0.15%", "78", "51 000"),
+        caveat="not in this repository",
+    ),
+    Claim(
+        where="docs/methodology.md",
+        phrase="those 78 were re-asked",
+        kind="historical",
+        because="the same count, restated where the paragraph turns to the repair",
+        covers=("78",),
+        caveat="not in this repository",
     ),
     Claim(
         where="docs/limitations.md",
@@ -646,7 +733,7 @@ UNACCOUNTED = {
     "docs/datasets.md": 53,
     "docs/landscape.md": 66,
     "docs/limitations.md": 146,
-    "docs/methodology.md": 82,
+    "docs/methodology.md": 74,
     # Raised from 38 on 2026-09-01: a live capture was retaken and recorded
     # as its own dated section. Its counts -- how many ids the endpoint
     # returned that day and how many survived the filter -- are a log of one

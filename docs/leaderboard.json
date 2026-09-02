@@ -1137,25 +1137,25 @@
             "system": "gpt-oss-120b"
           },
           "measure": "completeness",
-          "moved": 13,
+          "moved": 12,
           "n_systems": 19,
           "rankable": true,
-          "rho": 0.8947,
-          "stable": 6,
+          "rho": 0.8895,
+          "stable": 7,
           "tied": 2
         },
         {
           "furthest": {
-            "rank_a": 12,
+            "rank_a": 14,
             "rank_b": 5,
             "system": "mistral-large-v2 (TN-Eval, 2025)"
           },
           "measure": "conciseness",
-          "moved": 10,
+          "moved": 12,
           "n_systems": 19,
           "rankable": true,
-          "rho": 0.8877,
-          "stable": 9,
+          "rho": 0.8596,
+          "stable": 7,
           "tied": 2
         },
         {
@@ -1175,7 +1175,7 @@
       ],
       "n_systems": 19,
       "ranking_measure": "completeness",
-      "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on completeness (+0.895) and place 13 of 19 systems differently on it anyway. They agree least on faithfulness (+0.742, 16 of 19 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. Systems beating at least one other on every measure under both judges, which needs no weighting to be true: 14. `google_gemini-3.7-flash` beats 10. 8 of 19 systems are beaten outright by nobody. Ordering by completeness says little about conciseness (`gemini-3.1-pro-preview` -0.02, `gpt-5.6-terra` +0.05). Ordering by completeness says different things to the two judges about faithfulness (`gemini-3.1-pro-preview` +0.56, `gpt-5.6-terra` +0.04). The two judges disagree about whether those columns are related at all, so neither reading is this benchmark's answer.",
+      "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on completeness (+0.889) and place 12 of 19 systems differently on it anyway. They agree least on faithfulness (+0.742, 16 of 19 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. Systems beating at least one other on every measure under both judges, which needs no weighting to be true: 14. `google_gemini-3.7-flash` beats 10. 8 of 19 systems are beaten outright by nobody. Ordering by completeness says little about conciseness (`gemini-3.1-pro-preview` -0.07, `gpt-5.6-terra` +0.05). Ordering by completeness says different things to the two judges about faithfulness (`gemini-3.1-pro-preview` +0.59, `gpt-5.6-terra` +0.04). The two judges disagree about whether those columns are related at all, so neither reading is this benchmark's answer.",
       "systems": [
         "deepseek-v4-flash",
         "deepseek-v4-flash-thinking",
@@ -1205,7 +1205,7 @@
           "n_systems": 19,
           "rankable": true,
           "rho_by_judge": {
-            "gemini-3.1-pro-preview": -0.0246,
+            "gemini-3.1-pro-preview": -0.0667,
             "gpt-5.6-terra": 0.0526
           },
           "second": "conciseness",
@@ -1218,7 +1218,7 @@
           "n_systems": 19,
           "rankable": true,
           "rho_by_judge": {
-            "gemini-3.1-pro-preview": 0.5579,
+            "gemini-3.1-pro-preview": 0.5877,
             "gpt-5.6-terra": 0.0404
           },
           "second": "faithfulness",
@@ -1231,7 +1231,7 @@
           "n_systems": 19,
           "rankable": true,
           "rho_by_judge": {
-            "gemini-3.1-pro-preview": -0.1895,
+            "gemini-3.1-pro-preview": -0.1667,
             "gpt-5.6-terra": -0.3947
           },
           "second": "faithfulness",
@@ -1519,17 +1519,17 @@
       {
         "agreements": [
           {
-            "alpha": 0.5998072626406157,
-            "alpha_humans": 0.5040964461994439,
+            "alpha": 0.5995917448669379,
+            "alpha_humans": 0.5036339457981684,
             "alpha_level": "nominal",
             "clears_ceiling": true,
-            "humans": 0.5041571652036615,
-            "judge": 0.5997766802795041,
-            "margin": 0.09561951507584265,
+            "humans": 0.5036897910190797,
+            "judge": 0.5995603310175632,
+            "margin": 0.0958705399984835,
             "margin_draws": 2000,
-            "margin_high": 0.1229674338147635,
-            "margin_low": 0.068339884845527,
-            "n": 3448,
+            "margin_high": 0.12320695995885528,
+            "margin_low": 0.06862722328374937,
+            "n": 3449,
             "name": "rubric_completeness",
             "statistic": "Cohen's kappa"
           },
@@ -1962,18 +1962,18 @@
         "gemini-2.5-pro"
       ],
       "all_at_or_above_ceiling": true,
-      "ceiling": 0.5037308946452509,
+      "ceiling": 0.5036648231593545,
       "ceiling_span": [
         0.5034527634718307,
-        0.5040964461994439
+        0.5037134105690964
       ],
       "instruments": 2,
       "margin": 0.05,
       "measure": "rubric_completeness",
       "ranked": [
         {
-          "alpha": 0.5998072626406157,
-          "ceiling": 0.5040964461994439,
+          "alpha": 0.5995917448669379,
+          "ceiling": 0.5036339457981684,
           "judge": "gemini-3.1-pro-preview"
         },
         {
@@ -2010,31 +2010,31 @@
       "separated": [
         {
           "better": "gemini-3.1-pro-preview",
-          "by": 0.0554,
+          "by": 0.0551,
           "crosses_instrument": false,
           "worse": "gemini-3.7-flash"
         },
         {
           "better": "gemini-3.1-pro-preview",
-          "by": 0.0625,
+          "by": 0.0623,
           "crosses_instrument": false,
           "worse": "gemini-2.5-flash"
         },
         {
           "better": "gemini-3.1-pro-preview",
-          "by": 0.0636,
+          "by": 0.0634,
           "crosses_instrument": false,
           "worse": "gemini-3.5-flash"
         },
         {
           "better": "gemini-3.1-pro-preview",
-          "by": 0.0799,
+          "by": 0.0797,
           "crosses_instrument": true,
           "worse": "gpt-5.6-terra"
         },
         {
           "better": "gemini-3.1-pro-preview",
-          "by": 0.0894,
+          "by": 0.0892,
           "crosses_instrument": true,
           "worse": "gpt-5.6-sol"
         },
@@ -2106,24 +2106,24 @@
   "preference": {
     "difference": {
       "detected": false,
-      "estimate": 0.0092,
-      "high": 0.0581,
+      "estimate": -0.0015,
+      "high": 0.0411,
       "judge_a": "gemini-3.1-pro-preview",
       "judge_b": "gpt-5.6-terra",
-      "low": -0.0389,
-      "summary": "The two leans are not distinguishable from each other: `gpt-5.6-terra` minus `gemini-3.1-pro-preview` is +0.009 completeness [-0.039 to +0.058]. Neither judge is the more partial one on this evidence, and the larger of the two numbers above should not be read as though it were."
+      "low": -0.0419,
+      "summary": "The two leans are not distinguishable from each other: `gpt-5.6-terra` minus `gemini-3.1-pro-preview` is -0.002 completeness [-0.042 to +0.041]. Neither judge is the more partial one on this evidence, and the larger of the two numbers above should not be read as though it were."
     },
     "effects": [
       {
         "detected": false,
-        "estimate": 0.0176,
+        "estimate": 0.0172,
         "family": "google",
-        "high": 0.0471,
+        "high": 0.0461,
         "judge": "gemini-3.1-pro-preview",
-        "low": -0.0102,
+        "low": -0.0112,
         "n_neutral": 12,
         "n_own": 3,
-        "n_sessions": 25,
+        "n_sessions": 37,
         "neutral": [
           "deepseek-v4-flash",
           "deepseek-v4-flash-thinking",
@@ -2138,18 +2138,18 @@
           "qwen3.8-27b",
           "therapist"
         ],
-        "summary": "`gemini-3.1-pro-preview` shows no detectable preference for Google models: +0.018 completeness [-0.010 to +0.047], an interval that includes zero. Not detected is not the same as absent — the comparison was 3 of the vendor's own against 12 neutral, over 25 conversations."
+        "summary": "`gemini-3.1-pro-preview` shows no detectable preference for Google models: +0.017 completeness [-0.011 to +0.046], an interval that includes zero. Not detected is not the same as absent — the comparison was 3 of the vendor's own against 12 neutral, over 37 conversations."
       },
       {
         "detected": false,
-        "estimate": 0.0268,
+        "estimate": 0.0157,
         "family": "openai",
-        "high": 0.0584,
+        "high": 0.0429,
         "judge": "gpt-5.6-terra",
-        "low": -0.0044,
+        "low": -0.008,
         "n_neutral": 12,
         "n_own": 4,
-        "n_sessions": 25,
+        "n_sessions": 37,
         "neutral": [
           "deepseek-v4-flash",
           "deepseek-v4-flash-thinking",
@@ -2164,7 +2164,7 @@
           "qwen3.8-27b",
           "therapist"
         ],
-        "summary": "`gpt-5.6-terra` shows no detectable preference for OpenAI models: +0.027 completeness [-0.004 to +0.058], an interval that includes zero. Not detected is not the same as absent — the comparison was 4 of the vendor's own against 12 neutral, over 25 conversations."
+        "summary": "`gpt-5.6-terra` shows no detectable preference for OpenAI models: +0.016 completeness [-0.008 to +0.043], an interval that includes zero. Not detected is not the same as absent — the comparison was 4 of the vendor's own against 12 neutral, over 37 conversations."
       }
     ],
     "judge_a": "gemini-3.1-pro-preview",
@@ -2488,223 +2488,223 @@
   "saturation": {
     "beats": {
       "deepseek-v4-flash": {
-        "deepseek-v4-flash-thinking": 0.0345,
-        "gemma4": 0.003,
+        "deepseek-v4-flash-thinking": 0.0035,
+        "gemma4": 0.002,
         "glm-5": 0.0,
         "glm-5.2": 0.0,
         "google_gemini-3.1-pro-preview": 0.0,
         "google_gemini-3.7-flash": 0.0,
-        "gpt-5.6-luna": 0.005,
-        "gpt-5.6-sol": 0.002,
+        "gpt-5.6-luna": 0.0,
+        "gpt-5.6-sol": 0.0,
         "gpt-5.6-terra": 0.0,
         "gpt-oss-120b": 0.0,
         "kimi-k3": 0.0,
         "llama-3.1-70b": 1.0,
         "mistral-large-v2": 1.0,
-        "mistral-medium-3.5": 0.0195,
+        "mistral-medium-3.5": 0.047,
         "qwen3.5-122b": 0.0,
         "qwen3.5-int4": 0.0,
-        "qwen3.8-27b": 0.002,
+        "qwen3.8-27b": 0.0,
         "therapist": 1.0
       },
       "deepseek-v4-flash-thinking": {
-        "deepseek-v4-flash": 0.9655,
-        "gemma4": 0.425,
-        "glm-5": 0.072,
-        "glm-5.2": 0.016,
-        "google_gemini-3.1-pro-preview": 0.0035,
-        "google_gemini-3.7-flash": 0.0005,
-        "gpt-5.6-luna": 0.4865,
-        "gpt-5.6-sol": 0.146,
-        "gpt-5.6-terra": 0.0145,
-        "gpt-oss-120b": 0.206,
+        "deepseek-v4-flash": 0.9965,
+        "gemma4": 0.4645,
+        "glm-5": 0.0385,
+        "glm-5.2": 0.0555,
+        "google_gemini-3.1-pro-preview": 0.0025,
+        "google_gemini-3.7-flash": 0.001,
+        "gpt-5.6-luna": 0.509,
+        "gpt-5.6-sol": 0.079,
+        "gpt-5.6-terra": 0.0525,
+        "gpt-oss-120b": 0.2055,
         "kimi-k3": 0.0,
         "llama-3.1-70b": 1.0,
         "mistral-large-v2": 1.0,
-        "mistral-medium-3.5": 0.731,
+        "mistral-medium-3.5": 0.9365,
         "qwen3.5-122b": 0.0,
         "qwen3.5-int4": 0.0,
-        "qwen3.8-27b": 0.2065,
+        "qwen3.8-27b": 0.254,
         "therapist": 1.0
       },
       "gemma4": {
-        "deepseek-v4-flash": 0.997,
-        "deepseek-v4-flash-thinking": 0.5735,
-        "glm-5": 0.0995,
-        "glm-5.2": 0.0365,
-        "google_gemini-3.1-pro-preview": 0.0,
-        "google_gemini-3.7-flash": 0.006,
-        "gpt-5.6-luna": 0.6,
-        "gpt-5.6-sol": 0.243,
-        "gpt-5.6-terra": 0.06,
-        "gpt-oss-120b": 0.2775,
+        "deepseek-v4-flash": 0.998,
+        "deepseek-v4-flash-thinking": 0.5345,
+        "glm-5": 0.067,
+        "glm-5.2": 0.0915,
+        "google_gemini-3.1-pro-preview": 0.0005,
+        "google_gemini-3.7-flash": 0.0035,
+        "gpt-5.6-luna": 0.567,
+        "gpt-5.6-sol": 0.111,
+        "gpt-5.6-terra": 0.0915,
+        "gpt-oss-120b": 0.252,
         "kimi-k3": 0.0,
         "llama-3.1-70b": 1.0,
         "mistral-large-v2": 1.0,
-        "mistral-medium-3.5": 0.8635,
+        "mistral-medium-3.5": 0.9715,
         "qwen3.5-122b": 0.0,
         "qwen3.5-int4": 0.0,
-        "qwen3.8-27b": 0.3935,
+        "qwen3.8-27b": 0.358,
         "therapist": 1.0
       },
       "glm-5": {
         "deepseek-v4-flash": 1.0,
-        "deepseek-v4-flash-thinking": 0.9275,
-        "gemma4": 0.899,
-        "glm-5.2": 0.2725,
-        "google_gemini-3.1-pro-preview": 0.019,
-        "google_gemini-3.7-flash": 0.049,
-        "gpt-5.6-luna": 0.9575,
-        "gpt-5.6-sol": 0.6705,
-        "gpt-5.6-terra": 0.4115,
-        "gpt-oss-120b": 0.7715,
+        "deepseek-v4-flash-thinking": 0.9615,
+        "gemma4": 0.9325,
+        "glm-5.2": 0.578,
+        "google_gemini-3.1-pro-preview": 0.0435,
+        "google_gemini-3.7-flash": 0.0675,
+        "gpt-5.6-luna": 0.975,
+        "gpt-5.6-sol": 0.5715,
+        "gpt-5.6-terra": 0.6285,
+        "gpt-oss-120b": 0.8465,
         "kimi-k3": 0.0015,
         "llama-3.1-70b": 1.0,
         "mistral-large-v2": 1.0,
-        "mistral-medium-3.5": 0.995,
-        "qwen3.5-122b": 0.005,
-        "qwen3.5-int4": 0.0035,
-        "qwen3.8-27b": 0.8125,
+        "mistral-medium-3.5": 1.0,
+        "qwen3.5-122b": 0.0025,
+        "qwen3.5-int4": 0.0255,
+        "qwen3.8-27b": 0.887,
         "therapist": 1.0
       },
       "glm-5.2": {
         "deepseek-v4-flash": 1.0,
-        "deepseek-v4-flash-thinking": 0.984,
-        "gemma4": 0.963,
-        "glm-5": 0.7265,
-        "google_gemini-3.1-pro-preview": 0.1475,
-        "google_gemini-3.7-flash": 0.1875,
-        "gpt-5.6-luna": 0.994,
-        "gpt-5.6-sol": 0.8045,
-        "gpt-5.6-terra": 0.6615,
-        "gpt-oss-120b": 0.8575,
-        "kimi-k3": 0.017,
+        "deepseek-v4-flash-thinking": 0.9445,
+        "gemma4": 0.908,
+        "glm-5": 0.4215,
+        "google_gemini-3.1-pro-preview": 0.047,
+        "google_gemini-3.7-flash": 0.0525,
+        "gpt-5.6-luna": 0.973,
+        "gpt-5.6-sol": 0.5135,
+        "gpt-5.6-terra": 0.5565,
+        "gpt-oss-120b": 0.751,
+        "kimi-k3": 0.0,
         "llama-3.1-70b": 1.0,
         "mistral-large-v2": 1.0,
-        "mistral-medium-3.5": 0.9985,
-        "qwen3.5-122b": 0.0055,
-        "qwen3.5-int4": 0.0125,
-        "qwen3.8-27b": 0.938,
+        "mistral-medium-3.5": 1.0,
+        "qwen3.5-122b": 0.001,
+        "qwen3.5-int4": 0.0065,
+        "qwen3.8-27b": 0.8675,
         "therapist": 1.0
       },
       "google_gemini-3.1-pro-preview": {
         "deepseek-v4-flash": 1.0,
-        "deepseek-v4-flash-thinking": 0.9965,
-        "gemma4": 1.0,
-        "glm-5": 0.9795,
-        "glm-5.2": 0.852,
-        "google_gemini-3.7-flash": 0.619,
+        "deepseek-v4-flash-thinking": 0.997,
+        "gemma4": 0.9995,
+        "glm-5": 0.9565,
+        "glm-5.2": 0.9525,
+        "google_gemini-3.7-flash": 0.6225,
         "gpt-5.6-luna": 1.0,
-        "gpt-5.6-sol": 0.9975,
-        "gpt-5.6-terra": 0.9625,
+        "gpt-5.6-sol": 0.976,
+        "gpt-5.6-terra": 0.9795,
         "gpt-oss-120b": 0.9925,
-        "kimi-k3": 0.1825,
+        "kimi-k3": 0.0385,
         "llama-3.1-70b": 1.0,
         "mistral-large-v2": 1.0,
         "mistral-medium-3.5": 1.0,
-        "qwen3.5-122b": 0.2515,
-        "qwen3.5-int4": 0.2085,
-        "qwen3.8-27b": 0.9955,
+        "qwen3.5-122b": 0.2375,
+        "qwen3.5-int4": 0.315,
+        "qwen3.8-27b": 0.9985,
         "therapist": 1.0
       },
       "google_gemini-3.7-flash": {
         "deepseek-v4-flash": 1.0,
-        "deepseek-v4-flash-thinking": 0.9995,
-        "gemma4": 0.994,
-        "glm-5": 0.9505,
-        "glm-5.2": 0.8115,
-        "google_gemini-3.1-pro-preview": 0.378,
-        "gpt-5.6-luna": 0.9995,
-        "gpt-5.6-sol": 0.9955,
-        "gpt-5.6-terra": 0.9525,
-        "gpt-oss-120b": 0.983,
-        "kimi-k3": 0.0395,
+        "deepseek-v4-flash-thinking": 0.999,
+        "gemma4": 0.996,
+        "glm-5": 0.9315,
+        "glm-5.2": 0.947,
+        "google_gemini-3.1-pro-preview": 0.376,
+        "gpt-5.6-luna": 1.0,
+        "gpt-5.6-sol": 0.962,
+        "gpt-5.6-terra": 0.992,
+        "gpt-oss-120b": 0.994,
+        "kimi-k3": 0.007,
         "llama-3.1-70b": 1.0,
         "mistral-large-v2": 1.0,
         "mistral-medium-3.5": 1.0,
-        "qwen3.5-122b": 0.1765,
-        "qwen3.5-int4": 0.1195,
-        "qwen3.8-27b": 0.994,
+        "qwen3.5-122b": 0.1425,
+        "qwen3.5-int4": 0.217,
+        "qwen3.8-27b": 0.998,
         "therapist": 1.0
       },
       "gpt-5.6-luna": {
-        "deepseek-v4-flash": 0.9945,
-        "deepseek-v4-flash-thinking": 0.5125,
-        "gemma4": 0.3975,
-        "glm-5": 0.0425,
-        "glm-5.2": 0.006,
+        "deepseek-v4-flash": 1.0,
+        "deepseek-v4-flash-thinking": 0.4875,
+        "gemma4": 0.432,
+        "glm-5": 0.024,
+        "glm-5.2": 0.026,
         "google_gemini-3.1-pro-preview": 0.0,
-        "google_gemini-3.7-flash": 0.0005,
-        "gpt-5.6-sol": 0.157,
-        "gpt-5.6-terra": 0.0115,
-        "gpt-oss-120b": 0.228,
+        "google_gemini-3.7-flash": 0.0,
+        "gpt-5.6-sol": 0.063,
+        "gpt-5.6-terra": 0.018,
+        "gpt-oss-120b": 0.1965,
         "kimi-k3": 0.0,
         "llama-3.1-70b": 1.0,
         "mistral-large-v2": 1.0,
-        "mistral-medium-3.5": 0.762,
+        "mistral-medium-3.5": 0.9655,
         "qwen3.5-122b": 0.0,
         "qwen3.5-int4": 0.0,
-        "qwen3.8-27b": 0.206,
+        "qwen3.8-27b": 0.22,
         "therapist": 1.0
       },
       "gpt-5.6-sol": {
-        "deepseek-v4-flash": 0.998,
-        "deepseek-v4-flash-thinking": 0.853,
-        "gemma4": 0.7565,
-        "glm-5": 0.3285,
-        "glm-5.2": 0.194,
-        "google_gemini-3.1-pro-preview": 0.0025,
-        "google_gemini-3.7-flash": 0.0045,
-        "gpt-5.6-luna": 0.8405,
-        "gpt-5.6-terra": 0.147,
-        "gpt-oss-120b": 0.6015,
+        "deepseek-v4-flash": 1.0,
+        "deepseek-v4-flash-thinking": 0.9205,
+        "gemma4": 0.8885,
+        "glm-5": 0.428,
+        "glm-5.2": 0.484,
+        "google_gemini-3.1-pro-preview": 0.0235,
+        "google_gemini-3.7-flash": 0.0375,
+        "gpt-5.6-luna": 0.9365,
+        "gpt-5.6-terra": 0.524,
+        "gpt-oss-120b": 0.7505,
         "kimi-k3": 0.0,
         "llama-3.1-70b": 1.0,
         "mistral-large-v2": 1.0,
-        "mistral-medium-3.5": 0.9735,
-        "qwen3.5-122b": 0.0,
-        "qwen3.5-int4": 0.0005,
-        "qwen3.8-27b": 0.693,
+        "mistral-medium-3.5": 0.998,
+        "qwen3.5-122b": 0.001,
+        "qwen3.5-int4": 0.006,
+        "qwen3.8-27b": 0.8655,
         "therapist": 1.0
       },
       "gpt-5.6-terra": {
         "deepseek-v4-flash": 1.0,
-        "deepseek-v4-flash-thinking": 0.9855,
-        "gemma4": 0.94,
-        "glm-5": 0.5855,
-        "glm-5.2": 0.337,
-        "google_gemini-3.1-pro-preview": 0.0375,
-        "google_gemini-3.7-flash": 0.0475,
-        "gpt-5.6-luna": 0.9875,
-        "gpt-5.6-sol": 0.852,
-        "gpt-oss-120b": 0.8335,
+        "deepseek-v4-flash-thinking": 0.947,
+        "gemma4": 0.9085,
+        "glm-5": 0.3715,
+        "glm-5.2": 0.441,
+        "google_gemini-3.1-pro-preview": 0.02,
+        "google_gemini-3.7-flash": 0.008,
+        "gpt-5.6-luna": 0.982,
+        "gpt-5.6-sol": 0.475,
+        "gpt-oss-120b": 0.761,
         "kimi-k3": 0.0,
         "llama-3.1-70b": 1.0,
         "mistral-large-v2": 1.0,
-        "mistral-medium-3.5": 0.9995,
+        "mistral-medium-3.5": 1.0,
         "qwen3.5-122b": 0.0,
-        "qwen3.5-int4": 0.0,
-        "qwen3.8-27b": 0.907,
+        "qwen3.5-int4": 0.001,
+        "qwen3.8-27b": 0.8635,
         "therapist": 1.0
       },
       "gpt-oss-120b": {
         "deepseek-v4-flash": 1.0,
-        "deepseek-v4-flash-thinking": 0.7925,
-        "gemma4": 0.721,
-        "glm-5": 0.228,
-        "glm-5.2": 0.142,
-        "google_gemini-3.1-pro-preview": 0.007,
-        "google_gemini-3.7-flash": 0.016,
-        "gpt-5.6-luna": 0.7705,
-        "gpt-5.6-sol": 0.3965,
-        "gpt-5.6-terra": 0.1665,
+        "deepseek-v4-flash-thinking": 0.7935,
+        "gemma4": 0.7475,
+        "glm-5": 0.1535,
+        "glm-5.2": 0.249,
+        "google_gemini-3.1-pro-preview": 0.0075,
+        "google_gemini-3.7-flash": 0.006,
+        "gpt-5.6-luna": 0.8025,
+        "gpt-5.6-sol": 0.2465,
+        "gpt-5.6-terra": 0.2365,
         "kimi-k3": 0.0,
         "llama-3.1-70b": 1.0,
         "mistral-large-v2": 1.0,
-        "mistral-medium-3.5": 0.9745,
+        "mistral-medium-3.5": 1.0,
         "qwen3.5-122b": 0.001,
-        "qwen3.5-int4": 0.0005,
-        "qwen3.8-27b": 0.596,
+        "qwen3.5-int4": 0.0,
+        "qwen3.8-27b": 0.619,
         "therapist": 1.0
       },
       "kimi-k3": {
@@ -2712,9 +2712,9 @@
         "deepseek-v4-flash-thinking": 1.0,
         "gemma4": 1.0,
         "glm-5": 0.9985,
-        "glm-5.2": 0.982,
-        "google_gemini-3.1-pro-preview": 0.8165,
-        "google_gemini-3.7-flash": 0.9605,
+        "glm-5.2": 1.0,
+        "google_gemini-3.1-pro-preview": 0.961,
+        "google_gemini-3.7-flash": 0.993,
         "gpt-5.6-luna": 1.0,
         "gpt-5.6-sol": 1.0,
         "gpt-5.6-terra": 1.0,
@@ -2722,8 +2722,8 @@
         "llama-3.1-70b": 1.0,
         "mistral-large-v2": 1.0,
         "mistral-medium-3.5": 1.0,
-        "qwen3.5-122b": 0.633,
-        "qwen3.5-int4": 0.5145,
+        "qwen3.5-122b": 0.932,
+        "qwen3.5-int4": 0.889,
         "qwen3.8-27b": 1.0,
         "therapist": 1.0
       },
@@ -2740,12 +2740,12 @@
         "gpt-5.6-terra": 0.0,
         "gpt-oss-120b": 0.0,
         "kimi-k3": 0.0,
-        "mistral-large-v2": 0.246,
+        "mistral-large-v2": 0.0045,
         "mistral-medium-3.5": 0.0,
         "qwen3.5-122b": 0.0,
         "qwen3.5-int4": 0.0,
         "qwen3.8-27b": 0.0,
-        "therapist": 0.9895
+        "therapist": 0.9975
       },
       "mistral-large-v2": {
         "deepseek-v4-flash": 0.0,
@@ -2760,50 +2760,50 @@
         "gpt-5.6-terra": 0.0,
         "gpt-oss-120b": 0.0,
         "kimi-k3": 0.0,
-        "llama-3.1-70b": 0.752,
+        "llama-3.1-70b": 0.9945,
         "mistral-medium-3.5": 0.0,
         "qwen3.5-122b": 0.0,
         "qwen3.5-int4": 0.0,
         "qwen3.8-27b": 0.0,
-        "therapist": 0.9955
+        "therapist": 1.0
       },
       "mistral-medium-3.5": {
-        "deepseek-v4-flash": 0.98,
-        "deepseek-v4-flash-thinking": 0.268,
-        "gemma4": 0.1345,
-        "glm-5": 0.005,
-        "glm-5.2": 0.0015,
+        "deepseek-v4-flash": 0.953,
+        "deepseek-v4-flash-thinking": 0.0635,
+        "gemma4": 0.028,
+        "glm-5": 0.0,
+        "glm-5.2": 0.0,
         "google_gemini-3.1-pro-preview": 0.0,
         "google_gemini-3.7-flash": 0.0,
-        "gpt-5.6-luna": 0.2365,
-        "gpt-5.6-sol": 0.026,
-        "gpt-5.6-terra": 0.0005,
-        "gpt-oss-120b": 0.0255,
+        "gpt-5.6-luna": 0.034,
+        "gpt-5.6-sol": 0.002,
+        "gpt-5.6-terra": 0.0,
+        "gpt-oss-120b": 0.0,
         "kimi-k3": 0.0,
         "llama-3.1-70b": 1.0,
         "mistral-large-v2": 1.0,
         "qwen3.5-122b": 0.0,
         "qwen3.5-int4": 0.0,
-        "qwen3.8-27b": 0.0765,
+        "qwen3.8-27b": 0.0055,
         "therapist": 1.0
       },
       "qwen3.5-122b": {
         "deepseek-v4-flash": 1.0,
         "deepseek-v4-flash-thinking": 1.0,
         "gemma4": 1.0,
-        "glm-5": 0.995,
-        "glm-5.2": 0.9945,
-        "google_gemini-3.1-pro-preview": 0.7435,
-        "google_gemini-3.7-flash": 0.8215,
+        "glm-5": 0.997,
+        "glm-5.2": 0.999,
+        "google_gemini-3.1-pro-preview": 0.762,
+        "google_gemini-3.7-flash": 0.857,
         "gpt-5.6-luna": 1.0,
-        "gpt-5.6-sol": 1.0,
+        "gpt-5.6-sol": 0.999,
         "gpt-5.6-terra": 1.0,
         "gpt-oss-120b": 0.999,
-        "kimi-k3": 0.366,
+        "kimi-k3": 0.068,
         "llama-3.1-70b": 1.0,
         "mistral-large-v2": 1.0,
         "mistral-medium-3.5": 1.0,
-        "qwen3.5-int4": 0.343,
+        "qwen3.5-int4": 0.544,
         "qwen3.8-27b": 1.0,
         "therapist": 1.0
       },
@@ -2811,38 +2811,38 @@
         "deepseek-v4-flash": 1.0,
         "deepseek-v4-flash-thinking": 1.0,
         "gemma4": 1.0,
-        "glm-5": 0.996,
-        "glm-5.2": 0.987,
-        "google_gemini-3.1-pro-preview": 0.79,
-        "google_gemini-3.7-flash": 0.8805,
+        "glm-5": 0.9745,
+        "glm-5.2": 0.9935,
+        "google_gemini-3.1-pro-preview": 0.6845,
+        "google_gemini-3.7-flash": 0.7825,
         "gpt-5.6-luna": 1.0,
-        "gpt-5.6-sol": 0.9995,
-        "gpt-5.6-terra": 1.0,
-        "gpt-oss-120b": 0.9995,
-        "kimi-k3": 0.4835,
+        "gpt-5.6-sol": 0.994,
+        "gpt-5.6-terra": 0.999,
+        "gpt-oss-120b": 1.0,
+        "kimi-k3": 0.111,
         "llama-3.1-70b": 1.0,
         "mistral-large-v2": 1.0,
         "mistral-medium-3.5": 1.0,
-        "qwen3.5-122b": 0.6535,
+        "qwen3.5-122b": 0.4545,
         "qwen3.8-27b": 1.0,
         "therapist": 1.0
       },
       "qwen3.8-27b": {
-        "deepseek-v4-flash": 0.998,
-        "deepseek-v4-flash-thinking": 0.7925,
-        "gemma4": 0.6065,
-        "glm-5": 0.1865,
-        "glm-5.2": 0.061,
-        "google_gemini-3.1-pro-preview": 0.0045,
-        "google_gemini-3.7-flash": 0.005,
-        "gpt-5.6-luna": 0.792,
-        "gpt-5.6-sol": 0.306,
-        "gpt-5.6-terra": 0.092,
-        "gpt-oss-120b": 0.4025,
+        "deepseek-v4-flash": 1.0,
+        "deepseek-v4-flash-thinking": 0.745,
+        "gemma4": 0.64,
+        "glm-5": 0.1115,
+        "glm-5.2": 0.132,
+        "google_gemini-3.1-pro-preview": 0.0015,
+        "google_gemini-3.7-flash": 0.002,
+        "gpt-5.6-luna": 0.779,
+        "gpt-5.6-sol": 0.1345,
+        "gpt-5.6-terra": 0.135,
+        "gpt-oss-120b": 0.3805,
         "kimi-k3": 0.0,
         "llama-3.1-70b": 1.0,
         "mistral-large-v2": 1.0,
-        "mistral-medium-3.5": 0.923,
+        "mistral-medium-3.5": 0.9945,
         "qwen3.5-122b": 0.0,
         "qwen3.5-int4": 0.0,
         "therapist": 1.0
@@ -2860,8 +2860,8 @@
         "gpt-5.6-terra": 0.0,
         "gpt-oss-120b": 0.0,
         "kimi-k3": 0.0,
-        "llama-3.1-70b": 0.0105,
-        "mistral-large-v2": 0.0045,
+        "llama-3.1-70b": 0.0025,
+        "mistral-large-v2": 0.0,
         "mistral-medium-3.5": 0.0,
         "qwen3.5-122b": 0.0,
         "qwen3.5-int4": 0.0,
@@ -2973,7 +2973,7 @@
           "google_gemini-3.7-flash": 0.96,
           "gpt-5.6-luna": 0.92,
           "gpt-5.6-sol": 0.918,
-          "gpt-5.6-terra": 0.959,
+          "gpt-5.6-terra": 0.96,
           "gpt-oss-120b": 0.952,
           "kimi-k3": 0.94,
           "llama-3.1-70b": 0.88,
@@ -2982,9 +2982,9 @@
           "qwen3.5-122b": 0.98,
           "qwen3.5-int4": 0.94,
           "qwen3.8-27b": 0.959,
-          "therapist": 0.51
+          "therapist": 0.5
         },
-        "human": 0.51,
+        "human": 0.5,
         "key": "subjective-symptoms",
         "section": "subjective",
         "spread": 0.1,
@@ -3009,14 +3009,14 @@
           "mistral-large-v2": 0.96,
           "mistral-medium-3.5": 1.0,
           "qwen3.5-122b": 1.0,
-          "qwen3.5-int4": 0.653,
+          "qwen3.5-int4": 0.64,
           "qwen3.8-27b": 0.94,
           "therapist": 0.26
         },
         "human": 0.26,
         "key": "objective-mental-status",
         "section": "objective",
-        "spread": 0.347,
+        "spread": 0.36,
         "text": "Mental Status",
         "verdict": "discriminating"
       },
@@ -3030,7 +3030,7 @@
           "google_gemini-3.1-pro-preview": 0.7,
           "google_gemini-3.7-flash": 0.66,
           "gpt-5.6-luna": 0.66,
-          "gpt-5.6-sol": 0.735,
+          "gpt-5.6-sol": 0.74,
           "gpt-5.6-terra": 0.66,
           "gpt-oss-120b": 0.762,
           "kimi-k3": 0.72,
@@ -3053,12 +3053,12 @@
         "by_system": {
           "deepseek-v4-flash": 0.6,
           "deepseek-v4-flash-thinking": 0.62,
-          "gemma4": 0.633,
+          "gemma4": 0.62,
           "glm-5": 0.7,
           "glm-5.2": 0.74,
           "google_gemini-3.1-pro-preview": 0.673,
           "google_gemini-3.7-flash": 0.7,
-          "gpt-5.6-luna": 0.653,
+          "gpt-5.6-luna": 0.64,
           "gpt-5.6-sol": 0.7,
           "gpt-5.6-terra": 0.7,
           "gpt-oss-120b": 0.667,
@@ -3081,11 +3081,11 @@
       {
         "by_system": {
           "deepseek-v4-flash": 0.6,
-          "deepseek-v4-flash-thinking": 0.653,
-          "gemma4": 0.592,
+          "deepseek-v4-flash-thinking": 0.64,
+          "gemma4": 0.58,
           "glm-5": 0.58,
           "glm-5.2": 0.62,
-          "google_gemini-3.1-pro-preview": 0.551,
+          "google_gemini-3.1-pro-preview": 0.56,
           "google_gemini-3.7-flash": 0.64,
           "gpt-5.6-luna": 0.68,
           "gpt-5.6-sol": 0.66,
@@ -3097,7 +3097,7 @@
           "mistral-medium-3.5": 0.6,
           "qwen3.5-122b": 0.68,
           "qwen3.5-int4": 0.58,
-          "qwen3.8-27b": 0.653,
+          "qwen3.8-27b": 0.64,
           "therapist": 0.36
         },
         "human": 0.36,
@@ -3317,7 +3317,7 @@
           "gemma4": 0.22,
           "glm-5": 0.3,
           "glm-5.2": 0.3,
-          "google_gemini-3.1-pro-preview": 0.571,
+          "google_gemini-3.1-pro-preview": 0.56,
           "google_gemini-3.7-flash": 0.48,
           "gpt-5.6-luna": 0.4,
           "gpt-5.6-sol": 0.46,
@@ -3358,7 +3358,7 @@
           "mistral-medium-3.5": 0.18,
           "qwen3.5-122b": 0.3,
           "qwen3.5-int4": 0.38,
-          "qwen3.8-27b": 0.265,
+          "qwen3.8-27b": 0.26,
           "therapist": 0.44
         },
         "human": 0.44,
@@ -3372,10 +3372,10 @@
         "by_system": {
           "deepseek-v4-flash": 0.14,
           "deepseek-v4-flash-thinking": 0.28,
-          "gemma4": 0.24,
+          "gemma4": 0.245,
           "glm-5": 0.12,
           "glm-5.2": 0.12,
-          "google_gemini-3.1-pro-preview": 0.163,
+          "google_gemini-3.1-pro-preview": 0.16,
           "google_gemini-3.7-flash": 0.14,
           "gpt-5.6-luna": 0.12,
           "gpt-5.6-sol": 0.08,
@@ -3385,7 +3385,7 @@
           "llama-3.1-70b": 0.14,
           "mistral-large-v2": 0.08,
           "mistral-medium-3.5": 0.06,
-          "qwen3.5-122b": 0.224,
+          "qwen3.5-122b": 0.22,
           "qwen3.5-int4": 0.1,
           "qwen3.8-27b": 0.14,
           "therapist": 0.061
@@ -3402,10 +3402,10 @@
           "deepseek-v4-flash": 0.02,
           "deepseek-v4-flash-thinking": 0.14,
           "gemma4": 0.06,
-          "glm-5": 0.204,
-          "glm-5.2": 0.143,
+          "glm-5": 0.2,
+          "glm-5.2": 0.14,
           "google_gemini-3.1-pro-preview": 0.4,
-          "google_gemini-3.7-flash": 0.265,
+          "google_gemini-3.7-flash": 0.26,
           "gpt-5.6-luna": 0.14,
           "gpt-5.6-sol": 0.14,
           "gpt-5.6-terra": 0.14,
@@ -3474,7 +3474,7 @@
           "mistral-medium-3.5": 0.02,
           "qwen3.5-122b": 0.04,
           "qwen3.5-int4": 0.0,
-          "qwen3.8-27b": 0.061,
+          "qwen3.8-27b": 0.06,
           "therapist": 0.04
         },
         "human": 0.04,
@@ -3547,32 +3547,36 @@
     "indistinguishable": [
       [
         "kimi-k3",
-        "qwen3.5-int4",
         "qwen3.5-122b",
-        "google_gemini-3.1-pro-preview"
+        "qwen3.5-int4"
       ],
       [
-        "google_gemini-3.7-flash",
-        "glm-5.2"
+        "google_gemini-3.1-pro-preview",
+        "google_gemini-3.7-flash"
       ],
       [
-        "gpt-5.6-terra",
         "glm-5",
+        "glm-5.2",
         "gpt-5.6-sol",
+        "gpt-5.6-terra",
         "gpt-oss-120b",
         "qwen3.8-27b",
         "gemma4"
       ],
       [
-        "gpt-5.6-luna",
         "deepseek-v4-flash-thinking",
+        "gpt-5.6-luna"
+      ],
+      [
         "mistral-medium-3.5"
       ],
       [
         "deepseek-v4-flash"
       ],
       [
-        "mistral-large-v2",
+        "mistral-large-v2"
+      ],
+      [
         "llama-3.1-70b"
       ],
       [
@@ -3581,155 +3585,155 @@
     ],
     "intervals": [
       {
-        "high": 0.569,
-        "low": 0.4881,
-        "mean": 0.5269,
+        "high": 0.5911,
+        "low": 0.5153,
+        "mean": 0.551,
         "own_mean": 0.5503,
         "own_sessions": 49,
         "system": "kimi-k3"
       },
       {
-        "high": 0.5731,
-        "low": 0.4818,
-        "mean": 0.5266,
-        "own_mean": 0.5355,
+        "high": 0.5585,
+        "low": 0.5044,
+        "mean": 0.5312,
+        "own_mean": 0.5264,
         "own_sessions": 49,
-        "system": "qwen3.5-int4"
-      },
-      {
-        "high": 0.5565,
-        "low": 0.4884,
-        "mean": 0.5215,
-        "own_mean": 0.5242,
-        "own_sessions": 47,
         "system": "qwen3.5-122b"
       },
       {
-        "high": 0.5462,
-        "low": 0.4784,
-        "mean": 0.5125,
-        "own_mean": 0.5292,
-        "own_sessions": 45,
+        "high": 0.561,
+        "low": 0.4985,
+        "mean": 0.5297,
+        "own_mean": 0.5358,
+        "own_sessions": 50,
+        "system": "qwen3.5-int4"
+      },
+      {
+        "high": 0.5522,
+        "low": 0.4934,
+        "mean": 0.5224,
+        "own_mean": 0.5341,
+        "own_sessions": 49,
         "system": "google_gemini-3.1-pro-preview"
       },
       {
-        "high": 0.5473,
-        "low": 0.4688,
-        "mean": 0.5069,
-        "own_mean": 0.5245,
-        "own_sessions": 49,
+        "high": 0.5463,
+        "low": 0.4894,
+        "mean": 0.5183,
+        "own_mean": 0.5265,
+        "own_sessions": 50,
         "system": "google_gemini-3.7-flash"
       },
       {
-        "high": 0.5423,
-        "low": 0.4466,
-        "mean": 0.4903,
-        "own_mean": 0.4987,
-        "own_sessions": 49,
-        "system": "glm-5.2"
-      },
-      {
-        "high": 0.5176,
-        "low": 0.4498,
-        "mean": 0.4836,
-        "own_mean": 0.4935,
-        "own_sessions": 49,
-        "system": "gpt-5.6-terra"
-      },
-      {
-        "high": 0.5234,
-        "low": 0.4445,
-        "mean": 0.4796,
-        "own_mean": 0.5018,
-        "own_sessions": 49,
+        "high": 0.5315,
+        "low": 0.4674,
+        "mean": 0.4983,
+        "own_mean": 0.504,
+        "own_sessions": 50,
         "system": "glm-5"
       },
       {
-        "high": 0.5054,
-        "low": 0.439,
-        "mean": 0.4728,
-        "own_mean": 0.5038,
-        "own_sessions": 48,
+        "high": 0.5338,
+        "low": 0.4596,
+        "mean": 0.4957,
+        "own_mean": 0.5001,
+        "own_sessions": 50,
+        "system": "glm-5.2"
+      },
+      {
+        "high": 0.5259,
+        "low": 0.4628,
+        "mean": 0.4947,
+        "own_mean": 0.5037,
+        "own_sessions": 49,
         "system": "gpt-5.6-sol"
       },
       {
-        "high": 0.5004,
-        "low": 0.4379,
-        "mean": 0.4683,
+        "high": 0.5209,
+        "low": 0.4668,
+        "mean": 0.4937,
+        "own_mean": 0.4971,
+        "own_sessions": 50,
+        "system": "gpt-5.6-terra"
+      },
+      {
+        "high": 0.5091,
+        "low": 0.4601,
+        "mean": 0.4843,
         "own_mean": 0.4867,
         "own_sessions": 42,
         "system": "gpt-oss-120b"
       },
       {
-        "high": 0.5043,
-        "low": 0.4308,
-        "mean": 0.4652,
-        "own_mean": 0.4688,
-        "own_sessions": 45,
+        "high": 0.5094,
+        "low": 0.4519,
+        "mean": 0.4804,
+        "own_mean": 0.4775,
+        "own_sessions": 49,
         "system": "qwen3.8-27b"
       },
       {
-        "high": 0.4961,
-        "low": 0.4249,
-        "mean": 0.4585,
-        "own_mean": 0.4774,
-        "own_sessions": 48,
+        "high": 0.5073,
+        "low": 0.4448,
+        "mean": 0.4749,
+        "own_mean": 0.4748,
+        "own_sessions": 49,
         "system": "gemma4"
       },
       {
-        "high": 0.495,
-        "low": 0.4163,
-        "mean": 0.4545,
-        "own_mean": 0.4773,
-        "own_sessions": 49,
-        "system": "gpt-5.6-luna"
-      },
-      {
-        "high": 0.4954,
-        "low": 0.4137,
-        "mean": 0.4533,
-        "own_mean": 0.4766,
+        "high": 0.5033,
+        "low": 0.4403,
+        "mean": 0.4728,
+        "own_mean": 0.4732,
         "own_sessions": 49,
         "system": "deepseek-v4-flash-thinking"
       },
       {
+        "high": 0.5014,
+        "low": 0.4427,
+        "mean": 0.4726,
+        "own_mean": 0.4816,
+        "own_sessions": 50,
+        "system": "gpt-5.6-luna"
+      },
+      {
         "high": 0.4767,
-        "low": 0.4104,
-        "mean": 0.4424,
-        "own_mean": 0.4557,
-        "own_sessions": 49,
+        "low": 0.428,
+        "mean": 0.4512,
+        "own_mean": 0.457,
+        "own_sessions": 50,
         "system": "mistral-medium-3.5"
       },
       {
-        "high": 0.4564,
-        "low": 0.3892,
-        "mean": 0.4204,
-        "own_mean": 0.4457,
-        "own_sessions": 49,
+        "high": 0.4617,
+        "low": 0.4062,
+        "mean": 0.4318,
+        "own_mean": 0.4447,
+        "own_sessions": 50,
         "system": "deepseek-v4-flash"
       },
       {
-        "high": 0.3967,
-        "low": 0.3321,
-        "mean": 0.3633,
+        "high": 0.4074,
+        "low": 0.3582,
+        "mean": 0.3818,
         "own_mean": 0.388,
         "own_sessions": 50,
         "system": "mistral-large-v2"
       },
       {
-        "high": 0.3929,
-        "low": 0.3241,
-        "mean": 0.3547,
+        "high": 0.3826,
+        "low": 0.3306,
+        "mean": 0.3546,
         "own_mean": 0.3637,
         "own_sessions": 50,
         "system": "llama-3.1-70b"
       },
       {
-        "high": 0.3402,
-        "low": 0.2592,
-        "mean": 0.2988,
-        "own_mean": 0.3249,
-        "own_sessions": 48,
+        "high": 0.3363,
+        "low": 0.2721,
+        "mean": 0.3038,
+        "own_mean": 0.3266,
+        "own_sessions": 49,
         "system": "therapist"
       }
     ],
@@ -3744,8 +3748,8 @@
       "within_conversation": {
         "median": 0.1223,
         "n": 50,
-        "positive": 31,
-        "sign_test_p": 0.119
+        "positive": 33,
+        "sign_test_p": 0.0328
       },
       "within_system": [
         {
@@ -3754,24 +3758,29 @@
           "system": "kimi-k3"
         },
         {
-          "n": 45,
-          "rho": 0.4766,
+          "n": 49,
+          "rho": 0.474,
           "system": "qwen3.8-27b"
         },
         {
-          "n": 48,
-          "rho": 0.4652,
+          "n": 49,
+          "rho": 0.4639,
           "system": "gpt-5.6-sol"
         },
         {
-          "n": 48,
-          "rho": 0.4106,
+          "n": 49,
+          "rho": 0.423,
           "system": "gemma4"
         },
         {
-          "n": 47,
-          "rho": 0.3988,
+          "n": 49,
+          "rho": 0.4179,
           "system": "qwen3.5-122b"
+        },
+        {
+          "n": 50,
+          "rho": 0.3878,
+          "system": "gpt-5.6-luna"
         },
         {
           "n": 42,
@@ -3779,149 +3788,160 @@
           "system": "gpt-oss-120b"
         },
         {
-          "n": 49,
-          "rho": 0.3694,
-          "system": "gpt-5.6-luna"
-        },
-        {
-          "n": 49,
-          "rho": 0.3537,
+          "n": 50,
+          "rho": 0.375,
           "system": "google_gemini-3.7-flash"
         },
         {
-          "n": 49,
-          "rho": 0.3476,
+          "n": 50,
+          "rho": 0.3527,
+          "system": "gpt-5.6-terra"
+        },
+        {
+          "n": 50,
+          "rho": 0.3416,
+          "system": "mistral-medium-3.5"
+        },
+        {
+          "n": 50,
+          "rho": 0.326,
           "system": "deepseek-v4-flash"
         },
         {
-          "n": 49,
-          "rho": 0.3386,
+          "n": 50,
+          "rho": 0.3234,
           "system": "qwen3.5-int4"
         },
         {
           "n": 49,
-          "rho": 0.3307,
-          "system": "gpt-5.6-terra"
-        },
-        {
-          "n": 49,
-          "rho": 0.3286,
-          "system": "mistral-medium-3.5"
-        },
-        {
-          "n": 45,
-          "rho": 0.3271,
+          "rho": 0.2952,
           "system": "google_gemini-3.1-pro-preview"
         },
         {
           "n": 49,
-          "rho": 0.2622,
-          "system": "glm-5"
-        },
-        {
-          "n": 49,
-          "rho": 0.2593,
+          "rho": 0.2932,
           "system": "deepseek-v4-flash-thinking"
         },
         {
-          "n": 49,
-          "rho": 0.2443,
+          "n": 50,
+          "rho": 0.2791,
+          "system": "glm-5"
+        },
+        {
+          "n": 50,
+          "rho": 0.2519,
           "system": "glm-5.2"
         }
       ]
     },
     "narrowed_by": {
-      "deepseek-v4-flash": 1,
       "deepseek-v4-flash-thinking": 1,
-      "gemma4": 2,
-      "glm-5": 1,
-      "glm-5.2": 1,
-      "google_gemini-3.1-pro-preview": 5,
-      "google_gemini-3.7-flash": 1,
-      "gpt-5.6-luna": 1,
-      "gpt-5.6-sol": 2,
-      "gpt-5.6-terra": 1,
+      "gemma4": 1,
+      "google_gemini-3.1-pro-preview": 1,
+      "gpt-5.6-sol": 1,
       "gpt-oss-120b": 8,
       "kimi-k3": 1,
-      "mistral-medium-3.5": 1,
-      "qwen3.5-122b": 3,
-      "qwen3.5-int4": 1,
-      "qwen3.8-27b": 5,
-      "therapist": 2
+      "qwen3.5-122b": 1,
+      "qwen3.8-27b": 1,
+      "therapist": 1
     },
     "near_the_cut": {
       "comparisons": 171,
       "error": 0.0049,
       "pairs": [
         {
-          "beats": "google_gemini-3.7-flash",
-          "loses": "glm-5",
+          "beats": "google_gemini-3.1-pro-preview",
+          "loses": "glm-5.2",
           "moves": [
-            "glm-5"
-          ],
-          "sigmas": 0.1,
-          "value": 0.9505
-        },
-        {
-          "beats": "google_gemini-3.7-flash",
-          "loses": "gpt-5.6-terra",
-          "moves": [
-            "deepseek-v4-flash-thinking",
-            "gpt-5.6-terra"
+            "glm-5.2"
           ],
           "sigmas": 0.53,
           "value": 0.9525
         },
         {
-          "beats": "glm-5",
-          "loses": "gpt-5.6-luna",
+          "beats": "google_gemini-3.7-flash",
+          "loses": "glm-5.2",
           "moves": [],
-          "sigmas": 1.66,
-          "value": 0.9575
+          "sigmas": 0.6,
+          "value": 0.947
         },
         {
           "beats": "gpt-5.6-terra",
-          "loses": "gemma4",
+          "loses": "deepseek-v4-flash-thinking",
+          "moves": [],
+          "sigmas": 0.6,
+          "value": 0.947
+        },
+        {
+          "beats": "mistral-medium-3.5",
+          "loses": "deepseek-v4-flash",
           "moves": [
-            "gemma4"
+            "deepseek-v4-flash",
+            "llama-3.1-70b",
+            "mistral-large-v2",
+            "therapist"
           ],
-          "sigmas": 1.88,
-          "value": 0.94
+          "sigmas": 0.63,
+          "value": 0.953
         },
         {
           "beats": "glm-5.2",
-          "loses": "qwen3.8-27b",
+          "loses": "deepseek-v4-flash-thinking",
           "moves": [],
-          "sigmas": 2.23,
-          "value": 0.938
-        },
-        {
-          "beats": "kimi-k3",
-          "loses": "google_gemini-3.7-flash",
-          "moves": [
-            "deepseek-v4-flash",
-            "deepseek-v4-flash-thinking",
-            "glm-5",
-            "google_gemini-3.7-flash",
-            "gpt-5.6-luna",
-            "gpt-5.6-sol",
-            "gpt-5.6-terra",
-            "gpt-oss-120b",
-            "llama-3.1-70b",
-            "mistral-large-v2",
-            "mistral-medium-3.5",
-            "qwen3.8-27b",
-            "therapist"
-          ],
-          "sigmas": 2.41,
-          "value": 0.9605
+          "sigmas": 1.07,
+          "value": 0.9445
         },
         {
           "beats": "google_gemini-3.1-pro-preview",
-          "loses": "gpt-5.6-terra",
+          "loses": "glm-5",
+          "moves": [
+            "deepseek-v4-flash-thinking",
+            "glm-5"
+          ],
+          "sigmas": 1.43,
+          "value": 0.9565
+        },
+        {
+          "beats": "gpt-5.6-sol",
+          "loses": "gpt-5.6-luna",
           "moves": [],
-          "sigmas": 2.94,
-          "value": 0.9625
+          "sigmas": 2.48,
+          "value": 0.9365
+        },
+        {
+          "beats": "deepseek-v4-flash-thinking",
+          "loses": "mistral-medium-3.5",
+          "moves": [],
+          "sigmas": 2.48,
+          "value": 0.9365
+        },
+        {
+          "beats": "kimi-k3",
+          "loses": "google_gemini-3.1-pro-preview",
+          "moves": [
+            "deepseek-v4-flash-thinking",
+            "glm-5",
+            "glm-5.2",
+            "google_gemini-3.1-pro-preview"
+          ],
+          "sigmas": 2.54,
+          "value": 0.961
+        },
+        {
+          "beats": "glm-5",
+          "loses": "deepseek-v4-flash-thinking",
+          "moves": [
+            "deepseek-v4-flash-thinking"
+          ],
+          "sigmas": 2.67,
+          "value": 0.9615
+        },
+        {
+          "beats": "google_gemini-3.7-flash",
+          "loses": "gpt-5.6-sol",
+          "moves": [],
+          "sigmas": 2.81,
+          "value": 0.962
         }
       ],
       "samples": 2000,
@@ -3930,21 +3950,15 @@
       "unplaced": [
         "deepseek-v4-flash",
         "deepseek-v4-flash-thinking",
-        "gemma4",
         "glm-5",
-        "google_gemini-3.7-flash",
-        "gpt-5.6-luna",
-        "gpt-5.6-sol",
-        "gpt-5.6-terra",
-        "gpt-oss-120b",
+        "glm-5.2",
+        "google_gemini-3.1-pro-preview",
         "llama-3.1-70b",
         "mistral-large-v2",
-        "mistral-medium-3.5",
-        "qwen3.8-27b",
         "therapist"
       ]
     },
-    "sessions": 25,
+    "sessions": 37,
     "still_scoring": [],
     "track": "tneval-soap",
     "verdict_counts": {
@@ -3955,10 +3969,10 @@
     }
   },
   "selection": {
-    "default": "tneval-soap-gemini-3.1-pro-preview-tneval-rubric-v1-0.6.0-102129",
+    "default": "tneval-soap-gemini-3.1-pro-preview-tneval-rubric-v1-0.7.0-102129",
     "tracks": [
       {
-        "default": "tneval-soap-gemini-3.1-pro-preview-tneval-rubric-v1-0.6.0-102129",
+        "default": "tneval-soap-gemini-3.1-pro-preview-tneval-rubric-v1-0.7.0-102129",
         "judges": [
           {
             "judge_model": "gemini-3.1-pro-preview",
@@ -3966,7 +3980,7 @@
             "settings_differ": false,
             "settings_label": "",
             "stale_harness": false,
-            "table": "tneval-soap-gemini-3.1-pro-preview-tneval-rubric-v1-0.6.0-102129"
+            "table": "tneval-soap-gemini-3.1-pro-preview-tneval-rubric-v1-0.7.0-102129"
           },
           {
             "judge_model": "gpt-5.6-terra",
@@ -3974,14 +3988,14 @@
             "settings_differ": false,
             "settings_label": "",
             "stale_harness": false,
-            "table": "tneval-soap-gpt-5.6-terra-tneval-rubric-v1-0.6.0-acf643"
+            "table": "tneval-soap-gpt-5.6-terra-tneval-rubric-v1-0.7.0-acf643"
           }
         ],
         "label": "TN-Eval SOAP",
         "track": "tneval-soap"
       },
       {
-        "default": "icare-gemini-3.1-pro-preview-icare-trace-v1-0.6.0-102129",
+        "default": "icare-gemini-3.1-pro-preview-icare-trace-v1-0.7.0-102129",
         "judges": [
           {
             "judge_model": "gemini-3.1-pro-preview",
@@ -3989,7 +4003,7 @@
             "settings_differ": false,
             "settings_label": "",
             "stale_harness": false,
-            "table": "icare-gemini-3.1-pro-preview-icare-trace-v1-0.6.0-102129"
+            "table": "icare-gemini-3.1-pro-preview-icare-trace-v1-0.7.0-102129"
           },
           {
             "judge_model": "gpt-5.6-terra",
@@ -3997,7 +4011,7 @@
             "settings_differ": false,
             "settings_label": "",
             "stale_harness": false,
-            "table": "icare-gpt-5.6-terra-icare-trace-v1-0.6.0-acf643"
+            "table": "icare-gpt-5.6-terra-icare-trace-v1-0.7.0-acf643"
           }
         ],
         "label": "iCARE / iHOPE",
@@ -4030,7 +4044,7 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.1.0",
       "judge_model": "gemini-3.1-pro-preview",
@@ -4059,7 +4073,7 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.2.0",
       "judge_model": "gemini-3.1-pro-preview",
@@ -4074,7 +4088,7 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.2.0",
       "judge_model": "gpt-5.6-terra",
@@ -4089,7 +4103,7 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.2.0",
       "judge_model": "gemini-3.1-pro-preview",
@@ -4103,7 +4117,7 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.2.0",
       "judge_model": "gpt-5.6-terra",
@@ -4117,7 +4131,7 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.3.0",
       "judge_model": "gemini-3.1-pro-preview",
@@ -4131,7 +4145,7 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.3.0",
       "judge_model": "gpt-5.6-terra",
@@ -4145,7 +4159,7 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.4.0",
       "judge_model": "gemini-3.1-pro-preview",
@@ -4159,7 +4173,7 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.4.0",
       "judge_model": "gpt-5.6-terra",
@@ -4187,7 +4201,7 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.5.0",
       "judge_model": "gemini-3.1-pro-preview",
@@ -4201,7 +4215,7 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.5.0",
       "judge_model": "gpt-5.6-terra",
@@ -4229,7 +4243,35 @@
       "track": "icare"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
+      "current_judge_prompt_version": "",
+      "harness_version": "0.6.0",
+      "judge_model": "gemini-3.1-pro-preview",
+      "judge_prompt_version": "icare-trace-v1",
+      "prompt_version": "icare-zeroshot-v1",
+      "reasons": [
+        "harness"
+      ],
+      "rows": 16,
+      "scored_at": "2026-08-27T20:06:35Z",
+      "track": "icare"
+    },
+    {
+      "current_harness_version": "0.7.0",
+      "current_judge_prompt_version": "",
+      "harness_version": "0.6.0",
+      "judge_model": "gpt-5.6-terra",
+      "judge_prompt_version": "icare-trace-v1",
+      "prompt_version": "icare-zeroshot-v1",
+      "reasons": [
+        "harness"
+      ],
+      "rows": 16,
+      "scored_at": "2026-08-27T20:10:05Z",
+      "track": "icare"
+    },
+    {
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.3.0",
       "judge_model": "gemini-3.1-pro-preview",
@@ -4243,7 +4285,7 @@
       "track": "pdsqi-soap"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.3.0",
       "judge_model": "gpt-5.6-terra",
@@ -4257,7 +4299,7 @@
       "track": "pdsqi-soap"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.4.0",
       "judge_model": "gemini-3.1-pro-preview",
@@ -4271,7 +4313,7 @@
       "track": "pdsqi-soap"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.4.0",
       "judge_model": "gpt-5.6-terra",
@@ -4285,7 +4327,7 @@
       "track": "pdsqi-soap"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.5.0",
       "judge_model": "gemini-3.1-pro-preview",
@@ -4299,7 +4341,7 @@
       "track": "pdsqi-soap"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.5.0",
       "judge_model": "gpt-5.6-terra",
@@ -4310,6 +4352,34 @@
       ],
       "rows": 19,
       "scored_at": "2026-08-27T15:27:36Z",
+      "track": "pdsqi-soap"
+    },
+    {
+      "current_harness_version": "0.7.0",
+      "current_judge_prompt_version": "",
+      "harness_version": "0.6.0",
+      "judge_model": "gemini-3.1-pro-preview",
+      "judge_prompt_version": "pdsqi9-note-v1",
+      "prompt_version": "tneval-soap-v1",
+      "reasons": [
+        "harness"
+      ],
+      "rows": 19,
+      "scored_at": "2026-08-27T20:07:47Z",
+      "track": "pdsqi-soap"
+    },
+    {
+      "current_harness_version": "0.7.0",
+      "current_judge_prompt_version": "",
+      "harness_version": "0.6.0",
+      "judge_model": "gpt-5.6-terra",
+      "judge_prompt_version": "pdsqi9-note-v1",
+      "prompt_version": "tneval-soap-v1",
+      "reasons": [
+        "harness"
+      ],
+      "rows": 19,
+      "scored_at": "2026-08-27T20:11:16Z",
       "track": "pdsqi-soap"
     },
     {
@@ -4343,7 +4413,7 @@
       "track": "tneval-soap"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.1.0",
       "judge_model": "gemini-3.1-pro-preview",
@@ -4358,7 +4428,7 @@
       "track": "tneval-soap"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.1.0",
       "judge_model": "gpt-5.6-terra",
@@ -4387,7 +4457,7 @@
       "track": "tneval-soap"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.2.0",
       "judge_model": "gemini-3.1-pro-preview",
@@ -4402,7 +4472,7 @@
       "track": "tneval-soap"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.2.0",
       "judge_model": "gemini-3.1-pro-preview",
@@ -4416,7 +4486,7 @@
       "track": "tneval-soap"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.2.0",
       "judge_model": "gpt-5.6-terra",
@@ -4458,7 +4528,7 @@
       "track": "tneval-soap"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.3.0",
       "judge_model": "gemini-3.1-pro-preview",
@@ -4472,7 +4542,7 @@
       "track": "tneval-soap"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.3.0",
       "judge_model": "gpt-5.6-terra",
@@ -4486,7 +4556,7 @@
       "track": "tneval-soap"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.4.0",
       "judge_model": "gemini-3.1-pro-preview",
@@ -4500,7 +4570,7 @@
       "track": "tneval-soap"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.4.0",
       "judge_model": "gpt-5.6-terra",
@@ -4528,7 +4598,7 @@
       "track": "tneval-soap"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.5.0",
       "judge_model": "gemini-3.1-pro-preview",
@@ -4542,7 +4612,7 @@
       "track": "tneval-soap"
     },
     {
-      "current_harness_version": "0.6.0",
+      "current_harness_version": "0.7.0",
       "current_judge_prompt_version": "",
       "harness_version": "0.5.0",
       "judge_model": "gpt-5.6-terra",
@@ -4567,6 +4637,34 @@
       ],
       "rows": 16,
       "scored_at": "",
+      "track": "tneval-soap"
+    },
+    {
+      "current_harness_version": "0.7.0",
+      "current_judge_prompt_version": "",
+      "harness_version": "0.6.0",
+      "judge_model": "gemini-3.1-pro-preview",
+      "judge_prompt_version": "tneval-rubric-v1",
+      "prompt_version": "tneval-soap-v1",
+      "reasons": [
+        "harness"
+      ],
+      "rows": 19,
+      "scored_at": "2026-09-01T21:21:28Z",
+      "track": "tneval-soap"
+    },
+    {
+      "current_harness_version": "0.7.0",
+      "current_judge_prompt_version": "",
+      "harness_version": "0.6.0",
+      "judge_model": "gpt-5.6-terra",
+      "judge_prompt_version": "tneval-rubric-v1",
+      "prompt_version": "tneval-soap-v1",
+      "reasons": [
+        "harness"
+      ],
+      "rows": 19,
+      "scored_at": "2026-08-27T20:09:46Z",
       "track": "tneval-soap"
     }
   ],
@@ -4719,74 +4817,98 @@
           "error": 0.0049,
           "pairs": [
             {
-              "beats": "google_gemini-3.7-flash",
-              "loses": "glm-5",
+              "beats": "google_gemini-3.1-pro-preview",
+              "loses": "glm-5.2",
               "moves": [
-                "glm-5"
-              ],
-              "sigmas": 0.1,
-              "value": 0.9505
-            },
-            {
-              "beats": "google_gemini-3.7-flash",
-              "loses": "gpt-5.6-terra",
-              "moves": [
-                "deepseek-v4-flash-thinking",
-                "gpt-5.6-terra"
+                "glm-5.2"
               ],
               "sigmas": 0.53,
               "value": 0.9525
             },
             {
-              "beats": "glm-5",
-              "loses": "gpt-5.6-luna",
+              "beats": "google_gemini-3.7-flash",
+              "loses": "glm-5.2",
               "moves": [],
-              "sigmas": 1.66,
-              "value": 0.9575
+              "sigmas": 0.6,
+              "value": 0.947
             },
             {
               "beats": "gpt-5.6-terra",
-              "loses": "gemma4",
+              "loses": "deepseek-v4-flash-thinking",
+              "moves": [],
+              "sigmas": 0.6,
+              "value": 0.947
+            },
+            {
+              "beats": "mistral-medium-3.5",
+              "loses": "deepseek-v4-flash",
               "moves": [
-                "gemma4"
+                "deepseek-v4-flash",
+                "llama-3.1-70b",
+                "mistral-large-v2",
+                "therapist"
               ],
-              "sigmas": 1.88,
-              "value": 0.94
+              "sigmas": 0.63,
+              "value": 0.953
             },
             {
               "beats": "glm-5.2",
-              "loses": "qwen3.8-27b",
+              "loses": "deepseek-v4-flash-thinking",
               "moves": [],
-              "sigmas": 2.23,
-              "value": 0.938
-            },
-            {
-              "beats": "kimi-k3",
-              "loses": "google_gemini-3.7-flash",
-              "moves": [
-                "deepseek-v4-flash",
-                "deepseek-v4-flash-thinking",
-                "glm-5",
-                "google_gemini-3.7-flash",
-                "gpt-5.6-luna",
-                "gpt-5.6-sol",
-                "gpt-5.6-terra",
-                "gpt-oss-120b",
-                "llama-3.1-70b",
-                "mistral-large-v2",
-                "mistral-medium-3.5",
-                "qwen3.8-27b",
-                "therapist"
-              ],
-              "sigmas": 2.41,
-              "value": 0.9605
+              "sigmas": 1.07,
+              "value": 0.9445
             },
             {
               "beats": "google_gemini-3.1-pro-preview",
-              "loses": "gpt-5.6-terra",
+              "loses": "glm-5",
+              "moves": [
+                "deepseek-v4-flash-thinking",
+                "glm-5"
+              ],
+              "sigmas": 1.43,
+              "value": 0.9565
+            },
+            {
+              "beats": "gpt-5.6-sol",
+              "loses": "gpt-5.6-luna",
               "moves": [],
-              "sigmas": 2.94,
-              "value": 0.9625
+              "sigmas": 2.48,
+              "value": 0.9365
+            },
+            {
+              "beats": "deepseek-v4-flash-thinking",
+              "loses": "mistral-medium-3.5",
+              "moves": [],
+              "sigmas": 2.48,
+              "value": 0.9365
+            },
+            {
+              "beats": "kimi-k3",
+              "loses": "google_gemini-3.1-pro-preview",
+              "moves": [
+                "deepseek-v4-flash-thinking",
+                "glm-5",
+                "glm-5.2",
+                "google_gemini-3.1-pro-preview"
+              ],
+              "sigmas": 2.54,
+              "value": 0.961
+            },
+            {
+              "beats": "glm-5",
+              "loses": "deepseek-v4-flash-thinking",
+              "moves": [
+                "deepseek-v4-flash-thinking"
+              ],
+              "sigmas": 2.67,
+              "value": 0.9615
+            },
+            {
+              "beats": "google_gemini-3.7-flash",
+              "loses": "gpt-5.6-sol",
+              "moves": [],
+              "sigmas": 2.81,
+              "value": 0.962
             }
           ],
           "samples": 2000,
@@ -4795,60 +4917,58 @@
           "unplaced": [
             "deepseek-v4-flash",
             "deepseek-v4-flash-thinking",
-            "gemma4",
             "glm-5",
-            "google_gemini-3.7-flash",
-            "gpt-5.6-luna",
-            "gpt-5.6-sol",
-            "gpt-5.6-terra",
-            "gpt-oss-120b",
+            "glm-5.2",
+            "google_gemini-3.1-pro-preview",
             "llama-3.1-70b",
             "mistral-large-v2",
-            "mistral-medium-3.5",
-            "qwen3.8-27b",
             "therapist"
           ]
         },
         "of": [
           [
             "kimi-k3",
-            "qwen3.5-int4",
             "qwen3.5-122b",
-            "google_gemini-3.1-pro-preview"
+            "qwen3.5-int4"
           ],
           [
-            "google_gemini-3.7-flash",
-            "glm-5.2"
+            "google_gemini-3.1-pro-preview",
+            "google_gemini-3.7-flash"
           ],
           [
-            "gpt-5.6-terra",
             "glm-5",
+            "glm-5.2",
             "gpt-5.6-sol",
+            "gpt-5.6-terra",
             "gpt-oss-120b",
             "qwen3.8-27b",
             "gemma4"
           ],
           [
-            "gpt-5.6-luna",
             "deepseek-v4-flash-thinking",
+            "gpt-5.6-luna"
+          ],
+          [
             "mistral-medium-3.5"
           ],
           [
             "deepseek-v4-flash"
           ],
           [
-            "mistral-large-v2",
+            "mistral-large-v2"
+          ],
+          [
             "llama-3.1-70b"
           ],
           [
             "therapist"
           ]
         ],
-        "sessions": 25
+        "sessions": 37
       },
       "has_effort": true,
       "has_words": true,
-      "id": "tneval-soap-gemini-3.1-pro-preview-tneval-rubric-v1-0.6.0-102129",
+      "id": "tneval-soap-gemini-3.1-pro-preview-tneval-rubric-v1-0.7.0-102129",
       "judge_prompt_versions": [
         "tneval-rubric-v1",
         "pdsqi9-note-v1"
@@ -4884,7 +5004,7 @@
             },
             "subjective": {
               "completeness": 0.6867,
-              "conciseness": 0.8788,
+              "conciseness": 0.8779,
               "faithfulness": 5.0,
               "likert_completeness": 4.98,
               "likert_conciseness": 4.68
@@ -4920,10 +5040,10 @@
           "generated_at": "",
           "headline": {
             "accurate": 4.9796,
-            "completeness": 0.5459,
+            "completeness": 0.5503,
             "comprehensible": 5.0,
-            "conciseness": 0.8859,
-            "faithfulness": 4.9844,
+            "conciseness": 0.8866,
+            "faithfulness": 4.9847,
             "organized": 5.0,
             "stigmatizing": 0.9592,
             "succinct": 2.898,
@@ -4935,16 +5055,16 @@
           "label": "kimi-k3",
           "metrics_note": "faithfulness is a Likert rating; TN-Eval measured weak human agreement on it -- see docs/limitations.md",
           "n_attempted": 50,
-          "n_complete": 48,
+          "n_complete": 49,
           "n_failed": 0,
           "n_generated": 50,
-          "n_partial": 2,
+          "n_partial": 1,
           "n_scored": 50,
           "n_unreached": 0,
           "note_words": 518,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-09-01T21:21:28Z",
+          "scored_at": "2026-09-02T05:37:04Z",
           "section_order": [
             "subjective",
             "objective",
@@ -4969,7 +5089,7 @@
               "likert_conciseness": 5.0
             },
             "objective": {
-              "completeness": 0.5714,
+              "completeness": 0.568,
               "conciseness": 0.8613,
               "faithfulness": 4.96,
               "likert_completeness": 3.2,
@@ -5002,7 +5122,7 @@
             "objective-assessment-tools": 0.04,
             "objective-behavior": 0.94,
             "objective-interventions": 0.46,
-            "objective-mental-status": 0.6531,
+            "objective-mental-status": 0.64,
             "objective-therapy-activities": 0.76,
             "plan-adjustment": 0.16,
             "plan-follow-up": 0.52,
@@ -5020,10 +5140,10 @@
           "generated_at": "",
           "headline": {
             "accurate": 4.94,
-            "completeness": 0.5355,
+            "completeness": 0.5358,
             "comprehensible": 5.0,
-            "conciseness": 0.8782,
-            "faithfulness": 4.9235,
+            "conciseness": 0.8769,
+            "faithfulness": 4.925,
             "organized": 5.0,
             "stigmatizing": 0.94,
             "succinct": 4.0,
@@ -5035,16 +5155,16 @@
           "label": "qwen3.5-int4",
           "metrics_note": "faithfulness is a Likert rating; TN-Eval measured weak human agreement on it -- see docs/limitations.md",
           "n_attempted": 50,
-          "n_complete": 49,
+          "n_complete": 50,
           "n_failed": 0,
           "n_generated": 50,
-          "n_partial": 1,
+          "n_partial": 0,
           "n_scored": 50,
           "n_unreached": 0,
           "note_words": 273,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-09-01T21:21:28Z",
+          "scored_at": "2026-09-02T05:37:04Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5062,8 +5182,108 @@
         {
           "by_section": {
             "assessment": {
-              "completeness": 0.4193,
-              "conciseness": 0.9813,
+              "completeness": 0.455,
+              "conciseness": 0.99,
+              "faithfulness": 5.0,
+              "likert_completeness": 3.9,
+              "likert_conciseness": 5.0
+            },
+            "objective": {
+              "completeness": 0.556,
+              "conciseness": 0.8883,
+              "faithfulness": 4.96,
+              "likert_completeness": 3.1,
+              "likert_conciseness": 4.98
+            },
+            "plan": {
+              "completeness": 0.475,
+              "conciseness": 0.7977,
+              "faithfulness": 4.94,
+              "likert_completeness": 4.36,
+              "likert_conciseness": 5.0
+            },
+            "subjective": {
+              "completeness": 0.6463,
+              "conciseness": 0.8926,
+              "faithfulness": 5.0,
+              "likert_completeness": 4.7,
+              "likert_conciseness": 5.0
+            }
+          },
+          "detail": {
+            "assessment-analysis": 1.0,
+            "assessment-diagnosis": 0.16,
+            "assessment-goals": 0.0,
+            "assessment-overall-progress": 0.42,
+            "assessment-progress": 0.46,
+            "assessment-response": 0.48,
+            "assessment-stages": 0.5,
+            "assessment-triggers": 0.62,
+            "objective-assessment-tools": 0.08,
+            "objective-behavior": 0.98,
+            "objective-interventions": 0.4,
+            "objective-mental-status": 0.76,
+            "objective-therapy-activities": 0.56,
+            "plan-adjustment": 0.1,
+            "plan-follow-up": 0.42,
+            "plan-homework": 0.46,
+            "plan-interventions": 0.92,
+            "subjective-chief-complaint": 0.7,
+            "subjective-goals": 0.56,
+            "subjective-history": 0.6735,
+            "subjective-homework": 0.08,
+            "subjective-quotes": 0.88,
+            "subjective-symptoms": 0.96
+          },
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "accurate": 4.98,
+            "completeness": 0.5341,
+            "comprehensible": 5.0,
+            "conciseness": 0.8899,
+            "faithfulness": 4.9745,
+            "organized": 5.0,
+            "stigmatizing": 0.94,
+            "succinct": 3.84,
+            "synthesized": 5.0,
+            "thorough": 4.94,
+            "useful": 5.0
+          },
+          "judges_own_family": "google",
+          "label": "google_gemini-3.1-pro-preview",
+          "metrics_note": "faithfulness is a Likert rating; TN-Eval measured weak human agreement on it -- see docs/limitations.md",
+          "n_attempted": 50,
+          "n_complete": 49,
+          "n_failed": 0,
+          "n_generated": 50,
+          "n_partial": 1,
+          "n_scored": 50,
+          "n_unreached": 0,
+          "note_words": 350,
+          "provider": "vertex",
+          "scored": true,
+          "scored_at": "2026-09-02T05:37:04Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
+          "settings": "temperature 0, max tokens 4096",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "google_gemini-3.1-pro-preview",
+          "system_type": "model",
+          "unreached_reasons": {},
+          "withdrawn_on": null
+        },
+        {
+          "by_section": {
+            "assessment": {
+              "completeness": 0.425,
+              "conciseness": 0.9817,
               "faithfulness": 4.98,
               "likert_completeness": 3.62,
               "likert_conciseness": 5.0
@@ -5092,7 +5312,7 @@
           },
           "detail": {
             "assessment-analysis": 1.0,
-            "assessment-diagnosis": 0.2245,
+            "assessment-diagnosis": 0.22,
             "assessment-goals": 0.02,
             "assessment-overall-progress": 0.42,
             "assessment-progress": 0.46,
@@ -5120,10 +5340,10 @@
           "generated_at": "",
           "headline": {
             "accurate": 4.72,
-            "completeness": 0.5262,
+            "completeness": 0.529,
             "comprehensible": 5.0,
-            "conciseness": 0.9043,
-            "faithfulness": 4.7556,
+            "conciseness": 0.9047,
+            "faithfulness": 4.7656,
             "organized": 5.0,
             "stigmatizing": 0.92,
             "succinct": 3.18,
@@ -5135,16 +5355,16 @@
           "label": "qwen3.5-122b",
           "metrics_note": "faithfulness is a Likert rating; TN-Eval measured weak human agreement on it -- see docs/limitations.md",
           "n_attempted": 50,
-          "n_complete": 45,
+          "n_complete": 48,
           "n_failed": 0,
           "n_generated": 50,
-          "n_partial": 5,
+          "n_partial": 2,
           "n_scored": 50,
           "n_unreached": 0,
           "note_words": 443,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-09-01T21:21:28Z",
+          "scored_at": "2026-09-02T05:37:04Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5162,106 +5382,6 @@
         {
           "by_section": {
             "assessment": {
-              "completeness": 0.4505,
-              "conciseness": 0.99,
-              "faithfulness": 5.0,
-              "likert_completeness": 3.9,
-              "likert_conciseness": 5.0
-            },
-            "objective": {
-              "completeness": 0.5592,
-              "conciseness": 0.8942,
-              "faithfulness": 4.96,
-              "likert_completeness": 3.1,
-              "likert_conciseness": 4.98
-            },
-            "plan": {
-              "completeness": 0.475,
-              "conciseness": 0.7977,
-              "faithfulness": 4.94,
-              "likert_completeness": 4.36,
-              "likert_conciseness": 5.0
-            },
-            "subjective": {
-              "completeness": 0.6458,
-              "conciseness": 0.8926,
-              "faithfulness": 5.0,
-              "likert_completeness": 4.7,
-              "likert_conciseness": 5.0
-            }
-          },
-          "detail": {
-            "assessment-analysis": 1.0,
-            "assessment-diagnosis": 0.1633,
-            "assessment-goals": 0.0,
-            "assessment-overall-progress": 0.42,
-            "assessment-progress": 0.46,
-            "assessment-response": 0.48,
-            "assessment-stages": 0.5,
-            "assessment-triggers": 0.62,
-            "objective-assessment-tools": 0.08,
-            "objective-behavior": 0.98,
-            "objective-interventions": 0.4,
-            "objective-mental-status": 0.76,
-            "objective-therapy-activities": 0.5714,
-            "plan-adjustment": 0.1,
-            "plan-follow-up": 0.42,
-            "plan-homework": 0.46,
-            "plan-interventions": 0.92,
-            "subjective-chief-complaint": 0.7,
-            "subjective-goals": 0.551,
-            "subjective-history": 0.6735,
-            "subjective-homework": 0.08,
-            "subjective-quotes": 0.88,
-            "subjective-symptoms": 0.96
-          },
-          "effort": "",
-          "failure_reasons": {},
-          "generated_at": "",
-          "headline": {
-            "accurate": 4.98,
-            "completeness": 0.5251,
-            "comprehensible": 5.0,
-            "conciseness": 0.8932,
-            "faithfulness": 4.9716,
-            "organized": 5.0,
-            "stigmatizing": 0.94,
-            "succinct": 3.84,
-            "synthesized": 5.0,
-            "thorough": 4.94,
-            "useful": 5.0
-          },
-          "judges_own_family": "google",
-          "label": "google_gemini-3.1-pro-preview",
-          "metrics_note": "faithfulness is a Likert rating; TN-Eval measured weak human agreement on it -- see docs/limitations.md",
-          "n_attempted": 50,
-          "n_complete": 44,
-          "n_failed": 0,
-          "n_generated": 50,
-          "n_partial": 6,
-          "n_scored": 50,
-          "n_unreached": 0,
-          "note_words": 350,
-          "provider": "vertex",
-          "scored": true,
-          "scored_at": "2026-09-01T21:21:28Z",
-          "section_order": [
-            "subjective",
-            "objective",
-            "assessment",
-            "plan"
-          ],
-          "settings": "temperature 0, max tokens 4096",
-          "settings_differ": false,
-          "source": "",
-          "system_id": "google_gemini-3.1-pro-preview",
-          "system_type": "model",
-          "unreached_reasons": {},
-          "withdrawn_on": null
-        },
-        {
-          "by_section": {
-            "assessment": {
               "completeness": 0.4475,
               "conciseness": 0.9817,
               "faithfulness": 5.0,
@@ -5269,7 +5389,7 @@
               "likert_conciseness": 5.0
             },
             "objective": {
-              "completeness": 0.5429,
+              "completeness": 0.54,
               "conciseness": 0.95,
               "faithfulness": 4.96,
               "likert_completeness": 2.78,
@@ -5301,7 +5421,7 @@
             "assessment-triggers": 0.52,
             "objective-assessment-tools": 0.04,
             "objective-behavior": 1.0,
-            "objective-interventions": 0.2653,
+            "objective-interventions": 0.26,
             "objective-mental-status": 0.92,
             "objective-therapy-activities": 0.48,
             "plan-adjustment": 0.12,
@@ -5320,10 +5440,10 @@
           "generated_at": "",
           "headline": {
             "accurate": 5.0,
-            "completeness": 0.5245,
+            "completeness": 0.5265,
             "comprehensible": 5.0,
-            "conciseness": 0.9312,
-            "faithfulness": 4.9796,
+            "conciseness": 0.9326,
+            "faithfulness": 4.98,
             "organized": 5.0,
             "stigmatizing": 0.9574,
             "succinct": 4.0,
@@ -5335,16 +5455,16 @@
           "label": "google_gemini-3.7-flash",
           "metrics_note": "faithfulness is a Likert rating; TN-Eval measured weak human agreement on it -- see docs/limitations.md",
           "n_attempted": 50,
-          "n_complete": 49,
+          "n_complete": 50,
           "n_failed": 0,
           "n_generated": 50,
-          "n_partial": 1,
+          "n_partial": 0,
           "n_scored": 50,
           "n_unreached": 0,
           "note_words": 266,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-09-01T21:21:28Z",
+          "scored_at": "2026-09-02T05:37:04Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5369,7 +5489,7 @@
               "likert_conciseness": 5.0
             },
             "objective": {
-              "completeness": 0.498,
+              "completeness": 0.496,
               "conciseness": 0.9197,
               "faithfulness": 5.0,
               "likert_completeness": 2.48,
@@ -5384,7 +5504,7 @@
             },
             "subjective": {
               "completeness": 0.63,
-              "conciseness": 0.8609,
+              "conciseness": 0.8659,
               "faithfulness": 4.98,
               "likert_completeness": 4.64,
               "likert_conciseness": 4.96
@@ -5401,7 +5521,7 @@
             "assessment-triggers": 0.58,
             "objective-assessment-tools": 0.0,
             "objective-behavior": 1.0,
-            "objective-interventions": 0.2041,
+            "objective-interventions": 0.2,
             "objective-mental-status": 0.98,
             "objective-therapy-activities": 0.3,
             "plan-adjustment": 0.08,
@@ -5420,10 +5540,10 @@
           "generated_at": "",
           "headline": {
             "accurate": 4.9388,
-            "completeness": 0.5018,
+            "completeness": 0.504,
             "comprehensible": 5.0,
-            "conciseness": 0.8634,
-            "faithfulness": 4.9592,
+            "conciseness": 0.8649,
+            "faithfulness": 4.96,
             "organized": 5.0,
             "stigmatizing": 0.9388,
             "succinct": 3.7347,
@@ -5435,16 +5555,16 @@
           "label": "glm-5",
           "metrics_note": "faithfulness is a Likert rating; TN-Eval measured weak human agreement on it -- see docs/limitations.md",
           "n_attempted": 50,
-          "n_complete": 49,
+          "n_complete": 50,
           "n_failed": 0,
           "n_generated": 50,
-          "n_partial": 1,
+          "n_partial": 0,
           "n_scored": 50,
           "n_unreached": 0,
           "note_words": 358,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-09-01T21:21:28Z",
+          "scored_at": "2026-09-02T05:37:04Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5462,6 +5582,106 @@
         {
           "by_section": {
             "assessment": {
+              "completeness": 0.44,
+              "conciseness": 0.9503,
+              "faithfulness": 5.0,
+              "likert_completeness": 4.3,
+              "likert_conciseness": 5.0
+            },
+            "objective": {
+              "completeness": 0.504,
+              "conciseness": 0.958,
+              "faithfulness": 5.0,
+              "likert_completeness": 2.84,
+              "likert_conciseness": 4.76
+            },
+            "plan": {
+              "completeness": 0.515,
+              "conciseness": 0.8785,
+              "faithfulness": 4.86,
+              "likert_completeness": 4.52,
+              "likert_conciseness": 4.86
+            },
+            "subjective": {
+              "completeness": 0.5442,
+              "conciseness": 0.7558,
+              "faithfulness": 5.0,
+              "likert_completeness": 4.18,
+              "likert_conciseness": 5.0
+            }
+          },
+          "detail": {
+            "assessment-analysis": 1.0,
+            "assessment-diagnosis": 0.08,
+            "assessment-goals": 0.0,
+            "assessment-overall-progress": 0.62,
+            "assessment-progress": 0.58,
+            "assessment-response": 0.34,
+            "assessment-stages": 0.4,
+            "assessment-triggers": 0.5,
+            "objective-assessment-tools": 0.02,
+            "objective-behavior": 1.0,
+            "objective-interventions": 0.14,
+            "objective-mental-status": 0.9,
+            "objective-therapy-activities": 0.46,
+            "plan-adjustment": 0.08,
+            "plan-follow-up": 0.5,
+            "plan-homework": 0.48,
+            "plan-interventions": 1.0,
+            "subjective-chief-complaint": 0.74,
+            "subjective-goals": 0.66,
+            "subjective-history": 0.7,
+            "subjective-homework": 0.02,
+            "subjective-quotes": 0.2,
+            "subjective-symptoms": 0.9184
+          },
+          "effort": "medium",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "accurate": 5.0,
+            "completeness": 0.5019,
+            "comprehensible": 5.0,
+            "conciseness": 0.8868,
+            "faithfulness": 4.9635,
+            "organized": 5.0,
+            "stigmatizing": 1.0,
+            "succinct": 3.88,
+            "synthesized": 5.0,
+            "thorough": 5.0,
+            "useful": 5.0
+          },
+          "judges_own_family": "",
+          "label": "gpt-5.6-sol",
+          "metrics_note": "faithfulness is a Likert rating; TN-Eval measured weak human agreement on it -- see docs/limitations.md",
+          "n_attempted": 50,
+          "n_complete": 48,
+          "n_failed": 0,
+          "n_generated": 50,
+          "n_partial": 2,
+          "n_scored": 50,
+          "n_unreached": 0,
+          "note_words": 372,
+          "provider": "openai",
+          "scored": true,
+          "scored_at": "2026-09-02T05:37:04Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
+          "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
+          "settings_differ": true,
+          "source": "",
+          "system_id": "gpt-5.6-sol",
+          "system_type": "model",
+          "unreached_reasons": {},
+          "withdrawn_on": null
+        },
+        {
+          "by_section": {
+            "assessment": {
               "completeness": 0.4,
               "conciseness": 0.986,
               "faithfulness": 5.0,
@@ -5469,7 +5689,7 @@
               "likert_conciseness": 5.0
             },
             "objective": {
-              "completeness": 0.4898,
+              "completeness": 0.492,
               "conciseness": 0.95,
               "faithfulness": 4.98,
               "likert_completeness": 2.8,
@@ -5501,7 +5721,7 @@
             "assessment-triggers": 0.5,
             "objective-assessment-tools": 0.04,
             "objective-behavior": 1.0,
-            "objective-interventions": 0.1429,
+            "objective-interventions": 0.14,
             "objective-mental-status": 0.98,
             "objective-therapy-activities": 0.3,
             "plan-adjustment": 0.08,
@@ -5520,10 +5740,10 @@
           "generated_at": "",
           "headline": {
             "accurate": 5.0,
-            "completeness": 0.4987,
+            "completeness": 0.5001,
             "comprehensible": 5.0,
-            "conciseness": 0.8772,
-            "faithfulness": 4.9745,
+            "conciseness": 0.875,
+            "faithfulness": 4.975,
             "organized": 5.0,
             "stigmatizing": 0.9388,
             "succinct": 3.7347,
@@ -5535,16 +5755,16 @@
           "label": "glm-5.2",
           "metrics_note": "faithfulness is a Likert rating; TN-Eval measured weak human agreement on it -- see docs/limitations.md",
           "n_attempted": 50,
-          "n_complete": 49,
+          "n_complete": 50,
           "n_failed": 0,
           "n_generated": 50,
-          "n_partial": 1,
+          "n_partial": 0,
           "n_scored": 50,
           "n_unreached": 0,
           "note_words": 365,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-09-01T21:21:28Z",
+          "scored_at": "2026-09-02T05:37:04Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5562,107 +5782,7 @@
         {
           "by_section": {
             "assessment": {
-              "completeness": 0.44,
-              "conciseness": 0.9503,
-              "faithfulness": 5.0,
-              "likert_completeness": 4.3,
-              "likert_conciseness": 5.0
-            },
-            "objective": {
-              "completeness": 0.504,
-              "conciseness": 0.958,
-              "faithfulness": 5.0,
-              "likert_completeness": 2.84,
-              "likert_conciseness": 4.76
-            },
-            "plan": {
-              "completeness": 0.515,
-              "conciseness": 0.8785,
-              "faithfulness": 4.86,
-              "likert_completeness": 4.52,
-              "likert_conciseness": 4.86
-            },
-            "subjective": {
-              "completeness": 0.5382,
-              "conciseness": 0.7454,
-              "faithfulness": 5.0,
-              "likert_completeness": 4.18,
-              "likert_conciseness": 5.0
-            }
-          },
-          "detail": {
-            "assessment-analysis": 1.0,
-            "assessment-diagnosis": 0.08,
-            "assessment-goals": 0.0,
-            "assessment-overall-progress": 0.62,
-            "assessment-progress": 0.58,
-            "assessment-response": 0.34,
-            "assessment-stages": 0.4,
-            "assessment-triggers": 0.5,
-            "objective-assessment-tools": 0.02,
-            "objective-behavior": 1.0,
-            "objective-interventions": 0.14,
-            "objective-mental-status": 0.9,
-            "objective-therapy-activities": 0.46,
-            "plan-adjustment": 0.08,
-            "plan-follow-up": 0.5,
-            "plan-homework": 0.48,
-            "plan-interventions": 1.0,
-            "subjective-chief-complaint": 0.7347,
-            "subjective-goals": 0.66,
-            "subjective-history": 0.7,
-            "subjective-homework": 0.02,
-            "subjective-quotes": 0.2,
-            "subjective-symptoms": 0.9184
-          },
-          "effort": "medium",
-          "failure_reasons": {},
-          "generated_at": "",
-          "headline": {
-            "accurate": 5.0,
-            "completeness": 0.4968,
-            "comprehensible": 5.0,
-            "conciseness": 0.8822,
-            "faithfulness": 4.9611,
-            "organized": 5.0,
-            "stigmatizing": 1.0,
-            "succinct": 3.88,
-            "synthesized": 5.0,
-            "thorough": 5.0,
-            "useful": 5.0
-          },
-          "judges_own_family": "",
-          "label": "gpt-5.6-sol",
-          "metrics_note": "faithfulness is a Likert rating; TN-Eval measured weak human agreement on it -- see docs/limitations.md",
-          "n_attempted": 50,
-          "n_complete": 45,
-          "n_failed": 0,
-          "n_generated": 50,
-          "n_partial": 5,
-          "n_scored": 50,
-          "n_unreached": 0,
-          "note_words": 372,
-          "provider": "openai",
-          "scored": true,
-          "scored_at": "2026-09-01T21:21:28Z",
-          "section_order": [
-            "subjective",
-            "objective",
-            "assessment",
-            "plan"
-          ],
-          "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
-          "settings_differ": true,
-          "source": "",
-          "system_id": "gpt-5.6-sol",
-          "system_type": "model",
-          "unreached_reasons": {},
-          "withdrawn_on": null
-        },
-        {
-          "by_section": {
-            "assessment": {
-              "completeness": 0.4184,
+              "completeness": 0.4225,
               "conciseness": 0.9443,
               "faithfulness": 5.0,
               "likert_completeness": 4.28,
@@ -5683,8 +5803,8 @@
               "likert_conciseness": 4.92
             },
             "subjective": {
-              "completeness": 0.5884,
-              "conciseness": 0.7857,
+              "completeness": 0.59,
+              "conciseness": 0.7871,
               "faithfulness": 5.0,
               "likert_completeness": 4.6,
               "likert_conciseness": 4.92
@@ -5713,16 +5833,16 @@
             "subjective-history": 0.7,
             "subjective-homework": 0.02,
             "subjective-quotes": 0.62,
-            "subjective-symptoms": 0.9592
+            "subjective-symptoms": 0.96
           },
           "effort": "medium",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
             "accurate": 5.0,
-            "completeness": 0.4935,
+            "completeness": 0.4974,
             "comprehensible": 5.0,
-            "conciseness": 0.8885,
+            "conciseness": 0.8914,
             "faithfulness": 5.0,
             "organized": 5.0,
             "stigmatizing": 1.0,
@@ -5744,7 +5864,7 @@
           "note_words": 430,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-09-01T21:21:28Z",
+          "scored_at": "2026-09-02T05:37:04Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5846,7 +5966,7 @@
           "note_words": 438,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-09-01T21:21:28Z",
+          "scored_at": "2026-09-02T05:37:04Z",
           "section_order": [
             "subjective",
             "objective",
@@ -5857,106 +5977,6 @@
           "settings_differ": false,
           "source": "",
           "system_id": "gpt-oss-120b",
-          "system_type": "model",
-          "unreached_reasons": {},
-          "withdrawn_on": null
-        },
-        {
-          "by_section": {
-            "assessment": {
-              "completeness": 0.3675,
-              "conciseness": 0.9733,
-              "faithfulness": 4.94,
-              "likert_completeness": 3.64,
-              "likert_conciseness": 5.0
-            },
-            "objective": {
-              "completeness": 0.496,
-              "conciseness": 0.9091,
-              "faithfulness": 4.78,
-              "likert_completeness": 2.84,
-              "likert_conciseness": 4.84
-            },
-            "plan": {
-              "completeness": 0.45,
-              "conciseness": 0.8602,
-              "faithfulness": 4.68,
-              "likert_completeness": 4.18,
-              "likert_conciseness": 4.78
-            },
-            "subjective": {
-              "completeness": 0.6054,
-              "conciseness": 0.8539,
-              "faithfulness": 4.96,
-              "likert_completeness": 4.56,
-              "likert_conciseness": 4.98
-            }
-          },
-          "detail": {
-            "assessment-analysis": 1.0,
-            "assessment-diagnosis": 0.28,
-            "assessment-goals": 0.04,
-            "assessment-overall-progress": 0.2,
-            "assessment-progress": 0.26,
-            "assessment-response": 0.24,
-            "assessment-stages": 0.4,
-            "assessment-triggers": 0.52,
-            "objective-assessment-tools": 0.06,
-            "objective-behavior": 1.0,
-            "objective-interventions": 0.14,
-            "objective-mental-status": 0.98,
-            "objective-therapy-activities": 0.3,
-            "plan-adjustment": 0.1,
-            "plan-follow-up": 0.36,
-            "plan-homework": 0.34,
-            "plan-interventions": 1.0,
-            "subjective-chief-complaint": 0.68,
-            "subjective-goals": 0.6531,
-            "subjective-history": 0.62,
-            "subjective-homework": 0.02,
-            "subjective-quotes": 0.7,
-            "subjective-symptoms": 0.96
-          },
-          "effort": "",
-          "failure_reasons": {},
-          "generated_at": "",
-          "headline": {
-            "accurate": 4.8,
-            "completeness": 0.4766,
-            "comprehensible": 5.0,
-            "conciseness": 0.8998,
-            "faithfulness": 4.8367,
-            "organized": 5.0,
-            "stigmatizing": 0.98,
-            "succinct": 3.44,
-            "synthesized": 5.0,
-            "thorough": 4.86,
-            "useful": 5.0
-          },
-          "judges_own_family": "",
-          "label": "deepseek-v4-flash-thinking",
-          "metrics_note": "faithfulness is a Likert rating; TN-Eval measured weak human agreement on it -- see docs/limitations.md",
-          "n_attempted": 50,
-          "n_complete": 49,
-          "n_failed": 0,
-          "n_generated": 50,
-          "n_partial": 1,
-          "n_scored": 50,
-          "n_unreached": 0,
-          "note_words": 379,
-          "provider": "einfra",
-          "scored": true,
-          "scored_at": "2026-09-01T21:21:28Z",
-          "section_order": [
-            "subjective",
-            "objective",
-            "assessment",
-            "plan"
-          ],
-          "settings": "temperature 0, max tokens 4096",
-          "settings_differ": false,
-          "source": "",
-          "system_id": "deepseek-v4-flash-thinking",
           "system_type": "model",
           "unreached_reasons": {},
           "withdrawn_on": null
@@ -5985,8 +6005,8 @@
               "likert_conciseness": 4.86
             },
             "subjective": {
-              "completeness": 0.517,
-              "conciseness": 0.732,
+              "completeness": 0.52,
+              "conciseness": 0.7373,
               "faithfulness": 5.0,
               "likert_completeness": 4.22,
               "likert_conciseness": 5.0
@@ -6012,7 +6032,7 @@
             "plan-interventions": 1.0,
             "subjective-chief-complaint": 0.66,
             "subjective-goals": 0.68,
-            "subjective-history": 0.6531,
+            "subjective-history": 0.64,
             "subjective-homework": 0.02,
             "subjective-quotes": 0.2,
             "subjective-symptoms": 0.92
@@ -6022,10 +6042,10 @@
           "generated_at": "",
           "headline": {
             "accurate": 5.0,
-            "completeness": 0.4765,
+            "completeness": 0.4816,
             "comprehensible": 5.0,
-            "conciseness": 0.888,
-            "faithfulness": 4.9271,
+            "conciseness": 0.8892,
+            "faithfulness": 4.93,
             "organized": 5.0,
             "stigmatizing": 0.9592,
             "succinct": 3.4286,
@@ -6037,16 +6057,16 @@
           "label": "gpt-5.6-luna",
           "metrics_note": "faithfulness is a Likert rating; TN-Eval measured weak human agreement on it -- see docs/limitations.md",
           "n_attempted": 50,
-          "n_complete": 48,
+          "n_complete": 50,
           "n_failed": 0,
           "n_generated": 50,
-          "n_partial": 2,
+          "n_partial": 0,
           "n_scored": 50,
           "n_unreached": 0,
           "note_words": 374,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-09-01T21:21:28Z",
+          "scored_at": "2026-09-02T05:37:04Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6064,7 +6084,207 @@
         {
           "by_section": {
             "assessment": {
-              "completeness": 0.3925,
+              "completeness": 0.3575,
+              "conciseness": 0.89,
+              "faithfulness": 5.0,
+              "likert_completeness": 3.78,
+              "likert_conciseness": 5.0
+            },
+            "objective": {
+              "completeness": 0.484,
+              "conciseness": 0.9237,
+              "faithfulness": 5.0,
+              "likert_completeness": 2.52,
+              "likert_conciseness": 4.9
+            },
+            "plan": {
+              "completeness": 0.52,
+              "conciseness": 0.764,
+              "faithfulness": 4.78,
+              "likert_completeness": 4.54,
+              "likert_conciseness": 4.8
+            },
+            "subjective": {
+              "completeness": 0.5442,
+              "conciseness": 0.7663,
+              "faithfulness": 5.0,
+              "likert_completeness": 4.22,
+              "likert_conciseness": 4.72
+            }
+          },
+          "detail": {
+            "assessment-analysis": 1.0,
+            "assessment-diagnosis": 0.14,
+            "assessment-goals": 0.0,
+            "assessment-overall-progress": 0.38,
+            "assessment-progress": 0.36,
+            "assessment-response": 0.26,
+            "assessment-stages": 0.2,
+            "assessment-triggers": 0.52,
+            "objective-assessment-tools": 0.04,
+            "objective-behavior": 0.96,
+            "objective-interventions": 0.1,
+            "objective-mental-status": 0.94,
+            "objective-therapy-activities": 0.38,
+            "plan-adjustment": 0.06,
+            "plan-follow-up": 0.46,
+            "plan-homework": 0.56,
+            "plan-interventions": 1.0,
+            "subjective-chief-complaint": 0.64,
+            "subjective-goals": 0.64,
+            "subjective-history": 0.7,
+            "subjective-homework": 0.06,
+            "subjective-quotes": 0.26,
+            "subjective-symptoms": 0.9592
+          },
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "accurate": 5.0,
+            "completeness": 0.4775,
+            "comprehensible": 5.0,
+            "conciseness": 0.8352,
+            "faithfulness": 4.9439,
+            "organized": 5.0,
+            "stigmatizing": 0.9796,
+            "succinct": 3.551,
+            "synthesized": 5.0,
+            "thorough": 4.9184,
+            "useful": 5.0
+          },
+          "judges_own_family": "",
+          "label": "qwen3.8-27b",
+          "metrics_note": "faithfulness is a Likert rating; TN-Eval measured weak human agreement on it -- see docs/limitations.md",
+          "n_attempted": 50,
+          "n_complete": 49,
+          "n_failed": 0,
+          "n_generated": 50,
+          "n_partial": 1,
+          "n_scored": 50,
+          "n_unreached": 0,
+          "note_words": 340,
+          "provider": "einfra",
+          "scored": true,
+          "scored_at": "2026-09-02T05:37:04Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
+          "settings": "temperature 0, max tokens 16384",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "qwen3.8-27b",
+          "system_type": "model",
+          "unreached_reasons": {},
+          "withdrawn_on": null
+        },
+        {
+          "by_section": {
+            "assessment": {
+              "completeness": 0.3622,
+              "conciseness": 0.9727,
+              "faithfulness": 4.94,
+              "likert_completeness": 3.64,
+              "likert_conciseness": 5.0
+            },
+            "objective": {
+              "completeness": 0.496,
+              "conciseness": 0.9091,
+              "faithfulness": 4.78,
+              "likert_completeness": 2.84,
+              "likert_conciseness": 4.84
+            },
+            "plan": {
+              "completeness": 0.45,
+              "conciseness": 0.8602,
+              "faithfulness": 4.68,
+              "likert_completeness": 4.18,
+              "likert_conciseness": 4.78
+            },
+            "subjective": {
+              "completeness": 0.6033,
+              "conciseness": 0.8539,
+              "faithfulness": 4.96,
+              "likert_completeness": 4.56,
+              "likert_conciseness": 4.98
+            }
+          },
+          "detail": {
+            "assessment-analysis": 1.0,
+            "assessment-diagnosis": 0.28,
+            "assessment-goals": 0.04,
+            "assessment-overall-progress": 0.2,
+            "assessment-progress": 0.26,
+            "assessment-response": 0.24,
+            "assessment-stages": 0.4,
+            "assessment-triggers": 0.52,
+            "objective-assessment-tools": 0.06,
+            "objective-behavior": 1.0,
+            "objective-interventions": 0.14,
+            "objective-mental-status": 0.98,
+            "objective-therapy-activities": 0.3,
+            "plan-adjustment": 0.1,
+            "plan-follow-up": 0.36,
+            "plan-homework": 0.34,
+            "plan-interventions": 1.0,
+            "subjective-chief-complaint": 0.68,
+            "subjective-goals": 0.64,
+            "subjective-history": 0.62,
+            "subjective-homework": 0.02,
+            "subjective-quotes": 0.7,
+            "subjective-symptoms": 0.96
+          },
+          "effort": "",
+          "failure_reasons": {},
+          "generated_at": "",
+          "headline": {
+            "accurate": 4.8,
+            "completeness": 0.4732,
+            "comprehensible": 5.0,
+            "conciseness": 0.9011,
+            "faithfulness": 4.8333,
+            "organized": 5.0,
+            "stigmatizing": 0.98,
+            "succinct": 3.44,
+            "synthesized": 5.0,
+            "thorough": 4.86,
+            "useful": 5.0
+          },
+          "judges_own_family": "",
+          "label": "deepseek-v4-flash-thinking",
+          "metrics_note": "faithfulness is a Likert rating; TN-Eval measured weak human agreement on it -- see docs/limitations.md",
+          "n_attempted": 50,
+          "n_complete": 48,
+          "n_failed": 0,
+          "n_generated": 50,
+          "n_partial": 2,
+          "n_scored": 50,
+          "n_unreached": 0,
+          "note_words": 379,
+          "provider": "einfra",
+          "scored": true,
+          "scored_at": "2026-09-02T05:37:04Z",
+          "section_order": [
+            "subjective",
+            "objective",
+            "assessment",
+            "plan"
+          ],
+          "settings": "temperature 0, max tokens 4096",
+          "settings_differ": false,
+          "source": "",
+          "system_id": "deepseek-v4-flash-thinking",
+          "system_type": "model",
+          "unreached_reasons": {},
+          "withdrawn_on": null
+        },
+        {
+          "by_section": {
+            "assessment": {
+              "completeness": 0.3929,
               "conciseness": 1.0,
               "faithfulness": 5.0,
               "likert_completeness": 3.58,
@@ -6085,7 +6305,7 @@
               "likert_conciseness": 4.96
             },
             "subjective": {
-              "completeness": 0.6389,
+              "completeness": 0.6333,
               "conciseness": 0.954,
               "faithfulness": 5.0,
               "likert_completeness": 4.54,
@@ -6094,7 +6314,7 @@
           },
           "detail": {
             "assessment-analysis": 1.0,
-            "assessment-diagnosis": 0.24,
+            "assessment-diagnosis": 0.2449,
             "assessment-goals": 0.0,
             "assessment-overall-progress": 0.26,
             "assessment-progress": 0.38,
@@ -6111,8 +6331,8 @@
             "plan-homework": 0.36,
             "plan-interventions": 0.92,
             "subjective-chief-complaint": 0.76,
-            "subjective-goals": 0.5918,
-            "subjective-history": 0.6327,
+            "subjective-goals": 0.58,
+            "subjective-history": 0.62,
             "subjective-homework": 0.06,
             "subjective-quotes": 0.8,
             "subjective-symptoms": 0.98
@@ -6122,10 +6342,10 @@
           "generated_at": "",
           "headline": {
             "accurate": 5.0,
-            "completeness": 0.475,
+            "completeness": 0.4724,
             "comprehensible": 5.0,
-            "conciseness": 0.8974,
-            "faithfulness": 4.9468,
+            "conciseness": 0.8952,
+            "faithfulness": 4.9479,
             "organized": 5.0,
             "stigmatizing": 0.94,
             "succinct": 4.02,
@@ -6137,16 +6357,16 @@
           "label": "gemma4",
           "metrics_note": "faithfulness is a Likert rating; TN-Eval measured weak human agreement on it -- see docs/limitations.md",
           "n_attempted": 50,
-          "n_complete": 47,
+          "n_complete": 48,
           "n_failed": 0,
           "n_generated": 50,
-          "n_partial": 3,
+          "n_partial": 2,
           "n_scored": 50,
           "n_unreached": 0,
           "note_words": 296,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-09-01T21:21:28Z",
+          "scored_at": "2026-09-02T05:37:04Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6164,107 +6384,7 @@
         {
           "by_section": {
             "assessment": {
-              "completeness": 0.3516,
-              "conciseness": 0.89,
-              "faithfulness": 5.0,
-              "likert_completeness": 3.78,
-              "likert_conciseness": 5.0
-            },
-            "objective": {
-              "completeness": 0.484,
-              "conciseness": 0.9237,
-              "faithfulness": 5.0,
-              "likert_completeness": 2.52,
-              "likert_conciseness": 4.9
-            },
-            "plan": {
-              "completeness": 0.52,
-              "conciseness": 0.7592,
-              "faithfulness": 4.78,
-              "likert_completeness": 4.54,
-              "likert_conciseness": 4.8
-            },
-            "subjective": {
-              "completeness": 0.539,
-              "conciseness": 0.7663,
-              "faithfulness": 5.0,
-              "likert_completeness": 4.22,
-              "likert_conciseness": 4.72
-            }
-          },
-          "detail": {
-            "assessment-analysis": 1.0,
-            "assessment-diagnosis": 0.14,
-            "assessment-goals": 0.0,
-            "assessment-overall-progress": 0.38,
-            "assessment-progress": 0.36,
-            "assessment-response": 0.2653,
-            "assessment-stages": 0.2,
-            "assessment-triggers": 0.52,
-            "objective-assessment-tools": 0.04,
-            "objective-behavior": 0.96,
-            "objective-interventions": 0.1,
-            "objective-mental-status": 0.94,
-            "objective-therapy-activities": 0.38,
-            "plan-adjustment": 0.06,
-            "plan-follow-up": 0.46,
-            "plan-homework": 0.56,
-            "plan-interventions": 1.0,
-            "subjective-chief-complaint": 0.64,
-            "subjective-goals": 0.6531,
-            "subjective-history": 0.7,
-            "subjective-homework": 0.0612,
-            "subjective-quotes": 0.26,
-            "subjective-symptoms": 0.9592
-          },
-          "effort": "",
-          "failure_reasons": {},
-          "generated_at": "",
-          "headline": {
-            "accurate": 5.0,
-            "completeness": 0.471,
-            "comprehensible": 5.0,
-            "conciseness": 0.8362,
-            "faithfulness": 4.9375,
-            "organized": 5.0,
-            "stigmatizing": 0.9796,
-            "succinct": 3.551,
-            "synthesized": 5.0,
-            "thorough": 4.9184,
-            "useful": 5.0
-          },
-          "judges_own_family": "",
-          "label": "qwen3.8-27b",
-          "metrics_note": "faithfulness is a Likert rating; TN-Eval measured weak human agreement on it -- see docs/limitations.md",
-          "n_attempted": 50,
-          "n_complete": 44,
-          "n_failed": 0,
-          "n_generated": 50,
-          "n_partial": 6,
-          "n_scored": 50,
-          "n_unreached": 0,
-          "note_words": 340,
-          "provider": "einfra",
-          "scored": true,
-          "scored_at": "2026-09-01T21:21:28Z",
-          "section_order": [
-            "subjective",
-            "objective",
-            "assessment",
-            "plan"
-          ],
-          "settings": "temperature 0, max tokens 16384",
-          "settings_differ": false,
-          "source": "",
-          "system_id": "qwen3.8-27b",
-          "system_type": "model",
-          "unreached_reasons": {},
-          "withdrawn_on": null
-        },
-        {
-          "by_section": {
-            "assessment": {
-              "completeness": 0.3189,
+              "completeness": 0.3225,
               "conciseness": 0.9713,
               "faithfulness": 4.94,
               "likert_completeness": 3.6,
@@ -6322,10 +6442,10 @@
           "generated_at": "",
           "headline": {
             "accurate": 4.86,
-            "completeness": 0.4557,
+            "completeness": 0.457,
             "comprehensible": 5.0,
-            "conciseness": 0.9083,
-            "faithfulness": 4.8878,
+            "conciseness": 0.9095,
+            "faithfulness": 4.89,
             "organized": 5.0,
             "stigmatizing": 0.96,
             "succinct": 3.76,
@@ -6337,16 +6457,16 @@
           "label": "mistral-medium-3.5",
           "metrics_note": "faithfulness is a Likert rating; TN-Eval measured weak human agreement on it -- see docs/limitations.md",
           "n_attempted": 50,
-          "n_complete": 49,
+          "n_complete": 50,
           "n_failed": 0,
           "n_generated": 50,
-          "n_partial": 1,
+          "n_partial": 0,
           "n_scored": 50,
           "n_unreached": 0,
           "note_words": 311,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-09-01T21:21:28Z",
+          "scored_at": "2026-09-02T05:37:04Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6385,7 +6505,7 @@
               "likert_conciseness": 4.84
             },
             "subjective": {
-              "completeness": 0.6054,
+              "completeness": 0.6067,
               "conciseness": 0.8753,
               "faithfulness": 5.0,
               "likert_completeness": 4.42,
@@ -6415,17 +6535,17 @@
             "subjective-history": 0.6,
             "subjective-homework": 0.02,
             "subjective-quotes": 0.72,
-            "subjective-symptoms": 0.9796
+            "subjective-symptoms": 0.98
           },
           "effort": "",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
             "accurate": 4.6327,
-            "completeness": 0.4457,
+            "completeness": 0.4447,
             "comprehensible": 5.0,
-            "conciseness": 0.9193,
-            "faithfulness": 4.8776,
+            "conciseness": 0.9199,
+            "faithfulness": 4.88,
             "organized": 5.0,
             "stigmatizing": 0.9796,
             "succinct": 3.7755,
@@ -6437,16 +6557,16 @@
           "label": "deepseek-v4-flash",
           "metrics_note": "faithfulness is a Likert rating; TN-Eval measured weak human agreement on it -- see docs/limitations.md",
           "n_attempted": 50,
-          "n_complete": 49,
+          "n_complete": 50,
           "n_failed": 0,
           "n_generated": 50,
-          "n_partial": 1,
+          "n_partial": 0,
           "n_scored": 50,
           "n_unreached": 0,
           "note_words": 328,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-09-01T21:21:28Z",
+          "scored_at": "2026-09-02T05:37:04Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6465,7 +6585,7 @@
           "by_section": {
             "assessment": {
               "completeness": 0.2675,
-              "conciseness": 0.9864,
+              "conciseness": 0.9867,
               "faithfulness": 4.96,
               "likert_completeness": 2.72,
               "likert_conciseness": 5.0
@@ -6522,10 +6642,10 @@
           "generated_at": "",
           "headline": {
             "accurate": 4.88,
-            "completeness": 0.3887,
+            "completeness": 0.388,
             "comprehensible": 5.0,
-            "conciseness": 0.8856,
-            "faithfulness": 4.801,
+            "conciseness": 0.8859,
+            "faithfulness": 4.795,
             "organized": 5.0,
             "stigmatizing": 1.0,
             "succinct": 3.48,
@@ -6537,16 +6657,16 @@
           "label": "mistral-large-v2 (TN-Eval, 2025)",
           "metrics_note": "faithfulness is a Likert rating; TN-Eval measured weak human agreement on it -- see docs/limitations.md",
           "n_attempted": 50,
-          "n_complete": 49,
+          "n_complete": 50,
           "n_failed": 0,
           "n_generated": 50,
-          "n_partial": 1,
+          "n_partial": 0,
           "n_scored": 50,
           "n_unreached": 0,
           "note_words": null,
           "provider": "tneval",
           "scored": true,
-          "scored_at": "2026-09-01T21:21:28Z",
+          "scored_at": "2026-09-02T05:37:04Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6572,7 +6692,7 @@
             },
             "objective": {
               "completeness": 0.384,
-              "conciseness": 0.9533,
+              "conciseness": 0.9467,
               "faithfulness": 4.06,
               "likert_completeness": 1.82,
               "likert_conciseness": 5.0
@@ -6624,7 +6744,7 @@
             "accurate": 4.32,
             "completeness": 0.3637,
             "comprehensible": 5.0,
-            "conciseness": 0.9003,
+            "conciseness": 0.8987,
             "faithfulness": 4.455,
             "organized": 5.0,
             "stigmatizing": 0.88,
@@ -6646,7 +6766,7 @@
           "note_words": null,
           "provider": "tneval",
           "scored": true,
-          "scored_at": "2026-09-01T21:21:28Z",
+          "scored_at": "2026-09-02T05:37:04Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6672,7 +6792,7 @@
             },
             "objective": {
               "completeness": 0.244,
-              "conciseness": 0.5113,
+              "conciseness": 0.5013,
               "faithfulness": 4.64,
               "likert_completeness": 1.56,
               "likert_conciseness": 5.0
@@ -6685,8 +6805,8 @@
               "likert_conciseness": 5.0
             },
             "subjective": {
-              "completeness": 0.4116,
-              "conciseness": 0.7464,
+              "completeness": 0.41,
+              "conciseness": 0.7411,
               "faithfulness": 4.72,
               "likert_completeness": 2.72,
               "likert_conciseness": 4.68
@@ -6715,17 +6835,17 @@
             "subjective-history": 0.56,
             "subjective-homework": 0.04,
             "subjective-quotes": 0.24,
-            "subjective-symptoms": 0.5102
+            "subjective-symptoms": 0.5
           },
           "effort": "",
           "failure_reasons": {},
           "generated_at": "",
           "headline": {
             "accurate": 4.2041,
-            "completeness": 0.326,
+            "completeness": 0.3253,
             "comprehensible": 5.0,
-            "conciseness": 0.7028,
-            "faithfulness": 4.6489,
+            "conciseness": 0.7019,
+            "faithfulness": 4.6436,
             "organized": 4.9796,
             "stigmatizing": 0.898,
             "succinct": 2.9184,
@@ -6746,7 +6866,7 @@
           "note_words": null,
           "provider": "tneval",
           "scored": true,
-          "scored_at": "2026-09-01T21:21:28Z",
+          "scored_at": "2026-09-02T05:37:04Z",
           "section_order": [
             "subjective",
             "objective",
@@ -6763,7 +6883,7 @@
         }
       ],
       "scored": true,
-      "scored_at": "2026-09-01",
+      "scored_at": "2026-09-02",
       "stale_harness": false,
       "subtitle": "scored by gemini-3.1-pro-preview",
       "terms": [
@@ -6787,7 +6907,7 @@
       "title": "SOAP notes on AnnoMI · two instruments, the same notes",
       "track": "tneval-soap",
       "versions": {
-        "harness_version": "0.6.0",
+        "harness_version": "0.7.0",
         "judge_model": "gemini-3.1-pro-preview",
         "judge_prompt_version": "tneval-rubric-v1",
         "judge_settings": {
@@ -7032,7 +7152,7 @@
       },
       "has_effort": true,
       "has_words": true,
-      "id": "tneval-soap-gpt-5.6-terra-tneval-rubric-v1-0.6.0-acf643",
+      "id": "tneval-soap-gpt-5.6-terra-tneval-rubric-v1-0.7.0-acf643",
       "judge_prompt_versions": [
         "tneval-rubric-v1",
         "pdsqi9-note-v1"
@@ -7128,7 +7248,7 @@
           "note_words": 518,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:09:46Z",
+          "scored_at": "2026-09-02T05:37:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -7228,7 +7348,7 @@
           "note_words": 443,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:09:46Z",
+          "scored_at": "2026-09-02T05:37:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -7328,7 +7448,7 @@
           "note_words": 350,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-27T20:09:46Z",
+          "scored_at": "2026-09-02T05:37:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -7430,7 +7550,7 @@
           "note_words": 438,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:09:46Z",
+          "scored_at": "2026-09-02T05:37:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -7530,7 +7650,7 @@
           "note_words": 273,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:09:46Z",
+          "scored_at": "2026-09-02T05:37:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -7630,7 +7750,7 @@
           "note_words": 430,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T20:09:46Z",
+          "scored_at": "2026-09-02T05:37:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -7730,7 +7850,7 @@
           "note_words": 372,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T20:09:46Z",
+          "scored_at": "2026-09-02T05:37:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -7830,7 +7950,7 @@
           "note_words": 266,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-27T20:09:46Z",
+          "scored_at": "2026-09-02T05:37:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -7930,7 +8050,7 @@
           "note_words": 379,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:09:46Z",
+          "scored_at": "2026-09-02T05:37:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -8030,7 +8150,7 @@
           "note_words": 358,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:09:46Z",
+          "scored_at": "2026-09-02T05:37:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -8130,7 +8250,7 @@
           "note_words": 365,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:09:46Z",
+          "scored_at": "2026-09-02T05:37:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -8230,7 +8350,7 @@
           "note_words": 374,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T20:09:46Z",
+          "scored_at": "2026-09-02T05:37:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -8330,7 +8450,7 @@
           "note_words": 328,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:09:46Z",
+          "scored_at": "2026-09-02T05:37:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -8430,7 +8550,7 @@
           "note_words": 340,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:09:46Z",
+          "scored_at": "2026-09-02T05:37:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -8530,7 +8650,7 @@
           "note_words": 311,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:09:46Z",
+          "scored_at": "2026-09-02T05:37:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -8630,7 +8750,7 @@
           "note_words": 296,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:09:46Z",
+          "scored_at": "2026-09-02T05:37:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -8730,7 +8850,7 @@
           "note_words": null,
           "provider": "tneval",
           "scored": true,
-          "scored_at": "2026-08-27T20:09:46Z",
+          "scored_at": "2026-09-02T05:37:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -8830,7 +8950,7 @@
           "note_words": null,
           "provider": "tneval",
           "scored": true,
-          "scored_at": "2026-08-27T20:09:46Z",
+          "scored_at": "2026-09-02T05:37:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -8930,7 +9050,7 @@
           "note_words": null,
           "provider": "tneval",
           "scored": true,
-          "scored_at": "2026-08-27T20:09:46Z",
+          "scored_at": "2026-09-02T05:37:24Z",
           "section_order": [
             "subjective",
             "objective",
@@ -8947,7 +9067,7 @@
         }
       ],
       "scored": true,
-      "scored_at": "2026-08-27",
+      "scored_at": "2026-09-02",
       "stale_harness": false,
       "subtitle": "scored by gpt-5.6-terra",
       "terms": [
@@ -8971,7 +9091,7 @@
       "title": "SOAP notes on AnnoMI · two instruments, the same notes",
       "track": "tneval-soap",
       "versions": {
-        "harness_version": "0.6.0",
+        "harness_version": "0.7.0",
         "judge_model": "gpt-5.6-terra",
         "judge_prompt_version": "tneval-rubric-v1",
         "judge_settings": {
@@ -9043,7 +9163,7 @@
       "groups": null,
       "has_effort": true,
       "has_words": false,
-      "id": "icare-gemini-3.1-pro-preview-icare-trace-v1-0.6.0-102129",
+      "id": "icare-gemini-3.1-pro-preview-icare-trace-v1-0.7.0-102129",
       "not_ranked_reason": "<strong>No column ranks this track</strong>: its columns measure different things and the source paper found they disagree, and that disagreement is the result. The rows are in alphabetical order until the comparison that could order them &mdash; at least as good on every column under both judges &mdash; has been tested; what is known about it is on the methods page.",
       "ranking_measure": null,
       "rows": [
@@ -9079,7 +9199,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:35Z",
+          "scored_at": "2026-09-02T05:39:58Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -9121,7 +9241,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:35Z",
+          "scored_at": "2026-09-02T05:39:58Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -9163,7 +9283,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:35Z",
+          "scored_at": "2026-09-02T05:39:58Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -9205,7 +9325,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:35Z",
+          "scored_at": "2026-09-02T05:39:58Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -9247,7 +9367,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:35Z",
+          "scored_at": "2026-09-02T05:39:58Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -9289,7 +9409,7 @@
           "note_words": null,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:35Z",
+          "scored_at": "2026-09-02T05:39:58Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -9331,7 +9451,7 @@
           "note_words": null,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:35Z",
+          "scored_at": "2026-09-02T05:39:58Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -9373,7 +9493,7 @@
           "note_words": null,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:35Z",
+          "scored_at": "2026-09-02T05:39:58Z",
           "section_order": [],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
@@ -9415,7 +9535,7 @@
           "note_words": null,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:35Z",
+          "scored_at": "2026-09-02T05:39:58Z",
           "section_order": [],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
@@ -9457,7 +9577,7 @@
           "note_words": null,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:35Z",
+          "scored_at": "2026-09-02T05:39:58Z",
           "section_order": [],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
@@ -9499,7 +9619,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:35Z",
+          "scored_at": "2026-09-02T05:39:58Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -9541,7 +9661,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:35Z",
+          "scored_at": "2026-09-02T05:39:58Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -9583,7 +9703,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:35Z",
+          "scored_at": "2026-09-02T05:39:58Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -9625,7 +9745,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:35Z",
+          "scored_at": "2026-09-02T05:39:58Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -9667,7 +9787,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:35Z",
+          "scored_at": "2026-09-02T05:39:58Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -9711,7 +9831,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:06:35Z",
+          "scored_at": "2026-09-02T05:39:58Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -9723,7 +9843,7 @@
         }
       ],
       "scored": true,
-      "scored_at": "2026-08-27",
+      "scored_at": "2026-09-02",
       "stale_harness": false,
       "subtitle": "scored by gemini-3.1-pro-preview",
       "terms": [
@@ -9743,7 +9863,7 @@
       "title": "iCARE form on the iHOPE corpus · 17 sections per session",
       "track": "icare",
       "versions": {
-        "harness_version": "0.6.0",
+        "harness_version": "0.7.0",
         "judge_model": "gemini-3.1-pro-preview",
         "judge_prompt_version": "icare-trace-v1",
         "judge_settings": {
@@ -9815,7 +9935,7 @@
       "groups": null,
       "has_effort": true,
       "has_words": false,
-      "id": "icare-gpt-5.6-terra-icare-trace-v1-0.6.0-acf643",
+      "id": "icare-gpt-5.6-terra-icare-trace-v1-0.7.0-acf643",
       "not_ranked_reason": "<strong>No column ranks this track</strong>: its columns measure different things and the source paper found they disagree, and that disagreement is the result. The rows are in alphabetical order until the comparison that could order them &mdash; at least as good on every column under both judges &mdash; has been tested; what is known about it is on the methods page.",
       "ranking_measure": null,
       "rows": [
@@ -9851,7 +9971,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:10:05Z",
+          "scored_at": "2026-09-02T05:40:12Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -9893,7 +10013,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:10:05Z",
+          "scored_at": "2026-09-02T05:40:12Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -9935,7 +10055,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:10:05Z",
+          "scored_at": "2026-09-02T05:40:12Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -9977,7 +10097,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:10:05Z",
+          "scored_at": "2026-09-02T05:40:12Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -10019,7 +10139,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:10:05Z",
+          "scored_at": "2026-09-02T05:40:12Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -10061,7 +10181,7 @@
           "note_words": null,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-27T20:10:05Z",
+          "scored_at": "2026-09-02T05:40:12Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -10103,7 +10223,7 @@
           "note_words": null,
           "provider": "vertex",
           "scored": true,
-          "scored_at": "2026-08-27T20:10:05Z",
+          "scored_at": "2026-09-02T05:40:12Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -10145,7 +10265,7 @@
           "note_words": null,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T20:10:05Z",
+          "scored_at": "2026-09-02T05:40:12Z",
           "section_order": [],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
@@ -10187,7 +10307,7 @@
           "note_words": null,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T20:10:05Z",
+          "scored_at": "2026-09-02T05:40:12Z",
           "section_order": [],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
@@ -10229,7 +10349,7 @@
           "note_words": null,
           "provider": "openai",
           "scored": true,
-          "scored_at": "2026-08-27T20:10:05Z",
+          "scored_at": "2026-09-02T05:40:12Z",
           "section_order": [],
           "settings": "effort medium, temperature 1 (forced by the provider), max tokens 4096",
           "settings_differ": true,
@@ -10271,7 +10391,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:10:05Z",
+          "scored_at": "2026-09-02T05:40:12Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -10313,7 +10433,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:10:05Z",
+          "scored_at": "2026-09-02T05:40:12Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -10355,7 +10475,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:10:05Z",
+          "scored_at": "2026-09-02T05:40:12Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -10397,7 +10517,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:10:05Z",
+          "scored_at": "2026-09-02T05:40:12Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 4096",
           "settings_differ": false,
@@ -10439,7 +10559,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:10:05Z",
+          "scored_at": "2026-09-02T05:40:12Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -10483,7 +10603,7 @@
           "note_words": null,
           "provider": "einfra",
           "scored": true,
-          "scored_at": "2026-08-27T20:10:05Z",
+          "scored_at": "2026-09-02T05:40:12Z",
           "section_order": [],
           "settings": "temperature 0, max tokens 16384",
           "settings_differ": false,
@@ -10495,7 +10615,7 @@
         }
       ],
       "scored": true,
-      "scored_at": "2026-08-27",
+      "scored_at": "2026-09-02",
       "stale_harness": false,
       "subtitle": "scored by gpt-5.6-terra",
       "terms": [
@@ -10515,7 +10635,7 @@
       "title": "iCARE form on the iHOPE corpus · 17 sections per session",
       "track": "icare",
       "versions": {
-        "harness_version": "0.6.0",
+        "harness_version": "0.7.0",
         "judge_model": "gpt-5.6-terra",
         "judge_prompt_version": "icare-trace-v1",
         "judge_settings": {

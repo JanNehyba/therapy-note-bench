@@ -76,17 +76,17 @@
     {
       "agreements": [
         {
-          "alpha": 0.5998072626406157,
-          "alpha_humans": 0.5040964461994439,
+          "alpha": 0.5995917448669379,
+          "alpha_humans": 0.5036339457981684,
           "alpha_level": "nominal",
           "clears_ceiling": true,
-          "humans": 0.5041571652036615,
-          "judge": 0.5997766802795041,
-          "margin": 0.09561951507584265,
+          "humans": 0.5036897910190797,
+          "judge": 0.5995603310175632,
+          "margin": 0.0958705399984835,
           "margin_draws": 2000,
-          "margin_high": 0.1229674338147635,
-          "margin_low": 0.068339884845527,
-          "n": 3448,
+          "margin_high": 0.12320695995885528,
+          "margin_low": 0.06862722328374937,
+          "n": 3449,
           "name": "rubric_completeness",
           "statistic": "Cohen's kappa"
         },
@@ -519,18 +519,18 @@
       "gemini-2.5-pro"
     ],
     "all_at_or_above_ceiling": true,
-    "ceiling": 0.5037308946452509,
+    "ceiling": 0.5036648231593545,
     "ceiling_span": [
       0.5034527634718307,
-      0.5040964461994439
+      0.5037134105690964
     ],
     "instruments": 2,
     "margin": 0.05,
     "measure": "rubric_completeness",
     "ranked": [
       {
-        "alpha": 0.5998072626406157,
-        "ceiling": 0.5040964461994439,
+        "alpha": 0.5995917448669379,
+        "ceiling": 0.5036339457981684,
         "judge": "gemini-3.1-pro-preview"
       },
       {
@@ -567,31 +567,31 @@
     "separated": [
       {
         "better": "gemini-3.1-pro-preview",
-        "by": 0.0554,
+        "by": 0.0551,
         "crosses_instrument": false,
         "worse": "gemini-3.7-flash"
       },
       {
         "better": "gemini-3.1-pro-preview",
-        "by": 0.0625,
+        "by": 0.0623,
         "crosses_instrument": false,
         "worse": "gemini-2.5-flash"
       },
       {
         "better": "gemini-3.1-pro-preview",
-        "by": 0.0636,
+        "by": 0.0634,
         "crosses_instrument": false,
         "worse": "gemini-3.5-flash"
       },
       {
         "better": "gemini-3.1-pro-preview",
-        "by": 0.0799,
+        "by": 0.0797,
         "crosses_instrument": true,
         "worse": "gpt-5.6-terra"
       },
       {
         "better": "gemini-3.1-pro-preview",
-        "by": 0.0894,
+        "by": 0.0892,
         "crosses_instrument": true,
         "worse": "gpt-5.6-sol"
       },

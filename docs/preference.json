@@ -1,24 +1,24 @@
 {
   "difference": {
     "detected": false,
-    "estimate": 0.0092,
-    "high": 0.0581,
+    "estimate": -0.0015,
+    "high": 0.0411,
     "judge_a": "gemini-3.1-pro-preview",
     "judge_b": "gpt-5.6-terra",
-    "low": -0.0389,
-    "summary": "The two leans are not distinguishable from each other: `gpt-5.6-terra` minus `gemini-3.1-pro-preview` is +0.009 completeness [-0.039 to +0.058]. Neither judge is the more partial one on this evidence, and the larger of the two numbers above should not be read as though it were."
+    "low": -0.0419,
+    "summary": "The two leans are not distinguishable from each other: `gpt-5.6-terra` minus `gemini-3.1-pro-preview` is -0.002 completeness [-0.042 to +0.041]. Neither judge is the more partial one on this evidence, and the larger of the two numbers above should not be read as though it were."
   },
   "effects": [
     {
       "detected": false,
-      "estimate": 0.0176,
+      "estimate": 0.0172,
       "family": "google",
-      "high": 0.0471,
+      "high": 0.0461,
       "judge": "gemini-3.1-pro-preview",
-      "low": -0.0102,
+      "low": -0.0112,
       "n_neutral": 12,
       "n_own": 3,
-      "n_sessions": 25,
+      "n_sessions": 37,
       "neutral": [
         "deepseek-v4-flash",
         "deepseek-v4-flash-thinking",
@@ -33,18 +33,18 @@
         "qwen3.8-27b",
         "therapist"
       ],
-      "summary": "`gemini-3.1-pro-preview` shows no detectable preference for Google models: +0.018 completeness [-0.010 to +0.047], an interval that includes zero. Not detected is not the same as absent \u2014 the comparison was 3 of the vendor's own against 12 neutral, over 25 conversations."
+      "summary": "`gemini-3.1-pro-preview` shows no detectable preference for Google models: +0.017 completeness [-0.011 to +0.046], an interval that includes zero. Not detected is not the same as absent \u2014 the comparison was 3 of the vendor's own against 12 neutral, over 37 conversations."
     },
     {
       "detected": false,
-      "estimate": 0.0268,
+      "estimate": 0.0157,
       "family": "openai",
-      "high": 0.0584,
+      "high": 0.0429,
       "judge": "gpt-5.6-terra",
-      "low": -0.0044,
+      "low": -0.008,
       "n_neutral": 12,
       "n_own": 4,
-      "n_sessions": 25,
+      "n_sessions": 37,
       "neutral": [
         "deepseek-v4-flash",
         "deepseek-v4-flash-thinking",
@@ -59,7 +59,7 @@
         "qwen3.8-27b",
         "therapist"
       ],
-      "summary": "`gpt-5.6-terra` shows no detectable preference for OpenAI models: +0.027 completeness [-0.004 to +0.058], an interval that includes zero. Not detected is not the same as absent \u2014 the comparison was 4 of the vendor's own against 12 neutral, over 25 conversations."
+      "summary": "`gpt-5.6-terra` shows no detectable preference for OpenAI models: +0.016 completeness [-0.008 to +0.043], an interval that includes zero. Not detected is not the same as absent \u2014 the comparison was 4 of the vendor's own against 12 neutral, over 37 conversations."
     }
   ],
   "judge_a": "gemini-3.1-pro-preview",

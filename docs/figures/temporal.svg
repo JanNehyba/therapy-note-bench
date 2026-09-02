@@ -56,6 +56,6 @@
 <text class="note" x="0" y="572">The forward column rests on eleven sessions, so a score of 0.09 there is one session and the gap between two models a few hundredths apart is not</text>
 <text class="note" x="0" y="587">evidence. The backward column rests on thirty-four. They were one averaged column until harness 0.2.0, and the average — weighted three to one towards</text>
 <text class="note" x="0" y="602">the easy half — published the opposite of the finding this track exists to reproduce.</text>
-<text class="note" x="0" y="630">Source: docs/leaderboard.json, iCARE track, judge gemini-3.1-pro-preview, harness 0.6.0. Neither column involves the judge: both are computed from the</text>
+<text class="note" x="0" y="630">Source: docs/leaderboard.json, iCARE track, judge gemini-3.1-pro-preview, harness 0.7.0. Neither column involves the judge: both are computed from the</text>
 <text class="note" x="0" y="645">note and the expert note alone.</text>
 </svg>

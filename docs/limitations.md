@@ -217,26 +217,30 @@ rubric is not completeness against a reimbursement requirement.
   rather than theirs. But a lower score for `gpt-oss-120b` partly measures
   formatting, not clinical content, and **any table showing it must show its
   session count next to it.**
-- **A judge can lose a note to its own reasoning, and the cache keeps the
-  loss.** Under `gemini-3.1-pro-preview`, 42 of the 942 SOAP notes are scored
-  on fewer than all four sections. Checked on 2026-09-01: no question is
-  missing from the judge's answer cache for any of them. In 43 cached answers
-  (0.11% of 39 696 rubric answers; 30 completeness, 13 conciseness) — counted
-  in the judge's answer cache, which is not in this repository — the text
-  in the answer slot is the judge's working — `Evaluate against Rubric
-  Item:**`, `Format Output:**`, `Conclusion:**` — and no yes or no ever came.
-  The provider returned no `finish_reason`, so the harness recorded the call
-  as complete and cached it as answered; the aggregator, correctly, reads
-  such an answer as missing and names the section incomplete rather than
-  averaging over what survived. Re-running `tnb score` over all 19 systems
-  that day made **0 judge calls and changed nothing**, because a cached
-  answer is by design not re-asked. Under `gpt-5.6-terra` there are none.
-  These 42 notes are what shrinks the set of conversations all 19 systems
-  share — the set the Band column's paired bootstrap runs on — from 50 to 25
-  under gemini (42 under gpt, where only `gpt-oss-120b`'s 8 are missing).
-  The repair is a cache rule, not a re-run: a rubric answer that is not an
-  answer must not count as one. Until it is in place, the 25 stands and is
-  named beside every figure that rests on it.
+- **A judge can lose a note to its own reasoning, and until 2026-09-02 the
+  cache kept the loss.** Under `gemini-3.1-pro-preview` the judge sometimes
+  spends its whole thinking budget and returns, in the answer slot, a fragment
+  of its own working — `Evaluate against Rubric Item:**` — or an echo of the
+  prompt's closing instruction — `Format Output:** Just "Yes" or "No".` The
+  provider reports no `finish_reason` for these, so the harness cached them as
+  answered, and a cached answer was by design never re-asked. Counted in the
+  judge's answer cache, which is not in this repository: 78 of 51 000 rubric
+  answers were of this kind. The 43 fragments were already refused by the
+  aggregator and left 42 notes scored on fewer than all four sections; the 35
+  echoes passed the answer test because the word "yes" was in them, and 29 were
+  scored as criteria the note met. Under `gpt-5.6-terra` there were none. The
+  repair is a cache rule, not a cleverer parser: an answer is the word alone,
+  and the cache serves a record only if it passes the question's own test.
+- **What the re-ask changed, measured after it.** Re-asked at harness 0.7.0,
+  62 of the 78 came back as answers and 16 did not (counted from the run's
+  output, which is not in this repository). So 16 of the 942 SOAP notes are
+  still scored on fewer than all four sections and stay out of their systems'
+  means, and the set of conversations all 19 systems share — the set the band
+  analysis on the methods page resamples — is 37 of 50 under gemini and 42
+  under gpt, where only `gpt-oss-120b`'s 8 unrecoverable notes are missing;
+  under gemini it had been 25. Completeness moved on 16 of the 19 systems, by
+  between −0.003 and +0.009, which is why the 0.6.0 tables are named as
+  superseded rather than drawn beside these.
 
 ## The form does not fit the material
 

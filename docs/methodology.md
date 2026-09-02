@@ -132,27 +132,32 @@ the whole estimate is measured against. Whether self-preference carries across
 an open-weight sibling is genuinely open; leaving them in the control group
 answered it "no" with no evidence, so they are now counted with the vendor that
 built them and the panel names its comparison group on the page. Correcting it
-moved `gemini-3.1-pro-preview` from +0.005 to +0.018 and `gpt-5.6-terra` from
-+0.005 to +0.027.
+moved the estimates of that day from +0.005 to +0.018 for `gemini-3.1-pro-preview`
+and from +0.005 to +0.027 for `gpt-5.6-terra`; the figures after the re-ask of
+2026-09-02 are below.
 
 **Both intervals include zero, and a published one did not.** The bootstrap
 resampled conversations and not systems, so the interval described three or
 four models rather than a vendor — while the sentence it supported, and the
 mark on each affected row, are about the vendor. Resampling both:
-`gemini-3.1-pro-preview` +0.018 [−0.010, +0.047] and `gpt-5.6-terra` +0.027
-[−0.004, +0.058]. Neither is detected, and asked directly whether the two
-judges differ, they do not: +0.009 [−0.039, +0.058].
+`gemini-3.1-pro-preview` +0.017 [−0.011, +0.046] and `gpt-5.6-terra` +0.016
+[−0.008, +0.043]. Neither is detected, and asked directly whether the two
+judges differ, they do not: −0.002 [−0.042, +0.041].
 
 Two systems carry most of the estimate, and they are the two that the vendor
 redefinition moved into these groups: without `gemma4` the Gemini figure is
-+0.008, without `gpt-oss-120b` the GPT figure is +0.018. That is why the page
+about +0.006, without `gpt-oss-120b` the GPT figure about +0.009. That is why the page
 still tells a reader to check the panel before reading either table — not
 because an effect was proved, but because one this size cannot be ruled out.
 
 **The budget is part of the instrument.** At 128 tokens Gemini spent its whole
 allowance thinking on 0.50% of questions and returned a fragment of its own
 reasoning, which `parse_yes_no` reads as a "No" charged to the model. At 256
-that falls to 0.05%. Re-asking all 51 000 questions at the higher budget raised
+it was first counted as 0.05%; counted again on 2026-09-02 with an answer test
+that refuses an echo of the prompt, it was 0.15% (78 of 51 000) — a count from the
+judge's answer cache, which is not in this repository — and those 78 were re-asked
+at harness 0.7.0 (docs/limitations.md says what that changed). Re-asking all 51 000
+questions at the higher budget raised
 every system's completeness (mean +0.017) and conciseness (+0.048) and lowered
 faithfulness slightly (−0.021), and moved six systems on completeness and
 sixteen on conciseness. So a run at one budget and a run at another are two
