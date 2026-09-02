@@ -35,6 +35,11 @@ __STYLE__
     <div id="judges-body"></div>
   </details>
 
+  <!-- The panel above asks whether the judges agree with people; this one asks
+       whether a judge agrees with itself when nothing has changed but the
+       asking. Beside the judges panel because it is about them. -->
+  <div class="box" id="repeatability"></div>
+
   <div class="box" id="preference"></div>
 
   <div class="box" id="concordance"></div>
@@ -1118,10 +1123,12 @@ function renderJudges(data) {
       if (mixed.length) {
         return `<p class="note">${T`<strong>Some of these rows were measured at different
            settings from others of the same kind.</strong> Each candidate is shown at the
-           settings its answers were produced at, under its name. A judge's settings change
-           its answers — measured here, one judge's thinking budget going from 128 to 256
-           moved every model's completeness and reversed the order of the three
-           <code>flash</code> candidates — so those rows are not strictly comparable.`}</p>`;
+           settings its answers were produced at, under its name. A judge's settings are part
+           of the instrument, and changing them was measured once rather than repeated: on
+           2026-08-25 <code>gemini-3.1-pro-preview</code>'s thinking budget went from 128 to
+           256 tokens, every model's completeness moved and the order of the three
+           <code>flash</code> candidates reversed. Rows measured at different settings are
+           not strictly comparable.`}</p>`;
       }
       return Object.keys(byBackend).length > 1
         ? `<p class="note">${T`Every candidate of a kind was measured at one setting. Across
@@ -1140,6 +1147,47 @@ function renderJudges(data) {
     </table></div>
     ${whatTheCalibrationSeparates(data.separable)}
     ${whereTheCeilingIsCleared(data, measures, ceiling)}`;
+}
+
+// The budget observation in the panel above is a settings change; a reader
+// could take it for this question. Asked directly, on the record: the same
+// questions, asked again, and what came back.
+function renderRepeatability(data) {
+  const box = document.getElementById('repeatability');
+  if (!box) return;
+  if (!data || !data.judges || !data.judges.length) { box.remove(); return; }
+
+  const tracks = data.judges[0].tracks;
+  const rows = data.judges.map(j => `<tr><td><code>${esc(j.judge_model)}</code></td>` +
+    tracks.map(track => {
+      const found = j.tracks.find(t => t.track === track.track) || {};
+      return `<td>${found.questions ? T`${found.same} of ${found.questions}` : '—'}</td>`;
+    }).join('') +
+    `<td><strong>${T`${j.same} of ${j.questions}`}</strong></td></tr>`).join('');
+
+  // A question a run did not answer is not disagreement, and saying so is the
+  // difference between a judge that wavers and one that sometimes goes silent.
+  const silent = data.judges.map(j => {
+    const count = j.tracks.reduce((sum, t) => sum + (t.unanswered || 0), 0);
+    return count ? T`${count} for <code>${esc(j.judge_model)}</code>` : '';
+  }).filter(Boolean);
+
+  box.innerHTML = `<h2>${T`Does a judge repeat itself?`}</h2>
+    <p class="blurb">${T`The questions behind the tables, asked again of the same judges at the
+       same settings — ${data.notes} notes per instrument — with the answers compared at the
+       value the tables average, not at the wording. Asked into a separate answer cache
+       (<code>${data.repeat_root}</code>), so no table anywhere is computed from the second
+       asking.`}</p>
+    <div class="scroll"><table class="concordance">
+      <thead><tr><th>${T`Judge`}</th>${tracks.map(t => `<th>${esc(tr(t.label))}</th>`).join('')}
+        <th>${T`Together`}</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div>
+    ${silent.length ? `<p class="note">${T`Questions one of the two runs did not answer, and
+       which count as neither agreement nor disagreement: ${silent.join('; ')}.`}</p>` : ''}
+    <p class="note">${T`A question both runs answered is counted once, at its parsed value —
+       the number a table averages — so a differently worded yes is still a yes. The counts
+       come from <code>docs/repeatability.json</code>, the artefact this panel is drawn from.`}</p>`;
 }
 
 // Rows that were published and are not any more. Named rather than drawn: two
@@ -1312,11 +1360,13 @@ function drawAll() {
   renderSimilarityExample(DATA.similarity_example);
   renderCalibration(DATA.calibration);
   renderJudges(DATA.judges);
+  renderRepeatability(DATA.repeatability);
   renderPreference(DATA.preference);
   renderConcordance(DATA.concordance);
 }
 
 renderJudges(DATA.judges);
+renderRepeatability(DATA.repeatability);
 renderPreference(DATA.preference);
 renderConcordance(DATA.concordance);
 renderOrdering(DATA);
@@ -1336,6 +1386,7 @@ function drawProvenance() {
     'docs/judges.json',
     'docs/calibration.json',
     'docs/preference.json',
+    DATA.repeatability ? 'docs/repeatability.json' : '',
     'docs/corpus-profile.json',
     'docs/saturation-&lt;judge&gt;.json',
   ].filter(Boolean);

@@ -1089,6 +1089,7 @@ def _score_args(*, cache_only: bool, no_write: bool):
         run_id="",
         max_judge_usd=1.0,
         force=False,
+        repeat_into=None,
     )
 
 

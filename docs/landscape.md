@@ -285,7 +285,7 @@ measurement.
 The closest thing here is TRACE, whose five dimensions (trustworthiness,
 relevance, accuracy, comprehensiveness, expression) overlap PDSQI-9's
 construct more than the rubric does — and which has no human anchor and,
-measured on 2026-08-26, separates the sixteen models across 5.6% of its scale under
+measured on 2026-09-02, separates the eighteen models across 5.6% of its scale under
 `gemini-3.1-pro-preview` and 13.3% under `gpt-5.6-terra`.
 
 ## Adjacent, but a different task

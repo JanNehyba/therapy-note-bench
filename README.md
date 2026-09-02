@@ -59,23 +59,25 @@ written for somebody building or buying one:
 | Place | Model | Group | Provider | Completeness (0-1) | Conciseness (0-1) | Faithfulness (1-5) | Notes | Scored |
 |---|---|---|---|---|---|---|---|---|
 | 1 | `google_gemini-3.7-flash` | 1 | vertex | 0.526 | 0.933 | 4.98 | 50/50 | 50 |
+| 2 | `glm-5.3` | — | einfra | 0.534 | 0.891 | 4.97 | 50/50 | 42 of 50 *(8 part-answered)* |
 | 2 | `kimi-k3` | 1 | einfra | 0.550 | 0.887 | 4.98 | 50/50 | 49 of 50 *(1 part-answered)* |
-| 3 | `google_gemini-3.1-pro-preview` | 1 | vertex | 0.534 | 0.890 | 4.97 | 50/50 | 49 of 50 *(1 part-answered)* |
-| 4 | `gpt-5.6-terra` | 1 | openai | 0.497 | 0.891 | 5.00 | 50/50 | 49 of 50 *(1 part-answered)* |
-| 5 | `qwen3.5-122b` | 1 | einfra | 0.529 | 0.905 | 4.77 | 50/50 | 48 of 50 *(2 part-answered)* |
-| 6 | `gpt-5.6-sol` | 1 | openai | 0.502 | 0.887 | 4.96 | 50/50 | 48 of 50 *(2 part-answered)* |
-| 7 | `glm-5.2` | 1 | einfra | 0.500 | 0.875 | 4.97 | 50/50 | 50 |
-| 7 | `qwen3.5-int4` | 1 | einfra | 0.536 | 0.877 | 4.92 | 50/50 | 50 |
-| 9 | `glm-5` | 1 | einfra | 0.504 | 0.865 | 4.96 | 50/50 | 50 |
-| 10 | `gemma4` | 1 | einfra | 0.472 | 0.895 | 4.95 | 50/50 | 48 of 50 *(2 part-answered)* |
-| 10 | `mistral-medium-3.5` | 2 | einfra | 0.457 | 0.909 | 4.89 | 50/50 | 50 |
-| 12 | `deepseek-v4-flash` | 1 | einfra | 0.445 | 0.920 | 4.88 | 50/50 | 50 |
-| 12 | `gpt-5.6-luna` | 1 | openai | 0.482 | 0.889 | 4.93 | 50/50 | 50 |
-| 14 | `deepseek-v4-flash-thinking` | 1 | einfra | 0.473 | 0.901 | 4.83 | 50/50 | 48 of 50 *(2 part-answered)* |
-| 14 | `gpt-oss-120b` | 1 | einfra | 0.482 | 0.905 | 4.29 | 42/50 (8 unusable) | 41 of 42 *(1 part-answered)* |
-| 16 | `qwen3.8-27b` | 2 | einfra | 0.477 | 0.835 | 4.94 | 50/50 | 49 of 50 *(1 part-answered)* |
+| 4 | `google_gemini-3.1-pro-preview` | 1 | vertex | 0.534 | 0.890 | 4.97 | 50/50 | 49 of 50 *(1 part-answered)* |
+| 5 | `gpt-5.6-terra` | 1 | openai | 0.497 | 0.891 | 5.00 | 50/50 | 49 of 50 *(1 part-answered)* |
+| 6 | `qwen3.5-122b` | 1 | einfra | 0.529 | 0.905 | 4.77 | 50/50 | 48 of 50 *(2 part-answered)* |
+| 7 | `gpt-5.6-sol` | 1 | openai | 0.502 | 0.887 | 4.96 | 50/50 | 48 of 50 *(2 part-answered)* |
+| 8 | `glm-5.2` | 1 | einfra | 0.500 | 0.875 | 4.97 | 50/50 | 50 |
+| 8 | `qwen3.5-int4` | 1 | einfra | 0.536 | 0.877 | 4.92 | 50/50 | 50 |
+| 10 | `glm-5` | 1 | einfra | 0.504 | 0.865 | 4.96 | 50/50 | 50 |
+| 11 | `gemma4` | 1 | einfra | 0.472 | 0.895 | 4.95 | 50/50 | 48 of 50 *(2 part-answered)* |
+| 11 | `mistral-medium-3.5` | 2 | einfra | 0.457 | 0.909 | 4.89 | 50/50 | 50 |
+| 13 | `deepseek-v4-flash` | 1 | einfra | 0.445 | 0.920 | 4.88 | 50/50 | 50 |
+| 13 | `gpt-5.6-luna` | 1 | openai | 0.482 | 0.889 | 4.93 | 50/50 | 50 |
+| 15 | `gpt-oss-120b` | 1 | einfra | 0.482 | 0.905 | 4.29 | 42/50 (8 unusable) | 41 of 42 *(1 part-answered)* |
+| 16 | `deepseek-v4-flash-thinking` | 1 | einfra | 0.473 | 0.901 | 4.83 | 50/50 | 48 of 50 *(2 part-answered)* |
+| 17 | `qwen3.8-27b` | 2 | einfra | 0.477 | 0.835 | 4.94 | 50/50 | 49 of 50 *(1 part-answered)* |
+| 18 | `qwen3.8-flash-next` | — | einfra | 0.477 | 0.848 | 4.88 | 48/50 (2 unreached) | 45 of 48 *(3 part-answered)* |
 
-*Ordered by **mean place** over the 3 columns of this instrument, every column counting once — a convention, not a measurement: the columns do not predict each other. Under the other weightings tried (each column counted twice, and the reference rows removed) first place is held by `google_gemini-3.7-flash`; at most 14 of 19 systems change place and none by more than 7 ([how the order was built](https://jannehyba.github.io/therapy-note-bench/methods.html#ordering)). Places are among all 19 rows of the table, the reference systems included, so the models' places can have gaps.* *Group: what the evidence separates. A system stands above another only when it is at least as good on every column under both judges in 0.95 of the resampled conversations; 3 group(s) for 19 systems, 15 of them beaten by no tested comparison ([how the comparisons were tested](https://jannehyba.github.io/therapy-note-bench/methods.html#groups)).* ***Completeness** is the only column checked against people; it counts once in the order, like every other.*
+*Ordered by **mean place** over the 3 columns of this instrument, every column counting once — a convention, not a measurement: the columns do not predict each other. Under the other weightings tried (each column counted twice, and the reference rows removed) first place is held by `google_gemini-3.7-flash`; at most 15 of 21 systems change place and none by more than 7 ([how the order was built](https://jannehyba.github.io/therapy-note-bench/methods.html#ordering)). Places are among all 21 rows of the table, the reference systems included, so the models' places can have gaps.* *Group: what the evidence separates. A system stands above another only when it is at least as good on every column under both judges in 0.95 of the resampled conversations; 3 group(s) for 19 systems, 15 of them beaten by no tested comparison ([how the comparisons were tested](https://jannehyba.github.io/therapy-note-bench/methods.html#groups)).* ***Completeness** is the only column checked against people; it counts once in the order, like every other.*
 - **Completeness** (0-1) — The equal-weighted mean of the note's four SOAP section fractions. Per section, the fraction of that section's criteria the judge found present. Counts coverage of a checklist, not judgement. All 23 rubric items are asked of every note, whatever the session was about, so an item the session never called for counts as absent exactly like one the note forgot. The figure is the equal-weighted mean of the note's four section fractions, not the fraction of all 23 items, so a four-item section counts as much as an eight-item one. It is the only column here checked against two therapists' ratings; the table's order is a mean of places over all its columns.
 - **Conciseness** (0-1) — The equal-weighted mean of the note's four section fractions: per section, the fraction of that section's sentences that fit at least one rubric item. 1.00 means nothing is off-topic; it does not mean the note is short. Not a length measure, despite the name: a note twice as long scores the same if every added sentence is on topic. It is also the measure most moved by the judge's own settings -- raising the thinking budget from 128 to 256 tokens shifted all nineteen systems and reordered sixteen of them. The higher budget is what the table above is scored at; it was the budget-128 rows it was compared against that are gone -- not in results/rows.jsonl in any revision and not re-derivable, see docs/limitations.md.
 - **Faithfulness** (1-5) — Whether the note contradicts the transcript, rated 1 to 5, where 5 is no inaccuracies. TN-Eval's protocol has no criterion-based version of this one, so it stays a Likert scale. A different scale from the two columns beside it, and a weak one: TN-Eval published Krippendorff's alpha 0.18 between its two therapist annotators on this rating, and recomputing it here from their released annotations gives the same. Read it as a flag for gross invention, not as a ranking.
@@ -84,24 +86,26 @@ written for somebody building or buying one:
 
 | Place | Model | Group | Provider | ROUGE-L (0-1) | BERTScore (0-1) | TRACE (1-5) | Looks back (0-1) | Looks forward (0-1) | Notes | Scored |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 1 | `gemma4` | 1 | einfra | 0.202 | 0.820 | 4.83 | 1.00 | 0.36 | 40/40 | 40 |
+| 1 | `qwen3.8-flash-next` | — | einfra | 0.192 | 0.821 | 4.98 | 1.00 | 0.27 | 39/40 (1 unreached) | 39 |
+| 2 | `gemma4` | 1 | einfra | 0.202 | 0.820 | 4.83 | 1.00 | 0.36 | 40/40 | 40 |
 | 2 | `gpt-5.6-sol` | 1 | openai | 0.169 | 0.816 | 4.99 | 1.00 | 0.55 | 40/40 | 40 |
-| 3 | `glm-5.2` | 1 | einfra | 0.173 | 0.820 | 4.92 | 1.00 | 0.36 | 40/40 | 40 |
-| 3 | `google_gemini-3.1-pro-preview` | 1 | vertex | 0.182 | 0.817 | 4.96 | 1.00 | 0.45 | 40/40 | 40 |
-| 5 | `glm-5` | 1 | einfra | 0.179 | 0.820 | 4.88 | 1.00 | 0.36 | 40/40 | 40 |
-| 5 | `qwen3.8-27b` | 1 | einfra | 0.186 | 0.819 | 4.95 | 1.00 | 0.27 | 40/40 | 40 |
-| 7 | `google_gemini-3.7-flash` | 1 | vertex | 0.186 | 0.819 | 4.97 | 0.97 | 0.36 | 40/40 | 40 |
-| 7 | `qwen3.5-int4` | 1 | einfra | 0.183 | 0.818 | 4.97 | 1.00 | 0.09 | 39/40 (1 unreached) | 39 |
-| 9 | `kimi-k3` | 1 | einfra | 0.109 | 0.812 | 4.98 | 1.00 | 0.36 | 40/40 | 40 |
-| 9 | `mistral-medium-3.5` | 1 | einfra | 0.186 | 0.815 | 4.87 | 1.00 | 0.18 | 40/40 | 40 |
-| 11 | `gpt-5.6-terra` | 1 | openai | 0.155 | 0.815 | 4.97 | 0.97 | 0.45 | 40/40 | 40 |
-| 12 | `gpt-5.6-luna` | 1 | openai | 0.150 | 0.811 | 4.92 | 1.00 | 0.27 | 40/40 | 40 |
-| 13 | `deepseek-v4-flash` | 1 | einfra | 0.168 | 0.816 | 4.78 | 1.00 | 0.09 | 40/40 | 40 |
-| 13 | `deepseek-v4-flash-thinking` | 1 | einfra | 0.170 | 0.811 | 4.87 | 1.00 | 0.09 | 40/40 | 40 |
-| 15 | `qwen3.5-122b` | 2 | einfra | 0.140 | 0.815 | 4.76 | 1.00 | 0.27 | 40/40 | 40 |
-| 16 | `gpt-oss-120b` | 2 | einfra | 0.159 | 0.808 | 4.79 | 1.00 | 0.00 | 40/40 | 40 |
+| 4 | `google_gemini-3.1-pro-preview` | 1 | vertex | 0.182 | 0.817 | 4.96 | 1.00 | 0.45 | 40/40 | 40 |
+| 5 | `glm-5.2` | 1 | einfra | 0.173 | 0.820 | 4.92 | 1.00 | 0.36 | 40/40 | 40 |
+| 6 | `glm-5` | 1 | einfra | 0.179 | 0.820 | 4.88 | 1.00 | 0.36 | 40/40 | 40 |
+| 6 | `qwen3.8-27b` | 1 | einfra | 0.186 | 0.819 | 4.95 | 1.00 | 0.27 | 40/40 | 40 |
+| 8 | `qwen3.5-int4` | 1 | einfra | 0.183 | 0.818 | 4.97 | 1.00 | 0.09 | 39/40 (1 unreached) | 39 |
+| 9 | `google_gemini-3.7-flash` | 1 | vertex | 0.186 | 0.819 | 4.97 | 0.97 | 0.36 | 40/40 | 40 |
+| 10 | `glm-5.3` | — | einfra | 0.113 | 0.814 | 4.96 | 1.00 | 0.73 | 40/40 | 40 |
+| 11 | `kimi-k3` | 1 | einfra | 0.109 | 0.812 | 4.98 | 1.00 | 0.36 | 40/40 | 40 |
+| 12 | `mistral-medium-3.5` | 1 | einfra | 0.186 | 0.815 | 4.87 | 1.00 | 0.18 | 40/40 | 40 |
+| 13 | `gpt-5.6-terra` | 1 | openai | 0.155 | 0.815 | 4.97 | 0.97 | 0.45 | 40/40 | 40 |
+| 14 | `gpt-5.6-luna` | 1 | openai | 0.150 | 0.811 | 4.92 | 1.00 | 0.27 | 40/40 | 40 |
+| 15 | `deepseek-v4-flash` | 1 | einfra | 0.168 | 0.816 | 4.78 | 1.00 | 0.09 | 40/40 | 40 |
+| 16 | `deepseek-v4-flash-thinking` | 1 | einfra | 0.170 | 0.811 | 4.87 | 1.00 | 0.09 | 40/40 | 40 |
+| 17 | `qwen3.5-122b` | 2 | einfra | 0.140 | 0.815 | 4.76 | 1.00 | 0.27 | 40/40 | 40 |
+| 18 | `gpt-oss-120b` | 2 | einfra | 0.159 | 0.808 | 4.79 | 1.00 | 0.00 | 40/40 | 40 |
 
-*Ordered by **mean place** over the 5 columns of this instrument, every column counting once — a convention, not a measurement: the columns do not predict each other. Under the other weightings tried (each column counted twice, and the reference rows removed) first place is held by `gemma4`, `gpt-5.6-sol`; at most 13 of 16 systems change place and none by more than 6 ([how the order was built](https://jannehyba.github.io/therapy-note-bench/methods.html#ordering)). Places are among all 16 rows of the table, the reference systems included, so the models' places can have gaps.* *Group: what the evidence separates. A system stands above another only when it is at least as good on every column under both judges in 0.95 of the resampled conversations; 2 group(s) for 16 systems, 14 of them beaten by no tested comparison ([how the comparisons were tested](https://jannehyba.github.io/therapy-note-bench/methods.html#groups)).*
+*Ordered by **mean place** over the 5 columns of this instrument, every column counting once — a convention, not a measurement: the columns do not predict each other. Under the other weightings tried (each column counted twice, and the reference rows removed) first place is held by `gpt-5.6-sol`, `qwen3.8-flash-next`; at most 14 of 18 systems change place and none by more than 6 ([how the order was built](https://jannehyba.github.io/therapy-note-bench/methods.html#ordering)). Places are among all 18 rows of the table, the reference systems included, so the models' places can have gaps.* *Group: what the evidence separates. A system stands above another only when it is at least as good on every column under both judges in 0.95 of the resampled conversations; 2 group(s) for 16 systems, 14 of them beaten by no tested comparison ([how the comparisons were tested](https://jannehyba.github.io/therapy-note-bench/methods.html#groups)).*
 - **ROUGE-L** (0-1) — Longest-common-subsequence overlap with the expert note, F-measure. Rewards using the same words in the same order. Not the source paper's ROUGE-L and not comparable with their published table. Theirs compares the whole rendered note, which puts our own field labels and every Nil the expert wrote on both sides -- a note where the model wrote nothing at all scores 0.379 that way, above most real notes. This compares the field values of the sections the expert answered, where the same empty note scores 0.000, and every model's figure fell by about a third. It also cannot tell a good paraphrase from a wrong answer, and the source paper found it disagrees with what clinicians preferred. It also falls as notes get longer; where this table has a Words column, the correlation between the two is printed under it.
 - **BERTScore** (0-1) — Embedding similarity to the expert note. Tolerates paraphrase. A fluent note about the wrong session still scores well.
 - **TRACE** (1-5) — Trustworthiness, relevance, accuracy, comprehensiveness and expression, each rated 1-5 by a judge and averaged. A re-implementation with no human anchor: the authors never published their ratings, so unlike the TN-Eval track this number is not calibrated against anybody.
@@ -113,23 +117,25 @@ written for somebody building or buying one:
 | Place | Model | Group | Provider | Accurate (1-5) | Thorough (1-5) | Useful (1-5) | Organized (1-5) | Comprehensible (1-5) | Succinct (1-5) | Synthesized (1-5) | Free of stigmatizing language (0-1) | Notes | Scored |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 1 | `gpt-5.6-sol` | 1 | openai | 5.00 | 5.00 | 5.00 | 5.00 | 5.00 | 3.88 | 5.00 | 1.000 | 50/50 | 50 |
-| 2 | `google_gemini-3.7-flash` | 1 | vertex | 5.00 | 4.96 | 5.00 | 5.00 | 5.00 | 4.00 | 5.00 | 0.957 | 50/50 | 47 of 50 *(3 part-answered)* |
-| 3 | `gpt-5.6-terra` | 1 | openai | 5.00 | 4.98 | 5.00 | 5.00 | 5.00 | 3.35 | 5.00 | 1.000 | 50/50 | 49 of 50 *(1 part-answered)* |
-| 4 | `qwen3.8-27b` | 1 | einfra | 5.00 | 4.92 | 5.00 | 5.00 | 5.00 | 3.55 | 5.00 | 0.980 | 50/50 | 49 of 50 *(1 part-answered)* |
-| 5 | `gemma4` | 1 | einfra | 5.00 | 4.80 | 5.00 | 5.00 | 5.00 | 4.02 | 5.00 | 0.940 | 50/50 | 50 |
-| 5 | `glm-5.2` | 1 | einfra | 5.00 | 4.96 | 5.00 | 5.00 | 5.00 | 3.73 | 5.00 | 0.939 | 50/50 | 49 of 50 *(1 part-answered)* |
-| 7 | `gpt-5.6-luna` | 1 | openai | 5.00 | 4.96 | 5.00 | 5.00 | 5.00 | 3.43 | 5.00 | 0.959 | 50/50 | 49 of 50 *(1 part-answered)* |
-| 8 | `google_gemini-3.1-pro-preview` | 1 | vertex | 4.98 | 4.94 | 5.00 | 5.00 | 5.00 | 3.84 | 5.00 | 0.940 | 50/50 | 50 |
-| 9 | `qwen3.5-int4` | 1 | einfra | 4.94 | 4.90 | 5.00 | 5.00 | 5.00 | 4.00 | 5.00 | 0.940 | 50/50 | 50 |
-| 10 | `glm-5` | 1 | einfra | 4.94 | 4.96 | 5.00 | 5.00 | 5.00 | 3.73 | 5.00 | 0.939 | 50/50 | 49 of 50 *(1 part-answered)* |
+| 2 | `qwen3.8-flash-next` | — | einfra | 5.00 | 4.96 | 5.00 | 5.00 | 5.00 | 3.55 | 5.00 | 1.000 | 48/50 (2 unreached) | 47 of 48 *(1 part-answered)* |
+| 3 | `google_gemini-3.7-flash` | 1 | vertex | 5.00 | 4.96 | 5.00 | 5.00 | 5.00 | 4.00 | 5.00 | 0.957 | 50/50 | 47 of 50 *(3 part-answered)* |
+| 4 | `gpt-5.6-terra` | 1 | openai | 5.00 | 4.98 | 5.00 | 5.00 | 5.00 | 3.35 | 5.00 | 1.000 | 50/50 | 49 of 50 *(1 part-answered)* |
+| 5 | `qwen3.8-27b` | 1 | einfra | 5.00 | 4.92 | 5.00 | 5.00 | 5.00 | 3.55 | 5.00 | 0.980 | 50/50 | 49 of 50 *(1 part-answered)* |
+| 6 | `gemma4` | 1 | einfra | 5.00 | 4.80 | 5.00 | 5.00 | 5.00 | 4.02 | 5.00 | 0.940 | 50/50 | 50 |
+| 6 | `glm-5.2` | 1 | einfra | 5.00 | 4.96 | 5.00 | 5.00 | 5.00 | 3.73 | 5.00 | 0.939 | 50/50 | 49 of 50 *(1 part-answered)* |
+| 8 | `gpt-5.6-luna` | 1 | openai | 5.00 | 4.96 | 5.00 | 5.00 | 5.00 | 3.43 | 5.00 | 0.959 | 50/50 | 49 of 50 *(1 part-answered)* |
+| 9 | `google_gemini-3.1-pro-preview` | 1 | vertex | 4.98 | 4.94 | 5.00 | 5.00 | 5.00 | 3.84 | 5.00 | 0.940 | 50/50 | 50 |
+| 10 | `qwen3.5-int4` | 1 | einfra | 4.94 | 4.90 | 5.00 | 5.00 | 5.00 | 4.00 | 5.00 | 0.940 | 50/50 | 50 |
 | 11 | `kimi-k3` | 1 | einfra | 4.98 | 4.98 | 5.00 | 5.00 | 5.00 | 2.90 | 5.00 | 0.959 | 50/50 | 49 of 50 *(1 part-answered)* |
-| 12 | `mistral-medium-3.5` | 1 | einfra | 4.86 | 4.90 | 5.00 | 5.00 | 5.00 | 3.76 | 5.00 | 0.960 | 50/50 | 50 |
-| 13 | `deepseek-v4-flash` | 1 | einfra | 4.63 | 4.78 | 5.00 | 5.00 | 5.00 | 3.78 | 5.00 | 0.980 | 50/50 | 49 of 50 *(1 part-answered)* |
-| 15 | `deepseek-v4-flash-thinking` | 1 | einfra | 4.80 | 4.86 | 5.00 | 5.00 | 5.00 | 3.44 | 5.00 | 0.980 | 50/50 | 50 |
-| 16 | `qwen3.5-122b` | 1 | einfra | 4.72 | 4.94 | 5.00 | 5.00 | 5.00 | 3.18 | 5.00 | 0.920 | 50/50 | 50 |
-| 17 | `gpt-oss-120b` | 2 | einfra | 4.22 | 4.63 | 5.00 | 5.00 | 4.98 | 3.63 | 5.00 | 1.000 | 42/50 (8 unusable) | 41 of 42 *(1 part-answered)* |
+| 12 | `glm-5` | 1 | einfra | 4.94 | 4.96 | 5.00 | 5.00 | 5.00 | 3.73 | 5.00 | 0.939 | 50/50 | 49 of 50 *(1 part-answered)* |
+| 13 | `mistral-medium-3.5` | 1 | einfra | 4.86 | 4.90 | 5.00 | 5.00 | 5.00 | 3.76 | 5.00 | 0.960 | 50/50 | 50 |
+| 14 | `glm-5.3` | — | einfra | 4.98 | 4.98 | 5.00 | 5.00 | 5.00 | 2.84 | 5.00 | 0.940 | 50/50 | 50 |
+| 15 | `deepseek-v4-flash` | 1 | einfra | 4.63 | 4.78 | 5.00 | 5.00 | 5.00 | 3.78 | 5.00 | 0.980 | 50/50 | 49 of 50 *(1 part-answered)* |
+| 17 | `deepseek-v4-flash-thinking` | 1 | einfra | 4.80 | 4.86 | 5.00 | 5.00 | 5.00 | 3.44 | 5.00 | 0.980 | 50/50 | 50 |
+| 18 | `qwen3.5-122b` | 1 | einfra | 4.72 | 4.94 | 5.00 | 5.00 | 5.00 | 3.18 | 5.00 | 0.920 | 50/50 | 50 |
+| 19 | `gpt-oss-120b` | 2 | einfra | 4.22 | 4.63 | 5.00 | 5.00 | 4.98 | 3.63 | 5.00 | 1.000 | 42/50 (8 unusable) | 41 of 42 *(1 part-answered)* |
 
-*Ordered by **mean place** over the 8 columns of this instrument, every column counting once — a convention, not a measurement: the columns do not predict each other. Under the other weightings tried (each column counted twice, and the reference rows removed) first place is held by `gpt-5.6-sol`; at most 15 of 19 systems change place and none by more than 6 ([how the order was built](https://jannehyba.github.io/therapy-note-bench/methods.html#ordering)). Places are among all 19 rows of the table, the reference systems included, so the models' places can have gaps.* *Group: what the evidence separates. A system stands above another only when it is at least as good on every column under both judges in 0.95 of the resampled conversations; 2 group(s) for 19 systems, 18 of them beaten by no tested comparison ([how the comparisons were tested](https://jannehyba.github.io/therapy-note-bench/methods.html#groups)).*
+*Ordered by **mean place** over the 8 columns of this instrument, every column counting once — a convention, not a measurement: the columns do not predict each other. Under the other weightings tried (each column counted twice, and the reference rows removed) first place is held by `gpt-5.6-sol`; at most 16 of 21 systems change place and none by more than 7 ([how the order was built](https://jannehyba.github.io/therapy-note-bench/methods.html#ordering)). Places are among all 21 rows of the table, the reference systems included, so the models' places can have gaps.* *Group: what the evidence separates. A system stands above another only when it is at least as good on every column under both judges in 0.95 of the resampled conversations; 2 group(s) for 19 systems, 18 of them beaten by no tested comparison ([how the comparisons were tested](https://jannehyba.github.io/therapy-note-bench/methods.html#groups)).*
 - **PDSQI-9 columns** — The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.
 - **Accurate** (1-5) — The note is true and free of incorrect information. PDSQI-9 item 2, rated 1 (not at all) to 5 (extremely).
 - **Thorough** (1-5) — The note should thoroughly cover all critical patient issues. PDSQI-9 item 3, rated 1 (not at all) to 5 (extremely).
@@ -142,15 +148,15 @@ written for somebody building or buying one:
 
 **Do the two judges agree?** (TN-Eval SOAP · AnnoMI conversations)
 
-`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on completeness (+0.889) and place 12 of 19 systems differently on it anyway. They agree least on faithfulness (+0.742, 16 of 19 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. Systems beating at least one other on every measure under both judges, which needs no weighting to be true: 14. `google_gemini-3.7-flash` beats 10. 8 of 19 systems are beaten outright by nobody. Completeness says little about conciseness (`gemini-3.1-pro-preview` -0.07, `gpt-5.6-terra` +0.05). Completeness says different things to the two judges about faithfulness (`gemini-3.1-pro-preview` +0.59, `gpt-5.6-terra` +0.04). The two judges disagree about whether those columns are related at all, so neither reading is this benchmark's answer.
+`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on completeness (+0.890) and place 17 of 21 systems differently on it anyway. They agree least on faithfulness (+0.702, 19 of 21 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. Systems beating at least one other on every measure under both judges, which needs no weighting to be true: 16. `google_gemini-3.7-flash` beats 11. 9 of 21 systems are beaten outright by nobody. Completeness says little about conciseness (`gemini-3.1-pro-preview` -0.04, `gpt-5.6-terra` +0.10). Completeness says different things to the two judges about faithfulness (`gemini-3.1-pro-preview` +0.62, `gpt-5.6-terra` +0.01). The two judges disagree about whether those columns are related at all, so neither reading is this benchmark's answer.
 
 **Do the two judges agree?** (iCARE form on the iHOPE corpus · 17 sections per session)
 
-`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on trace (+0.826) and place 11 of 16 systems differently on it anyway. The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. Systems beating at least one other on every measure under both judges, which needs no weighting to be true: 9. `qwen3.8-27b` beats 6. 8 of 16 systems are beaten outright by nobody.
+`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on trace (+0.769) and place 12 of 18 systems differently on it anyway. The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. Systems beating at least one other on every measure under both judges, which needs no weighting to be true: 10. `qwen3.8-flash-next` beats 8. 8 of 18 systems are beaten outright by nobody.
 
 **Do the two judges agree?** (PDSQI-9 · the SOAP notes on AnnoMI, rated for quality)
 
-`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on thorough (+0.833) and place 18 of 19 systems differently on it anyway. They agree least on succinct (+0.446, 18 of 19 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. No agreement figure is given for comprehensible (18 of 19 share one value), organized (18 of 19 share one value), synthesized (18 of 19 share one value), useful (18 of 19 share one value): most systems print the same number there, so there are no orderings for the two judges to agree about, and a correlation over them would be decided by the few that differ. Systems beating at least one other on every measure under both judges, which needs no weighting to be true: 4. `gpt-5.6-sol` beats 7. 11 of 19 systems are beaten outright by nobody.
+`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on thorough (+0.766) and place 18 of 21 systems differently on it anyway. They agree least on succinct (+0.490, 21 of 21 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. No agreement figure is given for comprehensible (20 of 21 share one value), organized (20 of 21 share one value), synthesized (20 of 21 share one value), useful (20 of 21 share one value): most systems print the same number there, so there are no orderings for the two judges to agree about, and a correlation over them would be decided by the few that differ. Systems beating at least one other on every measure under both judges, which needs no weighting to be true: 4. `gpt-5.6-sol` beats 8. 12 of 21 systems are beaten outright by nobody.
 
 *16 icare row(s) of generation coverage at harness `0.1.0` are no longer shown: the measures were redefined in `0.7.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
@@ -248,10 +254,8 @@ written for somebody building or buying one:
 
 **Also scored, and not printed here.** Two judges are two instruments and two tables; the site draws one at a time and this file cannot, so it shows the one the site opens with.
 - **TN-Eval SOAP · AnnoMI conversations**, scored by gpt-5.6-terra (backend openai, effort medium, max_output_tokens 672) — [open it](https://jannehyba.github.io/therapy-note-bench/#tneval-soap-gpt-5.6-terra-tneval-rubric-v1-0.7.0-acf643)
-- **TN-Eval SOAP · AnnoMI conversations**, not yet scored — [open it](https://jannehyba.github.io/therapy-note-bench/#tneval-soap-unjudged-unrubriced-0.7.0)
 - **iCARE form on the iHOPE corpus · 17 sections per session**, scored by gpt-5.6-terra (backend openai, effort medium, max_output_tokens 672) — [open it](https://jannehyba.github.io/therapy-note-bench/#icare-gpt-5.6-terra-icare-trace-v1-0.7.0-acf643)
 - **PDSQI-9 · the SOAP notes on AnnoMI, rated for quality**, scored by gpt-5.6-terra (backend openai, effort medium, max_output_tokens 672) — [open it](https://jannehyba.github.io/therapy-note-bench/#pdsqi-soap-gpt-5.6-terra-pdsqi9-note-v1-0.7.0-acf643)
-- **iCARE form on the iHOPE corpus · 17 sections per session**, not yet scored — [open it](https://jannehyba.github.io/therapy-note-bench/#icare-unjudged-unrubriced-0.7.0)
 
 See the [full leaderboard](https://jannehyba.github.io/therapy-note-bench/) for per-section detail, the reference systems and the published numbers, and [how it was measured](https://jannehyba.github.io/therapy-note-bench/methods.html) for the judge, the corpora and what the two judges disagree about.
 <!-- LEADERBOARD:END -->

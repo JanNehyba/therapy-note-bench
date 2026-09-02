@@ -70,10 +70,10 @@ places are still not a result.
 The one claim that survives is dominance: a system at least as good on *every*
 measure under *both* judges is better however a reader weights the measures.
 The count depends on which instrument's measures are meant, so it is named:
-Eight of the nineteen are beaten outright by nobody on TN-Eval's three rubric
+Nine of the twenty-one are beaten outright by nobody on TN-Eval's three rubric
 columns — a minority, but a minority with no one system in it that beats the
 rest, which is why no single winner is named. On PDSQI-9's eight columns, on
-its own table, it is eleven of the nineteen; more measures make dominance
+its own table, it is twelve of the twenty-one; more measures make dominance
 harder to establish, not easier.
 
 **Those counts describe the stored means; the tested relation is smaller.**
@@ -244,11 +244,12 @@ rubric is not completeness against a reimbursement requirement.
   and the cache serves a record only if it passes the question's own test.
 - **What the re-ask changed, measured after it.** Re-asked at harness 0.7.0,
   62 of the 78 came back as answers and 16 did not (counted from the run's
-  output, which is not in this repository). So 16 of the 942 SOAP notes are
+  output, which is not in this repository). So 27 of the 1040 SOAP notes are
   still scored on fewer than all four sections and stay out of their systems'
-  means, and the set of conversations all 19 systems share — the set the band
-  analysis on the methods page resamples — is 37 of 50 under gemini and 42
-  under gpt, where only `gpt-oss-120b`'s 8 unrecoverable notes are missing;
+  means, and the set of conversations all 21 systems share — the set the band
+  analysis on the methods page resamples — is 33 of 50 under gemini and 40
+  under gpt, where `gpt-oss-120b`'s 8 unrecoverable notes and
+  `qwen3.8-flash-next`'s two notes with truncated judge answers are missing;
   under gemini it had been 25. Completeness moved on 16 of the 19 systems, by
   between −0.003 and +0.009, which is why the 0.6.0 tables are named as
   superseded rather than drawn beside these.
@@ -417,10 +418,10 @@ asks about all of them anyway, of every note, and the denominator is always 23.
 **What decides that a criterion cannot apply.** `saturation`'s `unreachable`
 verdict, which is already in the code and already published per judge in
 `docs/saturation-<judge>.json`: **nobody** reaches it — every one of the
-nineteen systems at or below 0.10, the therapist among them as one system and
-not as the authority on it. Two criteria meet that under both judges:
+twenty-one systems at or below 0.10, the therapist among them as one system
+and not as the authority on it. Two criteria meet that under both judges:
 
-| Criterion | Best of the nineteen, `gemini-3.1-pro-preview` | `gpt-5.6-terra` |
+| Criterion | Best of the twenty-one, `gemini-3.1-pro-preview` | `gpt-5.6-terra` |
 |---|---|---|
 | Treatment goals, SMART (assessment) | 0.04 | 0.02 |
 | Homework from previous sessions (subjective) | 0.08 | 0.06 |
@@ -430,28 +431,29 @@ A third — **assessment tools** — is on the floor under `gpt-5.6-terra` (best
 difference is one note out of fifty in one model, so it is named here rather
 than counted: **2 of 23 is what both judges support**, and that is the count the
 briefing's panel prints. Excluding the third as well would move the leader a
-further +0.029 under judge A and +0.015 under judge B.
+further +0.029 under judge A and +0.016 under judge B.
 
 **What this does to the number, and to the ordering.** Recomputed over the
 twenty-one criteria somebody reaches, on the notes whose completeness the judge
-answered in full — the saturation panel's denominator, which is why the baseline
-below is 0.550 and the leaderboard's headline for the same model is 0.546, and
-the note set is held to what was complete under all 23 so that the only thing
+answered in full — each system on its own complete notes, the saturation
+panel's denominator, which is why the leader's baseline below is the
+leaderboard's headline for the same model (0.550 under judge A) — and the
+note set is held to what was complete under all 23 so that the only thing
 changing is the criterion list:
 
 | | `gemini-3.1-pro-preview` | `gpt-5.6-terra` |
 |---|---|---|
-| Leader, `kimi-k3` | 0.550 → 0.598 | 0.514 → 0.564 |
+| Leader | `kimi-k3` 0.550 → 0.598 | `glm-5.3` 0.526 → 0.575 |
 | Weakest model, `llama-3.1-70b` | 0.364 → 0.396 | 0.315 → 0.348 |
-| Therapist | 0.325 → 0.355 | 0.273 → 0.303 |
+| Therapist | 0.327 → 0.357 | 0.273 → 0.303 |
 | Mean model gain | +0.041 | +0.044 |
 | The therapist's gain | +0.030, 0.74× the models' | +0.030, 0.68× |
-| Weakest model minus therapist | +0.039 → +0.040 | +0.042 → +0.045 |
-| Ordering | Spearman +0.996; four systems move, none by more than one place | +1.000; nothing moves at all |
+| Weakest model minus therapist | +0.037 → +0.039 | +0.042 → +0.045 |
+| Ordering | Spearman +0.992; six systems move, none by more than two places | +0.999; the only change is two adjacent systems swapping places |
 
 **The correction is small and it is not neutral between the parties.** The
 therapist gains about seven tenths of what the average model gains, so the gap
-between her and the weakest model widens — by 4% under one judge and 7% under
+between her and the weakest model widens — by 5% under one judge and 7% under
 the other. Small, and said out loud, because the version of this section it
 replaces did not say it at all.
 

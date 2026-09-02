@@ -184,8 +184,8 @@ being copies.
 - Status page: <https://llm.ai.e-infra.cz/status/>
 - Usage dashboard: <https://llm.ai.e-infra.cz/usage>
 - Inference through **this endpoint** runs inside e-INFRA CZ infrastructure.
-  Not all of the benchmark does: 38% of the published notes were written
-  elsewhere — 17% OpenAI, 11% Vertex, and the 10% that are TN-Eval's released
+  Not all of the benchmark does: 34% of the published notes were written
+  elsewhere — 15% OpenAI, 10% Vertex, and the 9% that are TN-Eval's released
   reference notes, which are not inference at all — and **both judges run
   outside e-INFRA**. What may be sent where is in
   [datasets.md](datasets.md).

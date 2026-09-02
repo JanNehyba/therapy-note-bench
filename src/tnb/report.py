@@ -94,6 +94,10 @@ SITE_URL = "https://jannehyba.github.io/therapy-note-bench/"
 
 JUDGES_PATH = DOCS_DIR / "judges.json"
 PREFERENCE_PATH = DOCS_DIR / "preference.json"
+#: Whether the judges answer the same question the same way twice. Written by
+#: `tnb repeatability`, which reads two answer caches and asks nobody; read
+#: here like the two above, and absent until the repeat has been run.
+REPEATABILITY_PATH = DOCS_DIR / "repeatability.json"
 
 #: What the endpoints served, and when they were asked. Written by `tnb roster`,
 #: which needs three credentials; read here, which must not, because `make test`
@@ -1993,6 +1997,7 @@ def write(rows: list[Row], *, docs_dir: Path | None = None, readme: Path | None 
     )
     data["judges"] = _load_json(docs_dir / JUDGES_PATH.name)
     data["preference"] = _load_json(docs_dir / PREFERENCE_PATH.name)
+    data["repeatability"] = _load_json(docs_dir / REPEATABILITY_PATH.name)
     # The tested comparisons, whole, for the methods page; the tables carry
     # only the layers.
     data["edges"] = {
@@ -2039,8 +2044,8 @@ _INLINE_ESCAPES = {
     "<": "\\u003c",
     ">": "\\u003e",
     "&": "\\u0026",
-    " ": "\\u2028",
-    " ": "\\u2029",
+    "\u2028": "\\u2028",
+    "\u2029": "\\u2029",
 }
 
 

@@ -1703,15 +1703,18 @@ _METHODS = {
     ),
     "<strong>Some of these rows were measured at different settings from others of the same"
     " kind.</strong> Each candidate is shown at the settings its answers were produced at, under"
-    " its name. A judge's settings change its answers — measured here, one judge's thinking"
-    " budget going from 128 to 256 moved every model's completeness and reversed the order of the"
-    " three <code>flash</code> candidates — so those rows are not strictly comparable.": (
+    " its name. A judge's settings are part of the instrument, and changing them was measured"
+    " once rather than repeated: on 2026-08-25 <code>gemini-3.1-pro-preview</code>'s thinking"
+    " budget went from 128 to 256 tokens, every model's completeness moved and the order of the"
+    " three <code>flash</code> candidates reversed. Rows measured at different settings are not"
+    " strictly comparable.": (
         "<strong>Některé z těchto řádků byly změřeny při jiném nastavení než jiné řádky téhož "
         "druhu.</strong> Každý kandidát je ukázán při nastavení, ve kterém vznikly jeho "
-        "odpovědi, pod svým jménem. Nastavení hodnotitele mění jeho odpovědi — změřeno tady: "
-        "rozpočet na přemýšlení jednoho hodnotitele šel ze 128 na 256 a pohnul úplností každého "
-        "modelu a obrátil pořadí tří kandidátů <code>flash</code> — takže ty řádky nejsou "
-        "striktně srovnatelné."
+        "odpovědi, pod svým jménem. Nastavení hodnotitele je součástí nástroje a jeho změna byla "
+        "změřena jednou, ne opakována: 2026-08-25 šel rozpočet na přemýšlení modelu "
+        "<code>gemini-3.1-pro-preview</code> ze 128 na 256 tokenů, pohnul úplností každého modelu "
+        "a obrátil pořadí tří kandidátů <code>flash</code>. Řádky změřené při různém nastavení "
+        "nejsou striktně srovnatelné."
     ),
     "Every candidate of a kind was measured at one setting. Across kinds there is no such thing:"
     " a thinking budget and a reasoning effort are different controls, and no value of one is the"
@@ -1722,6 +1725,31 @@ _METHODS = {
         "hodnota "
         "jednoho není totéž co hodnota druhého. To je mez srovnávání hodnotitelů od dvou "
         "dodavatelů, ne mezera v tomto běhu."
+    ),
+    # -- the repeatability panel ----------------------------------------------
+    "Does a judge repeat itself?": "Odpovídá hodnotitel dvakrát stejně?",
+    "The questions behind the tables, asked again of the same judges at the same settings —"
+    " {0} notes per instrument — with the answers compared at the value the tables average, not"
+    " at the wording. Asked into a separate answer cache (<code>{1}</code>), so no table"
+    " anywhere is computed from the second asking.": (
+        "Otázky, za kterými stojí tabulky, položené znovu týmž hodnotitelům při týchž "
+        "nastaveních — {0} zápisů na nástroj — s odpověďmi porovnanými na hodnotě, kterou "
+        "tabulky průměrují, ne na znění. Položené do samostatné cache odpovědí "
+        "(<code>{1}</code>), takže žádná tabulka se nikde nepočítá z druhého kladení."
+    ),
+    "Together": "Dohromady",
+    "{0} for <code>{1}</code>": "{0} u <code>{1}</code>",
+    "Questions one of the two runs did not answer, and which count as neither agreement nor"
+    " disagreement: {0}.": (
+        "Otázky, na které jeden ze dvou běhů neodpověděl, a proto se nepočítají ani jako shoda, "
+        "ani jako neshoda: {0}."
+    ),
+    "A question both runs answered is counted once, at its parsed value — the number a table"
+    " averages — so a differently worded yes is still a yes. The counts come from"
+    " <code>docs/repeatability.json</code>, the artefact this panel is drawn from.": (
+        "Otázka, na niž odpověděly oba běhy, se počítá jednou, podle parsované hodnoty — čísla, "
+        "které tabulky průměrují — takže jinak formulované ano je pořád ano. Počty stojí v "
+        "souboru <code>docs/repeatability.json</code>, artefaktu, z něhož se tento panel kreslí."
     ),
     "the two therapists": "ti dva terapeuti",
     # -- withdrawn ---------------------------------------------------------------------

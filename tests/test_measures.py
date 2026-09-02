@@ -354,7 +354,7 @@ def test_the_criteria_the_corpus_cannot_answer_are_named_with_the_sensitivity():
     limitations = (REPO_ROOT / "docs" / "limitations.md").read_text(encoding="utf-8")
 
     assert "Two of the twenty-three criteria are on the floor" in limitations
-    assert "+0.996" in limitations, "the sensitivity figure is the point of the section"
+    assert "+0.992" in limitations, "the sensitivity figure is the point of the section"
     assert "0.550 → 0.598" in limitations, "and so is what it does to the number"
     # The correction is not neutral between the parties, and the section that
     # this one replaces did not say so. That sentence is the finding.

@@ -54,7 +54,7 @@ def test_the_pair_count_matches_the_saturation_files(data, drawn):
 
     bands_a, bands_b = data.bands(figures.JUDGE_A), data.bands(figures.JUDGE_B)
     names = sorted(set(bands_a) & set(bands_b))
-    assert len(names) == 19, "every system is banded under both judges"
+    assert len(names) == 21, "every system is banded under both judges"
     assert 0 < agree <= separable <= len(names) * (len(names) - 1) // 2
 
     title = numbers_in(drawn["positions.svg"], "title")[0]
@@ -65,7 +65,7 @@ def test_every_system_the_table_holds_is_in_the_figure(data, drawn):
     """The name mismatch that produced "71 of 75" was invisible in the picture,
     so it is checked here rather than looked for there."""
     table = data.scores("tneval-soap", figures.JUDGE_A, "completeness")
-    assert len(table) == 19
+    assert len(table) == 21
 
     labels = numbers_in(drawn["positions.svg"], "name")
     # One label per rank: tied systems are joined with ", " and a system from

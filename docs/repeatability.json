@@ -1,0 +1,68 @@
+{
+  "judges": [
+    {
+      "judge_model": "gemini-3.1-pro-preview",
+      "questions": 333,
+      "same": 326,
+      "tracks": [
+        {
+          "label": "TN-Eval SOAP \u00b7 AnnoMI conversations",
+          "notes": 5,
+          "questions": 269,
+          "same": 265,
+          "track": "tneval-soap",
+          "unanswered": 0
+        },
+        {
+          "label": "PDSQI-9 \u00b7 the SOAP notes on AnnoMI, rated for quality",
+          "notes": 5,
+          "questions": 39,
+          "same": 37,
+          "track": "pdsqi-soap",
+          "unanswered": 1
+        },
+        {
+          "label": "iCARE form on the iHOPE corpus \u00b7 17 sections per session",
+          "notes": 5,
+          "questions": 25,
+          "same": 24,
+          "track": "icare",
+          "unanswered": 0
+        }
+      ]
+    },
+    {
+      "judge_model": "gpt-5.6-terra",
+      "questions": 334,
+      "same": 293,
+      "tracks": [
+        {
+          "label": "TN-Eval SOAP \u00b7 AnnoMI conversations",
+          "notes": 5,
+          "questions": 269,
+          "same": 243,
+          "track": "tneval-soap",
+          "unanswered": 0
+        },
+        {
+          "label": "PDSQI-9 \u00b7 the SOAP notes on AnnoMI, rated for quality",
+          "notes": 5,
+          "questions": 40,
+          "same": 31,
+          "track": "pdsqi-soap",
+          "unanswered": 0
+        },
+        {
+          "label": "iCARE form on the iHOPE corpus \u00b7 17 sections per session",
+          "notes": 5,
+          "questions": 25,
+          "same": 19,
+          "track": "icare",
+          "unanswered": 0
+        }
+      ]
+    }
+  ],
+  "notes": 5,
+  "repeat_root": "scores/repeatability-2"
+}

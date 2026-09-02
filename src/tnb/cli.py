@@ -621,12 +621,22 @@ def cmd_score(args: argparse.Namespace) -> int:
         f"judge {config.model}, thinking budget {config.thinking_budget}, "
         f"ceiling ${args.max_judge_usd:.2f}"
     )
+    if args.repeat_into:
+        print(
+            f"--repeat-into {args.repeat_into}: the same questions asked again into "
+            "their own directory, and no rows appended. A repeat measures the "
+            "judge, not a table; `tnb repeatability` reads it back."
+        )
 
     if args.dry_run:
         print("\nDry run: the judge was not called.")
         return 0
 
     client = judge.Judge(config)
+
+    # A repeat answers into its own directory so nothing it writes can reach
+    # the published cache, and appends no row so nothing can reach results/.
+    cache_root = Path(args.repeat_into) if args.repeat_into else _cache_root(args)
 
     def append(scored: list[scoring.NoteResult]) -> int:
         """Turn results into rows and record them, unless asked not to.
@@ -646,6 +656,9 @@ def cmd_score(args: argparse.Namespace) -> int:
             settings=settings,
             run_id=args.run_id or "",
         )
+        if args.repeat_into:
+            print("\n--repeat-into: rows were not appended.")
+            return 0
         if args.no_write:
             print("\n--no-write: rows were not appended.")
             return 0
@@ -688,7 +701,7 @@ def cmd_score(args: argparse.Namespace) -> int:
         spend,
         force=args.force,
         on_note=on_note,
-        cache_root=_cache_root(args),
+        cache_root=cache_root,
     )
 
     # None when the judge model has no recorded price. No total is printed
@@ -790,12 +803,22 @@ def cmd_score_pdsqi(args: argparse.Namespace) -> int:
             "--no-transcript: accurate and thorough are not asked. "
             "Their columns will be absent, not zero."
         )
+    if args.repeat_into:
+        print(
+            f"--repeat-into {args.repeat_into}: the same questions asked again into "
+            "their own directory, and no rows appended. A repeat measures the "
+            "judge, not a table; `tnb repeatability` reads it back."
+        )
 
     if args.dry_run:
         print("\nDry run: the judge was not called.")
         return 0
 
     client = judge.Judge(config)
+
+    # A repeat answers into its own directory so nothing it writes can reach
+    # the published cache, and appends no row so nothing can reach results/.
+    cache_root = Path(args.repeat_into) if args.repeat_into else _cache_root(args)
 
     def append(scored) -> int:
         rows = scoring_pdsqi.to_rows(
@@ -808,6 +831,9 @@ def cmd_score_pdsqi(args: argparse.Namespace) -> int:
             settings=settings,
             run_id=args.run_id or "",
         )
+        if args.repeat_into:
+            print("\n--repeat-into: rows were not appended.")
+            return 0
         if args.no_write:
             print("\n--no-write: rows were not appended.")
             return 0
@@ -853,7 +879,7 @@ def cmd_score_pdsqi(args: argparse.Namespace) -> int:
         force=args.force,
         with_transcript=with_transcript,
         on_note=on_note,
-        cache_root=_cache_root(args),
+        cache_root=cache_root,
     )
 
     total = spend.usd(config.model)
@@ -1110,6 +1136,46 @@ def cmd_edges(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_repeatability(args: argparse.Namespace) -> int:
+    """Count how often each judge answers the same question the same way twice.
+
+    Costs nothing: it reads the published answer cache and the repeat one
+    (`tnb score --repeat-into`, and its PDSQI and iCARE siblings). Writes
+    `docs/repeatability.json`, the artefact the methods panel is drawn from --
+    which is why that panel may not exist without this one.
+    """
+    from tnb.scoring import repeatability
+
+    judges = [args.judge_model] if args.judge_model else [judge.DEFAULT_MODEL, judge.SECOND_JUDGE]
+    root = REPO_ROOT / args.repeat_root
+    repeats = []
+    for judge_model in judges:
+        # For its fingerprint and name only; nothing here calls the judge.
+        client = judge.Judge(judge.config_from_env(model=judge_model))
+        found = repeatability.measure(
+            judge_model,
+            fingerprint=client.config.fingerprint(),
+            notes=args.notes,
+            repeat_root=root,
+        )
+        repeats.append(found)
+        for track in found.tracks:
+            print(
+                f"  {track.track}: {track.notes} note(s), {track.same} of {track.questions}"
+                f" the same, {track.unanswered} unanswered in one of the two runs"
+            )
+        print(f"{judge_model}: {found.same} of {found.questions} answers the same.\n")
+
+    if args.dry_run:
+        print("Dry run: docs/repeatability.json was not written.")
+        return 0
+    payload = repeatability.to_json(repeats, notes=args.notes, repeat_root=args.repeat_root)
+    path = report.DOCS_DIR / "repeatability.json"
+    path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(f"Wrote {path.relative_to(REPO_ROOT)}. Run 'tnb report' to draw the panel.")
+    return 0
+
+
 def cmd_saturation(args: argparse.Namespace) -> int:
     """Ask whether the benchmark can still tell these models apart.
 
@@ -1345,6 +1411,12 @@ def cmd_score_icare(args: argparse.Namespace) -> int:
     questions = len(candidates) * len(icare_scorer.TRACE_DIMENSIONS)
     print(f"{len(candidates)} note(s) from {len(coverage)} system(s), {questions} TRACE questions.")
     print(f"judge {config.model}, ceiling ${args.max_judge_usd:.2f}\n")
+    if args.repeat_into:
+        print(
+            f"--repeat-into {args.repeat_into}: the same questions asked again into "
+            "their own directory, and no rows appended. A repeat measures the "
+            "judge, not a table; `tnb repeatability` reads it back.\n"
+        )
     if args.dry_run:
         print("Dry run: the judge was not called.")
         return 0
@@ -1380,7 +1452,7 @@ def cmd_score_icare(args: argparse.Namespace) -> int:
             force=args.force,
             bert=bert_values,
             on_note=on_note,
-            cache_root=_cache_root(args),
+            cache_root=Path(args.repeat_into) if args.repeat_into else _cache_root(args),
         )
     except icare_run.BudgetExceeded as stop:
         # Nothing is appended. A truncated run's averages depend on how far the
@@ -1394,6 +1466,10 @@ def cmd_score_icare(args: argparse.Namespace) -> int:
     if not scored:
         print("Nothing scored.", file=sys.stderr)
         return 1
+
+    if args.repeat_into:
+        print("\n--repeat-into: rows were not appended.")
+        return 0
 
     total = spend.usd(config.model)
     # None rather than 0.00 when the model has no recorded price: a run whose
@@ -1527,6 +1603,14 @@ def build_parser() -> argparse.ArgumentParser:
     score_icare.add_argument(
         "--dry-run", action="store_true", help="print the size of the job, ask nothing"
     )
+    score_icare.add_argument(
+        "--repeat-into",
+        metavar="DIR",
+        help=(
+            "ask the same questions again into this cache directory and append no rows: "
+            "a repeat measures the judge, not a table (`tnb repeatability` reads it back)"
+        ),
+    )
     score_icare.add_argument("--run-id", default="", help="label these rows in results/")
     score_icare.set_defaults(func=cmd_score_icare)
 
@@ -1593,6 +1677,14 @@ def build_parser() -> argparse.ArgumentParser:
     score.add_argument(
         "--no-write", action="store_true", help="score but do not append result rows"
     )
+    score.add_argument(
+        "--repeat-into",
+        metavar="DIR",
+        help=(
+            "ask the same questions again into this cache directory and append no rows: "
+            "a repeat measures the judge, not a table (`tnb repeatability` reads it back)"
+        ),
+    )
     score.add_argument("--run-id", help="label these rows with a run id")
     score.set_defaults(func=cmd_score)
 
@@ -1656,8 +1748,38 @@ def build_parser() -> argparse.ArgumentParser:
     score_pdsqi.add_argument(
         "--no-write", action="store_true", help="rate but do not append result rows"
     )
+    score_pdsqi.add_argument(
+        "--repeat-into",
+        metavar="DIR",
+        help=(
+            "ask the same questions again into this cache directory and append no rows: "
+            "a repeat measures the judge, not a table (`tnb repeatability` reads it back)"
+        ),
+    )
     score_pdsqi.add_argument("--run-id", help="label these rows with a run id")
     score_pdsqi.set_defaults(func=cmd_score_pdsqi)
+
+    repeat = subparsers.add_parser(
+        "repeatability",
+        help="does a judge answer the same question the same way twice? (reads two caches)",
+    )
+    repeat.add_argument(
+        "--repeat-root",
+        default="scores/repeatability-2",
+        help="where the repeat run's answers live (what --repeat-into was given)",
+    )
+    repeat.add_argument(
+        "--notes",
+        type=int,
+        default=5,
+        help="how many notes per instrument the repeat covered",
+    )
+    repeat.add_argument(
+        "--judge-model",
+        help="measure one judge; default is both judges the site draws",
+    )
+    repeat.add_argument("--dry-run", action="store_true", help="print the counts, write nothing")
+    repeat.set_defaults(func=cmd_repeatability)
 
     calibrate = subparsers.add_parser(
         "calibrate", help="check the judge against TN-Eval's two human annotators (phase 4)"

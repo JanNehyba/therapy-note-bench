@@ -89,6 +89,7 @@ WORDS = {
     "eighteen": 18,
     "nineteen": 19,
     "twenty": 20,
+    "twenty-one": 21,
 }
 
 
@@ -142,7 +143,7 @@ def test_the_dominance_count_is_the_count(data):
     unbeaten = [n for n in names if not any(dominates(o, n) for o in names if o != n)]
 
     text = read("limitations.md")
-    said = re.search(r"(\w+) of the (\w+) are beaten outright by nobody", text)
+    said = re.search(r"([\w-]+) of the ([\w-]+) are beaten outright by nobody", text)
     assert said, "limitations.md no longer states a dominance count"
     assert [WORDS[w.lower()] for w in said.groups()] == [len(unbeaten), len(names)], (
         f"the file says {said.group(0)!r}; the payload says {len(unbeaten)} of {len(names)}"

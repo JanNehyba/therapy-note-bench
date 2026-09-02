@@ -80,6 +80,8 @@ PAYLOAD_FIELDS = (
     "concordance.*.measures[].measure",
     "concordance.*.tensions[].first",
     "concordance.*.tensions[].second",
+    # The repeatability panel's per-instrument headings, drawn the same way.
+    "repeatability.judges[].tracks[].label",
     "preference.measure",
 )
 

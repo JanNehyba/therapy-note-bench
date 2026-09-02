@@ -119,6 +119,9 @@ WORDS = {
     "seventeen": 17,
     "eighteen": 18,
     "nineteen": 19,
+    # Before "twenty": the alternation `_WORD` builds from this map takes the
+    # first entry that matches, and "twenty" alone would match the front of it.
+    "twenty-one": 21,
     "twenty": 20,
 }
 
@@ -248,6 +251,10 @@ def _gpt_oss_missing_under_gpt() -> tuple[float, ...]:
     return (float(_saturation("gpt-5.6-terra")["narrowed_by"]["gpt-oss-120b"]),)
 
 
+def _qwen_flash_next_missing_under_gpt() -> tuple[float, ...]:
+    return (float(_saturation("gpt-5.6-terra")["narrowed_by"]["qwen3.8-flash-next"]),)
+
+
 def _completeness_moved() -> tuple[float, ...]:
     """Systems whose completeness moved between the gemini SOAP rows at 0.6.0 and
     0.7.0, all systems compared, and the largest move down and up -- from
@@ -285,8 +292,8 @@ def _tneval_undominated() -> tuple[float, ...]:
 
     The third figure is the point. "Eight of the nineteen are beaten outright by
     nobody" was published with no instrument named, on a page whose SOAP table
-    draws eleven columns from two instruments -- and the payload carries three
-    concordances that answer the same sentence 8 of 19, 11 of 19 and 8 of 16.
+    draws eleven columns from two instruments -- and the payload carried three
+    concordances that answered the same sentence 8 of 19, 11 of 19 and 8 of 16.
     """
     found = payload()["concordance"]["tneval-soap"]
     return (
@@ -421,22 +428,22 @@ CLAIMS = (
     Claim(
         where="docs/limitations.md",
         phrase=(
-            "Eight of the nineteen are beaten outright by nobody on TN-Eval's three rubric columns"
+            "Nine of the twenty-one are beaten outright by nobody on TN-Eval's three rubric columns"
         ),
         kind="computed",
         because="the dominance count is the reason no winner is named, and it moved once already",
-        covers=("Eight", "nineteen", "three"),
+        covers=("Nine", "twenty-one", "three"),
         expected=_tneval_undominated,
     ),
     Claim(
         where="docs/limitations.md",
-        phrase="On PDSQI-9's eight columns, on its own table, it is eleven of the nineteen",
+        phrase="On PDSQI-9's eight columns, on its own table, it is twelve of the twenty-one",
         kind="computed",
         because=(
             "the same sentence answered over the other instrument; printing one without "
             "the other is what made the count read as the page's"
         ),
-        covers=("eight", "eleven", "nineteen"),
+        covers=("eight", "twelve", "twenty-one"),
         expected=_pdsqi_undominated,
     ),
     # The tested dominance graph, read from the committed edges artefacts.
@@ -524,35 +531,43 @@ CLAIMS = (
     ),
     Claim(
         where="docs/limitations.md",
-        phrase="16 of the 942 SOAP notes are still scored on fewer than all four sections",
+        phrase="27 of the 1040 SOAP notes are still scored on fewer than all four sections",
         kind="computed",
         because="the part-answered count after the re-ask; if it moves, this sentence must",
-        covers=("16", "942", "four"),
+        covers=("27", "1040", "four"),
         expected=_part_answered_notes,
     ),
     Claim(
         where="docs/limitations.md",
-        phrase="all 19 systems share",
+        phrase="all 21 systems share",
         kind="computed",
         because="the systems whose intersection the band analysis runs on",
-        covers=("19",),
+        covers=("21",),
         expected=_systems_on_the_gemini_table,
     ),
     Claim(
         where="docs/limitations.md",
-        phrase="is 37 of 50 under gemini and 42 under gpt",
+        phrase="is 33 of 50 under gemini and 40 under gpt",
         kind="computed",
         because="the band analysis's denominators, read from the two committed saturation analyses",
-        covers=("37", "50", "42"),
+        covers=("33", "50", "40"),
         expected=_shared_sets_stated,
     ),
     Claim(
         where="docs/limitations.md",
-        phrase="8 unrecoverable notes are missing",
+        phrase="8 unrecoverable notes and",
         kind="computed",
         because="gpt-oss-120b's unrecoverable notes, as the gpt analysis records them",
         covers=("8",),
         expected=_gpt_oss_missing_under_gpt,
+    ),
+    Claim(
+        where="docs/limitations.md",
+        phrase="`qwen3.8-flash-next`'s two notes with truncated judge answers are missing",
+        kind="computed",
+        because="qwen3.8-flash-next's notes the gpt judge truncated, as its analysis records them",
+        covers=("two",),
+        expected=_qwen_flash_next_missing_under_gpt,
     ),
     Claim(
         where="docs/limitations.md",
@@ -636,14 +651,14 @@ CLAIMS = (
     Claim(
         where="docs/landscape.md",
         phrase=(
-            "separates the sixteen models across 5.6% of its scale under "
+            "separates the eighteen models across 5.6% of its scale under "
             "`gemini-3.1-pro-preview` and 13.3% under `gpt-5.6-terra`"
         ),
         kind="computed",
         because=(
             "stated for one judge as though it held for both; the other spreads them 2.4x wider"
         ),
-        covers=("sixteen", "5.6%", "13.3%"),
+        covers=("eighteen", "5.6%", "13.3%"),
         expected=_trace_spread,
     ),
     Claim(
@@ -802,7 +817,11 @@ UNACCOUNTED = {
     # did not get paid; the documents got shorter.
     "docs/datasets.md": 53,
     "docs/landscape.md": 66,
-    "docs/limitations.md": 146,
+    # Lowered from 146 on 2026-09-02: the saturation and floor-criteria
+    # sections were rewritten for the two new systems and state fewer
+    # figures (the old baseline/headline pair became one number, and the
+    # old five-criterion-era rows went with them).
+    "docs/limitations.md": 143,
     "docs/methodology.md": 74,
     # Raised from 38 on 2026-09-01: a live capture was retaken and recorded
     # as its own dated section. Its counts -- how many ids the endpoint
