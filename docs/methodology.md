@@ -178,7 +178,7 @@ judges differ, they do not: −0.000 [−0.041, +0.042].
 
 Two systems carry most of the estimate, and they are the two that the vendor
 redefinition moved into these groups: without `gemma4` the Gemini figure is
-about +0.006, without `gpt-oss-120b` the GPT figure about +0.009. That is why the page
+about +0.006, without `gpt-oss-120b` the GPT figure about +0.011. That is why the page
 still tells a reader to check the panel before reading either table — not
 because an effect was proved, but because one this size cannot be ruled out.
 
