@@ -562,8 +562,8 @@ function renderTable(table, index) {
     // the column is computed from the note and the expert note, so the two
     // tables hold the same number and always will.
     (against && !c.judged
-      ? `<span class="scale" title="${T`Computed from the note and the expert note, not asked
-          of a judge. Both judges' tables carry the same figure, so there is nothing to
+      ? `<span class="scale exempt" title="${T`Computed from the note and the expert note, not
+          asked of a judge. Both judges' tables carry the same figure, so there is nothing to
           compare.`}">${T`same under both judges`}</span>`
       : '') +
     `</button></th>`).join('');

@@ -492,6 +492,11 @@
     font-weight: 500; letter-spacing: .03em; color: var(--muted);
     font-variant-numeric: tabular-nums; text-transform: none;
   }
+  /* Why this column carries no second figure while both judges are on screen.
+     On its own line rather than trailing the scale: it is a sentence, not a
+     tag, and beside `0-1` it doubled the width of four of the five columns on
+     the iCARE table. */
+  .scale.exempt { display: block; margin-left: 0; font-style: italic; }
   .ranks {
     display: inline-block; margin-left: .4em; padding: .05em .35em;
     border-radius: var(--radius); font-size: var(--t-xs); font-weight: 600;
