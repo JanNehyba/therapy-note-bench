@@ -1,0 +1,1894 @@
+{
+  "built": "2026-09-02",
+  "columns": [
+    "accurate",
+    "thorough",
+    "useful",
+    "organized",
+    "comprehensible",
+    "succinct",
+    "synthesized",
+    "stigmatizing"
+  ],
+  "counts": {
+    "holds": {
+      "0.90": 2,
+      "0.95": 1,
+      "0.99": 0
+    },
+    "stored": 11,
+    "tested": 11,
+    "untestable": 0
+  },
+  "decimals": {
+    "accurate": 2,
+    "comprehensible": 2,
+    "organized": 2,
+    "stigmatizing": 3,
+    "succinct": 2,
+    "synthesized": 2,
+    "thorough": 2,
+    "useful": 2
+  },
+  "edges": [
+    {
+      "holds": false,
+      "legs": [
+        {
+          "column": "accurate",
+          "difference": 0.0625,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 48,
+          "p_ahead": 0.9552,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0612
+        },
+        {
+          "column": "thorough",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 48,
+          "p_ahead": 0.4007,
+          "p_not_behind": 0.5996,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "useful",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 48,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "organized",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 48,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "comprehensible",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 48,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "succinct",
+          "difference": 0.0208,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 48,
+          "p_ahead": 0.5527,
+          "p_not_behind": 0.6377,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "synthesized",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 48,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "stigmatizing",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 48,
+          "p_ahead": 0.3963,
+          "p_not_behind": 0.6058,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "accurate",
+          "difference": -0.0208,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.4036,
+          "p_not_behind": 0.4685,
+          "stored_difference": 0.02
+        },
+        {
+          "column": "thorough",
+          "difference": 0.5833,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.9868,
+          "p_not_behind": 0.9897,
+          "stored_difference": 0.62
+        },
+        {
+          "column": "useful",
+          "difference": 0.0417,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.6259,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.04
+        },
+        {
+          "column": "organized",
+          "difference": 0.0,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "comprehensible",
+          "difference": 0.1458,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.9075,
+          "p_not_behind": 0.9359,
+          "stored_difference": 0.14
+        },
+        {
+          "column": "succinct",
+          "difference": 0.0625,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.8044,
+          "p_not_behind": 0.881,
+          "stored_difference": 0.08
+        },
+        {
+          "column": "synthesized",
+          "difference": 0.0,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "stigmatizing",
+          "difference": 0.0,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.4264,
+          "p_not_behind": 0.5883,
+          "stored_difference": 0.0
+        }
+      ],
+      "loser": "glm-5",
+      "n_shared": 48,
+      "p_holds": 0.0379,
+      "thinnest": {
+        "column": "accurate",
+        "difference": -0.0208,
+        "judge": "gpt-5.6-terra",
+        "p_not_behind": 0.4685
+      },
+      "winner": "glm-5.2"
+    },
+    {
+      "holds": false,
+      "legs": [
+        {
+          "column": "accurate",
+          "difference": 0.7826,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 46,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.7959
+        },
+        {
+          "column": "thorough",
+          "difference": 0.9783,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 46,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.9982
+        },
+        {
+          "column": "useful",
+          "difference": 0.0435,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 46,
+          "p_ahead": 0.6309,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0408
+        },
+        {
+          "column": "organized",
+          "difference": 0.0217,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 46,
+          "p_ahead": 0.6351,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0204
+        },
+        {
+          "column": "comprehensible",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 46,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "succinct",
+          "difference": 1.087,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 46,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 1.0816
+        },
+        {
+          "column": "synthesized",
+          "difference": 0.587,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 46,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.5918
+        },
+        {
+          "column": "stigmatizing",
+          "difference": 0.0435,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 46,
+          "p_ahead": 0.777,
+          "p_not_behind": 0.907,
+          "stored_difference": 0.0594
+        },
+        {
+          "column": "accurate",
+          "difference": 0.0652,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.621,
+          "p_not_behind": 0.665,
+          "stored_difference": 0.04
+        },
+        {
+          "column": "thorough",
+          "difference": 0.8913,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.9999,
+          "p_not_behind": 0.9999,
+          "stored_difference": 0.84
+        },
+        {
+          "column": "useful",
+          "difference": 0.4565,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.5
+        },
+        {
+          "column": "organized",
+          "difference": 0.1087,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.9955,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.1
+        },
+        {
+          "column": "comprehensible",
+          "difference": 0.2174,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.9643,
+          "p_not_behind": 0.9781,
+          "stored_difference": 0.2
+        },
+        {
+          "column": "succinct",
+          "difference": 0.2826,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.9865,
+          "p_not_behind": 0.9913,
+          "stored_difference": 0.22
+        },
+        {
+          "column": "synthesized",
+          "difference": 0.9783,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.98
+        },
+        {
+          "column": "stigmatizing",
+          "difference": 0.1522,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.9997,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.16
+        }
+      ],
+      "loser": "therapist",
+      "n_shared": 46,
+      "p_holds": 0.5874,
+      "thinnest": {
+        "column": "accurate",
+        "difference": 0.0652,
+        "judge": "gpt-5.6-terra",
+        "p_not_behind": 0.665
+      },
+      "winner": "google_gemini-3.7-flash"
+    },
+    {
+      "holds": false,
+      "legs": [
+        {
+          "column": "accurate",
+          "difference": 0.3673,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 0.9999,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.3673
+        },
+        {
+          "column": "thorough",
+          "difference": 0.2245,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.2245
+        },
+        {
+          "column": "useful",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "organized",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "comprehensible",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "succinct",
+          "difference": 0.102,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 0.8388,
+          "p_not_behind": 0.8909,
+          "stored_difference": 0.1045
+        },
+        {
+          "column": "synthesized",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "stigmatizing",
+          "difference": 0.0204,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 0.6374,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0204
+        },
+        {
+          "column": "accurate",
+          "difference": 1.0,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 1.0
+        },
+        {
+          "column": "thorough",
+          "difference": 0.3878,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.9481,
+          "p_not_behind": 0.9565,
+          "stored_difference": 0.38
+        },
+        {
+          "column": "useful",
+          "difference": 0.0816,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.9854,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.08
+        },
+        {
+          "column": "organized",
+          "difference": 0.0,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "comprehensible",
+          "difference": 0.0,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.4639,
+          "p_not_behind": 0.5498,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "succinct",
+          "difference": 0.102,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.8682,
+          "p_not_behind": 0.9132,
+          "stored_difference": 0.12
+        },
+        {
+          "column": "synthesized",
+          "difference": 0.0204,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.6345,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.02
+        },
+        {
+          "column": "stigmatizing",
+          "difference": 0.102,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.9957,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.1
+        }
+      ],
+      "loser": "deepseek-v4-flash",
+      "n_shared": 49,
+      "p_holds": 0.4566,
+      "thinnest": {
+        "column": "comprehensible",
+        "difference": 0.0,
+        "judge": "gpt-5.6-terra",
+        "p_not_behind": 0.5498
+      },
+      "winner": "gpt-5.6-sol"
+    },
+    {
+      "holds": false,
+      "legs": [
+        {
+          "column": "accurate",
+          "difference": 0.2,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 50,
+          "p_ahead": 0.9947,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.2
+        },
+        {
+          "column": "thorough",
+          "difference": 0.14,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 50,
+          "p_ahead": 0.9996,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.14
+        },
+        {
+          "column": "useful",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 50,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "organized",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 50,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "comprehensible",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 50,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "succinct",
+          "difference": 0.44,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 50,
+          "p_ahead": 0.9999,
+          "p_not_behind": 0.9999,
+          "stored_difference": 0.44
+        },
+        {
+          "column": "synthesized",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 50,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "stigmatizing",
+          "difference": 0.02,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 50,
+          "p_ahead": 0.636,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.02
+        },
+        {
+          "column": "accurate",
+          "difference": 1.1,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 1.1
+        },
+        {
+          "column": "thorough",
+          "difference": 0.88,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.88
+        },
+        {
+          "column": "useful",
+          "difference": 0.16,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.9996,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.16
+        },
+        {
+          "column": "organized",
+          "difference": 0.0,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "comprehensible",
+          "difference": 0.08,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.7683,
+          "p_not_behind": 0.8291,
+          "stored_difference": 0.08
+        },
+        {
+          "column": "succinct",
+          "difference": 0.24,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.24
+        },
+        {
+          "column": "synthesized",
+          "difference": 0.02,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.636,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.02
+        },
+        {
+          "column": "stigmatizing",
+          "difference": 0.08,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.987,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.08
+        }
+      ],
+      "loser": "deepseek-v4-flash-thinking",
+      "n_shared": 50,
+      "p_holds": 0.829,
+      "thinnest": {
+        "column": "comprehensible",
+        "difference": 0.08,
+        "judge": "gpt-5.6-terra",
+        "p_not_behind": 0.8291
+      },
+      "winner": "gpt-5.6-sol"
+    },
+    {
+      "holds": false,
+      "legs": [
+        {
+          "column": "accurate",
+          "difference": 0.0612,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 0.9564,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0612
+        },
+        {
+          "column": "thorough",
+          "difference": 0.0408,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 0.8741,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0408
+        },
+        {
+          "column": "useful",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "organized",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "comprehensible",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "succinct",
+          "difference": 0.1429,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 0.895,
+          "p_not_behind": 0.9259,
+          "stored_difference": 0.1453
+        },
+        {
+          "column": "synthesized",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "stigmatizing",
+          "difference": 0.0612,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 0.9569,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0612
+        },
+        {
+          "column": "accurate",
+          "difference": 0.3673,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.9968,
+          "p_not_behind": 0.9981,
+          "stored_difference": 0.38
+        },
+        {
+          "column": "thorough",
+          "difference": 0.7143,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.9974,
+          "p_not_behind": 0.9981,
+          "stored_difference": 0.76
+        },
+        {
+          "column": "useful",
+          "difference": 0.0408,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.6308,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.04
+        },
+        {
+          "column": "organized",
+          "difference": 0.0,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "comprehensible",
+          "difference": 0.0612,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.7265,
+          "p_not_behind": 0.7929,
+          "stored_difference": 0.06
+        },
+        {
+          "column": "succinct",
+          "difference": 0.1429,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.9597,
+          "p_not_behind": 0.9796,
+          "stored_difference": 0.14
+        },
+        {
+          "column": "synthesized",
+          "difference": 0.0,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "stigmatizing",
+          "difference": 0.1224,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.9986,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.12
+        }
+      ],
+      "loser": "glm-5",
+      "n_shared": 49,
+      "p_holds": 0.735,
+      "thinnest": {
+        "column": "comprehensible",
+        "difference": 0.0612,
+        "judge": "gpt-5.6-terra",
+        "p_not_behind": 0.7929
+      },
+      "winner": "gpt-5.6-sol"
+    },
+    {
+      "holds": true,
+      "legs": [
+        {
+          "column": "accurate",
+          "difference": 0.7805,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 41,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.7805
+        },
+        {
+          "column": "thorough",
+          "difference": 0.3659,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 41,
+          "p_ahead": 0.9998,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.3659
+        },
+        {
+          "column": "useful",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 41,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "organized",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 41,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "comprehensible",
+          "difference": 0.0244,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 41,
+          "p_ahead": 0.6403,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0244
+        },
+        {
+          "column": "succinct",
+          "difference": 0.2683,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 41,
+          "p_ahead": 0.9891,
+          "p_not_behind": 0.9941,
+          "stored_difference": 0.2459
+        },
+        {
+          "column": "synthesized",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 41,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "stigmatizing",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 41,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "accurate",
+          "difference": 2.8293,
+          "judge": "gpt-5.6-terra",
+          "n": 42,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 2.819
+        },
+        {
+          "column": "thorough",
+          "difference": 1.6341,
+          "judge": "gpt-5.6-terra",
+          "n": 42,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 1.5286
+        },
+        {
+          "column": "useful",
+          "difference": 0.2439,
+          "judge": "gpt-5.6-terra",
+          "n": 42,
+          "p_ahead": 0.9997,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.2381
+        },
+        {
+          "column": "organized",
+          "difference": 0.0,
+          "judge": "gpt-5.6-terra",
+          "n": 42,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "comprehensible",
+          "difference": 0.2195,
+          "judge": "gpt-5.6-terra",
+          "n": 42,
+          "p_ahead": 0.9858,
+          "p_not_behind": 0.9926,
+          "stored_difference": 0.219
+        },
+        {
+          "column": "succinct",
+          "difference": 0.1707,
+          "judge": "gpt-5.6-terra",
+          "n": 42,
+          "p_ahead": 0.9699,
+          "p_not_behind": 0.9868,
+          "stored_difference": 0.2124
+        },
+        {
+          "column": "synthesized",
+          "difference": 0.0488,
+          "judge": "gpt-5.6-terra",
+          "n": 42,
+          "p_ahead": 0.8703,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0476
+        },
+        {
+          "column": "stigmatizing",
+          "difference": 0.0244,
+          "judge": "gpt-5.6-terra",
+          "n": 42,
+          "p_ahead": 0.6416,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0238
+        }
+      ],
+      "loser": "gpt-oss-120b",
+      "n_shared": 41,
+      "p_holds": 0.9741,
+      "thinnest": {
+        "column": "succinct",
+        "difference": 0.1707,
+        "judge": "gpt-5.6-terra",
+        "p_not_behind": 0.9868
+      },
+      "winner": "gpt-5.6-sol"
+    },
+    {
+      "holds": false,
+      "legs": [
+        {
+          "column": "accurate",
+          "difference": 0.0204,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 0.629,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0204
+        },
+        {
+          "column": "thorough",
+          "difference": 0.0204,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 0.6371,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0204
+        },
+        {
+          "column": "useful",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "organized",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "comprehensible",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "succinct",
+          "difference": 0.9796,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.982
+        },
+        {
+          "column": "synthesized",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "stigmatizing",
+          "difference": 0.0408,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 0.8657,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0408
+        },
+        {
+          "column": "accurate",
+          "difference": 0.4898,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.9999,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.5
+        },
+        {
+          "column": "thorough",
+          "difference": 0.0816,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.6176,
+          "p_not_behind": 0.652,
+          "stored_difference": 0.08
+        },
+        {
+          "column": "useful",
+          "difference": 0.0816,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.9545,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.08
+        },
+        {
+          "column": "organized",
+          "difference": 0.0,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "comprehensible",
+          "difference": 0.1633,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.9584,
+          "p_not_behind": 0.9762,
+          "stored_difference": 0.18
+        },
+        {
+          "column": "succinct",
+          "difference": 0.3265,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.34
+        },
+        {
+          "column": "synthesized",
+          "difference": 0.0,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "stigmatizing",
+          "difference": 0.0408,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.8648,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.06
+        }
+      ],
+      "loser": "kimi-k3",
+      "n_shared": 49,
+      "p_holds": 0.6411,
+      "thinnest": {
+        "column": "thorough",
+        "difference": 0.0816,
+        "judge": "gpt-5.6-terra",
+        "p_not_behind": 0.652
+      },
+      "winner": "gpt-5.6-sol"
+    },
+    {
+      "holds": false,
+      "legs": [
+        {
+          "column": "accurate",
+          "difference": 0.14,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 50,
+          "p_ahead": 0.9852,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.14
+        },
+        {
+          "column": "thorough",
+          "difference": 0.1,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 50,
+          "p_ahead": 0.9941,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.1
+        },
+        {
+          "column": "useful",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 50,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "organized",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 50,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "comprehensible",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 50,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "succinct",
+          "difference": 0.12,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 50,
+          "p_ahead": 0.8602,
+          "p_not_behind": 0.9034,
+          "stored_difference": 0.12
+        },
+        {
+          "column": "synthesized",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 50,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "stigmatizing",
+          "difference": 0.04,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 50,
+          "p_ahead": 0.8724,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.04
+        },
+        {
+          "column": "accurate",
+          "difference": 0.8,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.8
+        },
+        {
+          "column": "thorough",
+          "difference": 0.32,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.9155,
+          "p_not_behind": 0.9288,
+          "stored_difference": 0.32
+        },
+        {
+          "column": "useful",
+          "difference": 0.2,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.9999,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.2
+        },
+        {
+          "column": "organized",
+          "difference": 0.0,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "comprehensible",
+          "difference": 0.1,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.8364,
+          "p_not_behind": 0.8872,
+          "stored_difference": 0.1
+        },
+        {
+          "column": "succinct",
+          "difference": 0.12,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.9089,
+          "p_not_behind": 0.9436,
+          "stored_difference": 0.12
+        },
+        {
+          "column": "synthesized",
+          "difference": 0.04,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.8675,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.04
+        },
+        {
+          "column": "stigmatizing",
+          "difference": 0.08,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.9847,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.08
+        }
+      ],
+      "loser": "mistral-medium-3.5",
+      "n_shared": 50,
+      "p_holds": 0.7055,
+      "thinnest": {
+        "column": "comprehensible",
+        "difference": 0.1,
+        "judge": "gpt-5.6-terra",
+        "p_not_behind": 0.8872
+      },
+      "winner": "gpt-5.6-sol"
+    },
+    {
+      "holds": false,
+      "legs": [
+        {
+          "column": "accurate",
+          "difference": 0.2857,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 50,
+          "p_ahead": 0.9995,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.28
+        },
+        {
+          "column": "thorough",
+          "difference": 0.0408,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 50,
+          "p_ahead": 0.8668,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.06
+        },
+        {
+          "column": "useful",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 50,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "organized",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 50,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "comprehensible",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 50,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "succinct",
+          "difference": 0.7143,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 50,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.7
+        },
+        {
+          "column": "synthesized",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 50,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "stigmatizing",
+          "difference": 0.0816,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 50,
+          "p_ahead": 0.9846,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.08
+        },
+        {
+          "column": "accurate",
+          "difference": 1.2857,
+          "judge": "gpt-5.6-terra",
+          "n": 49,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 1.2816
+        },
+        {
+          "column": "thorough",
+          "difference": 0.3061,
+          "judge": "gpt-5.6-terra",
+          "n": 49,
+          "p_ahead": 0.9325,
+          "p_not_behind": 0.9449,
+          "stored_difference": 0.3143
+        },
+        {
+          "column": "useful",
+          "difference": 0.2041,
+          "judge": "gpt-5.6-terra",
+          "n": 49,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.2041
+        },
+        {
+          "column": "organized",
+          "difference": 0.0,
+          "judge": "gpt-5.6-terra",
+          "n": 49,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "comprehensible",
+          "difference": 0.3469,
+          "judge": "gpt-5.6-terra",
+          "n": 49,
+          "p_ahead": 0.9999,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.3551
+        },
+        {
+          "column": "succinct",
+          "difference": 0.3265,
+          "judge": "gpt-5.6-terra",
+          "n": 49,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.3212
+        },
+        {
+          "column": "synthesized",
+          "difference": 0.0,
+          "judge": "gpt-5.6-terra",
+          "n": 49,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "stigmatizing",
+          "difference": 0.0816,
+          "judge": "gpt-5.6-terra",
+          "n": 49,
+          "p_ahead": 0.9862,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0816
+        }
+      ],
+      "loser": "qwen3.5-122b",
+      "n_shared": 49,
+      "p_holds": 0.9449,
+      "thinnest": {
+        "column": "thorough",
+        "difference": 0.3061,
+        "judge": "gpt-5.6-terra",
+        "p_not_behind": 0.9449
+      },
+      "winner": "gpt-5.6-sol"
+    },
+    {
+      "holds": false,
+      "legs": [
+        {
+          "column": "accurate",
+          "difference": 0.0208,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 48,
+          "p_ahead": 0.6287,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0204
+        },
+        {
+          "column": "thorough",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 48,
+          "p_ahead": 0.3433,
+          "p_not_behind": 0.6471,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "useful",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 48,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "organized",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 48,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "comprehensible",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 48,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "succinct",
+          "difference": 0.4375,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 48,
+          "p_ahead": 0.9997,
+          "p_not_behind": 0.9997,
+          "stored_difference": 0.4489
+        },
+        {
+          "column": "synthesized",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 48,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "stigmatizing",
+          "difference": 0.0417,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 48,
+          "p_ahead": 0.87,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0408
+        },
+        {
+          "column": "accurate",
+          "difference": 0.7083,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.72
+        },
+        {
+          "column": "thorough",
+          "difference": 0.4583,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.9575,
+          "p_not_behind": 0.9645,
+          "stored_difference": 0.42
+        },
+        {
+          "column": "useful",
+          "difference": 0.0625,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.8295,
+          "p_not_behind": 0.924,
+          "stored_difference": 0.06
+        },
+        {
+          "column": "organized",
+          "difference": 0.0,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "comprehensible",
+          "difference": 0.2917,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.9999,
+          "p_not_behind": 0.9999,
+          "stored_difference": 0.3
+        },
+        {
+          "column": "succinct",
+          "difference": 0.1667,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.9936,
+          "p_not_behind": 0.9971,
+          "stored_difference": 0.18
+        },
+        {
+          "column": "synthesized",
+          "difference": 0.0,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "stigmatizing",
+          "difference": 0.0417,
+          "judge": "gpt-5.6-terra",
+          "n": 50,
+          "p_ahead": 0.8711,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.06
+        }
+      ],
+      "loser": "kimi-k3",
+      "n_shared": 48,
+      "p_holds": 0.5784,
+      "thinnest": {
+        "column": "thorough",
+        "difference": 0.0,
+        "judge": "gemini-3.1-pro-preview",
+        "p_not_behind": 0.6471
+      },
+      "winner": "gpt-5.6-terra"
+    },
+    {
+      "holds": false,
+      "legs": [
+        {
+          "column": "accurate",
+          "difference": 0.2917,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 0.9993,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.28
+        },
+        {
+          "column": "thorough",
+          "difference": 0.0208,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 0.6072,
+          "p_not_behind": 0.822,
+          "stored_difference": 0.0396
+        },
+        {
+          "column": "useful",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "organized",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "comprehensible",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "succinct",
+          "difference": 0.1875,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 0.9474,
+          "p_not_behind": 0.9663,
+          "stored_difference": 0.1669
+        },
+        {
+          "column": "synthesized",
+          "difference": 0.0,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "stigmatizing",
+          "difference": 0.0833,
+          "judge": "gemini-3.1-pro-preview",
+          "n": 49,
+          "p_ahead": 0.9854,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.08
+        },
+        {
+          "column": "accurate",
+          "difference": 1.4792,
+          "judge": "gpt-5.6-terra",
+          "n": 49,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 1.5016
+        },
+        {
+          "column": "thorough",
+          "difference": 0.6458,
+          "judge": "gpt-5.6-terra",
+          "n": 49,
+          "p_ahead": 0.9963,
+          "p_not_behind": 0.9975,
+          "stored_difference": 0.6543
+        },
+        {
+          "column": "useful",
+          "difference": 0.1875,
+          "judge": "gpt-5.6-terra",
+          "n": 49,
+          "p_ahead": 0.9999,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.1841
+        },
+        {
+          "column": "organized",
+          "difference": 0.0,
+          "judge": "gpt-5.6-terra",
+          "n": 49,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "comprehensible",
+          "difference": 0.4792,
+          "judge": "gpt-5.6-terra",
+          "n": 49,
+          "p_ahead": 1.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.4751
+        },
+        {
+          "column": "succinct",
+          "difference": 0.1667,
+          "judge": "gpt-5.6-terra",
+          "n": 49,
+          "p_ahead": 0.9944,
+          "p_not_behind": 0.998,
+          "stored_difference": 0.1612
+        },
+        {
+          "column": "synthesized",
+          "difference": 0.0,
+          "judge": "gpt-5.6-terra",
+          "n": 49,
+          "p_ahead": 0.0,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0
+        },
+        {
+          "column": "stigmatizing",
+          "difference": 0.0833,
+          "judge": "gpt-5.6-terra",
+          "n": 49,
+          "p_ahead": 0.9822,
+          "p_not_behind": 1.0,
+          "stored_difference": 0.0816
+        }
+      ],
+      "loser": "qwen3.5-122b",
+      "n_shared": 48,
+      "p_holds": 0.7891,
+      "thinnest": {
+        "column": "thorough",
+        "difference": 0.0208,
+        "judge": "gemini-3.1-pro-preview",
+        "p_not_behind": 0.822
+      },
+      "winner": "gpt-5.6-terra"
+    }
+  ],
+  "judges": [
+    "gemini-3.1-pro-preview",
+    "gpt-5.6-terra"
+  ],
+  "layers": [
+    [
+      "deepseek-v4-flash",
+      "deepseek-v4-flash-thinking",
+      "gemma4",
+      "glm-5",
+      "glm-5.2",
+      "google_gemini-3.1-pro-preview",
+      "google_gemini-3.7-flash",
+      "gpt-5.6-luna",
+      "gpt-5.6-sol",
+      "gpt-5.6-terra",
+      "kimi-k3",
+      "llama-3.1-70b",
+      "mistral-large-v2",
+      "mistral-medium-3.5",
+      "qwen3.5-122b",
+      "qwen3.5-int4",
+      "qwen3.8-27b",
+      "therapist"
+    ],
+    [
+      "gpt-oss-120b"
+    ]
+  ],
+  "min_shared": 10,
+  "outside": [],
+  "samples": 10000,
+  "seed": 20260824,
+  "systems": [
+    "deepseek-v4-flash",
+    "deepseek-v4-flash-thinking",
+    "gemma4",
+    "glm-5",
+    "glm-5.2",
+    "google_gemini-3.1-pro-preview",
+    "google_gemini-3.7-flash",
+    "gpt-5.6-luna",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-oss-120b",
+    "kimi-k3",
+    "llama-3.1-70b",
+    "mistral-large-v2",
+    "mistral-medium-3.5",
+    "qwen3.5-122b",
+    "qwen3.5-int4",
+    "qwen3.8-27b",
+    "therapist"
+  ],
+  "tables": {
+    "gemini-3.1-pro-preview": {
+      "harness_version": "0.7.0",
+      "judge_model": "gemini-3.1-pro-preview",
+      "judge_prompt_version": "pdsqi9-note-v1",
+      "judge_settings": {
+        "max_output_tokens": 288,
+        "model": "gemini-3.1-pro-preview",
+        "temperature": 0,
+        "thinking_budget": 256
+      },
+      "prompt_version": "tneval-soap-v1",
+      "track": "pdsqi-soap"
+    },
+    "gpt-5.6-terra": {
+      "harness_version": "0.7.0",
+      "judge_model": "gpt-5.6-terra",
+      "judge_prompt_version": "pdsqi9-note-v1",
+      "judge_settings": {
+        "backend": "openai",
+        "effort": "medium",
+        "max_output_tokens": 672,
+        "model": "gpt-5.6-terra"
+      },
+      "prompt_version": "tneval-soap-v1",
+      "track": "pdsqi-soap"
+    }
+  },
+  "threshold": 0.95,
+  "thresholds": [
+    0.9,
+    0.95,
+    0.99
+  ],
+  "track": "pdsqi-soap",
+  "undominated": [
+    "deepseek-v4-flash",
+    "deepseek-v4-flash-thinking",
+    "gemma4",
+    "glm-5",
+    "glm-5.2",
+    "google_gemini-3.1-pro-preview",
+    "google_gemini-3.7-flash",
+    "gpt-5.6-luna",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "kimi-k3",
+    "llama-3.1-70b",
+    "mistral-large-v2",
+    "mistral-medium-3.5",
+    "qwen3.5-122b",
+    "qwen3.5-int4",
+    "qwen3.8-27b",
+    "therapist"
+  ],
+  "untestable": []
+}

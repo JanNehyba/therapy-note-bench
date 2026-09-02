@@ -1,4 +1,4 @@
-"""No table is ordered by dominance, and no row carries a place, until the edges are tested.
+"""No table is ordered by dominance alone, and no row carries a place yet.
 
 For one day the iCARE tables were ordered by (systems that beat me, systems I
 beat) with a Place column. The relation underneath had never been tested; when
@@ -18,7 +18,6 @@ from pathlib import Path
 
 from tests.test_page_runs import _flat, _judges_payload, _run
 from tnb import judge, report, results
-from tnb.config import REPO_ROOT
 from tnb.results import Metrics, Row
 
 
@@ -72,14 +71,16 @@ def _tables(rows: list[Row]) -> list[dict]:
     return [table for table in data["tables"] if table["track"] == results.TRACK_ICARE]
 
 
-def test_nothing_is_ordered_by_dominance_while_the_edges_are_untested():
-    """The switch is one constant, and it is off until an edges artefact exists."""
+def test_nothing_is_ordered_by_dominance_alone():
+    """The switch is one constant, and it stays off.
+
+    An order read from dominance alone needs a rule to break the ties the
+    relation leaves -- most pairs -- and on 2026-09-01 that rule decided more of
+    the drawn order than the data did. The tested edges (`docs/edges-*.json`)
+    become layers beside the order, never the order itself.
+    """
     assert not report.DOMINANCE_ORDERED, (
-        f"{sorted(report.DOMINANCE_ORDERED)} would be ordered by a relation nobody has tested"
-    )
-    assert not list((REPO_ROOT / "docs").glob("edges-*.json")), (
-        "docs/edges-*.json exists: the ordering may return from tested layers, and this "
-        "test retires with it"
+        f"{sorted(report.DOMINANCE_ORDERED)} would be ordered by dominance alone"
     )
 
 

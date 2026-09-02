@@ -1077,6 +1077,39 @@ def cmd_preference(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_edges(args: argparse.Namespace) -> int:
+    """Test every "beats outright" claim on the conversations it rests on.
+
+    Costs nothing: it reads the answer caches and the published rows. Writes
+    `docs/edges-<track>.json`, the artefact the Group column is drawn from --
+    which is why the column may not exist without it.
+    """
+    from tnb.scoring import edges
+
+    tracks = [args.track] if args.track else list(edges.LOADERS)
+    for track in tracks:
+        found = edges.build_track(track, samples=args.samples)
+        if found is None:
+            print(f"{track}: fewer than two judges have scored it; nothing to test.")
+            continue
+        counts = found["counts"]
+        kept = counts["holds"][f"{edges.THRESHOLD:.2f}"]
+        print(
+            f"{track}: {counts['stored']} edge(s) on the stored means, "
+            f"{counts['tested']} tested, {kept} hold at {edges.THRESHOLD:.2f} "
+            f"({counts['holds']}), {counts['untestable']} untestable."
+        )
+        for index, group in enumerate(found["layers"], start=1):
+            print(f"  {index}. {', '.join(group)}")
+        for gap in found["untestable"]:
+            print(f"  untestable: {gap['winner']} > {gap['loser']} -- {gap['why']}")
+        if args.dry_run:
+            continue
+        path = edges.write(track, found)
+        print(f"  wrote {path.relative_to(REPO_ROOT)}")
+    return 0
+
+
 def cmd_saturation(args: argparse.Namespace) -> int:
     """Ask whether the benchmark can still tell these models apart.
 
@@ -1657,6 +1690,24 @@ def build_parser() -> argparse.ArgumentParser:
     )
     pref.add_argument("--dry-run", action="store_true", help="print, write nothing")
     pref.set_defaults(func=cmd_preference)
+
+    edges_parser = subparsers.add_parser(
+        "edges",
+        help=(
+            "test every 'beats outright' claim by resampling its conversations "
+            "(reads the answer caches); writes docs/edges-<track>.json"
+        ),
+    )
+    edges_parser.add_argument(
+        "--track",
+        choices=[results.TRACK_TNEVAL, results.TRACK_PDSQI, results.TRACK_ICARE],
+        help="one track; default all three",
+    )
+    edges_parser.add_argument(
+        "--samples", type=int, default=10_000, help="resamples per edge; default 10 000"
+    )
+    edges_parser.add_argument("--dry-run", action="store_true", help="print, write nothing")
+    edges_parser.set_defaults(func=cmd_edges)
 
     roster = subparsers.add_parser(
         "roster",

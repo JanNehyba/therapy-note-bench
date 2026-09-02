@@ -254,29 +254,21 @@ def test_rounding_cannot_manufacture_a_claim():
     assert _dominates("A", "B", by_judge, decimals)
 
 
-def test_the_page_draws_no_beats_column_while_the_edges_are_untested():
-    """The relation is published; the column is not, until each edge has been tested.
+def test_the_page_draws_no_count_of_comparisons():
+    """The relation is published and tested; a *count* of it is still not a column.
 
-    Every claim it summed compares two stored means that nobody resampled. On
-    2026-09-01 a substantial share of them did not hold at the threshold the
-    Band column uses, and a count summing untested comparisons was drawn as a
-    number. The methods page still lists every claim; the payload still carries
-    the relation and the tests above still hold it. What must not come back
-    without a committed edges artefact is the column, its sort key and its
-    legend -- which is what this pins.
+    On 2026-09-01 a count of untested comparisons was drawn as a number per
+    system and taken off the same day. The edges have since been tested --
+    `scoring/edges.py`, `docs/edges-<track>.json` -- and what may be drawn from
+    them is the layers of the surviving graph, gated on that artefact. A count
+    per system, its sort key and its legend stay off: summing comparisons of
+    unequal evidence into one integer was the fault, tested or not.
     """
     template = (REPO_ROOT / "src" / "tnb" / "templates" / "leaderboard.html").read_text(
         encoding="utf-8"
     )
     for gone in ("beats:${track}", "beatsCells", "beatsLegend", "function dominanceOf"):
         assert gone not in template, (
-            f"{gone!r} is back in the template; the dominance edges have not been tested, "
-            "and a count of untested comparisons must not be drawn as a column"
-        )
-    for reason in ("docs/edges-", "edges.py"):
-        # The day this fails because the artefact exists is the day the column
-        # may return, with tested edges behind it. Until then it documents why.
-        assert not list((REPO_ROOT / "docs").glob("edges-*.json")), (
-            f"docs/edges-*.json exists; re-instate the column from tested edges and "
-            f"retire this test ({reason})"
+            f"{gone!r} is back in the template; a count of comparisons is not a column, "
+            "however well each comparison is tested"
         )
