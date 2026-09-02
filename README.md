@@ -451,15 +451,12 @@ everywhere it appears.
 
 ## Credits
 
-This benchmark is a harness around other people's work. The rubric, the prompts
-and the human annotations are theirs.
+This benchmark is a harness around other people's work. The rubric, the prompts,
+the instruments and the human annotations are theirs. The leaderboard cites them
+in the text beside each instrument's description; the works, in APA form:
 
-- **TN-Eval** — Shah, Xu, Liu, Burnsky, Bertagnolli, Shivade. *TN-Eval: Rubric
-  and Evaluation Protocols for Measuring the Quality of Behavioral Therapy
-  Notes.* ACL 2025, Industry Track.
-- **AnnoMI** — Wu, Balloccu, Kumar, Helaoui, Reiter, Reforgiato Recupero,
-  Riboni. *Anno-MI: A Dataset of Expert-Annotated Counselling Dialogues.*
-  ICASSP 2022.
-- **iCARE / iHOPE** — Adhikary et al. *Clinically Grounded AI-Scribing in
-  Psychotherapy: Benchmarking LLMs Against Expert Documentation in the iCARE
-  Framework.* medRxiv 2025.06.25.25330252.
+- Adhikary, P. K., Mukherjee, A., Deb, K. S., Singh, S., Singh, S. M., & Chakraborty, T. (2026). Discourse-guided summarisation of psychotherapy dialogues via graph-fused language models. *IEEE Journal of Biomedical and Health Informatics*. Advance online publication. https://doi.org/10.1109/JBHI.2026.3726138 — the TheraFuse repository, which carries the iHOPE corpus.
+- Adhikary, P. K., Singh, S., Singh, S., Sharma, P., Soni, P., Choudhary, R., Saxena, C., Chauhan, P., Gupta, S. K., Deb, K. S., Singh, S. M., & Chakraborty, T. (2026). *Clinically grounded AI-scribing in psychotherapy: Benchmarking LLMs against expert documentation in the iCARE framework* (Version 2) [Preprint]. medRxiv. https://doi.org/10.1101/2025.06.25.25330252 — iCARE, its section instructions, and the iHOPE corpus.
+- Croxford, E., Gao, Y., Pellegrino, N., Wong, K., Wills, G., First, E., Schnier, M., Burton, K., Ebby, C., Gorski, J., Kalscheur, M., Khalil, S., Pisani, M., Rubeor, T., Stetson, P., Liao, F., Goswami, C., Patterson, B., & Afshar, M. (2025). Development and validation of the provider documentation summarization quality instrument for large language models. *Journal of the American Medical Informatics Association, 32*(6), 1050–1060. https://doi.org/10.1093/jamia/ocaf068 — PDSQI-9; the wording reproduced here is the arXiv version's, https://arxiv.org/abs/2501.08977, which is CC BY.
+- Shah, R. S., Xu, L., Liu, Q., Burnsky, J., Bertagnolli, A., & Shivade, C. (2025). TN-Eval: Rubric and evaluation protocols for measuring the quality of behavioral therapy notes. In *Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 6: Industry Track)* (pp. 179–199). Association for Computational Linguistics. https://doi.org/10.18653/v1/2025.acl-industry.14 — the SOAP prompt, the scoring prompts, the completeness rubric and the human-rated notes.
+- Wu, Z., Balloccu, S., Kumar, V., Helaoui, R., Reiter, E., Reforgiato Recupero, D., & Riboni, D. (2022). Anno-MI: A dataset of expert-annotated counselling dialogues. In *ICASSP 2022 – 2022 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)* (pp. 6177–6181). IEEE. https://doi.org/10.1109/ICASSP43922.2022.9746035 — the transcripts.

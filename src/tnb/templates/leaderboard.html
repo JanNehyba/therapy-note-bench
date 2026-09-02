@@ -33,7 +33,7 @@ __STYLE__
      how far the two judges disagree with each other, what the two corpora are and
      where they came from, and which rows are no longer drawn.</p>
 
-  <p class="methods-link" id="sources"></p>
+  <section class="refs-block" id="sources"></section>
 
   <footer>
     <p data-t="page.foot.notes"><strong>Notes</strong> counts the notes a protocol could actually read. A model that
@@ -1059,15 +1059,25 @@ function designBlock(table) {
 function drawSources() {
   const host = document.getElementById('sources');
   if (!host) return;
-  const links = (DATA.licences || []).map(l =>
-    `<a href="${esc(l.url)}">${esc(l.source)}</a>`).join(' · ');
-  // Removed rather than left blank. A footer rule over nothing reads as a
-  // section somebody forgot to finish.
-  if (!links) { host.remove(); return; }
-  host.innerHTML = T`<strong>Sources:</strong> ${links} — every prompt and rubric here is
-     reproduced verbatim from them. <a href="methods.html#licences">What each is used for, and
-     on what terms</a>: three of them publish no licence at all, and a fourth shows
-     only a badge.`;
+  const entries = DATA.licences || [];
+  // Removed rather than left blank. A heading over nothing reads as a section
+  // somebody forgot to finish.
+  if (!entries.length) { host.remove(); return; }
+  // A reference list, APA, the same entries the methods page draws. It was a
+  // line of six short names: a reader who wanted to cite TN-Eval from here had
+  // to go to the other page to find out who wrote it. The short name leads each
+  // entry so the columns' names above can be matched to a work; the DOI is a
+  // link, and the repository the material was fetched from comes last.
+  // Alphabetical by the reference, which is the order an APA list is read in;
+  // the registry's own order is the licence table's.
+  const refs = [...entries].sort((a, b) => (a.cite || '').localeCompare(b.cite || '')).map(l =>
+    `<li><b>${esc(l.source)}</b> — ${esc(l.cite || '').replace(
+        /https?:\/\/[^\s<]+/g, m => `<a href="${m}">${m}</a>`)} <a href="${esc(l.url)}">${
+        esc(l.url.replace(/^https?:\/\//, ''))}</a></li>`).join('');
+  host.innerHTML = `<h3>${T`References`}</h3><ul class="refs">${refs}</ul>
+    <p class="note">${T`Every prompt, rubric and instrument here is reproduced verbatim from
+     the works above. <a href="methods.html#licences">What each is used for, and on what
+     terms</a>: three of them publish no licence at all, and a fourth shows only a badge.`}</p>`;
 }
 drawSources();
 

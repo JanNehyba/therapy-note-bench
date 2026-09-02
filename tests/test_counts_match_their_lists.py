@@ -181,7 +181,7 @@ CHECKS = (
     # against.
     Check(
         where="src/tnb/i18n.py",
-        pattern=r"(\w+) z nich nezveřejňují žádnou licenci a čtvrtý ukazuje jen",
+        pattern=r"(\w+) z nich nezveřejňují žádnou licenci a čtvrt\w ukazuje jen",
         expected=lambda: (publishing_none(),),
         why="the Czech of the Sources line, whose English is registered above",
         reads=(report, "LICENCES"),

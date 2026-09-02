@@ -629,18 +629,19 @@ _SENTENCES = {
         "<code>{0}</code>. Nic se neprůměruje — ▴ znamená, že druhý hodnotitel dal víc, ▾ že "
         "míň, a to číslo je vzdálenost mezi nimi."
     ),
-    "<strong>Sources:</strong> {0} — every prompt and rubric here is reproduced verbatim"
-    ' from them. <a href="methods.html#licences">What each is used for, and on what terms</a>:'
+    "Every prompt, rubric and instrument here is reproduced verbatim from the works above."
+    ' <a href="methods.html#licences">What each is used for, and on what terms</a>:'
     " three of them publish no licence at all, and a fourth shows only a badge.": (
-        "<strong>Zdroje:</strong> {0} — každý zdejší prompt i rubrika jsou z nich "
-        'převzaté doslova. <a href="methods.html#licences">K čemu se každý používá a za '
-        "jakých podmínek</a>: tři z nich nezveřejňují žádnou licenci a čtvrtý ukazuje jen "
-        "odznak."
+        "Každý zdejší prompt, rubrika i nástroj jsou z uvedených prací převzaté doslova. "
+        '<a href="methods.html#licences">K čemu se která používá a za jakých podmínek</a>: '
+        "tři z nich nezveřejňují žádnou licenci a čtvrtá ukazuje jen odznak."
     ),
     "The instrument is reproduced verbatim, anchors included, so a score here answers the"
-    " published question and not a rewritten one.": (
+    " published question and not a rewritten one. The wording is the arXiv version's, which is"
+    " CC BY 4.0; the instrument is itself an adaptation of PDQI-9 (Stetson et al., 2012).": (
         "Nástroj je převzatý doslova včetně kotev, takže zdejší skóre odpovídá na "
-        "publikovanou otázku, ne na přepsanou."
+        "publikovanou otázku, ne na přepsanou. Znění je z verze na arXivu, která je pod CC BY "
+        "4.0; nástroj sám je adaptací PDQI-9 (Stetson et al., 2012)."
     ),
     "the nine attributes and their anchors, eight of which are scored": (
         "devět atributů a jejich kotvy, z nichž osm se hodnotí"
@@ -648,18 +649,19 @@ _SENTENCES = {
     # -- what the corpus is and what a note is, above each table -------------
     "TN-Eval SOAP": "TN-Eval SOAP",
     "This track. A model reads a counselling transcript and writes a SOAP note; TN-Eval's"
-    " published rubric then scores it. Named after the paper the prompt and the rubric are taken"
-    " from.": (
+    " published rubric then scores it. Named after the paper the prompt and the rubric are"
+    " taken from (Shah et al., 2025).": (
         "Tato větev. Model si přečte přepis poradenského rozhovoru a napíše zápis SOAP; ten "
         "pak obodovala publikovaná rubrika TN-Evalu. Pojmenováno podle článku, ze kterého "
-        "pochází prompt i rubrika."
+        "pochází prompt i rubrika (Shah et al., 2025)."
     ),
     "The transcripts": "Přepisy",
-    "AnnoMI: 133 publicly released motivational-interviewing sessions, transcribed and annotated"
-    " by therapists. They are demonstration sessions, not recordings of clinical practice."
-    " 50 are scored here.": (
-        "AnnoMI: 133 veřejně vydaných motivačních rozhovorů, přepsaných a anotovaných terapeuty. "
-        "Jsou to ukázková sezení, ne záznamy klinické praxe. Hodnotí se z nich 50."
+    "AnnoMI (Wu et al., 2022): 133 publicly released motivational-interviewing sessions,"
+    " transcribed and annotated by therapists. They are demonstration sessions, not recordings"
+    " of clinical practice. 50 are scored here.": (
+        "AnnoMI (Wu et al., 2022): 133 veřejně vydaných motivačních rozhovorů, přepsaných a "
+        "anotovaných terapeuty. Jsou to ukázková sezení, ne záznamy klinické praxe. Hodnotí "
+        "se z nich 50."
     ),
     "SOAP note": "Zápis SOAP",
     "The standard clinical note format: subjective, objective, assessment, plan. Every model"
@@ -669,18 +671,19 @@ _SENTENCES = {
     ),
     "PDSQI-9": "PDSQI-9",
     "A published instrument for rating how a clinical note is written, validated on real"
-    " records with physicians doing the rating.": (
+    " records with physicians doing the rating (Croxford et al., 2025).": (
         "Publikovaný nástroj na hodnocení toho, jak je klinický zápis napsaný, ověřený na "
-        "skutečné dokumentaci s lékaři jako hodnotiteli."
+        "skutečné dokumentaci s lékaři jako hodnotiteli (Croxford et al., 2025)."
     ),
     "iCARE / iHOPE": "iCARE / iHOPE",
     "This track. A model fills in a 17-field clinical form from a counselling transcript, and"
     " its answers are compared with the form an expert clinician filled in from the same"
-    " session. One project under two names: released as iCARE, renamed iHOPE in the preprint.": (
+    " session. One project under two names: released as iCARE, renamed iHOPE in the preprint"
+    " (Adhikary, Singh, et al., 2026).": (
         "Tato větev. Model vyplní z přepisu poradenského rozhovoru klinický formulář o 17 "
         "polích a jeho odpovědi se porovnají s formulářem, který z téhož sezení vyplnil "
         "expertní klinik. Jeden projekt pod dvěma jmény: vydán jako iCARE, v preprintu "
-        "přejmenován na iHOPE."
+        "přejmenován na iHOPE (Adhikary, Singh, et al., 2026)."
     ),
     "The sessions": "Sezení",
     "40 counselling demonstrations, each with one form an expert clinician filled in from it"
@@ -780,38 +783,40 @@ _PAYLOAD = {
     # when a run has only one of the two -- which is every run before the other
     # instrument has been asked.
     "Reference-free. 23 completeness criteria, conciseness scored sentence by sentence,"
-    " faithfulness against the full transcript.": (
+    " faithfulness against the full transcript (Shah et al., 2025).": (
         "Bez referenčního zápisu. 23 kritérií úplnosti, stručnost bodovaná větu po větě, "
-        "věrnost proti celému přepisu."
+        "věrnost proti celému přepisu (Shah et al., 2025)."
     ),
-    "A published instrument asked about the same notes as the TN-Eval SOAP track: the SOAP notes"
-    " written from the 50 AnnoMI conversations. Not a third corpus -- one corpus, two"
-    " instruments, so the two tables can be read against each other. Eight attributes, reported"
-    " separately: the ratings themselves are never averaged, because the instrument reports them"
-    " that way and because one of the eight is a 0-1 column, and a mean over it and seven 1-5"
-    " scales would be a number with no unit. The order is a mean of places, which has the same"
-    " unit on every column.": (
-        "Publikovaný nástroj položený na tytéž zápisy jako větev TN-Eval SOAP: na zápisy SOAP "
-        "napsané z 50 rozhovorů AnnoMI. Není to třetí korpus — jeden korpus, dva nástroje, aby "
-        "se ty dvě tabulky daly číst proti sobě. Osm atributů, vykazovaných zvlášť: samotná "
-        "hodnocení se nikdy neprůměrují, protože je tak vykazuje sám nástroj a protože jeden z "
-        "těch osmi je sloupec 0-1 a průměr přes něj a přes sedm škál 1-5 by bylo číslo bez "
-        "jednotky. Pořadí je průměr míst, který má na každém sloupci stejnou jednotku."
+    "A published instrument (Croxford et al., 2025) asked about the same notes as the TN-Eval"
+    " SOAP track: the SOAP notes written from the 50 AnnoMI conversations. Not a third corpus"
+    " -- one corpus, two instruments, so the two tables can be read against each other. Eight"
+    " attributes, reported separately: the ratings themselves are never averaged, because the"
+    " instrument reports them that way and because one of the eight is a 0-1 column, and a"
+    " mean over it and seven 1-5 scales would be a number with no unit. The order is a mean of"
+    " places, which has the same unit on every column.": (
+        "Publikovaný nástroj (Croxford et al., 2025) položený na tytéž zápisy jako větev "
+        "TN-Eval SOAP: na zápisy SOAP napsané z 50 rozhovorů AnnoMI. Není to třetí korpus — "
+        "jeden korpus, dva nástroje, aby se ty dvě tabulky daly číst proti sobě. Osm "
+        "atributů, vykazovaných zvlášť: samotná hodnocení se nikdy neprůměrují, protože je "
+        "tak vykazuje sám nástroj a protože jeden z těch osmi je sloupec 0-1 a průměr přes "
+        "něj a přes sedm škál 1-5 by bylo číslo bez jednotky. Pořadí je průměr míst, který má "
+        "na každém sloupci stejnou jednotku."
     ),
     "Automatic metrics and a TRACE judge side by side, because the source paper found they"
-    " disagree. That disagreement is a result, not an error. iCARE and iHOPE are one project"
-    " under two names: the code was released as iCARE in April 2025 and the preprint renamed it"
-    " iHOPE in August 2026, sixteen months later. **PDSQI-9 has no columns here**, and that is"
-    " deliberate rather than missing: it rates how a clinical note is written, and these are 17"
-    " form fields rather than a written note. It runs on the SOAP notes, where it can be read"
-    " against the rubric that scores the same text.": (
-        "Automatické metriky a hodnotitel TRACE vedle sebe, protože zdrojový článek zjistil, že "
-        "si odporují. Ten rozpor je výsledek, ne chyba. iCARE a iHOPE jsou jeden projekt pod "
-        "dvěma jmény: kód vyšel jako iCARE v dubnu 2025 a preprint jej v srpnu 2026, o šestnáct "
-        "měsíců později, přejmenoval na iHOPE. **PDSQI-9 tu nemá žádné sloupce**, a to záměrně, "
-        "ne omylem: hodnotí, jak je klinický zápis napsán, a tohle je 17 polí formuláře, ne "
-        "napsaný zápis. Běží na zápisech SOAP, kde se dá číst proti rubrice, která boduje týž "
-        "text."
+    " disagree (Adhikary, Singh, et al., 2026). That disagreement is a result, not an error."
+    " iCARE and iHOPE are one project under two names: the code was released as iCARE in April"
+    " 2025 and the preprint renamed it iHOPE in August 2026, sixteen months later. **PDSQI-9"
+    " has no columns here**, and that is deliberate rather than missing: it rates how a"
+    " clinical note is written, and these are 17 form fields rather than a written note. It"
+    " runs on the SOAP notes, where it can be read against the rubric that scores the same"
+    " text.": (
+        "Automatické metriky a hodnotitel TRACE vedle sebe, protože zdrojový článek zjistil, "
+        "že si odporují (Adhikary, Singh, et al., 2026). Ten rozpor je výsledek, ne chyba. "
+        "iCARE a iHOPE jsou jeden projekt pod dvěma jmény: kód vyšel jako iCARE v dubnu 2025 "
+        "a preprint jej v srpnu 2026, o šestnáct měsíců později, přejmenoval na iHOPE. "
+        "**PDSQI-9 tu nemá žádné sloupce**, a to záměrně, ne omylem: hodnotí, jak je klinický "
+        "zápis napsán, a tohle je 17 polí formuláře, ne napsaný zápis. Běží na zápisech SOAP, "
+        "kde se dá číst proti rubrice, která boduje týž text."
     ),
     "TN-Eval SOAP": "TN-Eval SOAP",
     "iCARE / iHOPE": "iCARE / iHOPE",
@@ -1802,10 +1807,10 @@ _METHODS_PAYLOAD = {
         "a tady se nikdy nezobrazují."
     ),
     "the iHOPE transcripts and expert notes": "přepisy iHOPE a expertní zápisy",
-    "A badge on a code repository, for a corpus collected elsewhere. Treated as no licence for"
-    " the data.": (
+    "A badge on a code repository, for a corpus collected elsewhere. Treated as no licence"
+    " for the data. The repository carries the iHOPE corpus the iCARE paper describes.": (
         "Odznak na repozitáři s kódem, pro korpus posbíraný jinde. Bereme to tak, že data "
-        "licenci nemají."
+        "licenci nemají. Repozitář nese korpus iHOPE, který popisuje článek o iCARE."
     ),
     "Tingling in the stomach and butterflies in the stomach are the same symptom, as are"
     " palpitations and a rapid heartbeat; trembling hands appear in both. The model also records"

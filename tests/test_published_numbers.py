@@ -471,6 +471,89 @@ CLAIMS = (
     ),
     Claim(
         where="README.md",
+        phrase=(
+            "Adhikary, P. K., Mukherjee, A., Deb, K. S., Singh, S., Singh, S. M., & Chakraborty, "
+            "T. (2026). Discourse-guided summarisation of psychotherapy dialogues via graph-fused "
+            "language models. *IEEE Journal of Biomedical and Health Informatics*. Advance online "
+            "publication."
+        ),
+        kind="external",
+        because=(
+            "bibliographic data -- year, volume, issue, pages, version -- read from "
+            "Crossref and medRxiv on 2026-09-02, not from memory"
+        ),
+        covers=("2026",),
+        source="Adhikary",
+    ),
+    Claim(
+        where="README.md",
+        phrase=(
+            "Adhikary, P. K., Singh, S., Singh, S., Sharma, P., Soni, P., Choudhary, R., Saxena, "
+            "C., Chauhan, P., Gupta, S. K., Deb, K. S., Singh, S. M., & Chakraborty, T. (2026). "
+            "*Clinically grounded AI-scribing in psychotherapy: Benchmarking LLMs against expert "
+            "documentation in the iCARE framework* (Version 2) [Preprint]. medRxiv."
+        ),
+        kind="external",
+        because=(
+            "bibliographic data -- year, volume, issue, pages, version -- read from "
+            "Crossref and medRxiv on 2026-09-02, not from memory"
+        ),
+        covers=("2026", "2"),
+        source="Adhikary",
+    ),
+    Claim(
+        where="README.md",
+        phrase=(
+            "Croxford, E., Gao, Y., Pellegrino, N., Wong, K., Wills, G., First, E., Schnier, M., "
+            "Burton, K., Ebby, C., Gorski, J., Kalscheur, M., Khalil, S., Pisani, M., Rubeor, T., "
+            "Stetson, P., Liao, F., Goswami, C., Patterson, B., & Afshar, M. (2025). Development "
+            "and validation of the provider documentation summarization quality instrument for "
+            "large language models. *Journal of the American Medical Informatics Association, "
+            "32*(6), 1050–1060."
+        ),
+        kind="external",
+        because=(
+            "bibliographic data -- year, volume, issue, pages, version -- read from "
+            "Crossref and medRxiv on 2026-09-02, not from memory"
+        ),
+        covers=("2025", "32", "6"),
+        source="Croxford",
+    ),
+    Claim(
+        where="README.md",
+        phrase=(
+            "Shah, R. S., Xu, L., Liu, Q., Burnsky, J., Bertagnolli, A., & Shivade, C. (2025). "
+            "TN-Eval: Rubric and evaluation protocols for measuring the quality of behavioral "
+            "therapy notes. In *Proceedings of the 63rd Annual Meeting of the Association for "
+            "Computational Linguistics (Volume 6: Industry Track)* (pp. 179–199). Association for "
+            "Computational Linguistics."
+        ),
+        kind="external",
+        because=(
+            "bibliographic data -- year, volume, issue, pages, version -- read from "
+            "Crossref and medRxiv on 2026-09-02, not from memory"
+        ),
+        covers=("2025", "6"),
+        source="Shah",
+    ),
+    Claim(
+        where="README.md",
+        phrase=(
+            "Wu, Z., Balloccu, S., Kumar, V., Helaoui, R., Reiter, E., Reforgiato Recupero, D., & "
+            "Riboni, D. (2022). Anno-MI: A dataset of expert-annotated counselling dialogues. In "
+            "*ICASSP 2022 – 2022 IEEE International Conference on Acoustics, Speech and Signal "
+            "Processing (ICASSP)* (pp. 6177–6181). IEEE."
+        ),
+        kind="external",
+        because=(
+            "bibliographic data -- year, volume, issue, pages, version -- read from "
+            "Crossref and medRxiv on 2026-09-02, not from memory"
+        ),
+        covers=("2022", "2022"),
+        source="Wu",
+    ),
+    Claim(
+        where="README.md",
         phrase="16 of 21 systems share the top group",
         kind="computed",
         because="the rubric's top layer in docs/edges-tneval-soap.json",
@@ -829,7 +912,10 @@ UNACCOUNTED = {
     # capture, not a claim that can go stale, and registering each would say
     # otherwise.
     "docs/models-snapshot.md": 41,
-    "README.md": 40,
+    # Lowered from 40 on 2026-09-02: the Credits became APA references, every
+    # figure in them registered as bibliographic, and the two bare venue years
+    # the old list carried went with it.
+    "README.md": 37,
     "NOTICE": 7,
 }
 

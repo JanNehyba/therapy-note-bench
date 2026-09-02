@@ -521,10 +521,12 @@ function renderLicences(data) {
       <tbody>${rows}</tbody>
     </table></div>
     <h3>${T`References`}</h3>
-    <ul class="refs">${data.licences.map(l =>
+    <ul class="refs">${[...data.licences].sort((a, b) =>
+        (a.cite || '').localeCompare(b.cite || '')).map(l =>
       // The link last and spelled out, which is where APA puts it -- the short
       // name trailing a full reference read as a word left behind.
-      `<li>${l.cite ? esc(l.cite) : ''} <a href="${l.url}">${
+      `<li>${l.cite ? esc(l.cite).replace(/https?:\/\/[^\s<]+/g,
+          m => `<a href="${m}">${m}</a>`) : ''} <a href="${l.url}">${
         esc(l.url.replace(/^https?:\/\//, ''))}</a></li>`).join('')}</ul>
     <h3>${T`How to cite this benchmark`}</h3>
     <p>${T`A number quoted from these tables is a number from one judge at one setting &mdash;

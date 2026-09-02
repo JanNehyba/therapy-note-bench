@@ -368,11 +368,12 @@ TRACK_SWITCH_LABELS = {
 TRACK_BLURBS = {
     results.TRACK_TNEVAL: (
         "Reference-free. 23 completeness criteria, conciseness scored sentence by "
-        "sentence, faithfulness against the full transcript."
+        "sentence, faithfulness against the full transcript (Shah et al., 2025)."
     ),
     results.TRACK_ICARE: (
         "Automatic metrics and a TRACE judge side by side, because the source paper "
-        "found they disagree. That disagreement is a result, not an error. "
+        "found they disagree (Adhikary, Singh, et al., 2026). That disagreement is a "
+        "result, not an error. "
         "iCARE and iHOPE are one project under two names: the code "
         "was released as iCARE in April 2025 and the preprint renamed it iHOPE in "
         "August 2026, sixteen months later. **PDSQI-9 has no columns here**, and "
@@ -382,8 +383,8 @@ TRACK_BLURBS = {
         "the same text."
     ),
     results.TRACK_PDSQI: (
-        "A published instrument asked about the same notes as the TN-Eval SOAP "
-        "track: the SOAP notes written from the 50 AnnoMI conversations. Not a "
+        "A published instrument (Croxford et al., 2025) asked about the same notes as "
+        "the TN-Eval SOAP track: the SOAP notes written from the 50 AnnoMI conversations. Not a "
         "third corpus -- one corpus, two instruments, so the two tables can be "
         "read against each other. Eight attributes, reported separately: the "
         "ratings themselves are never averaged, because the instrument reports them "
@@ -416,11 +417,11 @@ TRACK_TERMS = {
             "TN-Eval SOAP",
             "This track. A model reads a counselling transcript and writes a SOAP "
             "note; TN-Eval's published rubric then scores it. Named after the paper "
-            "the prompt and the rubric are taken from.",
+            "the prompt and the rubric are taken from (Shah et al., 2025).",
         ),
         (
             "The transcripts",
-            "AnnoMI: 133 publicly released motivational-interviewing sessions, "
+            "AnnoMI (Wu et al., 2022): 133 publicly released motivational-interviewing sessions, "
             "transcribed and annotated by therapists. They are demonstration "
             "sessions, not recordings of clinical practice. 50 are scored here.",
         ),
@@ -435,18 +436,18 @@ TRACK_TERMS = {
             "TN-Eval SOAP",
             "This track. A model reads a counselling transcript and writes a SOAP "
             "note; TN-Eval's published rubric then scores it. Named after the paper "
-            "the prompt and the rubric are taken from.",
+            "the prompt and the rubric are taken from (Shah et al., 2025).",
         ),
         (
             "The transcripts",
-            "AnnoMI: 133 publicly released motivational-interviewing sessions, "
+            "AnnoMI (Wu et al., 2022): 133 publicly released motivational-interviewing sessions, "
             "transcribed and annotated by therapists. They are demonstration "
             "sessions, not recordings of clinical practice. 50 are scored here.",
         ),
         (
             "PDSQI-9",
             "A published instrument for rating how a clinical note is written, "
-            "validated on real records with physicians doing the rating.",
+            "validated on real records with physicians doing the rating (Croxford et al., 2025).",
         ),
     ),
     results.TRACK_ICARE: (
@@ -455,7 +456,7 @@ TRACK_TERMS = {
             "This track. A model fills in a 17-field clinical form from a counselling "
             "transcript, and its answers are compared with the form an expert "
             "clinician filled in from the same session. One project under two names: "
-            "released as iCARE, renamed iHOPE in the preprint.",
+            "released as iCARE, renamed iHOPE in the preprint (Adhikary, Singh, et al., 2026).",
         ),
         (
             "The sessions",
@@ -621,12 +622,17 @@ SECTION_ORDER = ("subjective", "objective", "assessment", "plan")
 LICENCES = [
     {
         "source": "PDSQI-9",
+        # Bibliographic data read from Crossref on 2026-09-02, not from memory:
+        # the paper had appeared in JAMIA by then, with nineteen authors, and the
+        # entry here had cited the arXiv preprint with three of them.
         "cite": (
-            "Croxford, E., Gao, Y., Pellegrino, N., et al. (2025). Development and "
-            "validation of the Provider Documentation Summarization Quality Instrument "
-            "for Large Language Models. arXiv:2501.08977. Adapted from the Physician "
-            "Documentation Quality Instrument: Stetson, P. D., Bakken, S., Wrenn, J. O., "
-            "& Siegler, E. L. (2012). Applied Clinical Informatics, PMC3347480."
+            "Croxford, E., Gao, Y., Pellegrino, N., Wong, K., Wills, G., First, E., "
+            "Schnier, M., Burton, K., Ebby, C., Gorski, J., Kalscheur, M., Khalil, S., "
+            "Pisani, M., Rubeor, T., Stetson, P., Liao, F., Goswami, C., Patterson, B., "
+            "& Afshar, M. (2025). Development and validation of the provider "
+            "documentation summarization quality instrument for large language models. "
+            "Journal of the American Medical Informatics Association, 32(6), 1050\u20131060. "
+            "https://doi.org/10.1093/jamia/ocaf068"
         ),
         "url": "https://arxiv.org/abs/2501.08977",
         "used_for": "the nine attributes and their anchors, eight of which are scored",
@@ -636,15 +642,20 @@ LICENCES = [
         "licence": "CC BY 4.0 (arXiv version)",
         "note": (
             "The instrument is reproduced verbatim, anchors included, so a score here "
-            "answers the published question and not a rewritten one."
+            "answers the published question and not a rewritten one. The wording is the "
+            "arXiv version's, which is CC BY 4.0; the instrument is itself an adaptation "
+            "of PDQI-9 (Stetson et al., 2012)."
         ),
     },
     {
         "source": "TN-Eval (code)",
         "cite": (
-            "Shah, R. S., Xu, L., Liu, Q., Burnsky, J., Bertagnolli, D., & Shivade, C. "
+            "Shah, R. S., Xu, L., Liu, Q., Burnsky, J., Bertagnolli, A., & Shivade, C. "
             "(2025). TN-Eval: Rubric and evaluation protocols for measuring the quality "
-            "of behavioral therapy notes. ACL 2025, Industry Track."
+            "of behavioral therapy notes. In Proceedings of the 63rd Annual Meeting of "
+            "the Association for Computational Linguistics (Volume 6: Industry Track) "
+            "(pp. 179\u2013199). Association for Computational Linguistics. "
+            "https://doi.org/10.18653/v1/2025.acl-industry.14"
         ),
         "url": "https://github.com/amazon-science/TN-Eval",
         "used_for": "SOAP prompt, the five scoring prompts, the 23-item rubric",
@@ -653,7 +664,7 @@ LICENCES = [
     },
     {
         "source": "TN-Eval-Data",
-        "cite": "Described in the TN-Eval paper above; the data repository publishes none.",
+        "cite": "The data release of Shah et al. (2025); it carries no reference of its own.",
         "url": "https://github.com/amazon-science/TN-Eval-Data",
         "used_for": "150 notes and the ratings of two human annotators",
         "licence": "none published",
@@ -667,7 +678,9 @@ LICENCES = [
         "cite": (
             "Wu, Z., Balloccu, S., Kumar, V., Helaoui, R., Reiter, E., "
             "Reforgiato Recupero, D., & Riboni, D. (2022). Anno-MI: A dataset of "
-            "expert-annotated counselling dialogues. ICASSP 2022."
+            "expert-annotated counselling dialogues. In ICASSP 2022 \u2013 2022 IEEE "
+            "International Conference on Acoustics, Speech and Signal Processing (ICASSP) "
+            "(pp. 6177\u20136181). IEEE. https://doi.org/10.1109/ICASSP43922.2022.9746035"
         ),
         "url": "https://github.com/uccollab/AnnoMI",
         "used_for": "the 133 transcripts, 50 of which are scored",
@@ -679,12 +692,15 @@ LICENCES = [
     },
     {
         "source": "iCARE",
+        # Twelve authors, as medRxiv lists them for both versions (read from its
+        # API on 2026-09-02); Crossref carries eleven for the same DOI and a
+        # different order, and the archive's own record is the one to follow.
         "cite": (
             "Adhikary, P. K., Singh, S., Singh, S., Sharma, P., Soni, P., Choudhary, R., "
             "Saxena, C., Chauhan, P., Gupta, S. K., Deb, K. S., Singh, S. M., & "
             "Chakraborty, T. (2026). Clinically grounded AI-scribing in psychotherapy: "
-            "Benchmarking LLMs against expert documentation in the iCARE framework. "
-            "medRxiv 2025.06.25.25330252 (v2)."
+            "Benchmarking LLMs against expert documentation in the iCARE framework "
+            "(Version 2) [Preprint]. medRxiv. https://doi.org/10.1101/2025.06.25.25330252"
         ),
         "url": "https://github.com/proadhikary/iCARE",
         "used_for": "the 17 section instructions",
@@ -703,15 +719,15 @@ LICENCES = [
             "Adhikary, P. K., Mukherjee, A., Deb, K. S., Singh, S., Singh, S. M., & "
             "Chakraborty, T. (2026). Discourse-guided summarisation of psychotherapy "
             "dialogues via graph-fused language models. IEEE Journal of Biomedical and "
-            "Health Informatics. https://doi.org/10.1109/JBHI.2026.3726138 -- it also "
-            "carries the iHOPE corpus described in the iCARE paper above."
+            "Health Informatics. Advance online publication. "
+            "https://doi.org/10.1109/JBHI.2026.3726138"
         ),
         "url": "https://github.com/ai4mhx/TheraFuse",
         "used_for": "the iHOPE transcripts and expert notes",
         "licence": "MIT badge, no LICENSE file",
         "note": (
             "A badge on a code repository, for a corpus collected elsewhere. Treated as no licence "
-            "for the data."
+            "for the data. The repository carries the iHOPE corpus the iCARE paper describes."
         ),
     },
 ]
