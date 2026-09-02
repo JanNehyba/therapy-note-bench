@@ -487,6 +487,11 @@ function renderTable(table, index) {
   // The scale rides on the heading, not in a footnote. Two of these columns are
   // 0-1 fractions and one is a 1-5 rating; a reader comparing 0.65 with 4.98
   // has no way to know that unless the header says so at the point of use.
+  // Every column names its instrument; the header tag is drawn only where a
+  // table holds more than one, because a tag on every column of a
+  // one-instrument table says nothing a reader can use.
+  const manyInstruments =
+    new Set(table.columns.map(c => c.instrument).filter(Boolean)).size > 1;
   const head = table.columns.map(c =>
     `<th scope="col" data-sort="${c.key}" title="${esc(tr(c.definition))}">` +
     // The sortable heading's contents in a real control, so the sort can be
@@ -497,7 +502,8 @@ function renderTable(table, index) {
     // instruments read as eleven columns from one unless the header says
     // otherwise -- and then a reader compares a coverage count with a 1-5
     // quality rating as though they were two grades from the same exam.
-    (c.instrument ? `<span class="instrument">${esc(tr(c.instrument))}</span>` : '') +
+    (manyInstruments && c.instrument
+      ? `<span class="instrument">${esc(tr(c.instrument))}</span>` : '') +
     `${esc(tr(c.label))}` +
     `<span class="scale">${esc(c.scale)}</span>` +
     `</button></th>`).join('');

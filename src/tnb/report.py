@@ -1180,118 +1180,6 @@ def _with_note_words(rows: list[Row]) -> list[Row]:
     ]
 
 
-def _merge_instruments(tables: list[dict]) -> list[dict]:
-    """Draw PDSQI-9 beside the rubric, in one table, for the SOAP notes.
-
-    They rate **the same 942 notes** with the same judge at the same settings
-    under the same harness: the only comparability field they differ on is
-    `judge_prompt_version`, because they ask different questions about one
-    corpus. Two tabs made a reader click between them to answer the question
-    both were run for -- whether an instrument built to rate clinical notes
-    agrees with the rubric that ranks the therapist last -- and a reader who has
-    to hold eleven numbers in their head across a page reload does not answer it.
-
-    **Side by side is not averaged in, and the difference is the whole rule.**
-    `harness_version` and the six comparability keys are untouched: the rows
-    still come from two groups and nothing is combined into a figure. What is
-    merged is the drawing. `ranking_measure` stays the rubric's, so the band
-    logic keeps reading the measure the saturation analysis was run on, and
-    every column carries the instrument it came from so the page can head them
-    separately.
-
-    iCARE cannot join and does not: a different corpus, different notes, sixteen
-    models against nineteen. Joining on `system_id` there would put two models'
-    work in one row.
-    """
-
-    def instrument_key(table: dict) -> tuple:
-        versions = table["versions"]
-        return (
-            versions["harness_version"],
-            versions["prompt_version"],
-            versions["judge_model"],
-            json.dumps(versions["judge_settings"], sort_keys=True),
-        )
-
-    beside = {
-        instrument_key(table): table
-        for table in tables
-        if table["track"] == results.TRACK_PDSQI and table["scored"]
-    }
-    absorbed: set[str] = set()
-    for table in tables:
-        if table["track"] != results.TRACK_TNEVAL or not table["scored"]:
-            continue
-        other = beside.get(instrument_key(table))
-        if other is None:
-            continue
-
-        for column in table["columns"]:
-            column.setdefault("instrument", INSTRUMENT_LABELS[table["track"]])
-        added = []
-        for column in other["columns"]:
-            added.append({**column, "instrument": INSTRUMENT_LABELS[other["track"]]})
-        table["columns"] = table["columns"] + added
-
-        by_system = {row["system_id"]: row for row in other["rows"]}
-        for row in table["rows"]:
-            found = by_system.get(row["system_id"])
-            # A system the second instrument has not rated keeps its dashes. It
-            # is not dropped and its rubric figures are not touched: one
-            # instrument having finished and the other not is a fact about the
-            # run, not about the model.
-            if found:
-                row["headline"] = {**row["headline"], **(found.get("headline") or {})}
-
-        # Both judge prompts, so the provenance line names what was actually
-        # asked. A merged table that reported one of them would say the eight
-        # PDSQI columns came from the rubric's prompt.
-        table["judge_prompt_versions"] = [
-            table["versions"]["judge_prompt_version"],
-            other["versions"]["judge_prompt_version"],
-        ]
-        table["merged_from"] = [table["track"], other["track"]]
-        # Both instruments named above the table they share. The terms came from
-        # the absorbing track alone, so PDSQI-9 wrote eight of the eleven
-        # columns and was defined nowhere a reader would meet it.
-        known = {term["term"] for term in table.get("terms") or []}
-        table["terms"] = (table.get("terms") or []) + [
-            term for term in other.get("terms") or [] if term["term"] not in known
-        ]
-        # Both instruments named above the table they share. The terms came from
-        # the absorbing track alone, so PDSQI-9 wrote eight of the eleven
-        # columns and was defined nowhere a reader would meet it.
-        known = {term["term"] for term in table.get("terms") or []}
-        table["terms"] = (table.get("terms") or []) + [
-            term for term in other.get("terms") or [] if term["term"] not in known
-        ]
-        # "Can the judge be checked?" is a property of a (judge, instrument)
-        # pair, and a merged table has two. It carried the rubric's answer
-        # alone -- the green "judge checked against people" chip, over a table
-        # whose other eight columns nobody has rated on that instrument at all.
-        # The honest answer for PDSQI-9 was already written and had never been
-        # drawn, because the merge copied columns, rows, terms, title and blurb
-        # and not this.
-        table["designs"] = [
-            {**table["design"], "instrument": INSTRUMENT_LABELS[table["track"]]},
-            {**other["design"], "instrument": INSTRUMENT_LABELS[other["track"]]},
-        ]
-        table["title"] = "SOAP notes on AnnoMI · two instruments, the same notes"
-        # Was three sentences establishing that eleven columns from two
-        # instruments is a deliberate arrangement. A reader can see that it is
-        # eleven columns. What they cannot see is that adding them up is
-        # meaningless, so that is what the line says now.
-        table["blurb"] = (
-            "The first three columns count what a note contains — TN-Eval's "
-            "rubric. The other eight rate how it is written — PDSQI-9. "
-            "**Nothing is averaged across them**: different questions on "
-            "different scales, and neither instrument publishes a total either."
-        )
-        absorbed.add(other["id"])
-
-    return [table for table in tables if table["id"] not in absorbed]
-
-
 def build(
     rows: list[Row],
     saturations: list[dict] | None = None,
@@ -1387,8 +1275,17 @@ def build(
                 # reader has to be told its columns may not mean the same thing
                 # as the columns above it.
                 "stale_harness": versions["harness_version"] != newest_harness,
+                # Every column names the instrument that asked for it. The
+                # legend groups a caveat shared by all of an instrument's
+                # columns under the instrument's name, and two SOAP-note tables
+                # sit under one switch; a reader who flips between them should
+                # not have to remember which eight columns were whose.
                 "columns": [
-                    {**column_meta(track, key_), "digits": digits}
+                    {
+                        **column_meta(track, key_),
+                        "digits": digits,
+                        "instrument": INSTRUMENT_LABELS[track],
+                    }
                     for key_, digits in COLUMNS[track]
                 ],
                 "ranking_measure": RANKING_MEASURES.get(track),
@@ -1462,10 +1359,6 @@ def build(
     # Two tables with one id would silently draw the same one twice, and the
     # reader would see a switch that does nothing.
     assert len({table["id"] for table in tables}) == len(tables), "table ids collide"
-
-    # After the ids, because absorbing a table is done by id, and before
-    # `_selection`, which decides what the switch offers.
-    tables = _merge_instruments(tables)
 
     # Withdrawn groups count too. `superseded` names a track on the page --
     # "this was published and is not any more" -- and a reader who reads that

@@ -169,13 +169,6 @@ CHECKS = (
         why="the same sentence, on the other page",
         reads=(results, "COMPARABILITY_KEYS"),
     ),
-    Check(
-        where="src/tnb/report.py",
-        pattern=r"first three columns count what a note contains.{0,40}?rubric\. The other (\w+)",
-        expected=lambda: (len(report.MEASURE_TABLES["pdsqi-soap"]),),
-        why="the blurb over a table whose PDSQI half is drawn from that list",
-        reads=(report, "MEASURE_TABLES"),
-    ),
     # --- and their Czech twins ------------------------------------------------
     #
     # `test_i18n` compares the digits in a translation against the digits in its

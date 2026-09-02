@@ -276,7 +276,10 @@ def test_the_provider_split_is_the_published_one(payload):
         if not table["scored"]:
             continue
         for row in table["rows"]:
-            key = (row["system_id"], table["track"])
+            # One set of notes per (system, generation prompt), however many
+            # instruments rated it: PDSQI-9 rates the SOAP track's notes and
+            # its table must not count them a second time.
+            key = (row["system_id"], table["versions"]["prompt_version"])
             if key in seen:
                 continue
             seen.add(key)

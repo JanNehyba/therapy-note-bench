@@ -51,40 +51,31 @@ written for somebody building or buying one:
 ([PDF](https://jannehyba.github.io/therapy-note-bench/therapy-note-bench.pdf))
 
 <!-- LEADERBOARD:BEGIN -->
-**SOAP notes on AnnoMI · two instruments, the same notes** — scored by gemini-3.1-pro-preview (max_output_tokens 288, temperature 0, thinking_budget 256)
+**TN-Eval SOAP · AnnoMI conversations** — scored by gemini-3.1-pro-preview (max_output_tokens 288, temperature 0, thinking_budget 256)
 
-| Model | Provider | Completeness (0-1) | Conciseness (0-1) | Faithfulness (1-5) | Accurate (1-5) | Thorough (1-5) | Useful (1-5) | Organized (1-5) | Comprehensible (1-5) | Succinct (1-5) | Synthesized (1-5) | Free of stigmatizing language (0-1) | Notes | Scored |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| `kimi-k3` | einfra | 0.550 | 0.887 | 4.98 | 4.98 | 4.98 | 5.00 | 5.00 | 5.00 | 2.90 | 5.00 | 0.959 | 50/50 | 50 |
-| `qwen3.5-int4` | einfra | 0.536 | 0.877 | 4.92 | 4.94 | 4.90 | 5.00 | 5.00 | 5.00 | 4.00 | 5.00 | 0.940 | 50/50 | 50 |
-| `google_gemini-3.1-pro-preview` | vertex | 0.534 | 0.890 | 4.97 | 4.98 | 4.94 | 5.00 | 5.00 | 5.00 | 3.84 | 5.00 | 0.940 | 50/50 | 50 |
-| `qwen3.5-122b` | einfra | 0.529 | 0.905 | 4.77 | 4.72 | 4.94 | 5.00 | 5.00 | 5.00 | 3.18 | 5.00 | 0.920 | 50/50 | 50 |
-| `google_gemini-3.7-flash` | vertex | 0.526 | 0.933 | 4.98 | 5.00 | 4.96 | 5.00 | 5.00 | 5.00 | 4.00 | 5.00 | 0.957 | 50/50 | 50 |
-| `glm-5` | einfra | 0.504 | 0.865 | 4.96 | 4.94 | 4.96 | 5.00 | 5.00 | 5.00 | 3.73 | 5.00 | 0.939 | 50/50 | 50 |
-| `gpt-5.6-sol` | openai | 0.502 | 0.887 | 4.96 | 5.00 | 5.00 | 5.00 | 5.00 | 5.00 | 3.88 | 5.00 | 1.000 | 50/50 | 50 |
-| `glm-5.2` | einfra | 0.500 | 0.875 | 4.97 | 5.00 | 4.96 | 5.00 | 5.00 | 5.00 | 3.73 | 5.00 | 0.939 | 50/50 | 50 |
-| `gpt-5.6-terra` | openai | 0.497 | 0.891 | 5.00 | 5.00 | 4.98 | 5.00 | 5.00 | 5.00 | 3.35 | 5.00 | 1.000 | 50/50 | 50 |
-| `gpt-oss-120b` | einfra | 0.482 | 0.905 | 4.29 | 4.22 | 4.63 | 5.00 | 5.00 | 4.98 | 3.63 | 5.00 | 1.000 | 42/50 (8 unusable) | 42 |
-| `gpt-5.6-luna` | openai | 0.482 | 0.889 | 4.93 | 5.00 | 4.96 | 5.00 | 5.00 | 5.00 | 3.43 | 5.00 | 0.959 | 50/50 | 50 |
-| `qwen3.8-27b` | einfra | 0.477 | 0.835 | 4.94 | 5.00 | 4.92 | 5.00 | 5.00 | 5.00 | 3.55 | 5.00 | 0.980 | 50/50 | 50 |
-| `deepseek-v4-flash-thinking` | einfra | 0.473 | 0.901 | 4.83 | 4.80 | 4.86 | 5.00 | 5.00 | 5.00 | 3.44 | 5.00 | 0.980 | 50/50 | 50 |
-| `gemma4` | einfra | 0.472 | 0.895 | 4.95 | 5.00 | 4.80 | 5.00 | 5.00 | 5.00 | 4.02 | 5.00 | 0.940 | 50/50 | 50 |
-| `mistral-medium-3.5` | einfra | 0.457 | 0.909 | 4.89 | 4.86 | 4.90 | 5.00 | 5.00 | 5.00 | 3.76 | 5.00 | 0.960 | 50/50 | 50 |
-| `deepseek-v4-flash` | einfra | 0.445 | 0.920 | 4.88 | 4.63 | 4.78 | 5.00 | 5.00 | 5.00 | 3.78 | 5.00 | 0.980 | 50/50 | 50 |
+| Model | Provider | Completeness (0-1) | Conciseness (0-1) | Faithfulness (1-5) | Notes | Scored |
+|---|---|---|---|---|---|---|
+| `kimi-k3` | einfra | 0.550 | 0.887 | 4.98 | 50/50 | 50 |
+| `qwen3.5-int4` | einfra | 0.536 | 0.877 | 4.92 | 50/50 | 50 |
+| `google_gemini-3.1-pro-preview` | vertex | 0.534 | 0.890 | 4.97 | 50/50 | 50 |
+| `qwen3.5-122b` | einfra | 0.529 | 0.905 | 4.77 | 50/50 | 50 |
+| `google_gemini-3.7-flash` | vertex | 0.526 | 0.933 | 4.98 | 50/50 | 50 |
+| `glm-5` | einfra | 0.504 | 0.865 | 4.96 | 50/50 | 50 |
+| `gpt-5.6-sol` | openai | 0.502 | 0.887 | 4.96 | 50/50 | 50 |
+| `glm-5.2` | einfra | 0.500 | 0.875 | 4.97 | 50/50 | 50 |
+| `gpt-5.6-terra` | openai | 0.497 | 0.891 | 5.00 | 50/50 | 50 |
+| `gpt-oss-120b` | einfra | 0.482 | 0.905 | 4.29 | 42/50 (8 unusable) | 42 |
+| `gpt-5.6-luna` | openai | 0.482 | 0.889 | 4.93 | 50/50 | 50 |
+| `qwen3.8-27b` | einfra | 0.477 | 0.835 | 4.94 | 50/50 | 50 |
+| `deepseek-v4-flash-thinking` | einfra | 0.473 | 0.901 | 4.83 | 50/50 | 50 |
+| `gemma4` | einfra | 0.472 | 0.895 | 4.95 | 50/50 | 50 |
+| `mistral-medium-3.5` | einfra | 0.457 | 0.909 | 4.89 | 50/50 | 50 |
+| `deepseek-v4-flash` | einfra | 0.445 | 0.920 | 4.88 | 50/50 | 50 |
 
 *Sorted by **Completeness** under this judge — a sort, not a rank: 9 of the 15 gaps between neighbouring rows are under 0.005 and 14 under 0.02, and which rows the evidence actually separates is on the [methods page](https://jannehyba.github.io/therapy-note-bench/methods.html#saturation). Every other column is context.*
 - **Completeness** (0-1) — The equal-weighted mean of the note's four SOAP section fractions. Per section, the fraction of that section's criteria the judge found present. Counts coverage of a checklist, not judgement. All 23 rubric items are asked of every note, whatever the session was about, so an item the session never called for counts as absent exactly like one the note forgot. The figure is the equal-weighted mean of the note's four section fractions, not the fraction of all 23 items, so a four-item section counts as much as an eight-item one. This is the column the table is ordered by.
 - **Conciseness** (0-1) — Fraction of the note's sentences that fit at least one rubric item. 1.00 means nothing is off-topic; it does not mean the note is short. Not a length measure, despite the name: a note twice as long scores the same if every added sentence is on topic. It is also the measure most moved by the judge's own settings -- raising the thinking budget from 128 to 256 tokens shifted all nineteen systems and reordered sixteen of them. The higher budget is what the table above is scored at; it was the budget-128 rows it was compared against that are gone -- not in results/rows.jsonl in any revision and not re-derivable, see docs/limitations.md.
 - **Faithfulness** (1-5) — Whether the note contradicts the transcript, rated 1 to 5, where 5 is no inaccuracies. TN-Eval's protocol has no criterion-based version of this one, so it stays a Likert scale. A different scale from the two columns beside it, and a weak one: TN-Eval published Krippendorff's alpha 0.18 between its two therapist annotators on this rating, and recomputing it here from their released annotations gives the same. Read it as a flag for gross invention, not as a ranking.
-- **PDSQI-9 columns** — The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes.
-- **Accurate** (1-5) — The note is true and free of incorrect information. PDSQI-9 item 2, rated 1 (not at all) to 5 (extremely).
-- **Thorough** (1-5) — The note should thoroughly cover all critical patient issues. PDSQI-9 item 3, rated 1 (not at all) to 5 (extremely).
-- **Useful** (1-5) — All the information is in there that is useful to the target provider/intended audience. The note is extremely relevant, providing valuable information and/or analysis. PDSQI-9 item 4, rated 1 (not at all) to 5 (extremely).
-- **Organized** (1-5) — The note is well-formed and structured in a way that helps the reader understand the patient's clinical course. PDSQI-9 item 5, rated 1 (not at all) to 5 (extremely).
-- **Comprehensible** (1-5) — The note is clear, without ambiguity or sections that are difficult to understand. PDSQI-9 item 6, rated 1 (not at all) to 5 (extremely).
-- **Succinct** (1-5) — The note is brief, to the point, and without redundancy. PDSQI-9 item 7, rated 1 (not at all) to 5 (extremely).
-- **Synthesized** (1-5) — The note reflects an understanding of the patient's status and ability to develop a plan of care. PDSQI-9 item 8, rated 1 (not at all) to 5 (extremely).
-- **Free of stigmatizing language** (0-1) — The note is free of discrediting or exaggerated words, of judgment or labelling, and uses person-first language. PDSQI-9 item 9, answered yes or no and reported as the fraction of notes free of it.
 
 **iCARE form on the iHOPE corpus · 17 sections per session** — scored by gemini-3.1-pro-preview (max_output_tokens 288, temperature 0, thinking_budget 256)
 
@@ -113,6 +104,38 @@ written for somebody building or buying one:
 - **TRACE** (1-5) — Trustworthiness, relevance, accuracy, comprehensiveness and expression, each rated 1-5 by a judge and averaged. A re-implementation with no human anchor: the authors never published their ratings, so unlike the TN-Eval track this number is not calibrated against anybody.
 - **Looks back** (0-1) — Section 5 only -- what happened in the previous session. The fraction of the 34 sessions whose expert note answered it where the model did too. Kept out of any average. Every model scores 0.97-1.00 here, so this column separates nobody -- it is shown because its twin does.
 - **Looks forward** (0-1) — Section 17 only -- what happens at the next session. The fraction of the 11 sessions whose expert note answered it where the model did too. This is where the source paper reports every model it tested failing, and ours do too: 0.00 to 0.55. Reported apart from its twin because averaging the two turned 1.00 and 0.09 into 0.78 and hid exactly this.
+
+**PDSQI-9 · the SOAP notes on AnnoMI, rated for quality** — scored by gemini-3.1-pro-preview (max_output_tokens 288, temperature 0, thinking_budget 256)
+
+| Model | Provider | Accurate (1-5) | Thorough (1-5) | Useful (1-5) | Organized (1-5) | Comprehensible (1-5) | Succinct (1-5) | Synthesized (1-5) | Free of stigmatizing language (0-1) | Notes | Scored |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| `deepseek-v4-flash` | einfra | 4.63 | 4.78 | 5.00 | 5.00 | 5.00 | 3.78 | 5.00 | 0.980 | 50/50 | 50 |
+| `deepseek-v4-flash-thinking` | einfra | 4.80 | 4.86 | 5.00 | 5.00 | 5.00 | 3.44 | 5.00 | 0.980 | 50/50 | 50 |
+| `gemma4` | einfra | 5.00 | 4.80 | 5.00 | 5.00 | 5.00 | 4.02 | 5.00 | 0.940 | 50/50 | 50 |
+| `glm-5` | einfra | 4.94 | 4.96 | 5.00 | 5.00 | 5.00 | 3.73 | 5.00 | 0.939 | 50/50 | 50 |
+| `glm-5.2` | einfra | 5.00 | 4.96 | 5.00 | 5.00 | 5.00 | 3.73 | 5.00 | 0.939 | 50/50 | 50 |
+| `google_gemini-3.1-pro-preview` | vertex | 4.98 | 4.94 | 5.00 | 5.00 | 5.00 | 3.84 | 5.00 | 0.940 | 50/50 | 50 |
+| `google_gemini-3.7-flash` | vertex | 5.00 | 4.96 | 5.00 | 5.00 | 5.00 | 4.00 | 5.00 | 0.957 | 50/50 | 50 |
+| `gpt-5.6-luna` | openai | 5.00 | 4.96 | 5.00 | 5.00 | 5.00 | 3.43 | 5.00 | 0.959 | 50/50 | 50 |
+| `gpt-5.6-sol` | openai | 5.00 | 5.00 | 5.00 | 5.00 | 5.00 | 3.88 | 5.00 | 1.000 | 50/50 | 50 |
+| `gpt-5.6-terra` | openai | 5.00 | 4.98 | 5.00 | 5.00 | 5.00 | 3.35 | 5.00 | 1.000 | 50/50 | 50 |
+| `gpt-oss-120b` | einfra | 4.22 | 4.63 | 5.00 | 5.00 | 4.98 | 3.63 | 5.00 | 1.000 | 42/50 (8 unusable) | 42 |
+| `kimi-k3` | einfra | 4.98 | 4.98 | 5.00 | 5.00 | 5.00 | 2.90 | 5.00 | 0.959 | 50/50 | 50 |
+| `mistral-medium-3.5` | einfra | 4.86 | 4.90 | 5.00 | 5.00 | 5.00 | 3.76 | 5.00 | 0.960 | 50/50 | 50 |
+| `qwen3.5-122b` | einfra | 4.72 | 4.94 | 5.00 | 5.00 | 5.00 | 3.18 | 5.00 | 0.920 | 50/50 | 50 |
+| `qwen3.5-int4` | einfra | 4.94 | 4.90 | 5.00 | 5.00 | 5.00 | 4.00 | 5.00 | 0.940 | 50/50 | 50 |
+| `qwen3.8-27b` | einfra | 5.00 | 4.92 | 5.00 | 5.00 | 5.00 | 3.55 | 5.00 | 0.980 | 50/50 | 50 |
+
+*Not ordered: no column ranks this track, and the comparison that could order it — at least as good on every column under both judges — has not been tested. Rows are alphabetical; read each column on its own.*
+- **PDSQI-9 columns** — The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes.
+- **Accurate** (1-5) — The note is true and free of incorrect information. PDSQI-9 item 2, rated 1 (not at all) to 5 (extremely).
+- **Thorough** (1-5) — The note should thoroughly cover all critical patient issues. PDSQI-9 item 3, rated 1 (not at all) to 5 (extremely).
+- **Useful** (1-5) — All the information is in there that is useful to the target provider/intended audience. The note is extremely relevant, providing valuable information and/or analysis. PDSQI-9 item 4, rated 1 (not at all) to 5 (extremely).
+- **Organized** (1-5) — The note is well-formed and structured in a way that helps the reader understand the patient's clinical course. PDSQI-9 item 5, rated 1 (not at all) to 5 (extremely).
+- **Comprehensible** (1-5) — The note is clear, without ambiguity or sections that are difficult to understand. PDSQI-9 item 6, rated 1 (not at all) to 5 (extremely).
+- **Succinct** (1-5) — The note is brief, to the point, and without redundancy. PDSQI-9 item 7, rated 1 (not at all) to 5 (extremely).
+- **Synthesized** (1-5) — The note reflects an understanding of the patient's status and ability to develop a plan of care. PDSQI-9 item 8, rated 1 (not at all) to 5 (extremely).
+- **Free of stigmatizing language** (0-1) — The note is free of discrediting or exaggerated words, of judgment or labelling, and uses person-first language. PDSQI-9 item 9, answered yes or no and reported as the fraction of notes free of it.
 
 **Do the two judges agree?** (TN-Eval SOAP · AnnoMI conversations)
 
@@ -217,8 +240,9 @@ written for somebody building or buying one:
 *19 tneval-soap row(s) scored by `gpt-5.6-terra` at harness `0.6.0` are no longer shown: the measures were redefined in `0.7.0` and the two are not comparable. They stay in `results/rows.jsonl`.*
 
 **Also scored, and not printed here.** Two judges are two instruments and two tables; the site draws one at a time and this file cannot, so it shows the one the site opens with.
-- **SOAP notes on AnnoMI · two instruments, the same notes**, scored by gpt-5.6-terra (backend openai, effort medium, max_output_tokens 672) — [open it](https://jannehyba.github.io/therapy-note-bench/#tneval-soap-gpt-5.6-terra-tneval-rubric-v1-0.7.0-acf643)
+- **TN-Eval SOAP · AnnoMI conversations**, scored by gpt-5.6-terra (backend openai, effort medium, max_output_tokens 672) — [open it](https://jannehyba.github.io/therapy-note-bench/#tneval-soap-gpt-5.6-terra-tneval-rubric-v1-0.7.0-acf643)
 - **iCARE form on the iHOPE corpus · 17 sections per session**, scored by gpt-5.6-terra (backend openai, effort medium, max_output_tokens 672) — [open it](https://jannehyba.github.io/therapy-note-bench/#icare-gpt-5.6-terra-icare-trace-v1-0.7.0-acf643)
+- **PDSQI-9 · the SOAP notes on AnnoMI, rated for quality**, scored by gpt-5.6-terra (backend openai, effort medium, max_output_tokens 672) — [open it](https://jannehyba.github.io/therapy-note-bench/#pdsqi-soap-gpt-5.6-terra-pdsqi9-note-v1-0.7.0-acf643)
 
 See the [full leaderboard](https://jannehyba.github.io/therapy-note-bench/) for per-section detail, the reference systems and the published numbers, and [how it was measured](https://jannehyba.github.io/therapy-note-bench/methods.html) for the judge, the corpora and what the two judges disagree about.
 <!-- LEADERBOARD:END -->
@@ -258,7 +282,7 @@ The judge reproduces TN-Eval's central finding: criterion checklists agree far b
 | **PDSQI-9 on the same SOAP notes** | the same 50 AnnoMI conversations | eight of PDSQI-9's nine attributes — seven rated 1-5 and one answered yes/no; item 1 ("cited") is dropped, because a note written from a single transcript has no source documents to cite | No |
 | **iCARE / iHOPE** | 40 held-out sessions, 17 sections | ROUGE-L + BERTScore, TRACE, and two temporal columns -- looking back and looking forward | Yes |
 
-The two SOAP instruments are drawn side by side in one table and never
+The two SOAP instruments are two tables under one switch and are never
 averaged: different questions on different scales, and neither instrument
 publishes a total.
 

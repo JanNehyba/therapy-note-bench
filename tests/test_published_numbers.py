@@ -391,11 +391,11 @@ CLAIMS = (
     ),
     Claim(
         where="docs/limitations.md",
-        phrase="On PDSQI-9's eight columns, drawn on the same table, it is eleven of the nineteen",
+        phrase="On PDSQI-9's eight columns, on its own table, it is eleven of the nineteen",
         kind="computed",
         because=(
-            "the same sentence answered over the other instrument on the same table; "
-            "printing one without the other is what made the count read as the page's"
+            "the same sentence answered over the other instrument; printing one without "
+            "the other is what made the count read as the page's"
         ),
         covers=("eight", "eleven", "nineteen"),
         expected=_pdsqi_undominated,

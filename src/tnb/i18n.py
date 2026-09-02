@@ -541,13 +541,6 @@ _SENTENCES = {
         "17 políček k vyplnění místo zápisu k napsání, takže prázdné políčko je něco jiného "
         "než krátká věta."
     ),
-    "The first three columns count what a note contains — TN-Eval's rubric. The other eight"
-    " rate how it is written — PDSQI-9. **Nothing is averaged across them**: different"
-    " questions on different scales, and neither instrument publishes a total either.": (
-        "První tři sloupce počítají, co zápis obsahuje — rubrika TN-Eval. Dalších osm "
-        "hodnotí, jak je napsaný — PDSQI-9. **Žádný souhrn se z nich nepočítá**: jsou to jiné "
-        "otázky na jiných škálách a ani jeden nástroj sám žádný souhrn nezveřejňuje."
-    ),
     # No column ranks it, and the rows are alphabetical until the comparison
     # that could order them has been tested. Not "nothing to order them by":
     # that was said, and it was not true.
@@ -643,10 +636,16 @@ _SENTENCES = {
 #: heading, definition and caveat. Authored in the scorers and in ``report.py``,
 #: where the number they describe is computed.
 _PAYLOAD = {
-    # -- track titles and blurbs ---------------------------------------------
-    "SOAP notes on AnnoMI · two instruments, the same notes": (
-        "Zápisy SOAP na AnnoMI · dva nástroje, tytéž zápisy"
+    # PDSQI-9's own row note, drawn now that the instrument has a table of its
+    # own; it sat on rows the merged table never showed.
+    "PDSQI-9, adapted: see docs/landscape.md. Physicians agree with each other on this"
+    " instrument at Krippendorff's alpha 0.575, which is the ceiling these columns are read"
+    " against -- no human has rated these notes on it.": (
+        "PDSQI-9, upravený: viz docs/landscape.md. Lékaři se na tomto nástroji mezi sebou "
+        "shodují na Krippendorffově alfě 0.575, což je strop, proti němuž se tyto sloupce "
+        "čtou — tyto zápisy na něm žádný člověk nehodnotil."
     ),
+    # -- track titles and blurbs ---------------------------------------------
     "iCARE form on the iHOPE corpus · 17 sections per session": (
         "Formulář iCARE na korpusu iHOPE · 17 oddílů na sezení"
     ),

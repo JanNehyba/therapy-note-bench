@@ -445,53 +445,53 @@ def test_the_docs_carry_what_an_empty_note_scores_on_this_instrument():
         assert figure in text, f"the measurement is quoted without {figure}"
 
 
-def test_the_rubric_and_pdsqi_are_drawn_in_one_table_and_averaged_in_none():
-    """They rate the same 942 notes with the same judge at the same settings
-    under the same harness, differing on `judge_prompt_version` alone -- so the
-    question both were run for, whether an instrument built to rate clinical
-    notes agrees with the rubric that ranks the therapist last, is one row
-    rather than two tabs.
-
-    Drawing them together is not combining them. The rows still come from two
-    comparability groups, no figure spans the two, and every column says which
-    instrument asked for it.
+def test_the_rubric_and_pdsqi_are_two_tables_and_averaged_in_none():
+    """They rate the same 942 notes with the same judge, and for a while they
+    were drawn as one table of eleven columns. That put two instruments with
+    two calibrations under one heading and one order, and a reader added them
+    up in their head whatever the blurb said. Each instrument is its own table
+    again, on its own track, with its own concordance; every column still names
+    the instrument that asked for it, because the two tables sit under one
+    switch and a reader flips between them.
     """
     data = report.build(results.load())
 
-    merged = [t for t in data["tables"] if t.get("merged_from")]
-    assert merged, "the SOAP tables draw one instrument each"
-
-    for table in merged:
-        assert table["merged_from"] == [results.TRACK_TNEVAL, results.TRACK_PDSQI]
-        scored = [c for c in table["columns"] if c.get("scale")]
-        instruments = {c["instrument"] for c in scored}
-        assert instruments == {"TN-Eval rubric", "PDSQI-9"}, (
-            "a reader has to see which columns are which instrument's"
-        )
-        assert len(table["judge_prompt_versions"]) == 2, (
-            "naming one prompt would say the PDSQI columns came from the rubric's"
-        )
-        # The measure the bands and the order are read off stays the rubric's:
-        # the saturation analysis behind them was run on that measure.
-        ranking = [c for c in scored if c.get("ranking")]
-        assert [c["instrument"] for c in ranking] == ["TN-Eval rubric"]
-
-    assert not [t for t in data["tables"] if t["track"] == results.TRACK_PDSQI], (
-        "the absorbed table is drawn twice"
-    )
+    assert not [t for t in data["tables"] if t.get("merged_from")], "a merged table is back"
+    by_track: dict[str, list[dict]] = {}
+    for table in data["tables"]:
+        if table["scored"]:
+            by_track.setdefault(table["track"], []).append(table)
+    assert results.TRACK_PDSQI in by_track, "PDSQI-9 has no table of its own"
+    for track, label in (
+        (results.TRACK_TNEVAL, "TN-Eval rubric"),
+        (results.TRACK_PDSQI, "PDSQI-9"),
+    ):
+        for table in by_track[track]:
+            assert {c["instrument"] for c in table["columns"]} == {label}, (
+                f"{table['id']} draws columns from more than one instrument"
+            )
+            assert "judge_prompt_versions" not in table, "one table, one judge prompt"
 
 
 def test_no_figure_is_ever_computed_across_the_two_instruments():
-    """The rule the merge must not break. One of the eight PDSQI columns is a
-    0-1 fraction against seven 1-5 scales and three rubric columns of two more
-    kinds; a mean over them would be a number with no unit, and it is exactly
-    what a merged table invites somebody to add later."""
+    """One of the eight PDSQI columns is a 0-1 fraction against seven 1-5 scales
+    and three rubric columns of two more kinds; a mean over them would be a
+    number with no unit. Every headline a SOAP-note table draws is one
+    instrument's, and no key on any row reads as a total."""
     data = report.build(results.load())
+    attributes = set(pdsqi.ATTRIBUTE_KEYS)
 
-    for table in [t for t in data["tables"] if t.get("merged_from")]:
+    for table in data["tables"]:
+        if table["track"] not in (results.TRACK_TNEVAL, results.TRACK_PDSQI):
+            continue
+        if not table["scored"]:
+            continue
         for row in table["rows"]:
             keys = set(row["headline"])
             assert not keys & {"total", "overall", "score", "mean", "composite"}, (
                 "a combined figure appeared over two instruments"
             )
-        assert table["ranking_measure"] in {c["key"] for c in table["columns"]}
+            if table["track"] == results.TRACK_TNEVAL:
+                assert not keys & attributes, "PDSQI attributes on the rubric's table"
+            else:
+                assert keys <= attributes, "rubric measures on PDSQI-9's table"

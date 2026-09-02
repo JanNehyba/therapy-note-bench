@@ -63,8 +63,8 @@ measure under *both* judges is better however a reader weights the measures.
 The count depends on which instrument's measures are meant, so it is named:
 Eight of the nineteen are beaten outright by nobody on TN-Eval's three rubric
 columns — a minority, but a minority with no one system in it that beats the
-rest, which is why no single winner is named. On PDSQI-9's eight columns, drawn
-on the same table, it is eleven of the nineteen; more measures make dominance
+rest, which is why no single winner is named. On PDSQI-9's eight columns, on
+its own table, it is eleven of the nineteen; more measures make dominance
 harder to establish, not easier.
 
 **Those counts were never tested, and this page says so before anything is
