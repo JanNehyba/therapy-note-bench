@@ -55,6 +55,7 @@ fraction of notes *free* of stigmatizing language.
 from __future__ import annotations
 
 import re
+from collections.abc import Callable
 from dataclasses import dataclass
 
 from tnb.tasks import soap
@@ -276,6 +277,7 @@ ATTRIBUTES: tuple[Attribute, ...] = (
 )
 
 ATTRIBUTE_KEYS: tuple[str, ...] = tuple(a.key for a in ATTRIBUTES)
+_BINARY_ATTRIBUTES: frozenset[str] = frozenset(a.key for a in ATTRIBUTES if a.binary)
 
 #: Answerable from the note alone. The two that are not -- accurate and thorough
 #: -- ask whether the note is true and complete, which needs the session.
@@ -369,6 +371,16 @@ class PdsqiTask:
     @property
     def section(self) -> str:
         return "pdsqi"
+
+    @property
+    def accepts(self) -> Callable[[str], bool]:
+        """The test that decides whether a reply is an answer to this attribute:
+        a yes or a no for the binary one, a rating for the rest. The same test
+        `score` applies, handed to the cache so that a stored reply which would
+        not count there is re-asked rather than reused."""
+        if self.attribute in _BINARY_ATTRIBUTES:
+            return lambda answer: parse_yes_no(answer) is not None
+        return is_a_rating
 
 
 def is_a_rating(answer: str) -> bool:

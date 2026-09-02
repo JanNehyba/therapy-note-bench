@@ -26,6 +26,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -184,6 +185,14 @@ class TraceTask:
     @property
     def section(self) -> str:
         return "trace"
+
+    @property
+    def accepts(self) -> Callable[[str], bool]:
+        """The test that decides whether a reply is an answer: a rating, as
+        `score` requires (see `is_a_rating`), handed to the cache so that a
+        stored reply which would not count there is re-asked rather than
+        reused."""
+        return is_a_rating
 
 
 @dataclass

@@ -14,6 +14,7 @@ they never published one. See :func:`aggregate`.
 from __future__ import annotations
 
 import re
+from collections.abc import Callable
 from dataclasses import dataclass, field
 
 #: Bumped whenever anything reaching the judge changes. Result rows carry it and
@@ -410,6 +411,12 @@ def parse_yes_no(answer: str) -> int:
     return 1 if "yes" in (answer or "").lower() else 0
 
 
+#: A yes or a no, and nothing but one. Punctuation and brackets around it are
+#: tolerated -- "[Yes]", "yes.", "**No**" -- which is every shape the prompt's
+#: "Just Yes or No" has come back in; a word of anything else is not.
+_YES_NO = re.compile(r"\W*(yes|no)\W*", re.IGNORECASE)
+
+
 def is_an_answer(answer: str) -> bool:
     """Whether a yes/no question actually got a yes or a no.
 
@@ -417,13 +424,19 @@ def is_an_answer(answer: str) -> bool:
     for one that said nothing usable, and their numbers depend on that. This
     separates the two without touching the parser.
 
-    Not hypothetical. 242 of gemini-3.1-pro-preview's cached rubric answers are
-    fragments of its own reasoning -- "Evaluate against Rubric Item:**",
-    "producingproducing..." -- each scored as a criterion the note failed to
-    satisfy. A judge that was cut off mid-thought is not evidence about the note.
+    Two kinds of non-answer are on disk, and the test has to refuse both. The
+    first is a fragment of the judge's own reasoning with no verdict in it --
+    "Evaluate against Rubric Item:**", "producingproducing..." -- which the
+    earlier substring test already refused. The second *contains* the word:
+    the judge, out of room, echoes the prompt's own instruction -- `Format
+    Output:** Just "Yes" or "No".` -- and a substring test read that as a Yes.
+    Under gemini-3.1-pro-preview 35 of 39 696 cached rubric answers are such
+    echoes, 29 of them parsed as Yes and published as criteria the note met.
+    Anchoring the match costs nothing real: every one of the 79 314 rubric
+    answers the two judges gave that is a yes or a no is the word alone with at
+    most punctuation around it.
     """
-    text = (answer or "").lower()
-    return "yes" in text or "no" in text
+    return _YES_NO.fullmatch((answer or "").strip()) is not None
 
 
 #: A rating, and nothing but a rating. Any digit 1-5 with only punctuation or a
@@ -495,6 +508,15 @@ class JudgeTask:
     @property
     def is_likert(self) -> bool:
         return self.kind.startswith("likert")
+
+    @property
+    def accepts(self) -> Callable[[str], bool]:
+        """The test that decides whether a reply to this question is an answer.
+
+        The same one `aggregate` applies, handed to the cache so that a stored
+        reply which would not count there is re-asked rather than reused.
+        """
+        return is_a_rating if self.is_likert else is_an_answer
 
 
 def build_tasks(note: dict[str, str], conversation: str) -> list[JudgeTask]:

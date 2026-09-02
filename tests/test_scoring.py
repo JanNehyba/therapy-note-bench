@@ -755,9 +755,31 @@ def test_anything_else_is_not_a_rating(text):
     assert tneval.is_a_rating(text) is False
 
 
-@pytest.mark.parametrize("text", ["Yes", "No", "[Yes]", "yes.", "The note contains no such item"])
+@pytest.mark.parametrize("text", ["Yes", "No", "[Yes]", "yes.", "**No**", "Yes\n", " no "])
 def test_a_yes_or_no_is_recognised_as_an_answer(text):
     assert tneval.is_an_answer(text) is True
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        'Format Output:** Just "Yes" or "No".',
+        "Format output:** Strictly [Yes, No].Yes",
+        "Format Output:**\n    *   [Yes] (Wait",
+        "The note contains no such item",
+        "Yes, the plan names a follow-up",
+    ],
+)
+def test_an_echo_of_the_prompt_is_not_an_answer(text):
+    """The word is in there and it is not the judge's verdict.
+
+    35 of gemini-3.1-pro-preview's cached rubric answers were the prompt's own
+    "Just Yes or No" instruction, echoed back by a judge that had run out of
+    room; the substring test read 29 of them as Yes. The prompt asks for the
+    word alone and every real answer on disk is the word alone, so anything
+    with more in it than punctuation is not one.
+    """
+    assert tneval.is_an_answer(text) is False
 
 
 @pytest.mark.parametrize(

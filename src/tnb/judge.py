@@ -37,6 +37,7 @@ import os
 import re
 import threading
 import time
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -778,15 +779,30 @@ def prompt_digest(prompt: str) -> str:
     return hashlib.sha256(prompt.encode("utf-8")).hexdigest()
 
 
-def load_cached(path: Path, fingerprint: dict, prompt: str | None = None) -> dict | None:
+def load_cached(
+    path: Path,
+    fingerprint: dict,
+    prompt: str | None = None,
+    *,
+    accepts: Callable[[str], bool] | None = None,
+) -> dict | None:
     """A previous answer, if it was produced by the same judge at the same
-    settings, about the same text.
+    settings, about the same text -- and if it is an answer at all.
 
     Falls back to the pre-2026-08-31 settings-free path when the instrument
     directory has nothing, and accepts what it finds only on the fingerprint
     check below -- which is the same test that made those answers safe to reuse
     before the directory existed. Without the fallback this change would have
     re-asked every cached answer to gain a level of tree.
+
+    ``accepts`` is the question's own test of what counts as an answer, the one
+    its aggregator applies. A record that fails it is treated as absent, so the
+    question is asked again. `ok` cannot carry this: 35 of
+    gemini-3.1-pro-preview's rubric answers are the judge echoing the prompt's
+    instruction -- `Format Output:** Just "Yes" or "No".` -- returned with no
+    `finish_reason`, cached as `ok`, and a re-run over all 19 systems asked
+    nothing and changed nothing. The cache was deciding what the aggregator
+    would later throw away; now it decides with the same test.
     """
     if not path.exists():
         older = legacy_path(path)
@@ -807,6 +823,8 @@ def load_cached(path: Path, fingerprint: dict, prompt: str | None = None) -> dic
     # dealt with directly instead.
     stored = record.get("prompt_sha256")
     if prompt is not None and stored is not None and stored != prompt_digest(prompt):
+        return None
+    if accepts is not None and not accepts(record.get("answer") or ""):
         return None
     return record
 

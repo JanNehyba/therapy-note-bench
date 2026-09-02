@@ -167,7 +167,11 @@ def score_note(
             root=cache_root,
         )
 
-        record = None if force else judge.load_cached(path, fingerprint, task.prompt)
+        record = (
+            None
+            if force
+            else judge.load_cached(path, fingerprint, task.prompt, accepts=task.accepts)
+        )
         if record is not None:
             answers[task.unit] = record["answer"]
             result.cached += 1
@@ -263,6 +267,7 @@ def from_cache(
                 # route that publishes without asking the judge anything --
                 # had the check switched off.
                 task.prompt,
+                accepts=task.accepts,
             )
             if record is not None:
                 answers[task.unit] = record["answer"]

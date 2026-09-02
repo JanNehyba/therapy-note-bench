@@ -55,4 +55,15 @@
 #: marked incomplete, because a partial note is left out of the mean and a
 #: model's worst note must count rather than vanish. No published figure moves:
 #: none of the 942 notes has an empty section.
-__version__ = "0.6.0"
+#: 0.7.0 -- a cached reply that is not an answer is asked again, not reused.
+#: `is_an_answer` accepted any text with "yes" or "no" in it, so a judge that
+#: ran out of room and echoed the prompt's own instruction -- `Format Output:**
+#: Just "Yes" or "No".` -- was scored as a Yes: 35 of gemini-3.1-pro-preview's
+#: 39 696 rubric answers, 29 of them read as criteria the note met, on 34 notes
+#: across 15 systems. The test now accepts the word alone, and the answer cache
+#: applies each question's own test before serving a record, so the 78 replies
+#: that fail it -- those 35 and the 43 fragments the aggregator already refused
+#: -- are re-asked instead of standing forever. Completeness and conciseness
+#: therefore do not mean what they meant last time for those systems, and the
+#: 0.6.0 tables are named as superseded rather than mixed with these.
+__version__ = "0.7.0"
