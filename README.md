@@ -20,10 +20,11 @@ rather than a second benchmark.
 > therapists who annotated the source data; TRACE, on the iCARE track, has no
 > human anchor and says so wherever it appears.
 >
-> Every model scores above both models TN-Eval released notes for — Llama 3.1
-> 70B and Mistral Large v2, both from 2024 — *and* above the therapist-written
-> note — on a rubric that rewards coverage, which is not the
-> same as writing a better note.
+> Every model scores higher on completeness than both models TN-Eval released
+> notes for — Llama 3.1 70B and Mistral Large v2, both from 2024 — *and* than
+> the therapist-written note, under either judge. Completeness rewards
+> coverage, which is not the same as writing a better note: on conciseness,
+> most of the models fall below at least one of those same rows.
 >
 > **The two judges agree on the shape of the ranking and not on the order**, so
 > "near the top" is a claim this benchmark supports and "ninth rather than

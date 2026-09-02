@@ -1440,7 +1440,10 @@ def build(
 
     # Scored tables lead. A queue of systems nobody has judged yet is context,
     # not a leaderboard, and printing it above the numbers is how a reader ends
-    # up asking why the benchmark is empty when it is not.
+    # up asking why the benchmark is empty when it is not. Among the scored
+    # tables the rubric track opens the page because it is the one whose judge
+    # is checked against people: PDSQI-9 is a second instrument on the same
+    # notes, and iCARE's TRACE has no human anchor. The switch draws the rest.
     tables.sort(
         key=lambda table: (
             table["track"] != results.TRACK_TNEVAL,
