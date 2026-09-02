@@ -694,6 +694,17 @@
         apart, one file per judge.</li>
     <li><a href="judges.json"><code>docs/judges.json</code></a> &mdash; every candidate
         judge against the two therapists, including the ones not used.</li>
+    <li><a href="preference.json"><code>docs/preference.json</code></a> &mdash; the
+        self-preference estimate, its interval, the systems it was measured over by
+        name, and how much of it rests on any single one of them.</li>
+    <li><code>docs/edges-&lt;track&gt;.json</code> &mdash; every &ldquo;beats
+        outright&rdquo; claim, resampled. Dominance &mdash; at least as good on every
+        column under both judges &mdash; is the one comparison on this page that needs
+        no convention about how the columns are weighted, and this file is where it is
+        tested rather than eyeballed:
+        <a href="edges-tneval-soap.json">tneval-soap</a>,
+        <a href="edges-pdsqi-soap.json">pdsqi-soap</a> and
+        <a href="edges-icare.json">icare</a>.</li>
     <li><code>results/rows.jsonl</code> &mdash; append-only. A re-run adds rows beside
         the old ones; what is drawn is the newest of each.</li>
   </ul>

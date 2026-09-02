@@ -312,6 +312,25 @@ def test_every_file_the_document_names_is_one_a_reader_can_open(prose):
     )
 
 
+def test_every_artefact_the_document_links_is_a_file_the_site_publishes(prose):
+    """A link in the "how to check" section that 404s is worse than no link.
+
+    The section hands over six files it reads and three it does not -- the
+    per-track dominance tests, which are where "beats outright" is decided
+    rather than eyeballed. Every one of those paths is written by hand in the
+    template, and a reader following a broken one has been told to check
+    something they cannot open.
+    """
+    linked = {
+        href
+        for href in re.findall(r'href="([^"]+)"', prose)
+        if not href.startswith("http") and href.endswith((".json", ".md"))
+    }
+    assert linked, "the document links no artefact at all"
+    missing = sorted(href for href in linked if not (DOCS / href).exists())
+    assert not missing, f"linked from the briefing and not published beside it: {missing}"
+
+
 def test_the_document_never_calls_completeness_a_fraction_of_23(prose):
     """The headline figure's own subtitle said it, 68 lines under the prose that denies it.
 
