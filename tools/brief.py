@@ -330,8 +330,8 @@ def what_was_measured(data: Data) -> str:
               notes are also rated on eight of PDSQI-9&rsquo;s nine attributes &mdash; an
               instrument validated on discharge summaries rather than on session notes,
               with no human anchor here, on a table of its own. The two are never
-              averaged: they are separate instruments, and the leaderboard is ordered
-              by the rubric alone.</td>
+              averaged: they are separate instruments, and each table is ordered by the
+              mean of a system&rsquo;s places over that instrument&rsquo;s own columns.</td>
           <td class="num">{sessions.get("tneval", "&mdash;")}</td></tr>
       <tr><td><strong>iCARE / iHOPE</strong></td>
           <td>A 17-section clinical form, one call per section</td>

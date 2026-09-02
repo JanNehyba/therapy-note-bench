@@ -273,6 +273,20 @@ function detailRow(row, table) {
     }
   }
 
+  // Where the row's place comes from: its place on each column, and their
+  // mean. A place is a statement about this table, not about a note, which
+  // is why it is here and not in `headline`.
+  if (row.places) {
+    const items = Object.entries(row.places).map(([key, place]) =>
+      `<div><span>${esc(colLabel(table, key))}</span><span>${place}</span></div>`).join('');
+    parts.push(`<h3>${T`Place by column`}</h3><div class="grid">${items}</div>
+      <p class="note">${T`Mean place ${row.mean_place}, which is where this row's place of
+        ${row.place} comes from. Ties share a place.`}</p>`);
+  } else if (row.unplaced_because && row.unplaced_because.length) {
+    parts.push(`<p class="note">${T`No place: ${esc(row.unplaced_because.join(', '))} was not
+      measured for this row, and a mean over fewer columns would be a different quantity.`}</p>`);
+  }
+
   const detail = Object.entries(row.detail);
   if (detail.length) {
     const items = detail
@@ -316,7 +330,7 @@ function detailRow(row, table) {
   // the header and to every row and not to this, and the raised detail panel
   // stopped two columns short of its own row with the page background showing
   // through under Provider and Marks.
-  const span = table.columns.length + 3 +
+  const span = table.columns.length + 4 + (table.groups_tested ? 1 : 0) +
     (coverageVaries(table) ? 1 : 0) + (table.has_words ? 1 : 0);
   return `<tr class="detail" hidden><td colspan="${span}">${parts.join('')}</td></tr>`;
 }
@@ -507,6 +521,23 @@ function renderTable(table, index) {
     `${esc(tr(c.label))}` +
     `<span class="scale">${esc(c.scale)}</span>` +
     `</button></th>`).join('');
+  // The order and, where it has been tested, the group. Place is the mean of
+  // the row's places over the instrument's columns; Group is what the tested
+  // comparisons separate. Neither is a measure and neither is in `columns`,
+  // so nothing that walks the columns -- the legend, the grid, the per-section
+  // detail -- can mistake either for something a judge said about a note.
+  const tested = table.groups_tested;
+  const placeHead =
+    `<th scope="col" class="place" data-sort="place" title="${T`Place in this table's order: the
+      mean of the row's places over the instrument's columns, every column counting once. Ties
+      share a place.`}"><button type="button">${T`Place`}</button></th>` +
+    (tested
+      ? `<th scope="col" class="group" data-sort="group" title="${T`What the evidence separates:
+          a system stands above another only when it is at least as good on every column under
+          both judges in ${tested.threshold.toFixed(2)} of the resampled conversations. Systems no
+          tested comparison separates share a group.`}"><button type="button">${
+          T`Group`}</button></th>`
+      : '');
   // A caveat that belongs to the instrument rather than to the column was
   // printed under every column that instrument owns: PDSQI-9's 47 words, eight
   // times, in one legend -- 376 words saying one thing. Where every column of
@@ -534,29 +565,24 @@ function renderTable(table, index) {
     }
     return head +
       `<div class="measure"><dt>${esc(tr(c.label))} <span class="scale">${esc(c.scale)}</span>` +
-      (c.ranking ? `<span class="ranks">${T`ranks this table`}</span>` : '') +
+      (c.anchored ? `<span class="ranks">${T`checked against people`}</span>` : '') +
       `</dt><dd>${esc(tr(c.definition))}` +
       (c.caveat && shared[c.instrument] !== c.caveat
         ? ` <em>${esc(tr(c.caveat))}</em>` : '') +
       (c.key === 'completeness' ? denominatorNote(table) : '') + `</dd></div>`;
   }).join('') + extraLegend(table);
-  // Said under the table either way. A table with no grouping measured must not
-  // read as a strict ranking just because nobody has checked.
-  const groupNote =
-    // Two cases, and the sentence used to fit one of them. A table with a
-    // ranking measure and no bootstrap has a gradient to read roughly. A table
-    // with no ranking measure is alphabetical, and telling a reader to read
-    // *that* as roughly who is near the top is telling them to read the
-    // alphabet as merit. What it is not told is "there is nothing to order
-    // them by": there is a comparison that could, and it has not been tested.
-    table.ranking_measure
-      ? `<p class="note">${T`<strong>Which of these can be told apart has not been measured
-           for this table.</strong> Read the order as roughly who is near the top and
-           near the bottom, not as a ranking: two adjacent rows are not a result.`}</p>`
-      : `<p class="note">${T`<strong>These rows are in alphabetical order.</strong> The
-           columns measure different things and the source paper found they disagree, and
-           the comparison that could order them &mdash; at least as good on every column
-           under both judges &mdash; has not been tested yet. Read each column on its own.`}</p>`;
+  // Said under the table either way. Where the comparisons have been tested
+  // the sentence says what they separate; where they have not, it says so
+  // rather than letting adjacent places read as a result.
+  const groupNote = tested
+    ? `<p class="note">${T`<strong>Group</strong> is what the evidence separates: a system stands
+         above another only when it is at least as good on every column under both judges in
+         ${tested.threshold.toFixed(2)} of ${tested.samples} resampled conversations.
+         ${tested.layers.length} group(s) for ${tested.systems.length} systems;
+         ${tested.undominated.length} of them beaten by no tested comparison
+         (<a href="methods.html#groups">how the comparisons were tested</a>).`}</p>`
+    : `<p class="note">${T`<strong>Which of these the evidence separates has not been tested for
+         this table.</strong> Read adjacent places as an order, not as a result.`}</p>`;
 
   // Why *this* column orders the table, and not one of the other ten. Asked by
   // the first reader who looked: the page said which column ranks and never
@@ -631,26 +657,43 @@ function renderTable(table, index) {
         <strong>${anchor.margin.point}</strong> (${anchor.margin.low} to ${anchor.margin.high}).`
     : ' ' + T`<strong>That lead is ${anchor.margin.point} (${anchor.margin.low} to
         ${anchor.margin.high} when the ${anchor.notes} notes are resampled), so under this judge
-        it does not clear zero.</strong> The column keeps the job because it is still the only one
-        with a human anchor at all &mdash; but on this judge's table, being closer to a therapist
-        than they are to each other is not something these notes establish.`;
+        it does not clear zero.</strong> It stays the only column with a human anchor at all
+        &mdash; but on this judge's table, being closer to a therapist than they are to each
+        other is not something these notes establish.`;
 
-  const rankingNote = !table.ranking_measure
-    ? TS(table.not_ranked_reason)
+  // Three sentences, all read off the payload: how the rows are ordered and
+  // what another weighting would do; then which column, if any, has been
+  // checked against people -- the sentence that used to justify the order and
+  // now qualifies one column of it.
+  const ordering = table.ordering;
+  const sens = ordering.sensitivity;
+  const labelOf = {};
+  table.rows.forEach(r => { labelOf[r.system_id] = r.label; });
+  const firstAny = sens.first_under_any.map(s => `<code>${esc(labelOf[s] || s)}</code>`).join(', ');
+  const orderingNote = T`Ordered by <strong>mean place</strong> over the ${ordering.columns.length}
+    columns of this instrument, every column counting once &mdash; a convention, not a
+    measurement: the columns do not predict each other. Under the other weightings tried (each
+    column counted twice, and the reference rows removed) first place is held by ${firstAny}; at
+    most ${sens.most_moved} of ${sens.n_systems} systems change place and none by more than
+    ${sens.furthest} (<a href="methods.html#ordering">how the order was built</a>). Ties share a
+    place.`;
+  const anchorLabel = table.anchor_measure ? esc(colLabel(table, table.anchor_measure)) : '';
+  const anchorNote = !table.anchor_measure
+    ? T`<strong>No column of this table has been checked against people</strong>: nobody has rated
+       these notes on this instrument.`
     : anchor
-    ? T`Ordered by <strong>${esc(colLabel(table, table.ranking_measure))}</strong>, because it is the
-       only column checked against people: the judge and a trained therapist agree at
-       <strong>${anchor.judge}</strong> where two therapists reach <strong>${anchor.humans}</strong>
-       (${anchor.stat}). On the 1&#8211;5 ratings TN-Eval published beside that rubric, those two
-       therapists reach only ${anchor.scales} (${anchor.scaleStat}) &mdash; too little to rank on.
-       Both are computed here from TN-Eval's own annotations over ${anchor.notes} notes;
-       <a href="methods.html#calibration">how this was measured</a>. Every other column is context
-       and is not a ranking.${marginClause}`
-    : T`Ordered by <strong>${esc(colLabel(table, table.ranking_measure))}</strong>, because it is the
-       only column with a human anchor at all. <strong>This judge's agreement with the two
-       therapists is not published here</strong>, so the figure that belongs in this sentence is
-       missing rather than borrowed from another judge. Every other column is context and is
-       not a ranking.`;
+    ? T`Only one column here is checked against people: <strong>${anchorLabel}</strong>. The judge
+       and a trained therapist agree on it at <strong>${anchor.judge}</strong> where two therapists
+       reach <strong>${anchor.humans}</strong> (${anchor.stat}); on the 1&#8211;5 ratings TN-Eval
+       published beside that rubric, those two therapists reach only ${anchor.scales}
+       (${anchor.scaleStat}). Both are computed here from TN-Eval's own annotations over
+       ${anchor.notes} notes; <a href="methods.html#calibration">how this was measured</a>. It
+       counts once in the order above, like every other column.${marginClause}`
+    : T`Only one column here has a human anchor at all: <strong>${anchorLabel}</strong>.
+       <strong>This judge's agreement with the two therapists is not published here</strong>, so
+       the figure that belongs in this sentence is missing rather than borrowed from another
+       judge. It counts once in the order above, like every other column.`;
+  const rankingNote = orderingNote + ' ' + anchorNote;
 
   const showCoverage = coverageVaries(table);
 
@@ -769,14 +812,30 @@ function renderTable(table, index) {
       ? `<td>${row.note_words ?? '<span class="dash">—</span>'}</td>`
       : '';
 
-    return `<tr class="system"` +
+    // The place, with its mean in the tooltip; a dash, with the reason, where
+    // the row is missing a column and could not be placed. And the group, only
+    // where the table has tested groups at all; a dash where the system is
+    // outside the compared population.
+    const placeCells =
+      (row.place === null || row.place === undefined
+        ? `<td class="place"><span class="dash" title="${T`Not placed: ${
+            esc((row.unplaced_because || []).join(', '))} not measured for this row.`}">—</span></td>`
+        : `<td class="place" title="${T`mean place ${row.mean_place}`}">${row.place}</td>`) +
+      (tested
+        ? (row.group === null || row.group === undefined
+            ? `<td class="group"><span class="dash" title="${T`Outside the compared population:
+                a column is missing under one of the two judges.`}">—</span></td>`
+            : `<td class="group">${row.group}</td>`)
+        : '');
+
+    return `<tr class="system${row.group === 1 ? ' undominated' : ''}"` +
       ` data-row="${index}-${position}" data-type="${row.system_type}"` +
       // The row opens a panel, so it is a control: reachable by keyboard and
       // announcing whether it is open. Every figure beside it is announced with
       // the system's name now, because the name is the row's header cell.
       ` tabindex="0" role="button" aria-expanded="false">
         <th scope="row" class="name"><span class="arrow">▸</span>${esc(row.label)}${effortMark}${chip}</th>
-        ${cells}${wordsCell}${showCoverage ? `<td>${coverage}</td>` : ''}${providerCell}${marksCell}
+        ${placeCells}${cells}${wordsCell}${showCoverage ? `<td>${coverage}</td>` : ''}${providerCell}${marksCell}
       </tr>` + detailRow(row, table);
   }).join('');
 
@@ -787,10 +846,9 @@ function renderTable(table, index) {
       ${compareNote}
       <div id="switch" class="switch"></div>
       <div class="scroll-top" aria-hidden="true"><div></div></div>
-      <div class="scroll"><table data-table="${index}" data-sorted="${
-        table.ranking_measure || ''}" data-descending="1">
+      <div class="scroll"><table data-table="${index}" data-sorted="place" data-descending="1">
         <thead><tr><th scope="col" class="name" data-sort="label"><button type="button">${
-            T`System`}</button></th>${head}${table.has_words
+            T`System`}</button></th>${placeHead}${head}${table.has_words
             ? `<th scope="col" data-sort="note_words" title="${T`Median words in this model’s notes. Completeness counts coverage, so a longer note covers more.`}"><button type="button">${T`Words`}</button></th>`
             : ''}${showCoverage
               ? `<th scope="col" data-sort="coverage" title="${T`Notes written of notes asked
@@ -854,6 +912,10 @@ function sortBy(table, key) {
     if (key === 'provider') return (row.provider || '').toLowerCase();
     if (key === 'coverage') return -row.n_generated;
     if (key === 'note_words') return -(row.note_words ?? -Infinity);
+    // Smallest is best on these two, so they are not negated: a first place
+    // sorts to the top on the first click like a best score does.
+    if (key === 'place') return row.place ?? Infinity;
+    if (key === 'group') return row.group ?? Infinity;
     const score = row.headline[key];
     return score === undefined || score === null ? Infinity : -score;
   };
@@ -894,7 +956,9 @@ function markSorted(table) {
   // largest, so the flag and the direction agree. On the two text columns they
   // do not: `value()` returns the name itself, so "best first" is A to Z --
   // which was announced to a screen reader, and drawn, as descending.
-  const text = key === 'label' || key === 'provider';
+  // Place and Group count up from the best, so "best first" is ascending on
+  // them too.
+  const text = key === 'label' || key === 'provider' || key === 'place' || key === 'group';
   const best = table.dataset.descending === '1';
   const how = best !== text ? 'descending' : 'ascending';
   table.querySelectorAll('th[data-sort]').forEach(th => {
@@ -1110,7 +1174,8 @@ function rosterNote() {
 function agreementNote(track) {
   const found = (DATA.concordance || {})[track];
   if (!found || !found.measures || !found.measures.length) return '';
-  const ranking = found.measures.find(m => m.measure === found.ranking_measure)
+  const ranking = found.measures.find(m =>
+      m.measure === (found.anchor_measure || found.summary_measure))
     || found.measures[0];
   if (!ranking || ranking.rho === null) return '';
 
@@ -1135,16 +1200,19 @@ function agreementNote(track) {
     ? T` — <code>${esc(far.system)}</code> furthest, ${here}${ordinal(here)} on
              ${measure} under this judge and ${there}${ordinal(there)} under that one`
     : '';
-  // And the closing clause is about a table that is ordered. Where it is not,
-  // the sentence above it has already said so and this must not contradict it.
-  const supports = drawn.ranking_measure
-    ? T` — so the top and the bottom are claims this table supports, ninth against tenth
-         is not.`
-    : T` — which is why this table is not ordered by any of them.`;
+  const supports = T` — so the top and the bottom are claims this table supports; adjacent
+         places are not.`;
+  // And the order itself, now that there is one: how far the two judges agree
+  // on the mean places, which is a different question from any one column.
+  const onOrder = found.ordering && found.ordering.rho !== null && found.ordering.rho !== undefined
+    ? ' ' + T`On the order itself the two judges agree at Spearman
+        ${found.ordering.rho.toFixed(2)}: ${found.ordering.moved} of ${found.ordering.n_systems}
+        systems hold a different place under the other judge.`
+    : '';
   return `<p class="note">${T`<strong>The two judges agree on the shape of this ranking and not
     on its order.</strong> On ${measure},
     ${ranking.moved} of ${ranking.n_systems} systems land somewhere else under
-    <code>${esc(other)}</code>${furthest}${supports}`}</p>`;
+    <code>${esc(other)}</code>${furthest}${supports}${onOrder}`}</p>`;
 }
 
 // 1st, 2nd, 3rd, 4th. Only ever applied to a rank, so the teens are the whole

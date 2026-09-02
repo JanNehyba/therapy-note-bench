@@ -101,36 +101,46 @@ def test_a_column_with_no_documented_scale_fails_loudly():
 
 
 @pytest.mark.parametrize("track", sorted(report.COLUMNS))
-def test_the_table_is_ordered_by_the_measure_it_says_it_is_ordered_by(track):
-    """One declaration, not three. The claim and the sort read the same constant."""
-    declared = report.RANKING_MEASURES[track]
-    if declared is None:
-        return  # iCARE declines to rank; the sort falls back and claims nothing
+def test_the_table_is_ordered_by_mean_place_and_flags_only_the_anchor(track):
+    """One rule for every track, and one flag: the column checked against people."""
+    from tnb.scoring import composite
 
-    flagged = [key for key, _ in report.COLUMNS[track] if report.column_meta(track, key)["ranking"]]
-    assert flagged == [declared]
+    assert report.ORDERINGS[track] == composite.RULE
+    anchored = [
+        key for key, _ in report.COLUMNS[track] if report.column_meta(track, key)["anchored"]
+    ]
+    expected = report.ANCHORED_MEASURES[track]
+    assert anchored == ([expected] if expected else [])
 
-    def row(system_id: str, value: float) -> results.Row:
+    def row(system_id: str, level: float) -> results.Row:
         return results.Row(
             track=track,
             system_id=system_id,
             system_type="model",
             n_sessions_attempted=1,
-            metrics=results.Metrics(headline={declared: value}),
+            metrics=results.Metrics(
+                headline={
+                    key: level * (5 if digits == 2 else 1) for key, digits in report.COLUMNS[track]
+                }
+            ),
         )
 
     better, worse = row("better", 0.9), row("worse", 0.1)
-    ordered = sorted([worse, better], key=lambda row: report._sort_key(row, track))
+    ordering = composite.order(
+        {r.system_id: dict(r.metrics.headline) for r in (better, worse)}, report.COLUMNS[track]
+    )
+    ordered = sorted([worse, better], key=lambda row: report._sort_key(row, ordering))
     assert [row.system_id for row in ordered] == ["better", "worse"]
 
 
-def test_the_icare_track_does_not_claim_a_ranking():
-    """Its columns disagree on purpose; naming one the ranking would hide that."""
-    assert report.RANKING_MEASURES[results.TRACK_ICARE] is None
-    assert not any(
-        report.column_meta(results.TRACK_ICARE, key)["ranking"]
-        for key, _ in report.COLUMNS[results.TRACK_ICARE]
-    )
+def test_no_column_is_anchored_where_no_human_rated_the_notes():
+    """iCARE's TRACE and PDSQI-9 have no human beside them on these notes, and
+    the page must not let a reader assume otherwise."""
+    for track in (results.TRACK_ICARE, results.TRACK_PDSQI):
+        assert report.ANCHORED_MEASURES[track] is None
+        assert not any(
+            report.column_meta(track, key)["anchored"] for key, _ in report.COLUMNS[track]
+        )
 
 
 def test_a_row_written_under_the_old_measure_name_is_repaired_on_read():
@@ -219,15 +229,16 @@ def test_every_column_a_table_draws_carries_a_caveat():
     assert not silent, f"drawn in a table with an empty caveat: {silent}"
 
 
-def test_the_ranking_column_says_what_it_cannot_see():
-    """The caveat that has to travel furthest, because it travels with an order."""
-    for track, measure in report.RANKING_MEASURES.items():
+def test_the_anchored_column_says_what_it_cannot_see():
+    """The caveat that has to travel furthest: this column is the one a reader
+    takes for quality, because it is the one checked against people."""
+    for track, measure in report.ANCHORED_MEASURES.items():
         if measure is None:
             continue
         caveat = report.MEASURE_TABLES[track][measure]["caveat"]
         assert "checklist" in caveat or "coverage" in caveat, (
-            f"{track} is ordered by {measure} and its caveat does not say what "
-            f"the ordering cannot see"
+            f"{track}'s anchored column {measure} has a caveat that does not say what "
+            f"the column cannot see"
         )
 
 

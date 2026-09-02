@@ -25,7 +25,7 @@ from pathlib import Path
 from tnb import corpus, i18n, judge, results
 from tnb.config import REPO_ROOT, write_published
 from tnb.results import Row
-from tnb.scoring import concordance, pdsqi
+from tnb.scoring import calibration, composite, concordance, edges, pdsqi
 from tnb.scoring import icare as icare_scorer
 from tnb.scoring import tneval as rubric
 from tnb.tasks import icare, soap
@@ -142,31 +142,29 @@ MEASURE_TABLES = {
     results.TRACK_PDSQI: pdsqi.MEASURES,
 }
 
-#: Which measure each track is ranked by, and the honest `None` where the
-#: project refuses to rank.
-#:
-#: iCARE is `None` on purpose: its three columns are reported side by side
-#: *because they disagree*, and naming one of them the ranking would publish a
-#: claim the methodology declines to make. `_sort_key` reads this, so what the
-#: page says it ranks by and what it is actually sorted by cannot drift apart.
-RANKING_MEASURES: dict[str, str | None] = {
+#: Every table is ordered the same way: by the mean of each system's places over
+#: the columns of its own instrument (`scoring.composite`). One rule for all
+#: three tracks, named per track so that a fourth track has to say so here.
+ORDERINGS: dict[str, str] = {
+    results.TRACK_TNEVAL: composite.RULE,
+    results.TRACK_ICARE: composite.RULE,
+    results.TRACK_PDSQI: composite.RULE,
+}
+
+#: The one column per track that has been checked against people, or None.
+#: This used to be the sort key. It orders nothing now -- the order is a mean
+#: of places over every column -- but it is still the only column with a human
+#: anchor, and the page says so beside it rather than letting a reader assume
+#: the whole table has one.
+ANCHORED_MEASURES: dict[str, str | None] = {
     results.TRACK_TNEVAL: rubric.RANKING_MEASURE,
-    results.TRACK_ICARE: None,
-    # Also None, and for the instrument's own reason: PDSQI-9's authors report
-    # its attributes separately, and a mean of seven 1-5 ratings with a yes/no
-    # would be a composite nobody validated.
+    results.TRACK_ICARE: icare_scorer.RANKING_MEASURE,
+    # None for the instrument's own reason: nobody has rated these notes on
+    # PDSQI-9, so no column of it has a human beside it.
     results.TRACK_PDSQI: pdsqi.RANKING_MEASURE,
 }
 
 
-#: Why a track without a ranking column has none. Rendered under the table.
-#:
-#: **Two tracks are unranked for two different reasons**, and the page used to
-#: print iCARE's under both: "the source paper found they disagree", which is
-#: true of iCARE, is not a statement anybody made about PDSQI-9. The reasons
-#: were written as comments beside `RANKING_MEASURES` and never reached a
-#: reader.
-#:
 #: Unranked tracks whose rows are ordered by dominance instead of by name.
 #:
 #: Empty. iCARE and PDSQI-9 were ordered this way for one day, 2026-09-01, and
@@ -178,25 +176,6 @@ RANKING_MEASURES: dict[str, str | None] = {
 #: with nothing breaking ties; an empty set is a truer statement of what is
 #: ordered by dominance today than a deleted one.
 DOMINANCE_ORDERED: frozenset[str] = frozenset()
-
-#: A track whose `RANKING_MEASURES` entry is None and which is missing here
-#: falls back to iCARE's sentence, which is how the wrong one got everywhere;
-#: `tests/test_report.py` holds every unranked track to having its own.
-NOT_RANKED_REASONS: dict[str, str] = {
-    results.TRACK_ICARE: (
-        "<strong>No column ranks this track</strong>: its columns measure different "
-        "things and the source paper found they disagree, and that disagreement is "
-        "the result. The rows are in alphabetical order until the comparison that "
-        "could order them &mdash; at least as good on every column under both "
-        "judges &mdash; has been tested; what is known about it is on the methods "
-        "page."
-    ),
-    results.TRACK_PDSQI: (
-        "This track is deliberately <strong>not ranked</strong>: PDSQI-9's authors "
-        "report its attributes separately, and a mean of them would be a composite "
-        "nobody validated."
-    ),
-}
 
 
 #: What the expandable row's second block holds, per track. It is not the same
@@ -339,7 +318,7 @@ def column_meta(track: str, key: str) -> dict:
         "scale": meta["scale"],
         "definition": definition,
         "caveat": caveat,
-        "ranking": key == RANKING_MEASURES.get(track),
+        "anchored": key == ANCHORED_MEASURES.get(track),
     }
 
 
@@ -730,32 +709,35 @@ LICENCES = [
 ]
 
 
-def _sort_key(row: Row, track: str):
-    """Best first on the track's leading metric; unscored and unmeasured last.
+def _placed(group: list[Row], track: str) -> tuple[dict, dict, dict | None]:
+    """The order of one table, its sensitivity, and the tested groups if they exist.
 
-    A track whose `RANKING_MEASURES` entry is None declines to be ranked -- the
-    iCARE columns measure different things and the source paper found they
-    disagree. The fallback to the first column overrode that refusal and sorted
-    it by ROUGE-L anyway, so a page saying "deliberately not ranked" printed a
-    ranking.
+    The order is `composite.order` over the scored rows' headlines. The groups
+    are the layers of `docs/edges-<track>.json`, and they are absent -- not
+    empty -- when that artefact has not been built, so nothing downstream can
+    draw a group nobody tested.
+    """
+    scores = {row.system_id: dict(row.metrics.headline) for row in group if row.is_scored}
+    ordering = composite.order(scores, COLUMNS[track])
+    reference = [row.system_id for row in group if row.is_scored and row.system_type != "model"]
+    sensitivity = composite.sensitivity(scores, COLUMNS[track], reference=reference)
+    return ordering, sensitivity, edges.load(track)
 
-    An unmeasured row sorts with the unscored rather than as 0.0. Reading a
-    missing measure as the worst possible score published `mistral-large-v2`
-    last on a measure nobody had computed for it.
+
+def _sort_key(row: Row, ordering: dict):
+    """Placed rows by place, then scored rows no place could be given, then unscored.
+
+    An unplaced row is one missing a column -- a measure nobody computed for it
+    -- and it sorts after the placed rows, in name order, rather than as the
+    worst score: reading a missing measure as 0.0 once published
+    `mistral-large-v2` last on a measure nobody had computed for it.
     """
     if not row.is_scored:
-        return (2, 0.0, 0.0, row.system_id)
-    leading = RANKING_MEASURES.get(track)
-    if leading is None:
-        # Alphabetical, and said to be, until the comparison that could order
-        # these rows has been tested. `DOMINANCE_ORDERED` is where that turns
-        # back on; the middle bucket is kept free for rows a tested comparison
-        # could not place, so the shape of the key does not change again.
-        return (0, 0.0, 0.0, row.system_id)
-    value = row.metrics.headline.get(leading)
-    if value is None:
-        return (2, 0.0, 0.0, row.system_id)
-    return (0, -float(value), 0.0, row.system_id)
+        return (2, 0, 0.0, row.system_id)
+    placed = ordering["systems"].get(row.system_id)
+    if placed is None:
+        return (1, 0, 0.0, row.system_id)
+    return (0, placed["place"], placed["mean_place"], row.system_id)
 
 
 def _ordered_sections(names: list[str]) -> list[str]:
@@ -1231,9 +1213,20 @@ def build(
         track = versions["track"]
         if track not in COLUMNS:
             continue
+        ordering, sensitivity, tested = _placed(group, track)
+        group_of = {
+            system: number
+            for number, layer in enumerate((tested or {}).get("layers") or [], start=1)
+            for system in layer
+        }
         rendered = [
-            _render_row(row, withdrawn=withdrawn)
-            for row in sorted(group, key=lambda r: _sort_key(r, track))
+            _render_row(
+                row,
+                withdrawn=withdrawn,
+                ordering=ordering,
+                groups=group_of if tested else None,
+            )
+            for row in sorted(group, key=lambda r: _sort_key(r, ordering))
         ]
         tables.append(
             {
@@ -1288,19 +1281,42 @@ def build(
                     }
                     for key_, digits in COLUMNS[track]
                 ],
-                "ranking_measure": RANKING_MEASURES.get(track),
-                "detail_label": DETAIL_LABELS.get(track, "Rubric criteria"),
-                # Only where there is one. `.get(track, <iCARE's>)` gave every
-                # ranked table iCARE's sentence -- "this track is deliberately
-                # not ranked: its columns measure different things and the
-                # source paper found they disagree" -- which is false of the
-                # SOAP tables and sat in the published JSON, where the guard
-                # that keeps it off the page does not reach.
+                # How the rows are ordered and what the choice does. A place is
+                # a statement about this table, never about a note: it is not a
+                # measure and it never enters a headline.
+                "ordering": {
+                    "rule": ordering["rule"],
+                    "columns": ordering["columns"],
+                    "placed": len(ordering["systems"]),
+                    "unplaced": [
+                        {"system_id": system, "missing": missing}
+                        for system, missing in sorted(ordering["unplaced"].items())
+                    ],
+                    "sensitivity": sensitivity,
+                },
+                # The one column checked against people, if any. Not the sort
+                # key any more; still the only anchor, and named as that.
+                "anchor_measure": ANCHORED_MEASURES.get(track),
+                # The layers of the tested dominance graph -- only where the
+                # artefact exists. A table without this key draws no Group
+                # column, and a Group column is never drawn from an untested
+                # relation: that was built and taken down once already.
                 **(
-                    {"not_ranked_reason": NOT_RANKED_REASONS[track]}
-                    if RANKING_MEASURES.get(track) is None
+                    {
+                        "groups_tested": {
+                            "layers": tested["layers"],
+                            "undominated": tested["undominated"],
+                            "threshold": tested["threshold"],
+                            "samples": tested["samples"],
+                            "counts": tested["counts"],
+                            "systems": tested["systems"],
+                            "source": edges.artefact_path(track).name,
+                        }
+                    }
+                    if tested
                     else {}
                 ),
+                "detail_label": DETAIL_LABELS.get(track, "Rubric criteria"),
                 "rows": rendered,
                 # Drawn only where something to show exists. A column of empty
                 # cells is worse than no column: it reads as missing data rather
@@ -1490,9 +1506,27 @@ def _judges_own_family(row: Row) -> str:
     return family if family and family_of(row.system_id) == family else ""
 
 
-def _render_row(row: Row, *, withdrawn: dict[tuple[str, str], str] | None = None) -> dict:
+def _render_row(
+    row: Row,
+    *,
+    withdrawn: dict[tuple[str, str], str] | None = None,
+    ordering: dict | None = None,
+    groups: dict[str, int] | None = None,
+) -> dict:
+    placed = ((ordering or {}).get("systems") or {}).get(row.system_id)
     return {
         "system_id": row.system_id,
+        # Where this row sits in its table's order, and the places it is the
+        # mean of. None for a row missing a column, which is then named in
+        # `unplaced_because` rather than placed last.
+        "place": placed["place"] if placed else None,
+        "mean_place": placed["mean_place"] if placed else None,
+        "places": placed["places"] if placed else None,
+        "unplaced_because": ((ordering or {}).get("unplaced") or {}).get(row.system_id),
+        # The tested group, present only when the table has groups at all. A
+        # system outside the compared population -- missing a column under
+        # either judge -- carries None and the page says why.
+        **({"group": groups.get(row.system_id)} if groups is not None else {}),
         # The day an endpoint was asked for this model and did not offer it.
         # Absent for every row where that has not happened, which is not the
         # same as a row that was checked and is fine: `roster` being absent
@@ -1547,14 +1581,6 @@ def _render_row(row: Row, *, withdrawn: dict[tuple[str, str], str] | None = None
 
 
 # --- README -----------------------------------------------------------------
-
-
-def _ranking_label(table: dict) -> str:
-    """The heading of the column a table is ordered by, read from the table."""
-    for column in table["columns"]:
-        if column["key"] == table["ranking_measure"]:
-            return column["label"]
-    return table["ranking_measure"] or ""
 
 
 def _readme_tables(data: dict) -> tuple[list[dict], list[dict]]:
@@ -1619,7 +1645,10 @@ def render_readme_section(data: dict) -> str:
 
         columns = table["columns"]
         multi_provider = len({row["provider"] for row in models}) > 1
-        header = ["Model"]
+        grouped = bool(table.get("groups_tested"))
+        header = ["Place", "Model"]
+        if grouped:
+            header.append("Group")
         if multi_provider:
             header.append("Provider")
         # The range goes in the heading. This table puts a 0-1 fraction beside a
@@ -1638,7 +1667,9 @@ def render_readme_section(data: dict) -> str:
             "|" + "---|" * len(header),
         ]
         for row in models:
-            cells = [f"`{row['label']}`"]
+            cells = ["—" if row["place"] is None else str(row["place"]), f"`{row['label']}`"]
+            if grouped:
+                cells.append("—" if row.get("group") is None else str(row["group"]))
             if multi_provider:
                 cells.append(row["provider"])
             for column in columns:
@@ -1666,37 +1697,7 @@ def render_readme_section(data: dict) -> str:
         # nobody scrolls, so a column that must not be read as a ranking says so
         # right here, under the numbers it applies to.
         lines.append("")
-        if table["ranking_measure"]:
-            # A sort, not a rank, and said with the number that shows why: how
-            # many neighbouring rows differ by less than the paired bootstrap
-            # can tell apart. README was the one view drawing this order with
-            # no band beside it and a caveat forty lines above the table.
-            values = [
-                row["headline"].get(table["ranking_measure"])
-                for row in models
-                if row["headline"].get(table["ranking_measure"]) is not None
-            ]
-            gaps = [abs(a - b) for a, b in zip(values, values[1:], strict=False)]
-            close = sum(1 for gap in gaps if gap < 0.005)
-            near = sum(1 for gap in gaps if gap < 0.02)
-            caveat = (
-                f"*Sorted by **{_ranking_label(table)}** under this judge — a sort, not a rank: "
-                f"{close} of the {len(gaps)} gaps between neighbouring rows are under 0.005 and "
-                f"{near} under 0.02, and which rows the evidence actually separates is on the "
-                f"[methods page]({SITE_URL}methods.html#saturation). Every other column is "
-                "context.*"
-            )
-        else:
-            # Alphabetical, and why. Not "nothing to order them by": there is a
-            # comparison that could -- at least as good on every column under
-            # both judges -- and it has not been tested, which is a different
-            # sentence and the true one.
-            caveat = (
-                "*Not ordered: no column ranks this track, and the comparison that could "
-                "order it — at least as good on every column under both judges — has not "
-                "been tested. Rows are alphabetical; read each column on its own.*"
-            )
-        lines.append(caveat)
+        lines.append(_order_caveat(table))
         # A caveat every column of one instrument shares is that instrument's,
         # not the column's. PDSQI-9's 47 words were repeated under all eight of
         # its columns here, exactly as they were on the page. Said once, in the
@@ -1752,6 +1753,47 @@ def render_readme_section(data: dict) -> str:
         f"what the two judges disagree about."
     )
     return "\n\n".join(blocks)
+
+
+def _order_caveat(table: dict) -> str:
+    """The order, the groups and the anchor, in three sentences under the table.
+
+    Every figure in them is read off the payload the table was drawn from --
+    the sensitivity block, the tested groups and the anchor -- so the README and
+    the page cannot say different things about the same rows.
+    """
+    ordering = table["ordering"]
+    sens = ordering["sensitivity"]
+    labels = {row["system_id"]: row["label"] for row in table["rows"]}
+    first = ", ".join(f"`{labels.get(s, s)}`" for s in sens["first_under_any"])
+    parts = [
+        f"*Ordered by **mean place** over the {len(ordering['columns'])} columns of this "
+        f"instrument, every column counting once — a convention, not a measurement: the columns "
+        f"do not predict each other. Under the other weightings tried (each column counted twice, "
+        f"and the reference rows removed) first place is held by {first}; at most "
+        f"{sens['most_moved']} of {sens['n_systems']} systems change place and none by more than "
+        f"{sens['furthest']} ([how the order was built]({SITE_URL}methods.html#ordering)). Places "
+        f"are among all {len(table['rows'])} rows of the table, the reference systems included, "
+        f"so the models' places can have gaps.*"
+    ]
+    tested = table.get("groups_tested")
+    if tested:
+        parts.append(
+            f"*Group: what the evidence separates. A system stands above another only when it is "
+            f"at least as good on every column under both judges in {tested['threshold']:.2f} of "
+            f"the resampled conversations; {len(tested['layers'])} group(s) for "
+            f"{len(tested['systems'])} systems, {len(tested['undominated'])} of them beaten by no "
+            f"tested comparison ([how the comparisons were tested]"
+            f"({SITE_URL}methods.html#groups)).*"
+        )
+    anchor = table.get("anchor_measure")
+    if anchor:
+        label = next((c["label"] for c in table["columns"] if c["key"] == anchor), anchor)
+        parts.append(
+            f"***{label}** is the only column checked against people; it counts once in the "
+            f"order, like every other.*"
+        )
+    return " ".join(parts)
 
 
 def _judge_line(table: dict) -> str:
@@ -1828,9 +1870,15 @@ def _scored_cell(row: dict) -> str:
     A model that wrote every note but is half-way through being judged must not
     read as a model that failed to write them.
     """
-    if row["n_scored"] >= row["n_generated"]:
-        return f"{row['n_scored']}"
-    return f"{row['n_scored']} of {row['n_generated']} *(judging)*"
+    if row["n_scored"] < row["n_generated"]:
+        return f"{row['n_scored']} of {row['n_generated']} *(judging)*"
+    # Started is not finished. A note the judge began and left part-answered is
+    # out of the figures, and a cell saying 50 over a figure computed from 44
+    # was the README's version of the denominator fault this repository keeps
+    # finding.
+    if row.get("n_partial"):
+        return f"{row['n_complete']} of {row['n_scored']} *({row['n_partial']} part-answered)*"
+    return f"{row['n_scored']}"
 
 
 def update_readme(
@@ -1889,6 +1937,11 @@ def write(rows: list[Row], *, docs_dir: Path | None = None, readme: Path | None 
     data["roster"] = load_roster(docs_dir)
     data["judges"] = _load_json(docs_dir / JUDGES_PATH.name)
     data["preference"] = _load_json(docs_dir / PREFERENCE_PATH.name)
+    # The tested comparisons, whole, for the methods page; the tables carry
+    # only the layers.
+    data["edges"] = {
+        track: found for track in COLUMNS if (found := edges.load(track, docs_dir)) is not None
+    }
     # Computed here rather than cached in docs/, because it is a statement about
     # the rows being rendered right now. A stale copy of "the judges disagree
     # about 11 of 19" beside a table where they no longer do is worse than none.
@@ -1901,6 +1954,11 @@ def write(rows: list[Row], *, docs_dir: Path | None = None, readme: Path | None 
     # under the rubric's three columns and under PDSQI-9's eight.
     for track, found in data["concordance"].items():
         found["instrument"] = INSTRUMENT_LABELS.get(track, track)
+        # How far the two judges agree on the order the page now draws, which
+        # is a different question from how they agree on any one column.
+        found["ordering"] = _ordering_agreement(
+            data["tables"], track, found["judge_a"], found["judge_b"]
+        )
 
     docs_dir.mkdir(parents=True, exist_ok=True)
     write_published(
@@ -1982,11 +2040,50 @@ def concordance_payload(rows: list[Row], **overrides) -> dict:
                     track,
                     COLUMNS[track],
                     judge_measures=JUDGE_MEASURES.get(track),
-                    ranking_measure=RANKING_MEASURES.get(track),
+                    anchor_measure=ANCHORED_MEASURES.get(track),
                     **overrides,
                 )
             )
         )
+    }
+
+
+def _ordering_agreement(tables: list[dict], track: str, judge_a: str, judge_b: str) -> dict | None:
+    """Spearman between the two judges' mean places, how many systems hold a
+    different place under the two, and who moved furthest -- over the systems
+    both judges placed. None until both tables exist."""
+    by_judge: dict[str, dict[str, dict]] = {}
+    for table in tables:
+        judge_model = table["versions"].get("judge_model")
+        if table["track"] != track or not table["scored"] or judge_model not in (judge_a, judge_b):
+            continue
+        by_judge[judge_model] = {
+            row["system_id"]: row for row in table["rows"] if row.get("place") is not None
+        }
+    if judge_a not in by_judge or judge_b not in by_judge:
+        return None
+    shared = sorted(set(by_judge[judge_a]) & set(by_judge[judge_b]))
+    if len(shared) < 3:
+        return None
+    rho = calibration.spearman(
+        [by_judge[judge_a][s]["mean_place"] for s in shared],
+        [by_judge[judge_b][s]["mean_place"] for s in shared],
+    )
+    moved = [s for s in shared if by_judge[judge_a][s]["place"] != by_judge[judge_b][s]["place"]]
+    furthest = max(
+        shared, key=lambda s: abs(by_judge[judge_a][s]["place"] - by_judge[judge_b][s]["place"])
+    )
+    return {
+        "rho": None if rho is None else round(rho, 3),
+        "n_systems": len(shared),
+        "moved": len(moved),
+        "furthest": {
+            "system": by_judge[judge_a][furthest]["label"],
+            "place_a": by_judge[judge_a][furthest]["place"],
+            "place_b": by_judge[judge_b][furthest]["place"],
+        }
+        if moved
+        else None,
     }
 
 

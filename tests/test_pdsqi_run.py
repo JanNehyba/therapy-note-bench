@@ -145,7 +145,7 @@ def test_the_page_knows_how_to_draw_the_track_it_was_given():
     for table in (
         report.COLUMNS,
         report.MEASURE_TABLES,
-        report.RANKING_MEASURES,
+        report.ORDERINGS,
         report.JUDGE_MEASURES,
         report.TRACK_TITLES,
         report.TRACK_SWITCH_LABELS,
@@ -159,8 +159,8 @@ def test_the_columns_are_the_instruments_own_eight_and_nothing_averaged():
     keys = [key for key, _ in report.COLUMNS[results.TRACK_PDSQI]]
 
     assert keys == list(pdsqi.ATTRIBUTE_KEYS)
-    assert report.RANKING_MEASURES[results.TRACK_PDSQI] is None, (
-        "the instrument's authors report the attributes separately"
+    assert report.ANCHORED_MEASURES[results.TRACK_PDSQI] is None, (
+        "nobody has rated these notes on the instrument, so no column has a human anchor"
     )
 
 

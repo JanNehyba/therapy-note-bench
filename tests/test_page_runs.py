@@ -806,7 +806,7 @@ def test_the_sentence_under_the_table_names_this_table_s_rank_first(tmp_path):
 
     data = _page_data(tmp_path)
     found = data["concordance"][results.TRACK_TNEVAL]
-    ranking = next(m for m in found["measures"] if m["measure"] == found["ranking_measure"])
+    ranking = next(m for m in found["measures"] if m["measure"] == found["anchor_measure"])
     far = ranking["furthest"]
     assert far and far["rank_a"] != far["rank_b"], "the fixture must have a system that moved"
 
@@ -1571,7 +1571,7 @@ def test_the_table_says_what_earned_the_ranking_column_its_job(tmp_path):
     )
     host = _flat(_run(report.render_page(data), tmp_path, panel="table-host"))
 
-    assert "only column checked against people" in host
+    assert "checked against people" in host
     assert "0.61" in host and "0.50" in host, "the reader needs the two numbers, not the claim"
     assert "0.13" in host and "0.19" in host, "and the ceiling on the scales it did not pick"
     assert "0.52" not in host, "that is the other judge's agreement, and this is not its table"
@@ -1590,9 +1590,7 @@ def test_the_table_says_which_column_is_sorting_it_from_the_first_paint(tmp_path
     data = report.build([_row("x", "a-judge", 0.5)])
     host = _flat(_run(report.render_page(data), tmp_path, panel="table-host"))
 
-    ranking = data["tables"][0]["ranking_measure"]
-    assert ranking, "this fixture is meant to have a ranking column"
-    assert f'data-sorted="{ranking}"' in host, "the table does not say what sorted it"
+    assert 'data-sorted="place"' in host, "the table does not say what sorted it"
     assert 'data-descending="1"' in host, "and which way round"
     assert 'class="ranks"' not in host.split("<tbody>")[0], "the badge outlived its job"
 
@@ -1811,6 +1809,9 @@ def test_the_leaderboard_draws_no_band_column_and_the_payload_keeps_the_bands(tm
         "a Band cell is still drawn on the leaderboard"
     )
     assert "share a Band" not in drawn and "Band on" not in drawn
-    assert "Which of these can be told apart" in drawn, (
-        "with the band column gone the table must still say the order is not a ranking"
-    )
+    # With the band column gone the table still says what separates the rows:
+    # the tested groups where docs/edges-<track>.json exists, and that nothing
+    # has been tested where it does not.
+    assert (
+        "beaten by no tested comparison" in drawn or "has not been tested for this table" in drawn
+    ), "with the band column gone the table must still say what the evidence separates"

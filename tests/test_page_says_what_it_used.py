@@ -42,51 +42,19 @@ def _row(track: str, **overrides) -> Row:
     return Row(**{**base, **overrides})
 
 
-UNRANKED = [track for track, measure in report.RANKING_MEASURES.items() if measure is None]
-
-
-def test_every_unranked_track_says_why_in_its_own_words():
-    """Two tracks carry no ranking column for two different reasons, and the
-    page printed iCARE's under both: "the source paper found they disagree" is
-    true of iCARE and is not a statement anybody has made about PDSQI-9.
-
-    The reasons were written as comments beside `RANKING_MEASURES` and never
-    reached a reader."""
-    assert UNRANKED, "nothing is unranked, so this test is watching nothing"
-    missing = [track for track in UNRANKED if track not in report.NOT_RANKED_REASONS]
-    assert not missing, f"unranked tracks falling back to iCARE's reason: {missing}"
-
-    icare = report.NOT_RANKED_REASONS[results.TRACK_ICARE]
-    borrowed = [
-        track
-        for track in UNRANKED
-        if track != results.TRACK_ICARE and report.NOT_RANKED_REASONS[track] == icare
-    ]
-    assert not borrowed, f"tracks printing iCARE's reason as their own: {borrowed}"
-
-
-@pytest.mark.parametrize("track", sorted(report.RANKING_MEASURES))
-def test_a_tables_reason_reaches_the_payload(track):
-    """The map is only half of it: the renderer reads `not_ranked_reason` off
-    the table, so a table without one draws nothing where the sentence goes.
-
-    And a table that *is* ranked must carry none. This asked every table for one
-    and `.get(track, <iCARE's>)` obliged, so both SOAP tables published "this
-    track is deliberately not ranked: its columns measure different things and
-    the source paper found they disagree" in `docs/leaderboard.json`, about a
-    table ordered by completeness, under the iCARE paper's reasoning. The page
-    guards on `ranking_measure` and never drew it; the JSON is published too and
-    has no guard.
-    """
+@pytest.mark.parametrize("track", sorted(report.ORDERINGS))
+def test_every_table_carries_its_order_and_names_its_anchor(track):
+    """The renderer reads `ordering` and `anchor_measure` off the table. A table
+    without the first would draw no order and a table without the second would
+    let the reader assume every column was checked against people; the JSON is
+    published too and has no guard, so both are held here."""
     data = report.build([_row(track)])
     for table in data["tables"]:
-        if report.RANKING_MEASURES.get(table["track"]) is None:
-            assert table.get("not_ranked_reason"), f"{table['track']} carries no reason"
-        else:
-            assert "not_ranked_reason" not in table, (
-                f"{table['track']} is ranked and carries a reason for not being ranked: "
-                f"{table.get('not_ranked_reason')!r}"
-            )
+        assert table["ordering"]["rule"] == "mean_place", f"{table['track']} names no order"
+        assert set(table["ordering"]) >= {"columns", "placed", "unplaced", "sensitivity"}
+        assert table["anchor_measure"] == report.ANCHORED_MEASURES[table["track"]]
+        for gone in ("ranking_measure", "not_ranked_reason"):
+            assert gone not in table, f"{table['track']} still carries {gone}"
         assert table.get("detail_label"), f"{table['track']} carries no detail heading"
 
 

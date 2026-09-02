@@ -238,7 +238,7 @@ def test_a_trade_off_between_two_columns_is_reported_as_a_trade_off():
     )
 
     result = concordance.compare(
-        rows, results.TRACK_TNEVAL, MEASURES, ranking_measure="completeness"
+        rows, results.TRACK_TNEVAL, MEASURES, anchor_measure="completeness"
     )
     tension = next(
         t for t in result.tensions if {t.first, t.second} == {"completeness", "faithfulness"}
@@ -272,7 +272,7 @@ def test_a_tension_the_two_judges_read_differently_is_not_resolved_for_the_reade
     )
 
     result = concordance.compare(
-        rows, results.TRACK_TNEVAL, MEASURES, ranking_measure="completeness"
+        rows, results.TRACK_TNEVAL, MEASURES, anchor_measure="completeness"
     )
     sentence = concordance.describe(result)
 
@@ -290,11 +290,11 @@ def test_measures_that_do_agree_are_not_reported_as_a_tension():
     )
 
     result = concordance.compare(
-        rows, results.TRACK_TNEVAL, MEASURES, ranking_measure="completeness"
+        rows, results.TRACK_TNEVAL, MEASURES, anchor_measure="completeness"
     )
 
     assert all(t.agrees for t in result.tensions)
-    assert "Ordering by" not in concordance.describe(result)
+    assert "says little" not in concordance.describe(result)
 
 
 def test_a_measure_no_judge_decides_is_left_out_of_the_agreement():

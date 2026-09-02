@@ -135,6 +135,166 @@ _STATIC = {
 #: Sentences written in the page script, keyed by their English with numbered
 #: holes. Read the module docstring for why a hole may go unused.
 _SENTENCES = {
+    # -- the order and the groups -------------------------------------------
+    "Place": "Místo",
+    "Group": "Skupina",
+    "Place by column": "Místo po sloupcích",
+    "checked against people": "ověřeno proti lidem",
+    "mean place {0}": "průměrné místo {0}",
+    "not placed: {0}": "bez místa: {0}",
+    "Not placed: {0} not measured for this row.": "Bez místa: {0} u tohoto řádku neměřeno.",
+    "Outside the compared population: a column is missing under one of the two judges.": (
+        "Mimo porovnávanou populaci: u jednoho ze dvou hodnotitelů chybí sloupec."
+    ),
+    "Place in this table's order: the mean of the row's places over the instrument's columns,"
+    " every column counting once. Ties share a place.": (
+        "Místo v pořadí této tabulky: průměr míst řádku přes sloupce nástroje, každý sloupec "
+        "počítá jednou. Remízy sdílejí místo."
+    ),
+    "What the evidence separates: a system stands above another only when it is at least as good"
+    " on every column under both judges in {0} of the resampled conversations. Systems no tested"
+    " comparison separates share a group.": (
+        "Co důkazy oddělí: systém stojí nad jiným jen tehdy, když je aspoň tak dobrý v každém "
+        "sloupci u obou hodnotitelů v {0} převzorkovaných rozhovorů. Systémy, které žádné "
+        "otestované porovnání neoddělí, sdílejí skupinu."
+    ),
+    "Mean place {0}, which is where this row's place of {1} comes from. Ties share a place.": (
+        "Průměrné místo {0}, z něhož vychází místo {1} tohoto řádku. Remízy sdílejí místo."
+    ),
+    "No place: {0} was not measured for this row, and a mean over fewer columns would be a"
+    " different quantity.": (
+        "Bez místa: {0} nebylo u tohoto řádku měřeno a průměr přes méně sloupců by byl jiná "
+        "veličina."
+    ),
+    "Ordered by <strong>mean place</strong> over the {0} columns of this instrument, every column"
+    " counting once &mdash; a convention, not a measurement: the columns do not predict each"
+    " other. Under the other weightings tried (each column counted twice, and the reference rows"
+    " removed) first place is held by {1}; at most {2} of {3} systems change place and none by"
+    ' more than {4} (<a href="methods.html#ordering">how the order was built</a>). Ties share a'
+    " place.": (
+        "Seřazeno podle <strong>průměrného místa</strong> přes {0} sloupců tohoto nástroje, "
+        "každý sloupec počítá jednou &mdash; konvence, ne měření: sloupce se navzájem "
+        "nepředpovídají. Při ostatních vyzkoušených vahách (každý sloupec počítán dvakrát a "
+        "odebrané referenční řádky) drží první místo {1}; místo změní nejvýš {2} z {3} systémů "
+        'a žádný o víc než {4} (<a href="methods.html#ordering">jak pořadí vzniklo</a>). '
+        "Remízy sdílejí místo."
+    ),
+    "<strong>Group</strong> is what the evidence separates: a system stands above another only"
+    " when it is at least as good on every column under both judges in {0} of {1} resampled"
+    " conversations. {2} group(s) for {3} systems; {4} of them beaten by no tested comparison"
+    ' (<a href="methods.html#groups">how the comparisons were tested</a>).': (
+        "<strong>Skupina</strong> je to, co důkazy oddělí: systém stojí nad jiným jen tehdy, když "
+        "je aspoň tak dobrý v každém sloupci u obou hodnotitelů v {0} z {1} převzorkování "
+        "rozhovorů. {2} skupin pro {3} systémů; {4} z nich neporazí žádné otestované porovnání "
+        '(<a href="methods.html#groups">jak se porovnání testovala</a>).'
+    ),
+    "<strong>Which of these the evidence separates has not been tested for this table.</strong>"
+    " Read adjacent places as an order, not as a result.": (
+        "<strong>Které z nich důkazy oddělí, nebylo u této tabulky testováno.</strong> Čtěte "
+        "sousední místa jako pořadí, ne jako výsledek."
+    ),
+    "<strong>No column of this table has been checked against people</strong>: nobody has rated"
+    " these notes on this instrument.": (
+        "<strong>Žádný sloupec této tabulky nebyl ověřen proti lidem</strong>: tyto zápisy na "
+        "tomto nástroji nikdo nehodnotil."
+    ),
+    "Only one column here is checked against people: <strong>{0}</strong>. The judge and a"
+    " trained therapist agree on it at <strong>{1}</strong> where two therapists reach"
+    " <strong>{2}</strong> ({3}); on the 1&#8211;5 ratings TN-Eval published beside that rubric,"
+    " those two therapists reach only {4} ({5}). Both are computed here from TN-Eval's own"
+    ' annotations over {6} notes; <a href="methods.html#calibration">how this was measured</a>.'
+    " It counts once in the order above, like every other column.{7}": (
+        "Proti lidem je tu ověřený jediný sloupec: <strong>{0}</strong>. Hodnotitel a školený "
+        "terapeut se na něm shodnou na <strong>{1}</strong> tam, kde se dva terapeuti shodnou na "
+        "<strong>{2}</strong> ({3}); na hodnoceních 1&#8211;5, která TN-Eval zveřejnil vedle té "
+        "rubriky, dosáhnou titíž dva terapeuti jen {4} ({5}). Obojí je spočítané zde z anotací "
+        'TN-Evalu přes {6} zápisů; <a href="methods.html#calibration">jak se to měřilo</a>. '
+        "V pořadí výše počítá jednou, jako každý jiný sloupec.{7}"
+    ),
+    "Only one column here has a human anchor at all: <strong>{0}</strong>. <strong>This judge's"
+    " agreement with the two therapists is not published here</strong>, so the figure that"
+    " belongs in this sentence is missing rather than borrowed from another judge. It counts"
+    " once in the order above, like every other column.": (
+        "Lidskou kotvu tu má vůbec jediný sloupec: <strong>{0}</strong>. <strong>Shoda tohoto "
+        "hodnotitele s oběma terapeuty tu není publikovaná</strong>, takže číslo, které do této "
+        "věty patří, chybí — místo aby se půjčilo od jiného hodnotitele. V pořadí výše počítá "
+        "jednou, jako každý jiný sloupec."
+    ),
+    "On the order itself the two judges agree at Spearman {0}: {1} of {2} systems hold a"
+    " different place under the other judge.": (
+        "Na samotném pořadí se oba hodnotitelé shodnou při Spearmanově {0}: {1} z {2} systémů má "
+        "u druhého hodnotitele jiné místo."
+    ),
+    # -- the methods page: how the order was built ------------------------------
+    "Every table is ordered the same way. On each column of its instrument every system is"
+    " placed 1st, 2nd, &hellip; at the precision the table prints, so two rows that print the"
+    " same figure share a place; the places are averaged with every column counting once; and"
+    " the rows are ordered by that mean, ties sharing a place. That equal weight is the one"
+    " convention the order embeds. The rows below recompute the order with each column counted"
+    " twice and with the reference rows removed, and say who is first under each, how many"
+    " systems change place, the furthest any moves, and Spearman against the equal-weight"
+    " order.": (
+        "Každá tabulka je seřazená stejně. Na každém sloupci svého nástroje je každý systém "
+        "umístěn jako 1., 2., &hellip; na přesnosti, kterou tabulka tiskne, takže dva řádky se "
+        "stejnou vytištěnou hodnotou sdílejí místo; místa se průměrují, každý sloupec počítá "
+        "jednou; a řádky se řadí podle toho průměru, remízy sdílejí místo. Ta stejná váha je "
+        "jediná konvence, kterou pořadí nese. Řádky níže pořadí přepočítávají s každým sloupcem "
+        "počítaným dvakrát a s odebranými referenčními řádky a říkají, kdo je při každé variantě "
+        "první, kolik systémů změní místo, o kolik nejvýš se některý posune a Spearmanovu "
+        "korelaci proti pořadí se stejnými vahami."
+    ),
+    "No ordered table yet.": "Zatím žádná seřazená tabulka.",
+    "every column once": "každý sloupec jednou",
+    "reference rows removed ({0})": "odebrané referenční řádky ({0})",
+    "{0} counted twice": "{0} počítáno dvakrát",
+    "{0} pair(s) reversed": "{0} dvojic prohozeno",
+    "{0} systems placed over {1} columns{2}.": "{0} systémů umístěno přes {1} sloupců{2}.",
+    "Weighting": "Váhy",
+    "First": "První",
+    "Second": "Druhý",
+    "Moved": "Posunuto",
+    "Furthest": "Nejdál",
+    "The two judges' orders on this track agree at Spearman <strong>{0}</strong> over {1}"
+    " systems; {2} hold a different place under the other judge{3}.": (
+        "Pořadí obou hodnotitelů na této trati se shodují při Spearmanově <strong>{0}</strong> "
+        "přes {1} systémů; {2} z nich má u druhého hodnotitele jiné místo{3}."
+    ),
+    "<code>{0}</code> furthest ({1} under <code>{2}</code>, {3} under <code>{4}</code>)": (
+        "<code>{0}</code> nejdál ({1} u <code>{2}</code>, {3} u <code>{4}</code>)"
+    ),
+    # -- the methods page: which comparisons survive ------------------------------
+    "A system beats another outright when it is at least as good on every column of one"
+    " instrument under both judges and strictly better somewhere. Each such claim is tested"
+    " whole: every (judge, column) pair is a leg, and all legs are resampled together over the"
+    " conversations both systems were scored on, paired. The claim holds in a draw when the"
+    " winner is at least as good on every leg and ahead on one; it is kept when it holds in the"
+    " stated share of draws. What survives is layered into the Group column: group 1 is beaten"
+    " by no kept claim, group 2 only by group 1, and nothing breaks a tie.": (
+        "Systém porazí jiný na plné čáře, když je aspoň tak dobrý v každém sloupci jednoho "
+        "nástroje u obou hodnotitelů a někde přísně lepší. Každé takové tvrzení se testuje celé: "
+        "každá dvojice (hodnotitel, sloupec) je jedna noha a všechny nohy se převzorkují "
+        "společně přes rozhovory, na nichž byly oba systémy obodovány, párově. Tvrzení v jednom "
+        "tahu drží, když je vítěz aspoň tak dobrý na každé noze a na jedné napřed; ponechá se, "
+        "když drží v uvedeném podílu tahů. Co přežije, se navrství do sloupce Skupina: skupinu 1 "
+        "neporazí žádné ponechané tvrzení, skupinu 2 jen skupina 1, a remízy nic nerozřazuje."
+    ),
+    "No comparison has been tested yet.": "Zatím nebylo otestováno žádné porovnání.",
+    "{0} claim(s) on the stored means, {1} tested over {2} draws each; {3}; {4} untestable.": (
+        "{0} tvrzení na uložených průměrech, {1} otestováno, každé přes {2} tahů; {3}; "
+        "{4} netestovatelných."
+    ),
+    "{0} hold at {1}": "{0} drží při {1}",
+    "Groups: {0}": "Skupiny: {0}",
+    "kept": "drží",
+    "not kept": "nedrží",
+    "Winner": "Vítěz",
+    "Loser": "Poražený",
+    "Shared": "Sdíleno",
+    "Holds in": "Drží v",
+    "At {0}": "Při {0}",
+    "Thinnest leg": "Nejtenčí noha",
+    "Completeness alone": "Jen úplnost",
+    "Untestable: {0}.": "Netestovatelné: {0}.",
     # -- one row, opened ----------------------------------------------------
     "{0} of this system's notes are still being judged.": (
         "U tohoto systému se ještě hodnotí {0} z jeho zápisů."
@@ -300,40 +460,13 @@ _SENTENCES = {
         "na stránce s metodikou"
     ),
     "judge's own {0}": "stejný dodavatel jako hodnotitel: {0}",
-    "ranks this table": "řadí tuto tabulku",
     # -- the sentences under the grid ----------------------------------------
-    "<strong>Which of these can be told apart has not been measured for this table.</strong>"
-    " Read the order as roughly who is near the top and near the bottom, not as a ranking: two"
-    " adjacent rows are not a result.": (
-        "<strong>U této tabulky nebylo změřeno, které systémy od sebe lze rozlišit.</strong> "
-        "Čtěte to pořadí jen zhruba jako to, kdo je blízko vrcholu a kdo blízko dna, ne jako "
-        "žebříček: dva sousední řádky nejsou výsledek."
-    ),
     "Reference group — the {0} systems neither judge's vendor wrote: {1}.": (
         "Referenční skupina — {0} systémů, které nenapsal dodavatel ani jednoho z hodnotitelů: {1}."
     ),
     "{0} are in it under a name their model family does not share, and pull the answer toward"
     " zero.": (
         "{0} v ní jsou pod jménem, které jejich rodina modelů nesdílí, a táhnou odpověď k nule."
-    ),
-    "Ordered by <strong>{0}</strong>, because it is the only column checked against people: the"
-    " judge and a trained therapist agree at <strong>{1}</strong> where two therapists reach"
-    " <strong>{2}</strong> ({3}). On the 1&#8211;5 ratings TN-Eval published beside that rubric,"
-    " those two therapists reach only {4} ({5}) &mdash; too little to rank on. Both are computed"
-    " here from TN-Eval's own annotations over {6} notes; <a"
-    ' href="methods.html#calibration">how this was measured</a>. Every other column is context and'
-    " is not a ranking.{7}": (
-        "Seřazeno podle sloupce <strong>{0}</strong>, protože je to jediný sloupec ověřený proti "
-        "lidem: hodnotitel a školený terapeut se na něm shodnou na <strong>{1}</strong> tam, kde "
-        "se dva terapeuti shodnou na <strong>{2}</strong> ({3}). Na hodnoceních 1&#8211;5, která "
-        "TN-Eval zveřejnil vedle té rubriky, dosáhnou titíž dva terapeuti jen {4} ({5}) &mdash; "
-        "na řazení je to málo. Obojí je spočítané zde z anotací TN-Evalu přes {6} zápisů; "
-        '<a href="methods.html#calibration">jak se to měřilo</a>. Každý další sloupec je kontext, '
-        # {7} is the clause about the lead over the therapists' own agreement.
-        # Left out of this value while it was added to the key, so the Czech
-        # page drew the sentence and silently dropped the finding at the end of
-        # it -- which is the one thing that separates the two judges here.
-        "ne žebříček.{7}"
     ),
     # The size of that lead, and what it does when the notes are resampled.
     # Under one of the two published judges it does not clear zero, and at two
@@ -342,22 +475,13 @@ _SENTENCES = {
         "Po převzorkování {0} zápisů je ten náskok <strong>{1}</strong> ({2} až {3})."
     ),
     "<strong>That lead is {0} ({1} to {2} when the {3} notes are resampled), so under this judge"
-    " it does not clear zero.</strong> The column keeps the job because it is still the only one"
-    " with a human anchor at all &mdash; but on this judge's table, being closer to a therapist"
-    " than they are to each other is not something these notes establish.": (
+    " it does not clear zero.</strong> It stays the only column with a human anchor at all"
+    " &mdash; but on this judge's table, being closer to a therapist than they are to each"
+    " other is not something these notes establish.": (
         "<strong>Ten náskok je {0} ({1} až {2} při převzorkování {3} zápisů), takže u tohoto "
-        "hodnotitele nepřekročí nulu.</strong> Sloupec si tu roli drží proto, že je pořád jediný "
-        "s jakýmkoli lidským ukotvením &mdash; ale v tabulce tohoto hodnotitele není to, že by byl "
+        "hodnotitele nepřekročí nulu.</strong> Zůstává jediným sloupcem s jakýmkoli lidským "
+        "ukotvením &mdash; ale v tabulce tohoto hodnotitele není to, že by byl "
         "blíž terapeutovi než oni sobě navzájem, něco, co by tyto zápisy prokázaly."
-    ),
-    "Ordered by <strong>{0}</strong>, because it is the only column with a human anchor at all."
-    " <strong>This judge's agreement with the two therapists is not published here</strong>, so"
-    " the figure that belongs in this sentence is missing rather than borrowed from another"
-    " judge. Every other column is context and is not a ranking.": (
-        "Seřazeno podle sloupce <strong>{0}</strong>, protože je to jediný sloupec, který má "
-        "vůbec lidskou kotvu. <strong>Shoda tohoto hodnotitele s oběma terapeuty tu není "
-        "publikovaná</strong>, takže číslo, které do téhle věty patří, chybí — místo aby se "
-        "půjčilo od jiného hodnotitele. Každý další sloupec je kontext, ne žebříček."
     ),
     # What the endpoints served the last time anyone asked. A row nobody can
     # ask again and a model nobody has asked yet are two different silences,
@@ -544,25 +668,9 @@ _SENTENCES = {
     # No column ranks it, and the rows are alphabetical until the comparison
     # that could order them has been tested. Not "nothing to order them by":
     # that was said, and it was not true.
-    "<strong>No column ranks this track</strong>: its columns measure different things and the"
-    " source paper found they disagree, and that disagreement is the result. The rows are in"
-    " alphabetical order until the comparison that could order them &mdash; at least as good on"
-    " every column under both judges &mdash; has been tested; what is known about it is on the"
-    " methods page.": (
-        "<strong>Tuto větev neřadí žádný sloupec</strong>: její sloupce měří různé věci a "
-        "zdrojový článek zjistil, že si odporují — a ten rozpor je ten výsledek. Řádky jsou "
-        "v abecedním pořadí, dokud nebude otestované porovnání, které by je seřadit mohlo "
-        "&mdash; aspoň tak dobrý v každém sloupci u obou hodnotitelů &mdash;; co se o něm ví, "
-        "je na stránce s metodikou."
-    ),
     # The other two reasons a track carries no ranking column. All three used
     # to be the sentence above, which is a statement about the iCARE paper and
     # was drawn under the Czech and PDSQI tables as well.
-    "This track is deliberately <strong>not ranked</strong>: PDSQI-9's authors report its"
-    " attributes separately, and a mean of them would be a composite nobody validated.": (
-        "Tato větev <strong>záměrně nemá pořadí</strong>: autoři PDSQI-9 vykazují jeho "
-        "atributy odděleně a průměr z nich by byl souhrn, který nikdo nevalidoval."
-    ),
     "{0} · notes answered": "{0} · zodpovězených zápisů",
     "mean words per note": "průměrný počet slov na zápis",
     # -- what a note here is scored against -----------------------------------
@@ -597,29 +705,16 @@ _SENTENCES = {
         "u toho druhého"
     ),
     "<strong>The two judges agree on the shape of this ranking and not on its order.</strong> On"
-    " {0}, {1} of {2} systems land somewhere else under <code>{3}</code>{4}{5}": (
+    " {0}, {1} of {2} systems land somewhere else under <code>{3}</code>{4}{5}{6}": (
         "<strong>Oba hodnotitelé se shodnou na tvaru tohoto pořadí, ne na konkrétním sledu "
         "příček.</strong> Na sloupci {0} se pod hodnotitelem <code>{3}</code> umístí jinam {1} "
-        "z {2} systémů{4}{5}"
+        "z {2} systémů{4}{5}{6}"
     ),
-    "— so the top and the bottom are claims this table supports, ninth against tenth is not.": (
-        " — blízko vrcholu a blízko dna jsou tvrzení, která tato tabulka unese, devátý proti "
-        "desátému ne."
+    "— so the top and the bottom are claims this table supports; adjacent places are not.": (
+        " — blízko vrcholu a blízko dna jsou tvrzení, která tato tabulka unese; sousední místa ne."
     ),
     # Drawn instead of the clause above where the table has no ranking column,
     # because there it would contradict the sentence directly above it.
-    "— which is why this table is not ordered by any of them.": (
-        " — a právě proto není tato tabulka podle žádného z nich seřazená."
-    ),
-    "<strong>These rows are in alphabetical order.</strong> The columns measure different things"
-    " and the source paper found they disagree, and the comparison that could order them &mdash;"
-    " at least as good on every column under both judges &mdash; has not been tested yet. Read"
-    " each column on its own.": (
-        "<strong>Tyto řádky jsou v abecedním pořadí.</strong> Sloupce měří různé věci a zdrojový "
-        "článek zjistil, že si odporují, a porovnání, které by je seřadit mohlo &mdash; aspoň tak "
-        "dobrý v každém sloupci u obou hodnotitelů &mdash; zatím není otestované. Čtěte každý "
-        "sloupec zvlášť."
-    ),
     "No runs yet": "Zatím žádný běh",
     "The first run will populate this page.": "První běh tuto stránku naplní.",
     # -- what a row is, when it is not a model --------------------------------
@@ -992,6 +1087,10 @@ _METHODS = {
         "<strong>Proč zrovna tito dva hodnotitelé, a ne ty nejnovější modely</strong>"
     ),
     "methods.saturation.summary": "<strong>Zbývá vůbec co měřit?</strong>",
+    "methods.ordering.summary": (
+        "<strong>Jak je každá tabulka seřazená a co by udělaly jiné váhy</strong>"
+    ),
+    "methods.groups.summary": ("<strong>Která porovnání přežijí převzorkování rozhovorů</strong>"),
     "methods.saturation.figure": (
         "Jak velkou část rozsahu každé míry modely skutečně obsadí. Vlevo: jeden pruh na každé "
         "kritérium rubriky, od nejhoršího modelu k nejlepšímu, s vyznačeným terapeutem. Vpravo: "

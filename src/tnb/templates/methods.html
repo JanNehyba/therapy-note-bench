@@ -39,6 +39,16 @@ __STYLE__
 
   <div class="box" id="concordance"></div>
 
+  <details class="box" open id="ordering">
+    <summary data-t="methods.ordering.summary"><strong>How each table is ordered, and what another weighting would do</strong></summary>
+    <div id="ordering-body"></div>
+  </details>
+
+  <details class="box" open id="groups">
+    <summary data-t="methods.groups.summary"><strong>Which comparisons survive resampling the conversations</strong></summary>
+    <div id="groups-body"></div>
+  </details>
+
   <details class="box" open id="saturation">
     <summary data-t="methods.saturation.summary"><strong>Is there anything left to measure?</strong></summary>
     <figure class="wide">__FIGURE_ROOM_LEFT__
@@ -150,7 +160,8 @@ const VERDICT_LABEL = {
 // contain it, which a reader can check in two clicks.
 function asTheTableShows(judgeModel, system, measure) {
   const table = (DATA.tables || []).find(t =>
-    t.versions && t.versions.judge_model === judgeModel && t.ranking_measure === measure);
+    t.versions && t.versions.judge_model === judgeModel &&
+    (t.columns || []).some(c => c.key === measure));
   if (!table) return null;
   // The id first and the label only as a fallback. The saturation payload
   // names a system `mistral-large-v2` where the table's label is
@@ -1179,7 +1190,120 @@ if ((DATA.superseded || []).length) {
   document.getElementById('withdrawn').remove();
 }
 
+// The order of every table, and what the other weightings do to it. One
+// block per scored table, read off `table.ordering`; the pair of judges'
+// agreement on the order read off the concordance.
+function renderOrdering(data) {
+  const box = document.getElementById('ordering-body');
+  if (!box) return;
+  const labelIn = (table, key) => ((table.columns || []).find(c => c.key === key) || {}).label || key;
+  const tables = (data.tables || []).filter(t => t.scored && t.ordering);
+  if (!tables.length) { box.innerHTML = `<p class="note">${T`No ordered table yet.`}</p>`; return; }
+  const parts = [`<p>${T`Every table is ordered the same way. On each column of its instrument
+    every system is placed 1st, 2nd, &hellip; at the precision the table prints, so two rows
+    that print the same figure share a place; the places are averaged with every column
+    counting once; and the rows are ordered by that mean, ties sharing a place. That equal
+    weight is the one convention the order embeds. The rows below recompute the order with
+    each column counted twice and with the reference rows removed, and say who is first under
+    each, how many systems change place, the furthest any moves, and Spearman against the
+    equal-weight order.`}</p>`];
+  const shown = new Set();
+  tables.forEach(table => {
+    const ordering = table.ordering, sens = ordering.sensitivity;
+    const labelOf = {};
+    table.rows.forEach(r => { labelOf[r.system_id] = r.label; });
+    const names = list => list.map(s => `<code>${esc(labelOf[s] || s)}</code>`).join(', ') || '—';
+    const rows = [
+      `<tr><td>${T`every column once`}</td><td>${names(sens.baseline.first)}</td>` +
+      `<td>${names(sens.baseline.second)}</td><td>—</td><td>—</td><td>—</td></tr>`,
+    ].concat(sens.variants.map(v => {
+      const what = v.name === 'models_only'
+        ? T`reference rows removed (${v.dropped.length})`
+        : T`${esc(labelIn(table, v.column))} counted twice`;
+      const moved = v.name === 'models_only'
+        ? T`${v.reversed_pairs} pair(s) reversed`
+        : `${v.moved}`;
+      return `<tr><td>${what}</td><td>${names(v.first)}</td><td>${names(v.second)}</td>` +
+        `<td>${moved}</td><td>${v.furthest === undefined ? '—' : v.furthest}</td>` +
+        `<td>${v.rho === null || v.rho === undefined ? '—' : v.rho.toFixed(2)}</td></tr>`;
+    }));
+    parts.push(`<h3>${tr(table.title)} · <code>${esc(table.versions.judge_model)}</code></h3>
+      <p class="note">${T`${ordering.placed} systems placed over ${ordering.columns.length}
+        columns${ordering.unplaced.length
+          ? '; ' + T`not placed: ${ordering.unplaced.map(u => esc(labelOf[u.system_id] || u.system_id)).join(', ')}`
+          : ''}.`}</p>
+      <div class="scroll"><table><thead><tr><th>${T`Weighting`}</th><th>${T`First`}</th>
+        <th>${T`Second`}</th><th>${T`Moved`}</th><th>${T`Furthest`}</th><th>ρ</th></tr></thead>
+        <tbody>${rows.join('')}</tbody></table></div>`);
+    const found = (data.concordance || {})[table.track];
+    if (found && found.ordering && !shown.has(table.track)) {
+      shown.add(table.track);
+      const o = found.ordering;
+      parts.push(`<p class="note">${T`The two judges' orders on this track agree at Spearman
+        <strong>${o.rho === null ? '—' : o.rho.toFixed(2)}</strong> over ${o.n_systems} systems;
+        ${o.moved} hold a different place under the other judge${o.furthest
+          ? ', ' + T`<code>${esc(o.furthest.system)}</code> furthest (${o.furthest.place_a} under
+              <code>${esc(found.judge_a)}</code>, ${o.furthest.place_b} under
+              <code>${esc(found.judge_b)}</code>)`
+          : ''}.`}</p>`);
+    }
+  });
+  box.innerHTML = parts.join('');
+}
+
+// Which "beats outright" claims survive resampling, from docs/edges-<track>.json.
+function renderGroups(data) {
+  const box = document.getElementById('groups-body');
+  if (!box) return;
+  const all = data.edges || {};
+  const order = [...new Set((data.tables || []).map(t => t.track))];
+  const tracks = Object.keys(all).sort((a, b) => order.indexOf(a) - order.indexOf(b));
+  if (!tracks.length) {
+    box.innerHTML = `<p class="note">${T`No comparison has been tested yet.`}</p>`;
+    return;
+  }
+  const parts = [`<p>${T`A system beats another outright when it is at least as good on every
+    column of one instrument under both judges and strictly better somewhere. Each such claim
+    is tested whole: every (judge, column) pair is a leg, and all legs are resampled together
+    over the conversations both systems were scored on, paired. The claim holds in a draw when
+    the winner is at least as good on every leg and ahead on one; it is kept when it holds in
+    the stated share of draws. What survives is layered into the Group column: group 1 is
+    beaten by no kept claim, group 2 only by group 1, and nothing breaks a tie.`}</p>`];
+  tracks.forEach(track => {
+    const found = all[track];
+    const holds = found.counts.holds || {};
+    const cuts = Object.keys(holds).sort();
+    parts.push(`<h3>${tr(((data.tables || []).find(t => t.track === track) || {}).title || track)}</h3>
+      <p class="note">${T`${found.counts.stored} claim(s) on the stored means, ${found.counts.tested}
+        tested over ${found.samples} draws each; ${cuts.map(c => T`${holds[c]} hold at ${c}`).join(', ')};
+        ${found.counts.untestable} untestable.`}</p>
+      <p class="note">${T`Groups: ${found.layers.map((layer, i) =>
+        `${i + 1}. ${layer.map(s => `<code>${esc(s)}</code>`).join(', ')}`).join(' · ')}`}</p>`);
+    if (found.edges.length) {
+      const rows = found.edges.slice().sort((a, b) => b.p_holds - a.p_holds).map(e =>
+        `<tr class="${e.holds ? 'holds' : 'fails'}"><td><code>${esc(e.winner)}</code></td>` +
+        `<td><code>${esc(e.loser)}</code></td><td>${e.n_shared}</td>` +
+        `<td>${e.p_holds.toFixed(3)}</td><td>${e.holds ? T`kept` : T`not kept`}</td>` +
+        `<td>${esc(e.thinnest.judge)} · ${esc(e.thinnest.column)} · ${e.thinnest.p_not_behind.toFixed(3)}</td>` +
+        `<td>${e.one_leg_completeness
+          ? Object.entries(e.one_leg_completeness).map(([j, p]) => `${esc(j.split('-')[0])} ${Number(p).toFixed(3)}`).join(', ')
+          : '—'}</td></tr>`).join('');
+      parts.push(`<div class="scroll"><table><thead><tr><th>${T`Winner`}</th><th>${T`Loser`}</th>
+        <th>${T`Shared`}</th><th>${T`Holds in`}</th><th>${T`At ${found.threshold.toFixed(2)}`}</th>
+        <th>${T`Thinnest leg`}</th><th>${T`Completeness alone`}</th></tr></thead>
+        <tbody>${rows}</tbody></table></div>`);
+    }
+    if (found.untestable.length) {
+      parts.push(`<p class="note">${T`Untestable: ${found.untestable.map(u =>
+        `<code>${esc(u.winner)}</code> › <code>${esc(u.loser)}</code> (${esc(u.why)})`).join('; ')}.`}</p>`);
+    }
+  });
+  box.innerHTML = parts.join('');
+}
+
 function drawAll() {
+  renderOrdering(DATA);
+  renderGroups(DATA);
   renderSaturation(DATA);
   renderTrackDesign(DATA);
   renderCorpora(DATA);
@@ -1195,6 +1319,8 @@ function drawAll() {
 renderJudges(DATA.judges);
 renderPreference(DATA.preference);
 renderConcordance(DATA.concordance);
+renderOrdering(DATA);
+renderGroups(DATA);
 
 // The slot was in the markup from the start and nothing ever filled it, so the
 // page carried an empty paragraph where it promises to say where its numbers

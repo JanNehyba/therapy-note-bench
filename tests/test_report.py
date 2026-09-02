@@ -38,7 +38,16 @@ def _scored(system_id: str, completeness: float, **overrides) -> Row:
         # produced. The tests that want that case pass `judge_settings=None`.
         "judge_settings": {"model": "claude-opus-5", "thinking_budget": 256},
         "n_sessions_scored": 50,
-        "metrics": Metrics(headline={"completeness": completeness}),
+        # Every column of the instrument, so the row can be placed: a fixture
+        # scoring one column is a row missing two, which the order names as
+        # unplaced and sorts after the rest.
+        "metrics": Metrics(
+            headline={
+                "completeness": completeness,
+                "conciseness": completeness,
+                "faithfulness": completeness * 5,
+            }
+        ),
     }
     return _row(system_id=system_id, **{**judged, **overrides})
 
@@ -173,7 +182,7 @@ def test_the_readme_shows_models_only_and_says_where_the_rest_is():
     # Look for the row, not the word. The column legend below the table explains
     # that two *therapists* rated these notes, and a bare substring check reads
     # that sentence as the therapist baseline having leaked into the table.
-    rows = [line for line in section.splitlines() if line.startswith("| `")]
+    rows = [line for line in section.splitlines() if line.startswith("| ") and "`" in line]
     named = {line.split("`")[1] for line in rows}
     assert named == {"gemma4"}
     assert "full leaderboard" in section
@@ -192,7 +201,9 @@ def test_the_readme_prints_a_dash_rather_than_a_zero_for_a_missing_score():
     row.metrics.headline.pop("conciseness", None)
     section = report.render_readme_section(report.build([row]))
 
-    line = next(line for line in section.splitlines() if line.startswith("| `gemma4`"))
+    line = next(
+        line for line in section.splitlines() if (line.startswith("| ") and "`gemma4`" in line)
+    )
     assert "0.610" in line, "the measure that exists is printed"
     assert "—" in line, "and the one that does not is a dash"
     assert "0.000" not in line
@@ -219,7 +230,13 @@ def test_a_measure_nobody_computed_does_not_sort_a_model_last():
     rows = [
         _scored("high", 0.7),
         unmeasured,
-        _scored("z-measured-zero", 0.0, metrics=Metrics(headline={"completeness": 0.0})),
+        _scored(
+            "z-measured-zero",
+            0.0,
+            metrics=Metrics(
+                headline={"completeness": 0.0, "conciseness": 0.0, "faithfulness": 1.0}
+            ),
+        ),
     ]
 
     labels = [row["label"] for row in report.build(rows)["tables"][0]["rows"]]

@@ -182,10 +182,11 @@ class Comparison:
     #: Which of `measures` a judge actually decides -- the ones the agreement
     #: figures above are computed over.
     judge_measures: tuple[str, ...] = ()
-    #: The column the table is ordered by, if it has one. Named so the summary
-    #: can report the tensions involving it rather than the numerically most
-    #: extreme pair, which is often one nobody is reading as a ranking.
-    ranking_measure: str | None = None
+    #: The column checked against people, if the track has one. Named so the
+    #: summary can report the tensions involving it rather than the numerically
+    #: most extreme pair: it is the column a reader is most likely to take for
+    #: "quality", now that no single column orders the table.
+    anchor_measure: str | None = None
 
     @property
     def any_ranking_support(self) -> bool:
@@ -326,7 +327,7 @@ def compare(
     judge_a: str = judge.DEFAULT_MODEL,
     judge_b: str = judge.SECOND_JUDGE,
     judge_measures: tuple[str, ...] | None = None,
-    ranking_measure: str | None = None,
+    anchor_measure: str | None = None,
 ) -> Comparison | None:
     """Read the panel's two judges' tables together, or None if either is absent.
 
@@ -446,7 +447,7 @@ def compare(
         judge_b=judge_b,
         tensions=tensions,
         judge_measures=tuple(compared),
-        ranking_measure=ranking_measure,
+        anchor_measure=anchor_measure,
         measures=agreements,
         dominance=sorted(dominance, key=lambda d: (-len(d.beats), d.system)),
         undominated=sorted(set(shared) - dominated),
@@ -527,9 +528,9 @@ def describe(comparison: Comparison) -> str:
     )
 
     # The reason there is no single winner, stated as the measurement rather
-    # than as a policy. Reported for the column the table is *ordered by*,
-    # because that is the one a reader is most likely to mistake for "quality".
-    if comparison.ranking_measure:
+    # than as a policy. Reported for the column checked against people, because
+    # that is the one a reader is most likely to mistake for "quality".
+    if comparison.anchor_measure:
         # Both the pairs that say nothing and the pairs that say the opposite.
         # A strongly inverse pair used to land in the first list and be
         # described as "says little", which is the sign read as weakness; with
@@ -540,12 +541,12 @@ def describe(comparison: Comparison) -> str:
         against = [
             t
             for t in comparison.tensions
-            if comparison.ranking_measure in (t.first, t.second)
+            if comparison.anchor_measure in (t.first, t.second)
             and t.rankable
             and (not t.agrees or t.inverse)
         ]
         for tension in against:
-            other = tension.second if tension.first == comparison.ranking_measure else tension.first
+            other = tension.second if tension.first == comparison.anchor_measure else tension.first
             readings = ", ".join(
                 f"`{judge_model}` {'--' if rho is None else format(rho, '+.2f')}"
                 for judge_model, rho in sorted(tension.rho_by_judge.items())
@@ -557,13 +558,14 @@ def describe(comparison: Comparison) -> str:
             split = len(found) > 1 and max(found) - min(found) >= 0.4
             if tension.inverse:
                 parts.append(
-                    f"Ordering by {comparison.ranking_measure} orders {other} in reverse "
-                    f"({readings}): the two are a trade-off, and collapsing them into one "
-                    "number means deciding which of them matters."
+                    f"{comparison.anchor_measure.capitalize()} orders {other} in reverse "
+                    f"({readings}): the two are a trade-off, and the mean of places that "
+                    "orders the table counts each of them once rather than deciding which "
+                    "matters."
                 )
                 continue
             parts.append(
-                f"Ordering by {comparison.ranking_measure} says "
+                f"{comparison.anchor_measure.capitalize()} says "
                 f"{'little' if not split else 'different things to the two judges'} about "
                 f"{other} ({readings})."
                 + (
@@ -576,6 +578,12 @@ def describe(comparison: Comparison) -> str:
     return " ".join(parts)
 
 
+def _summary_measure(comparison: Comparison) -> str | None:
+    """The rankable measure the two judges agree on best, or None if there is none."""
+    ranked = [m for m in comparison.measures if m.rho is not None and m.rankable]
+    return max(ranked, key=lambda m: m.rho).measure if ranked else None
+
+
 def to_json(comparison: Comparison | None) -> dict | None:
     """The shape the page reads."""
     if comparison is None:
@@ -583,7 +591,10 @@ def to_json(comparison: Comparison | None) -> dict | None:
     return {
         "judge_a": comparison.judge_a,
         "judge_b": comparison.judge_b,
-        "ranking_measure": comparison.ranking_measure,
+        "anchor_measure": comparison.anchor_measure,
+        # The column the summary's first sentence is about, so a page quoting
+        # the agreement figure names the column it belongs to.
+        "summary_measure": _summary_measure(comparison),
         "judge_measures": list(comparison.judge_measures),
         "n_systems": comparison.n_systems,
         "summary": describe(comparison),

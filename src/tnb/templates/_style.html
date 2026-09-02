@@ -365,6 +365,9 @@
      an agreement ceiling is not a verdict about a model. */
   /* The provider, and the marks. Apparatus, not findings. */
   td.meta { color: var(--muted); font-size: var(--t-sm); white-space: nowrap; }
+  td.place, td.group, th.place, th.group { text-align: center; font-variant-numeric: tabular-nums; }
+  /* The systems no tested comparison beats: a mark on the name, not a colour on the row. */
+  tbody tr.undominated th.name { box-shadow: inset 3px 0 0 var(--accent); }
 
   /* The instrument a column belongs to, above its name. Quieter than the
      label and louder than nothing: a reader scanning eleven headings has to

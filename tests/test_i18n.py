@@ -512,7 +512,6 @@ def live_strings(templates: str) -> set[str]:
     # per track in Python -- which reason a table has for not being ranked,
     # what its expandable block holds -- so `tagged_keys` cannot see them and
     # every one of them would read as an orphan.
-    live |= {i18n.norm(reason) for reason in report.NOT_RANKED_REASONS.values()}
     live |= {i18n.norm(label) for label in report.DETAIL_LABELS.values()}
     for licence in report.LICENCES:
         live |= {i18n.norm(licence[f]) for f in ("used_for", "note", "licence") if licence.get(f)}
