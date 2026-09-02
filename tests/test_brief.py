@@ -271,18 +271,26 @@ def test_the_document_does_not_tell_the_reader_not_to_check(prose):
 
 def test_the_document_counts_the_files_it_reads(prose):
     """It said two, then four. `Data.load` reads three -- the payload and the two
-    saturation files -- and `brief.py` opens two more of its own,
-    `calibration.json` and `corpus-profile.json`. Five.
+    saturation files -- and `brief.py` opens more of its own:
+    `calibration.json`, `corpus-profile.json`, and `repeatability.json` where
+    the repeat run has published one.
+
+    The count is taken from the list rather than asserted, because "Five files
+    rather than two" was typed under a list of five and stayed five when the
+    document began reading a sixth.
     """
-    for name in (
+    expected = [
         "leaderboard.json",
         f"saturation-{figures.JUDGE_A}.json",
         f"saturation-{figures.JUDGE_B}.json",
         "calibration.json",
         "corpus-profile.json",
-    ):
+    ]
+    if (DOCS / "repeatability.json").exists():
+        expected.append("repeatability.json")
+    for name in expected:
         assert name in prose, f"{name} is not named in the section that says how to check"
-    assert "Five files rather than two" in prose
+    assert f"{brief.spelled(len(expected)).capitalize()} files rather than two" in prose
 
 
 def test_every_file_the_document_names_is_one_a_reader_can_open(prose):
@@ -494,3 +502,102 @@ def test_the_drop_one_sentence_is_the_published_leave_one_out(prose, data):
         )
         assert stated in prose, f"the drop-one clause for {judge} is not the published one"
     assert seen, "the payload carries no leave-one-out for either judge"
+
+
+# --- the judge asked the same question twice ----------------------------------
+
+
+@pytest.fixture(scope="module")
+def repeats() -> dict:
+    found = brief.repeatability()
+    if not found or not found.get("judges"):
+        pytest.skip("no repeat run published in this checkout")
+    return found
+
+
+def test_the_repeat_panel_quotes_the_published_counts(prose, repeats):
+    """Every number in the panel, against `docs/repeatability.json`.
+
+    The section exists because agreement with a therapist is only half of
+    whether an instrument is any good, and the other half had no number
+    anywhere on this page while every table on the site is a mean of answers
+    taken once.
+    """
+    for judge in repeats["judges"]:
+        asked, same = judge["questions"], judge["same"]
+        assert f"<code>{judge['judge_model']}</code>" in prose
+        assert f'<td class="num">{asked}</td>' in prose, (
+            f"{judge['judge_model']} does not print how many questions were re-asked"
+        )
+        assert f"{same} ({brief.pct(same, asked)})" in prose
+        assert f"{brief.pct(asked - same, asked)}" in prose
+
+
+def test_the_repeat_panel_names_the_instrument_that_repeated_worst(prose, repeats):
+    """An aggregate stays healthy long after its parts have died -- the same
+    lesson the saturation section states, applied to the judge itself. One of
+    these judges repeats itself on 90% of the rubric and 76% of TRACE.
+    """
+    for judge in repeats["judges"]:
+        tracks = [track for track in judge.get("tracks", []) if track["questions"]]
+        if not tracks:
+            continue
+        worst = min(tracks, key=lambda track: track["same"] / track["questions"])
+        assert f"{brief.pct(worst['same'], worst['questions'])}" in prose
+
+
+def test_the_repeat_panel_says_how_narrow_its_evidence_is(prose, repeats):
+    """Five notes, one system. Published at that size with the size in the
+    sentence, which is the condition on publishing it at all.
+    """
+    assert f"{brief.spelled(repeats['notes'])} notes per instrument" in prose
+    for system in repeats.get("systems", []):
+        assert f"<code>{system}</code>" in prose, (
+            "the panel does not name the system whose notes were re-judged, so a "
+            "reader cannot see how narrow the probe is"
+        )
+    assert "does not sample the field" in prose
+
+
+def test_the_repeat_panel_does_not_promise_a_column_moves_by_its_rate(prose, repeats):
+    """The inference the number invites, and which nothing here supports.
+
+    A mean over dozens of answers cancels most of what the individual answers
+    do. How much is left was not measured, and a section that let a reader
+    carry 12% into a table would be worse than no section.
+    """
+    assert "It does not say a column moves by that much" in prose
+
+
+def test_the_claim_about_the_less_repeatable_judge_matches_the_calibration(
+    prose, repeats, calibration
+):
+    """Made only when the two orderings actually agree.
+
+    Today the judge that agrees with the therapists less is also the judge that
+    agrees with itself less. That is one re-calibration from being backwards,
+    so the sentence is built from the comparison rather than typed.
+    """
+    rates = {
+        judge["judge_model"]: judge["same"] / judge["questions"]
+        for judge in repeats["judges"]
+        if judge["questions"]
+    }
+    published = json.loads((DOCS / "judges.json").read_text(encoding="utf-8"))["judges"]
+    anchored = {}
+    for entry in published:
+        if entry["judge_model"] not in rates:
+            continue
+        found = [a for a in entry["agreements"] if a["name"] == "rubric_completeness"]
+        if found:
+            anchored[entry["judge_model"]] = found[0]["judge"]
+
+    claim = (
+        "the one that agrees with the therapists less is also the one that agrees with itself less"
+    )
+    if len(anchored) == 2 and min(rates, key=rates.get) == min(anchored, key=anchored.get):
+        assert claim in prose
+    else:
+        assert claim not in prose, (
+            "the two orderings no longer agree, so the sentence claiming they do is backwards"
+        )

@@ -226,6 +226,29 @@
   <p class="note">Measured across 150 of those notes, judge
      <code>gemini-3.1-pro-preview</code>. The second judge, <code>gpt-5.6-terra</code>, clears the same ceiling by less: 0.52 against 0.50 on the checklist. Both are in <a href="judges.json"><code>docs/judges.json</code></a>.</p>
 
+  <h3>Asked the same question twice, one of them answers differently</h3>
+  <p>Agreement with a therapist is half of whether an instrument is any good. The other
+     half is agreement with itself: the questions behind the tables were put to the same
+     two judges a second time, at the same settings, into a separate answer cache so that
+     no published table is computed from the second asking. The two answers are compared
+     at the value a table averages, not at the wording, so a differently worded yes is
+     still a yes.</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Judge</th><th class="num">Asked again</th>
+      <th class="num">Answered the same</th><th>Least repeatable instrument</th></tr></thead>
+    <tbody><tr><td><code>gemini-3.1-pro-preview</code></td><td class="num">333</td><td class="num">326 (98%)</td><td>PDSQI-9, 95%</td></tr><tr><td><code>gpt-5.6-terra</code></td><td class="num">334</td><td class="num">293 (88%)</td><td>iCARE form on the iHOPE corpus, 76%</td></tr></tbody>
+  </table></div>
+  <p><strong>The answers changed with nothing else changed &mdash; <code>gemini-3.1-pro-preview</code> 2% and <code>gpt-5.6-terra</code> 12%.</strong>
+     Not the note, not the question, not the settings. Whatever that is, it is a property
+     of the instrument rather than of the notes it was pointed at, and the two judges do not have the same amount of it: the one that agrees with the therapists less is also the one that agrees with itself less.</p>
+  <p class="note"><strong>What this does not say.</strong> It does not say a column moves
+     by that much. A mean over dozens of questions cancels most of what the individual
+     answers do, and how much is left is not measured here. It also does not sample the
+     field: five notes per instrument, all written by <code>deepseek-v4-flash</code>,
+     which measures these judges on those notes and nothing wider. One question went unanswered in one of the two runs and counts as neither agreement nor disagreement. The counts are
+     in <a href="repeatability.json"><code>docs/repeatability.json</code></a>.</p>
+
+
   <h2 class="page-break">One: a leaderboard position is not a measurement</h2>
   <p>The two judges see the same notes, ask the same 23 questions and reach almost the
      same conclusions about which of any two systems is better. And the two orderings
@@ -623,14 +646,9 @@
 
   <h2 class="page-break">How to check any of this</h2>
   <p>Every figure in this document is drawn from the files the site publishes, and
-     every table is built from them row by row. Five files rather than two, and each
-     one is a link because a section headed &ldquo;how to check&rdquo; that names a file
-     without handing it over is not one:
-     <a href="leaderboard.json"><code>leaderboard.json</code></a>,
-     <a href="saturation-gemini-3.1-pro-preview.json"><code>saturation-gemini-3.1-pro-preview.json</code></a> and
-     <a href="saturation-gpt-5.6-terra.json"><code>saturation-gpt-5.6-terra.json</code></a>,
-     <a href="calibration.json"><code>calibration.json</code></a> and
-     <a href="corpus-profile.json"><code>corpus-profile.json</code></a>.</p>
+     every table is built from them row by row. Six files rather than
+     two, and each one is a link because a section headed &ldquo;how to check&rdquo; that
+     names a file without handing it over is not one: <a href="leaderboard.json"><code>leaderboard.json</code></a>, <a href="saturation-gemini-3.1-pro-preview.json"><code>saturation-gemini-3.1-pro-preview.json</code></a>, <a href="saturation-gpt-5.6-terra.json"><code>saturation-gpt-5.6-terra.json</code></a>, <a href="calibration.json"><code>calibration.json</code></a>, <a href="corpus-profile.json"><code>corpus-profile.json</code></a>, <a href="repeatability.json"><code>repeatability.json</code></a>.</p>
   <p><strong>The prose around them is written by hand.</strong> Some figures in it are
      computed from the payload and a test fails if they drift; others are typed here
      beside the prose they belong to. The test names the sentences it covers, and a

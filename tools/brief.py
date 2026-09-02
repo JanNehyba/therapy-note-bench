@@ -146,6 +146,19 @@ def corpus_profile() -> dict:
     return json.loads((DOCS / "corpus-profile.json").read_text(encoding="utf-8"))
 
 
+def repeatability() -> dict | None:
+    """`docs/repeatability.json` -- the same questions asked of the same judges twice.
+
+    Optional, unlike the payload: a checkout scored before the repeat run was
+    added has no such file, and the section that reads it is left out rather
+    than drawn with the numbers missing.
+    """
+    path = DOCS / "repeatability.json"
+    if not path.exists():
+        return None
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
 def temporal_fields(corpus: dict) -> tuple[int, int]:
     """How many sessions the experts answered the looking-back and looking-forward
     sections on.
@@ -457,6 +470,106 @@ def what_was_measured(data: Data) -> str:
 """
 
 
+def repeat_panel(repeats: dict | None, anchored: dict[str, float]) -> str:
+    """How often each judge gives the same answer to a question it has answered.
+
+    Agreement with a therapist is one half of "is this instrument any good".
+    The other half is agreement with itself, and until the repeat run there was
+    no number for it anywhere on this page -- while every table on the site is
+    a mean of answers taken once.
+
+    **The probe is one model's notes.** Five per instrument, all written by the
+    same system, which is what the methods page says about it too: it measures
+    the judges on those notes and does not sample the field. Published at that
+    size, with the size in the sentence, rather than held back until it is
+    wider -- a reader choosing a judge today is better served by a narrow
+    measurement they can see the width of than by silence.
+    """
+    if not repeats or not repeats.get("judges"):
+        return ""
+
+    rows, sentences, rates = [], [], {}
+    for judge in repeats["judges"]:
+        asked, same = judge["questions"], judge["same"]
+        if not asked:
+            continue
+        worst = min(
+            (track for track in judge.get("tracks", []) if track["questions"]),
+            key=lambda track: track["same"] / track["questions"],
+            default=None,
+        )
+        hardest = (
+            f"{esc(worst['label'].split(' · ')[0])}, {pct(worst['same'], worst['questions'])}"
+            if worst
+            else "&mdash;"
+        )
+        rows.append(
+            f"<tr><td><code>{esc(judge['judge_model'])}</code></td>"
+            f'<td class="num">{asked}</td>'
+            f'<td class="num">{same} ({pct(same, asked)})</td>'
+            f"<td>{hardest}</td></tr>"
+        )
+        # Named, not just paired: "2% and 12%" leaves a reader to guess which
+        # judge is which from the order of a table above it.
+        sentences.append(f"<code>{esc(judge['judge_model'])}</code> {pct(asked - same, asked)}")
+        rates[judge["judge_model"]] = same / asked
+
+    if not rows:
+        return ""
+
+    # Which judge is the less repeatable one, and whether it is also the one
+    # that agrees with the therapists less. Typed, that sentence is one
+    # re-calibration from being backwards; the two orderings are compared here
+    # and the claim is only made where they actually agree.
+    shared = [name for name in rates if name in anchored]
+    if len(shared) == 2 and min(rates, key=rates.get) == min(anchored, key=anchored.get):
+        together = (
+            ", and the two judges do not have the same amount of it: the one that agrees "
+            "with the therapists less is also the one that agrees with itself less"
+        )
+    else:
+        together = ""
+
+    unanswered = sum(
+        track.get("unanswered", 0)
+        for judge in repeats["judges"]
+        for track in judge.get("tracks", [])
+    )
+    missing = (
+        f" {spelled(unanswered).capitalize()} question"
+        f"{'' if unanswered == 1 else 's'} went unanswered in one of the two runs and "
+        f"count{'s' if unanswered == 1 else ''} as neither agreement nor disagreement."
+        if unanswered
+        else ""
+    )
+    systems = ", ".join(f"<code>{esc(name)}</code>" for name in repeats.get("systems", []))
+    spread = " and ".join(sentences)
+
+    return f"""
+  <h3>Asked the same question twice, one of them answers differently</h3>
+  <p>Agreement with a therapist is half of whether an instrument is any good. The other
+     half is agreement with itself: the questions behind the tables were put to the same
+     two judges a second time, at the same settings, into a separate answer cache so that
+     no published table is computed from the second asking. The two answers are compared
+     at the value a table averages, not at the wording, so a differently worded yes is
+     still a yes.</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Judge</th><th class="num">Asked again</th>
+      <th class="num">Answered the same</th><th>Least repeatable instrument</th></tr></thead>
+    <tbody>{"".join(rows)}</tbody>
+  </table></div>
+  <p><strong>The answers changed with nothing else changed &mdash; {spread}.</strong>
+     Not the note, not the question, not the settings. Whatever that is, it is a property
+     of the instrument rather than of the notes it was pointed at{together}.</p>
+  <p class="note"><strong>What this does not say.</strong> It does not say a column moves
+     by that much. A mean over dozens of questions cancels most of what the individual
+     answers do, and how much is left is not measured here. It also does not sample the
+     field: {spelled(repeats.get("notes", 0))} notes per instrument, all written by {systems},
+     which measures these judges on those notes and nothing wider.{missing} The counts are
+     in <a href="repeatability.json"><code>docs/repeatability.json</code></a>.</p>
+"""
+
+
 def the_judges(data: Data) -> str:
     """The calibration table, carrying both statistics the payload holds.
 
@@ -512,6 +625,14 @@ def the_judges(data: Data) -> str:
     by_rho = "above" if completeness["judge"] > completeness["humans"] else "below"
     by_alpha = "above" if completeness["alpha"] > completeness["alpha_humans"] else "below"
 
+    # The judges' agreement with the therapists on the checklist, so the repeat
+    # panel can say whether the less repeatable judge is also the less accurate
+    # one -- or stay quiet when it is not.
+    anchored = {calibration["judge_model"]: checklist["judge"]}
+    if second:
+        anchored[JUDGE_B] = second["judge"]
+    repeats = repeat_panel(repeatability(), anchored)
+
     return f"""
   <h2>The judge is a model, so the judge is measured first</h2>
   <p>TN-Eval released 150 notes that two trained therapists had already rated. Every
@@ -543,6 +664,7 @@ def the_judges(data: Data) -> str:
      anything by them would be ordering by noise.</p>
   <p class="note">Measured across {calibration["notes"]} of those notes, judge
      <code>{esc(calibration["judge_model"])}</code>. {second_judge}</p>
+{repeats}
 """
 
 
@@ -993,17 +1115,27 @@ def how_to_check(data: Data) -> str:
 
     judge_a, judge_b = JUDGE_A, JUDGE_B
 
+    # The list, and the count, from one place. "Five files rather than two" was
+    # typed under a list of five and stayed five when the repeat run published a
+    # sixth this document reads. A count beside a list it is not taken from is
+    # a number waiting to be wrong.
+    read = [
+        "leaderboard.json",
+        f"saturation-{judge_a}.json",
+        f"saturation-{judge_b}.json",
+        "calibration.json",
+        "corpus-profile.json",
+    ]
+    if repeatability():
+        read.append("repeatability.json")
+    opened = ", ".join(f'<a href="{name}"><code>{name}</code></a>' for name in read)
+
     return f"""
   <h2 class="page-break">How to check any of this</h2>
   <p>Every figure in this document is drawn from the files the site publishes, and
-     every table is built from them row by row. Five files rather than two, and each
-     one is a link because a section headed &ldquo;how to check&rdquo; that names a file
-     without handing it over is not one:
-     <a href="leaderboard.json"><code>leaderboard.json</code></a>,
-     <a href="saturation-{judge_a}.json"><code>saturation-{judge_a}.json</code></a> and
-     <a href="saturation-{judge_b}.json"><code>saturation-{judge_b}.json</code></a>,
-     <a href="calibration.json"><code>calibration.json</code></a> and
-     <a href="corpus-profile.json"><code>corpus-profile.json</code></a>.</p>
+     every table is built from them row by row. {spelled(len(read)).capitalize()} files rather than
+     two, and each one is a link because a section headed &ldquo;how to check&rdquo; that
+     names a file without handing it over is not one: {opened}.</p>
   <p><strong>The prose around them is written by hand.</strong> Some figures in it are
      computed from the payload and a test fails if they drift; others are typed here
      beside the prose they belong to. The test names the sentences it covers, and a
