@@ -241,13 +241,6 @@ _SENTENCES = {
     "harness <code>{0}</code>": "harness <code>{0}</code>",
     "prompt <code>{0}</code>": "prompt <code>{0}</code>",
     # -- the grid itself ------------------------------------------------------
-    "Band on {0}: rows the paired bootstrap cannot separate share a band. It does not follow the"
-    " sort -- sorting by another column reorders the rows, not what the bootstrap could"
-    " separate.": (
-        "Pásmo podle sloupce {0}: řádky, které párový bootstrap neoddělí, sdílejí pásmo. "
-        "Neřídí se řazením — seřazení podle jiného sloupce přeskládá řádky, ne to, co bootstrap "
-        "dokázal oddělit."
-    ),
     "References": "Literatura",
     "How to cite this benchmark": "Jak citovat tento benchmark",
     "A number quoted from these tables is a number from one judge at one setting &mdash; cite the"
@@ -275,22 +268,6 @@ _SENTENCES = {
         "Souhrn níže je v angličtině: skládá se z čísel, o kterých mluví."
     ),
     "And the two against each other.": "A ti dva proti sobě.",
-    "Band": "Pásmo",
-    # The same thing said where a reader can read it. The tooltip above stays
-    # for a mouse; this is the entry in the legend under the table, which is
-    # where every other column's meaning is repeated in visible text and where
-    # the Band column's was not.
-    "Rows the paired bootstrap cannot separate share a band. Measured on {0} by resampling the"
-    " conversations every system here was scored on, so the numbers need not run in order down"
-    " the column — a band is a group, not a position, and the column beside it averages each"
-    " system over its own notes instead. There is no ↕ on this heading and it does not sort: a"
-    " grouping has no order to sort by.": (
-        "Řádky, které párový bootstrap neoddělí, sdílejí pásmo. Měřeno na míře {0} "
-        "převzorkováním rozhovorů, na kterých byl obodován každý zdejší systém, takže čísla "
-        "ve sloupci nemusí jít popořadě — pásmo je skupina, ne pozice, a sloupec vedle "
-        "průměruje každý systém přes jeho vlastní zápisy. U tohoto záhlaví není ↕ a neřadí se "
-        "podle něj: skupina nemá pořadí, podle kterého by se dalo řadit."
-    ),
     "System": "Systém",
     "Median words in this model’s notes. Completeness counts coverage, so a longer note covers"
     " more.": (
@@ -325,17 +302,6 @@ _SENTENCES = {
     "judge's own {0}": "stejný dodavatel jako hodnotitel: {0}",
     "ranks this table": "řadí tuto tabulku",
     # -- the sentences under the grid ----------------------------------------
-    # "Band" in the heading and "rank" in the sentence under it were one concept
-    # under two words -- three, counting the `td.rank` class -- and in Czech
-    # *pásmo* and *příčka* are not obviously the same thing at all. The heading
-    # is the word that stays, because it is the word a reader points at.
-    "<strong>Systems that share a Band are not separated by this bootstrap.</strong> {0} of {1}"
-    " bands are shared and the top one holds {2} of them. Paired bootstrap on"
-    " <strong>{3}</strong> over the {4} conversations every system here was scored on.": (
-        "<strong>Systémy ve stejném pásmu párový bootstrap od sebe neoddělil.</strong> "
-        "Sdílených pásem je {0} z {1} a v tom nejvyšším je jich {2}. Párový bootstrap na míře "
-        "<strong>{3}</strong> přes {4} rozhovorů, na kterých byl obodován každý zdejší systém."
-    ),
     "<strong>Which of these can be told apart has not been measured for this table.</strong>"
     " Read the order as roughly who is near the top and near the bottom, not as a ranking: two"
     " adjacent rows are not a result.": (
@@ -423,24 +389,6 @@ _SENTENCES = {
     "{0} could not be asked, so nothing here is said about the models it serves.": (
         "{0} se zeptat nešlo, takže se tu o modelech, které nabízí, neříká nic."
     ),
-    # The Band column's counterpart where no measure ranks the table: a
-    # position several systems hold together, from dominance rather than from a
-    # bootstrap.
-    # The band rule's own threshold has a standard error, and some comparisons
-    # land inside it. The page said the boundary is a convention and never said
-    # which rows are standing on it.
-    "<strong>{0} of the {1} comparisons that decide a band land within {2} standard errors of"
-    " the {3} cut</strong> (the error is {4} at {5} resamples), the nearest {6} of one away. If"
-    " they fall"
-    " the other way, {7} of these rows change band &mdash; {8} on one comparison alone. Drawn in a"
-    " band because the table has to draw them somewhere; this measurement does not place them:"
-    " {9}.": (
-        "<strong>{0} z {1} porovnání, která o pásmu rozhodují, leží do {2} směrodatných chyb od "
-        "řezu {3}</strong> (ta chyba je {4} při {5} převzorkováních), nejbližší {6} od něj. Kdyby "
-        "dopadla opačně, změní pásmo {7} z těchto řádků &mdash; {8} kvůli jedinému porovnání. "
-        "Jsou nakreslené v nějakém pásmu proto, že je tabulka někam nakreslit musí; tohle měření "
-        "je nezařazuje: {9}."
-    ),
     # The methods page's own table of the comparisons the band edges rest on.
     "Comparisons the band boundary turns on": "Porovnání, na kterých hranice pásma stojí",
     "Comparison": "Porovnání",
@@ -496,7 +444,6 @@ _SENTENCES = {
     ),
     # Only the tables with a ranking column have a Band heading to point at.
     # The iCARE tables do not, and the analogy sent a reader looking for it.
-    "Like Band, this": "Stejně jako u Pásma není u tohoto",
     "This": "U tohoto není",
     "Effort": "Úsilí",
     "A model that takes a reasoning-effort setting carries it beside its name. It is the effort"

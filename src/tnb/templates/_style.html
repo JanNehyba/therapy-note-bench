@@ -358,7 +358,6 @@
   td.rank.top { color: var(--fg); font-weight: 700; }
   /* The top band, marked with a tint rather than the grey slab that used to
      sit here: four rows of filled cells read as a selected range. */
-  tbody tr.first-group td { background: var(--accent-tint); }
   tr.humans td { border-top: 2px solid var(--line-strong); }
   /* A judge that clears the human ceiling on a measure. Marked rather than
      stated per row: the comparison is per column and the eye reads it that
@@ -400,7 +399,6 @@
   }
   table[data-table] thead th.name { z-index: 2; }
   tbody tr.system:hover th.name, tbody tr.system:hover td.name { background: var(--raise); }
-  tbody tr.first-group th.name, tbody tr.first-group td.name { background: var(--accent-tint); }
   /* The scrolled-under edge, so a reader can see that the name is pinned and
      the numbers are moving behind it rather than that the table is broken.
      On `::before`, because `::after` is where every sortable heading draws its

@@ -1131,48 +1131,6 @@ def test_an_expanded_row_spans_the_columns_the_table_actually_drew(tmp_path):
         assert spans == {headers}, f"colspan {spans} against {headers} headers"
 
 
-def test_a_row_drawn_under_a_label_still_finds_the_band_it_was_measured_for(tmp_path):
-    """`saturation` names its members by `system_id`; the table prints `label`.
-
-    Three published rows carry a label their id does not match -- the therapist's
-    note is drawn as "therapist-written (TN-Eval)" and the two reference models
-    carry the paper and the year -- and the band cell looked itself up by the
-    printed name. All three missed and printed a dash, which on this page means
-    "not measured", over a band the bootstrap had measured. The sentence under
-    the same table said 5 of 7 bands are shared while the column stopped at 5.
-    """
-    from tnb import report
-
-    rows = [
-        _row("kimi-k3", "a-judge", 0.55),
-        _row(
-            "therapist",
-            "a-judge",
-            0.33,
-            system_type="reference-human",
-            system_label="therapist-written (TN-Eval)",
-        ),
-    ]
-    saturations = [
-        {
-            "track": results.TRACK_TNEVAL,
-            "judge_model": "a-judge",
-            "judge_fingerprint": {"model": "a-judge", "thinking_budget": 256},
-            "sessions": 50,
-            "corpus_sessions": 50,
-            "indistinguishable": [["kimi-k3"], ["therapist"]],
-        }
-    ]
-    drawn = _flat(
-        _run(report.render_page(report.build(rows, saturations)), tmp_path, panel="table-host")
-    )
-
-    assert '<td class="rank">2</td> <th scope="row" class="name">' in drawn or (
-        '<td class="rank">2</td><th scope="row" class="name">' in drawn
-    ), "the labelled row lost the band it was measured for"
-    assert 'class="rank"><span class="dash">' not in drawn, "a measured band drawn as absent"
-
-
 def test_the_column_a_phone_keeps_on_screen_is_the_model_s_name(tmp_path):
     """The stylesheet's own comment says "The name column stays put".
 
@@ -1198,48 +1156,6 @@ def test_the_column_a_phone_keeps_on_screen_is_the_model_s_name(tmp_path):
     assert '<th scope="col" class="name" data-sort="label">' in style, (
         "the heading carries no name class"
     )
-
-
-def test_the_band_column_explains_itself_where_a_phone_can_read_it(tmp_path):
-    """A `title=` cannot be opened on a touch screen at all.
-
-    Band was the one heading whose meaning lived in a tooltip and nowhere else:
-    every measure's tooltip is repeated in the legend under the table, and this
-    one was not. On a phone the first column of both ranked tables was a bare
-    digit. So the assertion strips every `title=` first -- a test that passes on
-    the tooltip is the test that let this ship.
-
-    It also has to say the thing a reader trips on before the meaning: the
-    heading is not clickable when ten beside it are.
-    """
-    from tnb import report
-
-    rows = [_row("kimi-k3", "a-judge", 0.55), _row("gemma4", "a-judge", 0.44)]
-    saturations = [
-        {
-            "track": results.TRACK_TNEVAL,
-            "judge_model": "a-judge",
-            "judge_fingerprint": {"model": "a-judge", "thinking_budget": 256},
-            "sessions": 50,
-            "corpus_sessions": 50,
-            "indistinguishable": [["kimi-k3"], ["gemma4"]],
-        }
-    ]
-    drawn = _flat(
-        _run(report.render_page(report.build(rows, saturations)), tmp_path, panel="table-host")
-    )
-    visible = re.sub(r'title="[^"]*"', "", drawn)
-
-    assert "Rows the paired bootstrap cannot separate share a band" in visible
-    assert "it does not sort" in visible, "the one unclickable column never says why"
-    assert "Systems that share a Band" in visible, (
-        "the heading and the sentence under it are one concept and must be one word"
-    )
-
-    # And nothing about bands where none were measured: the legend entry is the
-    # column's, and the column is only drawn when the bootstrap has run.
-    alone = _flat(_run(report.render_page(report.build(rows)), tmp_path, panel="table-host"))
-    assert "share a band" not in re.sub(r'title="[^"]*"', "", alone)
 
 
 def test_nothing_on_the_table_is_explained_only_by_hovering(tmp_path):
@@ -1867,3 +1783,34 @@ def test_the_published_page_actually_runs(tmp_path):
     output = finished.stdout + finished.stderr
     assert "THREW" not in output, f"the published page throws: {output}"
     assert "table-host:" in output, f"the published page drew no table: {output}"
+
+
+def test_the_leaderboard_draws_no_band_column_and_the_payload_keeps_the_bands(tmp_path):
+    """The bands are a measurement and stay published; the column beside a
+    different order does not. Three answers to "where does this row stand" sat
+    on one table and disagreed by construction; the Band was computed on 25 of
+    50 conversations under one judge and 42 under the other, seven of its
+    deciding comparisons sit within three standard errors of the cut, and it did
+    not follow the sort. The methods page keeps every one of those facts."""
+    rows = [_row("kimi-k3", "a-judge", 0.55), _row("gemma4", "a-judge", 0.45)]
+    saturations = [
+        {
+            "track": results.TRACK_TNEVAL,
+            "judge_model": "a-judge",
+            "judge_fingerprint": {"model": "a-judge", "thinking_budget": 256},
+            "sessions": 50,
+            "corpus_sessions": 50,
+            "indistinguishable": [["kimi-k3"], ["gemma4"]],
+        }
+    ]
+    data = report.build(rows, saturations)
+    table = next(t for t in data["tables"] if t["track"] == results.TRACK_TNEVAL)
+    assert table.get("groups"), "the bands left the payload; they are a measurement and stay"
+    drawn = _flat(_run(report.render_page(data), tmp_path, panel="table-host"))
+    assert '<td class="rank' not in drawn and 'class="rank"' not in drawn, (
+        "a Band cell is still drawn on the leaderboard"
+    )
+    assert "share a Band" not in drawn and "Band on" not in drawn
+    assert "Which of these can be told apart" in drawn, (
+        "with the band column gone the table must still say the order is not a ranking"
+    )

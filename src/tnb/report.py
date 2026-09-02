@@ -1774,7 +1774,25 @@ def render_readme_section(data: dict) -> str:
         # right here, under the numbers it applies to.
         lines.append("")
         if table["ranking_measure"]:
-            caveat = f"*Ordered by **{_ranking_label(table)}**. Every other column is context.*"
+            # A sort, not a rank, and said with the number that shows why: how
+            # many neighbouring rows differ by less than the paired bootstrap
+            # can tell apart. README was the one view drawing this order with
+            # no band beside it and a caveat forty lines above the table.
+            values = [
+                row["headline"].get(table["ranking_measure"])
+                for row in models
+                if row["headline"].get(table["ranking_measure"]) is not None
+            ]
+            gaps = [abs(a - b) for a, b in zip(values, values[1:], strict=False)]
+            close = sum(1 for gap in gaps if gap < 0.005)
+            near = sum(1 for gap in gaps if gap < 0.02)
+            caveat = (
+                f"*Sorted by **{_ranking_label(table)}** under this judge — a sort, not a rank: "
+                f"{close} of the {len(gaps)} gaps between neighbouring rows are under 0.005 and "
+                f"{near} under 0.02, and which rows the evidence actually separates is on the "
+                f"[methods page]({SITE_URL}methods.html#saturation). Every other column is "
+                "context.*"
+            )
         else:
             # Alphabetical, and why. Not "nothing to order them by": there is a
             # comparison that could -- at least as good on every column under

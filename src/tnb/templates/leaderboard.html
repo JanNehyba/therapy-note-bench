@@ -317,7 +317,7 @@ function detailRow(row, table) {
   // stopped two columns short of its own row with the page background showing
   // through under Provider and Marks.
   const span = table.columns.length + 3 +
-    (coverageVaries(table) ? 1 : 0) + (table.has_words ? 1 : 0) + (table.groups ? 1 : 0);
+    (coverageVaries(table) ? 1 : 0) + (table.has_words ? 1 : 0);
   return `<tr class="detail" hidden><td colspan="${span}">${parts.join('')}</td></tr>`;
 }
 
@@ -406,32 +406,6 @@ function denominatorNote(table) {
         ${fmt(human.headline.completeness, column.digits)} by the same rule.`}</span>`;
 }
 
-// The Band column, explained where every other column is explained. It is the
-// only heading whose meaning lived in a `title=` and nowhere else, and a
-// `title=` cannot be opened on a touch screen at all: on a phone the column was
-// a bare digit with nothing anywhere saying what it counted.
-//
-// Prepended to the legend as a string rather than added to `table.columns`:
-// the columns list drives the header row, the body cells, the section
-// breakdown and the detail row's colspan, so an entry there would grow a real
-// empty column four ways over.
-//
-// Kept deliberately unsortable, and now saying so. A band is a partition, not a
-// position -- there is no order in it to sort by -- and the bands are measured
-// over the conversations every system shares while the ranking column averages
-// each system over its own notes, so the two disagree: on the published gemini
-// table `gemma4` is band 3 at 0.475 and sits below `deepseek-v4-flash-thinking`
-// at band 4 and 0.477. Sorting by band would print an order contradicting the
-// sentence that says what the table is ordered by.
-function bandLegend(table) {
-  const label = esc(colLabel(table, table.ranking_measure));
-  return `<div class="measure"><dt>${T`Band`}</dt><dd>${
-    T`Rows the paired bootstrap cannot separate share a band. Measured on ${label} by resampling
-      the conversations every system here was scored on, so the numbers need not run in order
-      down the column — a band is a group, not a position, and the column beside it
-      averages each system over its own notes instead. There is no ↕ on this heading
-      and it does not sort: a grouping has no order to sort by.`}</dd></div>`;
-}
 
 // The rest of what had nowhere to live but a `title=`. Words and Marks are
 // columns with no entry in `table.columns`, so the loop that repeats every
@@ -465,7 +439,7 @@ function extraLegend(table) {
     T`A row marked ≠ settings ran under conditions the rest of the table did not, and the settings
       themselves are in the row's own detail, one tap below it. A row marked judge's own was
       scored by a judge from the same vendor as the model it graded; how much that is worth is
-      measured on the methods page. ${table.groups ? T`Like Band, this` : T`This`} heading
+      measured on the methods page. ${T`This`} heading
       carries no ↕ and does not sort:
       these are labels, not an order.`,
   ]);
@@ -545,7 +519,7 @@ function renderTable(table, index) {
     if (all.length > 1 && all.every(one => one === all[0])) shared[name] = all[0];
   });
   const said = {};
-  const legend = (table.groups ? bandLegend(table) : '') + table.columns.map(c => {
+  const legend = table.columns.map(c => {
     let head = '';
     if (shared[c.instrument] && !said[c.instrument]) {
       said[c.instrument] = true;
@@ -562,21 +536,14 @@ function renderTable(table, index) {
   }).join('') + extraLegend(table);
   // Said under the table either way. A table with no grouping measured must not
   // read as a strict ranking just because nobody has checked.
-  const groupNote = table.groups
-    ? `<p class="note">${T`<strong>Systems that share a Band are not separated by this
-         bootstrap.</strong> ${table.groups.of.filter(g => g.length > 1).length} of
-         ${table.groups.of.length} bands are shared and the top one holds
-         ${table.groups.of[0].length} of them. Paired bootstrap on
-         <strong>${esc(tr(table.groups.measure))}</strong> over the
-         ${table.groups.sessions} conversations every system here was scored on.`}${
-         cutNote(table.groups.near_the_cut)}</p>`
+  const groupNote =
     // Two cases, and the sentence used to fit one of them. A table with a
     // ranking measure and no bootstrap has a gradient to read roughly. A table
     // with no ranking measure is alphabetical, and telling a reader to read
     // *that* as roughly who is near the top is telling them to read the
     // alphabet as merit. What it is not told is "there is nothing to order
     // them by": there is a comparison that could, and it has not been tested.
-    : table.ranking_measure
+    table.ranking_measure
       ? `<p class="note">${T`<strong>Which of these can be told apart has not been measured
            for this table.</strong> Read the order as roughly who is near the top and
            near the bottom, not as a ranking: two adjacent rows are not a result.`}</p>`
@@ -678,21 +645,6 @@ function renderTable(table, index) {
        therapists is not published here</strong>, so the figure that belongs in this sentence is
        missing rather than borrowed from another judge. Every other column is context and is
        not a ranking.`;
-
-  // Which systems this evidence cannot tell apart. A leaderboard prints an
-  // order whether or not one exists; this gives every row the rank it actually
-  // earned, so several systems can share first place -- which here they do.
-  // Keyed by `system_id`, which is what `saturation` names its members by --
-  // and what this read was `row.label`, which is the *printed* name. Three rows
-  // carry a label the id does not match: `therapist` is drawn as
-  // "therapist-written (TN-Eval)" and the two reference models carry the paper
-  // and the year. All three looked the band up, missed, and printed a dash --
-  // "not measured" over a measurement the bootstrap had made, under a sentence
-  // saying 5 of 7 bands are shared beside a column that stopped at 5.
-  const band = {};
-  (table.groups ? table.groups.of : []).forEach((members, i) => {
-    members.forEach(id => { band[id] = i + 1; });
-  });
 
   const showCoverage = coverageVaries(table);
 
@@ -811,19 +763,12 @@ function renderTable(table, index) {
       ? `<td>${row.note_words ?? '<span class="dash">—</span>'}</td>`
       : '';
 
-    // The rank, not the row number. Systems the evidence cannot separate share
-    // one, and the top of the table is a group rather than a winner.
-    const rank = band[row.system_id];
-    const rankCell = table.groups
-      ? `<td class="rank${rank === 1 ? ' top' : ''}">${rank || '<span class="dash">—</span>'}</td>`
-      : '';
-    return `<tr class="system${rank === 1 ? ' first-group' : ''}"` +
+    return `<tr class="system"` +
       ` data-row="${index}-${position}" data-type="${row.system_type}"` +
       // The row opens a panel, so it is a control: reachable by keyboard and
       // announcing whether it is open. Every figure beside it is announced with
       // the system's name now, because the name is the row's header cell.
       ` tabindex="0" role="button" aria-expanded="false">
-        ${rankCell}
         <th scope="row" class="name"><span class="arrow">▸</span>${esc(row.label)}${effortMark}${chip}</th>
         ${cells}${wordsCell}${showCoverage ? `<td>${coverage}</td>` : ''}${providerCell}${marksCell}
       </tr>` + detailRow(row, table);
@@ -838,9 +783,7 @@ function renderTable(table, index) {
       <div class="scroll-top" aria-hidden="true"><div></div></div>
       <div class="scroll"><table data-table="${index}" data-sorted="${
         table.ranking_measure || ''}" data-descending="1">
-        <thead><tr>${table.groups
-          ? `<th scope="col" class="rank" title="${T`Band on ${esc(colLabel(table, table.ranking_measure))}: rows the paired bootstrap cannot separate share a band. It does not follow the sort -- sorting by another column reorders the rows, not what the bootstrap could separate.`}">${T`Band`}</th>`
-          : ''}<th scope="col" class="name" data-sort="label"><button type="button">${
+        <thead><tr><th scope="col" class="name" data-sort="label"><button type="button">${
             T`System`}</button></th>${head}${table.has_words
             ? `<th scope="col" data-sort="note_words" title="${T`Median words in this model’s notes. Completeness counts coverage, so a longer note covers more.`}"><button type="button">${T`Words`}</button></th>`
             : ''}${showCoverage
@@ -1157,29 +1100,6 @@ function rosterNote() {
   return `<p class="note">${parts.join(' ')}</p>`;
 }
 
-// Which of those bands rest on a comparison this bootstrap cannot call.
-//
-// The band rule separates two systems when one beats the other in at least 0.95
-// of resamples. That fraction is estimated from a finite number of draws and
-// carries a standard error of its own, so a comparison landing at 0.9505 is a
-// tenth of one away from the threshold: which side the truth is on is not
-// something the measurement answers. The page already said the boundary is a
-// convention; it never said which rows are standing on it.
-//
-// Nothing where the analysis predates the measurement. A band with no statement
-// about its own edge is not a band that was checked and found firm.
-function cutNote(cut) {
-  if (!cut || !cut.pairs || !cut.pairs.length) return '';
-  const closest = cut.pairs[0];
-  const worst = cut.pairs.reduce((a, b) => (b.moves.length > a.moves.length ? b : a));
-  const names = cut.unplaced.map(system => `<code>${esc(system)}</code>`).join(', ');
-  return ' ' + T`<strong>${cut.pairs.length} of the ${cut.comparisons} comparisons that decide a
-    band land within ${cut.sigmas} standard errors of the ${cut.threshold} cut</strong> (the error is
-    ${cut.error} at ${cut.samples} resamples), the nearest ${closest.sigmas} of one away. If they fall the
-    other way, ${cut.unplaced.length} of these rows change band &mdash; ${worst.moves.length} on
-    one comparison alone. Drawn in a band because the table has to draw them somewhere; this
-    measurement does not place them: ${names}.`;
-}
 
 function agreementNote(track) {
   const found = (DATA.concordance || {})[track];

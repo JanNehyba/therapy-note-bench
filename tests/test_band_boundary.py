@@ -158,5 +158,5 @@ def test_the_page_names_the_systems_its_bands_do_not_place():
         if not groups:
             continue
         assert groups.get("near_the_cut"), (
-            f"{table['track']} draws a Band column and says nothing about what its edges rest on"
+            f"{table['track']} publishes bands and says nothing about what their edges rest on"
         )
