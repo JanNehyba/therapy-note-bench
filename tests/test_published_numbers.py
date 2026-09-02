@@ -287,6 +287,23 @@ def _completeness_moved() -> tuple[float, ...]:
     return (float(moved), float(len(deltas)), round(abs(min(deltas)), 3), round(max(deltas), 3))
 
 
+def _leans_on() -> tuple[float, ...]:
+    """What is left of each judge's lean without the model it rests on.
+
+    Published under `leans_on` in `docs/preference.json` since 2026-09-03. The
+    two figures were hand-computed in a terminal before that, and the briefing's
+    copy of the same sentence was a payload out of date for a week while this
+    document was right -- which is the argument for registering them here.
+    """
+    from tnb import judge
+
+    effects = {entry["judge"]: entry for entry in payload()["preference"]["effects"]}
+    return tuple(
+        round(effects[name]["leans_on"]["estimate"], 3)
+        for name in (judge.DEFAULT_MODEL, judge.SECOND_JUDGE)
+    )
+
+
 def _tneval_undominated() -> tuple[float, ...]:
     """Undominated systems, systems, and the measures dominance was read over.
 
@@ -690,6 +707,20 @@ CLAIMS = (
     ),
     Claim(
         where="docs/methodology.md",
+        phrase=(
+            "without `gemma4` the Gemini figure is about +0.006, without `gpt-oss-120b` "
+            "the GPT figure about +0.011"
+        ),
+        kind="computed",
+        because=(
+            "the leave-one-out is an artefact now, and the same sentence in the briefing "
+            "was two payloads stale while this one was right"
+        ),
+        covers=("0.006", "0.011"),
+        expected=_leans_on,
+    ),
+    Claim(
+        where="docs/methodology.md",
         phrase="0.15% (78 of 51 000)",
         kind="historical",
         because="the non-answer rate at budget 256, counted in the gitignored cache",
@@ -905,7 +936,11 @@ UNACCOUNTED = {
     # figures (the old baseline/headline pair became one number, and the
     # old five-criterion-era rows went with them).
     "docs/limitations.md": 143,
-    "docs/methodology.md": 74,
+    # Lowered from 74 on 2026-09-03: the leave-one-out pair is registered
+    # rather than unclassified, and `+0.011` only began counting when it
+    # stopped ending its sentence -- the number regex does not see a figure
+    # with a full stop against it.
+    "docs/methodology.md": 73,
     # Raised from 38 on 2026-09-01: a live capture was retaken and recorded
     # as its own dated section. Its counts -- how many ids the endpoint
     # returned that day and how many survived the filter -- are a log of one
