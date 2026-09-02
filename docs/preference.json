@@ -15,6 +15,13 @@
       "family": "google",
       "high": 0.0461,
       "judge": "gemini-3.1-pro-preview",
+      "leans_on": {
+        "estimate": 0.0058,
+        "n_own": 2,
+        "shift": -0.0117,
+        "summary": "Without `gemma4` it falls to +0.006 completeness, over the 2 of the vendor's own models left \u2014 a shift of -0.012, which is what one model out of a handful can be worth.",
+        "system": "gemma4"
+      },
       "low": -0.0089,
       "n_neutral": 14,
       "n_own": 3,
@@ -43,6 +50,13 @@
       "family": "openai",
       "high": 0.0428,
       "judge": "gpt-5.6-terra",
+      "leans_on": {
+        "estimate": 0.0106,
+        "n_own": 3,
+        "shift": -0.0068,
+        "summary": "Without `gpt-oss-120b` it falls to +0.011 completeness, over the 3 of the vendor's own models left \u2014 a shift of -0.007, which is what one model out of a handful can be worth.",
+        "system": "gpt-oss-120b"
+      },
       "low": -0.0068,
       "n_neutral": 14,
       "n_own": 4,

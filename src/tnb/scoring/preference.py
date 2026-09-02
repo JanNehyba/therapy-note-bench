@@ -168,6 +168,31 @@ class Spread:
         return self.low > NEGLIGIBLE or self.high < -NEGLIGIBLE
 
 
+@dataclass(frozen=True)
+class Lean:
+    """One judge's effect with one of its own models taken out of it.
+
+    Published beside the effect because the two are read together: an estimate
+    that halves when a single model leaves was never a statement about a
+    vendor, whatever the interval around it says.
+    """
+
+    judge: str
+    #: The own-family system that was dropped.
+    system: str
+    #: The effect without it.
+    estimate: float
+    #: And the effect as published, so a reader never has to fetch the pair.
+    published: float
+    #: How many of the vendor's own models are left behind it.
+    n_own: int
+
+    @property
+    def shift(self) -> float:
+        """Signed: negative where the effect was resting on the system."""
+        return self.estimate - self.published
+
+
 def _mean(values: list[float]) -> float:
     return sum(values) / len(values) if values else 0.0
 
@@ -340,6 +365,70 @@ def compare(
     )[0]
 
 
+def leans_on(
+    by_judge: dict[str, dict[str, dict[str, float]]],
+    *,
+    judge_a: str,
+    judge_b: str,
+    samples: int = BOOTSTRAP_SAMPLES,
+    seed: int = BOOTSTRAP_SEED,
+) -> list[Lean]:
+    """For each judge, the one of its own models its estimate rests on most.
+
+    "This judge scores its vendor's models higher" is a claim about a vendor,
+    and the mean behind it is over three or four models. An estimate that
+    width can be one model wide, and the only way to see that is to take each
+    of them out and ask again.
+
+    Each own-family system is dropped from **both** judges' tables and the
+    whole comparison re-run -- not the mean recomputed -- because dropping a
+    system also changes the set of conversations every remaining system shares,
+    which is what the difference is taken over. The system reported is the one
+    whose removal moves the estimate furthest in either direction; where that
+    is a fall, most of the effect was resting on it.
+
+    A judge with one own model gets no `Lean`: dropping it leaves nothing to
+    estimate from, and reporting the empty comparison as "the effect without
+    it" would be reading a missing measurement as a small one.
+    """
+    effects, _ = compare_with_spread(
+        by_judge, judge_a=judge_a, judge_b=judge_b, samples=samples, seed=seed
+    )
+    scored = set(by_judge.get(judge_a) or {}) & set(by_judge.get(judge_b) or {})
+
+    leans = []
+    for effect in effects:
+        own = sorted(s for s in scored if family_of(s) == effect.family)
+        if len(own) < 2:
+            continue
+        best: Lean | None = None
+        for system in own:
+            trimmed = {
+                name: {s: values for s, values in table.items() if s != system}
+                for name, table in by_judge.items()
+            }
+            without = {
+                found.judge: found
+                for found in compare(
+                    trimmed, judge_a=judge_a, judge_b=judge_b, samples=samples, seed=seed
+                )
+            }.get(effect.judge)
+            if without is None:
+                continue
+            candidate = Lean(
+                judge=effect.judge,
+                system=system,
+                estimate=without.estimate,
+                published=effect.estimate,
+                n_own=without.n_own,
+            )
+            if best is None or abs(candidate.shift) > abs(best.shift):
+                best = candidate
+        if best is not None:
+            leans.append(best)
+    return leans
+
+
 #: How each vendor is written in a sentence. The family key is a slug because
 #: it is matched against model ids; a sentence is not.
 FAMILY_NAMES = {"google": "Google", "openai": "OpenAI"}
@@ -376,6 +465,16 @@ def describe(effect: Effect, measure: str = "completeness") -> str:
         f"relative to how the two differ on the {effect.n_neutral} systems neither of "
         f"them wrote [{effect.low:+.3f} to {effect.high:+.3f}]. Read its column for a "
         f"{family_name(effect.family)} model with that in mind."
+    )
+
+
+def describe_lean(lean: Lean, measure: str = "completeness") -> str:
+    """One sentence saying how much of the effect one model was carrying."""
+    direction = "falls to" if lean.shift < 0 else "rises to"
+    return (
+        f"Without `{lean.system}` it {direction} {lean.estimate:+.3f} {measure}, over the "
+        f"{lean.n_own} of the vendor's own models left — a shift of {lean.shift:+.3f}, "
+        f"which is what one model out of a handful can be worth."
     )
 
 

@@ -556,3 +556,107 @@ def test_a_lopsided_pair_is_reported_as_a_difference_between_the_judges():
     assert spread is not None and spread.detected
     sentence = preference.describe_spread(spread)
     assert "gpt-5.6-terra" in sentence and "more than" in sentence
+
+
+# --- how much of an effect rests on a single model ----------------------------
+
+
+def test_the_model_an_effect_rests_on_is_the_one_named():
+    """Three Google models, one of which carries the whole lean.
+
+    The point of the panel is a claim about a vendor. Over three models a
+    vendor-shaped mean can be one model wide, and nothing in the interval says
+    so: the interval resamples the same three.
+    """
+    by_judge = {
+        A: _scores(
+            {
+                "gemini-3.7-flash": 0.50,
+                "google/gemini-3.1-pro-preview": 0.50,
+                "gemma4": 0.80,
+                "kimi-k3": 0.50,
+            }
+        ),
+        B: _scores(
+            {
+                "gemini-3.7-flash": 0.50,
+                "google/gemini-3.1-pro-preview": 0.50,
+                "gemma4": 0.50,
+                "kimi-k3": 0.50,
+            }
+        ),
+    }
+
+    leans = {lean.judge: lean for lean in preference.leans_on(by_judge, judge_a=A, judge_b=B)}
+
+    assert leans[A].system == "gemma4", "the model the estimate rests on is not the one named"
+    assert leans[A].published == pytest.approx(0.10)
+    assert leans[A].estimate == pytest.approx(0.0)
+    assert leans[A].shift == pytest.approx(-0.10)
+    assert leans[A].n_own == 2, "the count is of what is left, not of what was there"
+
+
+def test_the_model_that_carries_nothing_is_not_the_one_reported():
+    """Every own model leaning the same way: dropping any one changes little.
+
+    Written because "furthest from the published estimate" is a rule that
+    always returns *something*, and a test that only ever sees a lopsided
+    fixture cannot tell a real finding from that rule firing on noise.
+    """
+    by_judge = {
+        A: _scores({"gemini-3.7-flash": 0.60, "gemma4": 0.60, "kimi-k3": 0.50}),
+        B: _scores({"gemini-3.7-flash": 0.50, "gemma4": 0.50, "kimi-k3": 0.50}),
+    }
+
+    leans = {lean.judge: lean for lean in preference.leans_on(by_judge, judge_a=A, judge_b=B)}
+
+    assert leans[A].estimate == pytest.approx(leans[A].published)
+    assert leans[A].shift == pytest.approx(0.0), (
+        "an effect every own model shows equally does not rest on any one of them"
+    )
+
+
+def test_a_vendor_with_one_model_here_gets_no_lean_rather_than_a_zero():
+    """Dropping the only model leaves no comparison, which is not "no effect".
+
+    The absence rule: a measurement nobody can make is omitted and named, never
+    published as the number zero.
+    """
+    by_judge = {
+        A: _scores({"gemma4": 0.80, "gpt-5.6-luna": 0.50, "kimi-k3": 0.50}),
+        B: _scores({"gemma4": 0.50, "gpt-5.6-luna": 0.50, "kimi-k3": 0.50}),
+    }
+
+    effects = {e.judge: e for e in preference.compare(by_judge, judge_a=A, judge_b=B)}
+    leans = {lean.judge: lean for lean in preference.leans_on(by_judge, judge_a=A, judge_b=B)}
+
+    assert A in effects, "the fixture no longer produces the effect this test is about"
+    assert A not in leans
+
+
+def test_the_lean_sentence_says_which_way_it_moved():
+    by_judge = {
+        A: _scores(
+            {
+                "gemini-3.7-flash": 0.50,
+                "google/gemini-3.1-pro-preview": 0.50,
+                "gemma4": 0.80,
+                "kimi-k3": 0.50,
+            }
+        ),
+        B: _scores(
+            {
+                "gemini-3.7-flash": 0.50,
+                "google/gemini-3.1-pro-preview": 0.50,
+                "gemma4": 0.50,
+                "kimi-k3": 0.50,
+            }
+        ),
+    }
+
+    lean = {x.judge: x for x in preference.leans_on(by_judge, judge_a=A, judge_b=B)}[A]
+    sentence = preference.describe_lean(lean)
+
+    assert "gemma4" in sentence
+    assert "falls to" in sentence
+    assert "+0.000" in sentence

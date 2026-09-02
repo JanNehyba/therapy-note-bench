@@ -1046,9 +1046,22 @@ def cmd_preference(args: argparse.Namespace) -> int:
         )
         return 1
 
+    # How much of each effect rests on a single one of the vendor's own models.
+    # The brief and `docs/methodology.md` both say "without `gemma4` the Gemini
+    # figure is about +0.006", and until now that number was computed by hand
+    # in a terminal and typed into prose: it went stale twice and contradicted
+    # the table above it once.
+    leans = {
+        lean.judge: lean
+        for lean in preference.leans_on(by_judge, judge_a=args.judge_a, judge_b=args.judge_b)
+    }
+
     for effect in effects:
         print()
         print(preference.describe(effect, args.measure))
+        lean = leans.get(effect.judge)
+        if lean is not None:
+            print(preference.describe_lean(lean, args.measure))
     if spread is not None:
         print()
         print(preference.describe_spread(spread, args.measure))
@@ -1076,6 +1089,18 @@ def cmd_preference(args: argparse.Namespace) -> int:
                 # see who is in it cannot see that a judge's own vendor is.
                 "neutral": list(effect.neutral),
                 "n_sessions": effect.n_sessions,
+                # Which single model the estimate rests on, and what is left
+                # without it. `None` where the vendor has one model here and
+                # there is nothing to drop.
+                "leans_on": None
+                if effect.judge not in leans
+                else {
+                    "system": leans[effect.judge].system,
+                    "estimate": round(leans[effect.judge].estimate, 4),
+                    "shift": round(leans[effect.judge].shift, 4),
+                    "n_own": leans[effect.judge].n_own,
+                    "summary": preference.describe_lean(leans[effect.judge], args.measure),
+                },
                 "summary": preference.describe(effect, args.measure),
             }
             for effect in effects
