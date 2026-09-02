@@ -367,6 +367,14 @@ def front(data: Data) -> str:
     # inside a replacement field across three lines and the sentence stops
     # being readable in the file it is written in.
     how_many = spelled(len(models)).capitalize()
+
+    # The self-preference card. "+0.02" was typed, and it is true only while
+    # both effects round to it: the payload holds +0.018 and +0.017 today and
+    # has held a figure the page called detected before now.
+    leans = sorted(
+        {f"{entry['estimate']:+.2f}" for entry in (data.preference or {}).get("effects", [])}
+    )
+    lean_card = "/".join(leans) if leans else "&mdash;"
     _, forward_asked = temporal_fields(corpus_profile())
 
     return f"""
@@ -402,7 +410,7 @@ def front(data: Data) -> str:
     }
     {
         claim(
-            "+0.02",
+            lean_card,
             "each judge's own vendor",
             "Both judges score their own vendor&rsquo;s models higher by about this much, "
             "and the evidence cannot rule out zero for either. If you grade models with a "
@@ -675,7 +683,8 @@ def the_judges(data: Data) -> str:
 
     return f"""
   <h2>The judge is a model, so the judge is measured first</h2>
-  <p>TN-Eval released 150 notes that two trained therapists had already rated. Every
+  <p>TN-Eval released {calibration["notes"]} notes that two trained therapists had
+     already rated. Every
      candidate judge answers the same questions about the same notes before it is
      allowed near the leaderboard, and the agreement is published whatever it says.</p>
   <div class="scroll"><table>

@@ -726,3 +726,26 @@ def test_the_other_judge_is_compared_rather_than_assumed(prose, pdsqi):
             assert f"<em>{name}</em>" in prose
     else:
         assert f"Under <code>{other}</code> none of them is flat" in prose
+
+
+def test_the_self_preference_card_is_the_rounded_pair(prose, data):
+    """ "+0.02" on the front page, from two effects that could move apart.
+
+    They are +0.018 and +0.017 today and round to one number, which is why the
+    card could be typed and stay right. This repository has published a
+    "detected" verdict on this panel and withdrawn it; the card should not be
+    the last thing left saying the old number.
+    """
+    effects = (data.preference or {}).get("effects", [])
+    if not effects:
+        pytest.skip("no preference payload in this checkout")
+    expected = "/".join(sorted({f"{entry['estimate']:+.2f}" for entry in effects}))
+    assert f'<div class="figure">{expected}<small>each judge' in prose
+
+
+def test_the_calibration_corpus_is_counted_once(prose, calibration):
+    """ "TN-Eval released 150 notes" and "measured across 150 of those notes"
+    are the same number, and one of them was typed.
+    """
+    assert f"TN-Eval released {calibration['notes']} notes" in " ".join(prose.split())
+    assert f"across {calibration['notes']} of those notes" in prose
