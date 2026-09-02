@@ -233,6 +233,27 @@ def test_the_published_figures_are_current(data):
         )
 
 
+def test_the_published_briefing_is_current(data):
+    """`docs/brief.html` is what `tools/brief.py` produces today.
+
+    The hole every other test in this file and in `test_brief.py` left open:
+    they all render the document fresh and check that, while the file the site
+    serves is a committed artefact that nothing compared against anything.
+    `tnb report` does not write it -- `make brief` does -- so a run that
+    rebuilds the tables leaves the briefing beside them untouched, which is how
+    it came to open with "Sixteen models" over a table of eighteen.
+    """
+    brief = pytest.importorskip("brief")
+    path = DOCS / "brief.html"
+    if not path.exists():
+        pytest.skip("the briefing has not been generated in this checkout")
+
+    assert path.read_text(encoding="utf-8") == brief.render(data), (
+        "docs/brief.html is stale against the payload beside it — run `make brief` "
+        "(and `make pdf`, which prints from it)"
+    )
+
+
 def test_the_payload_the_figures_read_is_the_one_the_site_publishes():
     """One source, so a figure and the page cannot disagree."""
     payload = json.loads((DOCS / "leaderboard.json").read_text(encoding="utf-8"))
