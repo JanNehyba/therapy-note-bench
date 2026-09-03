@@ -61,6 +61,15 @@ try {
 // summary: a string can sit in the template unconditionally and still never
 // reach the page, so asserting on the source cannot tell the two apart.
 const wanted = process.argv[3];
+// `--all` prints every node the page wrote into, which is what an audit of the
+// published figures needs: naming the panels one by one is a list that goes
+// stale the first time somebody adds a section, and going stale silently is
+// the failure such an audit exists to prevent.
+if (wanted === '--all') {
+  console.log(Object.entries(nodes).map(([id, el]) =>
+    '<!-- node ' + id + ' -->' + (el.innerHTML || '')).join(''));
+  process.exit(0);
+}
 if (wanted) {
   console.log(nodes[wanted] ? nodes[wanted].innerHTML : '(panel absent)');
   process.exit(0);
