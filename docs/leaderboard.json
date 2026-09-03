@@ -12365,6 +12365,7 @@
           1,
           1
         ],
+        "span_over_half": false,
         "system_id": "gpt-5.6-sol",
         "top_group": 3,
         "worst": 7
@@ -12381,6 +12382,7 @@
           3,
           4
         ],
+        "span_over_half": false,
         "system_id": "google_gemini-3.7-flash",
         "top_group": 3,
         "worst": 9
@@ -12397,6 +12399,7 @@
           3,
           2
         ],
+        "span_over_half": true,
         "system_id": "gpt-5.6-terra",
         "top_group": 3,
         "worst": 13
@@ -12413,6 +12416,7 @@
           9,
           7
         ],
+        "span_over_half": false,
         "system_id": "google_gemini-3.1-pro-preview",
         "top_group": 3,
         "worst": 9
@@ -12429,6 +12433,7 @@
           5,
           6
         ],
+        "span_over_half": true,
         "system_id": "qwen3.8-27b",
         "top_group": 2,
         "worst": 17
@@ -12445,6 +12450,7 @@
           2,
           10
         ],
+        "span_over_half": true,
         "system_id": "qwen3.8-flash-next",
         "top_group": 2,
         "worst": 18
@@ -12461,6 +12467,7 @@
           7,
           3
         ],
+        "span_over_half": false,
         "system_id": "glm-5.2",
         "top_group": 3,
         "worst": 10
@@ -12477,6 +12484,7 @@
           7,
           9
         ],
+        "span_over_half": true,
         "system_id": "gemma4",
         "top_group": 3,
         "worst": 13
@@ -12493,6 +12501,7 @@
           11,
           8
         ],
+        "span_over_half": false,
         "system_id": "qwen3.5-int4",
         "top_group": 3,
         "worst": 11
@@ -12509,6 +12518,7 @@
           10,
           11
         ],
+        "span_over_half": true,
         "system_id": "kimi-k3",
         "top_group": 3,
         "worst": 12
@@ -12525,6 +12535,7 @@
           12,
           12
         ],
+        "span_over_half": false,
         "system_id": "glm-5",
         "top_group": 3,
         "worst": 13
@@ -12541,6 +12552,7 @@
           12,
           12
         ],
+        "span_over_half": false,
         "system_id": "glm-5.3",
         "top_group": 3,
         "worst": 12
@@ -12557,6 +12569,7 @@
           5,
           5
         ],
+        "span_over_half": false,
         "system_id": "gpt-5.6-luna",
         "top_group": 2,
         "worst": 14
@@ -12573,6 +12586,7 @@
           14,
           15
         ],
+        "span_over_half": false,
         "system_id": "mistral-medium-3.5",
         "top_group": 2,
         "worst": 16
@@ -12589,6 +12603,7 @@
           15,
           14
         ],
+        "span_over_half": false,
         "system_id": "deepseek-v4-flash",
         "top_group": 3,
         "worst": 15
@@ -12605,6 +12620,7 @@
           16,
           17
         ],
+        "span_over_half": false,
         "system_id": "deepseek-v4-flash-thinking",
         "top_group": 3,
         "worst": 17
@@ -12621,6 +12637,7 @@
           17,
           16
         ],
+        "span_over_half": true,
         "system_id": "qwen3.5-122b",
         "top_group": 2,
         "worst": 17
@@ -12637,6 +12654,7 @@
           18,
           18
         ],
+        "span_over_half": true,
         "system_id": "gpt-oss-120b",
         "top_group": 1,
         "worst": 18
@@ -12676,6 +12694,7 @@
         2,
         10
       ],
+      "span_over_half": true,
       "system_id": "qwen3.8-flash-next",
       "top_group": 2,
       "worst": 18

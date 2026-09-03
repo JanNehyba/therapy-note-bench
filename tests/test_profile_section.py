@@ -473,3 +473,31 @@ def test_the_rows_are_drawn_in_the_order_the_medians_put_them(payload, recompute
         "the rows are not in median order, so the column a reader checks the order against "
         f"disagrees with the order: {[(r['label'], r['median']) for r in rows]}"
     )
+
+
+def test_a_median_over_a_span_wider_than_half_the_table_is_marked(tmp_path, payload):
+    """A row ranked 1 on one table and 18 on another has a median of 6.0 and
+    sits sixth. That reads as an error, and it was reported as one.
+
+    The rule is half the table: a row whose ranks straddle more than that is not
+    being summarised by a middle number, it is being hidden by one. The median
+    stays printed, because the rows are ordered by it and an order whose key a
+    reader cannot see is one they cannot check.
+    """
+    rows = payload["orders"]["rows"]
+    over = [r for r in rows if (r["worst"] - r["best"]) > len(rows) // 2]
+    for row in rows:
+        assert row["span_over_half"] == (row in over), (
+            f"{row['label']}: span {row['best']}-{row['worst']} over {len(rows)} rows"
+        )
+
+    drawn = _drawn(tmp_path, payload)
+    marked = drawn.count('class="meta hollow"')
+    assert marked == len(over), (
+        f"{len(over)} rows have a span over half the table and {marked} medians are marked"
+    )
+    if over:
+        assert "describes nothing" in drawn, "the mark is drawn with nothing saying what it means"
+        assert f"{len(over)} of these {len(rows)} models are ranked in the top half" in (
+            " ".join(drawn.split())
+        ), "the count of unreliable medians is not stated where a reader meets the table"

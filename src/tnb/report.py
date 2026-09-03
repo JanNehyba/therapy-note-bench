@@ -2455,6 +2455,15 @@ def _orders_for(tables: list[dict], docs_dir: Path) -> dict | None:
                 "median": round(statistics.median(ranks), 1),
             }
         )
+    # Whether the median describes the row at all. A model ranked 1 on one
+    # table and 18 on another has a median of 6.0 and sits sixth, which reads as
+    # an error to anybody who does not check the span beside it -- and it was
+    # read that way the first time somebody looked. Half the table is the line:
+    # a row whose ranks straddle more than that is not being summarised by a
+    # middle number, it is being hidden by one. Computed here rather than in the
+    # page, so the rule is one a test can hold.
+    for row in rows:
+        row["span_over_half"] = (row["worst"] - row["best"]) > len(rows) // 2
     # **One key, and it is the one on screen.** Ordered by top group first and
     # then by the median, the table read as broken to anybody who did not know
     # what the first column was: a row with a median of 6.0 sat below one with

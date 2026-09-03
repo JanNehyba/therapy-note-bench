@@ -2084,15 +2084,16 @@ def test_the_tables_apparatus_folds_and_its_findings_do_not(tmp_path):
     head, _, folded = drawn.partition("<details")
     after_table = head[head.rfind("</table>") :]
 
-    assert "agree on the shape of this ranking" in after_table, (
-        "the finding about the two judges is folded away"
+    assert '<p class="note">' not in after_table, (
+        "a note is drawn between the table and the toggle; all of the prose folds"
     )
-    for apparatus in ("Ordered by", '<dl class="measures">'):
+    for apparatus in ("Ordered by", '<dl class="measures">', "agree on the shape of this ranking"):
         assert apparatus in folded, f"{apparatus!r} is drawn in the open rather than folded"
+    # Only where the fixture has such a row: this one is all models, and a note
+    # about reference rows that is not drawn cannot be drawn in the wrong place.
+    if "Not every row is a model under test" in drawn:
+        assert "Not every row is a model under test" in folded
     assert "<summary>" in folded
-    assert '<dl class="measures">' not in after_table, (
-        "the column glossary is drawn twice, or was never folded"
-    )
 
 
 def test_the_open_notes_say_which_kind_of_judge(tmp_path):
@@ -2100,11 +2101,9 @@ def test_the_open_notes_say_which_kind_of_judge(tmp_path):
     this repository, and this note is one of the two that stay in the open.
     """
     drawn = _run(_page(tmp_path), tmp_path, panel="table-host")
-    head = drawn.partition("<details")[0]
-    after_table = head[head.rfind("</table>") :]
-    if "judge" not in after_table.lower():
-        pytest.skip("the open notes mention no judge in this payload")
-    assert "LLM judge" in after_table, "the open notes say 'judge' with nothing saying what kind"
+    if "judge" not in drawn.lower():
+        pytest.skip("this table mentions no judge in this payload")
+    assert "LLM judge" in drawn, "the table says 'judge' with nothing saying what kind"
 
 
 def test_the_reference_note_says_why_they_are_ranked_once(tmp_path):

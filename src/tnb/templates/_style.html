@@ -184,6 +184,20 @@
   }
   details.box > summary strong { font-weight: 600; }
 
+  /* A heading that carries its own definition says so. The added columns on the
+     profile table hold their gloss in `title`, and without a mark a reader has
+     no reason to hover -- which is how a tooltip becomes a definition nobody
+     ever reads. */
+  th[title] { cursor: help; text-decoration: underline dotted var(--line-strong); }
+  th[title]:hover { text-decoration-color: var(--accent); }
+
+  /* A median over ranks that straddle more than half the table. Printed,
+     because the rows are ordered by it and an order whose key a reader cannot
+     see is one they cannot check; greyed, because for these rows it is not
+     describing anything, and a row ranked 1 and 18 sitting sixth reads as an
+     error otherwise. */
+  td.hollow { color: var(--muted); cursor: help; text-decoration: underline dotted; }
+
   /* A toggle inside a section rather than one that is the section: the
      apparatus under the profile table, which a reader needs only when they are
      checking the two findings above it. Smaller than a section heading, and it

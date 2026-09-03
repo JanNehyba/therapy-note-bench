@@ -979,20 +979,16 @@ function renderTable(table, index) {
             T`Marks`}</th></tr></thead>
         <tbody>${body}</tbody>
       </table></div>
-      <!-- What a reader needs to read the rows in front of them, and then
-           everything else. The two that stay are about rows the table draws --
-           which of them are not models under test, and how far the other judge
-           moves them. The rest is how the order was built and what each column
-           means: needed when somebody checks the table, not when they read it,
-           and eleven blocks of it stood between this table and the next.
-           Folded the same way the profile table's apparatus is. -->
-      <div class="notes">
-      ${referenceNote(table)}
-      ${instrumentsOf(table).map(([track]) => agreementNote(track)).join('')}
-      </div>
-      <details class="box more"><summary>${T`How this table was built, and what each column
-        means`}</summary>
+      <!-- All of it folded, the same way the profile table's apparatus is.
+           Two notes stayed in the open for a while -- which rows are not models
+           under test, and how far the other judge moves them -- and they were
+           still two paragraphs a reader had not asked for between a table and
+           the next section. The summary names what is inside instead. -->
+      <details class="box more"><summary>${T`How to read this table: what each column means,
+        which rows are not models, and how the order was built`}</summary>
         <div class="notes">
+        ${referenceNote(table)}
+        ${instrumentsOf(table).map(([track]) => agreementNote(track)).join('')}
         <p class="ranking-note">${rankingNote}</p>
         ${rosterNote()}
         ${groupNote}
@@ -1236,7 +1232,10 @@ function drawProfile() {
       <th scope="row" class="name">${esc(row.label)}</th>
       ${row.ranks.map((rank, i) => `<td class="place${seamAt(i)}">${rank}</td>`).join('')}
       <td class="meta">${row.best}&#8211;${row.worst}</td>
-      <td class="meta">${fmt(row.median, 1)}</td>
+      <td class="meta${row.span_over_half ? ' hollow' : ''}"${row.span_over_half
+        ? ` title="${esc(T`Ranked ${row.best} on one table and ${row.worst} on another — a
+            span wider than half the table, so this middle number describes nothing. Read the
+            six ranks, not this.`)}"` : ''}>${fmt(row.median, 1)}</td>
     </tr>`).join('');
 
   const pooled = profile.dominance.pooled;
@@ -1356,9 +1355,11 @@ function drawProfile() {
          ${profile.tables} published tables, with the rank each one gives them.
          <strong>Rank 1 is the best</strong>, every column runs 1 to
          ${profile.population.length}, and <strong>the rows are ordered by the Median column
-         on the right</strong>. The median is not a score: it is only a way of putting the
-         rows in some order, and two rows a place apart on it are not a place apart on
-         anything anybody measured.`}</p>
+         on the right</strong>. Read the Span beside it first: ${profile.rows.filter(
+         r => r.span_over_half).length} of these ${profile.rows.length} models are ranked in
+         the top half by one table and the bottom half by another, and for those a middle
+         number describes nothing — their medians are greyed. The median is not a score
+         either; it is only a way of putting the rows in some order.`}</p>
       <div class="scroll-top" aria-hidden="true"><div></div></div>
       <div class="scroll"><table class="profile">
         <thead><tr>
