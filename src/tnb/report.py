@@ -1584,7 +1584,8 @@ def _judges_own_family(row: Row) -> str:
 
     What the mark warns about is a lean, not a verdict. Each judge rates its own
     vendor about 0.02 completeness higher -- +0.018 for `gemini-3.1-pro-preview`
-    and +0.027 for `gpt-5.6-terra` -- and once the models are resampled as well
+    and +0.017 for `gpt-5.6-terra`, both from `docs/preference.json` -- and once
+    the models are resampled as well
     as the conversations, neither interval clears zero, so `preference.py`
     reports `detected: false` for both. This docstring used to call the +0.027
     "detected", which was true only of an earlier estimator that resampled
@@ -1763,7 +1764,14 @@ def render_readme_section(data: dict) -> str:
             "|" + "---|" * len(header),
         ]
         for row in models:
-            cells = ["—" if row["place"] is None else str(row["place"]), f"`{row['label']}`"]
+            # The own-family mark, which `docs/limitations.md` promises is
+            # carried "in the table where they sit". The page drew it and this
+            # table did not, so the README -- the surface most people read
+            # first, and the one that travels into other documents -- showed a
+            # judge's own vendor's rows with nothing on them.
+            own = row.get("judges_own_family") or ""
+            label = f"`{row['label']}`" + (f" *(judge's own {own})*" if own else "")
+            cells = ["—" if row["place"] is None else str(row["place"]), label]
             if grouped:
                 cells.append("—" if row.get("group") is None else str(row["group"]))
             if multi_provider:

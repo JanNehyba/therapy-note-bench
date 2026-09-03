@@ -326,3 +326,64 @@ def test_the_provider_split_is_the_published_one(payload):
     for provider in ("openai", "vertex"):
         share = counted.get(provider, 0) / total
         assert f"{share:.0%}" in text, f"the {provider} share {share:.0%} is not stated"
+
+
+# --- README ------------------------------------------------------------------
+
+
+def test_the_status_line_counts_the_models_and_the_sessions(payload):
+    """ "**18 models** have written notes on 50 AnnoMI conversations and on 40
+    iHOPE sessions" -- the sentence a reader meets first, and the exact shape
+    that went stale in the briefing's lede when two systems joined.
+
+    Nothing held it there. `test_published_numbers.py` counts figures in the
+    README but does not ask what any of them mean.
+    """
+    text = read("../README.md")
+    models, sessions = set(), {}
+    for table in payload["tables"]:
+        if not table["scored"]:
+            continue
+        models |= {r["system_id"] for r in table["rows"] if r.get("system_type") == "model"}
+        sessions[table["track"]] = max(
+            (r.get("n_attempted") or 0 for r in table["rows"]), default=0
+        )
+    assert models, "no scored models in this payload"
+    assert f"**{len(models)} models** have written notes" in text
+    for track, corpus in (("tneval-soap", "AnnoMI conversations"), ("icare", "iHOPE sessions")):
+        if track in sessions:
+            assert f"{sessions[track]} {corpus}" in text, (
+                f"the status line does not say how many {corpus} the {track} track covers"
+            )
+
+
+def test_the_readme_marks_the_rows_a_judge_scored_from_its_own_vendor(payload):
+    """`docs/limitations.md`: "Cells where a judge scored a model from its own
+    family are marked in the table where they sit."
+
+    The page drew the mark and the README table did not, so the surface most
+    people read first -- and the one that travels into other documents --
+    showed a judge's own vendor's rows with nothing on them.
+    """
+    from tnb import judge
+
+    text = read("../README.md")
+    marked = 0
+    for table in payload["tables"]:
+        # The tables the README actually prints: one per track, the default
+        # judge's. A row in the other judge's table carries its own mark and
+        # the model's name appears in this table too, so asking the question of
+        # every table asks it of a row the README never drew.
+        if not table["scored"] or table["versions"]["judge_model"] != judge.DEFAULT_MODEL:
+            continue
+        for row in table["rows"]:
+            own = row.get("judges_own_family")
+            if not own:
+                continue
+            marked += 1
+            assert f"`{row['label']}` *(judge's own {own})*" in text, (
+                f"{row['label']} is scored by its own vendor's judge and the README "
+                "table does not say so"
+            )
+    if not marked:
+        pytest.skip("no judge scored a model from its own family in this payload")

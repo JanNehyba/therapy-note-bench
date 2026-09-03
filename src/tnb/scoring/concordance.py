@@ -611,7 +611,13 @@ def to_json(comparison: Comparison | None) -> dict | None:
         "measures": [
             {
                 "measure": m.measure,
-                "rho": None if m.rho is None else round(m.rho, 4),
+                # Three decimals, which is what every surface draws. Stored at
+                # four, the page rounded a second time -- 0.89354 became 0.8935
+                # in the file and "0.893" through `toFixed(3)` -- while the
+                # summary sentence four lines above it was formatted from the
+                # unrounded value and said "+0.894". One statistic, two numbers,
+                # one panel. Rounded once, here, and both read the same.
+                "rho": None if m.rho is None else round(m.rho, 3),
                 "n_systems": m.n_systems,
                 "moved": m.moved,
                 "stable": m.stable,

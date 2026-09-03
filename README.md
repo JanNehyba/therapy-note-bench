@@ -59,9 +59,9 @@ written for somebody building or buying one:
 
 | Place | Model | Group | Provider | Completeness (0-1) | Conciseness (0-1) | Faithfulness (1-5) | Notes | Scored |
 |---|---|---|---|---|---|---|---|---|
-| 1 | `google_gemini-3.7-flash` | 1 | vertex | 0.526 | 0.933 | 4.98 | 50/50 | 50 |
+| 1 | `google_gemini-3.7-flash` *(judge's own google)* | 1 | vertex | 0.526 | 0.933 | 4.98 | 50/50 | 50 |
 | 2 | `kimi-k3` | 1 | einfra | 0.550 | 0.887 | 4.98 | 50/50 | 49 of 50 *(1 part-answered)* |
-| 3 | `google_gemini-3.1-pro-preview` | 1 | vertex | 0.534 | 0.890 | 4.97 | 50/50 | 49 of 50 *(1 part-answered)* |
+| 3 | `google_gemini-3.1-pro-preview` *(judge's own google)* | 1 | vertex | 0.534 | 0.890 | 4.97 | 50/50 | 49 of 50 *(1 part-answered)* |
 | 4 | `glm-5.3` | 1 | einfra | 0.535 | 0.888 | 4.97 | 50/50 | 47 of 50 *(3 part-answered)* |
 | 5 | `gpt-5.6-terra` | 1 | openai | 0.497 | 0.891 | 5.00 | 50/50 | 49 of 50 *(1 part-answered)* |
 | 6 | `qwen3.5-122b` | 1 | einfra | 0.529 | 0.905 | 4.77 | 50/50 | 48 of 50 *(2 part-answered)* |
@@ -69,7 +69,7 @@ written for somebody building or buying one:
 | 8 | `glm-5.2` | 1 | einfra | 0.500 | 0.875 | 4.97 | 50/50 | 50 |
 | 8 | `qwen3.5-int4` | 1 | einfra | 0.536 | 0.877 | 4.92 | 50/50 | 50 |
 | 10 | `glm-5` | 1 | einfra | 0.504 | 0.865 | 4.96 | 50/50 | 50 |
-| 11 | `gemma4` | 1 | einfra | 0.472 | 0.895 | 4.95 | 50/50 | 48 of 50 *(2 part-answered)* |
+| 11 | `gemma4` *(judge's own google)* | 1 | einfra | 0.472 | 0.895 | 4.95 | 50/50 | 48 of 50 *(2 part-answered)* |
 | 11 | `gpt-5.6-luna` | 1 | openai | 0.482 | 0.889 | 4.93 | 50/50 | 50 |
 | 11 | `mistral-medium-3.5` | 2 | einfra | 0.457 | 0.909 | 4.89 | 50/50 | 50 |
 | 14 | `deepseek-v4-flash` | 1 | einfra | 0.445 | 0.920 | 4.88 | 50/50 | 50 |
@@ -88,14 +88,14 @@ written for somebody building or buying one:
 | Place | Model | Group | Provider | ROUGE-L (0-1) | BERTScore (0-1) | TRACE (1-5) | Looks back (0-1) | Looks forward (0-1) | Notes | Scored |
 |---|---|---|---|---|---|---|---|---|---|---|
 | 1 | `qwen3.8-flash-next` | 1 | einfra | 0.192 | 0.821 | 4.98 | 1.00 | 0.27 | 39/40 (1 unreached) | 39 |
-| 2 | `gemma4` | 1 | einfra | 0.202 | 0.820 | 4.83 | 1.00 | 0.36 | 40/40 | 40 |
+| 2 | `gemma4` *(judge's own google)* | 1 | einfra | 0.202 | 0.820 | 4.83 | 1.00 | 0.36 | 40/40 | 40 |
 | 2 | `gpt-5.6-sol` | 1 | openai | 0.169 | 0.816 | 4.99 | 1.00 | 0.55 | 40/40 | 40 |
-| 4 | `google_gemini-3.1-pro-preview` | 1 | vertex | 0.182 | 0.817 | 4.96 | 1.00 | 0.45 | 40/40 | 40 |
+| 4 | `google_gemini-3.1-pro-preview` *(judge's own google)* | 1 | vertex | 0.182 | 0.817 | 4.96 | 1.00 | 0.45 | 40/40 | 40 |
 | 5 | `glm-5.2` | 1 | einfra | 0.173 | 0.820 | 4.92 | 1.00 | 0.36 | 40/40 | 40 |
 | 6 | `glm-5` | 1 | einfra | 0.179 | 0.820 | 4.88 | 1.00 | 0.36 | 40/40 | 40 |
 | 6 | `qwen3.8-27b` | 1 | einfra | 0.186 | 0.819 | 4.95 | 1.00 | 0.27 | 40/40 | 40 |
 | 8 | `qwen3.5-int4` | 1 | einfra | 0.183 | 0.818 | 4.97 | 1.00 | 0.09 | 39/40 (1 unreached) | 39 |
-| 9 | `google_gemini-3.7-flash` | 1 | vertex | 0.186 | 0.819 | 4.97 | 0.97 | 0.36 | 40/40 | 40 |
+| 9 | `google_gemini-3.7-flash` *(judge's own google)* | 1 | vertex | 0.186 | 0.819 | 4.97 | 0.97 | 0.36 | 40/40 | 40 |
 | 10 | `glm-5.3` | 1 | einfra | 0.113 | 0.814 | 4.96 | 1.00 | 0.73 | 40/40 | 40 |
 | 11 | `kimi-k3` | 1 | einfra | 0.109 | 0.812 | 4.98 | 1.00 | 0.36 | 40/40 | 40 |
 | 12 | `mistral-medium-3.5` | 1 | einfra | 0.186 | 0.815 | 4.87 | 1.00 | 0.18 | 40/40 | 40 |
@@ -119,13 +119,13 @@ written for somebody building or buying one:
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 1 | `gpt-5.6-sol` | 1 | openai | 5.00 | 5.00 | 5.00 | 5.00 | 5.00 | 3.88 | 5.00 | 1.000 | 50/50 | 50 |
 | 2 | `qwen3.8-flash-next` | 1 | einfra | 5.00 | 4.96 | 5.00 | 5.00 | 5.00 | 3.55 | 5.00 | 1.000 | 48/50 (2 unreached) | 47 of 48 *(1 part-answered)* |
-| 3 | `google_gemini-3.7-flash` | 1 | vertex | 5.00 | 4.96 | 5.00 | 5.00 | 5.00 | 4.00 | 5.00 | 0.957 | 50/50 | 47 of 50 *(3 part-answered)* |
+| 3 | `google_gemini-3.7-flash` *(judge's own google)* | 1 | vertex | 5.00 | 4.96 | 5.00 | 5.00 | 5.00 | 4.00 | 5.00 | 0.957 | 50/50 | 47 of 50 *(3 part-answered)* |
 | 4 | `gpt-5.6-terra` | 1 | openai | 5.00 | 4.98 | 5.00 | 5.00 | 5.00 | 3.35 | 5.00 | 1.000 | 50/50 | 49 of 50 *(1 part-answered)* |
 | 5 | `qwen3.8-27b` | 1 | einfra | 5.00 | 4.92 | 5.00 | 5.00 | 5.00 | 3.55 | 5.00 | 0.980 | 50/50 | 49 of 50 *(1 part-answered)* |
-| 6 | `gemma4` | 1 | einfra | 5.00 | 4.80 | 5.00 | 5.00 | 5.00 | 4.02 | 5.00 | 0.940 | 50/50 | 50 |
+| 6 | `gemma4` *(judge's own google)* | 1 | einfra | 5.00 | 4.80 | 5.00 | 5.00 | 5.00 | 4.02 | 5.00 | 0.940 | 50/50 | 50 |
 | 6 | `glm-5.2` | 1 | einfra | 5.00 | 4.96 | 5.00 | 5.00 | 5.00 | 3.73 | 5.00 | 0.939 | 50/50 | 49 of 50 *(1 part-answered)* |
 | 8 | `gpt-5.6-luna` | 1 | openai | 5.00 | 4.96 | 5.00 | 5.00 | 5.00 | 3.43 | 5.00 | 0.959 | 50/50 | 49 of 50 *(1 part-answered)* |
-| 9 | `google_gemini-3.1-pro-preview` | 1 | vertex | 4.98 | 4.94 | 5.00 | 5.00 | 5.00 | 3.84 | 5.00 | 0.940 | 50/50 | 50 |
+| 9 | `google_gemini-3.1-pro-preview` *(judge's own google)* | 1 | vertex | 4.98 | 4.94 | 5.00 | 5.00 | 5.00 | 3.84 | 5.00 | 0.940 | 50/50 | 50 |
 | 10 | `qwen3.5-int4` | 1 | einfra | 4.94 | 4.90 | 5.00 | 5.00 | 5.00 | 4.00 | 5.00 | 0.940 | 50/50 | 50 |
 | 11 | `kimi-k3` | 1 | einfra | 4.98 | 4.98 | 5.00 | 5.00 | 5.00 | 2.90 | 5.00 | 0.959 | 50/50 | 49 of 50 *(1 part-answered)* |
 | 12 | `glm-5` | 1 | einfra | 4.94 | 4.96 | 5.00 | 5.00 | 5.00 | 3.73 | 5.00 | 0.939 | 50/50 | 49 of 50 *(1 part-answered)* |
