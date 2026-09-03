@@ -571,7 +571,10 @@ def test_the_repeat_panel_quotes_the_published_counts(prose, repeats):
             f"{judge['judge_model']} does not print how many questions were re-asked"
         )
         assert f"{same} ({brief.pct(same, asked)})" in prose
-        assert f"{brief.pct(asked - same, asked)}" in prose
+        # Named, and anchored to the name. A bare `"2%" in prose` also matches
+        # the "12%" printed for the other judge in the same sentence, so the
+        # assertion held whatever the first judge's rate was.
+        assert f"<code>{judge['judge_model']}</code> {brief.pct(asked - same, asked)}" in prose
 
 
 def test_the_repeat_panel_names_the_instrument_that_repeated_worst(prose, repeats):
@@ -584,7 +587,13 @@ def test_the_repeat_panel_names_the_instrument_that_repeated_worst(prose, repeat
         if not tracks:
             continue
         worst = min(tracks, key=lambda track: track["same"] / track["questions"])
-        assert f"{brief.pct(worst['same'], worst['questions'])}" in prose
+        # The instrument and its rate together. Asserting the percentage alone
+        # let the cell name any of the three instruments and pass, which is the
+        # whole content of the column.
+        label = worst["label"].split(" · ")[0]
+        assert f"{label}, {brief.pct(worst['same'], worst['questions'])}" in prose, (
+            f"the least repeatable instrument for {judge['judge_model']} is {label}"
+        )
 
 
 def test_the_repeat_panel_says_how_narrow_its_evidence_is(prose, repeats):

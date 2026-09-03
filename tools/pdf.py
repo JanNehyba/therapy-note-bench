@@ -19,6 +19,7 @@ this at all.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import os
 import shutil
 import subprocess
@@ -122,8 +123,20 @@ def main(argv: list[str] | None = None) -> int:
         )
         return 1
 
+    # What was printed, beside what came out. The PDF is a committed artefact
+    # that nothing could check: `docs/brief.html` gained a freshness test on
+    # 2026-09-03 and the document printed from it did not, so a brief rebuilt
+    # without a reprint left a PDF describing an older payload with a green
+    # suite. A digest of the source is cheap, deterministic, and exactly the
+    # question -- "is this PDF the print of that page?" -- where comparing two
+    # PDFs byte for byte is not (Chrome stamps them).
+    digest = hashlib.sha256(source.read_bytes()).hexdigest()
+    stamp = target.with_suffix(target.suffix + ".sha256")
+    stamp.write_text(f"{digest}  {source.name}" + chr(10), encoding="utf-8")
+
     size = target.stat().st_size
     print(f"wrote {target}  {size:>9,} bytes  (via {Path(browser).name})")
+    print(f"       {stamp.name}  {digest[:16]}...")
     return 0
 
 

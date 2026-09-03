@@ -12,6 +12,7 @@ loud enough to fail. Skipped, not guessed, where node is absent.
 
 from __future__ import annotations
 
+import hashlib
 import os
 import re
 import shutil
@@ -1904,3 +1905,63 @@ def test_a_table_whose_judge_decided_every_column_still_compares_all_of_them(tmp
 
     assert "Every figure now carries a second one" in visible
     assert "same under both judges" not in visible, "said where nothing is exempt"
+
+
+# --- are the committed pages the ones the code produces today? ----------------
+
+
+def test_the_published_pages_and_readme_are_current(tmp_path):
+    """`docs/index.html`, `docs/methods.html` and the README block, rebuilt.
+
+    `docs/brief.html` got this test on 2026-09-03 and the two pages it sits
+    beside did not, which left the larger hole: `tnb report` writes all three,
+    so a rebuild that is not committed leaves the site serving a page the
+    repository can no longer produce, and nothing failed.
+
+    Rendered into a copy of `docs/` so the artefacts the build reads -- the
+    saturation files, the calibration, the judges, the preference, the edges --
+    are the published ones and only the output is new.
+    """
+    rows = results.load()
+    if not rows:
+        pytest.skip("no rows in results/ in this checkout")
+    docs = REPO_ROOT / "docs"
+    if not (docs / "leaderboard.json").exists():
+        pytest.skip("nothing published in this checkout")
+
+    for path in docs.glob("*.json"):
+        shutil.copy(path, tmp_path / path.name)
+    readme = tmp_path / "README.md"
+    shutil.copy(REPO_ROOT / "README.md", readme)
+
+    report.write(rows, docs_dir=tmp_path, readme=readme)
+
+    for name in (report.PAGE_PATH.name, report.METHODS_PATH.name):
+        assert (tmp_path / name).read_text(encoding="utf-8") == (docs / name).read_text(
+            encoding="utf-8"
+        ), f"docs/{name} is stale against results/ — run `uv run tnb report`"
+    assert readme.read_text(encoding="utf-8") == (REPO_ROOT / "README.md").read_text(
+        encoding="utf-8"
+    ), "the README block is stale against results/ — run `uv run tnb report`"
+
+
+def test_the_published_pdf_is_the_print_of_the_published_briefing():
+    """The hole one level under the briefing's own freshness test.
+
+    `docs/therapy-note-bench.pdf` is committed and is what leaves this
+    repository for people who never open the site. Comparing two PDFs byte for
+    byte says nothing -- Chrome stamps them -- so `tools/pdf.py` records the
+    digest of the page it printed, and this compares that against the page as
+    committed. It fails exactly when the brief was rebuilt and the PDF was not.
+    """
+    docs = REPO_ROOT / "docs"
+    brief_html, pdf = docs / "brief.html", docs / "therapy-note-bench.pdf"
+    if not pdf.exists() or not brief_html.exists():
+        pytest.skip("no briefing or no PDF in this checkout")
+
+    stamp = pdf.with_suffix(pdf.suffix + ".sha256")
+    assert stamp.exists(), "the PDF carries no record of what it was printed from — run `make pdf`"
+    printed = stamp.read_text(encoding="utf-8").split()[0]
+    assert printed == hashlib.sha256(brief_html.read_bytes()).hexdigest(), (
+        "docs/therapy-note-bench.pdf was printed from a different brief.html — run `make pdf`"
+    )
