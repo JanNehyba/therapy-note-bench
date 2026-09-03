@@ -1325,7 +1325,17 @@ def test_every_page_offers_a_route_to_the_background_documents():
 
     wanted = {"datasets.md", "methodology.md", "landscape.md", "limitations.md"}
     for name, html in pages.items():
-        linked = {target for target, _ in _links_in(html, name) if target.endswith(".md")}
+        # By the document's own name, local route or absolute. The two pages
+        # point at GitHub because this site serves `.md` as `text/markdown`,
+        # so a relative link opened the file as unformatted text; `_links_in`
+        # skips absolute hrefs by design and would have read that fix as the
+        # route disappearing. What this test is for is that a route exists.
+        static = re.sub(r"<script[^>]*>.*?</script>", "", html, flags=re.S)
+        linked = {
+            href.rsplit("/", 1)[-1]
+            for href in re.findall(r'href="([^"]+)"', static)
+            if href.endswith(".md")
+        }
         assert wanted <= linked, f"{name} does not link {sorted(wanted - linked)}"
 
     for name in wanted:
@@ -1746,9 +1756,12 @@ def test_the_published_page_keeps_the_header_it_was_written_with(tmp_path):
     summary = _run(report.render_page(data), tmp_path)
     assert "THREW" not in summary
     # Nothing writes to the two header nodes, so they are neither replaced nor
-    # removed. That is the whole assertion.
+    # removed. That is the whole assertion. It named `methods-link` until that
+    # node was taken off the page on purpose; `brief-link` is the same kind of
+    # node -- static prose above the tables that no render function touches --
+    # and asserting the removed one would have passed for the wrong reason.
     removed = next((line for line in summary.splitlines() if line.startswith("removed:")), "")
-    assert "methods-link" not in removed, "the published page dropped its methods link"
+    assert "brief-link" not in removed, "the published page dropped its briefing link"
     assert "e-INFRA" not in _flat(_run(report.render_page(data), tmp_path, panel="page-sub"))
 
 
@@ -1965,3 +1978,61 @@ def test_the_published_pdf_is_the_print_of_the_published_briefing():
     assert printed == hashlib.sha256(brief_html.read_bytes()).hexdigest(), (
         "docs/therapy-note-bench.pdf was printed from a different brief.html — run `make pdf`"
     )
+
+
+def test_the_main_page_makes_no_standing_invitation_to_the_methods_page():
+    """One link removed on purpose, five kept on purpose.
+
+    The paragraph under the tables was the only thing that sent a reader who
+    had asked no question to a page of answers. It is gone. The five links
+    inside sentences are not, and that is the half worth pinning: each sits in
+    the claim it supports -- how the order was built, how the comparisons were
+    tested, the calibration, the licences, the withdrawn rows -- so a reader
+    checking one number still reaches the panel that answers for it. Removing
+    those too would look like the same edit going one step further, and would
+    leave five published claims pointing at nothing.
+    """
+    template = REPO_ROOT / "src" / "tnb" / "templates" / "leaderboard.html"
+    page = template.read_text(encoding="utf-8")
+
+    assert 'id="methods-link"' not in page, "the standing invitation to the methods page is back"
+    assert ">How this was measured →</a>" not in page, "its wording is back under another id"
+
+    anchors = sorted(set(re.findall(r'href="methods\.html(#[a-z]+)"', page)))
+    assert anchors == ["#calibration", "#groups", "#licences", "#ordering", "#withdrawn"], (
+        f"the links that carry a claim to its evidence have changed: {anchors}"
+    )
+
+
+def test_the_documents_are_linked_where_a_browser_renders_them():
+    """A relative `.md` href on this page opens as unformatted text.
+
+    GitHub Pages serves `docs/*.md` as `text/markdown`, so all five of these
+    opened with their hashes and pipes showing -- checked with `curl` against
+    the published site on 2026-09-03. The blob URL renders the same file. This
+    fails if a relative one comes back, and it also fails if a link points at a
+    document this repository does not have.
+    """
+    template = REPO_ROOT / "src" / "tnb" / "templates" / "leaderboard.html"
+    page = template.read_text(encoding="utf-8")
+
+    bare = sorted(set(re.findall(r'href="([a-z][a-z-]*\.md)"', page)))
+    assert not bare, f"linked as raw markdown, which the site serves as text: {bare}"
+
+    blob = sorted(
+        re.findall(
+            r'href="https://github\.com/JanNehyba/therapy-note-bench/blob/main/docs/([a-z-]+\.md)"',
+            page,
+        )
+    )
+    assert blob == [
+        "datasets.md",
+        "landscape.md",
+        "limitations.md",
+        "methodology.md",
+        "models-snapshot.md",
+    ], f"the five documents the footer introduces have changed: {blob}"
+    for name in blob:
+        assert (REPO_ROOT / "docs" / name).exists(), (
+            f"{name} is linked and is not in this repository"
+        )
