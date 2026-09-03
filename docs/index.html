@@ -298,27 +298,34 @@
 
   /* --- the wide two ----------------------------------------------------- */
 
-  /* The table and a figure are the only two blocks allowed past the prose
-     measure. They start at the same left edge as everything else and run
-     right as far as their content needs, and no further than the frame: a
-     table wider than the frame scrolls inside `.scroll`, with the name column
-     pinned, instead of handing the document a horizontal scrollbar. Checked
-     in headless Chrome at 390, 768, 1280, 1440 and 1904 on 2026-09-02:
-     `scrollWidth === clientWidth` on the document at every one, on both
-     pages -- the methods page had been 3544px wide in an 1888px window. */
-  .scroll, .scroll-top, figure.wide {
-    /* As wide as it needs and no wider. Sized to the content rather than to
-       the frame, because `width: <the frame>` stretched every small table to
-       it too -- the calibration table on the methods page has five columns,
-       and spreading five columns over 1400px is not a wide table, it is a
-       sparse one. */
+  /* A table takes the frame. It used to take its content's width instead,
+     floored at a short column, which was right while the prose stopped at
+     44rem: a small table shared both edges with the paragraph above it, and
+     only a table that genuinely outgrew the measure reached past it.
+
+     Once the prose ran the frame that inverted. The profile table came out
+     1166px under 1408px of text, so the block a reader came for was the
+     narrowest thing on the page and lined up with nothing.
+
+     The known cost is on the methods page and it is real: `4d6d0dc` reverted
+     a version of this because spreading five columns over 1400px is not a
+     wide table, it is a sparse one. That objection stands and is accepted
+     here rather than answered -- the leaderboard is the page these tables
+     are read on, and `docs/methods.html` is on its way out.
+
+     A table wider than the frame still scrolls inside `.scroll` with the name
+     column pinned, rather than handing the document a horizontal scrollbar:
+     `width: 100%` is the box, and the table inside it keeps `max-content`.
+     Checked in headless Chrome at 390, 768, 1024, 1280, 1440, 1904 and 2560
+     on both pages -- the methods page had been 3544px wide in an 1888px
+     window. */
+  .scroll, .scroll-top { width: 100%; }
+
+  /* A figure is not a table: the drawing inside it is a fixed size, so the
+     box is sized to the content and floored at a short column. Stretching it
+     would leave a 948px picture adrift in 1408px of nothing. */
+  figure.wide {
     width: max-content;
-    /* Never narrower than the prose. A table sized purely to its content came
-       out at a different width on every panel of the methods page -- fourteen
-       tables, fourteen sets of edges, none lining up with the prose above them
-       or with each other. At the measure a small table shares both edges with
-       the paragraph above it, and only a table that genuinely outgrows the
-       measure reaches past it. */
     min-width: min(100%, var(--floor));
     max-width: 100%;
   }
