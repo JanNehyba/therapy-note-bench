@@ -227,7 +227,7 @@
      other three columns are reported because the protocol produces them, and ordering
      anything by them would be ordering by noise.</p>
   <p class="note">Measured across 150 of those notes, judge
-     <code>gemini-3.1-pro-preview</code>. The second judge, <code>gpt-5.6-terra</code>, clears the same ceiling by less: 0.52 against 0.50 on the checklist. Both are in <a href="judges.json"><code>docs/judges.json</code></a>.</p>
+     <code>gemini-3.1-pro-preview</code>. The second judge, <code>gpt-5.6-terra</code>, <strong>does not clear it</strong>: 0.52 against 0.50 on the checklist, and its lead of +0.017 runs from &minus;0.012 to +0.047 when the 150 notes are resampled. Two point estimates in that order are not a lead until the evidence under them is resampled &mdash; the same standard the vendor panel below is held to. Both are in <a href="judges.json"><code>docs/judges.json</code></a>.</p>
 
   <h3>Asked the same question twice, one of them answers differently</h3>
   <p>Agreement with a therapist is half of whether an instrument is any good. The other

@@ -2133,7 +2133,15 @@ function renderJudges(data) {
     const cells = measures.map(name => {
       const found = j.agreements.find(a => a.name === name);
       const alpha = found ? Number(found.alpha) : null;
-      const beats = alpha !== null && alpha >= ceiling[name];
+      // `clears_ceiling`, not `alpha >= ceiling`. The published verdict is
+      // `margin_interval[0] > 0` -- the lead has to survive resampling the
+      // notes -- and `calibration.py` separates it by name from
+      // `reaches_ceiling`, the point comparison that answers yes for a margin
+      // of 0.002. Every candidate's alpha sits at or above the ceiling by a
+      // point, and only two of them clear it: this marked all seven. The class
+      // carries no style today, so nothing a reader saw was wrong; the
+      // criterion behind it was.
+      const beats = found ? found.clears_ceiling === true : false;
       return `<td${beats ? ' class="beats"' : ''}>${alpha === null ? '—' : alpha.toFixed(3)}</td>`;
     }).join('');
     const mark = chosen.has(j.judge_model)

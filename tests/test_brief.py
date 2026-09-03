@@ -749,3 +749,52 @@ def test_the_calibration_corpus_is_counted_once(prose, calibration):
     """
     assert f"TN-Eval released {calibration['notes']} notes" in " ".join(prose.split())
     assert f"across {calibration['notes']} of those notes" in prose
+
+
+def test_the_second_judges_ceiling_verdict_is_the_published_one(prose):
+    """ "Clears the same ceiling by less" over a payload that records it does not.
+
+    `clears_ceiling` is `margin_interval[0] > 0`: the lead has to survive
+    resampling the notes. `calibration.py` separates it by name from
+    `reaches_ceiling`, the point comparison that answers yes for a margin of
+    0.002 -- and this sentence was the point comparison wearing the other
+    word's clothes, in the one place on the page where a zero-spanning estimate
+    was stated as a fact. `docs/index.html` prints "does not clear zero" for
+    the same judge and measure off the same field.
+    """
+    published = json.loads((DOCS / "judges.json").read_text(encoding="utf-8"))["judges"]
+    entry = next((j for j in published if j["judge_model"] == figures.JUDGE_B), None)
+    if not entry:
+        pytest.skip("the second judge has no published calibration in this checkout")
+    found = next((a for a in entry["agreements"] if a["name"] == "rubric_completeness"), None)
+    if not found or found.get("clears_ceiling") is None:
+        pytest.skip("this payload carries no ceiling verdict")
+
+    if found["clears_ceiling"]:
+        assert "clears the same ceiling by less" in prose
+        assert "does not clear it" not in prose
+    else:
+        assert "does not clear it" in prose, (
+            "the payload records that the second judge does not clear the therapists' "
+            "ceiling, and the briefing says it does"
+        )
+        assert "clears the same ceiling by less" not in prose
+        assert (
+            f"its lead of {brief.signed(found['margin'])} runs from "
+            f"{brief.signed(found['margin_low'])} to {brief.signed(found['margin_high'])}" in prose
+        ), "the interval that fails to clear zero is not printed beside the two estimates"
+
+
+def test_the_briefing_never_states_a_zero_spanning_lead_as_a_fact(prose, data):
+    """The rule the page applies to the vendor panel, applied to itself.
+
+    Two sections apart the same evidence shape -- a positive point estimate
+    whose resampled interval includes zero -- is written correctly as "neither
+    interval clears zero". A document that holds one number to that standard
+    and another to a point comparison is not applying a standard.
+    """
+    assert "neither interval clears zero" in prose, (
+        "the sentence that states the standard has gone; check the vendor panel"
+    )
+    for wrong in ("clears the same ceiling by less: 0.5", "beats the therapists"):
+        assert wrong not in prose or "does not clear" in prose

@@ -640,15 +640,43 @@ def the_judges(data: Data) -> str:
             continue
         found = [a for a in entry["agreements"] if a["name"] == "rubric_completeness"]
         second = found[0] if found else None
-    second_judge = (
-        f"The second judge, <code>{esc(JUDGE_B)}</code>, clears the same ceiling by less: "
-        f"{second['judge']:.2f} against {second['humans']:.2f} on the checklist. "
-        'Both are in <a href="judges.json"><code>docs/judges.json</code></a>.'
-        if second
-        else f"The second judge, <code>{esc(JUDGE_B)}</code>, has no published "
-        'calibration in <a href="judges.json"><code>docs/judges.json</code></a>, '
-        "which is itself a gap."
-    )
+    # **Whether it clears the ceiling is a published verdict, not a comparison
+    # of the two printed numbers.** `calibration.clears_ceiling` is
+    # `margin_interval[0] > 0` -- the lead has to survive resampling the 150
+    # notes -- and its docstring separates it from `reaches_ceiling`, which is
+    # the point comparison that answers yes for a margin of 0.002. This
+    # sentence said "clears the same ceiling by less" while the file it links
+    # in the same breath records `clears_ceiling: false` for that judge, and
+    # `docs/index.html` printed the opposite sentence off the same field. The
+    # verb comes from the payload now, and where the lead does not survive, the
+    # interval that fails to clear zero is printed rather than hidden.
+    if not second:
+        second_judge = (
+            f"The second judge, <code>{esc(JUDGE_B)}</code>, has no published "
+            'calibration in <a href="judges.json"><code>docs/judges.json</code></a>, '
+            "which is itself a gap."
+        )
+    elif second.get("clears_ceiling"):
+        second_judge = (
+            f"The second judge, <code>{esc(JUDGE_B)}</code>, clears the same ceiling by less: "
+            f"{second['judge']:.2f} against {second['humans']:.2f} on the checklist. "
+            'Both are in <a href="judges.json"><code>docs/judges.json</code></a>.'
+        )
+    else:
+        margin = (
+            f", and its lead of {signed(second['margin'])} runs from "
+            f"{signed(second['margin_low'])} to {signed(second['margin_high'])} when the "
+            f"{esc(str(calibration['notes']))} notes are resampled"
+            if second.get("margin_low") is not None
+            else ""
+        )
+        second_judge = (
+            f"The second judge, <code>{esc(JUDGE_B)}</code>, <strong>does not clear it</strong>: "
+            f"{second['judge']:.2f} against {second['humans']:.2f} on the checklist{margin}. "
+            "Two point estimates in that order are not a lead until the evidence under "
+            "them is resampled &mdash; the same standard the vendor panel below is held to. "
+            'Both are in <a href="judges.json"><code>docs/judges.json</code></a>.'
+        )
 
     rows = []
     for entry in calibration["agreements"]:
