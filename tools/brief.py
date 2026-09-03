@@ -813,7 +813,9 @@ def what_it_means(data: Data) -> str:
     # the three were wrong within a week of two systems joining the payload,
     # while the fourth, "just over half", described a system that now manages
     # eight sessions of eleven.
-    asked_back, asked_forward = temporal_fields(corpus_profile())
+    corpus = corpus_profile()
+    asked_back, asked_forward = temporal_fields(corpus)
+    sessions = corpus.get("sessions") or 0
     icare = [
         row
         for row in data.rows("icare", JUDGE_A)
@@ -821,22 +823,37 @@ def what_it_means(data: Data) -> str:
     ]
     back = [row["headline"]["temporal_past"] for row in icare]
     complete = [value for value in back if value >= 1.0]
-    partial = sorted({round(value * asked_back) for value in back if value < 1.0})
+    # **Denominator-free.** This read "on all thirty-four sessions the experts
+    # answered", attaching the corpus-wide count to each system. A system scored
+    # on fewer than all forty has a smaller denominator of its own -- two of
+    # these are scored on thirty-nine -- and the payload publishes no per-column
+    # count to check that against. A score of 1.00 says "wherever the expert
+    # answered, so did the model", whatever the denominator was, and that is
+    # what the sentence says now. The corpus counts are stated separately,
+    # where they are a fact about the corpus rather than about a system.
+    partial_values = sorted({round(value, 2) for value in back if value < 1.0}, reverse=True)
     looking_back = (
-        f"{spelled(len(complete))} of {spelled(len(icare))} on all {spelled(asked_back)} "
-        "sessions the experts answered"
+        f"{spelled(len(complete))} of {spelled(len(icare))} answered it in every session "
+        "where the expert did"
     )
-    if partial:
-        looking_back += f", the other {spelled(len(icare) - len(complete))} on " + " and ".join(
-            spelled(n) for n in reversed(partial)
+    if partial_values:
+        looking_back += (
+            f", and the other {spelled(len(icare) - len(complete))} scored "
+            + " and ".join(f"{value:.2f}" for value in partial_values)
         )
-    forward_best = max(
-        (row["headline"]["temporal_next"] for row in icare if row["headline"].get("temporal_next")),
-        default=0.0,
-    )
+
+    # The best system's forward count, in sessions only where that system was
+    # scored on the whole corpus -- otherwise the eleven is not its denominator
+    # either, and the fraction is printed instead.
+    forward_rows = [row for row in icare if row["headline"].get("temporal_next")]
+    best_forward = max(forward_rows, key=lambda row: row["headline"]["temporal_next"], default=None)
+    forward_best = best_forward["headline"]["temporal_next"] if best_forward else 0.0
+    whole_corpus = best_forward and best_forward.get("n_scored") == sessions
     looking_forward = (
         f"{spelled(round(forward_best * asked_forward))} of the {spelled(asked_forward)} "
         "sessions where an expert did"
+        if whole_corpus
+        else f"{forward_best:.2f} of the sessions where an expert did"
     )
 
     # How much of each effect one model was carrying. Typed until now, from a
@@ -856,9 +873,24 @@ def what_it_means(data: Data) -> str:
             f"{signed(lean['estimate'])}"
         )
     if dropped:
+        # The dated clause is a fact about `gemma4` and `gpt-oss-120b` -- the two
+        # an open-weight sibling rule moved into their vendors' groups -- not
+        # about whichever systems the leave-one-out names. Printed only while
+        # those are the same two.
+        named = {
+            (entry or {}).get("leans_on", {}).get("system")
+            for entry in (effects.get(JUDGE_A), effects.get(JUDGE_B))
+            if entry and entry.get("leans_on")
+        }
+        history = (
+            ", and they are the two that a definition change moved into these groups on 2026-08-26"
+            if named == {"gemma4", "gpt-oss-120b"}
+            else ""
+        )
         leans = (
-            "Each effect leans on one system more than the others, and they are the two "
-            "that a definition change moved into these groups on 2026-08-26: "
+            "Each effect leans on one system more than the others"
+            + history
+            + ": "
             + ", and ".join(dropped)
             + "."
         )
@@ -967,7 +999,9 @@ def what_it_means(data: Data) -> str:
 
   <h2 class="page-break">Three: nothing here can tell you what happens next</h2>
   <p>The iCARE form has two time-bearing sections: what happened at the previous
-     session, and what happens at the next one. Every model reliably fills the first
+     session, and what happens at the next one. The experts answered the first in
+     {spelled(asked_back)} of the {spelled(sessions)} sessions and the second in
+     {spelled(asked_forward)}. Every model reliably fills the first
      &mdash; {looking_back}. Almost none
      fills the second, and the best of them manages it in {looking_forward}.</p>
   {
@@ -1008,7 +1042,14 @@ def pdsqi_panel(flat: dict[str, dict], columns: list[str]) -> str:
     if not heaviest:
         return ""
     shared = {value for _count, _total, value, _place in heaviest.values()}
-    tie, scored, value, _place = max(heaviest.values())
+    # The tie every one of them holds, not the widest. `max` over the four
+    # tuples reports one column's count as though all four shared it; they do
+    # today, and the sentence would keep saying so when they stopped.
+    ties = {count for count, _total, _value, _place in heaviest.values()}
+    tie = min(ties)
+    at_least = "" if len(ties) == 1 else "at least "
+    scored = max(total for _count, total, _value, _place in heaviest.values())
+    value = max(v for _count, _total, v, _place in heaviest.values())
     places = {place for *_rest, place in heaviest.values()}
     ranked = "first place" if places == {1} else "one place"
     at_the_top = (
@@ -1036,7 +1077,7 @@ def pdsqi_panel(flat: dict[str, dict], columns: list[str]) -> str:
      many of those eight tell the systems apart is a different question, and the answer
      under <code>{esc(worst)}</code> is {spelled(len(columns) - len(heaviest))} of
      {spelled(len(columns))}. The other {spelled(len(heaviest))} &mdash; {names} &mdash;
-     give one number to {tie} of the {scored} systems, {at_the_top}.</p>
+     give one number to {at_least}{tie} of the {scored} systems, {at_the_top}.</p>
   <p>A column like that holds no ordering for a table to be built from: {tie} systems
      share {ranked} on it, so it adds the same number to almost every row and the
      order the table prints is decided by the columns that still vary. {overlap} Which
@@ -1114,6 +1155,56 @@ def how_much_room_is_left(data: Data) -> str:
     pdsqi_columns = sorted(pdsqi_rows[0].get("headline", {})) if pdsqi_rows else []
     pdsqi = pdsqi_panel(flat, pdsqi_columns)
 
+    # Which criterion the second judge additionally puts on the floor, and how
+    # far above the floor the first judge leaves it. Both were typed -- "the
+    # extra one being assessment tools, which the first judge leaves 0.02 above
+    # it" -- beside two counts read from the payload, and the sentence assumed
+    # there is exactly one extra. The margin was 0.02 against a floor constant
+    # this file cannot see, so what is printed instead is the rate itself: the
+    # best model's coverage of that criterion under the first judge, which is
+    # the number the verdict turns on and is in the file.
+    floors = {
+        judge: {
+            entry["key"]: entry
+            for entry in (data.saturation.get(judge) or {}).get("criteria") or []
+            if entry.get("verdict") == "unreachable"
+        }
+        for judge in (JUDGE_A, JUDGE_B)
+    }
+    extra = sorted(set(floors[JUDGE_B]) - set(floors[JUDGE_A]))
+    named = []
+    for key in extra:
+        entry = next(
+            (
+                found
+                for found in (data.saturation.get(JUDGE_A) or {}).get("criteria") or []
+                if found["key"] == key
+            ),
+            None,
+        )
+        if not entry or not entry.get("by_system"):
+            continue
+        named.append(
+            f"<em>{esc(entry.get('text') or key)}</em>, where the first judge&rsquo;s best "
+            f"model reaches {max(entry['by_system'].values()):.2f}"
+        )
+    if named:
+        extra_floor = (
+            f", the extra {'one' if len(named) == 1 else spelled(len(named))} being "
+            + ", and ".join(named)
+        )
+    else:
+        extra_floor = ""
+
+    # The systems TRACE is drawn over, counted on the track it is drawn from.
+    # This said `len(current)`, which is the SOAP table's model rows: two
+    # tables, one count, agreeing at eighteen by coincidence. The SOAP table
+    # also carries two dated reference models and the therapist, and iCARE
+    # carries none of them.
+    trace_rows = [
+        row for row in data.rows("icare", JUDGE_A) if row["headline"].get("trace") is not None
+    ]
+
     trace = {}
     for judge in (JUDGE_A, JUDGE_B):
         values = [
@@ -1170,7 +1261,7 @@ def how_much_room_is_left(data: Data) -> str:
     return f"""
   <h2 class="page-break">How much room is left</h2>
   <p>A benchmark that everything passes has stopped measuring. This one has not, and
-     it has not evenly: under <code>{esc(JUDGE_A)}</code> the twenty-three rubric
+     it has not evenly: under <code>{esc(JUDGE_A)}</code> the {spelled(total)} rubric
      criteria are in four different states at once.</p>
   <div class="scroll"><table>
     <thead><tr><th>Criterion</th><th class="num">How many</th><th>What that means</th></tr></thead>
@@ -1179,12 +1270,11 @@ def how_much_room_is_left(data: Data) -> str:
   <p><strong>These are one judge&rsquo;s verdicts.</strong> A verdict reads that
      judge&rsquo;s answers, and the second judge does not return the same reading:
      <code>{esc(JUDGE_B)}</code> puts {other_dead} criteria on the floor rather than
-     {dead}, the extra one being assessment tools, which the first judge leaves 0.02
-     above it. <code>docs/limitations.md</code> excludes only the {dead} both of them
-     put there.</p>
+     {dead}{extra_floor}. <code>docs/limitations.md</code> excludes only the {dead} both
+     of them put there.</p>
   <p>Strip out the {dead} nobody reaches and the most a model could score is
      {reachable:.2f} &mdash; weighted the way completeness is, four sections
-     averaged equally rather than 21 criteria out of 23.
+     averaged equally rather than {total - dead} criteria out of {total}.
      <strong>The highest completeness here is {best:.3f}, which is
      {best / reachable:.0%} of that.</strong> There is room.</p>
   <p>How fast it is being used up: the two 2024 models whose notes the source paper
@@ -1199,7 +1289,7 @@ def how_much_room_is_left(data: Data) -> str:
   <h3>The other track&rsquo;s judge-scored measure is nearly out of room</h3>
   <p>TRACE is a five-dimension framework from the iCARE paper, rated 1 to 5. Its
      authors published the dimension names and never a prompt, so this column is a
-     re-implementation with a prompt of our own. Under one judge all {len(current)}
+     re-implementation with a prompt of our own. Under one judge all {len(trace_rows)}
      models
      land between {trace[JUDGE_A][0]:.2f} and {trace[JUDGE_A][1]:.2f} &mdash;
      {(trace[JUDGE_A][1] - trace[JUDGE_A][0]) / 4:.0%} of the scale. Under the other,
@@ -1225,6 +1315,12 @@ def how_much_room_is_left(data: Data) -> str:
 
 
 def what_it_does_not_mean(data: Data) -> str:
+    # How many systems the coverage figure draws. The caption said "nineteen
+    # labels in a panel this size collide", typed on 2026-08-26 when the SOAP
+    # table held nineteen rows: the same species of count as the six the
+    # briefing was corrected for, in a caption nobody re-read.
+    drawn = len(data.rows("tneval-soap", JUDGE_A))
+
     return f"""
   <h2 class="page-break">What these numbers are not</h2>
   {
@@ -1249,11 +1345,11 @@ def what_it_does_not_mean(data: Data) -> str:
   {
         figure_block(
             "coverage-against-invention.svg",
-            "Completeness against factual accuracy, one panel per judge. The two judges do not "
-            "agree about whether covering more of a checklist goes with inventing more. Only "
-            "the two ends are named &mdash; nineteen labels in a panel this size collide, and "
-            "the figure is about the contrast between the judges rather than about any one "
-            "model. Every system is named in the chart above.",
+            "Completeness against factual accuracy, one panel per judge. The two judges do "
+            "not agree about whether covering more of a checklist goes with inventing more. "
+            f"Only the two ends are named &mdash; {spelled(drawn)} labels in a panel this "
+            "size collide, and the figure is about the contrast between the judges rather "
+            "than about any one model. Every system is named in the chart above.",
         )
     }
   <p class="note">Neither track measures whether a note is clinically useful, safe to
@@ -1277,6 +1373,10 @@ def how_to_check(data: Data) -> str:
         f"saturation-{judge_a}.json",
         f"saturation-{judge_b}.json",
         "calibration.json",
+        # The second judge's agreement with the therapists, and the verdict on
+        # whether its lead over them survives resampling, come from here. The
+        # count said six under a list of five that never named it.
+        "judges.json",
         "corpus-profile.json",
     ]
     if repeatability():

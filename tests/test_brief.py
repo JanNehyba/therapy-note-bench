@@ -287,6 +287,8 @@ def test_the_document_counts_the_files_it_reads(prose):
         "calibration.json",
         "corpus-profile.json",
     ]
+    if (DOCS / "judges.json").exists():
+        expected.append("judges.json")
     if (DOCS / "repeatability.json").exists():
         expected.append("repeatability.json")
     for name in expected:
@@ -412,11 +414,22 @@ def test_both_temporal_denominators_come_from_the_corpus_profile(prose):
     Neither number is about a model: they are what the corpus contains, and
     every temporal figure on the page is a fraction of them.
     """
-    back, forward = brief.temporal_fields(brief.corpus_profile())
+    corpus = brief.corpus_profile()
+    back, forward = brief.temporal_fields(corpus)
     assert back and forward, "corpus-profile.json no longer marks the two temporal sections"
-    assert f"all {brief.spelled(back)} sessions the experts answered" in prose
-    assert f"the {brief.spelled(forward)} sessions where an expert did" in prose
+    # Stated as a fact about the corpus, which is the only thing these two
+    # counts are. Attached to a system they were a denominator the payload
+    # publishes nothing to check: a model scored on 39 of the 40 sessions does
+    # not have 34 of them behind its looking-back score.
+    assert (
+        f"The experts answered the first in {brief.spelled(back)} of the "
+        f"{brief.spelled(corpus['sessions'])} sessions and the second in "
+        f"{brief.spelled(forward)}." in " ".join(prose.split())
+    )
     assert f"{brief.spelled(forward)} sessions where an expert did. Both columns" in prose
+    assert "on all thirty-four sessions the experts answered" not in prose, (
+        "the corpus denominator is attached to a per-system score again"
+    )
 
 
 def test_the_looking_back_sentence_counts_the_models_that_answered_every_session(prose, data):
@@ -433,7 +446,15 @@ def test_the_looking_back_sentence_counts_the_models_that_answered_every_session
     ]
     assert back, "no looking-back column in this payload"
     complete = [value for value in back if value >= 1.0]
-    assert f"{brief.spelled(len(complete))} of {brief.spelled(len(back))} on all" in prose
+    assert (
+        f"{brief.spelled(len(complete))} of {brief.spelled(len(back))} answered it in "
+        "every session where the expert did" in " ".join(prose.split())
+    )
+    for value in sorted({round(v, 2) for v in back if v < 1.0}):
+        assert f"{value:.2f}" in prose, (
+            "a system short of a perfect looking-back score is not printed, so the "
+            "sentence claims more than the column holds"
+        )
 
 
 def test_the_looking_forward_sentence_is_the_best_system_counted(prose, data):
@@ -798,3 +819,110 @@ def test_the_briefing_never_states_a_zero_spanning_lead_as_a_fact(prose, data):
     )
     for wrong in ("clears the same ceiling by less: 0.5", "beats the therapists"):
         assert wrong not in prose or "does not clear" in prose
+
+
+# --- the counts the audit found still typed -----------------------------------
+
+
+@pytest.fixture(scope="module")
+def saturation() -> dict[str, dict]:
+    found = {}
+    for judge in (figures.JUDGE_A, figures.JUDGE_B):
+        path = DOCS / f"saturation-{judge}.json"
+        if path.exists():
+            found[judge] = json.loads(path.read_text(encoding="utf-8"))
+    if len(found) != 2:
+        pytest.skip("both saturation files are needed to compare the two readings")
+    return found
+
+
+def test_the_rubric_criterion_count_is_counted(prose, saturation):
+    """ "the twenty-three rubric criteria" was a word beside a table of counts."""
+    total = len(saturation[figures.JUDGE_A]["criteria"])
+    assert f"the {brief.spelled(total)} rubric criteria are in four different states" in prose
+
+
+def test_the_reachable_count_is_the_total_less_the_floor(prose, saturation):
+    """ "21 criteria out of 23", typed two words after the floor count is
+    interpolated from the payload, and its arithmetic complement.
+    """
+    criteria = saturation[figures.JUDGE_A]["criteria"]
+    dead = sum(1 for entry in criteria if entry.get("verdict") == "unreachable")
+    assert f"rather than {len(criteria) - dead} criteria out of {len(criteria)}" in prose
+
+
+def test_the_criterion_the_second_judge_also_floors_is_named_from_the_payload(prose, saturation):
+    """ "the extra one being assessment tools, which the first judge leaves 0.02
+    above it" -- the name, the margin and the assumption that there is exactly
+    one extra were all typed beside two counts read from the payload.
+
+    The margin was measured against a floor constant this document cannot see,
+    so what is printed is the rate the verdict turns on instead.
+    """
+    floored = {
+        judge: {e["key"] for e in found["criteria"] if e.get("verdict") == "unreachable"}
+        for judge, found in saturation.items()
+    }
+    extra = floored[figures.JUDGE_B] - floored[figures.JUDGE_A]
+    if not extra:
+        pytest.skip("the two judges floor the same criteria in this payload")
+    for key in extra:
+        entry = next(e for e in saturation[figures.JUDGE_A]["criteria"] if e["key"] == key)
+        assert f"<em>{entry['text']}</em>" in prose, f"{key} is floored by one judge and unnamed"
+        assert f"best model reaches {max(entry['by_system'].values()):.2f}" in prose
+
+
+def test_the_trace_model_count_comes_from_the_track_trace_is_on(prose, data):
+    """It was `len(current)`: the SOAP table's model rows, printed as the count
+    of systems an iCARE column covers. The two agree at eighteen today and the
+    SOAP table also carries two dated reference models and the therapist.
+    """
+    rows = [
+        row
+        for row in data.rows("icare", figures.JUDGE_A)
+        if row["headline"].get("trace") is not None
+    ]
+    assert rows, "no TRACE column in this payload"
+    assert f"Under one judge all {len(rows)} models" in " ".join(prose.split())
+
+
+def test_the_coverage_figure_caption_counts_the_labels_it_would_draw(prose, data):
+    """ "nineteen labels in a panel this size collide", typed on 2026-08-26.
+
+    The seventh count of the species the six fixes were about, in a caption
+    under a figure rather than in the prose, which is why the sweep for them
+    missed it.
+    """
+    drawn = len(data.rows(TRACK, figures.JUDGE_A))
+    assert f"{brief.spelled(drawn)} labels in a panel this size collide" in prose
+
+
+def test_the_flat_column_tie_is_the_one_every_named_column_holds(prose, data):
+    """The sentence reported `max` over the four columns' ties as though all
+    four shared it. They do today; a payload where they stop would have kept the
+    sentence saying so.
+    """
+    if ("pdsqi-soap", figures.JUDGE_A) not in data.tables:
+        pytest.skip("no PDSQI table in this payload")
+    worst, flat = None, {}
+    for judge in (figures.JUDGE_A, figures.JUDGE_B):
+        rows = data.rows("pdsqi-soap", judge)
+        found = {}
+        for measure in sorted(rows[0].get("headline", {})):
+            values = [
+                row["headline"][measure] for row in rows if row["headline"].get(measure) is not None
+            ]
+            if not values:
+                continue
+            top = collections.Counter(values).most_common(1)[0]
+            if top[1] * 2 > len(values):
+                found[measure] = (top[1], len(values))
+        if worst is None or len(found) > len(flat):
+            worst, flat = judge, found
+    if not flat:
+        pytest.skip("no flat PDSQI column under either judge")
+
+    ties = {count for count, _total in flat.values()}
+    scored = max(total for _count, total in flat.values())
+    at_least = "" if len(ties) == 1 else "at least "
+    assert f"give one number to {at_least}{min(ties)} of the {scored} systems" in prose

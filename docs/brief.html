@@ -394,8 +394,10 @@
 
   <h2 class="page-break">Three: nothing here can tell you what happens next</h2>
   <p>The iCARE form has two time-bearing sections: what happened at the previous
-     session, and what happens at the next one. Every model reliably fills the first
-     &mdash; sixteen of eighteen on all thirty-four sessions the experts answered, the other two on thirty-three. Almost none
+     session, and what happens at the next one. The experts answered the first in
+     thirty-four of the forty sessions and the second in
+     eleven. Every model reliably fills the first
+     &mdash; sixteen of eighteen answered it in every session where the expert did, and the other two scored 0.97. Almost none
      fills the second, and the best of them manages it in eight of the eleven sessions where an expert did.</p>
   <figure><svg xmlns="http://www.w3.org/2000/svg" class="fig" width="880" height="702" viewBox="0 0 880 702" role="img" aria-label="Looking back against looking forward, per model">
 <style>
@@ -477,9 +479,8 @@
   <p><strong>These are one judge&rsquo;s verdicts.</strong> A verdict reads that
      judge&rsquo;s answers, and the second judge does not return the same reading:
      <code>gpt-5.6-terra</code> puts 3 criteria on the floor rather than
-     2, the extra one being assessment tools, which the first judge leaves 0.02
-     above it. <code>docs/limitations.md</code> excludes only the 2 both of them
-     put there.</p>
+     2, the extra one being <em>Assessment Tools</em>, where the first judge&rsquo;s best model reaches 0.12. <code>docs/limitations.md</code> excludes only the 2 both
+     of them put there.</p>
   <p>Strip out the 2 nobody reaches and the most a model could score is
      0.93 &mdash; weighted the way completeness is, four sections
      averaged equally rather than 21 criteria out of 23.
@@ -661,7 +662,7 @@
 <text class="note" x="0" y="485">under one judge and not the other is a fact about the instrument before it is a fact about the models.</text>
 <text class="note" x="0" y="512">Source: docs/leaderboard.json, harness 0.7.0. Spearman as computed for the concordance panel.</text>
 </svg>
-<figcaption>Completeness against factual accuracy, one panel per judge. The two judges do not agree about whether covering more of a checklist goes with inventing more. Only the two ends are named &mdash; nineteen labels in a panel this size collide, and the figure is about the contrast between the judges rather than about any one model. Every system is named in the chart above.</figcaption></figure>
+<figcaption>Completeness against factual accuracy, one panel per judge. The two judges do not agree about whether covering more of a checklist goes with inventing more. Only the two ends are named &mdash; twenty-one labels in a panel this size collide, and the figure is about the contrast between the judges rather than about any one model. Every system is named in the chart above.</figcaption></figure>
   <p class="note">Neither track measures whether a note is clinically useful, safe to
      put in a record, or acceptable to a supervisor. Nobody has run that study on these
      models. Treat every figure here as a lower bound on what you would have to check
@@ -669,9 +670,9 @@
 
   <h2 class="page-break">How to check any of this</h2>
   <p>Every figure in this document is drawn from the files the site publishes, and
-     every table is built from them row by row. Six files rather than
+     every table is built from them row by row. Seven files rather than
      two, and each one is a link because a section headed &ldquo;how to check&rdquo; that
-     names a file without handing it over is not one: <a href="leaderboard.json"><code>leaderboard.json</code></a>, <a href="saturation-gemini-3.1-pro-preview.json"><code>saturation-gemini-3.1-pro-preview.json</code></a>, <a href="saturation-gpt-5.6-terra.json"><code>saturation-gpt-5.6-terra.json</code></a>, <a href="calibration.json"><code>calibration.json</code></a>, <a href="corpus-profile.json"><code>corpus-profile.json</code></a>, <a href="repeatability.json"><code>repeatability.json</code></a>.</p>
+     names a file without handing it over is not one: <a href="leaderboard.json"><code>leaderboard.json</code></a>, <a href="saturation-gemini-3.1-pro-preview.json"><code>saturation-gemini-3.1-pro-preview.json</code></a>, <a href="saturation-gpt-5.6-terra.json"><code>saturation-gpt-5.6-terra.json</code></a>, <a href="calibration.json"><code>calibration.json</code></a>, <a href="judges.json"><code>judges.json</code></a>, <a href="corpus-profile.json"><code>corpus-profile.json</code></a>, <a href="repeatability.json"><code>repeatability.json</code></a>.</p>
   <p><strong>The prose around them is written by hand.</strong> Some figures in it are
      computed from the payload and a test fails if they drift; others are typed here
      beside the prose they belong to. The test names the sentences it covers, and a
