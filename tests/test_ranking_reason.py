@@ -236,7 +236,18 @@ def test_the_published_tables_carry_the_pair_counts_their_concordance_holds(tmp_
             panel="table-host",
         )
     )
+    # The failure carries what the page actually said. This passes on Windows
+    # and fails on Linux, and an assertion that reports only the string it
+    # wanted leaves the difference to be guessed at -- which it was, for a day.
+    nearby = ""
+    if sentence not in drawn:
+        at = drawn.find("rankable column pairs")
+        if at >= 0:
+            nearby = " | the page says: ..." + drawn[max(0, at - 120) : at + 160] + "..."
+        else:
+            held = [(t["first"], t["second"], t["rankable"]) for t in rankable]
+            nearby = f" | the page never says 'rankable column pairs'; payload holds {held}"
     assert sentence in drawn, (
         f"{sentence} is the count docs/leaderboard.json holds, and the published table "
-        "does not say it"
+        f"does not say it{nearby}"
     )

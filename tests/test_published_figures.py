@@ -265,7 +265,16 @@ def test_every_exception_is_still_needed(pool, tmp_path):
         blocks = _prose(found.page, tmp_path)
         on_page = any(found.figure in NUMBER.findall(block) for block in blocks)
         if not on_page:
-            stale.append(f"{found.page}: {found.figure} is allowed and is not on the page")
+            # With what the page did draw. This passes on Windows and fails on
+            # Linux, and "is not on the page" does not say whether the page is
+            # short, differently worded, or drew a different number there.
+            near = [b for b in blocks if found.figure.split(".")[0] in b][:1]
+            stale.append(
+                f"{found.page}: {found.figure} is allowed and is not on the page "
+                f"({len(blocks)} prose blocks drawn"
+                + (f"; nearest: ...{near[0][:180]}..." if near else "; no block holds its digits")
+                + ")"
+            )
         elif backed(found.figure, pool):
             stale.append(f"{found.page}: {found.figure} is allowed and an artefact now holds it")
     assert not stale, "\n  ".join(["exceptions that have outlived their reason:"] + stale)

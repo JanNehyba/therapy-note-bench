@@ -1974,8 +1974,12 @@ def test_the_published_pdf_is_the_print_of_the_published_briefing():
 
     stamp = pdf.with_suffix(pdf.suffix + ".sha256")
     assert stamp.exists(), "the PDF carries no record of what it was printed from — run `make pdf`"
+    # Text, with the line endings normalised -- see `tools/pdf.py`. `read_text`
+    # gives LF on every platform, and the committed file is LF, so the two
+    # agree wherever this runs.
     printed = stamp.read_text(encoding="utf-8").split()[0]
-    assert printed == hashlib.sha256(brief_html.read_bytes()).hexdigest(), (
+    current = hashlib.sha256(brief_html.read_text(encoding="utf-8").encode("utf-8")).hexdigest()
+    assert printed == current, (
         "docs/therapy-note-bench.pdf was printed from a different brief.html — run `make pdf`"
     )
 

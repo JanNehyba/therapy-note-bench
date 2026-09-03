@@ -217,12 +217,17 @@ def test_no_published_note_is_empty_so_no_figure_moves():
     """
     from tnb.scoring import run as scoring
 
+    # The guard covered `load_sessions` and not the two readers under it, so on
+    # a checkout without `generations/` -- which is gitignored, and so is every
+    # CI checkout -- this raised `FileNotFoundError` instead of skipping. It is
+    # the only test that failed in CI for the forty runs before 2026-09-03, and
+    # it made a red suite the normal state, which is how the three failures that
+    # joined it went unnoticed.
     try:
         sessions = scoring.load_sessions(None)
-    except Exception:  # pragma: no cover - the corpus is not in every checkout
-        pytest.skip("no corpus in this checkout")
-
-    notes = list(scoring.from_generations(sessions)) + list(scoring.from_reference(sessions))
+        notes = list(scoring.from_generations(sessions)) + list(scoring.from_reference(sessions))
+    except (OSError, ValueError, KeyError):  # pragma: no cover - not every checkout has them
+        pytest.skip("no corpus or no generations in this checkout")
     if not notes:
         pytest.skip("nothing generated in this checkout")
 

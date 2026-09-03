@@ -130,7 +130,11 @@ def main(argv: list[str] | None = None) -> int:
     # suite. A digest of the source is cheap, deterministic, and exactly the
     # question -- "is this PDF the print of that page?" -- where comparing two
     # PDFs byte for byte is not (Chrome stamps them).
-    digest = hashlib.sha256(source.read_bytes()).hexdigest()
+    # Hashed as text with the line endings normalised, not as bytes. The page
+    # is written with the platform's endings and committed with LF, so a digest
+    # over the bytes says "printed from a different file" on every machine but
+    # the one that printed it -- which is what CI reported for a day.
+    digest = hashlib.sha256(source.read_text(encoding="utf-8").encode("utf-8")).hexdigest()
     stamp = target.with_suffix(target.suffix + ".sha256")
     stamp.write_text(f"{digest}  {source.name}" + chr(10), encoding="utf-8")
 
