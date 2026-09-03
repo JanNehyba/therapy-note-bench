@@ -47,54 +47,22 @@ DIACRITIC = re.compile(
     "\u011a\u0160\u010c\u0158\u017d\u00dd\u00c1\u00cd\u00c9\u00da\u016e\u0147\u0164\u010e]"
 )
 
-#: The only tracked files that may contain Czech, each with the reason it may.
-#: A path is listed one per line so that adding one is a decision somebody made
-#: rather than a wildcard that quietly grew.
-ALLOWED_CZECH = {
-    "src/tnb/scoring/czech.py": "the six language questions are put to the judge in Czech",
-    "src/tnb/tasks/czech.py": "the note-generation prompt is Czech",
-    "src/tnb/tasks/deepsy.py": "the macros the Deepsy application fills its prompts with",
-    "tests/test_czech_scoring.py": "an invented note, used to exercise the rubric",
-    "tests/test_czech_datasets.py": "asserts on the invented fixtures",
-    "tests/test_czech_run.py": "an invented note, used to exercise the runner",
-    "tests/test_deepsy.py": "an invented session, and the prompt fragments it checks for",
-    "tests/test_czech_pdsqi.py": "an invented note, and an invented line of a session "
-    "that must not reach the judge",
-    "tests/test_czech_anchor.py": "an invented note, quoted two ways, to exercise the "
-    "counted column",
-    "tools/czech_control.py": "an invented clean note, and seven faults planted in it",
-    "tools/czech_pdsqi_control.py": "the filler sentences that pad the invented "
-    "note, to test whether the succinctness column responds",
-    "tools/czech_pdsqi_form.py": "the three PDSQI questions and their anchors in "
-    "Czech, so the rating page can be read without translating as you go",
-    "tools/czech_length.py": "the Czech wording a length instruction would use, "
-    "searched for in the prompts rather than assumed",
-    "tools/czech_brief_cs.py": "the Czech text of the briefing that goes to the team",
-    "tests/fixtures/czech/real/999001.txt": "invented transcript, marked as such",
-    "tests/fixtures/czech/translated/ukazka-b.txt": "invented transcript, marked as such",
-    "tests/test_counts_match_their_lists.py": "four published Czech sentences, "
-    "quoted so their counts can be checked against the same list in code as their "
-    "English twins, and the Czech numerals those sentences spell. Nothing from a "
-    "session: every string is a page's own wording",
-    "tools/czech_calques.py": "the prompt that asks a judge which expressions in a "
-    "note are literal translations from English, plus the two examples it is given. "
-    "Checked fragment by fragment against every transcript and both code files: "
-    "twenty fragments, thirty-six files, no match",
-    "tools/czech_category_control.py": "one invented sentence per category, planted "
-    "in the invented clean note so gate 7 can ask whether a category fires on a note "
-    "built to carry it. Checked fragment by fragment against every transcript and "
-    "every coded span: none of them appears in real material",
-    "tools/czech_code.py": "the two coder prompts, in the language of the notes "
-    "they are asked about",
-    "tools/czech_units.py": "the abbreviations a full stop does not end a sentence "
-    "after, the openers that only qualify what came before, and the subordinators "
-    "that open a second clause -- all of them Czech grammar, none of them a note",
-    "tools/czech_structure.py": "the Czech a regular expression has to match to "
-    "count a paralinguistic claim, a refusal to judge, or a stopword",
-    "tests/test_czech_code.py": "an invented note, used to exercise the span check",
-    "tests/test_czech_units.py": "invented sentences, used to exercise the cut",
-    "tests/test_czech_structure.py": "an invented note, used to exercise the census",
-}
+#: Files that may contain Czech. Empty, and that is the point.
+#:
+#: This list held twenty-five paths on 2026-09-03 and twenty-four of them named
+#: a file that is not in this repository: a Czech *scoring* track -- notes
+#: written and judged in Czech -- which lives in a sibling project and never
+#: landed here. The test below skipped them as "not written yet; the entry is a
+#: decision made in advance", so the allow-list read as though this repository
+#: handled Czech clinical text. It does not, and an open door nobody walks
+#: through still has to be shut: the twenty-fifth was a table of Czech numerals
+#: used by two registered sentences that were themselves removed with the
+#: translated pages.
+#:
+#: **The rule is now absolute.** No tracked file in this repository may contain
+#: Czech, and `test_no_tracked_file_carries_czech` says so with nothing to
+#: except.
+ALLOWED_CZECH: dict[str, str] = {}
 
 #: What every file under ``tests/fixtures/czech`` must say about itself. The
 #: allow-list above opens a door; this is what stops a real transcript walking
@@ -180,6 +148,18 @@ def _relative(path: Path) -> str:
 # --- the broad net ---------------------------------------------------------
 
 
+def test_no_tracked_file_carries_czech(tracked_files):
+    """The rule, with nothing to except.
+
+    `ALLOWED_CZECH` is empty and this asserts it, so re-opening the door is a
+    visible act in a diff rather than one line added to a list of twenty-five.
+    """
+    assert not ALLOWED_CZECH, (
+        "the Czech allow-list has entries again; every one of them is a file "
+        "this repository promises not to hold"
+    )
+
+
 def test_only_named_files_contain_czech(tracked_files):
     offenders = []
     for path in tracked_files:
@@ -205,11 +185,21 @@ def test_the_scanner_is_never_allow_listed():
 
 
 def test_the_allow_list_has_no_stale_entries(tracked_files):
-    """An entry for a file that no longer holds Czech is a door left open."""
+    """An entry for a file that no longer holds Czech is a door left open.
+
+    An entry for a file that is not here at all is the same door, and this used
+    to skip those: "not written yet; the entry is a decision made in advance".
+    Twenty-four of the twenty-five entries were for a Czech scoring track that
+    lives in a sibling project and never landed here, so the list read as
+    though this repository handled Czech clinical text. A decision made in
+    advance is made in the commit that brings the file.
+    """
     present = {_relative(path) for path in tracked_files}
     for name in ALLOWED_CZECH:
-        if name not in present:
-            continue  # not written yet; the entry is a decision made in advance
+        assert name in present, (
+            f"{name} is allow-listed for Czech and is not in this repository -- "
+            "an exemption for a file that is not here is a door held open for nothing"
+        )
         text = _readable_text(REPO_ROOT / name)
         assert text is not None and DIACRITIC.search(text), (
             f"{name} is allow-listed for Czech but contains none -- remove the entry"

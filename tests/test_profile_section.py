@@ -249,3 +249,22 @@ def test_the_readme_says_it_too_and_only_when_it_can(payload):
     pooled = profile["dominance"]["pooled"]
     assert f"{pooled['dominating']} of {pooled['pairs']} ordered pairs" in said
     assert report._orders_sentences(None) == "", "the block appears with no profile behind it"
+
+
+def test_the_section_names_the_interval_it_does_not_have(tmp_path, payload):
+    """`docs/methodology.md` says this page names the gap. It did not.
+
+    The jackknife leaves out a model, so it answers whether a band rests on one
+    system. It says nothing about whether the correlation would hold on a
+    different set of conversations, and the repository resamples conversations
+    everywhere else -- for the tested comparisons, the bands and the judges'
+    own-vendor lean -- so a reader has every reason to assume it was done here
+    too. An absence a reader assumes closed is the failure this whole file is
+    about, one level up.
+    """
+    drawn = _drawn(tmp_path, payload)
+
+    assert "resamples the sessions" in drawn, (
+        "the section prints correlations and does not say which interval is missing"
+    )
+    assert "rather than assumed" in drawn

@@ -61,39 +61,13 @@ WORDS = {
 }
 
 
-#: The Czech forms these registered sentences actually use. Not a general
-#: table: Czech declines a numeral, and a complete one would start matching
-#: ordinary words. Each entry is here because a published sentence spells it.
-CZECH_WORDS = {
-    "dva": 2,
-    "dvě": 2,
-    "tři": 3,
-    "čtyři": 4,
-    "pět": 5,
-    "šest": 6,
-    "sedm": 7,
-    "osm": 8,
-    # The forms a Czech sentence uses after a preposition, so a stale count
-    # fails saying which number it is rather than that the word is unknown.
-    "dvou": 2,
-    "tří": 3,
-    "čtyř": 4,
-    "pěti": 5,
-    "šesti": 6,
-    "sedmi": 7,
-    "osmi": 8,
-}
-
-
 def as_number(token: str) -> int:
-    """`8`, `eight`, `Eight` and `šesti` are the same count differently spelled."""
+    """`8`, `eight` and `Eight` are the same count differently spelled."""
     token = token.strip().lower()
     if token.isdigit():
         return int(token)
     if token in WORDS:
         return WORDS[token]
-    if token in CZECH_WORDS:
-        return CZECH_WORDS[token]
     raise AssertionError(f"{token!r} is neither a digit nor a number word")
 
 

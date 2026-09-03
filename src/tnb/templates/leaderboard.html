@@ -1260,6 +1260,18 @@ function drawProfile() {
        (${signed(touching.high)}), so those two are not shown here to be measuring different
        things.`}</p>`,
 
+    // Its own note, and conditional only on there being correlations to
+    // qualify. Hung on the jackknife sentence it inherited that sentence's
+    // conditions, and a table can print correlations while having no pair of
+    // bands to compare -- which is exactly when a reader is least likely to be
+    // told what was not measured.
+    across.length && `<p class="note">${T`Leaving a model out asks whether a band rests on one
+       system. It does not ask whether these correlations would hold on a different set of
+       conversations: nothing here resamples the sessions the scores were averaged over, so
+       that interval is missing rather than assumed. Every other interval on this site — the
+       tested comparisons, the bands, the judges' own-vendor lean — does resample them, which
+       is why the omission is named instead of left to be inferred.`}</p>`,
+
     counterFinding.length && `<p class="note">${T`<strong>And the disagreement is not the instruments measuring
        different things.</strong> Between individual columns, where no ordering rule is
        involved at all, columns of different instruments predict each other about as well as
