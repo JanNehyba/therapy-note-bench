@@ -145,6 +145,31 @@ weighting does printed beside it. What it would take to settle the weights is
 a clinician reading two notes and saying which they would sign — which is a
 different study.
 
+## And the instruments do not agree with each other either
+
+The section above is about columns inside an instrument. Put to whole
+instruments the question has a sharper answer: the orders the tables publish
+are barely related, and the pair that is scored on the identical notes from the
+identical conversations is among the least related of all.
+
+The figures are on [the leaderboard](https://jannehyba.github.io/therapy-note-bench/),
+in the profile above the tables, where a run keeps them right. They are not
+repeated here, for the reason given further up and demonstrated by this
+document more than once already.
+
+Two readings the numbers invite and the measurements refuse. The first is that
+the instruments measure different things: between individual columns, where no
+ordering convention is involved at all, columns of different instruments
+predict each other about as well as columns of the same instrument. Whatever
+separates the orders happens in the averaging of places. The second is that
+pooling the instruments settles who is better: pooled dominance separates
+nobody at all, but more columns are harder to clear whatever the models do, and
+the same count taken inside a single instrument shows that effect plainly.
+
+So the profile prints a rank per table and no total, and this document adds the
+sentence it exists to add: **a model's place is a property of the instrument
+that placed it, and this benchmark carries more than a single instrument.**
+
 ## The judge is a model
 
 For the TN-Eval track each judge is calibrated against two human annotators and

@@ -159,6 +159,18 @@ written for somebody building or buying one:
 
 `gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on thorough (+0.766) and place 18 of 21 systems differently on it anyway. They agree least on succinct (+0.490, 21 of 21 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. No agreement figure is given for comprehensible (20 of 21 share one value), organized (20 of 21 share one value), synthesized (20 of 21 share one value), useful (20 of 21 share one value): most systems print the same number there, so there are no orderings for the two judges to agree about, and a correlation over them would be decided by the few that differ. Systems beating at least one other on every measure under both judges, which needs no weighting to be true: 4. `gpt-5.6-sol` beats 8. 12 of 21 systems are beaten outright by nobody on the figures as printed. The Group column asks the same question of the same comparisons and keeps a lead only where it also survives resampling, which is the stricter test: its top group is larger than this count, because a lead too small to survive leaves both systems unseparated.
 
+**Is there one ranking? Only as a profile.** [All six rankings, one row per model](https://jannehyba.github.io/therapy-note-bench/) puts every one of the 18 models beside the rank each of the 6 tables gives it, and adds nothing up. A total over the three instruments would have to say what a SOAP rubric is worth against a 17-field form, which is a clinical judgement and not a measurement these numbers can be asked for.
+
+The two judges rank one instrument alike at Spearman +0.819 to +0.951; two different instruments reach −0.278 to +0.715. iCARE against TN-Eval rubric reaches −0.278 to +0.047, which is no relation at all.
+
+It is not the corpora that differ: PDSQI-9 and TN-Eval rubric are scored on the identical notes from the identical conversations, and their orders still agree only +0.038 to +0.361.
+
+Only the wider claim is published, because the sharper one does not survive: with each of the 18 models left out in turn, one instrument under two judges never falls below +0.758 and iCARE against TN-Eval rubric never rises above +0.229, so those two bands never meet.
+
+**And the disagreement is not the instruments measuring different things.** Between individual columns, where no ordering rule is involved, columns of different instruments predict each other about as well as columns of the same one: median |rho| 0.406 against 0.180 under `gemini-3.1-pro-preview`; 0.395 against 0.344 under `gpt-5.6-terra`. Whatever separates the six orders happens in the averaging of places, not in the measurements.
+
+Pooled over all three instruments nothing is separated at all: no model is at least as good as another on every one of the 32 column-legs under both judges, 0 of 306 ordered pairs. Part of that is arithmetic rather than a finding, and the same count inside one instrument shows it (TN-Eval rubric separates 20 of 306 on 6; iCARE separates 40 of 306 on 10; PDSQI-9 separates 11 of 306 on 16). 12 of the 18 models are left undominated by every instrument, which is this benchmark's honest answer to “which model”.
+
 **Rows that were published and are no longer shown** — 795 in 47 group(s), every one still in `results/rows.jsonl`.
 
 | Rows | Track | Judge | At harness | Why |

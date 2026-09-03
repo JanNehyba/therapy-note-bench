@@ -232,3 +232,20 @@ def test_the_headings_lead_back_to_the_tables_they_came_from(tmp_path, payload):
         assert f'data-target="{column["table"]}"' in drawn, (
             f"the {column['instrument']} column does not open its own table"
         )
+
+
+def test_the_readme_says_it_too_and_only_when_it_can(payload):
+    """The README prints one table of the six and has no switch to correct a
+    reader with, so it is the surface most likely to be taken for the ranking.
+    The finding belongs there. Absent the artefact it says nothing rather than
+    saying it with a hole in it, and every figure in it is read off the payload
+    -- a sentence with a typed number is the shape that goes stale here."""
+    said = report._orders_sentences(payload["orders"])
+    profile = payload["orders"]
+
+    assert "adds nothing up" in said
+    assert "not the instruments measuring different things" in said
+    assert f"{len(profile['population'])} models" in said
+    pooled = profile["dominance"]["pooled"]
+    assert f"{pooled['dominating']} of {pooled['pairs']} ordered pairs" in said
+    assert report._orders_sentences(None) == "", "the block appears with no profile behind it"

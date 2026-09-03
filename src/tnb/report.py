@@ -1830,6 +1830,15 @@ def render_readme_section(data: dict) -> str:
         blocks.append(f"**Do the two judges agree?** ({TRACK_TITLES.get(track, track)})")
         blocks.append(found["summary"])
 
+    # The finding the three tables above cannot state between them, in the file
+    # that prints only one of them and has no switch to correct a reader with.
+    # Sentences and not the grid: this view already refuses to print five of
+    # the six tables, and an 18-by-7 table of ranks is exactly what
+    # `_readme_tables` exists to keep out. The profile itself is a link.
+    profile = _orders_sentences(data.get("orders"))
+    if profile:
+        blocks.append(profile)
+
     # Named, not drawn. A number that was published and is not any more
     # should be explainable; a reader who remembers a different figure needs
     # to see that the measure changed, not wonder whether the model did.
@@ -1958,6 +1967,103 @@ def _superseded_reasons(gone: dict) -> list[str]:
     }
     # Older rows carry no `reasons`; before this field existed there was only one.
     return [said[name] for name in gone.get("reasons") or ["harness"] if name in said]
+
+
+def _orders_sentences(profile: dict | None) -> str:
+    """What the three instruments do to each other, for the README.
+
+    Every figure read off the payload, none typed: the shape that has gone
+    stale here before is a sentence with a number in it that nothing recomputes.
+    Returns "" when there is no profile, so the block simply does not appear
+    rather than appearing with a hole in it.
+    """
+    if not profile:
+        return ""
+    bands = {band["kind"]: band for band in profile["bands"]}
+    wide = {band["kind"]: band for band in profile["jackknife"]["bands"]}
+    inside, inside_wide = bands.get("same_instrument"), wide.get("same_instrument")
+    across = [band for kind, band in bands.items() if kind != "same_instrument"]
+    if not inside or not across:
+        return ""
+
+    def signed(value: float) -> str:
+        return f"{value:+.3f}".replace("-", "\u2212")
+
+    def name(track: str) -> str:
+        found = next((c for c in profile["columns_drawn"] if c["track"] == track), None)
+        return found["instrument"] if found else track
+
+    def pair(kind: str, joiner: str = " against ") -> str:
+        return joiner.join(name(track) for track in kind.split("/"))
+
+    apart = min(
+        (band for band in profile["jackknife"]["bands"] if band["kind"] != "same_instrument"),
+        key=lambda band: band["high"],
+    )
+    same_notes = next((band for band in across if band.get("same_corpus")), None)
+    pooled = profile["dominance"]["pooled"]
+    top = sum(
+        1 for row in profile["rows"] if row["top_group"] == len(profile["instruments_tested"])
+    )
+
+    said = [
+        f"**Is there one ranking? Only as a profile.** "
+        f"[All six rankings, one row per model]({SITE_URL}) puts every one of the "
+        f"{len(profile['population'])} models beside the rank each of the "
+        f"{profile['tables']} tables gives it, and adds nothing up. A total over the three "
+        f"instruments would have to say what a SOAP rubric is worth against a 17-field form, "
+        f"which is a clinical judgement and not a measurement these numbers can be asked for.",
+        f"The two judges rank one instrument alike at Spearman {signed(inside['low'])} to "
+        f"{signed(inside['high'])}; two different instruments reach "
+        f"{signed(min(band['low'] for band in across))} to "
+        f"{signed(max(band['high'] for band in across))}. "
+        f"{pair(apart['kind'])} reaches {signed(bands[apart['kind']]['low'])} to "
+        f"{signed(bands[apart['kind']]['high'])}, which is no relation at all.",
+    ]
+    if same_notes:
+        said.append(
+            f"It is not the corpora that differ: {pair(same_notes['kind'], ' and ')} are scored "
+            f"on the identical notes from the identical conversations, and their orders still "
+            f"agree only {signed(same_notes['low'])} to {signed(same_notes['high'])}."
+        )
+    if inside_wide:
+        said.append(
+            f"Only the wider claim is published, because the sharper one does not survive: "
+            f"with each of the {profile['jackknife']['refits']} models left out in turn, one "
+            f"instrument under two judges never falls below {signed(inside_wide['low'])} and "
+            f"{pair(apart['kind'])} never rises above {signed(apart['high'])}, so those two "
+            f"bands never meet."
+        )
+    measured = [
+        f"{judge['across_instruments']['median_abs_rho']:.3f} against "
+        f"{judge['within_instrument']['median_abs_rho']:.3f} under `{judge['judge_model']}`"
+        for judge in profile["columns"]
+        if judge["across_instruments"]["median_abs_rho"] is not None
+        and judge["within_instrument"]["median_abs_rho"] is not None
+    ]
+    if measured:
+        said.append(
+            "**And the disagreement is not the instruments measuring different things.** "
+            "Between individual columns, where no ordering rule is involved, columns of "
+            "different instruments predict each other about as well as columns of the same "
+            "one: median |rho| " + "; ".join(measured) + ". Whatever separates the six orders "
+            "happens in the averaging of places, not in the measurements."
+        )
+    controls = "; ".join(
+        f"{name(track)} separates {one['dominating']} of {one['pairs']} on {one['legs']}"
+        for track, one in sorted(
+            profile["dominance"]["per_instrument"].items(), key=lambda item: item[1]["legs"]
+        )
+    )
+    said.append(
+        f"Pooled over all three instruments nothing is separated at all: no model is at least "
+        f"as good as another on every one of the {pooled['legs']} column-legs under both "
+        f"judges, {pooled['dominating']} of {pooled['pairs']} ordered pairs. Part of that is "
+        f"arithmetic rather than a finding, and the same count inside one instrument shows it "
+        f"({controls}). {top} of the {len(profile['rows'])} models are left undominated by "
+        f"every instrument, which is this benchmark's honest answer to \u201cwhich model\u201d."
+    )
+    return "\n\n".join(said)
 
 
 def _withdrawn_table(superseded: list[dict]) -> str:

@@ -157,6 +157,49 @@ kept claim, the second only by the first, and nothing breaks a tie. The column
 exists only where that artefact does, by construction: a Group drawn from an
 untested relation was built and taken down once.
 
+## What the instruments do to each other
+
+Each table publishes an order of its own. The leaderboard opens with all of
+them side by side: a row per model, its rank in every published table, and no
+total. A total would have to price the instruments against each other, which is
+a clinical judgement and not something these numbers can be asked for.
+
+The ranks there are not the Place a table prints. Place counts the reference
+rows; those rows sit at different heights on each instrument, and the iCARE
+tables carry none at all, so a place among all rows means a different thing per
+table. The profile re-derives each order over the models alone, through the
+same `composite.order` the tables use — the `models_only` variant already
+reported under every table's sensitivity — so no new ordering rule is
+introduced.
+
+What it measures is the Spearman correlation between every pair of those
+orders, grouped by what the pair has in common: the same instrument under both
+judges, or different instruments. The figures are on the leaderboard, where a
+run keeps them right, and they are not repeated here for the reason
+`docs/limitations.md` gives.
+
+Sensitivity is a jackknife over the models. Every band is recomputed with each
+model left out in turn, and a claim is published only if it survives all of
+those, which answers whether a band rests on a single system. **It does not
+answer whether a correlation is distinguishable from zero.** Nothing here
+resamples the conversations the scores came from, and the page says so rather
+than leaving the gap to be assumed closed.
+
+Two things the section may not say, each because a measurement contradicts it.
+That every pair inside an instrument sits above every pair across instruments:
+true of the published figures, false as soon as a model is removed. And that
+the instruments measure different things: between individual columns, where no
+ordering convention is involved, columns of different instruments predict each
+other about as well as columns of the same instrument. Whatever separates the
+orders happens in the averaging of places, not in the measurements. That is
+unexplained, and it is printed beside the finding it qualifies rather than
+filed away here.
+
+The artefact is `docs/orders.json`, written by `tnb orders`. It is arithmetic
+over the published rows — no answer cache, no seed, no draw count — so the page
+refuses it as soon as it stops describing the tables being drawn, down to a
+single rank out of place.
+
 ## The judges
 
 **Two of them, and they mark each other's homework.** Scoring prompts are
