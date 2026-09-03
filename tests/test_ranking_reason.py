@@ -248,8 +248,16 @@ def test_the_published_tables_carry_the_pair_counts_their_concordance_holds(tmp_
         if at >= 0:
             nearby = " | the page says: ..." + drawn[max(0, at - 120) : at + 160] + "..."
         else:
-            held = [(t["first"], t["second"], t["rankable"]) for t in rankable]
-            nearby = f" | the page never says 'rankable column pairs'; payload holds {held}"
+            # The clause hangs off the ranking note, so print that note: what
+            # stands where the clause should be is the thing worth seeing, and
+            # the payload has already been shown to reach the script intact.
+            note = drawn.find("Ordered by")
+            held = [(t["first"], t["second"], t["rankable"], t["agrees"]) for t in rankable]
+            nearby = (
+                " | the ranking note says: ..." + drawn[note : note + 420] + "..."
+                if note >= 0
+                else " | the page draws no ranking note at all"
+            ) + f" | payload holds {held}"
     assert sentence in drawn, (
         f"{sentence} is the count docs/leaderboard.json holds, and the published table "
         f"does not say it{nearby}"
