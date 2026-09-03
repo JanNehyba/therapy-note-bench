@@ -406,6 +406,56 @@
     td.name { font-size: var(--t-sm); }
   }
 
+  /* --- the profile table ------------------------------------------------- */
+
+  /* Six rankings side by side. Every rule here keeps one row legible while the
+     eye travels right: this table is read across, not down. */
+
+  /* The name column is pinned for the reason the tables' own is: six columns of
+     bare digits with the model's name scrolled off the left is unreadable. */
+  table.profile th.name {
+    position: sticky; left: 0; background: var(--bg); text-align: left; z-index: 1;
+  }
+  table.profile thead th.name { z-index: 2; }
+  table.profile th.name::before {
+    content: ''; position: absolute; top: 0; right: 0; bottom: 0;
+    width: 1px; background: var(--line);
+  }
+
+  /* The judge under the instrument in a heading. `thead th` uppercases and
+     letter-spaces, and GEMINI-3.1-PRO-PREVIEW is not a string a reader can
+     match against the switch or against `results/rows.jsonl`; on one line it
+     also makes a column six times as wide as the digit under it. */
+  table.profile th .judge {
+    display: block; max-width: 6.5rem; margin: .15rem 0 0;
+    font-family: var(--mono); font-size: var(--t-xs); font-weight: 500;
+    text-transform: none; letter-spacing: 0;
+    white-space: normal; overflow-wrap: break-word;
+  }
+
+  /* Where one instrument ends and the next begins. Without it the six columns
+     read as one block of digits, and the thing this table exists to show --
+     the pair inside an instrument agreeing where two instruments do not --
+     is invisible. A hairline, because it separates columns that belong to the
+     same table rather than two tables. */
+  table.profile .pair-start { border-left: 1px solid var(--line); }
+
+  /* Out of three instruments, not six tables: the comparison is tested on both
+     judges at once. Muted, so `3/3` reads as a count and not as a score. */
+  table.profile .of { color: var(--muted); }
+
+  /* A row read across ten columns, on a table where the row is the unit. The
+     tables get this from `tr.system:hover`, which is a control that opens a
+     panel; these rows open nothing, so they take the tint and not the cursor. */
+  table.profile tbody tr:hover td,
+  table.profile tbody tr:hover th.name { background: var(--raise); }
+
+  @media (max-width: 34rem) {
+    /* Without this `deepseek-v4-flash-thinking` pins 190px of a 358px viewport
+       and the six columns it is pinned to keep readable have nothing left. */
+    table.profile th.name { max-width: 9.5rem; white-space: normal; }
+  }
+
   /* The judge-comparison table is read left to right as prose, not scanned as a
      column of figures, so its last column stays left-aligned. */
   table.concordance td:last-child, table.concordance th:last-child { text-align: left; }

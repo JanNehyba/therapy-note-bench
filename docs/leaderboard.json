@@ -310,8 +310,10 @@
           "system": "qwen3.8-27b"
         },
         "moved": 15,
+        "n_models": 18,
         "n_systems": 18,
-        "rho": 0.951
+        "rho": 0.951,
+        "rho_models": 0.951
       },
       "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on trace (+0.769) and place 12 of 18 systems differently on it anyway. The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. Systems beating at least one other on every measure under both judges, which needs no weighting to be true: 10. `qwen3.8-flash-next` beats 8. 8 of 18 systems are beaten outright by nobody on the figures as printed. The Group column asks the same question of the same comparisons and keeps a lead only where it also survives resampling, which is the stricter test: its top group is larger than this count, because a lead too small to survive leaves both systems unseparated.",
       "summary_measure": "trace",
@@ -648,8 +650,10 @@
           "system": "qwen3.8-flash-next"
         },
         "moved": 16,
+        "n_models": 18,
         "n_systems": 21,
-        "rho": 0.904
+        "rho": 0.904,
+        "rho_models": 0.889
       },
       "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on thorough (+0.766) and place 18 of 21 systems differently on it anyway. They agree least on succinct (+0.490, 21 of 21 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. No agreement figure is given for comprehensible (20 of 21 share one value), organized (20 of 21 share one value), synthesized (20 of 21 share one value), useful (20 of 21 share one value): most systems print the same number there, so there are no orderings for the two judges to agree about, and a correlation over them would be decided by the few that differ. Systems beating at least one other on every measure under both judges, which needs no weighting to be true: 4. `gpt-5.6-sol` beats 8. 12 of 21 systems are beaten outright by nobody on the figures as printed. The Group column asks the same question of the same comparisons and keeps a lead only where it also survives resampling, which is the stricter test: its top group is larger than this count, because a lead too small to survive leaves both systems unseparated.",
       "summary_measure": "thorough",
@@ -1242,8 +1246,10 @@
           "system": "mistral-large-v2 (TN-Eval, 2025)"
         },
         "moved": 15,
+        "n_models": 18,
         "n_systems": 21,
-        "rho": 0.813
+        "rho": 0.813,
+        "rho_models": 0.819
       },
       "summary": "`gemini-3.1-pro-preview` and `gpt-5.6-terra` agree on the shape of the ranking on completeness (+0.894) and place 16 of 21 systems differently on it anyway. They agree least on faithfulness (+0.695, 19 of 21 moved). The tables can say who is near the top and who is near the bottom. They cannot say who is ninth and who is tenth. Systems beating at least one other on every measure under both judges, which needs no weighting to be true: 16. `google_gemini-3.7-flash` beats 11. 9 of 21 systems are beaten outright by nobody on the figures as printed. The Group column asks the same question of the same comparisons and keeps a lead only where it also survives resampling, which is the stricter test: its top group is larger than this count, because a lead too small to survive leaves both systems unseparated. Completeness says little about conciseness (`gemini-3.1-pro-preview` -0.05, `gpt-5.6-terra` +0.10). Completeness says different things to the two judges about faithfulness (`gemini-3.1-pro-preview` +0.61, `gpt-5.6-terra` +0.01). The two judges disagree about whether those columns are related at all, so neither reading is this benchmark's answer.",
       "summary_measure": "completeness",
@@ -11485,6 +11491,1189 @@
       "used_for": "the iHOPE transcripts and expert notes"
     }
   ],
+  "orders": {
+    "agreement": [
+      {
+        "a": "icare-gemini-3.1-pro-preview-icare-trace-v1-0.7.0-102129",
+        "b": "icare-gpt-5.6-terra-icare-trace-v1-0.7.0-acf643",
+        "kind": "same_instrument",
+        "rho": 0.951,
+        "same_judge": false
+      },
+      {
+        "a": "icare-gemini-3.1-pro-preview-icare-trace-v1-0.7.0-102129",
+        "b": "pdsqi-soap-gemini-3.1-pro-preview-pdsqi9-note-v1-0.7.0-102129",
+        "kind": "icare/pdsqi-soap",
+        "rho": 0.68,
+        "same_judge": true
+      },
+      {
+        "a": "icare-gemini-3.1-pro-preview-icare-trace-v1-0.7.0-102129",
+        "b": "pdsqi-soap-gpt-5.6-terra-pdsqi9-note-v1-0.7.0-acf643",
+        "kind": "icare/pdsqi-soap",
+        "rho": 0.566,
+        "same_judge": false
+      },
+      {
+        "a": "icare-gemini-3.1-pro-preview-icare-trace-v1-0.7.0-102129",
+        "b": "tneval-soap-gemini-3.1-pro-preview-tneval-rubric-v1-0.7.0-102129",
+        "kind": "icare/tneval-soap",
+        "rho": 0.047,
+        "same_judge": true
+      },
+      {
+        "a": "icare-gemini-3.1-pro-preview-icare-trace-v1-0.7.0-102129",
+        "b": "tneval-soap-gpt-5.6-terra-tneval-rubric-v1-0.7.0-acf643",
+        "kind": "icare/tneval-soap",
+        "rho": -0.179,
+        "same_judge": false
+      },
+      {
+        "a": "icare-gpt-5.6-terra-icare-trace-v1-0.7.0-acf643",
+        "b": "pdsqi-soap-gemini-3.1-pro-preview-pdsqi9-note-v1-0.7.0-102129",
+        "kind": "icare/pdsqi-soap",
+        "rho": 0.715,
+        "same_judge": false
+      },
+      {
+        "a": "icare-gpt-5.6-terra-icare-trace-v1-0.7.0-acf643",
+        "b": "pdsqi-soap-gpt-5.6-terra-pdsqi9-note-v1-0.7.0-acf643",
+        "kind": "icare/pdsqi-soap",
+        "rho": 0.596,
+        "same_judge": true
+      },
+      {
+        "a": "icare-gpt-5.6-terra-icare-trace-v1-0.7.0-acf643",
+        "b": "tneval-soap-gemini-3.1-pro-preview-tneval-rubric-v1-0.7.0-102129",
+        "kind": "icare/tneval-soap",
+        "rho": -0.051,
+        "same_judge": false
+      },
+      {
+        "a": "icare-gpt-5.6-terra-icare-trace-v1-0.7.0-acf643",
+        "b": "tneval-soap-gpt-5.6-terra-tneval-rubric-v1-0.7.0-acf643",
+        "kind": "icare/tneval-soap",
+        "rho": -0.278,
+        "same_judge": true
+      },
+      {
+        "a": "pdsqi-soap-gemini-3.1-pro-preview-pdsqi9-note-v1-0.7.0-102129",
+        "b": "pdsqi-soap-gpt-5.6-terra-pdsqi9-note-v1-0.7.0-acf643",
+        "kind": "same_instrument",
+        "rho": 0.889,
+        "same_judge": false
+      },
+      {
+        "a": "pdsqi-soap-gemini-3.1-pro-preview-pdsqi9-note-v1-0.7.0-102129",
+        "b": "tneval-soap-gemini-3.1-pro-preview-tneval-rubric-v1-0.7.0-102129",
+        "kind": "pdsqi-soap/tneval-soap",
+        "rho": 0.159,
+        "same_judge": true
+      },
+      {
+        "a": "pdsqi-soap-gemini-3.1-pro-preview-pdsqi9-note-v1-0.7.0-102129",
+        "b": "tneval-soap-gpt-5.6-terra-tneval-rubric-v1-0.7.0-acf643",
+        "kind": "pdsqi-soap/tneval-soap",
+        "rho": 0.038,
+        "same_judge": false
+      },
+      {
+        "a": "pdsqi-soap-gpt-5.6-terra-pdsqi9-note-v1-0.7.0-acf643",
+        "b": "tneval-soap-gemini-3.1-pro-preview-tneval-rubric-v1-0.7.0-102129",
+        "kind": "pdsqi-soap/tneval-soap",
+        "rho": 0.361,
+        "same_judge": false
+      },
+      {
+        "a": "pdsqi-soap-gpt-5.6-terra-pdsqi9-note-v1-0.7.0-acf643",
+        "b": "tneval-soap-gpt-5.6-terra-tneval-rubric-v1-0.7.0-acf643",
+        "kind": "pdsqi-soap/tneval-soap",
+        "rho": 0.233,
+        "same_judge": true
+      },
+      {
+        "a": "tneval-soap-gemini-3.1-pro-preview-tneval-rubric-v1-0.7.0-102129",
+        "b": "tneval-soap-gpt-5.6-terra-tneval-rubric-v1-0.7.0-acf643",
+        "kind": "same_instrument",
+        "rho": 0.819,
+        "same_judge": false
+      }
+    ],
+    "bands": [
+      {
+        "high": 0.715,
+        "kind": "icare/pdsqi-soap",
+        "low": 0.566,
+        "pairs": 4,
+        "same_corpus": false
+      },
+      {
+        "high": 0.047,
+        "kind": "icare/tneval-soap",
+        "low": -0.278,
+        "pairs": 4,
+        "same_corpus": false
+      },
+      {
+        "high": 0.361,
+        "kind": "pdsqi-soap/tneval-soap",
+        "low": 0.038,
+        "pairs": 4,
+        "same_corpus": true
+      },
+      {
+        "high": 0.951,
+        "kind": "same_instrument",
+        "low": 0.819,
+        "pairs": 3,
+        "same_corpus": false
+      }
+    ],
+    "built": "2026-09-03",
+    "columns": [
+      {
+        "across_instruments": {
+          "median_abs_rho": 0.406,
+          "pairs": 40
+        },
+        "columns": 11,
+        "judge_model": "gemini-3.1-pro-preview",
+        "within_instrument": {
+          "median_abs_rho": 0.18,
+          "pairs": 15
+        }
+      },
+      {
+        "across_instruments": {
+          "median_abs_rho": 0.395,
+          "pairs": 61
+        },
+        "columns": 14,
+        "judge_model": "gpt-5.6-terra",
+        "within_instrument": {
+          "median_abs_rho": 0.344,
+          "pairs": 30
+        }
+      }
+    ],
+    "columns_drawn": [
+      {
+        "instrument": "TN-Eval rubric",
+        "judge_model": "gemini-3.1-pro-preview",
+        "table": "tneval-soap-gemini-3.1-pro-preview-tneval-rubric-v1-0.7.0-102129",
+        "title": "TN-Eval SOAP · AnnoMI conversations",
+        "track": "tneval-soap"
+      },
+      {
+        "instrument": "TN-Eval rubric",
+        "judge_model": "gpt-5.6-terra",
+        "table": "tneval-soap-gpt-5.6-terra-tneval-rubric-v1-0.7.0-acf643",
+        "title": "TN-Eval SOAP · AnnoMI conversations",
+        "track": "tneval-soap"
+      },
+      {
+        "instrument": "iCARE",
+        "judge_model": "gemini-3.1-pro-preview",
+        "table": "icare-gemini-3.1-pro-preview-icare-trace-v1-0.7.0-102129",
+        "title": "iCARE form on the iHOPE corpus · 17 sections per session",
+        "track": "icare"
+      },
+      {
+        "instrument": "iCARE",
+        "judge_model": "gpt-5.6-terra",
+        "table": "icare-gpt-5.6-terra-icare-trace-v1-0.7.0-acf643",
+        "title": "iCARE form on the iHOPE corpus · 17 sections per session",
+        "track": "icare"
+      },
+      {
+        "instrument": "PDSQI-9",
+        "judge_model": "gemini-3.1-pro-preview",
+        "table": "pdsqi-soap-gemini-3.1-pro-preview-pdsqi9-note-v1-0.7.0-102129",
+        "title": "PDSQI-9 · the SOAP notes on AnnoMI, rated for quality",
+        "track": "pdsqi-soap"
+      },
+      {
+        "instrument": "PDSQI-9",
+        "judge_model": "gpt-5.6-terra",
+        "table": "pdsqi-soap-gpt-5.6-terra-pdsqi9-note-v1-0.7.0-acf643",
+        "title": "PDSQI-9 · the SOAP notes on AnnoMI, rated for quality",
+        "track": "pdsqi-soap"
+      }
+    ],
+    "dominance": {
+      "per_instrument": {
+        "icare": {
+          "dominating": 40,
+          "judges": 2,
+          "legs": 10,
+          "pairs": 306,
+          "systems": 18
+        },
+        "pdsqi-soap": {
+          "dominating": 11,
+          "judges": 2,
+          "legs": 16,
+          "pairs": 306,
+          "systems": 18
+        },
+        "tneval-soap": {
+          "dominating": 20,
+          "judges": 2,
+          "legs": 6,
+          "pairs": 306,
+          "systems": 18
+        }
+      },
+      "pooled": {
+        "dominating": 0,
+        "judges": 2,
+        "legs": 32,
+        "pairs": 306,
+        "systems": 18
+      }
+    },
+    "instruments": 3,
+    "instruments_tested": [
+      "icare",
+      "pdsqi-soap",
+      "tneval-soap"
+    ],
+    "jackknife": {
+      "bands": [
+        {
+          "high": 0.782,
+          "kind": "icare/pdsqi-soap",
+          "low": 0.475,
+          "same_corpus": false
+        },
+        {
+          "high": 0.229,
+          "kind": "icare/tneval-soap",
+          "low": -0.397,
+          "same_corpus": false
+        },
+        {
+          "high": 0.459,
+          "kind": "pdsqi-soap/tneval-soap",
+          "low": -0.118,
+          "same_corpus": true
+        },
+        {
+          "high": 0.968,
+          "kind": "same_instrument",
+          "low": 0.758,
+          "same_corpus": false
+        }
+      ],
+      "refits": 18,
+      "rule": "leave_one_system_out"
+    },
+    "orders": [
+      {
+        "differs_from_place": [],
+        "instrument": "iCARE",
+        "judge_model": "gemini-3.1-pro-preview",
+        "mean_places": {
+          "deepseek-v4-flash": 10.8,
+          "deepseek-v4-flash-thinking": 11.0,
+          "gemma4": 4.8,
+          "glm-5": 5.6,
+          "glm-5.2": 5.4,
+          "glm-5.3": 8.0,
+          "google_gemini-3.1-pro-preview": 5.2,
+          "google_gemini-3.7-flash": 6.8,
+          "gpt-5.6-luna": 10.4,
+          "gpt-5.6-sol": 4.8,
+          "gpt-5.6-terra": 9.8,
+          "gpt-oss-120b": 13.2,
+          "kimi-k3": 8.2,
+          "mistral-medium-3.5": 8.4,
+          "qwen3.5-122b": 11.2,
+          "qwen3.5-int4": 6.6,
+          "qwen3.8-27b": 5.6,
+          "qwen3.8-flash-next": 3.2
+        },
+        "ranks": {
+          "deepseek-v4-flash": 15,
+          "deepseek-v4-flash-thinking": 16,
+          "gemma4": 2,
+          "glm-5": 6,
+          "glm-5.2": 5,
+          "glm-5.3": 10,
+          "google_gemini-3.1-pro-preview": 4,
+          "google_gemini-3.7-flash": 9,
+          "gpt-5.6-luna": 14,
+          "gpt-5.6-sol": 2,
+          "gpt-5.6-terra": 13,
+          "gpt-oss-120b": 18,
+          "kimi-k3": 11,
+          "mistral-medium-3.5": 12,
+          "qwen3.5-122b": 17,
+          "qwen3.5-int4": 8,
+          "qwen3.8-27b": 6,
+          "qwen3.8-flash-next": 1
+        },
+        "systems": [
+          "deepseek-v4-flash",
+          "deepseek-v4-flash-thinking",
+          "gemma4",
+          "glm-5",
+          "glm-5.2",
+          "glm-5.3",
+          "google_gemini-3.1-pro-preview",
+          "google_gemini-3.7-flash",
+          "gpt-5.6-luna",
+          "gpt-5.6-sol",
+          "gpt-5.6-terra",
+          "gpt-oss-120b",
+          "kimi-k3",
+          "mistral-medium-3.5",
+          "qwen3.5-122b",
+          "qwen3.5-int4",
+          "qwen3.8-27b",
+          "qwen3.8-flash-next"
+        ],
+        "table": "icare-gemini-3.1-pro-preview-icare-trace-v1-0.7.0-102129",
+        "title": "iCARE form on the iHOPE corpus · 17 sections per session",
+        "track": "icare",
+        "versions": {
+          "harness_version": "0.7.0",
+          "judge_model": "gemini-3.1-pro-preview",
+          "judge_prompt_version": "icare-trace-v1",
+          "judge_settings": {
+            "max_output_tokens": 288,
+            "model": "gemini-3.1-pro-preview",
+            "temperature": 0,
+            "thinking_budget": 256
+          },
+          "prompt_version": "icare-zeroshot-v1"
+        }
+      },
+      {
+        "differs_from_place": [],
+        "instrument": "iCARE",
+        "judge_model": "gpt-5.6-terra",
+        "mean_places": {
+          "deepseek-v4-flash": 10.8,
+          "deepseek-v4-flash-thinking": 11.2,
+          "gemma4": 3.2,
+          "glm-5": 5.6,
+          "glm-5.2": 5.6,
+          "glm-5.3": 9.6,
+          "google_gemini-3.1-pro-preview": 5.2,
+          "google_gemini-3.7-flash": 6.8,
+          "gpt-5.6-luna": 9.6,
+          "gpt-5.6-sol": 4.8,
+          "gpt-5.6-terra": 9.4,
+          "gpt-oss-120b": 13.0,
+          "kimi-k3": 9.6,
+          "mistral-medium-3.5": 8.4,
+          "qwen3.5-122b": 11.0,
+          "qwen3.5-int4": 7.8,
+          "qwen3.8-27b": 4.6,
+          "qwen3.8-flash-next": 3.4
+        },
+        "ranks": {
+          "deepseek-v4-flash": 15,
+          "deepseek-v4-flash-thinking": 17,
+          "gemma4": 1,
+          "glm-5": 6,
+          "glm-5.2": 6,
+          "glm-5.3": 12,
+          "google_gemini-3.1-pro-preview": 5,
+          "google_gemini-3.7-flash": 8,
+          "gpt-5.6-luna": 12,
+          "gpt-5.6-sol": 4,
+          "gpt-5.6-terra": 11,
+          "gpt-oss-120b": 18,
+          "kimi-k3": 12,
+          "mistral-medium-3.5": 10,
+          "qwen3.5-122b": 16,
+          "qwen3.5-int4": 9,
+          "qwen3.8-27b": 3,
+          "qwen3.8-flash-next": 2
+        },
+        "systems": [
+          "deepseek-v4-flash",
+          "deepseek-v4-flash-thinking",
+          "gemma4",
+          "glm-5",
+          "glm-5.2",
+          "glm-5.3",
+          "google_gemini-3.1-pro-preview",
+          "google_gemini-3.7-flash",
+          "gpt-5.6-luna",
+          "gpt-5.6-sol",
+          "gpt-5.6-terra",
+          "gpt-oss-120b",
+          "kimi-k3",
+          "mistral-medium-3.5",
+          "qwen3.5-122b",
+          "qwen3.5-int4",
+          "qwen3.8-27b",
+          "qwen3.8-flash-next"
+        ],
+        "table": "icare-gpt-5.6-terra-icare-trace-v1-0.7.0-acf643",
+        "title": "iCARE form on the iHOPE corpus · 17 sections per session",
+        "track": "icare",
+        "versions": {
+          "harness_version": "0.7.0",
+          "judge_model": "gpt-5.6-terra",
+          "judge_prompt_version": "icare-trace-v1",
+          "judge_settings": {
+            "backend": "openai",
+            "effort": "medium",
+            "max_output_tokens": 672,
+            "model": "gpt-5.6-terra"
+          },
+          "prompt_version": "icare-zeroshot-v1"
+        }
+      },
+      {
+        "differs_from_place": [
+          "deepseek-v4-flash-thinking",
+          "gemma4",
+          "glm-5.2",
+          "glm-5.3",
+          "gpt-5.6-luna",
+          "gpt-5.6-terra",
+          "gpt-oss-120b",
+          "kimi-k3",
+          "mistral-medium-3.5",
+          "qwen3.5-122b",
+          "qwen3.5-int4"
+        ],
+        "instrument": "PDSQI-9",
+        "judge_model": "gemini-3.1-pro-preview",
+        "mean_places": {
+          "deepseek-v4-flash": 6.12,
+          "deepseek-v4-flash-thinking": 6.5,
+          "gemma4": 4.25,
+          "glm-5": 5.62,
+          "glm-5.2": 4.25,
+          "glm-5.3": 5.62,
+          "google_gemini-3.1-pro-preview": 5.0,
+          "google_gemini-3.7-flash": 2.88,
+          "gpt-5.6-luna": 4.12,
+          "gpt-5.6-sol": 1.38,
+          "gpt-5.6-terra": 2.88,
+          "gpt-oss-120b": 8.5,
+          "kimi-k3": 5.12,
+          "mistral-medium-3.5": 5.75,
+          "qwen3.5-122b": 8.0,
+          "qwen3.5-int4": 5.38,
+          "qwen3.8-27b": 4.12,
+          "qwen3.8-flash-next": 2.75
+        },
+        "ranks": {
+          "deepseek-v4-flash": 15,
+          "deepseek-v4-flash-thinking": 16,
+          "gemma4": 7,
+          "glm-5": 12,
+          "glm-5.2": 7,
+          "glm-5.3": 12,
+          "google_gemini-3.1-pro-preview": 9,
+          "google_gemini-3.7-flash": 3,
+          "gpt-5.6-luna": 5,
+          "gpt-5.6-sol": 1,
+          "gpt-5.6-terra": 3,
+          "gpt-oss-120b": 18,
+          "kimi-k3": 10,
+          "mistral-medium-3.5": 14,
+          "qwen3.5-122b": 17,
+          "qwen3.5-int4": 11,
+          "qwen3.8-27b": 5,
+          "qwen3.8-flash-next": 2
+        },
+        "systems": [
+          "deepseek-v4-flash",
+          "deepseek-v4-flash-thinking",
+          "gemma4",
+          "glm-5",
+          "glm-5.2",
+          "glm-5.3",
+          "google_gemini-3.1-pro-preview",
+          "google_gemini-3.7-flash",
+          "gpt-5.6-luna",
+          "gpt-5.6-sol",
+          "gpt-5.6-terra",
+          "gpt-oss-120b",
+          "kimi-k3",
+          "mistral-medium-3.5",
+          "qwen3.5-122b",
+          "qwen3.5-int4",
+          "qwen3.8-27b",
+          "qwen3.8-flash-next"
+        ],
+        "table": "pdsqi-soap-gemini-3.1-pro-preview-pdsqi9-note-v1-0.7.0-102129",
+        "title": "PDSQI-9 · the SOAP notes on AnnoMI, rated for quality",
+        "track": "pdsqi-soap",
+        "versions": {
+          "harness_version": "0.7.0",
+          "judge_model": "gemini-3.1-pro-preview",
+          "judge_prompt_version": "pdsqi9-note-v1",
+          "judge_settings": {
+            "max_output_tokens": 288,
+            "model": "gemini-3.1-pro-preview",
+            "temperature": 0,
+            "thinking_budget": 256
+          },
+          "prompt_version": "tneval-soap-v1"
+        }
+      },
+      {
+        "differs_from_place": [
+          "deepseek-v4-flash",
+          "deepseek-v4-flash-thinking",
+          "glm-5",
+          "glm-5.2",
+          "glm-5.3",
+          "google_gemini-3.7-flash",
+          "gpt-oss-120b",
+          "kimi-k3",
+          "mistral-medium-3.5",
+          "qwen3.5-122b"
+        ],
+        "instrument": "PDSQI-9",
+        "judge_model": "gpt-5.6-terra",
+        "mean_places": {
+          "deepseek-v4-flash": 9.75,
+          "deepseek-v4-flash-thinking": 12.0,
+          "gemma4": 8.0,
+          "glm-5": 9.0,
+          "glm-5.2": 5.25,
+          "glm-5.3": 9.0,
+          "google_gemini-3.1-pro-preview": 6.62,
+          "google_gemini-3.7-flash": 5.62,
+          "gpt-5.6-luna": 5.75,
+          "gpt-5.6-sol": 2.5,
+          "gpt-5.6-terra": 3.12,
+          "gpt-oss-120b": 13.38,
+          "kimi-k3": 8.38,
+          "mistral-medium-3.5": 10.88,
+          "qwen3.5-122b": 11.62,
+          "qwen3.5-int4": 7.5,
+          "qwen3.8-27b": 6.12,
+          "qwen3.8-flash-next": 8.25
+        },
+        "ranks": {
+          "deepseek-v4-flash": 14,
+          "deepseek-v4-flash-thinking": 17,
+          "gemma4": 9,
+          "glm-5": 12,
+          "glm-5.2": 3,
+          "glm-5.3": 12,
+          "google_gemini-3.1-pro-preview": 7,
+          "google_gemini-3.7-flash": 4,
+          "gpt-5.6-luna": 5,
+          "gpt-5.6-sol": 1,
+          "gpt-5.6-terra": 2,
+          "gpt-oss-120b": 18,
+          "kimi-k3": 11,
+          "mistral-medium-3.5": 15,
+          "qwen3.5-122b": 16,
+          "qwen3.5-int4": 8,
+          "qwen3.8-27b": 6,
+          "qwen3.8-flash-next": 10
+        },
+        "systems": [
+          "deepseek-v4-flash",
+          "deepseek-v4-flash-thinking",
+          "gemma4",
+          "glm-5",
+          "glm-5.2",
+          "glm-5.3",
+          "google_gemini-3.1-pro-preview",
+          "google_gemini-3.7-flash",
+          "gpt-5.6-luna",
+          "gpt-5.6-sol",
+          "gpt-5.6-terra",
+          "gpt-oss-120b",
+          "kimi-k3",
+          "mistral-medium-3.5",
+          "qwen3.5-122b",
+          "qwen3.5-int4",
+          "qwen3.8-27b",
+          "qwen3.8-flash-next"
+        ],
+        "table": "pdsqi-soap-gpt-5.6-terra-pdsqi9-note-v1-0.7.0-acf643",
+        "title": "PDSQI-9 · the SOAP notes on AnnoMI, rated for quality",
+        "track": "pdsqi-soap",
+        "versions": {
+          "harness_version": "0.7.0",
+          "judge_model": "gpt-5.6-terra",
+          "judge_prompt_version": "pdsqi9-note-v1",
+          "judge_settings": {
+            "backend": "openai",
+            "effort": "medium",
+            "max_output_tokens": 672,
+            "model": "gpt-5.6-terra"
+          },
+          "prompt_version": "tneval-soap-v1"
+        }
+      },
+      {
+        "differs_from_place": [
+          "deepseek-v4-flash",
+          "gpt-oss-120b",
+          "mistral-medium-3.5"
+        ],
+        "instrument": "TN-Eval rubric",
+        "judge_model": "gemini-3.1-pro-preview",
+        "mean_places": {
+          "deepseek-v4-flash": 11.33,
+          "deepseek-v4-flash-thinking": 12.33,
+          "gemma4": 10.67,
+          "glm-5": 10.0,
+          "glm-5.2": 9.33,
+          "glm-5.3": 6.0,
+          "google_gemini-3.1-pro-preview": 5.67,
+          "google_gemini-3.7-flash": 3.0,
+          "gpt-5.6-luna": 10.67,
+          "gpt-5.6-sol": 9.0,
+          "gpt-5.6-terra": 6.33,
+          "gpt-oss-120b": 11.0,
+          "kimi-k3": 5.0,
+          "mistral-medium-3.5": 11.0,
+          "qwen3.5-122b": 8.67,
+          "qwen3.5-int4": 9.33,
+          "qwen3.8-27b": 13.67,
+          "qwen3.8-flash-next": 14.67
+        },
+        "ranks": {
+          "deepseek-v4-flash": 15,
+          "deepseek-v4-flash-thinking": 16,
+          "gemma4": 11,
+          "glm-5": 10,
+          "glm-5.2": 8,
+          "glm-5.3": 4,
+          "google_gemini-3.1-pro-preview": 3,
+          "google_gemini-3.7-flash": 1,
+          "gpt-5.6-luna": 11,
+          "gpt-5.6-sol": 7,
+          "gpt-5.6-terra": 5,
+          "gpt-oss-120b": 13,
+          "kimi-k3": 2,
+          "mistral-medium-3.5": 13,
+          "qwen3.5-122b": 6,
+          "qwen3.5-int4": 8,
+          "qwen3.8-27b": 17,
+          "qwen3.8-flash-next": 18
+        },
+        "systems": [
+          "deepseek-v4-flash",
+          "deepseek-v4-flash-thinking",
+          "gemma4",
+          "glm-5",
+          "glm-5.2",
+          "glm-5.3",
+          "google_gemini-3.1-pro-preview",
+          "google_gemini-3.7-flash",
+          "gpt-5.6-luna",
+          "gpt-5.6-sol",
+          "gpt-5.6-terra",
+          "gpt-oss-120b",
+          "kimi-k3",
+          "mistral-medium-3.5",
+          "qwen3.5-122b",
+          "qwen3.5-int4",
+          "qwen3.8-27b",
+          "qwen3.8-flash-next"
+        ],
+        "table": "tneval-soap-gemini-3.1-pro-preview-tneval-rubric-v1-0.7.0-102129",
+        "title": "TN-Eval SOAP · AnnoMI conversations",
+        "track": "tneval-soap",
+        "versions": {
+          "harness_version": "0.7.0",
+          "judge_model": "gemini-3.1-pro-preview",
+          "judge_prompt_version": "tneval-rubric-v1",
+          "judge_settings": {
+            "max_output_tokens": 288,
+            "model": "gemini-3.1-pro-preview",
+            "temperature": 0,
+            "thinking_budget": 256
+          },
+          "prompt_version": "tneval-soap-v1"
+        }
+      },
+      {
+        "differs_from_place": [
+          "deepseek-v4-flash",
+          "deepseek-v4-flash-thinking",
+          "gemma4",
+          "glm-5",
+          "glm-5.2",
+          "gpt-5.6-luna",
+          "gpt-oss-120b",
+          "qwen3.5-int4",
+          "qwen3.8-27b",
+          "qwen3.8-flash-next"
+        ],
+        "instrument": "TN-Eval rubric",
+        "judge_model": "gpt-5.6-terra",
+        "mean_places": {
+          "deepseek-v4-flash": 10.0,
+          "deepseek-v4-flash-thinking": 10.33,
+          "gemma4": 10.67,
+          "glm-5": 10.67,
+          "glm-5.2": 10.33,
+          "glm-5.3": 7.67,
+          "google_gemini-3.1-pro-preview": 5.33,
+          "google_gemini-3.7-flash": 4.67,
+          "gpt-5.6-luna": 10.67,
+          "gpt-5.6-sol": 7.33,
+          "gpt-5.6-terra": 6.33,
+          "gpt-oss-120b": 9.33,
+          "kimi-k3": 8.0,
+          "mistral-medium-3.5": 11.0,
+          "qwen3.5-122b": 8.0,
+          "qwen3.5-int4": 10.33,
+          "qwen3.8-27b": 13.33,
+          "qwen3.8-flash-next": 14.67
+        },
+        "ranks": {
+          "deepseek-v4-flash": 9,
+          "deepseek-v4-flash-thinking": 10,
+          "gemma4": 13,
+          "glm-5": 13,
+          "glm-5.2": 10,
+          "glm-5.3": 5,
+          "google_gemini-3.1-pro-preview": 2,
+          "google_gemini-3.7-flash": 1,
+          "gpt-5.6-luna": 13,
+          "gpt-5.6-sol": 4,
+          "gpt-5.6-terra": 3,
+          "gpt-oss-120b": 8,
+          "kimi-k3": 6,
+          "mistral-medium-3.5": 16,
+          "qwen3.5-122b": 6,
+          "qwen3.5-int4": 10,
+          "qwen3.8-27b": 17,
+          "qwen3.8-flash-next": 18
+        },
+        "systems": [
+          "deepseek-v4-flash",
+          "deepseek-v4-flash-thinking",
+          "gemma4",
+          "glm-5",
+          "glm-5.2",
+          "glm-5.3",
+          "google_gemini-3.1-pro-preview",
+          "google_gemini-3.7-flash",
+          "gpt-5.6-luna",
+          "gpt-5.6-sol",
+          "gpt-5.6-terra",
+          "gpt-oss-120b",
+          "kimi-k3",
+          "mistral-medium-3.5",
+          "qwen3.5-122b",
+          "qwen3.5-int4",
+          "qwen3.8-27b",
+          "qwen3.8-flash-next"
+        ],
+        "table": "tneval-soap-gpt-5.6-terra-tneval-rubric-v1-0.7.0-acf643",
+        "title": "TN-Eval SOAP · AnnoMI conversations",
+        "track": "tneval-soap",
+        "versions": {
+          "harness_version": "0.7.0",
+          "judge_model": "gpt-5.6-terra",
+          "judge_prompt_version": "tneval-rubric-v1",
+          "judge_settings": {
+            "backend": "openai",
+            "effort": "medium",
+            "max_output_tokens": 672,
+            "model": "gpt-5.6-terra"
+          },
+          "prompt_version": "tneval-soap-v1"
+        }
+      }
+    ],
+    "outside": [],
+    "population": [
+      "deepseek-v4-flash",
+      "deepseek-v4-flash-thinking",
+      "gemma4",
+      "glm-5",
+      "glm-5.2",
+      "glm-5.3",
+      "google_gemini-3.1-pro-preview",
+      "google_gemini-3.7-flash",
+      "gpt-5.6-luna",
+      "gpt-5.6-sol",
+      "gpt-5.6-terra",
+      "gpt-oss-120b",
+      "kimi-k3",
+      "mistral-medium-3.5",
+      "qwen3.5-122b",
+      "qwen3.5-int4",
+      "qwen3.8-27b",
+      "qwen3.8-flash-next"
+    ],
+    "reference": {
+      "in_tables": 4,
+      "of_tables": 6,
+      "systems": [
+        {
+          "label": "llama-3.1-70b (TN-Eval, 2025)",
+          "system_id": "llama-3.1-70b",
+          "tables": [
+            "pdsqi-soap-gemini-3.1-pro-preview-pdsqi9-note-v1-0.7.0-102129",
+            "pdsqi-soap-gpt-5.6-terra-pdsqi9-note-v1-0.7.0-acf643",
+            "tneval-soap-gemini-3.1-pro-preview-tneval-rubric-v1-0.7.0-102129",
+            "tneval-soap-gpt-5.6-terra-tneval-rubric-v1-0.7.0-acf643"
+          ]
+        },
+        {
+          "label": "mistral-large-v2 (TN-Eval, 2025)",
+          "system_id": "mistral-large-v2",
+          "tables": [
+            "pdsqi-soap-gemini-3.1-pro-preview-pdsqi9-note-v1-0.7.0-102129",
+            "pdsqi-soap-gpt-5.6-terra-pdsqi9-note-v1-0.7.0-acf643",
+            "tneval-soap-gemini-3.1-pro-preview-tneval-rubric-v1-0.7.0-102129",
+            "tneval-soap-gpt-5.6-terra-tneval-rubric-v1-0.7.0-acf643"
+          ]
+        },
+        {
+          "label": "therapist-written (TN-Eval)",
+          "system_id": "therapist",
+          "tables": [
+            "pdsqi-soap-gemini-3.1-pro-preview-pdsqi9-note-v1-0.7.0-102129",
+            "pdsqi-soap-gpt-5.6-terra-pdsqi9-note-v1-0.7.0-acf643",
+            "tneval-soap-gemini-3.1-pro-preview-tneval-rubric-v1-0.7.0-102129",
+            "tneval-soap-gpt-5.6-terra-tneval-rubric-v1-0.7.0-acf643"
+          ]
+        }
+      ]
+    },
+    "rows": [
+      {
+        "best": 1,
+        "label": "gpt-5.6-sol",
+        "median": 3.0,
+        "ranks": [
+          7,
+          4,
+          2,
+          4,
+          1,
+          1
+        ],
+        "system_id": "gpt-5.6-sol",
+        "top_group": 3,
+        "worst": 7
+      },
+      {
+        "best": 1,
+        "label": "google_gemini-3.7-flash",
+        "median": 3.5,
+        "ranks": [
+          1,
+          1,
+          9,
+          8,
+          3,
+          4
+        ],
+        "system_id": "google_gemini-3.7-flash",
+        "top_group": 3,
+        "worst": 9
+      },
+      {
+        "best": 2,
+        "label": "gpt-5.6-terra",
+        "median": 4.0,
+        "ranks": [
+          5,
+          3,
+          13,
+          11,
+          3,
+          2
+        ],
+        "system_id": "gpt-5.6-terra",
+        "top_group": 3,
+        "worst": 13
+      },
+      {
+        "best": 2,
+        "label": "google_gemini-3.1-pro-preview",
+        "median": 4.5,
+        "ranks": [
+          3,
+          2,
+          4,
+          5,
+          9,
+          7
+        ],
+        "system_id": "google_gemini-3.1-pro-preview",
+        "top_group": 3,
+        "worst": 9
+      },
+      {
+        "best": 3,
+        "label": "glm-5.2",
+        "median": 6.5,
+        "ranks": [
+          8,
+          10,
+          5,
+          6,
+          7,
+          3
+        ],
+        "system_id": "glm-5.2",
+        "top_group": 3,
+        "worst": 10
+      },
+      {
+        "best": 1,
+        "label": "gemma4",
+        "median": 8.0,
+        "ranks": [
+          11,
+          13,
+          2,
+          1,
+          7,
+          9
+        ],
+        "system_id": "gemma4",
+        "top_group": 3,
+        "worst": 13
+      },
+      {
+        "best": 8,
+        "label": "qwen3.5-int4",
+        "median": 8.5,
+        "ranks": [
+          8,
+          10,
+          8,
+          9,
+          11,
+          8
+        ],
+        "system_id": "qwen3.5-int4",
+        "top_group": 3,
+        "worst": 11
+      },
+      {
+        "best": 2,
+        "label": "kimi-k3",
+        "median": 10.5,
+        "ranks": [
+          2,
+          6,
+          11,
+          12,
+          10,
+          11
+        ],
+        "system_id": "kimi-k3",
+        "top_group": 3,
+        "worst": 12
+      },
+      {
+        "best": 6,
+        "label": "glm-5",
+        "median": 11.0,
+        "ranks": [
+          10,
+          13,
+          6,
+          6,
+          12,
+          12
+        ],
+        "system_id": "glm-5",
+        "top_group": 3,
+        "worst": 13
+      },
+      {
+        "best": 4,
+        "label": "glm-5.3",
+        "median": 11.0,
+        "ranks": [
+          4,
+          5,
+          10,
+          12,
+          12,
+          12
+        ],
+        "system_id": "glm-5.3",
+        "top_group": 3,
+        "worst": 12
+      },
+      {
+        "best": 9,
+        "label": "deepseek-v4-flash",
+        "median": 15.0,
+        "ranks": [
+          15,
+          9,
+          15,
+          15,
+          15,
+          14
+        ],
+        "system_id": "deepseek-v4-flash",
+        "top_group": 3,
+        "worst": 15
+      },
+      {
+        "best": 10,
+        "label": "deepseek-v4-flash-thinking",
+        "median": 16.0,
+        "ranks": [
+          16,
+          10,
+          16,
+          17,
+          16,
+          17
+        ],
+        "system_id": "deepseek-v4-flash-thinking",
+        "top_group": 3,
+        "worst": 17
+      },
+      {
+        "best": 3,
+        "label": "qwen3.8-27b",
+        "median": 6.0,
+        "ranks": [
+          17,
+          17,
+          6,
+          3,
+          5,
+          6
+        ],
+        "system_id": "qwen3.8-27b",
+        "top_group": 2,
+        "worst": 17
+      },
+      {
+        "best": 1,
+        "label": "qwen3.8-flash-next",
+        "median": 6.0,
+        "ranks": [
+          18,
+          18,
+          1,
+          2,
+          2,
+          10
+        ],
+        "system_id": "qwen3.8-flash-next",
+        "top_group": 2,
+        "worst": 18
+      },
+      {
+        "best": 5,
+        "label": "gpt-5.6-luna",
+        "median": 11.5,
+        "ranks": [
+          11,
+          13,
+          14,
+          12,
+          5,
+          5
+        ],
+        "system_id": "gpt-5.6-luna",
+        "top_group": 2,
+        "worst": 14
+      },
+      {
+        "best": 10,
+        "label": "mistral-medium-3.5",
+        "median": 13.5,
+        "ranks": [
+          13,
+          16,
+          12,
+          10,
+          14,
+          15
+        ],
+        "system_id": "mistral-medium-3.5",
+        "top_group": 2,
+        "worst": 16
+      },
+      {
+        "best": 6,
+        "label": "qwen3.5-122b",
+        "median": 16.0,
+        "ranks": [
+          6,
+          6,
+          17,
+          16,
+          17,
+          16
+        ],
+        "system_id": "qwen3.5-122b",
+        "top_group": 2,
+        "worst": 17
+      },
+      {
+        "best": 8,
+        "label": "gpt-oss-120b",
+        "median": 18.0,
+        "ranks": [
+          13,
+          8,
+          18,
+          18,
+          18,
+          18
+        ],
+        "system_id": "gpt-oss-120b",
+        "top_group": 1,
+        "worst": 18
+      }
+    ],
+    "rule": "mean_place",
+    "tables": 6,
+    "undominated": {
+      "deepseek-v4-flash": 3,
+      "deepseek-v4-flash-thinking": 3,
+      "gemma4": 3,
+      "glm-5": 3,
+      "glm-5.2": 3,
+      "glm-5.3": 3,
+      "google_gemini-3.1-pro-preview": 3,
+      "google_gemini-3.7-flash": 3,
+      "gpt-5.6-luna": 2,
+      "gpt-5.6-sol": 3,
+      "gpt-5.6-terra": 3,
+      "gpt-oss-120b": 1,
+      "kimi-k3": 3,
+      "mistral-medium-3.5": 2,
+      "qwen3.5-122b": 2,
+      "qwen3.5-int4": 3,
+      "qwen3.8-27b": 2,
+      "qwen3.8-flash-next": 2
+    },
+    "widest": {
+      "best": 1,
+      "label": "qwen3.8-flash-next",
+      "median": 6.0,
+      "ranks": [
+        18,
+        18,
+        1,
+        2,
+        2,
+        10
+      ],
+      "system_id": "qwen3.8-flash-next",
+      "top_group": 2,
+      "worst": 18
+    }
+  },
   "preference": {
     "difference": {
       "detected": false,

@@ -2087,6 +2087,12 @@ def write(rows: list[Row], *, docs_dir: Path | None = None, readme: Path | None 
     data["edges"] = {
         track: found for track in COLUMNS if (found := edges.load(track, docs_dir)) is not None
     }
+    # The six tables' orders read against each other. Recomputed and compared
+    # rather than trusted: `orders.matches` rebuilds the artefact from the
+    # tables being drawn and refuses it on a single rank out of place. That is
+    # affordable because the computation is free, and it is the guard the
+    # tested-edges artefact still has to do without.
+    data["orders"] = _orders_for(data["tables"], docs_dir)
     # Computed here rather than cached in docs/, because it is a statement about
     # the rows being rendered right now. A stale copy of "the judges disagree
     # about 11 of 19" beside a table where they no longer do is worse than none.
@@ -2102,7 +2108,7 @@ def write(rows: list[Row], *, docs_dir: Path | None = None, readme: Path | None 
         # How far the two judges agree on the order the page now draws, which
         # is a different question from how they agree on any one column.
         found["ordering"] = _ordering_agreement(
-            data["tables"], track, found["judge_a"], found["judge_b"]
+            data["tables"], track, found["judge_a"], found["judge_b"], data["orders"]
         )
 
     docs_dir.mkdir(parents=True, exist_ok=True)
@@ -2193,7 +2199,120 @@ def concordance_payload(rows: list[Row], **overrides) -> dict:
     }
 
 
-def _ordering_agreement(tables: list[dict], track: str, judge_a: str, judge_b: str) -> dict | None:
+def _profile_rho(profile: dict | None, track: str) -> float | None:
+    """The two judges' agreement on one instrument, over the models alone.
+
+    Read off `docs/orders.json`, which is where that population's orders are
+    built. Absent while the profile is absent, because a figure the page cannot
+    show the working for is one it should not print.
+    """
+    if not profile:
+        return None
+    tracks = {order["table"]: order["track"] for order in profile["orders"]}
+    for pair in profile["agreement"]:
+        if pair["kind"] == "same_instrument" and tracks.get(pair["a"]) == track:
+            return pair["rho"]
+    return None
+
+
+def _orders_for(tables: list[dict], docs_dir: Path) -> dict | None:
+    """The profile, from the committed artefact and only while it still fits.
+
+    `None` rather than absent, like every other optional panel: the key has to
+    exist for a template to read it, and a template that reads it is what says
+    the payload has no key nobody draws.
+
+    The instrument's label is attached here rather than stored in the artefact.
+    A data file that carries English is a wording nobody proof-reads beside the
+    paragraph it lands in, and one that can only be corrected by re-running a
+    command.
+    """
+    import statistics
+
+    from tnb.scoring import orders
+
+    found = orders.load(docs_dir)
+    if not orders.matches(found, tables):
+        return None
+
+    by_id = {table["id"]: table for table in tables}
+    for order in found["orders"]:
+        order["instrument"] = INSTRUMENT_LABELS.get(order["track"], order["track"])
+        order["title"] = by_id[order["table"]]["title"]
+
+    # Which cross-instrument pairs read the same notes. `DATASET_TRACKS`
+    # already groups the tracks by corpus, and the page needs it: "the two
+    # instruments disagree" is a much stronger sentence about a pair that
+    # scored the identical notes than about a pair that did not, and picking
+    # the pair by its correlation alone put the claim on the wrong one.
+    corpus_of = {track: corpus for corpus, tracks in DATASET_TRACKS.items() for track in tracks}
+    for band in found["bands"] + found["jackknife"]["bands"]:
+        tracks = band["kind"].split("/")
+        band["same_corpus"] = len(tracks) == 2 and corpus_of.get(tracks[0]) == corpus_of.get(
+            tracks[1]
+        )
+
+    # The six columns in the order the switch offers the tables, so a reader
+    # who has used the switch meets the same sequence here.
+    drawn = [order["table"] for table in tables if (order := _order_of(found, table["id"]))]
+    found["columns_drawn"] = [
+        {
+            "table": order["table"],
+            "track": order["track"],
+            "instrument": order["instrument"],
+            "judge_model": order["judge_model"],
+            "title": order["title"],
+        }
+        for table_id in drawn
+        if (order := _order_of(found, table_id))
+    ]
+
+    # Every ordering decision in Python, the rule this page has kept since the
+    # tables were built: the template draws what it was handed.
+    #
+    # Primarily by how many instruments leave the system undominated, which is
+    # evidence and not a convention. Then by the middle of its six ranks, which
+    # is a convention and is declared as one -- it settles the twelve rows the
+    # first key ties, and it settles nothing else. The span is printed before
+    # it so the reader meets the range before the middle: one model runs from
+    # first to last, and no middle number describes that.
+    labels = {}
+    for table in tables:
+        for row in table["rows"]:
+            labels.setdefault(row["system_id"], row["label"])
+    rows = []
+    for system in found["population"]:
+        ranks = [order["ranks"][system] for order in found["orders"]]
+        by_table = {order["table"]: order["ranks"][system] for order in found["orders"]}
+        rows.append(
+            {
+                "system_id": system,
+                "label": labels.get(system, system),
+                "top_group": found["undominated"][system],
+                "ranks": [by_table[column["table"]] for column in found["columns_drawn"]],
+                "best": min(ranks),
+                "worst": max(ranks),
+                "median": round(statistics.median(ranks), 1),
+            }
+        )
+    rows.sort(key=lambda row: (-row["top_group"], row["median"], row["label"]))
+    found["rows"] = rows
+    found["widest"] = max(rows, key=lambda row: (row["worst"] - row["best"], row["label"]))
+    return found
+
+
+def _order_of(found: dict, table_id: str) -> dict | None:
+    """One table's entry in the artefact, or None when it holds no such table."""
+    return next((order for order in found["orders"] if order["table"] == table_id), None)
+
+
+def _ordering_agreement(
+    tables: list[dict],
+    track: str,
+    judge_a: str,
+    judge_b: str,
+    profile: dict | None = None,
+) -> dict | None:
     """Spearman between the two judges' mean places, how many systems hold a
     different place under the two, and who moved furthest -- over the systems
     both judges placed. None until both tables exist."""
@@ -2214,6 +2333,14 @@ def _ordering_agreement(tables: list[dict], track: str, judge_a: str, judge_b: s
         [by_judge[judge_a][s]["mean_place"] for s in shared],
         [by_judge[judge_b][s]["mean_place"] for s in shared],
     )
+    # The same question over the models alone -- taken from the profile rather
+    # than computed a second time here. It is not the same arithmetic: the
+    # profile re-derives each order without the reference rows, so the places
+    # themselves move, and recomputing it here from mean places that still
+    # count those rows would put a third figure for one quantity on the page.
+    # One owner, and the sentence beside each names its population.
+    models = [s for s in shared if by_judge[judge_a][s]["system_type"] == "model"]
+    rho_models = _profile_rho(profile, track)
     moved = [s for s in shared if by_judge[judge_a][s]["place"] != by_judge[judge_b][s]["place"]]
     furthest = max(
         shared, key=lambda s: abs(by_judge[judge_a][s]["place"] - by_judge[judge_b][s]["place"])
@@ -2221,6 +2348,8 @@ def _ordering_agreement(tables: list[dict], track: str, judge_a: str, judge_b: s
     return {
         "rho": None if rho is None else round(rho, 3),
         "n_systems": len(shared),
+        "rho_models": rho_models,
+        "n_models": len(models),
         "moved": len(moved),
         "furthest": {
             "system": by_judge[judge_a][furthest]["label"],

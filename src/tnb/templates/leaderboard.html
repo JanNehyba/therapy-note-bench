@@ -23,6 +23,14 @@ __STYLE__
      Four claims these tables support and four they do not, with the file each number
      came from.</p>
 
+  <!-- Above the tables and above the filter, for the reason the briefing link
+       above it is: it is what to read before one instrument's ranking rather
+       than after it. The switch shows one instrument at a time, so a reader who
+       met this second would never learn that the other two disagree with it.
+       A bare div and not a `section.box`: the box draws a rule across the top
+       of the page, and an unfilled host would draw it over nothing. -->
+  <div id="profile"></div>
+
   <div class="controls" id="controls"></div>
 
   <div id="tables"></div>
@@ -1137,6 +1145,191 @@ function drawSources() {
 }
 drawSources();
 
+// --- one row per model, six rankings, nothing added up -----------------------
+//
+// The question the six tables cannot answer between them: "which model", asked
+// of all three instruments at once. Measured, there is no single order to
+// publish -- the two judges rank one instrument almost alike and the three
+// instruments rank the models almost independently -- so what is drawn is a
+// profile and not a ranking. A total over the six columns would have to say
+// what a SOAP rubric is worth against a 17-field form, and the weights would
+// be ours rather than anybody's measurement.
+//
+// Every figure, every band and the order of the rows are computed in Python
+// and arrive in `DATA.orders`. This draws what it was handed.
+function drawProfile() {
+  const host = document.getElementById('profile');
+  if (!host) return;
+  const profile = DATA.orders;
+  // Removed rather than drawn empty, the way the sources block is: without the
+  // committed artefact there is no profile, and a heading over nothing
+  // announces a comparison nobody made.
+  if (!profile || !(profile.rows || []).length) { host.remove(); return; }
+
+  const columns = profile.columns_drawn;
+  // Three decimals and a real minus sign. One band runs to -0.278, and at two
+  // decimals the sign of a figure near zero is the whole claim.
+  const signed = v => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(3);
+  const bandOf = (list, kind) => (list || []).find(b => b.kind === kind);
+  const nameOf = track => {
+    const found = columns.find(c => c.track === track);
+    return found ? found.instrument : track;
+  };
+  const pairName = kind => kind.split('/').map(nameOf).join(' against ');
+  // The same pair as a subject rather than as a comparison: "A against B score
+  // the same notes" reads as one thing scoring another.
+  const pairAnd = kind => kind.split('/').map(nameOf).join(' and ');
+
+  const inside = bandOf(profile.bands, 'same_instrument');
+  const insideWide = bandOf(profile.jackknife.bands, 'same_instrument');
+  const across = profile.bands.filter(b => b.kind !== 'same_instrument');
+  const acrossWide = profile.jackknife.bands.filter(b => b.kind !== 'same_instrument');
+  // Which cross-instrument band stays furthest from the same-instrument one
+  // under every refit, and which one reaches into it. Both read off the data
+  // rather than named here: the day the numbers move, the sentence moves with
+  // them instead of going quietly wrong.
+  const apart = acrossWide.slice().sort((a, b) => a.high - b.high)[0];
+  const touching = acrossWide.filter(b => insideWide && b.high >= insideWide.low)
+    .sort((a, b) => b.high - a.high)[0];
+  // The pair that read the identical notes, which is a different pair from the
+  // one that agrees least and is the stronger sentence: two instruments given
+  // the same notes on the same conversations, disagreeing anyway. Marked in
+  // the payload from `DATASET_TRACKS`, because reading it off the track names
+  // would be a guess that happens to work.
+  const sameNotes = across.filter(b => b.same_corpus).sort((a, b) => a.high - b.high)[0];
+
+  const counterFinding = (profile.columns || []).filter(c =>
+      c.across_instruments.median_abs_rho !== null && c.within_instrument.median_abs_rho !== null
+    ).map(c => T`median |ρ| ${fmt(c.across_instruments.median_abs_rho, 3)} against ${
+      fmt(c.within_instrument.median_abs_rho, 3)} under ${esc(c.judge_model)}`);
+
+  const seamAt = i => (i && columns[i].instrument !== columns[i - 1].instrument ? ' pair-start' : '');
+
+  const head = columns.map((column, i) =>
+    `<th scope="col" class="place${seamAt(i)}">` +
+      // The same block label the tables' own headings use, doing the same job.
+      `<span class="instrument">${esc(column.instrument)}</span>` +
+      // The heading is the way into the table it names, so the ranking stays
+      // with the table that owns it and a reader wanting the scores behind a
+      // rank is one click from them.
+      `<a class="judge" href="#${esc(column.table)}" data-target="${esc(column.table)}"
+          title="${T`Open this table: ${esc(column.instrument)}, judged by ${esc(column.judge_model)}`}"
+       >${esc(column.judge_model)}</a></th>`).join('');
+
+  const body = profile.rows.map(row => `<tr>
+      <th scope="row" class="name">${esc(row.label)}</th>
+      <td class="place top">${row.top_group}<span class="of">/${
+        profile.instruments_tested.length}</span></td>
+      ${row.ranks.map((rank, i) => `<td class="place${seamAt(i)}">${rank}</td>`).join('')}
+      <td class="meta">${row.best}&#8211;${row.worst}</td>
+      <td class="meta">${fmt(row.median, 1)}</td>
+    </tr>`).join('');
+
+  const pooled = profile.dominance.pooled;
+  const controls = Object.entries(profile.dominance.per_instrument)
+    .sort((a, b) => a[1].legs - b[1].legs)
+    .map(([track, one]) => T`${esc(nameOf(track))} separates ${one.dominating} of
+       ${one.pairs} on ${one.legs}`).join('; ');
+
+  const judgeNote = !(inside && across.length) ? '' : [
+    T`<strong>The judge is close to interchangeable; the instrument is not.</strong> Over these
+       ${profile.population.length} models the two judges rank one instrument alike at Spearman
+       ${signed(inside.low)} to ${signed(inside.high)}, while two different instruments reach
+       ${signed(Math.min(...across.map(b => b.low)))} to
+       ${signed(Math.max(...across.map(b => b.high)))}.`,
+    apart && T`${pairName(apart.kind)} reaches ${signed(bandOf(profile.bands, apart.kind).low)}
+       to ${signed(bandOf(profile.bands, apart.kind).high)}, which is no relation at all.`,
+    sameNotes && T`And it is not the corpora that differ: ${pairAnd(sameNotes.kind)} are scored
+       on the identical notes from the identical conversations, and their orders still agree
+       only ${signed(sameNotes.low)} to ${signed(sameNotes.high)}.`,
+  ].filter(Boolean).join(' ');
+
+  const notes = [
+    across.length && `<p class="note">${T`<strong>There is no combined column, because no way of building one
+       would be a measurement.</strong> A total over the three instruments would have to say
+       what a SOAP rubric is worth against a 17-field form, and that is a clinical judgement
+       this benchmark has not made and cannot read off its own numbers.`}</p>`,
+
+    judgeNote && `<p class="note">${judgeNote}</p>`,
+
+    apart && insideWide && touching && `<p class="note">${T`Only the wider claim is published, because the sharper one does not
+       survive. Leaving each of the ${profile.jackknife.refits} models out in turn, one
+       instrument under two judges never falls below ${signed(insideWide.low)} and
+       ${pairName(apart.kind)} never rises above ${signed(apart.high)}, so those two bands
+       never meet. ${pairName(touching.kind)} does reach into the first
+       (${signed(touching.high)}), so those two are not shown here to be measuring different
+       things.`}</p>`,
+
+    counterFinding.length && `<p class="note">${T`<strong>And the disagreement is not the instruments measuring
+       different things.</strong> Between individual columns, where no ordering rule is
+       involved at all, columns of different instruments predict each other about as well as
+       columns of the same one — ${counterFinding.join('; ')}. Whatever
+       separates the six orders happens in the averaging of places, not in the measurements.
+       That is unexplained, and it is recorded rather than smoothed over.`}</p>`,
+
+    `<p class="note">${T`<strong>Pooled over all three instruments, nothing is separated at
+       all.</strong> No model here is at least as good as another on every one of the
+       ${pooled.legs} column-legs under both judges: ${pooled.dominating} of ${pooled.pairs}
+       ordered pairs, on the stored values and before any resampling. Part of that is
+       arithmetic rather than a finding — more legs are harder to clear whatever the models do
+       — and the same count inside one instrument shows it: ${controls}.`}</p>`,
+
+    `<p class="note">${T`<strong>The ranks here are counted among models alone, so every
+       column runs 1 to ${profile.population.length}.</strong> A table's own Place column
+       counts its reference rows too, and those sit in ${profile.reference.in_tables} of the
+       ${profile.reference.of_tables} tables and nowhere in the rest. The
+       ${profile.reference.systems.length} rows left out are drawn in the tables that have
+       them and scored by the identical protocol; they are not here because two of the six
+       tables have no such row at all, and a profile across columns holding different
+       populations is not a profile.`}</p>`,
+
+    `<p class="note">${T`The rows are ordered by how many instruments leave the model
+       undominated, then by the middle of its ${columns.length} ranks. The first is evidence;
+       the second is a convention for putting the rows somewhere, and it settles nothing else.
+       No heading here sorts, because an order by one column is that instrument's own ranking
+       and the tables below draw those. Each heading opens the table its column came from.`}</p>`,
+  ].filter(Boolean).join('');
+
+  const legend = [
+    [T`Top group`, T`How many of the ${profile.instruments_tested.length} instruments put this
+       model in the group no tested comparison beats. Counted per instrument and not per
+       table: the comparison is tested on both judges at once, so the two tables of one
+       instrument give one answer, and counting it in both would count one test twice.
+       ${profile.rows.filter(r => r.top_group === profile.instruments_tested.length).length} of
+       the ${profile.rows.length} models are in the top group of every instrument, which is
+       this page's honest answer to "which model": on these three instruments most current
+       models are not separated at all.`],
+    [T`Span`, T`The best and the worst rank on this row. Read it before the median:
+       <code>${esc(profile.widest.label)}</code> is ranked ${profile.widest.best} on one table
+       and ${profile.widest.worst} on another, and no middle number describes that.`],
+    [T`Median`, T`The middle of the ${columns.length} ranks on this row, to one decimal because
+       ${columns.length} numbers have no single middle. It orders the rows and nothing else.
+       It is not a score: two rows a rank apart on it are not a rank apart on anything anybody
+       measured.`],
+  ].map(([term, gloss]) => `<div class="measure"><dt>${term}</dt><dd>${gloss}</dd></div>`).join('');
+
+  host.innerHTML = `<section class="box">
+      <h2>${T`All six rankings, one row per model`}</h2>
+      <p class="blurb">${T`The ${profile.population.length} models that are in all
+         ${profile.tables} published tables, with the rank each one gives them. Six rankings
+         side by side and nothing added up: a row is one model's profile across the three
+         instruments, not its score.`}</p>
+      <div class="scroll-top" aria-hidden="true"><div></div></div>
+      <div class="scroll"><table class="profile">
+        <thead><tr>
+          <th scope="col" class="name">${T`System`}</th>
+          <th scope="col" class="place">${T`Top group`}</th>
+          ${head}
+          <th scope="col">${T`Span`}</th>
+          <th scope="col">${T`Median`}</th>
+        </tr></thead>
+        <tbody>${body}</tbody>
+      </table></div>
+      <div class="notes">${notes}</div>
+      <dl class="measures">${legend}</dl>
+    </section>`;
+}
+
 function drawProvenance() {
   document.getElementById('provenance').innerHTML = DATA.generated_from
     ? T`Every score in these tables is generated from
@@ -1378,6 +1571,11 @@ function show(id) {
 // lies about what it does.
 function pairScrollbars() {
   document.querySelectorAll('.scroll-top').forEach(top => {
+    // Bound once per bar. This runs on every switch and the table's own bar is
+    // a new node each time; the profile's is not, so a second switch would
+    // leave two pairs of listeners setting each other's `scrollLeft`.
+    if (top.dataset.paired) return;
+    top.dataset.paired = '1';
     const bottom = top.nextElementSibling;
     const table = bottom && bottom.querySelector('table');
     if (!table) { top.hidden = true; return; }
@@ -1463,6 +1661,23 @@ if (DATA.tables.length) {
 (() => {
   drawProvenance();
   drawSources();
+  // Before `show()`, which is the only caller of `pairScrollbars`: the bar over
+  // this table has to exist by then or it is never paired.
+  drawProfile();
+  // Delegated on the host, and guarded because `drawProfile` takes the host off
+  // the page when there is no artefact. Not left to the bare `#table-id` href:
+  // the hash names no element, so the browser would scroll nowhere and a
+  // heading tapped at the top of the page would change a table below the fold
+  // and look like it had done nothing.
+  const profileHost = document.getElementById('profile');
+  if (profileHost) profileHost.addEventListener('click', event => {
+    const link = event.target.closest('a[data-target]');
+    if (!link) return;
+    event.preventDefault();
+    show(link.dataset.target);
+    const tables = document.getElementById('tables');
+    if (tables && tables.scrollIntoView) tables.scrollIntoView({ block: 'start' });
+  });
   // `show` redraws the table and the controls inside a frame that stays put.
   // Redrawing the frame itself would replace the two nodes the click handlers
   // above are bound to, and the page would go quiet.
