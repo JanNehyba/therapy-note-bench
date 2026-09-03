@@ -8,7 +8,6 @@ __STYLE__
 </head>
 <body>
 <main>
-  <div class="lang" id="lang"></div>
   <h1 data-t="methods.h1">How this was measured</h1>
   <p class="sub" data-t="methods.sub">
     The instrument behind <a href="index.html">the leaderboard</a>: which judge, checked
@@ -770,29 +769,6 @@ renderCalibration(DATA.calibration);
 // English the next time one moved -- so they are not translated at all, and
 // the paragraph says which language it is in. Every claim in them is also
 // drawn as a table directly below.
-function summaryLang(summary) {
-  return tr(summary) === summary ? 'en' : LANG;
-}
-
-// These summaries are assembled in Python with their figures interpolated, so
-// the string differs on every run and an exact-text lookup can never hit them.
-// Under a language switch they are therefore English -- and they are the longest
-// paragraphs on it, which is where the caveats live. The page already knows
-// which ones fell through; this says so, once above each, instead of dropping
-// a reader into the wrong language with no explanation. It is a stopgap and it
-// is marked as one: the real fix is numbered holes, which costs a second
-// assembler for `uv run tnb preference`.
-function englishAhead(summary) {
-  return summaryLang(summary) === 'en' && LANG !== 'en'
-    ? T`The summary below is in English: it is assembled from the numbers it reports.`
-    : '';
-}
-
-function englishNote(summary) {
-  const said = englishAhead(summary);
-  return said ? `<p class="note">${said}</p>` : '';
-}
-
 // The verdict word, which used to read the sign as weakness. `trace` against
 // `temporal_past` is -0.411 and -0.472 -- both judges finding a moderate
 // inverse relation -- and the column said "not related", denying a
@@ -851,8 +827,7 @@ function renderConcordance(all) {
     return `${tracks.length > 1
         ? `<h3 class="track-head">${esc(tr(c.track_label || track))}</h3>`
         : ''}
-      ${englishNote(c.summary)}
-      <p class="blurb" lang="${summaryLang(c.summary)}">${code(tr(c.summary))}</p>
+      <p class="blurb">${code(tr(c.summary))}</p>
       <div class="scroll"><table class="concordance">
         <thead><tr>
           <th>${T`Measure`}</th><th>${T`Rank correlation`}</th><th>${T`Systems placed differently`}</th>
@@ -942,15 +917,10 @@ function renderPreference(data) {
        that includes zero means a run this size could not see an effect, not that there is
        none — and the comparison is a vendor's three or four models against the systems
        neither of them wrote.`}</p>
-    ${data.effects.map(e => englishNote(e.summary) + `<p class="note" lang="${
-        summaryLang(e.summary)}">${code(tr(e.summary))}</p>`).join('')}
+    ${data.effects.map(e => `<p class="note">${code(tr(e.summary))}</p>`).join('')}
     ${data.difference
-      ? (englishAhead(data.difference.summary)
-          ? `<p class="note"><strong>${T`And the two against each other.`}</strong> ${
-              englishAhead(data.difference.summary)}</p><p class="note" lang="en">${
-              code(tr(data.difference.summary))}</p>`
-          : `<p class="note">${T`<strong>And the two against each other.</strong> ${
-              code(tr(data.difference.summary))}`}</p>`)
+      ? `<p class="note">${T`<strong>And the two against each other.</strong> ${
+          code(tr(data.difference.summary))}`}</p>`
       : ''}
     ${(data.effects[0] && data.effects[0].neutral || []).length
       ? (() => {
@@ -1414,7 +1384,7 @@ drawProvenance();
 // On a change it redraws them all: a panel that removed itself for want of data
 // stays removed, because `drawAll` calls exactly the functions that decided
 // that, and they decide it the same way again.
-installLanguageSwitch(drawAll);
+drawAll();
 </script>
 </body>
 </html>

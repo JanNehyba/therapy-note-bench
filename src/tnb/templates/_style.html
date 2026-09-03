@@ -156,23 +156,7 @@
   }
   p.sub { color: var(--ink); margin: 0 0 var(--s6); max-width: var(--measure); }
 
-  /* The language switch. Deliberately quiet: it sits in the corner above the
-     title, reads as two three-letter words, and never competes with the thing
-     the reader came for. English is the default and is not a preference the
-     page guesses -- see `chosenLanguage` in the helpers. */
-  .lang { float: right; display: flex; gap: var(--s1); margin: var(--s1) 0 0; }
-  .lang:empty { display: none; }
-  .lang button {
-    font-family: var(--sans); font-size: var(--t-xs); letter-spacing: .08em;
-    cursor: pointer; padding: .2rem .45rem; border: 1px solid transparent;
-    border-radius: var(--radius); background: none; color: var(--muted);
-  }
-  .lang button:hover { color: var(--fg); }
-  .lang button[aria-pressed="true"] {
-    color: var(--accent); border-color: var(--line-strong);
-  }
-
-  /* --- sections --------------------------------------------------------- */
+    /* --- sections --------------------------------------------------------- */
 
   /* Was a filled, rounded, bordered card. A card puts everything inside it
      19px to the right of everything outside it, which is half of why nothing

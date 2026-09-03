@@ -169,30 +169,6 @@ CHECKS = (
         why="the same sentence, on the other page",
         reads=(results, "COMPARABILITY_KEYS"),
     ),
-    # --- and their Czech twins ------------------------------------------------
-    #
-    # `test_i18n` compares the digits in a translation against the digits in its
-    # English, which catches a mistyped figure and not a stale word: these
-    # sentences spell their counts. Comparing the *words* across the two
-    # languages does not work -- Czech declines a numeral, so "two" is `dvě`,
-    # `dva`, `dvou` or absent depending on the case, and a table of forms
-    # reported forty differences that are all correct Czech. Registered
-    # one by one instead, against the same list the English is registered
-    # against.
-    Check(
-        where="src/tnb/i18n.py",
-        pattern=r"(\w+) z nich nezveřejňují žádnou licenci a čtvrt\w ukazuje jen",
-        expected=lambda: (publishing_none(),),
-        why="the Czech of the Sources line, whose English is registered above",
-        reads=(report, "LICENCES"),
-    ),
-    Check(
-        where="src/tnb/i18n.py",
-        pattern=r"Licenci nesou (\w+) ze (\w+); (\w+) žádnou nezveřejňují",
-        expected=lambda: (carrying_a_licence(), len(report.LICENCES), publishing_none()),
-        why="the Czech of the methods page's licence sentence",
-        reads=(report, "LICENCES"),
-    ),
 )
 
 

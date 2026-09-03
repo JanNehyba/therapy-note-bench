@@ -94,15 +94,6 @@ ALLOWED_CZECH = {
     "tests/test_czech_code.py": "an invented note, used to exercise the span check",
     "tests/test_czech_units.py": "invented sentences, used to exercise the cut",
     "tests/test_czech_structure.py": "an invented note, used to exercise the census",
-    "src/tnb/i18n.py": "the Czech translations of the two published pages",
-    "src/tnb/templates/_helpers.html": "the language switch names its own languages",
-    # The two generated pages carry Czech deliberately, and a blanket pass here
-    # would be the wrong repair -- it is the surface a leak would actually be
-    # read on. They are covered instead by the two stronger tests below, which
-    # say more than "no Czech": that the payload has none, and that every Czech
-    # string on the page is one somebody authored as a translation.
-    "docs/index.html": "bilingual; held by the payload and translation tests",
-    "docs/methods.html": "bilingual; held by the payload and translation tests",
 }
 
 #: What every file under ``tests/fixtures/czech`` must say about itself. The
@@ -111,16 +102,22 @@ ALLOWED_CZECH = {
 FIXTURE_MARKER = "SYNTHETIC-FIXTURE"
 
 #: The published surface that may never carry Czech at all. `docs/index.html`
-#: and `docs/methods.html` left this list when the pages became bilingual; what
-#: replaced their guarantee is the pair of tests at the end of this file.
-PUBLISHED = ("docs/leaderboard.json", "README.md")
+#: and `docs/methods.html` left this list when the pages became bilingual and
+#: came back on 2026-09-03, when the Czech mirror was taken off them: the rule
+#: they were the exception to is now the rule for everything published, which
+#: is both simpler and stricter than the pair of tests that stood in for it.
+PUBLISHED = (
+    "docs/leaderboard.json",
+    "README.md",
+    "docs/index.html",
+    "docs/methods.html",
+    "docs/brief.html",
+)
 
-#: The two generated pages, and where each one inlines the numbers as against
-#: the words. A leak lands in the payload -- it would arrive as a measure, a
-#: caveat, a blurb or a failure reason -- and never in the phrase book.
-BILINGUAL_PAGES = ("docs/index.html", "docs/methods.html")
+#: Where a page inlines the numbers. A leak lands in the payload -- it would
+#: arrive as a measure, a caveat, a blurb or a failure reason.
+PAGES = ("docs/index.html", "docs/methods.html")
 PAYLOAD_MARKER = "const DATA = "
-DICTIONARY_MARKER = "const I18N = "
 
 #: A corpus label reaches `Row.dataset_checksums` and therefore the page. The
 #: real transcripts are named after clinical record numbers, so a key carrying a
@@ -253,15 +250,16 @@ def _strings(value) -> list:
 
 
 def test_the_published_data_payload_carries_no_czech():
-    """The half of a bilingual page that a leak would arrive in.
+    """The half of a page a leak would arrive in, named on its own.
 
     Everything measured reaches the reader through `const DATA` -- measures,
-    caveats, blurbs, track titles, failure reasons, every row. The phrase book
-    beside it is authored prose and is Czech on purpose. Splitting them is what
-    keeps a diacritic scan meaningful now that the page is bilingual; scanning
-    the whole file stopped saying anything the day the Czech UI landed.
+    caveats, blurbs, track titles, failure reasons, every row. The whole file is
+    scanned by `test_the_published_surface_carries_no_czech_at_all` now that the
+    Czech mirror is gone; this stays beside it because the two fail differently.
+    A file-wide scan reports "the page contains Czech text" without saying that
+    it arrived as data, which is the only way a corpus leak could get there.
     """
-    for name in BILINGUAL_PAGES:
+    for name in PAGES:
         text = _readable_text(REPO_ROOT / name)
         if text is None:
             continue
@@ -269,42 +267,26 @@ def test_the_published_data_payload_carries_no_czech():
         assert not czech, f"{name}: {len(czech)} Czech strings in the data payload"
 
 
-def test_every_czech_string_on_the_page_is_a_translation():
-    """And the other half: the Czech that is there is Czech somebody wrote.
+def test_the_pages_carry_no_translation_machinery():
+    """The Czech mirror is gone, and the plumbing went with it.
 
-    Stronger than the rule it replaces. "No Czech on the page" only said a leak
-    would look out of place; this says every Czech string is a value in
-    `i18n.CS` or one of the two language names, so a sentence that is neither
-    fails whatever it is.
+    Removed on 2026-09-03: a dictionary inlined beside the payload, a switch in
+    the corner, and three call shapes that looked a sentence up. The call shapes
+    stay as pass-throughs -- several hundred sites across two templates, and
+    rewriting them would be a large edit to working pages for nothing a reader
+    would see -- so what says the mirror is really gone is that nothing looks
+    anything up and no second wording is shipped.
+
+    The Czech *scoring* track is untouched and is a different thing entirely:
+    notes written and judged in Czech, in `src/tnb/scoring/czech.py` and the
+    tools beside it. That is a measurement, not a translation of this page.
     """
-    from tnb import i18n
-
-    vouched = {i18n.norm(value) for value in i18n.CS.values()}
-    # Escaped for the same reason `DIACRITIC` is: this file asserts what may
-    # carry Czech, so it may not carry any itself.
-    vouched |= {"English", "\u010ce\u0161tina"}
-
-    for name in BILINGUAL_PAGES:
+    for name in PAGES:
         text = _readable_text(REPO_ROOT / name)
         if text is None:
             continue
-        strays = [
-            fragment
-            for fragment in _strings(_inlined(text, DICTIONARY_MARKER))
-            if DIACRITIC.search(fragment) and i18n.norm(fragment) not in vouched
-        ]
-        assert not strays, f"{name}: {len(strays)} Czech strings that are not translations"
-
-        # And nothing Czech outside the phrase book either -- a translation that
-        # reached the page any other way would not be in `i18n.CS` to check.
-        start = text.index(DICTIONARY_MARKER)
-        outside = text[:start] + text[text.index("\n", start) :]
-        remaining = [
-            line
-            for line in outside.splitlines()
-            if DIACRITIC.search(line) and "LANGUAGE_NAMES" not in line
-        ]
-        assert not remaining, f"{name}: Czech outside the phrase book ({len(remaining)} lines)"
+        for gone in ("const I18N", "installLanguageSwitch", "LANGUAGE_NAMES", 'id="lang"'):
+            assert gone not in text, f"{name} still carries {gone!r}"
 
 
 # --- the fixtures ----------------------------------------------------------

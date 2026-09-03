@@ -66,7 +66,7 @@ from tnb.config import REPO_ROOT
 DOCS = REPO_ROOT / "docs"
 
 #: The hand-written published surface. `docs/index.html` and `methods.html` are
-#: not here: they are generated, and `test_i18n.py` and `test_page_runs.py`
+#: not here: they are generated, and `test_page_runs.py`
 #: hold them.
 DOCUMENTS = (
     "docs/datasets.md",

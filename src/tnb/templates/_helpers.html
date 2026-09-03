@@ -44,143 +44,38 @@ function code(text) {
 }
 
 
-// --- two languages, one page ------------------------------------------------
+// --- the sentences, as written -----------------------------------------------
 //
-// English is the source and Czech is a lookup beside it. Three shapes of string
-// reach a reader and each has its own path in, but they share one dictionary
-// and one rule: **a key with no Czech draws its English**. A half-translated
-// page is a page; a page that throws on a missing key is not.
+// This page carried a Czech mirror until 2026-09-03: one dictionary, three ways
+// in, and a switch in the corner. It is gone. The benchmark, both corpora and
+// every prompt in it are English, and a second wording of a caveat was one more
+// thing that could disagree with the numbers it sits beside.
+//
+// The three call shapes stay, as pass-throughs, because they are what several
+// hundred call sites in the two page templates are written in and rewriting
+// those would be a large edit to working pages for no reader-visible gain:
 //
 //   tr(s)      one string out of the payload -- a column heading, a caveat, a
-//              track title. Keyed by the English itself.
-//   the tag    a sentence written in the script, wrapped in the tagged template
-//              below. Keyed by the English with each hole written {0}, {1}, so
-//              Czech may reorder them -- it has to.
-//   data-t     prose that is HTML in the template, keyed by the id the
-//              attribute names: a paragraph with three links in it is not a
-//              good dictionary key.
+//              track title.
+//   the tag    a sentence written in the script, with its holes filled.
+//   TS(s)      a payload sentence through the same path as the tag.
 //
-// Keys are whitespace-normalised on both sides: a sentence in a template
-// literal carries the template's indentation, and a dictionary that had to
-// reproduce it would break on a re-indent.
-const I18N = __I18N__;
-const DEFAULT_LANG = 'en';
-const NORM = value => String(value).replace(/\s+/g, ' ').trim();
-
-// Read once here, not on every lookup: the switch sets it and the page redraws.
-let LANG = DEFAULT_LANG;
-
-const dict = () => (LANG === DEFAULT_LANG ? null : I18N[LANG]) || null;
+// `data-t` attributes are left on the prose they marked. Nothing reads them
+// now; they cost a reader nothing and name the blocks that were keyed.
 
 function tr(text) {
-  if (text === null || text === undefined) return text;
-  const table = dict();
-  if (!table) return text;
-  const found = table[NORM(text)];
-  return found === undefined ? text : found;
+  return text;
 }
 
 function T(strings, ...values) {
-  // The cooked strings, not `.raw`: a sentence written with `—` in the
-  // template has an em dash in it as far as a reader is concerned, and a key
-  // spelling out the escape would have to be typed that way in the dictionary.
-  const english = strings.reduce(
-    (out, part, i) => out + part + (i < values.length ? `{${i}}` : ''), '');
-  const table = dict();
-  // The English is returned as written, not as normalised: only the *key* is,
-  // so the dictionary never has to reproduce a template's indentation while the
-  // page it falls back to keeps the wrapping it was authored with.
-  const shape = (table && table[NORM(english)]) || english;
-  // A function, not a replacement string: a value containing `$&` or `$1` --
-  // and provider error bodies are passed through verbatim -- would otherwise be
-  // read as a backreference rather than printed.
-  return shape.replace(/\{(\d+)\}/g, (whole, index) =>
-    values[index] === undefined ? '' : values[index]);
+  // The cooked strings, not `.raw`: a sentence written with `—` in the template
+  // has an em dash in it as far as a reader is concerned.
+  return strings.reduce(
+    (out, part, i) => out + part + (i < values.length && values[i] !== undefined
+      ? values[i] : ''), '');
 }
 
-// A sentence that arrives in the payload rather than in the source. The tagged
-// template above fixes its key when the page is written, which is right
-// for everything authored here; a reason chosen per track is picked in Python
-// and has to be looked up at run time. Same dictionary, same normalisation --
-// only the call shape differs, so a payload sentence is translated or it is not
-// drawn in Czech at all, exactly like an authored one.
 function TS(text) {
-  return T([text]);
+  return text;
 }
 
-//: The languages offered, in the order the switch draws them. English first
-//: and English by default: the benchmark, both corpora and every prompt in it
-//: are English, so a reader who lands here with no preference gets the language
-//: the numbers were made in. The browser's own language is deliberately not
-//: consulted -- a Czech-speaking reader who wants the English wording of a
-//: caveat should not have to fight the page for it.
-const LANGUAGES = { en: 'EN', cs: 'CS' };
-const LANGUAGE_NAMES = { en: 'English', cs: 'Čeština' };
-const LANGUAGE_KEY = 'tnb-lang';
-
-function chosenLanguage() {
-  // `?lang=cs` wins, so a link can name a language. Then what this reader last
-  // picked. Then English.
-  const asked = new URLSearchParams(location.search || '').get('lang');
-  if (asked && asked in LANGUAGES) return asked;
-  try {
-    const kept = localStorage.getItem(LANGUAGE_KEY);
-    if (kept && kept in LANGUAGES) return kept;
-  } catch (error) {
-    // Storage switched off, or a file:// page in a browser that treats it as
-    // opaque. The page still reads; it just forgets.
-  }
-  return DEFAULT_LANG;
-}
-
-// The prose that is HTML in the template. The English is kept on the node the
-// first time it is seen, so switching back is a restore rather than a second
-// dictionary that could disagree with the page it came from.
-function drawStaticText() {
-  document.querySelectorAll('[data-t]').forEach(el => {
-    if (el.dataset.tEn === undefined) el.dataset.tEn = el.innerHTML;
-    const table = dict();
-    const found = table ? table[el.dataset.t] : undefined;
-    el.innerHTML = found === undefined ? el.dataset.tEn : found;
-  });
-}
-
-function drawLanguageSwitch() {
-  const host = document.getElementById('lang');
-  if (!host) return;
-  host.innerHTML = Object.keys(LANGUAGES).map(code =>
-    `<button type="button" data-lang="${code}" lang="${code}"` +
-    ` aria-pressed="${code === LANG}" title="${LANGUAGE_NAMES[code]}">${
-      LANGUAGES[code]}</button>`).join('');
-}
-
-//: Everything that has to happen again when the language changes. The page
-//: passes its own redraw: the leaderboard rebuilds the table on screen, the
-//: methods page rebuilds its panels, and neither knows about the other.
-//:
-//: Called after the page has drawn itself once. `LANG` is already set by then
-//: -- see the line under this function -- so the first draw is in the reader's
-//: language and there is no flash of English to replace.
-function installLanguageSwitch(redraw) {
-  const apply = () => {
-    if (document.documentElement) document.documentElement.lang = LANG;
-    drawStaticText();
-    drawLanguageSwitch();
-    if (redraw) redraw();
-  };
-  const host = document.getElementById('lang');
-  if (host) {
-    host.addEventListener('click', event => {
-      const button = event.target.closest('button[data-lang]');
-      if (!button || button.dataset.lang === LANG) return;
-      LANG = button.dataset.lang;
-      try { localStorage.setItem(LANGUAGE_KEY, LANG); } catch (error) { /* see above */ }
-      apply();
-    });
-  }
-  apply();
-}
-
-// Before a single render function runs. Every one of them asks the dictionary
-// something, and a language decided afterwards would mean drawing twice.
-LANG = chosenLanguage();
