@@ -49,12 +49,16 @@ global.window = {
 };
 global.localStorage = { getItem() { return null; }, setItem() {} };
 
+let threw = false;
 try {
   new Function(fs.readFileSync(path, 'utf8'))();
 } catch (error) {
   console.log('THREW: ' + error.message);
   console.log(error.stack.split('\n').slice(0, 4).join('\n'));
-  process.exit(1);
+  // The exit code, not `process.exit`: see the note below on why nothing here
+  // exits after printing.
+  process.exitCode = 1;
+  threw = true;
 }
 
 // With a second argument, print that panel's rendered HTML instead of the
@@ -65,16 +69,29 @@ const wanted = process.argv[3];
 // published figures needs: naming the panels one by one is a list that goes
 // stale the first time somebody adds a section, and going stale silently is
 // the failure such an audit exists to prevent.
-if (wanted === '--all') {
+//
+// **No `process.exit` after a print.** On Windows a write to a pipe is
+// synchronous and on Linux it is not, so `console.log(big); process.exit(0)`
+// hands back whatever happened to have been flushed -- the rest is dropped
+// with the process. Every panel here is tens of kilobytes, so on Linux the
+// tail went missing and the tests reading it saw a page that stopped
+// mid-element: two of them failed on the published pages for a week, on
+// Linux only, reporting that a clause was "not drawn" and a figure "not on the
+// page" when both were simply past the cut. Node exits on its own when there
+// is nothing left to do, and it flushes on the way out.
+if (threw) {
+  // Nothing more to say: the page did not run, and whatever was drawn before
+  // it stopped is not a page anybody should assert on.
+} else if (wanted === '--all') {
   console.log(Object.entries(nodes).map(([id, el]) =>
     '<!-- node ' + id + ' -->' + (el.innerHTML || '')).join(''));
-  process.exit(0);
-}
-if (wanted) {
+} else if (wanted) {
   console.log(nodes[wanted] ? nodes[wanted].innerHTML : '(panel absent)');
-  process.exit(0);
+} else {
+  summary();
 }
 
+function summary() {
 const rendered = Object.entries(nodes)
   .filter(([, el]) => el.innerHTML && el.innerHTML.length > 40)
   .map(([id, el]) => `${id}: ${el.innerHTML.length} chars`);
@@ -89,3 +106,4 @@ const gone = Object.entries(nodes).filter(([, el]) => el.removed).map(([id]) => 
 if (gone.length) console.log('removed: ' + gone.join(', '));
 const empty = Object.entries(nodes).filter(([, el]) => !el.innerHTML && !el.removed).map(([id]) => id);
 if (empty.length) console.log('empty and not removed: ' + empty.join(', '));
+}
