@@ -16,11 +16,14 @@ only drawn here, like every other ordering decision on this page.
 from __future__ import annotations
 
 import json
+import re
+import shutil
+import subprocess
 from pathlib import Path
 
 import pytest
 
-from tests.test_page_runs import _flat, _judges_payload, _row, _run
+from tests.test_page_runs import RUNNER, _flat, _judges_payload, _row, _run
 from tnb import judge, report
 from tnb.results import Metrics
 
@@ -250,4 +253,67 @@ def test_the_published_tables_carry_the_pair_counts_their_concordance_holds(tmp_
     assert sentence in drawn, (
         f"{sentence} is the count docs/leaderboard.json holds, and the published table "
         f"does not say it{nearby}"
+    )
+
+
+def test_the_page_sees_the_concordance_the_payload_holds(tmp_path):
+    """What the page's own script has, against what the file it was built from
+    has.
+
+    Two tests fail on Linux and pass on Windows on the same committed page: the
+    clause counting rankable column pairs is not drawn, and a figure the methods
+    page computes is not on it. Both come from `concordance.tensions`, and the
+    runner reports no error, so the page runs and simply does not have them.
+    That is a claim about what the script sees, and this is the only test that
+    asks it.
+    """
+    node = shutil.which("node")
+    if node is None:
+        pytest.skip("node is not installed; the published page cannot be executed here")
+    source = (report.DOCS_DIR / "index.html").read_text(encoding="utf-8")
+    scripts = re.findall(r"<script[^>]*>(.*?)</script>", source, re.S)
+    if not scripts:
+        pytest.skip("the published page carries no script")
+
+    probe = (
+        "console.log('PROBE ' + JSON.stringify({"
+        "  keys: Object.keys(DATA.concordance || {}),"
+        "  tables: (DATA.tables || []).map(t => t.track),"
+        "  tensions: Object.entries(DATA.concordance || {}).map("
+        "    ([k, v]) => [k, (v.tensions || []).length,"
+        "                 (v.tensions || []).filter(t => t.rankable).length]),"
+        "  node: process.version,"
+        "}));"
+    )
+    script = tmp_path / "probe.js"
+    script.write_text("\n".join(scripts) + "\n" + probe, encoding="utf-8")
+    finished = subprocess.run(
+        [node, str(RUNNER), str(script)],
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        timeout=180,
+    )
+    line = next(
+        (ln for ln in (finished.stdout or "").splitlines() if ln.startswith("PROBE ")), None
+    )
+    assert line, f"the probe did not run: {(finished.stdout or '') + (finished.stderr or '')}"
+    seen = json.loads(line[len("PROBE ") :])
+
+    payload = json.loads((report.DOCS_DIR / "leaderboard.json").read_text(encoding="utf-8"))
+    held = {
+        track: [
+            len(entry.get("tensions") or []),
+            sum(1 for t in entry.get("tensions") or [] if t["rankable"]),
+        ]
+        for track, entry in (payload.get("concordance") or {}).items()
+    }
+    got = {track: [total, rankable] for track, total, rankable in seen["tensions"]}
+
+    assert sorted(seen["keys"]) == sorted(held), (
+        f"the script has concordance for {sorted(seen['keys'])} and the payload holds "
+        f"{sorted(held)} (node {seen['node']})"
+    )
+    assert got == held, (
+        f"the script counts {got} tensions and the payload holds {held} (node {seen['node']})"
     )
