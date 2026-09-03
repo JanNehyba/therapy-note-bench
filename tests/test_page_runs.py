@@ -2066,3 +2066,56 @@ def test_the_masthead_draws_the_counts_it_was_given(tmp_path):
     assert "two independent LLM judges" in drawn, (
         "a reader who does not know this repository reads 'judge' as a person"
     )
+
+
+def test_the_tables_apparatus_folds_and_its_findings_do_not(tmp_path):
+    """Eleven blocks stood between the leaderboard table and the next section:
+    how the order was built, an endpoint note, the Group definition and six
+    column glosses. A reader wanting to know which model met all of it first.
+
+    What stays in the open is about rows they can see -- which of them are not
+    models under test, and how far the other judge moves them. The rest folds,
+    the same way the profile table's apparatus does.
+    """
+    drawn = _run(_page(tmp_path), tmp_path, panel="table-host")
+    if "<details" not in drawn:
+        pytest.skip("this payload draws no apparatus to fold away")
+
+    head, _, folded = drawn.partition("<details")
+    after_table = head[head.rfind("</table>") :]
+
+    assert "agree on the shape of this ranking" in after_table, (
+        "the finding about the two judges is folded away"
+    )
+    for apparatus in ("Ordered by", '<dl class="measures">'):
+        assert apparatus in folded, f"{apparatus!r} is drawn in the open rather than folded"
+    assert "<summary>" in folded
+    assert '<dl class="measures">' not in after_table, (
+        "the column glossary is drawn twice, or was never folded"
+    )
+
+
+def test_the_open_notes_say_which_kind_of_judge(tmp_path):
+    """ "The two judges agree" reads as two people to anybody who has not seen
+    this repository, and this note is one of the two that stay in the open.
+    """
+    drawn = _run(_page(tmp_path), tmp_path, panel="table-host")
+    head = drawn.partition("<details")[0]
+    after_table = head[head.rfind("</table>") :]
+    if "judge" not in after_table.lower():
+        pytest.skip("the open notes mention no judge in this payload")
+    assert "LLM judge" in after_table, "the open notes say 'judge' with nothing saying what kind"
+
+
+def test_the_reference_note_says_why_they_are_ranked_once(tmp_path):
+    """ "Scored by the identical protocol" was said inside each half of the
+    sentence and then again for both -- three times in four lines.
+    """
+    drawn = _run(_page(tmp_path), tmp_path, panel="table-host")
+    head = drawn.partition("<details")[0]
+    after_table = head[head.rfind("</table>") :]
+    if "Not every row is a model under test" not in after_table:
+        pytest.skip("this payload draws no reference rows")
+    assert after_table.count("identical protocol") == 1, (
+        "the reason the reference rows are ranked is restated within its own sentence"
+    )

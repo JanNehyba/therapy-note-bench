@@ -385,7 +385,7 @@ function referenceNote(table) {
   const parts = [];
   if (human) {
     parts.push(T`the row marked <span class="chip">${tr('therapist')}</span> is a
-      <strong>note a human clinician wrote</strong>, scored by the identical protocol`);
+      <strong>note a human clinician wrote</strong>`);
   }
   if (model) {
     parts.push(T`rows marked <span class="chip">${tr('reference model')}</span> are the
@@ -395,9 +395,12 @@ function referenceNote(table) {
   // The tail used to restate the Completeness caveat printed a few centimetres
   // below it -- "the rubric counts what a note contains and cannot see what a
   // clinician chose to leave out" is the same sentence as the denominator note.
+  // "Scored by the identical protocol" was said once inside each part and then
+  // again for both, three times in four lines. It is the reason they sit in the
+  // ranking at all, so it is said once, at the end, where that reason belongs.
   return `<p class="note">${T`Not every row is a model under test: ${parts.join(T`, and `)}.
-    Both are scored by the identical protocol, which is why they sit in the ranking. A
-    human note placing low is a fact about the measure, not about the clinician.`}</p>`;
+    Both sit in the ranking because they were scored by the identical protocol. A human note
+    placing low is a fact about the measure, not about the clinician.`}</p>`;
 }
 
 // What the completeness denominator does to the numbers, read off the table it
@@ -976,14 +979,26 @@ function renderTable(table, index) {
             T`Marks`}</th></tr></thead>
         <tbody>${body}</tbody>
       </table></div>
+      <!-- What a reader needs to read the rows in front of them, and then
+           everything else. The two that stay are about rows the table draws --
+           which of them are not models under test, and how far the other judge
+           moves them. The rest is how the order was built and what each column
+           means: needed when somebody checks the table, not when they read it,
+           and eleven blocks of it stood between this table and the next.
+           Folded the same way the profile table's apparatus is. -->
       <div class="notes">
-      <p class="ranking-note">${rankingNote}</p>
-      ${rosterNote()}
       ${referenceNote(table)}
-      ${groupNote}
       ${instrumentsOf(table).map(([track]) => agreementNote(track)).join('')}
       </div>
-      <dl class="measures">${legend}</dl>
+      <details class="box more"><summary>${T`How this table was built, and what each column
+        means`}</summary>
+        <div class="notes">
+        <p class="ranking-note">${rankingNote}</p>
+        ${rosterNote()}
+        ${groupNote}
+        </div>
+        <dl class="measures">${legend}</dl>
+      </details>
       <!-- Under the table, not over it. A reader arriving at a leaderboard
            wants to know which model, and the first line they met was four
            version strings. It is the answer to "is this the same instrument as
@@ -1591,18 +1606,18 @@ function agreementNote(track) {
   const onOrder = found.ordering && found.ordering.rho !== null && found.ordering.rho !== undefined
     ? ' ' + T`On the order itself the two judges agree at Spearman
         ${found.ordering.rho.toFixed(2)}: ${found.ordering.moved} of ${found.ordering.n_systems}
-        systems hold a different place under the other judge.`
+        systems hold a different place under the other LLM judge.`
     : '';
-  return `<p class="note">${T`<strong>The two judges agree on the shape of this ranking and not
-    on its order.</strong> On ${measure},
+  // "The two judges" reads as two people to anybody who has not seen this
+  // repository, and this note stayed in the open when the apparatus folded.
+  return `<p class="note">${T`<strong>The two LLM judges agree on the shape of this ranking and
+    not on its order.</strong> On ${measure},
     ${ranking.moved} of ${ranking.n_systems} systems land somewhere else under
     <code>${esc(other)}</code>${furthest}${supports}${onOrder}`}</p>`;
 }
 
 // 1st, 2nd, 3rd, 4th. Only ever applied to a rank, so the teens are the whole
-// of the special case. Czech writes every ordinal the same way -- `4.` -- so the
-// suffix is a dictionary entry like any other sentence, and the English rule
-// runs only for English.
+// of the special case.
 function ordinal(n) {
   const suffix = tr('{ordinal-suffix}');
   if (suffix !== '{ordinal-suffix}') return suffix;
