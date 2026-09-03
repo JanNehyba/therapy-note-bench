@@ -123,7 +123,8 @@ _STATIC = {
     "page.foot.background": (
         "<strong>Pozadí.</strong> "
         '<a href="datasets.md">Datové sady</a> — odkud každá pochází, jakou licenci publikuje '
-        "(žádná ze tří) a jaké pasti v nich jsou; "
+        "(dva ze šesti ji mají, tři nepublikují žádnou a šestý ukazuje jen odznak) a jaké "
+        "pasti v nich jsou; "
         '<a href="methodology.md">metoda</a>; '
         '<a href="limitations.md">co výsledek nesmí tvrdit</a>; '
         '<a href="landscape.md">co v oboru existuje a co ne</a>; '
