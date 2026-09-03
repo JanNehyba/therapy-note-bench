@@ -1233,10 +1233,14 @@ function drawProfile() {
        ${one.pairs} on ${one.legs}`).join('; ');
 
   const judgeNote = !(inside && across.length) ? '' : [
-    T`<strong>The judge is close to interchangeable; the instrument is not.</strong> Over these
-       ${profile.population.length} models the two judges rank one instrument alike at Spearman
-       ${signed(inside.low)} to ${signed(inside.high)}, while two different instruments reach
-       ${signed(Math.min(...across.map(b => b.low)))} to
+    // Named for what it is. "The judge is close to interchangeable" reads, to
+    // anybody who has not seen this repository before, as a claim about a
+    // person -- and this is the most quotable sentence on the page.
+    T`<strong>Which LLM judge reads the notes barely matters; which instrument they are read
+       with decides almost everything.</strong> Over these ${profile.population.length} models
+       the two LLM judges rank one instrument alike at Spearman ${signed(inside.low)} to
+       ${signed(inside.high)} — +1 is the same order, 0 is no relation — while two different
+       instruments reach ${signed(Math.min(...across.map(b => b.low)))} to
        ${signed(Math.max(...across.map(b => b.high)))}.`,
     apart && T`${pairName(apart.kind)} reaches ${signed(bandOf(profile.bands, apart.kind).low)}
        to ${signed(bandOf(profile.bands, apart.kind).high)}, which is no relation at all.`,
@@ -1245,69 +1249,80 @@ function drawProfile() {
        only ${signed(sameNotes.low)} to ${signed(sameNotes.high)}.`,
   ].filter(Boolean).join(' ');
 
-  const notes = [
-    across.length && `<p class="note">${T`<strong>There is no combined column, because no way of building one
-       would be a measurement.</strong> A total over the three instruments would have to say
-       what a SOAP rubric is worth against a 17-field form, and that is a clinical judgement
-       this benchmark has not made and cannot read off its own numbers.`}</p>`,
+  //: Two findings a reader should not have to open anything to see, and the
+  //: apparatus behind them, which they should not have to read past.
+  //:
+  //: This was eight paragraphs under the table, in the order they had been
+  //: written rather than the order anybody needs them: the answer to "which
+  //: model" was seventh, and the first six were definitions and caveats. A
+  //: reader who does not know this repository also reads "judge" as a person,
+  //: so the word carries "LLM" wherever it is first used in a block.
+  const findings = [
+    `<p class="note">${T`<strong>${profile.rows.filter(
+       r => r.top_group === profile.instruments_tested.length).length} of the
+       ${profile.rows.length} models are in the top group of every instrument.</strong> That
+       is this page's answer to "which model": on these three scoring protocols most current
+       models are not separated at all.`}</p>`,
 
     judgeNote && `<p class="note">${judgeNote}</p>`,
+  ].filter(Boolean).join('');
 
-    apart && insideWide && touching && `<p class="note">${T`Only the wider claim is published, because the sharper one does not
-       survive. Leaving each of the ${profile.jackknife.refits} models out in turn, one
-       instrument under two judges never falls below ${signed(insideWide.low)} and
-       ${pairName(apart.kind)} never rises above ${signed(apart.high)}, so those two bands
-       never meet. ${pairName(touching.kind)} does reach into the first
-       (${signed(touching.high)}), so those two are not shown here to be measuring different
-       things.`}</p>`,
+  //: Everything a reader needs only if they are checking the two findings
+  //: above. Behind a toggle, because eight paragraphs of apparatus between a
+  //: table and the next section is a reason not to read any of it.
+  const detail = [
+    across.length && `<p class="note">${T`<strong>There is no combined column, because no way
+       of building one would be a measurement.</strong> A total over the three instruments
+       would have to say what a SOAP rubric is worth against a 17-field form, and that is a
+       clinical judgement this benchmark has not made and cannot read off its own
+       numbers.`}</p>`,
+
+    `<p class="note">${T`<strong>Pooled over all three instruments, nothing is separated at
+       all.</strong> No model is at least as good as another on every one of the
+       ${pooled.legs} column-legs under both LLM judges: ${pooled.dominating} of
+       ${pooled.pairs} ordered pairs. Part of that is arithmetic rather than a finding —
+       more legs are harder to clear whatever the models do — and the same count inside one
+       instrument shows it: ${controls}.`}</p>`,
+
+    counterFinding.length && `<p class="note">${T`<strong>And the disagreement is not the
+       instruments measuring different things.</strong> Between individual columns, where no
+       ordering rule is involved at all, columns of different instruments predict each other
+       about as well as columns of the same one — ${counterFinding.join('; ')}. Whatever
+       separates the six orders happens in the averaging of places, not in the measurements.
+       That is unexplained, and it is recorded rather than smoothed over.`}</p>`,
+
+    apart && insideWide && touching && `<p class="note">${T`<strong>Only the wider claim is
+       published, because the sharper one does not survive.</strong> Leaving each of the
+       ${profile.jackknife.refits} models out in turn, one instrument under two judges never
+       falls below ${signed(insideWide.low)} and ${pairName(apart.kind)} never rises above
+       ${signed(apart.high)}, so those two bands never meet. ${pairName(touching.kind)} does
+       reach into the first (${signed(touching.high)}), so those two are not shown here to be
+       measuring different things.`}</p>`,
 
     // Its own note, and conditional only on there being correlations to
     // qualify. Hung on the jackknife sentence it inherited that sentence's
     // conditions, and a table can print correlations while having no pair of
     // bands to compare -- which is exactly when a reader is least likely to be
     // told what was not measured.
-    across.length && `<p class="note">${T`Leaving a model out asks whether a band rests on one
-       system. It does not ask whether these correlations would hold on a different set of
-       conversations: nothing here resamples the sessions the scores were averaged over, so
-       that interval is missing rather than assumed. Every other interval on this site — the
-       tested comparisons, the bands, the judges' own-vendor lean — does resample them, which
-       is why the omission is named instead of left to be inferred.`}</p>`,
+    across.length && `<p class="note">${T`<strong>What leaving a model out does not ask.</strong>
+       It asks whether a band rests on one system. It does not ask whether these correlations
+       would hold on a different set of conversations: nothing here resamples the sessions the
+       scores were averaged over, so that interval is missing rather than assumed. Every other
+       interval on this site — the tested comparisons, the bands, the LLM judges' own-vendor
+       lean — does resample them, which is why the omission is named instead of left to be
+       inferred.`}</p>`,
 
-    counterFinding.length && `<p class="note">${T`<strong>And the disagreement is not the instruments measuring
-       different things.</strong> Between individual columns, where no ordering rule is
-       involved at all, columns of different instruments predict each other about as well as
-       columns of the same one — ${counterFinding.join('; ')}. Whatever
-       separates the six orders happens in the averaging of places, not in the measurements.
-       That is unexplained, and it is recorded rather than smoothed over.`}</p>`,
+    `<p class="note">${T`<strong>The ranks count models alone, so every column runs 1 to
+       ${profile.population.length}.</strong> A table's own Place column counts its reference
+       rows too — a therapist-written note, two models from the source paper — and those sit
+       in ${profile.reference.in_tables} of the ${profile.reference.of_tables} tables and
+       nowhere in the rest. A profile across columns holding different populations is not a
+       profile, so the ${profile.reference.systems.length} of them are left out here and
+       drawn in the tables that have them.`}</p>`,
 
-    `<p class="note">${T`<strong>Pooled over all three instruments, nothing is separated at
-       all.</strong> No model here is at least as good as another on every one of the
-       ${pooled.legs} column-legs under both judges: ${pooled.dominating} of ${pooled.pairs}
-       ordered pairs, on the stored values and before any resampling. Part of that is
-       arithmetic rather than a finding — more legs are harder to clear whatever the models do
-       — and the same count inside one instrument shows it: ${controls}.`}</p>`,
-
-    `<p class="note">${T`<strong>The ranks here are counted among models alone, so every
-       column runs 1 to ${profile.population.length}.</strong> A table's own Place column
-       counts its reference rows too, and those sit in ${profile.reference.in_tables} of the
-       ${profile.reference.of_tables} tables and nowhere in the rest. The
-       ${profile.reference.systems.length} rows left out are drawn in the tables that have
-       them and scored by the identical protocol; they are not here because two of the six
-       tables have no such row at all, and a profile across columns holding different
-       populations is not a profile.`}</p>`,
-
-    // The finding the Top group column carries, which is the page's answer to
-    // "which model" and is not a definition: it stayed when the three glosses
-    // moved onto their headings.
-    `<p class="note">${T`<strong>${profile.rows.filter(
-       r => r.top_group === profile.instruments_tested.length).length} of the
-       ${profile.rows.length} models are in the top group of every instrument.</strong> That
-       is this page's answer to "which model": on these three instruments most current models
-       are not separated at all.`}</p>`,
-
-    `<p class="note">${T`No heading here sorts, because an order by one column is that
-       instrument's own ranking and the tables below draw those. Each heading opens the table
-       its column came from.`}</p>`,
+    `<p class="note">${T`No heading here sorts: an order by one column is that instrument's own
+       ranking, and the tables below draw those. Each heading opens the table its column came
+       from.`}</p>`,
   ].filter(Boolean).join('');
 
   //: What each of the three added columns means, on the heading it belongs to
@@ -1347,7 +1362,10 @@ function drawProfile() {
         </tr></thead>
         <tbody>${body}</tbody>
       </table></div>
-      <div class="notes">${notes}</div>
+      <div class="notes">${findings}</div>
+      ${detail ? `<details class="box more"><summary>${T`How to check these two, and what
+        this table deliberately does not do`}</summary><div class="notes">${detail}</div>
+        </details>` : ''}
     </section>`;
 }
 

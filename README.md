@@ -15,7 +15,7 @@ swappable backend: today the harness measures what is deployed on
 rather than a second benchmark.
 
 > **Status: both tracks are measured.** **18 models** have written notes on 50
-> AnnoMI conversations and on 40 iHOPE sessions, scored by two independent
+> AnnoMI conversations and on 40 iHOPE sessions, scored by two independent LLM
 > judges. On the TN-Eval track each judge is first checked against the two
 > therapists who annotated the source data; TRACE, on the iCARE track, has no
 > human anchor and says so wherever it appears.

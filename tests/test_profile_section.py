@@ -273,3 +273,46 @@ def test_the_section_names_the_interval_it_does_not_have(tmp_path, payload):
         "the section prints correlations and does not say which interval is missing"
     )
     assert "rather than assumed" in drawn
+
+
+def test_the_apparatus_is_behind_a_toggle_and_the_findings_are_not(tmp_path, payload):
+    """Eight paragraphs stood between this table and the next section, in the
+    order they had been written rather than the order anybody needs them: the
+    answer to "which model" was seventh and the first six were definitions.
+
+    Two findings stay in the open -- how many models no instrument separates,
+    and that the instrument decides the order where the judge does not. The
+    rest is apparatus for a reader who is checking those two, and it is behind
+    a summary that says so.
+    """
+    drawn = _drawn(tmp_path, payload)
+    if "<details" not in drawn:
+        pytest.skip("this payload draws no apparatus to fold away")
+
+    head, _, folded = drawn.partition("<details")
+    assert "models are in the top group of every instrument" in head, (
+        "the answer to 'which model' is behind a toggle"
+    )
+    assert "decides almost everything" in head, (
+        "the finding about instruments against judges is behind a toggle"
+    )
+    for apparatus in (
+        "no way of building one would be a measurement",
+        "Pooled over all three instruments",
+        "resamples the sessions",
+        "No heading here sorts",
+    ):
+        assert apparatus in folded, f"{apparatus!r} is drawn in the open rather than folded"
+    assert "<summary>" in folded
+
+
+def test_the_page_says_llm_judge_where_a_stranger_would_read_a_person(tmp_path, payload):
+    """ "The judge is close to interchangeable" is the most quotable sentence on
+    this page, and to anybody who has not seen this repository it is a claim
+    about a person. The two notes that stay in the open name what a judge is.
+    """
+    drawn = _drawn(tmp_path, payload)
+    head = drawn.partition("<details")[0]
+    if "judge" not in head.lower():
+        pytest.skip("the open notes do not mention a judge in this payload")
+    assert "LLM judge" in head, "the open notes say 'judge' with nothing saying what kind"

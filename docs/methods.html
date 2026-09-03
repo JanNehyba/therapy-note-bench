@@ -189,6 +189,17 @@
     margin: 0 0 var(--s3);
   }
   details.box > summary strong { font-weight: 600; }
+
+  /* A toggle inside a section rather than one that is the section: the
+     apparatus under the profile table, which a reader needs only when they are
+     checking the two findings above it. Smaller than a section heading, and it
+     says so by size rather than by a different colour. */
+  details.more > summary {
+    font-size: var(--t-md); font-weight: 500; color: var(--muted);
+    margin: var(--s4) 0 0;
+  }
+  details.more > summary:hover { color: var(--ink); }
+  details.more[open] > summary { margin-bottom: var(--s2); }
   details.box[open] > summary { margin-bottom: var(--s4); }
 
   /* The lede under a section heading. Measured in `rem`, never in `ch`: a `ch`
