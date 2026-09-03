@@ -80,13 +80,17 @@ duplicates under a second name, or unversioned labels.
 
 **As of this capture there was no `glm-5.3` and no `DeepSeek-V4` proper.** The
 newest GLM on the endpoint was `glm-5.2`; the DeepSeek was `deepseek-v4-flash`.
-That has changed and this capture has not been retaken: `glm-5.3-flash` has
-been writing notes since 2026-08-27 and `qwen3.8-flash-next` since 2026-08-28,
-and neither of them appears in any published table: `results/rows.jsonl` holds
-no row for either. They have written notes and nobody has scored them, which is
-a different thing from a model that scored badly -- `tnb roster` is what tells
-the two apart.
-`glm-5` and `qwen3.5-122b` are still in the published runs -- 129 and 128 rows,
+That has changed and this capture has not been retaken: `glm-5.3` has been
+writing notes since 2026-08-27 and `qwen3.8-flash-next` since 2026-08-28. This
+paragraph said until 2026-09-03 that `results/rows.jsonl` held no row for
+either and that nobody had scored them. Both were scored on 2026-09-02, both
+are drawn in every published group, and the file holds nine rows each --
+`results/` is append-only, so a re-score adds rows beside the old ones rather
+than replacing them. The distinction the paragraph
+was drawing is still the one that matters and `tnb roster` is still what draws
+it: a model nobody has asked is not a model that scored badly. It just no
+longer describes these two.
+`glm-5` and `qwen3.5-122b` are still in the published runs -- 139 and 138 rows,
 including harness-0.6.0 rows on all three published tracks.
 **This file is dated; read the date, not the tense.** Note also the
 casing: the documentation writes `DeepSeek-V4-Flash`, the endpoint serves

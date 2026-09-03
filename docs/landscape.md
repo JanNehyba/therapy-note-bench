@@ -243,8 +243,8 @@ cover, and it is why PDSQI-9 was worth running separately:
 | Organized, synthesized, useful, comprehensible, citation, stigmatizing | not measured by the rubric |
 
 **Eight of the nine are now measured directly.** PDSQI-9 was run on 2026-08-27
-by both judges over the same 942 SOAP notes, on its own track, and only `cited`
-is dropped — a note written from one transcript has no source documents to cite.
+by both judges over the same SOAP notes the rubric scores, on its own track, and
+only `cited` is dropped — a note written from one transcript has no source documents to cite.
 So the table above is a statement about the *rubric*, not about the benchmark:
 the rubric still covers two of nine, and the instrument itself now covers eight.
 
@@ -266,8 +266,8 @@ about *these* notes, which needs clinicians rating what is in `generations/`.
 `src/tnb/scoring/pdsqi.py` implements the instrument, with the "cited"
 attribute dropped (a note written from one transcript has no source documents
 to cite) and two wordings substituted, both named in the module and in
-`NOTICE`. It was run on 2026-08-27 by both judges over the 942 SOAP notes, and
-`results/` carries its rows on the `pdsqi-soap` track.
+`NOTICE`. It was run on 2026-08-27 by both judges over the same SOAP notes the
+rubric scores, and `results/` carries its rows on the `pdsqi-soap` track.
 
 **It has no human anchor for these notes**, which is why it sits beside the
 rubric rather than above it: nobody has rated this corpus on this instrument, so

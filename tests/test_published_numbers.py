@@ -287,6 +287,38 @@ def _completeness_moved() -> tuple[float, ...]:
     return (float(moved), float(len(deltas)), round(abs(min(deltas)), 3), round(max(deltas), 3))
 
 
+def _short_of_the_corpus() -> tuple[float, ...]:
+    """The one model short of 50 for a reason that is not the rubric parser.
+
+    The sentence used to end "and the other eighteen on 50", which was an
+    era count and wrong twice over once two systems joined: there are nineteen
+    others, and one of them is not on 50 either.
+    """
+    from tnb import judge
+
+    rows = next(
+        table
+        for table in payload()["tables"]
+        if table["track"] == "tneval-soap"
+        and table["versions"]["judge_model"] == judge.DEFAULT_MODEL
+    )["rows"]
+    row = next(r for r in rows if r["system_id"] == "qwen3.8-flash-next")
+    return (float(row["n_scored"]), float(row["n_attempted"] - row["n_scored"]))
+
+
+def _repeat_counts() -> tuple[float, ...]:
+    """Each judge's repeated answers and questions re-asked, in the order named."""
+    from tnb import judge
+
+    found = json.loads((REPO_ROOT / "docs" / "repeatability.json").read_text(encoding="utf-8"))
+    by_judge = {entry["judge_model"]: entry for entry in found["judges"]}
+    out = []
+    for name in (judge.DEFAULT_MODEL, judge.SECOND_JUDGE):
+        entry = by_judge[name]
+        out.extend((float(entry["same"]), float(entry["questions"])))
+    return tuple(out)
+
+
 def _leans_on() -> tuple[float, ...]:
     """What is left of each judge's lean without the model it rests on.
 
@@ -721,6 +753,19 @@ CLAIMS = (
     ),
     Claim(
         where="docs/methodology.md",
+        phrase=(
+            "`gemini-3.1-pro-preview` repeated 326 of 333 answers and `gpt-5.6-terra` 293 of 334"
+        ),
+        kind="computed",
+        because=(
+            "the wider re-ask, published on 2026-09-02, which the drift section did not "
+            "have when it quoted one judge at 98.3% and stopped"
+        ),
+        covers=("326", "333", "293", "334"),
+        expected=_repeat_counts,
+    ),
+    Claim(
+        where="docs/methodology.md",
         phrase="0.15% (78 of 51 000)",
         kind="historical",
         because="the non-answer rate at budget 256, counted in the gitignored cache",
@@ -734,6 +779,17 @@ CLAIMS = (
         because="the same count, restated where the paragraph turns to the repair",
         covers=("78",),
         caveat="not in this repository",
+    ),
+    Claim(
+        where="docs/limitations.md",
+        phrase="`qwen3.8-flash-next`, at 48, on two notes its own generator truncated",
+        kind="computed",
+        because=(
+            "the sentence used to say the other eighteen were on 50; there are nineteen "
+            "others and one of them is not"
+        ),
+        covers=("48", "two"),
+        expected=_short_of_the_corpus,
     ),
     Claim(
         where="docs/limitations.md",
@@ -935,7 +991,9 @@ UNACCOUNTED = {
     # sections were rewritten for the two new systems and state fewer
     # figures (the old baseline/headline pair became one number, and the
     # old five-criterion-era rows went with them).
-    "docs/limitations.md": 143,
+    # Lowered from 143 on 2026-09-03 with the count of the one model short of
+    # the corpus for a non-parser reason, registered rather than left bare.
+    "docs/limitations.md": 142,
     # Lowered from 74 on 2026-09-03: the leave-one-out pair is registered
     # rather than unclassified, and `+0.011` only began counting when it
     # stopped ending its sentence -- the number regex does not see a figure

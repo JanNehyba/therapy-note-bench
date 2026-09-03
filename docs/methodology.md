@@ -254,7 +254,7 @@ Those numbers go in the README and on the methods page. **If the judge disagrees
 with therapists, that is published too.** A leaderboard whose referee has never
 been checked against a human is a table of numbers, not a measurement.
 
-### The judge does not drift, and that was tested
+### The judge does not drift with scoring order, and that was tested
 
 Models are scored one after another in alphabetical order, so "scored first" and
 "scored at 17:34" are the same fact: a reader who notices that three of the top
@@ -275,6 +275,19 @@ looking. Checked on 2026-08-25, three ways:
 If a future run wants to re-check this, the method is the first bullet: re-ask a
 sample of already-answered questions and compare, which costs cents because the
 answers are all cached.
+
+**That re-ask has since been run wider, and the first bullet is not the whole
+picture.** On 2026-09-02 both judges were asked the same questions again
+at the same settings, into a separate answer cache so no published table is
+computed from the second asking: `gemini-3.1-pro-preview` repeated 326 of 333
+answers and `gpt-5.6-terra` 293 of 334. The counts are in
+`docs/repeatability.json` and the panel drawn from it is on the methods page.
+Repeating an answer and drifting with scoring order are different questions —
+nothing here says the second judge's disagreement with itself grows through a
+run — but a section that quotes the first bullet's figure and stops leaves a
+reader with the wrong idea of how far an answer moves when nothing else does. The
+probe is narrow on purpose and says so where it is drawn: five notes per
+instrument, all written by one system.
 
 ## Comparability over time
 

@@ -220,7 +220,9 @@ rubric is not completeness against a reimbursement requirement.
   first full generation run `gpt-oss-120b` answered 37 of 50 conversations with
   a nested `Plan` (sub-headings and lists), which that slice truncates. The
   repair loop recovered 29; **8 conversations stayed unrecoverable**, so that
-  model is scored on 42 notes and the other eighteen on 50.
+  model is scored on 42 notes. One other model falls short for an unrelated
+  reason — `qwen3.8-flash-next`, at 48, on two notes its own generator
+  truncated — and every other model is on 50.
 
   The notes themselves were good. What failed was instruction-following on the
   output shape — which is part of the task as TN-Eval defined it, so it is not
@@ -385,9 +387,9 @@ written from one transcript has no source documents, the wording moved from
 "summary" to "note", and the stigmatising item asked as published and reported
 flipped so that every column runs the same way.
 
-**It has now been run**, on 2026-08-27, by both judges over the same 942 notes
-the rubric scores — the SOAP notes written from the 50 AnnoMI conversations,
-not a third corpus. It has its own track and its own tables, and the promise
+**It has now been run**, on 2026-08-27, by both judges over the same notes the
+rubric scores — the SOAP notes written from the 50 AnnoMI conversations, not a
+third corpus, and the two tracks have carried the same note count since. It has its own track and its own tables, and the promise
 made here when it had not been run is kept: the ceiling sits beside every one
 of the eight columns, all eight of them, where the rubric's does.
 
@@ -482,9 +484,10 @@ rate, and a therapist rate is a judge's opinion about her notes. Recomputed on
 `plan-adjustment` leaves, because she reaches 0.12 there, and
 **`objective-mental-status` arrives** at 0.02 — the criterion the next section
 names as the clearest case of the coverage mechanism, and where the best model
-reaches 0.52. Excluding that set moves ten of eighteen systems and one of them
-by **seven places**, Spearman +0.934, against the published claim that nothing
-moved by more than two. The `unreachable` rule does not behave like this: its
+reaches 0.52. Excluding that set moved ten of the eighteen systems then scored
+and one of them by **seven places**, Spearman +0.934, against the published
+claim that nothing moved by more than two — measured on 2026-08-31 and not
+recomputed since two more systems joined the payload. The `unreachable` rule does not behave like this: its
 two criteria are the same two under both judges.
 
 ### Three of the five it dropped are kept on purpose
