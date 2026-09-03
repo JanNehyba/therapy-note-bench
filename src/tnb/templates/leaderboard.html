@@ -9,12 +9,13 @@ __STYLE__
 <body>
 <main>
   <h1>therapy-note-bench</h1>
-  <p class="sub" id="page-sub" data-t="page.sub">
-    LLM-written psychotherapy session notes, scored on three published instruments —
-    TN-Eval's SOAP rubric, PDSQI-9 and iCARE's 17 sections — and re-run as models change.
-    <a href="https://github.com/JanNehyba/therapy-note-bench">Code and every published
-    score on GitHub</a>; the corpora are fetched from their own sources and not
-    redistributed here.
+  <!-- The counted version replaces this on load; what stands here is what a
+       reader sees if the payload carries no masthead, so it says the same thing
+       without the numbers rather than leaving a hole where they were. -->
+  <p class="sub" id="page-sub">
+    Psychotherapy session notes written by LLMs, scored on published instruments by two
+    independent LLM judges. <a href="https://github.com/JanNehyba/therapy-note-bench">Code
+    and every score on GitHub</a>; no corpus is redistributed here.
   </p>
 
   <!-- Above the table, because it is what to read before the numbers rather
@@ -1295,51 +1296,85 @@ function drawProfile() {
        tables have no such row at all, and a profile across columns holding different
        populations is not a profile.`}</p>`,
 
-    `<p class="note">${T`The rows are ordered by how many instruments leave the model
-       undominated, then by the middle of its ${columns.length} ranks. The first is evidence;
-       the second is a convention for putting the rows somewhere, and it settles nothing else.
-       No heading here sorts, because an order by one column is that instrument's own ranking
-       and the tables below draw those. Each heading opens the table its column came from.`}</p>`,
+    // The finding the Top group column carries, which is the page's answer to
+    // "which model" and is not a definition: it stayed when the three glosses
+    // moved onto their headings.
+    `<p class="note">${T`<strong>${profile.rows.filter(
+       r => r.top_group === profile.instruments_tested.length).length} of the
+       ${profile.rows.length} models are in the top group of every instrument.</strong> That
+       is this page's answer to "which model": on these three instruments most current models
+       are not separated at all.`}</p>`,
+
+    `<p class="note">${T`No heading here sorts, because an order by one column is that
+       instrument's own ranking and the tables below draw those. Each heading opens the table
+       its column came from.`}</p>`,
   ].filter(Boolean).join('');
 
-  const legend = [
-    [T`Top group`, T`How many of the ${profile.instruments_tested.length} instruments put this
-       model in the group no tested comparison beats. Counted per instrument and not per
-       table: the comparison is tested on both judges at once, so the two tables of one
-       instrument give one answer, and counting it in both would count one test twice.
-       ${profile.rows.filter(r => r.top_group === profile.instruments_tested.length).length} of
-       the ${profile.rows.length} models are in the top group of every instrument, which is
-       this page's honest answer to "which model": on these three instruments most current
-       models are not separated at all.`],
-    [T`Span`, T`The best and the worst rank on this row. Read it before the median:
-       <code>${esc(profile.widest.label)}</code> is ranked ${profile.widest.best} on one table
-       and ${profile.widest.worst} on another, and no middle number describes that.`],
-    [T`Median`, T`The middle of the ${columns.length} ranks on this row, to one decimal because
+  //: What each of the three added columns means, on the heading it belongs to
+  //: rather than in a list under the table. They were three paragraphs of
+  //: definition between a reader and the one question the table answers, and
+  //: the answer -- rank 1 is best, the rows are ordered by Top group then
+  //: Median -- was in none of them. A definition belongs on the thing it
+  //: defines; what stays below the table is the finding, not the glossary.
+  const gloss = {
+    top: T`How many of the ${profile.instruments_tested.length} instruments put this model in
+       the group no tested comparison beats. Counted once per instrument, not per table: the
+       comparison is tested on both judges at once, so one instrument gives one answer.`,
+    span: T`The best and the worst rank on this row. Read it before the Median: a row can be
+       ranked 1 on one table and last on another, and no middle number describes that.`,
+    median: T`The middle of the ${columns.length} ranks on this row, to one decimal because
        ${columns.length} numbers have no single middle. It orders the rows and nothing else.
-       It is not a score: two rows a rank apart on it are not a rank apart on anything anybody
-       measured.`],
-  ].map(([term, gloss]) => `<div class="measure"><dt>${term}</dt><dd>${gloss}</dd></div>`).join('');
+       It is not a score: two rows a rank apart on it are not a rank apart on anything
+       anybody measured.`,
+  };
 
   host.innerHTML = `<section class="box">
       <h2>${T`All six rankings, one row per model`}</h2>
       <p class="blurb">${T`The ${profile.population.length} models that are in all
-         ${profile.tables} published tables, with the rank each one gives them. Six rankings
-         side by side and nothing added up: a row is one model's profile across the three
-         instruments, not its score.`}</p>
+         ${profile.tables} published tables, with the rank each one gives them.
+         <strong>Rank 1 is the best</strong>, and every column runs 1 to
+         ${profile.population.length}. <strong>The rows are ordered by the Top group column
+         first, then by the Median.</strong> Neither is a score: the first is evidence, the
+         second is only a way of putting the rows somewhere.`}</p>
       <div class="scroll-top" aria-hidden="true"><div></div></div>
       <div class="scroll"><table class="profile">
         <thead><tr>
           <th scope="col" class="name">${T`System`}</th>
-          <th scope="col" class="place">${T`Top group`}</th>
+          <th scope="col" class="place" title="${esc(strip(gloss.top))}">${T`Top group`}</th>
           ${head}
-          <th scope="col">${T`Span`}</th>
-          <th scope="col">${T`Median`}</th>
+          <th scope="col" title="${esc(strip(gloss.span))}">${T`Span`}</th>
+          <th scope="col" title="${esc(strip(gloss.median))}">${T`Median`}</th>
         </tr></thead>
         <tbody>${body}</tbody>
       </table></div>
       <div class="notes">${notes}</div>
-      <dl class="measures">${legend}</dl>
     </section>`;
+}
+
+//: The sentence under the title, with the four counts it can state.
+//:
+//: It named the three instruments and nothing countable, ran to five lines at
+//: the reading measure, and was the last block on this page still written by
+//: hand. Every figure here is read from `DATA.masthead`, which `report.py`
+//: builds from the drawn tables -- so the masthead cannot claim a number the
+//: tables below it disagree with, and it cannot go stale when they move.
+function drawSub() {
+  const host = document.getElementById('page-sub');
+  const said = DATA.masthead;
+  if (!host || !said || !said.notes || !said.models) return;
+  const count = value => value.toLocaleString('en-US');
+  host.innerHTML = T`<strong>${count(said.notes)}</strong> psychotherapy session notes from
+    <strong>${said.models}</strong> models, scored on ${TS(numberWord(said.instruments))}
+    published instruments by ${TS(numberWord(said.judges))} independent LLM judges.
+    <a href="https://github.com/JanNehyba/therapy-note-bench">Code and every score on
+    GitHub</a>; no corpus is redistributed here.`;
+}
+
+//: Small counts read as words in a sentence and as figures in a table. Only as
+//: far as this page needs; anything past it prints as a digit rather than
+//: inventing a word.
+function numberWord(value) {
+  return ['no', 'one', 'two', 'three', 'four', 'five', 'six'][value] || String(value);
 }
 
 function drawProvenance() {
@@ -1671,6 +1706,7 @@ if (DATA.tables.length) {
 // This ran through the language switch until 2026-09-03, which is why it is a
 // block of its own rather than three calls in the body above.
 (() => {
+  drawSub();
   drawProvenance();
   drawSources();
   // Before `show()`, which is the only caller of `pairScrollbars`: the bar over

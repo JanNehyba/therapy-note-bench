@@ -2036,3 +2036,33 @@ def test_the_documents_are_linked_where_a_browser_renders_them():
         assert (REPO_ROOT / "docs" / name).exists(), (
             f"{name} is linked and is not in this repository"
         )
+
+
+def test_the_masthead_draws_the_counts_it_was_given(tmp_path):
+    """The sentence under the title, as a reader sees it.
+
+    `test_docs_figures.py` binds the counts to the tables; this binds the
+    sentence to the counts. The static fallback in the template says the same
+    thing without them, so a payload with no masthead leaves prose rather than
+    a hole -- and that is the only reason the fallback exists.
+    """
+    data = _page_data(tmp_path)
+    data["masthead"] = {
+        "models": 4,
+        "notes": 1234,
+        "sessions": 90,
+        "judges": 2,
+        "instruments": 3,
+    }
+    # Whitespace-normalised: the tag returns the sentence with the template's
+    # own wrapping in it, which a browser collapses and a substring match does
+    # not.
+    drawn = " ".join(_run(report.render_page(data), tmp_path, panel="page-sub").split())
+
+    assert "1,234" in drawn, "the note count is not drawn, or not with a thousands separator"
+    assert ">4</strong> psychotherapy session notes" not in drawn, "the two counts are swapped"
+    assert "<strong>4</strong> models" in drawn
+    assert "three published instruments" in drawn
+    assert "two independent LLM judges" in drawn, (
+        "a reader who does not know this repository reads 'judge' as a person"
+    )

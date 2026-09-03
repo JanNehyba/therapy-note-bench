@@ -56,6 +56,18 @@ TRACKS = (
     TRACK_PDSQI,
 )
 
+#: Which track a track's notes were written for, where they were not written
+#: for itself. PDSQI-9 rates the SOAP notes the rubric already scored, so a
+#: count of notes that adds the two tracks up counts every SOAP note twice.
+#: Named here rather than worked out at each call site: "the same notes as
+#: `TRACK_TNEVAL`" was a sentence in a comment, and a sentence in a comment is
+#: not something a count can read.
+SHARES_NOTES_WITH = {TRACK_PDSQI: TRACK_TNEVAL}
+
+#: The tracks whose notes are written rather than reused. What a model is asked
+#: to produce, once per track.
+NOTE_TRACKS = tuple(track for track in TRACKS if track not in SHARES_NOTES_WITH)
+
 #: What `tnb report` draws and what the coverage sweep writes.
 #:
 #: Every track is published. It was not always -- tracks have been measured

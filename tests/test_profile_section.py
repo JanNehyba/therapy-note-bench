@@ -188,8 +188,10 @@ def test_the_section_publishes_no_order_of_its_own(tmp_path, payload):
     A mean over the three instruments would have to price a SOAP rubric against
     a 17-field form. The median is printed because the rows are ordered by it
     and an order whose key a reader cannot see is one they cannot check -- so
-    it is printed as apparatus, after the span, and says in the legend that it
-    is not a score.
+    it is printed as apparatus, after the span, and says that it is not a score
+    in the tooltip on its own heading -- where the three column glosses moved
+    on 2026-09-03, out of a list under the table that put three paragraphs of
+    definition between a reader and the question the table answers.
     """
     drawn = _drawn(tmp_path, payload)
     profile = payload["orders"]
@@ -198,7 +200,10 @@ def test_the_section_publishes_no_order_of_its_own(tmp_path, payload):
     assert "no way of building one would be a measurement" in drawn
     # The span is read before the middle, which is the whole reason both are
     # printed: one model runs from first to last and no middle describes it.
-    assert drawn.index("Span") < drawn.index("Median")
+    # The *columns*, not the first mention of either word: the blurb names the
+    # two the rows are ordered by, which is the one thing a reader was asking
+    # the table and could not find, and it necessarily says "Median" first.
+    assert drawn.index(">Span<") < drawn.index(">Median<")
     for absent in ("Score", "Total", "Overall", "Combined score"):
         assert f">{absent}<" not in drawn, f"a column headed {absent} is an aggregate"
     for row in profile["rows"]:

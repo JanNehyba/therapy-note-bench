@@ -79,3 +79,10 @@ function TS(text) {
   return text;
 }
 
+// A sentence written as prose, flattened for an attribute. `title` renders its
+// value literally, so a gloss carrying `<code>` would show the tag; and the
+// wrapping a template literal brings would reach the tooltip as runs of spaces.
+function strip(html) {
+  return String(html).replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+}
+

@@ -447,3 +447,64 @@ def test_the_readme_marks_the_rows_a_judge_scored_from_its_own_vendor(payload):
             )
     if not marked:
         pytest.skip("no judge scored a model from its own family in this payload")
+
+
+# --- the masthead ------------------------------------------------------------
+
+
+def test_the_masthead_counts_are_the_ones_the_tables_hold(payload):
+    """The sentence under the title, against the tables under it.
+
+    It named three instruments and nothing countable, ran to five lines at the
+    reading measure, and was the last block on the page still written by hand.
+    Every figure in it is recomputed here from the drawn tables rather than
+    from `report._masthead`, which is the code that built it.
+    """
+    said = payload.get("masthead")
+    assert said, "the payload carries no masthead"
+
+    scored = [t for t in payload["tables"] if t["scored"]]
+    models = {r["system_id"] for t in scored for r in t["rows"] if r.get("system_type") == "model"}
+    assert said["models"] == len(models)
+    assert said["judges"] == len({t["versions"]["judge_model"] for t in scored})
+    assert said["instruments"] == len({t["instrument"] for t in scored if t.get("instrument")}) or (
+        said["instruments"] == len({t["track"] for t in scored})
+    )
+
+
+def test_the_masthead_counts_a_soap_note_once(payload):
+    """PDSQI-9 rates the notes the rubric already scored.
+
+    Adding the three tracks up counts every SOAP note twice and the masthead
+    would claim a third more work than was done. `results.SHARES_NOTES_WITH`
+    names which track's notes were written for another, so the count reads the
+    rule instead of restating it.
+    """
+    from tnb import results
+
+    said = payload["masthead"]
+    seen, notes, sessions = set(), 0, 0
+    for table in payload["tables"]:
+        if not table["scored"] or table["track"] in seen:
+            continue
+        if table["track"] not in results.NOTE_TRACKS:
+            continue
+        seen.add(table["track"])
+        rows = [r for r in table["rows"] if r.get("system_type") == "model"]
+        notes += sum((r.get("n_generated") or 0) for r in rows)
+        sessions += max((r.get("n_attempted") or 0) for r in rows)
+
+    assert said["notes"] == notes
+    assert said["sessions"] == sessions
+
+    doubled = sum(
+        (r.get("n_generated") or 0)
+        for t in payload["tables"]
+        if t["scored"] and t["track"] in results.SHARES_NOTES_WITH
+        for r in t["rows"]
+        if r.get("system_type") == "model"
+    )
+    if doubled:
+        assert said["notes"] != notes + doubled, (
+            "the masthead counts the notes PDSQI-9 re-scores as though they were written twice"
+        )

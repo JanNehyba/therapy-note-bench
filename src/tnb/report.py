@@ -1234,6 +1234,55 @@ def _with_note_words(rows: list[Row]) -> list[Row]:
     ]
 
 
+def _masthead(tables: list[dict]) -> dict:
+    """What the sentence under the title can say and have checked.
+
+    Built from the drawn tables, which is what the page itself reads, so the
+    masthead cannot state a number the tables below it disagree with.
+
+    `notes` counts only the tracks whose notes were written for them --
+    `results.NOTE_TRACKS`. PDSQI-9 rates the SOAP notes the rubric already
+    scored, so adding the three tracks up would count every SOAP note twice and
+    the masthead would claim a third more work than was done. `sessions` is the
+    same rule applied to the corpora: 50 AnnoMI conversations and 40 iHOPE
+    sessions, not 140.
+    """
+    scored = [table for table in tables if table["scored"]]
+    models, judges, instruments = set(), set(), set()
+    sessions = {}
+    for table in scored:
+        judges.add(table["versions"].get("judge_model"))
+        instruments.add(INSTRUMENT_LABELS.get(table["track"]))
+        for row in table["rows"]:
+            if row.get("system_type") != "model":
+                continue
+            models.add(row["system_id"])
+            if table["track"] not in results.NOTE_TRACKS:
+                continue
+            sessions[table["track"]] = max(
+                sessions.get(table["track"], 0), row.get("n_attempted") or 0
+            )
+    # One judge's table per track, not both: two judges scored the same notes,
+    # and a note counted once per table is a note counted twice.
+    per_track = {}
+    for table in scored:
+        if table["track"] in results.NOTE_TRACKS:
+            per_track.setdefault(table["track"], table)
+    written = sum(
+        (row.get("n_generated") or 0)
+        for table in per_track.values()
+        for row in table["rows"]
+        if row.get("system_type") == "model"
+    )
+    return {
+        "models": len(models),
+        "notes": written,
+        "sessions": sum(sessions.values()),
+        "judges": len(judges - {None, ""}),
+        "instruments": len(instruments - {None}),
+    }
+
+
 def build(
     rows: list[Row],
     saturations: list[dict] | None = None,
@@ -1488,6 +1537,11 @@ def build(
         # any more should be explainable rather than silently gone.
         "superseded": superseded,
         "protocol": protocol(drawn),
+        # The four counts the masthead states. Drawn from the tables rather
+        # than written into the template: the sentence under the title used to
+        # name the three instruments and nothing countable, and every number on
+        # this page that was typed has gone stale at least once.
+        "masthead": _masthead(tables),
         "corpus": _corpus_for(drawn),
         "licences": [
             licence for licence in LICENCES if _used_by(LICENCE_TRACKS, licence["source"], drawn)

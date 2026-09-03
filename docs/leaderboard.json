@@ -11491,6 +11491,13 @@
       "used_for": "the iHOPE transcripts and expert notes"
     }
   ],
+  "masthead": {
+    "instruments": 3,
+    "judges": 2,
+    "models": 18,
+    "notes": 1608,
+    "sessions": 90
+  },
   "orders": {
     "agreement": [
       {
