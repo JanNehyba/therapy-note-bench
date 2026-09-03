@@ -508,3 +508,64 @@ def test_the_masthead_counts_a_soap_note_once(payload):
         assert said["notes"] != notes + doubled, (
             "the masthead counts the notes PDSQI-9 re-scores as though they were written twice"
         )
+
+
+# --- the profile table, recomputed on the numbers the site publishes ----------
+#
+# `tests/test_profile_section.py` checks the same rule against a fixture it
+# builds, which catches a logic error and cannot catch a wrong published file.
+# A reader asked how they are to know these numbers were computed right, and
+# "the code that computed them says so" is not an answer, so the reimplementation
+# there is run here against `docs/leaderboard.json` itself.
+
+
+@pytest.fixture
+def published_ranks(payload) -> dict[str, list[int]]:
+    sys.path.insert(0, str(REPO_ROOT / "tests"))
+    profile = pytest.importorskip("test_profile_section")
+    orders = payload.get("orders")
+    if not orders:
+        pytest.skip("no orders artefact in the published payload")
+    by_id = {t["id"]: t for t in payload["tables"] if t.get("scored") and t.get("id")}
+    population = set(orders["population"])
+    found: dict[str, list[int]] = {}
+    for column in orders["columns_drawn"]:
+        table = by_id.get(column["table"])
+        assert table is not None, f"the profile draws a column from an absent table: {column}"
+        ranks = profile._rank_one_table(table, population)
+        for system in population:
+            found.setdefault(system, []).append(ranks[system])
+    return found
+
+
+def test_the_published_profile_ranks_survive_a_second_implementation(payload, published_ranks):
+    """Every rank, median and span in `docs/leaderboard.json`, recomputed."""
+    sys.path.insert(0, str(REPO_ROOT / "tests"))
+    profile = pytest.importorskip("test_profile_section")
+    for row in payload["orders"]["rows"]:
+        ranks = published_ranks[row["system_id"]]
+        assert row["ranks"] == ranks, (
+            f"{row['label']}: published {row['ranks']}, rule gives {ranks}"
+        )
+        assert row["median"] == pytest.approx(round(profile._middle(ranks), 1)), (
+            f"{row['label']}: published median {row['median']} over ranks {ranks}"
+        )
+        assert (row["best"], row["worst"]) == (min(ranks), max(ranks)), (
+            f"{row['label']}: published span {row['best']}-{row['worst']} over ranks {ranks}"
+        )
+
+
+def test_the_published_profile_is_drawn_in_median_order(payload):
+    """The order a reader checks by eye against the column beside it.
+
+    It was ordered by the top-group count first, so a row with a median of 6.0
+    sat below one with 16.0 — correct under the rule as it stood, unreadable,
+    and reported as a bug by the first person to look at it.
+    """
+    rows = (payload.get("orders") or {}).get("rows")
+    if not rows:
+        pytest.skip("no orders artefact in the published payload")
+    keys = [(row["median"], row["label"]) for row in rows]
+    assert keys == sorted(keys), (
+        f"the published rows are not in median order: {[(r['label'], r['median']) for r in rows]}"
+    )

@@ -2455,7 +2455,15 @@ def _orders_for(tables: list[dict], docs_dir: Path) -> dict | None:
                 "median": round(statistics.median(ranks), 1),
             }
         )
-    rows.sort(key=lambda row: (-row["top_group"], row["median"], row["label"]))
+    # **One key, and it is the one on screen.** Ordered by top group first and
+    # then by the median, the table read as broken to anybody who did not know
+    # what the first column was: a row with a median of 6.0 sat below one with
+    # 16.0, correctly, and nothing about that was visible. How many instruments
+    # leave a model undominated is still the honest answer to "which model" and
+    # it is still published -- as a sentence, and in `docs/edges-<track>.json`
+    # -- but it is not what puts the rows in an order a reader is asked to read
+    # down.
+    rows.sort(key=lambda row: (row["median"], row["label"]))
     found["rows"] = rows
     found["widest"] = max(rows, key=lambda row: (row["worst"] - row["best"], row["label"]))
     return found

@@ -1234,8 +1234,6 @@ function drawProfile() {
 
   const body = profile.rows.map(row => `<tr>
       <th scope="row" class="name">${esc(row.label)}</th>
-      <td class="place top">${row.top_group}<span class="of">/${
-        profile.instruments_tested.length}</span></td>
       ${row.ranks.map((rank, i) => `<td class="place${seamAt(i)}">${rank}</td>`).join('')}
       <td class="meta">${row.best}&#8211;${row.worst}</td>
       <td class="meta">${fmt(row.median, 1)}</td>
@@ -1264,28 +1262,25 @@ function drawProfile() {
        only ${signed(sameNotes.low)} to ${signed(sameNotes.high)}.`,
   ].filter(Boolean).join(' ');
 
-  //: Two findings a reader should not have to open anything to see, and the
-  //: apparatus behind them, which they should not have to read past.
+  //: Everything that is not the table: two findings and the apparatus behind
+  //: them, all of it folded.
   //:
-  //: This was eight paragraphs under the table, in the order they had been
-  //: written rather than the order anybody needs them: the answer to "which
-  //: model" was seventh, and the first six were definitions and caveats. A
-  //: reader who does not know this repository also reads "judge" as a person,
-  //: so the word carries "LLM" wherever it is first used in a block.
-  const findings = [
+  //: This was eight paragraphs between the table and the next section, in the
+  //: order they had been written rather than the order anybody needs them --
+  //: the answer to "which model" was seventh. Two of them were promoted into
+  //: the open and that was still two paragraphs of prose a reader had not
+  //: asked for; the summary names what is inside instead, so opening it is a
+  //: choice rather than a gamble. A reader who does not know this repository
+  //: also reads "judge" as a person, so the word carries "LLM".
+  const detail = [
     `<p class="note">${T`<strong>${profile.rows.filter(
        r => r.top_group === profile.instruments_tested.length).length} of the
-       ${profile.rows.length} models are in the top group of every instrument.</strong> That
-       is this page's answer to "which model": on these three scoring protocols most current
-       models are not separated at all.`}</p>`,
+       ${profile.rows.length} models are in the top group of every instrument</strong> —
+       the group no tested comparison beats. That is this page's answer to "which model": on
+       these three scoring protocols most current models are not separated at all.`}</p>`,
 
     judgeNote && `<p class="note">${judgeNote}</p>`,
-  ].filter(Boolean).join('');
 
-  //: Everything a reader needs only if they are checking the two findings
-  //: above. Behind a toggle, because eight paragraphs of apparatus between a
-  //: table and the next section is a reason not to read any of it.
-  const detail = [
     across.length && `<p class="note">${T`<strong>There is no combined column, because no way
        of building one would be a measurement.</strong> A total over the three instruments
        would have to say what a SOAP rubric is worth against a 17-field form, and that is a
@@ -1347,9 +1342,6 @@ function drawProfile() {
   //: Median -- was in none of them. A definition belongs on the thing it
   //: defines; what stays below the table is the finding, not the glossary.
   const gloss = {
-    top: T`How many of the ${profile.instruments_tested.length} instruments put this model in
-       the group no tested comparison beats. Counted once per instrument, not per table: the
-       comparison is tested on both judges at once, so one instrument gives one answer.`,
     span: T`The best and the worst rank on this row. Read it before the Median: a row can be
        ranked 1 on one table and last on another, and no middle number describes that.`,
     median: T`The middle of the ${columns.length} ranks on this row, to one decimal because
@@ -1362,24 +1354,23 @@ function drawProfile() {
       <h2>${T`All six rankings, one row per model`}</h2>
       <p class="blurb">${T`The ${profile.population.length} models that are in all
          ${profile.tables} published tables, with the rank each one gives them.
-         <strong>Rank 1 is the best</strong>, and every column runs 1 to
-         ${profile.population.length}. <strong>The rows are ordered by the Top group column
-         first, then by the Median.</strong> Neither is a score: the first is evidence, the
-         second is only a way of putting the rows somewhere.`}</p>
+         <strong>Rank 1 is the best</strong>, every column runs 1 to
+         ${profile.population.length}, and <strong>the rows are ordered by the Median column
+         on the right</strong>. The median is not a score: it is only a way of putting the
+         rows in some order, and two rows a place apart on it are not a place apart on
+         anything anybody measured.`}</p>
       <div class="scroll-top" aria-hidden="true"><div></div></div>
       <div class="scroll"><table class="profile">
         <thead><tr>
           <th scope="col" class="name">${T`System`}</th>
-          <th scope="col" class="place" title="${esc(strip(gloss.top))}">${T`Top group`}</th>
           ${head}
           <th scope="col" title="${esc(strip(gloss.span))}">${T`Span`}</th>
           <th scope="col" title="${esc(strip(gloss.median))}">${T`Median`}</th>
         </tr></thead>
         <tbody>${body}</tbody>
       </table></div>
-      <div class="notes">${findings}</div>
-      ${detail ? `<details class="box more"><summary>${T`How to check these two, and what
-        this table deliberately does not do`}</summary><div class="notes">${detail}</div>
+      ${detail ? `<details class="box more"><summary>${T`What these six rankings say, how they
+        were built, and what they do not claim`}</summary><div class="notes">${detail}</div>
         </details>` : ''}
     </section>`;
 }

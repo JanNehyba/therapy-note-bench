@@ -12419,6 +12419,38 @@
       },
       {
         "best": 3,
+        "label": "qwen3.8-27b",
+        "median": 6.0,
+        "ranks": [
+          17,
+          17,
+          6,
+          3,
+          5,
+          6
+        ],
+        "system_id": "qwen3.8-27b",
+        "top_group": 2,
+        "worst": 17
+      },
+      {
+        "best": 1,
+        "label": "qwen3.8-flash-next",
+        "median": 6.0,
+        "ranks": [
+          18,
+          18,
+          1,
+          2,
+          2,
+          10
+        ],
+        "system_id": "qwen3.8-flash-next",
+        "top_group": 2,
+        "worst": 18
+      },
+      {
+        "best": 3,
         "label": "glm-5.2",
         "median": 6.5,
         "ranks": [
@@ -12514,70 +12546,6 @@
         "worst": 12
       },
       {
-        "best": 9,
-        "label": "deepseek-v4-flash",
-        "median": 15.0,
-        "ranks": [
-          15,
-          9,
-          15,
-          15,
-          15,
-          14
-        ],
-        "system_id": "deepseek-v4-flash",
-        "top_group": 3,
-        "worst": 15
-      },
-      {
-        "best": 10,
-        "label": "deepseek-v4-flash-thinking",
-        "median": 16.0,
-        "ranks": [
-          16,
-          10,
-          16,
-          17,
-          16,
-          17
-        ],
-        "system_id": "deepseek-v4-flash-thinking",
-        "top_group": 3,
-        "worst": 17
-      },
-      {
-        "best": 3,
-        "label": "qwen3.8-27b",
-        "median": 6.0,
-        "ranks": [
-          17,
-          17,
-          6,
-          3,
-          5,
-          6
-        ],
-        "system_id": "qwen3.8-27b",
-        "top_group": 2,
-        "worst": 17
-      },
-      {
-        "best": 1,
-        "label": "qwen3.8-flash-next",
-        "median": 6.0,
-        "ranks": [
-          18,
-          18,
-          1,
-          2,
-          2,
-          10
-        ],
-        "system_id": "qwen3.8-flash-next",
-        "top_group": 2,
-        "worst": 18
-      },
-      {
         "best": 5,
         "label": "gpt-5.6-luna",
         "median": 11.5,
@@ -12608,6 +12576,38 @@
         "system_id": "mistral-medium-3.5",
         "top_group": 2,
         "worst": 16
+      },
+      {
+        "best": 9,
+        "label": "deepseek-v4-flash",
+        "median": 15.0,
+        "ranks": [
+          15,
+          9,
+          15,
+          15,
+          15,
+          14
+        ],
+        "system_id": "deepseek-v4-flash",
+        "top_group": 3,
+        "worst": 15
+      },
+      {
+        "best": 10,
+        "label": "deepseek-v4-flash-thinking",
+        "median": 16.0,
+        "ranks": [
+          16,
+          10,
+          16,
+          17,
+          16,
+          17
+        ],
+        "system_id": "deepseek-v4-flash-thinking",
+        "top_group": 3,
+        "worst": 17
       },
       {
         "best": 6,

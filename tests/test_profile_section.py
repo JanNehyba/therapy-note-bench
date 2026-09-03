@@ -210,18 +210,49 @@ def test_the_section_publishes_no_order_of_its_own(tmp_path, payload):
         assert "mean" not in row, "the payload's rows carry an average across instruments"
 
 
-def test_the_top_group_denominator_is_the_instruments(tmp_path, payload):
+def test_the_top_group_is_counted_per_instrument_not_per_table(tmp_path, payload):
     """Three, because dominance is tested on both judges at once.
 
     Six would be one test counted twice, and would offer a reader a resolution
     the artefact cannot express: undominated under one judge and not the other.
+
+    It was a column until 2026-09-03 and is a sentence now: as the table's first
+    sort key it made the order unreadable -- a row with a median of 6.0 sat
+    below one with 16.0, correctly, and nothing on screen said why.
     """
     drawn = _drawn(tmp_path, payload)
     tested = len(payload["orders"]["instruments_tested"])
+    counted = sum(1 for row in payload["orders"]["rows"] if row["top_group"] == tested)
 
-    assert f'<span class="of">/{tested}</span>' in drawn
-    assert f'<span class="of">/{len(payload["orders"]["columns_drawn"])}</span>' not in drawn, (
-        "the top group is counted per table rather than per instrument"
+    assert f"{counted} of the {len(payload['orders']['rows'])} models are in the top group" in (
+        " ".join(drawn.split())
+    )
+    assert '<span class="of">' not in drawn, (
+        "the top group is drawn as a column again; it is the table's evidence and not its order"
+    )
+
+
+def test_the_rows_are_ordered_by_the_column_the_reader_can_see(tmp_path, payload):
+    """One key, and it is the last column.
+
+    Ordered by top group first and then by the median, the table read as broken
+    to anybody who did not know what the first column was. The median is now
+    the only key, so a reader can check the order against the numbers in front
+    of them -- which is the whole of what an order in a table is for.
+    """
+    rows = payload["orders"]["rows"]
+    medians = [row["median"] for row in rows]
+    assert medians == sorted(medians), (
+        "the rows are not in median order, so the column a reader checks the order "
+        "against disagrees with the order"
+    )
+    for first, second in zip(rows, rows[1:], strict=False):
+        if first["median"] == second["median"]:
+            assert first["label"] <= second["label"], "ties are not broken by name"
+
+    drawn = _drawn(tmp_path, payload)
+    assert "the rows are ordered by the Median column" in " ".join(drawn.split()), (
+        "the page does not say what puts the rows in this order"
     )
 
 
@@ -290,19 +321,18 @@ def test_the_apparatus_is_behind_a_toggle_and_the_findings_are_not(tmp_path, pay
         pytest.skip("this payload draws no apparatus to fold away")
 
     head, _, folded = drawn.partition("<details")
-    assert "models are in the top group of every instrument" in head, (
-        "the answer to 'which model' is behind a toggle"
+    assert '<p class="note">' not in head, (
+        "a note is drawn between the table and the toggle; all of the prose folds"
     )
-    assert "decides almost everything" in head, (
-        "the finding about instruments against judges is behind a toggle"
-    )
-    for apparatus in (
+    for inside in (
+        "models are in the top group of every instrument",
+        "decides almost everything",
         "no way of building one would be a measurement",
         "Pooled over all three instruments",
         "resamples the sessions",
         "No heading here sorts",
     ):
-        assert apparatus in folded, f"{apparatus!r} is drawn in the open rather than folded"
+        assert inside in folded, f"{inside!r} is drawn in the open rather than folded"
     assert "<summary>" in folded
 
 
@@ -312,7 +342,134 @@ def test_the_page_says_llm_judge_where_a_stranger_would_read_a_person(tmp_path, 
     about a person. The two notes that stay in the open name what a judge is.
     """
     drawn = _drawn(tmp_path, payload)
-    head = drawn.partition("<details")[0]
-    if "judge" not in head.lower():
-        pytest.skip("the open notes do not mention a judge in this payload")
-    assert "LLM judge" in head, "the open notes say 'judge' with nothing saying what kind"
+    if "judge" not in drawn.lower():
+        pytest.skip("this section mentions no judge in this payload")
+    assert "LLM judge" in drawn, "the section says 'judge' with nothing saying what kind"
+
+
+# --- the six ranks and the median, reimplemented from the definition ----------
+#
+# A reader asked how they are to know these were computed right. The answer
+# cannot be "the code that computed them says so", so the rule is written out a
+# second time here, from `composite.order` and `concordance._positions` as a
+# specification rather than as an import, and the two are compared.
+#
+# The rule, in full:
+#   1. Take the models alone -- reference rows are not in this table.
+#   2. Per column, sort by value descending; two systems share a place when
+#      their values print the same at that column's decimals.
+#   3. A system's place on a table is the mean of its places over that
+#      instrument's columns, equal weights.
+#   4. Rank on that mean, exact ties sharing the better place (1, 2, 2, 4).
+#   5. The row's median is the middle of its six ranks; with six there is no
+#      single middle, so it is the mean of the third and fourth.
+
+
+def _printed(value: float, decimals: int) -> str:
+    return f"{value:.{decimals}f}"
+
+
+def _places_on_one_column(values: dict[str, float], decimals: int) -> dict[str, int]:
+    ordered = sorted(values.items(), key=lambda pair: (-pair[1], pair[0]))
+    places: dict[str, int] = {}
+    for index, (system, value) in enumerate(ordered):
+        previous = ordered[index - 1] if index else None
+        if previous and _printed(value, decimals) == _printed(previous[1], decimals):
+            places[system] = places[previous[0]]
+        else:
+            places[system] = index + 1
+    return places
+
+
+def _rank_one_table(table: dict, population: set[str]) -> dict[str, int]:
+    rows = [
+        row
+        for row in table["rows"]
+        if row.get("system_type") == "model" and row["system_id"] in population
+    ]
+    columns = [(c["key"], c["digits"]) for c in table["columns"]]
+    per_column = {}
+    for key, decimals in columns:
+        values = {
+            row["system_id"]: row["headline"][key]
+            for row in rows
+            if row["headline"].get(key) is not None
+        }
+        per_column[key] = _places_on_one_column(values, decimals)
+
+    mean_place = {}
+    for row in rows:
+        system = row["system_id"]
+        if any(system not in per_column[key] for key, _ in columns):
+            continue  # a mean over fewer columns is a different quantity
+        mean_place[system] = sum(per_column[key][system] for key, _ in columns) / len(columns)
+
+    ordered = sorted(mean_place, key=lambda s: (mean_place[s], s))
+    ranks: dict[str, int] = {}
+    for index, system in enumerate(ordered):
+        if index and mean_place[system] == mean_place[ordered[index - 1]]:
+            ranks[system] = ranks[ordered[index - 1]]
+        else:
+            ranks[system] = index + 1
+    return ranks
+
+
+def _middle(values: list[int]) -> float:
+    ordered = sorted(values)
+    half = len(ordered) // 2
+    if len(ordered) % 2:
+        return float(ordered[half])
+    return (ordered[half - 1] + ordered[half]) / 2
+
+
+@pytest.fixture
+def recomputed(payload) -> dict[str, list[int]]:
+    orders = payload.get("orders")
+    if not orders:
+        pytest.skip("no orders artefact in this payload")
+    by_id = {t["id"]: t for t in payload["tables"] if t.get("scored") and t.get("id")}
+    population = set(orders["population"])
+    found: dict[str, list[int]] = {}
+    for column in orders["columns_drawn"]:
+        table = by_id.get(column["table"])
+        assert table is not None, f"the profile draws a column from an absent table: {column}"
+        ranks = _rank_one_table(table, population)
+        for system in population:
+            found.setdefault(system, []).append(ranks[system])
+    return found
+
+
+def test_every_rank_in_the_profile_is_the_one_the_rule_gives(payload, recomputed):
+    """Six ranks a row, against a second implementation of the ordering rule."""
+    for row in payload["orders"]["rows"]:
+        assert row["ranks"] == recomputed[row["system_id"]], (
+            f"{row['label']}: the table draws {row['ranks']} where the rule gives "
+            f"{recomputed[row['system_id']]}"
+        )
+
+
+def test_every_median_and_span_is_the_middle_of_those_ranks(payload, recomputed):
+    """And the two summary columns, taken by hand off the six."""
+    for row in payload["orders"]["rows"]:
+        ranks = recomputed[row["system_id"]]
+        assert row["median"] == pytest.approx(round(_middle(ranks), 1)), (
+            f"{row['label']}: median {row['median']} against {_middle(ranks)} over {ranks}"
+        )
+        assert (row["best"], row["worst"]) == (min(ranks), max(ranks)), (
+            f"{row['label']}: span {row['best']}-{row['worst']} over ranks {ranks}"
+        )
+
+
+def test_the_rows_are_drawn_in_the_order_the_medians_put_them(payload, recomputed):
+    """The one thing a reader checks by eye, and the one that was wrong.
+
+    The rows were ordered by the top-group count and then by the median, so a
+    row with a median of 6.0 sat below one with 16.0 -- correct under the rule
+    and unreadable, because the key was a column most rows share a value on.
+    """
+    rows = payload["orders"]["rows"]
+    keys = [(row["median"], row["label"]) for row in rows]
+    assert keys == sorted(keys), (
+        "the rows are not in median order, so the column a reader checks the order against "
+        f"disagrees with the order: {[(r['label'], r['median']) for r in rows]}"
+    )
