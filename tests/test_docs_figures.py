@@ -225,6 +225,35 @@ def test_the_rubric_measures_two_and_pdsqi_measures_eight(payload):
 
 
 # --- methodology.md -----------------------------------------------------------
+def test_the_two_temporal_ranges_in_the_prose_are_the_columns_they_describe(payload):
+    """ "0.00-0.55" outlived the column by two systems, in three places at once.
+
+    The briefing's front-page card, this sentence, and the `temporal_next`
+    caveat inside `docs/leaderboard.json` -- which the README and both site
+    pages reprint -- all froze the sixteen-model range. `glm-5.3` answers the
+    looking-forward section in eight sessions of eleven, so the top is 0.73.
+
+    The caveat computes its range now. This sentence is prose and cannot, so it
+    is checked here. The figure regex in `test_published_numbers.py` cannot see
+    either range -- it refuses a number followed by a dash and a digit -- so
+    neither pair was ever in that file's budget, and registering them there
+    would have credited four figures nothing counts.
+    """
+    rows = next(
+        table["rows"]
+        for table in payload["tables"]
+        if table["track"] == "icare" and table["scored"]
+    )
+    text = read("methodology.md")
+    for measure, name in (("temporal_past", "Looking back"), ("temporal_next", "looking forward")):
+        values = [
+            row["headline"][measure] for row in rows if row["headline"].get(measure) is not None
+        ]
+        assert values, f"no {measure} column in this payload"
+        stated = f"({min(values):.2f}-{max(values):.2f}"
+        assert stated in text, (
+            f"the {name} sentence does not carry the range its column covers, {stated})"
+        )
 
 
 def test_the_self_preference_intervals_are_the_published_ones(data):

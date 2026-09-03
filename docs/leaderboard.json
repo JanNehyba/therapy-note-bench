@@ -19310,7 +19310,7 @@
         },
         {
           "anchored": false,
-          "caveat": "Counts once in the order like every column, and moves it little: every model scores 0.97-1.00 here, so it separates nobody -- it is shown because its twin does.",
+          "caveat": "Counts once in the order like every column, and moves it little: the models are packed at the top of it, so it separates nobody -- it is shown because its twin does.",
           "definition": "Section 5 only -- what happened in the previous session. The fraction of the 34 sessions whose expert note answered it where the model did too.",
           "digits": 2,
           "instrument": "iCARE",
@@ -19321,7 +19321,7 @@
         },
         {
           "anchored": false,
-          "caveat": "This is where the source paper reports every model it tested failing, and ours do too: 0.00 to 0.55. Reported apart from its twin because averaging the two turned 1.00 and 0.09 into 0.78 and hid exactly this.",
+          "caveat": "This is where the source paper reports every model it tested failing, and ours do too -- the column beside this note is the whole spread. Reported apart from its twin because averaging the two turned 1.00 and 0.09 into 0.78 and hid exactly this.",
           "definition": "Section 17 only -- what happens at the next session. The fraction of the 11 sessions whose expert note answered it where the model did too.",
           "digits": 2,
           "instrument": "iCARE",
@@ -20554,7 +20554,7 @@
         },
         {
           "anchored": false,
-          "caveat": "Counts once in the order like every column, and moves it little: every model scores 0.97-1.00 here, so it separates nobody -- it is shown because its twin does.",
+          "caveat": "Counts once in the order like every column, and moves it little: the models are packed at the top of it, so it separates nobody -- it is shown because its twin does.",
           "definition": "Section 5 only -- what happened in the previous session. The fraction of the 34 sessions whose expert note answered it where the model did too.",
           "digits": 2,
           "instrument": "iCARE",
@@ -20565,7 +20565,7 @@
         },
         {
           "anchored": false,
-          "caveat": "This is where the source paper reports every model it tested failing, and ours do too: 0.00 to 0.55. Reported apart from its twin because averaging the two turned 1.00 and 0.09 into 0.78 and hid exactly this.",
+          "caveat": "This is where the source paper reports every model it tested failing, and ours do too -- the column beside this note is the whole spread. Reported apart from its twin because averaging the two turned 1.00 and 0.09 into 0.78 and hid exactly this.",
           "definition": "Section 17 only -- what happens at the next session. The fraction of the 11 sessions whose expert note answered it where the model did too.",
           "digits": 2,
           "instrument": "iCARE",

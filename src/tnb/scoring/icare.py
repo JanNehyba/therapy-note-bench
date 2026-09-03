@@ -91,9 +91,9 @@ MEASURES: dict[str, dict[str, str]] = {
             "of the 34 sessions whose expert note answered it where the model did too."
         ),
         "caveat": (
-            "Counts once in the order like every column, and moves it little: every "
-            "model scores 0.97-1.00 here, so it separates nobody -- it is shown "
-            "because its twin does."
+            "Counts once in the order like every column, and moves it little: the "
+            "models are packed at the top of it, so it separates nobody -- it is "
+            "shown because its twin does."
         ),
     },
     "temporal_next": {
@@ -103,10 +103,19 @@ MEASURES: dict[str, dict[str, str]] = {
             "Section 17 only -- what happens at the next session. The fraction of "
             "the 11 sessions whose expert note answered it where the model did too."
         ),
+        # **No range in the caveat.** It said "0.00 to 0.55", frozen from the
+        # sixteen-model era, and it is reprinted on four surfaces -- the README,
+        # both site pages, and `docs/leaderboard.json`, which every one of them
+        # reads. The briefing's copy of that range was corrected on 2026-09-02
+        # and this one, the source the others draw from, was not. A caveat is a
+        # property of the measure; the spread is the column standing beside it,
+        # and a caveat is also a translated string, so a number inside one needs
+        # a new Czech entry every time the data moves.
         "caveat": (
             "This is where the source paper reports every model it tested failing, "
-            "and ours do too: 0.00 to 0.55. Reported apart from its twin because "
-            "averaging the two turned 1.00 and 0.09 into 0.78 and hid exactly this."
+            "and ours do too -- the column beside this note is the whole spread. "
+            "Reported apart from its twin because averaging the two turned 1.00 "
+            "and 0.09 into 0.78 and hid exactly this."
         ),
     },
 }
@@ -452,8 +461,10 @@ def temporal_score(
     when they did not -- there is nothing to measure, and 0.0 would be a claim.
 
     **One field at a time, and never averaged.** The two are not one measure:
-    measured across all 16 models, looking back scores 0.97-1.00 and looking
-    forward scores 0.00-0.55. Because the expert notes fill section 5 in 34 of
+    looking back is something every model does and looking forward is something
+    almost none does -- the two ranges are printed in the caveats the tables
+    carry, computed from the run rather than frozen here. Because the expert
+    notes fill section 5 in 34 of
     40 sessions and section 17 in only 11, a blended average is weighted three
     to one toward the easy one and turned 1.00 and 0.09 into 0.78.
 

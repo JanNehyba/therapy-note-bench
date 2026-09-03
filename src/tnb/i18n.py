@@ -1105,10 +1105,10 @@ _PAYLOAD = {
         "Jen oddíl 5 — co se stalo na minulém sezení. Podíl z 34 sezení, jejichž expertní zápis "
         "na něj odpověděl, kde odpověděl i model."
     ),
-    "Counts once in the order like every column, and moves it little: every model scores"
-    " 0.97-1.00 here, so it separates nobody -- it is shown because its twin does.": (
-        "V pořadí počítá jednou jako každý sloupec a skoro s ním nehne: každý model tu boduje "
-        "0.97–1.00, takže nikoho neodliší — je vidět proto, že jeho dvojče ano."
+    "Counts once in the order like every column, and moves it little: the models are packed"
+    " at the top of it, so it separates nobody -- it is shown because its twin does.": (
+        "V pořadí počítá jednou jako každý sloupec a skoro s ním nehne: modely jsou namačkané "
+        "u jeho horního konce, takže nikoho neodliší — je vidět proto, že jeho dvojče ano."
     ),
     "Looks forward": "Výhled dopředu",
     "Section 17 only -- what happens at the next session. The fraction of the 11 sessions whose"
@@ -1116,12 +1116,13 @@ _PAYLOAD = {
         "Jen oddíl 17 — co bude na příštím sezení. Podíl z 11 sezení, jejichž expertní zápis na "
         "něj odpověděl, kde odpověděl i model."
     ),
-    "This is where the source paper reports every model it tested failing, and ours do too: 0.00"
-    " to 0.55. Reported apart from its twin because averaging the two turned 1.00 and 0.09 into"
-    " 0.78 and hid exactly this.": (
+    "This is where the source paper reports every model it tested failing, and ours do too --"
+    " the column beside this note is the whole spread. Reported apart from its twin because"
+    " averaging the two turned 1.00 and 0.09 into 0.78 and hid exactly this.": (
         "Právě tady zdrojový článek hlásí selhání každého modelu, který testoval, a ty naše "
-        "selhávají také: 0.00 až 0.55. Vykazuje se odděleně od svého dvojčete, protože průměr "
-        "těch dvou udělal z 1.00 a 0.09 hodnotu 0.78 a zakryl přesně tohle."
+        "selhávají také — celý rozptyl je ve sloupci vedle této poznámky. Vykazuje se odděleně "
+        "od svého dvojčete, protože průměr těch dvou udělal z 1.00 a 0.09 hodnotu 0.78 a zakryl "
+        "přesně tohle."
     ),
     # -- row notes, settings, sections and failure reasons ---------------------
     "faithfulness is a Likert rating; TN-Eval measured weak human agreement on it -- see"

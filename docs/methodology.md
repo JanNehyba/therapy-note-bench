@@ -69,7 +69,7 @@ It is reported, not smoothed over.
 
 **Why the two temporal columns are not one.** They were, and the average lied.
 Looking back is something every model does (0.97-1.00); looking forward is
-something almost none of them does (0.00-0.55, `gpt-oss-120b` at 0.00). The
+something almost none of them does (0.00-0.73, `gpt-oss-120b` at 0.00). The
 expert notes answer section 5 in 34 of 40 cases and section 17 in 11, so the
 mean is weighted 3:1 towards the easy half and turned 1.00 and 0.09 into 0.78 --
 publishing the *opposite* of the finding this track exists to reproduce.
