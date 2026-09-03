@@ -17,9 +17,10 @@
      say a page looks generated.
 
      So the rules below are one column, one scale of sizes, one scale of
-     spaces, and hairlines instead of boxes. Only two things are allowed to be
-     wider than the column: the table, which is what the page is for, and a
-     figure. Everything else lines up with everything else.
+     spaces, and hairlines instead of boxes. The column is the frame, and the
+     only two things allowed to be narrower are a figure, which is as wide as
+     it was drawn, and its caption, which is held to the figure. Everything
+     else lines up with everything else.
      --------------------------------------------------------------------- */
   :root {
     color-scheme: light dark;
@@ -86,24 +87,52 @@
     --s1: .25rem; --s2: .5rem;  --s3: .75rem; --s4: 1rem;
     --s5: 1.5rem; --s6: 2rem;   --s7: 3rem;   --s8: 4.5rem;
 
-    /* One frame, one left edge. This has been two things, and each drew the
-       same complaint from the other side. A 42rem column left-aligned in a
-       76rem frame put the prose in the left half of the window, and the
-       reader said the text stops halfway across. A 44rem page with the table
-       breaking out symmetrically on both sides put a 704px column of prose
+    /* One frame, one left edge, one column. This has been three things and
+       each drew the same complaint from a different side. A 42rem column
+       left-aligned in a 76rem frame put the prose in the left half of the
+       window, and the reader said the text stops halfway across. A 44rem page
+       with the table breaking out on both sides put a 704px column of prose
        over a 1374px table, and the reader said the text is narrow and the
-       table is enormous. Measured at 1904px: prose 592-1296, table 257-1631,
-       nothing sharing an edge with anything.
+       table is enormous. Then a 44rem measure inside an 88rem frame, with the
+       blocks around a table set in two columns so the right of the frame was
+       not empty -- and the reader said the page reads as two documents, a
+       narrow one and a wide one, and is twice as long as it needs to be.
 
-       So: the frame is as wide as the table needs (`--wide`), everything in
-       it starts at the same left edge, prose runs to a reading measure, a
-       table runs as far as it needs and no further than the frame, and above
-       76rem the blocks that belong to a table -- its lede beside its terms,
-       the sentences under it, its legend -- take the table's width in two
-       columns instead of leaving the right of the frame empty. Under 76rem it
-       is one column again and a wide table scrolls inside the frame. */
-    --measure: 44rem;
+       Measured on the published page at 1904px before this change: the frame
+       was 1408px and no line of text on it was ever wider than 704px. Twenty
+       one blocks stopped at half the frame; 2493px of a 5006px page had an
+       empty 704px strip down its right side. The reference list alone was
+       623px deep at 704px wide and 353px deep at the frame; the footer 553px
+       and 361px.
+
+       So: everything outside a toggle is one column and runs the frame.
+       Two columns survive only inside a `<details>`, where a reader has
+       asked for the apparatus and is scanning it rather than reading down
+       the page. Measured after: the leaderboard 4874 -> 4178px and the
+       methods page 35347 -> 29812px, no two-column block outside a toggle at
+       any width, no small table stretched, and no document wider than its
+       window at 390, 768, 1024, 1280, 1440, 1904 or 2560px.
+
+       What this costs is the line: prose runs about 150 characters where it
+       ran 94, past every width the reading literature has tested. It is a
+       measured trade the maintainer made with both numbers in front of him,
+       not an oversight -- the alternative that keeps the line short is two
+       columns everywhere, which is the layout this replaces. */
     --wide: 88rem;
+
+    /* 44rem was the reading measure until the frame swallowed it. Two rules
+       still want that width and neither of them is prose, so it keeps the
+       value under a name that says what it now does: the least a table or a
+       figure is allowed to shrink to, and the most a caption is allowed to
+       grow to. Both are the same judgement -- a table narrower than a short
+       column reads as a fragment, and a caption wider than the drawing it
+       describes points at nothing.
+
+       It is deliberately NOT `--wide`. Setting the floor to the frame is how
+       every small table gets stretched to fill it, which is a sparse table
+       and not a wide one; that was tried and reverted in `4d6d0dc`. */
+    --floor: 44rem;
+
     --gutter: 1.5rem;
 
     --radius: 3px;
@@ -137,16 +166,20 @@
      the section rules and the footer rule run its full width. */
   main { max-width: var(--wide); margin: 0 auto; }
 
-  /* Prose runs to one measure from the frame's left edge. One value for every
-     block that is read as sentences, so a sentence ends in the same place
-     whichever block it is in. The blocks that are apparatus rather than prose
-     -- the switch, the controls, a legend of colours -- run the frame, and a
-     table is not in this list at all: it takes the width it needs, below. */
-  p, ul, ol, dl, h1, h2, h3, h4, summary, figcaption, .design, .pair, .soap,
-  .criteria, .track-head, .methods-link {
-    max-width: var(--measure);
+  /* Everything runs the frame. This was a list of the blocks held to a
+     reading measure while the frame around them stayed twice as wide, which
+     is the layout the block at the top of this file describes and replaces.
+     There is no list any more because there is no second width: one column,
+     one left edge, one right edge, and the only two things allowed to be
+     narrower are a figure, which is as wide as it was drawn, and its caption,
+     which is held to the figure.
+
+     `main` still caps at `--wide`, so this is the frame and not the window. */
+  p, ul, ol, dl, h1, h2, h3, h4, summary, .design, .pair, .soap,
+  .criteria, .track-head, .methods-link,
+  footer, .legend, .switch, .controls, .lede, .notes {
+    max-width: 100%;
   }
-  footer, .legend, .switch, .controls, .lede, .notes { max-width: 100%; }
 
   a { color: var(--accent); text-underline-offset: .15em; }
   a:hover { text-decoration-thickness: 2px; }
@@ -160,7 +193,7 @@
     font-size: var(--t-xl); line-height: 1.15; letter-spacing: -.015em;
     font-weight: 600; margin: 0 0 var(--s3);
   }
-  p.sub { color: var(--ink); margin: 0 0 var(--s6); max-width: var(--measure); }
+  p.sub { color: var(--ink); margin: 0 0 var(--s6); max-width: 100%; }
 
     /* --- sections --------------------------------------------------------- */
 
@@ -216,14 +249,16 @@
   details.more[open] > summary { margin-bottom: var(--s2); }
   details.box[open] > summary { margin-bottom: var(--s4); }
 
-  /* The lede under a section heading. Measured in `rem`, never in `ch`: a `ch`
-     measure shrinks with the font size, and at .9rem the old 68ch came out
-     around half the frame beside a table running all of it, which read as a
-     broken column rather than as a comfortable line. */
+  /* The lede under a section heading. It runs the frame like every other
+     paragraph now; the rule stays because the colour and the margin are its
+     own. Never measured in `ch` if a width comes back here: a `ch` measure
+     shrinks with the font size, and at .9rem the old 68ch came out around
+     half the frame beside a table running all of it, which read as a broken
+     column rather than as a comfortable line. */
   p.blurb {
     color: var(--ink);
     margin: 0 0 var(--s4);
-    max-width: var(--measure);
+    max-width: 100%;
   }
 
   /* --- prose ------------------------------------------------------------ */
@@ -284,7 +319,7 @@
        or with each other. At the measure a small table shares both edges with
        the paragraph above it, and only a table that genuinely outgrows the
        measure reaches past it. */
-    min-width: min(100%, var(--measure));
+    min-width: min(100%, var(--floor));
     max-width: 100%;
   }
 
@@ -303,7 +338,7 @@
   figure.wide svg { display: block; max-width: 100%; height: auto; }
   figure.wide figcaption {
     font-size: var(--t-sm); color: var(--muted); margin: var(--s2) 0 0;
-    max-width: var(--measure);
+    max-width: var(--floor);
   }
 
   /* --- tables ----------------------------------------------------------- */
@@ -636,7 +671,7 @@
      the sentences between them are the same width, and it is the one-column
      legend that would be the odd block out. */
   dl.measures {
-    margin: var(--s5) 0 0; padding: 0; max-width: var(--measure);
+    margin: var(--s5) 0 0; padding: 0; max-width: 100%;
   }
   dl.measures .measure {
     break-inside: avoid; padding: var(--s3) 0;
@@ -670,7 +705,7 @@
   .methods-link {
     margin: var(--s6) 0; padding: var(--s2) 0 var(--s2) var(--s4);
     border-left: 2px solid var(--accent);
-    font-size: var(--t-md); color: var(--ink); max-width: var(--measure);
+    font-size: var(--t-md); color: var(--ink); max-width: 100%;
   }
   .methods-link a { font-weight: 600; }
 
@@ -800,35 +835,40 @@
     padding-top: var(--s5); border-top: 1px solid var(--line);
     max-width: 100%;
   }
-  footer p { margin: 0 0 var(--s3); max-width: var(--measure); }
+  footer p { margin: 0 0 var(--s3); max-width: 100%; }
   footer strong { color: var(--fg); }
 
-  /* --- a table's section, above 76rem ------------------------------------ */
+  /* --- a table's section ------------------------------------------------- */
 
   /* The lede of a table's section is the paragraph saying what the table
-     measures and the terms it uses. One column until the frame has room for
-     two; then side by side, the paragraph at the measure and the terms in
-     the rest, so the head of the section is as wide as the table under it.
-     The sentences under the table and the legend of its columns take the
-     table's width in two columns for the same reason: at one column they
-     were a strip of text at the measure beside an empty half of the frame.
-     A paragraph or a legend entry never splits across the two columns. */
+     measures and the terms it uses. It was the paragraph beside the terms in
+     two halves of the frame; both now run the frame in turn, one under the
+     other, because a page that is one column everywhere else cannot have two
+     here without reading as a different document for the length of one
+     block. It stays a grid so `.lede-side` can be dropped when it is empty. */
   .lede { display: grid; gap: 0 var(--s6); }
   .lede > * { min-width: 0; }
   .lede-side:empty { display: none; }
-  /* 76rem and not 80: a 1280px window reports 1264px once its scrollbar is
-     counted out, and the laptop this was first looked at on is 1280 wide. */
+  .lede-side .design { margin-top: var(--s4); }
+  .notes { margin-top: var(--s5); }
+
+  /* Two columns, and only here. Inside a `<details>` a reader has opened the
+     apparatus on purpose and is looking for one entry in a glossary or one
+     sentence in a list of caveats -- scanning, not reading down the page --
+     and two columns halve how far they scroll to do it. Outside a toggle
+     this is exactly the treatment that made the page read as two documents.
+
+     76rem and not 80: a 1280px window reports 1264px once its scrollbar is
+     counted out, and the laptop this was first looked at on is 1280 wide.
+
+     `break-inside` so a paragraph or a glossary entry is never split down
+     the middle by the column break. */
   @media (min-width: 76rem) {
-    /* Two equal halves rather than the measure and the rest: at 1280px the
-       rest was 480px, and three terms glossed in 480px ran five lines each
-       beside a two-line paragraph. Half the frame is 592px at 1280 and 688px
-       at 1904, a reading measure either way. */
-    .lede { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
-    .lede p.blurb { max-width: none; }
-    .lede-side .design { margin-top: 0; }
-    .notes, dl.measures { columns: 2; column-gap: var(--s6); max-width: 100%; }
-    .notes > p { break-inside: avoid; max-width: none; margin-top: 0; }
-    .notes { margin-top: var(--s5); }
+    details .notes, details dl.measures {
+      columns: 2; column-gap: var(--s6);
+    }
+    details .notes > p, details dl.measures .measure { break-inside: avoid; }
+    details .notes > p { margin-top: 0; }
   }
 
   @media (max-width: 48rem) {
