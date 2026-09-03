@@ -161,6 +161,7 @@ uv run tnb judges           # every candidate judge against the two therapists
 uv run tnb saturation       # is there anything left to measure?
 uv run tnb preference       # does either judge favour its own family?
 uv run tnb edges            # test every 'beats outright' claim; writes docs/edges-*.json
+uv run tnb orders           # the six tables' orders against each other; writes docs/orders.json
 uv run tnb report           # rebuild both pages, the JSON and the README table
 ```
 

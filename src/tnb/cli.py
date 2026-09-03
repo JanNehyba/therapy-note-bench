@@ -1128,6 +1128,74 @@ def cmd_preference(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_orders(args: argparse.Namespace) -> int:
+    """Read the six published orders against each other.
+
+    Costs nothing and asks nobody: pure arithmetic over the rows the page is
+    already drawing. Writes `docs/orders.json`, the artefact the profile
+    section is drawn from -- which is why the section may not exist without it.
+    """
+    from tnb.scoring import orders
+
+    found = orders.build()
+    if found is None:
+        print("Fewer than two scored tables, or fewer than three systems on all of them.")
+        return 0
+
+    print(f"{len(found['population'])} system(s) placed on all {found['tables']} table(s).")
+    for gap in found["outside"]:
+        print(f"  outside: {gap['system_id']} -- missing from {len(gap['missing'])} table(s)")
+    reference = found["reference"]
+    print(
+        f"  {len(reference['systems'])} reference row(s), on {reference['in_tables']} of "
+        f"{reference['of_tables']} tables, named and not counted."
+    )
+
+    jack = {band["kind"]: band for band in found["jackknife"]["bands"]}
+    print("")
+    print("Spearman between the tables' orders, and the same with each system left out:")
+    for band in found["bands"]:
+        wide = jack.get(band["kind"], band)
+        print(
+            f"  {band['kind']:24s} {band['pairs']:2d} pair(s)  "
+            f"{band['low']:+.3f}..{band['high']:+.3f}   "
+            f"leave-one-out {wide['low']:+.3f}..{wide['high']:+.3f}"
+        )
+
+    pooled = found["dominance"]["pooled"]
+    print("")
+    print(
+        f"Dominance pooled over {found['instruments']} instrument(s), {pooled['legs']} legs: "
+        f"{pooled['dominating']} of {pooled['pairs']} ordered pair(s)."
+    )
+    for track, one in sorted(found["dominance"]["per_instrument"].items()):
+        print(f"  {track:12s} {one['dominating']:3d} of {one['pairs']} on {one['legs']:2d} legs")
+
+    print("")
+    print("Between columns, where no ordering rule is involved:")
+    for measured in found["columns"]:
+        inside, across = measured["within_instrument"], measured["across_instruments"]
+        print(
+            f"  {measured['judge_model']:24s} {measured['columns']:2d} rankable column(s); "
+            f"median |rho| {inside['median_abs_rho']} within an instrument, "
+            f"{across['median_abs_rho']} across"
+        )
+
+    counted = found["undominated"]
+    tested = len(found["instruments_tested"])
+    for many in range(tested, -1, -1):
+        names = sorted(system for system, held in counted.items() if held == many)
+        if names:
+            print(f"  undominated in {many} of {tested} instrument(s): {len(names)}")
+
+    if args.dry_run:
+        return 0
+    path = orders.write(found)
+    print("")
+    print(f"  wrote {path.relative_to(REPO_ROOT)}")
+    return 0
+
+
 def cmd_edges(args: argparse.Namespace) -> int:
     """Test every "beats outright" claim on the conversations it rests on.
 
@@ -1855,6 +1923,16 @@ def build_parser() -> argparse.ArgumentParser:
     )
     edges_parser.add_argument("--dry-run", action="store_true", help="print, write nothing")
     edges_parser.set_defaults(func=cmd_edges)
+
+    orders_parser = subparsers.add_parser(
+        "orders",
+        help=(
+            "read the published tables' orders against each other (offline, no judge); "
+            "writes docs/orders.json"
+        ),
+    )
+    orders_parser.add_argument("--dry-run", action="store_true", help="print, write nothing")
+    orders_parser.set_defaults(func=cmd_orders)
 
     roster = subparsers.add_parser(
         "roster",

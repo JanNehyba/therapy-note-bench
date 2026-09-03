@@ -61,6 +61,7 @@ score-icare:
 analyse:
 	uv run tnb saturation
 	uv run tnb preference
+	uv run tnb orders
 
 report:
 	uv run tnb report
