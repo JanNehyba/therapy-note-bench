@@ -35,6 +35,7 @@ carry many more than it names.
 
 from __future__ import annotations
 
+import collections
 import json
 import re
 import sys
@@ -326,6 +327,65 @@ def test_the_provider_split_is_the_published_one(payload):
     for provider in ("openai", "vertex"):
         share = counted.get(provider, 0) / total
         assert f"{share:.0%}" in text, f"the {provider} share {share:.0%} is not stated"
+
+
+def test_the_method_describes_every_track_the_payload_publishes(payload):
+    """The document every page links as "the method" said two tracks.
+
+    The payload has held three since 2026-08-27: PDSQI-9 has its own
+    comparability group, its own table, its own ordering and its own caveats,
+    and this page did not contain the string. A reader sent here to find out
+    how a published table was scored found nothing about one of them.
+    """
+    text = read("methodology.md")
+    tracks = {table["track"] for table in payload["tables"] if table["scored"]}
+    assert tracks, "no scored table in this payload"
+
+    named = {
+        "tneval-soap": "TN-Eval SOAP rubric",
+        "icare": "iCARE / iHOPE",
+        "pdsqi-soap": "PDSQI-9",
+    }
+    for track in sorted(tracks):
+        assert track in named, f"{track} is published and this test does not know its heading"
+        assert named[track] in text, (
+            f"the {track} track is published and `docs/methodology.md` does not describe it"
+        )
+    assert f"Track {len(tracks)} —" in text, (
+        f"{len(tracks)} tracks are published and the page numbers fewer"
+    )
+
+
+def test_the_flat_pdsqi_columns_are_named_in_the_method_too(payload):
+    """The four columns that hold no ordering, named where the instrument is
+    described rather than only in the briefing.
+    """
+    text = read("methodology.md")
+    rows = next(
+        (
+            table["rows"]
+            for table in payload["tables"]
+            if table["track"] == "pdsqi-soap" and table["scored"]
+        ),
+        None,
+    )
+    if rows is None:
+        pytest.skip("no PDSQI table in this payload")
+
+    flat = []
+    for measure in sorted(rows[0].get("headline", {})):
+        values = [r["headline"][measure] for r in rows if r["headline"].get(measure) is not None]
+        if not values:
+            continue
+        top = collections.Counter(values).most_common(1)[0]
+        if top[1] * 2 > len(values):
+            flat.append(measure)
+    if not flat:
+        pytest.skip("no flat PDSQI column under the judge the README draws")
+    for measure in flat:
+        assert f"*{measure}*" in text, (
+            f"{measure} gives one number to most systems and the method does not say so"
+        )
 
 
 # --- README ------------------------------------------------------------------

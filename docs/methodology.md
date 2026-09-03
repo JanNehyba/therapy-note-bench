@@ -6,8 +6,10 @@ Given a therapy session transcript, a model must produce a clinical note. The
 note is scored. That is the whole task. Nothing here measures a model's ability
 to *conduct* therapy — see [landscape.md](landscape.md) for benchmarks that do.
 
-Two tracks run side by side because they measure different things and disagree
-in interesting ways.
+Two corpora run side by side because they measure different things and disagree
+in interesting ways, and the SOAP notes written on the first are scored by two
+instruments rather than one. Three tracks, then: the TN-Eval rubric and PDSQI-9
+over the same notes, and the iCARE form over the other corpus.
 
 ## Track 1 — TN-Eval SOAP rubric (reference-free)
 
@@ -86,6 +88,42 @@ Our TRACE is a **re-implementation without a human anchor.** The authors'
 TRACE annotations and blinded expert review are not in the public repository, so
 we cannot calibrate it the way we calibrate the TN-Eval judge. Every table and
 column that carries a TRACE score says so.
+
+## Track 3 — PDSQI-9 over the same SOAP notes
+
+This page described two tracks until 2026-09-03 and the payload has held three
+since 2026-08-27. The section is here because the document every page links as
+"the method" has to describe the instrument a published table is ordered by.
+
+**Why a second instrument on the same notes.** The rubric that anchors the
+leaderboard reaches two of the nine things a clinician means by note quality
+(see [limitations.md](limitations.md)). PDSQI-9 is the field's instrument for
+that count — nine attributes, validated on real records with physicians doing
+the rating — and eight of the nine are run here over the notes the rubric
+already scored. `cited` is dropped: a note written from one transcript has no
+source documents to cite. Two wordings are substituted, both named in
+`src/tnb/scoring/pdsqi.py` and in `NOTICE`.
+
+**It is never averaged with the rubric.** They are separate instruments, they
+are drawn as separate tables, and each table is ordered by the mean of a
+system's places over *its own* columns. A number scored on one is not comparable
+with a number scored on the other, and the second does not fill the gap the
+first leaves — it is wider, not sharper.
+
+**No human anchor, and two traps.** No therapist rated these notes on PDSQI-9,
+so unlike the rubric there is nothing to calibrate the judge against, and every
+table says so. The first trap is the ceiling: an empty SOAP note beats the
+therapist on *accurate* and on *succinct*, because a note that asserts nothing
+has nothing untrue in it and says what it says in the fewest possible words.
+[limitations.md](limitations.md) has the figures, and they are stated once,
+there. Read those two columns as things a note can fail, never as things it can
+win. The second is that under `gemini-3.1-pro-preview` four of
+the eight columns — *comprehensible*, *organized*, *synthesized* and *useful* —
+give the same number to twenty of the twenty-one systems, so no ordering exists
+on them and the table's order is decided by the four that vary. Under
+`gpt-5.6-terra` only *organized* is flat. That makes the count a fact about the
+pair of judges rather than about the instrument, and it is one more reason the
+two tables are never averaged.
 
 ## How the tables are ordered
 
