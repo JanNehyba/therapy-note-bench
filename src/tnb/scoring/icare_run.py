@@ -429,10 +429,7 @@ def to_rows(
                 failure_reasons=dict(unreached.failure_reasons) if unreached else {},
                 unreached_reasons=dict(unreached.reasons) if unreached else {},
                 metrics=aggregate.metrics(),
-                metrics_note=(
-                    "TRACE is a re-implementation with no human anchor -- the authors "
-                    "never published their ratings. See docs/limitations.md"
-                ),
+                metrics_note=scorer.METRICS_NOTE,
                 dataset_checksums=checksums(),
                 scored_at=now,
                 run_id=run_id,

@@ -85,6 +85,24 @@ def test_each_track_gets_its_own_columns():
     assert keys == ["rouge_l", "bertscore", "trace", "temporal_past", "temporal_next"]
 
 
+def test_icare_page_labels_our_score_as_trace_inspired():
+    """The public page must not present our unpublished judge protocol as iCARE's."""
+    data = report.build(
+        [
+            _row(
+                track=results.TRACK_ICARE,
+                prompt_version="icare-zeroshot-v1",
+                metrics_note="TRACE is a re-implementation with no human anchor",
+            )
+        ]
+    )
+    table = data["tables"][0]
+    trace = next(column for column in table["columns"] if column["key"] == "trace")
+    assert trace["label"] == "TRACE-inspired"
+    assert "Not iCARE's TRACE implementation" in trace["caveat"]
+    assert table["rows"][0]["metrics_note"].startswith("TRACE-inspired")
+
+
 # --- ordering and coverage --------------------------------------------------
 
 

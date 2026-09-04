@@ -9,11 +9,12 @@ Mistral model was preferred by experts over the model that led on the automatic
 scores. Reporting only one of them would delete that finding, so ROUGE-L and
 BERTScore sit beside TRACE and the gap between them is published as a result.
 
-**TRACE here has no human anchor.** The authors' TRACE annotations and their
-blinded expert review are not in the public repository — checked, and recorded
-in docs/datasets.md. The TN-Eval track can say how far its judge agrees with two
+**The TRACE-inspired score here has no human anchor.** The paper publishes
+aggregate TRACE results, but the item-level ratings and blinded expert-review
+records are not in the public repository — checked, and recorded in
+docs/datasets.md. The TN-Eval track can say how far its judge agrees with two
 therapists; this one cannot say anything of the sort, and every view that
-carries a TRACE number says so.
+carries this score says so.
 
 The two automatic metrics are computed here rather than imported so the offline
 test suite can exercise them: ROUGE-L is a longest-common-subsequence, which is
@@ -71,16 +72,21 @@ MEASURES: dict[str, dict[str, str]] = {
         "caveat": "A fluent note about the wrong session still scores well.",
     },
     "trace": {
-        "label": "TRACE",
+        # Keep the stored key `trace` for result compatibility, but do not give
+        # our score the source framework's unqualified name. iCARE published
+        # the five dimensions, not the judging protocol implemented below.
+        "label": "TRACE-inspired",
         "scale": "1-5",
         "definition": (
-            "Trustworthiness, relevance, accuracy, comprehensiveness and expression, "
-            "each rated 1-5 by a judge and averaged."
+            "This benchmark's LLM-judge score, inspired by iCARE's five TRACE "
+            "dimensions: trustworthiness, relevance, accuracy, comprehensiveness "
+            "and expression. Five 1-5 ratings are averaged."
         ),
         "caveat": (
-            "A re-implementation with no human anchor: the authors never published "
-            "their ratings, so unlike the TN-Eval track this number is not "
-            "calibrated against anybody."
+            "Not iCARE's TRACE implementation or its human scores. The exact iCARE "
+            "scoring prompt, rating anchors and item-level ratings were not "
+            "published; the prompt, per-dimension wording and rating codebook used "
+            "here are this benchmark's own and have no human anchor."
         ),
     },
     "temporal_past": {
@@ -133,6 +139,17 @@ INTERNAL_MEASURES: tuple[str, ...] = ()
 #: reporting "the judges agree perfectly on ROUGE-L" would dress a tautology as
 #: a finding. TRACE is the only thing a judge decides here.
 JUDGE_MEASURES: tuple[str, ...] = ("trace",)
+
+#: Current public wording for result rows. Historical rows preserve the wording
+#: written when they were scored; the report uses this current qualification so
+#: an old metadata sentence cannot make the published page call our score TRACE
+#: without distinguishing it from iCARE's human evaluation.
+METRICS_NOTE = (
+    "TRACE-inspired is this benchmark's own LLM-judge score -- not iCARE's "
+    "TRACE implementation or its human scores. iCARE publishes aggregate TRACE "
+    "results, but not its item-level ratings or exact judging prompt; our prompt "
+    "and rating anchors have no human validation. See docs/limitations.md"
+)
 
 #: Which iHOPE section each time-bearing measure reads. Separate measures, never
 #: averaged -- see `temporal_score` for the numbers that forced the split.

@@ -6,17 +6,18 @@
 no annotation is committed. `data/` is in `.gitignore`. Every dataset is fetched
 from its original source at run time, checksummed, and cited.
 
-This is not caution for its own sake. Checked repository by repository on
-2026-08-24 — the GitHub licence field, the file tree, and the README of each:
+This is not caution for its own sake. Repository terms were checked on
+2026-08-24 from each GitHub licence field, file tree and README; the preprint's
+licence was also checked through the medRxiv API:
 
 | Source | What we take | `LICENSE` file | Stated elsewhere |
 |---|---|---|---|
 | `amazon-science/TN-Eval` | SOAP prompt, scoring prompts, 23-item rubric | **Apache-2.0** | — |
 | `amazon-science/TN-Eval-Data` | 150 notes, ratings from 2 annotators | **none** | README says only "data for the TN-Eval project" |
 | `uccollab/AnnoMI` | 133 transcripts | **none** | "we release AnnoMI … to benefit research community"; citation requested |
+| iCARE preprint | the TRACE name and five domains | — | **CC BY** (confirmed via the medRxiv API) |
 | `proadhikary/iCARE` | the 17 section instructions | **none** | nothing at all |
 | `ai4mhx/TheraFuse` | iHOPE transcripts and gold notes | **none** | an **MIT badge** in the README |
-| medRxiv 2025.06.25.25330252 | citation only | — | **CC-BY** (confirmed via the medRxiv API) |
 
 Two corrections to what this page used to say:
 
@@ -185,18 +186,20 @@ What this means in practice:
 
 - The 174-session corpus with expert gold notes **is** present and matches v2's
   description, so the generation and reference-scoring tracks are sound.
-- The **TRACE annotations are not published anywhere.** This was established by
+- The **item-level TRACE annotations are not published anywhere.** Aggregate
+  domain results are published in the paper; the records needed to
+  reproduce them or calibrate another judge are not. This was established by
   search, not assumption — see
   [landscape.md](landscape.md#where-the-trace-data-is-not) for what was checked.
-  Our TRACE scorer is a re-implementation with no human anchor.
+  Our score is labelled TRACE-inspired and has no human anchor.
 - The corpus counts agree across two independently published copies (iCARE's CSV
   directories and TheraFuse's JSON), which is weak but real evidence that it did
   not change between v1 and v2.
 
 The authors release data on request elsewhere — MEMO ships nothing but a consent
-form and an email address — so a request is the likely route for the TRACE
-ratings. If they arrive, the TRACE column gets a human anchor and affected runs
-are re-tagged.
+form and an email address — so a request is the likely route for the item-level
+TRACE ratings. If they arrive, the TRACE-inspired column can be calibrated and
+affected runs are re-tagged.
 
 ## Ethics and scope
 

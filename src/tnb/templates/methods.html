@@ -96,7 +96,9 @@ __STYLE__
   <footer>
     <p data-t="methods.foot.columns"><strong>Faithfulness</strong> carries near-zero human agreement — TN-Eval
        measured Krippendorff's alpha 0.18 between trained therapists — and
-       <strong>TRACE</strong> is a re-implementation with <em>no human anchor</em>. Each
+       <strong>TRACE-inspired</strong> is this benchmark's own score, based on TRACE's
+       five published domains and using our own prompt and rating anchors; it has
+       <em>no human anchor</em>. Each
        column's range, what it counts and what it must not be read as are under its own
        table on <a href="index.html">the leaderboard</a>.</p>
     <p data-t="page.foot.notes"><strong>Notes</strong> counts the notes a protocol could actually read. A model that
@@ -114,7 +116,7 @@ __STYLE__
     <p id="provenance"></p>
       <p data-t="page.foot.background"><strong>Background.</strong>
        <a href="https://github.com/JanNehyba/therapy-note-bench/blob/main/docs/datasets.md">The datasets</a> — where each came from, what licence
-       it publishes (two of the six carry one, three publish none, and the sixth shows
+       it publishes (three of the seven carry one, three publish none, and the seventh shows
        only a badge), and the traps in them;
        <a href="https://github.com/JanNehyba/therapy-note-bench/blob/main/docs/methodology.md">the method</a>;
        <a href="https://github.com/JanNehyba/therapy-note-bench/blob/main/docs/limitations.md">what a result cannot claim</a>;
@@ -511,9 +513,10 @@ function renderLicences(data) {
     </tr>`).join('');
 
   document.getElementById('licences-body').innerHTML = `
-    <p class="blurb">${T`Licence field, file tree and README checked for each source on
-       2026-08-24. <strong>Two of the six carry a licence; three publish none, and the sixth
-       shows a badge with no LICENSE file behind it.</strong> Nothing here redistributes a
+    <p class="blurb">${T`Repository terms checked on 2026-08-24; the preprint's licence
+       was checked through the medRxiv API on 2026-09-04.
+       <strong>Three of the seven carry a licence; three publish none, and the
+       seventh shows a badge with no LICENSE file behind it.</strong> Nothing here redistributes a
        corpus: every dataset is fetched from its origin when a run needs it, and this page shows
        field names and scores, never transcripts, notes, or somebody else's prompt.`}</p>
     <div class="scroll"><table>

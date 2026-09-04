@@ -185,9 +185,10 @@ completeness and conciseness and **struggle on faithfulness** — which is the
 dimension that matters most clinically, because it is where hallucinations show
 up.
 
-For the iCARE track, the TRACE scorer has **no human anchor at all**, because
-the authors' TRACE annotations are not public. It is a re-implementation. Weigh
-it accordingly.
+For the iCARE track, the TRACE-inspired score has **no human anchor at all**.
+The paper publishes aggregate TRACE results, but not the item-level ratings
+needed to calibrate this LLM judge; its prompt and rating anchors are ours.
+Weigh it accordingly.
 
 ## Automatic metrics and clinical preference disagree
 
@@ -343,7 +344,7 @@ Set against the other track, the asymmetry is total:
 |---|---|---|
 | Human documents per item | note + **two** annotators' ratings | **one** expert note |
 | Human disagreement | **measured**: Krippendorff's alpha 0.50 on the rubric, 0.13 / 0.19 / 0.18 on the three Likert scales | **not measurable** |
-| Judge anchored against a human | yes, and the figure is published whatever it says | no — the TRACE ratings are [not published anywhere](landscape.md#where-the-trace-data-is-not) |
+| Judge anchored against a human | yes, and the figure is published whatever it says | no — the item-level TRACE ratings are [not published](landscape.md#where-the-trace-data-is-not) |
 
 So on this track **ROUGE-L and BERTScore measure distance from a single
 unreviewed document**, and that document is 54% empty. They do not say a note is
@@ -395,9 +396,9 @@ judge gives columns that are *better anchored than TRACE and still not
 calibrated here*, and the difference between those two sentences is the whole
 point:
 
-- TRACE has **no human agreement figure at all**. Nobody has rated anything on
-  it that this repository can cite, which is why it is labelled that way
-  wherever it appears.
+- TRACE has **no published human agreement figure**, and its item-level ratings
+  are not released. That leaves no data against which this repository can
+  calibrate its judge, which is why its column is labelled TRACE-inspired.
 - PDSQI-9 publishes one: trained physicians agree with each other at
   Krippendorff's alpha **0.575** — against the 0.18 two therapists reach on
   faithfulness. That is a **ceiling** a judge can be held against, and it is not

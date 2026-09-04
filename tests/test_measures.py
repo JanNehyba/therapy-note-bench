@@ -338,7 +338,7 @@ def test_the_docs_name_what_is_not_measured():
     # about -- that the page says what adopting the instrument does not buy
     # -- is unchanged.
     assert "no comparison of LLM raters against human ones" in landscape
-    assert "no human agreement figure at all" in landscape, "TRACE's position, stated"
+    assert "no published human agreement figure" in landscape, "TRACE's position, stated"
     assert "0.575" in landscape, "and PDSQI-9's, which is not the same position"
 
 

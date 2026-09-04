@@ -60,7 +60,8 @@ models as the whole of OpenAI.
   ids they released, and following the prose would have paired notes with the
   wrong transcripts.
 - **Record negative and unexplained findings, do not smooth them over.** The
-  TRACE ratings are not published and the docs say where that was checked. The
+  TRACE's aggregate results are published, but its item-level ratings are not,
+  and the docs say where that was checked. The
   paper's median conversation length does not reproduce and the docs say so.
 - **An absence is never a measurement.** Every number here is a fraction, and
   for each one the question "what happens when something is missing" has three

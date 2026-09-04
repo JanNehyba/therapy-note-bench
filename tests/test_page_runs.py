@@ -1905,7 +1905,7 @@ def test_a_column_no_judge_decided_carries_no_second_figure(tmp_path):
     # And the heading says why the others have none, rather than leaving four
     # columns looking short of a number.
     assert visible.count("same under both judges") == 4
-    assert "Only TRACE carries a second figure" in visible
+    assert "Only TRACE-inspired carries a second figure" in visible
 
 
 def test_a_table_whose_judge_decided_every_column_still_compares_all_of_them(tmp_path):

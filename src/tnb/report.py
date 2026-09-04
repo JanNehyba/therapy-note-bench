@@ -195,7 +195,7 @@ DOMINANCE_ORDERED: frozenset[str] = frozenset()
 #: notes or over nine -- is this repository's oldest failure mode.
 DETAIL_LABELS: dict[str, str] = {
     results.TRACK_TNEVAL: "Rubric criteria",
-    results.TRACK_ICARE: "TRACE dimensions",
+    results.TRACK_ICARE: "Dimensions in the TRACE-inspired score",
 }
 
 
@@ -222,7 +222,8 @@ LICENCE_TRACKS: dict[str, tuple[str, ...]] = {
         results.TRACK_TNEVAL,
         results.TRACK_PDSQI,
     ),
-    "iCARE": (results.TRACK_ICARE,),
+    "iCARE preprint": (results.TRACK_ICARE,),
+    "iCARE (code)": (results.TRACK_ICARE,),
     "TheraFuse": (results.TRACK_ICARE,),
 }
 
@@ -371,9 +372,10 @@ TRACK_BLURBS = {
         "sentence, faithfulness against the full transcript (Shah et al., 2025)."
     ),
     results.TRACK_ICARE: (
-        "Automatic metrics and a TRACE judge side by side, because the source paper "
-        "found they disagree (Adhikary, Singh, et al., 2026). That disagreement is a "
-        "result, not an error. "
+        "Automatic metrics and this benchmark's TRACE-inspired judge score side by "
+        "side, because the source paper found automatic metrics and clinical judgement "
+        "disagree (Adhikary, Singh, et al., 2026). That disagreement is a result, not "
+        "an error. "
         "iCARE and iHOPE are one project under two names: the code "
         "was released as iCARE in April 2025 and the preprint renamed it iHOPE in "
         "August 2026, sixteen months later. **PDSQI-9 has no columns here**, and "
@@ -497,8 +499,9 @@ TRACK_DESIGN = {
         "scored_against": (
             "An expert note written from the session by a clinician who was not in "
             "it. ROUGE-L and BERTScore measure how closely the model reproduced it; "
-            "TRACE asks a judge to rate the note itself, the way the paper's experts "
-            "did."
+            "this benchmark's TRACE-inspired score asks an LLM judge to rate the note "
+            "on the five dimensions the paper names. Its prompt and rating anchors are "
+            "ours, because the paper's judging protocol was not published."
         ),
         "human_role": (
             "The expert note is the answer key and never competes. In the source "
@@ -692,7 +695,7 @@ LICENCES = [
         ),
     },
     {
-        "source": "iCARE",
+        "source": "iCARE preprint",
         # Twelve authors, as medRxiv lists them for both versions (read from its
         # API on 2026-09-02); Crossref carries eleven for the same DOI and a
         # different order, and the archive's own record is the one to follow.
@@ -703,6 +706,17 @@ LICENCES = [
             "Benchmarking LLMs against expert documentation in the iCARE framework "
             "(Version 2) [Preprint]. medRxiv. https://doi.org/10.1101/2025.06.25.25330252"
         ),
+        "url": "https://doi.org/10.1101/2025.06.25.25330252",
+        "used_for": "the TRACE name, five domains and 1-5 scale",
+        "licence": "CC BY",
+        "note": (
+            "Licence recorded as cc_by by the medRxiv API. This benchmark uses the "
+            "published framework only as the stated inspiration for its own judge score."
+        ),
+    },
+    {
+        "source": "iCARE (code)",
+        "cite": "Code and data repository accompanying Adhikary et al. (2026).",
         "url": "https://github.com/proadhikary/iCARE",
         "used_for": "the 17 section instructions",
         "licence": "none published",
@@ -1723,7 +1737,13 @@ def _render_row(
         # SOAP is an acronym whose letters are the sequence.
         "section_order": _ordered_sections(list(row.metrics.by_section)),
         "detail": row.metrics.detail,
-        "metrics_note": row.metrics_note,
+        # The row preserves the caveat written when it was scored. Present the
+        # current, more precise qualification for this score without rewriting
+        # historical result data: iCARE published aggregate TRACE results, but
+        # not item-level ratings or the exact judging prompt.
+        "metrics_note": (
+            icare_scorer.METRICS_NOTE if row.track == results.TRACK_ICARE else row.metrics_note
+        ),
         "source": row.source,
         "scored": row.is_scored,
         "generated_at": row.generated_at,

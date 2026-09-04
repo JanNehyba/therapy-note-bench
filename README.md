@@ -17,8 +17,8 @@ rather than a second benchmark.
 > **Status: both tracks are measured.** **18 models** have written notes on 50
 > AnnoMI conversations and on 40 iHOPE sessions, scored by two independent LLM
 > judges. On the TN-Eval track each judge is first checked against the two
-> therapists who annotated the source data; TRACE, on the iCARE track, has no
-> human anchor and says so wherever it appears.
+> therapists who annotated the source data; the TRACE-inspired score on the
+> iCARE track has no human anchor and says so wherever it appears.
 >
 > Every model scores higher on completeness than both models TN-Eval released
 > notes for — Llama 3.1 70B and Mistral Large v2, both from 2024 — *and* than
@@ -85,7 +85,7 @@ written for somebody building or buying one:
 
 **iCARE form on the iHOPE corpus · 17 sections per session** — scored by gemini-3.1-pro-preview (max_output_tokens 288, temperature 0, thinking_budget 256)
 
-| Place | Model | Group | Provider | ROUGE-L (0-1) | BERTScore (0-1) | TRACE (1-5) | Looks back (0-1) | Looks forward (0-1) | Notes | Scored |
+| Place | Model | Group | Provider | ROUGE-L (0-1) | BERTScore (0-1) | TRACE-inspired (1-5) | Looks back (0-1) | Looks forward (0-1) | Notes | Scored |
 |---|---|---|---|---|---|---|---|---|---|---|
 | 1 | `qwen3.8-flash-next` | 1 | einfra | 0.192 | 0.821 | 4.98 | 1.00 | 0.27 | 39/40 (1 unreached) | 39 |
 | 2 | `gemma4` *(judge's own google)* | 1 | einfra | 0.202 | 0.820 | 4.83 | 1.00 | 0.36 | 40/40 | 40 |
@@ -109,7 +109,7 @@ written for somebody building or buying one:
 *Ordered by **mean place** over the 5 columns of this instrument, every column counting once — a convention, not a measurement: the columns do not predict each other. Under the other weightings tried (each column counted twice, and the reference rows removed) first place is held by `gpt-5.6-sol`, `qwen3.8-flash-next`; at most 14 of 18 systems change place and none by more than 6 ([how the order was built](https://jannehyba.github.io/therapy-note-bench/methods.html#ordering)). Places are among all 18 rows of the table, the reference systems included, so the models' places can have gaps.* *Group: what the evidence separates. A system stands above another only when it is at least as good on every column under both judges in 0.95 of the resampled conversations; 2 group(s) for 18 systems, 15 of them beaten by no tested comparison ([how the comparisons were tested](https://jannehyba.github.io/therapy-note-bench/methods.html#groups)).*
 - **ROUGE-L** (0-1) — Longest-common-subsequence overlap with the expert note, F-measure. Rewards using the same words in the same order. Not the source paper's ROUGE-L and not comparable with their published table. Theirs compares the whole rendered note, which puts our own field labels and every Nil the expert wrote on both sides -- a note where the model wrote nothing at all scores 0.379 that way, above most real notes. This compares the field values of the sections the expert answered, where the same empty note scores 0.000, and every model's figure fell by about a third. It also cannot tell a good paraphrase from a wrong answer, and the source paper found it disagrees with what clinicians preferred. It also falls as notes get longer; where this table has a Words column, the correlation between the two is printed under it.
 - **BERTScore** (0-1) — Embedding similarity to the expert note. Tolerates paraphrase. A fluent note about the wrong session still scores well.
-- **TRACE** (1-5) — Trustworthiness, relevance, accuracy, comprehensiveness and expression, each rated 1-5 by a judge and averaged. A re-implementation with no human anchor: the authors never published their ratings, so unlike the TN-Eval track this number is not calibrated against anybody.
+- **TRACE-inspired** (1-5) — This benchmark's LLM-judge score, inspired by iCARE's five TRACE dimensions: trustworthiness, relevance, accuracy, comprehensiveness and expression. Five 1-5 ratings are averaged. Not iCARE's TRACE implementation or its human scores. The exact iCARE scoring prompt, rating anchors and item-level ratings were not published; the prompt, per-dimension wording and rating codebook used here are this benchmark's own and have no human anchor.
 - **Looks back** (0-1) — Section 5 only -- what happened in the previous session. The fraction of the 34 sessions whose expert note answered it where the model did too. Counts once in the order like every column, and moves it little: the models are packed at the top of it, so it separates nobody -- it is shown because its twin does.
 - **Looks forward** (0-1) — Section 17 only -- what happens at the next session. The fraction of the 11 sessions whose expert note answered it where the model did too. This is where the source paper reports every model it tested failing, and ours do too -- the column beside this note is the whole spread. Reported apart from its twin because averaging the two turned 1.00 and 0.09 into 0.78 and hid exactly this.
 
@@ -351,8 +351,9 @@ and needs a MetaCentrum account or Masaryk University affiliation.
 ## Data and licensing
 
 The MIT licence covers **this repository's code only.** No corpus is
-redistributed here. Checked source by source on 2026-08-24 — licence
-field, file tree and README — **two of the six inputs carry a licence:**
+redistributed here. Repository terms were checked on 2026-08-24 and the
+preprint's licence through the medRxiv API on 2026-09-04 —
+**three of the seven inputs carry a licence:**
 
 | Source | Used for | Licence |
 |---|---|---|
@@ -360,12 +361,14 @@ field, file tree and README — **two of the six inputs carry a licence:**
 | [TN-Eval](https://github.com/amazon-science/TN-Eval) (code) | SOAP prompt, scoring prompts, 23-item rubric | **Apache-2.0** |
 | [TN-Eval-Data](https://github.com/amazon-science/TN-Eval-Data) | 150 notes, two annotators' ratings | none published |
 | [AnnoMI](https://github.com/uccollab/AnnoMI) | 133 transcripts, 50 scored | none published, citation requested |
-| [iCARE](https://github.com/proadhikary/iCARE) | the 17 section instructions | none published |
+| [iCARE preprint](https://doi.org/10.1101/2025.06.25.25330252) | the TRACE name, five domains and 1–5 scale | **CC BY** |
+| [iCARE](https://github.com/proadhikary/iCARE) (code) | the 17 section instructions | none published |
 | [TheraFuse](https://github.com/ai4mhx/TheraFuse) | iHOPE transcripts and expert notes | MIT badge, no `LICENSE` file |
 
-So: prompts under Apache-2.0 are reproduced in source with attribution;
-everything else is fetched from its origin when a run needs it, checksummed, and
-cited. The published pages show scores, field names, TN-Eval's prompt and
+So: prompts under Apache-2.0 are reproduced in source with attribution; the
+TRACE name and domains are used from the CC BY preprint with attribution; and
+the unlicensed instructions and datasets are fetched from their origins when a
+run needs them, checksummed, and cited. The published pages show scores, field names, TN-Eval's prompt and
 rubric text (Apache-2.0, reproduced with attribution), and one worked example —
 a single iHOPE note section quoted in both the clinician's and one model's
 wording, to show that word overlap is not quality. No transcript is
@@ -377,15 +380,15 @@ records: [docs/datasets.md](docs/datasets.md), [NOTICE](NOTICE).
 | | TN-Eval | iCARE |
 |---|---|---|
 | Expert-written reference note | 50, by therapists | 174, by named clinicians |
-| **Human ratings of what a model wrote** | **2 annotators × 150 notes, 100 of them model-written** | **none published** |
+| **Human ratings of what a model wrote** | **2 annotators × 150 notes, 100 of them model-written** | aggregate TRACE results published; item-level ratings not released |
 
 That second row is why the judge can be calibrated on one track and not the
 other. TN-Eval's annotators disagree with each other — Cohen's kappa 0.50 on the
 rubric, and weak agreement on the three 1-5 scales (Spearman rho 0.13 to
 0.19) — and our judge is
 measured against that ceiling rather than against an imagined truth. The iCARE
-TRACE column has no such anchor and is labelled as a re-implementation
-everywhere it appears.
+track's TRACE-inspired column has no such anchor and is labelled as this
+benchmark's own score everywhere it appears.
 
 ## Credits
 

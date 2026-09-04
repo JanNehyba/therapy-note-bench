@@ -54,7 +54,19 @@ AnnoMI  (counselling transcripts underlying the TN-Eval track)
   Expert-Annotated Counselling Dialogues." ICASSP 2022.
 
 --------------------------------------------------------------------------
-iCARE / iHOPE  (17-section format, transcripts, expert gold notes)
+iCARE preprint  (TRACE name, five domains and 1-5 scale)
+  CC BY -- licence field returned by the medRxiv API, verified 2026-09-04.
+  This repository labels its automated score TRACE-inspired: the paper does
+  not publish the exact judging prompt or item-level ratings, and the prompt,
+  per-dimension wording and rating anchors used here are our own.
+  https://doi.org/10.1101/2025.06.25.25330252
+  Adhikary, Prottay Kumar; Singh, S.; Singh, S.; Sharma, P.; Soni, P.;
+  Choudhary, R.; Saxena, C.; Chauhan, P.; Gupta, Swati Kedia; Deb, K. S.;
+  Singh, S. M.; Chakraborty, Tanmoy. "Clinically Grounded AI-Scribing in
+  Psychotherapy: Benchmarking LLMs Against Expert Documentation in the iCARE
+  Framework." medRxiv 2025.06.25.25330252 (v2, 2026-08-19).
+
+iCARE code / iHOPE data  (17-section format, transcripts, expert gold notes)
   No licence file, and no statement of terms in the README -- verified
   2026-08-24. The transcripts and gold notes are fetched from ai4mhx/TheraFuse,
   which displays an MIT badge but ships no LICENSE file; the corpus it
@@ -66,11 +78,6 @@ iCARE / iHOPE  (17-section format, transcripts, expert gold notes)
   names, and only for display.
   https://github.com/proadhikary/iCARE
   https://github.com/ai4mhx/TheraFuse
-  Adhikary, Prottay Kumar; Singh, S.; Singh, S.; Sharma, P.; Soni, P.;
-  Choudhary, R.; Saxena, C.; Chauhan, P.; Gupta, Swati Kedia; Deb, K. S.;
-  Singh, S. M.; Chakraborty, Tanmoy. "Clinically Grounded AI-Scribing in
-  Psychotherapy: Benchmarking LLMs Against Expert Documentation in the iCARE
-  Framework." medRxiv 2025.06.25.25330252 (v2, 2026-08-19). CC-BY.
 
   Because no licence is attached to the data, this repository never vendors,
   mirrors or republishes it. See docs/datasets.md.

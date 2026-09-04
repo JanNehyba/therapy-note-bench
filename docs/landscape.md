@@ -64,10 +64,11 @@ in v2.
 
 **Three caveats that shaped this benchmark's design.**
 
-1. *The TRACE annotations are not published anywhere.* This was searched for
+1. *The item-level TRACE annotations are not published anywhere.* Aggregate
+   results are in the paper's Table 4; the records needed to reproduce them or
+   calibrate another judge are not. This was searched for
    rather than assumed — see [Where the TRACE data is not](#where-the-trace-data-is-not).
-   Our TRACE implementation is therefore a re-implementation with no human
-   anchor, and is labelled as such everywhere it appears.
+   Our score is therefore labelled TRACE-inspired, with no human anchor.
 2. *The authors report that automatic metrics disagree with clinical judgement.*
    From the v2 abstract: "clinical preference did not always mirror automatic
    benchmarks, with Mistral, a smaller open model, emerging as a surprise
@@ -84,8 +85,10 @@ numbers can only be transcribed from the PDF, not re-derived.
 
 ### Where the TRACE data is not
 
-The TRACE human ratings are the one artefact that would let an automated TRACE
-scorer be calibrated against clinicians. Searched on 2026-08-23, in this order:
+The item-level TRACE human ratings and evaluator assignments are the artefacts
+that would let an automated score be calibrated against clinicians. The paper
+publishes aggregate means and standard deviations in Table 4, not those
+records. Searched on 2026-08-23, in this order:
 
 1. **The paper's own Data Availability statement** (v2 full text, JATS XML). It
    reads: *"All conversation transcripts used in this study and all source code
@@ -103,7 +106,7 @@ scorer be calibrated against clinicians. Searched on 2026-08-23, in this order:
 6. **The group's own publication list** (20 entries on their site) — no dataset
    link for TRACE.
 
-The finding is negative and it is a real finding: the ratings are not public.
+The finding is negative and it is a real finding: the item-level ratings are not public.
 The likely route is a request, which is how this group releases data elsewhere —
 see MEMO below.
 
@@ -257,7 +260,7 @@ here for the same reason there is no single figure in the instrument.
 *physicians* doing the rating; the paper reports no comparison of LLM
 raters against human ones. So an LLM judge scoring these notes on it produces
 columns that are better anchored than TRACE and still not calibrated here.
-TRACE has no human agreement figure at all; PDSQI-9 publishes one — physicians
+TRACE has no published human agreement figure; PDSQI-9 publishes one — physicians
 reach Krippendorff's alpha 0.575 with each other, against 0.18 between two
 therapists on faithfulness — and that is a ceiling a judge can be held against.
 What neither gives is a measurement of how well *our* judge agrees with people

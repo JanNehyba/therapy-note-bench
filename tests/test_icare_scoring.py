@@ -328,9 +328,14 @@ def test_every_measure_the_page_shows_is_documented_here():
     assert displayed <= set(scorer.MEASURES)
 
 
-def test_trace_says_it_has_no_human_anchor_wherever_it_appears():
-    """A CLAUDE.md invariant, asserted rather than promised."""
-    assert "no human anchor" in scorer.MEASURES["trace"]["caveat"]
+def test_trace_inspired_label_distinguishes_our_score_from_icare():
+    """The public heading must not present our unpublished protocol as iCARE's."""
+    measure = scorer.MEASURES["trace"]
+    assert measure["label"] == "TRACE-inspired"
+    assert "Not iCARE's TRACE implementation" in measure["caveat"]
+    assert "prompt" in measure["caveat"]
+    assert "rating anchors" in measure["caveat"]
+    assert "no human anchor" in measure["caveat"]
 
 
 def test_a_section_the_endpoint_refused_does_not_score_as_a_blank_field(tmp_path):
