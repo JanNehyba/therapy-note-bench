@@ -13,6 +13,7 @@ loud enough to fail. Skipped, not guessed, where node is absent.
 from __future__ import annotations
 
 import hashlib
+import json
 import os
 import re
 import shutil
@@ -2122,3 +2123,66 @@ def test_the_reference_note_says_why_they_are_ranked_once(tmp_path):
     assert after_table.count("identical protocol") == 1, (
         "the reason the reference rows are ranked is restated within its own sentence"
     )
+
+
+# --- what the page does to the address -----------------------------------------
+
+
+def _address(page: str, tmp_path: Path, hash_: str = "") -> dict:
+    """Every write the page made to the address, as it drew itself once."""
+    node = shutil.which("node")
+    if node is None:
+        pytest.skip("node is not installed; the published page cannot be executed here")
+    scripts = re.findall(r"<script[^>]*>(.*?)</script>", page, re.S)
+    script = tmp_path / "address.js"
+    script.write_text(
+        "\n".join(scripts) + "\nconsole.log('ADDRESS ' + JSON.stringify(global.__address));",
+        encoding="utf-8",
+    )
+    env = {**os.environ}
+    if hash_:
+        env["PAGE_HASH"] = hash_
+    finished = subprocess.run(
+        [node, str(RUNNER), str(script)],
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        env=env,
+        timeout=180,
+    )
+    line = next(
+        (ln for ln in (finished.stdout or "").splitlines() if ln.startswith("ADDRESS ")), None
+    )
+    assert line, f"the probe did not run: {(finished.stdout or '') + (finished.stderr or '')}"
+    return json.loads(line[len("ADDRESS ") :])
+
+
+def test_landing_on_the_page_does_not_rewrite_the_address(tmp_path):
+    """Opening the site turned the URL into `#tneval-soap-<judge>-<prompt>-...`.
+
+    The table's id went into the address on the *first* draw, before the reader
+    had touched anything, so a clean link became an unshareable one on arrival
+    -- and `location.hash =` pushes a history entry, so Back returned to the
+    same page. The address names a table once the reader has chosen one.
+    """
+    wrote = _address(_page(tmp_path), tmp_path)
+
+    assert wrote["hashSets"] == [], (
+        f"the page assigned location.hash on load: {wrote['hashSets']} -- that rewrites a "
+        "clean link and pushes a history entry"
+    )
+    assert wrote["replaced"] == [], f"the page rewrote the address on load: {wrote['replaced']}"
+
+
+def test_a_link_to_one_table_is_left_alone(tmp_path):
+    """And a reader who arrives at a particular judge's table keeps it.
+
+    The address is worth writing for exactly one reason -- somebody sent it --
+    so arriving with one has to leave it as it was found.
+    """
+    data = _page_data(tmp_path)
+    wanted = data["selection"]["tracks"][-1]["default"]
+    wrote = _address(report.render_page(data), tmp_path, hash_=f"#{wanted}")
+
+    assert wrote["hashSets"] == []
+    assert wrote["replaced"] == [], "the address was rewritten for a link that named a table"

@@ -37,10 +37,23 @@ global.document = {
 // `PAGE_SEARCH=?lang=cs` runs the page in the other language: the switch
 // reads it there, and a render function that throws only in Czech is a
 // render function that throws.
+// What the page did to the address, recorded rather than discarded. Opening
+// the site used to rewrite a clean URL to `#tneval-soap-<judge>-...` before the
+// reader had touched anything, and nothing here could see it: `hash` was a
+// plain property and `replaceState` a no-op, so both writes vanished.
+global.__address = { hashSets: [], replaced: [], pushed: [] };
 global.location = {
-  hash: '', href: 'https://example.invalid/', search: process.env.PAGE_SEARCH || '',
+  href: 'https://example.invalid/',
+  pathname: '/',
+  search: process.env.PAGE_SEARCH || '',
+  _hash: process.env.PAGE_HASH || '',
+  get hash() { return this._hash; },
+  set hash(value) { this._hash = value; global.__address.hashSets.push(value); },
 };
-global.history = { replaceState() {}, pushState() {} };
+global.history = {
+  replaceState(_state, _title, url) { global.__address.replaced.push(url); },
+  pushState(_state, _title, url) { global.__address.pushed.push(url); },
+};
 global.window = {
   addEventListener() {},
   matchMedia: () => ({ matches: false, addEventListener() {} }),

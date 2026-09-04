@@ -1444,7 +1444,8 @@ let current = wanted();
 const COMPARE_PARAM = /(?:^|[?&])compare=1(?:&|$)/;
 let compare = COMPARE_PARAM.test(location.search || '');
 
-function rememberCompare() {
+
+function rememberAddress(id) {
   const search = (location.search || '').replace(/^\?/, '');
   const parts = search ? search.split('&').filter(p => p && p !== 'compare=1') : [];
   if (compare) parts.push('compare=1');
@@ -1452,7 +1453,12 @@ function rememberCompare() {
   // With the path. An empty string is "no change" to `replaceState`, so turning
   // the mode off left `?compare=1` in the address: a reload or a shared link
   // brought it back, and the one thing the address was used for was sharing.
-  history.replaceState(null, '', location.pathname + query + (location.hash || ''));
+  const hash = id ? '#' + id : (location.hash || '');
+  history.replaceState(null, '', location.pathname + query + hash);
+}
+
+function rememberCompare() {
+  rememberAddress(null);
 }
 
 // The other judge's table for the same track. Only where there are exactly two:
@@ -1628,12 +1634,22 @@ function show(id) {
   applyFilters();
   document.querySelectorAll('table[data-table]').forEach(markSorted);
   pairScrollbars();
-  if (location.hash.replace(/^#/, '') !== id) {
-    // Through the same writer, or switching judge would drop `compare=1` and
-    // the mode would turn itself off whenever a reader changed anything.
-    location.hash = '#' + id;
-    rememberCompare();
-  }
+}
+
+// A table the reader picked, as against the one they were shown. Drawing and
+// naming it in the address are two different things and only this does both:
+// `show` ran on the first draw as well, so opening the site rewrote a clean
+// link to `#tneval-soap-<judge>-<prompt>-<harness>-<digest>` before anybody
+// had touched anything -- and `location.hash =` pushes a history entry, so
+// Back returned to the same page.
+//
+// The address is still worth writing, for the one reason it is ever read: a
+// reader sends somebody the table they are looking at. It goes through
+// `rememberAddress`, or switching judge would drop `compare=1` and the mode
+// would turn itself off whenever a reader changed anything.
+function choose(id) {
+  show(id);
+  if (location.hash.replace(/^#/, '') !== id) rememberAddress(id);
 }
 
 // The scrollbar under a wide table is a screen away from the columns it moves,
@@ -1715,7 +1731,7 @@ if (DATA.tables.length) {
     const toggle = event.target.closest('button[data-compare]');
     if (toggle) { compare = !compare; rememberCompare(); show(current); return; }
     const button = event.target.closest('button[data-target]');
-    if (button) show(button.dataset.target);
+    if (button) choose(button.dataset.target);
   });
 
   // Delegated for the same reason the row and sort handlers are: the boxes are
@@ -1747,7 +1763,7 @@ if (DATA.tables.length) {
     const link = event.target.closest('a[data-target]');
     if (!link) return;
     event.preventDefault();
-    show(link.dataset.target);
+    choose(link.dataset.target);
     const tables = document.getElementById('tables');
     if (tables && tables.scrollIntoView) tables.scrollIntoView({ block: 'start' });
   });
