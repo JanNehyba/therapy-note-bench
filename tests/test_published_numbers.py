@@ -70,6 +70,7 @@ DOCS = REPO_ROOT / "docs"
 #: hold them.
 DOCUMENTS = (
     "docs/gen2.md",
+    "docs/incidents.md",
     "docs/datasets.md",
     "docs/landscape.md",
     "docs/limitations.md",
@@ -1024,6 +1025,77 @@ CLAIMS = (
         "checks these budgets without presenting them as completed ratings.",
         covers=("120", "30"),
     ),
+    Claim(
+        where="docs/incidents.md",
+        phrase=(
+            "all ten real sessions of the corpus went to OpenAI and to Google Vertex: 150 calls, each answered, between 01:09 and 03:39"
+        ),
+        kind="historical",
+        because=(
+            "the event's size and window as the commit recording it states them; the generation "
+            "log is gitignored"
+        ),
+        covers=("150", "01", "09", "03", "39", "ten"),
+        caveat="not in this repository",
+    ),
+    Claim(
+        where="docs/incidents.md",
+        phrase=("the 300 answers were quarantined"),
+        kind="historical",
+        because="the commit's own count of what it quarantined; the directory is not present here",
+        covers=("300",),
+        caveat="not in this repository",
+    ),
+    Claim(
+        where="docs/incidents.md",
+        phrase=(
+            "2 424 cached answers per judge about 168 notes written for the ten sessions by 17 systems, 12 of them on e-INFRA, 3 on OpenAI and 2 on Vertex, between 03:39 and 13:07"
+        ),
+        kind="historical",
+        because="counted from the names and timestamps of the gitignored judge cache on 2026-09-14",
+        covers=("2 424", "168", "17", "12", "3", "2", "03", "39", "13", "07", "ten"),
+        caveat="not in this repository",
+    ),
+    Claim(
+        where="docs/incidents.md",
+        phrase=("714 answers per judge about 119 notes from 12 systems"),
+        kind="historical",
+        because="counted from the gitignored judge cache on 2026-09-14",
+        covers=("714", "119", "12"),
+        caveat="not in this repository",
+    ),
+    Claim(
+        where="docs/incidents.md",
+        phrase=("19 and 7 further answers"),
+        kind="historical",
+        because="counted from the gitignored judge cache on 2026-09-14",
+        covers=("19", "7"),
+        caveat="not in this repository",
+    ),
+    Claim(
+        where="docs/incidents.md",
+        phrase=("6 302 cached answers"),
+        kind="historical",
+        because="the sum of the three counts above, both judges",
+        covers=("6 302",),
+        caveat="not in this repository",
+    ),
+    Claim(
+        where="docs/incidents.md",
+        phrase=("within 72 hours of awareness (Article 33)"),
+        kind="external",
+        because="the notification deadline is the regulation's, not this repository's",
+        covers=("72", "33"),
+        source="GDPR",
+    ),
+    Claim(
+        where="docs/incidents.md",
+        phrase=("to the data subject (Article 34)"),
+        kind="external",
+        because="the article number is the regulation's",
+        covers=("34",),
+        source="GDPR",
+    ),
 )
 
 #: Which gitignored input each corpus claim needs, so a skip can name it.
@@ -1157,6 +1229,9 @@ def test_every_kind_is_one_the_docstring_explains():
 #: is deliberately raised in a commit that says why.
 UNACCOUNTED = {
     "docs/gen2.md": 0,
+    # Written 2026-09-14 with every figure registered: a record of data events
+    # is the last place a bare number belongs.
+    "docs/incidents.md": 0,
     # Four budgets lowered on 2026-09-01, when the Czech branch left this
     # repository and took its sections of these documents with it. The debt
     # did not get paid; the documents got shorter.

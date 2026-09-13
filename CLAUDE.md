@@ -18,6 +18,8 @@ jargon, and prove things in small verified steps rather than large ones.
 - Corpora, licensing, and the traps in them: `docs/datasets.md`
 - What a result cannot claim: `docs/limitations.md`
 - What e-INFRA had deployed when: `docs/models-snapshot.md`
+- What happened to confidential data, and what is still to be decided:
+  `docs/incidents.md`
 - Roadmap and phase status: `README.md`
 
 ## Where We Are
