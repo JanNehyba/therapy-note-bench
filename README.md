@@ -225,12 +225,12 @@ Judge **`gemini-3.1-pro-preview`** (prompts `tneval-rubric-v1`) against the two 
 
 | Measure | Statistic | Judge vs therapist | Therapist vs therapist | Alpha, judge | Alpha, therapists | n |
 |---|---|---|---|---|---|---|
-| rubric completeness | Cohen's kappa | 0.60 | 0.50 | 0.60 | 0.50 | 3448 |
+| rubric completeness | Cohen's kappa | 0.60 | 0.50 | 0.60 | 0.50 | 3449 |
 | likert completeness | Spearman rho | 0.24 | 0.13 | 0.11 | 0.13 | 600 |
 | likert conciseness | Spearman rho | 0.11 | 0.19 | 0.03 | 0.19 | 600 |
 | likert faithfulness | Spearman rho | 0.09 | 0.18 | 0.09 | 0.18 | 600 |
 
-**The therapist-vs-therapist columns are the ceiling, not a target to beat.** Two trained therapists disagree with each other about these notes; a judge that agrees with a therapist as often as the other therapist does has done as well as the task allows.
+**The therapist-vs-therapist columns estimate reliability for these raters and units.** Disagreement is informative about the rating procedure. Matching or exceeding this agreement does not establish correctness, and this estimate is not a theoretical upper bound.
 
 **Why two statistics.** Cohen's kappa suits a yes/no criterion and Spearman suits a 1–5 scale, so each measure is reported under the one a reader expects. But those two are different quantities and an inequality between them means nothing, so the rubric-versus-Likert comparison below is made on **Krippendorff's alpha**, which is defined for both — nominal for the rubric, ordinal for the scales — and is the statistic TN-Eval used to reach the finding in the first place.
 

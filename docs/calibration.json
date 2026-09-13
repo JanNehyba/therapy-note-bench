@@ -1,12 +1,17 @@
 {
   "agreements": [
     {
-      "alpha": 0.5998072626406157,
-      "alpha_humans": 0.5040964461994439,
+      "alpha": 0.5995917448669379,
+      "alpha_humans": 0.5036339457981684,
       "alpha_level": "nominal",
-      "humans": 0.5041571652036615,
-      "judge": 0.5997766802795041,
-      "n": 3448,
+      "clears_ceiling": true,
+      "humans": 0.5036897910190797,
+      "judge": 0.5995603310175632,
+      "margin": 0.0958705399984835,
+      "margin_draws": 2000,
+      "margin_high": 0.12320695995885528,
+      "margin_low": 0.06862722328374937,
+      "n": 3449,
       "name": "rubric_completeness",
       "statistic": "Cohen's kappa"
     },
@@ -14,8 +19,13 @@
       "alpha": 0.10943408363151369,
       "alpha_humans": 0.13053214160572235,
       "alpha_level": "ordinal",
+      "clears_ceiling": null,
       "humans": 0.13096836110903934,
       "judge": 0.24453266155975872,
+      "margin": null,
+      "margin_draws": 0,
+      "margin_high": null,
+      "margin_low": null,
       "n": 600,
       "name": "likert_completeness",
       "statistic": "Spearman rho"
@@ -24,8 +34,13 @@
       "alpha": 0.030139343524273998,
       "alpha_humans": 0.18712235103669383,
       "alpha_level": "ordinal",
+      "clears_ceiling": null,
       "humans": 0.19210453252909696,
       "judge": 0.11061336434027434,
+      "margin": null,
+      "margin_draws": 0,
+      "margin_high": null,
+      "margin_low": null,
       "n": 600,
       "name": "likert_conciseness",
       "statistic": "Spearman rho"
@@ -34,8 +49,13 @@
       "alpha": 0.09333623235527316,
       "alpha_humans": 0.17930428214514715,
       "alpha_level": "ordinal",
+      "clears_ceiling": null,
       "humans": 0.1830973712087935,
       "judge": 0.09390692033812073,
+      "margin": null,
+      "margin_draws": 0,
+      "margin_high": null,
+      "margin_low": null,
       "n": 600,
       "name": "likert_faithfulness",
       "statistic": "Spearman rho"
@@ -43,7 +63,15 @@
   ],
   "judge_model": "gemini-3.1-pro-preview",
   "judge_prompt_version": "tneval-rubric-v1",
+  "judge_settings": {
+    "max_output_tokens": 288,
+    "model": "gemini-3.1-pro-preview",
+    "temperature": 0,
+    "thinking_budget": 256
+  },
+  "margin_seed": 20260901,
   "notes": 150,
+  "other_settings": {},
   "per_criterion": [
     {
       "criterion": "assessment-analysis",
@@ -157,8 +185,8 @@
     },
     {
       "criterion": "subjective-symptoms",
-      "humans": 0.49517852488923647,
-      "judge": 0.4441337727068402
+      "humans": 0.4819646968534151,
+      "judge": 0.44426278027333965
     }
   ],
   "per_system": [
@@ -175,9 +203,9 @@
       "system": "mistral-large-v2"
     },
     {
-      "humans": 0.5439305599614952,
-      "judge": 0.5539864077806755,
-      "n": 1148,
+      "humans": 0.5423973961635621,
+      "judge": 0.553318489730406,
+      "n": 1149,
       "system": "therapist"
     }
   ],

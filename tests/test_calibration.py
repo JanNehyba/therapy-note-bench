@@ -8,6 +8,8 @@ on.
 
 from __future__ import annotations
 
+import json
+
 import pytest
 
 from tnb.scoring import calibration
@@ -360,3 +362,60 @@ def test_a_separation_across_two_settings_is_labelled_as_such():
     assert crossing[("one", "two")] is False, "same settings, a difference between judges"
     assert crossing[("one", "three")] is True
     assert crossing[("two", "three")] is True
+
+
+# --- the two published files say the same thing ------------------------------
+
+
+def _published(name: str) -> dict:
+    from tnb.config import REPO_ROOT
+
+    return json.loads((REPO_ROOT / "docs" / name).read_text(encoding="utf-8"))
+
+
+def test_both_published_calibration_files_use_one_serialiser():
+    """The judge file and the calibration file must describe an agreement alike.
+
+    They were built by two hand-rolled dicts over the same object and had
+    drifted: `docs/judges.json` carried the margin, its interval, its draw count
+    and the clears-estimate verdict, and `docs/calibration.json` -- the file a
+    reader reaches from the README -- carried none of them. A reader of the
+    published calibration could not tell whether the judge's lead over the
+    therapists survived resampling.
+    """
+    calib = _published("calibration.json")
+    judges = _published("judges.json")
+    assert calib["agreements"], "calibration.json has no agreements"
+    assert judges["judges"], "judges.json has no candidates"
+
+    ours = set(calib["agreements"][0])
+    for row in judges["judges"]:
+        for agreement in row["agreements"]:
+            assert set(agreement) == ours, (
+                "docs/judges.json and docs/calibration.json describe an agreement "
+                f"with different fields: {sorted(set(agreement) ^ ours)}. "
+                "Both are built by calibration.agreement_row; a difference means "
+                "one of them stopped using it."
+            )
+
+
+def test_the_published_calibration_names_the_instrument_it_was_taken_at():
+    """Without settings the file cannot say which instrument it describes.
+
+    Two candidates measured at two thinking budgets are two instruments, and
+    `results.COMPARABILITY_KEYS` counts judge settings among the six fields that
+    decide whether rows may share a table. The calibration file omitted them.
+    """
+    calib = _published("calibration.json")
+    settings = calib.get("judge_settings")
+    assert settings, "docs/calibration.json does not record the judge settings"
+    assert settings.get("model") == calib["judge_model"], (
+        "the recorded settings belong to a different model than the file names"
+    )
+
+    judges = _published("judges.json")
+    rows = [r for r in judges["judges"] if r["judge_model"] == calib["judge_model"]]
+    assert rows, "the calibrated judge is not among the candidates in docs/judges.json"
+    assert rows[0]["judge_settings"] == settings, (
+        "the same judge is recorded at different settings in the two published files"
+    )

@@ -337,6 +337,60 @@ def _leans_on() -> tuple[float, ...]:
     )
 
 
+def _judge_panel_instruments() -> tuple[float, ...]:
+    """Candidates per instrument, separations crossing the line, separations.
+
+    The page said the seven candidates were "measured at one setting" while
+    docs/judges.json recorded two. Five Gemini candidates answered at
+    max_output_tokens 288 with a thinking budget of 256, the two GPT ones at 672
+    with effort medium. COMPARABILITY_KEYS forbids exactly that pairing for
+    models, so the sentence that picks this repository's judge has to state it.
+    """
+    found = json.loads((DOCS / "judges.json").read_text(encoding="utf-8"))
+    block = found["separable"]
+    shapes: dict[str, int] = {}
+    for row in found["judges"]:
+        settings = dict(row.get("judge_settings") or {})
+        settings.pop("model", None)
+        key = json.dumps(settings, sort_keys=True)
+        shapes[key] = shapes.get(key, 0) + 1
+    sizes = sorted(shapes.values(), reverse=True)
+    return (
+        float(sizes[0]),
+        float(sizes[1]),
+        float(block["separations_crossing_instruments"]),
+        float(len(block["separated"])),
+        1.0,  # "at one instrument": the larger group answered at a single setting
+    )
+
+
+def _completeness_denominators() -> tuple[float, ...]:
+    """The four SOAP section sizes the completeness mean is taken over, then their sum.
+
+    limitations.md said "the denominator is always 23" until 2026-09-13. That is
+    the applicability point stated as arithmetic, and the arithmetic is different:
+    `tneval.aggregate` averages the four section fractions equally, so a criterion
+    in the four-item plan section is worth twice one in the eight-item assessment
+    section. The sentence now names the section sizes, and this binds them to the
+    rubric rather than to a number somebody typed.
+    """
+    from tnb.scoring import tneval
+
+    sizes = {s: float(len(tneval.criteria_keys(s))) for s in tneval.SOAP_SECTIONS}
+    # The sentence names the four section sizes, then restates two of them to say
+    # what the unequal weighting costs: one criterion in the plan section against
+    # one in the assessment section. Every figure comes from the rubric.
+    return (
+        sizes["subjective"],
+        sizes["objective"],
+        sizes["assessment"],
+        sizes["plan"],
+        sizes["plan"],
+        1.0,
+        sizes["assessment"],
+    )
+
+
 def _tneval_undominated() -> tuple[float, ...]:
     """Undominated systems, systems, and the measures dominance was read over.
 
@@ -495,6 +549,35 @@ CLAIMS = (
         because="the dominance count is the reason no winner is named, and it moved once already",
         covers=("Nine", "twenty-one", "three"),
         expected=_tneval_undominated,
+    ),
+    Claim(
+        where="docs/limitations.md",
+        phrase=(
+            "5 answered at one instrument and 2 at another, and 4 of those 7 separations "
+            "cross that line"
+        ),
+        kind="computed",
+        because=(
+            "the page claimed the candidates were measured at one setting while the "
+            "artefact recorded two, and this is the comparison that picks the judge"
+        ),
+        covers=("5", "2", "4", "7", "one"),
+        expected=_judge_panel_instruments,
+    ),
+    Claim(
+        where="docs/limitations.md",
+        phrase=(
+            "over sections of 6, 5, 8 and 4 criteria, so a criterion in the four-item "
+            "plan section is worth twice one in the eight-item assessment section"
+        ),
+        kind="computed",
+        because=(
+            "the page told readers for months to quote completeness as a fraction of 23, "
+            "which is not what aggregate computes; the section sizes are the correction "
+            "and they have to come from the rubric"
+        ),
+        covers=("6", "5", "8", "4", "four", "one", "eight"),
+        expected=_completeness_denominators,
     ),
     Claim(
         where="docs/limitations.md",

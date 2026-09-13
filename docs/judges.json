@@ -524,6 +524,7 @@
       0.5034527634718307,
       0.5037134105690964
     ],
+    "comparability_violation": true,
     "instruments": 2,
     "margin": 0.05,
     "measure": "rubric_completeness",
@@ -607,6 +608,7 @@
         "crosses_instrument": true,
         "worse": "gpt-5.6-sol"
       }
-    ]
+    ],
+    "separations_crossing_instruments": 4
   }
 }

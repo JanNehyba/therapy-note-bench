@@ -174,13 +174,23 @@ that placed it, and this benchmark carries more than a single instrument.**
 
 For the TN-Eval track each judge is calibrated against two human annotators and
 that calibration is published on [the methods page](https://jannehyba.github.io/therapy-note-bench/methods.html). Calibrated is not the same
-as correct. Nor does newer or dearer mean better: measured at one setting, the
-seven candidates span 0.089 in agreement with the therapists, and of the 21
-pairs among them only 7 are separated by more than the 0.05 this repository
-treats as the smallest real difference. The three `flash` candidates cannot be
-told apart from each other, and neither can the $20 GPT from the $12 one. That
-is why every candidate is measured rather than assumed — and why the panel
-reports bands rather than an order. TN-Eval's own finding is that LLM judges track humans acceptably on
+as correct. Nor does newer or dearer mean better: the seven candidates span
+0.089 in agreement with the therapists, and of the 21 pairs among them only 7
+are separated by more than the 0.05 this repository treats as the smallest real
+difference. The three `flash` candidates cannot be told apart from each other,
+and neither can the $20 GPT from the $12 one. That is why every candidate is
+measured rather than assumed — and why the panel reports bands rather than an
+order.
+
+**The panel breaks this repository's own comparability rule.** This page said
+the candidates were measured at one setting. They were not: 5 answered at one
+instrument and 2 at another, and 4 of those 7 separations cross that line, so
+they are as much a difference between two instruments as between two judges.
+`results.COMPARABILITY_KEYS` forbids putting two models in one table when their
+judge settings differ, and the panel that picks this repository's judge did
+exactly that to its own candidates. `docs/judges.json` now carries
+`comparability_violation` at the top of the block rather than only a flag per
+pair. TN-Eval's own finding is that LLM judges track humans acceptably on
 completeness and conciseness and **struggle on faithfulness** — which is the
 dimension that matters most clinically, because it is where hallucinations show
 up.
@@ -441,7 +451,17 @@ stigmatising column as things a note can fail, never as things it can win.**
 
 AnnoMI is motivational-interviewing demonstrations. There is no medication to
 adjust, no formal diagnosis, no assessment instrument administered. The rubric
-asks about all of them anyway, of every note, and the denominator is always 23.
+asks about all of them anyway, of every note, so a criterion no counselling
+session ever raises costs a note the same mark as one it forgot.
+
+It does not cost the same mark everywhere, though. This page used to name the
+whole rubric as the denominator, which is not the arithmetic `aggregate`
+performs: it averages the four section fractions equally, over sections of
+6, 5, 8 and 4 criteria, so a criterion in the four-item plan section is worth
+twice one in the eight-item assessment section. The two readings are not
+interchangeable, and the order the tables print is the first one. What the
+second would do to that order is a number this page may not state until it
+is computed into a committed artefact.
 
 **What decides that a criterion cannot apply.** `saturation`'s `unreachable`
 verdict, which is already in the code and already published per judge in
@@ -533,8 +553,9 @@ rather than removed. `plan-adjustment` is the same shape with the judges
 swapped: judge B puts `gpt-5.6-terra` at 0.54 there and judge A puts the field's
 maximum at 0.16.
 
-Quote completeness as a fraction of the whole 23-item rubric, which is what it
-is, and not as a proportion of what a note could have contained.
+Quote completeness as the equal-weighted mean of the note's four SOAP section
+fractions, which is what it is. It is not a fraction of the whole 23-item
+rubric, and it is not a proportion of what a note could have contained.
 
 ## How a model beats a therapist: by filling boxes she leaves empty
 

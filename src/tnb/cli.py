@@ -948,40 +948,7 @@ def cmd_calibrate(args: argparse.Namespace) -> int:
         print("\nDry run: nothing written.")
         return 0
 
-    payload = {
-        "judge_model": report_data.judge_model,
-        "judge_prompt_version": report_data.judge_prompt_version,
-        "notes": report_data.notes,
-        "rubric_beats_likert": report_data.rubric_beats_likert,
-        "agreements": [
-            {
-                "name": a.name,
-                "statistic": a.statistic,
-                "alpha": a.alpha_judge_mean,
-                "alpha_humans": a.alpha_human_vs_human,
-                "alpha_level": a.alpha_level,
-                "judge": a.judge_mean,
-                "humans": a.human_vs_human,
-                "n": a.n,
-            }
-            for a in report_data.agreements
-        ],
-        "per_criterion": [
-            {"criterion": key, "judge": judge_value, "humans": humans}
-            for key, judge_value, humans in report_data.per_criterion
-        ],
-        # Split by whose note was being read. The pooled figure is one number
-        # for the instrument; this says whether it is the same instrument on
-        # every kind of note. It is not: the spread across the three systems
-        # TN-Eval rated is 0.078 under the leaderboard's judge, larger than the
-        # margin this repository uses to decide that two agreement figures are
-        # separable at all -- and the judge is worst on the therapist's notes,
-        # which is the row the most-quoted comparison depends on.
-        "per_system": [
-            {"system": system, "judge": judge_value, "humans": humans, "n": count}
-            for system, judge_value, humans, count in report_data.per_system
-        ],
-    }
+    payload = calibration.as_payload(report_data)
     report.DOCS_DIR.mkdir(parents=True, exist_ok=True)
     report.CALIBRATION_PATH.write_text(
         _json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8"
@@ -1411,30 +1378,7 @@ def cmd_judges(args: argparse.Namespace) -> int:
             # judge was comparing them without saying so.
             "judge_settings": r.judge_settings,
             "other_settings": r.other_settings,
-            "agreements": [
-                {
-                    "name": a.name,
-                    "statistic": a.statistic,
-                    "alpha": a.alpha_judge_mean,
-                    "alpha_humans": a.alpha_human_vs_human,
-                    "alpha_level": a.alpha_level,
-                    "judge": a.judge_mean,
-                    "humans": a.human_vs_human,
-                    # How far above the therapists' own agreement this judge
-                    # sits, and whether that distance survives resampling the
-                    # notes. Published because the leaderboard gives this
-                    # inequality as the sole reason for the column it orders
-                    # by, and one of the two judges it draws does not clear
-                    # zero: the page cannot say so from a point estimate.
-                    "margin": a.margin,
-                    "margin_low": a.margin_interval[0] if a.margin_interval else None,
-                    "margin_high": a.margin_interval[1] if a.margin_interval else None,
-                    "margin_draws": a.margin_draws,
-                    "clears_ceiling": a.clears_ceiling,
-                    "n": a.n,
-                }
-                for a in r.agreements
-            ],
+            "agreements": [calibration.agreement_row(a) for a in r.agreements],
             "rubric_beats_likert": r.rubric_beats_likert,
         }
         for r in reports

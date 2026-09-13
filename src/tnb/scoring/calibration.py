@@ -752,6 +752,18 @@ def separations(judges: list[dict], measure: str, margin: float = ALPHA_MARGIN) 
         #: the panel is comparing judges; more means it is also comparing
         #: instruments.
         "instruments": len(set(shapes.values())),
+        #: The same fact at the top of the document, because per-pair flags are
+        #: easy to read past. `COMPARABILITY_KEYS` forbids putting two models in
+        #: one table when their judge settings differ; the panel that picks this
+        #: repository's judge does exactly that to its own candidates, and a
+        #: reader should meet that before the ranking rather than after it.
+        "comparability_violation": len(set(shapes.values())) > 1,
+        "separations_crossing_instruments": sum(
+            1
+            for index, (better, first, _) in enumerate(found)
+            for worse, second, _ in found[index + 1 :]
+            if first - second > margin and shapes.get(better) != shapes.get(worse)
+        ),
         "above_ceiling": [
             name for name, alpha, own in found if own is not None and alpha - own > margin
         ],
@@ -838,6 +850,72 @@ def calibrate(sessions: list[Session], judge_model: str, *, root: Path | None = 
         per_criterion=detail,
         per_system=by_system,
     )
+
+
+def agreement_row(agreement: Agreement) -> dict:
+    """One agreement, as both published files write it.
+
+    `docs/judges.json` and `docs/calibration.json` each used to build this dict
+    by hand from the same object, and they had drifted: the judges file carried
+    the margin, its interval, its draw count and the clears-estimate verdict,
+    and the calibration file -- the one a reader reaches through the README --
+    carried none of them. A reader of that file could not tell whether the
+    judge's lead over the therapists survived resampling, which is the whole
+    question those fields answer.
+    """
+    return {
+        "name": agreement.name,
+        "statistic": agreement.statistic,
+        "alpha": agreement.alpha_judge_mean,
+        "alpha_humans": agreement.alpha_human_vs_human,
+        "alpha_level": agreement.alpha_level,
+        "judge": agreement.judge_mean,
+        "humans": agreement.human_vs_human,
+        # How far above the therapists' own agreement this judge sits, and
+        # whether that distance survives resampling the notes. The leaderboard
+        # gives this inequality as the sole reason for the column it orders by,
+        # and one of the two judges it draws does not clear zero -- which a
+        # point estimate cannot say.
+        "margin": agreement.margin,
+        "margin_low": agreement.margin_interval[0] if agreement.margin_interval else None,
+        "margin_high": agreement.margin_interval[1] if agreement.margin_interval else None,
+        "margin_draws": agreement.margin_draws,
+        "clears_ceiling": agreement.clears_ceiling,
+        "n": agreement.n,
+    }
+
+
+def as_payload(report: Report) -> dict:
+    """`docs/calibration.json`, built from the same rows as `docs/judges.json`."""
+    return {
+        "judge_model": report.judge_model,
+        "judge_prompt_version": report.judge_prompt_version,
+        # What these answers were produced at. Absent until 2026-09-13, so a
+        # reader of this file could not tell which instrument it described,
+        # while the judges file beside it carried the settings for every
+        # candidate.
+        "judge_settings": report.judge_settings,
+        "other_settings": report.other_settings,
+        "notes": report.notes,
+        "rubric_beats_likert": report.rubric_beats_likert,
+        "margin_seed": MARGIN_SEED,
+        "agreements": [agreement_row(a) for a in report.agreements],
+        "per_criterion": [
+            {"criterion": key, "judge": judge_value, "humans": humans}
+            for key, judge_value, humans in report.per_criterion
+        ],
+        # Split by whose note was being read. The pooled figure is one number
+        # for the instrument; this says whether it is the same instrument on
+        # every kind of note. It is not: the spread across the three systems
+        # TN-Eval rated is 0.078 under the leaderboard's judge, larger than the
+        # margin this repository uses to decide that two agreement figures are
+        # separable at all -- and the judge is worst on the therapist's notes,
+        # which is the row the most-quoted comparison depends on.
+        "per_system": [
+            {"system": system, "judge": judge_value, "humans": humans, "n": count}
+            for system, judge_value, humans, count in report.per_system
+        ],
+    }
 
 
 def render_markdown(report: Report) -> str:
