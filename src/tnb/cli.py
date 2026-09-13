@@ -1397,8 +1397,8 @@ def cmd_judges(args: argparse.Namespace) -> int:
         f"{'therapist vs therapist':26}"
         + "".join(f"{ceilings.get(m, float('nan')):17.2f}" for m in measures)
     )
-    print("\nThe last row is the ceiling. Agreeing with a therapist as often as the")
-    print("other therapist does is as well as this task allows.")
+    print("\nThe last row estimates agreement between these therapists on these units.")
+    print("It describes reliability, not a theoretical limit on correctness.")
 
     if args.dry_run or args.no_write:
         return 0
@@ -1597,6 +1597,9 @@ def cmd_not_implemented(args: argparse.Namespace) -> int:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="tnb", description=__doc__)
     subparsers = parser.add_subparsers(dest="command", required=True)
+    subparsers.add_parser(
+        "gen2", help="source-grounded multilingual evaluation (install gen2 extra)"
+    )
 
     models = subparsers.add_parser(
         "models", help="list what each configured provider has deployed right now"
@@ -1989,6 +1992,17 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: list[str] | None = None) -> int:
+    arguments = list(sys.argv[1:] if argv is None else argv)
+    if arguments and arguments[0] == "gen2":
+        try:
+            from therapy_note_eval.cli import main as gen2_main
+        except ImportError:
+            print(
+                "Install the shared evaluator with: uv sync --all-groups --all-extras",
+                file=sys.stderr,
+            )
+            return 2
+        return gen2_main(arguments[1:])
     load_dotenv(Path.cwd() / ".env")
     parser = build_parser()
     args = parser.parse_known_args(argv)[0]
