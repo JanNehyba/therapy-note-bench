@@ -69,6 +69,7 @@ DOCS = REPO_ROOT / "docs"
 #: not here: they are generated, and `test_page_runs.py`
 #: hold them.
 DOCUMENTS = (
+    "docs/gen2.md",
     "docs/datasets.md",
     "docs/landscape.md",
     "docs/limitations.md",
@@ -443,6 +444,17 @@ def _ihope_labels() -> tuple[float, ...]:
     notes = [note for entry in entries if (note := (entry.get("summary") or "").strip())]
     incomplete = sum(1 for note in notes if len(split_sections(note)) < SECTION_COUNT)
     return (float(incomplete), float(len(notes)), float(SECTION_COUNT))
+
+
+def _gen2_annomi_groups() -> tuple[float, ...]:
+    from therapy_note_eval.legacy import annomi_video_groups
+
+    parts = [REPO_ROOT / "data" / f"tneval_notes_part{i}.json" for i in range(1, 11)]
+    if not all(p.exists() for p in parts):
+        pytest.skip("TN-Eval release parts are absent; video grouping cannot be recomputed")
+    wanted = {str(row["id"]) for p in parts for row in json.loads(p.read_text(encoding="utf-8"))}
+    grouped = annomi_video_groups(REPO_ROOT / "data" / "AnnoMI-full.csv", wanted)
+    return float(len(grouped)), float(len(set(grouped.values())))
 
 
 def _dressed_up_empties() -> tuple[float, ...]:
@@ -851,12 +863,58 @@ CLAIMS = (
         covers=("18", "40", "17"),
         expected=_ihope_labels,
     ),
+    Claim(
+        where="docs/gen2.md",
+        phrase="24 invented notes",
+        kind="elsewhere",
+        because="tests/test_gen2.py::"
+        "test_offline_demo_reports_separate_languages_profiles_and_judges "
+        "counts the synthetic generated/evaluated notes; these are not LLM measurements.",
+        covers=("24",),
+    ),
+    Claim(
+        where="docs/gen2.md",
+        phrase="complete 100%",
+        kind="elsewhere",
+        because="tests/test_gen2_research.py::"
+        "test_one_assessed_reference_does_not_claim_complete_precision "
+        "prevents a complete precision estimate from a partially assessed set of citations.",
+        covers=("100%",),
+    ),
+    Claim(
+        where="docs/gen2.md",
+        phrase="50 released conversations by their 43 known source videos",
+        kind="corpus",
+        because="Gen-2 uses observed AnnoMI video dependencies, without inferring client identity.",
+        covers=("50", "43"),
+        expected=_gen2_annomi_groups,
+    ),
+    Claim(
+        where="docs/gen2.md",
+        phrase="48 generation jobs, and balances a 24-note human sample",
+        kind="elsewhere",
+        because="tests/test_gen2_research.py::"
+        "test_balanced_pilot_is_a_plan_not_fabricated_human_data "
+        "checks 48 planned jobs and the 24-note balanced subset; no execution is claimed.",
+        covers=("48", "24"),
+    ),
+    Claim(
+        where="docs/gen2.md",
+        phrase="120 unique decisions and 30 repeats",
+        kind="elsewhere",
+        because="The revised feasibility plan budgets 150 item decisions including 30 repeats, "
+        "replacing the older 150-claim/50-pair suggestion. "
+        "tests/test_gen2_research.py::test_balanced_pilot_is_a_plan_not_fabricated_human_data "
+        "checks these budgets without presenting them as completed ratings.",
+        covers=("120", "30"),
+    ),
 )
 
 #: Which gitignored input each corpus claim needs, so a skip can name it.
 _CORPUS_INPUT = {
     "_dressed_up_empties": (_GENERATIONS, "generations/"),
     "_ihope_labels": (_GOLD, "data/ihope_test.json"),
+    "_gen2_annomi_groups": (REPO_ROOT / "data" / "AnnoMI-full.csv", "data/AnnoMI-full.csv"),
 }
 
 
@@ -982,6 +1040,7 @@ def test_every_kind_is_one_the_docstring_explains():
 #: number in a published page fails until it is registered above or the budget
 #: is deliberately raised in a commit that says why.
 UNACCOUNTED = {
+    "docs/gen2.md": 0,
     # Four budgets lowered on 2026-09-01, when the Czech branch left this
     # repository and took its sections of these documents with it. The debt
     # did not get paid; the documents got shorter.
