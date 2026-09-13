@@ -56,16 +56,11 @@ class Accounted:
     because: str
 
 
+#: Removed 2026-09-13: methods.html no longer prints the per-system spread, so
+#: the exception that allowed its 0.077 had outlived its reason and this test
+#: said so. The fact itself is not lost -- the spread is 0.078 in the current
+#: calibration, and the sentence that uses it lives in docs/methodology.md.
 ACCOUNTED = (
-    Accounted(
-        page="methods.html",
-        figure="0.077",
-        kind="derived",
-        because=(
-            "the spread between the best and the worst per-system agreement, subtracted on "
-            "the page from two figures the table immediately above it prints"
-        ),
-    ),
     Accounted(
         page="brief.html",
         figure="124",
