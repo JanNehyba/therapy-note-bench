@@ -38,6 +38,20 @@ rather than a second benchmark.
 
 ---
 
+## Experimental Gen-2
+
+[Gen-2](docs/gen2.md) uses a separate shared Python core for English and Czech
+notes, with distinct purposes for continuity, supervision, client communication
+and documentation audit. Software 0.3.0 / gen2-v3 preserves exact research and
+annotation versions and reports incomplete assessment explicitly.
+
+The [research protocol](research/gen2/README.md), version 2.0.0, combines a planned
+scoping review with attributed expert and empirical inputs. Historical origin and
+supporting evidence remain distinct. The first feasibility round targets 8-12
+operational measurements. Earlier prototypes are formative development; no completed
+review, human pilot or clinical validation is claimed. `make gen2-demo` runs an
+entirely synthetic offline example and makes no API calls.
+
 ## The leaderboard
 
 Full version, with per-section detail, the reference systems and a switch
@@ -137,7 +151,7 @@ written for somebody building or buying one:
 | 19 | `gpt-oss-120b` | 2 | einfra | 4.22 | 4.63 | 5.00 | 5.00 | 4.98 | 3.63 | 5.00 | 1.000 | 42/50 (8 unusable) | 41 of 42 *(1 part-answered)* |
 
 *Ordered by **mean place** over the 8 columns of this instrument, every column counting once — a convention, not a measurement: the columns do not predict each other. Under the other weightings tried (each column counted twice, and the reference rows removed) first place is held by `gpt-5.6-sol`; at most 16 of 21 systems change place and none by more than 7 ([how the order was built](https://jannehyba.github.io/therapy-note-bench/methods.html#ordering)). Places are among all 21 rows of the table, the reference systems included, so the models' places can have gaps.* *Group: what the evidence separates. A system stands above another only when it is at least as good on every column under both judges in 0.95 of the resampled conversations; 2 group(s) for 21 systems, 20 of them beaten by no tested comparison ([how the comparisons were tested](https://jannehyba.github.io/therapy-note-bench/methods.html#groups)).*
-- **PDSQI-9 columns** — The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.
+- **PDSQI-9 columns** — The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published reliability estimate in that study, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.
 - **Accurate** (1-5) — The note is true and free of incorrect information. PDSQI-9 item 2, rated 1 (not at all) to 5 (extremely).
 - **Thorough** (1-5) — The note should thoroughly cover all critical patient issues. PDSQI-9 item 3, rated 1 (not at all) to 5 (extremely).
 - **Useful** (1-5) — All the information is in there that is useful to the target provider/intended audience. The note is extremely relevant, providing valuable information and/or analysis. PDSQI-9 item 4, rated 1 (not at all) to 5 (extremely).
