@@ -19,14 +19,29 @@ jobs:
           enable-cache: true
 
       - name: Install
-        run: uv sync --all-groups
+        run: uv sync --all-groups --extra gen2 --extra research
 
       - name: Lint
         run: |
-          uv run ruff check src tests
-          uv run ruff format --check src tests
+          uv run --no-sync ruff check src tests packages/therapy-note-eval-core/src
+          uv run --no-sync ruff format --check src tests packages/therapy-note-eval-core/src
 
       # Offline only. Nothing in CI touches e-INFRA or the judge API, so this
       # job needs no secrets and is safe to run on pull requests from forks.
       - name: Test
-        run: uv run pytest -q
+        run: uv run --no-sync pytest -q
+
+      - name: Build independent core wheel
+        run: uv build packages/therapy-note-eval-core --wheel --out-dir dist/gen2
+
+      - name: Test installed wheel without host package
+        run: |
+          uv run --isolated --no-project --with dist/gen2/therapy_note_eval_core-0.3.0-py3-none-any.whl python -I -c "import therapy_note_eval; import importlib.util; assert importlib.util.find_spec('tnb') is None; from therapy_note_eval.cli import main; main(['--workspace', '/tmp/gen2-wheel', 'demo'])"
+
+  core-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.0.1
+      - run: uv sync --all-groups --extra gen2 --extra research
+      - run: uv run --no-sync pytest -q tests/test_gen2.py tests/test_gen2_research.py

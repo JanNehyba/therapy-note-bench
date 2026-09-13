@@ -20,8 +20,15 @@ install:
 	uv sync --all-groups --all-extras
 
 lint:
-	uv run ruff check src tests
-	uv run ruff format --check src tests
+	uv run ruff check src tests packages/therapy-note-eval-core/src
+	uv run ruff format --check src tests packages/therapy-note-eval-core/src
+
+.PHONY: test-gen2 gen2-demo
+test-gen2:
+	uv run --all-extras pytest -q tests/test_gen2.py tests/test_gen2_research.py
+
+gen2-demo:
+	uv run --all-extras tnb gen2 --workspace local/gen2-v3-demo demo
 
 test:
 	uv run pytest -q
