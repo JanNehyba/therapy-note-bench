@@ -1,0 +1,57 @@
+{
+  "id": "therapy-note-construct-review",
+  "version": "1.0.0",
+  "status": "protocol_prepared_search_not_completed",
+  "recorded_date": "2026-09-11",
+  "design": "Systematic scoping review followed by instrument development and feasibility pilot",
+  "prior_exposure": "The investigator and coding assistant have seen existing instruments, prior Gen-2 drafts and a colleague's QA suggestion. This is not a claim of hypothesis-free discovery or blinded authorship.",
+  "conduct_framework": "JBI scoping review guidance, full-text verification pending",
+  "reporting_frameworks": ["PRISMA-ScR", "PRISMA-S"],
+  "appraisal": "Item-level evidence mapping informed by COSMIN principles; adaptations to documentation checklists explicitly recorded. No automatic alpha, CVR, factor-analysis or agreement threshold determines content validity.",
+  "questions": [
+    "Which properties of useful and accurate psychotherapy documentation are defined in the literature and professional guidance?",
+    "For which recipients, purposes and clinical circumstances do those properties matter?",
+    "How are they operationalized and what evidence supports their measurement?",
+    "What transfers to automated English and Czech evaluation and what remains unvalidated?"
+  ],
+  "pcc": {
+    "population": "Human-written and model-generated psychotherapy session documentation; adjacent clinical documentation and summarization methods identified as transfer evidence",
+    "concept": "Documentation quality constructs, operational criteria and measurement properties",
+    "context": "Continuity of care, supervision, client communication and documentation audit"
+  },
+  "languages": ["en", "cs"],
+  "date_limits": {"lower": null, "upper": "actual search date recorded for each execution"},
+  "layers": ["direct", "transfer", "requirements"],
+  "include": [
+    "Psychotherapy progress notes or session summaries with explicit quality properties, user needs or evaluation methods",
+    "Clinical documentation or general summarization methods with an explicit documentation measurement application, labelled as transfer evidence",
+    "Professional or recipient requirements with attributable authorship, jurisdiction and document version",
+    "Full text in English or Czech, including preprints and software artifacts with publication type explicitly distinguished"
+  ],
+  "exclude": [
+    "Therapeutic chatbot or treatment effectiveness evaluation without a documentation-relevant requirement or method",
+    "No identifiable quality construct, operational criterion or measurement method",
+    "Duplicate report with no additional evidence, linked to its study family rather than counted independently",
+    "Full text unavailable or outside the language scope, retained in the exclusions log with the reason"
+  ],
+  "databases": ["PubMed", "APA PsycINFO", "Scopus", "ACL Anthology"],
+  "supplementary_routes": ["backward citations", "forward citations", "professional guidance", "known-source retrieval check"],
+  "metadata_services": ["Crossref", "OpenAlex"],
+  "reviewers": {"human_count": 1, "human_role": "investigator and instrument developer", "ai_role": "assist retrieval, extraction and discrepancy detection; never impersonate a human decision", "independent_second_screening": "not yet available; deviation from independent dual screening is explicit"},
+  "sequence": [
+    "Freeze protocol and separately record prior proposals before new searching",
+    "Execute and log searches, export records, deduplicate conservatively",
+    "Human title/abstract and full-text eligibility decisions with reasons",
+    "Extract constructs from source passages without a menu of existing Gen-2 categories",
+    "Human verification of source interpretations and freeze literature-derived pool",
+    "Only after the literature freeze, compare prior proposals and inductive observations in separate origin strata",
+    "Organize definitions, review proposed merges, operationalize candidate measurements",
+    "Human select pilot items, with all changes and exclusions recorded",
+    "Freeze pilot configuration before any pilot judgments; conduct format and granularity comparisons separately"
+  ],
+  "selection": {"target_pool_size": "not a quota; 100-200 is a workload expectation only", "pilot_item_limit": 40, "mandatory_considerations": ["purpose-specific importance", "evidence directness and limitations", "coverage of clinically consequential content", "definition clarity", "measurement feasibility"], "not_exclusion_rules": ["rare occurrence", "low between-model variance", "few dominance edges", "membership in a small semantic cluster"]},
+  "clustering": {"input": "source-derived construct definitions, not model scores", "distance": "cosine", "linkage": "average", "representation": "explicit model/revision and exact definition digest per vector", "human_pairs": {"nearest": 10, "middle": 10, "random": 10}, "interpretation": "Semantic organization and merge proposals, not a proof of latent structure or importance"},
+  "pilot": {"status": "not_run", "cases": {"english_demo": 2, "paired_czech_translation": 2, "native_czech": 2}, "purposes": ["continuity", "supervision", "client", "audit"], "generator_families": 2, "judge_families": 2, "max_notes": 48, "human_note_sample": 24, "human_decisions_target": 150, "blind_repeats": 30, "human_hours": [8, 12], "interpretation": "Feasibility and measurement development, not confirmatory validation or model ranking", "precision_targets_for_later_planning": {"essential_coverage_ci95_half_width": 0.05, "serious_error_sensitivity_ci95_half_width": 0.10}},
+  "data": {"native_czech_policy": ["local", "einfra"], "derived_artifacts_inherit_policy": true, "translation_relatives_share_split": true, "native_czech_clusters": 1, "annomi_video_grouping": "Video identity is a known grouping factor, not proof of client or therapist identity", "future_sessions": "excluded from available context"},
+  "reporting": {"overall_quality_score": false, "separate_by": ["language", "corpus_origin", "purpose", "protocol", "judge"], "missingness": "distinguish not applicable, insufficient source, ambiguous content and execution failure", "external_validation": "not established", "review_completion": "Only executed searches and verified decisions count as completed; blocked sources remain named gaps"}
+}

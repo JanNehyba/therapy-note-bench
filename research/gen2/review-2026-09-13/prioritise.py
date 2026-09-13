@@ -1,0 +1,120 @@
+"""Rank the record pool for AI-assisted title/abstract screening.
+
+This is a documented, deterministic ordering, not a screening decision. Records
+below the priority threshold are not excluded: they are moved to a stratum that
+is audited by random sampling, so the miss rate of the ordering can be estimated
+and reported instead of assumed to be zero.
+"""
+
+from __future__ import annotations
+
+import hashlib
+import json
+import random
+import re
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+EXPORTS = Path("C:/Users/Nehyba/therapy-note-bench/local/gen2-review-2026-09-13/exports")
+POOL = EXPORTS / "pool.json"
+
+# Weighted signals, each tied to a review question. Weights are a stated
+# convention for ordering only; they carry no claim about study importance.
+SIGNALS: list[tuple[str, str, int]] = [
+    # Q1/Q3 - an explicit named instrument or rating scale for note quality
+    (r"\b(PDQI|PDSQI|QNOTE|SOAP note|rubric|psychometric|content validity|inter-?rater)\b", "instrument", 5),
+    (r"\b(note quality|documentation quality|quality of (clinical )?(notes?|documentation))\b", "note-quality", 5),
+    # Q1 - psychotherapy / mental-health documentation specifically (direct layer)
+    (r"\b(psychotherap\w*|counsel\w*|therapy session|behavioral health|mental health)\b.{0,80}\b(note|documentation|record|summar)", "direct-mh", 4),
+    (r"\b(progress note|session note|therapy note|session summar|case note)\w*\b", "direct-note", 4),
+    # Q4 - model-generated documentation and its evaluation
+    (r"\b(large language model|LLM|generative AI|ambient (AI|documentation|scribe)|AI scribe)\b", "llm", 3),
+    (r"\b(hallucinat\w*|factual\w*|faithful\w*|omission|fabricat\w*|error taxonom\w*)\b", "fidelity", 3),
+    # Q3 - measurement methods transferable to automated evaluation
+    (r"\b(question answering|QA-based|atomic fact|claim verification|attribution|entailment)\b", "method", 3),
+    # Q2 - recipients and purposes
+    (r"\b(open ?notes|patient access|client access|patients? read\w*|shared notes)\b", "client", 4),
+    (r"\b(supervis\w*)\b", "supervision", 3),
+    (r"\b(record.?keeping|documentation (standard|guideline|requirement)|audit|compliance|accreditation)\b", "audit", 3),
+    (r"\b(privacy|confidential\w*|sensitive information|de-?identif\w*|stigmat\w*)\b", "privacy", 2),
+    # Q4 - language transfer
+    (r"\b(Czech|multilingual|cross-?lingual|translation)\b", "language", 2),
+    # study-type signals that raise the value of a record for this review
+    (r"\b(validat\w*|reliabilit\w*|agreement|Delphi|consensus|development and validation)\b", "validation", 2),
+    (r"\b(interview\w*|focus group|survey|qualitative|user need|information need)\b", "user-need", 2),
+]
+
+# Signals that a record is probably off-topic for this review even when it
+# scores. They subtract; they never exclude on their own.
+NEGATIVE: list[tuple[str, int]] = [
+    (r"\b(chatbot|conversational agent)\b.{0,60}\b(therap|treatment|intervention)\b", -3),
+    (r"\b(randomi[sz]ed controlled trial|efficacy of (therapy|treatment)|symptom reduction)\b", -2),
+    (r"\b(radiolog\w*|patholog\w* report|surgical|anesthes\w*|dental)\b", -2),
+]
+
+
+def score(rec: dict) -> tuple[int, list[str]]:
+    hay = f"{rec.get('title', '')} {rec.get('abstract', '')}"
+    total, tags = 0, []
+    for pat, tag, w in SIGNALS:
+        if re.search(pat, hay, re.I):
+            total += w
+            tags.append(tag)
+    for pat, w in NEGATIVE:
+        if re.search(pat, hay, re.I):
+            total += w
+            tags.append("neg")
+    return total, tags
+
+
+def main() -> None:
+    records = json.loads(POOL.read_text(encoding="utf-8"))
+    for r in records:
+        r["priority_score"], r["signals"] = score(r)
+    records.sort(key=lambda r: (-r["priority_score"], r.get("year") or ""))
+
+    threshold = 9
+    priority = [r for r in records if r["priority_score"] >= threshold]
+    remainder = [r for r in records if r["priority_score"] < threshold]
+
+    rng = random.Random(20260913)
+    audit = rng.sample(remainder, min(200, len(remainder)))
+
+    (EXPORTS / "screen-priority.json").write_text(
+        json.dumps(priority, indent=1, ensure_ascii=False), encoding="utf-8"
+    )
+    (EXPORTS / "screen-audit-sample.json").write_text(
+        json.dumps(audit, indent=1, ensure_ascii=False), encoding="utf-8"
+    )
+
+    dist: dict[int, int] = {}
+    for r in records:
+        dist[r["priority_score"]] = dist.get(r["priority_score"], 0) + 1
+
+    summary = {
+        "pool_size": len(records),
+        "ordering_rule": "weighted keyword signals over title+abstract; a stated convention for ordering only",
+        "signals": [{"tag": t, "weight": w, "pattern": p} for p, t, w in SIGNALS],
+        "negative_signals": [{"weight": w, "pattern": p} for p, w in NEGATIVE],
+        "priority_threshold": threshold,
+        "priority_stratum": len(priority),
+        "remainder_stratum": len(remainder),
+        "audit_sample_size": len(audit),
+        "audit_sample_seed": 20260913,
+        "audit_purpose": (
+            "Estimate how many eligible records the ordering pushed below the threshold. "
+            "The remainder is not excluded; it is unscreened and reported as such."
+        ),
+        "score_distribution": dict(sorted(dist.items(), reverse=True)),
+        "priority_sha256": hashlib.sha256((EXPORTS / "screen-priority.json").read_bytes()).hexdigest(),
+        "audit_sha256": hashlib.sha256((EXPORTS / "screen-audit-sample.json").read_bytes()).hexdigest(),
+    }
+    (ROOT / "screening-strata.json").write_text(
+        json.dumps(summary, indent=2, ensure_ascii=False), encoding="utf-8"
+    )
+    print(f"pool={len(records)} priority={len(priority)} remainder={len(remainder)} audit={len(audit)}")
+    print("score distribution (top):", dict(list(sorted(dist.items(), reverse=True))[:18]))
+
+
+if __name__ == "__main__":
+    main()

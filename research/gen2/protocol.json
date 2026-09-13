@@ -1,0 +1,184 @@
+{
+  "id": "therapy-note-construct-review",
+  "version": "2.0.0",
+  "status": "protocol_prepared_search_not_completed",
+  "recorded_date": "2026-09-12",
+  "design": "Instrument development informed by a systematic scoping review, expert proposals and empirical observations",
+  "prior_exposure": "The investigator and coding assistant have seen existing instruments, prior Gen-2 drafts and a colleague's QA suggestion. This is not a claim of hypothesis-free discovery or blinded authorship.",
+  "conduct_framework": "JBI scoping review guidance, full-text verification pending",
+  "reporting_frameworks": [
+    "PRISMA-ScR",
+    "PRISMA-S"
+  ],
+  "appraisal": "Item-level evidence mapping informed by COSMIN principles; adaptations to documentation checklists explicitly recorded. No automatic alpha, CVR, factor-analysis or agreement threshold determines content validity.",
+  "questions": [
+    "Which properties of useful and accurate psychotherapy documentation are defined in the literature and professional guidance?",
+    "For which recipients, purposes and clinical circumstances do those properties matter?",
+    "How are they operationalized and what evidence supports their measurement?",
+    "What transfers to automated English and Czech evaluation and what remains unvalidated?"
+  ],
+  "pcc": {
+    "population": "Human-written and model-generated psychotherapy session documentation; adjacent clinical documentation and summarization methods identified as transfer evidence",
+    "concept": "Documentation quality constructs, operational criteria and measurement properties",
+    "context": "Continuity of care, supervision, client communication and documentation audit"
+  },
+  "languages": [
+    "en",
+    "cs"
+  ],
+  "date_limits": {
+    "lower": null,
+    "upper": "actual search date recorded for each execution"
+  },
+  "layers": [
+    "direct",
+    "transfer",
+    "requirements"
+  ],
+  "include": [
+    "Psychotherapy progress notes or session summaries with explicit quality properties, user needs or evaluation methods",
+    "Clinical documentation or general summarization methods with an explicit documentation measurement application, labelled as transfer evidence",
+    "Professional or recipient requirements with attributable authorship, jurisdiction and document version",
+    "Full text in English or Czech, including preprints and software artifacts with publication type explicitly distinguished"
+  ],
+  "exclude": [
+    "Therapeutic chatbot or treatment effectiveness evaluation without a documentation-relevant requirement or method",
+    "No identifiable quality construct, operational criterion or measurement method",
+    "Duplicate report with no additional evidence, linked to its study family rather than counted independently",
+    "Full text outside English/Czech scope, with the language restriction disclosed"
+  ],
+  "databases": [
+    "PubMed",
+    "APA PsycINFO",
+    "Scopus",
+    "ACL Anthology"
+  ],
+  "supplementary_routes": [
+    "backward citations",
+    "forward citations",
+    "professional guidance",
+    "known-source retrieval check"
+  ],
+  "metadata_services": [
+    "Crossref",
+    "OpenAlex"
+  ],
+  "reviewers": {
+    "human_count": 1,
+    "human_role": "investigator and instrument developer",
+    "ai_role": "assist retrieval, extraction and discrepancy detection; never impersonate a human decision",
+    "independent_second_screening": "not yet available; deviation from independent dual screening is explicit"
+  },
+  "sequence": [
+    "Record the prospective protocol revision and prior exposure before the corresponding research steps",
+    "Execute and document searches, exports, duplicate handling and retrieval gaps",
+    "Human title/abstract and full-text screening; non-retrieval is not an eligibility exclusion",
+    "Extract source-anchored candidates without forcing the prototype taxonomy",
+    "Record expert proposals and empirical inputs before, during or after searching, preserving historical origins",
+    "Human review interpretations, proposals, merges, method choices and language-specific wording; preserve disagreements",
+    "Create versioned literature and mixed-source snapshots with explicit amendment parents; literature snapshots do not gate expert input",
+    "Select 8-12 operational measurements for the first deep feasibility round; keep other candidates visible",
+    "Freeze the reviewed instrument and exact unit assignments before ratings; distinguish format from granularity experiments",
+    "Use developmental results to revise measures; preregister a later independent confirmatory study before its judgments"
+  ],
+  "selection": {
+    "target_pool_size": "No quota; stop according to the documented search scope, not a desired number of constructs",
+    "mandatory_considerations": [
+      "purpose-specific importance",
+      "evidence directness and limitations",
+      "coverage of clinically consequential content",
+      "definition clarity",
+      "measurement feasibility"
+    ],
+    "not_exclusion_rules": [
+      "rare occurrence",
+      "low between-model variance",
+      "few dominance edges",
+      "membership in a small semantic cluster"
+    ],
+    "pilot_measurements_target": [
+      8,
+      12
+    ]
+  },
+  "clustering": {
+    "input": "source-derived construct definitions, not model scores",
+    "distance": "cosine",
+    "linkage": "average",
+    "representation": "explicit model/revision and exact definition digest per vector",
+    "human_pairs": {
+      "nearest": 10,
+      "middle": 10,
+      "random": 10
+    },
+    "interpretation": "Semantic organization and merge proposals, not a proof of latent structure or importance"
+  },
+  "pilot": {
+    "status": "not_run",
+    "cases": {
+      "english_demo": 2,
+      "paired_czech_translation": 2,
+      "native_czech": 2
+    },
+    "purposes": [
+      "continuity",
+      "supervision",
+      "client",
+      "audit"
+    ],
+    "generator_families": 2,
+    "judge_families": 2,
+    "max_notes": 48,
+    "human_note_sample": 24,
+    "human_decisions_target": 150,
+    "blind_repeats": 30,
+    "human_hours": [
+      8,
+      12
+    ],
+    "interpretation": "Feasibility and measurement development, not confirmatory validation or model ranking",
+    "precision_targets_for_later_planning": {
+      "essential_coverage_ci95_half_width": 0.05,
+      "serious_error_sensitivity_ci95_half_width": 0.1
+    },
+    "unique_decisions": 120,
+    "preparation_included_in_hours": true,
+    "time_overrun_policy": "Reduce the documented sample through a versioned amendment; do not call unreviewed units checked",
+    "replicate_policy": "Distinct replicate IDs reserve real calls; resume caching is within a replicate only",
+    "measurement_count": "Operational items plus selected non-item methods; record the actual count and gaps"
+  },
+  "data": {
+    "native_czech_policy": [
+      "local",
+      "einfra"
+    ],
+    "derived_artifacts_inherit_policy": true,
+    "translation_relatives_share_split": true,
+    "native_czech_clusters": 1,
+    "annomi_video_grouping": "Video identity is a known grouping factor, not proof of client or therapist identity",
+    "future_sessions": "excluded from available context"
+  },
+  "reporting": {
+    "overall_quality_score": false,
+    "separate_by": [
+      "language",
+      "corpus_origin",
+      "purpose",
+      "protocol",
+      "judge"
+    ],
+    "missingness": "distinguish not applicable, insufficient source, ambiguous content and execution failure",
+    "external_validation": "not established",
+    "review_completion": "Only executed searches and verified decisions count as completed; blocked sources remain named gaps",
+    "scope": "Report selected and required methods, planned/applicable/assessed units, and incomplete critical-error assessment even in public aggregates"
+  },
+  "supersedes": "1.0.0",
+  "amendment_reason": "Allow transparent iterative mixed-source development; deepen the first feasibility pilot instead of testing up to forty items.",
+  "retrieval_gaps": "Record reports not retrieved separately from full-text eligibility exclusions; unavailable databases remain named gaps",
+  "expert_inputs": "May enter throughout development. Later support does not rewrite historical origin; author or colleague proposals do not imply consensus.",
+  "registration": {
+    "status": "not_registered",
+    "local_timestamp_is_registration": false,
+    "confirmatory_preregistration": "required before confirmatory judgments"
+  }
+}

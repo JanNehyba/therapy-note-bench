@@ -1,0 +1,124 @@
+{
+  "pool_size": 10059,
+  "ordering_rule": "weighted keyword signals over title+abstract; a stated convention for ordering only",
+  "signals": [
+    {
+      "tag": "instrument",
+      "weight": 5,
+      "pattern": "\\b(PDQI|PDSQI|QNOTE|SOAP note|rubric|psychometric|content validity|inter-?rater)\\b"
+    },
+    {
+      "tag": "note-quality",
+      "weight": 5,
+      "pattern": "\\b(note quality|documentation quality|quality of (clinical )?(notes?|documentation))\\b"
+    },
+    {
+      "tag": "direct-mh",
+      "weight": 4,
+      "pattern": "\\b(psychotherap\\w*|counsel\\w*|therapy session|behavioral health|mental health)\\b.{0,80}\\b(note|documentation|record|summar)"
+    },
+    {
+      "tag": "direct-note",
+      "weight": 4,
+      "pattern": "\\b(progress note|session note|therapy note|session summar|case note)\\w*\\b"
+    },
+    {
+      "tag": "llm",
+      "weight": 3,
+      "pattern": "\\b(large language model|LLM|generative AI|ambient (AI|documentation|scribe)|AI scribe)\\b"
+    },
+    {
+      "tag": "fidelity",
+      "weight": 3,
+      "pattern": "\\b(hallucinat\\w*|factual\\w*|faithful\\w*|omission|fabricat\\w*|error taxonom\\w*)\\b"
+    },
+    {
+      "tag": "method",
+      "weight": 3,
+      "pattern": "\\b(question answering|QA-based|atomic fact|claim verification|attribution|entailment)\\b"
+    },
+    {
+      "tag": "client",
+      "weight": 4,
+      "pattern": "\\b(open ?notes|patient access|client access|patients? read\\w*|shared notes)\\b"
+    },
+    {
+      "tag": "supervision",
+      "weight": 3,
+      "pattern": "\\b(supervis\\w*)\\b"
+    },
+    {
+      "tag": "audit",
+      "weight": 3,
+      "pattern": "\\b(record.?keeping|documentation (standard|guideline|requirement)|audit|compliance|accreditation)\\b"
+    },
+    {
+      "tag": "privacy",
+      "weight": 2,
+      "pattern": "\\b(privacy|confidential\\w*|sensitive information|de-?identif\\w*|stigmat\\w*)\\b"
+    },
+    {
+      "tag": "language",
+      "weight": 2,
+      "pattern": "\\b(Czech|multilingual|cross-?lingual|translation)\\b"
+    },
+    {
+      "tag": "validation",
+      "weight": 2,
+      "pattern": "\\b(validat\\w*|reliabilit\\w*|agreement|Delphi|consensus|development and validation)\\b"
+    },
+    {
+      "tag": "user-need",
+      "weight": 2,
+      "pattern": "\\b(interview\\w*|focus group|survey|qualitative|user need|information need)\\b"
+    }
+  ],
+  "negative_signals": [
+    {
+      "weight": -3,
+      "pattern": "\\b(chatbot|conversational agent)\\b.{0,60}\\b(therap|treatment|intervention)\\b"
+    },
+    {
+      "weight": -2,
+      "pattern": "\\b(randomi[sz]ed controlled trial|efficacy of (therapy|treatment)|symptom reduction)\\b"
+    },
+    {
+      "weight": -2,
+      "pattern": "\\b(radiolog\\w*|patholog\\w* report|surgical|anesthes\\w*|dental)\\b"
+    }
+  ],
+  "priority_threshold": 9,
+  "priority_stratum": 487,
+  "remainder_stratum": 9572,
+  "audit_sample_size": 200,
+  "audit_sample_seed": 20260913,
+  "audit_purpose": "Estimate how many eligible records the ordering pushed below the threshold. The remainder is not excluded; it is unscreened and reported as such.",
+  "score_distribution": {
+    "22": 1,
+    "20": 3,
+    "19": 1,
+    "18": 8,
+    "17": 10,
+    "16": 7,
+    "15": 19,
+    "14": 22,
+    "13": 30,
+    "12": 47,
+    "11": 47,
+    "10": 128,
+    "9": 164,
+    "8": 272,
+    "7": 344,
+    "6": 477,
+    "5": 821,
+    "4": 573,
+    "3": 1147,
+    "2": 1952,
+    "1": 88,
+    "0": 3438,
+    "-2": 458,
+    "-4": 2
+  },
+  "priority_sha256": "d4d00c0877ef0e57f24a307a014678b20769962ba073cba2a79c665049524671",
+  "audit_sha256": "5840a079fe6d64dfed55e1bdccf850e546b896b7555b0d367e0c9c5c1663305d"
+}

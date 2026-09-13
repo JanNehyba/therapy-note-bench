@@ -1,0 +1,168 @@
+# Gen-2: scoping review and transparent instrument development
+
+**Research protocol 2.0.0. Status: prepared; the newly specified searches, human
+selection and clinical validation are not complete.** Earlier reading, prototype
+experiments and proposals are formative development, not erased history.
+
+The review has its own literature findings. The instrument may additionally use
+expert proposals and empirical observations before, during or after searching.
+Historical origin and strength of supporting evidence are separate. Finding a
+relevant paper later does not turn an expert-origin idea into a literature-origin
+idea. Igor's QA proposal is initially a candidate measurement method, not a new
+quality construct. Author input is not expert consensus; another LLM is not an
+independent human reviewer.
+
+## Protocol and evidence
+
+`protocol.json` defines the current sequence and workload. The previous version
+is retained in `history/protocol-1.0.0.json`; it is superseded, not silently edited.
+`queries.json` contains planned, unexecuted queries. `retrieval-seeds.json` is a
+known-source retrieval inventory, not an included-study table.
+`prior-proposals.json` records prior exposure and proposals, not validated criteria.
+
+Use JBI scoping-review guidance with explicitly recorded adaptations. Report with
+PRISMA-ScR and PRISMA-S; neither checklist by itself establishes review quality.
+Verify the methodological full texts before claiming adherence. One investigator
+screens and reviews with disclosed AI assistance. Independent second screening
+and role-specific external validation remain outstanding.
+
+Search PubMed/MEDLINE, APA PsycINFO, Scopus and ACL Anthology; add backward and
+forward citation searches and attributable professional guidance. Preserve exact
+platform syntax, dates, exports and checksums. Pilot queries against known
+relevant sources. Crossref and OpenAlex help link metadata but do not replace
+an unsearched database. Unavailable databases remain named gaps.
+
+Use three evidence layers: direct psychotherapy documentation evidence,
+transferable evaluation methods, and requirements for the intended use. Separate
+peer-reviewed studies, preprints, guidelines, software, expert proposals and local
+observations. Link multiple reports of a study instead of counting them as
+independent validations. Record reports not retrieved separately from full-text
+eligibility exclusions. Disclose English/Czech full-text restrictions.
+
+For each source, retain eligibility decisions and precise extraction locations.
+For each measure, record population, language, purpose, raters, unit, response
+format, validation design, limitations and what was actually checked. Adapt COSMIN
+principles: a heterogeneous error checklist is not necessarily a reflective scale;
+internal consistency, a fixed family count, model variance or prevalence gates do
+not determine clinical importance. Semantic clustering is optional organization,
+not psychometric validation.
+
+## Development and actual human review
+
+1. Record the protocol revision and prior exposure before the corresponding steps.
+2. Execute and log searches; perform human screening and source-anchored extraction.
+3. Record proposals and empirical inputs whenever they arise, with attribution,
+   rationale and immutable origin references. Initial extraction does not force
+   the prototype categories or any target number of constructs.
+4. Review source classifications, interpretations, definitions, examples,
+   applicability, four-purpose relevance and consequences of error. Keep rejected,
+   unresolved and revised candidates as well as accepted ones.
+5. Specify each selected measurement and method, including QA/claim-only designs:
+   units, required information, outcome categories, severity rules and Czech wording.
+6. Import the human's actual decisions on the exact material shown. The code binds
+   response artifacts to content digests; typing a reviewer name is insufficient.
+   It does not authenticate a person's identity or prove their interpretation true.
+7. Freeze a reviewed instrument snapshot before pilot judgments. A new snapshot
+   names its parent and amendment reason. Preserve historical origins. A separate
+   literature-only snapshot can be taken when useful; it does not gate expert input.
+8. Freeze exact reference and unit assignments before treating them as pilot
+   reference data. Developmental findings may motivate revisions; subsequent
+   confirmatory evaluation needs new independent evidence and preregistration.
+
+Every pilot entry must follow the chain **origin/support -> construct -> observable
+criterion -> operational measurement -> actual validation evidence or named gap**.
+Source, evidence, construct, method, measurement, language and assessment scope
+have separate review subjects. Changing their content invalidates their prior
+acceptance. Independent conflicting decisions block acceptance until explicitly
+resolved; original responses remain available. AI proposals cannot self-promote
+into human-reviewed evidence.
+
+## Commands
+
+Install the optional extras with `uv sync --all-groups --all-extras`. The standalone
+`therapy-note-eval` CLI accepts the same arguments after `tnb gen2`.
+Use a new private workspace for this protocol revision:
+
+```sh
+tnb gen2 --workspace local/gen2-research-v3 research init --protocol research/gen2/protocol.json --queries research/gen2/queries.json --proposals research/gen2/prior-proposals.json
+tnb gen2 --workspace local/gen2-research-v3 research status
+tnb gen2 --workspace local/gen2-research-v3 research export-protocol
+tnb gen2 --workspace local/gen2-research-v3 research import-records --input local/export.nbib --format nbib --search-log local/executed-search.json
+tnb gen2 --workspace local/gen2-research-v3 research screening-sheet --stage title_abstract
+tnb gen2 --workspace local/gen2-research-v3 research import-screening --sheet SHEET_ID --input local/actual-human-response.json
+tnb gen2 --workspace local/gen2-research-v3 research screening-sheet --stage full_text
+tnb gen2 --workspace local/gen2-research-v3 research extraction-prompt --record-id RECORD_ID --input local/full-text.txt
+tnb gen2 --workspace local/gen2-research-v3 research import-extraction --request-id REQUEST_ID --input local/candidate-extraction.json
+tnb gen2 --workspace local/gen2-research-v3 research build-pool
+```
+
+Development commands do not require a prior literature freeze:
+
+```sh
+tnb gen2 --workspace local/gen2-research-v3 research record-input --input local/proposal.json
+tnb gen2 --workspace local/gen2-research-v3 research compare-proposals --registry local/candidates.json
+tnb gen2 --workspace local/gen2-research-v3 research import-proposal-decisions --comparison-id COMPARISON_ID --input local/actual-proposal-decisions.json
+tnb gen2 --workspace local/gen2-research-v3 research registry-sheet --registry local/instrument-draft.json
+tnb gen2 --workspace local/gen2-research-v3 research import-registry-review --sheet SHEET_ID --input local/actual-registry-review.json
+tnb gen2 --workspace local/gen2-research-v3 research freeze-instrument --registry local/reviewed-draft.json
+tnb gen2 --workspace local/gen2-research-v3 research validate --registry local/frozen-instrument.json --pilot
+```
+
+Use the paths returned by each command, not the example filenames. Imports retain
+actual responses; none of these commands performs a human review. To revise a
+previous decision, create `registry-sheet --amend`; the sheet displays original
+decisions and exports their explicit replacement links. New instrument and
+literature snapshots use `--parent SNAPSHOT_ID --reason "actual reason"`.
+`freeze-literature` remains available for reviewed source-derived subsets.
+
+A proposal input has `id`, `kind` (`proposal` or `observation`), `content`,
+`attribution` and `rationale`. Its recorded time describes entry into this workflow,
+not the time the idea first occurred. Proposal decisions name the exact comparison,
+actual reviewer, role, decision time, mode, reference, decision and reason; merge
+decisions also name exact target constructs. Amended responses retain their parent.
+
+## First feasibility pilot
+
+The initial target is **8-12 operational measurements**, not forty. Retain the
+larger candidate registry and clinically important unresolved measurements.
+Executable pilot parameters come from the exact reviewed protocol revision.
+
+The design has two English cases, their two Czech translations, two native Czech
+sessions, four purposes and two generator families: at most 48 generated notes.
+The human target is at most 24 notes and 120 unique decisions plus 30 blinded
+repeats, within 8-12 hours including reference checks. This is not the time budget
+for the whole review. If preparation exceeds it, amend and reduce the sample;
+report the actual coverage rather than marking unreviewed units complete.
+
+Check translation meaning, important-information banks, unanswered information
+needs and atomic segmentation before using them as references. Prepare banks
+before candidate-note exposure. Balance assignments across purposes, languages,
+corpus origins and model families, retaining related sessions and translations in
+one split. Never expose future sessions. Native Czech data currently represent one
+client; TN-Eval's 43 videos are known grouping units, not established client IDs.
+
+Use two judge families and explicit replicate IDs for real repeated calls. Compare
+response formats on the same units; test granularity separately. Include verified
+correct controls and targeted errors. Enriched controls do not estimate natural
+error prevalence. Report confusion, false alarms, sensitivity, missingness, time
+and costs; agreement alone does not choose the method.
+
+Freeze exact unit assignments after reviewed references exist. `pilot-plan` freezes
+the workload and balanced note sample; it does not manufacture reference approvals,
+unit assignments or human judgments. The next human round must supply those.
+
+## Release and claims
+
+Raw full texts, source passages, clinical derivatives and human responses remain
+private. `export-protocol` stages a protocol bundle, excluding raw proposals,
+clinical data and reviews; it does not publish or register it. Review the staged
+bundle before release. A local timestamp or Git commit is not independent public
+preregistration. Record an external registration only when it actually occurs;
+preregister the later confirmatory study before its judgments.
+
+Methodological sources for full-text verification include JBI guidance;
+PRISMA-ScR (10.7326/M18-0850); PRISMA-S (10.1186/s13643-020-01542-z);
+COSMIN content validity (10.1007/s11136-018-1829-0); and Boateng et al.
+(10.3389/fpubh.2018.00149). These are a retrieval inventory, not completed review
+findings. The latest attempted PRISMA-S retrieval was rejected before execution
+by the approval service's API 404. It is not a completed literature search.

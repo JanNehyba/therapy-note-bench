@@ -1,0 +1,181 @@
+{
+  "version": "fulltext-log-v1",
+  "principle": "A report not retrieved is recorded as not retrieved, never as content-ineligible.",
+  "retrieved": 16,
+  "not_retrieved": 2,
+  "records": [
+    {
+      "slug": "tn-eval",
+      "doi": null,
+      "pmid": null,
+      "route": "direct url https://aclanthology.org/2025.acl-industry.14.pdf",
+      "retrieved": true,
+      "file": "C:\\Users\\Nehyba\\therapy-note-bench\\local\\gen2-review-2026-09-13\\fulltext\\tn-eval.pdf",
+      "bytes": 629281,
+      "sha256": "54e18175fe865893c9beccee91b6e5bd520efed649dac3f916fd728c411874da"
+    },
+    {
+      "slug": "icare-ihope",
+      "doi": "10.1101/2025.06.25.25330252",
+      "pmid": null,
+      "route": "free full text at Unpaywall",
+      "retrieved": true,
+      "file": "C:\\Users\\Nehyba\\therapy-note-bench\\local\\gen2-review-2026-09-13\\fulltext\\icare-ihope.xml",
+      "bytes": 1004761,
+      "sha256": "45f0e1b5966f97fea3458ec2c266acf321683b5a1608865284eb20f75184c59b"
+    },
+    {
+      "slug": "pdsqi-9",
+      "doi": "10.1093/jamia/ocaf068",
+      "pmid": "40323321",
+      "route": "free full text at Europe_PMC",
+      "retrieved": true,
+      "file": "C:\\Users\\Nehyba\\therapy-note-bench\\local\\gen2-review-2026-09-13\\fulltext\\pdsqi-9.xml",
+      "bytes": 2037757,
+      "sha256": "0d00dbb000a1351dac283071d760d6f36f8f341147e704fd4f9a2c8eecadff69"
+    },
+    {
+      "slug": "pdqi-9-prelim",
+      "doi": "10.1197/jamia.M2404",
+      "pmid": "18436914",
+      "route": "free full text at Europe_PMC",
+      "retrieved": false,
+      "note": "Europe PMC returned a landing-page shell, not the article body. The 2008 preliminary-development paper is not open access. Not retrieved; this is not an eligibility exclusion."
+    },
+    {
+      "slug": "pdqi-9-validation",
+      "doi": "10.4338/aci-2011-11-ra-0070",
+      "pmid": "22577483",
+      "route": "free full text at Unpaywall",
+      "retrieved": true,
+      "file": "C:\\Users\\Nehyba\\therapy-note-bench\\local\\gen2-review-2026-09-13\\fulltext\\pdqi-9-validation.xml",
+      "bytes": 175169,
+      "sha256": "5fc0aacf232deadf1bc5a245dea3f7be1c62134a5730f59a29f71705f3c5596b"
+    },
+    {
+      "slug": "pdqi-9-negative-ed",
+      "doi": "10.4338/aci2017050080",
+      "pmid": "28956888",
+      "route": "Europe PMC free PDF render (PMC6220701)",
+      "retrieved": true,
+      "file": "local\\gen2-review-2026-09-13\\fulltext\\pdqi9neg.pdf",
+      "bytes": 2120648,
+      "sha256": "0c06176d356ef325ce261e0c0dac2fc2d9af93777773737958cabd397e679bdf",
+      "correction": "First attempt used PMID 28197625, which the assistant had guessed. That PMID is an unrelated oncology paper and Unpaywall returned its text. The error was found by reading the downloaded file, not by trusting the retrieval. The correct record was resolved by a title search: PMID 28956888, Walker et al., Appl Clin Inform 2017."
+    },
+    {
+      "slug": "mentalclouds",
+      "doi": "10.2196/57306",
+      "pmid": "39042893",
+      "route": "europepmc OA fullTextXML PMC11303879",
+      "retrieved": true,
+      "file": "C:\\Users\\Nehyba\\therapy-note-bench\\local\\gen2-review-2026-09-13\\fulltext\\mentalclouds.xml",
+      "bytes": 188602,
+      "sha256": "bc01b56fb6f4eb668ef909d1aafe3e15d78d53423d638d96b7acf683798015c1"
+    },
+    {
+      "slug": "questeval",
+      "doi": null,
+      "pmid": null,
+      "route": "direct url https://aclanthology.org/2021.emnlp-main.529.pdf",
+      "retrieved": true,
+      "file": "C:\\Users\\Nehyba\\therapy-note-bench\\local\\gen2-review-2026-09-13\\fulltext\\questeval.pdf",
+      "bytes": 592502,
+      "sha256": "cbb1d1f6bad6b561f2068a26e777739b15a8b9ef9fbaec26f1423942a98bb5c1"
+    },
+    {
+      "slug": "qafacteval",
+      "doi": null,
+      "pmid": null,
+      "route": "direct url https://aclanthology.org/2022.naacl-main.187.pdf",
+      "retrieved": true,
+      "file": "C:\\Users\\Nehyba\\therapy-note-bench\\local\\gen2-review-2026-09-13\\fulltext\\qafacteval.pdf",
+      "bytes": 217879,
+      "sha256": "1dfb506e3475d111a658b2e45db3803d7d185fb2665378db4119ece3903541e9"
+    },
+    {
+      "slug": "factscore",
+      "doi": null,
+      "pmid": null,
+      "route": "direct url https://aclanthology.org/2023.emnlp-main.741.pdf",
+      "retrieved": true,
+      "file": "C:\\Users\\Nehyba\\therapy-note-bench\\local\\gen2-review-2026-09-13\\fulltext\\factscore.pdf",
+      "bytes": 2409424,
+      "sha256": "8486fe22a15aaf3fe2e1d7043d169000600205dde9c601c9fd31c0dd6f7380e9"
+    },
+    {
+      "slug": "cosmin-content-validity",
+      "doi": "10.1007/s11136-018-1829-0",
+      "pmid": null,
+      "route": "europepmc OA fullTextXML PMC5891557",
+      "retrieved": true,
+      "file": "C:\\Users\\Nehyba\\therapy-note-bench\\local\\gen2-review-2026-09-13\\fulltext\\cosmin-content-validity.xml",
+      "bytes": 106625,
+      "sha256": "6df04d882ab8d62fdffbc95eb40bf0dc04f24141651044aba134c48794955df2"
+    },
+    {
+      "slug": "boateng-scale-development",
+      "doi": "10.3389/fpubh.2018.00149",
+      "pmid": null,
+      "route": "europepmc OA fullTextXML PMC6004510",
+      "retrieved": true,
+      "file": "C:\\Users\\Nehyba\\therapy-note-bench\\local\\gen2-review-2026-09-13\\fulltext\\boateng-scale-development.xml",
+      "bytes": 216104,
+      "sha256": "d8e32366c9ab560a3ebb9e3f03ba102ab03534528f761877985f0923a92638de"
+    },
+    {
+      "slug": "psychres-2026",
+      "doi": "10.1080/10503307.2026.2729093",
+      "pmid": "42715612",
+      "retrieved": false,
+      "route": "attempted: Unpaywall (closed), OpenAlex (closed), Europe PMC (subscription), Semantic Scholar (isOpenAccess false), Crossref TDM links (Taylor & Francis returned HTTP 403 on all three registered text-mining URLs), CORE.ac.uk with an API key (0 hits by DOI and by title), OpenAIRE (no results), arXiv (no preprint)",
+      "note": "Closed access. No preprint and no repository deposit exists yet. Not retrieved is not an eligibility exclusion. The structured abstract was obtained from PubMed and the team's evaluation framework was recovered from their open-access companion paper (S18), which is a partial substitute and is labelled as such.",
+      "remaining_options": [
+        "institutional access through the user's university library",
+        "request from the corresponding author",
+        "wait for the QMUL repository deposit, which UK funding rules require but which may carry a publisher embargo"
+      ]
+    },
+    {
+      "slug": "atzil-jmir-summaries",
+      "pmid": "41894679",
+      "retrieved": true,
+      "route": "Europe PMC OA fullTextXML PMC13069367",
+      "note": "Found by author search after the primary target proved closed."
+    },
+    {
+      "slug": "atzil-automation-framework",
+      "pmid": "41426204",
+      "retrieved": true,
+      "route": "Europe PMC free PDF render PMC12716858",
+      "note": "Found by author search after the primary target proved closed."
+    },
+    {
+      "slug": "psychres-2026-pdf",
+      "retrieved": true,
+      "file": "C:\\Users\\Nehyba\\therapy-note-bench\\local\\gen2-review-2026-09-13\\fulltext\\psychres-2026.pdf",
+      "bytes": 770608,
+      "sha256": "9fa660246f02657a80b1cf91d3e25b137a3e7e8e5a0cad11bbaae2bff89a98eb",
+      "note": "Supplied by the user on 2026-09-13 after every open route failed. Now full-text verified."
+    },
+    {
+      "slug": "mind-coding-manual",
+      "retrieved": true,
+      "file": "C:\\Users\\Nehyba\\therapy-note-bench\\local\\gen2-review-2026-09-13\\fulltext\\mind-manual.docx",
+      "bytes": 303530,
+      "sha256": "ee52029834aad29f23f55b4ad4df2959991ce2ea66b54880010e706675d6b918",
+      "note": "MIND transtheoretical coding manual, Atzil-Slonim 2025, OSF node d5m2x, public. Downloaded directly; no author request needed."
+    },
+    {
+      "slug": "mind-supplementary",
+      "retrieved": true,
+      "file": "C:\\Users\\Nehyba\\therapy-note-bench\\local\\gen2-review-2026-09-13\\fulltext\\mind-supplementary.pdf",
+      "bytes": 527284,
+      "sha256": "49cfdc71705f9eae34116b30a250e6f6c254cc03869f947b2d8a3f94b5698a36",
+      "note": "Supplementary to S19: Appendix A full prompts, Appendix B reliability, Appendix C the complete 1-5 evaluation scheme with anchors. OSF node 6d7pq via the view-only token printed in the article."
+    }
+  ],
+  "corrections": [
+    "pdqi-9-negative-ed: wrong article retrieved under a guessed PMID; corrected after reading the file."
+  ]
+}

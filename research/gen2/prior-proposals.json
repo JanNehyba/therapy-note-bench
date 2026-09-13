@@ -1,0 +1,16 @@
+{
+  "version": "prior-proposals-v1",
+  "recorded_date": "2026-09-11",
+  "status": "Prior exposure ledger, not literature-derived findings",
+  "access_rule": "Do not feed this ledger or the legacy registry into literature extraction prompts. Compare only after a literature-pool snapshot is frozen.",
+  "proposals": [
+    {"id": "prior-qa", "origin": "colleague proposal relayed by investigator", "kind": "measurement method", "idea": "Ask the same clinically important question of the transcript and of the note; compare information conveyed."},
+    {"id": "prior-source-links", "origin": "colleague proposal relayed by investigator", "kind": "measurement method", "idea": "Link statements to source passages; investigate retrieval if needed."},
+    {"id": "prior-human-qa", "origin": "colleague proposal relayed by investigator", "kind": "annotation method", "idea": "Use questions, answers and evidence passages for human checking."},
+    {"id": "prior-four-purposes", "origin": "investigator design requirement", "kind": "intended use", "idea": "Separate continuity, supervision, client communication and documentation audit."},
+    {"id": "prior-multilingual", "origin": "investigator design requirement", "kind": "intended use", "idea": "Support English and Czech with separate language validation."},
+    {"id": "prior-reverse-claims", "origin": "earlier Gen-2 draft", "kind": "measurement method", "idea": "Verify note claims against sources and audit completeness of their extraction."},
+    {"id": "prior-legacy-items", "origin": "earlier Gen-2 implementation", "kind": "unvalidated operational items", "idea": "Clinical appropriateness, privacy, language and instructions were prototype fields; none is automatically included in the research pool."},
+    {"id": "prior-czech-codes", "origin": "existing Czech qualitative work", "kind": "inductive observations", "idea": "Previously observed output patterns are candidate additions after the literature freeze, with private provenance and no automatic importance claim."}
+  ]
+}

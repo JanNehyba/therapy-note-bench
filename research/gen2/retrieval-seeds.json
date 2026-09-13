@@ -1,0 +1,19 @@
+{
+  "status": "prior_known_retrieval_inventory_not_screened_findings",
+  "metadata_verification": "Identifiers were supplied in prior planning or are established methodological references; new full-text verification remains pending.",
+  "seeds": [
+    {"id": "jbi-scoping", "label": "JBI Manual for Evidence Synthesis: scoping reviews", "locator": "https://jbi-global-wiki.refined.site/space/MANUAL", "purpose": "conduct methodology"},
+    {"id": "prisma-scr", "label": "PRISMA-ScR", "locator": "https://doi.org/10.7326/M18-0850", "purpose": "reporting methodology"},
+    {"id": "prisma-s", "label": "PRISMA-S", "locator": "https://doi.org/10.1186/s13643-020-01542-z", "purpose": "search reporting"},
+    {"id": "cosmin-content", "label": "COSMIN content validity methodology", "locator": "https://doi.org/10.1007/s11136-018-1829-0", "purpose": "appraisal principles requiring adaptation"},
+    {"id": "boateng-development", "label": "Boateng et al.: scale development and validation", "locator": "https://doi.org/10.3389/fpubh.2018.00149", "purpose": "instrument development; checklist is not automatically a scale"},
+    {"id": "tn-eval", "label": "TN-Eval", "locator": "https://aclanthology.org/2025.acl-industry.14/", "purpose": "direct documentation evaluation candidate"},
+    {"id": "icare-ihope", "label": "iCARE/iHOPE", "locator": "https://doi.org/10.1101/2025.06.25.25330252", "purpose": "direct documentation evaluation candidate; supplied preprint identifier"},
+    {"id": "pdsqi-9", "label": "PDSQI-9", "locator": "https://doi.org/10.1093/jamia/ocaf068", "purpose": "adjacent clinical summarization candidate"},
+    {"id": "questeval", "label": "QuestEval", "locator": "https://aclanthology.org/2021.emnlp-main.529/", "purpose": "candidate QA method, not a preselected construct"},
+    {"id": "qafacteval", "label": "QAFactEval", "locator": "https://aclanthology.org/2022.naacl-main.187/", "purpose": "candidate QA method, not a preselected construct"},
+    {"id": "factscore", "label": "FActScore", "locator": "https://aclanthology.org/2023.emnlp-main.741/", "purpose": "candidate atomic-claim method, not direct psychotherapy validation"}
+  ],
+  "included_sources": 0,
+  "literature_derived_constructs": 0
+}

@@ -1,0 +1,87 @@
+{
+  "version": "search-log-v1",
+  "database": "ACL Anthology",
+  "platform": "offline corpus search, amendment AM-5",
+  "corpus_url": "https://aclanthology.org/anthology+abstracts.bib.gz",
+  "corpus_sha256": "31d71e8bb2118d5c7bb262d2ae7f2ae078d999a96b4587b8a37d1ff79caf7bf0",
+  "corpus_records": 131040,
+  "peer_review_of_search": "none",
+  "language_restriction": "none applied at corpus level",
+  "date_limits": "no lower limit; corpus snapshot downloaded on the recorded date",
+  "limitation": "Records whose abstract is absent from the Anthology corpus are searched on title alone, which lowers recall for those entries.",
+  "searches": [
+    {
+      "query_id": "acl-direct",
+      "database": "ACL Anthology",
+      "platform": "complete Anthology BibTeX corpus, searched offline (amendment AM-5)",
+      "layer": "direct",
+      "description": "Planned acl-direct: (\"therapy\" OR \"psychotherapy\" OR \"counseling\" OR \"counselling\") AND (\"note\" OR \"summary\" OR \"summarization\" OR \"summarisation\")",
+      "regex_groups_as_run": [
+        "\\b(therapy|psychotherap\\w*|counsel\\w*|therapeutic)\\b",
+        "\\b(notes?|summar\\w*)\\b"
+      ],
+      "match_rule": "a record matches when title+abstract match at least one alternative in every group",
+      "fields_searched": "title and abstract",
+      "executed_utc": "2026-09-13T19:23:48.189141+00:00",
+      "search_date": "2026-09-13",
+      "filters_applied": "none",
+      "corpus_file": "anthology+abstracts.bib.gz",
+      "corpus_sha256": "31d71e8bb2118d5c7bb262d2ae7f2ae078d999a96b4587b8a37d1ff79caf7bf0",
+      "corpus_records": 131040,
+      "total_records": 19,
+      "records_downloaded": 19,
+      "download_complete": true,
+      "export_file": "C:\\Users\\Nehyba\\therapy-note-bench\\local\\gen2-review-2026-09-13\\exports\\acl-direct.json",
+      "export_sha256": "4b37337e221d191f16c9a4c3744e8c4e9050c7707c50eacf539f233f3218ea26"
+    },
+    {
+      "query_id": "acl-transfer",
+      "database": "ACL Anthology",
+      "platform": "complete Anthology BibTeX corpus, searched offline (amendment AM-5)",
+      "layer": "transfer",
+      "description": "Planned acl-transfer: (\"summarization\" OR \"summarisation\") AND (\"evaluation\" OR \"faithfulness\" OR \"factuality\" OR \"attribution\" OR \"question answering\" OR \"multilingual\")",
+      "regex_groups_as_run": [
+        "\\b(summari[sz]\\w*)\\b",
+        "\\b(evaluat\\w*|faithful\\w*|factual\\w*|attribution|question answering|multilingual)\\b"
+      ],
+      "match_rule": "a record matches when title+abstract match at least one alternative in every group",
+      "fields_searched": "title and abstract",
+      "executed_utc": "2026-09-13T19:23:48.189141+00:00",
+      "search_date": "2026-09-13",
+      "filters_applied": "none",
+      "corpus_file": "anthology+abstracts.bib.gz",
+      "corpus_sha256": "31d71e8bb2118d5c7bb262d2ae7f2ae078d999a96b4587b8a37d1ff79caf7bf0",
+      "corpus_records": 131040,
+      "total_records": 2152,
+      "records_downloaded": 2152,
+      "download_complete": true,
+      "export_file": "C:\\Users\\Nehyba\\therapy-note-bench\\local\\gen2-review-2026-09-13\\exports\\acl-transfer.json",
+      "export_sha256": "3e456e851848e2b4f882fb3302ad291e3568a41b77561e840c9f51a78b55ad06"
+    },
+    {
+      "query_id": "acl-clinical-doc",
+      "database": "ACL Anthology",
+      "platform": "complete Anthology BibTeX corpus, searched offline (amendment AM-5)",
+      "layer": "transfer",
+      "description": "Amendment AM-5 companion: clinical or mental-health documentation in NLP venues",
+      "regex_groups_as_run": [
+        "\\b(clinical|medical|psychiatr\\w*|mental health|patient)\\b",
+        "\\b(notes?|documentation|discharge summar\\w*|summar\\w*)\\b",
+        "\\b(evaluat\\w*|quality|faithful\\w*|factual\\w*|hallucinat\\w*|error\\w*)\\b"
+      ],
+      "match_rule": "a record matches when title+abstract match at least one alternative in every group",
+      "fields_searched": "title and abstract",
+      "executed_utc": "2026-09-13T19:23:48.189141+00:00",
+      "search_date": "2026-09-13",
+      "filters_applied": "none",
+      "corpus_file": "anthology+abstracts.bib.gz",
+      "corpus_sha256": "31d71e8bb2118d5c7bb262d2ae7f2ae078d999a96b4587b8a37d1ff79caf7bf0",
+      "corpus_records": 131040,
+      "total_records": 406,
+      "records_downloaded": 406,
+      "download_complete": true,
+      "export_file": "C:\\Users\\Nehyba\\therapy-note-bench\\local\\gen2-review-2026-09-13\\exports\\acl-clinical-doc.json",
+      "export_sha256": "d6b14ee6a3bf916f3678b352070a3daaee3d7250f56b55d55086fc0a0f4ade9e"
+    }
+  ]
+}

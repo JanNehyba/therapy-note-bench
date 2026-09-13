@@ -1,0 +1,111 @@
+{
+  "version": "flow-v1",
+  "identification": {
+    "PubMed": 8820,
+    "ACL Anthology": 2577,
+    "total_records_identified": 11397,
+    "downloaded_completely": true,
+    "not_parsed_into_pool": {
+      "count": 35,
+      "what": "PubmedBookArticle records (book chapters); structurally different and excluded from the screening pool, quantified rather than silently dropped"
+    },
+    "databases_not_searched": [
+      {
+        "name": "Scopus",
+        "reason": "no API key; api.elsevier.com returned HTTP 401"
+      },
+      {
+        "name": "APA PsycINFO",
+        "reason": "EBSCOhost requires an institutional login"
+      }
+    ]
+  },
+  "deduplication": {
+    "before": 11362,
+    "after": 10059,
+    "removed": 1303,
+    "rule": "DOI, else PMID, else normalised title (ASCII-folded, alphanumeric only)"
+  },
+  "screening": {
+    "pool": 10059,
+    "priority_stratum_screened": 487,
+    "remainder_NOT_screened": 9572,
+    "include_candidates": 192,
+    "exclude_candidates": 295,
+    "human_decisions": 0,
+    "audit_of_unscreened": {
+      "sampled": 200,
+      "sampling": "simple random sample, seed 20260913",
+      "clearly_eligible_found": 6,
+      "borderline_eligible_found": 5,
+      "clearly_eligible_titles": [
+        "\"I think it's something that we should lean in to\": The use of OpenNotes in Canadian psychiatric care contexts",
+        "Clinical supervision of psychotherapy: essential ethics issues for supervisors and supervisees",
+        "SummaC: Re-Visiting NLI-based Models for Inconsistency Detection in Summarization",
+        "DecompEval: Evaluating Generated Texts as Unsupervised Decomposed Question Answering",
+        "Analyzing and Evaluating Faithfulness in Dialogue Summarization",
+        "An evaluation of existing text de-identification tools for use with patient progress notes"
+      ],
+      "borderline_titles": [
+        "On Improving Summarization Factual Consistency from Natural Language Feedback",
+        "FIZZ: Factual Inconsistency Detection by Zoom-in Summary and Zoom-out Document",
+        "Contrastive Decoding Mitigates Score Range Bias in LLM-as-a-Judge",
+        "The frequency and quality of delirium documentation in discharge summaries",
+        "Implementation of an AI-Assisted Workflow for Rehabilitation Discharge Summary Creation"
+      ],
+      "clear_rate": 0.03,
+      "clear_rate_ci95_wilson": [
+        0.0138,
+        0.0639
+      ],
+      "estimated_eligible_records_below_threshold": 287,
+      "estimated_ci95": [
+        132,
+        612
+      ],
+      "estimated_including_borderline": 526,
+      "estimated_including_borderline_ci95": [
+        297,
+        917
+      ],
+      "interpretation": "The priority ordering is not a complete screen. An estimated share of eligible records sits below the threshold and was never screened. Most of them are transfer-layer NLP method papers, a large and well-populated literature; two of the six clear finds were direct or requirements evidence, so the gap is not confined to the transfer layer."
+    }
+  },
+  "full_text": {
+    "sought": 18,
+    "retrieved": 16,
+    "not_retrieved": 2,
+    "not_retrieved_detail": [
+      "pdqi-9-prelim",
+      "psychres-2026"
+    ],
+    "corrections": [
+      "pdqi-9-negative-ed: wrong article retrieved under a guessed PMID; corrected after reading the file."
+    ]
+  },
+  "synthesis": {
+    "sources_full_text_verified": 17,
+    "sources_abstract_only": 13,
+    "candidates": 27,
+    "families": 7,
+    "methods": 16,
+    "levels": 12,
+    "blind_spots": 10,
+    "pilot_measurements_proposed": 12
+  },
+  "caveat": "Counts describe what was executed. The 9579 unscreened records and the two unsearched databases mean this is not a completed scoping review and must not be reported as one.",
+  "corrections": [
+    {
+      "date": "2026-09-13",
+      "what": "BibTeX parser in acl_search.py appended uncollected field lines (pages, isbn) to the preceding collected field, corrupting 1886 of 10066 recorded DOIs.",
+      "found_by": "auditing the pool before committing, not by a failing test",
+      "effect": "7 records that should have merged did not. Unique records 10066 -> 10059, duplicates removed 1296 -> 1303. Query hit counts and screening set unchanged.",
+      "also": "DOI fields are now normalised at both ingest sites, which removed a Google Scholar session token that a PubMed record carried inside its doi ArticleId."
+    },
+    {
+      "date": "2026-09-13",
+      "what": "Screening decisions were recorded as positions in the priority ordering.",
+      "effect": "The parser fix left the 487-record priority set identical but moved 29 positions. Decisions are now keyed by record title in include-candidates.json and screen.py resolves them, so a re-run cannot silently reassign a decision to another record."
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "version": "queries-v1",
+  "date_limits": "No lower limit; record actual execution date",
+  "queries": [
+    {
+      "id": "pubmed-direct",
+      "database": "PubMed",
+      "platform": "PubMed/MEDLINE",
+      "layer": "direct",
+      "query": "(psychotherap*[Title/Abstract] OR counsel*[Title/Abstract] OR \"mental health\"[Title/Abstract]) AND (\"progress note*\"[Title/Abstract] OR \"session summar*\"[Title/Abstract] OR \"clinical documentation\"[Title/Abstract] OR \"therapy note*\"[Title/Abstract])",
+      "status": "not_run",
+      "syntax_verification": "Required on the actual platform before the full search; log any amendment"
+    },
+    {
+      "id": "pubmed-transfer",
+      "database": "PubMed",
+      "platform": "PubMed/MEDLINE",
+      "layer": "transfer",
+      "query": "(\"clinical note*\"[Title/Abstract] OR \"medical summar*\"[Title/Abstract] OR \"clinical documentation\"[Title/Abstract]) AND (quality[Title/Abstract] OR evaluat*[Title/Abstract] OR validat*[Title/Abstract] OR instrument*[Title/Abstract] OR rubric*[Title/Abstract])",
+      "status": "not_run",
+      "syntax_verification": "Required on the actual platform before the full search; log any amendment"
+    },
+    {
+      "id": "psycinfo-direct",
+      "database": "APA PsycINFO",
+      "platform": "EBSCOhost APA PsycINFO",
+      "layer": "direct",
+      "query": "TX (psychotherap* OR counsel* OR \"mental health\") AND TX (\"progress note*\" OR \"session summar*\" OR \"clinical documentation\" OR \"therapy note*\")",
+      "status": "not_run",
+      "syntax_verification": "Required on the actual platform before the full search; log any amendment"
+    },
+    {
+      "id": "psycinfo-requirements",
+      "database": "APA PsycINFO",
+      "platform": "EBSCOhost APA PsycINFO",
+      "layer": "requirements",
+      "query": "TX (psychotherap* OR counsel*) AND TX (documentation OR \"clinical notes\" OR \"record keeping\") AND TX (supervision OR continuity OR \"patient access\" OR \"client access\" OR audit OR quality OR ethics)",
+      "status": "not_run",
+      "syntax_verification": "Required on the actual platform before the full search; log any amendment"
+    },
+    {
+      "id": "scopus-direct",
+      "database": "Scopus",
+      "platform": "Scopus",
+      "layer": "direct",
+      "query": "TITLE-ABS-KEY((psychotherap* OR counsel* OR \"mental health\") AND (\"progress note*\" OR \"session summar*\" OR \"clinical documentation\" OR \"therapy note*\"))",
+      "status": "not_run",
+      "syntax_verification": "Required on the actual platform before the full search; log any amendment"
+    },
+    {
+      "id": "scopus-transfer",
+      "database": "Scopus",
+      "platform": "Scopus",
+      "layer": "transfer",
+      "query": "TITLE-ABS-KEY((summarization OR summarisation OR \"clinical documentation\") AND (evaluation OR factuality OR faithfulness OR attribution OR \"question answering\") AND (metric* OR rubric* OR human OR multilingual))",
+      "status": "not_run",
+      "syntax_verification": "Required on the actual platform before the full search; log any amendment"
+    },
+    {
+      "id": "acl-direct",
+      "database": "ACL Anthology",
+      "platform": "ACL Anthology search",
+      "layer": "direct",
+      "query": "(\"therapy\" OR \"psychotherapy\" OR \"counseling\" OR \"counselling\") (\"note\" OR \"summary\" OR \"summarization\" OR \"summarisation\")",
+      "status": "not_run",
+      "syntax_verification": "Required on the actual platform before the full search; log any amendment"
+    },
+    {
+      "id": "acl-transfer",
+      "database": "ACL Anthology",
+      "platform": "ACL Anthology search",
+      "layer": "transfer",
+      "query": "(\"summarization\" OR \"summarisation\") (\"evaluation\" OR \"faithfulness\" OR \"factuality\" OR \"attribution\" OR \"question answering\" OR \"multilingual\")",
+      "status": "not_run",
+      "syntax_verification": "Required on the actual platform before the full search; log any amendment"
+    }
+  ],
+  "supplementary": {
+    "guidance": "Search professional psychotherapy record-keeping guidance and client-access literature; record organization, jurisdiction, document version and exact query.",
+    "citation_chasing": "Backward and forward from included reports; record seed report and metadata service.",
+    "czech": "Search Czech professional guidance using the equivalent documentation and psychotherapy terms; retain the exact executed Czech query privately."
+  }
+}
