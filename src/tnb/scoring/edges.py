@@ -321,7 +321,7 @@ def published(rows: list[results.Row], track: str) -> dict[str, dict[str, dict[s
 
 def _client(judge_model: str) -> judge.Judge:
     """A judge object for its fingerprint and name only; nothing here calls it."""
-    return judge.Judge(judge.config_from_env(model=judge_model))
+    return judge.Judge(judge.config_from_env(model=judge_model), tasks=())
 
 
 def _collect(out: dict, system: str, session: str, headline: dict[str, float]) -> None:

@@ -216,8 +216,13 @@ class JudgeConfig:
     effort: str = "medium"
 
     @property
+    def backend_name(self) -> str:
+        """Where this judge runs, by the provider name `Task.confined_to` uses."""
+        return self.backend or backend_for(self.model)
+
+    @property
     def transport(self) -> Backend:
-        return BACKENDS[self.backend or backend_for(self.model)]
+        return BACKENDS[self.backend_name]
 
     @property
     def endpoint(self) -> str:
@@ -504,6 +509,10 @@ OPENAI_OUTPUT_CEILING = 160 + REASONING_HEADROOM
 BACKENDS: dict[str, Backend] = {"vertex": VertexBackend(), "openai": OpenAIBackend()}
 
 
+class ConfinedCorpus(RuntimeError):
+    """A judge was asked to exist for a corpus its backend may not read."""
+
+
 class Judge:
     """A Vertex client that mints its own token and refreshes it when it expires.
 
@@ -511,8 +520,29 @@ class Judge:
     to be held somewhere: it lives about an hour, and a scoring run is longer.
     """
 
-    def __init__(self, config: JudgeConfig):
+    def __init__(self, config: JudgeConfig, *, tasks: tuple):
+        """Build a judge for the tasks whose sessions it will be handed.
+
+        `tasks` is required, and it is where the corpus restriction is enforced
+        on this side of the transcript: a task whose corpus is confined names
+        the providers it may reach, and a judge on any other backend refuses to
+        be built, before a prompt exists. `cmd_generate` does the same before a
+        job exists. The prompt carries the transcript on both sides of the
+        benchmark, so a guard on one side was half a guard.
+
+        A judge built for no task can compute its fingerprint and name a cache
+        directory, and may ask nothing: `ask` refuses. That is what the
+        cache-only readers pass, and it is the truth about them.
+        """
         self.config = config
+        self.tasks = tuple(tasks)
+        for task in self.tasks:
+            if task.confined_to and config.backend_name not in task.confined_to:
+                raise ConfinedCorpus(
+                    f"{task.name}: this corpus may only be sent to "
+                    f"{', '.join(task.confined_to)}, and judge {config.model} runs on "
+                    f"{config.backend_name}"
+                )
         self._credentials = None
         # Threads share one credential. Without the lock two of them refresh at
         # once and one reads a half-updated token, which the pilot met as an
@@ -537,6 +567,11 @@ class Judge:
 
     def ask(self, prompt: str, *, sleep=time.sleep) -> Answer:
         """One question. Retries quota and backend errors, reports the rest."""
+        if not self.tasks:
+            raise ConfinedCorpus(
+                "this judge was built for no task and may ask nothing; "
+                "pass tasks= to Judge for the sessions it is handed"
+            )
         started = time.monotonic()
         last_error = "no attempt made"
         refresh_token = False

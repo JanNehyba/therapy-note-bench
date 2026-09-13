@@ -14,13 +14,22 @@ because whoever ran them happened to pass the flag.
 
 A flag somebody remembers is not a safeguard. The task carries the restriction
 and `cmd_generate` cannot build a job that breaks it.
+
+**The judge is the other side of the same transcript.** Its prompt carries the
+session too, and until 2026-09-14 nothing stood between a confidential corpus
+and a judge on any backend with a token. `judge.Judge` is now built for named
+tasks and refuses to exist for a confined corpus on a backend the task does not
+allow; a judge built for no task may ask nothing.
 """
 
 from __future__ import annotations
 
 import ast
+from dataclasses import replace
 
-from tnb import tasks
+import pytest
+
+from tnb import judge, tasks
 from tnb.config import REPO_ROOT
 
 #: The whole roster, named rather than derived. Every task here reads a public
@@ -82,3 +91,62 @@ def test_the_restriction_survives_a_task_being_added():
     for name, task in tasks.TASKS.items():
         assert hasattr(task, "confined_to"), name
         assert task.confined_to is None or isinstance(task.confined_to, tuple), name
+
+
+def _config(model: str, backend: str = "") -> judge.JudgeConfig:
+    return judge.JudgeConfig(
+        project="", location="", credentials_path="", model=model, backend=backend
+    )
+
+
+def test_a_judge_refuses_to_be_built_for_a_corpus_its_backend_may_not_reach():
+    """The judge-side half of the guard. Both published judges run outside
+    e-INFRA, so a task confined to it can be generated for and not scored --
+    the right state until a judge inside it exists and is calibrated."""
+    confined = replace(tasks.TASKS["soap"], confined_to=("einfra",))
+    for model in ("gemini-3.1-pro-preview", "gpt-5.6-terra"):
+        with pytest.raises(judge.ConfinedCorpus, match="einfra"):
+            judge.Judge(_config(model), tasks=(confined,))
+
+
+def test_a_judge_on_a_permitted_backend_is_built_and_the_override_is_what_counts():
+    vertex_only = replace(tasks.TASKS["soap"], confined_to=("vertex",))
+    built = judge.Judge(_config("gemini-3.1-pro-preview"), tasks=(vertex_only,))
+    assert built.tasks == (vertex_only,)
+    with pytest.raises(judge.ConfinedCorpus, match="openai"):
+        judge.Judge(_config("gpt-5.6-terra"), tasks=(vertex_only,))
+    # `JudgeConfig.backend` overrides the name-derived transport. The check reads
+    # the property the transport reads, so the two cannot disagree.
+    judge.Judge(_config("gpt-5.6-terra", backend="vertex"), tasks=(vertex_only,))
+
+
+def test_the_public_tasks_build_on_every_backend():
+    for model in ("gemini-3.1-pro-preview", "gpt-5.6-terra"):
+        judge.Judge(_config(model), tasks=tuple(tasks.TASKS.values()))
+
+
+def test_a_judge_built_for_no_task_may_ask_nothing():
+    """The cache-only readers build a judge for its fingerprint and cache
+    directory. That object must not be a way around the guard."""
+    client = judge.Judge(_config("gemini-3.1-pro-preview"), tasks=())
+    assert client.config.fingerprint()
+    with pytest.raises(judge.ConfinedCorpus, match="no task"):
+        client.ask("a question")
+
+
+def test_every_judge_in_the_harness_is_built_for_named_tasks():
+    """Read from the source, like the generation-side check. A construction
+    that omits `tasks=` fails when it runs, and the cache-only paths run
+    rarely; this fails on the day it is written."""
+    for path in sorted((REPO_ROOT / "src" / "tnb").rglob("*.py")):
+        tree = ast.parse(path.read_text(encoding="utf-8"))
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.Call):
+                continue
+            func = node.func
+            name = func.attr if isinstance(func, ast.Attribute) else getattr(func, "id", None)
+            if name != "Judge":
+                continue
+            assert any(k.arg == "tasks" for k in node.keywords), (
+                f"{path.relative_to(REPO_ROOT)}:{node.lineno} builds a judge for no named task"
+            )

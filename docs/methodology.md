@@ -285,10 +285,14 @@ e-INFRA buys nothing there.
 
 **And if that changes.** If real session data are ever added to this
 benchmark, the judge must move inside the infrastructure that holds them. The
-commitment is written here rather than assumed, because the enforcement is not:
+commitment is written here rather than assumed, and so is the enforcement:
 `tasks.Task.confined_to` refuses to build a generation job for a provider a
-corpus may not reach, and nothing equivalent stands between a confidential
-transcript and a judge.
+corpus may not reach, and `judge.Judge` is built for named tasks and refuses
+to exist for a confined corpus on any backend the task does not allow; a judge
+built for no task may ask nothing. What does not exist yet is a judge inside
+e-INFRA for this harness, so a confined corpus here could be generated for and
+not scored, which is the correct state until one is wired and calibrated as a
+new instrument.
 
 **Why not the newest one.** Judge quality here does not follow release order,
 and mostly it does not follow anything: measured over the same 150 notes with

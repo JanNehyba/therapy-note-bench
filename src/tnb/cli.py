@@ -632,7 +632,7 @@ def cmd_score(args: argparse.Namespace) -> int:
         print("\nDry run: the judge was not called.")
         return 0
 
-    client = judge.Judge(config)
+    client = judge.Judge(config, tasks=(tasks.TASKS["soap"],))
 
     # A repeat answers into its own directory so nothing it writes can reach
     # the published cache, and appends no row so nothing can reach results/.
@@ -814,7 +814,7 @@ def cmd_score_pdsqi(args: argparse.Namespace) -> int:
         print("\nDry run: the judge was not called.")
         return 0
 
-    client = judge.Judge(config)
+    client = judge.Judge(config, tasks=(tasks.TASKS["soap"],))
 
     # A repeat answers into its own directory so nothing it writes can reach
     # the published cache, and appends no row so nothing can reach results/.
@@ -1255,7 +1255,7 @@ def cmd_repeatability(args: argparse.Namespace) -> int:
     repeats = []
     for judge_model in judges:
         # For its fingerprint and name only; nothing here calls the judge.
-        client = judge.Judge(judge.config_from_env(model=judge_model))
+        client = judge.Judge(judge.config_from_env(model=judge_model), tasks=())
         found = repeatability.measure(
             judge_model,
             fingerprint=client.config.fingerprint(),
@@ -1365,7 +1365,7 @@ def cmd_judges(args: argparse.Namespace) -> int:
     reports = []
     for model in models:
         config = judge.config_from_env(model=model)
-        client = judge.Judge(config)
+        client = judge.Judge(config, tasks=(tasks.TASKS["soap"],))
         spend = judge.Spend(limit_usd=args.max_judge_usd)
 
         if not args.dry_run and not args.cache_only:
@@ -1466,7 +1466,7 @@ def cmd_score_icare(args: argparse.Namespace) -> int:
     if getattr(args, "concurrency", None):
         overrides["concurrency"] = args.concurrency
     config = judge.config_from_env(**overrides)
-    client = judge.Judge(config)
+    client = judge.Judge(config, tasks=(tasks.TASKS["icare"],))
 
     sessions = icare_run.load_sessions(args.limit)
     candidates = list(icare_run.from_generations(sessions))

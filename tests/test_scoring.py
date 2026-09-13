@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from types import SimpleNamespace
 
 import httpx
 import pytest
@@ -159,8 +160,12 @@ def _config(**overrides) -> judge.JudgeConfig:
     return judge.JudgeConfig(**{**base, **overrides})
 
 
+#: A task whose corpus may go anywhere, for the tests that ask a judge things.
+_UNCONFINED = SimpleNamespace(name="a-public-task", confined_to=None)
+
+
 def _client(monkeypatch, responses) -> tuple[judge.Judge, list]:
-    client = judge.Judge(_config())
+    client = judge.Judge(_config(), tasks=(_UNCONFINED,))
     monkeypatch.setattr(client, "_token", lambda **_: "test-token")
     sent = []
     queue = list(responses)
@@ -978,7 +983,8 @@ def test_publishing_from_cache_checks_what_the_judge_was_asked(tmp_path, monkeyp
     from tnb.scoring import run as scoring
 
     client = judge.Judge(
-        judge.JudgeConfig(project="p", location="l", credentials_path="", model="a-judge")
+        judge.JudgeConfig(project="p", location="l", credentials_path="", model="a-judge"),
+        tasks=(),
     )
     candidate = _one_candidate()
     _cache_every_answer(tmp_path, candidate, client, prompt_of=lambda task: task.prompt)
@@ -998,7 +1004,8 @@ def test_publishing_from_cache_still_accepts_answers_older_than_the_digest(tmp_p
     from tnb.scoring import run as scoring
 
     client = judge.Judge(
-        judge.JudgeConfig(project="p", location="l", credentials_path="", model="a-judge")
+        judge.JudgeConfig(project="p", location="l", credentials_path="", model="a-judge"),
+        tasks=(),
     )
     candidate = _one_candidate()
     tasks = tneval.build_tasks(candidate.note, candidate.conversation)
@@ -1040,7 +1047,7 @@ def test_cache_only_honours_no_write(monkeypatch, capsys):
     appended: list[list] = []
 
     monkeypatch.setattr(cli.judge, "config_from_env", lambda **kw: _AConfig())
-    monkeypatch.setattr(cli.judge, "Judge", lambda config: object())
+    monkeypatch.setattr(cli.judge, "Judge", lambda config, *, tasks: object())
     monkeypatch.setattr(scoring, "load_sessions", lambda limit: {"s1": "a session"})
     monkeypatch.setattr(scoring, "from_reference", lambda sessions: [])
     monkeypatch.setattr(scoring, "from_generations", lambda sessions: [candidate])

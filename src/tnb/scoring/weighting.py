@@ -251,7 +251,7 @@ def build(judge_model: str = judge.DEFAULT_MODEL, cache_root: Path | None = None
     """
     from tnb.scoring import run
 
-    client = judge.Judge(judge.config_from_env(model=judge_model))
+    client = judge.Judge(judge.config_from_env(model=judge_model), tasks=())
     sessions = run.load_sessions()
     candidates = list(run.from_reference(sessions)) + list(run.from_generations(sessions))
     notes = run.from_cache(candidates, client, cache_root=cache_root)

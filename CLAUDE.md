@@ -124,6 +124,10 @@ models as the whole of OpenAI.
   such everywhere it appears.
 - The iCARE track reports automatic metrics and TRACE **side by side**; the
   source paper found they disagree, and that disagreement is a result.
+- A task whose corpus is confidential names where it may go
+  (`Task.confined_to`). `cmd_generate` refuses to build a job outside that set,
+  and `judge.Judge(config, tasks=...)` refuses to be built for such a task on
+  any other backend; a judge built for no task may ask nothing.
 - `results/` is append-only.
 
 ## Cost And Safety
