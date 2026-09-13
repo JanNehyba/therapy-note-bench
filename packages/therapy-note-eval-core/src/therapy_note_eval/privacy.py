@@ -104,6 +104,7 @@ def public_report(payload: dict) -> dict:
                         "evaluations": numeric(s["evaluations"]),
                         "critical_findings_observed": numeric(s["critical_findings_observed"]),
                         "critical_findings_by_method": numeric(s["critical_findings_by_method"]),
+                        "error_types": numeric(s["error_types"]),
                         "critical_scope_complete_notes": numeric(
                             s["critical_scope_complete_notes"]
                         ),

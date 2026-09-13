@@ -11,6 +11,8 @@ from . import PROTOCOL_VERSION
 from .findings import summarize as summarize_findings
 from .metrics import cluster_interval, measure
 from .schema import (
+    AGGREGATION_VERSION,
+    ERROR_TYPES,
     Bank,
     Case,
     Evaluation,
@@ -89,7 +91,7 @@ def build_report(store: Store) -> dict:
         if (
             manifest.protocol != PROTOCOL_VERSION
             or manifest.implementation_digest != implementation_digest()
-            or manifest.aggregation_version != "aggregation-v3"
+            or manifest.aggregation_version != AGGREGATION_VERSION
         ):
             archived.append(
                 {
@@ -253,6 +255,17 @@ def build_report(store: Store) -> dict:
                     ),
                     "critical_scope_incomplete_notes": len(population)
                     - sum(v["critical_scope_complete"] for v in measured.values()),
+                    # Findings by the kind of error the judge named, per method, summed
+                    # over this system's notes. A verdict carrying several labels is
+                    # counted under each, so these exceed the finding counts beside them
+                    # and are not a count of incidents.
+                    "error_types": {
+                        kind: {
+                            method: sum(v["error_types"][kind][method] for v in measured.values())
+                            for method in ("claims", "qa", "items")
+                        }
+                        for kind in ERROR_TYPES
+                    },
                     "critical_findings_by_method": {
                         method: sum(
                             v["critical_findings_by_method"].get(method, 0)

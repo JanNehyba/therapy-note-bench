@@ -155,6 +155,10 @@ missing methods never imply absence. Positive observed findings remain visible
 even when other methods fail. Each method exposes planned, applicable, assessed,
 missing and unassessable units. Raw finding counts
 can overlap between QA and claims and are not counts of independent incidents.
+Findings are also counted by the error type the judge named, separately per
+method; a verdict carrying several labels is counted under each, so those totals
+are labels rather than incidents, and a failed deterministic check counts as an
+instruction error.
 `link-findings` accepts human-reviewed groups bound to one exact evaluation digest.
 A group lists finding IDs such as `claim:c1` and `qa:i1`, its reason and actual
 reviewer. Distinct-error counts remain unavailable until every observed finding is

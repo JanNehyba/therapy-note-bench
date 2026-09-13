@@ -18,6 +18,14 @@ from typing import Any, Literal, Union, get_args, get_origin, get_type_hints
 
 from . import PROTOCOL_VERSION
 
+#: The version of the arithmetic in `metrics.measure` and of the shape it
+#: returns. Owned here, and read by `metrics` and `report`, so that a bump is
+#: one edit: a manifest recorded under an older version is archived by the
+#: report rather than recalculated, and `Manifest.check` refuses to score
+#: under it. Bumped to v4 on 2026-09-13 when per-error-type counts were added
+#: to what a measurement returns.
+AGGREGATION_VERSION = "aggregation-v4"
+
 Profile = Literal["continuity", "supervision", "client", "audit"]
 Language = Literal["en", "cs"]
 PROFILES = ("continuity", "supervision", "client", "audit")
@@ -794,7 +802,7 @@ class Manifest:
     prompts_version: str = "prompts-v3"
     profiles_version: str = "profiles-v1"
     segmentation_version: str = "atomic-claims-v1"
-    aggregation_version: str = "aggregation-v3"
+    aggregation_version: str = AGGREGATION_VERSION
     implementation_digest: str = field(default_factory=implementation_digest)
     measurements: tuple[MeasurementSpec, ...] = field(default_factory=default_measurements)
     research_revision: str = "development-default-v3"
@@ -834,7 +842,7 @@ class Manifest:
             "Implementation changed; create a derived run, retaining the original artifacts",
         )
         require(
-            self.aggregation_version == "aggregation-v3"
+            self.aggregation_version == AGGREGATION_VERSION
             and self.prompts_version == "prompts-v3"
             and self.profiles_version == "profiles-v1",
             "Incompatible scoring versions",

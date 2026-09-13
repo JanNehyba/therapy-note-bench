@@ -8,9 +8,19 @@ import statistics
 from collections import Counter, defaultdict
 
 from .deterministic import checks, violations
-from .schema import Bank, Case, Evaluation, Note, Segmentation, digest, require
+from .schema import (
+    AGGREGATION_VERSION,
+    ERROR_TYPES,
+    Bank,
+    Case,
+    Evaluation,
+    Note,
+    Segmentation,
+    digest,
+    require,
+)
 
-VERSION = "aggregation-v3"
+VERSION = AGGREGATION_VERSION
 
 
 def fraction(found: int, expected: int, complete: bool = True) -> float | None:
@@ -74,8 +84,24 @@ def measure(
         for m in evaluation.measurements
         if note.spec.profile in m.profiles and "items" in evaluation.methods
     }
-    for item_id in violations(note, tuple(active_items.values())):
+    vetoed = violations(note, tuple(active_items.values()))
+    for item_id in vetoed:
         dimensions[item_id] = "fail"
+    # Findings by the kind of error the judge named, per method. A verdict that
+    # carries three labels counts under three types, so the totals here exceed
+    # the number of findings and are not a count of incidents; the finding
+    # counts are elsewhere in this dict. A deterministic veto names no error
+    # type of its own -- `DimensionVerdict` carries none -- and is counted under
+    # `instruction`, one per failed check, because a word limit or a required
+    # heading is an instruction and nothing else.
+    error_types = {t: {"claims": 0, "qa": 0, "items": 0} for t in ERROR_TYPES}
+    for verdict in evaluation.claims:
+        for label in set(verdict.error_types):
+            error_types[label]["claims"] += 1
+    for verdict in evaluation.qa:
+        for label in set(verdict.error_types):
+            error_types[label]["qa"] += 1
+    error_types["instruction"]["items"] += sum(len(checks) for checks in vetoed.values())
     all_complete = (
         (claim_complete or not use_claims)
         and (len(evaluation.qa) == len(bank.information) or not use_qa)
@@ -222,6 +248,7 @@ def measure(
         "claim_checks_expected": len(segmentation.claims) if use_claims else 0,
         "claim_checks_answered": len(evaluation.claims),
         "claim_outcomes": dict(claims),
+        "error_types": error_types,
         "segmentation_audit": evaluation.segmentation_complete,
         "faithfulness": fraction(claims["supported"], len(segmentation.claims), claim_complete),
         "coverage": coverage,
