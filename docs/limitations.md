@@ -401,8 +401,8 @@ point:
   calibrate its judge, which is why its column is labelled TRACE-inspired.
 - PDSQI-9 publishes one: trained physicians agree with each other at
   Krippendorff's alpha **0.575** — against the 0.18 two therapists reach on
-  faithfulness. That is a **ceiling** a judge can be held against, and it is not
-  nothing.
+  faithfulness. These are estimates of reliability in different tasks and
+  populations, not theoretical ceilings on judge accuracy.
 - Neither is a measurement of how well *our* judge agrees with *people* about
   *these* notes. That still needs clinicians rating what is in `generations/`,
   and that is a study rather than a configuration change.
@@ -416,7 +416,7 @@ flipped so that every column runs the same way.
 **It has now been run**, on 2026-08-27, by both judges over the same notes the
 rubric scores — the SOAP notes written from the 50 AnnoMI conversations, not a
 third corpus, and the two tracks have carried the same note count since. It has its own track and its own tables, and the promise
-made here when it had not been run is kept: the ceiling sits beside every one
+made here when it had not been run is kept: the human reliability estimate sits beside every one
 of the eight columns, all eight of them, where the rubric's does.
 
 **And the first thing it says is that an empty note is excellent.** A SOAP note

@@ -7,13 +7,13 @@ section. Our judge answered the same questions. This compares them.
 Two numbers matter and one of them is not about our judge at all:
 
 - **judge vs human** is the thing being measured;
-- **human vs human** is the ceiling it is measured against. A judge that agrees
-  with a therapist as often as two therapists agree with each other has done as
-  well as the task allows. TN-Eval measured Krippendorff's alpha of 0.52 on
-  rubric completeness and **0.08** on Likert completeness between trained
-  therapists — so a low Likert agreement is a property of the scale, not a
-  verdict on the judge, and reporting it without the ceiling beside it would be
-  misleading.
+- **human vs human** estimates reliability for these raters, units and tasks.
+  TN-Eval measured Krippendorff's alpha of 0.52 on rubric completeness and
+  0.08 on Likert completeness. These contextualize judge agreement; they do
+  not establish a correctness ceiling or isolate the effect of response format.
+
+Historical API fields containing `ceiling` retain their names for compatibility.
+They represent the observed human-human comparison, not a theoretical bound.
 
 Whatever comes out goes in the README. A leaderboard whose referee has never
 been checked against a person is a table of numbers, not a measurement.
@@ -263,7 +263,7 @@ class Agreement:
 
     @property
     def clears_ceiling(self) -> bool | None:
-        """Does the margin over the therapists' ceiling clear zero once resampled?
+        """Does the margin over the observed therapist agreement clear zero once resampled?
 
         Not the same question as `reaches_ceiling`, which compares two point
         estimates and answers yes for a margin of 0.002. This one answers no
@@ -275,7 +275,7 @@ class Agreement:
 
     @property
     def reaches_ceiling(self) -> bool | None:
-        """Does the judge agree with a therapist as often as they agree with each other?"""
+        """Does the judge agree with a therapist at the observed human-human agreement level?"""
         if self.judge_mean is None or self.human_vs_human is None:
             return None
         return self.judge_mean >= self.human_vs_human
@@ -871,10 +871,10 @@ def render_markdown(report: Report) -> str:
 
     lines += [
         "",
-        "**The therapist-vs-therapist columns are the ceiling, not a target to beat.** Two "
-        "trained therapists disagree with each other about these notes; a judge that agrees "
-        "with a therapist as often as the other therapist does has done as well as the task "
-        "allows.",
+        "**The therapist-vs-therapist columns estimate reliability for these raters and "
+        "units.** Disagreement is informative about the rating procedure. Matching or "
+        "exceeding this agreement does not establish correctness, and this estimate is "
+        "not a theoretical upper bound.",
         "",
         "**Why two statistics.** Cohen's kappa suits a yes/no criterion and Spearman suits a "
         "1–5 scale, so each measure is reported under the one a reader expects. But those two "

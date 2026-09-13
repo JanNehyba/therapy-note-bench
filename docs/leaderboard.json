@@ -22986,7 +22986,7 @@
       "columns": [
         {
           "anchored": false,
-          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published reliability estimate in that study, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
           "definition": "The note is true and free of incorrect information. PDSQI-9 item 2, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
@@ -22997,7 +22997,7 @@
         },
         {
           "anchored": false,
-          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published reliability estimate in that study, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
           "definition": "The note should thoroughly cover all critical patient issues. PDSQI-9 item 3, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
@@ -23008,7 +23008,7 @@
         },
         {
           "anchored": false,
-          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published reliability estimate in that study, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
           "definition": "All the information is in there that is useful to the target provider/intended audience. The note is extremely relevant, providing valuable information and/or analysis. PDSQI-9 item 4, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
@@ -23019,7 +23019,7 @@
         },
         {
           "anchored": false,
-          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published reliability estimate in that study, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
           "definition": "The note is well-formed and structured in a way that helps the reader understand the patient's clinical course. PDSQI-9 item 5, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
@@ -23030,7 +23030,7 @@
         },
         {
           "anchored": false,
-          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published reliability estimate in that study, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
           "definition": "The note is clear, without ambiguity or sections that are difficult to understand. PDSQI-9 item 6, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
@@ -23041,7 +23041,7 @@
         },
         {
           "anchored": false,
-          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published reliability estimate in that study, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
           "definition": "The note is brief, to the point, and without redundancy. PDSQI-9 item 7, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
@@ -23052,7 +23052,7 @@
         },
         {
           "anchored": false,
-          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published reliability estimate in that study, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
           "definition": "The note reflects an understanding of the patient's status and ability to develop a plan of care. PDSQI-9 item 8, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
@@ -23063,7 +23063,7 @@
         },
         {
           "anchored": false,
-          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published reliability estimate in that study, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
           "definition": "The note is free of discrediting or exaggerated words, of judgment or labelling, and uses person-first language. PDSQI-9 item 9, answered yes or no and reported as the fraction of notes free of it.",
           "digits": 3,
           "instrument": "PDSQI-9",
@@ -23075,7 +23075,7 @@
       ],
       "design": {
         "calibrated": false,
-        "calibration": "No human has rated these notes on this instrument, so there is no agreement figure for this judge. What the instrument publishes instead is a ceiling: trained physicians agreed with each other at Krippendorff's alpha 0.575, against the 0.18 two therapists reach on faithfulness. A judge cannot be asked to agree with a person better than people agree with each other -- but a ceiling is not a measurement, and these columns have not been checked against anyone.",
+        "calibration": "No human has rated these notes on this instrument, so there is no agreement figure for this judge. What the instrument publishes instead is inter-rater reliability: trained physicians had Krippendorff's alpha 0.575 in the original study. That estimate describes those raters, units and tasks; it is not a theoretical limit on correctness and is not directly comparable to therapist agreement on a different task. These columns have not been checked against human ratings of these notes.",
         "human_role": "The therapist's note is scored by the identical protocol and sits in the table as its own row, exactly as it does on the rubric track. That is the reason this table exists next to that one: the same notes, two instruments, and a reader can see where they disagree about who wrote well.",
         "human_role_short": "competitor",
         "scored_against": "The note itself, and for two of the eight attributes the transcript as well -- accurate and thorough ask whether the note is true and complete, which cannot be answered without the session. There is no gold note, so this track is reference-free in the same sense the rubric track is."
@@ -24484,7 +24484,7 @@
       "columns": [
         {
           "anchored": false,
-          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published reliability estimate in that study, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
           "definition": "The note is true and free of incorrect information. PDSQI-9 item 2, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
@@ -24495,7 +24495,7 @@
         },
         {
           "anchored": false,
-          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published reliability estimate in that study, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
           "definition": "The note should thoroughly cover all critical patient issues. PDSQI-9 item 3, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
@@ -24506,7 +24506,7 @@
         },
         {
           "anchored": false,
-          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published reliability estimate in that study, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
           "definition": "All the information is in there that is useful to the target provider/intended audience. The note is extremely relevant, providing valuable information and/or analysis. PDSQI-9 item 4, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
@@ -24517,7 +24517,7 @@
         },
         {
           "anchored": false,
-          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published reliability estimate in that study, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
           "definition": "The note is well-formed and structured in a way that helps the reader understand the patient's clinical course. PDSQI-9 item 5, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
@@ -24528,7 +24528,7 @@
         },
         {
           "anchored": false,
-          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published reliability estimate in that study, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
           "definition": "The note is clear, without ambiguity or sections that are difficult to understand. PDSQI-9 item 6, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
@@ -24539,7 +24539,7 @@
         },
         {
           "anchored": false,
-          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published reliability estimate in that study, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
           "definition": "The note is brief, to the point, and without redundancy. PDSQI-9 item 7, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
@@ -24550,7 +24550,7 @@
         },
         {
           "anchored": false,
-          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published reliability estimate in that study, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
           "definition": "The note reflects an understanding of the patient's status and ability to develop a plan of care. PDSQI-9 item 8, rated 1 (not at all) to 5 (extremely).",
           "digits": 2,
           "instrument": "PDSQI-9",
@@ -24561,7 +24561,7 @@
         },
         {
           "anchored": false,
-          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published ceiling, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
+          "caveat": "The instrument was validated on multi-note clinical summaries from a corpus that excluded psychiatry, not on notes written from a single session. Its authors report Krippendorff's alpha 0.575 between trained physicians on that material -- a published reliability estimate in that study, not a measurement of this judge on these notes. Three of the eight -- accurate, succinct and free of stigmatising language -- can be won by saying nothing: an empty note scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as things it can win.",
           "definition": "The note is free of discrediting or exaggerated words, of judgment or labelling, and uses person-first language. PDSQI-9 item 9, answered yes or no and reported as the fraction of notes free of it.",
           "digits": 3,
           "instrument": "PDSQI-9",
@@ -24573,7 +24573,7 @@
       ],
       "design": {
         "calibrated": false,
-        "calibration": "No human has rated these notes on this instrument, so there is no agreement figure for this judge. What the instrument publishes instead is a ceiling: trained physicians agreed with each other at Krippendorff's alpha 0.575, against the 0.18 two therapists reach on faithfulness. A judge cannot be asked to agree with a person better than people agree with each other -- but a ceiling is not a measurement, and these columns have not been checked against anyone.",
+        "calibration": "No human has rated these notes on this instrument, so there is no agreement figure for this judge. What the instrument publishes instead is inter-rater reliability: trained physicians had Krippendorff's alpha 0.575 in the original study. That estimate describes those raters, units and tasks; it is not a theoretical limit on correctness and is not directly comparable to therapist agreement on a different task. These columns have not been checked against human ratings of these notes.",
         "human_role": "The therapist's note is scored by the identical protocol and sits in the table as its own row, exactly as it does on the rubric track. That is the reason this table exists next to that one: the same notes, two instruments, and a reader can see where they disagree about who wrote well.",
         "human_role_short": "competitor",
         "scored_against": "The note itself, and for two of the eight attributes the transcript as well -- accurate and thorough ask whether the note is true and complete, which cannot be answered without the session. There is no gold note, so this track is reference-free in the same sense the rubric track is."

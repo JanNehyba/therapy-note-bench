@@ -176,9 +176,10 @@ Krippendorff's alpha between human annotators:
 | Conciseness | 0.49 | **0.16** |
 | Faithfulness | 0.62 | **0.18** |
 
-A 1–5 scale produces near-zero agreement between trained therapists on this
-task. Criterion checklists produce usable agreement. Any leaderboard in this
-area that rests on Likert scores is measuring noise.
+These section-level 1–5 tasks produced low agreement in this study. The rubric
+protocols also change the task and, for some properties, the unit of judgment.
+Their difference does not isolate the effect of binary versus graded responses
+and does not establish that all Likert-based leaderboards measure noise.
 
 The paper also finds that LLM judges track humans well on completeness and
 conciseness but **struggle on faithfulness**, and that in blind comparison
@@ -262,7 +263,8 @@ raters against human ones. So an LLM judge scoring these notes on it produces
 columns that are better anchored than TRACE and still not calibrated here.
 TRACE has no published human agreement figure; PDSQI-9 publishes one — physicians
 reach Krippendorff's alpha 0.575 with each other, against 0.18 between two
-therapists on faithfulness — and that is a ceiling a judge can be held against.
+therapists on faithfulness. These are reliability estimates for different tasks
+and populations, not theoretical accuracy ceilings or directly interchangeable benchmarks.
 What neither gives is a measurement of how well *our* judge agrees with people
 about *these* notes, which needs clinicians rating what is in `generations/`.
 
@@ -275,8 +277,9 @@ rubric scores, and `results/` carries its rows on the `pdsqi-soap` track.
 **It has no human anchor for these notes**, which is why it sits beside the
 rubric rather than above it: nobody has rated this corpus on this instrument, so
 there is no agreement figure for either judge. What the instrument publishes is
-a ceiling — trained physicians agreed with each other at Krippendorff's alpha
-0.575 — and a ceiling is not a measurement. Every column carries that sentence.
+a reliability estimate — trained physicians agreed with each other at Krippendorff's
+alpha 0.575. It does not measure our judge's accuracy on psychotherapy notes.
+Historical displays calling it a ceiling should be read with this correction.
 
 And it inherits the failure mode this repository keeps meeting: an empty note
 scores 5.00 on `accurate`, 5.00 on `succinct` and 1.00 on the stigmatising

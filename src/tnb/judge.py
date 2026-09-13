@@ -59,7 +59,7 @@ DEFAULT_MODEL = "gemini-3.1-pro-preview"
 #:
 #: Chosen by measurement over the same 150 notes the humans rated, not by
 #: reputation. Krippendorff's alpha on the rubric, every candidate at one
-#: setting, against a human-vs-human ceiling of 0.504:
+#: setting, against observed human-vs-human agreement of 0.504:
 #:
 #:     gemini-3.1-pro-preview  0.600      gpt-5.6-terra  0.520
 #:     gemini-2.5-pro          0.574      gpt-5.6-sol    0.510
@@ -81,7 +81,7 @@ DEFAULT_MODEL = "gemini-3.1-pro-preview"
 #:
 #: Every candidate agrees with a therapist at least as often as the two
 #: therapists agree with each other, but only the two `pro` models clear that
-#: ceiling by the margin.
+#: observed human agreement by the margin.
 SECOND_JUDGE = "gpt-5.6-terra"
 
 #: Candidates worth measuring against the human annotators before one is chosen.
@@ -94,7 +94,7 @@ JUDGE_CANDIDATES = (
     "gemini-3.5-flash",
     "gemini-2.5-flash",
     "gpt-5.6-terra",
-    # Added after terra calibrated at 0.520 -- above the human ceiling of 0.504,
+    # Added after terra calibrated at 0.520 -- above observed human agreement of 0.504,
     # but the weakest of six and the only one with a *negative* agreement on
     # faithfulness. Worth $17 to find out whether the flagship is better before
     # committing $65 to a full pass with the one that barely cleared.

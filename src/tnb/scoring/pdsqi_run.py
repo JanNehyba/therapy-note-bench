@@ -290,9 +290,9 @@ class SystemAggregate:
 #: not asked of the real half at all.
 METRICS_NOTE = (
     "PDSQI-9, adapted: see docs/landscape.md. Physicians agree with each "
-    "other on this instrument at Krippendorff's alpha 0.575, which is the "
-    "ceiling these columns are read against -- no human has rated these "
-    "notes on it."
+    "other on this instrument at Krippendorff's alpha 0.575 in its original study. "
+    "This is reliability in that setting, not an accuracy limit or calibration "
+    "of these columns; no human has rated these notes on it."
 )
 
 

@@ -659,15 +659,16 @@ function renderCalibration(calibration) {
                  <th>n</th></tr></thead>
       <tbody>${rows}</tbody>
     </table></div>
-    <p class="blurb">${T`<strong>The right-hand column is the ceiling, not a target to beat.</strong>
-       Two trained therapists disagree with each other about these notes; a judge that agrees with
-       a therapist as often as the other therapist does has done as well as the task allows.`}</p>
+    <p class="blurb">${T`<strong>The right-hand column estimates reliability for these raters and units.</strong>
+       Agreement describes this rating procedure. Matching or exceeding human-human agreement
+       does not establish correctness or a theoretical upper limit.`}</p>
     <p class="blurb">${T`<strong>Why two statistics.</strong> Cohen's kappa suits a yes/no criterion
        and Spearman suits a 1–5 scale, so each measure is reported under the one a reader
        expects. Those two are different quantities and an inequality between them means nothing,
        so the comparison below is made on <strong>Krippendorff's alpha</strong> — defined for
        both, nominal for the rubric and ordinal for the scales, and the statistic TN-Eval used
-       to reach the finding in the first place.`}</p>
+       to reach the finding in the first place. These comparisons also differ in rating tasks
+       and units; they do not isolate the effect of response format.`}</p>
     ${finding}
     ${whoseNotesWereRated(calibration)}`;
 }
@@ -708,7 +709,7 @@ function whoseNotesWereRated(calibration) {
        that two agreement figures are separable at all. It is weakest on
        <code>${worst.system}</code>${below.length
          ? T`, and on ${below.map(r => `<code>${r.system}</code>`).join(T` and `)} it does not reach
-            the ceiling the two therapists set between them`
+            the observed agreement between the two therapists`
          : ''}. A score from this judge means slightly different things depending on whose note
        it read, and the leaderboard compares those scores in one column.`}</p>`;
 }
@@ -1011,7 +1012,7 @@ function whatTheCalibrationSeparates(sep) {
       ? ' ' + T`${sep.all_at_or_above_ceiling
             ? T`Every candidate agrees with a therapist at least as often as the two
                therapists agree with each other`
-            : T`Not every candidate reaches the ceiling the two therapists set between them`}
+            : T`Not every candidate reaches the observed agreement between the two therapists`}
           (${sep.ceiling.toFixed(3)}), but only
           ${sep.above_ceiling.length
             ? sep.above_ceiling.map(n => `<code>${n}</code>`).join(T` and `)
@@ -1029,7 +1030,7 @@ function whereTheCeilingIsCleared(data, measures, ceiling) {
     data.judges.every(j => { const a = alphaOf(j, m); return a === null || a < ceiling[m]; }));
   if (!cleared.length && !none.length) return '';
   return `<p class="note">
-    ${cleared.length ? T`Every judge clears the human ceiling on
+    ${cleared.length ? T`Every judge reaches the observed human-human agreement on
       ${cleared.map(m => `<code>${tr(m)}</code>`).join(', ')}.` : ''}
     ${none.length ? ' ' + T`None of them does on
       ${none.map(m => `<code>${tr(m)}</code>`).join(', ')}, which is why those columns carry the

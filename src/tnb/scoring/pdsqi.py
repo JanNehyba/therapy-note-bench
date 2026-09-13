@@ -13,9 +13,10 @@ sections are both reproduced rather than designed -- and a column called
 "quality" that this repository made up would mean whatever a reader guessed. The
 number that matters is inter-rater reliability among trained physicians:
 Krippendorff's alpha 0.575, ICC 0.867, Cronbach's alpha 0.879. For comparison,
-TN-Eval measured alpha 0.18 between two therapists on faithfulness. 0.575 is
-also a ceiling: a judge cannot be expected to agree with a person better than
-people agree with each other.
+TN-Eval measured alpha 0.18 between two therapists on faithfulness. These
+estimates describe different tasks and populations; they are not
+interchangeable benchmarks or theoretical limits on correctness. Human
+agreement with this judge on these notes still needs to be measured.
 
 **Three things about this instrument do not fit our task, and all three are
 published on the page rather than smoothed over.**
@@ -291,7 +292,8 @@ _CAVEAT = (
     "The instrument was validated on multi-note clinical summaries from a corpus that "
     "excluded psychiatry, not on notes written from a single session. Its authors report "
     "Krippendorff's alpha 0.575 between trained physicians on that material -- a published "
-    "ceiling, not a measurement of this judge on these notes. Three of the eight -- accurate, "
+    "reliability estimate in that study, not a measurement of this judge on these notes. "
+    "Three of the eight -- accurate, "
     "succinct and free of stigmatising language -- can be won by saying nothing: an empty note "
     "scores 5.00, 5.00 and 1.00 on them, so read them as things a note can fail, never as "
     "things it can win."

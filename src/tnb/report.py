@@ -535,17 +535,17 @@ TRACK_DESIGN = {
         "human_role_short": "competitor",
         # False, and the reason is not the reason iCARE is False. There the
         # ratings exist and are unpublished; here nobody has ever rated *these*
-        # notes on this instrument. What PDSQI-9 does publish is a ceiling, which
-        # is more than TRACE has and less than a calibration.
+        # notes on this instrument. PDSQI-9 publishes reliability in another
+        # population; this is context, not calibration of these judges.
         "calibrated": False,
         "calibration": (
             "No human has rated these notes on this instrument, so there is no "
             "agreement figure for this judge. What the instrument publishes instead "
-            "is a ceiling: trained physicians agreed with each other at "
-            "Krippendorff's alpha 0.575, against the 0.18 two therapists reach on "
-            "faithfulness. A judge cannot be asked to agree with a person better "
-            "than people agree with each other -- but a ceiling is not a "
-            "measurement, and these columns have not been checked against anyone."
+            "is inter-rater reliability: trained physicians had Krippendorff's alpha "
+            "0.575 in the original study. That estimate describes those raters, units "
+            "and tasks; it is not a theoretical limit on correctness and is not "
+            "directly comparable to therapist agreement on a different task. "
+            "These columns have not been checked against human ratings of these notes."
         ),
     },
 }

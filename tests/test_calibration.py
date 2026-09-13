@@ -171,7 +171,7 @@ def test_the_report_would_say_so_if_the_finding_did_not_hold():
     )
 
 
-def test_the_published_block_always_shows_the_human_ceiling():
+def test_the_published_block_explains_the_observed_human_reliability():
     """Publishing 'judge 0.31' without 'therapists -0.21' beside it would read
     as a bad judge when it is a bad scale."""
     report = Report(
@@ -183,7 +183,8 @@ def test_the_published_block_always_shows_the_human_ceiling():
     markdown = calibration.render_markdown(report)
 
     assert "0.31" in markdown and "-0.21" in markdown
-    assert "ceiling" in markdown
+    assert "estimate reliability" in markdown
+    assert "not a theoretical upper bound" in markdown
 
 
 def test_an_uncalibrated_judge_says_so_rather_than_showing_nothing():
