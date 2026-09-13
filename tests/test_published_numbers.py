@@ -1028,7 +1028,8 @@ CLAIMS = (
     Claim(
         where="docs/incidents.md",
         phrase=(
-            "all ten real sessions of the corpus went to OpenAI and to Google Vertex: 150 calls, each answered, between 01:09 and 03:39"
+            "all ten real sessions of the corpus went to OpenAI and to Google Vertex: 150 calls, "
+            "each answered, between 01:09 and 03:39"
         ),
         kind="historical",
         because=(
@@ -1049,7 +1050,8 @@ CLAIMS = (
     Claim(
         where="docs/incidents.md",
         phrase=(
-            "2 424 cached answers per judge about 168 notes written for the ten sessions by 17 systems, 12 of them on e-INFRA, 3 on OpenAI and 2 on Vertex, between 03:39 and 13:07"
+            "2 424 cached answers per judge about 168 notes written for the ten sessions by 17 "
+            "systems, 12 of them on e-INFRA, 3 on OpenAI and 2 on Vertex, between 03:39 and 13:07"
         ),
         kind="historical",
         because="counted from the names and timestamps of the gitignored judge cache on 2026-09-14",
