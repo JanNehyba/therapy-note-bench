@@ -151,10 +151,18 @@ def score(
             and registry.assessment_scope == manifest.assessment_scope,
             "Manifest differs from reviewed research instrument",
         )
+        # Two conditions, two messages. Joined, an instrument that had passed
+        # review but carried one unreviewed measurement failed with "legacy
+        # defaults are demo-only", which sends the reader to the wrong file.
         require(
-            manifest.research_revision != "development-default-v3"
-            and all(m.status == "pilot_reviewed" for m in manifest.measurements),
+            manifest.research_revision != "development-default-v3",
             "Real research runs require a reviewed registry; legacy defaults are demo-only",
+        )
+        unreviewed = [m.id for m in manifest.measurements if m.status != "pilot_reviewed"]
+        require(
+            not unreviewed,
+            "Real research runs require every measurement to be pilot_reviewed; "
+            f"not reviewed: {', '.join(unreviewed)}",
         )
     selected = (
         retrieve(case, note.text, manifest.retrieval_turns)
