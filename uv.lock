@@ -2221,8 +2221,14 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
+gen2 = [
+    { name = "therapy-note-eval-core" },
+]
 judge = [
     { name = "google-auth" },
+]
+research = [
+    { name = "therapy-note-eval-core", extra = ["research"] },
 ]
 scoring = [
     { name = "bert-score" },
@@ -2251,9 +2257,11 @@ requires-dist = [
     { name = "pyyaml", specifier = ">=6.0" },
     { name = "rouge-score", marker = "extra == 'scoring'", specifier = ">=0.1.2" },
     { name = "scipy", marker = "extra == 'scoring'", specifier = ">=1.13" },
+    { name = "therapy-note-eval-core", marker = "extra == 'gen2'", editable = "packages/therapy-note-eval-core" },
+    { name = "therapy-note-eval-core", extras = ["research"], marker = "extra == 'research'", editable = "packages/therapy-note-eval-core" },
     { name = "tqdm", specifier = ">=4.66" },
 ]
-provides-extras = ["judge", "scoring"]
+provides-extras = ["gen2", "research", "judge", "scoring"]
 
 [package.metadata.requires-dev]
 dev = [
@@ -2261,6 +2269,25 @@ dev = [
     { name = "pytest-cov", specifier = ">=5.0" },
     { name = "ruff", specifier = ">=0.6" },
 ]
+
+[[package]]
+name = "therapy-note-eval-core"
+version = "0.3.0"
+source = { editable = "packages/therapy-note-eval-core" }
+
+[package.optional-dependencies]
+research = [
+    { name = "matplotlib" },
+    { name = "scipy", version = "1.17.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
+    { name = "scipy", version = "1.18.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "matplotlib", marker = "extra == 'research'", specifier = ">=3.8" },
+    { name = "scipy", marker = "extra == 'research'", specifier = ">=1.13" },
+]
+provides-extras = ["research"]
 
 [[package]]
 name = "tokenizers"

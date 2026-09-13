@@ -17,6 +17,8 @@ dependencies = [
 # multi-gigabyte download. Discovery, generation and the rubric judge do not
 # need it, so only the reference-metric track pays that cost.
 [project.optional-dependencies]
+gen2 = ["therapy-note-eval-core==0.3.0"]
+research = ["therapy-note-eval-core[research]==0.3.0"]
 # Generation speaks raw HTTP to OpenAI-compatible endpoints via httpx, which is
 # a core dependency -- there is no SDK to install for it.
 judge = ["google-auth>=2.30"]
@@ -64,4 +66,7 @@ select = ["E", "F", "I", "UP", "B", "SIM"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["src"]
+pythonpath = ["src", "packages/therapy-note-eval-core/src"]
+
+[tool.uv.sources]
+therapy-note-eval-core = { path = "packages/therapy-note-eval-core", editable = true }
