@@ -181,6 +181,18 @@ must share splits. Single-client data do not receive population confidence
 intervals. Published Gen-1 estimates remain historical; their sampling assumptions
 are not silently changed by this Gen-2 adapter.
 
+`contrast` compares two languages over the same conversations, pair by pair. It
+takes two manifests that agree on everything but the language of the note spec
+(cases, banks, corpus and origin may differ; required headings may differ in
+wording but not in number), joins cases on their translation group, requires the
+two sides of a pair to share a client group, and resamples clients over the
+per-pair differences. A metric is compared only where the report's completeness
+rule held on both sides; otherwise the entry names the incomplete side instead
+of a value. Question banks are built per language, so a recall on each side has
+its own denominator, and the output states both bank sizes. An interval crossing
+zero does not establish equivalence, and one client gives no interval. The public
+form of a contrast carries no free text.
+
 ## Data protection and reproducibility
 
 Raw artifacts are immutable and private. Git-backed private roots must actually

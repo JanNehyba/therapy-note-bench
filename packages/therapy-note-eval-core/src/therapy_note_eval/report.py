@@ -76,7 +76,13 @@ def write_review(store: Store, review: dict) -> Path:
     return path
 
 
-def build_report(store: Store) -> dict:
+def load_workspace(store: Store) -> dict:
+    """Every artefact a report reads, decoded and keyed by revision.
+
+    Shared with `contrast`, which needs the same population and the same
+    per-case measurements and must not reach them by a second, subtly
+    different route.
+    """
     cases = {c.revision: c for c in (decode(Case, r) for r in store.all("cases"))}
     banks = {b.revision: b for b in (decode(Bank, r) for r in store.all("banks"))}
     notes = {n.revision: n for n in (decode(Note, r) for r in store.all("notes"))}
@@ -85,6 +91,93 @@ def build_report(store: Store) -> dict:
     }
     manifests = {digest(r): decode(Manifest, r) for r in store.all("manifests")}
     evaluations = [decode(Evaluation, r) for r in store.all("evaluations")]
+    return {
+        "cases": cases,
+        "banks": banks,
+        "notes": notes,
+        "segments": segments,
+        "manifests": manifests,
+        "evaluations": evaluations,
+    }
+
+
+def measured_by_system(
+    store: Store, key: str, manifest: Manifest, found: dict
+) -> tuple[dict, dict, dict]:
+    """Per-case measurements for one manifest, keyed system -> case id.
+
+    This is the loop `build_report` averages. It is a function so that
+    `contrast` can pair the values it produces across two manifests: the report
+    payload carries only the means, and a paired comparison needs the notes.
+    Returns the measurements, the generator identities it saw, and which cases
+    each generator produced a note for.
+    """
+    cases, banks, notes, segments, evaluations = (
+        found["cases"],
+        found["banks"],
+        found["notes"],
+        found["segments"],
+        found["evaluations"],
+    )
+    population = {k: cases[v] for k, v in manifest.cases.items()}
+    require(
+        all(c.revision == manifest.cases[c.id] for c in population.values()),
+        "Report population revision mismatch",
+    )
+    by_system = defaultdict(dict)
+    identities = {}
+    generated = defaultdict(set)
+    for note in notes.values():
+        if note.case_revision in manifest.cases.values() and note.spec == manifest.spec:
+            identities[note.generator.key] = note.generator
+            generated[note.generator.key].add(note.case_id)
+    for record in store.all("generation_plans"):
+        if record["spec"] == plain(manifest.spec) and record["cases"] == manifest.cases:
+            from .schema import Model
+
+            model = decode(Model, record["generator"])
+            identities[model.key] = model
+    for evaluation in evaluations:
+        if evaluation.manifest_id != key:
+            continue
+        note = notes[evaluation.note_revision]
+        bank = banks[evaluation.bank_revision]
+        segmentation = segments[evaluation.segmentation_revision]
+        case = population[evaluation.case_id]
+        manifest.check(case, bank, note, segmentation)
+        require(evaluation.judge == manifest.judge, "Report judge mismatch")
+        require(
+            evaluation.measurements == manifest.measurements
+            and evaluation.research_revision == manifest.research_revision
+            and evaluation.methods == manifest.methods,
+            "Evaluation and manifest use different research instruments",
+        )
+        require(
+            evaluation.assessment_scope == manifest.assessment_scope
+            and evaluation.required_methods == manifest.required_methods
+            and evaluation.method_specs == manifest.method_specs
+            and evaluation.replicate_id == manifest.replicate_id,
+            "Evaluation and manifest use different scope or replicate",
+        )
+        # Two judgments of the same note are repeats, never two independent cases.
+        previous = by_system[note.generator.key].get(case.id)
+        values = measure(case, note, bank, segmentation, evaluation)
+        links = [
+            v for v in store.all("finding_links") if v["evaluation_revision"] == digest(evaluation)
+        ]
+        require(len(links) <= 1, "Choose one reviewed finding linkage in this report workspace")
+        values["finding_linkage"] = summarize_findings(evaluation, links[0] if links else None)
+        require(
+            previous is None or previous == values,
+            "Repeated judgments disagree; choose a separate run before reporting",
+        )
+        by_system[note.generator.key][case.id] = values
+    return by_system, identities, generated
+
+
+def build_report(store: Store) -> dict:
+    found = load_workspace(store)
+    cases, manifests = found["cases"], found["manifests"]
     cohorts = []
     archived = []
     for key, manifest in sorted(manifests.items()):
@@ -103,60 +196,7 @@ def build_report(store: Store) -> dict:
             )
             continue
         population = {k: cases[v] for k, v in manifest.cases.items()}
-        require(
-            all(c.revision == manifest.cases[c.id] for c in population.values()),
-            "Report population revision mismatch",
-        )
-        by_system = defaultdict(dict)
-        identities = {}
-        generated = defaultdict(set)
-        for note in notes.values():
-            if note.case_revision in manifest.cases.values() and note.spec == manifest.spec:
-                identities[note.generator.key] = note.generator
-                generated[note.generator.key].add(note.case_id)
-        for record in store.all("generation_plans"):
-            if record["spec"] == plain(manifest.spec) and record["cases"] == manifest.cases:
-                from .schema import Model
-
-                model = decode(Model, record["generator"])
-                identities[model.key] = model
-        for evaluation in evaluations:
-            if evaluation.manifest_id != key:
-                continue
-            note = notes[evaluation.note_revision]
-            bank = banks[evaluation.bank_revision]
-            segmentation = segments[evaluation.segmentation_revision]
-            case = population[evaluation.case_id]
-            manifest.check(case, bank, note, segmentation)
-            require(evaluation.judge == manifest.judge, "Report judge mismatch")
-            require(
-                evaluation.measurements == manifest.measurements
-                and evaluation.research_revision == manifest.research_revision
-                and evaluation.methods == manifest.methods,
-                "Evaluation and manifest use different research instruments",
-            )
-            require(
-                evaluation.assessment_scope == manifest.assessment_scope
-                and evaluation.required_methods == manifest.required_methods
-                and evaluation.method_specs == manifest.method_specs
-                and evaluation.replicate_id == manifest.replicate_id,
-                "Evaluation and manifest use different scope or replicate",
-            )
-            # Two judgments of the same note are repeats, never two independent cases.
-            previous = by_system[note.generator.key].get(case.id)
-            values = measure(case, note, bank, segmentation, evaluation)
-            links = [
-                v
-                for v in store.all("finding_links")
-                if v["evaluation_revision"] == digest(evaluation)
-            ]
-            require(len(links) <= 1, "Choose one reviewed finding linkage in this report workspace")
-            values["finding_linkage"] = summarize_findings(evaluation, links[0] if links else None)
-            require(
-                previous is None or previous == values,
-                "Repeated judgments disagree; choose a separate run before reporting",
-            )
-            by_system[note.generator.key][case.id] = values
+        by_system, identities, generated = measured_by_system(store, key, manifest, found)
         systems = []
         for system, identity in sorted(identities.items()):
             measured = by_system[system]

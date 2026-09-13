@@ -10,6 +10,9 @@ from pathlib import Path
 
 from .schema import require
 
+#: What a public identifier may look like; `contrast.public_contrast` applies the same rule.
+LABEL = re.compile(r"[A-Za-z0-9_.:/-]{1,128}")
+
 
 def words(text: str) -> list[str]:
     # Public HTML and JSON can carry escaped Unicode, including inside script tags.
@@ -54,7 +57,7 @@ def public_report(payload: dict) -> dict:
 
     def label(value):
         require(
-            isinstance(value, str) and re.fullmatch(r"[A-Za-z0-9_.:/-]{1,128}", value) is not None,
+            isinstance(value, str) and LABEL.fullmatch(value) is not None,
             "Unsafe public identifier",
         )
         return value

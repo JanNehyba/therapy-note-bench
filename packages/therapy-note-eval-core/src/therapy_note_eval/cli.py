@@ -370,6 +370,14 @@ def command(args):
     elif args.action == "report":
         data, page = report.write_report(store)
         emit({"report": str(page), "aggregate_data": str(data)})
+    elif args.action == "contrast":
+        from . import contrast
+
+        found = contrast.language_contrast(store, args.left, args.right)
+        private = store.put("contrasts", digest(found), found)
+        public = contrast.public_contrast(found)
+        destination = store.put("public_contrasts", digest(public), public)
+        emit({"contrast": str(private), "public_contrast": str(destination), "public": public})
     elif args.action == "link-findings":
         from .findings import summarize
 
@@ -595,6 +603,11 @@ def parser() -> argparse.ArgumentParser:
         "--variants", nargs="+", choices=controls.VARIANTS, default=list(controls.VARIANTS)
     )
     sub.add_parser("report", help="local aggregate report, separate per instrument and cohort")
+    pair = sub.add_parser(
+        "contrast", help="paired difference between two languages over the same conversations"
+    )
+    pair.add_argument("--left", required=True, help="manifest id, as the report lists cohorts")
+    pair.add_argument("--right", required=True, help="manifest id of the other language")
     annotate = sub.add_parser("annotate", help="create blinded local review pages")
     pilot = sub.add_parser("pilot-plan", help="freeze the six-case balanced feasibility design")
     pilot.add_argument("--registry", type=Path, required=True)
