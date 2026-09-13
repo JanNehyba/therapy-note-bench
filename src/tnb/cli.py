@@ -977,6 +977,50 @@ def _say_which_instrument(judge_model: str, answers) -> None:
         print(f"  ignoring {count} answer(s) at different settings: {other}", file=sys.stderr)
 
 
+def cmd_weighting(args: argparse.Namespace) -> int:
+    """What the completeness order would be under a different weighting.
+
+    Costs nothing: it reads the answers the judge has already given, through
+    the same path `tnb score --cache-only` publishes from, so the notes it
+    averages are the notes the table averages. The leaderboard's completeness
+    weights four sections equally; this recomputes the same notes item-weighted
+    and under TN-Eval's own importance grading and publishes what each does to
+    the order, so "N systems change place" is a checked figure and not a remark
+    in a docstring.
+    """
+    from tnb.scoring import weighting
+
+    found = weighting.build(judge_model=args.judge_model)
+    if found is None:
+        print("Fewer than two systems with a complete answer set for this judge.")
+        return 0
+
+    settings = ", ".join(f"{k}={v}" for k, v in sorted(found["judge_settings"].items()))
+    print(f"{args.judge_model}: reading answers at {settings}")
+    print(f"{len(found['systems'])} system(s), on the notes the table averages.")
+    print(f"unlabelled in the source, excluded from importance weighting: {found['unlabelled']}")
+    print("")
+    print(f"{'system':32} {'used':>4} {'macro':>7} {'item':>7} {'imp@.5':>7}")
+    for system in found["macro_order"]:
+        row = found["systems"][system]
+        print(
+            f"{system:32} {row['notes_used']:4d} {row['macro']:7.4f} {row['item_weighted']:7.4f} "
+            f"{row['importance_weighted'][str(weighting.RATIO)]:7.4f}"
+        )
+    print("")
+    for name, change in found["rank_changes"].items():
+        print(f"  {name:28} {change['moved']:2d} of {change['of']} systems change place")
+        for c in change["changes"][:3]:
+            print(f"      {c['system']:28} {c['macro_place']:2d} -> {c['place']:2d}")
+
+    if args.dry_run:
+        return 0
+    path = weighting.write(found)
+    print("")
+    print(f"  wrote {path.relative_to(REPO_ROOT)}")
+    return 0
+
+
 def cmd_preference(args: argparse.Namespace) -> int:
     """Does either judge score its own family higher than a neutral rater would?
 
@@ -1839,6 +1883,15 @@ def build_parser() -> argparse.ArgumentParser:
     )
     saturation.add_argument("--dry-run", action="store_true", help="print, write nothing")
     saturation.set_defaults(func=cmd_saturation)
+
+    weighting = subparsers.add_parser(
+        "weighting", help="the completeness order under other weightings (reads the answer cache)"
+    )
+    weighting.add_argument(
+        "--judge-model", default=judge.DEFAULT_MODEL, help="whose answers to analyse"
+    )
+    weighting.add_argument("--dry-run", action="store_true", help="print, write nothing")
+    weighting.set_defaults(func=cmd_weighting)
 
     pref = subparsers.add_parser(
         "preference", help="does either judge favour its own family? (reads the answer cache)"

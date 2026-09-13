@@ -10,7 +10,7 @@ help:
 	@echo "bench       generate over every discovered model (no judge, no money)"
 	@echo "score       judge the TN-Eval notes with both judges"
 	@echo "score-icare judge the iCARE notes with both judges"
-	@echo "analyse     saturation and self-preference, from cached answers"
+	@echo "analyse     saturation, self-preference, table orders and weighting, from cached answers"
 	@echo "report      regenerate both pages, docs/leaderboard.json and the README table"
 	@echo "figures     redraw docs/figures/*.svg from the published payload"
 	@echo "brief       rebuild docs/brief.html from the payload and the figures"
@@ -69,6 +69,8 @@ analyse:
 	uv run tnb saturation
 	uv run tnb preference
 	uv run tnb orders
+	uv run tnb weighting --judge-model gemini-3.1-pro-preview
+	uv run tnb weighting --judge-model gpt-5.6-terra
 
 report:
 	uv run tnb report

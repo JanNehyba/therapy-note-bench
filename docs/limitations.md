@@ -459,9 +459,11 @@ whole rubric as the denominator, which is not the arithmetic `aggregate`
 performs: it averages the four section fractions equally, over sections of
 6, 5, 8 and 4 criteria, so a criterion in the four-item plan section is worth
 twice one in the eight-item assessment section. The two readings are not
-interchangeable, and the order the tables print is the first one. What the
-second would do to that order is a number this page may not state until it
-is computed into a committed artefact.
+interchangeable, and the order the tables print is the first one. Recomputed
+item-weighted over the same notes, 11 of the 21 systems change place under
+`gemini-3.1-pro-preview` and 9 of the 21 under `gpt-5.6-terra`; the figures,
+the notes they rest on and what the rubric's own importance grading does
+instead are in `docs/weighting-<judge>.json`, from `tnb weighting`.
 
 **What decides that a criterion cannot apply.** `saturation`'s `unreachable`
 verdict, which is already in the code and already published per judge in

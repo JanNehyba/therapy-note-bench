@@ -1,0 +1,880 @@
+{
+  "built": "2026-09-13",
+  "convention": {
+    "alternatives": {
+      "0.25": {
+        "good_to_have": 0.125,
+        "highly_recommended": 0.25,
+        "mandatory": 1.0,
+        "mandatory_in_certain_circumstances": 1.0,
+        "optional": 0.0625
+      },
+      "0.5": {
+        "good_to_have": 0.25,
+        "highly_recommended": 0.5,
+        "mandatory": 1.0,
+        "mandatory_in_certain_circumstances": 1.0,
+        "optional": 0.125
+      },
+      "0.75": {
+        "good_to_have": 0.375,
+        "highly_recommended": 0.75,
+        "mandatory": 1.0,
+        "mandatory_in_certain_circumstances": 1.0,
+        "optional": 0.1875
+      }
+    },
+    "note": "The paper grades criteria; it does not weigh them. The weights are this repository's convention and the figure is published at three ratios so a reader can see how much of the order the convention decides.",
+    "ratio": 0.5,
+    "weights": {
+      "good_to_have": 0.25,
+      "highly_recommended": 0.5,
+      "mandatory": 1.0,
+      "mandatory_in_certain_circumstances": 1.0,
+      "optional": 0.125
+    }
+  },
+  "importance": {
+    "by_criterion": {
+      "assessment-analysis": "highly_recommended",
+      "assessment-diagnosis": "mandatory",
+      "assessment-goals": "highly_recommended",
+      "assessment-overall-progress": "highly_recommended",
+      "assessment-progress": "highly_recommended",
+      "assessment-response": "highly_recommended",
+      "assessment-stages": "highly_recommended",
+      "assessment-triggers": null,
+      "objective-assessment-tools": "highly_recommended",
+      "objective-behavior": "mandatory",
+      "objective-interventions": "highly_recommended",
+      "objective-mental-status": "mandatory",
+      "objective-therapy-activities": "highly_recommended",
+      "plan-adjustment": "mandatory_in_certain_circumstances",
+      "plan-follow-up": "mandatory",
+      "plan-homework": "highly_recommended",
+      "plan-interventions": "mandatory",
+      "subjective-chief-complaint": "mandatory",
+      "subjective-goals": "highly_recommended",
+      "subjective-history": "mandatory",
+      "subjective-homework": "highly_recommended",
+      "subjective-quotes": "highly_recommended",
+      "subjective-symptoms": "mandatory"
+    },
+    "levels": [
+      "mandatory",
+      "mandatory_in_certain_circumstances",
+      "highly_recommended",
+      "good_to_have",
+      "optional"
+    ],
+    "source": "Shah et al., TN-Eval, ACL 2025 Industry Track, Appendix A (definitions of SOAP note sections, pp. 190-191) and Appendix C (five importance levels, p. 191)"
+  },
+  "judge_model": "gemini-3.1-pro-preview",
+  "judge_prompt_version": "tneval-rubric-v1",
+  "judge_settings": {
+    "max_output_tokens": 288,
+    "model": "gemini-3.1-pro-preview",
+    "temperature": 0,
+    "thinking_budget": 256
+  },
+  "macro_order": [
+    "kimi-k3",
+    "qwen3.5-int4",
+    "glm-5.3",
+    "google_gemini-3.1-pro-preview",
+    "qwen3.5-122b",
+    "google_gemini-3.7-flash",
+    "glm-5",
+    "gpt-5.6-sol",
+    "glm-5.2",
+    "gpt-5.6-terra",
+    "gpt-oss-120b",
+    "gpt-5.6-luna",
+    "qwen3.8-27b",
+    "qwen3.8-flash-next",
+    "deepseek-v4-flash-thinking",
+    "gemma4",
+    "mistral-medium-3.5",
+    "deepseek-v4-flash",
+    "mistral-large-v2",
+    "llama-3.1-70b",
+    "therapist"
+  ],
+  "not_implemented": [
+    {
+      "item": "safety concerns assessed and addressed",
+      "level": "mandatory",
+      "section": "A.5"
+    },
+    {
+      "item": "culturally competent treatment",
+      "level": "highly_recommended",
+      "section": "A.5"
+    },
+    {
+      "item": "professionalism",
+      "level": "highly_recommended",
+      "section": "A.5"
+    }
+  ],
+  "note_rule": "Scores.is_complete, the table's own: all four sections of every measure. notes_used is the row's n_complete; notes_dropped is its n_partial.",
+  "rank_changes": {
+    "importance_weighted_0.25": {
+      "changes": [
+        {
+          "by": -8,
+          "macro_place": 11,
+          "place": 3,
+          "system": "gpt-oss-120b"
+        },
+        {
+          "by": 8,
+          "macro_place": 2,
+          "place": 10,
+          "system": "qwen3.5-int4"
+        },
+        {
+          "by": -4,
+          "macro_place": 16,
+          "place": 12,
+          "system": "gemma4"
+        },
+        {
+          "by": 4,
+          "macro_place": 12,
+          "place": 16,
+          "system": "gpt-5.6-luna"
+        },
+        {
+          "by": 4,
+          "macro_place": 10,
+          "place": 14,
+          "system": "gpt-5.6-terra"
+        },
+        {
+          "by": 3,
+          "macro_place": 4,
+          "place": 7,
+          "system": "google_gemini-3.1-pro-preview"
+        },
+        {
+          "by": -3,
+          "macro_place": 5,
+          "place": 2,
+          "system": "qwen3.5-122b"
+        },
+        {
+          "by": -3,
+          "macro_place": 14,
+          "place": 11,
+          "system": "qwen3.8-flash-next"
+        },
+        {
+          "by": -2,
+          "macro_place": 15,
+          "place": 13,
+          "system": "deepseek-v4-flash-thinking"
+        },
+        {
+          "by": 2,
+          "macro_place": 3,
+          "place": 5,
+          "system": "glm-5.3"
+        },
+        {
+          "by": -2,
+          "macro_place": 6,
+          "place": 4,
+          "system": "google_gemini-3.7-flash"
+        },
+        {
+          "by": -2,
+          "macro_place": 8,
+          "place": 6,
+          "system": "gpt-5.6-sol"
+        },
+        {
+          "by": 2,
+          "macro_place": 13,
+          "place": 15,
+          "system": "qwen3.8-27b"
+        },
+        {
+          "by": 1,
+          "macro_place": 7,
+          "place": 8,
+          "system": "glm-5"
+        }
+      ],
+      "moved": 14,
+      "of": 21,
+      "order": [
+        "kimi-k3",
+        "qwen3.5-122b",
+        "gpt-oss-120b",
+        "google_gemini-3.7-flash",
+        "glm-5.3",
+        "gpt-5.6-sol",
+        "google_gemini-3.1-pro-preview",
+        "glm-5",
+        "glm-5.2",
+        "qwen3.5-int4",
+        "qwen3.8-flash-next",
+        "gemma4",
+        "deepseek-v4-flash-thinking",
+        "gpt-5.6-terra",
+        "qwen3.8-27b",
+        "gpt-5.6-luna",
+        "mistral-medium-3.5",
+        "deepseek-v4-flash",
+        "mistral-large-v2",
+        "llama-3.1-70b",
+        "therapist"
+      ]
+    },
+    "importance_weighted_0.5": {
+      "changes": [
+        {
+          "by": -4,
+          "macro_place": 16,
+          "place": 12,
+          "system": "gemma4"
+        },
+        {
+          "by": 4,
+          "macro_place": 2,
+          "place": 6,
+          "system": "qwen3.5-int4"
+        },
+        {
+          "by": 3,
+          "macro_place": 12,
+          "place": 15,
+          "system": "gpt-5.6-luna"
+        },
+        {
+          "by": -3,
+          "macro_place": 5,
+          "place": 2,
+          "system": "qwen3.5-122b"
+        },
+        {
+          "by": 3,
+          "macro_place": 13,
+          "place": 16,
+          "system": "qwen3.8-27b"
+        },
+        {
+          "by": -2,
+          "macro_place": 15,
+          "place": 13,
+          "system": "deepseek-v4-flash-thinking"
+        },
+        {
+          "by": -2,
+          "macro_place": 6,
+          "place": 4,
+          "system": "google_gemini-3.7-flash"
+        },
+        {
+          "by": 1,
+          "macro_place": 7,
+          "place": 8,
+          "system": "glm-5"
+        },
+        {
+          "by": 1,
+          "macro_place": 4,
+          "place": 5,
+          "system": "google_gemini-3.1-pro-preview"
+        },
+        {
+          "by": -1,
+          "macro_place": 8,
+          "place": 7,
+          "system": "gpt-5.6-sol"
+        },
+        {
+          "by": 1,
+          "macro_place": 10,
+          "place": 11,
+          "system": "gpt-5.6-terra"
+        },
+        {
+          "by": -1,
+          "macro_place": 11,
+          "place": 10,
+          "system": "gpt-oss-120b"
+        }
+      ],
+      "moved": 12,
+      "of": 21,
+      "order": [
+        "kimi-k3",
+        "qwen3.5-122b",
+        "glm-5.3",
+        "google_gemini-3.7-flash",
+        "google_gemini-3.1-pro-preview",
+        "qwen3.5-int4",
+        "gpt-5.6-sol",
+        "glm-5",
+        "glm-5.2",
+        "gpt-oss-120b",
+        "gpt-5.6-terra",
+        "gemma4",
+        "deepseek-v4-flash-thinking",
+        "qwen3.8-flash-next",
+        "gpt-5.6-luna",
+        "qwen3.8-27b",
+        "mistral-medium-3.5",
+        "deepseek-v4-flash",
+        "mistral-large-v2",
+        "llama-3.1-70b",
+        "therapist"
+      ]
+    },
+    "importance_weighted_0.75": {
+      "changes": [
+        {
+          "by": -5,
+          "macro_place": 16,
+          "place": 11,
+          "system": "gemma4"
+        },
+        {
+          "by": 4,
+          "macro_place": 2,
+          "place": 6,
+          "system": "qwen3.5-int4"
+        },
+        {
+          "by": 2,
+          "macro_place": 13,
+          "place": 15,
+          "system": "qwen3.8-27b"
+        },
+        {
+          "by": 2,
+          "macro_place": 14,
+          "place": 16,
+          "system": "qwen3.8-flash-next"
+        },
+        {
+          "by": -1,
+          "macro_place": 15,
+          "place": 14,
+          "system": "deepseek-v4-flash-thinking"
+        },
+        {
+          "by": 1,
+          "macro_place": 7,
+          "place": 8,
+          "system": "glm-5"
+        },
+        {
+          "by": -1,
+          "macro_place": 3,
+          "place": 2,
+          "system": "glm-5.3"
+        },
+        {
+          "by": -1,
+          "macro_place": 4,
+          "place": 3,
+          "system": "google_gemini-3.1-pro-preview"
+        },
+        {
+          "by": -1,
+          "macro_place": 6,
+          "place": 5,
+          "system": "google_gemini-3.7-flash"
+        },
+        {
+          "by": 1,
+          "macro_place": 12,
+          "place": 13,
+          "system": "gpt-5.6-luna"
+        },
+        {
+          "by": -1,
+          "macro_place": 8,
+          "place": 7,
+          "system": "gpt-5.6-sol"
+        },
+        {
+          "by": 1,
+          "macro_place": 11,
+          "place": 12,
+          "system": "gpt-oss-120b"
+        },
+        {
+          "by": -1,
+          "macro_place": 5,
+          "place": 4,
+          "system": "qwen3.5-122b"
+        }
+      ],
+      "moved": 13,
+      "of": 21,
+      "order": [
+        "kimi-k3",
+        "glm-5.3",
+        "google_gemini-3.1-pro-preview",
+        "qwen3.5-122b",
+        "google_gemini-3.7-flash",
+        "qwen3.5-int4",
+        "gpt-5.6-sol",
+        "glm-5",
+        "glm-5.2",
+        "gpt-5.6-terra",
+        "gemma4",
+        "gpt-oss-120b",
+        "gpt-5.6-luna",
+        "deepseek-v4-flash-thinking",
+        "qwen3.8-27b",
+        "qwen3.8-flash-next",
+        "mistral-medium-3.5",
+        "deepseek-v4-flash",
+        "mistral-large-v2",
+        "llama-3.1-70b",
+        "therapist"
+      ]
+    },
+    "item_weighted": {
+      "changes": [
+        {
+          "by": -4,
+          "macro_place": 16,
+          "place": 12,
+          "system": "gemma4"
+        },
+        {
+          "by": 3,
+          "macro_place": 11,
+          "place": 14,
+          "system": "gpt-oss-120b"
+        },
+        {
+          "by": 3,
+          "macro_place": 2,
+          "place": 5,
+          "system": "qwen3.5-int4"
+        },
+        {
+          "by": -2,
+          "macro_place": 15,
+          "place": 13,
+          "system": "deepseek-v4-flash-thinking"
+        },
+        {
+          "by": -2,
+          "macro_place": 4,
+          "place": 2,
+          "system": "google_gemini-3.1-pro-preview"
+        },
+        {
+          "by": 2,
+          "macro_place": 13,
+          "place": 15,
+          "system": "qwen3.8-27b"
+        },
+        {
+          "by": 2,
+          "macro_place": 14,
+          "place": 16,
+          "system": "qwen3.8-flash-next"
+        },
+        {
+          "by": 1,
+          "macro_place": 9,
+          "place": 10,
+          "system": "glm-5.2"
+        },
+        {
+          "by": -1,
+          "macro_place": 12,
+          "place": 11,
+          "system": "gpt-5.6-luna"
+        },
+        {
+          "by": -1,
+          "macro_place": 10,
+          "place": 9,
+          "system": "gpt-5.6-terra"
+        },
+        {
+          "by": -1,
+          "macro_place": 5,
+          "place": 4,
+          "system": "qwen3.5-122b"
+        }
+      ],
+      "moved": 11,
+      "of": 21,
+      "order": [
+        "kimi-k3",
+        "google_gemini-3.1-pro-preview",
+        "glm-5.3",
+        "qwen3.5-122b",
+        "qwen3.5-int4",
+        "google_gemini-3.7-flash",
+        "glm-5",
+        "gpt-5.6-sol",
+        "gpt-5.6-terra",
+        "glm-5.2",
+        "gpt-5.6-luna",
+        "gemma4",
+        "deepseek-v4-flash-thinking",
+        "gpt-oss-120b",
+        "qwen3.8-27b",
+        "qwen3.8-flash-next",
+        "mistral-medium-3.5",
+        "deepseek-v4-flash",
+        "mistral-large-v2",
+        "llama-3.1-70b",
+        "therapist"
+      ]
+    }
+  },
+  "systems": {
+    "deepseek-v4-flash": {
+      "by_level": {
+        "highly_recommended": 0.3076923076923077,
+        "mandatory": 0.7,
+        "mandatory_in_certain_circumstances": 0.04
+      },
+      "importance_weighted": {
+        "0.25": 0.5420408163265306,
+        "0.5": 0.49290322580645163,
+        "0.75": 0.4608
+      },
+      "item_weighted": 0.4356521739130435,
+      "macro": 0.44466666666666665,
+      "notes_dropped": 0,
+      "notes_used": 50
+    },
+    "deepseek-v4-flash-thinking": {
+      "by_level": {
+        "highly_recommended": 0.328525641025641,
+        "mandatory": 0.7317708333333334,
+        "mandatory_in_certain_circumstances": 0.08333333333333333
+      },
+      "importance_weighted": {
+        "0.25": 0.5718537414965986,
+        "0.5": 0.5208333333333334,
+        "0.75": 0.4875
+      },
+      "item_weighted": 0.46648550724637683,
+      "macro": 0.4731770833333333,
+      "notes_dropped": 2,
+      "notes_used": 48
+    },
+    "gemma4": {
+      "by_level": {
+        "highly_recommended": 0.34294871794871795,
+        "mandatory": 0.7317708333333334,
+        "mandatory_in_certain_circumstances": 0.041666666666666664
+      },
+      "importance_weighted": {
+        "0.25": 0.5722789115646258,
+        "0.5": 0.5241935483870968,
+        "0.75": 0.49277777777777776
+      },
+      "item_weighted": 0.47101449275362317,
+      "macro": 0.4724392361111111,
+      "notes_dropped": 2,
+      "notes_used": 48
+    },
+    "glm-5": {
+      "by_level": {
+        "highly_recommended": 0.38461538461538464,
+        "mandatory": 0.7275,
+        "mandatory_in_certain_circumstances": 0.08
+      },
+      "importance_weighted": {
+        "0.25": 0.5836734693877551,
+        "0.5": 0.5419354838709678,
+        "0.75": 0.5146666666666667
+      },
+      "item_weighted": 0.4991304347826087,
+      "macro": 0.504,
+      "notes_dropped": 0,
+      "notes_used": 50
+    },
+    "glm-5.2": {
+      "by_level": {
+        "highly_recommended": 0.37846153846153846,
+        "mandatory": 0.73,
+        "mandatory_in_certain_circumstances": 0.08
+      },
+      "importance_weighted": {
+        "0.25": 0.5836734693877551,
+        "0.5": 0.5406451612903226,
+        "0.75": 0.5125333333333333
+      },
+      "item_weighted": 0.4930434782608696,
+      "macro": 0.5000833333333333,
+      "notes_dropped": 0,
+      "notes_used": 50
+    },
+    "glm-5.3": {
+      "by_level": {
+        "highly_recommended": 0.44189852700491,
+        "mandatory": 0.7313829787234043,
+        "mandatory_in_certain_circumstances": 0.0425531914893617
+      },
+      "importance_weighted": {
+        "0.25": 0.598349978289188,
+        "0.5": 0.5655456417295813,
+        "0.75": 0.544113475177305
+      },
+      "item_weighted": 0.5309898242368177,
+      "macro": 0.5351507092198582,
+      "notes_dropped": 3,
+      "notes_used": 47
+    },
+    "google_gemini-3.1-pro-preview": {
+      "by_level": {
+        "highly_recommended": 0.45682888540031397,
+        "mandatory": 0.6989795918367347,
+        "mandatory_in_certain_circumstances": 0.08163265306122448
+      },
+      "importance_weighted": {
+        "0.25": 0.5843398583923365,
+        "0.5": 0.5576036866359447,
+        "0.75": 0.5401360544217687
+      },
+      "item_weighted": 0.5314995563442768,
+      "macro": 0.5341411564625851,
+      "notes_dropped": 1,
+      "notes_used": 49
+    },
+    "google_gemini-3.7-flash": {
+      "by_level": {
+        "highly_recommended": 0.42,
+        "mandatory": 0.7325,
+        "mandatory_in_certain_circumstances": 0.12
+      },
+      "importance_weighted": {
+        "0.25": 0.5995918367346939,
+        "0.5": 0.5619354838709677,
+        "0.75": 0.5373333333333333
+      },
+      "item_weighted": 0.52,
+      "macro": 0.5264583333333334,
+      "notes_dropped": 0,
+      "notes_used": 50
+    },
+    "gpt-5.6-luna": {
+      "by_level": {
+        "highly_recommended": 0.3553846153846154,
+        "mandatory": 0.7025,
+        "mandatory_in_certain_circumstances": 0.1
+      },
+      "importance_weighted": {
+        "0.25": 0.5612244897959183,
+        "0.5": 0.5180645161290323,
+        "0.75": 0.4898666666666667
+      },
+      "item_weighted": 0.47304347826086957,
+      "macro": 0.48162499999999997,
+      "notes_dropped": 0,
+      "notes_used": 50
+    },
+    "gpt-5.6-sol": {
+      "by_level": {
+        "highly_recommended": 0.37980769230769235,
+        "mandatory": 0.734375,
+        "mandatory_in_certain_circumstances": 0.08333333333333333
+      },
+      "importance_weighted": {
+        "0.25": 0.5871598639455783,
+        "0.5": 0.5436827956989247,
+        "0.75": 0.5152777777777778
+      },
+      "item_weighted": 0.4954710144927536,
+      "macro": 0.5019097222222222,
+      "notes_dropped": 2,
+      "notes_used": 48
+    },
+    "gpt-5.6-terra": {
+      "by_level": {
+        "highly_recommended": 0.3861852433281005,
+        "mandatory": 0.701530612244898,
+        "mandatory_in_certain_circumstances": 0.10204081632653061
+      },
+      "importance_weighted": {
+        "0.25": 0.5689296126613911,
+        "0.5": 0.5306122448979592,
+        "0.75": 0.505578231292517
+      },
+      "item_weighted": 0.4933451641526176,
+      "macro": 0.497406462585034,
+      "notes_dropped": 1,
+      "notes_used": 49
+    },
+    "gpt-oss-120b": {
+      "by_level": {
+        "highly_recommended": 0.2795497185741088,
+        "mandatory": 0.8079268292682927,
+        "mandatory_in_certain_circumstances": 0.024390243902439025
+      },
+      "importance_weighted": {
+        "0.25": 0.6037829766052762,
+        "0.5": 0.5357985837922895,
+        "0.75": 0.4913821138211382
+      },
+      "item_weighted": 0.464475079533404,
+      "macro": 0.4821138211382114,
+      "notes_dropped": 1,
+      "notes_used": 41
+    },
+    "kimi-k3": {
+      "by_level": {
+        "highly_recommended": 0.45054945054945056,
+        "mandatory": 0.7525510204081632,
+        "mandatory_in_certain_circumstances": 0.061224489795918366
+      },
+      "importance_weighted": {
+        "0.25": 0.6159933361099542,
+        "0.5": 0.5813034891375906,
+        "0.75": 0.5586394557823129
+      },
+      "item_weighted": 0.5456965394853593,
+      "macro": 0.5502551020408163,
+      "notes_dropped": 1,
+      "notes_used": 49
+    },
+    "llama-3.1-70b": {
+      "by_level": {
+        "highly_recommended": 0.18923076923076923,
+        "mandatory": 0.665,
+        "mandatory_in_certain_circumstances": 0.02
+      },
+      "importance_weighted": {
+        "0.25": 0.48612244897959184,
+        "0.5": 0.4238709677419355,
+        "0.75": 0.3832
+      },
+      "item_weighted": 0.35304347826086957,
+      "macro": 0.3637083333333333,
+      "notes_dropped": 0,
+      "notes_used": 50
+    },
+    "mistral-large-v2": {
+      "by_level": {
+        "highly_recommended": 0.22,
+        "mandatory": 0.68,
+        "mandatory_in_certain_circumstances": 0.02
+      },
+      "importance_weighted": {
+        "0.25": 0.5040816326530613,
+        "0.5": 0.44451612903225807,
+        "0.75": 0.4056
+      },
+      "item_weighted": 0.37565217391304345,
+      "macro": 0.38795833333333335,
+      "notes_dropped": 0,
+      "notes_used": 50
+    },
+    "mistral-medium-3.5": {
+      "by_level": {
+        "highly_recommended": 0.2876923076923077,
+        "mandatory": 0.7275,
+        "mandatory_in_certain_circumstances": 0.08
+      },
+      "importance_weighted": {
+        "0.25": 0.5579591836734694,
+        "0.5": 0.5012903225806452,
+        "0.75": 0.46426666666666666
+      },
+      "item_weighted": 0.44173913043478263,
+      "macro": 0.4569583333333333,
+      "notes_dropped": 0,
+      "notes_used": 50
+    },
+    "qwen3.5-122b": {
+      "by_level": {
+        "highly_recommended": 0.40865384615384615,
+        "mandatory": 0.75,
+        "mandatory_in_certain_circumstances": 0.125
+      },
+      "importance_weighted": {
+        "0.25": 0.6084183673469388,
+        "0.5": 0.5665322580645161,
+        "0.75": 0.5391666666666667
+      },
+      "item_weighted": 0.5235507246376812,
+      "macro": 0.5289930555555555,
+      "notes_dropped": 2,
+      "notes_used": 48
+    },
+    "qwen3.5-int4": {
+      "by_level": {
+        "highly_recommended": 0.4430769230769231,
+        "mandatory": 0.69,
+        "mandatory_in_certain_circumstances": 0.16
+      },
+      "importance_weighted": {
+        "0.25": 0.5812244897959183,
+        "0.5": 0.552258064516129,
+        "0.75": 0.5333333333333333
+      },
+      "item_weighted": 0.5208695652173913,
+      "macro": 0.53575,
+      "notes_dropped": 0,
+      "notes_used": 50
+    },
+    "qwen3.8-27b": {
+      "by_level": {
+        "highly_recommended": 0.3281004709576138,
+        "mandatory": 0.7244897959183674,
+        "mandatory_in_certain_circumstances": 0.061224489795918366
+      },
+      "importance_weighted": {
+        "0.25": 0.5651811745106206,
+        "0.5": 0.5154707044107966,
+        "0.75": 0.48299319727891155
+      },
+      "item_weighted": 0.4622892635314996,
+      "macro": 0.47750850340136053,
+      "notes_dropped": 1,
+      "notes_used": 49
+    },
+    "qwen3.8-flash-next": {
+      "by_level": {
+        "highly_recommended": 0.3092948717948718,
+        "mandatory": 0.7473958333333334,
+        "mandatory_in_certain_circumstances": 0.041666666666666664
+      },
+      "importance_weighted": {
+        "0.25": 0.5735544217687074,
+        "0.5": 0.5181451612903226,
+        "0.75": 0.48194444444444445
+      },
+      "item_weighted": 0.4601449275362319,
+      "macro": 0.47660590277777776,
+      "notes_dropped": 0,
+      "notes_used": 48
+    },
+    "therapist": {
+      "by_level": {
+        "highly_recommended": 0.3142389525368249,
+        "mandatory": 0.4175531914893617,
+        "mandatory_in_certain_circumstances": 0.06382978723404255
+      },
+      "importance_weighted": {
+        "0.25": 0.3612679114198871,
+        "0.5": 0.3514070006863418,
+        "0.75": 0.3449645390070922
+      },
+      "item_weighted": 0.333950046253469,
+      "macro": 0.32531028368794324,
+      "notes_dropped": 3,
+      "notes_used": 47
+    }
+  },
+  "unlabelled": [
+    "assessment-triggers"
+  ]
+}

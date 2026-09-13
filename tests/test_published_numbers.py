@@ -364,6 +364,25 @@ def _judge_panel_instruments() -> tuple[float, ...]:
     )
 
 
+def _item_weighting_moves() -> tuple[float, ...]:
+    """Systems that change place item-weighted, and systems, per judge.
+
+    Read from docs/weighting-<judge>.json, the artefact `tnb weighting` writes
+    over the notes the table averages. Until 2026-09-13 the only version of
+    this figure was a remark in a docstring ("seven of nineteen"), which no test
+    could reach; the page said so and withheld it. Now it is computed.
+    """
+    from tnb.scoring import weighting
+
+    out: list[float] = []
+    for judge_model in ("gemini-3.1-pro-preview", "gpt-5.6-terra"):
+        found = weighting.load(judge_model)
+        assert found is not None, f"no weighting artefact for {judge_model}"
+        change = found["rank_changes"]["item_weighted"]
+        out += [float(change["moved"]), float(change["of"])]
+    return tuple(out)
+
+
 def _completeness_denominators() -> tuple[float, ...]:
     """The four SOAP section sizes the completeness mean is taken over, then their sum.
 
@@ -563,6 +582,20 @@ CLAIMS = (
         ),
         covers=("5", "2", "4", "7", "one"),
         expected=_judge_panel_instruments,
+    ),
+    Claim(
+        where="docs/limitations.md",
+        phrase=(
+            "11 of the 21 systems change place under `gemini-3.1-pro-preview` and 9 of "
+            "the 21 under `gpt-5.6-terra`"
+        ),
+        kind="computed",
+        because=(
+            "the page withheld this figure until it existed as an artefact; it now "
+            "does, and the sentence may not outlive the file it is read from"
+        ),
+        covers=("11", "21", "9", "21"),
+        expected=_item_weighting_moves,
     ),
     Claim(
         where="docs/limitations.md",
