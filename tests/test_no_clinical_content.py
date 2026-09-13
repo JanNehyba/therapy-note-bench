@@ -47,22 +47,15 @@ DIACRITIC = re.compile(
     "\u011a\u0160\u010c\u0158\u017d\u00dd\u00c1\u00cd\u00c9\u00da\u016e\u0147\u0164\u010e]"
 )
 
-#: Files that may contain Czech. Empty, and that is the point.
-#:
-#: This list held twenty-five paths on 2026-09-03 and twenty-four of them named
-#: a file that is not in this repository: a Czech *scoring* track -- notes
-#: written and judged in Czech -- which lives in a sibling project and never
-#: landed here. The test below skipped them as "not written yet; the entry is a
-#: decision made in advance", so the allow-list read as though this repository
-#: handled Czech clinical text. It does not, and an open door nobody walks
-#: through still has to be shut: the twenty-fifth was a table of Czech numerals
-#: used by two registered sentences that were themselves removed with the
-#: translated pages.
-#:
-#: **The rule is now absolute.** No tracked file in this repository may contain
-#: Czech, and `test_no_tracked_file_carries_czech` says so with nothing to
-#: except.
-ALLOWED_CZECH: dict[str, str] = {}
+# Gen-2 explicitly introduces authored Czech task instructions, interface labels
+# and wholly synthetic controls. These exact files contain no patient material.
+# Real transcripts and every derived QA/evidence artifact stay gitignored.
+CORE = "packages/therapy-note-eval-core/src/therapy_note_eval/"
+ALLOWED_CZECH: dict[str, str] = {
+    CORE + "profiles.py": "Original bilingual profile instructions",
+    CORE + "review.js": "Original Czech annotation interface labels",
+    CORE + "controls.py": "SYNTHETIC-FIXTURE: invented bilingual challenge cases",
+}
 
 #: What every file under ``tests/fixtures/czech`` must say about itself. The
 #: allow-list above opens a door; this is what stops a real transcript walking
@@ -123,7 +116,7 @@ RECORD_NUMBER = re.compile(r"\d{4,}")
 def tracked_files() -> list[Path]:
     """Every file git would publish. Ignored files are not this test's business."""
     result = subprocess.run(
-        ["git", "ls-files", "-z"],
+        ["git", "ls-files", "--cached", "--others", "--exclude-standard", "-z"],
         cwd=REPO_ROOT,
         capture_output=True,
         text=True,
@@ -148,16 +141,9 @@ def _relative(path: Path) -> str:
 # --- the broad net ---------------------------------------------------------
 
 
-def test_no_tracked_file_carries_czech(tracked_files):
-    """The rule, with nothing to except.
-
-    `ALLOWED_CZECH` is empty and this asserts it, so re-opening the door is a
-    visible act in a diff rather than one line added to a list of twenty-five.
-    """
-    assert not ALLOWED_CZECH, (
-        "the Czech allow-list has entries again; every one of them is a file "
-        "this repository promises not to hold"
-    )
+def test_czech_exceptions_are_only_authored_gen2_resources(tracked_files):
+    assert set(ALLOWED_CZECH) == {CORE + f for f in ("profiles.py", "review.js", "controls.py")}
+    assert FIXTURE_MARKER in (REPO_ROOT / CORE / "controls.py").read_text(encoding="utf-8")
 
 
 def test_only_named_files_contain_czech(tracked_files):
@@ -213,6 +199,28 @@ def test_the_published_surface_carries_no_czech_at_all():
         if text is None:
             continue
         assert not DIACRITIC.search(text), f"{name} contains Czech text"
+
+
+def test_no_local_clinical_fragments_in_publishable_files(tracked_files):
+    from therapy_note_eval.privacy import find_fragments, load_local_fingerprints
+
+    sources = load_local_fingerprints(
+        [
+            REPO_ROOT / "data/czech/anonymised",
+            REPO_ROOT / "local/gen2-cs-pilot/cases",
+        ]
+    )
+    if not sources:
+        pytest.skip("Local clinical corpus unavailable; synthetic scanner tests still run")
+    offenders = []
+    for path in tracked_files:
+        content = _readable_text(path)
+        if content:
+            matches = find_fragments(content, sources)
+            if matches:
+                offenders.append((_relative(path), matches))
+    # No exemptions for authored Czech resources: every publishable file is scanned.
+    assert not offenders, f"Clinical fragments: file and source digests only: {offenders}"
 
 
 def _inlined(page: str, marker: str):
