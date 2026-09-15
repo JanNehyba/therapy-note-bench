@@ -61,10 +61,12 @@ def store(workspace):
 
 
 @pytest.fixture(autouse=True)
-def _staged_corpus_profile(monkeypatch, tmp_path):
+def _staged_corpus_profile(monkeypatch, tmp_path_factory):
     from tnb import corpus
 
-    staged = tmp_path / "corpus-profile.json"
+    # Its own directory, not the test's tmp_path: a test that globs every JSON
+    # file under its tmp_path must not find the profile among its own records.
+    staged = tmp_path_factory.mktemp("corpus-profile") / "corpus-profile.json"
     if corpus.PROFILE_PATH.exists():
         staged.write_bytes(corpus.PROFILE_PATH.read_bytes())
     monkeypatch.setattr(corpus, "PROFILE_PATH", staged)
