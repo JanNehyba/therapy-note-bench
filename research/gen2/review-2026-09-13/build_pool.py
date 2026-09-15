@@ -164,7 +164,7 @@ def main() -> None:
             )
 
     records = list(pool.values())
-    POOL.write_text(json.dumps(records, indent=1, ensure_ascii=False), encoding="utf-8")
+    POOL.write_bytes((json.dumps(records, indent=1, ensure_ascii=False) + "\n").encode("utf-8"))
     summary = {
         "records_per_query_before_dedup": per_query,
         "sum_before_dedup": sum(per_query.values()),
@@ -195,9 +195,7 @@ def main() -> None:
         "pool_file": str(POOL),
         "pool_sha256": hashlib.sha256(POOL.read_bytes()).hexdigest(),
     }
-    (ROOT / "pool-summary.json").write_text(
-        json.dumps(summary, indent=2, ensure_ascii=False), encoding="utf-8"
-    )
+    (ROOT / "pool-summary.json").write_bytes((json.dumps(summary, indent=2, ensure_ascii=False) + "\n").encode("utf-8"))
     print(json.dumps(summary, indent=2, ensure_ascii=False))
 
 

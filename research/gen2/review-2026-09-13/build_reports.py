@@ -270,9 +270,7 @@ def build(
         "families": mapping["families"],
         "reports": reports,
         "diagnostics": diagnostics,
-        "derived_from": {
-            name: hashlib.sha256((root / name).read_bytes()).hexdigest() for name in INPUTS
-        },
+        "derived_from": {name: ledger.sha256_file(root / name) for name in INPUTS},
         "corrections": [],
     }
     ledger.recount(out)

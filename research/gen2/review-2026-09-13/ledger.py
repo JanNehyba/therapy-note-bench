@@ -65,7 +65,13 @@ _SHA = re.compile(r"^[0-9a-f]{64}$")
 
 
 def sha256_file(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    """The digest of a text file with line endings normalised to LF.
+
+    Git stores these files with LF; a Windows checkout may hold them with CRLF.
+    Hashing the raw bytes made the ledger's input digests depend on the
+    checkout rather than on the content.
+    """
+    return hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
 
 
 def live_events(events: list[dict]) -> list[dict]:

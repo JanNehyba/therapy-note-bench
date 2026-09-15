@@ -3216,9 +3216,9 @@
  "derived_from": {
   "report-map.json": "f6c1d28aa4ff46b5d93f57dec9430630aca792902267d9eb854332bc465e04d4",
   "fulltext-retrieval-log.json": "52ddeaedfdda580148007182ec7d0c78c4e1dd1450704dc8c736199418133611",
-  "screening-decisions.json": "f75151944ad5b6b76bcd167eeef5005b52a10493d8c1935b6bb6c1ee886e2a9f",
-  "screening-strata.json": "e9f86385a2bb5aed13f8e09135d7df667a37d9c497e2e771a259f2505c5ae3e4",
-  "pool-summary.json": "d7bc88759763377ed06f6c183ef6a863afce200f424f5fa6b93f1392dfcb82ce"
+  "screening-decisions.json": "2f98644de1101880fe54fa705b3cf7ece932803e07b51d56be35e96bbd145a80",
+  "screening-strata.json": "7f5cec8ab7f51c80bba97ceb1e359ff68b9ad7e39122c8211606d14a7e7bf21b",
+  "pool-summary.json": "a1ded470c9d7956637a4476564c730887cfc9c3c1d5314fc54f0da15050c0cb3"
  },
  "corrections": [],
  "counts": {

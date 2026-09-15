@@ -148,7 +148,7 @@ def test_every_log_row_is_a_primary_event_exactly_once(reports):
 
 def test_derived_from_digests_match(reports):
     for name, digest in reports["derived_from"].items():
-        assert hashlib.sha256((REVIEW / name).read_bytes()).hexdigest() == digest, name
+        assert ledger.sha256_file(REVIEW / name) == digest, name
 
 
 def test_reports_equals_the_builder_output(reports):
@@ -197,7 +197,7 @@ def test_flow_equals_the_generator_output(flow):
     rebuilt = build_flow.build(*(build_flow.read(name) for name in build_flow.INPUTS))
     assert rebuilt == flow
     for name, digest in flow["derived_from"].items():
-        assert hashlib.sha256((REVIEW / name).read_bytes()).hexdigest() == digest, name
+        assert ledger.sha256_file(REVIEW / name) == digest, name
 
 
 def test_flow_full_text_is_report_level(flow, reports):
@@ -257,7 +257,7 @@ def test_fetch_appends_to_the_map_and_rebuilds_the_ledger_not_the_log(tmp_path):
     builder reproduces it; the 2026-09-13 log stays byte-identical, and a
     later failure does not revert an earlier success."""
     copy = _review_copy(tmp_path)
-    log_digest = hashlib.sha256((copy / "fulltext-retrieval-log.json").read_bytes()).hexdigest()
+    log_digest = ledger.sha256_file(copy / "fulltext-retrieval-log.json")
     s5 = "doi:10.1197/jamia.m2404"
 
     def found(report):
@@ -283,8 +283,7 @@ def test_fetch_appends_to_the_map_and_rebuilds_the_ledger_not_the_log(tmp_path):
     assert rebuilt == json.loads((copy / "reports.json").read_text(encoding="utf-8"))
     flow = json.loads((copy / "flow.json").read_text(encoding="utf-8"))
     assert flow["full_text"]["catalog_reports"]["retrieved"] == 19
-    digest = hashlib.sha256((copy / "fulltext-retrieval-log.json").read_bytes()).hexdigest()
-    assert digest == log_digest
+    assert ledger.sha256_file(copy / "fulltext-retrieval-log.json") == log_digest
 
     def gone(report):
         return None, "attempted: publisher (403)", "publisher", ""

@@ -168,9 +168,7 @@ def main() -> None:
         "exclude_candidates_detail": excluded_priority,
         "not_screened_detail": not_screened,
     }
-    (ROOT / "screening-decisions.json").write_text(
-        json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8"
-    )
+    (ROOT / "screening-decisions.json").write_bytes((json.dumps(payload, indent=2, ensure_ascii=False) + "\n").encode("utf-8"))
     print(f"include candidates: {len(included)}")
     print(f"exclude candidates (priority stratum): {len(excluded_priority)}")
     print(f"not screened (entered the stratum after the screen): {len(not_screened)}")

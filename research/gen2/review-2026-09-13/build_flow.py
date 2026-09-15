@@ -13,11 +13,14 @@ flow.json to this generator's output, so a hand edit fails the suite.
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
+sys.path.insert(0, str(ROOT))
+import ledger  # noqa: E402
+
 INPUTS = (
     "reports.json",
     "pool-summary.json",
@@ -258,9 +261,7 @@ def build(
         },
         "caveat": recorded["caveat"],
         "corrections": recorded["corrections"],
-        "derived_from": {
-            name: hashlib.sha256((root / name).read_bytes()).hexdigest() for name in INPUTS
-        },
+        "derived_from": {name: ledger.sha256_file(root / name) for name in INPUTS},
     }
     return flow
 

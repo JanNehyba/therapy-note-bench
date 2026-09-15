@@ -124,12 +124,8 @@ def main() -> None:
     rng = random.Random(20260913)
     audit = rng.sample(remainder, min(200, len(remainder)))
 
-    (EXPORTS / "screen-priority.json").write_text(
-        json.dumps(priority, indent=1, ensure_ascii=False), encoding="utf-8"
-    )
-    (EXPORTS / "screen-audit-sample.json").write_text(
-        json.dumps(audit, indent=1, ensure_ascii=False), encoding="utf-8"
-    )
+    (EXPORTS / "screen-priority.json").write_bytes((json.dumps(priority, indent=1, ensure_ascii=False) + "\n").encode("utf-8"))
+    (EXPORTS / "screen-audit-sample.json").write_bytes((json.dumps(audit, indent=1, ensure_ascii=False) + "\n").encode("utf-8"))
 
     dist: dict[int, int] = {}
     for r in records:
@@ -163,9 +159,7 @@ def main() -> None:
             (EXPORTS / "screen-audit-sample.json").read_bytes()
         ).hexdigest(),
     }
-    (ROOT / "screening-strata.json").write_text(
-        json.dumps(summary, indent=2, ensure_ascii=False), encoding="utf-8"
-    )
+    (ROOT / "screening-strata.json").write_bytes((json.dumps(summary, indent=2, ensure_ascii=False) + "\n").encode("utf-8"))
     print(
         f"pool={len(records)} priority={len(priority)} remainder={len(remainder)} audit={len(audit)}"
     )
