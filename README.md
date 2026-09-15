@@ -40,6 +40,9 @@ rather than a second benchmark.
 
 ## Experimental Gen-2
 
+The [repository audit and repair plan](docs/audit-and-repair-plan-2026-09-15.md)
+records the current research, implementation and integration gaps and their repair order.
+
 [Gen-2](docs/gen2.md) uses a separate shared Python core for English and Czech
 notes, with distinct purposes for continuity, supervision, client communication
 and documentation audit. Software 0.3.0 / gen2-v3 preserves exact research and

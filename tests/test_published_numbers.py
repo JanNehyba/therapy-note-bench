@@ -71,6 +71,7 @@ DOCS = REPO_ROOT / "docs"
 DOCUMENTS = (
     "docs/gen2.md",
     "docs/incidents.md",
+    "docs/audit-and-repair-plan-2026-09-15.md",
     "docs/datasets.md",
     "docs/landscape.md",
     "docs/limitations.md",
@@ -1234,6 +1235,11 @@ UNACCOUNTED = {
     # Written 2026-09-14 with every figure registered: a record of data events
     # is the last place a bare number belongs.
     "docs/incidents.md": 0,
+    # Registered 2026-09-15 at its opening count. An audit backlog is a log of
+    # one inspection: its counts (records screened, tests passed, directories
+    # found) describe that day and are not claims that can go stale, so each is
+    # not registered on its own. Repairs may lower the number, never raise it.
+    "docs/audit-and-repair-plan-2026-09-15.md": 55,
     # Four budgets lowered on 2026-09-01, when the Czech branch left this
     # repository and took its sections of these documents with it. The debt
     # did not get paid; the documents got shorter.
