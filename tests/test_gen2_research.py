@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-import uuid
 from dataclasses import replace
 from pathlib import Path
 
@@ -38,16 +37,7 @@ from therapy_note_eval.schema import (
     digest,
     plain,
 )
-from therapy_note_eval.storage import Budget, Runner, Store
-
-
-@pytest.fixture
-def store():
-    path = (
-        Path(__file__).resolve().parents[1] / "local" / ("gen2-research-test-" + uuid.uuid4().hex)
-    )
-    path.mkdir(mode=0o777, parents=True)
-    return Store(path)
+from therapy_note_eval.storage import Budget, Runner
 
 
 def response(review):

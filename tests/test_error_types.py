@@ -11,24 +11,15 @@ aggregation version this changed is owned in one place.
 
 from __future__ import annotations
 
-import uuid
 from dataclasses import replace
 from pathlib import Path
 
-import pytest
 from therapy_note_eval import controls, metrics, report
 from therapy_note_eval.privacy import public_report
 from therapy_note_eval.schema import AGGREGATION_VERSION, ERROR_TYPES, Manifest, decode, digest
 from therapy_note_eval.storage import Store
 
 REPO = Path(__file__).resolve().parents[1]
-
-
-@pytest.fixture
-def workspace():
-    path = REPO / "local" / ("gen2-test-" + uuid.uuid4().hex)
-    path.mkdir(parents=True, mode=0o777)
-    return path
 
 
 def _measured(variant: str = "clean"):

@@ -11,7 +11,6 @@ as a value; the public form carries no free text.
 from __future__ import annotations
 
 import json
-import uuid
 from pathlib import Path
 
 import pytest
@@ -22,15 +21,6 @@ from therapy_note_eval.schema import ValidationError
 from therapy_note_eval.storage import Store
 
 REPO = Path(__file__).resolve().parents[1]
-
-
-@pytest.fixture
-def workspace():
-    # Same shape as tests/test_gen2.py: Store refuses a root that is not under
-    # local/ and gitignored, so tmp_path cannot be used.
-    path = REPO / "local" / ("gen2-test-" + uuid.uuid4().hex)
-    path.mkdir(parents=True, mode=0o777)
-    return path
 
 
 def _pair(store: Store, profile: str) -> tuple[str, str]:

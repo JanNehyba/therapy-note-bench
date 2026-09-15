@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-import uuid
 from dataclasses import replace
 from pathlib import Path
 
@@ -27,15 +26,6 @@ from therapy_note_eval.schema import (
 from therapy_note_eval.storage import Budget, Runner, Store
 
 REPO = Path(__file__).resolve().parents[1]
-
-
-@pytest.fixture
-def workspace():
-    # Python 3.13's Windows mode=700 changes the ACL in this runner. New test
-    # directories inherit the already-private workspace ACL instead.
-    path = REPO / "local" / ("gen2-test-" + uuid.uuid4().hex)
-    path.mkdir(parents=True, mode=0o777)
-    return path
 
 
 class ScriptedBackend:
