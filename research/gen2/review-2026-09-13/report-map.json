@@ -1,0 +1,2377 @@
+{
+ "version": "report-map-v1",
+ "ledger_date": "2026-09-15",
+ "note": "The recorded half of the ledger. Which report each retrieval-log slug belongs to, how each report entered the review, its identifiers and pool position, and the retrieval events the log never held. Human decisions are not recorded here and the builder never invents one.",
+ "log_row_route_kinds": {
+  "tn-eval": "direct_url",
+  "icare-ihope": "open_access_api",
+  "pdsqi-9": "open_access_api",
+  "pdqi-9-prelim": "open_access_api",
+  "pdqi-9-validation": "open_access_api",
+  "pdqi-9-negative-ed": "open_access_api",
+  "mentalclouds": "open_access_api",
+  "questeval": "direct_url",
+  "qafacteval": "direct_url",
+  "factscore": "direct_url",
+  "cosmin-content-validity": "open_access_api",
+  "boateng-scale-development": "open_access_api",
+  "psychres-2026": "open_access_api",
+  "atzil-jmir-summaries": "open_access_api",
+  "atzil-automation-framework": "open_access_api",
+  "psychres-2026-pdf": "investigator_supplied",
+  "mind-coding-manual": "repository",
+  "mind-supplementary": "repository",
+  "apa-record-keeping-2007": "publisher",
+  "cz-vyhlaska-444-2024": "web_page"
+ },
+ "log_row_times": {
+  "tn-eval": {
+   "time": "11:21",
+   "date_source": "local file mtime"
+  },
+  "icare-ihope": {
+   "time": "11:21",
+   "date_source": "local file mtime"
+  },
+  "pdsqi-9": {
+   "time": "11:22",
+   "date_source": "local file mtime"
+  },
+  "pdqi-9-validation": {
+   "time": "11:22",
+   "date_source": "local file mtime"
+  },
+  "pdqi-9-negative-ed": {
+   "time": "11:29",
+   "date_source": "local file mtime"
+  },
+  "mentalclouds": {
+   "time": "11:22",
+   "date_source": "local file mtime"
+  },
+  "questeval": {
+   "time": "11:23",
+   "date_source": "local file mtime"
+  },
+  "qafacteval": {
+   "time": "11:23",
+   "date_source": "local file mtime"
+  },
+  "factscore": {
+   "time": "11:23",
+   "date_source": "local file mtime"
+  },
+  "cosmin-content-validity": {
+   "time": "11:23",
+   "date_source": "local file mtime"
+  },
+  "boateng-scale-development": {
+   "time": "11:23",
+   "date_source": "local file mtime"
+  },
+  "atzil-jmir-summaries": {
+   "time": "14:01",
+   "date_source": "local file mtime"
+  },
+  "atzil-automation-framework": {
+   "time": "14:03",
+   "date_source": "local file mtime"
+  },
+  "psychres-2026-pdf": {
+   "time": "16:10",
+   "date_source": "local file mtime"
+  },
+  "mind-coding-manual": {
+   "time": "16:24",
+   "date_source": "local file mtime"
+  },
+  "mind-supplementary": {
+   "time": "16:24",
+   "date_source": "local file mtime"
+  },
+  "apa-record-keeping-2007": {
+   "time": "11:27",
+   "date_source": "local file mtime"
+  },
+  "cz-vyhlaska-444-2024": {
+   "time": "11:27",
+   "date_source": "local file mtime"
+  },
+  "pdqi-9-prelim": {
+   "time": "11:22",
+   "date_source": "local file mtime of the saved landing shell"
+  },
+  "psychres-2026": {
+   "time": "13:59",
+   "date_source": "mtime of the retrieval script written for the attempt (local work/try_fulltext.py)"
+  },
+  "pdqi-9-negative-ed#correction": {
+   "time": "11:23",
+   "date_source": "fetch run of 2026-09-13; the wrong file was overwritten and its time is not recorded"
+  }
+ },
+ "log_row_file_fill": {
+  "atzil-jmir-summaries": {
+   "file": "atzil-jmir-summaries.xml",
+   "bytes": 122605,
+   "sha256": "6c71be9e47c453bf586093fe9c30dc8bf3017a14b5d77700872c71853249f397"
+  },
+  "atzil-automation-framework": {
+   "file": "atzil-automation-framework.pdf",
+   "bytes": 896111,
+   "sha256": "d70e8fd04c741209ebd6277f6e7e9af9e3c0e3f69249184b7b5e3acfb6d2c517"
+  }
+ },
+ "log_row_bytes_measured": {
+  "pdqi-9-negative-ed": 187388
+ },
+ "flow_v1_errors": [
+  "S4 was listed under search and screening although it is not in the pool",
+  "S19 was counted as not retrieved after its PDF had been logged as retrieved",
+  "retrieval attempts were counted as reports",
+  "the two Atzil rows were retrieved without a recorded file or checksum",
+  "S15, S16 and S17 were read and never logged"
+ ],
+ "audit_sample_drift": "screen-audit-sample.json on disk was regenerated after the BibTeX parser fix; only one of the six clearly eligible titles hard-coded in screen.py is in the current sample; the recorded audit_sha256 is that of the new file",
+ "families": [
+  {
+   "family_id": "tn-eval",
+   "label": "TN-Eval rubric and protocols",
+   "kind": "single_report",
+   "members": [
+    "doi:10.18653/v1/2025.acl-industry.14"
+   ],
+   "sample_overlap": "not_applicable",
+   "overlap_basis": null,
+   "assessed_by": null
+  },
+  {
+   "family_id": "pdqi-pdsqi",
+   "label": "PDQI-9 / PDSQI-9 instrument lineage",
+   "kind": "instrument_lineage",
+   "members": [
+    "doi:10.1093/jamia/ocaf068",
+    "doi:10.4338/aci-2011-11-ra-0070",
+    "doi:10.1197/jamia.m2404",
+    "doi:10.4338/aci2017050080"
+   ],
+   "sample_overlap": "not_assessed",
+   "overlap_basis": "one instrument developed and validated across four reports by different groups; rater samples differ; independence of findings not assessed",
+   "assessed_by": null
+  },
+  {
+   "family_id": "icare-ihope",
+   "label": "iCARE framework and iHOPE corpus",
+   "kind": "single_report",
+   "members": [
+    "doi:10.1101/2025.06.25.25330252"
+   ],
+   "sample_overlap": "not_applicable",
+   "overlap_basis": null,
+   "assessed_by": null
+  },
+  {
+   "family_id": "memo-mentalclouds",
+   "label": "MEMO / MentalCLOUDS",
+   "kind": "single_report",
+   "members": [
+    "doi:10.2196/57306"
+   ],
+   "sample_overlap": "not_applicable",
+   "overlap_basis": null,
+   "assessed_by": null
+  },
+  {
+   "family_id": "qa-based-evaluation",
+   "label": "QA-based factuality evaluation",
+   "kind": "method_lineage",
+   "members": [
+    "doi:10.18653/v1/2021.emnlp-main.529",
+    "doi:10.18653/v1/2022.naacl-main.187"
+   ],
+   "sample_overlap": "not_applicable",
+   "overlap_basis": "method papers evaluated on public summarisation benchmarks",
+   "assessed_by": null
+  },
+  {
+   "family_id": "atomic-claim",
+   "label": "Atomic claim evaluation",
+   "kind": "single_report",
+   "members": [
+    "doi:10.18653/v1/2023.emnlp-main.741"
+   ],
+   "sample_overlap": "not_applicable",
+   "overlap_basis": null,
+   "assessed_by": null
+  },
+  {
+   "family_id": "cosmin",
+   "label": "COSMIN",
+   "kind": "single_report",
+   "members": [
+    "doi:10.1007/s11136-018-1829-0"
+   ],
+   "sample_overlap": "not_applicable",
+   "overlap_basis": null,
+   "assessed_by": null
+  },
+  {
+   "family_id": "scale-development",
+   "label": "Scale development guidance",
+   "kind": "single_report",
+   "members": [
+    "doi:10.3389/fpubh.2018.00149"
+   ],
+   "sample_overlap": "not_applicable",
+   "overlap_basis": null,
+   "assessed_by": null
+  },
+  {
+   "family_id": "apa-record-keeping",
+   "label": "APA Record Keeping Guidelines",
+   "kind": "single_report",
+   "members": [
+    "doi:10.1037/0003-066x.62.9.993"
+   ],
+   "sample_overlap": "not_applicable",
+   "overlap_basis": null,
+   "assessed_by": null
+  },
+  {
+   "family_id": "cz-documentation-law",
+   "label": "Czech medical documentation decree",
+   "kind": "single_report",
+   "members": [
+    "guid:cz-decree-444-2024"
+   ],
+   "sample_overlap": "not_applicable",
+   "overlap_basis": null,
+   "assessed_by": null
+  },
+  {
+   "family_id": "jbi-scoping",
+   "label": "JBI scoping-review guidance",
+   "kind": "method_lineage",
+   "members": [
+    "doi:10.11124/jbies-20-00167",
+    "guid:jbi-manual-scoping-chapter"
+   ],
+   "sample_overlap": "not_applicable",
+   "overlap_basis": "the journal version and the manual chapter of one guidance",
+   "assessed_by": null
+  },
+  {
+   "family_id": "prisma",
+   "label": "PRISMA reporting extensions",
+   "kind": "method_lineage",
+   "members": [
+    "doi:10.7326/m18-0850",
+    "doi:10.1186/s13643-020-01542-z"
+   ],
+   "sample_overlap": "not_applicable",
+   "overlap_basis": null,
+   "assessed_by": null
+  },
+  {
+   "family_id": "atzil-slonim-summarisation",
+   "label": "Atzil-Slonim group: session and timeline summarisation with the MIND framework",
+   "kind": "same_research_programme",
+   "members": [
+    "pmid:41894679",
+    "doi:10.1080/10503307.2026.2729093",
+    "pmid:41426204",
+    "supp:mind-coding-manual",
+    "supp:mind-supplementary"
+   ],
+   "sample_overlap": "not_assessed",
+   "overlap_basis": "same group, framework and possibly raters; the catalog describes different corpora (social-media timelines vs therapy sessions); independence of the two studies' findings is not established",
+   "assessed_by": null
+  }
+ ],
+ "reports": [
+  {
+   "report_id": "doi:10.18653/v1/2025.acl-industry.14",
+   "id_basis": "DOI verified by the retrieval log or the pool",
+   "kind": "database_record",
+   "title": "TN-Eval: Rubric and Evaluation Protocols for Measuring the Quality of Behavioral Therapy Notes",
+   "citation_short": "Shah et al. 2025, ACL Industry",
+   "catalog_source": "S1",
+   "study_family": "tn-eval",
+   "identifiers": {
+    "doi": "10.18653/v1/2025.acl-industry.14",
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": "2025.acl-industry.14",
+    "url": "https://aclanthology.org/2025.acl-industry.14.pdf",
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "pool",
+    "acl_key": "retrieval log route"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.18653/v1/2025.acl-industry.14",
+    "pool_record_id_status": "matches_report_id",
+    "stratum": "priority",
+    "priority_index": 0
+   },
+   "route": {
+    "kind": "search_and_screening",
+    "from": null,
+    "declared_in": "screening-decisions.json#include_candidates_detail",
+    "note": null
+   },
+   "known_before_search": {
+    "value": true,
+    "declared_in": "research/gen2/retrieval-seeds.json#tn-eval"
+   },
+   "log_slugs": [
+    "tn-eval"
+   ],
+   "events": [],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "direct",
+    "verification": "full_text",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "doi:10.1093/jamia/ocaf068",
+   "id_basis": "DOI verified by the retrieval log or the pool",
+   "kind": "database_record",
+   "title": "Development and validation of the provider documentation summarization quality instrument (PDSQI-9)",
+   "citation_short": "Croxford et al. 2025, JAMIA",
+   "catalog_source": "S2",
+   "study_family": "pdqi-pdsqi",
+   "identifiers": {
+    "doi": "10.1093/jamia/ocaf068",
+    "pmid": "40323321",
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "retrieval log",
+    "pmid": "retrieval log"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.1007/978-1-4612-4380-9_6",
+    "pool_record_id_status": "doi_from_reference_list",
+    "stratum": "priority",
+    "priority_index": 40
+   },
+   "route": {
+    "kind": "search_and_screening",
+    "from": null,
+    "declared_in": "screening-decisions.json#include_candidates_detail",
+    "note": null
+   },
+   "known_before_search": {
+    "value": true,
+    "declared_in": "research/gen2/review-2026-09-13/amendments.json#pre_search_sensitivity_check"
+   },
+   "log_slugs": [
+    "pdsqi-9"
+   ],
+   "events": [],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "transfer",
+    "verification": "full_text",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": [
+    "The pool keyed this record by a DOI from its reference list (build_pool.py takes the last DOI in the PubMed record); the report id is the article's own DOI."
+   ]
+  },
+  {
+   "report_id": "doi:10.1101/2025.06.25.25330252",
+   "id_basis": "DOI verified by the retrieval log or the pool",
+   "kind": "supplementary_discovery",
+   "title": "Clinically Grounded AI-Scribing in Psychotherapy (iCARE / iHOPE)",
+   "citation_short": "Adhikary et al. 2025, medRxiv",
+   "catalog_source": "S3",
+   "study_family": "icare-ihope",
+   "identifiers": {
+    "doi": "10.1101/2025.06.25.25330252",
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "retrieval log"
+   },
+   "pool": {
+    "in_pool": false,
+    "pool_record_id": null,
+    "pool_record_id_status": "not_in_pool",
+    "stratum": null,
+    "priority_index": null
+   },
+   "route": {
+    "kind": "known_before_search",
+    "from": null,
+    "declared_in": "research/gen2/retrieval-seeds.json#icare-ihope",
+    "note": "a preprint; not indexed in the searched databases"
+   },
+   "known_before_search": {
+    "value": true,
+    "declared_in": "research/gen2/retrieval-seeds.json#icare-ihope"
+   },
+   "log_slugs": [
+    "icare-ihope"
+   ],
+   "events": [],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "direct",
+    "verification": "full_text",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "doi:10.4338/aci-2011-11-ra-0070",
+   "id_basis": "DOI verified by the retrieval log or the pool",
+   "kind": "supplementary_discovery",
+   "title": "Assessing Electronic Note Quality Using the Physician Documentation Quality Instrument (PDQI-9)",
+   "citation_short": "Stetson et al. 2012, Appl Clin Inform",
+   "catalog_source": "S4",
+   "study_family": "pdqi-pdsqi",
+   "identifiers": {
+    "doi": "10.4338/aci-2011-11-ra-0070",
+    "pmid": "22577483",
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "retrieval log",
+    "pmid": "retrieval log"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.4338/aci-2011-11-ra-0070",
+    "pool_record_id_status": "matches_report_id",
+    "stratum": "priority",
+    "priority_index": 383
+   },
+   "route": {
+    "kind": "known_before_search",
+    "from": null,
+    "declared_in": "research/gen2/review-2026-09-13/amendments.json#pre_search_sensitivity_check",
+    "note": "a PDQI-9 family member named in the pre-search sensitivity check; not in the pool, so flow-v1 was wrong to count it under search and screening"
+   },
+   "known_before_search": {
+    "value": true,
+    "declared_in": "research/gen2/review-2026-09-13/amendments.json#pre_search_sensitivity_check"
+   },
+   "log_slugs": [
+    "pdqi-9-validation"
+   ],
+   "events": [],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "transfer",
+    "verification": "full_text",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "doi:10.1197/jamia.m2404",
+   "id_basis": "DOI verified by the retrieval log or the pool",
+   "kind": "database_record",
+   "title": "Preliminary development of the physician documentation quality instrument",
+   "citation_short": "Stetson et al. 2008, JAMIA",
+   "catalog_source": "S5",
+   "study_family": "pdqi-pdsqi",
+   "identifiers": {
+    "doi": "10.1197/jamia.M2404",
+    "pmid": "18436914",
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "retrieval log",
+    "pmid": "retrieval log"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.1197/jamia.m2404",
+    "pool_record_id_status": "matches_report_id",
+    "stratum": "priority",
+    "priority_index": 23
+   },
+   "route": {
+    "kind": "search_and_screening",
+    "from": null,
+    "declared_in": "screening-decisions.json#include_candidates_detail",
+    "note": null
+   },
+   "known_before_search": {
+    "value": true,
+    "declared_in": "research/gen2/review-2026-09-13/amendments.json#pre_search_sensitivity_check"
+   },
+   "log_slugs": [
+    "pdqi-9-prelim"
+   ],
+   "events": [],
+   "reading": {
+    "basis": "abstract",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "transfer",
+    "verification": "not_retrieved",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": [
+    "Europe PMC returned a landing-page shell (kept locally as pdqi-9-prelim.xml), not the article. The 2008 paper is behind the publisher's paywall."
+   ]
+  },
+  {
+   "report_id": "doi:10.4338/aci2017050080",
+   "id_basis": "DOI verified by the retrieval log or the pool",
+   "kind": "database_record",
+   "title": "The 9-Item Physician Documentation Quality Instrument (PDQI-9) score is not useful in evaluating EMR (scribe) note quality in Emergency Medicine",
+   "citation_short": "Walker et al. 2017, Appl Clin Inform",
+   "catalog_source": "S6",
+   "study_family": "pdqi-pdsqi",
+   "identifiers": {
+    "doi": "10.4338/aci2017050080",
+    "pmid": "28956888",
+    "pmcid": "PMC6220701",
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "retrieval log",
+    "pmid": "retrieval log (corrected)",
+    "pmcid": "retrieval log route"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.4338/aci2017050080",
+    "pool_record_id_status": "matches_report_id",
+    "stratum": "priority",
+    "priority_index": 112
+   },
+   "route": {
+    "kind": "search_and_screening",
+    "from": null,
+    "declared_in": "screening-decisions.json#include_candidates_detail",
+    "note": null
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "log_slugs": [
+    "pdqi-9-negative-ed"
+   ],
+   "events": [],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "transfer",
+    "verification": "full_text",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": [
+    "The retrieval log records 2 120 648 bytes for pdqi9neg.pdf; the local file is 187 388 bytes and its SHA-256 matches the log. The measured size is recorded on the event; the log is not edited."
+   ]
+  },
+  {
+   "report_id": "doi:10.2196/57306",
+   "id_basis": "DOI verified by the retrieval log or the pool",
+   "kind": "database_record",
+   "title": "Exploring the Efficacy of Large Language Models in Summarizing Mental Health Counseling Sessions (MentalCLOUDS)",
+   "citation_short": "Adhikary et al. 2024, JMIR Ment Health",
+   "catalog_source": "S7",
+   "study_family": "memo-mentalclouds",
+   "identifiers": {
+    "doi": "10.2196/57306",
+    "pmid": "39042893",
+    "pmcid": "PMC11303879",
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "retrieval log",
+    "pmid": "retrieval log"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.5260/chara.21.2.8",
+    "pool_record_id_status": "doi_from_reference_list",
+    "stratum": "priority",
+    "priority_index": 239
+   },
+   "route": {
+    "kind": "search_and_screening",
+    "from": null,
+    "declared_in": "screening-decisions.json#include_candidates_detail",
+    "note": null
+   },
+   "known_before_search": {
+    "value": true,
+    "declared_in": "research/gen2/review-2026-09-13/amendments.json#pre_search_sensitivity_check"
+   },
+   "log_slugs": [
+    "mentalclouds"
+   ],
+   "events": [],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "direct",
+    "verification": "full_text",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": [
+    "Pool id is a reference-list DOI; see S2."
+   ]
+  },
+  {
+   "report_id": "doi:10.18653/v1/2021.emnlp-main.529",
+   "id_basis": "DOI verified by the retrieval log or the pool",
+   "kind": "database_record",
+   "title": "QuestEval: Summarization Asks for Fact-based Evaluation",
+   "citation_short": "Scialom et al. 2021, EMNLP",
+   "catalog_source": "S8",
+   "study_family": "qa-based-evaluation",
+   "identifiers": {
+    "doi": "10.18653/v1/2021.emnlp-main.529",
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": "2021.emnlp-main.529",
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "pool",
+    "acl_key": "retrieval log route"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.18653/v1/2021.emnlp-main.529",
+    "pool_record_id_status": "matches_report_id",
+    "stratum": "remainder",
+    "priority_index": null
+   },
+   "route": {
+    "kind": "known_before_search",
+    "from": null,
+    "declared_in": "research/gen2/retrieval-seeds.json#questeval",
+    "note": "in the ACL pool below the screening threshold"
+   },
+   "known_before_search": {
+    "value": true,
+    "declared_in": "research/gen2/retrieval-seeds.json#questeval"
+   },
+   "log_slugs": [
+    "questeval"
+   ],
+   "events": [],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "transfer",
+    "verification": "full_text",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "doi:10.18653/v1/2022.naacl-main.187",
+   "id_basis": "DOI verified by the retrieval log or the pool",
+   "kind": "database_record",
+   "title": "QAFactEval: Improved QA-Based Factual Consistency Evaluation for Summarization",
+   "citation_short": "Fabbri et al. 2022, NAACL",
+   "catalog_source": "S9",
+   "study_family": "qa-based-evaluation",
+   "identifiers": {
+    "doi": "10.18653/v1/2022.naacl-main.187",
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": "2022.naacl-main.187",
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "pool",
+    "acl_key": "retrieval log route"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.18653/v1/2022.naacl-main.187",
+    "pool_record_id_status": "matches_report_id",
+    "stratum": "remainder",
+    "priority_index": null
+   },
+   "route": {
+    "kind": "known_before_search",
+    "from": null,
+    "declared_in": "research/gen2/retrieval-seeds.json#qafacteval",
+    "note": "in the ACL pool below the screening threshold"
+   },
+   "known_before_search": {
+    "value": true,
+    "declared_in": "research/gen2/retrieval-seeds.json#qafacteval"
+   },
+   "log_slugs": [
+    "qafacteval"
+   ],
+   "events": [],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "transfer",
+    "verification": "full_text",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "doi:10.18653/v1/2023.emnlp-main.741",
+   "id_basis": "DOI formed from the Anthology key in the retrieval log route; not verified against a database record",
+   "kind": "supplementary_discovery",
+   "title": "FActScore: Fine-grained Atomic Evaluation of Factual Precision in Long Form Text Generation",
+   "citation_short": "Min et al. 2023, EMNLP",
+   "catalog_source": "S10",
+   "study_family": "atomic-claim",
+   "identifiers": {
+    "doi": "10.18653/v1/2023.emnlp-main.741",
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": "2023.emnlp-main.741",
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "ACL Anthology DOI convention for the key in the retrieval log route",
+    "acl_key": "retrieval log route"
+   },
+   "pool": {
+    "in_pool": false,
+    "pool_record_id": null,
+    "pool_record_id_status": "not_in_pool",
+    "stratum": null,
+    "priority_index": null
+   },
+   "route": {
+    "kind": "known_before_search",
+    "from": null,
+    "declared_in": "research/gen2/retrieval-seeds.json#factscore",
+    "note": "not matched by the ACL queries"
+   },
+   "known_before_search": {
+    "value": true,
+    "declared_in": "research/gen2/retrieval-seeds.json#factscore"
+   },
+   "log_slugs": [
+    "factscore"
+   ],
+   "events": [],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "transfer",
+    "verification": "full_text",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "doi:10.1007/s11136-018-1829-0",
+   "id_basis": "DOI verified by the retrieval log or the pool",
+   "kind": "methodological_guidance",
+   "title": "COSMIN methodology for evaluating the content validity of patient-reported outcome measures",
+   "citation_short": "Terwee et al. 2018, Qual Life Res",
+   "catalog_source": "S11",
+   "study_family": "cosmin",
+   "identifiers": {
+    "doi": "10.1007/s11136-018-1829-0",
+    "pmid": null,
+    "pmcid": "PMC5891557",
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "retrieval log"
+   },
+   "pool": {
+    "in_pool": false,
+    "pool_record_id": null,
+    "pool_record_id_status": "not_in_pool",
+    "stratum": null,
+    "priority_index": null
+   },
+   "route": {
+    "kind": "methodological_guidance",
+    "from": null,
+    "declared_in": "research/gen2/retrieval-seeds.json#cosmin-content",
+    "note": null
+   },
+   "known_before_search": {
+    "value": true,
+    "declared_in": "research/gen2/retrieval-seeds.json#cosmin-content"
+   },
+   "log_slugs": [
+    "cosmin-content-validity"
+   ],
+   "events": [],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "method",
+    "layer": "transfer",
+    "verification": "full_text",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "doi:10.3389/fpubh.2018.00149",
+   "id_basis": "DOI verified by the retrieval log or the pool",
+   "kind": "methodological_guidance",
+   "title": "Best Practices for Developing and Validating Scales for Health, Social, and Behavioral Research",
+   "citation_short": "Boateng et al. 2018, Front Public Health",
+   "catalog_source": "S12",
+   "study_family": "scale-development",
+   "identifiers": {
+    "doi": "10.3389/fpubh.2018.00149",
+    "pmid": null,
+    "pmcid": "PMC6004510",
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "retrieval log"
+   },
+   "pool": {
+    "in_pool": false,
+    "pool_record_id": null,
+    "pool_record_id_status": "not_in_pool",
+    "stratum": null,
+    "priority_index": null
+   },
+   "route": {
+    "kind": "methodological_guidance",
+    "from": null,
+    "declared_in": "research/gen2/retrieval-seeds.json#boateng-development",
+    "note": null
+   },
+   "known_before_search": {
+    "value": true,
+    "declared_in": "research/gen2/retrieval-seeds.json#boateng-development"
+   },
+   "log_slugs": [
+    "boateng-scale-development"
+   ],
+   "events": [],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "method",
+    "layer": "transfer",
+    "verification": "full_text",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "doi:10.1037/0003-066x.62.9.993",
+   "id_basis": "DOI verified by the retrieval log or the pool",
+   "kind": "professional_guidance",
+   "title": "Record Keeping Guidelines",
+   "citation_short": "American Psychological Association 2007, Am Psychol",
+   "catalog_source": "S13",
+   "study_family": "apa-record-keeping",
+   "identifiers": {
+    "doi": "10.1037/0003-066X.62.9.993",
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "retrieval log"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.1037/0003-066x.62.9.993",
+    "pool_record_id_status": "matches_report_id",
+    "stratum": "remainder",
+    "priority_index": null
+   },
+   "route": {
+    "kind": "professional_guidance",
+    "from": null,
+    "declared_in": "research/gen2/protocol.json#supplementary_routes",
+    "note": "in the PubMed pool below the screening threshold; taken through the guidance route"
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "log_slugs": [
+    "apa-record-keeping-2007"
+   ],
+   "events": [],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "guidance",
+    "layer": "requirements",
+    "verification": "full_text",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "guid:cz-decree-444-2024",
+   "id_basis": "a legal instrument without a DOI; slug id",
+   "kind": "professional_guidance",
+   "title": "Decree No. 444/2024 Coll., on medical documentation (Czech Republic)",
+   "citation_short": "Ministry of Health of the Czech Republic 2024, in force from 2025-01-01",
+   "catalog_source": "S14",
+   "study_family": "cz-documentation-law",
+   "identifiers": {
+    "doi": null,
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {},
+   "pool": {
+    "in_pool": false,
+    "pool_record_id": null,
+    "pool_record_id_status": "not_in_pool",
+    "stratum": null,
+    "priority_index": null
+   },
+   "route": {
+    "kind": "professional_guidance",
+    "from": null,
+    "declared_in": "research/gen2/protocol.json#supplementary_routes",
+    "note": "the saved text is a page from zakonyprolidi.cz, not the official e-Sbirka copy"
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "log_slugs": [
+    "cz-vyhlaska-444-2024"
+   ],
+   "events": [],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "guidance",
+    "layer": "requirements",
+    "verification": "full_text",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "doi:10.11124/jbies-20-00167",
+   "id_basis": "DOI from the catalog citation; the file was not fetched through a DOI resolver",
+   "kind": "methodological_guidance",
+   "title": "Updated methodological guidance for the conduct of scoping reviews",
+   "citation_short": "Peters et al. 2020, JBI Evidence Synthesis",
+   "catalog_source": "S15",
+   "study_family": "jbi-scoping",
+   "identifiers": {
+    "doi": "10.11124/JBIES-20-00167",
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "catalog citation"
+   },
+   "pool": {
+    "in_pool": false,
+    "pool_record_id": null,
+    "pool_record_id_status": "not_in_pool",
+    "stratum": null,
+    "priority_index": null
+   },
+   "route": {
+    "kind": "methodological_guidance",
+    "from": null,
+    "declared_in": "research/gen2/retrieval-seeds.json#jbi-scoping",
+    "note": null
+   },
+   "known_before_search": {
+    "value": true,
+    "declared_in": "research/gen2/retrieval-seeds.json#jbi-scoping"
+   },
+   "log_slugs": [],
+   "events": [
+    {
+     "date": "2026-09-13",
+     "time": "11:05",
+     "date_source": "local file mtime",
+     "route": "journal page of the JBI guidance, saved as HTML; URL not recorded",
+     "route_kind": "web_page",
+     "outcome": "retrieved",
+     "file": "peters2020-jbi.html",
+     "bytes": 388410,
+     "sha256": "737e2162683ccca42f8553305bf7080a4f55c097900f171b50fd220bf230bc58",
+     "checksum_source": "computed 2026-09-15 from the local file",
+     "bytes_source": "measured 2026-09-15 from the local file",
+     "note": "Retrieved on 2026-09-13 with the reporting guidance and never logged; logged retroactively from the file.",
+     "remaining_options": null,
+     "logged_retroactively": "2026-09-15",
+     "log_row": null,
+     "superseded_by_correction": null
+    }
+   ],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "method",
+    "layer": "method",
+    "verification": "full_text",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "doi:10.7326/m18-0850",
+   "id_basis": "DOI from the catalog citation; the copy is an accepted manuscript",
+   "kind": "methodological_guidance",
+   "title": "PRISMA Extension for Scoping Reviews (PRISMA-ScR): Checklist and Explanation",
+   "citation_short": "Tricco et al. 2018, Ann Intern Med",
+   "catalog_source": "S16",
+   "study_family": "prisma",
+   "identifiers": {
+    "doi": "10.7326/M18-0850",
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "catalog citation"
+   },
+   "pool": {
+    "in_pool": false,
+    "pool_record_id": null,
+    "pool_record_id_status": "not_in_pool",
+    "stratum": null,
+    "priority_index": null
+   },
+   "route": {
+    "kind": "methodological_guidance",
+    "from": null,
+    "declared_in": "research/gen2/retrieval-seeds.json#prisma-scr",
+    "note": null
+   },
+   "known_before_search": {
+    "value": true,
+    "declared_in": "research/gen2/retrieval-seeds.json#prisma-scr"
+   },
+   "log_slugs": [],
+   "events": [
+    {
+     "date": "2026-09-13",
+     "time": "11:04",
+     "date_source": "local file mtime",
+     "route": "accepted manuscript from the White Rose repository, not the version of record; URL not recorded",
+     "route_kind": "repository",
+     "outcome": "retrieved",
+     "file": "prisma-scr-whiterose.pdf",
+     "bytes": 426500,
+     "sha256": "b73ad1864ac7ca55a03645adf36986d319bd9f3e1cb1dff560d1393f8dc1b766",
+     "checksum_source": "computed 2026-09-15 from the local file",
+     "bytes_source": "measured 2026-09-15 from the local file",
+     "note": "Retrieved on 2026-09-13 and never logged; logged retroactively from the file.",
+     "remaining_options": null,
+     "logged_retroactively": "2026-09-15",
+     "log_row": null,
+     "superseded_by_correction": null
+    }
+   ],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "method",
+    "layer": "method",
+    "verification": "full_text",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "doi:10.1186/s13643-020-01542-z",
+   "id_basis": "DOI from the catalog citation",
+   "kind": "methodological_guidance",
+   "title": "PRISMA-S: an extension to the PRISMA Statement for Reporting Literature Searches in Systematic Reviews",
+   "citation_short": "Rethlefsen et al. 2021, Syst Rev",
+   "catalog_source": "S17",
+   "study_family": "prisma",
+   "identifiers": {
+    "doi": "10.1186/s13643-020-01542-z",
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "catalog citation"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.1186/s13643-020-01542-z",
+    "pool_record_id_status": "matches_report_id",
+    "stratum": "remainder",
+    "priority_index": null
+   },
+   "route": {
+    "kind": "methodological_guidance",
+    "from": null,
+    "declared_in": "research/gen2/retrieval-seeds.json#prisma-s",
+    "note": null
+   },
+   "known_before_search": {
+    "value": true,
+    "declared_in": "research/gen2/retrieval-seeds.json#prisma-s"
+   },
+   "log_slugs": [],
+   "events": [
+    {
+     "date": "2026-09-13",
+     "time": "11:05",
+     "date_source": "local file mtime",
+     "route": "publisher PDF; URL not recorded",
+     "route_kind": "publisher",
+     "outcome": "retrieved",
+     "file": "prisma-s.pdf",
+     "bytes": 737278,
+     "sha256": "82a893638c69647c3699552f07f13e309648c2921017331aa07b99965a3e9a21",
+     "checksum_source": "computed 2026-09-15 from the local file",
+     "bytes_source": "measured 2026-09-15 from the local file",
+     "note": "Retrieved on 2026-09-13 and never logged; logged retroactively from the file.",
+     "remaining_options": null,
+     "logged_retroactively": "2026-09-15",
+     "log_row": null,
+     "superseded_by_correction": null
+    }
+   ],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "method",
+    "layer": "method",
+    "verification": "full_text",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "pmid:41894679",
+   "id_basis": "PMID verified by the retrieval log or the pool; the pool DOI is a cited reference, not the report's own",
+   "kind": "database_record",
+   "title": "Clinical Summaries of Social Media Timelines for Mental Health Monitoring (LLM summaries)",
+   "citation_short": "Keren, Klein, Bar-Shachar, Liakata, Atzil-Slonim et al. 2025, JMIR",
+   "catalog_source": "S18",
+   "study_family": "atzil-slonim-summarisation",
+   "identifiers": {
+    "doi": null,
+    "pmid": "41894679",
+    "pmcid": "PMC13069367",
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "pmid": "retrieval log",
+    "pmcid": "retrieval log route"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.18653/v1/p19-1542",
+    "pool_record_id_status": "doi_from_reference_list",
+    "stratum": "remainder",
+    "priority_index": null
+   },
+   "route": {
+    "kind": "author_search_from",
+    "from": "doi:10.1080/10503307.2026.2729093",
+    "declared_in": "fulltext-retrieval-log.json#atzil-jmir-summaries.note",
+    "note": null
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "log_slugs": [
+    "atzil-jmir-summaries"
+   ],
+   "events": [],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "direct",
+    "verification": "full_text",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": [
+    "The log row is retrieved without a file; the local atzil-jmir-summaries.xml is recorded on the event with a digest computed on 2026-09-15."
+   ]
+  },
+  {
+   "report_id": "doi:10.1080/10503307.2026.2729093",
+   "id_basis": "DOI verified by the retrieval log or the pool",
+   "kind": "database_record",
+   "title": "A comparative evaluation of LLM and clinician psychotherapy session summaries (MIND)",
+   "citation_short": "Keren, Klein, Bar-Shachar, Liakata, Atzil-Slonim 2026, Psychother Res",
+   "catalog_source": "S19",
+   "study_family": "atzil-slonim-summarisation",
+   "identifiers": {
+    "doi": "10.1080/10503307.2026.2729093",
+    "pmid": "42715612",
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "retrieval log",
+    "pmid": "retrieval log"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.1080/10503307.2026.2729093",
+    "pool_record_id_status": "matches_report_id",
+    "stratum": "priority",
+    "priority_index": 19
+   },
+   "route": {
+    "kind": "search_and_screening",
+    "from": null,
+    "declared_in": "screening-decisions.json#include_candidates_detail",
+    "note": null
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "log_slugs": [
+    "psychres-2026",
+    "psychres-2026-pdf"
+   ],
+   "events": [],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "direct",
+    "verification": "full_text",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": [
+    "Every open route failed on 2026-09-13; the investigator supplied the PDF the same day. Read by the coding assistant; not human-verified."
+   ]
+  },
+  {
+   "report_id": "pmid:41426204",
+   "id_basis": "PMID verified by the retrieval log or the pool; the pool DOI is a cited reference, not the report's own",
+   "kind": "database_record",
+   "title": "A Framework for Automation in Psychotherapy",
+   "citation_short": "Atzil-Slonim et al. 2025",
+   "catalog_source": null,
+   "study_family": "atzil-slonim-summarisation",
+   "identifiers": {
+    "doi": null,
+    "pmid": "41426204",
+    "pmcid": "PMC12716858",
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "pmid": "retrieval log",
+    "pmcid": "retrieval log route"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.3390/ijerph19095164",
+    "pool_record_id_status": "doi_from_reference_list",
+    "stratum": "remainder",
+    "priority_index": null
+   },
+   "route": {
+    "kind": "author_search_from",
+    "from": "doi:10.1080/10503307.2026.2729093",
+    "declared_in": "fulltext-retrieval-log.json#atzil-automation-framework.note",
+    "note": null
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "log_slugs": [
+    "atzil-automation-framework"
+   ],
+   "events": [],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": null,
+    "ai_read_basis": null,
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": false,
+    "use": null,
+    "layer": null,
+    "verification": "full_text",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": [
+    "Retrieved but not a catalog source; whether it was read is not recorded."
+   ]
+  },
+  {
+   "report_id": "supp:mind-coding-manual",
+   "id_basis": "supporting material without a DOI; slug id",
+   "kind": "supporting_material",
+   "title": "MIND transtheoretical coding manual",
+   "citation_short": "Atzil-Slonim et al. 2025, OSF",
+   "catalog_source": null,
+   "study_family": "atzil-slonim-summarisation",
+   "identifiers": {
+    "doi": null,
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": "d5m2x"
+   },
+   "identifier_sources": {
+    "osf_node": "retrieval log note"
+   },
+   "pool": {
+    "in_pool": false,
+    "pool_record_id": null,
+    "pool_record_id_status": "not_in_pool",
+    "stratum": null,
+    "priority_index": null
+   },
+   "route": {
+    "kind": "citation_from",
+    "from": "doi:10.1080/10503307.2026.2729093",
+    "declared_in": "fulltext-retrieval-log.json#mind-coding-manual.note",
+    "note": null
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "log_slugs": [
+    "mind-coding-manual"
+   ],
+   "events": [],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": false,
+    "use": "support",
+    "layer": null,
+    "verification": "full_text",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "supp:mind-supplementary",
+   "id_basis": "supporting material without a DOI; slug id",
+   "kind": "supporting_material",
+   "title": "Supplementary material to the MIND comparative evaluation (prompts, reliability, comparisons)",
+   "citation_short": "Keren et al. 2026, OSF",
+   "catalog_source": null,
+   "study_family": "atzil-slonim-summarisation",
+   "identifiers": {
+    "doi": null,
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": "6d7pq"
+   },
+   "identifier_sources": {
+    "osf_node": "retrieval log note"
+   },
+   "pool": {
+    "in_pool": false,
+    "pool_record_id": null,
+    "pool_record_id_status": "not_in_pool",
+    "stratum": null,
+    "priority_index": null
+   },
+   "route": {
+    "kind": "citation_from",
+    "from": "doi:10.1080/10503307.2026.2729093",
+    "declared_in": "fulltext-retrieval-log.json#mind-supplementary.note",
+    "note": null
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "log_slugs": [
+    "mind-supplementary"
+   ],
+   "events": [],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": false,
+    "use": "support",
+    "layer": null,
+    "verification": "full_text",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "guid:jbi-manual-scoping-chapter",
+   "id_basis": "online manual chapter without a DOI; slug id",
+   "kind": "methodological_guidance",
+   "title": "JBI Manual for Evidence Synthesis, scoping reviews chapter (wiki)",
+   "citation_short": "JBI, online manual chapter",
+   "catalog_source": null,
+   "study_family": "jbi-scoping",
+   "identifiers": {
+    "doi": null,
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": null,
+    "url": "https://jbi-global-wiki.refined.site/space/MANUAL",
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "url": "declared"
+   },
+   "pool": {
+    "in_pool": false,
+    "pool_record_id": null,
+    "pool_record_id_status": "not_in_pool",
+    "stratum": null,
+    "priority_index": null
+   },
+   "route": {
+    "kind": "known_before_search",
+    "from": null,
+    "declared_in": "research/gen2/retrieval-seeds.json#jbi-scoping",
+    "note": null
+   },
+   "known_before_search": {
+    "value": true,
+    "declared_in": "research/gen2/retrieval-seeds.json#jbi-scoping"
+   },
+   "log_slugs": [],
+   "events": [
+    {
+     "date": "2026-09-13",
+     "time": "11:03",
+     "date_source": "local file mtime",
+     "route": "wiki chapter page; JavaScript-rendered shell without the chapter text",
+     "route_kind": "web_page",
+     "outcome": "not_retrieved",
+     "file": "jbi-ch10.html",
+     "bytes": 6406,
+     "sha256": "6a9c280293f6707fe32ce13733b4c074748494a10880d9e5ff36daff79133001",
+     "checksum_source": "computed 2026-09-15 from the local file",
+     "bytes_source": "measured 2026-09-15 from the local file",
+     "note": "The saved page carries no chapter text; the journal version (S15) was read instead.",
+     "remaining_options": null,
+     "logged_retroactively": "2026-09-15",
+     "log_row": null,
+     "superseded_by_correction": null
+    }
+   ],
+   "reading": {
+    "basis": "none",
+    "ai_read": false,
+    "ai_read_basis": null,
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": false,
+    "use": null,
+    "layer": null,
+    "verification": "not_retrieved",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "pmid:42118974",
+   "id_basis": "PMID verified by the pool; own DOI not verified in tracked records",
+   "kind": "database_record",
+   "title": "What do clinicians edit in ambient AI-drafted clinical documentation? A qualitative content analysis",
+   "citation_short": "J Am Med Inform Assoc 2026",
+   "catalog_source": "S_abs_edit",
+   "study_family": null,
+   "identifiers": {
+    "doi": null,
+    "pmid": "42118974",
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "pmid": "pool"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.1177/00491241231156971",
+    "pool_record_id_status": "doi_from_reference_list",
+    "stratum": "priority",
+    "priority_index": 2
+   },
+   "route": {
+    "kind": "search_and_screening",
+    "from": null,
+    "declared_in": "screening-decisions.json#include_candidates_detail",
+    "note": null
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "log_slugs": [],
+   "events": [],
+   "reading": {
+    "basis": "abstract",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "transfer",
+    "verification": "abstract",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "pmid:42712320",
+   "id_basis": "PMID verified by the pool; own DOI not verified in tracked records",
+   "kind": "database_record",
+   "title": "Clinical AI Scribes in primary care: accuracy, error severity and implications for clinical practice",
+   "citation_short": "BMJ Digital Health and AI 2025",
+   "catalog_source": "S_abs_severity",
+   "study_family": null,
+   "identifiers": {
+    "doi": null,
+    "pmid": "42712320",
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "pmid": "pool"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.18653/v1/2022.acl-long.394",
+    "pool_record_id_status": "doi_from_reference_list",
+    "stratum": "priority",
+    "priority_index": 38
+   },
+   "route": {
+    "kind": "search_and_screening",
+    "from": null,
+    "declared_in": "screening-decisions.json#include_candidates_detail",
+    "note": null
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "log_slugs": [],
+   "events": [],
+   "reading": {
+    "basis": "abstract",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "transfer",
+    "verification": "abstract",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "pmid:37921861",
+   "id_basis": "PMID verified by the pool; own DOI not verified in tracked records",
+   "kind": "database_record",
+   "title": "Errors, Omissions, and Offenses in the Health Record of Mental Health Care Patients: Results from a Nationwide Survey in Sweden",
+   "citation_short": "J Med Internet Res 2023",
+   "catalog_source": "S_abs_sweden",
+   "study_family": null,
+   "identifiers": {
+    "doi": null,
+    "pmid": "37921861",
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "pmid": "pool"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.1515/dx-2018-0106",
+    "pool_record_id_status": "doi_from_reference_list",
+    "stratum": "priority",
+    "priority_index": 123
+   },
+   "route": {
+    "kind": "search_and_screening",
+    "from": null,
+    "declared_in": "screening-decisions.json#include_candidates_detail",
+    "note": null
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "log_slugs": [],
+   "events": [],
+   "reading": {
+    "basis": "abstract",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "direct",
+    "verification": "abstract",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "pmid:34644320",
+   "id_basis": "PMID verified by the pool; own DOI not verified in tracked records",
+   "kind": "database_record",
+   "title": "The benefits and harms of open notes in mental health: A Delphi survey of international experts",
+   "citation_short": "PLoS One 2021",
+   "catalog_source": "S_abs_delphi",
+   "study_family": null,
+   "identifiers": {
+    "doi": null,
+    "pmid": "34644320",
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "pmid": "pool"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.2196/27397",
+    "pool_record_id_status": "doi_from_reference_list",
+    "stratum": "priority",
+    "priority_index": 57
+   },
+   "route": {
+    "kind": "search_and_screening",
+    "from": null,
+    "declared_in": "screening-decisions.json#include_candidates_detail",
+    "note": null
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "log_slugs": [],
+   "events": [],
+   "reading": {
+    "basis": "abstract",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "requirements",
+    "verification": "abstract",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "pmid:34904956",
+   "id_basis": "PMID verified by the pool; own DOI not verified in tracked records",
+   "kind": "database_record",
+   "title": "Sharing Clinical Notes and Electronic Health Records With People Affected by Mental Health Conditions: Scoping Review",
+   "citation_short": "JMIR Ment Health 2021",
+   "catalog_source": "S_abs_scoping_notes",
+   "study_family": null,
+   "identifiers": {
+    "doi": null,
+    "pmid": "34904956",
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "pmid": "pool"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.3389/fpubh.2020.577896",
+    "pool_record_id_status": "doi_from_reference_list",
+    "stratum": "priority",
+    "priority_index": 221
+   },
+   "route": {
+    "kind": "search_and_screening",
+    "from": null,
+    "declared_in": "screening-decisions.json#include_candidates_detail",
+    "note": null
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "log_slugs": [],
+   "events": [],
+   "reading": {
+    "basis": "abstract",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "requirements",
+    "verification": "abstract",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "pmid:23164470",
+   "id_basis": "PMID verified by the pool; own DOI not verified in tracked records",
+   "kind": "database_record",
+   "title": "Quality of outpatient clinical notes: a stakeholder definition derived through qualitative research",
+   "citation_short": "BMC Health Serv Res 2012",
+   "catalog_source": "S_abs_stakeholder",
+   "study_family": null,
+   "identifiers": {
+    "doi": null,
+    "pmid": "23164470",
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "pmid": "pool"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.1016/j.jbi.2006.06.006",
+    "pool_record_id_status": "doi_from_reference_list",
+    "stratum": "priority",
+    "priority_index": 340
+   },
+   "route": {
+    "kind": "search_and_screening",
+    "from": null,
+    "declared_in": "screening-decisions.json#include_candidates_detail",
+    "note": null
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "log_slugs": [],
+   "events": [],
+   "reading": {
+    "basis": "abstract",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "transfer",
+    "verification": "abstract",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "pmid:29368656",
+   "id_basis": "PMID verified by the pool; own DOI not verified in tracked records",
+   "kind": "database_record",
+   "title": "Objective coding of content and techniques in workplace-based supervision of an EBT in public mental health",
+   "citation_short": "Implementation Science 2018",
+   "catalog_source": "S_abs_supcode",
+   "study_family": null,
+   "identifiers": {
+    "doi": null,
+    "pmid": "29368656",
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "pmid": "pool"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.1007/s10488-015-0673-6",
+    "pool_record_id_status": "doi_from_reference_list",
+    "stratum": "priority",
+    "priority_index": 216
+   },
+   "route": {
+    "kind": "search_and_screening",
+    "from": null,
+    "declared_in": "screening-decisions.json#include_candidates_detail",
+    "note": null
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "log_slugs": [],
+   "events": [],
+   "reading": {
+    "basis": "abstract",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "requirements",
+    "verification": "abstract",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "pmid:42361434",
+   "id_basis": "PMID verified by the pool; own DOI not verified in tracked records",
+   "kind": "database_record",
+   "title": "Race and gender disparities in mental health documentation in primary care: Findings from a video vignette experiment",
+   "citation_short": "Soc Sci Med 2026",
+   "catalog_source": "S_abs_disparity",
+   "study_family": null,
+   "identifiers": {
+    "doi": null,
+    "pmid": "42361434",
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "pmid": "pool"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.1016/j.socscimed.2026.119505",
+    "pool_record_id_status": "doi_from_reference_list",
+    "stratum": "priority",
+    "priority_index": 450
+   },
+   "route": {
+    "kind": "search_and_screening",
+    "from": null,
+    "declared_in": "screening-decisions.json#include_candidates_detail",
+    "note": null
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "log_slugs": [],
+   "events": [],
+   "reading": {
+    "basis": "abstract",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "direct",
+    "verification": "abstract",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "supp:hua-scoping-review-2025",
+   "id_basis": "PMID verified by the retrieval log or the pool; the pool DOI is a cited reference, not the report's own",
+   "kind": "supplementary_discovery",
+   "title": "A scoping review of large language models for generative tasks in mental health care",
+   "citation_short": "npj Digit Med 2025",
+   "catalog_source": "S_abs_hua",
+   "study_family": null,
+   "identifiers": {
+    "doi": "10.1038/s41746-025-01611-4",
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "catalog citation"
+   },
+   "pool": {
+    "in_pool": false,
+    "pool_record_id": null,
+    "pool_record_id_status": "not_in_pool",
+    "stratum": null,
+    "priority_index": null
+   },
+   "route": {
+    "kind": "not_recorded",
+    "from": null,
+    "declared_in": null,
+    "note": "how this review reached the catalog was not recorded"
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "log_slugs": [],
+   "events": [],
+   "reading": {
+    "basis": "abstract",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "direct",
+    "verification": "abstract",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "doi:10.1162/tacl_a_00453",
+   "id_basis": "DOI verified by the retrieval log or the pool",
+   "kind": "database_record",
+   "title": "SummaC: Re-Visiting NLI-based Models for Inconsistency Detection in Summarization",
+   "citation_short": "TACL 2022",
+   "catalog_source": "S_abs_summac",
+   "study_family": null,
+   "identifiers": {
+    "doi": "10.1162/tacl_a_00453",
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "pool"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.1162/tacl_a_00453",
+    "pool_record_id_status": "matches_report_id",
+    "stratum": "remainder",
+    "priority_index": null
+   },
+   "route": {
+    "kind": "remainder_audit_sample",
+    "from": null,
+    "declared_in": "screening-decisions.json#audit_of_unscreened_remainder",
+    "note": "one of the clearly eligible titles of the remainder audit; the audit sample on disk was regenerated after the parser fix and no longer contains it"
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "log_slugs": [],
+   "events": [],
+   "reading": {
+    "basis": "abstract",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "transfer",
+    "verification": "abstract",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "pmid:42054574",
+   "id_basis": "PMID verified by the pool; own DOI not verified in tracked records",
+   "kind": "database_record",
+   "title": "Errors in AI-Transformed Patient-Centered Mental Health Documentation Written by Psychiatrists: Qualitative Pre-Post Study",
+   "citation_short": "JMIR Ment Health 2026",
+   "catalog_source": "S_abs_mherrors",
+   "study_family": null,
+   "identifiers": {
+    "doi": null,
+    "pmid": "42054574",
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "pmid": "pool"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.2196/53164",
+    "pool_record_id_status": "doi_from_reference_list",
+    "stratum": "priority",
+    "priority_index": 68
+   },
+   "route": {
+    "kind": "search_and_screening",
+    "from": null,
+    "declared_in": "screening-decisions.json#include_candidates_detail",
+    "note": null
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "log_slugs": [],
+   "events": [],
+   "reading": {
+    "basis": "abstract",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "direct",
+    "verification": "abstract",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "pmid:31367401",
+   "id_basis": "PMID verified by the pool; own DOI not verified in tracked records",
+   "kind": "database_record",
+   "title": "Development and reliability testing of the Scale for the Evaluation of Staff-Patient Interactions in Progress Notes (SESPI)",
+   "citation_short": "Nursing Open 2019",
+   "catalog_source": "S_abs_sespi",
+   "study_family": null,
+   "identifiers": {
+    "doi": null,
+    "pmid": "31367401",
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "pmid": "pool"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.1111/j.1365-2648.2009.05071.x",
+    "pool_record_id_status": "doi_from_reference_list",
+    "stratum": "priority",
+    "priority_index": 16
+   },
+   "route": {
+    "kind": "not_recorded",
+    "from": null,
+    "declared_in": null,
+    "note": "in the PubMed pool below the screening threshold; how it reached the catalog was not recorded"
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "log_slugs": [],
+   "events": [],
+   "reading": {
+    "basis": "abstract",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "transfer",
+    "verification": "abstract",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "pmid:40249563",
+   "id_basis": "PMID verified by the pool; own DOI not verified in tracked records",
+   "kind": "database_record",
+   "title": "Development of a scoring tool for emergency department note quality: a modified Delphi approach",
+   "citation_short": "CJEM 2025",
+   "catalog_source": "S_abs_tednq",
+   "study_family": null,
+   "identifiers": {
+    "doi": null,
+    "pmid": "40249563",
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "pmid": "pool"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.1056/cat.23.0283",
+    "pool_record_id_status": "doi_from_reference_list",
+    "stratum": "priority",
+    "priority_index": 430
+   },
+   "route": {
+    "kind": "search_and_screening",
+    "from": null,
+    "declared_in": "screening-decisions.json#include_candidates_detail",
+    "note": null
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "log_slugs": [],
+   "events": [],
+   "reading": {
+    "basis": "abstract",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "transfer",
+    "verification": "abstract",
+    "basis": "local catalog registry_data.py / synthesis_data.py"
+   },
+   "notes": []
+  }
+ ]
+}
