@@ -27,12 +27,17 @@ the planned searches.
 4. Built one deduplicated pool of 10 059 records, screened a 487-record priority
    stratum, and audited a random sample of 200 records from the 9 572 that the
    ordering left below the threshold.
-5. Retrieved and read 11 primary full texts. One was not retrieved and is logged
-   as such.
-6. Produced a 28-candidate registry, a 17-method inventory, a 13-level map of
+5. Retrieved and read 13 primary full texts and 2 guidance documents. Six of the
+   papers reached the full-text stage through the search and screening; the other
+   nine sources entered through other routes (known sources, professional guidance,
+   citations), which `flow.json` records under `other_methods`. Two reports were not
+   retrieved and are logged as such.
+6. Produced a 29-candidate registry, a 17-method inventory, a 13-level map of
    assessment units, 11 worked blind spots, a line-by-line comparison with the
-   previous 26-candidate map, and a 13-measurement pilot proposal, which is one over the
-   protocol's 8-12 range: which one to drop is a human decision and is flagged as such.
+   previous 26-candidate map, and a 14-measurement pilot proposal. The protocol's
+   8-12 target came from the task brief, not from the review; it was withdrawn on
+   2026-09-15 (decision of the investigator): every supported measurement is carried,
+   and what the human budget cannot cover is reported as not measured.
 
 ## What could not be done
 
@@ -208,7 +213,8 @@ APA PsycINFO were not accessible and remain unsearched. Query amendments were
 recorded before use, following a sensitivity check against known relevant works.
 One investigator with AI assistance screened a 487-record priority stratum and
 audited a random sample of the remainder, estimating that 287 [132-612] eligible
-records were left unscreened. Thirteen primary full texts were read. Screening and
+records were left unscreened. Thirteen primary full texts were read, six reached
+through screening and seven through other routes, plus two guidance documents. Screening and
 construct proposals await independent human review; no dual independent screening
 was performed."
 

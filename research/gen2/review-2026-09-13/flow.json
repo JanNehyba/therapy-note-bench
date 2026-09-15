@@ -1,111 +1,175 @@
 {
-  "version": "flow-v1",
-  "identification": {
-    "PubMed": 8820,
-    "ACL Anthology": 2577,
-    "total_records_identified": 11397,
-    "downloaded_completely": true,
-    "not_parsed_into_pool": {
-      "count": 35,
-      "what": "PubmedBookArticle records (book chapters); structurally different and excluded from the screening pool, quantified rather than silently dropped"
-    },
-    "databases_not_searched": [
-      {
-        "name": "Scopus",
-        "reason": "no API key; api.elsevier.com returned HTTP 401"
-      },
-      {
-        "name": "APA PsycINFO",
-        "reason": "EBSCOhost requires an institutional login"
-      }
-    ]
+ "version": "flow-v1",
+ "identification": {
+  "PubMed": 8820,
+  "ACL Anthology": 2577,
+  "total_records_identified": 11397,
+  "downloaded_completely": true,
+  "not_parsed_into_pool": {
+   "count": 35,
+   "what": "PubmedBookArticle records (book chapters); structurally different and excluded from the screening pool, quantified rather than silently dropped"
   },
-  "deduplication": {
-    "before": 11362,
-    "after": 10059,
-    "removed": 1303,
-    "rule": "DOI, else PMID, else normalised title (ASCII-folded, alphanumeric only)"
-  },
-  "screening": {
-    "pool": 10059,
-    "priority_stratum_screened": 487,
-    "remainder_NOT_screened": 9572,
-    "include_candidates": 192,
-    "exclude_candidates": 295,
-    "human_decisions": 0,
-    "audit_of_unscreened": {
-      "sampled": 200,
-      "sampling": "simple random sample, seed 20260913",
-      "clearly_eligible_found": 6,
-      "borderline_eligible_found": 5,
-      "clearly_eligible_titles": [
-        "\"I think it's something that we should lean in to\": The use of OpenNotes in Canadian psychiatric care contexts",
-        "Clinical supervision of psychotherapy: essential ethics issues for supervisors and supervisees",
-        "SummaC: Re-Visiting NLI-based Models for Inconsistency Detection in Summarization",
-        "DecompEval: Evaluating Generated Texts as Unsupervised Decomposed Question Answering",
-        "Analyzing and Evaluating Faithfulness in Dialogue Summarization",
-        "An evaluation of existing text de-identification tools for use with patient progress notes"
-      ],
-      "borderline_titles": [
-        "On Improving Summarization Factual Consistency from Natural Language Feedback",
-        "FIZZ: Factual Inconsistency Detection by Zoom-in Summary and Zoom-out Document",
-        "Contrastive Decoding Mitigates Score Range Bias in LLM-as-a-Judge",
-        "The frequency and quality of delirium documentation in discharge summaries",
-        "Implementation of an AI-Assisted Workflow for Rehabilitation Discharge Summary Creation"
-      ],
-      "clear_rate": 0.03,
-      "clear_rate_ci95_wilson": [
-        0.0138,
-        0.0639
-      ],
-      "estimated_eligible_records_below_threshold": 287,
-      "estimated_ci95": [
-        132,
-        612
-      ],
-      "estimated_including_borderline": 526,
-      "estimated_including_borderline_ci95": [
-        297,
-        917
-      ],
-      "interpretation": "The priority ordering is not a complete screen. An estimated share of eligible records sits below the threshold and was never screened. Most of them are transfer-layer NLP method papers, a large and well-populated literature; two of the six clear finds were direct or requirements evidence, so the gap is not confined to the transfer layer."
-    }
-  },
-  "full_text": {
-    "sought": 18,
-    "retrieved": 16,
-    "not_retrieved": 2,
-    "not_retrieved_detail": [
-      "pdqi-9-prelim",
-      "psychres-2026"
-    ],
-    "corrections": [
-      "pdqi-9-negative-ed: wrong article retrieved under a guessed PMID; corrected after reading the file."
-    ]
-  },
-  "synthesis": {
-    "sources_full_text_verified": 17,
-    "sources_abstract_only": 13,
-    "candidates": 27,
-    "families": 7,
-    "methods": 16,
-    "levels": 12,
-    "blind_spots": 10,
-    "pilot_measurements_proposed": 12
-  },
-  "caveat": "Counts describe what was executed. The 9579 unscreened records and the two unsearched databases mean this is not a completed scoping review and must not be reported as one.",
-  "corrections": [
-    {
-      "date": "2026-09-13",
-      "what": "BibTeX parser in acl_search.py appended uncollected field lines (pages, isbn) to the preceding collected field, corrupting 1886 of 10066 recorded DOIs.",
-      "found_by": "auditing the pool before committing, not by a failing test",
-      "effect": "7 records that should have merged did not. Unique records 10066 -> 10059, duplicates removed 1296 -> 1303. Query hit counts and screening set unchanged.",
-      "also": "DOI fields are now normalised at both ingest sites, which removed a Google Scholar session token that a PubMed record carried inside its doi ArticleId."
-    },
-    {
-      "date": "2026-09-13",
-      "what": "Screening decisions were recorded as positions in the priority ordering.",
-      "effect": "The parser fix left the 487-record priority set identical but moved 29 positions. Decisions are now keyed by record title in include-candidates.json and screen.py resolves them, so a re-run cannot silently reassign a decision to another record."
-    }
+  "databases_not_searched": [
+   {
+    "name": "Scopus",
+    "reason": "no API key; api.elsevier.com returned HTTP 401"
+   },
+   {
+    "name": "APA PsycINFO",
+    "reason": "EBSCOhost requires an institutional login"
+   }
   ]
+ },
+ "deduplication": {
+  "before": 11362,
+  "after": 10059,
+  "removed": 1303,
+  "rule": "DOI, else PMID, else normalised title (ASCII-folded, alphanumeric only)"
+ },
+ "screening": {
+  "pool": 10059,
+  "priority_stratum_screened": 487,
+  "remainder_NOT_screened": 9572,
+  "include_candidates": 192,
+  "exclude_candidates": 295,
+  "human_decisions": 0,
+  "audit_of_unscreened": {
+   "sampled": 200,
+   "sampling": "simple random sample, seed 20260913",
+   "clearly_eligible_found": 6,
+   "borderline_eligible_found": 5,
+   "clearly_eligible_titles": [
+    "\"I think it's something that we should lean in to\": The use of OpenNotes in Canadian psychiatric care contexts",
+    "Clinical supervision of psychotherapy: essential ethics issues for supervisors and supervisees",
+    "SummaC: Re-Visiting NLI-based Models for Inconsistency Detection in Summarization",
+    "DecompEval: Evaluating Generated Texts as Unsupervised Decomposed Question Answering",
+    "Analyzing and Evaluating Faithfulness in Dialogue Summarization",
+    "An evaluation of existing text de-identification tools for use with patient progress notes"
+   ],
+   "borderline_titles": [
+    "On Improving Summarization Factual Consistency from Natural Language Feedback",
+    "FIZZ: Factual Inconsistency Detection by Zoom-in Summary and Zoom-out Document",
+    "Contrastive Decoding Mitigates Score Range Bias in LLM-as-a-Judge",
+    "The frequency and quality of delirium documentation in discharge summaries",
+    "Implementation of an AI-Assisted Workflow for Rehabilitation Discharge Summary Creation"
+   ],
+   "clear_rate": 0.03,
+   "clear_rate_ci95_wilson": [
+    0.0138,
+    0.0639
+   ],
+   "estimated_eligible_records_below_threshold": 287,
+   "estimated_ci95": [
+    132,
+    612
+   ],
+   "estimated_including_borderline": 526,
+   "estimated_including_borderline_ci95": [
+    297,
+    917
+   ],
+   "interpretation": "The priority ordering is not a complete screen. An estimated share of eligible records sits below the threshold and was never screened. Most of them are transfer-layer NLP method papers, a large and well-populated literature; two of the six clear finds were direct or requirements evidence, so the gap is not confined to the transfer layer."
+  }
+ },
+ "full_text": {
+  "sought": 20,
+  "retrieved": 18,
+  "not_retrieved": 2,
+  "not_retrieved_detail": [
+   "pdqi-9-prelim",
+   "psychres-2026"
+  ],
+  "corrections": [
+   "pdqi-9-negative-ed: wrong article retrieved under a guessed PMID; corrected after reading the file."
+  ]
+ },
+ "synthesis": {
+  "sources_full_text_verified": 18,
+  "sources_abstract_only": 13,
+  "candidates": 29,
+  "families": 7,
+  "methods": 17,
+  "levels": 13,
+  "blind_spots": 11,
+  "pilot_measurements_proposed": 14,
+  "note": "Families are the investigator's provisional organising device, not validated dimensions."
+ },
+ "caveat": "Counts describe what was executed. The 9579 unscreened records and the two unsearched databases mean this is not a completed scoping review and must not be reported as one.",
+ "corrections": [
+  {
+   "date": "2026-09-13",
+   "what": "BibTeX parser in acl_search.py appended uncollected field lines (pages, isbn) to the preceding collected field, corrupting 1886 of 10066 recorded DOIs.",
+   "found_by": "auditing the pool before committing, not by a failing test",
+   "effect": "7 records that should have merged did not. Unique records 10066 -> 10059, duplicates removed 1296 -> 1303. Query hit counts and screening set unchanged.",
+   "also": "DOI fields are now normalised at both ingest sites, which removed a Google Scholar session token that a PubMed record carried inside its doi ArticleId."
+  },
+  {
+   "date": "2026-09-13",
+   "what": "Screening decisions were recorded as positions in the priority ordering.",
+   "effect": "The parser fix left the 487-record priority set identical but moved 29 positions. Decisions are now keyed by record title in include-candidates.json and screen.py resolves them, so a re-run cannot silently reassign a decision to another record."
+  },
+  {
+   "date": "2026-09-15",
+   "what": "The flow reported identification only from the database search; the sources that entered through other routes (known sources, professional guidance, citations) were not shown as such, and the synthesis counts predated the additions of 2026-09-13 (K28, K29, ME17, one assessment level, one blind spot, P13, P14).",
+   "effect": "other_methods block added; full_text counts include the two guidance documents now logged; synthesis counts recomputed from the registry."
+  }
+ ],
+ "other_methods": {
+  "principle": "PRISMA-ScR reports records identified through other methods beside the database search. This block was missing until 2026-09-15; the sources were always in the registry, their route was not.",
+  "evidence_sources_via_search_and_screening": [
+   "S1 TN-Eval",
+   "S2 PDSQI-9",
+   "S4 PDQI-9 validation",
+   "S5 PDQI-9 preliminary (not retrieved)",
+   "S6 Walker PDQI-9 ED",
+   "S7 MentalCLOUDS",
+   "S19 Keren 2026 Psychotherapy Research"
+  ],
+  "evidence_and_guidance_sources_via_other_methods": [
+   {
+    "source": "S3 iCARE/iHOPE",
+    "route": "known before the search (declared prior exposure); medRxiv preprint, not in the searched databases"
+   },
+   {
+    "source": "S8 QuestEval",
+    "route": "known before the search; in the pool but below the screening threshold"
+   },
+   {
+    "source": "S9 QAFactEval",
+    "route": "known before the search; in the pool but below the screening threshold"
+   },
+   {
+    "source": "S10 FActScore",
+    "route": "known before the search; not matched by the ACL queries"
+   },
+   {
+    "source": "S11 COSMIN content validity",
+    "route": "methodological guidance for instrument development, chosen by the investigator; not in the pool"
+   },
+   {
+    "source": "S12 Boateng scale development",
+    "route": "methodological guidance for instrument development, chosen by the investigator; not in the pool"
+   },
+   {
+    "source": "S13 APA Record Keeping Guidelines 2007",
+    "route": "professional guidance route; in the PubMed pool but below the screening threshold"
+   },
+   {
+    "source": "S14 vyhlaska 444/2024 Sb.",
+    "route": "professional guidance route; legal instrument, in no searched database"
+   },
+   {
+    "source": "S18 Keren et al. JMIR summaries",
+    "route": "in the pool below the screening threshold; reached through the authors of S19"
+   },
+   {
+    "source": "MIND coding manual and supplementary",
+    "route": "OSF, backward from S19; supporting material, not a registry source"
+   }
+  ],
+  "counts": {
+   "via_search_and_screening": 7,
+   "via_other_methods": 10
+  }
+ }
 }

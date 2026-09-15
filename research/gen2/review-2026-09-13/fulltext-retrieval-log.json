@@ -1,7 +1,7 @@
 {
   "version": "fulltext-log-v1",
   "principle": "A report not retrieved is recorded as not retrieved, never as content-ineligible.",
-  "retrieved": 16,
+  "retrieved": 18,
   "not_retrieved": 2,
   "records": [
     {
@@ -173,9 +173,40 @@
       "bytes": 527284,
       "sha256": "49cfdc71705f9eae34116b30a250e6f6c254cc03869f947b2d8a3f94b5698a36",
       "note": "Supplementary to S19: Appendix A full prompts, Appendix B reliability, Appendix C the complete 1-5 evaluation scheme with anchors. OSF node 6d7pq via the view-only token printed in the article."
+    },
+    {
+      "slug": "apa-record-keeping-2007",
+      "doi": "10.1037/0003-066X.62.9.993",
+      "pmid": null,
+      "route": "professional guidance (requirements layer); publisher PDF of Am Psychol 2007;62(9):993-1004",
+      "retrieved": true,
+      "file": "C:\\Users\\Nehyba\\therapy-note-bench\\local\\gen2-review-2026-09-13\\fulltext\\apa-record-keeping-2007.pdf",
+      "bytes": 85083,
+      "sha256": "ded29ef559be3a6422e03ece7e4ff20626e49d6360a02c792b379166cdd9e84a",
+      "retrieved_at": "2026-09-13 11:27",
+      "logged_retroactively": "2026-09-15",
+      "note": "Retrieved on 2026-09-13 with the other full texts but not logged at the time; the download URL was not recorded. Registry source S13."
+    },
+    {
+      "slug": "cz-vyhlaska-444-2024",
+      "doi": null,
+      "pmid": null,
+      "route": "professional guidance (requirements layer); page text saved from zakonyprolidi.cz (444/2024 Sb., verze 1), not the official e-Sbirka text",
+      "retrieved": true,
+      "file": "C:\\Users\\Nehyba\\therapy-note-bench\\local\\gen2-review-2026-09-13\\fulltext\\cz-vyhlaska-444-2024.txt",
+      "bytes": 79688,
+      "sha256": "5626c2ff823c1038328ca776cf010baa7bd09fbfd2721d645e4bca1f2a64aca9",
+      "retrieved_at": "2026-09-13 11:27",
+      "logged_retroactively": "2026-09-15",
+      "note": "Retrieved on 2026-09-13 but not logged at the time; the URL was not recorded. The saved text carries the site chrome, section 2 and the effectivity clause (1 January 2025). The official e-Sbirka copy has not been retrieved. Registry source S14."
     }
   ],
   "corrections": [
-    "pdqi-9-negative-ed: wrong article retrieved under a guessed PMID; corrected after reading the file."
+    "pdqi-9-negative-ed: wrong article retrieved under a guessed PMID; corrected after reading the file.",
+    {
+      "date": "2026-09-15",
+      "what": "Two requirements-layer documents (APA Record Keeping Guidelines 2007; vyhlaska 444/2024 Sb.) were read on 2026-09-13 and cited in the registry without a retrieval record.",
+      "effect": "Logged retroactively with checksum, size and file time, and marked as such. Their download URLs are not recoverable and are recorded as not logged."
+    }
   ]
 }

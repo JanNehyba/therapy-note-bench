@@ -47,8 +47,8 @@ annotation versions and reports incomplete assessment explicitly.
 
 The [research protocol](research/gen2/README.md), version 2.0.0, combines a planned
 scoping review with attributed expert and empirical inputs. Historical origin and
-supporting evidence remain distinct. The first feasibility round targets 8-12
-operational measurements. Earlier prototypes are formative development; no completed
+supporting evidence remain distinct. The first feasibility round carries every
+measurement the review supported, not a count named in advance. Earlier prototypes are formative development; no completed
 review, human pilot or clinical validation is claimed. `make gen2-demo` runs an
 entirely synthetic offline example and makes no API calls.
 

@@ -123,7 +123,7 @@ decisions also name exact target constructs. Amended responses retain their pare
 
 ## First feasibility pilot
 
-The initial target is **8-12 operational measurements**, not forty. Retain the
+The first round carries **every measurement the review supported**, not forty and not a count named in advance; what the human budget cannot cover is reported as not measured. Retain the
 larger candidate registry and clinically important unresolved measurements.
 Executable pilot parameters come from the exact reviewed protocol revision.
 
