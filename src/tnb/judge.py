@@ -531,8 +531,8 @@ class Judge:
         benchmark, so a guard on one side was half a guard.
 
         A judge built for no task can compute its fingerprint and name a cache
-        directory, and may ask nothing: `ask` refuses. That is what the
-        cache-only readers pass, and it is the truth about them.
+        directory, and may send nothing: `ask` and `count_tokens` refuse. That
+        is what the cache-only readers pass, and it is the truth about them.
         """
         self.config = config
         self.tasks = tuple(tasks)
@@ -561,17 +561,25 @@ class Judge:
     def _payload(self, prompt: str) -> dict:
         return self.config.transport.payload(self.config, prompt)
 
+    def _require_task(self, verb: str) -> None:
+        if not self.tasks:
+            raise ConfinedCorpus(
+                f"this judge was built for no task and may {verb} nothing; "
+                "pass tasks= to Judge for the sessions it is handed"
+            )
+
     def count_tokens(self, prompt: str) -> int:
-        """How large a prompt is, for the budget check before spending."""
+        """How large a prompt is, for the budget check before spending.
+
+        Guarded like `ask`: the Vertex transport counts by sending the prompt,
+        so a prompt that may not leave must not be counted either.
+        """
+        self._require_task("count")
         return self.config.transport.count_tokens(self.config, prompt)
 
     def ask(self, prompt: str, *, sleep=time.sleep) -> Answer:
         """One question. Retries quota and backend errors, reports the rest."""
-        if not self.tasks:
-            raise ConfinedCorpus(
-                "this judge was built for no task and may ask nothing; "
-                "pass tasks= to Judge for the sessions it is handed"
-            )
+        self._require_task("ask")
         started = time.monotonic()
         last_error = "no attempt made"
         refresh_token = False

@@ -132,6 +132,9 @@ def test_a_judge_built_for_no_task_may_ask_nothing():
     assert client.config.fingerprint()
     with pytest.raises(judge.ConfinedCorpus, match="no task"):
         client.ask("a question")
+    # Counting tokens sends the prompt to Vertex as well.
+    with pytest.raises(judge.ConfinedCorpus, match="no task"):
+        client.count_tokens("a question")
 
 
 def test_every_judge_in_the_harness_is_built_for_named_tasks():
@@ -150,3 +153,32 @@ def test_every_judge_in_the_harness_is_built_for_named_tasks():
             assert any(k.arg == "tasks" for k in node.keywords), (
                 f"{path.relative_to(REPO_ROOT)}:{node.lineno} builds a judge for no named task"
             )
+
+
+class _RecordingBackend(judge.Backend):
+    """A transport that records what it was handed and never opens a socket."""
+
+    def __init__(self):
+        self.prompts = []
+
+    def count_tokens(self, config, prompt):
+        self.prompts.append(prompt)
+        return 1
+
+    def token(self, config, *, force_refresh=False):
+        raise AssertionError("no request may be prepared for a denied judge")
+
+
+def test_a_denied_judge_makes_no_transport_call_and_an_allowed_one_does(monkeypatch):
+    """The completion condition of audit finding A01, checked on a mock transport."""
+    fake = _RecordingBackend()
+    monkeypatch.setitem(judge.BACKENDS, "vertex", fake)
+    confined = replace(tasks.TASKS["soap"], confined_to=("einfra",))
+    with pytest.raises(judge.ConfinedCorpus):
+        judge.Judge(_config("gemini-3.1-pro-preview"), tasks=(confined,))
+    with pytest.raises(judge.ConfinedCorpus):
+        judge.Judge(_config("gemini-3.1-pro-preview"), tasks=()).count_tokens("the transcript")
+    assert fake.prompts == []
+    allowed = judge.Judge(_config("gemini-3.1-pro-preview"), tasks=(tasks.TASKS["soap"],))
+    assert allowed.count_tokens("a public prompt") == 1
+    assert fake.prompts == ["a public prompt"]
