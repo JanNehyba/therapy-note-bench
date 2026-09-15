@@ -27,11 +27,15 @@ the planned searches.
 4. Built one deduplicated pool of 10 059 records, screened a 487-record priority
    stratum, and audited a random sample of 200 records from the 9 572 that the
    ordering left below the threshold.
-5. Retrieved and read 13 primary full texts and 2 guidance documents. Six of the
-   papers reached the full-text stage through the search and screening; the other
-   nine sources entered through other routes (known sources, professional guidance,
-   citations), which `flow.json` records under `other_methods`. Two reports were not
-   retrieved and are logged as such.
+5. Sought 19 catalog reports: 12 evidence papers, 2 guidance documents and 5
+   methodological guidance documents. Eighteen were retrieved and read by the
+   assistant; one, the 2008 PDQI-9 preliminary paper, was not. Six evidence papers
+   reached the full-text stage through the search and screening; the other thirteen
+   reports entered through other routes (known sources, professional and
+   methodological guidance, an author search from Keren 2026), which `reports.json`
+   records per report and `flow.json` derives. Two attempts failed before a copy was
+   obtained: the Walker paper was first fetched under a guessed PMID, and Keren 2026
+   was supplied by the investigator after every open route failed.
 6. Produced a 29-candidate registry, a 17-method inventory, a 13-level map of
    assessment units, 11 worked blind spots, a line-by-line comparison with the
    previous 26-candidate map, and a 14-measurement pilot proposal. The protocol's
@@ -47,7 +51,7 @@ the planned searches.
 | **APA PsycINFO** | Not searched. EBSCOhost requires an institutional login. PsycINFO was the only database planned for the requirements layer, so amendment AM-2 added a PubMed requirements query that recovers part, not all, of that coverage. |
 | **9 572 records unscreened** | The priority ordering is not a screen. The audit estimates **287 eligible records [95% CI 132-612]** below the threshold, or 527 [297-918] counting borderline cases. Two of the six clear finds were direct or requirements evidence, so the gap is not confined to NLP method papers. |
 | **No human screening** | JBI asks for a minimum of two reviewers at selection and at least two at extraction. This round has one investigator and an AI assistant. Every include/exclude in `screening-decisions.json` is an AI proposal. |
-| **Two full texts not retrieved** | The 2008 PDQI-9 preliminary-development paper, and the Psychotherapy Research 2026 paper described below. Not retrieved is not an eligibility exclusion. |
+| **One report not retrieved** | The 2008 PDQI-9 preliminary-development paper (S5). The Psychotherapy Research 2026 paper was supplied by the investigator on 2026-09-13 after every open route failed and is retrieved; `reports.json` keeps the failed attempt beside the supplied copy. Not retrieved is not an eligibility exclusion. |
 | **Abstract-only sources** | 13 sources were judged relevant from title and abstract alone. Their instruments and validation are **not** verified, and the registry marks every candidate that leans on them. |
 | **ACL recall** | Only 62.9% of Anthology records carry an abstract; the rest were searched on title alone. |
 
@@ -123,7 +127,7 @@ by the amended searches and none has been read in full. The Swedish survey's
 three categories — errors, omissions and offenses — map onto the client purpose
 more directly than anything we currently measure.
 
-### The most directly relevant paper is closed, and its method was recovered sideways
+### The most directly relevant paper is closed to open routes; the investigator supplied it
 
 Keren, Klein, Bar-Shachar, Liakata and Atzil-Slonim, *A comparative evaluation of
 LLM-generated and clinician-written psychotherapy session summaries*
@@ -136,6 +140,11 @@ title. There is no preprint and no repository deposit. The remaining legitimate
 routes are institutional access, an author request, or waiting for the QMUL
 deposit that UK funding rules require.
 
+Later on 2026-09-13 the investigator supplied the publisher PDF (770 608 bytes,
+SHA-256 beginning 9fa66024); the failed attempt and the supplied copy are both
+events on the report in `reports.json`, and its status is retrieved. The paper was
+read by the coding assistant from that PDF; it is not human-verified.
+
 Its structured abstract was obtained, and it is substantial: 1008 segment-level
 summaries, 504 clinician-written and 504 LLM-generated, over **108 five-minute
 segments from 36 sessions**, judged blind to source on **factual consistency,
@@ -147,9 +156,10 @@ value of the therapeutic relationship or intrapersonal functioning.
 Searching by author then found the same team's **open-access companion study**
 (JMIR Form Res 2026, PMC13069367), which sets out the same three-dimension
 framework in full and supplies its rating design and its operational definition
-of personalisation. That is a partial substitute for the paywalled paper and is
-labelled as one: the session-summary study's own template and agreement figures
-remain unverified.
+of personalisation. It was found first; the session-summary paper itself was
+supplied by the investigator the same day and read from the PDF, so its template
+and agreement figures are read (AI extraction, human verification pending), not
+unverified.
 
 ### A construct the previous map had no room for at all
 
@@ -213,8 +223,9 @@ APA PsycINFO were not accessible and remain unsearched. Query amendments were
 recorded before use, following a sensitivity check against known relevant works.
 One investigator with AI assistance screened a 487-record priority stratum and
 audited a random sample of the remainder, estimating that 287 [132-612] eligible
-records were left unscreened. Thirteen primary full texts were read, six reached
-through screening and seven through other routes, plus two guidance documents. Screening and
+records were left unscreened. Nineteen catalog reports were sought and eighteen
+retrieved and read by the assistant; six evidence papers reached full text through
+screening and the rest through declared routes; one report was not retrieved. Screening and
 construct proposals await independent human review; no dual independent screening
 was performed."
 
@@ -230,8 +241,9 @@ ready for publication-grade measurement.
 | `search-log-pubmed.json`, `search-log-acl.json` | Exact queries, dates, counts, export checksums |
 | `pool-summary.json`, `screening-strata.json` | Deduplication and the ordering rule |
 | `screening-decisions.json` | Per-record AI include/exclude proposals and the audit estimate |
-| `fulltext-retrieval-log.json` | What was retrieved, by which route, and the correction |
-| `flow.json` | PRISMA-style counts end to end |
+| `fulltext-retrieval-log.json` | The retrieval attempts of 2026-09-13, by route, with the correction; the historical log, frozen |
+| `report-map.json`, `reports.json` | The report-level evidence ledger: one record per report, its route, identifiers, pool position, retrieval events and derived status; `ledger.py` holds the rule, `build_reports.py` builds it |
+| `flow-recorded.json`, `flow.json` | PRISMA-style counts end to end, generated by `build_flow.py` from the ledger and the records; the recorded file holds what cannot be derived; hand edits to `flow.json` fail the suite |
 | `local/gen2-review-2026-09-13/outputs/gen2-mapa.html` | The clickable Czech map |
 | `local/.../outputs/gen2-map.svg`, `.pdf` | Static export |
 | `local/.../outputs/gen2-registry.json` | Everything as structured data |

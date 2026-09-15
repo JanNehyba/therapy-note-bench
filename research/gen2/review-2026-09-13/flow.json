@@ -1,9 +1,26 @@
 {
- "version": "flow-v1",
+ "version": "flow-v2",
+ "generated_from": "build_flow.py over the files named in derived_from; hand edits fail the suite",
  "identification": {
-  "PubMed": 8820,
-  "ACL Anthology": 2577,
-  "total_records_identified": 11397,
+  "databases": [
+   {
+    "name": "PubMed/MEDLINE",
+    "platform": "NCBI E-utilities",
+    "queries": 6,
+    "records": 8820,
+    "downloaded_completely": true,
+    "source": "search-log total_records per query"
+   },
+   {
+    "name": "ACL Anthology",
+    "platform": "offline corpus search, amendment AM-5",
+    "queries": 3,
+    "records": 2577,
+    "downloaded_completely": true,
+    "source": "search-log total_records per query"
+   }
+  ],
+  "records_from_databases": 11397,
   "downloaded_completely": true,
   "not_parsed_into_pool": {
    "count": 35,
@@ -11,28 +28,193 @@
   },
   "databases_not_searched": [
    {
-    "name": "Scopus",
-    "reason": "no API key; api.elsevier.com returned HTTP 401"
+    "name": "APA PsycINFO",
+    "reason": "search.ebscohost.com redirects to an institutional login; no EBSCO credential is configured"
    },
    {
-    "name": "APA PsycINFO",
-    "reason": "EBSCOhost requires an institutional login"
+    "name": "Scopus",
+    "reason": "api.elsevier.com/content/search/scopus returned HTTP 401 without an API key"
    }
-  ]
+  ],
+  "other_methods": {
+   "principle": "Records identified through routes other than the database search, as PRISMA-ScR reports them: known before the search, professional or methodological guidance, citations and author searches from an included report, the audit sample of the unscreened remainder, or not recorded.",
+   "counts": {
+    "author_search_from": 2,
+    "citation_from": 2,
+    "known_before_search": 6,
+    "methodological_guidance": 5,
+    "not_recorded": 2,
+    "professional_guidance": 2,
+    "remainder_audit_sample": 1
+   },
+   "reports": {
+    "author_search_from": [
+     {
+      "report_id": "pmid:41894679",
+      "catalog_source": "S18",
+      "kind": "database_record",
+      "from": "doi:10.1080/10503307.2026.2729093"
+     },
+     {
+      "report_id": "pmid:41426204",
+      "catalog_source": null,
+      "kind": "database_record",
+      "from": "doi:10.1080/10503307.2026.2729093"
+     }
+    ],
+    "citation_from": [
+     {
+      "report_id": "supp:mind-coding-manual",
+      "catalog_source": null,
+      "kind": "supporting_material",
+      "from": "doi:10.1080/10503307.2026.2729093"
+     },
+     {
+      "report_id": "supp:mind-supplementary",
+      "catalog_source": null,
+      "kind": "supporting_material",
+      "from": "doi:10.1080/10503307.2026.2729093"
+     }
+    ],
+    "known_before_search": [
+     {
+      "report_id": "doi:10.1101/2025.06.25.25330252",
+      "catalog_source": "S3",
+      "kind": "supplementary_discovery",
+      "from": null
+     },
+     {
+      "report_id": "doi:10.4338/aci-2011-11-ra-0070",
+      "catalog_source": "S4",
+      "kind": "supplementary_discovery",
+      "from": null
+     },
+     {
+      "report_id": "doi:10.18653/v1/2021.emnlp-main.529",
+      "catalog_source": "S8",
+      "kind": "database_record",
+      "from": null
+     },
+     {
+      "report_id": "doi:10.18653/v1/2022.naacl-main.187",
+      "catalog_source": "S9",
+      "kind": "database_record",
+      "from": null
+     },
+     {
+      "report_id": "doi:10.18653/v1/2023.emnlp-main.741",
+      "catalog_source": "S10",
+      "kind": "supplementary_discovery",
+      "from": null
+     },
+     {
+      "report_id": "guid:jbi-manual-scoping-chapter",
+      "catalog_source": null,
+      "kind": "methodological_guidance",
+      "from": null
+     }
+    ],
+    "methodological_guidance": [
+     {
+      "report_id": "doi:10.1007/s11136-018-1829-0",
+      "catalog_source": "S11",
+      "kind": "methodological_guidance",
+      "from": null
+     },
+     {
+      "report_id": "doi:10.3389/fpubh.2018.00149",
+      "catalog_source": "S12",
+      "kind": "methodological_guidance",
+      "from": null
+     },
+     {
+      "report_id": "doi:10.11124/jbies-20-00167",
+      "catalog_source": "S15",
+      "kind": "methodological_guidance",
+      "from": null
+     },
+     {
+      "report_id": "doi:10.7326/m18-0850",
+      "catalog_source": "S16",
+      "kind": "methodological_guidance",
+      "from": null
+     },
+     {
+      "report_id": "doi:10.1186/s13643-020-01542-z",
+      "catalog_source": "S17",
+      "kind": "methodological_guidance",
+      "from": null
+     }
+    ],
+    "not_recorded": [
+     {
+      "report_id": "supp:hua-scoping-review-2025",
+      "catalog_source": "S_abs_hua",
+      "kind": "supplementary_discovery",
+      "from": null
+     },
+     {
+      "report_id": "pmid:31367401",
+      "catalog_source": "S_abs_sespi",
+      "kind": "database_record",
+      "from": null
+     }
+    ],
+    "professional_guidance": [
+     {
+      "report_id": "doi:10.1037/0003-066x.62.9.993",
+      "catalog_source": "S13",
+      "kind": "professional_guidance",
+      "from": null
+     },
+     {
+      "report_id": "guid:cz-decree-444-2024",
+      "catalog_source": "S14",
+      "kind": "professional_guidance",
+      "from": null
+     }
+    ],
+    "remainder_audit_sample": [
+     {
+      "report_id": "doi:10.1162/tacl_a_00453",
+      "catalog_source": "S_abs_summac",
+      "kind": "database_record",
+      "from": null
+     }
+    ]
+   }
+  }
  },
  "deduplication": {
   "before": 11362,
   "after": 10059,
   "removed": 1303,
-  "rule": "DOI, else PMID, else normalised title (ASCII-folded, alphanumeric only)"
+  "rule": "DOI, else PMID, else normalised title (ASCII-folded, alphanumeric only)",
+  "source": "pool-summary.json",
+  "known_defect": "build_pool.py keyed PubMed records by the last DOI in the record, which can be a cited reference; some merges are therefore wrong and some report ids in the pool are not the report's own. The ledger keys reports by verified identifiers; the pool is to be rebuilt in a separate correction."
  },
  "screening": {
   "pool": 10059,
+  "priority_threshold": 9,
   "priority_stratum_screened": 487,
-  "remainder_NOT_screened": 9572,
-  "include_candidates": 192,
-  "exclude_candidates": 295,
-  "human_decisions": 0,
+  "remainder_not_screened": 9572,
+  "ai_proposals": {
+   "include": 192,
+   "exclude": 295,
+   "total": 487,
+   "include_by_layer": {
+    "direct": 57,
+    "requirements": 14,
+    "transfer:instrument": 42,
+    "transfer:llm-documentation": 55,
+    "transfer:method": 24
+   },
+   "status": "AI-assisted screening proposals awaiting human decision"
+  },
+  "human_decisions": {
+   "made": 0,
+   "source": "screening-decisions.json#human_decisions_made"
+  },
   "audit_of_unscreened": {
    "sampled": 200,
    "sampling": "simple random sample, seed 20260913",
@@ -68,31 +250,96 @@
     297,
     917
    ],
-   "interpretation": "The priority ordering is not a complete screen. An estimated share of eligible records sits below the threshold and was never screened. Most of them are transfer-layer NLP method papers, a large and well-populated literature; two of the six clear finds were direct or requirements evidence, so the gap is not confined to the transfer layer."
+   "interpretation": "The priority ordering is not a complete screen. An estimated share of eligible records sits below the threshold and was never screened. Most of them are transfer-layer NLP method papers, a large and well-populated literature; two of the six clear finds were direct or requirements evidence, so the gap is not confined to the transfer layer.",
+   "basis": "recorded in screening-decisions.json; the sample on disk was regenerated after the parser fix (see reports.json diagnostics)"
   }
  },
  "full_text": {
-  "sought": 20,
-  "retrieved": 18,
-  "not_retrieved": 2,
-  "not_retrieved_detail": [
-   "pdqi-9-prelim",
-   "psychres-2026"
+  "unit": "report",
+  "catalog_reports": {
+   "sought": 19,
+   "retrieved": 18,
+   "not_retrieved": 1,
+   "not_retrieved_detail": [
+    {
+     "report_id": "doi:10.1197/jamia.m2404",
+     "catalog_source": "S5",
+     "last_attempt": "2026-09-13",
+     "remaining_options": null
+    }
+   ]
+  },
+  "other_reports": {
+   "total": 2,
+   "retrieved": 1,
+   "not_retrieved": 1,
+   "not_retrieved_detail": [
+    {
+     "report_id": "guid:jbi-manual-scoping-chapter",
+     "catalog_source": null,
+     "last_attempt": "2026-09-13",
+     "remaining_options": null
+    }
+   ]
+  },
+  "supporting_materials": {
+   "total": 2,
+   "retrieved": 2
+  },
+  "retrieval_attempts": {
+   "unit": "attempt",
+   "total": 25,
+   "succeeded": 21,
+   "failed": 3,
+   "wrong_report": 1,
+   "logged_retroactively": 6,
+   "by_route_kind": {
+    "direct_url": 4,
+    "investigator_supplied": 1,
+    "open_access_api": 12,
+    "publisher": 2,
+    "repository": 3,
+    "web_page": 3
+   }
+  },
+  "retrieved_after_failed_attempt": [
+   "doi:10.1080/10503307.2026.2729093",
+   "doi:10.4338/aci2017050080"
   ],
-  "corrections": [
-   "pdqi-9-negative-ed: wrong article retrieved under a guessed PMID; corrected after reading the file."
-  ]
+  "reading": {
+   "full_text_ai_read": 20,
+   "abstract_only": 13,
+   "human_verified": 0
+  }
+ },
+ "inclusion": {
+  "catalog_sources_by_use": {
+   "evidence": 12,
+   "guidance": 2,
+   "method": 5
+  },
+  "catalog_sources_by_layer": {
+   "direct": 5,
+   "method": 3,
+   "requirements": 2,
+   "transfer": 9
+  },
+  "abstract_only_sources": 13,
+  "supporting_materials_not_registry_sources": 2,
+  "human_inclusion_decisions": 0,
+  "basis": "reports.json inclusion blocks, which record the local catalog; no human inclusion decision exists"
  },
  "synthesis": {
-  "sources_full_text_verified": 18,
-  "sources_abstract_only": 13,
   "candidates": 29,
   "families": 7,
   "methods": 17,
   "levels": 13,
   "blind_spots": 11,
   "pilot_measurements_proposed": 14,
-  "note": "Families are the investigator's provisional organising device, not validated dimensions."
+  "note": "Families are the investigator's provisional organising device, not validated dimensions.",
+  "basis": "candidates, families, methods, levels, blind spots and pilot entries are recorded from the local catalog; the source counts are derived from reports.json",
+  "sources_full_text_verified": 18,
+  "sources_abstract_only": 13
  },
  "caveat": "Counts describe what was executed. The 9579 unscreened records and the two unsearched databases mean this is not a completed scoping review and must not be reported as one.",
  "corrections": [
@@ -112,64 +359,21 @@
    "date": "2026-09-15",
    "what": "The flow reported identification only from the database search; the sources that entered through other routes (known sources, professional guidance, citations) were not shown as such, and the synthesis counts predated the additions of 2026-09-13 (K28, K29, ME17, one assessment level, one blind spot, P13, P14).",
    "effect": "other_methods block added; full_text counts include the two guidance documents now logged; synthesis counts recomputed from the registry."
+  },
+  {
+   "date": "2026-09-15",
+   "what": "flow-v1 counted retrieval attempts as reports, listed Keren 2026 (S19) as not retrieved after its PDF had been logged, showed S4 under search and screening although it is not in the pool, carried two retrieved rows without file or checksum, and never recorded that S15-S17 were retrieved.",
+   "effect": "flow.json is generated by build_flow.py from reports.json and the search, pool, screening and amendment records: full text is counted at report level (19 sought, 18 retrieved, 1 not retrieved) with attempts reported separately; the other-methods block is derived from the routes in the ledger; hand edits fail the suite."
   }
  ],
- "other_methods": {
-  "principle": "PRISMA-ScR reports records identified through other methods beside the database search. This block was missing until 2026-09-15; the sources were always in the registry, their route was not.",
-  "evidence_sources_via_search_and_screening": [
-   "S1 TN-Eval",
-   "S2 PDSQI-9",
-   "S4 PDQI-9 validation",
-   "S5 PDQI-9 preliminary (not retrieved)",
-   "S6 Walker PDQI-9 ED",
-   "S7 MentalCLOUDS",
-   "S19 Keren 2026 Psychotherapy Research"
-  ],
-  "evidence_and_guidance_sources_via_other_methods": [
-   {
-    "source": "S3 iCARE/iHOPE",
-    "route": "known before the search (declared prior exposure); medRxiv preprint, not in the searched databases"
-   },
-   {
-    "source": "S8 QuestEval",
-    "route": "known before the search; in the pool but below the screening threshold"
-   },
-   {
-    "source": "S9 QAFactEval",
-    "route": "known before the search; in the pool but below the screening threshold"
-   },
-   {
-    "source": "S10 FActScore",
-    "route": "known before the search; not matched by the ACL queries"
-   },
-   {
-    "source": "S11 COSMIN content validity",
-    "route": "methodological guidance for instrument development, chosen by the investigator; not in the pool"
-   },
-   {
-    "source": "S12 Boateng scale development",
-    "route": "methodological guidance for instrument development, chosen by the investigator; not in the pool"
-   },
-   {
-    "source": "S13 APA Record Keeping Guidelines 2007",
-    "route": "professional guidance route; in the PubMed pool but below the screening threshold"
-   },
-   {
-    "source": "S14 vyhlaska 444/2024 Sb.",
-    "route": "professional guidance route; legal instrument, in no searched database"
-   },
-   {
-    "source": "S18 Keren et al. JMIR summaries",
-    "route": "in the pool below the screening threshold; reached through the authors of S19"
-   },
-   {
-    "source": "MIND coding manual and supplementary",
-    "route": "OSF, backward from S19; supporting material, not a registry source"
-   }
-  ],
-  "counts": {
-   "via_search_and_screening": 7,
-   "via_other_methods": 10
-  }
+ "derived_from": {
+  "reports.json": "b794b1097251e009cfa8a8973d3675967bda0d5ed959fa6245d081f7c55259e5",
+  "pool-summary.json": "081f545959d531f2af88b35a22cac7561ef9a65b0c8d4bb6a3a7243a123786f6",
+  "screening-decisions.json": "72745d4d6a12c91232489361e9a06b8144118243271038f49bce86ff75b1eac4",
+  "screening-strata.json": "95865eee52d5f9b03f915548fe84c95411db7bd1e8cf2dda4f1ee2fb1c681f3e",
+  "search-log-pubmed.json": "6ce3b6c879badc2975885a41e82ed1bd749952755b450ec99f99737d8d221845",
+  "search-log-acl.json": "21225cf337cee838db311383fd748e2931435e00a1fc42923f80ebec307f868b",
+  "amendments.json": "f20d45ba63caa83ba5e7ea7839c40984de99f26267b68ea952a54b4cbba72aa3",
+  "flow-recorded.json": "2b1524c4d478bc33f35171320a20ac30be33eb257501ce5e0a86cca456c403f7"
  }
 }

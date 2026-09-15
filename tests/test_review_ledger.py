@@ -36,6 +36,7 @@ def _module(name: str):
 
 ledger = _module("ledger")
 build_reports = _module("build_reports")
+build_flow = _module("build_flow")
 
 
 @pytest.fixture(scope="module")
@@ -184,3 +185,57 @@ def test_append_event_never_touches_existing_events(reports):
         ledger.append_event(reports, "doi:nobody", event)
     with pytest.raises(ValueError, match="needs"):
         ledger.append_event(reports, s19, {"date": "2026-09-16"})
+
+
+@pytest.fixture(scope="module")
+def flow() -> dict:
+    return json.loads((REVIEW / "flow.json").read_text(encoding="utf-8"))
+
+
+def test_flow_equals_the_generator_output(flow):
+    rebuilt = build_flow.build(*(build_flow.read(name) for name in build_flow.INPUTS))
+    assert rebuilt == flow
+    for name, digest in flow["derived_from"].items():
+        assert hashlib.sha256((REVIEW / name).read_bytes()).hexdigest() == digest, name
+
+
+def test_flow_full_text_is_report_level(flow, reports):
+    full = flow["full_text"]
+    assert full["unit"] == "report"
+    assert {k: full["catalog_reports"][k] for k in ("sought", "retrieved", "not_retrieved")} == {
+        "sought": 19,
+        "retrieved": 18,
+        "not_retrieved": 1,
+    }
+    listed = {d["catalog_source"] for d in full["catalog_reports"]["not_retrieved_detail"]}
+    assert listed == {"S5"}
+    assert full["retrieval_attempts"]["unit"] == "attempt"
+    assert full["retrieval_attempts"]["total"] == reports["counts"]["attempts"]["total"]
+    assert full["retrieval_attempts"]["total"] > full["catalog_reports"]["sought"]
+
+
+def test_flow_preserves_the_correction_history(flow):
+    recorded = json.loads((REVIEW / "flow-recorded.json").read_text(encoding="utf-8"))
+    assert flow["corrections"] == recorded["corrections"]
+    dates = [c["date"] for c in flow["corrections"]]
+    assert dates == sorted(dates) and dates[-1] == "2026-09-15"
+    assert any("attempts" in c["what"] for c in flow["corrections"])
+
+
+def test_flow_identification_derives_from_the_search_logs(flow):
+    by_name = {d["name"]: d for d in flow["identification"]["databases"]}
+    assert by_name["PubMed"]["records"] == 8820
+    assert by_name["ACL Anthology"]["records"] == 2577
+    assert flow["identification"]["records_from_databases"] == 11397
+    assert flow["identification"]["not_parsed_into_pool"]["count"] == 35
+    other = flow["identification"]["other_methods"]["counts"]
+    assert "search_and_screening" not in other
+    assert sum(other.values()) == sum(
+        1
+        for r in json.loads((REVIEW / "reports.json").read_text(encoding="utf-8"))["reports"]
+        if r["route"]["kind"] != "search_and_screening"
+    )
+    assert {d["name"] for d in flow["identification"]["databases_not_searched"]} == {
+        "APA PsycINFO",
+        "Scopus",
+    }
