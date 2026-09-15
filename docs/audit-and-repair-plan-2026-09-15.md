@@ -12,6 +12,13 @@ The attachment supplied on 15 September describes decisions and intended changes
 it is not evidence that those changes are implemented. In particular, protocol
 2.1.0 has not replaced the executable 2.0.0 at this baseline.
 
+**Repairs recorded later the same day**, each in the finding it answers below:
+A01 (both repositories), A02, A05, A06 and A13 carry a status line naming the
+commit; A04 is bounded by decision D6 in protocol 2.1.0 rather than completed;
+the pool defect found while building the ledger (a cited reference's DOI as a
+record key) is repaired in commit `926fa4c`. Findings without a status line are
+still open.
+
 ## Scope and verification
 
 Inspected the main repository's Gen-1 and Gen-2 entrypoints, research records,
@@ -50,7 +57,7 @@ clinical importance, translation meaning or LLM judge accuracy.
 |---|---|---|
 | Gen-1 benchmark | Historical results, versioned scoring, public reports and calibration infrastructure | Clinical readiness or transfer to Czech practice |
 | Shared Gen-2 core | Version 0.3.0, run protocol gen2-v3; builds and runs independently | A selected, validated instrument |
-| Research protocol | Executable 2.0.0, still with the original pilot configuration | Implementation of the later decisions in the attachment |
+| Research protocol | Executable 2.1.0 since 2026-09-15 (commit `4da6055`); 2.0.0 retained in `history/` | That any decision has been acted on: no screener, rater or pilot run yet |
 | Executed search | PubMed and ACL exports; corrected deduplicated pool of 10,059 records | Completed screening or a completed scoping review |
 | Research map | 29 candidate constructs, 17 methods and 14 proposed pilot entries, in a local custom schema | 14 operational, reviewed measurements accepted by the evaluator |
 | Human research review | No actual human screening decisions in the search record; research workspace reports zero human responses and instrument snapshots | Independent review or expert consensus |
@@ -64,6 +71,13 @@ workflows, not evidence that the search did not happen.
 ## Findings, ordered by consequence
 
 ### A01 — Data restrictions are incomplete across repositories and transport methods
+
+**Status: repaired on 2026-09-15.** Main repository: `count_tokens` is guarded like
+`ask` and a mock transport shows a denied judge makes no call (commit `7ad094b`).
+Sibling: the guard is ported to every judge construction in its CLI and tools,
+its real tasks stay confined to e-INFRA and its translated tasks, public AnnoMI
+content, are released (sibling commit `aab7e12`, decision D5). The historical
+data-governance questions stay open. The text below is the finding as audited.
 
 **Priority 0, confirmed.** The main `Judge` requires named tasks and rejects a
 confined task on a disallowed backend. The sibling still has
@@ -91,6 +105,12 @@ Evidence: [main judge](../src/tnb/judge.py), sibling `src/tnb/judge.py` and
 `src/tnb/cli.py`, [confinement tests](../tests/test_corpus_confinement.py).
 
 ### A02 — There is no single current executable study design
+
+**Status: repaired on 2026-09-15 by commit `4da6055`.** Protocol 2.1.0 lists the
+eligible cohorts, the record-not-cap rule, the reviewer roles and the human anchor
+with a decision ledger; the planner derives its strata from that list and refuses a
+native case; 2.0.0 is retained in `history/`. The text below is the finding as
+audited.
 
 **Priority 1, confirmed.** README and research documentation say the first round
 carries every review-supported measurement. `protocol.json` still says 8–12,
@@ -130,6 +150,13 @@ Freeze only after actual human responses on exact revisions.
 
 ### A04 — Screening remains incomplete; a second check of 192 candidates is insufficient
 
+**Status: bounded, not completed (decision D6, protocol 2.1.0).** The second
+screener covers the priority stratum and the audit sample; the remainder and the
+two unsearched databases are reported as limits; the work is named a scoping
+search with a prioritised evidence map. The pool correction of commit `926fa4c`
+added twenty records to the priority stratum, listed as not screened, never as
+excluded. The text below is the finding as audited.
+
 **Priority 1, confirmed.** There are 487 AI-screened priority records: 192 inclusion
 proposals and 295 exclusion proposals. The 9,572-record remainder includes a
 200-record audit sample, which found six clearly relevant and five borderline
@@ -155,6 +182,15 @@ Evidence: [flow](../research/gen2/review-2026-09-13/flow.json),
 
 ### A05 — Retrieval attempts, reports and studies are being counted together
 
+**Status: repaired on 2026-09-15 by commits `6fdf7c9`, `0ff2da3` and `2986a37`.**
+`reports.json` keeps one record per report with stable ids, study families,
+retrieval events and a derived status; `flow.json` is generated from it and the
+records; the fetch script appends events instead of rewriting the log, which is
+frozen. The Keren paper (S19) is retrieved after a recorded failed attempt; S4 is
+no longer
+counted under search and screening; the two Atzil files and the three guidance
+documents are recorded. The text below is the finding as audited.
+
 **Priority 1, confirmed.** The flow still lists Keren's `psychres-2026` as not
 retrieved. The retrieval log later records the user-supplied PDF as retrieved,
 and its stored SHA-256 matches. The source registry also contains its full-text
@@ -174,6 +210,10 @@ different events. The statement that S1–S19 were all read in full conflicts wi
 S5's unavailable status and must not be propagated.
 
 ### A06 — Several source interpretations overstate what was demonstrated
+
+**Status: tempered on 2026-09-15 by commit `af6d423`** in the memo, the weighting
+docstring and the local catalog; the evidence table's original labels are kept.
+The text below is the finding as audited.
 
 **Priority 1, checked against local primary texts.**
 
@@ -321,6 +361,12 @@ visible. The main old agreement-as-ceiling wording has already been corrected;
 do not list that completed repair as outstanding everywhere.
 
 ### A13 — Integration and local test hygiene still need finishing
+
+**Status: test hygiene repaired on 2026-09-15 by commits `dcaa049` and `de9743a`.**
+One fixture creates and removes the private workspace; the corpus profile is
+staged outside every test's temporary directory; the directories earlier runs
+left under `local/` were removed by fixture pattern only (decision D7). The
+sibling integration remains open. The text below is the finding as audited.
 
 **Priority 2.** CI now builds the independent wheel and lints the core: the older
 claim that this CI coverage is absent is stale. However, no installed sibling

@@ -20,6 +20,9 @@ jargon, and prove things in small verified steps rather than large ones.
 - What e-INFRA had deployed when: `docs/models-snapshot.md`
 - What happened to confidential data, and what is still to be decided:
   `docs/incidents.md`
+- What the review sought, retrieved and read, report by report:
+  `research/gen2/review-2026-09-13/reports.json` (built by `build_reports.py`;
+  `flow.json` is generated from it and hand edits fail the suite)
 - Roadmap and phase status: `README.md`
 
 ## Where We Are
