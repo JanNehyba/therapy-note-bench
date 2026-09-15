@@ -266,12 +266,16 @@ def test_public_export_cannot_include_provider_settings_or_free_text(store):
         public_report(payload)
 
 
-def start_review(store):
-    protocol = json.loads(
+def live_protocol() -> dict:
+    return json.loads(
         (Path(__file__).resolve().parents[1] / "research/gen2/protocol.json").read_text(
             encoding="utf-8"
         )
     )
+
+
+def start_review(store, protocol: dict | None = None):
+    protocol = protocol or live_protocol()
     queries = {"queries": [{"id": "q1", "database": "PubMed", "query": "toy query"}]}
     proposals = {"proposals": [{"id": "prior", "idea": "PRIOR-SENTINEL-QA-IS-NOT-MANDATORY"}]}
     active = research.initialize(store, protocol, queries, proposals)
@@ -931,6 +935,38 @@ def test_public_exports_keep_scope_denominators_and_no_false_registration(store)
     raw = json.loads(Path(bundle["export"]).read_text(encoding="utf-8"))
     assert raw["registration"]["status"] == "not_registered"
     assert "PRIOR-SENTINEL" not in json.dumps(raw)
+    assert bundle["registered"] is False
+
+
+def test_review_status_and_protocol_bundle_read_the_protocol(store):
+    """Both used to hard-code one planned reviewer and an unregistered
+    protocol; an amendment that recruits a second screener or registers the
+    study must show up in the status and the export without a code change."""
+    live = live_protocol()
+    active, _ = start_review(store)
+    status = research.review_status(store, active)
+    assert status["human_reviewers_planned"] == live["reviewers"]["human_count"]
+    bundle = development.public_protocol_bundle(store, active)
+    raw = json.loads(Path(bundle["export"]).read_text(encoding="utf-8"))
+    assert raw["registration"]["status"] == live["registration"]["status"]
+    assert raw["registration"]["external_timestamp"] is None
+
+    more = json.loads(json.dumps(live))
+    more["reviewers"]["human_count"] = 3
+    more["prior_exposure"] += " (three reviewers)"
+    active, _ = start_review(store, more)
+    assert research.review_status(store, active)["human_reviewers_planned"] == 3
+
+    registered = json.loads(json.dumps(live))
+    registered["registration"] = {"status": "registered"}
+    registered["prior_exposure"] += " (registered)"
+    active, _ = start_review(store, registered)
+    with pytest.raises(ValidationError, match="timestamp"):
+        development.public_protocol_bundle(store, active)
+    registered["registration"]["external_timestamp"] = "2026-09-15T00:00:00Z"
+    registered["prior_exposure"] += " (stamped)"
+    active, _ = start_review(store, registered)
+    assert development.public_protocol_bundle(store, active)["registered"] is True
 
 
 def test_repeat_calls_use_distinct_cache_entries_and_remain_resumable(store):

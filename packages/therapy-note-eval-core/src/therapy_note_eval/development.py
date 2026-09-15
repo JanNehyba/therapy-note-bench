@@ -376,6 +376,14 @@ def public_protocol_bundle(store, active):
     """Stage a shareable protocol, excluding inputs, excerpts, reviews and clinical derivatives."""
     from .research import review_status
 
+    # Registration is a fact about the protocol, read from it: an export that
+    # hard-codes "not registered" would keep saying so after a registration.
+    registration = {"external_timestamp": None, **active["protocol"].get("registration", {})}
+    require(
+        registration.get("status") == "not_registered"
+        or bool(registration.get("external_timestamp")),
+        "A registered protocol needs its external registration timestamp",
+    )
     result = {
         "protocol": active["protocol"],
         "queries": active["queries"],
@@ -384,8 +392,12 @@ def public_protocol_bundle(store, active):
         "study_id": active["id"],
         "review_status": review_status(store, active),
         "prior_input_count": len(origin_inputs(store, active)),
-        "registration": {"status": "not_registered", "external_timestamp": None},
+        "registration": registration,
         "release_status": "staged_for_human_disclosure_review_not_published",
     }
     path = store.put("protocol_exports", digest(result), result)
-    return {"export": str(path), "published": False, "registered": False}
+    return {
+        "export": str(path),
+        "published": False,
+        "registered": registration["status"] != "not_registered",
+    }

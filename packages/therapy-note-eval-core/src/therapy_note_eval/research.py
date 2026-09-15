@@ -413,7 +413,7 @@ def review_status(store: Store, active: dict) -> dict:
         ),
         "decisions": {"/".join(k): v for k, v in sorted(counts.items())},
         "external_validation": "not established",
-        "human_reviewers_planned": 1,
+        "human_reviewers_planned": active["protocol"]["reviewers"]["human_count"],
         "flow_mermaid": "flowchart TD\n A[Search records: "
         + str(sum(s.get("record_count", 0) for s in searches))
         + "] --> B[Unique reports: "
