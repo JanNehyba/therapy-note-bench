@@ -184,6 +184,7 @@
     "in_pool": true,
     "pool_record_id": "doi:10.18653/v1/2025.acl-industry.14",
     "pool_record_id_status": "matches_report_id",
+    "pool_doi": "10.18653/v1/2025.acl-industry.14",
     "stratum": "priority",
     "priority_index": 0
    },
@@ -273,10 +274,11 @@
    },
    "pool": {
     "in_pool": true,
-    "pool_record_id": "doi:10.1007/978-1-4612-4380-9_6",
-    "pool_record_id_status": "doi_from_reference_list",
+    "pool_record_id": "doi:10.1093/jamia/ocaf068",
+    "pool_record_id_status": "matches_report_id",
+    "pool_doi": "10.1093/jamia/ocaf068",
     "stratum": "priority",
-    "priority_index": 40
+    "priority_index": 45
    },
    "route": {
     "kind": "search_and_screening",
@@ -291,7 +293,7 @@
    "screening": {
     "ai_proposal": "include_candidate",
     "ai_layer": "transfer:instrument",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[40]",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[45]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -334,7 +336,7 @@
     "basis": "local catalog registry_data.py / synthesis_data.py"
    },
    "notes": [
-    "The pool keyed this record by a DOI from its reference list (build_pool.py takes the last DOI in the PubMed record); the report id is the article's own DOI."
+    "Until 2026-09-15 the pool keyed this record by a DOI from its reference list; the pool was rebuilt with the record's own DOI, which the report id already carried."
    ],
    "current_status": "retrieved",
    "current_file": {
@@ -458,8 +460,9 @@
     "in_pool": true,
     "pool_record_id": "doi:10.4338/aci-2011-11-ra-0070",
     "pool_record_id_status": "matches_report_id",
+    "pool_doi": "10.4338/aci-2011-11-ra-0070",
     "stratum": "priority",
-    "priority_index": 383
+    "priority_index": 26
    },
    "route": {
     "kind": "known_before_search",
@@ -472,9 +475,9 @@
     "declared_in": "research/gen2/review-2026-09-13/amendments.json#pre_search_sensitivity_check"
    },
    "screening": {
-    "ai_proposal": "include_candidate",
-    "ai_layer": "transfer:instrument",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[383]",
+    "ai_proposal": "not_screened",
+    "ai_layer": null,
+    "ai_proposal_source": "screening-decisions.json#not_screened_detail[26]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -549,8 +552,9 @@
     "in_pool": true,
     "pool_record_id": "doi:10.1197/jamia.m2404",
     "pool_record_id_status": "matches_report_id",
+    "pool_doi": "10.1197/jamia.m2404",
     "stratum": "priority",
-    "priority_index": 23
+    "priority_index": 25
    },
    "route": {
     "kind": "search_and_screening",
@@ -565,7 +569,7 @@
    "screening": {
     "ai_proposal": "include_candidate",
     "ai_layer": "transfer:instrument",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[23]",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[25]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -639,8 +643,9 @@
     "in_pool": true,
     "pool_record_id": "doi:10.4338/aci2017050080",
     "pool_record_id_status": "matches_report_id",
+    "pool_doi": "10.4338/aci2017050080",
     "stratum": "priority",
-    "priority_index": 112
+    "priority_index": 121
    },
    "route": {
     "kind": "search_and_screening",
@@ -655,7 +660,7 @@
    "screening": {
     "ai_proposal": "include_candidate",
     "ai_layer": "transfer:instrument",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[112]",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[121]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -752,10 +757,11 @@
    },
    "pool": {
     "in_pool": true,
-    "pool_record_id": "doi:10.5260/chara.21.2.8",
-    "pool_record_id_status": "doi_from_reference_list",
+    "pool_record_id": "doi:10.2196/57306",
+    "pool_record_id_status": "matches_report_id",
+    "pool_doi": "10.2196/57306",
     "stratum": "priority",
-    "priority_index": 239
+    "priority_index": 252
    },
    "route": {
     "kind": "search_and_screening",
@@ -770,7 +776,7 @@
    "screening": {
     "ai_proposal": "include_candidate",
     "ai_layer": "direct",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[239]",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[252]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -813,7 +819,7 @@
     "basis": "local catalog registry_data.py / synthesis_data.py"
    },
    "notes": [
-    "Pool id is a reference-list DOI; see S2."
+    "Until 2026-09-15 the pool keyed this record by a reference-list DOI; rebuilt, see S2."
    ],
    "current_status": "retrieved",
    "current_file": {
@@ -847,6 +853,7 @@
     "in_pool": true,
     "pool_record_id": "doi:10.18653/v1/2021.emnlp-main.529",
     "pool_record_id_status": "matches_report_id",
+    "pool_doi": "10.18653/v1/2021.emnlp-main.529",
     "stratum": "remainder",
     "priority_index": null
    },
@@ -938,6 +945,7 @@
     "in_pool": true,
     "pool_record_id": "doi:10.18653/v1/2022.naacl-main.187",
     "pool_record_id_status": "matches_report_id",
+    "pool_doi": "10.18653/v1/2022.naacl-main.187",
     "stratum": "remainder",
     "priority_index": null
    },
@@ -1299,6 +1307,7 @@
     "in_pool": true,
     "pool_record_id": "doi:10.1037/0003-066x.62.9.993",
     "pool_record_id_status": "matches_report_id",
+    "pool_doi": "10.1037/0003-066x.62.9.993",
     "stratum": "remainder",
     "priority_index": null
    },
@@ -1650,10 +1659,10 @@
     "doi": "catalog citation"
    },
    "pool": {
-    "in_pool": true,
-    "pool_record_id": "doi:10.1186/s13643-020-01542-z",
-    "pool_record_id_status": "matches_report_id",
-    "stratum": "remainder",
+    "in_pool": false,
+    "pool_record_id": null,
+    "pool_record_id_status": "not_in_pool",
+    "stratum": null,
     "priority_index": null
    },
    "route": {
@@ -1667,7 +1676,7 @@
     "declared_in": "research/gen2/retrieval-seeds.json#prisma-s"
    },
    "screening": {
-    "ai_proposal": "not_screened",
+    "ai_proposal": "not_applicable",
     "ai_layer": null,
     "ai_proposal_source": null,
     "human_decision": null,
@@ -1720,14 +1729,14 @@
   },
   {
    "report_id": "pmid:41894679",
-   "id_basis": "PMID verified by the retrieval log or the pool; the pool DOI is a cited reference, not the report's own",
+   "id_basis": "PMID verified by the retrieval log or the pool; minted on 2026-09-15 while the pool still keyed the record by a cited reference's DOI, and kept stable after the pool correction",
    "kind": "database_record",
    "title": "Clinical Summaries of Social Media Timelines for Mental Health Monitoring (LLM summaries)",
    "citation_short": "Keren, Klein, Bar-Shachar, Liakata, Atzil-Slonim et al. 2025, JMIR",
    "catalog_source": "S18",
    "study_family": "atzil-slonim-summarisation",
    "identifiers": {
-    "doi": null,
+    "doi": "10.2196/71230",
     "pmid": "41894679",
     "pmcid": "PMC13069367",
     "acl_key": null,
@@ -1736,12 +1745,14 @@
    },
    "identifier_sources": {
     "pmid": "retrieval log",
-    "pmcid": "retrieval log route"
+    "pmcid": "retrieval log route",
+    "doi": "pool export, from the record's own ArticleIdList (pool corrected 2026-09-15)"
    },
    "pool": {
     "in_pool": true,
-    "pool_record_id": "doi:10.18653/v1/p19-1542",
-    "pool_record_id_status": "doi_from_reference_list",
+    "pool_record_id": "doi:10.2196/71230",
+    "pool_record_id_status": "own_doi_pool_key",
+    "pool_doi": "10.2196/71230",
     "stratum": "remainder",
     "priority_index": null
    },
@@ -1835,6 +1846,7 @@
     "in_pool": true,
     "pool_record_id": "doi:10.1080/10503307.2026.2729093",
     "pool_record_id_status": "matches_report_id",
+    "pool_doi": "10.1080/10503307.2026.2729093",
     "stratum": "priority",
     "priority_index": 19
    },
@@ -1931,14 +1943,14 @@
   },
   {
    "report_id": "pmid:41426204",
-   "id_basis": "PMID verified by the retrieval log or the pool; the pool DOI is a cited reference, not the report's own",
+   "id_basis": "PMID verified by the retrieval log or the pool; minted on 2026-09-15 while the pool still keyed the record by a cited reference's DOI, and kept stable after the pool correction",
    "kind": "database_record",
    "title": "A Framework for Automation in Psychotherapy",
    "citation_short": "Atzil-Slonim et al. 2025",
    "catalog_source": null,
    "study_family": "atzil-slonim-summarisation",
    "identifiers": {
-    "doi": null,
+    "doi": "10.1177/09637214251386047",
     "pmid": "41426204",
     "pmcid": "PMC12716858",
     "acl_key": null,
@@ -1947,12 +1959,14 @@
    },
    "identifier_sources": {
     "pmid": "retrieval log",
-    "pmcid": "retrieval log route"
+    "pmcid": "retrieval log route",
+    "doi": "pool export, from the record's own ArticleIdList (pool corrected 2026-09-15)"
    },
    "pool": {
     "in_pool": true,
-    "pool_record_id": "doi:10.3390/ijerph19095164",
-    "pool_record_id_status": "doi_from_reference_list",
+    "pool_record_id": "doi:10.1177/09637214251386047",
+    "pool_record_id_status": "own_doi_pool_key",
+    "pool_doi": "10.1177/09637214251386047",
     "stratum": "remainder",
     "priority_index": null
    },
@@ -2288,14 +2302,14 @@
   },
   {
    "report_id": "pmid:42118974",
-   "id_basis": "PMID verified by the pool; own DOI not verified in tracked records",
+   "id_basis": "PMID verified by the pool; minted on 2026-09-15 while the pool still keyed the record by a cited reference's DOI, and kept stable after the pool correction",
    "kind": "database_record",
    "title": "What do clinicians edit in ambient AI-drafted clinical documentation? A qualitative content analysis",
    "citation_short": "J Am Med Inform Assoc 2026",
    "catalog_source": "S_abs_edit",
    "study_family": null,
    "identifiers": {
-    "doi": null,
+    "doi": "10.1093/jamia/ocag073",
     "pmid": "42118974",
     "pmcid": null,
     "acl_key": null,
@@ -2303,12 +2317,14 @@
     "osf_node": null
    },
    "identifier_sources": {
-    "pmid": "pool"
+    "pmid": "pool",
+    "doi": "pool export, from the record's own ArticleIdList (pool corrected 2026-09-15)"
    },
    "pool": {
     "in_pool": true,
-    "pool_record_id": "doi:10.1177/00491241231156971",
-    "pool_record_id_status": "doi_from_reference_list",
+    "pool_record_id": "doi:10.1093/jamia/ocag073",
+    "pool_record_id_status": "own_doi_pool_key",
+    "pool_doi": "10.1093/jamia/ocag073",
     "stratum": "priority",
     "priority_index": 2
    },
@@ -2352,14 +2368,14 @@
   },
   {
    "report_id": "pmid:42712320",
-   "id_basis": "PMID verified by the pool; own DOI not verified in tracked records",
+   "id_basis": "PMID verified by the pool; minted on 2026-09-15 while the pool still keyed the record by a cited reference's DOI, and kept stable after the pool correction",
    "kind": "database_record",
    "title": "Clinical AI Scribes in primary care: accuracy, error severity and implications for clinical practice",
    "citation_short": "BMJ Digital Health and AI 2025",
    "catalog_source": "S_abs_severity",
    "study_family": null,
    "identifiers": {
-    "doi": null,
+    "doi": "10.1136/bmjdhai-2025-000092",
     "pmid": "42712320",
     "pmcid": null,
     "acl_key": null,
@@ -2367,14 +2383,16 @@
     "osf_node": null
    },
    "identifier_sources": {
-    "pmid": "pool"
+    "pmid": "pool",
+    "doi": "pool export, from the record's own ArticleIdList (pool corrected 2026-09-15)"
    },
    "pool": {
     "in_pool": true,
-    "pool_record_id": "doi:10.18653/v1/2022.acl-long.394",
-    "pool_record_id_status": "doi_from_reference_list",
+    "pool_record_id": "doi:10.1136/bmjdhai-2025-000092",
+    "pool_record_id_status": "own_doi_pool_key",
+    "pool_doi": "10.1136/bmjdhai-2025-000092",
     "stratum": "priority",
-    "priority_index": 38
+    "priority_index": 43
    },
    "route": {
     "kind": "search_and_screening",
@@ -2389,7 +2407,7 @@
    "screening": {
     "ai_proposal": "include_candidate",
     "ai_layer": "transfer:llm-documentation",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[38]",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[43]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -2416,14 +2434,14 @@
   },
   {
    "report_id": "pmid:37921861",
-   "id_basis": "PMID verified by the pool; own DOI not verified in tracked records",
+   "id_basis": "PMID verified by the pool; minted on 2026-09-15 while the pool still keyed the record by a cited reference's DOI, and kept stable after the pool correction",
    "kind": "database_record",
    "title": "Errors, Omissions, and Offenses in the Health Record of Mental Health Care Patients: Results from a Nationwide Survey in Sweden",
    "citation_short": "J Med Internet Res 2023",
    "catalog_source": "S_abs_sweden",
    "study_family": null,
    "identifiers": {
-    "doi": null,
+    "doi": "10.2196/47841",
     "pmid": "37921861",
     "pmcid": null,
     "acl_key": null,
@@ -2431,14 +2449,16 @@
     "osf_node": null
    },
    "identifier_sources": {
-    "pmid": "pool"
+    "pmid": "pool",
+    "doi": "pool export, from the record's own ArticleIdList (pool corrected 2026-09-15)"
    },
    "pool": {
     "in_pool": true,
-    "pool_record_id": "doi:10.1515/dx-2018-0106",
-    "pool_record_id_status": "doi_from_reference_list",
+    "pool_record_id": "doi:10.2196/47841",
+    "pool_record_id_status": "own_doi_pool_key",
+    "pool_doi": "10.2196/47841",
     "stratum": "priority",
-    "priority_index": 123
+    "priority_index": 133
    },
    "route": {
     "kind": "search_and_screening",
@@ -2453,7 +2473,7 @@
    "screening": {
     "ai_proposal": "include_candidate",
     "ai_layer": "direct",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[123]",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[133]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -2480,14 +2500,14 @@
   },
   {
    "report_id": "pmid:34644320",
-   "id_basis": "PMID verified by the pool; own DOI not verified in tracked records",
+   "id_basis": "PMID verified by the pool; minted on 2026-09-15 while the pool still keyed the record by a cited reference's DOI, and kept stable after the pool correction",
    "kind": "database_record",
    "title": "The benefits and harms of open notes in mental health: A Delphi survey of international experts",
    "citation_short": "PLoS One 2021",
    "catalog_source": "S_abs_delphi",
    "study_family": null,
    "identifiers": {
-    "doi": null,
+    "doi": "10.1371/journal.pone.0258056",
     "pmid": "34644320",
     "pmcid": null,
     "acl_key": null,
@@ -2495,14 +2515,16 @@
     "osf_node": null
    },
    "identifier_sources": {
-    "pmid": "pool"
+    "pmid": "pool",
+    "doi": "pool export, from the record's own ArticleIdList (pool corrected 2026-09-15)"
    },
    "pool": {
     "in_pool": true,
-    "pool_record_id": "doi:10.2196/27397",
-    "pool_record_id_status": "doi_from_reference_list",
+    "pool_record_id": "doi:10.1371/journal.pone.0258056",
+    "pool_record_id_status": "own_doi_pool_key",
+    "pool_doi": "10.1371/journal.pone.0258056",
     "stratum": "priority",
-    "priority_index": 57
+    "priority_index": 62
    },
    "route": {
     "kind": "search_and_screening",
@@ -2517,7 +2539,7 @@
    "screening": {
     "ai_proposal": "include_candidate",
     "ai_layer": "direct",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[57]",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[62]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -2544,14 +2566,14 @@
   },
   {
    "report_id": "pmid:34904956",
-   "id_basis": "PMID verified by the pool; own DOI not verified in tracked records",
+   "id_basis": "PMID verified by the pool; minted on 2026-09-15 while the pool still keyed the record by a cited reference's DOI, and kept stable after the pool correction",
    "kind": "database_record",
    "title": "Sharing Clinical Notes and Electronic Health Records With People Affected by Mental Health Conditions: Scoping Review",
    "citation_short": "JMIR Ment Health 2021",
    "catalog_source": "S_abs_scoping_notes",
    "study_family": null,
    "identifiers": {
-    "doi": null,
+    "doi": "10.2196/34170",
     "pmid": "34904956",
     "pmcid": null,
     "acl_key": null,
@@ -2559,14 +2581,16 @@
     "osf_node": null
    },
    "identifier_sources": {
-    "pmid": "pool"
+    "pmid": "pool",
+    "doi": "pool export, from the record's own ArticleIdList (pool corrected 2026-09-15)"
    },
    "pool": {
     "in_pool": true,
-    "pool_record_id": "doi:10.3389/fpubh.2020.577896",
-    "pool_record_id_status": "doi_from_reference_list",
+    "pool_record_id": "doi:10.2196/34170",
+    "pool_record_id_status": "own_doi_pool_key",
+    "pool_doi": "10.2196/34170",
     "stratum": "priority",
-    "priority_index": 221
+    "priority_index": 234
    },
    "route": {
     "kind": "search_and_screening",
@@ -2581,7 +2605,7 @@
    "screening": {
     "ai_proposal": "include_candidate",
     "ai_layer": "direct",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[221]",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[234]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -2608,14 +2632,14 @@
   },
   {
    "report_id": "pmid:23164470",
-   "id_basis": "PMID verified by the pool; own DOI not verified in tracked records",
+   "id_basis": "PMID verified by the pool; minted on 2026-09-15 while the pool still keyed the record by a cited reference's DOI, and kept stable after the pool correction",
    "kind": "database_record",
    "title": "Quality of outpatient clinical notes: a stakeholder definition derived through qualitative research",
    "citation_short": "BMC Health Serv Res 2012",
    "catalog_source": "S_abs_stakeholder",
    "study_family": null,
    "identifiers": {
-    "doi": null,
+    "doi": "10.1186/1472-6963-12-407",
     "pmid": "23164470",
     "pmcid": null,
     "acl_key": null,
@@ -2623,14 +2647,16 @@
     "osf_node": null
    },
    "identifier_sources": {
-    "pmid": "pool"
+    "pmid": "pool",
+    "doi": "pool export, from the record's own ArticleIdList (pool corrected 2026-09-15)"
    },
    "pool": {
     "in_pool": true,
-    "pool_record_id": "doi:10.1016/j.jbi.2006.06.006",
-    "pool_record_id_status": "doi_from_reference_list",
+    "pool_record_id": "doi:10.1186/1472-6963-12-407",
+    "pool_record_id_status": "own_doi_pool_key",
+    "pool_doi": "10.1186/1472-6963-12-407",
     "stratum": "priority",
-    "priority_index": 340
+    "priority_index": 358
    },
    "route": {
     "kind": "search_and_screening",
@@ -2645,7 +2671,7 @@
    "screening": {
     "ai_proposal": "include_candidate",
     "ai_layer": "transfer:instrument",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[340]",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[358]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -2672,14 +2698,14 @@
   },
   {
    "report_id": "pmid:29368656",
-   "id_basis": "PMID verified by the pool; own DOI not verified in tracked records",
+   "id_basis": "PMID verified by the pool; minted on 2026-09-15 while the pool still keyed the record by a cited reference's DOI, and kept stable after the pool correction",
    "kind": "database_record",
    "title": "Objective coding of content and techniques in workplace-based supervision of an EBT in public mental health",
    "citation_short": "Implementation Science 2018",
    "catalog_source": "S_abs_supcode",
    "study_family": null,
    "identifiers": {
-    "doi": null,
+    "doi": "10.1186/s13012-017-0708-3",
     "pmid": "29368656",
     "pmcid": null,
     "acl_key": null,
@@ -2687,14 +2713,16 @@
     "osf_node": null
    },
    "identifier_sources": {
-    "pmid": "pool"
+    "pmid": "pool",
+    "doi": "pool export, from the record's own ArticleIdList (pool corrected 2026-09-15)"
    },
    "pool": {
     "in_pool": true,
-    "pool_record_id": "doi:10.1007/s10488-015-0673-6",
-    "pool_record_id_status": "doi_from_reference_list",
+    "pool_record_id": "doi:10.1186/s13012-017-0708-3",
+    "pool_record_id_status": "own_doi_pool_key",
+    "pool_doi": "10.1186/s13012-017-0708-3",
     "stratum": "priority",
-    "priority_index": 216
+    "priority_index": 229
    },
    "route": {
     "kind": "search_and_screening",
@@ -2709,7 +2737,7 @@
    "screening": {
     "ai_proposal": "include_candidate",
     "ai_layer": "requirements",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[216]",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[229]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -2736,14 +2764,14 @@
   },
   {
    "report_id": "pmid:42361434",
-   "id_basis": "PMID verified by the pool; own DOI not verified in tracked records",
+   "id_basis": "PMID verified by the pool; minted on 2026-09-15 while the pool still keyed the record by a cited reference's DOI, and kept stable after the pool correction",
    "kind": "database_record",
    "title": "Race and gender disparities in mental health documentation in primary care: Findings from a video vignette experiment",
    "citation_short": "Soc Sci Med 2026",
    "catalog_source": "S_abs_disparity",
    "study_family": null,
    "identifiers": {
-    "doi": null,
+    "doi": "10.1016/j.socscimed.2026.119505",
     "pmid": "42361434",
     "pmcid": null,
     "acl_key": null,
@@ -2751,14 +2779,16 @@
     "osf_node": null
    },
    "identifier_sources": {
-    "pmid": "pool"
+    "pmid": "pool",
+    "doi": "pool export, from the record's own ArticleIdList (pool corrected 2026-09-15)"
    },
    "pool": {
     "in_pool": true,
     "pool_record_id": "doi:10.1016/j.socscimed.2026.119505",
-    "pool_record_id_status": "doi_from_reference_list",
+    "pool_record_id_status": "own_doi_pool_key",
+    "pool_doi": "10.1016/j.socscimed.2026.119505",
     "stratum": "priority",
-    "priority_index": 450
+    "priority_index": 470
    },
    "route": {
     "kind": "search_and_screening",
@@ -2773,7 +2803,7 @@
    "screening": {
     "ai_proposal": "include_candidate",
     "ai_layer": "direct",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[450]",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[470]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -2800,7 +2830,7 @@
   },
   {
    "report_id": "supp:hua-scoping-review-2025",
-   "id_basis": "PMID verified by the retrieval log or the pool; the pool DOI is a cited reference, not the report's own",
+   "id_basis": "PMID verified by the retrieval log or the pool; minted on 2026-09-15 while the pool still keyed the record by a cited reference's DOI, and kept stable after the pool correction",
    "kind": "supplementary_discovery",
    "title": "A scoping review of large language models for generative tasks in mental health care",
    "citation_short": "npj Digit Med 2025",
@@ -2885,6 +2915,7 @@
     "in_pool": true,
     "pool_record_id": "doi:10.1162/tacl_a_00453",
     "pool_record_id_status": "matches_report_id",
+    "pool_doi": "10.1162/tacl_a_00453",
     "stratum": "remainder",
     "priority_index": null
    },
@@ -2928,14 +2959,14 @@
   },
   {
    "report_id": "pmid:42054574",
-   "id_basis": "PMID verified by the pool; own DOI not verified in tracked records",
+   "id_basis": "PMID verified by the pool; minted on 2026-09-15 while the pool still keyed the record by a cited reference's DOI, and kept stable after the pool correction",
    "kind": "database_record",
    "title": "Errors in AI-Transformed Patient-Centered Mental Health Documentation Written by Psychiatrists: Qualitative Pre-Post Study",
    "citation_short": "JMIR Ment Health 2026",
    "catalog_source": "S_abs_mherrors",
    "study_family": null,
    "identifiers": {
-    "doi": null,
+    "doi": "10.2196/78351",
     "pmid": "42054574",
     "pmcid": null,
     "acl_key": null,
@@ -2943,14 +2974,16 @@
     "osf_node": null
    },
    "identifier_sources": {
-    "pmid": "pool"
+    "pmid": "pool",
+    "doi": "pool export, from the record's own ArticleIdList (pool corrected 2026-09-15)"
    },
    "pool": {
     "in_pool": true,
-    "pool_record_id": "doi:10.2196/53164",
-    "pool_record_id_status": "doi_from_reference_list",
+    "pool_record_id": "doi:10.2196/78351",
+    "pool_record_id_status": "own_doi_pool_key",
+    "pool_doi": "10.2196/78351",
     "stratum": "priority",
-    "priority_index": 68
+    "priority_index": 74
    },
    "route": {
     "kind": "search_and_screening",
@@ -2965,7 +2998,7 @@
    "screening": {
     "ai_proposal": "include_candidate",
     "ai_layer": "direct",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[68]",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[74]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -2992,14 +3025,14 @@
   },
   {
    "report_id": "pmid:31367401",
-   "id_basis": "PMID verified by the pool; own DOI not verified in tracked records",
+   "id_basis": "PMID verified by the pool; minted on 2026-09-15 while the pool still keyed the record by a cited reference's DOI, and kept stable after the pool correction",
    "kind": "database_record",
    "title": "Development and reliability testing of the Scale for the Evaluation of Staff-Patient Interactions in Progress Notes (SESPI)",
    "citation_short": "Nursing Open 2019",
    "catalog_source": "S_abs_sespi",
    "study_family": null,
    "identifiers": {
-    "doi": null,
+    "doi": "10.1002/nop2.254",
     "pmid": "31367401",
     "pmcid": null,
     "acl_key": null,
@@ -3007,12 +3040,14 @@
     "osf_node": null
    },
    "identifier_sources": {
-    "pmid": "pool"
+    "pmid": "pool",
+    "doi": "pool export, from the record's own ArticleIdList (pool corrected 2026-09-15)"
    },
    "pool": {
     "in_pool": true,
-    "pool_record_id": "doi:10.1111/j.1365-2648.2009.05071.x",
-    "pool_record_id_status": "doi_from_reference_list",
+    "pool_record_id": "doi:10.1002/nop2.254",
+    "pool_record_id_status": "own_doi_pool_key",
+    "pool_doi": "10.1002/nop2.254",
     "stratum": "priority",
     "priority_index": 16
    },
@@ -3056,14 +3091,14 @@
   },
   {
    "report_id": "pmid:40249563",
-   "id_basis": "PMID verified by the pool; own DOI not verified in tracked records",
+   "id_basis": "PMID verified by the pool; minted on 2026-09-15 while the pool still keyed the record by a cited reference's DOI, and kept stable after the pool correction",
    "kind": "database_record",
    "title": "Development of a scoring tool for emergency department note quality: a modified Delphi approach",
    "citation_short": "CJEM 2025",
    "catalog_source": "S_abs_tednq",
    "study_family": null,
    "identifiers": {
-    "doi": null,
+    "doi": "10.1007/s43678-025-00914-5",
     "pmid": "40249563",
     "pmcid": null,
     "acl_key": null,
@@ -3071,14 +3106,16 @@
     "osf_node": null
    },
    "identifier_sources": {
-    "pmid": "pool"
+    "pmid": "pool",
+    "doi": "pool export, from the record's own ArticleIdList (pool corrected 2026-09-15)"
    },
    "pool": {
     "in_pool": true,
-    "pool_record_id": "doi:10.1056/cat.23.0283",
-    "pool_record_id_status": "doi_from_reference_list",
+    "pool_record_id": "doi:10.1007/s43678-025-00914-5",
+    "pool_record_id_status": "own_doi_pool_key",
+    "pool_doi": "10.1007/s43678-025-00914-5",
     "stratum": "priority",
-    "priority_index": 430
+    "priority_index": 450
    },
    "route": {
     "kind": "search_and_screening",
@@ -3093,7 +3130,7 @@
    "screening": {
     "ai_proposal": "include_candidate",
     "ai_layer": "transfer:instrument",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[430]",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[450]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -3122,18 +3159,8 @@
  "diagnostics": [
   {
    "level": "warning",
-   "subject": "doi:10.1093/jamia/ocaf068",
-   "message": "pool id doi:10.1007/978-1-4612-4380-9_6 is a DOI from the record's reference list, not the report's own"
-  },
-  {
-   "level": "warning",
    "subject": "pdqi-9-negative-ed",
    "message": "log records 2120648 bytes; the local file measures 187388 and its digest matches the log"
-  },
-  {
-   "level": "warning",
-   "subject": "doi:10.2196/57306",
-   "message": "pool id doi:10.5260/chara.21.2.8 is a DOI from the record's reference list, not the report's own"
   },
   {
    "level": "warning",
@@ -3142,58 +3169,8 @@
   },
   {
    "level": "warning",
-   "subject": "pmid:41894679",
-   "message": "pool id doi:10.18653/v1/p19-1542 is a DOI from the record's reference list, not the report's own"
-  },
-  {
-   "level": "warning",
    "subject": "atzil-automation-framework",
    "message": "log row is retrieved without a file; file, size and digest recorded from the local copy on 2026-09-15"
-  },
-  {
-   "level": "warning",
-   "subject": "pmid:41426204",
-   "message": "pool id doi:10.3390/ijerph19095164 is a DOI from the record's reference list, not the report's own"
-  },
-  {
-   "level": "warning",
-   "subject": "pmid:42118974",
-   "message": "pool id doi:10.1177/00491241231156971 is a DOI from the record's reference list, not the report's own"
-  },
-  {
-   "level": "warning",
-   "subject": "pmid:42712320",
-   "message": "pool id doi:10.18653/v1/2022.acl-long.394 is a DOI from the record's reference list, not the report's own"
-  },
-  {
-   "level": "warning",
-   "subject": "pmid:37921861",
-   "message": "pool id doi:10.1515/dx-2018-0106 is a DOI from the record's reference list, not the report's own"
-  },
-  {
-   "level": "warning",
-   "subject": "pmid:34644320",
-   "message": "pool id doi:10.2196/27397 is a DOI from the record's reference list, not the report's own"
-  },
-  {
-   "level": "warning",
-   "subject": "pmid:34904956",
-   "message": "pool id doi:10.3389/fpubh.2020.577896 is a DOI from the record's reference list, not the report's own"
-  },
-  {
-   "level": "warning",
-   "subject": "pmid:23164470",
-   "message": "pool id doi:10.1016/j.jbi.2006.06.006 is a DOI from the record's reference list, not the report's own"
-  },
-  {
-   "level": "warning",
-   "subject": "pmid:29368656",
-   "message": "pool id doi:10.1007/s10488-015-0673-6 is a DOI from the record's reference list, not the report's own"
-  },
-  {
-   "level": "warning",
-   "subject": "pmid:42361434",
-   "message": "pool id doi:10.1016/j.socscimed.2026.119505 is a DOI from the record's reference list, not the report's own"
   },
   {
    "level": "warning",
@@ -3202,23 +3179,8 @@
   },
   {
    "level": "warning",
-   "subject": "pmid:42054574",
-   "message": "pool id doi:10.2196/53164 is a DOI from the record's reference list, not the report's own"
-  },
-  {
-   "level": "warning",
-   "subject": "pmid:31367401",
-   "message": "pool id doi:10.1111/j.1365-2648.2009.05071.x is a DOI from the record's reference list, not the report's own"
-  },
-  {
-   "level": "warning",
    "subject": "pmid:31367401",
    "message": "how the report entered the review was not recorded"
-  },
-  {
-   "level": "warning",
-   "subject": "pmid:40249563",
-   "message": "pool id doi:10.1056/cat.23.0283 is a DOI from the record's reference list, not the report's own"
   },
   {
    "level": "info",
@@ -3252,11 +3214,11 @@
   }
  ],
  "derived_from": {
-  "report-map.json": "cd6d5e957e8e09119e3914ad3dad53a584a187359763390a2804e64e6d9e180a",
+  "report-map.json": "f6c1d28aa4ff46b5d93f57dec9430630aca792902267d9eb854332bc465e04d4",
   "fulltext-retrieval-log.json": "52ddeaedfdda580148007182ec7d0c78c4e1dd1450704dc8c736199418133611",
-  "screening-decisions.json": "72745d4d6a12c91232489361e9a06b8144118243271038f49bce86ff75b1eac4",
-  "screening-strata.json": "95865eee52d5f9b03f915548fe84c95411db7bd1e8cf2dda4f1ee2fb1c681f3e",
-  "pool-summary.json": "081f545959d531f2af88b35a22cac7561ef9a65b0c8d4bb6a3a7243a123786f6"
+  "screening-decisions.json": "f75151944ad5b6b76bcd167eeef5005b52a10493d8c1935b6bb6c1ee886e2a9f",
+  "screening-strata.json": "e9f86385a2bb5aed13f8e09135d7df667a37d9c497e2e771a259f2505c5ae3e4",
+  "pool-summary.json": "d7bc88759763377ed06f6c183ef6a863afce200f424f5fa6b93f1392dfcb82ce"
  },
  "corrections": [],
  "counts": {

@@ -65,17 +65,31 @@ def parse_pubmed_xml(path: Path) -> list[dict]:
         for art in root.iter("PubmedArticle"):
             pmid_el = art.find(".//PMID")
             pmid = pmid_el.text if pmid_el is not None else None
-            title = "".join(art.find(".//ArticleTitle").itertext()) if art.find(".//ArticleTitle") is not None else ""
+            title = (
+                "".join(art.find(".//ArticleTitle").itertext())
+                if art.find(".//ArticleTitle") is not None
+                else ""
+            )
             abst = " ".join(
                 "".join(a.itertext()) for a in art.findall(".//Abstract/AbstractText")
             ).strip()
             journal = art.find(".//Journal/Title")
             year = art.find(".//JournalIssue/PubDate/Year")
             medline_date = art.find(".//JournalIssue/PubDate/MedlineDate")
+            # The record's own DOI only: PubmedData/ArticleIdList, else the
+            # article's ELocationID. Never `.//ArticleId`, which also walks the
+            # cited-reference list and keyed a third of the PubMed pool by a
+            # reference's DOI until 2026-09-15.
             doi = None
-            for aid in art.findall(".//ArticleId"):
+            for aid in art.findall("./PubmedData/ArticleIdList/ArticleId"):
                 if aid.get("IdType") == "doi":
                     doi = norm_doi(aid.text)
+                    break
+            if doi is None:
+                for el in art.findall("./MedlineCitation/Article/ELocationID"):
+                    if el.get("EIdType") == "doi":
+                        doi = norm_doi(el.text)
+                        break
             ptypes = [p.text for p in art.findall(".//PublicationType") if p.text]
             out.append(
                 {
@@ -84,7 +98,13 @@ def parse_pubmed_xml(path: Path) -> list[dict]:
                     "title": title,
                     "abstract": abst,
                     "venue": journal.text if journal is not None else "",
-                    "year": (year.text if year is not None else (medline_date.text or "")[:4] if medline_date is not None else ""),
+                    "year": (
+                        year.text
+                        if year is not None
+                        else (medline_date.text or "")[:4]
+                        if medline_date is not None
+                        else ""
+                    ),
                     "pubtypes": ptypes,
                     "source_db": "PubMed",
                 }
@@ -151,6 +171,22 @@ def main() -> None:
         "unique_records_after_dedup": len(records),
         "duplicates_removed": sum(per_query.values()) - len(records),
         "dedup_rule": "DOI, else PMID, else normalised title (ASCII-folded, alphanumeric only)",
+        "doi_rule": (
+            "a PubMed record's DOI is read from PubmedData/ArticleIdList, else from the "
+            "article's ELocationID; never from its reference list"
+        ),
+        "corrections": [
+            {
+                "date": "2026-09-15",
+                "what": (
+                    "Until this date the DOI was the last ArticleId of type doi anywhere in "
+                    "the record, which includes the cited-reference list: 2719 PubMed records "
+                    "were keyed by a reference's DOI and distinct records merged as duplicates "
+                    "(10059 unique, 1303 removed before the correction)."
+                ),
+                "effect": "rebuilt with the record's own DOI; the counts in this file changed",
+            }
+        ],
         "with_abstract": sum(1 for r in records if r.get("abstract")),
         "by_source_db": {
             db: sum(1 for r in records if db in r["source_dbs"])

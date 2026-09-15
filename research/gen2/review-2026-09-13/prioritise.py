@@ -22,26 +22,70 @@ POOL = EXPORTS / "pool.json"
 # convention for ordering only; they carry no claim about study importance.
 SIGNALS: list[tuple[str, str, int]] = [
     # Q1/Q3 - an explicit named instrument or rating scale for note quality
-    (r"\b(PDQI|PDSQI|QNOTE|SOAP note|rubric|psychometric|content validity|inter-?rater)\b", "instrument", 5),
-    (r"\b(note quality|documentation quality|quality of (clinical )?(notes?|documentation))\b", "note-quality", 5),
+    (
+        r"\b(PDQI|PDSQI|QNOTE|SOAP note|rubric|psychometric|content validity|inter-?rater)\b",
+        "instrument",
+        5,
+    ),
+    (
+        r"\b(note quality|documentation quality|quality of (clinical )?(notes?|documentation))\b",
+        "note-quality",
+        5,
+    ),
     # Q1 - psychotherapy / mental-health documentation specifically (direct layer)
-    (r"\b(psychotherap\w*|counsel\w*|therapy session|behavioral health|mental health)\b.{0,80}\b(note|documentation|record|summar)", "direct-mh", 4),
-    (r"\b(progress note|session note|therapy note|session summar|case note)\w*\b", "direct-note", 4),
+    (
+        r"\b(psychotherap\w*|counsel\w*|therapy session|behavioral health|mental health)\b.{0,80}\b(note|documentation|record|summar)",
+        "direct-mh",
+        4,
+    ),
+    (
+        r"\b(progress note|session note|therapy note|session summar|case note)\w*\b",
+        "direct-note",
+        4,
+    ),
     # Q4 - model-generated documentation and its evaluation
-    (r"\b(large language model|LLM|generative AI|ambient (AI|documentation|scribe)|AI scribe)\b", "llm", 3),
-    (r"\b(hallucinat\w*|factual\w*|faithful\w*|omission|fabricat\w*|error taxonom\w*)\b", "fidelity", 3),
+    (
+        r"\b(large language model|LLM|generative AI|ambient (AI|documentation|scribe)|AI scribe)\b",
+        "llm",
+        3,
+    ),
+    (
+        r"\b(hallucinat\w*|factual\w*|faithful\w*|omission|fabricat\w*|error taxonom\w*)\b",
+        "fidelity",
+        3,
+    ),
     # Q3 - measurement methods transferable to automated evaluation
-    (r"\b(question answering|QA-based|atomic fact|claim verification|attribution|entailment)\b", "method", 3),
+    (
+        r"\b(question answering|QA-based|atomic fact|claim verification|attribution|entailment)\b",
+        "method",
+        3,
+    ),
     # Q2 - recipients and purposes
     (r"\b(open ?notes|patient access|client access|patients? read\w*|shared notes)\b", "client", 4),
     (r"\b(supervis\w*)\b", "supervision", 3),
-    (r"\b(record.?keeping|documentation (standard|guideline|requirement)|audit|compliance|accreditation)\b", "audit", 3),
-    (r"\b(privacy|confidential\w*|sensitive information|de-?identif\w*|stigmat\w*)\b", "privacy", 2),
+    (
+        r"\b(record.?keeping|documentation (standard|guideline|requirement)|audit|compliance|accreditation)\b",
+        "audit",
+        3,
+    ),
+    (
+        r"\b(privacy|confidential\w*|sensitive information|de-?identif\w*|stigmat\w*)\b",
+        "privacy",
+        2,
+    ),
     # Q4 - language transfer
     (r"\b(Czech|multilingual|cross-?lingual|translation)\b", "language", 2),
     # study-type signals that raise the value of a record for this review
-    (r"\b(validat\w*|reliabilit\w*|agreement|Delphi|consensus|development and validation)\b", "validation", 2),
-    (r"\b(interview\w*|focus group|survey|qualitative|user need|information need)\b", "user-need", 2),
+    (
+        r"\b(validat\w*|reliabilit\w*|agreement|Delphi|consensus|development and validation)\b",
+        "validation",
+        2,
+    ),
+    (
+        r"\b(interview\w*|focus group|survey|qualitative|user need|information need)\b",
+        "user-need",
+        2,
+    ),
 ]
 
 # Signals that a record is probably off-topic for this review even when it
@@ -101,18 +145,30 @@ def main() -> None:
         "remainder_stratum": len(remainder),
         "audit_sample_size": len(audit),
         "audit_sample_seed": 20260913,
+        "audit_sample_note": (
+            "The 200-record sample judged on 2026-09-13 was drawn before the parser fix of "
+            "that evening; the file on disk is a later draw with the same seed over a changed "
+            "remainder and does not reproduce the judged sample. The judgement itself is "
+            "recorded in screening-decisions.json."
+        ),
         "audit_purpose": (
             "Estimate how many eligible records the ordering pushed below the threshold. "
             "The remainder is not excluded; it is unscreened and reported as such."
         ),
         "score_distribution": dict(sorted(dist.items(), reverse=True)),
-        "priority_sha256": hashlib.sha256((EXPORTS / "screen-priority.json").read_bytes()).hexdigest(),
-        "audit_sha256": hashlib.sha256((EXPORTS / "screen-audit-sample.json").read_bytes()).hexdigest(),
+        "priority_sha256": hashlib.sha256(
+            (EXPORTS / "screen-priority.json").read_bytes()
+        ).hexdigest(),
+        "audit_sha256": hashlib.sha256(
+            (EXPORTS / "screen-audit-sample.json").read_bytes()
+        ).hexdigest(),
     }
     (ROOT / "screening-strata.json").write_text(
         json.dumps(summary, indent=2, ensure_ascii=False), encoding="utf-8"
     )
-    print(f"pool={len(records)} priority={len(priority)} remainder={len(remainder)} audit={len(audit)}")
+    print(
+        f"pool={len(records)} priority={len(priority)} remainder={len(remainder)} audit={len(audit)}"
+    )
     print("score distribution (top):", dict(list(sorted(dist.items(), reverse=True))[:18]))
 
 

@@ -171,7 +171,9 @@ def build(
         "screening": {
             "pool": strata["pool_size"],
             "priority_threshold": strata["priority_threshold"],
-            "priority_stratum_screened": strata["priority_stratum"],
+            "priority_stratum": strata["priority_stratum"],
+            "priority_stratum_screened": screening["priority_stratum_screened"],
+            "priority_stratum_not_screened": screening.get("not_screened", 0),
             "remainder_not_screened": strata["remainder_stratum"],
             "ai_proposals": {
                 "include": len(screening["include_candidates_detail"]),

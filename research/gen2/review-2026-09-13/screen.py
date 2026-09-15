@@ -64,7 +64,9 @@ def main() -> None:
     for layer, titles in LAYERS.items():
         for title in titles:
             if title not in by_title:
-                raise SystemExit(f"screening decision names a record not in the priority stratum: {title!r}")
+                raise SystemExit(
+                    f"screening decision names a record not in the priority stratum: {title!r}"
+                )
             i, r = by_title[title]
             if i in seen:
                 continue
@@ -85,6 +87,14 @@ def main() -> None:
                 }
             )
 
+    # A record that entered the priority stratum after the AI screen of
+    # 2026-09-13 (the pool correction of 2026-09-15 unmerged records) has no
+    # proposal and no decision; it is listed as not screened, never as excluded.
+    previous_path = ROOT / "screening-decisions.json"
+    previous = (
+        json.loads(previous_path.read_text(encoding="utf-8")) if previous_path.exists() else {}
+    )
+    previously_excluded = {r["title"] for r in previous.get("exclude_candidates_detail", [])}
     excluded_priority = [
         {
             "priority_index": i,
@@ -95,7 +105,19 @@ def main() -> None:
             "decided_by": "AI proposal; no human eligibility decision has been made",
         }
         for i, r in enumerate(priority)
-        if i not in seen
+        if i not in seen and r["title"] in previously_excluded
+    ]
+    not_screened = [
+        {
+            "priority_index": i,
+            "pool_id": r["id"],
+            "title": r["title"],
+            "decision": "not_screened",
+            "reason": "entered the priority stratum after the pool correction of 2026-09-15; no AI proposal and no human decision exist for it",
+            "decided_by": "nobody yet",
+        }
+        for i, r in enumerate(priority)
+        if i not in seen and r["title"] not in previously_excluded
     ]
 
     k_clear = len(AUDIT_ELIGIBLE_CLEAR)
@@ -112,9 +134,11 @@ def main() -> None:
             "has one investigator and an AI assistant, and the AI proposals below are "
             "not a completed screen."
         ),
-        "priority_stratum_screened": len(priority),
+        "priority_stratum": len(priority),
+        "priority_stratum_screened": len(included) + len(excluded_priority),
         "include_candidates": len(included),
         "exclude_candidates": len(excluded_priority),
+        "not_screened": len(not_screened),
         "remainder_unscreened": remainder_n,
         "audit_of_unscreened_remainder": {
             "sampled": audit_n,
@@ -128,7 +152,10 @@ def main() -> None:
             "estimated_eligible_records_below_threshold": round(remainder_n * k_clear / audit_n),
             "estimated_ci95": [round(remainder_n * lo_c), round(remainder_n * hi_c)],
             "estimated_including_borderline": round(remainder_n * k_any / audit_n),
-            "estimated_including_borderline_ci95": [round(remainder_n * lo_a), round(remainder_n * hi_a)],
+            "estimated_including_borderline_ci95": [
+                round(remainder_n * lo_a),
+                round(remainder_n * hi_a),
+            ],
             "interpretation": (
                 "The priority ordering is not a complete screen. An estimated share of "
                 "eligible records sits below the threshold and was never screened. Most "
@@ -139,12 +166,14 @@ def main() -> None:
         },
         "include_candidates_detail": included,
         "exclude_candidates_detail": excluded_priority,
+        "not_screened_detail": not_screened,
     }
     (ROOT / "screening-decisions.json").write_text(
         json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8"
     )
     print(f"include candidates: {len(included)}")
     print(f"exclude candidates (priority stratum): {len(excluded_priority)}")
+    print(f"not screened (entered the stratum after the screen): {len(not_screened)}")
     print(f"unscreened remainder: {remainder_n}")
     print(
         f"audit: {k_clear}/{audit_n} clearly eligible -> est. "

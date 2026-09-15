@@ -309,3 +309,35 @@ def test_the_fetch_script_has_no_roster_and_requires_a_report():
         fetch_fulltext.main([])
     log = json.loads((REVIEW / "fulltext-retrieval-log.json").read_text(encoding="utf-8"))
     assert log["superseded_by"]["file"] == "reports.json"
+
+
+def test_pool_keys_are_the_reports_own_identifiers(reports):
+    """The pool once keyed a third of its PubMed records by a cited reference's
+    DOI; since the correction of 2026-09-15 every pool key of a report in the
+    ledger is the report's own identifier, and the builder has no
+    reference-list warning left to print."""
+    assert not any("reference list" in d["message"] for d in reports["diagnostics"])
+    for report in reports["reports"]:
+        pool = report["pool"]
+        if pool["in_pool"]:
+            assert pool["pool_record_id_status"] in ("matches_report_id", "own_doi_pool_key"), (
+                report["report_id"]
+            )
+    summary = json.loads((REVIEW / "pool-summary.json").read_text(encoding="utf-8"))
+    assert "reference list" in summary["doi_rule"]
+    assert summary["corrections"][0]["date"] == "2026-09-15"
+
+
+def test_flow_screening_counts_are_consistent(flow):
+    """Records that entered the priority stratum after the AI screen are counted
+    as not screened, never folded into the excluded ones."""
+    s = flow["screening"]
+    assert (
+        s["priority_stratum"] == s["priority_stratum_screened"] + s["priority_stratum_not_screened"]
+    )
+    assert s["pool"] == s["priority_stratum"] + s["remainder_not_screened"]
+    assert s["ai_proposals"]["total"] == s["priority_stratum_screened"]
+    decisions = json.loads((REVIEW / "screening-decisions.json").read_text(encoding="utf-8"))
+    assert all(r["decision"] == "not_screened" for r in decisions["not_screened_detail"])
+    assert len(decisions["not_screened_detail"]) == s["priority_stratum_not_screened"]
+    assert decisions["human_decisions_made"] == 0

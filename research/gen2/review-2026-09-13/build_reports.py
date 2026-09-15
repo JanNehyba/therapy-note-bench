@@ -143,8 +143,12 @@ def _log_event(slug: str, row: dict, mapping: dict, diagnostics: list[dict]) -> 
 def _proposal_source(proposal: dict | None) -> str | None:
     if not proposal:
         return None
-    detail = "include" if proposal["decision"] == "include_candidate" else "exclude"
-    return f"screening-decisions.json#{detail}_candidates_detail[{proposal['priority_index']}]"
+    detail = {
+        "include_candidate": "include_candidates_detail",
+        "exclude_candidate": "exclude_candidates_detail",
+        "not_screened": "not_screened_detail",
+    }[proposal["decision"]]
+    return f"screening-decisions.json#{detail}[{proposal['priority_index']}]"
 
 
 def build(
@@ -172,7 +176,9 @@ def build(
         )
     proposals = {
         r["pool_id"]: r
-        for r in screening["include_candidates_detail"] + screening["exclude_candidates_detail"]
+        for r in screening["include_candidates_detail"]
+        + screening["exclude_candidates_detail"]
+        + screening.get("not_screened_detail", [])
     }
     human_made = screening.get("human_decisions_made", 0)
 

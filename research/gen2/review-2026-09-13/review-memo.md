@@ -24,9 +24,13 @@ the planned searches.
    Every result set was downloaded in full. `search-log-pubmed.json` and
    `search-log-acl.json` hold the exact queries, dates, counts and export
    checksums.
-4. Built one deduplicated pool of 10 059 records, screened a 487-record priority
-   stratum, and audited a random sample of 200 records from the 9 572 that the
-   ordering left below the threshold.
+4. Built one deduplicated pool of 10 223 records (10 059 until the DOI correction of
+   2026-09-15, when the pool builder was found to take a cited reference's DOI for a
+   third of the PubMed records), screened a 487-record priority stratum, and audited
+   a random sample of 200 records from the remainder. The corrected stratum holds
+   507 records: the 487 screened ones and 20 that entered it only through the
+   correction and are listed as not screened, never as excluded; the remainder is
+   9 716.
 5. Sought 19 catalog reports: 12 evidence papers, 2 guidance documents and 5
    methodological guidance documents. Eighteen were retrieved and read by the
    assistant; one, the 2008 PDQI-9 preliminary paper, was not. Six evidence papers
@@ -49,7 +53,7 @@ the planned searches.
 |---|---|
 | **Scopus** | Not searched. `api.elsevier.com` returns HTTP 401 without a key. The sibling `destilo` project was checked at the user's suggestion: its `.env` and `.env.example` hold `CORE_API_KEY` and `NCBI_API_KEY` but **no Elsevier or Scopus credential**, and a repo-wide search found Scopus mentioned only in a design note recording that Taylor & Francis, APA and Elsevier paywalls return 404. |
 | **APA PsycINFO** | Not searched. EBSCOhost requires an institutional login. PsycINFO was the only database planned for the requirements layer, so amendment AM-2 added a PubMed requirements query that recovers part, not all, of that coverage. |
-| **9 572 records unscreened** | The priority ordering is not a screen. The audit estimates **287 eligible records [95% CI 132-612]** below the threshold, or 527 [297-918] counting borderline cases. Two of the six clear finds were direct or requirements evidence, so the gap is not confined to NLP method papers. |
+| **9 716 records unscreened, and 20 more in the priority stratum** | The priority ordering is not a screen. The audit estimates **291 eligible records [95% CI 134-621]** below the threshold, or 534 [301-931] counting borderline cases (the judgement of 2026-09-13, recomputed over the remainder after the DOI correction). Two of the six clear finds were direct or requirements evidence, so the gap is not confined to NLP method papers. Twenty records entered the priority stratum only through the correction of 2026-09-15 and have no proposal yet. |
 | **No human screening** | JBI asks for a minimum of two reviewers at selection and at least two at extraction. This round has one investigator and an AI assistant. Every include/exclude in `screening-decisions.json` is an AI proposal. |
 | **One report not retrieved** | The 2008 PDQI-9 preliminary-development paper (S5). The Psychotherapy Research 2026 paper was supplied by the investigator on 2026-09-13 after every open route failed and is retrieved; `reports.json` keeps the failed attempt beside the supplied copy. Not retrieved is not an eligibility exclusion. |
 | **Abstract-only sources** | 13 sources were judged relevant from title and abstract alone. Their instruments and validation are **not** verified, and the registry marks every candidate that leans on them. |
@@ -220,11 +224,14 @@ resolved by title search. `fulltext-retrieval-log.json` records the correction.
 ## What a methods section may truthfully say
 
 "We executed a scoping search of PubMed and the complete ACL Anthology corpus on
-2026-09-13, retrieving 11 397 records and 10 059 after deduplication. Scopus and
+2026-09-13, retrieving 11 397 records and 10 223 after deduplication (corrected on
+2026-09-15 from 10 059 when the pool builder was found to take cited references'
+DOIs). Scopus and
 APA PsycINFO were not accessible and remain unsearched. Query amendments were
 recorded before use, following a sensitivity check against known relevant works.
-One investigator with AI assistance screened a 487-record priority stratum and
-audited a random sample of the remainder, estimating that 287 [132-612] eligible
+One investigator with AI assistance screened 487 of the 507 records in the priority
+stratum (20 entered it after the screen, through the correction) and audited a random
+sample of the remainder, estimating that 291 [134-621] eligible
 records were left unscreened. Nineteen catalog reports were sought and eighteen
 retrieved and read by the assistant; six evidence papers reached full text through
 screening and the rest through declared routes; one report was not retrieved. Screening and

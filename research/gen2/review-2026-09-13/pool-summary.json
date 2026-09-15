@@ -11,14 +11,22 @@
     "acl-clinical-doc": 406
   },
   "sum_before_dedup": 11362,
-  "unique_records_after_dedup": 10059,
-  "duplicates_removed": 1303,
+  "unique_records_after_dedup": 10223,
+  "duplicates_removed": 1139,
   "dedup_rule": "DOI, else PMID, else normalised title (ASCII-folded, alphanumeric only)",
-  "with_abstract": 9901,
+  "doi_rule": "a PubMed record's DOI is read from PubmedData/ArticleIdList, else from the article's ELocationID; never from its reference list",
+  "corrections": [
+    {
+      "date": "2026-09-15",
+      "what": "Until this date the DOI was the last ArticleId of type doi anywhere in the record, which includes the cited-reference list: 2719 PubMed records were keyed by a reference's DOI and distinct records merged as duplicates (10059 unique, 1303 removed before the correction).",
+      "effect": "rebuilt with the record's own DOI; the counts in this file changed"
+    }
+  ],
+  "with_abstract": 10062,
   "by_source_db": {
-    "PubMed": 7644,
+    "PubMed": 7806,
     "ACL Anthology": 2422
   },
   "pool_file": "C:\\Users\\Nehyba\\therapy-note-bench\\local\\gen2-review-2026-09-13\\exports\\pool.json",
-  "pool_sha256": "0d706c14bbd910225c5c539a62d8190621d1a4f289716eef803bfef598928344"
+  "pool_sha256": "d906fead5824ce6eb972f2bf2920febc2e5b584073386e39b9404b317117a59a"
 }
