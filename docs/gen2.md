@@ -1,7 +1,8 @@
 # Gen-2: traceable research and versioned measurement
 
-**Software: experimental v0.3.0 / protocol gen2-v3. Research protocol: 2.0.0.
-The newly specified review, human pilot and clinical validation are not complete.**
+**Software: experimental v0.3.0 / protocol gen2-v3. Research protocol: 2.1.0, amended
+on 2026-09-15 before any pilot run; 2.0.0 is retained in history. The newly specified
+review, human pilot and clinical validation are not complete.**
 
 The existing software, prior proposals and earlier experiments are formative
 development. They do not predetermine the new instrument. The scoping review has
@@ -217,14 +218,21 @@ passing offline tests is not clinical validation.
 
 ## Feasibility planning and sibling integration
 
-`pilot-plan --registry ... --research-workspace ... --input ...` takes six exact
-case revisions plus two declared generator and judge families. It verifies English/
-Czech translation pairing and provider permissions, freezes 48 generation jobs,
-and balances a 24-note human sample across strata, purposes, cases and generators.
-The first round carries every measurement the review supported; what the human
-budget cannot cover is reported as not measured, never dropped to fit a count.
-The 120 unique decisions and 30 repeats are a budget taken from the reviewed protocol; assignment of annotation
-units still requires reviewed banks and segmentations. Nothing is executed by planning.
+`pilot-plan --registry ... --research-workspace ... --input ...` takes the exact case
+revisions of the protocol's eligible cohorts, currently two English AnnoMI
+conversations and their two Czech translations, plus two declared generator and
+judge families. It verifies English/Czech translation pairing and provider
+permissions, freezes 32 generation jobs, and balances a 16-note human sample across
+cohorts, purposes, cases and generators. Native Czech sessions are not eligible:
+they are a private track outside the paper and the pilot, and the planner refuses
+them by name. The first round carries every measurement the review supported; the
+executable count is recorded at freeze, never capped, and what the human budget
+cannot cover is reported as not measured. The 120 unique decisions and 30 repeats are
+a budget of annotation units taken from the reviewed protocol; two psychologists
+additionally rate the human sample in a crossover over languages with an overlap
+block and blinded repeats, as a feasibility anchor rather than validation.
+Assignment of annotation units still requires reviewed banks and segmentations.
+Nothing is executed by planning.
 
 The Czech checkout is not installed or modified by the core. Prepare a reviewable
 patch with `python tools/prepare_gen2_czech.py --target ../czech-therapy-notes

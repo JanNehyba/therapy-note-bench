@@ -609,7 +609,9 @@ def parser() -> argparse.ArgumentParser:
     pair.add_argument("--left", required=True, help="manifest id, as the report lists cohorts")
     pair.add_argument("--right", required=True, help="manifest id of the other language")
     annotate = sub.add_parser("annotate", help="create blinded local review pages")
-    pilot = sub.add_parser("pilot-plan", help="freeze the six-case balanced feasibility design")
+    pilot = sub.add_parser(
+        "pilot-plan", help="freeze the balanced feasibility design over the protocol's cohorts"
+    )
     pilot.add_argument("--registry", type=Path, required=True)
     pilot.add_argument("--research-workspace", type=Path)
     pilot.add_argument("--input", type=Path, required=True)

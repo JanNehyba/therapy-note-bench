@@ -1,7 +1,9 @@
 # Gen-2: scoping review and transparent instrument development
 
-**Research protocol 2.0.0. Status: prepared; the newly specified searches, human
-selection and clinical validation are not complete.** Earlier reading, prototype
+**Research protocol 2.1.0, amended 2026-09-15; 2.0.0 and 1.0.0 are retained in
+`history/`. Status: prepared and amended before any pilot run; the search of
+2026-09-13 is bounded as a scoping search with a prioritised evidence map, and the
+human selection and clinical validation are not complete.** Earlier reading, prototype
 experiments and proposals are formative development, not erased history.
 
 The review has its own literature findings. The instrument may additionally use
@@ -14,8 +16,10 @@ independent human reviewer.
 
 ## Protocol and evidence
 
-`protocol.json` defines the current sequence and workload. The previous version
-is retained in `history/protocol-1.0.0.json`; it is superseded, not silently edited.
+`protocol.json` defines the current sequence and workload. Previous versions are
+retained in `history/`; each is superseded, not silently edited, and the live file
+names the version it supersedes and carries a decision ledger with the origin and
+date of every change.
 `queries.json` contains planned, unexecuted queries. `retrieval-seeds.json` is a
 known-source retrieval inventory, not an included-study table.
 `prior-proposals.json` records prior exposure and proposals, not validated criteria.
@@ -23,8 +27,11 @@ known-source retrieval inventory, not an included-study table.
 Use JBI scoping-review guidance with explicitly recorded adaptations. Report with
 PRISMA-ScR and PRISMA-S; neither checklist by itself establishes review quality.
 Verify the methodological full texts before claiming adherence. One investigator
-screens and reviews with disclosed AI assistance. Independent second screening
-and role-specific external validation remain outstanding.
+screens and reviews with disclosed AI assistance; a second human screener will be
+recruited to cover the priority stratum and the audit sample on the exact sheets,
+and a clinical panel is not planned (decision D2). Until the second screener records
+decisions, screening is single-reviewer and is reported as such. Role-specific
+external validation remains outstanding.
 
 Search PubMed/MEDLINE, APA PsycINFO, Scopus and ACL Anthology; add backward and
 forward citation searches and attributable professional guidance. Preserve exact
@@ -81,7 +88,8 @@ into human-reviewed evidence.
 
 Install the optional extras with `uv sync --all-groups --all-extras`. The standalone
 `therapy-note-eval` CLI accepts the same arguments after `tnb gen2`.
-Use a new private workspace for this protocol revision:
+Use a new private workspace for each protocol revision; a study started on 2.0.0
+keeps its snapshots and is refused by `pilot-plan`:
 
 ```sh
 tnb gen2 --workspace local/gen2-research-v3 research init --protocol research/gen2/protocol.json --queries research/gen2/queries.json --proposals research/gen2/prior-proposals.json
@@ -123,23 +131,47 @@ decisions also name exact target constructs. Amended responses retain their pare
 
 ## First feasibility pilot
 
-The first round carries **every measurement the review supported**, not forty and not a count named in advance; what the human budget cannot cover is reported as not measured. Retain the
-larger candidate registry and clinically important unresolved measurements.
-Executable pilot parameters come from the exact reviewed protocol revision.
+The first round carries **every measurement the review supported** (decision D3):
+the executable count is recorded at freeze, never capped, and what the human budget
+cannot cover is reported as not measured. The fourteen catalog entries are not
+fourteen comparable measures: a training condition, a requirements check, two
+human-use outcomes, a corpus-level proxy and a derived ratio sit among them, and the
+protocol keeps catalog entries, executable measures and study conditions as distinct
+records. Retain the larger candidate registry and clinically important unresolved
+measurements. Executable pilot parameters come from the exact reviewed protocol
+revision.
 
-The design has two English cases, their two Czech translations, two native Czech
-sessions, four purposes and two generator families: at most 48 generated notes.
-The human target is at most 24 notes and 120 unique decisions plus 30 blinded
-repeats, within 8-12 hours including reference checks. This is not the time budget
-for the whole review. If preparation exceeds it, amend and reduce the sample;
-report the actual coverage rather than marking unreviewed units complete.
+The eligible cohorts are two English AnnoMI conversations and their two Czech
+translations, produced by a recorded translation instrument that is never a judge
+(decision D4; the earlier Claude translations are superseded and redone). The native
+Czech sessions are excluded (decision D1): the planner refuses a native case as not
+eligible, and adding a cohort is a protocol amendment, not a planner option.
+
+With four purposes and two generator families the design freezes at most 32
+generated notes. The investigator's development budget is at most 16 balanced notes
+and 120 unique annotation-unit decisions plus 30 blinded repeats within 8-12 hours
+including reference checks; that is a budget of annotation units bounded by time,
+not a count of notes. This is not the time budget for the whole review. If
+preparation exceeds it, amend and reduce the sample; report the actual coverage
+rather than marking unreviewed units complete.
+
+The human anchor is two Czech psychologists (decision D2). Each rates one language
+of each conversation in a crossover, so every conversation is rated in both
+languages and no rater sees a conversation twice; an overlap block rated by both in
+the same language is the only source of between-rater agreement, and blinded
+repeats give within-rater agreement. Calibration uses notes outside the rated
+sample; agreement is reported with Gwet's AC1/AC2 per item, with disagreements
+retained. Counts for the confirmatory study are fixed in a later amendment from the
+pilot's timing and agreement. This anchors the feasibility of the rating task; it is
+not confirmatory validation, model ranking or clinical validation.
 
 Check translation meaning, important-information banks, unanswered information
 needs and atomic segmentation before using them as references. Prepare banks
 before candidate-note exposure. Balance assignments across purposes, languages,
 corpus origins and model families, retaining related sessions and translations in
-one split. Never expose future sessions. Native Czech data currently represent one
-client; TN-Eval's 43 videos are known grouping units, not established client IDs.
+one split. Never expose future sessions. The native Czech data are one client and a
+permanently private track outside this pilot; TN-Eval's 43 videos are known grouping
+units, not established client IDs.
 
 Use two judge families and explicit replicate IDs for real repeated calls. Compare
 response formats on the same units; test granularity separately. Include verified

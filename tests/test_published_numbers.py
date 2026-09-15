@@ -1009,19 +1009,21 @@ CLAIMS = (
     ),
     Claim(
         where="docs/gen2.md",
-        phrase="48 generation jobs, and balances a 24-note human sample",
+        phrase="32 generation jobs, and balances a 16-note human sample",
         kind="elsewhere",
         because="tests/test_gen2_research.py::"
         "test_balanced_pilot_is_a_plan_not_fabricated_human_data "
-        "checks 48 planned jobs and the 24-note balanced subset; no execution is claimed.",
-        covers=("48", "24"),
+        "checks 32 planned jobs and the 16-note balanced subset under protocol 2.1.0, "
+        "whose two eligible cohorts hold two cases each; no execution is claimed.",
+        covers=("32", "16"),
     ),
     Claim(
         where="docs/gen2.md",
         phrase="120 unique decisions and 30 repeats",
         kind="elsewhere",
-        because="The revised feasibility plan budgets 150 item decisions including 30 repeats, "
-        "replacing the older 150-claim/50-pair suggestion. "
+        because="Protocol 2.1.0 keeps the 150-unit budget of annotation units, 120 unique "
+        "plus 30 repeats, bounded by the investigator hours; the note count fell to 16 and "
+        "the units per note rose. "
         "tests/test_gen2_research.py::test_balanced_pilot_is_a_plan_not_fabricated_human_data "
         "checks these budgets without presenting them as completed ratings.",
         covers=("120", "30"),

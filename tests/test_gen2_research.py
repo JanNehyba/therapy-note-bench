@@ -697,6 +697,34 @@ def test_overlapping_qa_and_claim_findings_need_reviewed_links():
         summarize(e, {**links, "groups": [*links["groups"], {**links["groups"][0], "id": "g2"}]})
 
 
+def pilot_cases(protocol: dict, base, *, extra=()):
+    """Two cases per cohort the protocol lists, paired by translation group."""
+    cases = []
+    for entry in (*protocol["pilot"]["cohorts"], *extra):
+        origin, language = entry["origin"], entry["language"]
+        native = origin == "native_real"
+        for index in range(entry.get("cases", 2)):
+            cases.append(
+                replace(
+                    base,
+                    id=f"{origin}-{index}",
+                    origin=origin,
+                    language=language,
+                    group_id="native-one-client" if native else f"pair-{index}",
+                    translation_group=None if native else f"pair-{index}",
+                    split="pilot",
+                    allowed_providers=("local",),
+                )
+            )
+    return cases
+
+
+def two_families():
+    return [
+        replace(controls.FIXTURE_MODEL, family=f"family-{i}", model=f"model-{i}") for i in range(2)
+    ]
+
+
 def test_balanced_pilot_is_a_plan_not_fabricated_human_data(store):
     from collections import Counter
 
@@ -705,35 +733,26 @@ def test_balanced_pilot_is_a_plan_not_fabricated_human_data(store):
     active, record = start_review(store)
     instrument = operational_toy(store, active, toy_registry(active, record))
     base, *_ = controls.fixture("en", "continuity")
-    cases = []
-    for origin, language in (
-        ("public_demo", "en"),
-        ("translated_demo", "cs"),
-        ("native_real", "cs"),
-    ):
-        for index in range(2):
-            cases.append(
-                replace(
-                    base,
-                    id=f"{origin}-{index}",
-                    origin=origin,
-                    language=language,
-                    group_id="native-one-client" if origin == "native_real" else f"pair-{index}",
-                    translation_group=None if origin == "native_real" else f"pair-{index}",
-                    split="pilot",
-                    allowed_providers=("local",),
-                )
-            )
-    models = [
-        replace(controls.FIXTURE_MODEL, family=f"family-{i}", model=f"model-{i}") for i in range(2)
-    ]
+    cases = pilot_cases(active["protocol"], base)
+    models = two_families()
     result = plan(cases, instrument, models, models, 11, protocol=active["protocol"])
-    assert len(result["jobs"]) == 48 and len(result["human_note_sample"]) == 24
-    assert result["independent_native_client_groups"] == 1
+    assert len(result["jobs"]) == 32 and len(result["human_note_sample"]) == 16
     selected = [j for j in result["jobs"] if j["id"] in result["human_note_sample"]]
     assert set(Counter(j["case_revision"] for j in selected).values()) == {4}
     assert result["human_item_budget"]["blinded_repeats"] == 30
     assert result["human_item_budget"]["unique_decisions"] == 120
+    assert result["measurement_rule"] == "record_not_cap"
+    assert result["measurements_recorded"] == {
+        "executable": 1,
+        "items": 0,
+        "non_item_methods": ["claims"],
+        "recorded_at": "pilot_plan",
+    }
+    assert {c["origin"] for c in result["cohorts"]} == {"public_demo", "translated_demo"}
+    assert all(c["cases"] == 2 and c["client_groups"] == 2 for c in result["cohorts"])
+    assert [e["origin"] for e in result["excluded_cohorts"]] == ["native_real"]
+    for gone in ("measurement_target", "below_target", "independent_native_client_groups"):
+        assert gone not in result
     assert "no notes" in result["status"]
     with pytest.raises(ValidationError):
         plan(
@@ -744,6 +763,94 @@ def test_balanced_pilot_is_a_plan_not_fabricated_human_data(store):
             11,
             protocol=active["protocol"],
         )
+
+
+def test_pilot_refuses_a_cohort_the_protocol_excludes(store):
+    """A native case is refused by name, before the counts are compared, and a
+    missing listed cohort is a different refusal."""
+    from therapy_note_eval.pilot import plan
+
+    active, record = start_review(store)
+    instrument = operational_toy(store, active, toy_registry(active, record))
+    base, *_ = controls.fixture("en", "continuity")
+    protocol = active["protocol"]
+    models = two_families()
+    with_native = pilot_cases(protocol, base, extra=protocol["pilot"]["excluded_cohorts"])
+    with pytest.raises(ValidationError, match="excluded"):
+        plan(with_native, instrument, models, models, 11, protocol=protocol)
+    only_english = [c for c in pilot_cases(protocol, base) if c.language == "en"]
+    with pytest.raises(ValidationError, match="differ"):
+        plan(only_english, instrument, models, models, 11, protocol=protocol)
+
+
+def test_pilot_plans_whatever_cohorts_the_protocol_lists(store):
+    """The strata are the protocol's, not the planner's: a revision that lists a
+    native cohort plans it, with its one client group visible."""
+    from therapy_note_eval.pilot import plan
+
+    revised = json.loads(json.dumps(live_protocol()))
+    native = revised["pilot"]["excluded_cohorts"].pop()
+    revised["pilot"]["cohorts"].append({**native, "cases": 2})
+    revised["pilot"]["max_notes"] = 48
+    revised["pilot"]["human_note_sample"] = 24
+    active, record = start_review(store, revised)
+    instrument = operational_toy(store, active, toy_registry(active, record))
+    base, *_ = controls.fixture("en", "continuity")
+    models = two_families()
+    result = plan(pilot_cases(revised, base), instrument, models, models, 11, protocol=revised)
+    assert len(result["jobs"]) == 48 and len(result["human_note_sample"]) == 24
+    by_origin = {c["origin"]: c for c in result["cohorts"]}
+    assert by_origin["native_real"]["client_groups"] == 1
+    assert result["excluded_cohorts"] == []
+
+
+def test_a_superseded_protocol_shape_is_refused_not_planned(store):
+    """Protocol 2.0.0 is history: a study started on it keeps its snapshots and
+    is refused by the planner with a message that says to amend, rather than
+    planned under strata the current protocol no longer names."""
+    from therapy_note_eval.pilot import plan
+
+    archived = json.loads(
+        (
+            Path(__file__).resolve().parents[1] / "research/gen2/history/protocol-2.0.0.json"
+        ).read_text(encoding="utf-8")
+    )
+    active, record = start_review(store, archived)
+    instrument = operational_toy(store, active, toy_registry(active, record))
+    base, *_ = controls.fixture("en", "continuity")
+    cases = pilot_cases(live_protocol(), base)
+    models = two_families()
+    with pytest.raises(ValidationError, match="amend"):
+        plan(cases, instrument, models, models, 11, protocol=archived)
+
+
+def test_measurement_count_is_recorded_not_capped(store):
+    """A protocol that still carries a cap is refused; the live one records."""
+    from therapy_note_eval.pilot import plan
+
+    capped = json.loads(json.dumps(live_protocol()))
+    capped["selection"]["pilot_measurements_target"] = [8, 12]
+    active, record = start_review(store, capped)
+    instrument = operational_toy(store, active, toy_registry(active, record))
+    base, *_ = controls.fixture("en", "continuity")
+    models = two_families()
+    with pytest.raises(ValidationError, match="record the count"):
+        plan(pilot_cases(capped, base), instrument, models, models, 11, protocol=capped)
+
+
+def test_the_live_protocol_supersedes_the_newest_archived_one():
+    history = Path(__file__).resolve().parents[1] / "research/gen2/history"
+    archived = {}
+    for path in sorted(history.glob("protocol-*.json")):
+        version = json.loads(path.read_text(encoding="utf-8"))["version"]
+        assert path.name == f"protocol-{version}.json"
+        archived[tuple(int(v) for v in version.split("."))] = version
+    live = live_protocol()
+    newest = archived[max(archived)]
+    assert live["supersedes"] == newest
+    assert tuple(int(v) for v in live["version"].split(".")) > max(archived)
+    assert live["recorded_before_use"] is True
+    assert {d["id"] for d in live["decision_ledger"]} >= {"D1", "D2", "D3", "D4"}
 
 
 @pytest.mark.parametrize("methods", [("qa", "claims"), ("qa", "claims", "citations")])

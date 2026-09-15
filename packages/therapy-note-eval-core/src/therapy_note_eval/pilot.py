@@ -23,15 +23,17 @@ def plan(
         "Pilot configuration differs from reviewed protocol",
     )
     cfg = protocol["pilot"]
-    target = protocol["selection"]["pilot_measurements_target"]
+    require("cohorts" in cfg, "Protocol lists no eligible pilot cohorts; amend it to name them")
+    rule = protocol["selection"].get("first_round_measurements") or {}
     require(
-        len(target) == 2
-        and all(type(v) is int and v > 0 for v in target)
-        and target[0] <= target[1],
-        "Invalid measurement target",
+        "pilot_measurements_target" not in protocol["selection"]
+        and rule.get("rule") == "record_not_cap",
+        "Protocol caps the measurement count; amend it to record the count instead",
     )
+    # Recorded, never capped: what the review supported is carried, and what
+    # the human budget cannot cover is reported as not measured.
     count = len(instrument.measurements) + sum(m != "items" for m in instrument.methods)
-    require(0 < count <= target[1], "Pilot exceeds its reviewed operational measurement limit")
+    require(count > 0, "Pilot has no executable measurement")
     for key in (
         "generator_families",
         "judge_families",
@@ -61,23 +63,47 @@ def plan(
         cohorts[(case.origin, case.language)].append(case)
         for model in (*generators, *judges):
             case.authorize(model.provider)
-    expected = {
-        ("public_demo", "en"): cfg["cases"]["english_demo"],
-        ("translated_demo", "cs"): cfg["cases"]["paired_czech_translation"],
-        ("native_real", "cs"): cfg["cases"]["native_czech"],
-    }
+    # The strata come from the protocol, not from this file: adding a cohort
+    # is a protocol amendment, and a cohort the protocol excludes is refused
+    # by name before the counts are compared.
+    expected: dict[tuple[str, str], int] = {}
+    for entry in cfg["cohorts"]:
+        key = (entry["origin"], entry["language"])
+        require(
+            key not in expected
+            and entry["origin"] in ("public_demo", "translated_demo", "native_real", "synthetic")
+            and entry["language"] in ("en", "cs")
+            and type(entry["cases"]) is int
+            and entry["cases"] > 0,
+            "Invalid pilot cohort in protocol",
+        )
+        expected[key] = entry["cases"]
+    excluded = {(e["origin"], e["language"]) for e in cfg.get("excluded_cohorts", ())}
+    require(not (excluded & set(expected)), "Protocol both lists and excludes a cohort")
+    require(
+        not (set(cohorts) & excluded),
+        "Case cohort is excluded from this pilot by the protocol",
+    )
     require(
         set(cohorts) == set(expected) and all(len(cohorts[k]) == v for k, v in expected.items()),
-        "Cases differ from reviewed pilot strata",
+        "Cases differ from the protocol's eligible cohorts",
     )
-    english = {c.translation_group for c in cohorts[("public_demo", "en")]}
-    translated = {c.translation_group for c in cohorts[("translated_demo", "cs")]}
-    require(
-        None not in english
-        and english == translated
-        and len(english) == cfg["cases"]["english_demo"],
-        "Verify the two English/Czech translation pairs before planning",
-    )
+    pairing = cfg.get("translation_pairing") or {}
+    if pairing.get("required"):
+        original = (pairing["original"]["origin"], pairing["original"]["language"])
+        translation = (pairing["translation"]["origin"], pairing["translation"]["language"])
+        require(
+            original in expected and translation in expected,
+            "Translation pairing names a cohort the protocol does not list",
+        )
+        originals = {c.translation_group for c in cohorts[original]}
+        translations = {c.translation_group for c in cohorts[translation]}
+        require(
+            None not in originals
+            and originals == translations
+            and len(originals) == expected[original],
+            "Verify the original/translation pairs before planning",
+        )
     instrument.check_language("cs")
     require(set(cfg["purposes"]) == set(PROFILES), "Pilot must retain the four purposes")
     jobs, human_notes = [], []
@@ -104,7 +130,7 @@ def plan(
         "Balanced sample differs from protocol; amend the assignment design explicitly",
     )
     result = {
-        "version": "feasibility-design-v2",
+        "version": "feasibility-design-v3",
         "research_revision": instrument.revision,
         "protocol_revision": instrument.protocol_revision,
         "seed": seed,
@@ -117,9 +143,24 @@ def plan(
             "blinded_repeats": cfg["blind_repeats"],
             "total": cfg["human_decisions_target"],
         },
-        "operational_measurements": count,
-        "measurement_target": target,
-        "below_target": count < target[0],
+        "measurement_rule": rule["rule"],
+        "measurements_recorded": {
+            "executable": count,
+            "items": len(instrument.measurements),
+            "non_item_methods": [m for m in instrument.methods if m != "items"],
+            "recorded_at": "pilot_plan",
+        },
+        "cohorts": [
+            {
+                "origin": origin,
+                "language": language,
+                "cases": len(group),
+                "client_groups": len({c.group_id for c in group}),
+            }
+            for (origin, language), group in sorted(cohorts.items())
+        ],
+        "excluded_cohorts": list(cfg.get("excluded_cohorts", ())),
+        "human_anchor": cfg.get("human_anchor"),
         "human_hours": cfg["human_hours"],
         "configuration": cfg,
         "unit_selection": "Pending reviewed banks and segmentations; "
@@ -128,9 +169,6 @@ def plan(
         "do not validate clinical meaning.",
         "format_experiments": "Compare response formats on identical units; "
         "vary granularity separately.",
-        "independent_native_client_groups": len(
-            {c.group_id for c in cohorts[("native_real", "cs")]}
-        ),
         "status": "Planned feasibility pilot; "
         "no notes, model measurements or human ratings executed.",
     }
