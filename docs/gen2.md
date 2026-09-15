@@ -221,7 +221,8 @@ passing offline tests is not clinical validation.
 case revisions plus two declared generator and judge families. It verifies English/
 Czech translation pairing and provider permissions, freezes 48 generation jobs,
 and balances a 24-note human sample across strata, purposes, cases and generators.
-The first round targets 8-12 operational measurements, retaining other candidates.
+The first round carries every measurement the review supported; what the human
+budget cannot cover is reported as not measured, never dropped to fit a count.
 The 120 unique decisions and 30 repeats are a budget taken from the reviewed protocol; assignment of annotation
 units still requires reviewed banks and segmentations. Nothing is executed by planning.
 
