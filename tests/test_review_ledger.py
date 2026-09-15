@@ -223,9 +223,11 @@ def test_flow_preserves_the_correction_history(flow):
 
 
 def test_flow_identification_derives_from_the_search_logs(flow):
-    by_name = {d["name"]: d for d in flow["identification"]["databases"]}
+    by_name = {
+        d["name"].split("/")[0].split(" ")[0]: d for d in flow["identification"]["databases"]
+    }
     assert by_name["PubMed"]["records"] == 8820
-    assert by_name["ACL Anthology"]["records"] == 2577
+    assert by_name["ACL"]["records"] == 2577
     assert flow["identification"]["records_from_databases"] == 11397
     assert flow["identification"]["not_parsed_into_pool"]["count"] == 35
     other = flow["identification"]["other_methods"]["counts"]
