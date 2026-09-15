@@ -1,42 +1,38 @@
-"""Retrieve full texts for the records selected for deep extraction.
+"""Retrieve a report named in the ledger and record the attempt as an event.
 
-Retrieval is attempted through Europe PMC open access, then Unpaywall, then the
-publisher. A record that cannot be retrieved is logged as not retrieved, which
-is not an eligibility exclusion.
+Targets come from reports.json, one `--report <id>` at a time; there is no
+roster in this file to re-run by accident. Retrieval is attempted through a
+direct URL when the report has one, then Europe PMC open access, then
+Unpaywall. Whatever happens is appended as a dated event to the report's
+entry in report-map.json, the recorded half of the ledger, and reports.json
+and flow.json are rebuilt from it, so the invariant that the tracked ledger
+equals the builder's output holds after every run. The log of 2026-09-13 is
+never written again.
+
+A report that cannot be retrieved gets a not_retrieved event; that is a
+retrieval outcome, not an eligibility exclusion, and it never reverts an
+earlier success.
 """
 
 from __future__ import annotations
 
+import argparse
+import datetime as dt
 import hashlib
 import json
-import time
+import re
+import sys
 import urllib.parse
 import urllib.request
 from pathlib import Path
 
-UA = "therapy-note-bench-gen2-review/1.0 (mailto:jan.nehyba@gmail.com)"
 ROOT = Path(__file__).resolve().parent
-FT = Path("C:/Users/Nehyba/therapy-note-bench/local/gen2-review-2026-09-13/fulltext")
-EXPORTS = Path("C:/Users/Nehyba/therapy-note-bench/local/gen2-review-2026-09-13/exports")
+sys.path.insert(0, str(ROOT))
+import build_flow  # noqa: E402
+import build_reports  # noqa: E402
 
-# (slug, doi or None, pmid or None, direct url or None)
-TIER_A = [
-    ("tn-eval", None, None, "https://aclanthology.org/2025.acl-industry.14.pdf"),
-    ("icare-ihope", "10.1101/2025.06.25.25330252", None, None),
-    ("pdsqi-9", "10.1093/jamia/ocaf068", "40323321", None),
-    ("pdqi-9-prelim", "10.1197/jamia.M2404", "18436914", None),
-    ("pdqi-9-validation", "10.4338/aci-2011-11-ra-0070", "22577483", None),
-    # PMID corrected: 28197625 was a guess and belongs to an unrelated oncology
-    # paper whose text Unpaywall returned. Found by reading the file, not by
-    # trusting the retrieval. See fulltext-retrieval-log.json.
-    ("pdqi-9-negative-ed", "10.4338/aci2017050080", "28956888", None),
-    ("mentalclouds", "10.2196/57306", "39042893", None),
-    ("questeval", None, None, "https://aclanthology.org/2021.emnlp-main.529.pdf"),
-    ("qafacteval", None, None, "https://aclanthology.org/2022.naacl-main.187.pdf"),
-    ("factscore", None, None, "https://aclanthology.org/2023.emnlp-main.741.pdf"),
-    ("cosmin-content-validity", "10.1007/s11136-018-1829-0", None, None),
-    ("boateng-scale-development", "10.3389/fpubh.2018.00149", None, None),
-]
+UA = "therapy-note-bench-gen2-review/1.0 (mailto:jan.nehyba@gmail.com)"
+FULLTEXT = ROOT.parents[2] / "local" / "gen2-review-2026-09-13" / "fulltext"
 
 
 def get(url: str, timeout: int = 90) -> bytes | None:
@@ -50,9 +46,8 @@ def get(url: str, timeout: int = 90) -> bytes | None:
 
 def europepmc_fulltext(doi: str | None, pmid: str | None) -> tuple[bytes | None, str]:
     q = f'DOI:"{doi}"' if doi else f"EXT_ID:{pmid}"
-    u = (
-        "https://www.ebi.ac.uk/europepmc/webservices/rest/search?"
-        + urllib.parse.urlencode({"query": q, "format": "json", "resultType": "core", "pageSize": 1})
+    u = "https://www.ebi.ac.uk/europepmc/webservices/rest/search?" + urllib.parse.urlencode(
+        {"query": q, "format": "json", "resultType": "core", "pageSize": 1}
     )
     raw = get(u, 60)
     if not raw:
@@ -95,54 +90,136 @@ def unpaywall_pdf(doi: str) -> tuple[bytes | None, str]:
     return None, f"unpaywall: is_oa={d.get('is_oa')}, no usable location"
 
 
-def main() -> None:
-    log = []
-    for slug, doi, pmid, url in TIER_A:
-        body, how, ext = None, "", "html"
-        if url:
-            body = get(url)
-            how = f"direct url {url}"
-            ext = "pdf" if url.endswith(".pdf") else "html"
-        if body is None and (doi or pmid):
-            body, how = europepmc_fulltext(doi, pmid)
-            ext = "xml"
-        if body is None and doi:
-            body, how2 = unpaywall_pdf(doi)
-            how = f"{how}; {how2}"
-            ext = "pdf"
-        rec = {"slug": slug, "doi": doi, "pmid": pmid, "route": how}
+def attempt(report: dict) -> tuple[bytes | None, str, str, str]:
+    """Try the open routes for one report: body, route text, route kind, extension."""
+    ids = report["identifiers"]
+    tried: list[str] = []
+    if ids.get("url"):
+        body = get(ids["url"])
         if body:
-            p = FT / f"{slug}.{ext}"
-            p.write_bytes(body)
-            rec.update(
-                retrieved=True,
-                file=str(p),
+            return (
+                body,
+                f"direct url {ids['url']}",
+                "direct_url",
+                "pdf" if ids["url"].endswith(".pdf") else "html",
+            )
+        tried.append(f"direct url {ids['url']} (no body)")
+    if ids.get("doi") or ids.get("pmid"):
+        body, how = europepmc_fulltext(ids.get("doi"), ids.get("pmid"))
+        if body:
+            return body, how, "open_access_api", "xml"
+        tried.append(how)
+    if ids.get("doi"):
+        body, how = unpaywall_pdf(ids["doi"])
+        if body:
+            return body, how, "open_access_api", "pdf"
+        tried.append(how)
+    return (
+        None,
+        "attempted: " + "; ".join(tried) if tried else "no identifier to retrieve by",
+        "open_access_api",
+        "",
+    )
+
+
+def _filename(report: dict, ext: str) -> str:
+    if report.get("current_file"):
+        return report["current_file"]["file"]
+    stem = report.get("catalog_source") or re.sub(
+        r"[^a-z0-9]+", "-", report["report_id"].lower()
+    ).strip("-")
+    return f"{stem}.{ext}"
+
+
+def run(
+    review_dir: Path,
+    report_ids: list[str],
+    *,
+    fetch=attempt,
+    today: str,
+    fulltext_dir: Path,
+) -> dict:
+    """Attempt every named report; record each attempt in the map; rebuild ledger and flow."""
+    inputs = {
+        name: json.loads((review_dir / name).read_text(encoding="utf-8"))
+        for name in build_reports.INPUTS
+    }
+    mapping = inputs["report-map.json"]
+    current = build_reports.build(*(inputs[name] for name in build_reports.INPUTS), root=review_dir)
+    by_id = {r["report_id"]: r for r in current["reports"]}
+    entries = {e["report_id"]: e for e in mapping["reports"]}
+    for report_id in report_ids:
+        if report_id not in by_id:
+            raise ValueError(f"unknown report {report_id}; add it to report-map.json first")
+        body, route, route_kind, ext = fetch(by_id[report_id])
+        event = {
+            "date": today,
+            "time": None,
+            "date_source": "fetch run",
+            "route": route,
+            "route_kind": route_kind,
+            "outcome": "retrieved" if body else "not_retrieved",
+            "file": None,
+            "bytes": None,
+            "sha256": None,
+            "checksum_source": None,
+            "bytes_source": None,
+            "note": None,
+            "remaining_options": None,
+            "logged_retroactively": None,
+            "log_row": None,
+            "superseded_by_correction": None,
+        }
+        if body:
+            name = _filename(by_id[report_id], ext)
+            fulltext_dir.mkdir(parents=True, exist_ok=True)
+            (fulltext_dir / name).write_bytes(body)
+            event.update(
+                file=name,
                 bytes=len(body),
                 sha256=hashlib.sha256(body).hexdigest(),
+                checksum_source="computed at download",
+                bytes_source="measured at download",
             )
-            print(f"[OK ] {slug:28s} {len(body):>9,} bytes  via {how[:60]}")
-        else:
-            rec.update(retrieved=False, note="full text not retrieved; this is not an eligibility exclusion")
-            print(f"[MISS] {slug:28s} {how[:80]}")
-        log.append(rec)
-        time.sleep(0.5)
-
-    (ROOT / "fulltext-retrieval-log.json").write_text(
-        json.dumps(
-            {
-                "version": "fulltext-log-v1",
-                "principle": "A report not retrieved is recorded as not retrieved, never as content-ineligible.",
-                "retrieved": sum(1 for r in log if r["retrieved"]),
-                "not_retrieved": sum(1 for r in log if not r["retrieved"]),
-                "records": log,
-            },
-            indent=2,
-            ensure_ascii=False,
-        ),
-        encoding="utf-8",
+        entries[report_id]["events"].append(event)
+    (review_dir / "report-map.json").write_bytes(
+        (json.dumps(mapping, ensure_ascii=False, indent=1) + "\n").encode("utf-8")
     )
-    print(f"\nretrieved {sum(1 for r in log if r['retrieved'])}/{len(log)}")
+    inputs["report-map.json"] = mapping
+    ledger = build_reports.build(*(inputs[name] for name in build_reports.INPUTS), root=review_dir)
+    (review_dir / "reports.json").write_bytes(
+        (json.dumps(ledger, ensure_ascii=False, indent=1) + "\n").encode("utf-8")
+    )
+    flow_inputs = [
+        ledger
+        if name == "reports.json"
+        else json.loads((review_dir / name).read_text(encoding="utf-8"))
+        for name in build_flow.INPUTS
+    ]
+    flow = build_flow.build(*flow_inputs, root=review_dir)
+    (review_dir / "flow.json").write_bytes(
+        (json.dumps(flow, ensure_ascii=False, indent=1) + "\n").encode("utf-8")
+    )
+    return ledger
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument(
+        "--report", action="append", required=True, help="report id from reports.json"
+    )
+    parser.add_argument("--date", default=dt.date.today().isoformat())
+    args = parser.parse_args(argv)
+    ledger = run(ROOT, args.report, today=args.date, fulltext_dir=FULLTEXT)
+    for report in ledger["reports"]:
+        if report["report_id"] in args.report:
+            last = report["retrieval_events"][-1]
+            print(
+                f"{report['report_id']}: {last['outcome']} via {last['route'][:70]} "
+                f"-> {report['current_status']}"
+            )
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

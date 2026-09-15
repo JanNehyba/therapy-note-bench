@@ -37,6 +37,7 @@ def _module(name: str):
 ledger = _module("ledger")
 build_reports = _module("build_reports")
 build_flow = _module("build_flow")
+fetch_fulltext = _module("fetch_fulltext")
 
 
 @pytest.fixture(scope="module")
@@ -241,3 +242,70 @@ def test_flow_identification_derives_from_the_search_logs(flow):
         "APA PsycINFO",
         "Scopus",
     }
+
+
+def _review_copy(tmp_path: Path) -> Path:
+    copy = tmp_path / "review"
+    copy.mkdir()
+    for name in set(build_reports.INPUTS) | set(build_flow.INPUTS):
+        (copy / name).write_bytes((REVIEW / name).read_bytes())
+    return copy
+
+
+def test_fetch_appends_to_the_map_and_rebuilds_the_ledger_not_the_log(tmp_path):
+    """A new attempt is an event on the report, recorded in the map so the
+    builder reproduces it; the 2026-09-13 log stays byte-identical, and a
+    later failure does not revert an earlier success."""
+    copy = _review_copy(tmp_path)
+    log_digest = hashlib.sha256((copy / "fulltext-retrieval-log.json").read_bytes()).hexdigest()
+    s5 = "doi:10.1197/jamia.m2404"
+
+    def found(report):
+        route = "unpaywall repository https://example.invalid/s5.pdf"
+        return b"%PDF-1.4 synthetic", route, "open_access_api", "pdf"
+
+    grown = fetch_fulltext.run(
+        copy, [s5], fetch=found, today="2026-09-16", fulltext_dir=tmp_path / "ft"
+    )
+    report = next(r for r in grown["reports"] if r["report_id"] == s5)
+    assert report["current_status"] == "retrieved"
+    assert report["retrieval_events"][-1]["date"] == "2026-09-16"
+    expected = hashlib.sha256(b"%PDF-1.4 synthetic").hexdigest()
+    assert report["retrieval_events"][-1]["sha256"] == expected
+    assert (tmp_path / "ft" / "S5.pdf").read_bytes() == b"%PDF-1.4 synthetic"
+    mapping = json.loads((copy / "report-map.json").read_text(encoding="utf-8"))
+    entry = next(e for e in mapping["reports"] if e["report_id"] == s5)
+    assert entry["events"][-1]["outcome"] == "retrieved"
+    assert entry["events"][-1]["log_row"] is None
+    rebuilt = build_reports.build(
+        *(build_reports.read(n, copy) for n in build_reports.INPUTS), root=copy
+    )
+    assert rebuilt == json.loads((copy / "reports.json").read_text(encoding="utf-8"))
+    flow = json.loads((copy / "flow.json").read_text(encoding="utf-8"))
+    assert flow["full_text"]["catalog_reports"]["retrieved"] == 19
+    digest = hashlib.sha256((copy / "fulltext-retrieval-log.json").read_bytes()).hexdigest()
+    assert digest == log_digest
+
+    def gone(report):
+        return None, "attempted: publisher (403)", "publisher", ""
+
+    again = fetch_fulltext.run(
+        copy, [s5], fetch=gone, today="2026-09-17", fulltext_dir=tmp_path / "ft"
+    )
+    report = next(r for r in again["reports"] if r["report_id"] == s5)
+    outcomes = [e["outcome"] for e in report["retrieval_events"]]
+    assert outcomes[-2:] == ["retrieved", "not_retrieved"]
+    assert report["current_status"] == "retrieved"
+    with pytest.raises(ValueError, match="unknown report"):
+        fetch_fulltext.run(
+            copy, ["doi:nobody"], fetch=gone, today="2026-09-17", fulltext_dir=tmp_path / "ft"
+        )
+
+
+def test_the_fetch_script_has_no_roster_and_requires_a_report():
+    source = (REVIEW / "fetch_fulltext.py").read_text(encoding="utf-8")
+    assert "TIER_A" not in source
+    with pytest.raises(SystemExit):
+        fetch_fulltext.main([])
+    log = json.loads((REVIEW / "fulltext-retrieval-log.json").read_text(encoding="utf-8"))
+    assert log["superseded_by"]["file"] == "reports.json"

@@ -31,8 +31,8 @@ INPUTS = (
 VERSION = "flow-v2"
 
 
-def read(name: str) -> dict:
-    return json.loads((ROOT / name).read_text(encoding="utf-8"))
+def read(name: str, root: Path = ROOT) -> dict:
+    return json.loads((root / name).read_text(encoding="utf-8"))
 
 
 def _databases(pubmed: dict, acl: dict) -> list[dict]:
@@ -63,6 +63,8 @@ def build(
     acl: dict,
     amendments: dict,
     recorded: dict,
+    *,
+    root: Path = ROOT,
 ) -> dict:
     databases = _databases(pubmed, acl)
     from_databases = sum(d["records"] for d in databases)
@@ -255,7 +257,7 @@ def build(
         "caveat": recorded["caveat"],
         "corrections": recorded["corrections"],
         "derived_from": {
-            name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in INPUTS
+            name: hashlib.sha256((root / name).read_bytes()).hexdigest() for name in INPUTS
         },
     }
     return flow

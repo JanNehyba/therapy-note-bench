@@ -36,8 +36,8 @@ INPUTS = (
 LEDGER_DATE = "2026-09-15"
 
 
-def read(name: str) -> dict:
-    return json.loads((ROOT / name).read_text(encoding="utf-8"))
+def read(name: str, root: Path = ROOT) -> dict:
+    return json.loads((root / name).read_text(encoding="utf-8"))
 
 
 def _basename(path: str | None) -> str | None:
@@ -147,7 +147,15 @@ def _proposal_source(proposal: dict | None) -> str | None:
     return f"screening-decisions.json#{detail}_candidates_detail[{proposal['priority_index']}]"
 
 
-def build(mapping: dict, log: dict, screening: dict, strata: dict, pool_summary: dict) -> dict:
+def build(
+    mapping: dict,
+    log: dict,
+    screening: dict,
+    strata: dict,
+    pool_summary: dict,
+    *,
+    root: Path = ROOT,
+) -> dict:
     diagnostics: list[dict] = []
     rows = {r["slug"]: r for r in log["records"]}
     claimed: dict[str, str] = {}
@@ -257,7 +265,7 @@ def build(mapping: dict, log: dict, screening: dict, strata: dict, pool_summary:
         "reports": reports,
         "diagnostics": diagnostics,
         "derived_from": {
-            name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in INPUTS
+            name: hashlib.sha256((root / name).read_bytes()).hexdigest() for name in INPUTS
         },
         "corrections": [],
     }

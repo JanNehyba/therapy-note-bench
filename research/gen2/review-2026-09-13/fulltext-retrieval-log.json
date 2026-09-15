@@ -208,5 +208,10 @@
       "what": "Two requirements-layer documents (APA Record Keeping Guidelines 2007; vyhlaska 444/2024 Sb.) were read on 2026-09-13 and cited in the registry without a retrieval record.",
       "effect": "Logged retroactively with checksum, size and file time, and marked as such. Their download URLs are not recoverable and are recorded as not logged."
     }
-  ]
+  ],
+  "superseded_by": {
+    "file": "reports.json",
+    "date": "2026-09-15",
+    "note": "This log is the record of the attempts of 2026-09-13 and is not written again. reports.json is the current record: one entry per report with every attempt as an event; fetch_fulltext.py appends new attempts to report-map.json and rebuilds it."
+  }
 }
