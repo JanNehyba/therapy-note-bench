@@ -10,10 +10,12 @@ reasonably have expected instead, and publish what each does to the order:
 
 * **item-weighted** -- every one of the 23 criteria counts once, so an
   eight-item section is worth twice a four-item one rather than the same;
-* **importance-weighted** -- the rubric's own grading. TN-Eval's appendix marks
-  every criterion Mandatory, Mandatory in certain circumstances, Highly
-  recommended, Good to have or Optional (agreed among five therapists, Fleiss'
-  kappa 0.68). The released data carries none of these labels and neither did
+* **importance-weighted** -- the rubric's importance labels, given numeric
+  weights by a convention of this repository. TN-Eval's appendix marks every
+  criterion Mandatory, Mandatory in certain circumstances, Highly recommended,
+  Good to have or Optional (agreed among five therapists, Fleiss' kappa 0.68);
+  the paper grades, it does not weigh, and its own average weights by section
+  item counts. The released data carries none of these labels and neither did
   this repository until 2026-09-13; they are transcribed here from the paper,
   with the section they come from.
 

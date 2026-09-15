@@ -77,16 +77,18 @@ psychotherapy deliberately removed. Transfer to our task is an untested
 extrapolation, and the source itself is evidence that these notes are treated as
 a special category.
 
-### The same instrument family has a published failure, and the difference is rater training
+### The same instrument family has a published failure, and rater training is the likeliest difference
 
 Walker et al. 2017 applied PDQI-9 to 220 emergency department notes and found
 Cronbach's alpha 0.93 alongside **between-rater Pearson r = 0.07 (p = 0.270)**
 and an inability to distinguish good from poor notes, F(3,34) = 1.15, p = 0.342.
 Their methods say raters *"were not trained in the use of the tool and there was
 no pre-study agreement between raters about standards."* PDSQI-9, which trained
-its raters, reached ICC 0.867. Two lessons: rater training is a condition of the
-instrument working, not an optional extra; and **high internal consistency is not
-agreement** — 0.93 and 0.07 came from the same study.
+its raters, reached ICC 0.867 — on a different instrument version, sample, rater
+pool and statistic, so the pair motivates training without establishing its causal
+effect or its size (audit A06). Two lessons: train raters before any use of the
+instrument, and measure what the training does rather than assume it; and **high
+internal consistency is not agreement** — 0.93 and 0.07 came from the same study.
 
 ### Rating format and task decomposition change the conclusion, but we cannot say which did it
 
