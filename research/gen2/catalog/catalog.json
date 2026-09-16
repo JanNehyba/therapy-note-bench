@@ -2,7 +2,7 @@
   "version": "catalog-v2",
   "review_date": "2026-09-13",
   "catalog_date": "2026-09-16",
-  "status": "AI-authored proposals from the scoping search of 2026-09-13, translated to English by the coding assistant on 2026-09-15. No human acceptance decision exists for any entry; the executable registry is derived from this catalog only as a draft that the core refuses to freeze until humans review it.",
+  "status": "AI-authored proposals from the scoping search of 2026-09-13, translated to English by the coding assistant on 2026-09-16. No human acceptance decision exists for any entry; the executable registry is derived from this catalog only as a draft that the core refuses to freeze until humans review it.",
   "language_policy": "English is the tracked source of the catalog. The Czech record of 2026-09-13 in the investigator's private workspace is the original of this round and stays as written; Czech views are generated from these records under the language policy of the repository. Quotations from a Czech legal text are given in English translation and marked as such.",
   "origin_policy": "origin is the historical origin of an idea and never changes when a supporting source is found later; later support is recorded in the evidence, not in the origin.",
   "origin_values": {
