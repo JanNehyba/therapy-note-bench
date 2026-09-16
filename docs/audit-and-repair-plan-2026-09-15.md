@@ -13,8 +13,8 @@ it is not evidence that those changes are implemented. In particular, protocol
 2.1.0 has not replaced the executable 2.0.0 at this baseline.
 
 **Repairs recorded later the same day**, each in the finding it answers below:
-A01 (both repositories), A02, A05, A06 and A13 carry a status line naming the
-commit; A04 is bounded by decision D6 in protocol 2.1.0 rather than completed;
+A01 (both repositories), A02, A03, A05, A06, A09 and A13 carry a status line
+naming the commit; A04 is bounded by decision D6 in protocol 2.1.0 rather than completed;
 the pool defect found while building the ledger (a cited reference's DOI as a
 record key) is repaired in commit `926fa4c`. Findings without a status line are
 still open.
@@ -134,6 +134,13 @@ Evidence: [protocol](../research/gen2/protocol.json),
 [research README](../research/gen2/README.md), [Gen-2 documentation](gen2.md).
 
 ### A03 — The literature map is not connected to the executable registry
+
+**Status: repaired on 2026-09-16 by commit `a9b4867`.**
+`research/gen2/catalog/convert_to_registry.py` converts the catalog into
+`draft-registry.json`, which the core loads and refuses as a pilot instrument;
+`conversion-diagnostics.json` lists every pilot entry, method and origin reference
+that did not map, and no reviewer name or acceptance is synthesized. The text below
+is the finding as audited.
 
 **Priority 1, confirmed.** Loading the local `outputs/gen2-registry.json` through
 `load_registry` fails with `ValidationError: artifact: unknown fields`. It uses
@@ -289,6 +296,12 @@ Report density with coverage, harmful omissions and comprehensibility. Do not
 assume word-normalized ratios are comparable between English and Czech.
 
 ### A09 — The primary synthesis and its renderer are local-only
+
+**Status: repaired on 2026-09-16 by commit `a9b4867`.** The English catalog, its
+validator, the renderer and the conversion are tracked under `research/gen2/catalog/`;
+`docs/gen2-catalog.html` is generated from the catalog and the suite fails when it
+drifts. Czech views stay generated locally under the language policy. Historical
+origin labels were carried over unchanged. The text below is the finding as audited.
 
 **Priority 1 for reproducibility.** The main candidate JSON, source extractions,
 comparison table and output-builder scripts are under ignored `local/`. They
