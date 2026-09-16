@@ -164,8 +164,14 @@ def test_a_published_sensitivity_artefact_says_it_replaces_nothing(track):
     assert "not a replacement" in found["reading"]
     assert found["clustering"]["by"] == "AnnoMI source video"
     assert found["clustering"]["clusters"] <= found["clustering"]["conversations"]
+    # Against the artefact the page draws from, which is the point of the
+    # comparison: the sensitivity run recomputes the unclustered test itself,
+    # and if its own unclustered half disagreed with what is published then the
+    # two numbers beside each other would not be the same measurement. (The
+    # `draws` field is not required here: artefacts built before it existed
+    # drew conversations, which is what this equality is checking anyway.)
     published = json.loads((REPO_ROOT / "docs" / f"edges-{track}.json").read_text(encoding="utf-8"))
-    assert published["draws"] == "conversations", "the published test still draws conversations"
     assert found["comparison"]["holds"]["conversations"] == sum(
         1 for edge in published["edges"] if edge["holds"]
     ), "the sensitivity run disagrees with the artefact it is measured against"
+    assert found["comparison"]["tested"] == published["counts"]["tested"]
