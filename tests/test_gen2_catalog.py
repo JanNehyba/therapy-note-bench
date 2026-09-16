@@ -1,0 +1,266 @@
+"""The Gen-2 candidate catalog: one versioned record, two generated views.
+
+The audit of 2026-09-15 found the review's criteria map in three unconnected
+places: a Czech working catalog on one machine, a runtime registry with other
+names, and prose that quoted both. `research/gen2/catalog/catalog.json` is now
+the one record; `docs/gen2-catalog.html` and `draft-registry.json` are derived
+from it. Pinned here: the catalog validates and points at the review's ledger,
+the page and the draft equal a fresh rendering and conversion, the draft loads
+in the core and is refused as a pilot instrument, no record claims a human
+decision, every pilot entry and method is accounted for in the diagnostics,
+and nothing in any of the files is Czech text, a local path or a secret.
+"""
+
+from __future__ import annotations
+
+import importlib.util
+import json
+import re
+import sys
+from pathlib import Path
+
+import pytest
+from therapy_note_eval.registry import load_registry
+from therapy_note_eval.schema import PROFILES, ValidationError, digest
+
+REPO = Path(__file__).resolve().parents[1]
+CATALOG = REPO / "research" / "gen2" / "catalog"
+REVIEW = REPO / "research" / "gen2" / "review-2026-09-13"
+PAGE = REPO / "docs" / "gen2-catalog.html"
+
+
+def _module(name: str):
+    spec = importlib.util.spec_from_file_location(name, CATALOG / f"{name}.py")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+catalog_mod = _module("catalog")
+render_catalog = _module("render_catalog")
+convert_to_registry = _module("convert_to_registry")
+
+
+def _json(path: Path) -> dict:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+@pytest.fixture(scope="module")
+def catalog() -> dict:
+    return catalog_mod.load()
+
+
+@pytest.fixture(scope="module")
+def reports() -> dict:
+    return _json(REVIEW / "reports.json")
+
+
+@pytest.fixture(scope="module")
+def protocol() -> dict:
+    return _json(REPO / "research" / "gen2" / "protocol.json")
+
+
+@pytest.fixture(scope="module")
+def proposals() -> dict:
+    return _json(REPO / "research" / "gen2" / "prior-proposals.json")
+
+
+@pytest.fixture(scope="module")
+def draft() -> dict:
+    return _json(CATALOG / "draft-registry.json")
+
+
+@pytest.fixture(scope="module")
+def diagnostics() -> dict:
+    return _json(CATALOG / "conversion-diagnostics.json")
+
+
+# --- the record -------------------------------------------------------------
+
+
+def test_the_catalog_validates_against_the_ledger(catalog, reports):
+    assert catalog_mod.problems(catalog, reports) == []
+
+
+def test_the_catalog_holds_what_the_review_proposed(catalog):
+    """The counts the documentation states, held to the record."""
+    assert len(catalog["candidates"]) == 29
+    assert len(catalog["methods"]) == 17
+    assert len(catalog["sources"]) == 19
+    assert len(catalog["abstract_sources"]) == 13
+    assert len(catalog["pilot_proposal"]["entries"]) == 14
+    assert len(catalog["comparison"]) == 35
+    assert catalog_mod.ids(catalog, "candidates") == [f"K{n:02d}" for n in range(1, 30)]
+    assert catalog_mod.ids(catalog, "methods") == [f"ME{n:02d}" for n in range(1, 18)]
+
+
+def test_every_source_is_a_report_the_ledger_sought(catalog, reports):
+    by_id = {r["report_id"]: r for r in reports["reports"]}
+    for s in catalog["sources"] + catalog["abstract_sources"]:
+        report = by_id[s["ledger_report_id"]]
+        assert report["catalog_source"] == s["id"]
+        if s["verification"] == "full_text":
+            assert report["current_status"] == "retrieved", s["id"]
+        else:
+            assert report["current_status"] != "retrieved", s["id"]
+
+
+def test_every_pilot_entry_carries_a_record_kind_and_the_count_is_recorded_not_capped(catalog):
+    kinds = {p["id"]: p["record_kind"] for p in catalog["pilot_proposal"]["entries"]}
+    assert kinds["P12"] == "study_condition"
+    assert kinds["P09"] == "requirements_check"
+    assert kinds["P10"] == kinds["P11"] == "human_use_outcome"
+    assert kinds["P13"] == "corpus_level_proxy"
+    assert kinds["P14"] == "derived_ratio"
+    assert sum(1 for k in kinds.values() if k == "executable_measure") == 8
+    note = catalog["pilot_proposal"]["count_note"]
+    assert "record-not-cap" in note and "not a result of the review" in note
+
+
+def test_the_problem_finder_refuses_a_human_decision_field(catalog):
+    doctored = json.loads(json.dumps(catalog))
+    doctored["candidates"][0]["reviewed_by"] = "somebody"
+    assert any("human decision" in p for p in catalog_mod.problems(doctored))
+    doctored = json.loads(json.dumps(catalog))
+    doctored["status"] = "Accepted."
+    assert any("no human acceptance" in p for p in catalog_mod.problems(doctored))
+
+
+def test_the_problem_finder_refuses_a_dangling_reference(catalog):
+    doctored = json.loads(json.dumps(catalog))
+    doctored["methods"][0]["measures"].append("K99")
+    assert any("unknown candidate" in p for p in catalog_mod.problems(doctored))
+    doctored = json.loads(json.dumps(catalog))
+    doctored["candidates"][3]["evidence"][0]["source"] = "S99"
+    assert any("unknown source" in p for p in catalog_mod.problems(doctored))
+
+
+def test_the_comparison_accounts_for_every_earlier_criterion(catalog):
+    olds = [row["old"] for row in catalog["comparison"] if row["old"]]
+    assert [o[:3] for o in olds] == [f"c{n:02d}" for n in range(1, 27)]
+    added = {row["new"] for row in catalog["comparison"] if row["action"] == "add"}
+    kept = {row["new"] for row in catalog["comparison"] if row["new"]}
+    assert kept | added <= set(catalog_mod.ids(catalog, "candidates"))
+    dropped = [row for row in catalog["comparison"] if row["action"] == "drop"]
+    assert [row["old"][:3] for row in dropped] == ["c16"]
+    assert "A07" in dropped[0]["reason"]
+
+
+# --- the page ---------------------------------------------------------------
+
+
+def test_the_published_page_equals_a_fresh_rendering(catalog):
+    assert PAGE.read_bytes().decode("utf-8") == render_catalog.render(catalog)
+
+
+def test_the_page_draws_every_entry_and_names_its_status(catalog):
+    page = PAGE.read_text(encoding="utf-8")
+    for section in ("candidates", "methods"):
+        for item in catalog[section]:
+            assert f'id="{item["id"]}"' in page
+    for p in catalog["pilot_proposal"]["entries"]:
+        assert p["label"] in page or render_catalog.esc(p["label"]) in page
+    assert "No human acceptance decision exists" in page
+    assert 'href="index.html"' in page
+
+
+# --- the draft registry -----------------------------------------------------
+
+
+def test_the_draft_equals_a_fresh_conversion(catalog, protocol, proposals, draft, diagnostics):
+    registry, notes = convert_to_registry.convert(catalog, protocol, proposals)
+    assert registry == draft
+    assert notes == diagnostics
+
+
+def test_the_draft_loads_and_is_refused_as_a_pilot_instrument(draft, protocol):
+    registry = load_registry(draft)
+    assert registry.protocol_revision == digest(protocol)
+    assert registry.reviews == () and registry.measurements == () and registry.methods == ()
+    with pytest.raises(ValidationError, match="Pilot needs explicit methods"):
+        load_registry(draft, pilot=True)
+
+
+def test_no_draft_record_claims_a_human_decision(draft, diagnostics):
+    for c in draft["constructs"]:
+        assert c["status"] == "candidate" and c["reviewed_by"] is None
+        assert c["decision_reason"] == "Awaiting human review"
+        assert set(c["relevance"]) == set(PROFILES)
+    for e in draft["evidence"]:
+        assert e["human_checked_by"] is None
+    assert draft["methods_reviewed_by"] is None
+    assert diagnostics["pilot_check"]["result"] == "refused"
+
+
+def test_every_source_evidence_line_and_candidate_maps(catalog, draft, diagnostics):
+    assert {s["id"] for s in draft["sources"]} == catalog_mod.source_ids(catalog)
+    assert [c["id"] for c in draft["constructs"]] == catalog_mod.ids(catalog, "candidates")
+    lines = sum(len(c["evidence"]) for c in catalog["candidates"])
+    assert len(draft["evidence"]) == lines
+    assert diagnostics["mapped"] == {"sources": 32, "evidence": lines, "constructs": 29}
+    for s in draft["sources"]:
+        assert s["locator"].startswith("ledger:")
+
+
+def test_every_unmapped_entry_has_a_diagnostic(catalog, diagnostics):
+    assert [p["id"] for p in diagnostics["pilot_entries"]] == catalog_mod.ids(catalog, "pilot")
+    assert all(p["why_not_a_measurement"] for p in diagnostics["pilot_entries"])
+    assert [m["id"] for m in diagnostics["methods"]] == catalog_mod.ids(catalog, "methods")
+    assert {
+        m["id"]: m["implementation"] for m in diagnostics["methods"] if m["implementation"]
+    } == {
+        "ME01": "qa",
+        "ME02": "claims",
+        "ME03": "items",
+        "ME08": "citations",
+    }
+    assert [c["id"] for c in diagnostics["constructs"]] == catalog_mod.ids(catalog, "candidates")
+    for c in diagnostics["constructs"]:
+        assert c["origin_reference"].startswith(("proposal:", "catalog:"))
+        if c["origin_reference"].startswith("catalog:"):
+            assert "placeholder" in c["note"]
+    assert diagnostics["not_mapped"]["measurements"] == 14
+
+
+def test_a_verbatim_proposal_name_is_the_only_way_to_a_recorded_origin(proposals):
+    ids = {p["id"] for p in proposals["proposals"]}
+    named = {
+        "id": "K18",
+        "origin": "expert_proposal",
+        "origin_note": "A colleague's proposal (prior-source-links).",
+    }
+    assert convert_to_registry.origin_reference(named, ids)[0] == "proposal:prior-source-links"
+    vague = {"id": "K20", "origin": "prior_local", "origin_note": "Exists in the prototype."}
+    reference, note = convert_to_registry.origin_reference(vague, ids)
+    assert reference == "catalog:K20" and "placeholder" in note
+    two = {"id": "K01", "origin": "prior_local", "origin_note": "prior-qa and prior-reverse-claims"}
+    assert convert_to_registry.origin_reference(two, ids)[0] == "catalog:K01"
+
+
+# --- public safety ----------------------------------------------------------
+
+DIACRITIC = re.compile(
+    "[" + "\u011b\u0161\u010d\u0159\u017e\u00fd\u00e1\u00ed\u00e9\u00fa\u016f\u0148\u0165\u010f"
+    "\u011a\u0160\u010c\u0158\u017d\u00dd\u00c1\u00cd\u00c9\u00da\u016e\u0147\u0164\u010e]"
+)
+
+
+@pytest.mark.parametrize(
+    "path",
+    [
+        CATALOG / "catalog.json",
+        CATALOG / "draft-registry.json",
+        CATALOG / "conversion-diagnostics.json",
+        CATALOG / "catalog.py",
+        CATALOG / "render_catalog.py",
+        CATALOG / "convert_to_registry.py",
+        PAGE,
+    ],
+)
+def test_the_catalog_files_are_public_safe(path):
+    text = path.read_text(encoding="utf-8")
+    assert not DIACRITIC.search(text), f"{path.name} carries Czech text"
+    assert "C:\\" not in text and "/Users/" not in text and "local/" not in text
+    assert not re.search(r"(?i)(api[_-]?key|token)\s*[:=]\s*\S{8,}", text)
+    assert b"\r\n" not in path.read_bytes()

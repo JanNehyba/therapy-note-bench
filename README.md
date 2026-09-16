@@ -56,6 +56,13 @@ measurement the review supported, not a count named in advance. Earlier prototyp
 review, human pilot or clinical validation is claimed. `make gen2-demo` runs an
 entirely synthetic offline example and makes no API calls.
 
+What the search proposed is published as a
+[candidate catalog](https://jannehyba.github.io/therapy-note-bench/gen2-catalog.html):
+every candidate construct, method and source, generated from
+[a single versioned record](research/gen2/catalog/catalog.json) together with a draft
+registry the core refuses to freeze. It is an AI-authored proposal; no entry has been
+accepted by a person, and nothing from Gen-2 is scored on the leaderboard.
+
 ## The leaderboard
 
 Full version, with per-section detail, the reference systems and a switch

@@ -1,0 +1,548 @@
+{
+  "version": "conversion-diagnostics-v1",
+  "catalog_version": "catalog-v1",
+  "catalog_date": "2026-09-16",
+  "protocol_version": "2.1.0",
+  "protocol_revision": "53518d6d331f63c347056c420494fb63544813c962a9bf149cc97f291bb18834",
+  "rule": "Every source, evidence line and candidate maps to a registry record with no human decision. Nothing becomes an operational item, a selected method or a review; each such gap is listed here with its reason.",
+  "mapped": {
+    "sources": 32,
+    "evidence": 53,
+    "constructs": 29
+  },
+  "not_mapped": {
+    "measurements": 14,
+    "methods": 17,
+    "reviews": 0
+  },
+  "pilot_check": {
+    "result": "refused",
+    "message": "Pilot needs explicit methods"
+  },
+  "relationship_rule": "derived from the source's evidence layer, not from a human reading of the passage",
+  "origin_rule": "catalog origins prior_local and expert_proposal both map to prior_proposal; empirical_observation maps to inductive; the historical origin never changes because of later evidence",
+  "sources": [
+    {
+      "id": "S5",
+      "publication_type": "article",
+      "verification": "metadata_checked",
+      "note": "type or verification could not be mapped to a checked category"
+    },
+    {
+      "id": "S_abs_edit",
+      "publication_type": "unverified",
+      "verification": "metadata_checked",
+      "note": "abstract-only source; the pilot check refuses it until the full text is verified"
+    },
+    {
+      "id": "S_abs_severity",
+      "publication_type": "unverified",
+      "verification": "metadata_checked",
+      "note": "abstract-only source; the pilot check refuses it until the full text is verified"
+    },
+    {
+      "id": "S_abs_sweden",
+      "publication_type": "unverified",
+      "verification": "metadata_checked",
+      "note": "abstract-only source; the pilot check refuses it until the full text is verified"
+    },
+    {
+      "id": "S_abs_delphi",
+      "publication_type": "unverified",
+      "verification": "metadata_checked",
+      "note": "abstract-only source; the pilot check refuses it until the full text is verified"
+    },
+    {
+      "id": "S_abs_scoping_notes",
+      "publication_type": "unverified",
+      "verification": "metadata_checked",
+      "note": "abstract-only source; the pilot check refuses it until the full text is verified"
+    },
+    {
+      "id": "S_abs_stakeholder",
+      "publication_type": "unverified",
+      "verification": "metadata_checked",
+      "note": "abstract-only source; the pilot check refuses it until the full text is verified"
+    },
+    {
+      "id": "S_abs_supcode",
+      "publication_type": "unverified",
+      "verification": "metadata_checked",
+      "note": "abstract-only source; the pilot check refuses it until the full text is verified"
+    },
+    {
+      "id": "S_abs_disparity",
+      "publication_type": "unverified",
+      "verification": "metadata_checked",
+      "note": "abstract-only source; the pilot check refuses it until the full text is verified"
+    },
+    {
+      "id": "S_abs_hua",
+      "publication_type": "unverified",
+      "verification": "metadata_checked",
+      "note": "abstract-only source; the pilot check refuses it until the full text is verified"
+    },
+    {
+      "id": "S_abs_summac",
+      "publication_type": "unverified",
+      "verification": "metadata_checked",
+      "note": "abstract-only source; the pilot check refuses it until the full text is verified"
+    },
+    {
+      "id": "S_abs_mherrors",
+      "publication_type": "unverified",
+      "verification": "metadata_checked",
+      "note": "abstract-only source; the pilot check refuses it until the full text is verified"
+    },
+    {
+      "id": "S_abs_sespi",
+      "publication_type": "unverified",
+      "verification": "metadata_checked",
+      "note": "abstract-only source; the pilot check refuses it until the full text is verified"
+    },
+    {
+      "id": "S_abs_tednq",
+      "publication_type": "unverified",
+      "verification": "metadata_checked",
+      "note": "abstract-only source; the pilot check refuses it until the full text is verified"
+    }
+  ],
+  "constructs": [
+    {
+      "id": "K01",
+      "catalog_origin": "prior_local",
+      "origin": "prior_proposal",
+      "origin_reference": "catalog:K01",
+      "note": "placeholder: the workflow needs a recorded proposal (proposal:<id>) from prior-proposals.json or record-input; the catalog records the origin in prose only",
+      "record_kind": "construct"
+    },
+    {
+      "id": "K02",
+      "catalog_origin": "literature",
+      "origin": "literature",
+      "origin_reference": "catalog:K02",
+      "note": "placeholder: the workflow needs an extraction record (extraction:<id>) bound to an included full text; the catalog records the origin in prose only",
+      "record_kind": "construct_refinement"
+    },
+    {
+      "id": "K03",
+      "catalog_origin": "prior_local",
+      "origin": "prior_proposal",
+      "origin_reference": "catalog:K03",
+      "note": "placeholder: the workflow needs a recorded proposal (proposal:<id>) from prior-proposals.json or record-input; the catalog records the origin in prose only",
+      "record_kind": "construct_refinement"
+    },
+    {
+      "id": "K04",
+      "catalog_origin": "prior_local",
+      "origin": "prior_proposal",
+      "origin_reference": "catalog:K04",
+      "note": "placeholder: the workflow needs a recorded proposal (proposal:<id>) from prior-proposals.json or record-input; the catalog records the origin in prose only",
+      "record_kind": "construct_refinement"
+    },
+    {
+      "id": "K05",
+      "catalog_origin": "literature",
+      "origin": "literature",
+      "origin_reference": "catalog:K05",
+      "note": "placeholder: the workflow needs an extraction record (extraction:<id>) bound to an included full text; the catalog records the origin in prose only",
+      "record_kind": "construct"
+    },
+    {
+      "id": "K06",
+      "catalog_origin": "empirical_observation",
+      "origin": "inductive",
+      "origin_reference": "catalog:K06",
+      "note": "placeholder: the workflow needs a recorded observation (observation:<id>) from record-input; the catalog records the origin in prose only",
+      "record_kind": "construct_refinement"
+    },
+    {
+      "id": "K07",
+      "catalog_origin": "prior_local",
+      "origin": "prior_proposal",
+      "origin_reference": "catalog:K07",
+      "note": "placeholder: the workflow needs a recorded proposal (proposal:<id>) from prior-proposals.json or record-input; the catalog records the origin in prose only",
+      "record_kind": "purpose_refinement"
+    },
+    {
+      "id": "K08",
+      "catalog_origin": "literature",
+      "origin": "literature",
+      "origin_reference": "catalog:K08",
+      "note": "placeholder: the workflow needs an extraction record (extraction:<id>) bound to an included full text; the catalog records the origin in prose only",
+      "record_kind": "content_topic"
+    },
+    {
+      "id": "K09",
+      "catalog_origin": "prior_local",
+      "origin": "prior_proposal",
+      "origin_reference": "catalog:K09",
+      "note": "placeholder: the workflow needs a recorded proposal (proposal:<id>) from prior-proposals.json or record-input; the catalog records the origin in prose only",
+      "record_kind": "construct"
+    },
+    {
+      "id": "K10",
+      "catalog_origin": "literature",
+      "origin": "literature",
+      "origin_reference": "catalog:K10",
+      "note": "placeholder: the workflow needs an extraction record (extraction:<id>) bound to an included full text; the catalog records the origin in prose only",
+      "record_kind": "purpose_refinement"
+    },
+    {
+      "id": "K11",
+      "catalog_origin": "literature",
+      "origin": "literature",
+      "origin_reference": "catalog:K11",
+      "note": "placeholder: the workflow needs an extraction record (extraction:<id>) bound to an included full text; the catalog records the origin in prose only",
+      "record_kind": "construct"
+    },
+    {
+      "id": "K12",
+      "catalog_origin": "literature",
+      "origin": "literature",
+      "origin_reference": "catalog:K12",
+      "note": "placeholder: the workflow needs an extraction record (extraction:<id>) bound to an included full text; the catalog records the origin in prose only",
+      "record_kind": "construct"
+    },
+    {
+      "id": "K13",
+      "catalog_origin": "prior_local",
+      "origin": "prior_proposal",
+      "origin_reference": "catalog:K13",
+      "note": "placeholder: the workflow needs a recorded proposal (proposal:<id>) from prior-proposals.json or record-input; the catalog records the origin in prose only",
+      "record_kind": "construct"
+    },
+    {
+      "id": "K14",
+      "catalog_origin": "literature",
+      "origin": "literature",
+      "origin_reference": "catalog:K14",
+      "note": "placeholder: the workflow needs an extraction record (extraction:<id>) bound to an included full text; the catalog records the origin in prose only",
+      "record_kind": "construct"
+    },
+    {
+      "id": "K15",
+      "catalog_origin": "expert_proposal",
+      "origin": "prior_proposal",
+      "origin_reference": "catalog:K15",
+      "note": "placeholder: the workflow needs a recorded proposal (proposal:<id>) from prior-proposals.json or record-input; the catalog records the origin in prose only",
+      "record_kind": "expert_proposal"
+    },
+    {
+      "id": "K16",
+      "catalog_origin": "literature",
+      "origin": "literature",
+      "origin_reference": "catalog:K16",
+      "note": "placeholder: the workflow needs an extraction record (extraction:<id>) bound to an included full text; the catalog records the origin in prose only",
+      "record_kind": "specification_criterion"
+    },
+    {
+      "id": "K17",
+      "catalog_origin": "literature",
+      "origin": "literature",
+      "origin_reference": "catalog:K17",
+      "note": "placeholder: the workflow needs an extraction record (extraction:<id>) bound to an included full text; the catalog records the origin in prose only",
+      "record_kind": "content_topic"
+    },
+    {
+      "id": "K18",
+      "catalog_origin": "expert_proposal",
+      "origin": "prior_proposal",
+      "origin_reference": "proposal:prior-source-links",
+      "note": "origin note names the recorded proposal prior-source-links",
+      "record_kind": "construct"
+    },
+    {
+      "id": "K19",
+      "catalog_origin": "literature",
+      "origin": "literature",
+      "origin_reference": "catalog:K19",
+      "note": "placeholder: the workflow needs an extraction record (extraction:<id>) bound to an included full text; the catalog records the origin in prose only",
+      "record_kind": "specification_criterion"
+    },
+    {
+      "id": "K20",
+      "catalog_origin": "prior_local",
+      "origin": "prior_proposal",
+      "origin_reference": "catalog:K20",
+      "note": "placeholder: the workflow needs a recorded proposal (proposal:<id>) from prior-proposals.json or record-input; the catalog records the origin in prose only",
+      "record_kind": "specification_criterion"
+    },
+    {
+      "id": "K21",
+      "catalog_origin": "literature",
+      "origin": "literature",
+      "origin_reference": "catalog:K21",
+      "note": "placeholder: the workflow needs an extraction record (extraction:<id>) bound to an included full text; the catalog records the origin in prose only",
+      "record_kind": "practical_outcome"
+    },
+    {
+      "id": "K22",
+      "catalog_origin": "literature",
+      "origin": "literature",
+      "origin_reference": "catalog:K22",
+      "note": "placeholder: the workflow needs an extraction record (extraction:<id>) bound to an included full text; the catalog records the origin in prose only",
+      "record_kind": "practical_outcome"
+    },
+    {
+      "id": "K23",
+      "catalog_origin": "literature",
+      "origin": "literature",
+      "origin_reference": "catalog:K23",
+      "note": "placeholder: the workflow needs an extraction record (extraction:<id>) bound to an included full text; the catalog records the origin in prose only",
+      "record_kind": "practical_outcome"
+    },
+    {
+      "id": "K24",
+      "catalog_origin": "prior_local",
+      "origin": "prior_proposal",
+      "origin_reference": "catalog:K24",
+      "note": "placeholder: the workflow needs a recorded proposal (proposal:<id>) from prior-proposals.json or record-input; the catalog records the origin in prose only",
+      "record_kind": "practical_outcome"
+    },
+    {
+      "id": "K25",
+      "catalog_origin": "prior_local",
+      "origin": "prior_proposal",
+      "origin_reference": "catalog:K25",
+      "note": "placeholder: the workflow needs a recorded proposal (proposal:<id>) from prior-proposals.json or record-input; the catalog records the origin in prose only",
+      "record_kind": "practical_outcome"
+    },
+    {
+      "id": "K26",
+      "catalog_origin": "literature",
+      "origin": "literature",
+      "origin_reference": "catalog:K26",
+      "note": "placeholder: the workflow needs an extraction record (extraction:<id>) bound to an included full text; the catalog records the origin in prose only",
+      "record_kind": "construct"
+    },
+    {
+      "id": "K27",
+      "catalog_origin": "literature",
+      "origin": "literature",
+      "origin_reference": "catalog:K27",
+      "note": "placeholder: the workflow needs an extraction record (extraction:<id>) bound to an included full text; the catalog records the origin in prose only",
+      "record_kind": "practical_outcome"
+    },
+    {
+      "id": "K28",
+      "catalog_origin": "literature",
+      "origin": "literature",
+      "origin_reference": "catalog:K28",
+      "note": "placeholder: the workflow needs an extraction record (extraction:<id>) bound to an included full text; the catalog records the origin in prose only",
+      "record_kind": "construct"
+    },
+    {
+      "id": "K29",
+      "catalog_origin": "expert_proposal",
+      "origin": "prior_proposal",
+      "origin_reference": "catalog:K29",
+      "note": "placeholder: the workflow needs a recorded proposal (proposal:<id>) from prior-proposals.json or record-input; the catalog records the origin in prose only",
+      "record_kind": "construct"
+    }
+  ],
+  "pilot_entries": [
+    {
+      "id": "P01",
+      "record_kind": "executable_measure",
+      "measures": "K05",
+      "method": "ME01 + ME03",
+      "why_not_a_measurement": "no anchors, labels, question or reference mode are recorded, and no human selected it"
+    },
+    {
+      "id": "P02",
+      "record_kind": "executable_measure",
+      "measures": "K06",
+      "method": "ME01",
+      "why_not_a_measurement": "no anchors, labels, question or reference mode are recorded, and no human selected it"
+    },
+    {
+      "id": "P03",
+      "record_kind": "executable_measure",
+      "measures": "K08",
+      "method": "ME01 + ME14",
+      "why_not_a_measurement": "no anchors, labels, question or reference mode are recorded, and no human selected it"
+    },
+    {
+      "id": "P04",
+      "record_kind": "executable_measure",
+      "measures": "K01",
+      "method": "ME02 + ME05",
+      "why_not_a_measurement": "no anchors, labels, question or reference mode are recorded, and no human selected it"
+    },
+    {
+      "id": "P05",
+      "record_kind": "executable_measure",
+      "measures": "K02, K03, K04",
+      "method": "ME02",
+      "why_not_a_measurement": "no anchors, labels, question or reference mode are recorded, and no human selected it"
+    },
+    {
+      "id": "P06",
+      "record_kind": "executable_measure",
+      "measures": "K12",
+      "method": "ME03",
+      "why_not_a_measurement": "no anchors, labels, question or reference mode are recorded, and no human selected it"
+    },
+    {
+      "id": "P07",
+      "record_kind": "executable_measure",
+      "measures": "K11",
+      "method": "ME04",
+      "why_not_a_measurement": "no anchors, labels, question or reference mode are recorded, and no human selected it"
+    },
+    {
+      "id": "P08",
+      "record_kind": "executable_measure",
+      "measures": "K14",
+      "method": "ME09 + human marking",
+      "why_not_a_measurement": "no anchors, labels, question or reference mode are recorded, and no human selected it"
+    },
+    {
+      "id": "P09",
+      "record_kind": "requirements_check",
+      "measures": "K19",
+      "method": "deterministic check",
+      "why_not_a_measurement": "a deterministic check against an external specification, not a rated item"
+    },
+    {
+      "id": "P10",
+      "record_kind": "human_use_outcome",
+      "measures": "K21",
+      "method": "ME11",
+      "why_not_a_measurement": "a task a person performs; the core has no human-task record type"
+    },
+    {
+      "id": "P11",
+      "record_kind": "human_use_outcome",
+      "measures": "K23",
+      "method": "ME12",
+      "why_not_a_measurement": "a task a person performs; the core has no human-task record type"
+    },
+    {
+      "id": "P12",
+      "record_kind": "study_condition",
+      "measures": "condition M1",
+      "method": "ME09",
+      "why_not_a_measurement": "a check of the instrument, not a property of a note"
+    },
+    {
+      "id": "P13",
+      "record_kind": "corpus_level_proxy",
+      "measures": "K28",
+      "method": "ME17",
+      "why_not_a_measurement": "computed over a system's notes; a MeasurementSpec scores one note"
+    },
+    {
+      "id": "P14",
+      "record_kind": "derived_ratio",
+      "measures": "K29",
+      "method": "derived from P01 + control condition",
+      "why_not_a_measurement": "derived from another entry; not an item a rater answers"
+    }
+  ],
+  "methods": [
+    {
+      "id": "ME01",
+      "implementation": "qa",
+      "readiness": "implemented",
+      "note": "stands for the core's qa method; not selected, because selection is a human decision"
+    },
+    {
+      "id": "ME02",
+      "implementation": "claims",
+      "readiness": "implemented",
+      "note": "stands for the core's claims method; not selected, because selection is a human decision"
+    },
+    {
+      "id": "ME03",
+      "implementation": "items",
+      "readiness": "transferable",
+      "note": "stands for the core's items method; not selected, because selection is a human decision"
+    },
+    {
+      "id": "ME04",
+      "implementation": null,
+      "readiness": "implemented",
+      "note": "no counterpart among the four implemented methods; usable only after its own implementation and review"
+    },
+    {
+      "id": "ME05",
+      "implementation": null,
+      "readiness": "transferable",
+      "note": "no counterpart among the four implemented methods; usable only after its own implementation and review"
+    },
+    {
+      "id": "ME06",
+      "implementation": null,
+      "readiness": "transferable",
+      "note": "no counterpart among the four implemented methods; usable only after its own implementation and review"
+    },
+    {
+      "id": "ME07",
+      "implementation": null,
+      "readiness": "candidate",
+      "note": "no counterpart among the four implemented methods; usable only after its own implementation and review"
+    },
+    {
+      "id": "ME08",
+      "implementation": "citations",
+      "readiness": "implemented",
+      "note": "stands for the core's citations method; not selected, because selection is a human decision"
+    },
+    {
+      "id": "ME09",
+      "implementation": null,
+      "readiness": "implemented",
+      "note": "no counterpart among the four implemented methods; usable only after its own implementation and review"
+    },
+    {
+      "id": "ME10",
+      "implementation": null,
+      "readiness": "implemented",
+      "note": "no counterpart among the four implemented methods; usable only after its own implementation and review"
+    },
+    {
+      "id": "ME11",
+      "implementation": null,
+      "readiness": "human_only",
+      "note": "no counterpart among the four implemented methods; usable only after its own implementation and review"
+    },
+    {
+      "id": "ME12",
+      "implementation": null,
+      "readiness": "human_only",
+      "note": "no counterpart among the four implemented methods; usable only after its own implementation and review"
+    },
+    {
+      "id": "ME13",
+      "implementation": null,
+      "readiness": "candidate",
+      "note": "no counterpart among the four implemented methods; usable only after its own implementation and review"
+    },
+    {
+      "id": "ME14",
+      "implementation": null,
+      "readiness": "candidate",
+      "note": "no counterpart among the four implemented methods; usable only after its own implementation and review"
+    },
+    {
+      "id": "ME15",
+      "implementation": null,
+      "readiness": "human_only",
+      "note": "no counterpart among the four implemented methods; usable only after its own implementation and review"
+    },
+    {
+      "id": "ME16",
+      "implementation": null,
+      "readiness": "candidate",
+      "note": "no counterpart among the four implemented methods; usable only after its own implementation and review"
+    },
+    {
+      "id": "ME17",
+      "implementation": null,
+      "readiness": "transferable",
+      "note": "no counterpart among the four implemented methods; usable only after its own implementation and review"
+    }
+  ]
+}

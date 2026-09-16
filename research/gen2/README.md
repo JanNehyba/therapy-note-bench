@@ -23,6 +23,11 @@ date of every change.
 `queries.json` contains planned, unexecuted queries. `retrieval-seeds.json` is a
 known-source retrieval inventory, not an included-study table.
 `prior-proposals.json` records prior exposure and proposals, not validated criteria.
+`catalog/catalog.json` is the single versioned record of what the search of
+2026-09-13 proposed: sources, candidate constructs, methods, measurement levels,
+blind spots, a pilot proposal and the comparison with the earlier criteria map.
+`catalog/README.md` explains its provenance; the page under `docs/` and the draft
+registry beside it are generated from it, and hand edits to either fail the suite.
 
 Use JBI scoping-review guidance with explicitly recorded adaptations. Report with
 PRISMA-ScR and PRISMA-S; neither checklist by itself establishes review quality.

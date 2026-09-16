@@ -1,0 +1,2435 @@
+{
+  "sources": [
+    {
+      "id": "S1",
+      "title": "Shah et al. TN-Eval: Rubric and Evaluation Protocols for Measuring the Quality of Behavioral Therapy Notes. Proc. 63rd ACL (Industry Track), 2025, pp. 178-192.",
+      "locator": "ledger:doi:10.18653/v1/2025.acl-industry.14",
+      "layer": "direct",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "Public MI demonstrations are not routine clinical sessions. English only. Note sources were revealed to annotators. No Czech evidence.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S2",
+      "title": "Croxford et al. Development and validation of the provider documentation summarization quality instrument for large language models. J Am Med Inform Assoc, 2025. doi:10.1093/jamia/ocaf068. PMID 40323321.",
+      "locator": "ledger:doi:10.1093/jamia/ocaf068",
+      "layer": "transfer",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "Psychotherapy notes were excluded from the validation corpus by design, so transfer to psychotherapy documentation is untested. Substantive validity rests on weak length correlations (beta about -0.2).",
+      "version": "source-v1"
+    },
+    {
+      "id": "S3",
+      "title": "Adhikary et al. Clinically Grounded AI-Scribing in Psychotherapy: Benchmarking LLMs Against Expert Documentation in the iCARE Framework. medRxiv 2025.06.25.25330252.",
+      "locator": "ledger:doi:10.1101/2025.06.25.25330252",
+      "layer": "direct",
+      "publication_type": "preprint",
+      "verification": "full_text_checked",
+      "limitations": "Preprint. Public counselling videos, not routine care. Aspect 1 requires patient name and contact details, which conflicts with data minimisation. The MSE aspect asks only for positive findings.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S4",
+      "title": "Stetson et al. Assessing Electronic Note Quality Using the Physician Documentation Quality Instrument (PDQI-9). Appl Clin Inform 2012;3(2):164-174. doi:10.4338/aci-2011-11-ra-0070. PMC3347480, PMID 22577483.",
+      "locator": "ledger:doi:10.4338/aci-2011-11-ra-0070",
+      "layer": "transfer",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "General medicine, not psychotherapy. The preliminary-development report of the same study family was not retrieved in this round.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S5",
+      "title": "Stetson et al. Preliminary development of the physician documentation quality instrument. J Am Med Inform Assoc 2008;15(4):534-541. doi:10.1197/jamia.M2404. PMID 18436914.",
+      "locator": "ledger:doi:10.1197/jamia.m2404",
+      "layer": "transfer",
+      "publication_type": "article",
+      "verification": "metadata_checked",
+      "limitations": "Full text not open access and not obtained. Linked to S4 as the earlier report of the same instrument family; the two are not independent confirmations.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S6",
+      "title": "Walker KJ, Wang A, Dunlop W, Rodda H, et al. The 9-Item Physician Documentation Quality Instrument (PDQI-9) score is not useful in evaluating EMR (scribe) note quality in Emergency Medicine. Appl Clin Inform 2017;8(3):981-993. doi:10.4338/ACI2017050080. PMID 28956888.",
+      "locator": "ledger:doi:10.4338/aci2017050080",
+      "layer": "transfer",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "One department, one country, emergency medicine. Its value here is the negative result and the untrained-rater condition, not generalisation to psychotherapy.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S7",
+      "title": "Adhikary et al. Exploring the Efficacy of Large Language Models in Summarizing Mental Health Counseling Sessions: Benchmark Study. JMIR Ment Health 2024;11:e57306. doi:10.2196/57306. PMID 39042893.",
+      "locator": "ledger:doi:10.2196/57306",
+      "layer": "direct",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "Public videos, English. The three components are a task definition, not a validated quality model.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S8",
+      "title": "Scialom et al. QuestEval: Summarization Asks for Fact-based Evaluation. EMNLP 2021, pp. 6594-6604.",
+      "locator": "ledger:doi:10.18653/v1/2021.emnlp-main.529",
+      "layer": "transfer",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "General-domain news text. No clinical or Czech validation. Retrieval of an answer is not proof that the answer is clinically correct.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S9",
+      "title": "Fabbri et al. QAFactEval: Improved QA-Based Factual Consistency Evaluation for Summarization. NAACL 2022, pp. 2587-2601.",
+      "locator": "ledger:doi:10.18653/v1/2022.naacl-main.187",
+      "layer": "transfer",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "General domain. Unanswerable questions are a distinct outcome from wrong answers, and conflating them distorts the score.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S10",
+      "title": "Min et al. FActScore: Fine-grained Atomic Evaluation of Factual Precision in Long Form Text Generation. EMNLP 2023, pp. 12076-12100.",
+      "locator": "ledger:doi:10.18653/v1/2023.emnlp-main.741",
+      "layer": "transfer",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "Precision only; it does not measure omission. Atomicity of decomposition is itself an unvalidated step. No clinical or Czech validation.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S11",
+      "title": "Terwee et al. COSMIN methodology for evaluating the content validity of patient-reported outcome measures: a Delphi study. Qual Life Res 2018;27:1159-1170. doi:10.1007/s11136-018-1829-0.",
+      "locator": "ledger:doi:10.1007/s11136-018-1829-0",
+      "layer": "transfer",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "Designed for patient-reported outcome scales. A documentation checklist rated by a third party is not a PROM, so the criteria need explicit adaptation.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S12",
+      "title": "Boateng et al. Best Practices for Developing and Validating Scales for Health, Social, and Behavioral Research: A Primer. Front Public Health 2018;6:149. doi:10.3389/fpubh.2018.00149.",
+      "locator": "ledger:doi:10.3389/fpubh.2018.00149",
+      "layer": "transfer",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "Assumes a reflective latent construct. A heterogeneous error checklist is not automatically such a scale and should not be forced into one.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S13",
+      "title": "American Psychological Association. Record Keeping Guidelines. Am Psychol 2007;62(9):993-1004. doi:10.1037/0003-066X.62.9.993.",
+      "locator": "ledger:doi:10.1037/0003-066x.62.9.993",
+      "layer": "requirements",
+      "publication_type": "guideline",
+      "verification": "full_text_checked",
+      "limitations": "EXPIRED BY ITS OWN TERMS. The document states it was 'scheduled to expire 10 years from February 16, 2007'. Whether a successor is in force was not established in this round. US jurisdiction; it is not a Czech requirement.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S14",
+      "title": "Decree No. 444/2024 Coll., on medical documentation (Vyhlaska c. 444/2024 Sb., o zdravotnicke dokumentaci). Ministry of Health of the Czech Republic, adopted 2024-12-19, in force from 2025-01-01.",
+      "locator": "ledger:guid:cz-decree-444-2024",
+      "layer": "requirements",
+      "publication_type": "guideline",
+      "verification": "full_text_checked",
+      "limitations": "It replaced Decree No. 98/2012 Coll., which was repealed with effect from 2025-01-01. It states required elements, not quality. Presence of a required field is not evidence that its content is correct.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S15",
+      "title": "Peters MDJ et al. Updated methodological guidance for the conduct of scoping reviews. JBI Evid Synth 2020;18(10):2119-2126. doi:10.11124/JBIES-20-00167.",
+      "locator": "ledger:doi:10.11124/jbies-20-00167",
+      "layer": "methodology",
+      "publication_type": "guideline",
+      "verification": "full_text_checked",
+      "limitations": "This round has one investigator and an AI assistant, which is a declared deviation from that guidance.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S16",
+      "title": "Tricco AC et al. PRISMA Extension for Scoping Reviews (PRISMA-ScR): Checklist and Explanation. Ann Intern Med 2018;169(7):467-473. doi:10.7326/M18-0850.",
+      "locator": "ledger:doi:10.7326/m18-0850",
+      "layer": "methodology",
+      "publication_type": "guideline",
+      "verification": "full_text_checked",
+      "limitations": "The retrieved copy is the accepted manuscript from a repository, not the version of record; its Supplement 2 item elaboration was not obtained.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S17",
+      "title": "Rethlefsen ML et al. PRISMA-S: an extension to the PRISMA Statement for Reporting Literature Searches in Systematic Reviews. Syst Rev 2021;10:39. doi:10.1186/s13643-020-01542-z.",
+      "locator": "ledger:doi:10.1186/s13643-020-01542-z",
+      "layer": "methodology",
+      "publication_type": "guideline",
+      "verification": "full_text_checked",
+      "limitations": "Reporting guidance only; following it does not make a search comprehensive.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S18",
+      "title": "Keren L, Klein A, Bar-Shachar Y, Liakata M, Atzil-Slonim D et al. Clinical Summaries of Social Media Timelines for Mental Health Monitoring: Human Versus Large Language Model. JMIR Form Res 2026. PMID 41894679, PMC13069367.",
+      "locator": "ledger:pmid:41894679",
+      "layer": "direct",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "Social media timelines, not therapy sessions. Raters rated their own peers' work. The diversity proxy varied with the embedding model chosen, which the authors report as an inconsistency.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S19",
+      "title": "Keren L, Klein A, Bar-Shachar Y, Liakata M, Atzil-Slonim D. A comparative evaluation of LLM-generated and clinician-written psychotherapy session summaries. Psychother Res 2026. doi:10.1080/10503307.2026.2729093. PMID 42715612.",
+      "locator": "ledger:doi:10.1080/10503307.2026.2729093",
+      "layer": "direct",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "Summaries written by trainees, not experienced therapists. Segments, not whole sessions, with context limited to the current session. Full transcripts were found to dilute the model and were deliberately replaced by a distilled preamble. Blinding success was never behaviourally tested. Length, terminology and structure were deliberately aligned between sources, which is why this study cannot be read as evidence that models cover more.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S_abs_edit",
+      "title": "What do clinicians edit in ambient AI-drafted clinical documentation? A qualitative content analysis. J Am Med Inform Assoc, 2026.",
+      "locator": "ledger:pmid:42118974",
+      "layer": "transfer",
+      "publication_type": "unverified",
+      "verification": "metadata_checked",
+      "limitations": "Read from the abstract only; the full text was not retrieved in this round. A method for K22: content analysis of the edits clinicians actually make to an AI draft.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S_abs_severity",
+      "title": "Clinical AI Scribes in primary care: accuracy, error severity and implications for clinical practice. BMJ Digital Health & AI, 2025.",
+      "locator": "ledger:pmid:42712320",
+      "layer": "transfer",
+      "publication_type": "unverified",
+      "verification": "metadata_checked",
+      "limitations": "Read from the abstract only; the full text was not retrieved in this round. Error severity reported separately from error count; support for ME14.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S_abs_sweden",
+      "title": "Errors, Omissions, and Offenses in the Health Record of Mental Health Care Patients: Results from a Nationwide Survey in Sweden. J Med Internet Res 2023.",
+      "locator": "ledger:pmid:37921861",
+      "layer": "direct",
+      "publication_type": "unverified",
+      "verification": "metadata_checked",
+      "limitations": "Read from the abstract only; the full text was not retrieved in this round. Mental health patients themselves report errors, omissions and offensive content in their records: three categories that match the client purpose exactly.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S_abs_delphi",
+      "title": "The benefits and harms of open notes in mental health: A Delphi survey of international experts. PLoS One 2021.",
+      "locator": "ledger:pmid:34644320",
+      "layer": "requirements",
+      "publication_type": "unverified",
+      "verification": "metadata_checked",
+      "limitations": "Read from the abstract only; the full text was not retrieved in this round. Expert consensus on the benefits and harms of giving clients access to notes.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S_abs_scoping_notes",
+      "title": "Sharing Clinical Notes and Electronic Health Records With People Affected by Mental Health Conditions: Scoping Review. JMIR Ment Health 2021.",
+      "locator": "ledger:pmid:34904956",
+      "layer": "requirements",
+      "publication_type": "unverified",
+      "verification": "metadata_checked",
+      "limitations": "Read from the abstract only; the full text was not retrieved in this round. An existing scoping review on exactly the client purpose. It has to be read before this layer is built again.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S_abs_stakeholder",
+      "title": "Quality of outpatient clinical notes: a stakeholder definition derived through qualitative research. BMC Health Serv Res 2012.",
+      "locator": "ledger:pmid:23164470",
+      "layer": "transfer",
+      "publication_type": "unverified",
+      "verification": "metadata_checked",
+      "limitations": "Read from the abstract only; the full text was not retrieved in this round. A definition of note quality derived from its users, not from an expert committee.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S_abs_supcode",
+      "title": "Objective coding of content and techniques in workplace-based supervision of an EBT in public mental health. Implementation Science 2018.",
+      "locator": "ledger:pmid:29368656",
+      "layer": "requirements",
+      "publication_type": "unverified",
+      "verification": "metadata_checked",
+      "limitations": "Read from the abstract only; the full text was not retrieved in this round. A coding system for the content of supervision; the closest support found for the supervision purpose.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S_abs_disparity",
+      "title": "Race and gender disparities in mental health documentation in primary care: Findings from a video vignette experiment. Soc Sci Med 2026.",
+      "locator": "ledger:pmid:42361434",
+      "layer": "direct",
+      "publication_type": "unverified",
+      "verification": "metadata_checked",
+      "limitations": "Read from the abstract only; the full text was not retrieved in this round. Experimental evidence of inequality in mental health documentation; support for K27 and ME16.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S_abs_hua",
+      "title": "Hua Y, Na H, Li Z, Liu F, Fang X, Clifton D, Torous J. A scoping review of large language models for generative tasks in mental health care. npj Digit Med 2025;8:230. doi:10.1038/s41746-025-01611-4.",
+      "locator": "ledger:supp:hua-scoping-review-2025",
+      "layer": "direct",
+      "publication_type": "unverified",
+      "verification": "metadata_checked",
+      "limitations": "Read from the abstract only; the full text was not retrieved in this round. RECALL GAP. The queries did not capture this work: neither its title nor its abstract carries a term for notes, documentation or summarisation, and every query required one. The investigator pointed to it on 2026-09-13 from an external source, and S19 cites it. It shows that the layer of general reviews on language models in mental health is systematically under-retrieved by the queries.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S_abs_summac",
+      "title": "SummaC: Re-Visiting NLI-based Models for Inconsistency Detection in Summarization. TACL 2022.",
+      "locator": "ledger:doi:10.1162/tacl_a_00453",
+      "layer": "transfer",
+      "publication_type": "unverified",
+      "verification": "metadata_checked",
+      "limitations": "Read from the abstract only; the full text was not retrieved in this round. The method behind ME07. Found in the audit of the below-threshold stratum, not by the priority screen.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S_abs_mherrors",
+      "title": "Errors in AI-Transformed Patient-Centered Mental Health Documentation Written by Psychiatrists: Qualitative Pre-Post Study. JMIR Ment Health 2026.",
+      "locator": "ledger:pmid:42054574",
+      "layer": "direct",
+      "publication_type": "unverified",
+      "verification": "metadata_checked",
+      "limitations": "Read from the abstract only; the full text was not retrieved in this round. A typology of errors arising when psychiatric documentation is transformed automatically.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S_abs_sespi",
+      "title": "Development and reliability testing of the Scale for the Evaluation of Staff-Patient Interactions in Progress Notes (SESPI). Nursing Open 2019.",
+      "locator": "ledger:pmid:31367401",
+      "layer": "transfer",
+      "publication_type": "unverified",
+      "verification": "metadata_checked",
+      "limitations": "Read from the abstract only; the full text was not retrieved in this round. An instrument aimed directly at how staff-patient interactions are captured in notes; a Spanish adaptation exists, a precedent for language transfer.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S_abs_tednq",
+      "title": "Development of a scoring tool for emergency department note quality: a modified Delphi approach. CJEM 2025; a The inter-rater reliability of the TEDNQ. CJEM 2026.",
+      "locator": "ledger:pmid:40249563",
+      "layer": "transfer",
+      "publication_type": "unverified",
+      "verification": "metadata_checked",
+      "limitations": "Read from the abstract only; the full text was not retrieved in this round. A recent example of the whole cycle: Delphi construction of criteria, then a separate agreement study.",
+      "version": "source-v1"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "K01-e1",
+      "source_id": "S1",
+      "location": "Section 4.1 Human Evaluation Protocols",
+      "interpretation": "A three-way typology of fidelity error, rated per sentence against the transcript.",
+      "relationship": "direct_validation",
+      "population": "50 conversations from the high-quality split of AnnoMI (public motivational interviewing demonstrations, English)",
+      "languages": [
+        "en"
+      ],
+      "raters": "5 internal + 8 note-writing + 9 evaluating licensed US therapists; rubric validated with 17 external therapists",
+      "unit": "rubric item per SOAP section; sentence for conciseness; sentence for faithfulness",
+      "response_format": "binary item coverage, sentence labels, 3-way hallucination label; 5-point Likert baseline for comparison",
+      "validation": "not established",
+      "limitations": "TN-Eval annotates with licensed therapists in English; automation and Czech are our step.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "categorizing hallucinations into (1) Out-of-nowhere, (2) Misinterpreted Information, or (3) No Error"
+    },
+    {
+      "id": "K01-e2",
+      "source_id": "S2",
+      "location": "Round 2, attribute refinement",
+      "interpretation": "Separation of inaccuracy from omission as two different vulnerabilities.",
+      "relationship": "method_transfer",
+      "population": "779 multi-document EHR summaries, multiple specialties, real-world data; psychiatry and psychotherapy notes explicitly excluded",
+      "languages": [
+        "en"
+      ],
+      "raters": "7 trained physician raters, 8329 answered questions",
+      "unit": "whole summary",
+      "response_format": "9 attributes on 5-point Likert scales",
+      "validation": "not established",
+      "limitations": "PDSQI rates the whole summary with one Likert item; the claim as unit is our proposal.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "the vulnerability of the attribute Accurate to hallucinations and the attribute Thorough to omissions"
+    },
+    {
+      "id": "K02-e1",
+      "source_id": "S1",
+      "location": "Appendix A.2 Objective, Definition",
+      "interpretation": "Separating the originator is an explicit requirement of the format, not our improvement.",
+      "relationship": "direct_validation",
+      "population": "50 conversations from the high-quality split of AnnoMI (public motivational interviewing demonstrations, English)",
+      "languages": [
+        "en"
+      ],
+      "raters": "5 internal + 8 note-writing + 9 evaluating licensed US therapists; rubric validated with 17 external therapists",
+      "unit": "rubric item per SOAP section; sentence for conciseness; sentence for faithfulness",
+      "response_format": "binary item coverage, sentence labels, 3-way hallucination label; 5-point Likert baseline for comparison",
+      "validation": "not established",
+      "limitations": "TN-Eval handles it by placement in a section; measuring attribution inside a sentence is our proposal.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Avoid including any subjective statements or self-reported information from the client."
+    },
+    {
+      "id": "K03-e1",
+      "source_id": "S2",
+      "location": "Methods, instrument development",
+      "interpretation": "Temporality was a separate attribute in PDQI-9 and the PDSQI-9 authors judged it redundant.",
+      "relationship": "method_transfer",
+      "population": "779 multi-document EHR summaries, multiple specialties, real-world data; psychiatry and psychotherapy notes explicitly excluded",
+      "languages": [
+        "en"
+      ],
+      "raters": "7 trained physician raters, 8329 answered questions",
+      "unit": "whole summary",
+      "response_format": "9 attributes on 5-point Likert scales",
+      "validation": "not established",
+      "limitations": "We take this as a warning against a separate temporal column; we propose to measure time as part of claim agreement.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Two PDQI-9 attributes, Up-to-Date and Consistent, were removed"
+    },
+    {
+      "id": "K04-e1",
+      "source_id": "S1",
+      "location": "Appendix A.3 Assessment, Definition",
+      "interpretation": "A hypothesis is the expected content of the section, so it should remain a hypothesis.",
+      "relationship": "direct_validation",
+      "population": "50 conversations from the high-quality split of AnnoMI (public motivational interviewing demonstrations, English)",
+      "languages": [
+        "en"
+      ],
+      "raters": "5 internal + 8 note-writing + 9 evaluating licensed US therapists; rubric validated with 17 external therapists",
+      "unit": "rubric item per SOAP section; sentence for conciseness; sentence for faithfulness",
+      "response_format": "binary item coverage, sentence labels, 3-way hallucination label; 5-point Likert baseline for comparison",
+      "validation": "not established",
+      "limitations": "TN-Eval does not measure whether the note keeps the status of a hypothesis; that is our proposal.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Summarize the clinical impressions and hypotheses regarding the client's issues."
+    },
+    {
+      "id": "K05-e1",
+      "source_id": "S1",
+      "location": "Appendix C, importance annotation",
+      "interpretation": "Five-level importance of items, verified with five therapists at Fleiss' kappa 0.68 and Krippendorff's alpha 0.73.",
+      "relationship": "direct_validation",
+      "population": "50 conversations from the high-quality split of AnnoMI (public motivational interviewing demonstrations, English)",
+      "languages": [
+        "en"
+      ],
+      "raters": "5 internal + 8 note-writing + 9 evaluating licensed US therapists; rubric validated with 17 external therapists",
+      "unit": "rubric item per SOAP section; sentence for conciseness; sentence for faithfulness",
+      "response_format": "binary item coverage, sentence labels, 3-way hallucination label; 5-point Likert baseline for comparison",
+      "validation": "not established",
+      "limitations": "Carrying the grading into the score and adding purpose dependence is our step.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Mandatory, Mandatory in certain circumstances, Highly recommended, Good to have, and Optional."
+    },
+    {
+      "id": "K05-e2",
+      "source_id": "S1",
+      "location": "Section 4.1",
+      "interpretation": "Even coverage itself is not a plain share over all items.",
+      "relationship": "direct_validation",
+      "population": "50 conversations from the high-quality split of AnnoMI (public motivational interviewing demonstrations, English)",
+      "languages": [
+        "en"
+      ],
+      "raters": "5 internal + 8 note-writing + 9 evaluating licensed US therapists; rubric validated with 17 external therapists",
+      "unit": "rubric item per SOAP section; sentence for conciseness; sentence for faithfulness",
+      "response_format": "binary item coverage, sentence labels, 3-way hallucination label; 5-point Likert baseline for comparison",
+      "validation": "not established",
+      "limitations": "-",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "The full note score is computed as a micro average, weighted by section rubric elements."
+    },
+    {
+      "id": "K05-e3",
+      "source_id": "S2",
+      "location": "Round 2, omissions",
+      "interpretation": "An omission counts only when it is relevant to the use and the recipient.",
+      "relationship": "method_transfer",
+      "population": "779 multi-document EHR summaries, multiple specialties, real-world data; psychiatry and psychotherapy notes explicitly excluded",
+      "languages": [
+        "en"
+      ],
+      "raters": "7 trained physician raters, 8329 answered questions",
+      "unit": "whole summary",
+      "response_format": "9 attributes on 5-point Likert scales",
+      "validation": "not established",
+      "limitations": "-",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "are only considered when classified as pertinent or potentially pertinent"
+    },
+    {
+      "id": "K06-e1",
+      "source_id": "S3",
+      "location": "aspect 9 Current Mental Status Examination",
+      "interpretation": "iCARE asks for the MSE as a structured field.",
+      "relationship": "direct_validation",
+      "population": "iHOPE, derived from the HOPE dataset of pre-recorded counselling videos published on YouTube, re-transcribed and diarised with WhisperX",
+      "languages": [
+        "en"
+      ],
+      "raters": "clinical experts; annotation validated in multiple stages",
+      "unit": "aspect field",
+      "response_format": "17 structured aspects",
+      "validation": "not established",
+      "limitations": "The conclusion that the MSE cannot be filled from a text transcript without observational data, and that an empty field is not a normal finding, is our adaptation, not a claim of iCARE.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "an assessment of the most recent mental state"
+    },
+    {
+      "id": "K07-e1",
+      "source_id": "S2",
+      "location": "Round 2, pertinence",
+      "interpretation": "Relevance is defined against the expected use, not absolutely.",
+      "relationship": "method_transfer",
+      "population": "779 multi-document EHR summaries, multiple specialties, real-world data; psychiatry and psychotherapy notes explicitly excluded",
+      "languages": [
+        "en"
+      ],
+      "raters": "7 trained physician raters, 8329 answered questions",
+      "unit": "whole summary",
+      "response_format": "9 attributes on 5-point Likert scales",
+      "validation": "not established",
+      "limitations": "Our four purposes are our construction, not PDSQI's.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "A pertinent omission refers to details relevant to a patient's expected"
+    },
+    {
+      "id": "K07-e2",
+      "source_id": "S11",
+      "location": "COSMIN, components of content validity",
+      "interpretation": "Relevance is judged against a declared target population and purpose.",
+      "relationship": "method_transfer",
+      "population": "patient-reported outcome measures",
+      "languages": [
+        "en"
+      ],
+      "raters": "Delphi panel",
+      "unit": "instrument",
+      "response_format": "content validity appraisal criteria",
+      "validation": "not established",
+      "limitations": "COSMIN aims at PROMs; a documentation criterion rated by a third party is not a PROM.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "relevance"
+    },
+    {
+      "id": "K08-e1",
+      "source_id": "S1",
+      "location": "Appendix A.5 General Items",
+      "interpretation": "Safety is mandatory across sections, not the content of one of them.",
+      "relationship": "direct_validation",
+      "population": "50 conversations from the high-quality split of AnnoMI (public motivational interviewing demonstrations, English)",
+      "languages": [
+        "en"
+      ],
+      "raters": "5 internal + 8 note-writing + 9 evaluating licensed US therapists; rubric validated with 17 external therapists",
+      "unit": "rubric item per SOAP section; sentence for conciseness; sentence for faithfulness",
+      "response_format": "binary item coverage, sentence labels, 3-way hallucination label; 5-point Likert baseline for comparison",
+      "validation": "not established",
+      "limitations": "-",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Clearly reflect that the practitioner assessed for and addressed any safety concerns"
+    },
+    {
+      "id": "K08-e2",
+      "source_id": "S3",
+      "location": "aspect 8 Crisis Markers",
+      "interpretation": "A separate structured field for crisis markers.",
+      "relationship": "direct_validation",
+      "population": "iHOPE, derived from the HOPE dataset of pre-recorded counselling videos published on YouTube, re-transcribed and diarised with WhisperX",
+      "languages": [
+        "en"
+      ],
+      "raters": "clinical experts; annotation validated in multiple stages",
+      "unit": "aspect field",
+      "response_format": "17 structured aspects",
+      "validation": "not established",
+      "limitations": "-",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "indicators that suggest that the patient may be at risk of harming themselves or others"
+    },
+    {
+      "id": "K09-e1",
+      "source_id": "S2",
+      "location": "Table 1, Synthesized, relevant domains",
+      "interpretation": "Synthesis is a separate attribute in PDSQI-9, linked to abstraction and reasoning.",
+      "relationship": "method_transfer",
+      "population": "779 multi-document EHR summaries, multiple specialties, real-world data; psychiatry and psychotherapy notes explicitly excluded",
+      "languages": [
+        "en"
+      ],
+      "raters": "7 trained physician raters, 8329 answered questions",
+      "unit": "whole summary",
+      "response_format": "9 attributes on 5-point Likert scales",
+      "validation": "not established",
+      "limitations": "PDSQI-9 was validated on EHR summaries, where clinical integration is the goal. In a note meant for the client the same integration may be inappropriate; that is our conclusion.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Abstraction, Reasoning, Consistency"
+    },
+    {
+      "id": "K09-e2",
+      "source_id": "S3",
+      "location": "aspect 10 Psychotherapy Type",
+      "interpretation": "iCARE expects the type of therapy to be named.",
+      "relationship": "direct_validation",
+      "population": "iHOPE, derived from the HOPE dataset of pre-recorded counselling videos published on YouTube, re-transcribed and diarised with WhisperX",
+      "languages": [
+        "en"
+      ],
+      "raters": "clinical experts; annotation validated in multiple stages",
+      "unit": "aspect field",
+      "response_format": "17 structured aspects",
+      "validation": "not established",
+      "limitations": "Our conclusion that a generally supportive conversation should not automatically become a named intervention is an adaptation.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "defines the type of psychotherapy used in the treatment"
+    },
+    {
+      "id": "K10-e1",
+      "source_id": "S1",
+      "location": "Appendix A.4 Plan",
+      "interpretation": "Future interventions and the follow-up meeting are items of the Mandatory level.",
+      "relationship": "direct_validation",
+      "population": "50 conversations from the high-quality split of AnnoMI (public motivational interviewing demonstrations, English)",
+      "languages": [
+        "en"
+      ],
+      "raters": "5 internal + 8 note-writing + 9 evaluating licensed US therapists; rubric validated with 17 external therapists",
+      "unit": "rubric item per SOAP section; sentence for conciseness; sentence for faithfulness",
+      "response_format": "binary item coverage, sentence labels, 3-way hallucination label; 5-point Likert baseline for comparison",
+      "validation": "not established",
+      "limitations": "-",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Future Interventions: Planned therapeutic techniques or strategies to be used in future sessions. Importance: Mandatory"
+    },
+    {
+      "id": "K10-e2",
+      "source_id": "S3",
+      "location": "aspects 16-17 Action Plan, Next Session Details",
+      "interpretation": "The plan and the details of the next session are separate aspects.",
+      "relationship": "direct_validation",
+      "population": "iHOPE, derived from the HOPE dataset of pre-recorded counselling videos published on YouTube, re-transcribed and diarised with WhisperX",
+      "languages": [
+        "en"
+      ],
+      "raters": "clinical experts; annotation validated in multiple stages",
+      "unit": "aspect field",
+      "response_format": "17 structured aspects",
+      "validation": "not established",
+      "limitations": "-",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "a structured plan for ongoing treatment and goals for the patient"
+    },
+    {
+      "id": "K11-e1",
+      "source_id": "S1",
+      "location": "Section 4 Evaluation Protocols",
+      "interpretation": "Economy is the share of needed sentences, not length.",
+      "relationship": "direct_validation",
+      "population": "50 conversations from the high-quality split of AnnoMI (public motivational interviewing demonstrations, English)",
+      "languages": [
+        "en"
+      ],
+      "raters": "5 internal + 8 note-writing + 9 evaluating licensed US therapists; rubric validated with 17 external therapists",
+      "unit": "rubric item per SOAP section; sentence for conciseness; sentence for faithfulness",
+      "response_format": "binary item coverage, sentence labels, 3-way hallucination label; 5-point Likert baseline for comparison",
+      "validation": "not established",
+      "limitations": "-",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "This metric measures whether each sentence contributes to a rubric item."
+    },
+    {
+      "id": "K11-e2",
+      "source_id": "S2",
+      "location": "Results, substantive validity",
+      "interpretation": "In PDSQI-9 a longer summary is rated as less succinct, beta about -0.2.",
+      "relationship": "method_transfer",
+      "population": "779 multi-document EHR summaries, multiple specialties, real-world data; psychiatry and psychotherapy notes explicitly excluded",
+      "languages": [
+        "en"
+      ],
+      "raters": "7 trained physician raters, 8329 answered questions",
+      "unit": "whole summary",
+      "response_format": "9 attributes on 5-point Likert scales",
+      "validation": "not established",
+      "limitations": "We take this as a weak relation, not as proof that shorter is better.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "correlations between note length and scores for Succinct"
+    },
+    {
+      "id": "K12-e1",
+      "source_id": "S2",
+      "location": "Table 1, Organized",
+      "interpretation": "Organisation is defined by its service to the reader.",
+      "relationship": "method_transfer",
+      "population": "779 multi-document EHR summaries, multiple specialties, real-world data; psychiatry and psychotherapy notes explicitly excluded",
+      "languages": [
+        "en"
+      ],
+      "raters": "7 trained physician raters, 8329 answered questions",
+      "unit": "whole summary",
+      "response_format": "9 attributes on 5-point Likert scales",
+      "validation": "not established",
+      "limitations": "-",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "well-formed and structured in a way that helps the reader understand the patient's clinical course"
+    },
+    {
+      "id": "K12-e2",
+      "source_id": "S1",
+      "location": "Section 3.2, Rubric Quality",
+      "interpretation": "Five experts agreed perfectly, during rubric design, on which section a rubric item belongs to. Placement is therefore well defined; the reliability of rating it on actual notes is not established by that.",
+      "relationship": "direct_validation",
+      "population": "50 conversations from the high-quality split of AnnoMI (public motivational interviewing demonstrations, English)",
+      "languages": [
+        "en"
+      ],
+      "raters": "5 internal + 8 note-writing + 9 evaluating licensed US therapists; rubric validated with 17 external therapists",
+      "unit": "rubric item per SOAP section; sentence for conciseness; sentence for faithfulness",
+      "response_format": "binary item coverage, sentence labels, 3-way hallucination label; 5-point Likert baseline for comparison",
+      "validation": "not established",
+      "limitations": "Using placement as a separate measure is our proposal.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "We observe perfect IAA among 5 experts for the appropriate section for each key characteristic"
+    },
+    {
+      "id": "K13-e1",
+      "source_id": "S2",
+      "location": "Results, factor analysis",
+      "interpretation": "Clarity separates empirically from organisation, accuracy and utility.",
+      "relationship": "method_transfer",
+      "population": "779 multi-document EHR summaries, multiple specialties, real-world data; psychiatry and psychotherapy notes explicitly excluded",
+      "languages": [
+        "en"
+      ],
+      "raters": "7 trained physician raters, 8329 answered questions",
+      "unit": "whole summary",
+      "response_format": "9 attributes on 5-point Likert scales",
+      "validation": "not established",
+      "limitations": "The factor structure comes from physicians rating EHR summaries. It cannot be transferred to psychotherapy notes or to reading by a client without verification.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "4-factor model explaining 58% of the variance, representing organization, clarity, accuracy, and utility"
+    },
+    {
+      "id": "K14-e1",
+      "source_id": "S2",
+      "location": "Methods, instrument development",
+      "interpretation": "Stigmatising language is a separate attribute in PDSQI-9, introduced precisely because of the models.",
+      "relationship": "method_transfer",
+      "population": "779 multi-document EHR summaries, multiple specialties, real-world data; psychiatry and psychotherapy notes explicitly excluded",
+      "languages": [
+        "en"
+      ],
+      "raters": "7 trained physician raters, 8329 answered questions",
+      "unit": "whole summary",
+      "response_format": "9 attributes on 5-point Likert scales",
+      "validation": "not established",
+      "limitations": "PDSQI gives example words in English; converting that into a Czech list of forbidden words is an inadmissible simplification and is supported by no source.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Two new attributes were added to address concerns in LLM-generated summaries: use of stigmatizing"
+    },
+    {
+      "id": "K14-e2",
+      "source_id": "S1",
+      "location": "Appendix A.5 General Items, Professionalism",
+      "interpretation": "Professionalism includes the way other persons are spoken about.",
+      "relationship": "direct_validation",
+      "population": "50 conversations from the high-quality split of AnnoMI (public motivational interviewing demonstrations, English)",
+      "languages": [
+        "en"
+      ],
+      "raters": "5 internal + 8 note-writing + 9 evaluating licensed US therapists; rubric validated with 17 external therapists",
+      "unit": "rubric item per SOAP section; sentence for conciseness; sentence for faithfulness",
+      "response_format": "binary item coverage, sentence labels, 3-way hallucination label; 5-point Likert baseline for comparison",
+      "validation": "not established",
+      "limitations": "-",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Never describe other clients and staff in a derogatory manner."
+    },
+    {
+      "id": "K15-e1",
+      "source_id": "S3",
+      "location": "aspect 1 Patient Particulars",
+      "interpretation": "DOES NOT SUPPORT minimisation. iCARE asks, on the contrary, for the name and contact details.",
+      "relationship": "direct_validation",
+      "population": "iHOPE, derived from the HOPE dataset of pre-recorded counselling videos published on YouTube, re-transcribed and diarised with WhisperX",
+      "languages": [
+        "en"
+      ],
+      "raters": "clinical experts; annotation validated in multiple stages",
+      "unit": "aspect field",
+      "response_format": "17 structured aspects",
+      "validation": "not established",
+      "limitations": "The tension between this requirement and data minimisation is a finding, not support.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "socio-demographic details such as name, age, sex, contact information"
+    },
+    {
+      "id": "K15-e2",
+      "source_id": "S2",
+      "location": "Methods, inclusion criteria",
+      "interpretation": "The sensitivity of psychotherapy notes is acknowledged so far as to exclude them from the validation study.",
+      "relationship": "method_transfer",
+      "population": "779 multi-document EHR summaries, multiple specialties, real-world data; psychiatry and psychotherapy notes explicitly excluded",
+      "languages": [
+        "en"
+      ],
+      "raters": "7 trained physician raters, 8329 answered questions",
+      "unit": "whole summary",
+      "response_format": "9 attributes on 5-point Likert scales",
+      "validation": "not established",
+      "limitations": "That is evidence of sensitivity, not of how to measure it in a note.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Psychotherapy notes were excluded due to their highly sensitive nature and additional regulatory protections"
+    },
+    {
+      "id": "K15-e3",
+      "source_id": "S14",
+      "location": "Section 2 (b)",
+      "interpretation": "The Czech decree requires identification and contact details, the opposite of minimisation.",
+      "relationship": "requirement",
+      "population": "all health services provided in the Czech Republic",
+      "languages": [
+        "cs"
+      ],
+      "raters": "n/a",
+      "unit": "documentation record and individual entries",
+      "response_format": "enumerated required elements",
+      "validation": "not established",
+      "limitations": "Minimisation therefore cannot concern the fields the law requires; it can concern free text.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "[translated from Czech] the patient's identification and contact details"
+    },
+    {
+      "id": "K16-e1",
+      "source_id": "S13",
+      "location": "Guideline 8, Preserving the Context of Records",
+      "interpretation": "The context of creation is a professional requirement for record keeping.",
+      "relationship": "requirement",
+      "population": "US psychologists",
+      "languages": [
+        "en"
+      ],
+      "raters": "n/a",
+      "unit": "record",
+      "response_format": "13 numbered guidelines with rationale and application",
+      "validation": "not established",
+      "limitations": "The APA guidelines themselves state an expiry ten years from 2007-02-16. We use them as a historical, not a current, requirement, and a US standard is not a Czech requirement.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "attentive to the situational context in which records are created and how that context may influence the content of those records"
+    },
+    {
+      "id": "K16-e2",
+      "source_id": "S14",
+      "location": "Section 2 (d)",
+      "interpretation": "The Czech decree requires identification of the author of the entry.",
+      "relationship": "requirement",
+      "population": "all health services provided in the Czech Republic",
+      "languages": [
+        "cs"
+      ],
+      "raters": "n/a",
+      "unit": "documentation record and individual entries",
+      "response_format": "enumerated required elements",
+      "validation": "not established",
+      "limitations": "For a note created by a model the question of authorship is open; the decree does not anticipate it.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "[translated from Czech] the given name or names and the surname of the health professional"
+    },
+    {
+      "id": "K17-e1",
+      "source_id": "S13",
+      "location": "Guideline 11, Multiple Client Records",
+      "interpretation": "Records concerning several persons are recognised as a separate problem.",
+      "relationship": "requirement",
+      "population": "US psychologists",
+      "languages": [
+        "en"
+      ],
+      "raters": "n/a",
+      "unit": "record",
+      "response_format": "13 numbered guidelines with rationale and application",
+      "validation": "not established",
+      "limitations": "The content of this guideline was not extracted in detail in this round.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Multiple Client Records"
+    },
+    {
+      "id": "K17-e2",
+      "source_id": "S1",
+      "location": "Appendix A.5 Professionalism",
+      "interpretation": "The way other persons are described is part of professionalism.",
+      "relationship": "direct_validation",
+      "population": "50 conversations from the high-quality split of AnnoMI (public motivational interviewing demonstrations, English)",
+      "languages": [
+        "en"
+      ],
+      "raters": "5 internal + 8 note-writing + 9 evaluating licensed US therapists; rubric validated with 17 external therapists",
+      "unit": "rubric item per SOAP section; sentence for conciseness; sentence for faithfulness",
+      "response_format": "binary item coverage, sentence labels, 3-way hallucination label; 5-point Likert baseline for comparison",
+      "validation": "not established",
+      "limitations": "-",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Never describe other clients and staff in a derogatory manner."
+    },
+    {
+      "id": "K18-e1",
+      "source_id": "S2",
+      "location": "Table 1, Cited",
+      "interpretation": "Citation is one of the nine PDSQI-9 attributes and one of the two newly added ones.",
+      "relationship": "method_transfer",
+      "population": "779 multi-document EHR summaries, multiple specialties, real-world data; psychiatry and psychotherapy notes explicitly excluded",
+      "languages": [
+        "en"
+      ],
+      "raters": "7 trained physician raters, 8329 answered questions",
+      "unit": "whole summary",
+      "response_format": "9 attributes on 5-point Likert scales",
+      "validation": "not established",
+      "limitations": "PDSQI rates presence and appropriateness with one Likert item; the decomposition into validity, support and coverage is ours.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "The summary includes citations that are present and appropriate"
+    },
+    {
+      "id": "K19-e1",
+      "source_id": "S14",
+      "location": "Sections 1 and 2",
+      "interpretation": "A regulation in force from 2025-01-01 lays down the required elements.",
+      "relationship": "requirement",
+      "population": "all health services provided in the Czech Republic",
+      "languages": [
+        "cs"
+      ],
+      "raters": "n/a",
+      "unit": "documentation record and individual entries",
+      "response_format": "enumerated required elements",
+      "validation": "not established",
+      "limitations": "The regulation lays down required elements, not quality. Converting them into measurable criteria is our step and requires legal review.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "[translated from Czech] This decree lays down (a) the content and required elements of medical documentation"
+    },
+    {
+      "id": "K19-e2",
+      "source_id": "S14",
+      "location": "Section 2 (g)",
+      "interpretation": "Course and outcome are mandatory content.",
+      "relationship": "requirement",
+      "population": "all health services provided in the Czech Republic",
+      "languages": [
+        "cs"
+      ],
+      "raters": "n/a",
+      "unit": "documentation record and individual entries",
+      "response_format": "enumerated required elements",
+      "validation": "not established",
+      "limitations": "-",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "[translated from Czech] information on the course and outcome of the health services provided"
+    },
+    {
+      "id": "K20-e1",
+      "source_id": "S1",
+      "location": "Section 3, SOAP Note and Rubric creation",
+      "interpretation": "The format is an organisational choice, not a property of quality.",
+      "relationship": "direct_validation",
+      "population": "50 conversations from the high-quality split of AnnoMI (public motivational interviewing demonstrations, English)",
+      "languages": [
+        "en"
+      ],
+      "raters": "5 internal + 8 note-writing + 9 evaluating licensed US therapists; rubric validated with 17 external therapists",
+      "unit": "rubric item per SOAP section; sentence for conciseness; sentence for faithfulness",
+      "response_format": "binary item coverage, sentence labels, 3-way hallucination label; 5-point Likert baseline for comparison",
+      "validation": "not established",
+      "limitations": "-",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "the exact definitions and information present in each of the sections are determined by the healthcare provider organization"
+    },
+    {
+      "id": "K21-e1",
+      "source_id": "S6",
+      "location": "Section 3.4 Variables",
+      "interpretation": "A task question on usability, asked as yes/no beside the Likert scale.",
+      "relationship": "method_transfer",
+      "population": "110 scribed and 110 non-scribed emergency department notes, Cabrini ED, Australia",
+      "languages": [
+        "en"
+      ],
+      "raters": "2 per note: an emergency physician plus a senior resident or senior nurse; raters were NOT trained and no pre-study agreement on standards was established",
+      "unit": "whole note",
+      "response_format": "PDQI-9 5-point Likert, plus two yes/no items",
+      "validation": "not established",
+      "limitations": "Transfer to psychotherapy and to supervision is our step.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Could you use these notes to manage this patient in the ED if the primary doctor was absent?"
+    },
+    {
+      "id": "K21-e2",
+      "source_id": "S1",
+      "location": "Table 1, Acceptance",
+      "interpretation": "Acceptance for use is a separate item in TN-Eval; human-written notes scored 2.34 of 5 on it, the models 3.34 and 3.73.",
+      "relationship": "direct_validation",
+      "population": "50 conversations from the high-quality split of AnnoMI (public motivational interviewing demonstrations, English)",
+      "languages": [
+        "en"
+      ],
+      "raters": "5 internal + 8 note-writing + 9 evaluating licensed US therapists; rubric validated with 17 external therapists",
+      "unit": "rubric item per SOAP section; sentence for conciseness; sentence for faithfulness",
+      "response_format": "binary item coverage, sentence labels, 3-way hallucination label; 5-point Likert baseline for comparison",
+      "validation": "not established",
+      "limitations": "-",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "whether the therapist would accept the note for clinical use"
+    },
+    {
+      "id": "K22-e1",
+      "source_id": "S_abs_edit",
+      "location": "J Am Med Inform Assoc 2026, abstract",
+      "interpretation": "A method exists: content analysis of the actual edits.",
+      "relationship": "hypothesis",
+      "population": "not established",
+      "languages": [],
+      "raters": "not established",
+      "unit": "not established",
+      "response_format": "not established",
+      "validation": "not established",
+      "limitations": "VERIFIED FROM THE ABSTRACT ONLY. The full text was not obtained in this round.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "What do clinicians edit in ambient AI-drafted clinical documentation? A qualitative content analysis."
+    },
+    {
+      "id": "K23-e1",
+      "source_id": "S7",
+      "location": "Results, expert evaluation",
+      "interpretation": "Six acceptability parameters, of which only coherence is a property of the text.",
+      "relationship": "direct_validation",
+      "population": "191 counselling sessions, 11 543 utterances, from publicly accessible video platforms (MEMO dataset)",
+      "languages": [
+        "en"
+      ],
+      "raters": "mental health professionals",
+      "unit": "aspect-focused summary",
+      "response_format": "three counselling components; expert rating on six acceptability parameters",
+      "validation": "not established",
+      "limitations": "Adopting this framework into the Czech context is our proposal.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "affective attitude, burden, ethicality, coherence, opportunity costs, and perceived effectiveness"
+    },
+    {
+      "id": "K23-e2",
+      "source_id": "S7",
+      "location": "Conclusions",
+      "interpretation": "Expert judgement diverged from automatic metrics on the same data.",
+      "relationship": "direct_validation",
+      "population": "191 counselling sessions, 11 543 utterances, from publicly accessible video platforms (MEMO dataset)",
+      "languages": [
+        "en"
+      ],
+      "raters": "mental health professionals",
+      "unit": "aspect-focused summary",
+      "response_format": "three counselling components; expert rating on six acceptability parameters",
+      "validation": "not established",
+      "limitations": "-",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "expert assessments indicate that these models are not yet reliable for clinical application"
+    },
+    {
+      "id": "K24-e1",
+      "source_id": "S_abs_sweden",
+      "location": "J Med Internet Res 2023, abstract",
+      "interpretation": "A nationwide survey exists in which mental health patients themselves report errors, omissions and offensive content in their records.",
+      "relationship": "hypothesis",
+      "population": "not established",
+      "languages": [],
+      "raters": "not established",
+      "unit": "not established",
+      "response_format": "not established",
+      "validation": "not established",
+      "limitations": "VERIFIED FROM THE ABSTRACT ONLY. This triad of categories is, however, exactly what we lack for the client purpose.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Errors, Omissions, and Offenses in the Health Record of Mental Health Care Patients: Results from a Nationwide Survey in Sweden"
+    },
+    {
+      "id": "K24-e2",
+      "source_id": "S_abs_delphi",
+      "location": "PLoS One 2021, abstract",
+      "interpretation": "Expert consensus exists on the benefits and harms of opening notes.",
+      "relationship": "hypothesis",
+      "population": "not established",
+      "languages": [],
+      "raters": "not established",
+      "unit": "not established",
+      "response_format": "not established",
+      "validation": "not established",
+      "limitations": "VERIFIED FROM THE ABSTRACT ONLY.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "The benefits and harms of open notes in mental health: A Delphi survey of international experts"
+    },
+    {
+      "id": "K25-e1",
+      "source_id": "S3",
+      "location": "aspect 14 Reflections by the Therapist",
+      "interpretation": "The therapist's reflections are a separate field; that is the closest support for supervision.",
+      "relationship": "direct_validation",
+      "population": "iHOPE, derived from the HOPE dataset of pre-recorded counselling videos published on YouTube, re-transcribed and diarised with WhisperX",
+      "languages": [
+        "en"
+      ],
+      "raters": "clinical experts; annotation validated in multiple stages",
+      "unit": "aspect field",
+      "response_format": "17 structured aspects",
+      "validation": "not established",
+      "limitations": "iCARE nowhere claims that this field serves supervision. The link is ours.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "the insights and observations made by the therapist regarding the session"
+    },
+    {
+      "id": "K25-e2",
+      "source_id": "S_abs_supcode",
+      "location": "Implementation Science 2018, abstract",
+      "interpretation": "A coding system for the content of supervision exists.",
+      "relationship": "hypothesis",
+      "population": "not established",
+      "languages": [],
+      "raters": "not established",
+      "unit": "not established",
+      "response_format": "not established",
+      "validation": "not established",
+      "limitations": "VERIFIED FROM THE ABSTRACT ONLY; and it concerns supervision sessions, not notes.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Objective coding of content and techniques in workplace-based supervision of an EBT in public mental health"
+    },
+    {
+      "id": "K26-e1",
+      "source_id": "S3",
+      "location": "aspect 5 Past Session Information",
+      "interpretation": "iCARE counts previous sessions as context.",
+      "relationship": "direct_validation",
+      "population": "iHOPE, derived from the HOPE dataset of pre-recorded counselling videos published on YouTube, re-transcribed and diarised with WhisperX",
+      "languages": [
+        "en"
+      ],
+      "raters": "clinical experts; annotation validated in multiple stages",
+      "unit": "aspect field",
+      "response_format": "17 structured aspects",
+      "validation": "not established",
+      "limitations": "iCARE does not use them as a measure of consistency, however. The proposal to measure contradiction between notes is ours.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "documentation and notes from previous therapy sessions that can provide context for ongoing treatment"
+    },
+    {
+      "id": "K26-e2",
+      "source_id": "S2",
+      "location": "Methods, instrument development",
+      "interpretation": "Internal consistency was an attribute in PDQI-9 and was removed in PDSQI-9.",
+      "relationship": "method_transfer",
+      "population": "779 multi-document EHR summaries, multiple specialties, real-world data; psychiatry and psychotherapy notes explicitly excluded",
+      "languages": [
+        "en"
+      ],
+      "raters": "7 trained physician raters, 8329 answered questions",
+      "unit": "whole summary",
+      "response_format": "9 attributes on 5-point Likert scales",
+      "validation": "not established",
+      "limitations": "Internal consistency of one text is not the same as consistency between texts; this is a different quantity.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Two PDQI-9 attributes, Up-to-Date and Consistent, were removed"
+    },
+    {
+      "id": "K27-e1",
+      "source_id": "S_abs_disparity",
+      "location": "Soc Sci Med 2026, abstract",
+      "interpretation": "Experimental evidence of inequalities in mental health documentation exists.",
+      "relationship": "hypothesis",
+      "population": "not established",
+      "languages": [],
+      "raters": "not established",
+      "unit": "not established",
+      "response_format": "not established",
+      "validation": "not established",
+      "limitations": "VERIFIED FROM THE ABSTRACT ONLY. Transfer to generated notes and to Czech is our proposal.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Race and gender disparities in mental health documentation in primary care: Findings from a video vignette experiment"
+    },
+    {
+      "id": "K28-e1",
+      "source_id": "S18",
+      "location": "Methods, three prime dimensions",
+      "interpretation": "Personalisation is one of the three main evaluation dimensions in this framework, beside fidelity and preservation of salient meaning.",
+      "relationship": "direct_validation",
+      "population": "33 human-written expert summaries over social media timelines (TalkLife), sampled from a 500-timeline dataset",
+      "languages": [
+        "en"
+      ],
+      "raters": "3 clinical psychology graduate students, trained in 2 sessions with guideline refinement under an expert clinical supervisor; blind peer rating",
+      "unit": "whole summary",
+      "response_format": "five 1-5 Likert metrics: factual consistency, meaning preservation / general usefulness, and aspect-specific usefulness for three core clinical aspects",
+      "validation": "not established",
+      "limitations": "Their domain is social-media timelines, not sessions. Transfer to a psychotherapy note is our step.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "current models often struggle with personalization, defaulting to generic phrasing"
+    },
+    {
+      "id": "K28-e2",
+      "source_id": "S18",
+      "location": "Discussion, personalisation",
+      "interpretation": "The authors describe the mechanism: a language model aims at the most probable text and thereby regresses to generic, safe wording.",
+      "relationship": "direct_validation",
+      "population": "33 human-written expert summaries over social media timelines (TalkLife), sampled from a 500-timeline dataset",
+      "languages": [
+        "en"
+      ],
+      "raters": "3 clinical psychology graduate students, trained in 2 sessions with guideline refinement under an expert clinical supervisor; blind peer rating",
+      "unit": "whole summary",
+      "response_format": "five 1-5 Likert metrics: factual consistency, meaning preservation / general usefulness, and aspect-specific usefulness for three core clinical aspects",
+      "validation": "not established",
+      "limitations": "-",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "regression to the mean"
+    },
+    {
+      "id": "K28-e3",
+      "source_id": "S19",
+      "location": "abstract, results",
+      "interpretation": "At the level of individual components the model and the clinician diverge in different directions; genericness is therefore not the same as incompleteness.",
+      "relationship": "direct_validation",
+      "population": "1008 segment-level summaries (504 clinician-written, 504 LLaMA-3.1-70B) over 108 five-minute segments from 36 sessions of 16-session supportive-expressive psychodynamic therapy for depression, 58 patients with MDD, 13 therapists, Bar-Ilan community clinic. Hebrew transcripts machine-translated to English; speech-turns randomised before translation and reordered locally afterwards for confidentiality.",
+      "languages": [
+        "he source, en working language"
+      ],
+      "raters": "summaries by 4 clinical psychology graduate trainees after intensive calibration; evaluation by 3 independent undergraduate judges after group seminars plus 15 practical meetings of 1.5 h and a jointly scored 10-segment training set, with weekly drift checks",
+      "unit": "one MIND component of one five-minute segment",
+      "response_format": "three 1-5 criteria: factual consistency, salient meaning preservation, clinical value; clinical value not applied to Main Topics Discussed",
+      "validation": "not established",
+      "limitations": "VERIFIED FROM THE ABSTRACT ONLY.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "the LLM was superior in preserving central themes"
+    },
+    {
+      "id": "K29-e1",
+      "source_id": "S19",
+      "location": "Method, Summary generation: LLMs",
+      "interpretation": "This is the only study found that deliberately aligned length between sources. With length aligned, humans won on preservation of salient meaning too (d = 0.70), and that AGAINST the authors' own hypothesis, who expected parity.",
+      "relationship": "direct_validation",
+      "population": "1008 segment-level summaries (504 clinician-written, 504 LLaMA-3.1-70B) over 108 five-minute segments from 36 sessions of 16-session supportive-expressive psychodynamic therapy for depression, 58 patients with MDD, 13 therapists, Bar-Ilan community clinic. Hebrew transcripts machine-translated to English; speech-turns randomised before translation and reordered locally afterwards for confidentiality.",
+      "languages": [
+        "he source, en working language"
+      ],
+      "raters": "summaries by 4 clinical psychology graduate trainees after intensive calibration; evaluation by 3 independent undergraduate judges after group seminars plus 15 practical meetings of 1.5 h and a jointly scored 10-segment training set, with weekly drift checks",
+      "unit": "one MIND component of one five-minute segment",
+      "response_format": "three 1-5 criteria: factual consistency, salient meaning preservation, clinical value; clinical value not applied to Main Topics Discussed",
+      "validation": "not established",
+      "limitations": "The conclusion that uncontrolled length lies behind the apparent comprehensiveness of models is ours; the authors do not put it that way.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "in terms of length, terminology, and overall structure"
+    },
+    {
+      "id": "K29-e2",
+      "source_id": "S18",
+      "location": "Results, qualitative analysis",
+      "interpretation": "Where length was not aligned, the models came out as more comprehensive. The difference between S18 and S19 is exactly where length was controlled.",
+      "relationship": "direct_validation",
+      "population": "33 human-written expert summaries over social media timelines (TalkLife), sampled from a 500-timeline dataset",
+      "languages": [
+        "en"
+      ],
+      "raters": "3 clinical psychology graduate students, trained in 2 sessions with guideline refinement under an expert clinical supervisor; blind peer rating",
+      "unit": "whole summary",
+      "response_format": "five 1-5 Likert metrics: factual consistency, meaning preservation / general usefulness, and aspect-specific usefulness for three core clinical aspects",
+      "validation": "not established",
+      "limitations": "-",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "more exhaustive but generic descriptions"
+    },
+    {
+      "id": "K29-e3",
+      "source_id": "S2",
+      "location": "Results, substantive validity",
+      "interpretation": "PDSQI-9 has only a weak correlation with length (beta about -0.2) and does not measure density at all.",
+      "relationship": "method_transfer",
+      "population": "779 multi-document EHR summaries, multiple specialties, real-world data; psychiatry and psychotherapy notes explicitly excluded",
+      "languages": [
+        "en"
+      ],
+      "raters": "7 trained physician raters, 8329 answered questions",
+      "unit": "whole summary",
+      "response_format": "9 attributes on 5-point Likert scales",
+      "validation": "not established",
+      "limitations": "-",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "correlations between note length and scores for Succinct"
+    }
+  ],
+  "constructs": [
+    {
+      "id": "K01",
+      "name": "Support of claims in the source",
+      "definition": "Every factual claim in the note has support in the session transcript or in another declared source. Lack of support divides into invented (the source has nothing of the kind) and distorted (the source says something else).",
+      "families": [
+        "F1"
+      ],
+      "evidence_ids": [
+        "K01-e1",
+        "K01-e2"
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "high",
+        "client": "high",
+        "audit": "high"
+      },
+      "unit": "atomic claim (actor, time, polarity, certainty)",
+      "required_inputs": [
+        "session transcript",
+        "note",
+        "segmentation into claims"
+      ],
+      "examples": {
+        "positive": "Transcript: the client says they sleep about four hours. Note: The client reports sleeping about four hours.",
+        "negative": "Note: The client reports insomnia since the divorce. No divorce was mentioned in the session.",
+        "boundary": "Note: The client seemed tired. The transcript only contains a yawn; a therapist's observation can be neither verified nor refuted from a text transcript."
+      },
+      "candidate_formats": [
+        "categorical per claim (4 outcomes)"
+      ],
+      "applicability": "Always. Unavailable context or a failed retrieval makes a claim unassessable; that is not the same as false.",
+      "error_consequences": "An invented fact propagates into further care and the client reads it as something said about them.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "prior_proposal",
+      "origin_reference": "catalog:K01"
+    },
+    {
+      "id": "K02",
+      "name": "Preservation of the originator of a statement",
+      "definition": "The note preserves who said or observed what: the client's statement, the therapist's observation, a third party's information, information from earlier documentation.",
+      "families": [
+        "F1"
+      ],
+      "evidence_ids": [
+        "K02-e1"
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "high",
+        "client": "high",
+        "audit": "medium"
+      },
+      "unit": "claim",
+      "required_inputs": [
+        "transcript with distinguished speakers",
+        "note"
+      ],
+      "examples": {
+        "positive": "The client reports that his partner reproaches him for drinking.",
+        "negative": "The partner reproaches the client for drinking. The client's belief has become a fact about a third person.",
+        "boundary": "The client agreed to try... An agreement has two originators; attributing it to one is misleading."
+      },
+      "candidate_formats": [
+        "categorical per claim"
+      ],
+      "applicability": "Requires a transcript with speaker roles. Without diarisation it cannot be measured.",
+      "error_consequences": "A belief recorded as a fact about a third person is both a fidelity error and an intrusion on the rights of someone who is not the client and has no access to the note.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "literature",
+      "origin_reference": "catalog:K02"
+    },
+    {
+      "id": "K03",
+      "name": "Time and change of state",
+      "definition": "The note preserves when what happened and what is current as opposed to past: current state, history, intention, plan.",
+      "families": [
+        "F1"
+      ],
+      "evidence_ids": [
+        "K03-e1"
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "medium",
+        "client": "medium",
+        "audit": "high"
+      },
+      "unit": "claim",
+      "required_inputs": [
+        "transcript with time markers",
+        "note"
+      ],
+      "examples": {
+        "positive": "In the last session he refused; today he is considering it.",
+        "negative": "The client takes antidepressants. The session was about use two years ago.",
+        "boundary": "Plans to contact his brother. An intention voiced in the session, not an event that took place."
+      },
+      "candidate_formats": [
+        "categorical per claim"
+      ],
+      "applicability": "Longitudinal tasks require previous notes; those must not be slipped to a task that is not supposed to have them.",
+      "error_consequences": "A past state presented as current changes the clinical decision.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "prior_proposal",
+      "origin_reference": "catalog:K03"
+    },
+    {
+      "id": "K04",
+      "name": "Certainty, hypothesis and agreement",
+      "definition": "The note preserves epistemic status: what is certain, what is the therapist's hypothesis, what is a suggestion and what is an agreement between therapist and client.",
+      "families": [
+        "F1"
+      ],
+      "evidence_ids": [
+        "K04-e1"
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "high",
+        "client": "high",
+        "audit": "medium"
+      },
+      "unit": "claim",
+      "required_inputs": [
+        "transcript",
+        "note"
+      ],
+      "examples": {
+        "positive": "I am considering whether this is avoidant behaviour; to be checked in the next session.",
+        "negative": "This is avoidant behaviour. A consideration has become a conclusion.",
+        "boundary": "We agreed on a sleep diary. If the suggestion was made and the client stayed silent, it is not an agreement."
+      },
+      "candidate_formats": [
+        "categorical per claim"
+      ],
+      "applicability": "Always.",
+      "error_consequences": "A suggestion elevated to an agreement creates in further care a commitment the client never signed up to.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "prior_proposal",
+      "origin_reference": "catalog:K04"
+    },
+    {
+      "id": "K05",
+      "name": "Coverage of essential content weighted by importance",
+      "definition": "The share of essential information from the session that the note carries, where essentiality is graded and derived from the source and the purpose, not from the existence of a field in a form.",
+      "families": [
+        "F2"
+      ],
+      "evidence_ids": [
+        "K05-e1",
+        "K05-e2",
+        "K05-e3"
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "high",
+        "client": "medium",
+        "audit": "high"
+      },
+      "unit": "information unit derived from the source, with an assigned importance level",
+      "required_inputs": [
+        "transcript",
+        "an information bank built before seeing the note",
+        "note"
+      ],
+      "examples": {
+        "positive": "Self-harm was mentioned and the note carries it; an item of the Mandatory level.",
+        "negative": "Self-harm was mentioned and the note lacks it. One Mandatory omission weighs more than three Good-to-have omissions.",
+        "boundary": "The session contains nothing about medication. The item is not applicable, not unmet, and does not belong in the denominator."
+      },
+      "candidate_formats": [
+        "yes/no per unit, then a share per importance level"
+      ],
+      "applicability": "Information that was not said in the session must not be counted as omitted. The bank must exist before exposure to the candidate note.",
+      "error_consequences": "Omitting risk information is a different class of error from omitting a homework task; blending them into one percentage erases the difference.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "literature",
+      "origin_reference": "catalog:K05"
+    },
+    {
+      "id": "K06",
+      "name": "Acknowledged information gap",
+      "definition": "The note distinguishes three things: that something was not said, that it was said to be absent, and that nobody asked about it.",
+      "families": [
+        "F2"
+      ],
+      "evidence_ids": [
+        "K06-e1"
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "high",
+        "client": "medium",
+        "audit": "high"
+      },
+      "unit": "information unit",
+      "required_inputs": [
+        "information bank",
+        "note"
+      ],
+      "examples": {
+        "positive": "Asked about suicidal thoughts, denies.",
+        "negative": "Suicidal thoughts: none. Nobody asked about them in the session.",
+        "boundary": "No risks. A summary that cannot be assigned to any question from the session."
+      },
+      "candidate_formats": [
+        "categorical per unit (3 values)"
+      ],
+      "applicability": "Always, but the meaning differs by topic: an unmentioned risk is not an excluded risk.",
+      "error_consequences": "A note that manufactures a negative finding gives further care false reassurance.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "inductive",
+      "origin_reference": "catalog:K06"
+    },
+    {
+      "id": "K07",
+      "name": "Relevance for a specific recipient",
+      "definition": "What is essential changes with who reads the note and why. The same information can be necessary for taking over care and superfluous in a client summary.",
+      "families": [
+        "F2"
+      ],
+      "evidence_ids": [
+        "K07-e1",
+        "K07-e2"
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "high",
+        "client": "high",
+        "audit": "high"
+      },
+      "unit": "information unit times purpose",
+      "required_inputs": [
+        "information bank with purpose labels",
+        "note",
+        "declared purpose"
+      ],
+      "examples": {
+        "positive": "A detail about medication is essential for continuity and optional in a client summary.",
+        "negative": "One relevance score across all four purposes.",
+        "boundary": "Risk information: the one topic where essentiality does not diverge across purposes."
+      },
+      "candidate_formats": [
+        "share reported separately per purpose"
+      ],
+      "applicability": "Requires a purpose declared in advance. Otherwise relevance is unmeasurable.",
+      "error_consequences": "A universal score rewards a note that is good for one recipient and unusable for another.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "prior_proposal",
+      "origin_reference": "catalog:K07"
+    },
+    {
+      "id": "K08",
+      "name": "Risk and safety",
+      "definition": "A content topic: suicidality, self-harm, danger to others, abuse, crisis markers. It is not a quality construct; it is the topic with the highest error severity.",
+      "families": [
+        "F2"
+      ],
+      "evidence_ids": [
+        "K08-e1",
+        "K08-e2"
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "high",
+        "client": "medium",
+        "audit": "high"
+      },
+      "unit": "information unit marked as risk-related",
+      "required_inputs": [
+        "information bank with risk marking"
+      ],
+      "examples": {
+        "positive": "A mention of hopelessness is marked as risk-related in the bank and the note carries it.",
+        "negative": "The mention of hopelessness is missing, and yet overall coverage comes out at 85%.",
+        "boundary": "The client speaks about the end ambiguously. The item is disputed, not automatically risk-related."
+      },
+      "candidate_formats": [
+        "yes/no plus ordinal severity"
+      ],
+      "applicability": "The topic occurs rarely; rarity is not a reason to drop the item.",
+      "error_consequences": "The highest. A single omission can be clinically decisive.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "literature",
+      "origin_reference": "catalog:K08"
+    },
+    {
+      "id": "K09",
+      "name": "Justification of created relations",
+      "definition": "If the note connects pieces of information into a relation, a link or a conclusion, that relation is grounded in the source and appropriate to the purpose.",
+      "families": [
+        "F3"
+      ],
+      "evidence_ids": [
+        "K09-e1",
+        "K09-e2"
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "high",
+        "client": "low",
+        "audit": "medium"
+      },
+      "unit": "created relation or abstraction",
+      "required_inputs": [
+        "transcript",
+        "note",
+        "declared purpose"
+      ],
+      "examples": {
+        "positive": "The client himself links avoiding meetings to a fear of being judged by others.",
+        "negative": "The note concludes social phobia although no such link was made in the session.",
+        "boundary": "The note calls the conversation cognitive restructuring when the therapist was only exploring how the client thinks."
+      },
+      "candidate_formats": [
+        "yes/no for support plus ordinal appropriateness"
+      ],
+      "applicability": "The purpose decides how much synthesis is wanted. The mere amount of clinical reasoning cannot be rewarded.",
+      "error_consequences": "An invented clinical link looks like an expert conclusion and travels on.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "prior_proposal",
+      "origin_reference": "catalog:K09"
+    },
+    {
+      "id": "K10",
+      "name": "Follow-through and next steps",
+      "definition": "The note carries what is needed to continue: the plan, agreed tasks, open questions, the date.",
+      "families": [
+        "F3"
+      ],
+      "evidence_ids": [
+        "K10-e1",
+        "K10-e2"
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "medium",
+        "client": "high",
+        "audit": "high"
+      },
+      "unit": "information unit of the plan type",
+      "required_inputs": [
+        "information bank",
+        "note"
+      ],
+      "examples": {
+        "positive": "A sleep diary agreed until the next session in a week.",
+        "negative": "The note states a date that was not mentioned in the session.",
+        "boundary": "The therapist hinted at a plan but did not agree it. A note that presents it as agreed errs in modality, not in content."
+      },
+      "candidate_formats": [
+        "yes/no per plan-type unit"
+      ],
+      "applicability": "A session without an agreed plan must not be penalised for a missing plan.",
+      "error_consequences": "A missing plan breaks continuity; an invented plan creates a false commitment.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "literature",
+      "origin_reference": "catalog:K10"
+    },
+    {
+      "id": "K11",
+      "name": "Economy: every sentence serves something",
+      "definition": "The share of sentences that carry essential content. Measured by the relation of a sentence to content, not by the length of the text.",
+      "families": [
+        "F4"
+      ],
+      "evidence_ids": [
+        "K11-e1",
+        "K11-e2"
+      ],
+      "relevance": {
+        "continuity": "medium",
+        "supervision": "medium",
+        "client": "high",
+        "audit": "low"
+      },
+      "unit": "sentence",
+      "required_inputs": [
+        "note",
+        "information bank or rubric"
+      ],
+      "examples": {
+        "positive": "Four of five sentences carry essential content.",
+        "negative": "A one-sentence note has economy 1.00 and coverage 0.08; only both may be reported.",
+        "boundary": "A sentence that carries no content but holds the text together; dropping it is a debatable decision, not an error."
+      },
+      "candidate_formats": [
+        "yes/no per sentence, then a share"
+      ],
+      "applicability": "An empty or very short note must not receive high economy without its coverage being reported at the same time.",
+      "error_consequences": "Economy reported on its own rewards an empty note.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "literature",
+      "origin_reference": "catalog:K11"
+    },
+    {
+      "id": "K12",
+      "name": "Organisation and orientation in the text",
+      "definition": "The note is structured so that the reader finds what they look for, and content is in its expected place.",
+      "families": [
+        "F4"
+      ],
+      "evidence_ids": [
+        "K12-e1",
+        "K12-e2"
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "medium",
+        "client": "high",
+        "audit": "high"
+      },
+      "unit": "information unit times section; the whole note for overall organisation",
+      "required_inputs": [
+        "note with structure",
+        "section definitions"
+      ],
+      "examples": {
+        "positive": "The therapist's observation is in the Objective section.",
+        "negative": "The therapist's interpretation appears in the Subjective section as a client statement.",
+        "boundary": "A client quotation inside Assessment: the content belongs elsewhere, but it serves to document the conclusion."
+      },
+      "candidate_formats": [
+        "yes/no per unit times section, then a share"
+      ],
+      "applicability": "Only for tasks that prescribe a structure.",
+      "error_consequences": "Correct content in the wrong place changes its originator and the reader reads it differently.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "literature",
+      "origin_reference": "catalog:K12"
+    },
+    {
+      "id": "K13",
+      "name": "Comprehensibility for the given reader",
+      "definition": "The note is linguistically comprehensible to the person it is meant for. For a client that means a different language than for a colleague.",
+      "families": [
+        "F4"
+      ],
+      "evidence_ids": [
+        "K13-e1"
+      ],
+      "relevance": {
+        "continuity": "medium",
+        "supervision": "medium",
+        "client": "high",
+        "audit": "low"
+      },
+      "unit": "whole note",
+      "required_inputs": [
+        "note",
+        "declared recipient"
+      ],
+      "examples": {
+        "positive": "The client version uses no unexplained technical terms.",
+        "negative": "The client version contains abbreviations without explanation.",
+        "boundary": "A technical term the client used in the session themselves."
+      },
+      "candidate_formats": [
+        "ordinal scale"
+      ],
+      "applicability": "Measurable only against a specific recipient.",
+      "error_consequences": "An incomprehensible client summary fails its only purpose.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "prior_proposal",
+      "origin_reference": "catalog:K13"
+    },
+    {
+      "id": "K14",
+      "name": "Non-stigmatising language",
+      "definition": "The note does not use language that belittles the client, questions their credibility or reduces them to a diagnosis or a behaviour.",
+      "families": [
+        "F5"
+      ],
+      "evidence_ids": [
+        "K14-e1",
+        "K14-e2"
+      ],
+      "relevance": {
+        "continuity": "medium",
+        "supervision": "high",
+        "client": "high",
+        "audit": "medium"
+      },
+      "unit": "span of text",
+      "required_inputs": [
+        "note; the source too",
+        "for judging context"
+      ],
+      "examples": {
+        "positive": "The client did not come to three sessions in recent weeks.",
+        "negative": "The client is uncooperative and manipulative.",
+        "boundary": "The client says of himself that he is lazy; a verbatim quotation is not the same as the author's judgement."
+      },
+      "candidate_formats": [
+        "marking of a span plus type (quotation / author)"
+      ],
+      "applicability": "A quotation of the client's own words is judged differently from the note author's wording.",
+      "error_consequences": "The client reads a condemnation of themselves. It damages the therapeutic relationship and it is a permanent record.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "literature",
+      "origin_reference": "catalog:K14"
+    },
+    {
+      "id": "K15",
+      "name": "Necessity of sensitive detail",
+      "definition": "The note contains only the sensitive detail its declared purpose needs; the rest is generalised or left out.",
+      "families": [
+        "F5"
+      ],
+      "evidence_ids": [
+        "K15-e1",
+        "K15-e2",
+        "K15-e3"
+      ],
+      "relevance": {
+        "continuity": "low",
+        "supervision": "medium",
+        "client": "high",
+        "audit": "low"
+      },
+      "unit": "sensitive detail",
+      "required_inputs": [
+        "note",
+        "declared purpose",
+        "legal framework"
+      ],
+      "examples": {
+        "positive": "The client summary mentions a family conflict without identifying the third person by name.",
+        "negative": "The note for supervision gives the full name and employer of the client's partner.",
+        "boundary": "A detail about a third person that is necessary for assessing risk."
+      },
+      "candidate_formats": [
+        "human judgement, no scale yet"
+      ],
+      "applicability": "Must not delete clinically decisive content. A conflict with a legal requirement is resolved in favour of the law and recorded.",
+      "error_consequences": "Superfluous sensitive detail harms the client and third persons and cannot be taken back.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "prior_proposal",
+      "origin_reference": "catalog:K15"
+    },
+    {
+      "id": "K16",
+      "name": "Context of the record's creation",
+      "definition": "The note carries information about the circumstances in which it was created, because those affect how its content is to be read.",
+      "families": [
+        "F5"
+      ],
+      "evidence_ids": [
+        "K16-e1",
+        "K16-e2"
+      ],
+      "relevance": {
+        "continuity": "medium",
+        "supervision": "high",
+        "client": "medium",
+        "audit": "high"
+      },
+      "unit": "whole note",
+      "required_inputs": [
+        "note",
+        "task metadata"
+      ],
+      "examples": {
+        "positive": "The note states who produced it and from what material.",
+        "negative": "A note created by a model presents itself as the therapist's own record.",
+        "boundary": "A note produced from an automatically generated transcript whose quality is not documented."
+      },
+      "candidate_formats": [
+        "deterministic presence check"
+      ],
+      "applicability": "Always, but the specific mandatory fields follow from the jurisdiction.",
+      "error_consequences": "Without the context of creation one cannot judge what weight to give the record.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "literature",
+      "origin_reference": "catalog:K16"
+    },
+    {
+      "id": "K17",
+      "name": "Information about third persons",
+      "definition": "Data about people who are not the client and gave no consent: partners, children, colleagues, other clients in a group.",
+      "families": [
+        "F5"
+      ],
+      "evidence_ids": [
+        "K17-e1",
+        "K17-e2"
+      ],
+      "relevance": {
+        "continuity": "low",
+        "supervision": "medium",
+        "client": "high",
+        "audit": "medium"
+      },
+      "unit": "mention of a third person",
+      "required_inputs": [
+        "note",
+        "source"
+      ],
+      "examples": {
+        "positive": "The client describes a conflict with his superior; the note gives the role, not the name.",
+        "negative": "The note adopts the client's judgement of his partner as a factual description of her person.",
+        "boundary": "The third person is at the same time a client of the same practice."
+      },
+      "candidate_formats": [
+        "marking of a mention plus role / identification"
+      ],
+      "applicability": "Fundamentally different in couple and group therapy than in individual therapy.",
+      "error_consequences": "Intrudes on the rights of someone who does not know about the note and has no access to it.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "literature",
+      "origin_reference": "catalog:K17"
+    },
+    {
+      "id": "K18",
+      "name": "Traceability of claims to the source",
+      "definition": "For a claim, the place in the source that supports it can be shown. Distinguished are the validity of the citation, its actual support of the claim, and the share of claims that carry a citation.",
+      "families": [
+        "F6"
+      ],
+      "evidence_ids": [
+        "K18-e1"
+      ],
+      "relevance": {
+        "continuity": "medium",
+        "supervision": "high",
+        "client": "low",
+        "audit": "high"
+      },
+      "unit": "a citation and the claim it cites for",
+      "required_inputs": [
+        "note with citations",
+        "source with identifiable units"
+      ],
+      "examples": {
+        "positive": "A claim cites a turn in the transcript that actually contains it.",
+        "negative": "A citation points to an existing turn that says nothing about the claim.",
+        "boundary": "A citation points to a turn that supports the claim only together with another turn."
+      },
+      "candidate_formats": [
+        "three separate shares"
+      ],
+      "applicability": "Only for tasks that explicitly require citations. An ordinary time in square brackets is not a citation.",
+      "error_consequences": "A citation that does not support inspires false confidence more effectively than no citation.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "prior_proposal",
+      "origin_reference": "proposal:prior-source-links"
+    },
+    {
+      "id": "K19",
+      "name": "Compliance with the Czech documentation decree",
+      "definition": "The note contains the elements that the current Czech regulation requires of medical documentation.",
+      "families": [
+        "F6"
+      ],
+      "evidence_ids": [
+        "K19-e1",
+        "K19-e2"
+      ],
+      "relevance": {
+        "continuity": "medium",
+        "supervision": "low",
+        "client": "low",
+        "audit": "high"
+      },
+      "unit": "required element under the regulation",
+      "required_inputs": [
+        "note",
+        "list of required elements"
+      ],
+      "examples": {
+        "positive": "The note carries the identification of the author of the entry.",
+        "negative": "The note has no author field because a model produced it.",
+        "boundary": "A note meant for the client is not medical documentation and these criteria do not apply to it."
+      },
+      "candidate_formats": [
+        "deterministic check of required elements"
+      ],
+      "applicability": "Only for Czech tasks and only for documentation kept under this regulation. The English track is not judged by it.",
+      "error_consequences": "Non-compliance is a legal, not a clinical problem; it must not be mixed into a quality score.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "literature",
+      "origin_reference": "catalog:K19"
+    },
+    {
+      "id": "K20",
+      "name": "Compliance with the task's format",
+      "definition": "The note kept to what the instruction explicitly asked for: sections, length, language, forbidden elements.",
+      "families": [
+        "F6"
+      ],
+      "evidence_ids": [
+        "K20-e1"
+      ],
+      "relevance": {
+        "continuity": "low",
+        "supervision": "low",
+        "client": "low",
+        "audit": "medium"
+      },
+      "unit": "requirement of the instruction",
+      "required_inputs": [
+        "instruction",
+        "note"
+      ],
+      "examples": {
+        "positive": "The note has all four required headings.",
+        "negative": "The note exceeded the word limit.",
+        "boundary": "The note kept within the limit by leaving out risk information."
+      },
+      "candidate_formats": [
+        "deterministic check of the instruction"
+      ],
+      "applicability": "Only where the task explicitly asks for the check.",
+      "error_consequences": "Small, unless mistaken for quality.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "prior_proposal",
+      "origin_reference": "catalog:K20"
+    },
+    {
+      "id": "K21",
+      "name": "Taking over care from the note",
+      "definition": "Another professional can meaningfully continue care from the note without access to the transcript.",
+      "families": [
+        "F7"
+      ],
+      "evidence_ids": [
+        "K21-e1",
+        "K21-e2"
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "medium",
+        "client": "low",
+        "audit": "low"
+      },
+      "unit": "note times rater",
+      "required_inputs": [
+        "note without the transcript",
+        "task"
+      ],
+      "examples": {
+        "positive": "After reading, the therapist knows what was agreed and what to build on.",
+        "negative": "The therapist has to reach for the transcript to understand at all what it was about.",
+        "boundary": "The note suffices for continuity but not for assessing risk."
+      },
+      "candidate_formats": [
+        "human task, ternary plus justification"
+      ],
+      "applicability": "Requires a person in the role of the one taking over. An LLM cannot stand in for this task.",
+      "error_consequences": "This is the quantity notes are written for; not tracking it is the main weakness of purely textual measures.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "literature",
+      "origin_reference": "catalog:K21"
+    },
+    {
+      "id": "K22",
+      "name": "Extent and nature of the edits needed",
+      "definition": "How many and what kinds of intervention a professional has to make before the note is usable. The type of edit carries information that a score does not.",
+      "families": [
+        "F7"
+      ],
+      "evidence_ids": [
+        "K22-e1"
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "medium",
+        "client": "low",
+        "audit": "low"
+      },
+      "unit": "edit",
+      "required_inputs": [
+        "note before and after editing"
+      ],
+      "examples": {
+        "positive": "The therapist corrects one formulation.",
+        "negative": "The therapist rewrites three of four sections.",
+        "boundary": "The therapist changes nothing because there is no time to check. Zero edits then do not mean quality."
+      },
+      "candidate_formats": [
+        "typology of edits plus count"
+      ],
+      "applicability": "Requires a real workflow, not laboratory rating.",
+      "error_consequences": "Low visible error rate with a high rate of silent rewriting hides the real state.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "literature",
+      "origin_reference": "catalog:K22"
+    },
+    {
+      "id": "K23",
+      "name": "Acceptability to a professional",
+      "definition": "Whether a professional is willing to accept the note into practice, including the reasons why not.",
+      "families": [
+        "F7"
+      ],
+      "evidence_ids": [
+        "K23-e1",
+        "K23-e2"
+      ],
+      "relevance": {
+        "continuity": "medium",
+        "supervision": "high",
+        "client": "low",
+        "audit": "low"
+      },
+      "unit": "note times rater",
+      "required_inputs": [
+        "note",
+        "task context"
+      ],
+      "examples": {
+        "positive": "The therapist would put the note into the documentation unchanged.",
+        "negative": "The therapist rejects the note, although it is factually correct, because it is inconsiderate towards the client.",
+        "boundary": "Acceptability differs more between therapists than between models."
+      },
+      "candidate_formats": [
+        "six ordinal scales"
+      ],
+      "applicability": "A human measurement. Cannot be replaced by a judge.",
+      "error_consequences": "A benchmark that measures only text can recommend a system that professionals reject.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "literature",
+      "origin_reference": "catalog:K23"
+    },
+    {
+      "id": "K24",
+      "name": "Understanding and acceptance by the client",
+      "definition": "Whether the client understands the summary, recognises their session in it, and is not harmed by reading it.",
+      "families": [
+        "F7"
+      ],
+      "evidence_ids": [
+        "K24-e1",
+        "K24-e2"
+      ],
+      "relevance": {
+        "continuity": "low",
+        "supervision": "low",
+        "client": "high",
+        "audit": "low"
+      },
+      "unit": "note times reader",
+      "required_inputs": [
+        "client version of the note"
+      ],
+      "examples": {
+        "positive": "The client reads the summary and confirms that it matches what they experienced.",
+        "negative": "The client finds in the summary a statement they do not recognise about themselves.",
+        "boundary": "The summary is factually correct and the client perceives it as cold."
+      },
+      "candidate_formats": [
+        "human task"
+      ],
+      "applicability": "Requires real readers. Does not fit into the first pilot without an ethics framework.",
+      "error_consequences": "The most sensitive purpose; an error touches the client directly.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "prior_proposal",
+      "origin_reference": "catalog:K24"
+    },
+    {
+      "id": "K25",
+      "name": "Support of the supervision task",
+      "definition": "Whether a supervisor can tell from the note what the therapist did, why, and where they were unsure.",
+      "families": [
+        "F7"
+      ],
+      "evidence_ids": [
+        "K25-e1",
+        "K25-e2"
+      ],
+      "relevance": {
+        "continuity": "low",
+        "supervision": "high",
+        "client": "low",
+        "audit": "low"
+      },
+      "unit": "note times supervisor",
+      "required_inputs": [
+        "note",
+        "case context"
+      ],
+      "examples": {
+        "positive": "The supervisor recognises the chosen intervention and the client's reaction to it.",
+        "negative": "The note describes the content of the session but not what the therapist did.",
+        "boundary": "The note is sufficient for continuity and empty for supervision."
+      },
+      "candidate_formats": [
+        "human task"
+      ],
+      "applicability": "Requires supervisors as raters.",
+      "error_consequences": "Supervision without information about the therapist's procedure misses its point.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "prior_proposal",
+      "origin_reference": "catalog:K25"
+    },
+    {
+      "id": "K26",
+      "name": "Consistency across sessions",
+      "definition": "The note does not contradict earlier notes of the same case where there is no documented reason for it.",
+      "families": [
+        "F1"
+      ],
+      "evidence_ids": [
+        "K26-e1",
+        "K26-e2"
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "high",
+        "client": "medium",
+        "audit": "medium"
+      },
+      "unit": "pair of notes of the same case",
+      "required_inputs": [
+        "series of notes",
+        "series of transcripts"
+      ],
+      "examples": {
+        "positive": "The note records a change of state and refers to the earlier one.",
+        "negative": "The note records the first mention of panic attacks although the previous note contains them.",
+        "boundary": "The contradiction corresponds to a real change in what the client said between sessions."
+      },
+      "candidate_formats": [
+        "categorical per pair of notes"
+      ],
+      "applicability": "Requires longitudinal data. Our current data are single sessions, so this candidate CANNOT be measured yet.",
+      "error_consequences": "A contradiction in the documentation undermines the credibility of the whole record.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "literature",
+      "origin_reference": "catalog:K26"
+    },
+    {
+      "id": "K27",
+      "name": "Evenness of quality across client groups",
+      "definition": "Whether note quality does not systematically drop for certain client groups, language varieties or topics.",
+      "families": [
+        "F7"
+      ],
+      "evidence_ids": [
+        "K27-e1"
+      ],
+      "relevance": {
+        "continuity": "medium",
+        "supervision": "medium",
+        "client": "high",
+        "audit": "high"
+      },
+      "unit": "group of cases, not an individual note",
+      "required_inputs": [
+        "results across labelled subgroups"
+      ],
+      "examples": {
+        "positive": "Risk coverage is comparable across subgroups.",
+        "negative": "The model reliably omits content for clients speaking non-standard language.",
+        "boundary": "A difference exists but corresponds to a real difference in the content of the sessions."
+      },
+      "candidate_formats": [
+        "breakdown of existing scores by subgroup"
+      ],
+      "applicability": "Requires enough cases per subgroup. With one Czech client cluster it CANNOT be measured and must not be pretended to be.",
+      "error_consequences": "Systematic inequality is worse than random error and a single note does not reveal it.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "literature",
+      "origin_reference": "catalog:K27"
+    },
+    {
+      "id": "K28",
+      "name": "Personalisation: a note about this person",
+      "definition": "The note captures what is unique about this client and this session, instead of a generic description that would fit anyone. Not a matter of style but of whether the text carries idiosyncratic content.",
+      "families": [
+        "F3"
+      ],
+      "evidence_ids": [
+        "K28-e1",
+        "K28-e2",
+        "K28-e3"
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "high",
+        "client": "high",
+        "audit": "low"
+      },
+      "unit": "the set of notes of one system, not one note",
+      "required_inputs": [
+        "notes from the same generator across several cases"
+      ],
+      "examples": {
+        "positive": "The note records that the client speaks about his father exclusively in work metaphors.",
+        "negative": "The note records that the client showed anxiety and was motivated to change. It fits any session and is at the same time fully faithful and complete.",
+        "boundary": "The session itself was poor in content; a generic note may then be adequate."
+      },
+      "candidate_formats": [
+        "continuous score from embeddings and self-ROUGE"
+      ],
+      "applicability": "CANNOT be measured on one note. Requires enough cases to compute similarity among them.",
+      "error_consequences": "A generic note passes every other criterion and adds nothing that would help the next therapist recognise this client.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "literature",
+      "origin_reference": "catalog:K28"
+    },
+    {
+      "id": "K29",
+      "name": "Information density",
+      "definition": "How much clinically essential content the note carries per unit of text. Not length and not economy: the ratio between information carried and space consumed.",
+      "families": [
+        "F4"
+      ],
+      "evidence_ids": [
+        "K29-e1",
+        "K29-e2",
+        "K29-e3"
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "medium",
+        "client": "high",
+        "audit": "low"
+      },
+      "unit": "note; comparable only among notes of the same source material",
+      "required_inputs": [
+        "note",
+        "information bank",
+        "text length"
+      ],
+      "examples": {
+        "positive": "Two notes of the same length; one carries nine essential pieces of information, the other four.",
+        "negative": "A model has higher coverage simply because it wrote twice as much text. We report it as better coverage although per page it carries less.",
+        "boundary": "A longer note that additionally carries only marginal information: higher coverage, lower density, and worse for the reader."
+      },
+      "candidate_formats": [
+        "continuous ratio (count per 100 words)"
+      ],
+      "applicability": "Without comparable length or without normalisation per unit of text, coverage comparisons between systems are misleading.",
+      "error_consequences": "Without it the benchmark systematically rewards verbosity. That is precisely the tendency models have, so the error always points one way.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "prior_proposal",
+      "origin_reference": "catalog:K29"
+    }
+  ],
+  "measurements": [],
+  "protocol_revision": "53518d6d331f63c347056c420494fb63544813c962a9bf149cc97f291bb18834",
+  "version": "registry-v2",
+  "literature_freeze": null,
+  "methods": [],
+  "method_evidence": {},
+  "methods_reviewed_by": null,
+  "method_specs": [],
+  "reviews": [],
+  "assessment_scope": "",
+  "required_methods": [],
+  "research_snapshot": null
+}

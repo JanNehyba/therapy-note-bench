@@ -18,6 +18,15 @@ human response artifacts bound to their exact content. A name alone is insuffici
 The software checks consistency and lineage, not personal identity or clinical truth.
 One investigator with AI assistance is not independent dual review or expert consensus.
 
+What the scoping search proposed is a single versioned record,
+[research/gen2/catalog/catalog.json](../research/gen2/catalog/catalog.json): every
+candidate construct, method and source, with the historical origin of each idea kept
+apart from the support found later. Its readable form is the
+[candidate catalog page](https://jannehyba.github.io/therapy-note-bench/gen2-catalog.html);
+its executable form is a draft registry that the core loads and refuses to freeze,
+with a diagnostic for every entry that did not become an operational item. All of it
+is an AI-authored proposal; no entry has been accepted by a person.
+
 Prior drafts may contribute useful ideas without automatically becoming validated
 criteria. Igor's QA idea is a candidate method for measuring retained information.
 Literature-only snapshots are useful checkpoints; they are not a prerequisite for

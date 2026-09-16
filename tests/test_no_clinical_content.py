@@ -73,6 +73,7 @@ PUBLISHED = (
     "docs/index.html",
     "docs/methods.html",
     "docs/brief.html",
+    "docs/gen2-catalog.html",
 )
 
 #: Where a page inlines the numbers. A leak lands in the payload -- it would
