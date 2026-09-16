@@ -121,6 +121,25 @@ tnb gen2 --workspace local/gen2-research-v3 research freeze-instrument --registr
 tnb gen2 --workspace local/gen2-research-v3 research validate --registry local/frozen-instrument.json --pilot
 ```
 
+The Czech side of the paired design is produced by a recorded translator, not by
+whatever model was at hand: `tools/translate_annomi_cs.py` measures candidates by
+back-translation, records the chosen one with its provider, settings and prompt
+digest, verifies that every conversation maps one turn for one turn, and writes an
+EN/CS pair only for a conversation a person has read a sample of (decision D4,
+audit A11). The ten earlier translations have no such record and are superseded.
+
+```sh
+python tools/translate_annomi_cs.py select --sample local/sample.json --candidates a,b --back-translator c
+python tools/translate_annomi_cs.py record --model a --check research/gen2/translation/back-translation-check-DATE.json --judges JUDGE_A,JUDGE_B --reason "actual reason"
+python tools/translate_annomi_cs.py translate local/conversations/*.json
+python tools/translate_annomi_cs.py review-sheet --conversation CONVERSATION --source local/conversations/CONVERSATION.json
+python tools/translate_annomi_cs.py import-review --file local/gen2-translation/CONVERSATION.review.json --conversation CONVERSATION --reviewer NAME
+python tools/translate_annomi_cs.py groups
+```
+
+Transcripts and their translations stay under the ignored `local/`; the records under
+`research/gen2/translation/` carry digests, counts and model identity and no text.
+
 Use the paths returned by each command, not the example filenames. Imports retain
 actual responses; none of these commands performs a human review. To revise a
 previous decision, create `registry-sheet --amend`; the sheet displays original
