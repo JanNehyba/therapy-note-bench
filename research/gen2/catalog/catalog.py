@@ -46,6 +46,7 @@ META = (
     "pilot_record_kinds",
     "candidate_states",
     "families_policy",
+    "purposes_in_scope",
     "purposes",
     "relevance_levels",
     "evidence_layers",
@@ -91,6 +92,10 @@ DIACRITIC = re.compile(
     "\u011a\u0160\u010c\u0158\u017d\u00dd\u00c1\u00cd\u00c9\u00da\u016e\u0147\u0164\u010e]"
 )
 #: Words that would turn a catalog entry into a claim about a person's decision.
+#:
+#: A pointer to the protocol's decision ledger is a different thing and is
+#: spelled `protocol_decision`: it says which recorded decision set the scope,
+#: which is provenance rather than an acceptance of the entry it sits on.
 DECISION_KEYS = ("reviewed_by", "human_checked_by", "accepted_by", "decision")
 ID = re.compile(r"\b(K\d\d|ME\d\d|M\d|S_abs_\w+|S\d\d?|P\d\d|F\d|L\d+b?|B\d+)\b")
 

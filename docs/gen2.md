@@ -1,7 +1,7 @@
 # Gen-2: traceable research and versioned measurement
 
-**Software: experimental v0.3.0 / protocol gen2-v3. Research protocol: 2.1.0, amended
-on 2026-09-15 before any pilot run; 2.0.0 is retained in history. The newly specified
+**Software: experimental v0.3.0 / protocol gen2-v3. Research protocol: 2.2.0, amended
+on 2026-09-16 before any pilot run; 2.1.0 and 2.0.0 are retained in history. The newly specified
 review, human pilot and clinical validation are not complete.**
 
 The existing software, prior proposals and earlier experiments are formative
@@ -36,9 +36,16 @@ previous research protocol is retained in its historical file, not backdated.
 | Purpose | Intended use | Subsequent human validation |
 |---|---|---|
 | continuity | Meaningfully resume care | Therapists |
-| supervision | Understand the documented process and uncertainties | Supervisors |
-| client | Understand and use a respectful session summary | Client reviewers and clinicians |
 | audit | Check documentation against explicit requirements | Documentation specialists |
+| supervision | out of scope in this round | Supervisors |
+| client | out of scope in this round | Client reviewers and clinicians |
+
+Decision D8 of 2026-09-16 narrowed the round to continuity and audit. Supervision
+was the worst supported of the four in the review: no source found says what a
+supervisor needs from a note. The client purpose has a literature this round read
+only from abstracts, and it has neither real client readers nor an ethics framework
+here. Both keep their candidates and their evidence in the catalog; what they do not
+get is a measurement or a claim.
 
 Purpose, format, language and instrument are separate. Audit is not legal or
 insurance certification. EN-to-EN and CS-to-CS are separate tasks. English demos,
@@ -231,7 +238,7 @@ passing offline tests is not clinical validation.
 revisions of the protocol's eligible cohorts, currently two English AnnoMI
 conversations and their two Czech translations, plus two declared generator and
 judge families. It verifies English/Czech translation pairing and provider
-permissions, freezes 32 generation jobs, and balances a 16-note human sample across
+permissions, freezes 16 generation jobs, and balances an 8-note human sample across
 cohorts, purposes, cases and generators. Native Czech sessions are not eligible:
 they are a private track outside the paper and the pilot, and the planner refuses
 them by name. The first round carries every measurement the review supported; the

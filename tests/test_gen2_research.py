@@ -726,9 +726,14 @@ def test_balanced_pilot_is_a_plan_not_fabricated_human_data(store):
     cases = pilot_cases(active["protocol"], base)
     models = two_families()
     result = plan(cases, instrument, models, models, 11, protocol=active["protocol"])
-    assert len(result["jobs"]) == 32 and len(result["human_note_sample"]) == 16
+    # Two purposes since protocol 2.2.0, so half the jobs of the four-purpose
+    # round and half the human sample; the unit budget below did not move.
+    assert len(result["jobs"]) == 16 and len(result["human_note_sample"]) == 8
+    assert result["purposes"] == ["continuity", "audit"]
+    assert [e["purpose"] for e in result["purposes_out_of_scope"]] == ["supervision", "client"]
+    assert all(e["reason"] and e["decision"] == "D8" for e in result["purposes_out_of_scope"])
     selected = [j for j in result["jobs"] if j["id"] in result["human_note_sample"]]
-    assert set(Counter(j["case_revision"] for j in selected).values()) == {4}
+    assert set(Counter(j["case_revision"] for j in selected).values()) == {2}
     assert result["human_item_budget"]["blinded_repeats"] == 30
     assert result["human_item_budget"]["unique_decisions"] == 120
     assert result["measurement_rule"] == "record_not_cap"
@@ -753,6 +758,56 @@ def test_balanced_pilot_is_a_plan_not_fabricated_human_data(store):
             11,
             protocol=active["protocol"],
         )
+
+
+def _without_the_record(protocol):
+    protocol["pilot"].pop("purposes_out_of_scope")
+
+
+def _without_a_reason(protocol):
+    protocol["pilot"]["purposes_out_of_scope"] = [
+        {"purpose": "supervision", "reason": "", "decision": "D8"},
+        {"purpose": "client", "reason": "thin", "decision": "D8"},
+    ]
+
+
+def _planned_and_dropped_at_once(protocol):
+    protocol["pilot"]["purposes"] = ["continuity", "audit", "client"]
+
+
+def _an_invented_purpose(protocol):
+    protocol["pilot"]["purposes"] = ["continuity", "billing"]
+
+
+@pytest.mark.parametrize(
+    ("mutate", "refusal"),
+    [
+        (_without_the_record, "out of scope"),
+        (_without_a_reason, "needs a reason"),
+        (_planned_and_dropped_at_once, "both planned and out of scope"),
+        (_an_invented_purpose, "unknown purpose"),
+    ],
+)
+def test_a_purpose_may_be_dropped_by_decision_and_never_in_silence(store, mutate, refusal):
+    """The planner required all four purposes, which stopped a silent drop and a
+    recorded one alike. Since 2.2.0 a purpose may be left out of a round, and
+    only with a reason and the decision that left it out.
+
+    Each variant is a study started on its own protocol: a pilot configuration
+    that disagrees with the reviewed protocol is refused before any of this, so
+    a doctored protocol planned against a study of the live one would pass for
+    the wrong reason.
+    """
+    from therapy_note_eval.pilot import plan
+
+    protocol = json.loads(json.dumps(live_protocol()))
+    mutate(protocol)
+    active, record = start_review(store, protocol)
+    instrument = operational_toy(store, active, toy_registry(active, record))
+    base, *_ = controls.fixture("en", "continuity")
+    models = two_families()
+    with pytest.raises(ValidationError, match=refusal):
+        plan(pilot_cases(protocol, base), instrument, models, models, 11, protocol=protocol)
 
 
 def test_pilot_refuses_a_cohort_the_protocol_excludes(store):
@@ -781,14 +836,14 @@ def test_pilot_plans_whatever_cohorts_the_protocol_lists(store):
     revised = json.loads(json.dumps(live_protocol()))
     native = revised["pilot"]["excluded_cohorts"].pop()
     revised["pilot"]["cohorts"].append({**native, "cases": 2})
-    revised["pilot"]["max_notes"] = 48
-    revised["pilot"]["human_note_sample"] = 24
+    revised["pilot"]["max_notes"] = 24
+    revised["pilot"]["human_note_sample"] = 12
     active, record = start_review(store, revised)
     instrument = operational_toy(store, active, toy_registry(active, record))
     base, *_ = controls.fixture("en", "continuity")
     models = two_families()
     result = plan(pilot_cases(revised, base), instrument, models, models, 11, protocol=revised)
-    assert len(result["jobs"]) == 48 and len(result["human_note_sample"]) == 24
+    assert len(result["jobs"]) == 24 and len(result["human_note_sample"]) == 12
     by_origin = {c["origin"]: c for c in result["cohorts"]}
     assert by_origin["native_real"]["client_groups"] == 1
     assert result["excluded_cohorts"] == []

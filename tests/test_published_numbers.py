@@ -1104,13 +1104,14 @@ CLAIMS = (
     ),
     Claim(
         where="docs/gen2.md",
-        phrase="32 generation jobs, and balances a 16-note human sample",
+        phrase="16 generation jobs, and balances an 8-note human sample",
         kind="elsewhere",
         because="tests/test_gen2_research.py::"
         "test_balanced_pilot_is_a_plan_not_fabricated_human_data "
-        "checks 32 planned jobs and the 16-note balanced subset under protocol 2.1.0, "
-        "whose two eligible cohorts hold two cases each; no execution is claimed.",
-        covers=("32", "16"),
+        "checks 16 planned jobs and the 8-note balanced subset under protocol 2.2.0, "
+        "whose two eligible cohorts hold two cases each and whose round serves two "
+        "purposes rather than four; no execution is claimed.",
+        covers=("16", "8"),
     ),
     Claim(
         where="docs/gen2.md",

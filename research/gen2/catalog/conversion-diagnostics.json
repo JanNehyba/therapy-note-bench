@@ -2,8 +2,8 @@
   "version": "conversion-diagnostics-v1",
   "catalog_version": "catalog-v2",
   "catalog_date": "2026-09-16",
-  "protocol_version": "2.1.0",
-  "protocol_revision": "53518d6d331f63c347056c420494fb63544813c962a9bf149cc97f291bb18834",
+  "protocol_version": "2.2.0",
+  "protocol_revision": "c2f3e268c63d6560f934685643ad7e1533064e033f467b2bec7c0db78d7bb3da",
   "rule": "Every source, evidence line and candidate maps to a registry record with no human decision. Nothing becomes an operational item, a selected method or a review; each such gap is listed here with its reason.",
   "mapped": {
     "sources": 32,
@@ -318,7 +318,7 @@
     },
     {
       "id": "K24",
-      "catalog_state": "awaiting_raters",
+      "catalog_state": "out_of_scope",
       "catalog_origin": "prior_local",
       "origin": "prior_proposal",
       "origin_reference": "catalog:K24",
@@ -327,7 +327,7 @@
     },
     {
       "id": "K25",
-      "catalog_state": "awaiting_raters",
+      "catalog_state": "out_of_scope",
       "catalog_origin": "prior_local",
       "origin": "prior_proposal",
       "origin_reference": "catalog:K25",

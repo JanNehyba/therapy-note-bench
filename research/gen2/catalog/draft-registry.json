@@ -2251,8 +2251,8 @@
     },
     {
       "id": "K23",
-      "name": "Acceptability to a professional",
-      "definition": "Whether a professional is willing to accept the note into practice, including the reasons why not.",
+      "name": "Acceptability: would a professional use this in practice",
+      "definition": "Whether a professional would take the note into their own practice and keep using the system that produced it, and if not, why. The question is about use, not about billing or any payer. It is answered on the six parameters MentalCLOUDS took from the acceptability framework for health-care interventions: affective attitude, burden, ethicality, coherence, opportunity costs and perceived effectiveness. Only coherence is a property of the text; the other five are about what working with it costs.",
       "families": [
         "F7"
       ],
@@ -2272,9 +2272,9 @@
         "task context"
       ],
       "examples": {
-        "positive": "The therapist would put the note into the documentation unchanged.",
-        "negative": "The therapist rejects the note, although it is factually correct, because it is inconsiderate towards the client.",
-        "boundary": "Acceptability differs more between therapists than between models."
+        "positive": "The therapist would keep using the system and would file this note as it is.",
+        "negative": "The therapist will not use it, although the note is factually correct, because checking it costs more than writing the note themselves.",
+        "boundary": "The note is acceptable and the therapist would still not use the system, for a reason that is not about this note at all."
       },
       "candidate_formats": [
         "six ordinal scales"
@@ -2592,7 +2592,7 @@
     }
   ],
   "measurements": [],
-  "protocol_revision": "53518d6d331f63c347056c420494fb63544813c962a9bf149cc97f291bb18834",
+  "protocol_revision": "c2f3e268c63d6560f934685643ad7e1533064e033f467b2bec7c0db78d7bb3da",
   "version": "registry-v2",
   "literature_freeze": null,
   "methods": [],

@@ -109,7 +109,11 @@ def test_every_candidate_carries_a_state_and_a_reason(catalog):
     assert {k for k, v in states.items() if v == "proposed"} == measured
     assert states["K30"] == states["K31"] == "not_yet_operationalized"
     assert states["K15"] == "lacking_evidence"
-    assert states["K24"] == states["K25"] == "awaiting_raters"
+    # K13 still waits for a reader the pilot has not got. K24 and K25 waited for
+    # one too until decision D8 of 2026-09-16 put their purposes out of scope,
+    # which is a different reason and has to read as one.
+    assert states["K13"] == "awaiting_raters"
+    assert states["K24"] == states["K25"] == "out_of_scope"
     assert states["K26"] == states["K27"] == "not_measured"
     assert states["K20"] == states["K22"] == "out_of_scope"
     assert "measurement_failed" not in states.values()
@@ -136,6 +140,39 @@ def test_the_reopened_candidates_say_what_reopened_them(catalog):
     # pinning "the last one" would fail the next time anything else is revised.
     reopening = [r for r in catalog["revisions"] if "A07" in r["reason"]]
     assert len(reopening) == 1 and reopening[0]["date"] == "2026-09-16"
+
+
+def test_the_round_serves_two_purposes_and_says_which_it_does_not(catalog):
+    """Decision D8 of 2026-09-16. A purpose left out keeps its candidates and
+    its evidence; what changes is what the round measures and claims."""
+    scope = catalog["purposes_in_scope"]
+    assert scope["served"] == ["continuity", "audit"]
+    assert scope["out_of_scope"] == ["supervision", "client"]
+    assert scope["protocol_decision"].startswith("D8")
+    assert set(scope["served"]) | set(scope["out_of_scope"]) == set(catalog["purposes"])
+
+    by = {c["id"]: c for c in catalog["candidates"]}
+    for key in ("K24", "K25"):
+        assert by[key]["state"] == "out_of_scope"
+        assert "D8" in by[key]["state_note"]
+        assert by[key]["evidence"], "a purpose left out keeps its evidence"
+        assert set(by[key]["relevance"]) == set(catalog["purposes"])
+
+    coverage = next(r for r in catalog["pilot_proposal"]["applied_criteria"] if r["id"] == "C3")
+    assert "the round serves" in coverage["criterion"]
+    assert "D8" in coverage["detail"]
+
+
+def test_the_acceptability_criterion_asks_about_use_not_about_a_payer(catalog):
+    """The investigator marked K23 `revise` on 2026-09-16: "accept the note into
+    practice" read as a question about an insurer. The six parameters it rests
+    on are about using the system, and the wording now says so."""
+    k23 = next(c for c in catalog["candidates"] if c["id"] == "K23")
+    assert "not about billing or any payer" in k23["definition"]
+    for parameter in ("affective attitude", "burden", "ethicality", "opportunity costs"):
+        assert parameter in k23["definition"]
+    assert "never summed with" in k23["measurement"]
+    assert "2026-09-16" in k23["state_note"]
 
 
 def test_the_czech_legal_criterion_states_the_population_it_binds(catalog):

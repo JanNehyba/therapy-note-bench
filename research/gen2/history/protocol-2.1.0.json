@@ -1,0 +1,377 @@
+{
+  "id": "therapy-note-construct-review",
+  "version": "2.1.0",
+  "status": "protocol_amended_before_pilot_search_partially_executed",
+  "recorded_date": "2026-09-15",
+  "design": "Instrument development informed by a systematic scoping review, expert proposals and empirical observations",
+  "prior_exposure": "The investigator and coding assistant have seen existing instruments, prior Gen-2 drafts and a colleague's QA suggestion. This is not a claim of hypothesis-free discovery or blinded authorship.",
+  "conduct_framework": "JBI scoping review guidance, full-text verification pending",
+  "reporting_frameworks": [
+    "PRISMA-ScR",
+    "PRISMA-S"
+  ],
+  "appraisal": "Item-level evidence mapping informed by COSMIN principles; adaptations to documentation checklists explicitly recorded. No automatic alpha, CVR, factor-analysis or agreement threshold determines content validity.",
+  "questions": [
+    "Which properties of useful and accurate psychotherapy documentation are defined in the literature and professional guidance?",
+    "For which recipients, purposes and clinical circumstances do those properties matter?",
+    "How are they operationalized and what evidence supports their measurement?",
+    "What transfers to automated English and Czech evaluation and what remains unvalidated?"
+  ],
+  "pcc": {
+    "population": "Human-written and model-generated psychotherapy session documentation; adjacent clinical documentation and summarization methods identified as transfer evidence",
+    "concept": "Documentation quality constructs, operational criteria and measurement properties",
+    "context": "Continuity of care, supervision, client communication and documentation audit"
+  },
+  "languages": [
+    "en",
+    "cs"
+  ],
+  "date_limits": {
+    "lower": null,
+    "upper": "actual search date recorded for each execution"
+  },
+  "layers": [
+    "direct",
+    "transfer",
+    "requirements"
+  ],
+  "include": [
+    "Psychotherapy progress notes or session summaries with explicit quality properties, user needs or evaluation methods",
+    "Clinical documentation or general summarization methods with an explicit documentation measurement application, labelled as transfer evidence",
+    "Professional or recipient requirements with attributable authorship, jurisdiction and document version",
+    "Full text in English or Czech, including preprints and software artifacts with publication type explicitly distinguished"
+  ],
+  "exclude": [
+    "Therapeutic chatbot or treatment effectiveness evaluation without a documentation-relevant requirement or method",
+    "No identifiable quality construct, operational criterion or measurement method",
+    "Duplicate report with no additional evidence, linked to its study family rather than counted independently",
+    "Full text outside English/Czech scope, with the language restriction disclosed"
+  ],
+  "databases": [
+    "PubMed",
+    "APA PsycINFO",
+    "Scopus",
+    "ACL Anthology"
+  ],
+  "supplementary_routes": [
+    "backward citations",
+    "forward citations",
+    "professional guidance",
+    "known-source retrieval check"
+  ],
+  "metadata_services": [
+    "Crossref",
+    "OpenAlex"
+  ],
+  "reviewers": {
+    "human_count": 2,
+    "human_roles": [
+      {
+        "role": "investigator and instrument developer",
+        "screening": true,
+        "status": "active"
+      },
+      {
+        "role": "second screener",
+        "screening": true,
+        "status": "to be recruited; not yet named (D2)"
+      }
+    ],
+    "raters": "two Czech psychologists for the human anchor (D2); neither screens",
+    "clinical_panel": "not planned (D2)",
+    "ai_role": "assist retrieval, extraction and discrepancy detection; never impersonate a human decision",
+    "independent_second_screening": "planned: a second human screener will be recruited; until that person records decisions on the exact sheets, screening is single-reviewer with AI assistance and is reported as such"
+  },
+  "sequence": [
+    "Record the prospective protocol revision and prior exposure before the corresponding research steps",
+    "Execute and document searches, exports, duplicate handling and retrieval gaps",
+    "Human title/abstract and full-text screening, with a second human screener once recruited (D2, D6): the priority stratum and the audit sample of the remainder, on exact sheets, disagreements retained; non-retrieval is not an eligibility exclusion",
+    "Extract source-anchored candidates without forcing the prototype taxonomy",
+    "Record expert proposals and empirical inputs before, during or after searching, preserving historical origins",
+    "Human review interpretations, proposals, merges, method choices and language-specific wording; preserve disagreements",
+    "Create versioned literature and mixed-source snapshots with explicit amendment parents; literature snapshots do not gate expert input",
+    "Carry every measurement the review supported into the first feasibility round; record the executable count at freeze, report what the human budget cannot cover as not measured, and keep catalog entries, executable measures and study conditions as distinct records (D3)",
+    "Freeze the reviewed instrument and exact unit assignments before ratings; distinguish format from granularity experiments",
+    "Use developmental results to revise measures; preregister a later independent confirmatory study before its judgments"
+  ],
+  "selection": {
+    "target_pool_size": "No quota; stop according to the documented search scope, not a desired number of constructs",
+    "mandatory_considerations": [
+      "purpose-specific importance",
+      "evidence directness and limitations",
+      "coverage of clinically consequential content",
+      "definition clarity",
+      "measurement feasibility"
+    ],
+    "not_exclusion_rules": [
+      "rare occurrence",
+      "low between-model variance",
+      "few dominance edges",
+      "membership in a small semantic cluster"
+    ],
+    "first_round_measurements": {
+      "rule": "record_not_cap",
+      "statement": "The first round carries every measurement the review supported; the executable count is recorded at instrument freeze and by pilot-plan; what the human budget cannot cover is reported as not measured, never dropped to fit a count",
+      "record_kinds": {
+        "catalog_entry": "a review-supported candidate in the research map; visible, not by itself executable",
+        "executable_measure": "an operational item (MeasurementSpec) or a selected non-item method (MethodSpec) in the frozen instrument; the only kind the count counts",
+        "study_condition": "a design manipulation or human-use outcome of the pilot; planned and reported as a condition, never counted as a measure"
+      },
+      "supported_at_amendment": {
+        "catalog_entries": 14,
+        "not_comparable_as_measures": "P12 is a training/reliability condition; P09 a requirements check; P10 and P11 human-use outcomes; P13 a corpus-level proxy; P14 a derived ratio (audit A08)",
+        "executable_count": "recorded at freeze, not fixed here"
+      },
+      "previous_target": "8-12 in 2.0.0 came from the task brief, not from the review; a feasibility convention, not an error (audit A02); withdrawn by D3"
+    }
+  },
+  "clustering": {
+    "input": "source-derived construct definitions, not model scores",
+    "distance": "cosine",
+    "linkage": "average",
+    "representation": "explicit model/revision and exact definition digest per vector",
+    "human_pairs": {
+      "nearest": 10,
+      "middle": 10,
+      "random": 10
+    },
+    "interpretation": "Semantic organization and merge proposals, not a proof of latent structure or importance"
+  },
+  "pilot": {
+    "status": "not_run",
+    "purposes": [
+      "continuity",
+      "supervision",
+      "client",
+      "audit"
+    ],
+    "generator_families": 2,
+    "judge_families": 2,
+    "max_notes": 32,
+    "human_note_sample": 16,
+    "human_decisions_target": 150,
+    "blind_repeats": 30,
+    "human_hours": [
+      8,
+      12
+    ],
+    "interpretation": "Feasibility and measurement development, not confirmatory validation or model ranking",
+    "precision_targets_for_later_planning": {
+      "essential_coverage_ci95_half_width": 0.05,
+      "serious_error_sensitivity_ci95_half_width": 0.1
+    },
+    "unique_decisions": 120,
+    "preparation_included_in_hours": true,
+    "time_overrun_policy": "Reduce the documented sample through a versioned amendment; do not call unreviewed units checked",
+    "replicate_policy": "Distinct replicate IDs reserve real calls; resume caching is within a replicate only",
+    "measurement_rule": "selection.first_round_measurements",
+    "cohorts": [
+      {
+        "origin": "public_demo",
+        "language": "en",
+        "cases": 2,
+        "source": "AnnoMI conversations released through TN-Eval"
+      },
+      {
+        "origin": "translated_demo",
+        "language": "cs",
+        "cases": 2,
+        "source": "Czech translations of the same conversations by data.translation_instrument"
+      }
+    ],
+    "translation_pairing": {
+      "required": true,
+      "original": {
+        "origin": "public_demo",
+        "language": "en"
+      },
+      "translation": {
+        "origin": "translated_demo",
+        "language": "cs"
+      },
+      "rule": "every original conversation has exactly one translation sharing its translation_group; group identifiers alone do not validate meaning"
+    },
+    "excluded_cohorts": [
+      {
+        "origin": "native_real",
+        "language": "cs",
+        "reason": "one client, no consent or ethics documentation; permanently private track processed only on local/einfra; outside the paper and this pilot (D1)"
+      }
+    ],
+    "human_decisions_basis": "A budget of annotation units (item, claim and QA decisions) bounded by the investigator's 8-12 hours, not a count of notes; fewer notes leave more units per note, and unit assignment is frozen after reviewed banks exist",
+    "human_anchor": {
+      "raters": 2,
+      "rater_profile": "Czech psychologists; neither is the instrument author",
+      "design": [
+        "crossover over languages: each rater receives one language of each conversation, so every conversation is rated in both languages and no rater sees a conversation twice",
+        "overlap block: a subset of notes rated by both raters in the same language; the only source of between-rater agreement, which the crossover alone does not measure",
+        "blinded repeats: notes re-rated by the same rater; the source of within-rater agreement"
+      ],
+      "calibration": "on notes outside the rated sample; count fixed at instrument freeze",
+      "agreement": [
+        "gwet_ac1",
+        "gwet_ac2"
+      ],
+      "reported_per": "operational item, language and purpose; disagreements retained",
+      "masking": "no model identity, no automatic verdicts, no other rater's answers",
+      "time": "actual rating time recorded per rater and per note; the confirmatory sample is derived from it",
+      "counts": "the development pilot rates its balanced human sample; counts for the confirmatory study are fixed in a later amendment from the pilot's timing and agreement, not here (audit A10)",
+      "interpretation": "A feasibility anchor for the rating task on development notes; not confirmatory validation, model ranking or clinical validation",
+      "estimate_note": "The 2026-09-13 estimate of about 25 notes per rater preceded the fixed cohorts and is superseded by the measured design"
+    }
+  },
+  "data": {
+    "native_czech_policy": [
+      "local",
+      "einfra"
+    ],
+    "derived_artifacts_inherit_policy": true,
+    "translation_relatives_share_split": true,
+    "native_czech_clusters": 1,
+    "annomi_video_grouping": "Video identity is a known grouping factor, not proof of client or therapist identity",
+    "future_sessions": "excluded from available context",
+    "native_czech_track": {
+      "status": "permanently private",
+      "in_paper": false,
+      "in_development_pilot": false,
+      "reason": "one client; no consent or ethics documentation",
+      "decision": "D1"
+    },
+    "translation_instrument": {
+      "direction": "en->cs",
+      "status": "not yet selected",
+      "selection": "chosen by a measured back-translation check recorded before use",
+      "record": [
+        "provider",
+        "model",
+        "settings",
+        "prompt_digest",
+        "back_translation_check_digest"
+      ],
+      "provider": null,
+      "model": null,
+      "settings": null,
+      "prompt_digest": null,
+      "constraint": "not a judge model of this pilot",
+      "existing_translations": "the ten earlier Claude translations are superseded; they will be redone with the selected instrument and retained as historical artifacts (D4)"
+    }
+  },
+  "reporting": {
+    "overall_quality_score": false,
+    "separate_by": [
+      "language",
+      "corpus_origin",
+      "purpose",
+      "protocol",
+      "judge"
+    ],
+    "missingness": "distinguish not applicable, insufficient source, ambiguous content and execution failure",
+    "external_validation": "not established",
+    "review_completion": "Only executed searches and verified decisions count as completed; blocked sources remain named gaps",
+    "scope": "Report selected and required methods, planned/applicable/assessed units, and incomplete critical-error assessment even in public aggregates"
+  },
+  "supersedes": "2.0.0",
+  "amendment_reason": "Reconcile the executable design with the investigator's decisions of 2026-09-13 and 2026-09-15: the private native Czech track leaves the paper and the pilot; a second screener and a two-rater human anchor are planned; the 8-12 measurement target, which came from the task brief, is replaced by a record-not-cap rule that separates catalog entries, executable measures and study conditions; the translation instrument is recorded and kept apart from the judges; the review is bounded as a scoping search with a prioritised evidence map. Protocol 2.0.0 is retained unchanged in history/.",
+  "retrieval_gaps": "Record reports not retrieved separately from full-text eligibility exclusions; unavailable databases remain named gaps",
+  "expert_inputs": "May enter throughout development. Later support does not rewrite historical origin; author or colleague proposals do not imply consensus.",
+  "registration": {
+    "status": "not_registered",
+    "local_timestamp_is_registration": false,
+    "confirmatory_preregistration": "required before confirmatory judgments"
+  },
+  "recorded_before_use": true,
+  "query_amendments": "review-2026-09-13/amendments.json remains the recorded query ledger; this revision changes no query",
+  "review_scope": {
+    "name": "scoping search with a prioritised evidence map",
+    "decision": "D6",
+    "second_screener_scope": "the priority stratum and the audit sample of the remainder, on the exact sheets the first screening used",
+    "reported_as_limits": [
+      "the remainder of the pool left unscreened, with its audited estimate of eligible records",
+      "APA PsycINFO and Scopus, not searched",
+      "the requirements layer, not searched systematically"
+    ],
+    "not_claimed": "a completed scoping review",
+    "full_screening": "a possible later study with its own protocol"
+  },
+  "decision_ledger": [
+    {
+      "id": "D1",
+      "date": "2026-09-13",
+      "origin": "investigator",
+      "decision": "The ten native Czech real sessions are excluded from the paper and from the development pilot; they remain a permanently private track processed only on local/einfra",
+      "replaces": "pilot.cases.native_czech = 2 in 2.0.0",
+      "affects": [
+        "pilot.cohorts",
+        "pilot.excluded_cohorts",
+        "data.native_czech_track",
+        "pilot.max_notes",
+        "pilot.human_note_sample"
+      ]
+    },
+    {
+      "id": "D2",
+      "date": "2026-09-13",
+      "origin": "investigator",
+      "decision": "A second human screener will be recruited and a clinical panel is not planned; two Czech psychologists rate notes as the human anchor, in a crossover over languages with an overlap block and blinded repeats, after calibration on notes outside the sample, with agreement reported by Gwet AC1/AC2 per item",
+      "replaces": "reviewers.human_count = 1 and no human anchor in 2.0.0",
+      "affects": [
+        "reviewers",
+        "pilot.human_anchor",
+        "sequence"
+      ]
+    },
+    {
+      "id": "D3",
+      "date": "2026-09-15",
+      "origin": "investigator, following audit findings A02 and A08",
+      "decision": "The 8-12 measurement target came from the task brief, not from the review. The first round carries every measurement the review supported; the executable count is recorded, not capped; catalog entries, executable measures and study conditions are distinct records",
+      "replaces": "selection.pilot_measurements_target = [8, 12] and sequence item 8 in 2.0.0",
+      "affects": [
+        "selection.first_round_measurements",
+        "sequence",
+        "pilot.measurement_rule"
+      ]
+    },
+    {
+      "id": "D4",
+      "date": "2026-09-15",
+      "origin": "investigator, delegated to the developer",
+      "decision": "The AnnoMI-to-Czech translator is recorded as an instrument (provider, model, settings, prompt digest), chosen by a measured back-translation check, never a judge of this pilot; the ten earlier translations are redone with it",
+      "replaces": "no translation provenance requirement in 2.0.0",
+      "affects": [
+        "data.translation_instrument",
+        "pilot.cohorts"
+      ]
+    },
+    {
+      "id": "D5",
+      "date": "2026-09-15",
+      "origin": "investigator",
+      "decision": "The judge-side confinement guard is ported to the sibling Czech repository; its real tasks stay confined to e-INFRA and its translated tasks (public AnnoMI content) are released",
+      "replaces": "sibling policy that a judge may read a note written from a real session",
+      "affects": [
+        "data.native_czech_policy"
+      ]
+    },
+    {
+      "id": "D6",
+      "date": "2026-09-15",
+      "origin": "investigator",
+      "decision": "The review is bounded: the second screener covers the priority stratum and the audit sample; the unscreened remainder and the two unsearched databases are reported as limits; the work is named a scoping search with a prioritised evidence map, not a completed scoping review",
+      "replaces": "the completed-review ambition of 2.0.0 status",
+      "affects": [
+        "review_scope",
+        "sequence",
+        "status"
+      ]
+    },
+    {
+      "id": "D7",
+      "date": "2026-09-15",
+      "origin": "investigator",
+      "decision": "Test fixtures clean their private workspaces; the directories earlier test runs left under local/ are removed by fixture pattern only",
+      "replaces": "nothing in the protocol; recorded because it touches private workspaces",
+      "affects": []
+    }
+  ]
+}

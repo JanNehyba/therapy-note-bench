@@ -105,7 +105,25 @@ def plan(
             "Verify the original/translation pairs before planning",
         )
     instrument.check_language("cs")
-    require(set(cfg["purposes"]) == set(PROFILES), "Pilot must retain the four purposes")
+    # A purpose may be left out of a round, and it may not be left out quietly.
+    # The rule was "keep all four", which stopped a silent drop and also stopped
+    # a recorded one; an investigator who narrows the scope now has to say which
+    # purposes are out and why, and the plan carries that with it.
+    purposes = tuple(cfg["purposes"])
+    require(bool(purposes) and set(purposes) <= set(PROFILES), "Pilot names an unknown purpose")
+    out_of_scope = {e["purpose"]: e for e in cfg.get("purposes_out_of_scope", ())}
+    require(
+        not (set(purposes) & set(out_of_scope)),
+        "A purpose cannot be both planned and out of scope",
+    )
+    require(
+        set(purposes) | set(out_of_scope) == set(PROFILES),
+        "Every purpose is either planned or recorded as out of scope",
+    )
+    require(
+        all(e.get("reason") and e.get("decision") for e in out_of_scope.values()),
+        "A purpose left out needs a reason and the decision that left it out",
+    )
     jobs, human_notes = [], []
     for _cohort, pair in sorted(cohorts.items()):
         ordered = sorted(pair, key=lambda c: digest((seed, c.revision)))
@@ -159,6 +177,10 @@ def plan(
             }
             for (origin, language), group in sorted(cohorts.items())
         ],
+        "purposes": list(purposes),
+        # Named in the plan, not only in the protocol: a reader of the plan has
+        # to see that two purposes exist and are not being served, and why.
+        "purposes_out_of_scope": list(cfg.get("purposes_out_of_scope", ())),
         "excluded_cohorts": list(cfg.get("excluded_cohorts", ())),
         "human_anchor": cfg.get("human_anchor"),
         "human_hours": cfg["human_hours"],

@@ -1588,8 +1588,8 @@
       "id": "K23",
       "family": "F7",
       "kind": "practical_outcome",
-      "label": "Acceptability to a professional",
-      "definition": "Whether a professional is willing to accept the note into practice, including the reasons why not.",
+      "label": "Acceptability: would a professional use this in practice",
+      "definition": "Whether a professional would take the note into their own practice and keep using the system that produced it, and if not, why. The question is about use, not about billing or any payer. It is answered on the six parameters MentalCLOUDS took from the acceptability framework for health-care interventions: affective attitude, burden, ethicality, coherence, opportunity costs and perceived effectiveness. Only coherence is a property of the text; the other five are about what working with it costs.",
       "origin": "literature",
       "origin_note": "A new candidate. MentalCLOUDS used six acceptability parameters for expert rating that are not properties of the text.",
       "evidence": [
@@ -1619,16 +1619,16 @@
       "inputs": "note, task context",
       "applicability": "A human measurement. Cannot be replaced by a judge.",
       "examples": {
-        "positive": "The therapist would put the note into the documentation unchanged.",
-        "negative": "The therapist rejects the note, although it is factually correct, because it is inconsiderate towards the client.",
-        "boundary": "Acceptability differs more between therapists than between models."
+        "positive": "The therapist would keep using the system and would file this note as it is.",
+        "negative": "The therapist will not use it, although the note is factually correct, because checking it costs more than writing the note themselves.",
+        "boundary": "The note is acceptable and the therapist would still not use the system, for a reason that is not about this note at all."
       },
-      "measurement": "Structured rating on six parameters, reported separately.",
+      "measurement": "Structured rating on the six parameters, reported separately and never summed with textual scores. A rejection carries its reason, because the reason is the finding.",
       "error_consequence": "A benchmark that measures only text can recommend a system that professionals reject.",
       "validation": "Used in S7 on English data from public videos.",
       "overlaps": "K21, K22.",
       "state": "proposed",
-      "state_note": "P11; needs therapists as raters."
+      "state_note": "P11. Reworded on 2026-09-16 after the investigator's review: the earlier wording, 'accept the note into practice', read as a question about a payer."
     },
     {
       "id": "K24",
@@ -1673,8 +1673,8 @@
       "error_consequence": "The most sensitive purpose; an error touches the client directly.",
       "validation": "A rich literature exists but was not verified from full texts in this round.",
       "overlaps": "K13, K14.",
-      "state": "awaiting_raters",
-      "state_note": "Needs real client readers and an ethics framework the pilot does not have; P11 carries a professional's proxy judgement, labelled as such."
+      "state": "out_of_scope",
+      "state_note": "Out of scope by decision D8 of 2026-09-16: the instrument serves continuity of care and documentation. The client purpose keeps its candidate and its evidence for a later round, and this round measures and claims nothing for it."
     },
     {
       "id": "K25",
@@ -1719,8 +1719,8 @@
       "error_consequence": "Supervision without information about the therapist's procedure misses its point.",
       "validation": "The weakest of the purposes. Direct evidence is missing and that has to be admitted, not filled with a guess.",
       "overlaps": "K09, K21.",
-      "state": "awaiting_raters",
-      "state_note": "Needs supervisors as raters, and has the thinnest evidence of the four purposes."
+      "state": "out_of_scope",
+      "state_note": "Out of scope by decision D8 of 2026-09-16: the instrument serves continuity of care and documentation. Supervision was also the worst supported of the four purposes, which is a finding of the review and is kept as one."
     },
     {
       "id": "K26",
@@ -2692,8 +2692,8 @@
       },
       {
         "id": "C3",
-        "criterion": "Every one of the four purposes has at least one measurement",
-        "detail": "continuity P01/P10, supervision P05/P11, client P08/P13, audit P09. Supervision and client are covered worst, because the evidence for them is the thinnest."
+        "criterion": "Every purpose the round serves has at least one measurement",
+        "detail": "continuity P01/P10, documentation P09. Decision D8 of 2026-09-16 narrowed the round to those two; supervision and client are out of scope, so P11 is read as a professional's willingness to use the system and not as a supervision or client measure. The entries that served only the dropped purposes are listed below with that reason."
       },
       {
         "id": "C4",
@@ -2736,11 +2736,11 @@
       },
       {
         "candidate": "K24 understanding by the client",
-        "reason": "Requires real clients and an ethics framework we do not have for the pilot. A proxy judgement by a professional is in P11."
+        "reason": "Out of scope by decision D8: the round serves continuity and documentation. Real client readers and an ethics framework are missing anyway, and the literature this purpose has was read only from abstracts."
       },
       {
         "candidate": "K25 supervision task",
-        "reason": "Needs supervisors as raters and has the weakest evidential support of all four purposes."
+        "reason": "Out of scope by decision D8, and the worst supported of the four purposes: no source found says what a supervisor needs from a note."
       },
       {
         "candidate": "K15 necessity of sensitive detail",
@@ -3038,6 +3038,28 @@
         "K19 and P09 state that the decree prescribes required elements and no note structure: SOAP, DAP and BIRP are not mandatory in the Czech Republic",
         "neither the criterion nor the pilot entry may be read as a verdict about legal compliance in practice"
       ]
+    },
+    {
+      "date": "2026-09-16",
+      "reason": "investigator review of the criteria, and decision D8 on scope",
+      "changes": [
+        "K23 is about whether a professional would use the system in practice, not about accepting a note for a payer; the six acceptability parameters are named",
+        "K24 and K25 are out of scope for this round by decision D8, with their candidates and evidence kept",
+        "the pilot's coverage criterion names the two purposes the round serves",
+        "purposes_in_scope records what is served and what is not"
+      ]
     }
-  ]
+  ],
+  "purposes_in_scope": {
+    "served": [
+      "continuity",
+      "audit"
+    ],
+    "out_of_scope": [
+      "supervision",
+      "client"
+    ],
+    "rule": "A candidate is kept with its evidence whichever purpose it serves; the purposes this round serves decide what is measured and claimed, not what the catalog records.",
+    "protocol_decision": "D8, 2026-09-16"
+  }
 }
