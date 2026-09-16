@@ -13,8 +13,8 @@ it is not evidence that those changes are implemented. In particular, protocol
 2.1.0 has not replaced the executable 2.0.0 at this baseline.
 
 **Repairs recorded later the same day**, each in the finding it answers below:
-A01 (both repositories), A02, A03, A05, A06, A09 and A13 carry a status line
-naming the commit; A04 is bounded by decision D6 in protocol 2.1.0 rather than completed;
+A01 (both repositories), A02, A03, A05, A06, A07, A08, A09 and A13 carry a status
+line naming the commit; A04 is bounded by decision D6 in protocol 2.1.0 rather than completed;
 the pool defect found while building the ledger (a cited reference's DOI as a
 record key) is repaired in commit `926fa4c`. Findings without a status line are
 still open.
@@ -245,6 +245,14 @@ core already separates essential and supplementary coverage and supports
 
 ### A07 — Candidate removal and merging are hiding important distinctions
 
+**Status: repaired on 2026-09-16 in catalog revision `catalog-v2`.** Every candidate
+carries one of the seven states named below with a reason of its own; language
+naturalness is back as K30 and redundancy is split from K11 as K31, both as not yet
+operationalised; K15 reads as lacking evidence rather than refuted; K17 stays relevant
+to individual therapy; K18 separates author-provided citations from evaluator evidence;
+K26 says the cases are not prepared for longitudinal evaluation. The text below is the
+finding as audited.
+
 **Priority 1.** The current map still drops language naturalness, despite the
 subsequent objection. QuestEval's use of separate fluency ratings supports keeping
 language quality as transfer evidence; the exact naturalness criterion still
@@ -270,6 +278,14 @@ evidence, awaiting raters, not measured and measurement failed. These are not
 interchangeable reasons to delete a candidate.
 
 ### A08 — The 14 pilot entries are not 14 comparable measurements of note quality
+
+**Status: repaired on 2026-09-16, in protocol 2.1.0 and catalog revision `catalog-v2`.**
+Each pilot entry carries a record kind and the conversion refuses to make a measurement
+of any of them; K08 states its double nature as a content topic and a cross-cutting
+consequence, K19 that the decree is a requirements source while the criterion is
+compliance, and a families policy says the families are not independent latent
+dimensions. P13 carries the exploratory caveats and P14 the numerator, duplicate and
+language-specific length-unit conditions. The text below is the finding as audited.
 
 **Priority 1.** P12 is a training/reliability experiment; P09 is a requirements
 check; P10/P11 are human use outcomes; P13 is a corpus-level proxy; P14 is a

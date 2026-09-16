@@ -168,7 +168,14 @@ def _evidence(rows: list[dict]) -> str:
 def _candidates(catalog: dict) -> str:
     out = []
     for c in catalog["candidates"]:
-        tags = chips({"family": c["family"], "kind": c["kind"], "origin": c["origin"]})
+        tags = chips(
+            {
+                "family": c["family"],
+                "kind": c["kind"],
+                "origin": c["origin"],
+                "state": c["state"],
+            }
+        )
         out.append(
             f'<article id="{esc(c["id"])}">'
             f'<h3><span class="id">{esc(c["id"])}</span> {esc(c["label"])}</h3>'
@@ -177,6 +184,7 @@ def _candidates(catalog: dict) -> str:
             + dl(
                 [
                     ("Origin", esc(c["origin_note"])),
+                    ("State", esc(c["state"]) + ". " + esc(c["state_note"])),
                     ("Response mode", esc(c["mode"])),
                     ("Unit", esc(c["unit"])),
                     ("Inputs", esc(c["inputs"])),
@@ -322,6 +330,16 @@ def _comparison(catalog: dict) -> str:
     return table(["Earlier criterion", "Action", "Catalog entry", "Reason"], rows)
 
 
+def _revisions(catalog: dict) -> str:
+    """What changed after the first assembly, and on whose finding."""
+    return "<h3>Revisions</h3>" + "".join(
+        f"<p>{esc(r['date'])}, {esc(r['reason'])}:</p><ul>"
+        + "".join(f"<li>{esc(change)}</li>" for change in r["changes"])
+        + "</ul>"
+        for r in catalog["revisions"]
+    )
+
+
 def _glossary(title: str, mapping) -> str:
     """A named vocabulary: definitions when the catalog gives them, else the values."""
     if isinstance(mapping, dict):
@@ -371,9 +389,12 @@ def render(catalog: dict) -> str:
                 ("Assembled from", esc(catalog["provenance"]["assembled_from"])),
                 ("Translated by", esc(catalog["provenance"]["translated_by"])),
                 ("Rule", esc(catalog["provenance"]["rule"])),
+                ("Families", esc(catalog["families_policy"])),
             ]
         )
+        + _revisions(catalog)
         + _glossary("Origin values", catalog["origin_values"])
+        + _glossary("Candidate states", catalog["candidate_states"])
         + _glossary("Record kinds of a candidate", catalog["record_kinds"])
         + _glossary("Record kinds of a pilot entry", catalog["pilot_record_kinds"])
         + _glossary("Purposes", catalog["purposes"])

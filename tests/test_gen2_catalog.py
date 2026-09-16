@@ -85,14 +85,55 @@ def test_the_catalog_validates_against_the_ledger(catalog, reports):
 
 def test_the_catalog_holds_what_the_review_proposed(catalog):
     """The counts the documentation states, held to the record."""
-    assert len(catalog["candidates"]) == 29
+    assert len(catalog["candidates"]) == 31
     assert len(catalog["methods"]) == 17
     assert len(catalog["sources"]) == 19
     assert len(catalog["abstract_sources"]) == 13
     assert len(catalog["pilot_proposal"]["entries"]) == 14
     assert len(catalog["comparison"]) == 35
-    assert catalog_mod.ids(catalog, "candidates") == [f"K{n:02d}" for n in range(1, 30)]
+    assert catalog_mod.ids(catalog, "candidates") == [f"K{n:02d}" for n in range(1, 32)]
     assert catalog_mod.ids(catalog, "methods") == [f"ME{n:02d}" for n in range(1, 18)]
+
+
+def test_every_candidate_carries_a_state_and_a_reason(catalog):
+    """Audit A07: "irrelevant", "not yet operationalized" and "awaiting raters"
+    are different reasons and were all being spelled as absence from the pilot."""
+    states = {c["id"]: c["state"] for c in catalog["candidates"]}
+    assert set(states.values()) <= set(catalog["candidate_states"])
+    measured = {
+        found
+        for p in catalog["pilot_proposal"]["entries"]
+        for found in catalog_mod.ID.findall(p["measures"])
+        if found in states
+    }
+    assert {k for k, v in states.items() if v == "proposed"} == measured
+    assert states["K30"] == states["K31"] == "not_yet_operationalized"
+    assert states["K15"] == "lacking_evidence"
+    assert states["K24"] == states["K25"] == "awaiting_raters"
+    assert states["K26"] == states["K27"] == "not_measured"
+    assert states["K20"] == states["K22"] == "out_of_scope"
+    assert "measurement_failed" not in states.values()
+    for c in catalog["candidates"]:
+        assert c["state_note"], c["id"]
+
+
+def test_the_state_of_a_candidate_must_match_the_pilot_proposal(catalog):
+    doctored = json.loads(json.dumps(catalog))
+    by = {c["id"]: c for c in doctored["candidates"]}
+    by["K30"]["state"] = "proposed"
+    assert any("does not match the pilot proposal" in p for p in catalog_mod.problems(doctored))
+
+
+def test_the_reopened_candidates_say_what_reopened_them(catalog):
+    """A07 reopened two decisions, and the record has to show the reversal
+    rather than quietly reading as though the drop never happened."""
+    by = {c["id"]: c for c in catalog["candidates"]}
+    assert "A07" in by["K30"]["origin_note"] and "A07" in by["K31"]["origin_note"]
+    assert by["K30"]["origin"] == by["K31"]["origin"] == "prior_local"
+    assert {e["source"] for e in by["K30"]["evidence"]} == {"S8", "S2"}
+    assert "S4" in {e["source"] for e in by["K31"]["evidence"]}
+    revision = catalog["revisions"][-1]
+    assert revision["date"] == "2026-09-16" and "A07" in revision["reason"]
 
 
 def test_every_source_is_a_report_the_ledger_sought(catalog, reports):
@@ -142,9 +183,12 @@ def test_the_comparison_accounts_for_every_earlier_criterion(catalog):
     added = {row["new"] for row in catalog["comparison"] if row["action"] == "add"}
     kept = {row["new"] for row in catalog["comparison"] if row["new"]}
     assert kept | added <= set(catalog_mod.ids(catalog, "candidates"))
-    dropped = [row for row in catalog["comparison"] if row["action"] == "drop"]
-    assert [row["old"][:3] for row in dropped] == ["c16"]
-    assert "A07" in dropped[0]["reason"]
+    # c16 was the one dropped row until audit A07 reopened it; the row now
+    # points at K30 and keeps the history of both decisions in its reason.
+    assert not [row for row in catalog["comparison"] if row["action"] == "drop"]
+    naturalness = next(row for row in catalog["comparison"] if row["old"].startswith("c16 "))
+    assert naturalness["new"] == "K30" and "A07" in naturalness["reason"]
+    assert "Dropped on 2026-09-13" in naturalness["reason"]
 
 
 # --- the page ---------------------------------------------------------------
@@ -198,7 +242,7 @@ def test_every_source_evidence_line_and_candidate_maps(catalog, draft, diagnosti
     assert [c["id"] for c in draft["constructs"]] == catalog_mod.ids(catalog, "candidates")
     lines = sum(len(c["evidence"]) for c in catalog["candidates"])
     assert len(draft["evidence"]) == lines
-    assert diagnostics["mapped"] == {"sources": 32, "evidence": lines, "constructs": 29}
+    assert diagnostics["mapped"] == {"sources": 32, "evidence": lines, "constructs": 31}
     for s in draft["sources"]:
         assert s["locator"].startswith("ledger:")
 
@@ -216,7 +260,9 @@ def test_every_unmapped_entry_has_a_diagnostic(catalog, diagnostics):
         "ME08": "citations",
     }
     assert [c["id"] for c in diagnostics["constructs"]] == catalog_mod.ids(catalog, "candidates")
+    assert "never becomes a registry status" in diagnostics["state_rule"]
     for c in diagnostics["constructs"]:
+        assert c["catalog_state"] in {"proposed"} | set(catalog_mod.load()["candidate_states"])
         assert c["origin_reference"].startswith(("proposal:", "catalog:"))
         if c["origin_reference"].startswith("catalog:"):
             assert "placeholder" in c["note"]

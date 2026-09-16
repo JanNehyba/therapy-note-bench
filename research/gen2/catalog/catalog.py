@@ -21,7 +21,7 @@ HERE = Path(__file__).resolve().parent
 CATALOG_PATH = HERE / "catalog.json"
 REPORTS_PATH = HERE.parent / "review-2026-09-13" / "reports.json"
 
-VERSION = "catalog-v1"
+VERSION = "catalog-v2"
 SECTIONS = (
     "sources",
     "abstract_sources",
@@ -44,10 +44,13 @@ META = (
     "origin_values",
     "record_kinds",
     "pilot_record_kinds",
+    "candidate_states",
+    "families_policy",
     "purposes",
     "relevance_levels",
     "evidence_layers",
     "provenance",
+    "revisions",
 )
 READINESS = ("implemented", "transferable", "candidate", "human_only")
 ACTIONS = ("keep", "revise", "merge", "drop", "add")
@@ -65,7 +68,11 @@ CANDIDATE_TEXT = (
     "error_consequence",
     "validation",
     "overlaps",
+    "state_note",
 )
+#: A candidate named by a pilot entry is proposed for measurement; every other
+#: state is a reason it is not, and the reasons are not interchangeable (A07).
+PROPOSED = "proposed"
 ENTRY_TEXT = (
     "label",
     "unit",
@@ -188,6 +195,8 @@ def problems(catalog: dict, reports: dict | None = None) -> list[str]:
             out.append(f"{c['id']}: unknown relevance level")
         if set(c["examples"]) != set(EXAMPLES):
             out.append(f"{c['id']}: examples are not positive, negative and boundary")
+        if c.get("state") not in catalog["candidate_states"]:
+            out.append(f"{c['id']}: unknown state {c.get('state')!r}")
         if not c["evidence"]:
             out.append(f"{c['id']}: no evidence")
         for i, e in enumerate(c["evidence"]):
@@ -224,6 +233,18 @@ def problems(catalog: dict, reports: dict | None = None) -> list[str]:
                 out.append(f"{b['id']}: empty {key}")
 
     pilot = catalog["pilot_proposal"]
+    named_by_entries = {
+        found
+        for p in pilot["entries"]
+        for found in ID.findall(p["measures"])
+        if found in candidates
+    }
+    for c in catalog["candidates"]:
+        if (c["id"] in named_by_entries) != (c.get("state") == PROPOSED):
+            out.append(
+                f"{c['id']}: state {c.get('state')!r} does not match the pilot proposal; "
+                "a candidate a pilot entry measures is proposed, and only it"
+            )
     for p in pilot["entries"]:
         if p["record_kind"] not in catalog["pilot_record_kinds"]:
             out.append(f"{p['id']}: unknown record kind {p['record_kind']!r}")

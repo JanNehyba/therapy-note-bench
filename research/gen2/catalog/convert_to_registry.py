@@ -212,6 +212,7 @@ def convert(catalog: dict, protocol: dict, proposals: dict) -> tuple[dict, dict]
         construct_notes.append(
             {
                 "id": c["id"],
+                "catalog_state": c["state"],
                 "catalog_origin": c["origin"],
                 "origin": ORIGIN[c["origin"]],
                 "origin_reference": reference,
@@ -290,6 +291,9 @@ def convert(catalog: dict, protocol: dict, proposals: dict) -> tuple[dict, dict]
         "pilot_check": {"result": "refused" if refusal else "passed", "message": refusal},
         "relationship_rule": "derived from the source's evidence layer, not from a human "
         "reading of the passage",
+        "state_rule": "a catalog state is a research judgement and never becomes a registry "
+        "status: every construct is decoded as candidate, because pilot status is a human "
+        "selection the core refuses to infer",
         "origin_rule": "catalog origins prior_local and expert_proposal both map to "
         "prior_proposal; empirical_observation maps to inductive; the historical origin never "
         "changes because of later evidence",

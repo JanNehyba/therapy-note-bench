@@ -1,5 +1,5 @@
 {
-  "version": "catalog-v1",
+  "version": "catalog-v2",
   "review_date": "2026-09-13",
   "catalog_date": "2026-09-16",
   "status": "AI-authored proposals from the scoping search of 2026-09-13, translated to English by the coding assistant on 2026-09-15. No human acceptance decision exists for any entry; the executable registry is derived from this catalog only as a draft that the core refuses to freeze until humans review it.",
@@ -48,7 +48,7 @@
   },
   "provenance": {
     "assembled_on": "2026-09-16",
-    "assembled_from": "the investigator's untracked Czech working catalog of the review of 2026-09-13 (candidates, methods, sources, synthesis), record by record",
+    "assembled_from": "the investigator's untracked Czech working catalog of the review of 2026-09-13 (candidates, methods, sources, synthesis), record by record; revised on 2026-09-16 for audit findings A07 and A08 (see revisions)",
     "translated_by": "the coding assistant; no human has checked the translation",
     "ledger": "research/gen2/review-2026-09-13/reports.json",
     "rule": "This file is the versioned source. The HTML page and the draft registry are generated from it and the suite fails when they drift."
@@ -656,7 +656,9 @@
       "measurement": "Verification of claims against the source with four outcomes: supported, contradicted, unsupported, unassessable.",
       "error_consequence": "An invented fact propagates into further care and the client reads it as something said about them.",
       "validation": "Direct evidence from S1 for English and public MI demonstrations. No Czech validation.",
-      "overlaps": "K02-K04; one wrong claim is one finding, not four."
+      "overlaps": "K02-K04; one wrong claim is one finding, not four.",
+      "state": "proposed",
+      "state_note": "P04."
     },
     {
       "id": "K02",
@@ -693,7 +695,9 @@
       "measurement": "Part of claim comparison: agreement on the actor is a condition of the verdict supported.",
       "error_consequence": "A belief recorded as a fact about a third person is both a fidelity error and an intrusion on the rights of someone who is not the client and has no access to the note.",
       "validation": "Indirect; no study found measured attribution separately.",
-      "overlaps": "K01, K17."
+      "overlaps": "K01, K17.",
+      "state": "proposed",
+      "state_note": "P05."
     },
     {
       "id": "K03",
@@ -730,7 +734,9 @@
       "measurement": "Agreement on time is a condition of the verdict supported. A separate temporal score is not introduced before it is shown to add information over K01.",
       "error_consequence": "A past state presented as current changes the clinical decision.",
       "validation": "PDSQI-9's own experience rather argues against a separate scale.",
-      "overlaps": "K01, K26."
+      "overlaps": "K01, K26.",
+      "state": "proposed",
+      "state_note": "P05."
     },
     {
       "id": "K04",
@@ -767,7 +773,9 @@
       "measurement": "Agreement on modality is a condition of the verdict supported; it is also tracked as a separate error type.",
       "error_consequence": "A suggestion elevated to an agreement creates in further care a commitment the client never signed up to.",
       "validation": "None direct.",
-      "overlaps": "K01, K02, K10."
+      "overlaps": "K01, K02, K10.",
+      "state": "proposed",
+      "state_note": "P05."
     },
     {
       "id": "K05",
@@ -818,7 +826,9 @@
       "measurement": "QA against a bank built from the source, with the score reported separately for each importance level. Never one average number.",
       "error_consequence": "Omitting risk information is a different class of error from omitting a homework task; blending them into one percentage erases the difference.",
       "validation": "The grading is supported in S1 with the stated agreement. Transfer to Czech unverified.",
-      "overlaps": "K06, K07, K08."
+      "overlaps": "K06, K07, K08.",
+      "state": "proposed",
+      "state_note": "P01."
     },
     {
       "id": "K06",
@@ -855,7 +865,9 @@
       "measurement": "A three-way outcome per information unit: present, explicitly negated in the source, absent from the source. Absence is never converted to zero nor dropped from the denominator.",
       "error_consequence": "A note that manufactures a negative finding gives further care false reassurance.",
       "validation": "No direct study; the support is project experience and the contrast with iCARE.",
-      "overlaps": "K05, K08."
+      "overlaps": "K05, K08.",
+      "state": "proposed",
+      "state_note": "P02."
     },
     {
       "id": "K07",
@@ -899,14 +911,16 @@
       "measurement": "Coverage is reported separately for each purpose and never summed.",
       "error_consequence": "A universal score rewards a note that is good for one recipient and unusable for another.",
       "validation": "Indirect. Our four purposes are not a validated taxonomy.",
-      "overlaps": "K05, K27-K30."
+      "overlaps": "K05, K27-K30.",
+      "state": "proposed",
+      "state_note": "Inside P01 as a reporting rule: coverage is reported per purpose and never summed."
     },
     {
       "id": "K08",
       "family": "F2",
       "kind": "content_topic",
       "label": "Risk and safety",
-      "definition": "A content topic: suicidality, self-harm, danger to others, abuse, crisis markers. It is not a quality construct; it is the topic with the highest error severity.",
+      "definition": "A content topic: suicidality, self-harm, danger to others, abuse, crisis markers. It is not a quality construct; it is the topic with the highest error severity. It is also a cross-cutting consequence: an error of fidelity or coverage that touches risk is more severe than the same error elsewhere.",
       "origin": "literature",
       "origin_note": "In TN-Eval safety is the only Mandatory-level item among the general items; in iCARE it has a separate aspect, Crisis Markers.",
       "evidence": [
@@ -943,7 +957,9 @@
       "measurement": "Reported as a separate, undilutable layer above coverage and fidelity. A negative claim about risk findings requires complete assessment of the declared scope.",
       "error_consequence": "The highest. A single omission can be clinically decisive.",
       "validation": "Content support in S1 and S3. No study found measures risk detection in a generated note against a human standard.",
-      "overlaps": "Runs through K01, K05, K06."
+      "overlaps": "Runs through K01, K05, K06.",
+      "state": "proposed",
+      "state_note": "P03."
     },
     {
       "id": "K09",
@@ -987,7 +1003,9 @@
       "measurement": "Verification of the relation against the source plus a judgement of appropriateness to the purpose; two separate statements.",
       "error_consequence": "An invented clinical link looks like an expert conclusion and travels on.",
       "validation": "PDSQI-9 has validation for the Synthesized attribute on a different population that explicitly excluded psychotherapy.",
-      "overlaps": "K01, K04."
+      "overlaps": "K01, K04.",
+      "state": "not_yet_operationalized",
+      "state_note": "The supported half of the construct is in P04; the purpose-appropriateness half needs a purpose-specific standard that does not exist yet."
     },
     {
       "id": "K10",
@@ -1031,14 +1049,16 @@
       "measurement": "Coverage of plan-type items, separately from the other content.",
       "error_consequence": "A missing plan breaks continuity; an invented plan creates a false commitment.",
       "validation": "Content support in S1 and S3.",
-      "overlaps": "K04, K05."
+      "overlaps": "K04, K05.",
+      "state": "proposed",
+      "state_note": "Inside P01 as the plan importance level; a separate measurement would count it twice."
     },
     {
       "id": "K11",
       "family": "F4",
       "kind": "construct",
       "label": "Economy: every sentence serves something",
-      "definition": "The share of sentences that carry essential content. Measured by the relation of a sentence to content, not by the length of the text.",
+      "definition": "The share of sentences that carry essential content. Measured by the relation of a sentence to content, not by the length of the text. A repeated sentence still carries content, so repetition is not seen here; it is K31.",
       "origin": "literature",
       "origin_note": "Directly from TN-Eval, where conciseness is defined by the relation of a sentence to a rubric item.",
       "evidence": [
@@ -1075,7 +1095,9 @@
       "measurement": "The share of sentences tied to at least one information unit; always reported beside coverage, never alone.",
       "error_consequence": "Economy reported on its own rewards an empty note.",
       "validation": "Direct evidence from S1; in S1, however, automatic economy is the dimension where the judge correlates worst with humans.",
-      "overlaps": "K05, K12."
+      "overlaps": "K05, K12; repetition is K31 and density K29.",
+      "state": "proposed",
+      "state_note": "P07."
     },
     {
       "id": "K12",
@@ -1119,7 +1141,9 @@
       "measurement": "The share of information units in their expected place. Separately from whether they are present at all.",
       "error_consequence": "Correct content in the wrong place changes its originator and the reader reads it differently.",
       "validation": "The agreement of five experts on placing items into sections is documented in S1 during rubric design; rating the placement of content in actual notes is not validated.",
-      "overlaps": "K02, K05."
+      "overlaps": "K02, K05.",
+      "state": "proposed",
+      "state_note": "P06."
     },
     {
       "id": "K13",
@@ -1156,7 +1180,9 @@
       "measurement": "Judgement against the declared recipient; automatic readability indices are a stand-in, not evidence of understanding.",
       "error_consequence": "An incomprehensible client summary fails its only purpose.",
       "validation": "Factor support from S2 on a different population. No Czech readability verification.",
-      "overlaps": "K12, K29."
+      "overlaps": "K12, K29.",
+      "state": "awaiting_raters",
+      "state_note": "Measurable only against a specific reader; the pilot has no client readers, and readability indices are a stand-in, not evidence."
     },
     {
       "id": "K14",
@@ -1200,7 +1226,9 @@
       "measurement": "Marking of spans with an indication of whether it is a quotation or the author's wording. Not a dictionary filter.",
       "error_consequence": "The client reads a condemnation of themselves. It damages the therapeutic relationship and it is a permanent record.",
       "validation": "The existence of the attribute in S2 is documented; its Czech form is not verified at all.",
-      "overlaps": "K15, K29."
+      "overlaps": "K15, K29.",
+      "state": "proposed",
+      "state_note": "P08."
     },
     {
       "id": "K15",
@@ -1250,8 +1278,10 @@
       },
       "measurement": "Human judgement only for now. We propose to postpone automatic measurement.",
       "error_consequence": "Superfluous sensitive detail harms the client and third persons and cannot be taken back.",
-      "validation": "NONE. This is the least supported candidate in the registry and is marked as such.",
-      "overlaps": "K14, K16."
+      "validation": "No source defines purpose-relative necessity, so the candidate lacks evidence rather than being refuted: the identifiers that iCARE and the Czech decree require concern the medical record as a whole, not every generated note for every purpose (audit A07). Still the least supported candidate in the catalog, and marked as such.",
+      "overlaps": "K14, K16.",
+      "state": "lacking_evidence",
+      "state_note": "No source defines purpose-relative necessity. The identifiers the decree and iCARE require concern the medical record as a whole, not every generated note for every purpose, so the candidate is unsupported, not refuted."
     },
     {
       "id": "K16",
@@ -1295,7 +1325,9 @@
       "measurement": "A check for the presence of declared fields. The presence of a field does not prove the correctness of its content.",
       "error_consequence": "Without the context of creation one cannot judge what weight to give the record.",
       "validation": "Professional consensus, not empirical validation; and the source is past expiry.",
-      "overlaps": "K17, K19."
+      "overlaps": "K17, K19.",
+      "state": "not_measured",
+      "state_note": "Second round. Overlaps P09, whose Czech required elements about the author of an entry are harder and more concrete."
     },
     {
       "id": "K17",
@@ -1330,7 +1362,7 @@
       "mode": "marking of a mention plus role / identification",
       "unit": "mention of a third person",
       "inputs": "note, source",
-      "applicability": "Fundamentally different in couple and group therapy than in individual therapy.",
+      "applicability": "Present in every setting. In individual therapy third parties enter through the client's account; in couple and group therapy they are participants with their own consent status, which changes the rule, not the relevance.",
       "examples": {
         "positive": "The client describes a conflict with his superior; the note gives the role, not the name.",
         "negative": "The note adopts the client's judgement of his partner as a factual description of her person.",
@@ -1339,14 +1371,16 @@
       "measurement": "Marking of mentions of third persons, distinguishing role and identification.",
       "error_consequence": "Intrudes on the rights of someone who does not know about the note and has no access to it.",
       "validation": "None empirical; the professional support is from an expired document.",
-      "overlaps": "K02, K15."
+      "overlaps": "K02, K15.",
+      "state": "not_yet_operationalized",
+      "state_note": "Third parties appear in individual therapy through the client's account; the marking rule and the role-versus-identification distinction still need a definition."
     },
     {
       "id": "K18",
       "family": "F6",
       "kind": "construct",
       "label": "Traceability of claims to the source",
-      "definition": "For a claim, the place in the source that supports it can be shown. Distinguished are the validity of the citation, its actual support of the claim, and the share of claims that carry a citation.",
+      "definition": "For a claim, the place in the source that supports it can be shown. Distinguished are the validity of the citation, its actual support of the claim, and the share of claims that carry a citation. The object is the citation the author writes into the note; the evidence spans an evaluator attaches while checking a claim are a different thing and belong to the methods.",
       "origin": "expert_proposal",
       "origin_note": "Historically a colleague's proposal (prior-source-links), recorded before this review. Finding the PDSQI attribute Cited does not retroactively change its origin.",
       "evidence": [
@@ -1376,14 +1410,16 @@
       "measurement": "Three separate numbers: validity of the target, semantic support, coverage of claims by citations. Never one.",
       "error_consequence": "A citation that does not support inspires false confidence more effectively than no citation.",
       "validation": "Existence of the attribute in S2. The decomposition into three quantities is validated nowhere.",
-      "overlaps": "K01, K19."
+      "overlaps": "K01, K19.",
+      "state": "not_measured",
+      "state_note": "No pilot task requires author-provided citations, so the denominator would be empty. The evaluator's evidence spans are a different thing and stay in the methods."
     },
     {
       "id": "K19",
       "family": "F6",
       "kind": "specification_criterion",
       "label": "Compliance with the Czech documentation decree",
-      "definition": "The note contains the elements that the current Czech regulation requires of medical documentation.",
+      "definition": "The note complies with a specified, applicable documentation requirement: here, the elements the current Czech regulation requires of medical documentation. The decree is a requirements source; the observable criterion is compliance with a requirement that applies to the note at hand.",
       "origin": "literature",
       "origin_note": "A new candidate of this round. The previous map contained no Czech legal requirement.",
       "evidence": [
@@ -1420,7 +1456,9 @@
       "measurement": "A check for the presence of the required elements. Presence of a field is not evidence of the correctness of its content.",
       "error_consequence": "Non-compliance is a legal, not a clinical problem; it must not be mixed into a quality score.",
       "validation": "The text of the regulation is verified. Its legal interpretation is not; the assistant is not a lawyer and the investigator must have it reviewed.",
-      "overlaps": "K16, K05."
+      "overlaps": "K16, K05.",
+      "state": "proposed",
+      "state_note": "P09."
     },
     {
       "id": "K20",
@@ -1457,7 +1495,9 @@
       "measurement": "A deterministic check. It must not coexist with a claim that the instruction was met.",
       "error_consequence": "Small, unless mistaken for quality.",
       "validation": "Not applicable; it is a check of the instruction.",
-      "overlaps": "K19, K11."
+      "overlaps": "K19, K11.",
+      "state": "out_of_scope",
+      "state_note": "A deterministic check of the instruction, run outside the pilot and never mixed into the quality score."
     },
     {
       "id": "K21",
@@ -1501,7 +1541,9 @@
       "measurement": "A human task with a binary or ternary answer and a free-text justification.",
       "error_consequence": "This is the quantity notes are written for; not tracking it is the main weakness of purely textual measures.",
       "validation": "Used in S6 and S1, in both cases on a population other than Czech psychotherapy.",
-      "overlaps": "Encompasses K05, K10, K12."
+      "overlaps": "Encompasses K05, K10, K12.",
+      "state": "proposed",
+      "state_note": "P10; needs therapists as raters."
     },
     {
       "id": "K22",
@@ -1538,7 +1580,9 @@
       "measurement": "A typology of edits plus their count. The count alone, without the type, is misleading.",
       "error_consequence": "Low visible error rate with a high rate of silent rewriting hides the real state.",
       "validation": "Not verified from the full text.",
-      "overlaps": "K21."
+      "overlaps": "K21.",
+      "state": "out_of_scope",
+      "state_note": "Needs a real workflow in which a therapist works with the draft; a laboratory pilot has none."
     },
     {
       "id": "K23",
@@ -1582,7 +1626,9 @@
       "measurement": "Structured rating on six parameters, reported separately.",
       "error_consequence": "A benchmark that measures only text can recommend a system that professionals reject.",
       "validation": "Used in S7 on English data from public videos.",
-      "overlaps": "K21, K22."
+      "overlaps": "K21, K22.",
+      "state": "proposed",
+      "state_note": "P11; needs therapists as raters."
     },
     {
       "id": "K24",
@@ -1626,7 +1672,9 @@
       "measurement": "A human task. In the first pilot only as a proxy judgement by a professional, explicitly labelled as a proxy.",
       "error_consequence": "The most sensitive purpose; an error touches the client directly.",
       "validation": "A rich literature exists but was not verified from full texts in this round.",
-      "overlaps": "K13, K14."
+      "overlaps": "K13, K14.",
+      "state": "awaiting_raters",
+      "state_note": "Needs real client readers and an ethics framework the pilot does not have; P11 carries a professional's proxy judgement, labelled as such."
     },
     {
       "id": "K25",
@@ -1670,7 +1718,9 @@
       "measurement": "A human task with supervisors.",
       "error_consequence": "Supervision without information about the therapist's procedure misses its point.",
       "validation": "The weakest of the purposes. Direct evidence is missing and that has to be admitted, not filled with a guess.",
-      "overlaps": "K09, K21."
+      "overlaps": "K09, K21.",
+      "state": "awaiting_raters",
+      "state_note": "Needs supervisors as raters, and has the thinnest evidence of the four purposes."
     },
     {
       "id": "K26",
@@ -1705,7 +1755,7 @@
       "mode": "categorical per pair of notes",
       "unit": "pair of notes of the same case",
       "inputs": "series of notes, series of transcripts",
-      "applicability": "Requires longitudinal data. Our current data are single sessions, so this candidate CANNOT be measured yet.",
+      "applicability": "Requires a series of notes of the same case with a validated chronology. The current cases are not prepared or selected for longitudinal evaluation: the native sessions carry no validated session order and stay outside the pilot by decision D1, so the candidate is not measured in this round.",
       "examples": {
         "positive": "The note records a change of state and refers to the earlier one.",
         "negative": "The note records the first mention of panic attacks although the previous note contains them.",
@@ -1714,7 +1764,9 @@
       "measurement": "Verification of claims against the series, not against one source.",
       "error_consequence": "A contradiction in the documentation undermines the credibility of the whole record.",
       "validation": "None. At the same time it is the largest structural gap of the current map.",
-      "overlaps": "K01, K03."
+      "overlaps": "K01, K03.",
+      "state": "not_measured",
+      "state_note": "The cases are not prepared or selected for longitudinal evaluation: the native sessions carry no validated session order and stay outside the pilot by decision D1."
     },
     {
       "id": "K27",
@@ -1751,7 +1803,9 @@
       "measurement": "A breakdown of existing scores by subgroup with intervals; no new measure.",
       "error_consequence": "Systematic inequality is worse than random error and a single note does not reveal it.",
       "validation": "Not verified from the full text; unmeasurable for us so far because of sample size.",
-      "overlaps": "A breakdown over K05, K08."
+      "overlaps": "A breakdown over K05, K08.",
+      "state": "not_measured",
+      "state_note": "Needs enough cases per subgroup; with one Czech client cluster the breakdown cannot be made and must not be pretended."
     },
     {
       "id": "K28",
@@ -1802,7 +1856,9 @@
       "measurement": "ME17. Low diversity among the notes of one system as an indirect indicator of genericness. It is a proxy, not a direct measurement.",
       "error_consequence": "A generic note passes every other criterion and adds nothing that would help the next therapist recognise this client.",
       "validation": "Documented in S18 in another domain and with its own admitted limitation: the result changed with the embedding model chosen.",
-      "overlaps": "K05 (genericness is not omission), K09, K27."
+      "overlaps": "K05 (genericness is not omission), K09, K27.",
+      "state": "proposed",
+      "state_note": "P13."
     },
     {
       "id": "K29",
@@ -1841,19 +1897,120 @@
         "client": "high",
         "audit": "low"
       },
-      "mode": "continuous ratio (count per 100 words)",
+      "mode": "continuous ratio (distinct units per language-specific length unit)",
       "unit": "note; comparable only among notes of the same source material",
       "inputs": "note, information bank, text length",
-      "applicability": "Without comparable length or without normalisation per unit of text, coverage comparisons between systems are misleading.",
+      "applicability": "Without comparable length or without normalisation per unit of text, coverage comparisons between systems are misleading. A short note can be dense and still omit essential content; density is never read alone.",
       "examples": {
         "positive": "Two notes of the same length; one carries nine essential pieces of information, the other four.",
         "negative": "A model has higher coverage simply because it wrote twice as much text. We report it as better coverage although per page it carries less.",
         "boundary": "A longer note that additionally carries only marginal information: higher coverage, lower density, and worse for the reader."
       },
-      "measurement": "Essential information units per 100 words, reported beside coverage. In addition a control condition: comparing systems at aligned length (a proposed experiment; the differences between studies S18 and S19 do not isolate length).",
+      "measurement": "Distinct essential information units, duplicates counted once, per length unit, reported beside coverage, harmful omissions and comprehensibility. The length unit is defined per language, because word-normalised ratios are not comparable between English and Czech. In addition a control condition: comparing systems at aligned length (a proposed experiment; the differences between studies S18 and S19 do not isolate length).",
       "error_consequence": "Without it the benchmark systematically rewards verbosity. That is precisely the tendency models have, so the error always points one way.",
       "validation": "No study names or measures this construct. The evidence is indirect: the difference between S18 and S19 according to whether length was aligned.",
-      "overlaps": "K05, K11, K28."
+      "overlaps": "K05, K11, K28.",
+      "state": "proposed",
+      "state_note": "P14."
+    },
+    {
+      "id": "K30",
+      "family": "F4",
+      "kind": "construct",
+      "label": "Language naturalness",
+      "definition": "The note reads as a clinician of that language would write it: ordinary clinical register, no machine phrasing, no idiom carried over from another language. Distinct from comprehensibility: a stilted note can be perfectly understandable.",
+      "origin": "prior_local",
+      "origin_note": "Earlier criterion c16, implemented in the prototype as the language item and dropped on 2026-09-13 for lack of a source. Audit A07 found transfer evidence (fluency is a separately annotated dimension in the data QuestEval is validated on) and that an existing implementation had been counted against it. Returned on 2026-09-16; not operationalised in either language.",
+      "evidence": [
+        {
+          "source": "S8",
+          "location": "Experiments, SummEval annotation (four dimensions)",
+          "quote": "three experts annotated four dimensions: i) Consistency ... ii) Coherence ... iii) Fluency: how fluent the summary is to read; and, iv) Relevance",
+          "supports": "Fluency is rated by human experts as a dimension of its own, apart from consistency, coherence and relevance.",
+          "our_adaptation": "Transfer evidence only: English news summaries, nothing about clinical notes or Czech. The paper validates a metric against these ratings; it does not define naturalness for a note."
+        },
+        {
+          "source": "S2",
+          "location": "Table 1, Comprehensible (mapped concepts)",
+          "quote": "Comprehensible: The summary is clear, without ambiguity or sections that are difficult to understand (Coherence, Fluency)",
+          "supports": "The PDSQI lineage folds fluency and coherence from the earlier literature into the single attribute Comprehensible.",
+          "our_adaptation": "This is why the review of 2026-09-13 could not separate naturalness from comprehensibility. We keep them apart until each has its own operational rule."
+        }
+      ],
+      "relevance": {
+        "continuity": "medium",
+        "supervision": "low",
+        "client": "high",
+        "audit": "low"
+      },
+      "mode": "ordinal scale per note; not yet defined",
+      "unit": "whole note",
+      "inputs": "note only",
+      "applicability": "Both languages, each with its own operationalisation: what reads as natural in Czech clinical writing is not a translation of the English rule. Requires human raters; no automatic proxy is proposed.",
+      "examples": {
+        "positive": "The note reads as a clinician wrote it, in the ordinary register of the language.",
+        "negative": "The note repeats one template phrase in every section and renders English idioms word for word in Czech.",
+        "boundary": "A note that is grammatical and comprehensible but stilted: comprehensibility (K13) passes and naturalness is the open question."
+      },
+      "measurement": "Not yet defined. A human rating scale written in both languages; perplexity or judge ratings are not evidence of naturalness until checked against human ratings.",
+      "error_consequence": "Low for care; an unnatural note is still read. It marks the text as machine-written and can lower trust in the content.",
+      "validation": "None on notes. Transfer evidence only: fluency is a separately annotated dimension in general summarisation evaluation (S8), and the PDSQI lineage folded it into comprehensibility (S2).",
+      "overlaps": "K13 (comprehensibility), K14 (wording).",
+      "state": "not_yet_operationalized",
+      "state_note": "Returned by audit A07. A rating rule must be written in English and in Czech and assessed by humans before it can be measured."
+    },
+    {
+      "id": "K31",
+      "family": "F4",
+      "kind": "construct",
+      "label": "Redundancy: the same fact more than once",
+      "definition": "An essential information unit appears in the note more than once without new content. Not economy: a repeated sentence still carries content, so the share of content-bearing sentences (K11) does not see it. Not density: density also falls with padding that repeats nothing.",
+      "origin": "prior_local",
+      "origin_note": "The earlier criterion c15 named repetition explicitly. The review of 2026-09-13 merged it into K11, whose per-sentence definition cannot see a repeated relevant fact (audit A07). Restored on 2026-09-16 as its own candidate.",
+      "evidence": [
+        {
+          "source": "S1",
+          "location": "Figure 1, Sentence-level conciseness",
+          "quote": "A sentence is not concise if it does not cover any rubric items.",
+          "supports": "Conciseness is defined per sentence by whether the sentence covers a rubric item; a second sentence covering the same item counts as concise.",
+          "our_adaptation": "Repetition of a relevant fact is therefore invisible to K11 and needs its own construct."
+        },
+        {
+          "source": "S2",
+          "location": "Table 1, Succinct",
+          "quote": "The summary is brief, to the point, and without redundancy",
+          "supports": "Redundancy is part of the definition of the Succinct attribute.",
+          "our_adaptation": "Rated there as one Likert item together with brevity; we keep repetition apart from economy."
+        },
+        {
+          "source": "S4",
+          "location": "Conclusions; Methods, redundancy score",
+          "quote": "Tools for assessing note redundancy are required to complement use of the PDQI-9.",
+          "supports": "The validation study measured redundancy with a separate automated score and named it a gap of the instrument.",
+          "our_adaptation": "Their redundancy is copy-paste across notes of a record; ours is repetition within one note. The unit differs and the method does not transfer."
+        }
+      ],
+      "relevance": {
+        "continuity": "medium",
+        "supervision": "medium",
+        "client": "medium",
+        "audit": "low"
+      },
+      "mode": "count of repeated units per note, then a share; not yet defined",
+      "unit": "information unit repeated within one note",
+      "inputs": "note, segmentation into information units",
+      "applicability": "Any note; needs the same unit bank as coverage. A restatement that adds a consequence, such as a next step, is not repetition.",
+      "examples": {
+        "positive": "Each essential unit appears once, in its section.",
+        "negative": "The client's panic attacks are described in Subjective, again in Assessment and again in Plan, with nothing new each time.",
+        "boundary": "A fact restated in Plan with a new next step attached is not repetition."
+      },
+      "measurement": "Not yet defined: the share of information units that appear more than once without added content. Unit boundaries and what counts as added content need rules and human checking.",
+      "error_consequence": "Moderate: repetition lengthens the note, hides omissions behind volume and inflates any comparison that grows with length.",
+      "validation": "None on generated notes. PDQI-9's validation measured copy-paste redundancy across notes with a separate score and named redundancy a gap of the instrument (S4).",
+      "overlaps": "K11, K29, K12.",
+      "state": "not_yet_operationalized",
+      "state_note": "Split from K11 by audit A07. The unit rules for repetition are not defined; measurable once the coverage bank of P01 exists."
     }
   ],
   "methods": [
@@ -2315,11 +2472,11 @@
         "id": "P01",
         "record_kind": "executable_measure",
         "label": "Coverage of essential content, separately by importance level",
-        "measures": "K05",
+        "measures": "K05, K07, K10",
         "method": "ME01 + ME03",
         "unit": "information unit",
         "format": "present / missing / not applicable",
-        "why": "The strongest documented change against the current state and at the same time the core of the continuity purpose.",
+        "why": "The strongest documented change against the current state and at the same time the core of the continuity purpose. It carries K07 as a reporting rule (coverage per purpose, never summed) and K10 as the plan importance level.",
         "human_input": "A therapist must approve the information bank and assign the importance levels.",
         "risk": "Without a Czech rubric with importance this is so far only a transfer of the English one. Always reported together with P14; coverage alone rewards longer text.",
         "saturation": "much room",
@@ -2501,7 +2658,7 @@
         "format": "continuous similarity score",
         "why": "Catches a type of failure no other proposed measurement sees: a note that is faithful, complete and well organised, and would nevertheless fit anyone.",
         "human_input": "A therapist judges whether systems with low diversity really read as generic.",
-        "risk": "A proxy that depends on the choice of embedding model, and may be read only for notes that have passed the fidelity check.",
+        "risk": "An exploratory diagnostic, not established personalisation: high diversity can reflect errors and low diversity genuinely similar sessions. It depends on the embedding model, requires the same cases and model version across systems, human checks of source-specific detail, and disclosure of any faithfulness-based selection of notes. Genericness can also be examined within one note against its source (audit A08).",
         "saturation": "unknown, and the measure itself is fragile",
         "saturation_source": "S18 Discussion",
         "saturation_detail": "Klein: humans had higher linguistic diversity, but the authors admit that the semantic variant changed with the embedding model chosen and gave an inconsistent picture."
@@ -2513,10 +2670,10 @@
         "measures": "K29",
         "method": "derived from P01 + control condition",
         "unit": "note",
-        "format": "continuous ratio: essential information units per 100 words",
+        "format": "continuous ratio: distinct essential information units per language-specific length unit",
         "why": "A construct in its own right, not an addendum to coverage. Without it the benchmark systematically rewards length, which is exactly the tendency models have, so the error always points one way.",
         "human_input": "None beyond P01; density is computed from the same information bank. A therapist must, however, judge whether a system with higher density really reads better.",
-        "risk": "Comparable only among notes of the same source material. The aligned-length control condition means a second generation run, i.e. real extra cost. The differences between the two Keren studies do not isolate length; controlled length is a proposed experiment, not a documented mechanism.",
+        "risk": "Comparable only among notes of the same source material. The aligned-length control condition means a second generation run, i.e. real extra cost. The differences between the two Keren studies do not isolate length; controlled length is a proposed experiment, not a documented mechanism. The numerator, the handling of duplicates and the Czech length unit must be fixed before use; word-normalised ratios are not comparable between the languages, and density is reported with coverage, harmful omissions and comprehensibility (audit A08).",
         "saturation": "unknown",
         "saturation_source": "S19 Method vs S18 Results",
         "saturation_detail": "Nobody has ever reported density. Indirect evidence: S19 aligned length between sources and humans won on preservation of salient meaning too (d = 0.70) against the authors' own hypothesis; S18 did not align length and there the models came out as more comprehensive. The difference between the studies is exactly length."
@@ -2571,7 +2728,7 @@
     "left_out": [
       {
         "candidate": "K26 consistency across sessions",
-        "reason": "We have no longitudinal data. Cannot be measured."
+        "reason": "The cases are not prepared or selected for longitudinal evaluation: the native sessions carry no validated session order and stay outside the pilot by decision D1. Not measured, not impossible."
       },
       {
         "candidate": "K27 evenness across groups",
@@ -2587,11 +2744,7 @@
       },
       {
         "candidate": "K15 necessity of sensitive detail",
-        "reason": "Explicitly unsupported; the review found counterexamples. Measuring something without a definition would produce a meaningless number."
-      },
-      {
-        "candidate": "K07 relevance for the recipient",
-        "reason": "Not a separate measurement but a reporting rule: coverage from P01 is always reported separately per purpose and never summed. Built into the design of P01."
+        "reason": "No source defines purpose-relative necessity; the record-wide identifiers the decree and iCARE require are not requirements for every generated note. Lacking evidence, not refuted; measuring it without a definition would produce a meaningless number."
       },
       {
         "candidate": "K09 justification of created relations",
@@ -2602,20 +2755,16 @@
         "reason": "Measurable only against a specific reader and the pilot has no client readers. Automatic readability indices are a stand-in, not evidence of understanding. Closely related to K24, dropped for the same reason."
       },
       {
-        "candidate": "K10 follow-through and next steps",
-        "reason": "The plan is a type of information unit, so it falls into P01 as one of the importance levels. A separate measurement would count it twice."
-      },
-      {
         "candidate": "K16 context of the record's creation",
         "reason": "Overlaps with P09: the Czech required elements about the author of an entry are harder and more concrete than the general professional requirement from an expired APA document."
       },
       {
         "candidate": "K17 information about third persons",
-        "reason": "Lacks a definition that could be operationalised, as with K15. In couple and group therapy it would be crucial, but the pilot is on individual therapy (a decision reopened by audit A07: individual therapy can also contain sensitive third-party information)."
+        "reason": "Lacks a definition that could be operationalised. Relevant to individual therapy too, where third parties enter through the client's account; not yet operationalised."
       },
       {
         "candidate": "K18 traceability of claims",
-        "reason": "Applies only to tasks that explicitly require citations. None of the pilot tasks does, so the measurement would have an empty denominator."
+        "reason": "Applies only to tasks that require author-provided citations; none of the pilot tasks does, so the denominator would be empty. Stays in the catalog; the evaluator's evidence spans are a different thing."
       },
       {
         "candidate": "K20 compliance with the task format",
@@ -2628,9 +2777,17 @@
       {
         "candidate": "K16, K17, K18, K20, K22 as separate measurements",
         "reason": "They fit only into a second round. K29 was originally built into P01, but at the investigator's instruction of 2026-09-13 it is the separate measurement P14: a construct of its own, not an addendum to coverage."
+      },
+      {
+        "candidate": "K30 language naturalness",
+        "reason": "Returned by audit A07; not operationalised in either language. A human rating rule must be written first."
+      },
+      {
+        "candidate": "K31 redundancy",
+        "reason": "Split from K11 by audit A07; the unit rules for repetition are not defined. Measurable once the coverage bank of P01 exists."
       }
     ],
-    "count_note": "There are 14 entries. The brief of 2026-09-13 asked for 8-12; that was a number from the brief, not a result of the review, and protocol 2.1.0 replaces it with a record-not-cap rule (decision D3): every supported measurement is carried, what the human budget cannot cover is reported as not measured, and the executable count is recorded at freeze. The entries are not 14 comparable measures: P12 is a study condition, P09 a requirements check, P10 and P11 human-use outcomes, P13 a corpus-level proxy and P14 a derived ratio (audit A08)."
+    "count_note": "There are 14 entries. The brief of 2026-09-13 asked for 8-12; that was a number from the brief, not a result of the review, and protocol 2.1.0 replaces it with a record-not-cap rule (decision D3): every supported measurement is carried, what the human budget cannot cover is reported as not measured, and the executable count is recorded at freeze. The entries are not 14 comparable measures: P12 is a study condition, P09 a requirements check, P10 and P11 human-use outcomes, P13 a corpus-level proxy and P14 a derived ratio (audit A08). Every candidate carries a state (audit A07); K07 and K10 are measured inside P01 and no longer listed as left out."
   },
   "comparison": [
     {
@@ -2719,15 +2876,15 @@
     },
     {
       "old": "c15 Economy without repetition",
-      "action": "keep",
-      "new": "K11",
-      "reason": "Kept."
+      "action": "revise",
+      "new": "K31",
+      "reason": "Split by audit A07: economy stays in K11 as the share of content-bearing sentences; repetition of the same relevant fact becomes K31, because a repeated sentence still carries a rubric item and K11 cannot see it."
     },
     {
       "old": "c16 Language naturalness",
-      "action": "drop",
-      "new": null,
-      "reason": "DROPPED on 2026-09-13: the review found no support for it in any source and it could not be separated from comprehensibility; an existing implementation is not a reason to keep it. Audit A07 of 2026-09-15 reopens the drop: QuestEval's separate fluency ratings are transfer evidence for language quality, and an existing implementation was wrongly counted against it. Returning it to the candidate list, as not yet operationalised in either language, is the next catalog revision; it is not in this one."
+      "action": "revise",
+      "new": "K30",
+      "reason": "Dropped on 2026-09-13: the review found no support for it in any source and could not separate it from comprehensibility; an existing implementation is not a reason to keep a criterion. Audit A07 of 2026-09-15 reopened the drop: fluency is a separately annotated dimension in the data QuestEval is validated on, and an existing implementation had been counted against the criterion. Returned on 2026-09-16 as K30, not yet operationalised in either language."
     },
     {
       "old": "c17 Non-stigmatising language",
@@ -2842,6 +2999,35 @@
       "action": "add",
       "new": "K27",
       "reason": "ADDED. Evenness of quality across groups. Not measurable yet, but it must be visible as a planned level, not absent."
+    }
+  ],
+  "candidate_states": {
+    "proposed": "named by an entry of the pilot proposal; an AI proposal awaiting human selection",
+    "irrelevant": "judged not a property of note quality for any purpose; no candidate today",
+    "out_of_scope": "outside what this study design can observe, such as a real workflow, or a check kept apart from the quality score on purpose",
+    "not_yet_operationalized": "a defensible construct without a definition a rater or a program could apply",
+    "lacking_evidence": "no source defines or supports it; kept visible as a proposal",
+    "awaiting_raters": "operationalisable only with a reader or rater the pilot does not have, such as clients or supervisors",
+    "not_measured": "measurable in principle and not measured in this round for a stated reason: data, tasks or sample size",
+    "measurement_failed": "attempted in a pilot and failed; none yet"
+  },
+  "families_policy": "Families organise the catalog; they are not a hierarchy of independent latent dimensions. A candidate may be a content topic and a cross-cutting consequence at once (K08), or rest on a requirements source while the observable criterion is compliance (K19).",
+  "revisions": [
+    {
+      "date": "2026-09-16",
+      "reason": "audit findings A07 and A08 of 2026-09-15",
+      "changes": [
+        "every candidate carries a state from candidate_states and a note for it",
+        "K30 language naturalness returned as a candidate, not yet operationalised",
+        "K31 redundancy split from K11, which cannot see a repeated relevant fact",
+        "K15 reads as lacking evidence, not refuted: record-wide identifiers are not requirements for every generated note",
+        "K17 stays relevant to individual therapy",
+        "K18 distinguishes author-provided citations from evaluator evidence",
+        "K26 says the cases are not prepared for longitudinal evaluation, not that no longitudinal material exists",
+        "K08 and K19 state their double nature; families_policy added",
+        "P01 carries K07 and K10; P13 and P14 carry the audit's caveats",
+        "comparison rows c15 and c16 revised; left-out list updated"
+      ]
     }
   ]
 }

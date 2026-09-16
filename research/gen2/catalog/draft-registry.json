@@ -1318,6 +1318,101 @@
       "human_checked_by": null,
       "source_artifact_digest": "",
       "excerpt": "correlations between note length and scores for Succinct"
+    },
+    {
+      "id": "K30-e1",
+      "source_id": "S8",
+      "location": "Experiments, SummEval annotation (four dimensions)",
+      "interpretation": "Fluency is rated by human experts as a dimension of its own, apart from consistency, coherence and relevance.",
+      "relationship": "method_transfer",
+      "population": "news summarisation benchmarks",
+      "languages": [
+        "en"
+      ],
+      "raters": "existing human judgement datasets",
+      "unit": "generated question/answer pair",
+      "response_format": "QA-based precision and recall without a reference summary",
+      "validation": "not established",
+      "limitations": "Transfer evidence only: English news summaries, nothing about clinical notes or Czech. The paper validates a metric against these ratings; it does not define naturalness for a note.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "three experts annotated four dimensions: i) Consistency ... ii) Coherence ... iii) Fluency: how fluent the summary is to read; and, iv) Relevance"
+    },
+    {
+      "id": "K30-e2",
+      "source_id": "S2",
+      "location": "Table 1, Comprehensible (mapped concepts)",
+      "interpretation": "The PDSQI lineage folds fluency and coherence from the earlier literature into the single attribute Comprehensible.",
+      "relationship": "method_transfer",
+      "population": "779 multi-document EHR summaries, multiple specialties, real-world data; psychiatry and psychotherapy notes explicitly excluded",
+      "languages": [
+        "en"
+      ],
+      "raters": "7 trained physician raters, 8329 answered questions",
+      "unit": "whole summary",
+      "response_format": "9 attributes on 5-point Likert scales",
+      "validation": "not established",
+      "limitations": "This is why the review of 2026-09-13 could not separate naturalness from comprehensibility. We keep them apart until each has its own operational rule.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Comprehensible: The summary is clear, without ambiguity or sections that are difficult to understand (Coherence, Fluency)"
+    },
+    {
+      "id": "K31-e1",
+      "source_id": "S1",
+      "location": "Figure 1, Sentence-level conciseness",
+      "interpretation": "Conciseness is defined per sentence by whether the sentence covers a rubric item; a second sentence covering the same item counts as concise.",
+      "relationship": "direct_validation",
+      "population": "50 conversations from the high-quality split of AnnoMI (public motivational interviewing demonstrations, English)",
+      "languages": [
+        "en"
+      ],
+      "raters": "5 internal + 8 note-writing + 9 evaluating licensed US therapists; rubric validated with 17 external therapists",
+      "unit": "rubric item per SOAP section; sentence for conciseness; sentence for faithfulness",
+      "response_format": "binary item coverage, sentence labels, 3-way hallucination label; 5-point Likert baseline for comparison",
+      "validation": "not established",
+      "limitations": "Repetition of a relevant fact is therefore invisible to K11 and needs its own construct.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "A sentence is not concise if it does not cover any rubric items."
+    },
+    {
+      "id": "K31-e2",
+      "source_id": "S2",
+      "location": "Table 1, Succinct",
+      "interpretation": "Redundancy is part of the definition of the Succinct attribute.",
+      "relationship": "method_transfer",
+      "population": "779 multi-document EHR summaries, multiple specialties, real-world data; psychiatry and psychotherapy notes explicitly excluded",
+      "languages": [
+        "en"
+      ],
+      "raters": "7 trained physician raters, 8329 answered questions",
+      "unit": "whole summary",
+      "response_format": "9 attributes on 5-point Likert scales",
+      "validation": "not established",
+      "limitations": "Rated there as one Likert item together with brevity; we keep repetition apart from economy.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "The summary is brief, to the point, and without redundancy"
+    },
+    {
+      "id": "K31-e3",
+      "source_id": "S4",
+      "location": "Conclusions; Methods, redundancy score",
+      "interpretation": "The validation study measured redundancy with a separate automated score and named it a gap of the instrument.",
+      "relationship": "method_transfer",
+      "population": "inpatient electronic notes, US academic centre",
+      "languages": [
+        "en"
+      ],
+      "raters": "physician raters",
+      "unit": "whole note",
+      "response_format": "9 items, 5-point Likert",
+      "validation": "not established",
+      "limitations": "Their redundancy is copy-paste across notes of a record; ours is repetition within one note. The unit differs and the method does not transfer.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Tools for assessing note redundancy are required to complement use of the PDQI-9."
     }
   ],
   "constructs": [
@@ -1590,7 +1685,7 @@
     {
       "id": "K08",
       "name": "Risk and safety",
-      "definition": "A content topic: suicidality, self-harm, danger to others, abuse, crisis markers. It is not a quality construct; it is the topic with the highest error severity.",
+      "definition": "A content topic: suicidality, self-harm, danger to others, abuse, crisis markers. It is not a quality construct; it is the topic with the highest error severity. It is also a cross-cutting consequence: an error of fidelity or coverage that touches risk is more severe than the same error elsewhere.",
       "families": [
         "F2"
       ],
@@ -1704,7 +1799,7 @@
     {
       "id": "K11",
       "name": "Economy: every sentence serves something",
-      "definition": "The share of sentences that carry essential content. Measured by the relation of a sentence to content, not by the length of the text.",
+      "definition": "The share of sentences that carry essential content. Measured by the relation of a sentence to content, not by the length of the text. A repeated sentence still carries content, so repetition is not seen here; it is K31.",
       "families": [
         "F4"
       ],
@@ -1960,7 +2055,7 @@
       "candidate_formats": [
         "marking of a mention plus role / identification"
       ],
-      "applicability": "Fundamentally different in couple and group therapy than in individual therapy.",
+      "applicability": "Present in every setting. In individual therapy third parties enter through the client's account; in couple and group therapy they are participants with their own consent status, which changes the rule, not the relevance.",
       "error_consequences": "Intrudes on the rights of someone who does not know about the note and has no access to it.",
       "status": "candidate",
       "decision_reason": "Awaiting human review",
@@ -1971,7 +2066,7 @@
     {
       "id": "K18",
       "name": "Traceability of claims to the source",
-      "definition": "For a claim, the place in the source that supports it can be shown. Distinguished are the validity of the citation, its actual support of the claim, and the share of claims that carry a citation.",
+      "definition": "For a claim, the place in the source that supports it can be shown. Distinguished are the validity of the citation, its actual support of the claim, and the share of claims that carry a citation. The object is the citation the author writes into the note; the evidence spans an evaluator attaches while checking a claim are a different thing and belong to the methods.",
       "families": [
         "F6"
       ],
@@ -2008,7 +2103,7 @@
     {
       "id": "K19",
       "name": "Compliance with the Czech documentation decree",
-      "definition": "The note contains the elements that the current Czech regulation requires of medical documentation.",
+      "definition": "The note complies with a specified, applicable documentation requirement: here, the elements the current Czech regulation requires of medical documentation. The decree is a requirements source; the observable criterion is compliance with a requirement that applies to the note at hand.",
       "families": [
         "F6"
       ],
@@ -2297,7 +2392,7 @@
       "candidate_formats": [
         "categorical per pair of notes"
       ],
-      "applicability": "Requires longitudinal data. Our current data are single sessions, so this candidate CANNOT be measured yet.",
+      "applicability": "Requires a series of notes of the same case with a validated chronology. The current cases are not prepared or selected for longitudinal evaluation: the native sessions carry no validated session order and stay outside the pilot by decision D1, so the candidate is not measured in this round.",
       "error_consequences": "A contradiction in the documentation undermines the credibility of the whole record.",
       "status": "candidate",
       "decision_reason": "Awaiting human review",
@@ -2409,15 +2504,91 @@
         "boundary": "A longer note that additionally carries only marginal information: higher coverage, lower density, and worse for the reader."
       },
       "candidate_formats": [
-        "continuous ratio (count per 100 words)"
+        "continuous ratio (distinct units per language-specific length unit)"
       ],
-      "applicability": "Without comparable length or without normalisation per unit of text, coverage comparisons between systems are misleading.",
+      "applicability": "Without comparable length or without normalisation per unit of text, coverage comparisons between systems are misleading. A short note can be dense and still omit essential content; density is never read alone.",
       "error_consequences": "Without it the benchmark systematically rewards verbosity. That is precisely the tendency models have, so the error always points one way.",
       "status": "candidate",
       "decision_reason": "Awaiting human review",
       "reviewed_by": null,
       "origin": "prior_proposal",
       "origin_reference": "catalog:K29"
+    },
+    {
+      "id": "K30",
+      "name": "Language naturalness",
+      "definition": "The note reads as a clinician of that language would write it: ordinary clinical register, no machine phrasing, no idiom carried over from another language. Distinct from comprehensibility: a stilted note can be perfectly understandable.",
+      "families": [
+        "F4"
+      ],
+      "evidence_ids": [
+        "K30-e1",
+        "K30-e2"
+      ],
+      "relevance": {
+        "continuity": "medium",
+        "supervision": "low",
+        "client": "high",
+        "audit": "low"
+      },
+      "unit": "whole note",
+      "required_inputs": [
+        "note only"
+      ],
+      "examples": {
+        "positive": "The note reads as a clinician wrote it, in the ordinary register of the language.",
+        "negative": "The note repeats one template phrase in every section and renders English idioms word for word in Czech.",
+        "boundary": "A note that is grammatical and comprehensible but stilted: comprehensibility (K13) passes and naturalness is the open question."
+      },
+      "candidate_formats": [
+        "ordinal scale per note; not yet defined"
+      ],
+      "applicability": "Both languages, each with its own operationalisation: what reads as natural in Czech clinical writing is not a translation of the English rule. Requires human raters; no automatic proxy is proposed.",
+      "error_consequences": "Low for care; an unnatural note is still read. It marks the text as machine-written and can lower trust in the content.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "prior_proposal",
+      "origin_reference": "catalog:K30"
+    },
+    {
+      "id": "K31",
+      "name": "Redundancy: the same fact more than once",
+      "definition": "An essential information unit appears in the note more than once without new content. Not economy: a repeated sentence still carries content, so the share of content-bearing sentences (K11) does not see it. Not density: density also falls with padding that repeats nothing.",
+      "families": [
+        "F4"
+      ],
+      "evidence_ids": [
+        "K31-e1",
+        "K31-e2",
+        "K31-e3"
+      ],
+      "relevance": {
+        "continuity": "medium",
+        "supervision": "medium",
+        "client": "medium",
+        "audit": "low"
+      },
+      "unit": "information unit repeated within one note",
+      "required_inputs": [
+        "note",
+        "segmentation into information units"
+      ],
+      "examples": {
+        "positive": "Each essential unit appears once, in its section.",
+        "negative": "The client's panic attacks are described in Subjective, again in Assessment and again in Plan, with nothing new each time.",
+        "boundary": "A fact restated in Plan with a new next step attached is not repetition."
+      },
+      "candidate_formats": [
+        "count of repeated units per note, then a share; not yet defined"
+      ],
+      "applicability": "Any note; needs the same unit bank as coverage. A restatement that adds a consequence, such as a next step, is not repetition.",
+      "error_consequences": "Moderate: repetition lengthens the note, hides omissions behind volume and inflates any comparison that grows with length.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "prior_proposal",
+      "origin_reference": "catalog:K31"
     }
   ],
   "measurements": [],
