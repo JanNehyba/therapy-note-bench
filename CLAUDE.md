@@ -131,6 +131,12 @@ models as the whole of OpenAI.
   such everywhere it appears.
 - The iCARE track reports automatic metrics and TRACE **side by side**; the
   source paper found they disagree, and that disagreement is a result.
+- A published claim about one system beating another is a **survival share, not a
+  probability**: each claim is tested by itself, so the threshold is neither the
+  chance that the winner is really better nor an error rate across the table.
+  `tnb edges --clustered` measures what the test costs when conversations that
+  share an AnnoMI video are drawn together, and writes it beside the published
+  artefact rather than into it.
 - A task whose corpus is confidential names where it may go
   (`Task.confined_to`). `cmd_generate` refuses to build a job outside that set,
   and `judge.Judge(config, tasks=...)` refuses to be built for such a task on
@@ -173,6 +179,7 @@ uv run tnb judges           # every candidate judge against the two therapists
 uv run tnb saturation       # is there anything left to measure?
 uv run tnb preference       # does either judge favour its own family?
 uv run tnb edges            # test every 'beats outright' claim; writes docs/edges-*.json
+uv run tnb edges --clustered  # the same test drawing whole AnnoMI videos, beside it
 uv run tnb orders           # the six tables' orders against each other; writes docs/orders.json
 uv run tnb weighting        # completeness item- and importance-weighted; writes docs/weighting-<judge>.json
 uv run tnb report           # rebuild both pages, the JSON and the README table
