@@ -2102,8 +2102,8 @@
     },
     {
       "id": "K19",
-      "name": "Compliance with the Czech documentation decree",
-      "definition": "The note complies with a specified, applicable documentation requirement: here, the elements the current Czech regulation requires of medical documentation. The decree is a requirements source; the observable criterion is compliance with a requirement that applies to the note at hand.",
+      "name": "Required elements of Czech medical documentation, where it applies",
+      "definition": "The note carries the elements the current Czech regulation requires of medical documentation. The decree is a requirements source and the observable criterion is the presence of those elements. It binds a narrow population: records kept by a provider of health services, in practice clinical psychologists. A therapist working outside health services keeps no medical documentation and this criterion does not reach them.",
       "families": [
         "F6"
       ],
@@ -2130,8 +2130,8 @@
       "candidate_formats": [
         "deterministic check of required elements"
       ],
-      "applicability": "Only for Czech tasks and only for documentation kept under this regulation. The English track is not judged by it.",
-      "error_consequences": "Non-compliance is a legal, not a clinical problem; it must not be mixed into a quality score.",
+      "applicability": "Czech notes only, and only those kept as medical documentation by a provider of health services. Not the English track, not a client summary, which is not medical documentation at all. The decree prescribes required elements, not a note structure: no SOAP, DAP or BIRP form is mandatory in the Czech Republic, so the criterion must never be read as a requirement to write in one of them.",
+      "error_consequences": "A missing required element is a documentation problem for the narrow population this binds, not a clinical defect of the note, and it must not be mixed into a quality score. Reading it as a legal verdict would be a claim about real practice that this work cannot support.",
       "status": "candidate",
       "decision_reason": "Awaiting human review",
       "reviewed_by": null,

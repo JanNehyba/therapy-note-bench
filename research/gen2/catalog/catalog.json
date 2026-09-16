@@ -1418,8 +1418,8 @@
       "id": "K19",
       "family": "F6",
       "kind": "specification_criterion",
-      "label": "Compliance with the Czech documentation decree",
-      "definition": "The note complies with a specified, applicable documentation requirement: here, the elements the current Czech regulation requires of medical documentation. The decree is a requirements source; the observable criterion is compliance with a requirement that applies to the note at hand.",
+      "label": "Required elements of Czech medical documentation, where it applies",
+      "definition": "The note carries the elements the current Czech regulation requires of medical documentation. The decree is a requirements source and the observable criterion is the presence of those elements. It binds a narrow population: records kept by a provider of health services, in practice clinical psychologists. A therapist working outside health services keeps no medical documentation and this criterion does not reach them.",
       "origin": "literature",
       "origin_note": "A new candidate of this round. The previous map contained no Czech legal requirement.",
       "evidence": [
@@ -1447,18 +1447,18 @@
       "mode": "deterministic check of required elements",
       "unit": "required element under the regulation",
       "inputs": "note, list of required elements",
-      "applicability": "Only for Czech tasks and only for documentation kept under this regulation. The English track is not judged by it.",
+      "applicability": "Czech notes only, and only those kept as medical documentation by a provider of health services. Not the English track, not a client summary, which is not medical documentation at all. The decree prescribes required elements, not a note structure: no SOAP, DAP or BIRP form is mandatory in the Czech Republic, so the criterion must never be read as a requirement to write in one of them.",
       "examples": {
         "positive": "The note carries the identification of the author of the entry.",
         "negative": "The note has no author field because a model produced it.",
         "boundary": "A note meant for the client is not medical documentation and these criteria do not apply to it."
       },
-      "measurement": "A check for the presence of the required elements. Presence of a field is not evidence of the correctness of its content.",
-      "error_consequence": "Non-compliance is a legal, not a clinical problem; it must not be mixed into a quality score.",
-      "validation": "The text of the regulation is verified. Its legal interpretation is not; the assistant is not a lawyer and the investigator must have it reviewed.",
+      "measurement": "A deterministic check that the declared elements are present, reported on its own and never mixed into a quality score. The presence of a field is not evidence that its content is correct, and a missing element is reported as a missing element, never as a verdict that a law was broken.",
+      "error_consequence": "A missing required element is a documentation problem for the narrow population this binds, not a clinical defect of the note, and it must not be mixed into a quality score. Reading it as a legal verdict would be a claim about real practice that this work cannot support.",
+      "validation": "The text of the regulation is verified. Its legal interpretation is not: converting a required element into a criterion is a reading of the law, and no lawyer has checked it. The investigator decided on 2026-09-16 not to obtain a legal review and to narrow the scope instead, so the criterion is reported as a documentation-conformance check for a named population and never as a statement about legal compliance in practice.",
       "overlaps": "K16, K05.",
       "state": "proposed",
-      "state_note": "P09."
+      "state_note": "P09, with its scope narrowed on 2026-09-16: Czech records kept as medical documentation by a provider of health services. Every other cohort is outside it."
     },
     {
       "id": "K20",
@@ -2591,14 +2591,14 @@
       {
         "id": "P09",
         "record_kind": "requirements_check",
-        "label": "Required elements under Decree No. 444/2024 Coll.",
+        "label": "Elements required of Czech medical documentation, where the decree applies",
         "measures": "K19",
         "method": "deterministic check",
         "unit": "required element",
         "format": "present / missing",
-        "why": "The only hard Czech specification we have for the audit purpose.",
-        "human_input": "Legal review of the conversion into criteria. The assistant is not a lawyer.",
-        "risk": "The presence of a field is not evidence of the correctness of its content; it must not be mixed into quality.",
+        "why": "The only hard Czech specification we have for the audit purpose, and the audit purpose is the one a generic quality rubric cannot answer.",
+        "human_input": "None. The investigator decided on 2026-09-16 that no legal review will be obtained and that the scope is narrowed instead; a therapist confirms which cohort the check applies to.",
+        "risk": "The narrowest entry of the round. It binds only Czech records kept as medical documentation by a provider of health services, and the pilot's own cases are public demonstrations and their translations, which are not such records: on them the check measures whether the elements are present and says nothing about compliance. The presence of a field is not evidence that its content is correct, and the result is never mixed into a quality score.",
         "saturation": "unknown",
         "saturation_source": "S14",
         "saturation_detail": "A legal criterion, not a psychometric one. A strong ceiling effect is expected: mandatory fields are either there or not, and most systems fill them."
@@ -3027,6 +3027,16 @@
         "K08 and K19 state their double nature; families_policy added",
         "P01 carries K07 and K10; P13 and P14 carry the audit's caveats",
         "comparison rows c15 and c16 revised; left-out list updated"
+      ]
+    },
+    {
+      "date": "2026-09-16",
+      "reason": "investigator decision on the Czech legal criterion",
+      "changes": [
+        "no legal review will be obtained; the scope of K19 is narrowed instead",
+        "K19 binds records kept as medical documentation by a provider of health services, in practice clinical psychologists, and reaches no other cohort",
+        "K19 and P09 state that the decree prescribes required elements and no note structure: SOAP, DAP and BIRP are not mandatory in the Czech Republic",
+        "neither the criterion nor the pilot entry may be read as a verdict about legal compliance in practice"
       ]
     }
   ]

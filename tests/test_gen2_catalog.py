@@ -132,8 +132,31 @@ def test_the_reopened_candidates_say_what_reopened_them(catalog):
     assert by["K30"]["origin"] == by["K31"]["origin"] == "prior_local"
     assert {e["source"] for e in by["K30"]["evidence"]} == {"S8", "S2"}
     assert "S4" in {e["source"] for e in by["K31"]["evidence"]}
-    revision = catalog["revisions"][-1]
-    assert revision["date"] == "2026-09-16" and "A07" in revision["reason"]
+    # By its reason, not by being the newest entry: revisions accumulate, and
+    # pinning "the last one" would fail the next time anything else is revised.
+    reopening = [r for r in catalog["revisions"] if "A07" in r["reason"]]
+    assert len(reopening) == 1 and reopening[0]["date"] == "2026-09-16"
+
+
+def test_the_czech_legal_criterion_states_the_population_it_binds(catalog):
+    """The investigator decided on 2026-09-16 not to obtain a legal review and
+    to narrow the scope instead, so nothing here may read as a legal verdict.
+
+    The decree binds records kept by a provider of health services. A therapist
+    outside health services keeps no medical documentation, a client summary is
+    not medical documentation, and no note structure is prescribed at all.
+    """
+    k19 = next(c for c in catalog["candidates"] if c["id"] == "K19")
+    p09 = next(p for p in catalog["pilot_proposal"]["entries"] if p["id"] == "P09")
+    for field in (k19["definition"], k19["applicability"]):
+        assert "health services" in field
+    assert "no SOAP, DAP or BIRP form is mandatory" in k19["applicability"]
+    assert "never as a statement about legal compliance" in k19["validation"]
+    assert "no lawyer has checked it" in k19["validation"]
+    assert "never mixed into a quality score" in p09["risk"]
+    assert "no legal review will be obtained" in p09["human_input"]
+    narrowing = [r for r in catalog["revisions"] if "legal criterion" in r["reason"]]
+    assert len(narrowing) == 1 and narrowing[0]["date"] == "2026-09-16"
 
 
 def test_every_source_is_a_report_the_ledger_sought(catalog, reports):
