@@ -478,7 +478,7 @@ def _clustered_sensitivity() -> tuple[float, ...]:
     paragraph says the published column still draws conversations, and these
     figures may not be read out of it.
     """
-    found = json.loads((DOCS / "edges-tneval-soap-clustered.json").read_text(encoding="utf-8"))
+    found = json.loads((DOCS / "clustered-edges-tneval-soap.json").read_text(encoding="utf-8"))
     grouping, comparison = found["clustering"], found["comparison"]
     return (
         float(grouping["conversations"]),

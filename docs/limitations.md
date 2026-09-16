@@ -109,8 +109,9 @@ fourteen rubric claims kept -- `google_gemini-3.7-flash` over
 `mistral-medium-3.5`, and `mistral-large-v2` over the therapist, both of which
 held just above the threshold and now sit just below it -- and moves one system
 into the top group, because a claim that no longer holds stops separating the
-pair it was about. The Group column still draws conversations; the comparison
-is beside it in `docs/edges-<track>-clustered.json`, from `tnb edges
+pair it was about. On PDSQI-9 nothing moves: the single claim that held under
+one draw holds under the other. The Group column still draws conversations; the comparison
+is beside it in `docs/clustered-edges-<track>.json`, from `tnb edges
 --clustered`. Read it as a sensitivity analysis and not as a correction:
 drawing videos removes a dependency and removes draws at the same time, so a
 claim can stop holding for either reason and the artefact reports both rather

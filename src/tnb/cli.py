@@ -1966,7 +1966,7 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help=(
             "instead, run the same test drawing whole AnnoMI videos and compare; "
-            "writes docs/edges-<track>-clustered.json and changes no published group"
+            "writes docs/clustered-edges-<track>.json and changes no published group"
         ),
     )
     edges_parser.set_defaults(func=cmd_edges)

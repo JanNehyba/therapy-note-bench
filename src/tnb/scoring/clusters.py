@@ -51,7 +51,10 @@ CLUSTERED_TRACKS = (results.TRACK_TNEVAL, results.TRACK_PDSQI)
 def artefact_path(track: str, docs_dir: Path | None = None) -> Path:
     from tnb import report
 
-    return (docs_dir or report.DOCS_DIR) / f"edges-{track}-clustered.json"
+    # Deliberately not `edges-<track>-...`: the tests glob that name for the
+    # published dominance artefacts and check every one of them against the
+    # table, which this file is not and would fail.
+    return (docs_dir or report.DOCS_DIR) / f"clustered-edges-{track}.json"
 
 
 def load(track: str, docs_dir: Path | None = None) -> dict | None:
