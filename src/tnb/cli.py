@@ -1207,6 +1207,43 @@ def cmd_orders(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_clustered_edges(tracks: list[str], args: argparse.Namespace) -> int:
+    """The same dominance test, drawing whole videos, reported beside the published one.
+
+    Writes its own artefact and touches none of the published ones: the point
+    of a sensitivity analysis is that the reader can see both numbers.
+    """
+    from tnb.scoring import clusters
+
+    for track in tracks:
+        found = clusters.build_track(track, samples=args.samples)
+        if found is None:
+            print(f"{track}: not clustered here; see the artefact's `not_clustered`.")
+            continue
+        grouping = found["clustering"]
+        comparison = found["comparison"]
+        print(
+            f"{track}: {grouping['conversations']} conversation(s) from "
+            f"{grouping['clusters']} video(s), "
+            f"{grouping['conversations_sharing_a_video']} of them sharing one; "
+            f"{comparison['tested']} claim(s) tested, "
+            f"{comparison['holds']['conversations']} hold drawing conversations and "
+            f"{comparison['holds']['clusters']} drawing videos "
+            f"({comparison['verdict_changed']} changed verdict)."
+        )
+        for row in comparison["changed"]:
+            direction = "only conversations" if row["kept_by_conversations_only"] else "only videos"
+            print(
+                f"  {row['winner']} > {row['loser']}: kept by {direction} "
+                f"({row['p_holds_conversations']:.3f} vs {row['p_holds_clusters']:.3f})"
+            )
+        if args.dry_run:
+            continue
+        path = clusters.write(track, found)
+        print(f"  wrote {path.relative_to(REPO_ROOT)}")
+    return 0
+
+
 def cmd_edges(args: argparse.Namespace) -> int:
     """Test every "beats outright" claim on the conversations it rests on.
 
@@ -1217,6 +1254,8 @@ def cmd_edges(args: argparse.Namespace) -> int:
     from tnb.scoring import edges
 
     tracks = [args.track] if args.track else list(edges.LOADERS)
+    if getattr(args, "clustered", False):
+        return _cmd_clustered_edges(tracks, args)
     for track in tracks:
         found = edges.build_track(track, samples=args.samples)
         if found is None:
@@ -1922,6 +1961,14 @@ def build_parser() -> argparse.ArgumentParser:
         "--samples", type=int, default=10_000, help="resamples per edge; default 10 000"
     )
     edges_parser.add_argument("--dry-run", action="store_true", help="print, write nothing")
+    edges_parser.add_argument(
+        "--clustered",
+        action="store_true",
+        help=(
+            "instead, run the same test drawing whole AnnoMI videos and compare; "
+            "writes docs/edges-<track>-clustered.json and changes no published group"
+        ),
+    )
     edges_parser.set_defaults(func=cmd_edges)
 
     orders_parser = subparsers.add_parser(

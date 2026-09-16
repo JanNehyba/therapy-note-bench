@@ -81,6 +81,27 @@ def load(track: str, docs_dir: Path | None = None) -> dict | None:
 # --- the test -------------------------------------------------------------------
 
 
+def draw_plan(common: Sequence[str], clusters: dict[str, str] | None) -> list[list[int]]:
+    """What one bootstrap draw picks from: a conversation, or a whole cluster.
+
+    Resampling conversations treats every conversation as independent evidence.
+    The 50 AnnoMI conversations come from 43 videos, so seven of them share a
+    video with another, and a draw that takes one without the other counts a
+    dependency as independent evidence. With a cluster map the draw takes the
+    whole cluster or none of it, which is the standard repair and costs
+    precision: there are fewer things to draw.
+
+    Without a map every conversation is its own cluster, which is the same
+    plan, the same number of draws and the same numbers as before.
+    """
+    if clusters is None:
+        return [[index] for index in range(len(common))]
+    grouped: dict[str, list[int]] = {}
+    for index, session in enumerate(common):
+        grouped.setdefault(clusters.get(session, session), []).append(index)
+    return [grouped[key] for key in sorted(grouped)]
+
+
 def examine(
     track: str,
     columns: Sequence[tuple[str, int]],
@@ -92,6 +113,7 @@ def examine(
     min_shared: int = MIN_SHARED,
     threshold: float = THRESHOLD,
     thresholds: Sequence[float] = THRESHOLDS,
+    clusters: dict[str, str] | None = None,
 ) -> dict:
     """Test every edge of the dominance graph and layer what survives.
 
@@ -165,6 +187,7 @@ def examine(
                 rng=rng,
                 samples=samples,
                 threshold=threshold,
+                clusters=clusters,
             )
         )
 
@@ -177,6 +200,10 @@ def examine(
         "decimals": decimals,
         "samples": samples,
         "seed": seed,
+        # What one draw treats as one independent thing. Named in the artefact
+        # rather than assumed, because the answer changes what the fractions
+        # below mean and the two answers are both defensible.
+        "draws": "conversations" if clusters is None else "clusters",
         "threshold": threshold,
         "thresholds": list(thresholds),
         "min_shared": min_shared,
@@ -209,6 +236,7 @@ def _resample(
     rng: random.Random,
     samples: int,
     threshold: float,
+    clusters: dict[str, str] | None = None,
 ) -> dict:
     """One edge, every leg on the same draws."""
     n = len(common)
@@ -219,9 +247,10 @@ def _resample(
     ahead = dict.fromkeys(legs, 0)
     not_behind = dict.fromkeys(legs, 0)
     holds = 0
-    population = range(n)
+    plan = draw_plan(common, clusters)
+    population = range(len(plan))
     for _ in range(samples):
-        picked = rng.choices(population, k=n)
+        picked = [index for group in rng.choices(population, k=len(plan)) for index in plan[group]]
         all_legs = True
         some_leg = False
         for leg in legs:
@@ -259,6 +288,10 @@ def _resample(
         "winner": winner,
         "loser": loser,
         "n_shared": n,
+        # What a draw actually drew from. Equal to `n_shared` when every
+        # conversation stands alone, and smaller when conversations are drawn
+        # in clusters -- which is the price of not counting a dependency twice.
+        "n_drawn": len(plan),
         "p_holds": p_holds,
         "holds": p_holds >= threshold,
         "legs": described,
