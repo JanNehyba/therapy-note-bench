@@ -160,14 +160,28 @@ def test_the_czech_legal_criterion_states_the_population_it_binds(catalog):
 
 
 def test_every_source_is_a_report_the_ledger_sought(catalog, reports):
+    """What the catalog claims to have read, against what the ledger recorded.
+
+    The two halves say different things and must not be conflated. A catalog
+    source marked `full_text` claims the text was read, and the ledger has to
+    show it was retrieved. An abstract-only source claims nothing beyond the
+    abstract, whether or not the file has since arrived: six of them were
+    downloaded on 2026-09-16 and are recorded as retrieved, and the catalog
+    still rests on their abstracts because nobody has read them.
+    """
     by_id = {r["report_id"]: r for r in reports["reports"]}
-    for s in catalog["sources"] + catalog["abstract_sources"]:
+    for s in catalog["sources"]:
         report = by_id[s["ledger_report_id"]]
         assert report["catalog_source"] == s["id"]
         if s["verification"] == "full_text":
             assert report["current_status"] == "retrieved", s["id"]
+            assert report["reading"]["basis"] == "full_text", s["id"]
         else:
             assert report["current_status"] != "retrieved", s["id"]
+    for s in catalog["abstract_sources"]:
+        report = by_id[s["ledger_report_id"]]
+        assert report["catalog_source"] == s["id"]
+        assert report["reading"]["basis"] == "abstract", s["id"]
 
 
 def test_every_pilot_entry_carries_a_record_kind_and_the_count_is_recorded_not_capped(catalog):

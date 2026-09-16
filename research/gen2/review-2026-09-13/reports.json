@@ -2346,7 +2346,27 @@
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
    },
-   "retrieval_events": [],
+   "retrieval_events": [
+    {
+     "date": "2026-09-16",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "supplied by the investigator (publisher download)",
+     "route_kind": "investigator_supplied",
+     "outcome": "retrieved",
+     "file": "S_abs_edit.pdf",
+     "bytes": 902665,
+     "sha256": "b58c98d672223c787906d73c76e682944ea8ad6fdc510e8e9eaf3a2562228511",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null,
+     "seq": 1
+    }
+   ],
    "reading": {
     "basis": "abstract",
     "ai_read": true,
@@ -2362,9 +2382,13 @@
     "basis": "local catalog registry_data.py / synthesis_data.py"
    },
    "notes": [],
-   "current_status": "not_sought",
-   "current_file": null,
-   "last_attempt_date": null
+   "current_status": "retrieved",
+   "current_file": {
+    "file": "S_abs_edit.pdf",
+    "bytes": 902665,
+    "sha256": "b58c98d672223c787906d73c76e682944ea8ad6fdc510e8e9eaf3a2562228511"
+   },
+   "last_attempt_date": "2026-09-16"
   },
   {
    "report_id": "pmid:42712320",
@@ -2478,7 +2502,27 @@
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
    },
-   "retrieval_events": [],
+   "retrieval_events": [
+    {
+     "date": "2026-09-16",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "supplied by the investigator (publisher download)",
+     "route_kind": "investigator_supplied",
+     "outcome": "retrieved",
+     "file": "S_abs_sweden.pdf",
+     "bytes": 292896,
+     "sha256": "a51cb032206b5ec64ac9bffa8271a8c2e50acdbe93d5f567b00993f28786ccb5",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null,
+     "seq": 1
+    }
+   ],
    "reading": {
     "basis": "abstract",
     "ai_read": true,
@@ -2494,9 +2538,13 @@
     "basis": "local catalog registry_data.py / synthesis_data.py"
    },
    "notes": [],
-   "current_status": "not_sought",
-   "current_file": null,
-   "last_attempt_date": null
+   "current_status": "retrieved",
+   "current_file": {
+    "file": "S_abs_sweden.pdf",
+    "bytes": 292896,
+    "sha256": "a51cb032206b5ec64ac9bffa8271a8c2e50acdbe93d5f567b00993f28786ccb5"
+   },
+   "last_attempt_date": "2026-09-16"
   },
   {
    "report_id": "pmid:34644320",
@@ -2610,7 +2658,27 @@
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
    },
-   "retrieval_events": [],
+   "retrieval_events": [
+    {
+     "date": "2026-09-16",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "supplied by the investigator (publisher download)",
+     "route_kind": "investigator_supplied",
+     "outcome": "retrieved",
+     "file": "S_abs_scoping_notes.pdf",
+     "bytes": 411325,
+     "sha256": "90342ad60b158bcc91f124472bff8bab16ec9528b30f531bce9627641c3adabb",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null,
+     "seq": 1
+    }
+   ],
    "reading": {
     "basis": "abstract",
     "ai_read": true,
@@ -2626,9 +2694,13 @@
     "basis": "local catalog registry_data.py / synthesis_data.py"
    },
    "notes": [],
-   "current_status": "not_sought",
-   "current_file": null,
-   "last_attempt_date": null
+   "current_status": "retrieved",
+   "current_file": {
+    "file": "S_abs_scoping_notes.pdf",
+    "bytes": 411325,
+    "sha256": "90342ad60b158bcc91f124472bff8bab16ec9528b30f531bce9627641c3adabb"
+   },
+   "last_attempt_date": "2026-09-16"
   },
   {
    "report_id": "pmid:23164470",
@@ -2742,7 +2814,27 @@
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
    },
-   "retrieval_events": [],
+   "retrieval_events": [
+    {
+     "date": "2026-09-16",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "supplied by the investigator (publisher download)",
+     "route_kind": "investigator_supplied",
+     "outcome": "retrieved",
+     "file": "S_abs_supcode.pdf",
+     "bytes": 776534,
+     "sha256": "87636193192a13ad02b4ea1af6dd5c5f4b7b835a1a12eb54d3f84c64fec6a067",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null,
+     "seq": 1
+    }
+   ],
    "reading": {
     "basis": "abstract",
     "ai_read": true,
@@ -2758,9 +2850,13 @@
     "basis": "local catalog registry_data.py / synthesis_data.py"
    },
    "notes": [],
-   "current_status": "not_sought",
-   "current_file": null,
-   "last_attempt_date": null
+   "current_status": "retrieved",
+   "current_file": {
+    "file": "S_abs_supcode.pdf",
+    "bytes": 776534,
+    "sha256": "87636193192a13ad02b4ea1af6dd5c5f4b7b835a1a12eb54d3f84c64fec6a067"
+   },
+   "last_attempt_date": "2026-09-16"
   },
   {
    "report_id": "pmid:42361434",
@@ -2872,7 +2968,27 @@
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
    },
-   "retrieval_events": [],
+   "retrieval_events": [
+    {
+     "date": "2026-09-16",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "supplied by the investigator (publisher download)",
+     "route_kind": "investigator_supplied",
+     "outcome": "retrieved",
+     "file": "S_abs_hua.pdf",
+     "bytes": 888224,
+     "sha256": "300dbe37c6fe8ca7e35876ca5c473a7410c6ad59e5ff6a7777ea92a768a9f40d",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null,
+     "seq": 1
+    }
+   ],
    "reading": {
     "basis": "abstract",
     "ai_read": true,
@@ -2888,9 +3004,13 @@
     "basis": "local catalog registry_data.py / synthesis_data.py"
    },
    "notes": [],
-   "current_status": "not_sought",
-   "current_file": null,
-   "last_attempt_date": null
+   "current_status": "retrieved",
+   "current_file": {
+    "file": "S_abs_hua.pdf",
+    "bytes": 888224,
+    "sha256": "300dbe37c6fe8ca7e35876ca5c473a7410c6ad59e5ff6a7777ea92a768a9f40d"
+   },
+   "last_attempt_date": "2026-09-16"
   },
   {
    "report_id": "doi:10.1162/tacl_a_00453",
@@ -3135,7 +3255,27 @@
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
    },
-   "retrieval_events": [],
+   "retrieval_events": [
+    {
+     "date": "2026-09-16",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "supplied by the investigator (publisher download)",
+     "route_kind": "investigator_supplied",
+     "outcome": "retrieved",
+     "file": "S_abs_tednq.pdf",
+     "bytes": 1518846,
+     "sha256": "b8632823776b014f208f10508601c61265564c71c03a3d49d0581c4453568f30",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null,
+     "seq": 1
+    }
+   ],
    "reading": {
     "basis": "abstract",
     "ai_read": true,
@@ -3151,9 +3291,13 @@
     "basis": "local catalog registry_data.py / synthesis_data.py"
    },
    "notes": [],
-   "current_status": "not_sought",
-   "current_file": null,
-   "last_attempt_date": null
+   "current_status": "retrieved",
+   "current_file": {
+    "file": "S_abs_tednq.pdf",
+    "bytes": 1518846,
+    "sha256": "b8632823776b014f208f10508601c61265564c71c03a3d49d0581c4453568f30"
+   },
+   "last_attempt_date": "2026-09-16"
   }
  ],
  "diagnostics": [
@@ -3214,7 +3358,7 @@
   }
  ],
  "derived_from": {
-  "report-map.json": "f6c1d28aa4ff46b5d93f57dec9430630aca792902267d9eb854332bc465e04d4",
+  "report-map.json": "0b8166345232fb1f12ff5c182a9d6d1486f6776b881acf3bd55489c32fc71cd0",
   "fulltext-retrieval-log.json": "52ddeaedfdda580148007182ec7d0c78c4e1dd1450704dc8c736199418133611",
   "screening-decisions.json": "2f98644de1101880fe54fa705b3cf7ece932803e07b51d56be35e96bbd145a80",
   "screening-strata.json": "7f5cec8ab7f51c80bba97ceb1e359ff68b9ad7e39122c8211606d14a7e7bf21b",
@@ -3231,9 +3375,9 @@
   },
   "abstract_only_reports": {
    "total": 13,
-   "retrieved": 0,
+   "retrieved": 6,
    "not_retrieved": 0,
-   "not_sought": 13
+   "not_sought": 7
   },
   "other_reports": {
    "total": 2,
@@ -3248,8 +3392,8 @@
    "not_sought": 0
   },
   "attempts": {
-   "total": 25,
-   "succeeded": 21,
+   "total": 31,
+   "succeeded": 27,
    "failed": 3,
    "wrong_report": 1,
    "logged_retroactively": 6

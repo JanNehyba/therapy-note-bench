@@ -1724,7 +1724,26 @@
     "declared_in": null
    },
    "log_slugs": [],
-   "events": [],
+   "events": [
+    {
+     "date": "2026-09-16",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "supplied by the investigator (publisher download)",
+     "route_kind": "investigator_supplied",
+     "outcome": "retrieved",
+     "file": "S_abs_edit.pdf",
+     "bytes": 902665,
+     "sha256": "b58c98d672223c787906d73c76e682944ea8ad6fdc510e8e9eaf3a2562228511",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null
+    }
+   ],
    "reading": {
     "basis": "abstract",
     "ai_read": true,
@@ -1836,7 +1855,26 @@
     "declared_in": null
    },
    "log_slugs": [],
-   "events": [],
+   "events": [
+    {
+     "date": "2026-09-16",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "supplied by the investigator (publisher download)",
+     "route_kind": "investigator_supplied",
+     "outcome": "retrieved",
+     "file": "S_abs_sweden.pdf",
+     "bytes": 292896,
+     "sha256": "a51cb032206b5ec64ac9bffa8271a8c2e50acdbe93d5f567b00993f28786ccb5",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null
+    }
+   ],
    "reading": {
     "basis": "abstract",
     "ai_read": true,
@@ -1948,7 +1986,26 @@
     "declared_in": null
    },
    "log_slugs": [],
-   "events": [],
+   "events": [
+    {
+     "date": "2026-09-16",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "supplied by the investigator (publisher download)",
+     "route_kind": "investigator_supplied",
+     "outcome": "retrieved",
+     "file": "S_abs_scoping_notes.pdf",
+     "bytes": 411325,
+     "sha256": "90342ad60b158bcc91f124472bff8bab16ec9528b30f531bce9627641c3adabb",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null
+    }
+   ],
    "reading": {
     "basis": "abstract",
     "ai_read": true,
@@ -2060,7 +2117,26 @@
     "declared_in": null
    },
    "log_slugs": [],
-   "events": [],
+   "events": [
+    {
+     "date": "2026-09-16",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "supplied by the investigator (publisher download)",
+     "route_kind": "investigator_supplied",
+     "outcome": "retrieved",
+     "file": "S_abs_supcode.pdf",
+     "bytes": 776534,
+     "sha256": "87636193192a13ad02b4ea1af6dd5c5f4b7b835a1a12eb54d3f84c64fec6a067",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null
+    }
+   ],
    "reading": {
     "basis": "abstract",
     "ai_read": true,
@@ -2170,7 +2246,26 @@
     "declared_in": null
    },
    "log_slugs": [],
-   "events": [],
+   "events": [
+    {
+     "date": "2026-09-16",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "supplied by the investigator (publisher download)",
+     "route_kind": "investigator_supplied",
+     "outcome": "retrieved",
+     "file": "S_abs_hua.pdf",
+     "bytes": 888224,
+     "sha256": "300dbe37c6fe8ca7e35876ca5c473a7410c6ad59e5ff6a7777ea92a768a9f40d",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null
+    }
+   ],
    "reading": {
     "basis": "abstract",
     "ai_read": true,
@@ -2393,7 +2488,26 @@
     "declared_in": null
    },
    "log_slugs": [],
-   "events": [],
+   "events": [
+    {
+     "date": "2026-09-16",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "supplied by the investigator (publisher download)",
+     "route_kind": "investigator_supplied",
+     "outcome": "retrieved",
+     "file": "S_abs_tednq.pdf",
+     "bytes": 1518846,
+     "sha256": "b8632823776b014f208f10508601c61265564c71c03a3d49d0581c4453568f30",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null
+    }
+   ],
    "reading": {
     "basis": "abstract",
     "ai_read": true,

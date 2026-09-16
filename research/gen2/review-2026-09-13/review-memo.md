@@ -242,6 +242,26 @@ It would be inaccurate to describe this as a completed scoping review, to claim
 that the seven families are validated dimensions, or to present any candidate as
 ready for publication-grade measurement.
 
+## What happened after this round
+
+This memo records the round of 2026-09-13 and is not rewritten when later work
+changes something. What has changed since:
+
+- **2026-09-16.** The investigator supplied full texts for six of the thirteen
+  abstract-only reports: the scoping review on sharing notes with mental health
+  patients, the Swedish survey of what those patients find in their records, the
+  supervision coding study, the npj scoping review of language models in mental
+  health care, the study of what clinicians edit in AI drafts, and the emergency
+  department note-quality tool. `reports.json` records each as retrieved on that
+  date, by an investigator-supplied route, with a checksum. **Nobody has read
+  them.** Their reading basis is still the abstract and every claim resting on
+  them is still an abstract-level claim, which `tests/test_review_ledger.py`
+  holds them to. Reading them is a later round, with its own extractions.
+- **2026-09-16.** The candidate list moved from 29 to 31 in the catalog revision
+  that answered audit findings A07 and A08. Language naturalness returned as K30
+  and redundance became K31, separate from economy. The catalog carries the
+  revision and its reasons; this memo keeps the count the round itself produced.
+
 ## Outputs
 
 | File | What it is |

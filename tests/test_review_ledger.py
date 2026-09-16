@@ -115,7 +115,34 @@ def test_catalog_reports_count_19_18_1(reports):
     by_source = _by_source(reports)
     assert by_source["S5"]["current_status"] == "not_retrieved"
     assert by_source["S5"]["report_id"] == "doi:10.1197/jamia.m2404"
-    assert reports["counts"]["abstract_only_reports"]["not_sought"] == 13
+
+
+def test_having_the_file_is_not_the_same_as_having_read_it(reports):
+    """Six of the thirteen abstract-only reports arrived on 2026-09-16.
+
+    The investigator downloaded them and they are recorded as retrieved, with a
+    date, a route and a checksum. Nobody has read them, so their reading basis
+    is still the abstract and the catalog still rests on the abstract for every
+    claim they support. Those are two different facts and the ledger keeps them
+    apart; collapsing them is how an unread paper becomes a citation.
+    """
+    abstract_only = [
+        report
+        for report in reports["reports"]
+        if (report["catalog_source"] or "").startswith("S_abs_")
+    ]
+    assert len(abstract_only) == 13
+    retrieved = [r for r in abstract_only if r["current_status"] == "retrieved"]
+    assert len(retrieved) == 6
+    assert reports["counts"]["abstract_only_reports"]["not_sought"] == 7
+    for report in abstract_only:
+        assert report["reading"]["basis"] == "abstract", report["catalog_source"]
+        assert report["reading"]["human_verified"] is None
+    for report in retrieved:
+        supplied = report["retrieval_events"][-1]
+        assert supplied["route_kind"] == "investigator_supplied"
+        assert supplied["date"] == "2026-09-16"
+        assert supplied["sha256"] and supplied["bytes"] > 0
 
 
 def test_psychres_2026_is_retrieved_after_a_failed_attempt(reports):

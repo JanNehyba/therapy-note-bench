@@ -290,14 +290,14 @@
   },
   "retrieval_attempts": {
    "unit": "attempt",
-   "total": 25,
-   "succeeded": 21,
+   "total": 31,
+   "succeeded": 27,
    "failed": 3,
    "wrong_report": 1,
    "logged_retroactively": 6,
    "by_route_kind": {
     "direct_url": 4,
-    "investigator_supplied": 1,
+    "investigator_supplied": 7,
     "open_access_api": 12,
     "publisher": 2,
     "repository": 3,
@@ -374,7 +374,7 @@
   }
  ],
  "derived_from": {
-  "reports.json": "849dbed1a411d8e1be36ce894cb15eafa99d7720c0c0e0d87e09c4a11c5d5c10",
+  "reports.json": "25f6afc6aa23d6a13332779936ce80d264cbe9215f2cd74ac09e3cfd609e6aeb",
   "pool-summary.json": "a1ded470c9d7956637a4476564c730887cfc9c3c1d5314fc54f0da15050c0cb3",
   "screening-decisions.json": "2f98644de1101880fe54fa705b3cf7ece932803e07b51d56be35e96bbd145a80",
   "screening-strata.json": "7f5cec8ab7f51c80bba97ceb1e359ff68b9ad7e39122c8211606d14a7e7bf21b",
