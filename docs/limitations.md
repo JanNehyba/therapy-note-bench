@@ -101,6 +101,21 @@ fourteen. The counts at every threshold tried are published beside each other
 for that reason. A kept claim says this and no more: this pair, tested by
 itself, survived resampling the conversations it rests on.
 
+**The conversations are not quite independent either.** The 50 AnnoMI
+conversations are transcripts of 43 videos, and twelve of them share a video
+with another conversation. The test above draws conversations, which counts
+that dependency as evidence. Drawing whole videos instead costs two of the
+fourteen rubric claims kept -- `google_gemini-3.7-flash` over
+`mistral-medium-3.5`, and `mistral-large-v2` over the therapist, both of which
+held just above the threshold and now sit just below it -- and moves one system
+into the top group, because a claim that no longer holds stops separating the
+pair it was about. The Group column still draws conversations; the comparison
+is beside it in `docs/edges-<track>-clustered.json`, from `tnb edges
+--clustered`. Read it as a sensitivity analysis and not as a correction:
+drawing videos removes a dependency and removes draws at the same time, so a
+claim can stop holding for either reason and the artefact reports both rather
+than deciding between them.
+
 **And it is not only two judges disagreeing — one judge disagrees with
 itself.** Gemini's thinking budget was raised from 128 to 256 tokens and all
 51 000 questions were asked again. Nothing else changed: same model, same

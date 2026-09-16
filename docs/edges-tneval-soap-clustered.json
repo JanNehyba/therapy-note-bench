@@ -1,0 +1,114 @@
+{
+  "built": "2026-09-16",
+  "clustering": {
+    "by": "AnnoMI source video",
+    "clusters": 43,
+    "conversations": 50,
+    "conversations_sharing_a_video": 12,
+    "source": "AnnoMI-full.csv",
+    "unmapped_conversations": 0,
+    "videos": 43,
+    "videos_with_more_than_one": 5
+  },
+  "comparison": {
+    "changed": [
+      {
+        "kept_by_conversations_only": true,
+        "loser": "mistral-medium-3.5",
+        "n_drawn_clustered": 43,
+        "n_shared": 50,
+        "p_holds_clusters": 0.9417,
+        "p_holds_conversations": 0.9538,
+        "winner": "google_gemini-3.7-flash"
+      },
+      {
+        "kept_by_conversations_only": true,
+        "loser": "therapist",
+        "n_drawn_clustered": 41,
+        "n_shared": 47,
+        "p_holds_clusters": 0.9455,
+        "p_holds_conversations": 0.9501,
+        "winner": "mistral-large-v2"
+      }
+    ],
+    "holds": {
+      "clusters": 12,
+      "conversations": 14
+    },
+    "layers": {
+      "clusters": [
+        [
+          "deepseek-v4-flash",
+          "deepseek-v4-flash-thinking",
+          "gemma4",
+          "glm-5",
+          "glm-5.2",
+          "glm-5.3",
+          "google_gemini-3.1-pro-preview",
+          "google_gemini-3.7-flash",
+          "gpt-5.6-luna",
+          "gpt-5.6-sol",
+          "gpt-5.6-terra",
+          "gpt-oss-120b",
+          "kimi-k3",
+          "mistral-large-v2",
+          "mistral-medium-3.5",
+          "qwen3.5-122b",
+          "qwen3.5-int4"
+        ],
+        [
+          "llama-3.1-70b",
+          "qwen3.8-27b",
+          "qwen3.8-flash-next"
+        ],
+        [
+          "therapist"
+        ]
+      ],
+      "conversations": [
+        [
+          "deepseek-v4-flash",
+          "deepseek-v4-flash-thinking",
+          "gemma4",
+          "glm-5",
+          "glm-5.2",
+          "glm-5.3",
+          "google_gemini-3.1-pro-preview",
+          "google_gemini-3.7-flash",
+          "gpt-5.6-luna",
+          "gpt-5.6-sol",
+          "gpt-5.6-terra",
+          "gpt-oss-120b",
+          "kimi-k3",
+          "mistral-large-v2",
+          "qwen3.5-122b",
+          "qwen3.5-int4"
+        ],
+        [
+          "llama-3.1-70b",
+          "mistral-medium-3.5",
+          "qwen3.8-27b",
+          "qwen3.8-flash-next"
+        ],
+        [
+          "therapist"
+        ]
+      ]
+    },
+    "tested": 38,
+    "undominated": {
+      "clusters": 17,
+      "conversations": 16
+    },
+    "verdict_changed": 2,
+    "verdict_unchanged": 36
+  },
+  "not_clustered": {
+    "icare": "iHOPE sessions have no video ancestry in this repository; a cluster map would be a guess"
+  },
+  "reading": "A sensitivity analysis of the published dominance test, not a replacement for it. Drawing whole videos removes a dependency and costs precision at the same time, so a claim that stops holding may have stopped for either reason; the artefact reports both and decides neither.",
+  "samples": 10000,
+  "seed": 20260824,
+  "threshold": 0.95,
+  "track": "tneval-soap"
+}

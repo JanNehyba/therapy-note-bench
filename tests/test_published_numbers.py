@@ -468,6 +468,28 @@ def _threshold_is_not_a_probability() -> tuple[float, ...]:
     )
 
 
+def _clustered_sensitivity() -> tuple[float, ...]:
+    """The rubric's clustering, in the order the paragraph states it.
+
+    Conversations, the videos they come from, the conversations that share one,
+    the claims the clustered draw stops keeping, how many were kept before, and
+    how many systems the top group gains. All from the sensitivity artefact,
+    which is a separate file from the one the Group column is drawn from -- the
+    paragraph says the published column still draws conversations, and these
+    figures may not be read out of it.
+    """
+    found = json.loads((DOCS / "edges-tneval-soap-clustered.json").read_text(encoding="utf-8"))
+    grouping, comparison = found["clustering"], found["comparison"]
+    return (
+        float(grouping["conversations"]),
+        float(grouping["videos"]),
+        float(grouping["conversations_sharing_a_video"]),
+        float(comparison["holds"]["conversations"] - comparison["holds"]["clusters"]),
+        float(comparison["holds"]["conversations"]),
+        float(comparison["undominated"]["clusters"] - comparison["undominated"]["conversations"]),
+    )
+
+
 def _tested_groups() -> tuple[float, ...]:
     """Top-group size, systems, systems below the top group (rubric), then the
     same top-group and systems figures for PDSQI-9 and iCARE."""
@@ -659,6 +681,30 @@ CLAIMS = (
         because="the threshold and the counts in docs/edges-<track>.json, per track",
         covers=("0.95", "38", "14", "12", "1", "40", "9"),
         expected=_tested_claims,
+    ),
+    Claim(
+        where="docs/limitations.md",
+        phrase=(
+            "The 50 AnnoMI conversations are transcripts of 43 videos, and twelve of them share "
+            "a video with another conversation. The test above draws conversations, which counts "
+            "that dependency as evidence. Drawing whole videos instead costs two of the fourteen "
+            "rubric claims kept"
+        ),
+        kind="computed",
+        because=(
+            "the dominance test treats conversations as independent and they are not; "
+            "the figures come from the sensitivity artefact, not from the published one"
+        ),
+        covers=("50", "43", "twelve", "two", "fourteen"),
+        expected=lambda: _clustered_sensitivity()[:5],
+    ),
+    Claim(
+        where="docs/limitations.md",
+        phrase="and moves one system into the top group",
+        kind="computed",
+        because="the top group grows when a claim stops separating the pair it was about",
+        covers=("one",),
+        expected=lambda: _clustered_sensitivity()[5:],
     ),
     Claim(
         where="docs/limitations.md",
