@@ -89,6 +89,18 @@ therapist alone at the bottom; on PDSQI-9 20 of 21 share it; on iCARE 15 of
 tested claim is listed on
 [the methods page](https://jannehyba.github.io/therapy-note-bench/methods.html#groups).
 
+**What "held in 0.95 of the draws" is, and what it is not.** It is the share of
+draws in which the whole claim held: no leg behind, and somewhere ahead. It is
+not the probability that a system is really better than another, which would
+need a prior over how these systems differ and there is none here. It is not a
+statement about the table either. Each claim is tested by itself, and the 38
+rubric claims tested at the same threshold do not share a single error rate
+between them: keeping the chance of a wrong keep among all of them near 0.05
+would ask roughly 0.999 of each, and at that level six hold rather than
+fourteen. The counts at every threshold tried are published beside each other
+for that reason. A kept claim says this and no more: this pair, tested by
+itself, survived resampling the conversations it rests on.
+
 **And it is not only two judges disagreeing — one judge disagrees with
 itself.** Gemini's thinking budget was raised from 128 to 256 tokens and all
 51 000 questions were asked again. Nothing else changed: same model, same

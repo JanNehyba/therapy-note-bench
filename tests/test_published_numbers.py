@@ -445,6 +445,29 @@ def _tested_claims() -> tuple[float, ...]:
     return (0.95, *out)
 
 
+def _threshold_is_not_a_probability() -> tuple[float, ...]:
+    """What the paragraph about the threshold states, in the order it states it.
+
+    The family-wise level is the Bonferroni one for the rubric's own number of
+    tested claims, rounded to the three decimals the sentence prints: keeping
+    the chance of a single wrong keep across `tested` claims near 0.05 asks
+    `1 - 0.05 / tested` of each. The count beside it is the artefact's own
+    tally at 0.99, which is the published threshold nearest that level -- the
+    sentence says "at that level six hold" and six is what 0.99 gives, so the
+    two figures have to be read together or not at all.
+    """
+    found = _edges("tneval-soap")
+    tested = found["counts"]["tested"]
+    return (
+        0.95,
+        float(tested),
+        0.05,
+        round(1 - 0.05 / tested, 3),
+        float(found["counts"]["holds"]["0.99"]),
+        float(found["counts"]["holds"]["0.95"]),
+    )
+
+
 def _tested_groups() -> tuple[float, ...]:
     """Top-group size, systems, systems below the top group (rubric), then the
     same top-group and systems figures for PDSQI-9 and iCARE."""
@@ -636,6 +659,32 @@ CLAIMS = (
         because="the threshold and the counts in docs/edges-<track>.json, per track",
         covers=("0.95", "38", "14", "12", "1", "40", "9"),
         expected=_tested_claims,
+    ),
+    Claim(
+        where="docs/limitations.md",
+        phrase=(
+            '**What "held in 0.95 of the draws" is, and what it is not.**'
+            " It is the share of draws in which the whole claim held"
+        ),
+        kind="computed",
+        because="the threshold itself, named where the paragraph defines what it is not",
+        covers=("0.95",),
+        expected=lambda: (_threshold_is_not_a_probability()[0],),
+    ),
+    Claim(
+        where="docs/limitations.md",
+        phrase=(
+            "the 38 rubric claims tested at the same threshold do not share a single error rate "
+            "between them: keeping the chance of a wrong keep among all of them near 0.05 would "
+            "ask roughly 0.999 of each, and at that level six hold rather than fourteen"
+        ),
+        kind="computed",
+        because=(
+            "a bootstrap survival share is neither a probability of being better nor a "
+            "family-wise guarantee, and the audit of 2026-09-15 found the page implying both"
+        ),
+        covers=("38", "0.05", "0.999", "six", "fourteen"),
+        expected=lambda: _threshold_is_not_a_probability()[1:],
     ),
     Claim(
         where="docs/limitations.md",
