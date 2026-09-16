@@ -13,8 +13,8 @@ it is not evidence that those changes are implemented. In particular, protocol
 2.1.0 has not replaced the executable 2.0.0 at this baseline.
 
 **Repairs recorded later the same day**, each in the finding it answers below:
-A01 (both repositories), A02, A03, A05, A06, A07, A08, A09, A11 and A13 carry a
-status line naming the commit; A04 is bounded by decision D6 in protocol 2.1.0 rather than completed;
+A01 (both repositories), A02, A03, A05, A06, A07, A08, A09, A11, A12 and A13
+carry a status line naming the commit; A04 is bounded by decision D6 in protocol 2.1.0 rather than completed;
 the pool defect found while building the ledger (a cited reference's DOI as a
 record key) is repaired in commit `926fa4c`. Findings without a status line are
 still open.
@@ -378,6 +378,16 @@ Evidence: [language contrast](../packages/therapy-note-eval-core/src/therapy_not
 [import adapters](../packages/therapy-note-eval-core/src/therapy_note_eval/legacy.py).
 
 ### A12 — Gen-1 remains useful, with separate statistical and reporting limits
+
+**Status: the statistical half repaired on 2026-09-16.** `tnb edges --clustered`
+runs the dominance test drawing whole AnnoMI videos beside the published run and
+writes the comparison to `docs/clustered-edges-<track>.json`: on the rubric two of
+the fourteen kept claims fall and the top group gains a system, on PDSQI-9 nothing
+moves, and iCARE is not clustered because iHOPE has no video ancestry here. The
+published artefacts and the Group column are untouched. `docs/limitations.md` now
+says what a survival share is not, and `docs/landscape.md` reads its count of public
+resources as a date. The claims in the rest of the documentation against the newer
+sources stay open. The text below is the finding as audited.
 
 **Priority 2, separate analysis.** Preserve historical instruments and rows. The
 new weighting analysis is explicitly a sensitivity analysis, not repaired original
