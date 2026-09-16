@@ -52,3 +52,19 @@ uv run python research/gen2/catalog/convert_to_registry.py # draft-registry.json
 ```
 
 Edit `catalog.json` and regenerate; never edit the page or the draft by hand.
+
+## What comes next
+
+The draft is the input to the human review, not a shortcut past it. Producing
+the sheet a person answers takes one command against a study started on the
+current protocol:
+
+```sh
+tnb gen2 --workspace local/gen2-research-v3 research registry-sheet --registry research/gen2/catalog/draft-registry.json
+```
+
+Every source, evidence line and construct arrives as its own subject with its
+own reason, so the sheet is long by design: a single decision covering many
+subjects is exactly what the registry refuses to accept later. Nothing is
+frozen until those answers exist, and the origin references the diagnostics
+mark as placeholders have to become real records first.

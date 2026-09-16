@@ -284,6 +284,36 @@ def test_a_verbatim_proposal_name_is_the_only_way_to_a_recorded_origin(proposals
     assert convert_to_registry.origin_reference(two, ids)[0] == "catalog:K01"
 
 
+def test_the_draft_is_something_the_workflow_can_actually_put_to_a_person(store, draft):
+    """Loading is not enough: the point of the conversion is the review step.
+
+    `registry-sheet` is the command that turns a draft into the questions a
+    human answers, and a draft that loads but produces no sheet would have
+    moved the wall one step further back without saying so. Every source,
+    evidence line and construct has to arrive as its own subject, because a
+    sheet that bundles them would take one decision for many.
+    """
+    from therapy_note_eval import development, research
+
+    protocol = _json(REPO / "research" / "gen2" / "protocol.json")
+    proposals = _json(REPO / "research" / "gen2" / "prior-proposals.json")
+    queries = {"queries": [{"id": "q1", "database": "PubMed", "query": "toy query"}]}
+    active = research.initialize(store, protocol, queries, proposals)
+
+    sheet = development.registry_sheet(store, active, draft)
+    subjects = {item["id"] for item in sheet["items"]}
+
+    assert {"source:" + s["id"] for s in draft["sources"]} <= subjects
+    assert {"evidence:" + e["id"] for e in draft["evidence"]} <= subjects
+    assert {"construct:" + c["id"] for c in draft["constructs"]} <= subjects
+    assert "scope" in subjects
+    assert len(subjects) == len(sheet["items"]), "a subject appears twice on the sheet"
+    assert sheet["stage"] == "registry_review" and sheet["mode"] == "independent"
+    # The sheet asks; it never answers. Nothing on it may arrive pre-decided.
+    assert not any(item.get("decision") or item.get("human_votes") for item in sheet["items"])
+    assert all(item["require_reason"] for item in sheet["items"])
+
+
 # --- public safety ----------------------------------------------------------
 
 DIACRITIC = re.compile(
