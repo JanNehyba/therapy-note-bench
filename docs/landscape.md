@@ -7,7 +7,7 @@ something could not be verified, it says so.*
 ## Short version
 
 For the specific task of **generating a clinical note from a psychotherapy
-session transcript**, there are exactly two public resources, both from the last
+session transcript**, this survey found two public resources, both from the last
 eighteen months, and neither is an established standard:
 
 | | iCARE / iHOPE | TN-Eval |
@@ -22,6 +22,15 @@ eighteen months, and neither is an established standard:
 
 Nobody has re-run either of them on current models. That is the gap this
 repository fills.
+
+**Read the count as a date, not as a fact about the field.** It says what was
+public and reusable on the day above, and a later scoping search, on the date
+its own records carry, already found work on the same task that this table does
+not list, because the data behind it is not public: a comparison of
+LLM-generated with clinician-written psychotherapy session summaries, in Hebrew,
+on real sessions from a community clinic. What that search sought, retrieved and
+read is in the [Gen-2 catalog](https://jannehyba.github.io/therapy-note-bench/gen2-catalog.html), and it is a bounded search of
+its own rather than a standing claim that nothing else exists.
 
 Two more corpora from the iCARE group cover the adjacent task of *counseling
 summarization* — **MentalCLOUDS** (191 sessions, JMIR Mental Health 2024) and
