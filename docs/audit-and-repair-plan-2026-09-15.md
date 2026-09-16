@@ -13,8 +13,8 @@ it is not evidence that those changes are implemented. In particular, protocol
 2.1.0 has not replaced the executable 2.0.0 at this baseline.
 
 **Repairs recorded later the same day**, each in the finding it answers below:
-A01 (both repositories), A02, A03, A05, A06, A07, A08, A09 and A13 carry a status
-line naming the commit; A04 is bounded by decision D6 in protocol 2.1.0 rather than completed;
+A01 (both repositories), A02, A03, A05, A06, A07, A08, A09, A11 and A13 carry a
+status line naming the commit; A04 is bounded by decision D6 in protocol 2.1.0 rather than completed;
 the pool defect found while building the ledger (a cited reference's DOI as a
 record key) is repaired in commit `926fa4c`. Findings without a status line are
 still open.
@@ -351,6 +351,14 @@ measurement onto every note. Clinicians alone do not validate client reading,
 supervision use or documentation audit expertise.
 
 ### A11 — Language comparisons require more than paired filenames
+
+**Status: the tool is in place as of 2026-09-16 (commit `6f6c2a0`); the run is not.**
+`tools/translate_annomi_cs.py` records the translator as an instrument chosen by a
+measured back-translation check, verifies each conversation turn for turn, carries a
+human meaning review, and establishes an EN/CS pair only where both held. Nothing has
+been selected or translated yet: the protocol still records the instrument as not yet
+selected, and the ten earlier translations stay superseded and unused. The text below
+is the finding as audited.
 
 **Priority 2, partly implemented.** The new contrast code preserves model and
 protocol comparability and reports missing pairs. It correctly warns that equal
