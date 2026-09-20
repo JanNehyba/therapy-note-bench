@@ -28,6 +28,11 @@ known-source retrieval inventory, not an included-study table.
 blind spots, a pilot proposal and the comparison with the earlier criteria map.
 `catalog/README.md` explains its provenance; the page under `docs/` and the draft
 registry beside it are generated from it, and hand edits to either fail the suite.
+`catalog/source-properties.json` is the inductive half of the framework: what each
+read source itself defines as a property of note quality, in its own words and with
+its location, mapped to candidates only afterwards. A literature-origin candidate
+must rest on at least one such property; a property no candidate covers is listed
+as open in the catalog until the investigator decides.
 
 Use JBI scoping-review guidance with explicitly recorded adaptations. Report with
 PRISMA-ScR and PRISMA-S; neither checklist by itself establishes review quality.

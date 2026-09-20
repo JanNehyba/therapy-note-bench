@@ -25,7 +25,11 @@ apart from the support found later. Its readable form is the
 [candidate catalog page](https://jannehyba.github.io/therapy-note-bench/gen2-catalog.html);
 its executable form is a draft registry that the core loads and refuses to freeze,
 with a diagnostic for every entry that did not become an operational item. All of it
-is an AI-authored proposal; no entry has been accepted by a person.
+is an AI-authored proposal; no entry has been accepted by a person. Beside the
+catalog, a source-first table lists what every read source itself defines as a
+property of note quality, in the source's own words, so that a candidate said to
+come from the literature can be traced to the passage it came from and a property
+the catalog does not cover is visible rather than absent.
 
 Prior drafts may contribute useful ideas without automatically becoming validated
 criteria. Igor's QA idea is a candidate method for measuring retained information.

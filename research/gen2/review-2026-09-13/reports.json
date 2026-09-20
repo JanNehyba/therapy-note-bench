@@ -2368,9 +2368,9 @@
     }
    ],
    "reading": {
-    "basis": "abstract",
+    "basis": "full_text",
     "ai_read": true,
-    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "ai_read_basis": "read by the coding assistant on 2026-09-20 for the source-first property extraction; the sections defining quality properties in full, the rest skimmed",
     "human_verified": null,
     "human_verification": null
    },
@@ -2378,7 +2378,7 @@
     "registry_included": true,
     "use": "evidence",
     "layer": "transfer",
-    "verification": "abstract",
+    "verification": "full_text",
     "basis": "local catalog registry_data.py / synthesis_data.py"
    },
    "notes": [],
@@ -2524,9 +2524,9 @@
     }
    ],
    "reading": {
-    "basis": "abstract",
+    "basis": "full_text",
     "ai_read": true,
-    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "ai_read_basis": "read by the coding assistant on 2026-09-20 for the source-first property extraction; the sections defining quality properties in full, the rest skimmed",
     "human_verified": null,
     "human_verification": null
    },
@@ -2534,7 +2534,7 @@
     "registry_included": true,
     "use": "evidence",
     "layer": "direct",
-    "verification": "abstract",
+    "verification": "full_text",
     "basis": "local catalog registry_data.py / synthesis_data.py"
    },
    "notes": [],
@@ -2680,9 +2680,9 @@
     }
    ],
    "reading": {
-    "basis": "abstract",
+    "basis": "full_text",
     "ai_read": true,
-    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "ai_read_basis": "read by the coding assistant on 2026-09-20 for the source-first property extraction; the sections defining quality properties in full, the rest skimmed",
     "human_verified": null,
     "human_verification": null
    },
@@ -2690,7 +2690,7 @@
     "registry_included": true,
     "use": "evidence",
     "layer": "requirements",
-    "verification": "abstract",
+    "verification": "full_text",
     "basis": "local catalog registry_data.py / synthesis_data.py"
    },
    "notes": [],
@@ -2836,9 +2836,9 @@
     }
    ],
    "reading": {
-    "basis": "abstract",
+    "basis": "full_text",
     "ai_read": true,
-    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "ai_read_basis": "read by the coding assistant on 2026-09-20 for the source-first property extraction; the sections defining quality properties in full, the rest skimmed",
     "human_verified": null,
     "human_verification": null
    },
@@ -2846,7 +2846,7 @@
     "registry_included": true,
     "use": "evidence",
     "layer": "requirements",
-    "verification": "abstract",
+    "verification": "full_text",
     "basis": "local catalog registry_data.py / synthesis_data.py"
    },
    "notes": [],
@@ -2990,9 +2990,9 @@
     }
    ],
    "reading": {
-    "basis": "abstract",
+    "basis": "full_text",
     "ai_read": true,
-    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "ai_read_basis": "read by the coding assistant on 2026-09-20 for the source-first property extraction; the sections defining quality properties in full, the rest skimmed",
     "human_verified": null,
     "human_verification": null
    },
@@ -3000,7 +3000,7 @@
     "registry_included": true,
     "use": "evidence",
     "layer": "direct",
-    "verification": "abstract",
+    "verification": "full_text",
     "basis": "local catalog registry_data.py / synthesis_data.py"
    },
    "notes": [],
@@ -3277,9 +3277,9 @@
     }
    ],
    "reading": {
-    "basis": "abstract",
+    "basis": "full_text",
     "ai_read": true,
-    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "ai_read_basis": "read by the coding assistant on 2026-09-20 for the source-first property extraction; the sections defining quality properties in full, the rest skimmed",
     "human_verified": null,
     "human_verification": null
    },
@@ -3287,7 +3287,7 @@
     "registry_included": true,
     "use": "evidence",
     "layer": "transfer",
-    "verification": "abstract",
+    "verification": "full_text",
     "basis": "local catalog registry_data.py / synthesis_data.py"
    },
    "notes": [],
@@ -3358,7 +3358,7 @@
   }
  ],
  "derived_from": {
-  "report-map.json": "0b8166345232fb1f12ff5c182a9d6d1486f6776b881acf3bd55489c32fc71cd0",
+  "report-map.json": "6eb4f6c20b7f0afbb027f542283888f6cc132c89acfc1910afb88d1de26d9a8d",
   "fulltext-retrieval-log.json": "52ddeaedfdda580148007182ec7d0c78c4e1dd1450704dc8c736199418133611",
   "screening-decisions.json": "2f98644de1101880fe54fa705b3cf7ece932803e07b51d56be35e96bbd145a80",
   "screening-strata.json": "7f5cec8ab7f51c80bba97ceb1e359ff68b9ad7e39122c8211606d14a7e7bf21b",

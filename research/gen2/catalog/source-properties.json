@@ -1,0 +1,2241 @@
+{
+  "version": "source-properties-v1",
+  "date": "2026-09-20",
+  "method": "Source-first extraction. For every source read in full, every property of note quality the source itself defines or measures is listed in the source's own words with its location, without reference to the catalog. Mapping to catalog candidates is a second column, done afterwards. This is the half of a best-fit framework synthesis that the round of 2026-09-13 lacked: that round collected evidence to support candidates already on the table, and could not say whether anything in the sources had been missed.",
+  "rule": "A candidate with no source property behind it is listed as such and stands on its declared origin. A source property no candidate covers is listed as unmapped with the reason, and is either a new candidate or a recorded non-adoption. A literature-origin candidate must have at least one source property behind it, or its origin is wrong.",
+  "kinds": {
+    "dimension": "a top-level dimension the source scores",
+    "attribute": "an item of a rating instrument",
+    "content_items": "content the source expects a note to carry, by section or list",
+    "content_aspect": "one aspect of a structured note framework",
+    "importance_grading": "how the source grades the essentiality of content",
+    "originator_rule": "a rule about who said or observed what",
+    "epistemic_rule": "a rule about the certainty status of content",
+    "error_type": "a category of fidelity error",
+    "general_item": "a requirement across sections",
+    "format_rule": "a rule about the note's form or structure",
+    "human_judgement": "a question a person answers about the note",
+    "rating_criterion": "a criterion human raters scored summaries on",
+    "summary_dimension": "a quality dimension of summaries in general (transfer)",
+    "acceptability_parameter": "a parameter of whether a professional would use the system",
+    "requirement": "an element a guideline or regulation requires",
+    "edit_category": "a category of what clinicians change in AI drafts",
+    "edit_theme": "a recurring pattern of edits",
+    "edit_code": "one code in the edit framework",
+    "survey_category": "what patients reported finding in their records",
+    "theme": "a theme of a qualitative synthesis",
+    "coding_category": "a category of an observational coding system",
+    "evaluation_construct": "a construct of a system-level evaluation taxonomy",
+    "method_metric": "a metric or rating format, not a property of a note",
+    "scoring_rule": "a rule about when something counts",
+    "design_finding": "a finding that changes how a property should be measured",
+    "abstract_claim": "what an abstract states, when the full text was not read"
+  },
+  "counts": {
+    "sources_read_in_full": 24,
+    "sources_abstract_only": 7,
+    "sources_defining_properties": 26,
+    "properties": 140,
+    "properties_mapped": 130,
+    "properties_unmapped": 10,
+    "candidates_with_source_property": 30,
+    "candidates_without_source_property": 1
+  },
+  "sources": [
+    {
+      "id": "S1",
+      "citation": "Shah et al. TN-Eval: Rubric and Evaluation Protocols for Measuring the Quality of Behavioral Therapy Notes. Proc. 63rd ACL (Industry Track), 2025, pp. 178-192.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": null,
+      "properties": [
+        {
+          "pid": "S1-p01",
+          "label": "Completeness",
+          "kind": "dimension",
+          "location": "Section 4, Evaluation Protocols",
+          "quote": "evaluates whether each rubric element appears in its corresponding note section ... the ratio of covered elements aggregated across sections",
+          "maps_to": [
+            "K05",
+            "K12"
+          ],
+          "mapping": "coverage of rubric elements, counted in the section they belong to"
+        },
+        {
+          "pid": "S1-p02",
+          "label": "Conciseness",
+          "kind": "dimension",
+          "location": "Section 4, Evaluation Protocols",
+          "quote": "measures whether each sentence contributes to a rubric item ... the score is the ratio of necessary sentences in a section",
+          "maps_to": [
+            "K11"
+          ],
+          "mapping": "share of sentences that carry a rubric item"
+        },
+        {
+          "pid": "S1-p03",
+          "label": "Faithfulness",
+          "kind": "dimension",
+          "location": "Section 4, Evaluation Protocols",
+          "quote": "checks whether a note's content is factually grounded in the therapy session. Errors are categorized into hallucination types",
+          "maps_to": [
+            "K01"
+          ],
+          "mapping": "grounding of content in the session"
+        },
+        {
+          "pid": "S1-p04",
+          "label": "Hallucination types: Out-of-nowhere, Misinterpreted Information, No Error",
+          "kind": "error_type",
+          "location": "Section 4.1, Human Evaluation Protocols",
+          "quote": "categorizing hallucinations into (1) Out-of-nowhere, (2) Misinterpreted Information, or (3) No Error",
+          "maps_to": [
+            "K01"
+          ],
+          "mapping": "the invented versus distorted split of K01"
+        },
+        {
+          "pid": "S1-p05",
+          "label": "Importance levels of rubric items",
+          "kind": "importance_grading",
+          "location": "Appendix A and C",
+          "quote": "Mandatory, Mandatory in certain circumstances, Highly recommended, Good to have, and Optional",
+          "maps_to": [
+            "K05"
+          ],
+          "mapping": "graded essentiality of content"
+        },
+        {
+          "pid": "S1-p06",
+          "label": "Subjective section items: chief complaint, symptoms, history, client's goals, homework from previous sessions, quotes",
+          "kind": "content_items",
+          "location": "Appendix A.1",
+          "quote": "Chief Complaint ... Importance: Mandatory; Symptoms ... Mandatory; History ... Mandatory; Client's Goals ... Highly recommended; Homework from Previous Sessions ... Highly recommended; Quotes ... Highly recommended",
+          "maps_to": [
+            "K05",
+            "K02"
+          ],
+          "mapping": "content bank; quotes as the client's exact words bear on the originator of a statement"
+        },
+        {
+          "pid": "S1-p07",
+          "label": "Objective section items: observed behavior, mental status, assessment tools, therapy activities, interventions",
+          "kind": "content_items",
+          "location": "Appendix A.2",
+          "quote": "Client's Observed Behavior ... Mandatory; Mental Status ... Mandatory; Assessment Tools ... Highly recommended; Therapy Activities ...; Interventions [A] ...; Interventions [B] ...",
+          "maps_to": [
+            "K05"
+          ],
+          "mapping": "content bank"
+        },
+        {
+          "pid": "S1-p08",
+          "label": "Objective section excludes self-report",
+          "kind": "originator_rule",
+          "location": "Appendix A.2, Definition",
+          "quote": "Avoid including any subjective statements or self-reported information from the client.",
+          "maps_to": [
+            "K02"
+          ],
+          "mapping": "the format itself separates who said what from what was observed"
+        },
+        {
+          "pid": "S1-p09",
+          "label": "Assessment section items: diagnosis, triggers, progress, analysis, response to interventions, treatment goals, stages of change",
+          "kind": "content_items",
+          "location": "Appendix A.3",
+          "quote": "Diagnosis/Symptoms ... Mandatory; Identifying Triggers; Progress ...; Analysis: The therapist's interpretation of how the client's subjective report and objective observations relate to their overall condition ...; Treatment Goals ...; Stages of Change ...",
+          "maps_to": [
+            "K05",
+            "K09"
+          ],
+          "mapping": "content bank; the Analysis item is a created relation between observations"
+        },
+        {
+          "pid": "S1-p10",
+          "label": "Assessment section holds hypotheses",
+          "kind": "epistemic_rule",
+          "location": "Appendix A.3, Definition",
+          "quote": "Summarize the clinical impressions and hypotheses regarding the client's issues.",
+          "maps_to": [
+            "K04"
+          ],
+          "mapping": "a hypothesis is the expected status of that content"
+        },
+        {
+          "pid": "S1-p11",
+          "label": "Plan section items: future interventions, follow-up, adjustment of medication or intervention, homework",
+          "kind": "content_items",
+          "location": "Appendix A.4",
+          "quote": "Future Interventions ... Mandatory; Follow-Up: Scheduling of the next session and any referrals ... Mandatory; Adjustment of Medication/Intervention Choice ... Mandatory in certain circumstances; Homework ... Highly recommended",
+          "maps_to": [
+            "K10",
+            "K05"
+          ],
+          "mapping": "the plan and next steps"
+        },
+        {
+          "pid": "S1-p12",
+          "label": "Safety concerns assessed and addressed",
+          "kind": "general_item",
+          "location": "Appendix A.5, General Items",
+          "quote": "Clearly reflect that the practitioner assessed for and addressed any safety concerns (e.g., suicide risks, self-harming behaviors, homicidal ideation, etc.). Importance: Mandatory",
+          "maps_to": [
+            "K08"
+          ],
+          "mapping": "risk as a mandatory cross-cutting item"
+        },
+        {
+          "pid": "S1-p13",
+          "label": "Culturally competent care evidenced in the note",
+          "kind": "general_item",
+          "location": "Appendix A.5, General Items",
+          "quote": "Evidence of treatment being provided in a culturally competent manner. Importance: Highly recommended",
+          "maps_to": [],
+          "mapping": "no candidate covers it: it is a property of the treatment shown in the note, not of the note's rendering of the session"
+        },
+        {
+          "pid": "S1-p14",
+          "label": "Professionalism: no derogatory description of others, no slang, descriptions rather than presumptuous adjectives",
+          "kind": "general_item",
+          "location": "Appendix A.5, Professionalism",
+          "quote": "Never describe other clients and staff in a derogatory manner. Avoid using slang. Descriptions of the patient's presenting problem should be used rather than presumptuous adjectives.",
+          "maps_to": [
+            "K14",
+            "K17",
+            "K30"
+          ],
+          "mapping": "stigmatising wording, third persons, and register"
+        },
+        {
+          "pid": "S1-p15",
+          "label": "Acceptance for clinical use",
+          "kind": "human_judgement",
+          "location": "Table 1, Acceptance",
+          "quote": "whether the therapist would accept the note for clinical use",
+          "maps_to": [
+            "K21",
+            "K23"
+          ],
+          "mapping": "a use judgement by a professional"
+        },
+        {
+          "pid": "S1-p16",
+          "label": "Section definitions are set by the provider organisation",
+          "kind": "format_rule",
+          "location": "Section 3, SOAP Note and Rubric creation",
+          "quote": "the exact definitions and information present in each of the sections are determined by the healthcare provider organization",
+          "maps_to": [
+            "K20"
+          ],
+          "mapping": "format is an organisational instruction"
+        },
+        {
+          "pid": "S1-p17",
+          "label": "Five-point Likert baseline per dimension",
+          "kind": "method_metric",
+          "location": "Section 4.1 and Table 1",
+          "quote": "5-point Likert baseline for comparison",
+          "maps_to": [],
+          "mapping": "a rating format, not a property; the paper reports it beside the fine-grained protocol"
+        }
+      ]
+    },
+    {
+      "id": "S2",
+      "citation": "Croxford et al. Development and validation of the provider documentation summarization quality instrument for large language models. J Am Med Inform Assoc, 2025. doi:10.1093/jamia/ocaf068. PMID 40323321.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": null,
+      "properties": [
+        {
+          "pid": "S2-p01",
+          "label": "Accurate",
+          "kind": "attribute",
+          "location": "Table 1",
+          "quote": "The summary is true and free of incorrect information",
+          "maps_to": [
+            "K01"
+          ],
+          "mapping": "direct"
+        },
+        {
+          "pid": "S2-p02",
+          "label": "Cited",
+          "kind": "attribute",
+          "location": "Table 1",
+          "quote": "The summary includes citations that are present and appropriate",
+          "maps_to": [
+            "K18"
+          ],
+          "mapping": "direct"
+        },
+        {
+          "pid": "S2-p03",
+          "label": "Comprehensible",
+          "kind": "attribute",
+          "location": "Table 1",
+          "quote": "The summary is clear, without ambiguity or sections that are difficult to understand",
+          "maps_to": [
+            "K13"
+          ],
+          "mapping": "direct"
+        },
+        {
+          "pid": "S2-p04",
+          "label": "Organized",
+          "kind": "attribute",
+          "location": "Table 1",
+          "quote": "The summary is well-formed and structured in a way that helps the reader understand the patient's clinical course",
+          "maps_to": [
+            "K12"
+          ],
+          "mapping": "direct"
+        },
+        {
+          "pid": "S2-p05",
+          "label": "Succinct",
+          "kind": "attribute",
+          "location": "Table 1",
+          "quote": "The summary is brief, to the point, and without redundancy",
+          "maps_to": [
+            "K11",
+            "K31"
+          ],
+          "mapping": "brevity and absence of redundancy are two candidates here"
+        },
+        {
+          "pid": "S2-p06",
+          "label": "Stigmatizing",
+          "kind": "attribute",
+          "location": "Table 1",
+          "quote": "The summary is free of stigmatizing language",
+          "maps_to": [
+            "K14"
+          ],
+          "mapping": "direct"
+        },
+        {
+          "pid": "S2-p07",
+          "label": "Synthesized",
+          "kind": "attribute",
+          "location": "Table 1",
+          "quote": "The summary reflects an understanding of the patient's status and ability to develop a plan of care",
+          "maps_to": [
+            "K09"
+          ],
+          "mapping": "direct"
+        },
+        {
+          "pid": "S2-p08",
+          "label": "Thorough",
+          "kind": "attribute",
+          "location": "Table 1",
+          "quote": "The summary should thoroughly cover all pertinent patient issues",
+          "maps_to": [
+            "K05"
+          ],
+          "mapping": "coverage limited to what is pertinent"
+        },
+        {
+          "pid": "S2-p09",
+          "label": "Useful",
+          "kind": "attribute",
+          "location": "Table 1",
+          "quote": "The summary is relevant, providing valuable information",
+          "maps_to": [
+            "K07"
+          ],
+          "mapping": "relevance for the reader"
+        },
+        {
+          "pid": "S2-p10",
+          "label": "Pertinence condition on omissions",
+          "kind": "scoring_rule",
+          "location": "Methods, rubric",
+          "quote": "omissions ... are only considered when classified as pertinent or potentially pertinent",
+          "maps_to": [
+            "K05",
+            "K07"
+          ],
+          "mapping": "an omission counts only when the content mattered"
+        },
+        {
+          "pid": "S2-p11",
+          "label": "Up-to-Date and Consistent removed from the instrument",
+          "kind": "design_finding",
+          "location": "Methods, instrument development",
+          "quote": "Two PDQI-9 attributes, Up-to-Date and Consistent, were removed",
+          "maps_to": [
+            "K03",
+            "K26"
+          ],
+          "mapping": "a decision against separate temporal and consistency attributes, recorded as such"
+        },
+        {
+          "pid": "S2-p12",
+          "label": "Score correlates weakly with note length",
+          "kind": "design_finding",
+          "location": "Results, substantive validity",
+          "quote": "correlations between note length and scores for Succinct ... and Organized",
+          "maps_to": [
+            "K29"
+          ],
+          "mapping": "length is not controlled by the instrument"
+        }
+      ]
+    },
+    {
+      "id": "S3",
+      "citation": "Adhikary et al. Clinically Grounded AI-Scribing in Psychotherapy: Benchmarking LLMs Against Expert Documentation in the iCARE Framework. medRxiv 2025.06.25.25330252.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": null,
+      "properties": [
+        {
+          "pid": "S3-p01",
+          "label": "Patient Particulars",
+          "kind": "content_aspect",
+          "location": "aspect 1",
+          "quote": "socio-demographic details such as name, age, sex, contact information",
+          "maps_to": [
+            "K15",
+            "K19"
+          ],
+          "mapping": "identifiers the framework requires; the necessity question of K15 and the required elements of K19"
+        },
+        {
+          "pid": "S3-p02",
+          "label": "Clinical Identifiers",
+          "kind": "content_aspect",
+          "location": "aspect 2",
+          "quote": "the patient's clinical records and hospital interactions ... hospital name, ID",
+          "maps_to": [
+            "K16",
+            "K19"
+          ],
+          "mapping": "context of the record"
+        },
+        {
+          "pid": "S3-p03",
+          "label": "Referral Information",
+          "kind": "content_aspect",
+          "location": "aspect 3",
+          "quote": "the reasons for referral, the referee's name, department and hospital",
+          "maps_to": [
+            "K16"
+          ],
+          "mapping": "context of the record"
+        },
+        {
+          "pid": "S3-p04",
+          "label": "Therapist Information",
+          "kind": "content_aspect",
+          "location": "aspect 4",
+          "quote": "the therapist/clinician providing the counselling session",
+          "maps_to": [
+            "K16"
+          ],
+          "mapping": "author identification"
+        },
+        {
+          "pid": "S3-p05",
+          "label": "Past Session Information",
+          "kind": "content_aspect",
+          "location": "aspect 5",
+          "quote": "documentation and notes from previous therapy sessions that can provide context for ongoing treatment",
+          "maps_to": [
+            "K26",
+            "K03"
+          ],
+          "mapping": "longitudinal context"
+        },
+        {
+          "pid": "S3-p06",
+          "label": "Presenting Complaints",
+          "kind": "content_aspect",
+          "location": "aspect 6",
+          "quote": "Presenting Symptoms and Chief Complaints and their duration",
+          "maps_to": [
+            "K05"
+          ],
+          "mapping": "content bank"
+        },
+        {
+          "pid": "S3-p07",
+          "label": "History",
+          "kind": "content_aspect",
+          "location": "aspect 7",
+          "quote": "comprehensive overview of a patient's personal, medical, and mental health background",
+          "maps_to": [
+            "K05"
+          ],
+          "mapping": "content bank"
+        },
+        {
+          "pid": "S3-p08",
+          "label": "Crisis Markers",
+          "kind": "content_aspect",
+          "location": "aspect 8",
+          "quote": "indicators that suggest that the patient may be at risk of harming themselves or others",
+          "maps_to": [
+            "K08"
+          ],
+          "mapping": "direct"
+        },
+        {
+          "pid": "S3-p09",
+          "label": "Current Mental Status Examination",
+          "kind": "content_aspect",
+          "location": "aspect 9",
+          "quote": "an assessment of the most recent mental state",
+          "maps_to": [
+            "K05"
+          ],
+          "mapping": "content bank"
+        },
+        {
+          "pid": "S3-p10",
+          "label": "Psychotherapy Type",
+          "kind": "content_aspect",
+          "location": "aspect 10",
+          "quote": "the type of psychotherapy used in the treatment ... a short explanation of the choice",
+          "maps_to": [
+            "K05",
+            "K25"
+          ],
+          "mapping": "content bank; what the therapist did"
+        },
+        {
+          "pid": "S3-p11",
+          "label": "Psychotherapy Technique",
+          "kind": "content_aspect",
+          "location": "aspect 11",
+          "quote": "methods employed within the chosen psychotherapy type",
+          "maps_to": [
+            "K05",
+            "K25"
+          ],
+          "mapping": "content bank; what the therapist did"
+        },
+        {
+          "pid": "S3-p12",
+          "label": "Assessments",
+          "kind": "content_aspect",
+          "location": "aspect 12",
+          "quote": "psychological assessments, standardised tests ... clinical evaluations",
+          "maps_to": [
+            "K05"
+          ],
+          "mapping": "content bank"
+        },
+        {
+          "pid": "S3-p13",
+          "label": "Issues Discussed in Current Session",
+          "kind": "content_aspect",
+          "location": "aspect 13",
+          "quote": "special topics and concerns addressed during the most recent session",
+          "maps_to": [
+            "K05"
+          ],
+          "mapping": "content bank"
+        },
+        {
+          "pid": "S3-p14",
+          "label": "Reflections by the Therapist",
+          "kind": "content_aspect",
+          "location": "aspect 14",
+          "quote": "the insights and observations made by the therapist regarding the session",
+          "maps_to": [
+            "K25",
+            "K04"
+          ],
+          "mapping": "the therapist's own view, marked as such"
+        },
+        {
+          "pid": "S3-p15",
+          "label": "Clinical Diagnosis by Reviewer",
+          "kind": "content_aspect",
+          "location": "aspect 15",
+          "quote": "reviews conducted by qualified psychologists, updated diagnoses",
+          "maps_to": [
+            "K05"
+          ],
+          "mapping": "content bank"
+        },
+        {
+          "pid": "S3-p16",
+          "label": "Action Plan",
+          "kind": "content_aspect",
+          "location": "aspect 16",
+          "quote": "a structured plan for ongoing treatment and goals ... planned interventions, timelines, follow-up actions",
+          "maps_to": [
+            "K10"
+          ],
+          "mapping": "direct"
+        },
+        {
+          "pid": "S3-p17",
+          "label": "Next Session Details",
+          "kind": "content_aspect",
+          "location": "aspect 17",
+          "quote": "the date, time, location, mode of therapy ... and homework (if any)",
+          "maps_to": [
+            "K10"
+          ],
+          "mapping": "direct"
+        },
+        {
+          "pid": "S3-p18",
+          "label": "Temporal reasoning across sessions is where models struggle",
+          "kind": "design_finding",
+          "location": "Abstract",
+          "quote": "all models struggle with temporal reasoning",
+          "maps_to": [
+            "K03",
+            "K26"
+          ],
+          "mapping": "a reported failure mode"
+        }
+      ]
+    },
+    {
+      "id": "S4",
+      "citation": "Stetson et al. Assessing Electronic Note Quality Using the Physician Documentation Quality Instrument (PDQI-9). Appl Clin Inform 2012;3(2):164-174. doi:10.4338/aci-2011-11-ra-0070. PMC3347480, PMID 22577483.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": null,
+      "properties": [
+        {
+          "pid": "S4-p01",
+          "label": "Up-to-date",
+          "kind": "attribute",
+          "location": "Appendix (PDQI-9 form), as reproduced in S6 Table 1",
+          "quote": "The note contains the most recent test result recommendations.",
+          "maps_to": [
+            "K03"
+          ],
+          "mapping": "currency of content"
+        },
+        {
+          "pid": "S4-p02",
+          "label": "Accurate",
+          "kind": "attribute",
+          "location": "PDQI-9 form",
+          "quote": "The note is true. It is free of incorrect information.",
+          "maps_to": [
+            "K01"
+          ],
+          "mapping": "direct"
+        },
+        {
+          "pid": "S4-p03",
+          "label": "Thorough",
+          "kind": "attribute",
+          "location": "PDQI-9 form",
+          "quote": "The note is complete and documents all of the issues of importance to the patient.",
+          "maps_to": [
+            "K05"
+          ],
+          "mapping": "direct"
+        },
+        {
+          "pid": "S4-p04",
+          "label": "Useful",
+          "kind": "attribute",
+          "location": "PDQI-9 form",
+          "quote": "The note is extremely relevant, providing valuable information and/or analysis.",
+          "maps_to": [
+            "K07"
+          ],
+          "mapping": "relevance"
+        },
+        {
+          "pid": "S4-p05",
+          "label": "Organized",
+          "kind": "attribute",
+          "location": "PDQI-9 form",
+          "quote": "The note is well-formed and structured in a way that helps the reader understand the patient's clinical course.",
+          "maps_to": [
+            "K12"
+          ],
+          "mapping": "direct"
+        },
+        {
+          "pid": "S4-p06",
+          "label": "Comprehensible",
+          "kind": "attribute",
+          "location": "PDQI-9 form",
+          "quote": "The note is clear, without ambiguity or sections that are difficult to understand.",
+          "maps_to": [
+            "K13"
+          ],
+          "mapping": "direct"
+        },
+        {
+          "pid": "S4-p07",
+          "label": "Succinct",
+          "kind": "attribute",
+          "location": "PDQI-9 form",
+          "quote": "The note is brief, to the point, and without redundancy.",
+          "maps_to": [
+            "K11",
+            "K31"
+          ],
+          "mapping": "brevity and no redundancy"
+        },
+        {
+          "pid": "S4-p08",
+          "label": "Synthesized",
+          "kind": "attribute",
+          "location": "PDQI-9 form",
+          "quote": "The note reflects the author's understanding of the patient's status and ability to develop a plan of care.",
+          "maps_to": [
+            "K09"
+          ],
+          "mapping": "direct"
+        },
+        {
+          "pid": "S4-p09",
+          "label": "Internally consistent",
+          "kind": "attribute",
+          "location": "PDQI-9 form",
+          "quote": "No part of the note ignores or contradicts any other part.",
+          "maps_to": [],
+          "mapping": "no candidate: K26 is consistency between notes of a case, this is consistency inside one note"
+        },
+        {
+          "pid": "S4-p10",
+          "label": "Redundancy (copy and paste) measured separately",
+          "kind": "design_finding",
+          "location": "Methods and Conclusions",
+          "quote": "A Redundancy score was assessed for each note (the percentage of the note that was copied from other notes or reports) ... Tools for assessing note redundancy are required to complement use of PDQI-9.",
+          "maps_to": [
+            "K31"
+          ],
+          "mapping": "redundancy is a gap of the attribute instrument"
+        },
+        {
+          "pid": "S4-p11",
+          "label": "General Impression rating",
+          "kind": "method_metric",
+          "location": "Results, Table 1",
+          "quote": "General Impression",
+          "maps_to": [],
+          "mapping": "a holistic rating format, not a property"
+        }
+      ]
+    },
+    {
+      "id": "S6",
+      "citation": "Walker KJ, Wang A, Dunlop W, Rodda H, et al. The 9-Item Physician Documentation Quality Instrument (PDQI-9) score is not useful in evaluating EMR (scribe) note quality in Emergency Medicine. Appl Clin Inform 2017;8(3):981-993. doi:10.4338/ACI2017050080. PMID 28956888.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": null,
+      "properties": [
+        {
+          "pid": "S6-p01",
+          "label": "The nine PDQI-9 items",
+          "kind": "attribute",
+          "location": "Table 1",
+          "quote": "Up-to-date, Accuracy, Thorough, Useful, Organized, Comprehensible, Succinct, Synthesized and Internally Consistent",
+          "maps_to": [
+            "K03",
+            "K01",
+            "K05",
+            "K07",
+            "K12",
+            "K13",
+            "K11",
+            "K09"
+          ],
+          "mapping": "as in S4; internal consistency stays unmapped"
+        },
+        {
+          "pid": "S6-p02",
+          "label": "Major or minor errors or omissions",
+          "kind": "human_judgement",
+          "location": "Methods, Quality Tool",
+          "quote": "Did you find any major or minor errors or omissions in these patient notes?",
+          "maps_to": [
+            "K01",
+            "K05",
+            "K08"
+          ],
+          "mapping": "errors and omissions with a severity grade"
+        },
+        {
+          "pid": "S6-p03",
+          "label": "Usable to manage the patient in the primary doctor's absence",
+          "kind": "human_judgement",
+          "location": "Methods, Quality Tool",
+          "quote": "Could you use these notes to manage this patient in the ED if the primary doctor was absent?",
+          "maps_to": [
+            "K21"
+          ],
+          "mapping": "direct"
+        },
+        {
+          "pid": "S6-p04",
+          "label": "Omission categories found by raters",
+          "kind": "content_items",
+          "location": "Table 2",
+          "quote": "History of presenting complaint; Medical history, medications or allergies; Examination findings; Differential diagnosis; Results or outcomes of procedure; Final disposition on discharge from ED; Spelling errors",
+          "maps_to": [
+            "K05"
+          ],
+          "mapping": "domain-specific content bank of an emergency department"
+        },
+        {
+          "pid": "S6-p05",
+          "label": "Untrained raters without an agreed standard",
+          "kind": "design_finding",
+          "location": "Methods, Raters",
+          "quote": "Raters were not trained in the use of the tool and there was no pre-study agreement between raters about standards.",
+          "maps_to": [],
+          "mapping": "a condition of measurement (M1), not a property of a note"
+        }
+      ]
+    },
+    {
+      "id": "S7",
+      "citation": "Adhikary et al. Exploring the Efficacy of Large Language Models in Summarizing Mental Health Counseling Sessions: Benchmark Study. JMIR Ment Health 2024;11:e57306. doi:10.2196/57306. PMID 39042893.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": null,
+      "properties": [
+        {
+          "pid": "S7-p01",
+          "label": "Symptom and history exploration",
+          "kind": "content_aspect",
+          "location": "Methods, counseling components",
+          "quote": "symptom and history (SH) exploration",
+          "maps_to": [
+            "K05"
+          ],
+          "mapping": "content bank"
+        },
+        {
+          "pid": "S7-p02",
+          "label": "Patient discovery",
+          "kind": "content_aspect",
+          "location": "Methods, counseling components",
+          "quote": "patient discovery (PD)",
+          "maps_to": [
+            "K05"
+          ],
+          "mapping": "content bank"
+        },
+        {
+          "pid": "S7-p03",
+          "label": "Reflecting",
+          "kind": "content_aspect",
+          "location": "Methods, counseling components",
+          "quote": "reflective utterances ... therapists use concise utterances, allowing ample space for patients",
+          "maps_to": [
+            "K25",
+            "K05"
+          ],
+          "mapping": "the therapist's contribution, of interest to supervision"
+        },
+        {
+          "pid": "S7-p04",
+          "label": "Affective attitude",
+          "kind": "acceptability_parameter",
+          "location": "Table 6",
+          "quote": "How an individual feels about an intervention",
+          "maps_to": [
+            "K23"
+          ],
+          "mapping": "direct"
+        },
+        {
+          "pid": "S7-p05",
+          "label": "Burden",
+          "kind": "acceptability_parameter",
+          "location": "Table 6",
+          "quote": "Perceived amount of effort required to participate ... How much effort is required to understand the summarization",
+          "maps_to": [
+            "K23",
+            "K13"
+          ],
+          "mapping": "effort to use, partly comprehensibility"
+        },
+        {
+          "pid": "S7-p06",
+          "label": "Ethicality",
+          "kind": "acceptability_parameter",
+          "location": "Table 6",
+          "quote": "Extent to which this is a good fit with your organization's value system",
+          "maps_to": [
+            "K23"
+          ],
+          "mapping": "direct"
+        },
+        {
+          "pid": "S7-p07",
+          "label": "Coherence",
+          "kind": "acceptability_parameter",
+          "location": "Table 6",
+          "quote": "Extent to which the intervention is understood ... How well the summaries are understood",
+          "maps_to": [
+            "K23",
+            "K13"
+          ],
+          "mapping": "the one parameter that is a property of the text"
+        },
+        {
+          "pid": "S7-p08",
+          "label": "Opportunity costs",
+          "kind": "acceptability_parameter",
+          "location": "Table 6",
+          "quote": "The extent to which one would benefit from using this intervention",
+          "maps_to": [
+            "K23"
+          ],
+          "mapping": "direct"
+        },
+        {
+          "pid": "S7-p09",
+          "label": "Perceived effectiveness",
+          "kind": "acceptability_parameter",
+          "location": "Table 6 and Table 7",
+          "quote": "perceived effectiveness",
+          "maps_to": [
+            "K23"
+          ],
+          "mapping": "direct"
+        },
+        {
+          "pid": "S7-p10",
+          "label": "Extent of hallucination",
+          "kind": "error_type",
+          "location": "Methods, expert evaluation",
+          "quote": "0=extensive hallucination observed, 1=minimal hallucination observed, and 2=no hallucination observed",
+          "maps_to": [
+            "K01"
+          ],
+          "mapping": "a coarse fidelity grade"
+        },
+        {
+          "pid": "S7-p11",
+          "label": "Automatic metrics diverge from expert judgement",
+          "kind": "design_finding",
+          "location": "Conclusions",
+          "quote": "expert assessments indicate that these models are not yet reliable for clinical application",
+          "maps_to": [],
+          "mapping": "a finding about methods (ME10), not a property"
+        }
+      ]
+    },
+    {
+      "id": "S8",
+      "citation": "Scialom et al. QuestEval: Summarization Asks for Fact-based Evaluation. EMNLP 2021, pp. 6594-6604.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": null,
+      "properties": [
+        {
+          "pid": "S8-p01",
+          "label": "Consistency",
+          "kind": "summary_dimension",
+          "location": "Experiments, SummEval annotation",
+          "quote": "the proportion of facts in the summary corresponding to facts in the original text",
+          "maps_to": [
+            "K01"
+          ],
+          "mapping": "transfer from news summarisation"
+        },
+        {
+          "pid": "S8-p02",
+          "label": "Coherence",
+          "kind": "summary_dimension",
+          "location": "Experiments, SummEval annotation",
+          "quote": "how well-structured and well-organized is the summary",
+          "maps_to": [
+            "K12"
+          ],
+          "mapping": "transfer"
+        },
+        {
+          "pid": "S8-p03",
+          "label": "Fluency",
+          "kind": "summary_dimension",
+          "location": "Experiments, SummEval annotation",
+          "quote": "how fluent the summary is to read",
+          "maps_to": [
+            "K30"
+          ],
+          "mapping": "transfer; the only source that rates fluency on its own"
+        },
+        {
+          "pid": "S8-p04",
+          "label": "Relevance",
+          "kind": "summary_dimension",
+          "location": "Experiments, SummEval annotation",
+          "quote": "the ratio between important and excess information in the summary",
+          "maps_to": [
+            "K07",
+            "K11"
+          ],
+          "mapping": "transfer; important versus excess"
+        }
+      ]
+    },
+    {
+      "id": "S9",
+      "citation": "Fabbri et al. QAFactEval: Improved QA-Based Factual Consistency Evaluation for Summarization. NAACL 2022, pp. 2587-2601.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": null,
+      "properties": [
+        {
+          "pid": "S9-p01",
+          "label": "Factual consistency",
+          "kind": "summary_dimension",
+          "location": "Abstract and Section 1",
+          "quote": "Factual consistency is an essential quality of summaries",
+          "maps_to": [
+            "K01"
+          ],
+          "mapping": "transfer; the method behind QA-based checking"
+        }
+      ]
+    },
+    {
+      "id": "S10",
+      "citation": "Min et al. FActScore: Fine-grained Atomic Evaluation of Factual Precision in Long Form Text Generation. EMNLP 2023, pp. 12076-12100.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": null,
+      "properties": [
+        {
+          "pid": "S10-p01",
+          "label": "Factual precision over atomic facts",
+          "kind": "summary_dimension",
+          "location": "Abstract",
+          "quote": "breaks a generation into a series of atomic facts and computes the percentage of atomic facts supported by a reliable knowledge source",
+          "maps_to": [
+            "K01"
+          ],
+          "mapping": "transfer; defines the atomic claim as the unit"
+        }
+      ]
+    },
+    {
+      "id": "S18",
+      "citation": "Keren L, Klein A, Bar-Shachar Y, Liakata M, Atzil-Slonim D et al. Clinical Summaries of Social Media Timelines for Mental Health Monitoring: Human Versus Large Language Model. JMIR Form Res 2026. PMID 41894679, PMC13069367.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": null,
+      "properties": [
+        {
+          "pid": "S18-p01",
+          "label": "Salient meaning preservation",
+          "kind": "rating_criterion",
+          "location": "Evaluation Procedure",
+          "quote": "retaining essential clinical information while discarding less important details",
+          "maps_to": [
+            "K05",
+            "K07"
+          ],
+          "mapping": "coverage of what matters"
+        },
+        {
+          "pid": "S18-p02",
+          "label": "Factual consistency",
+          "kind": "rating_criterion",
+          "location": "Evaluation Procedure",
+          "quote": "ensuring the summary accurately reflects the timeline's content without introducing errors or hallucinations",
+          "maps_to": [
+            "K01"
+          ],
+          "mapping": "direct"
+        },
+        {
+          "pid": "S18-p03",
+          "label": "Personalization, or diversity",
+          "kind": "rating_criterion",
+          "location": "Evaluation Procedure",
+          "quote": "capturing the individual's unique voice and experiences, avoiding generic language",
+          "maps_to": [
+            "K28"
+          ],
+          "mapping": "direct"
+        },
+        {
+          "pid": "S18-p04",
+          "label": "General usefulness and aspect-specific usefulness",
+          "kind": "rating_criterion",
+          "location": "Methods, human ratings",
+          "quote": "meaning preservation / general usefulness, and aspect-specific usefulness for three core clinical aspects",
+          "maps_to": [
+            "K07",
+            "K21"
+          ],
+          "mapping": "usefulness for a reader with a purpose"
+        },
+        {
+          "pid": "S18-p05",
+          "label": "Semantic and surface linguistic diversity",
+          "kind": "method_metric",
+          "location": "Methods, Semantic Diversity and Surface Diversity",
+          "quote": "the mean pairwise ROUGE scores over all pairs of summaries within a system. Lower self-ROUGE scores signify higher surface diversity",
+          "maps_to": [
+            "K28"
+          ],
+          "mapping": "the proxy of ME17"
+        }
+      ]
+    },
+    {
+      "id": "S19",
+      "citation": "Keren L, Klein A, Bar-Shachar Y, Liakata M, Atzil-Slonim D. A comparative evaluation of LLM-generated and clinician-written psychotherapy session summaries. Psychother Res 2026. doi:10.1080/10503307.2026.2729093. PMID 42715612.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": null,
+      "properties": [
+        {
+          "pid": "S19-p01",
+          "label": "Factual Consistency",
+          "kind": "rating_criterion",
+          "location": "Current Study, criteria",
+          "quote": "the extent to which the summary accurately reflected the content of the session without introducing information not present in, or observations not grounded in, the original material",
+          "maps_to": [
+            "K01"
+          ],
+          "mapping": "direct, including ungrounded observations"
+        },
+        {
+          "pid": "S19-p02",
+          "label": "Salient Meaning Preservation",
+          "kind": "rating_criterion",
+          "location": "Current Study, criteria",
+          "quote": "the extent to which the summary retained the most important and clinically relevant content while excluding less central details",
+          "maps_to": [
+            "K05",
+            "K07"
+          ],
+          "mapping": "graded coverage"
+        },
+        {
+          "pid": "S19-p03",
+          "label": "Clinical Value",
+          "kind": "rating_criterion",
+          "location": "Current Study, criteria",
+          "quote": "the depth of clinical understanding of the summary, including its ability to convey nuances, integrate theoretical perspectives, and reflect therapeutic significance",
+          "maps_to": [
+            "K09"
+          ],
+          "mapping": "synthesis and interpretation; only partly covered"
+        },
+        {
+          "pid": "S19-p04",
+          "label": "MIND components: main topics, patient's self-states, therapist interventions, dyadic relationship, micro-level outcome, context, additional comments",
+          "kind": "content_aspect",
+          "location": "Current Study, MIND framework",
+          "quote": "(1) Main Topics Discussed ... (2) Patient's Self-State(s) ... (3) Therapist Interventions ... (4) Dyadic Relationship ... (5) Patient's Micro-Level Outcome ... (6) Context ... (7) Additional Comments",
+          "maps_to": [
+            "K05",
+            "K25"
+          ],
+          "mapping": "a content bank for session summaries; therapist interventions and the dyad are what supervision reads"
+        },
+        {
+          "pid": "S19-p05",
+          "label": "Length aligned between clinician and model summaries",
+          "kind": "design_finding",
+          "location": "Method, summary generation",
+          "quote": "length aligned between sources",
+          "maps_to": [
+            "K29"
+          ],
+          "mapping": "the only study that controlled length"
+        }
+      ]
+    },
+    {
+      "id": "S13",
+      "citation": "American Psychological Association. Record Keeping Guidelines. Am Psychol 2007;62(9):993-1004. doi:10.1037/0003-066X.62.9.993.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": null,
+      "properties": [
+        {
+          "pid": "S13-p01",
+          "label": "Legible and accurate entries made promptly",
+          "kind": "requirement",
+          "location": "Guideline 1, Application",
+          "quote": "legible and accurate entries are made in client records as soon as is practicable after a service is rendered",
+          "maps_to": [
+            "K01",
+            "K13"
+          ],
+          "mapping": "accuracy and legibility"
+        },
+        {
+          "pid": "S13-p02",
+          "label": "Content of the client file: identifying data, contact information, fees, guardianship, consent, waivers, mandated disclosures, presenting complaint or diagnosis, plan for services, health and developmental history",
+          "kind": "requirement",
+          "location": "Guideline 2, Application",
+          "quote": "identifying data ...; contact information ...; fees and billing information; ... documentation of informed consent ...; presenting complaint, diagnosis, or basis for request for services; plan for services, updated as appropriate ...; health and developmental history",
+          "maps_to": [
+            "K16",
+            "K19",
+            "K10"
+          ],
+          "mapping": "required elements and the plan"
+        },
+        {
+          "pid": "S13-p03",
+          "label": "Per contact: date and duration, types of services, nature of intervention, assessment of client status",
+          "kind": "requirement",
+          "location": "Guideline 2, Application",
+          "quote": "date of service and duration of session; types of services ...; nature of professional intervention or contact ...; formal or informal assessment of client status",
+          "maps_to": [
+            "K16",
+            "K05"
+          ],
+          "mapping": "context of the entry and its content"
+        },
+        {
+          "pid": "S13-p04",
+          "label": "Circumstantial content: client responses to interventions, current risk factors, emergency interventions, plans for future interventions, qualitative aspects of the interaction, prognosis, assessment data, consultations",
+          "kind": "requirement",
+          "location": "Guideline 2, Application",
+          "quote": "client responses or reactions to professional interventions; current risk factors in relation to dangerousness to self or others; ... plans for future interventions; information describing the qualitative aspects of the professional-client interaction; prognosis; ...",
+          "maps_to": [
+            "K05",
+            "K08",
+            "K10",
+            "K25"
+          ],
+          "mapping": "content bank, risk, plan, and the interaction a supervisor reads"
+        },
+        {
+          "pid": "S13-p05",
+          "label": "Preserving the context of records",
+          "kind": "requirement",
+          "location": "Guideline 8",
+          "quote": "attentive to the situational context in which records are created and how that context may influence the content of those records",
+          "maps_to": [
+            "K16"
+          ],
+          "mapping": "direct"
+        },
+        {
+          "pid": "S13-p06",
+          "label": "Multiple client records",
+          "kind": "requirement",
+          "location": "Guideline 11",
+          "quote": "documentation procedures when conducting couple, family, or group therapy in order to respect the privacy and confidentiality of all parties",
+          "maps_to": [
+            "K17"
+          ],
+          "mapping": "direct"
+        },
+        {
+          "pid": "S13-p07",
+          "label": "Confidentiality of records",
+          "kind": "requirement",
+          "location": "Guideline 3",
+          "quote": "Confidentiality of Records",
+          "maps_to": [
+            "K15"
+          ],
+          "mapping": "what may be recorded and shared"
+        },
+        {
+          "pid": "S13-p08",
+          "label": "Guidelines expired by their own terms",
+          "kind": "design_finding",
+          "location": "Front matter",
+          "quote": "scheduled to expire",
+          "maps_to": [],
+          "mapping": "a limitation of the source, recorded in the catalog"
+        }
+      ]
+    },
+    {
+      "id": "S14",
+      "citation": "Decree No. 444/2024 Coll., on medical documentation (Vyhlaska c. 444/2024 Sb., o zdravotnicke dokumentaci). Ministry of Health of the Czech Republic, adopted 2024-12-19, in force from 2025-01-01.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": null,
+      "properties": [
+        {
+          "pid": "S14-p01",
+          "label": "Identification of the provider",
+          "kind": "requirement",
+          "location": "Section 2 (a)",
+          "quote": "[translated from Czech] identification data of the provider: name, ... address of the place of provision, department",
+          "maps_to": [
+            "K19",
+            "K16"
+          ],
+          "mapping": "required element"
+        },
+        {
+          "pid": "S14-p02",
+          "label": "Identification and contact data of the patient",
+          "kind": "requirement",
+          "location": "Section 2 (b)",
+          "quote": "[translated from Czech] the patient's identification and contact details: name, date of birth ..., address, contact, patient identifier",
+          "maps_to": [
+            "K19",
+            "K15"
+          ],
+          "mapping": "required element; bears on the necessity question of K15"
+        },
+        {
+          "pid": "S14-p03",
+          "label": "Author of the entry",
+          "kind": "requirement",
+          "location": "Section 2 (d)",
+          "quote": "[translated from Czech] the name(s) and surname of the health professional ..., and in electronic documentation also their identifier",
+          "maps_to": [
+            "K19",
+            "K16"
+          ],
+          "mapping": "author of each entry"
+        },
+        {
+          "pid": "S14-p04",
+          "label": "Course and outcome of the services",
+          "kind": "requirement",
+          "location": "Section 2 (g)",
+          "quote": "[translated from Czech] information on the course and outcome of the health services provided and on other significant circumstances related to the patient's health",
+          "maps_to": [
+            "K19",
+            "K05"
+          ],
+          "mapping": "the substantive content requirement"
+        },
+        {
+          "pid": "S14-p05",
+          "label": "Working conclusions and final diagnosis",
+          "kind": "requirement",
+          "location": "Section 3 (1)(a)",
+          "quote": "[translated from Czech] working conclusions and the final diagnosis",
+          "maps_to": [
+            "K19",
+            "K04"
+          ],
+          "mapping": "diagnosis with its provisional or final status"
+        },
+        {
+          "pid": "S14-p06",
+          "label": "Recommendation of further treatment",
+          "kind": "requirement",
+          "location": "Section 3 (1)(b)",
+          "quote": "[translated from Czech] a recommendation of the further treatment procedure and information on the course of the provision of services, if the patient's condition requires it",
+          "maps_to": [
+            "K19",
+            "K10"
+          ],
+          "mapping": "the plan"
+        },
+        {
+          "pid": "S14-p07",
+          "label": "Current development per the patient's account and the objective finding",
+          "kind": "requirement",
+          "location": "Section 3 (1)(d)",
+          "quote": "[translated from Czech] a record of the current development of the state of health according to the assessment communicated by the patient, and the targeted objective finding",
+          "maps_to": [
+            "K19",
+            "K02",
+            "K03"
+          ],
+          "mapping": "the originator split and the time dimension are in the law itself"
+        },
+        {
+          "pid": "S14-p08",
+          "label": "Restraint, involuntary care and risk records",
+          "kind": "requirement",
+          "location": "Section 2 (s) and Section 3 (1)(m)-(o)",
+          "quote": "[translated from Czech] a record of individually determined risks and protective factors ... a record of the use of restraints",
+          "maps_to": [
+            "K08",
+            "K19"
+          ],
+          "mapping": "risk as a required record in specific settings"
+        }
+      ]
+    },
+    {
+      "id": "S11",
+      "citation": "Terwee et al. COSMIN methodology for evaluating the content validity of patient-reported outcome measures: a Delphi study. Qual Life Res 2018;27:1159-1170. doi:10.1007/s11136-018-1829-0.",
+      "read": "full_text",
+      "defines_note_quality": false,
+      "note": "Methodological guidance on reviews or instruments; defines no property of a note.",
+      "properties": []
+    },
+    {
+      "id": "S12",
+      "citation": "Boateng et al. Best Practices for Developing and Validating Scales for Health, Social, and Behavioral Research: A Primer. Front Public Health 2018;6:149. doi:10.3389/fpubh.2018.00149.",
+      "read": "full_text",
+      "defines_note_quality": false,
+      "note": "Methodological guidance on reviews or instruments; defines no property of a note.",
+      "properties": []
+    },
+    {
+      "id": "S15",
+      "citation": "Peters MDJ et al. Updated methodological guidance for the conduct of scoping reviews. JBI Evid Synth 2020;18(10):2119-2126. doi:10.11124/JBIES-20-00167.",
+      "read": "full_text",
+      "defines_note_quality": false,
+      "note": "Methodological guidance on reviews or instruments; defines no property of a note.",
+      "properties": []
+    },
+    {
+      "id": "S16",
+      "citation": "Tricco AC et al. PRISMA Extension for Scoping Reviews (PRISMA-ScR): Checklist and Explanation. Ann Intern Med 2018;169(7):467-473. doi:10.7326/M18-0850.",
+      "read": "full_text",
+      "defines_note_quality": false,
+      "note": "Methodological guidance on reviews or instruments; defines no property of a note.",
+      "properties": []
+    },
+    {
+      "id": "S17",
+      "citation": "Rethlefsen ML et al. PRISMA-S: an extension to the PRISMA Statement for Reporting Literature Searches in Systematic Reviews. Syst Rev 2021;10:39. doi:10.1186/s13643-020-01542-z.",
+      "read": "full_text",
+      "defines_note_quality": false,
+      "note": "Methodological guidance on reviews or instruments; defines no property of a note.",
+      "properties": []
+    },
+    {
+      "id": "S_abs_edit",
+      "citation": "What do clinicians edit in ambient AI-drafted clinical documentation? A qualitative content analysis. J Am Med Inform Assoc 2026;33(8):1457. doi:10.1093/jamia/ocag073. PMID 42118974.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": null,
+      "properties": [
+        {
+          "pid": "S_abs_edit-p01",
+          "label": "Three categories of edits: clinical content, terminology, language style; eleven codes",
+          "kind": "edit_category",
+          "location": "Materials and Methods; Table 3",
+          "quote": "an inductive coding framework with 11 codes across 3 categories: clinical content, terminology, and language style",
+          "maps_to": [
+            "K22"
+          ],
+          "mapping": "the typology of edits"
+        },
+        {
+          "pid": "S_abs_edit-p02",
+          "label": "Edits that revise factual discrepancies and specific clinical details",
+          "kind": "edit_theme",
+          "location": "Theme 1",
+          "quote": "These edits revised misspelled names and pronouns, and time-",
+          "maps_to": [
+            "K01",
+            "K22"
+          ],
+          "mapping": "fidelity repairs"
+        },
+        {
+          "pid": "S_abs_edit-p03",
+          "label": "Edits that refine generic drafts into specialty-appropriate documentation",
+          "kind": "edit_theme",
+          "location": "Theme 2",
+          "quote": "Clinicians added specialty-specific clinical details and terminology",
+          "maps_to": [
+            "K28",
+            "K05"
+          ],
+          "mapping": "genericness repaired by hand"
+        },
+        {
+          "pid": "S_abs_edit-p04",
+          "label": "Edits that revise the certainty level of diagnostic and causal statements",
+          "kind": "edit_theme",
+          "location": "Theme 3",
+          "quote": "clinicians often replaced definitive causal or diagnostic statements",
+          "maps_to": [
+            "K04"
+          ],
+          "mapping": "epistemic status"
+        },
+        {
+          "pid": "S_abs_edit-p05",
+          "label": "Edits that replace conversational phrasing with standardized chart language",
+          "kind": "edit_theme",
+          "location": "Theme 4",
+          "quote": "Clinicians frequently edited transcript-like language into more standardized chart language",
+          "maps_to": [
+            "K30",
+            "K13"
+          ],
+          "mapping": "register of the note"
+        },
+        {
+          "pid": "S_abs_edit-p06",
+          "label": "Edits that reorganize, relocate and condense",
+          "kind": "edit_theme",
+          "location": "Theme 5",
+          "quote": "Clinicians frequently restructure AI-generated drafts through re-",
+          "maps_to": [
+            "K12",
+            "K11"
+          ],
+          "mapping": "organisation and economy"
+        },
+        {
+          "pid": "S_abs_edit-p07",
+          "label": "Empathy, rapport and politeness edits",
+          "kind": "edit_code",
+          "location": "Table 3, S-Emp",
+          "quote": "Empathy/rapport/politeness (S-Emp)",
+          "maps_to": [
+            "K14"
+          ],
+          "mapping": "the way the patient is spoken about"
+        }
+      ]
+    },
+    {
+      "id": "S_abs_sweden",
+      "citation": "Errors, Omissions, and Offenses in the Health Record of Mental Health Care Patients: Results from a Nationwide Survey in Sweden. J Med Internet Res 2023;25:e47841. doi:10.2196/47841. PMID 37921861.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": null,
+      "properties": [
+        {
+          "pid": "S_abs_sweden-p01",
+          "label": "Errors found by patients in their own record",
+          "kind": "survey_category",
+          "location": "Results, Errors, Omissions, and Offenses",
+          "quote": "Half of the respondents in the MHC group ... reported finding an error in their EHR",
+          "maps_to": [
+            "K01"
+          ],
+          "mapping": "the reader's side of fidelity"
+        },
+        {
+          "pid": "S_abs_sweden-p02",
+          "label": "Omissions found by patients",
+          "kind": "survey_category",
+          "location": "Results",
+          "quote": "about a third ... reported an omission",
+          "maps_to": [
+            "K05"
+          ],
+          "mapping": "the reader's side of coverage"
+        },
+        {
+          "pid": "S_abs_sweden-p03",
+          "label": "Offensive content",
+          "kind": "survey_category",
+          "location": "Results",
+          "quote": "more than a third of the MHC group ... offended by something they read",
+          "maps_to": [
+            "K14"
+          ],
+          "mapping": "stigmatising or offensive wording as experienced"
+        },
+        {
+          "pid": "S_abs_sweden-p04",
+          "label": "Seriousness of the most serious error or omission",
+          "kind": "survey_category",
+          "location": "Results",
+          "quote": "rated the most serious error they found as very important",
+          "maps_to": [],
+          "mapping": "severity as rated by the patient; a scale, not a property (ME14)"
+        }
+      ]
+    },
+    {
+      "id": "S_abs_scoping_notes",
+      "citation": "Schwarz J et al. Sharing Clinical Notes and Electronic Health Records With People Affected by Mental Health Conditions: Scoping Review. JMIR Ment Health 2021;8(12):e34170. doi:10.2196/34170. PMID 34904956.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": null,
+      "properties": [
+        {
+          "pid": "S_abs_scoping_notes-p01",
+          "label": "Errors and inaccuracies in notes, and undiscussed diagnoses",
+          "kind": "theme",
+          "location": "Results, SUs' Experiences",
+          "quote": "felt confused and blindsided when discovering diagnoses in their notes that had not been discussed with them ... worried that errors could affect their mental health treatment",
+          "maps_to": [
+            "K01",
+            "K04"
+          ],
+          "mapping": "fidelity and the status of a diagnosis"
+        },
+        {
+          "pid": "S_abs_scoping_notes-p02",
+          "label": "Disrespectful or medicalized language",
+          "kind": "theme",
+          "location": "Results and Discussion",
+          "quote": "concerns about medicalized language in clinical notes and inconsistencies and errors in the documentation",
+          "maps_to": [
+            "K14",
+            "K13"
+          ],
+          "mapping": "wording and comprehensibility for the client"
+        },
+        {
+          "pid": "S_abs_scoping_notes-p03",
+          "label": "Privacy, confidentiality and who can access the notes",
+          "kind": "theme",
+          "location": "Results, SUs' Experiences",
+          "quote": "concern about who could access their mental health notes",
+          "maps_to": [
+            "K15"
+          ],
+          "mapping": "necessity and sharing of sensitive detail"
+        },
+        {
+          "pid": "S_abs_scoping_notes-p04",
+          "label": "Clinician documentation burden and possible harm from sharing",
+          "kind": "theme",
+          "location": "Abstract",
+          "quote": "an increased clinical burden owing to more documentation efforts and possible harm",
+          "maps_to": [
+            "K23"
+          ],
+          "mapping": "burden as an acceptability parameter"
+        }
+      ]
+    },
+    {
+      "id": "S_abs_supcode",
+      "citation": "Objective coding of content and techniques in workplace-based supervision of an EBT in public mental health. Implement Sci 2018;13:19. doi:10.1186/s13012-017-0708-3. PMID 29368656.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": null,
+      "properties": [
+        {
+          "pid": "S_abs_supcode-p01",
+          "label": "Sixteen supervision content areas",
+          "kind": "coding_category",
+          "location": "Methods, SPOCS",
+          "quote": "29 supervision strategies, with 16 content areas and 13 techniques ... assessment, psychoeducation, coping skills, exposure, cognitive processing, and behavior management ... assigning/reviewing client homework",
+          "maps_to": [
+            "K25",
+            "K10"
+          ],
+          "mapping": "what supervision talks about: the clinician's interventions and homework"
+        },
+        {
+          "pid": "S_abs_supcode-p02",
+          "label": "Thirteen supervision techniques",
+          "kind": "coding_category",
+          "location": "Methods, SPOCS",
+          "quote": "symptom monitoring, reviewing actual practice (audio/video, client work produced in session), fidelity or adherence assessment, clinician behavioral rehearsal in supervision, and supervisor modeling",
+          "maps_to": [
+            "K25"
+          ],
+          "mapping": "what a supervisor needs to see: practice, fidelity, symptoms"
+        }
+      ]
+    },
+    {
+      "id": "S_abs_hua",
+      "citation": "Hua Y, Na H, Li Z, Liu F, Fang X, Clifton D, Torous J. A scoping review of large language models for generative tasks in mental health care. npj Digit Med 2025;8:230. doi:10.1038/s41746-025-01611-4.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": null,
+      "properties": [
+        {
+          "pid": "S_abs_hua-p01",
+          "label": "Safety",
+          "kind": "evaluation_construct",
+          "location": "Table 3",
+          "quote": "Prevent worse outcomes for the patient, provider, or health system from occurring as a result of the use of an ML algorithm.",
+          "maps_to": [
+            "K08"
+          ],
+          "mapping": "system-level safety; risk content is the note-level counterpart"
+        },
+        {
+          "pid": "S_abs_hua-p02",
+          "label": "Privacy",
+          "kind": "evaluation_construct",
+          "location": "Table 3",
+          "quote": "Protect privacy according to standards like HIPAA and GDPR, ensuring user autonomy and dignity.",
+          "maps_to": [
+            "K15"
+          ],
+          "mapping": "transfer"
+        },
+        {
+          "pid": "S_abs_hua-p03",
+          "label": "Fairness and bias management",
+          "kind": "evaluation_construct",
+          "location": "Table 3",
+          "quote": "Ensure the chatbot operate with minimized and acknowledged biases to ensure fair outcomes.",
+          "maps_to": [
+            "K27"
+          ],
+          "mapping": "transfer"
+        },
+        {
+          "pid": "S_abs_hua-p04",
+          "label": "Trustworthiness and usefulness, beneficence",
+          "kind": "evaluation_construct",
+          "location": "Table 3",
+          "quote": "Ensure the chatbot positively impacts its intended outcomes",
+          "maps_to": [
+            "K23",
+            "K21"
+          ],
+          "mapping": "transfer; usefulness for the intended purpose"
+        },
+        {
+          "pid": "S_abs_hua-p05",
+          "label": "Evaluation methods are non-standardized",
+          "kind": "design_finding",
+          "location": "Abstract",
+          "quote": "the evaluation methods were often non-standardized, with most studies relying on ad-hoc",
+          "maps_to": [],
+          "mapping": "a finding about the field"
+        }
+      ]
+    },
+    {
+      "id": "S_abs_tednq",
+      "citation": "Development of a scoring tool for emergency department note quality: a modified Delphi approach. CJEM 2025;27:524-533. doi:10.1007/s43678-025-00914-5. PMID 40249563.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": null,
+      "properties": [
+        {
+          "pid": "S_abs_tednq-p01",
+          "label": "Universal and conditional content elements",
+          "kind": "content_items",
+          "location": "Results and Fig. 2",
+          "quote": "eight universal and 16 conditional elements",
+          "maps_to": [
+            "K05",
+            "K07"
+          ],
+          "mapping": "graded and context-dependent essentiality"
+        },
+        {
+          "pid": "S_abs_tednq-p02",
+          "label": "Attributes ranked: veracity, clear, organized, interpretable, sufficient, timely, synthesized, consistent, concise, complete, prioritized, objective",
+          "kind": "attribute",
+          "location": "Table 2",
+          "quote": "Veracity 95.7; Clear 87.9; Organized 81.5; Interpretable 79.5; Sufficient 75.4; Timely or up-to-date 74.9; Synthesized 74.4; Consistent 73.5; Concise 71.0; Complete 70.4; Prioritized 62.5; Objective 58.4",
+          "maps_to": [
+            "K01",
+            "K13",
+            "K12",
+            "K05",
+            "K03",
+            "K09",
+            "K11"
+          ],
+          "mapping": "the same attribute family as PDQI; consistent, prioritized and objective have no direct candidate"
+        },
+        {
+          "pid": "S_abs_tednq-p03",
+          "label": "Identification of other persons providing information about or on behalf of the patient",
+          "kind": "content_items",
+          "location": "Table 2",
+          "quote": "Identification of other persons providing information about/on behalf of the patient",
+          "maps_to": [
+            "K02",
+            "K17"
+          ],
+          "mapping": "originator and third persons"
+        },
+        {
+          "pid": "S_abs_tednq-p04",
+          "label": "Signature of writer and role",
+          "kind": "content_items",
+          "location": "Table 2",
+          "quote": "Signature of writer and role",
+          "maps_to": [
+            "K16"
+          ],
+          "mapping": "author of the entry"
+        },
+        {
+          "pid": "S_abs_tednq-p05",
+          "label": "Binary satisfactory/unsatisfactory scoring chosen over a 5-point scale",
+          "kind": "design_finding",
+          "location": "Results, round two",
+          "quote": "near complete consensus ... with the suitability of the binary scoring system",
+          "maps_to": [],
+          "mapping": "a rating format decision"
+        }
+      ]
+    },
+    {
+      "id": "S_abs_severity",
+      "citation": "Clinical AI Scribes in primary care: accuracy, error severity and implications for clinical practice. BMJ Digital Health & AI, 2025.",
+      "read": "abstract",
+      "defines_note_quality": true,
+      "note": "Read from the abstract only; one row stating what the abstract claims.",
+      "properties": [
+        {
+          "pid": "S_abs_severity-a01",
+          "label": "Error severity reported separately from error count",
+          "kind": "abstract_claim",
+          "location": "abstract",
+          "quote": null,
+          "maps_to": [
+            "K08"
+          ],
+          "mapping": "severity as a grade beside the count (ME14)"
+        }
+      ]
+    },
+    {
+      "id": "S_abs_delphi",
+      "citation": "The benefits and harms of open notes in mental health: A Delphi survey of international experts. PLoS One 2021.",
+      "read": "abstract",
+      "defines_note_quality": true,
+      "note": "Read from the abstract only; one row stating what the abstract claims.",
+      "properties": [
+        {
+          "pid": "S_abs_delphi-a01",
+          "label": "Benefits and harms of opening mental health notes to clients",
+          "kind": "abstract_claim",
+          "location": "abstract",
+          "quote": null,
+          "maps_to": [
+            "K24"
+          ],
+          "mapping": "the client purpose, out of scope by D8"
+        }
+      ]
+    },
+    {
+      "id": "S_abs_stakeholder",
+      "citation": "Quality of outpatient clinical notes: a stakeholder definition derived through qualitative research. BMC Health Serv Res 2012.",
+      "read": "abstract",
+      "defines_note_quality": true,
+      "note": "Read from the abstract only; one row stating what the abstract claims.",
+      "properties": [
+        {
+          "pid": "S_abs_stakeholder-a01",
+          "label": "Note quality defined by its users rather than an expert committee",
+          "kind": "abstract_claim",
+          "location": "abstract",
+          "quote": null,
+          "maps_to": [
+            "K07",
+            "K21"
+          ],
+          "mapping": "relevance and use for the reader"
+        }
+      ]
+    },
+    {
+      "id": "S_abs_disparity",
+      "citation": "Race and gender disparities in mental health documentation in primary care: Findings from a video vignette experiment. Soc Sci Med 2026.",
+      "read": "abstract",
+      "defines_note_quality": true,
+      "note": "Read from the abstract only; one row stating what the abstract claims.",
+      "properties": [
+        {
+          "pid": "S_abs_disparity-a01",
+          "label": "Race and gender disparities in mental health documentation",
+          "kind": "abstract_claim",
+          "location": "abstract",
+          "quote": null,
+          "maps_to": [
+            "K27"
+          ],
+          "mapping": "direct"
+        }
+      ]
+    },
+    {
+      "id": "S_abs_summac",
+      "citation": "SummaC: Re-Visiting NLI-based Models for Inconsistency Detection in Summarization. TACL 2022.",
+      "read": "abstract",
+      "defines_note_quality": true,
+      "note": "Read from the abstract only; one row stating what the abstract claims.",
+      "properties": [
+        {
+          "pid": "S_abs_summac-a01",
+          "label": "Inconsistency between summary and source detected by entailment",
+          "kind": "abstract_claim",
+          "location": "abstract",
+          "quote": null,
+          "maps_to": [
+            "K01"
+          ],
+          "mapping": "a method (ME07)"
+        }
+      ]
+    },
+    {
+      "id": "S_abs_mherrors",
+      "citation": "Errors in AI-Transformed Patient-Centered Mental Health Documentation Written by Psychiatrists: Qualitative Pre-Post Study. JMIR Ment Health 2026.",
+      "read": "abstract",
+      "defines_note_quality": true,
+      "note": "Read from the abstract only; one row stating what the abstract claims.",
+      "properties": [
+        {
+          "pid": "S_abs_mherrors-a01",
+          "label": "Errors arising when psychiatric documentation is transformed automatically",
+          "kind": "abstract_claim",
+          "location": "abstract",
+          "quote": null,
+          "maps_to": [
+            "K01"
+          ],
+          "mapping": "an error typology"
+        }
+      ]
+    },
+    {
+      "id": "S_abs_sespi",
+      "citation": "Development and reliability testing of the Scale for the Evaluation of Staff-Patient Interactions in Progress Notes (SESPI). Nursing Open 2019.",
+      "read": "abstract",
+      "defines_note_quality": true,
+      "note": "Read from the abstract only; one row stating what the abstract claims.",
+      "properties": [
+        {
+          "pid": "S_abs_sespi-a01",
+          "label": "How staff-patient interactions are captured in progress notes",
+          "kind": "abstract_claim",
+          "location": "abstract",
+          "quote": null,
+          "maps_to": [
+            "K25",
+            "K02"
+          ],
+          "mapping": "the interaction as content"
+        }
+      ]
+    }
+  ],
+  "coverage": {
+    "K01": [
+      "S1-p03",
+      "S1-p04",
+      "S2-p01",
+      "S4-p02",
+      "S6-p01",
+      "S6-p02",
+      "S7-p10",
+      "S8-p01",
+      "S9-p01",
+      "S10-p01",
+      "S18-p02",
+      "S19-p01",
+      "S13-p01",
+      "S_abs_edit-p02",
+      "S_abs_sweden-p01",
+      "S_abs_scoping_notes-p01",
+      "S_abs_tednq-p02",
+      "S_abs_summac-a01",
+      "S_abs_mherrors-a01"
+    ],
+    "K02": [
+      "S1-p06",
+      "S1-p08",
+      "S14-p07",
+      "S_abs_tednq-p03",
+      "S_abs_sespi-a01"
+    ],
+    "K03": [
+      "S2-p11",
+      "S3-p05",
+      "S3-p18",
+      "S4-p01",
+      "S6-p01",
+      "S14-p07",
+      "S_abs_tednq-p02"
+    ],
+    "K04": [
+      "S1-p10",
+      "S3-p14",
+      "S14-p05",
+      "S_abs_edit-p04",
+      "S_abs_scoping_notes-p01"
+    ],
+    "K05": [
+      "S1-p01",
+      "S1-p05",
+      "S1-p06",
+      "S1-p07",
+      "S1-p09",
+      "S1-p11",
+      "S2-p08",
+      "S2-p10",
+      "S3-p06",
+      "S3-p07",
+      "S3-p09",
+      "S3-p10",
+      "S3-p11",
+      "S3-p12",
+      "S3-p13",
+      "S3-p15",
+      "S4-p03",
+      "S6-p01",
+      "S6-p02",
+      "S6-p04",
+      "S7-p01",
+      "S7-p02",
+      "S7-p03",
+      "S18-p01",
+      "S19-p02",
+      "S19-p04",
+      "S13-p03",
+      "S13-p04",
+      "S14-p04",
+      "S_abs_edit-p03",
+      "S_abs_sweden-p02",
+      "S_abs_tednq-p01",
+      "S_abs_tednq-p02"
+    ],
+    "K06": [],
+    "K07": [
+      "S2-p09",
+      "S2-p10",
+      "S4-p04",
+      "S6-p01",
+      "S8-p04",
+      "S18-p01",
+      "S18-p04",
+      "S19-p02",
+      "S_abs_tednq-p01",
+      "S_abs_stakeholder-a01"
+    ],
+    "K08": [
+      "S1-p12",
+      "S3-p08",
+      "S6-p02",
+      "S13-p04",
+      "S14-p08",
+      "S_abs_hua-p01",
+      "S_abs_severity-a01"
+    ],
+    "K09": [
+      "S1-p09",
+      "S2-p07",
+      "S4-p08",
+      "S6-p01",
+      "S19-p03",
+      "S_abs_tednq-p02"
+    ],
+    "K10": [
+      "S1-p11",
+      "S3-p16",
+      "S3-p17",
+      "S13-p02",
+      "S13-p04",
+      "S14-p06",
+      "S_abs_supcode-p01"
+    ],
+    "K11": [
+      "S1-p02",
+      "S2-p05",
+      "S4-p07",
+      "S6-p01",
+      "S8-p04",
+      "S_abs_edit-p06",
+      "S_abs_tednq-p02"
+    ],
+    "K12": [
+      "S1-p01",
+      "S2-p04",
+      "S4-p05",
+      "S6-p01",
+      "S8-p02",
+      "S_abs_edit-p06",
+      "S_abs_tednq-p02"
+    ],
+    "K13": [
+      "S2-p03",
+      "S4-p06",
+      "S6-p01",
+      "S7-p05",
+      "S7-p07",
+      "S13-p01",
+      "S_abs_edit-p05",
+      "S_abs_scoping_notes-p02",
+      "S_abs_tednq-p02"
+    ],
+    "K14": [
+      "S1-p14",
+      "S2-p06",
+      "S_abs_edit-p07",
+      "S_abs_sweden-p03",
+      "S_abs_scoping_notes-p02"
+    ],
+    "K15": [
+      "S3-p01",
+      "S13-p07",
+      "S14-p02",
+      "S_abs_scoping_notes-p03",
+      "S_abs_hua-p02"
+    ],
+    "K16": [
+      "S3-p02",
+      "S3-p03",
+      "S3-p04",
+      "S13-p02",
+      "S13-p03",
+      "S13-p05",
+      "S14-p01",
+      "S14-p03",
+      "S_abs_tednq-p04"
+    ],
+    "K17": [
+      "S1-p14",
+      "S13-p06",
+      "S_abs_tednq-p03"
+    ],
+    "K18": [
+      "S2-p02"
+    ],
+    "K19": [
+      "S3-p01",
+      "S3-p02",
+      "S13-p02",
+      "S14-p01",
+      "S14-p02",
+      "S14-p03",
+      "S14-p04",
+      "S14-p05",
+      "S14-p06",
+      "S14-p07",
+      "S14-p08"
+    ],
+    "K20": [
+      "S1-p16"
+    ],
+    "K21": [
+      "S1-p15",
+      "S6-p03",
+      "S18-p04",
+      "S_abs_hua-p04",
+      "S_abs_stakeholder-a01"
+    ],
+    "K22": [
+      "S_abs_edit-p01",
+      "S_abs_edit-p02"
+    ],
+    "K23": [
+      "S1-p15",
+      "S7-p04",
+      "S7-p05",
+      "S7-p06",
+      "S7-p07",
+      "S7-p08",
+      "S7-p09",
+      "S_abs_scoping_notes-p04",
+      "S_abs_hua-p04"
+    ],
+    "K24": [
+      "S_abs_delphi-a01"
+    ],
+    "K25": [
+      "S3-p10",
+      "S3-p11",
+      "S3-p14",
+      "S7-p03",
+      "S19-p04",
+      "S13-p04",
+      "S_abs_supcode-p01",
+      "S_abs_supcode-p02",
+      "S_abs_sespi-a01"
+    ],
+    "K26": [
+      "S2-p11",
+      "S3-p05",
+      "S3-p18"
+    ],
+    "K27": [
+      "S_abs_hua-p03",
+      "S_abs_disparity-a01"
+    ],
+    "K28": [
+      "S18-p03",
+      "S18-p05",
+      "S_abs_edit-p03"
+    ],
+    "K29": [
+      "S2-p12",
+      "S19-p05"
+    ],
+    "K30": [
+      "S1-p14",
+      "S8-p03",
+      "S_abs_edit-p05"
+    ],
+    "K31": [
+      "S2-p05",
+      "S4-p07",
+      "S4-p10"
+    ]
+  },
+  "unmapped_properties": [
+    {
+      "pid": "S1-p13",
+      "source": "S1",
+      "label": "Culturally competent care evidenced in the note",
+      "why_unmapped": "no candidate covers it: it is a property of the treatment shown in the note, not of the note's rendering of the session"
+    },
+    {
+      "pid": "S1-p17",
+      "source": "S1",
+      "label": "Five-point Likert baseline per dimension",
+      "why_unmapped": "a rating format, not a property; the paper reports it beside the fine-grained protocol"
+    },
+    {
+      "pid": "S4-p09",
+      "source": "S4",
+      "label": "Internally consistent",
+      "why_unmapped": "no candidate: K26 is consistency between notes of a case, this is consistency inside one note"
+    },
+    {
+      "pid": "S4-p11",
+      "source": "S4",
+      "label": "General Impression rating",
+      "why_unmapped": "a holistic rating format, not a property"
+    },
+    {
+      "pid": "S6-p05",
+      "source": "S6",
+      "label": "Untrained raters without an agreed standard",
+      "why_unmapped": "a condition of measurement (M1), not a property of a note"
+    },
+    {
+      "pid": "S7-p11",
+      "source": "S7",
+      "label": "Automatic metrics diverge from expert judgement",
+      "why_unmapped": "a finding about methods (ME10), not a property"
+    },
+    {
+      "pid": "S13-p08",
+      "source": "S13",
+      "label": "Guidelines expired by their own terms",
+      "why_unmapped": "a limitation of the source, recorded in the catalog"
+    },
+    {
+      "pid": "S_abs_sweden-p04",
+      "source": "S_abs_sweden",
+      "label": "Seriousness of the most serious error or omission",
+      "why_unmapped": "severity as rated by the patient; a scale, not a property (ME14)"
+    },
+    {
+      "pid": "S_abs_hua-p05",
+      "source": "S_abs_hua",
+      "label": "Evaluation methods are non-standardized",
+      "why_unmapped": "a finding about the field"
+    },
+    {
+      "pid": "S_abs_tednq-p05",
+      "source": "S_abs_tednq",
+      "label": "Binary satisfactory/unsatisfactory scoring chosen over a 5-point scale",
+      "why_unmapped": "a rating format decision"
+    }
+  ],
+  "candidates_without_source_property": [
+    {
+      "id": "K06",
+      "label": "Acknowledged information gap",
+      "origin": "empirical_observation",
+      "reading": "no source property maps to it; it stands on the origin the catalog declares"
+    }
+  ]
+}

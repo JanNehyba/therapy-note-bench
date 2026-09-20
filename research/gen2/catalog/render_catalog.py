@@ -340,6 +340,88 @@ def _revisions(catalog: dict) -> str:
     )
 
 
+def _source_properties(props: dict, catalog: dict) -> str:
+    """The inductive half: what each source itself says quality is, then the mapping."""
+    names = {c["id"]: c["label"] for c in catalog["candidates"]}
+    counts = props["counts"]
+    out = [
+        f"<p>{esc(props['method'])}</p>",
+        f"<p><em>Rule.</em> {esc(props['rule'])}</p>",
+        "<p>"
+        + esc(
+            f"{counts['properties']} properties from {counts['sources_defining_properties']} "
+            f"sources; {counts['properties_mapped']} map to a candidate and "
+            f"{counts['properties_unmapped']} do not; {counts['candidates_with_source_property']} "
+            f"candidates rest on at least one source property and "
+            f"{counts['candidates_without_source_property']} on none."
+        )
+        + "</p>",
+    ]
+    out.append("<h3>Open properties: found in a source, covered by no candidate</h3>")
+    out.append(
+        table(
+            ["Property", "Source", "Disposition", "Reason"],
+            [
+                [
+                    esc(row["pid"]) + " " + esc(row["label"]),
+                    esc(row["source"]),
+                    esc(row["disposition"]),
+                    esc(row["reason"]),
+                ]
+                for row in catalog["open_source_properties"]
+            ],
+        )
+    )
+    out.append("<h3>Candidates with no source property behind them</h3>")
+    out.append(
+        table(
+            ["Candidate", "Declared origin", "Reading"],
+            [
+                [esc(row["id"]) + " " + esc(row["label"]), esc(row["origin"]), esc(row["reading"])]
+                for row in props["candidates_without_source_property"]
+            ],
+        )
+    )
+    for s in props["sources"]:
+        title = (
+            f'<h3 id="props-{esc(s["id"])}"><span class="id">{esc(s["id"])}</span> '
+            f"{esc(s['citation'])}</h3>"
+        )
+        if not s["defines_note_quality"]:
+            out.append(title + f'<p class="sub">{esc(s["note"])}</p>')
+            continue
+        out.append(
+            title
+            + f'<p class="sub">{esc(s["read"])}{"; " + esc(s["note"]) if s["note"] else ""}</p>'
+        )
+        out.append(
+            table(
+                [
+                    "Id",
+                    "Property, as the source names it",
+                    "Kind",
+                    "Location",
+                    "Quote",
+                    "Maps to",
+                    "Mapping",
+                ],
+                [
+                    [
+                        f'<span class="id">{esc(p["pid"])}</span>',
+                        esc(p["label"]),
+                        esc(p["kind"]),
+                        esc(p["location"]),
+                        esc(p["quote"] or ""),
+                        esc(", ".join(f"{k} {names.get(k, '')}" for k in p["maps_to"]) or "none"),
+                        esc(p["mapping"]),
+                    ]
+                    for p in s["properties"]
+                ],
+            )
+        )
+    return "".join(out)
+
+
 def _glossary(title: str, mapping) -> str:
     """A named vocabulary: definitions when the catalog gives them, else the values."""
     if isinstance(mapping, dict):
@@ -347,7 +429,9 @@ def _glossary(title: str, mapping) -> str:
     return f"<h3>{esc(title)}</h3><p>{esc(', '.join(mapping))}</p>"
 
 
-def render(catalog: dict) -> str:
+def render(catalog: dict, props: dict | None = None) -> str:
+    if props is None:
+        props = _catalog_module().load_properties()
     n = {
         "candidates": len(catalog["candidates"]),
         "methods": len(catalog["methods"]),
@@ -359,6 +443,12 @@ def render(catalog: dict) -> str:
     sections = [
         ("status", "Status and policies", None),
         ("sources", f"Sources ({n['sources']} read, {n['abstracts']} abstract-only)", _sources),
+        (
+            "source-properties",
+            "What the sources themselves define as quality "
+            f"({props['counts']['properties']} properties)",
+            lambda c: _source_properties(props, c),
+        ),
         ("families", "Families, an organising aid", _families),
         ("conditions", "Conditions of measurement", _conditions),
         ("candidates", f"Candidate constructs ({n['candidates']})", _candidates),

@@ -136,13 +136,19 @@ def test_having_the_file_is_not_the_same_as_having_read_it(reports):
     assert len(retrieved) == 6
     assert reports["counts"]["abstract_only_reports"]["not_sought"] == 7
     for report in abstract_only:
-        assert report["reading"]["basis"] == "abstract", report["catalog_source"]
         assert report["reading"]["human_verified"] is None
+    # Retrieved on 2026-09-16, read on 2026-09-20: two dated facts, and the
+    # reading basis moved only when the reading happened.
     for report in retrieved:
         supplied = report["retrieval_events"][-1]
         assert supplied["route_kind"] == "investigator_supplied"
         assert supplied["date"] == "2026-09-16"
         assert supplied["sha256"] and supplied["bytes"] > 0
+        assert report["reading"]["basis"] == "full_text", report["catalog_source"]
+        assert "2026-09-20" in report["reading"]["ai_read_basis"]
+    for report in abstract_only:
+        if report["current_status"] != "retrieved":
+            assert report["reading"]["basis"] == "abstract", report["catalog_source"]
 
 
 def test_psychres_2026_is_retrieved_after_a_failed_attempt(reports):

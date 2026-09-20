@@ -309,7 +309,7 @@
    "doi:10.4338/aci2017050080"
   ],
   "reading": {
-   "full_text_ai_read": 20,
+   "full_text_ai_read": 26,
    "abstract_only": 13,
    "human_verified": 0
   }
@@ -374,7 +374,7 @@
   }
  ],
  "derived_from": {
-  "reports.json": "25f6afc6aa23d6a13332779936ce80d264cbe9215f2cd74ac09e3cfd609e6aeb",
+  "reports.json": "a2f746d13ccc1515e5a4450e44440f33012ccbec56b62e1a9e0dab5cf4236215",
   "pool-summary.json": "a1ded470c9d7956637a4476564c730887cfc9c3c1d5314fc54f0da15050c0cb3",
   "screening-decisions.json": "2f98644de1101880fe54fa705b3cf7ece932803e07b51d56be35e96bbd145a80",
   "screening-strata.json": "7f5cec8ab7f51c80bba97ceb1e359ff68b9ad7e39122c8211606d14a7e7bf21b",

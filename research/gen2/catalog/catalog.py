@@ -47,6 +47,7 @@ META = (
     "candidate_states",
     "families_policy",
     "purposes_in_scope",
+    "open_source_properties",
     "purposes",
     "relevance_levels",
     "evidence_layers",
@@ -284,8 +285,75 @@ def problems(catalog: dict, reports: dict | None = None) -> list[str]:
     return out
 
 
+PROPERTIES_PATH = HERE / "source-properties.json"
+
+
+def load_properties(path: Path = PROPERTIES_PATH) -> dict:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def property_problems(catalog: dict, props: dict) -> list[str]:
+    """The source-first table against the catalog it was mapped to.
+
+    The extraction is source-first and the mapping comes second, so what is
+    checked here is only that the two agree: every property names a source the
+    catalog has, every mapping target is a candidate, a candidate the catalog
+    calls literature-origin rests on at least one source property, and every
+    property no candidate covers is listed as open in the catalog or explained
+    as something that is not a property of a note.
+    """
+    out: list[str] = []
+    sources = source_ids(catalog)
+    candidates = {c["id"]: c for c in catalog["candidates"]}
+    seen: set[str] = set()
+    covered: dict[str, list[str]] = {k: [] for k in candidates}
+    for s in props["sources"]:
+        if s["id"] not in sources:
+            out.append(f"{s['id']}: property source is not in the catalog")
+        for p in s["properties"]:
+            if p["pid"] in seen:
+                out.append(f"{p['pid']}: duplicate property id")
+            seen.add(p["pid"])
+            if not p["label"] or not p["location"]:
+                out.append(f"{p['pid']}: empty label or location")
+            if s["read"] == "full_text" and not p.get("quote"):
+                out.append(f"{p['pid']}: a full-text property needs a quote")
+            if p["kind"] not in props["kinds"]:
+                out.append(f"{p['pid']}: unknown kind {p['kind']!r}")
+            for k in p["maps_to"]:
+                if k not in candidates:
+                    out.append(f"{p['pid']}: maps to unknown candidate {k!r}")
+                else:
+                    covered[k].append(p["pid"])
+    for k, c in candidates.items():
+        if c["origin"] == "literature" and not covered[k]:
+            out.append(f"{k}: literature origin without any source property behind it")
+    listed = {row["pid"] for row in catalog["open_source_properties"]}
+    for row in props["unmapped_properties"]:
+        method_like = any(
+            word in row["why_unmapped"]
+            for word in (
+                "not a property",
+                "rating format",
+                "a finding",
+                "a condition",
+                "a scale",
+                "limitation",
+            )
+        )
+        if row["pid"] not in listed and not method_like:
+            out.append(f"{row['pid']}: unmapped and neither open in the catalog nor explained")
+    for row in catalog["open_source_properties"]:
+        if row["pid"] not in seen:
+            out.append(f"{row['pid']}: open property is not in the source-first table")
+    if props["counts"]["properties"] != len(seen):
+        out.append("counts.properties does not match the table")
+    return out
+
+
 if __name__ == "__main__":
     found = problems(load(), json.loads(REPORTS_PATH.read_text(encoding="utf-8")))
+    found += property_problems(load(), load_properties())
     for line in found:
         print(line)
     raise SystemExit(1 if found else 0)

@@ -30,19 +30,7 @@
       "note": "type or verification could not be mapped to a checked category"
     },
     {
-      "id": "S_abs_edit",
-      "publication_type": "unverified",
-      "verification": "metadata_checked",
-      "note": "abstract-only source; the pilot check refuses it until the full text is verified"
-    },
-    {
       "id": "S_abs_severity",
-      "publication_type": "unverified",
-      "verification": "metadata_checked",
-      "note": "abstract-only source; the pilot check refuses it until the full text is verified"
-    },
-    {
-      "id": "S_abs_sweden",
       "publication_type": "unverified",
       "verification": "metadata_checked",
       "note": "abstract-only source; the pilot check refuses it until the full text is verified"
@@ -54,31 +42,13 @@
       "note": "abstract-only source; the pilot check refuses it until the full text is verified"
     },
     {
-      "id": "S_abs_scoping_notes",
-      "publication_type": "unverified",
-      "verification": "metadata_checked",
-      "note": "abstract-only source; the pilot check refuses it until the full text is verified"
-    },
-    {
       "id": "S_abs_stakeholder",
       "publication_type": "unverified",
       "verification": "metadata_checked",
       "note": "abstract-only source; the pilot check refuses it until the full text is verified"
     },
     {
-      "id": "S_abs_supcode",
-      "publication_type": "unverified",
-      "verification": "metadata_checked",
-      "note": "abstract-only source; the pilot check refuses it until the full text is verified"
-    },
-    {
       "id": "S_abs_disparity",
-      "publication_type": "unverified",
-      "verification": "metadata_checked",
-      "note": "abstract-only source; the pilot check refuses it until the full text is verified"
-    },
-    {
-      "id": "S_abs_hua",
       "publication_type": "unverified",
       "verification": "metadata_checked",
       "note": "abstract-only source; the pilot check refuses it until the full text is verified"
@@ -97,12 +67,6 @@
     },
     {
       "id": "S_abs_sespi",
-      "publication_type": "unverified",
-      "verification": "metadata_checked",
-      "note": "abstract-only source; the pilot check refuses it until the full text is verified"
-    },
-    {
-      "id": "S_abs_tednq",
       "publication_type": "unverified",
       "verification": "metadata_checked",
       "note": "abstract-only source; the pilot check refuses it until the full text is verified"

@@ -87,8 +87,10 @@ def test_the_catalog_holds_what_the_review_proposed(catalog):
     """The counts the documentation states, held to the record."""
     assert len(catalog["candidates"]) == 31
     assert len(catalog["methods"]) == 17
-    assert len(catalog["sources"]) == 19
-    assert len(catalog["abstract_sources"]) == 13
+    # 19 read in the round of 2026-09-13, and 6 more read on 2026-09-20 after
+    # the investigator supplied them; 7 are still known from abstracts only.
+    assert len(catalog["sources"]) == 25
+    assert len(catalog["abstract_sources"]) == 7
     assert len(catalog["pilot_proposal"]["entries"]) == 14
     assert len(catalog["comparison"]) == 35
     assert catalog_mod.ids(catalog, "candidates") == [f"K{n:02d}" for n in range(1, 32)]
@@ -388,6 +390,68 @@ def test_the_draft_is_something_the_workflow_can_actually_put_to_a_person(store,
     assert all(item["require_reason"] for item in sheet["items"])
 
 
+# --- the source-first table ---------------------------------------------------
+
+
+@pytest.fixture(scope="module")
+def props() -> dict:
+    return catalog_mod.load_properties()
+
+
+def test_the_source_first_table_agrees_with_the_catalog(catalog, props):
+    assert catalog_mod.property_problems(catalog, props) == []
+
+
+def test_the_table_is_extracted_source_first_and_mapped_second(catalog, props):
+    """The round of 2026-09-13 collected evidence for candidates already on the
+    table; this table goes the other way and has to be able to say what the
+    sources define that the catalog does not cover."""
+    counts = props["counts"]
+    assert counts["properties"] == sum(len(s["properties"]) for s in props["sources"])
+    assert counts["properties_mapped"] + counts["properties_unmapped"] == counts["properties"]
+    read = {s["id"] for s in props["sources"] if s["read"] == "full_text"}
+    assert read == {s["id"] for s in catalog["sources"] if s["verification"] == "full_text"}
+    for s in props["sources"]:
+        if s["read"] == "full_text" and s["defines_note_quality"]:
+            for p in s["properties"]:
+                assert p["quote"] and p["location"], p["pid"]
+    # The methodological sources define no property of a note and say so.
+    for sid in ("S11", "S12", "S15", "S16", "S17"):
+        entry = next(s for s in props["sources"] if s["id"] == sid)
+        assert not entry["defines_note_quality"] and entry["properties"] == []
+
+
+def test_every_literature_candidate_rests_on_a_source_property(catalog, props):
+    covered = props["coverage"]
+    for c in catalog["candidates"]:
+        if c["origin"] == "literature":
+            assert covered[c["id"]], f"{c['id']} claims a literature origin with nothing behind it"
+    without = {row["id"] for row in props["candidates_without_source_property"]}
+    assert without == {"K06"}
+    assert next(c for c in catalog["candidates"] if c["id"] == "K06")["origin"] == (
+        "empirical_observation"
+    )
+
+
+def test_a_property_no_candidate_covers_is_open_not_absent(catalog, props):
+    """Two properties the sources define fit no candidate. They are recorded
+    with a proposed disposition for the investigator; nothing decided them."""
+    open_ids = {row["pid"] for row in catalog["open_source_properties"]}
+    assert open_ids == {"S1-p13", "S4-p09"}
+    for row in catalog["open_source_properties"]:
+        assert "pending the investigator" in row["disposition"]
+    unmapped = {row["pid"] for row in props["unmapped_properties"]}
+    assert open_ids <= unmapped
+
+
+def test_the_page_carries_the_source_first_table(catalog, props):
+    page = PAGE.read_text(encoding="utf-8")
+    assert 'id="source-properties"' in page
+    for s in props["sources"]:
+        assert f'id="props-{s["id"]}"' in page
+    assert "Open properties: found in a source, covered by no candidate" in page
+
+
 # --- public safety ----------------------------------------------------------
 
 DIACRITIC = re.compile(
@@ -400,6 +464,7 @@ DIACRITIC = re.compile(
     "path",
     [
         CATALOG / "catalog.json",
+        CATALOG / "source-properties.json",
         CATALOG / "draft-registry.json",
         CATALOG / "conversion-diagnostics.json",
         CATALOG / "catalog.py",

@@ -19,7 +19,23 @@ Two files are generated from it and the suite fails when either drifts:
 `catalog.py` holds the validation rule and is what the tests and the two
 generators run first.
 
+`source-properties.json` is the inductive half. For every source read in full it
+lists every property of note quality the source itself defines or measures, in the
+source's own words with its location, extracted source by source without reference
+to the catalog; the mapping to candidates is a second column, done afterwards. A
+candidate the catalog calls literature-origin has to rest on at least one such
+property, and a property no candidate covers is listed in the catalog as open, with
+a proposed disposition, until the investigator decides. Together with the prior map
+this is a best-fit framework synthesis: an a priori framework, evidence coded
+against it, and new themes for what does not fit. The paper will cite the method
+(Carroll et al., BMC Medical Research Methodology, 2013); that reference is not yet
+in the review ledger and has to be added there before submission.
+
 ## Provenance
+
+The six reports the investigator supplied on 2026-09-16 were read on 2026-09-20 for
+the property extraction and are full sources since then; their evidence lines were
+re-verified against the full texts on that day.
 
 The original of this round is the investigator's Czech working catalog, which
 stays in the private workspace under the repository's language rule. This English

@@ -395,17 +395,117 @@
       "key_results": "Judge reliability ICC .81 factual consistency, .71 salient meaning, .65 clinical value. Clinicians higher on all three: d = 1.54, 0.70 and 0.51. The single reversal is salient meaning on Main Topics Discussed, d = -0.46. No difference on clinical value for Dyadic Relationship (p = .696) or Micro-Level Outcome (p = .070). Error types differ by component: hallucination on the surface task, misinterpretation and misattributed interventions on the clinical ones. Clinical value scored lowest for humans too (3.94).",
       "limitations": "Summaries written by trainees, not experienced therapists. Segments, not whole sessions, with context limited to the current session. Full transcripts were found to dilute the model and were deliberately replaced by a distilled preamble. Blinding success was never behaviourally tested. Length, terminology and structure were deliberately aligned between sources, which is why this study cannot be read as evidence that models cover more.",
       "ledger_report_id": "doi:10.1080/10503307.2026.2729093"
+    },
+    {
+      "id": "S_abs_edit",
+      "key": "jamia-ambient-edits",
+      "citation": "What do clinicians edit in ambient AI-drafted clinical documentation? A qualitative content analysis. J Am Med Inform Assoc 2026;33(8):1457. doi:10.1093/jamia/ocag073. PMID 42118974.",
+      "type": "peer-reviewed journal article",
+      "layer": "transfer",
+      "study_family": "ambient AI documentation edits",
+      "population": "200 ambient-AI-drafted notes from 200 encounters by 73 clinicians across two vendors in one US health system; family and internal medicine and other specialties, two psychiatry notes",
+      "language": "en",
+      "raters": "8 coders, inductive codebook, Cohen's kappa per code",
+      "unit": "sentence-level edit unit",
+      "format": "11 binary codes in 3 categories (clinical content, terminology, language style); 5 themes",
+      "analysis": "inductive content coding and thematic analysis of clinician edits",
+      "key_results": "Most edits change clinical facts: orders 40.0%, symptoms 30.3%, medications 27.3%, diagnoses 25.9%; terminology 11.6% and style 7.2%. Five themes: factual discrepancies, specialty detail, certainty of diagnostic and causal statements, conversational to chart language, reorganising and condensing.",
+      "limitations": "General medicine ambient scribing, not psychotherapy; two vendors in one system; an edit is what a clinician chose to change, not every error present. Read on 2026-09-20 for the property extraction.",
+      "verification": "full_text",
+      "ledger_report_id": "pmid:42118974"
+    },
+    {
+      "id": "S_abs_sweden",
+      "key": "sweden-ora-mhc",
+      "citation": "Errors, Omissions, and Offenses in the Health Record of Mental Health Care Patients: Results from a Nationwide Survey in Sweden. J Med Internet Res 2023;25:e47841. doi:10.2196/47841. PMID 37921861.",
+      "type": "peer-reviewed journal article",
+      "layer": "direct",
+      "study_family": "Swedish online record access surveys",
+      "population": "12 334 respondents of a national patient-portal survey, 3 131 with mental health care experience and 9 203 without",
+      "language": "sv survey, en report",
+      "raters": "self-report by patients",
+      "unit": "respondent",
+      "format": "yes/no items and Likert ratings on errors, omissions and offences found in one's own record",
+      "analysis": "descriptive rates and chi-square comparisons between groups",
+      "key_results": "Among mental health care respondents 50.65% reported an error, 34.78% an omission and 37.78% offensive content, all more often than other respondents; half rated the most serious error very important.",
+      "limitations": "Self-report about whole records in Sweden, not about session notes or generated notes; what counted as an error was the patient's judgement. Read on 2026-09-20 for the property extraction.",
+      "verification": "full_text",
+      "ledger_report_id": "pmid:37921861"
+    },
+    {
+      "id": "S_abs_scoping_notes",
+      "key": "schwarz-open-notes-scoping",
+      "citation": "Schwarz J et al. Sharing Clinical Notes and Electronic Health Records With People Affected by Mental Health Conditions: Scoping Review. JMIR Ment Health 2021;8(12):e34170. doi:10.2196/34170. PMID 34904956.",
+      "type": "peer-reviewed journal article (scoping review)",
+      "layer": "requirements",
+      "study_family": "open notes in mental health",
+      "population": "studies of sharing notes and records with people affected by mental health conditions; 1 034 records identified",
+      "language": "en",
+      "raters": "two researchers, thematic analysis",
+      "unit": "included study",
+      "format": "thematic synthesis in four categories: service users, care partners, health care professionals, policy stakeholders",
+      "analysis": "scoping review with thematic analysis",
+      "key_results": "Service users report better recall and understanding, and also errors, diagnoses they had not been told about, medicalised or disrespectful language and privacy worries; professionals' concerns, documentation burden among them, outweigh the benefits they perceive.",
+      "limitations": "About access to existing records, not about generated notes; no service-user co-production. Read on 2026-09-20 for the property extraction.",
+      "verification": "full_text",
+      "ledger_report_id": "pmid:34904956"
+    },
+    {
+      "id": "S_abs_supcode",
+      "key": "spocs-supervision-coding",
+      "citation": "Objective coding of content and techniques in workplace-based supervision of an EBT in public mental health. Implement Sci 2018;13:19. doi:10.1186/s13012-017-0708-3. PMID 29368656.",
+      "type": "peer-reviewed journal article",
+      "layer": "requirements",
+      "study_family": "supervision observational coding",
+      "population": "audio-recorded workplace supervision sessions of trauma-focused CBT in US public mental health, coded with the SPOCS",
+      "language": "en",
+      "raters": "trained observational coders",
+      "unit": "supervision session",
+      "format": "29 supervision strategies: 16 content areas and 13 techniques, coded for intensity of coverage",
+      "analysis": "mixed models of variance attributable to supervisor and clinician",
+      "key_results": "Content coverage varied; techniques that observe the clinician's actual practice, such as reviewing recordings or fidelity assessment, were rarely used.",
+      "limitations": "Supervision sessions, not notes; one treatment and one US service system. The closest evidence found for what supervision attends to. Read on 2026-09-20 for the property extraction.",
+      "verification": "full_text",
+      "ledger_report_id": "pmid:29368656"
+    },
+    {
+      "id": "S_abs_hua",
+      "key": "hua-llm-mental-health-scoping",
+      "citation": "Hua Y, Na H, Li Z, Liu F, Fang X, Clifton D, Torous J. A scoping review of large language models for generative tasks in mental health care. npj Digit Med 2025;8:230. doi:10.1038/s41746-025-01611-4.",
+      "type": "peer-reviewed journal article (scoping review)",
+      "layer": "transfer",
+      "study_family": "LLM mental health evaluation reviews",
+      "population": "726 articles screened, 16 included, on generative language models in mental health care, mostly conversational agents",
+      "language": "en",
+      "raters": "review authors",
+      "unit": "included study",
+      "format": "unified evaluation constructs: safety, privacy, fairness and bias, trustworthiness and usefulness, and others",
+      "analysis": "structured mapping of evaluation constructs across studies",
+      "key_results": "Evaluation methods were non-standardised and mostly ad hoc; no included study defines a property of a therapy note.",
+      "limitations": "Conversational agents rather than documentation; system-level constructs. Also a recall gap of our search: neither its title nor its abstract carries a term for notes or summarisation. Read on 2026-09-20 for the property extraction.",
+      "verification": "full_text",
+      "ledger_report_id": "supp:hua-scoping-review-2025"
+    },
+    {
+      "id": "S_abs_tednq",
+      "key": "tednq-delphi",
+      "citation": "Development of a scoring tool for emergency department note quality: a modified Delphi approach. CJEM 2025;27:524-533. doi:10.1007/s43678-025-00914-5. PMID 40249563.",
+      "type": "peer-reviewed journal article",
+      "layer": "transfer",
+      "study_family": "TEDNQ",
+      "population": "40 invited Canadian emergency physicians; 17 responded in the first Delphi round and 8 in the second",
+      "language": "en",
+      "raters": "expert panel by electronic survey",
+      "unit": "note",
+      "format": "8 universal and 16 conditional content elements, 4 attributes, binary satisfactory/unsatisfactory scoring",
+      "analysis": "modified Delphi with visual-analogue ranking",
+      "key_results": "Veracity ranked the highest attribute; universal versus conditional elements and a binary scoring system reached consensus. A separate reliability study followed.",
+      "limitations": "Small panel, physicians only, emergency department; the reliability study (CJEM 2026) was not read. Read on 2026-09-20 for the property extraction.",
+      "verification": "full_text",
+      "ledger_report_id": "pmid:40249563"
     }
   ],
   "abstract_sources": [
-    {
-      "id": "S_abs_edit",
-      "citation": "What do clinicians edit in ambient AI-drafted clinical documentation? A qualitative content analysis. J Am Med Inform Assoc, 2026.",
-      "layer": "transfer",
-      "verification": "abstract",
-      "relevance": "A method for K22: content analysis of the edits clinicians actually make to an AI draft.",
-      "ledger_report_id": "pmid:42118974"
-    },
     {
       "id": "S_abs_severity",
       "citation": "Clinical AI Scribes in primary care: accuracy, error severity and implications for clinical practice. BMJ Digital Health & AI, 2025.",
@@ -413,14 +513,6 @@
       "verification": "abstract",
       "relevance": "Error severity reported separately from error count; support for ME14.",
       "ledger_report_id": "pmid:42712320"
-    },
-    {
-      "id": "S_abs_sweden",
-      "citation": "Errors, Omissions, and Offenses in the Health Record of Mental Health Care Patients: Results from a Nationwide Survey in Sweden. J Med Internet Res 2023.",
-      "layer": "direct",
-      "verification": "abstract",
-      "relevance": "Mental health patients themselves report errors, omissions and offensive content in their records: three categories that match the client purpose exactly.",
-      "ledger_report_id": "pmid:37921861"
     },
     {
       "id": "S_abs_delphi",
@@ -431,14 +523,6 @@
       "ledger_report_id": "pmid:34644320"
     },
     {
-      "id": "S_abs_scoping_notes",
-      "citation": "Sharing Clinical Notes and Electronic Health Records With People Affected by Mental Health Conditions: Scoping Review. JMIR Ment Health 2021.",
-      "layer": "requirements",
-      "verification": "abstract",
-      "relevance": "An existing scoping review on exactly the client purpose. It has to be read before this layer is built again.",
-      "ledger_report_id": "pmid:34904956"
-    },
-    {
       "id": "S_abs_stakeholder",
       "citation": "Quality of outpatient clinical notes: a stakeholder definition derived through qualitative research. BMC Health Serv Res 2012.",
       "layer": "transfer",
@@ -447,28 +531,12 @@
       "ledger_report_id": "pmid:23164470"
     },
     {
-      "id": "S_abs_supcode",
-      "citation": "Objective coding of content and techniques in workplace-based supervision of an EBT in public mental health. Implementation Science 2018.",
-      "layer": "requirements",
-      "verification": "abstract",
-      "relevance": "A coding system for the content of supervision; the closest support found for the supervision purpose.",
-      "ledger_report_id": "pmid:29368656"
-    },
-    {
       "id": "S_abs_disparity",
       "citation": "Race and gender disparities in mental health documentation in primary care: Findings from a video vignette experiment. Soc Sci Med 2026.",
       "layer": "direct",
       "verification": "abstract",
       "relevance": "Experimental evidence of inequality in mental health documentation; support for K27 and ME16.",
       "ledger_report_id": "pmid:42361434"
-    },
-    {
-      "id": "S_abs_hua",
-      "citation": "Hua Y, Na H, Li Z, Liu F, Fang X, Clifton D, Torous J. A scoping review of large language models for generative tasks in mental health care. npj Digit Med 2025;8:230. doi:10.1038/s41746-025-01611-4.",
-      "layer": "direct",
-      "verification": "abstract",
-      "relevance": "RECALL GAP. The queries did not capture this work: neither its title nor its abstract carries a term for notes, documentation or summarisation, and every query required one. The investigator pointed to it on 2026-09-13 from an external source, and S19 cites it. It shows that the layer of general reviews on language models in mental health is systematically under-retrieved by the queries.",
-      "ledger_report_id": "supp:hua-scoping-review-2025"
     },
     {
       "id": "S_abs_summac",
@@ -493,14 +561,6 @@
       "verification": "abstract",
       "relevance": "An instrument aimed directly at how staff-patient interactions are captured in notes; a Spanish adaptation exists, a precedent for language transfer.",
       "ledger_report_id": "pmid:31367401"
-    },
-    {
-      "id": "S_abs_tednq",
-      "citation": "Development of a scoring tool for emergency department note quality: a modified Delphi approach. CJEM 2025; a The inter-rater reliability of the TEDNQ. CJEM 2026.",
-      "layer": "transfer",
-      "verification": "abstract",
-      "relevance": "A recent example of the whole cycle: Delphi construction of criteria, then a separate agreement study.",
-      "ledger_report_id": "pmid:40249563"
     }
   ],
   "families": [
@@ -1556,10 +1616,10 @@
       "evidence": [
         {
           "source": "S_abs_edit",
-          "location": "J Am Med Inform Assoc 2026, abstract",
-          "quote": "What do clinicians edit in ambient AI-drafted clinical documentation? A qualitative content analysis.",
-          "supports": "A method exists: content analysis of the actual edits.",
-          "our_adaptation": "VERIFIED FROM THE ABSTRACT ONLY. The full text was not obtained in this round."
+          "location": "Materials and Methods; Results, Themes 1 to 5",
+          "quote": "an inductive coding framework with 11 codes across 3 categories: clinical content, terminology, and language style",
+          "supports": "A method exists: content analysis of the actual edits, with a coding framework, interrater reliability and a thematic synthesis into five kinds of edit.",
+          "our_adaptation": "Read in full on 2026-09-20. General medicine ambient scribing in one US system, not psychotherapy; an edit is what the clinician chose to change, not every error present."
         }
       ],
       "relevance": {
@@ -1641,10 +1701,10 @@
       "evidence": [
         {
           "source": "S_abs_sweden",
-          "location": "J Med Internet Res 2023, abstract",
-          "quote": "Errors, Omissions, and Offenses in the Health Record of Mental Health Care Patients: Results from a Nationwide Survey in Sweden",
-          "supports": "A nationwide survey exists in which mental health patients themselves report errors, omissions and offensive content in their records.",
-          "our_adaptation": "VERIFIED FROM THE ABSTRACT ONLY. This triad of categories is, however, exactly what we lack for the client purpose."
+          "location": "Results, Errors, Omissions, and Offenses",
+          "quote": "Half of the respondents in the MHC group (1586/3131, 50.65%) reported finding an error in their EHR, and about a third (1089/3131, 34.78%) reported an omission.",
+          "supports": "Mental health patients themselves report errors, omissions and offensive content in their records, more often than other patients.",
+          "our_adaptation": "Read in full on 2026-09-20. Self-report about whole records in Sweden, not session notes. The three categories are exactly what the client purpose lacks, and that purpose is out of scope by decision D8."
         },
         {
           "source": "S_abs_delphi",
@@ -1694,10 +1754,10 @@
         },
         {
           "source": "S_abs_supcode",
-          "location": "Implementation Science 2018, abstract",
-          "quote": "Objective coding of content and techniques in workplace-based supervision of an EBT in public mental health",
-          "supports": "A coding system for the content of supervision exists.",
-          "our_adaptation": "VERIFIED FROM THE ABSTRACT ONLY; and it concerns supervision sessions, not notes."
+          "location": "Methods, SPOCS",
+          "quote": "29 supervision strategies, with 16 content areas and 13 techniques",
+          "supports": "A coding system for what supervision covers exists: the clinician's techniques, homework, symptom monitoring and review of actual practice.",
+          "our_adaptation": "Read in full on 2026-09-20. It codes supervision sessions, not notes; what it lists is what a note would have to carry for a supervisor, which nobody has measured."
         }
       ],
       "relevance": {
@@ -2220,12 +2280,12 @@
         "K22"
       ],
       "origin": "literature",
-      "origin_note": "A new finding of this round.",
+      "origin_note": "A new finding of this round, read in full on 2026-09-20.",
       "evidence": [
         "S_abs_edit"
       ],
       "readiness": "candidate",
-      "limits": "VERIFIED FROM THE ABSTRACT ONLY. Requires real operation, which we do not have. Zero edits do not mean quality; they can mean no time to check."
+      "limits": "Read in full on 2026-09-20: eleven codes in three categories with interrater reliability, synthesised into five themes. Requires real operation, which we do not have. Zero edits do not mean quality; they can mean no time to check."
     },
     {
       "id": "ME14",
@@ -3048,6 +3108,16 @@
         "the pilot's coverage criterion names the two purposes the round serves",
         "purposes_in_scope records what is served and what is not"
       ]
+    },
+    {
+      "date": "2026-09-20",
+      "reason": "source-first property extraction (the inductive half of the framework synthesis)",
+      "changes": [
+        "source-properties.json lists every property of note quality each read source defines, in its own words with its location, mapped to candidates afterwards",
+        "the six reports supplied on 2026-09-16 were read and move from abstract-only to full sources with their population, raters, unit, format and limitations",
+        "two source properties no candidate covers are recorded as open, with a proposed disposition, for the investigator to decide",
+        "every literature-origin candidate is shown to rest on at least one source property; K06 rests on observation alone, as its origin says"
+      ]
     }
   ],
   "purposes_in_scope": {
@@ -3061,5 +3131,21 @@
     ],
     "rule": "A candidate is kept with its evidence whichever purpose it serves; the purposes this round serves decide what is measured and claimed, not what the catalog records.",
     "protocol_decision": "D8, 2026-09-16"
-  }
+  },
+  "open_source_properties": [
+    {
+      "pid": "S1-p13",
+      "label": "Culturally competent care evidenced in the note",
+      "source": "S1",
+      "disposition": "not adopted, pending the investigator's decision",
+      "reason": "A property of the treatment as the note shows it, not of the note's rendering of the session; judging it would mean judging the therapist's care from a note."
+    },
+    {
+      "pid": "S4-p09",
+      "label": "Internally consistent: no part of the note ignores or contradicts any other part",
+      "source": "S4",
+      "disposition": "proposed as a new candidate, pending the investigator's decision",
+      "reason": "K26 is consistency between notes of one case; nothing in the catalog measures contradiction inside one note. PDSQI-9 dropped the attribute as redundant with accuracy (S2-p11), which is an argument to record, not a reason to omit it."
+    }
+  ]
 }

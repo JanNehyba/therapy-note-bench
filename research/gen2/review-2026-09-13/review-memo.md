@@ -257,6 +257,11 @@ changes something. What has changed since:
   them.** Their reading basis is still the abstract and every claim resting on
   them is still an abstract-level claim, which `tests/test_review_ledger.py`
   holds them to. Reading them is a later round, with its own extractions.
+- **2026-09-20.** Those six were read, for a source-first extraction of every
+  property of note quality each read source defines (`catalog/source-properties.json`).
+  They are full sources in the catalog since then, and the three evidence lines that
+  had cited them from their abstracts were re-verified against the full texts. Seven
+  abstract-only reports remain.
 - **2026-09-16.** The candidate list moved from 29 to 31 in the catalog revision
   that answered audit findings A07 and A08. Language naturalness returned as K30
   and redundance became K31, separate from economy. The catalog carries the

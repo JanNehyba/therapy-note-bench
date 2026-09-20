@@ -192,12 +192,62 @@
     },
     {
       "id": "S_abs_edit",
-      "title": "What do clinicians edit in ambient AI-drafted clinical documentation? A qualitative content analysis. J Am Med Inform Assoc, 2026.",
+      "title": "What do clinicians edit in ambient AI-drafted clinical documentation? A qualitative content analysis. J Am Med Inform Assoc 2026;33(8):1457. doi:10.1093/jamia/ocag073. PMID 42118974.",
       "locator": "ledger:pmid:42118974",
       "layer": "transfer",
-      "publication_type": "unverified",
-      "verification": "metadata_checked",
-      "limitations": "Read from the abstract only; the full text was not retrieved in this round. A method for K22: content analysis of the edits clinicians actually make to an AI draft.",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "General medicine ambient scribing, not psychotherapy; two vendors in one system; an edit is what a clinician chose to change, not every error present. Read on 2026-09-20 for the property extraction.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S_abs_sweden",
+      "title": "Errors, Omissions, and Offenses in the Health Record of Mental Health Care Patients: Results from a Nationwide Survey in Sweden. J Med Internet Res 2023;25:e47841. doi:10.2196/47841. PMID 37921861.",
+      "locator": "ledger:pmid:37921861",
+      "layer": "direct",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "Self-report about whole records in Sweden, not about session notes or generated notes; what counted as an error was the patient's judgement. Read on 2026-09-20 for the property extraction.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S_abs_scoping_notes",
+      "title": "Schwarz J et al. Sharing Clinical Notes and Electronic Health Records With People Affected by Mental Health Conditions: Scoping Review. JMIR Ment Health 2021;8(12):e34170. doi:10.2196/34170. PMID 34904956.",
+      "locator": "ledger:pmid:34904956",
+      "layer": "requirements",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "About access to existing records, not about generated notes; no service-user co-production. Read on 2026-09-20 for the property extraction.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S_abs_supcode",
+      "title": "Objective coding of content and techniques in workplace-based supervision of an EBT in public mental health. Implement Sci 2018;13:19. doi:10.1186/s13012-017-0708-3. PMID 29368656.",
+      "locator": "ledger:pmid:29368656",
+      "layer": "requirements",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "Supervision sessions, not notes; one treatment and one US service system. The closest evidence found for what supervision attends to. Read on 2026-09-20 for the property extraction.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S_abs_hua",
+      "title": "Hua Y, Na H, Li Z, Liu F, Fang X, Clifton D, Torous J. A scoping review of large language models for generative tasks in mental health care. npj Digit Med 2025;8:230. doi:10.1038/s41746-025-01611-4.",
+      "locator": "ledger:supp:hua-scoping-review-2025",
+      "layer": "transfer",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "Conversational agents rather than documentation; system-level constructs. Also a recall gap of our search: neither its title nor its abstract carries a term for notes or summarisation. Read on 2026-09-20 for the property extraction.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S_abs_tednq",
+      "title": "Development of a scoring tool for emergency department note quality: a modified Delphi approach. CJEM 2025;27:524-533. doi:10.1007/s43678-025-00914-5. PMID 40249563.",
+      "locator": "ledger:pmid:40249563",
+      "layer": "transfer",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "Small panel, physicians only, emergency department; the reliability study (CJEM 2026) was not read. Read on 2026-09-20 for the property extraction.",
       "version": "source-v1"
     },
     {
@@ -211,16 +261,6 @@
       "version": "source-v1"
     },
     {
-      "id": "S_abs_sweden",
-      "title": "Errors, Omissions, and Offenses in the Health Record of Mental Health Care Patients: Results from a Nationwide Survey in Sweden. J Med Internet Res 2023.",
-      "locator": "ledger:pmid:37921861",
-      "layer": "direct",
-      "publication_type": "unverified",
-      "verification": "metadata_checked",
-      "limitations": "Read from the abstract only; the full text was not retrieved in this round. Mental health patients themselves report errors, omissions and offensive content in their records: three categories that match the client purpose exactly.",
-      "version": "source-v1"
-    },
-    {
       "id": "S_abs_delphi",
       "title": "The benefits and harms of open notes in mental health: A Delphi survey of international experts. PLoS One 2021.",
       "locator": "ledger:pmid:34644320",
@@ -228,16 +268,6 @@
       "publication_type": "unverified",
       "verification": "metadata_checked",
       "limitations": "Read from the abstract only; the full text was not retrieved in this round. Expert consensus on the benefits and harms of giving clients access to notes.",
-      "version": "source-v1"
-    },
-    {
-      "id": "S_abs_scoping_notes",
-      "title": "Sharing Clinical Notes and Electronic Health Records With People Affected by Mental Health Conditions: Scoping Review. JMIR Ment Health 2021.",
-      "locator": "ledger:pmid:34904956",
-      "layer": "requirements",
-      "publication_type": "unverified",
-      "verification": "metadata_checked",
-      "limitations": "Read from the abstract only; the full text was not retrieved in this round. An existing scoping review on exactly the client purpose. It has to be read before this layer is built again.",
       "version": "source-v1"
     },
     {
@@ -251,16 +281,6 @@
       "version": "source-v1"
     },
     {
-      "id": "S_abs_supcode",
-      "title": "Objective coding of content and techniques in workplace-based supervision of an EBT in public mental health. Implementation Science 2018.",
-      "locator": "ledger:pmid:29368656",
-      "layer": "requirements",
-      "publication_type": "unverified",
-      "verification": "metadata_checked",
-      "limitations": "Read from the abstract only; the full text was not retrieved in this round. A coding system for the content of supervision; the closest support found for the supervision purpose.",
-      "version": "source-v1"
-    },
-    {
       "id": "S_abs_disparity",
       "title": "Race and gender disparities in mental health documentation in primary care: Findings from a video vignette experiment. Soc Sci Med 2026.",
       "locator": "ledger:pmid:42361434",
@@ -268,16 +288,6 @@
       "publication_type": "unverified",
       "verification": "metadata_checked",
       "limitations": "Read from the abstract only; the full text was not retrieved in this round. Experimental evidence of inequality in mental health documentation; support for K27 and ME16.",
-      "version": "source-v1"
-    },
-    {
-      "id": "S_abs_hua",
-      "title": "Hua Y, Na H, Li Z, Liu F, Fang X, Clifton D, Torous J. A scoping review of large language models for generative tasks in mental health care. npj Digit Med 2025;8:230. doi:10.1038/s41746-025-01611-4.",
-      "locator": "ledger:supp:hua-scoping-review-2025",
-      "layer": "direct",
-      "publication_type": "unverified",
-      "verification": "metadata_checked",
-      "limitations": "Read from the abstract only; the full text was not retrieved in this round. RECALL GAP. The queries did not capture this work: neither its title nor its abstract carries a term for notes, documentation or summarisation, and every query required one. The investigator pointed to it on 2026-09-13 from an external source, and S19 cites it. It shows that the layer of general reviews on language models in mental health is systematically under-retrieved by the queries.",
       "version": "source-v1"
     },
     {
@@ -308,16 +318,6 @@
       "publication_type": "unverified",
       "verification": "metadata_checked",
       "limitations": "Read from the abstract only; the full text was not retrieved in this round. An instrument aimed directly at how staff-patient interactions are captured in notes; a Spanish adaptation exists, a precedent for language transfer.",
-      "version": "source-v1"
-    },
-    {
-      "id": "S_abs_tednq",
-      "title": "Development of a scoring tool for emergency department note quality: a modified Delphi approach. CJEM 2025; a The inter-rater reliability of the TEDNQ. CJEM 2026.",
-      "locator": "ledger:pmid:40249563",
-      "layer": "transfer",
-      "publication_type": "unverified",
-      "verification": "metadata_checked",
-      "limitations": "Read from the abstract only; the full text was not retrieved in this round. A recent example of the whole cycle: Delphi construction of criteria, then a separate agreement study.",
       "version": "source-v1"
     }
   ],
@@ -1028,19 +1028,21 @@
     {
       "id": "K22-e1",
       "source_id": "S_abs_edit",
-      "location": "J Am Med Inform Assoc 2026, abstract",
-      "interpretation": "A method exists: content analysis of the actual edits.",
-      "relationship": "hypothesis",
-      "population": "not established",
-      "languages": [],
-      "raters": "not established",
-      "unit": "not established",
-      "response_format": "not established",
+      "location": "Materials and Methods; Results, Themes 1 to 5",
+      "interpretation": "A method exists: content analysis of the actual edits, with a coding framework, interrater reliability and a thematic synthesis into five kinds of edit.",
+      "relationship": "method_transfer",
+      "population": "200 ambient-AI-drafted notes from 200 encounters by 73 clinicians across two vendors in one US health system; family and internal medicine and other specialties, two psychiatry notes",
+      "languages": [
+        "en"
+      ],
+      "raters": "8 coders, inductive codebook, Cohen's kappa per code",
+      "unit": "sentence-level edit unit",
+      "response_format": "11 binary codes in 3 categories (clinical content, terminology, language style); 5 themes",
       "validation": "not established",
-      "limitations": "VERIFIED FROM THE ABSTRACT ONLY. The full text was not obtained in this round.",
+      "limitations": "Read in full on 2026-09-20. General medicine ambient scribing in one US system, not psychotherapy; an edit is what the clinician chose to change, not every error present.",
       "human_checked_by": null,
       "source_artifact_digest": "",
-      "excerpt": "What do clinicians edit in ambient AI-drafted clinical documentation? A qualitative content analysis."
+      "excerpt": "an inductive coding framework with 11 codes across 3 categories: clinical content, terminology, and language style"
     },
     {
       "id": "K23-e1",
@@ -1083,19 +1085,21 @@
     {
       "id": "K24-e1",
       "source_id": "S_abs_sweden",
-      "location": "J Med Internet Res 2023, abstract",
-      "interpretation": "A nationwide survey exists in which mental health patients themselves report errors, omissions and offensive content in their records.",
-      "relationship": "hypothesis",
-      "population": "not established",
-      "languages": [],
-      "raters": "not established",
-      "unit": "not established",
-      "response_format": "not established",
+      "location": "Results, Errors, Omissions, and Offenses",
+      "interpretation": "Mental health patients themselves report errors, omissions and offensive content in their records, more often than other patients.",
+      "relationship": "direct_validation",
+      "population": "12 334 respondents of a national patient-portal survey, 3 131 with mental health care experience and 9 203 without",
+      "languages": [
+        "sv survey, en report"
+      ],
+      "raters": "self-report by patients",
+      "unit": "respondent",
+      "response_format": "yes/no items and Likert ratings on errors, omissions and offences found in one's own record",
       "validation": "not established",
-      "limitations": "VERIFIED FROM THE ABSTRACT ONLY. This triad of categories is, however, exactly what we lack for the client purpose.",
+      "limitations": "Read in full on 2026-09-20. Self-report about whole records in Sweden, not session notes. The three categories are exactly what the client purpose lacks, and that purpose is out of scope by decision D8.",
       "human_checked_by": null,
       "source_artifact_digest": "",
-      "excerpt": "Errors, Omissions, and Offenses in the Health Record of Mental Health Care Patients: Results from a Nationwide Survey in Sweden"
+      "excerpt": "Half of the respondents in the MHC group (1586/3131, 50.65%) reported finding an error in their EHR, and about a third (1089/3131, 34.78%) reported an omission."
     },
     {
       "id": "K24-e2",
@@ -1136,19 +1140,21 @@
     {
       "id": "K25-e2",
       "source_id": "S_abs_supcode",
-      "location": "Implementation Science 2018, abstract",
-      "interpretation": "A coding system for the content of supervision exists.",
-      "relationship": "hypothesis",
-      "population": "not established",
-      "languages": [],
-      "raters": "not established",
-      "unit": "not established",
-      "response_format": "not established",
+      "location": "Methods, SPOCS",
+      "interpretation": "A coding system for what supervision covers exists: the clinician's techniques, homework, symptom monitoring and review of actual practice.",
+      "relationship": "requirement",
+      "population": "audio-recorded workplace supervision sessions of trauma-focused CBT in US public mental health, coded with the SPOCS",
+      "languages": [
+        "en"
+      ],
+      "raters": "trained observational coders",
+      "unit": "supervision session",
+      "response_format": "29 supervision strategies: 16 content areas and 13 techniques, coded for intensity of coverage",
       "validation": "not established",
-      "limitations": "VERIFIED FROM THE ABSTRACT ONLY; and it concerns supervision sessions, not notes.",
+      "limitations": "Read in full on 2026-09-20. It codes supervision sessions, not notes; what it lists is what a note would have to carry for a supervisor, which nobody has measured.",
       "human_checked_by": null,
       "source_artifact_digest": "",
-      "excerpt": "Objective coding of content and techniques in workplace-based supervision of an EBT in public mental health"
+      "excerpt": "29 supervision strategies, with 16 content areas and 13 techniques"
     },
     {
       "id": "K26-e1",
