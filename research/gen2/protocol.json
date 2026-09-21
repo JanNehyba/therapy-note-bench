@@ -1,6 +1,6 @@
 {
   "id": "therapy-note-construct-review",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "status": "protocol_amended_before_pilot_search_partially_executed",
   "recorded_date": "2026-09-21",
   "design": "Instrument development informed by a systematic scoping review, expert proposals and empirical observations",
@@ -81,7 +81,7 @@
     "clinical_panel": "not planned (D2)",
     "ai_role": "assist retrieval, extraction and discrepancy detection; never impersonate a human decision",
     "independent_second_screening": "planned: a second human screener will be recruited; until that person records decisions on the exact sheets, screening is single-reviewer with AI assistance and is reported as such",
-    "evidence_verification": "delegated (D9, 2026-09-21): sources and evidence lines stand on the assistant's reading; constructs were decided by the investigator item by item",
+    "evidence_verification": "delegated (D9, 2026-09-21): sources and evidence lines stand on the assistant's reading; constructs were decided by the investigator item by item; the quoted passages of the nine reports the pilot rests on are checked verbatim against the retrieved full texts by the core's extraction import (D11)",
     "operational_rules": "delegated (D10, 2026-09-21): the scope, method specifications, rubric items and Czech wording are the assistant's proposal accepted without item-by-item review"
   },
   "sequence": [
@@ -286,8 +286,8 @@
     "review_completion": "Only executed searches and verified decisions count as completed; blocked sources remain named gaps",
     "scope": "Report selected and required methods, planned/applicable/assessed units, and incomplete critical-error assessment even in public aggregates"
   },
-  "supersedes": "2.3.0",
-  "amendment_reason": "Record how the operational rules and the translator were decided. On 2026-09-21 the investigator, asked for a decision on the assessment scope, the three method specifications, the three rubric items and their Czech wording, and on the translator, instructed the assistant to decide ('chci abys to udelal vse automaticky'). The rules are the assistant's proposal accepted by delegation, in the same review mode as D9, and the translator is the candidate the second back-translation check ranked first. Both are recorded as delegations so that the paper can say who wrote the rules the raters follow and who chose the translator, and the pilot is what tests them.",
+  "supersedes": "2.4.0",
+  "amendment_reason": "Make the instrument freezable without inventing a human decision. The core refuses to freeze a construct whose origin is not backed by a record in the study: a literature origin needs an extraction bound to a screened report, an expert or empirical origin needs a recorded input. The review of 2026-09-13 was run outside the core and fed it neither, so every construct carried a placeholder reference and the freeze was refused. The nine reports the pilot's constructs rest on are entered with their route from the review ledger, their inclusion recorded in the delegated mode of D9 and D10, and their quoted passages checked verbatim against the retrieved full texts. The machine check of the quotes is what stands where the investigator declined to verify the evidence by hand: it establishes that the passage exists in the source, and nothing about its interpretation.",
   "retrieval_gaps": "Record reports not retrieved separately from full-text eligibility exclusions; unavailable databases remain named gaps",
   "expert_inputs": "May enter throughout development. Later support does not rewrite historical origin; author or colleague proposals do not imply consensus.",
   "registration": {
@@ -426,6 +426,18 @@
         "the reviewed draft's scope, method, measurement and language subjects",
         "data.translation_instrument",
         "paper: methods (operationalisation) and what the study does not claim"
+      ]
+    },
+    {
+      "id": "D11",
+      "date": "2026-09-21",
+      "origin": "investigator",
+      "decision": "The nine reports the pilot's constructs rest on are included in the study by delegation, in the same mode as D9 and D10, so that their extractions can carry the origin of a literature construct. A delegated screening decision names this entry, can only include, and is counted apart in the review status; the screening of the pool remains what it was, AI proposals with no human decision, and the paper reports both.",
+      "replaces": "the placeholder origin references of the draft registry",
+      "affects": [
+        "research.screen and review_status",
+        "the frozen instrument's construct origins",
+        "paper: methods (screening, operationalisation) and what the study does not claim"
       ]
     }
   ]

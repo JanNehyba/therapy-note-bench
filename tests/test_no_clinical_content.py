@@ -52,6 +52,7 @@ DIACRITIC = re.compile(
 # Real transcripts and every derived QA/evidence artifact stay gitignored.
 OPERATIONAL = "research/gen2/catalog/operational.json"
 DRAFT = "research/gen2/catalog/draft-registry.json"
+DECISIONS = "research/gen2/decisions.json"
 CORE = "packages/therapy-note-eval-core/src/therapy_note_eval/"
 ALLOWED_CZECH: dict[str, str] = {
     CORE + "profiles.py": "Original bilingual profile instructions",
@@ -60,6 +61,8 @@ ALLOWED_CZECH: dict[str, str] = {
     OPERATIONAL: "AUTHORED-INSTRUMENT-TEXT: the pilot's operational rules in both languages",
     DRAFT: "derived from operational.json by the converter; tests/test_gen2_catalog.py holds "
     "its Czech to exactly the authored strings",
+    DECISIONS: "AUTHORED-INVESTIGATOR-TEXT: the investigator's own decisions on the catalog's "
+    "constructs, in the words they were given in",
 }
 
 #: The one research file that may carry Czech: the operational rules the
@@ -153,9 +156,10 @@ def _relative(path: Path) -> str:
 
 def test_czech_exceptions_are_only_authored_gen2_resources(tracked_files):
     core = {CORE + f for f in ("profiles.py", "review.js", "controls.py")}
-    assert set(ALLOWED_CZECH) == core | {OPERATIONAL, DRAFT}
+    assert set(ALLOWED_CZECH) == core | {OPERATIONAL, DRAFT, DECISIONS}
     assert FIXTURE_MARKER in (REPO_ROOT / CORE / "controls.py").read_text(encoding="utf-8")
     assert INSTRUMENT_MARKER in (REPO_ROOT / OPERATIONAL).read_text(encoding="utf-8")
+    assert "AUTHORED-INVESTIGATOR-TEXT" in (REPO_ROOT / DECISIONS).read_text(encoding="utf-8")
 
 
 def test_only_named_files_contain_czech(tracked_files):

@@ -217,9 +217,21 @@ def screen(store: Store, active: dict, decisions: list[dict]) -> dict:
             "Unknown screening decision",
         )
         require(
-            decision.get("mode") in ("human", "human_with_ai"),
+            decision.get("mode") in ("human", "human_with_ai", "delegated"),
             "Screening needs an actual human decision",
         )
+        if decision.get("mode") == "delegated":
+            ledger = {d["id"] for d in active["protocol"].get("decision_ledger", ())}
+            require(
+                decision.get("delegation_decision") in ledger,
+                "A delegated screening decision names the protocol decision that delegates it",
+            )
+            require(
+                decision["decision"] == "include",
+                "A delegation can only accept the assistant's reading; excluding a report "
+                "from a review is the reviewer's own decision and is recorded as one",
+            )
+            require(bool(decision.get("reason")), "A delegated inclusion needs its reason")
         require(
             decision["decision"] != "not_retrieved" or decision["stage"] == "full_text",
             "Not-retrieved is a full-text retrieval outcome, not an eligibility exclusion",
@@ -264,6 +276,16 @@ def screen(store: Store, active: dict, decisions: list[dict]) -> dict:
         existing.append(out)
         accepted.append(digest(out))
     return {"imported_decisions": len(accepted), "decision_ids": accepted}
+
+
+def delegated_decisions(store: Store, active: dict) -> list[dict]:
+    """Screening decisions nobody reviewed, so that a report can print them.
+
+    A delegated inclusion is a human decision to accept the assistant's reading,
+    not a reading of the report; the review's own counts are elsewhere and this
+    is what keeps the two from being confused.
+    """
+    return [d for d in current_decisions(store, active) if d.get("mode") == "delegated"]
 
 
 def current_decisions(store: Store, active: dict) -> list[dict]:
@@ -414,6 +436,7 @@ def review_status(store: Store, active: dict) -> dict:
         "decisions": {"/".join(k): v for k, v in sorted(counts.items())},
         "external_validation": "not established",
         "human_reviewers_planned": active["protocol"]["reviewers"]["human_count"],
+        "delegated_screening_decisions": len(delegated_decisions(store, active)),
         "flow_mermaid": "flowchart TD\n A[Search records: "
         + str(sum(s.get("record_count", 0) for s in searches))
         + "] --> B[Unique reports: "

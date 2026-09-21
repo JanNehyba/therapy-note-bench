@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from datetime import UTC, datetime
 
 from . import annotations
@@ -90,6 +91,18 @@ def import_screening(store, active, sheet, response):
     return screen(store, active, decisions)
 
 
+def flat(text: str) -> str:
+    """The text with its whitespace removed, for comparing a quote with a source.
+
+    Every extractor breaks words at a line or column edge, with a hyphen or
+    without one, so a quote that is in the document is often not in the string
+    the extractor produced. Dropping whitespace on both sides keeps the check
+    exact in the character sequence, which is what a quote is, and stops it
+    failing on the layout of the page it came from.
+    """
+    return re.sub(r"\s+", "", text)
+
+
 def import_extraction(store, active, request_id, entries):
     request = store.get("research_extraction_requests", request_id)
     require(
@@ -108,7 +121,10 @@ def import_extraction(store, active, request_id, entries):
             ),
             "Incomplete source-derived candidate",
         )
-        require(entry["exact_quote"] in text, "Extraction quote is absent from the supplied source")
+        require(
+            flat(entry["exact_quote"]) in flat(text),
+            "Extraction quote is absent from the supplied source",
+        )
     result = {
         "study_id": active["id"],
         "request_id": request_id,

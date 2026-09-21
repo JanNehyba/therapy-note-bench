@@ -1,0 +1,232 @@
+{
+  "version": "investigator-decisions-v1",
+  "marker": "AUTHORED-INVESTIGATOR-TEXT",
+  "note": "The investigator's own decisions on the catalog's constructs, kept here because they are the human review the instrument rests on and the workspaces that held them are rebuilt. Reasons are quoted as given, in Czech where they were given in Czech. No clinical text: these are judgements about criteria.",
+  "rater_id": "1",
+  "role": "researcher",
+  "instrument_author": true,
+  "delegations": [
+    {
+      "decision": "D9",
+      "date": "2026-09-21",
+      "subjects": [
+        "source",
+        "evidence"
+      ],
+      "instruction": "ber to jako prectene",
+      "means": "every source and evidence subject is accepted on the assistant's reading, not verified item by item"
+    },
+    {
+      "decision": "D10",
+      "date": "2026-09-21",
+      "subjects": [
+        "scope",
+        "method",
+        "measurement",
+        "language"
+      ],
+      "instruction": "chci abys to udelal vse automaticky",
+      "means": "the assessment scope, the method rules, the rubric items and their Czech wording are accepted on the assistant's proposal"
+    }
+  ],
+  "decisions": [
+    {
+      "subject": "construct:K01",
+      "decision": "accept",
+      "reason": "zdá se mi to ok",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K02",
+      "decision": "accept",
+      "reason": "je to podel mě tdefinice sedí popsiu ne?",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K03",
+      "decision": "accept",
+      "reason": "no dobře ale asis to vyžeduej mít k dispozici minulý sezení ne?",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K04",
+      "decision": "accept",
+      "reason": "dává smysl",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K05",
+      "decision": "accept",
+      "reason": "dává asmyls",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K06",
+      "decision": "accept",
+      "reason": "ok",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K07",
+      "decision": "accept",
+      "reason": "ano, todává smyls ale stačilo by možná jen shnrutí pro teraeputa therapeutic note a pak por pojištovnu? klidneta ybch neřešil a supervizora taky ne t enmá jasná pravidla",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K08",
+      "decision": "accept",
+      "reason": "ok, dává smyls je to spíše deskritpivní věc na ne ne škála anele možná anao",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K09",
+      "decision": "accept",
+      "reason": "dobře to je celkem důelžité",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K10",
+      "decision": "accept",
+      "reason": "ok pozro na naáveznasot an předhcozí tarsnrktip který enmsuí být k dispozici",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K11",
+      "decision": "accept",
+      "reason": "ok dobře.",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K12",
+      "decision": "accept",
+      "reason": "dobře a nená to i o otm že je tam nějaký linak bud čaosvá nebo téematická nebo sturktur?a",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K13",
+      "decision": "accept",
+      "reason": "ok  a klinický jazyk je asi řečšen jinde?",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K14",
+      "decision": "accept",
+      "reason": "ok nestignatizují je negaitnví vymezení pozitivní je deskritpvní jayzk?",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K15",
+      "decision": "accept",
+      "reason": "ok dobře...",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K16",
+      "decision": "unresolved",
+      "reason": "ohle tedy nevím to se mi nezdá důležité ale možná nao?",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K17",
+      "decision": "accept",
+      "reason": "ano špatěn často llm určuje třetí osoby a spštan ě připsiuje co říkají nebo neříkají kdy to kleint říka otec mi vžd yříkal, že...",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K18",
+      "decision": "accept",
+      "reason": "ok",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K19",
+      "decision": "accept",
+      "reason": "no dobře, specifické por čr jen",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K20",
+      "decision": "accept",
+      "reason": "ok,a le jennutné to mít jasně a satdnardizoaven nasan v pormtpu",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K21",
+      "decision": "accept",
+      "reason": "souhlasi; rozhodnuti sdeleno v chatu 2026-09-21, zapsal asistent",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K22",
+      "decision": "accept",
+      "reason": "dobře ale tto přepdkládá, že mám k dispozici zurpavy od dobronka a to nebudu mít aspon ne hned nebo později ano...",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K23",
+      "decision": "accept",
+      "reason": "souhlasi s prepsanym znenim; rozhodnuti sdeleno v chatu 2026-09-21, zapsal asistent",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K24",
+      "decision": "accept",
+      "reason": "tohel je relaebtní jen pro klieantksé shrnutí!",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K25",
+      "decision": "accept",
+      "reason": "jen relevrntaní pro supervizora!",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K26",
+      "decision": "accept",
+      "reason": "přepdkldádi že eixstuje předhoczí zápisy a jsou k diporzici netriviální! popozor!",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K27",
+      "decision": "accept",
+      "reason": "ano,a le vyžaduje to hodnš zápisků a por na co se měří klalita modelu nebo ?",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K28",
+      "decision": "accept",
+      "reason": "dobře míra nějaké perosnalizace verusus obecnsot v e zrpávě... to yb asi šlo...",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K29",
+      "decision": "accept",
+      "reason": "ok",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K30",
+      "decision": "accept",
+      "reason": "ok",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K31",
+      "decision": "accept",
+      "reason": "ok ale pozro na to zda je to v rměřneo v rámci jendodho promptu nebo mezi promtp ynapříč, anpříkadkl u dlouhcých nějakých poznámek často se dělí na jendotlivé prompty, alejako že dap ppor kadžou sekcimá svůj pormtp a le pak je redunecndce větší! jedne zápis note jedne asi pormtp základní překldopad!",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K32",
+      "decision": "accept",
+      "reason": "adopted by the investigator in chat on 2026-09-21 (cultural competence: 'prevezmi to'), transcribed by the assistant",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    },
+    {
+      "subject": "construct:K33",
+      "decision": "accept",
+      "reason": "added by the investigator in chat on 2026-09-21 (internal consistency: 'na druhou rikam take ano'), transcribed by the assistant",
+      "decided_at": "2026-09-21T09:44:00.000Z"
+    }
+  ]
+}

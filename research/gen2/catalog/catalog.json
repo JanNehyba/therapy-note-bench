@@ -941,9 +941,9 @@
         {
           "source": "S2",
           "location": "Round 2, pertinence",
-          "quote": "A pertinent omission refers to details relevant to a patient's expected",
+          "quote": "A pertinent omission refers to information that is essential for the use case or target provider and would have adverse effects on patient care decisions",
           "supports": "Relevance is defined against the expected use, not absolutely.",
-          "our_adaptation": "Our four purposes are our construction, not PDSQI's."
+          "our_adaptation": "Our four purposes are our construction, not PDSQI's, and since 2026-09-16 the round serves two of them (D8). The quote was corrected on 2026-09-21: the earlier one spliced the opening of the pertinent definition onto the body of the potentially pertinent one, which reverses what it says, and the splice was found by checking the passage against the retrieved full text."
         },
         {
           "source": "S11",
@@ -3240,6 +3240,14 @@
       "changes": [
         "K19-e1: 'requires legal review' contradicted the investigator's decision of 2026-09-16 that narrowed K19 without one",
         "K28-e3: 'verified from the abstract only' was written before S19's full text was retrieved on 2026-09-13; re-verified in the full text on 2026-09-21"
+      ]
+    },
+    {
+      "date": "2026-09-21",
+      "reason": "the quoted passages of the pilot's constructs were checked against the retrieved full texts",
+      "changes": [
+        "K07-e1: the quote was a splice of PDSQI-9's two omission definitions, 'A pertinent omission refers to' followed by the body of 'A potentially pertinent omission refers to details relevant to a patient's expected clinical course'; replaced by the pertinent definition as the source states it, which supports the same claim more directly",
+        "every other quoted passage of the twelve constructs the pilot measures was found in the retrieved file, allowing for the whitespace an extractor inserts inside words"
       ]
     }
   ],

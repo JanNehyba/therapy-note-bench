@@ -507,10 +507,10 @@
       "unit": "whole summary",
       "response_format": "9 attributes on 5-point Likert scales",
       "validation": "not established",
-      "limitations": "Our four purposes are our construction, not PDSQI's.",
+      "limitations": "Our four purposes are our construction, not PDSQI's, and since 2026-09-16 the round serves two of them (D8). The quote was corrected on 2026-09-21: the earlier one spliced the opening of the pertinent definition onto the body of the potentially pertinent one, which reverses what it says, and the splice was found by checking the passage against the retrieved full text.",
       "human_checked_by": null,
       "source_artifact_digest": "",
-      "excerpt": "A pertinent omission refers to details relevant to a patient's expected"
+      "excerpt": "A pertinent omission refers to information that is essential for the use case or target provider and would have adverse effects on patient care decisions"
     },
     {
       "id": "K07-e2",
@@ -2865,7 +2865,7 @@
       "deterministic_checks": []
     }
   ],
-  "protocol_revision": "ea8db4bd1f1c77ac16b762f839cc69e2a08d22757d11dda6b4129679dfaf7a4a",
+  "protocol_revision": "392aa312a253a13ad76ddbc05e00df17610d5b110f31436b5a90b039a772e8c2",
   "version": "registry-v2",
   "literature_freeze": null,
   "methods": [

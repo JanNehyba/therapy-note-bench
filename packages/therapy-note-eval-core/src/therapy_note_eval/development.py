@@ -202,6 +202,7 @@ def record_input(store, active, value):
 
 def verify_sources(store, active, registry):
     from .research import current_decisions
+    from .research_review import flat
 
     decisions = current_decisions(store, active)
     title_included = {
@@ -257,7 +258,7 @@ def verify_sources(store, active, registry):
                     r["study_id"] == active["id"]
                     and r["record_id"] == source.id
                     and r["full_text_digest"] == evidence.source_artifact_digest
-                    and evidence.excerpt in r["source_text"]
+                    and flat(evidence.excerpt) in flat(r["source_text"])
                     for r in store.all("research_extraction_requests")
                 ),
                 "Evidence does not match a supplied source passage",

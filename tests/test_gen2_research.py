@@ -1003,6 +1003,84 @@ def test_registry_review_rejects_stale_content_ai_authorship_and_missing_decisio
     assert out["decisions"] == 0 and out["unanswered"] == len(sheet["items"])
 
 
+def test_a_delegated_screening_decision_names_its_delegation_and_can_only_include(store):
+    """The reports the instrument rests on were read by the assistant and never
+    screened by a person. Entering them as a human decision would be false;
+    entering them as a delegation says who decided and what they decided."""
+    active, record = start_review(store)
+    base = {
+        "record_id": record["id"],
+        "stage": "title_abstract",
+        "reviewer": "1",
+        "decided_at": "2026-09-21",
+        "reason": "cited by the catalog; accepted on the assistant's reading",
+    }
+    with pytest.raises(ValidationError, match="names the protocol decision"):
+        research.screen(store, active, [{**base, "decision": "include", "mode": "delegated"}])
+    with pytest.raises(ValidationError, match="can only accept"):
+        research.screen(
+            store,
+            active,
+            [
+                {
+                    **base,
+                    "decision": "exclude",
+                    "mode": "delegated",
+                    "delegation_decision": "D9",
+                }
+            ],
+        )
+    research.screen(
+        store,
+        active,
+        [{**base, "decision": "include", "mode": "delegated", "delegation_decision": "D9"}],
+    )
+    assert research.review_status(store, active)["delegated_screening_decisions"] == 1
+    assert [d["record_id"] for d in research.delegated_decisions(store, active)] == [record["id"]]
+
+
+def test_a_quote_is_checked_through_the_whitespace_an_extractor_inserts(store):
+    """Every extractor breaks words at a column edge. A quote that is in the
+    report must not fail its check because the page had two columns, and a
+    quote that is not in the report must still fail."""
+    active, record = start_review(store)
+    research.screen(
+        store,
+        active,
+        [
+            {
+                "record_id": record["id"],
+                "stage": stage,
+                "decision": "include",
+                "mode": "human",
+                "reviewer": "synthetic",
+                "decided_at": "synthetic",
+            }
+            for stage in ("title_abstract", "full_text")
+        ],
+    )
+    text = (
+        "The panel placed a focus on the vulnerability of the attribute "
+        "Accurate to hallucina tions."
+    )
+    request = research.extraction_prompt(store, active, record["id"], text)
+    entry = {
+        "source_location": "Methods",
+        "exact_quote": "vulnerability of the attribute Accurate to hallucinations",
+        "construct_name": "Synthetic",
+        "definition": "Synthetic",
+    }
+    out = research_review.import_extraction(store, active, digest(request), [entry])
+    assert out["candidates"] == 1
+    with pytest.raises(ValidationError, match="absent from the supplied source"):
+        research_review.import_extraction(
+            store,
+            active,
+            digest(request),
+            [{**entry, "exact_quote": "the attribute Thorough to omissions"}],
+        )
+
+
 def test_a_delegated_review_is_recorded_as_one_and_can_only_accept(store):
     """On 2026-09-21 the investigator, having decided every construct, declined
     to verify sources and evidence lines item by item and accepted them on the
