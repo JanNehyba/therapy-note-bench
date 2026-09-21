@@ -1,0 +1,42 @@
+{
+  "version": "pilot-cases-v1",
+  "date": "2026-09-21",
+  "seed": 20260921,
+  "source": "AnnoMI conversations released through TN-Eval (50)",
+  "rule": [
+    "turn count between the 25th and 75th percentile of the 50 (inclusive), so the pilot is neither the shortest nor the longest material",
+    "shuffled with the seed; the first two from distinct AnnoMI videos are the pilot cases",
+    "the back-translation sample draws ten turns each from four other conversations outside the pilot videos, seed plus one"
+  ],
+  "turn_count_quartiles": [
+    29,
+    68
+  ],
+  "pilot_cases": [
+    {
+      "id": "94",
+      "video_group": "annomi-video:3cc7f21ad8b026fe8796448ac3ae22198c3502d1b96c28c29d259d851b6b6880",
+      "turns": 62,
+      "words": 1285,
+      "digest": "1642a7e7f7fcb63cbebcc15f11799aa90eb810dfe4ffb90b9612169ac9ee84ce"
+    },
+    {
+      "id": "25",
+      "video_group": "annomi-video:cda6236d5a1c377ff71f08dfecaa2ca81f18514e03afe33d0f14d82277e90548",
+      "turns": 34,
+      "words": 611,
+      "digest": "b34ecf27ca5bc2448e60d55d72a35f9bcbb569d9af529fa95c1cbb80fb92f56c"
+    }
+  ],
+  "translation_sample": {
+    "conversations": [
+      "37",
+      "29",
+      "35",
+      "50"
+    ],
+    "turns": 40,
+    "digest": "fc9b68f845627f95c5189b3d4ee6ab30ee5141f44798bdd1b65f0abb6676e4ff"
+  },
+  "note": "Text stays under local/; this record carries identifiers, counts and digests only."
+}

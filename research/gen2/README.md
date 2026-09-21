@@ -132,6 +132,10 @@ back-translation, records the chosen one with its provider, settings and prompt
 digest, verifies that every conversation maps one turn for one turn, and writes an
 EN/CS pair only for a conversation a person has read a sample of (decision D4,
 audit A11). The ten earlier translations have no such record and are superseded.
+Which two conversations the pilot translates is drawn by a seeded rule in
+`research/gen2/translation/draw_pilot_cases.py` and recorded in `pilot-cases.json`
+with the sample the translator check scores candidates on, taken from other
+conversations; the test suite re-derives the record wherever the corpus is.
 
 ```sh
 python tools/translate_annomi_cs.py select --sample local/sample.json --candidates a,b --back-translator c
