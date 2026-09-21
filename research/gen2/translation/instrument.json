@@ -1,9 +1,9 @@
 {
   "version": "translation-instrument-v1",
-  "recorded_at": "2026-09-21T15:15:05+00:00",
+  "recorded_at": "2026-09-21T19:50:04+00:00",
   "direction": "en->cs",
   "provider": "einfra",
-  "model": "mistral-medium-3.5",
+  "model": "glm-5.3",
   "settings": {
     "temperature": 0.0,
     "max_tokens": 16384,
@@ -12,35 +12,43 @@
   "prompt_version": "gen2-translate-v1",
   "prompt_digest": "0814e00e8536094fc8fdf07e32ca78548e5f3be07c387080362ea3ea2b5d669c",
   "back_translation_check": {
-    "digest": "2edf93b5c3e5b8b65bd2583d8bf6d39b5fecb9e9ff1b760bdead39afde5121eb",
-    "recorded_at": "2026-09-21T14:55:09+00:00",
+    "digest": "a963438c4a661bc03c7cbc9ee2f698251123a2c16703613704b7fed06c67260c",
+    "recorded_at": "2026-09-21T16:04:32+00:00",
     "back_translator": {
       "provider": "einfra",
       "model": "gpt-oss-120b"
     },
     "sample_turns": 40,
     "measurement": {
-      "model": "mistral-medium-3.5",
+      "model": "glm-5.3",
       "structure": {
         "turns_in": 40,
         "turns_out": 40,
         "problems": [],
         "untranslated_turns": 0,
-        "length_ratio": 0.8687,
+        "unchanged_short_turns": [
+          1,
+          9,
+          13,
+          15,
+          17,
+          37
+        ],
+        "length_ratio": 0.9306,
         "ok": true
       },
       "round_trip": {
         "compared_turns": 40,
         "of_turns": 40,
-        "mean_chrf": 0.644,
-        "worst_chrf": 0.0498,
-        "below_floor": 8,
+        "mean_chrf": 0.772,
+        "worst_chrf": 0.0296,
+        "below_floor": 3,
         "floor": 0.5
       }
     }
   },
   "not_a_judge_of": [],
-  "reason": "The only candidate of six that returned every one of the forty sample turns and completed the round trip (mean chrF 0.644, eight turns under the 0.50 floor, listed for the human meaning review). gemma4 and glm-5.3 failed the check's v1 untranslated rule on five short turns later found to be interjections; deepseek-v4-flash and kimi-k3 timed out at 180 s; qwen3.8-27b exceeded a 16384-token budget. The investigator instructed on 2026-09-21 to close the selection and proceed; a second check under the corrected v2 rule was running and is recorded beside this one when it completes. The pilot's judge models are not yet named; the instrument must be re-checked against them before any judged run.",
+  "reason": "Highest round trip of the second check (mean chrF 0.772, three of forty turns under the 0.50 floor, every turn returned, six short interjections unchanged), measured under the corrected v2 rule and the 600 s timeout; gemma4 was within 0.01 and mistral-medium-3.5, recorded from the first check, at 0.669 with eight turns under the floor. The investigator delegated the choice to the assistant on 2026-09-21 ('prepni klidne na glm 5.3 ... nebo klidne nechej'); this record supersedes the mistral-medium-3.5 record of the same day, which is retained in the workspace. The pilot's judge models are not yet named; the instrument must be re-checked against them before any judged run.",
   "status": "recorded_before_use",
   "supersedes": "the ten undocumented Czech translations of the earlier Gen-2 draft, which are retained as historical artifacts and are not used as pairs (D4)"
 }
