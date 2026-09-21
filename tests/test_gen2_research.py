@@ -1003,6 +1003,41 @@ def test_registry_review_rejects_stale_content_ai_authorship_and_missing_decisio
     assert out["decisions"] == 0 and out["unanswered"] == len(sheet["items"])
 
 
+def test_a_delegated_review_is_recorded_as_one_and_can_only_accept(store):
+    """On 2026-09-21 the investigator, having decided every construct, declined
+    to verify sources and evidence lines item by item and accepted them on the
+    assistant's reading (D9). That is a decision and is recorded as a distinct
+    mode: it names the ledger decision, it can only accept, and the registry
+    lists what rests on it so that a snapshot and a report can say so."""
+    active, record = start_review(store)
+    registry = toy_registry(active, record)
+    sheet = development.registry_sheet(store, active, plain(registry))
+    subjects = [i["id"] for i in sheet["items"] if i["id"].split(":")[0] in ("source", "evidence")]
+    assert subjects
+    raw = {
+        **response(sheet),
+        "submitted_at": "synthetic-time",
+        "delegated": True,
+        "delegation_decision": "D9",
+        "answers": [
+            {"id": s, "value": "accept", "reason": "accepted on the assistant's reading (D9)"}
+            for s in subjects
+        ],
+    }
+    out = development.import_registry_review(store, active, sheet, raw)
+    assert out["decisions"] == len(subjects)
+    reviewed = load_registry(store.get("registry_drafts", out["registry_revision"]))
+    assert all(r.mode == "delegated" for r in reviewed.reviews)
+    assert reviewed.delegated_subjects() == tuple(sorted(subjects))
+    with pytest.raises(ValidationError, match="names the protocol decision"):
+        development.import_registry_review(
+            store, active, sheet, {**raw, "delegation_decision": "D0"}
+        )
+    excluded = [{**a, "value": "exclude"} for a in raw["answers"][:1]]
+    with pytest.raises(ValidationError, match="can only accept"):
+        development.import_registry_review(store, active, sheet, {**raw, "answers": excluded})
+
+
 def test_expert_instrument_snapshot_preserves_origin_and_rejects_silent_amendments(store):
     active, record = start_review(store)
     registry = toy_registry(active, record)
@@ -1034,6 +1069,8 @@ def test_expert_instrument_snapshot_preserves_origin_and_rejects_silent_amendmen
     )
     assert development.verify_snapshot(store, checked)["id"] == active["id"]
     assert checked.constructs[0].origin == "prior_proposal"
+    snapshot = store.get("instrument_snapshots", frozen["snapshot_id"])
+    assert snapshot["delegated_reviews"] == [] and snapshot["delegated_note"] is None
     with pytest.raises(ValidationError, match="parent"):
         development.freeze_instrument(store, active, plain(registry))
     with pytest.raises(ValidationError, match="differs"):

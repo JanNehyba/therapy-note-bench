@@ -76,6 +76,24 @@ def import_registry_review(store, active, sheet, response):
     response_id = digest({"study_id": active["id"], "sheet_id": sheet["id"], "response": response})
     prior = {r.id: r for r in registry.reviews}
     superseded = {k for r in registry.reviews for k in r.supersedes}
+    delegated = bool(response.get("delegated", False))
+    if delegated:
+        ledger = {d["id"] for d in active["protocol"].get("decision_ledger", ())}
+        require(
+            response.get("delegation_decision") in ledger,
+            "A delegated review names the protocol decision that delegates it",
+        )
+        require(
+            all(a.get("value") == "accept" for a in checked["answers"]),
+            "A delegation can only accept the assistant's reading; any other decision "
+            "is the reviewer's own and is imported as one",
+        )
+    if delegated:
+        mode = "delegated"
+    elif response.get("ai_assisted", False):
+        mode = "human_with_ai"
+    else:
+        mode = "human"
     decisions = []
     for answer in checked["answers"]:
         require(bool(answer.get("reason", "").strip()), "Every research decision needs a reason")
@@ -95,7 +113,7 @@ def import_registry_review(store, active, sheet, response):
                 checked["rater_id"],
                 checked["role"],
                 response["submitted_at"],
-                "human_with_ai" if response.get("ai_assisted", False) else "human",
+                mode,
                 answer["reason"],
                 response_id,
                 parents,
@@ -262,6 +280,13 @@ def freeze_instrument(store, active, raw, parent=None, reason=""):
         "amendment_reason": reason,
         "recorded_at": datetime.now(UTC).isoformat(),
         "status": "development_instrument_not_clinically_validated",
+        "delegated_reviews": list(registry.delegated_subjects()),
+        "delegated_note": (
+            "these subjects were accepted on the assistant's reading by a recorded "
+            "delegation and are not human-verified item by item"
+            if registry.delegated_subjects()
+            else None
+        ),
     }
     key = digest(snapshot)
     store.put("instrument_snapshots", key, snapshot)

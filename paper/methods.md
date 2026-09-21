@@ -120,8 +120,12 @@ revise, exclude, unresolved, merge) with a mandatory reason, bound to a digest
 of the exact text it was made about, so that a later change of wording voids
 the decision rather than inheriting it. The investigator is recorded as the
 instrument's author on every decision; an author's review is not independent
-validation. At the time of writing, 31 construct decisions are recorded and 96
-subjects are open; a second reviewer has not been recruited.
+validation. The investigator decided every construct: 31 on 2026-09-16 and
+2026-09-21, and the two adopted from the source-first extraction. The source and
+evidence subjects were not verified item by item: on 2026-09-21 the investigator
+accepted them on the assistant's reading by a recorded delegation (decision D9),
+which the registry stores as a distinct decision mode that can only accept and
+lists on every frozen snapshot. A second reviewer has not been recruited.
 
 ## Operationalisation, freeze and pilot
 
@@ -136,7 +140,7 @@ rater training, 1 corpus-level proxy and 1 derived ratio. The protocol records
 the executable count at freeze rather than capping it. The registry refuses to
 freeze while any used subject lacks an accepted decision.
 
-The feasibility pilot (protocol 2.2.0) freezes 16 generation jobs over two
+The feasibility pilot (protocol 2.3.0) freezes 16 generation jobs over two
 cohorts, two English AnnoMI conversations and their Czech translations, two
 purposes and two generator families, and balances an 8-note human sample across
 them. Two Czech psychologists, neither the instrument author, rate under a
@@ -183,6 +187,8 @@ searched, most of the pool was not screened, and the estimate of what was
 missed is reported. It does not present expert consensus: the instruments we
 build on used therapist co-design and Delphi panels, and this round had one
 investigator with AI assistance, whose decisions are recorded as an author's.
+The passages quoted as evidence were read by the assistant and accepted by
+delegation; no person verified each of them against its source.
 It does not present a validated instrument: no agreement statistic exists
 before the pilot. The Czech legal criterion is a documentation-conformance check
 for records kept by a provider of health services, not a statement about legal

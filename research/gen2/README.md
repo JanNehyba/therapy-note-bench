@@ -1,7 +1,7 @@
 # Gen-2: scoping review and transparent instrument development
 
-**Research protocol 2.2.0, amended 2026-09-16; 2.1.0, 2.0.0 and 1.0.0 are retained
-in `history/`. Status: prepared and amended before any pilot run; the search of
+**Research protocol 2.3.0, amended 2026-09-21; 2.2.0, 2.1.0, 2.0.0 and 1.0.0 are
+retained in `history/`. Status: prepared and amended before any pilot run; the search of
 2026-09-13 is bounded as a scoping search with a prioritised evidence map, and the
 human selection and clinical validation are not complete.** Earlier reading, prototype
 experiments and proposals are formative development, not erased history.
@@ -93,6 +93,14 @@ have separate review subjects. Changing their content invalidates their prior
 acceptance. Independent conflicting decisions block acceptance until explicitly
 resolved; original responses remain available. AI proposals cannot self-promote
 into human-reviewed evidence.
+
+A review may be delegated, and the record then says so. On 2026-09-21 the
+investigator, having decided every construct, declined to verify the sources and
+evidence lines item by item and accepted them on the assistant's reading (decision
+D9). Such a response is imported with `delegated: true`, must name the ledger
+decision, can only accept, and is stored in the review mode `delegated`; every
+frozen instrument snapshot lists the subjects that rest on it, so nothing built on
+them is reported as human-verified evidence.
 
 ## Commands
 

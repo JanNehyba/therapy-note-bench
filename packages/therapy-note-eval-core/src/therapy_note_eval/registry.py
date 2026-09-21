@@ -28,7 +28,7 @@ class ReviewDecision:
     reviewer: str
     role: str
     decided_at: str
-    mode: Literal["human", "human_with_ai"]
+    mode: Literal["human", "human_with_ai", "delegated"]
     reason: str
     response_id: str
     supersedes: tuple[str, ...] = ()
@@ -48,7 +48,10 @@ class ReviewDecision:
             ),
             "Incomplete human decision",
         )
-        require(self.mode in ("human", "human_with_ai"), "AI output is not a human decision")
+        require(
+            self.mode in ("human", "human_with_ai", "delegated"),
+            "AI output is not a human decision",
+        )
 
     @property
     def id(self):
@@ -182,6 +185,18 @@ class InstrumentRegistry:
             ),
             "Missing, disputed or stale human decision: " + subject,
         )
+
+    def delegated_subjects(self) -> tuple[str, ...]:
+        """Subjects accepted on the assistant's reading by a recorded delegation.
+
+        A delegation is a human decision, but not a verification: the person
+        chose not to check each subject and said so. Whatever is built on these
+        subjects may not be reported as human-verified evidence, so the list is
+        kept where a frozen snapshot and a report can print it.
+        """
+        superseded = {key for r in self.reviews for key in r.supersedes}
+        current = [r for r in self.reviews if r.id not in superseded]
+        return tuple(sorted({r.subject for r in current if r.mode == "delegated"}))
 
     def check_language(self, language: str) -> None:
         for kind, values in (("method", self.method_specs), ("measurement", self.measurements)):
