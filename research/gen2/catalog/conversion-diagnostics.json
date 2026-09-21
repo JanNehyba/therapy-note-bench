@@ -4,20 +4,60 @@
   "catalog_date": "2026-09-16",
   "protocol_version": "2.3.0",
   "protocol_revision": "a1f778023a3bbe7ace46e04fe76879a7568287ed6065b4de598bdfa99c949ffa",
-  "rule": "Every source, evidence line and candidate maps to a registry record with no human decision. Nothing becomes an operational item, a selected method or a review; each such gap is listed here with its reason.",
+  "rule": "Every source, evidence line and candidate maps to a registry record with no human decision. The operational specification, where present, becomes method specs and development items with no decision on them; nothing becomes a review, a pilot status or a reviewed item, and each pilot entry without operational rules is listed here with its reason.",
   "mapped": {
     "sources": 32,
     "evidence": 61,
     "constructs": 33
   },
+  "operational": {
+    "specification": "operational-v1",
+    "method_specs": [
+      "qa",
+      "claims",
+      "items"
+    ],
+    "measurements": [
+      "M06",
+      "M07",
+      "M08"
+    ],
+    "status": "development items and proposed scope; selection, pilot status and every language variant are human decisions the sheet puts to the reviewer",
+    "not_operationalised": [
+      {
+        "entry": "P09",
+        "why": "a deterministic requirements check, specified with the Czech task template, not a rated method"
+      },
+      {
+        "entry": "P10",
+        "why": "human-use outcome asked of the raters in the pilot protocol, not a note measurement"
+      },
+      {
+        "entry": "P11",
+        "why": "human-use outcome asked of the raters in the pilot protocol, not a note measurement"
+      },
+      {
+        "entry": "P12",
+        "why": "a study condition of the pilot design, not a measurement"
+      },
+      {
+        "entry": "P13",
+        "why": "a corpus-level proxy computed over a generator's set of notes, outside the per-note registry"
+      },
+      {
+        "entry": "P14",
+        "why": "derived from P01 under a length-controlled condition; defined with the pilot plan"
+      }
+    ]
+  },
   "not_mapped": {
-    "measurements": 14,
+    "pilot_entries_without_operational_rules": 6,
     "methods": 17,
     "reviews": 0
   },
   "pilot_check": {
     "result": "refused",
-    "message": "Pilot needs explicit methods"
+    "message": "Missing, disputed or stale human decision: scope"
   },
   "relationship_rule": "derived from the source's evidence layer, not from a human reading of the passage",
   "state_rule": "a catalog state is a research judgement and never becomes a registry status: every construct is decoded as candidate, because pilot status is a human selection the core refuses to infer",

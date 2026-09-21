@@ -68,6 +68,19 @@ uv run python research/gen2/catalog/render_catalog.py      # docs/gen2-catalog.h
 uv run python research/gen2/catalog/convert_to_registry.py # draft-registry.json, diagnostics
 ```
 
+`operational.json` is the assistant's proposal of the rules the pilot's three
+methods run under, in English and Czech: source-bank question answering for
+P01 to P03, atomic-claim verification for P04 and P05, and three rubric items
+for P06 to P08, each with the outcome keys the core implements, severity
+rules and anchors. The converter turns it into method specs and development
+items with no decision on them; the scope, each method, each item and each
+Czech variant is a review subject the sheet puts to the investigator. It is
+the one research file allowed to carry Czech, marked as authored instrument
+text.
+
+```sh
+```
+
 Edit `catalog.json` and regenerate; never edit the page or the draft by hand.
 
 ## What comes next

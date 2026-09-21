@@ -2728,16 +2728,361 @@
       "origin_reference": "catalog:K33"
     }
   ],
-  "measurements": [],
+  "measurements": [
+    {
+      "id": "M06",
+      "construct_id": "K12",
+      "definition": "Each information unit the note carries is checked against the section the task's template expects it in.",
+      "question": "Is every information unit the note carries placed in the section the template expects for it?",
+      "reference_mode": "norm",
+      "response_format": "binary",
+      "labels": [
+        "pass",
+        "fail"
+      ],
+      "anchors": {
+        "pass": "every unit the note carries sits in its expected section",
+        "fail": "at least one unit sits in another section; each such unit is marked"
+      },
+      "sources": [
+        "K12-e1",
+        "K12-e2"
+      ],
+      "profiles": [
+        "continuity",
+        "audit"
+      ],
+      "examples": {
+        "pass": "The client's report of drinking is in Subjective and the plan to cut down is in Plan.",
+        "fail": "The therapist's working hypothesis about avoidance is written into Subjective as the client's statement."
+      },
+      "status": "development",
+      "version": "measurement-v1",
+      "language_variants": {
+        "cs": {
+          "definition": "Každá informační jednotka, kterou zápis nese, se porovná s oddílem, kde ji šablona úlohy čeká.",
+          "question": "Stojí každá informační jednotka, kterou zápis nese, v oddílu, kde ji šablona čeká?",
+          "anchors": {
+            "pass": "každá jednotka, kterou zápis nese, stojí ve svém očekávaném oddílu",
+            "fail": "aspoň jedna jednotka stojí v jiném oddílu; každá taková se označí"
+          },
+          "examples": {
+            "pass": "Klientova zpráva o pití je v části Subjektivní a plán omezit pití v části Plán.",
+            "fail": "Pracovní hypotéza terapeuta o vyhýbání je zapsaná v části Subjektivní jako výrok klienta."
+          }
+        }
+      },
+      "deterministic_checks": []
+    },
+    {
+      "id": "M07",
+      "construct_id": "K11",
+      "definition": "Each sentence of the note is labelled with the information units it carries; a sentence that carries none is superfluous. The share is reported beside coverage.",
+      "question": "Does every sentence of the note carry at least one information unit of the bank?",
+      "reference_mode": "source",
+      "response_format": "binary",
+      "labels": [
+        "pass",
+        "fail"
+      ],
+      "anchors": {
+        "pass": "every sentence carries at least one unit, or is a required heading",
+        "fail": "at least one sentence carries no unit; each such sentence is marked"
+      },
+      "sources": [
+        "K11-e1",
+        "K11-e2"
+      ],
+      "profiles": [
+        "continuity",
+        "audit"
+      ],
+      "examples": {
+        "pass": "Every sentence names something the client said, the therapist did, or the plan holds.",
+        "fail": "\"The session was productive and the client engaged well\" carries no unit of the bank."
+      },
+      "status": "development",
+      "version": "measurement-v1",
+      "language_variants": {
+        "cs": {
+          "definition": "Každá věta zápisu se označí informačními jednotkami, které nese; věta, která nenese žádnou, je nadbytečná. Podíl se uvádí vedle pokrytí.",
+          "question": "Nese každá věta zápisu aspoň jednu informační jednotku banky?",
+          "anchors": {
+            "pass": "každá věta nese aspoň jednu jednotku, nebo je to povinný nadpis",
+            "fail": "aspoň jedna věta nenese žádnou jednotku; každá taková se označí"
+          },
+          "examples": {
+            "pass": "Každá věta pojmenovává něco, co klient řekl, terapeut udělal nebo plán obsahuje.",
+            "fail": "„Sezení bylo produktivní a klient dobře spolupracoval“ nenese žádnou jednotku banky."
+          }
+        }
+      },
+      "deterministic_checks": []
+    },
+    {
+      "id": "M08",
+      "construct_id": "K14",
+      "definition": "The author's own text of the note is read for wording that stigmatises the client or another person; a quotation of the client's words is marked as quotation and is not the author's text. No word list decides this; a rater does, and marks the span.",
+      "question": "Is the author's own text of the note free of wording that stigmatises the client or another person?",
+      "reference_mode": "note_only",
+      "response_format": "binary",
+      "labels": [
+        "pass",
+        "fail"
+      ],
+      "anchors": {
+        "pass": "no span of the author's text stigmatises anyone",
+        "fail": "at least one span of the author's text stigmatises the client or another person; each span is marked with its type"
+      },
+      "sources": [
+        "K14-e1",
+        "K14-e2"
+      ],
+      "profiles": [
+        "continuity",
+        "audit"
+      ],
+      "examples": {
+        "pass": "The note writes that the client reports drinking daily and describes his wife as angry about it.",
+        "fail": "The note calls the client an alcoholic who manipulates his wife; the transcript carries neither word."
+      },
+      "status": "development",
+      "version": "measurement-v1",
+      "language_variants": {
+        "cs": {
+          "definition": "Vlastní text autora zápisu se čte kvůli formulacím, které stigmatizují klienta nebo jinou osobu; citace klientových slov se označí jako citace a není textem autora. Nerozhoduje seznam slov, rozhoduje hodnotitel a označí úsek.",
+          "question": "Je vlastní text autora zápisu prostý formulací, které stigmatizují klienta nebo jinou osobu?",
+          "anchors": {
+            "pass": "žádný úsek textu autora nikoho nestigmatizuje",
+            "fail": "aspoň jeden úsek textu autora stigmatizuje klienta nebo jinou osobu; každý úsek se označí s typem"
+          },
+          "examples": {
+            "pass": "Zápis píše, že klient uvádí každodenní pití a popisuje, že se na něj žena kvůli tomu zlobí.",
+            "fail": "Zápis nazývá klienta alkoholikem, který manipuluje svou ženou; přepis nenese ani jedno z těch slov."
+          }
+        }
+      },
+      "deterministic_checks": []
+    }
+  ],
   "protocol_revision": "a1f778023a3bbe7ace46e04fe76879a7568287ed6065b4de598bdfa99c949ffa",
   "version": "registry-v2",
   "literature_freeze": null,
-  "methods": [],
-  "method_evidence": {},
+  "methods": [
+    "qa",
+    "claims",
+    "items"
+  ],
+  "method_evidence": {
+    "qa": [
+      "K05-e1",
+      "K05-e2",
+      "K05-e3",
+      "K06-e1",
+      "K07-e1",
+      "K07-e2",
+      "K08-e1",
+      "K08-e2",
+      "K10-e1",
+      "K10-e2"
+    ],
+    "claims": [
+      "K01-e1",
+      "K01-e2",
+      "K02-e1",
+      "K03-e1",
+      "K04-e1"
+    ],
+    "items": [
+      "K12-e1",
+      "K12-e2",
+      "K11-e1",
+      "K11-e2",
+      "K14-e1",
+      "K14-e2"
+    ]
+  },
   "methods_reviewed_by": null,
-  "method_specs": [],
+  "method_specs": [
+    {
+      "id": "qa",
+      "construct_ids": [
+        "K05",
+        "K06",
+        "K07",
+        "K08",
+        "K10"
+      ],
+      "evidence_ids": [
+        "K05-e1",
+        "K05-e2",
+        "K05-e3",
+        "K06-e1",
+        "K07-e1",
+        "K07-e2",
+        "K08-e1",
+        "K08-e2",
+        "K10-e1",
+        "K10-e2"
+      ],
+      "definition": "Before any note is read, a bank of information units is built from the transcript. Each unit is one fact that a continuation of care or a documentation audit would need, and carries an importance level (mandatory, mandatory in certain circumstances, highly recommended, good to have, optional), a purpose tag (continuity, audit), a type tag (plan, risk, other) and the transcript span it rests on. For each unit the answerer receives the note only and states whether the note carries it. The answer is compared with the bank. Coverage is reported per importance level and per purpose, never as one sum (P01); a unit the note reports as not asked or as explicitly denied is answered with that status, not as omitted (P02); risk-tagged units are reported as their own layer that no other unit can dilute (P03).",
+      "unit": "information unit of the bank",
+      "required_inputs": [
+        "transcript",
+        "note",
+        "information bank"
+      ],
+      "applicability": "Any note written from a transcript that a bank was built from. A unit the transcript does not contain cannot be in the bank. A bank is built and approved before the notes are seen; a unit added after a note was read is recorded as such and excluded.",
+      "outcomes": {
+        "preserved": "the note carries the unit with the same content, actor and time",
+        "partial": "the note carries part of the unit, or with an unclear referent or time",
+        "omitted": "the note does not carry the unit and does not say that it is missing",
+        "contradicted": "the note states the opposite of the unit, reports as not asked what the transcript asked, or reports as denied what the transcript affirmed",
+        "unassessable": "the answerer cannot decide from the note; recorded as such, never as omitted"
+      },
+      "severity_rules": {
+        "none": "preserved, or the omission of an optional unit",
+        "minor": "partial, or the omission of a good-to-have unit",
+        "major": "the omission of a highly recommended or mandatory unit, or the contradiction of a unit that is not risk-tagged",
+        "critical": "any contradiction or omission of a risk-tagged unit, or a fabricated gap: the note reports as not asked or as denied what the transcript carries"
+      },
+      "language_variants": {
+        "cs": {
+          "definition": "Dříve, než kdokoli čte zápis, se z přepisu sestaví banka informačních jednotek. Každá jednotka je jeden fakt, který by potřebovalo navázání péče nebo kontrola dokumentace, a nese stupeň důležitosti (povinné, povinné za určitých okolností, silně doporučené, dobré mít, volitelné), značku účelu (návaznost, kontrola), značku typu (plán, riziko, ostatní) a úsek přepisu, o který se opírá. U každé jednotky dostane odpovídající pouze zápis a řekne, zda ho zápis nese. Odpověď se porovná s bankou. Pokrytí se uvádí po stupních důležitosti a po účelech, nikdy jako jeden součet (P01); jednotku, o které zápis říká, že nebyla probrána nebo že ji klient výslovně popřel, se hodnotí tímto statusem, ne jako vynechanou (P02); jednotky označené jako riziko se uvádějí jako vlastní vrstva, kterou žádná jiná jednotka nerozředí (P03).",
+          "outcomes": {
+            "preserved": "zápis jednotku nese se stejným obsahem, aktérem i časem",
+            "partial": "zápis nese část jednotky, nebo s nejasným vztažením či časem",
+            "omitted": "zápis jednotku nenese a neříká, že chybí",
+            "contradicted": "zápis tvrdí opak jednotky, uvádí jako neprobrané to, na co se v přepisu ptalo, nebo jako popřené to, co přepis potvrzuje",
+            "unassessable": "odpovídající to ze zápisu nedokáže rozhodnout; zapíše se tak, nikdy jako vynechané"
+          },
+          "severity_rules": {
+            "none": "zachováno, nebo vynechání volitelné jednotky",
+            "minor": "částečně, nebo vynechání jednotky typu dobré mít",
+            "major": "vynechání silně doporučené nebo povinné jednotky, nebo popření jednotky, která není označená jako riziko",
+            "critical": "jakékoli popření nebo vynechání jednotky označené jako riziko, nebo vymyšlená mezera: zápis uvádí jako neprobrané nebo popřené to, co přepis nese"
+          },
+          "applicability": "Jakýkoli zápis psaný z přepisu, ze kterého byla sestavena banka. Jednotka, kterou přepis neobsahuje, v bance být nemůže. Banka se sestaví a schválí dříve, než se čtou zápisy; jednotka přidaná po přečtení zápisu se tak zaznamená a vyloučí."
+        }
+      }
+    },
+    {
+      "id": "claims",
+      "construct_ids": [
+        "K01",
+        "K02",
+        "K03",
+        "K04"
+      ],
+      "evidence_ids": [
+        "K01-e1",
+        "K01-e2",
+        "K02-e1",
+        "K03-e1",
+        "K04-e1"
+      ],
+      "definition": "The note is decomposed into atomic claims. Each claim carries its actor (who said or did it), its time (when, and whether it is a change of state) and its modality (fact, hypothesis, plan, agreement, degree of certainty). Each claim is verified against the transcript (P04). A claim that has support in the transcript at a different actor, time or modality is contradicted, and the error is typed as actor, time or modality (P05).",
+      "unit": "atomic claim",
+      "required_inputs": [
+        "transcript",
+        "note"
+      ],
+      "applicability": "Every declarative sentence of the note. Section headings and template text are not claims. A statement the note attributes to the client as reported speech is verified as what the client said, not as a fact about the client.",
+      "outcomes": {
+        "supported": "the transcript carries the claim with the same actor, time and modality",
+        "contradicted": "the transcript carries the opposite, or the same content at a different actor, time or modality; the error type is recorded",
+        "unsupported": "the transcript carries nothing that supports or contradicts the claim",
+        "unassessable": "the claim cannot be decided from the transcript; recorded as such"
+      },
+      "severity_rules": {
+        "none": "supported",
+        "minor": "an unsupported detail without clinical consequence, or an unassessable claim",
+        "major": "an unsupported claim about the client's state, history or plan, or an actor, time or modality error that changes who, when or how certain",
+        "critical": "a contradicted claim about risk, safety, diagnosis, medication or a decision of care, or an intervention attributed to the therapist that the transcript does not carry"
+      },
+      "language_variants": {
+        "cs": {
+          "definition": "Zápis se rozloží na atomická tvrzení. Každé tvrzení nese svého aktéra (kdo to řekl nebo udělal), čas (kdy, a zda jde o změnu stavu) a modalitu (fakt, hypotéza, plán, dohoda, míra jistoty). Každé tvrzení se ověří proti přepisu (P04). Tvrzení, které má v přepisu oporu u jiného aktéra, v jiném čase nebo v jiné modalitě, je popřené a chyba se zařadí jako chyba aktéra, času nebo modality (P05).",
+          "outcomes": {
+            "supported": "přepis nese tvrzení se stejným aktérem, časem i modalitou",
+            "contradicted": "přepis nese opak, nebo stejný obsah u jiného aktéra, v jiném čase nebo v jiné modalitě; typ chyby se zapíše",
+            "unsupported": "přepis nenese nic, co by tvrzení podpíralo nebo popíralo",
+            "unassessable": "tvrzení nelze z přepisu rozhodnout; zapíše se tak"
+          },
+          "severity_rules": {
+            "none": "podpořeno",
+            "minor": "nepodložený detail bez klinického důsledku, nebo nerozhodnutelné tvrzení",
+            "major": "nepodložené tvrzení o stavu, historii nebo plánu klienta, nebo chyba aktéra, času či modality, která mění kdo, kdy nebo s jakou jistotou",
+            "critical": "popřené tvrzení o riziku, bezpečí, diagnóze, medikaci nebo rozhodnutí o péči, nebo intervence připsaná terapeutovi, kterou přepis nenese"
+          },
+          "applicability": "Každá oznamovací věta zápisu. Nadpisy oddílů a text šablony nejsou tvrzení. Výrok, který zápis připisuje klientovi jako řeč klienta, se ověřuje jako to, co klient řekl, ne jako fakt o klientovi."
+        }
+      }
+    },
+    {
+      "id": "items",
+      "construct_ids": [
+        "K12",
+        "K11",
+        "K14"
+      ],
+      "evidence_ids": [
+        "K12-e1",
+        "K12-e2",
+        "K11-e1",
+        "K11-e2",
+        "K14-e1",
+        "K14-e2"
+      ],
+      "definition": "Rubric items rated per note by a rater who has the transcript, the note and the section template: whether content sits in the section the template expects (P06), whether every sentence carries an information unit (P07), and whether the author's own text, as distinct from quotation of the client, contains stigmatising wording (P08). P07 is reported beside coverage and never alone, because an empty note passes it.",
+      "unit": "item per note; P06 per unit and section, P07 per sentence, P08 per span of text",
+      "required_inputs": [
+        "transcript",
+        "note",
+        "section template",
+        "information bank"
+      ],
+      "applicability": "P06 only where the task prescribes sections; P07 and P08 for every note. A quotation of the client's own words is not the author's text for P08.",
+      "outcomes": {
+        "pass": "the item's condition holds for the whole note",
+        "fail": "the item's condition fails at least once; the place is marked",
+        "rated": "an ordinal or categorical item was rated; the label is recorded",
+        "not_applicable": "the item does not apply to this note, with the reason",
+        "unassessable": "the rater cannot decide; recorded as such, never as fail"
+      },
+      "severity_rules": {
+        "none": "pass or not applicable",
+        "minor": "a unit in another section (P06), or a sentence that carries no unit (P07)",
+        "major": "stigmatising wording in the author's own text (P08)",
+        "critical": "stigmatising wording that attributes to the client a trait or motive the transcript does not carry"
+      },
+      "language_variants": {
+        "cs": {
+          "definition": "Rubrikové položky hodnocené na celém zápisu hodnotitelem, který má přepis, zápis a šablonu oddílů: zda obsah stojí v oddílu, kde ho šablona čeká (P06), zda každá věta nese informační jednotku (P07) a zda vlastní text autora, na rozdíl od citace klienta, obsahuje stigmatizující formulaci (P08). P07 se uvádí vedle pokrytí a nikdy samo, protože prázdný zápis jím projde.",
+          "outcomes": {
+            "pass": "podmínka položky platí pro celý zápis",
+            "fail": "podmínka položky aspoň jednou neplatí; místo se označí",
+            "rated": "ordinální nebo kategoriální položka byla ohodnocena; štítek se zapíše",
+            "not_applicable": "položka se na tento zápis nevztahuje, s důvodem",
+            "unassessable": "hodnotitel to nedokáže rozhodnout; zapíše se tak, nikdy jako selhání"
+          },
+          "severity_rules": {
+            "none": "vyhovuje nebo se nevztahuje",
+            "minor": "jednotka v jiném oddílu (P06), nebo věta, která nenese žádnou jednotku (P07)",
+            "major": "stigmatizující formulace ve vlastním textu autora (P08)",
+            "critical": "stigmatizující formulace, která klientovi připisuje rys nebo motiv, který přepis nenese"
+          },
+          "applicability": "P06 jen tam, kde úloha předepisuje oddíly; P07 a P08 u každého zápisu. Citace klientových vlastních slov není pro P08 text autora."
+        }
+      }
+    }
+  ],
   "reviews": [],
-  "assessment_scope": "",
-  "required_methods": [],
+  "assessment_scope": "Feasibility pilot under research protocol 2.3.0: the two public AnnoMI conversations drawn in pilot-cases.json (94 and 25) in English and their recorded Czech translations, notes written for the continuity and audit purposes by two generator families, measured by source-bank question answering (qa), atomic-claim verification (claims) and rubric items (items), with a human anchor of two Czech psychologists under the protocol's crossover; no citation method in this round.",
+  "required_methods": [
+    "qa",
+    "claims",
+    "items"
+  ],
   "research_snapshot": null
 }

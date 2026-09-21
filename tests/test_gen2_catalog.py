@@ -292,18 +292,58 @@ def test_the_page_draws_every_entry_and_names_its_status(catalog):
 # --- the draft registry -----------------------------------------------------
 
 
-def test_the_draft_equals_a_fresh_conversion(catalog, protocol, proposals, draft, diagnostics):
-    registry, notes = convert_to_registry.convert(catalog, protocol, proposals)
+@pytest.fixture(scope="module")
+def operational() -> dict:
+    return _json(CATALOG / "operational.json")
+
+
+def test_the_draft_equals_a_fresh_conversion(
+    catalog, protocol, proposals, operational, draft, diagnostics
+):
+    registry, notes = convert_to_registry.convert(catalog, protocol, proposals, operational)
     assert registry == draft
     assert notes == diagnostics
 
 
 def test_the_draft_loads_and_is_refused_as_a_pilot_instrument(draft, protocol):
+    """The draft carries the proposed rules and no decision: it is refused as a
+    pilot instrument at the first human decision it lacks, the scope."""
     registry = load_registry(draft)
     assert registry.protocol_revision == digest(protocol)
-    assert registry.reviews == () and registry.measurements == () and registry.methods == ()
-    with pytest.raises(ValidationError, match="Pilot needs explicit methods"):
+    assert registry.reviews == ()
+    assert (
+        [m.id for m in registry.method_specs] == list(registry.methods) == ["qa", "claims", "items"]
+    )
+    assert [x.id for x in registry.measurements] == ["M06", "M07", "M08"]
+    assert all(x.status == "development" for x in registry.measurements)
+    with pytest.raises(ValidationError, match="human decision: scope"):
         load_registry(draft, pilot=True)
+
+
+def test_the_operational_rules_are_bilingual_and_name_only_registry_records(operational, draft):
+    """Every method rule and every item exists in Czech with the same outcome
+    keys, names constructs and evidence the draft holds, and covers exactly the
+    eight executable pilot entries; the six other entries say why they are not
+    here. The Czech is instrument wording and carries the marker that lets a
+    tracked file hold Czech at all."""
+    constructs = {c["id"] for c in draft["constructs"]}
+    evidence = {e["id"] for e in draft["evidence"]}
+    covered = []
+    for m in operational["methods"]:
+        assert set(m["construct_ids"]) <= constructs and set(m["evidence_ids"]) <= evidence
+        assert set(m["cs"]["outcomes"]) == set(m["outcomes"])
+        assert set(m["cs"]["severity_rules"]) == set(m["severity_rules"])
+        covered += m["pilot_entries"]
+    assert sorted(covered) == [f"P0{i}" for i in range(1, 9)]
+    assert {e["entry"] for e in operational["not_operationalised_here"]} == {
+        f"P{i:02d}" for i in range(9, 15)
+    }
+    for x in operational["measurements"]:
+        assert x["construct_id"] in constructs and set(x["sources"]) <= evidence
+        assert set(x["cs"]["anchors"]) == set(x["labels"])
+    assert operational["marker"] == "AUTHORED-INSTRUMENT-TEXT"
+    for variant in (m["cs"] for m in operational["methods"]):
+        assert variant["definition"] and variant["applicability"]
 
 
 def test_no_draft_record_claims_a_human_decision(draft, diagnostics):
@@ -346,7 +386,8 @@ def test_every_unmapped_entry_has_a_diagnostic(catalog, diagnostics):
         assert c["origin_reference"].startswith(("proposal:", "catalog:"))
         if c["origin_reference"].startswith("catalog:"):
             assert "placeholder" in c["note"]
-    assert diagnostics["not_mapped"]["measurements"] == 14
+    assert diagnostics["not_mapped"]["pilot_entries_without_operational_rules"] == 6
+    assert diagnostics["operational"]["measurements"] == ["M06", "M07", "M08"]
 
 
 def test_a_verbatim_proposal_name_is_the_only_way_to_a_recorded_origin(proposals):
@@ -490,7 +531,31 @@ DIACRITIC = re.compile(
 )
 def test_the_catalog_files_are_public_safe(path):
     text = path.read_text(encoding="utf-8")
-    assert not DIACRITIC.search(text), f"{path.name} carries Czech text"
+    if path.name != "draft-registry.json":
+        assert not DIACRITIC.search(text), f"{path.name} carries Czech text"
     assert "C:\\" not in text and "/Users/" not in text and "local/" not in text
     assert not re.search(r"(?i)(api[_-]?key|token)\s*[:=]\s*\S{8,}", text)
     assert b"\r\n" not in path.read_bytes()
+
+
+def _czech_strings(value) -> set[str]:
+    if isinstance(value, str):
+        return {value} if DIACRITIC.search(value) else set()
+    if isinstance(value, dict):
+        return set().union(*(_czech_strings(v) for v in value.values())) if value else set()
+    if isinstance(value, list):
+        return set().union(*(_czech_strings(v) for v in value)) if value else set()
+    return set()
+
+
+def test_the_draft_carries_no_czech_but_the_authored_operational_wording(operational, draft):
+    """The draft registry is the one derived file that holds Czech, because the
+    raters' rules have to exist in Czech before the freeze. Every Czech string
+    in it must be one that `operational.json`, the authored and marked file,
+    put there; a transcript fragment could not get in through the converter
+    without appearing here as an unexplained string."""
+    authored = _czech_strings([m["cs"] for m in operational["methods"]]) | _czech_strings(
+        [x["cs"] for x in operational["measurements"]]
+    )
+    assert authored, "the operational wording exists in Czech"
+    assert _czech_strings(draft) == authored

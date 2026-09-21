@@ -29,6 +29,7 @@ HERE = Path(__file__).resolve().parent
 PROTOCOL_PATH = HERE.parent / "protocol.json"
 PROPOSALS_PATH = HERE.parent / "prior-proposals.json"
 REGISTRY_PATH = HERE / "draft-registry.json"
+OPERATIONAL_PATH = HERE / "operational.json"
 DIAGNOSTICS_PATH = HERE / "conversion-diagnostics.json"
 
 LAYER = {
@@ -108,8 +109,65 @@ def origin_reference(candidate: dict, proposals: set[str]) -> tuple[str, str]:
     )
 
 
-def convert(catalog: dict, protocol: dict, proposals: dict) -> tuple[dict, dict]:
+def operational_records(spec: dict | None) -> tuple[list, list, dict]:
+    """Method specs and operational items from the authored specification.
+
+    The specification is the assistant's proposal of the rules the pilot's
+    three methods run under, in both languages. It becomes records with no
+    decision on them: every measurement stays `development`, and the scope,
+    each method, each item and each Czech variant is a review subject of its
+    own that the sheet puts to the investigator.
+    """
+    if not spec:
+        return [], [], {"assessment_scope": "", "required_methods": [], "methods": []}
+    specs = [
+        {
+            "id": m["id"],
+            "construct_ids": list(m["construct_ids"]),
+            "evidence_ids": list(m["evidence_ids"]),
+            "definition": m["definition"],
+            "unit": m["unit"],
+            "required_inputs": list(m["required_inputs"]),
+            "applicability": m["applicability"],
+            "outcomes": dict(m["outcomes"]),
+            "severity_rules": dict(m["severity_rules"]),
+            "language_variants": {"cs": dict(m["cs"])},
+        }
+        for m in spec["methods"]
+    ]
+    items = [
+        {
+            "id": x["id"],
+            "construct_id": x["construct_id"],
+            "definition": x["definition"],
+            "question": x["question"],
+            "reference_mode": x["reference_mode"],
+            "response_format": x["response_format"],
+            "labels": list(x["labels"]),
+            "anchors": dict(x["anchors"]),
+            "sources": list(x["sources"]),
+            "profiles": list(x["profiles"]),
+            "examples": dict(x["examples"]),
+            "status": "development",
+            "version": "measurement-v1",
+            "language_variants": {"cs": dict(x["cs"])},
+            "deterministic_checks": [],
+        }
+        for x in spec["measurements"]
+    ]
+    scope = {
+        "assessment_scope": spec["assessment_scope"],
+        "required_methods": list(spec["required_methods"]),
+        "methods": [m["id"] for m in spec["methods"]],
+    }
+    return specs, items, scope
+
+
+def convert(
+    catalog: dict, protocol: dict, proposals: dict, operational: dict | None = None
+) -> tuple[dict, dict]:
     by_source = {s["id"]: s for s in catalog["sources"]}
+    method_specs, measurements, scope = operational_records(operational)
     proposal_ids = {p["id"] for p in proposals["proposals"]}
     sources, source_notes = [], []
     for s in catalog["sources"]:
@@ -224,17 +282,17 @@ def convert(catalog: dict, protocol: dict, proposals: dict) -> tuple[dict, dict]
         "sources": sources,
         "evidence": evidence,
         "constructs": constructs,
-        "measurements": [],
+        "measurements": measurements,
         "protocol_revision": digest(protocol),
         "version": "registry-v2",
         "literature_freeze": None,
-        "methods": [],
-        "method_evidence": {},
+        "methods": scope["methods"],
+        "method_evidence": {m["id"]: list(m["evidence_ids"]) for m in method_specs},
         "methods_reviewed_by": None,
-        "method_specs": [],
+        "method_specs": method_specs,
         "reviews": [],
-        "assessment_scope": "",
-        "required_methods": [],
+        "assessment_scope": scope["assessment_scope"],
+        "required_methods": scope["required_methods"],
         "research_snapshot": None,
     }
     load_registry(registry)
@@ -276,15 +334,26 @@ def convert(catalog: dict, protocol: dict, proposals: dict) -> tuple[dict, dict]
         "protocol_version": protocol["version"],
         "protocol_revision": registry["protocol_revision"],
         "rule": "Every source, evidence line and candidate maps to a registry record with no "
-        "human decision. Nothing becomes an operational item, a selected method or a review; "
-        "each such gap is listed here with its reason.",
+        "human decision. The operational specification, where present, becomes method specs "
+        "and development items with no decision on them; nothing becomes a review, a pilot "
+        "status or a reviewed item, and each pilot entry without operational rules is listed "
+        "here with its reason.",
         "mapped": {
             "sources": len(sources),
             "evidence": len(evidence),
             "constructs": len(constructs),
         },
+        "operational": {
+            "specification": (operational or {}).get("version"),
+            "method_specs": [m["id"] for m in method_specs],
+            "measurements": [x["id"] for x in measurements],
+            "status": "development items and proposed scope; selection, pilot status and every "
+            "language variant are human decisions the sheet puts to the reviewer",
+            "not_operationalised": list((operational or {}).get("not_operationalised_here", [])),
+        },
         "not_mapped": {
-            "measurements": len(catalog["pilot_proposal"]["entries"]),
+            "pilot_entries_without_operational_rules": len(catalog["pilot_proposal"]["entries"])
+            - sum(len(m["pilot_entries"]) for m in (operational or {}).get("methods", [])),
             "methods": len(catalog["methods"]),
             "reviews": 0,
         },
@@ -318,7 +387,12 @@ if __name__ == "__main__":
         raise SystemExit(1)
     protocol = json.loads(PROTOCOL_PATH.read_text(encoding="utf-8"))
     proposals = json.loads(PROPOSALS_PATH.read_text(encoding="utf-8"))
-    registry, diagnostics = convert(catalog, protocol, proposals)
+    operational = (
+        json.loads(OPERATIONAL_PATH.read_text(encoding="utf-8"))
+        if OPERATIONAL_PATH.exists()
+        else None
+    )
+    registry, diagnostics = convert(catalog, protocol, proposals, operational)
     _dump(REGISTRY_PATH, registry)
     _dump(DIAGNOSTICS_PATH, diagnostics)
     print(

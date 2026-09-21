@@ -50,12 +50,21 @@ DIACRITIC = re.compile(
 # Gen-2 explicitly introduces authored Czech task instructions, interface labels
 # and wholly synthetic controls. These exact files contain no patient material.
 # Real transcripts and every derived QA/evidence artifact stay gitignored.
+OPERATIONAL = "research/gen2/catalog/operational.json"
+DRAFT = "research/gen2/catalog/draft-registry.json"
 CORE = "packages/therapy-note-eval-core/src/therapy_note_eval/"
 ALLOWED_CZECH: dict[str, str] = {
     CORE + "profiles.py": "Original bilingual profile instructions",
     CORE + "review.js": "Original Czech annotation interface labels",
     CORE + "controls.py": "SYNTHETIC-FIXTURE: invented bilingual challenge cases",
+    OPERATIONAL: "AUTHORED-INSTRUMENT-TEXT: the pilot's operational rules in both languages",
+    DRAFT: "derived from operational.json by the converter; tests/test_gen2_catalog.py holds "
+    "its Czech to exactly the authored strings",
 }
+
+#: The one research file that may carry Czech: the operational rules the
+#: raters read, authored for the investigator's decision. It must say so.
+INSTRUMENT_MARKER = "AUTHORED-INSTRUMENT-TEXT"
 
 #: What every file under ``tests/fixtures/czech`` must say about itself. The
 #: allow-list above opens a door; this is what stops a real transcript walking
@@ -143,8 +152,10 @@ def _relative(path: Path) -> str:
 
 
 def test_czech_exceptions_are_only_authored_gen2_resources(tracked_files):
-    assert set(ALLOWED_CZECH) == {CORE + f for f in ("profiles.py", "review.js", "controls.py")}
+    core = {CORE + f for f in ("profiles.py", "review.js", "controls.py")}
+    assert set(ALLOWED_CZECH) == core | {OPERATIONAL, DRAFT}
     assert FIXTURE_MARKER in (REPO_ROOT / CORE / "controls.py").read_text(encoding="utf-8")
+    assert INSTRUMENT_MARKER in (REPO_ROOT / OPERATIONAL).read_text(encoding="utf-8")
 
 
 def test_only_named_files_contain_czech(tracked_files):
