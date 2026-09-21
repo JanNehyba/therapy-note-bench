@@ -1,0 +1,45 @@
+{
+  "version": "translations-v1",
+  "instrument_digest": "0156bceaee92eb54e90ffb7f3e724f4030d70fc0291ff02cad9980165f93db11",
+  "model": "mistral-medium-3.5",
+  "provider": "einfra",
+  "prompt_digest": "0814e00e8536094fc8fdf07e32ca78548e5f3be07c387080362ea3ea2b5d669c",
+  "conversations": [
+    {
+      "conversation": "25",
+      "source_digest": "cd595cd62601484443c0597d5e43c9577df88bd1274e40601e7aa38433babfa2",
+      "translation_digest": "8f8ff9c4a33b6afcddc4ae09165291c4f95e2b16db046ab64586975b0b103416",
+      "check": {
+        "turns_in": 34,
+        "turns_out": 34,
+        "problems": [],
+        "untranslated_turns": 0,
+        "unchanged_short_turns": [],
+        "length_ratio": 0.8902,
+        "ok": true
+      },
+      "translated_at": "2026-09-21T15:16:30+00:00"
+    },
+    {
+      "conversation": "94",
+      "source_digest": "a8cb77aa7b67b90175a5625007dbe2fdc4ee72517141cc92f9128c578f1e0f96",
+      "translation_digest": "0d7c301632c313fe5cd13f5fcbba637fbac8d16306e0cac2f9c3375f02b1d8cf",
+      "check": {
+        "turns_in": 62,
+        "turns_out": 62,
+        "problems": [],
+        "untranslated_turns": 0,
+        "unchanged_short_turns": [],
+        "length_ratio": 0.8984,
+        "ok": true
+      },
+      "translated_at": "2026-09-21T15:19:52+00:00"
+    }
+  ],
+  "usable": [
+    "25",
+    "94"
+  ],
+  "failed": [],
+  "rule": "Only a conversation whose turns map one for one is a translation of its original; a failed one is recorded and never paired."
+}
