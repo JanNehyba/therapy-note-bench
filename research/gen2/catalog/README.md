@@ -28,8 +28,9 @@ property, and a property no candidate covers is listed in the catalog as open, w
 a proposed disposition, until the investigator decides. Together with the prior map
 this is a best-fit framework synthesis: an a priori framework, evidence coded
 against it, and new themes for what does not fit. The paper will cite the method
-(Carroll et al., BMC Medical Research Methodology, 2013); that reference is not yet
-in the review ledger and has to be added there before submission.
+(Carroll et al., BMC Medical Research Methodology, 2013); the reference is in the
+review ledger as a methodological report, not yet retrieved or read, and the paper
+may not describe the method's steps from memory until it is.
 
 ## Provenance
 

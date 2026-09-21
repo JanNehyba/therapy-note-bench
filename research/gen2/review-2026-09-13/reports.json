@@ -157,6 +157,17 @@
    "sample_overlap": "not_assessed",
    "overlap_basis": "same group, framework and possibly raters; the catalog describes different corpora (social-media timelines vs therapy sessions); independence of the two studies' findings is not established",
    "assessed_by": null
+  },
+  {
+   "family_id": "best-fit-framework-synthesis",
+   "label": "Best-fit framework synthesis method paper",
+   "kind": "single_report",
+   "members": [
+    "doi:10.1186/1471-2288-13-37"
+   ],
+   "sample_overlap": "not_applicable",
+   "overlap_basis": null,
+   "assessed_by": null
   }
  ],
  "reports": [
@@ -3298,6 +3309,72 @@
     "sha256": "b8632823776b014f208f10508601c61265564c71c03a3d49d0581c4453568f30"
    },
    "last_attempt_date": "2026-09-16"
+  },
+  {
+   "report_id": "doi:10.1186/1471-2288-13-37",
+   "id_basis": "DOI from the catalog README; not yet resolved",
+   "kind": "methodological_guidance",
+   "title": "\"Best fit\" framework synthesis: refining the method",
+   "citation_short": "Carroll, Booth, Leaviss, Rick 2013, BMC Medical Research Methodology",
+   "catalog_source": null,
+   "study_family": "best-fit-framework-synthesis",
+   "identifiers": {
+    "doi": "10.1186/1471-2288-13-37",
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "catalog README"
+   },
+   "pool": {
+    "in_pool": false,
+    "pool_record_id": null,
+    "pool_record_id_status": "not_in_pool",
+    "stratum": null,
+    "priority_index": null
+   },
+   "route": {
+    "kind": "methodological_guidance",
+    "from": null,
+    "declared_in": "research/gen2/catalog/README.md",
+    "note": "named on 2026-09-20 as the method the source-first extraction follows; not part of the search"
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "screening": {
+    "ai_proposal": "not_applicable",
+    "ai_layer": null,
+    "ai_proposal_source": null,
+    "human_decision": null,
+    "human_decision_record": null,
+    "human_decision_status": "none_recorded"
+   },
+   "retrieval_events": [],
+   "reading": {
+    "basis": "not_read",
+    "ai_read": false,
+    "ai_read_basis": null,
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": false,
+    "use": "method",
+    "layer": "method",
+    "verification": "not_retrieved",
+    "basis": "named as the method's reference; to be retrieved and read before submission"
+   },
+   "notes": [
+    "Added 2026-09-21. The method is cited by name; the paper must not describe its steps from memory until the text is read."
+   ],
+   "current_status": "not_sought",
+   "current_file": null,
+   "last_attempt_date": null
   }
  ],
  "diagnostics": [
@@ -3358,7 +3435,7 @@
   }
  ],
  "derived_from": {
-  "report-map.json": "6eb4f6c20b7f0afbb027f542283888f6cc132c89acfc1910afb88d1de26d9a8d",
+  "report-map.json": "ca60ad89f95a674837c23f80c31c9945e04053d9f038e140d26cef439002a247",
   "fulltext-retrieval-log.json": "52ddeaedfdda580148007182ec7d0c78c4e1dd1450704dc8c736199418133611",
   "screening-decisions.json": "2f98644de1101880fe54fa705b3cf7ece932803e07b51d56be35e96bbd145a80",
   "screening-strata.json": "7f5cec8ab7f51c80bba97ceb1e359ff68b9ad7e39122c8211606d14a7e7bf21b",
@@ -3366,7 +3443,7 @@
  },
  "corrections": [],
  "counts": {
-  "reports": 36,
+  "reports": 37,
   "catalog_reports": {
    "sought": 19,
    "retrieved": 18,
@@ -3380,10 +3457,10 @@
    "not_sought": 7
   },
   "other_reports": {
-   "total": 2,
+   "total": 3,
    "retrieved": 1,
    "not_retrieved": 1,
-   "not_sought": 0
+   "not_sought": 1
   },
   "supporting_materials": {
    "total": 2,
@@ -3406,7 +3483,7 @@
    "author_search_from": 2,
    "citation_from": 2,
    "known_before_search": 6,
-   "methodological_guidance": 5,
+   "methodological_guidance": 6,
    "not_recorded": 2,
    "professional_guidance": 2,
    "remainder_audit_sample": 1,

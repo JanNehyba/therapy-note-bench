@@ -286,6 +286,17 @@
    "sample_overlap": "not_assessed",
    "overlap_basis": "same group, framework and possibly raters; the catalog describes different corpora (social-media timelines vs therapy sessions); independence of the two studies' findings is not established",
    "assessed_by": null
+  },
+  {
+   "family_id": "best-fit-framework-synthesis",
+   "label": "Best-fit framework synthesis method paper",
+   "kind": "single_report",
+   "members": [
+    "doi:10.1186/1471-2288-13-37"
+   ],
+   "sample_overlap": "not_applicable",
+   "overlap_basis": null,
+   "assessed_by": null
   }
  ],
  "reports": [

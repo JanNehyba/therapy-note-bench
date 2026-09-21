@@ -42,7 +42,7 @@
     "author_search_from": 2,
     "citation_from": 2,
     "known_before_search": 6,
-    "methodological_guidance": 5,
+    "methodological_guidance": 6,
     "not_recorded": 2,
     "professional_guidance": 2,
     "remainder_audit_sample": 1
@@ -142,6 +142,12 @@
      {
       "report_id": "doi:10.1186/s13643-020-01542-z",
       "catalog_source": "S17",
+      "kind": "methodological_guidance",
+      "from": null
+     },
+     {
+      "report_id": "doi:10.1186/1471-2288-13-37",
+      "catalog_source": null,
       "kind": "methodological_guidance",
       "from": null
      }
@@ -272,7 +278,7 @@
    ]
   },
   "other_reports": {
-   "total": 2,
+   "total": 3,
    "retrieved": 1,
    "not_retrieved": 1,
    "not_retrieved_detail": [
@@ -374,7 +380,7 @@
   }
  ],
  "derived_from": {
-  "reports.json": "a2f746d13ccc1515e5a4450e44440f33012ccbec56b62e1a9e0dab5cf4236215",
+  "reports.json": "da8c14ff9b999abd39422d2ac965fcfa9229b147fc69d8f688864b320fd7bb36",
   "pool-summary.json": "a1ded470c9d7956637a4476564c730887cfc9c3c1d5314fc54f0da15050c0cb3",
   "screening-decisions.json": "2f98644de1101880fe54fa705b3cf7ece932803e07b51d56be35e96bbd145a80",
   "screening-strata.json": "7f5cec8ab7f51c80bba97ceb1e359ff68b9ad7e39122c8211606d14a7e7bf21b",
