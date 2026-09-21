@@ -2523,6 +2523,62 @@
     "basis": "local catalog registry_data.py / synthesis_data.py"
    },
    "notes": []
+  },
+  {
+   "report_id": "doi:10.1186/1471-2288-13-37",
+   "id_basis": "DOI from the catalog README; not yet resolved",
+   "kind": "methodological_guidance",
+   "title": "\"Best fit\" framework synthesis: refining the method",
+   "citation_short": "Carroll, Booth, Leaviss, Rick 2013, BMC Medical Research Methodology",
+   "catalog_source": null,
+   "study_family": "best-fit-framework-synthesis",
+   "identifiers": {
+    "doi": "10.1186/1471-2288-13-37",
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "catalog README"
+   },
+   "pool": {
+    "in_pool": false,
+    "pool_record_id": null,
+    "pool_record_id_status": "not_in_pool",
+    "stratum": null,
+    "priority_index": null
+   },
+   "route": {
+    "kind": "methodological_guidance",
+    "from": null,
+    "declared_in": "research/gen2/catalog/README.md",
+    "note": "named on 2026-09-20 as the method the source-first extraction follows; not part of the search"
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "log_slugs": [],
+   "events": [],
+   "reading": {
+    "basis": "not_read",
+    "ai_read": false,
+    "ai_read_basis": null,
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": false,
+    "use": "method",
+    "layer": "method",
+    "verification": "not_retrieved",
+    "basis": "named as the method's reference; to be retrieved and read before submission"
+   },
+   "notes": [
+    "Added 2026-09-21. The method is cited by name; the paper must not describe its steps from memory until the text is read."
+   ]
   }
  ]
 }
