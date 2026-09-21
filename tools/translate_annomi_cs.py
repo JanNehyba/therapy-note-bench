@@ -321,9 +321,12 @@ def instrument_record(
 
 def _complete(provider_name: str, model: str, prompt: str) -> str:
     """One call, through the same client every other model call here uses."""
+    from dotenv import load_dotenv
+
     from tnb.config import load_policy
     from tnb.providers import openai_compatible as client
 
+    load_dotenv(REPO / ".env")  # the credential lives where `tnb` reads it, never in a tracked file
     provider = load_policy().get(provider_name)
     answer = client.complete(provider, model, prompt)
     if not answer.ok or not answer.text.strip():
