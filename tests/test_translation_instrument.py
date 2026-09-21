@@ -193,6 +193,36 @@ def test_an_instrument_is_recorded_only_for_a_measured_model(tmp_path, source):
         _record(check, model="model-never-tried")
 
 
+def test_a_candidate_that_fails_is_a_row_of_the_check_not_the_end_of_it(tmp_path, source):
+    """The first candidate on e-INFRA truncated at the note budget and the run stopped
+    before the second was asked; a check that measures one candidate measures none."""
+
+    def call(model: str, prompt: str) -> str:
+        if model == "model-a":
+            raise tool.ModelFailure("model-a returned no usable answer: truncated at max_tokens")
+        if model == "model-back" and "model-c" in prompt:
+            raise tool.ModelFailure("model-back returned no usable answer: empty")
+        return good(model, prompt)
+
+    args = tool.argparse.Namespace(
+        sample=source,
+        provider="einfra",
+        candidates=["model-a", "model-b", "model-c"],
+        back_translator="model-back",
+        workspace=tmp_path / "work",
+    )
+    check = tool.cmd_select(args, call=call, settings={"max_tokens": 16384, "temperature": 0.0})
+    rows = {row["model"]: row for row in check["candidates"]}
+    assert set(rows) == {"model-a", "model-b", "model-c"}
+    assert rows["model-a"]["failed"]["stage"] == "forward" and rows["model-a"]["round_trip"] is None
+    assert rows["model-b"]["round_trip"]["compared_turns"] == 4 and "failed" not in rows["model-b"]
+    assert check["settings"]["max_tokens"] == 16384
+    with pytest.raises(SystemExit, match="measurement failed"):
+        _record(check, model="model-a")
+    record = _record(check, model="model-b", settings=check["settings"])
+    assert record["settings"]["max_tokens"] == 16384
+
+
 def test_a_judge_of_this_pilot_may_not_translate_for_it(tmp_path, source):
     check = _check(tmp_path, source)
     with pytest.raises(SystemExit, match="may not also be its translator"):
@@ -248,6 +278,19 @@ def test_a_run_records_the_instrument_and_separates_failures(tmp_path, source):
     assert not (tmp_path / "work" / "conversation-2.cs.json").exists()
     assert (tmp_path / "work" / "conversation-1.cs.json").exists()
     assert record["model"] == "model-a"
+
+    # A call that returns nothing usable is a failed conversation, not a crash.
+    dead = tmp_path / "conversation-3.json"
+    dead.write_text(json.dumps({"turns": EN}), encoding="utf-8")
+
+    def refuses(prompt: str) -> str:
+        raise tool.ModelFailure("model-a returned no usable answer: truncated")
+
+    args.conversations = [dead]
+    record = tool.cmd_translate(args, call=refuses)
+    assert record["failed"] == ["conversation-3"] and record["usable"] == []
+    assert "truncated" in record["conversations"][0]["check"]["problems"][0]
+    assert not (tmp_path / "work" / "conversation-3.cs.json").exists()
 
 
 def test_a_translation_is_never_written_where_this_repository_publishes(tmp_path):

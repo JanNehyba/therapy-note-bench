@@ -292,6 +292,18 @@ def instrument_record(
             "The back-translator measured this candidate; a model cannot check its own "
             "translation, because consistent damage would come back as agreement."
         )
+    row = next(row for row in check["candidates"] if row["model"] == model)
+    if row.get("failed") or row["round_trip"] is None:
+        why = (row.get("failed") or {}).get("error", "no round trip")
+        raise SystemExit(
+            f"{model}: its measurement failed ({why}); a translator is recorded from a "
+            "measurement that completed."
+        )
+    if not row["structure"]["ok"]:
+        raise SystemExit(
+            f"{model} did not return the sample one turn for one turn "
+            f"({'; '.join(row['structure']['problems'])}); it cannot be the instrument."
+        )
     return {
         "version": "translation-instrument-v1",
         "recorded_at": now(),
@@ -319,18 +331,41 @@ def instrument_record(
 # --- the calls -----------------------------------------------------------------
 
 
-def _complete(provider_name: str, model: str, prompt: str) -> str:
-    """One call, through the same client every other model call here uses."""
+class ModelFailure(Exception):
+    """A model returned nothing usable. The caller records it; nothing repairs it."""
+
+
+def _provider(provider_name: str):
     from dotenv import load_dotenv
 
     from tnb.config import load_policy
-    from tnb.providers import openai_compatible as client
 
     load_dotenv(REPO / ".env")  # the credential lives where `tnb` reads it, never in a tracked file
-    provider = load_policy().get(provider_name)
-    answer = client.complete(provider, model, prompt)
+    return load_policy().get(provider_name)
+
+
+def call_settings(provider_name: str) -> dict:
+    """The settings every call of a check or a run is made with, recorded beside it.
+
+    A whole conversation in Czech does not fit the budget a note does, and a
+    reasoning model spends part of any budget thinking, so the translator gets
+    the provider's escalation budget from the first call. The budget is part
+    of the instrument: the same model under a smaller one truncates.
+    """
+    generation = _provider(provider_name).generation
+    return {
+        "temperature": generation.temperature,
+        "max_tokens": max(generation.max_tokens, generation.escalate_max_tokens),
+    }
+
+
+def _complete(provider_name: str, model: str, prompt: str, max_tokens: int | None = None) -> str:
+    """One call, through the same client every other model call here uses."""
+    from tnb.providers import openai_compatible as client
+
+    answer = client.complete(_provider(provider_name), model, prompt, max_tokens=max_tokens)
     if not answer.ok or not answer.text.strip():
-        raise SystemExit(f"{model} returned no usable answer: {answer.error or 'empty'}")
+        raise ModelFailure(f"{model} returned no usable answer: {answer.error or 'empty'}")
     return answer.text
 
 
@@ -341,20 +376,45 @@ def translate_turns(turns: list[Turn], direction: str, call) -> list[Turn]:
 # --- commands ------------------------------------------------------------------
 
 
-def cmd_select(args, call=None) -> dict:
-    """Measure every candidate over the same sample, and decide nothing."""
+def cmd_select(args, call=None, settings=None) -> dict:
+    """Measure every candidate over the same sample, and decide nothing.
+
+    A candidate that returns nothing usable, or whose back-translation does
+    not, is a row that says so: the check is a measurement of every candidate,
+    and a crash on the first would have measured none of the others.
+    """
     sample = read_turns(args.sample)
-    call = call or (lambda model, prompt: _complete(args.provider, model, prompt))
+    if call is None:
+        settings = call_settings(args.provider)
+        budget = settings["max_tokens"]
+        call = lambda model, prompt: _complete(args.provider, model, prompt, budget)  # noqa: E731
+    settings = settings or {}
     back = args.back_translator
     rows = []
     for model in args.candidates:
         if model == back:
             raise SystemExit(f"{model} cannot be both a candidate and the back-translator")
-        translated = translate_turns(sample, "en->cs", lambda p, m=model: call(m, p))
+        try:
+            translated = translate_turns(sample, "en->cs", lambda p, m=model: call(m, p))
+        except ModelFailure as failure:
+            rows.append(
+                {
+                    "model": model,
+                    "structure": None,
+                    "round_trip": None,
+                    "failed": {"stage": "forward", "error": str(failure)},
+                }
+            )
+            continue
         forward = check_structure(sample, translated)
         row = {"model": model, "structure": forward.record(), "round_trip": None}
         if forward.ok:
-            english = translate_turns(translated, "cs->en", lambda p: call(back, p))
+            try:
+                english = translate_turns(translated, "cs->en", lambda p: call(back, p))
+            except ModelFailure as failure:
+                row["failed"] = {"stage": "back", "error": str(failure)}
+                rows.append(row)
+                continue
             row["round_trip"] = round_trip(sample, english)
             write_local(args.workspace / f"selection-{model}.json", translated, english)
         rows.append(row)
@@ -365,6 +425,7 @@ def cmd_select(args, call=None) -> dict:
         "prompt_version": PROMPT_VERSION,
         "prompt_digests": {d: prompt_digest(d) for d in PROMPT},
         "provider": args.provider,
+        "settings": settings,
         "back_translator": {"provider": args.provider, "model": back},
         "sample": {
             "source": args.sample.name,
@@ -386,12 +447,20 @@ def cmd_select(args, call=None) -> dict:
 def cmd_translate(args, call=None) -> dict:
     """Run the recorded instrument, and record what it produced and what failed."""
     instrument = load_instrument(args.instrument)
-    call = call or (lambda prompt: _complete(instrument["provider"], instrument["model"], prompt))
+    if call is None:
+        budget = (instrument.get("settings") or {}).get("max_tokens")
+        call = lambda prompt: _complete(  # noqa: E731
+            instrument["provider"], instrument["model"], prompt, budget
+        )
     records = []
     for path in sorted(args.conversations):
         source = read_turns(path)
-        translated = translate_turns(source, "en->cs", call)
-        check = check_structure(source, translated)
+        try:
+            translated = translate_turns(source, "en->cs", call)
+        except ModelFailure as failure:
+            check = Check(turns_in=len(source), turns_out=0, problems=[str(failure)])
+        else:
+            check = check_structure(source, translated)
         if check.ok:
             write_local(args.workspace / f"{path.stem}.cs.json", translated, None)
         records.append(
@@ -581,7 +650,7 @@ def main(argv=None) -> None:
     keep.add_argument("--check", type=Path, required=True)
     keep.add_argument("--judges", default="", help="comma-separated judge models of this pilot")
     keep.add_argument("--reason", required=True)
-    keep.add_argument("--settings", default="{}")
+    keep.add_argument("--settings", default=None, help="JSON; default: the check's settings")
 
     run = sub.add_parser("translate", help="translate conversations with the recorded instrument")
     run.add_argument("conversations", type=Path, nargs="+")
@@ -611,7 +680,7 @@ def main(argv=None) -> None:
             instrument_record(
                 provider=args.provider,
                 model=args.model,
-                settings=json.loads(args.settings),
+                settings=json.loads(args.settings) if args.settings else check.get("settings", {}),
                 check=check,
                 check_digest=digest(check),
                 judges=[j.strip() for j in args.judges.split(",") if j.strip()],
