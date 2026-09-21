@@ -155,6 +155,32 @@ def test_the_check_measures_every_candidate_and_decides_nothing(tmp_path, source
     assert "not a measurement of it" in check["metric"]["means"]
 
 
+def test_a_structural_failure_keeps_the_text_that_failed_under_local(tmp_path, source):
+    """glm-5.3 "changed every speaker" in the first live check and nothing kept
+    what it had written, so the failure could be named and not read."""
+
+    def call(model: str, prompt: str) -> str:
+        if model == "model-a":
+            return _answer(prompt, CS).replace("| therapist |", "| Terapeut |")
+        return good(model, prompt)
+
+    args = tool.argparse.Namespace(
+        sample=source,
+        provider="einfra",
+        candidates=["model-a", "model-b"],
+        back_translator="model-back",
+        workspace=tmp_path / "work",
+    )
+    check = tool.cmd_select(args, call=call)
+    rows = {row["model"]: row for row in check["candidates"]}
+    assert not rows["model-a"]["structure"]["ok"]
+    kept = tmp_path / "work" / "selection-model-a.failed.txt"
+    assert kept.exists() and "Terapeut" in kept.read_text(encoding="utf-8")
+    assert not (tmp_path / "work" / "selection-model-b.failed.txt").exists()
+    with pytest.raises(SystemExit, match="only be written under local"):
+        tool.write_raw(tool.REPO / "docs" / "leak.txt", "x")
+
+
 def test_a_candidate_may_not_be_its_own_back_translator(tmp_path, source):
     args = tool.argparse.Namespace(
         sample=source,

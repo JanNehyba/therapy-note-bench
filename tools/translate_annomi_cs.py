@@ -390,12 +390,18 @@ def cmd_select(args, call=None, settings=None) -> dict:
         call = lambda model, prompt: _complete(args.provider, model, prompt, budget)  # noqa: E731
     settings = settings or {}
     back = args.back_translator
+    last: dict[str, str] = {}
+
+    def remembering(model: str, prompt: str) -> str:
+        last["text"] = call(model, prompt)
+        return last["text"]
+
     rows = []
     for model in args.candidates:
         if model == back:
             raise SystemExit(f"{model} cannot be both a candidate and the back-translator")
         try:
-            translated = translate_turns(sample, "en->cs", lambda p, m=model: call(m, p))
+            translated = translate_turns(sample, "en->cs", lambda p, m=model: remembering(m, p))
         except ModelFailure as failure:
             rows.append(
                 {
@@ -407,10 +413,12 @@ def cmd_select(args, call=None, settings=None) -> dict:
             )
             continue
         forward = check_structure(sample, translated)
+        if not forward.ok:
+            write_raw(args.workspace / f"selection-{model}.failed.txt", last["text"])
         row = {"model": model, "structure": forward.record(), "round_trip": None}
         if forward.ok:
             try:
-                english = translate_turns(translated, "cs->en", lambda p: call(back, p))
+                english = translate_turns(translated, "cs->en", lambda p: remembering(back, p))
             except ModelFailure as failure:
                 row["failed"] = {"stage": "back", "error": str(failure)}
                 rows.append(row)
@@ -603,6 +611,25 @@ def read_turns(path: Path) -> list[Turn]:
     return out
 
 
+def _local_only(path: Path) -> None:
+    resolved = path.resolve()
+    inside = REPO in resolved.parents
+    if inside and REPO / "local" not in resolved.parents:
+        raise SystemExit("Translated transcripts may only be written under local/")
+
+
+def write_raw(path: Path, text: str) -> None:
+    """What a model actually returned when the parser could not make turns of it.
+
+    A structural failure is recorded by name in the tracked check; this is the
+    text behind the name, kept where corpus text is kept and nowhere else, so
+    that "changed every speaker" can be read rather than guessed at.
+    """
+    _local_only(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(text, encoding="utf-8")
+
+
 def write_local(path: Path, translated: list[Turn], back: list[Turn] | None) -> None:
     """Corpus text, and therefore never anywhere this repository publishes.
 
@@ -611,10 +638,7 @@ def write_local(path: Path, translated: list[Turn], back: list[Turn] | None) -> 
     checkout is somewhere this repository does not publish from and is left to
     whoever named it.
     """
-    resolved = path.resolve()
-    inside = REPO in resolved.parents
-    if inside and REPO / "local" not in resolved.parents:
-        raise SystemExit("Translated transcripts may only be written under local/")
+    _local_only(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     body = {
         "turns": [{"index": t.index, "speaker": t.speaker, "text": t.text} for t in translated],
