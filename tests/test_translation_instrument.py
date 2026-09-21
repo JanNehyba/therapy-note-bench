@@ -96,6 +96,27 @@ def test_an_untranslated_turn_is_named_rather_than_scored():
 # --- structure ---------------------------------------------------------------
 
 
+def test_an_unchanged_short_turn_is_listed_and_not_failed():
+    """ "Mm-hmm." and "Kia ora." are the same in Czech; the first live check failed
+    two models for returning them unchanged, and would have failed a human."""
+    source = [
+        tool.Turn(1, "client", "Kia ora."),
+        tool.Turn(2, "client", "Mm-hmm."),
+        tool.Turn(3, "therapist", "I have been thinking about what you said last time."),
+    ]
+    faithful = [
+        source[0],
+        source[1],
+        tool.Turn(3, "therapist", "Premyslel jsem o tom, co jste rekl."),
+    ]
+    check = tool.check_structure(source, faithful)
+    assert check.ok and check.unchanged_short == [1, 2] and check.untranslated == []
+    assert check.record()["unchanged_short_turns"] == [1, 2]
+    lazy = [source[0], source[1], source[2]]
+    check = tool.check_structure(source, lazy)
+    assert not check.ok and check.untranslated == [3] and check.unchanged_short == [1, 2]
+
+
 def test_a_translation_that_loses_a_turn_is_a_failure_not_a_repair():
     source = _turns()
     result = tool.parse_numbered(_answer(tool.numbered(source), CS, drop=3))

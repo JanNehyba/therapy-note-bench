@@ -65,6 +65,16 @@ SPEAKERS = ("therapist", "client")
 #: translation. Measured as chrF of the output against its own input: identical
 #: text scores 1.0, and above this a turn is reported as untranslated.
 UNTRANSLATED_ABOVE = 0.90
+#: "Mm-hmm." and "Kia ora." come back unchanged from a faithful translator, and
+#: the first live check failed two models for exactly that. A turn that came
+#: back unchanged is a failure only when it had this many words, enough English
+#: to be sure it should have changed; shorter ones are listed, not failed, and
+#: the human meaning review sees them.
+UNTRANSLATED_MIN_WORDS = 3
+#: A whole conversation in Czech takes far longer than a note; the provider's
+#: default timeout is for a note.
+TIMEOUT_S = 600
+CHECK_VERSION = "back-translation-check-v2"
 #: A round trip lands near, not on, its original. Reported, never enforced:
 #: what this number means for meaning is exactly what the human review asks.
 ROUND_TRIP_FLOOR = 0.50
@@ -195,6 +205,7 @@ class Check:
     turns_out: int
     problems: list[str] = field(default_factory=list)
     untranslated: list[int] = field(default_factory=list)
+    unchanged_short: list[int] = field(default_factory=list)
     length_ratio: float = 0.0
 
     @property
@@ -207,6 +218,7 @@ class Check:
             "turns_out": self.turns_out,
             "problems": list(self.problems),
             "untranslated_turns": len(self.untranslated),
+            "unchanged_short_turns": list(self.unchanged_short),
             "length_ratio": round(self.length_ratio, 4),
             "ok": self.ok,
         }
@@ -230,7 +242,10 @@ def check_structure(source: list[Turn], result: list[Turn]) -> Check:
         if not got.text.strip():
             check.problems.append(f"turn {turn.index} came back empty")
         elif chrf(got.text, turn.text) >= UNTRANSLATED_ABOVE:
-            check.untranslated.append(turn.index)
+            if len(turn.text.split()) >= UNTRANSLATED_MIN_WORDS:
+                check.untranslated.append(turn.index)
+            else:
+                check.unchanged_short.append(turn.index)
     if check.untranslated:
         check.problems.append(f"{len(check.untranslated)} turn(s) came back untranslated")
     source_chars = sum(len(t.text) for t in source)
@@ -336,12 +351,15 @@ class ModelFailure(Exception):
 
 
 def _provider(provider_name: str):
+    from dataclasses import replace
+
     from dotenv import load_dotenv
 
     from tnb.config import load_policy
 
     load_dotenv(REPO / ".env")  # the credential lives where `tnb` reads it, never in a tracked file
-    return load_policy().get(provider_name)
+    provider = load_policy().get(provider_name)
+    return replace(provider, generation=replace(provider.generation, timeout_s=TIMEOUT_S))
 
 
 def call_settings(provider_name: str) -> dict:
@@ -356,6 +374,7 @@ def call_settings(provider_name: str) -> dict:
     return {
         "temperature": generation.temperature,
         "max_tokens": max(generation.max_tokens, generation.escalate_max_tokens),
+        "timeout_s": generation.timeout_s,
     }
 
 
@@ -427,7 +446,7 @@ def cmd_select(args, call=None, settings=None) -> dict:
             write_local(args.workspace / f"selection-{model}.json", translated, english)
         rows.append(row)
     check = {
-        "version": "back-translation-check-v1",
+        "version": CHECK_VERSION,
         "recorded_at": now(),
         "direction": "en->cs",
         "prompt_version": PROMPT_VERSION,
@@ -446,6 +465,12 @@ def cmd_select(args, call=None, settings=None) -> dict:
             "beta": 2.0,
             "means": "character n-gram agreement of the round trip with the original; "
             "an indirect screen for meaning, not a measurement of it",
+        },
+        "structure_rule": {
+            "untranslated_above": UNTRANSLATED_ABOVE,
+            "untranslated_min_words": UNTRANSLATED_MIN_WORDS,
+            "means": "a turn that came back unchanged fails only with at least this many "
+            "words; shorter unchanged turns are listed for the human review",
         },
         "candidates": rows,
     }
@@ -653,7 +678,9 @@ def write_local(path: Path, translated: list[Turn], back: list[Turn] | None) -> 
 def write_record(path: Path, value: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_bytes((json.dumps(value, ensure_ascii=False, indent=2) + "\n").encode("utf-8"))
-    print("wrote", path.relative_to(REPO).as_posix())
+    resolved = path.resolve()
+    shown = resolved.relative_to(REPO).as_posix() if REPO in resolved.parents else str(resolved)
+    print("wrote", shown)
 
 
 def main(argv=None) -> None:
@@ -696,7 +723,8 @@ def main(argv=None) -> None:
     if args.command == "select":
         args.candidates = [name.strip() for name in args.candidates.split(",") if name.strip()]
         check = cmd_select(args)
-        write_record(args.records / f"back-translation-check-{now()[:10]}.json", check)
+        stamp = now()[:16].replace(":", "")
+        write_record(args.records / f"back-translation-check-{stamp}.json", check)
     elif args.command == "record":
         check = json.loads(args.check.read_text(encoding="utf-8"))
         write_record(
