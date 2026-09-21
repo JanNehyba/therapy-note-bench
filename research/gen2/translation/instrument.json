@@ -1,0 +1,46 @@
+{
+  "version": "translation-instrument-v1",
+  "recorded_at": "2026-09-21T15:15:05+00:00",
+  "direction": "en->cs",
+  "provider": "einfra",
+  "model": "mistral-medium-3.5",
+  "settings": {
+    "temperature": 0.0,
+    "max_tokens": 16384,
+    "timeout_s": 600
+  },
+  "prompt_version": "gen2-translate-v1",
+  "prompt_digest": "0814e00e8536094fc8fdf07e32ca78548e5f3be07c387080362ea3ea2b5d669c",
+  "back_translation_check": {
+    "digest": "2edf93b5c3e5b8b65bd2583d8bf6d39b5fecb9e9ff1b760bdead39afde5121eb",
+    "recorded_at": "2026-09-21T14:55:09+00:00",
+    "back_translator": {
+      "provider": "einfra",
+      "model": "gpt-oss-120b"
+    },
+    "sample_turns": 40,
+    "measurement": {
+      "model": "mistral-medium-3.5",
+      "structure": {
+        "turns_in": 40,
+        "turns_out": 40,
+        "problems": [],
+        "untranslated_turns": 0,
+        "length_ratio": 0.8687,
+        "ok": true
+      },
+      "round_trip": {
+        "compared_turns": 40,
+        "of_turns": 40,
+        "mean_chrf": 0.644,
+        "worst_chrf": 0.0498,
+        "below_floor": 8,
+        "floor": 0.5
+      }
+    }
+  },
+  "not_a_judge_of": [],
+  "reason": "The only candidate of six that returned every one of the forty sample turns and completed the round trip (mean chrF 0.644, eight turns under the 0.50 floor, listed for the human meaning review). gemma4 and glm-5.3 failed the check's v1 untranslated rule on five short turns later found to be interjections; deepseek-v4-flash and kimi-k3 timed out at 180 s; qwen3.8-27b exceeded a 16384-token budget. The investigator instructed on 2026-09-21 to close the selection and proceed; a second check under the corrected v2 rule was running and is recorded beside this one when it completes. The pilot's judge models are not yet named; the instrument must be re-checked against them before any judged run.",
+  "status": "recorded_before_use",
+  "supersedes": "the ten undocumented Czech translations of the earlier Gen-2 draft, which are retained as historical artifacts and are not used as pairs (D4)"
+}
