@@ -117,6 +117,21 @@ def test_an_unchanged_short_turn_is_listed_and_not_failed():
     assert not check.ok and check.untranslated == [3] and check.unchanged_short == [1, 2]
 
 
+def test_a_translated_speaker_label_names_the_same_speaker():
+    """glm-5.3 wrote "terapeut" and "klient" on the sixty-two-turn conversation and
+    every turn was called a changed speaker. The label's language is not the
+    speaker's identity: a known translation maps back and is counted, and any
+    other label is still a changed speaker."""
+    source = _turns()
+    answer = _answer(tool.numbered(source), CS).replace("| therapist |", "| Terapeut |")
+    parsed = tool.parse_numbered(answer)
+    assert [t.speaker for t in parsed] == [t.speaker for t in source]
+    assert tool.relabelled(answer) == [t.index for t in source if t.speaker == "therapist"]
+    assert tool.check_structure(source, parsed).ok
+    other = tool.parse_numbered(answer.replace("| client |", "| doctor |"))
+    assert "changed speaker" in " ".join(tool.check_structure(source, other).problems)
+
+
 def test_a_translation_that_loses_a_turn_is_a_failure_not_a_repair():
     source = _turns()
     result = tool.parse_numbered(_answer(tool.numbered(source), CS, drop=3))
@@ -182,7 +197,7 @@ def test_a_structural_failure_keeps_the_text_that_failed_under_local(tmp_path, s
 
     def call(model: str, prompt: str) -> str:
         if model == "model-a":
-            return _answer(prompt, CS).replace("| therapist |", "| Terapeut |")
+            return _answer(prompt, CS).replace("| therapist |", "| doctor |")
         return good(model, prompt)
 
     args = tool.argparse.Namespace(
@@ -196,7 +211,7 @@ def test_a_structural_failure_keeps_the_text_that_failed_under_local(tmp_path, s
     rows = {row["model"]: row for row in check["candidates"]}
     assert not rows["model-a"]["structure"]["ok"]
     kept = tmp_path / "work" / "selection-model-a.failed.txt"
-    assert kept.exists() and "Terapeut" in kept.read_text(encoding="utf-8")
+    assert kept.exists() and "doctor" in kept.read_text(encoding="utf-8")
     assert not (tmp_path / "work" / "selection-model-b.failed.txt").exists()
     with pytest.raises(SystemExit, match="only be written under local"):
         tool.write_raw(tool.REPO / "docs" / "leak.txt", "x")

@@ -60,6 +60,16 @@ INSTRUMENT_PATH = RECORDS / "instrument.json"
 #: merged turn is visible rather than silently changing what a turn says.
 LINE = re.compile(r"^\s*(\d+)\s*\|\s*([^|]+?)\s*\|\s*(.*\S)\s*$")
 SPEAKERS = ("therapist", "client")
+#: A model that translates the whole line translates the label too. "terapeut"
+#: and "klient" name the same speakers, so the identity is intact and only the
+#: label's language changed; it is mapped back and counted, not failed. Any
+#: other label is a changed speaker.
+LABELS = {
+    "terapeut": "therapist",
+    "terapeutka": "therapist",
+    "klient": "client",
+    "klientka": "client",
+}
 
 #: A Czech translation that still reads as its English source is not a
 #: translation. Measured as chrF of the output against its own input: identical
@@ -146,8 +156,19 @@ def parse_numbered(text: str) -> list[Turn]:
     for line in text.splitlines():
         match = LINE.match(line)
         if match:
-            out.append(Turn(int(match.group(1)), match.group(2).strip().lower(), match.group(3)))
+            label = match.group(2).strip().lower()
+            out.append(Turn(int(match.group(1)), LABELS.get(label, label), match.group(3)))
     return out
+
+
+def relabelled(text: str) -> list[int]:
+    """The turns whose speaker label came back translated, for the record."""
+    found = []
+    for line in text.splitlines():
+        match = LINE.match(line)
+        if match and match.group(2).strip().lower() in LABELS:
+            found.append(int(match.group(1)))
+    return found
 
 
 PROMPT_VERSION = "gen2-translate-v1"
@@ -486,14 +507,22 @@ def cmd_translate(args, call=None) -> dict:
             instrument["provider"], instrument["model"], prompt, budget
         )
     records = []
+    last: dict[str, str] = {}
+
+    def remembering(prompt: str) -> str:
+        last["text"] = call(prompt)
+        return last["text"]
+
     for path in sorted(args.conversations):
         source = read_turns(path)
         try:
-            translated = translate_turns(source, "en->cs", call)
+            translated = translate_turns(source, "en->cs", remembering)
         except ModelFailure as failure:
             check = Check(turns_in=len(source), turns_out=0, problems=[str(failure)])
         else:
             check = check_structure(source, translated)
+            if not check.ok:
+                write_raw(args.workspace / f"{path.stem}.cs.failed.txt", last["text"])
         if check.ok:
             write_local(args.workspace / f"{path.stem}.cs.json", translated, None)
         records.append(
