@@ -455,7 +455,8 @@ def test_a_property_no_candidate_covered_was_opened_and_then_decided(catalog, pr
     by_id = {c["id"]: c for c in catalog["candidates"]}
     assert by_id["K32"]["origin"] == by_id["K33"]["origin"] == "literature"
     assert "2026-09-21" in by_id["K32"]["origin_note"]
-    assert "against" in catalog["revisions"][-1]["changes"][0]
+    decided = next(r for r in catalog["revisions"] if "open source properties" in r["reason"])
+    assert "against" in decided["changes"][0]
 
 
 def test_the_page_carries_the_source_first_table(catalog, props):

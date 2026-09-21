@@ -1488,7 +1488,7 @@
           "location": "Sections 1 and 2",
           "quote": "[translated from Czech] This decree lays down (a) the content and required elements of medical documentation",
           "supports": "A regulation in force from 2025-01-01 lays down the required elements.",
-          "our_adaptation": "The regulation lays down required elements, not quality. Converting them into measurable criteria is our step and requires legal review."
+          "our_adaptation": "The regulation lays down required elements, not quality. Converting them into a presence check is our step. The criterion was narrowed on 2026-09-16 by the investigator's decision to a documentation-conformance check for records kept by a provider of health services, without legal review; it makes no claim about legal compliance."
         },
         {
           "source": "S14",
@@ -1892,10 +1892,10 @@
         },
         {
           "source": "S19",
-          "location": "abstract, results",
+          "location": "Abstract, Results; Table I, component-level comparisons",
           "quote": "the LLM was superior in preserving central themes",
           "supports": "At the level of individual components the model and the clinician diverge in different directions; genericness is therefore not the same as incompleteness.",
-          "our_adaptation": "VERIFIED FROM THE ABSTRACT ONLY."
+          "our_adaptation": "Verified in the full text on 2026-09-21: the passage is the abstract's results sentence, and Table I shows the components on which the model was rated higher (therapist interventions) beside those on which the clinicians were. The reading that genericness and incompleteness are different properties is ours."
         }
       ],
       "relevance": {
@@ -3232,6 +3232,14 @@
         "K33 internal consistency within one note, added from the PDQI-9 attribute",
         "both not yet operationalised and outside the pilot proposal",
         "the open-property records keep their history and now carry the decision"
+      ]
+    },
+    {
+      "date": "2026-09-21",
+      "reason": "two evidence lines corrected before the source and evidence review, because they were known to be stale",
+      "changes": [
+        "K19-e1: 'requires legal review' contradicted the investigator's decision of 2026-09-16 that narrowed K19 without one",
+        "K28-e3: 'verified from the abstract only' was written before S19's full text was retrieved on 2026-09-13; re-verified in the full text on 2026-09-21"
       ]
     }
   ],
