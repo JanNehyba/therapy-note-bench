@@ -1419,6 +1419,63 @@
       "human_checked_by": null,
       "source_artifact_digest": "",
       "excerpt": "Tools for assessing note redundancy are required to complement use of the PDQI-9."
+    },
+    {
+      "id": "K32-e1",
+      "source_id": "S1",
+      "location": "Appendix A.5, General Items",
+      "interpretation": "Cultural competence is an item of the note rubric, graded highly recommended and applying across sections.",
+      "relationship": "direct_validation",
+      "population": "50 conversations from the high-quality split of AnnoMI (public motivational interviewing demonstrations, English)",
+      "languages": [
+        "en"
+      ],
+      "raters": "5 internal + 8 note-writing + 9 evaluating licensed US therapists; rubric validated with 17 external therapists",
+      "unit": "rubric item per SOAP section; sentence for conciseness; sentence for faithfulness",
+      "response_format": "binary item coverage, sentence labels, 3-way hallucination label; 5-point Likert baseline for comparison",
+      "validation": "not established",
+      "limitations": "TN-Eval treats it as something the note carries. Whether a note can show it without knowing the therapist's intent is the open operational question, and S1 reports no score for the item.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Evidence of treatment being provided in a culturally competent manner. Importance: Highly recommended"
+    },
+    {
+      "id": "K33-e1",
+      "source_id": "S4",
+      "location": "PDQI-9 form, item 9, as reproduced in S6 Table 1",
+      "interpretation": "Internal consistency is a rated attribute of the instrument family.",
+      "relationship": "method_transfer",
+      "population": "inpatient electronic notes, US academic centre",
+      "languages": [
+        "en"
+      ],
+      "raters": "physician raters",
+      "unit": "whole note",
+      "response_format": "9 items, 5-point Likert",
+      "validation": "not established",
+      "limitations": "Rated there as one Likert item over the whole note; we would locate each contradicting pair instead.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "No part of the note ignores or contradicts any other part."
+    },
+    {
+      "id": "K33-e2",
+      "source_id": "S2",
+      "location": "Methods, instrument development",
+      "interpretation": "The successor instrument judged the attribute redundant.",
+      "relationship": "method_transfer",
+      "population": "779 multi-document EHR summaries, multiple specialties, real-world data; psychiatry and psychotherapy notes explicitly excluded",
+      "languages": [
+        "en"
+      ],
+      "raters": "7 trained physician raters, 8329 answered questions",
+      "unit": "whole summary",
+      "response_format": "9 attributes on 5-point Likert scales",
+      "validation": "not established",
+      "limitations": "Recorded as an argument against, not as a reason to omit: the redundancy with accuracy holds only when every claim is checked against the source, which a reader of the note alone cannot do.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Two PDQI-9 attributes, Up-to-Date and Consistent, were removed"
     }
   ],
   "constructs": [
@@ -2595,6 +2652,80 @@
       "reviewed_by": null,
       "origin": "prior_proposal",
       "origin_reference": "catalog:K31"
+    },
+    {
+      "id": "K32",
+      "name": "Cultural competence evidenced in the note",
+      "definition": "The note shows that the client's cultural, linguistic and social context was taken into account where it bore on the session: how the client's background is recorded, whether an adaptation or an interpreter is noted, and that no assumption about the client stands in for what was said. It is judged from the note alone, as what the note shows about the care.",
+      "families": [
+        "F5"
+      ],
+      "evidence_ids": [
+        "K32-e1"
+      ],
+      "relevance": {
+        "continuity": "medium",
+        "supervision": "high",
+        "client": "high",
+        "audit": "low"
+      },
+      "unit": "whole note",
+      "required_inputs": [
+        "note",
+        "transcript"
+      ],
+      "examples": {
+        "positive": "The note records that the client's religious framing of guilt was taken up in the intervention in the client's own terms.",
+        "negative": "The note explains the client's reluctance by a cultural stereotype the session does not contain.",
+        "boundary": "The transcript carries no cultural content; the note says nothing about it and the item is not applicable."
+      },
+      "candidate_formats": [
+        "human judgement; scale not yet defined"
+      ],
+      "applicability": "Where the session carries cultural, linguistic or social context that bore on the care. A session without such content makes the item not applicable, which is not a failure.",
+      "error_consequences": "A note that reads the client through a stereotype is read by the next clinician and by the client; the harm is to the relationship and to trust, and it is permanent.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "literature",
+      "origin_reference": "catalog:K32"
+    },
+    {
+      "id": "K33",
+      "name": "Internal consistency within one note",
+      "definition": "No part of the note ignores or contradicts another part of the same note. Distinct from K26, which is consistency between notes of one case, and from K01: two statements can each have support in the source at different moments and still contradict each other when the note presents both as current.",
+      "families": [
+        "F1"
+      ],
+      "evidence_ids": [
+        "K33-e1",
+        "K33-e2"
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "medium",
+        "client": "high",
+        "audit": "medium"
+      },
+      "unit": "pair of statements within one note",
+      "required_inputs": [
+        "note only"
+      ],
+      "examples": {
+        "positive": "The plan in the Plan section follows from the assessment above it.",
+        "negative": "The Subjective section says the client stopped drinking; the Plan section plans to reduce the drinking.",
+        "boundary": "The note reports that the client said two contradictory things in the session; that is faithful reporting, not an inconsistency of the note."
+      },
+      "candidate_formats": [
+        "categorical per pair of contradicting statements; not yet defined"
+      ],
+      "applicability": "Any note. A contradiction the client themselves voiced and the note reports as the client's is fidelity, not inconsistency.",
+      "error_consequences": "A reader who finds a contradiction cannot tell which part to trust and discounts the whole note.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "literature",
+      "origin_reference": "catalog:K33"
     }
   ],
   "measurements": [],

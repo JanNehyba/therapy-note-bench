@@ -36,9 +36,9 @@
     "sources_abstract_only": 7,
     "sources_defining_properties": 26,
     "properties": 140,
-    "properties_mapped": 130,
-    "properties_unmapped": 10,
-    "candidates_with_source_property": 30,
+    "properties_mapped": 132,
+    "properties_unmapped": 8,
+    "candidates_with_source_property": 32,
     "candidates_without_source_property": 1
   },
   "sources": [
@@ -191,8 +191,10 @@
           "kind": "general_item",
           "location": "Appendix A.5, General Items",
           "quote": "Evidence of treatment being provided in a culturally competent manner. Importance: Highly recommended",
-          "maps_to": [],
-          "mapping": "no candidate covers it: it is a property of the treatment shown in the note, not of the note's rendering of the session"
+          "maps_to": [
+            "K32"
+          ],
+          "mapping": "adopted by the investigator on 2026-09-21 as its own candidate"
         },
         {
           "pid": "S1-p14",
@@ -701,8 +703,10 @@
           "kind": "attribute",
           "location": "PDQI-9 form",
           "quote": "No part of the note ignores or contradicts any other part.",
-          "maps_to": [],
-          "mapping": "no candidate: K26 is consistency between notes of a case, this is consistency inside one note"
+          "maps_to": [
+            "K33"
+          ],
+          "mapping": "added by the investigator on 2026-09-21 as its own candidate; K26 is consistency between notes"
         },
         {
           "pid": "S4-p10",
@@ -747,9 +751,10 @@
             "K12",
             "K13",
             "K11",
-            "K09"
+            "K09",
+            "K33"
           ],
-          "mapping": "as in S4; internal consistency stays unmapped"
+          "mapping": "as in S4, internal consistency included"
         },
         {
           "pid": "S6-p02",
@@ -1725,9 +1730,10 @@
             "K05",
             "K03",
             "K09",
-            "K11"
+            "K11",
+            "K33"
           ],
-          "mapping": "the same attribute family as PDQI; consistent, prioritized and objective have no direct candidate"
+          "mapping": "the same attribute family as PDQI; prioritized and objective have no direct candidate"
         },
         {
           "pid": "S_abs_tednq-p03",
@@ -2166,26 +2172,22 @@
       "S2-p05",
       "S4-p07",
       "S4-p10"
+    ],
+    "K32": [
+      "S1-p13"
+    ],
+    "K33": [
+      "S4-p09",
+      "S6-p01",
+      "S_abs_tednq-p02"
     ]
   },
   "unmapped_properties": [
-    {
-      "pid": "S1-p13",
-      "source": "S1",
-      "label": "Culturally competent care evidenced in the note",
-      "why_unmapped": "no candidate covers it: it is a property of the treatment shown in the note, not of the note's rendering of the session"
-    },
     {
       "pid": "S1-p17",
       "source": "S1",
       "label": "Five-point Likert baseline per dimension",
       "why_unmapped": "a rating format, not a property; the paper reports it beside the fine-grained protocol"
-    },
-    {
-      "pid": "S4-p09",
-      "source": "S4",
-      "label": "Internally consistent",
-      "why_unmapped": "no candidate: K26 is consistency between notes of a case, this is consistency inside one note"
     },
     {
       "pid": "S4-p11",

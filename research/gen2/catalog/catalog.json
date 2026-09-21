@@ -2071,6 +2071,91 @@
       "overlaps": "K11, K29, K12.",
       "state": "not_yet_operationalized",
       "state_note": "Split from K11 by audit A07. The unit rules for repetition are not defined; measurable once the coverage bank of P01 exists."
+    },
+    {
+      "id": "K32",
+      "family": "F5",
+      "kind": "construct",
+      "label": "Cultural competence evidenced in the note",
+      "definition": "The note shows that the client's cultural, linguistic and social context was taken into account where it bore on the session: how the client's background is recorded, whether an adaptation or an interpreter is noted, and that no assumption about the client stands in for what was said. It is judged from the note alone, as what the note shows about the care.",
+      "origin": "literature",
+      "origin_note": "Found in TN-Eval's general items (Appendix A.5, 'Evidence of treatment being provided in a culturally competent manner'). The source-first extraction of 2026-09-20 left it open with a proposal not to adopt it, because it reads as a property of the care rather than of the note; the investigator decided on 2026-09-21 to adopt it.",
+      "evidence": [
+        {
+          "source": "S1",
+          "location": "Appendix A.5, General Items",
+          "quote": "Evidence of treatment being provided in a culturally competent manner. Importance: Highly recommended",
+          "supports": "Cultural competence is an item of the note rubric, graded highly recommended and applying across sections.",
+          "our_adaptation": "TN-Eval treats it as something the note carries. Whether a note can show it without knowing the therapist's intent is the open operational question, and S1 reports no score for the item."
+        }
+      ],
+      "relevance": {
+        "continuity": "medium",
+        "supervision": "high",
+        "client": "high",
+        "audit": "low"
+      },
+      "mode": "human judgement; scale not yet defined",
+      "unit": "whole note",
+      "inputs": "note, transcript",
+      "applicability": "Where the session carries cultural, linguistic or social context that bore on the care. A session without such content makes the item not applicable, which is not a failure.",
+      "examples": {
+        "positive": "The note records that the client's religious framing of guilt was taken up in the intervention in the client's own terms.",
+        "negative": "The note explains the client's reluctance by a cultural stereotype the session does not contain.",
+        "boundary": "The transcript carries no cultural content; the note says nothing about it and the item is not applicable."
+      },
+      "measurement": "Not yet defined. Human rating only; needs a rule for when the item applies and for what counts as evidence, written in both languages.",
+      "error_consequence": "A note that reads the client through a stereotype is read by the next clinician and by the client; the harm is to the relationship and to trust, and it is permanent.",
+      "validation": "One rubric item in S1, never reported as a score there. No study found measures it in generated notes.",
+      "overlaps": "K14 (stigmatising wording), K02 (originator of a statement), K27 (evenness across groups).",
+      "state": "not_yet_operationalized",
+      "state_note": "Adopted by the investigator on 2026-09-21 from an open source property. No rating rule exists in either language."
+    },
+    {
+      "id": "K33",
+      "family": "F1",
+      "kind": "construct",
+      "label": "Internal consistency within one note",
+      "definition": "No part of the note ignores or contradicts another part of the same note. Distinct from K26, which is consistency between notes of one case, and from K01: two statements can each have support in the source at different moments and still contradict each other when the note presents both as current.",
+      "origin": "literature",
+      "origin_note": "The PDQI-9 attribute 'Internally consistent' (S4, as reproduced in S6, Table 1). PDSQI-9 removed it as redundant (S2). The source-first extraction of 2026-09-20 found no candidate covering it; the investigator decided on 2026-09-21 to add it.",
+      "evidence": [
+        {
+          "source": "S4",
+          "location": "PDQI-9 form, item 9, as reproduced in S6 Table 1",
+          "quote": "No part of the note ignores or contradicts any other part.",
+          "supports": "Internal consistency is a rated attribute of the instrument family.",
+          "our_adaptation": "Rated there as one Likert item over the whole note; we would locate each contradicting pair instead."
+        },
+        {
+          "source": "S2",
+          "location": "Methods, instrument development",
+          "quote": "Two PDQI-9 attributes, Up-to-Date and Consistent, were removed",
+          "supports": "The successor instrument judged the attribute redundant.",
+          "our_adaptation": "Recorded as an argument against, not as a reason to omit: the redundancy with accuracy holds only when every claim is checked against the source, which a reader of the note alone cannot do."
+        }
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "medium",
+        "client": "high",
+        "audit": "medium"
+      },
+      "mode": "categorical per pair of contradicting statements; not yet defined",
+      "unit": "pair of statements within one note",
+      "inputs": "note only",
+      "applicability": "Any note. A contradiction the client themselves voiced and the note reports as the client's is fidelity, not inconsistency.",
+      "examples": {
+        "positive": "The plan in the Plan section follows from the assessment above it.",
+        "negative": "The Subjective section says the client stopped drinking; the Plan section plans to reduce the drinking.",
+        "boundary": "The note reports that the client said two contradictory things in the session; that is faithful reporting, not an inconsistency of the note."
+      },
+      "measurement": "Not yet defined. Locate pairs of statements in the note that cannot both hold, count them per note, and have a person check each pair.",
+      "error_consequence": "A reader who finds a contradiction cannot tell which part to trust and discounts the whole note.",
+      "validation": "Rated in S4 and S6 as one Likert item of PDQI-9; dropped in S2. No study found measures it in generated notes.",
+      "overlaps": "K01, K26, K03.",
+      "state": "not_yet_operationalized",
+      "state_note": "Added by the investigator on 2026-09-21 from an open source property. The rule for what counts as a contradicting pair is not written."
     }
   ],
   "methods": [
@@ -2845,6 +2930,14 @@
       {
         "candidate": "K31 redundancy",
         "reason": "Split from K11 by audit A07; the unit rules for repetition are not defined. Measurable once the coverage bank of P01 exists."
+      },
+      {
+        "candidate": "K32 cultural competence evidenced in the note",
+        "reason": "Adopted on 2026-09-21; no rating rule exists yet, so it is not in this round."
+      },
+      {
+        "candidate": "K33 internal consistency within one note",
+        "reason": "Added on 2026-09-21; the rule for a contradicting pair is not written, so it is not in this round."
       }
     ],
     "count_note": "There are 14 entries. The brief of 2026-09-13 asked for 8-12; that was a number from the brief, not a result of the review, and protocol 2.1.0 replaces it with a record-not-cap rule (decision D3): every supported measurement is carried, what the human budget cannot cover is reported as not measured, and the executable count is recorded at freeze. The entries are not 14 comparable measures: P12 is a study condition, P09 a requirements check, P10 and P11 human-use outcomes, P13 a corpus-level proxy and P14 a derived ratio (audit A08). Every candidate carries a state (audit A07); K07 and K10 are measured inside P01 and no longer listed as left out."
@@ -3059,6 +3152,18 @@
       "action": "add",
       "new": "K27",
       "reason": "ADDED. Evenness of quality across groups. Not measurable yet, but it must be visible as a planned level, not absent."
+    },
+    {
+      "old": null,
+      "action": "add",
+      "new": "K32",
+      "reason": "ADDED on 2026-09-21 by the investigator's decision. Found by the source-first extraction in TN-Eval's general items; the earlier map had nothing about the client's cultural context."
+    },
+    {
+      "old": null,
+      "action": "add",
+      "new": "K33",
+      "reason": "ADDED on 2026-09-21 by the investigator's decision. The PDQI-9 attribute the earlier map and the catalog both lacked: contradiction inside one note, as opposed to between notes."
     }
   ],
   "candidate_states": {
@@ -3118,6 +3223,16 @@
         "two source properties no candidate covers are recorded as open, with a proposed disposition, for the investigator to decide",
         "every literature-origin candidate is shown to rest on at least one source property; K06 rests on observation alone, as its origin says"
       ]
+    },
+    {
+      "date": "2026-09-21",
+      "reason": "investigator decisions on the two open source properties",
+      "changes": [
+        "K32 cultural competence evidenced in the note, adopted from TN-Eval's general items against the assistant's proposal not to adopt it",
+        "K33 internal consistency within one note, added from the PDQI-9 attribute",
+        "both not yet operationalised and outside the pilot proposal",
+        "the open-property records keep their history and now carry the decision"
+      ]
     }
   ],
   "purposes_in_scope": {
@@ -3137,14 +3252,14 @@
       "pid": "S1-p13",
       "label": "Culturally competent care evidenced in the note",
       "source": "S1",
-      "disposition": "not adopted, pending the investigator's decision",
+      "disposition": "decided by the investigator on 2026-09-21: adopted as K32",
       "reason": "A property of the treatment as the note shows it, not of the note's rendering of the session; judging it would mean judging the therapist's care from a note."
     },
     {
       "pid": "S4-p09",
       "label": "Internally consistent: no part of the note ignores or contradicts any other part",
       "source": "S4",
-      "disposition": "proposed as a new candidate, pending the investigator's decision",
+      "disposition": "decided by the investigator on 2026-09-21: adopted as K33",
       "reason": "K26 is consistency between notes of one case; nothing in the catalog measures contradiction inside one note. PDSQI-9 dropped the attribute as redundant with accuracy (S2-p11), which is an argument to record, not a reason to omit it."
     }
   ]

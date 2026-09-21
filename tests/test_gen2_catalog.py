@@ -85,15 +85,18 @@ def test_the_catalog_validates_against_the_ledger(catalog, reports):
 
 def test_the_catalog_holds_what_the_review_proposed(catalog):
     """The counts the documentation states, held to the record."""
-    assert len(catalog["candidates"]) == 31
+    # 29 from the round of 2026-09-13, two returned or split on 2026-09-16, and
+    # two adopted on 2026-09-21 from properties the sources defined and the
+    # catalog had not covered.
+    assert len(catalog["candidates"]) == 33
     assert len(catalog["methods"]) == 17
     # 19 read in the round of 2026-09-13, and 6 more read on 2026-09-20 after
     # the investigator supplied them; 7 are still known from abstracts only.
     assert len(catalog["sources"]) == 25
     assert len(catalog["abstract_sources"]) == 7
     assert len(catalog["pilot_proposal"]["entries"]) == 14
-    assert len(catalog["comparison"]) == 35
-    assert catalog_mod.ids(catalog, "candidates") == [f"K{n:02d}" for n in range(1, 32)]
+    assert len(catalog["comparison"]) == 37
+    assert catalog_mod.ids(catalog, "candidates") == [f"K{n:02d}" for n in range(1, 34)]
     assert catalog_mod.ids(catalog, "methods") == [f"ME{n:02d}" for n in range(1, 18)]
 
 
@@ -110,6 +113,7 @@ def test_every_candidate_carries_a_state_and_a_reason(catalog):
     }
     assert {k for k, v in states.items() if v == "proposed"} == measured
     assert states["K30"] == states["K31"] == "not_yet_operationalized"
+    assert states["K32"] == states["K33"] == "not_yet_operationalized"
     assert states["K15"] == "lacking_evidence"
     # K13 still waits for a reader the pilot has not got. K24 and K25 waited for
     # one too until decision D8 of 2026-09-16 put their purposes out of scope,
@@ -318,7 +322,7 @@ def test_every_source_evidence_line_and_candidate_maps(catalog, draft, diagnosti
     assert [c["id"] for c in draft["constructs"]] == catalog_mod.ids(catalog, "candidates")
     lines = sum(len(c["evidence"]) for c in catalog["candidates"])
     assert len(draft["evidence"]) == lines
-    assert diagnostics["mapped"] == {"sources": 32, "evidence": lines, "constructs": 31}
+    assert diagnostics["mapped"] == {"sources": 32, "evidence": lines, "constructs": 33}
     for s in draft["sources"]:
         assert s["locator"].startswith("ledger:")
 
@@ -433,15 +437,25 @@ def test_every_literature_candidate_rests_on_a_source_property(catalog, props):
     )
 
 
-def test_a_property_no_candidate_covers_is_open_not_absent(catalog, props):
-    """Two properties the sources define fit no candidate. They are recorded
-    with a proposed disposition for the investigator; nothing decided them."""
-    open_ids = {row["pid"] for row in catalog["open_source_properties"]}
-    assert open_ids == {"S1-p13", "S4-p09"}
-    for row in catalog["open_source_properties"]:
-        assert "pending the investigator" in row["disposition"]
+def test_a_property_no_candidate_covered_was_opened_and_then_decided(catalog, props):
+    """Two properties the sources define fit no candidate on 2026-09-20. They
+    were recorded as open with a proposed disposition, and on 2026-09-21 the
+    investigator decided both, one against the proposal. The record keeps the
+    history: the open rows stay, carry the decision, and now map to K32 and
+    K33; nothing in the table is unmapped without an explanation."""
+    open_rows = {row["pid"]: row for row in catalog["open_source_properties"]}
+    assert set(open_rows) == {"S1-p13", "S4-p09"}
+    assert "adopted as K32" in open_rows["S1-p13"]["disposition"]
+    assert "adopted as K33" in open_rows["S4-p09"]["disposition"]
+    by_pid = {p["pid"]: p for s in props["sources"] for p in s["properties"]}
+    assert by_pid["S1-p13"]["maps_to"] == ["K32"]
+    assert by_pid["S4-p09"]["maps_to"] == ["K33"]
     unmapped = {row["pid"] for row in props["unmapped_properties"]}
-    assert open_ids <= unmapped
+    assert not (unmapped & set(open_rows))
+    by_id = {c["id"]: c for c in catalog["candidates"]}
+    assert by_id["K32"]["origin"] == by_id["K33"]["origin"] == "literature"
+    assert "2026-09-21" in by_id["K32"]["origin_note"]
+    assert "against" in catalog["revisions"][-1]["changes"][0]
 
 
 def test_the_page_carries_the_source_first_table(catalog, props):

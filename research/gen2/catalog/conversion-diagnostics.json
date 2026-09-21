@@ -7,8 +7,8 @@
   "rule": "Every source, evidence line and candidate maps to a registry record with no human decision. Nothing becomes an operational item, a selected method or a review; each such gap is listed here with its reason.",
   "mapped": {
     "sources": 32,
-    "evidence": 58,
-    "constructs": 31
+    "evidence": 61,
+    "constructs": 33
   },
   "not_mapped": {
     "measurements": 14,
@@ -350,6 +350,24 @@
       "origin": "prior_proposal",
       "origin_reference": "catalog:K31",
       "note": "placeholder: the workflow needs a recorded proposal (proposal:<id>) from prior-proposals.json or record-input; the catalog records the origin in prose only",
+      "record_kind": "construct"
+    },
+    {
+      "id": "K32",
+      "catalog_state": "not_yet_operationalized",
+      "catalog_origin": "literature",
+      "origin": "literature",
+      "origin_reference": "catalog:K32",
+      "note": "placeholder: the workflow needs an extraction record (extraction:<id>) bound to an included full text; the catalog records the origin in prose only",
+      "record_kind": "construct"
+    },
+    {
+      "id": "K33",
+      "catalog_state": "not_yet_operationalized",
+      "catalog_origin": "literature",
+      "origin": "literature",
+      "origin_reference": "catalog:K33",
+      "note": "placeholder: the workflow needs an extraction record (extraction:<id>) bound to an included full text; the catalog records the origin in prose only",
       "record_kind": "construct"
     }
   ],
