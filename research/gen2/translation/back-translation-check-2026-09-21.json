@@ -1,0 +1,146 @@
+{
+  "version": "back-translation-check-v1",
+  "recorded_at": "2026-09-21T14:55:09+00:00",
+  "direction": "en->cs",
+  "prompt_version": "gen2-translate-v1",
+  "prompt_digests": {
+    "en->cs": "0814e00e8536094fc8fdf07e32ca78548e5f3be07c387080362ea3ea2b5d669c",
+    "cs->en": "21385cfd61e17b274d6ad4e49c6d6c39ad84a77592375494f63bfe6150261673"
+  },
+  "provider": "einfra",
+  "settings": {
+    "temperature": 0.0,
+    "max_tokens": 16384
+  },
+  "back_translator": {
+    "provider": "einfra",
+    "model": "gpt-oss-120b"
+  },
+  "sample": {
+    "source": "sample.json",
+    "turns": 40,
+    "digest": "bac2de7d3a5fcb00159c15e68388ca6d1bb89794f5a1f8a4f2a1680bb3ddb543"
+  },
+  "metric": {
+    "name": "chrF",
+    "order": 6,
+    "beta": 2.0,
+    "means": "character n-gram agreement of the round trip with the original; an indirect screen for meaning, not a measurement of it"
+  },
+  "candidates": [
+    {
+      "model": "deepseek-v4-flash",
+      "structure": null,
+      "round_trip": null,
+      "failed": {
+        "stage": "forward",
+        "error": "deepseek-v4-flash returned no usable answer: ReadTimeout"
+      }
+    },
+    {
+      "model": "gemma4",
+      "structure": {
+        "turns_in": 40,
+        "turns_out": 40,
+        "problems": [
+          "5 turn(s) came back untranslated"
+        ],
+        "untranslated_turns": 5,
+        "length_ratio": 0.9394,
+        "ok": false
+      },
+      "round_trip": null
+    },
+    {
+      "model": "glm-5.3",
+      "structure": {
+        "turns_in": 40,
+        "turns_out": 40,
+        "problems": [
+          "turn 1 changed speaker",
+          "turn 2 changed speaker",
+          "turn 3 changed speaker",
+          "turn 4 changed speaker",
+          "turn 5 changed speaker",
+          "turn 6 changed speaker",
+          "turn 7 changed speaker",
+          "turn 8 changed speaker",
+          "turn 9 changed speaker",
+          "turn 10 changed speaker",
+          "turn 11 changed speaker",
+          "turn 12 changed speaker",
+          "turn 13 changed speaker",
+          "turn 14 changed speaker",
+          "turn 15 changed speaker",
+          "turn 16 changed speaker",
+          "turn 17 changed speaker",
+          "turn 18 changed speaker",
+          "turn 19 changed speaker",
+          "turn 20 changed speaker",
+          "turn 21 changed speaker",
+          "turn 22 changed speaker",
+          "turn 23 changed speaker",
+          "turn 24 changed speaker",
+          "turn 25 changed speaker",
+          "turn 26 changed speaker",
+          "turn 27 changed speaker",
+          "turn 28 changed speaker",
+          "turn 29 changed speaker",
+          "turn 30 changed speaker",
+          "turn 31 changed speaker",
+          "turn 32 changed speaker",
+          "turn 33 changed speaker",
+          "turn 34 changed speaker",
+          "turn 35 changed speaker",
+          "turn 36 changed speaker",
+          "turn 37 changed speaker",
+          "turn 38 changed speaker",
+          "turn 39 changed speaker",
+          "turn 40 changed speaker",
+          "1 turn(s) came back untranslated"
+        ],
+        "untranslated_turns": 1,
+        "length_ratio": 0.967,
+        "ok": false
+      },
+      "round_trip": null
+    },
+    {
+      "model": "kimi-k3",
+      "structure": null,
+      "round_trip": null,
+      "failed": {
+        "stage": "forward",
+        "error": "kimi-k3 returned no usable answer: ReadTimeout"
+      }
+    },
+    {
+      "model": "mistral-medium-3.5",
+      "structure": {
+        "turns_in": 40,
+        "turns_out": 40,
+        "problems": [],
+        "untranslated_turns": 0,
+        "length_ratio": 0.8687,
+        "ok": true
+      },
+      "round_trip": {
+        "compared_turns": 40,
+        "of_turns": 40,
+        "mean_chrf": 0.644,
+        "worst_chrf": 0.0498,
+        "below_floor": 8,
+        "floor": 0.5
+      }
+    },
+    {
+      "model": "qwen3.8-27b",
+      "structure": null,
+      "round_trip": null,
+      "failed": {
+        "stage": "forward",
+        "error": "qwen3.8-27b returned no usable answer: truncated at max_tokens=16384"
+      }
+    }
+  ]
+}
