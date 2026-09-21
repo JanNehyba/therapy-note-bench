@@ -1,7 +1,7 @@
 # Gen-2: scoping review and transparent instrument development
 
-**Research protocol 2.3.0, amended 2026-09-21; 2.2.0, 2.1.0, 2.0.0 and 1.0.0 are
-retained in `history/`. Status: prepared and amended before any pilot run; the search of
+**Research protocol 2.4.0, amended 2026-09-21; 2.3.0 to 1.0.0 are retained in
+`history/`. Status: prepared and amended before any pilot run; the search of
 2026-09-13 is bounded as a scoping search with a prioritised evidence map, and the
 human selection and clinical validation are not complete.** Earlier reading, prototype
 experiments and proposals are formative development, not erased history.
@@ -100,7 +100,11 @@ evidence lines item by item and accepted them on the assistant's reading (decisi
 D9). Such a response is imported with `delegated: true`, must name the ledger
 decision, can only accept, and is stored in the review mode `delegated`; every
 frozen instrument snapshot lists the subjects that rest on it, so nothing built on
-them is reported as human-verified evidence.
+them is reported as human-verified evidence. The same day the investigator delegated
+the operational rules and the translator choice as well (decision D10): the scope,
+the three method specifications, the three rubric items and their Czech wording are
+the assistant's proposal accepted without item-by-item review, and the feasibility
+pilot is their first test.
 
 ## Commands
 

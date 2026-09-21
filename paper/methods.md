@@ -133,14 +133,19 @@ Constructs proposed for measurement become operational measurements with a
 question, a response format, anchors and examples in both languages; the core
 implements four measurement methods (source-derived question answering,
 atomic-claim verification, item scoring and citation checking), and each
-operational item names the one it uses. The current pilot proposal holds 14
+operational item names the one it uses. The rules of the three methods this
+round uses, the three rubric items and their Czech wording were drafted by the
+assistant and accepted by the investigator by delegation on 2026-09-21
+(decision D10), not reviewed item by item; the feasibility pilot is their
+first test, and the translator was chosen the same way from the recorded
+back-translation check. The current pilot proposal holds 14
 entries that are deliberately not 14 comparable measures: 8 executable
 measures, 2 human-use outcomes, 1 requirements check, 1 study condition on
 rater training, 1 corpus-level proxy and 1 derived ratio. The protocol records
 the executable count at freeze rather than capping it. The registry refuses to
 freeze while any used subject lacks an accepted decision.
 
-The feasibility pilot (protocol 2.3.0) freezes 16 generation jobs over two
+The feasibility pilot (protocol 2.4.0) freezes 16 generation jobs over two
 cohorts, two English AnnoMI conversations and their Czech translations, two
 purposes and two generator families, and balances an 8-note human sample across
 them. Two Czech psychologists, neither the instrument author, rate under a
@@ -188,7 +193,9 @@ missed is reported. It does not present expert consensus: the instruments we
 build on used therapist co-design and Delphi panels, and this round had one
 investigator with AI assistance, whose decisions are recorded as an author's.
 The passages quoted as evidence were read by the assistant and accepted by
-delegation; no person verified each of them against its source.
+delegation; no person verified each of them against its source. The operational
+rules and the Czech wording the raters follow were drafted by the assistant and
+accepted by delegation as well; they are tested by the pilot, not by review.
 It does not present a validated instrument: no agreement statistic exists
 before the pilot. The Czech legal criterion is a documentation-conformance check
 for records kept by a provider of health services, not a statement about legal

@@ -1,7 +1,7 @@
 # Gen-2: traceable research and versioned measurement
 
-**Software: experimental v0.3.0 / protocol gen2-v3. Research protocol: 2.3.0, amended
-on 2026-09-21 before any pilot run; 2.2.0, 2.1.0 and 2.0.0 are retained in history. The newly specified
+**Software: experimental v0.3.0 / protocol gen2-v3. Research protocol: 2.4.0, amended
+on 2026-09-21 before any pilot run; 2.3.0 to 2.0.0 are retained in history. The newly specified
 review, human pilot and clinical validation are not complete.**
 
 The existing software, prior proposals and earlier experiments are formative
@@ -19,7 +19,9 @@ The software checks consistency and lineage, not personal identity or clinical t
 One investigator with AI assistance is not independent dual review or expert consensus.
 The construct decisions are the investigator's own; the sources and evidence lines were
 accepted on the assistant's reading by a recorded delegation (decision D9, 2026-09-21)
-and are not human-verified item by item.
+and are not human-verified item by item. The operational rules the raters follow and
+the choice of translator were likewise delegated to the assistant's proposal (decision
+D10, 2026-09-21); the feasibility pilot is their first test.
 
 What the scoping search proposed is a single versioned record,
 [research/gen2/catalog/catalog.json](../research/gen2/catalog/catalog.json): every

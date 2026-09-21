@@ -1,6 +1,6 @@
 {
   "id": "therapy-note-construct-review",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "status": "protocol_amended_before_pilot_search_partially_executed",
   "recorded_date": "2026-09-21",
   "design": "Instrument development informed by a systematic scoping review, expert proposals and empirical observations",
@@ -81,7 +81,8 @@
     "clinical_panel": "not planned (D2)",
     "ai_role": "assist retrieval, extraction and discrepancy detection; never impersonate a human decision",
     "independent_second_screening": "planned: a second human screener will be recruited; until that person records decisions on the exact sheets, screening is single-reviewer with AI assistance and is reported as such",
-    "evidence_verification": "delegated (D9, 2026-09-21): sources and evidence lines stand on the assistant's reading; constructs were decided by the investigator item by item"
+    "evidence_verification": "delegated (D9, 2026-09-21): sources and evidence lines stand on the assistant's reading; constructs were decided by the investigator item by item",
+    "operational_rules": "delegated (D10, 2026-09-21): the scope, method specifications, rubric items and Czech wording are the assistant's proposal accepted without item-by-item review"
   },
   "sequence": [
     "Record the prospective protocol revision and prior exposure before the corresponding research steps",
@@ -250,7 +251,7 @@
     },
     "translation_instrument": {
       "direction": "en->cs",
-      "status": "not yet selected",
+      "status": "recorded on 2026-09-21: glm-5.3 on e-INFRA, chosen by the assistant under D10 from the second back-translation check; see research/gen2/translation/instrument.json",
       "selection": "chosen by a measured back-translation check recorded before use",
       "record": [
         "provider",
@@ -259,9 +260,13 @@
         "prompt_digest",
         "back_translation_check_digest"
       ],
-      "provider": null,
-      "model": null,
-      "settings": null,
+      "provider": "einfra",
+      "model": "glm-5.3",
+      "settings": {
+        "temperature": 0.0,
+        "max_tokens": 16384,
+        "timeout_s": 600
+      },
       "prompt_digest": null,
       "constraint": "not a judge model of this pilot",
       "existing_translations": "the ten earlier Claude translations are superseded; they will be redone with the selected instrument and retained as historical artifacts (D4)"
@@ -281,8 +286,8 @@
     "review_completion": "Only executed searches and verified decisions count as completed; blocked sources remain named gaps",
     "scope": "Report selected and required methods, planned/applicable/assessed units, and incomplete critical-error assessment even in public aggregates"
   },
-  "supersedes": "2.2.0",
-  "amendment_reason": "Record how the sources and evidence lines were reviewed. The investigator decided every construct (2026-09-16 and 2026-09-21) and, on 2026-09-21, declined to verify the 32 sources and 61 evidence lines item by item, accepting them on the assistant's reading. That is a decision and it is recorded as one, in a distinct review mode that can only accept, names this ledger entry, and is listed on every frozen instrument snapshot, so that nothing built on it is reported as human-verified evidence. The alternative, five regenerated review forms asking the same person the same 96 questions, had produced no answers and would not.",
+  "supersedes": "2.3.0",
+  "amendment_reason": "Record how the operational rules and the translator were decided. On 2026-09-21 the investigator, asked for a decision on the assessment scope, the three method specifications, the three rubric items and their Czech wording, and on the translator, instructed the assistant to decide ('chci abys to udelal vse automaticky'). The rules are the assistant's proposal accepted by delegation, in the same review mode as D9, and the translator is the candidate the second back-translation check ranked first. Both are recorded as delegations so that the paper can say who wrote the rules the raters follow and who chose the translator, and the pilot is what tests them.",
   "retrieval_gaps": "Record reports not retrieved separately from full-text eligibility exclusions; unavailable databases remain named gaps",
   "expert_inputs": "May enter throughout development. Later support does not rewrite historical origin; author or colleague proposals do not imply consensus.",
   "registration": {
@@ -408,6 +413,19 @@
         "registry review mode 'delegated' and its import rule",
         "instrument snapshot field 'delegated_reviews'",
         "paper: methods (human review) and what the study does not claim"
+      ]
+    },
+    {
+      "id": "D10",
+      "date": "2026-09-21",
+      "origin": "investigator",
+      "decision": "The assessment scope, the method specifications for qa, claims and items, the three rubric items and every Czech operational wording are accepted on the assistant's proposal, by delegation, without item-by-item review; the translator is chosen by the assistant from the recorded back-translation check. Each is recorded in the review mode 'delegated', names this entry, and is listed on the frozen instrument snapshot; the paper reports the operational rules as assistant-drafted and the feasibility pilot as their first test.",
+      "replaces": "the plan that the investigator decides each operational subject on the sheet",
+      "affects": [
+        "reviewers.operational_rules",
+        "the reviewed draft's scope, method, measurement and language subjects",
+        "data.translation_instrument",
+        "paper: methods (operationalisation) and what the study does not claim"
       ]
     }
   ]
