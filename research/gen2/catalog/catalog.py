@@ -46,6 +46,7 @@ META = (
     "pilot_record_kinds",
     "candidate_states",
     "families_policy",
+    "method",
     "purposes_in_scope",
     "open_source_properties",
     "purposes",
@@ -75,6 +76,12 @@ CANDIDATE_TEXT = (
 #: A candidate named by a pilot entry is proposed for measurement; every other
 #: state is a reason it is not, and the reasons are not interchangeable (A07).
 PROPOSED = "proposed"
+#: What a candidate needs before it may be measured. The item pool is drawn from
+#: the literature and from this project alike, which is how an item pool is built
+#: (S12, Item generation); what keeps that from being a free pass is that nothing
+#: is measured on its origin. At least one evidence line has to quote a source
+#: read in full, whoever thought of the criterion first.
+SUPPORT_RULE = "proposed for measurement without a source read in full"
 ENTRY_TEXT = (
     "label",
     "unit",
@@ -188,6 +195,7 @@ def problems(catalog: dict, reports: dict | None = None) -> list[str]:
             out.append(f"{m['id']}: evidence names an unknown source")
 
     candidates = set(ids(catalog, "candidates"))
+    full_text_sources = {s["id"] for s in catalog["sources"]}
     for c in catalog["candidates"]:
         if c["family"] not in families:
             out.append(f"{c['id']}: unknown family {c['family']!r}")
@@ -251,6 +259,10 @@ def problems(catalog: dict, reports: dict | None = None) -> list[str]:
                 f"{c['id']}: state {c.get('state')!r} does not match the pilot proposal; "
                 "a candidate a pilot entry measures is proposed, and only it"
             )
+        if c.get("state") == PROPOSED and not any(
+            e["source"] in full_text_sources for e in c["evidence"]
+        ):
+            out.append(f"{c['id']}: {SUPPORT_RULE}")
     for p in pilot["entries"]:
         if p["record_kind"] not in catalog["pilot_record_kinds"]:
             out.append(f"{p['id']}: unknown record kind {p['record_kind']!r}")

@@ -9,13 +9,24 @@ wrong until it is re-read.**
 
 We develop a bilingual instrument for the quality of psychotherapy session
 notes and a benchmark that applies it to model-written notes in English and in
-Czech. The construct framework was assembled by a best-fit framework synthesis
-(Carroll et al., 2013): an a priori criteria map recorded before any search,
-confronted with a bounded scoping search of the literature, with every
-construct carrying a declared origin, every claim about a source carrying the
-passage it rests on, and a second, source-first extraction of what each source
-itself defines as note quality. Nothing in the framework was accepted without a
-recorded human decision. The instrument is developed for two purposes of a note,
+Czech. The work reported here is the first phase of instrument development,
+item generation followed by content validity (Boateng et al., 2018; Terwee et
+al., 2018). Items were generated deductively, from a bounded scoping search of
+the literature and the instruments it found, and inductively, from a criteria
+map this project recorded before the search, three named expert proposals and
+one repeated observation of our own outputs; drawing on both is what the
+procedure prescribes rather than a mixture to be explained away. What the
+procedure requires instead, and what this design supplies, is that the origin
+of every item is declared and never rewritten when support is found later, that
+every claim about a source carries the passage it rests on, and that a second,
+source-first extraction records what each source itself defines as note quality
+so that the pool is not merely a confirmation of the map. One rule makes the
+mixture safe and is enforced by the repository's validator: a construct may be
+proposed for measurement only when at least one of its evidence lines quotes a
+source read in full. An idea may come from anywhere; what is measured must be
+supported. An earlier draft described this as a best-fit framework synthesis;
+that method begins from a published framework, ours began from our own
+prototype, and the citation is withdrawn. The instrument is developed for two purposes of a note,
 continuity of care and documentation audit; supervision and client
 communication remain declared and out of scope for this round. A feasibility
 pilot on a small balanced sample precedes any confirmatory study; the present
@@ -99,7 +110,10 @@ proposal; the record keeps both the proposal and the decision.
 The catalog holds 33 candidates. By origin, 18 came from the literature, 11
 existed in the project before the search, 3 are named expert proposals and 1
 arose from observation; origin never changes when support is found later, which
-is recorded as evidence instead. Against the prior map, 8 criteria were kept, 12
+is recorded as evidence instead. Origin and support are reported separately,
+because they answer different questions: all 17 constructs proposed for
+measurement in this round rest on at least one source read in full, and the one
+candidate with no such support is not measured. Against the prior map, 8 criteria were kept, 12
 revised on what the sources say, 6 merged where they had counted one finding
 twice, and 11 added. Every candidate carries one of seven states that say why
 it is or is not measured in this round: 17 are proposed for measurement, 6 lack
@@ -145,7 +159,7 @@ rater training, 1 corpus-level proxy and 1 derived ratio. The protocol records
 the executable count at freeze rather than capping it. The registry refuses to
 freeze while any used subject lacks an accepted decision.
 
-The feasibility pilot (protocol 2.5.0) freezes 16 generation jobs over two
+The feasibility pilot (protocol 2.6.0) freezes 16 generation jobs over two
 cohorts, two English AnnoMI conversations and their Czech translations, two
 purposes and two generator families, and balances an 8-note human sample across
 them. Two Czech psychologists, neither the instrument author, rate under a
@@ -189,9 +203,15 @@ repository's test suite.
 
 It does not present a completed scoping review: two databases were not
 searched, most of the pool was not screened, and the estimate of what was
-missed is reported. It does not present expert consensus: the instruments we
-build on used therapist co-design and Delphi panels, and this round had one
-investigator with AI assistance, whose decisions are recorded as an author's.
+missed is reported. It does not present content validity in the sense the method it
+follows requires: expert judges "should be independent of those who developed
+the item pool" (Boateng et al., 2018), and here the pool was developed by the
+investigator with the assistant and judged by the investigator. The two Czech
+psychologists of the pilot are raters, not independent judges of the pool, and
+a feasibility pilot does not stand in for that judgement. COSMIN's criteria
+name relevance, comprehensiveness and comprehensibility as what such a
+judgement covers, and this round reports that nobody has assessed them. The
+instruments we build on used therapist co-design and Delphi panels.
 The passages quoted as evidence were read by the assistant and accepted by
 delegation; no person verified each of them against its source. The operational
 rules and the Czech wording the raters follow were drafted by the assistant and

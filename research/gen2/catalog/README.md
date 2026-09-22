@@ -26,11 +26,20 @@ to the catalog; the mapping to candidates is a second column, done afterwards. A
 candidate the catalog calls literature-origin has to rest on at least one such
 property, and a property no candidate covers is listed in the catalog as open, with
 a proposed disposition, until the investigator decides. Together with the prior map
-this is a best-fit framework synthesis: an a priori framework, evidence coded
-against it, and new themes for what does not fit. The paper will cite the method
-(Carroll et al., BMC Medical Research Methodology, 2013); the reference is in the
-review ledger as a methodological report, not yet retrieved or read, and the paper
-may not describe the method's steps from memory until it is.
+this is the first phase of instrument development: item generation followed by
+content validity (Boateng et al., Frontiers in Public Health, 2018, which the
+catalog holds as S12; COSMIN's content-validity criteria are S11). Items are
+generated deductively from the search and the instruments it found, and
+inductively from the prototype recorded before it, three named expert proposals
+and one observation of our own outputs. An earlier draft called this a best-fit
+framework synthesis (Carroll et al., 2013); that method begins from a published
+framework and ours began from this project's prototype, so the citation is
+withdrawn and the reference stays in the review ledger as a report that was
+named and never read. What keeps a mixed item pool honest is a rule the
+validator enforces: a candidate may be proposed for measurement only when at
+least one of its evidence lines quotes a source read in full. The gap the same
+method names, expert judges independent of those who developed the pool, is
+recorded in `catalog.json` as not met.
 
 ## Provenance
 

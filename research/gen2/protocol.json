@@ -1,8 +1,8 @@
 {
   "id": "therapy-note-construct-review",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "status": "protocol_amended_before_pilot_search_partially_executed",
-  "recorded_date": "2026-09-21",
+  "recorded_date": "2026-09-22",
   "design": "Instrument development informed by a systematic scoping review, expert proposals and empirical observations",
   "prior_exposure": "The investigator and coding assistant have seen existing instruments, prior Gen-2 drafts and a colleague's QA suggestion. This is not a claim of hypothesis-free discovery or blinded authorship.",
   "conduct_framework": "JBI scoping review guidance, full-text verification pending",
@@ -286,8 +286,8 @@
     "review_completion": "Only executed searches and verified decisions count as completed; blocked sources remain named gaps",
     "scope": "Report selected and required methods, planned/applicable/assessed units, and incomplete critical-error assessment even in public aggregates"
   },
-  "supersedes": "2.4.0",
-  "amendment_reason": "Make the instrument freezable without inventing a human decision. The core refuses to freeze a construct whose origin is not backed by a record in the study: a literature origin needs an extraction bound to a screened report, an expert or empirical origin needs a recorded input. The review of 2026-09-13 was run outside the core and fed it neither, so every construct carried a placeholder reference and the freeze was refused. The nine reports the pilot's constructs rest on are entered with their route from the review ledger, their inclusion recorded in the delegated mode of D9 and D10, and their quoted passages checked verbatim against the retrieved full texts. The machine check of the quotes is what stands where the investigator declined to verify the evidence by hand: it establishes that the passage exists in the source, and nothing about its interpretation.",
+  "supersedes": "2.5.0",
+  "amendment_reason": "Name the method correctly. The investigator objected on 2026-09-22 that a framework mixing constructs from the literature with constructs the project already had is methodologically disorderly, and that the citation the draft leaned on did not cover it. The objection about the citation is right: a best-fit framework synthesis begins from a published framework and this began from our own prototype. The objection about the mixture is answered by naming what this actually is, the first phase of instrument development, where an item pool is generated deductively and inductively by design; what that procedure demands is a declared origin per item, a rule that nothing is measured on its origin alone, and a content-validity judgement by experts independent of the pool's authors. The first two are now enforced. The third is not met and is recorded as the gap it is.",
   "retrieval_gaps": "Record reports not retrieved separately from full-text eligibility exclusions; unavailable databases remain named gaps",
   "expert_inputs": "May enter throughout development. Later support does not rewrite historical origin; author or colleague proposals do not imply consensus.",
   "registration": {
@@ -438,6 +438,18 @@
         "research.screen and review_status",
         "the frozen instrument's construct origins",
         "paper: methods (screening, operationalisation) and what the study does not claim"
+      ]
+    },
+    {
+      "id": "D12",
+      "date": "2026-09-22",
+      "origin": "investigator",
+      "decision": "The framework is reported as phase one of instrument development, item generation followed by content validity, after Boateng et al. (S12) and COSMIN (S11); the best-fit framework synthesis citation is withdrawn. A candidate may be proposed for measurement only with at least one evidence line quoting a source read in full, which the catalog validator enforces. Content validity by judges independent of the item pool's authors is not met and is reported as an open gap, which the pilot does not close.",
+      "replaces": "the framework-synthesis framing of the catalog and the methods draft",
+      "affects": [
+        "paper: design, construct framework, and what the study does not claim",
+        "research/gen2/catalog/catalog.json method block and its validator",
+        "research/gen2/catalog/README.md"
       ]
     }
   ]

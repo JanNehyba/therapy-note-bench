@@ -181,6 +181,45 @@ def test_the_acceptability_criterion_asks_about_use_not_about_a_payer(catalog):
     assert "2026-09-16" in k23["state_note"]
 
 
+def test_the_catalog_names_its_method_and_the_gap_that_method_leaves(catalog):
+    """An earlier draft leaned on best-fit framework synthesis, which begins from a
+    published framework; this began from the project's own prototype. The record
+    names what was done instead, quotes the source for it, and says plainly that
+    the content-validity judgement that method requires has not happened."""
+    method = catalog["method"]
+    assert "item generation" in method["named"] and "content validity" in method["named"]
+    assert "withdrawn" in method["why_not_framework_synthesis"]
+    generation = method["item_generation"]
+    assert generation["source"] == "S12" and generation["quote"]
+    assert generation["deductive_here"] and generation["inductive_here"]
+    validity = method["content_validity"]
+    assert validity["source"] == "S12"
+    assert "independent of those who developed the item pool" in validity["quote"]
+    assert validity["where_we_stand"].startswith("Not met")
+    for key in ("S11", "S12"):
+        assert key in catalog_mod.source_ids(catalog), "the method rests on sources it holds"
+
+
+def test_nothing_is_measured_on_its_origin_alone(catalog):
+    """The item pool mixes what the search found with what the project already had,
+    which is how an item pool is built. What keeps that honest is that support, not
+    origin, decides what may be measured, and the validator says so."""
+    full_text = {s["id"] for s in catalog["sources"]}
+    proposed = [c for c in catalog["candidates"] if c["state"] == "proposed"]
+    assert len(proposed) == 17
+    for candidate in proposed:
+        assert any(e["source"] in full_text for e in candidate["evidence"]), candidate["id"]
+    assert {c["origin"] for c in proposed} > {"literature"}, "the pool is mixed by design"
+
+    doctored = json.loads(json.dumps(catalog))
+    victim = next(c for c in doctored["candidates"] if c["id"] == "K05")
+    abstract_only = doctored["abstract_sources"][0]["id"]
+    victim["evidence"] = [{**e, "source": abstract_only} for e in victim["evidence"]]
+    assert any(
+        "without a source read in full" in problem for problem in catalog_mod.problems(doctored)
+    )
+
+
 def test_the_czech_legal_criterion_states_the_population_it_binds(catalog):
     """The investigator decided on 2026-09-16 not to obtain a legal review and
     to narrow the scope instead, so nothing here may read as a legal verdict.

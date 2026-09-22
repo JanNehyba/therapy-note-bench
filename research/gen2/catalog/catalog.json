@@ -3249,6 +3249,16 @@
         "K07-e1: the quote was a splice of PDSQI-9's two omission definitions, 'A pertinent omission refers to' followed by the body of 'A potentially pertinent omission refers to details relevant to a patient's expected clinical course'; replaced by the pertinent definition as the source states it, which supports the same claim more directly",
         "every other quoted passage of the twelve constructs the pilot measures was found in the retrieved file, allowing for the whitespace an extractor inserts inside words"
       ]
+    },
+    {
+      "date": "2026-09-22",
+      "reason": "the method the framework was assembled by is named correctly",
+      "changes": [
+        "the best-fit framework synthesis citation is withdrawn: that method starts from a published framework, ours started from this project's prototype",
+        "the work is named as phase one of instrument development, item generation from deductive and inductive sources followed by content validity, after S12 and S11",
+        "the rule that a candidate is proposed for measurement only with support from a source read in full is written down and enforced by the validator",
+        "the gap S12 names, expert judges independent of those who developed the item pool, is recorded as not met"
+      ]
     }
   ],
   "purposes_in_scope": {
@@ -3278,5 +3288,25 @@
       "disposition": "decided by the investigator on 2026-09-21: adopted as K33",
       "reason": "K26 is consistency between notes of one case; nothing in the catalog measures contradiction inside one note. PDSQI-9 dropped the attribute as redundant with accuracy (S2-p11), which is an argument to record, not a reason to omit it."
     }
-  ]
+  ],
+  "method": {
+    "named": "instrument development, phase one: item generation followed by content validity",
+    "why_not_framework_synthesis": "An earlier draft called this a best-fit framework synthesis (Carroll et al., 2013). That method starts from a published framework and codes the evidence against it; ours started from this project's own prototype, so the citation did not cover what was done and is withdrawn. The reference stays in the review ledger as a report that was named and never read.",
+    "item_generation": {
+      "source": "S12",
+      "location": "Item generation",
+      "quote": "There are two ways to identify appropriate questions: deductive and inductive methods",
+      "deductive_here": "the bounded scoping search of 2026-09-13 and the instruments it found",
+      "inductive_here": "the prototype recorded before the search, three named expert proposals, and one repeated observation of this project's own outputs",
+      "means": "An item pool drawn from both is the prescribed procedure, not a mixture to apologise for. What the procedure requires instead is that the origin of every item is declared and that the pool then passes content validity."
+    },
+    "measurement_rule": "A candidate may be proposed for measurement only when at least one of its evidence lines quotes a source read in full. An idea may come from anywhere; what is measured must be supported. The validator enforces this.",
+    "content_validity": {
+      "source": "S12",
+      "location": "Content validity, expert judges",
+      "quote": "These expert judges should be independent of those who developed the item pool",
+      "where_we_stand": "Not met. The item pool was developed by the investigator with the assistant, and the only judgement on it is the investigator's own, with the sources, evidence lines and operational rules accepted by delegation (D9, D10). The two Czech psychologists of the pilot are raters, not independent judges of content validity, and the pilot does not substitute for that judgement."
+    },
+    "reporting": "COSMIN's content-validity criteria (S11) name relevance, comprehensiveness and comprehensibility as what such a judgement has to cover; this round reports which of them nobody has assessed."
+  }
 }

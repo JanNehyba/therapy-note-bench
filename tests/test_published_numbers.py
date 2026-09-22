@@ -1108,7 +1108,7 @@ CLAIMS = (
         kind="elsewhere",
         because="tests/test_gen2_research.py::"
         "test_balanced_pilot_is_a_plan_not_fabricated_human_data "
-        "checks 16 planned jobs and the 8-note balanced subset under protocol 2.5.0, "
+        "checks 16 planned jobs and the 8-note balanced subset under protocol 2.6.0, "
         "whose two eligible cohorts hold two cases each and whose round serves two "
         "purposes rather than four; no execution is claimed.",
         covers=("16", "8"),
