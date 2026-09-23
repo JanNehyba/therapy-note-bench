@@ -15,12 +15,16 @@ al., 2018). Items were generated deductively, from a bounded scoping search of
 the literature and the instruments it found, and inductively, from a criteria
 map this project recorded before the search, three named expert proposals and
 one repeated observation of our own outputs; drawing on both is what the
-procedure prescribes rather than a mixture to be explained away. What the
-procedure requires instead, and what this design supplies, is that the origin
-of every item is declared and never rewritten when support is found later, that
-every claim about a source carries the passage it rests on, and that a second,
-source-first extraction records what each source itself defines as note quality
-so that the pool is not merely a confirmation of the map. One rule makes the
+procedure prescribes rather than a mixture to be explained away. The framework
+is nevertheless reported from the sources upwards, because that is the part a
+reader can check: for every source read in full we list every property of note
+quality the source itself defines, and 32 of the 33 candidates are anchored in
+at least one such property. The prior map is reported as the comparison the
+framework was tested against rather than as its derivation, and the one
+candidate no source defines is named. What the procedure requires besides is
+that the origin of every item is declared and never rewritten when support is
+found later, and that every claim about a source carries the passage it rests
+on. One rule makes the
 mixture safe and is enforced by the repository's validator: a construct may be
 proposed for measurement only when at least one of its evidence lines quotes a
 source read in full. An idea may come from anywhere; what is measured must be
@@ -88,18 +92,24 @@ defines no property of a note. Each construct rests on evidence lines that
 quote a located passage and state separately what the passage supports and what
 our adaptation adds; there are 61 such lines (`catalog.json`).
 
-## Source-first extraction
+## The derivation, from the sources upwards
 
-Because the evidence above was collected for candidates already on the table,
-we extracted in the other direction as well. For every source read in full we
+The evidence above was collected for candidates already on the table, so it
+cannot say whether the sources contain anything the table missed. The
+derivation we report runs the other way. For every source read in full we
 listed every property of note quality the source itself defines or measures, in
 the source's own words and with its location, without reference to the catalog,
 and mapped each to a candidate afterwards (`source-properties.json`). The table
 holds 140 properties from 26 sources. 132 map to a candidate; the eight that do
 not are rating formats, findings about raters, or limitations of a source
 rather than properties of a note. Thirty-two of the 33 candidates rest on at
-least one source property; the one that does not is declared as originating in
-observation of the project's own outputs. Two properties that no candidate had
+least one source property. The one that does not is K06, a note that says what
+it could not record rather than leaving the gap silent; no source defines it
+and it stands on the observation this project declares as its origin, which is
+that models write a denial of information nobody asked for and score full
+marks for it. This convergence is not a blind replication: the extraction was
+written by the assistant that had already written the catalog, source by
+source and with the mapping done afterwards, and it is reported as what it is. Two properties that no candidate had
 covered, culturally competent care evidenced in the note and internal
 consistency within one note, were recorded as open with a proposed disposition
 and adopted as candidates by the investigator on 2026-09-21, one against the

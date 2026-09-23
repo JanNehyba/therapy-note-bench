@@ -200,6 +200,28 @@ def test_the_catalog_names_its_method_and_the_gap_that_method_leaves(catalog):
         assert key in catalog_mod.source_ids(catalog), "the method rests on sources it holds"
 
 
+def test_the_framework_is_reported_from_the_sources_upwards(catalog, props):
+    """The investigator asked whether a purely source-first derivation would reach
+    the same framework. It nearly does, and the record says both halves of that:
+    how far the convergence goes, and that the extraction was not blind."""
+    derivation = catalog["method"]["derivation"]
+    assert "source-first" in derivation["reported_from"]
+    assert "comparison" in derivation["prior_map_role"]
+    assert "not a blind replication" in derivation["caveat"]
+    anchored = {
+        key
+        for source in props["sources"]
+        for prop in source["properties"]
+        for key in prop["maps_to"]
+    }
+    ids = {c["id"] for c in catalog["candidates"]}
+    assert len(anchored & ids) == 33 - 1
+    assert ids - anchored == {"K06"}, "the one candidate no source defines is named"
+    assert [row["id"] for row in props["candidates_without_source_property"]] == ["K06"]
+    assert "K06" in derivation["convergence"]
+    assert "not a blind replication" in props["blindness"]
+
+
 def test_nothing_is_measured_on_its_origin_alone(catalog):
     """The item pool mixes what the search found with what the project already had,
     which is how an item pool is built. What keeps that honest is that support, not

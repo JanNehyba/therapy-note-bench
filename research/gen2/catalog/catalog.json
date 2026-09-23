@@ -3259,6 +3259,15 @@
         "the rule that a candidate is proposed for measurement only with support from a source read in full is written down and enforced by the validator",
         "the gap S12 names, expert judges independent of those who developed the item pool, is recorded as not met"
       ]
+    },
+    {
+      "date": "2026-09-22",
+      "reason": "the framework is reported from the sources upwards, after the investigator asked whether a purely inductive derivation would reach the same place",
+      "changes": [
+        "the source-first extraction becomes the reported derivation and the prior map the comparison; 32 of 33 candidates are anchored in a property a source itself defines",
+        "K06 is named as the single candidate no source defines, standing on its declared origin in this project's own observation",
+        "the extraction records that it was not blind to the catalog and is not a replication"
+      ]
     }
   ],
   "purposes_in_scope": {
@@ -3307,6 +3316,12 @@
       "quote": "These expert judges should be independent of those who developed the item pool",
       "where_we_stand": "Not met. The item pool was developed by the investigator with the assistant, and the only judgement on it is the investigator's own, with the sources, evidence lines and operational rules accepted by delegation (D9, D10). The two Czech psychologists of the pilot are raters, not independent judges of content validity, and the pilot does not substitute for that judgement."
     },
-    "reporting": "COSMIN's content-validity criteria (S11) name relevance, comprehensiveness and comprehensibility as what such a judgement has to cover; this round reports which of them nobody has assessed."
+    "reporting": "COSMIN's content-validity criteria (S11) name relevance, comprehensiveness and comprehensibility as what such a judgement has to cover; this round reports which of them nobody has assessed.",
+    "derivation": {
+      "reported_from": "the source-first extraction (source-properties.json): every property of note quality each source read in full defines, in the source's own words",
+      "convergence": "32 of the 33 candidates are anchored in at least one such property. The exception is K06, acknowledged information gap, which no source defines as a property of a note and which stands on the observation this project declares as its origin.",
+      "prior_map_role": "the 26-criterion map recorded on 2026-09-12, before the search, is reported as the comparison the framework was tested against, not as its derivation: 8 criteria kept, 12 revised on what the sources say, 6 merged and 11 added.",
+      "caveat": "The extraction was written by the assistant that had already written the catalog, source by source and without the catalog open, with the mapping done afterwards. It is not a blind replication and is not reported as one."
+    }
   }
 }

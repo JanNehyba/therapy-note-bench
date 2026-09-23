@@ -1,7 +1,7 @@
 {
   "version": "source-properties-v1",
   "date": "2026-09-20",
-  "method": "Source-first extraction. For every source read in full, every property of note quality the source itself defines or measures is listed in the source's own words with its location, without reference to the catalog. Mapping to catalog candidates is a second column, done afterwards. This is the half of a best-fit framework synthesis that the round of 2026-09-13 lacked: that round collected evidence to support candidates already on the table, and could not say whether anything in the sources had been missed.",
+  "method": "Source-first extraction. For every source read in full, every property of note quality the source itself defines or measures is listed in the source's own words with its location, without reference to the catalog. Mapping to catalog candidates is a second column, done afterwards. It is the derivation the round of 2026-09-13 lacked: that round collected evidence to support candidates already on the table, and could not say whether anything in the sources had been missed. The paper reports the framework from this table upwards, and the prior map as the comparison it was tested against (decision D12).",
   "rule": "A candidate with no source property behind it is listed as such and stands on its declared origin. A source property no candidate covers is listed as unmapped with the reason, and is either a new candidate or a recorded non-adoption. A literature-origin candidate must have at least one source property behind it, or its origin is wrong.",
   "kinds": {
     "dimension": "a top-level dimension the source scores",
@@ -2239,5 +2239,6 @@
       "origin": "empirical_observation",
       "reading": "no source property maps to it; it stands on the origin the catalog declares"
     }
-  ]
+  ],
+  "blindness": "The extraction was written by the assistant that had already written the catalog. It was done source by source without the catalog open, and the mapping column afterwards, but it is not a blind replication and nothing here is reported as one. What it establishes is that a property of the source stands behind each candidate, not that an independent reader would have drawn the same boundaries."
 }
