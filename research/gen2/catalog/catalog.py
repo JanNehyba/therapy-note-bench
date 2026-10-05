@@ -47,6 +47,7 @@ META = (
     "candidate_states",
     "families_policy",
     "method",
+    "decision_basis",
     "purposes_in_scope",
     "open_source_properties",
     "purposes",
@@ -259,6 +260,19 @@ def problems(catalog: dict, reports: dict | None = None) -> list[str]:
                 f"{c['id']}: state {c.get('state')!r} does not match the pilot proposal; "
                 "a candidate a pilot entry measures is proposed, and only it"
             )
+        if c.get("decided_by") not in catalog["decision_basis"]:
+            out.append(f"{c['id']}: unknown decided_by {c.get('decided_by')!r}")
+        if c.get("decided_by") in ("indicator", "derived") and c.get("state") == PROPOSED:
+            kinds = {
+                p["record_kind"]
+                for p in catalog["pilot_proposal"]["entries"]
+                if c["id"] in set(ID.findall(p["measures"]))
+            }
+            if kinds - {"corpus_level_proxy", "derived_ratio"}:
+                out.append(
+                    f"{c['id']}: describes rather than grades, so a pilot entry may only carry it "
+                    f"as a proxy or a derived ratio, not as {sorted(kinds)}"
+                )
         if c.get("state") == PROPOSED and not any(
             e["source"] in full_text_sources for e in c["evidence"]
         ):

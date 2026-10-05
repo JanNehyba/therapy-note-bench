@@ -51,7 +51,7 @@
     ]
   },
   "not_mapped": {
-    "pilot_entries_without_operational_rules": 6,
+    "pilot_entries_without_operational_rules": 5,
     "methods": 17,
     "reviews": 0
   },
@@ -277,7 +277,7 @@
     },
     {
       "id": "K19",
-      "catalog_state": "proposed",
+      "catalog_state": "out_of_scope",
       "catalog_origin": "literature",
       "origin": "literature",
       "origin_reference": "catalog:K19",
@@ -476,13 +476,6 @@
       "measures": "K14",
       "method": "ME09 + human marking",
       "why_not_a_measurement": "no anchors, labels, question or reference mode are recorded, and no human selected it"
-    },
-    {
-      "id": "P09",
-      "record_kind": "requirements_check",
-      "measures": "K19",
-      "method": "deterministic check",
-      "why_not_a_measurement": "a deterministic check against an external specification, not a rated item"
     },
     {
       "id": "P10",

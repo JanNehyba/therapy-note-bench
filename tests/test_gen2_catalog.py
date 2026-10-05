@@ -94,7 +94,7 @@ def test_the_catalog_holds_what_the_review_proposed(catalog):
     # the investigator supplied them; 7 are still known from abstracts only.
     assert len(catalog["sources"]) == 25
     assert len(catalog["abstract_sources"]) == 7
-    assert len(catalog["pilot_proposal"]["entries"]) == 14
+    assert len(catalog["pilot_proposal"]["entries"]) == 13
     assert len(catalog["comparison"]) == 37
     assert catalog_mod.ids(catalog, "candidates") == [f"K{n:02d}" for n in range(1, 35)]
     assert catalog_mod.ids(catalog, "methods") == [f"ME{n:02d}" for n in range(1, 18)]
@@ -228,7 +228,7 @@ def test_nothing_is_measured_on_its_origin_alone(catalog):
     origin, decides what may be measured, and the validator says so."""
     full_text = {s["id"] for s in catalog["sources"]}
     proposed = [c for c in catalog["candidates"] if c["state"] == "proposed"]
-    assert len(proposed) == 17
+    assert len(proposed) == 16
     for candidate in proposed:
         assert any(e["source"] in full_text for e in candidate["evidence"]), candidate["id"]
     assert {c["origin"] for c in proposed} > {"literature"}, "the pool is mixed by design"
@@ -242,25 +242,42 @@ def test_nothing_is_measured_on_its_origin_alone(catalog):
     )
 
 
-def test_the_czech_legal_criterion_states_the_population_it_binds(catalog):
-    """The investigator decided on 2026-09-16 not to obtain a legal review and
-    to narrow the scope instead, so nothing here may read as a legal verdict.
-
-    The decree binds records kept by a provider of health services. A therapist
-    outside health services keeps no medical documentation, a client summary is
-    not medical documentation, and no note structure is prescribed at all.
-    """
+def test_the_czech_decree_check_left_the_round_and_stayed_in_the_record(catalog):
+    """The investigator dropped it on 2026-10-05: a presence check against one
+    country's regulation is not a measure of note quality. The candidate stays,
+    because deleting the row would erase that the review found it and that it had
+    already been narrowed once; what goes is the entry that measured it."""
     k19 = next(c for c in catalog["candidates"] if c["id"] == "K19")
-    p09 = next(p for p in catalog["pilot_proposal"]["entries"] if p["id"] == "P09")
-    for field in (k19["definition"], k19["applicability"]):
-        assert "health services" in field
-    assert "no SOAP, DAP or BIRP form is mandatory" in k19["applicability"]
-    assert "never as a statement about legal compliance" in k19["validation"]
-    assert "no lawyer has checked it" in k19["validation"]
-    assert "never mixed into a quality score" in p09["risk"]
-    assert "no legal review will be obtained" in p09["human_input"]
-    narrowing = [r for r in catalog["revisions"] if "legal criterion" in r["reason"]]
-    assert len(narrowing) == 1 and narrowing[0]["date"] == "2026-09-16"
+    assert k19["state"] == "out_of_scope" and "2026-10-05" in k19["state_note"]
+    assert k19["evidence"], "a candidate out of scope keeps its evidence"
+    assert "P09" not in {p["id"] for p in catalog["pilot_proposal"]["entries"]}
+    assert not any("K19" in p["measures"] for p in catalog["pilot_proposal"]["entries"])
+    assert any("K19" in row["candidate"] for row in catalog["pilot_proposal"]["left_out"])
+    # The purpose it used to serve has to be served by something else, or the
+    # round would claim a purpose with nothing behind it.
+    c3 = next(r for r in catalog["pilot_proposal"]["applied_criteria"] if r["id"] == "C3")
+    assert "P01" in c3["detail"] and "rubric items" in c3["detail"]
+
+
+def test_every_candidate_says_what_makes_an_answer_correct(catalog):
+    """The investigator asked which of these numbers can tell quality apart. That
+    depends on what decides a right answer, which the record now carries for each
+    candidate: the source, a written norm, the note itself, a rater's verdict,
+    another measure, or nothing at all. The last two describe rather than grade."""
+    basis = catalog["decision_basis"]
+    assert set(basis) == {"source", "norm", "note", "rater", "derived", "indicator"}
+    by = {c["id"]: c["decided_by"] for c in catalog["candidates"]}
+    assert set(by.values()) <= set(basis)
+    measured = [c for c in catalog["candidates"] if c["state"] == "proposed"]
+    counts: dict[str, int] = {}
+    for c in measured:
+        counts[c["decided_by"]] = counts.get(c["decided_by"], 0) + 1
+    assert counts == {"source": 10, "norm": 1, "rater": 3, "indicator": 2}
+    # An indicator may never be carried into the round as an ordinary measure.
+    doctored = json.loads(json.dumps(catalog))
+    entry = next(p for p in doctored["pilot_proposal"]["entries"] if p["id"] == "P13")
+    entry["record_kind"] = "executable_measure"
+    assert any("describes rather than grades" in p for p in catalog_mod.problems(doctored))
 
 
 def test_every_source_is_a_report_the_ledger_sought(catalog, reports):
@@ -291,7 +308,9 @@ def test_every_source_is_a_report_the_ledger_sought(catalog, reports):
 def test_every_pilot_entry_carries_a_record_kind_and_the_count_is_recorded_not_capped(catalog):
     kinds = {p["id"]: p["record_kind"] for p in catalog["pilot_proposal"]["entries"]}
     assert kinds["P12"] == "study_condition"
-    assert kinds["P09"] == "requirements_check"
+    # P09, the deterministic check against the Czech decree, was the one
+    # requirements check; the investigator dropped it on 2026-10-05.
+    assert "requirements_check" not in kinds.values()
     assert kinds["P10"] == kinds["P11"] == "human_use_outcome"
     assert kinds["P13"] == "corpus_level_proxy"
     assert kinds["P14"] == "derived_ratio"
@@ -468,7 +487,7 @@ def test_every_unmapped_entry_has_a_diagnostic(catalog, diagnostics):
         assert c["origin_reference"].startswith(("proposal:", "catalog:"))
         if c["origin_reference"].startswith("catalog:"):
             assert "placeholder" in c["note"]
-    assert diagnostics["not_mapped"]["pilot_entries_without_operational_rules"] == 6
+    assert diagnostics["not_mapped"]["pilot_entries_without_operational_rules"] == 5
     assert diagnostics["operational"]["measurements"] == ["M06", "M07", "M08"]
 
 

@@ -131,10 +131,14 @@ validator refuses such a gap when a mapping note admits it, and two further
 concepts the notes had set aside in prose are recorded as open. Against the prior map, 8 criteria were kept, 12
 revised on what the sources say, 6 merged where they had counted one finding
 twice, and 11 added. Every candidate carries one of seven states that say why
-it is or is not measured in this round: 17 are proposed for measurement, 6 lack
-an operational rule, 4 cannot be measured on the present data, 4 are out of
+it is or is not measured in this round: 16 are proposed for measurement, 7 lack
+an operational rule, 4 cannot be measured on the present data, 5 are out of
 scope by decision, 1 awaits a rater the pilot does not have, and 1 lacks
-evidence. Candidates also carry a record kind, because a content topic, a
+evidence. Each also records what would make an answer to it correct, because
+that is what decides whether its number can rank a system at all: of the 16
+measured, 10 are decided by the transcript, 1 by a written template, 3 by a
+professional's verdict whose only evidence of validity is agreement between
+raters, and 2 describe rather than grade and carry no target value. Candidates also carry a record kind, because a content topic, a
 specification criterion and a practical outcome are not interchangeable
 constructs; families organise the catalog and are not claimed as independent
 latent dimensions. The catalog is a single versioned file from which the public
