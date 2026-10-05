@@ -342,5 +342,261 @@
       "why": "derived from P01 under a length-controlled condition; defined with the pilot plan"
     }
   ],
-  "language_note": "The Czech wording is written by the assistant for the investigator's decision. It is instrument text, not corpus text, and is the only Czech a tracked catalog file may carry."
+  "language_note": "The Czech wording is written by the assistant for the investigator's decision. It is instrument text, not corpus text, and is the only Czech a tracked catalog file may carry.",
+  "rules_written_not_in_this_round": {
+    "date": "2026-10-05",
+    "why_here": "The reason these criteria were not measured was that nobody had written the rule, which is a fact about us and not about the criteria. The rules are written. Putting one into the round is a second decision: the protocol bounds the human work at 120 unique annotation units and 30 repeats inside 8 to 12 hours, and each item multiplies by the notes, so adoption means adding the entry to the catalog's pilot proposal and re-planning that budget.",
+    "status": "proposed by the assistant; no candidate's state changes until an entry is added",
+    "items": [
+      {
+        "id": "M09",
+        "construct_id": "K17",
+        "candidate_state_now": "not_yet_operationalized",
+        "definition": "Every mention of a person who is not the client is classified as a role or as an identification. A role is partner, mother, colleague, another client. An identification is a name, a workplace, an address, a diagnosis of that person or any detail that would single them out to a reader of the note. The note may carry an identification only where the purpose requires it; otherwise the role is enough.",
+        "question": "Does the note mention any person other than the client in a way that would single that person out, where the purpose does not require it?",
+        "reference_mode": "note_only",
+        "response_format": "binary",
+        "labels": [
+          "pass",
+          "fail"
+        ],
+        "anchors": {
+          "pass": "every mention of another person is by role, or carries an identification the purpose requires",
+          "fail": "at least one mention carries an identification the purpose does not require; each such mention is marked"
+        },
+        "examples": {
+          "pass": "The note writes that the client's partner objects to the therapy.",
+          "fail": "The note names the partner and her employer, which no purpose of this note needs.",
+          "boundary": "The client quotes her mother by first name; the quotation is the client's words and the first name alone does not single the mother out."
+        },
+        "rater": "documentation specialist or therapist",
+        "why_no_proxy": "A name list would miss a workplace and flag a quoted first name.",
+        "cs": {
+          "definition": "Každá zmínka o osobě, která není klient, se zařadí jako role, nebo jako identifikace. Role je partner, matka, kolega, jiný klient. Identifikace je jméno, pracoviště, adresa, diagnóza té osoby nebo jakýkoli údaj, podle kterého by ji čtenář zápisu poznal. Identifikaci smí zápis nést jen tam, kde ji účel potřebuje; jinak stačí role.",
+          "question": "Zmiňuje zápis někoho jiného než klienta tak, že by ho šlo poznat, aniž to účel zápisu potřebuje?",
+          "anchors": {
+            "pass": "každá zmínka o další osobě je rolí, nebo nese identifikaci, kterou účel potřebuje",
+            "fail": "aspoň jedna zmínka nese identifikaci, kterou účel nepotřebuje; každá taková se označí"
+          },
+          "examples": {
+            "pass": "Zápis píše, že klientčin partner s terapií nesouhlasí.",
+            "fail": "Zápis jmenuje partnerku i jejího zaměstnavatele, což žádný účel zápisu nepotřebuje.",
+            "boundary": "Klientka cituje matku jménem; citace jsou klientčina slova a samotné jméno matku neurčuje."
+          }
+        }
+      },
+      {
+        "id": "M10",
+        "construct_id": "K30",
+        "candidate_state_now": "not_yet_operationalized",
+        "definition": "A clinician who writes notes in that language rates how the note reads as a piece of writing in it, with the content set aside. Four steps, and the rater is told that a stilted note can be perfectly understandable and a fluent one can be wrong: this item is about the writing, not about the facts.",
+        "question": "Does this note read as a clinician writing in this language would have written it?",
+        "reference_mode": "note_only",
+        "response_format": "ordinal",
+        "labels": [
+          "native",
+          "serviceable",
+          "stilted",
+          "translated"
+        ],
+        "anchors": {
+          "native": "reads as a clinical note written in this language; nothing in the phrasing would be changed",
+          "serviceable": "one or two phrasings a clinician would rewrite, and no pattern to them",
+          "stilted": "a pattern of unidiomatic phrasing, or vocabulary from outside the clinical register, throughout",
+          "translated": "reads as a translation: constructions carried over from another language, or phrasing no clinician of this language uses"
+        },
+        "examples": {
+          "native": "A Czech note that uses ordinary Czech clinical phrasing throughout.",
+          "stilted": "Every sentence opens with the same construction, as a template would.",
+          "translated": "Czech sentences built on English word order and English prepositions."
+        },
+        "rater": "native-speaking clinician; two raters, because this is the item most open to taste",
+        "why_no_proxy": "Perplexity and a judge model rate fluency of the kind they generate. Neither is evidence of naturalness until it is checked against these human ratings, which is what the pilot would supply.",
+        "cs": {
+          "definition": "Klinik, který v daném jazyce píše zápisy, ohodnotí, jak se zápis čte jako text v tom jazyce, s odloženým obsahem. Čtyři stupně. Hodnotitel dostane upozornění, že kostrbatý zápis může být dokonale srozumitelný a plynulý může být věcně špatný: tahle položka je o psaní, ne o faktech.",
+          "question": "Čte se tento zápis tak, jak by ho napsal klinik píšící v tomto jazyce?",
+          "anchors": {
+            "native": "čte se jako klinický zápis psaný v tomto jazyce; na formulacích by nebylo co měnit",
+            "serviceable": "jedna dvě formulace, které by klinik přepsal, bez jakéhokoli vzorce",
+            "stilted": "průběžně neidiomatické formulace nebo slovník mimo klinický rejstřík",
+            "translated": "čte se jako překlad: vazby přetažené z jiného jazyka nebo formulace, které v tomto jazyce žádný klinik nepoužívá"
+          },
+          "examples": {
+            "native": "Český zápis s běžnými českými klinickými formulacemi.",
+            "stilted": "Každá věta začíná stejnou vazbou, jako by to dělala šablona.",
+            "translated": "České věty postavené na anglickém slovosledu a anglických předložkách."
+          }
+        }
+      },
+      {
+        "id": "M11",
+        "construct_id": "K31",
+        "candidate_state_now": "not_yet_operationalized",
+        "definition": "Each information unit of the approved bank is located in the note. A unit that appears in more than one sentence without adding anything the first mention did not carry is a repetition. Restating a unit in the section where the template requires it again is not a repetition; neither is a unit the note returns to with new content.",
+        "question": "Does any information unit appear more than once in the note without adding anything new?",
+        "reference_mode": "source",
+        "response_format": "binary",
+        "labels": [
+          "pass",
+          "fail"
+        ],
+        "anchors": {
+          "pass": "every unit appears once, or appears again where the template requires it, or appears again with new content",
+          "fail": "at least one unit is restated with nothing added; each repeated unit is marked with both places"
+        },
+        "examples": {
+          "pass": "The plan repeats the agreed homework because the template asks for it in Plan.",
+          "fail": "The client's sleep problem is described in three sentences that say the same thing in different words.",
+          "boundary": "The note mentions the sleep problem again to say it worsened, which is new content."
+        },
+        "rater": "the same rater who answered the bank, because the units are already located",
+        "why_no_proxy": "String similarity finds the paraphrase and misses the restatement in other words, which is the one that matters.",
+        "cs": {
+          "definition": "Každá informační jednotka schválené banky se v zápisu najde. Jednotka, která je ve více než jedné větě, aniž by přidala něco, co první zmínka nenesla, je opakování. Zopakování jednotky v oddílu, kde ji šablona znovu vyžaduje, opakování není; stejně tak není opakováním jednotka, ke které se zápis vrací s novým obsahem.",
+          "question": "Objevuje se některá informační jednotka v zápisu víc než raz, aniž by přidala něco nového?",
+          "anchors": {
+            "pass": "každá jednotka je v zápisu raz, nebo znovu tam, kde to šablona vyžaduje, nebo znovu s novým obsahem",
+            "fail": "aspoň jedna jednotka je zopakovaná bez přidaného obsahu; každá taková se označí na obou místech"
+          },
+          "examples": {
+            "pass": "Plán zopakuje dohodnutý domácí úkol, protože ho šablona v Plánu vyžaduje.",
+            "fail": "Klientovy potíže se spánkem jsou popsané třemi větami, které říkají totéž jinými slovy.",
+            "boundary": "Zápis se ke spánku vrací, aby řekl, že se zhoršil; to je nový obsah."
+          }
+        }
+      },
+      {
+        "id": "M12",
+        "construct_id": "K32",
+        "candidate_state_now": "not_yet_operationalized",
+        "definition": "Judged only where the transcript carries cultural, linguistic or social content that bore on the care: the client's background, language, faith, migration, family arrangement or material situation came up and the therapist's work responded to it. Where it did not come up, the item does not apply, and that is not a failure. Where it did, the note is read for whether it records that content in the client's own terms and whether any assumption about the client stands where the session has something said.",
+        "question": "Where the session carried cultural, linguistic or social context that bore on the care, does the note record it in the client's own terms rather than through an assumption?",
+        "reference_mode": "source",
+        "response_format": "categorical",
+        "labels": [
+          "evidenced",
+          "missing",
+          "assumed",
+          "not_applicable"
+        ],
+        "anchors": {
+          "evidenced": "the note records the context as the session carried it, in the client's terms, including any adaptation or interpreter",
+          "missing": "the session carried such content and bore on the care, and the note does not record it",
+          "assumed": "the note explains the client through a cultural or social attribution the session does not contain",
+          "not_applicable": "the session carried no such content, or it did not bear on the care"
+        },
+        "examples": {
+          "evidenced": "The note records that the client's religious framing of guilt was taken up in the client's own words.",
+          "assumed": "The note explains the client's reluctance by a cultural stereotype the session does not contain.",
+          "boundary": "The client mentions being from another country and nothing in the session turns on it; the item does not apply."
+        },
+        "rater": "therapist; the not-applicable branch is decided from the transcript before the note is read",
+        "why_no_proxy": "The item is about what the session contained and the note did with it, and the frequent answer is that it does not apply. A model would answer the question it was asked rather than refuse it.",
+        "cs": {
+          "definition": "Posuzuje se jen tam, kde přepis nese kulturní, jazykový nebo sociální obsah, který se péče týkal: zázemí klienta, jazyk, víra, migrace, rodinné uspořádání nebo materiální situace v sezení zazněly a práce terapeuta na to reagovala. Kde to nezaznělo, položka se neuplatní, a to není selhání. Kde zaznělo, čte se zápis na to, jestli ten obsah zaznamenává klientovými slovy a jestli někde nestojí domněnka o klientovi tam, kde sezení má něco řečeného.",
+          "question": "Tam, kde sezení neslo kulturní, jazykový nebo sociální kontext týkající se péče, zaznamenává ho zápis klientovými slovy, a ne přes domněnku?",
+          "anchors": {
+            "evidenced": "zápis zaznamenává kontext tak, jak ho sezení neslo, klientovými slovy, včetně případné úpravy postupu nebo tlumočníka",
+            "missing": "sezení takový obsah neslo a týkal se péče, a zápis ho nezaznamenává",
+            "assumed": "zápis vysvětluje klienta kulturním nebo sociálním přisouzením, které sezení neobsahuje",
+            "not_applicable": "sezení takový obsah nenese, nebo se péče netýkal"
+          },
+          "examples": {
+            "evidenced": "Zápis zaznamenává, že klientovo náboženské rámování viny bylo přijato jeho vlastními slovy.",
+            "assumed": "Zápis vysvětluje klientovu zdráhavost kulturním stereotypem, který sezení neobsahuje.",
+            "boundary": "Klient zmíní, že je z jiné země, a nic v sezení se o to neopírá; položka se neuplatní."
+          }
+        }
+      },
+      {
+        "id": "M13",
+        "construct_id": "K33",
+        "candidate_state_now": "not_yet_operationalized",
+        "definition": "The note is read against itself, without the transcript. A pair of statements that cannot both hold as current is a contradiction, and both places are marked. A contradiction the client voiced and the note reports as the client's is not a contradiction of the note. Two statements supported at different moments of the session are a contradiction only where the note presents both as current.",
+        "question": "Does any part of the note contradict another part of the same note?",
+        "reference_mode": "note_only",
+        "response_format": "binary",
+        "labels": [
+          "pass",
+          "fail"
+        ],
+        "anchors": {
+          "pass": "no pair of statements in the note is incompatible as current",
+          "fail": "at least one pair cannot both hold as current; both places are marked"
+        },
+        "examples": {
+          "pass": "The plan follows from the assessment above it.",
+          "fail": "The Subjective section says the client stopped drinking; the Plan plans to reduce the drinking.",
+          "boundary": "The note reports that the client said two contradictory things in the session, as the client's words; that is faithful reporting."
+        },
+        "rater": "any trained rater; the item needs no transcript, which is why it is cheap",
+        "why_no_proxy": "An entailment model is a candidate here and would have to be checked against these human answers first, which the pilot would supply.",
+        "cs": {
+          "definition": "Zápis se čte sám proti sobě, bez přepisu. Dvojice tvrzení, která nemohou platit obě jako současná, je rozpor a označí se obě místa. Rozpor, který vyslovil klient a zápis ho uvádí jako klientův, rozporem zápisu není. Dvě tvrzení podložená v různých okamžicích sezení jsou rozporem jen tam, kde je zápis podává obě jako současná.",
+          "question": "Odporuje některá část zápisu jiné části téhož zápisu?",
+          "anchors": {
+            "pass": "žádná dvojice tvrzení v zápisu není jako současná neslučitelná",
+            "fail": "aspoň jedna dvojice nemůže platit obě jako současná; obě místa se označí"
+          },
+          "examples": {
+            "pass": "Plán vyplývá z hodnocení nad ním.",
+            "fail": "Subjektivní část říká, že klient přestal pít; Plán plánuje snížit pití.",
+            "boundary": "Zápis uvádí, že klient v sezení řekl dvě protikladné věci, jako klientova slova; to je věrné zaznamenání."
+          }
+        }
+      },
+      {
+        "id": "M14",
+        "construct_id": "K34",
+        "candidate_state_now": "not_yet_operationalized",
+        "definition": "A clinician reads the note against the transcript for its terms. Three failures are distinguished, because they are different mistakes: a term used for something it does not mean, a term the session supports and the note replaces with a lay paraphrase, and a term the session does not support at all. For the client purpose the requirement inverts and the item is not applicable.",
+        "question": "Does the note use the profession's terms, and use them for what they mean?",
+        "reference_mode": "source",
+        "response_format": "categorical",
+        "labels": [
+          "correct",
+          "wrong_term",
+          "missing_term",
+          "unsupported_term",
+          "not_applicable"
+        ],
+        "anchors": {
+          "correct": "every term stands for what it means and the session supports it",
+          "wrong_term": "a term is used for something it does not mean; each is marked",
+          "missing_term": "the session supports a term and the note writes a lay paraphrase where the term carries clinical meaning",
+          "unsupported_term": "a term appears that the session does not support, which is also an unsupported claim under K01",
+          "not_applicable": "the note is written for the client purpose, where terms are not wanted"
+        },
+        "examples": {
+          "correct": "The note writes that the client reports early waking and loss of interest, and names the latter anhedonia where the session supports it.",
+          "wrong_term": "The note calls the described worry a panic attack, which the session does not describe.",
+          "boundary": "The note writes that the client was somehow out of it: not a wrong term, a missing one, which is the same failure from the other side."
+        },
+        "rater": "therapist",
+        "why_no_proxy": "A term list rewards the word and not its use, and would score the wrong term as a hit.",
+        "cs": {
+          "definition": "Klinik čte zápis proti přepisu kvůli termínům. Rozlišují se tři selhání, protože jsou to různé chyby: termín použitý pro něco, co neznamená; termín, který sezení podporuje a zápis ho nahradí laickým opisem; a termín, který sezení nepodporuje vůbec. U klientského účelu se požadavek obrací a položka se neuplatní.",
+          "question": "Používá zápis profesní termíny, a používá je pro to, co znamenají?",
+          "anchors": {
+            "correct": "každý termín stojí za tím, co znamená, a sezení ho podporuje",
+            "wrong_term": "termín je použitý pro něco, co neznamená; každý se označí",
+            "missing_term": "sezení termín podporuje a zápis píše laický opis tam, kde termín nese klinický význam",
+            "unsupported_term": "objevuje se termín, který sezení nepodporuje, což je zároveň nepodložené tvrzení podle K01",
+            "not_applicable": "zápis je psaný pro klientský účel, kde termíny nejsou žádoucí"
+          },
+          "examples": {
+            "correct": "Zápis píše, že klient uvádí předčasné probouzení a ztrátu zájmu, a druhé pojmenuje jako anhedonii tam, kde to sezení podporuje.",
+            "wrong_term": "Zápis nazývá popsané obavy panickou atakou, kterou sezení nepopisuje.",
+            "boundary": "Zápis píše, že klient byl nějak mimo: ne špatný termín, chybějící, což je totéž selhání z druhé strany."
+          }
+        }
+      }
+    ],
+    "still_not_writable": [
+      {
+        "construct_id": "K09",
+        "why": "Half of this criterion is already measured: whether a relation the note draws is supported by the transcript is a claim, and claims are verified. The other half asks whether the relation is appropriate to the purpose, and that needs a standard of appropriateness per purpose which no source supplies and which the assistant will not invent. The rule is not written because it cannot be written honestly yet, which is a different reason from the other six."
+      }
+    ]
+  }
 }

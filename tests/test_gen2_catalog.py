@@ -381,6 +381,27 @@ def test_the_draft_loads_and_is_refused_as_a_pilot_instrument(draft, protocol):
         load_registry(draft, pilot=True)
 
 
+def test_a_criterion_without_a_rule_now_has_one_written_and_not_yet_adopted(operational, catalog):
+    """ "Nobody wrote the rule" was a reason about us, not about the criterion, so
+    the rules exist. Writing one does not measure it: the state only changes when
+    an entry joins the pilot proposal, because the human budget is bounded."""
+    block = operational["rules_written_not_in_this_round"]
+    states = {c["id"]: c["state"] for c in catalog["candidates"]}
+    without = {k for k, v in states.items() if v == "not_yet_operationalized"}
+    covered = {r["construct_id"] for r in block["items"]}
+    unwritable = {r["construct_id"] for r in block["still_not_writable"]}
+    assert covered | unwritable == without, "every criterion without a rule is accounted for"
+    assert unwritable == {"K09"} and block["still_not_writable"][0]["why"]
+    for rule in block["items"]:
+        assert set(rule["anchors"]) == set(rule["labels"]) == set(rule["cs"]["anchors"]), rule["id"]
+        assert rule["cs"]["definition"] and rule["cs"]["question"] and rule["cs"]["examples"]
+        assert rule["rater"] and rule["why_no_proxy"]
+        assert rule["construct_id"] in states
+    # Written is not adopted: none of these is a measurement of this round.
+    assert not covered & {x["construct_id"] for x in operational["measurements"]}
+    assert "120 unique annotation units" in block["why_here"]
+
+
 def test_the_operational_rules_are_bilingual_and_name_only_registry_records(operational, draft):
     """Every method rule and every item exists in Czech with the same outcome
     keys, names constructs and evidence the draft holds, and covers exactly the
