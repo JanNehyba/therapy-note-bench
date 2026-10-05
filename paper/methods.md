@@ -18,7 +18,7 @@ one repeated observation of our own outputs; drawing on both is what the
 procedure prescribes rather than a mixture to be explained away. The framework
 is nevertheless reported from the sources upwards, because that is the part a
 reader can check: for every source read in full we list every property of note
-quality the source itself defines, and 32 of the 33 candidates are anchored in
+quality the source itself defines, and 33 of the 34 candidates are anchored in
 at least one such property. The prior map is reported as the comparison the
 framework was tested against rather than as its derivation, and the one
 candidate no source defines is named. What the procedure requires besides is
@@ -102,7 +102,7 @@ the source's own words and with its location, without reference to the catalog,
 and mapped each to a candidate afterwards (`source-properties.json`). The table
 holds 140 properties from 26 sources. 132 map to a candidate; the eight that do
 not are rating formats, findings about raters, or limitations of a source
-rather than properties of a note. Thirty-two of the 33 candidates rest on at
+rather than properties of a note. Thirty-three of the 34 candidates rest on at
 least one source property. The one that does not is K06, a note that says what
 it could not record rather than leaving the gap silent; no source defines it
 and it stands on the observation this project declares as its origin, which is
@@ -117,13 +117,18 @@ proposal; the record keeps both the proposal and the decision.
 
 ## The construct framework
 
-The catalog holds 33 candidates. By origin, 18 came from the literature, 11
+The catalog holds 34 candidates. By origin, 19 came from the literature, 11
 existed in the project before the search, 3 are named expert proposals and 1
 arose from observation; origin never changes when support is found later, which
 is recorded as evidence instead. Origin and support are reported separately,
 because they answer different questions: all 17 constructs proposed for
 measurement in this round rest on at least one source read in full, and the one
-candidate with no such support is not measured. Against the prior map, 8 criteria were kept, 12
+candidate with no such support is not measured. One candidate was found late:
+a property of a source can enumerate several concepts, and until 2026-10-05
+nothing checked that each of them had a candidate of its own, so professional
+terminology sat inside a bundled property for three weeks. It is K34 now, the
+validator refuses such a gap when a mapping note admits it, and two further
+concepts the notes had set aside in prose are recorded as open. Against the prior map, 8 criteria were kept, 12
 revised on what the sources say, 6 merged where they had counted one finding
 twice, and 11 added. Every candidate carries one of seven states that say why
 it is or is not measured in this round: 17 are proposed for measurement, 6 lack

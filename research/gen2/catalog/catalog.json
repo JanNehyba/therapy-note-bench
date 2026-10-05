@@ -2156,6 +2156,52 @@
       "overlaps": "K01, K26, K03.",
       "state": "not_yet_operationalized",
       "state_note": "Added by the investigator on 2026-09-21 from an open source property. The rule for what counts as a contradicting pair is not written."
+    },
+    {
+      "id": "K34",
+      "family": "F4",
+      "kind": "construct",
+      "label": "Correct and appropriate professional terminology",
+      "definition": "The note names what happened in the words the profession uses, and uses them correctly: a term stands for what the term means, a lay paraphrase does not replace a term that carries clinical meaning, and no term is used that the session does not support. Distinct from K30, which is whether the text reads as a clinician of that language would write it: a fluent note can use the wrong term, and a correct term can sit in a stilted sentence. Distinct from K13, which is whether the intended reader understands it.",
+      "origin": "literature",
+      "origin_note": "Found on 2026-10-05 by the investigator, who objected that language naturalness is not the same thing as clinical language. The property was in the source-first table all along, inside a bundled property: S_abs_edit names terminology as one of three categories of what clinicians edit in AI-drafted documentation, and the property had been mapped to K22 as a typology of edits, which left terminology itself with no candidate.",
+      "evidence": [
+        {
+          "source": "S_abs_edit",
+          "location": "Materials and Methods; Table 3",
+          "quote": "an inductive coding framework with 11 codes across 3 categories: clinical content, terminology, and language style",
+          "supports": "Terminology is one of three categories of what clinicians change in an AI-drafted note, named apart from clinical content and from language style.",
+          "our_adaptation": "The source counts edits in ambient documentation of general medicine; that terminology is a property a psychotherapy note can be rated on, and how, is our step."
+        },
+        {
+          "source": "S_abs_edit",
+          "location": "Theme 2",
+          "quote": "Clinicians added specialty-specific clinical details and terminology",
+          "supports": "What the clinicians added was specialty-specific terminology, so the draft's terminology was not merely unnatural but absent or wrong for the setting.",
+          "our_adaptation": "Read as evidence that terminology and genericness come apart: the same theme feeds K28. Which of the two a given edit repairs is not decided here."
+        }
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "high",
+        "client": "low",
+        "audit": "medium"
+      },
+      "mode": "ordinal per note, or categorical per term; not yet defined",
+      "unit": "term in the note",
+      "inputs": "note, transcript",
+      "applicability": "Both languages, each with its own rule: Czech clinical terminology is not a translation of the English list, and for the client purpose the requirement inverts, because a note a client reads should not lean on terms.",
+      "examples": {
+        "positive": "The note writes that the client reports early waking and loss of interest, and calls the latter anhedonia where the session's content supports it.",
+        "negative": "The note calls the client's described worry a panic attack, which the session does not describe.",
+        "boundary": "The note writes „the client was somehow out of it“: not a wrong term, a missing one, which is the same failure from the other side."
+      },
+      "measurement": "Not yet defined. A rating rule written in English and in Czech, applied by a clinician, distinguishing a wrong term, a missing term and an unsupported term. No automatic proxy is proposed: a term list would reward the word and not its use.",
+      "error_consequence": "A wrong term is read by the next clinician as a finding, and a term the session does not support is a diagnosis nobody made. A missing term costs precision rather than safety.",
+      "validation": "None on notes. The support is an edit-category analysis of general-medicine ambient documentation, read in full; no study rates terminology in psychotherapy notes.",
+      "overlaps": "K30 (naturalness of the language), K13 (comprehensibility for the reader), K04 (certainty of a diagnostic statement), K01 (a term the source does not support).",
+      "state": "not_yet_operationalized",
+      "state_note": "Accepted by the investigator on 2026-10-05. No rating rule exists in either language, and a term list is explicitly not a substitute."
     }
   ],
   "methods": [
@@ -3268,6 +3314,15 @@
         "K06 is named as the single candidate no source defines, standing on its declared origin in this project's own observation",
         "the extraction records that it was not blind to the catalog and is not a replication"
       ]
+    },
+    {
+      "date": "2026-10-05",
+      "reason": "the investigator found that language naturalness is not clinical language, and the bundled-property hole behind it",
+      "changes": [
+        "K34, correct and appropriate professional terminology, accepted by the investigator; not yet operationalised and outside the pilot",
+        "two concepts the mapping notes had named in prose and never surfaced, prioritised and objective, are recorded as open properties with a proposed disposition",
+        "the validator now refuses a mapping note that says a part has no candidate unless that part is in open_source_properties: a property is an atom to the checker, which is how a concept inside a bundle could go missing silently"
+      ]
     }
   ],
   "purposes_in_scope": {
@@ -3296,6 +3351,22 @@
       "source": "S4",
       "disposition": "decided by the investigator on 2026-09-21: adopted as K33",
       "reason": "K26 is consistency between notes of one case; nothing in the catalog measures contradiction inside one note. PDSQI-9 dropped the attribute as redundant with accuracy (S2-p11), which is an argument to record, not a reason to omit it."
+    },
+    {
+      "pid": "S_abs_tednq-p02a",
+      "label": "Prioritized: the note puts what matters most where it is read first",
+      "source": "S_abs_tednq",
+      "part_of": "S_abs_tednq-p02",
+      "proposal": "record as a candidate of its own, not measured in this round",
+      "reason": "Ranked 62.5 by the Delphi panel. The mapping note of the attribute list said in prose that it has no direct candidate and nothing surfaced it. K12 is whether content sits in its expected section, which is a different question from whether the important things come first within it."
+    },
+    {
+      "pid": "S_abs_tednq-p02b",
+      "label": "Objective: the note reports rather than editorialises",
+      "source": "S_abs_tednq",
+      "part_of": "S_abs_tednq-p02",
+      "proposal": "do not adopt: the parts that can be rated are already K02, K04 and K14, and what is left is a disposition of the writer rather than a property of the note",
+      "reason": "Ranked 58.4 by the Delphi panel, the lowest of the twelve. Same hole as the one above: named in a mapping note, never recorded as open."
     }
   ],
   "method": {

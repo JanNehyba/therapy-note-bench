@@ -38,7 +38,7 @@
     "properties": 140,
     "properties_mapped": 132,
     "properties_unmapped": 8,
-    "candidates_with_source_property": 32,
+    "candidates_with_source_property": 33,
     "candidates_without_source_property": 1
   },
   "sources": [
@@ -1421,9 +1421,10 @@
           "location": "Materials and Methods; Table 3",
           "quote": "an inductive coding framework with 11 codes across 3 categories: clinical content, terminology, and language style",
           "maps_to": [
-            "K22"
+            "K22",
+            "K34"
           ],
-          "mapping": "the typology of edits"
+          "mapping": "the typology of edits feeds K22; its terminology category is K34, mapped on 2026-10-05 (the history is in K34's origin note)"
         },
         {
           "pid": "S_abs_edit-p02",
@@ -1445,9 +1446,10 @@
           "quote": "Clinicians added specialty-specific clinical details and terminology",
           "maps_to": [
             "K28",
-            "K05"
+            "K05",
+            "K34"
           ],
-          "mapping": "genericness repaired by hand"
+          "mapping": "genericness repaired by hand feeds K28 and K05; the terminology the clinicians added is K34"
         },
         {
           "pid": "S_abs_edit-p04",
@@ -1733,7 +1735,7 @@
             "K11",
             "K33"
           ],
-          "mapping": "the same attribute family as PDQI; prioritized and objective have no direct candidate"
+          "mapping": "the same attribute family as PDQI; prioritized and objective have no direct candidate and are recorded as open properties (S_abs_tednq-p02a, -p02b)"
         },
         {
           "pid": "S_abs_tednq-p03",
@@ -1992,7 +1994,6 @@
       "S_abs_tednq-p01",
       "S_abs_tednq-p02"
     ],
-    "K06": [],
     "K07": [
       "S2-p09",
       "S2-p10",
@@ -2180,6 +2181,10 @@
       "S4-p09",
       "S6-p01",
       "S_abs_tednq-p02"
+    ],
+    "K34": [
+      "S_abs_edit-p01",
+      "S_abs_edit-p03"
     ]
   },
   "unmapped_properties": [
@@ -2240,5 +2245,6 @@
       "reading": "no source property maps to it; it stands on the origin the catalog declares"
     }
   ],
-  "blindness": "The extraction was written by the assistant that had already written the catalog. It was done source by source without the catalog open, and the mapping column afterwards, but it is not a blind replication and nothing here is reported as one. What it establishes is that a property of the source stands behind each candidate, not that an independent reader would have drawn the same boundaries."
+  "blindness": "The extraction was written by the assistant that had already written the catalog. It was done source by source without the catalog open, and the mapping column afterwards, but it is not a blind replication and nothing here is reported as one. What it establishes is that a property of the source stands behind each candidate, not that an independent reader would have drawn the same boundaries.",
+  "bundling": "A property is one row even when its label enumerates several concepts, and 52 of the 140 map to two or more candidates. Until 2026-10-05 nothing checked that every concept inside such a row had a candidate: the row counted as covered if any part of it did. That is how terminology went missing inside S_abs_edit-p01 for three weeks. The validator now requires that a mapping note which says a part has no candidate be matched by an open property, and the mapping notes of multi-target rows say which candidate takes which part."
 }

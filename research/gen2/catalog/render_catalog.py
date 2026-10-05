@@ -365,7 +365,10 @@ def _source_properties(props: dict, catalog: dict) -> str:
                 [
                     esc(row["pid"]) + " " + esc(row["label"]),
                     esc(row["source"]),
-                    esc(row["disposition"]),
+                    # A row opened and not yet decided carries a proposal; the
+                    # page says which of the two it is rather than reading as
+                    # though the investigator had already answered.
+                    esc(row.get("disposition") or "undecided; proposal: " + row["proposal"]),
                     esc(row["reason"]),
                 ]
                 for row in catalog["open_source_properties"]

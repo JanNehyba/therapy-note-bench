@@ -88,7 +88,7 @@ def test_the_catalog_holds_what_the_review_proposed(catalog):
     # 29 from the round of 2026-09-13, two returned or split on 2026-09-16, and
     # two adopted on 2026-09-21 from properties the sources defined and the
     # catalog had not covered.
-    assert len(catalog["candidates"]) == 33
+    assert len(catalog["candidates"]) == 34
     assert len(catalog["methods"]) == 17
     # 19 read in the round of 2026-09-13, and 6 more read on 2026-09-20 after
     # the investigator supplied them; 7 are still known from abstracts only.
@@ -96,7 +96,7 @@ def test_the_catalog_holds_what_the_review_proposed(catalog):
     assert len(catalog["abstract_sources"]) == 7
     assert len(catalog["pilot_proposal"]["entries"]) == 14
     assert len(catalog["comparison"]) == 37
-    assert catalog_mod.ids(catalog, "candidates") == [f"K{n:02d}" for n in range(1, 34)]
+    assert catalog_mod.ids(catalog, "candidates") == [f"K{n:02d}" for n in range(1, 35)]
     assert catalog_mod.ids(catalog, "methods") == [f"ME{n:02d}" for n in range(1, 18)]
 
 
@@ -215,7 +215,7 @@ def test_the_framework_is_reported_from_the_sources_upwards(catalog, props):
         for key in prop["maps_to"]
     }
     ids = {c["id"] for c in catalog["candidates"]}
-    assert len(anchored & ids) == 33 - 1
+    assert len(anchored & ids) == 34 - 1
     assert ids - anchored == {"K06"}, "the one candidate no source defines is named"
     assert [row["id"] for row in props["candidates_without_source_property"]] == ["K06"]
     assert "K06" in derivation["convergence"]
@@ -423,7 +423,7 @@ def test_every_source_evidence_line_and_candidate_maps(catalog, draft, diagnosti
     assert [c["id"] for c in draft["constructs"]] == catalog_mod.ids(catalog, "candidates")
     lines = sum(len(c["evidence"]) for c in catalog["candidates"])
     assert len(draft["evidence"]) == lines
-    assert diagnostics["mapped"] == {"sources": 32, "evidence": lines, "constructs": 33}
+    assert diagnostics["mapped"] == {"sources": 32, "evidence": lines, "constructs": 34}
     for s in draft["sources"]:
         assert s["locator"].startswith("ledger:")
 
@@ -546,7 +546,7 @@ def test_a_property_no_candidate_covered_was_opened_and_then_decided(catalog, pr
     history: the open rows stay, carry the decision, and now map to K32 and
     K33; nothing in the table is unmapped without an explanation."""
     open_rows = {row["pid"]: row for row in catalog["open_source_properties"]}
-    assert set(open_rows) == {"S1-p13", "S4-p09"}
+    assert set(open_rows) == {"S1-p13", "S4-p09", "S_abs_tednq-p02a", "S_abs_tednq-p02b"}
     assert "adopted as K32" in open_rows["S1-p13"]["disposition"]
     assert "adopted as K33" in open_rows["S4-p09"]["disposition"]
     by_pid = {p["pid"]: p for s in props["sources"] for p in s["properties"]}
@@ -557,6 +557,11 @@ def test_a_property_no_candidate_covered_was_opened_and_then_decided(catalog, pr
     by_id = {c["id"]: c for c in catalog["candidates"]}
     assert by_id["K32"]["origin"] == by_id["K33"]["origin"] == "literature"
     assert "2026-09-21" in by_id["K32"]["origin_note"]
+    # The two rows opened on 2026-10-05 are a part of a bundled property and are
+    # not decided yet: they carry a proposal and name the row they came out of.
+    for pid in ("S_abs_tednq-p02a", "S_abs_tednq-p02b"):
+        assert open_rows[pid]["part_of"] == "S_abs_tednq-p02"
+        assert open_rows[pid]["proposal"] and "disposition" not in open_rows[pid]
     decided = next(r for r in catalog["revisions"] if "open source properties" in r["reason"])
     assert "against" in decided["changes"][0]
 

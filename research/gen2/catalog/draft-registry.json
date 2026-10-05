@@ -1476,6 +1476,44 @@
       "human_checked_by": null,
       "source_artifact_digest": "",
       "excerpt": "Two PDQI-9 attributes, Up-to-Date and Consistent, were removed"
+    },
+    {
+      "id": "K34-e1",
+      "source_id": "S_abs_edit",
+      "location": "Materials and Methods; Table 3",
+      "interpretation": "Terminology is one of three categories of what clinicians change in an AI-drafted note, named apart from clinical content and from language style.",
+      "relationship": "method_transfer",
+      "population": "200 ambient-AI-drafted notes from 200 encounters by 73 clinicians across two vendors in one US health system; family and internal medicine and other specialties, two psychiatry notes",
+      "languages": [
+        "en"
+      ],
+      "raters": "8 coders, inductive codebook, Cohen's kappa per code",
+      "unit": "sentence-level edit unit",
+      "response_format": "11 binary codes in 3 categories (clinical content, terminology, language style); 5 themes",
+      "validation": "not established",
+      "limitations": "The source counts edits in ambient documentation of general medicine; that terminology is a property a psychotherapy note can be rated on, and how, is our step.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "an inductive coding framework with 11 codes across 3 categories: clinical content, terminology, and language style"
+    },
+    {
+      "id": "K34-e2",
+      "source_id": "S_abs_edit",
+      "location": "Theme 2",
+      "interpretation": "What the clinicians added was specialty-specific terminology, so the draft's terminology was not merely unnatural but absent or wrong for the setting.",
+      "relationship": "method_transfer",
+      "population": "200 ambient-AI-drafted notes from 200 encounters by 73 clinicians across two vendors in one US health system; family and internal medicine and other specialties, two psychiatry notes",
+      "languages": [
+        "en"
+      ],
+      "raters": "8 coders, inductive codebook, Cohen's kappa per code",
+      "unit": "sentence-level edit unit",
+      "response_format": "11 binary codes in 3 categories (clinical content, terminology, language style); 5 themes",
+      "validation": "not established",
+      "limitations": "Read as evidence that terminology and genericness come apart: the same theme feeds K28. Which of the two a given edit repairs is not decided here.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Clinicians added specialty-specific clinical details and terminology"
     }
   ],
   "constructs": [
@@ -2726,6 +2764,44 @@
       "reviewed_by": null,
       "origin": "literature",
       "origin_reference": "catalog:K33"
+    },
+    {
+      "id": "K34",
+      "name": "Correct and appropriate professional terminology",
+      "definition": "The note names what happened in the words the profession uses, and uses them correctly: a term stands for what the term means, a lay paraphrase does not replace a term that carries clinical meaning, and no term is used that the session does not support. Distinct from K30, which is whether the text reads as a clinician of that language would write it: a fluent note can use the wrong term, and a correct term can sit in a stilted sentence. Distinct from K13, which is whether the intended reader understands it.",
+      "families": [
+        "F4"
+      ],
+      "evidence_ids": [
+        "K34-e1",
+        "K34-e2"
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "high",
+        "client": "low",
+        "audit": "medium"
+      },
+      "unit": "term in the note",
+      "required_inputs": [
+        "note",
+        "transcript"
+      ],
+      "examples": {
+        "positive": "The note writes that the client reports early waking and loss of interest, and calls the latter anhedonia where the session's content supports it.",
+        "negative": "The note calls the client's described worry a panic attack, which the session does not describe.",
+        "boundary": "The note writes „the client was somehow out of it“: not a wrong term, a missing one, which is the same failure from the other side."
+      },
+      "candidate_formats": [
+        "ordinal per note, or categorical per term; not yet defined"
+      ],
+      "applicability": "Both languages, each with its own rule: Czech clinical terminology is not a translation of the English list, and for the client purpose the requirement inverts, because a note a client reads should not lean on terms.",
+      "error_consequences": "A wrong term is read by the next clinician as a finding, and a term the session does not support is a diagnosis nobody made. A missing term costs precision rather than safety.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "literature",
+      "origin_reference": "catalog:K34"
     }
   ],
   "measurements": [

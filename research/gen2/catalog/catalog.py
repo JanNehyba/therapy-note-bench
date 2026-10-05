@@ -304,6 +304,14 @@ def load_properties(path: Path = PROPERTIES_PATH) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+#: A mapping note that admits a part of a bundled property has no candidate
+#: must be matched by an open property. The checker reads a property as one
+#: atom, so without this a concept named inside a label can be set aside in
+#: prose and never decided; terminology sat in such a note for three weeks
+#: before it became K34.
+NO_CANDIDATE = re.compile(r"no (?:direct )?candidate|nothing covers|unmapped", re.I)
+
+
 def property_problems(catalog: dict, props: dict) -> list[str]:
     """The source-first table against the catalog it was mapped to.
 
@@ -317,6 +325,7 @@ def property_problems(catalog: dict, props: dict) -> list[str]:
     out: list[str] = []
     sources = source_ids(catalog)
     candidates = {c["id"]: c for c in catalog["candidates"]}
+    listed = {row["pid"] for row in catalog["open_source_properties"]}
     seen: set[str] = set()
     covered: dict[str, list[str]] = {k: [] for k in candidates}
     for s in props["sources"]:
@@ -332,6 +341,13 @@ def property_problems(catalog: dict, props: dict) -> list[str]:
                 out.append(f"{p['pid']}: a full-text property needs a quote")
             if p["kind"] not in props["kinds"]:
                 out.append(f"{p['pid']}: unknown kind {p['kind']!r}")
+            if NO_CANDIDATE.search(p.get("mapping") or "") and not any(
+                row == p["pid"] or row.startswith(p["pid"]) for row in listed
+            ):
+                out.append(
+                    f"{p['pid']}: its mapping says a part has no candidate and no open "
+                    "property records that part"
+                )
             for k in p["maps_to"]:
                 if k not in candidates:
                     out.append(f"{p['pid']}: maps to unknown candidate {k!r}")
@@ -340,7 +356,6 @@ def property_problems(catalog: dict, props: dict) -> list[str]:
     for k, c in candidates.items():
         if c["origin"] == "literature" and not covered[k]:
             out.append(f"{k}: literature origin without any source property behind it")
-    listed = {row["pid"] for row in catalog["open_source_properties"]}
     for row in props["unmapped_properties"]:
         method_like = any(
             word in row["why_unmapped"]
@@ -356,7 +371,10 @@ def property_problems(catalog: dict, props: dict) -> list[str]:
         if row["pid"] not in listed and not method_like:
             out.append(f"{row['pid']}: unmapped and neither open in the catalog nor explained")
     for row in catalog["open_source_properties"]:
-        if row["pid"] not in seen:
+        # An open property may name one part of a bundled row, and then it says
+        # which row it came out of rather than standing in the table itself.
+        parent = row.get("part_of")
+        if row["pid"] not in seen and not (parent and parent in seen):
             out.append(f"{row['pid']}: open property is not in the source-first table")
     if props["counts"]["properties"] != len(seen):
         out.append("counts.properties does not match the table")
