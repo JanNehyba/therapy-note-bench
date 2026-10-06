@@ -15,7 +15,15 @@ al., 2018). Items were generated deductively, from a bounded scoping search of
 the literature and the instruments it found, and inductively, from a criteria
 map this project recorded before the search, three named expert proposals and
 one repeated observation of our own outputs; drawing on both is what the
-procedure prescribes rather than a mixture to be explained away. The framework
+procedure prescribes rather than a mixture to be explained away. The
+investigator's clinical input during development is recorded entry by entry with
+its date, its rationale and what changed because of it
+(`research/gen2/expert-input.json`), so that the inductive half is readable
+rather than absorbed: it contains, among others, the objection that the first
+framework was not inductive at all, which produced the source-first extraction,
+and the objection that language naturalness is not clinical terminology, which
+produced a construct the review had buried inside a source property that named
+several concepts at once. The framework
 is nevertheless reported from the sources upwards, because that is the part a
 reader can check: for every source read in full we list every property of note
 quality the source itself defines, and 33 of the 34 candidates are anchored in

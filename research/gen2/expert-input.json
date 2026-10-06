@@ -1,0 +1,135 @@
+{
+  "version": "expert-input-v1",
+  "marker": "AUTHORED-INVESTIGATOR-TEXT",
+  "author": {
+    "role": "investigator and instrument developer; psychotherapy researcher",
+    "note": "The same person reviews the catalog, which is why his review is recorded as an author's and not as independent validation. This file is about his substantive contributions to the instrument, which are a different thing from his review decisions in decisions.json and from the process decisions in protocol.json."
+  },
+  "why_this_file": "Item generation draws deductively on the literature and inductively on expert input (Boateng et al., 2018, Item generation). The inductive half is legitimate only if it is declared, so each entry says what the investigator contributed, when, why, and what changed because of it. Without this the contributions are invisible except as their effect, and a reader cannot tell where the review ends and the clinician begins.",
+  "language_note": "The instructions were given in Czech in a working chat. `instruction` is a transcription cleaned of typing, not a quotation. `verbatim` is used only where the wording is the point.",
+  "entries": [
+    {
+      "id": "E1",
+      "date": "2026-09-16",
+      "kind": "scope",
+      "instruction": "Zúžit nástroj na dva účely: návaznost péče a dokumentace. Supervize a porozumění klienta zůstanou zapsané, ale v tomhle kole se neměří.",
+      "rationale": "Čtyři účely byly ze zadání, ne ze zjištění. Na supervizi i na klientskou stranu nemáme ani hodnotitele, ani dost opory.",
+      "landed_in": [
+        "protocol decision D8",
+        "catalog: K24 and K25 out of scope"
+      ],
+      "kind_of_contribution": "narrowed what the round claims"
+    },
+    {
+      "id": "E2",
+      "date": "2026-09-16",
+      "kind": "criterion_wording",
+      "instruction": "Kritérium o české vyhlášce nevyžaduje právníka; zúžit ho na záznamy poskytovatele zdravotních služeb. A přijatelnost pro praxi přepsat: čte se to, jako by šlo o pojišťovnu, a o tu nejde.",
+      "rationale": "Právní posudek je nad rámec možností projektu a kritérium se dá zúžit na kontrolu náležitostí. U přijatelnosti je otázka o používání systému, ne o platbě.",
+      "landed_in": [
+        "catalog: K19 narrowed",
+        "catalog: K23 rewritten"
+      ],
+      "kind_of_contribution": "corrected a reading a clinician would stumble on"
+    },
+    {
+      "id": "E3",
+      "date": "2026-09-20",
+      "kind": "method",
+      "instruction": "Tenhle postup není induktivní. Dvacet šest kritérií vzniklo tak, že si je asistent sepsal, a zbytek se doplnil; to nestačí.",
+      "verbatim": "ach jo toto není induktivní postup!!!",
+      "rationale": "Opora sbíraná ke kritériím, která už jsou na stole, nemůže říct, jestli ve zdrojích není něco, co stůl minul.",
+      "landed_in": [
+        "source-properties.json: 140 properties extracted source by source, without the catalog open, mapped afterwards",
+        "paper: the framework is reported from the sources upwards",
+        "two properties no candidate covered became K32 and K33"
+      ],
+      "kind_of_contribution": "changed the method, not an item; the single largest methodological correction in the project"
+    },
+    {
+      "id": "E4",
+      "date": "2026-09-21",
+      "kind": "criterion",
+      "instruction": "Kulturní kompetence doložená v zápisu: přijmout, přes to, že asistent navrhoval nepřijímat. Vnitřní konzistence jednoho zápisu: přijmout také.",
+      "rationale": "Obojí je v zápisu vidět a obojí má klinický důsledek. U kulturní kompetence je riziko stereotypu v zápisu trvalé.",
+      "landed_in": [
+        "catalog: K32 and K33"
+      ],
+      "kind_of_contribution": "adopted two criteria, one against the assistant's proposal"
+    },
+    {
+      "id": "E5",
+      "date": "2026-10-04",
+      "kind": "overlap",
+      "instruction": "Úspornost a informační hustota mi přijdou stejné nebo podobné.",
+      "rationale": "Obě se tváří jako poměr obsahu k textu.",
+      "landed_in": [
+        "recorded as a hypothesis the pilot tests: the two differ in denominator (sentences versus length) and in whether a repeated fact counts, and if they correlate on real notes one of them goes"
+      ],
+      "kind_of_contribution": "named a redundancy to be tested rather than assumed away"
+    },
+    {
+      "id": "E6",
+      "date": "2026-10-05",
+      "kind": "criterion",
+      "instruction": "Jazyková přirozenost není klinický jazyk. Terminologii přijmi jako kritérium okamžitě.",
+      "verbatim": "jazyková přirozenost není klinický jazyk snad!",
+      "rationale": "Jak to zní a jakými slovy se o tom mluví odborně jsou dvě věci. Zápis může být plynulá čeština a přitom používat špatné termíny.",
+      "landed_in": [
+        "catalog: K34, correct and appropriate professional terminology",
+        "the bundled-property hole it exposed: a concept inside a multi-concept property could be left with no candidate, and the validator now refuses that",
+        "two further concepts the mapping notes had set aside in prose were recorded as open properties"
+      ],
+      "kind_of_contribution": "found a criterion the review had buried, and with it a structural defect in the mapping"
+    },
+    {
+      "id": "E7",
+      "date": "2026-10-05",
+      "kind": "scope",
+      "instruction": "Kritérium o české vyhlášce vyhodit z kola úplně.",
+      "verbatim": "můžeš konečně tu vyhlášku smazat je to pitomost!",
+      "rationale": "Kontrola náležitostí jedné národní vyhlášky není měření kvality zápisu.",
+      "landed_in": [
+        "catalog: K19 out of scope, pilot entry P09 removed",
+        "the documentation purpose is now served by per-purpose coverage and the rubric items instead"
+      ],
+      "kind_of_contribution": "removed a measure; the candidate stays as the record of a finding"
+    },
+    {
+      "id": "E8",
+      "date": "2026-10-05",
+      "kind": "demand",
+      "instruction": "Šest kritérií se neměří proto, že nikdo nenapsal pravidlo. Tak to pravidlo napiš.",
+      "rationale": "„Nikdo nenapsal pravidlo“ je výpověď o nás, ne o kritériu.",
+      "landed_in": [
+        "operational.json: six rating rules written in both languages, in their own block because adopting one into the round costs human budget"
+      ],
+      "kind_of_contribution": "refused a procedural excuse"
+    },
+    {
+      "id": "E9",
+      "date": "2026-10-05",
+      "kind": "method",
+      "instruction": "Některá kritéria jsou jen popisný údaj. Který údaj vlastně dokáže odlišit kvalitu?",
+      "rationale": "U počtu třetích osob nejde říct, kolik jich má být. Takové číslo nic nehodnotí.",
+      "landed_in": [
+        "catalog: decided_by on every candidate, one of source, norm, note, rater, derived or indicator",
+        "the validator refuses a pilot entry that would carry an indicator as an ordinary measure",
+        "paper: of the measured criteria, which can rank a system and which only describe"
+      ],
+      "kind_of_contribution": "produced the distinction the instrument was missing"
+    },
+    {
+      "id": "E10",
+      "date": "2026-10-06",
+      "kind": "demand",
+      "instruction": "Pravidlo pro opodstatněnost vytvořených vztahů taky dopiš, i když asistent tvrdil, že to nejde.",
+      "rationale": "Když na něco není vnější měřítko, pořád to může posoudit odborník.",
+      "landed_in": [
+        "operational.json: the rule for K09, written as a rater verdict whose only evidence of validity is agreement, with the reversal recorded"
+      ],
+      "kind_of_contribution": "corrected the assistant's refusal; a criterion without an external standard is a verdict, not an impossibility"
+    }
+  ],
+  "what_this_is_not": "Not independent validation. The investigator is the instrument's author, so these entries are an author's contributions recorded for transparency, not an expert panel. The panel that content validity asks for, judges independent of the item pool's authors, has not happened and is reported as an open gap."
+}

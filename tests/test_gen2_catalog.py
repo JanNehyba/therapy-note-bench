@@ -259,6 +259,46 @@ def test_the_czech_decree_check_left_the_round_and_stayed_in_the_record(catalog)
     assert "P01" in c3["detail"] and "rubric items" in c3["detail"]
 
 
+@pytest.fixture(scope="module")
+def expert() -> dict:
+    return _json(REPO / "research" / "gen2" / "expert-input.json")
+
+
+def test_the_investigators_own_input_is_declared_and_dated(expert, catalog):
+    """Item generation draws on the literature and on expert input alike, which is
+    the prescribed procedure and is honest only if the expert part is declared.
+    Until 2026-10-06 the investigator's contributions were visible only as the
+    change they caused. Each entry now says what, when, why and where it landed,
+    and the file states plainly that an author's input is not a panel."""
+    entries = expert["entries"]
+    assert len(entries) >= 10
+    dates = [e["date"] for e in entries]
+    assert dates == sorted(dates), "the record reads in the order it happened"
+    for entry in entries:
+        assert entry["instruction"] and entry["rationale"], entry["id"]
+        assert entry["landed_in"] and entry["kind_of_contribution"], entry["id"]
+        assert entry["kind"] in {
+            "scope",
+            "criterion",
+            "criterion_wording",
+            "method",
+            "overlap",
+            "demand",
+        }
+    # The entries that produced a criterion must point at one the catalog holds.
+    ids = {c["id"] for c in catalog["candidates"]}
+    produced = {
+        word.strip(",.:")
+        for entry in entries
+        for line in entry["landed_in"]
+        for word in line.replace("catalog:", " ").split()
+        if word.strip(",.:") in ids
+    }
+    assert {"K32", "K33", "K34", "K19"} <= produced
+    assert expert["what_this_is_not"].startswith("Not independent validation")
+    assert expert["marker"] == "AUTHORED-INVESTIGATOR-TEXT"
+
+
 def test_every_candidate_says_what_makes_an_answer_correct(catalog):
     """The investigator asked which of these numbers can tell quality apart. That
     depends on what decides a right answer, which the record now carries for each

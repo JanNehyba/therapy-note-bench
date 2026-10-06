@@ -53,6 +53,7 @@ DIACRITIC = re.compile(
 OPERATIONAL = "research/gen2/catalog/operational.json"
 DRAFT = "research/gen2/catalog/draft-registry.json"
 DECISIONS = "research/gen2/decisions.json"
+EXPERT = "research/gen2/expert-input.json"
 CORE = "packages/therapy-note-eval-core/src/therapy_note_eval/"
 ALLOWED_CZECH: dict[str, str] = {
     CORE + "profiles.py": "Original bilingual profile instructions",
@@ -63,6 +64,8 @@ ALLOWED_CZECH: dict[str, str] = {
     "its Czech to exactly the authored strings",
     DECISIONS: "AUTHORED-INVESTIGATOR-TEXT: the investigator's own decisions on the catalog's "
     "constructs, in the words they were given in",
+    EXPERT: "AUTHORED-INVESTIGATOR-TEXT: the investigator's clinical input to the instrument, "
+    "dated, because the inductive half of item generation is legitimate only if declared",
 }
 
 #: The one research file that may carry Czech: the operational rules the
@@ -156,10 +159,11 @@ def _relative(path: Path) -> str:
 
 def test_czech_exceptions_are_only_authored_gen2_resources(tracked_files):
     core = {CORE + f for f in ("profiles.py", "review.js", "controls.py")}
-    assert set(ALLOWED_CZECH) == core | {OPERATIONAL, DRAFT, DECISIONS}
+    assert set(ALLOWED_CZECH) == core | {OPERATIONAL, DRAFT, DECISIONS, EXPERT}
     assert FIXTURE_MARKER in (REPO_ROOT / CORE / "controls.py").read_text(encoding="utf-8")
     assert INSTRUMENT_MARKER in (REPO_ROOT / OPERATIONAL).read_text(encoding="utf-8")
     assert "AUTHORED-INVESTIGATOR-TEXT" in (REPO_ROOT / DECISIONS).read_text(encoding="utf-8")
+    assert "AUTHORED-INVESTIGATOR-TEXT" in (REPO_ROOT / EXPERT).read_text(encoding="utf-8")
 
 
 def test_only_named_files_contain_czech(tracked_files):

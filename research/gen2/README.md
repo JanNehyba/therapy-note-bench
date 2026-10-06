@@ -94,6 +94,14 @@ acceptance. Independent conflicting decisions block acceptance until explicitly
 resolved; original responses remain available. AI proposals cannot self-promote
 into human-reviewed evidence.
 
+The investigator's own clinical input is a declared part of the method, not an
+unrecorded influence. Item generation draws deductively on the literature and
+inductively on expert input, which is the prescribed procedure and is honest
+only if the expert half is visible; `expert-input.json` records what he
+contributed, when, why and what changed because of it, from the narrowing of the
+round's purposes to the criterion the review had buried inside a bundled source
+property. It is not an expert panel and says so: he is the instrument's author.
+
 A review may be delegated, and the record then says so. On 2026-09-21 the
 investigator, having decided every construct, declined to verify the sources and
 evidence lines item by item and accepted them on the assistant's reading (decision
