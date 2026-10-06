@@ -408,9 +408,14 @@ def test_a_criterion_without_a_rule_now_has_one_written_and_not_yet_adopted(oper
     states = {c["id"]: c["state"] for c in catalog["candidates"]}
     without = {k for k, v in states.items() if v == "not_yet_operationalized"}
     covered = {r["construct_id"] for r in block["items"]}
-    unwritable = {r["construct_id"] for r in block["still_not_writable"]}
-    assert covered | unwritable == without, "every criterion without a rule is accounted for"
-    assert unwritable == {"K09"} and block["still_not_writable"][0]["why"]
+    assert covered == without, "every criterion without a rule now has one written"
+    assert block["still_not_writable"] == []
+    # K09 was held back on 2026-10-05 for want of a standard of appropriateness and
+    # written on 2026-10-06 as what it is, a rater verdict. The record keeps both.
+    held = block["held_back_and_then_written"][0]
+    assert held["construct_id"] == "K09" and held["why_then"] and held["why_now"]
+    k09 = next(r for r in block["items"] if r["construct_id"] == "K09")
+    assert "no external standard" in k09["definition"]
     for rule in block["items"]:
         assert set(rule["anchors"]) == set(rule["labels"]) == set(rule["cs"]["anchors"]), rule["id"]
         assert rule["cs"]["definition"] and rule["cs"]["question"] and rule["cs"]["examples"]

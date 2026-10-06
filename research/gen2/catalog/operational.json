@@ -590,12 +590,62 @@
             "boundary": "Zápis píše, že klient byl nějak mimo: ne špatný termín, chybějící, což je totéž selhání z druhé strany."
           }
         }
+      },
+      {
+        "id": "M15",
+        "construct_id": "K09",
+        "candidate_state_now": "not_yet_operationalized",
+        "definition": "A relation is anything the note asserts between two things it also reports: a cause, a trigger, a consequence, a progression, a diagnosis drawn from symptoms, an effect attributed to an intervention. The rater locates each one and answers two questions in order. First, does the transcript support both parts and the link between them? Second, where the parts are supported and the link is the note's own inference, is drawing it here what the note is for? The second question has no external standard and the answer is the rater's; that is why agreement between raters is the only evidence this item has.",
+        "question": "For each relation the note draws, is it carried by the session, or is it the note's own inference?",
+        "reference_mode": "source",
+        "response_format": "categorical",
+        "labels": [
+          "carried",
+          "inferred_warranted",
+          "inferred_overreaching",
+          "unsupported",
+          "not_applicable"
+        ],
+        "anchors": {
+          "carried": "the session itself makes the link; the note reports it",
+          "inferred_warranted": "the session does not make the link, the note draws it, and the rater judges that a clinician writing this note would draw it too",
+          "inferred_overreaching": "the parts are in the session, the link is the note's, and the rater judges it goes beyond what this session shows",
+          "unsupported": "a part of the relation is not in the session at all, which is also an unsupported claim under K01",
+          "not_applicable": "the note draws no relation; it reports without connecting"
+        },
+        "examples": {
+          "carried": "The client says the argument with her sister is why she stopped going out; the note records that.",
+          "inferred_overreaching": "The client mentions an argument and, separately, poor sleep; the note writes that the argument caused the insomnia.",
+          "boundary": "The note writes that the client responded to the reframe by softening. The session shows the softening after the reframe but not because of it; whether that is warranted is the rater's call and the disagreement is the finding."
+        },
+        "rater": "therapist; the same pass that verifies claims, because the relations are found there",
+        "why_no_proxy": "A model asked whether an inference is warranted answers the question it was asked. The first half, whether the parts are supported, is already machine-checkable as a claim; only the second half needs the person, and it is the half with no standard.",
+        "cs": {
+          "definition": "Souvislost je cokoli, co zápis tvrdí mezi dvěma věcmi, které sám uvádí: příčina, spouštěč, následek, vývoj, diagnóza vyvozená ze symptomů, účinek připsaný intervenci. Hodnotitel každou najde a odpoví na dvě otázky v pořadí. Za prvé, podporuje přepis obě části i spojení mezi nimi? Za druhé, tam kde jsou části podpořené a spojení si zápis vyvodil sám, je namístě ho vyvozovat? Druhá otázka nemá vnější měřítko a odpověď je hodnotitelova; proto je shoda mezi hodnotiteli jediný doklad, který tahle položka má.",
+          "question": "Nese každou souvislost, kterou zápis vytvořil, samo sezení, nebo si ji zápis vyvodil?",
+          "anchors": {
+            "carried": "spojení dělá samo sezení a zápis ho zaznamenává",
+            "inferred_warranted": "sezení spojení nedělá, zápis ho vyvodil, a hodnotitel soudí, že klinik píšící tenhle zápis by ho vyvodil také",
+            "inferred_overreaching": "části v sezení jsou, spojení je zápisu vlastní, a hodnotitel soudí, že jde dál, než co tohle sezení ukazuje",
+            "unsupported": "část souvislosti v sezení vůbec není, což je zároveň nepodložené tvrzení podle K01",
+            "not_applicable": "zápis žádnou souvislost nevytváří, jen zaznamenává"
+          },
+          "examples": {
+            "carried": "Klientka říká, že kvůli hádce se sestrou přestala chodit ven; zápis to zaznamená.",
+            "inferred_overreaching": "Klientka zmíní hádku a zvlášť špatný spánek; zápis napíše, že hádka způsobila nespavost.",
+            "boundary": "Zápis píše, že klient na přerámování zareagoval zjemněním. Sezení ukazuje zjemnění po přerámování, ale ne kvůli němu; jestli je to namístě, rozhoduje hodnotitel a jejich neshoda je ten výsledek."
+          }
+        }
       }
     ],
-    "still_not_writable": [
+    "still_not_writable": [],
+    "held_back_and_then_written": [
       {
         "construct_id": "K09",
-        "why": "Half of this criterion is already measured: whether a relation the note draws is supported by the transcript is a claim, and claims are verified. The other half asks whether the relation is appropriate to the purpose, and that needs a standard of appropriateness per purpose which no source supplies and which the assistant will not invent. The rule is not written because it cannot be written honestly yet, which is a different reason from the other six."
+        "held_back_on": "2026-10-05",
+        "why_then": "Its second half asks whether a relation suits the purpose, and no source supplies a standard of appropriateness, so the assistant declined to invent one.",
+        "written_on": "2026-10-06",
+        "why_now": "The investigator asked for it to be written. A criterion with no external standard is not unwritable: it is a rater verdict, which this catalog already has three of. What it costs is that agreement between raters is its only evidence of validity, and the rule says so in both languages rather than hiding it."
       }
     ]
   }
