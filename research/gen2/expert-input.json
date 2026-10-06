@@ -1,135 +1,208 @@
 {
-  "version": "expert-input-v1",
+  "version": "expert-input-v2",
   "marker": "AUTHORED-INVESTIGATOR-TEXT",
+  "supersedes": "expert-input-v1 of 2026-10-06, which recorded the working instruction and a conversational reason. That reads as a log of requests rather than as expert contribution, and the investigator refused it as unusable for reviewers. Each entry now carries the proposition, the professional argument, what the argument rests on, and the effect; the instruction is kept as provenance.",
   "author": {
-    "role": "investigator and instrument developer; psychotherapy researcher",
-    "note": "The same person reviews the catalog, which is why his review is recorded as an author's and not as independent validation. This file is about his substantive contributions to the instrument, which are a different thing from his review decisions in decisions.json and from the process decisions in protocol.json."
+    "role": "investigator and instrument developer",
+    "qualifications": null,
+    "qualifications_note": "Not supplied. The assistant will not state the investigator's professional qualifications, and until this field is filled the paper may not describe any entry here as clinical expert input; it may only say that the instrument's author contributed it. Filling it is a prerequisite for submission.",
+    "independence": "None. The same person develops the instrument, reviews it and contributes here, which is why this file is transparency and not validation."
   },
-  "why_this_file": "Item generation draws deductively on the literature and inductively on expert input (Boateng et al., 2018, Item generation). The inductive half is legitimate only if it is declared, so each entry says what the investigator contributed, when, why, and what changed because of it. Without this the contributions are invisible except as their effect, and a reader cannot tell where the review ends and the clinician begins.",
-  "language_note": "The instructions were given in Czech in a working chat. `instruction` is a transcription cleaned of typing, not a quotation. `verbatim` is used only where the wording is the point.",
+  "why_this_file": "Item generation draws deductively on the literature and inductively on expert input, and the inductive half is legitimate only if declared. Each entry states the proposition, the argument a reviewer can engage with, what that argument rests on, and what changed. Without it the contributions are visible only as their effect and a reader cannot tell where the review ends and the clinician begins.",
+  "confirmation": "Every rationale below is the assistant's formulation of an objection the investigator raised in a working session, so every entry is marked unconfirmed. An entry the investigator has not read is not a statement he has made, and an unconfirmed entry may not be cited in the paper as his reasoning.",
   "entries": [
     {
       "id": "E1",
       "date": "2026-09-16",
-      "kind": "scope",
-      "instruction": "Zúžit nástroj na dva účely: návaznost péče a dokumentace. Supervize a porozumění klienta zůstanou zapsané, ale v tomhle kole se neměří.",
-      "rationale": "Čtyři účely byly ze zadání, ne ze zjištění. Na supervizi i na klientskou stranu nemáme ani hodnotitele, ani dost opory.",
-      "landed_in": [
+      "contribution_type": "scope restriction",
+      "proposition": "The instrument is built for two uses of a note, continuity of care and documentation. Supervision and client communication stay declared and are measured for nothing in this round.",
+      "clinical_rationale": "What counts as a complete note is a function of the use it is written for: the same detail that a colleague taking over the case needs is superfluous, and sometimes harmful, in a summary a client reads. An instrument that does not name the use cannot say what an omission is. Supervision and client communication each require a reader this round does not have, a supervisor and a client, so declaring them in scope while measuring nothing for them would overstate what the instrument covers.",
+      "basis": "clinical practice, and the review's own finding that supervision was the least supported of the four purposes",
+      "effect": [
         "protocol decision D8",
         "catalog: K24 and K25 out of scope"
       ],
-      "kind_of_contribution": "narrowed what the round claims"
+      "instruction_as_given": {
+        "language": "cs",
+        "text": "Zúžit nástroj na dva účely: návaznost péče a dokumentace. Supervize a porozumění klienta zůstanou zapsané, ale v tomhle kole se neměří.",
+        "status": "transcription of a working instruction, cleaned of typing; not a quotation"
+      },
+      "rationale_written_by": "the assistant, from the investigator's objection",
+      "confirmed_by_investigator": false
     },
     {
       "id": "E2",
       "date": "2026-09-16",
-      "kind": "criterion_wording",
-      "instruction": "Kritérium o české vyhlášce nevyžaduje právníka; zúžit ho na záznamy poskytovatele zdravotních služeb. A přijatelnost pro praxi přepsat: čte se to, jako by šlo o pojišťovnu, a o tu nejde.",
-      "rationale": "Právní posudek je nad rámec možností projektu a kritérium se dá zúžit na kontrolu náležitostí. U přijatelnosti je otázka o používání systému, ne o platbě.",
-      "landed_in": [
+      "contribution_type": "construct wording",
+      "proposition": "The criterion resting on the Czech documentation decree is a check that required elements are present in records kept by a provider of health services, and makes no claim about legal compliance. The acceptability criterion concerns whether a practitioner would adopt the note and the system, not whether a payer would accept it.",
+      "clinical_rationale": "A regulation enumerates elements; whether a record complies with law is a legal judgement that needs legal expertise the project does not have, so the construct must be scoped to the presence of the enumerated elements and to the narrow group of records the decree binds. In Czech clinical usage 'acceptability' is heard first as acceptance by an insurer, and a rater reading it that way answers a different question from the one the construct asks.",
+      "basis": "clinical and administrative practice in Czech health services; the construct's source defines acceptability as a property of adopting an intervention, not of billing",
+      "effect": [
         "catalog: K19 narrowed",
         "catalog: K23 rewritten"
       ],
-      "kind_of_contribution": "corrected a reading a clinician would stumble on"
+      "instruction_as_given": {
+        "language": "cs",
+        "text": "Kritérium o české vyhlášce nevyžaduje právníka; zúžit ho na záznamy poskytovatele zdravotních služeb. A přijatelnost pro praxi přepsat: čte se to, jako by šlo o pojišťovnu, a o tu nejde.",
+        "status": "transcription of a working instruction, cleaned of typing; not a quotation"
+      },
+      "rationale_written_by": "the assistant, from the investigator's objection",
+      "confirmed_by_investigator": false
     },
     {
       "id": "E3",
       "date": "2026-09-20",
-      "kind": "method",
-      "instruction": "Tenhle postup není induktivní. Dvacet šest kritérií vzniklo tak, že si je asistent sepsal, a zbytek se doplnil; to nestačí.",
-      "verbatim": "ach jo toto není induktivní postup!!!",
-      "rationale": "Opora sbíraná ke kritériím, která už jsou na stole, nemůže říct, jestli ve zdrojích není něco, co stůl minul.",
-      "landed_in": [
-        "source-properties.json: 140 properties extracted source by source, without the catalog open, mapped afterwards",
-        "paper: the framework is reported from the sources upwards",
+      "contribution_type": "method correction",
+      "proposition": "A framework presented as derived from a review has to be derived in the direction it claims. Evidence collected to support criteria already on the table cannot establish that the sources contain nothing the table omits, so every source read in full must first be read for the properties it itself defines, with the mapping to candidates done afterwards.",
+      "clinical_rationale": "Not clinical but methodological, and it is the entry that changed the most. The first framework was a prototype plus literature confirmation, which is a weaker claim than the one the paper intended to make.",
+      "basis": "methodological; the procedure the project follows separates deductive item generation from the confirmation of items already held",
+      "effect": [
+        "source-properties.json: 140 properties extracted source by source without the catalog open, mapped in a second column",
+        "the paper reports the framework from the sources upwards and the prior map as the comparison it was tested against",
         "two properties no candidate covered became K32 and K33"
       ],
-      "kind_of_contribution": "changed the method, not an item; the single largest methodological correction in the project"
+      "instruction_as_given": {
+        "language": "cs",
+        "text": "Tenhle postup není induktivní. Dvacet šest kritérií vzniklo tak, že si je asistent sepsal, a zbytek se doplnil; to nestačí.",
+        "status": "transcription of a working instruction, cleaned of typing; not a quotation",
+        "verbatim": "ach jo toto není induktivní postup!!!"
+      },
+      "rationale_written_by": "the assistant, from the investigator's objection",
+      "confirmed_by_investigator": false
     },
     {
       "id": "E4",
       "date": "2026-09-21",
-      "kind": "criterion",
-      "instruction": "Kulturní kompetence doložená v zápisu: přijmout, přes to, že asistent navrhoval nepřijímat. Vnitřní konzistence jednoho zápisu: přijmout také.",
-      "rationale": "Obojí je v zápisu vidět a obojí má klinický důsledek. U kulturní kompetence je riziko stereotypu v zápisu trvalé.",
-      "landed_in": [
+      "contribution_type": "construct adoption",
+      "proposition": "Two properties the sources define and the catalog did not cover are adopted: whether the note evidences culturally competent care, and whether the note is internally consistent. The first is adopted against the assistant's proposal not to.",
+      "clinical_rationale": "A note that explains a client through a cultural assumption is read by the next clinician and, where the client has access, by the client; the damage is to the therapeutic relationship and is not corrected by a later note. Internal consistency is distinct both from consistency between notes of one case and from fidelity: two statements can each have support at different moments of the session and still be incompatible when the note presents both as current, and a reader who finds the contradiction cannot tell which part to trust and discounts the whole note.",
+      "basis": "clinical practice; the first property is an item of the TN-Eval rubric, the second an attribute of PDQI-9 that its successor dropped as redundant",
+      "effect": [
         "catalog: K32 and K33"
       ],
-      "kind_of_contribution": "adopted two criteria, one against the assistant's proposal"
+      "instruction_as_given": {
+        "language": "cs",
+        "text": "Kulturní kompetence doložená v zápisu: přijmout, přes to, že asistent navrhoval nepřijímat. Vnitřní konzistence jednoho zápisu: přijmout také.",
+        "status": "transcription of a working instruction, cleaned of typing; not a quotation"
+      },
+      "rationale_written_by": "the assistant, from the investigator's objection",
+      "confirmed_by_investigator": false
     },
     {
       "id": "E5",
       "date": "2026-10-04",
-      "kind": "overlap",
-      "instruction": "Úspornost a informační hustota mi přijdou stejné nebo podobné.",
-      "rationale": "Obě se tváří jako poměr obsahu k textu.",
-      "landed_in": [
-        "recorded as a hypothesis the pilot tests: the two differ in denominator (sentences versus length) and in whether a repeated fact counts, and if they correlate on real notes one of them goes"
+      "contribution_type": "redundancy hypothesis",
+      "proposition": "Economy and information density may measure the same thing and must be tested for it rather than assumed distinct.",
+      "clinical_rationale": "Both present as content per text. They differ in denominator, sentences against length, and in the treatment of repetition: a restated fact keeps every sentence content-bearing while adding no distinct content. Whether that difference shows up on real notes is unknown, and if the two correlate, one of them is redundant and should go rather than be carried for completeness.",
+      "basis": "measurement reasoning; the catalog records the overlap and the pilot tests it",
+      "effect": [
+        "recorded as a hypothesis the feasibility pilot tests, with the consequence stated in advance: if they correlate, one is dropped"
       ],
-      "kind_of_contribution": "named a redundancy to be tested rather than assumed away"
+      "instruction_as_given": {
+        "language": "cs",
+        "text": "Úspornost a informační hustota mi přijdou stejné nebo podobné.",
+        "status": "transcription of a working instruction, cleaned of typing; not a quotation"
+      },
+      "rationale_written_by": "the assistant, from the investigator's objection",
+      "confirmed_by_investigator": false
     },
     {
       "id": "E6",
       "date": "2026-10-05",
-      "kind": "criterion",
-      "instruction": "Jazyková přirozenost není klinický jazyk. Terminologii přijmi jako kritérium okamžitě.",
-      "verbatim": "jazyková přirozenost není klinický jazyk snad!",
-      "rationale": "Jak to zní a jakými slovy se o tom mluví odborně jsou dvě věci. Zápis může být plynulá čeština a přitom používat špatné termíny.",
-      "landed_in": [
+      "contribution_type": "construct adoption",
+      "proposition": "Fluency in a language and correct use of the profession's terminology are distinct properties of a note and need distinct constructs. Terminology is adopted as a construct of its own.",
+      "clinical_rationale": "A note can be idiomatic Czech and name an intervention wrongly, and a correctly termed note can read as a translation. In supervision these are corrected by different people for different reasons: one is a writing problem, the other a clinical one, and a measure that conflates them cannot tell a reader which it found. The distinction also marks where the two failures sit: a wrong term is a clinical error that a later reader acts on, while unidiomatic phrasing costs trust and time.",
+      "basis": "clinical practice and supervision practice; a published analysis of what clinicians edit in AI-drafted documentation separates clinical content, terminology and language style as three categories",
+      "effect": [
         "catalog: K34, correct and appropriate professional terminology",
-        "the bundled-property hole it exposed: a concept inside a multi-concept property could be left with no candidate, and the validator now refuses that",
-        "two further concepts the mapping notes had set aside in prose were recorded as open properties"
+        "the structural defect it exposed: a source property whose label names several concepts counted as covered if any one of them mapped, so the validator now refuses a mapping note that admits a part has no candidate",
+        "two concepts the mapping notes had set aside in prose were recorded as open"
       ],
-      "kind_of_contribution": "found a criterion the review had buried, and with it a structural defect in the mapping"
+      "instruction_as_given": {
+        "language": "cs",
+        "text": "Jazyková přirozenost není klinický jazyk. Terminologii přijmi jako kritérium okamžitě.",
+        "status": "transcription of a working instruction, cleaned of typing; not a quotation",
+        "verbatim": "jazyková přirozenost není klinický jazyk snad!"
+      },
+      "rationale_written_by": "the assistant, from the investigator's objection",
+      "confirmed_by_investigator": false
     },
     {
       "id": "E7",
       "date": "2026-10-05",
-      "kind": "scope",
-      "instruction": "Kritérium o české vyhlášce vyhodit z kola úplně.",
-      "verbatim": "můžeš konečně tu vyhlášku smazat je to pitomost!",
-      "rationale": "Kontrola náležitostí jedné národní vyhlášky není měření kvality zápisu.",
-      "landed_in": [
+      "contribution_type": "scope restriction",
+      "proposition": "The conformance check against the Czech documentation decree does not belong in a benchmark of note quality and leaves the round.",
+      "clinical_rationale": "The check establishes that enumerated fields are present, which is administrative completeness and not the quality of the clinical record: a note can carry every required field and still misstate what happened in the session. Keeping it among quality measures would let a system score well for filling fields, and the criterion does not transfer beyond records kept by Czech providers of health services, which is a narrow group within the instrument's intended users.",
+      "basis": "clinical and administrative practice; the construct's own evidence states that the decree lays down required elements, not quality",
+      "effect": [
         "catalog: K19 out of scope, pilot entry P09 removed",
-        "the documentation purpose is now served by per-purpose coverage and the rubric items instead"
+        "the documentation use is served instead by coverage reported per purpose and by the rubric items, which apply to both purposes"
       ],
-      "kind_of_contribution": "removed a measure; the candidate stays as the record of a finding"
+      "instruction_as_given": {
+        "language": "cs",
+        "text": "Kritérium o české vyhlášce vyhodit z kola úplně.",
+        "status": "transcription of a working instruction, cleaned of typing; not a quotation",
+        "verbatim": "můžeš konečně tu vyhlášku smazat je to pitomost!"
+      },
+      "rationale_written_by": "the assistant, from the investigator's objection",
+      "confirmed_by_investigator": false
     },
     {
       "id": "E8",
       "date": "2026-10-05",
-      "kind": "demand",
-      "instruction": "Šest kritérií se neměří proto, že nikdo nenapsal pravidlo. Tak to pravidlo napiš.",
-      "rationale": "„Nikdo nenapsal pravidlo“ je výpověď o nás, ne o kritériu.",
-      "landed_in": [
-        "operational.json: six rating rules written in both languages, in their own block because adopting one into the round costs human budget"
+      "contribution_type": "operationalisation demand",
+      "proposition": "A construct may not be left unmeasured because no rating rule has been written for it. The rules are to be written.",
+      "clinical_rationale": "The absence of a rule is a property of the instrument's development, not of the construct. Leaving constructs out for that reason biases the instrument towards whatever was convenient to operationalise, and that bias runs against exactly the properties that need a clinician, which are the ones a benchmark of documentation most needs.",
+      "basis": "methodological; the protocol already forbids dropping a measure because systems do not differ on it, and this is the same failure in another form",
+      "effect": [
+        "operational.json: rating rules written in both languages for every construct that had none, in a separate block because adopting one into the round costs human budget"
       ],
-      "kind_of_contribution": "refused a procedural excuse"
+      "instruction_as_given": {
+        "language": "cs",
+        "text": "Šest kritérií se neměří proto, že nikdo nenapsal pravidlo. Tak to pravidlo napiš.",
+        "status": "transcription of a working instruction, cleaned of typing; not a quotation"
+      },
+      "rationale_written_by": "the assistant, from the investigator's objection",
+      "confirmed_by_investigator": false
     },
     {
       "id": "E9",
       "date": "2026-10-05",
-      "kind": "method",
-      "instruction": "Některá kritéria jsou jen popisný údaj. Který údaj vlastně dokáže odlišit kvalitu?",
-      "rationale": "U počtu třetích osob nejde říct, kolik jich má být. Takové číslo nic nehodnotí.",
-      "landed_in": [
-        "catalog: decided_by on every candidate, one of source, norm, note, rater, derived or indicator",
-        "the validator refuses a pilot entry that would carry an indicator as an ordinary measure",
-        "paper: of the measured criteria, which can rank a system and which only describe"
+      "contribution_type": "measurement-theory distinction",
+      "proposition": "Each construct must record what makes an answer to it correct, because some of the instrument's numbers can order systems and others only describe them.",
+      "clinical_rationale": "Asked how many third persons a note should mention, no clinician can answer, because the count has no target: the answerable question is whether a mention carries an identifying detail the use does not need. A count published beside graded measures is read as a grade, and two of the instrument's measures, the diversity of a system's notes and the density of one note, have no target value at all: a system can be diverse by being wrong differently each time, and a dense note can be unreadable.",
+      "basis": "measurement reasoning; the catalog's record kinds already treated two entries apart without naming the reason",
+      "effect": [
+        "catalog: every construct carries what decides a right answer, one of the source, a written norm, the note itself, a rater's verdict, another measure, or nothing",
+        "the validator refuses a pilot entry that would carry a descriptive indicator as an ordinary measure",
+        "the paper reports, of the measured constructs, which can rank a system and which describe it"
       ],
-      "kind_of_contribution": "produced the distinction the instrument was missing"
+      "instruction_as_given": {
+        "language": "cs",
+        "text": "Některá kritéria jsou jen popisný údaj. Který údaj vlastně dokáže odlišit kvalitu?",
+        "status": "transcription of a working instruction, cleaned of typing; not a quotation"
+      },
+      "rationale_written_by": "the assistant, from the investigator's objection",
+      "confirmed_by_investigator": false
     },
     {
       "id": "E10",
       "date": "2026-10-06",
-      "kind": "demand",
-      "instruction": "Pravidlo pro opodstatněnost vytvořených vztahů taky dopiš, i když asistent tvrdil, že to nejde.",
-      "rationale": "Když na něco není vnější měřítko, pořád to může posoudit odborník.",
-      "landed_in": [
-        "operational.json: the rule for K09, written as a rater verdict whose only evidence of validity is agreement, with the reversal recorded"
+      "contribution_type": "operationalisation demand",
+      "proposition": "A construct for which no external standard exists is not unmeasurable. The rule for whether a relation the note draws is warranted is to be written as what it is, a rater-judged item.",
+      "clinical_rationale": "Clinicians judge whether an inference is warranted as part of ordinary supervision, without any external standard, and the discipline's answer to the absence of a standard is to measure agreement rather than to abandon the question. The consequence is that this item's validity rests on inter-rater agreement and must be reported that way, which is a cost to accept rather than a reason to omit.",
+      "basis": "clinical supervision practice; the instrument already carries three constructs decided by a rater's verdict",
+      "effect": [
+        "operational.json: the rule for K09, written as a rater verdict whose only evidence of validity is agreement, with the reversal of the assistant's refusal recorded"
       ],
-      "kind_of_contribution": "corrected the assistant's refusal; a criterion without an external standard is a verdict, not an impossibility"
+      "instruction_as_given": {
+        "language": "cs",
+        "text": "Pravidlo pro opodstatněnost vytvořených vztahů taky dopiš, i když asistent tvrdil, že to nejde.",
+        "status": "transcription of a working instruction, cleaned of typing; not a quotation"
+      },
+      "rationale_written_by": "the assistant, from the investigator's objection",
+      "confirmed_by_investigator": false
     }
   ],
-  "what_this_is_not": "Not independent validation. The investigator is the instrument's author, so these entries are an author's contributions recorded for transparency, not an expert panel. The panel that content validity asks for, judges independent of the item pool's authors, has not happened and is reported as an open gap."
+  "what_this_is_not": "Not independent validation and not an expert panel. The investigator is the instrument's author. The content validity that asks for judges independent of the item pool's authors has not happened and is reported as an open gap."
 }

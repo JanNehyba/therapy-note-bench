@@ -271,30 +271,44 @@ def test_the_investigators_own_input_is_declared_and_dated(expert, catalog):
     change they caused. Each entry now says what, when, why and where it landed,
     and the file states plainly that an author's input is not a panel."""
     entries = expert["entries"]
+    assert expert["version"] == "expert-input-v2" and expert["supersedes"]
     assert len(entries) >= 10
     dates = [e["date"] for e in entries]
     assert dates == sorted(dates), "the record reads in the order it happened"
+    kinds = {
+        "scope restriction",
+        "construct adoption",
+        "construct wording",
+        "method correction",
+        "redundancy hypothesis",
+        "operationalisation demand",
+        "measurement-theory distinction",
+    }
     for entry in entries:
-        assert entry["instruction"] and entry["rationale"], entry["id"]
-        assert entry["landed_in"] and entry["kind_of_contribution"], entry["id"]
-        assert entry["kind"] in {
-            "scope",
-            "criterion",
-            "criterion_wording",
-            "method",
-            "overlap",
-            "demand",
-        }
-    # The entries that produced a criterion must point at one the catalog holds.
+        # What a reviewer needs: the proposition, the argument, what it rests on,
+        # the effect. The working instruction is provenance and is kept apart.
+        assert entry["proposition"] and entry["clinical_rationale"], entry["id"]
+        assert entry["basis"] and entry["effect"], entry["id"]
+        assert entry["contribution_type"] in kinds, entry["id"]
+        assert entry["instruction_as_given"]["status"].startswith("transcription")
+        assert entry["rationale_written_by"].startswith("the assistant")
+        assert entry["confirmed_by_investigator"] is False, (
+            "an entry the investigator has not read is not a statement he has made"
+        )
     ids = {c["id"] for c in catalog["candidates"]}
     produced = {
         word.strip(",.:")
         for entry in entries
-        for line in entry["landed_in"]
+        for line in entry["effect"]
         for word in line.replace("catalog:", " ").split()
         if word.strip(",.:") in ids
     }
     assert {"K32", "K33", "K34", "K19"} <= produced
+    # The assistant may not state his qualifications, so the file says they are
+    # missing and that the paper may not claim expertise until they are supplied.
+    assert expert["author"]["qualifications"] is None
+    assert "prerequisite for submission" in expert["author"]["qualifications_note"]
+    assert "unconfirmed" in expert["confirmation"]
     assert expert["what_this_is_not"].startswith("Not independent validation")
     assert expert["marker"] == "AUTHORED-INVESTIGATOR-TEXT"
 

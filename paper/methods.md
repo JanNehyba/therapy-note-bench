@@ -18,7 +18,9 @@ one repeated observation of our own outputs; drawing on both is what the
 procedure prescribes rather than a mixture to be explained away. The
 investigator's clinical input during development is recorded entry by entry with
 its date, its rationale and what changed because of it
-(`research/gen2/expert-input.json`), so that the inductive half is readable
+(`research/gen2/expert-input.json`), each entry stating the proposition, the
+argument behind it and what it rests on, and each marked as awaiting his
+confirmation of the assistant's wording, so that the inductive half is readable
 rather than absorbed: it contains, among others, the objection that the first
 framework was not inductive at all, which produced the source-first extraction,
 and the objection that language naturalness is not clinical terminology, which
