@@ -66,35 +66,67 @@ and, in the Anthology, summarisation evaluation. Exact strings, execution
 dates, counts and export checksums are logged (`search-log-pubmed.json`,
 `search-log-acl.json`) and reported in the appendix following PRISMA-S. Query
 amendments were recorded before use after a sensitivity check against known
-relevant works (`amendments.json`). APA PsycINFO and Scopus were planned and not
-searched, for want of institutional access; they are reported as a limit.
+relevant works (`amendments.json`). Scopus was planned, was not reachable
+without an API key, and was searched on 2026-10-07 with three queries covering
+the same three subjects, by the investigator in the institutional web interface
+(amendment AM-7, `search-log-scopus.json`). Because those searches were run by
+hand, the hit count each query reported was not captured: their record counts
+are export row counts, that is lower bounds, and no export can be verified
+complete. APA PsycINFO remains unsearched for want of institutional access and
+is reported as a limit.
 
-The searches returned 11 397 records (8 820 and 2 577); 35 book-chapter records
-were not parsed into the pool and are counted rather than dropped; 10 223 unique
-records remained after deduplication by DOI, then PMID, then normalised title
-(1 139 removed; `pool-summary.json`, `flow.json`).
+The searches identified at least 14 569 records (8 820, 2 577 and at least
+3 172); 35 book-chapter records were not parsed into the pool and are counted
+rather than dropped; 12 042 unique records remained after deduplication by DOI,
+then PMID, then normalised title (2 492 removed; `pool-summary.json`,
+`flow.json`). Scopus contributed 3 100 of those records and 1 819 of them were
+reached by no other query. The deduplication rule tries DOI before title, so
+the same work enters twice whenever one database supplies a DOI and the other
+does not: 126 normalised titles sit on 253 records, 94 of those groups
+involving Scopus. We report that as a measured defect of the pool rather than
+correct it, because merging on title needs a guard against short and generic
+titles and would move every stratum, every sample drawn from one and every
+judgement made over a sample.
 
 ## Screening
 
-Records were ordered by a priority rule and a stratum of 507 was screened with
-AI assistance by one investigator: 487 received a proposal (192 include,
-295 exclude), 20 entered the stratum after a correction of the pool builder and
-are listed as not screened, and the remaining 9 716 were not screened. No
-screening proposal has yet received a human decision, and no second screener
-has been recruited; screening is therefore single-reviewer and AI-assisted, and
-is reported as such. A simple random sample of 200 records from the unscreened
-remainder found 6 clearly eligible and 5 borderline records, which estimates
-291 eligible records left unscreened (95% Wilson interval 134 to 621;
-`screening-decisions.json`). We call the whole a scoping search with a
+Records were ordered by a priority rule at a threshold registered before the
+first screen and unchanged since. The stratum now holds 687 records and 666
+received a proposal across two dated rounds: 487 in the first (192 include,
+295 exclude) and 180 in the second, the records the Scopus searches added
+(55 include, 125 exclude, each with its reason recorded,
+`include-candidates-2026-10-07.json`). Twenty-one records are listed as not
+screened, never as excluded. No screening proposal has yet received a human
+decision, and no second screener has been recruited; screening is therefore
+single-reviewer and AI-assisted, and is reported as such.
+
+The unscreened remainder of 11 355 records is audited as two strata, because
+the records Scopus alone reached were not reachable when the first sample was
+drawn and the first sample's rate is a property of the frame it came from. A
+simple random sample of 200 from the 9 716 records reachable without Scopus
+found 6 clearly eligible and 5 borderline, estimating 291 eligible records left
+unscreened (95% Wilson interval 134 to 621). A separate sample of 200 from the
+1 639 Scopus-only records found 28 clearly eligible and 11 borderline,
+estimating 229 (162 to 319). The difference between the two rates is not a
+measurement: the two samples were judged on different days from differently
+formatted listings, and comparing them would mean judging the first frame again
+under the second procedure. What the second estimate does establish is that the
+ordering leaves more eligible material below the threshold in the Scopus
+stratum than in the original one, which is consistent with Scopus matching a
+query against indexed keywords as well as title and abstract
+(`screening-decisions.json`). We call the whole a scoping search with a
 prioritised evidence map, not a scoping review.
 
 ## Sources and evidence
 
-Nineteen reports were sought as catalog sources: 18 were retrieved and read,
-one (the 2008 preliminary PDQI paper) was not. Thirteen further reports were
-used from their abstracts; six of them were obtained on 2026-09-16 and read on
-2026-09-20, and seven remain abstract-only, marked as such wherever they are
-cited. Every report has a ledger entry with its route into the review, its
+Nineteen reports were sought as catalog sources and all nineteen have been
+retrieved, the 2008 preliminary PDQI paper last, on 2026-10-07. Eighteen have
+been read in full text; that one has not, so the entry resting on it still
+rests on its abstract. Thirteen further reports were used from their abstracts;
+six were obtained on 2026-09-16 and read on 2026-09-20, five more were obtained
+on 2026-10-07 and have not been read, and two could not be obtained at all and
+carry a dated failed attempt, which is a different fact from untried. Every
+source cited from an abstract is marked as such wherever it appears. Every report has a ledger entry with its route into the review, its
 identifiers, every retrieval attempt with date and checksum, and a reading basis
 that is kept separate from retrieval (`reports.json`). Sources are classed by
 evidence layer: direct, transfer, requirements, or methodological guidance that

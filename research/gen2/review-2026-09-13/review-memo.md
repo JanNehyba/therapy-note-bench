@@ -24,16 +24,33 @@ the planned searches.
    Every result set was downloaded in full. `search-log-pubmed.json` and
    `search-log-acl.json` hold the exact queries, dates, counts and export
    checksums.
-4. Built one deduplicated pool of 10 223 records (10 059 until the DOI correction of
-   2026-09-15, when the pool builder was found to take a cited reference's DOI for a
-   third of the PubMed records), screened a 487-record priority stratum, and audited
-   a random sample of 200 records from the remainder. The corrected stratum holds
-   507 records: the 487 screened ones and 20 that entered it only through the
-   correction and are listed as not screened, never as excluded; the remainder is
-   9 716.
+   **Added three Scopus searches on 2026-10-07** (amendment AM-7), which the
+   investigator ran by hand in the institutional web interface because the API
+   needs a key the project does not have. `search-log-scopus.json` holds the
+   three query strings, the date, the export checksums and the two things that
+   are missing: the hit count the interface reported for each query, which was
+   not written down, and therefore any verification that an export is complete.
+   The record counts for Scopus are export row counts and are lower bounds.
+4. Built one deduplicated pool, now of 12 042 records (10 223 before the Scopus
+   searches; 10 059 before the DOI correction of 2026-09-15, when the pool builder
+   was found to take a cited reference's DOI for a third of the PubMed records).
+   Scopus contributed 3 100 records of which **1 819 no other query reached**. The
+   priority stratum holds 687 records at the threshold of 9, which was registered
+   before the first screen and not changed: 507 from the first round and 180 that
+   Scopus alone brought above it. Those 180 were screened on 2026-10-07 as a second
+   AI round, 55 in and 125 out, each with its reason
+   (`include-candidates-2026-10-07.json`); 21 records are listed as not screened,
+   never as excluded. The remainder is 11 355, and it is **two strata with two
+   samples**: 9 716 records reachable without Scopus, audited on 2026-09-13, and
+   1 639 that Scopus alone reached, audited separately on 2026-10-07. The
+   September rate is not applied to records September could not reach.
 5. Sought 19 catalog reports: 12 evidence papers, 2 guidance documents and 5
    methodological guidance documents. Eighteen were retrieved and read by the
-   assistant; one, the 2008 PDQI-9 preliminary paper, was not. Six evidence papers
+   assistant by 2026-09-20; the nineteenth, the 2008 PDQI-9 preliminary paper,
+   came down on 2026-10-07 on a second attempt, so every report the catalog
+   sought is retrieved. **Retrieved is not read**: that copy has not been read
+   and the catalog still rests on its abstract, which `reports.json` records as
+   a reading basis separate from the retrieval status. Six evidence papers
    reached the full-text stage through the search and screening; the other thirteen
    reports entered through other routes (known sources, professional and
    methodological guidance, an author search from Keren 2026), which `reports.json`
@@ -51,11 +68,14 @@ the planned searches.
 
 | Gap | Detail |
 |---|---|
-| **Scopus** | Not searched. `api.elsevier.com` returns HTTP 401 without a key. The sibling `destilo` project was checked at the user's suggestion: its `.env` and `.env.example` hold `CORE_API_KEY` and `NCBI_API_KEY` but **no Elsevier or Scopus credential**, and a repo-wide search found Scopus mentioned only in a design note recording that Taylor & Francis, APA and Elsevier paywalls return 404. |
+| **Scopus, until 2026-10-07** | Not searched for the first round. `api.elsevier.com` returns HTTP 401 without a key; the sibling `destilo` project was checked at the user's suggestion and holds no Elsevier credential. It was searched on 2026-10-07 through the institutional web interface instead (AM-7), by the investigator, with three queries covering the three layers. What that does **not** close: the queries cover those three subjects and no others, the hit counts were not captured so completeness is unverified, the searches are not re-runnable from this repository, and the 1 639 records it put below the threshold are unscreened. |
+| **Scopus brought more below the threshold than above it** | The audit of the Scopus-only remainder found **28 of 200** records clearly eligible, against 6 of 200 in the September remainder, estimating **229 [95% CI 162-319]** eligible records left unscreened in that stratum alone. The likely reason is that Scopus matches a query against indexed keywords as well as title and abstract, so a record can be squarely on topic and still score below a threshold built from title and abstract words. The ordering rule and the threshold were left as registered. The two rates were judged by the same assistant on different days from differently formatted listings, so **the difference between them is not a measurement**; comparing them properly would mean judging the September frame again under the October procedure, which has not been done. |
 | **APA PsycINFO** | Not searched. EBSCOhost requires an institutional login. PsycINFO was the only database planned for the requirements layer, so amendment AM-2 added a PubMed requirements query that recovers part, not all, of that coverage. |
-| **9 716 records unscreened, and 20 more in the priority stratum** | The priority ordering is not a screen. The audit estimates **291 eligible records [95% CI 134-621]** below the threshold, or 534 [301-931] counting borderline cases (the judgement of 2026-09-13, recomputed over the remainder after the DOI correction). Two of the six clear finds were direct or requirements evidence, so the gap is not confined to NLP method papers. Twenty records entered the priority stratum only through the correction of 2026-09-15 and have no proposal yet. |
+| **11 355 records unscreened, and 21 in the priority stratum** | The priority ordering is not a screen. Over the 9 716 records reachable without Scopus the audit estimates **291 eligible records [95% CI 134-621]** below the threshold, or 534 [301-931] counting borderline cases; over the 1 639 Scopus-only records it estimates 229 [162-319] (see the row above). Two of the six clear finds in the September sample were direct or requirements evidence, so the gap is not confined to NLP method papers. Twenty-one records are in the priority stratum with no proposal: twenty entered it through the correction of 2026-09-15 and one through the Scopus round. |
+| **The September audit sample no longer reproduces** | It was redrawn after the parser fix, after the DOI correction and again when the Scopus records moved to their own stratum. Checked on 2026-10-07: **none** of the six clearly eligible titles is in the draw the same seed makes today. The judgement stands for the records it was made on, which are recorded as titles; what is lost is the ability to re-read them. The October sample does reproduce, and `report-map.json` records both checks. |
+| **126 works are in the pool twice** | The dedup rule keys a record by DOI, then PMID, then normalised title, so the same work entered twice whenever one database supplied a DOI and the other did not. That is common between PubMed and Scopus: 126 normalised titles sit on 253 records, 94 of those groups involving Scopus. One work is in the priority stratum twice and was screened in twice, once in each round. Measured on 2026-10-07 and not yet corrected, because merging on title needs a guard against short and generic titles and would move every stratum, every sample drawn from one and every judgement made over a sample. |
 | **No human screening** | JBI asks for a minimum of two reviewers at selection and at least two at extraction. This round has one investigator and an AI assistant. Every include/exclude in `screening-decisions.json` is an AI proposal. |
-| **One report not retrieved** | The 2008 PDQI-9 preliminary-development paper (S5). The Psychotherapy Research 2026 paper was supplied by the investigator on 2026-09-13 after every open route failed and is retrieved; `reports.json` keeps the failed attempt beside the supplied copy. Not retrieved is not an eligibility exclusion. |
+| **Retrieved but unread** | Every report the catalog sought is now retrieved, the 2008 PDQI-9 preliminary-development paper (S5) last, on 2026-10-07. Six copies that arrived that day have not been read, S5 and five abstract-only sources, and the catalog entries resting on them still rest on their abstracts. Two abstract-only reports could not be retrieved at all and carry a dated failed attempt, which is a different fact from untried. |
 | **Abstract-only sources** | 13 sources were judged relevant from title and abstract alone. Their instruments and validation are **not** verified, and the registry marks every candidate that leans on them. |
 | **ACL recall** | Only 62.9% of Anthology records carry an abstract; the rest were searched on title alone. |
 
@@ -224,19 +244,22 @@ resolved by title search. `fulltext-retrieval-log.json` records the correction.
 ## What a methods section may truthfully say
 
 "We executed a scoping search of PubMed and the complete ACL Anthology corpus on
-2026-09-13, retrieving 11 397 records and 10 223 after deduplication (corrected on
-2026-09-15 from 10 059 when the pool builder was found to take cited references'
-DOIs). Scopus and
-APA PsycINFO were not accessible and remain unsearched. Query amendments were
-recorded before use, following a sensitivity check against known relevant works.
-One investigator with AI assistance screened 487 of the 507 records in the priority
-stratum (20 entered it after the screen, through the correction) and audited a random
-sample of the remainder, estimating that 291 [134-621] eligible
-records were left unscreened. Nineteen catalog reports were sought and eighteen
-retrieved and read by the assistant; six evidence papers reached full text through
-screening and the rest through declared routes; one report was not retrieved. Screening and
-construct proposals await independent human review; no dual independent screening
-was performed."
+2026-09-13 and of Scopus on 2026-10-07, identifying at least 14 569 records and
+12 042 after deduplication (10 223 before the Scopus round; corrected on 2026-09-15
+from 10 059 when the pool builder was found to take cited references' DOIs). The
+Scopus count is the number of records exported, because the interface's hit counts
+were not recorded, so the total is a floor. APA PsycINFO was not accessible and
+remains unsearched. Query amendments were recorded before use, following a
+sensitivity check against known relevant works. One investigator with AI assistance
+screened 666 of the 687 records in the priority stratum across two dated rounds (21
+have no proposal) and audited a random sample of 200 records from each of the two
+remainder strata, estimating that 291 [134-621] eligible records were left
+unscreened among the 9 716 records reachable without Scopus and 229 [162-319] among
+the 1 639 Scopus-only records. Nineteen catalog reports were sought and all
+nineteen retrieved; eighteen have been read in full text and the nineteenth,
+which arrived on 2026-10-07, is still cited from its abstract. Six evidence papers reached full text through screening and
+the rest through declared routes. Screening and construct proposals await
+independent human review; no dual independent screening was performed."
 
 It would be inaccurate to describe this as a completed scoping review, to claim
 that the seven families are validated dimensions, or to present any candidate as
