@@ -1,6 +1,6 @@
 {
   "id": "therapy-note-construct-review",
-  "version": "2.7.0",
+  "version": "2.8.0",
   "status": "protocol_amended_before_pilot_search_partially_executed",
   "recorded_date": "2026-10-07",
   "design": "Instrument development informed by a systematic scoping review, expert proposals and empirical observations",
@@ -287,8 +287,8 @@
     "review_completion": "Only executed searches and verified decisions count as completed; blocked sources remain named gaps",
     "scope": "Report selected and required methods, planned/applicable/assessed units, and incomplete critical-error assessment even in public aggregates"
   },
-  "supersedes": "2.6.0",
-  "amendment_reason": "Take the retention decision off the investigator. He objected repeatedly that a review followed by one person saying which criteria stay and which go is not something he can justify, and he is right: assembling a candidate pool from the literature and from expert input is the prescribed procedure, but being the rule that retains and drops is not. The pool goes to a panel of three therapists who are neither the instrument's author nor the assistant, against a threshold registered here before the questionnaire is sent and before any answer exists. Every decision the investigator made about the pool, including the criterion he dropped, returns to the panel as a candidate; whether his judgement was right becomes a result instead of an authority.",
+  "supersedes": "2.7.0",
+  "amendment_reason": "The item pool grew by two before the content-validity panel was asked anything. Reading SESPI in full showed that the catalog had carried the whole instrument as one abstract-only row mapped to two candidates that are not what it measures, and the properties it does measure, whether the client's experience is in the note and whether the note describes both the therapist's approach and the client's response, had no candidate. They are now K35 and K36. The retention rule registered under D13 is unchanged and no rating exists for any item; what this amendment records is that the pool put to the panel is 36 items and not 34, and the date on which that was fixed.",
   "retrieval_gaps": "Record reports not retrieved separately from full-text eligibility exclusions; unavailable databases remain named gaps",
   "expert_inputs": "May enter throughout development. Later support does not rewrite historical origin; author or colleague proposals do not imply consensus.",
   "registration": {
@@ -464,10 +464,24 @@
         "the measured set of the catalog, pending the panel",
         "paper: methods (content validity) and what the study does not claim"
       ]
+    },
+    {
+      "id": "D14",
+      "date": "2026-10-07",
+      "origin": "assistant, from a source read in full",
+      "decision": "K35, the interaction described from both sides, and K36, the client's experience present at all, enter the item pool with the rating rule and the reliability figures of the source that defines them. Neither is measured in this round. The panel registered under D13 rates 36 items instead of 34 against the same threshold, and the sheets are not sent until the pool is settled.",
+      "replaces": "nothing; it adds to the pool D13 put to the panel",
+      "affects": [
+        "content_validity.what_is_rated of this protocol",
+        "the catalog's candidate list and its source-first table",
+        "the panel's rating sheets, which are rebuilt before they go out",
+        "paper: methods (item generation and content validity)"
+      ],
+      "why_it_is_not_the_investigator_deciding": "The property was found in a source, the rule it is measured by is the source's, and whether it stays is the panel's answer against a threshold registered before any answer existed. Adding to the pool is item generation, which is the prescribed procedure (S12); the decision D13 took off the investigator was retention, and this does not give it back."
     }
   ],
   "content_validity": {
-    "status": "registered before any rating exists; no answer has been collected",
+    "status": "registered before any rating exists; no answer has been collected and no sheet has been sent. The pool was 34 items when the rule was registered and is 36 since the same day.",
     "registered_on": "2026-10-07",
     "procedure": {
       "named": "expert rating of the item pool for relevance, with a retention threshold declared in advance; a screening round of a modified Delphi",
@@ -487,9 +501,10 @@
       "independence_of_the_ratings": "each rater answers on their own copy and sees no other rater's answers; a shared sheet would make the second and third answer a reaction to the first"
     },
     "what_is_rated": {
-      "items": "all 34 candidates of the catalog, including those the round does not measure and the one the investigator dropped on 2026-10-05",
+      "items": "all 36 candidates of the catalog, including those the round does not measure, the one the investigator dropped on 2026-10-05, and K35 and K36, which arrived on 2026-10-07 from a source read in full",
       "shown_per_item": "the code, the Czech name and one sentence of definition; no state, no origin, no citation and no indication of what the assistant or the investigator thinks",
-      "why_blind_to_state": "a rater told that an item is already measured is being asked to ratify rather than to judge"
+      "why_blind_to_state": "a rater told that an item is already measured is being asked to ratify rather than to judge",
+      "pool_changes_before_the_panel": "A pool may grow until the first sheet is sent, and two items were added on 2026-10-07. After an answer exists it may not: adding an item then would mean some raters rated it and others did not, and the threshold is a proportion of three. If a property is found after the panel has answered, it waits for a second round and is reported as a later addition."
     },
     "questions": [
       {

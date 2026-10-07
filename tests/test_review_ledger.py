@@ -54,7 +54,8 @@ def test_ledger_validates(reports):
     sources = [r["catalog_source"] for r in reports["reports"] if r["catalog_source"]]
     assert len(sources) == len(set(sources))
     assert {f"S{n}" for n in range(1, 20)} <= set(sources)
-    assert sum(1 for s in sources if "_abs_" in s) == 13
+    # Twelve since 2026-10-07: SESPI was read in full and became S20.
+    assert sum(1 for s in sources if "_abs_" in s) == 12
     for family in reports["families"]:
         for member in family["members"]:
             report = next(r for r in reports["reports"] if r["report_id"] == member)
@@ -109,8 +110,8 @@ def test_human_verification_is_never_invented(reports):
         assert family["assessed_by"] is None or family["sample_overlap"] == "established"
 
 
-def test_catalog_reports_count_19_19_0(reports):
-    """Eighteen of the nineteen until 2026-10-07, when the nineteenth came down.
+def test_catalog_reports_count_21_21_0(reports):
+    """Eighteen of nineteen until 2026-10-07, and then twenty-one of twenty-one.
 
     S5, the 2008 preliminary report of the PDQI family, had been recorded as not
     retrieved since 2026-09-13 and was found in a repository on the second
@@ -119,13 +120,22 @@ def test_catalog_reports_count_19_19_0(reports):
     which is the field that tracks reading.
     """
     counts = reports["counts"]["catalog_reports"]
-    assert counts == {"sought": 19, "retrieved": 19, "not_retrieved": 0, "not_sought": 0}
+    assert counts == {"sought": 21, "retrieved": 21, "not_retrieved": 0, "not_sought": 0}
     s5 = _by_source(reports)["S5"]
     assert s5["report_id"] == "doi:10.1197/jamia.m2404"
     assert s5["current_status"] == "retrieved"
     assert [e["date"] for e in s5["retrieval_events"]] == ["2026-09-13", "2026-10-07"]
     assert [e["outcome"] for e in s5["retrieval_events"]] == ["not_retrieved", "retrieved"]
     assert s5["reading"]["basis"] == "abstract", "retrieved is not read"
+    # The group grew by two the same day, from the other direction: SESPI was
+    # read and left the abstract-only group as S20, and its 2025 application
+    # joined as S21 from the Scopus round.
+    by_source = _by_source(reports)
+    assert by_source["S20"]["report_id"] == "pmid:31367401"
+    assert by_source["S20"]["reading"]["basis"] == "full_text"
+    assert by_source["S21"]["report_id"] == "doi:10.1002/capr.12829"
+    assert by_source["S21"]["route"]["kind"] == "search_and_screening"
+    assert by_source["S21"]["retrieval_events"][-1]["date"] == "2026-10-07"
 
 
 def test_having_the_file_is_not_the_same_as_having_read_it(reports):
@@ -142,14 +152,16 @@ def test_having_the_file_is_not_the_same_as_having_read_it(reports):
         for report in reports["reports"]
         if (report["catalog_source"] or "").startswith("S_abs_")
     ]
-    assert len(abstract_only) == 13
+    # Twelve since SESPI was read in full on 2026-10-07 and became S20.
+    assert len(abstract_only) == 12
     retrieved = [r for r in abstract_only if r["current_status"] == "retrieved"]
-    assert len(retrieved) == 11
+    assert len(retrieved) == 10
     # Nothing is unsought any more: the seven that had never been tried were
     # tried on 2026-10-07 and five of them came down. The two that did not are
     # recorded as attempted and failed, which is a different fact from untried.
+    # The group then lost one from the top: SESPI was read and became S20.
     counts = reports["counts"]["abstract_only_reports"]
-    assert counts == {"total": 13, "retrieved": 11, "not_retrieved": 2, "not_sought": 0}
+    assert counts == {"total": 12, "retrieved": 10, "not_retrieved": 2, "not_sought": 0}
     failed = {r["catalog_source"] for r in abstract_only if r["current_status"] != "retrieved"}
     assert failed == {"S_abs_disparity", "S_abs_summac"}
     for report in abstract_only:
@@ -259,8 +271,8 @@ def test_flow_full_text_is_report_level(flow, reports):
     full = flow["full_text"]
     assert full["unit"] == "report"
     assert {k: full["catalog_reports"][k] for k in ("sought", "retrieved", "not_retrieved")} == {
-        "sought": 19,
-        "retrieved": 19,
+        "sought": 21,
+        "retrieved": 21,
         "not_retrieved": 0,
     }
     assert full["catalog_reports"]["not_retrieved_detail"] == []
@@ -407,7 +419,7 @@ def test_fetch_appends_to_the_map_and_rebuilds_the_ledger_not_the_log(tmp_path):
     )
     assert rebuilt == json.loads((copy / "reports.json").read_text(encoding="utf-8"))
     flow = json.loads((copy / "flow.json").read_text(encoding="utf-8"))
-    assert flow["full_text"]["catalog_reports"]["retrieved"] == 19
+    assert flow["full_text"]["catalog_reports"]["retrieved"] == 21
     assert ledger.sha256_file(copy / "fulltext-retrieval-log.json") == log_digest
 
     def gone(report):

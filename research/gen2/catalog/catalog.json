@@ -503,6 +503,46 @@
       "limitations": "Small panel, physicians only, emergency department; the reliability study (CJEM 2026) was not read. Read on 2026-09-20 for the property extraction.",
       "verification": "full_text",
       "ledger_report_id": "pmid:40249563"
+    },
+    {
+      "id": "S20",
+      "key": "sespi-2019",
+      "citation": "Myklebust KK, Bjorkly S. Development and reliability testing of the Scale for the Evaluation of Staff-Patient Interactions in Progress Notes (SESPI). Nursing Open 2019;6(3):1086-1096. doi:10.1002/nop2.254. PMID 31367401.",
+      "type": "peer-reviewed journal article, open access",
+      "layer": "transfer",
+      "verification": "full_text",
+      "study_family": "SESPI",
+      "population": "Progress notes from 20 electronic patient records, 10 from an acute psychiatric ward and 10 from an open inpatient unit of a district psychiatric centre in Norway, about 90 staff members writing. Ten excerpts drawn from that pool for the reliability test, chosen to exercise all four steps.",
+      "language": "no source, en reporting",
+      "raters": "22 raters (1 man, 21 women), aged 25 to 71, October 2016; the sample size was chosen for 10 observations at 80% power to detect an ICC difference of 0.20",
+      "unit": "an excerpt of a progress note",
+      "format": "four gated coding steps: Step 1 dichotomous, is the patient's experience described; Step 2 the experience on a four-point scale from very uncomfortable to very positive; Step 3 the staff-patient interaction in four levels A to D; Step 4 the staff's attunement from failed to successful. Steps 1 and 3 exclude an excerpt from what follows.",
+      "analysis": "Cronbach's alpha and Kuder-Richardson 20 for internal consistency, ICC and absolute percentage agreement for inter-rater reliability, per step and for the instrument",
+      "key_results": "Alpha for the instrument 0.977 with ICC 0.770 (0.608-0.888). Per step: Step 1 KR-20 0.984, ICC 0.982, agreement 95.9%; Step 2 alpha 0.992, ICC 0.992, agreement 76.8% and 94.5% collapsed to positive against negative; Step 3 alpha 0.970, ICC 0.968, agreement 84.1%; Step 4 alpha 0.981, ICC 0.978, agreement 66.4% and 89.8% collapsed. Step 4 is the least agreed and Step 1 the most.",
+      "limitations": "Ten excerpts and 22 raters: the reliability claim rests on few observations, and the source itself cites Cortina on alpha being inflated for scales with many items, which is why its ICC of 0.770 is the honest figure for the instrument as a whole. Step 1 is dichotomous and the source says its ICC must be read with care. The notes are inpatient psychiatric nursing notes, not psychotherapy notes, and nothing here tests the instrument on a note written by a model. Two of its four steps score the encounter rather than the note and are recorded here as non-adoptions.",
+      "relevance": "The only instrument in this review built for the notes of a mental health service and reliability-tested on them, and the source of K35 and K36.",
+      "ledger_report_id": "pmid:31367401",
+      "retrieval_note": "Held as S_abs_sespi and cited from its abstract from 2026-09-13; retrieved on 2026-10-07 by an open-access route and read the same day. The abstract row it carried until then is replaced, not refined: it mapped the whole instrument to K25 and K02, and the full text shows neither is what the instrument measures."
+    },
+    {
+      "id": "S21",
+      "key": "sespi-collab-2025",
+      "citation": "Myklebust KK, Hoemsnes H, Kvello O, Vatnar SKB. Collaboration with clients to create journal notes: A mixed methods evaluation of a pilot intervention study in a municipality mental health services team. Counselling and Psychotherapy Research 2025;25:e12829. doi:10.1002/capr.12829.",
+      "type": "peer-reviewed journal article, open access",
+      "layer": "direct",
+      "verification": "full_text",
+      "study_family": "SESPI",
+      "population": "193 journal notes from the electronic health records of 11 consenting clients of a Norwegian municipality low-threshold mental health service for children, adolescents and parents, written between August 2021 and March 2023 by 8 therapists; 2 to 34 notes per record. Six of the therapists also gave individual interviews.",
+      "language": "no source, en reporting",
+      "raters": "the first two authors scored all 193 notes together, not independently; no inter-rater figure is reported for this application",
+      "unit": "a whole journal note, where the instrument was developed on excerpts",
+      "format": "SESPI Steps 3 and 4 only, before and after an educational intervention that asked therapists to write notes together with their clients; plus semi-structured interviews analysed by systematic text condensation",
+      "analysis": "cross-tabulation of the step categories at T0 and T1, then bivariate and multivariate logistic regression with control variables including therapist identity; the data did not meet the assumptions for paired tests and the design is not causal",
+      "key_results": "Notes describing both the therapist's approach and the client's response rose from 15.1% to 39.2% (OR 5.127, p < .001, 95% CI 2.267-11.594), while level A, no or insufficient description of the approach, fell from 49.3% to 25.0%. Successful attunement descriptions rose from 14% to 36%. 155 of the 193 notes recorded nothing about the degree of collaboration, which stopped the study measuring collaboration at all. Therapists invited few clients; no client declined.",
+      "limitations": "A pilot with 11 clients and 8 therapists, selection bias because most clients were never invited, no independent double scoring, and no clear date on which each client learned of the invitation, so T1 notes include notes written before the client knew. The design cannot support a causal claim and the authors do not make one. The base rates are one Norwegian municipal service, and the notes are human-written.",
+      "relevance": "SESPI applied in a psychotherapy team, which makes it direct-layer evidence, and the only source here that reports how often a property of this kind is present in therapy notes.",
+      "ledger_report_id": "doi:10.1002/capr.12829",
+      "retrieval_note": "Found by the Scopus search of 2026-10-07 (scopus-direct), screened in the same day, and retrieved through CORE, which held the full text where the publisher answered a script with 403."
     }
   ],
   "abstract_sources": [
@@ -553,14 +593,6 @@
       "verification": "abstract",
       "relevance": "A typology of errors arising when psychiatric documentation is transformed automatically.",
       "ledger_report_id": "pmid:42054574"
-    },
-    {
-      "id": "S_abs_sespi",
-      "citation": "Development and reliability testing of the Scale for the Evaluation of Staff-Patient Interactions in Progress Notes (SESPI). Nursing Open 2019.",
-      "layer": "transfer",
-      "verification": "abstract",
-      "relevance": "An instrument aimed directly at how staff-patient interactions are captured in notes; a Spanish adaptation exists, a precedent for language transfer.",
-      "ledger_report_id": "pmid:31367401"
     }
   ],
   "families": [
@@ -2243,6 +2275,107 @@
       "state": "not_yet_operationalized",
       "state_note": "Accepted by the investigator on 2026-10-05. No rating rule exists in either language, and a term list is explicitly not a substitute.",
       "decided_by": "source"
+    },
+    {
+      "id": "K35",
+      "family": "F2",
+      "kind": "construct",
+      "label": "The interaction is described from both sides",
+      "definition": "The note describes what the therapist did and how the client responded to it, not one without the other. The source's instrument orders this in four levels: the therapist's approach is missing or too thin to read; the approach is there but not the client's response; the approach is there and met practically, without reaching the client's experience or feelings; both the approach and the client's response are there. Distinct from K25, which asks whether a supervisor can tell what the therapist did and why: a note can answer that and still say nothing about what it did to the client. Distinct from K02, which is attribution, who said a thing: this is whether the exchange is there at all.",
+      "origin": "literature",
+      "origin_note": "Found on 2026-10-07 when SESPI was read in full. The property had been in the catalog since 2026-09-13 inside an abstract-only row, S_abs_sespi-a01, 'How staff-patient interactions are captured in progress notes', mapped to K25 and K02 as 'the interaction as content'. That mapping absorbed an instrument's central construct into two candidates that are not it. It is the second property found this way, after terminology inside S_abs_edit-p01, and both were found by reading a source rather than its abstract.",
+      "evidence": [
+        {
+          "source": "S20",
+          "location": "Methods, The instrument SESPI, Step 3",
+          "quote": "In Step 3, the descriptions of staff-patient interactions are assessed by four alternatives: A. No or insufficient description of the staff's approach. B. The staff's approach is described, but the patient's response is not, or not sufficiently, described. C. The staff's approach is described, and the patient appears to experience it as fair enough. However, the approach is mostly oriented to practical solutions and fails to grasp the patient's experience or feelings. D. Both staff's approach and patient's response are described.",
+          "supports": "A four-level ordinal rule over a mental health progress note, manualised, with the levels distinguished by which side of the interaction is present.",
+          "our_adaptation": "The source scores excerpts of inpatient psychiatric notes written by nursing staff. That the same levels apply to a psychotherapy session note is shown by S21 and not by S20; that they apply to a model-written note is our step, and nothing in either source says a generated note fails these levels in the same way a hurried human note does."
+        },
+        {
+          "source": "S20",
+          "location": "Results, inter-rater and internal consistency for each step",
+          "quote": "Cronbach's alpha for Step 3 was 0.970 and ICC was 0.968 (95% CI 0.929-0.991). The percentage agreement was high (84.1)",
+          "supports": "Raters agree on the four levels: 84.1% absolute agreement across 22 raters, with an ICC above 0.9.",
+          "our_adaptation": "The figure is for 22 raters scoring ten excerpts, which is a small number of observations for a reliability claim, and the source's own total ICC of 0.770 is far below its alpha of 0.977. We report the step figure with both cautions and do not carry it over to a judge model, which is not a human rater."
+        },
+        {
+          "source": "S21",
+          "location": "Results, Table 1, changes in described interaction",
+          "quote": "Before the intervention, only 15% described an entire therapist-client interaction (T0), but this category increased to nearly 40% after the intervention (T1)",
+          "supports": "In a psychotherapy service, most notes do not describe both sides: at T0, 49.3% of 193 notes were at level A and 15.1% at level D.",
+          "our_adaptation": "A base rate, which is why the property can separate notes rather than being passed by everything. It is a base rate for human therapists in one Norwegian municipal service, and what models do is the thing to be measured."
+        }
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "high",
+        "client": "medium",
+        "audit": "low"
+      },
+      "mode": "ordinal, four levels, from the source's manual",
+      "unit": "the note, or an excerpt of it; the instrument was tested on excerpts and the 2025 application scored whole journal notes, so which unit a level belongs to is not settled by the source and has to be declared",
+      "inputs": "note",
+      "applicability": "Both languages. The rule reads the note alone, so it needs no transcript, which also means it cannot tell a described interaction from an invented one: a model that writes a plausible exchange that did not happen scores D here and fails K01.",
+      "examples": {
+        "positive": "The note records that the therapist named the client's silence and asked what it was protecting, and that the client said it felt safer not to answer yet.",
+        "negative": "The note records that the therapist worked on the client's avoidance, and says nothing about how the client took it.",
+        "boundary": "The note records that the client asked for a letter for their employer and that the therapist agreed to write one. The approach is practical and the client accepted it, and the client's experience of the session is absent: the source's level C rather than D."
+      },
+      "measurement": "Not measured in this round. The rule exists and is manualised, so what is missing is a decision to measure it, not a definition.",
+      "error_consequence": "Scored from the note alone, a confident invention of an exchange is indistinguishable from an accurate record of one. The level must never be read as evidence that the interaction happened, and must be reported beside K01.",
+      "validation": "SESPI Step 3: Cronbach's alpha 0.970, ICC 0.968 (95% CI 0.929-0.991), 84.1% absolute agreement, 22 raters, 10 excerpts (S20). No human anchor of our own, and no figure for a judge model.",
+      "overlaps": "K25 (what a supervisor can tell the therapist did and why), K02 (attribution of who said what), K36 (whether the client's experience is described at all, which is the gate this rule sits behind in the source), K01 (whether the described exchange is supported by the session).",
+      "state": "not_measured",
+      "state_note": "Arrived on 2026-10-07, after protocol 2.7.0 froze the round's measured set at 16 and after the pilot's jobs were planned. It is in the pool the panel rates under D13; whether it is measured follows from the panel's rating and a later protocol amendment, not from this entry.",
+      "decided_by": "note"
+    },
+    {
+      "id": "K36",
+      "family": "F2",
+      "kind": "construct",
+      "label": "The client's experience is in the note, not only their behaviour",
+      "definition": "The note carries some description of how the client experienced something, and not only what the client was observed to do. The source's instrument asks this as a yes-or-no gate before anything else is scored, and its own example of a no is a note that reports only conduct. Distinct from K05, which asks whether the substantive content of the session is there: a note can cover the session's topics completely and report none of the client's experience of them. Distinct from K28, which asks whether what is there is specific to this client rather than generic.",
+      "origin": "literature",
+      "origin_note": "Found on 2026-10-07 with K35, in the same abstract-only row that had absorbed the whole of SESPI into K25 and K02.",
+      "evidence": [
+        {
+          "source": "S20",
+          "location": "Methods, The instrument SESPI, Step 1",
+          "quote": "In Step 1, all excerpts are scored dichotomously: “Does the excerpt contain some kind of description of patient's experience?” A yes means proceed to Step 2; a no signifies no further assessment of that excerpt. A typical example that would be scored “no” is “Mostly stayed in his room. He answers briefly when the staff poses specific questions.”",
+          "supports": "The presence of the client's experience is a property an instrument scores on its own, dichotomously, and its absence is a recognisable kind of note rather than an oversight.",
+          "our_adaptation": "The source uses it as a gate: an excerpt scored no is excluded from the rest of the instrument. We would report it as a property in its own right and must not use it as a gate, because excluding the notes that fail it is how a corpus mean comes to describe only the notes that passed."
+        },
+        {
+          "source": "S20",
+          "location": "Results, inter-rater and internal consistency for each step",
+          "quote": "The internal consistency reliability was very high (Kuder-Richardson 20 for Step 1 = 0.984). The absolute inter-rater agreement for all scores ( N = 10 scores per rater) was very high (95.9%",
+          "supports": "Raters agree almost completely on whether a note describes the client's experience.",
+          "our_adaptation": "The source itself cautions that the figure must be read with care because the scale is dichotomous, and the observations are ten. We keep the caution with the figure."
+        }
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "high",
+        "client": "high",
+        "audit": "low"
+      },
+      "mode": "dichotomous in the source; an ordinal form is possible and is not the source's",
+      "unit": "the note, or an excerpt of it; the same unresolved unit as K35",
+      "inputs": "note",
+      "applicability": "Both languages. Read from the note alone, so as with K35 it cannot distinguish a described experience from an invented one.",
+      "examples": {
+        "positive": "The note records that the client said the week felt like wading, and that getting up was the hardest part of the day.",
+        "negative": "The note records that the client attended, spoke little and left on time.",
+        "boundary": "The note records a diagnosis-shaped summary, that the client presented with low mood and reduced motivation, and nothing of how the client described it. Whether clinical wording of a state counts as the client's experience is the judgement the rule has to settle, and the source settles it by asking for the client's own experience."
+      },
+      "measurement": "Not measured in this round, for the same reason as K35.",
+      "error_consequence": "Used as a gate, as the source uses it, it removes the worst notes from every other measure. Reported as a property, its cost is only that a note of pure conduct is marked as such.",
+      "validation": "SESPI Step 1: Kuder-Richardson 20 = 0.984, ICC 0.982 (95% CI 0.959-0.995), 95.9% absolute agreement, 22 raters, 10 excerpts, with the source's own caution about a dichotomous scale (S20).",
+      "overlaps": "K05 (coverage of the session's substantive content), K28 (personalisation), K35 (the two-sided description of the interaction, which the source gates behind this), K04 (the certainty status of a statement about the client's state).",
+      "state": "not_measured",
+      "state_note": "Arrived on 2026-10-07 with K35 and is in the pool the panel rates under D13. The source's gate design is the reason it is written as a property here and not as a filter.",
+      "decided_by": "note"
     }
   ],
   "methods": [
@@ -3363,6 +3496,17 @@
         "every candidate carries decided_by: what makes an answer correct, one of source, norm, note, rater, derived or indicator",
         "the two indicators, personalisation and density, are marked as describing rather than grading, which is what the record kinds already implied"
       ]
+    },
+    {
+      "date": "2026-10-07",
+      "reason": "the Scopus searches of amendment AM-7 reached a psychotherapy application of SESPI, and reading SESPI itself showed its abstract row had absorbed the instrument into two candidates that are not it",
+      "changes": [
+        "S_abs_sespi is promoted to S20, read in full; its single abstract row, 'How staff-patient interactions are captured in progress notes' mapped to K25 and K02, is replaced by seven rows from the text, two of which are properties of a note and five of which are non-adoptions or findings about measurement",
+        "S21, the 2025 application of SESPI in a psychotherapy team, joins as a direct-layer source read in full; it was found by scopus-direct and retrieved through CORE",
+        "K35, the interaction described from both sides, and K36, the client's experience present at all, join the pool with the source's own rule and reliability figures; neither is measured in this round and both are rated by the panel under D13",
+        "S21-p03 anchors K16 in a measured case: 155 of 193 therapy notes did not record how the note came about, which stopped that study measuring what it set out to measure",
+        "the two steps of SESPI that rate the client's state and the therapist's attunement are recorded as non-adoptions with the reason, rather than folded into note quality"
+      ]
     }
   ],
   "purposes_in_scope": {
@@ -3407,6 +3551,20 @@
       "part_of": "S_abs_tednq-p02",
       "proposal": "do not adopt: the parts that can be rated are already K02, K04 and K14, and what is left is a disposition of the writer rather than a property of the note",
       "reason": "Ranked 58.4 by the Delphi panel, the lowest of the twelve. Same hole as the one above: named in a mapping note, never recorded as open."
+    },
+    {
+      "pid": "S20-p01",
+      "label": "Whether the note describes the client's experience at all",
+      "source": "S20",
+      "disposition": "adopted as K36 on 2026-10-07, from a source read in full; retention is the content-validity panel's under D13 and not the assistant's or the investigator's",
+      "reason": "A property of the note that no candidate covered. It had been inside an abstract-only row mapped to K25 and K02."
+    },
+    {
+      "pid": "S20-p03",
+      "label": "Whether the note describes both the therapist's approach and the client's response to it",
+      "source": "S20",
+      "disposition": "adopted as K35 on 2026-10-07, from a source read in full; retention is the content-validity panel's under D13",
+      "reason": "The construct the instrument is built around, with a manualised four-level rule and a measured base rate in a psychotherapy service, and no candidate covered it."
     }
   ],
   "method": {
@@ -3430,7 +3588,7 @@
     "reporting": "COSMIN's content-validity criteria (S11) name relevance, comprehensiveness and comprehensibility as what such a judgement has to cover; this round reports which of them nobody has assessed.",
     "derivation": {
       "reported_from": "the source-first extraction (source-properties.json): every property of note quality each source read in full defines, in the source's own words",
-      "convergence": "32 of the 33 candidates are anchored in at least one such property. The exception is K06, acknowledged information gap, which no source defines as a property of a note and which stands on the observation this project declares as its origin.",
+      "convergence": "35 of the 36 candidates are anchored in at least one such property. The exception is K06, acknowledged information gap, which no source defines as a property of a note and which stands on the observation this project declares as its origin. Two of the 35, K35 and K36, were anchored on 2026-10-07 when SESPI was read in full; until then its abstract row was mapped to two candidates that are not what it measures.",
       "prior_map_role": "the 26-criterion map recorded on 2026-09-12, before the search, is reported as the comparison the framework was tested against, not as its derivation: 8 criteria kept, 12 revised on what the sources say, 6 merged and 11 added.",
       "caveat": "The extraction was written by the assistant that had already written the catalog, source by source and without the catalog open, with the mapping done afterwards. It is not a blind replication and is not reported as one."
     }

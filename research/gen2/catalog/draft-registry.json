@@ -251,6 +251,26 @@
       "version": "source-v1"
     },
     {
+      "id": "S20",
+      "title": "Myklebust KK, Bjorkly S. Development and reliability testing of the Scale for the Evaluation of Staff-Patient Interactions in Progress Notes (SESPI). Nursing Open 2019;6(3):1086-1096. doi:10.1002/nop2.254. PMID 31367401.",
+      "locator": "ledger:pmid:31367401",
+      "layer": "transfer",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "Ten excerpts and 22 raters: the reliability claim rests on few observations, and the source itself cites Cortina on alpha being inflated for scales with many items, which is why its ICC of 0.770 is the honest figure for the instrument as a whole. Step 1 is dichotomous and the source says its ICC must be read with care. The notes are inpatient psychiatric nursing notes, not psychotherapy notes, and nothing here tests the instrument on a note written by a model. Two of its four steps score the encounter rather than the note and are recorded here as non-adoptions.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S21",
+      "title": "Myklebust KK, Hoemsnes H, Kvello O, Vatnar SKB. Collaboration with clients to create journal notes: A mixed methods evaluation of a pilot intervention study in a municipality mental health services team. Counselling and Psychotherapy Research 2025;25:e12829. doi:10.1002/capr.12829.",
+      "locator": "ledger:doi:10.1002/capr.12829",
+      "layer": "direct",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "A pilot with 11 clients and 8 therapists, selection bias because most clients were never invited, no independent double scoring, and no clear date on which each client learned of the invitation, so T1 notes include notes written before the client knew. The design cannot support a causal claim and the authors do not make one. The base rates are one Norwegian municipal service, and the notes are human-written.",
+      "version": "source-v1"
+    },
+    {
       "id": "S_abs_severity",
       "title": "Clinical AI Scribes in primary care: accuracy, error severity and implications for clinical practice. BMJ Digital Health & AI, 2025.",
       "locator": "ledger:pmid:42712320",
@@ -308,16 +328,6 @@
       "publication_type": "unverified",
       "verification": "metadata_checked",
       "limitations": "Read from the abstract only; the full text was not retrieved in this round. A typology of errors arising when psychiatric documentation is transformed automatically.",
-      "version": "source-v1"
-    },
-    {
-      "id": "S_abs_sespi",
-      "title": "Development and reliability testing of the Scale for the Evaluation of Staff-Patient Interactions in Progress Notes (SESPI). Nursing Open 2019.",
-      "locator": "ledger:pmid:31367401",
-      "layer": "transfer",
-      "publication_type": "unverified",
-      "verification": "metadata_checked",
-      "limitations": "Read from the abstract only; the full text was not retrieved in this round. An instrument aimed directly at how staff-patient interactions are captured in notes; a Spanish adaptation exists, a precedent for language transfer.",
       "version": "source-v1"
     }
   ],
@@ -1514,6 +1524,101 @@
       "human_checked_by": null,
       "source_artifact_digest": "",
       "excerpt": "Clinicians added specialty-specific clinical details and terminology"
+    },
+    {
+      "id": "K35-e1",
+      "source_id": "S20",
+      "location": "Methods, The instrument SESPI, Step 3",
+      "interpretation": "A four-level ordinal rule over a mental health progress note, manualised, with the levels distinguished by which side of the interaction is present.",
+      "relationship": "method_transfer",
+      "population": "Progress notes from 20 electronic patient records, 10 from an acute psychiatric ward and 10 from an open inpatient unit of a district psychiatric centre in Norway, about 90 staff members writing. Ten excerpts drawn from that pool for the reliability test, chosen to exercise all four steps.",
+      "languages": [
+        "no source, en reporting"
+      ],
+      "raters": "22 raters (1 man, 21 women), aged 25 to 71, October 2016; the sample size was chosen for 10 observations at 80% power to detect an ICC difference of 0.20",
+      "unit": "an excerpt of a progress note",
+      "response_format": "four gated coding steps: Step 1 dichotomous, is the patient's experience described; Step 2 the experience on a four-point scale from very uncomfortable to very positive; Step 3 the staff-patient interaction in four levels A to D; Step 4 the staff's attunement from failed to successful. Steps 1 and 3 exclude an excerpt from what follows.",
+      "validation": "not established",
+      "limitations": "The source scores excerpts of inpatient psychiatric notes written by nursing staff. That the same levels apply to a psychotherapy session note is shown by S21 and not by S20; that they apply to a model-written note is our step, and nothing in either source says a generated note fails these levels in the same way a hurried human note does.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "In Step 3, the descriptions of staff-patient interactions are assessed by four alternatives: A. No or insufficient description of the staff's approach. B. The staff's approach is described, but the patient's response is not, or not sufficiently, described. C. The staff's approach is described, and the patient appears to experience it as fair enough. However, the approach is mostly oriented to practical solutions and fails to grasp the patient's experience or feelings. D. Both staff's approach and patient's response are described."
+    },
+    {
+      "id": "K35-e2",
+      "source_id": "S20",
+      "location": "Results, inter-rater and internal consistency for each step",
+      "interpretation": "Raters agree on the four levels: 84.1% absolute agreement across 22 raters, with an ICC above 0.9.",
+      "relationship": "method_transfer",
+      "population": "Progress notes from 20 electronic patient records, 10 from an acute psychiatric ward and 10 from an open inpatient unit of a district psychiatric centre in Norway, about 90 staff members writing. Ten excerpts drawn from that pool for the reliability test, chosen to exercise all four steps.",
+      "languages": [
+        "no source, en reporting"
+      ],
+      "raters": "22 raters (1 man, 21 women), aged 25 to 71, October 2016; the sample size was chosen for 10 observations at 80% power to detect an ICC difference of 0.20",
+      "unit": "an excerpt of a progress note",
+      "response_format": "four gated coding steps: Step 1 dichotomous, is the patient's experience described; Step 2 the experience on a four-point scale from very uncomfortable to very positive; Step 3 the staff-patient interaction in four levels A to D; Step 4 the staff's attunement from failed to successful. Steps 1 and 3 exclude an excerpt from what follows.",
+      "validation": "not established",
+      "limitations": "The figure is for 22 raters scoring ten excerpts, which is a small number of observations for a reliability claim, and the source's own total ICC of 0.770 is far below its alpha of 0.977. We report the step figure with both cautions and do not carry it over to a judge model, which is not a human rater.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Cronbach's alpha for Step 3 was 0.970 and ICC was 0.968 (95% CI 0.929-0.991). The percentage agreement was high (84.1)"
+    },
+    {
+      "id": "K35-e3",
+      "source_id": "S21",
+      "location": "Results, Table 1, changes in described interaction",
+      "interpretation": "In a psychotherapy service, most notes do not describe both sides: at T0, 49.3% of 193 notes were at level A and 15.1% at level D.",
+      "relationship": "direct_validation",
+      "population": "193 journal notes from the electronic health records of 11 consenting clients of a Norwegian municipality low-threshold mental health service for children, adolescents and parents, written between August 2021 and March 2023 by 8 therapists; 2 to 34 notes per record. Six of the therapists also gave individual interviews.",
+      "languages": [
+        "no source, en reporting"
+      ],
+      "raters": "the first two authors scored all 193 notes together, not independently; no inter-rater figure is reported for this application",
+      "unit": "a whole journal note, where the instrument was developed on excerpts",
+      "response_format": "SESPI Steps 3 and 4 only, before and after an educational intervention that asked therapists to write notes together with their clients; plus semi-structured interviews analysed by systematic text condensation",
+      "validation": "not established",
+      "limitations": "A base rate, which is why the property can separate notes rather than being passed by everything. It is a base rate for human therapists in one Norwegian municipal service, and what models do is the thing to be measured.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Before the intervention, only 15% described an entire therapist-client interaction (T0), but this category increased to nearly 40% after the intervention (T1)"
+    },
+    {
+      "id": "K36-e1",
+      "source_id": "S20",
+      "location": "Methods, The instrument SESPI, Step 1",
+      "interpretation": "The presence of the client's experience is a property an instrument scores on its own, dichotomously, and its absence is a recognisable kind of note rather than an oversight.",
+      "relationship": "method_transfer",
+      "population": "Progress notes from 20 electronic patient records, 10 from an acute psychiatric ward and 10 from an open inpatient unit of a district psychiatric centre in Norway, about 90 staff members writing. Ten excerpts drawn from that pool for the reliability test, chosen to exercise all four steps.",
+      "languages": [
+        "no source, en reporting"
+      ],
+      "raters": "22 raters (1 man, 21 women), aged 25 to 71, October 2016; the sample size was chosen for 10 observations at 80% power to detect an ICC difference of 0.20",
+      "unit": "an excerpt of a progress note",
+      "response_format": "four gated coding steps: Step 1 dichotomous, is the patient's experience described; Step 2 the experience on a four-point scale from very uncomfortable to very positive; Step 3 the staff-patient interaction in four levels A to D; Step 4 the staff's attunement from failed to successful. Steps 1 and 3 exclude an excerpt from what follows.",
+      "validation": "not established",
+      "limitations": "The source uses it as a gate: an excerpt scored no is excluded from the rest of the instrument. We would report it as a property in its own right and must not use it as a gate, because excluding the notes that fail it is how a corpus mean comes to describe only the notes that passed.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "In Step 1, all excerpts are scored dichotomously: “Does the excerpt contain some kind of description of patient's experience?” A yes means proceed to Step 2; a no signifies no further assessment of that excerpt. A typical example that would be scored “no” is “Mostly stayed in his room. He answers briefly when the staff poses specific questions.”"
+    },
+    {
+      "id": "K36-e2",
+      "source_id": "S20",
+      "location": "Results, inter-rater and internal consistency for each step",
+      "interpretation": "Raters agree almost completely on whether a note describes the client's experience.",
+      "relationship": "method_transfer",
+      "population": "Progress notes from 20 electronic patient records, 10 from an acute psychiatric ward and 10 from an open inpatient unit of a district psychiatric centre in Norway, about 90 staff members writing. Ten excerpts drawn from that pool for the reliability test, chosen to exercise all four steps.",
+      "languages": [
+        "no source, en reporting"
+      ],
+      "raters": "22 raters (1 man, 21 women), aged 25 to 71, October 2016; the sample size was chosen for 10 observations at 80% power to detect an ICC difference of 0.20",
+      "unit": "an excerpt of a progress note",
+      "response_format": "four gated coding steps: Step 1 dichotomous, is the patient's experience described; Step 2 the experience on a four-point scale from very uncomfortable to very positive; Step 3 the staff-patient interaction in four levels A to D; Step 4 the staff's attunement from failed to successful. Steps 1 and 3 exclude an excerpt from what follows.",
+      "validation": "not established",
+      "limitations": "The source itself cautions that the figure must be read with care because the scale is dichotomous, and the observations are ten. We keep the caution with the figure.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "The internal consistency reliability was very high (Kuder-Richardson 20 for Step 1 = 0.984). The absolute inter-rater agreement for all scores ( N = 10 scores per rater) was very high (95.9%"
     }
   ],
   "constructs": [
@@ -2802,6 +2907,81 @@
       "reviewed_by": null,
       "origin": "literature",
       "origin_reference": "catalog:K34"
+    },
+    {
+      "id": "K35",
+      "name": "The interaction is described from both sides",
+      "definition": "The note describes what the therapist did and how the client responded to it, not one without the other. The source's instrument orders this in four levels: the therapist's approach is missing or too thin to read; the approach is there but not the client's response; the approach is there and met practically, without reaching the client's experience or feelings; both the approach and the client's response are there. Distinct from K25, which asks whether a supervisor can tell what the therapist did and why: a note can answer that and still say nothing about what it did to the client. Distinct from K02, which is attribution, who said a thing: this is whether the exchange is there at all.",
+      "families": [
+        "F2"
+      ],
+      "evidence_ids": [
+        "K35-e1",
+        "K35-e2",
+        "K35-e3"
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "high",
+        "client": "medium",
+        "audit": "low"
+      },
+      "unit": "the note, or an excerpt of it; the instrument was tested on excerpts and the 2025 application scored whole journal notes, so which unit a level belongs to is not settled by the source and has to be declared",
+      "required_inputs": [
+        "note"
+      ],
+      "examples": {
+        "positive": "The note records that the therapist named the client's silence and asked what it was protecting, and that the client said it felt safer not to answer yet.",
+        "negative": "The note records that the therapist worked on the client's avoidance, and says nothing about how the client took it.",
+        "boundary": "The note records that the client asked for a letter for their employer and that the therapist agreed to write one. The approach is practical and the client accepted it, and the client's experience of the session is absent: the source's level C rather than D."
+      },
+      "candidate_formats": [
+        "ordinal, four levels, from the source's manual"
+      ],
+      "applicability": "Both languages. The rule reads the note alone, so it needs no transcript, which also means it cannot tell a described interaction from an invented one: a model that writes a plausible exchange that did not happen scores D here and fails K01.",
+      "error_consequences": "Scored from the note alone, a confident invention of an exchange is indistinguishable from an accurate record of one. The level must never be read as evidence that the interaction happened, and must be reported beside K01.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "literature",
+      "origin_reference": "catalog:K35"
+    },
+    {
+      "id": "K36",
+      "name": "The client's experience is in the note, not only their behaviour",
+      "definition": "The note carries some description of how the client experienced something, and not only what the client was observed to do. The source's instrument asks this as a yes-or-no gate before anything else is scored, and its own example of a no is a note that reports only conduct. Distinct from K05, which asks whether the substantive content of the session is there: a note can cover the session's topics completely and report none of the client's experience of them. Distinct from K28, which asks whether what is there is specific to this client rather than generic.",
+      "families": [
+        "F2"
+      ],
+      "evidence_ids": [
+        "K36-e1",
+        "K36-e2"
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "high",
+        "client": "high",
+        "audit": "low"
+      },
+      "unit": "the note, or an excerpt of it; the same unresolved unit as K35",
+      "required_inputs": [
+        "note"
+      ],
+      "examples": {
+        "positive": "The note records that the client said the week felt like wading, and that getting up was the hardest part of the day.",
+        "negative": "The note records that the client attended, spoke little and left on time.",
+        "boundary": "The note records a diagnosis-shaped summary, that the client presented with low mood and reduced motivation, and nothing of how the client described it. Whether clinical wording of a state counts as the client's experience is the judgement the rule has to settle, and the source settles it by asking for the client's own experience."
+      },
+      "candidate_formats": [
+        "dichotomous in the source; an ordinal form is possible and is not the source's"
+      ],
+      "applicability": "Both languages. Read from the note alone, so as with K35 it cannot distinguish a described experience from an invented one.",
+      "error_consequences": "Used as a gate, as the source uses it, it removes the worst notes from every other measure. Reported as a property, its cost is only that a note of pure conduct is marked as such.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "literature",
+      "origin_reference": "catalog:K36"
     }
   ],
   "measurements": [
@@ -2941,7 +3121,7 @@
       "deterministic_checks": []
     }
   ],
-  "protocol_revision": "5f3e463b310ba42d7dc055cd8366ad8aa1d18a1a9cdfc618f10a405496790d15",
+  "protocol_revision": "3f57d1b5d0d56f7d60559ec734a08ee055aa434f871991a91c0f645fd9e3e704",
   "version": "registry-v2",
   "literature_freeze": null,
   "methods": [

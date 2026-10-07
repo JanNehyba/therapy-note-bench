@@ -297,6 +297,18 @@
    "sample_overlap": "not_applicable",
    "overlap_basis": null,
    "assessed_by": null
+  },
+  {
+   "family_id": "myklebust-sespi",
+   "label": "SESPI, its development and its application",
+   "kind": "instrument_lineage",
+   "members": [
+    "pmid:31367401",
+    "doi:10.1002/capr.12829"
+   ],
+   "sample_overlap": "not_applicable",
+   "overlap_basis": "The 2019 paper develops and reliability-tests the instrument on inpatient psychiatric progress notes written by nursing staff; the 2025 paper applies two of its steps to the journal notes of a municipality psychotherapy team. Different services, different notes, different raters, one shared first author.",
+   "assessed_by": null
   }
  ],
  "reports": [
@@ -2543,8 +2555,8 @@
    "kind": "database_record",
    "title": "Development and reliability testing of the Scale for the Evaluation of Staff-Patient Interactions in Progress Notes (SESPI)",
    "citation_short": "Nursing Open 2019",
-   "catalog_source": "S_abs_sespi",
-   "study_family": null,
+   "catalog_source": "S20",
+   "study_family": "myklebust-sespi",
    "identifiers": {
     "doi": "10.1002/nop2.254",
     "pmid": "31367401",
@@ -2569,7 +2581,7 @@
     "kind": "not_recorded",
     "from": null,
     "declared_in": null,
-    "note": "in the PubMed pool below the screening threshold; how it reached the catalog was not recorded"
+    "note": "How the record reached the catalog on 2026-09-13 was not recorded; it was then below the screening threshold. The pool correction of 2026-09-15 raised it into the priority stratum, where it sits at index 18 with a score of 17, and the Scopus searches of 2026-10-07 returned it as well, so it is now an include candidate by both rounds."
    },
    "known_before_search": {
     "value": false,
@@ -2584,12 +2596,12 @@
      "route": "europepmc OA fullTextXML PMC6650683",
      "route_kind": "open_access_api",
      "outcome": "retrieved",
-     "file": "S_abs_sespi.xml",
+     "file": "S20.xml",
      "bytes": 84993,
      "sha256": "378202977e4889953dfd0a01be983818602e8985a83dee903c51cb070d4b1d70",
      "checksum_source": "computed at download",
      "bytes_source": "measured at download",
-     "note": null,
+     "note": "Saved as S_abs_sespi.xml at download and copied to S20.xml when the source was promoted; same bytes, same digest.",
      "remaining_options": null,
      "logged_retroactively": null,
      "log_row": null,
@@ -2597,9 +2609,9 @@
     }
    ],
    "reading": {
-    "basis": "abstract",
+    "basis": "full_text",
     "ai_read": true,
-    "ai_read_basis": "read by the coding assistant on 2026-09-13; catalog extraction",
+    "ai_read_basis": "the abstract was read by the coding assistant on 2026-09-13; the full text was read on 2026-10-07 and the catalog's single abstract row was replaced by seven rows from the text",
     "human_verified": null,
     "human_verification": null
    },
@@ -2607,10 +2619,12 @@
     "registry_included": true,
     "use": "evidence",
     "layer": "transfer",
-    "verification": "abstract",
-    "basis": "local catalog registry_data.py / synthesis_data.py"
+    "verification": "full_text",
+    "basis": "local catalog registry_data.py / synthesis_data.py until 2026-10-07; from that date catalog.json S20 and the source-first table"
    },
-   "notes": []
+   "notes": [
+    "Promoted from S_abs_sespi to S20 on 2026-10-07. The abstract-only row it carried, 'How staff-patient interactions are captured in progress notes' mapped to K25 and K02, was a bundle: the full text has four coding steps, two of which are properties of a note and neither of which is K25 or K02. K35 and K36 come from it."
+   ]
   },
   {
    "report_id": "pmid:40249563",
@@ -2741,6 +2755,82 @@
    },
    "notes": [
     "Added 2026-09-21. The method is cited by name; the paper must not describe its steps from memory until the text is read."
+   ]
+  },
+  {
+   "report_id": "doi:10.1002/capr.12829",
+   "id_basis": "DOI from the Scopus export of 2026-10-07, confirmed by the pool and by the publisher page",
+   "kind": "database_record",
+   "title": "Collaboration with clients to create journal notes: A mixed methods evaluation of a pilot intervention study in a municipality mental health services team",
+   "citation_short": "Myklebust, Hoemsnes, Kvello, Vatnar 2025, Couns Psychother Res",
+   "catalog_source": "S21",
+   "study_family": "myklebust-sespi",
+   "identifiers": {
+    "doi": "10.1002/capr.12829",
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "Scopus export scopus-direct.csv, 2026-10-07"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.1002/capr.12829",
+    "pool_record_id_status": "matches_report_id",
+    "pool_doi": "10.1002/capr.12829",
+    "stratum": "priority",
+    "priority_index": 408
+   },
+   "route": {
+    "kind": "search_and_screening",
+    "from": null,
+    "declared_in": "include-candidates-2026-10-07.json#include_candidates_detail",
+    "note": "Returned by scopus-direct, screened in on 2026-10-07 as direct-layer evidence with a priority score of 10. No PubMed or ACL query reached it."
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "log_slugs": [],
+   "events": [
+    {
+     "date": "2026-10-07",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "core.ac.uk v3 search, fullText field",
+     "route_kind": "open_access_api",
+     "outcome": "retrieved",
+     "file": "S21.txt",
+     "bytes": 69721,
+     "sha256": "2addaa3372ca87f3bdb8d356a1ef4ed575071cda88d4d1d8d593730dc908bdfb",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": "The publisher answered a script with 403 and the repository copy sits behind a page with no static link; CORE held the extracted text. The key is the investigator's, from a sibling project, and is in no file of this repository.",
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null
+    }
+   ],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-10-07; source-first extraction into four rows",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "direct",
+    "verification": "full_text",
+    "basis": "catalog.json S21 and the source-first table"
+   },
+   "notes": [
+    "The first direct-layer source this review has for how often a property of note quality is actually present in psychotherapy notes, and the source of the base rate behind K35."
    ]
   }
  ],

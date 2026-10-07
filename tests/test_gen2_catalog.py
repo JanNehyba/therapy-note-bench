@@ -88,15 +88,18 @@ def test_the_catalog_holds_what_the_review_proposed(catalog):
     # 29 from the round of 2026-09-13, two returned or split on 2026-09-16, and
     # two adopted on 2026-09-21 from properties the sources defined and the
     # catalog had not covered.
-    assert len(catalog["candidates"]) == 34
+    # 34 until 2026-10-07, when reading SESPI in full yielded K35 and K36.
+    assert len(catalog["candidates"]) == 36
     assert len(catalog["methods"]) == 17
     # 19 read in the round of 2026-09-13, and 6 more read on 2026-09-20 after
     # the investigator supplied them; 7 are still known from abstracts only.
-    assert len(catalog["sources"]) == 25
-    assert len(catalog["abstract_sources"]) == 7
+    # SESPI moved from the abstract-only group to S20 when it was read, and
+    # its 2025 application joined as S21, so the two counts move together.
+    assert len(catalog["sources"]) == 27
+    assert len(catalog["abstract_sources"]) == 6
     assert len(catalog["pilot_proposal"]["entries"]) == 13
     assert len(catalog["comparison"]) == 37
-    assert catalog_mod.ids(catalog, "candidates") == [f"K{n:02d}" for n in range(1, 35)]
+    assert catalog_mod.ids(catalog, "candidates") == [f"K{n:02d}" for n in range(1, 37)]
     assert catalog_mod.ids(catalog, "methods") == [f"ME{n:02d}" for n in range(1, 18)]
 
 
@@ -215,7 +218,7 @@ def test_the_framework_is_reported_from_the_sources_upwards(catalog, props):
         for key in prop["maps_to"]
     }
     ids = {c["id"] for c in catalog["candidates"]}
-    assert len(anchored & ids) == 34 - 1
+    assert len(anchored & ids) == 36 - 1
     assert ids - anchored == {"K06"}, "the one candidate no source defines is named"
     assert [row["id"] for row in props["candidates_without_source_property"]] == ["K06"]
     assert "K06" in derivation["convergence"]
@@ -527,7 +530,7 @@ def test_every_source_evidence_line_and_candidate_maps(catalog, draft, diagnosti
     assert [c["id"] for c in draft["constructs"]] == catalog_mod.ids(catalog, "candidates")
     lines = sum(len(c["evidence"]) for c in catalog["candidates"])
     assert len(draft["evidence"]) == lines
-    assert diagnostics["mapped"] == {"sources": 32, "evidence": lines, "constructs": 34}
+    assert diagnostics["mapped"] == {"sources": 33, "evidence": lines, "constructs": 36}
     for s in draft["sources"]:
         assert s["locator"].startswith("ledger:")
 
@@ -650,7 +653,14 @@ def test_a_property_no_candidate_covered_was_opened_and_then_decided(catalog, pr
     history: the open rows stay, carry the decision, and now map to K32 and
     K33; nothing in the table is unmapped without an explanation."""
     open_rows = {row["pid"]: row for row in catalog["open_source_properties"]}
-    assert set(open_rows) == {"S1-p13", "S4-p09", "S_abs_tednq-p02a", "S_abs_tednq-p02b"}
+    assert set(open_rows) == {
+        "S1-p13",
+        "S4-p09",
+        "S_abs_tednq-p02a",
+        "S_abs_tednq-p02b",
+        "S20-p01",
+        "S20-p03",
+    }
     assert "adopted as K32" in open_rows["S1-p13"]["disposition"]
     assert "adopted as K33" in open_rows["S4-p09"]["disposition"]
     by_pid = {p["pid"]: p for s in props["sources"] for p in s["properties"]}
@@ -668,6 +678,43 @@ def test_a_property_no_candidate_covered_was_opened_and_then_decided(catalog, pr
         assert open_rows[pid]["proposal"] and "disposition" not in open_rows[pid]
     decided = next(r for r in catalog["revisions"] if "open source properties" in r["reason"])
     assert "against" in decided["changes"][0]
+
+
+def test_the_two_candidates_from_sespi_carry_the_source_rule_and_not_a_decision(catalog, props):
+    """K35 and K36 came out of an abstract row that had absorbed an instrument.
+
+    S_abs_sespi-a01 said "How staff-patient interactions are captured in
+    progress notes" and mapped it to K25 and K02. Reading the source showed
+    four coding steps: two are properties of a note and neither is K25 or K02.
+    The two candidates therefore exist, they carry the source's own rule and
+    its reliability figures, and nothing about them says a person accepted
+    them: retention is the panel's under D13.
+    """
+    by_id = {c["id"]: c for c in catalog["candidates"]}
+    rows = {p["pid"]: p for s in props["sources"] for p in s["properties"]}
+    assert rows["S20-p03"]["maps_to"] == ["K35"]
+    assert rows["S20-p01"]["maps_to"] == ["K36"]
+    for cid, pid in (("K35", "S20-p03"), ("K36", "S20-p01")):
+        candidate = by_id[cid]
+        assert candidate["origin"] == "literature"
+        assert candidate["state"] == "not_measured", "the round's measured set was frozen at 16"
+        assert candidate["decided_by"] == "note", "both rules read the note alone"
+        assert "S20" in [line["source"] for line in candidate["evidence"]]
+        # The rule is quoted, not paraphrased, and the quote is in the table too.
+        quoted = [line["quote"] for line in candidate["evidence"] if line["source"] == "S20"]
+        assert any(rows[pid]["quote"][:60] in q for q in quoted)
+        assert "panel" in next(
+            row["disposition"] for row in catalog["open_source_properties"] if row["pid"] == pid
+        )
+    # The two steps that rate the encounter rather than the note are refused in
+    # writing, so nothing folds the therapist's attunement into note quality.
+    unmapped = {row["pid"]: row["why_unmapped"] for row in props["unmapped_properties"]}
+    assert "not a property of a note" in unmapped["S20-p02"]
+    assert "not a property of a note" in unmapped["S20-p04"]
+    assert "attunement" in unmapped["S20-p04"]
+    # And the base rate that makes K35 worth measuring is a quote, not a claim.
+    base = next(line for line in by_id["K35"]["evidence"] if line["source"] == "S21")
+    assert "15%" in base["quote"] and "40%" in base["quote"]
 
 
 def test_the_overview_shows_every_candidate_with_its_rule_and_a_status_a_reader_can_read(

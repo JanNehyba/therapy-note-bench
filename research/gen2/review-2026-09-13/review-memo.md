@@ -46,11 +46,18 @@ the planned searches.
    September rate is not applied to records September could not reach.
 5. Sought 19 catalog reports: 12 evidence papers, 2 guidance documents and 5
    methodological guidance documents. Eighteen were retrieved and read by the
-   assistant by 2026-09-20; the nineteenth, the 2008 PDQI-9 preliminary paper,
+   assistant by 2026-09-20; the nineteenth of those, the 2008 PDQI-9 preliminary paper,
    came down on 2026-10-07 on a second attempt, so every report the catalog
    sought is retrieved. **Retrieved is not read**: that copy has not been read
    and the catalog still rests on its abstract, which `reports.json` records as
-   a reading basis separate from the retrieval status. Six evidence papers
+   a reading basis separate from the retrieval status. **Two sources joined on
+   2026-10-07**, which makes 21 sought and 21 retrieved: SESPI left the
+   abstract-only group when it was read in full, and its 2025 application in a
+   psychotherapy team was found by the Scopus search and retrieved through CORE.
+   Reading the first showed its abstract row had carried a whole instrument as one
+   property mapped to two candidates that are not what it measures; K35 and K36
+   come out of that reading, neither is measured in this round, and both go to the
+   panel. Six evidence papers
    reached the full-text stage through the search and screening; the other thirteen
    reports entered through other routes (known sources, professional and
    methodological guidance, an author search from Keren 2026), which `reports.json`

@@ -2,13 +2,13 @@
   "version": "conversion-diagnostics-v1",
   "catalog_version": "catalog-v2",
   "catalog_date": "2026-09-16",
-  "protocol_version": "2.7.0",
-  "protocol_revision": "5f3e463b310ba42d7dc055cd8366ad8aa1d18a1a9cdfc618f10a405496790d15",
+  "protocol_version": "2.8.0",
+  "protocol_revision": "3f57d1b5d0d56f7d60559ec734a08ee055aa434f871991a91c0f645fd9e3e704",
   "rule": "Every source, evidence line and candidate maps to a registry record with no human decision. The operational specification, where present, becomes method specs and development items with no decision on them; nothing becomes a review, a pilot status or a reviewed item, and each pilot entry without operational rules is listed here with its reason.",
   "mapped": {
-    "sources": 32,
-    "evidence": 63,
-    "constructs": 34
+    "sources": 33,
+    "evidence": 68,
+    "constructs": 36
   },
   "operational": {
     "specification": "operational-v1",
@@ -101,12 +101,6 @@
     },
     {
       "id": "S_abs_mherrors",
-      "publication_type": "unverified",
-      "verification": "metadata_checked",
-      "note": "abstract-only source; the pilot check refuses it until the full text is verified"
-    },
-    {
-      "id": "S_abs_sespi",
       "publication_type": "unverified",
       "verification": "metadata_checked",
       "note": "abstract-only source; the pilot check refuses it until the full text is verified"
@@ -416,6 +410,24 @@
       "catalog_origin": "literature",
       "origin": "literature",
       "origin_reference": "catalog:K34",
+      "note": "placeholder: the workflow needs an extraction record (extraction:<id>) bound to an included full text; the catalog records the origin in prose only",
+      "record_kind": "construct"
+    },
+    {
+      "id": "K35",
+      "catalog_state": "not_measured",
+      "catalog_origin": "literature",
+      "origin": "literature",
+      "origin_reference": "catalog:K35",
+      "note": "placeholder: the workflow needs an extraction record (extraction:<id>) bound to an included full text; the catalog records the origin in prose only",
+      "record_kind": "construct"
+    },
+    {
+      "id": "K36",
+      "catalog_state": "not_measured",
+      "catalog_origin": "literature",
+      "origin": "literature",
+      "origin_reference": "catalog:K36",
       "note": "placeholder: the workflow needs an extraction record (extraction:<id>) bound to an included full text; the catalog records the origin in prose only",
       "record_kind": "construct"
     }

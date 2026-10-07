@@ -28,7 +28,7 @@ produced a construct the review had buried inside a source property that named
 several concepts at once. The framework
 is nevertheless reported from the sources upwards, because that is the part a
 reader can check: for every source read in full we list every property of note
-quality the source itself defines, and 33 of the 34 candidates are anchored in
+quality the source itself defines, and 35 of the 36 candidates are anchored in
 at least one such property. The prior map is reported as the comparison the
 framework was tested against rather than as its derivation, and the one
 candidate no source defines is named. What the procedure requires besides is
@@ -119,14 +119,17 @@ prioritised evidence map, not a scoping review.
 
 ## Sources and evidence
 
-Nineteen reports were sought as catalog sources and all nineteen have been
-retrieved, the 2008 preliminary PDQI paper last, on 2026-10-07. Eighteen have
-been read in full text; that one has not, so the entry resting on it still
-rests on its abstract. Thirteen further reports were used from their abstracts;
-six were obtained on 2026-09-16 and read on 2026-09-20, five more were obtained
-on 2026-10-07 and have not been read, and two could not be obtained at all and
-carry a dated failed attempt, which is a different fact from untried. Every
-source cited from an abstract is marked as such wherever it appears. Every report has a ledger entry with its route into the review, its
+Twenty-one reports were sought as catalog sources and all twenty-one have
+been retrieved. Nineteen of them were sought from the start and the 2008
+preliminary PDQI paper came last, on 2026-10-07; the other two joined that day,
+when SESPI was read in full and its 2025 application was found by the Scopus
+search. Twenty have been read in full text. The 2008 paper has not, so the
+entry resting on it still rests on its abstract. Twelve further reports are
+used from their abstracts; six were obtained on 2026-09-16 and read on
+2026-09-20, four more were obtained on 2026-10-07 and have not been read, and
+two could not be obtained at all and carry a dated failed attempt, which is a
+different fact from untried. Every source cited from an abstract is marked as
+such wherever it appears. Every report has a ledger entry with its route into the review, its
 identifiers, every retrieval attempt with date and checksum, and a reading basis
 that is kept separate from retrieval (`reports.json`). Sources are classed by
 evidence layer: direct, transfer, requirements, or methodological guidance that
@@ -142,24 +145,66 @@ derivation we report runs the other way. For every source read in full we
 listed every property of note quality the source itself defines or measures, in
 the source's own words and with its location, without reference to the catalog,
 and mapped each to a candidate afterwards (`source-properties.json`). The table
-holds 140 properties from 26 sources. 132 map to a candidate; the eight that do
-not are rating formats, findings about raters, or limitations of a source
-rather than properties of a note. Thirty-three of the 34 candidates rest on at
-least one source property. The one that does not is K06, a note that says what
+holds 150 properties from 27 sources. 137 map to a candidate; the thirteen
+that do not are rating formats, findings about measurement, reliability
+figures, or properties of the encounter the note reports rather than of the
+note. Thirty-five of the 36 candidates rest on at least one source property. The one that does not is K06, a note that says what
 it could not record rather than leaving the gap silent; no source defines it
 and it stands on the observation this project declares as its origin, which is
 that models write a denial of information nobody asked for and score full
 marks for it. This convergence is not a blind replication: the extraction was
 written by the assistant that had already written the catalog, source by
-source and with the mapping done afterwards, and it is reported as what it is. Two properties that no candidate had
-covered, culturally competent care evidenced in the note and internal
-consistency within one note, were recorded as open with a proposed disposition
-and adopted as candidates by the investigator on 2026-09-21, one against the
-proposal; the record keeps both the proposal and the decision.
+source and with the mapping done afterwards, and it is reported as what it is. Four properties that no candidate had
+covered were recorded as open with a proposed disposition. Culturally competent
+care evidenced in the note and internal consistency within one note were
+adopted as candidates by the investigator on 2026-09-21, one against the
+proposal, and the record keeps both the proposal and the decision. Two more
+were opened on 2026-10-07 and adopted the same day from a source read in full,
+which the next section describes.
+
+### Two constructs found by reading a source instead of its abstract
+
+The same failure happened twice and the second time is the one that shows the
+shape of it. On 2026-10-05 professional terminology was found inside a source
+property that named three categories at once; nothing had checked that each
+concept in such a row had a candidate, and the row counted as covered because
+one part of it did. On 2026-10-07 the same thing was found in an abstract row.
+The catalog had held the Scale for the Evaluation of Staff-Patient Interactions
+in Progress Notes as an abstract-only source with a single row, "How
+staff-patient interactions are captured in progress notes", mapped to the
+candidate for supervision support and the candidate for attribution. Reading
+the instrument showed four gated coding steps, two of which are properties of a
+note and neither of which is either candidate: whether the note describes the
+client's experience at all, scored as a yes-or-no gate, and whether it
+describes both the therapist's approach and the client's response to it, scored
+in four ordered levels. Both entered the pool as K36 and K35 with the source's
+own wording, its manual's levels and its per-step reliability. The other two
+steps rate the client's state and the therapist's attunement as the note
+reports them; those are properties of the encounter and not of the note, and
+they are recorded as non-adoptions with the reason rather than folded into note
+quality.
+
+An abstract row is a bundle by default, which is the general lesson. Six
+sources are still cited from their abstracts and each is marked, and what that
+mark now means is that the properties behind it have not been enumerated.
+
+The arrival also gives the construct framework its first measured base rate in
+psychotherapy. The 2025 application of the instrument scored 193 journal notes
+of a Norwegian municipal mental health team: 49.3% were at the level where the
+therapist's approach is missing or too thin to read, and 15.1% described both
+sides, rising to 39.2% after an intervention that asked therapists to write
+notes with their clients. A property that most notes fail and some pass can
+separate notes, which is the question the investigator put to the catalog on
+2026-10-05 and which almost no other candidate can answer with a number.
+
+Neither candidate is measured in this round: the measured set was frozen at 16
+before they arrived. Both are in the pool the content-validity panel rates, and
+protocol amendment D14 records that a pool may grow until the first rating
+sheet is sent and not afterwards.
 
 ## The construct framework
 
-The catalog holds 34 candidates. By origin, 19 came from the literature, 11
+The catalog holds 36 candidates. By origin, 21 came from the literature, 11
 existed in the project before the search, 3 are named expert proposals and 1
 arose from observation; origin never changes when support is found later, which
 is recorded as evidence instead. Origin and support are reported separately,
@@ -220,7 +265,7 @@ rater training, 1 corpus-level proxy and 1 derived ratio. The protocol records
 the executable count at freeze rather than capping it. The registry refuses to
 freeze while any used subject lacks an accepted decision.
 
-The feasibility pilot (protocol 2.7.0) freezes 16 generation jobs over two
+The feasibility pilot (protocol 2.8.0) freezes 16 generation jobs over two
 cohorts, two English AnnoMI conversations and their Czech translations, two
 purposes and two generator families, and balances an 8-note human sample across
 them. Two Czech psychologists, neither the instrument author, rate under a

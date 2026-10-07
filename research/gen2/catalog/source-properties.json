@@ -1,6 +1,6 @@
 {
   "version": "source-properties-v1",
-  "date": "2026-09-20",
+  "date": "2026-10-07",
   "method": "Source-first extraction. For every source read in full, every property of note quality the source itself defines or measures is listed in the source's own words with its location, without reference to the catalog. Mapping to catalog candidates is a second column, done afterwards. It is the derivation the round of 2026-09-13 lacked: that round collected evidence to support candidates already on the table, and could not say whether anything in the sources had been missed. The paper reports the framework from this table upwards, and the prior map as the comparison it was tested against (decision D12).",
   "rule": "A candidate with no source property behind it is listed as such and stands on its declared origin. A source property no candidate covers is listed as unmapped with the reason, and is either a new candidate or a recorded non-adoption. A literature-origin candidate must have at least one source property behind it, or its origin is wrong.",
   "kinds": {
@@ -32,13 +32,13 @@
     "abstract_claim": "what an abstract states, when the full text was not read"
   },
   "counts": {
-    "sources_read_in_full": 24,
-    "sources_abstract_only": 7,
-    "sources_defining_properties": 26,
-    "properties": 140,
-    "properties_mapped": 132,
-    "properties_unmapped": 8,
-    "candidates_with_source_property": 33,
+    "sources_read_in_full": 26,
+    "sources_abstract_only": 6,
+    "sources_defining_properties": 27,
+    "properties": 150,
+    "properties_mapped": 137,
+    "properties_unmapped": 13,
+    "candidates_with_source_property": 35,
     "candidates_without_source_property": 1
   },
   "sources": [
@@ -1893,23 +1893,131 @@
       ]
     },
     {
-      "id": "S_abs_sespi",
-      "citation": "Development and reliability testing of the Scale for the Evaluation of Staff-Patient Interactions in Progress Notes (SESPI). Nursing Open 2019.",
-      "read": "abstract",
+      "id": "S20",
+      "citation": "Myklebust KK, Bjorkly S. Development and reliability testing of the Scale for the Evaluation of Staff-Patient Interactions in Progress Notes (SESPI). Nursing Open 2019;6(3):1086-1096. doi:10.1002/nop2.254. PMID 31367401.",
+      "read": "full_text",
       "defines_note_quality": true,
-      "note": "Read from the abstract only; one row stating what the abstract claims.",
+      "note": "Held as S_abs_sespi and cited from its abstract until 2026-10-07, when the full text was retrieved and read. The abstract row said 'How staff-patient interactions are captured in progress notes' and mapped it to K25 and K02 as 'the interaction as content'. The full text shows four separate coding steps, two of which are properties of the note and neither of which is K25 or K02, so the row is replaced rather than refined.",
       "properties": [
         {
-          "pid": "S_abs_sespi-a01",
-          "label": "How staff-patient interactions are captured in progress notes",
-          "kind": "abstract_claim",
-          "location": "abstract",
-          "quote": null,
+          "pid": "S20-p01",
+          "label": "Whether the note describes the client's experience at all",
+          "kind": "coding_category",
+          "location": "Methods, The instrument SESPI, Step 1",
+          "quote": "In Step 1, all excerpts are scored dichotomously: “Does the excerpt contain some kind of description of patient's experience?” A yes means proceed to Step 2; a no signifies no further assessment of that excerpt. A typical example that would be scored “no” is “Mostly stayed in his room. He answers briefly when the staff poses specific questions.”",
           "maps_to": [
-            "K25",
-            "K02"
+            "K36"
           ],
-          "mapping": "the interaction as content"
+          "mapping": "the presence of the client's experience, as opposed to observable behaviour alone; the quoted negative example is a note that reports only what the client did"
+        },
+        {
+          "pid": "S20-p02",
+          "label": "How uncomfortable or positive the client's experience was",
+          "kind": "coding_category",
+          "location": "Methods, The instrument SESPI, Step 2",
+          "quote": "Step 2 has four possible scores of patient experiences: ‐ II = Very uncomfortable ‐ I = Uncomfortable + I = Positive + II = Very positive",
+          "maps_to": [],
+          "mapping": "not adopted: this rates the client's state as the note reports it, which is a property of the encounter and not of the note. A note can describe a very uncomfortable experience accurately and be a good note."
+        },
+        {
+          "pid": "S20-p03",
+          "label": "Whether the note describes both the therapist's approach and the client's response to it, in four levels",
+          "kind": "coding_category",
+          "location": "Methods, The instrument SESPI, Step 3",
+          "quote": "In Step 3, the descriptions of staff-patient interactions are assessed by four alternatives: A. No or insufficient description of the staff's approach. B. The staff's approach is described, but the patient's response is not, or not sufficiently, described. C. The staff's approach is described, and the patient appears to experience it as fair enough. However, the approach is mostly oriented to practical solutions and fails to grasp the patient's experience or feelings. D. Both staff's approach and patient's response are described.",
+          "maps_to": [
+            "K35"
+          ],
+          "mapping": "the interaction as a two-sided description: the approach and the response to it, with a defined order between the four levels"
+        },
+        {
+          "pid": "S20-p04",
+          "label": "How well the therapist attuned to the client",
+          "kind": "coding_category",
+          "location": "Results, reliability for each step, Step 4",
+          "quote": "In Step 4, the choices were ‐ II Failed staff attunement, ‐ I Partially failed staff attunement, + I Partially successful staff attunement and + II Successful staff attunement.",
+          "maps_to": [],
+          "mapping": "not adopted: this rates the therapist's work as the note reports it. A benchmark of note quality would be scoring the therapy through the note, and a model that writes the note does not do the attuning."
+        },
+        {
+          "pid": "S20-p05",
+          "label": "Two of the four steps exclude the excerpt from any further score",
+          "kind": "design_finding",
+          "location": "Methods, The instrument SESPI",
+          "quote": "In Steps 1 and 3, excerpts that lack a description of patient's experience or the staff's attunement are excluded.",
+          "maps_to": [],
+          "mapping": "a finding about measurement rather than a property of a note, and a warning: the attunement score exists only for excerpts that already describe the interaction, so a mean attunement over a corpus is a mean over the notes that passed. This project's rule is to omit the number and name the gap instead."
+        },
+        {
+          "pid": "S20-p06",
+          "label": "Reliability of the instrument, and the gap between its two estimates",
+          "kind": "method_metric",
+          "location": "Results, inter-rater and internal consistency",
+          "quote": "Cronbach's alpha for instrument total = 0.977. This is a very high alpha value, indicating that raters' scores had very high internal consistency for the four steps of the SESPI. Regarding the distribution of scores for the excerpts in each of the four steps, the ICC was lower, but still acceptable; ICC = 0.770 (95% CI 0.608-0.888).",
+          "maps_to": [],
+          "mapping": "not a property of a note. Recorded because it is the only reliability figure this review has for an instrument built for psychiatric progress notes, and because the two estimates disagree: the source itself cites Cortina on alpha being high for scales with many items, and the per-step agreement runs from 95.9% at Step 1 down to 66.4% at Step 4. Twenty-two raters scored ten excerpts."
+        },
+        {
+          "pid": "S20-p07",
+          "label": "The unit scored is an excerpt of a progress note, not the note",
+          "kind": "design_finding",
+          "location": "Methods, Procedure",
+          "quote": "Ten excerpts for the reliability testing of the SESPI were picked from the pool of excerpts retrieved in the qualitative investigation of progress notes from the locked acute and open psychiatric wards.",
+          "maps_to": [],
+          "mapping": "a finding about measurement: the instrument was developed and tested on excerpts, and the 2025 application scores whole journal notes with the same steps. Which unit a level like D belongs to is therefore not settled by the instrument, and this project has to say which it means."
+        }
+      ]
+    },
+    {
+      "id": "S21",
+      "citation": "Myklebust KK, Hoemsnes H, Kvello O, Vatnar SKB. Collaboration with clients to create journal notes: A mixed methods evaluation of a pilot intervention study in a municipality mental health services team. Counselling and Psychotherapy Research 2025;25:e12829. doi:10.1002/capr.12829.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": "Found by the Scopus search of 2026-10-07 (scopus-direct) and read in full the same day. It applies SESPI in a psychotherapy team rather than a psychiatric ward, which is the direct layer, and it is the only source in this review that reports how often a property like this is actually present in therapy notes.",
+      "properties": [
+        {
+          "pid": "S21-p01",
+          "label": "The same two-sided description of the interaction, applied to a whole psychotherapy journal note",
+          "kind": "coding_category",
+          "location": "Methods, The SESPI tool",
+          "quote": "The SESPI has four steps; Steps 3 and 4, which measure the quality and quantity of descriptions of therapist-client interactions in the journal notes, were used in our study.",
+          "maps_to": [
+            "K35"
+          ],
+          "mapping": "the same property as S20-p03, scored per journal note by two raters working together, in a psychotherapy service rather than an inpatient ward"
+        },
+        {
+          "pid": "S21-p02",
+          "label": "How often a therapy note describes both sides of the interaction",
+          "kind": "design_finding",
+          "location": "Results, Table 1, changes in described interaction",
+          "quote": "Before the intervention, only 15% described an entire therapist-client interaction (T0), but this category increased to nearly 40% after the intervention (T1) when the clients were informed about the study and gave their consent to participate in co-creating journal notes",
+          "maps_to": [
+            "K35"
+          ],
+          "mapping": "a base rate for the property, and the reason it can discriminate: at T0 49.3% of the 193 notes were at level A, no or insufficient description of the approach, and 15.1% at level D. A property that most notes fail and some pass separates notes; one that nearly all pass does not."
+        },
+        {
+          "pid": "S21-p03",
+          "label": "Whether the note records how it came about",
+          "kind": "general_item",
+          "location": "Results, the clients' response to the invitation to collaborate",
+          "quote": "Quantitative data could not assess the level of therapist-client collaboration, as 155 journal notes (N = 193) lacked a description of the degree of collaboration.",
+          "maps_to": [
+            "K16"
+          ],
+          "mapping": "the circumstances of the note's creation, here whether the client took part in writing it. Four of five notes did not say, which stopped the study from measuring what it set out to measure: the clearest case in this review of a missing provenance line costing a measurement."
+        },
+        {
+          "pid": "S21-p04",
+          "label": "Writing the note with the client may strengthen the client's voice in it",
+          "kind": "theme",
+          "location": "Abstract, Conclusion",
+          "quote": "Collaborative documentation challenges established journal documentation practices and may strengthen the client's voice.",
+          "maps_to": [
+            "K24"
+          ],
+          "mapping": "the client's standing in the note. The source's claim is about what collaborative writing does, so co-writing is an intervention and not a property of a note; what transfers is that the client's voice is something a note can carry more or less of, which is K24's territory."
         }
       ]
     }
@@ -1918,6 +2026,10 @@
     "K01": [
       "S1-p03",
       "S1-p04",
+      "S10-p01",
+      "S13-p01",
+      "S18-p02",
+      "S19-p01",
       "S2-p01",
       "S4-p02",
       "S6-p01",
@@ -1925,37 +2037,32 @@
       "S7-p10",
       "S8-p01",
       "S9-p01",
-      "S10-p01",
-      "S18-p02",
-      "S19-p01",
-      "S13-p01",
       "S_abs_edit-p02",
-      "S_abs_sweden-p01",
+      "S_abs_mherrors-a01",
       "S_abs_scoping_notes-p01",
-      "S_abs_tednq-p02",
       "S_abs_summac-a01",
-      "S_abs_mherrors-a01"
+      "S_abs_sweden-p01",
+      "S_abs_tednq-p02"
     ],
     "K02": [
       "S1-p06",
       "S1-p08",
       "S14-p07",
-      "S_abs_tednq-p03",
-      "S_abs_sespi-a01"
+      "S_abs_tednq-p03"
     ],
     "K03": [
+      "S14-p07",
       "S2-p11",
       "S3-p05",
       "S3-p18",
       "S4-p01",
       "S6-p01",
-      "S14-p07",
       "S_abs_tednq-p02"
     ],
     "K04": [
       "S1-p10",
-      "S3-p14",
       "S14-p05",
+      "S3-p14",
       "S_abs_edit-p04",
       "S_abs_scoping_notes-p01"
     ],
@@ -1966,6 +2073,12 @@
       "S1-p07",
       "S1-p09",
       "S1-p11",
+      "S13-p03",
+      "S13-p04",
+      "S14-p04",
+      "S18-p01",
+      "S19-p02",
+      "S19-p04",
       "S2-p08",
       "S2-p10",
       "S3-p06",
@@ -1983,53 +2096,47 @@
       "S7-p01",
       "S7-p02",
       "S7-p03",
-      "S18-p01",
-      "S19-p02",
-      "S19-p04",
-      "S13-p03",
-      "S13-p04",
-      "S14-p04",
       "S_abs_edit-p03",
       "S_abs_sweden-p02",
       "S_abs_tednq-p01",
       "S_abs_tednq-p02"
     ],
     "K07": [
+      "S18-p01",
+      "S18-p04",
+      "S19-p02",
       "S2-p09",
       "S2-p10",
       "S4-p04",
       "S6-p01",
       "S8-p04",
-      "S18-p01",
-      "S18-p04",
-      "S19-p02",
-      "S_abs_tednq-p01",
-      "S_abs_stakeholder-a01"
+      "S_abs_stakeholder-a01",
+      "S_abs_tednq-p01"
     ],
     "K08": [
       "S1-p12",
-      "S3-p08",
-      "S6-p02",
       "S13-p04",
       "S14-p08",
+      "S3-p08",
+      "S6-p02",
       "S_abs_hua-p01",
       "S_abs_severity-a01"
     ],
     "K09": [
       "S1-p09",
+      "S19-p03",
       "S2-p07",
       "S4-p08",
       "S6-p01",
-      "S19-p03",
       "S_abs_tednq-p02"
     ],
     "K10": [
       "S1-p11",
-      "S3-p16",
-      "S3-p17",
       "S13-p02",
       "S13-p04",
       "S14-p06",
+      "S3-p16",
+      "S3-p17",
       "S_abs_supcode-p01"
     ],
     "K11": [
@@ -2051,12 +2158,12 @@
       "S_abs_tednq-p02"
     ],
     "K13": [
+      "S13-p01",
       "S2-p03",
       "S4-p06",
       "S6-p01",
       "S7-p05",
       "S7-p07",
-      "S13-p01",
       "S_abs_edit-p05",
       "S_abs_scoping_notes-p02",
       "S_abs_tednq-p02"
@@ -2065,25 +2172,26 @@
       "S1-p14",
       "S2-p06",
       "S_abs_edit-p07",
-      "S_abs_sweden-p03",
-      "S_abs_scoping_notes-p02"
+      "S_abs_scoping_notes-p02",
+      "S_abs_sweden-p03"
     ],
     "K15": [
-      "S3-p01",
       "S13-p07",
       "S14-p02",
-      "S_abs_scoping_notes-p03",
-      "S_abs_hua-p02"
+      "S3-p01",
+      "S_abs_hua-p02",
+      "S_abs_scoping_notes-p03"
     ],
     "K16": [
-      "S3-p02",
-      "S3-p03",
-      "S3-p04",
       "S13-p02",
       "S13-p03",
       "S13-p05",
       "S14-p01",
       "S14-p03",
+      "S21-p03",
+      "S3-p02",
+      "S3-p03",
+      "S3-p04",
       "S_abs_tednq-p04"
     ],
     "K17": [
@@ -2095,8 +2203,6 @@
       "S2-p02"
     ],
     "K19": [
-      "S3-p01",
-      "S3-p02",
       "S13-p02",
       "S14-p01",
       "S14-p02",
@@ -2105,15 +2211,17 @@
       "S14-p05",
       "S14-p06",
       "S14-p07",
-      "S14-p08"
+      "S14-p08",
+      "S3-p01",
+      "S3-p02"
     ],
     "K20": [
       "S1-p16"
     ],
     "K21": [
       "S1-p15",
-      "S6-p03",
       "S18-p04",
+      "S6-p03",
       "S_abs_hua-p04",
       "S_abs_stakeholder-a01"
     ],
@@ -2129,22 +2237,22 @@
       "S7-p07",
       "S7-p08",
       "S7-p09",
-      "S_abs_scoping_notes-p04",
-      "S_abs_hua-p04"
+      "S_abs_hua-p04",
+      "S_abs_scoping_notes-p04"
     ],
     "K24": [
+      "S21-p04",
       "S_abs_delphi-a01"
     ],
     "K25": [
+      "S13-p04",
+      "S19-p04",
       "S3-p10",
       "S3-p11",
       "S3-p14",
       "S7-p03",
-      "S19-p04",
-      "S13-p04",
       "S_abs_supcode-p01",
-      "S_abs_supcode-p02",
-      "S_abs_sespi-a01"
+      "S_abs_supcode-p02"
     ],
     "K26": [
       "S2-p11",
@@ -2152,8 +2260,8 @@
       "S3-p18"
     ],
     "K27": [
-      "S_abs_hua-p03",
-      "S_abs_disparity-a01"
+      "S_abs_disparity-a01",
+      "S_abs_hua-p03"
     ],
     "K28": [
       "S18-p03",
@@ -2161,8 +2269,8 @@
       "S_abs_edit-p03"
     ],
     "K29": [
-      "S2-p12",
-      "S19-p05"
+      "S19-p05",
+      "S2-p12"
     ],
     "K30": [
       "S1-p14",
@@ -2185,6 +2293,14 @@
     "K34": [
       "S_abs_edit-p01",
       "S_abs_edit-p03"
+    ],
+    "K35": [
+      "S20-p03",
+      "S21-p01",
+      "S21-p02"
+    ],
+    "K36": [
+      "S20-p01"
     ]
   },
   "unmapped_properties": [
@@ -2235,6 +2351,36 @@
       "source": "S_abs_tednq",
       "label": "Binary satisfactory/unsatisfactory scoring chosen over a 5-point scale",
       "why_unmapped": "a rating format decision"
+    },
+    {
+      "pid": "S20-p02",
+      "source": "S20",
+      "label": "How uncomfortable or positive the client's experience was",
+      "why_unmapped": "not a property of a note: it rates the client's state the note reports, and a note that records a very uncomfortable experience accurately is a good note"
+    },
+    {
+      "pid": "S20-p04",
+      "source": "S20",
+      "label": "How well the therapist attuned to the client",
+      "why_unmapped": "not a property of a note: it rates the therapist's attunement as the note reports it, which would be scoring the therapy through the note"
+    },
+    {
+      "pid": "S20-p05",
+      "source": "S20",
+      "label": "Two of the four steps exclude the excerpt from any further score",
+      "why_unmapped": "a finding about measurement: two of the four steps exclude an excerpt instead of scoring it, so any mean over a corpus is a mean over what passed"
+    },
+    {
+      "pid": "S20-p06",
+      "source": "S20",
+      "label": "Reliability of the instrument, and the gap between its two estimates",
+      "why_unmapped": "not a property of a note: the instrument's own reliability, kept because it is the only such figure this review has for a mental health notes instrument"
+    },
+    {
+      "pid": "S20-p07",
+      "source": "S20",
+      "label": "The unit scored is an excerpt of a progress note, not the note",
+      "why_unmapped": "a finding about measurement: the unit tested was an excerpt and the 2025 application scored whole notes"
     }
   ],
   "candidates_without_source_property": [
@@ -2246,5 +2392,5 @@
     }
   ],
   "blindness": "The extraction was written by the assistant that had already written the catalog. It was done source by source without the catalog open, and the mapping column afterwards, but it is not a blind replication and nothing here is reported as one. What it establishes is that a property of the source stands behind each candidate, not that an independent reader would have drawn the same boundaries.",
-  "bundling": "A property is one row even when its label enumerates several concepts, and 52 of the 140 map to two or more candidates. Until 2026-10-05 nothing checked that every concept inside such a row had a candidate: the row counted as covered if any part of it did. That is how terminology went missing inside S_abs_edit-p01 for three weeks. The validator now requires that a mapping note which says a part has no candidate be matched by an open property, and the mapping notes of multi-target rows say which candidate takes which part."
+  "bundling": "A property is one row even when its label enumerates several concepts, and 52 of the 140 map to two or more candidates. Until 2026-10-05 nothing checked that every concept inside such a row had a candidate: the row counted as covered if any part of it did. That is how terminology went missing inside S_abs_edit-p01 for three weeks. The validator now requires that a mapping note which says a part has no candidate be matched by an open property, and the mapping notes of multi-target rows say which candidate takes which part. The second instance was found on 2026-10-07 and in an abstract rather than a full text: S_abs_sespi-a01 carried the whole of SESPI as 'the interaction as content' mapped to K25 and K02, and reading the source showed four separate coding steps, two of which are properties of a note and neither of which is K25 or K02. An abstract row is a bundle by default, and the six that remain are marked so."
 }
