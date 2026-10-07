@@ -96,11 +96,6 @@ both allowed and denied cases. Until repaired, do not execute sibling judging on
 real-session derivatives. The intended first pilot excludes real clinical cases
 according to the latest supplied context.
 
-The historical events in [incidents.md](incidents.md) remain a separate open
-data-governance matter. A code fix does not resolve the location of old caches,
-permitted processing or the controller's decisions. Preserve the audit trail;
-do not delete evidence as an incidental cleanup.
-
 Evidence: [main judge](../src/tnb/judge.py), sibling `src/tnb/judge.py` and
 `src/tnb/cli.py`, [confinement tests](../tests/test_corpus_confinement.py).
 
@@ -437,7 +432,7 @@ human validation can be completed by a coding assistant alone.
 
 | Step | Deliverable and owner | Completion condition |
 |---|---|---|
-| 1. Close data paths | Developer: protect judging/token-counting in both repos. Investigator/controller: handle historical data decisions separately. | Mocked denied requests make zero transport calls; public/allowed cases still work; unresolved historical decisions remain explicitly open. |
+| 1. Close data paths | Developer: protect judging/token-counting in both repos. | Mocked denied requests make zero transport calls; public/allowed cases still work. |
 | 2. Reconcile the design | Investigator + developer: one prospective protocol amendment and decision ledger, then the matching planner/docs. | Public and translated cohorts can be planned without native cases; expert candidates remain eligible; workload and rater roles are explicit; old protocol stays readable. |
 | 3. Repair the evidence ledger | Research assistant drafts; humans review key inclusion/extraction decisions. | Stable report IDs, current retrieval states, linked study families, corrected flow and interpretations; AI proposals remain AI proposals. |
 | 4. Complete or explicitly bound the review | Investigator/reviewers, with institutional database access where available. | Screening and full-text status account for the chosen scope, including exclusions and remainder; no false completed-review claim. |

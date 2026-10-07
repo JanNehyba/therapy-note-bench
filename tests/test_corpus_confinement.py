@@ -2,24 +2,15 @@
 
 Offline. Nothing here calls a provider.
 
-**The incident.** A generation run was started without `--providers`. The
-default is every provider with a token, so all ten sessions of a confidential
-clinical corpus went to OpenAI and to Google Vertex: 150 calls, every one
-answered, between 01:09 and 03:39 on 2026-08-29. The prompt carries the
-transcript, so the disclosure was in the request itself.
-
-The published methodology said in the same breath that those sessions never
-leave the university's infrastructure. It was true of every run before that one
-because whoever ran them happened to pass the flag.
-
+The generation prompt carries the transcript, so a default meaning "every
+provider with a token" would make one omitted `--providers` flag a disclosure.
 A flag somebody remembers is not a safeguard. The task carries the restriction
 and `cmd_generate` cannot build a job that breaks it.
 
 **The judge is the other side of the same transcript.** Its prompt carries the
-session too, and until 2026-09-14 nothing stood between a confidential corpus
-and a judge on any backend with a token. `judge.Judge` is now built for named
-tasks and refuses to exist for a confined corpus on a backend the task does not
-allow; a judge built for no task may ask nothing.
+session too. `judge.Judge` is built for named tasks and refuses to exist for a
+confined corpus on a backend the task does not allow; a judge built for no task
+may ask nothing.
 """
 
 from __future__ import annotations

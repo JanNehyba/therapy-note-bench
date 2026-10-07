@@ -62,12 +62,9 @@ class Task:
     #: flag: `cmd_generate` refuses to build a job for a provider outside this
     #: set, so the restriction holds whatever a command line says or omits.
     #:
-    #: It exists because omitting `--providers` once sent every session of a
-    #: confidential corpus to two external providers -- 150 calls, every one
-    #: answered. The prompt carries the transcript, so a default meaning
-    #: "every provider with a token" was one forgotten flag away from a
-    #: disclosure, and the published methodology said in the same breath that
-    #: those transcripts never leave.
+    #: The prompt carries the transcript, so a default meaning "every provider
+    #: with a token" would put a confidential corpus one forgotten flag away
+    #: from leaving the infrastructure it is allowed to reach.
     #:
     #: No task here sets it today. That is a fact about the corpora currently
     #: read, not a reason to drop the guard: a task that needs it would
