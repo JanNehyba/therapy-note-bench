@@ -1,8 +1,8 @@
 {
   "id": "therapy-note-construct-review",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "status": "protocol_amended_before_pilot_search_partially_executed",
-  "recorded_date": "2026-09-22",
+  "recorded_date": "2026-10-07",
   "design": "Instrument development informed by a systematic scoping review, expert proposals and empirical observations",
   "prior_exposure": "The investigator and coding assistant have seen existing instruments, prior Gen-2 drafts and a colleague's QA suggestion. This is not a claim of hypothesis-free discovery or blinded authorship.",
   "conduct_framework": "JBI scoping review guidance, full-text verification pending",
@@ -82,7 +82,8 @@
     "ai_role": "assist retrieval, extraction and discrepancy detection; never impersonate a human decision",
     "independent_second_screening": "planned: a second human screener will be recruited; until that person records decisions on the exact sheets, screening is single-reviewer with AI assistance and is reported as such",
     "evidence_verification": "delegated (D9, 2026-09-21): sources and evidence lines stand on the assistant's reading; constructs were decided by the investigator item by item; the quoted passages of the nine reports the pilot rests on are checked verbatim against the retrieved full texts by the core's extraction import (D11)",
-    "operational_rules": "delegated (D10, 2026-09-21): the scope, method specifications, rubric items and Czech wording are the assistant's proposal accepted without item-by-item review"
+    "operational_rules": "delegated (D10, 2026-09-21): the scope, method specifications, rubric items and Czech wording are the assistant's proposal accepted without item-by-item review",
+    "content_validity_panel": "three therapists, neither the author nor the assistant, rating the 34 candidates for relevance against the threshold registered in content_validity (D13, 2026-10-07)"
   },
   "sequence": [
     "Record the prospective protocol revision and prior exposure before the corresponding research steps",
@@ -286,8 +287,8 @@
     "review_completion": "Only executed searches and verified decisions count as completed; blocked sources remain named gaps",
     "scope": "Report selected and required methods, planned/applicable/assessed units, and incomplete critical-error assessment even in public aggregates"
   },
-  "supersedes": "2.5.0",
-  "amendment_reason": "Name the method correctly. The investigator objected on 2026-09-22 that a framework mixing constructs from the literature with constructs the project already had is methodologically disorderly, and that the citation the draft leaned on did not cover it. The objection about the citation is right: a best-fit framework synthesis begins from a published framework and this began from our own prototype. The objection about the mixture is answered by naming what this actually is, the first phase of instrument development, where an item pool is generated deductively and inductively by design; what that procedure demands is a declared origin per item, a rule that nothing is measured on its origin alone, and a content-validity judgement by experts independent of the pool's authors. The first two are now enforced. The third is not met and is recorded as the gap it is.",
+  "supersedes": "2.6.0",
+  "amendment_reason": "Take the retention decision off the investigator. He objected repeatedly that a review followed by one person saying which criteria stay and which go is not something he can justify, and he is right: assembling a candidate pool from the literature and from expert input is the prescribed procedure, but being the rule that retains and drops is not. The pool goes to a panel of three therapists who are neither the instrument's author nor the assistant, against a threshold registered here before the questionnaire is sent and before any answer exists. Every decision the investigator made about the pool, including the criterion he dropped, returns to the panel as a candidate; whether his judgement was right becomes a result instead of an authority.",
   "retrieval_gaps": "Record reports not retrieved separately from full-text eligibility exclusions; unavailable databases remain named gaps",
   "expert_inputs": "May enter throughout development. Later support does not rewrite historical origin; author or colleague proposals do not imply consensus.",
   "registration": {
@@ -451,6 +452,90 @@
         "research/gen2/catalog/catalog.json method block and its validator",
         "research/gen2/catalog/README.md"
       ]
+    },
+    {
+      "id": "D13",
+      "date": "2026-10-07",
+      "origin": "investigator",
+      "decision": "The item pool is put to a panel of three therapists against a retention threshold registered before the questionnaire is sent: three of three retains, two of three retains as contested with the dissent published, one or none removes the item from the measured set. A harm flag from any rater is reported and stops measurement in this round. Items are shown blind to their state and origin. The investigator stops being the retention rule, every decision he made about the pool returns to the panel, and the measured set the pilot uses is the panel's.",
+      "replaces": "the retention of criteria by the investigator's and the assistant's judgement",
+      "affects": [
+        "content_validity block of this protocol",
+        "the measured set of the catalog, pending the panel",
+        "paper: methods (content validity) and what the study does not claim"
+      ]
     }
-  ]
+  ],
+  "content_validity": {
+    "status": "registered before any rating exists; no answer has been collected",
+    "registered_on": "2026-10-07",
+    "procedure": {
+      "named": "expert rating of the item pool for relevance, with a retention threshold declared in advance; a screening round of a modified Delphi",
+      "source": "S12",
+      "source_quotes": [
+        "Multiple judges have been used (typically ranging from 5 to 7)",
+        "an increase in the number of experts has been found to increase the robustness of the ratings"
+      ],
+      "what_the_source_recommends": "S12 names three ways to quantify the judges' assessments, the content validity ratio, the content validity index and Cohen's kappa, and recommends kappa as the most efficient. The numeric thresholds conventionally used with the first two come from Lawshe (1975) and Lynn (1986), which this project has not retrieved, so no threshold is taken from them: the rule below is this project's own, declared in advance and reported as a convention."
+    },
+    "panel": {
+      "raters": 3,
+      "profile": "psychotherapy researchers or practising therapists, none of them the instrument's author and none the assistant",
+      "identities": "held locally; a rater is named in the paper only with their consent",
+      "independence_to_record_per_rater": "whether the rater will be an author of the paper, because a rater who will be an author is not an independent judge and must be reported as a co-author's rating",
+      "below_the_typical_range": "S12 calls five to seven typical. Three is fewer, the arithmetic below is coarse because of it, and the round is therefore reported as a screening of the pool and not as established content validity.",
+      "independence_of_the_ratings": "each rater answers on their own copy and sees no other rater's answers; a shared sheet would make the second and third answer a reaction to the first"
+    },
+    "what_is_rated": {
+      "items": "all 34 candidates of the catalog, including those the round does not measure and the one the investigator dropped on 2026-10-05",
+      "shown_per_item": "the code, the Czech name and one sentence of definition; no state, no origin, no citation and no indication of what the assistant or the investigator thinks",
+      "why_blind_to_state": "a rater told that an item is already measured is being asked to ratify rather than to judge"
+    },
+    "questions": [
+      {
+        "id": "relevance",
+        "text": "Is this relevant to the quality of a psychotherapy session note?",
+        "scale": [
+          "not relevant",
+          "somewhat relevant",
+          "quite relevant",
+          "highly relevant"
+        ],
+        "counts_as_relevant": "quite relevant or highly relevant"
+      },
+      {
+        "id": "harm",
+        "text": "Could measuring this mislead, or harm a client or a therapist?",
+        "scale": [
+          "no",
+          "yes, and I say how"
+        ],
+        "effect": "a yes is reported for the item whatever its relevance count, and the reason is kept verbatim"
+      },
+      {
+        "id": "missing",
+        "text": "What important property of a note is missing from this list?",
+        "scale": [
+          "free text, once per rater, not per item"
+        ],
+        "effect": "a property named here enters the pool as a candidate with the rater as its origin, and is rated in a second round if the panel is asked again"
+      }
+    ],
+    "retention_rule": {
+      "declared_before_any_answer": true,
+      "index": "the proportion of the three raters who answer quite or highly relevant",
+      "3_of_3": "retained for measurement where an operational rule exists",
+      "2_of_3": "retained and marked contested; the dissenting rater's reason is published with the item",
+      "1_of_3_or_0": "removed from the measured set; the candidate stays in the catalog with the panel's rating as the reason, which is the same treatment every other unmeasured candidate gets",
+      "harm_flag": "an item any rater flags for harm is reported with the flag and is not measured in this round whatever its relevance count",
+      "agreement": "agreement between the three raters is computed and published for the whole pool, by Cohen's kappa as S12 recommends, with the caveat that three raters over 34 items give an imprecise estimate",
+      "what_the_rule_does_not_do": "it does not decide whether an item is measurable, only whether the panel judges it relevant. A relevant item with no operational rule stays unmeasured for that reason and the two reasons are reported apart."
+    },
+    "consequences_recorded_in_advance": [
+      "The measured set after the panel may differ from the sixteen chosen before it, and the pilot runs on the panel's set.",
+      "If the panel retains the criterion the investigator dropped on 2026-10-05, that decision was wrong and the paper says so.",
+      "If the panel drops a criterion the assistant proposed, the same applies in the other direction.",
+      "A panel of three cannot establish content validity, so the paper claims a screening of the pool by three independent raters and reports the gap that remains."
+    ]
+  }
 }

@@ -188,7 +188,7 @@ rater training, 1 corpus-level proxy and 1 derived ratio. The protocol records
 the executable count at freeze rather than capping it. The registry refuses to
 freeze while any used subject lacks an accepted decision.
 
-The feasibility pilot (protocol 2.6.0) freezes 16 generation jobs over two
+The feasibility pilot (protocol 2.7.0) freezes 16 generation jobs over two
 cohorts, two English AnnoMI conversations and their Czech translations, two
 purposes and two generator families, and balances an 8-note human sample across
 them. Two Czech psychologists, neither the instrument author, rate under a
@@ -232,10 +232,16 @@ repository's test suite.
 
 It does not present a completed scoping review: two databases were not
 searched, most of the pool was not screened, and the estimate of what was
-missed is reported. It does not present content validity in the sense the method it
-follows requires: expert judges "should be independent of those who developed
-the item pool" (Boateng et al., 2018), and here the pool was developed by the
-investigator with the assistant and judged by the investigator. The two Czech
+missed is reported. It does not present established content validity. The method it follows asks
+for expert judges who "should be independent of those who developed the item
+pool" (Boateng et al., 2018) and calls five to seven of them typical. The pool
+was developed by the investigator with the assistant, and on 2026-10-07, before
+any rating existed, a retention threshold was registered and the whole pool was
+put to three therapists who are neither: three of three retains an item, two of
+three retains it as contested with the dissent published, fewer removes it from
+the measured set. Three raters is below the typical range, so what the panel
+supplies is a screening of the pool and not established content validity, and
+the measured set the pilot uses is the panel's rather than the authors'. The two Czech
 psychologists of the pilot are raters, not independent judges of the pool, and
 a feasibility pilot does not stand in for that judgement. COSMIN's criteria
 name relevance, comprehensiveness and comprehensibility as what such a
