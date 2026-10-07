@@ -8,11 +8,14 @@
     "pubmed-note-quality-instruments": 477,
     "acl-direct": 19,
     "acl-transfer": 2152,
-    "acl-clinical-doc": 406
+    "acl-clinical-doc": 406,
+    "scopus-direct": 1154,
+    "scopus-note-quality": 645,
+    "scopus-llm-docs": 1373
   },
-  "sum_before_dedup": 11362,
-  "unique_records_after_dedup": 10223,
-  "duplicates_removed": 1139,
+  "sum_before_dedup": 14534,
+  "unique_records_after_dedup": 12042,
+  "duplicates_removed": 2492,
   "dedup_rule": "DOI, else PMID, else normalised title (ASCII-folded, alphanumeric only)",
   "doi_rule": "a PubMed record's DOI is read from PubmedData/ArticleIdList, else from the article's ELocationID; never from its reference list",
   "corrections": [
@@ -20,13 +23,39 @@
       "date": "2026-09-15",
       "what": "Until this date the DOI was the last ArticleId of type doi anywhere in the record, which includes the cited-reference list: 2719 PubMed records were keyed by a reference's DOI and distinct records merged as duplicates (10059 unique, 1303 removed before the correction).",
       "effect": "rebuilt with the record's own DOI; the counts in this file changed"
+    },
+    {
+      "date": "2026-10-07",
+      "what": "The three Scopus queries of amendment AM-7 were added to the pool. Scopus had been a declared gap since 2026-09-13 because its API needs a key; the investigator ran the queries in the institutional web interface.",
+      "effect": "the pool grew and the counts in this file changed; every record that entered through Scopus alone is unscreened until a dated screening round says otherwise"
     }
   ],
-  "with_abstract": 10062,
+  "with_abstract": 11855,
   "by_source_db": {
     "PubMed": 7806,
-    "ACL Anthology": 2422
+    "ACL Anthology": 2422,
+    "Scopus": 3100
+  },
+  "in_more_than_one_database": 1283,
+  "reached_only_through": {
+    "PubMed": 6549,
+    "ACL Anthology": 2391,
+    "Scopus": 1819
+  },
+  "identifier_key_used": {
+    "doi": 10570,
+    "pmid": 662,
+    "ttl": 810
+  },
+  "title_key_risk": "a record with no DOI and no PMID is keyed by its normalised title, which merges the same work across databases and fails to merge it when a subtitle differs. The count above is how many records that applies to.",
+  "same_normalised_title_on_several_records": {
+    "groups": 126,
+    "records_involved": 253,
+    "groups_involving_scopus": 94,
+    "defect": "these are the same work entered twice, not two works with one title, in every case inspected. The key order is DOI, then PMID, then normalised title, so a work that PubMed gives a DOI for and Scopus does not is keyed two different ways and never merged.",
+    "known_consequence": "the unique record count above is an overcount by at most the difference between records_involved and groups, the duplicates are ranked twice by the prioritiser, and one work is in the priority stratum twice and was screened in twice, once in each round.",
+    "not_fixed_here": "merging on normalised title needs a guard against short and generic titles, and it would move the strata, the samples drawn from them and the screening judgements made over those samples. It is a correction of its own."
   },
   "pool_file": "C:\\Users\\Nehyba\\therapy-note-bench\\local\\gen2-review-2026-09-13\\exports\\pool.json",
-  "pool_sha256": "d906fead5824ce6eb972f2bf2920febc2e5b584073386e39b9404b317117a59a"
+  "pool_sha256": "2968a6bf4a3d77cfaee3a0380d24c21e712fb9d13b57866a8dbe49128ca6a347"
 }

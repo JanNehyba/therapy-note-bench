@@ -72,6 +72,27 @@ ALLOWED_CZECH: dict[str, str] = {
 #: raters read, authored for the investigator's decision. It must say so.
 INSTRUMENT_MARKER = "AUTHORED-INSTRUMENT-TEXT"
 
+#: Files that hold the titles of indexed records as the databases give them.
+#:
+#: These are not an allow-list for Czech. Scopus returns a non-English
+#: record's own title in brackets after the English one, two of the records the
+#: searches of 2026-10-07 returned are Spanish, and Spanish shares letters with
+#: Czech. The titles are recorded verbatim because a title is the key a
+#: screening decision is filed under: fold the accents away and the decision no
+#: longer matches the record.
+#:
+#: The door is the shape of the data, not the name of the file. Every match in
+#: these files must sit inside a bracketed alternative title, which on its line
+#: follows the marker below. A sentence of a transcript pasted into one of them
+#: carries no such marker and still fails the scan.
+BIBLIOGRAPHIC: dict[str, str] = {
+    "research/gen2/review-2026-09-13/screen.py": "titles of the audited records, judged by the "
+    "assistant and filed under the title the pool holds",
+    "research/gen2/review-2026-09-13/screening-decisions.json": "generated from screen.py",
+    "research/gen2/review-2026-09-13/flow.json": "generated from the screening record",
+}
+ALTERNATIVE_TITLE = "; ["
+
 #: What every file under ``tests/fixtures/czech`` must say about itself. The
 #: allow-list above opens a door; this is what stops a real transcript walking
 #: through it by being dropped into a directory whose path is permitted.
@@ -160,6 +181,11 @@ def _relative(path: Path) -> str:
 def test_czech_exceptions_are_only_authored_gen2_resources(tracked_files):
     core = {CORE + f for f in ("profiles.py", "review.js", "controls.py")}
     assert set(ALLOWED_CZECH) == core | {OPERATIONAL, DRAFT, DECISIONS, EXPERT}
+    # The bibliographic exception is a separate list with a separate rule, and
+    # nothing published is on it.
+    assert not set(BIBLIOGRAPHIC) & set(ALLOWED_CZECH)
+    assert not set(BIBLIOGRAPHIC) & set(PUBLISHED)
+    assert all(reason for reason in BIBLIOGRAPHIC.values())
     assert FIXTURE_MARKER in (REPO_ROOT / CORE / "controls.py").read_text(encoding="utf-8")
     assert INSTRUMENT_MARKER in (REPO_ROOT / OPERATIONAL).read_text(encoding="utf-8")
     assert "AUTHORED-INVESTIGATOR-TEXT" in (REPO_ROOT / DECISIONS).read_text(encoding="utf-8")
@@ -167,12 +193,43 @@ def test_czech_exceptions_are_only_authored_gen2_resources(tracked_files):
 
 
 def test_only_named_files_contain_czech(tracked_files):
+    allowed = set(ALLOWED_CZECH) | set(BIBLIOGRAPHIC)
     offenders = []
     for path in tracked_files:
         text = _readable_text(path)
-        if text and DIACRITIC.search(text) and _relative(path) not in ALLOWED_CZECH:
+        if text and DIACRITIC.search(text) and _relative(path) not in allowed:
             offenders.append(_relative(path))
     assert not offenders, f"Czech text in tracked files that may not carry it: {offenders}"
+
+
+def test_the_bibliographic_exception_only_covers_alternative_titles(tracked_files):
+    """Each match in those three files is inside a record's own-language title.
+
+    This is what keeps the exception from being a blanket one. The three files
+    are generated and will grow with every search round, so the rule has to
+    hold for text nobody has read yet: a diacritic is permitted where a
+    database put a non-English title in brackets, and nowhere else.
+    """
+    for name in BIBLIOGRAPHIC:
+        path = REPO_ROOT / name
+        assert path.is_file(), name
+        text = path.read_text(encoding="utf-8")
+        assert DIACRITIC.search(text), f"{name}: no longer needs the exception; remove the entry"
+        for match in DIACRITIC.finditer(text):
+            start = text.rfind("\n", 0, match.start()) + 1
+            end = text.find("\n", match.start())
+            line = text[start : end if end != -1 else len(text)]
+            marker = line.find(ALTERNATIVE_TITLE)
+            # Reported by position, never by content: printing the line would
+            # be the leak this file exists to prevent.
+            where = match.start()
+            assert marker != -1, f"{name}: diacritic outside an alternative title at {where}"
+            assert marker < match.start() - start, (
+                f"{name}: diacritic before the alternative title at {match.start()}"
+            )
+            assert "]" in line[match.start() - start :], (
+                f"{name}: unclosed alternative title at {match.start()}"
+            )
 
 
 def test_the_scanner_is_never_allow_listed():

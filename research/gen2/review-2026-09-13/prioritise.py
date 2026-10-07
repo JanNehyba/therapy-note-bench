@@ -121,11 +121,20 @@ def main() -> None:
     priority = [r for r in records if r["priority_score"] >= threshold]
     remainder = [r for r in records if r["priority_score"] < threshold]
 
+    # Two remainders, audited separately. A record "reached only through
+    # Scopus" has no PubMed or ACL query behind it, so it was unreachable
+    # before 2026-10-07 and the audit of 2026-09-13 says nothing about it.
+    parent_remainder = [r for r in remainder if r["source_dbs"] != ["Scopus"]]
+    scopus_remainder = [r for r in remainder if r["source_dbs"] == ["Scopus"]]
+
     rng = random.Random(20260913)
-    audit = rng.sample(remainder, min(200, len(remainder)))
+    audit = rng.sample(parent_remainder, min(200, len(parent_remainder)))
+    rng_scopus = random.Random(20261007)
+    audit_scopus = rng_scopus.sample(scopus_remainder, min(200, len(scopus_remainder)))
 
     (EXPORTS / "screen-priority.json").write_bytes((json.dumps(priority, indent=1, ensure_ascii=False) + "\n").encode("utf-8"))
     (EXPORTS / "screen-audit-sample.json").write_bytes((json.dumps(audit, indent=1, ensure_ascii=False) + "\n").encode("utf-8"))
+    (EXPORTS / "screen-audit-sample-scopus.json").write_bytes((json.dumps(audit_scopus, indent=1, ensure_ascii=False) + "\n").encode("utf-8"))
 
     dist: dict[int, int] = {}
     for r in records:
@@ -137,15 +146,42 @@ def main() -> None:
         "signals": [{"tag": t, "weight": w, "pattern": p} for p, t, w in SIGNALS],
         "negative_signals": [{"weight": w, "pattern": p} for p, w in NEGATIVE],
         "priority_threshold": threshold,
+        "priority_threshold_basis": (
+            "registered before the screen of 2026-09-13 and unchanged since. The Scopus "
+            "records of 2026-10-07 were ranked by the same rule at the same cut; choosing a "
+            "cut with the new records in view would be choosing it after seeing the data."
+        ),
         "priority_stratum": len(priority),
+        "priority_stratum_reached_only_through_scopus": sum(
+            1 for r in priority if r["source_dbs"] == ["Scopus"]
+        ),
         "remainder_stratum": len(remainder),
+        "remainder_parent": len(parent_remainder),
+        "remainder_reached_only_through_scopus": len(scopus_remainder),
+        "why_the_remainder_is_split": (
+            "the audit of 2026-09-13 sampled the PubMed and ACL remainder, so its eligibility "
+            "rate is a property of that remainder. The records Scopus alone brought in were "
+            "unreachable then and are sampled separately rather than covered by an "
+            "extrapolation nobody measured."
+        ),
         "audit_sample_size": len(audit),
         "audit_sample_seed": 20260913,
+        "audit_sample_frame": "the remainder reachable without Scopus",
         "audit_sample_note": (
             "The 200-record sample judged on 2026-09-13 was drawn before the parser fix of "
             "that evening; the file on disk is a later draw with the same seed over a changed "
             "remainder and does not reproduce the judged sample. The judgement itself is "
-            "recorded in screening-decisions.json."
+            "recorded in screening-decisions.json. The frame shrank again on 2026-10-07, when "
+            "the Scopus records moved to their own stratum, so the drift is larger, not "
+            "smaller, than it was."
+        ),
+        "audit_sample_scopus_size": len(audit_scopus),
+        "audit_sample_scopus_seed": 20261007,
+        "audit_sample_scopus_frame": "the remainder reached only through Scopus",
+        "audit_sample_scopus_note": (
+            "Drawn on 2026-10-07 from the stratum the Scopus searches added. This draw does "
+            "reproduce: the frame is fixed by the three export checksums in "
+            "search-log-scopus.json and the seed is recorded here."
         ),
         "audit_purpose": (
             "Estimate how many eligible records the ordering pushed below the threshold. "
@@ -158,10 +194,18 @@ def main() -> None:
         "audit_sha256": hashlib.sha256(
             (EXPORTS / "screen-audit-sample.json").read_bytes()
         ).hexdigest(),
+        "audit_scopus_sha256": hashlib.sha256(
+            (EXPORTS / "screen-audit-sample-scopus.json").read_bytes()
+        ).hexdigest(),
     }
     (ROOT / "screening-strata.json").write_bytes((json.dumps(summary, indent=2, ensure_ascii=False) + "\n").encode("utf-8"))
     print(
-        f"pool={len(records)} priority={len(priority)} remainder={len(remainder)} audit={len(audit)}"
+        f"pool={len(records)} priority={len(priority)} remainder={len(remainder)} "
+        f"audit={len(audit)}"
+    )
+    print(
+        f"  scopus-only: priority={summary['priority_stratum_reached_only_through_scopus']} "
+        f"remainder={len(scopus_remainder)} audit={len(audit_scopus)}"
     )
     print("score distribution (top):", dict(list(sorted(dist.items(), reverse=True))[:18]))
 

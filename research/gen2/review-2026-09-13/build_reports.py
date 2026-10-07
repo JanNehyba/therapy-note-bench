@@ -255,6 +255,16 @@ def build(
                 "message": mapping["audit_sample_drift"],
             }
         )
+    # The other audit sample is in the opposite state, and an estimate that can
+    # be checked should not look the same in the ledger as one that cannot.
+    if mapping.get("scopus_audit_sample_check"):
+        diagnostics.append(
+            {
+                "level": "info",
+                "subject": "screen-audit-sample-scopus.json",
+                "message": mapping["scopus_audit_sample_check"],
+            }
+        )
 
     out = {
         "version": ledger.VERSION,

@@ -3,10 +3,15 @@
 Deduplication is by DOI, then PMID, then a normalised title. The source query
 or queries of every record are kept, so per-database counts stay reportable
 after merging.
+
+Three databases feed it: PubMed (XML, six queries), the ACL Anthology (BibTeX
+parsed to JSON, three queries) and Scopus (CSV, three queries added on
+2026-10-07 by amendment AM-7).
 """
 
 from __future__ import annotations
 
+import csv
 import hashlib
 import json
 import re
@@ -27,6 +32,12 @@ PUBMED_QUERIES = [
     "pubmed-note-quality-instruments",
 ]
 ACL_QUERIES = ["acl-direct", "acl-transfer", "acl-clinical-doc"]
+SCOPUS_QUERIES = ["scopus-direct", "scopus-note-quality", "scopus-llm-docs"]
+
+#: Scopus writes this in the abstract column when there is no abstract. Kept as
+#: an empty abstract rather than as text, so a record without an abstract is not
+#: scored by the prioritiser on the words of the placeholder.
+NO_ABSTRACT = "[No abstract available]"
 
 
 def norm_title(t: str) -> str:
@@ -112,6 +123,89 @@ def parse_pubmed_xml(path: Path) -> list[dict]:
     return out
 
 
+def parse_scopus_csv(path: Path) -> list[dict]:
+    """Read one Scopus CSV export.
+
+    The DOI column is the record's own; Scopus does not put a cited reference
+    there. The EID is carried through because it is the only identifier a
+    Scopus record without a DOI has, and because it is what the export file is
+    auditable by.
+    """
+    out: list[dict] = []
+    with open(path, encoding="utf-8-sig", newline="") as handle:
+        for row in csv.DictReader(handle):
+            abstract = (row.get("Abstract") or "").strip()
+            if abstract.startswith(NO_ABSTRACT):
+                abstract = ""
+            doctype = (row.get("Document Type") or "").strip()
+            out.append(
+                {
+                    "pmid": None,
+                    "doi": norm_doi(row.get("DOI")),
+                    "title": (row.get("Title") or "").strip(),
+                    "abstract": abstract,
+                    "venue": (row.get("Source title") or "").strip(),
+                    "year": (row.get("Year") or "").strip(),
+                    "pubtypes": [doctype] if doctype else [],
+                    "keywords": "; ".join(
+                        k
+                        for k in (
+                            (row.get("Author Keywords") or "").strip(),
+                            (row.get("Index Keywords") or "").strip(),
+                        )
+                        if k
+                    ),
+                    "eid": (row.get("EID") or "").strip() or None,
+                    "url": (row.get("Link") or "").strip() or None,
+                    "source_db": "Scopus",
+                }
+            )
+    return out
+
+
+def _duplicate_titles(records: list[dict]) -> dict:
+    """Measure the duplicates the key order cannot catch.
+
+    The key order is DOI, then PMID, then normalised title. Two records of the
+    same work therefore stay apart whenever one database gives a DOI and the
+    other does not, which is common between PubMed and Scopus. This counts the
+    groups rather than merging them, because merging on title needs a guard
+    against short and generic titles and would move every stratum drawn from
+    the pool.
+    """
+    groups: dict[str, list[dict]] = {}
+    for r in records:
+        key = norm_title(r["title"])
+        if key:
+            groups.setdefault(key, []).append(r)
+    repeated = {k: v for k, v in groups.items() if len(v) > 1}
+    with_scopus = {
+        k: v for k, v in repeated.items() if any("Scopus" in r["source_dbs"] for r in v)
+    }
+    return {
+        "groups": len(repeated),
+        "records_involved": sum(len(v) for v in repeated.values()),
+        "groups_involving_scopus": len(with_scopus),
+        "defect": (
+            "these are the same work entered twice, not two works with one title, in every "
+            "case inspected. The key order is DOI, then PMID, then normalised title, so a "
+            "work that PubMed gives a DOI for and Scopus does not is keyed two different ways "
+            "and never merged."
+        ),
+        "known_consequence": (
+            "the unique record count above is an overcount by at most the difference between "
+            "records_involved and groups, the duplicates are ranked twice by the prioritiser, "
+            "and one work is in the priority stratum twice and was screened in twice, once in "
+            "each round."
+        ),
+        "not_fixed_here": (
+            "merging on normalised title needs a guard against short and generic titles, and "
+            "it would move the strata, the samples drawn from them and the screening "
+            "judgements made over those samples. It is a correction of its own."
+        ),
+    }
+
+
 def main() -> None:
     pool: dict[str, dict] = {}
     per_query: dict[str, int] = {}
@@ -130,6 +224,12 @@ def main() -> None:
                 pool[ident]["source_dbs"].append(rec["source_db"])
             if not pool[ident].get("abstract") and rec.get("abstract"):
                 pool[ident]["abstract"] = rec["abstract"]
+            # A merge must not lose the identifier the other database knew the
+            # record by: a Scopus EID on a record first seen in PubMed is how
+            # that record is found again in the export it came from.
+            for field in ("eid", "pmid", "doi", "keywords", "url"):
+                if not pool[ident].get(field) and rec.get(field):
+                    pool[ident][field] = rec[field]
         else:
             r = dict(rec)
             r["id"] = ident
@@ -163,6 +263,12 @@ def main() -> None:
                 qid,
             )
 
+    for qid in SCOPUS_QUERIES:
+        recs = parse_scopus_csv(EXPORTS / f"{qid}.csv")
+        per_query[qid] = len(recs)
+        for r in recs:
+            add(r, qid)
+
     records = list(pool.values())
     POOL.write_bytes((json.dumps(records, indent=1, ensure_ascii=False) + "\n").encode("utf-8"))
     summary = {
@@ -185,13 +291,41 @@ def main() -> None:
                     "(10059 unique, 1303 removed before the correction)."
                 ),
                 "effect": "rebuilt with the record's own DOI; the counts in this file changed",
-            }
+            },
+            {
+                "date": "2026-10-07",
+                "what": (
+                    "The three Scopus queries of amendment AM-7 were added to the pool. "
+                    "Scopus had been a declared gap since 2026-09-13 because its API needs a "
+                    "key; the investigator ran the queries in the institutional web interface."
+                ),
+                "effect": (
+                    "the pool grew and the counts in this file changed; every record that "
+                    "entered through Scopus alone is unscreened until a dated screening round "
+                    "says otherwise"
+                ),
+            },
         ],
         "with_abstract": sum(1 for r in records if r.get("abstract")),
         "by_source_db": {
             db: sum(1 for r in records if db in r["source_dbs"])
-            for db in ("PubMed", "ACL Anthology")
+            for db in ("PubMed", "ACL Anthology", "Scopus")
         },
+        "in_more_than_one_database": sum(1 for r in records if len(r["source_dbs"]) > 1),
+        "reached_only_through": {
+            db: sum(1 for r in records if r["source_dbs"] == [db])
+            for db in ("PubMed", "ACL Anthology", "Scopus")
+        },
+        "identifier_key_used": {
+            kind: sum(1 for r in records if r["id"].startswith(f"{kind}:"))
+            for kind in ("doi", "pmid", "ttl")
+        },
+        "title_key_risk": (
+            "a record with no DOI and no PMID is keyed by its normalised title, which merges "
+            "the same work across databases and fails to merge it when a subtitle differs. "
+            "The count above is how many records that applies to."
+        ),
+        "same_normalised_title_on_several_records": _duplicate_titles(records),
         "pool_file": str(POOL),
         "pool_sha256": hashlib.sha256(POOL.read_bytes()).hexdigest(),
     }

@@ -8,20 +8,41 @@
     "platform": "NCBI E-utilities",
     "queries": 6,
     "records": 8820,
+    "records_is_a_lower_bound": false,
     "downloaded_completely": true,
-    "source": "search-log total_records per query"
+    "source": "search-log total_records per query",
+    "search_date": null
    },
    {
     "name": "ACL Anthology",
     "platform": "offline corpus search, amendment AM-5",
     "queries": 3,
     "records": 2577,
+    "records_is_a_lower_bound": false,
     "downloaded_completely": true,
-    "source": "search-log total_records per query"
+    "source": "search-log total_records per query",
+    "search_date": null
+   },
+   {
+    "name": "Scopus",
+    "platform": "Scopus web interface, advanced search (no API key; amendment AM-7)",
+    "queries": 3,
+    "records": 3172,
+    "records_is_a_lower_bound": true,
+    "downloaded_completely": "unverified",
+    "source": "search-log total_records per query",
+    "search_date": "2026-10-07",
+    "records_basis": "the number of rows in the export. The hit count the interface reported for this query was not written down, so this is what is in hand: a lower bound on what the query returned, not the query's reported total."
    }
   ],
-  "records_from_databases": 11397,
-  "downloaded_completely": true,
+  "records_from_databases": 14569,
+  "records_from_databases_includes_a_lower_bound": true,
+  "what_the_lower_bound_means": "The Scopus searches were run by hand and the hit count the interface reported was not captured, so their contribution to this total is the number of records exported. The total is therefore at least this, and the shortfall, if any, is unknown rather than zero.",
+  "downloaded_completely": {
+   "PubMed/MEDLINE": true,
+   "ACL Anthology": true,
+   "Scopus": "unverified"
+  },
   "not_parsed_into_pool": {
    "count": 35,
    "what": "PubmedBookArticle records (book chapters); structurally different and excluded from the screening pool, quantified rather than silently dropped"
@@ -30,10 +51,15 @@
    {
     "name": "APA PsycINFO",
     "reason": "search.ebscohost.com redirects to an institutional login; no EBSCO credential is configured"
-   },
+   }
+  ],
+  "databases_searched_after_the_parent_round": [
    {
     "name": "Scopus",
-    "reason": "api.elsevier.com/content/search/scopus returned HTTP 401 without an API key"
+    "searched_on": "2026-10-07",
+    "by_route": "Scopus web interface, advanced search, institutional access",
+    "why_it_was_a_gap": "api.elsevier.com/content/search/scopus returned HTTP 401 without an API key",
+    "amendment": "AM-7"
    }
   ],
   "other_methods": {
@@ -192,30 +218,38 @@
   }
  },
  "deduplication": {
-  "before": 11362,
-  "after": 10223,
-  "removed": 1139,
+  "before": 14534,
+  "after": 12042,
+  "removed": 2492,
   "rule": "DOI, else PMID, else normalised title (ASCII-folded, alphanumeric only)",
   "source": "pool-summary.json",
-  "known_defect": "build_pool.py keyed PubMed records by the last DOI in the record, which can be a cited reference; some merges are therefore wrong and some report ids in the pool are not the report's own. The ledger keys reports by verified identifiers; the pool is to be rebuilt in a separate correction."
+  "known_defect": "build_pool.py keyed PubMed records by the last DOI in the record, which can be a cited reference; some merges are therefore wrong and some report ids in the pool are not the report's own. The ledger keys reports by verified identifiers; the pool was rebuilt on 2026-09-15 and this note is kept for the history.",
+  "second_known_defect": {
+   "what": "The key order is DOI, then PMID, then normalised title, so the same work entered twice whenever one database supplied a DOI and the other did not. That is common between PubMed and Scopus.",
+   "groups": 126,
+   "records_involved": 253,
+   "groups_involving_scopus": 94,
+   "effect": "the unique count above is an overcount by at most records_involved minus groups; one work sits in the priority stratum twice and was screened in twice, once in each round",
+   "status": "measured on 2026-10-07, not yet corrected"
+  }
  },
  "screening": {
-  "pool": 10223,
+  "pool": 12042,
   "priority_threshold": 9,
-  "priority_stratum": 507,
-  "priority_stratum_screened": 487,
-  "priority_stratum_not_screened": 20,
-  "remainder_not_screened": 9716,
+  "priority_stratum": 687,
+  "priority_stratum_screened": 666,
+  "priority_stratum_not_screened": 21,
+  "remainder_not_screened": 11355,
   "ai_proposals": {
-   "include": 192,
-   "exclude": 295,
-   "total": 487,
+   "include": 246,
+   "exclude": 420,
+   "total": 666,
    "include_by_layer": {
-    "direct": 57,
-    "requirements": 14,
-    "transfer:instrument": 42,
-    "transfer:llm-documentation": 55,
-    "transfer:method": 24
+    "direct": 68,
+    "requirements": 23,
+    "transfer:instrument": 51,
+    "transfer:llm-documentation": 70,
+    "transfer:method": 34
    },
    "status": "AI-assisted screening proposals awaiting human decision"
   },
@@ -223,7 +257,27 @@
    "made": 0,
    "source": "screening-decisions.json#human_decisions_made"
   },
+  "rounds": [
+   {
+    "round": "2026-09-13",
+    "frame": "the priority stratum of the PubMed and ACL searches",
+    "source": "include-candidates.json"
+   },
+   {
+    "round": "2026-10-07",
+    "frame": "the 180 priority records the Scopus searches of amendment AM-7 added",
+    "source": "include-candidates-2026-10-07.json",
+    "include": 55,
+    "exclude": 125
+   }
+  ],
+  "ai_proposals_by_round": {
+   "2026-09-13": 192,
+   "2026-10-07": 54
+  },
   "audit_of_unscreened": {
+   "frame": "the remainder reachable without Scopus",
+   "frame_size": 9716,
    "sampled": 200,
    "sampling": "simple random sample, seed 20260913",
    "clearly_eligible_found": 6,
@@ -258,8 +312,79 @@
     301,
     931
    ],
+   "applies_to": "this frame only. Until 2026-10-07 the frame was the whole remainder; the Scopus records now have their own stratum and their own estimate, because applying this rate to them would extrapolate to a population nobody sampled.",
    "interpretation": "The priority ordering is not a complete screen. An estimated share of eligible records sits below the threshold and was never screened. Most of them are transfer-layer NLP method papers, a large and well-populated literature; two of the six clear finds were direct or requirements evidence, so the gap is not confined to the transfer layer.",
-   "basis": "recorded in screening-decisions.json; the sample on disk was regenerated after the parser fix (see reports.json diagnostics)"
+   "basis": "recorded in screening-decisions.json; the sample on disk was regenerated after the parser fix (see reports.json diagnostics) and again when the Scopus records moved to their own stratum"
+  },
+  "audit_of_unscreened_scopus_remainder": {
+   "frame": "the remainder reached only through the Scopus searches of 2026-10-07",
+   "frame_size": 1639,
+   "sampled": 200,
+   "sampling": "simple random sample, seed 20261007",
+   "read_from": "title and the first 360 characters of the abstract",
+   "clearly_eligible_found": 28,
+   "borderline_eligible_found": 11,
+   "clearly_eligible_titles": [
+    "EHRCon: Dataset for Checking Consistency between Unstructured Notes and Structured Tables in Electronic Health Records",
+    "Toward Relieving Clinician Burden by Automatically Generating Progress Notes using Interim Hospital Data",
+    "Electronic Record Keeping and Psychotherapy Alliance: The Role of Concurrent Collaborative Documentation",
+    "MTS-Dialog-Bangla: A Dataset and Benchmark for Bangla Clinical Dialogue-to-Note Summarization",
+    "Do Clinicians Know How to Prompt? The Need for Automatic Prompt Optimization Help in Clinical Note Generation",
+    "Note Keeping in the Digital Age: Making Good Use of Electronic Records Systems",
+    "An interactive system for generating hospital progress notes",
+    "Large Language Models for Clinical Note Simplification: A Systematic Review and Experimental Evaluation of Medical Text Readability",
+    "Social circumstances reports--a critical evaluation.",
+    "A Study on Automatic Generation of Chinese Discharge Summary",
+    "Hallucinations and Key Information Extraction in Medical Texts: A Comprehensive Assessment of Open-Source Large Language Models",
+    "Implementation and Impact of Psychiatric Electronic Medical Records in a Public Medical Center",
+    "Recommendations for integrated progress notes",
+    "Enhancing Clinical Note Generation from Doctor-Patient Conversations through Semantic Partition-Oriented Summarization",
+    "Exploring the Potential of Ambient AI for Inpatient Documentation: A Qualitative Study with Junior Doctors",
+    "Experiments in Automated Generation of Discharge Summaries in Italian",
+    "Clinical documentation following aggressive incidents in mental health inpatient settings may perpetuate stigma against patients",
+    "Fine-Tuning Large Language Models for Automated Subjective, Objective, Assessment, and Plan Note Generation in Medical Contexts",
+    "A randomized trial of standardized nursing patient assessment using wireless devices.",
+    "The third voice: Writing case-notes",
+    "HuskyScribe at MEDIQA-Sum 2023: Summarizing Clinical Dialogues with Transformers",
+    "Adaptive Reinforcement Learning for Quality Assurance in Clinical Assessment: A Multi-agent Framework",
+    "Artificial intelligence medical scribes in allied health: a solution in search of evidence?",
+    "Use of a psychiatric proforma for accident and emergency officers",
+    "An evaluation of the quality of the medical information passing between primary care and specialist levels; [Evaluación de la calidad de la información médica entre los niveles de atención primaria y especializada.]",
+    "Beyond ASR: Achieving Privacy-Aligned Low Diarization Error Rates in Psychiatric Transcripts Using Large Language Models",
+    "NewAgeHealthWarriors at MEDIQA-Chat 2023 Task A: Summarizing Short Medical Conversation with Transformers",
+    "Factual consistency evaluation of summarization in the Era of large language models"
+   ],
+   "borderline_titles": [
+    "A Comparative Analysis of Ai-Based Solutions for Clinical Documentation",
+    "Artificial intelligence scribe: A new era in medical documentation",
+    "Ai-Augmented Clinical Handoff Systems: Integrating Large Language Models With Electronic Health Records For Safer Care Transitions",
+    "Collaboration of Large and Small Language Models with Iterative Reflection Framework for Clinical Note Summarization; [大型和小型语言模型协同迭代反射框架在临床病历摘要中的应用]",
+    "Large language models (LLMs) for healthcare: A practical guide to their process and evaluation",
+    "Technology-Enabled Diagnosis and Documentation in Psychiatry: Prospects, Challenges, and Future Directions",
+    "MaLei at MultiClinSUM: Summarisation of Clinical Documents using Perspective-Aware Iterative Self-Prompting with LLMs",
+    "Automated Brief Hospital Course Summarization in Cardiac Surgery Using a Lightweight Large Language Model-Based Framework: Development and Evaluation Study on the Medical Information Mart for Intensive Care-IV",
+    "Development and implementation of an evidence-based biofield therapy standardized documentation tool",
+    "Workload, Motivation, and Nursing Compliance with Electronic Documentation: A CrossSectional Study in Indonesia; [Carga de Trabajo, Motivación y Cumplimiento de Documentación Electrónica de Enfermería: Estudio Transversal en Indonesia]",
+    "Large language models for the mental health community: framework for translating code to care"
+   ],
+   "clear_rate": 0.14,
+   "clear_rate_ci95_wilson": [
+    0.0987,
+    0.1949
+   ],
+   "estimated_eligible_records_below_threshold": 229,
+   "estimated_ci95": [
+    162,
+    319
+   ],
+   "estimated_including_borderline": 320,
+   "estimated_including_borderline_ci95": [
+    239,
+    419
+   ],
+   "interpretation": "The clear rate in this stratum is several times the rate measured in the parent remainder in September. The likely reason is that the Scopus queries name this review's subject matter directly and Scopus matches them against indexed keywords as well as title and abstract, so a record can be squarely on topic and still score below a threshold built from title and abstract words. The ordering rule and its threshold were left unchanged, because they were registered before the first screen; what changes is the size of the declared gap.",
+   "not_a_measured_ratio": "The two strata were judged by the same assistant on different days from differently formatted listings, so the difference between the two rates is not a measurement of anything. Comparing them properly would mean judging the parent frame again under this round's procedure, which has not been done.",
+   "basis": "recorded in screening-decisions.json; drawn and judged on 2026-10-07"
   }
  },
  "full_text": {
@@ -374,13 +499,14 @@
   }
  ],
  "derived_from": {
-  "reports.json": "9ede3007f0145b4d97f9d111c2b62ed151a976e3f8e46cef95ba027074d46028",
-  "pool-summary.json": "a1ded470c9d7956637a4476564c730887cfc9c3c1d5314fc54f0da15050c0cb3",
-  "screening-decisions.json": "2f98644de1101880fe54fa705b3cf7ece932803e07b51d56be35e96bbd145a80",
-  "screening-strata.json": "7f5cec8ab7f51c80bba97ceb1e359ff68b9ad7e39122c8211606d14a7e7bf21b",
+  "reports.json": "37e5d52ce300dd240ae7a08f3bf87bfda15ec13dc63e0b3e9ac90c0b28e7da93",
+  "pool-summary.json": "943b6ba26488884e91c808adcdebbc618e53ca2884f12aec13d482edbc0843f9",
+  "screening-decisions.json": "6f5519b520638e09a901b489baf6d8b9eb61e5e26b45fe72cfb104c021923e06",
+  "screening-strata.json": "d89e50a36bcb370ef9b28a290e40265e9df720c8e677fd06bee7b99941a0f87d",
   "search-log-pubmed.json": "f42e20750dc1d88bea6bb6fd8e0046e6b4f515c3c2fa4012949f27e6e330d6f3",
   "search-log-acl.json": "10cafe1def17c7b52089836fa3413c87a16f50006fc4d285a32940da8492ac6f",
-  "amendments.json": "f20d45ba63caa83ba5e7ea7839c40984de99f26267b68ea952a54b4cbba72aa3",
+  "search-log-scopus.json": "72565b8f49d50d1341c9f314433f588d097bf39aad6265783936ce2609734447",
+  "amendments.json": "fd70d9e72aba8ace8de1281a7131cc363293c21e3dbc7238b724bfbb14abac16",
   "flow-recorded.json": "8f031f1ad6cd2904b3dbce2392b0123f0edb926d48c80e096b1ff74b3d8ffc95"
  }
 }

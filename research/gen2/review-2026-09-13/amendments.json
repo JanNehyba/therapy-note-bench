@@ -1,67 +1,109 @@
 {
-  "version": "amendments-v1",
-  "parent_protocol": "2.0.0",
-  "parent_queries": "queries-v1",
-  "recorded_date": "2026-09-13",
-  "recorded_before_use": true,
-  "note": "Each amendment was recorded before the amended query was executed. The pre-search sensitivity check below is the evidence that motivated them.",
-  "pre_search_sensitivity_check": {
-    "method": "Known relevant works were resolved to PubMed PMIDs, then tested for membership in the full result set of each planned query.",
-    "date": "2026-09-13",
-    "results": [
-      {"known_item": "PDSQI-9 validation, J Am Med Inform Assoc 2025, doi 10.1093/jamia/ocaf068, PMID 40323321", "planned_direct": "missed", "planned_transfer": "missed"},
-      {"known_item": "PDQI-9 preliminary development, JAMIA 2008, PMID 18436914", "planned_direct": "missed", "planned_transfer": "captured"},
-      {"known_item": "LLM summarisation of mental health counseling sessions, JMIR Ment Health 2024, PMID 39042893", "planned_direct": "captured", "planned_transfer": "missed"},
-      {"known_item": "PDQI-9 family, 40 PubMed records", "planned_transfer": "captured 27 of 40"}
-    ],
-    "diagnosis": "The planned transfer query requires 'clinical note*' OR 'medical summar*' OR 'clinical documentation' in Title/Abstract. The PDSQI-9 validation paper describes 'provider documentation summarization' for 'large language models' and matches none of them. No planned query contains any term for automatic or model-based note generation, which is the subject matter of the benchmark under development."
-  },
-  "amendments": [
-    {
-      "id": "AM-1",
-      "type": "added query",
-      "reason": "The planned query set contains no term for large language models, AI scribes or automatic note generation. The literature on model-generated clinical documentation and its evaluation was therefore unreachable, including the PDSQI-9 validation paper that the protocol names as a retrieval seed.",
-      "affects": "PubMed, transfer layer",
-      "new_query_id": "pubmed-llm-docquality"
-    },
-    {
-      "id": "AM-2",
-      "type": "added query, compensating for an unavailable database",
-      "reason": "APA PsycINFO is not accessible from this environment (EBSCOhost requires an institutional login). PsycINFO was the only database planned for the requirements layer, so without an amendment that layer would have no executed search at all. A PubMed requirements query recovers part, not all, of the intended coverage. PsycINFO remains a declared gap; this amendment does not close it.",
-      "affects": "PubMed, requirements layer",
-      "new_query_id": "pubmed-requirements"
-    },
-    {
-      "id": "AM-3",
-      "type": "added query",
-      "reason": "Client reading of their own record, supervision needs and privacy were named as under-covered in the previous formative round and are among the four declared purposes, but no planned query targets them directly.",
-      "affects": "PubMed, requirements layer",
-      "new_query_id": "pubmed-client-access-supervision"
-    },
-    {
-      "id": "AM-4",
-      "type": "added query",
-      "reason": "Documentation quality instruments are the most directly transferable evidence for item wording and rating format, and the planned queries reach them only incidentally. A dedicated instrument query makes that evidence reachable and its recall auditable.",
-      "affects": "PubMed, transfer layer",
-      "new_query_id": "pubmed-note-quality-instruments"
-    },
-    {
-      "id": "AM-5",
-      "type": "changed execution route, not scope",
-      "reason": "ACL Anthology has no query API. The complete Anthology BibTeX corpus is downloaded and searched offline with recorded regular expressions, which is more reproducible than a web search box. The searched corpus snapshot is checksummed.",
-      "affects": "ACL Anthology, both layers",
-      "new_query_id": "acl-direct, acl-transfer"
-    },
-    {
-      "id": "AM-6",
-      "type": "declared deviation, not a query change",
-      "reason": "JBI conduct guidance requires a minimum of two reviewers for study selection and at least two for extraction. This round has one investigator and an AI assistant. Screening and extraction here are AI proposals awaiting human decision; they are not dual independent review and are not reported as completed screening.",
-      "affects": "whole review",
-      "new_query_id": null
-    }
+ "version": "amendments-v1",
+ "parent_protocol": "2.0.0",
+ "parent_queries": "queries-v1",
+ "recorded_date": "2026-09-13",
+ "recorded_before_use": true,
+ "note": "Each amendment was recorded before the amended query was executed. The pre-search sensitivity check below is the evidence that motivated them.",
+ "pre_search_sensitivity_check": {
+  "method": "Known relevant works were resolved to PubMed PMIDs, then tested for membership in the full result set of each planned query.",
+  "date": "2026-09-13",
+  "results": [
+   {
+    "known_item": "PDSQI-9 validation, J Am Med Inform Assoc 2025, doi 10.1093/jamia/ocaf068, PMID 40323321",
+    "planned_direct": "missed",
+    "planned_transfer": "missed"
+   },
+   {
+    "known_item": "PDQI-9 preliminary development, JAMIA 2008, PMID 18436914",
+    "planned_direct": "missed",
+    "planned_transfer": "captured"
+   },
+   {
+    "known_item": "LLM summarisation of mental health counseling sessions, JMIR Ment Health 2024, PMID 39042893",
+    "planned_direct": "captured",
+    "planned_transfer": "missed"
+   },
+   {
+    "known_item": "PDQI-9 family, 40 PubMed records",
+    "planned_transfer": "captured 27 of 40"
+   }
   ],
-  "unavailable_sources": [
-    {"source": "APA PsycINFO", "platform": "EBSCOhost", "evidence": "search.ebscohost.com redirects to an institutional login; no EBSCO credential is configured", "status": "named gap, not searched"},
-    {"source": "Scopus", "platform": "Elsevier Scopus API", "evidence": "api.elsevier.com/content/search/scopus returned HTTP 401 without an API key", "status": "named gap, not searched"}
-  ]
+  "diagnosis": "The planned transfer query requires 'clinical note*' OR 'medical summar*' OR 'clinical documentation' in Title/Abstract. The PDSQI-9 validation paper describes 'provider documentation summarization' for 'large language models' and matches none of them. No planned query contains any term for automatic or model-based note generation, which is the subject matter of the benchmark under development."
+ },
+ "amendments": [
+  {
+   "id": "AM-1",
+   "type": "added query",
+   "reason": "The planned query set contains no term for large language models, AI scribes or automatic note generation. The literature on model-generated clinical documentation and its evaluation was therefore unreachable, including the PDSQI-9 validation paper that the protocol names as a retrieval seed.",
+   "affects": "PubMed, transfer layer",
+   "new_query_id": "pubmed-llm-docquality"
+  },
+  {
+   "id": "AM-2",
+   "type": "added query, compensating for an unavailable database",
+   "reason": "APA PsycINFO is not accessible from this environment (EBSCOhost requires an institutional login). PsycINFO was the only database planned for the requirements layer, so without an amendment that layer would have no executed search at all. A PubMed requirements query recovers part, not all, of the intended coverage. PsycINFO remains a declared gap; this amendment does not close it.",
+   "affects": "PubMed, requirements layer",
+   "new_query_id": "pubmed-requirements"
+  },
+  {
+   "id": "AM-3",
+   "type": "added query",
+   "reason": "Client reading of their own record, supervision needs and privacy were named as under-covered in the previous formative round and are among the four declared purposes, but no planned query targets them directly.",
+   "affects": "PubMed, requirements layer",
+   "new_query_id": "pubmed-client-access-supervision"
+  },
+  {
+   "id": "AM-4",
+   "type": "added query",
+   "reason": "Documentation quality instruments are the most directly transferable evidence for item wording and rating format, and the planned queries reach them only incidentally. A dedicated instrument query makes that evidence reachable and its recall auditable.",
+   "affects": "PubMed, transfer layer",
+   "new_query_id": "pubmed-note-quality-instruments"
+  },
+  {
+   "id": "AM-5",
+   "type": "changed execution route, not scope",
+   "reason": "ACL Anthology has no query API. The complete Anthology BibTeX corpus is downloaded and searched offline with recorded regular expressions, which is more reproducible than a web search box. The searched corpus snapshot is checksummed.",
+   "affects": "ACL Anthology, both layers",
+   "new_query_id": "acl-direct, acl-transfer"
+  },
+  {
+   "id": "AM-6",
+   "type": "declared deviation, not a query change",
+   "reason": "JBI conduct guidance requires a minimum of two reviewers for study selection and at least two for extraction. This round has one investigator and an AI assistant. Screening and extraction here are AI proposals awaiting human decision; they are not dual independent review and are not reported as completed screening.",
+   "affects": "whole review",
+   "new_query_id": null
+  },
+  {
+   "id": "AM-7",
+   "type": "a database recorded as unsearched was searched, by a different route",
+   "date": "2026-10-07",
+   "recorded_before_use": "the queries were, this record was not. The three query strings were fixed in a handover note at 11:35 and the first export was downloaded at 11:43 the same day; this amendment was written after the exports arrived.",
+   "reason": "Scopus was one of two databases the 2026-09-13 round declared as a gap, because api.elsevier.com returns HTTP 401 without a key, and the assistant has no key. The gap mattered: Scopus indexes journals outside MEDLINE, including the German-language psychotherapy literature, so the direct layer of this review was searched in one biomedical database and one NLP corpus only. The investigator has institutional access to the web interface, which needs no key, and ran the three queries there by hand.",
+   "affects": "Scopus, all three layers",
+   "new_query_id": "scopus-direct, scopus-note-quality, scopus-llm-docs",
+   "route": "web interface, executed by the investigator; not re-runnable from this repository. The query strings, the date, the export files and their checksums are in search-log-scopus.json.",
+   "what_it_does_not_close": "the queries cover the three subjects of the parent protocol and nothing else, the interface's reported hit counts were not captured, so completeness of each export is unverified, and screening of what it returned is a separate record. APA PsycINFO remains unsearched."
+  }
+ ],
+ "unavailable_sources": [
+  {
+   "source": "APA PsycINFO",
+   "platform": "EBSCOhost",
+   "evidence": "search.ebscohost.com redirects to an institutional login; no EBSCO credential is configured",
+   "status": "named gap, not searched"
+  }
+ ],
+ "sources_searched_after_the_parent_round": [
+  {
+   "source": "Scopus",
+   "platform_that_was_unavailable": "Elsevier Scopus API",
+   "why_it_was_unavailable": "api.elsevier.com/content/search/scopus returned HTTP 401 without an API key",
+   "status_in_the_parent_round": "named gap, not searched",
+   "searched_on": "2026-10-07",
+   "by_route": "Scopus web interface, advanced search, institutional access",
+   "amendment": "AM-7",
+   "log": "search-log-scopus.json"
+  }
+ ]
 }

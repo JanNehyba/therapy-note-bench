@@ -212,7 +212,7 @@
    "screening": {
     "ai_proposal": "include_candidate",
     "ai_layer": "direct",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[0]",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[1]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -304,7 +304,7 @@
    "screening": {
     "ai_proposal": "include_candidate",
     "ai_layer": "transfer:instrument",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[45]",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[53]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -488,7 +488,7 @@
    "screening": {
     "ai_proposal": "not_screened",
     "ai_layer": null,
-    "ai_proposal_source": "screening-decisions.json#not_screened_detail[26]",
+    "ai_proposal_source": "screening-decisions.json#not_screened_detail[30]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -580,7 +580,7 @@
    "screening": {
     "ai_proposal": "include_candidate",
     "ai_layer": "transfer:instrument",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[25]",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[29]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -694,7 +694,7 @@
    "screening": {
     "ai_proposal": "include_candidate",
     "ai_layer": "transfer:instrument",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[121]",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[157]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -810,7 +810,7 @@
    "screening": {
     "ai_proposal": "include_candidate",
     "ai_layer": "direct",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[252]",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[355]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -1897,7 +1897,7 @@
    "screening": {
     "ai_proposal": "include_candidate",
     "ai_layer": "direct",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[19]",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[22]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -2375,7 +2375,7 @@
    "screening": {
     "ai_proposal": "include_candidate",
     "ai_layer": "transfer:llm-documentation",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[2]",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[3]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -2465,7 +2465,7 @@
    "screening": {
     "ai_proposal": "include_candidate",
     "ai_layer": "transfer:llm-documentation",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[43]",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[51]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -2555,7 +2555,7 @@
    "screening": {
     "ai_proposal": "include_candidate",
     "ai_layer": "direct",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[133]",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[171]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -2645,7 +2645,7 @@
    "screening": {
     "ai_proposal": "include_candidate",
     "ai_layer": "direct",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[62]",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[76]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -2735,7 +2735,7 @@
    "screening": {
     "ai_proposal": "include_candidate",
     "ai_layer": "direct",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[234]",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[334]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -2825,7 +2825,7 @@
    "screening": {
     "ai_proposal": "include_candidate",
     "ai_layer": "transfer:instrument",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[358]",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[509]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -2915,7 +2915,7 @@
    "screening": {
     "ai_proposal": "include_candidate",
     "ai_layer": "requirements",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[229]",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[326]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -3005,7 +3005,7 @@
    "screening": {
     "ai_proposal": "include_candidate",
     "ai_layer": "direct",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[470]",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[640]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -3264,7 +3264,7 @@
    "screening": {
     "ai_proposal": "include_candidate",
     "ai_layer": "direct",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[74]",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[90]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -3354,7 +3354,7 @@
    "screening": {
     "ai_proposal": "include_candidate",
     "ai_layer": "transfer:instrument",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[16]",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[18]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -3444,7 +3444,7 @@
    "screening": {
     "ai_proposal": "include_candidate",
     "ai_layer": "transfer:instrument",
-    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[450]",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[617]",
     "human_decision": null,
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
@@ -3614,15 +3614,20 @@
   {
    "level": "warning",
    "subject": "screen-audit-sample.json",
-   "message": "screen-audit-sample.json on disk was regenerated after the BibTeX parser fix; only one of the six clearly eligible titles hard-coded in screen.py is in the current sample; the recorded audit_sha256 is that of the new file"
+   "message": "screen-audit-sample.json on disk no longer reproduces the sample that was judged. It was regenerated after the BibTeX parser fix of 2026-09-13, again after the DOI correction of 2026-09-15, and again on 2026-10-07 when the Scopus records moved to a stratum of their own and left this one a smaller frame. Checked on 2026-10-07 by looking for the six clearly eligible titles screen.py names: none of the six is in the current draw, where one of six was there before the Scopus round. The judgement itself is recorded as titles in screening-decisions.json and still stands for the records it was made on; what is lost is the ability to re-read them. The recorded audit_sha256 is that of the current file."
+  },
+  {
+   "level": "info",
+   "subject": "screen-audit-sample-scopus.json",
+   "message": "screen-audit-sample-scopus.json does reproduce. Its frame is the remainder reached only through the three Scopus exports, which are checksummed in search-log-scopus.json, and its seed, 20261007, is recorded in screening-strata.json. Checked on 2026-10-07: all 28 clearly eligible and all 11 borderline titles that screen.py names are in the file the seed draws. It will stop reproducing the first time the pool is rebuilt, and then it is to be recorded here in the same way rather than quietly repaired."
   }
  ],
  "derived_from": {
-  "report-map.json": "e7789aeb6bfbd895d3c134808ad2d39f71051f4cafda14373edfbfb6b56e40d5",
+  "report-map.json": "0397d5017117dfbb4621a635e496707dd4b0e4cefe63dc9ee50ee70d5ad8b404",
   "fulltext-retrieval-log.json": "52ddeaedfdda580148007182ec7d0c78c4e1dd1450704dc8c736199418133611",
-  "screening-decisions.json": "2f98644de1101880fe54fa705b3cf7ece932803e07b51d56be35e96bbd145a80",
-  "screening-strata.json": "7f5cec8ab7f51c80bba97ceb1e359ff68b9ad7e39122c8211606d14a7e7bf21b",
-  "pool-summary.json": "a1ded470c9d7956637a4476564c730887cfc9c3c1d5314fc54f0da15050c0cb3"
+  "screening-decisions.json": "6f5519b520638e09a901b489baf6d8b9eb61e5e26b45fe72cfb104c021923e06",
+  "screening-strata.json": "d89e50a36bcb370ef9b28a290e40265e9df720c8e677fd06bee7b99941a0f87d",
+  "pool-summary.json": "943b6ba26488884e91c808adcdebbc618e53ca2884f12aec13d482edbc0843f9"
  },
  "corrections": [],
  "counts": {

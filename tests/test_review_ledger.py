@@ -269,6 +269,52 @@ def test_flow_full_text_is_report_level(flow, reports):
     assert full["retrieval_attempts"]["total"] > full["catalog_reports"]["sought"]
 
 
+def test_the_two_audited_strata_are_estimated_apart(flow):
+    """The September rate is not applied to records September could not reach.
+
+    The audit of 2026-09-13 sampled the remainder of the PubMed and ACL
+    searches. The Scopus searches added 1639 records to the remainder that no
+    earlier query reached, so they are a stratum of their own with their own
+    sample, their own seed and their own rate. Multiplying the old rate by the
+    new, larger remainder would have reported an estimate for a population
+    nobody sampled.
+    """
+    screening = flow["screening"]
+    parent = screening["audit_of_unscreened"]
+    scopus = screening["audit_of_unscreened_scopus_remainder"]
+    assert parent["frame_size"] + scopus["frame_size"] == screening["remainder_not_screened"]
+    assert parent["sampled"] == scopus["sampled"] == 200
+    assert parent["sampling"].endswith("20260913") and scopus["sampling"].endswith("20261007")
+    # Each estimate is its own rate times its own frame, not the other's.
+    for block in (parent, scopus):
+        rate = block["clearly_eligible_found"] / block["sampled"]
+        assert block["estimated_eligible_records_below_threshold"] == round(
+            block["frame_size"] * rate
+        )
+        lo, hi = block["estimated_ci95"]
+        assert lo <= block["estimated_eligible_records_below_threshold"] <= hi
+    assert scopus["clear_rate"] > parent["clear_rate"]
+    # ... and the difference between the two rates is not offered as a finding.
+    assert "not a measurement" in scopus["not_a_measured_ratio"]
+
+
+def test_the_two_screening_rounds_are_kept_apart(flow):
+    """One priority stratum, two dated rounds, and no record in neither.
+
+    The 180 records the Scopus searches put above the threshold were screened
+    on 2026-10-07. Every one of them carries a decision with a reason, which
+    the first round's exclusions do not, and the reason a record is still
+    unscreened names the event that put it in the stratum.
+    """
+    screening = flow["screening"]
+    assert [r["round"] for r in screening["rounds"]] == ["2026-09-13", "2026-10-07"]
+    assert screening["ai_proposals_by_round"]["2026-10-07"] > 0
+    assert (
+        screening["priority_stratum_screened"] + screening["priority_stratum_not_screened"]
+        == screening["pool"] - screening["remainder_not_screened"]
+    )
+
+
 def test_flow_preserves_the_correction_history(flow):
     recorded = json.loads((REVIEW / "flow-recorded.json").read_text(encoding="utf-8"))
     assert flow["corrections"] == recorded["corrections"]
@@ -278,13 +324,34 @@ def test_flow_preserves_the_correction_history(flow):
 
 
 def test_flow_identification_derives_from_the_search_logs(flow):
-    by_name = {
-        d["name"].split("/")[0].split(" ")[0]: d for d in flow["identification"]["databases"]
-    }
+    """Three databases, and one of the three counts is a floor rather than a total.
+
+    PubMed and the ACL corpus report how many records a query matched. Scopus
+    was searched by hand on 2026-10-07 and the hit count it showed was not
+    written down, so its 3172 is the number of rows exported: at least that
+    many records, with the shortfall unknown rather than zero. The total is
+    marked accordingly, and `downloaded_completely` answers per database
+    instead of collapsing an unverifiable claim into one boolean.
+    """
+    identification = flow["identification"]
+    by_name = {d["name"].split("/")[0].split(" ")[0]: d for d in identification["databases"]}
     assert by_name["PubMed"]["records"] == 8820
     assert by_name["ACL"]["records"] == 2577
-    assert flow["identification"]["records_from_databases"] == 11397
-    assert flow["identification"]["not_parsed_into_pool"]["count"] == 35
+    assert by_name["Scopus"]["records"] == 3172
+    assert identification["records_from_databases"] == 8820 + 2577 + 3172
+    assert identification["records_from_databases_includes_a_lower_bound"] is True
+    assert [d["name"] for d in identification["databases"] if d["records_is_a_lower_bound"]] == [
+        "Scopus"
+    ]
+    assert identification["downloaded_completely"] == {
+        "PubMed/MEDLINE": True,
+        "ACL Anthology": True,
+        "Scopus": "unverified",
+    }
+    assert by_name["Scopus"]["queries"] == 3 and by_name["Scopus"]["search_date"] == "2026-10-07"
+    # The 35 unparsed records are the PubmedBookArticle entries, and every
+    # Scopus row parsed, so the figure did not move when the pool grew.
+    assert identification["not_parsed_into_pool"]["count"] == 35
     other = flow["identification"]["other_methods"]["counts"]
     assert "search_and_screening" not in other
     assert sum(other.values()) == sum(
@@ -292,10 +359,14 @@ def test_flow_identification_derives_from_the_search_logs(flow):
         for r in json.loads((REVIEW / "reports.json").read_text(encoding="utf-8"))["reports"]
         if r["route"]["kind"] != "search_and_screening"
     )
-    assert {d["name"] for d in flow["identification"]["databases_not_searched"]} == {
-        "APA PsycINFO",
-        "Scopus",
-    }
+    # Scopus was on this list until 2026-10-07 and is not on it now; the
+    # reason it was there, an API that needs a key, is kept with the amendment
+    # that moved it. PsycINFO is unchanged and still unsearched.
+    assert {d["name"] for d in flow["identification"]["databases_not_searched"]} == {"APA PsycINFO"}
+    searched_later = flow["identification"]["databases_searched_after_the_parent_round"]
+    assert [d["name"] for d in searched_later] == ["Scopus"]
+    assert searched_later[0]["searched_on"] == "2026-10-07"
+    assert searched_later[0]["amendment"] == "AM-7"
 
 
 def _review_copy(tmp_path: Path) -> Path:

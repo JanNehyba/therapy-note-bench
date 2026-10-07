@@ -28,6 +28,7 @@ INPUTS = (
     "screening-strata.json",
     "search-log-pubmed.json",
     "search-log-acl.json",
+    "search-log-scopus.json",
     "amendments.json",
     "flow-recorded.json",
 )
@@ -38,22 +39,38 @@ def read(name: str, root: Path = ROOT) -> dict:
     return json.loads((root / name).read_text(encoding="utf-8"))
 
 
-def _databases(pubmed: dict, acl: dict) -> list[dict]:
+def _databases(*logs: dict) -> list[dict]:
+    """One entry per database, in the order the logs are passed.
+
+    `records` is what the log's queries identified. For PubMed and the ACL
+    corpus that is the number the search reported; for Scopus it is the number
+    of rows in the exports, because the interface's hit count was not written
+    down. The difference is carried on the entry rather than averaged away,
+    and a log that cannot assert complete download says so instead of
+    answering the question with a silent True.
+    """
     out = []
-    for log in (pubmed, acl):
+    for log in logs:
         searches = log["searches"]
-        out.append(
-            {
-                "name": log["database"],
-                "platform": log.get("platform"),
-                "queries": len(searches),
-                "records": sum(s["total_records"] for s in searches),
-                "downloaded_completely": all(
-                    s.get("records_downloaded") == s["total_records"] for s in searches
-                ),
-                "source": "search-log total_records per query",
-            }
-        )
+        lower_bound = any(s.get("total_records_is_a_lower_bound") for s in searches)
+        complete = [s.get("download_complete") for s in searches]
+        entry = {
+            "name": log["database"],
+            "platform": log.get("platform"),
+            "queries": len(searches),
+            "records": sum(s["total_records"] for s in searches),
+            "records_is_a_lower_bound": lower_bound,
+            "downloaded_completely": (
+                "unverified"
+                if any(c is None for c in complete)
+                else all(s.get("records_downloaded") == s["total_records"] for s in searches)
+            ),
+            "source": "search-log total_records per query",
+            "search_date": log.get("search_date"),
+        }
+        if lower_bound:
+            entry["records_basis"] = searches[0]["total_records_basis"]
+        out.append(entry)
     return out
 
 
@@ -64,12 +81,13 @@ def build(
     strata: dict,
     pubmed: dict,
     acl: dict,
+    scopus: dict,
     amendments: dict,
     recorded: dict,
     *,
     root: Path = ROOT,
 ) -> dict:
-    databases = _databases(pubmed, acl)
+    databases = _databases(pubmed, acl, scopus)
     from_databases = sum(d["records"] for d in databases)
     other = [r for r in reports["reports"] if r["route"]["kind"] != "search_and_screening"]
     by_route: dict[str, list[dict]] = {}
@@ -135,7 +153,18 @@ def build(
         "identification": {
             "databases": databases,
             "records_from_databases": from_databases,
-            "downloaded_completely": all(d["downloaded_completely"] for d in databases),
+            "records_from_databases_includes_a_lower_bound": any(
+                d["records_is_a_lower_bound"] for d in databases
+            ),
+            "what_the_lower_bound_means": (
+                "The Scopus searches were run by hand and the hit count the interface reported "
+                "was not captured, so their contribution to this total is the number of records "
+                "exported. The total is therefore at least this, and the shortfall, if any, is "
+                "unknown rather than zero."
+            ),
+            "downloaded_completely": {
+                d["name"]: d["downloaded_completely"] for d in databases
+            },
             "not_parsed_into_pool": {
                 "count": from_databases - pool_summary["sum_before_dedup"],
                 "what": (
@@ -146,6 +175,16 @@ def build(
             "databases_not_searched": [
                 {"name": s["source"], "reason": s.get("evidence") or s.get("status")}
                 for s in amendments.get("unavailable_sources", [])
+            ],
+            "databases_searched_after_the_parent_round": [
+                {
+                    "name": s["source"],
+                    "searched_on": s["searched_on"],
+                    "by_route": s["by_route"],
+                    "why_it_was_a_gap": s["why_it_was_unavailable"],
+                    "amendment": s["amendment"],
+                }
+                for s in amendments.get("sources_searched_after_the_parent_round", [])
             ],
             "other_methods": {
                 "principle": (
@@ -168,8 +207,27 @@ def build(
                 "build_pool.py keyed PubMed records by the last DOI in the record, which can "
                 "be a cited reference; some merges are therefore wrong and some report ids in "
                 "the pool are not the report's own. The ledger keys reports by verified "
-                "identifiers; the pool is to be rebuilt in a separate correction."
+                "identifiers; the pool was rebuilt on 2026-09-15 and this note is kept for the "
+                "history."
             ),
+            "second_known_defect": {
+                "what": (
+                    "The key order is DOI, then PMID, then normalised title, so the same work "
+                    "entered twice whenever one database supplied a DOI and the other did not. "
+                    "That is common between PubMed and Scopus."
+                ),
+                **{
+                    k: v
+                    for k, v in pool_summary["same_normalised_title_on_several_records"].items()
+                    if k in ("groups", "records_involved", "groups_involving_scopus")
+                },
+                "effect": (
+                    "the unique count above is an overcount by at most records_involved minus "
+                    "groups; one work sits in the priority stratum twice and was screened in "
+                    "twice, once in each round"
+                ),
+                "status": "measured on 2026-10-07, not yet corrected",
+            },
         },
         "screening": {
             "pool": strata["pool_size"],
@@ -189,12 +247,19 @@ def build(
                 "made": screening["human_decisions_made"],
                 "source": "screening-decisions.json#human_decisions_made",
             },
+            "rounds": screening["rounds"],
+            "ai_proposals_by_round": screening["include_candidates_by_round"],
             "audit_of_unscreened": {
                 **screening["audit_of_unscreened_remainder"],
                 "basis": (
                     "recorded in screening-decisions.json; the sample on disk was regenerated "
-                    "after the parser fix (see reports.json diagnostics)"
+                    "after the parser fix (see reports.json diagnostics) and again when the "
+                    "Scopus records moved to their own stratum"
                 ),
+            },
+            "audit_of_unscreened_scopus_remainder": {
+                **screening["audit_of_unscreened_scopus_remainder"],
+                "basis": "recorded in screening-decisions.json; drawn and judged on 2026-10-07",
             },
         },
         "full_text": {
@@ -274,7 +339,8 @@ def main(argv: list[str] | None = None) -> int:
     args.output.write_bytes((json.dumps(flow, ensure_ascii=False, indent=1) + "\n").encode("utf-8"))
     ft = flow["full_text"]["catalog_reports"]
     print(
-        f"flow {flow['version']}: {flow['identification']['records_from_databases']} records from "
+        f"flow {flow['version']}: at least "
+        f"{flow['identification']['records_from_databases']} records from "
         f"{len(flow['identification']['databases'])} databases; catalog reports sought "
         f"{ft['sought']}, "
         f"retrieved {ft['retrieved']}, not retrieved {ft['not_retrieved']}"
