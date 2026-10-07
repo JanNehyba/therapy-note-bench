@@ -3,16 +3,19 @@
   "date": "2026-10-07",
   "round": "the candidates proposed by the Scopus screening of 2026-10-07",
   "frame": "the 30 include candidates in the direct, requirements and instrument layers. The method layer was not tried: a method paper offers a way to measure a property rather than a property, so it cannot change the list of criteria.",
-  "routes": "the same open routes the review has always used, in this order: a direct URL if the record has one, Europe PMC open-access full text, then every Unpaywall location. A second pass walked all locations with browser headers; a third tried the publisher's own open-access URL pattern for the five that matter most.",
+  "routes": "the same open routes the review has always used, in this order: a direct URL if the record has one, Europe PMC open-access full text, then every Unpaywall location. A second pass walked all locations with browser headers; a third tried the publisher's own open-access URL pattern for the five that matter most. A fourth pass asked CORE, with a key the investigator authorised from a sibling project; it answered for two records the publishers had refused, holding the extracted text rather than the PDF.",
   "nothing_left_the_machine_but_a_doi": true,
   "counts": {
     "attempted": 30,
-    "retrieved": 10,
-    "not_retrieved": 20,
-    "open_access_but_not_retrievable": 7,
-    "no_identifier_to_retrieve_by": 5
+    "retrieved": 9,
+    "not_retrieved": 21,
+    "open_access_but_not_retrievable": 6,
+    "no_identifier_to_retrieve_by": 5,
+    "retrieved_but_only_a_landing_page": 3,
+    "read_in_full": 9,
+    "became_a_catalog_source": 7
   },
-  "retrieved_is_not_read": "None of the ten has been read. A property enters the catalog only from a source read in full, with a located quote, so these ten are files and nothing more until that is done.",
+  "retrieved_is_not_read": "Seven files are the article. Six were read in full on 2026-10-07 and are sources S22 to S27 of the catalog, with every quote checked against the file it came from. One, the SOAP completeness paper, was read and yielded no property worth taking, which is recorded on the row rather than left to look like an oversight.",
   "open_access_but_blocked": [
     {
       "listing_index": 17,
@@ -31,12 +34,6 @@
       "title": "Ethics of witnessing in clinical case notes of children in state care: From data extraction to narrative care",
       "doi": "10.1177/14733250261457255",
       "why": "no location answered"
-    },
-    {
-      "listing_index": 108,
-      "title": "Collaboration with clients to create journal notes: A mixed methods evaluation of a pilot intervention study in a municipality mental health services team",
-      "doi": "10.1002/capr.12829",
-      "why": "onlinelibrary.wiley.com/doi/pdfdirect returned 403; the repository handle redirects to a JavaScript-rendered page at nva.sikt.no with no static file link"
     },
     {
       "listing_index": 169,
@@ -76,7 +73,8 @@
       "bytes": 116743,
       "sha256": "d4e23ff061f779b3243244874b245e77aac5fb5ddcd8079f092c9994e3d75ce4",
       "looks_like": "html or xml",
-      "read": false
+      "read": true,
+      "reading_outcome": "read in full. Its completeness check is the presence of the four SOAP section labels in a bag of pre-labelled segments, which is thinner than the section-wise coverage the catalog already holds from S1, so no property was taken and the paper is not a source."
     },
     {
       "listing_index": 7,
@@ -133,7 +131,8 @@
       "bytes": 107426,
       "sha256": "029c78319668cd71629680a55caace26594ed92c381d96f3fc9a56244e327d25",
       "looks_like": "html or xml",
-      "read": false
+      "read": true,
+      "reading_outcome": "read in full on 2026-10-07; a source of the catalog since"
     },
     {
       "listing_index": 17,
@@ -218,7 +217,8 @@
       "bytes": 163289,
       "sha256": "1b5269d0a8126368d2f4ad39bbadebbde3bdca2fcdbbb338c1202a1a4f2dde47",
       "looks_like": "html or xml",
-      "read": false
+      "read": true,
+      "reading_outcome": "read in full on 2026-10-07; a source of the catalog since"
     },
     {
       "listing_index": 44,
@@ -263,7 +263,8 @@
       "bytes": 508733,
       "sha256": "83d8f709d1cb4a58537e1caa462f4fc720484e19cd23f70c194f7b82edd7ea3e",
       "looks_like": "pdf",
-      "read": false
+      "read": true,
+      "reading_outcome": "read in full on 2026-10-07; a source of the catalog since"
     },
     {
       "listing_index": 53,
@@ -281,7 +282,8 @@
       "bytes": 89037,
       "sha256": "c07e3342cf56ef0342f9f475ceac469c88d462a00e60755b89c7b7fb4d031d6f",
       "looks_like": "pdf",
-      "read": false
+      "read": true,
+      "reading_outcome": "read in full on 2026-10-07; a source of the catalog since"
     },
     {
       "listing_index": 55,
@@ -292,9 +294,15 @@
       "year": "2003",
       "venue": "Hospital Pharmacist",
       "attempted": "2026-10-07",
-      "outcome": "not_retrieved",
-      "route": "no identifier to retrieve by",
-      "passes_tried": 1
+      "outcome": "retrieved",
+      "route": "core.ac.uk v3 search by title, fullText field",
+      "passes_tried": 4,
+      "read": true,
+      "reading_outcome": "read in full. It audits whether consent and capacity entries required by the Mental Health Act are present, which is the record-keeping conformance the investigator put out of scope on 2026-10-05 with K19; no property was taken.",
+      "file": "K055.core.txt",
+      "bytes": 82692,
+      "sha256": "beab980f06abedc76930046a14e13dc7e1275ae66a321c763b85f31903577b58",
+      "looks_like": "plain text extracted by the aggregator"
     },
     {
       "listing_index": 56,
@@ -318,14 +326,16 @@
       "year": "2015",
       "venue": "European Journal of Emergency Medicine",
       "attempted": "2026-10-07",
-      "outcome": "retrieved",
+      "outcome": "not_retrieved",
       "route": "unpaywall repository http://hdl.handle.net/2183/38815",
       "passes_tried": 1,
       "file": "K061.pdf",
       "bytes": 442507,
-      "sha256": "7bad94026652b1d37c0f2403052c0d77c29823c40a49aff03037f6695517587e",
-      "looks_like": "html or xml",
-      "read": false
+      "read": false,
+      "correction": {
+        "date": "2026-10-07",
+        "what": "the file is the publisher's article page, 438 words of site furniture with no article text; counted as retrieved on 2026-10-07 and corrected the same day"
+      }
     },
     {
       "listing_index": 66,
@@ -336,14 +346,16 @@
       "year": "2024",
       "venue": "Jordan Journal of Nursing Research",
       "attempted": "2026-10-07",
-      "outcome": "retrieved",
+      "outcome": "not_retrieved",
       "route": "publisher url https://doi.org/10.14525/jjnr.v3i2.10 (text/html; charset=utf-8)",
       "passes_tried": 2,
       "file": "K066.html",
       "bytes": 28194,
-      "sha256": "c8d379aeedc9727239165c2de11bcb795673024c923649ba0582bd567a3cce80",
-      "looks_like": "html or xml",
-      "read": false
+      "read": false,
+      "correction": {
+        "date": "2026-10-07",
+        "what": "the file is the journal's front page, 580 words of menus; corrected the same day"
+      }
     },
     {
       "listing_index": 71,
@@ -381,14 +393,16 @@
       "year": "2013",
       "venue": "Journal of Social Service Research",
       "attempted": "2026-10-07",
-      "outcome": "retrieved",
+      "outcome": "not_retrieved",
       "route": "repository url https://stars.library.ucf.edu/facultybib2010/4290 (text/html; charset=UTF-8)",
       "passes_tried": 2,
       "file": "K093.html",
       "bytes": 33397,
-      "sha256": "34edd64916cd73377d1a22dea3f364f494a2747c0a4f2f8b9a55b42299419668",
-      "looks_like": "html or xml",
-      "read": false
+      "read": false,
+      "correction": {
+        "date": "2026-10-07",
+        "what": "the file is the repository's stub page for the record, 401 words; corrected the same day"
+      }
     },
     {
       "listing_index": 94,
@@ -412,11 +426,15 @@
       "year": "2025",
       "venue": "Counselling and Psychotherapy Research",
       "attempted": "2026-10-07",
-      "outcome": "not_retrieved",
-      "route": "no location answered",
-      "passes_tried": 3,
-      "publisher_route_tried": "onlinelibrary.wiley.com/doi/pdfdirect returned 403; the repository handle redirects to a JavaScript-rendered page at nva.sikt.no with no static file link",
-      "open_access_per_unpaywall": true
+      "outcome": "retrieved",
+      "route": "core.ac.uk v3 search by DOI, fullText field",
+      "passes_tried": 4,
+      "file": "K108.core.txt",
+      "bytes": 69721,
+      "sha256": "2addaa3372ca87f3bdb8d356a1ef4ed575071cda88d4d1d8d593730dc908bdfb",
+      "looks_like": "plain text extracted by the aggregator",
+      "read": true,
+      "reading_outcome": "read in full on 2026-10-07; it is catalog source S21 and the base rate behind K35."
     },
     {
       "listing_index": 123,
@@ -434,7 +452,8 @@
       "bytes": 431434,
       "sha256": "41359b09881e85d78c3d6b09a96d4ad0a4a932a908890cb4d69321eec648cd92",
       "looks_like": "pdf",
-      "read": false
+      "read": true,
+      "reading_outcome": "read in full on 2026-10-07; a source of the catalog since"
     },
     {
       "listing_index": 139,
@@ -452,7 +471,8 @@
       "bytes": 67113,
       "sha256": "76551bd6f875c3ecdaa8e4e5f322087cdf4ebb330e91bec7f6d2419a213d1108",
       "looks_like": "pdf",
-      "read": false
+      "read": true,
+      "reading_outcome": "read in full on 2026-10-07; a source of the catalog since"
     },
     {
       "listing_index": 158,
@@ -511,6 +531,13 @@
       "passes_tried": 3,
       "publisher_route_tried": "mdpi.com returned 403 for both the article and the PDF URL",
       "open_access_per_unpaywall": true
+    }
+  ],
+  "corrections": [
+    {
+      "date": "2026-10-07",
+      "what": "Three of the ten files counted as retrieved were not the article. Two publishers and one repository answered with their own page, which the fetch accepted because it was large enough to look like an article; reading them found 438, 580 and 401 words of menus and furniture.",
+      "effect": "seven retrievals, not ten, and the three are back among the not retrieved with the reason. The size test that let them through is recorded here rather than quietly tightened: a fetch cannot tell an article from a page about an article by length alone, and only reading the file decides."
     }
   ]
 }

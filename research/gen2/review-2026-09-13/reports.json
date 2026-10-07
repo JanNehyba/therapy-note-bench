@@ -3663,6 +3663,542 @@
     "sha256": "2addaa3372ca87f3bdb8d356a1ef4ed575071cda88d4d1d8d593730dc908bdfb"
    },
    "last_attempt_date": "2026-10-07"
+  },
+  {
+   "report_id": "doi:10.1192/pb.25.11.418",
+   "id_basis": "DOI from the Scopus export of 2026-10-07, matched to the pool record",
+   "kind": "database_record",
+   "title": "Structured psychiatric assessment schedules - treating the case notes and the patient",
+   "citation_short": "Lyons, Amos, Mathew 2001, Psychiatric Bulletin",
+   "catalog_source": "S22",
+   "study_family": null,
+   "identifiers": {
+    "doi": "10.1192/pb.25.11.418",
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "Scopus export, 2026-10-07"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.1192/pb.25.11.418",
+    "pool_record_id_status": "matches_report_id",
+    "pool_doi": "10.1192/pb.25.11.418",
+    "stratum": "priority",
+    "priority_index": 483
+   },
+   "route": {
+    "kind": "search_and_screening",
+    "from": null,
+    "declared_in": "include-candidates-2026-10-07.json#include_candidates_detail",
+    "note": "Screened in on 2026-10-07 as direct evidence, confidence clear, priority score 9."
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "screening": {
+    "ai_proposal": "include_candidate",
+    "ai_layer": "direct",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[483]",
+    "human_decision": null,
+    "human_decision_record": null,
+    "human_decision_status": "none_recorded"
+   },
+   "retrieval_events": [
+    {
+     "date": "2026-10-07",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "unpaywall publisher https://www.cambridge.org/core/services/aop-cambridge-core/content/view/8CE5A09C360A50D79B1FA8BF97B142AF/S0955603600023552a.pdf/div-class-title-structured-psychiatric-assessment-schedules-treating-the-case-notes-and-the-patient-div.pdf",
+     "route_kind": "open_access_api",
+     "outcome": "retrieved",
+     "file": "S22.pdf",
+     "bytes": 67113,
+     "sha256": "76551bd6f875c3ecdaa8e4e5f322087cdf4ebb330e91bec7f6d2419a213d1108",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null,
+     "seq": 1
+    }
+   ],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-10-07; source-first extraction, every quote checked against the retrieved file",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "direct",
+    "verification": "full_text",
+    "basis": "catalog.json and the source-first table"
+   },
+   "notes": [],
+   "current_status": "retrieved",
+   "current_file": {
+    "file": "S22.pdf",
+    "bytes": 67113,
+    "sha256": "76551bd6f875c3ecdaa8e4e5f322087cdf4ebb330e91bec7f6d2419a213d1108"
+   },
+   "last_attempt_date": "2026-10-07"
+  },
+  {
+   "report_id": "doi:10.1192/pb.20.1.30",
+   "id_basis": "DOI from the Scopus export of 2026-10-07, matched to the pool record",
+   "kind": "database_record",
+   "title": "Improving methods of assessment in a community mental health team",
+   "citation_short": "Treloar 1996, Psychiatric Bulletin",
+   "catalog_source": "S23",
+   "study_family": null,
+   "identifiers": {
+    "doi": "10.1192/pb.20.1.30",
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "Scopus export, 2026-10-07"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.1192/pb.20.1.30",
+    "pool_record_id_status": "matches_report_id",
+    "pool_doi": "10.1192/pb.20.1.30",
+    "stratum": "priority",
+    "priority_index": 207
+   },
+   "route": {
+    "kind": "search_and_screening",
+    "from": null,
+    "declared_in": "include-candidates-2026-10-07.json#include_candidates_detail",
+    "note": "Screened in on 2026-10-07 as direct evidence, confidence borderline, priority score 11."
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "screening": {
+    "ai_proposal": "include_candidate",
+    "ai_layer": "direct",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[207]",
+    "human_decision": null,
+    "human_decision_record": null,
+    "human_decision_status": "none_recorded"
+   },
+   "retrieval_events": [
+    {
+     "date": "2026-10-07",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "unpaywall publisher https://www.cambridge.org/core/services/aop-cambridge-core/content/view/9ED7584C7F905BDDDF298203146B8CDC/S0955603600073669a.pdf/div-class-title-improving-methods-of-assessment-in-a-community-mental-health-team-div.pdf",
+     "route_kind": "open_access_api",
+     "outcome": "retrieved",
+     "file": "S23.pdf",
+     "bytes": 508733,
+     "sha256": "83d8f709d1cb4a58537e1caa462f4fc720484e19cd23f70c194f7b82edd7ea3e",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null,
+     "seq": 1
+    }
+   ],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-10-07; source-first extraction, every quote checked against the retrieved file",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "direct",
+    "verification": "full_text",
+    "basis": "catalog.json and the source-first table"
+   },
+   "notes": [
+    "The published PDF's text layer interleaves two columns character by character in the Methods section; the quotes recorded from this source come from a raw extraction, which recovers it, and were checked against the file."
+   ],
+   "current_status": "retrieved",
+   "current_file": {
+    "file": "S23.pdf",
+    "bytes": 508733,
+    "sha256": "83d8f709d1cb4a58537e1caa462f4fc720484e19cd23f70c194f7b82edd7ea3e"
+   },
+   "last_attempt_date": "2026-10-07"
+  },
+  {
+   "report_id": "doi:10.1192/pb.25.7.250",
+   "id_basis": "DOI from the Scopus export of 2026-10-07, matched to the pool record",
+   "kind": "database_record",
+   "title": "Improving the assessment of risk of violence: a clinical audit of case note documentation",
+   "citation_short": "Campbell & Chaplin 2001, Psychiatric Bulletin",
+   "catalog_source": "S24",
+   "study_family": null,
+   "identifiers": {
+    "doi": "10.1192/pb.25.7.250",
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "Scopus export, 2026-10-07"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.1192/pb.25.7.250",
+    "pool_record_id_status": "matches_report_id",
+    "pool_doi": "10.1192/pb.25.7.250",
+    "stratum": "priority",
+    "priority_index": 211
+   },
+   "route": {
+    "kind": "search_and_screening",
+    "from": null,
+    "declared_in": "include-candidates-2026-10-07.json#include_candidates_detail",
+    "note": "Screened in on 2026-10-07 as direct evidence, confidence borderline, priority score 11."
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "screening": {
+    "ai_proposal": "include_candidate",
+    "ai_layer": "direct",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[211]",
+    "human_decision": null,
+    "human_decision_record": null,
+    "human_decision_status": "none_recorded"
+   },
+   "retrieval_events": [
+    {
+     "date": "2026-10-07",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "unpaywall publisher https://www.cambridge.org/core/services/aop-cambridge-core/content/view/63A58F72D9E93F2F694E16403EBD5090/S0955603600022212a.pdf/div-class-title-improving-the-assessment-of-risk-of-violence-a-clinical-audit-of-case-note-documentation-div.pdf",
+     "route_kind": "open_access_api",
+     "outcome": "retrieved",
+     "file": "S24.pdf",
+     "bytes": 89037,
+     "sha256": "c07e3342cf56ef0342f9f475ceac469c88d462a00e60755b89c7b7fb4d031d6f",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null,
+     "seq": 1
+    }
+   ],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-10-07; source-first extraction, every quote checked against the retrieved file",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "direct",
+    "verification": "full_text",
+    "basis": "catalog.json and the source-first table"
+   },
+   "notes": [],
+   "current_status": "retrieved",
+   "current_file": {
+    "file": "S24.pdf",
+    "bytes": 89037,
+    "sha256": "c07e3342cf56ef0342f9f475ceac469c88d462a00e60755b89c7b7fb4d031d6f"
+   },
+   "last_attempt_date": "2026-10-07"
+  },
+  {
+   "report_id": "doi:10.1093/jamia/ocw067",
+   "id_basis": "DOI from the Scopus export of 2026-10-07, matched to the pool record",
+   "kind": "database_record",
+   "title": "Comparison of accuracy of physical examination findings in initial progress notes between paper charts and a newly implemented electronic health record",
+   "citation_short": "J Am Med Inform Assoc 2017",
+   "catalog_source": "S25",
+   "study_family": null,
+   "identifiers": {
+    "doi": "10.1093/jamia/ocw067",
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "Scopus export, 2026-10-07"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.1093/jamia/ocw067",
+    "pool_record_id_status": "matches_report_id",
+    "pool_doi": "10.1093/jamia/ocw067",
+    "stratum": "priority",
+    "priority_index": 159
+   },
+   "route": {
+    "kind": "search_and_screening",
+    "from": null,
+    "declared_in": "include-candidates-2026-10-07.json#include_candidates_detail",
+    "note": "Screened in on 2026-10-07 as transfer:instrument evidence, confidence clear, priority score 12."
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "screening": {
+    "ai_proposal": "include_candidate",
+    "ai_layer": "transfer:instrument",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[159]",
+    "human_decision": null,
+    "human_decision_record": null,
+    "human_decision_status": "none_recorded"
+   },
+   "retrieval_events": [
+    {
+     "date": "2026-10-07",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "repository url https://www.ncbi.nlm.nih.gov/pmc/articles/7654088 (text/html; charset=utf-8)",
+     "route_kind": "open_access_api",
+     "outcome": "retrieved",
+     "file": "S25.html",
+     "bytes": 163289,
+     "sha256": "1b5269d0a8126368d2f4ad39bbadebbde3bdca2fcdbbb338c1202a1a4f2dde47",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null,
+     "seq": 1
+    }
+   ],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-10-07; source-first extraction, every quote checked against the retrieved file",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "transfer",
+    "verification": "full_text",
+    "basis": "catalog.json and the source-first table"
+   },
+   "notes": [],
+   "current_status": "retrieved",
+   "current_file": {
+    "file": "S25.html",
+    "bytes": 163289,
+    "sha256": "1b5269d0a8126368d2f4ad39bbadebbde3bdca2fcdbbb338c1202a1a4f2dde47"
+   },
+   "last_attempt_date": "2026-10-07"
+  },
+  {
+   "report_id": "doi:10.20473/pmnj.v12i2.75365",
+   "id_basis": "DOI from the Scopus export of 2026-10-07, matched to the pool record",
+   "kind": "database_record",
+   "title": "Implementation of pediatric nursing documentation quality audit: a mixed method study",
+   "citation_short": "Pediomaternal Nursing Journal 2026",
+   "catalog_source": "S26",
+   "study_family": null,
+   "identifiers": {
+    "doi": "10.20473/pmnj.v12i2.75365",
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "Scopus export, 2026-10-07"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.20473/pmnj.v12i2.75365",
+    "pool_record_id_status": "matches_report_id",
+    "pool_doi": "10.20473/pmnj.v12i2.75365",
+    "stratum": "priority",
+    "priority_index": 463
+   },
+   "route": {
+    "kind": "search_and_screening",
+    "from": null,
+    "declared_in": "include-candidates-2026-10-07.json#include_candidates_detail",
+    "note": "Screened in on 2026-10-07 as transfer:instrument evidence, confidence borderline, priority score 10."
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "screening": {
+    "ai_proposal": "include_candidate",
+    "ai_layer": "transfer:instrument",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[463]",
+    "human_decision": null,
+    "human_decision_record": null,
+    "human_decision_status": "none_recorded"
+   },
+   "retrieval_events": [
+    {
+     "date": "2026-10-07",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "unpaywall publisher https://e-journal.unair.ac.id/PMNJ/article/download/75365/39463",
+     "route_kind": "open_access_api",
+     "outcome": "retrieved",
+     "file": "S26.pdf",
+     "bytes": 431434,
+     "sha256": "41359b09881e85d78c3d6b09a96d4ad0a4a932a908890cb4d69321eec648cd92",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null,
+     "seq": 1
+    }
+   ],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-10-07; source-first extraction, every quote checked against the retrieved file",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "transfer",
+    "verification": "full_text",
+    "basis": "catalog.json and the source-first table"
+   },
+   "notes": [],
+   "current_status": "retrieved",
+   "current_file": {
+    "file": "S26.pdf",
+    "bytes": 431434,
+    "sha256": "41359b09881e85d78c3d6b09a96d4ad0a4a932a908890cb4d69321eec648cd92"
+   },
+   "last_attempt_date": "2026-10-07"
+  },
+  {
+   "report_id": "doi:10.2196/64919",
+   "id_basis": "DOI from the Scopus export of 2026-10-07, matched to the pool record",
+   "kind": "database_record",
+   "title": "Pursuit of Digital Innovation in Psychiatric Data Handling Practices in Ireland: Comprehensive Case Study",
+   "citation_short": "JMIR Human Factors 2025",
+   "catalog_source": "S27",
+   "study_family": null,
+   "identifiers": {
+    "doi": "10.2196/64919",
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "Scopus export, 2026-10-07"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.2196/64919",
+    "pool_record_id_status": "matches_report_id",
+    "pool_doi": "10.2196/64919",
+    "stratum": "priority",
+    "priority_index": 84
+   },
+   "route": {
+    "kind": "search_and_screening",
+    "from": null,
+    "declared_in": "include-candidates-2026-10-07.json#include_candidates_detail",
+    "note": "Screened in on 2026-10-07 as requirements evidence, confidence borderline, priority score 14."
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "screening": {
+    "ai_proposal": "include_candidate",
+    "ai_layer": "requirements",
+    "ai_proposal_source": "screening-decisions.json#include_candidates_detail[84]",
+    "human_decision": null,
+    "human_decision_record": null,
+    "human_decision_status": "none_recorded"
+   },
+   "retrieval_events": [
+    {
+     "date": "2026-10-07",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "europepmc OA fullTextXML PMC12212889",
+     "route_kind": "open_access_api",
+     "outcome": "retrieved",
+     "file": "S27.xml",
+     "bytes": 107426,
+     "sha256": "029c78319668cd71629680a55caace26594ed92c381d96f3fc9a56244e327d25",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null,
+     "seq": 1
+    }
+   ],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-10-07; source-first extraction, every quote checked against the retrieved file",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "requirements",
+    "verification": "full_text",
+    "basis": "catalog.json and the source-first table"
+   },
+   "notes": [],
+   "current_status": "retrieved",
+   "current_file": {
+    "file": "S27.xml",
+    "bytes": 107426,
+    "sha256": "029c78319668cd71629680a55caace26594ed92c381d96f3fc9a56244e327d25"
+   },
+   "last_attempt_date": "2026-10-07"
   }
  ],
  "diagnostics": [
@@ -3728,7 +4264,7 @@
   }
  ],
  "derived_from": {
-  "report-map.json": "53a3485b9efc190dbd8e5bec4a3a74efff098e98d994db0fe9983aabbbf9788d",
+  "report-map.json": "e1aac109976115a8c18770e777f75e5c6d761ca7e0e9b6599faa9bbb21650243",
   "fulltext-retrieval-log.json": "52ddeaedfdda580148007182ec7d0c78c4e1dd1450704dc8c736199418133611",
   "screening-decisions.json": "6f5519b520638e09a901b489baf6d8b9eb61e5e26b45fe72cfb104c021923e06",
   "screening-strata.json": "d89e50a36bcb370ef9b28a290e40265e9df720c8e677fd06bee7b99941a0f87d",
@@ -3736,10 +4272,10 @@
  },
  "corrections": [],
  "counts": {
-  "reports": 38,
+  "reports": 44,
   "catalog_reports": {
-   "sought": 21,
-   "retrieved": 21,
+   "sought": 27,
+   "retrieved": 27,
    "not_retrieved": 0,
    "not_sought": 0
   },
@@ -3762,8 +4298,8 @@
    "not_sought": 0
   },
   "attempts": {
-   "total": 40,
-   "succeeded": 34,
+   "total": 46,
+   "succeeded": 40,
    "failed": 5,
    "wrong_report": 1,
    "logged_retroactively": 6
@@ -3781,7 +4317,7 @@
    "not_recorded": 2,
    "professional_guidance": 2,
    "remainder_audit_sample": 1,
-   "search_and_screening": 17
+   "search_and_screening": 23
   },
   "human_verified": 0
  }

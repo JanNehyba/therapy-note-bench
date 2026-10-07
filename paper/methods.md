@@ -119,11 +119,12 @@ prioritised evidence map, not a scoping review.
 
 ## Sources and evidence
 
-Twenty-one reports were sought as catalog sources and all twenty-one have
+Twenty-seven reports were sought as catalog sources and all twenty-seven have
 been retrieved. Nineteen of them were sought from the start and the 2008
-preliminary PDQI paper came last, on 2026-10-07; the other two joined that day,
-when SESPI was read in full and its 2025 application was found by the Scopus
-search. Twenty have been read in full text. The 2008 paper has not, so the
+preliminary PDQI paper came last, on 2026-10-07; the other eight joined that
+day, when SESPI was read in full and the Scopus searches brought seven further
+papers that the assistant read the same day. Twenty-six have been read in full
+text. The 2008 paper has not, so the
 entry resting on it still rests on its abstract. Twelve further reports are
 used from their abstracts; six were obtained on 2026-09-16 and read on
 2026-09-20, four more were obtained on 2026-10-07 and have not been read, and
@@ -145,7 +146,7 @@ derivation we report runs the other way. For every source read in full we
 listed every property of note quality the source itself defines or measures, in
 the source's own words and with its location, without reference to the catalog,
 and mapped each to a candidate afterwards (`source-properties.json`). The table
-holds 150 properties from 27 sources. 137 map to a candidate; the thirteen
+holds 169 properties from 33 sources. 155 map to a candidate; the fourteen
 that do not are rating formats, findings about measurement, reliability
 figures, or properties of the encounter the note reports rather than of the
 note. Thirty-five of the 36 candidates rest on at least one source property. The one that does not is K06, a note that says what
@@ -161,6 +162,53 @@ adopted as candidates by the investigator on 2026-09-21, one against the
 proposal, and the record keeps both the proposal and the decision. Two more
 were opened on 2026-10-07 and adopted the same day from a source read in full,
 which the next section describes.
+
+### What the seven further readings changed, and what they did not
+
+The Scopus screening of 2026-10-07 proposed fifty-five candidates for
+retrieval. Thirty sit in the three layers that could change the list of
+criteria, nine of those were retrieved and nine were read; six became sources.
+None of the six adds a candidate, and the pool is 36 for that reason rather
+than by assumption. What they add is support for four claims that had rested on
+argument.
+
+Relevance to the recipient was an argument and is now a measurement. One study
+had the same psychiatric admission notes rated independently by a specialist
+registrar and a registered mental nurse, before and after a structured
+assessment form was introduced. The form raised the clarity of the treatment
+plan and of the risk record for the medical rater and for the nursing rater it
+raised neither, which the authors read as the two professions looking for
+different things. A single human anchor drawn from one profession is therefore
+not a general anchor, and our own two-rater design has to say which professions
+it speaks for.
+
+Coverage and synthesis come apart under the same intervention. An audit of
+risk-of-violence documentation found significant improvement in 45% of the
+individual items of history and mental state, and no improvement at all in the
+formulation of a risk assessment statement. Our catalog keeps coverage and
+justified synthesis as separate candidates, and this is the measured case for
+that separation.
+
+Fidelity and coverage can trade against each other. A study of five diagnoses
+with invariable physical findings classified each note as accurate, inaccurate
+or omitted, which separates a wrong statement from a missing one without a
+transcript. Moving from paper to an electronic record cut omissions from 41.2%
+to 17.6% and raised inaccuracy from 4.4% to 24%. A system that covers more is
+not thereby more faithful, and a benchmark that reports one number for both
+would have called that transition an improvement.
+
+The same study is the literature anchor for a rule this project had adopted on
+its own: errors were fewer for findings obvious at first look and more frequent
+for those needing a subtle examination. What goes missing clusters on the hard
+cases, which is why dropping a missing measurement from the denominator is
+biased rather than merely incomplete.
+
+Finally, the rule that a token entry is not presence turns out to be thirty
+years old. A 1996 audit of a community mental health team scored a heading as
+recorded only if the notes held more than a minimal entry, and gave a date of
+birth under personal history as its example of an entry that does not count.
+This project had to write that rule for itself after a model was published with
+a perfect temporal score for writing Nil four ways.
 
 ### Two constructs found by reading a source instead of its abstract
 

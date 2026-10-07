@@ -32,12 +32,12 @@
     "abstract_claim": "what an abstract states, when the full text was not read"
   },
   "counts": {
-    "sources_read_in_full": 26,
+    "sources_read_in_full": 32,
     "sources_abstract_only": 6,
-    "sources_defining_properties": 27,
-    "properties": 150,
-    "properties_mapped": 137,
-    "properties_unmapped": 13,
+    "sources_defining_properties": 33,
+    "properties": 169,
+    "properties_mapped": 155,
+    "properties_unmapped": 14,
     "candidates_with_source_property": 35,
     "candidates_without_source_property": 1
   },
@@ -2020,6 +2020,276 @@
           "mapping": "the client's standing in the note. The source's claim is about what collaborative writing does, so co-writing is an intervention and not a property of a note; what transfers is that the client's voice is something a note can carry more or less of, which is K24's territory."
         }
       ]
+    },
+    {
+      "id": "S22",
+      "citation": "Lyons D, Amos M, Mathew VM. Structured psychiatric assessment schedules - treating the case notes and the patient. Psychiatric Bulletin 2001;25:418-420. doi:10.1192/pb.25.11.418.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": "Found by the Scopus screening of 2026-10-07 and read the same day.",
+      "properties": [
+        {
+          "pid": "S22-p01",
+          "label": "What a reader can tell from the notes, as six rated statements",
+          "kind": "coding_category",
+          "location": "Method, the rating form",
+          "quote": "From the admitting officer's notes a likely diagnosis is implied",
+          "maps_to": [
+            "K05",
+            "K10"
+          ],
+          "mapping": "what the note makes discernible to its reader, stated as a property of the note rather than of the care"
+        },
+        {
+          "pid": "S22-p02",
+          "label": "The same notes and the same change rated differently by two professions",
+          "kind": "design_finding",
+          "location": "Results",
+          "quote": "The nursing rater's estimation of the clarity of the treatment plans was not enhanced by the use of the schedule, nor was the documenting of risk",
+          "maps_to": [
+            "K07"
+          ],
+          "mapping": "relevance to the recipient, measured: one intervention improved the notes for the doctor and not for the nurse, and the authors attribute that to the two professions looking for different aspects"
+        },
+        {
+          "pid": "S22-p03",
+          "label": "A structure can be too large to be used at all",
+          "kind": "design_finding",
+          "location": "The standard",
+          "quote": "The resultant 16-page assessment form proved unpopular because of its size and had been abandoned for over a year prior to our survey",
+          "maps_to": [
+            "K23"
+          ],
+          "mapping": "acceptability in practice: the cost of a format is part of whether it is used, and an abandoned format produces no documentation quality at all"
+        },
+        {
+          "pid": "S22-p04",
+          "label": "Risk documented with its history and its collateral information",
+          "kind": "attribute",
+          "location": "Method, criterion (e)",
+          "quote": "Risk was evaluated and documented in a clear fashion (full agreement implying clear description of risk past and present and the obtaining of collateral information)",
+          "maps_to": [
+            "K08"
+          ],
+          "mapping": "risk and safety, with the source adding two requirements our candidate does not name: that risk is described for the past as well as the present, and that collateral information was obtained"
+        }
+      ]
+    },
+    {
+      "id": "S23",
+      "citation": "Treloar A. Improving methods of assessment in a community mental health team. Psychiatric Bulletin 1996;20:30-32. doi:10.1192/pb.20.1.30.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": "Found by the Scopus screening of 2026-10-07 and read the same day.",
+      "properties": [
+        {
+          "pid": "S23-p01",
+          "label": "A token entry does not count as the information being present",
+          "kind": "scoring_rule",
+          "location": "Methods",
+          "quote": "The history was rated as being present if there was anything other than a minimal entry (e.g. 'born 1916' was unacceptable for personal history) somewhere in the notes",
+          "maps_to": [
+            "K05",
+            "K11"
+          ],
+          "mapping": "coverage, with the threshold the catalog's own rules needed: presence is more than a filled field, and a date of birth under personal history is an absence wearing the shape of an entry"
+        },
+        {
+          "pid": "S23-p02",
+          "label": "Nineteen headings a psychogeriatric assessment note should carry",
+          "kind": "content_items",
+          "location": "Table 1",
+          "quote": "Effect of new process on recording of history and clinical examination",
+          "maps_to": [
+            "K05",
+            "K12"
+          ],
+          "mapping": "content expected by section; the list is for an elderly community mental health assessment and is not transferable item by item to a psychotherapy session note"
+        },
+        {
+          "pid": "S23-p03",
+          "label": "Whether what is in the note reaches the next clinician",
+          "kind": "general_item",
+          "location": "Results, communication with GPs",
+          "quote": "The letter to GPs was the sole place where information was recorded in only 13% of communications to GPs",
+          "maps_to": [
+            "K21"
+          ],
+          "mapping": "handover: the note and the letter are different artefacts, and the study measures how often the record is the thing that carries the information onward"
+        }
+      ]
+    },
+    {
+      "id": "S24",
+      "citation": "Campbell M, Chaplin R. Improving the assessment of risk of violence: a clinical audit of case note documentation. Psychiatric Bulletin 2001;25:250-252. doi:10.1192/pb.25.7.250.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": "Found by the Scopus screening of 2026-10-07 and read the same day.",
+      "properties": [
+        {
+          "pid": "S24-p01",
+          "label": "Items of risk addressed, counted one by one",
+          "kind": "content_items",
+          "location": "Approved standards; Table 1",
+          "quote": "This council report contains guidance in the form of a list of important risk factors in the history, mental state and environment",
+          "maps_to": [
+            "K08"
+          ],
+          "mapping": "risk and safety as a checklist of what the note should address, with the list coming from a professional body"
+        },
+        {
+          "pid": "S24-p02",
+          "label": "The items improved and the formulation did not",
+          "kind": "design_finding",
+          "location": "Results",
+          "quote": "Significant improvements were made in 45% of the items in the history and mental state although not in the formulation of a risk assessment statement",
+          "maps_to": [
+            "K05",
+            "K09"
+          ],
+          "mapping": "coverage and synthesis come apart: the same intervention moved what was recorded and left the conclusion drawn from it untouched, which is why the catalog does not treat a formulation as the sum of its items"
+        },
+        {
+          "pid": "S24-p03",
+          "label": "Whether information from outside the client was sought and recorded",
+          "kind": "attribute",
+          "location": "Table 1, history",
+          "quote": "Availability of collateral information",
+          "maps_to": [
+            "K02"
+          ],
+          "mapping": "attribution beyond the client: the note records that a third source was consulted, which our candidate covers as who said or observed what"
+        }
+      ]
+    },
+    {
+      "id": "S25",
+      "citation": "Comparison of accuracy of physical examination findings in initial progress notes between paper charts and a newly implemented electronic health record. J Am Med Inform Assoc 2017;24(1):140-144. doi:10.1093/jamia/ocw067. PMC7654088.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": "Found by the Scopus screening of 2026-10-07 and read the same day.",
+      "properties": [
+        {
+          "pid": "S25-p01",
+          "label": "A wrong statement and a missing one are different outcomes, not degrees",
+          "kind": "scoring_rule",
+          "location": "Methods, primary outcome",
+          "quote": "A physical examination finding was considered omitted if there was no mention of a physical finding associated with the diagnosis",
+          "maps_to": [
+            "K01",
+            "K05"
+          ],
+          "mapping": "support and coverage: the scheme scores a note that asserts the opposite of the truth apart from one that says nothing. It is deliberately not mapped to K06. K06 asks whether the note marks its own gap, distinguishing what was not discussed from what the client denied; this scheme classifies what a reviewer found by comparing the note with a known diagnosis, and asks the note to declare nothing. K06 remains the one candidate no source defines."
+        },
+        {
+          "pid": "S25-p02",
+          "label": "Fewer omissions bought more inaccuracies",
+          "kind": "design_finding",
+          "location": "Results, accuracies, inaccuracies and omissions",
+          "quote": "Inaccurate documentation was significantly higher in EHRs compared to paper notes (24% vs 4.4%)",
+          "maps_to": [
+            "K01",
+            "K05"
+          ],
+          "mapping": "fidelity and coverage can trade against each other: the medium that cut omissions from 41.2% to 17.6% raised inaccuracy from 4.4% to 24%, so a system that covers more is not thereby more accurate"
+        },
+        {
+          "pid": "S25-p03",
+          "label": "The errors cluster on the findings that are hard to establish",
+          "kind": "design_finding",
+          "location": "Discussion",
+          "quote": "The converse was true for diagnoses that required more subtle and focused examination, such as atrial fibrillation or aortic stenosis",
+          "maps_to": [
+            "K05"
+          ],
+          "mapping": "what goes missing is not missing at random: this project's rule that a dropped denominator is biased because omissions cluster on the hard cases, measured in clinical notes"
+        },
+        {
+          "pid": "S25-p04",
+          "label": "Templates and copy-paste lengthen a note without informing its reader",
+          "kind": "design_finding",
+          "location": "Introduction",
+          "quote": "use of templates and the copy-paste function has increased verbosity, perhaps impairing communication through the daily progress note",
+          "maps_to": [
+            "K11",
+            "K31"
+          ],
+          "mapping": "economy and redundancy; the source offers this as a concern from the literature rather than as its own measurement, and it is recorded as such"
+        }
+      ]
+    },
+    {
+      "id": "S26",
+      "citation": "Implementation of pediatric nursing documentation quality audit: a mixed method study. Pediomaternal Nursing Journal 2026;12(2). doi:10.20473/pmnj.v12i2.75365.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": "Found by the Scopus screening of 2026-10-07 and read the same day.",
+      "properties": [
+        {
+          "pid": "S26-p01",
+          "label": "Documentation structure as a scored dimension",
+          "kind": "dimension",
+          "location": "Methods, instrument",
+          "quote": "the D-Cath Instrument (Documentation of Care, Administrative Accuracy, Clinical Accuracy, and Timeliness)",
+          "maps_to": [
+            "K12",
+            "K01"
+          ],
+          "mapping": "structure and clinical accuracy as two dimensions of one instrument; the administrative half is record-keeping conformance rather than note quality"
+        },
+        {
+          "pid": "S26-p02",
+          "label": "How soon after the care the note was written",
+          "kind": "dimension",
+          "location": "Methods, instrument",
+          "quote": "Administrative Accuracy, Clinical Accuracy, and Timeliness",
+          "maps_to": [],
+          "mapping": "not adopted: timeliness is a property of the documenting process and a model writes instantly, so the dimension cannot separate the systems this benchmark compares. It is named here so the omission is a decision and not an oversight."
+        },
+        {
+          "pid": "S26-p03",
+          "label": "The same instrument gives very different completeness in different institutions",
+          "kind": "design_finding",
+          "location": "Results, Table 2",
+          "quote": "82.7%",
+          "maps_to": [
+            "K05"
+          ],
+          "mapping": "a completeness score is a property of a service as well as of a note, which bounds what a base rate from one setting can say about another"
+        }
+      ]
+    },
+    {
+      "id": "S27",
+      "citation": "Pursuit of Digital Innovation in Psychiatric Data Handling Practices in Ireland: Comprehensive Case Study. JMIR Human Factors 2025;12:e64919. doi:10.2196/64919.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": "Found by the Scopus screening of 2026-10-07 and read the same day.",
+      "properties": [
+        {
+          "pid": "S27-p01",
+          "label": "Whether a psychiatric note can be read at all",
+          "kind": "survey_category",
+          "location": "Abstract, results",
+          "quote": "alarmingly low readability of notes",
+          "maps_to": [
+            "K13"
+          ],
+          "mapping": "comprehensibility for the reader, reported as a shortcoming of current practice rather than measured on notes"
+        },
+        {
+          "pid": "S27-p02",
+          "label": "Who can see a psychiatric note, and with what device in hand",
+          "kind": "requirement",
+          "location": "Abstract, results",
+          "quote": "staff members are allowed to keep their phones while accessing psychiatric case notes",
+          "maps_to": [
+            "K15",
+            "K17"
+          ],
+          "mapping": "necessity of sensitive detail and the standing of third parties: what a note may contain depends on who can reach it, and the source reports that reach is wide"
+        }
+      ]
     }
   ],
   "coverage": {
@@ -2031,6 +2301,9 @@
       "S18-p02",
       "S19-p01",
       "S2-p01",
+      "S25-p01",
+      "S25-p02",
+      "S26-p01",
       "S4-p02",
       "S6-p01",
       "S6-p02",
@@ -2048,6 +2321,7 @@
       "S1-p06",
       "S1-p08",
       "S14-p07",
+      "S24-p03",
       "S_abs_tednq-p03"
     ],
     "K03": [
@@ -2081,6 +2355,14 @@
       "S19-p04",
       "S2-p08",
       "S2-p10",
+      "S22-p01",
+      "S23-p01",
+      "S23-p02",
+      "S24-p02",
+      "S25-p01",
+      "S25-p02",
+      "S25-p03",
+      "S26-p03",
       "S3-p06",
       "S3-p07",
       "S3-p09",
@@ -2107,6 +2389,7 @@
       "S19-p02",
       "S2-p09",
       "S2-p10",
+      "S22-p02",
       "S4-p04",
       "S6-p01",
       "S8-p04",
@@ -2117,6 +2400,8 @@
       "S1-p12",
       "S13-p04",
       "S14-p08",
+      "S22-p04",
+      "S24-p01",
       "S3-p08",
       "S6-p02",
       "S_abs_hua-p01",
@@ -2126,6 +2411,7 @@
       "S1-p09",
       "S19-p03",
       "S2-p07",
+      "S24-p02",
       "S4-p08",
       "S6-p01",
       "S_abs_tednq-p02"
@@ -2135,6 +2421,7 @@
       "S13-p02",
       "S13-p04",
       "S14-p06",
+      "S22-p01",
       "S3-p16",
       "S3-p17",
       "S_abs_supcode-p01"
@@ -2142,6 +2429,8 @@
     "K11": [
       "S1-p02",
       "S2-p05",
+      "S23-p01",
+      "S25-p04",
       "S4-p07",
       "S6-p01",
       "S8-p04",
@@ -2151,6 +2440,8 @@
     "K12": [
       "S1-p01",
       "S2-p04",
+      "S23-p02",
+      "S26-p01",
       "S4-p05",
       "S6-p01",
       "S8-p02",
@@ -2160,6 +2451,7 @@
     "K13": [
       "S13-p01",
       "S2-p03",
+      "S27-p01",
       "S4-p06",
       "S6-p01",
       "S7-p05",
@@ -2178,6 +2470,7 @@
     "K15": [
       "S13-p07",
       "S14-p02",
+      "S27-p02",
       "S3-p01",
       "S_abs_hua-p02",
       "S_abs_scoping_notes-p03"
@@ -2197,6 +2490,7 @@
     "K17": [
       "S1-p14",
       "S13-p06",
+      "S27-p02",
       "S_abs_tednq-p03"
     ],
     "K18": [
@@ -2221,6 +2515,7 @@
     "K21": [
       "S1-p15",
       "S18-p04",
+      "S23-p03",
       "S6-p03",
       "S_abs_hua-p04",
       "S_abs_stakeholder-a01"
@@ -2231,6 +2526,7 @@
     ],
     "K23": [
       "S1-p15",
+      "S22-p03",
       "S7-p04",
       "S7-p05",
       "S7-p06",
@@ -2279,6 +2575,7 @@
     ],
     "K31": [
       "S2-p05",
+      "S25-p04",
       "S4-p07",
       "S4-p10"
     ],
@@ -2381,6 +2678,12 @@
       "source": "S20",
       "label": "The unit scored is an excerpt of a progress note, not the note",
       "why_unmapped": "a finding about measurement: the unit tested was an excerpt and the 2025 application scored whole notes"
+    },
+    {
+      "pid": "S26-p02",
+      "source": "S26",
+      "label": "How soon after the care the note was written",
+      "why_unmapped": "not a property of a note that this benchmark can compare: timeliness belongs to the documenting process and a model writes instantly"
     }
   ],
   "candidates_without_source_property": [

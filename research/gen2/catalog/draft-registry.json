@@ -271,6 +271,66 @@
       "version": "source-v1"
     },
     {
+      "id": "S22",
+      "title": "Lyons D, Amos M, Mathew VM. Structured psychiatric assessment schedules - treating the case notes and the patient. Psychiatric Bulletin 2001;25:418-420. doi:10.1192/pb.25.11.418.",
+      "locator": "ledger:doi:10.1192/pb.25.11.418",
+      "layer": "transfer",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "No rater blinding, two raters, one trust, and no measure of agreement between the raters is reported, so the divergence between them is a difference in scores rather than a measured disagreement. Completion rates of the form's other categories were not studied.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S23",
+      "title": "Treloar A. Improving methods of assessment in a community mental health team. Psychiatric Bulletin 1996;20:30-32. doi:10.1192/pb.20.1.30.",
+      "locator": "ledger:doi:10.1192/pb.20.1.30",
+      "layer": "transfer",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "One rater, one team, 60 notes, no blinding, and a before-and-after design in which the new form is confounded with the attention the project brought. The text layer of the published PDF interleaves two columns in the Methods section, and the quotes here are taken from a raw extraction that recovers it.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S24",
+      "title": "Campbell M, Chaplin R. Improving the assessment of risk of violence: a clinical audit of case note documentation. Psychiatric Bulletin 2001;25:250-252. doi:10.1192/pb.25.7.250.",
+      "locator": "ledger:doi:10.1192/pb.25.7.250",
+      "layer": "transfer",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "Before-and-after with no control, one team, no blinding, no rater agreement, and the items come from a guideline rather than from a validated instrument.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S25",
+      "title": "Comparison of accuracy of physical examination findings in initial progress notes between paper charts and a newly implemented electronic health record. J Am Med Inform Assoc 2017;24(1):140-144. doi:10.1093/jamia/ocw067. PMC7654088.",
+      "locator": "ledger:doi:10.1093/jamia/ocw067",
+      "layer": "transfer",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "Retrospective, one hospital, a transition period that confounds the medium with unfamiliarity, and general medicine rather than mental health. The reference standard works only because the chosen diagnoses have invariable findings, which is not available for a psychotherapy session.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S26",
+      "title": "Implementation of pediatric nursing documentation quality audit: a mixed method study. Pediomaternal Nursing Journal 2026;12(2). doi:10.20473/pmnj.v12i2.75365.",
+      "locator": "ledger:doi:10.20473/pmnj.v12i2.75365",
+      "layer": "transfer",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "Accidental sampling, one rater, no agreement figure, nursing records of children rather than psychotherapy notes, and an instrument adapted locally rather than the published D-Catch.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S27",
+      "title": "Pursuit of Digital Innovation in Psychiatric Data Handling Practices in Ireland: Comprehensive Case Study. JMIR Human Factors 2025;12:e64919. doi:10.2196/64919.",
+      "locator": "ledger:doi:10.2196/64919",
+      "layer": "requirements",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "Small samples (12 to 16 respondents on the privacy items), one country, self-report, and the paper's purpose is to motivate a proposed technical solution, which is not evidence about note quality.",
+      "version": "source-v1"
+    },
+    {
       "id": "S_abs_severity",
       "title": "Clinical AI Scribes in primary care: accuracy, error severity and implications for clinical practice. BMJ Digital Health & AI, 2025.",
       "locator": "ledger:pmid:42712320",

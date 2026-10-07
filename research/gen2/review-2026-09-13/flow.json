@@ -390,8 +390,8 @@
  "full_text": {
   "unit": "report",
   "catalog_reports": {
-   "sought": 21,
-   "retrieved": 21,
+   "sought": 27,
+   "retrieved": 27,
    "not_retrieved": 0,
    "not_retrieved_detail": []
   },
@@ -414,15 +414,15 @@
   },
   "retrieval_attempts": {
    "unit": "attempt",
-   "total": 40,
-   "succeeded": 34,
+   "total": 46,
+   "succeeded": 40,
    "failed": 5,
    "wrong_report": 1,
    "logged_retroactively": 6,
    "by_route_kind": {
     "direct_url": 4,
     "investigator_supplied": 7,
-    "open_access_api": 21,
+    "open_access_api": 27,
     "publisher": 2,
     "repository": 3,
     "web_page": 3
@@ -434,22 +434,22 @@
    "doi:10.4338/aci2017050080"
   ],
   "reading": {
-   "full_text_ai_read": 28,
+   "full_text_ai_read": 34,
    "abstract_only": 12,
    "human_verified": 0
   }
  },
  "inclusion": {
   "catalog_sources_by_use": {
-   "evidence": 14,
+   "evidence": 20,
    "guidance": 2,
    "method": 5
   },
   "catalog_sources_by_layer": {
-   "direct": 6,
+   "direct": 9,
    "method": 3,
-   "requirements": 2,
-   "transfer": 10
+   "requirements": 3,
+   "transfer": 12
   },
   "abstract_only_sources": 12,
   "supporting_materials_not_registry_sources": 2,
@@ -465,7 +465,7 @@
   "pilot_measurements_proposed": 14,
   "note": "Families are the investigator's provisional organising device, not validated dimensions.",
   "basis": "candidates, families, methods, levels, blind spots and pilot entries are recorded from the local catalog; the source counts are derived from reports.json",
-  "sources_full_text_verified": 21,
+  "sources_full_text_verified": 27,
   "sources_abstract_only": 12
  },
  "caveat": "Counts describe what was executed. The 9579 unscreened records and the two unsearched databases mean this is not a completed scoping review and must not be reported as one.",
@@ -499,7 +499,7 @@
   }
  ],
  "derived_from": {
-  "reports.json": "100defefab22efb1fd617677182bf7b9b5280e2fbbb829573ed49122a69b300f",
+  "reports.json": "e3d218c0e2ea0826c384234c41a1172f2bb2d773fb02304d1f0f259ea0a68f52",
   "pool-summary.json": "943b6ba26488884e91c808adcdebbc618e53ca2884f12aec13d482edbc0843f9",
   "screening-decisions.json": "6f5519b520638e09a901b489baf6d8b9eb61e5e26b45fe72cfb104c021923e06",
   "screening-strata.json": "d89e50a36bcb370ef9b28a290e40265e9df720c8e677fd06bee7b99941a0f87d",
