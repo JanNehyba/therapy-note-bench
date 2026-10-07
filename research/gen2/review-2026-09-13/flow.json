@@ -266,16 +266,9 @@
   "unit": "report",
   "catalog_reports": {
    "sought": 19,
-   "retrieved": 18,
-   "not_retrieved": 1,
-   "not_retrieved_detail": [
-    {
-     "report_id": "doi:10.1197/jamia.m2404",
-     "catalog_source": "S5",
-     "last_attempt": "2026-09-13",
-     "remaining_options": null
-    }
-   ]
+   "retrieved": 19,
+   "not_retrieved": 0,
+   "not_retrieved_detail": []
   },
   "other_reports": {
    "total": 3,
@@ -296,15 +289,15 @@
   },
   "retrieval_attempts": {
    "unit": "attempt",
-   "total": 31,
-   "succeeded": 27,
-   "failed": 3,
+   "total": 39,
+   "succeeded": 33,
+   "failed": 5,
    "wrong_report": 1,
    "logged_retroactively": 6,
    "by_route_kind": {
     "direct_url": 4,
     "investigator_supplied": 7,
-    "open_access_api": 12,
+    "open_access_api": 20,
     "publisher": 2,
     "repository": 3,
     "web_page": 3
@@ -312,6 +305,7 @@
   },
   "retrieved_after_failed_attempt": [
    "doi:10.1080/10503307.2026.2729093",
+   "doi:10.1197/jamia.m2404",
    "doi:10.4338/aci2017050080"
   ],
   "reading": {
@@ -346,7 +340,7 @@
   "pilot_measurements_proposed": 14,
   "note": "Families are the investigator's provisional organising device, not validated dimensions.",
   "basis": "candidates, families, methods, levels, blind spots and pilot entries are recorded from the local catalog; the source counts are derived from reports.json",
-  "sources_full_text_verified": 18,
+  "sources_full_text_verified": 19,
   "sources_abstract_only": 13
  },
  "caveat": "Counts describe what was executed. The 9579 unscreened records and the two unsearched databases mean this is not a completed scoping review and must not be reported as one.",
@@ -380,7 +374,7 @@
   }
  ],
  "derived_from": {
-  "reports.json": "da8c14ff9b999abd39422d2ac965fcfa9229b147fc69d8f688864b320fd7bb36",
+  "reports.json": "9ede3007f0145b4d97f9d111c2b62ed151a976e3f8e46cef95ba027074d46028",
   "pool-summary.json": "a1ded470c9d7956637a4476564c730887cfc9c3c1d5314fc54f0da15050c0cb3",
   "screening-decisions.json": "2f98644de1101880fe54fa705b3cf7ece932803e07b51d56be35e96bbd145a80",
   "screening-strata.json": "7f5cec8ab7f51c80bba97ceb1e359ff68b9ad7e39122c8211606d14a7e7bf21b",

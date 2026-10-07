@@ -606,6 +606,25 @@
      },
      "superseded_by_correction": null,
      "seq": 1
+    },
+    {
+     "date": "2026-10-07",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "unpaywall repository https://www.ncbi.nlm.nih.gov/pmc/articles/2442259",
+     "route_kind": "open_access_api",
+     "outcome": "retrieved",
+     "file": "S5.pdf",
+     "bytes": 205910,
+     "sha256": "f53083465c4fcf8706961457c1826ef125e4991f90407e4dd65f87d12ccff789",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null,
+     "seq": 2
     }
    ],
    "reading": {
@@ -625,9 +644,13 @@
    "notes": [
     "Europe PMC returned a landing-page shell (kept locally as pdqi-9-prelim.xml), not the article. The 2008 paper is behind the publisher's paywall."
    ],
-   "current_status": "not_retrieved",
-   "current_file": null,
-   "last_attempt_date": "2026-09-13"
+   "current_status": "retrieved",
+   "current_file": {
+    "file": "S5.pdf",
+    "bytes": 205910,
+    "sha256": "f53083465c4fcf8706961457c1826ef125e4991f90407e4dd65f87d12ccff789"
+   },
+   "last_attempt_date": "2026-10-07"
   },
   {
    "report_id": "doi:10.4338/aci2017050080",
@@ -2447,7 +2470,27 @@
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
    },
-   "retrieval_events": [],
+   "retrieval_events": [
+    {
+     "date": "2026-10-07",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "europepmc OA fullTextXML PMC13528381",
+     "route_kind": "open_access_api",
+     "outcome": "retrieved",
+     "file": "S_abs_severity.xml",
+     "bytes": 107287,
+     "sha256": "90534e29a73746b02c5145b2ed65dd569b456d33dab8951c85436563db98dcfb",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null,
+     "seq": 1
+    }
+   ],
    "reading": {
     "basis": "abstract",
     "ai_read": true,
@@ -2463,9 +2506,13 @@
     "basis": "local catalog registry_data.py / synthesis_data.py"
    },
    "notes": [],
-   "current_status": "not_sought",
-   "current_file": null,
-   "last_attempt_date": null
+   "current_status": "retrieved",
+   "current_file": {
+    "file": "S_abs_severity.xml",
+    "bytes": 107287,
+    "sha256": "90534e29a73746b02c5145b2ed65dd569b456d33dab8951c85436563db98dcfb"
+   },
+   "last_attempt_date": "2026-10-07"
   },
   {
    "report_id": "pmid:37921861",
@@ -2603,7 +2650,27 @@
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
    },
-   "retrieval_events": [],
+   "retrieval_events": [
+    {
+     "date": "2026-10-07",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "europepmc OA fullTextXML PMC8513879",
+     "route_kind": "open_access_api",
+     "outcome": "retrieved",
+     "file": "S_abs_delphi.xml",
+     "bytes": 151733,
+     "sha256": "14bd40531c6f5f0a9254a21db8cdaadb5ce9dc6ab452081c5066e5a761edcf22",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null,
+     "seq": 1
+    }
+   ],
    "reading": {
     "basis": "abstract",
     "ai_read": true,
@@ -2619,9 +2686,13 @@
     "basis": "local catalog registry_data.py / synthesis_data.py"
    },
    "notes": [],
-   "current_status": "not_sought",
-   "current_file": null,
-   "last_attempt_date": null
+   "current_status": "retrieved",
+   "current_file": {
+    "file": "S_abs_delphi.xml",
+    "bytes": 151733,
+    "sha256": "14bd40531c6f5f0a9254a21db8cdaadb5ce9dc6ab452081c5066e5a761edcf22"
+   },
+   "last_attempt_date": "2026-10-07"
   },
   {
    "report_id": "pmid:34904956",
@@ -2759,7 +2830,27 @@
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
    },
-   "retrieval_events": [],
+   "retrieval_events": [
+    {
+     "date": "2026-10-07",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "europepmc OA fullTextXML PMC3529118",
+     "route_kind": "open_access_api",
+     "outcome": "retrieved",
+     "file": "S_abs_stakeholder.xml",
+     "bytes": 117041,
+     "sha256": "68df8e203edb3cfa460971faadc9cca9e550c694ae2e1487492526d73a4baaae",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null,
+     "seq": 1
+    }
+   ],
    "reading": {
     "basis": "abstract",
     "ai_read": true,
@@ -2775,9 +2866,13 @@
     "basis": "local catalog registry_data.py / synthesis_data.py"
    },
    "notes": [],
-   "current_status": "not_sought",
-   "current_file": null,
-   "last_attempt_date": null
+   "current_status": "retrieved",
+   "current_file": {
+    "file": "S_abs_stakeholder.xml",
+    "bytes": 117041,
+    "sha256": "68df8e203edb3cfa460971faadc9cca9e550c694ae2e1487492526d73a4baaae"
+   },
+   "last_attempt_date": "2026-10-07"
   },
   {
    "report_id": "pmid:29368656",
@@ -2915,7 +3010,27 @@
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
    },
-   "retrieval_events": [],
+   "retrieval_events": [
+    {
+     "date": "2026-10-07",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "attempted: no open full text (pmcid=None, OA=N); unpaywall: is_oa=False, no usable location",
+     "route_kind": "open_access_api",
+     "outcome": "not_retrieved",
+     "file": null,
+     "bytes": null,
+     "sha256": null,
+     "checksum_source": null,
+     "bytes_source": null,
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null,
+     "seq": 1
+    }
+   ],
    "reading": {
     "basis": "abstract",
     "ai_read": true,
@@ -2931,9 +3046,9 @@
     "basis": "local catalog registry_data.py / synthesis_data.py"
    },
    "notes": [],
-   "current_status": "not_sought",
+   "current_status": "not_retrieved",
    "current_file": null,
-   "last_attempt_date": null
+   "last_attempt_date": "2026-10-07"
   },
   {
    "report_id": "supp:hua-scoping-review-2025",
@@ -3068,7 +3183,27 @@
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
    },
-   "retrieval_events": [],
+   "retrieval_events": [
+    {
+     "date": "2026-10-07",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "attempted: not indexed in europepmc; unpaywall: is_oa=True, no usable location",
+     "route_kind": "open_access_api",
+     "outcome": "not_retrieved",
+     "file": null,
+     "bytes": null,
+     "sha256": null,
+     "checksum_source": null,
+     "bytes_source": null,
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null,
+     "seq": 1
+    }
+   ],
    "reading": {
     "basis": "abstract",
     "ai_read": true,
@@ -3084,9 +3219,9 @@
     "basis": "local catalog registry_data.py / synthesis_data.py"
    },
    "notes": [],
-   "current_status": "not_sought",
+   "current_status": "not_retrieved",
    "current_file": null,
-   "last_attempt_date": null
+   "last_attempt_date": "2026-10-07"
   },
   {
    "report_id": "pmid:42054574",
@@ -3134,7 +3269,27 @@
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
    },
-   "retrieval_events": [],
+   "retrieval_events": [
+    {
+     "date": "2026-10-07",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "europepmc OA fullTextXML PMC13128051",
+     "route_kind": "open_access_api",
+     "outcome": "retrieved",
+     "file": "S_abs_mherrors.xml",
+     "bytes": 109986,
+     "sha256": "5f89f0dfbac6673e33b331e46db59df1884479ac9adb926974389a5b8bf0a4b2",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null,
+     "seq": 1
+    }
+   ],
    "reading": {
     "basis": "abstract",
     "ai_read": true,
@@ -3150,9 +3305,13 @@
     "basis": "local catalog registry_data.py / synthesis_data.py"
    },
    "notes": [],
-   "current_status": "not_sought",
-   "current_file": null,
-   "last_attempt_date": null
+   "current_status": "retrieved",
+   "current_file": {
+    "file": "S_abs_mherrors.xml",
+    "bytes": 109986,
+    "sha256": "5f89f0dfbac6673e33b331e46db59df1884479ac9adb926974389a5b8bf0a4b2"
+   },
+   "last_attempt_date": "2026-10-07"
   },
   {
    "report_id": "pmid:31367401",
@@ -3200,7 +3359,27 @@
     "human_decision_record": null,
     "human_decision_status": "none_recorded"
    },
-   "retrieval_events": [],
+   "retrieval_events": [
+    {
+     "date": "2026-10-07",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "europepmc OA fullTextXML PMC6650683",
+     "route_kind": "open_access_api",
+     "outcome": "retrieved",
+     "file": "S_abs_sespi.xml",
+     "bytes": 84993,
+     "sha256": "378202977e4889953dfd0a01be983818602e8985a83dee903c51cb070d4b1d70",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null,
+     "seq": 1
+    }
+   ],
    "reading": {
     "basis": "abstract",
     "ai_read": true,
@@ -3216,9 +3395,13 @@
     "basis": "local catalog registry_data.py / synthesis_data.py"
    },
    "notes": [],
-   "current_status": "not_sought",
-   "current_file": null,
-   "last_attempt_date": null
+   "current_status": "retrieved",
+   "current_file": {
+    "file": "S_abs_sespi.xml",
+    "bytes": 84993,
+    "sha256": "378202977e4889953dfd0a01be983818602e8985a83dee903c51cb070d4b1d70"
+   },
+   "last_attempt_date": "2026-10-07"
   },
   {
    "report_id": "pmid:40249563",
@@ -3435,7 +3618,7 @@
   }
  ],
  "derived_from": {
-  "report-map.json": "ca60ad89f95a674837c23f80c31c9945e04053d9f038e140d26cef439002a247",
+  "report-map.json": "e7789aeb6bfbd895d3c134808ad2d39f71051f4cafda14373edfbfb6b56e40d5",
   "fulltext-retrieval-log.json": "52ddeaedfdda580148007182ec7d0c78c4e1dd1450704dc8c736199418133611",
   "screening-decisions.json": "2f98644de1101880fe54fa705b3cf7ece932803e07b51d56be35e96bbd145a80",
   "screening-strata.json": "7f5cec8ab7f51c80bba97ceb1e359ff68b9ad7e39122c8211606d14a7e7bf21b",
@@ -3446,15 +3629,15 @@
   "reports": 37,
   "catalog_reports": {
    "sought": 19,
-   "retrieved": 18,
-   "not_retrieved": 1,
+   "retrieved": 19,
+   "not_retrieved": 0,
    "not_sought": 0
   },
   "abstract_only_reports": {
    "total": 13,
-   "retrieved": 6,
-   "not_retrieved": 0,
-   "not_sought": 7
+   "retrieved": 11,
+   "not_retrieved": 2,
+   "not_sought": 0
   },
   "other_reports": {
    "total": 3,
@@ -3469,14 +3652,15 @@
    "not_sought": 0
   },
   "attempts": {
-   "total": 31,
-   "succeeded": 27,
-   "failed": 3,
+   "total": 39,
+   "succeeded": 33,
+   "failed": 5,
    "wrong_report": 1,
    "logged_retroactively": 6
   },
   "retrieved_after_failed_attempt": [
    "doi:10.1080/10503307.2026.2729093",
+   "doi:10.1197/jamia.m2404",
    "doi:10.4338/aci2017050080"
   ],
   "by_route": {

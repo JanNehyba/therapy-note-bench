@@ -339,10 +339,15 @@ def test_every_source_is_a_report_the_ledger_sought(catalog, reports):
 
     The two halves say different things and must not be conflated. A catalog
     source marked `full_text` claims the text was read, and the ledger has to
-    show it was retrieved. An abstract-only source claims nothing beyond the
-    abstract, whether or not the file has since arrived: six of them were
-    downloaded on 2026-09-16 and are recorded as retrieved, and the catalog
-    still rests on their abstracts because nobody has read them.
+    show both that it was retrieved and that it was read. A source marked
+    otherwise claims nothing beyond the abstract, whether or not the file has
+    since arrived, and the ledger's reading basis has to agree: eleven of the
+    thirteen abstract-only reports are now downloaded and six of those have been
+    read, and S5 arrived on 2026-10-07 and nobody has read it.
+
+    This assertion used to say that a source not marked `full_text` must not be
+    retrieved, which conflates having the file with having read it and broke the
+    moment a file arrived. The claim belongs on the reading basis.
     """
     by_id = {r["report_id"]: r for r in reports["reports"]}
     for s in catalog["sources"]:
@@ -352,7 +357,7 @@ def test_every_source_is_a_report_the_ledger_sought(catalog, reports):
             assert report["current_status"] == "retrieved", s["id"]
             assert report["reading"]["basis"] == "full_text", s["id"]
         else:
-            assert report["current_status"] != "retrieved", s["id"]
+            assert report["reading"]["basis"] != "full_text", s["id"]
     for s in catalog["abstract_sources"]:
         report = by_id[s["ledger_report_id"]]
         assert report["catalog_source"] == s["id"]

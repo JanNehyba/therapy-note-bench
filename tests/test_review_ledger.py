@@ -109,12 +109,23 @@ def test_human_verification_is_never_invented(reports):
         assert family["assessed_by"] is None or family["sample_overlap"] == "established"
 
 
-def test_catalog_reports_count_19_18_1(reports):
+def test_catalog_reports_count_19_19_0(reports):
+    """Eighteen of the nineteen until 2026-10-07, when the nineteenth came down.
+
+    S5, the 2008 preliminary report of the PDQI family, had been recorded as not
+    retrieved since 2026-09-13 and was found in a repository on the second
+    attempt. Having it is not reading it: its reading basis is still the
+    abstract and the catalog still says `not_retrieved` for its verification,
+    which is the field that tracks reading.
+    """
     counts = reports["counts"]["catalog_reports"]
-    assert counts == {"sought": 19, "retrieved": 18, "not_retrieved": 1, "not_sought": 0}
-    by_source = _by_source(reports)
-    assert by_source["S5"]["current_status"] == "not_retrieved"
-    assert by_source["S5"]["report_id"] == "doi:10.1197/jamia.m2404"
+    assert counts == {"sought": 19, "retrieved": 19, "not_retrieved": 0, "not_sought": 0}
+    s5 = _by_source(reports)["S5"]
+    assert s5["report_id"] == "doi:10.1197/jamia.m2404"
+    assert s5["current_status"] == "retrieved"
+    assert [e["date"] for e in s5["retrieval_events"]] == ["2026-09-13", "2026-10-07"]
+    assert [e["outcome"] for e in s5["retrieval_events"]] == ["not_retrieved", "retrieved"]
+    assert s5["reading"]["basis"] == "abstract", "retrieved is not read"
 
 
 def test_having_the_file_is_not_the_same_as_having_read_it(reports):
@@ -133,22 +144,33 @@ def test_having_the_file_is_not_the_same_as_having_read_it(reports):
     ]
     assert len(abstract_only) == 13
     retrieved = [r for r in abstract_only if r["current_status"] == "retrieved"]
-    assert len(retrieved) == 6
-    assert reports["counts"]["abstract_only_reports"]["not_sought"] == 7
+    assert len(retrieved) == 11
+    # Nothing is unsought any more: the seven that had never been tried were
+    # tried on 2026-10-07 and five of them came down. The two that did not are
+    # recorded as attempted and failed, which is a different fact from untried.
+    counts = reports["counts"]["abstract_only_reports"]
+    assert counts == {"total": 13, "retrieved": 11, "not_retrieved": 2, "not_sought": 0}
+    failed = {r["catalog_source"] for r in abstract_only if r["current_status"] != "retrieved"}
+    assert failed == {"S_abs_disparity", "S_abs_summac"}
     for report in abstract_only:
         assert report["reading"]["human_verified"] is None
-    # Retrieved on 2026-09-16, read on 2026-09-20: two dated facts, and the
-    # reading basis moved only when the reading happened.
+    # Six arrived on 2026-09-16 and were read on 2026-09-20; five arrived on
+    # 2026-10-07 and nobody has read them. Both facts are dated, and the reading
+    # basis moves only when the reading happens.
     for report in retrieved:
-        supplied = report["retrieval_events"][-1]
-        assert supplied["route_kind"] == "investigator_supplied"
-        assert supplied["date"] == "2026-09-16"
-        assert supplied["sha256"] and supplied["bytes"] > 0
-        assert report["reading"]["basis"] == "full_text", report["catalog_source"]
-        assert "2026-09-20" in report["reading"]["ai_read_basis"]
+        event = report["retrieval_events"][-1]
+        assert event["sha256"] and event["bytes"] > 0
+        assert event["date"] in {"2026-09-16", "2026-10-07"}
+        if event["date"] == "2026-09-16":
+            assert event["route_kind"] == "investigator_supplied"
+            assert report["reading"]["basis"] == "full_text", report["catalog_source"]
+            assert "2026-09-20" in report["reading"]["ai_read_basis"]
+        else:
+            assert report["reading"]["basis"] == "abstract", report["catalog_source"]
     for report in abstract_only:
         if report["current_status"] != "retrieved":
             assert report["reading"]["basis"] == "abstract", report["catalog_source"]
+            assert report["retrieval_events"], "a failure is an attempt, and is recorded"
 
 
 def test_psychres_2026_is_retrieved_after_a_failed_attempt(reports):
@@ -238,11 +260,10 @@ def test_flow_full_text_is_report_level(flow, reports):
     assert full["unit"] == "report"
     assert {k: full["catalog_reports"][k] for k in ("sought", "retrieved", "not_retrieved")} == {
         "sought": 19,
-        "retrieved": 18,
-        "not_retrieved": 1,
+        "retrieved": 19,
+        "not_retrieved": 0,
     }
-    listed = {d["catalog_source"] for d in full["catalog_reports"]["not_retrieved_detail"]}
-    assert listed == {"S5"}
+    assert full["catalog_reports"]["not_retrieved_detail"] == []
     assert full["retrieval_attempts"]["unit"] == "attempt"
     assert full["retrieval_attempts"]["total"] == reports["counts"]["attempts"]["total"]
     assert full["retrieval_attempts"]["total"] > full["catalog_reports"]["sought"]
@@ -298,11 +319,11 @@ def test_fetch_appends_to_the_map_and_rebuilds_the_ledger_not_the_log(tmp_path):
         return b"%PDF-1.4 synthetic", route, "open_access_api", "pdf"
 
     grown = fetch_fulltext.run(
-        copy, [s5], fetch=found, today="2026-09-16", fulltext_dir=tmp_path / "ft"
+        copy, [s5], fetch=found, today="2026-10-08", fulltext_dir=tmp_path / "ft"
     )
     report = next(r for r in grown["reports"] if r["report_id"] == s5)
     assert report["current_status"] == "retrieved"
-    assert report["retrieval_events"][-1]["date"] == "2026-09-16"
+    assert report["retrieval_events"][-1]["date"] == "2026-10-08"
     expected = hashlib.sha256(b"%PDF-1.4 synthetic").hexdigest()
     assert report["retrieval_events"][-1]["sha256"] == expected
     assert (tmp_path / "ft" / "S5.pdf").read_bytes() == b"%PDF-1.4 synthetic"
@@ -322,7 +343,7 @@ def test_fetch_appends_to_the_map_and_rebuilds_the_ledger_not_the_log(tmp_path):
         return None, "attempted: publisher (403)", "publisher", ""
 
     again = fetch_fulltext.run(
-        copy, [s5], fetch=gone, today="2026-09-17", fulltext_dir=tmp_path / "ft"
+        copy, [s5], fetch=gone, today="2026-10-09", fulltext_dir=tmp_path / "ft"
     )
     report = next(r for r in again["reports"] if r["report_id"] == s5)
     outcomes = [e["outcome"] for e in report["retrieval_events"]]
@@ -330,7 +351,7 @@ def test_fetch_appends_to_the_map_and_rebuilds_the_ledger_not_the_log(tmp_path):
     assert report["current_status"] == "retrieved"
     with pytest.raises(ValueError, match="unknown report"):
         fetch_fulltext.run(
-            copy, ["doi:nobody"], fetch=gone, today="2026-09-17", fulltext_dir=tmp_path / "ft"
+            copy, ["doi:nobody"], fetch=gone, today="2026-10-09", fulltext_dir=tmp_path / "ft"
         )
 
 

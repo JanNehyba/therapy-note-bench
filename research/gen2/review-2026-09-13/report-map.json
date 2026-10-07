@@ -573,7 +573,26 @@
    "log_slugs": [
     "pdqi-9-prelim"
    ],
-   "events": [],
+   "events": [
+    {
+     "date": "2026-10-07",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "unpaywall repository https://www.ncbi.nlm.nih.gov/pmc/articles/2442259",
+     "route_kind": "open_access_api",
+     "outcome": "retrieved",
+     "file": "S5.pdf",
+     "bytes": 205910,
+     "sha256": "f53083465c4fcf8706961457c1826ef125e4991f90407e4dd65f87d12ccff789",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null
+    }
+   ],
    "reading": {
     "basis": "abstract",
     "ai_read": true,
@@ -1810,7 +1829,26 @@
     "declared_in": null
    },
    "log_slugs": [],
-   "events": [],
+   "events": [
+    {
+     "date": "2026-10-07",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "europepmc OA fullTextXML PMC13528381",
+     "route_kind": "open_access_api",
+     "outcome": "retrieved",
+     "file": "S_abs_severity.xml",
+     "bytes": 107287,
+     "sha256": "90534e29a73746b02c5145b2ed65dd569b456d33dab8951c85436563db98dcfb",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null
+    }
+   ],
    "reading": {
     "basis": "abstract",
     "ai_read": true,
@@ -1941,7 +1979,26 @@
     "declared_in": null
    },
    "log_slugs": [],
-   "events": [],
+   "events": [
+    {
+     "date": "2026-10-07",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "europepmc OA fullTextXML PMC8513879",
+     "route_kind": "open_access_api",
+     "outcome": "retrieved",
+     "file": "S_abs_delphi.xml",
+     "bytes": 151733,
+     "sha256": "14bd40531c6f5f0a9254a21db8cdaadb5ce9dc6ab452081c5066e5a761edcf22",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null
+    }
+   ],
    "reading": {
     "basis": "abstract",
     "ai_read": true,
@@ -2072,7 +2129,26 @@
     "declared_in": null
    },
    "log_slugs": [],
-   "events": [],
+   "events": [
+    {
+     "date": "2026-10-07",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "europepmc OA fullTextXML PMC3529118",
+     "route_kind": "open_access_api",
+     "outcome": "retrieved",
+     "file": "S_abs_stakeholder.xml",
+     "bytes": 117041,
+     "sha256": "68df8e203edb3cfa460971faadc9cca9e550c694ae2e1487492526d73a4baaae",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null
+    }
+   ],
    "reading": {
     "basis": "abstract",
     "ai_read": true,
@@ -2203,7 +2279,26 @@
     "declared_in": null
    },
    "log_slugs": [],
-   "events": [],
+   "events": [
+    {
+     "date": "2026-10-07",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "attempted: no open full text (pmcid=None, OA=N); unpaywall: is_oa=False, no usable location",
+     "route_kind": "open_access_api",
+     "outcome": "not_retrieved",
+     "file": null,
+     "bytes": null,
+     "sha256": null,
+     "checksum_source": null,
+     "bytes_source": null,
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null
+    }
+   ],
    "reading": {
     "basis": "abstract",
     "ai_read": true,
@@ -2331,7 +2426,26 @@
     "declared_in": null
    },
    "log_slugs": [],
-   "events": [],
+   "events": [
+    {
+     "date": "2026-10-07",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "attempted: not indexed in europepmc; unpaywall: is_oa=True, no usable location",
+     "route_kind": "open_access_api",
+     "outcome": "not_retrieved",
+     "file": null,
+     "bytes": null,
+     "sha256": null,
+     "checksum_source": null,
+     "bytes_source": null,
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null
+    }
+   ],
    "reading": {
     "basis": "abstract",
     "ai_read": true,
@@ -2387,7 +2501,26 @@
     "declared_in": null
    },
    "log_slugs": [],
-   "events": [],
+   "events": [
+    {
+     "date": "2026-10-07",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "europepmc OA fullTextXML PMC13128051",
+     "route_kind": "open_access_api",
+     "outcome": "retrieved",
+     "file": "S_abs_mherrors.xml",
+     "bytes": 109986,
+     "sha256": "5f89f0dfbac6673e33b331e46db59df1884479ac9adb926974389a5b8bf0a4b2",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null
+    }
+   ],
    "reading": {
     "basis": "abstract",
     "ai_read": true,
@@ -2443,7 +2576,26 @@
     "declared_in": null
    },
    "log_slugs": [],
-   "events": [],
+   "events": [
+    {
+     "date": "2026-10-07",
+     "time": null,
+     "date_source": "fetch run",
+     "route": "europepmc OA fullTextXML PMC6650683",
+     "route_kind": "open_access_api",
+     "outcome": "retrieved",
+     "file": "S_abs_sespi.xml",
+     "bytes": 84993,
+     "sha256": "378202977e4889953dfd0a01be983818602e8985a83dee903c51cb070d4b1d70",
+     "checksum_source": "computed at download",
+     "bytes_source": "measured at download",
+     "note": null,
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null
+    }
+   ],
    "reading": {
     "basis": "abstract",
     "ai_read": true,
