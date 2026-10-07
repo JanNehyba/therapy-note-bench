@@ -1,0 +1,65 @@
+{
+  "version": "back-translation-check-v2",
+  "recorded_at": "2026-10-07T21:20:46+00:00",
+  "direction": "en->cs",
+  "prompt_version": "gen2-translate-v1",
+  "prompt_digests": {
+    "en->cs": "0814e00e8536094fc8fdf07e32ca78548e5f3be07c387080362ea3ea2b5d669c",
+    "cs->en": "21385cfd61e17b274d6ad4e49c6d6c39ad84a77592375494f63bfe6150261673"
+  },
+  "provider": "einfra",
+  "settings": {
+    "temperature": 0.0,
+    "max_tokens": 16384,
+    "timeout_s": 600
+  },
+  "back_translator": {
+    "provider": "einfra",
+    "model": "gpt-oss-120b"
+  },
+  "sample": {
+    "source": "sample.json",
+    "turns": 40,
+    "digest": "bac2de7d3a5fcb00159c15e68388ca6d1bb89794f5a1f8a4f2a1680bb3ddb543"
+  },
+  "metric": {
+    "name": "chrF",
+    "order": 6,
+    "beta": 2.0,
+    "means": "character n-gram agreement of the round trip with the original; an indirect screen for meaning, not a measurement of it"
+  },
+  "structure_rule": {
+    "untranslated_above": 0.9,
+    "untranslated_min_words": 3,
+    "means": "a turn that came back unchanged fails only with at least this many words; shorter unchanged turns are listed for the human review"
+  },
+  "candidates": [
+    {
+      "model": "deepseek-v4-flash",
+      "structure": null,
+      "round_trip": null,
+      "failed": {
+        "stage": "forward",
+        "error": "deepseek-v4-flash returned no usable answer: HTTP400: bad request"
+      }
+    },
+    {
+      "model": "kimi-k3",
+      "structure": null,
+      "round_trip": null,
+      "failed": {
+        "stage": "forward",
+        "error": "kimi-k3 returned no usable answer: ReadTimeout"
+      }
+    },
+    {
+      "model": "qwen3.8-27b",
+      "structure": null,
+      "round_trip": null,
+      "failed": {
+        "stage": "forward",
+        "error": "qwen3.8-27b returned no usable answer: truncated at max_tokens=16384"
+      }
+    }
+  ]
+}

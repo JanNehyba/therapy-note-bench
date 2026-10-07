@@ -48,7 +48,66 @@
     }
   },
   "not_a_judge_of": [],
-  "reason": "Highest round trip of the second check (mean chrF 0.772, three of forty turns under the 0.50 floor, every turn returned, six short interjections unchanged), measured under the corrected v2 rule and the 600 s timeout; gemma4 was within 0.01 and mistral-medium-3.5, recorded from the first check, at 0.669 with eight turns under the floor. The investigator delegated the choice to the assistant on 2026-09-21 ('prepni klidne na glm 5.3 ... nebo klidne nechej'); this record supersedes the mistral-medium-3.5 record of the same day, which is retained in the workspace. The pilot's judge models are not yet named; the instrument must be re-checked against them before any judged run.",
+  "reason": "Highest round trip of the candidates that answered: mean chrF 0.772, three of forty turns under the 0.50 floor, every turn returned, six short interjections unchanged, measured under the corrected v2 rule and the 600 s timeout. It is not the highest of the six candidates, because three of the six returned nothing and were not scored; see candidates_without_a_measurement. The investigator delegated the choice to the assistant on 2026-09-21 ('prepni klidne na glm 5.3 ... nebo klidne nechej'); this record supersedes the mistral-medium-3.5 record of the same day, which is retained in the workspace. The pilot's judge models are not yet named; the instrument must be re-checked against them before any judged run.",
   "status": "recorded_before_use",
-  "supersedes": "the ten undocumented Czech translations of the earlier Gen-2 draft, which are retained as historical artifacts and are not used as pairs (D4)"
+  "supersedes": "the ten undocumented Czech translations of the earlier Gen-2 draft, which are retained as historical artifacts and are not used as pairs (D4)",
+  "reason_superseded_on_2026-10-08": "Highest round trip of the second check (mean chrF 0.772, three of forty turns under the 0.50 floor, every turn returned, six short interjections unchanged), measured under the corrected v2 rule and the 600 s timeout; gemma4 was within 0.01 and mistral-medium-3.5, recorded from the first check, at 0.669 with eight turns under the floor. The investigator delegated the choice to the assistant on 2026-09-21 ('prepni klidne na glm 5.3 ... nebo klidne nechej'); this record supersedes the mistral-medium-3.5 record of the same day, which is retained in the workspace. The pilot's judge models are not yet named; the instrument must be re-checked against them before any judged run.",
+  "candidates_without_a_measurement": {
+    "recorded": "2026-10-08",
+    "why_this_block_exists": "Until today the record named the two candidates that scored below glm-5.3 and said nothing about the three that produced no score at all. A row with no number reads like a low number, and for two of these three it means the opposite: the measurement never happened.",
+    "candidates": [
+      {
+        "model": "deepseek-v4-flash, redeployed as deepseek-v4.1-flash",
+        "what_happened": "truncated at max_tokens=16384 with finish_reason=length and an empty string, in both September checks",
+        "why": "a reasoning model spends the budget on thinking before it writes. Probed on 2026-10-07 over three turns: at max_tokens=2048 it produced 2048 tokens and no text; at 8192 it stopped of its own accord after 1661 tokens and returned correct Czech. The forty-turn sample needs more than 16384.",
+        "re_measured": "2026-10-08 at max_tokens=65536: mean chrF 0.7686, three turns under the floor, all forty turns returned. That is 0.0034 below glm-5.3 and 0.0050 above gemma4, on a sample of forty turns.",
+        "name_drift": "deepseek-v4-flash was deployed when models-snapshot.md was captured, with a published output ceiling of 8192. The endpoint now serves deepseek-v4.1-flash and rejects the old name with HTTP 400. The September candidate list was right when it was written."
+      },
+      {
+        "model": "qwen3.8-27b",
+        "what_happened": "truncated at max_tokens=16384, in both September and the re-run of 2026-10-07",
+        "why": "the same shape as deepseek and not separately probed, so it is recorded as unmeasured rather than as a reasoning model",
+        "re_measured": null
+      },
+      {
+        "model": "kimi-k3",
+        "what_happened": "read timeout at 600 s, in September and again on 2026-10-07",
+        "why": "not established. A timeout is a property of the deployment on the day as much as of the model.",
+        "re_measured": null
+      }
+    ]
+  },
+  "what_the_comparison_can_and_cannot_separate": {
+    "measured": [
+      {
+        "model": "glm-5.3",
+        "max_tokens": 16384,
+        "mean_chrf": 0.772,
+        "below_floor": 3
+      },
+      {
+        "model": "deepseek-v4.1-flash",
+        "max_tokens": 65536,
+        "mean_chrf": 0.7686,
+        "below_floor": 3
+      },
+      {
+        "model": "gemma4",
+        "max_tokens": 16384,
+        "mean_chrf": 0.7636,
+        "below_floor": 2
+      },
+      {
+        "model": "mistral-medium-3.5",
+        "max_tokens": 16384,
+        "mean_chrf": 0.6691,
+        "below_floor": 8
+      }
+    ],
+    "reading": "The top three span 0.0084 of mean chrF over forty turns and have two or three turns under the floor each. Nothing in this check separates them. mistral-medium-3.5 is separated from them, by eight turns under the floor as much as by the mean.",
+    "not_like_for_like": "deepseek was measured at four times the budget of the others, because below that it returns nothing. A larger budget gives a reasoning model room to think rather than more of the text to work from, so it is not obviously an advantage in translation quality; it is a difference in the conditions and is named rather than averaged away.",
+    "cost": "The budget difference is a cost difference: translating fifty conversations with deepseek spends about four times the output budget of glm-5.3 for a result this check cannot distinguish.",
+    "why_glm_stays": "It is the recorded instrument and the two pilot conversations are already translated with it. Switching on a difference of 0.0034 would be choosing on noise. The investigator may switch, and if he does, the two conversations are re-translated and the record supersedes this one.",
+    "what_would_separate_them": "a larger sample, or the human meaning review the pilot plans over twenty sentences, which asks a question chrF cannot: whether the Czech says what the English said."
+  }
 }
