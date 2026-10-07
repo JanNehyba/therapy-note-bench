@@ -670,6 +670,42 @@ def test_a_property_no_candidate_covered_was_opened_and_then_decided(catalog, pr
     assert "against" in decided["changes"][0]
 
 
+def test_the_overview_shows_every_candidate_with_its_rule_and_a_status_a_reader_can_read(
+    catalog, operational
+):
+    """The one-table view leads the page. Its status column once said "written,
+    not adopted" and "rule yes, round no" in a shorthand only its author could
+    read; each status is now a phrase with its meaning beneath the table, and
+    every rule that exists is one click from the candidate it measures."""
+    page = PAGE.read_text(encoding="utf-8")
+    overview = page.split('<h2 id="overview">')[1].split("<h2 ")[0]
+    assert page.index('id="overview"') < page.index('id="status"')
+    rows = re.findall(r'<span class="id">(K\d\d)</span>(.*?)</tr>', overview, re.S)
+    assert [k for k, _ in rows] == [c["id"] for c in catalog["candidates"]]
+    by = dict(rows)
+    words = render_catalog.STATUS_WORDS
+    assert set(catalog["candidate_states"]) <= set(words)
+    block = operational["rules_written_not_in_this_round"]
+    written = {r["construct_id"]: r for r in block["items"]}
+    for c in catalog["candidates"]:
+        row = by[c["id"]]
+        if c["state"] == "proposed":
+            assert words["proposed"] in row, c["id"]
+            assert "no rule written" not in row, c["id"]
+        elif c["id"] in written:
+            assert words["rule_written"] in row, c["id"]
+            assert render_catalog.esc(written[c["id"]]["question"]) in row, c["id"]
+        else:
+            assert words[c["state"]] in row, c["id"]
+            assert "no rule written" in row, c["id"]
+    for m in operational["measurements"]:
+        assert render_catalog.esc(m["question"]) in by[m["construct_id"]]
+    # Every status the table uses is explained under it, in the record's words.
+    assert render_catalog.esc(block["why_here"]) in overview
+    for state in {c["state"] for c in catalog["candidates"] if c["id"] not in written}:
+        assert render_catalog.esc(catalog["candidate_states"][state]) in overview, state
+
+
 def test_the_page_carries_the_source_first_table(catalog, props):
     page = PAGE.read_text(encoding="utf-8")
     assert 'id="source-properties"' in page

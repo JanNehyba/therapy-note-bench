@@ -10,11 +10,14 @@ from __future__ import annotations
 
 import html
 import importlib.util
+import json
+import re
 import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 PAGE_PATH = HERE.parents[2] / "docs" / "gen2-catalog.html"
+OPERATIONAL_PATH = HERE / "operational.json"
 REPO_URL = "https://github.com/JanNehyba/therapy-note-bench"
 BLOB = REPO_URL + "/blob/main/"
 
@@ -64,6 +67,14 @@ STYLE = """
        border-radius: .3rem; font-size: .85em; color: var(--muted); margin-right: .3rem; }
   footer { margin-top: 3rem; border-top: 1px solid var(--line); padding-top: 1rem;
            color: var(--muted); font-size: .9rem; }
+  details summary { cursor: pointer; }
+  .more { margin: .4rem 0 .2rem; padding: .5rem .7rem; background: var(--raise);
+          border-radius: .3rem; max-width: 40rem; }
+  .more h4 { margin: .5rem 0 .2rem; font-size: .8rem; text-transform: uppercase;
+             letter-spacing: .04em; color: var(--muted); }
+  .more h4:first-child { margin-top: 0; }
+  .more dl { grid-template-columns: minmax(6rem, 9rem) 1fr; margin: .3rem 0; }
+  .measured { font-weight: 600; }
 """
 
 
@@ -125,6 +136,134 @@ def _sources(catalog: dict) -> str:
     )
     out += table(["Id and ledger report", "Citation", "Layer", "Why it is here"], rows)
     return out
+
+
+#: The overview's status words. The catalog's own state names stay as they are;
+#: "rule_written" is not one of them, because writing a rule does not change a
+#: candidate's state until an entry joins the pilot. A reader still has to see
+#: that "not yet operationalized" stopped being true the day the rule was written.
+STATUS_WORDS = {
+    "proposed": "In the pilot proposal",
+    "rule_written": "Rule written, not in the pilot",
+    "not_yet_operationalized": "No rule yet",
+    "not_measured": "Not measured this round",
+    "out_of_scope": "Outside this study",
+    "awaiting_raters": "No suitable rater",
+    "lacking_evidence": "No source supports it",
+    "irrelevant": "Not a quality property",
+    "measurement_failed": "Measurement failed",
+}
+
+
+def _status(candidate: dict, written: set[str]) -> str:
+    if candidate["state"] != "proposed" and candidate["id"] in written:
+        return "rule_written"
+    return candidate["state"]
+
+
+def _labelled(kind: str, mapping: dict) -> list[tuple[str, str]]:
+    return [(f"{kind}: {label}", esc(text)) for label, text in mapping.items()]
+
+
+def _rule(candidate: dict, catalog: dict, operational: dict) -> tuple[str, str]:
+    """The rule a rater or a program applies to one candidate, and where it is recorded."""
+    key = candidate["id"]
+    for m in operational["measurements"]:
+        if m["construct_id"] == key:
+            pairs = [("Question", esc(m["question"]))]
+            pairs += _labelled("Answer", m["anchors"]) + _labelled("Example", m["examples"])
+            return m["id"], f"<p>{esc(m['definition'])}</p>" + dl(pairs)
+    for m in operational["methods"]:
+        if key in m["construct_ids"]:
+            shared = f"<p>One method shared by {esc(', '.join(m['construct_ids']))}.</p>"
+            return (
+                f"method {m['id']}",
+                f"<p>{esc(m['definition'])}</p>" + dl(_labelled("Outcome", m["outcomes"])) + shared,
+            )
+    for m in operational["rules_written_not_in_this_round"]["items"]:
+        if m["construct_id"] == key:
+            pairs = [("Question", esc(m["question"]))]
+            pairs += _labelled("Answer", m["anchors"]) + _labelled("Example", m["examples"])
+            pairs.append(("Rater", esc(m["rater"])))
+            return m["id"], f"<p>{esc(m['definition'])}</p>" + dl(pairs)
+    for p in catalog["pilot_proposal"]["entries"]:
+        if key in p["measures"]:
+            pairs = [
+                ("Entry", esc(p["label"])),
+                ("Unit", esc(p["unit"])),
+                ("Answer", esc(p["format"])),
+            ]
+            return f"pilot entry {p['id']}", f"<p>{esc(candidate['measurement'])}</p>" + dl(pairs)
+    return "", ""
+
+
+def _cite(source: dict) -> str:
+    """Author and year where the citation opens with a person, else what names the work."""
+    citation = source["citation"]
+    year = re.search(r"\b(19|20)\d{2}\b", citation)
+    if " et al" in citation[:40] or re.match(r"[A-Z][a-z]+ [A-Z]{1,3}[,.]", citation):
+        name = citation.split()[0]
+    else:
+        name = source.get("study_family") or citation.split(".")[0]
+        if len(name) > 40:
+            name = name[:37].rstrip() + "..."
+    return f"{name} {year.group(0)}" if year else name
+
+
+def _overview(catalog: dict, operational: dict) -> str:
+    """Every candidate on one row, the rule and the reason one click away."""
+    written = {r["construct_id"] for r in operational["rules_written_not_in_this_round"]["items"]}
+    family = {f["id"]: f["label"] for f in catalog["families"]}
+    full = {s["id"]: s for s in catalog["sources"]}
+    names = {s["id"]: s for s in catalog["sources"] + catalog["abstract_sources"]}
+    basis = catalog["decision_basis"]
+    rows = []
+    for c in catalog["candidates"]:
+        status = _status(c, written)
+        where, rule = _rule(c, catalog, operational)
+        if rule:
+            rule = f"<h4>Rule ({esc(where)})</h4>{rule}"
+        else:
+            rule = f"<h4>Proposed measurement, no rule written</h4><p>{esc(c['measurement'])}</p>"
+        cited = []
+        for e in c["evidence"]:
+            label = _cite(names[e["source"]]) + ("" if e["source"] in full else " (abstract)")
+            if label not in cited:
+                cited.append(label)
+        rows.append(
+            [
+                f'<span class="id">{esc(c["id"])}</span>',
+                f"<details><summary><b>{esc(c['label'])}</b></summary>"
+                f'<div class="more"><h4>Definition</h4><p>{esc(c["definition"])}</p>{rule}'
+                f"<h4>Why it stands here</h4><p>{esc(c['state_note'])}</p></div></details>",
+                esc(family[c["family"]]),
+                esc(c["unit"]),
+                f'<span title="{esc(basis[c["decided_by"]])}">{esc(c["decided_by"])}</span>',
+                esc("; ".join(cited)),
+                f'<span class="{"measured" if status == "proposed" else ""}">'
+                f"{esc(STATUS_WORDS[status])}</span>",
+            ]
+        )
+    used = {_status(c, written) for c in catalog["candidates"]}
+    meaning = {
+        **catalog["candidate_states"],
+        "rule_written": operational["rules_written_not_in_this_round"]["why_here"],
+    }
+    legend = dl([(STATUS_WORDS[s], esc(meaning[s])) for s in STATUS_WORDS if s in used])
+    decided = dl([(k, esc(v)) for k, v in basis.items()])
+    return (
+        f'<p class="notice">{esc(catalog["pilot_proposal"]["status"])}</p>'
+        "<p>One row per candidate. Open a name for its definition, the rule a rater or a "
+        "program applies, and why it stands where it does.</p>"
+        + table(
+            ["Id", "Candidate", "Family", "Unit", "Decided by", "Sources", "Status"],
+            rows,
+        )
+        + "<h3>What the status means</h3>"
+        + legend
+        + "<h3>What decides a right answer</h3>"
+        + decided
+    )
 
 
 def _families(catalog: dict) -> str:
@@ -432,9 +571,11 @@ def _glossary(title: str, mapping) -> str:
     return f"<h3>{esc(title)}</h3><p>{esc(', '.join(mapping))}</p>"
 
 
-def render(catalog: dict, props: dict | None = None) -> str:
+def render(catalog: dict, props: dict | None = None, operational: dict | None = None) -> str:
     if props is None:
         props = _catalog_module().load_properties()
+    if operational is None:
+        operational = json.loads(OPERATIONAL_PATH.read_text(encoding="utf-8"))
     n = {
         "candidates": len(catalog["candidates"]),
         "methods": len(catalog["methods"]),
@@ -444,6 +585,11 @@ def render(catalog: dict, props: dict | None = None) -> str:
         "comparison": len(catalog["comparison"]),
     }
     sections = [
+        (
+            "overview",
+            f"All {n['candidates']} candidates in one table",
+            lambda c: _overview(c, operational),
+        ),
         ("status", "Status and policies", None),
         ("sources", f"Sources ({n['sources']} read, {n['abstracts']} abstract-only)", _sources),
         (
