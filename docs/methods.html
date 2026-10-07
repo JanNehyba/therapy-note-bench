@@ -513,6 +513,18 @@
      same table rather than two tables. */
   table.profile .pair-start { border-left: 1px solid var(--line); }
 
+  /* The column the rows are ordered by, beside the name rather than after six
+     columns of digits: a reader checks an order against its key, and a key
+     printed last in the muted apparatus colour was one nobody found. Ink, not
+     accent: it orders the rows and is still not a score. */
+  table.profile td.key { color: var(--fg); font-weight: 600; text-align: center;
+                         font-variant-numeric: tabular-nums; }
+  table.profile td.key.hollow { color: var(--muted); font-weight: 400; }
+  table.profile th.key, table.profile th.span { text-align: center; }
+  table.profile td.span { text-align: center; }
+  table.profile th .sub { display: block; font-size: var(--t-xs); font-weight: 400;
+                          text-transform: none; letter-spacing: 0; color: var(--muted); }
+
   /* A row read across ten columns, on a table where the row is the unit. The
      tables get this from `tr.system:hover`, which is a control that opens a
      panel; these rows open nothing, so they take the tint and not the cursor. */

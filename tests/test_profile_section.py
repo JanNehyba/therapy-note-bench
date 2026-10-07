@@ -200,10 +200,12 @@ def test_the_section_publishes_no_order_of_its_own(tmp_path, payload):
     assert "no way of building one would be a measurement" in drawn
     # The span is read before the middle, which is the whole reason both are
     # printed: one model runs from first to last and no middle describes it.
-    # The *columns*, not the first mention of either word: the blurb names the
-    # two the rows are ordered by, which is the one thing a reader was asking
-    # the table and could not find, and it necessarily says "Median" first.
-    assert drawn.index(">Span<") < drawn.index(">Median<")
+    # Both stand beside the name since 2026-10-07: printed last and in the
+    # apparatus colour, the key the rows are ordered by was one the investigator
+    # could not find, and the heading did not say what it was a median of.
+    head = drawn[drawn.index('<table class="profile">') :]
+    assert head.index(">Best–worst<") < head.index(">Median rank<") < head.index('class="judge"')
+    assert ">of the 6 ranks<" in head, "the heading does not say what the median is taken over"
     for absent in ("Score", "Total", "Overall", "Combined score"):
         assert f">{absent}<" not in drawn, f"a column headed {absent} is an aggregate"
     for row in profile["rows"]:
@@ -233,7 +235,7 @@ def test_the_top_group_is_counted_per_instrument_not_per_table(tmp_path, payload
 
 
 def test_the_rows_are_ordered_by_the_column_the_reader_can_see(tmp_path, payload):
-    """One key, and it is the last column.
+    """One key, and it stands beside the name.
 
     Ordered by top group first and then by the median, the table read as broken
     to anybody who did not know what the first column was. The median is now
@@ -251,7 +253,7 @@ def test_the_rows_are_ordered_by_the_column_the_reader_can_see(tmp_path, payload
             assert first["label"] <= second["label"], "ties are not broken by name"
 
     drawn = _drawn(tmp_path, payload)
-    assert "the rows are ordered by the Median column" in " ".join(drawn.split()), (
+    assert "the rows are ordered by the Median rank column" in " ".join(drawn.split()), (
         "the page does not say what puts the rows in this order"
     )
 
@@ -492,7 +494,7 @@ def test_a_median_over_a_span_wider_than_half_the_table_is_marked(tmp_path, payl
         )
 
     drawn = _drawn(tmp_path, payload)
-    marked = drawn.count('class="meta hollow"')
+    marked = drawn.count('class="key hollow"')
     assert marked == len(over), (
         f"{len(over)} rows have a span over half the table and {marked} medians are marked"
     )

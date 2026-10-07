@@ -1244,12 +1244,13 @@ function drawProfile() {
 
   const body = profile.rows.map(row => `<tr>
       <th scope="row" class="name">${esc(row.label)}</th>
-      ${row.ranks.map((rank, i) => `<td class="place${seamAt(i)}">${rank}</td>`).join('')}
-      <td class="meta">${row.best}&#8211;${row.worst}</td>
-      <td class="meta${row.span_over_half ? ' hollow' : ''}"${row.span_over_half
+      <td class="meta span">${row.best}&#8211;${row.worst}</td>
+      <td class="key${row.span_over_half ? ' hollow' : ''}"${row.span_over_half
         ? ` title="${esc(T`Ranked ${row.best} on one table and ${row.worst} on another — a
             span wider than half the table, so this middle number describes nothing. Read the
             six ranks, not this.`)}"` : ''}>${fmt(row.median, 1)}</td>
+      ${row.ranks.map((rank, i) => `<td class="place${i ? seamAt(i) : ' pair-start'}">${
+        rank}</td>`).join('')}
     </tr>`).join('');
 
   const pooled = profile.dominance.pooled;
@@ -1355,7 +1356,7 @@ function drawProfile() {
   //: Median -- was in none of them. A definition belongs on the thing it
   //: defines; what stays below the table is the finding, not the glossary.
   const gloss = {
-    span: T`The best and the worst rank on this row. Read it before the Median: a row can be
+    span: T`The best and the worst rank on this row. Read it before the median: a row can be
        ranked 1 on one table and last on another, and no middle number describes that.`,
     median: T`The middle of the ${columns.length} ranks on this row, to one decimal because
        ${columns.length} numbers have no single middle. It orders the rows and nothing else.
@@ -1368,8 +1369,9 @@ function drawProfile() {
       <p class="blurb">${T`The ${profile.population.length} models that are in all
          ${profile.tables} published tables, with the rank each one gives them.
          <strong>Rank 1 is the best</strong>, every column runs 1 to
-         ${profile.population.length}, and <strong>the rows are ordered by the Median column
-         on the right</strong>. Read the Span beside it first: ${profile.rows.filter(
+         ${profile.population.length}, and <strong>the rows are ordered by the Median rank
+         column</strong>: the middle of each model's ${columns.length} ranks. Read Best–worst
+         beside it first: ${profile.rows.filter(
          r => r.span_over_half).length} of these ${profile.rows.length} models are ranked in
          the top half by one table and the bottom half by another, and for those a middle
          number describes nothing — their medians are greyed. The median is not a score
@@ -1378,9 +1380,10 @@ function drawProfile() {
       <div class="scroll"><table class="profile">
         <thead><tr>
           <th scope="col" class="name">${T`System`}</th>
-          ${head}
-          <th scope="col" title="${esc(strip(gloss.span))}">${T`Span`}</th>
-          <th scope="col" title="${esc(strip(gloss.median))}">${T`Median`}</th>
+          <th scope="col" class="span" title="${esc(strip(gloss.span))}">${T`Best–worst`}</th>
+          <th scope="col" class="key" title="${esc(strip(gloss.median))}">${T`Median rank`}<span
+            class="sub">${T`of the ${columns.length} ranks`}</span></th>
+          ${head.replace('class="place"', 'class="place pair-start"')}
         </tr></thead>
         <tbody>${body}</tbody>
       </table></div>
