@@ -491,6 +491,18 @@
       ],
       "what_this_records": "The mechanism D13 set up was used as intended, by the person it was set up to constrain. The investigator wanted an item out, the rule said the panel decides, and the item stayed. That is worth a line because the usual failure of a retention rule is that its author exempts himself from it.",
       "the_open_question_it_leaves": "K06 has no source in the literature and the paper says so. The error it guards against is documented elsewhere: S25 counts as inaccurate a note in which a normal finding was recorded when the finding was not normal. What no source asks for is the remedy, that the note itself distinguish what was not discussed from what was denied and from what nobody asked. The problem has support; the requirement does not."
+    },
+    {
+      "id": "D16",
+      "date": "2026-10-08",
+      "origin": "investigator",
+      "decision": "The paper is the benchmark. The scoping search is reported as the method by which the item pool was generated, not as a study of its own: one paragraph in the methods, the full record in the public repository and the appendix. The instrument's development and the search may be published separately afterwards from the same registered record.",
+      "replaces": "the working assumption that the review and the benchmark are reported together",
+      "affects": [
+        "paper: methods, and what the review section may claim",
+        "the OSF registration, which registers the protocol this shape implies"
+      ],
+      "why": "A co-author put it that the project was running two studies in one. It is running three, counting the benchmark, and an eight-page venue holds one. Dropping the review is not the alternative: a benchmark whose criteria have no recorded origin invites the question the review exists to answer. So the review changes role rather than disappearing."
     }
   ],
   "content_validity": {

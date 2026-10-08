@@ -97,7 +97,7 @@ def test_the_catalog_holds_what_the_review_proposed(catalog):
     # its 2025 application joined as S21, so the two counts move together. S22
     # to S27 are the six further papers the Scopus screening found and the
     # assistant read on 2026-10-07.
-    assert len(catalog["sources"]) == 33
+    assert len(catalog["sources"]) == 39
     assert len(catalog["abstract_sources"]) == 6
     assert len(catalog["pilot_proposal"]["entries"]) == 13
     assert len(catalog["comparison"]) == 37
@@ -532,7 +532,7 @@ def test_every_source_evidence_line_and_candidate_maps(catalog, draft, diagnosti
     assert [c["id"] for c in draft["constructs"]] == catalog_mod.ids(catalog, "candidates")
     lines = sum(len(c["evidence"]) for c in catalog["candidates"])
     assert len(draft["evidence"]) == lines
-    assert diagnostics["mapped"] == {"sources": 39, "evidence": lines, "constructs": 36}
+    assert diagnostics["mapped"] == {"sources": 45, "evidence": lines, "constructs": 36}
     for s in draft["sources"]:
         assert s["locator"].startswith("ledger:")
 

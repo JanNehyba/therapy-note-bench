@@ -3278,6 +3278,454 @@
     "basis": "catalog.json and the source-first table"
    },
    "notes": []
+  },
+  {
+   "report_id": "doi:10.1007/s00278-026-00842-4",
+   "id_basis": "DOI from the Scopus export of 2026-10-07, matched to the pool record",
+   "kind": "database_record",
+   "title": "KI-Dokumentation in der Psychotherapie: Qualitative Studie zu Nutzungserfahrungen von Psychotherapeut:innen",
+   "citation_short": "Goer & Schwarz 2026, Die Psychotherapie",
+   "catalog_source": "S28",
+   "study_family": null,
+   "identifiers": {
+    "doi": "10.1007/s00278-026-00842-4",
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "Scopus export, 2026-10-07"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.1007/s00278-026-00842-4",
+    "pool_record_id_status": "matches_report_id",
+    "pool_doi": "10.1007/s00278-026-00842-4",
+    "stratum": "priority",
+    "priority_index": 94
+   },
+   "route": {
+    "kind": "search_and_screening",
+    "from": null,
+    "declared_in": "include-candidates-2026-10-07.json#include_candidates_detail",
+    "note": "Screened in on 2026-10-07 as direct evidence, confidence clear, priority score 14."
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "log_slugs": [],
+   "events": [
+    {
+     "date": "2026-10-07",
+     "time": null,
+     "date_source": "investigator's download",
+     "route": "publisher page in a browser, institutional access",
+     "route_kind": "investigator_supplied",
+     "outcome": "retrieved",
+     "file": "S28.pdf",
+     "bytes": 465423,
+     "sha256": "75a7cad62386065d547fa8500492556e46179db4f4a188e11418c0450b60c6c5",
+     "checksum_source": "computed when the file was taken into the ledger",
+     "bytes_source": "measured when the file was taken into the ledger",
+     "note": "Open access by Unpaywall and refused by every automated route tried on 2026-10-07: Springer answered an interstitial, Wiley, Taylor & Francis and MDPI answered 403, and a repository copy sat behind a page with no static link. The investigator opened the publisher page in a browser.",
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null
+    }
+   ],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-10-08; source-first extraction with every quote checked against the file",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "direct",
+    "verification": "full_text",
+    "basis": "catalog.json and the source-first table"
+   },
+   "notes": [
+    "The body is in German and no extractor available here renders both its umlauts and its word spacing, so the recorded quotes come from the English abstract and the German findings are recorded as readings with their location."
+   ]
+  },
+  {
+   "report_id": "doi:10.1007/s11757-026-00935-5",
+   "id_basis": "DOI from the Scopus export of 2026-10-07, matched to the pool record",
+   "kind": "database_record",
+   "title": "Optimierung der Dokumentationsqualitat in einer forensischen Fachambulanz",
+   "citation_short": "Kube et al. 2026, Forens Psychiatr Psychol Kriminol",
+   "catalog_source": "S29",
+   "study_family": null,
+   "identifiers": {
+    "doi": "10.1007/s11757-026-00935-5",
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "Scopus export, 2026-10-07"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.1007/s11757-026-00935-5",
+    "pool_record_id_status": "matches_report_id",
+    "pool_doi": "10.1007/s11757-026-00935-5",
+    "stratum": "priority",
+    "priority_index": 680
+   },
+   "route": {
+    "kind": "search_and_screening",
+    "from": null,
+    "declared_in": "include-candidates-2026-10-07.json#include_candidates_detail",
+    "note": "Screened in on 2026-10-07 as direct evidence, confidence clear, priority score 9."
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "log_slugs": [],
+   "events": [
+    {
+     "date": "2026-10-07",
+     "time": null,
+     "date_source": "investigator's download",
+     "route": "publisher page in a browser, institutional access",
+     "route_kind": "investigator_supplied",
+     "outcome": "retrieved",
+     "file": "S29.pdf",
+     "bytes": 369270,
+     "sha256": "15ddd9b5d289f2e23204314e508948cceccf71d10ad826257119acc939a6ffae",
+     "checksum_source": "computed when the file was taken into the ledger",
+     "bytes_source": "measured when the file was taken into the ledger",
+     "note": "Open access by Unpaywall and refused by every automated route tried on 2026-10-07: Springer answered an interstitial, Wiley, Taylor & Francis and MDPI answered 403, and a repository copy sat behind a page with no static link. The investigator opened the publisher page in a browser.",
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null
+    }
+   ],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-10-08; source-first extraction with every quote checked against the file",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "direct",
+    "verification": "full_text",
+    "basis": "catalog.json and the source-first table"
+   },
+   "notes": [
+    "The body is in German and no extractor available here renders both its umlauts and its word spacing, so the recorded quotes come from the English abstract and the German findings are recorded as readings with their location."
+   ]
+  },
+  {
+   "report_id": "doi:10.1080/23794925.2024.2426185",
+   "id_basis": "DOI from the Scopus export of 2026-10-07, matched to the pool record",
+   "kind": "database_record",
+   "title": "A Qualitative Study of School Mental Health Providers' Experiences with Chart Notes",
+   "citation_short": "Isenberg et al. 2025, Evid Based Pract Child Adolesc Ment Health",
+   "catalog_source": "S30",
+   "study_family": null,
+   "identifiers": {
+    "doi": "10.1080/23794925.2024.2426185",
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "Scopus export, 2026-10-07"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.1080/23794925.2024.2426185",
+    "pool_record_id_status": "matches_report_id",
+    "pool_doi": "10.1080/23794925.2024.2426185",
+    "stratum": "priority",
+    "priority_index": 635
+   },
+   "route": {
+    "kind": "search_and_screening",
+    "from": null,
+    "declared_in": "include-candidates-2026-10-07.json#include_candidates_detail",
+    "note": "Screened in on 2026-10-07 as requirements evidence, confidence clear, priority score 9."
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "log_slugs": [],
+   "events": [
+    {
+     "date": "2026-10-07",
+     "time": null,
+     "date_source": "investigator's download",
+     "route": "publisher page in a browser, institutional access",
+     "route_kind": "investigator_supplied",
+     "outcome": "retrieved",
+     "file": "S30.pdf",
+     "bytes": 966319,
+     "sha256": "1dc147b62a5efa7ec26f9bb192aad59d9a435980430145d6b0016b9e01a291bd",
+     "checksum_source": "computed when the file was taken into the ledger",
+     "bytes_source": "measured when the file was taken into the ledger",
+     "note": "Open access by Unpaywall and refused by every automated route tried on 2026-10-07: Springer answered an interstitial, Wiley, Taylor & Francis and MDPI answered 403, and a repository copy sat behind a page with no static link. The investigator opened the publisher page in a browser.",
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null
+    }
+   ],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-10-08; source-first extraction with every quote checked against the file",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "requirements",
+    "verification": "full_text",
+    "basis": "catalog.json and the source-first table"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "doi:10.1177/14733250261457255",
+   "id_basis": "DOI from the Scopus export of 2026-10-07, matched to the pool record",
+   "kind": "database_record",
+   "title": "Ethics of witnessing in clinical case notes of children in state care",
+   "citation_short": "Phippard 2026, Qualitative Social Work",
+   "catalog_source": "S31",
+   "study_family": null,
+   "identifiers": {
+    "doi": "10.1177/14733250261457255",
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "Scopus export, 2026-10-07"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.1177/14733250261457255",
+    "pool_record_id_status": "matches_report_id",
+    "pool_doi": "10.1177/14733250261457255",
+    "stratum": "priority",
+    "priority_index": 275
+   },
+   "route": {
+    "kind": "search_and_screening",
+    "from": null,
+    "declared_in": "include-candidates-2026-10-07.json#include_candidates_detail",
+    "note": "Screened in on 2026-10-07 as requirements evidence, confidence clear, priority score 11."
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "log_slugs": [],
+   "events": [
+    {
+     "date": "2026-10-07",
+     "time": null,
+     "date_source": "investigator's download",
+     "route": "publisher page in a browser, institutional access",
+     "route_kind": "investigator_supplied",
+     "outcome": "retrieved",
+     "file": "S31.pdf",
+     "bytes": 1221188,
+     "sha256": "0b94d0ee1e5a148648861601d422dee834ee3e8bf5a99d8cc7b6d9ea1d12b848",
+     "checksum_source": "computed when the file was taken into the ledger",
+     "bytes_source": "measured when the file was taken into the ledger",
+     "note": "Open access by Unpaywall and refused by every automated route tried on 2026-10-07: Springer answered an interstitial, Wiley, Taylor & Francis and MDPI answered 403, and a repository copy sat behind a page with no static link. The investigator opened the publisher page in a browser.",
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null
+    }
+   ],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-10-08; source-first extraction with every quote checked against the file",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "requirements",
+    "verification": "full_text",
+    "basis": "catalog.json and the source-first table"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "doi:10.3390/informatics13060093",
+   "id_basis": "DOI from the Scopus export of 2026-10-07, matched to the pool record",
+   "kind": "database_record",
+   "title": "Comparative Evaluation of Resident-Written and GPT-5.2-Generated Ophthalmology Discharge Letters",
+   "citation_short": "Jaksic et al. 2026, Informatics",
+   "catalog_source": "S32",
+   "study_family": null,
+   "identifiers": {
+    "doi": "10.3390/informatics13060093",
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "Scopus export, 2026-10-07"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.3390/informatics13060093",
+    "pool_record_id_status": "matches_report_id",
+    "pool_doi": "10.3390/informatics13060093",
+    "stratum": "priority",
+    "priority_index": 684
+   },
+   "route": {
+    "kind": "search_and_screening",
+    "from": null,
+    "declared_in": "include-candidates-2026-10-07.json#include_candidates_detail",
+    "note": "Screened in on 2026-10-07 as transfer:instrument evidence, confidence clear, priority score 9."
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "log_slugs": [],
+   "events": [
+    {
+     "date": "2026-10-07",
+     "time": null,
+     "date_source": "investigator's download",
+     "route": "publisher page in a browser, institutional access",
+     "route_kind": "investigator_supplied",
+     "outcome": "retrieved",
+     "file": "S32.pdf",
+     "bytes": 1202183,
+     "sha256": "57ca9cde1cd8c0314dcf3c83f403eb963fbcc5c78f2c3a3dd4d0f63f5a416dca",
+     "checksum_source": "computed when the file was taken into the ledger",
+     "bytes_source": "measured when the file was taken into the ledger",
+     "note": "Open access by Unpaywall and refused by every automated route tried on 2026-10-07: Springer answered an interstitial, Wiley, Taylor & Francis and MDPI answered 403, and a repository copy sat behind a page with no static link. The investigator opened the publisher page in a browser.",
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null
+    }
+   ],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-10-08; source-first extraction with every quote checked against the file",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "transfer",
+    "verification": "full_text",
+    "basis": "catalog.json and the source-first table"
+   },
+   "notes": []
+  },
+  {
+   "report_id": "doi:10.1007/s12553-025-01042-x",
+   "id_basis": "DOI from the Scopus export of 2026-10-07, matched to the pool record",
+   "kind": "database_record",
+   "title": "AI in medical practice: doctors' perspective on the benefits, challenges and facilitators of artificial intelligence scribe use",
+   "citation_short": "Irons et al. 2026, Health and Technology",
+   "catalog_source": "S33",
+   "study_family": null,
+   "identifiers": {
+    "doi": "10.1007/s12553-025-01042-x",
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": null,
+    "url": null,
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "Scopus export, 2026-10-07"
+   },
+   "pool": {
+    "in_pool": true,
+    "pool_record_id": "doi:10.1007/s12553-025-01042-x",
+    "pool_record_id_status": "matches_report_id",
+    "pool_doi": "10.1007/s12553-025-01042-x",
+    "stratum": "priority",
+    "priority_index": 201
+   },
+   "route": {
+    "kind": "search_and_screening",
+    "from": null,
+    "declared_in": "include-candidates-2026-10-07.json#include_candidates_detail",
+    "note": "Screened in on 2026-10-07 as requirements evidence, confidence clear, priority score 12."
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "log_slugs": [],
+   "events": [
+    {
+     "date": "2026-10-07",
+     "time": null,
+     "date_source": "investigator's download",
+     "route": "publisher page in a browser, institutional access",
+     "route_kind": "investigator_supplied",
+     "outcome": "retrieved",
+     "file": "S33.pdf",
+     "bytes": 907746,
+     "sha256": "f5f4e9589102225167c81adcf4f545cdccf302720fbaae1c709dc967059b9fce",
+     "checksum_source": "computed when the file was taken into the ledger",
+     "bytes_source": "measured when the file was taken into the ledger",
+     "note": "Open access by Unpaywall and refused by every automated route tried on 2026-10-07: Springer answered an interstitial, Wiley, Taylor & Francis and MDPI answered 403, and a repository copy sat behind a page with no static link. The investigator opened the publisher page in a browser.",
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null
+    }
+   ],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-10-08; source-first extraction with every quote checked against the file",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "requirements",
+    "verification": "full_text",
+    "basis": "catalog.json and the source-first table"
+   },
+   "notes": []
   }
  ],
  "scopus_audit_sample_check": "screen-audit-sample-scopus.json does reproduce. Its frame is the remainder reached only through the three Scopus exports, which are checksummed in search-log-scopus.json, and its seed, 20261007, is recorded in screening-strata.json. Checked on 2026-10-07: all 28 clearly eligible and all 11 borderline titles that screen.py names are in the file the seed draws. It will stop reproducing the first time the pool is rebuilt, and then it is to be recorded here in the same way rather than quietly repaired."

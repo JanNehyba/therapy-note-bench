@@ -1,6 +1,6 @@
 {
   "version": "source-properties-v1",
-  "date": "2026-10-07",
+  "date": "2026-10-08",
   "method": "Source-first extraction. For every source read in full, every property of note quality the source itself defines or measures is listed in the source's own words with its location, without reference to the catalog. Mapping to catalog candidates is a second column, done afterwards. It is the derivation the round of 2026-09-13 lacked: that round collected evidence to support candidates already on the table, and could not say whether anything in the sources had been missed. The paper reports the framework from this table upwards, and the prior map as the comparison it was tested against (decision D12).",
   "rule": "A candidate with no source property behind it is listed as such and stands on its declared origin. A source property no candidate covers is listed as unmapped with the reason, and is either a new candidate or a recorded non-adoption. A literature-origin candidate must have at least one source property behind it, or its origin is wrong.",
   "kinds": {
@@ -32,12 +32,12 @@
     "abstract_claim": "what an abstract states, when the full text was not read"
   },
   "counts": {
-    "sources_read_in_full": 32,
+    "sources_read_in_full": 38,
     "sources_abstract_only": 6,
-    "sources_defining_properties": 33,
-    "properties": 169,
-    "properties_mapped": 155,
-    "properties_unmapped": 14,
+    "sources_defining_properties": 39,
+    "properties": 181,
+    "properties_mapped": 165,
+    "properties_unmapped": 16,
     "candidates_with_source_property": 35,
     "candidates_without_source_property": 1
   },
@@ -2290,6 +2290,193 @@
           "mapping": "necessity of sensitive detail and the standing of third parties: what a note may contain depends on who can reach it, and the source reports that reach is wide"
         }
       ]
+    },
+    {
+      "id": "S28",
+      "citation": "Goer V, Schwarz J. KI-Dokumentation in der Psychotherapie: Qualitative Studie zu Nutzungserfahrungen von Psychotherapeut:innen. Die Psychotherapie 2026. doi:10.1007/s00278-026-00842-4.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": "Open access by Unpaywall and refused by every automated route; downloaded in a browser by the investigator on 2026-10-07 and read on 2026-10-08.",
+      "properties": [
+        {
+          "pid": "S28-p01",
+          "label": "Documentation quality is what practitioners criticise most",
+          "kind": "theme",
+          "location": "Abstract, Results",
+          "quote": "At the same time, quality deficits, selective patient acceptance, technical hurdles, as well as needs for system integration, inclusion of diagnostics, and customizable templates are mentioned.",
+          "maps_to": [
+            "K01",
+            "K05"
+          ],
+          "mapping": "the faults the therapists name are content errors, hallucinations, format errors and information loss; the first two are support of claims and the last is coverage. The German body names them one by one in the Results; the abstract summarises them as quality deficits."
+        },
+        {
+          "pid": "S28-p02",
+          "label": "A model-written note needs a professional reading before it is a note",
+          "kind": "requirement",
+          "location": "Abstract, Conclusion",
+          "quote": "Safe implementation requires mandatory professional review, error classifications, as well as robust data protection regulations and sustainable system integration.",
+          "maps_to": [
+            "K22"
+          ],
+          "mapping": "the edit a professional has to make is not an optional improvement but the condition of use, which is what our candidate measures as the extent and nature of the edits needed"
+        },
+        {
+          "pid": "S28-p03",
+          "label": "The field itself asks for a standardised way to evaluate these tools",
+          "kind": "design_finding",
+          "location": "Abstract, Conclusion",
+          "quote": "Follow-up studies should examine effects on burnout, therapeutic relationship, and quality of care, and establish a standardized evaluation framework.",
+          "maps_to": [],
+          "mapping": "not a property of a note. Recorded because it is a psychotherapy journal in 2026 stating that the evaluation framework this benchmark is building does not exist."
+        }
+      ]
+    },
+    {
+      "id": "S29",
+      "citation": "Kube S et al. Optimierung der Dokumentationsqualitat in einer forensischen Fachambulanz: Ergebnisse eines Evaluationsprojekts. Forensische Psychiatrie, Psychologie, Kriminologie 2026. doi:10.1007/s11757-026-00935-5.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": "Open access by Unpaywall and refused by every automated route; downloaded in a browser by the investigator on 2026-10-07 and read on 2026-10-08.",
+      "properties": [
+        {
+          "pid": "S29-p01",
+          "label": "The intervention method, the topic and the risk factor are named so that they can be found again",
+          "kind": "content_items",
+          "location": "Abstract, Results",
+          "quote": "the clear and searchable naming of the therapeutic intervention method, the topic of the session and the risk or responsivity factor addressed",
+          "maps_to": [
+            "K25",
+            "K08",
+            "K05"
+          ],
+          "mapping": "three things the note should carry: what the therapist did, which our candidate covers as support of the supervision task, the risk addressed, and the session's topic. What our candidates do not cover is the word searchable: that the naming is standardised enough to be found again in a corpus."
+        },
+        {
+          "pid": "S29-p02",
+          "label": "A note is also a record a later study will have to read",
+          "kind": "design_finding",
+          "location": "Abstract, Conclusion",
+          "quote": "the integration of standardized keywords led to an improved database for therapeutic practice and future (component-specific) efficacy evaluations",
+          "maps_to": [],
+          "mapping": "not adopted as a candidate here: the purposes this catalog names are continuity, supervision, the client and audit, and secondary use for research is a fifth. Whether to add it is a decision about the purpose list rather than about a single criterion, and it is left open rather than folded into an existing one."
+        }
+      ]
+    },
+    {
+      "id": "S30",
+      "citation": "Isenberg BM et al. A Qualitative Study of School Mental Health Providers' Experiences with Chart Notes: Perceived Utility, Burden, and Areas for Growth. Evidence-Based Practice in Child and Adolescent Mental Health 2025. doi:10.1080/23794925.2024.2426185.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": "Open access by Unpaywall and refused by every automated route; downloaded in a browser by the investigator on 2026-10-07 and read on 2026-10-08.",
+      "properties": [
+        {
+          "pid": "S30-p01",
+          "label": "What the writers think a therapy note is for",
+          "kind": "survey_category",
+          "location": "Abstract, Results",
+          "quote": "viewed chart notes primarily as a billing requirement, but also valued their utility for treatment planning, outcome monitoring, and clinical accountability",
+          "maps_to": [
+            "K07"
+          ],
+          "mapping": "relevance to the recipient, with the recipients named by the people who write: the payer first, then planning, monitoring and accountability. Billing is a purpose this catalog does not list, and what is essential content under it is not what is essential under continuity."
+        },
+        {
+          "pid": "S30-p02",
+          "label": "The same information required in several places in one note",
+          "kind": "design_finding",
+          "location": "Results, current chart note usage",
+          "quote": "these redundancies introduced room for errors that ultimately led to notes being returned for corrections",
+          "maps_to": [
+            "K31"
+          ],
+          "mapping": "redundancy with a measured consequence: repetition is not merely inelegant, it is where the error enters and what sends the note back"
+        }
+      ]
+    },
+    {
+      "id": "S31",
+      "citation": "Phippard S. Ethics of witnessing in clinical case notes of children in state care: From data extraction to narrative care. Qualitative Social Work 2026. doi:10.1177/14733250261457255.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": "Open access by Unpaywall and refused by every automated route; downloaded in a browser by the investigator on 2026-10-07 and read on 2026-10-08.",
+      "properties": [
+        {
+          "pid": "S31-p01",
+          "label": "Professional language can push the client out of the note about them",
+          "kind": "theme",
+          "location": "Abstract",
+          "quote": "Divergent professional positions and discourses often collide, shaping children's representation and obscuring their voices within clinical and administrative documentation.",
+          "maps_to": [
+            "K36",
+            "K14"
+          ],
+          "mapping": "the client's experience being present in the note, reached from social work ethics rather than from a rating instrument, and the stigmatising effect of the institution's own vocabulary"
+        }
+      ]
+    },
+    {
+      "id": "S32",
+      "citation": "Jaksic B, Znaor L, Vrdoljak J, et al. Comparative Evaluation of Resident-Written and GPT-5.2-Generated Ophthalmology Discharge Letters: A Retrospective Blinded Study. Informatics 2026;13(6):93. doi:10.3390/informatics13060093.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": "Open access by Unpaywall and refused by every automated route; downloaded in a browser by the investigator on 2026-10-07 and read on 2026-10-08.",
+      "properties": [
+        {
+          "pid": "S32-p01",
+          "label": "Specialists do not agree on how concise a note is",
+          "kind": "design_finding",
+          "location": "Abstract, Results",
+          "quote": "inter-rater agreement was poor on these stylistic domains (at or below chance for conciseness)",
+          "maps_to": [
+            "K11"
+          ],
+          "mapping": "economy, with a warning about measuring it: three board-certified specialists scoring the same letters agreed on conciseness no better than chance. A column for it, human or model-scored, carries that risk and this project publishes one."
+        },
+        {
+          "pid": "S32-p02",
+          "label": "Equal overall scores hid a difference in what the letters contained",
+          "kind": "design_finding",
+          "location": "Abstract, Results",
+          "quote": "Resident-written letters more often documented operations, while GPT-5.2-generated letters more consistently included findings.",
+          "maps_to": [
+            "K05"
+          ],
+          "mapping": "coverage of essential content: the two sources were judged equal overall and were not carrying the same things, which is an argument for reporting content elements apart from a global score"
+        }
+      ]
+    },
+    {
+      "id": "S33",
+      "citation": "Irons JL, Duenser A, Pickett T, Haysom G, McGrath MJ. AI in medical practice: doctors' perspective on the benefits, challenges and facilitators of artificial intelligence scribe use. Health and Technology 2026;16:401-410. doi:10.1007/s12553-025-01042-x.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": "Open access by Unpaywall and refused by every automated route; downloaded in a browser by the investigator on 2026-10-07 and read on 2026-10-08.",
+      "properties": [
+        {
+          "pid": "S33-p01",
+          "label": "What practitioners say goes wrong in a machine-written note",
+          "kind": "survey_category",
+          "location": "Introduction",
+          "quote": "One study found commercial AI scribes averaged three errors per note, most commonly omitting information",
+          "maps_to": [
+            "K05",
+            "K01"
+          ],
+          "mapping": "omission as the commonest failure of a machine-written clinical note, cited by this source from a technical evaluation rather than measured by it, which is how it is recorded"
+        },
+        {
+          "pid": "S33-p02",
+          "label": "What stops practitioners trusting the note",
+          "kind": "theme",
+          "location": "Abstract, Results",
+          "quote": "AI errors, limited knowledge of the technology and data management, and fears about how AI might change clinical work are significant barriers for some doctors",
+          "maps_to": [
+            "K23"
+          ],
+          "mapping": "acceptability in practice: whether a professional would use the system that wrote the note, with the reasons they give for not doing so"
+        }
+      ]
     }
   ],
   "coverage": {
@@ -2304,6 +2491,8 @@
       "S25-p01",
       "S25-p02",
       "S26-p01",
+      "S28-p01",
+      "S33-p01",
       "S4-p02",
       "S6-p01",
       "S6-p02",
@@ -2363,6 +2552,8 @@
       "S25-p02",
       "S25-p03",
       "S26-p03",
+      "S28-p01",
+      "S29-p01",
       "S3-p06",
       "S3-p07",
       "S3-p09",
@@ -2371,6 +2562,8 @@
       "S3-p12",
       "S3-p13",
       "S3-p15",
+      "S32-p02",
+      "S33-p01",
       "S4-p03",
       "S6-p01",
       "S6-p02",
@@ -2390,6 +2583,7 @@
       "S2-p09",
       "S2-p10",
       "S22-p02",
+      "S30-p01",
       "S4-p04",
       "S6-p01",
       "S8-p04",
@@ -2402,6 +2596,7 @@
       "S14-p08",
       "S22-p04",
       "S24-p01",
+      "S29-p01",
       "S3-p08",
       "S6-p02",
       "S_abs_hua-p01",
@@ -2431,6 +2626,7 @@
       "S2-p05",
       "S23-p01",
       "S25-p04",
+      "S32-p01",
       "S4-p07",
       "S6-p01",
       "S8-p04",
@@ -2463,6 +2659,7 @@
     "K14": [
       "S1-p14",
       "S2-p06",
+      "S31-p01",
       "S_abs_edit-p07",
       "S_abs_scoping_notes-p02",
       "S_abs_sweden-p03"
@@ -2521,12 +2718,14 @@
       "S_abs_stakeholder-a01"
     ],
     "K22": [
+      "S28-p02",
       "S_abs_edit-p01",
       "S_abs_edit-p02"
     ],
     "K23": [
       "S1-p15",
       "S22-p03",
+      "S33-p02",
       "S7-p04",
       "S7-p05",
       "S7-p06",
@@ -2543,6 +2742,7 @@
     "K25": [
       "S13-p04",
       "S19-p04",
+      "S29-p01",
       "S3-p10",
       "S3-p11",
       "S3-p14",
@@ -2576,6 +2776,7 @@
     "K31": [
       "S2-p05",
       "S25-p04",
+      "S30-p02",
       "S4-p07",
       "S4-p10"
     ],
@@ -2597,7 +2798,8 @@
       "S21-p02"
     ],
     "K36": [
-      "S20-p01"
+      "S20-p01",
+      "S31-p01"
     ]
   },
   "unmapped_properties": [
@@ -2684,6 +2886,18 @@
       "source": "S26",
       "label": "How soon after the care the note was written",
       "why_unmapped": "not a property of a note that this benchmark can compare: timeliness belongs to the documenting process and a model writes instantly"
+    },
+    {
+      "pid": "S28-p03",
+      "source": "S28",
+      "label": "The field itself asks for a standardised way to evaluate these tools",
+      "why_unmapped": "not a property of a note: a 2026 psychotherapy journal stating that the evaluation framework this benchmark is building does not yet exist"
+    },
+    {
+      "pid": "S29-p02",
+      "source": "S29",
+      "label": "A note is also a record a later study will have to read",
+      "why_unmapped": "a finding about purposes rather than a property: secondary use for research is a fifth purpose this catalog does not name, and whether to add it is a decision about the purpose list"
     }
   ],
   "candidates_without_source_property": [

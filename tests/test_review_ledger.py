@@ -110,7 +110,7 @@ def test_human_verification_is_never_invented(reports):
         assert family["assessed_by"] is None or family["sample_overlap"] == "established"
 
 
-def test_catalog_reports_count_27_27_0(reports):
+def test_catalog_reports_count_33_33_0(reports):
     """Eighteen of nineteen until 2026-10-07, and then twenty-seven of twenty-seven.
 
     S5, the 2008 preliminary report of the PDQI family, had been recorded as not
@@ -120,7 +120,7 @@ def test_catalog_reports_count_27_27_0(reports):
     which is the field that tracks reading.
     """
     counts = reports["counts"]["catalog_reports"]
-    assert counts == {"sought": 27, "retrieved": 27, "not_retrieved": 0, "not_sought": 0}
+    assert counts == {"sought": 33, "retrieved": 33, "not_retrieved": 0, "not_sought": 0}
     s5 = _by_source(reports)["S5"]
     assert s5["report_id"] == "doi:10.1197/jamia.m2404"
     assert s5["current_status"] == "retrieved"
@@ -271,8 +271,8 @@ def test_flow_full_text_is_report_level(flow, reports):
     full = flow["full_text"]
     assert full["unit"] == "report"
     assert {k: full["catalog_reports"][k] for k in ("sought", "retrieved", "not_retrieved")} == {
-        "sought": 27,
-        "retrieved": 27,
+        "sought": 33,
+        "retrieved": 33,
         "not_retrieved": 0,
     }
     assert full["catalog_reports"]["not_retrieved_detail"] == []
@@ -419,7 +419,7 @@ def test_fetch_appends_to_the_map_and_rebuilds_the_ledger_not_the_log(tmp_path):
     )
     assert rebuilt == json.loads((copy / "reports.json").read_text(encoding="utf-8"))
     flow = json.loads((copy / "flow.json").read_text(encoding="utf-8"))
-    assert flow["full_text"]["catalog_reports"]["retrieved"] == 27
+    assert flow["full_text"]["catalog_reports"]["retrieved"] == 33
     assert ledger.sha256_file(copy / "fulltext-retrieval-log.json") == log_digest
 
     def gone(report):

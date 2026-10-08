@@ -331,6 +331,66 @@
       "version": "source-v1"
     },
     {
+      "id": "S28",
+      "title": "Goer V, Schwarz J. KI-Dokumentation in der Psychotherapie: Qualitative Studie zu Nutzungserfahrungen von Psychotherapeut:innen. Die Psychotherapie 2026. doi:10.1007/s00278-026-00842-4.",
+      "locator": "ledger:doi:10.1007/s00278-026-00842-4",
+      "layer": "direct",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "Eleven self-selected users of a technology they already adopted, one country, no measurement of any note. Everything about quality is reported experience. The body is in German and no extractor available here renders both its umlauts and its word spacing, so the quotes below are from the English abstract and the German findings are recorded as readings with their location.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S29",
+      "title": "Kube S et al. Optimierung der Dokumentationsqualitat in einer forensischen Fachambulanz: Ergebnisse eines Evaluationsprojekts. Forensische Psychiatrie, Psychologie, Kriminologie 2026. doi:10.1007/s11757-026-00935-5.",
+      "locator": "ledger:doi:10.1007/s11757-026-00935-5",
+      "layer": "direct",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "One service, no control, the coders were not independent of the intervention, and the effect on everyday practice is indicated rather than measured. The body is German, quoted here from the English abstract.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S30",
+      "title": "Isenberg BM et al. A Qualitative Study of School Mental Health Providers' Experiences with Chart Notes: Perceived Utility, Burden, and Areas for Growth. Evidence-Based Practice in Child and Adolescent Mental Health 2025. doi:10.1080/23794925.2024.2426185.",
+      "locator": "ledger:doi:10.1080/23794925.2024.2426185",
+      "layer": "requirements",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "Eight providers in one setting and one country, self-report, no note was examined. The purposes they name are those of a school service billing a payer.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S31",
+      "title": "Phippard S. Ethics of witnessing in clinical case notes of children in state care: From data extraction to narrative care. Qualitative Social Work 2026. doi:10.1177/14733250261457255.",
+      "locator": "ledger:doi:10.1177/14733250261457255",
+      "layer": "requirements",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "One practitioner's reflexive study in child state care, not psychotherapy; it measures nothing and is argument rather than evidence. What it offers this review is a second tradition reaching the same property.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S32",
+      "title": "Jaksic B, Znaor L, Vrdoljak J, et al. Comparative Evaluation of Resident-Written and GPT-5.2-Generated Ophthalmology Discharge Letters: A Retrospective Blinded Study. Informatics 2026;13(6):93. doi:10.3390/informatics13060093.",
+      "locator": "ledger:doi:10.3390/informatics13060093",
+      "layer": "transfer",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "One specialty, one hospital, retrospective, and the letters come from the same structured clinical data rather than from a conversation. The equal global scores hide a difference in which content elements each source carried.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S33",
+      "title": "Irons JL, Duenser A, Pickett T, Haysom G, McGrath MJ. AI in medical practice: doctors' perspective on the benefits, challenges and facilitators of artificial intelligence scribe use. Health and Technology 2026;16:401-410. doi:10.1007/s12553-025-01042-x.",
+      "locator": "ledger:doi:10.1007/s12553-025-01042-x",
+      "layer": "requirements",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "Self-report from one country, no note examined, and the users were people who had already adopted the tool.",
+      "version": "source-v1"
+    },
+    {
       "id": "S_abs_severity",
       "title": "Clinical AI Scribes in primary care: accuracy, error severity and implications for clinical practice. BMJ Digital Health & AI, 2025.",
       "locator": "ledger:pmid:42712320",
@@ -3181,7 +3241,7 @@
       "deterministic_checks": []
     }
   ],
-  "protocol_revision": "9266b11e57ce19ed8967de761f329289beaf41e1a223ad91797d6b707ef276d4",
+  "protocol_revision": "5e09693c63df69209a07823e680aa486752ec64797880dcfb09f4d111a5c835c",
   "version": "registry-v2",
   "literature_freeze": null,
   "methods": [
