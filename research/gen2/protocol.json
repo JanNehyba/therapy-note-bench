@@ -478,6 +478,19 @@
         "paper: methods (item generation and content validity)"
       ],
       "why_it_is_not_the_investigator_deciding": "The property was found in a source, the rule it is measured by is the source's, and whether it stays is the panel's answer against a threshold registered before any answer existed. Adding to the pool is item generation, which is the prescribed procedure (S12); the decision D13 took off the investigator was retention, and this does not give it back."
+    },
+    {
+      "id": "D15",
+      "date": "2026-10-08",
+      "origin": "investigator",
+      "decision": "K06, acknowledged information gap, stays in the pool and is put to the panel like every other candidate. The investigator proposed removing it, on the ground that it was his own ad hoc addition and complicated the instrument, and withdrew that when the record showed the candidate is not his: its origin is a repeated finding of this project's own code reviews, where a model wrote a denial nobody had asked for and scored full marks. Whether it is kept is now the panel's answer against the threshold registered under D13.",
+      "replaces": "nothing; it declines to make a retention decision outside the panel",
+      "affects": [
+        "K06 stays in the rated pool of 36",
+        "paper: the one candidate with no source in the literature is named as such"
+      ],
+      "what_this_records": "The mechanism D13 set up was used as intended, by the person it was set up to constrain. The investigator wanted an item out, the rule said the panel decides, and the item stayed. That is worth a line because the usual failure of a retention rule is that its author exempts himself from it.",
+      "the_open_question_it_leaves": "K06 has no source in the literature and the paper says so. The error it guards against is documented elsewhere: S25 counts as inaccurate a note in which a normal finding was recorded when the finding was not normal. What no source asks for is the remedy, that the note itself distinguish what was not discussed from what was denied and from what nobody asked. The problem has support; the requirement does not."
     }
   ],
   "content_validity": {
