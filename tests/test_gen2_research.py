@@ -1116,6 +1116,49 @@ def test_a_delegated_review_is_recorded_as_one_and_can_only_accept(store):
         development.import_registry_review(store, active, sheet, {**raw, "answers": excluded})
 
 
+def test_seeing_a_subject_without_objecting_is_not_a_review(store):
+    """On 2026-09-21 the investigator opened each construct, wrote a line and
+    accepted it. On 2026-10-08 he said he does not stand behind those lines as
+    judgements, and the reasons bear him out: the first reads "zda se mi to ok".
+
+    Neither existing mode states that. A delegation says the person chose not
+    to look, which is not what happened; a review says a person judged, which
+    is what he withdraws. So the mode exists, it can only accept, and every
+    later claim of human verification has to route around it: the subjects
+    appear in `seen_subjects` and in `unverified_subjects` beside the
+    delegated ones, never in the reviewed set.
+    """
+    active, record = start_review(store)
+    registry = toy_registry(active, record)
+    sheet = development.registry_sheet(store, active, plain(registry))
+    subjects = [i["id"] for i in sheet["items"] if i["id"].startswith("construct:")]
+    assert subjects
+    raw = {
+        **response(sheet),
+        "submitted_at": "synthetic-time",
+        "seen_no_objection": True,
+        "answers": [{"id": s, "value": "accept", "reason": "seems fine to me"} for s in subjects],
+    }
+    out = development.import_registry_review(store, active, sheet, raw)
+    reviewed = load_registry(store.get("registry_drafts", out["registry_revision"]))
+    assert all(r.mode == "seen_no_objection" for r in reviewed.reviews)
+    assert reviewed.seen_subjects() == tuple(sorted(subjects))
+    assert reviewed.delegated_subjects() == ()
+    assert reviewed.unverified_subjects() == tuple(sorted(subjects))
+    # Looking and judging are not the same act, so a response cannot be both.
+    with pytest.raises(ValidationError, match="not both"):
+        development.import_registry_review(
+            store,
+            active,
+            sheet,
+            {**raw, "delegated": True, "delegation_decision": "D9"},
+        )
+    # Anything other than acceptance is a judgement and has to be imported as one.
+    excluded = [{**a, "value": "exclude"} for a in raw["answers"][:1]] + raw["answers"][1:]
+    with pytest.raises(ValidationError, match="can only accept"):
+        development.import_registry_review(store, active, sheet, {**raw, "answers": excluded})
+
+
 def test_expert_instrument_snapshot_preserves_origin_and_rejects_silent_amendments(store):
     active, record = start_review(store)
     registry = toy_registry(active, record)

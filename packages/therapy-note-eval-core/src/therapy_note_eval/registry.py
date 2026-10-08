@@ -28,7 +28,7 @@ class ReviewDecision:
     reviewer: str
     role: str
     decided_at: str
-    mode: Literal["human", "human_with_ai", "delegated"]
+    mode: Literal["human", "human_with_ai", "delegated", "seen_no_objection"]
     reason: str
     response_id: str
     supersedes: tuple[str, ...] = ()
@@ -49,7 +49,7 @@ class ReviewDecision:
             "Incomplete human decision",
         )
         require(
-            self.mode in ("human", "human_with_ai", "delegated"),
+            self.mode in ("human", "human_with_ai", "delegated", "seen_no_objection"),
             "AI output is not a human decision",
         )
 
@@ -194,9 +194,28 @@ class InstrumentRegistry:
         subjects may not be reported as human-verified evidence, so the list is
         kept where a frozen snapshot and a report can print it.
         """
+        return self._subjects_in_mode("delegated")
+
+    def seen_subjects(self) -> tuple[str, ...]:
+        """Subjects the reviewer looked at one by one without judging them.
+
+        Between a review and a delegation there is a third thing, and it is
+        what happened to the constructs on 2026-09-21: the reviewer opened each
+        one, wrote a line and accepted it, and later said he does not stand
+        behind those lines. Calling that a review would make every later claim
+        of human verification rest on it; calling it a delegation would say he
+        chose not to look, which is not what he did.
+        """
+        return self._subjects_in_mode("seen_no_objection")
+
+    def unverified_subjects(self) -> tuple[str, ...]:
+        """Every subject no person has judged: delegated or merely seen."""
+        return tuple(sorted(set(self.delegated_subjects()) | set(self.seen_subjects())))
+
+    def _subjects_in_mode(self, mode: str) -> tuple[str, ...]:
         superseded = {key for r in self.reviews for key in r.supersedes}
         current = [r for r in self.reviews if r.id not in superseded]
-        return tuple(sorted({r.subject for r in current if r.mode == "delegated"}))
+        return tuple(sorted({r.subject for r in current if r.mode == mode}))
 
     def check_language(self, language: str) -> None:
         for kind, values in (("method", self.method_specs), ("measurement", self.measurements)):

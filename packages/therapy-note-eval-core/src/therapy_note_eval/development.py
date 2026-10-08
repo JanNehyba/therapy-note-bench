@@ -88,8 +88,21 @@ def import_registry_review(store, active, sheet, response):
             "A delegation can only accept the assistant's reading; any other decision "
             "is the reviewer's own and is imported as one",
         )
+    seen_only = bool(response.get("seen_no_objection", False))
+    require(
+        not (delegated and seen_only),
+        "A response is either delegated or seen without objection, not both",
+    )
+    if seen_only:
+        require(
+            all(a.get("value") == "accept" for a in checked["answers"]),
+            "Seeing without objection can only accept; anything else is a judgement "
+            "and is imported as one",
+        )
     if delegated:
         mode = "delegated"
+    elif seen_only:
+        mode = "seen_no_objection"
     elif response.get("ai_assisted", False):
         mode = "human_with_ai"
     else:
@@ -288,6 +301,16 @@ def freeze_instrument(store, active, raw, parent=None, reason=""):
             if registry.delegated_subjects()
             else None
         ),
+        "seen_without_objection": list(registry.seen_subjects()),
+        "seen_note": (
+            "the reviewer opened each of these subjects and accepted it without "
+            "objecting, and does not stand behind those acceptances as judgements; "
+            "they are not human-verified and nothing may be reported as reviewed "
+            "on their account"
+            if registry.seen_subjects()
+            else None
+        ),
+        "unverified_subjects": list(registry.unverified_subjects()),
     }
     key = digest(snapshot)
     store.put("instrument_snapshots", key, snapshot)

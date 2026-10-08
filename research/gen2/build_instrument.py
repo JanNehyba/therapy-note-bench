@@ -382,6 +382,13 @@ def build(workspace: Path) -> dict:
         if which is not None:
             response["delegated"] = True
             response["delegation_decision"] = which
+        else:
+            # The investigator opened each construct on 2026-09-21, wrote a line
+            # and accepted it. On 2026-10-08 he said he does not stand behind
+            # those lines as judgements, and the reasons bear him out. Importing
+            # them as a review would make every later claim of human
+            # verification rest on them.
+            response["seen_no_objection"] = True
         imported = development.import_registry_review(store, active, sheet, response)
         current = store.get("registry_drafts", imported["registry_revision"])
 
@@ -397,7 +404,7 @@ def build(workspace: Path) -> dict:
         "sources": sorted(pilot_sources),
         "measurements": [x["id"] for x in registry["measurements"]],
         "methods": registry["methods"],
-        "human_decisions": len(batches[None]),
+        "seen_without_objection": len(batches[None]),
         "delegated_decisions": {k: len(v) for k, v in batches.items() if k},
         "delegated_reviews": len(snapshot["delegated_reviews"]),
         "quotes_checked": sum(
