@@ -1,0 +1,1610 @@
+{
+  "version": "catalog-czech-v1",
+  "marker": "AUTHORED-INSTRUMENT-TEXT",
+  "what_this_is": "The Czech text of the candidate catalog: the name and the one-line question a reviewer reads, the unit each measure counts, how the measured ones are measured and why the rest are not. Keyed to catalog.json, which stays the single list of candidates; this file adds no candidate and removes none.",
+  "why_it_exists": "Until 2026-10-13 this text existed only in nine view generators in a session-scoped temp directory, in versions that disagreed. The panel sheets are generated from it, so losing it would mean a panel could no longer be shown what it was shown.",
+  "harvested_from": "the view generators of 2026-09-22 to 2026-10-07 by harvest_czech.py, which is not committed because it reads a temp directory",
+  "precedence": {
+    "rule": "completeness first, then date",
+    "by_field": {
+      "name": [
+        "panel_sheet.py",
+        "cz_constructs.py",
+        "vse.py",
+        "stav.py"
+      ],
+      "statement": [
+        "panel_sheet.py"
+      ],
+      "question": [
+        "vse.py",
+        "stav.py"
+      ],
+      "definition": [
+        "cz_constructs.py"
+      ],
+      "unit": [
+        "vse.py"
+      ],
+      "unit_definition": [
+        "cz_constructs.py"
+      ],
+      "applicability": [
+        "cz_constructs.py"
+      ],
+      "error_consequence": [
+        "cz_constructs.py"
+      ],
+      "how": [
+        "stav.py"
+      ],
+      "why_not_measured": [
+        "build_doc.py"
+      ],
+      "measured_otherwise": [
+        "build_doc.py"
+      ]
+    },
+    "note": "panel_sheet.py of 2026-10-07 is the only generator that covers all 36 candidates, so it wins the name wherever it has one"
+  },
+  "statement_and_question_are_not_variants": "A statement is what a panel marks agreement with, and none of the 36 ends in a question mark; a question is what a reader of the table is asked, and 33 of the 34 do. They came from different generators for different sheets and are kept apart: the panel sheet must not be built from the questions.",
+  "coverage": {
+    "candidates": 36,
+    "by_field": {
+      "name": 36,
+      "statement": 36,
+      "question": 34,
+      "definition": 33,
+      "unit": 34,
+      "unit_definition": 33,
+      "applicability": 33,
+      "error_consequence": 33,
+      "how": 16,
+      "why_not_measured": 16,
+      "measured_otherwise": 5
+    },
+    "missing_by_field": {
+      "question": [
+        "K35",
+        "K36"
+      ],
+      "definition": [
+        "K34",
+        "K35",
+        "K36"
+      ],
+      "unit": [
+        "K35",
+        "K36"
+      ],
+      "unit_definition": [
+        "K34",
+        "K35",
+        "K36"
+      ],
+      "applicability": [
+        "K34",
+        "K35",
+        "K36"
+      ],
+      "error_consequence": [
+        "K34",
+        "K35",
+        "K36"
+      ],
+      "how": [
+        "K09",
+        "K13",
+        "K15",
+        "K16",
+        "K17",
+        "K18",
+        "K19",
+        "K20",
+        "K22",
+        "K24",
+        "K25",
+        "K26",
+        "K27",
+        "K30",
+        "K31",
+        "K32",
+        "K33",
+        "K34",
+        "K35",
+        "K36"
+      ],
+      "why_not_measured": [
+        "K01",
+        "K02",
+        "K03",
+        "K04",
+        "K05",
+        "K06",
+        "K07",
+        "K08",
+        "K10",
+        "K11",
+        "K12",
+        "K14",
+        "K19",
+        "K21",
+        "K23",
+        "K28",
+        "K29",
+        "K34",
+        "K35",
+        "K36"
+      ],
+      "measured_otherwise": [
+        "K01",
+        "K02",
+        "K03",
+        "K04",
+        "K05",
+        "K06",
+        "K07",
+        "K08",
+        "K09",
+        "K10",
+        "K11",
+        "K12",
+        "K13",
+        "K14",
+        "K15",
+        "K16",
+        "K17",
+        "K18",
+        "K20",
+        "K22",
+        "K24",
+        "K25",
+        "K26",
+        "K27",
+        "K30",
+        "K31",
+        "K32",
+        "K33",
+        "K34",
+        "K35",
+        "K36"
+      ]
+    },
+    "candidates_with_no_explanation_of_their_state": [
+      "K34",
+      "K35",
+      "K36"
+    ],
+    "candidates_with_no_explanation_note": "These carry a Czech name and nothing that says how they are measured, why they are not, or that they are measured another way. K34 predates the generators and was never written up; K35 and K36 were added on 2026-10-07, after the last of them ran. The gap is recorded, not filled: a reason written today would be this file inventing one."
+  },
+  "conflicts_resolved": [
+    {
+      "candidate": "K02",
+      "field": "name",
+      "kept": {
+        "from": "panel_sheet.py",
+        "text": "Kdo co řekl"
+      },
+      "rejected": [
+        {
+          "from": "cz_constructs.py",
+          "text": "Zachování původce sdělení"
+        }
+      ]
+    },
+    {
+      "candidate": "K04",
+      "field": "name",
+      "kept": {
+        "from": "panel_sheet.py",
+        "text": "Jistota, hypotéza, dohoda"
+      },
+      "rejected": [
+        {
+          "from": "cz_constructs.py",
+          "text": "Jistota, hypotéza a dohoda"
+        }
+      ]
+    },
+    {
+      "candidate": "K05",
+      "field": "name",
+      "kept": {
+        "from": "panel_sheet.py",
+        "text": "Pokrytí podstatného obsahu"
+      },
+      "rejected": [
+        {
+          "from": "cz_constructs.py",
+          "text": "Pokrytí podstatného obsahu vážené důležitostí"
+        }
+      ]
+    },
+    {
+      "candidate": "K07",
+      "field": "name",
+      "kept": {
+        "from": "panel_sheet.py",
+        "text": "Relevance pro adresáta"
+      },
+      "rejected": [
+        {
+          "from": "cz_constructs.py",
+          "text": "Relevance pro konkrétního adresáta"
+        }
+      ]
+    },
+    {
+      "candidate": "K09",
+      "field": "name",
+      "kept": {
+        "from": "panel_sheet.py",
+        "text": "Opodstatněnost vytvořených souvislostí"
+      },
+      "rejected": [
+        {
+          "from": "cz_constructs.py",
+          "text": "Opodstatněnost vytvořených vztahů"
+        },
+        {
+          "from": "vse.py",
+          "text": "Opodstatněnost vytvořených vztahů"
+        }
+      ]
+    },
+    {
+      "candidate": "K11",
+      "field": "name",
+      "kept": {
+        "from": "panel_sheet.py",
+        "text": "Úspornost"
+      },
+      "rejected": [
+        {
+          "from": "cz_constructs.py",
+          "text": "Úspornost: každá věta něčemu slouží"
+        }
+      ]
+    },
+    {
+      "candidate": "K12",
+      "field": "name",
+      "kept": {
+        "from": "panel_sheet.py",
+        "text": "Uspořádání textu"
+      },
+      "rejected": [
+        {
+          "from": "cz_constructs.py",
+          "text": "Uspořádání a orientace v textu"
+        }
+      ]
+    },
+    {
+      "candidate": "K13",
+      "field": "name",
+      "kept": {
+        "from": "panel_sheet.py",
+        "text": "Srozumitelnost pro čtenáře"
+      },
+      "rejected": [
+        {
+          "from": "cz_constructs.py",
+          "text": "Srozumitelnost pro daného čtenáře"
+        }
+      ]
+    },
+    {
+      "candidate": "K14",
+      "field": "name",
+      "kept": {
+        "from": "panel_sheet.py",
+        "text": "Nestigmatizující jazyk"
+      },
+      "rejected": [
+        {
+          "from": "cz_constructs.py",
+          "text": "Nestigmatizující vyjadřování"
+        }
+      ]
+    },
+    {
+      "candidate": "K18",
+      "field": "name",
+      "kept": {
+        "from": "panel_sheet.py",
+        "text": "Dohledatelnost ke zdroji"
+      },
+      "rejected": [
+        {
+          "from": "cz_constructs.py",
+          "text": "Dohledatelnost tvrzení ke zdroji"
+        }
+      ]
+    },
+    {
+      "candidate": "K19",
+      "field": "name",
+      "kept": {
+        "from": "panel_sheet.py",
+        "text": "Náležitosti české zdravotnické dokumentace"
+      },
+      "rejected": [
+        {
+          "from": "cz_constructs.py",
+          "text": "Náležitosti české zdravotnické dokumentace, kde se uplatní"
+        },
+        {
+          "from": "vse.py",
+          "text": "Náležitosti české vyhlášky"
+        }
+      ]
+    },
+    {
+      "candidate": "K22",
+      "field": "name",
+      "kept": {
+        "from": "panel_sheet.py",
+        "text": "Rozsah nutných úprav"
+      },
+      "rejected": [
+        {
+          "from": "cz_constructs.py",
+          "text": "Rozsah a povaha nutných úprav"
+        }
+      ]
+    },
+    {
+      "candidate": "K23",
+      "field": "name",
+      "kept": {
+        "from": "panel_sheet.py",
+        "text": "Přijatelnost pro praxi"
+      },
+      "rejected": [
+        {
+          "from": "cz_constructs.py",
+          "text": "Přijatelnost: použil by to odborník v praxi"
+        }
+      ]
+    },
+    {
+      "candidate": "K24",
+      "field": "name",
+      "kept": {
+        "from": "panel_sheet.py",
+        "text": "Porozumění ze strany klienta"
+      },
+      "rejected": [
+        {
+          "from": "cz_constructs.py",
+          "text": "Porozumění a přijetí ze strany klienta"
+        },
+        {
+          "from": "vse.py",
+          "text": "Porozumění klienta"
+        }
+      ]
+    },
+    {
+      "candidate": "K25",
+      "field": "name",
+      "kept": {
+        "from": "panel_sheet.py",
+        "text": "Podpora supervize"
+      },
+      "rejected": [
+        {
+          "from": "cz_constructs.py",
+          "text": "Podpora supervizní úlohy"
+        }
+      ]
+    },
+    {
+      "candidate": "K27",
+      "field": "name",
+      "kept": {
+        "from": "panel_sheet.py",
+        "text": "Rovnoměrnost napříč skupinami klientů"
+      },
+      "rejected": [
+        {
+          "from": "cz_constructs.py",
+          "text": "Rovnoměrnost kvality napříč skupinami klientů"
+        },
+        {
+          "from": "vse.py",
+          "text": "Rovnoměrnost napříč skupinami"
+        }
+      ]
+    },
+    {
+      "candidate": "K28",
+      "field": "name",
+      "kept": {
+        "from": "panel_sheet.py",
+        "text": "Personalizace"
+      },
+      "rejected": [
+        {
+          "from": "cz_constructs.py",
+          "text": "Personalizace: zápis o tomhle člověku"
+        }
+      ]
+    },
+    {
+      "candidate": "K31",
+      "field": "name",
+      "kept": {
+        "from": "panel_sheet.py",
+        "text": "Redundance"
+      },
+      "rejected": [
+        {
+          "from": "cz_constructs.py",
+          "text": "Redundance: tentýž fakt víckrát"
+        }
+      ]
+    },
+    {
+      "candidate": "K32",
+      "field": "name",
+      "kept": {
+        "from": "panel_sheet.py",
+        "text": "Kulturní kompetence doložená v zápisu"
+      },
+      "rejected": [
+        {
+          "from": "vse.py",
+          "text": "Kulturní kompetence"
+        }
+      ]
+    },
+    {
+      "candidate": "K33",
+      "field": "name",
+      "kept": {
+        "from": "panel_sheet.py",
+        "text": "Vnitřní konzistence"
+      },
+      "rejected": [
+        {
+          "from": "cz_constructs.py",
+          "text": "Vnitřní konzistence jednoho zápisu"
+        }
+      ]
+    },
+    {
+      "candidate": "K01",
+      "field": "question",
+      "kept": {
+        "from": "vse.py",
+        "text": "Má každé tvrzení oporu v tom, co zaznělo?"
+      },
+      "rejected": [
+        {
+          "from": "stav.py",
+          "text": "Má každé tvrzení v zápisu oporu v tom, co v sezení zaznělo?"
+        }
+      ]
+    },
+    {
+      "candidate": "K03",
+      "field": "question",
+      "kept": {
+        "from": "vse.py",
+        "text": "Je poznat, kdy se co stalo a co je aktuální?"
+      },
+      "rejected": [
+        {
+          "from": "stav.py",
+          "text": "Je poznat, kdy se co stalo a co je z toho aktuální?"
+        }
+      ]
+    },
+    {
+      "candidate": "K04",
+      "field": "question",
+      "kept": {
+        "from": "vse.py",
+        "text": "Je poznat, co je fakt, co dohoda a co domněnka?"
+      },
+      "rejected": [
+        {
+          "from": "stav.py",
+          "text": "Je poznat, co je fakt, co dohoda a co jen domněnka terapeuta?"
+        }
+      ]
+    },
+    {
+      "candidate": "K05",
+      "field": "question",
+      "kept": {
+        "from": "vse.py",
+        "text": "Je v zápisu to podstatné, co zaznělo? Důležitost má stupně."
+      },
+      "rejected": [
+        {
+          "from": "stav.py",
+          "text": "Je v zápisu to podstatné, co v sezení zaznělo? Důležitost má stupně."
+        }
+      ]
+    },
+    {
+      "candidate": "K06",
+      "field": "question",
+      "kept": {
+        "from": "vse.py",
+        "text": "Netvrdí zápis, že něco není, když se o tom nemluvilo?"
+      },
+      "rejected": [
+        {
+          "from": "stav.py",
+          "text": "Netvrdí zápis, že něco není, když se o tom v sezení vůbec nemluvilo?"
+        }
+      ]
+    },
+    {
+      "candidate": "K07",
+      "field": "question",
+      "kept": {
+        "from": "vse.py",
+        "text": "Je tam to, co potřebuje právě tenhle čtenář?"
+      },
+      "rejected": [
+        {
+          "from": "stav.py",
+          "text": "Je v zápisu to, co potřebuje právě ten, kdo ho bude číst?"
+        }
+      ]
+    },
+    {
+      "candidate": "K08",
+      "field": "question",
+      "kept": {
+        "from": "vse.py",
+        "text": "Je zachycené riziko tam, kde zaznělo?"
+      },
+      "rejected": [
+        {
+          "from": "stav.py",
+          "text": "Je zachycené riziko a bezpečí tam, kde v sezení zaznělo?"
+        }
+      ]
+    },
+    {
+      "candidate": "K10",
+      "field": "question",
+      "kept": {
+        "from": "vse.py",
+        "text": "Je tam plán, úkoly a další setkání?"
+      },
+      "rejected": [
+        {
+          "from": "stav.py",
+          "text": "Je v zápisu plán, dohodnuté úkoly a další setkání?"
+        }
+      ]
+    },
+    {
+      "candidate": "K11",
+      "field": "question",
+      "kept": {
+        "from": "vse.py",
+        "text": "Nese každá věta informaci, nebo je to vata?"
+      },
+      "rejected": [
+        {
+          "from": "stav.py",
+          "text": "Nese každá věta nějakou informaci, nebo je to vata?"
+        }
+      ]
+    },
+    {
+      "candidate": "K12",
+      "field": "question",
+      "kept": {
+        "from": "vse.py",
+        "text": "Stojí obsah tam, kde ho čtenář čeká?"
+      },
+      "rejected": [
+        {
+          "from": "stav.py",
+          "text": "Stojí obsah tam, kde ho čtenář čeká podle šablony?"
+        }
+      ]
+    },
+    {
+      "candidate": "K21",
+      "field": "question",
+      "kept": {
+        "from": "vse.py",
+        "text": "Dokáže jiný odborník ze zápisu navázat péči?"
+      },
+      "rejected": [
+        {
+          "from": "stav.py",
+          "text": "Dokáže jiný odborník ze zápisu pokračovat v péči, bez přepisu?"
+        }
+      ]
+    },
+    {
+      "candidate": "K23",
+      "field": "question",
+      "kept": {
+        "from": "vse.py",
+        "text": "Použil by odborník takový zápis u sebe?"
+      },
+      "rejected": [
+        {
+          "from": "stav.py",
+          "text": "Použil by odborník takový zápis u sebe v praxi?"
+        }
+      ]
+    }
+  ],
+  "candidates": {
+    "K01": {
+      "name": "Opora tvrzení ve zdroji",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "how": "stav.py"
+      },
+      "statement": "Každé věcné tvrzení v zápisu má oporu v tom, co v sezení zaznělo.",
+      "question": "Má každé tvrzení oporu v tom, co zaznělo?",
+      "definition": "Každé věcné tvrzení v zápisu má oporu v přepisu sezení nebo v jiném deklarovaném zdroji. Chybějící opora se dělí na vymyšlené (zdroj nic takového nemá) a zkreslené (zdroj říká něco jiného).",
+      "unit": "jedno tvrzení",
+      "unit_definition": "atomické tvrzení (aktér, čas, polarita, jistota)",
+      "applicability": "Vždy. Nedostupný kontext nebo neúspěšné dohledání znamená, že tvrzení nelze posoudit; to není totéž co nepravdivé.",
+      "error_consequence": "Vymyšlený fakt putuje do další péče a klient si ho přečte jako něco, co o něm bylo řečeno.",
+      "how": "Zápis se rozloží na tvrzení a každé se ověří proti přepisu."
+    },
+    "K02": {
+      "name": "Kdo co řekl",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "how": "stav.py"
+      },
+      "statement": "Zápis zachovává, kdo co řekl nebo pozoroval: klient, terapeut, třetí osoba, starší dokumentace.",
+      "question": "Je poznat, co řekl klient, co terapeut a co někdo třetí?",
+      "definition": "Zápis zachovává, kdo co řekl nebo pozoroval: výpověď klienta, pozorování terapeuta, informace od třetí osoby, informace z dřívější dokumentace.",
+      "unit": "jedno tvrzení",
+      "unit_definition": "tvrzení",
+      "applicability": "Vyžaduje přepis s rozlišenými mluvčími. Bez toho se to nedá měřit.",
+      "error_consequence": "Domněnka zapsaná jako fakt o třetí osobě je zároveň chyba věrnosti a zásah do práv někoho, kdo není klient a k zápisu nemá přístup.",
+      "how": "Totéž, se zaměřením na aktéra tvrzení."
+    },
+    "K03": {
+      "name": "Čas a změna stavu",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "how": "stav.py"
+      },
+      "statement": "Zápis zachovává, kdy se co stalo a co je aktuální oproti minulému.",
+      "question": "Je poznat, kdy se co stalo a co je aktuální?",
+      "definition": "Zápis zachovává, kdy se co stalo a co je aktuální oproti minulému: současný stav, anamnéza, záměr, plán.",
+      "unit": "jedno tvrzení",
+      "unit_definition": "tvrzení",
+      "applicability": "Longitudinální úlohy potřebují předchozí zápisy; ty se nesmí podstrčit úloze, která je mít nemá.",
+      "error_consequence": "Minulý stav vydávaný za současný mění klinické rozhodnutí.",
+      "how": "Totéž, se zaměřením na čas a změnu stavu."
+    },
+    "K04": {
+      "name": "Jistota, hypotéza, dohoda",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "how": "stav.py"
+      },
+      "statement": "Zápis zachovává, co je jisté, co je hypotéza terapeuta, co návrh a co dohoda.",
+      "question": "Je poznat, co je fakt, co dohoda a co domněnka?",
+      "definition": "Zápis zachovává epistemický status: co je jisté, co je hypotéza terapeuta, co je návrh a co je dohoda mezi terapeutem a klientem.",
+      "unit": "jedno tvrzení",
+      "unit_definition": "tvrzení",
+      "applicability": "Vždy.",
+      "error_consequence": "Návrh povýšený na dohodu vytvoří v další péči závazek, ke kterému se klient nikdy nepřihlásil.",
+      "how": "Totéž, se zaměřením na míru jistoty."
+    },
+    "K05": {
+      "name": "Pokrytí podstatného obsahu",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "how": "stav.py"
+      },
+      "statement": "Zápis nese podstatné informace ze sezení, přičemž podstatnost má stupně.",
+      "question": "Je v zápisu to podstatné, co zaznělo? Důležitost má stupně.",
+      "definition": "Podíl podstatných informací ze sezení, které zápis nese, přičemž podstatnost má stupně a odvozuje se ze zdroje a z účelu, ne z toho, že ve formuláři existuje kolonka.",
+      "unit": "jedna informační jednotka",
+      "unit_definition": "informační jednotka odvozená ze zdroje, s přiřazenou úrovní důležitosti",
+      "applicability": "Informace, která na sezení nezazněla, se nesmí počítat jako vynechaná. Banka informací musí vzniknout dřív, než kdokoli uvidí hodnocený zápis.",
+      "error_consequence": "Vynechání rizikové informace je jiná třída chyby než vynechání domácího úkolu; sloučení do jednoho procenta ten rozdíl smaže.",
+      "how": "Z přepisu se předem sestaví banka faktů se stupni důležitosti; u každého se zjistí, jestli ho zápis nese."
+    },
+    "K06": {
+      "name": "Přiznaná informační mezera",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "how": "stav.py"
+      },
+      "statement": "Zápis netvrdí, že něco není, když se o tom v sezení nemluvilo; rozliší „nezaznělo“, „klient popřel“ a „nikdo se nezeptal“.",
+      "question": "Netvrdí zápis, že něco není, když se o tom nemluvilo?",
+      "definition": "Zápis rozlišuje tři věci: že něco nezaznělo, že bylo řečeno, že to není, a že se na to nikdo nezeptal.",
+      "unit": "jedna informační jednotka",
+      "unit_definition": "informační jednotka",
+      "applicability": "Vždy, ale význam se liší podle tématu: nezmíněné riziko není vyloučené riziko.",
+      "error_consequence": "Zápis, který si vyrobí negativní nález, dává další péči falešné ujištění.",
+      "how": "Z téže banky: u každého faktu se rozliší, že zazněl, že klient popřel, a že se na to nikdo nezeptal. Zápis se nemá co vyjadřovat k ostatním faktům světa, jen k těm v bance."
+    },
+    "K07": {
+      "name": "Relevance pro adresáta",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "how": "stav.py"
+      },
+      "statement": "Co je podstatné, se mění podle toho, kdo zápis čte a proč.",
+      "question": "Je tam to, co potřebuje právě tenhle čtenář?",
+      "definition": "Co je podstatné, se mění podle toho, kdo zápis čte a proč. Táž informace může být nutná pro převzetí péče a zbytečná v klientském shrnutí.",
+      "unit": "jednotka krát účel",
+      "unit_definition": "informační jednotka krát účel",
+      "applicability": "Vyžaduje předem deklarovaný účel. Jinak je relevance neměřitelná.",
+      "error_consequence": "Univerzální skóre odmění zápis, který je dobrý pro jednoho adresáta a pro jiného nepoužitelný.",
+      "how": "Z téže banky: každý fakt má značku účelu a pokrytí se uvádí po účelech."
+    },
+    "K08": {
+      "name": "Riziko a bezpečí",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "how": "stav.py"
+      },
+      "statement": "Zápis zachycuje riziko a bezpečí tam, kde v sezení zaznělo.",
+      "question": "Je zachycené riziko tam, kde zaznělo?",
+      "definition": "Obsahové téma: suicidalita, sebepoškozování, nebezpečí pro druhé, týrání, krizové ukazatele. Není to konstrukt kvality, je to téma s nejvyšší závažností chyby. Zároveň je to průřezový důsledek: chyba věrnosti nebo pokrytí, která se dotkne rizika, je závažnější než táž chyba jinde.",
+      "unit": "jednotka označená jako riziko",
+      "unit_definition": "informační jednotka označená jako riziková",
+      "applicability": "Téma se vyskytuje vzácně; vzácnost není důvod položku vypustit.",
+      "error_consequence": "Nejvyšší. Jediné vynechání může být klinicky rozhodující.",
+      "how": "Z téže banky: fakty označené jako riziko se uvádějí jako vlastní vrstva."
+    },
+    "K09": {
+      "name": "Opodstatněnost vytvořených souvislostí",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "why_not_measured": "build_doc.py"
+      },
+      "statement": "Když zápis spojí informace do souvislosti nebo závěru, je ten vztah opřený o zdroj.",
+      "question": "Je souvislost, kterou zápis vytvořil, opřená o zdroj?",
+      "definition": "Pokud zápis spojí informace do vztahu, souvislosti nebo závěru, je ten vztah opřený o zdroj a přiměřený účelu.",
+      "unit": "jedna vytvořená souvislost",
+      "unit_definition": "vytvořený vztah nebo abstrakce",
+      "applicability": "Účel rozhoduje, kolik syntézy je žádoucí. Samotné množství klinických úvah se odměňovat nesmí.",
+      "error_consequence": "Vymyšlená klinická souvislost vypadá jako odborný závěr a putuje dál.",
+      "why_not_measured": "Chybí pravidlo měření. Polovina, kterou umíme, je v ověřování tvrzení; druhá polovina (je ten vztah vhodný pro daný účel?) nemá stanovené měřítko."
+    },
+    "K10": {
+      "name": "Návaznost a další kroky",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "how": "stav.py"
+      },
+      "statement": "Zápis nese, co je potřeba k pokračování: plán, úkoly, otevřené otázky, termín.",
+      "question": "Je tam plán, úkoly a další setkání?",
+      "definition": "Zápis nese, co je potřeba k pokračování: plán, dohodnuté úkoly, otevřené otázky, termín.",
+      "unit": "jednotka typu plán",
+      "unit_definition": "informační jednotka typu plán",
+      "applicability": "Sezení bez dohodnutého plánu se nesmí trestat za chybějící plán.",
+      "error_consequence": "Chybějící plán přeruší návaznost; vymyšlený plán vytvoří falešný závazek.",
+      "how": "Z téže banky: fakty typu plán."
+    },
+    "K11": {
+      "name": "Úspornost",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "how": "stav.py"
+      },
+      "statement": "Každá věta zápisu nese podstatný obsah; prázdné fráze nikoli.",
+      "question": "Nese každá věta informaci, nebo je to vata?",
+      "definition": "Podíl vět, které nesou podstatný obsah. Měří se vztahem věty k obsahu, ne délkou textu. Opakovaná věta obsah pořád nese, takže opakování tady vidět není; to je K31.",
+      "unit": "jedna věta",
+      "unit_definition": "věta",
+      "applicability": "Prázdný nebo velmi krátký zápis nesmí dostat vysokou úspornost, aniž by se současně vykázalo jeho pokrytí.",
+      "error_consequence": "Úspornost vykázaná samostatně odměňuje prázdný zápis.",
+      "how": "Každá věta se označí jednotkami, které nese; věta bez jednotky je nadbytečná."
+    },
+    "K12": {
+      "name": "Uspořádání textu",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "how": "stav.py"
+      },
+      "statement": "Zápis je uspořádaný tak, že čtenář najde, co hledá, na očekávaném místě.",
+      "question": "Stojí obsah tam, kde ho čtenář čeká?",
+      "definition": "Zápis je uspořádaný tak, že čtenář najde, co hledá, a obsah je na očekávaném místě.",
+      "unit": "jednotka krát oddíl",
+      "unit_definition": "informační jednotka krát sekce; celý zápis pro celkové uspořádání",
+      "applicability": "Jen pro úlohy, které předepisují strukturu.",
+      "error_consequence": "Správný obsah na špatném místě mění svého původce a čtenář ho čte jinak.",
+      "how": "U každé jednotky se zjistí, jestli stojí v oddílu podle šablony."
+    },
+    "K13": {
+      "name": "Srozumitelnost pro čtenáře",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "why_not_measured": "build_doc.py"
+      },
+      "statement": "Zápis je jazykově srozumitelný tomu, komu je určen.",
+      "question": "Rozumí tomu ten, komu je zápis určen?",
+      "definition": "Zápis je jazykově srozumitelný tomu, komu je určen. Pro klienta to znamená jiný jazyk než pro kolegu.",
+      "unit": "celý zápis, jeden čtenář",
+      "unit_definition": "celý zápis",
+      "applicability": "Měřitelné jen vůči konkrétnímu adresátovi.",
+      "error_consequence": "Nesrozumitelné klientské shrnutí selhalo ve svém jediném účelu.",
+      "why_not_measured": "Chybí hodnotitel. Dá se měřit jen proti konkrétnímu čtenáři, a pilot nemá klientské čtenáře. Indexy čitelnosti jsou náhražka, ne důkaz."
+    },
+    "K14": {
+      "name": "Nestigmatizující jazyk",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "how": "stav.py"
+      },
+      "statement": "Zápis nepoužívá jazyk, který klienta snižuje nebo ho redukuje na diagnózu.",
+      "question": "Nemluví zápis o klientovi snižujícím způsobem?",
+      "definition": "Zápis nepoužívá jazyk, který klienta snižuje, zpochybňuje jeho věrohodnost nebo ho redukuje na diagnózu či chování.",
+      "unit": "úsek textu",
+      "unit_definition": "úsek textu",
+      "applicability": "Citace vlastních slov klienta se posuzuje jinak než formulace autora zápisu.",
+      "error_consequence": "Klient si přečte odsudek sebe sama. Poškozuje to terapeutický vztah a je to trvalý záznam.",
+      "how": "Hodnotitel přečte vlastní text autora, citace klienta se nepočítá."
+    },
+    "K15": {
+      "name": "Nezbytnost citlivého detailu",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "why_not_measured": "build_doc.py"
+      },
+      "statement": "Zápis obsahuje jen ten citlivý detail, který jeho účel potřebuje.",
+      "question": "Je tam jen ten citlivý detail, který účel potřebuje?",
+      "definition": "Zápis obsahuje jen ten citlivý detail, který jeho deklarovaný účel potřebuje; zbytek je zobecněný nebo vynechaný.",
+      "unit": "jeden citlivý údaj",
+      "unit_definition": "citlivý detail",
+      "applicability": "Nesmí smazat klinicky rozhodující obsah. Konflikt s právním požadavkem se řeší ve prospěch práva a zapíše se.",
+      "error_consequence": "Zbytečný citlivý detail poškodí klienta i třetí osoby a nejde vzít zpět.",
+      "why_not_measured": "Nemá oporu. Pozor na sloupec vlevo: ty tři zdroje se kritéria dotýkají, ale žádný nedefinuje, co je nezbytný detail vzhledem k účelu. Mluví o zdravotnické dokumentaci jako celku, ne o jednom zápisu pro jeden účel. Jediný kandidát v tomto stavu."
+    },
+    "K16": {
+      "name": "Kontext vzniku záznamu",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "why_not_measured": "build_doc.py"
+      },
+      "statement": "Zápis nese informaci o okolnostech svého vzniku, například kdo a kdy ho psal.",
+      "question": "Je zaznamenáno, kdo a kdy zápis psal?",
+      "definition": "Zápis nese informaci o okolnostech svého vzniku, protože ty ovlivňují, jak se má jeho obsah číst.",
+      "unit": "celý zápis",
+      "unit_definition": "celý zápis",
+      "applicability": "Vždy, ale konkrétní povinné údaje plynou z jurisdikce.",
+      "error_consequence": "Bez kontextu vzniku nelze posoudit, jakou váhu záznamu dát.",
+      "why_not_measured": "Neměří se. Překrývá se s kontrolou náležitostí české vyhlášky, která je konkrétnější."
+    },
+    "K17": {
+      "name": "Informace o třetích osobách",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "why_not_measured": "build_doc.py"
+      },
+      "statement": "Údaje o osobách, které nejsou klient, jsou uvedené rolí, ne identifikací.",
+      "question": "Nejde podle zápisu poznat osobu, která není klient?",
+      "definition": "Údaje o lidech, kteří nejsou klient a nedali souhlas: partneři, děti, kolegové, další klienti ve skupině.",
+      "unit": "jedna zmínka osoby",
+      "unit_definition": "zmínka o třetí osobě",
+      "applicability": "Přítomné v každém uspořádání. V individuální terapii vstupují třetí osoby přes klientovo vyprávění; v párové a skupinové jsou to účastníci s vlastním souhlasem, což mění pravidlo, ne relevanci.",
+      "error_consequence": "Zasahuje do práv někoho, kdo o zápisu neví a nemá k němu přístup.",
+      "why_not_measured": "Chybí pravidlo měření. Není definované, jak označovat třetí osoby a jak odlišit roli od identifikace."
+    },
+    "K18": {
+      "name": "Dohledatelnost ke zdroji",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "why_not_measured": "build_doc.py"
+      },
+      "statement": "U tvrzení v zápisu lze ukázat místo ve zdroji, které ho podpírá.",
+      "question": "Lze u tvrzení ukázat místo ve zdroji?",
+      "definition": "U tvrzení lze ukázat místo ve zdroji, které ho podpírá. Rozlišuje se platnost odkazu, jeho skutečná opora tvrzení a podíl tvrzení, která odkaz nesou. Předmětem je odkaz, který do zápisu napíše autor; úseky, které si při kontrole označí hodnotitel, jsou něco jiného a patří do metod.",
+      "unit": "jeden odkaz",
+      "unit_definition": "odkaz a tvrzení, ke kterému odkazuje",
+      "applicability": "Jen pro úlohy, které odkazy výslovně vyžadují. Běžný čas v hranaté závorce není odkaz.",
+      "error_consequence": "Odkaz, který nepodpírá, budí falešnou důvěru účinněji než žádný odkaz.",
+      "why_not_measured": "Neměří se. Žádná úloha po modelu nechce citace, takže by jmenovatel byl prázdný."
+    },
+    "K19": {
+      "name": "Náležitosti české zdravotnické dokumentace",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "measured_otherwise": "build_doc.py"
+      },
+      "statement": "Zápis nese náležitosti, které u zdravotnické dokumentace vyžaduje český předpis.",
+      "question": "Má zápis náležitosti podle české vyhlášky?",
+      "definition": "Zápis nese náležitosti, které současný český předpis vyžaduje u zdravotnické dokumentace. Vyhláška je zdroj požadavků a pozorovatelné kritérium je přítomnost těch náležitostí. Váže úzkou skupinu: záznamy vedené poskytovatelem zdravotních služeb, v praxi kliničtí psychologové. Terapeut mimo zdravotní služby zdravotnickou dokumentaci nevede a tohle kritérium na něj nedosáhne.",
+      "unit": "jedna náležitost",
+      "unit_definition": "náležitost podle předpisu",
+      "applicability": "Jen české zápisy, a jen ty vedené jako zdravotnická dokumentace poskytovatelem zdravotních služeb. Ne anglická stopa, ne klientské shrnutí, které zdravotnická dokumentace vůbec není. Vyhláška předepisuje náležitosti, ne strukturu zápisu: žádná forma SOAP, DAP ani BIRP není v ČR povinná, takže se kritérium nikdy nesmí číst jako požadavek psát v některé z nich.",
+      "error_consequence": "Chybějící náležitost je dokumentační problém pro tu úzkou skupinu, ne klinická vada zápisu, a nesmí se míchat do skóre kvality. Číst to jako právní verdikt by bylo tvrzení o reálné praxi, které tahle práce neunese.",
+      "measured_otherwise": "Měří se jinak: deterministická kontrola náležitostí vyhlášky."
+    },
+    "K20": {
+      "name": "Splnění formátu zadání",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "why_not_measured": "build_doc.py"
+      },
+      "statement": "Zápis dodržel, co zadání výslovně žádalo: oddíly, délku, jazyk.",
+      "question": "Dodržel model zadaný formát, délku, jazyk?",
+      "definition": "Zápis dodržel, co zadání výslovně žádalo: sekce, délku, jazyk, zakázané prvky.",
+      "unit": "celý zápis",
+      "unit_definition": "požadavek zadání",
+      "applicability": "Jen tam, kde si úloha tu kontrolu výslovně vyžádá.",
+      "error_consequence": "Malý, pokud se nezamění za kvalitu.",
+      "why_not_measured": "Mimo rozsah. Je to kontrola instrukce, ne kvality; běží stranou a nemíchá se do skóre."
+    },
+    "K21": {
+      "name": "Převzetí péče ze zápisu",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "how": "stav.py",
+        "measured_otherwise": "build_doc.py"
+      },
+      "statement": "Jiný odborník dokáže ze zápisu pokračovat v péči bez přístupu k přepisu.",
+      "question": "Dokáže jiný odborník ze zápisu navázat péči?",
+      "definition": "Jiný odborník dokáže ze zápisu smysluplně pokračovat v péči bez přístupu k přepisu.",
+      "unit": "celý zápis, jeden hodnotitel",
+      "unit_definition": "zápis krát hodnotitel",
+      "applicability": "Vyžaduje člověka v roli přebírajícího. Model ho v této úloze nenahradí.",
+      "error_consequence": "Tohle je veličina, kvůli které se zápisy píšou; nesledovat ji je hlavní slabina čistě textových měření.",
+      "how": "Člověk dostane jen zápis, bez přepisu, a zkusí z něj navázat péči.",
+      "measured_otherwise": "Měří se jinak: otázka pro člověka, zda dokáže ze zápisu převzít péči."
+    },
+    "K22": {
+      "name": "Rozsah nutných úprav",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "why_not_measured": "build_doc.py"
+      },
+      "statement": "Kolik a jakých zásahů musí odborník udělat, než je zápis použitelný.",
+      "question": "Kolik toho musí odborník přepsat, než je zápis použitelný?",
+      "definition": "Kolik a jakých zásahů musí odborník udělat, než je zápis použitelný. Typ úpravy nese informaci, kterou skóre nemá.",
+      "unit": "jedna úprava",
+      "unit_definition": "úprava",
+      "applicability": "Vyžaduje skutečný provoz, ne laboratorní hodnocení.",
+      "error_consequence": "Nízká viditelná chybovost při vysoké míře tichého přepisování zakrývá skutečný stav.",
+      "why_not_measured": "Mimo rozsah. Potřebuje skutečný provoz, kde terapeut s konceptem pracuje. Laboratorní pilot takový provoz nemá."
+    },
+    "K23": {
+      "name": "Přijatelnost pro praxi",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "how": "stav.py",
+        "measured_otherwise": "build_doc.py"
+      },
+      "statement": "Zda by si odborník zápis vzal do vlastní praxe a dál používal systém, který ho vytvořil.",
+      "question": "Použil by odborník takový zápis u sebe?",
+      "definition": "Zda by si odborník vzal zápis do vlastní praxe a dál používal systém, který ho vytvořil, a když ne, proč. Otázka je o používání, ne o vyúčtování a ne o pojišťovně. Odpovídá se na šesti parametrech, které MentalCLOUDS převzal z rámce pro přijímání zdravotnických intervencí: citový postoj, zátěž, etickost, srozumitelnost, náklady obětované příležitosti a vnímaná účinnost. Vlastností textu je z nich jen ta srozumitelnost; zbylých pět je o tom, co stojí s tím pracovat.",
+      "unit": "celý zápis, jeden hodnotitel",
+      "unit_definition": "zápis krát hodnotitel",
+      "applicability": "Lidské měření. Soudcem se nahradit nedá.",
+      "error_consequence": "Benchmark, který měří jen text, může doporučit systém, který odborníci odmítají.",
+      "how": "Člověk odpoví na šest parametrů přijatelnosti ze zdroje.",
+      "measured_otherwise": "Měří se jinak: otázka pro člověka, zda by zápis použil v praxi."
+    },
+    "K24": {
+      "name": "Porozumění ze strany klienta",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "why_not_measured": "build_doc.py"
+      },
+      "statement": "Zda klient zápis rozumí, pozná v něm své sezení a čtením mu to neublíží.",
+      "question": "Rozumí tomu klient a pozná v tom své sezení?",
+      "definition": "Zda klient shrnutí rozumí, pozná v něm své sezení a čtením mu to neublíží.",
+      "unit": "celý zápis, jeden klient",
+      "unit_definition": "zápis krát čtenář",
+      "applicability": "Vyžaduje skutečné čtenáře. Do prvního pilotu se bez etického rámce nevejde.",
+      "error_consequence": "Nejcitlivější účel; chyba se dotkne přímo klienta.",
+      "why_not_measured": "Mimo rozsah tvým rozhodnutím ze 16. 9. (nástroj slouží návaznosti péče a dokumentaci). Kandidát i jeho opora zůstávají pro další kolo."
+    },
+    "K25": {
+      "name": "Podpora supervize",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "why_not_measured": "build_doc.py"
+      },
+      "statement": "Zda supervizor ze zápisu pozná, co terapeut dělal, proč, a kde si nebyl jistý.",
+      "question": "Pozná supervizor, co terapeut dělal a proč?",
+      "definition": "Zda supervizor ze zápisu pozná, co terapeut dělal, proč, a kde si nebyl jistý.",
+      "unit": "celý zápis, jeden supervizor",
+      "unit_definition": "zápis krát supervizor",
+      "applicability": "Vyžaduje supervizory jako hodnotitele.",
+      "error_consequence": "Supervize bez informace o postupu terapeuta míjí svůj smysl.",
+      "why_not_measured": "Mimo rozsah týmž rozhodnutím. Supervize byla navíc ze čtyř účelů nejhůř podepřená, což je samo o sobě výsledek rešerše."
+    },
+    "K26": {
+      "name": "Soulad napříč sezeními",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "why_not_measured": "build_doc.py"
+      },
+      "statement": "Zápis neodporuje dřívějším zápisům téhož případu bez doloženého důvodu.",
+      "question": "Neodporuje zápis dřívějším zápisům téhož klienta?",
+      "definition": "Zápis neodporuje dřívějším zápisům téhož případu tam, kde pro to není doložený důvod.",
+      "unit": "dvojice zápisů téhož případu",
+      "unit_definition": "dvojice zápisů téhož případu",
+      "applicability": "Vyžaduje sérii zápisů téhož případu s ověřenou chronologií. Současné případy nejsou pro longitudinální hodnocení připravené ani vybrané: nativní sezení nemají ověřené pořadí a rozhodnutím D1 zůstávají mimo pilot, takže se kandidát v tomhle kole neměří.",
+      "error_consequence": "Rozpor v dokumentaci podrývá důvěryhodnost celého záznamu.",
+      "why_not_measured": "Neměří se. Potřebuje několik sezení téhož klienta za sebou; pilotní případy pro to nejsou připravené a česká reálná sezení jsou mimo pilot."
+    },
+    "K27": {
+      "name": "Rovnoměrnost napříč skupinami klientů",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "why_not_measured": "build_doc.py"
+      },
+      "statement": "Kvalita zápisu systematicky neklesá u určitých skupin klientů nebo témat.",
+      "question": "Neklesá kvalita u určitých skupin klientů?",
+      "definition": "Zda kvalita zápisu systematicky neklesá u určitých skupin klientů, jazykových variet nebo témat.",
+      "unit": "skupina klientů",
+      "unit_definition": "skupina případů, ne jednotlivý zápis",
+      "applicability": "Vyžaduje dost případů na podskupinu. S jedním českým klientským klastrem to měřit NELZE a nesmí se to předstírat.",
+      "error_consequence": "Systematická nerovnost je horší než náhodná chyba a jeden zápis ji neodhalí.",
+      "why_not_measured": "Neměří se. Potřebuje dost případů v každé skupině klientů; s jednou skupinou se to nedá rozdělit a nesmí se to předstírat."
+    },
+    "K28": {
+      "name": "Personalizace",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "how": "stav.py",
+        "measured_otherwise": "build_doc.py"
+      },
+      "statement": "Zápis zachytí, co je na tomhle klientovi a tomhle sezení jedinečné, místo obecného popisu.",
+      "question": "Je zápis o tomhle člověku, nebo by sedl na kohokoli?",
+      "definition": "Zápis zachytí, co je na tomhle klientovi a tomhle sezení jedinečné, místo obecného popisu, který by seděl na kohokoli. Nejde o styl, ale o to, jestli text nese idiosynkratický obsah.",
+      "unit": "všechny zápisy jednoho modelu",
+      "unit_definition": "soubor zápisů jednoho systému, ne jeden zápis",
+      "applicability": "Na jednom zápisu se měřit NEDÁ. Vyžaduje dost případů, aby se dala spočítat podobnost mezi nimi.",
+      "error_consequence": "Obecný zápis projde všemi ostatními kritérii a nepřidá nic, co by dalšímu terapeutovi pomohlo tohohle klienta poznat.",
+      "how": "Spočítá se rozmanitost všech zápisů jednoho modelu, ne jeden zápis.",
+      "measured_otherwise": "Měří se jinak: ukazatel přes všechny zápisy jednoho modelu."
+    },
+    "K29": {
+      "name": "Informační hustota",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "how": "stav.py",
+        "measured_otherwise": "build_doc.py"
+      },
+      "statement": "Kolik klinicky podstatného obsahu zápis nese na jednotku textu.",
+      "question": "Kolik informace nese zápis na svou délku?",
+      "definition": "Kolik klinicky podstatného obsahu zápis nese na jednotku textu. Ne délka a ne úspornost: poměr mezi nesenou informací a spotřebovaným místem.",
+      "unit": "celý zápis",
+      "unit_definition": "zápis; porovnatelné jen mezi zápisy o téže předloze",
+      "applicability": "Bez srovnatelné délky nebo bez přepočtu na jednotku textu jsou srovnání pokrytí mezi systémy zavádějící. Krátký zápis může být hustý a přitom vynechávat podstatné; hustota se nikdy nečte samostatně.",
+      "error_consequence": "Bez ní benchmark systematicky odměňuje mnohomluvnost. To je přesně sklon, který modely mají, takže chyba míří vždycky na jednu stranu.",
+      "how": "Počet různých faktů z banky na jednotku délky.",
+      "measured_otherwise": "Měří se jinak: odvozený poměr informace k délce."
+    },
+    "K30": {
+      "name": "Jazyková přirozenost",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "why_not_measured": "build_doc.py"
+      },
+      "statement": "Zápis se čte, jako by ho psal klinik v daném jazyce, bez strojových formulací.",
+      "question": "Čte se to, jako by to psal český klinik?",
+      "definition": "Zápis se čte, jako by ho psal klinik v daném jazyce: běžný klinický rejstřík, žádné strojové formulace, žádná vazba přenesená z jiného jazyka. Odlišné od srozumitelnosti: kostrbatý zápis může být dokonale srozumitelný.",
+      "unit": "celý zápis",
+      "unit_definition": "celý zápis",
+      "applicability": "Oba jazyky, každý s vlastní operacionalizací: co zní přirozeně v českém klinickém psaní, není překlad anglického pravidla. Vyžaduje lidské hodnotitele; žádná automatická náhrada se nenavrhuje.",
+      "error_consequence": "Pro péči nízký; nepřirozený zápis se pořád přečte. Označkuje text jako strojově psaný a může snížit důvěru v obsah.",
+      "why_not_measured": "Chybí pravidlo měření. Hodnoticí pravidlo musí být napsané anglicky i česky a posouzené člověkem."
+    },
+    "K31": {
+      "name": "Redundance",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "why_not_measured": "build_doc.py"
+      },
+      "statement": "Tatáž podstatná informace se v zápisu neobjevuje víckrát bez nového obsahu.",
+      "question": "Neopakuje se tentýž fakt bez nového obsahu?",
+      "definition": "Podstatná informační jednotka se v zápisu objeví víckrát bez nového obsahu. Není to úspornost: opakovaná věta obsah pořád nese, takže podíl obsah nesoucích vět (K11) to nevidí. Není to ani hustota: ta klesá i vatou, která neopakuje nic.",
+      "unit": "jednotka opakovaná v zápisu",
+      "unit_definition": "informační jednotka opakovaná v rámci jednoho zápisu",
+      "applicability": "Jakýkoli zápis; potřebuje tutéž banku jednotek jako pokrytí. Zopakování, které přidá důsledek, třeba další krok, opakování není.",
+      "error_consequence": "Střední: opakování zápis prodlužuje, skrývá vynechávky za objem a nafukuje každé srovnání, které roste s délkou.",
+      "why_not_measured": "Chybí pravidlo měření. Není definované, co je opakování téhož; půjde měřit, až bude existovat banka faktů."
+    },
+    "K32": {
+      "name": "Kulturní kompetence doložená v zápisu",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "why_not_measured": "build_doc.py"
+      },
+      "statement": "Zápis ukazuje, že kulturní, jazykový a sociální kontext klienta byl zohledněn tam, kde se péče týkal.",
+      "question": "Je v zápisu zohledněný kulturní kontext, kde se péče týkal?",
+      "definition": "Zápis ukazuje, že kulturní, jazykový a sociální kontext klienta byl zohledněn tam, kde se sezení týkal: jak je zaznamenané klientovo zázemí, jestli je uvedená úprava postupu nebo tlumočník, a že žádná domněnka o klientovi nenahrazuje to, co zaznělo. Posuzuje se jen ze zápisu, jako to, co zápis o péči ukazuje.",
+      "unit": "celý zápis",
+      "unit_definition": "celý zápis",
+      "applicability": "Tam, kde sezení nese kulturní, jazykový nebo sociální kontext, který se péče týkal. Sezení bez takového obsahu znamená, že se položka neuplatní, což není selhání.",
+      "error_consequence": "Zápis, který čte klienta přes stereotyp, čte další klinik i klient; škoda je na vztahu a na důvěře a je trvalá.",
+      "why_not_measured": "Chybí pravidlo měření. Přijal jsi ho 21. 9.; jak se to hodnotí, zatím nikdo nenapsal."
+    },
+    "K33": {
+      "name": "Vnitřní konzistence",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "definition": "cz_constructs.py",
+        "unit": "vse.py",
+        "unit_definition": "cz_constructs.py",
+        "applicability": "cz_constructs.py",
+        "error_consequence": "cz_constructs.py",
+        "why_not_measured": "build_doc.py"
+      },
+      "statement": "Žádná část zápisu neignoruje ani nepopírá jinou část téhož zápisu.",
+      "question": "Neodporuje si zápis sám?",
+      "definition": "Žádná část zápisu neignoruje ani nepopírá jinou část téhož zápisu. Liší se od K26, což je soulad mezi zápisy jednoho případu, i od K01: dvě tvrzení mohou mít každé oporu ve zdroji v jiném okamžiku, a přesto si odporovat, když je zápis podává obě jako současná.",
+      "unit": "dvojice tvrzení v zápisu",
+      "unit_definition": "dvojice tvrzení v rámci jednoho zápisu",
+      "applicability": "Jakýkoli zápis. Rozpor, který vyslovil sám klient a zápis ho uvádí jako klientův, je věrnost, ne nekonzistence.",
+      "error_consequence": "Čtenář, který narazí na rozpor, neví, které části věřit, a odepíše celý zápis.",
+      "why_not_measured": "Chybí pravidlo měření. Přidal jsi ho 21. 9.; není napsané, co se počítá jako dvojice tvrzení, která si odporují."
+    },
+    "K34": {
+      "name": "Odborná terminologie",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py",
+        "question": "vse.py",
+        "unit": "vse.py"
+      },
+      "statement": "Zápis používá odborné termíny a používá je pro to, co znamenají.",
+      "question": "Používá zápis odborné termíny, a správně?",
+      "unit": "jeden termín"
+    },
+    "K35": {
+      "name": "Zachycení interakce z obou stran",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py"
+      },
+      "statement": "Zápis popisuje, co terapeut udělal, i jak na to klient zareagoval; ne jedno bez druhého."
+    },
+    "K36": {
+      "name": "Klientovo prožívání, ne jen chování",
+      "from": {
+        "name": "panel_sheet.py",
+        "statement": "panel_sheet.py"
+      },
+      "statement": "Ze zápisu je poznat, jak to klient prožíval, ne jen co dělal."
+    }
+  },
+  "panel_sheet": {
+    "instructions": [
+      [
+        "Hodnocení kritérií kvality zápisu ze psychoterapeutického sezení"
+      ],
+      [],
+      [
+        "Co se po vás chce. Níže je 36 vlastností, které by zápis ze sezení mohl mít. U každé odpovězte na dvě otázky. Odhadem 30 minut. Nepotřebujete nic číst předem."
+      ],
+      [],
+      [
+        "Otázka 1, sloupec D: Je tato vlastnost podstatná pro kvalitu zápisu ze sezení? Vyberte: nepodstatné / spíše podstatné / podstatné / velmi podstatné."
+      ],
+      [
+        "Otázka 2, sloupec E: Mohlo by měření této vlastnosti svádět k nesprávnému hodnocení, nebo uškodit klientovi či terapeutovi? Pokud ano, napište čím."
+      ],
+      [
+        "Sloupec F je nepovinná poznámka: cokoli, co vám u té vlastnosti vrtá hlavou."
+      ],
+      [],
+      [
+        "Na konci, pod tabulkou, je jedna otevřená otázka: co podle vás v tom seznamu chybí."
+      ],
+      [],
+      [
+        "Důležité. Vyplňujte prosím sami a nekonzultujte to s ostatními hodnotiteli: každý má vlastní kopii právě proto, aby se odpovědi neovlivňovaly."
+      ],
+      [
+        "Pořadí kritérií je zamíchané a nic o nich neprozrazujeme, abyste je posoudili, a ne potvrzovali, co si o nich myslíme my."
+      ],
+      [
+        "Jak se s tím naloží: pravidlo bylo zapsané předem, 7. 10. 2026, ještě než vznikla jakákoli odpověď. Vlastnost, kterou označí za podstatnou všichni tři, zůstává; u které dva ze tří, zůstává jako sporná a váš nesouhlas se zveřejní; u které jeden nebo nikdo, z měření vypadává."
+      ],
+      []
+    ],
+    "header": [
+      "Kód",
+      "Kritérium",
+      "Jednou větou",
+      "Podstatné?",
+      "Mohlo by to škodit? Jak?",
+      "Poznámka"
+    ],
+    "tail": [
+      [],
+      [
+        "Co v seznamu chybí? Napište prosím sem, klidně víc věcí, každou na nový řádek."
+      ],
+      [
+        ""
+      ],
+      [
+        ""
+      ],
+      [
+        ""
+      ]
+    ]
+  },
+  "panel_sheet_note": "The wording of the content-validity rating sheet, kept here so that the generator beside it carries no Czech. The sheet shows a code, a name and the statement, and nothing about state, origin or citation, so that a rater judges rather than ratifies.",
+  "vocabulary": {
+    "state": {
+      "awaiting_raters": "chybí hodnotitel, který by to posoudil",
+      "lacking_evidence": "nemá oporu v žádném přečteném článku",
+      "not_measured": "v tomhle kole se neměří",
+      "not_yet_operationalized": "zatím není pravidlo, jak to měřit",
+      "out_of_scope": "mimo rozsah tohoto kola",
+      "proposed": "měří se"
+    },
+    "origin": {
+      "empirical_observation": "z pozorování našich výstupů",
+      "expert_proposal": "návrh kolegy",
+      "literature": "z literatury (našla rešerše)",
+      "prior_local": "existovalo v projektu před rešerší"
+    },
+    "entry": {
+      "K19": "Deterministická kontrola: projde se seznam náležitostí z vyhlášky a u každé se zjistí, jestli v zápisu je. Netvrdí nic o souladu s právem.",
+      "K21": "Otázka pro člověka: přebírající terapeut dostane jen zápis (bez přepisu) a řekne, jestli z něj dokáže smysluplně pokračovat v péči.",
+      "K23": "Otázka pro člověka: použil by odborník tenhle zápis v praxi? Šest parametrů přijatelnosti podle zdroje.",
+      "K28": "Ukazatel přes celý korpus: jak rozmanité jsou zápisy jednoho modelu. Když jsou si všechny podobné, model píše obecně, ne o tomhle člověku.",
+      "K29": "Odvozený poměr: kolik informace připadá na jednotku délky, a srovnání při vyrovnané délce textů."
+    },
+    "item": {
+      "M06": "Stojí každá informace v tom oddílu zápisu, kam podle šablony patří?",
+      "M07": "Nese každá věta zápisu nějakou informaci z banky faktů? (Prázdná fráze = ne.)",
+      "M08": "Je vlastní text autora bez stigmatizujících formulací? (Citace klienta se nepočítá.)"
+    },
+    "method": {
+      "claims": "Ověření jednotlivých tvrzení",
+      "items": "Tři otázky na celý zápis (rubrika)",
+      "qa": "Otázky z banky faktů"
+    },
+    "family": {
+      "F1": "Věrnost zdroji a status informace",
+      "F2": "Pokrytí podstatného obsahu",
+      "F3": "Zpracování a klinická syntéza",
+      "F4": "Srozumitelnost, uspořádání, úspornost",
+      "F5": "Respekt, soukromí, bezpečí sdílení",
+      "F6": "Dohledatelnost a soulad se zadáním",
+      "F7": "Použitelnost v úloze"
+    },
+    "basis": {
+      "derived": "jiná měření",
+      "indicator": "nic, jen popis",
+      "norm": "šablona či předpis",
+      "note": "samotný zápis",
+      "rater": "odborník",
+      "source": "přepis"
+    },
+    "why_state": {
+      "awaiting_raters": "chybí hodnotitel",
+      "lacking_evidence": "bez opory",
+      "not_measured": "data nebo překryv",
+      "not_yet_operationalized": "chybí pravidlo",
+      "out_of_scope": "mimo rozsah kola"
+    }
+  },
+  "groupings": {
+    "our_groups": {
+      "Pravdivost": [
+        "K01",
+        "K02",
+        "K03",
+        "K04"
+      ],
+      "Úplnost": [
+        "K05",
+        "K06",
+        "K07",
+        "K08",
+        "K10"
+      ],
+      "Čitelnost a úspornost": [
+        "K11",
+        "K12",
+        "K29"
+      ],
+      "Respekt a konkrétnost": [
+        "K14",
+        "K28"
+      ],
+      "Použitelnost v praxi": [
+        "K21",
+        "K23"
+      ]
+    },
+    "upheal_dimensions": {
+      "věrnost": [
+        "K01",
+        "K02",
+        "K03",
+        "K04",
+        "K33"
+      ],
+      "úplnost": [
+        "K05",
+        "K06",
+        "K07",
+        "K08",
+        "K10",
+        "K26"
+      ],
+      "klinický úsudek": [
+        "K09",
+        "K34"
+      ],
+      "compliance": [
+        "K11",
+        "K12",
+        "K13",
+        "K14",
+        "K15",
+        "K17",
+        "K20",
+        "K30"
+      ],
+      "deskriptivní vrstva": [
+        "K27",
+        "K28",
+        "K29",
+        "K31"
+      ],
+      "auditní kritéria": [
+        "K16",
+        "K19"
+      ],
+      "produkční kotva": [
+        "K21",
+        "K22",
+        "K23"
+      ],
+      "nemají": [
+        "K18",
+        "K24",
+        "K25",
+        "K32"
+      ]
+    }
+  },
+  "groupings_note": "our_groups and upheal_dimensions are claims about the criteria, not translations: the first is this project's grouping of the measured ones, the second maps a candidate onto a prior commercial taxonomy. Both predate K35 and K36 and cover 34 of 36 candidates; the gap is left open rather than guessed."
+}

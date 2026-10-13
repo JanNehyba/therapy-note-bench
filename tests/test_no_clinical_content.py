@@ -51,6 +51,7 @@ DIACRITIC = re.compile(
 # and wholly synthetic controls. These exact files contain no patient material.
 # Real transcripts and every derived QA/evidence artifact stay gitignored.
 OPERATIONAL = "research/gen2/catalog/operational.json"
+CATALOG_CZECH = "research/gen2/catalog/czech.json"
 DRAFT = "research/gen2/catalog/draft-registry.json"
 DECISIONS = "research/gen2/decisions.json"
 REVIEW_RECORD = "research/gen2/review-record.json"
@@ -61,6 +62,9 @@ ALLOWED_CZECH: dict[str, str] = {
     CORE + "review.js": "Original Czech annotation interface labels",
     CORE + "controls.py": "SYNTHETIC-FIXTURE: invented bilingual challenge cases",
     OPERATIONAL: "AUTHORED-INSTRUMENT-TEXT: the pilot's operational rules in both languages",
+    CATALOG_CZECH: "AUTHORED-INSTRUMENT-TEXT: the Czech name and statement a reviewer reads "
+    "for each candidate, held to catalog.json by tests/test_catalog_czech.py so that it "
+    "translates the one list of criteria instead of becoming a second one",
     DRAFT: "derived from operational.json by the converter; tests/test_gen2_catalog.py holds "
     "its Czech to exactly the authored strings",
     DECISIONS: "AUTHORED-INVESTIGATOR-TEXT: the investigator's own decisions on the catalog's "
@@ -184,7 +188,14 @@ def _relative(path: Path) -> str:
 
 def test_czech_exceptions_are_only_authored_gen2_resources(tracked_files):
     core = {CORE + f for f in ("profiles.py", "review.js", "controls.py")}
-    assert set(ALLOWED_CZECH) == core | {OPERATIONAL, DRAFT, DECISIONS, REVIEW_RECORD, EXPERT}
+    assert set(ALLOWED_CZECH) == core | {
+        OPERATIONAL,
+        CATALOG_CZECH,
+        DRAFT,
+        DECISIONS,
+        REVIEW_RECORD,
+        EXPERT,
+    }
     # The bibliographic exception is a separate list with a separate rule, and
     # nothing published is on it.
     assert not set(BIBLIOGRAPHIC) & set(ALLOWED_CZECH)
@@ -192,6 +203,7 @@ def test_czech_exceptions_are_only_authored_gen2_resources(tracked_files):
     assert all(reason for reason in BIBLIOGRAPHIC.values())
     assert FIXTURE_MARKER in (REPO_ROOT / CORE / "controls.py").read_text(encoding="utf-8")
     assert INSTRUMENT_MARKER in (REPO_ROOT / OPERATIONAL).read_text(encoding="utf-8")
+    assert INSTRUMENT_MARKER in (REPO_ROOT / CATALOG_CZECH).read_text(encoding="utf-8")
     assert "AUTHORED-INVESTIGATOR-TEXT" in (REPO_ROOT / DECISIONS).read_text(encoding="utf-8")
     assert "AUTHORED-INVESTIGATOR-TEXT" in (REPO_ROOT / REVIEW_RECORD).read_text(encoding="utf-8")
     assert "AUTHORED-INVESTIGATOR-TEXT" in (REPO_ROOT / EXPERT).read_text(encoding="utf-8")

@@ -395,9 +395,112 @@ def property_problems(catalog: dict, props: dict) -> list[str]:
     return out
 
 
+CZECH_PATH = HERE / "czech.json"
+
+#: Fields of `czech.json` that must name every candidate. The name is what a
+#: reader identifies a criterion by and the statement is what a panel marks
+#: agreement with, so a candidate missing either cannot be put on a sheet. The
+#: rest are allowed to be partial: a criterion that is not measured has no
+#: `how`, and saying nothing is the honest shape of that.
+CZECH_REQUIRED = ("name", "statement")
+
+
+def load_czech(path: Path = CZECH_PATH) -> dict:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def czech_problems(catalog: dict, czech: dict) -> list[str]:
+    """The Czech text of the catalog against the catalog.
+
+    `catalog.json` stays the single list of candidates. This file translates it
+    and must therefore name exactly the same codes: a Czech view built from a
+    file that had drifted is how five views came to claim five different counts.
+
+    Partial coverage is allowed and counted, never guessed. What is refused is a
+    code neither file knows, a required field left empty, and a count that does
+    not match the list it counts.
+    """
+    out: list[str] = []
+    codes = set(ids(catalog, "candidates"))
+    named = set(czech["candidates"])
+    for code in sorted(named - codes):
+        out.append(f"czech.candidates[{code}]: not a candidate of the catalog")
+    for code in sorted(codes - named):
+        out.append(f"czech.candidates[{code}]: candidate has no Czech text")
+    for code in sorted(named & codes):
+        entry = czech["candidates"][code]
+        for field in CZECH_REQUIRED:
+            if not str(entry.get(field, "")).strip():
+                out.append(f"czech.candidates[{code}].{field}: required and empty")
+        for field, value in entry.items():
+            if field == "from":
+                continue
+            if not str(value).strip():
+                out.append(f"czech.candidates[{code}].{field}: present and empty")
+
+    # Everything below counts the entries, so it reads the codes both files
+    # know. A missing candidate is already reported above, and indexing it here
+    # would answer the drift this function exists to name with a traceback.
+    shared = sorted(named & codes, key=_code)
+    coverage = czech["coverage"]
+    if coverage["candidates"] != len(codes):
+        out.append("czech.coverage.candidates does not match the catalog")
+    for field, count in coverage["by_field"].items():
+        actual = sum(1 for e in czech["candidates"].values() if field in e)
+        if actual != count:
+            out.append(f"czech.coverage.by_field[{field}]: says {count}, the entries have {actual}")
+    for field, listed in coverage["missing_by_field"].items():
+        actual = [c for c in shared if field not in czech["candidates"][c]]
+        if actual != listed:
+            out.append(f"czech.coverage.missing_by_field[{field}]: does not match the entries")
+    unexplained = [
+        code
+        for code in shared
+        if not {"how", "why_not_measured", "measured_otherwise"} & set(czech["candidates"][code])
+    ]
+    if unexplained != coverage["candidates_with_no_explanation_of_their_state"]:
+        out.append("czech.coverage.candidates_with_no_explanation_of_their_state: does not match")
+
+    # A grouping is a claim about the criteria, not a translation, so it may
+    # cover fewer than all of them; what it may not do is name a code that is
+    # not a candidate, or quietly place one twice.
+    for name, groups in czech["groupings"].items():
+        placed: list[str] = []
+        for group, members in groups.items():
+            for code in members:
+                if code not in codes:
+                    out.append(f"czech.groupings[{name}][{group}]: {code} is not a candidate")
+                placed.append(code)
+        duplicated = sorted({c for c in placed if placed.count(c) > 1})
+        if duplicated:
+            out.append(f"czech.groupings[{name}]: places {', '.join(duplicated)} more than once")
+
+    for entry in czech["conflicts_resolved"]:
+        code = entry["candidate"]
+        if code not in codes:
+            out.append(f"czech.conflicts_resolved: {code} is not a candidate")
+        if not entry["rejected"]:
+            out.append(f"czech.conflicts_resolved[{code}]: nothing was rejected")
+        if code not in named:
+            out.append(f"czech.conflicts_resolved[{code}]: resolves a conflict for no entry")
+            continue
+        kept = czech["candidates"][code].get(entry["field"])
+        if kept != entry["kept"]["text"]:
+            out.append(
+                f"czech.conflicts_resolved[{code}].{entry['field']}: "
+                "the kept text is not the one in the entry"
+            )
+    return out
+
+
+def _code(candidate: str) -> int:
+    return int(candidate[1:])
+
+
 if __name__ == "__main__":
     found = problems(load(), json.loads(REPORTS_PATH.read_text(encoding="utf-8")))
     found += property_problems(load(), load_properties())
+    found += czech_problems(load(), load_czech())
     for line in found:
         print(line)
     raise SystemExit(1 if found else 0)
