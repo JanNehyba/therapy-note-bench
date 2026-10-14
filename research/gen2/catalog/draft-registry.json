@@ -391,6 +391,16 @@
       "version": "source-v1"
     },
     {
+      "id": "S34",
+      "title": "Huidrom R, Belz A. Towards a Consensus Taxonomy for Annotating Errors in Automatically Generated Text. Proceedings of Recent Advances in Natural Language Processing (RANLP), 2023, pages 527-540. doi:10.26615/978-954-452-092-2_058.",
+      "locator": "ledger:doi:10.26615/978-954-452-092-2_058",
+      "layer": "transfer",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "It treats errors of content only: the authors collated the form categories of all fifteen schemes and then removed them, so a reader looking for grammatical or lexical-choice categories will not find them here. Built on data-to-text and text-to-text generation, not on clinical documentation, and no reliability figure is reported for the merge itself.",
+      "version": "source-v1"
+    },
+    {
       "id": "S_abs_severity",
       "title": "Clinical AI Scribes in primary care: accuracy, error severity and implications for clinical practice. BMJ Digital Health & AI, 2025.",
       "locator": "ledger:pmid:42712320",
@@ -1739,6 +1749,63 @@
       "human_checked_by": null,
       "source_artifact_digest": "",
       "excerpt": "The internal consistency reliability was very high (Kuder-Richardson 20 for Step 1 = 0.984). The absolute inter-rater agreement for all scores ( N = 10 scores per rater) was very high (95.9%"
+    },
+    {
+      "id": "K37-e1",
+      "source_id": "S34",
+      "location": "Section 5.2, orthogonal error type dimensions, item 1(c)",
+      "interpretation": "A deviation in numerical content is a named category in a taxonomy merged from fifteen schemes, and one that can apply to an omission, an addition or a substitution alike.",
+      "relationship": "method_transfer",
+      "population": "15 error annotation schemes for automatically generated text, collated and merged; not a study of people or notes",
+      "languages": [
+        "en"
+      ],
+      "raters": "not a rating study; the authors align and merge other people's categories",
+      "unit": "an error category",
+      "response_format": "a survey of schemes, a minimally merged taxonomy and a maximally merged consensus taxonomy, with definitions and four orthogonal error-type dimensions",
+      "validation": "not established",
+      "limitations": "The source leaves it at the level of a dimension on an annotated span. In a session note the content is specific and clinical, so the rule has to say which numbers count: a dose, a frequency, a duration, a count of sessions, a date. The category is one of four dimensions the paper calls orthogonal: each applies to any primary error category, and their test for that is whether putting it in the hierarchy would duplicate it.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Numerical Deviation: Deviation in numerical content."
+    },
+    {
+      "id": "K38-e1",
+      "source_id": "S34",
+      "location": "Section 5.2, orthogonal error type dimensions, item 1(a)",
+      "interpretation": "A deviation in a named entity is a named category in a taxonomy merged from fifteen schemes, independent of which primary error it occurs in.",
+      "relationship": "method_transfer",
+      "population": "15 error annotation schemes for automatically generated text, collated and merged; not a study of people or notes",
+      "languages": [
+        "en"
+      ],
+      "raters": "not a rating study; the authors align and merge other people's categories",
+      "unit": "an error category",
+      "response_format": "a survey of schemes, a minimally merged taxonomy and a maximally merged consensus taxonomy, with definitions and four orthogonal error-type dimensions",
+      "validation": "not established",
+      "limitations": "The source says named entities and leaves the inventory open. A session note needs the inventory written down, and the one that matters here is not the standard one: a relative and their relation to the client, a referrer, an institution and a medication, rather than companies and nationalities. The category is one of four dimensions the paper calls orthogonal: each applies to any primary error category, and their test for that is whether putting it in the hierarchy would duplicate it.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "NE Deviation: Deviation in named entities."
+    },
+    {
+      "id": "K39-e1",
+      "source_id": "S34",
+      "location": "Section 5.2, the maximally merged consensus taxonomy, Substitution subtype (d)",
+      "interpretation": "An error the output inherited from its input is a category of the merged taxonomy in its own right, under Substitution.",
+      "relationship": "method_transfer",
+      "population": "15 error annotation schemes for automatically generated text, collated and merged; not a study of people or notes",
+      "languages": [
+        "en"
+      ],
+      "raters": "not a rating study; the authors align and merge other people's categories",
+      "unit": "an error category",
+      "response_format": "a survey of schemes, a minimally merged taxonomy and a maximally merged consensus taxonomy, with definitions and four orthogonal error-type dimensions",
+      "validation": "not established",
+      "limitations": "The source names it and leaves it there. Here it has a consequence the source does not draw: every criterion that scores a note against the transcript marks such a note correct, so the property is invisible to the whole instrument rather than merely unmeasured by it.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Error In Input: An error that is caused by an error in the input."
     }
   ],
   "constructs": [
@@ -3102,6 +3169,118 @@
       "reviewed_by": null,
       "origin": "literature",
       "origin_reference": "catalog:K36"
+    },
+    {
+      "id": "K37",
+      "name": "Numerical deviation",
+      "definition": "A number in the note differs from the number in the source: a dose, a frequency, a duration, a count of sessions or episodes, a date, an age. Distinct from K01, which asks whether a claim has support at all and records a wrong number as distorted without recording that what moved was a quantity. The unit of this one is the number, so a note can be scored for how often it moves numbers independently of how often it is unsupported.",
+      "families": [
+        "F1"
+      ],
+      "evidence_ids": [
+        "K37-e1"
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "medium",
+        "client": "medium",
+        "audit": "high"
+      },
+      "unit": "one number in the note, paired with the number in the source it renders",
+      "required_inputs": [
+        "transcript",
+        "note"
+      ],
+      "examples": {
+        "positive": "The transcript has the client missing two doses in the last month; the note says two.",
+        "negative": "The transcript has two; the note says four.",
+        "boundary": "The transcript has the client missing doses 'a couple of times' and the note says twice. Whether a vague quantity rendered as an exact one is a deviation or a certainty error under K04 is what the rule has to settle."
+      },
+      "candidate_formats": [
+        "count of deviating numbers over numbers present in the source"
+      ],
+      "applicability": "Both languages. A number the source does not contain cannot deviate, so a note that invents a number is an addition under K01 and is counted there as well; the two are reported separately and are not added together.",
+      "error_consequences": "A wrong dose or frequency travels into the next appointment and is read as what the client reported. Of the properties found on 2026-10-14 this is the one with the most direct clinical cost.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "literature",
+      "origin_reference": "catalog:K37"
+    },
+    {
+      "id": "K38",
+      "name": "Named-entity deviation",
+      "definition": "A name in the note differs from the name in the source: a person, a relative and their relation, an institution, a referrer, a medication, a place. Distinct from K01 for the same reason as K37: K01 records that the claim is distorted and not that what moved was a name. Distinct from K17, which asks whether a third party should be in the note at all rather than whether the name given is the right one.",
+      "families": [
+        "F1"
+      ],
+      "evidence_ids": [
+        "K38-e1"
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "medium",
+        "client": "high",
+        "audit": "high"
+      },
+      "unit": "one named entity in the note, paired with the one in the source it renders",
+      "required_inputs": [
+        "transcript",
+        "note"
+      ],
+      "examples": {
+        "positive": "The client speaks of his sister Hana and of being referred by a general practitioner; the note says sister Hana, referred by a general practitioner.",
+        "negative": "The note says the client Jana was referred by a psychiatrist.",
+        "boundary": "The note writes the sister's name correctly but calls her the client's partner. Whether a wrong relation is a named-entity deviation or a speaker error under the existing error types is what the rule has to settle."
+      },
+      "candidate_formats": [
+        "count of deviating names over names present in the source"
+      ],
+      "applicability": "Both languages, with a caution for Czech: a name carries case endings, so the rule has to compare lemmas and not surface forms, or every correctly declined name counts as deviating.",
+      "error_consequences": "A wrong name is the error a reader of a clinical note checks first, and the one that makes a reader distrust the whole note. It also crosses into privacy when the name is a third party's.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "literature",
+      "origin_reference": "catalog:K38"
+    },
+    {
+      "id": "K39",
+      "name": "Error inherited from the source",
+      "definition": "The note faithfully renders something the source itself got wrong. In this benchmark the source of the Czech track is speech recognition output, so a mis-recognised word copied correctly into the note is wrong about the session and right about the transcript. It is the one property in the catalog that cannot be decided from the transcript, because the transcript is what is wrong.",
+      "families": [
+        "F1"
+      ],
+      "evidence_ids": [
+        "K39-e1"
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "medium",
+        "client": "medium",
+        "audit": "high"
+      },
+      "unit": "one claim in the note whose source text is itself wrong",
+      "required_inputs": [
+        "recording",
+        "transcript",
+        "note"
+      ],
+      "examples": {
+        "positive": "The transcript has sertralid where the client said sertralin, and the note writes sertralin.",
+        "negative": "The transcript has sertralid and the note writes sertralid.",
+        "boundary": "The transcript is unintelligible at that point and the note omits the medication. Whether that is an inherited error or an omission under K05 is what the rule has to settle, and the honest answer may be that it is neither and belongs with the unresolvable cases."
+      },
+      "candidate_formats": [
+        "count of inherited errors over the errors the source contains"
+      ],
+      "applicability": "Measurable only where the recording is available, because deciding it needs something the transcript is not. For AnnoMI the recordings are public; for the Czech sessions they are confidential and governed by Task.confined_to, so the measurement may not leave the machines that set names. Where no recording exists the criterion is reported as not applicable and not as passed, which is the whole reason to record it.",
+      "error_consequences": "The note is wrong about the session and no measure says so. A model that copies carefully scores better than one that silently corrects the transcript, and the second may be the one a clinician wants.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "literature",
+      "origin_reference": "catalog:K39"
     }
   ],
   "measurements": [

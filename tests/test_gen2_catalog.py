@@ -89,7 +89,10 @@ def test_the_catalog_holds_what_the_review_proposed(catalog):
     # two adopted on 2026-09-21 from properties the sources defined and the
     # catalog had not covered.
     # 34 until 2026-10-07, when reading SESPI in full yielded K35 and K36.
-    assert len(catalog["candidates"]) == 36
+    # 36 until 2026-10-14, when the inductive half of the language layer read the
+    # consensus error taxonomy and the investigator accepted three of the four
+    # categories it exposed that nothing in the catalog covered.
+    assert len(catalog["candidates"]) == 39
     assert len(catalog["methods"]) == 17
     # 19 read in the round of 2026-09-13, and 6 more read on 2026-09-20 after
     # the investigator supplied them; 7 are still known from abstracts only.
@@ -97,11 +100,13 @@ def test_the_catalog_holds_what_the_review_proposed(catalog):
     # its 2025 application joined as S21, so the two counts move together. S22
     # to S27 are the six further papers the Scopus screening found and the
     # assistant read on 2026-10-07.
-    assert len(catalog["sources"]) == 39
+    # 39 until 2026-10-14, when S34, the consensus error taxonomy, was read in the
+    # inductive half of the language layer.
+    assert len(catalog["sources"]) == 40
     assert len(catalog["abstract_sources"]) == 6
     assert len(catalog["pilot_proposal"]["entries"]) == 13
     assert len(catalog["comparison"]) == 37
-    assert catalog_mod.ids(catalog, "candidates") == [f"K{n:02d}" for n in range(1, 37)]
+    assert catalog_mod.ids(catalog, "candidates") == [f"K{n:02d}" for n in range(1, 40)]
     assert catalog_mod.ids(catalog, "methods") == [f"ME{n:02d}" for n in range(1, 18)]
 
 
@@ -220,7 +225,11 @@ def test_the_framework_is_reported_from_the_sources_upwards(catalog, props):
         for key in prop["maps_to"]
     }
     ids = {c["id"] for c in catalog["candidates"]}
-    assert len(anchored & ids) == 36 - 1
+    # Every literature-origin candidate rests on a property extracted from a source,
+    # and K06 is the one that rests on nothing: it came from this project's own code
+    # reviews. K37 to K39 arrived with their properties on 2026-10-14, so the one
+    # unanchored candidate is still only K06.
+    assert len(anchored & ids) == len(ids) - 1
     assert ids - anchored == {"K06"}, "the one candidate no source defines is named"
     assert [row["id"] for row in props["candidates_without_source_property"]] == ["K06"]
     assert "K06" in derivation["convergence"]
@@ -393,6 +402,13 @@ def test_every_source_is_a_report_the_ledger_sought(catalog, reports):
     """
     by_id = {r["report_id"]: r for r in reports["reports"]}
     for s in catalog["sources"]:
+        if s["layer"] == "language":
+            # The report ledger is the record of the 2026-09-13 review. A layer
+            # created on 2026-10-14 by AM-8 has its own search log, so a source
+            # from it is traced by its DOI and checked against that log instead.
+            # The carve-out is by layer, so no source escapes the ledger by name.
+            assert str(s["ledger_report_id"]).startswith("doi:"), s["id"]
+            continue
         report = by_id[s["ledger_report_id"]]
         assert report["catalog_source"] == s["id"]
         if s["verification"] == "full_text":
@@ -509,7 +525,16 @@ def test_a_criterion_without_a_rule_now_has_one_written_and_not_yet_adopted(oper
     states = {c["id"]: c["state"] for c in catalog["candidates"]}
     without = {k for k, v in states.items() if v == "not_yet_operationalized"}
     covered = {r["construct_id"] for r in block["items"]}
-    assert covered == without, "every criterion without a rule now has one written"
+    # True of every criterion that existed on 2026-10-05. K37, K38 and K39 were
+    # accepted on 2026-10-14 and no rule is written for any of them: the human
+    # budget that writing one costs is spent. Named here rather than subtracted by
+    # a date, so the exemption cannot quietly grow to cover the next arrival.
+    accepted_later = {"K37", "K39", "K38"}
+    assert covered == without - accepted_later, (
+        "every criterion without a rule, except the three accepted on 2026-10-14, "
+        "now has one written"
+    )
+    assert accepted_later <= without
     assert block["still_not_writable"] == []
     # K09 was held back on 2026-10-05 for want of a standard of appropriateness and
     # written on 2026-10-06 as what it is, a rater verdict. The record keeps both.
@@ -569,7 +594,7 @@ def test_every_source_evidence_line_and_candidate_maps(catalog, draft, diagnosti
     assert [c["id"] for c in draft["constructs"]] == catalog_mod.ids(catalog, "candidates")
     lines = sum(len(c["evidence"]) for c in catalog["candidates"])
     assert len(draft["evidence"]) == lines
-    assert diagnostics["mapped"] == {"sources": 45, "evidence": lines, "constructs": 36}
+    assert diagnostics["mapped"] == {"sources": 46, "evidence": lines, "constructs": 39}
     for s in draft["sources"]:
         assert s["locator"].startswith("ledger:")
 
@@ -699,6 +724,14 @@ def test_a_property_no_candidate_covered_was_opened_and_then_decided(catalog, pr
         "S_abs_tednq-p02b",
         "S20-p01",
         "S20-p03",
+        # S34 defines two things that are not properties of a note and so become
+        # no candidate: that the consensus taxonomy deliberately drops every
+        # error of form, which is the half all six Czech criteria belong to, and
+        # a test for telling a dimension from a criterion. Both are open rather
+        # than merely noted in a mapping, because terminology sat in a mapping
+        # note for three weeks before anyone decided it and it became K34.
+        "S34-p04",
+        "S34-p05",
     }
     assert "adopted as K32" in open_rows["S1-p13"]["disposition"]
     assert "adopted as K33" in open_rows["S4-p09"]["disposition"]

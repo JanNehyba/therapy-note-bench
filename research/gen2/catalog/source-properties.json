@@ -29,16 +29,18 @@
     "method_metric": "a metric or rating format, not a property of a note",
     "scoring_rule": "a rule about when something counts",
     "design_finding": "a finding that changes how a property should be measured",
-    "abstract_claim": "what an abstract states, when the full text was not read"
+    "abstract_claim": "what an abstract states, when the full text was not read",
+    "scope_statement": "a statement of what the source deliberately does not cover",
+    "method_statement": "a rule the source uses to build its own scheme, not a property of a note"
   },
   "counts": {
-    "sources_read_in_full": 38,
+    "sources_read_in_full": 39,
     "sources_abstract_only": 6,
-    "sources_defining_properties": 39,
-    "properties": 181,
-    "properties_mapped": 165,
-    "properties_unmapped": 16,
-    "candidates_with_source_property": 35,
+    "sources_defining_properties": 40,
+    "properties": 186,
+    "properties_mapped": 168,
+    "properties_unmapped": 18,
+    "candidates_with_source_property": 38,
     "candidates_without_source_property": 1
   },
   "sources": [
@@ -2477,6 +2479,66 @@
           "mapping": "acceptability in practice: whether a professional would use the system that wrote the note, with the reasons they give for not doing so"
         }
       ]
+    },
+    {
+      "id": "S34",
+      "citation": "Huidrom R, Belz A. Towards a Consensus Taxonomy for Annotating Errors in Automatically Generated Text. Proceedings of Recent Advances in Natural Language Processing (RANLP), 2023, pages 527-540.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": "Open access from the ACL Anthology, which serves its PDFs without a key. Found in the inductive half of the language layer on 2026-10-14 and not in the 2026-09-13 round, because every query of the first three layers required a word about notes, documentation or summarisation to be present.",
+      "properties": [
+        {
+          "pid": "S34-p01",
+          "label": "Deviation in a number, as a dimension that applies to any error",
+          "kind": "error_type",
+          "location": "Section 5.2, orthogonal error type dimensions, item 1(c)",
+          "quote": "Numerical Deviation: Deviation in numerical content.",
+          "maps_to": [
+            "K37"
+          ],
+          "mapping": "the property K37 is written from. The source treats it as a dimension on an annotated span; K37 makes the number the unit so that moving numbers can be counted separately from being unsupported"
+        },
+        {
+          "pid": "S34-p02",
+          "label": "Deviation in a named entity, as a dimension that applies to any error",
+          "kind": "error_type",
+          "location": "Section 5.2, orthogonal error type dimensions, item 1(a)",
+          "quote": "NE Deviation: Deviation in named entities.",
+          "maps_to": [
+            "K38"
+          ],
+          "mapping": "the property K38 is written from. The source leaves the inventory of entities open; K38 has to name the clinical one, which is a relative and their relation, a referrer, an institution and a medication"
+        },
+        {
+          "pid": "S34-p03",
+          "label": "An error the output inherited from a wrong input",
+          "kind": "error_type",
+          "location": "Section 5.2, the maximally merged taxonomy, Substitution subtype (d)",
+          "quote": "Error In Input: An error that is caused by an error in the input.",
+          "maps_to": [
+            "K39"
+          ],
+          "mapping": "the property K39 is written from. The source names the category; the consequence that every transcript-comparing measure scores such a note correct is ours"
+        },
+        {
+          "pid": "S34-p04",
+          "label": "Errors of content and errors of form are two kinds, and this taxonomy covers only the first",
+          "kind": "scope_statement",
+          "location": "Section 5.1, minimally merged error taxonomy",
+          "quote": "We removed those categories that relate to errors in the form, rather than the content, of outputs.",
+          "maps_to": [],
+          "mapping": "no candidate: it is a statement about what this source does not contain. It matters because all six of the Czech scorer's language criteria are errors of form, so the form categories of the fifteen surveyed schemes were collated by these authors and then discarded. That is where to look next and it is recorded as an open property rather than as support"
+        },
+        {
+          "pid": "S34-p05",
+          "label": "A category belongs in the hierarchy only if it does not duplicate across it",
+          "kind": "method_statement",
+          "location": "Section 5.2, the extraction criterion",
+          "quote": "any of the primary error categories can additionally be annotated with them, i.e. they necessarily result in duplication in the taxonomy if included there",
+          "maps_to": [],
+          "mapping": "no candidate: a test for telling a dimension from a criterion. Applied to this catalog it suggests severity and the disclosure level of a sensitive detail are dimensions rather than criteria, which is a question about the shape of the instrument and not about any one item"
+        }
+      ]
     }
   ],
   "coverage": {
@@ -2800,6 +2862,15 @@
     "K36": [
       "S20-p01",
       "S31-p01"
+    ],
+    "K37": [
+      "S34-p01"
+    ],
+    "K38": [
+      "S34-p02"
+    ],
+    "K39": [
+      "S34-p03"
     ]
   },
   "unmapped_properties": [

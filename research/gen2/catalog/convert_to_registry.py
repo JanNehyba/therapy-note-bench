@@ -37,6 +37,10 @@ LAYER = {
     "transfer": "transfer",
     "requirements": "requirements",
     "method": "methodology",
+    # Added with the language layer of AM-8. It maps to transfer because that is
+    # what it is: work on the quality of generated text in general, carried over
+    # to a session note, exactly as the summarisation literature was.
+    "language": "transfer",
 }
 VERIFICATION = {
     "full_text": "full_text_checked",

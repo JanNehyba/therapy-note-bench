@@ -228,5 +228,18 @@
       "reason": "added by the investigator in chat on 2026-09-21 (internal consistency: 'na druhou rikam take ano'), transcribed by the assistant",
       "decided_at": "2026-09-21T09:44:00.000Z"
     }
+  ],
+  "not_adopted": [
+    {
+      "id": "not-adopted-2026-10-14",
+      "category": "Should Not Be Verbatim (S34, Substitution subtype (a))",
+      "quote": "Some part of the input has been copied verbatim to the output, but should have been rendered differently.",
+      "decision": "declined",
+      "decided_by": "investigator",
+      "date": "2026-10-14",
+      "reason_in_his_words": "tak posledni ohledne citace a sumarizace mi prijde vysoce subjektivni",
+      "why_that_is_right": "The category turns on when a note is required to render rather than quote, and the paper does not say. Nothing in the definition distinguishes a quotation that carries the client's own words usefully from one that should have been a formulation, so every observation would be the rater's taste. The other three accepted categories each have a decidable comparison behind them: a number, a name, or a source that is itself wrong.",
+      "what_would_change_it": "A written rule naming the cases in which a session note must render rather than quote. K15, the necessity of a sensitive detail, is the nearest thing the catalog has and it has no source either."
+    }
   ]
 }

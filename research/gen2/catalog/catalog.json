@@ -36,7 +36,8 @@
     "direct": "psychotherapy notes or session summaries with explicit quality properties",
     "transfer": "clinical documentation or general summarisation methods with a documentation application",
     "requirements": "professional or legal requirements with attributable authorship and jurisdiction",
-    "method": "guidance on how the review itself is conducted and reported; not evidence about notes"
+    "method": "guidance on how the review itself is conducted and reported; not evidence about notes",
+    "language": "language quality of generated and translated text; added by amendment AM-8 on 2026-10-14, when the six Czech language criteria turned out to be unsearched rather than unsupported"
   },
   "pilot_record_kinds": {
     "executable_measure": "a measurement the current software can run on a note",
@@ -771,6 +772,25 @@
       "relevance": "A second professional group saying what they want from a machine-written note, and the source of a figure for how often such notes are wrong.",
       "verification": "full_text",
       "ledger_report_id": "doi:10.1007/s12553-025-01042-x"
+    },
+    {
+      "id": "S34",
+      "key": "consensus-error-taxonomy-2023",
+      "citation": "Huidrom R, Belz A. Towards a Consensus Taxonomy for Annotating Errors in Automatically Generated Text. Proceedings of Recent Advances in Natural Language Processing (RANLP), 2023, pages 527-540. doi:10.26615/978-954-452-092-2_058.",
+      "type": "peer-reviewed conference paper, open access",
+      "layer": "language",
+      "study_family": null,
+      "population": "15 error annotation schemes for automatically generated text, collated and merged; not a study of people or notes",
+      "language": "en",
+      "raters": "not a rating study; the authors align and merge other people's categories",
+      "unit": "an error category",
+      "format": "a survey of schemes, a minimally merged taxonomy and a maximally merged consensus taxonomy, with definitions and four orthogonal error-type dimensions",
+      "analysis": "categories grouped where the authors took them to name the same phenomenon, then arranged in superset/subset relations",
+      "key_results": "Virtually complete agreement at the highest level, where errors of meaning divide into Content Omission, Content Addition and Content Substitution. Up to ten of the fifteen papers used the same category under different names. Four dimensions are orthogonal and apply to any category: the type of deviation in meaning (named entity, polarity, numerical, other), the number of words involved, the severity, and whether the words carry content or function.",
+      "limitations": "It treats errors of content only: the authors collated the form categories of all fifteen schemes and then removed them, so a reader looking for grammatical or lexical-choice categories will not find them here. Built on data-to-text and text-to-text generation, not on clinical documentation, and no reliability figure is reported for the merge itself.",
+      "relevance": "The only source in the catalog that is a merge of other people's error schemes rather than a study. It is what K37, K38 and K39 rest on, and its stated removal of the form categories is why the six Czech language criteria could not be supported from the content literature.",
+      "verification": "full_text",
+      "ledger_report_id": "doi:10.26615/978-954-452-092-2_058"
     }
   ],
   "abstract_sources": [
@@ -2604,6 +2624,126 @@
       "state": "not_measured",
       "state_note": "Arrived on 2026-10-07 with K35 and is in the pool the panel rates under D13. The source's gate design is the reason it is written as a property here and not as a filter.",
       "decided_by": "note"
+    },
+    {
+      "id": "K37",
+      "family": "F1",
+      "kind": "construct",
+      "label": "Numerical deviation",
+      "definition": "A number in the note differs from the number in the source: a dose, a frequency, a duration, a count of sessions or episodes, a date, an age. Distinct from K01, which asks whether a claim has support at all and records a wrong number as distorted without recording that what moved was a quantity. The unit of this one is the number, so a note can be scored for how often it moves numbers independently of how often it is unsupported.",
+      "origin": "literature",
+      "origin_note": "Found on 2026-10-14 in the inductive half of the language layer, in the consensus taxonomy. Unreachable by the twelve queries of the first three layers; the investigator accepted it the same day.",
+      "evidence": [
+        {
+          "source": "S34",
+          "location": "Section 5.2, orthogonal error type dimensions, item 1(c)",
+          "quote": "Numerical Deviation: Deviation in numerical content.",
+          "supports": "A deviation in numerical content is a named category in a taxonomy merged from fifteen schemes, and one that can apply to an omission, an addition or a substitution alike.",
+          "our_adaptation": "The source leaves it at the level of a dimension on an annotated span. In a session note the content is specific and clinical, so the rule has to say which numbers count: a dose, a frequency, a duration, a count of sessions, a date. The category is one of four dimensions the paper calls orthogonal: each applies to any primary error category, and their test for that is whether putting it in the hierarchy would duplicate it."
+        }
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "medium",
+        "client": "medium",
+        "audit": "high"
+      },
+      "mode": "count of deviating numbers over numbers present in the source",
+      "unit": "one number in the note, paired with the number in the source it renders",
+      "inputs": "transcript, note",
+      "applicability": "Both languages. A number the source does not contain cannot deviate, so a note that invents a number is an addition under K01 and is counted there as well; the two are reported separately and are not added together.",
+      "examples": {
+        "positive": "The transcript has the client missing two doses in the last month; the note says two.",
+        "negative": "The transcript has two; the note says four.",
+        "boundary": "The transcript has the client missing doses 'a couple of times' and the note says twice. Whether a vague quantity rendered as an exact one is a deviation or a certainty error under K04 is what the rule has to settle."
+      },
+      "measurement": "Not measured in this round. No rule is written and the pilot's human budget is spent.",
+      "error_consequence": "A wrong dose or frequency travels into the next appointment and is read as what the client reported. Of the properties found on 2026-10-14 this is the one with the most direct clinical cost.",
+      "validation": "None. The source reports no reliability figure for the taxonomy it merges, and none for this dimension.",
+      "overlaps": "K01 (a wrong number is also an unsupported claim), K04 (a vague quantity made exact is also a certainty error), K03 (a wrong date is also a time error).",
+      "state": "not_yet_operationalized",
+      "state_note": "Accepted into the pool by the investigator on 2026-10-14 and rated by the panel under D13. No measurement rule exists yet.",
+      "decided_by": "source"
+    },
+    {
+      "id": "K38",
+      "family": "F1",
+      "kind": "construct",
+      "label": "Named-entity deviation",
+      "definition": "A name in the note differs from the name in the source: a person, a relative and their relation, an institution, a referrer, a medication, a place. Distinct from K01 for the same reason as K37: K01 records that the claim is distorted and not that what moved was a name. Distinct from K17, which asks whether a third party should be in the note at all rather than whether the name given is the right one.",
+      "origin": "literature",
+      "origin_note": "Found on 2026-10-14 with K37, in the same four orthogonal dimensions of the consensus taxonomy, and accepted the same day.",
+      "evidence": [
+        {
+          "source": "S34",
+          "location": "Section 5.2, orthogonal error type dimensions, item 1(a)",
+          "quote": "NE Deviation: Deviation in named entities.",
+          "supports": "A deviation in a named entity is a named category in a taxonomy merged from fifteen schemes, independent of which primary error it occurs in.",
+          "our_adaptation": "The source says named entities and leaves the inventory open. A session note needs the inventory written down, and the one that matters here is not the standard one: a relative and their relation to the client, a referrer, an institution and a medication, rather than companies and nationalities. The category is one of four dimensions the paper calls orthogonal: each applies to any primary error category, and their test for that is whether putting it in the hierarchy would duplicate it."
+        }
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "medium",
+        "client": "high",
+        "audit": "high"
+      },
+      "mode": "count of deviating names over names present in the source",
+      "unit": "one named entity in the note, paired with the one in the source it renders",
+      "inputs": "transcript, note",
+      "applicability": "Both languages, with a caution for Czech: a name carries case endings, so the rule has to compare lemmas and not surface forms, or every correctly declined name counts as deviating.",
+      "examples": {
+        "positive": "The client speaks of his sister Hana and of being referred by a general practitioner; the note says sister Hana, referred by a general practitioner.",
+        "negative": "The note says the client Jana was referred by a psychiatrist.",
+        "boundary": "The note writes the sister's name correctly but calls her the client's partner. Whether a wrong relation is a named-entity deviation or a speaker error under the existing error types is what the rule has to settle."
+      },
+      "measurement": "Not measured in this round, for the same reason as K37.",
+      "error_consequence": "A wrong name is the error a reader of a clinical note checks first, and the one that makes a reader distrust the whole note. It also crosses into privacy when the name is a third party's.",
+      "validation": "None, as for K37.",
+      "overlaps": "K01 (a wrong name is also an unsupported claim), K17 (whether a third party belongs in the note at all), K18 (whether the claim can be traced to where the name appears).",
+      "state": "not_yet_operationalized",
+      "state_note": "Accepted into the pool by the investigator on 2026-10-14. No measurement rule exists yet, and the Czech lemma problem has to be settled in it.",
+      "decided_by": "source"
+    },
+    {
+      "id": "K39",
+      "family": "F1",
+      "kind": "construct",
+      "label": "Error inherited from the source",
+      "definition": "The note faithfully renders something the source itself got wrong. In this benchmark the source of the Czech track is speech recognition output, so a mis-recognised word copied correctly into the note is wrong about the session and right about the transcript. It is the one property in the catalog that cannot be decided from the transcript, because the transcript is what is wrong.",
+      "origin": "literature",
+      "origin_note": "Found on 2026-10-14 in the consensus taxonomy and accepted the same day. The project already had the case without the criterion: the synthetic controls carry a transcription_error variant.",
+      "evidence": [
+        {
+          "source": "S34",
+          "location": "Section 5.2, the maximally merged consensus taxonomy, Substitution subtype (d)",
+          "quote": "Error In Input: An error that is caused by an error in the input.",
+          "supports": "An error the output inherited from its input is a category of the merged taxonomy in its own right, under Substitution.",
+          "our_adaptation": "The source names it and leaves it there. Here it has a consequence the source does not draw: every criterion that scores a note against the transcript marks such a note correct, so the property is invisible to the whole instrument rather than merely unmeasured by it."
+        }
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "medium",
+        "client": "medium",
+        "audit": "high"
+      },
+      "mode": "count of inherited errors over the errors the source contains",
+      "unit": "one claim in the note whose source text is itself wrong",
+      "inputs": "recording, transcript, note",
+      "applicability": "Measurable only where the recording is available, because deciding it needs something the transcript is not. For AnnoMI the recordings are public; for the Czech sessions they are confidential and governed by Task.confined_to, so the measurement may not leave the machines that set names. Where no recording exists the criterion is reported as not applicable and not as passed, which is the whole reason to record it.",
+      "examples": {
+        "positive": "The transcript has sertralid where the client said sertralin, and the note writes sertralin.",
+        "negative": "The transcript has sertralid and the note writes sertralid.",
+        "boundary": "The transcript is unintelligible at that point and the note omits the medication. Whether that is an inherited error or an omission under K05 is what the rule has to settle, and the honest answer may be that it is neither and belongs with the unresolvable cases."
+      },
+      "measurement": "Not measured in this round. It needs the recordings, and for the Czech track that is a confinement question before it is a measurement question.",
+      "error_consequence": "The note is wrong about the session and no measure says so. A model that copies carefully scores better than one that silently corrects the transcript, and the second may be the one a clinician wants.",
+      "validation": "None.",
+      "overlaps": "K01 (support, which this inverts: the note is supported by the source and still wrong), K18 (traceability), K05 (omission where the source is unintelligible).",
+      "state": "not_yet_operationalized",
+      "state_note": "Accepted into the pool by the investigator on 2026-10-14. Needs the recording to be measurable at all, which no other candidate does.",
+      "decided_by": "source"
     }
   ],
   "methods": [
@@ -3735,6 +3875,17 @@
         "S21-p03 anchors K16 in a measured case: 155 of 193 therapy notes did not record how the note came about, which stopped that study measuring what it set out to measure",
         "the two steps of SESPI that rate the client's state and the therapist's attunement are recorded as non-adoptions with the reason, rather than folded into note quality"
       ]
+    },
+    {
+      "date": "2026-10-14",
+      "reason": "The inductive half of the language layer read the consensus error taxonomy, which no query of the first three layers could reach. Four of its categories were covered by nothing in the catalog; the investigator accepted three and declined the fourth as too subjective, and he was right about why.",
+      "changes": [
+        "S34 added: the consensus taxonomy of Huidrom and Belz (2023), read in full",
+        "K37 Numerical deviation added, state not_yet_operationalized",
+        "K38 Named-entity deviation added, state not_yet_operationalized",
+        "K39 Error inherited from the source added, state not_yet_operationalized",
+        "Should Not Be Verbatim declined and recorded in decisions.json with the reason, so that a later reader finds the decision rather than a silence"
+      ]
     }
   ],
   "purposes_in_scope": {
@@ -3793,6 +3944,20 @@
       "source": "S20",
       "disposition": "adopted as K35 on 2026-10-07, from a source read in full; retention is the content-validity panel's under D13",
       "reason": "The construct the instrument is built around, with a manualised four-level rule and a measured base rate in a psychotherapy service, and no candidate covered it."
+    },
+    {
+      "pid": "S34-p04",
+      "label": "Errors of content and errors of form are two kinds, and the consensus taxonomy covers only the first",
+      "source": "S34",
+      "disposition": "open on 2026-10-14. Not a property of a note, so it becomes no candidate. It is where to look next: the authors collated the form categories of all fifteen surveyed schemes and then removed them.",
+      "reason": "All six of the Czech scorer's language criteria are errors of form. The catalog mixes the two kinds without saying so, and the content literature could never have supported the six. The form half of those fifteen schemes is unread."
+    },
+    {
+      "pid": "S34-p05",
+      "label": "A category belongs in a hierarchy only if it does not duplicate across it",
+      "source": "S34",
+      "disposition": "open on 2026-10-14. A test about the shape of an instrument rather than a property of a note, so it becomes no candidate.",
+      "reason": "Applied to this catalog the test suggests that severity and the disclosure level of a sensitive detail are dimensions that apply to many criteria at once, not criteria in their own right. That matters before a panel rates 39 items as though they were one kind of thing."
     }
   ],
   "method": {

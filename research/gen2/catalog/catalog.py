@@ -182,9 +182,19 @@ def problems(catalog: dict, reports: dict | None = None) -> list[str]:
         if not s.get("ledger_report_id"):
             out.append(f"{s['id']}: no ledger report id")
     if reports is not None:
+        # Every source has to be traceable to the record of how it was found.
+        # Until 2026-10-14 there was one such record, the report ledger of the
+        # 2026-09-13 review, so the rule was that the id matches it. The
+        # language layer added by AM-8 has its own search log and no report
+        # ledger, and a source found there is traced by its DOI instead. The
+        # exception is by layer and not by source id, so a source cannot escape
+        # the ledger by being named.
         by_source = {r["catalog_source"]: r["report_id"] for r in reports["reports"]}
         for s in catalog["sources"] + catalog["abstract_sources"]:
-            if by_source.get(s["id"]) != s["ledger_report_id"]:
+            if s["layer"] == "language":
+                if not str(s["ledger_report_id"]).startswith("doi:"):
+                    out.append(f"{s['id']}: a language-layer source is traced by its DOI")
+            elif by_source.get(s["id"]) != s["ledger_report_id"]:
                 out.append(f"{s['id']}: ledger report id does not match reports.json")
 
     families = set(ids(catalog, "families"))

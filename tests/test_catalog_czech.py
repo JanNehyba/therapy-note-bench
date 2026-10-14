@@ -72,7 +72,7 @@ def test_it_names_exactly_the_catalog_codes(catalog, czech):
     to it.
     """
     assert set(czech["candidates"]) == set(catalog_mod.ids(catalog, "candidates"))
-    assert len(czech["candidates"]) == 36
+    assert len(czech["candidates"]) == 39
 
 
 def test_a_candidate_cannot_reach_a_sheet_without_a_name_and_a_statement(czech):
@@ -92,7 +92,7 @@ def test_the_statement_and_the_question_are_not_the_same_field(czech):
     """
     statements = [e["statement"] for e in czech["candidates"].values()]
     questions = [e["question"] for e in czech["candidates"].values() if "question" in e]
-    assert len(statements) == 36
+    assert len(statements) == len(czech["candidates"])
     assert not [s for s in statements if s.rstrip().endswith("?")]
     assert sum(1 for q in questions if q.rstrip().endswith("?")) >= len(questions) - 1
     assert czech["statement_and_question_are_not_variants"]
@@ -108,8 +108,11 @@ def test_partial_coverage_is_counted_and_the_gaps_are_named(catalog, czech):
     coverage block lists them.
     """
     coverage = czech["coverage"]
-    assert coverage["candidates"] == 36
-    assert coverage["by_field"]["name"] == coverage["by_field"]["statement"] == 36
+    assert coverage["candidates"] == 39
+    assert coverage["by_field"]["name"] == coverage["by_field"]["statement"] == 39
+    # K35 and K36 were added on 2026-10-07, after the last generator ran, so they
+    # have no question and no unit. K37 to K39 were written on 2026-10-14 with
+    # both, which is why they are not in these lists.
     assert coverage["missing_by_field"]["question"] == ["K35", "K36"]
     assert coverage["missing_by_field"]["unit"] == ["K35", "K36"]
     assert coverage["candidates_with_no_explanation_of_their_state"] == ["K34", "K35", "K36"]
@@ -143,6 +146,12 @@ def test_every_field_says_which_generator_it_came_from(czech):
         assert set(provenance) == set(entry) - {"from"}, code
         for field, filename in provenance.items():
             assert field in known, (code, field)
+            if filename == czech["authored_here"]:
+                # Written for this file rather than harvested from a generator.
+                # The three criteria accepted on 2026-10-14 postdate every
+                # generator, so there was nothing to harvest.
+                assert code in czech["authored_here_candidates"], (code, field)
+                continue
             assert filename in czech["precedence"]["by_field"][field], (code, field)
 
 
@@ -190,7 +199,7 @@ def codes(catalog) -> list[str]:
 def test_the_sheet_has_one_row_per_candidate(czech, codes):
     table = panel_sheet.rows(czech, codes)
     items = [row for row in table if row and re.fullmatch(r"K\d\d", row[0])]
-    assert len(items) == len(codes) == 36
+    assert len(items) == len(codes) == 39
     assert {row[0] for row in items} == set(codes)
     for code, name, statement, *answers in items:
         assert name == czech["candidates"][code]["name"]
@@ -248,7 +257,7 @@ def test_every_rater_gets_the_same_sheet_in_its_own_file(tmp_path, monkeypatch):
     assert len(contents) == 1
     recorded = json.loads((tmp_path / "poradi.json").read_text(encoding="utf-8"))
     assert recorded["seed"] == panel_sheet.SEED
-    assert recorded["items"] == 36
+    assert recorded["items"] == 39
 
 
 def test_the_sheet_refuses_to_build_from_drifted_data(tmp_path, monkeypatch):
@@ -294,7 +303,7 @@ def page(catalog, czech, operational) -> str:
 
 
 def test_the_table_has_one_row_per_candidate(page, codes):
-    assert page.count("<tr class=") == len(codes) == 36
+    assert page.count("<tr class=") == len(codes) == 39
     for code in codes:
         assert f"<td class=id>{code}</td>" in page
 

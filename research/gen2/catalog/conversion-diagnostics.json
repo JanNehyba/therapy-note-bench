@@ -6,9 +6,9 @@
   "protocol_revision": "434973026f32394240526fcaa5c1778c49468368478ccd2bcf30071ea467cc78",
   "rule": "Every source, evidence line and candidate maps to a registry record with no human decision. The operational specification, where present, becomes method specs and development items with no decision on them; nothing becomes a review, a pilot status or a reviewed item, and each pilot entry without operational rules is listed here with its reason.",
   "mapped": {
-    "sources": 45,
-    "evidence": 68,
-    "constructs": 36
+    "sources": 46,
+    "evidence": 71,
+    "constructs": 39
   },
   "operational": {
     "specification": "operational-v1",
@@ -428,6 +428,33 @@
       "catalog_origin": "literature",
       "origin": "literature",
       "origin_reference": "catalog:K36",
+      "note": "placeholder: the workflow needs an extraction record (extraction:<id>) bound to an included full text; the catalog records the origin in prose only",
+      "record_kind": "construct"
+    },
+    {
+      "id": "K37",
+      "catalog_state": "not_yet_operationalized",
+      "catalog_origin": "literature",
+      "origin": "literature",
+      "origin_reference": "catalog:K37",
+      "note": "placeholder: the workflow needs an extraction record (extraction:<id>) bound to an included full text; the catalog records the origin in prose only",
+      "record_kind": "construct"
+    },
+    {
+      "id": "K38",
+      "catalog_state": "not_yet_operationalized",
+      "catalog_origin": "literature",
+      "origin": "literature",
+      "origin_reference": "catalog:K38",
+      "note": "placeholder: the workflow needs an extraction record (extraction:<id>) bound to an included full text; the catalog records the origin in prose only",
+      "record_kind": "construct"
+    },
+    {
+      "id": "K39",
+      "catalog_state": "not_yet_operationalized",
+      "catalog_origin": "literature",
+      "origin": "literature",
+      "origin_reference": "catalog:K39",
       "note": "placeholder: the workflow needs an extraction record (extraction:<id>) bound to an included full text; the catalog records the origin in prose only",
       "record_kind": "construct"
     }

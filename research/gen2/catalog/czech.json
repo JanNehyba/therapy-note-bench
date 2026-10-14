@@ -49,18 +49,18 @@
   },
   "statement_and_question_are_not_variants": "A statement is what a panel marks agreement with, and none of the 36 ends in a question mark; a question is what a reader of the table is asked, and 33 of the 34 do. They came from different generators for different sheets and are kept apart: the panel sheet must not be built from the questions.",
   "coverage": {
-    "candidates": 36,
+    "candidates": 39,
     "by_field": {
-      "name": 36,
-      "statement": 36,
-      "question": 34,
+      "name": 39,
+      "statement": 39,
+      "question": 37,
       "definition": 33,
-      "unit": 34,
+      "unit": 37,
       "unit_definition": 33,
       "applicability": 33,
       "error_consequence": 33,
       "how": 16,
-      "why_not_measured": 16,
+      "why_not_measured": 19,
       "measured_otherwise": 5
     },
     "missing_by_field": {
@@ -71,7 +71,10 @@
       "definition": [
         "K34",
         "K35",
-        "K36"
+        "K36",
+        "K37",
+        "K38",
+        "K39"
       ],
       "unit": [
         "K35",
@@ -80,17 +83,26 @@
       "unit_definition": [
         "K34",
         "K35",
-        "K36"
+        "K36",
+        "K37",
+        "K38",
+        "K39"
       ],
       "applicability": [
         "K34",
         "K35",
-        "K36"
+        "K36",
+        "K37",
+        "K38",
+        "K39"
       ],
       "error_consequence": [
         "K34",
         "K35",
-        "K36"
+        "K36",
+        "K37",
+        "K38",
+        "K39"
       ],
       "how": [
         "K09",
@@ -112,7 +124,10 @@
         "K33",
         "K34",
         "K35",
-        "K36"
+        "K36",
+        "K37",
+        "K38",
+        "K39"
       ],
       "why_not_measured": [
         "K01",
@@ -167,7 +182,10 @@
         "K33",
         "K34",
         "K35",
-        "K36"
+        "K36",
+        "K37",
+        "K38",
+        "K39"
       ]
     },
     "candidates_with_no_explanation_of_their_state": [
@@ -1405,6 +1423,48 @@
         "statement": "panel_sheet.py"
       },
       "statement": "Ze zápisu je poznat, jak to klient prožíval, ne jen co dělal."
+    },
+    "K37": {
+      "name": "Číselná odchylka",
+      "statement": "Čísla v zápisu odpovídají tomu, co v sezení zaznělo.",
+      "question": "Uvádí zápis stejná čísla, jaká zazněla?",
+      "unit": "jedno číslo",
+      "why_not_measured": "Chybí pravidlo měření. Není napsané, která čísla se počítají a co dělat s neurčitým množstvím, které zápis uvede jako přesné.",
+      "from": {
+        "name": "read on 2026-10-14 and written here",
+        "statement": "read on 2026-10-14 and written here",
+        "question": "read on 2026-10-14 and written here",
+        "unit": "read on 2026-10-14 and written here",
+        "why_not_measured": "read on 2026-10-14 and written here"
+      }
+    },
+    "K38": {
+      "name": "Záměna jména nebo instituce",
+      "statement": "Jména, instituce a odesílatel v zápisu odpovídají zdroji.",
+      "question": "Je v zápisu správné jméno, instituce a odesílatel?",
+      "unit": "jedna pojmenovaná entita",
+      "why_not_measured": "Chybí pravidlo měření. U češtiny se navíc musí porovnávat základní tvary, jinak každé správně skloňované jméno vyjde jako odchylka.",
+      "from": {
+        "name": "read on 2026-10-14 and written here",
+        "statement": "read on 2026-10-14 and written here",
+        "question": "read on 2026-10-14 and written here",
+        "unit": "read on 2026-10-14 and written here",
+        "why_not_measured": "read on 2026-10-14 and written here"
+      }
+    },
+    "K39": {
+      "name": "Chyba zděděná ze zdroje",
+      "statement": "Zápis nepřebírá chyby, které udělal už přepis.",
+      "question": "Nepřepsal zápis věrně chybu, kterou udělalo rozpoznávání řeči?",
+      "unit": "jedno tvrzení, jehož zdrojový text je sám špatný",
+      "why_not_measured": "Nedá se to rozhodnout z přepisu, protože špatný je ten přepis. Potřebuje to nahrávku, a u českých sezení je nahrávka důvěrná.",
+      "from": {
+        "name": "read on 2026-10-14 and written here",
+        "statement": "read on 2026-10-14 and written here",
+        "question": "read on 2026-10-14 and written here",
+        "unit": "read on 2026-10-14 and written here",
+        "why_not_measured": "read on 2026-10-14 and written here"
+      }
     }
   },
   "panel_sheet": {
@@ -1642,5 +1702,12 @@
       ]
     }
   },
-  "groupings_note": "our_groups and upheal_dimensions are claims about the criteria, not translations: the first is this project's grouping of the measured ones, the second maps a candidate onto a prior commercial taxonomy. Both predate K35 and K36 and cover 34 of 36 candidates; the gap is left open rather than guessed."
+  "groupings_note": "our_groups and upheal_dimensions are claims about the criteria, not translations: the first is this project's grouping of the measured ones, the second maps a candidate onto a prior commercial taxonomy. Both predate K35 and K36 and cover 34 of 36 candidates; the gap is left open rather than guessed.",
+  "authored_here": "read on 2026-10-14 and written here",
+  "authored_here_candidates": [
+    "K37",
+    "K38",
+    "K39"
+  ],
+  "authored_here_note": "Every other entry was harvested from a view generator. These three criteria were accepted on 2026-10-14, after the last generator ran, so there was nothing to harvest and the Czech was written for this file."
 }
