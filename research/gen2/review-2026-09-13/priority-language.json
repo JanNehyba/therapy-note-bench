@@ -1,0 +1,127 @@
+{
+  "layer": "language",
+  "amendment": "AM-8",
+  "pool_size": 6868,
+  "ordering_rule": "weighted keyword signals over title+abstract; a stated convention for ordering only",
+  "why_its_own_signals": "The signals of prioritise.py encode the question of the 2026-09-13 round. A paper on the typology of translation errors matches two of them, scores 5 and sits below the cut by construction, so running them here would measure the signals and not the literature.",
+  "signals": [
+    {
+      "tag": "typology",
+      "weight": 5,
+      "pattern": "\\b(mqm|multidimensional quality metrics|dqf|error taxonom\\w*|error typolog\\w*|annotation scheme|error categor\\w*|error annotation)\\b"
+    },
+    {
+      "tag": "six",
+      "weight": 5,
+      "pattern": "\\b(diacritics?|calque\\w*|anglicism\\w*|loan ?word\\w*|untranslated|agreement error\\w*|grammatical error correction|register|formality|non[- ]?words?|neologism\\w*)\\b"
+    },
+    {
+      "tag": "rated-property",
+      "weight": 4,
+      "pattern": "\\b(fluenc\\w*|adequac\\w*|grammaticalit\\w*|acceptabilit\\w*|naturalness)\\b"
+    },
+    {
+      "tag": "method",
+      "weight": 4,
+      "pattern": "\\b(detect\\w*|classif\\w*|identif\\w*|automatic metric|reference[- ]free|quality estimation)\\b"
+    },
+    {
+      "tag": "small-language",
+      "weight": 3,
+      "pattern": "\\b(low[- ]resource\\w*|under[- ]resourced|morphologically rich|slavic|czech|highly inflected)\\b"
+    },
+    {
+      "tag": "post-editing",
+      "weight": 3,
+      "pattern": "\\b(post[- ]?editing|translationese|interference)\\b"
+    },
+    {
+      "tag": "reliability",
+      "weight": 3,
+      "pattern": "\\b(inter[- ]?annotator|inter[- ]?rater|agreement|kappa|reliabilit\\w*|annotation guidelines)\\b"
+    },
+    {
+      "tag": "clinical-non-english",
+      "weight": 2,
+      "pattern": "\\b(clinical|medical|patient|health)\\b.{0,60}\\b(non[- ]english|multilingual|cross[- ]lingual|translat\\w*)\\b"
+    },
+    {
+      "tag": "human-eval",
+      "weight": 2,
+      "pattern": "\\b(human evaluation|human judg\\w*|rater\\w*|annotator\\w*)\\b"
+    }
+  ],
+  "negative_signals": [
+    {
+      "weight": -3,
+      "pattern": "\\b(speech recognition|acoustic model\\w*|speaker diari[sz]ation|text[- ]to[- ]speech)\\b"
+    },
+    {
+      "weight": -3,
+      "pattern": "\\b(hate speech|offensive language|sentiment analysis|spam|fake news)\\b"
+    },
+    {
+      "weight": -2,
+      "pattern": "\\b(word embedding\\w*|representation learning|pre[- ]?training objective)\\b"
+    },
+    {
+      "weight": -2,
+      "pattern": "\\b(parsing|part[- ]of[- ]speech tagging|named entity recognition)\\b"
+    }
+  ],
+  "priority_threshold": 9,
+  "priority_threshold_basis": "the same cut as the 2026-09-13 round, which is registered. The signals are new because the question is, but moving the cut as well would make the two rounds incomparable in two ways at once.",
+  "priority_stratum": 609,
+  "remainder_stratum": 6259,
+  "priority_by_signal": {
+    "method": 479,
+    "six": 294,
+    "human-eval": 228,
+    "rated-property": 210,
+    "small-language": 135,
+    "reliability": 125,
+    "typology": 123,
+    "post-editing": 69,
+    "neg": 9,
+    "clinical-non-english": 7
+  },
+  "score_distribution": {
+    "21": 1,
+    "20": 1,
+    "19": 1,
+    "18": 3,
+    "17": 1,
+    "16": 6,
+    "15": 12,
+    "14": 27,
+    "13": 22,
+    "12": 56,
+    "11": 65,
+    "10": 95,
+    "9": 319,
+    "8": 199,
+    "7": 525,
+    "6": 247,
+    "5": 562,
+    "4": 1075,
+    "3": 1244,
+    "2": 217,
+    "1": 180,
+    "0": 1779,
+    "-1": 24,
+    "-2": 109,
+    "-3": 86,
+    "-4": 9,
+    "-5": 2,
+    "-7": 1
+  },
+  "audit_sample_size": 200,
+  "audit_sample_seed": 20261014,
+  "audit_sample_frame": "the remainder of this layer only",
+  "audit_sample_note": "Drawn from this layer's remainder and audited on its own. The eligibility rate of the 2026-09-13 remainder is a property of that remainder and says nothing about this one.",
+  "not_a_screening_decision": "Nothing here is included or excluded. Records below the cut are audited by sampling, which is what lets the miss rate be reported rather than assumed.",
+  "export_digests": {
+    "screen-priority-language.json": "61f8c72641cb9c6d38ccafd6c02d15fb98187b435da254c8b475d28cfdceb610",
+    "screen-audit-sample-language.json": "e7460c07b025d4bee6c21ec449824d64055529eaa1e256ce998fe8eb5c67d47b"
+  }
+}

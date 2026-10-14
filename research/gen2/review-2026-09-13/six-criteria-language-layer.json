@@ -1,0 +1,459 @@
+{
+  "diacritics": {
+    "what_it_measures": "a missing or wrong diacritic",
+    "search_terms": "\\bdiacritics?\\b|\\bdiacriti[sz]\\w*\\b|\\baccent restoration\\b",
+    "priority_records_naming_it": 17,
+    "of_those_also_offering_a_definition_or_scheme": 2,
+    "top_to_read": [
+      {
+        "score": 9,
+        "year": "2023",
+        "title": "Pipeline Enabling Zero-shot Classification for Bangla Handwritten Grapheme",
+        "venue": "Proceedings of the First Workshop on Bangla Language Processing (BLP-2023)\", month = dec,",
+        "url": "https://aclanthology.org/2023.banglalp-1.4/",
+        "signals": [
+          "method",
+          "six"
+        ]
+      },
+      {
+        "score": 9,
+        "year": "2026",
+        "title": "Lexical and Orthographic Variation in Portuguese Financial Tweets: Annotation, Analysis, and Implications for Embedding Models",
+        "venue": "Proceedings of the 17th International Conference on Computational Processing of Portuguese (PROPOR 2026) - Vol. 1\", month = apr,",
+        "url": "https://aclanthology.org/2026.propor-1.62/",
+        "signals": [
+          "method",
+          "six"
+        ]
+      }
+    ]
+  },
+  "calque": {
+    "what_it_measures": "a term formed by translating word for word from English",
+    "search_terms": "\\bcalque\\w*\\b|\\bliteral translation\\b|\\binterference\\b|\\btranslationese\\b",
+    "priority_records_naming_it": 18,
+    "of_those_also_offering_a_definition_or_scheme": 4,
+    "top_to_read": [
+      {
+        "score": 12,
+        "year": "2019",
+        "title": "Analysing Coreference in Transformer Outputs",
+        "venue": "Proceedings of the Fourth Workshop on Discourse in Machine Translation (DiscoMT 2019)\", month = nov,",
+        "url": "https://aclanthology.org/D19-6501/",
+        "signals": [
+          "post-editing",
+          "rated-property",
+          "typology"
+        ]
+      },
+      {
+        "score": 12,
+        "year": "2019",
+        "title": "Translationese Features as Indicators of Quality in English-Russian Human Translation",
+        "venue": "Proceedings of the Human-Informed Translation and Interpreting Technology Workshop (HiT-IT 2019)\", month = sep,",
+        "url": "https://aclanthology.org/W19-8706/",
+        "signals": [
+          "post-editing",
+          "rated-property",
+          "six"
+        ]
+      },
+      {
+        "score": 12,
+        "year": "2026",
+        "title": "BlAInded by Fluency: How Idiomatic Machine Translation Outputs Affect Student Post-Editors' Edit Types",
+        "venue": "Proceedings of the 26th Annual Conference of the European Association for Machine Translation (Volume 1)\", month = jun,",
+        "url": "https://aclanthology.org/2026.eamt-1.56/",
+        "signals": [
+          "post-editing",
+          "rated-property",
+          "six"
+        ]
+      },
+      {
+        "score": 12,
+        "year": "2026",
+        "title": "A Joint Detection Framework for Latvian Loanwords and Calques Using Monolingual Data",
+        "venue": "Proceedings of the Fifteenth Language Resources and Evaluation Conference\", month = may,",
+        "url": "https://aclanthology.org/2026.lrec-1.798/",
+        "signals": [
+          "method",
+          "six",
+          "small-language"
+        ]
+      }
+    ]
+  },
+  "untranslated": {
+    "what_it_measures": "an English technical term left as it is",
+    "search_terms": "\\buntranslated\\b|\\bloan ?word\\w*\\b|\\banglicism\\w*\\b|\\bborrowing\\w*\\b|\\bcode[- ]switch\\w*\\b",
+    "priority_records_naming_it": 32,
+    "of_those_also_offering_a_definition_or_scheme": 8,
+    "top_to_read": [
+      {
+        "score": 12,
+        "year": "2026",
+        "title": "A Joint Detection Framework for Latvian Loanwords and Calques Using Monolingual Data",
+        "venue": "Proceedings of the Fifteenth Language Resources and Evaluation Conference\", month = may,",
+        "url": "https://aclanthology.org/2026.lrec-1.798/",
+        "signals": [
+          "method",
+          "six",
+          "small-language"
+        ]
+      },
+      {
+        "score": 11,
+        "year": "2026",
+        "title": "``Be My Cheese?'': Cultural Nuance Benchmarking for Machine Translation in Multilingual LLMs",
+        "venue": "Proceedings of the Fifth Workshop on Generation, Evaluation and Metrics (GEM)\", month = jul,",
+        "url": "https://aclanthology.org/2026.gem-main.6/",
+        "signals": [
+          "human-eval",
+          "rated-property",
+          "six"
+        ]
+      },
+      {
+        "score": 10,
+        "year": "2022",
+        "title": "DEMETR: Diagnosing Evaluation Metrics for Translation",
+        "venue": "Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing\", month = dec,",
+        "url": "https://aclanthology.org/2022.emnlp-main.649/",
+        "signals": [
+          "six",
+          "typology"
+        ]
+      },
+      {
+        "score": 9,
+        "year": "2016",
+        "title": "L'invasivit\\'e phonologique dans le traitement des anglicismes : une \\'etude quantitative de trois langues (Phonological invasiveness in the treatment of loanwords)",
+        "venue": "Actes de la conf\\'erence conjointe JEP-TALN-RECITAL 2016. volume 1 : JEP",
+        "url": "https://aclanthology.org/2016.jeptalnrecital-jep.45/",
+        "signals": [
+          "method",
+          "six"
+        ]
+      },
+      {
+        "score": 9,
+        "year": "2020",
+        "title": "Classification and Analysis of Neologisms Produced by Learners of Spanish: Effects of Proficiency and Task",
+        "venue": "Proceedings of the Fourth Widening Natural Language Processing Workshop\", month = jul,",
+        "url": "https://aclanthology.org/2020.winlp-1.22/",
+        "signals": [
+          "method",
+          "six"
+        ]
+      },
+      {
+        "score": 9,
+        "year": "2020",
+        "title": "An Annotated Corpus of Emerging Anglicisms in Spanish Newspaper Headlines",
+        "venue": "Proceedings of the 4th Workshop on Computational Approaches to Code Switching\", month = may,",
+        "url": "https://aclanthology.org/2020.calcs-1.1/",
+        "signals": [
+          "method",
+          "six"
+        ]
+      },
+      {
+        "score": 9,
+        "year": "2022",
+        "title": "Universal Dependencies Treebank for Tatar: Incorporating Intra-Word Code-Switching Information",
+        "venue": "Proceedings of the Workshop on Resources and Technologies for Indigenous, Endangered and Lesser-resourced Languages in Eurasia within the 13th Language Resources and Evaluation Conference\", month = jun,",
+        "url": "https://aclanthology.org/2022.eurali-1.17/",
+        "signals": [
+          "method",
+          "typology"
+        ]
+      },
+      {
+        "score": 9,
+        "year": "2024",
+        "title": "Grammatical Error Correction for Code-Switched Sentences by Learners of English",
+        "venue": "Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation (LREC-COLING 2024)\", month = may,",
+        "url": "https://aclanthology.org/2024.lrec-main.698/",
+        "signals": [
+          "method",
+          "six"
+        ]
+      }
+    ]
+  },
+  "agreement": {
+    "what_it_measures": "a broken agreement, case or unfinished sentence",
+    "search_terms": "\\bagreement error\\w*\\b|\\bgrammatical error correction\\b|\\bmorphosyntactic\\b|\\binflection\\w* error\\w*\\b|\\bcase marking\\b",
+    "priority_records_naming_it": 135,
+    "of_those_also_offering_a_definition_or_scheme": 24,
+    "top_to_read": [
+      {
+        "score": 16,
+        "year": "2016",
+        "title": "Reassessing the Goals of Grammatical Error Correction: Fluency Instead of Grammaticality",
+        "venue": null,
+        "url": "https://aclanthology.org/Q16-1013/",
+        "signals": [
+          "human-eval",
+          "rated-property",
+          "six",
+          "typology"
+        ]
+      },
+      {
+        "score": 14,
+        "year": "2022",
+        "title": "Automatic Classification of Russian Learner Errors",
+        "venue": "Proceedings of the Thirteenth Language Resources and Evaluation Conference\", month = jun,",
+        "url": "https://aclanthology.org/2022.lrec-1.605/",
+        "signals": [
+          "method",
+          "six",
+          "typology"
+        ]
+      },
+      {
+        "score": 14,
+        "year": "2023",
+        "title": "Towards Automatic Grammatical Error Type Classification for Turkish",
+        "venue": "Proceedings of the 17th Conference of the European Chapter of the Association for Computational Linguistics: Student Research Workshop\", month = may,",
+        "url": "https://aclanthology.org/2023.eacl-srw.14/",
+        "signals": [
+          "method",
+          "six",
+          "typology"
+        ]
+      },
+      {
+        "score": 14,
+        "year": "2025",
+        "title": "Leveraging LLMs for Bangla Grammar Error Correction: Error Categorization, Synthetic Data, and Model Evaluation",
+        "venue": "Findings of the Association for Computational Linguistics: ACL 2025\", month = jul,",
+        "url": "https://aclanthology.org/2025.findings-acl.431/",
+        "signals": [
+          "method",
+          "six",
+          "typology"
+        ]
+      },
+      {
+        "score": 14,
+        "year": "2025",
+        "title": "Improving Automatic Grammatical Error Annotation for Chinese Through Linguistically-Informed Error Typology",
+        "venue": "Proceedings of the 31st International Conference on Computational Linguistics\", month = jan,",
+        "url": "https://aclanthology.org/2025.coling-main.189/",
+        "signals": [
+          "method",
+          "six",
+          "typology"
+        ]
+      },
+      {
+        "score": 13,
+        "year": "2025",
+        "title": "Leveraging Multilingual Models for Robust Grammatical Error Correction Across Low-Resource Languages",
+        "venue": "Proceedings of the 31st International Conference on Computational Linguistics: Industry Track\", month = jan,",
+        "url": "https://aclanthology.org/2025.coling-industry.43/",
+        "signals": [
+          "six",
+          "small-language",
+          "typology"
+        ]
+      },
+      {
+        "score": 13,
+        "year": "2025",
+        "title": "Multilingual Grammatical Error Annotation: Combining Language-Agnostic Framework with Language-Specific Flexibility",
+        "venue": "Proceedings of the 20th Workshop on Innovative Use of NLP for Building Educational Applications (BEA 2025)\", month = jul,",
+        "url": "https://aclanthology.org/2025.bea-1.15/",
+        "signals": [
+          "six",
+          "small-language",
+          "typology"
+        ]
+      },
+      {
+        "score": 12,
+        "year": "2022",
+        "title": "FCGEC: Fine-Grained Corpus for Chinese Grammatical Error Correction",
+        "venue": "Findings of the Association for Computational Linguistics: EMNLP 2022\", month = dec,",
+        "url": "https://aclanthology.org/2022.findings-emnlp.137/",
+        "signals": [
+          "method",
+          "six",
+          "small-language"
+        ]
+      }
+    ]
+  },
+  "register": {
+    "what_it_measures": "a colloquial word where a professional one belongs",
+    "search_terms": "\\bregister\\b|\\bformality\\b|\\bcolloquial\\w*\\b|\\bstyle transfer\\b",
+    "priority_records_naming_it": 109,
+    "of_those_also_offering_a_definition_or_scheme": 22,
+    "top_to_read": [
+      {
+        "score": 15,
+        "year": "2024",
+        "title": "Massively Multilingual Token-Based Typology Using the Parallel Bible Corpus",
+        "venue": "Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation (LREC-COLING 2024)\", month = may,",
+        "url": "https://aclanthology.org/2024.lrec-main.965/",
+        "signals": [
+          "method",
+          "reliability",
+          "six",
+          "small-language"
+        ]
+      },
+      {
+        "score": 14,
+        "year": "2026",
+        "title": "Register Mixing Is the Norm on the Web",
+        "venue": "Proceedings of the 6th International Conference on Natural Language Processing for the Digital Humanities\", month = jul,",
+        "url": "https://aclanthology.org/2026.nlp4dh-1.14/",
+        "signals": [
+          "human-eval",
+          "method",
+          "reliability",
+          "six"
+        ]
+      },
+      {
+        "score": 12,
+        "year": "2019",
+        "title": "Translationese Features as Indicators of Quality in English-Russian Human Translation",
+        "venue": "Proceedings of the Human-Informed Translation and Interpreting Technology Workshop (HiT-IT 2019)\", month = sep,",
+        "url": "https://aclanthology.org/W19-8706/",
+        "signals": [
+          "post-editing",
+          "rated-property",
+          "six"
+        ]
+      },
+      {
+        "score": 12,
+        "year": "2022",
+        "title": "Metaphor annotation for German",
+        "venue": "Proceedings of the Thirteenth Language Resources and Evaluation Conference\", month = jun,",
+        "url": "https://aclanthology.org/2022.lrec-1.273/",
+        "signals": [
+          "method",
+          "reliability",
+          "six"
+        ]
+      },
+      {
+        "score": 12,
+        "year": "2026",
+        "title": "Cuet Yet Another Baseline@DravidianLangTech 2026: Shared Task on Prompt Recovery for LLM in Telugu",
+        "venue": "Proceedings of the Sixth Workshop on Speech, Vision, and Language Technologies for Dravidian Languages\", month = jul,",
+        "url": "https://aclanthology.org/2026.dravidianlangtech-1.25/",
+        "signals": [
+          "method",
+          "six",
+          "small-language"
+        ]
+      },
+      {
+        "score": 9,
+        "year": "2017",
+        "title": "Dimensions of Abusive Language on Twitter",
+        "venue": "Proceedings of the First Workshop on Abusive Language Online\", month = aug,",
+        "url": "https://aclanthology.org/W17-3001/",
+        "signals": [
+          "method",
+          "six"
+        ]
+      },
+      {
+        "score": 9,
+        "year": "2017",
+        "title": "Modeling Communicative Purpose with Functional Style: Corpus and Features for German Genre and Register Analysis",
+        "venue": "Proceedings of the Workshop on Stylistic Variation\", month = sep,",
+        "url": "https://aclanthology.org/W17-4910/",
+        "signals": [
+          "method",
+          "six"
+        ]
+      },
+      {
+        "score": 9,
+        "year": "2020",
+        "title": "Exploring Coreference Features in Heterogeneous Data",
+        "venue": "Proceedings of the First Workshop on Computational Approaches to Discourse\", month = nov,",
+        "url": "https://aclanthology.org/2020.codi-1.6/",
+        "signals": [
+          "method",
+          "six"
+        ]
+      }
+    ]
+  },
+  "nonword": {
+    "what_it_measures": "a word that does not exist in the language",
+    "search_terms": "\\bnon[- ]?words?\\b|\\bneologism\\w*\\b|\\bnonsense words?\\b|\\bmalformed\\b",
+    "priority_records_naming_it": 19,
+    "of_those_also_offering_a_definition_or_scheme": 5,
+    "top_to_read": [
+      {
+        "score": 9,
+        "year": "2012",
+        "title": "NeoTag: a POS Tagger for Grammatical Neologism Detection",
+        "venue": "Proceedings of the Eighth International Conference on Language Resources and Evaluation (LREC'12)\", month = may,",
+        "url": "https://aclanthology.org/L12-1653/",
+        "signals": [
+          "method",
+          "six"
+        ]
+      },
+      {
+        "score": 9,
+        "year": "2016",
+        "title": "Natural Language Generation through Character-based RNNs with Finite-state Prior Knowledge",
+        "venue": "Proceedings of COLING 2016, the 26th International Conference on Computational Linguistics: Technical Papers\", month = dec,",
+        "url": "https://aclanthology.org/C16-1103/",
+        "signals": [
+          "rated-property",
+          "six"
+        ]
+      },
+      {
+        "score": 9,
+        "year": "2020",
+        "title": "Classification and Analysis of Neologisms Produced by Learners of Spanish: Effects of Proficiency and Task",
+        "venue": "Proceedings of the Fourth Widening Natural Language Processing Workshop\", month = jul,",
+        "url": "https://aclanthology.org/2020.winlp-1.22/",
+        "signals": [
+          "method",
+          "six"
+        ]
+      },
+      {
+        "score": 9,
+        "year": "2026",
+        "title": "High Resource Bias in AI-Driven Neology: Structural Inequality in Lexical Innovation",
+        "venue": "Proceedings of the Workshop Neology and Large Language Models\", month = may,",
+        "url": "https://aclanthology.org/2026.neollm-1.2/",
+        "signals": [
+          "method",
+          "six"
+        ]
+      },
+      {
+        "score": 9,
+        "year": "2026",
+        "title": "New Terms, New Toxicity: Consensus-based Chinese Neologism Toxicity Detection via Search-Augmented LLMs",
+        "venue": "Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)\", month = jul,",
+        "url": "https://aclanthology.org/2026.acl-long.1602/",
+        "signals": [
+          "method",
+          "six"
+        ]
+      }
+    ]
+  },
+  "_note": "Counts of records above the registered cut whose title or abstract names the property. A count is not support: a paper can name diacritics and be about restoring them in speech output. What it says is whether there is anything to read, which the catalog could not say before because nothing had looked.",
+  "_priority_records": 609
+}
