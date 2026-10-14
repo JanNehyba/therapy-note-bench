@@ -73,11 +73,89 @@
       "query": "(\"summarization\" OR \"summarisation\") (\"evaluation\" OR \"faithfulness\" OR \"factuality\" OR \"attribution\" OR \"question answering\" OR \"multilingual\")",
       "status": "not_run",
       "syntax_verification": "Required on the actual platform before the full search; log any amendment"
+    },
+    {
+      "id": "acl-quality-typology",
+      "database": "ACL Anthology",
+      "platform": "offline corpus, searched with recorded regular expressions",
+      "layer": "language",
+      "query": "(\"translation\" OR \"generation\" OR \"summarization\" OR \"summarisation\" OR \"machine translation\") AND (\"error\" OR \"quality\") AND (\"typology\" OR \"taxonomy\" OR \"annotation scheme\" OR \"framework\" OR \"MQM\" OR \"multidimensional quality metrics\")",
+      "asks": "Does the field already have a named list of text-quality error types, with rules for telling them apart? MQM and its relatives are the obvious candidate and no query so far could have found them.",
+      "status": "not_run",
+      "recorded": "2026-10-14",
+      "syntax_verification": "Implemented as conjunctive regex groups over title and abstract in review-2026-09-13/acl_search.py; the groups are the record of what was actually matched"
+    },
+    {
+      "id": "acl-fluency-adequacy",
+      "database": "ACL Anthology",
+      "platform": "offline corpus, searched with recorded regular expressions",
+      "layer": "language",
+      "query": "(\"fluency\" OR \"adequacy\" OR \"grammaticality\" OR \"acceptability\") AND (\"evaluation\" OR \"annotation\" OR \"human judgment\" OR \"human judgement\" OR \"rating\")",
+      "asks": "Is a text property like fluency measured, and how is a rater told to recognise it? Three of the six Czech criteria are kinds of disfluency.",
+      "status": "not_run",
+      "recorded": "2026-10-14",
+      "syntax_verification": "Implemented as conjunctive regex groups over title and abstract in review-2026-09-13/acl_search.py; the groups are the record of what was actually matched"
+    },
+    {
+      "id": "acl-post-editing",
+      "database": "ACL Anthology",
+      "platform": "offline corpus, searched with recorded regular expressions",
+      "layer": "language",
+      "query": "(\"post-editing\" OR \"post editing\" OR \"translationese\") AND (\"error\" OR \"taxonomy\" OR \"effort\" OR \"quality\" OR \"annotation\")",
+      "asks": "Post-editing research names what a human had to fix, which is the closest existing thing to asking what is wrong with a generated Czech note.",
+      "status": "not_run",
+      "recorded": "2026-10-14",
+      "syntax_verification": "Implemented as conjunctive regex groups over title and abstract in review-2026-09-13/acl_search.py; the groups are the record of what was actually matched"
+    },
+    {
+      "id": "acl-small-language-quality",
+      "database": "ACL Anthology",
+      "platform": "offline corpus, searched with recorded regular expressions",
+      "layer": "language",
+      "query": "(\"low-resource\" OR \"under-resourced\" OR \"morphologically rich\" OR \"Slavic\" OR \"Czech\") AND (\"generation\" OR \"summarization\" OR \"summarisation\" OR \"translation\") AND (\"quality\" OR \"error\" OR \"evaluation\" OR \"fluency\")",
+      "asks": "Is text quality in a small language measured differently, and does anyone say why? This is the layer the second generation exists for.",
+      "status": "not_run",
+      "recorded": "2026-10-14",
+      "syntax_verification": "Implemented as conjunctive regex groups over title and abstract in review-2026-09-13/acl_search.py; the groups are the record of what was actually matched"
+    },
+    {
+      "id": "acl-orthography-and-morphology",
+      "database": "ACL Anthology",
+      "platform": "offline corpus, searched with recorded regular expressions",
+      "layer": "language",
+      "query": "(\"diacritic\" OR \"diacritics\" OR \"orthography\" OR \"spelling\" OR \"grammatical error correction\" OR \"morphosyntactic\" OR \"agreement error\") AND (\"error\" OR \"correction\" OR \"restoration\" OR \"detection\" OR \"evaluation\")",
+      "asks": "Covers two of the six directly: a missing or wrong diacritic, and a broken agreement or case.",
+      "status": "not_run",
+      "recorded": "2026-10-14",
+      "syntax_verification": "Implemented as conjunctive regex groups over title and abstract in review-2026-09-13/acl_search.py; the groups are the record of what was actually matched"
+    },
+    {
+      "id": "acl-borrowing-and-register",
+      "database": "ACL Anthology",
+      "platform": "offline corpus, searched with recorded regular expressions",
+      "layer": "language",
+      "query": "(\"calque\" OR \"loanword\" OR \"loan word\" OR \"anglicism\" OR \"borrowing\" OR \"code-switching\" OR \"untranslated\" OR \"register\" OR \"formality\" OR \"colloquial\") AND (\"detection\" OR \"classification\" OR \"annotation\" OR \"evaluation\" OR \"corpus\")",
+      "asks": "Covers three of the six: a term formed by translating word for word from English, an English term left as it is, and a colloquial word where a professional one belongs.",
+      "status": "not_run",
+      "recorded": "2026-10-14",
+      "syntax_verification": "Implemented as conjunctive regex groups over title and abstract in review-2026-09-13/acl_search.py; the groups are the record of what was actually matched"
+    },
+    {
+      "id": "acl-nonword",
+      "database": "ACL Anthology",
+      "platform": "offline corpus, searched with recorded regular expressions",
+      "layer": "language",
+      "query": "(\"nonword\" OR \"non-word\" OR \"neologism\" OR \"out-of-vocabulary\" OR \"malformed\" OR \"nonsense word\") AND (\"detection\" OR \"error\" OR \"generation\" OR \"evaluation\")",
+      "asks": "Covers the sixth: a word that does not exist in the language. A generated note can contain one and no existing criterion would see it.",
+      "status": "not_run",
+      "recorded": "2026-10-14",
+      "syntax_verification": "Implemented as conjunctive regex groups over title and abstract in review-2026-09-13/acl_search.py; the groups are the record of what was actually matched"
     }
   ],
   "supplementary": {
     "guidance": "Search professional psychotherapy record-keeping guidance and client-access literature; record organization, jurisdiction, document version and exact query.",
     "citation_chasing": "Backward and forward from included reports; record seed report and metadata service.",
     "czech": "Search Czech professional guidance using the equivalent documentation and psychotherapy terms; retain the exact executed Czech query privately."
-  }
+  },
+  "layers_note": "The `language` layer was added on 2026-10-14 by AM-8. It is reported separately from the three layers of 2026-09-13: a count that mixes them would hide that the first round could not have found this literature."
 }
