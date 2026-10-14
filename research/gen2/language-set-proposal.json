@@ -1,0 +1,165 @@
+{
+  "version": "language-set-proposal-v1",
+  "date": "2026-10-14",
+  "status": "a proposal, written by the assistant. Nothing here is in the catalog.",
+  "marker": "AUTHORED-INSTRUMENT-TEXT",
+  "what_this_is": "A set of language-quality criteria for the Czech track, proposed as a whole rather than defended item by item. The investigator asked for this on 2026-10-14 and said he does not insist on the six the first-generation scorer measures.",
+  "why_it_is_two_layers": {
+    "taken_from": "Qiu et al. (2025), the multilingual grammatical error annotation framework, which was applied to English, German, Czech, Korean and Chinese",
+    "quote": "Our approach combines a language-agnostic foundation with structured language-specific extensions, enabling both consistency and flexibility across languages.",
+    "what_it_settles": "The investigator's instinct was that form does not matter for English. Half right. A check for a diacritic or a case ending is meaningless in English, and those belong in a layer that is reported for Czech alone and never enters a comparison between the two tracks. But a note cut off mid-sentence and a note that switches language happen in English too, so those belong in a layer measured in both, or the two tracks cannot be compared at all. Six flat properties with no relation to the English instrument was the shape to get away from."
+  },
+  "neutral_layer": {
+    "measured_in": "both languages",
+    "why": "These are properties of a generated note in any language. Dropping them from the English track would leave the two tracks measuring different things.",
+    "criteria": [
+      {
+        "name": "Useknutý zápis",
+        "en": "Truncated note",
+        "question": "Je zápis utnutý v půlce věty nebo oddílu?",
+        "from": "REPA (Pugachev et al. 2025), Sudden Interruption",
+        "quote": "Sudden Interruption: The chatbot 's response was abruptly cut off.",
+        "proposed_role": "orders",
+        "why_this_role": "Nearly deterministic: an unfinished last sentence is visible without a judgement. The direction of quality is given.",
+        "what_changes_here": "This benchmark currently treats a cut-off answer as a harness failure. finish_reason decides whether a row is usable and a truncated note never reaches scoring, so the frequency of the thing is invisible. The investigator named it himself: it happens often and nobody measures it. Measuring it means keeping those rows and reporting the rate instead of discarding them.",
+        "the_catch": "A row cannot be both discarded as unusable and scored as truncated. Which one it is has to be decided before the pilot, because it changes the denominator of every other measure."
+      },
+      {
+        "name": "Fluence s prahem porozumění",
+        "en": "Fluency, with a comprehension threshold",
+        "question": "Je v zápisu gramatická chyba, která může čtenáři zabránit porozumět?",
+        "from": "REPA (Pugachev et al. 2025), Fluency",
+        "quote": "Fluency: The response contains critical grammatical errors that may hinder text comprehension.",
+        "proposed_role": "orders_with_two_raters",
+        "why_this_role": "Whether comprehension is hindered is a reader's verdict, so it orders models only where two readers agree.",
+        "what_changes_here": "The threshold is the transferable part and the current Czech criterion has none, so it counts a missing comma and an unreadable sentence as the same kind of finding. With the threshold, a note full of small slips that reads perfectly well is not a failure."
+      },
+      {
+        "name": "Nečekané přepnutí jazyka",
+        "en": "Unexpected code-switching",
+        "question": "Přepíná zápis nečekaně do jiného jazyka?",
+        "from": "REPA (Pugachev et al. 2025), Code-Switching",
+        "quote": "Code -Switching: The chatbot 's response contains unexpected switching between languages.",
+        "proposed_role": "orders",
+        "why_this_role": "A switch is visible in the text and the direction is given.",
+        "what_changes_here": "This replaces the Czech scorer's untranslated-term question and widens it. The source's definition is any unexpected switch, not only a technical term left in English, and widening is the right direction: a whole English sentence in a Czech note is worse than one English term and the narrow question cannot see it. The exception the Czech sheet already writes down stays: an abbreviation that Czech documentation uses anyway, CBT or PTSD, is not a switch.",
+        "measured_already": "The narrow version has the highest agreement of the six: a judge and one native speaker said the same thing in 90 of 104 cases, 87%."
+      },
+      {
+        "name": "Slovosled",
+        "en": "Word order",
+        "question": "Mění pořadí slov to, co zápis říká?",
+        "from": "ELERRANT (Korre et al. 2021) WO, and the Czech application in Qiu et al. (2025)",
+        "quote": "WO Words Order Error in words order.",
+        "proposed_role": "describes_only",
+        "why_this_role": "In Czech word order carries emphasis and the given/new structure rather than grammatical role, so a different order is usually a different emphasis and not an error. Reported as a characteristic and never as a column of the order, because nobody can say which order is better without reading the session.",
+        "what_changes_here": "Nobody on this project proposed it. It is a category in both schemes built for an inflected language, and no criterion of the 39 asks about it."
+      }
+    ]
+  },
+  "czech_layer": {
+    "measured_in": "Czech only",
+    "why": "A diacritic, a case ending and a Czech non-word have no English counterpart. These are reported for the Czech track alone and never enter a comparison between the two tracks.",
+    "criteria": [
+      {
+        "name": "Diakritika",
+        "question": "Je v zápisu české slovo s chybějící nebo špatnou délkou či háčkem?",
+        "from": "ELERRANT (Korre et al. 2021), ACC",
+        "quote": "ACC Accentuation Accentuation addition or removal.",
+        "proposed_role": "orders",
+        "measured_already": "84 of 101, 83%, with 3 unanswered",
+        "why_this_role": "The direction is given and the agreement is among the highest of the six. Greek is not Czech: an accent in Greek marks stress, a Czech diacritic can change the word, so the severity is ours and the rule transfers."
+      },
+      {
+        "name": "Shoda a pád",
+        "question": "Je v zápisu věta s chybnou shodou nebo špatným pádem?",
+        "from": "ELERRANT (Korre et al. 2021), VERB:SVA, and the Czech morphosyntactic annotation of Qiu et al. (2025)",
+        "quote": "VERB:SVA Subject Verb Agreement The subject and the verb to be in person agreement.",
+        "proposed_role": "orders_with_two_raters",
+        "measured_already": "71 of 104, 68%, the second lowest of the six",
+        "why_this_role": "68% agreement is too low to order models on one reading. The low figure has a likely cause worth testing: the current question bundles three things, so two readers can both be right and disagree. Splitting the unfinished sentence off into the fluency threshold above is the first thing to try."
+      },
+      {
+        "name": "Neexistující slovo",
+        "question": "Je v zápisu slovo, které v češtině neexistuje?",
+        "from": "no named category in the four schemes read; nearest is the Greek SPELL",
+        "quote": null,
+        "proposed_role": "orders",
+        "measured_already": "86 of 104, 83%",
+        "why_this_role": "No literature category yet and the second highest agreement of the six. It stays on the strength of our own measurement, and the record has to say that is what it rests on."
+      },
+      {
+        "name": "Hovorový výraz místo odborného",
+        "question": "Je v zápisu hovorový nebo citově zabarvený výraz tam, kam patří odborný?",
+        "from": "no named category in the four schemes read",
+        "quote": null,
+        "proposed_role": "describes_only",
+        "measured_already": "73 of 104, 70%",
+        "why_this_role": "Moved out of the ranking, and this is a change from what the first generation does. A note written for a documentation audit and one written for the client may legitimately differ in register, so a single direction of quality cannot be claimed for it. It stays measured and is reported as a characteristic of a model."
+      },
+      {
+        "name": "Kalk",
+        "question": "Je v zápisu výraz utvořený doslovným překladem z angličtiny?",
+        "from": "no named category in the four schemes read; the Latvian loanword and calque detector of 2026 is in the frame and unread",
+        "quote": null,
+        "proposed_role": "describes_only",
+        "measured_already": "68 of 102, 67%, the lowest of the six, with 2 unanswered",
+        "why_this_role": "The lowest agreement of the six and no category behind it. Ordering models on a question two readers answer differently a third of the time would be reporting noise. It stays measured because a calque is a real property of a translated clinical text, and one unread paper in the frame is about exactly this."
+      }
+    ]
+  },
+  "required_on_every_question_and_not_a_criterion": {
+    "name": "„Neumím rozhodnout“ jako platná odpověď",
+    "from": "ELERRANT UNK (Korre et al. 2021) and TalkTag (Venturini et al. 2026)",
+    "quotes": [
+      "UNK Unknown error type An error that can be detected but not corrected.",
+      "effectively identifying instances where linguistic ambiguity makes automated tagging genuinely complex"
+    ],
+    "why_it_matters_most": "This is the single most important thing to adopt and it is not a criterion. Without it a rater who can see that something is wrong without being able to say what the right version is must choose between a wrong label and no label, and both corrupt the number. This project already has the rule written down as `an absence is never a measurement`, and no mechanism that carries it out for a language question. The Czech sheet already has a third answer for `the note gave no chance to make this mistake`, which is the neighbouring case and not this one.",
+    "consequence": "Every criterion above reports three fractions and not one: how often the fault was present, how often it was absent, and how often nobody could tell. The third is published, not folded into the second."
+  },
+  "dropped_from_the_set": [
+    {
+      "name": "Rovné uvozovky",
+      "was": "the seventh question of the Czech sheet",
+      "why_dropped": "It is a deterministic format check, decidable by a regular expression, and it has no reliability question. It belongs with the compliance check against the task's format, K20, and not among the quality criteria. It is also the one question of the seven that the measured rubric already leaves out, which nobody had noticed."
+    }
+  ],
+  "not_a_criterion_but_a_warning": {
+    "finding": "A judge does worse in Russian than in English",
+    "from": "REPA (Pugachev et al. 2025)",
+    "quote": "Our findings reveal a notable gap between LLM judge performance in Russian and English.",
+    "consequence": "Every number in this set is produced by a judge whose calibration against the two human annotators was measured on English. The one paper that measured the same thing for a Slavic language found the judge worse there. The calibration has to be repeated in Czech before any of this is published, not carried over. The 20-note anchor against one native speaker is a start and it says itself that one rater gives no ceiling."
+  },
+  "what_this_proposal_changes_about_the_six": {
+    "kept_and_ordering": [
+      "diacritics",
+      "nonword"
+    ],
+    "kept_and_ordering_with_two_raters": [
+      "agreement, narrowed"
+    ],
+    "kept_but_descriptive_only": [
+      "register",
+      "calque"
+    ],
+    "widened": [
+      "untranslated becomes any unexpected language switch"
+    ],
+    "dropped": [
+      "straight quotation marks, which moves to the format check"
+    ],
+    "added": [
+      "truncated note",
+      "fluency with a comprehension threshold",
+      "word order"
+    ],
+    "summary": "Four criteria measured in both languages and five in Czech only, against the first generation's seven flat Czech questions. Two of the investigator's six stop ordering models and keep being measured. The reasons are the agreement figures his own anchor produced and, for register, that two purposes can legitimately want different registers."
+  },
+  "what_is_still_missing": [
+    "No rule is written for any of these. A rule is what makes a criterion measurable, and writing one costs the human budget the pilot does not have.",
+    "Czech has no inter-rater figure at all: the anchor had one native speaker, so none of the agreement numbers above is a reliability figure.",
+    "Thirteen of the seventeen fetched papers are unread, and the form half of the fifteen schemes the consensus taxonomy surveyed is unread. The Latvian loanword and calque paper of 2026 is the obvious next read for the weakest criterion in this set."
+  ],
+  "czech_is_here_because": "The questions are the ones a Czech rater would read, so they are instrument text and are written in the language they will be asked in. Nothing in this file is clinical: the agreement figures are counts and no note is quoted."
+}

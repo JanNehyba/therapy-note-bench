@@ -682,7 +682,9 @@
       "unit_definition": "atomické tvrzení (aktér, čas, polarita, jistota)",
       "applicability": "Vždy. Nedostupný kontext nebo neúspěšné dohledání znamená, že tvrzení nelze posoudit; to není totéž co nepravdivé.",
       "error_consequence": "Vymyšlený fakt putuje do další péče a klient si ho přečte jako něco, co o něm bylo řečeno.",
-      "how": "Zápis se rozloží na tvrzení a každé se ověří proti přepisu."
+      "how": "Zápis se rozloží na tvrzení a každé se ověří proti přepisu.",
+      "ranking_role": "orders",
+      "needs_bank": false
     },
     "K02": {
       "name": "Kdo co řekl",
@@ -704,7 +706,9 @@
       "unit_definition": "tvrzení",
       "applicability": "Vyžaduje přepis s rozlišenými mluvčími. Bez toho se to nedá měřit.",
       "error_consequence": "Domněnka zapsaná jako fakt o třetí osobě je zároveň chyba věrnosti a zásah do práv někoho, kdo není klient a k zápisu nemá přístup.",
-      "how": "Totéž, se zaměřením na aktéra tvrzení."
+      "how": "Totéž, se zaměřením na aktéra tvrzení.",
+      "ranking_role": "orders",
+      "needs_bank": false
     },
     "K03": {
       "name": "Čas a změna stavu",
@@ -726,7 +730,9 @@
       "unit_definition": "tvrzení",
       "applicability": "Longitudinální úlohy potřebují předchozí zápisy; ty se nesmí podstrčit úloze, která je mít nemá.",
       "error_consequence": "Minulý stav vydávaný za současný mění klinické rozhodnutí.",
-      "how": "Totéž, se zaměřením na čas a změnu stavu."
+      "how": "Totéž, se zaměřením na čas a změnu stavu.",
+      "ranking_role": "orders",
+      "needs_bank": false
     },
     "K04": {
       "name": "Jistota, hypotéza, dohoda",
@@ -748,7 +754,9 @@
       "unit_definition": "tvrzení",
       "applicability": "Vždy.",
       "error_consequence": "Návrh povýšený na dohodu vytvoří v další péči závazek, ke kterému se klient nikdy nepřihlásil.",
-      "how": "Totéž, se zaměřením na míru jistoty."
+      "how": "Totéž, se zaměřením na míru jistoty.",
+      "ranking_role": "orders",
+      "needs_bank": false
     },
     "K05": {
       "name": "Pokrytí podstatného obsahu",
@@ -770,7 +778,9 @@
       "unit_definition": "informační jednotka odvozená ze zdroje, s přiřazenou úrovní důležitosti",
       "applicability": "Informace, která na sezení nezazněla, se nesmí počítat jako vynechaná. Banka informací musí vzniknout dřív, než kdokoli uvidí hodnocený zápis.",
       "error_consequence": "Vynechání rizikové informace je jiná třída chyby než vynechání domácího úkolu; sloučení do jednoho procenta ten rozdíl smaže.",
-      "how": "Z přepisu se předem sestaví banka faktů se stupni důležitosti; u každého se zjistí, jestli ho zápis nese."
+      "how": "Z přepisu se předem sestaví banka faktů se stupni důležitosti; u každého se zjistí, jestli ho zápis nese.",
+      "ranking_role": "orders",
+      "needs_bank": true
     },
     "K06": {
       "name": "Přiznaná informační mezera",
@@ -792,7 +802,9 @@
       "unit_definition": "informační jednotka",
       "applicability": "Vždy, ale význam se liší podle tématu: nezmíněné riziko není vyloučené riziko.",
       "error_consequence": "Zápis, který si vyrobí negativní nález, dává další péči falešné ujištění.",
-      "how": "Z téže banky: u každého faktu se rozliší, že zazněl, že klient popřel, a že se na to nikdo nezeptal. Zápis se nemá co vyjadřovat k ostatním faktům světa, jen k těm v bance."
+      "how": "Z téže banky: u každého faktu se rozliší, že zazněl, že klient popřel, a že se na to nikdo nezeptal. Zápis se nemá co vyjadřovat k ostatním faktům světa, jen k těm v bance.",
+      "ranking_role": "orders",
+      "needs_bank": true
     },
     "K07": {
       "name": "Relevance pro adresáta",
@@ -814,7 +826,9 @@
       "unit_definition": "informační jednotka krát účel",
       "applicability": "Vyžaduje předem deklarovaný účel. Jinak je relevance neměřitelná.",
       "error_consequence": "Univerzální skóre odmění zápis, který je dobrý pro jednoho adresáta a pro jiného nepoužitelný.",
-      "how": "Z téže banky: každý fakt má značku účelu a pokrytí se uvádí po účelech."
+      "how": "Z téže banky: každý fakt má značku účelu a pokrytí se uvádí po účelech.",
+      "ranking_role": "orders",
+      "needs_bank": true
     },
     "K08": {
       "name": "Riziko a bezpečí",
@@ -836,7 +850,9 @@
       "unit_definition": "informační jednotka označená jako riziková",
       "applicability": "Téma se vyskytuje vzácně; vzácnost není důvod položku vypustit.",
       "error_consequence": "Nejvyšší. Jediné vynechání může být klinicky rozhodující.",
-      "how": "Z téže banky: fakty označené jako riziko se uvádějí jako vlastní vrstva."
+      "how": "Z téže banky: fakty označené jako riziko se uvádějí jako vlastní vrstva.",
+      "ranking_role": "orders",
+      "needs_bank": true
     },
     "K09": {
       "name": "Opodstatněnost vytvořených souvislostí",
@@ -858,7 +874,9 @@
       "unit_definition": "vytvořený vztah nebo abstrakce",
       "applicability": "Účel rozhoduje, kolik syntézy je žádoucí. Samotné množství klinických úvah se odměňovat nesmí.",
       "error_consequence": "Vymyšlená klinická souvislost vypadá jako odborný závěr a putuje dál.",
-      "why_not_measured": "Chybí pravidlo měření. Polovina, kterou umíme, je v ověřování tvrzení; druhá polovina (je ten vztah vhodný pro daný účel?) nemá stanovené měřítko."
+      "why_not_measured": "Chybí pravidlo měření. Polovina, kterou umíme, je v ověřování tvrzení; druhá polovina (je ten vztah vhodný pro daný účel?) nemá stanovené měřítko.",
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
     },
     "K10": {
       "name": "Návaznost a další kroky",
@@ -880,7 +898,9 @@
       "unit_definition": "informační jednotka typu plán",
       "applicability": "Sezení bez dohodnutého plánu se nesmí trestat za chybějící plán.",
       "error_consequence": "Chybějící plán přeruší návaznost; vymyšlený plán vytvoří falešný závazek.",
-      "how": "Z téže banky: fakty typu plán."
+      "how": "Z téže banky: fakty typu plán.",
+      "ranking_role": "orders",
+      "needs_bank": true
     },
     "K11": {
       "name": "Úspornost",
@@ -902,7 +922,9 @@
       "unit_definition": "věta",
       "applicability": "Prázdný nebo velmi krátký zápis nesmí dostat vysokou úspornost, aniž by se současně vykázalo jeho pokrytí.",
       "error_consequence": "Úspornost vykázaná samostatně odměňuje prázdný zápis.",
-      "how": "Každá věta se označí jednotkami, které nese; věta bez jednotky je nadbytečná."
+      "how": "Každá věta se označí jednotkami, které nese; věta bez jednotky je nadbytečná.",
+      "ranking_role": "orders",
+      "needs_bank": true
     },
     "K12": {
       "name": "Uspořádání textu",
@@ -924,7 +946,9 @@
       "unit_definition": "informační jednotka krát sekce; celý zápis pro celkové uspořádání",
       "applicability": "Jen pro úlohy, které předepisují strukturu.",
       "error_consequence": "Správný obsah na špatném místě mění svého původce a čtenář ho čte jinak.",
-      "how": "U každé jednotky se zjistí, jestli stojí v oddílu podle šablony."
+      "how": "U každé jednotky se zjistí, jestli stojí v oddílu podle šablony.",
+      "ranking_role": "orders",
+      "needs_bank": false
     },
     "K13": {
       "name": "Srozumitelnost pro čtenáře",
@@ -946,7 +970,9 @@
       "unit_definition": "celý zápis",
       "applicability": "Měřitelné jen vůči konkrétnímu adresátovi.",
       "error_consequence": "Nesrozumitelné klientské shrnutí selhalo ve svém jediném účelu.",
-      "why_not_measured": "Chybí hodnotitel. Dá se měřit jen proti konkrétnímu čtenáři, a pilot nemá klientské čtenáře. Indexy čitelnosti jsou náhražka, ne důkaz."
+      "why_not_measured": "Chybí hodnotitel. Dá se měřit jen proti konkrétnímu čtenáři, a pilot nemá klientské čtenáře. Indexy čitelnosti jsou náhražka, ne důkaz.",
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
     },
     "K14": {
       "name": "Nestigmatizující jazyk",
@@ -968,7 +994,9 @@
       "unit_definition": "úsek textu",
       "applicability": "Citace vlastních slov klienta se posuzuje jinak než formulace autora zápisu.",
       "error_consequence": "Klient si přečte odsudek sebe sama. Poškozuje to terapeutický vztah a je to trvalý záznam.",
-      "how": "Hodnotitel přečte vlastní text autora, citace klienta se nepočítá."
+      "how": "Hodnotitel přečte vlastní text autora, citace klienta se nepočítá.",
+      "ranking_role": "orders_with_two_raters",
+      "needs_bank": false
     },
     "K15": {
       "name": "Nezbytnost citlivého detailu",
@@ -990,7 +1018,9 @@
       "unit_definition": "citlivý detail",
       "applicability": "Nesmí smazat klinicky rozhodující obsah. Konflikt s právním požadavkem se řeší ve prospěch práva a zapíše se.",
       "error_consequence": "Zbytečný citlivý detail poškodí klienta i třetí osoby a nejde vzít zpět.",
-      "why_not_measured": "Nemá oporu. Pozor na sloupec vlevo: ty tři zdroje se kritéria dotýkají, ale žádný nedefinuje, co je nezbytný detail vzhledem k účelu. Mluví o zdravotnické dokumentaci jako celku, ne o jednom zápisu pro jeden účel. Jediný kandidát v tomto stavu."
+      "why_not_measured": "Nemá oporu. Pozor na sloupec vlevo: ty tři zdroje se kritéria dotýkají, ale žádný nedefinuje, co je nezbytný detail vzhledem k účelu. Mluví o zdravotnické dokumentaci jako celku, ne o jednom zápisu pro jeden účel. Jediný kandidát v tomto stavu.",
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
     },
     "K16": {
       "name": "Kontext vzniku záznamu",
@@ -1012,7 +1042,9 @@
       "unit_definition": "celý zápis",
       "applicability": "Vždy, ale konkrétní povinné údaje plynou z jurisdikce.",
       "error_consequence": "Bez kontextu vzniku nelze posoudit, jakou váhu záznamu dát.",
-      "why_not_measured": "Neměří se. Překrývá se s kontrolou náležitostí české vyhlášky, která je konkrétnější."
+      "why_not_measured": "Neměří se. Překrývá se s kontrolou náležitostí české vyhlášky, která je konkrétnější.",
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
     },
     "K17": {
       "name": "Informace o třetích osobách",
@@ -1034,7 +1066,9 @@
       "unit_definition": "zmínka o třetí osobě",
       "applicability": "Přítomné v každém uspořádání. V individuální terapii vstupují třetí osoby přes klientovo vyprávění; v párové a skupinové jsou to účastníci s vlastním souhlasem, což mění pravidlo, ne relevanci.",
       "error_consequence": "Zasahuje do práv někoho, kdo o zápisu neví a nemá k němu přístup.",
-      "why_not_measured": "Chybí pravidlo měření. Není definované, jak označovat třetí osoby a jak odlišit roli od identifikace."
+      "why_not_measured": "Chybí pravidlo měření. Není definované, jak označovat třetí osoby a jak odlišit roli od identifikace.",
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
     },
     "K18": {
       "name": "Dohledatelnost ke zdroji",
@@ -1056,7 +1090,9 @@
       "unit_definition": "odkaz a tvrzení, ke kterému odkazuje",
       "applicability": "Jen pro úlohy, které odkazy výslovně vyžadují. Běžný čas v hranaté závorce není odkaz.",
       "error_consequence": "Odkaz, který nepodpírá, budí falešnou důvěru účinněji než žádný odkaz.",
-      "why_not_measured": "Neměří se. Žádná úloha po modelu nechce citace, takže by jmenovatel byl prázdný."
+      "why_not_measured": "Neměří se. Žádná úloha po modelu nechce citace, takže by jmenovatel byl prázdný.",
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
     },
     "K19": {
       "name": "Náležitosti české zdravotnické dokumentace",
@@ -1078,7 +1114,9 @@
       "unit_definition": "náležitost podle předpisu",
       "applicability": "Jen české zápisy, a jen ty vedené jako zdravotnická dokumentace poskytovatelem zdravotních služeb. Ne anglická stopa, ne klientské shrnutí, které zdravotnická dokumentace vůbec není. Vyhláška předepisuje náležitosti, ne strukturu zápisu: žádná forma SOAP, DAP ani BIRP není v ČR povinná, takže se kritérium nikdy nesmí číst jako požadavek psát v některé z nich.",
       "error_consequence": "Chybějící náležitost je dokumentační problém pro tu úzkou skupinu, ne klinická vada zápisu, a nesmí se míchat do skóre kvality. Číst to jako právní verdikt by bylo tvrzení o reálné praxi, které tahle práce neunese.",
-      "measured_otherwise": "Měří se jinak: deterministická kontrola náležitostí vyhlášky."
+      "measured_otherwise": "Měří se jinak: deterministická kontrola náležitostí vyhlášky.",
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
     },
     "K20": {
       "name": "Splnění formátu zadání",
@@ -1100,7 +1138,9 @@
       "unit_definition": "požadavek zadání",
       "applicability": "Jen tam, kde si úloha tu kontrolu výslovně vyžádá.",
       "error_consequence": "Malý, pokud se nezamění za kvalitu.",
-      "why_not_measured": "Mimo rozsah. Je to kontrola instrukce, ne kvality; běží stranou a nemíchá se do skóre."
+      "why_not_measured": "Mimo rozsah. Je to kontrola instrukce, ne kvality; běží stranou a nemíchá se do skóre.",
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
     },
     "K21": {
       "name": "Převzetí péče ze zápisu",
@@ -1124,7 +1164,9 @@
       "applicability": "Vyžaduje člověka v roli přebírajícího. Model ho v této úloze nenahradí.",
       "error_consequence": "Tohle je veličina, kvůli které se zápisy píšou; nesledovat ji je hlavní slabina čistě textových měření.",
       "how": "Člověk dostane jen zápis, bez přepisu, a zkusí z něj navázat péči.",
-      "measured_otherwise": "Měří se jinak: otázka pro člověka, zda dokáže ze zápisu převzít péči."
+      "measured_otherwise": "Měří se jinak: otázka pro člověka, zda dokáže ze zápisu převzít péči.",
+      "ranking_role": "orders_with_two_raters",
+      "needs_bank": false
     },
     "K22": {
       "name": "Rozsah nutných úprav",
@@ -1146,7 +1188,9 @@
       "unit_definition": "úprava",
       "applicability": "Vyžaduje skutečný provoz, ne laboratorní hodnocení.",
       "error_consequence": "Nízká viditelná chybovost při vysoké míře tichého přepisování zakrývá skutečný stav.",
-      "why_not_measured": "Mimo rozsah. Potřebuje skutečný provoz, kde terapeut s konceptem pracuje. Laboratorní pilot takový provoz nemá."
+      "why_not_measured": "Mimo rozsah. Potřebuje skutečný provoz, kde terapeut s konceptem pracuje. Laboratorní pilot takový provoz nemá.",
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
     },
     "K23": {
       "name": "Přijatelnost pro praxi",
@@ -1170,7 +1214,9 @@
       "applicability": "Lidské měření. Soudcem se nahradit nedá.",
       "error_consequence": "Benchmark, který měří jen text, může doporučit systém, který odborníci odmítají.",
       "how": "Člověk odpoví na šest parametrů přijatelnosti ze zdroje.",
-      "measured_otherwise": "Měří se jinak: otázka pro člověka, zda by zápis použil v praxi."
+      "measured_otherwise": "Měří se jinak: otázka pro člověka, zda by zápis použil v praxi.",
+      "ranking_role": "orders_with_two_raters",
+      "needs_bank": false
     },
     "K24": {
       "name": "Porozumění ze strany klienta",
@@ -1192,7 +1238,9 @@
       "unit_definition": "zápis krát čtenář",
       "applicability": "Vyžaduje skutečné čtenáře. Do prvního pilotu se bez etického rámce nevejde.",
       "error_consequence": "Nejcitlivější účel; chyba se dotkne přímo klienta.",
-      "why_not_measured": "Mimo rozsah tvým rozhodnutím ze 16. 9. (nástroj slouží návaznosti péče a dokumentaci). Kandidát i jeho opora zůstávají pro další kolo."
+      "why_not_measured": "Mimo rozsah tvým rozhodnutím ze 16. 9. (nástroj slouží návaznosti péče a dokumentaci). Kandidát i jeho opora zůstávají pro další kolo.",
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
     },
     "K25": {
       "name": "Podpora supervize",
@@ -1214,7 +1262,9 @@
       "unit_definition": "zápis krát supervizor",
       "applicability": "Vyžaduje supervizory jako hodnotitele.",
       "error_consequence": "Supervize bez informace o postupu terapeuta míjí svůj smysl.",
-      "why_not_measured": "Mimo rozsah týmž rozhodnutím. Supervize byla navíc ze čtyř účelů nejhůř podepřená, což je samo o sobě výsledek rešerše."
+      "why_not_measured": "Mimo rozsah týmž rozhodnutím. Supervize byla navíc ze čtyř účelů nejhůř podepřená, což je samo o sobě výsledek rešerše.",
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
     },
     "K26": {
       "name": "Soulad napříč sezeními",
@@ -1236,7 +1286,9 @@
       "unit_definition": "dvojice zápisů téhož případu",
       "applicability": "Vyžaduje sérii zápisů téhož případu s ověřenou chronologií. Současné případy nejsou pro longitudinální hodnocení připravené ani vybrané: nativní sezení nemají ověřené pořadí a rozhodnutím D1 zůstávají mimo pilot, takže se kandidát v tomhle kole neměří.",
       "error_consequence": "Rozpor v dokumentaci podrývá důvěryhodnost celého záznamu.",
-      "why_not_measured": "Neměří se. Potřebuje několik sezení téhož klienta za sebou; pilotní případy pro to nejsou připravené a česká reálná sezení jsou mimo pilot."
+      "why_not_measured": "Neměří se. Potřebuje několik sezení téhož klienta za sebou; pilotní případy pro to nejsou připravené a česká reálná sezení jsou mimo pilot.",
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
     },
     "K27": {
       "name": "Rovnoměrnost napříč skupinami klientů",
@@ -1258,7 +1310,9 @@
       "unit_definition": "skupina případů, ne jednotlivý zápis",
       "applicability": "Vyžaduje dost případů na podskupinu. S jedním českým klientským klastrem to měřit NELZE a nesmí se to předstírat.",
       "error_consequence": "Systematická nerovnost je horší než náhodná chyba a jeden zápis ji neodhalí.",
-      "why_not_measured": "Neměří se. Potřebuje dost případů v každé skupině klientů; s jednou skupinou se to nedá rozdělit a nesmí se to předstírat."
+      "why_not_measured": "Neměří se. Potřebuje dost případů v každé skupině klientů; s jednou skupinou se to nedá rozdělit a nesmí se to předstírat.",
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
     },
     "K28": {
       "name": "Personalizace",
@@ -1282,7 +1336,9 @@
       "applicability": "Na jednom zápisu se měřit NEDÁ. Vyžaduje dost případů, aby se dala spočítat podobnost mezi nimi.",
       "error_consequence": "Obecný zápis projde všemi ostatními kritérii a nepřidá nic, co by dalšímu terapeutovi pomohlo tohohle klienta poznat.",
       "how": "Spočítá se rozmanitost všech zápisů jednoho modelu, ne jeden zápis.",
-      "measured_otherwise": "Měří se jinak: ukazatel přes všechny zápisy jednoho modelu."
+      "measured_otherwise": "Měří se jinak: ukazatel přes všechny zápisy jednoho modelu.",
+      "ranking_role": "describes_only",
+      "needs_bank": false
     },
     "K29": {
       "name": "Informační hustota",
@@ -1306,7 +1362,9 @@
       "applicability": "Bez srovnatelné délky nebo bez přepočtu na jednotku textu jsou srovnání pokrytí mezi systémy zavádějící. Krátký zápis může být hustý a přitom vynechávat podstatné; hustota se nikdy nečte samostatně.",
       "error_consequence": "Bez ní benchmark systematicky odměňuje mnohomluvnost. To je přesně sklon, který modely mají, takže chyba míří vždycky na jednu stranu.",
       "how": "Počet různých faktů z banky na jednotku délky.",
-      "measured_otherwise": "Měří se jinak: odvozený poměr informace k délce."
+      "measured_otherwise": "Měří se jinak: odvozený poměr informace k délce.",
+      "ranking_role": "describes_only",
+      "needs_bank": true
     },
     "K30": {
       "name": "Jazyková přirozenost",
@@ -1328,7 +1386,9 @@
       "unit_definition": "celý zápis",
       "applicability": "Oba jazyky, každý s vlastní operacionalizací: co zní přirozeně v českém klinickém psaní, není překlad anglického pravidla. Vyžaduje lidské hodnotitele; žádná automatická náhrada se nenavrhuje.",
       "error_consequence": "Pro péči nízký; nepřirozený zápis se pořád přečte. Označkuje text jako strojově psaný a může snížit důvěru v obsah.",
-      "why_not_measured": "Chybí pravidlo měření. Hodnoticí pravidlo musí být napsané anglicky i česky a posouzené člověkem."
+      "why_not_measured": "Chybí pravidlo měření. Hodnoticí pravidlo musí být napsané anglicky i česky a posouzené člověkem.",
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
     },
     "K31": {
       "name": "Redundance",
@@ -1350,7 +1410,9 @@
       "unit_definition": "informační jednotka opakovaná v rámci jednoho zápisu",
       "applicability": "Jakýkoli zápis; potřebuje tutéž banku jednotek jako pokrytí. Zopakování, které přidá důsledek, třeba další krok, opakování není.",
       "error_consequence": "Střední: opakování zápis prodlužuje, skrývá vynechávky za objem a nafukuje každé srovnání, které roste s délkou.",
-      "why_not_measured": "Chybí pravidlo měření. Není definované, co je opakování téhož; půjde měřit, až bude existovat banka faktů."
+      "why_not_measured": "Chybí pravidlo měření. Není definované, co je opakování téhož; půjde měřit, až bude existovat banka faktů.",
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
     },
     "K32": {
       "name": "Kulturní kompetence doložená v zápisu",
@@ -1372,7 +1434,9 @@
       "unit_definition": "celý zápis",
       "applicability": "Tam, kde sezení nese kulturní, jazykový nebo sociální kontext, který se péče týkal. Sezení bez takového obsahu znamená, že se položka neuplatní, což není selhání.",
       "error_consequence": "Zápis, který čte klienta přes stereotyp, čte další klinik i klient; škoda je na vztahu a na důvěře a je trvalá.",
-      "why_not_measured": "Chybí pravidlo měření. Přijal jsi ho 21. 9.; jak se to hodnotí, zatím nikdo nenapsal."
+      "why_not_measured": "Chybí pravidlo měření. Přijal jsi ho 21. 9.; jak se to hodnotí, zatím nikdo nenapsal.",
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
     },
     "K33": {
       "name": "Vnitřní konzistence",
@@ -1394,7 +1458,9 @@
       "unit_definition": "dvojice tvrzení v rámci jednoho zápisu",
       "applicability": "Jakýkoli zápis. Rozpor, který vyslovil sám klient a zápis ho uvádí jako klientův, je věrnost, ne nekonzistence.",
       "error_consequence": "Čtenář, který narazí na rozpor, neví, které části věřit, a odepíše celý zápis.",
-      "why_not_measured": "Chybí pravidlo měření. Přidal jsi ho 21. 9.; není napsané, co se počítá jako dvojice tvrzení, která si odporují."
+      "why_not_measured": "Chybí pravidlo měření. Přidal jsi ho 21. 9.; není napsané, co se počítá jako dvojice tvrzení, která si odporují.",
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
     },
     "K34": {
       "name": "Odborná terminologie",
@@ -1406,7 +1472,9 @@
       },
       "statement": "Zápis používá odborné termíny a používá je pro to, co znamenají.",
       "question": "Používá zápis odborné termíny, a správně?",
-      "unit": "jeden termín"
+      "unit": "jeden termín",
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
     },
     "K35": {
       "name": "Zachycení interakce z obou stran",
@@ -1414,7 +1482,9 @@
         "name": "panel_sheet.py",
         "statement": "panel_sheet.py"
       },
-      "statement": "Zápis popisuje, co terapeut udělal, i jak na to klient zareagoval; ne jedno bez druhého."
+      "statement": "Zápis popisuje, co terapeut udělal, i jak na to klient zareagoval; ne jedno bez druhého.",
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
     },
     "K36": {
       "name": "Klientovo prožívání, ne jen chování",
@@ -1422,7 +1492,9 @@
         "name": "panel_sheet.py",
         "statement": "panel_sheet.py"
       },
-      "statement": "Ze zápisu je poznat, jak to klient prožíval, ne jen co dělal."
+      "statement": "Ze zápisu je poznat, jak to klient prožíval, ne jen co dělal.",
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
     },
     "K37": {
       "name": "Číselná odchylka",
@@ -1436,7 +1508,9 @@
         "question": "read on 2026-10-14 and written here",
         "unit": "read on 2026-10-14 and written here",
         "why_not_measured": "read on 2026-10-14 and written here"
-      }
+      },
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
     },
     "K38": {
       "name": "Záměna jména nebo instituce",
@@ -1450,7 +1524,9 @@
         "question": "read on 2026-10-14 and written here",
         "unit": "read on 2026-10-14 and written here",
         "why_not_measured": "read on 2026-10-14 and written here"
-      }
+      },
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
     },
     "K39": {
       "name": "Chyba zděděná ze zdroje",
@@ -1464,7 +1540,9 @@
         "question": "read on 2026-10-14 and written here",
         "unit": "read on 2026-10-14 and written here",
         "why_not_measured": "read on 2026-10-14 and written here"
-      }
+      },
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
     }
   },
   "panel_sheet": {
@@ -1709,5 +1787,36 @@
     "K38",
     "K39"
   ],
-  "authored_here_note": "Every other entry was harvested from a view generator. These three criteria were accepted on 2026-10-14, after the last generator ran, so there was nothing to harvest and the Czech was written for this file."
+  "authored_here_note": "Every other entry was harvested from a view generator. These three criteria were accepted on 2026-10-14, after the last generator ran, so there was nothing to harvest and the Czech was written for this file.",
+  "basis_means": {
+    "source": "Odchylka od zdroje je chyba. Směr kvality je dán, ne dohodnut.",
+    "norm": "Jasné, ale jen tam, kam šablona nebo předpis dosáhne.",
+    "note": "Čte se ze samotného zápisu, bez zdroje. Co nelze ověřit, nelze ani popřít.",
+    "rater": "Kvalita *je* ten verdikt. Platnost se dokládá jen shodou dvou hodnotitelů.",
+    "derived": "Spočítané z jiných měření, takže to nenese vlastní pozorování.",
+    "indicator": "Nesmí se číst „víc je lepší“. Není to sloupec žebříčku."
+  },
+  "basis_means_note": "What follows from the basis, restored on 2026-10-14. The harvest kept the label of each basis and dropped the sentence beside it, so the table named a basis without saying what followed from it.",
+  "ranking_role_labels": {
+    "orders": "určuje pořadí modelů",
+    "orders_with_two_raters": "určuje pořadí jen se dvěma hodnotiteli",
+    "describes_only": "jen popisuje, nikdy žebříček",
+    "not_measured_yet": "neměří se, takže zatím neurčuje nic"
+  },
+  "ranking_role_why": {
+    "orders": "Směr kvality je dán zdrojem, šablonou nebo samotným zápisem, takže vyšší hodnota znamená lepší zápis a kritérium smí být sloupcem pořadí.",
+    "orders_with_two_raters": "Kvalita je verdikt odborníka, takže pořadí z toho smí vzniknout jen tam, kde se shodnou dva hodnotitelé. Jeden hodnotitel dává čtení, ne pořadí.",
+    "describes_only": "Ukazatel nebo číslo spočítané z jiných měření. Charakterizuje model a nesmí se číst jako „víc je lepší“ — hustší zápis není lepší zápis.",
+    "not_measured_yet": "Pravidlo neexistuje, takže kritérium neurčuje ani pořadí, ani popis."
+  },
+  "ranking_role_rule": "Derived from what decides the correct answer and from whether the criterion is measured. An indicator or a derived figure never orders models; an expert verdict orders them only where two raters agree; the rest order them where the direction of quality is given. No role is set by hand, so one changes only when a basis or a state does.",
+  "ranking_role_counts": {
+    "orders": 11,
+    "orders_with_two_raters": 3,
+    "describes_only": 2,
+    "not_measured_yet": 23
+  },
+  "bank_note": "The information bank is not a criterion and is not in this list. It is the answer key: the facts of one session, written down before anyone reads a note, each with how much it matters. Seven criteria cannot be measured without it, and `needs_bank` marks them.",
+  "bank_note_cs": "Banka faktů není kritérium a v seznamu není. Je to klíč správných odpovědí: fakta jednoho sezení, zapsaná dřív, než kdokoli uvidí zápis, u každého s tím, jak moc váží. Sedm kritérií se bez ní nedá změřit a jsou označená.",
+  "bank_is_not_a_criterion": "The information bank is not a criterion and is not in the list. It is the answer key: the facts of one session, written down before anyone reads a note, each with how much it matters. The criteria that cannot be measured without it are marked by `needs_bank`."
 }

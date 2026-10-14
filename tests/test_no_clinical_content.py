@@ -52,6 +52,7 @@ DIACRITIC = re.compile(
 # Real transcripts and every derived QA/evidence artifact stay gitignored.
 OPERATIONAL = "research/gen2/catalog/operational.json"
 CATALOG_CZECH = "research/gen2/catalog/czech.json"
+LANGUAGE_SET = "research/gen2/language-set-proposal.json"
 DRAFT = "research/gen2/catalog/draft-registry.json"
 DECISIONS = "research/gen2/decisions.json"
 REVIEW_RECORD = "research/gen2/review-record.json"
@@ -65,6 +66,10 @@ ALLOWED_CZECH: dict[str, str] = {
     CATALOG_CZECH: "AUTHORED-INSTRUMENT-TEXT: the Czech name and statement a reviewer reads "
     "for each candidate, held to catalog.json by tests/test_catalog_czech.py so that it "
     "translates the one list of criteria instead of becoming a second one",
+    LANGUAGE_SET: "AUTHORED-INSTRUMENT-TEXT: a proposed set of language-quality criteria for "
+    "the Czech track, with the question each one asks in the language it will be asked in. A "
+    "proposal, not part of the catalog; the agreement figures in it are counts and no note is "
+    "quoted",
     DRAFT: "derived from operational.json by the converter; tests/test_gen2_catalog.py holds "
     "its Czech to exactly the authored strings",
     DECISIONS: "AUTHORED-INVESTIGATOR-TEXT: the investigator's own decisions on the catalog's "
@@ -191,6 +196,7 @@ def test_czech_exceptions_are_only_authored_gen2_resources(tracked_files):
     assert set(ALLOWED_CZECH) == core | {
         OPERATIONAL,
         CATALOG_CZECH,
+        LANGUAGE_SET,
         DRAFT,
         DECISIONS,
         REVIEW_RECORD,
@@ -204,6 +210,7 @@ def test_czech_exceptions_are_only_authored_gen2_resources(tracked_files):
     assert FIXTURE_MARKER in (REPO_ROOT / CORE / "controls.py").read_text(encoding="utf-8")
     assert INSTRUMENT_MARKER in (REPO_ROOT / OPERATIONAL).read_text(encoding="utf-8")
     assert INSTRUMENT_MARKER in (REPO_ROOT / CATALOG_CZECH).read_text(encoding="utf-8")
+    assert INSTRUMENT_MARKER in (REPO_ROOT / LANGUAGE_SET).read_text(encoding="utf-8")
     assert "AUTHORED-INVESTIGATOR-TEXT" in (REPO_ROOT / DECISIONS).read_text(encoding="utf-8")
     assert "AUTHORED-INVESTIGATOR-TEXT" in (REPO_ROOT / REVIEW_RECORD).read_text(encoding="utf-8")
     assert "AUTHORED-INVESTIGATOR-TEXT" in (REPO_ROOT / EXPERT).read_text(encoding="utf-8")

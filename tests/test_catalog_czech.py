@@ -139,11 +139,19 @@ def test_every_resolved_conflict_says_what_it_rejected(czech):
     assert fields <= set(czech["precedence"]["by_field"])
 
 
+#: Fields computed from catalog.json rather than written or harvested, so they
+#: carry no provenance: the catalog is their provenance and they change when it
+#: does. `ranking_role` says whether a criterion may order models and
+#: `needs_bank` whether it needs the information bank, and both are derived by
+#: research/gen2/catalog/ranking_role.py from what decides the criterion's answer.
+DERIVED_FIELDS = {"ranking_role", "needs_bank"}
+
+
 def test_every_field_says_which_generator_it_came_from(czech):
     known = set(czech["precedence"]["by_field"])
     for code, entry in czech["candidates"].items():
         provenance = entry["from"]
-        assert set(provenance) == set(entry) - {"from"}, code
+        assert set(provenance) == set(entry) - {"from"} - DERIVED_FIELDS, code
         for field, filename in provenance.items():
             assert field in known, (code, field)
             if filename == czech["authored_here"]:
