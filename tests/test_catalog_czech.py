@@ -146,12 +146,19 @@ def test_every_resolved_conflict_says_what_it_rejected(czech):
 #: research/gen2/catalog/ranking_role.py from what decides the criterion's answer.
 DERIVED_FIELDS = {"ranking_role", "needs_bank"}
 
+#: Fields that record what happened to an entry rather than what it says, so
+#: they carry no generator either. K18's Czech question was reworded on
+#: 2026-10-14 because it could not be told apart from K01's, and the entry keeps
+#: the date, the reason and the previous wording beside the new one: a criterion
+#: whose question changed silently is a criterion nobody can audit.
+HISTORY_FIELDS = {"reworded_on", "why_reworded", "previous_wording"}
+
 
 def test_every_field_says_which_generator_it_came_from(czech):
     known = set(czech["precedence"]["by_field"])
     for code, entry in czech["candidates"].items():
         provenance = entry["from"]
-        assert set(provenance) == set(entry) - {"from"} - DERIVED_FIELDS, code
+        assert set(provenance) == set(entry) - {"from"} - DERIVED_FIELDS - HISTORY_FIELDS, code
         for field, filename in provenance.items():
             assert field in known, (code, field)
             if filename == czech["authored_here"]:

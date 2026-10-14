@@ -1083,8 +1083,8 @@
         "error_consequence": "cz_constructs.py",
         "why_not_measured": "build_doc.py"
       },
-      "statement": "U tvrzení v zápisu lze ukázat místo ve zdroji, které ho podpírá.",
-      "question": "Lze u tvrzení ukázat místo ve zdroji?",
+      "statement": "Zápis u tvrzení uvádí odkaz na místo ve zdroji a ten odkaz tvrzení opravdu podpírá.",
+      "question": "Uvádí zápis u tvrzení odkaz na místo v přepisu, a sedí ten odkaz?",
       "definition": "U tvrzení lze ukázat místo ve zdroji, které ho podpírá. Rozlišuje se platnost odkazu, jeho skutečná opora tvrzení a podíl tvrzení, která odkaz nesou. Předmětem je odkaz, který do zápisu napíše autor; úseky, které si při kontrole označí hodnotitel, jsou něco jiného a patří do metod.",
       "unit": "jeden odkaz",
       "unit_definition": "odkaz a tvrzení, ke kterému odkazuje",
@@ -1092,7 +1092,13 @@
       "error_consequence": "Odkaz, který nepodpírá, budí falešnou důvěru účinněji než žádný odkaz.",
       "why_not_measured": "Neměří se. Žádná úloha po modelu nechce citace, takže by jmenovatel byl prázdný.",
       "ranking_role": "not_measured_yet",
-      "needs_bank": false
+      "needs_bank": false,
+      "reworded_on": "2026-10-14",
+      "why_reworded": "Původní znění „Lze u tvrzení ukázat místo ve zdroji?“ se nedalo odlišit od K01, protože se ptalo, jestli opora existuje. Předmětem K18 je ale odkaz, který do zápisu napsal autor, a jednotkou je jeden odkaz, ne jedno tvrzení. K01 se ptá, jestli je tvrzení podložené; K18, jestli zápis uvedl odkaz a jestli ten odkaz sedí.",
+      "previous_wording": {
+        "question": "Lze u tvrzení ukázat místo ve zdroji?",
+        "statement": "U tvrzení v zápisu lze ukázat místo ve zdroji, které ho podpírá."
+      }
     },
     "K19": {
       "name": "Náležitosti české zdravotnické dokumentace",
