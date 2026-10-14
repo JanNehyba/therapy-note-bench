@@ -50,6 +50,15 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "inductive-properties.json"
+
+#: How many documents a term needs to be reported. Two, not three.
+#:
+#: The first run used three and returned 17 terms, which is a measurement of the
+#: corpus rather than of the method: an abstract says it has a taxonomy far more
+#: often than it prints one, so almost every real property appears once or
+#: twice. A high threshold here does not buy precision, it buys silence, and the
+#: point of an inductive pass is the unexpected term that one paper used.
+MIN_DOCUMENTS = 2
 LAYER_LOG = ROOT / "search-log-acl-language.json"
 
 #: An abstract that enumerates kinds of error or quality. Structural only: every
@@ -64,10 +73,23 @@ ENUMERATES = re.compile(
     re.I,
 )
 
-#: The extraction. P1 and P2 are the content-free ones: they take whatever the
-#: corpus puts next to the word "error". P3 reads an explicit enumeration, and
-#: only inside a sentence that is already about errors or quality.
-MODIFIER = re.compile(r"\b([a-z][a-z-]{2,24})[- ]+errors?\b", re.I)
+#: The extraction. The first two are the content-free ones: they take whatever
+#: the corpus puts next to the word "error". The third reads an explicit
+#: enumeration, and only inside a sentence already about errors or quality.
+#:
+#: The modifier may be up to three words, because the first run of this script
+#: reported `order` where the corpus had said "word order errors" and threw the
+#: half that carries the meaning away.
+MODIFIER = re.compile(r"\b((?:[a-z][a-z-]{2,24}\s+){0,2}[a-z][a-z-]{2,24})[- ]+errors?\b", re.I)
+#: What may follow "error" for the modifier to describe the study rather than
+#: the error. "A detailed error analysis" is about an analysis; it was 94 of the
+#: first run's documents for the term `detailed`, and none of them said that
+#: detailedness is a way a text can be wrong.
+ABOUT_THE_STUDY = re.compile(
+    r"\berrors?\s+(?:analys[ei]s|stud(?:y|ies)|examination|inspection|breakdown"
+    r"|investigation|review|discussion|annotation|taxonom\w+|typolog\w+)\b",
+    re.I,
+)
 OF_ERRORS = re.compile(r"\berrors?\s+(?:of|in|related to)\s+([a-z][a-z-]{2,24})\b", re.I)
 ENUMERATION = re.compile(
     r"(?:error|quality|issue)[a-z]*\s*(?:types?|categor\w+|dimensions?|aspects?)?"
@@ -267,6 +289,81 @@ STOP = {
     "silver",
     "best",
     "worst",
+    # Exposed by the first run of this script, which reported `detailed` with 94
+    # documents and `in-depth` with 26 because the corpus writes "a detailed error
+    # analysis". Each of these qualifies a study, never a text: no paper claims that
+    # thoroughness is a way a note can be wrong. `order`, `recall`, `character` and
+    # `entity` were noisy too and are deliberately not here, because each of them can
+    # name a property.
+    "detailed",
+    "in-depth",
+    "in",
+    "qualitative",
+    "quantitative",
+    "comprehensive",
+    "thorough",
+    "extensive",
+    "fine-grained",
+    "coarse-grained",
+    "span-level",
+    "sentence-level",
+    "document-level",
+    "word-level",
+    "hierarchical",
+    "comparative",
+    "diverse",
+    "individual",
+    "certain",
+    "dominant",
+    "remaining",
+    "explicit",
+    "implicit",
+    "key",
+    "further",
+    "deeper",
+    "deep",
+    "broad",
+    "wide",
+    "perform",
+    "performed",
+    "performing",
+    "provide",
+    "provides",
+    "providing",
+    "facilitate",
+    "identify",
+    "identifies",
+    "identifying",
+    "categorizing",
+    "categorising",
+    "annotating",
+    "including",
+    "include",
+    "includes",
+    "improve",
+    "improves",
+    "improving",
+    "reduce",
+    "reduces",
+    "reducing",
+    "report",
+    "reports",
+    "reporting",
+    "reveal",
+    "reveals",
+    "revealing",
+    "show",
+    "shows",
+    "showing",
+    "using",
+    "used",
+    "use",
+    "based",
+    "conduct",
+    "conducted",
+    "conducting",
+    "present",
+    "presents",
 }
 
 #: A term that is a property only in a context this review does not care about:
@@ -324,22 +421,30 @@ def normalise(term: str) -> str | None:
     return term
 
 
-def extract(text: str) -> set[str]:
-    """Every property name this abstract puts next to the idea of an error."""
-    found: set[str] = set()
+def extract(text: str) -> dict[str, set[str]]:
+    """Every property name this abstract puts next to the idea of an error.
+
+    Returns the patterns that found each term. A term the corpus listed in an
+    enumeration is the corpus calling it a kind of error; a term seen only
+    before the word "error" may still be an adjective that ABOUT_THE_STUDY did
+    not catch, so the two are kept apart rather than summed.
+    """
+    found: dict[str, set[str]] = defaultdict(set)
     for match in MODIFIER.finditer(text):
+        if ABOUT_THE_STUDY.search(text[match.start() : match.end() + 24]):
+            continue
         term = normalise(match.group(1))
         if term:
-            found.add(term)
+            found[term].add("before_error")
     for match in OF_ERRORS.finditer(text):
         term = normalise(match.group(1))
         if term:
-            found.add(term)
+            found[term].add("after_errors_of")
     for match in ENUMERATION.finditer(text):
         for part in re.split(r",| and | or |/|;", match.group(1)):
             term = normalise(part)
             if term and len(term.split()) <= 3:
-                found.add(term)
+                found[term].add("enumeration")
     return found
 
 
@@ -361,6 +466,8 @@ def main() -> int:
     in_layer = 0
     frequency: Counter[str] = Counter()
     inside: Counter[str] = Counter()
+    listed: Counter[str] = Counter()
+    how: dict[str, set[str]] = defaultdict(set)
     examples: dict[str, list[dict]] = defaultdict(list)
     for record in records:
         text = f"{record.get('title', '')} {record.get('abstract', '')}"
@@ -369,8 +476,11 @@ def main() -> int:
         documents += 1
         reachable = record["_key"] in layer_keys
         in_layer += reachable
-        for term in extract(text):
+        for term, patterns in extract(text).items():
             frequency[term] += 1
+            how[term] |= patterns
+            if "enumeration" in patterns:
+                listed[term] += 1
             if reachable:
                 inside[term] += 1
             if len(examples[term]) < 3:
@@ -385,12 +495,15 @@ def main() -> int:
 
     terms = []
     for term, count in frequency.most_common():
-        if count < 3:
+        if count < MIN_DOCUMENTS:
             continue
         terms.append(
             {
                 "term": term,
                 "documents": count,
+                "documents_that_listed_it_as_a_kind": listed[term],
+                "found_by": sorted(how[term]),
+                "corpus_called_it_a_kind_of_error": listed[term] > 0,
                 "documents_reachable_by_the_seven_queries": inside[term],
                 "found_only_outside_those_queries": inside[term] == 0,
                 "probably_not_a_property_of_a_text": term in NOT_A_TEXT_PROPERTY,
@@ -432,7 +545,7 @@ def main() -> int:
             "modifier_before_error": MODIFIER.pattern,
             "after_errors_of": OF_ERRORS.pattern,
             "explicit_enumeration": ENUMERATION.pattern,
-            "minimum_documents_to_report": 3,
+            "minimum_documents_to_report": MIN_DOCUMENTS,
             "stoplist_size": len(STOP),
             "stoplist_is_a_declared_bias": (
                 "every word in it is about the shape of a sentence or the apparatus of a "

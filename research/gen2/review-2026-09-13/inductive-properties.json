@@ -1,0 +1,2101 @@
+{
+  "version": "inductive-properties-v1",
+  "date": "2026-10-14",
+  "what_this_is": "Text-quality property names taken from the corpus bottom-up. The papers were selected because their abstracts enumerate kinds of error, by a pattern that names no kind; the property names were then taken from whatever those abstracts put next to the word error. No category list was supplied, and this file does not know what the catalog contains.",
+  "why_it_exists": "Every other step of this review is deductive. The queries were written from properties somebody already had in mind, the ordering gives 5 points for naming one of the Czech scorer's six, and the per-criterion breakdown counts mentions of what we already measure. None of that can find a property nobody here thought of, which is what the investigator asked for on 2026-10-14.",
+  "corpus": {
+    "file": "anthology+abstracts.bib.gz",
+    "sha256": "31d71e8bb2118d5c7bb262d2ae7f2ae078d999a96b4587b8a37d1ff79caf7bf0",
+    "records": 131040,
+    "snapshot": "downloaded 2026-09-13 for AM-5"
+  },
+  "selection": {
+    "rule": "the abstract or title enumerates kinds of error or quality",
+    "pattern": "\\b(error (?:types?|categor\\w+|class\\w+|taxonom\\w+|typolog\\w+)|taxonom\\w+ of errors?|typolog\\w+ of errors?|(?:quality|error) (?:dimension|aspect)s?|annotation (?:scheme|guidelines?|taxonom\\w+)|(?:we|they) (?:annotate|label|categori[sz]e|classify)[^.]{0,40}\\berrors?\\b|fine[- ]grained errors?|error analysis)\\b",
+    "contains_no_property_name": true,
+    "documents_selected": 1941,
+    "of_those_reachable_by_the_seven_deductive_queries": 373
+  },
+  "extraction": {
+    "modifier_before_error": "\\b((?:[a-z][a-z-]{2,24}\\s+){0,2}[a-z][a-z-]{2,24})[- ]+errors?\\b",
+    "after_errors_of": "\\berrors?\\s+(?:of|in|related to)\\s+([a-z][a-z-]{2,24})\\b",
+    "explicit_enumeration": "(?:error|quality|issue)[a-z]*\\s*(?:types?|categor\\w+|dimensions?|aspects?)?[^.]{0,30}?(?::|such as|including|namely|consisting of)\\s*([^.;]{5,200})",
+    "minimum_documents_to_report": 2,
+    "stoplist_size": 256,
+    "stoplist_is_a_declared_bias": "every word in it is about the shape of a sentence or the apparatus of a study, never a property a text can have, so removing it cannot remove a candidate",
+    "not_a_text_property_is_a_judgement": "a separate, smaller list of terms this review takes to be about a pipeline or a measurement rather than a text. The terms are kept and flagged rather than dropped, so the judgement can be reversed by whoever disagrees."
+  },
+  "limitations": "An abstract names a taxonomy far more often than it lists one, so a scheme whose categories live in a table contributes its name and not its contents. Recall is low and this is a floor, not a census. Nothing here is read: a term is a place to look, not a property with a definition.",
+  "what_this_does_not_do": "It maps nothing onto the catalog. Which of these the 36 candidates already cover is a judgement, made in a separate step and recorded there, because a mapping done here would hide the step where a new property could be talked away.",
+  "terms": [
+    {
+      "term": "grammatical",
+      "documents": 25,
+      "documents_that_listed_it_as_a_kind": 1,
+      "found_by": [
+        "before_error",
+        "enumeration"
+      ],
+      "corpus_called_it_a_kind_of_error": true,
+      "documents_reachable_by_the_seven_queries": 21,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2025",
+          "title": "Leveraging LLMs for Bangla Grammar Error Correction: Error Categorization, Synthetic Data, and Model Evaluation",
+          "url": "https://aclanthology.org/2025.findings-acl.431/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2025",
+          "title": "Large Language Models are Good Annotators for Type-aware Data Augmentation in Grammatical Error Correction",
+          "url": "https://aclanthology.org/2025.coling-main.14/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2025",
+          "title": "An Annotated Error Corpus for Esperanto",
+          "url": "https://aclanthology.org/2025.cgmta-1.1/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "and",
+      "documents": 15,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 7,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2026",
+          "title": "SiniticMTError: A Machine Translation Dataset with Error Annotations for Sinitic Languages",
+          "url": "https://aclanthology.org/2026.lrec-1.683/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2026",
+          "title": "Reading Between the Lines: Toward Translating Verbose Patient-authored Messages into Clinician-Formulated Questions",
+          "url": "https://aclanthology.org/2026.bionlp-1.38/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2026",
+          "title": "DeformAR: A Visual Analytics Framework for Evaluation of Arabic Named Entity Recognition",
+          "url": "https://aclanthology.org/2026.abjadnlp-1.34/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "chinese grammatical",
+      "documents": 14,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 5,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2025",
+          "title": "A Chain-of-Task Framework for Instruction Tuning of LLMs Based on Chinese Grammatical Error Correction",
+          "url": "https://aclanthology.org/2025.coling-main.577/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2025",
+          "title": "A Chunk-based Chain of Thought Prompting Method for Mitigating Over-Correction in Chinese Grammatical Error Correction",
+          "url": "https://aclanthology.org/2025.ccl-1.63/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2024",
+          "title": "Chinese Grammatical Error Correction via Large Language Model Guided Optimization Training",
+          "url": "https://aclanthology.org/2024.ccl-1.105/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "factual",
+      "documents": 6,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 4,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2024",
+          "title": "TofuEval: Evaluating Hallucinations of LLMs on Topic-Focused Dialogue Summarization",
+          "url": "https://aclanthology.org/2024.naacl-long.251/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2023",
+          "title": "Interpretable Automatic Fine-grained Inconsistency Detection in Text Summarization",
+          "url": "https://aclanthology.org/2023.findings-acl.402/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2023",
+          "title": "Factual or Contextual? Disentangling Error Types in Entity Description Generation",
+          "url": "https://aclanthology.org/2023.acl-long.463/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "current",
+      "documents": 5,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "after_errors_of",
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 1,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2025",
+          "title": "Error Classification of Large Language Models on Math Word Problems: A Dynamically Adaptive Framework",
+          "url": "https://aclanthology.org/2025.findings-emnlp.20/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2025",
+          "title": "Boosting Text-to-SQL through Multi-grained Error Identification",
+          "url": "https://aclanthology.org/2025.coling-main.289/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2025",
+          "title": "Mis-prompt: Benchmarking Large Language Models for Proactive Error Handling",
+          "url": "https://aclanthology.org/2025.acl-long.833/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "identify grammatical",
+      "documents": 4,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 0,
+      "found_only_outside_those_queries": true,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2020",
+          "title": "Overview of NLPTEA-2020 Shared Task for Chinese Grammatical Error Diagnosis",
+          "url": "https://aclanthology.org/2020.nlptea-1.4/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2018",
+          "title": "Overview of NLPTEA-2018 Share Task Chinese Grammatical Error Diagnosis",
+          "url": "https://aclanthology.org/W18-3706/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2017",
+          "title": "IJCNLP-2017 Task 1: Chinese Grammatical Error Diagnosis",
+          "url": "https://aclanthology.org/I17-4001/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "spelling",
+      "documents": 4,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 4,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2020",
+          "title": "Relations between comprehensibility and adequacy errors in machine translation output",
+          "url": "https://aclanthology.org/2020.conll-1.19/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2017",
+          "title": "A New Error Annotation for Dyslexic texts in Arabic",
+          "url": "https://aclanthology.org/W17-1309/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2014",
+          "title": "A Database of Freely Written Texts of German School Students for the Purpose of Automatic Spelling Error Classification",
+          "url": "https://aclanthology.org/L14-1239/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "classification",
+      "documents": 3,
+      "documents_that_listed_it_as_a_kind": 1,
+      "found_by": [
+        "after_errors_of",
+        "before_error",
+        "enumeration"
+      ],
+      "corpus_called_it_a_kind_of_error": true,
+      "documents_reachable_by_the_seven_queries": 0,
+      "found_only_outside_those_queries": true,
+      "probably_not_a_property_of_a_text": true,
+      "examples": [
+        {
+          "year": "2026",
+          "title": "Comparing Traditional and LLM-based Approaches for Automated Scoring of Dutch Writing Products",
+          "url": "https://aclanthology.org/2026.lrec-1.44/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2023",
+          "title": "Using MT for multilingual covid-19 case load prediction from social media texts",
+          "url": "https://aclanthology.org/2023.eamt-1.45/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2012",
+          "title": "Automatic MT Error Analysis: Hjerson Helping Addicter",
+          "url": "https://aclanthology.org/L12-1160/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "analyse",
+      "documents": 3,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 0,
+      "found_only_outside_those_queries": true,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2026",
+          "title": "Errors in coreference resolution in German: Effects of modality, simplification and heterogeneous training data",
+          "url": "https://aclanthology.org/2026.codi-1.14/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2024",
+          "title": "Using ChatGPT for Annotation of Attitude within the Appraisal Theory: Lessons Learned",
+          "url": "https://aclanthology.org/2024.law-1.11/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2021",
+          "title": "Linguistic change and historical periodization of Old Literary Finnish",
+          "url": "https://aclanthology.org/2021.lchange-1.4/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "coreference",
+      "documents": 3,
+      "documents_that_listed_it_as_a_kind": 1,
+      "found_by": [
+        "after_errors_of",
+        "enumeration"
+      ],
+      "corpus_called_it_a_kind_of_error": true,
+      "documents_reachable_by_the_seven_queries": 0,
+      "found_only_outside_those_queries": true,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2026",
+          "title": "Errors in coreference resolution in German: Effects of modality, simplification and heterogeneous training data",
+          "url": "https://aclanthology.org/2026.codi-1.14/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2019",
+          "title": "WiRe57 : A Fine-Grained Benchmark for Open Information Extraction",
+          "url": "https://aclanthology.org/W19-4002/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2012",
+          "title": "Challenges in the Knowledge Base Population Slot Filling Task",
+          "url": "https://aclanthology.org/L12-1104/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "fluency",
+      "documents": 3,
+      "documents_that_listed_it_as_a_kind": 1,
+      "found_by": [
+        "before_error",
+        "enumeration"
+      ],
+      "corpus_called_it_a_kind_of_error": true,
+      "documents_reachable_by_the_seven_queries": 3,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2024",
+          "title": "Multi-Dimensional Machine Translation Evaluation: Model Evaluation and Resource for Korean",
+          "url": "https://aclanthology.org/2024.lrec-main.1024/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2021",
+          "title": "Benchmarking ASR Systems Based on Post-Editing Effort and Error Analysis",
+          "url": "https://aclanthology.org/2021.triton-1.23/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2004",
+          "title": "A fluency error categorization scheme to guide automated machine translation evaluation",
+          "url": "https://aclanthology.org/2004.amta-papers.8/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "learner",
+      "documents": 3,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "after_errors_of",
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 1,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2024",
+          "title": "Russian Learner Corpus: Towards Error-Cause Annotation for L2 Russian",
+          "url": "https://aclanthology.org/2024.lrec-main.1241/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2020",
+          "title": "Classifying Syntactic Errors in Learner Language",
+          "url": "https://aclanthology.org/2020.conll-1.7/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2010",
+          "title": "Towards a Motivated Annotation Schema of Collocation Errors in Learner Corpora",
+          "url": "https://aclanthology.org/L10-1520/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "asr",
+      "documents": 3,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 1,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": true,
+      "examples": [
+        {
+          "year": "2024",
+          "title": "Hyper-BTS Dataset: Scalability and Enhanced Analysis of Back TranScription (BTS) for ASR Post-Processing",
+          "url": "https://aclanthology.org/2024.findings-eacl.5/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2016",
+          "title": "Generating Task-Pertinent sorted Error Lists for Speech Recognition",
+          "url": "https://aclanthology.org/L16-1297/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2014",
+          "title": "Assessing the impact of speech recognition errors on machine translation quality",
+          "url": "https://aclanthology.org/2014.amta-researchers.20/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "nmt",
+      "documents": 3,
+      "documents_that_listed_it_as_a_kind": 1,
+      "found_by": [
+        "after_errors_of",
+        "enumeration"
+      ],
+      "corpus_called_it_a_kind_of_error": true,
+      "documents_reachable_by_the_seven_queries": 3,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2023",
+          "title": "On the Evaluation of Terminology Translation Errors in NMT and PB-SMT in the Legal Domain: a Study on the Translation of Arabic Legal Documents into English and French",
+          "url": "https://aclanthology.org/2023.contents-1.4/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2020",
+          "title": "Fine-Grained Error Analysis on English-to-Japanese Machine Translation in the Medical Domain",
+          "url": "https://aclanthology.org/2020.eamt-1.17/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2020",
+          "title": "Machine Translation Quality: A comparative evaluation of SMT, NMT and tailored-NMT outputs",
+          "url": "https://aclanthology.org/2020.eamt-1.47/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "chat-oriented",
+      "documents": 3,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "after_errors_of"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 1,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2022",
+          "title": "Investigating person-specific errors in chat-oriented dialogue systems",
+          "url": "https://aclanthology.org/2022.acl-short.50/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2021",
+          "title": "Integrated taxonomy of errors in chat-oriented dialogue systems",
+          "url": "https://aclanthology.org/2021.sigdial-1.10/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2015",
+          "title": "Towards Taxonomy of Errors in Chat-oriented Dialogue Systems",
+          "url": "https://aclanthology.org/W15-4611/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "parsing",
+      "documents": 3,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 1,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": true,
+      "examples": [
+        {
+          "year": "2020",
+          "title": "An Empirical Exploration of Local Ordering Pre-training for Structured Prediction",
+          "url": "https://aclanthology.org/2020.findings-emnlp.160/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2018",
+          "title": "An Empirical Investigation of Error Types in Vietnamese Parsing",
+          "url": "https://aclanthology.org/C18-1260/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2016",
+          "title": "Multi-lingual Dependency Parsing Evaluation: a Large-scale Analysis of Word Order Properties using Artificial Data",
+          "url": "https://aclanthology.org/Q16-1025/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "word order",
+      "documents": 3,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 1,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2018",
+          "title": "A Comparison of Transformer and Recurrent Neural Networks on Multilingual Neural Machine Translation",
+          "url": "https://aclanthology.org/C18-1054/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2010",
+          "title": "Evaluation of Machine Translation Errors in English and Iraqi Arabic",
+          "url": "https://aclanthology.org/L10-1065/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2010",
+          "title": "EAGLE: an Error-Annotated Corpus of Beginning Learner German",
+          "url": "https://aclanthology.org/L10-1560/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "character",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 1,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2026",
+          "title": "Konkani Daan: A Community-Driven Culturally Grounded Speech Corpus for Low-Resource ASR",
+          "url": "https://aclanthology.org/2026.wildre-1.3/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2025",
+          "title": "Automatic Accent Restoration in Vedic Sanskrit with Neural Language Models",
+          "url": "https://aclanthology.org/2025.bhasha-1.7/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "diacritic",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 2,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2026",
+          "title": "Fine-Tashkeel at KSAA-2026: A Comprehensive Evaluation of Seq2Seq and Multimodal Approaches for Automatic Diacritization of Arabic Speech Dictation",
+          "url": "https://aclanthology.org/2026.osact-1.31/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2026",
+          "title": "Arabic-Adapted One-Step Speech-to-Diacritized ASR: Evaluation and Error Analysis",
+          "url": "https://aclanthology.org/2026.abjadnlp-1.43/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "calculation",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 0,
+      "found_only_outside_those_queries": true,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2026",
+          "title": "SOP-Maze: Evaluating Large Language Models on Complicated Business Standard Operating Procedures",
+          "url": "https://aclanthology.org/2026.findings-acl.715/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2024",
+          "title": "Evaluating Mathematical Reasoning of Large Language Models: A Focus on Error Identification and Correction",
+          "url": "https://aclanthology.org/2024.findings-acl.673/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "multimodal",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "after_errors_of",
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 1,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2026",
+          "title": "ErrorRadar: Benchmarking Complex Mathematical Reasoning of Multimodal Large Language Models Via Error Detection",
+          "url": "https://aclanthology.org/2026.findings-acl.1217/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2025",
+          "title": "MathAgent: Leveraging a Mixture-of-Math-Agent Framework for Real-World Multimodal Mathematical Error Detection",
+          "url": "https://aclanthology.org/2025.acl-industry.7/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "error categorization",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 2,
+      "found_by": [
+        "enumeration"
+      ],
+      "corpus_called_it_a_kind_of_error": true,
+      "documents_reachable_by_the_seven_queries": 1,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2026",
+          "title": "ErrorRadar: Benchmarking Complex Mathematical Reasoning of Multimodal Large Language Models Via Error Detection",
+          "url": "https://aclanthology.org/2026.findings-acl.1217/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2025",
+          "title": "Leveraging LLMs for Bangla Grammar Error Correction: Error Categorization, Synthetic Data, and Model Evaluation",
+          "url": "https://aclanthology.org/2025.findings-acl.431/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "completeness",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 2,
+      "found_by": [
+        "enumeration"
+      ],
+      "corpus_called_it_a_kind_of_error": true,
+      "documents_reachable_by_the_seven_queries": 1,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2026",
+          "title": "Calibrating Model-Based Evaluation Metrics for Summarization",
+          "url": "https://aclanthology.org/2026.findings-acl.1760/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2026",
+          "title": "Learning to Control Summaries with Score Ranking",
+          "url": "https://aclanthology.org/2026.findings-acl.1762/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "conciseness",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 2,
+      "found_by": [
+        "enumeration"
+      ],
+      "corpus_called_it_a_kind_of_error": true,
+      "documents_reachable_by_the_seven_queries": 1,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2026",
+          "title": "Calibrating Model-Based Evaluation Metrics for Summarization",
+          "url": "https://aclanthology.org/2026.findings-acl.1760/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2026",
+          "title": "Learning to Control Summaries with Score Ranking",
+          "url": "https://aclanthology.org/2026.findings-acl.1762/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "faithfulness",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 2,
+      "found_by": [
+        "enumeration"
+      ],
+      "corpus_called_it_a_kind_of_error": true,
+      "documents_reachable_by_the_seven_queries": 1,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2026",
+          "title": "Calibrating Model-Based Evaluation Metrics for Summarization",
+          "url": "https://aclanthology.org/2026.findings-acl.1760/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2026",
+          "title": "Learning to Control Summaries with Score Ranking",
+          "url": "https://aclanthology.org/2026.findings-acl.1762/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "labeled",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 2,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2026",
+          "title": "LQM: Linguistically Motivated Multidimensional Quality Metrics for Machine Translation",
+          "url": "https://aclanthology.org/2026.findings-acl.2012/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2016",
+          "title": "Reassessing the Goals of Grammatical Error Correction: Fluency Instead of Grammaticality",
+          "url": "https://aclanthology.org/Q16-1013/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "boundary",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 1,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2026",
+          "title": "Night Shift Nerds at MEDIQA-SYNUR 2026: Pushing Small Large Language Model Capability for Clinical Observation Extraction and Normalization from Nurse Dictation using RLVR",
+          "url": "https://aclanthology.org/2026.clinicalnlp-1.18/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2022",
+          "title": "GGPONC 2.0 - The German Clinical Guideline Corpus for Oncology: Curation Workflow, Annotation Policy, Baseline NER Taggers",
+          "url": "https://aclanthology.org/2022.lrec-1.389/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "labor-intensive",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 0,
+      "found_only_outside_those_queries": true,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2026",
+          "title": "HSE NLP TEAM at MEDIQA-SYNUR 2026: Consensus Adjudication Ensemble (ACE): Balancing Precision and Recall for Schema-Bystander Clinical Extraction",
+          "url": "https://aclanthology.org/2026.clinicalnlp-1.22/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2023",
+          "title": "Zero-Shot Information Extraction for Clinical Meta-Analysis using Large Language Models",
+          "url": "https://aclanthology.org/2023.bionlp-1.37/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "russian grammatical",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 2,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2026",
+          "title": "What Aggregate Scores Hide: Per-Rule Evaluation of Russian Grammatical Error Correction",
+          "url": "https://aclanthology.org/2026.bea-1.32/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2024",
+          "title": "Multi-Reference Benchmarks for Russian Grammatical Error Correction",
+          "url": "https://aclanthology.org/2024.eacl-long.76/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "propose",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 0,
+      "found_only_outside_those_queries": true,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2026",
+          "title": "Learning from Near-Misses: Error-Aware Contrastive Few-Shot Learning for NL2Formula",
+          "url": "https://aclanthology.org/2026.acl-long.1368/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2025",
+          "title": "Error Classification of Large Language Models on Math Word Problems: A Dynamically Adaptive Framework",
+          "url": "https://aclanthology.org/2025.findings-emnlp.20/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "classify",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 0,
+      "found_only_outside_those_queries": true,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2026",
+          "title": "MMErroR: A Benchmark for Erroneous Reasoning in Vision-Language Models",
+          "url": "https://aclanthology.org/2026.acl-long.2083/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2025",
+          "title": "Beyond the Data: The Impact of Annotation Inconsistencies in UD Treebanks on Typological Universals and Complexity Assessment",
+          "url": "https://aclanthology.org/2025.sigtyp-1.5/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "classifie",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 0,
+      "found_only_outside_those_queries": true,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2026",
+          "title": "MMErroR: A Benchmark for Erroneous Reasoning in Vision-Language Models",
+          "url": "https://aclanthology.org/2026.acl-long.2083/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2012",
+          "title": "Automatic MT Error Analysis: Hjerson Helping Addicter",
+          "url": "https://aclanthology.org/L12-1160/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "reasoning",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "after_errors_of",
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 1,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2025",
+          "title": "Tagged Span Annotation for Detecting Translation Errors in Reasoning LLMs",
+          "url": "https://aclanthology.org/2025.wmt-1.62/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2024",
+          "title": "Liar, Liar, Logical Mire: A Benchmark for Suppositional Reasoning in Large Language Models",
+          "url": "https://aclanthology.org/2024.emnlp-main.404/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "spelling and grammatical",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 2,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2025",
+          "title": "How to Create Treebanks without Human Annotators -- An Indigenous Language Grammar Checker for Treebank Construction",
+          "url": "https://aclanthology.org/2025.tlt-1.14/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2024",
+          "title": "Man or Machine: Evaluating Spelling Error Detection in Danish Newspaper Corpora",
+          "url": "https://aclanthology.org/2024.sigul-1.24/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "multiple",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "after_errors_of",
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 0,
+      "found_only_outside_those_queries": true,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2025",
+          "title": "Beyond the Data: The Impact of Annotation Inconsistencies in UD Treebanks on Typological Universals and Complexity Assessment",
+          "url": "https://aclanthology.org/2025.sigtyp-1.5/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2016",
+          "title": "Bi-LSTM Neural Networks for Chinese Grammatical Error Diagnosis",
+          "url": "https://aclanthology.org/W16-4919/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "automated",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 2,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2025",
+          "title": "Evaluating Robustness of LLMs to Numerical Variations in Mathematical Reasoning",
+          "url": "https://aclanthology.org/2025.insights-1.16/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2025",
+          "title": "TRANSLATIONCORRECT: A Unified Framework for Machine Translation Post-Editing with Predictive Error Assistance",
+          "url": "https://aclanthology.org/2025.acl-demo.53/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "learning from",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 1,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2025",
+          "title": "LEMMA: Learning from Errors for MatheMatical Advancement in LLMs",
+          "url": "https://aclanthology.org/2025.findings-acl.605/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2025",
+          "title": "Self-Error-Instruct: Generalizing from Errors for LLMs Mathematical Reasoning",
+          "url": "https://aclanthology.org/2025.acl-long.417/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "annotate",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 1,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2025",
+          "title": "An Evaluation Resource for Grounding Translation Errors",
+          "url": "https://aclanthology.org/2025.findings-emnlp.1299/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2019",
+          "title": "Weird Inflects but OK: Making Sense of Morphological Generation Errors",
+          "url": "https://aclanthology.org/K19-1014/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "chinese",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "after_errors_of",
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 1,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2025",
+          "title": "Improving Automatic Grammatical Error Annotation for Chinese Through Linguistically-Informed Error Typology",
+          "url": "https://aclanthology.org/2025.coling-main.189/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2018",
+          "title": "Correcting Chinese Word Usage Errors for Learning Chinese as a Second Language",
+          "url": "https://aclanthology.org/C18-1204/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "insertion",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 2,
+      "found_by": [
+        "enumeration"
+      ],
+      "corpus_called_it_a_kind_of_error": true,
+      "documents_reachable_by_the_seven_queries": 0,
+      "found_only_outside_those_queries": true,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2025",
+          "title": "WER We Stand: Benchmarking Urdu ASR Models",
+          "url": "https://aclanthology.org/2025.coling-main.397/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2024",
+          "title": "Measuring Cross-Text Cohesion for Segmentation Similarity Scoring",
+          "url": "https://aclanthology.org/2024.lrec-main.971/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "deletion",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 2,
+      "found_by": [
+        "enumeration"
+      ],
+      "corpus_called_it_a_kind_of_error": true,
+      "documents_reachable_by_the_seven_queries": 0,
+      "found_only_outside_those_queries": true,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2025",
+          "title": "WER We Stand: Benchmarking Urdu ASR Models",
+          "url": "https://aclanthology.org/2025.coling-main.397/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2024",
+          "title": "Measuring Cross-Text Cohesion for Segmentation Similarity Scoring",
+          "url": "https://aclanthology.org/2024.lrec-main.971/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "reflecting",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 2,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2025",
+          "title": "Is my Meeting Summary Good? Estimating Quality with a Multi-LLM Evaluator",
+          "url": "https://aclanthology.org/2025.coling-industry.48/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2022",
+          "title": "HOPE: A Task-Oriented and Human-Centric Evaluation Framework Using Professional Post-Editing Towards More Effective MT Evaluation",
+          "url": "https://aclanthology.org/2022.lrec-1.2/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "improve grammatical",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 2,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2025",
+          "title": "Fine-tuning GEC Model Based on Language Family Corpus",
+          "url": "https://aclanthology.org/2025.ccl-1.70/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2021",
+          "title": "Multi-Class Grammatical Error Detection for Correction: A Tale of Two Systems",
+          "url": "https://aclanthology.org/2021.emnlp-main.687/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "russian",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "after_errors_of",
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 2,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2025",
+          "title": "REPA: Russian Error Types Annotation for Evaluating Text Generation and Judgment Capabilities",
+          "url": "https://aclanthology.org/2025.bsnlp-1.16/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2022",
+          "title": "Automatic Classification of Russian Learner Errors",
+          "url": "https://aclanthology.org/2022.lrec-1.605/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "handwritten",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "after_errors_of"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 1,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2025",
+          "title": "Can Vision-Language Models Evaluate Handwritten Math?",
+          "url": "https://aclanthology.org/2025.acl-long.720/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2023",
+          "title": "Recognizing Learner Handwriting Retaining Orthographic Errors for Enabling Fine-Grained Error Feedback",
+          "url": "https://aclanthology.org/2023.bea-1.28/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "correct",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 2,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2025",
+          "title": "TRANSLATIONCORRECT: A Unified Framework for Machine Translation Post-Editing with Predictive Error Assistance",
+          "url": "https://aclanthology.org/2025.acl-demo.53/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2023",
+          "title": "LET: Leveraging Error Type Information for Grammatical Error Correction",
+          "url": "https://aclanthology.org/2023.findings-acl.371/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "tense",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "after_errors_of",
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 2,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2024",
+          "title": "GPT-3.5 for Grammatical Error Correction",
+          "url": "https://aclanthology.org/2024.lrec-main.692/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2012",
+          "title": "Error Detection for Post-editing Rule-based Machine Translation",
+          "url": "https://aclanthology.org/2012.amta-wptp.9/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "prediction",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 0,
+      "found_only_outside_those_queries": true,
+      "probably_not_a_property_of_a_text": true,
+      "examples": [
+        {
+          "year": "2024",
+          "title": "Who Said What: Formalization and Benchmarks for the Task of Quote Attribution",
+          "url": "https://aclanthology.org/2024.lrec-main.1530/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2021",
+          "title": "CroAno : A Crowd Annotation Platform for Improving Label Consistency of Chinese NER Dataset",
+          "url": "https://aclanthology.org/2021.emnlp-demo.32/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "orthographic",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 2,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2024",
+          "title": "A Systematic Exploration of Linguistic Phenomena in Spoken Hindi: Resource Creation and Hypothesis Testing",
+          "url": "https://aclanthology.org/2024.icon-1.8/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2023",
+          "title": "Recognizing Learner Handwriting Retaining Orthographic Errors for Enabling Fine-Grained Error Feedback",
+          "url": "https://aclanthology.org/2023.bea-1.28/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "redundancy",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 1,
+      "found_by": [
+        "before_error",
+        "enumeration"
+      ],
+      "corpus_called_it_a_kind_of_error": true,
+      "documents_reachable_by_the_seven_queries": 1,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2024",
+          "title": "ReproHum \\#1018-09: Reproducing Human Evaluations of Redundancy Errors in Data-To-Text Systems",
+          "url": "https://aclanthology.org/2024.humeval-1.16/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2022",
+          "title": "Is GPT-3 Text Indistinguishable from Human Text? Scarecrow: A Framework for Scrutinizing Machine Text",
+          "url": "https://aclanthology.org/2022.acl-long.501/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "reflect",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 2,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2024",
+          "title": "What's under the hood: Investigating Automatic Metrics on Meeting Summarization",
+          "url": "https://aclanthology.org/2024.findings-emnlp.393/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2019",
+          "title": "Weird Inflects but OK: Making Sense of Morphological Generation Errors",
+          "url": "https://aclanthology.org/K19-1014/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "analyzing",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 1,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2024",
+          "title": "ERVQA: A Dataset to Benchmark the Readiness of Large Vision Language Models in Hospital Environments",
+          "url": "https://aclanthology.org/2024.emnlp-main.873/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2024",
+          "title": "A Joint Approach for Automatic Analysis of Reading and Writing Errors",
+          "url": "https://aclanthology.org/2024.cawl-1.2/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "correction",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 1,
+      "found_by": [
+        "before_error",
+        "enumeration"
+      ],
+      "corpus_called_it_a_kind_of_error": true,
+      "documents_reachable_by_the_seven_queries": 1,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2024",
+          "title": "PromptMind Team at MEDIQA-CORR 2024: Improving Clinical Text Correction with Error Categorization and LLM Ensembles",
+          "url": "https://aclanthology.org/2024.clinicalnlp-1.35/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2014",
+          "title": "Large Scale Arabic Error Annotation: Guidelines and Framework",
+          "url": "https://aclanthology.org/L14-1721/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "coarse-grained and fine-grained",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 2,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2024",
+          "title": "Chinese Essay Fluency Evaluation (CEFE) Task",
+          "url": "https://aclanthology.org/2024.ccl-3.34/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2023",
+          "title": "Overview of CCL23-Eval Task 8: Chinese Essay Fluency Evaluation (CEFE) Task",
+          "url": "https://aclanthology.org/2023.ccl-3.31/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "taxonomy for annotating",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 2,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2023",
+          "title": "Towards a Consensus Taxonomy for Annotating Errors in Automatically Generated Text",
+          "url": "https://aclanthology.org/2023.ranlp-1.58/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2022",
+          "title": "A Survey of Recent Error Annotation Schemes for Automatically Generated Text",
+          "url": "https://aclanthology.org/2022.gem-1.33/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "automatically",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "after_errors_of"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 2,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2023",
+          "title": "Towards a Consensus Taxonomy for Annotating Errors in Automatically Generated Text",
+          "url": "https://aclanthology.org/2023.ranlp-1.58/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2022",
+          "title": "A Survey of Recent Error Annotation Schemes for Automatically Generated Text",
+          "url": "https://aclanthology.org/2022.gem-1.33/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "rule-based",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 1,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2023",
+          "title": "Towards Automatic Grammatical Error Type Classification for Turkish",
+          "url": "https://aclanthology.org/2023.eacl-srw.14/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2021",
+          "title": "ELERRANT: Automatic Grammatical Error Type Classification for Greek",
+          "url": "https://aclanthology.org/2021.ranlp-1.81/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "terminology translation",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 2,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2023",
+          "title": "On the Evaluation of Terminology Translation Errors in NMT and PB-SMT in the Legal Domain: a Study on the Translation of Arabic Legal Documents into English and French",
+          "url": "https://aclanthology.org/2023.contents-1.4/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2019",
+          "title": "Investigating Terminology Translation in Statistical and Neural Machine Translation: A Case Study on English-to-Hindi and Hindi-to-English",
+          "url": "https://aclanthology.org/R19-1052/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "commonly occurring",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 2,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2023",
+          "title": "Byte-Level Grammatical Error Correction Using Synthetic and Curated Corpora",
+          "url": "https://aclanthology.org/2023.acl-long.402/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2022",
+          "title": "HOPE: A Task-Oriented and Human-Centric Evaluation Framework Using Professional Post-Editing Towards More Effective MT Evaluation",
+          "url": "https://aclanthology.org/2022.lrec-1.2/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "dyslexic",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 1,
+      "found_by": [
+        "before_error",
+        "enumeration"
+      ],
+      "corpus_called_it_a_kind_of_error": true,
+      "documents_reachable_by_the_seven_queries": 2,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2023",
+          "title": "Byte-Level Grammatical Error Correction Using Synthetic and Curated Corpora",
+          "url": "https://aclanthology.org/2023.acl-long.402/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2017",
+          "title": "A New Error Annotation for Dyslexic texts in Arabic",
+          "url": "https://aclanthology.org/W17-1309/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "the corresponding",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 2,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2023",
+          "title": "Enhancing Grammatical Error Correction Systems with Explanations",
+          "url": "https://aclanthology.org/2023.acl-long.413/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2014",
+          "title": "On the origin of errors: A fine-grained analysis of MT and PE errors and their relationship",
+          "url": "https://aclanthology.org/L14-1441/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "morphological",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 2,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2022",
+          "title": "DEMETR: Diagnosing Evaluation Metrics for Translation",
+          "url": "https://aclanthology.org/2022.emnlp-main.649/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2012",
+          "title": "BLEU Evaluation of Machine-Translated English-Croatian Legislation",
+          "url": "https://aclanthology.org/L12-1087/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "method for grammatical",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 2,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2022",
+          "title": "Dynamic Negative Example Construction for Grammatical Error Correction using Contrastive Learning",
+          "url": "https://aclanthology.org/2022.ccl-1.83/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2021",
+          "title": "System Combination for Grammatical Error Correction Based on Integer Programming",
+          "url": "https://aclanthology.org/2021.ranlp-1.94/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "tagging",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 0,
+      "found_only_outside_those_queries": true,
+      "probably_not_a_property_of_a_text": true,
+      "examples": [
+        {
+          "year": "2021",
+          "title": "What Taggers Fail to Learn, Parsers Need the Most",
+          "url": "https://aclanthology.org/2021.nodalida-main.31/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2018",
+          "title": "An Empirical Investigation of Error Types in Vietnamese Parsing",
+          "url": "https://aclanthology.org/C18-1260/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "can detect",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 0,
+      "found_only_outside_those_queries": true,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2021",
+          "title": "Text-in-Context: Token-Level Error Detection for Table-to-Text Generation",
+          "url": "https://aclanthology.org/2021.inlg-1.25/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2016",
+          "title": "Grammatical Error Detection Based on Machine Learning for Mandarin as Second Language Learning",
+          "url": "https://aclanthology.org/W16-4918/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "diagnosis grammatical",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 0,
+      "found_only_outside_those_queries": true,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2020",
+          "title": "Combining ResNet and Transformer for Chinese Grammatical Error Diagnosis",
+          "url": "https://aclanthology.org/2020.nlptea-1.5/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2016",
+          "title": "Bi-LSTM Neural Networks for Chinese Grammatical Error Diagnosis",
+          "url": "https://aclanthology.org/W16-4919/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "also recommend",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 0,
+      "found_only_outside_those_queries": true,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2020",
+          "title": "Combining ResNet and Transformer for Chinese Grammatical Error Diagnosis",
+          "url": "https://aclanthology.org/2020.nlptea-1.5/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2018",
+          "title": "Chinese Grammatical Error Diagnosis using Statistical and Prior Knowledge driven Features with Probabilistic Ensemble Enhancement",
+          "url": "https://aclanthology.org/W18-3707/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "corrections for specific",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 0,
+      "found_only_outside_those_queries": true,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2020",
+          "title": "Combining ResNet and Transformer for Chinese Grammatical Error Diagnosis",
+          "url": "https://aclanthology.org/2020.nlptea-1.5/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2018",
+          "title": "Chinese Grammatical Error Diagnosis using Statistical and Prior Knowledge driven Features with Probabilistic Ensemble Enhancement",
+          "url": "https://aclanthology.org/W18-3707/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "improving grammatical",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 2,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2020",
+          "title": "ERRANT: Assessing and Improving Grammatical Error Type Classification",
+          "url": "https://aclanthology.org/2020.latechclfl-1.10/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2020",
+          "title": "Improving Grammatical Error Correction with Data Augmentation by Editing Latent Representation",
+          "url": "https://aclanthology.org/2020.coling-main.200/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "syntactic",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 2,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2020",
+          "title": "Classifying Syntactic Errors in Learner Language",
+          "url": "https://aclanthology.org/2020.conll-1.7/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2012",
+          "title": "BLEU Evaluation of Machine-Translated English-Croatian Legislation",
+          "url": "https://aclanthology.org/L12-1087/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "especially for chinese",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 0,
+      "found_only_outside_those_queries": true,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2017",
+          "title": "IJCNLP-2017 Task 1: Chinese Grammatical Error Diagnosis",
+          "url": "https://aclanthology.org/I17-4001/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2016",
+          "title": "Overview of NLP-TEA 2016 Shared Task for Chinese Grammatical Error Diagnosis",
+          "url": "https://aclanthology.org/W16-4906/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "detect chinese grammatical",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 0,
+      "found_only_outside_those_queries": true,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2017",
+          "title": "YNU-HPCC at IJCNLP-2017 Task 1: Chinese Grammatical Error Diagnosis Using a Bi-directional LSTM-CRF Model",
+          "url": "https://aclanthology.org/I17-4011/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2016",
+          "title": "Bi-LSTM Neural Networks for Chinese Grammatical Error Diagnosis",
+          "url": "https://aclanthology.org/W16-4919/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "that the asr",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 1,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2016",
+          "title": "Generating Task-Pertinent sorted Error Lists for Speech Recognition",
+          "url": "https://aclanthology.org/L16-1297/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2014",
+          "title": "Assessing the impact of speech recognition errors on machine translation quality",
+          "url": "https://aclanthology.org/2014.amta-researchers.20/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    },
+    {
+      "term": "lexical",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "before_error"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 1,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2012",
+          "title": "BLEU Evaluation of Machine-Translated English-Croatian Legislation",
+          "url": "https://aclanthology.org/L12-1087/",
+          "reachable_by_the_seven_queries": true
+        },
+        {
+          "year": "2010",
+          "title": "Towards a Motivated Annotation Schema of Collocation Errors in Learner Corpora",
+          "url": "https://aclanthology.org/L10-1520/",
+          "reachable_by_the_seven_queries": false
+        }
+      ]
+    },
+    {
+      "term": "english",
+      "documents": 2,
+      "documents_that_listed_it_as_a_kind": 0,
+      "found_by": [
+        "after_errors_of"
+      ],
+      "corpus_called_it_a_kind_of_error": false,
+      "documents_reachable_by_the_seven_queries": 1,
+      "found_only_outside_those_queries": false,
+      "probably_not_a_property_of_a_text": false,
+      "examples": [
+        {
+          "year": "2010",
+          "title": "Evaluation of Machine Translation Errors in English and Iraqi Arabic",
+          "url": "https://aclanthology.org/L10-1065/",
+          "reachable_by_the_seven_queries": false
+        },
+        {
+          "year": "2004",
+          "title": "A fluency error categorization scheme to guide automated machine translation evaluation",
+          "url": "https://aclanthology.org/2004.amta-papers.8/",
+          "reachable_by_the_seven_queries": true
+        }
+      ]
+    }
+  ]
+}

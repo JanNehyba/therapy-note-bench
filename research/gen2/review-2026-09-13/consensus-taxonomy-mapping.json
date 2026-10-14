@@ -1,0 +1,154 @@
+{
+  "version": "consensus-taxonomy-mapping-v1",
+  "date": "2026-10-14",
+  "paper": {
+    "key": "huidrom-belz-2023-towards",
+    "title": "Towards a Consensus Taxonomy for Annotating Errors in Automatically Generated Text",
+    "authors": "Rudali Huidrom and Anya Belz",
+    "venue": "Recent Advances in Natural Language Processing (RANLP), 2023, pages 527-540",
+    "url": "https://aclanthology.org/2023.ranlp-1.58/",
+    "what_it_is": "A merge of the content/meaning error categories of fifteen annotation schemes, not one group's taxonomy. Its highest level is where the authors report virtually complete agreement across those schemes."
+  },
+  "source_text_sha256": "3575ea293af227bb3db510136e92da682e8f24bcbfc7cb75915eb27d3714fbc5",
+  "every_quote_was_found_in_that_text": true,
+  "what_this_is": "The categories of the field's consensus error taxonomy, each with the paper's own words, mapped onto the candidates of this catalog. The mapping is the assistant's judgement and is labelled as one.",
+  "why_the_mapping_is_separate_from_the_extraction": "A review loses a property by deciding it was already covered. The extraction scripts know nothing of the catalog, and the claim that a category is covered is written here next to the words it was made from, where it can be disagreed with.",
+  "counts": {
+    "categories": 15,
+    "mapped_to_a_candidate": 9,
+    "covered_by_nothing": 6,
+    "of_those_proposed_as_candidates": 4,
+    "of_those_recorded_and_not_proposed": 2
+  },
+  "gaps_proposed_as_candidates": [
+    "Should Not Be Verbatim",
+    "Error In Input",
+    "NE Deviation",
+    "Numerical Deviation"
+  ],
+  "nothing_is_in_the_catalog_yet": "No candidate is created here. Whether these enter the pool is the investigator's decision, and the pool may only grow until the panel's first table exists (D14).",
+  "mapping": [
+    {
+      "category": "Omission",
+      "quote": "Some content that is present in the input and should be rendered in the output is not present in the output.",
+      "covered_by": [
+        "K05"
+      ],
+      "reason": "K05 is coverage of essential content weighted by importance, measured against an information bank built before the note is seen. Same phenomenon."
+    },
+    {
+      "category": "Addition",
+      "quote": "Some content that is not present in the input and should not be rendered in the output is present in the output.",
+      "covered_by": [
+        "K01"
+      ],
+      "reason": "K01 calls this invented: the source has nothing of the kind."
+    },
+    {
+      "category": "Duplication",
+      "quote": "Some content is repeated verbatim in the output, but there is no corresponding repetition in the input.",
+      "covered_by": [
+        "K31"
+      ],
+      "reason": "K31 is redundancy. The taxonomy is narrower -- repetition with no counterpart in the input -- and K31 as written does not require that comparison, which is a difference in the rule rather than in the property."
+    },
+    {
+      "category": "Substitution",
+      "quote": "Some content in the output, that is intended to convey some content that is present in the input, does it wrongly.",
+      "covered_by": [
+        "K01"
+      ],
+      "reason": "K01 calls this distorted: the source says something else."
+    },
+    {
+      "category": "Should Not Be Verbatim",
+      "quote": "Some part of the input has been copied verbatim to the output, but should have been rendered differently.",
+      "covered_by": null,
+      "reason": "Nothing in the catalog asks whether the note copied where it should have summarised. K01 uses the word verbatim for TN-Eval's three-way typology and K14 for telling a quotation from the author's own judgement; neither is this. In a session note the case is concrete and clinical: the client's words reproduced where a professional formulation was required, which is also a privacy question because a verbatim sentence carries more detail than a rendering of it."
+    },
+    {
+      "category": "Should Be Verbatim",
+      "quote": "Some part of the input should have been copied verbatim to the output, but has been rendered differently.",
+      "covered_by": [
+        "K01"
+      ],
+      "reason": "The core already has a `quotation` error type for a quotation that is not what was said, and K01 covers the claim being distorted. Partly covered: what is missing is the rule for when a note is required to quote rather than render."
+    },
+    {
+      "category": "Lexical Error",
+      "quote": "An error that can be fixed by replacing one lexical item in the output with another.",
+      "covered_by": [
+        "K34",
+        "K30"
+      ],
+      "reason": "K34 is professional terminology and K30 language naturalness. The taxonomy's category is wider than either and is the bundle K30 already is."
+    },
+    {
+      "category": "Error In Input",
+      "quote": "An error that is caused by an error in the input.",
+      "covered_by": null,
+      "reason": "Nothing in the catalog and nothing in the eleven blind spots. It matters here more than in most settings: the Czech transcripts are speech recognition output, so an error can be inherited rather than made. A note that faithfully reproduces a mis-transcribed word is wrong about the session and right about its input, and every criterion that compares note with transcript would score it as correct. The synthetic controls already have a `transcription_error` variant, so the project has the case and not the criterion."
+    },
+    {
+      "category": "Reordering",
+      "quote": "An error that can be fixed by reordering parts of the output.",
+      "covered_by": [
+        "K12"
+      ],
+      "reason": "K12 is the arrangement of the text, whether content stands where the template puts it. Close enough to be the same property, differently cut."
+    },
+    {
+      "category": "NE Deviation",
+      "quote": "Deviation in named entities.",
+      "covered_by": null,
+      "reason": "K01 would score a wrong name as distorted, but no criterion and no error type names the facet. K01's unit is an atomic claim with four facets -- actor, time, polarity, certainty -- and the core's error types are speaker, negation, time, certainty, intervention, causality, diagnosis, risk, plan, quotation, omission, privacy, language, instruction, other. A wrong name, a wrong institution or a wrong referrer lands in `other`, so the one error a reader of a clinical note would check first cannot be counted."
+    },
+    {
+      "category": "Pos/Neg Deviation",
+      "quote": "Deviation in negation, polarity or positive/negative sentiment.",
+      "covered_by": [
+        "K01"
+      ],
+      "reason": "Covered twice over: polarity is one of K01's four facets and `negation` is one of the core's error types."
+    },
+    {
+      "category": "Numerical Deviation",
+      "quote": "Deviation in numerical content.",
+      "covered_by": null,
+      "reason": "The same gap as named entities and the more serious one clinically. A dose, a frequency, a duration, the number of missed sessions, a date: all of these are claims K01 would call distorted without recording that what moved was a number. Neither K01's facets nor the error types name quantity."
+    },
+    {
+      "category": "Severity (major/minor)",
+      "quote": "Severity of the error: Major and Minor",
+      "covered_by": [
+        "method qa"
+      ],
+      "reason": "The operational severity rule has four levels, none/minor/major/critical, and the core carries them as a type. Covered, and finer than the taxonomy."
+    },
+    {
+      "category": "Content Word(s) vs Function Word(s)",
+      "quote": "Degree to which words in the error contribute to the content/meaning of the output",
+      "covered_by": null,
+      "reason": "Not covered and probably not wanted. It is a granularity dimension for annotating a span, not a property a reader of a note would ask about. Recorded so that the decision not to take it is visible."
+    },
+    {
+      "category": "Single Word vs Multiple Words",
+      "quote": "Number of words involved in a given error",
+      "covered_by": null,
+      "reason": "As above: a dimension of the annotation, not of the note. Recorded and not proposed."
+    }
+  ],
+  "structural_observations": [
+    {
+      "observation": "content versus form",
+      "quote": "Errors of content (as opposed to errors of form such as grammatical or lexical-choice errors)",
+      "what_it_means_here": "The taxonomy divides errors of content from errors of form and then treats only content. This catalog mixes them: K01 and K05 are content, K30 and K34 are form, and nothing says so. The six Czech criteria are all errors of form, which is why no amount of searching the content literature was going to support them."
+    },
+    {
+      "observation": "orthogonal dimensions rather than more categories",
+      "quote": "any of the primary error categories can additionally be annotated with them, i.e. they necessarily result in duplication in the taxonomy if included there",
+      "what_it_means_here": "Their test for a dimension is whether putting it in the hierarchy would duplicate it. By that test some of this catalog's 36 are dimensions and not criteria: severity, and the disclosure level of a sensitive detail, apply to many criteria at once. Worth checking before the panel rates 36 items as if they were one kind of thing."
+    }
+  ],
+  "what_is_still_unread": "Sixteen of the seventeen fetched papers, and 47 of the 64 in the frame. This is the first taxonomy read, chosen because it merges fifteen schemes rather than proposing one."
+}

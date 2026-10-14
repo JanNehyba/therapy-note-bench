@@ -1,0 +1,108 @@
+{
+  "version": "category-names-v1",
+  "date": "2026-10-14",
+  "what_this_is": "Category names taken out of the full texts of the taxonomy papers, with no seed list. The patterns describe what a category name looks like and where in a paper one stands; they name no category, no criterion and none of the Czech scorer's six.",
+  "why_full_texts": "A taxonomy lives in a table or a numbered list in the body. Two passes over abstracts returned the few property words that happen to appear in prose, and said so: that was a measurement of where taxonomies are printed, not of what is in them.",
+  "the_signal_is_document_frequency": "A name one paper invented is a lead. A name several unrelated papers use is the field agreeing that a text has that property, which is what a catalog can be held against. Only names appearing in two or more papers are reported.",
+  "no_mapping_here": "Which of these the 36 candidates already cover is a judgement, made and recorded in a separate step. A mapping done inside this script would let a new property be talked away where nobody could see it.",
+  "extraction": {
+    "a_label_printed_with_a_definition": "(?:(?<=[;\\u2022\\u2013\\u2014])|(?<=\\d\\.)|(?<=\\d\\))|^)\\s*([A-Za-z][A-Za-z/&' -]{3,44}?)\\s*[:\\u2013\\u2014]\\s+(?=[a-z])([^.;:]{18,220})",
+    "an_enumerated_item": "(?:(?:\\(|\\[)?\\d{1,2}(?:\\)|\\.|\\])|\\u2022|\\u2013|\\u2014)\\s+([A-Za-z][A-Za-z -]{3,38}?)(?=[,;.:]|\\s+\\()",
+    "why_not_capitalisation": "the first version looked for Title Case near a word about taxonomies and returned `this`, `there`, `while`, `canada` and `vancouver`. Capitalisation cannot tell a category name from the first word of a sentence, so the shape of a printed taxonomy entry replaced it: a label, a colon, a definition.",
+    "header_and_references_are_cut": "affiliations gave `dublin` and `ireland`, the bibliography gave `zhang` and `long papers`",
+    "dehyphenation": "a two-column PDF breaks words across lines, so 'Con-\\ntent Omission' is rejoined before anything else; without it the field's most agreed category is invisible",
+    "stoplist_size": 154,
+    "stoplist_is_a_declared_bias": "every entry is about a document or a study, never a property a text can have",
+    "minimum_papers_to_report": 2
+  },
+  "limitations": "A table pdftotext scrambles contributes nothing, so this under-reports. A name is not a definition: what each category means still has to be read, and the quote recorded, before it can support a criterion.",
+  "outcome": "This did not work, and the reason is worth keeping. It returns almost nothing, because a taxonomy is printed as a table or a figure and pdftotext turns both into a bare sequence of words with no label-colon-definition shape left in them. The result is a measurement of how taxonomies are typeset, not of what is in them. Three successive versions of the patterns made it worse rather than better: capitalisation could not tell a category name from the first word of a sentence, and loosening the anchors let the bibliography back in. The categories were read out of the papers by hand instead, with every quote machine-checked against the text file it is attributed to, which is what map_consensus_taxonomy.py records. Kept rather than deleted because the next person to think of mining these PDFs should see that it was tried and what it cost.",
+  "papers_read": [
+    {
+      "key": "belz-etal-2026-mapping",
+      "year": "2026",
+      "names_found": 28
+    },
+    {
+      "key": "belz-etal-2024-qcet-interactive",
+      "year": "2024",
+      "names_found": 10
+    },
+    {
+      "key": "huidrom-belz-2023-towards",
+      "year": "2023",
+      "names_found": 11
+    },
+    {
+      "key": "huidrom-belz-2022-survey",
+      "year": "2022",
+      "names_found": 21
+    },
+    {
+      "key": "higashinaka-etal-2021-integrated",
+      "year": "2021",
+      "names_found": 21
+    },
+    {
+      "key": "sharou-specia-2022-taxonomy",
+      "year": "2022",
+      "names_found": 11
+    },
+    {
+      "key": "pugachev-etal-2025-repa",
+      "year": "2025",
+      "names_found": 5
+    },
+    {
+      "key": "venturini-etal-2026-talktag",
+      "year": "2026",
+      "names_found": 2
+    },
+    {
+      "key": "qiu-etal-2025-multilingual",
+      "year": "2025",
+      "names_found": 3
+    },
+    {
+      "key": "korre-etal-2021-elerrant",
+      "year": "2021",
+      "names_found": 1
+    },
+    {
+      "key": "arnardottir-etal-2024-beyond",
+      "year": "2024",
+      "names_found": 24
+    },
+    {
+      "key": "mieskes-etal-2020-data",
+      "year": "2020",
+      "names_found": 10
+    },
+    {
+      "key": "macketanz-etal-2022-perceptual",
+      "year": "2022",
+      "names_found": 3
+    },
+    {
+      "key": "korre-pavlopoulos-2020-errant",
+      "year": "2020",
+      "names_found": 1
+    },
+    {
+      "key": "murugesan-etal-2023-mismatch",
+      "year": "2023",
+      "names_found": 4
+    },
+    {
+      "key": "xu-etal-2026-hallucination",
+      "year": "2026",
+      "names_found": 22
+    },
+    {
+      "key": "ivanova-etal-2024-lets",
+      "year": "2024",
+      "names_found": 15
+    }
+  ],
+  "names": []
+}
