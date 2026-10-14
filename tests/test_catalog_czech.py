@@ -47,6 +47,7 @@ def _module(name: str):
 
 catalog_mod = _module("catalog")
 panel_sheet = _module("panel_sheet")
+render_cs = _module("render_catalog_cs")
 
 
 @pytest.fixture(scope="module")
@@ -267,15 +268,97 @@ def test_the_sheet_refuses_to_build_from_drifted_data(tmp_path, monkeypatch):
     assert not list(tmp_path.glob("*.csv"))
 
 
-def test_the_generator_carries_no_czech_of_its_own():
-    """The wording lives in the data, so this script stays public-safe.
+@pytest.mark.parametrize("script", ["panel_sheet.py", "render_catalog_cs.py"])
+def test_the_generators_carry_no_czech_of_their_own(script):
+    """The wording lives in the data, so these scripts stay public-safe.
 
     Every other script in the catalog directory is held to the same rule, and it
     is what lets the Czech sit behind one allow-list entry instead of several.
     """
-    text = (CATALOG_DIR / "panel_sheet.py").read_text(encoding="utf-8")
+    text = (CATALOG_DIR / script).read_text(encoding="utf-8")
     assert not DIACRITIC.search(text)
     assert "C:\\" not in text and "/Users/" not in text
+
+
+# --- the one Czech table ---------------------------------------------------
+
+
+@pytest.fixture(scope="module")
+def operational() -> dict:
+    return json.loads((CATALOG_DIR / "operational.json").read_text(encoding="utf-8"))
+
+
+@pytest.fixture(scope="module")
+def page(catalog, czech, operational) -> str:
+    return render_cs.render(catalog, czech, operational, "1. 1. 2026 00:00", "0" * 64)
+
+
+def test_the_table_has_one_row_per_candidate(page, codes):
+    assert page.count("<tr class=") == len(codes) == 36
+    for code in codes:
+        assert f"<td class=id>{code}</td>" in page
+
+
+def test_no_count_on_the_page_is_typed_anywhere(page, catalog, czech):
+    """The defect that produced five different numbers.
+
+    Each old view had its total written into a button by hand, so every one of
+    them was right on the day it ran. The filter labels here are counted from
+    the catalog, and the test fails if a number stops matching it rather than
+    when somebody notices.
+    """
+    total = len(catalog["candidates"])
+    measured = sum(1 for c in catalog["candidates"] if c["state"] == "proposed")
+    labels = czech["page"]["filters"]
+    assert f"{labels['all']} ({total})" in page
+    assert f"{labels['on']} ({measured})" in page
+    assert f"{labels['off']} ({total - measured})" in page
+    for number in (16, 17, 33, 34):
+        if number not in (total, measured, total - measured):
+            assert f"({number})" not in page
+
+
+def test_a_stale_copy_says_so_instead_of_being_recounted(catalog, czech, operational):
+    """The header carries the digest of the catalog the page was made from.
+
+    The old views could only be checked by counting their rows against the
+    catalog, which is how one of them sat six days old and sixteen criteria
+    short. A digest that does not match the file is visible at a glance.
+    """
+    rendered = render_cs.render(catalog, czech, operational, "1. 1. 2026 00:00", "abc123def456" * 5)
+    assert "abc123def456" in rendered
+    assert czech["page"]["stale"] in rendered
+
+
+def test_the_digest_is_of_the_catalog_file_as_it_is_on_disk(tmp_path, monkeypatch):
+    import hashlib
+
+    monkeypatch.setattr(render_cs, "OUT", tmp_path / "kriteria-cesky.html")
+    assert render_cs.main() == 0
+    expected = hashlib.sha256(render_cs.CATALOG_PATH.read_bytes()).hexdigest()[:12]
+    assert expected in (tmp_path / "kriteria-cesky.html").read_text(encoding="utf-8")
+
+
+def test_a_candidate_with_no_czech_question_says_so_rather_than_showing_a_blank(page, czech):
+    """K35 and K36 were added after the last generator ran.
+
+    An empty cell reads as "nothing to ask here", which is a claim. The gap is
+    labelled instead, and the label is in the data so it can be read.
+    """
+    missing = czech["coverage"]["missing_by_field"]["question"]
+    assert missing == ["K35", "K36"]
+    assert page.count(czech["page"]["no_question"]) == len(missing)
+
+
+def test_the_table_refuses_to_render_from_drifted_data(tmp_path, monkeypatch):
+    monkeypatch.setattr(render_cs, "OUT", tmp_path / "kriteria-cesky.html")
+    module = render_cs._catalog_module()
+    drifted = json.loads(CZECH_PATH.read_text(encoding="utf-8"))
+    drifted["candidates"]["K01"]["statement"] = ""
+    monkeypatch.setattr(module, "load_czech", lambda *a, **k: drifted)
+    monkeypatch.setattr(render_cs, "_catalog_module", lambda: module)
+    assert render_cs.main() == 2
+    assert not (tmp_path / "kriteria-cesky.html").exists()
 
 
 DIACRITIC = re.compile(

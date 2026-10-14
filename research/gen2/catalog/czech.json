@@ -1466,6 +1466,42 @@
       ]
     ]
   },
+  "page": {
+    "title": "Všechna kritéria v jedné tabulce",
+    "intro": [
+      "Tohle je jediná česká tabulka kritérií. Vzniká z anglického katalogu, takže v ní nemůže být jiný počet kritérií než v něm; do 13. 10. 2026 jich pět různých tabulek tvrdilo 36, 34, 33, 17 a 16.",
+      "Tmavé řádky se měří, světlé ne. Sloupec <b>na čem se měří</b> říká, co se počítá: většina kritérií není na celý zápis, ale na jedno tvrzení nebo na jednu informační jednotku."
+    ],
+    "filters": {
+      "all": "Vše",
+      "on": "Jen měřené",
+      "off": "Jen neměřené"
+    },
+    "columns": [
+      "",
+      "Kritérium",
+      "Na co se ptáme",
+      "Naše kategorie",
+      "Kdo to v literatuře našel",
+      "Na čem se měří",
+      "Co rozhoduje",
+      "Pravidlo",
+      "Stav"
+    ],
+    "states": {
+      "measured": "MĚŘÍ SE",
+      "rule_but_no_round": "pravidlo je, kolo ne",
+      "rule_written_not_used": "napsané, nezařazené",
+      "rule_yes": "ano",
+      "rule_other": "měří se jinak",
+      "none": "—"
+    },
+    "generated": "Vygenerováno {stamp} z katalogu ve verzi {digest}.",
+    "stale": "Když se katalog změní, je tahle stránka starší než data a je potřeba ji vyrobit znovu; odtud ten otisk.",
+    "footer": "Česky je pracovní překlad. Závazné znění je anglické v <code>research/gen2/catalog/catalog.json</code>, jeho český text je v <code>research/gen2/catalog/czech.json</code>.",
+    "no_question": "(česká otázka k tomuhle kritériu zatím není)",
+    "abstract_only": " (jen abstrakt)"
+  },
   "panel_sheet_note": "The wording of the content-validity rating sheet, kept here so that the generator beside it carries no Czech. The sheet shows a code, a name and the statement, and nothing about state, origin or citation, so that a rater judges rather than ratifies.",
   "vocabulary": {
     "state": {

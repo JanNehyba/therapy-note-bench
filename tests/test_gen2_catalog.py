@@ -782,6 +782,7 @@ DIACRITIC = re.compile(
         CATALOG / "render_catalog.py",
         CATALOG / "convert_to_registry.py",
         CATALOG / "panel_sheet.py",
+        CATALOG / "render_catalog_cs.py",
         PAGE,
     ],
 )
