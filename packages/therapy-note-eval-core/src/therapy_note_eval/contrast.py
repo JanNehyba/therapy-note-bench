@@ -19,7 +19,7 @@ translation relatives share splits.
 
 What is published and what is not. A metric is compared only where the
 report's own completeness rule held on both sides; otherwise the entry says
-why. The question banks are built per language, so `essential_recall` on the
+why. The question banks are built per language, so a recall measure on the
 two sides has two denominators; `bank_comparability` states their sizes so a
 reader sees that. A confidence interval crossing zero does not establish
 equivalence, and one client gives no interval at all.
@@ -29,7 +29,7 @@ from __future__ import annotations
 
 import json
 
-from .metrics import paired_interval
+from .metrics import RECALL_MEASURES, paired_interval
 from .privacy import LABEL
 from .schema import Manifest, plain, require
 from .storage import Store
@@ -40,8 +40,7 @@ MAY_DIFFER = frozenset({"cases", "banks", "corpus", "origin"})
 #: The metrics the report averages, compared here pair by pair.
 METRICS = (
     "faithfulness",
-    "essential_recall",
-    "supplementary_recall",
+    *RECALL_MEASURES,
     "has_critical_error",
     "citation_coverage",
     "citation_support",

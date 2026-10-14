@@ -8,6 +8,8 @@ from collections import Counter, defaultdict
 from .metrics import validation_metrics
 from .profiles import instructions
 from .schema import (
+    IMPORTANCE,
+    MANDATORY,
     Bank,
     Case,
     Evaluation,
@@ -24,7 +26,7 @@ PAIR_CHOICES = ("a_better", "b_better", "both_acceptable", "both_unacceptable", 
 LABELS = {
     "claim": ("supported", "contradicted", "unsupported", "unassessable"),
     "qa": ("preserved", "partial", "omitted", "contradicted", "unassessable"),
-    "importance": ("essential", "supplementary", "not_required"),
+    "importance": IMPORTANCE,
     "disclosure": ("retain", "generalize", "omit"),
     "segmentation": ("complete_atomic", "missing_claim", "compound_claim", "incorrect_split"),
     "dimension": ("pass", "fail", "unassessable", "not_applicable"),
@@ -97,9 +99,7 @@ def task_sheet(case: Case, bank: Bank, note: Note) -> tuple[dict, dict]:
     bank.check(case)
     note.check(case)
     information = {
-        i.id: i
-        for i in bank.information
-        if i.relevance[note.spec.profile].importance == "essential"
+        i.id: i for i in bank.information if i.relevance[note.spec.profile].importance == MANDATORY
     }
     items = [
         {

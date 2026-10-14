@@ -10,6 +10,7 @@ from __future__ import annotations
 from dataclasses import replace
 
 from .schema import (
+    MANDATORY,
     PROFILES,
     Bank,
     Case,
@@ -160,7 +161,7 @@ def fixture(language: str, profile: str, variant: str = "clean"):
         source.id, source.revision, Span("t0", 0, len(data["turns"][0]), data["turns"][0])
     )
     relevance = {
-        p: Relevance("essential", "retain", "Document the actual risk-related report")
+        p: Relevance(MANDATORY, "retain", "Document the actual risk-related report")
         for p in PROFILES
     }
     bank = Bank(
@@ -357,7 +358,7 @@ def extended_fixture(language: str, profile: str, variant: str):
         text = TEXT[language]["template"] if variant == "omitted_risk" else fact
     relevance = {
         p: Relevance(
-            "essential",
+            MANDATORY,
             "generalize" if variant == "generalization" else "retain",
             "Authored synthetic information target",
         )

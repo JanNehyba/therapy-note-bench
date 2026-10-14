@@ -9,10 +9,12 @@ from pathlib import Path
 
 from . import PROTOCOL_VERSION
 from .findings import summarize as summarize_findings
-from .metrics import cluster_interval, measure
+from .metrics import RECALL_MEASURES, cluster_interval, measure
 from .schema import (
     AGGREGATION_VERSION,
     ERROR_TYPES,
+    IMPORTANCE,
+    MANDATORY,
     Bank,
     Case,
     Evaluation,
@@ -203,8 +205,7 @@ def build_report(store: Store) -> dict:
             summary = {}
             for metric in (
                 "faithfulness",
-                "essential_recall",
-                "supplementary_recall",
+                *RECALL_MEASURES,
                 "has_critical_error",
                 "citation_coverage",
                 "citation_support",
@@ -366,12 +367,12 @@ def build_report(store: Store) -> dict:
                                     "unassessable",
                                 )
                             }
-                            for importance in ("essential", "supplementary")
+                            for importance in IMPORTANCE
                         },
                         "missing_qa_checks": sum(
                             v["coverage"][importance]["missing"]
                             for v in measured.values()
-                            for importance in ("essential", "supplementary")
+                            for importance in IMPORTANCE
                         ),
                     },
                 }
@@ -437,7 +438,8 @@ def report_html(payload: dict) -> str:
             + str(cohort["independent_groups"])
             + "</p>",
             "<table><tr><th>System</th><th>Generated / expected</th><th>Faithfulness</th>"
-            "<th>Essential recall</th><th>Notes with critical findings in declared scope</th></tr>",
+            f"<th>{MANDATORY.capitalize()} recall</th>"
+            "<th>Notes with critical findings in declared scope</th></tr>",
         ]
         parts.append(
             "<caption>Scope: "
@@ -455,7 +457,7 @@ def report_html(payload: dict) -> str:
                 + "</td><td>"
                 + f"{system['generated']} / {system['expected']}</td>"
             )
-            for name in ("faithfulness", "essential_recall", "has_critical_error"):
+            for name in ("faithfulness", MANDATORY + "_recall", "has_critical_error"):
                 m = system["metrics"][name]
                 value = (
                     (

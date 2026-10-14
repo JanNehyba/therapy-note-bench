@@ -6,6 +6,9 @@ from . import PROTOCOL_VERSION
 from .profiles import DEFINITIONS, instructions
 from .schema import (
     ERROR_TYPES,
+    IMPORTANCE,
+    MANDATORY,
+    OPTIONAL,
     Bank,
     Case,
     Note,
@@ -80,8 +83,8 @@ def prepare(case: Case, instrument=None) -> str:
         "comprehensive negative assessment. Such absence may have no extractive evidence. "
         "One primary question per information item, in the session language, with an explicit "
         "answer from the sources. No yes/no leading question that supplies its own answer. "
-        "Use all four relevance keys. Omit implies not_required; "
-        "generalize can still be essential.",
+        "Use all four relevance keys. Omit implies the lowest grade; "
+        f"generalize can still be {MANDATORY}.",
         {"language": case.language, "sources": source_data(case), "profiles": DEFINITIONS},
         {
             "information": [
@@ -94,7 +97,7 @@ def prepare(case: Case, instrument=None) -> str:
                     "critical": False,
                     "relevance": {
                         p: {
-                            "importance": "essential|supplementary|not_required",
+                            "importance": "|".join(IMPORTANCE),
                             "disclosure": "retain|generalize|omit",
                             "reason": "purpose-specific rationale",
                         }
@@ -184,7 +187,7 @@ def compare(note: Note, bank: Bank, answers: list[dict], method_specs=()) -> str
         "and contradicted; unassessable is distinct from all three. Judge meaning retention "
         "at the disclosure level this purpose requires: appropriate generalization preserves "
         "the relevant information. Give no error severity to preserved or unassessable. "
-        "Omission of not_required information has severity none."
+        f"Omission of {OPTIONAL} information has severity none."
         + method_rules(method_specs, note.spec.language, ("qa",)),
         {
             "information": plain(bank.information),

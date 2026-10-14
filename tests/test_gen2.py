@@ -11,6 +11,8 @@ from therapy_note_eval import annotations, controls, pipeline, prompts, report
 from therapy_note_eval.cli import main
 from therapy_note_eval.metrics import cluster_interval, measure, paired_interval, plan_sample
 from therapy_note_eval.schema import (
+    MANDATORY,
+    OPTIONAL,
     Case,
     Claim,
     Question,
@@ -47,7 +49,7 @@ def test_empty_note_has_zero_recall_and_no_perfect_precision(language, profile):
     c, b, n, s, _, e = controls.fixture(language, profile, "empty")
     result = measure(c, n, b, s, e)
     assert result["faithfulness"] is None
-    assert result["coverage"]["essential"]["recall"] == 0
+    assert result["coverage"][MANDATORY]["recall"] == 0
     assert result["has_critical_error"] is True
 
 
@@ -57,7 +59,7 @@ def test_clean_and_negated_notes_are_not_equivalent(language):
     bad = controls.fixture(language, "continuity", "negation")
     assert measure(good[0], good[2], good[1], good[3], good[5])["faithfulness"] == 1
     assert measure(bad[0], bad[2], bad[1], bad[3], bad[5])["faithfulness"] == 0
-    assert measure(bad[0], bad[2], bad[1], bad[3], bad[5])["coverage"]["essential"]["recall"] == 0
+    assert measure(bad[0], bad[2], bad[1], bad[3], bad[5])["coverage"][MANDATORY]["recall"] == 0
 
 
 def test_note_only_question_prompt_cannot_see_transcript_or_answer():
@@ -153,22 +155,24 @@ def test_primary_question_is_unique_and_paraphrases_do_not_inflate_recall():
     bank = replace(b, questions=(*b.questions, extra))
     bank.check(c)
     result = measure(c, n, bank, s, replace(e, bank_revision=bank.revision))
-    assert result["coverage"]["essential"]["expected"] == 1
+    assert result["coverage"][MANDATORY]["expected"] == 1
     with pytest.raises(ValidationError, match="primary"):
         replace(bank, questions=(*b.questions, replace(extra, primary=True))).check(c)
 
 
-def test_appropriate_generalization_and_optional_omission_are_not_missing_essentials():
+def test_appropriate_generalization_and_optional_omission_are_not_missing_mandatories():
     c, b, n, s, _, e = controls.fixture("en", "continuity")
     relevance = dict(b.information[0].relevance)
-    relevance["continuity"] = Relevance("not_required", "omit", "Not needed for this purpose")
+    relevance["continuity"] = Relevance(OPTIONAL, "omit", "Not needed for this purpose")
     bank = replace(b, information=(replace(b.information[0], relevance=relevance),))
     result = measure(c, n, bank, s, replace(e, bank_revision=bank.revision))
-    assert result["coverage"]["essential"]["expected"] == 0
-    assert result["coverage"]["essential"]["recall"] is None
-    assert Relevance("essential", "generalize", "Keep the relationship, omit the name")
+    assert result["coverage"][MANDATORY]["expected"] == 0
+    assert result["coverage"][MANDATORY]["recall"] is None
+    assert Relevance(MANDATORY, "generalize", "Keep the relationship, omit the name")
     with pytest.raises(ValidationError):
-        Relevance("essential", "omit", "Contradiction")
+        Relevance(MANDATORY, "omit", "Contradiction")
+    with pytest.raises(ValidationError, match="Unknown importance grade"):
+        Relevance("essential", "retain", "A grade from before 2026-10-14")
 
 
 def test_missing_judgments_and_unclear_source_are_not_scored_as_success():
@@ -176,7 +180,7 @@ def test_missing_judgments_and_unclear_source_are_not_scored_as_success():
     missing = replace(e, claims=(), qa=(), answers=(), dimensions=())
     result = measure(c, n, b, s, missing)
     assert result["faithfulness"] is None
-    assert result["coverage"]["essential"]["recall"] is None
+    assert result["coverage"][MANDATORY]["recall"] is None
     assert result["has_critical_error"] is None
     unknown = replace(e, claims=(replace(e.claims[0], verdict="unassessable"),))
     assert measure(c, n, b, s, unknown)["faithfulness"] is None
@@ -398,7 +402,9 @@ def test_missing_planned_case_cannot_shrink_the_report_denominator(workspace):
         ("evaluations", digest(e), e),
     ):
         store.put(kind, key, obj)
-    metric = report.build_report(store)["cohorts"][0]["systems"][0]["metrics"]["essential_recall"]
+    metric = report.build_report(store)["cohorts"][0]["systems"][0]["metrics"][
+        MANDATORY + "_recall"
+    ]
     assert metric["expected"] == 2 and metric["answered"] == 1
     assert metric["value"] is None
 
@@ -451,7 +457,7 @@ def test_challenge_artifacts_bind_real_spans_without_asserting_llm_sensitivity(l
     m.check(c, b, n, s)
     metrics = measure(c, n, b, s, e)
     if variant in controls.POSITIVE:
-        assert metrics["coverage"]["essential"]["recall"] == 1
+        assert metrics["coverage"][MANDATORY]["recall"] == 1
         assert not controls.assess(variant, e, metrics)["detected"]
     if variant == "wrong_citation":
         assert metrics["faithfulness"] == 1
@@ -512,7 +518,7 @@ def test_report_exposes_all_dimensions_and_partial_qa_outcomes(workspace):
         "language failure rate",
         "instructions failure rate",
         "citation support",
-        "supplementary recall",
+        "highly recommended recall",
         "partial:",
         "omitted:",
         "not applicable",

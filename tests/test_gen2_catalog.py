@@ -21,7 +21,7 @@ from pathlib import Path
 
 import pytest
 from therapy_note_eval.registry import load_registry
-from therapy_note_eval.schema import PROFILES, ValidationError, digest
+from therapy_note_eval.schema import IMPORTANCE, PROFILES, ValidationError, digest
 
 REPO = Path(__file__).resolve().parents[1]
 CATALOG = REPO / "research" / "gen2" / "catalog"
@@ -245,6 +245,43 @@ def test_nothing_is_measured_on_its_origin_alone(catalog):
     assert any(
         "without a source read in full" in problem for problem in catalog_mod.problems(doctored)
     )
+
+
+def test_the_importance_grades_are_the_ones_the_catalog_quotes(catalog, operational):
+    """The code grades an information unit with the grades the source gave.
+
+    Until 2026-10-14 it did not. The core carried three grades that came in with
+    the package, the catalog quoted TN-Eval's five from its Appendix C, and the
+    severity rule of the `qa` method separates four of those five: the omission
+    of an optional unit is no error, of a good-to-have one minor, of a highly
+    recommended or mandatory one major. Three grades cannot tell those apart, so
+    the rule the pilot runs on could not be carried out, and coverage reported
+    two of the three grades while the third was neither counted nor declared
+    missing.
+
+    This binds the three together. The grades in the code are the grades the
+    catalog quotes, and the words the severity rule uses are grades that exist.
+    """
+    quoted = next(
+        e["quote"]
+        for c in catalog["candidates"]
+        if c["id"] == "K05"
+        for e in c["evidence"]
+        if "Mandatory in certain circumstances" in e["quote"]
+    )
+    spelled = [part.strip(" .") for part in quoted.replace(", and ", ", ").split(", ")]
+    assert [grade.replace("_", " ").capitalize() for grade in IMPORTANCE] == spelled
+
+    rules = next(m for m in operational["methods"] if m["id"] == "qa")["severity_rules"]
+    # The prose hyphenates "good-to-have" where the key uses underscores.
+    prose = {name: rule.replace("-", " ") for name, rule in rules.items()}
+    named = {grade.replace("_", " ") for grade in IMPORTANCE}
+    mentioned = {grade for grade in named if any(grade in rule for rule in prose.values())}
+    assert mentioned == named - {"mandatory in certain circumstances"}, (
+        "the severity rule distinguishes grades, so every grade it names must exist"
+    )
+    assert "good to have" in prose["minor"] and "optional" in prose["none"]
+    assert "highly recommended" in prose["major"] and "mandatory" in prose["major"]
 
 
 def test_the_czech_decree_check_left_the_round_and_stayed_in_the_record(catalog):

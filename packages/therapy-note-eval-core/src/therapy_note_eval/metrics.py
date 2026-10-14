@@ -11,6 +11,7 @@ from .deterministic import checks, violations
 from .schema import (
     AGGREGATION_VERSION,
     ERROR_TYPES,
+    IMPORTANCE,
     Bank,
     Case,
     Evaluation,
@@ -21,6 +22,12 @@ from .schema import (
 )
 
 VERSION = AGGREGATION_VERSION
+
+#: One recall measure per importance grade, named after it. Derived rather than
+#: listed: the report, the pairwise contrast and this module each used to spell
+#: the names out, and a grade added in one place would have been silently
+#: dropped by the other two.
+RECALL_MEASURES = tuple(grade + "_recall" for grade in IMPORTANCE)
 
 
 def fraction(found: int, expected: int, complete: bool = True) -> float | None:
@@ -41,7 +48,7 @@ def measure(
     qa = {q.information_id: q for q in evaluation.qa}
     answers = {a.question_id: a for a in evaluation.answers}
     coverage = {}
-    for importance in ("essential", "supplementary"):
+    for importance in IMPORTANCE:
         ids = {
             i.id
             for i in bank.information
@@ -213,7 +220,7 @@ def measure(
     )
     if evaluation.source_mode == "full_context":
         not_applicable.append("retrieval_recall")
-    for importance in ("essential", "supplementary"):
+    for importance in IMPORTANCE:
         if not coverage[importance]["expected"]:
             not_applicable.append(importance + "_recall")
     not_requested = []
@@ -222,7 +229,7 @@ def measure(
             ("faithfulness", "evidence_coverage", "evidence_support", "citation_coverage")
         )
     if not use_qa:
-        not_requested.extend(("essential_recall", "supplementary_recall"))
+        not_requested.extend(RECALL_MEASURES)
     if "citations" not in evaluation.methods:
         not_requested.extend(("citation_coverage", "citation_support", "citation_validity"))
     return {

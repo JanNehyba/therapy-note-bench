@@ -27,6 +27,7 @@ from therapy_note_eval.registry import (
     load_registry,
 )
 from therapy_note_eval.schema import (
+    MANDATORY,
     PROFILES,
     CitationVerdict,
     DimensionVerdict,
@@ -141,7 +142,7 @@ def test_known_ambiguous_content_is_not_an_api_failure():
         answers=(replace(e.answers[0], status="ambiguous"),),
         qa=(replace(e.qa[0], verdict="partial", severity="minor"),),
     )
-    coverage = measure(c, n, b, s, e)["coverage"]["essential"]
+    coverage = measure(c, n, b, s, e)["coverage"][MANDATORY]
     assert coverage["outcomes"] == {"partial": 1}
     assert coverage["missing"] == 0
     assert coverage["ambiguous_note_answers"] == 1
@@ -176,7 +177,7 @@ def test_unselected_qa_and_claims_are_not_run_or_presented_as_failures(store):
     metrics = measure(c, n, b, s, result)
     assert metrics["fully_evaluated"]
     assert metrics["has_critical_error"] is None
-    assert "essential_recall" in metrics["not_requested"]
+    assert MANDATORY + "_recall" in metrics["not_requested"]
 
 
 def test_ordinal_registry_reaches_annotation_without_binary_coercion():

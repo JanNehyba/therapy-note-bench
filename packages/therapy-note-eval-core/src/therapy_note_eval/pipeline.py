@@ -7,6 +7,7 @@ from dataclasses import replace
 
 from . import prompts
 from .schema import (
+    MANDATORY,
     Bank,
     Case,
     CitationVerdict,
@@ -211,7 +212,7 @@ def score(
                     i.id,
                     "omitted",
                     "critical"
-                    if i.critical and i.relevance[note.spec.profile].importance == "essential"
+                    if i.critical and i.relevance[note.spec.profile].importance == MANDATORY
                     else "none",
                     (),
                     "Empty note",

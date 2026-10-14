@@ -23,13 +23,50 @@ from . import PROTOCOL_VERSION
 #: one edit: a manifest recorded under an older version is archived by the
 #: report rather than recalculated, and `Manifest.check` refuses to score
 #: under it. Bumped to v4 on 2026-09-13 when per-error-type counts were added
-#: to what a measurement returns.
-AGGREGATION_VERSION = "aggregation-v4"
+#: to what a measurement returns. Bumped to v5 on 2026-10-14 when the three
+#: importance grades became the five of TN-Eval's Appendix C: coverage returns
+#: one entry per grade, so the shape changed and an older manifest is archived
+#: rather than recalculated under it.
+AGGREGATION_VERSION = "aggregation-v5"
 
 Profile = Literal["continuity", "supervision", "client", "audit"]
 Language = Literal["en", "cs"]
 PROFILES = ("continuity", "supervision", "client", "audit")
 Severity = Literal["none", "minor", "major", "critical"]
+
+Importance = Literal[
+    "mandatory",
+    "mandatory_in_certain_circumstances",
+    "highly_recommended",
+    "good_to_have",
+    "optional",
+]
+#: The five grades of TN-Eval's Appendix C, in the order it gives them, most
+#: required first. Taken verbatim because they are the one part of the grading
+#: with a reliability figure behind it: five therapists agreed on them at
+#: Fleiss' kappa 0.68 and Krippendorff's alpha 0.73.
+#:
+#: The core carried three grades until 2026-10-14 (`essential`, `supplementary`,
+#: `not_required`), which came in with the package and predate the review that
+#: found the five. They were not a simplification anyone had tested, and the
+#: severity rule the pilot runs on cannot be applied with them: it separates the
+#: omission of an optional unit (no error) from a good-to-have one (minor) from
+#: a highly recommended or mandatory one (major), and three grades cannot tell
+#: those apart. Nothing published rested on the three.
+#:
+#: Everything that names a grade derives it from here. Four places used to spell
+#: the list out, and they had already diverged: coverage reported two grades of
+#: the three, so the third was neither counted nor declared missing.
+IMPORTANCE = (
+    "mandatory",
+    "mandatory_in_certain_circumstances",
+    "highly_recommended",
+    "good_to_have",
+    "optional",
+)
+#: The grade an information unit must carry for a wrong answer about it to be a
+#: critical error. The lowest grade, where an omission is no error at all.
+MANDATORY, OPTIONAL = IMPORTANCE[0], IMPORTANCE[-1]
 ERROR_TYPES = (
     "speaker",
     "negation",
@@ -259,13 +296,14 @@ class Evidence:
 
 @dataclass(frozen=True)
 class Relevance:
-    importance: Literal["essential", "supplementary", "not_required"]
+    importance: Importance
     disclosure: Literal["retain", "generalize", "omit"]
     reason: str
 
     def __post_init__(self):
+        require(self.importance in IMPORTANCE, "Unknown importance grade")
         require(
-            not (self.disclosure == "omit" and self.importance != "not_required"),
+            not (self.disclosure == "omit" and self.importance != OPTIONAL),
             "An omitted detail cannot also be required",
         )
 
@@ -731,9 +769,15 @@ class Evaluation:
                 "Invalid QA error severity",
             )
             relevance = information[verdict.information_id].relevance[note.spec.profile]
+            # The method's severity rule has four branches and this enforces
+            # the one that cannot be a matter of judgement: an omission at the
+            # lowest grade is no error. The other three stay prose the rater
+            # reads, because a severity derived from the grade would record
+            # agreement with the rule rather than the rater's reading of the
+            # note.
             require(
                 verdict.verdict != "omitted"
-                or relevance.importance != "not_required"
+                or relevance.importance != OPTIONAL
                 or verdict.severity == "none",
                 "Omission of unneeded information is not an error",
             )
