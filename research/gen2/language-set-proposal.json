@@ -11,7 +11,7 @@
   },
   "neutral_layer": {
     "measured_in": "both languages",
-    "why": "These are properties of a generated note in any language. Dropping them from the English track would leave the two tracks measuring different things.",
+    "why": "Vlastnosti vygenerovaného zápisu, které má kterýkoli jazyk. Měří se v obou stopách, protože kritérium měřené jen v jedné nikdy neřekne, jestli je model v češtině horší, nebo jestli je české kritérium jen přísnější.",
     "criteria": [
       {
         "name": "Useknutý zápis",
@@ -54,21 +54,6 @@
         "proposed_role": "describes_only",
         "why_this_role": "In Czech word order carries emphasis and the given/new structure rather than grammatical role, so a different order is usually a different emphasis and not an error. Reported as a characteristic and never as a column of the order, because nobody can say which order is better without reading the session.",
         "what_changes_here": "Nobody on this project proposed it. It is a category in both schemes built for an inflected language, and no criterion of the 39 asks about it."
-      }
-    ]
-  },
-  "czech_layer": {
-    "measured_in": "Czech only",
-    "why": "A diacritic, a case ending and a Czech non-word have no English counterpart. These are reported for the Czech track alone and never enter a comparison between the two tracks.",
-    "criteria": [
-      {
-        "name": "Diakritika",
-        "question": "Je v zápisu české slovo s chybějící nebo špatnou délkou či háčkem?",
-        "from": "ELERRANT (Korre et al. 2021), ACC",
-        "quote": "ACC Accentuation Accentuation addition or removal.",
-        "proposed_role": "orders",
-        "measured_already": "84 of 101, 83%, with 3 unanswered",
-        "why_this_role": "The direction is given and the agreement is among the highest of the six. Greek is not Czech: an accent in Greek marks stress, a Czech diacritic can change the word, so the severity is ours and the rule transfers."
       },
       {
         "name": "Shoda a pád",
@@ -77,7 +62,10 @@
         "quote": "VERB:SVA Subject Verb Agreement The subject and the verb to be in person agreement.",
         "proposed_role": "orders_with_two_raters",
         "measured_already": "71 of 104, 68%, the second lowest of the six",
-        "why_this_role": "68% agreement is too low to order models on one reading. The low figure has a likely cause worth testing: the current question bundles three things, so two readers can both be right and disagree. Splitting the unfinished sentence off into the fluency threshold above is the first thing to try."
+        "why_this_role": "68% agreement is too low to order models on one reading. The low figure has a likely cause worth testing: the current question bundles three things, so two readers can both be right and disagree. Splitting the unfinished sentence off into the fluency threshold above is the first thing to try.",
+        "moved_from_czech_layer_on": "2026-10-14",
+        "why_it_is_not_czech_only": "Angličtina to má taky. Zápis v angličtině může porušit shodu podmětu s přísudkem, vymyslet si slovo i napsat hovorově to, co patří odborně. ELERRANT uvádí, že z jeho čtrnácti typů jsou řecké jen dva, a tenhle mezi ně nepatří.",
+        "czech_specific_part": "Pád. Čeština skloňuje a angličtina ne, takže české znění je širší než anglické; měří se tatáž vlastnost, jen má v češtině víc způsobů, jak selhat."
       },
       {
         "name": "Neexistující slovo",
@@ -86,7 +74,10 @@
         "quote": null,
         "proposed_role": "orders",
         "measured_already": "86 of 104, 83%",
-        "why_this_role": "No literature category yet and the second highest agreement of the six. It stays on the strength of our own measurement, and the record has to say that is what it rests on."
+        "why_this_role": "No literature category yet and the second highest agreement of the six. It stays on the strength of our own measurement, and the record has to say that is what it rests on.",
+        "moved_from_czech_layer_on": "2026-10-14",
+        "why_it_is_not_czech_only": "Angličtina to má taky. Zápis v angličtině může porušit shodu podmětu s přísudkem, vymyslet si slovo i napsat hovorově to, co patří odborně. ELERRANT uvádí, že z jeho čtrnácti typů jsou řecké jen dva, a tenhle mezi ně nepatří.",
+        "czech_specific_part": null
       },
       {
         "name": "Hovorový výraz místo odborného",
@@ -95,7 +86,26 @@
         "quote": null,
         "proposed_role": "describes_only",
         "measured_already": "73 of 104, 70%",
-        "why_this_role": "Moved out of the ranking, and this is a change from what the first generation does. A note written for a documentation audit and one written for the client may legitimately differ in register, so a single direction of quality cannot be claimed for it. It stays measured and is reported as a characteristic of a model."
+        "why_this_role": "Moved out of the ranking, and this is a change from what the first generation does. A note written for a documentation audit and one written for the client may legitimately differ in register, so a single direction of quality cannot be claimed for it. It stays measured and is reported as a characteristic of a model.",
+        "moved_from_czech_layer_on": "2026-10-14",
+        "why_it_is_not_czech_only": "Angličtina to má taky. Zápis v angličtině může porušit shodu podmětu s přísudkem, vymyslet si slovo i napsat hovorově to, co patří odborně. ELERRANT uvádí, že z jeho čtrnácti typů jsou řecké jen dva, a tenhle mezi ně nepatří.",
+        "czech_specific_part": null
+      }
+    ]
+  },
+  "czech_layer": {
+    "measured_in": "Czech only",
+    "why": "Tyhle dvě v angličtině měřit nejde, a u každé z jiného důvodu, který je u ní napsaný. Hlásí se jen pro českou stopu a nikdy nevstupují do srovnání obou stop.",
+    "criteria": [
+      {
+        "name": "Diakritika",
+        "question": "Je v zápisu české slovo s chybějící nebo špatnou délkou či háčkem?",
+        "from": "ELERRANT (Korre et al. 2021), ACC",
+        "quote": "ACC Accentuation Accentuation addition or removal.",
+        "proposed_role": "orders",
+        "measured_already": "84 of 101, 83%, with 3 unanswered",
+        "why_this_role": "The direction is given and the agreement is among the highest of the six. Greek is not Czech: an accent in Greek marks stress, a Czech diacritic can change the word, so the severity is ours and the rule transfers.",
+        "why_it_stays_czech_only": "Angličtina diakritiku v domácích slovech nemá, takže by se měřilo na prázdném jmenovateli. Řecká práce to potvrzuje tím, že svou kategorii pro přízvuk přidala od nuly — a čeština je silnější případ: řecký přízvuk značí důraz, česká délka nebo háček můžou změnit slovo."
       },
       {
         "name": "Kalk",
@@ -104,7 +114,8 @@
         "quote": null,
         "proposed_role": "describes_only",
         "measured_already": "68 of 102, 67%, the lowest of the six, with 2 unanswered",
-        "why_this_role": "The lowest agreement of the six and no category behind it. Ordering models on a question two readers answer differently a third of the time would be reporting noise. It stays measured because a calque is a real property of a translated clinical text, and one unread paper in the frame is about exactly this."
+        "why_this_role": "The lowest agreement of the six and no category behind it. Ordering models on a question two readers answer differently a third of the time would be reporting noise. It stays measured because a calque is a real property of a translated clinical text, and one unread paper in the frame is about exactly this.",
+        "why_it_stays_czech_only": "Kalk potřebuje zdrojový jazyk, ze kterého se kalkuje. Anglická stopa má přepisy rodilé anglické, takže do nich není z čeho kalkovat. Je to vlastnost našeho korpusu, ne angličtiny."
       }
     ]
   },
@@ -154,12 +165,29 @@
       "fluency with a comprehension threshold",
       "word order"
     ],
-    "summary": "Four criteria measured in both languages and five in Czech only, against the first generation's seven flat Czech questions. Two of the investigator's six stop ordering models and keep being measured. The reasons are the agreement figures his own anchor produced and, for register, that two purposes can legitimately want different registers."
+    "summary": "7 kritérií měřených v obou jazycích a 2 jen v češtině, proti sedmi plochým českým otázkám první generace. Dvě z šesti přestávají určovat pořadí a dál se měří."
   },
   "what_is_still_missing": [
     "No rule is written for any of these. A rule is what makes a criterion measurable, and writing one costs the human budget the pilot does not have.",
     "Czech has no inter-rater figure at all: the anchor had one native speaker, so none of the agreement numbers above is a reliability figure.",
     "Thirteen of the seventeen fetched papers are unread, and the form half of the fifteen schemes the consensus taxonomy surveyed is unread. The Latvian loanword and calque paper of 2026 is the obvious next read for the weakest criterion in this set."
   ],
-  "czech_is_here_because": "The questions are the ones a Czech rater would read, so they are instrument text and are written in the language they will be asked in. Nothing in this file is clinical: the agreement figures are counts and no note is quoted."
+  "czech_is_here_because": "The questions are the ones a Czech rater would read, so they are instrument text and are written in the language they will be asked in. Nothing in this file is clinical: the agreement figures are counts and no note is quoted.",
+  "correction_2026_10_14": {
+    "what_was_wrong": "Pět kritérií bylo v české vrstvě a tři z nich tam nepatří. Rozdělení bylo moje a bylo líné; investigátor se zeptal, proč se to nedá měřit i anglicky, a měl pravdu.",
+    "what_changed": "Shoda a pád, Neexistující slovo a Hovorový výraz se přesouvají do neutrální vrstvy. V české zůstávají Diakritika a Kalk.",
+    "why_it_matters": "Kritérium měřené jen v jednom jazyce nikdy neřekne, jestli je model v češtině horší, nebo jestli je to kritérium jen přísnější. Měřit tutéž vlastnost v obou jazycích je jediný způsob, jak říct „tenhle model drží registr v angličtině a v češtině ho ztrácí“ — což je otázka, kvůli které benchmark pro malý jazyk existuje.",
+    "evidence": {
+      "elerrant_added_only_two": {
+        "quote": "We added two more categories from scratch: ACC (Accent) and FN (Final -/nu).",
+        "file": "korre-etal-2021-elerrant.txt",
+        "what_it_shows": "Of ELERRANT's fourteen error types only two are Greek rather than inherited from the English ERRANT, and one of those two is the accent. Spelling, word order and subject-verb agreement are in the English base, so they are not language-specific in the judgement of the scheme this project cited for them."
+      },
+      "english_spelling_is_frequent": {
+        "quote": "Spelling mistakes (R:SPELL) were also very common, accounting for about 15% of the sample.",
+        "file": "korre-pavlopoulos-2020-errant.txt",
+        "what_it_shows": "The English denominator for an orthographic criterion is not empty: spelling is 15% of the errors in the English sample, so measuring a non-word or a misspelling in English is not a check with nothing to find."
+      }
+    }
+  }
 }
