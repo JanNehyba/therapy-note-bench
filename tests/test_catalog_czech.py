@@ -153,13 +153,26 @@ DERIVED_FIELDS = {"ranking_role", "needs_bank"}
 #: whose question changed silently is a criterion nobody can audit.
 HISTORY_FIELDS = {"reworded_on", "why_reworded", "previous_wording"}
 
+#: Fields written for this file rather than harvested from a generator, so their
+#: provenance is a date and not a filename. `plain` is the one sentence that says
+#: what a criterion is, written on 2026-10-15 because the catalog had a formal
+#: definition for every candidate and no sentence a reader could start from;
+#: `example` is its negative example from catalog.json, translated. Both are
+#: still required to say when they were written: text that appears on a page
+#: with no record of where it came from is how a working note becomes a claim.
+AUTHORED_FIELDS = {"plain", "example"}
+
 
 def test_every_field_says_which_generator_it_came_from(czech):
     known = set(czech["precedence"]["by_field"])
     for code, entry in czech["candidates"].items():
         provenance = entry["from"]
-        assert set(provenance) == set(entry) - {"from"} - DERIVED_FIELDS - HISTORY_FIELDS, code
+        expected = set(entry) - {"from"} - DERIVED_FIELDS - HISTORY_FIELDS
+        assert set(provenance) == expected, code
         for field, filename in provenance.items():
+            if field in AUTHORED_FIELDS:
+                assert "2026-" in filename, (code, field, filename)
+                continue
             assert field in known, (code, field)
             if filename == czech["authored_here"]:
                 # Written for this file rather than harvested from a generator.
@@ -431,3 +444,28 @@ def test_the_validator_names_every_drift_instead_of_raising(catalog, czech):
     assert any("by_field" in line for line in drift(miscounted))
     assert any("is not a candidate" in line for line in drift(grouping_names_a_stranger))
     assert any("kept text" in line for line in drift(conflict_keeps_other_text))
+
+
+def test_every_criterion_says_in_one_sentence_what_it_is(czech, codes):
+    """The thing the investigator asked for on 2026-10-15, and the reason it was missing.
+
+    The catalog had a formal definition for every candidate, a unit, and a
+    sentence on what goes wrong. It had no sentence a person who does not know
+    the criteria could start from, so every column added to the table was one
+    more thing to decode. `plain` is that sentence and `example` is what going
+    wrong looks like, and both exist for all of them or the list has a hole
+    exactly where somebody would stop reading.
+    """
+    for code in codes:
+        entry = czech["candidates"][code]
+        assert entry["plain"].strip(), code
+        assert entry["example"].strip(), code
+        # A plain sentence is short. The formal definition is one click away and
+        # copying it here would meet the request only in appearance.
+        assert len(entry["plain"]) < 160, (code, len(entry["plain"]))
+        assert entry["plain"] != entry.get("definition"), code
+
+    sheet = czech["first_generation_questions"]
+    assert len(sheet) == 7
+    for question in sheet:
+        assert question["name"] and question["plain"] and question["example"]

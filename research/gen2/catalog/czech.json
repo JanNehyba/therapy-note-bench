@@ -673,7 +673,9 @@
         "unit_definition": "cz_constructs.py",
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
-        "how": "stav.py"
+        "how": "stav.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Každé věcné tvrzení v zápisu má oporu v tom, co v sezení zaznělo.",
       "question": "Má každé tvrzení oporu v tom, co zaznělo?",
@@ -684,7 +686,9 @@
       "error_consequence": "Vymyšlený fakt putuje do další péče a klient si ho přečte jako něco, co o něm bylo řečeno.",
       "how": "Zápis se rozloží na tvrzení a každé se ověří proti přepisu.",
       "ranking_role": "orders",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Všechno, co zápis tvrdí, muselo v sezení opravdu zaznít.",
+      "example": "Zápis uvede „klient uvádí nespavost od rozvodu“, ale o žádném rozvodu se v sezení nemluvilo."
     },
     "K02": {
       "name": "Kdo co řekl",
@@ -697,7 +701,9 @@
         "unit_definition": "cz_constructs.py",
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
-        "how": "stav.py"
+        "how": "stav.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Zápis zachovává, kdo co řekl nebo pozoroval: klient, terapeut, třetí osoba, starší dokumentace.",
       "question": "Je poznat, co řekl klient, co terapeut a co někdo třetí?",
@@ -708,7 +714,9 @@
       "error_consequence": "Domněnka zapsaná jako fakt o třetí osobě je zároveň chyba věrnosti a zásah do práv někoho, kdo není klient a k zápisu nemá přístup.",
       "how": "Totéž, se zaměřením na aktéra tvrzení.",
       "ranking_role": "orders",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Musí být poznat, co řekl klient, co terapeut a co někdo třetí.",
+      "example": "Klient řekne, že mu partnerka vyčítá pití. Zápis to napíše jako fakt o partnerce, ne jako to, co si myslí klient."
     },
     "K03": {
       "name": "Čas a změna stavu",
@@ -721,7 +729,9 @@
         "unit_definition": "cz_constructs.py",
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
-        "how": "stav.py"
+        "how": "stav.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Zápis zachovává, kdy se co stalo a co je aktuální oproti minulému.",
       "question": "Je poznat, kdy se co stalo a co je aktuální?",
@@ -732,7 +742,9 @@
       "error_consequence": "Minulý stav vydávaný za současný mění klinické rozhodnutí.",
       "how": "Totéž, se zaměřením na čas a změnu stavu.",
       "ranking_role": "orders",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Musí být poznat, kdy se co stalo a co z toho platí teď.",
+      "example": "Zápis napíše „klient bere antidepresiva“, ačkoli se v sezení mluvilo o užívání před dvěma lety."
     },
     "K04": {
       "name": "Jistota, hypotéza, dohoda",
@@ -745,7 +757,9 @@
         "unit_definition": "cz_constructs.py",
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
-        "how": "stav.py"
+        "how": "stav.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Zápis zachovává, co je jisté, co je hypotéza terapeuta, co návrh a co dohoda.",
       "question": "Je poznat, co je fakt, co dohoda a co domněnka?",
@@ -756,7 +770,9 @@
       "error_consequence": "Návrh povýšený na dohodu vytvoří v další péči závazek, ke kterému se klient nikdy nepřihlásil.",
       "how": "Totéž, se zaměřením na míru jistoty.",
       "ranking_role": "orders",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Musí být poznat, co je fakt, co terapeutova domněnka a co dohoda s klientem.",
+      "example": "Terapeut v sezení uvažoval, že by mohlo jít o vyhýbavé chování. Zápis napíše „jde o vyhýbavé chování“ jako hotový závěr."
     },
     "K05": {
       "name": "Pokrytí podstatného obsahu",
@@ -769,7 +785,9 @@
         "unit_definition": "cz_constructs.py",
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
-        "how": "stav.py"
+        "how": "stav.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Zápis nese podstatné informace ze sezení, přičemž podstatnost má stupně.",
       "question": "Je v zápisu to podstatné, co zaznělo? Důležitost má stupně.",
@@ -780,7 +798,9 @@
       "error_consequence": "Vynechání rizikové informace je jiná třída chyby než vynechání domácího úkolu; sloučení do jednoho procenta ten rozdíl smaže.",
       "how": "Z přepisu se předem sestaví banka faktů se stupni důležitosti; u každého se zjistí, jestli ho zápis nese.",
       "ranking_role": "orders",
-      "needs_bank": true
+      "needs_bank": true,
+      "plain": "Jestli je v zápisu to podstatné, co v sezení zaznělo. Podstatnost má stupně.",
+      "example": "V sezení zaznělo sebepoškozování a v zápisu chybí. Jedno vynechání povinné informace váží víc než tři vynechání těch volitelných."
     },
     "K06": {
       "name": "Přiznaná informační mezera",
@@ -793,7 +813,9 @@
         "unit_definition": "cz_constructs.py",
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
-        "how": "stav.py"
+        "how": "stav.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Zápis netvrdí, že něco není, když se o tom v sezení nemluvilo; rozliší „nezaznělo“, „klient popřel“ a „nikdo se nezeptal“.",
       "question": "Netvrdí zápis, že něco není, když se o tom nemluvilo?",
@@ -804,7 +826,9 @@
       "error_consequence": "Zápis, který si vyrobí negativní nález, dává další péči falešné ujištění.",
       "how": "Z téže banky: u každého faktu se rozliší, že zazněl, že klient popřel, a že se na to nikdo nezeptal. Zápis se nemá co vyjadřovat k ostatním faktům světa, jen k těm v bance.",
       "ranking_role": "orders",
-      "needs_bank": true
+      "needs_bank": true,
+      "plain": "Zápis nesmí tvrdit, že něco není, když se o tom vůbec nemluvilo.",
+      "example": "Zápis napíše „sebevražedné myšlenky: neguje“, ačkoli se na ně v sezení nikdo neptal."
     },
     "K07": {
       "name": "Relevance pro adresáta",
@@ -817,7 +841,9 @@
         "unit_definition": "cz_constructs.py",
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
-        "how": "stav.py"
+        "how": "stav.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Co je podstatné, se mění podle toho, kdo zápis čte a proč.",
       "question": "Je tam to, co potřebuje právě tenhle čtenář?",
@@ -828,7 +854,9 @@
       "error_consequence": "Univerzální skóre odmění zápis, který je dobrý pro jednoho adresáta a pro jiného nepoužitelný.",
       "how": "Z téže banky: každý fakt má značku účelu a pokrytí se uvádí po účelech.",
       "ranking_role": "orders",
-      "needs_bank": true
+      "needs_bank": true,
+      "plain": "Co je v zápisu podstatné, záleží na tom, pro koho je psaný.",
+      "example": "Jedno skóre relevance pro všechny čtyři účely: zápis pro navázání péče a shrnutí pro klienta se posuzují stejně."
     },
     "K08": {
       "name": "Riziko a bezpečí",
@@ -841,7 +869,9 @@
         "unit_definition": "cz_constructs.py",
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
-        "how": "stav.py"
+        "how": "stav.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Zápis zachycuje riziko a bezpečí tam, kde v sezení zaznělo.",
       "question": "Je zachycené riziko tam, kde zaznělo?",
@@ -852,7 +882,9 @@
       "error_consequence": "Nejvyšší. Jediné vynechání může být klinicky rozhodující.",
       "how": "Z téže banky: fakty označené jako riziko se uvádějí jako vlastní vrstva.",
       "ranking_role": "orders",
-      "needs_bank": true
+      "needs_bank": true,
+      "plain": "Jestli je v zápisu to, co v sezení zaznělo o riziku a bezpečí.",
+      "example": "V zápisu chybí zmínka o beznaději, a celkové pokrytí přesto vyjde na 85 %."
     },
     "K09": {
       "name": "Opodstatněnost vytvořených souvislostí",
@@ -865,7 +897,9 @@
         "unit_definition": "cz_constructs.py",
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
-        "why_not_measured": "build_doc.py"
+        "why_not_measured": "build_doc.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Když zápis spojí informace do souvislosti nebo závěru, je ten vztah opřený o zdroj.",
       "question": "Je souvislost, kterou zápis vytvořil, opřená o zdroj?",
@@ -876,7 +910,9 @@
       "error_consequence": "Vymyšlená klinická souvislost vypadá jako odborný závěr a putuje dál.",
       "why_not_measured": "Chybí pravidlo měření. Polovina, kterou umíme, je v ověřování tvrzení; druhá polovina (je ten vztah vhodný pro daný účel?) nemá stanovené měřítko.",
       "ranking_role": "not_measured_yet",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Souvislost, kterou zápis vytvořil, musí mít oporu v tom, co zaznělo.",
+      "example": "Zápis uzavře, že jde o sociální fobii, ačkoli takovou souvislost v sezení nikdo neudělal."
     },
     "K10": {
       "name": "Návaznost a další kroky",
@@ -889,7 +925,9 @@
         "unit_definition": "cz_constructs.py",
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
-        "how": "stav.py"
+        "how": "stav.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Zápis nese, co je potřeba k pokračování: plán, úkoly, otevřené otázky, termín.",
       "question": "Je tam plán, úkoly a další setkání?",
@@ -900,7 +938,9 @@
       "error_consequence": "Chybějící plán přeruší návaznost; vymyšlený plán vytvoří falešný závazek.",
       "how": "Z téže banky: fakty typu plán.",
       "ranking_role": "orders",
-      "needs_bank": true
+      "needs_bank": true,
+      "plain": "Jestli je v zápisu plán, dohodnuté úkoly a další setkání.",
+      "example": "Zápis uvede datum dalšího sezení, které v sezení nepadlo."
     },
     "K11": {
       "name": "Úspornost",
@@ -913,7 +953,9 @@
         "unit_definition": "cz_constructs.py",
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
-        "how": "stav.py"
+        "how": "stav.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Každá věta zápisu nese podstatný obsah; prázdné fráze nikoli.",
       "question": "Nese každá věta informaci, nebo je to vata?",
@@ -924,7 +966,9 @@
       "error_consequence": "Úspornost vykázaná samostatně odměňuje prázdný zápis.",
       "how": "Každá věta se označí jednotkami, které nese; věta bez jednotky je nadbytečná.",
       "ranking_role": "orders",
-      "needs_bank": true
+      "needs_bank": true,
+      "plain": "Jestli každá věta něco nese, nebo je to vata.",
+      "example": "Jednovětý zápis má úspornost 1,00 a pokrytí 0,08. Samotná úspornost odměňuje prázdný zápis."
     },
     "K12": {
       "name": "Uspořádání textu",
@@ -937,7 +981,9 @@
         "unit_definition": "cz_constructs.py",
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
-        "how": "stav.py"
+        "how": "stav.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Zápis je uspořádaný tak, že čtenář najde, co hledá, na očekávaném místě.",
       "question": "Stojí obsah tam, kde ho čtenář čeká?",
@@ -948,7 +994,9 @@
       "error_consequence": "Správný obsah na špatném místě mění svého původce a čtenář ho čte jinak.",
       "how": "U každé jednotky se zjistí, jestli stojí v oddílu podle šablony.",
       "ranking_role": "orders",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Jestli obsah stojí v oddílu, kam ho šablona čeká.",
+      "example": "Terapeutova interpretace stojí v oddílu Subjektivní, jako by to řekl klient."
     },
     "K13": {
       "name": "Srozumitelnost pro čtenáře",
@@ -961,7 +1009,9 @@
         "unit_definition": "cz_constructs.py",
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
-        "why_not_measured": "build_doc.py"
+        "why_not_measured": "build_doc.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Zápis je jazykově srozumitelný tomu, komu je určen.",
       "question": "Rozumí tomu ten, komu je zápis určen?",
@@ -972,7 +1022,9 @@
       "error_consequence": "Nesrozumitelné klientské shrnutí selhalo ve svém jediném účelu.",
       "why_not_measured": "Chybí hodnotitel. Dá se měřit jen proti konkrétnímu čtenáři, a pilot nemá klientské čtenáře. Indexy čitelnosti jsou náhražka, ne důkaz.",
       "ranking_role": "not_measured_yet",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Jestli zápisu rozumí ten, komu je určený.",
+      "example": "Verze pro klienta obsahuje zkratky bez vysvětlení."
     },
     "K14": {
       "name": "Nestigmatizující jazyk",
@@ -985,7 +1037,9 @@
         "unit_definition": "cz_constructs.py",
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
-        "how": "stav.py"
+        "how": "stav.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Zápis nepoužívá jazyk, který klienta snižuje nebo ho redukuje na diagnózu.",
       "question": "Nemluví zápis o klientovi snižujícím způsobem?",
@@ -996,7 +1050,9 @@
       "error_consequence": "Klient si přečte odsudek sebe sama. Poškozuje to terapeutický vztah a je to trvalý záznam.",
       "how": "Hodnotitel přečte vlastní text autora, citace klienta se nepočítá.",
       "ranking_role": "orders_with_two_raters",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Zápis nesmí o klientovi mluvit snižujícím způsobem.",
+      "example": "Zápis napíše „klient je nespolupracující a manipulativní“."
     },
     "K15": {
       "name": "Nezbytnost citlivého detailu",
@@ -1009,7 +1065,9 @@
         "unit_definition": "cz_constructs.py",
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
-        "why_not_measured": "build_doc.py"
+        "why_not_measured": "build_doc.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Zápis obsahuje jen ten citlivý detail, který jeho účel potřebuje.",
       "question": "Je tam jen ten citlivý detail, který účel potřebuje?",
@@ -1020,7 +1078,9 @@
       "error_consequence": "Zbytečný citlivý detail poškodí klienta i třetí osoby a nejde vzít zpět.",
       "why_not_measured": "Nemá oporu. Pozor na sloupec vlevo: ty tři zdroje se kritéria dotýkají, ale žádný nedefinuje, co je nezbytný detail vzhledem k účelu. Mluví o zdravotnické dokumentaci jako celku, ne o jednom zápisu pro jeden účel. Jediný kandidát v tomto stavu.",
       "ranking_role": "not_measured_yet",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Citlivý detail má v zápisu být jen tehdy, když ho ten účel opravdu potřebuje.",
+      "example": "Zápis pro supervizi uvádí celé jméno a zaměstnavatele klientova partnera."
     },
     "K16": {
       "name": "Kontext vzniku záznamu",
@@ -1033,7 +1093,9 @@
         "unit_definition": "cz_constructs.py",
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
-        "why_not_measured": "build_doc.py"
+        "why_not_measured": "build_doc.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Zápis nese informaci o okolnostech svého vzniku, například kdo a kdy ho psal.",
       "question": "Je zaznamenáno, kdo a kdy zápis psal?",
@@ -1044,7 +1106,9 @@
       "error_consequence": "Bez kontextu vzniku nelze posoudit, jakou váhu záznamu dát.",
       "why_not_measured": "Neměří se. Překrývá se s kontrolou náležitostí české vyhlášky, která je konkrétnější.",
       "ranking_role": "not_measured_yet",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Ze zápisu má být poznat, jak vznikl.",
+      "example": "Zápis, který napsal model, se tváří jako terapeutův vlastní záznam."
     },
     "K17": {
       "name": "Informace o třetích osobách",
@@ -1057,7 +1121,9 @@
         "unit_definition": "cz_constructs.py",
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
-        "why_not_measured": "build_doc.py"
+        "why_not_measured": "build_doc.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Údaje o osobách, které nejsou klient, jsou uvedené rolí, ne identifikací.",
       "question": "Nejde podle zápisu poznat osobu, která není klient?",
@@ -1068,7 +1134,9 @@
       "error_consequence": "Zasahuje do práv někoho, kdo o zápisu neví a nemá k němu přístup.",
       "why_not_measured": "Chybí pravidlo měření. Není definované, jak označovat třetí osoby a jak odlišit roli od identifikace.",
       "ranking_role": "not_measured_yet",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Jak zápis zachází s lidmi, kteří nejsou klient.",
+      "example": "Zápis převezme klientův soud o partnerce jako věcný popis její osoby."
     },
     "K18": {
       "name": "Dohledatelnost ke zdroji",
@@ -1081,7 +1149,9 @@
         "unit_definition": "cz_constructs.py",
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
-        "why_not_measured": "build_doc.py"
+        "why_not_measured": "build_doc.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Zápis u tvrzení uvádí odkaz na místo ve zdroji a ten odkaz tvrzení opravdu podpírá.",
       "question": "Uvádí zápis u tvrzení odkaz na místo v přepisu, a sedí ten odkaz?",
@@ -1098,7 +1168,9 @@
       "previous_wording": {
         "question": "Lze u tvrzení ukázat místo ve zdroji?",
         "statement": "U tvrzení v zápisu lze ukázat místo ve zdroji, které ho podpírá."
-      }
+      },
+      "plain": "Jestli zápis u tvrzení uvádí odkaz do přepisu a jestli ten odkaz sedí.",
+      "example": "Odkaz míří na existující místo v přepisu, které o tom tvrzení nic neříká."
     },
     "K19": {
       "name": "Náležitosti české zdravotnické dokumentace",
@@ -1111,7 +1183,9 @@
         "unit_definition": "cz_constructs.py",
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
-        "measured_otherwise": "build_doc.py"
+        "measured_otherwise": "build_doc.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Zápis nese náležitosti, které u zdravotnické dokumentace vyžaduje český předpis.",
       "question": "Má zápis náležitosti podle české vyhlášky?",
@@ -1122,7 +1196,9 @@
       "error_consequence": "Chybějící náležitost je dokumentační problém pro tu úzkou skupinu, ne klinická vada zápisu, a nesmí se míchat do skóre kvality. Číst to jako právní verdikt by bylo tvrzení o reálné praxi, které tahle práce neunese.",
       "measured_otherwise": "Měří se jinak: deterministická kontrola náležitostí vyhlášky.",
       "ranking_role": "not_measured_yet",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Jestli má zápis náležitosti, které předepisuje česká vyhláška.",
+      "example": "Zápis nemá pole s autorem, protože ho napsal model."
     },
     "K20": {
       "name": "Splnění formátu zadání",
@@ -1135,7 +1211,9 @@
         "unit_definition": "cz_constructs.py",
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
-        "why_not_measured": "build_doc.py"
+        "why_not_measured": "build_doc.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Zápis dodržel, co zadání výslovně žádalo: oddíly, délku, jazyk.",
       "question": "Dodržel model zadaný formát, délku, jazyk?",
@@ -1146,7 +1224,9 @@
       "error_consequence": "Malý, pokud se nezamění za kvalitu.",
       "why_not_measured": "Mimo rozsah. Je to kontrola instrukce, ne kvality; běží stranou a nemíchá se do skóre.",
       "ranking_role": "not_measured_yet",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Jestli zápis dodržel, co po něm zadání chtělo.",
+      "example": "Zápis překročil povolený počet slov."
     },
     "K21": {
       "name": "Převzetí péče ze zápisu",
@@ -1160,7 +1240,9 @@
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
         "how": "stav.py",
-        "measured_otherwise": "build_doc.py"
+        "measured_otherwise": "build_doc.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Jiný odborník dokáže ze zápisu pokračovat v péči bez přístupu k přepisu.",
       "question": "Dokáže jiný odborník ze zápisu navázat péči?",
@@ -1172,7 +1254,9 @@
       "how": "Člověk dostane jen zápis, bez přepisu, a zkusí z něj navázat péči.",
       "measured_otherwise": "Měří se jinak: otázka pro člověka, zda dokáže ze zápisu převzít péči.",
       "ranking_role": "orders_with_two_raters",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Jestli jiný odborník dokáže ze zápisu pokračovat v péči.",
+      "example": "Terapeut musí sáhnout po přepisu, aby vůbec pochopil, o čem sezení bylo."
     },
     "K22": {
       "name": "Rozsah nutných úprav",
@@ -1185,7 +1269,9 @@
         "unit_definition": "cz_constructs.py",
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
-        "why_not_measured": "build_doc.py"
+        "why_not_measured": "build_doc.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Kolik a jakých zásahů musí odborník udělat, než je zápis použitelný.",
       "question": "Kolik toho musí odborník přepsat, než je zápis použitelný?",
@@ -1196,7 +1282,9 @@
       "error_consequence": "Nízká viditelná chybovost při vysoké míře tichého přepisování zakrývá skutečný stav.",
       "why_not_measured": "Mimo rozsah. Potřebuje skutečný provoz, kde terapeut s konceptem pracuje. Laboratorní pilot takový provoz nemá.",
       "ranking_role": "not_measured_yet",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Kolik práce dá zápis opravit, než se dá použít.",
+      "example": "Terapeut zápis přijme, ale předtím přepíše tři oddíly ze čtyř."
     },
     "K23": {
       "name": "Přijatelnost pro praxi",
@@ -1210,7 +1298,9 @@
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
         "how": "stav.py",
-        "measured_otherwise": "build_doc.py"
+        "measured_otherwise": "build_doc.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Zda by si odborník zápis vzal do vlastní praxe a dál používal systém, který ho vytvořil.",
       "question": "Použil by odborník takový zápis u sebe?",
@@ -1222,7 +1312,9 @@
       "how": "Člověk odpoví na šest parametrů přijatelnosti ze zdroje.",
       "measured_otherwise": "Měří se jinak: otázka pro člověka, zda by zápis použil v praxi.",
       "ranking_role": "orders_with_two_raters",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Jestli by odborník takový zápis u sebe v praxi použil.",
+      "example": "Zápis je věcně správný, a terapeut ho přesto nepoužije, protože zkontrolovat ho stojí víc práce než napsat vlastní."
     },
     "K24": {
       "name": "Porozumění ze strany klienta",
@@ -1235,7 +1327,9 @@
         "unit_definition": "cz_constructs.py",
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
-        "why_not_measured": "build_doc.py"
+        "why_not_measured": "build_doc.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Zda klient zápis rozumí, pozná v něm své sezení a čtením mu to neublíží.",
       "question": "Rozumí tomu klient a pozná v tom své sezení?",
@@ -1246,7 +1340,9 @@
       "error_consequence": "Nejcitlivější účel; chyba se dotkne přímo klienta.",
       "why_not_measured": "Mimo rozsah tvým rozhodnutím ze 16. 9. (nástroj slouží návaznosti péče a dokumentaci). Kandidát i jeho opora zůstávají pro další kolo.",
       "ranking_role": "not_measured_yet",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Jestli klient svému shrnutí rozumí a pozná se v něm.",
+      "example": "Klient najde ve shrnutí tvrzení o sobě, ve kterém se nepoznává."
     },
     "K25": {
       "name": "Podpora supervize",
@@ -1259,7 +1355,9 @@
         "unit_definition": "cz_constructs.py",
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
-        "why_not_measured": "build_doc.py"
+        "why_not_measured": "build_doc.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Zda supervizor ze zápisu pozná, co terapeut dělal, proč, a kde si nebyl jistý.",
       "question": "Pozná supervizor, co terapeut dělal a proč?",
@@ -1270,7 +1368,9 @@
       "error_consequence": "Supervize bez informace o postupu terapeuta míjí svůj smysl.",
       "why_not_measured": "Mimo rozsah týmž rozhodnutím. Supervize byla navíc ze čtyř účelů nejhůř podepřená, což je samo o sobě výsledek rešerše.",
       "ranking_role": "not_measured_yet",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Jestli je v zápisu i to, co dělal terapeut, ne jen o čem se mluvilo.",
+      "example": "Zápis popisuje obsah sezení, ale ne to, co terapeut udělal."
     },
     "K26": {
       "name": "Soulad napříč sezeními",
@@ -1283,7 +1383,9 @@
         "unit_definition": "cz_constructs.py",
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
-        "why_not_measured": "build_doc.py"
+        "why_not_measured": "build_doc.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Zápis neodporuje dřívějším zápisům téhož případu bez doloženého důvodu.",
       "question": "Neodporuje zápis dřívějším zápisům téhož klienta?",
@@ -1294,7 +1396,9 @@
       "error_consequence": "Rozpor v dokumentaci podrývá důvěryhodnost celého záznamu.",
       "why_not_measured": "Neměří se. Potřebuje několik sezení téhož klienta za sebou; pilotní případy pro to nejsou připravené a česká reálná sezení jsou mimo pilot.",
       "ranking_role": "not_measured_yet",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Jestli si zápisy téhož klienta neodporují.",
+      "example": "Zápis uvádí, že se panické ataky objevily poprvé, ačkoli je předchozí zápis obsahuje."
     },
     "K27": {
       "name": "Rovnoměrnost napříč skupinami klientů",
@@ -1307,7 +1411,9 @@
         "unit_definition": "cz_constructs.py",
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
-        "why_not_measured": "build_doc.py"
+        "why_not_measured": "build_doc.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Kvalita zápisu systematicky neklesá u určitých skupin klientů nebo témat.",
       "question": "Neklesá kvalita u určitých skupin klientů?",
@@ -1318,7 +1424,9 @@
       "error_consequence": "Systematická nerovnost je horší než náhodná chyba a jeden zápis ji neodhalí.",
       "why_not_measured": "Neměří se. Potřebuje dost případů v každé skupině klientů; s jednou skupinou se to nedá rozdělit a nesmí se to předstírat.",
       "ranking_role": "not_measured_yet",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Jestli model nepíše soustavně horší zápisy pro některou skupinu klientů.",
+      "example": "Model spolehlivě vynechává obsah u klientů, kteří mluví nespisovně."
     },
     "K28": {
       "name": "Personalizace",
@@ -1332,7 +1440,9 @@
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
         "how": "stav.py",
-        "measured_otherwise": "build_doc.py"
+        "measured_otherwise": "build_doc.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Zápis zachytí, co je na tomhle klientovi a tomhle sezení jedinečné, místo obecného popisu.",
       "question": "Je zápis o tomhle člověku, nebo by sedl na kohokoli?",
@@ -1344,7 +1454,9 @@
       "how": "Spočítá se rozmanitost všech zápisů jednoho modelu, ne jeden zápis.",
       "measured_otherwise": "Měří se jinak: ukazatel přes všechny zápisy jednoho modelu.",
       "ranking_role": "describes_only",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Jestli je zápis o tomhle člověku, nebo by seděl na kohokoli.",
+      "example": "Zápis uvádí, že klient projevoval úzkost a byl motivovaný ke změně. Sedí to na jakékoli sezení, a přitom je to věrné a úplné."
     },
     "K29": {
       "name": "Informační hustota",
@@ -1358,7 +1470,9 @@
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
         "how": "stav.py",
-        "measured_otherwise": "build_doc.py"
+        "measured_otherwise": "build_doc.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Kolik klinicky podstatného obsahu zápis nese na jednotku textu.",
       "question": "Kolik informace nese zápis na svou délku?",
@@ -1370,7 +1484,9 @@
       "how": "Počet různých faktů z banky na jednotku délky.",
       "measured_otherwise": "Měří se jinak: odvozený poměr informace k délce.",
       "ranking_role": "describes_only",
-      "needs_bank": true
+      "needs_bank": true,
+      "plain": "Kolik různých informací zápis nese na jednotku délky.",
+      "example": "Model má vyšší pokrytí jen proto, že napsal dvakrát víc textu. Vykáže se to jako lepší pokrytí, ačkoli na stránku nese míň."
     },
     "K30": {
       "name": "Jazyková přirozenost",
@@ -1383,7 +1499,9 @@
         "unit_definition": "cz_constructs.py",
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
-        "why_not_measured": "build_doc.py"
+        "why_not_measured": "build_doc.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Zápis se čte, jako by ho psal klinik v daném jazyce, bez strojových formulací.",
       "question": "Čte se to, jako by to psal český klinik?",
@@ -1394,7 +1512,9 @@
       "error_consequence": "Pro péči nízký; nepřirozený zápis se pořád přečte. Označkuje text jako strojově psaný a může snížit důvěru v obsah.",
       "why_not_measured": "Chybí pravidlo měření. Hodnoticí pravidlo musí být napsané anglicky i česky a posouzené člověkem.",
       "ranking_role": "not_measured_yet",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Jestli se to čte jako čeština napsaná klinikem.",
+      "example": "Zápis opakuje jednu šablonovitou frázi v každém oddílu a anglické obraty překládá slovo za slovem."
     },
     "K31": {
       "name": "Redundance",
@@ -1407,7 +1527,9 @@
         "unit_definition": "cz_constructs.py",
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
-        "why_not_measured": "build_doc.py"
+        "why_not_measured": "build_doc.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Tatáž podstatná informace se v zápisu neobjevuje víckrát bez nového obsahu.",
       "question": "Neopakuje se tentýž fakt bez nového obsahu?",
@@ -1418,7 +1540,9 @@
       "error_consequence": "Střední: opakování zápis prodlužuje, skrývá vynechávky za objem a nafukuje každé srovnání, které roste s délkou.",
       "why_not_measured": "Chybí pravidlo měření. Není definované, co je opakování téhož; půjde měřit, až bude existovat banka faktů.",
       "ranking_role": "not_measured_yet",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Jestli se v zápisu totéž neopakuje víckrát.",
+      "example": "Klientovy panické ataky jsou popsané v Subjektivním, znovu v Hodnocení a znovu v Plánu, pokaždé bez čehokoli nového."
     },
     "K32": {
       "name": "Kulturní kompetence doložená v zápisu",
@@ -1431,7 +1555,9 @@
         "unit_definition": "cz_constructs.py",
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
-        "why_not_measured": "build_doc.py"
+        "why_not_measured": "build_doc.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Zápis ukazuje, že kulturní, jazykový a sociální kontext klienta byl zohledněn tam, kde se péče týkal.",
       "question": "Je v zápisu zohledněný kulturní kontext, kde se péče týkal?",
@@ -1442,7 +1568,9 @@
       "error_consequence": "Zápis, který čte klienta přes stereotyp, čte další klinik i klient; škoda je na vztahu a na důvěře a je trvalá.",
       "why_not_measured": "Chybí pravidlo měření. Přijal jsi ho 21. 9.; jak se to hodnotí, zatím nikdo nenapsal.",
       "ranking_role": "not_measured_yet",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Jestli zápis nečte klienta přes stereotyp.",
+      "example": "Zápis vysvětluje klientovu zdrženlivost kulturním stereotypem, který v sezení nezazněl."
     },
     "K33": {
       "name": "Vnitřní konzistence",
@@ -1455,7 +1583,9 @@
         "unit_definition": "cz_constructs.py",
         "applicability": "cz_constructs.py",
         "error_consequence": "cz_constructs.py",
-        "why_not_measured": "build_doc.py"
+        "why_not_measured": "build_doc.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Žádná část zápisu neignoruje ani nepopírá jinou část téhož zápisu.",
       "question": "Neodporuje si zápis sám?",
@@ -1466,7 +1596,9 @@
       "error_consequence": "Čtenář, který narazí na rozpor, neví, které části věřit, a odepíše celý zápis.",
       "why_not_measured": "Chybí pravidlo měření. Přidal jsi ho 21. 9.; není napsané, co se počítá jako dvojice tvrzení, která si odporují.",
       "ranking_role": "not_measured_yet",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Jestli si zápis neodporuje sám se sebou.",
+      "example": "Oddíl Subjektivní uvádí, že klient přestal pít; oddíl Plán plánuje omezení pití."
     },
     "K34": {
       "name": "Odborná terminologie",
@@ -1474,33 +1606,45 @@
         "name": "panel_sheet.py",
         "statement": "panel_sheet.py",
         "question": "vse.py",
-        "unit": "vse.py"
+        "unit": "vse.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Zápis používá odborné termíny a používá je pro to, co znamenají.",
       "question": "Používá zápis odborné termíny, a správně?",
       "unit": "jeden termín",
       "ranking_role": "not_measured_yet",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Jestli zápis používá odborné termíny správně.",
+      "example": "Zápis nazve popsané obavy panickou atakou, ačkoli sezení panickou ataku nepopisuje."
     },
     "K35": {
       "name": "Zachycení interakce z obou stran",
       "from": {
         "name": "panel_sheet.py",
-        "statement": "panel_sheet.py"
+        "statement": "panel_sheet.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Zápis popisuje, co terapeut udělal, i jak na to klient zareagoval; ne jedno bez druhého.",
       "ranking_role": "not_measured_yet",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Jestli je v zápisu, co udělal terapeut, i jak na to klient zareagoval.",
+      "example": "Zápis uvádí, že terapeut pracoval s klientovým vyhýbáním, a neříká nic o tom, jak to klient přijal."
     },
     "K36": {
       "name": "Klientovo prožívání, ne jen chování",
       "from": {
         "name": "panel_sheet.py",
-        "statement": "panel_sheet.py"
+        "statement": "panel_sheet.py",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "statement": "Ze zápisu je poznat, jak to klient prožíval, ne jen co dělal.",
       "ranking_role": "not_measured_yet",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Jestli je ze zápisu poznat, jak to klient prožíval, ne jen co dělal.",
+      "example": "Zápis uvádí, že klient přišel, mluvil málo a odešel včas."
     },
     "K37": {
       "name": "Číselná odchylka",
@@ -1513,10 +1657,14 @@
         "statement": "read on 2026-10-14 and written here",
         "question": "read on 2026-10-14 and written here",
         "unit": "read on 2026-10-14 and written here",
-        "why_not_measured": "read on 2026-10-14 and written here"
+        "why_not_measured": "read on 2026-10-14 and written here",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "ranking_role": "not_measured_yet",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Jestli čísla v zápisu sedí s tím, co v sezení zaznělo.",
+      "example": "V přepisu jsou dvě vynechané dávky, zápis uvádí čtyři."
     },
     "K38": {
       "name": "Záměna jména nebo instituce",
@@ -1529,10 +1677,14 @@
         "statement": "read on 2026-10-14 and written here",
         "question": "read on 2026-10-14 and written here",
         "unit": "read on 2026-10-14 and written here",
-        "why_not_measured": "read on 2026-10-14 and written here"
+        "why_not_measured": "read on 2026-10-14 and written here",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "ranking_role": "not_measured_yet",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Jestli jména, instituce a odesílatel sedí se zdrojem.",
+      "example": "Zápis uvede, že klientku Janu odeslal psychiatr, ačkoli šlo o sestru Hanu a o praktického lékaře."
     },
     "K39": {
       "name": "Chyba zděděná ze zdroje",
@@ -1545,10 +1697,14 @@
         "statement": "read on 2026-10-14 and written here",
         "question": "read on 2026-10-14 and written here",
         "unit": "read on 2026-10-14 and written here",
-        "why_not_measured": "read on 2026-10-14 and written here"
+        "why_not_measured": "read on 2026-10-14 and written here",
+        "plain": "napsáno 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "ranking_role": "not_measured_yet",
-      "needs_bank": false
+      "needs_bank": false,
+      "plain": "Jestli zápis nepřepsal věrně chybu, kterou udělalo už rozpoznávání řeči.",
+      "example": "Přepis slyšel „sertralid“ místo „sertralin“ a zápis to opíše."
     }
   },
   "panel_sheet": {
@@ -1824,5 +1980,50 @@
   },
   "bank_note": "The information bank is not a criterion and is not in this list. It is the answer key: the facts of one session, written down before anyone reads a note, each with how much it matters. Seven criteria cannot be measured without it, and `needs_bank` marks them.",
   "bank_note_cs": "Banka faktů není kritérium a v seznamu není. Je to klíč správných odpovědí: fakta jednoho sezení, zapsaná dřív, než kdokoli uvidí zápis, u každého s tím, jak moc váží. Sedm kritérií se bez ní nedá změřit a jsou označená.",
-  "bank_is_not_a_criterion": "The information bank is not a criterion and is not in the list. It is the answer key: the facts of one session, written down before anyone reads a note, each with how much it matters. The criteria that cannot be measured without it are marked by `needs_bank`."
+  "bank_is_not_a_criterion": "The information bank is not a criterion and is not in the list. It is the answer key: the facts of one session, written down before anyone reads a note, each with how much it matters. The criteria that cannot be measured without it are marked by `needs_bank`.",
+  "first_generation_questions": [
+    {
+      "id": "cz-diacritics",
+      "name": "Diakritika",
+      "plain": "Jestli je v zápisu české slovo s chybějící nebo špatnou délkou či háčkem.",
+      "example": "„sebepeče“ místo „sebepéče“."
+    },
+    {
+      "id": "cz-calque",
+      "name": "Kalk",
+      "plain": "Jestli je v zápisu výraz utvořený doslovným překladem z angličtiny.",
+      "example": "„pres“ tam, kde se česky řekne „tlak“."
+    },
+    {
+      "id": "cz-untranslated",
+      "name": "Nepřeložený termín",
+      "plain": "Jestli v zápisu zůstal anglický odborný termín nepřeložený.",
+      "example": "„behavioral avoidance coping“ ponechané anglicky. Mezinárodní zkratka, která se v české dokumentaci běžně používá, jako CBT nebo PTSD, sem nepatří."
+    },
+    {
+      "id": "cz-agreement",
+      "name": "Shoda, pád, nedokončená věta",
+      "plain": "Jestli je v zápisu věta s chybnou shodou, špatným pádem nebo nedokončená.",
+      "example": "„klientka uvedl“."
+    },
+    {
+      "id": "cz-register",
+      "name": "Hovorový výraz místo odborného",
+      "plain": "Jestli je v zápisu hovorový nebo citově zabarvený výraz tam, kam patří odborný.",
+      "example": "„ségra“ tam, kde patří „sestra“. Citace klientovy vlastní řeči v uvozovkách sem nepatří."
+    },
+    {
+      "id": "cz-nonword",
+      "name": "Neexistující slovo",
+      "plain": "Jestli je v zápisu slovo, které v češtině neexistuje.",
+      "example": "Překlep nebo vymyšlený odborný termín. Vlastní jméno ani anglický termín sem nepatří, na ty se ptáme jinde."
+    },
+    {
+      "id": "cz-quotes",
+      "name": "Rovné uvozovky",
+      "plain": "Jestli jsou v zápisu rovné uvozovky místo českých.",
+      "example": "Ptáme se jen na tvar uvozovek, ne na to, co je v nich."
+    }
+  ],
+  "plain_note": "`plain` je jedna věta o tom, co kritérium je, psaná pro někoho, kdo ta kritéria nezná. Není to převzatá definice: formální definice v katalogu jsou psané jako součást nástroje a jako vysvětlení se číst nedají. `example` je příklad chyby, přeložený ze záporného příkladu v katalogu."
 }
