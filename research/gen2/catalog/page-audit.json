@@ -1,0 +1,316 @@
+{
+  "version": "page-audit-v2",
+  "subject": "page-data.json",
+  "what_this_is": "An audit of the Czech overview page, run against the data it displays and the template that decides what is displayed. Each check is one defect somebody found by reading, turned into something that can be run.",
+  "fields_the_template_renders": [
+    "applicability",
+    "applies",
+    "basis",
+    "basis_means",
+    "bears",
+    "example",
+    "family",
+    "first_generation",
+    "from",
+    "id",
+    "is_new",
+    "layer",
+    "means",
+    "measured",
+    "measured_already",
+    "name",
+    "needs_bank",
+    "p",
+    "plain",
+    "proposed_role",
+    "question",
+    "quote",
+    "rule_text",
+    "sources",
+    "status",
+    "tail",
+    "the_catch",
+    "unit",
+    "what_changes_here",
+    "why_this_role"
+  ],
+  "A1_english_on_a_czech_page": {
+    "found": 45,
+    "by_field": {
+      "applicability": 28,
+      "why_this_role": 7,
+      "what_changes_here": 4,
+      "measured_already": 3,
+      "from": 2,
+      "the_catch": 1
+    },
+    "why_it_happens": "The page reads repository fields directly and the repository is English by the project's own rule. Quotations are exempt; everything counted here is text meant for a Czech reader.",
+    "examples": [
+      {
+        "id": "K01",
+        "field": "applicability",
+        "text": "Always. Unavailable context or a failed retrieval makes a claim unassessable; that is not the same as false."
+      },
+      {
+        "id": "K03",
+        "field": "applicability",
+        "text": "Longitudinal tasks require previous notes; those must not be slipped to a task that is not supposed to have th"
+      },
+      {
+        "id": "K05",
+        "field": "applicability",
+        "text": "Information that was not said in the session must not be counted as omitted. The bank must exist before exposu"
+      },
+      {
+        "id": "K08",
+        "field": "applicability",
+        "text": "The topic occurs rarely; rarity is not a reason to drop the item."
+      },
+      {
+        "id": "K09",
+        "field": "applicability",
+        "text": "The purpose decides how much synthesis is wanted. The mere amount of clinical reasoning cannot be rewarded."
+      },
+      {
+        "id": "K10",
+        "field": "applicability",
+        "text": "A session without an agreed plan must not be penalised for a missing plan."
+      }
+    ]
+  },
+  "A2_two_fields_carrying_one_fact": {
+    "found": [],
+    "why_it_matters": "Two fields that agree on most rows are one fact with two names, and the reader has to work out which is which."
+  },
+  "A3_labels_that_sound_alike": {
+    "found": [
+      {
+        "labels": [
+          "Kritérium",
+          "Kritérium"
+        ],
+        "shared": [
+          "krit"
+        ]
+      },
+      {
+        "labels": [
+          "Kritérium",
+          "Kritérium"
+        ],
+        "shared": [
+          "krit"
+        ]
+      },
+      {
+        "labels": [
+          "Kritérium",
+          "Kritérium"
+        ],
+        "shared": [
+          "krit"
+        ]
+      },
+      {
+        "labels": [
+          "Na čem se to měří",
+          "Co měří"
+        ],
+        "shared": [
+          "měří"
+        ]
+      },
+      {
+        "labels": [
+          "Na čem se to měří",
+          "Kde se měří"
+        ],
+        "shared": [
+          "měří"
+        ]
+      },
+      {
+        "labels": [
+          "Na čem se to měří",
+          "Jak se měří, nebo proč ne"
+        ],
+        "shared": [
+          "měří"
+        ]
+      },
+      {
+        "labels": [
+          "Na čem se to měří",
+          "V čem je háček"
+        ],
+        "shared": [
+          "čem"
+        ]
+      },
+      {
+        "labels": [
+          "Co rozhoduje o správné odpovědi",
+          "Co plyne z toho, čím se rozhoduje"
+        ],
+        "shared": [
+          "rozh"
+        ]
+      },
+      {
+        "labels": [
+          "Kde platí",
+          "Kde se měří"
+        ],
+        "shared": [
+          "kde"
+        ]
+      },
+      {
+        "labels": [
+          "Kde platí",
+          "Kde platí, slovy katalogu"
+        ],
+        "shared": [
+          "kde",
+          "plat"
+        ]
+      },
+      {
+        "labels": [
+          "Co měří",
+          "Kde se měří"
+        ],
+        "shared": [
+          "měří"
+        ]
+      },
+      {
+        "labels": [
+          "Co měří",
+          "Jak se měří, nebo proč ne"
+        ],
+        "shared": [
+          "měří"
+        ]
+      },
+      {
+        "labels": [
+          "Z toho se schématem",
+          "Co plyne z toho, čím se rozhoduje"
+        ],
+        "shared": [
+          "toho"
+        ]
+      },
+      {
+        "labels": [
+          "Kde se měří",
+          "Jak se měří, nebo proč ne"
+        ],
+        "shared": [
+          "měří"
+        ]
+      },
+      {
+        "labels": [
+          "Kde se měří",
+          "Kde platí, slovy katalogu"
+        ],
+        "shared": [
+          "kde"
+        ]
+      },
+      {
+        "labels": [
+          "Role",
+          "Proč právě tahle role"
+        ],
+        "shared": [
+          "role"
+        ]
+      },
+      {
+        "labels": [
+          "Jak",
+          "Jak se měří, nebo proč ne"
+        ],
+        "shared": [
+          "jak"
+        ]
+      }
+    ],
+    "labels_checked": [
+      "Kritérium",
+      "Co to je",
+      "Kód",
+      "Kritérium",
+      "Kategorie",
+      "Na co se ptáme",
+      "Na čem se to měří",
+      "Co rozhoduje o správné odpovědi",
+      "Stav",
+      "Zdrojů",
+      "Kde platí",
+      "Kritérium",
+      "Co měří",
+      "Jmenuje to",
+      "Z toho se schématem",
+      "Návrh názvu",
+      "Na co se ptá",
+      "Kde se měří",
+      "Role",
+      "Naše naměřená shoda",
+      "Co",
+      "Jak",
+      "Jak se měří, nebo proč ne",
+      "Kde platí, slovy katalogu",
+      "Co plyne z toho, čím se rozhoduje",
+      "Proč právě tahle role",
+      "Co se tím mění",
+      "V čem je háček"
+    ],
+    "why_it_matters": "Different content under names sharing their key word reads as a duplicate even when it is not."
+  },
+  "A4_what_the_reader_needs_first": {
+    "name": {
+      "present": 46,
+      "missing": []
+    },
+    "plain": {
+      "present": 39,
+      "missing": [
+        "cz-diacritics",
+        "cz-calque",
+        "cz-untranslated",
+        "cz-agreement",
+        "cz-register",
+        "cz-nonword",
+        "cz-quotes"
+      ]
+    },
+    "example": {
+      "present": 39,
+      "missing": [
+        "cz-diacritics",
+        "cz-calque",
+        "cz-untranslated",
+        "cz-agreement",
+        "cz-register",
+        "cz-nonword",
+        "cz-quotes"
+      ]
+    },
+    "status": {
+      "present": 46,
+      "missing": []
+    }
+  },
+  "A5_rows": {
+    "proposal_criteria_audited": 9,
+    "total": 46,
+    "catalog": 39,
+    "first_generation": 7
+  },
+  "not_checked_here": "Whether a number written into the page's prose matches the data, and whether a sentence describing the state of the work is still true. Both have gone wrong: a count of 27 that the data did not support, and a section that said work was in progress after it was finished. Neither is mechanical unless the prose declares which number it quotes, which it does not.",
+  "the_builder_is_not_in_the_repository": "The page is built by build_page_data.py and build_overview.py, both of which live in a session-scoped temp directory. This is the defect that cost thirteen Czech views on 2026-10-13, repeated here within two days. Nothing can regenerate this page once the directory is cleaned."
+}
