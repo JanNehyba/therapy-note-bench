@@ -48,8 +48,8 @@ notes, with distinct purposes for continuity, supervision, client communication
 and documentation audit. Software 0.3.0 / gen2-v3 preserves exact research and
 annotation versions and reports incomplete assessment explicitly.
 
-The [research protocol](research/gen2/README.md), version 2.8.0, amended on 2026-10-07
-with 2.7.0 to 2.0.0 retained in history, combines a planned
+The [research protocol](research/gen2/README.md), version 2.9.0, amended on 2026-10-14
+with 2.8.0 to 1.0.0 retained in history, combines a planned
 scoping review with attributed expert and empirical inputs. Historical origin and
 supporting evidence remain distinct. The first feasibility round carries every
 measurement the review supported, not a count named in advance. Earlier prototypes are formative development; no completed
@@ -60,8 +60,10 @@ What the search proposed is published as a
 [candidate catalog](https://jannehyba.github.io/therapy-note-bench/gen2-catalog.html):
 every candidate construct, method and source, generated from
 [a single versioned record](research/gen2/catalog/catalog.json) together with a draft
-registry the core refuses to freeze. It is an AI-authored proposal; no entry has been
-accepted by a person, and nothing from Gen-2 is scored on the leaderboard.
+registry the core refuses to freeze. It is an AI-authored proposal. The investigator, who
+is also the instrument's author, has been through it entry by entry, accepting most and
+declining a proposed category as too subjective to decide; no independent panel has rated
+it, and nothing from Gen-2 is scored on the leaderboard.
 
 ## The leaderboard
 

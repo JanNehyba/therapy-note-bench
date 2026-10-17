@@ -80,6 +80,18 @@ DOCUMENTS = (
     "NOTICE",
 )
 
+#: Every document that prints the research protocol's version number. A fifth
+#: one that starts printing it belongs here, because the point of the list is
+#: that none of them keeps naming a predecessor after an amendment, which four
+#: of them did until 2026-10-17. `research/gen2/history/` is deliberately out:
+#: an archived protocol names its own version and that is what it is for.
+NAMES_THE_PROTOCOL_VERSION = (
+    "README.md",
+    "docs/gen2.md",
+    "research/gen2/README.md",
+    "paper/methods.md",
+)
+
 # --- the scanner -------------------------------------------------------------
 
 #: A number that is part of a claim.
@@ -1107,7 +1119,8 @@ CLAIMS = (
         kind="elsewhere",
         because="tests/test_gen2_research.py::"
         "test_balanced_pilot_is_a_plan_not_fabricated_human_data "
-        "checks 16 planned jobs and the 8-note balanced subset under protocol 2.8.0, "
+        "checks 16 planned jobs and the 8-note balanced subset under the registered "
+        "protocol, "
         "whose two eligible cohorts hold two cases each and whose round serves two "
         "purposes rather than four; no execution is claimed.",
         covers=("16", "8"),
@@ -1361,3 +1374,43 @@ def test_the_scanner_reads_prose_and_not_machinery(tmp_path):
     # sample itself and every rule it applies is the shipping one.
     found = numbers(readable(str(document)))
     assert found == ["40", "17", "51 000"], found
+
+
+def test_the_protocol_version_in_prose_is_the_protocol_version():
+    """The one class of figure this module exempts, held to its file instead.
+
+    `_VERSION` strips `2.8.0` before the ratchet sees it and `_DATE` strips the
+    date beside it, which is right: a version is an id, not a claim about a
+    measurement. The cost showed up on 2026-10-17, when the protocol had moved
+    to 2.9.0 and all four documents that print its version still named 2.8.0 as
+    the current one. So the exemption is paid for here rather than left open:
+    each of those documents must name the current version, and must not name a
+    superseded one as though it were current.
+
+    The comparison is by release order and not by string, because `2.10.0`
+    sorts below `2.2.0` as text and the next amendment is 2.10.0.
+    """
+
+    def release(version: str) -> tuple[int, ...]:
+        return tuple(int(part) for part in version.split("."))
+
+    protocol = json.loads((REPO_ROOT / "research/gen2/protocol.json").read_text(encoding="utf-8"))
+    current = protocol["version"]
+    history = REPO_ROOT / "research" / "gen2" / "history"
+    archived = sorted(
+        (path.stem.removeprefix("protocol-") for path in history.glob("protocol-*.json")),
+        key=release,
+    )
+    assert archived, "no superseded protocol is retained"
+    assert protocol["supersedes"] == archived[-1], (
+        f"the protocol supersedes {protocol['supersedes']}, which the history does not hold; "
+        f"its newest retained version is {archived[-1]}"
+    )
+    known = {current, *archived}
+    for name in NAMES_THE_PROTOCOL_VERSION:
+        named = set(_VERSION.findall((REPO_ROOT / name).read_text(encoding="utf-8"))) & known
+        assert current in named, f"{name} does not name protocol {current}"
+        newest = max(named, key=release)
+        assert newest == current, (
+            f"{name} names protocol {newest} as the current one; the protocol is {current}"
+        )
