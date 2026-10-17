@@ -409,10 +409,13 @@ CZECH_PATH = HERE / "czech.json"
 
 #: Fields of `czech.json` that must name every candidate. The name is what a
 #: reader identifies a criterion by and the statement is what a panel marks
-#: agreement with, so a candidate missing either cannot be put on a sheet. The
-#: rest are allowed to be partial: a criterion that is not measured has no
-#: `how`, and saying nothing is the honest shape of that.
-CZECH_REQUIRED = ("name", "statement")
+#: agreement with, so a candidate missing either cannot be put on a sheet.
+#: `plain` and `example` joined them on 2026-10-17: they are the two columns of
+#: the first table on the Czech page, the one a reader meets before any of the
+#: rest, and a criterion with neither is a row that says only its own name. The
+#: remaining fields are allowed to be partial: a criterion that is not measured
+#: has no `how`, and saying nothing is the honest shape of that.
+CZECH_REQUIRED = ("name", "statement", "plain", "example")
 
 
 def load_czech(path: Path = CZECH_PATH) -> dict:

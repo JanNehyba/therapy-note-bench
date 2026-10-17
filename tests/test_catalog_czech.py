@@ -336,6 +336,58 @@ def test_the_table_has_one_row_per_candidate(page, codes):
         assert f"<td class=id>{code}</td>" in page
 
 
+def test_the_plain_tier_has_two_columns_and_covers_everything_the_page_shows(page, czech, codes):
+    """The table a reader meets first: a name, and what the thing is.
+
+    The investigator asked for this after reading the nine-column table and
+    being unable to tell what any of the criteria were, which is the defect it
+    exists to fix: a third column would be the start of the same drift. It
+    covers the candidates and the first-generation questions both, because the
+    page shows both and the question "what is this" applies to each.
+    """
+    labels = czech["page"]["plain"]
+    assert len(labels["columns"]) == 2
+    questions = czech["first_generation_questions"]
+    assert page.count("<tr data-code=") == len(codes) + len(questions)
+    headers = "".join(f"<th>{column}</th>" for column in labels["columns"])
+    assert page.count(headers) == 2, "both plain tables carry the same two columns"
+    for code in [*codes, *(q["id"] for q in questions)]:
+        assert f"<tr data-code='{code}'>" in page
+
+
+def test_every_plain_row_shows_an_example(page, czech, codes):
+    """A sentence saying what a criterion is, and a case of it going wrong.
+
+    Without the example the sentence stays abstract, which is what the formal
+    definitions already were. `example` is required of every candidate for this
+    reason, so a row with none is a validation failure rather than a blank cell.
+    """
+    shown = page.count(f"<b>{czech['page']['plain']['example_label']}</b>")
+    assert shown == len(codes) + len(czech["first_generation_questions"])
+    for entry in czech["candidates"].values():
+        assert entry["example"] in page
+
+
+def test_the_plain_tier_comes_first_and_leads_into_the_detailed_table(page, czech, codes):
+    """Order is the point, not decoration.
+
+    The detailed table was the whole page and the explanation was nowhere, so a
+    plain tier printed below it would answer the question after the reader had
+    already given up. Each plain row also links to its own row in the detailed
+    table, so the two tiers are one page rather than two lists.
+    """
+    labels = czech["page"]["plain"]
+    assert page.index(labels["heading"]) < page.index(labels["detail_heading"])
+    assert page.index(labels["detail_heading"]) < page.index("<td class=id>")
+    for code in codes:
+        assert f"<a href='#{code}'>{code}</a>" in page, f"{code} has no link to its row"
+        assert f"id='{code}'" in page, f"{code} is linked to a row that is not there"
+    # The first-generation questions are not in the detailed table, so a link
+    # from them would point at nothing.
+    for question in czech["first_generation_questions"]:
+        assert f"<a href='#{question['id']}'>" not in page
+
+
 def test_no_count_on_the_page_is_typed_anywhere(page, catalog, czech):
     """The defect that produced five different numbers.
 

@@ -11,6 +11,15 @@ So this is the only Czech view, it is generated from `catalog.json` and
 anywhere. The header carries the catalog digest, so a stale copy says so instead
 of having to be recounted.
 
+Two tiers, in that order. First what each criterion is, in one sentence with one
+example of it failing, two columns and nothing else; then the detailed table with
+the state, the unit, the rule and the sources. The detailed table came first and
+was the whole page, which was the mistake: every column it gained was another
+thing to decipher for a reader who did not yet know what any of the criteria
+were. The plain tier also carries the seven questions of the first-generation
+Czech sheet, under their own heading, because they are not candidates and a
+reader meeting them in one list would have no way to tell.
+
 Writes into a gitignored directory, because the published pages are English.
 Carries no Czech of its own: the wording is in `czech.json`, which keeps this
 file public-safe like the rest of the catalog scripts.
@@ -56,6 +65,8 @@ body{margin:0;background:var(--bg);color:var(--ink);padding:1.5rem 1rem 4rem;
 font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
 main{max-width:94rem;margin:0 auto}
 h1{font-size:1.5rem;margin:0 0 .3rem}
+h2{font-size:1.2rem;margin:2.4rem 0 .3rem}
+h3{font-size:1rem;margin:1.8rem 0 .3rem;color:var(--ink2)}
 p{margin:.4rem 0;max-width:68rem;color:var(--ink2)}
 .bar{display:flex;gap:.5rem;margin:1rem 0 .4rem;flex-wrap:wrap}
 button{font:inherit;padding:.35rem .9rem;border-radius:.3rem;border:1px solid var(--line);
@@ -77,6 +88,15 @@ border:1px solid;white-space:nowrap}
 .chip.note{color:var(--note);border-color:var(--note)}
 .chip.rater{color:var(--rater);border-color:var(--rater)}
 .chip.ind{color:var(--ind);border-color:var(--ind)}
+/* The plain-language tier: two columns and nothing else, so it stays readable
+   at a width where the nine-column table below it has to scroll. */
+table.plain{min-width:0}
+table.plain td:first-child{width:22rem}
+table.plain td.what{max-width:56rem;color:var(--ink)}
+.code{display:block;font-family:ui-monospace,monospace;font-size:.78rem;color:var(--mut)}
+.code a{color:inherit;text-decoration:none;border-bottom:1px dotted currentColor}
+.ex{display:block;margin-top:.3rem;color:var(--ink2);font-size:.93rem}
+.ex b{color:var(--mut);font-weight:600}
 footer{margin-top:2rem;border-top:1px solid var(--line);padding-top:.7rem;color:var(--mut);
 font-size:.85rem}
 """
@@ -157,6 +177,57 @@ def sources_for(catalog: dict, abstract_only_suffix: str) -> dict[str, str]:
     return out
 
 
+def plain_table(entries: list[tuple[str, dict]], labels: dict, *, linked: bool) -> str:
+    """One row per criterion: what it is called, and what it is.
+
+    Two columns and no third. The nine-column table below this one was built
+    first, and every column added to it was another thing to decipher for a
+    reader who did not yet know what any of the criteria were. This answers that
+    one question and leaves the rest where it was.
+
+    `linked` makes the code jump to the criterion's row in the detailed table.
+    The first-generation questions are not in that table, so theirs do not link
+    to a row that is not there.
+    """
+    rows = []
+    for code, entry in entries:
+        shown = f"<a href='#{esc(code)}'>{esc(code)}</a>" if linked else esc(code)
+        example = (
+            f"<span class=ex><b>{esc(labels['example_label'])}</b> {esc(entry['example'])}</span>"
+        )
+        rows.append(
+            f"<tr data-code='{esc(code)}'>"
+            f"<td><span class=code>{shown}</span><b>{esc(entry['name'])}</b></td>"
+            f"<td class=what>{esc(entry['plain'])}{example}</td></tr>"
+        )
+    headers = "".join(f"<th>{esc(column)}</th>" for column in labels["columns"])
+    return (
+        f"<div class=wrap><table class=plain><thead><tr>{headers}</tr></thead>"
+        f"<tbody>{''.join(rows)}</tbody></table></div>"
+    )
+
+
+def plain_section(catalog: dict, czech: dict) -> str:
+    """The plain tier: the catalog's candidates, then the first-generation sheet.
+
+    Both under their own heading rather than mixed, because the seven questions
+    of the Czech sheet are not candidates and never were, and a reader who meets
+    them in one list has no way to tell. Both are counted from the data, so
+    neither heading states a total.
+    """
+    labels = czech["page"]["plain"]
+    candidates = [(c["id"], czech["candidates"][c["id"]]) for c in catalog["candidates"]]
+    questions = [(q["id"], q) for q in czech["first_generation_questions"]]
+    intro = "".join(f"<p>{esc(paragraph)}</p>" for paragraph in labels["intro"])
+    return (
+        f"<h2>{esc(labels['heading'])}</h2>\n{intro}\n"
+        f"{plain_table(candidates, labels, linked=True)}\n"
+        f"<h3>{esc(labels['first_generation_heading'])}</h3>\n"
+        f"<p>{esc(labels['first_generation_intro'])}</p>\n"
+        f"{plain_table(questions, labels, linked=False)}\n"
+    )
+
+
 def render(catalog: dict, czech: dict, operational: dict, stamp: str, digest: str) -> str:
     page = czech["page"]
     labels = page["states"]
@@ -196,7 +267,8 @@ def render(catalog: dict, czech: dict, operational: dict, stamp: str, digest: st
         unit = entry.get("unit")
         counted = f"<b>{esc(unit)}</b>" if unit else f"<span class=gap>{esc(labels['none'])}</span>"
         body.append(
-            f"<tr class='{'on' if on else 'off'}' data-on='{str(on).lower()}'>"
+            f"<tr class='{'on' if on else 'off'}' id='{esc(code)}' "
+            f"data-on='{str(on).lower()}'>"
             f"<td class=id>{esc(code)}</td>"
             f"<td><b>{esc(entry['name'])}</b></td>"
             f"<td class=ask>{asked}</td>"
@@ -224,6 +296,8 @@ def render(catalog: dict, czech: dict, operational: dict, stamp: str, digest: st
         f"<title>{esc(page['title'])}</title><style>{STYLE}</style></head><body><main>\n"
         f"<h1>{esc(page['title'])}</h1>\n{intro}\n"
         f"<p class=small>{generated} {esc(page['stale'])}</p>\n"
+        f"{plain_section(catalog, czech)}\n"
+        f"<h2>{esc(page['plain']['detail_heading'])}</h2>\n"
         f"<div class=bar>{buttons}</div>\n"
         f"<div class=wrap><table><thead><tr>{headers}</tr></thead>"
         f"<tbody>{''.join(body)}</tbody></table></div>\n"

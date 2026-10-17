@@ -1800,7 +1800,22 @@
     "stale": "Když se katalog změní, je tahle stránka starší než data a je potřeba ji vyrobit znovu; odtud ten otisk.",
     "footer": "Česky je pracovní překlad. Závazné znění je anglické v <code>research/gen2/catalog/catalog.json</code>, jeho český text je v <code>research/gen2/catalog/czech.json</code>.",
     "no_question": "(česká otázka k tomuhle kritériu zatím není)",
-    "abstract_only": " (jen abstrakt)"
+    "abstract_only": " (jen abstrakt)",
+    "plain": {
+      "heading": "Co každé kritérium znamená",
+      "intro": [
+        "Tahle tabulka má jedinou práci: aby bylo u každého kritéria vidět, co to je. Jedna věta bez odborných pojmů a jeden příklad toho, jak to selže. Formální definice, jednotka a stav jsou v podrobné tabulce níž.",
+        "Nejdřív kandidáti katalogu, pak otázky českého archu první generace, které kandidáti nejsou a nikdy nebyly."
+      ],
+      "columns": [
+        "Kritérium",
+        "Co to je"
+      ],
+      "example_label": "Příklad chyby:",
+      "first_generation_heading": "Otázky českého archu, první generace",
+      "first_generation_intro": "Na tyhle otázky odpověděl jeden rodilý mluvčí. Kandidáti katalogu to nejsou a nikdy nebyly; jsou tady proto, že se o nich pořád mluví a nikde nebyly vypsané vedle kritérií.",
+      "detail_heading": "Podrobná tabulka: stav, jednotka, pravidlo, zdroje"
+    }
   },
   "panel_sheet_note": "The wording of the content-validity rating sheet, kept here so that the generator beside it carries no Czech. The sheet shows a code, a name and the statement, and nothing about state, origin or citation, so that a rater judges rather than ratifies.",
   "vocabulary": {
