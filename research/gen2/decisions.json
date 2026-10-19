@@ -34,199 +34,265 @@
       "subject": "construct:K01",
       "decision": "accept",
       "reason": "zdá se mi to ok",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "retention",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K02",
       "decision": "accept",
       "reason": "je to podel mě tdefinice sedí popsiu ne?",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "retention",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K03",
       "decision": "accept",
       "reason": "no dobře ale asis to vyžeduej mít k dispozici minulý sezení ne?",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "retention",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K04",
       "decision": "accept",
       "reason": "dává smysl",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "retention",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K05",
       "decision": "accept",
       "reason": "dává asmyls",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "retention",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K06",
       "decision": "accept",
       "reason": "ok",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "retention",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K07",
       "decision": "accept",
       "reason": "ano, todává smyls ale stačilo by možná jen shnrutí pro teraeputa therapeutic note a pak por pojištovnu? klidneta ybch neřešil a supervizora taky ne t enmá jasná pravidla",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "retention",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K08",
       "decision": "accept",
       "reason": "ok, dává smyls je to spíše deskritpivní věc na ne ne škála anele možná anao",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "retention",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K09",
       "decision": "accept",
       "reason": "dobře to je celkem důelžité",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "retention",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K10",
       "decision": "accept",
       "reason": "ok pozro na naáveznasot an předhcozí tarsnrktip který enmsuí být k dispozici",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "retention",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K11",
       "decision": "accept",
       "reason": "ok dobře.",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "retention",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K12",
       "decision": "accept",
       "reason": "dobře a nená to i o otm že je tam nějaký linak bud čaosvá nebo téematická nebo sturktur?a",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "retention",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K13",
       "decision": "accept",
       "reason": "ok  a klinický jazyk je asi řečšen jinde?",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "retention",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K14",
       "decision": "accept",
       "reason": "ok nestignatizují je negaitnví vymezení pozitivní je deskritpvní jayzk?",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "retention",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K15",
       "decision": "accept",
       "reason": "ok dobře...",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "retention",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K16",
       "decision": "unresolved",
       "reason": "ohle tedy nevím to se mi nezdá důležité ale možná nao?",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "retention",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K17",
       "decision": "accept",
       "reason": "ano špatěn často llm určuje třetí osoby a spštan ě připsiuje co říkají nebo neříkají kdy to kleint říka otec mi vžd yříkal, že...",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "retention",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K18",
       "decision": "accept",
       "reason": "ok",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "retention",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K19",
       "decision": "accept",
       "reason": "no dobře, specifické por čr jen",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "retention",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K20",
       "decision": "accept",
       "reason": "ok,a le jennutné to mít jasně a satdnardizoaven nasan v pormtpu",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "retention",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K21",
       "decision": "accept",
       "reason": "souhlasi; rozhodnuti sdeleno v chatu 2026-09-21, zapsal asistent",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "retention",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K22",
       "decision": "accept",
       "reason": "dobře ale tto přepdkládá, že mám k dispozici zurpavy od dobronka a to nebudu mít aspon ne hned nebo později ano...",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "retention",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K23",
       "decision": "accept",
       "reason": "souhlasi s prepsanym znenim; rozhodnuti sdeleno v chatu 2026-09-21, zapsal asistent",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "wording",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K24",
       "decision": "accept",
       "reason": "tohel je relaebtní jen pro klieantksé shrnutí!",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "retention",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K25",
       "decision": "accept",
       "reason": "jen relevrntaní pro supervizora!",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "retention",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K26",
       "decision": "accept",
       "reason": "přepdkldádi že eixstuje předhoczí zápisy a jsou k diporzici netriviální! popozor!",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "retention",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K27",
       "decision": "accept",
       "reason": "ano,a le vyžaduje to hodnš zápisků a por na co se měří klalita modelu nebo ?",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "retention",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K28",
       "decision": "accept",
       "reason": "dobře míra nějaké perosnalizace verusus obecnsot v e zrpávě... to yb asi šlo...",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "retention",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K29",
       "decision": "accept",
       "reason": "ok",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "retention",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K30",
       "decision": "accept",
       "reason": "ok",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "retention",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K31",
       "decision": "accept",
       "reason": "ok ale pozro na to zda je to v rměřneo v rámci jendodho promptu nebo mezi promtp ynapříč, anpříkadkl u dlouhcých nějakých poznámek často se dělí na jendotlivé prompty, alejako že dap ppor kadžou sekcimá svůj pormtp a le pak je redunecndce větší! jedne zápis note jedne asi pormtp základní překldopad!",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "retention",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K32",
       "decision": "accept",
       "reason": "adopted by the investigator in chat on 2026-09-21 (cultural competence: 'prevezmi to'), transcribed by the assistant",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "item_generation",
+      "retention_superseded_by": "D13"
     },
     {
       "subject": "construct:K33",
       "decision": "accept",
       "reason": "added by the investigator in chat on 2026-09-21 (internal consistency: 'na druhou rikam take ano'), transcribed by the assistant",
-      "decided_at": "2026-09-21T09:44:00.000Z"
+      "decided_at": "2026-09-21T09:44:00.000Z",
+      "kind": "item_generation",
+      "retention_superseded_by": "D13"
     }
   ],
   "not_adopted": [
@@ -239,7 +305,154 @@
       "date": "2026-10-14",
       "reason_in_his_words": "tak posledni ohledne citace a sumarizace mi prijde vysoce subjektivni",
       "why_that_is_right": "The category turns on when a note is required to render rather than quote, and the paper does not say. Nothing in the definition distinguishes a quotation that carries the client's own words usefully from one that should have been a formulation, so every observation would be the rater's taste. The other three accepted categories each have a decidable comparison behind them: a number, a name, or a source that is itself wrong.",
-      "what_would_change_it": "A written rule naming the cases in which a session note must render rather than quote. K15, the necessity of a sensitive detail, is the nearest thing the catalog has and it has no source either."
+      "what_would_change_it": "A written rule naming the cases in which a session note must render rather than quote. K15, the necessity of a sensitive detail, is the nearest thing the catalog has and it has no source either.",
+      "kind": "item_generation"
     }
-  ]
+  ],
+  "kinds": {
+    "retention": "Whether the construct stays in the pool. Decision D13 of 2026-10-07 took this off the investigator and returned every one of these to the panel, so each is recorded with the decision that superseded it. It is not independent validation and was never counted as any.",
+    "item_generation": "Proposing a construct, or adopting one the review found. The prescribed procedure of S12, and the investigator's expert input at the stage where it belongs. D13 did not touch it: adding to the pool is generation, and what D13 took was retention.",
+    "wording": "Agreeing to or asking for a different wording of a construct. Pre-testing for comprehensibility, attributed to him, and not a judgement about whether the construct is relevant.",
+    "construct_correction": "A claim about what a construct measures, what it needs as input, or where it applies. Unlike the three above it is checkable against the catalog or the source, so it is not an opinion. These are lifted into `objections` below, because the field they were written in was named for something else."
+  },
+  "where_the_rest_of_his_acts_are_recorded": "This file holds the acts that were recorded as decisions. It is not all of them. Proposing a construct, rewording one and accepting one found later are recorded in catalog.json, in each candidate's origin_note and state_note and in its revisions list; a declined category is in not_adopted below; and expert-input.json types its own entries with contribution_type. Nothing gathers them in one place, and the three files count them differently, which is why the paper quotes each file rather than a total.",
+  "the_same_thirty_three_in_two_modes": "The 33 retention verdicts below are recorded by review-record.json as mode 'human', because that is what the review form captured, and are imported into the instrument registry by build_instrument.py as 'seen_no_objection', because on 2026-10-08 the investigator said he does not stand behind those lines as judgements. Both are true of the same 33 acts and neither file said so, so a reader of the record counted 33 human reviews. The registry's reading is the one any later claim of human verification rests on, which is to say: none of these 33 supports such a claim.",
+  "objections": [
+    {
+      "subject": "construct:K03",
+      "his_words": "no dobře ale asis to vyžeduej mít k dispozici minulý sezení ne?",
+      "claim": "The construct needs the previous session to be available.",
+      "bears_on": "applicability",
+      "catalog_says": "Longitudinal tasks require previous notes; those must not be slipped to a task that is not supposed to have them.",
+      "status": "reflected"
+    },
+    {
+      "subject": "construct:K07",
+      "his_words": "ano, todává smyls ale stačilo by možná jen shnrutí pro teraeputa therapeutic note a pak por pojištovnu? klidneta ybch neřešil a supervizora taky ne t enmá jasná pravidla",
+      "claim": "The set of purposes may be wrong: a summary for the therapist and one for the insurer might be enough, and supervision has no clear rules to measure against. This bears on the four profiles the instrument declares, not on K07's own fields, and no field of the catalog answers it.",
+      "bears_on": "relevance",
+      "catalog_says": {
+        "continuity": "high",
+        "supervision": "high",
+        "client": "high",
+        "audit": "high"
+      },
+      "status": "open"
+    },
+    {
+      "subject": "construct:K08",
+      "his_words": "ok, dává smyls je to spíše deskritpivní věc na ne ne škála anele možná anao",
+      "claim": "This is a descriptive topic rather than a quality scale.",
+      "bears_on": "definition",
+      "catalog_says": "A content topic: suicidality, self-harm, danger to others, abuse, crisis markers. It is not a quality construct; it is the topic with the highest error severity. It is also a cross-cutting consequence: an error of fidelity or coverage that touches risk is more severe than the same error elsewhere.",
+      "status": "reflected"
+    },
+    {
+      "subject": "construct:K10",
+      "his_words": "ok pozro na naáveznasot an předhcozí tarsnrktip který enmsuí být k dispozici",
+      "claim": "Beware of a dependence on the previous transcript, which need not be available.",
+      "bears_on": "inputs",
+      "catalog_says": "information bank, note",
+      "status": "reflected"
+    },
+    {
+      "subject": "construct:K12",
+      "his_words": "dobře a nená to i o otm že je tam nějaký linak bud čaosvá nebo téematická nebo sturktur?a",
+      "claim": "Is it not also about a thread through the text, whether temporal or thematic, rather than only about placement?",
+      "bears_on": "definition",
+      "catalog_says": "The note is structured so that the reader finds what they look for, and content is in its expected place.",
+      "status": "open"
+    },
+    {
+      "subject": "construct:K13",
+      "his_words": "ok  a klinický jazyk je asi řečšen jinde?",
+      "claim": "Clinical language is presumably handled elsewhere. It is: K30 for register and K34 for terminology, neither of which this construct's overlaps name. K34 was written on 2026-10-05, after the question was asked.",
+      "bears_on": "overlaps",
+      "catalog_says": "K12, K29.",
+      "status": "open"
+    },
+    {
+      "subject": "construct:K14",
+      "his_words": "ok nestignatizují je negaitnví vymezení pozitivní je deskritpvní jayzk?",
+      "claim": "The construct is defined negatively; stated positively it would be descriptive language. The definition is still the negative one.",
+      "bears_on": "definition",
+      "catalog_says": "The note does not use language that belittles the client, questions their credibility or reduces them to a diagnosis or a behaviour.",
+      "status": "open"
+    },
+    {
+      "subject": "construct:K19",
+      "his_words": "no dobře, specifické por čr jen",
+      "claim": "Specific to the Czech Republic only.",
+      "bears_on": "applicability",
+      "catalog_says": "Czech notes only, and only those kept as medical documentation by a provider of health services. Not the English track, not a client summary, which is not medical documentation at all. The decree prescribes required elements, not a note structure: no SOAP, DAP or BIRP form is mandatory in the Czech Republic, so the criterion must never be read as a requirement to write in one of them.",
+      "status": "reflected"
+    },
+    {
+      "subject": "construct:K20",
+      "his_words": "ok,a le jennutné to mít jasně a satdnardizoaven nasan v pormtpu",
+      "claim": "Only works if the requirement is written clearly and in a standard form into the task.",
+      "bears_on": "applicability",
+      "catalog_says": "Only where the task explicitly asks for the check.",
+      "status": "reflected"
+    },
+    {
+      "subject": "construct:K22",
+      "his_words": "dobře ale tto přepdkládá, že mám k dispozici zurpavy od dobronka a to nebudu mít aspon ne hned nebo později ano...",
+      "claim": "It presumes edits by a professional, which will not be available, at least not soon.",
+      "bears_on": "state_note",
+      "catalog_says": "Needs a real workflow in which a therapist works with the draft; a laboratory pilot has none.",
+      "status": "reflected"
+    },
+    {
+      "subject": "construct:K24",
+      "his_words": "tohel je relaebtní jen pro klieantksé shrnutí!",
+      "claim": "Relevant only for the client summary.",
+      "bears_on": "relevance",
+      "catalog_says": {
+        "continuity": "low",
+        "supervision": "low",
+        "client": "high",
+        "audit": "low"
+      },
+      "status": "reflected"
+    },
+    {
+      "subject": "construct:K25",
+      "his_words": "jen relevrntaní pro supervizora!",
+      "claim": "Relevant only for supervision.",
+      "bears_on": "relevance",
+      "catalog_says": {
+        "continuity": "low",
+        "supervision": "high",
+        "client": "low",
+        "audit": "low"
+      },
+      "status": "reflected"
+    },
+    {
+      "subject": "construct:K26",
+      "his_words": "přepdkldádi že eixstuje předhoczí zápisy a jsou k diporzici netriviální! popozor!",
+      "claim": "It presumes previous notes exist and are available, which is not trivial.",
+      "bears_on": "inputs",
+      "catalog_says": "series of notes, series of transcripts",
+      "status": "reflected"
+    },
+    {
+      "subject": "construct:K27",
+      "his_words": "ano,a le vyžaduje to hodnš zápisků a por na co se měří klalita modelu nebo ?",
+      "claim": "It needs many notes, and what is being measured, the quality of the model? The first half is in the fields; the second is the unit of analysis, which the catalog carries only as prose inside a field meant for inputs and which was raised again as a new finding on 2026-10-17.",
+      "bears_on": "inputs",
+      "catalog_says": "results across labelled subgroups",
+      "status": "partly_reflected"
+    },
+    {
+      "subject": "construct:K31",
+      "his_words": "ok ale pozro na to zda je to v rměřneo v rámci jendodho promptu nebo mezi promtp ynapříč, anpříkadkl u dlouhcých nějakých poznámek často se dělí na jendotlivé prompty, alejako že dap ppor kadžou sekcimá svůj pormtp a le pak je redunecndce větší! jedne zápis note jedne asi pormtp základní překldopad!",
+      "claim": "Beware whether repetition is measured within one prompt or across prompts: a long note is often generated section by section, and then the redundancy is larger. The field speaks of one note and does not address the across-prompt case.",
+      "bears_on": "applicability",
+      "catalog_says": "Any note; needs the same unit bank as coverage. A restatement that adds a consequence, such as a next step, is not repetition.",
+      "status": "open"
+    }
+  ],
+  "objections_note": "Lifted out of the reason fields above, where a claim about a construct sat in a field named for the reason of a decision about whether it stays. `catalog_says` is read from catalog.json rather than written here, so a test can compare the two and fail when the catalog moves: an objection marked reflected has to stop being so if the field that reflected it changes."
 }

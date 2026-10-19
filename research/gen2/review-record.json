@@ -3,6 +3,7 @@
   "built_by": "research/gen2/build_review_record.py",
   "what_this_is": "AUTHORED-INVESTIGATOR-TEXT. Every registry review decision found in the gitignored working copies local/gen2-review-v4 to v11, keyed to the file and the snapshot it came from. A rescue of a record, not a registry: it picks no winner where snapshots disagree and supersedes nothing in decisions.json. The reasons are in the language the reviewer wrote them in, because a reason translated is no longer what was said.",
   "why_it_exists": "decisions.json carries the 33 construct decisions and nothing else. The decisions about the sources, the evidence items, the Czech measurements, the methods and the scope existed only under local/, which git ignores, so deleting a stale view would have deleted them.",
+  "what_mode_human_means_here": "The mode below is the one the review form captured, not what the instrument counts. The 33 construct subjects carry mode 'human', and the same 33 are imported into the instrument registry by build_instrument.py as 'seen_no_objection', because on 2026-10-08 the investigator said he does not stand behind those lines as judgements. Both are true of the same acts. Until 2026-10-19 neither file said so, so a reader of this record counted 33 human reviews of the instrument; the registry's reading is the one any claim of human verification rests on, and it supports none.",
   "summary": {
     "snapshots": 8,
     "response_files": 14,

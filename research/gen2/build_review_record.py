@@ -175,6 +175,16 @@ def main() -> int:
             "the methods and the scope existed only under local/, which git ignores, "
             "so deleting a stale view would have deleted them."
         ),
+        "what_mode_human_means_here": (
+            "The mode below is the one the review form captured, not what the instrument "
+            "counts. The 33 construct subjects carry mode 'human', and the same 33 are "
+            "imported into the instrument registry by build_instrument.py as "
+            "'seen_no_objection', because on 2026-10-08 the investigator said he does not "
+            "stand behind those lines as judgements. Both are true of the same acts. Until "
+            "2026-10-19 neither file said so, so a reader of this record counted 33 human "
+            "reviews of the instrument; the registry's reading is the one any claim of human "
+            "verification rests on, and it supports none."
+        ),
         "summary": {
             "snapshots": len(seen_in),
             "response_files": len(sources),

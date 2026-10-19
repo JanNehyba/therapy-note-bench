@@ -179,3 +179,129 @@ def test_the_record_claims_no_authority_over_the_registry(record):
     for entry in changed:
         assert len(entry["records"]) >= 2
         assert "current" not in entry and "winner" not in entry
+
+
+# --- what each of the 33 acts was, and the claims buried in them -------------
+
+CATALOG = GEN2 / "catalog" / "catalog.json"
+PROTOCOL = GEN2 / "protocol.json"
+
+
+@pytest.fixture(scope="module")
+def candidates() -> dict:
+    catalog = json.loads(CATALOG.read_text(encoding="utf-8"))
+    return {c["id"]: c for c in catalog["candidates"]}
+
+
+def test_every_act_says_what_kind_it_was(decisions):
+    """`decision` is the outcome; it never said what the act was.
+
+    Thirty of the 33 are a retention verdict, two are item generation and one is
+    agreement to a rewording. Flattened into one shape, a reader counts 33 human
+    reviews of the instrument, which is the claim the record must not support by
+    accident.
+    """
+    kinds = decisions["kinds"]
+    assert set(kinds) == {"retention", "item_generation", "wording", "construct_correction"}
+    ledger = {d["id"] for d in json.loads(PROTOCOL.read_text(encoding="utf-8"))["decision_ledger"]}
+    for entry in decisions["decisions"]:
+        assert entry["kind"] in kinds, entry["subject"]
+        # Every one of them carried a verdict, and D13 returned every verdict to
+        # the panel. A retention decision of his that is not superseded would be
+        # the author deciding his own instrument's content.
+        assert entry["retention_superseded_by"] in ledger, entry["subject"]
+    counts = {kind: 0 for kind in kinds}
+    for entry in decisions["decisions"]:
+        counts[entry["kind"]] += 1
+    assert counts["retention"] == 30
+    assert counts["item_generation"] == 2
+    assert counts["wording"] == 1
+    assert decisions["not_adopted"][0]["kind"] == "item_generation"
+
+
+def test_every_objection_quotes_the_reason_it_was_buried_in(decisions):
+    """His words stay verbatim beside the claim read out of them."""
+    reasons = {d["subject"]: d["reason"] for d in decisions["decisions"]}
+    assert decisions["objections"], "the reasons carried claims; none is lifted"
+    for objection in decisions["objections"]:
+        assert objection["his_words"] == reasons[objection["subject"]]
+        assert objection["claim"].strip()
+        assert objection["status"] in {"reflected", "partly_reflected", "open"}
+
+
+def test_an_objection_is_still_what_the_catalog_says(decisions, candidates):
+    """The drift check, and the reason `catalog_says` is read rather than written.
+
+    An objection is marked reflected because a field of the catalog answers it.
+    If that field changes, the mark is a claim about a text that no longer
+    exists, so the two are compared here instead of trusted: a catalog edit that
+    unanswers one of his objections fails this and somebody has to look.
+    """
+    for objection in decisions["objections"]:
+        code = objection["subject"].split(":")[1]
+        field = objection["bears_on"]
+        live = candidates[code][field]
+        assert objection["catalog_says"] == live, (
+            f"{code}.{field} has changed since the objection was recorded as "
+            f"{objection['status']}; re-read whether it still answers him"
+        )
+
+
+def test_the_open_objections_are_not_quietly_counted_as_answered(decisions):
+    """Five of them are open and one is partly answered, and that is the finding.
+
+    A claim he made in 2026-09 that the instrument has not acted on is a gap, not
+    a decision. Pinned so that marking one reflected needs an edit here as well
+    as in the file.
+    """
+    by_status: dict[str, list[str]] = {}
+    for objection in decisions["objections"]:
+        by_status.setdefault(objection["status"], []).append(objection["subject"])
+    assert sorted(by_status["open"]) == [
+        "construct:K07",
+        "construct:K12",
+        "construct:K13",
+        "construct:K14",
+        "construct:K31",
+    ]
+    assert by_status["partly_reflected"] == ["construct:K27"]
+
+
+def test_the_record_says_the_thirty_three_are_read_two_ways(decisions):
+    """Two tracked files disagree about the same 33 acts, and neither said so.
+
+    `review-record.json` records them as mode 'human' because that is what the
+    form captured; `build_instrument.py` imports them as 'seen_no_objection'
+    because he said on 2026-10-08 that he does not stand behind them as
+    judgements. Both are true, and a reader who met only the first counted 33
+    human reviews.
+    """
+    said = decisions["the_same_thirty_three_in_two_modes"]
+    assert "human" in said and "seen_no_objection" in said
+    assert "2026-10-08" in said
+    assert decisions["where_the_rest_of_his_acts_are_recorded"].strip()
+
+
+def test_the_record_itself_says_which_reading_of_human_it_carries(record):
+    """And the record, not only the file that disagrees with it.
+
+    A reader who opens `review-record.json` alone sees 33 subjects in mode
+    `human`. The sentence is in the record because that is where the number is.
+    """
+    said = record["what_mode_human_means_here"]
+    assert "seen_no_objection" in said
+    assert "2026-10-08" in said
+    assert record["summary"]["subjects_by_latest_mode"]["human"] == 33
+
+
+def test_the_paper_says_it_too(decisions):
+    """The methods section is where a reviewer meets this, and it went stale once."""
+    methods = (REPO / "paper" / "methods.md").read_text(encoding="utf-8")
+    assert "seen_no_objection" in methods
+    assert "retention verdict" in methods
+    counts = {"reflected": 0, "partly_reflected": 0, "open": 0}
+    for objection in decisions["objections"]:
+        counts[objection["status"]] += 1
+    # The paper spells these out, so a change to the file has to reach it.
+    assert "Nine are answered" in methods and counts["reflected"] == 9
+    assert "five are not answered" in methods and counts["open"] == 5

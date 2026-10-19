@@ -289,7 +289,26 @@ of the exact text it was made about, so that a later change of wording voids
 the decision rather than inheriting it. The investigator is recorded as the
 instrument's author on every decision; an author's review is not independent
 validation. The investigator decided every construct: 31 on 2026-09-16 and
-2026-09-21, and the two adopted from the source-first extraction. The source and
+2026-09-21, and the two adopted from the source-first extraction.
+
+Those 33 decisions are read two ways by two tracked files, and both readings
+hold. The rescued review record carries them in the mode the review form
+captured, `human`; the instrument registry imports the same 33 as
+`seen_no_objection`, because on 2026-10-08 the investigator said he does not
+stand behind those lines as judgements. The registry's reading is the one any
+claim of human verification would rest on, and it supports none. Each decision
+also records what kind of act it was: 30 are a retention verdict, which decision
+D13 returned to the content-validity panel on 2026-10-07, two are item
+generation, and one is agreement to a rewording. Fifteen of the 33 reasons
+carried, in free text, a checkable claim about the construct rather than about
+whether it stays; those are lifted out and reported separately, each against the
+catalog field it bears on. Nine are answered by a field of the catalog, one
+partly, and five are not answered at all and are reported as gaps. One of the
+five, the question of what a construct is measured over, was raised again as a
+new finding on 2026-10-17, which is what a claim recorded in a field named for
+something else costs.
+
+The source and
 evidence subjects were not verified item by item: on 2026-09-21 the investigator
 accepted them on the assistant's reading by a recorded delegation (decision D9),
 which the registry stores as a distinct decision mode that can only accept and
