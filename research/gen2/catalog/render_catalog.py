@@ -99,10 +99,18 @@ def chips(mapping: dict) -> str:
     return " ".join(f'<span class="k">{esc(k)}: {esc(v)}</span>' for k, v in mapping.items())
 
 
+def _ledger_cell(source: dict) -> str:
+    """The id this page is referred to by, and its report as a link where one exists."""
+    url = ledger_url(source["ledger_report_id"])
+    report = esc(source["ledger_report_id"])
+    linked = f'<a href="{esc(url)}">{report}</a>' if url else f"<code>{report}</code>"
+    return f'<span class="id" id="src-{esc(source["id"])}">{esc(source["id"])}</span><br>{linked}'
+
+
 def _sources(catalog: dict) -> str:
     rows = [
         [
-            f'<span class="id">{esc(s["id"])}</span><br><code>{esc(s["ledger_report_id"])}</code>',
+            _ledger_cell(s),
             esc(s["citation"]),
             esc(s["type"]) + "<br>" + esc(s["layer"]) + " / " + esc(s["verification"]),
             esc(s["study_family"]) + "<br>" + esc(s["population"]),
@@ -122,7 +130,7 @@ def _sources(catalog: dict) -> str:
     )
     rows = [
         [
-            f'<span class="id">{esc(s["id"])}</span><br><code>{esc(s["ledger_report_id"])}</code>',
+            _ledger_cell(s),
             esc(s["citation"]),
             esc(s["layer"]),
             esc(s["relevance"]),
@@ -288,12 +296,33 @@ def _conditions(catalog: dict) -> str:
     return table(["Id", "Condition", "Evidence", "Detail"], rows)
 
 
-def _evidence(rows: list[dict]) -> str:
+#: Shared with the Czech renderer, so one table decides which ids can be linked.
+ledger_url = _catalog_module().ledger_url
+
+
+def _source_cell(source: dict, *, abstract_only: bool) -> str:
+    """A citation that is the link to the study, over the id that anchors the row.
+
+    This column used to be the bare id `S1`, which is the one thing a reader
+    cannot look up. The citation names the work and carries its link; the id is
+    kept underneath because the rest of the page refers to sources by it.
+    """
+    label = _cite(source) + (" (abstract)" if abstract_only else "")
+    url = ledger_url(source["ledger_report_id"])
+    cited = f'<a href="{esc(url)}">{esc(label)}</a>' if url else esc(label)
+    anchor = f'<a class="id" href="#src-{esc(source["id"])}">{esc(source["id"])}</a>'
+    # An id that resolves nowhere says so by showing itself: the reader can see
+    # that there is no link rather than wonder why the citation is not one.
+    tail = "" if url else f"<br><code>{esc(source['ledger_report_id'])}</code>"
+    return f"{cited}<br>{anchor}{tail}"
+
+
+def _evidence(rows: list[dict], sources: dict[str, dict], full: set[str]) -> str:
     return table(
         ["Source", "Location", "Excerpt", "What it supports", "Our adaptation"],
         [
             [
-                esc(e["source"]),
+                _source_cell(sources[e["source"]], abstract_only=e["source"] not in full),
                 esc(e["location"]),
                 esc(e["quote"]),
                 esc(e["supports"]),
@@ -305,6 +334,8 @@ def _evidence(rows: list[dict]) -> str:
 
 
 def _candidates(catalog: dict) -> str:
+    sources = {s["id"]: s for s in catalog["sources"] + catalog["abstract_sources"]}
+    full = {s["id"] for s in catalog["sources"]}
     out = []
     for c in catalog["candidates"]:
         tags = chips(
@@ -337,7 +368,7 @@ def _candidates(catalog: dict) -> str:
                     ("Overlaps", esc(c["overlaps"])),
                 ]
             )
-            + _evidence(c["evidence"])
+            + _evidence(c["evidence"], sources, full)
             + "</article>"
         )
     return "".join(out)

@@ -388,6 +388,32 @@ def test_the_plain_tier_comes_first_and_leads_into_the_detailed_table(page, czec
         assert f"<a href='#{question['id']}'>" not in page
 
 
+def test_the_source_column_is_a_link_to_the_study(page, catalog):
+    """The column said who found it and gave no way to go and read it.
+
+    It held a short citation as plain text, so a reader who wanted the study had
+    to search for it by author and year. The citation is now the link. The two
+    sources that resolve nowhere stay text, because a dead link on a page about
+    provenance is worse than no link, and one of them backs three criteria here.
+    """
+    sources = {s["id"]: s for s in catalog["sources"] + catalog["abstract_sources"]}
+    linked = unlinkable = 0
+    for candidate in catalog["candidates"]:
+        for evidence in candidate["evidence"]:
+            source = sources[evidence["source"]]
+            url = catalog_mod.ledger_url(source["ledger_report_id"])
+            if url:
+                assert f'<a href="{url}">' in page, f"{source['id']} is named without its study"
+                linked += 1
+            else:
+                unlinkable += 1
+                assert f'href="{source["ledger_report_id"]}"' not in page
+    assert linked and unlinkable, "both branches have to be exercised by the real data"
+    # Escaping is the trap: the cell used to be wrapped in `esc`, which would
+    # print the anchor as visible markup instead of drawing it.
+    assert "&lt;a href=" not in page
+
+
 def test_no_count_on_the_page_is_typed_anywhere(page, catalog, czech):
     """The defect that produced five different numbers.
 

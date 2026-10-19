@@ -53,6 +53,9 @@ def _catalog_module():
 
 esc = html.escape
 
+#: Shared with the English renderer, so one table decides which ids can be linked.
+ledger_url = _catalog_module().ledger_url
+
 STYLE = """
 :root{color-scheme:light dark;--bg:#fcfcfb;--panel:#f3f2ed;--ink:#0b0b0b;--ink2:#52514e;
 --mut:#79776f;--line:#e2e0d8;--src:#2a78d6;--norm:#1baf7a;--note:#4a3aa7;--rater:#eb6834;
@@ -154,26 +157,30 @@ def short_cite(citation: str) -> str:
 
 
 def sources_for(catalog: dict, abstract_only_suffix: str) -> dict[str, str]:
-    """One short citation list per candidate, abstract-only sources marked.
+    """One citation list per candidate, linked to the study, abstract-only marked.
 
     A source read only in abstract supports a candidate more weakly than one
     read in full, and the page has to show which is which or it overstates its
     own evidence.
+
+    The citation is the link. This column used to be plain text, so a reader who
+    wanted the study had to search for it by author and year; two of the sources
+    resolve nowhere, a Czech decree and a supplied file, and those stay text
+    rather than becoming a link that goes nowhere.
     """
-    cite = {
-        s["id"]: short_cite(s["citation"]) for s in catalog["sources"] + catalog["abstract_sources"]
-    }
+    records = {s["id"]: s for s in catalog["sources"] + catalog["abstract_sources"]}
     full = {s["id"] for s in catalog["sources"]}
     out = {}
     for candidate in catalog["candidates"]:
-        seen: list[str] = []
+        seen: dict[str, str] = {}
         for evidence in candidate["evidence"]:
-            label = cite[evidence["source"]]
+            source = records[evidence["source"]]
+            label = short_cite(source["citation"])
             if evidence["source"] not in full:
                 label += abstract_only_suffix
-            if label not in seen:
-                seen.append(label)
-        out[candidate["id"]] = "; ".join(seen)
+            url = ledger_url(source["ledger_report_id"])
+            seen.setdefault(label, f'<a href="{esc(url)}">{esc(label)}</a>' if url else esc(label))
+        out[candidate["id"]] = "; ".join(seen.values())
     return out
 
 
@@ -273,7 +280,7 @@ def render(catalog: dict, czech: dict, operational: dict, stamp: str, digest: st
             f"<td><b>{esc(entry['name'])}</b></td>"
             f"<td class=ask>{asked}</td>"
             f"<td class=small>{esc(groups.get(code, labels['none']))}</td>"
-            f"<td class=small>{esc(cites[code] or labels['none'])}</td>"
+            f"<td class=small>{cites[code] or esc(labels['none'])}</td>"
             f"<td class=small>{counted}</td>"
             f"<td class=small><span class='chip {chip}'>{esc(basis_cz[candidate['decided_by']])}"
             f"</span></td>"

@@ -475,6 +475,71 @@ def test_the_published_page_equals_a_fresh_rendering(catalog):
     assert PAGE.read_bytes().decode("utf-8") == render_catalog.render(catalog)
 
 
+def test_a_ledger_id_becomes_a_link_only_when_it_resolves(catalog):
+    """Two of the shapes resolve to a URL and two do not, by a closed table.
+
+    The catalog records what identifies a report, not where to click. Turning an
+    id into a link is therefore a mapping somebody has to maintain, and the two
+    ids that resolve nowhere -- the Czech decree and a file the investigator
+    supplied -- have to come back as None rather than as a plausible URL. One of
+    them backs four evidence lines, so this is not a corner case.
+    """
+    assert catalog_mod.ledger_url("doi:10.18653/v1/2025.acl-industry.14") == (
+        "https://doi.org/10.18653/v1/2025.acl-industry.14"
+    )
+    assert catalog_mod.ledger_url("pmid:41894679") == "https://pubmed.ncbi.nlm.nih.gov/41894679/"
+    assert catalog_mod.ledger_url("guid:cz-decree-444-2024") is None
+    assert catalog_mod.ledger_url("supp:hua-scoping-review-2025") is None
+    assert catalog_mod.ledger_url("doi:") is None, "a prefix with no id is not a URL"
+
+    sources = catalog["sources"] + catalog["abstract_sources"]
+    unresolvable = sorted(
+        s["id"] for s in sources if not catalog_mod.ledger_url(s["ledger_report_id"])
+    )
+    assert unresolvable == ["S14", "S_abs_hua"], (
+        "a source stopped resolving, or a new unresolvable one arrived; both change the page"
+    )
+
+
+def test_every_evidence_row_cites_its_source_and_links_the_study(catalog):
+    """The evidence tables named the source `S1`, the one thing a reader cannot look up.
+
+    Every evidence line now carries the citation as the link to the study and the
+    id as an anchor into the sources table, which had no anchors at all before, so
+    nothing on the page could point at a source record.
+    """
+    page = PAGE.read_text(encoding="utf-8")
+    sources = {s["id"]: s for s in catalog["sources"] + catalog["abstract_sources"]}
+    lines = sum(len(c["evidence"]) for c in catalog["candidates"])
+
+    assert page.count('href="#src-') == lines, "one anchored source per evidence line"
+    for source_id in sources:
+        assert f'id="src-{source_id}"' in page, f"{source_id} has no row to anchor to"
+
+    for candidate in catalog["candidates"]:
+        for evidence in candidate["evidence"]:
+            source = sources[evidence["source"]]
+            assert render_catalog._cite(source) in page, f"{candidate['id']} cites nobody"
+            url = catalog_mod.ledger_url(source["ledger_report_id"])
+            if url:
+                assert f'href="{url}"' in page, f"{source['id']} is cited without its study"
+
+
+def test_a_source_that_resolves_nowhere_is_shown_rather_than_linked(catalog):
+    """A dead link on a page about provenance is worse than no link.
+
+    The decree and the supplied file are printed with their id visible, so a
+    reader sees that there is nothing to click rather than wondering why the
+    citation beside them is not a link.
+    """
+    page = PAGE.read_text(encoding="utf-8")
+    for ledger in ("guid:cz-decree-444-2024", "supp:hua-scoping-review-2025"):
+        assert f"<code>{ledger}</code>" in page, f"{ledger} is not shown as the text it is"
+        assert f'href="{ledger}"' not in page
+        for scheme in ("https://doi.org/", "https://pubmed.ncbi.nlm.nih.gov/"):
+            assert f"{scheme}{ledger}" not in page, "an unresolvable id was pushed into a URL"
+
+
 def test_the_page_draws_every_entry_and_names_its_status(catalog):
     page = PAGE.read_text(encoding="utf-8")
     for section in ("candidates", "methods"):

@@ -405,6 +405,28 @@ def property_problems(catalog: dict, props: dict) -> list[str]:
     return out
 
 
+#: How a ledger report id becomes a URL, for the pages that draw citations.
+#:
+#: The catalog records what identifies a report, not where to click, which is
+#: right: an id outlives a host. Two of the 46 sources carry an id that resolves
+#: nowhere, a Czech decree and a file the investigator supplied, and the decree
+#: backs four evidence lines, so the shapes that cannot be linked have to be
+#: drawn as text rather than guessed at. A dead link on a page about provenance
+#: is worse than no link, and this is why the mapping is a closed table and not
+#: a pattern.
+LEDGER_URLS = {
+    "doi": "https://doi.org/{}",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/{}/",
+}
+
+
+def ledger_url(ledger_report_id: str) -> str | None:
+    """The URL a ledger report id resolves to, or None when it resolves nowhere."""
+    prefix, _, rest = str(ledger_report_id).partition(":")
+    template = LEDGER_URLS.get(prefix)
+    return template.format(rest) if template and rest else None
+
+
 CZECH_PATH = HERE / "czech.json"
 
 #: Fields of `czech.json` that must name every candidate. The name is what a
