@@ -48,6 +48,7 @@ META = (
     "families_policy",
     "method",
     "decision_basis",
+    "units_of_analysis",
     "purposes_in_scope",
     "open_source_properties",
     "purposes",
@@ -272,6 +273,25 @@ def problems(catalog: dict, reports: dict | None = None) -> list[str]:
             )
         if c.get("decided_by") not in catalog["decision_basis"]:
             out.append(f"{c['id']}: unknown decided_by {c.get('decided_by')!r}")
+        # What entity the candidate is a property of. It used to be carried in
+        # free text inside `inputs`, which nothing read, so a property of a
+        # generator could be measured on one note and reported as that note's.
+        if c.get("unit_of_analysis") not in catalog["units_of_analysis"]:
+            out.append(f"{c['id']}: unknown unit_of_analysis {c.get('unit_of_analysis')!r}")
+        elif c.get("unit_of_analysis") != "note":
+            # It may be measured, but not by an entry that runs on a note. The
+            # pilot's own vocabulary draws the line: `corpus_level_proxy` is
+            # "computed over a system's notes, never for one note", which is
+            # what a property of a generator needs. K28 passes because P13 is
+            # one; a per-note number for it would be a measurement nobody made.
+            for entry in catalog["pilot_proposal"]["entries"]:
+                if c["id"] in set(ID.findall(entry["measures"])):
+                    if entry.get("record_kind") != "corpus_level_proxy":
+                        out.append(
+                            f"{c['id']}: a property of {c['unit_of_analysis']} measured by "
+                            f"{entry['id']}, which is a {entry.get('record_kind')} and runs "
+                            "on one note"
+                        )
         if c.get("decided_by") in ("indicator", "derived") and c.get("state") == PROPOSED:
             kinds = {
                 p["record_kind"]

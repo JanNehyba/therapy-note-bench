@@ -475,6 +475,64 @@ def test_the_published_page_equals_a_fresh_rendering(catalog):
     assert PAGE.read_bytes().decode("utf-8") == render_catalog.render(catalog)
 
 
+def test_every_candidate_says_what_entity_it_is_a_property_of(catalog):
+    """One slot called "candidate" held properties of three different things.
+
+    The difference was carried by accident, in free text inside `inputs`: K27
+    said "results across labelled subgroups" and K28 "notes from the same
+    generator across several cases", while K35 and K36 said "note". Nothing read
+    those strings. The investigator asked for this on 2026-09-21 about K27 --
+    "por na co se mire, klalita modelu nebo?" -- and it reached no field.
+    """
+    values = catalog["units_of_analysis"]
+    assert set(values) == {"note", "case_series", "model_over_cases"}
+    counts = {value: 0 for value in values}
+    for candidate in catalog["candidates"]:
+        assert candidate["unit_of_analysis"] in values, candidate["id"]
+        counts[candidate["unit_of_analysis"]] += 1
+    assert counts == {"note": 36, "case_series": 1, "model_over_cases": 2}
+    not_a_note = {
+        c["id"]: c["unit_of_analysis"]
+        for c in catalog["candidates"]
+        if c["unit_of_analysis"] != "note"
+    }
+    assert not_a_note == {
+        "K26": "case_series",
+        "K27": "model_over_cases",
+        "K28": "model_over_cases",
+    }
+
+
+def test_a_property_of_a_generator_is_not_measured_on_one_note(catalog):
+    """K28 is measured, and the entry that measures it runs over a system's notes.
+
+    The pilot's own vocabulary draws the line: `corpus_level_proxy` is "computed
+    over a system's notes, never for one note". P13 is one, so K28 passes. An
+    entry that ran on a note would be a per-note number for a property of a
+    generator, which is a measurement nobody made.
+    """
+    doctored = json.loads(json.dumps(catalog))
+    for entry in doctored["pilot_proposal"]["entries"]:
+        if entry["id"] == "P13":
+            entry["record_kind"] = "executable_measure"
+    found = catalog_mod.problems(doctored)
+    assert any("runs on one note" in problem for problem in found), found
+
+    unknown = json.loads(json.dumps(catalog))
+    unknown["candidates"][0]["unit_of_analysis"] = "whatever"
+    assert any("unknown unit_of_analysis" in p for p in catalog_mod.problems(unknown))
+
+
+def test_the_page_says_what_each_candidate_is_judged_on(catalog):
+    page = PAGE.read_text(encoding="utf-8")
+    assert page.count("<dt>Judged on</dt>") == len(catalog["candidates"]) == 39
+    # The value is a vocabulary word, so the page has to carry the vocabulary or
+    # it prints `model_over_cases` at a reader and explains nothing.
+    assert "What a candidate is judged on" in page
+    for value, meaning in catalog["units_of_analysis"].items():
+        assert value in page and meaning[:60] in page
+
+
 def test_a_ledger_id_becomes_a_link_only_when_it_resolves(catalog):
     """Two of the shapes resolve to a URL and two do not, by a closed table.
 

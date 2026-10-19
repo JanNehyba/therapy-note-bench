@@ -356,6 +356,7 @@ def _candidates(catalog: dict) -> str:
                     ("Origin", esc(c["origin_note"])),
                     ("State", esc(c["state"]) + ". " + esc(c["state_note"])),
                     ("Response mode", esc(c["mode"])),
+                    ("Judged on", esc(c["unit_of_analysis"])),
                     ("Unit", esc(c["unit"])),
                     ("Inputs", esc(c["inputs"])),
                     ("Applicability", esc(c["applicability"])),
@@ -668,6 +669,7 @@ def render(catalog: dict, props: dict | None = None, operational: dict | None = 
         + _glossary("Record kinds of a candidate", catalog["record_kinds"])
         + _glossary("Record kinds of a pilot entry", catalog["pilot_record_kinds"])
         + _glossary("Purposes", catalog["purposes"])
+        + _glossary("What a candidate is judged on", catalog["units_of_analysis"])
         + _glossary("Relevance levels", catalog["relevance_levels"])
         + _glossary("Evidence layers", catalog["evidence_layers"])
     )

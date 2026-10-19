@@ -999,7 +999,8 @@
       "overlaps": "K02-K04; one wrong claim is one finding, not four.",
       "state": "proposed",
       "state_note": "P04.",
-      "decided_by": "source"
+      "decided_by": "source",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K02",
@@ -1039,7 +1040,8 @@
       "overlaps": "K01, K17.",
       "state": "proposed",
       "state_note": "P05.",
-      "decided_by": "source"
+      "decided_by": "source",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K03",
@@ -1079,7 +1081,8 @@
       "overlaps": "K01, K26.",
       "state": "proposed",
       "state_note": "P05.",
-      "decided_by": "source"
+      "decided_by": "source",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K04",
@@ -1119,7 +1122,8 @@
       "overlaps": "K01, K02, K10.",
       "state": "proposed",
       "state_note": "P05.",
-      "decided_by": "source"
+      "decided_by": "source",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K05",
@@ -1173,7 +1177,8 @@
       "overlaps": "K06, K07, K08.",
       "state": "proposed",
       "state_note": "P01.",
-      "decided_by": "source"
+      "decided_by": "source",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K06",
@@ -1213,7 +1218,8 @@
       "overlaps": "K05, K08.",
       "state": "proposed",
       "state_note": "P02.",
-      "decided_by": "source"
+      "decided_by": "source",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K07",
@@ -1260,7 +1266,8 @@
       "overlaps": "K05, K27-K30.",
       "state": "proposed",
       "state_note": "Inside P01 as a reporting rule: coverage is reported per purpose and never summed.",
-      "decided_by": "source"
+      "decided_by": "source",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K08",
@@ -1307,7 +1314,8 @@
       "overlaps": "Runs through K01, K05, K06.",
       "state": "proposed",
       "state_note": "P03.",
-      "decided_by": "source"
+      "decided_by": "source",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K09",
@@ -1355,7 +1363,8 @@
       "state": "not_yet_operationalized",
       "state_note": "The supported half of the construct is in P04; the purpose-appropriateness half needs a purpose-specific standard that does not exist yet.",
       "decided_by": "source",
-      "decided_by_note": "The supported half is decided by the source. The unmeasured half asks whether a relation suits the purpose, which would need a norm that does not exist."
+      "decided_by_note": "The supported half is decided by the source. The unmeasured half asks whether a relation suits the purpose, which would need a norm that does not exist.",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K10",
@@ -1402,7 +1411,8 @@
       "overlaps": "K04, K05.",
       "state": "proposed",
       "state_note": "Inside P01 as the plan importance level; a separate measurement would count it twice.",
-      "decided_by": "source"
+      "decided_by": "source",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K11",
@@ -1449,7 +1459,8 @@
       "overlaps": "K05, K12; repetition is K31 and density K29.",
       "state": "proposed",
       "state_note": "P07.",
-      "decided_by": "source"
+      "decided_by": "source",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K12",
@@ -1496,7 +1507,8 @@
       "overlaps": "K02, K05.",
       "state": "proposed",
       "state_note": "P06.",
-      "decided_by": "norm"
+      "decided_by": "norm",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K13",
@@ -1536,7 +1548,8 @@
       "overlaps": "K12, K29.",
       "state": "awaiting_raters",
       "state_note": "Measurable only against a specific reader; the pilot has no client readers, and readability indices are a stand-in, not evidence.",
-      "decided_by": "rater"
+      "decided_by": "rater",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K14",
@@ -1583,7 +1596,8 @@
       "overlaps": "K15, K29.",
       "state": "proposed",
       "state_note": "P08.",
-      "decided_by": "rater"
+      "decided_by": "rater",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K15",
@@ -1638,7 +1652,8 @@
       "state": "lacking_evidence",
       "state_note": "No source defines purpose-relative necessity. The identifiers the decree and iCARE require concern the medical record as a whole, not every generated note for every purpose, so the candidate is unsupported, not refuted.",
       "decided_by": "norm",
-      "decided_by_note": "In principle a norm decides, but no source states what a purpose requires, which is why the candidate has no support."
+      "decided_by_note": "In principle a norm decides, but no source states what a purpose requires, which is why the candidate has no support.",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K16",
@@ -1685,7 +1700,8 @@
       "overlaps": "K17, K19.",
       "state": "not_measured",
       "state_note": "Second round. Overlaps P09, whose Czech required elements about the author of an entry are harder and more concrete.",
-      "decided_by": "norm"
+      "decided_by": "norm",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K17",
@@ -1733,7 +1749,8 @@
       "state": "not_yet_operationalized",
       "state_note": "Third parties appear in individual therapy through the client's account; the marking rule and the role-versus-identification distinction still need a definition.",
       "decided_by": "norm",
-      "decided_by_note": "A norm decides: identify only what the purpose needs. That list of required identifiers per purpose is not written, so the rule written for it is half a rule."
+      "decided_by_note": "A norm decides: identify only what the purpose needs. That list of required identifiers per purpose is not written, so the rule written for it is half a rule.",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K18",
@@ -1773,7 +1790,8 @@
       "overlaps": "K01, K19.",
       "state": "not_measured",
       "state_note": "No pilot task requires author-provided citations, so the denominator would be empty. The evaluator's evidence spans are a different thing and stay in the methods.",
-      "decided_by": "source"
+      "decided_by": "source",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K19",
@@ -1820,7 +1838,8 @@
       "overlaps": "K16, K05.",
       "state": "out_of_scope",
       "state_note": "Dropped from the round by the investigator on 2026-10-05. It had already been narrowed on 2026-09-16 to records kept by a provider of health services, and the investigator now judges that a presence check against one country's regulation does not belong in a benchmark of note quality. The candidate and its evidence stay as the record of what the review found; no pilot entry names it, so nothing measures it.",
-      "decided_by": "norm"
+      "decided_by": "norm",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K20",
@@ -1860,7 +1879,8 @@
       "overlaps": "K19, K11.",
       "state": "out_of_scope",
       "state_note": "A deterministic check of the instruction, run outside the pilot and never mixed into the quality score.",
-      "decided_by": "norm"
+      "decided_by": "norm",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K21",
@@ -1907,7 +1927,8 @@
       "overlaps": "Encompasses K05, K10, K12.",
       "state": "proposed",
       "state_note": "P10; needs therapists as raters.",
-      "decided_by": "rater"
+      "decided_by": "rater",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K22",
@@ -1947,7 +1968,8 @@
       "overlaps": "K21.",
       "state": "out_of_scope",
       "state_note": "Needs a real workflow in which a therapist works with the draft; a laboratory pilot has none.",
-      "decided_by": "rater"
+      "decided_by": "rater",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K23",
@@ -1994,7 +2016,8 @@
       "overlaps": "K21, K22.",
       "state": "proposed",
       "state_note": "P11. Reworded on 2026-09-16 after the investigator's review: the earlier wording, 'accept the note into practice', read as a question about a payer.",
-      "decided_by": "rater"
+      "decided_by": "rater",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K24",
@@ -2041,7 +2064,8 @@
       "overlaps": "K13, K14.",
       "state": "out_of_scope",
       "state_note": "Out of scope by decision D8 of 2026-09-16: the instrument serves continuity of care and documentation. The client purpose keeps its candidate and its evidence for a later round, and this round measures and claims nothing for it.",
-      "decided_by": "rater"
+      "decided_by": "rater",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K25",
@@ -2088,7 +2112,8 @@
       "overlaps": "K09, K21.",
       "state": "out_of_scope",
       "state_note": "Out of scope by decision D8 of 2026-09-16: the instrument serves continuity of care and documentation. Supervision was also the worst supported of the four purposes, which is a finding of the review and is kept as one.",
-      "decided_by": "rater"
+      "decided_by": "rater",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K26",
@@ -2135,7 +2160,8 @@
       "overlaps": "K01, K03.",
       "state": "not_measured",
       "state_note": "The cases are not prepared or selected for longitudinal evaluation: the native sessions carry no validated session order and stay outside the pilot by decision D1.",
-      "decided_by": "source"
+      "decided_by": "source",
+      "unit_of_analysis": "case_series"
     },
     {
       "id": "K27",
@@ -2176,7 +2202,8 @@
       "state": "not_measured",
       "state_note": "Needs enough cases per subgroup; with one Czech client cluster the breakdown cannot be made and must not be pretended.",
       "decided_by": "derived",
-      "decided_by_note": "Computed from the other measures across groups of clients; a gap is a defect, so the direction is clear, but it has no reference of its own."
+      "decided_by_note": "Computed from the other measures across groups of clients; a gap is a defect, so the direction is clear, but it has no reference of its own.",
+      "unit_of_analysis": "model_over_cases"
     },
     {
       "id": "K28",
@@ -2231,7 +2258,8 @@
       "state": "proposed",
       "state_note": "P13.",
       "decided_by": "indicator",
-      "decided_by_note": "Diversity over a system's notes. A model can be diverse by being wrong differently each time, so more is not better."
+      "decided_by_note": "Diversity over a system's notes. A model can be diverse by being wrong differently each time, so more is not better.",
+      "unit_of_analysis": "model_over_cases"
     },
     {
       "id": "K29",
@@ -2286,7 +2314,8 @@
       "state": "proposed",
       "state_note": "P14.",
       "decided_by": "indicator",
-      "decided_by_note": "Units of the bank per unit of length. A dense note can be unreadable, so the number is reported beside coverage and never as a grade."
+      "decided_by_note": "Units of the bank per unit of length. A dense note can be unreadable, so the number is reported beside coverage and never as a grade.",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K30",
@@ -2333,7 +2362,8 @@
       "overlaps": "K13 (comprehensibility), K14 (wording).",
       "state": "not_yet_operationalized",
       "state_note": "Returned by audit A07. A rating rule must be written in English and in Czech and assessed by humans before it can be measured.",
-      "decided_by": "rater"
+      "decided_by": "rater",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K31",
@@ -2387,7 +2417,8 @@
       "overlaps": "K11, K29, K12.",
       "state": "not_yet_operationalized",
       "state_note": "Split from K11 by audit A07. The unit rules for repetition are not defined; measurable once the coverage bank of P01 exists.",
-      "decided_by": "source"
+      "decided_by": "source",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K32",
@@ -2427,7 +2458,8 @@
       "overlaps": "K14 (stigmatising wording), K02 (originator of a statement), K27 (evenness across groups).",
       "state": "not_yet_operationalized",
       "state_note": "Adopted by the investigator on 2026-09-21 from an open source property. No rating rule exists in either language.",
-      "decided_by": "rater"
+      "decided_by": "rater",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K33",
@@ -2475,7 +2507,8 @@
       "state": "not_yet_operationalized",
       "state_note": "Added by the investigator on 2026-09-21 from an open source property. The rule for what counts as a contradicting pair is not written.",
       "decided_by": "note",
-      "decided_by_note": "A pair of statements that cannot both hold as current is a contradiction whoever reads it; the transcript is not needed."
+      "decided_by_note": "A pair of statements that cannot both hold as current is a contradiction whoever reads it; the transcript is not needed.",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K34",
@@ -2522,7 +2555,8 @@
       "overlaps": "K30 (naturalness of the language), K13 (comprehensibility for the reader), K04 (certainty of a diagnostic statement), K01 (a term the source does not support).",
       "state": "not_yet_operationalized",
       "state_note": "Accepted by the investigator on 2026-10-05. No rating rule exists in either language, and a term list is explicitly not a substitute.",
-      "decided_by": "source"
+      "decided_by": "source",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K35",
@@ -2576,7 +2610,8 @@
       "overlaps": "K25 (what a supervisor can tell the therapist did and why), K02 (attribution of who said what), K36 (whether the client's experience is described at all, which is the gate this rule sits behind in the source), K01 (whether the described exchange is supported by the session).",
       "state": "not_measured",
       "state_note": "Arrived on 2026-10-07, after protocol 2.7.0 froze the round's measured set at 16 and after the pilot's jobs were planned. It is in the pool the panel rates under D13; whether it is measured follows from the panel's rating and a later protocol amendment, not from this entry.",
-      "decided_by": "note"
+      "decided_by": "note",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K36",
@@ -2623,7 +2658,8 @@
       "overlaps": "K05 (coverage of the session's substantive content), K28 (personalisation), K35 (the two-sided description of the interaction, which the source gates behind this), K04 (the certainty status of a statement about the client's state).",
       "state": "not_measured",
       "state_note": "Arrived on 2026-10-07 with K35 and is in the pool the panel rates under D13. The source's gate design is the reason it is written as a property here and not as a filter.",
-      "decided_by": "note"
+      "decided_by": "note",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K37",
@@ -2663,7 +2699,8 @@
       "overlaps": "K01 (a wrong number is also an unsupported claim), K04 (a vague quantity made exact is also a certainty error), K03 (a wrong date is also a time error).",
       "state": "not_yet_operationalized",
       "state_note": "Accepted into the pool by the investigator on 2026-10-14 and rated by the panel under D13. No measurement rule exists yet.",
-      "decided_by": "source"
+      "decided_by": "source",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K38",
@@ -2703,7 +2740,8 @@
       "overlaps": "K01 (a wrong name is also an unsupported claim), K17 (whether a third party belongs in the note at all), K18 (whether the claim can be traced to where the name appears).",
       "state": "not_yet_operationalized",
       "state_note": "Accepted into the pool by the investigator on 2026-10-14. No measurement rule exists yet, and the Czech lemma problem has to be settled in it.",
-      "decided_by": "source"
+      "decided_by": "source",
+      "unit_of_analysis": "note"
     },
     {
       "id": "K39",
@@ -2743,7 +2781,8 @@
       "overlaps": "K01 (support, which this inverts: the note is supported by the source and still wrong), K18 (traceability), K05 (omission where the source is unintelligible).",
       "state": "not_yet_operationalized",
       "state_note": "Accepted into the pool by the investigator on 2026-10-14. Needs the recording to be measurable at all, which no other candidate does.",
-      "decided_by": "source"
+      "decided_by": "source",
+      "unit_of_analysis": "note"
     }
   ],
   "methods": [
@@ -3993,5 +4032,10 @@
     "rater": "a professional's verdict, with nothing external behind it; the only evidence of its validity is agreement between raters",
     "derived": "computed from other measures rather than from a reference of its own; the direction is clear but the number is not independent",
     "indicator": "describes rather than grades: it has no target value, and reading it as more-is-better would invent a direction the data does not carry"
+  },
+  "units_of_analysis": {
+    "note": "One note, judged against its own sources. A score is a property of that note and of the system that wrote it only through the notes it wrote.",
+    "case_series": "Several notes of the same case. Cannot be judged on one note: the property is a relation between notes, so a single note has no value for it.",
+    "model_over_cases": "Many notes from the same generator across different cases. The entity judged is the generator, not any note, and a per-note number would be a measurement nobody made. K27 is second order besides: it reads other measures' results and compares them across labelled groups of cases."
   }
 }
