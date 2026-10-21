@@ -8,8 +8,13 @@
       "platform": "PubMed/MEDLINE",
       "layer": "direct",
       "query": "(psychotherap*[Title/Abstract] OR counsel*[Title/Abstract] OR \"mental health\"[Title/Abstract]) AND (\"progress note*\"[Title/Abstract] OR \"session summar*\"[Title/Abstract] OR \"clinical documentation\"[Title/Abstract] OR \"therapy note*\"[Title/Abstract])",
-      "status": "not_run",
-      "syntax_verification": "Required on the actual platform before the full search; log any amendment"
+      "status": "run",
+      "syntax_verification": "Required on the actual platform before the full search; log any amendment",
+      "executed": {
+        "log": "research/gen2/review-2026-09-13/search-log-pubmed.json",
+        "query_id": "pubmed-direct",
+        "search_date": "2026-09-13"
+      }
     },
     {
       "id": "pubmed-transfer",
@@ -17,8 +22,13 @@
       "platform": "PubMed/MEDLINE",
       "layer": "transfer",
       "query": "(\"clinical note*\"[Title/Abstract] OR \"medical summar*\"[Title/Abstract] OR \"clinical documentation\"[Title/Abstract]) AND (quality[Title/Abstract] OR evaluat*[Title/Abstract] OR validat*[Title/Abstract] OR instrument*[Title/Abstract] OR rubric*[Title/Abstract])",
-      "status": "not_run",
-      "syntax_verification": "Required on the actual platform before the full search; log any amendment"
+      "status": "run",
+      "syntax_verification": "Required on the actual platform before the full search; log any amendment",
+      "executed": {
+        "log": "research/gen2/review-2026-09-13/search-log-pubmed.json",
+        "query_id": "pubmed-transfer",
+        "search_date": "2026-09-13"
+      }
     },
     {
       "id": "psycinfo-direct",
@@ -44,8 +54,13 @@
       "platform": "Scopus",
       "layer": "direct",
       "query": "TITLE-ABS-KEY((psychotherap* OR counsel* OR \"mental health\") AND (\"progress note*\" OR \"session summar*\" OR \"clinical documentation\" OR \"therapy note*\"))",
-      "status": "not_run",
-      "syntax_verification": "Required on the actual platform before the full search; log any amendment"
+      "status": "run",
+      "syntax_verification": "Required on the actual platform before the full search; log any amendment",
+      "executed": {
+        "log": "research/gen2/review-2026-09-13/search-log-scopus.json",
+        "query_id": "scopus-direct",
+        "search_date": "2026-10-07"
+      }
     },
     {
       "id": "scopus-transfer",
@@ -62,8 +77,13 @@
       "platform": "ACL Anthology search",
       "layer": "direct",
       "query": "(\"therapy\" OR \"psychotherapy\" OR \"counseling\" OR \"counselling\") (\"note\" OR \"summary\" OR \"summarization\" OR \"summarisation\")",
-      "status": "not_run",
-      "syntax_verification": "Required on the actual platform before the full search; log any amendment"
+      "status": "run",
+      "syntax_verification": "Required on the actual platform before the full search; log any amendment",
+      "executed": {
+        "log": "research/gen2/review-2026-09-13/search-log-acl.json",
+        "query_id": "acl-direct",
+        "search_date": "2026-09-13"
+      }
     },
     {
       "id": "acl-transfer",
@@ -71,8 +91,13 @@
       "platform": "ACL Anthology search",
       "layer": "transfer",
       "query": "(\"summarization\" OR \"summarisation\") (\"evaluation\" OR \"faithfulness\" OR \"factuality\" OR \"attribution\" OR \"question answering\" OR \"multilingual\")",
-      "status": "not_run",
-      "syntax_verification": "Required on the actual platform before the full search; log any amendment"
+      "status": "run",
+      "syntax_verification": "Required on the actual platform before the full search; log any amendment",
+      "executed": {
+        "log": "research/gen2/review-2026-09-13/search-log-acl.json",
+        "query_id": "acl-transfer",
+        "search_date": "2026-09-13"
+      }
     },
     {
       "id": "acl-quality-typology",
@@ -81,9 +106,14 @@
       "layer": "language",
       "query": "(\"translation\" OR \"generation\" OR \"summarization\" OR \"summarisation\" OR \"machine translation\") AND (\"error\" OR \"quality\") AND (\"typology\" OR \"taxonomy\" OR \"annotation scheme\" OR \"framework\" OR \"MQM\" OR \"multidimensional quality metrics\")",
       "asks": "Does the field already have a named list of text-quality error types, with rules for telling them apart? MQM and its relatives are the obvious candidate and no query so far could have found them.",
-      "status": "not_run",
+      "status": "run",
       "recorded": "2026-10-14",
-      "syntax_verification": "Implemented as conjunctive regex groups over title and abstract in review-2026-09-13/acl_search.py; the groups are the record of what was actually matched"
+      "syntax_verification": "Implemented as conjunctive regex groups over title and abstract in review-2026-09-13/acl_search.py; the groups are the record of what was actually matched",
+      "executed": {
+        "log": "research/gen2/review-2026-09-13/search-log-acl-language.json",
+        "query_id": "acl-quality-typology",
+        "search_date": "2026-10-14"
+      }
     },
     {
       "id": "acl-fluency-adequacy",
@@ -92,9 +122,14 @@
       "layer": "language",
       "query": "(\"fluency\" OR \"adequacy\" OR \"grammaticality\" OR \"acceptability\") AND (\"evaluation\" OR \"annotation\" OR \"human judgment\" OR \"human judgement\" OR \"rating\")",
       "asks": "Is a text property like fluency measured, and how is a rater told to recognise it? Three of the six Czech criteria are kinds of disfluency.",
-      "status": "not_run",
+      "status": "run",
       "recorded": "2026-10-14",
-      "syntax_verification": "Implemented as conjunctive regex groups over title and abstract in review-2026-09-13/acl_search.py; the groups are the record of what was actually matched"
+      "syntax_verification": "Implemented as conjunctive regex groups over title and abstract in review-2026-09-13/acl_search.py; the groups are the record of what was actually matched",
+      "executed": {
+        "log": "research/gen2/review-2026-09-13/search-log-acl-language.json",
+        "query_id": "acl-fluency-adequacy",
+        "search_date": "2026-10-14"
+      }
     },
     {
       "id": "acl-post-editing",
@@ -103,9 +138,14 @@
       "layer": "language",
       "query": "(\"post-editing\" OR \"post editing\" OR \"translationese\") AND (\"error\" OR \"taxonomy\" OR \"effort\" OR \"quality\" OR \"annotation\")",
       "asks": "Post-editing research names what a human had to fix, which is the closest existing thing to asking what is wrong with a generated Czech note.",
-      "status": "not_run",
+      "status": "run",
       "recorded": "2026-10-14",
-      "syntax_verification": "Implemented as conjunctive regex groups over title and abstract in review-2026-09-13/acl_search.py; the groups are the record of what was actually matched"
+      "syntax_verification": "Implemented as conjunctive regex groups over title and abstract in review-2026-09-13/acl_search.py; the groups are the record of what was actually matched",
+      "executed": {
+        "log": "research/gen2/review-2026-09-13/search-log-acl-language.json",
+        "query_id": "acl-post-editing",
+        "search_date": "2026-10-14"
+      }
     },
     {
       "id": "acl-small-language-quality",
@@ -114,9 +154,14 @@
       "layer": "language",
       "query": "(\"low-resource\" OR \"under-resourced\" OR \"morphologically rich\" OR \"Slavic\" OR \"Czech\") AND (\"generation\" OR \"summarization\" OR \"summarisation\" OR \"translation\") AND (\"quality\" OR \"error\" OR \"evaluation\" OR \"fluency\")",
       "asks": "Is text quality in a small language measured differently, and does anyone say why? This is the layer the second generation exists for.",
-      "status": "not_run",
+      "status": "run",
       "recorded": "2026-10-14",
-      "syntax_verification": "Implemented as conjunctive regex groups over title and abstract in review-2026-09-13/acl_search.py; the groups are the record of what was actually matched"
+      "syntax_verification": "Implemented as conjunctive regex groups over title and abstract in review-2026-09-13/acl_search.py; the groups are the record of what was actually matched",
+      "executed": {
+        "log": "research/gen2/review-2026-09-13/search-log-acl-language.json",
+        "query_id": "acl-small-language-quality",
+        "search_date": "2026-10-14"
+      }
     },
     {
       "id": "acl-orthography-and-morphology",
@@ -125,9 +170,14 @@
       "layer": "language",
       "query": "(\"diacritic\" OR \"diacritics\" OR \"orthography\" OR \"spelling\" OR \"grammatical error correction\" OR \"morphosyntactic\" OR \"agreement error\") AND (\"error\" OR \"correction\" OR \"restoration\" OR \"detection\" OR \"evaluation\")",
       "asks": "Covers two of the six directly: a missing or wrong diacritic, and a broken agreement or case.",
-      "status": "not_run",
+      "status": "run",
       "recorded": "2026-10-14",
-      "syntax_verification": "Implemented as conjunctive regex groups over title and abstract in review-2026-09-13/acl_search.py; the groups are the record of what was actually matched"
+      "syntax_verification": "Implemented as conjunctive regex groups over title and abstract in review-2026-09-13/acl_search.py; the groups are the record of what was actually matched",
+      "executed": {
+        "log": "research/gen2/review-2026-09-13/search-log-acl-language.json",
+        "query_id": "acl-orthography-and-morphology",
+        "search_date": "2026-10-14"
+      }
     },
     {
       "id": "acl-borrowing-and-register",
@@ -136,9 +186,14 @@
       "layer": "language",
       "query": "(\"calque\" OR \"loanword\" OR \"loan word\" OR \"anglicism\" OR \"borrowing\" OR \"code-switching\" OR \"untranslated\" OR \"register\" OR \"formality\" OR \"colloquial\") AND (\"detection\" OR \"classification\" OR \"annotation\" OR \"evaluation\" OR \"corpus\")",
       "asks": "Covers three of the six: a term formed by translating word for word from English, an English term left as it is, and a colloquial word where a professional one belongs.",
-      "status": "not_run",
+      "status": "run",
       "recorded": "2026-10-14",
-      "syntax_verification": "Implemented as conjunctive regex groups over title and abstract in review-2026-09-13/acl_search.py; the groups are the record of what was actually matched"
+      "syntax_verification": "Implemented as conjunctive regex groups over title and abstract in review-2026-09-13/acl_search.py; the groups are the record of what was actually matched",
+      "executed": {
+        "log": "research/gen2/review-2026-09-13/search-log-acl-language.json",
+        "query_id": "acl-borrowing-and-register",
+        "search_date": "2026-10-14"
+      }
     },
     {
       "id": "acl-nonword",
@@ -147,9 +202,14 @@
       "layer": "language",
       "query": "(\"nonword\" OR \"non-word\" OR \"neologism\" OR \"out-of-vocabulary\" OR \"malformed\" OR \"nonsense word\") AND (\"detection\" OR \"error\" OR \"generation\" OR \"evaluation\")",
       "asks": "Covers the sixth: a word that does not exist in the language. A generated note can contain one and no existing criterion would see it.",
-      "status": "not_run",
+      "status": "run",
       "recorded": "2026-10-14",
-      "syntax_verification": "Implemented as conjunctive regex groups over title and abstract in review-2026-09-13/acl_search.py; the groups are the record of what was actually matched"
+      "syntax_verification": "Implemented as conjunctive regex groups over title and abstract in review-2026-09-13/acl_search.py; the groups are the record of what was actually matched",
+      "executed": {
+        "log": "research/gen2/review-2026-09-13/search-log-acl-language.json",
+        "query_id": "acl-nonword",
+        "search_date": "2026-10-14"
+      }
     }
   ],
   "supplementary": {
@@ -157,5 +217,6 @@
     "citation_chasing": "Backward and forward from included reports; record seed report and metadata service.",
     "czech": "Search Czech professional guidance using the equivalent documentation and psychotherapy terms; retain the exact executed Czech query privately."
   },
-  "layers_note": "The `language` layer was added on 2026-10-14 by AM-8. It is reported separately from the three layers of 2026-09-13: a count that mixes them would hide that the first round could not have found this literature."
+  "layers_note": "The `language` layer was added on 2026-10-14 by AM-8. It is reported separately from the three layers of 2026-09-13: a count that mixes them would hide that the first round could not have found this literature.",
+  "status_rule": "A query that ran says so and names the log that holds its date, its record count and the sha256 of its export; the numbers stay in the log rather than being restated here. Every one of these said not_run until 2026-10-21, twelve of them while a log recorded them as executed, and tests/test_review_ledger.py now walks between the two in both directions."
 }

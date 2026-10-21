@@ -477,3 +477,55 @@ def test_flow_screening_counts_are_consistent(flow):
     assert all(r["decision"] == "not_screened" for r in decisions["not_screened_detail"])
     assert len(decisions["not_screened_detail"]) == s["priority_stratum_not_screened"]
     assert decisions["human_decisions_made"] == 0
+
+
+# --- what ran, against the logs of the searches that ran --------------------
+
+
+def test_a_query_says_whether_it_ran_and_names_the_log_that_proves_it():
+    """Every one of the fifteen said not_run; twelve were in a log with a date.
+
+    The file whose job is to say what was searched said nothing had been, while
+    four search logs held execution dates, record counts and the sha256 of each
+    export. `research/gen2/README.md` repeated the claim in prose. The statuses
+    now point at the evidence rather than restating it, and this walks between
+    the two in both directions: a query that claims to have run must be in the
+    log it names, and a query that claims not to have run must be in none.
+    """
+    queries = json.loads((REPO / "research/gen2/queries.json").read_text(encoding="utf-8"))
+    in_logs: dict[str, str] = {}
+    for log in sorted(REVIEW.glob("search-log-*.json")):
+        data = json.loads(log.read_text(encoding="utf-8"))
+        for row in data.get("searches", ()):
+            if row.get("query_id"):
+                in_logs[row["query_id"]] = f"research/gen2/review-2026-09-13/{log.name}"
+
+    ran, not_run = [], []
+    for row in queries["queries"]:
+        assert row["status"] in {"run", "not_run"}, row["id"]
+        if row["status"] == "run":
+            ran.append(row["id"])
+            executed = row["executed"]
+            assert executed["query_id"] == row["id"]
+            assert executed["search_date"], f"{row['id']} ran on no date"
+            assert in_logs.get(row["id"]) == executed["log"], (
+                f"{row['id']} names {executed['log']} and the logs put it in "
+                f"{in_logs.get(row['id'])}"
+            )
+        else:
+            not_run.append(row["id"])
+            assert "executed" not in row
+            assert row["id"] not in in_logs, f"{row['id']} says not_run and a log has it"
+
+    assert len(ran) == 12 and len(not_run) == 3
+    assert sorted(not_run) == ["psycinfo-direct", "psycinfo-requirements", "scopus-transfer"]
+    assert queries["status_rule"].strip()
+
+
+def test_the_research_readme_no_longer_says_nothing_was_executed():
+    """The prose that repeated the stale claim, held to the file it describes."""
+    readme = (REPO / "research/gen2/README.md").read_text(encoding="utf-8")
+    assert "planned, unexecuted queries" not in readme
+    queries = json.loads((REPO / "research/gen2/queries.json").read_text(encoding="utf-8"))
+    not_run = sum(1 for row in queries["queries"] if row["status"] == "not_run")
+    assert f"{'three' if not_run == 3 else not_run} have not run" in readme

@@ -20,7 +20,11 @@ independent human reviewer.
 retained in `history/`; each is superseded, not silently edited, and the live file
 names the version it supersedes and carries a decision ledger with the origin and
 date of every change.
-`queries.json` contains planned, unexecuted queries. `retrieval-seeds.json` is a
+`queries.json` holds the planned queries and says of each whether it ran; a query
+that ran names the search log that carries its date, its record count and the
+sha256 of its export, and three have not run. It said all fifteen were unexecuted
+until 2026-10-21, twelve of them while a log recorded them as executed.
+`retrieval-seeds.json` is a
 known-source retrieval inventory, not an included-study table.
 `prior-proposals.json` records prior exposure and proposals, not validated criteria.
 `catalog/catalog.json` is the single versioned record of what the search of

@@ -287,26 +287,55 @@ def c3_pilot() -> list[dict]:
 
 
 def c4_executed() -> list[dict]:
-    """A query marked not run, against the logs of the searches that ran."""
-    queries = load("research/gen2/queries.json")
-    rows = queries["queries"] if isinstance(queries, dict) and "queries" in queries else queries
-    logs = {}
-    for log in (GEN2 / "review-2026-09-13").glob("search-log-*.json"):
-        logs[log.name] = json.dumps(json.load(open(log, encoding="utf-8")), ensure_ascii=False)
+    """What queries.json says about running, against the logs, in both directions.
+
+    Until 2026-10-21 all fifteen said `not_run` and twelve were in a log with a
+    date, a record count and the sha256 of an export. Repairing that could have
+    left this check reporting nothing for ever, which is a check that has stopped
+    working rather than a defect that has gone; so it now also catches a query
+    that claims to have run and is in no log, and one that names a log it is not
+    in.
+    """
+    rows = load("research/gen2/queries.json")["queries"]
+    in_logs: dict[str, str] = {}
+    for log in sorted((GEN2 / "review-2026-09-13").glob("search-log-*.json")):
+        for entry in json.loads(log.read_text(encoding="utf-8")).get("searches", ()):
+            if entry.get("query_id"):
+                in_logs[entry["query_id"]] = f"research/gen2/review-2026-09-13/{log.name}"
+
     out = []
     for row in rows:
-        ident = row.get("id")
-        if not ident or row.get("status") != "not_run":
-            continue
-        ran_in = sorted(name for name, blob in logs.items() if f'"{ident}"' in blob)
-        if ran_in:
+        ident, status = row.get("id"), row.get("status")
+        where = in_logs.get(ident)
+        if status == "not_run" and where:
             out.append(
                 finding(
                     "C4 executed vs planned",
                     f"research/gen2/queries.json {ident}",
                     "not_run",
-                    ", ".join(f"review-2026-09-13/{n}" for n in ran_in),
+                    where,
                     "executed, with counts and an export checksum",
+                )
+            )
+        elif status == "run" and not where:
+            out.append(
+                finding(
+                    "C4 executed vs planned",
+                    f"research/gen2/queries.json {ident}",
+                    "run",
+                    "the four search logs",
+                    "no log holds this query",
+                )
+            )
+        elif status == "run" and row.get("executed", {}).get("log") != where:
+            out.append(
+                finding(
+                    "C4 executed vs planned",
+                    f"research/gen2/queries.json {ident}",
+                    row.get("executed", {}).get("log"),
+                    "the four search logs",
+                    where,
+                    "the query names one log and the logs put it in another",
                 )
             )
     return out

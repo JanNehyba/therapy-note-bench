@@ -9,13 +9,12 @@
     "research/gen2/audit-findings.json": "its report, which quotes what it found"
   },
   "counts": {
-    "live": 41,
+    "live": 29,
     "in_dated_records": 8,
     "by_check": {
       "C1 pool size": 21,
       "C2 protocol version": 1,
       "C3 pilot entries": 3,
-      "C4 executed vs planned": 12,
       "C6 state word": 3,
       "C7 execution evidence": 1
     }
@@ -243,114 +242,6 @@
       "says": 14,
       "holder": "research/gen2/catalog/catalog.json pilot_proposal.entries",
       "holds": 13,
-      "note": "",
-      "dated_record": null
-    },
-    {
-      "check": "C4 executed vs planned",
-      "path": "research/gen2/queries.json pubmed-direct",
-      "says": "not_run",
-      "holder": "review-2026-09-13/search-log-pubmed.json",
-      "holds": "executed, with counts and an export checksum",
-      "note": "",
-      "dated_record": null
-    },
-    {
-      "check": "C4 executed vs planned",
-      "path": "research/gen2/queries.json pubmed-transfer",
-      "says": "not_run",
-      "holder": "review-2026-09-13/search-log-pubmed.json",
-      "holds": "executed, with counts and an export checksum",
-      "note": "",
-      "dated_record": null
-    },
-    {
-      "check": "C4 executed vs planned",
-      "path": "research/gen2/queries.json scopus-direct",
-      "says": "not_run",
-      "holder": "review-2026-09-13/search-log-scopus.json",
-      "holds": "executed, with counts and an export checksum",
-      "note": "",
-      "dated_record": null
-    },
-    {
-      "check": "C4 executed vs planned",
-      "path": "research/gen2/queries.json acl-direct",
-      "says": "not_run",
-      "holder": "review-2026-09-13/search-log-acl.json",
-      "holds": "executed, with counts and an export checksum",
-      "note": "",
-      "dated_record": null
-    },
-    {
-      "check": "C4 executed vs planned",
-      "path": "research/gen2/queries.json acl-transfer",
-      "says": "not_run",
-      "holder": "review-2026-09-13/search-log-acl.json",
-      "holds": "executed, with counts and an export checksum",
-      "note": "",
-      "dated_record": null
-    },
-    {
-      "check": "C4 executed vs planned",
-      "path": "research/gen2/queries.json acl-quality-typology",
-      "says": "not_run",
-      "holder": "review-2026-09-13/search-log-acl-language.json",
-      "holds": "executed, with counts and an export checksum",
-      "note": "",
-      "dated_record": null
-    },
-    {
-      "check": "C4 executed vs planned",
-      "path": "research/gen2/queries.json acl-fluency-adequacy",
-      "says": "not_run",
-      "holder": "review-2026-09-13/search-log-acl-language.json",
-      "holds": "executed, with counts and an export checksum",
-      "note": "",
-      "dated_record": null
-    },
-    {
-      "check": "C4 executed vs planned",
-      "path": "research/gen2/queries.json acl-post-editing",
-      "says": "not_run",
-      "holder": "review-2026-09-13/search-log-acl-language.json",
-      "holds": "executed, with counts and an export checksum",
-      "note": "",
-      "dated_record": null
-    },
-    {
-      "check": "C4 executed vs planned",
-      "path": "research/gen2/queries.json acl-small-language-quality",
-      "says": "not_run",
-      "holder": "review-2026-09-13/search-log-acl-language.json",
-      "holds": "executed, with counts and an export checksum",
-      "note": "",
-      "dated_record": null
-    },
-    {
-      "check": "C4 executed vs planned",
-      "path": "research/gen2/queries.json acl-orthography-and-morphology",
-      "says": "not_run",
-      "holder": "review-2026-09-13/search-log-acl-language.json",
-      "holds": "executed, with counts and an export checksum",
-      "note": "",
-      "dated_record": null
-    },
-    {
-      "check": "C4 executed vs planned",
-      "path": "research/gen2/queries.json acl-borrowing-and-register",
-      "says": "not_run",
-      "holder": "review-2026-09-13/search-log-acl-language.json",
-      "holds": "executed, with counts and an export checksum",
-      "note": "",
-      "dated_record": null
-    },
-    {
-      "check": "C4 executed vs planned",
-      "path": "research/gen2/queries.json acl-nonword",
-      "says": "not_run",
-      "holder": "review-2026-09-13/search-log-acl-language.json",
-      "holds": "executed, with counts and an export checksum",
       "note": "",
       "dated_record": null
     },
