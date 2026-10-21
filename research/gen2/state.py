@@ -60,38 +60,69 @@ def release(version: str) -> tuple[int, ...]:
     return tuple(int(part) for part in version.split("."))
 
 
-def generations() -> dict:
+def generations(rows: list[dict] | None = None) -> dict:
     """What has been generated and scored, and for which generation.
 
     Generation 2's prompt versions would be its own; none appears, which is the
     fact every stale sentence in the repository turned on.
     """
-    rows = [
-        json.loads(line)
-        for line in (REPO / "results" / "rows.jsonl").read_text(encoding="utf-8").splitlines()
-        if line.strip()
-    ]
+    # Takes rows so a test can hand it a planted generation-2 row; the review
+    # showed the claim and the totals were both wrong when one arrived, and a
+    # function that can only read the real ledger cannot be shown that.
+    if rows is None:
+        rows = [
+            json.loads(line)
+            for line in (REPO / "results" / "rows.jsonl").read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
     gen1_prompts = {"tneval-soap-v1", "icare-zeroshot-v1"}
-    by_prompt = Counter(row.get("prompt_version") for row in rows)
-    gen2 = {prompt: n for prompt, n in by_prompt.items() if prompt not in gen1_prompts}
+    # Split first, then count. Counting over every row put a generation-2 row
+    # into generation 1's tracks, judges and harness versions, which the review
+    # demonstrated by handing the builder one.
+    one = [row for row in rows if row.get("prompt_version") in gen1_prompts]
+    two = [row for row in rows if row.get("prompt_version") not in gen1_prompts]
     return {
         "rows_in_total": len(rows),
         "generation_1": {
-            "measured": True,
-            "tracks": dict(sorted(Counter(row.get("track") for row in rows).items())),
-            "prompt_versions": dict(sorted(by_prompt.items())),
-            "judges": sorted({row.get("judge_model") for row in rows if row.get("judge_model")}),
+            "measured": bool(one),
+            "rows": len(one),
+            "tracks": dict(sorted(Counter(row.get("track") for row in one).items())),
+            "prompt_versions": dict(
+                sorted(Counter(row.get("prompt_version") for row in one).items())
+            ),
+            "judges": sorted({row.get("judge_model") for row in one if row.get("judge_model")}),
             "harness_versions": sorted(
-                {row.get("harness_version") for row in rows if row.get("harness_version")}
+                {row.get("harness_version") for row in one if row.get("harness_version")}
+            ),
+            "rows_are_not_notes": (
+                "A row is one scored question of one note by one judge, so the count is not "
+                "a count of notes: these rows carry fewer distinct row ids than rows, and "
+                "fewer still with a session actually scored."
             ),
         },
         "generation_2": {
-            "measured": bool(gen2),
-            "rows": sum(gen2.values()),
+            "measured": bool(two),
+            "rows": len(two),
+            "prompt_versions": dict(
+                sorted(Counter(row.get("prompt_version") for row in two).items())
+            ),
             "what_that_means": (
-                "No note has been written and nothing has been scored for generation 2. Its "
-                "operational rules are a proposal; a sentence in the present tense about one "
-                "of its measurements describes a plan, not a result."
+                "Nothing from generation 2 has been scored into the result ledger. Its "
+                "operational rules are a proposal; a sentence in the present tense about "
+                "one of its measurements describes a plan, not a result."
+            )
+            if not two
+            else (
+                "Generation 2 has rows in the result ledger. Every sentence in this "
+                "repository that says it has measured nothing is now wrong and has to be "
+                "re-read."
+            ),
+            "what_this_does_not_establish": (
+                "That no note exists. Generation 2 writes notes into a workspace store "
+                "through packages/therapy-note-eval-core pipeline.py, and that store is "
+                "gitignored, so this file reports the silence of results/rows.jsonl and "
+                "not the absence of a note. The protocol's pilot status, quoted under "
+                "protocol below, is the tracked statement that the round has not run."
             ),
         },
     }
@@ -100,7 +131,10 @@ def generations() -> dict:
 def protocol_state() -> dict:
     protocol = load("research/gen2/protocol.json")
     archived = sorted(
-        (path.stem.removeprefix("protocol-") for path in (HERE / "history").glob("protocol-*.json")),
+        (
+            path.stem.removeprefix("protocol-")
+            for path in (HERE / "history").glob("protocol-*.json")
+        ),
         key=release,
     )
     return {
@@ -202,8 +236,12 @@ def main() -> int:
         print(f"wrote {OUT.relative_to(REPO).as_posix()}")
     gen = state["generations"]
     print(f"rows in results/: {gen['rows_in_total']}")
-    print(f"  generation 1 measured: {gen['generation_1']['measured']}  {gen['generation_1']['tracks']}")
-    print(f"  generation 2 measured: {gen['generation_2']['measured']}  rows {gen['generation_2']['rows']}")
+    print(
+        f"  generation 1 measured: {gen['generation_1']['measured']}  {gen['generation_1']['tracks']}"
+    )
+    print(
+        f"  generation 2 measured: {gen['generation_2']['measured']}  rows {gen['generation_2']['rows']}"
+    )
     print(f"protocol {state['protocol']['version']}, pilot {state['protocol']['pilot_status']}")
     cat = state["catalog"]
     print(

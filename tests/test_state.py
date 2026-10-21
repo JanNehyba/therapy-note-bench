@@ -73,8 +73,22 @@ def test_it_answers_the_question_nothing_answered_before(state):
     assert generations["generation_1"]["measured"] is True
     assert generations["generation_2"]["measured"] is bool(gen2_rows)
     assert generations["generation_2"]["rows"] == len(gen2_rows)
-    # Today that is none, and the file says what that means rather than only zero.
-    assert "No note has been written" in generations["generation_2"]["what_that_means"]
+
+    # The wording has to follow the number, not be required alongside it. This
+    # test used to assert the literal sentence "No note has been written", which
+    # a review named as the defect: handed a generation-2 row the builder said
+    # `measured: true` and kept that sentence, and the test demanded the sentence
+    # rather than asking whether it was true. So what is checked is the
+    # conditional, and tests/test_audit_detects.py plants a row to exercise the
+    # other branch.
+    said = generations["generation_2"]["what_that_means"]
+    if gen2_rows:
+        assert "has rows in the result ledger" in said
+        assert "nothing" not in said.lower()
+    else:
+        assert "Nothing from generation 2 has been scored" in said
+    # And either way it names what the ledger's silence cannot establish.
+    assert "pipeline.py" in generations["generation_2"]["what_this_does_not_establish"]
 
 
 def test_it_names_a_source_for_every_figure_it_reports(state):

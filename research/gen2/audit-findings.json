@@ -3,90 +3,19 @@
   "marker": "AUTHORED-INVESTIGATOR-TEXT",
   "what_this_is": "Every finding re-derived from the files it is about. Nothing here is written down as a finding: a finding that stops being true disappears from this file, and a new one appears without anybody noticing it first.",
   "what_it_cannot_do": "Four classes cannot be computed: two prose sentences contradicting each other, the present tense used of something not run, a claim buried in a field meant for something else, and a convention with no source. They are listed under found_by_reading with their evidence, and reading is not exhaustive.",
-  "claim_bearing_files_scanned": 123,
+  "claim_bearing_files_scanned": 125,
   "not_scanned": {
     "research/gen2/audit.py": "the checker",
     "research/gen2/audit-findings.json": "its report, which quotes what it found"
   },
   "counts": {
     "live": 0,
-    "in_dated_records": 9,
+    "in_dated_records": 1,
+    "to_triage": 18,
     "by_check": {}
   },
   "live": [],
   "in_dated_records": [
-    {
-      "check": "C1 pool size",
-      "path": "research/gen2/history/protocol-2.7.0.json:86",
-      "says": 34,
-      "holder": "research/gen2/catalog/catalog.json candidates",
-      "holds": 39,
-      "note": "\"content_validity_panel\": \"three therapists, neither the author nor the assistant, rating the 34 candidates for relevance against the thresh",
-      "dated_record": "an archived protocol names its own version and pool; that is what it is for"
-    },
-    {
-      "check": "C1 pool size",
-      "path": "research/gen2/history/protocol-2.7.0.json:490",
-      "says": 34,
-      "holder": "research/gen2/catalog/catalog.json candidates",
-      "holds": 39,
-      "note": "\"items\": \"all 34 candidates of the catalog, including those the round does not measure and the one the investigator dropped on 2026-10-05\",",
-      "dated_record": "an archived protocol names its own version and pool; that is what it is for"
-    },
-    {
-      "check": "C1 pool size",
-      "path": "research/gen2/history/protocol-2.8.0.json:86",
-      "says": 34,
-      "holder": "research/gen2/catalog/catalog.json candidates",
-      "holds": 39,
-      "note": "\"content_validity_panel\": \"three therapists, neither the author nor the assistant, rating the 34 candidates for relevance against the thresh",
-      "dated_record": "an archived protocol names its own version and pool; that is what it is for"
-    },
-    {
-      "check": "C1 pool size",
-      "path": "research/gen2/history/protocol-2.8.0.json:291",
-      "says": 36,
-      "holder": "research/gen2/catalog/catalog.json candidates",
-      "holds": 39,
-      "note": "\"amendment_reason\": \"The item pool grew by two before the content-validity panel was asked anything. Reading SESPI in full showed that the c",
-      "dated_record": "an archived protocol names its own version and pool; that is what it is for"
-    },
-    {
-      "check": "C1 pool size",
-      "path": "research/gen2/history/protocol-2.8.0.json:489",
-      "says": 36,
-      "holder": "research/gen2/catalog/catalog.json candidates",
-      "holds": 39,
-      "note": "\"K06 stays in the rated pool of 36\",",
-      "dated_record": "an archived protocol names its own version and pool; that is what it is for"
-    },
-    {
-      "check": "C1 pool size",
-      "path": "research/gen2/history/protocol-2.8.0.json:509",
-      "says": 34,
-      "holder": "research/gen2/catalog/catalog.json candidates",
-      "holds": 39,
-      "note": "\"status\": \"registered before any rating exists; no answer has been collected and no sheet has been sent. The pool was 34 items when the rule",
-      "dated_record": "an archived protocol names its own version and pool; that is what it is for"
-    },
-    {
-      "check": "C1 pool size",
-      "path": "research/gen2/history/protocol-2.8.0.json:529",
-      "says": 36,
-      "holder": "research/gen2/catalog/catalog.json candidates",
-      "holds": 39,
-      "note": "\"items\": \"all 36 candidates of the catalog, including those the round does not measure, the one the investigator dropped on 2026-10-05, and ",
-      "dated_record": "an archived protocol names its own version and pool; that is what it is for"
-    },
-    {
-      "check": "C1 pool size",
-      "path": "research/gen2/protocol.json:525",
-      "says": 34,
-      "holder": "research/gen2/catalog/catalog.json candidates",
-      "holds": 39,
-      "note": "\"status\": \"registered before any rating exists; no answer has been collected and no sheet has been sent. The pool was 34 items when the rule",
-      "dated_record": "the sentence dates the value: 'The pool was 34 items'"
-    },
     {
       "check": "C2 protocol version",
       "path": "research/gen2/review-2026-09-13/review-memo.md:13",
@@ -95,6 +24,99 @@
       "holds": "2.9.0",
       "note": "1. Verified the methodological guidance before searching, as protocol 2.0.0",
       "dated_record": "declares itself not rewritten when later work changes something"
+    }
+  ],
+  "to_triage_note": "A number standing beside a word that means a candidate, which is not the pool's size. These are not findings: the sentence is as often a correct statement about a part of the pool as a stale statement about its size, and no pattern tells those apart. They are printed so that narrowing the registry above cannot make anything invisible.",
+  "to_triage": [
+    {
+      "path": "docs/gen2-catalog.html:66",
+      "says": 38,
+      "line": "<p>Source-first extraction. For every source read in full, every property of note quality the source itself defines or measures is listed in"
+    },
+    {
+      "path": "docs/gen2-catalog.html:66",
+      "says": 21,
+      "line": "<p>Source-first extraction. For every source read in full, every property of note quality the source itself defines or measures is listed in"
+    },
+    {
+      "path": "docs/gen2-catalog.html:66",
+      "says": 21,
+      "line": "<p>Source-first extraction. For every source read in full, every property of note quality the source itself defines or measures is listed in"
+    },
+    {
+      "path": "docs/gen2-catalog.html:72",
+      "says": 16,
+      "line": "<article id=\"K01\"><h3><span class=\"id\">K01</span> Support of claims in the source</h3><p><span class=\"k\">family: F1</span> <span class=\"k\">k"
+    },
+    {
+      "path": "docs/gen2-catalog.html:72",
+      "says": 20,
+      "line": "<article id=\"K01\"><h3><span class=\"id\">K01</span> Support of claims in the source</h3><p><span class=\"k\">family: F1</span> <span class=\"k\">k"
+    },
+    {
+      "path": "paper/methods.md:261",
+      "says": 16,
+      "line": "because they answer different questions: all 16 constructs proposed for"
+    },
+    {
+      "path": "paper/methods.md:293",
+      "says": 31,
+      "line": "validation. The investigator decided every construct: 31 on 2026-09-16 and"
+    },
+    {
+      "path": "research/gen2/build_review_record.py:173",
+      "says": 33,
+      "line": "\"decisions.json carries the 33 construct decisions and nothing else. The \""
+    },
+    {
+      "path": "research/gen2/build_review_record.py:180",
+      "says": 33,
+      "line": "\"counts. The 33 construct subjects carry mode 'human', and the same 33 are \""
+    },
+    {
+      "path": "research/gen2/catalog/catalog.json:2375",
+      "says": 16,
+      "line": "\"origin_note\": \"The earlier criterion c15 named repetition explicitly. The review of 2026-09-13 merged it into K11, whose per-sentence defin"
+    },
+    {
+      "path": "research/gen2/catalog/catalog.json:2471",
+      "says": 20,
+      "line": "\"origin_note\": \"The PDQI-9 attribute 'Internally consistent' (S4, as reproduced in S6, Table 1). PDSQI-9 removed it as redundant (S2). The s"
+    },
+    {
+      "path": "research/gen2/catalog/source-properties.json:199",
+      "says": 21,
+      "line": "\"mapping\": \"adopted by the investigator on 2026-09-21 as its own candidate\""
+    },
+    {
+      "path": "research/gen2/catalog/source-properties.json:711",
+      "says": 21,
+      "line": "\"mapping\": \"added by the investigator on 2026-09-21 as its own candidate; K26 is consistency between notes\""
+    },
+    {
+      "path": "research/gen2/review-2026-09-13/candidate-retrieval-2026-10-07.json:5",
+      "says": 30,
+      "line": "\"frame\": \"the 30 include candidates in the direct, requirements and instrument layers. The method layer was not tried: a method paper offers"
+    },
+    {
+      "path": "research/gen2/review-2026-09-13/flow.json:460",
+      "says": 29,
+      "line": "\"candidates\": 29,"
+    },
+    {
+      "path": "research/gen2/review-record.json:5",
+      "says": 33,
+      "line": "\"why_it_exists\": \"decisions.json carries the 33 construct decisions and nothing else. The decisions about the sources, the evidence items, t"
+    },
+    {
+      "path": "research/gen2/review-record.json:6",
+      "says": 33,
+      "line": "\"what_mode_human_means_here\": \"The mode below is the one the review form captured, not what the instrument counts. The 33 construct subjects"
+    },
+    {
+      "path": "research/gen2/review-record.json:13",
+      "says": 33,
+      "line": "\"construct\": 33,"
     }
   ],
   "found_by_reading": {

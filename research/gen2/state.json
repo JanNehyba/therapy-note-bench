@@ -16,6 +16,7 @@
     "rows_in_total": 2357,
     "generation_1": {
       "measured": true,
+      "rows": 2357,
       "tracks": {
         "icare": 905,
         "pdsqi-soap": 194,
@@ -38,12 +39,15 @@
         "0.5.0",
         "0.6.0",
         "0.7.0"
-      ]
+      ],
+      "rows_are_not_notes": "A row is one scored question of one note by one judge, so the count is not a count of notes: these rows carry fewer distinct row ids than rows, and fewer still with a session actually scored."
     },
     "generation_2": {
       "measured": false,
       "rows": 0,
-      "what_that_means": "No note has been written and nothing has been scored for generation 2. Its operational rules are a proposal; a sentence in the present tense about one of its measurements describes a plan, not a result."
+      "prompt_versions": {},
+      "what_that_means": "Nothing from generation 2 has been scored into the result ledger. Its operational rules are a proposal; a sentence in the present tense about one of its measurements describes a plan, not a result.",
+      "what_this_does_not_establish": "That no note exists. Generation 2 writes notes into a workspace store through packages/therapy-note-eval-core pipeline.py, and that store is gitignored, so this file reports the silence of results/rows.jsonl and not the absence of a note. The protocol's pilot status, quoted under protocol below, is the tracked statement that the round has not run."
     }
   },
   "protocol": {

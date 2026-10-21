@@ -2698,7 +2698,7 @@
       "validation": "None. The source reports no reliability figure for the taxonomy it merges, and none for this dimension.",
       "overlaps": "K01 (a wrong number is also an unsupported claim), K04 (a vague quantity made exact is also a certainty error), K03 (a wrong date is also a time error).",
       "state": "not_yet_operationalized",
-      "state_note": "Accepted into the pool by the investigator on 2026-10-14 and rated by the panel under D13. No measurement rule exists yet.",
+      "state_note": "Accepted into the pool by the investigator on 2026-10-14 and in the pool the panel rates under D13; it has not been rated, because no sheet has been sent. No measurement rule exists yet.",
       "decided_by": "source",
       "unit_of_analysis": "note"
     },

@@ -3,7 +3,7 @@
   "date": "2026-09-21",
   "marker": "AUTHORED-INSTRUMENT-TEXT",
   "status": "proposed by the assistant on 2026-09-21; every subject below awaits the investigator's decision",
-  "assessment_scope": "Feasibility pilot under research protocol 2.3.0: the two public AnnoMI conversations drawn in pilot-cases.json (94 and 25) in English and their recorded Czech translations, notes written for the continuity and audit purposes by two generator families, measured by source-bank question answering (qa), atomic-claim verification (claims) and rubric items (items), with a human anchor of two Czech psychologists under the protocol's crossover; no citation method in this round.",
+  "assessment_scope": "Feasibility pilot under the research protocol of research/gen2/protocol.json, which states its own version: the two public AnnoMI conversations drawn in pilot-cases.json (94 and 25) in English and their recorded Czech translations, notes written for the continuity and audit purposes by two generator families, measured by source-bank question answering (qa), atomic-claim verification (claims) and rubric items (items), with a human anchor of two Czech psychologists under the protocol's crossover; no citation method in this round.",
   "required_methods": [
     "qa",
     "claims",
