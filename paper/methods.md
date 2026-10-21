@@ -341,7 +341,7 @@ removed with K19 on 2026-10-05. The protocol records
 the executable count at freeze rather than capping it. The registry refuses to
 freeze while any used subject lacks an accepted decision.
 
-The feasibility pilot (protocol 2.9.0) freezes 16 generation jobs over two
+The feasibility pilot (protocol 2.10.0) freezes 16 generation jobs over two
 cohorts, two English AnnoMI conversations and their Czech translations, two
 purposes and two generator families, and balances an 8-note human sample across
 them. Two Czech psychologists, neither the instrument author, rate under a
@@ -351,7 +351,13 @@ agreement; agreement is reported per item as Gwet's AC1 or AC2. The human budget
 is 150 annotation units, 120 unique and 30 repeats, within 8 to 12 hours. The
 pilot asks of each measurement whether it can be performed, whether raters
 agree, whether it discriminates or sits at a ceiling, and what it costs; the
-protocol forbids dropping a measurement because systems do not differ on it.
+protocol forbids dropping a measurement because systems do not differ on it. It
+also carries one condition rather than a measurement: on the human sample every
+operational item is asked of the judge twice, once with every item of a
+reference mode in a single call and once one item per call, because the two
+generations of this benchmark disagree about that and the disagreement has
+never been measured. The rule is declared in advance and the margin it has to
+clear is the judge's own disagreement on blinded repeats of the same items.
 Sample sizes for a confirmatory study are derived from the pilot's measured
 agreement and time, not assumed.
 
