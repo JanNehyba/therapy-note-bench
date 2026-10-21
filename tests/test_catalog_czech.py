@@ -235,6 +235,35 @@ def test_the_sheet_has_one_row_per_candidate(czech, codes):
         assert answers == ["", "", ""], code
 
 
+def test_the_sheet_tells_the_rater_the_number_it_then_lists(czech, codes):
+    """The one artefact of this project that goes to people outside it.
+
+    The instruction read "Nize je 36 vlastnosti" while the sheet listed 39: true
+    on 2026-10-07, false from 2026-10-14 when three criteria arrived, and held by
+    nothing. The count is now filled from the list it counts, so the sentence
+    cannot be wrong unless the sheet is empty, and no instruction line may carry
+    a typed figure again.
+    """
+    table = panel_sheet.rows(czech, list(codes))
+    # The sheet carries blank separator rows, so a row may be empty.
+    items = [row for row in table if row and row[0] in set(codes)]
+    assert len(items) == len(codes)
+
+    lines = len(czech["panel_sheet"]["instructions"])
+    instructions = [row[0] for row in table[:lines] if row]
+    assert any(str(len(codes)) in line for line in instructions), (
+        "no instruction tells the rater how many properties follow"
+    )
+    for line in instructions:
+        for wrong in (len(codes) - n for n in (1, 2, 3, 5, 6)):
+            assert str(wrong) not in line, f"a count other than {len(codes)} is typed in"
+
+    # The placeholder, not the value, is what the data file holds.
+    raw = " ".join(cell for line in czech["panel_sheet"]["instructions"] for cell in line)
+    assert "{count}" in raw
+    assert str(len(codes)) not in raw, "the sheet's own text states the count instead of taking it"
+
+
 def test_the_sheet_is_blind(catalog, czech, codes):
     """A rater who can see the state or the citation ratifies instead of judging.
 

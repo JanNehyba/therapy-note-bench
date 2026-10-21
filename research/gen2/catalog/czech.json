@@ -1714,7 +1714,7 @@
       ],
       [],
       [
-        "Co se po vás chce. Níže je 36 vlastností, které by zápis ze sezení mohl mít. U každé odpovězte na dvě otázky. Odhadem 30 minut. Nepotřebujete nic číst předem."
+        "Co se po vás chce. Níže je {count} vlastností, které by zápis ze sezení mohl mít. U každé odpovězte na dvě otázky. Odhadem 30 minut. Nepotřebujete nic číst předem."
       ],
       [],
       [
@@ -1957,7 +1957,7 @@
       ]
     }
   },
-  "groupings_note": "our_groups and upheal_dimensions are claims about the criteria, not translations: the first is this project's grouping of the measured ones, the second maps a candidate onto a prior commercial taxonomy. Both predate K35 and K36 and cover 34 of 36 candidates; the gap is left open rather than guessed.",
+  "groupings_note": "our_groups and upheal_dimensions are claims about the criteria, not translations: the first is this project's grouping of the ones proposed for measurement, the second maps a candidate onto a prior commercial taxonomy. Both predate the criteria that arrived later and neither covers every candidate; the gap is left open rather than guessed. Neither count is stated here: the validator counts the members of each grouping, and a figure typed beside a list it counts is how this file came to claim 36 candidates while holding 39.",
   "authored_here": "read on 2026-10-14 and written here",
   "authored_here_candidates": [
     "K37",

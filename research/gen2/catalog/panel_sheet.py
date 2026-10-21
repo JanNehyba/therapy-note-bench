@@ -56,7 +56,12 @@ def order(codes: list[str], seed: int = SEED) -> list[str]:
 
 def rows(czech: dict, codes: list[str]) -> list[list[str]]:
     sheet = czech["panel_sheet"]
-    out = [list(line) for line in sheet["instructions"]]
+    # The instruction tells the rater how many properties follow, and it used to
+    # say so in a typed number: it read 36 while the sheet listed 39, true on
+    # 2026-10-07 and false from 2026-10-14, when three criteria arrived and
+    # nothing re-read the sentence. The count is filled from the list it counts,
+    # so the sentence cannot be wrong without the sheet being empty.
+    out = [[cell.format(count=len(codes)) for cell in line] for line in sheet["instructions"]]
     out.append(list(sheet["header"]))
     for code in order(codes):
         entry = czech["candidates"][code]
