@@ -1,0 +1,498 @@
+{
+  "version": "audit-v1",
+  "marker": "AUTHORED-INVESTIGATOR-TEXT",
+  "what_this_is": "Every finding re-derived from the files it is about. Nothing here is written down as a finding: a finding that stops being true disappears from this file, and a new one appears without anybody noticing it first.",
+  "what_it_cannot_do": "Four classes cannot be computed: two prose sentences contradicting each other, the present tense used of something not run, a claim buried in a field meant for something else, and a convention with no source. They are listed under found_by_reading with their evidence, and reading is not exhaustive.",
+  "claim_bearing_files_scanned": 123,
+  "counts": {
+    "live": 42,
+    "in_dated_records": 8,
+    "by_check": {
+      "C1 pool size": 22,
+      "C2 protocol version": 1,
+      "C3 pilot entries": 3,
+      "C4 executed vs planned": 12,
+      "C6 state word": 3,
+      "C7 execution evidence": 1
+    }
+  },
+  "live": [
+    {
+      "check": "C1 pool size",
+      "path": "docs/gen2-catalog.html:62",
+      "says": 32,
+      "holder": "research/gen2/catalog/catalog.json candidates",
+      "holds": 39,
+      "note": "<p class=\"notice\">AI-authored proposals from the scoping search of 2026-09-13, translated to English by the coding assistant on 2026-09-16. ",
+      "dated_record": null
+    },
+    {
+      "check": "C1 pool size",
+      "path": "paper/methods.md:31",
+      "says": 35,
+      "holder": "research/gen2/catalog/catalog.json candidates",
+      "holds": 39,
+      "note": "quality the source itself defines, and 35 of the 36 candidates are anchored in",
+      "dated_record": null
+    },
+    {
+      "check": "C1 pool size",
+      "path": "paper/methods.md:152",
+      "says": 36,
+      "holder": "research/gen2/catalog/catalog.json candidates",
+      "holds": 39,
+      "note": "note. Thirty-five of the 36 candidates rest on at least one source property. The one that does not is K06, a note that says what",
+      "dated_record": null
+    },
+    {
+      "check": "C1 pool size",
+      "path": "paper/methods.md:171",
+      "says": 36,
+      "holder": "research/gen2/catalog/catalog.json candidates",
+      "holds": 39,
+      "note": "None of the six adds a candidate, and the pool is 36 for that reason rather",
+      "dated_record": null
+    },
+    {
+      "check": "C1 pool size",
+      "path": "paper/methods.md:255",
+      "says": 36,
+      "holder": "research/gen2/catalog/catalog.json candidates",
+      "holds": 39,
+      "note": "The catalog holds 36 candidates. By origin, 21 came from the literature, 11",
+      "dated_record": null
+    },
+    {
+      "check": "C1 pool size",
+      "path": "research/gen2/catalog/catalog.json:3883",
+      "says": 32,
+      "holder": "research/gen2/catalog/catalog.json candidates",
+      "holds": 39,
+      "note": "\"the source-first extraction becomes the reported derivation and the prior map the comparison; 32 of 33 candidates are anchored in a propert",
+      "dated_record": null
+    },
+    {
+      "check": "C1 pool size",
+      "path": "research/gen2/catalog/catalog.json:4023",
+      "says": 35,
+      "holder": "research/gen2/catalog/catalog.json candidates",
+      "holds": 39,
+      "note": "\"convergence\": \"35 of the 36 candidates are anchored in at least one such property. The exception is K06, acknowledged information gap, whic",
+      "dated_record": null
+    },
+    {
+      "check": "C1 pool size",
+      "path": "research/gen2/catalog/czech.json:48",
+      "says": 36,
+      "holder": "research/gen2/catalog/catalog.json candidates",
+      "holds": 39,
+      "note": "\"note\": \"panel_sheet.py of 2026-10-07 is the only generator that covers all 36 candidates, so it wins the name wherever it has one\"",
+      "dated_record": null
+    },
+    {
+      "check": "C1 pool size",
+      "path": "research/gen2/catalog/czech.json:1717",
+      "says": 36,
+      "holder": "research/gen2/catalog/catalog.json candidates",
+      "holds": 39,
+      "note": "\"Co se po vás chce. Níže je 36 vlastností, které by zápis ze sezení mohl mít. U každé odpovězte na dvě otázky. Odhadem 30 minut. Nepotřebuje",
+      "dated_record": null
+    },
+    {
+      "check": "C1 pool size",
+      "path": "research/gen2/catalog/czech.json:1960",
+      "says": 34,
+      "holder": "research/gen2/catalog/catalog.json candidates",
+      "holds": 39,
+      "note": "\"groupings_note\": \"our_groups and upheal_dimensions are claims about the criteria, not translations: the first is this project's grouping of",
+      "dated_record": null
+    },
+    {
+      "check": "C1 pool size",
+      "path": "research/gen2/protocol.json:86",
+      "says": 34,
+      "holder": "research/gen2/catalog/catalog.json candidates",
+      "holds": 39,
+      "note": "\"content_validity_panel\": \"three therapists, neither the author nor the assistant, rating the 34 candidates for relevance against the thresh",
+      "dated_record": null
+    },
+    {
+      "check": "C1 pool size",
+      "path": "research/gen2/protocol.json:489",
+      "says": 36,
+      "holder": "research/gen2/catalog/catalog.json candidates",
+      "holds": 39,
+      "note": "\"K06 stays in the rated pool of 36\",",
+      "dated_record": null
+    },
+    {
+      "check": "C1 pool size",
+      "path": "research/gen2/protocol.json:525",
+      "says": 34,
+      "holder": "research/gen2/catalog/catalog.json candidates",
+      "holds": 39,
+      "note": "\"status\": \"registered before any rating exists; no answer has been collected and no sheet has been sent. The pool was 34 items when the rule",
+      "dated_record": null
+    },
+    {
+      "check": "C1 pool size",
+      "path": "research/gen2/protocol.json:545",
+      "says": 36,
+      "holder": "research/gen2/catalog/catalog.json candidates",
+      "holds": 39,
+      "note": "\"items\": \"all 36 candidates of the catalog, including those the round does not measure, the one the investigator dropped on 2026-10-05, and ",
+      "dated_record": null
+    },
+    {
+      "check": "C1 pool size",
+      "path": "research/gen2/review-2026-09-13/amendments.json:99",
+      "says": 36,
+      "holder": "research/gen2/catalog/catalog.json candidates",
+      "holds": 39,
+      "note": "\"what_does_not_change\": \"Nothing about the pool as it stands. The existing 12042 records, 687 priority records and 36 candidates are untouch",
+      "dated_record": null
+    },
+    {
+      "check": "C1 pool size",
+      "path": "research/gen2/review-2026-09-13/category-names.json:7",
+      "says": 36,
+      "holder": "research/gen2/catalog/catalog.json candidates",
+      "holds": 39,
+      "note": "\"no_mapping_here\": \"Which of these the 36 candidates already cover is a judgement, made and recorded in a separate step. A mapping done insi",
+      "dated_record": null
+    },
+    {
+      "check": "C1 pool size",
+      "path": "research/gen2/review-2026-09-13/extract_categories.py:215",
+      "says": 36,
+      "holder": "research/gen2/catalog/catalog.json candidates",
+      "holds": 39,
+      "note": "\"Which of these the 36 candidates already cover is a judgement, made and recorded \"",
+      "dated_record": null
+    },
+    {
+      "check": "C1 pool size",
+      "path": "research/gen2/review-2026-09-13/inductive-properties.json:29",
+      "says": 36,
+      "holder": "research/gen2/catalog/catalog.json candidates",
+      "holds": 39,
+      "note": "\"what_this_does_not_do\": \"It maps nothing onto the catalog. Which of these the 36 candidates already cover is a judgement, made in a separat",
+      "dated_record": null
+    },
+    {
+      "check": "C1 pool size",
+      "path": "research/gen2/review-2026-09-13/inductive_properties.py:29",
+      "says": 36,
+      "holder": "research/gen2/catalog/catalog.json candidates",
+      "holds": 39,
+      "note": "36 candidates exist. It writes the ranked vocabulary and stops; comparing it",
+      "dated_record": null
+    },
+    {
+      "check": "C1 pool size",
+      "path": "research/gen2/review-2026-09-13/inductive_properties.py:568",
+      "says": 36,
+      "holder": "research/gen2/catalog/catalog.json candidates",
+      "holds": 39,
+      "note": "\"It maps nothing onto the catalog. Which of these the 36 candidates already cover \"",
+      "dated_record": null
+    },
+    {
+      "check": "C1 pool size",
+      "path": "research/gen2/review-2026-09-13/small-language-schemes.json:91",
+      "says": 36,
+      "holder": "research/gen2/catalog/catalog.json candidates",
+      "holds": 39,
+      "note": "\"what_it_means_here\": \"Nobody on this project proposed word order, and it is a category in both schemes built for an inflected language. In ",
+      "dated_record": null
+    },
+    {
+      "check": "C1 pool size",
+      "path": "research/gen2/review-2026-09-13/small_language_schemes.py:114",
+      "says": 36,
+      "holder": "research/gen2/catalog/catalog.json candidates",
+      "holds": 39,
+      "note": "\"grammatical and still say the wrong thing by its order. None of the 36 candidates \"",
+      "dated_record": null
+    },
+    {
+      "check": "C2 protocol version",
+      "path": "research/gen2/translation/draw_pilot_cases.py:3",
+      "says": "2.2.0",
+      "holder": "research/gen2/protocol.json version",
+      "holds": "2.9.0",
+      "note": "Protocol 2.2.0 freezes the pilot over two public AnnoMI conversations and their",
+      "dated_record": null
+    },
+    {
+      "check": "C3 pilot entries",
+      "path": "research/gen2/catalog/catalog.json pilot_proposal.count_note",
+      "says": 14,
+      "holder": "research/gen2/catalog/catalog.json pilot_proposal.entries",
+      "holds": 13,
+      "note": "the note counts the list it sits on",
+      "dated_record": null
+    },
+    {
+      "check": "C3 pilot entries",
+      "path": "research/gen2/catalog/catalog.json pilot_proposal.count_note",
+      "says": "P09",
+      "holder": "research/gen2/catalog/catalog.json pilot_proposal.entries",
+      "holds": "absent",
+      "note": "P09 is described as an entry and is not one",
+      "dated_record": null
+    },
+    {
+      "check": "C3 pilot entries",
+      "path": "research/gen2/protocol.json selection...catalog_entries",
+      "says": 14,
+      "holder": "research/gen2/catalog/catalog.json pilot_proposal.entries",
+      "holds": 13,
+      "note": "",
+      "dated_record": null
+    },
+    {
+      "check": "C4 executed vs planned",
+      "path": "research/gen2/queries.json pubmed-direct",
+      "says": "not_run",
+      "holder": "review-2026-09-13/search-log-pubmed.json",
+      "holds": "executed, with counts and an export checksum",
+      "note": "",
+      "dated_record": null
+    },
+    {
+      "check": "C4 executed vs planned",
+      "path": "research/gen2/queries.json pubmed-transfer",
+      "says": "not_run",
+      "holder": "review-2026-09-13/search-log-pubmed.json",
+      "holds": "executed, with counts and an export checksum",
+      "note": "",
+      "dated_record": null
+    },
+    {
+      "check": "C4 executed vs planned",
+      "path": "research/gen2/queries.json scopus-direct",
+      "says": "not_run",
+      "holder": "review-2026-09-13/search-log-scopus.json",
+      "holds": "executed, with counts and an export checksum",
+      "note": "",
+      "dated_record": null
+    },
+    {
+      "check": "C4 executed vs planned",
+      "path": "research/gen2/queries.json acl-direct",
+      "says": "not_run",
+      "holder": "review-2026-09-13/search-log-acl.json",
+      "holds": "executed, with counts and an export checksum",
+      "note": "",
+      "dated_record": null
+    },
+    {
+      "check": "C4 executed vs planned",
+      "path": "research/gen2/queries.json acl-transfer",
+      "says": "not_run",
+      "holder": "review-2026-09-13/search-log-acl.json",
+      "holds": "executed, with counts and an export checksum",
+      "note": "",
+      "dated_record": null
+    },
+    {
+      "check": "C4 executed vs planned",
+      "path": "research/gen2/queries.json acl-quality-typology",
+      "says": "not_run",
+      "holder": "review-2026-09-13/search-log-acl-language.json",
+      "holds": "executed, with counts and an export checksum",
+      "note": "",
+      "dated_record": null
+    },
+    {
+      "check": "C4 executed vs planned",
+      "path": "research/gen2/queries.json acl-fluency-adequacy",
+      "says": "not_run",
+      "holder": "review-2026-09-13/search-log-acl-language.json",
+      "holds": "executed, with counts and an export checksum",
+      "note": "",
+      "dated_record": null
+    },
+    {
+      "check": "C4 executed vs planned",
+      "path": "research/gen2/queries.json acl-post-editing",
+      "says": "not_run",
+      "holder": "review-2026-09-13/search-log-acl-language.json",
+      "holds": "executed, with counts and an export checksum",
+      "note": "",
+      "dated_record": null
+    },
+    {
+      "check": "C4 executed vs planned",
+      "path": "research/gen2/queries.json acl-small-language-quality",
+      "says": "not_run",
+      "holder": "review-2026-09-13/search-log-acl-language.json",
+      "holds": "executed, with counts and an export checksum",
+      "note": "",
+      "dated_record": null
+    },
+    {
+      "check": "C4 executed vs planned",
+      "path": "research/gen2/queries.json acl-orthography-and-morphology",
+      "says": "not_run",
+      "holder": "review-2026-09-13/search-log-acl-language.json",
+      "holds": "executed, with counts and an export checksum",
+      "note": "",
+      "dated_record": null
+    },
+    {
+      "check": "C4 executed vs planned",
+      "path": "research/gen2/queries.json acl-borrowing-and-register",
+      "says": "not_run",
+      "holder": "review-2026-09-13/search-log-acl-language.json",
+      "holds": "executed, with counts and an export checksum",
+      "note": "",
+      "dated_record": null
+    },
+    {
+      "check": "C4 executed vs planned",
+      "path": "research/gen2/queries.json acl-nonword",
+      "says": "not_run",
+      "holder": "review-2026-09-13/search-log-acl-language.json",
+      "holds": "executed, with counts and an export checksum",
+      "note": "",
+      "dated_record": null
+    },
+    {
+      "check": "C6 state word",
+      "path": "research/gen2/catalog/czech.json page.states.measured",
+      "says": "MĚŘÍ SE",
+      "holder": "research/gen2/catalog/catalog.json candidate_states.proposed",
+      "holds": "named by an entry of the pilot proposal; an AI proposal awaiting human selection",
+      "note": "asserts measurement for 16 rows; nothing has been measured",
+      "dated_record": null
+    },
+    {
+      "check": "C6 state word",
+      "path": "research/gen2/catalog/czech.json vocabulary.state.proposed",
+      "says": "měří se",
+      "holder": "research/gen2/catalog/catalog.json candidate_states.proposed",
+      "holds": "named by an entry of the pilot proposal; an AI proposal awaiting human selection",
+      "note": "asserts measurement for 16 rows; nothing has been measured",
+      "dated_record": null
+    },
+    {
+      "check": "C6 state word",
+      "path": "research/gen2/catalog/czech.json page.filters.on",
+      "says": "Jen měřené",
+      "holder": "results/rows.jsonl",
+      "holds": "no generation-2 row exists",
+      "note": "a filter that partitions the criteria into measured and unmeasured",
+      "dated_record": null
+    },
+    {
+      "check": "C7 execution evidence",
+      "path": "results/rows.jsonl",
+      "says": "2357 rows, tracks ['icare', 'pdsqi-soap', 'tneval-soap']",
+      "holder": "research/gen2/catalog/operational.json measurements",
+      "holds": "M06, M07, M08 proposed",
+      "note": "generation 2 has generated no note and measured nothing; no tracked file states this in one place, which is the defect every other check above is a symptom of",
+      "dated_record": null
+    }
+  ],
+  "in_dated_records": [
+    {
+      "check": "C1 pool size",
+      "path": "research/gen2/history/protocol-2.7.0.json:86",
+      "says": 34,
+      "holder": "research/gen2/catalog/catalog.json candidates",
+      "holds": 39,
+      "note": "\"content_validity_panel\": \"three therapists, neither the author nor the assistant, rating the 34 candidates for relevance against the thresh",
+      "dated_record": "an archived protocol names its own version and pool; that is what it is for"
+    },
+    {
+      "check": "C1 pool size",
+      "path": "research/gen2/history/protocol-2.7.0.json:490",
+      "says": 34,
+      "holder": "research/gen2/catalog/catalog.json candidates",
+      "holds": 39,
+      "note": "\"items\": \"all 34 candidates of the catalog, including those the round does not measure and the one the investigator dropped on 2026-10-05\",",
+      "dated_record": "an archived protocol names its own version and pool; that is what it is for"
+    },
+    {
+      "check": "C1 pool size",
+      "path": "research/gen2/history/protocol-2.8.0.json:86",
+      "says": 34,
+      "holder": "research/gen2/catalog/catalog.json candidates",
+      "holds": 39,
+      "note": "\"content_validity_panel\": \"three therapists, neither the author nor the assistant, rating the 34 candidates for relevance against the thresh",
+      "dated_record": "an archived protocol names its own version and pool; that is what it is for"
+    },
+    {
+      "check": "C1 pool size",
+      "path": "research/gen2/history/protocol-2.8.0.json:291",
+      "says": 36,
+      "holder": "research/gen2/catalog/catalog.json candidates",
+      "holds": 39,
+      "note": "\"amendment_reason\": \"The item pool grew by two before the content-validity panel was asked anything. Reading SESPI in full showed that the c",
+      "dated_record": "an archived protocol names its own version and pool; that is what it is for"
+    },
+    {
+      "check": "C1 pool size",
+      "path": "research/gen2/history/protocol-2.8.0.json:489",
+      "says": 36,
+      "holder": "research/gen2/catalog/catalog.json candidates",
+      "holds": 39,
+      "note": "\"K06 stays in the rated pool of 36\",",
+      "dated_record": "an archived protocol names its own version and pool; that is what it is for"
+    },
+    {
+      "check": "C1 pool size",
+      "path": "research/gen2/history/protocol-2.8.0.json:509",
+      "says": 34,
+      "holder": "research/gen2/catalog/catalog.json candidates",
+      "holds": 39,
+      "note": "\"status\": \"registered before any rating exists; no answer has been collected and no sheet has been sent. The pool was 34 items when the rule",
+      "dated_record": "an archived protocol names its own version and pool; that is what it is for"
+    },
+    {
+      "check": "C1 pool size",
+      "path": "research/gen2/history/protocol-2.8.0.json:529",
+      "says": 36,
+      "holder": "research/gen2/catalog/catalog.json candidates",
+      "holds": 39,
+      "note": "\"items\": \"all 36 candidates of the catalog, including those the round does not measure, the one the investigator dropped on 2026-10-05, and ",
+      "dated_record": "an archived protocol names its own version and pool; that is what it is for"
+    },
+    {
+      "check": "C2 protocol version",
+      "path": "research/gen2/review-2026-09-13/review-memo.md:13",
+      "says": "2.0.0",
+      "holder": "research/gen2/protocol.json version",
+      "holds": "2.9.0",
+      "note": "1. Verified the methodological guidance before searching, as protocol 2.0.0",
+      "dated_record": "declares itself not rewritten when later work changes something"
+    }
+  ],
+  "found_by_reading": {
+    "two artefacts contradicting each other in prose": [
+      "the same 33 investigator acts are mode 'human' in review-record.json and 'seen_no_objection' in the registry build; both files now say so (2026-10-19)",
+      "docs/audit-and-repair-plan-2026-09-15.md says nothing has been translated; translation/instrument.json and translations.json record a translator chosen and two conversations translated on 2026-09-21"
+    ],
+    "the present tense used of something not run": [
+      "the Czech page prints MERI SE in bold capitals for the state whose English reads 'an AI proposal awaiting human selection' (checked mechanically below)",
+      "prompt_coverage.py, written by the assistant on 2026-10-19, says 'what is actually being measured' and 'M08 measures this construct ... in this round'",
+      "paper/methods.md writes 'of the 16 measured' two sentences after '16 are proposed for measurement'",
+      "language-set-proposal.json holds six agreement figures under the field name 'measured_already'; five of the six do not say that there was one rater"
+    ],
+    "a claim buried in a field meant for something else": [
+      "fifteen of the investigator's objections sat in the reason field of a retention decision; lifted into decisions.json on 2026-10-19, nine answered by the catalog, five open, one partly"
+    ],
+    "a convention with no source": [
+      "the panel's four-step relevance scale has no origin recorded in protocol.json, which is scrupulous about the threshold in the same block"
+    ]
+  },
+  "dated_records": {
+    "research/gen2/history": "an archived protocol names its own version and pool; that is what it is for",
+    "research/gen2/review-2026-09-13/review-memo.md": "declares itself not rewritten when later work changes something",
+    "research/gen2/review-2026-09-13/flow-recorded.json": "append-only; records what was recorded on 2026-09-15",
+    "docs/audit-and-repair-plan-2026-09-15.md": "a log of one inspection; its counts describe that day",
+    "research/gen2/prior-proposals.json": "a prior-exposure ledger dated before the search"
+  }
+}
