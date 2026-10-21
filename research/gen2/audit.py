@@ -36,6 +36,7 @@ the evidence, and this file says so rather than implying its coverage is complet
 
 from __future__ import annotations
 
+import importlib.util
 import json
 import re
 import subprocess
@@ -485,24 +486,56 @@ def c6_state_words() -> list[dict]:
 
 
 def c7_execution_evidence() -> list[dict]:
-    """The only execution evidence in the repository, and what it covers."""
-    rows = [json.loads(line) for line in (REPO / "results/rows.jsonl").read_text().splitlines() if line]
-    tracks = sorted({row.get("track") for row in rows})
-    gen2 = [row for row in rows if row.get("prompt_version", "").startswith(("gen2", "profiles"))]
-    if gen2:
-        return []
-    return [
-        finding(
-            "C7 execution evidence",
-            "results/rows.jsonl",
-            f"{len(rows)} rows, tracks {tracks}",
-            "research/gen2/catalog/operational.json measurements",
-            "M06, M07, M08 proposed",
-            "generation 2 has generated no note and measured nothing; no tracked file "
-            "states this in one place, which is the defect every other check above is "
-            "a symptom of",
+    """Whether one file states what has been run, and whether it is current.
+
+    Until 2026-10-21 nothing did, and this check reported that absence: the defect
+    every other check above is a symptom of. research/gen2/state.py now derives it
+    from results/rows.jsonl, the protocol, the catalog and the panel directory, so
+    the check becomes whether that file exists, is what a fresh run produces, and
+    answers the question. A state file that has gone stale is worse than none,
+    because five documents disagreeing at least look like five.
+    """
+    spec = importlib.util.spec_from_file_location("gen2_state", GEN2 / "state.py")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules["gen2_state"] = module
+    spec.loader.exec_module(module)
+
+    path = GEN2 / "state.json"
+    if not path.is_file():
+        return [
+            finding(
+                "C7 execution evidence",
+                "research/gen2/state.json",
+                "absent",
+                "research/gen2/state.py",
+                "would derive it",
+                "no file states what has been run",
+            )
+        ]
+    out = []
+    recorded = json.loads(path.read_text(encoding="utf-8"))
+    if recorded != module.build():
+        out.append(
+            finding(
+                "C7 execution evidence",
+                "research/gen2/state.json",
+                "stale",
+                "research/gen2/state.py",
+                "a fresh build differs",
+                "run research/gen2/state.py --write",
+            )
         )
-    ]
+    if "measured" not in recorded.get("generations", {}).get("generation_2", {}):
+        out.append(
+            finding(
+                "C7 execution evidence",
+                "research/gen2/state.json",
+                "says nothing about whether generation 2 has run",
+                "results/rows.jsonl",
+                "the question it exists to answer",
+            )
+        )
+    return out
 
 
 CHECKS = (

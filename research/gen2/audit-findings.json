@@ -9,23 +9,11 @@
     "research/gen2/audit-findings.json": "its report, which quotes what it found"
   },
   "counts": {
-    "live": 1,
+    "live": 0,
     "in_dated_records": 9,
-    "by_check": {
-      "C7 execution evidence": 1
-    }
+    "by_check": {}
   },
-  "live": [
-    {
-      "check": "C7 execution evidence",
-      "path": "results/rows.jsonl",
-      "says": "2357 rows, tracks ['icare', 'pdsqi-soap', 'tneval-soap']",
-      "holder": "research/gen2/catalog/operational.json measurements",
-      "holds": "M06, M07, M08 proposed",
-      "note": "generation 2 has generated no note and measured nothing; no tracked file states this in one place, which is the defect every other check above is a symptom of",
-      "dated_record": null
-    }
-  ],
+  "live": [],
   "in_dated_records": [
     {
       "check": "C1 pool size",

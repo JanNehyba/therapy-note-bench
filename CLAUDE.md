@@ -24,8 +24,26 @@ jargon, and prove things in small verified steps rather than large ones.
 - What the review proposed, entry by entry, with the page and the draft registry
   generated from it: `research/gen2/catalog/catalog.json` (`catalog/README.md`)
 - Roadmap and phase status: `README.md`
+- **What has been run and what has not: `research/gen2/state.json`** — derived by
+  `state.py` from `results/rows.jsonl`, the protocol, the catalog and the panel's
+  registration. Read it before writing any sentence about the state of the work.
+  Nothing else in this repository is allowed to be the answer to that question:
+  until 2026-10-21 nothing was, and five documents each said part of it in their
+  own words and went stale apart from one another.
+- Whether any of those documents has gone stale: `research/gen2/audit.py` — it
+  re-derives every claim from the file that holds it and the suite fails on a live
+  finding. It found 42 on 2026-10-21.
 
 ## Where We Are
+
+**Generation 1 is measured. Generation 2 has generated no note and measured
+nothing**: its operational rules are a proposal, its content-validity panel has
+not been sent its sheet, and a sentence in the present tense about one of its
+measurements describes a plan. `research/gen2/state.json` is the file that says
+so; this section is not, and the two generations are kept apart below because
+mixing them is how a Gen-2 plan gets read as a Gen-1 result.
+
+### Generation 1
 
 Phases 0 to 5 are done. 18 models have written notes on both tracks — 50 AnnoMI
 conversations for TN-Eval SOAP, 40 iHOPE sessions for iCARE — and both tracks

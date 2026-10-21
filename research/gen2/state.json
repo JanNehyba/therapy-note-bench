@@ -1,0 +1,110 @@
+{
+  "version": "state-v1",
+  "marker": "AUTHORED-INVESTIGATOR-TEXT",
+  "generated_by": "research/gen2/state.py",
+  "what_this_is": "What has been run and what has not, recomputed from the files that would know. Nothing here is maintained by hand: a figure that goes stale in this file is a figure that was never read from its source.",
+  "why_it_exists": "No tracked file said what the state of the project was, so several said part of it in their own words and went stale apart from one another. The audit of 2026-09-15 prescribed this file and it was not built; the audit of 2026-10-21 found 42 claims that had gone false, every one of them a symptom of its absence.",
+  "what_it_does_not_say": "Whether an instrument is valid, whether a measurement would be any good, and whether anybody outside this project has agreed to anything. It reports what has happened, not what it is worth.",
+  "sources": {
+    "generated_and_scored": "results/rows.jsonl",
+    "protocol": "research/gen2/protocol.json and research/gen2/history/",
+    "catalog": "research/gen2/catalog/catalog.json",
+    "operational": "research/gen2/catalog/operational.json",
+    "panel": "research/gen2/protocol.json content_validity"
+  },
+  "generations": {
+    "rows_in_total": 2357,
+    "generation_1": {
+      "measured": true,
+      "tracks": {
+        "icare": 905,
+        "pdsqi-soap": 194,
+        "tneval-soap": 1258
+      },
+      "prompt_versions": {
+        "icare-zeroshot-v1": 905,
+        "tneval-soap-v1": 1452
+      },
+      "judges": [
+        "gemini-2.5-pro",
+        "gemini-3.1-pro-preview",
+        "gpt-5.6-terra"
+      ],
+      "harness_versions": [
+        "0.1.0",
+        "0.2.0",
+        "0.3.0",
+        "0.4.0",
+        "0.5.0",
+        "0.6.0",
+        "0.7.0"
+      ]
+    },
+    "generation_2": {
+      "measured": false,
+      "rows": 0,
+      "what_that_means": "No note has been written and nothing has been scored for generation 2. Its operational rules are a proposal; a sentence in the present tense about one of its measurements describes a plan, not a result."
+    }
+  },
+  "protocol": {
+    "version": "2.9.0",
+    "recorded_date": "2026-10-14",
+    "supersedes": "2.8.0",
+    "archived": [
+      "1.0.0",
+      "2.0.0",
+      "2.1.0",
+      "2.2.0",
+      "2.3.0",
+      "2.4.0",
+      "2.5.0",
+      "2.6.0",
+      "2.7.0",
+      "2.8.0"
+    ],
+    "status": "protocol_amended_before_pilot_search_partially_executed",
+    "pilot_status": "not_run",
+    "registration_status": "not_registered"
+  },
+  "catalog": {
+    "candidates": 39,
+    "by_state": {
+      "awaiting_raters": 1,
+      "lacking_evidence": 1,
+      "not_measured": 6,
+      "not_yet_operationalized": 10,
+      "out_of_scope": 5,
+      "proposed": 16
+    },
+    "by_unit_of_analysis": {
+      "case_series": 1,
+      "model_over_cases": 2,
+      "note": 36
+    },
+    "with_a_rule_in_this_round": 12,
+    "with_a_rule_written_for_a_later_round": 7,
+    "pilot_entries": 13,
+    "purposes_declared": [
+      "continuity",
+      "supervision",
+      "client",
+      "audit"
+    ],
+    "purposes_this_round_serves": [
+      "continuity",
+      "audit"
+    ],
+    "purposes_out_of_scope": [
+      "supervision",
+      "client"
+    ],
+    "scope_decided_by": "D8, 2026-09-16",
+    "catalog_status": "AI-authored proposals from the scoping search of 2026-09-13, translated to English by the coding assistant on 2026-09-16. No human acceptance decision exists for any entry; the executable registry is derived from this catalog only as a draft that the core refuses to freeze until humans review it."
+  },
+  "panel": {
+    "raters": 3,
+    "registration_status_as_the_protocol_states_it": "registered before any rating exists; no answer has been collected and no sheet has been sent. The pool was 34 items when the rule was registered and is larger now; catalog/catalog.json holds the list the sheet is built from, and the sheet takes its count from that list rather than stating one.",
+    "retention_rule_declared_before_any_answer": true,
+    "note": "Nothing here is read from local/panel/, where the sheets are built. That directory is gitignored, so what it holds differs between machines and a state file that reported it would not be the same file twice. Whether a sheet has been sent and whether an answer exists are quoted from the protocol's own registration above, which is tracked and is the one place to correct if it is wrong."
+  }
+}
