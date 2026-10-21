@@ -1,6 +1,6 @@
 """Draw the pilot's two English conversations and the translator check's sample.
 
-Protocol 2.2.0 freezes the pilot over two public AnnoMI conversations and their
+Protocol 2.2.0 froze the pilot over two public AnnoMI conversations and their
 Czech translations. Which two would otherwise be chosen by whoever ran the
 first translation, so the choice is made here by a rule with a seed, written
 to a tracked record, and re-derived by the test suite on any machine that has

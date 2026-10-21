@@ -45,7 +45,7 @@
         "build_doc.py"
       ]
     },
-    "note": "panel_sheet.py of 2026-10-07 is the only generator that covers all 36 candidates, so it wins the name wherever it has one"
+    "note": "panel_sheet.py of 2026-10-07 is the only generator that covers every candidate, so it wins the name wherever it has one"
   },
   "statement_and_question_are_not_variants": "A statement is what a panel marks agreement with, and none of the 36 ends in a question mark; a question is what a reader of the table is asked, and 33 of the 34 do. They came from different generators for different sheets and are kept apart: the panel sheet must not be built from the questions.",
   "coverage": {
@@ -1957,7 +1957,7 @@
       ]
     }
   },
-  "groupings_note": "our_groups and upheal_dimensions are claims about the criteria, not translations: the first is this project's grouping of the ones proposed for measurement, the second maps a candidate onto a prior commercial taxonomy. Both predate the criteria that arrived later and neither covers every candidate; the gap is left open rather than guessed. Neither count is stated here: the validator counts the members of each grouping, and a figure typed beside a list it counts is how this file came to claim 36 candidates while holding 39.",
+  "groupings_note": "our_groups and upheal_dimensions are claims about the criteria, not translations: the first is this project's grouping of the ones proposed for measurement, the second maps a candidate onto a prior commercial taxonomy. Both predate the criteria that arrived later and neither covers every candidate; the gap is left open rather than guessed. Neither count is stated here: the validator counts the members of each grouping, and a figure typed beside a list it counts is how this file came to claim a smaller pool than the one it holds.",
   "authored_here": "read on 2026-10-14 and written here",
   "authored_here_candidates": [
     "K37",

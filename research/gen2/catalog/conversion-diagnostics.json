@@ -3,7 +3,7 @@
   "catalog_version": "catalog-v2",
   "catalog_date": "2026-09-16",
   "protocol_version": "2.9.0",
-  "protocol_revision": "434973026f32394240526fcaa5c1778c49468368478ccd2bcf30071ea467cc78",
+  "protocol_revision": "01b823087c6ac8605eaad7c20647718dce5e620b29d589ef86e213ed82cf9b42",
   "rule": "Every source, evidence line and candidate maps to a registry record with no human decision. The operational specification, where present, becomes method specs and development items with no decision on them; nothing becomes a review, a pilot status or a reviewed item, and each pilot entry without operational rules is listed here with its reason.",
   "mapped": {
     "sources": 46,
@@ -24,10 +24,6 @@
     ],
     "status": "development items and proposed scope; selection, pilot status and every language variant are human decisions the sheet puts to the reviewer",
     "not_operationalised": [
-      {
-        "entry": "P09",
-        "why": "a deterministic requirements check, specified with the Czech task template, not a rated method"
-      },
       {
         "entry": "P10",
         "why": "human-use outcome asked of the raters in the pilot protocol, not a note measurement"

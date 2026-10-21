@@ -26,7 +26,7 @@
     "not_a_text_property_is_a_judgement": "a separate, smaller list of terms this review takes to be about a pipeline or a measurement rather than a text. The terms are kept and flagged rather than dropped, so the judgement can be reversed by whoever disagrees."
   },
   "limitations": "An abstract names a taxonomy far more often than it lists one, so a scheme whose categories live in a table contributes its name and not its contents. Recall is low and this is a floor, not a census. Nothing here is read: a term is a place to look, not a property with a definition.",
-  "what_this_does_not_do": "It maps nothing onto the catalog. Which of these the 36 candidates already cover is a judgement, made in a separate step and recorded there, because a mapping done here would hide the step where a new property could be talked away.",
+  "what_this_does_not_do": "It maps nothing onto the catalog. Which of these the candidates already cover is a judgement, made in a separate step and recorded there, because a mapping done here would hide the step where a new property could be talked away.",
   "terms": [
     {
       "term": "grammatical",

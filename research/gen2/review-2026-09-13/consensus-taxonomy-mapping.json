@@ -147,7 +147,7 @@
     {
       "observation": "orthogonal dimensions rather than more categories",
       "quote": "any of the primary error categories can additionally be annotated with them, i.e. they necessarily result in duplication in the taxonomy if included there",
-      "what_it_means_here": "Their test for a dimension is whether putting it in the hierarchy would duplicate it. By that test some of this catalog's 36 are dimensions and not criteria: severity, and the disclosure level of a sensitive detail, apply to many criteria at once. Worth checking before the panel rates 36 items as if they were one kind of thing."
+      "what_it_means_here": "Their test for a dimension is whether putting it in the hierarchy would duplicate it. By that test some of this catalog's criteria are dimensions and not criteria: severity, and the disclosure level of a sensitive detail, apply to many criteria at once. Worth checking before the panel rates the pool as if they were one kind of thing."
     }
   ],
   "what_is_still_unread": "Sixteen of the seventeen fetched papers, and 47 of the 64 in the frame. This is the first taxonomy read, chosen because it merges fifteen schemes rather than proposing one."

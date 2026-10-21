@@ -28,7 +28,7 @@ produced a construct the review had buried inside a source property that named
 several concepts at once. The framework
 is nevertheless reported from the sources upwards, because that is the part a
 reader can check: for every source read in full we list every property of note
-quality the source itself defines, and 35 of the 36 candidates are anchored in
+quality the source itself defines, and all but one of the candidates are anchored in
 at least one such property. The prior map is reported as the comparison the
 framework was tested against rather than as its derivation, and the one
 candidate no source defines is named. What the procedure requires besides is
@@ -119,9 +119,11 @@ prioritised evidence map, not a scoping review.
 
 ## Sources and evidence
 
-Twenty-seven reports were sought as catalog sources and all twenty-seven have
-been retrieved. Nineteen of them were sought from the start and the 2008
-preliminary PDQI paper came last, on 2026-10-07; the other eight joined that
+Thirty-three reports were sought as catalog sources and all thirty-three have
+been retrieved. The round of 2026-10-07 attempted thirty, retrieved nine, read
+nine in full and seven became sources; the 2008 preliminary PDQI paper came in
+that round. Which of the earlier reports was sought when is not derivable from
+any artefact and is therefore not stated. The round joined that
 day, when SESPI was read in full and the Scopus searches brought seven further
 papers that the assistant read the same day. Twenty-six have been read in full
 text. The 2008 paper has not, so the
@@ -146,10 +148,10 @@ derivation we report runs the other way. For every source read in full we
 listed every property of note quality the source itself defines or measures, in
 the source's own words and with its location, without reference to the catalog,
 and mapped each to a candidate afterwards (`source-properties.json`). The table
-holds 169 properties from 33 sources. 155 map to a candidate; the fourteen
+holds 186 properties from 40 sources. 168 map to a candidate; the eighteen
 that do not are rating formats, findings about measurement, reliability
 figures, or properties of the encounter the note reports rather than of the
-note. Thirty-five of the 36 candidates rest on at least one source property. The one that does not is K06, a note that says what
+note. Thirty-eight of the thirty-nine candidates rest on at least one source property. The one that does not is K06, a note that says what
 it could not record rather than leaving the gap silent; no source defines it
 and it stands on the observation this project declares as its origin, which is
 that models write a denial of information nobody asked for and score full
@@ -167,9 +169,9 @@ which the next section describes.
 
 The Scopus screening of 2026-10-07 proposed fifty-five candidates for
 retrieval. Thirty sit in the three layers that could change the list of
-criteria, nine of those were retrieved and nine were read; six became sources.
-None of the six adds a candidate, and the pool is 36 for that reason rather
-than by assumption. What they add is support for four claims that had rested on
+criteria, nine of those were retrieved and nine were read; seven became sources.
+None of the seven adds a candidate, and the pool did not grow for that reason
+rather than by assumption. What they add is support for four claims that had rested on
 argument.
 
 Relevance to the recipient was an argument and is now a measurement. One study
@@ -252,11 +254,11 @@ sheet is sent and not afterwards.
 
 ## The construct framework
 
-The catalog holds 36 candidates. By origin, 21 came from the literature, 11
+The catalog holds 39 candidates. By origin, 24 came from the literature, 11
 existed in the project before the search, 3 are named expert proposals and 1
 arose from observation; origin never changes when support is found later, which
 is recorded as evidence instead. Origin and support are reported separately,
-because they answer different questions: all 17 constructs proposed for
+because they answer different questions: all 16 constructs proposed for
 measurement in this round rest on at least one source read in full, and the one
 candidate with no such support is not measured. One candidate was found late:
 a property of a source can enumerate several concepts, and until 2026-10-05
@@ -266,12 +268,12 @@ validator refuses such a gap when a mapping note admits it, and two further
 concepts the notes had set aside in prose are recorded as open. Against the prior map, 8 criteria were kept, 12
 revised on what the sources say, 6 merged where they had counted one finding
 twice, and 11 added. Every candidate carries one of seven states that say why
-it is or is not measured in this round: 16 are proposed for measurement, 7 lack
-an operational rule, 4 cannot be measured on the present data, 5 are out of
+it is or is not measured in this round: 16 are proposed for measurement, 10 lack
+an operational rule, 6 cannot be measured on the present data, 5 are out of
 scope by decision, 1 awaits a rater the pilot does not have, and 1 lacks
 evidence. Each also records what would make an answer to it correct, because
 that is what decides whether its number can rank a system at all: of the 16
-measured, 10 are decided by the transcript, 1 by a written template, 3 by a
+proposed, 10 are decided by the transcript, 1 by a written template, 3 by a
 professional's verdict whose only evidence of validity is agreement between
 raters, and 2 describe rather than grade and carry no target value. Candidates also carry a record kind, because a content topic, a
 specification criterion and a practical outcome are not interchangeable
@@ -325,10 +327,11 @@ round uses, the three rubric items and their Czech wording were drafted by the
 assistant and accepted by the investigator by delegation on 2026-09-21
 (decision D10), not reviewed item by item; the feasibility pilot is their
 first test, and the translator was chosen the same way from the recorded
-back-translation check. The current pilot proposal holds 14
-entries that are deliberately not 14 comparable measures: 8 executable
-measures, 2 human-use outcomes, 1 requirements check, 1 study condition on
-rater training, 1 corpus-level proxy and 1 derived ratio. The protocol records
+back-translation check. The current pilot proposal holds 13
+entries that are deliberately not comparable measures of one kind: 8 executable
+measures, 2 human-use outcomes, 1 study condition on rater training, 1
+corpus-level proxy and 1 derived ratio. A fourteenth, a requirements check, was
+removed with K19 on 2026-10-05. The protocol records
 the executable count at freeze rather than capping it. The registry refuses to
 freeze while any used subject lacks an accepted decision.
 

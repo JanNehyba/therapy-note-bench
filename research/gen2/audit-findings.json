@@ -9,241 +9,13 @@
     "research/gen2/audit-findings.json": "its report, which quotes what it found"
   },
   "counts": {
-    "live": 26,
-    "in_dated_records": 8,
+    "live": 1,
+    "in_dated_records": 9,
     "by_check": {
-      "C1 pool size": 21,
-      "C2 protocol version": 1,
-      "C3 pilot entries": 3,
       "C7 execution evidence": 1
     }
   },
   "live": [
-    {
-      "check": "C1 pool size",
-      "path": "docs/gen2-catalog.html:62",
-      "says": 32,
-      "holder": "research/gen2/catalog/catalog.json candidates",
-      "holds": 39,
-      "note": "<p class=\"notice\">AI-authored proposals from the scoping search of 2026-09-13, translated to English by the coding assistant on 2026-09-16. ",
-      "dated_record": null
-    },
-    {
-      "check": "C1 pool size",
-      "path": "paper/methods.md:31",
-      "says": 35,
-      "holder": "research/gen2/catalog/catalog.json candidates",
-      "holds": 39,
-      "note": "quality the source itself defines, and 35 of the 36 candidates are anchored in",
-      "dated_record": null
-    },
-    {
-      "check": "C1 pool size",
-      "path": "paper/methods.md:152",
-      "says": 36,
-      "holder": "research/gen2/catalog/catalog.json candidates",
-      "holds": 39,
-      "note": "note. Thirty-five of the 36 candidates rest on at least one source property. The one that does not is K06, a note that says what",
-      "dated_record": null
-    },
-    {
-      "check": "C1 pool size",
-      "path": "paper/methods.md:171",
-      "says": 36,
-      "holder": "research/gen2/catalog/catalog.json candidates",
-      "holds": 39,
-      "note": "None of the six adds a candidate, and the pool is 36 for that reason rather",
-      "dated_record": null
-    },
-    {
-      "check": "C1 pool size",
-      "path": "paper/methods.md:255",
-      "says": 36,
-      "holder": "research/gen2/catalog/catalog.json candidates",
-      "holds": 39,
-      "note": "The catalog holds 36 candidates. By origin, 21 came from the literature, 11",
-      "dated_record": null
-    },
-    {
-      "check": "C1 pool size",
-      "path": "research/gen2/catalog/catalog.json:3883",
-      "says": 32,
-      "holder": "research/gen2/catalog/catalog.json candidates",
-      "holds": 39,
-      "note": "\"the source-first extraction becomes the reported derivation and the prior map the comparison; 32 of 33 candidates are anchored in a propert",
-      "dated_record": null
-    },
-    {
-      "check": "C1 pool size",
-      "path": "research/gen2/catalog/catalog.json:4023",
-      "says": 35,
-      "holder": "research/gen2/catalog/catalog.json candidates",
-      "holds": 39,
-      "note": "\"convergence\": \"35 of the 36 candidates are anchored in at least one such property. The exception is K06, acknowledged information gap, whic",
-      "dated_record": null
-    },
-    {
-      "check": "C1 pool size",
-      "path": "research/gen2/catalog/czech.json:48",
-      "says": 36,
-      "holder": "research/gen2/catalog/catalog.json candidates",
-      "holds": 39,
-      "note": "\"note\": \"panel_sheet.py of 2026-10-07 is the only generator that covers all 36 candidates, so it wins the name wherever it has one\"",
-      "dated_record": null
-    },
-    {
-      "check": "C1 pool size",
-      "path": "research/gen2/catalog/czech.json:1960",
-      "says": 36,
-      "holder": "research/gen2/catalog/catalog.json candidates",
-      "holds": 39,
-      "note": "\"groupings_note\": \"our_groups and upheal_dimensions are claims about the criteria, not translations: the first is this project's grouping of",
-      "dated_record": null
-    },
-    {
-      "check": "C1 pool size",
-      "path": "research/gen2/protocol.json:86",
-      "says": 34,
-      "holder": "research/gen2/catalog/catalog.json candidates",
-      "holds": 39,
-      "note": "\"content_validity_panel\": \"three therapists, neither the author nor the assistant, rating the 34 candidates for relevance against the thresh",
-      "dated_record": null
-    },
-    {
-      "check": "C1 pool size",
-      "path": "research/gen2/protocol.json:489",
-      "says": 36,
-      "holder": "research/gen2/catalog/catalog.json candidates",
-      "holds": 39,
-      "note": "\"K06 stays in the rated pool of 36\",",
-      "dated_record": null
-    },
-    {
-      "check": "C1 pool size",
-      "path": "research/gen2/protocol.json:525",
-      "says": 34,
-      "holder": "research/gen2/catalog/catalog.json candidates",
-      "holds": 39,
-      "note": "\"status\": \"registered before any rating exists; no answer has been collected and no sheet has been sent. The pool was 34 items when the rule",
-      "dated_record": null
-    },
-    {
-      "check": "C1 pool size",
-      "path": "research/gen2/protocol.json:545",
-      "says": 36,
-      "holder": "research/gen2/catalog/catalog.json candidates",
-      "holds": 39,
-      "note": "\"items\": \"all 36 candidates of the catalog, including those the round does not measure, the one the investigator dropped on 2026-10-05, and ",
-      "dated_record": null
-    },
-    {
-      "check": "C1 pool size",
-      "path": "research/gen2/review-2026-09-13/amendments.json:99",
-      "says": 36,
-      "holder": "research/gen2/catalog/catalog.json candidates",
-      "holds": 39,
-      "note": "\"what_does_not_change\": \"Nothing about the pool as it stands. The existing 12042 records, 687 priority records and 36 candidates are untouch",
-      "dated_record": null
-    },
-    {
-      "check": "C1 pool size",
-      "path": "research/gen2/review-2026-09-13/category-names.json:7",
-      "says": 36,
-      "holder": "research/gen2/catalog/catalog.json candidates",
-      "holds": 39,
-      "note": "\"no_mapping_here\": \"Which of these the 36 candidates already cover is a judgement, made and recorded in a separate step. A mapping done insi",
-      "dated_record": null
-    },
-    {
-      "check": "C1 pool size",
-      "path": "research/gen2/review-2026-09-13/extract_categories.py:215",
-      "says": 36,
-      "holder": "research/gen2/catalog/catalog.json candidates",
-      "holds": 39,
-      "note": "\"Which of these the 36 candidates already cover is a judgement, made and recorded \"",
-      "dated_record": null
-    },
-    {
-      "check": "C1 pool size",
-      "path": "research/gen2/review-2026-09-13/inductive-properties.json:29",
-      "says": 36,
-      "holder": "research/gen2/catalog/catalog.json candidates",
-      "holds": 39,
-      "note": "\"what_this_does_not_do\": \"It maps nothing onto the catalog. Which of these the 36 candidates already cover is a judgement, made in a separat",
-      "dated_record": null
-    },
-    {
-      "check": "C1 pool size",
-      "path": "research/gen2/review-2026-09-13/inductive_properties.py:29",
-      "says": 36,
-      "holder": "research/gen2/catalog/catalog.json candidates",
-      "holds": 39,
-      "note": "36 candidates exist. It writes the ranked vocabulary and stops; comparing it",
-      "dated_record": null
-    },
-    {
-      "check": "C1 pool size",
-      "path": "research/gen2/review-2026-09-13/inductive_properties.py:568",
-      "says": 36,
-      "holder": "research/gen2/catalog/catalog.json candidates",
-      "holds": 39,
-      "note": "\"It maps nothing onto the catalog. Which of these the 36 candidates already cover \"",
-      "dated_record": null
-    },
-    {
-      "check": "C1 pool size",
-      "path": "research/gen2/review-2026-09-13/small-language-schemes.json:91",
-      "says": 36,
-      "holder": "research/gen2/catalog/catalog.json candidates",
-      "holds": 39,
-      "note": "\"what_it_means_here\": \"Nobody on this project proposed word order, and it is a category in both schemes built for an inflected language. In ",
-      "dated_record": null
-    },
-    {
-      "check": "C1 pool size",
-      "path": "research/gen2/review-2026-09-13/small_language_schemes.py:114",
-      "says": 36,
-      "holder": "research/gen2/catalog/catalog.json candidates",
-      "holds": 39,
-      "note": "\"grammatical and still say the wrong thing by its order. None of the 36 candidates \"",
-      "dated_record": null
-    },
-    {
-      "check": "C2 protocol version",
-      "path": "research/gen2/translation/draw_pilot_cases.py:3",
-      "says": "2.2.0",
-      "holder": "research/gen2/protocol.json version",
-      "holds": "2.9.0",
-      "note": "Protocol 2.2.0 freezes the pilot over two public AnnoMI conversations and their",
-      "dated_record": null
-    },
-    {
-      "check": "C3 pilot entries",
-      "path": "research/gen2/catalog/catalog.json pilot_proposal.count_note",
-      "says": 14,
-      "holder": "research/gen2/catalog/catalog.json pilot_proposal.entries",
-      "holds": 13,
-      "note": "the note counts the list it sits on",
-      "dated_record": null
-    },
-    {
-      "check": "C3 pilot entries",
-      "path": "research/gen2/catalog/catalog.json pilot_proposal.count_note",
-      "says": "P09",
-      "holder": "research/gen2/catalog/catalog.json pilot_proposal.entries",
-      "holds": "absent",
-      "note": "P09 is described as an entry and is not one",
-      "dated_record": null
-    },
-    {
-      "check": "C3 pilot entries",
-      "path": "research/gen2/protocol.json selection...catalog_entries",
-      "says": 14,
-      "holder": "research/gen2/catalog/catalog.json pilot_proposal.entries",
-      "holds": 13,
-      "note": "",
-      "dated_record": null
-    },
     {
       "check": "C7 execution evidence",
       "path": "results/rows.jsonl",
@@ -317,6 +89,15 @@
       "holds": 39,
       "note": "\"items\": \"all 36 candidates of the catalog, including those the round does not measure, the one the investigator dropped on 2026-10-05, and ",
       "dated_record": "an archived protocol names its own version and pool; that is what it is for"
+    },
+    {
+      "check": "C1 pool size",
+      "path": "research/gen2/protocol.json:525",
+      "says": 34,
+      "holder": "research/gen2/catalog/catalog.json candidates",
+      "holds": 39,
+      "note": "\"status\": \"registered before any rating exists; no answer has been collected and no sheet has been sent. The pool was 34 items when the rule",
+      "dated_record": "the sentence dates the value: 'The pool was 34 items'"
     },
     {
       "check": "C2 protocol version",

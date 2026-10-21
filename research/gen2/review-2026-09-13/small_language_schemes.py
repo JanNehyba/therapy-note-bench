@@ -111,7 +111,7 @@ CATEGORIES = [
         "what_it_means_here": "Nobody on this project proposed word order, and it is a "
         "category in both schemes built for an inflected language. In Czech word order carries "
         "emphasis and given/new structure rather than grammatical role, so a note can be "
-        "grammatical and still say the wrong thing by its order. None of the 36 candidates "
+        "grammatical and still say the wrong thing by its order. None of the candidates "
         "asks about it.",
     },
     {

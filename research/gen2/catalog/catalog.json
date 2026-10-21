@@ -3556,7 +3556,7 @@
         "reason": "Dropped from the round by the investigator on 2026-10-05; P09, the deterministic check against the decree, is removed with it."
       }
     ],
-    "count_note": "There are 14 entries. The brief of 2026-09-13 asked for 8-12; that was a number from the brief, not a result of the review, and protocol 2.1.0 replaces it with a record-not-cap rule (decision D3): every supported measurement is carried, what the human budget cannot cover is reported as not measured, and the executable count is recorded at freeze. The entries are not 14 comparable measures: P12 is a study condition, P09 a requirements check, P10 and P11 human-use outcomes, P13 a corpus-level proxy and P14 a derived ratio (audit A08). Every candidate carries a state (audit A07); K07 and K10 are measured inside P01 and no longer listed as left out."
+    "count_note": "The brief of 2026-09-13 asked for 8-12; that was a number from the brief, not a result of the review, and protocol 2.1.0 replaces it with a record-not-cap rule (decision D3): every supported measurement is carried, what the human budget cannot cover is reported as not measured, and the executable count is recorded at freeze. The entries are not comparable measures of one kind: P12 is a study condition, P10 and P11 human-use outcomes, P13 a corpus-level proxy and P14 a derived ratio (audit A08). Every candidate carries a state (audit A07); K07 and K10 are measured inside P01 and no longer listed as left out."
   },
   "comparison": [
     {
@@ -3880,7 +3880,7 @@
       "date": "2026-09-22",
       "reason": "the framework is reported from the sources upwards, after the investigator asked whether a purely inductive derivation would reach the same place",
       "changes": [
-        "the source-first extraction becomes the reported derivation and the prior map the comparison; 32 of 33 candidates are anchored in a property a source itself defines",
+        "the source-first extraction becomes the reported derivation and the prior map the comparison; all but one candidate are anchored in a property a source itself defines",
         "K06 is named as the single candidate no source defines, standing on its declared origin in this project's own observation",
         "the extraction records that it was not blind to the catalog and is not a replication"
       ]
@@ -4020,7 +4020,7 @@
     "reporting": "COSMIN's content-validity criteria (S11) name relevance, comprehensiveness and comprehensibility as what such a judgement has to cover; this round reports which of them nobody has assessed.",
     "derivation": {
       "reported_from": "the source-first extraction (source-properties.json): every property of note quality each source read in full defines, in the source's own words",
-      "convergence": "35 of the 36 candidates are anchored in at least one such property. The exception is K06, acknowledged information gap, which no source defines as a property of a note and which stands on the observation this project declares as its origin. Two of the 35, K35 and K36, were anchored on 2026-10-07 when SESPI was read in full; until then its abstract row was mapped to two candidates that are not what it measures.",
+      "convergence": "All but one of the candidates are anchored in at least one such property. The exception is K06, acknowledged information gap, which no source defines as a property of a note and which stands on the observation this project declares as its origin. Two of the 35, K35 and K36, were anchored on 2026-10-07 when SESPI was read in full; until then its abstract row was mapped to two candidates that are not what it measures.",
       "prior_map_role": "the 26-criterion map recorded on 2026-09-12, before the search, is reported as the comparison the framework was tested against, not as its derivation: 8 criteria kept, 12 revised on what the sources say, 6 merged and 11 added.",
       "caveat": "The extraction was written by the assistant that had already written the catalog, source by source and without the catalog open, with the mapping done afterwards. It is not a blind replication and is not reported as one."
     }

@@ -190,8 +190,8 @@ decisions also name exact target constructs. Amended responses retain their pare
 
 The first round carries **every measurement the review supported** (decision D3):
 the executable count is recorded at freeze, never capped, and what the human budget
-cannot cover is reported as not measured. The fourteen catalog entries are not
-fourteen comparable measures: a training condition, a requirements check, two
+cannot cover is reported as not measured. The catalog entries are not
+comparable measures of one kind: a training condition, two
 human-use outcomes, a corpus-level proxy and a derived ratio sit among them, and the
 protocol keeps catalog entries, executable measures and study conditions as distinct
 records. Retain the larger candidate registry and clinically important unresolved

@@ -63,7 +63,7 @@ and read is looked up there and not restated here.
   refinement for one purpose, a content topic, an expert proposal, a specification
   criterion or a practical outcome. A pilot entry is an executable measure, a
   requirements check, a human-use outcome, a study condition, a corpus-level proxy
-  or a derived ratio. The fourteen pilot entries are therefore not fourteen
+  or a derived ratio. The pilot entries are therefore not
   comparable measurements, and the protocol records the executable count instead
   of capping it.
 - **Families from importance.** Families organise the catalog; they are not

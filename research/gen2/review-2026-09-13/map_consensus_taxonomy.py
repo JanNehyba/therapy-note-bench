@@ -210,9 +210,9 @@ STRUCTURAL = [
         "them, i.e. they necessarily result in duplication in the taxonomy if included there",
         "what_it_means_here": (
             "Their test for a dimension is whether putting it in the hierarchy would duplicate "
-            "it. By that test some of this catalog's 36 are dimensions and not criteria: "
+            "it. By that test some of this catalog's criteria are dimensions and not criteria: "
             "severity, and the disclosure level of a sensitive detail, apply to many criteria "
-            "at once. Worth checking before the panel rates 36 items as if they were one kind "
+            "at once. Worth checking before the panel rates the pool as if they were one kind "
             "of thing."
         ),
     },

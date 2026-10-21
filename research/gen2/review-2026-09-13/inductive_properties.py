@@ -26,7 +26,7 @@ How the bias is kept out, which is the whole point:
    "errors of", so the corpus supplies the vocabulary.
 
 4. **Mapping happens afterwards and elsewhere.** This script does not know the
-   36 candidates exist. It writes the ranked vocabulary and stops; comparing it
+   the candidates exist. It writes the ranked vocabulary and stops; comparing it
    with the catalog is a separate step whose judgements are recorded as
    judgements.
 
@@ -565,7 +565,7 @@ def main() -> int:
             "look, not a property with a definition."
         ),
         "what_this_does_not_do": (
-            "It maps nothing onto the catalog. Which of these the 36 candidates already cover "
+            "It maps nothing onto the catalog. Which of these the candidates already cover "
             "is a judgement, made in a separate step and recorded there, because a mapping "
             "done here would hide the step where a new property could be talked away."
         ),

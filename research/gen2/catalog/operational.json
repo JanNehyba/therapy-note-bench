@@ -318,10 +318,6 @@
   ],
   "not_operationalised_here": [
     {
-      "entry": "P09",
-      "why": "a deterministic requirements check, specified with the Czech task template, not a rated method"
-    },
-    {
       "entry": "P10",
       "why": "human-use outcome asked of the raters in the pilot protocol, not a note measurement"
     },

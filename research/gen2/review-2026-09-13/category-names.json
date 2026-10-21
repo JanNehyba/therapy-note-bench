@@ -4,7 +4,7 @@
   "what_this_is": "Category names taken out of the full texts of the taxonomy papers, with no seed list. The patterns describe what a category name looks like and where in a paper one stands; they name no category, no criterion and none of the Czech scorer's six.",
   "why_full_texts": "A taxonomy lives in a table or a numbered list in the body. Two passes over abstracts returned the few property words that happen to appear in prose, and said so: that was a measurement of where taxonomies are printed, not of what is in them.",
   "the_signal_is_document_frequency": "A name one paper invented is a lead. A name several unrelated papers use is the field agreeing that a text has that property, which is what a catalog can be held against. Only names appearing in two or more papers are reported.",
-  "no_mapping_here": "Which of these the 36 candidates already cover is a judgement, made and recorded in a separate step. A mapping done inside this script would let a new property be talked away where nobody could see it.",
+  "no_mapping_here": "Which of these the candidates already cover is a judgement, made and recorded in a separate step. A mapping done inside this script would let a new property be talked away where nobody could see it.",
   "extraction": {
     "a_label_printed_with_a_definition": "(?:(?<=[;\\u2022\\u2013\\u2014])|(?<=\\d\\.)|(?<=\\d\\))|^)\\s*([A-Za-z][A-Za-z/&' -]{3,44}?)\\s*[:\\u2013\\u2014]\\s+(?=[a-z])([^.;:]{18,220})",
     "an_enumerated_item": "(?:(?:\\(|\\[)?\\d{1,2}(?:\\)|\\.|\\])|\\u2022|\\u2013|\\u2014)\\s+([A-Za-z][A-Za-z -]{3,38}?)(?=[,;.:]|\\s+\\()",

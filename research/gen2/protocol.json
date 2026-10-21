@@ -83,7 +83,7 @@
     "independent_second_screening": "planned: a second human screener will be recruited; until that person records decisions on the exact sheets, screening is single-reviewer with AI assistance and is reported as such",
     "evidence_verification": "delegated (D9, 2026-09-21): sources and evidence lines stand on the assistant's reading; constructs were decided by the investigator item by item; the quoted passages of the nine reports the pilot rests on are checked verbatim against the retrieved full texts by the core's extraction import (D11)",
     "operational_rules": "delegated (D10, 2026-09-21): the scope, method specifications, rubric items and Czech wording are the assistant's proposal accepted without item-by-item review",
-    "content_validity_panel": "three therapists, neither the author nor the assistant, rating the 34 candidates for relevance against the threshold registered in content_validity (D13, 2026-10-07)"
+    "content_validity_panel": "three therapists, neither the author nor the assistant, rating every candidate of the catalog for relevance against the threshold registered in content_validity (D13, 2026-10-07)"
   },
   "sequence": [
     "Record the prospective protocol revision and prior exposure before the corresponding research steps",
@@ -121,9 +121,9 @@
         "study_condition": "a design manipulation or human-use outcome of the pilot; planned and reported as a condition, never counted as a measure"
       },
       "supported_at_amendment": {
-        "catalog_entries": 14,
-        "not_comparable_as_measures": "P12 is a training/reliability condition; P09 a requirements check; P10 and P11 human-use outcomes; P13 a corpus-level proxy; P14 a derived ratio (audit A08)",
-        "executable_count": "recorded at freeze, not fixed here"
+        "not_comparable_as_measures": "P12 is a training/reliability condition; P10 and P11 human-use outcomes; P13 a corpus-level proxy; P14 a derived ratio (audit A08)",
+        "executable_count": "recorded at freeze, not fixed here",
+        "catalog_entries_note": "The count is not recorded here. catalog/catalog.json holds the list and the page derives the figure from it; this entry said 14 while the list held 13, because P09 was removed with K19 and nothing re-read the sentence."
       },
       "previous_target": "8-12 in 2.0.0 came from the task brief, not from the review; a feasibility convention, not an error (audit A02); withdrawn by D3"
     }
@@ -486,7 +486,7 @@
       "decision": "K06, acknowledged information gap, stays in the pool and is put to the panel like every other candidate. The investigator proposed removing it, on the ground that it was his own ad hoc addition and complicated the instrument, and withdrew that when the record showed the candidate is not his: its origin is a repeated finding of this project's own code reviews, where a model wrote a denial nobody had asked for and scored full marks. Whether it is kept is now the panel's answer against the threshold registered under D13.",
       "replaces": "nothing; it declines to make a retention decision outside the panel",
       "affects": [
-        "K06 stays in the rated pool of 36",
+        "K06 stays in the rated pool",
         "paper: the one candidate with no source in the literature is named as such"
       ],
       "what_this_records": "The mechanism D13 set up was used as intended, by the person it was set up to constrain. The investigator wanted an item out, the rule said the panel decides, and the item stayed. That is worth a line because the usual failure of a retention rule is that its author exempts himself from it.",
@@ -522,7 +522,7 @@
     }
   ],
   "content_validity": {
-    "status": "registered before any rating exists; no answer has been collected and no sheet has been sent. The pool was 34 items when the rule was registered and is 36 since the same day.",
+    "status": "registered before any rating exists; no answer has been collected and no sheet has been sent. The pool was 34 items when the rule was registered and is larger now; catalog/catalog.json holds the list the sheet is built from, and the sheet takes its count from that list rather than stating one.",
     "registered_on": "2026-10-07",
     "procedure": {
       "named": "expert rating of the item pool for relevance, with a retention threshold declared in advance; a screening round of a modified Delphi",
@@ -542,7 +542,7 @@
       "independence_of_the_ratings": "each rater answers on their own copy and sees no other rater's answers; a shared sheet would make the second and third answer a reaction to the first"
     },
     "what_is_rated": {
-      "items": "all 36 candidates of the catalog, including those the round does not measure, the one the investigator dropped on 2026-10-05, and K35 and K36, which arrived on 2026-10-07 from a source read in full",
+      "items": "every candidate of the catalog, including those the round does not measure, the one the investigator dropped on 2026-10-05, and K35 and K36, which arrived on 2026-10-07 from a source read in full",
       "shown_per_item": "the code, the Czech name and one sentence of definition; no state, no origin, no citation and no indication of what the assistant or the investigator thinks",
       "why_blind_to_state": "a rater told that an item is already measured is being asked to ratify rather than to judge",
       "pool_changes_before_the_panel": "A pool may grow until the first sheet is sent, and two items were added on 2026-10-07. After an answer exists it may not: adding an item then would mean some raters rated it and others did not, and the threshold is a proportion of three. If a property is found after the panel has answered, it waits for a second round and is reported as a later addition."
@@ -584,7 +584,7 @@
       "2_of_3": "retained and marked contested; the dissenting rater's reason is published with the item",
       "1_of_3_or_0": "removed from the measured set; the candidate stays in the catalog with the panel's rating as the reason, which is the same treatment every other unmeasured candidate gets",
       "harm_flag": "an item any rater flags for harm is reported with the flag and is not measured in this round whatever its relevance count",
-      "agreement": "agreement between the three raters is computed and published for the whole pool, by Cohen's kappa as S12 recommends, with the caveat that three raters over 34 items give an imprecise estimate",
+      "agreement": "agreement between the three raters is computed and published for the whole pool, by Cohen's kappa as S12 recommends, with the caveat that three raters over a pool this size give an imprecise estimate",
       "what_the_rule_does_not_do": "it does not decide whether an item is measurable, only whether the panel judges it relevant. A relevant item with no operational rule stays unmeasured for that reason and the two reasons are reported apart."
     },
     "consequences_recorded_in_advance": [

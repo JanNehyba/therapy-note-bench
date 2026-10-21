@@ -58,6 +58,18 @@ DATED_RECORDS = {
     "research/gen2/prior-proposals.json": "a prior-exposure ledger dated before the search",
 }
 
+#: Sentences inside live files that state a past value and are correct as history.
+#:
+#: A count is not a defect when the sentence dates it. The registration of the
+#: panel's rule says the pool was 34 items on the day it was registered, which is
+#: the fact that makes the registration meaningful, and no pattern can tell it
+#: from a stale claim. Each entry is a literal substring verified once by reading,
+#: so the exemption is per sentence rather than per file and can be argued with.
+#: Short enough to survive the 140 characters a finding keeps of its line: the
+#: first version named the whole clause and the truncation cut it in half, so the
+#: exemption never fired.
+DATED_SENTENCES = ("The pool was 34 items",)
+
 #: The classes no script can decide, with what was found by reading and where.
 #: Here so that the output never implies the checker covers everything.
 FOUND_BY_READING = {
@@ -141,6 +153,14 @@ def dated(path: str) -> str | None:
     return None
 
 
+def dated_sentence(note: str) -> str | None:
+    """Whether the line a finding sits on dates the value it states."""
+    for sentence in DATED_SENTENCES:
+        if sentence in note:
+            return f"the sentence dates the value: {sentence!r}"
+    return None
+
+
 def finding(check: str, path: str, says, holder: str, holds, note: str = "") -> dict:
     return {
         "check": check,
@@ -149,7 +169,7 @@ def finding(check: str, path: str, says, holder: str, holds, note: str = "") -> 
         "holder": holder,
         "holds": holds,
         "note": note,
-        "dated_record": dated(path),
+        "dated_record": dated(path) or dated_sentence(note),
     }
 
 
@@ -269,13 +289,16 @@ def c3_pilot() -> list[dict]:
                 )
             )
     protocol = load("research/gen2/protocol.json")
+    # Not stating the count is the repair, not a defect: the protocol said 14
+    # while the list held 13. What it must do instead is say where the count
+    # lives, so a reader is sent to the list rather than left with nothing.
     where = protocol["selection"]["first_round_measurements"]["supported_at_amendment"]
-    if where.get("catalog_entries") != truth:
+    if "catalog_entries" in where and where["catalog_entries"] != truth:
         out.append(
             finding(
                 "C3 pilot entries",
                 "research/gen2/protocol.json selection...catalog_entries",
-                where.get("catalog_entries"),
+                where["catalog_entries"],
                 "research/gen2/catalog/catalog.json pilot_proposal.entries",
                 truth,
             )

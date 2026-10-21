@@ -14,7 +14,7 @@ Still inductive, and the same three rules keep it so:
    paper invented is a lead; a name eight unrelated papers use is the field
    agreeing on a property, which is the thing worth comparing a catalog
    against.
-3. **No mapping.** This writes the names and stops. Which of them the 36
+3. **No mapping.** This writes the names and stops. Which of them the
    candidates already cover is a judgement, and it is made and recorded
    separately so that a new property cannot be talked away inside a script.
 
@@ -212,7 +212,7 @@ def main() -> int:
             "held against. Only names appearing in two or more papers are reported."
         ),
         "no_mapping_here": (
-            "Which of these the 36 candidates already cover is a judgement, made and recorded "
+            "Which of these the candidates already cover is a judgement, made and recorded "
             "in a separate step. A mapping done inside this script would let a new property be "
             "talked away where nobody could see it."
         ),

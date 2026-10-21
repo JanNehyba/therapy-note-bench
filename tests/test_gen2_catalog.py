@@ -675,7 +675,9 @@ def test_a_criterion_without_a_rule_now_has_one_written_and_not_yet_adopted(oper
     assert "120 unique annotation units" in block["why_here"]
 
 
-def test_the_operational_rules_are_bilingual_and_name_only_registry_records(operational, draft):
+def test_the_operational_rules_are_bilingual_and_name_only_registry_records(
+    operational, draft, catalog
+):
     """Every method rule and every item exists in Czech with the same outcome
     keys, names constructs and evidence the draft holds, and covers exactly the
     eight executable pilot entries; the six other entries say why they are not
@@ -690,9 +692,15 @@ def test_the_operational_rules_are_bilingual_and_name_only_registry_records(oper
         assert set(m["cs"]["severity_rules"]) == set(m["severity_rules"])
         covered += m["pilot_entries"]
     assert sorted(covered) == [f"P0{i}" for i in range(1, 9)]
-    assert {e["entry"] for e in operational["not_operationalised_here"]} == {
-        f"P{i:02d}" for i in range(9, 15)
-    }
+    # P09 left this list on 2026-10-21: it was removed from the pilot with K19 on
+    # 2026-10-05, and a list of entries that were not operationalised may not name
+    # one that is not an entry. Derived from the entries rather than written out,
+    # so a removal cannot leave a name behind again.
+    entries = {e["id"] for e in catalog["pilot_proposal"]["entries"]}
+    without_rules = {e["entry"] for e in operational["not_operationalised_here"]}
+    assert without_rules <= entries, "an entry without rules that is not an entry"
+    assert without_rules == entries - set(covered)
+    assert without_rules == {f"P{i:02d}" for i in range(10, 15)}
     for x in operational["measurements"]:
         assert x["construct_id"] in constructs and set(x["sources"]) <= evidence
         assert set(x["cs"]["anchors"]) == set(x["labels"])
