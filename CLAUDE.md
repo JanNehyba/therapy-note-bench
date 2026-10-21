@@ -32,7 +32,9 @@ jargon, and prove things in small verified steps rather than large ones.
   own words and went stale apart from one another.
 - Whether any of those documents has gone stale: `research/gen2/audit.py` — it
   re-derives every claim from the file that holds it and the suite fails on a live
-  finding. It found 42 on 2026-10-21.
+  finding, writing its report to `audit-findings.json`. No count of what it has
+  found is restated here: the 42 that stood here was typed in, no artefact holds
+  it, and three of those findings were not false claims.
 
 ## Where We Are
 
