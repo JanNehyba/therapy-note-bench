@@ -443,6 +443,52 @@ def test_the_source_column_is_a_link_to_the_study(page, catalog):
     assert "&lt;a href=" not in page
 
 
+def _state_audit():
+    """The audit's own test for Czech that asserts a measurement, not a copy of it."""
+    spec = importlib.util.spec_from_file_location(
+        "gen2_state_audit", REPO / "research" / "gen2" / "audit.py"
+    )
+    module = importlib.util.module_from_spec(spec)
+    sys.modules["gen2_state_audit"] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+def test_no_czech_the_page_shows_says_a_criterion_is_being_measured(page, czech, catalog):
+    """The defect the investigator met every day, and it was made in translation.
+
+    The page printed MERI SE, bold and in capitals, on every row whose catalog
+    state is `proposed`, whose English reads "an AI proposal awaiting human
+    selection". Generation 2 has measured nothing, so the Czech reader was told
+    the opposite of the truth by the page's most prominent string while the
+    English reader was told the truth. Two more strings said it again: the legend
+    of the page's own colour coding and the filter buttons.
+
+    The check is the audit's, loaded rather than reimplemented, so the two cannot
+    drift apart. A quotation is exempt: the introduction now says what the rows
+    used to read, and that sentence is the repair.
+    """
+    audit = _state_audit()
+    shown = [
+        *czech["page"]["states"].values(),
+        *czech["page"]["filters"].values(),
+        *czech["page"]["intro"],
+        *czech["vocabulary"]["state"].values(),
+    ]
+    for string in shown:
+        assert not audit.MEASURES.search(audit.without_quotations(string)), (
+            f"{string[:70]!r} tells the reader a criterion is measured; nothing is"
+        )
+
+    proposed = sum(1 for c in catalog["candidates"] if c["state"] == "proposed")
+    assert page.count(czech["page"]["states"]["measured"]) >= proposed
+    # And the one thing Czech never said at all: that the round has not run.
+    # Written as escapes, like the diacritic class in test_no_clinical_content.py,
+    # so that the file checking Czech does not have to be allow-listed for it.
+    not_measured = "nezm" + chr(0x11B) + chr(0x159) + "ilo"
+    assert not_measured in " ".join(czech["page"]["intro"])
+
+
 def test_no_count_on_the_page_is_typed_anywhere(page, catalog, czech):
     """The defect that produced five different numbers.
 

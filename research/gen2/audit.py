@@ -376,7 +376,30 @@ def c5_affects() -> list[dict]:
 
 # --- C6 the same state in two languages -------------------------------------
 
-MEASURES = re.compile(r"\bm[eě][řr][íi]\s*se\b|\bm[eě][řr]en", re.I)
+#: Czech that asserts a measurement happens or happened, and nothing weaker.
+#:
+#: The reflexive present `meri se` ("is measured") and the participle `zmereno`
+#: ("was measured"), not the noun `mereni` ("measurement"): the repaired label
+#: reads "NAVRZENO K MERENI", proposed for measurement, and a pattern that
+#: matched the noun would report the repair as the defect. A negated form is not
+#: a finding either -- "v tomhle kole se nemeri" is the sentence we want.
+#: Both word orders, because Czech takes the reflexive on either side of the verb
+#: and the page's colour legend used the one the first pattern missed: "tmave
+#: radky se meri", the dark rows are measured.
+MEASURES = re.compile(
+    r"(?<!ne)m[eě][řr][íi]\s*se\b|\bse\s+m[eě][řr][íi]\b|(?<!ne)zm[eě][řr]en", re.I
+)
+
+
+#: Czech quotation marks. A text that explains a defect has to be able to quote
+#: it: the page's introduction now says that the dark rows read "meri se" until
+#: 2026-10-21, and that sentence is the repair, not the fault. Stripping what is
+#: quoted is the same exemption the review's source quotes get.
+QUOTED_CS = re.compile("„[^“]*“")
+
+
+def without_quotations(text: str) -> str:
+    return QUOTED_CS.sub(" ", text)
 
 
 def c6_state_words() -> list[dict]:
@@ -397,7 +420,7 @@ def c6_state_words() -> list[dict]:
         ("vocabulary.state.proposed", czech.get("vocabulary", {}).get("state", {}).get("proposed"), "proposed"),
     ]
     for where, word, state in pairs:
-        if word and MEASURES.search(word):
+        if word and MEASURES.search(without_quotations(word)):
             out.append(
                 finding(
                     "C6 state word",
@@ -409,7 +432,7 @@ def c6_state_words() -> list[dict]:
                 )
             )
     for key, label in czech["page"]["filters"].items():
-        if MEASURES.search(label):
+        if MEASURES.search(without_quotations(label)):
             out.append(
                 finding(
                     "C6 state word",
@@ -421,7 +444,7 @@ def c6_state_words() -> list[dict]:
                 )
             )
     for index, paragraph in enumerate(czech["page"]["intro"]):
-        if MEASURES.search(paragraph):
+        if MEASURES.search(without_quotations(paragraph)):
             out.append(
                 finding(
                     "C6 state word",

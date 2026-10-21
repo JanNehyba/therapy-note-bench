@@ -9,13 +9,12 @@
     "research/gen2/audit-findings.json": "its report, which quotes what it found"
   },
   "counts": {
-    "live": 29,
+    "live": 26,
     "in_dated_records": 8,
     "by_check": {
       "C1 pool size": 21,
       "C2 protocol version": 1,
       "C3 pilot entries": 3,
-      "C6 state word": 3,
       "C7 execution evidence": 1
     }
   },
@@ -243,33 +242,6 @@
       "holder": "research/gen2/catalog/catalog.json pilot_proposal.entries",
       "holds": 13,
       "note": "",
-      "dated_record": null
-    },
-    {
-      "check": "C6 state word",
-      "path": "research/gen2/catalog/czech.json page.states.measured",
-      "says": "MĚŘÍ SE",
-      "holder": "research/gen2/catalog/catalog.json candidate_states.proposed",
-      "holds": "named by an entry of the pilot proposal; an AI proposal awaiting human selection",
-      "note": "asserts measurement for 16 rows; nothing has been measured",
-      "dated_record": null
-    },
-    {
-      "check": "C6 state word",
-      "path": "research/gen2/catalog/czech.json vocabulary.state.proposed",
-      "says": "měří se",
-      "holder": "research/gen2/catalog/catalog.json candidate_states.proposed",
-      "holds": "named by an entry of the pilot proposal; an AI proposal awaiting human selection",
-      "note": "asserts measurement for 16 rows; nothing has been measured",
-      "dated_record": null
-    },
-    {
-      "check": "C6 state word",
-      "path": "research/gen2/catalog/czech.json page.filters.on",
-      "says": "Jen měřené",
-      "holder": "results/rows.jsonl",
-      "holds": "no generation-2 row exists",
-      "note": "a filter that partitions the criteria into measured and unmeasured",
       "dated_record": null
     },
     {

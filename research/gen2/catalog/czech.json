@@ -1194,7 +1194,7 @@
       "unit_definition": "náležitost podle předpisu",
       "applicability": "Jen české zápisy, a jen ty vedené jako zdravotnická dokumentace poskytovatelem zdravotních služeb. Ne anglická stopa, ne klientské shrnutí, které zdravotnická dokumentace vůbec není. Vyhláška předepisuje náležitosti, ne strukturu zápisu: žádná forma SOAP, DAP ani BIRP není v ČR povinná, takže se kritérium nikdy nesmí číst jako požadavek psát v některé z nich.",
       "error_consequence": "Chybějící náležitost je dokumentační problém pro tu úzkou skupinu, ne klinická vada zápisu, a nesmí se míchat do skóre kvality. Číst to jako právní verdikt by bylo tvrzení o reálné praxi, které tahle práce neunese.",
-      "measured_otherwise": "Měří se jinak: deterministická kontrola náležitostí vyhlášky.",
+      "measured_otherwise": "Navrženo měřit jinak: deterministická kontrola náležitostí vyhlášky.",
       "ranking_role": "not_measured_yet",
       "needs_bank": false,
       "plain": "Jestli má zápis náležitosti, které předepisuje česká vyhláška.",
@@ -1252,7 +1252,7 @@
       "applicability": "Vyžaduje člověka v roli přebírajícího. Model ho v této úloze nenahradí.",
       "error_consequence": "Tohle je veličina, kvůli které se zápisy píšou; nesledovat ji je hlavní slabina čistě textových měření.",
       "how": "Člověk dostane jen zápis, bez přepisu, a zkusí z něj navázat péči.",
-      "measured_otherwise": "Měří se jinak: otázka pro člověka, zda dokáže ze zápisu převzít péči.",
+      "measured_otherwise": "Navrženo měřit jinak: otázka pro člověka, zda dokáže ze zápisu převzít péči.",
       "ranking_role": "orders_with_two_raters",
       "needs_bank": false,
       "plain": "Jestli jiný odborník dokáže ze zápisu pokračovat v péči.",
@@ -1310,7 +1310,7 @@
       "applicability": "Lidské měření. Soudcem se nahradit nedá.",
       "error_consequence": "Benchmark, který měří jen text, může doporučit systém, který odborníci odmítají.",
       "how": "Člověk odpoví na šest parametrů přijatelnosti ze zdroje.",
-      "measured_otherwise": "Měří se jinak: otázka pro člověka, zda by zápis použil v praxi.",
+      "measured_otherwise": "Navrženo měřit jinak: otázka pro člověka, zda by zápis použil v praxi.",
       "ranking_role": "orders_with_two_raters",
       "needs_bank": false,
       "plain": "Jestli by odborník takový zápis u sebe v praxi použil.",
@@ -1452,7 +1452,7 @@
       "applicability": "Na jednom zápisu se měřit NEDÁ. Vyžaduje dost případů, aby se dala spočítat podobnost mezi nimi.",
       "error_consequence": "Obecný zápis projde všemi ostatními kritérii a nepřidá nic, co by dalšímu terapeutovi pomohlo tohohle klienta poznat.",
       "how": "Spočítá se rozmanitost všech zápisů jednoho modelu, ne jeden zápis.",
-      "measured_otherwise": "Měří se jinak: ukazatel přes všechny zápisy jednoho modelu.",
+      "measured_otherwise": "Navrženo měřit jinak: ukazatel přes všechny zápisy jednoho modelu.",
       "ranking_role": "describes_only",
       "needs_bank": false,
       "plain": "Jestli je zápis o tomhle člověku, nebo by seděl na kohokoli.",
@@ -1482,7 +1482,7 @@
       "applicability": "Bez srovnatelné délky nebo bez přepočtu na jednotku textu jsou srovnání pokrytí mezi systémy zavádějící. Krátký zápis může být hustý a přitom vynechávat podstatné; hustota se nikdy nečte samostatně.",
       "error_consequence": "Bez ní benchmark systematicky odměňuje mnohomluvnost. To je přesně sklon, který modely mají, takže chyba míří vždycky na jednu stranu.",
       "how": "Počet různých faktů z banky na jednotku délky.",
-      "measured_otherwise": "Měří se jinak: odvozený poměr informace k délce.",
+      "measured_otherwise": "Navrženo měřit jinak: odvozený poměr informace k délce.",
       "ranking_role": "describes_only",
       "needs_bank": true,
       "plain": "Kolik různých informací zápis nese na jednotku délky.",
@@ -1770,12 +1770,12 @@
     "title": "Všechna kritéria v jedné tabulce",
     "intro": [
       "Tohle je jediná česká tabulka kritérií. Vzniká z anglického katalogu, takže v ní nemůže být jiný počet kritérií než v něm; do 13. 10. 2026 jich pět různých tabulek tvrdilo 36, 34, 33, 17 a 16.",
-      "Tmavé řádky se měří, světlé ne. Sloupec <b>na čem se měří</b> říká, co se počítá: většina kritérií není na celý zápis, ale na jedno tvrzení nebo na jednu informační jednotku."
+      "<b>Nic z toho se ještě nezměřilo.</b> Generace 2 nenapsala ani jeden zápis a nic neohodnotila; tmavé řádky jsou ta kritéria, která jsou <b>navržená</b> do prvního kola, světlé ta ostatní. O tom, která zůstanou, rozhodnou tři hodnotitelé, a arch jim ještě neodešel. Do 21. 10. 2026 stálo u tmavých řádků „měří se“, anglická verze téhož stavu přitom říkala „an AI proposal awaiting human selection“. Sloupec <b>co se počítá</b> říká, na čem by se to měřilo: většina kritérií není na celý zápis, ale na jedno tvrzení nebo na jednu informační jednotku."
     ],
     "filters": {
       "all": "Vše",
-      "on": "Jen měřené",
-      "off": "Jen neměřené"
+      "on": "Jen navržené",
+      "off": "Jen nenavržené"
     },
     "columns": [
       "",
@@ -1783,17 +1783,17 @@
       "Na co se ptáme",
       "Naše kategorie",
       "Kdo to v literatuře našel",
-      "Na čem se měří",
+      "Co se počítá",
       "Co rozhoduje",
       "Pravidlo",
       "Stav"
     ],
     "states": {
-      "measured": "MĚŘÍ SE",
+      "measured": "NAVRŽENO K MĚŘENÍ",
       "rule_but_no_round": "pravidlo je, kolo ne",
       "rule_written_not_used": "napsané, nezařazené",
       "rule_yes": "ano",
-      "rule_other": "měří se jinak",
+      "rule_other": "navrženo měřit jinak",
       "none": "—"
     },
     "generated": "Vygenerováno {stamp} z katalogu ve verzi {digest}.",
@@ -1825,7 +1825,7 @@
       "not_measured": "v tomhle kole se neměří",
       "not_yet_operationalized": "zatím není pravidlo, jak to měřit",
       "out_of_scope": "mimo rozsah tohoto kola",
-      "proposed": "měří se"
+      "proposed": "navrženo do prvního kola; návrh asistenta, který čeká na výběr člověkem"
     },
     "origin": {
       "empirical_observation": "z pozorování našich výstupů",
