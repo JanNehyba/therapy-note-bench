@@ -341,7 +341,7 @@ removed with K19 on 2026-10-05. The protocol records
 the executable count at freeze rather than capping it. The registry refuses to
 freeze while any used subject lacks an accepted decision.
 
-The feasibility pilot (protocol 2.10.0) freezes 16 generation jobs over two
+The feasibility pilot (protocol 2.11.0) freezes 16 generation jobs over two
 cohorts, two English AnnoMI conversations and their Czech translations, two
 purposes and two generator families, and balances an 8-note human sample across
 them. Two Czech psychologists, neither the instrument author, rate under a
@@ -397,11 +397,24 @@ missed is reported. It does not present established content validity. The method
 for expert judges who "should be independent of those who developed the item
 pool" (Boateng et al., 2018) and calls five to seven of them typical. The pool
 was developed by the investigator with the assistant, and on 2026-10-07, before
-any rating existed, a retention threshold was registered and the whole pool is to
-be put to three therapists who are neither. No sheet has been sent and no answer
-has been collected, which the protocol's registration records; the rule is: three of three retains an item, two of
-three retains it as contested with the dissent published, fewer removes it from
-the measured set. Three raters is below the typical range, so what the panel
+any rating existed, a retention threshold was recorded in the tracked protocol
+and the whole pool is to be put to three therapists who are neither. The
+project has no external preregistration, and a local timestamp is not one. No
+sheet has been sent and no answer has been collected, which the protocol
+records; the rule, amended on 2026-10-21 while that was still true, is that an
+item is measured only where all three raters call it quite or highly relevant,
+that two of three publishes it as contested and does not measure it, and that
+fewer removes it from the measured set. Two of three used to retain an item,
+and under a rater answering uniformly over the four points two of three agree
+with probability 0.50 against 0.125 for three of three; three of five would be
+0.50 again, so the cut and not the number of raters was the problem. That null
+describes no real rater and is quoted as a floor for reading the index. A blank
+is not a vote: an item any rater leaves unrated is reported as rated by fewer
+than three and is not measured, because counting it as not relevant would
+invent a judgement and rescaling the denominator would apply a different rule
+to that item than to the rest. Agreement is Krippendorff's alpha over the three
+raters' ordinal answers with the three pairwise Cohen's kappas beside it; the
+rule named Cohen's kappa alone, which is defined for two. Three raters is below the typical range, so what the panel
 supplies is a screening of the pool and not established content validity, and
 the measured set the pilot uses is the panel's rather than the authors'. The two Czech
 psychologists of the pilot are raters, not independent judges of the pool, and

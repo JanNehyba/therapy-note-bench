@@ -1,6 +1,6 @@
 {
   "id": "therapy-note-construct-review",
-  "version": "2.10.0",
+  "version": "2.11.0",
   "status": "protocol_amended_before_pilot_search_partially_executed",
   "recorded_date": "2026-10-14",
   "design": "Instrument development informed by a systematic scoping review, expert proposals and empirical observations",
@@ -298,8 +298,8 @@
     "review_completion": "Only executed searches and verified decisions count as completed; blocked sources remain named gaps",
     "scope": "Report selected and required methods, planned/applicable/assessed units, and incomplete critical-error assessment even in public aggregates"
   },
-  "supersedes": "2.9.0",
-  "amendment_reason": "D18: how many items one judge call decides becomes a measured condition of the pilot. Generation 1 asks one question per call and generation 2's pipeline asks every item of a reference mode at once, the two have never been compared here, and the difference decides both the judge's task and the confirmatory round's call budget.",
+  "supersedes": "2.10.0",
+  "amendment_reason": "D19: a criterion is retained only where all three raters call it relevant. Two of three retained an item that a uniform rater's answers retain with probability 0.50, Cohen's kappa was named for a panel of three, a blank had no rule, the Czech third step read as leaning relevant on the not-relevant side of the cut, and the sheet did not say that three of the properties are not about one note.",
   "retrieval_gaps": "Record reports not retrieved separately from full-text eligibility exclusions; unavailable databases remain named gaps",
   "expert_inputs": "May enter throughout development. Later support does not rewrite historical origin; author or colleague proposals do not imply consensus.",
   "registration": {
@@ -545,6 +545,22 @@
       "why": "Generation 1 asks one question per call and says so in the first line of its judge module: roughly 60 calls per note, 23 rubric criteria, one per sentence for conciseness, twelve Likert ratings. Generation 2's pipeline asks every item of a reference mode at once, roughly 6 calls per note. The two generations therefore disagree about the one thing that decides whether a verdict is any good, and neither choice was ever measured against the other here. Asking it of the pilot costs a few hundred judge calls and nothing on e-INFRA, and the pilot already holds the two things the comparison needs: a human anchor on eight notes and blind repeats that measure the judge's own noise.",
       "rule_declared_in_advance": "The split asking is adopted for the confirmatory round if its agreement with the human anchor exceeds the batched asking's by more than the judge's own blind-repeat disagreement on the same items. Below that margin the batched asking is kept, because a difference smaller than the instrument's own noise is not a finding. Either way both figures are published, and a pilot too small to separate them is reported as that and not as agreement.",
       "not_decided_here": "Whether the split asking is better. That is what the condition measures. Nor is the number of items: the pool may still grow before the panel answers, and the style question is about how many items share a call rather than how many exist."
+    },
+    {
+      "id": "D19",
+      "date": "2026-10-21",
+      "origin": "investigator",
+      "decision": "A criterion enters the measured set only where all three raters answer quite or highly relevant. Two of three no longer retains it: the item is published as contested, with both the agreeing and the dissenting reasons, and is not measured in this round. The sheet names the cut, says that a blank is not a vote, and shows what each property is judged over. Agreement is reported as Krippendorff's alpha over the three raters' ordinal answers with the three pairwise Cohen's kappas beside it.",
+      "replaces": "the rule recorded on 2026-10-07, under which two of three retained the item and marked it contested, and which named Cohen's kappa for a panel of three",
+      "affects": [
+        "the measured set: an item two raters call relevant and one does not is reported and not measured, where it would have been measured and marked",
+        "the sheet the three raters receive: the cut, the blank rule, the renamed third step and a column saying what the property is judged over",
+        "the agreement figure in the paper, which is now alpha with the pairwise kappas beside it rather than a kappa that was not defined for three raters"
+      ],
+      "why": "Four points with the cut above the midpoint means a rater choosing uniformly calls an item relevant half the time. Under that null two of three agreeing has probability 0.50, so the old rule retained an item as often as a coin would; unanimity among three has probability 0.125. Three of five would be 0.50 again, so the problem was the cut and not the number of raters. The investigator asked for three raters and an unambiguous verdict, and unanimity is the only cut among three that gives one.",
+      "the_null_these_figures_assume": "a rater choosing uniformly among the four points, which describes nobody. The figures are a floor for reading the index, not an estimate of how this panel behaves, and the paper states the null wherever it quotes them. A real rater's answers are not independent of the item, which is the whole reason to ask them.",
+      "what_this_costs": "Items that two of three call relevant. Under the old rule they were measured and flagged; now they are reported and not measured, so the measured set can only be smaller. That is the intended direction: the round claims a screening of the pool, and an item that one in three experts does not consider relevant to note quality is not something to publish a number about.",
+      "not_decided_here": "Whether a contested item returns in a second round. The pool may not grow once an answer exists, so a contested item waits for a panel that is asked again, and no such panel is planned."
     }
   ],
   "content_validity": {
@@ -569,7 +585,7 @@
     },
     "what_is_rated": {
       "items": "every candidate of the catalog, including those the round does not measure, the one the investigator dropped on 2026-10-05, and K35 and K36, which arrived on 2026-10-07 from a source read in full",
-      "shown_per_item": "the code, the Czech name and one sentence of definition; no state, no origin, no citation and no indication of what the assistant or the investigator thinks",
+      "shown_per_item": "the code, the Czech name, one sentence of definition and what the property is judged over, which is one note for thirty-six of them, several sessions with one client for one and a model across clients for two; no state, no origin, no citation and no indication of what the assistant or the investigator thinks",
       "why_blind_to_state": "a rater told that an item is already measured is being asked to ratify rather than to judge",
       "pool_changes_before_the_panel": "A pool may grow until the first sheet is sent, and two items were added on 2026-10-07. After an answer exists it may not: adding an item then would mean some raters rated it and others did not, and the threshold is a proportion of three. If a property is found after the panel has answered, it waits for a second round and is reported as a later addition."
     },
@@ -583,7 +599,8 @@
           "quite relevant",
           "highly relevant"
         ],
-        "counts_as_relevant": "quite relevant or highly relevant"
+        "counts_as_relevant": "quite relevant or highly relevant",
+        "scale_source": "Four points with the cut above the midpoint is the convention of the content-validity index literature; the labels are this project's own wording. The primary sources for the scale and its thresholds, Lynn (1986) and Davis (1992), have not been retrieved, so nothing here is taken from them and the retrieval is an open gap rather than a citation. procedure.what_the_source_recommends states the same for Lawshe (1975)."
       },
       {
         "id": "harm",
@@ -605,12 +622,25 @@
     ],
     "retention_rule": {
       "declared_before_any_answer": true,
+      "recorded_on": "2026-10-07",
+      "amended_on": "2026-10-21",
+      "amended_before_any_answer": true,
+      "what_registered_means_here": "recorded in this tracked protocol before use. The project has no external preregistration at all: registration.status is not_registered and local_timestamp_is_registration is false. A rule may be amended while no answer exists, which is the case here, and the amendment carries its date.",
       "index": "the proportion of the three raters who answer quite or highly relevant",
       "3_of_3": "retained for measurement where an operational rule exists",
-      "2_of_3": "retained and marked contested; the dissenting rater's reason is published with the item",
+      "2_of_3": "published as contested, with the agreeing and the dissenting reasons, and not measured in this round. It used to be retained and marked, and two of three happens under the null below with probability 0.50.",
       "1_of_3_or_0": "removed from the measured set; the candidate stays in the catalog with the panel's rating as the reason, which is the same treatment every other unmeasured candidate gets",
+      "chance_levels_under_a_uniform_rater": {
+        "one_rater_calls_it_relevant": 0.5,
+        "at_least_2_of_3": 0.5,
+        "3_of_3": 0.125,
+        "at_least_3_of_5": 0.5,
+        "null": "a rater choosing uniformly among the four points. Nobody behaves like that, so these are a floor for reading the index and not a model of the panel; they are quoted with the null named."
+      },
+      "missing_answer": "A blank is not an answer. Where a rater leaves an item unrated the index is not computed for it: the item is reported as rated by fewer than three and is not measured. Counting the blank as not relevant would invent a judgement nobody made, and taking the proportion over the raters who did answer would apply a different rule to that item than to every other -- and an item left blank is likely to be one of the hard ones, so the bias has a direction.",
       "harm_flag": "an item any rater flags for harm is reported with the flag and is not measured in this round whatever its relevance count",
-      "agreement": "agreement between the three raters is computed and published for the whole pool, by Cohen's kappa as S12 recommends, with the caveat that three raters over a pool this size give an imprecise estimate",
+      "agreement": "Krippendorff's alpha on the ordinal four-point answers over all three raters, with the three pairwise Cohen's kappas beside it. The rule used to name Cohen's kappa alone, which is defined for two raters and could not report the panel it described; S12 recommends kappa over the content validity ratio and index and does not say how to apply it to three. Both are published, with the caveat that three raters over a pool this size give an imprecise estimate, and alpha is the one quoted in prose.",
+      "why_the_cut_is_shown_to_the_raters": "The sheet already told them what happens to their answers, and a rater who is not told where the line falls guesses. The cost is named rather than avoided: a rater who knows the cut can answer at the extremes to push an item in or out, which is a risk the alternative does not remove, it only hides.",
       "what_the_rule_does_not_do": "it does not decide whether an item is measurable, only whether the panel judges it relevant. A relevant item with no operational rule stays unmeasured for that reason and the two reasons are reported apart."
     },
     "consequences_recorded_in_advance": [

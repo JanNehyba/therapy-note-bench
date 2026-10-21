@@ -2,8 +2,8 @@
   "version": "conversion-diagnostics-v1",
   "catalog_version": "catalog-v2",
   "catalog_date": "2026-09-16",
-  "protocol_version": "2.10.0",
-  "protocol_revision": "c2557c380d4723c097267be31744e87f6bc5a4b1bc5ad6ef1878f19f54b0d9b7",
+  "protocol_version": "2.11.0",
+  "protocol_revision": "81f97f29aa5202a4463ca4e5e6625ec9854221859183eacb1a31696bb9e67bdb",
   "rule": "Every source, evidence line and candidate maps to a registry record with no human decision. The operational specification, where present, becomes method specs and development items with no decision on them; nothing becomes a review, a pilot status or a reviewed item, and each pilot entry without operational rules is listed here with its reason.",
   "mapped": {
     "sources": 46,

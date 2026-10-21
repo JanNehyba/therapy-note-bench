@@ -54,7 +54,7 @@ def order(codes: list[str], seed: int = SEED) -> list[str]:
     return shuffled
 
 
-def rows(czech: dict, codes: list[str]) -> list[list[str]]:
+def rows(czech: dict, codes: list[str], catalog: dict) -> list[list[str]]:
     sheet = czech["panel_sheet"]
     # The instruction tells the rater how many properties follow, and it used to
     # say so in a typed number: it read 36 while the sheet listed 39, true on
@@ -63,9 +63,17 @@ def rows(czech: dict, codes: list[str]) -> list[list[str]]:
     # so the sentence cannot be wrong without the sheet being empty.
     out = [[cell.format(count=len(codes)) for cell in line] for line in sheet["instructions"]]
     out.append(list(sheet["header"]))
+    # What the property is judged over. Thirty-six of the thirty-nine are about
+    # one note, one is about several sessions with a client and two about a model
+    # across clients, and until 2026-10-21 the sheet did not say so -- so for
+    # those three a rater was answering a question about a single note that
+    # nobody had asked. The Czech label lives in czech.json like every other
+    # word on the sheet; the catalog holds which label applies.
+    units = czech["vocabulary"]["unit_of_analysis"]
+    judged_over = {c["id"]: units[c["unit_of_analysis"]] for c in catalog["candidates"]}
     for code in order(codes):
         entry = czech["candidates"][code]
-        out.append([code, entry["name"], entry["statement"], "", "", ""])
+        out.append([code, entry["name"], entry["statement"], judged_over[code], "", "", ""])
     out.extend(list(line) for line in sheet["tail"])
     return out
 
@@ -89,7 +97,7 @@ def main() -> int:
         return 2
 
     codes = catalog.ids(cat, "candidates")
-    table = rows(czech, codes)
+    table = rows(czech, codes, cat)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     for rater in RATERS:
         (OUT_DIR / f"hodnoceni-kriterii-{rater}.csv").write_text(as_csv(table), encoding="utf-8")

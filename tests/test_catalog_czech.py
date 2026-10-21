@@ -224,18 +224,26 @@ def codes(catalog) -> list[str]:
     return catalog_mod.ids(catalog, "candidates")
 
 
-def test_the_sheet_has_one_row_per_candidate(czech, codes):
-    table = panel_sheet.rows(czech, codes)
+def test_the_sheet_has_one_row_per_candidate(catalog, czech, codes):
+    table = panel_sheet.rows(czech, codes, catalog)
     items = [row for row in table if row and re.fullmatch(r"K\d\d", row[0])]
     assert len(items) == len(codes) == 39
     assert {row[0] for row in items} == set(codes)
-    for code, name, statement, *answers in items:
+    units = czech["vocabulary"]["unit_of_analysis"]
+    judged = {c["id"]: units[c["unit_of_analysis"]] for c in catalog["candidates"]}
+    for code, name, statement, over, *answers in items:
         assert name == czech["candidates"][code]["name"]
         assert statement == czech["candidates"][code]["statement"]
+        # What the property is judged over. The sheet did not say until
+        # 2026-10-21, and three of the thirty-nine are not about one note at
+        # all, so for those three the rater was answering about a single note,
+        # which is a question nobody had asked.
+        assert over == judged[code], code
         assert answers == ["", "", ""], code
+    assert len({judged[code] for code in codes}) == 3, "all three units reach the sheet"
 
 
-def test_the_sheet_tells_the_rater_the_number_it_then_lists(czech, codes):
+def test_the_sheet_tells_the_rater_the_number_it_then_lists(catalog, czech, codes):
     """The one artefact of this project that goes to people outside it.
 
     The instruction read "Nize je 36 vlastnosti" while the sheet listed 39: true
@@ -244,7 +252,7 @@ def test_the_sheet_tells_the_rater_the_number_it_then_lists(czech, codes):
     cannot be wrong unless the sheet is empty, and no instruction line may carry
     a typed figure again.
     """
-    table = panel_sheet.rows(czech, list(codes))
+    table = panel_sheet.rows(czech, list(codes), catalog)
     # The sheet carries blank separator rows, so a row may be empty.
     items = [row for row in table if row and row[0] in set(codes)]
     assert len(items) == len(codes)
@@ -271,7 +279,7 @@ def test_the_sheet_is_blind(catalog, czech, codes):
     a criterion is measured, where it came from, or who proposed it: the panel is
     asked what matters for a session note, not whether this project was right.
     """
-    table = panel_sheet.rows(czech, codes)
+    table = panel_sheet.rows(czech, codes, catalog)
     text = "\n".join("\t".join(row) for row in table)
     for candidate in catalog["candidates"]:
         assert candidate["state"] not in text
@@ -280,6 +288,54 @@ def test_the_sheet_is_blind(catalog, czech, codes):
         assert candidate["label"] not in text
     for source in catalog["sources"]:
         assert source["key"] not in text
+
+
+def test_the_sheet_carries_no_superseded_sentence(catalog, czech, codes):
+    """It told three raters a rule the protocol no longer held, and nothing caught it.
+
+    The instruction said an item two of three call relevant stays as contested.
+    That was the rule recorded on 2026-10-07; D19 replaced it on 2026-10-21,
+    before any answer existed, because two of three agree by chance with
+    probability 0.50 when a four-point scale is cut above its midpoint. The
+    sentence was changed by hand in one place, and the only thing that would
+    have found a copy left behind was somebody reading the sheet.
+
+    So the replaced sentences are kept rather than deleted, as a reworded Czech
+    criterion keeps its previous wording, and none of them may reach a sheet.
+    """
+    superseded = czech["panel_sheet"]["superseded_instructions"]
+    assert superseded, "nothing is recorded, so nothing is guarded"
+    text = "\n".join("\t".join(row) for row in panel_sheet.rows(czech, codes, catalog))
+    for record in superseded:
+        assert record["text"] and record["until"] and len(record["why"].split()) >= 8
+        assert record["text"] not in text, record["why"]
+
+
+def test_the_sheets_rule_is_the_protocols_rule(czech):
+    """The rater is told what happens to the answer, so the two must agree.
+
+    Checked on the protocol's side in English, because that is where the rule
+    lives: unanimity retains, two of three publishes and does not measure. The
+    sheet's own sentence is Czech and is guarded by the test above, which holds
+    it to not being the superseded one.
+    """
+    protocol = json.loads((REPO / "research/gen2/protocol.json").read_text(encoding="utf-8"))
+    rule = protocol["content_validity"]["retention_rule"]
+    assert "retained for measurement" in rule["3_of_3"]
+    assert "not measured" in rule["2_of_3"]
+    assert rule["amended_before_any_answer"] is True
+    assert rule["chance_levels_under_a_uniform_rater"]["at_least_2_of_3"] == 0.5
+    assert rule["chance_levels_under_a_uniform_rater"]["3_of_3"] == 0.125
+    # The null is stated wherever the figures are, because nobody answers
+    # uniformly and a chance level read as a behaviour is worse than none.
+    assert "uniformly" in rule["chance_levels_under_a_uniform_rater"]["null"]
+    # A blank is neither a zero nor a smaller denominator: the rule has to say
+    # what it does with it, and what it does is leave the item unmeasured.
+    assert "not computed" in rule["missing_answer"]
+    assert "invent" in rule["missing_answer"]
+    assert "not measured" in rule["missing_answer"]
+    # Cohen's kappa is defined for two raters and the rule named it for three.
+    assert "Krippendorff" in rule["agreement"] and "pairwise" in rule["agreement"]
 
 
 def test_the_order_is_the_recorded_seed_and_does_not_move(codes):

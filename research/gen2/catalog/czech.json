@@ -1726,13 +1726,13 @@
       ],
       [],
       [
-        "Otázka 1, sloupec D: Je tato vlastnost podstatná pro kvalitu zápisu ze sezení? Vyberte: nepodstatné / spíše podstatné / podstatné / velmi podstatné."
+        "Otázka 1, sloupec E: Je tato vlastnost podstatná pro kvalitu zápisu ze sezení? Vyberte: nepodstatné / málo podstatné / podstatné / velmi podstatné. Jako podstatné se počítají dvě horní možnosti, tedy podstatné a velmi podstatné."
       ],
       [
-        "Otázka 2, sloupec E: Mohlo by měření této vlastnosti svádět k nesprávnému hodnocení, nebo uškodit klientovi či terapeutovi? Pokud ano, napište čím."
+        "Otázka 2, sloupec F: Mohlo by měření této vlastnosti svádět k nesprávnému hodnocení, nebo uškodit klientovi či terapeutovi? Pokud ano, napište čím."
       ],
       [
-        "Sloupec F je nepovinná poznámka: cokoli, co vám u té vlastnosti vrtá hlavou."
+        "Sloupec G je nepovinná poznámka: cokoli, co vám u té vlastnosti vrtá hlavou."
       ],
       [],
       [
@@ -1746,7 +1746,10 @@
         "Pořadí kritérií je zamíchané a nic o nich neprozrazujeme, abyste je posoudili, a ne potvrzovali, co si o nich myslíme my."
       ],
       [
-        "Jak se s tím naloží: pravidlo bylo zapsané předem, 7. 10. 2026, ještě než vznikla jakákoli odpověď. Vlastnost, kterou označí za podstatnou všichni tři, zůstává; u které dva ze tří, zůstává jako sporná a váš nesouhlas se zveřejní; u které jeden nebo nikdo, z měření vypadává."
+        "Jak se s tím naloží: pravidlo bylo zapsané předem, 7. 10. 2026, a upřesněné 21. 10. 2026, pořád ještě než vznikla jakákoli odpověď. Měří se jen to, co za podstatné označí všichni tři. Kde se neshodnete, vlastnost se zveřejní jako spornou včetně vašich důvodů a neměří se. Dva ze tří už tedy nestačí: při odpovídání naslepo by dva ze tří vyšli v polovině případů."
+      ],
+      [
+        "Když odpověď u některé vlastnosti vynecháte, nepočítá se to jako „nepodstatné“. Ta vlastnost se vykáže jako neposouzená všemi třemi a neměří se, takže prázdné políčko není hlas pro ani proti."
       ],
       []
     ],
@@ -1754,6 +1757,7 @@
       "Kód",
       "Kritérium",
       "Jednou větou",
+      "Čeho se to týká",
       "Podstatné?",
       "Mohlo by to škodit? Jak?",
       "Poznámka"
@@ -1772,6 +1776,28 @@
       [
         ""
       ]
+    ],
+    "superseded_instructions": [
+      {
+        "text": "Otázka 1, sloupec D: Je tato vlastnost podstatná pro kvalitu zápisu ze sezení? Vyberte: nepodstatné / spíše podstatné / podstatné / velmi podstatné.",
+        "until": "2026-10-21",
+        "why": "Named the third step 'spise podstatne', which reads as leaning essential while sitting on the not-essential side of the cut, said nothing about where the cut falls, and put the relevance answer in column D, which the unit column moved."
+      },
+      {
+        "text": "Otázka 2, sloupec E: Mohlo by měření této vlastnosti svádět k nesprávnému hodnocení, nebo uškodit klientovi či terapeutovi? Pokud ano, napište čím.",
+        "until": "2026-10-21",
+        "why": "Put the harm answer in column E, which the unit column moved to F."
+      },
+      {
+        "text": "Sloupec F je nepovinná poznámka: cokoli, co vám u té vlastnosti vrtá hlavou.",
+        "until": "2026-10-21",
+        "why": "Put the optional note in column F, which the unit column moved to G."
+      },
+      {
+        "text": "Jak se s tím naloží: pravidlo bylo zapsané předem, 7. 10. 2026, ještě než vznikla jakákoli odpověď. Vlastnost, kterou označí za podstatnou všichni tři, zůstává; u které dva ze tří, zůstává jako sporná a váš nesouhlas se zveřejní; u které jeden nebo nikdo, z měření vypadává.",
+        "until": "2026-10-21",
+        "why": "Said that two of three retains an item as contested. Under D19 two of three publishes it as contested and does not measure it, because two of three agree by chance with probability 0.50 on a four-point scale cut above the midpoint."
+      }
     ]
   },
   "page": {
@@ -1881,6 +1907,11 @@
       "not_measured": "data nebo překryv",
       "not_yet_operationalized": "chybí pravidlo",
       "out_of_scope": "mimo rozsah kola"
+    },
+    "unit_of_analysis": {
+      "note": "jednoho zápisu",
+      "case_series": "víc sezení s jedním klientem",
+      "model_over_cases": "modelu přes víc klientů"
     }
   },
   "groupings": {

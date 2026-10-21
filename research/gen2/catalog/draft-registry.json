@@ -3420,7 +3420,7 @@
       "deterministic_checks": []
     }
   ],
-  "protocol_revision": "c2557c380d4723c097267be31744e87f6bc5a4b1bc5ad6ef1878f19f54b0d9b7",
+  "protocol_revision": "81f97f29aa5202a4463ca4e5e6625ec9854221859183eacb1a31696bb9e67bdb",
   "version": "registry-v2",
   "literature_freeze": null,
   "methods": [
