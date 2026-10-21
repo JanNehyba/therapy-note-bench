@@ -98,6 +98,16 @@ def text_of(path: str) -> str:
     return (REPO / path).read_text(encoding="utf-8", errors="replace")
 
 
+#: What the audit does not read, and why. Its own report quotes the stale
+#: sentences it found, so scanning it reports every finding a second time as a
+#: finding of its own: the count went from 42 to 67 the moment the report was
+#: committed. A checker that reads its own output measures itself.
+NOT_SCANNED = {
+    "research/gen2/audit.py": "the checker",
+    "research/gen2/audit-findings.json": "its report, which quotes what it found",
+}
+
+
 def claim_bearing() -> list[str]:
     """Tracked files that state something, by the scope decided on 2026-10-21."""
     out = subprocess.run(
@@ -107,6 +117,7 @@ def claim_bearing() -> list[str]:
         name
         for name in out
         if name
+        and name not in NOT_SCANNED
         and Path(name).suffix in (".json", ".md", ".py", ".html")
         and (
             name.startswith(("research/", "paper/", "docs/"))
@@ -455,6 +466,7 @@ def run() -> dict:
             "found_by_reading with their evidence, and reading is not exhaustive."
         ),
         "claim_bearing_files_scanned": len(paths),
+        "not_scanned": NOT_SCANNED,
         "counts": {"live": len(live), "in_dated_records": len(historical), "by_check": by_check},
         "live": live,
         "in_dated_records": historical,
