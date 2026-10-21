@@ -49,6 +49,13 @@ SOURCES = {
     "catalog": "research/gen2/catalog/catalog.json",
     "operational": "research/gen2/catalog/operational.json",
     "panel": "research/gen2/protocol.json content_validity",
+    "searches": "research/gen2/queries.json",
+    "literature": "research/gen2/review-2026-09-13/reports.json",
+    "translation": (
+        "research/gen2/translation/instrument.json and research/gen2/translation/translations.json"
+    ),
+    "review_decisions": "research/gen2/review-record.json",
+    "claims_audit": "research/gen2/audit-findings.json",
 }
 
 
@@ -94,10 +101,14 @@ def generations(rows: list[dict] | None = None) -> dict:
             "harness_versions": sorted(
                 {row.get("harness_version") for row in one if row.get("harness_version")}
             ),
+            "distinct_row_ids": len({row.get("row_id") for row in one}),
+            "rows_with_a_session_scored": sum(1 for row in one if row.get("n_sessions_scored")),
             "rows_are_not_notes": (
-                "A row is one scored question of one note by one judge, so the count is not "
-                "a count of notes: these rows carry fewer distinct row ids than rows, and "
-                "fewer still with a session actually scored."
+                "A row is one scored question of one note by one judge, so the row count is "
+                "not a count of notes, and the two figures above are why: a row id repeats "
+                "and a row can carry no scored session at all. Neither of them is a count "
+                "of notes either, and this file does not report one, because the ledger "
+                "does not hold it."
             ),
         },
         "generation_2": {
@@ -198,6 +209,104 @@ def panel_state() -> dict:
     }
 
 
+def has_been_run() -> dict:
+    """The work that was carried out, counted from the records that hold it.
+
+    This file was built to stop one claim -- that generation 2 had measured
+    something -- and the first version answered that and little else. Read on
+    its own it describes a project where nothing has happened, which is the
+    same fault pointing the other way. An independent review said so: the
+    searches, the translator comparison, the translated conversations and the
+    review records are all finished work and none of them was here.
+
+    Every figure is read from a tracked artefact. None of it is a measurement
+    of a model, and `generations` below is still the only block that answers
+    that question.
+    """
+    queries = load("research/gen2/queries.json")
+    ran = [q for q in queries["queries"] if q.get("status") == "run"]
+    reports = load("research/gen2/review-2026-09-13/reports.json")
+    catalog_reports = [
+        r
+        for r in reports["reports"]
+        if (r.get("catalog_source") or "").startswith("S") and "_abs_" not in r["catalog_source"]
+    ]
+    instrument = load("research/gen2/translation/instrument.json")
+    check = instrument["back_translation_check"]
+    translations = load("research/gen2/translation/translations.json")
+    record = load("research/gen2/review-record.json")["summary"]
+    return {
+        "searches": {
+            "queries_written": len(queries["queries"]),
+            "queries_run": len(ran),
+            "databases": sorted({q["database"] for q in ran}),
+            "logs": sorted({q["executed"]["log"] for q in ran}),
+            "what_the_logs_hold": (
+                "each run query's date, its record count and the sha256 of its export; the "
+                "numbers stay there rather than being restated here"
+            ),
+            "not_run": sorted(q["id"] for q in queries["queries"] if q.get("status") != "run"),
+        },
+        "literature": {
+            "reports_in_the_ledger": reports["counts"]["reports"],
+            "catalog_sources_sought": reports["counts"]["catalog_reports"]["sought"],
+            "catalog_sources_retrieved": reports["counts"]["catalog_reports"]["retrieved"],
+            "read_in_full_text": sum(
+                1 for r in catalog_reports if r["reading"]["basis"] == "full_text"
+            ),
+            "read_from_the_abstract": sum(
+                1 for r in catalog_reports if r["reading"]["basis"] == "abstract"
+            ),
+            "verified_by_a_person": reports["counts"]["human_verified"],
+            "what_reading_is_not": (
+                "Every reading recorded there is the assistant's. Nobody has checked a "
+                "quote against its paper, which is why the last figure is zero and is "
+                "reported beside the others rather than instead of them."
+            ),
+        },
+        "translation": {
+            "translator": f"{instrument['model']} on {instrument['provider']}",
+            "chosen_by": (
+                f"a back-translation check over {check['sample_turns']} turns against "
+                f"{check['back_translator']['model']}, recorded before use"
+            ),
+            "recorded_at": instrument["recorded_at"],
+            "conversations_translated": len(translations["conversations"]),
+            "usable": len(translations["usable"]),
+            "failed": len(translations["failed"]),
+            "what_this_is_not": (
+                "Two conversations are a feasibility pilot's materials and not a cohort. "
+                "No note has been written from them by generation 2."
+            ),
+        },
+        "review_decisions": {
+            "decision_records": record["decision_records"],
+            "subjects": record["subjects"],
+            "snapshots": record["snapshots"],
+            "by_latest_mode": record["subjects_by_latest_mode"],
+            "what_delegated_means": (
+                "The investigator reviewed the criteria once and delegated the rest; a "
+                "delegated decision is the assistant's and is recorded as such."
+            ),
+        },
+        "claims_audit": {
+            "where": "research/gen2/audit-findings.json",
+            "what_it_reports": (
+                "Every published claim the checker can decide, against the file that holds "
+                "it, with the live findings listed first. A live count of zero is not a "
+                "clean repository: four classes of defect are found by reading and the "
+                "report names them."
+            ),
+            "why_no_number_here": (
+                "The audit scans this file, so a count copied into it would decide the next "
+                "run's answer and neither artefact could be built first. The figure lives "
+                "in the audit's own report, which tests/test_state.py holds to a fresh run, "
+                "and the 42 this file used to carry was typed in and checkable nowhere."
+            ),
+        },
+    }
+
+
 def build() -> dict:
     return {
         "version": "state-v1",
@@ -212,7 +321,11 @@ def build() -> dict:
             "No tracked file said what the state of the project was, so several said part of "
             "it in their own words and went stale apart from one another. The audit of "
             "2026-09-15 prescribed this file and it was not built; the audit of 2026-10-21 "
-            "found 42 claims that had gone false, every one of them a symptom of its absence."
+            "found stale claims across the tracked documents, every one of them a symptom "
+            "of its absence. How many is not stated here: this file carried the figure 42 "
+            "by hand, no artefact holds it, and three of those findings were not false "
+            "claims at all. What the audit says now is in `claims_audit`, which is read "
+            "from its report."
         ),
         "what_it_does_not_say": (
             "Whether an instrument is valid, whether a measurement would be any good, and "
@@ -220,6 +333,7 @@ def build() -> dict:
             "has happened, not what it is worth."
         ),
         "sources": SOURCES,
+        "has_been_run": has_been_run(),
         "generations": generations(),
         "protocol": protocol_state(),
         "catalog": catalog_state(),

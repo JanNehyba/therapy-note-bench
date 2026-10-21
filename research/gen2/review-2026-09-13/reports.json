@@ -3,6 +3,7 @@
  "ledger_date": "2026-09-15",
  "id_rule": "doi:<own DOI, normalised> when the DOI is verified by a record other than the map (retrieval log, PubMed export, retrieval seeds); else pmid:<pmid>; else ttl:<normalised title> for pool records; supp:<slug> for other material; guid:<slug> for guidance documents without a DOI. Equal to the pool id whenever the pool id is right, and fixed when the pool is rebuilt.",
  "file_base": "local/gen2-review-2026-09-13/fulltext/",
+ "file_base_note": "Where a retrieval event's file is, unless the event names its own file_base. One does: the language layer's sweep wrote its files elsewhere.",
  "principle": "A report is sought, retrieved or not retrieved; an attempt is an event on a report. The latest successful event decides the status; a failed attempt after a success does not revert it; a success is withdrawn only by a dated correction. Human verification and human screening decisions appear only with a named human record.",
  "families": [
   {
@@ -4737,6 +4738,97 @@
     "sha256": "f5f4e9589102225167c81adcf4f545cdccf302720fbaae1c709dc967059b9fce"
    },
    "last_attempt_date": "2026-10-07"
+  },
+  {
+   "report_id": "doi:10.26615/978-954-452-092-2_058",
+   "id_basis": "DOI as the catalog citation records it, consistent with the Anthology key 2023.ranlp-1.58 and the volume's DOI pattern. The Anthology metadata carries no DOI field for this paper (taxonomy-papers.json), so no second record verifies it and the key is what the retrieval was made on.",
+   "kind": "supplementary_discovery",
+   "title": "Towards a Consensus Taxonomy for Annotating Errors in Automatically Generated Text",
+   "citation_short": "Huidrom and Belz 2023, RANLP",
+   "catalog_source": "S34",
+   "study_family": null,
+   "identifiers": {
+    "doi": "10.26615/978-954-452-092-2_058",
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": "2023.ranlp-1.58",
+    "url": "https://aclanthology.org/2023.ranlp-1.58/",
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "catalog.json citation; no record other than the catalog carries it",
+    "acl_key": "taxonomy-papers.json",
+    "url": "taxonomy-papers.json"
+   },
+   "pool": {
+    "in_pool": false,
+    "pool_record_id": null,
+    "pool_record_id_status": "not_in_pool",
+    "stratum": null,
+    "priority_index": null
+   },
+   "route": {
+    "kind": "taxonomy_frame",
+    "from": null,
+    "declared_in": "research/gen2/review-2026-09-13/taxonomy-papers.json and taxonomy-fulltext-log.json",
+    "note": "Not the pool's search. A frame of 64 ACL Anthology papers was built by seven queries on 2026-10-13, 17 of them were selected to read as the paper's own read set, and this one was chosen first because it merges fifteen schemes rather than proposing one."
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "screening": {
+    "ai_proposal": "not_applicable",
+    "ai_layer": null,
+    "ai_proposal_source": null,
+    "human_decision": null,
+    "human_decision_record": null,
+    "human_decision_status": "none_recorded"
+   },
+   "retrieval_events": [
+    {
+     "date": "2026-10-14",
+     "time": null,
+     "date_source": "taxonomy-fulltext-log.json",
+     "route": "aclanthology.org PDF, open access, no key",
+     "route_kind": "direct_url",
+     "outcome": "retrieved",
+     "file": "huidrom-belz-2023-towards.pdf",
+     "file_base": "local/gen2-language-fulltext/",
+     "bytes": 830287,
+     "sha256": "03f5c47965eabd49598473a820c6f4ed49cd1c9b4e86fbe2eb614f6afc0f9a1b",
+     "checksum_source": "recorded in taxonomy-fulltext-log.json on 2026-10-14 and recomputed from the file when the report was taken into the ledger",
+     "bytes_source": "measured when the report was taken into the ledger",
+     "note": "Verified twice over: the PDF's digest is the one the fetch log recorded, and the digest of the text extracted from it is the source_text_sha256 of consensus-taxonomy-mapping.json, so the file read is the file fetched.",
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null,
+     "seq": 1
+    }
+   ],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-10-14; the fifteen categories were extracted into consensus-taxonomy-mapping.json with every quote checked against the extracted text whose digest that file records",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "language",
+    "verification": "full_text",
+    "basis": "catalog.json, where K37, K38 and K39 quote it"
+   },
+   "notes": [],
+   "current_status": "retrieved",
+   "current_file": {
+    "file": "huidrom-belz-2023-towards.pdf",
+    "bytes": 830287,
+    "sha256": "03f5c47965eabd49598473a820c6f4ed49cd1c9b4e86fbe2eb614f6afc0f9a1b"
+   },
+   "last_attempt_date": "2026-10-14"
   }
  ],
  "diagnostics": [
@@ -4802,7 +4894,7 @@
   }
  ],
  "derived_from": {
-  "report-map.json": "e2edaebfced309ccb14ccad93bb10c8b6dce36e3f2c73947299ae4b613ec9ef2",
+  "report-map.json": "e6166d015530050efd9bf775d4126f6baa0155b7d07c58b8faa55e837b4b28b2",
   "fulltext-retrieval-log.json": "52ddeaedfdda580148007182ec7d0c78c4e1dd1450704dc8c736199418133611",
   "screening-decisions.json": "6f5519b520638e09a901b489baf6d8b9eb61e5e26b45fe72cfb104c021923e06",
   "screening-strata.json": "d89e50a36bcb370ef9b28a290e40265e9df720c8e677fd06bee7b99941a0f87d",
@@ -4810,10 +4902,10 @@
  },
  "corrections": [],
  "counts": {
-  "reports": 50,
+  "reports": 51,
   "catalog_reports": {
-   "sought": 33,
-   "retrieved": 33,
+   "sought": 34,
+   "retrieved": 34,
    "not_retrieved": 0,
    "not_sought": 0
   },
@@ -4836,8 +4928,8 @@
    "not_sought": 0
   },
   "attempts": {
-   "total": 52,
-   "succeeded": 46,
+   "total": 53,
+   "succeeded": 47,
    "failed": 5,
    "wrong_report": 1,
    "logged_retroactively": 6
@@ -4855,7 +4947,8 @@
    "not_recorded": 2,
    "professional_guidance": 2,
    "remainder_audit_sample": 1,
-   "search_and_screening": 29
+   "search_and_screening": 29,
+   "taxonomy_frame": 1
   },
   "human_verified": 0
  }

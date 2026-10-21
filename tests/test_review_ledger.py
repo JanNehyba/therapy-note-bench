@@ -110,7 +110,7 @@ def test_human_verification_is_never_invented(reports):
         assert family["assessed_by"] is None or family["sample_overlap"] == "established"
 
 
-def test_catalog_reports_count_33_33_0(reports):
+def test_catalog_reports_count_34_34_0(reports):
     """Eighteen of nineteen until 2026-10-07, and then twenty-seven of twenty-seven.
 
     S5, the 2008 preliminary report of the PDQI family, had been recorded as not
@@ -120,7 +120,7 @@ def test_catalog_reports_count_33_33_0(reports):
     which is the field that tracks reading.
     """
     counts = reports["counts"]["catalog_reports"]
-    assert counts == {"sought": 33, "retrieved": 33, "not_retrieved": 0, "not_sought": 0}
+    assert counts == {"sought": 34, "retrieved": 34, "not_retrieved": 0, "not_sought": 0}
     s5 = _by_source(reports)["S5"]
     assert s5["report_id"] == "doi:10.1197/jamia.m2404"
     assert s5["current_status"] == "retrieved"
@@ -136,6 +136,36 @@ def test_catalog_reports_count_33_33_0(reports):
     assert by_source["S21"]["report_id"] == "doi:10.1002/capr.12829"
     assert by_source["S21"]["route"]["kind"] == "search_and_screening"
     assert by_source["S21"]["retrieval_events"][-1]["date"] == "2026-10-07"
+    # And by one more on 2026-10-21, when S34 was brought in from the language
+    # sweep. It was the only catalog source outside the ledger, and the rule
+    # that kept it out was catalog.py's exemption for its layer.
+    assert by_source["S34"]["report_id"] == "doi:10.26615/978-954-452-092-2_058"
+    assert by_source["S34"]["route"]["kind"] == "taxonomy_frame"
+
+
+def test_the_language_sweeps_one_source_is_in_the_ledger_with_its_digests(reports):
+    """S34 is what K37, K38 and K39 are made from, and it was outside the ledger.
+
+    Its entry is not retyped from the catalog. The digest it declares is the one
+    the sweep's own fetch log recorded on 2026-10-14, and the file it names is
+    the file that log named, in the directory that sweep wrote to rather than
+    the review's. Both are tracked records, so this holds with no local file.
+
+    What is deliberately not asserted is that anyone verified it: the reading is
+    the assistant's, and `human_verified` stays null here as everywhere.
+    """
+    entry = _by_source(reports)["S34"]
+    log = json.loads((REVIEW / "taxonomy-fulltext-log.json").read_text(encoding="utf-8"))
+    paper = next(p for p in log["papers"] if p["key"] == "huidrom-belz-2023-towards")
+    event = entry["retrieval_events"][-1]
+    assert event["date"] == log["date"]
+    assert event["sha256"] == paper["sha256"]
+    assert event["file"] == "huidrom-belz-2023-towards.pdf"
+    assert event["file_base"] == "local/gen2-language-fulltext/"
+    assert entry["pool"]["in_pool"] is False, "the pool search did not find it"
+    assert entry["reading"]["basis"] == "full_text"
+    assert entry["reading"]["human_verified"] is None
+    assert entry["inclusion"]["layer"] == "language"
 
 
 def test_having_the_file_is_not_the_same_as_having_read_it(reports):
@@ -271,8 +301,8 @@ def test_flow_full_text_is_report_level(flow, reports):
     full = flow["full_text"]
     assert full["unit"] == "report"
     assert {k: full["catalog_reports"][k] for k in ("sought", "retrieved", "not_retrieved")} == {
-        "sought": 33,
-        "retrieved": 33,
+        "sought": 34,
+        "retrieved": 34,
         "not_retrieved": 0,
     }
     assert full["catalog_reports"]["not_retrieved_detail"] == []
@@ -331,7 +361,9 @@ def test_flow_preserves_the_correction_history(flow):
     recorded = json.loads((REVIEW / "flow-recorded.json").read_text(encoding="utf-8"))
     assert flow["corrections"] == recorded["corrections"]
     dates = [c["date"] for c in flow["corrections"]]
-    assert dates == sorted(dates) and dates[-1] == "2026-09-15"
+    # The last entry is the caveat of 2026-10-21: the one sentence a reader of
+    # the diagram carries away restated two figures, and both had gone stale.
+    assert dates == sorted(dates) and dates[-1] == "2026-10-21"
     assert any("attempts" in c["what"] for c in flow["corrections"])
 
 
@@ -419,7 +451,7 @@ def test_fetch_appends_to_the_map_and_rebuilds_the_ledger_not_the_log(tmp_path):
     )
     assert rebuilt == json.loads((copy / "reports.json").read_text(encoding="utf-8"))
     flow = json.loads((copy / "flow.json").read_text(encoding="utf-8"))
-    assert flow["full_text"]["catalog_reports"]["retrieved"] == 33
+    assert flow["full_text"]["catalog_reports"]["retrieved"] == 34
     assert ledger.sha256_file(copy / "fulltext-retrieval-log.json") == log_digest
 
     def gone(report):

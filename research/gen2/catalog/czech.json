@@ -1688,23 +1688,31 @@
     },
     "K39": {
       "name": "Chyba zděděná ze zdroje",
-      "statement": "Zápis nepřebírá chyby, které udělal už přepis.",
-      "question": "Nepřepsal zápis věrně chybu, kterou udělalo rozpoznávání řeči?",
+      "statement": "Zápis nepřebírá chyby, které byly už ve zdroji.",
+      "question": "Nepřepsal zápis věrně chybu, která byla už ve zdroji — v přepisu nahrávky nebo v překladu?",
       "unit": "jedno tvrzení, jehož zdrojový text je sám špatný",
-      "why_not_measured": "Nedá se to rozhodnout z přepisu, protože špatný je ten přepis. Potřebuje to nahrávku, a u českých sezení je nahrávka důvěrná.",
+      "why_not_measured": "Nedá se to rozhodnout z přepisu, protože špatný je právě ten přepis. Potřebuje to nahrávku, a u české části navíc anglický přepis, ze kterého se překládalo.",
       "from": {
         "name": "read on 2026-10-14 and written here",
         "statement": "read on 2026-10-14 and written here",
         "question": "read on 2026-10-14 and written here",
         "unit": "read on 2026-10-14 and written here",
         "why_not_measured": "read on 2026-10-14 and written here",
-        "plain": "napsáno 2026-10-15",
+        "plain": "napsáno 2026-10-15, přepsáno 2026-10-21",
         "example": "přeloženo z catalog.json examples.negative 2026-10-15"
       },
       "ranking_role": "not_measured_yet",
       "needs_bank": false,
-      "plain": "Jestli zápis nepřepsal věrně chybu, kterou udělalo už rozpoznávání řeči.",
-      "example": "Přepis slyšel „sertralid“ místo „sertralin“ a zápis to opíše."
+      "plain": "Jestli zápis věrně neopsal chybu, která vznikla už dřív — při přepisu nahrávky nebo při překladu do češtiny.",
+      "example": "Přepis slyšel „sertralid“ místo „sertralin“ a zápis to opíše.",
+      "reworded_on": "2026-10-21",
+      "why_reworded": "Všechna čtyři znění tvrdila, že chyba přichází z rozpoznávání řeči, a že u českých sezení je nahrávka důvěrná. Česká část článku jsou ale překlady veřejných anglických konverzací a skutečná česká sezení nejsou ani v článku, ani v pilotu. Chyba se tedy dědí z přepisu nahrávky a na české straně z překladu, a žádná otázka důvěrnosti tu nevzniká.",
+      "previous_wording": {
+        "statement": "Zápis nepřebírá chyby, které udělal už přepis.",
+        "question": "Nepřepsal zápis věrně chybu, kterou udělalo rozpoznávání řeči?",
+        "plain": "Jestli zápis nepřepsal věrně chybu, kterou udělalo už rozpoznávání řeči.",
+        "why_not_measured": "Nedá se to rozhodnout z přepisu, protože špatný je ten přepis. Potřebuje to nahrávku, a u českých sezení je nahrávka důvěrná."
+      }
     }
   },
   "panel_sheet": {

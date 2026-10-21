@@ -192,7 +192,11 @@ def problems(catalog: dict, reports: dict | None = None) -> list[str]:
         # the ledger by being named.
         by_source = {r["catalog_source"]: r["report_id"] for r in reports["reports"]}
         for s in catalog["sources"] + catalog["abstract_sources"]:
-            if s["layer"] == "language":
+            # The exemption is for a language-layer source the ledger does not
+            # hold. S34 is in the ledger since 2026-10-21, and an exemption that
+            # went on applying to it would let the one entry drift from the
+            # catalog unseen.
+            if s["layer"] == "language" and s["id"] not in by_source:
                 if not str(s["ledger_report_id"]).startswith("doi:"):
                     out.append(f"{s['id']}: a language-layer source is traced by its DOI")
             elif by_source.get(s["id"]) != s["ledger_report_id"]:

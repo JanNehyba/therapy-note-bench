@@ -3,14 +3,75 @@
   "marker": "AUTHORED-INVESTIGATOR-TEXT",
   "generated_by": "research/gen2/state.py",
   "what_this_is": "What has been run and what has not, recomputed from the files that would know. Nothing here is maintained by hand: a figure that goes stale in this file is a figure that was never read from its source.",
-  "why_it_exists": "No tracked file said what the state of the project was, so several said part of it in their own words and went stale apart from one another. The audit of 2026-09-15 prescribed this file and it was not built; the audit of 2026-10-21 found 42 claims that had gone false, every one of them a symptom of its absence.",
+  "why_it_exists": "No tracked file said what the state of the project was, so several said part of it in their own words and went stale apart from one another. The audit of 2026-09-15 prescribed this file and it was not built; the audit of 2026-10-21 found stale claims across the tracked documents, every one of them a symptom of its absence. How many is not stated here: this file carried the figure 42 by hand, no artefact holds it, and three of those findings were not false claims at all. What the audit says now is in `claims_audit`, which is read from its report.",
   "what_it_does_not_say": "Whether an instrument is valid, whether a measurement would be any good, and whether anybody outside this project has agreed to anything. It reports what has happened, not what it is worth.",
   "sources": {
     "generated_and_scored": "results/rows.jsonl",
     "protocol": "research/gen2/protocol.json and research/gen2/history/",
     "catalog": "research/gen2/catalog/catalog.json",
     "operational": "research/gen2/catalog/operational.json",
-    "panel": "research/gen2/protocol.json content_validity"
+    "panel": "research/gen2/protocol.json content_validity",
+    "searches": "research/gen2/queries.json",
+    "literature": "research/gen2/review-2026-09-13/reports.json",
+    "translation": "research/gen2/translation/instrument.json and research/gen2/translation/translations.json",
+    "review_decisions": "research/gen2/review-record.json",
+    "claims_audit": "research/gen2/audit-findings.json"
+  },
+  "has_been_run": {
+    "searches": {
+      "queries_written": 15,
+      "queries_run": 12,
+      "databases": [
+        "ACL Anthology",
+        "PubMed",
+        "Scopus"
+      ],
+      "logs": [
+        "research/gen2/review-2026-09-13/search-log-acl-language.json",
+        "research/gen2/review-2026-09-13/search-log-acl.json",
+        "research/gen2/review-2026-09-13/search-log-pubmed.json",
+        "research/gen2/review-2026-09-13/search-log-scopus.json"
+      ],
+      "what_the_logs_hold": "each run query's date, its record count and the sha256 of its export; the numbers stay there rather than being restated here",
+      "not_run": [
+        "psycinfo-direct",
+        "psycinfo-requirements",
+        "scopus-transfer"
+      ]
+    },
+    "literature": {
+      "reports_in_the_ledger": 51,
+      "catalog_sources_sought": 34,
+      "catalog_sources_retrieved": 34,
+      "read_in_full_text": 33,
+      "read_from_the_abstract": 1,
+      "verified_by_a_person": 0,
+      "what_reading_is_not": "Every reading recorded there is the assistant's. Nobody has checked a quote against its paper, which is why the last figure is zero and is reported beside the others rather than instead of them."
+    },
+    "translation": {
+      "translator": "glm-5.3 on einfra",
+      "chosen_by": "a back-translation check over 40 turns against gpt-oss-120b, recorded before use",
+      "recorded_at": "2026-09-21T19:50:04+00:00",
+      "conversations_translated": 2,
+      "usable": 2,
+      "failed": 0,
+      "what_this_is_not": "Two conversations are a feasibility pilot's materials and not a cohort. No note has been written from them by generation 2."
+    },
+    "review_decisions": {
+      "decision_records": 543,
+      "subjects": 139,
+      "snapshots": 8,
+      "by_latest_mode": {
+        "delegated": 106,
+        "human": 33
+      },
+      "what_delegated_means": "The investigator reviewed the criteria once and delegated the rest; a delegated decision is the assistant's and is recorded as such."
+    },
+    "claims_audit": {
+      "where": "research/gen2/audit-findings.json",
+      "what_it_reports": "Every published claim the checker can decide, against the file that holds it, with the live findings listed first. A live count of zero is not a clean repository: four classes of defect are found by reading and the report names them.",
+      "why_no_number_here": "The audit scans this file, so a count copied into it would decide the next run's answer and neither artefact could be built first. The figure lives in the audit's own report, which tests/test_state.py holds to a fresh run, and the 42 this file used to carry was typed in and checkable nowhere."
+    }
   },
   "generations": {
     "rows_in_total": 2357,
@@ -40,7 +101,9 @@
         "0.6.0",
         "0.7.0"
       ],
-      "rows_are_not_notes": "A row is one scored question of one note by one judge, so the count is not a count of notes: these rows carry fewer distinct row ids than rows, and fewer still with a session actually scored."
+      "distinct_row_ids": 996,
+      "rows_with_a_session_scored": 1188,
+      "rows_are_not_notes": "A row is one scored question of one note by one judge, so the row count is not a count of notes, and the two figures above are why: a row id repeats and a row can carry no scored session at all. Neither of them is a count of notes either, and this file does not report one, because the ledger does not hold it."
     },
     "generation_2": {
       "measured": false,

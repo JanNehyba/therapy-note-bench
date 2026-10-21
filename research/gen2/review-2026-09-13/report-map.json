@@ -3726,6 +3726,82 @@
     "basis": "catalog.json and the source-first table"
    },
    "notes": []
+  },
+  {
+   "report_id": "doi:10.26615/978-954-452-092-2_058",
+   "id_basis": "DOI as the catalog citation records it, consistent with the Anthology key 2023.ranlp-1.58 and the volume's DOI pattern. The Anthology metadata carries no DOI field for this paper (taxonomy-papers.json), so no second record verifies it and the key is what the retrieval was made on.",
+   "kind": "supplementary_discovery",
+   "title": "Towards a Consensus Taxonomy for Annotating Errors in Automatically Generated Text",
+   "citation_short": "Huidrom and Belz 2023, RANLP",
+   "catalog_source": "S34",
+   "study_family": null,
+   "identifiers": {
+    "doi": "10.26615/978-954-452-092-2_058",
+    "pmid": null,
+    "pmcid": null,
+    "acl_key": "2023.ranlp-1.58",
+    "url": "https://aclanthology.org/2023.ranlp-1.58/",
+    "osf_node": null
+   },
+   "identifier_sources": {
+    "doi": "catalog.json citation; no record other than the catalog carries it",
+    "acl_key": "taxonomy-papers.json",
+    "url": "taxonomy-papers.json"
+   },
+   "pool": {
+    "in_pool": false,
+    "pool_record_id": null,
+    "pool_record_id_status": "not_in_pool",
+    "stratum": null,
+    "priority_index": null
+   },
+   "route": {
+    "kind": "taxonomy_frame",
+    "from": null,
+    "declared_in": "research/gen2/review-2026-09-13/taxonomy-papers.json and taxonomy-fulltext-log.json",
+    "note": "Not the pool's search. A frame of 64 ACL Anthology papers was built by seven queries on 2026-10-13, 17 of them were selected to read as the paper's own read set, and this one was chosen first because it merges fifteen schemes rather than proposing one."
+   },
+   "known_before_search": {
+    "value": false,
+    "declared_in": null
+   },
+   "log_slugs": [],
+   "events": [
+    {
+     "date": "2026-10-14",
+     "time": null,
+     "date_source": "taxonomy-fulltext-log.json",
+     "route": "aclanthology.org PDF, open access, no key",
+     "route_kind": "direct_url",
+     "outcome": "retrieved",
+     "file": "huidrom-belz-2023-towards.pdf",
+     "file_base": "local/gen2-language-fulltext/",
+     "bytes": 830287,
+     "sha256": "03f5c47965eabd49598473a820c6f4ed49cd1c9b4e86fbe2eb614f6afc0f9a1b",
+     "checksum_source": "recorded in taxonomy-fulltext-log.json on 2026-10-14 and recomputed from the file when the report was taken into the ledger",
+     "bytes_source": "measured when the report was taken into the ledger",
+     "note": "Verified twice over: the PDF's digest is the one the fetch log recorded, and the digest of the text extracted from it is the source_text_sha256 of consensus-taxonomy-mapping.json, so the file read is the file fetched.",
+     "remaining_options": null,
+     "logged_retroactively": null,
+     "log_row": null,
+     "superseded_by_correction": null
+    }
+   ],
+   "reading": {
+    "basis": "full_text",
+    "ai_read": true,
+    "ai_read_basis": "read by the coding assistant on 2026-10-14; the fifteen categories were extracted into consensus-taxonomy-mapping.json with every quote checked against the extracted text whose digest that file records",
+    "human_verified": null,
+    "human_verification": null
+   },
+   "inclusion": {
+    "registry_included": true,
+    "use": "evidence",
+    "layer": "language",
+    "verification": "full_text",
+    "basis": "catalog.json, where K37, K38 and K39 quote it"
+   },
+   "notes": []
   }
  ],
  "scopus_audit_sample_check": "screen-audit-sample-scopus.json does reproduce. Its frame is the remainder reached only through the three Scopus exports, which are checksummed in search-log-scopus.json, and its seed, 20261007, is recorded in screening-strata.json. Checked on 2026-10-07: all 28 clearly eligible and all 11 borderline titles that screen.py names are in the file the seed draws. It will stop reproducing the first time the pool is rebuilt, and then it is to be recorded here in the same way rather than quietly repaired."

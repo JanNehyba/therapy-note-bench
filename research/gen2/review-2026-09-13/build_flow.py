@@ -314,14 +314,31 @@ def build(
         },
         "synthesis": {
             **recorded["synthesis"],
-            "sources_full_text_verified": sum(
-                1 for r in catalog if r["current_status"] == "retrieved"
+            # Retrieval is not reading and reading is not verification. The field
+            # that used to stand here was named `sources_full_text_verified` and
+            # counted reports whose status is `retrieved`, which is all three at
+            # once: forty-three were retrieved, thirty-eight were read in full
+            # text, and reports.json records that nobody verified any of them.
+            "sources_retrieved": sum(1 for r in catalog if r["current_status"] == "retrieved"),
+            "sources_read_in_full_text": sum(
+                1 for r in catalog if (r.get("reading") or {}).get("basis") == "full_text"
             ),
-            "sources_abstract_only": len(abstract),
+            "sources_read_from_the_abstract": sum(
+                1 for r in catalog if (r.get("reading") or {}).get("basis") == "abstract"
+            ),
+            "sources_verified_by_a_human": reports["counts"]["human_verified"],
+            "what_retrieval_is_not": (
+                "A retrieved report is a file that arrived. Whether it was read, and on "
+                "what, is its reading basis; whether a person checked its evidence against "
+                "it is human_verified, which is zero. The earlier field conflated the three "
+                "and published the first as the third."
+            ),
             "basis": (
-                "candidates, families, methods, levels, blind spots and pilot entries are "
-                "recorded from the local catalog; the source counts are derived from "
-                "reports.json"
+                "The candidate, family, method, level, blind-spot and pilot-entry counts are "
+                + recorded["synthesis"]["basis"]
+                + ", so they describe that date and not today: the catalog's current figures "
+                "are in research/gen2/state.json, which derives them. The source counts here "
+                "are derived from reports.json on every run."
             ),
         },
         "caveat": recorded["caveat"],

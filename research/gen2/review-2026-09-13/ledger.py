@@ -38,6 +38,10 @@ ROUTE_KINDS = (
     "citation_from",
     "author_search_from",
     "remainder_audit_sample",
+    # The language layer of 2026-10-13 searched the ACL Anthology rather than the
+    # pool's databases, so a report of that frame entered by neither the pool's
+    # screening nor a citation. Declared in taxonomy-papers.json.
+    "taxonomy_frame",
     "not_recorded",
 )
 EVENT_ROUTE_KINDS = (

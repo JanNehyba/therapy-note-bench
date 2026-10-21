@@ -2748,7 +2748,7 @@
       "family": "F1",
       "kind": "construct",
       "label": "Error inherited from the source",
-      "definition": "The note faithfully renders something the source itself got wrong. In this benchmark the source of the Czech track is speech recognition output, so a mis-recognised word copied correctly into the note is wrong about the session and right about the transcript. It is the one property in the catalog that cannot be decided from the transcript, because the transcript is what is wrong.",
+      "definition": "The note faithfully renders something the source itself got wrong. Both corpora are transcriptions of public recordings, and the Czech side is a translation of the same conversations, so a word that was already wrong before the model saw it can be copied correctly into the note and be wrong about the session while right about its source. It is the one property in the catalog that cannot be decided from the transcript, because the transcript is what is wrong.",
       "origin": "literature",
       "origin_note": "Found on 2026-10-14 in the consensus taxonomy and accepted the same day. The project already had the case without the criterion: the synthetic controls carry a transcription_error variant.",
       "evidence": [
@@ -2768,14 +2768,14 @@
       },
       "mode": "count of inherited errors over the errors the source contains",
       "unit": "one claim in the note whose source text is itself wrong",
-      "inputs": "recording, transcript, note",
-      "applicability": "Measurable only where the recording is available, because deciding it needs something the transcript is not. For AnnoMI the recordings are public; for the Czech sessions they are confidential and governed by Task.confined_to, so the measurement may not leave the machines that set names. Where no recording exists the criterion is reported as not applicable and not as passed, which is the whole reason to record it.",
+      "inputs": "recording, transcript, note; on the Czech side also the English transcript the translation was made from",
+      "applicability": "Measurable only against something the transcript is not. Both corpora are transcripts of public YouTube recordings, so on the English side the recording decides it; on the Czech side, which is a translation of those same conversations, the English transcript decides a translation error and the recording decides a transcription error underneath it. The project's real Czech sessions are in neither the paper nor the pilot, so no confinement question arises here. Where no recording exists the criterion is reported as not applicable and not as passed, which is the whole reason to record it.",
       "examples": {
         "positive": "The transcript has sertralid where the client said sertralin, and the note writes sertralin.",
         "negative": "The transcript has sertralid and the note writes sertralid.",
         "boundary": "The transcript is unintelligible at that point and the note omits the medication. Whether that is an inherited error or an omission under K05 is what the rule has to settle, and the honest answer may be that it is neither and belongs with the unresolvable cases."
       },
-      "measurement": "Not measured in this round. It needs the recordings, and for the Czech track that is a confinement question before it is a measurement question.",
+      "measurement": "Not measured in this round. It needs the recordings, and on the Czech side also the English transcript the translation was made from.",
       "error_consequence": "The note is wrong about the session and no measure says so. A model that copies carefully scores better than one that silently corrects the transcript, and the second may be the one a clinician wants.",
       "validation": "None.",
       "overlaps": "K01 (support, which this inverts: the note is supported by the source and still wrong), K18 (traceability), K05 (omission where the source is unintelligible).",

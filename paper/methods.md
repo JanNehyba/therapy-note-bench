@@ -119,15 +119,21 @@ prioritised evidence map, not a scoping review.
 
 ## Sources and evidence
 
-Thirty-three reports were sought as catalog sources and all thirty-three have
+Thirty-four reports were sought as catalog sources and all thirty-four have
 been retrieved. The round of 2026-10-07 attempted thirty, retrieved nine, read
 nine in full and seven became sources; the 2008 preliminary PDQI paper came in
 that round. Which of the earlier reports was sought when is not derivable from
 any artefact and is therefore not stated. The round joined that
 day, when SESPI was read in full and the Scopus searches brought seven further
-papers that the assistant read the same day. Twenty-six have been read in full
-text. The 2008 paper has not, so the
-entry resting on it still rests on its abstract. Twelve further reports are
+papers that the assistant read the same day. The thirty-fourth is the consensus
+error taxonomy, which the language sweep of 2026-10-14 found outside the pool
+and which three candidates rest on; it was brought into the report ledger on
+2026-10-21, having been traced only by its DOI until then. Thirty-three of the
+thirty-four have been read in full text and one from its abstract, which the
+flow diagram now reports as three separate figures: retrieved, read in full
+text, and verified by a person, the last of which is zero. The 2008 paper is
+the one read from its abstract, so the entry resting on it still rests on
+that. Twelve further reports are
 used from their abstracts; six were obtained on 2026-09-16 and read on
 2026-09-20, four more were obtained on 2026-10-07 and have not been read, and
 two could not be obtained at all and carry a dated failed attempt, which is a

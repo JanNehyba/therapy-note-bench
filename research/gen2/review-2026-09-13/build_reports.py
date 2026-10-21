@@ -271,6 +271,10 @@ def build(
         "ledger_date": mapping["ledger_date"],
         "id_rule": ledger.ID_RULE,
         "file_base": "local/gen2-review-2026-09-13/fulltext/",
+        "file_base_note": (
+            "Where a retrieval event's file is, unless the event names its own file_base. "
+            "One does: the language layer's sweep wrote its files elsewhere."
+        ),
         "principle": (
             "A report is sought, retrieved or not retrieved; an attempt is an event on a report. "
             "The latest successful event decides the status; a failed attempt after a success does "
@@ -316,7 +320,10 @@ def check_local(out: dict) -> list[str]:
     for report in out["reports"]:
         for event in report["retrieval_events"]:
             if event.get("file"):
-                path = fulltext / event["file"]
+                # An event may name its own directory, relative to the repository,
+                # for a file the review's own sweep did not fetch.
+                base = event.get("file_base")
+                path = (ROOT.parents[2] / base if base else fulltext) / event["file"]
                 if not path.exists():
                     findings.append(f"{report['report_id']}: {event['file']} absent locally")
                     continue

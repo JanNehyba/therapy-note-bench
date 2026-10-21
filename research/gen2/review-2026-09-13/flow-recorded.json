@@ -11,7 +11,7 @@
   "note": "Families are the investigator's provisional organising device, not validated dimensions.",
   "basis": "recorded from the local catalog on 2026-09-15; not derived"
  },
- "caveat": "Counts describe what was executed. The 9579 unscreened records and the two unsearched databases mean this is not a completed scoping review and must not be reported as one.",
+ "caveat": "Counts describe what was executed. Most of the pool has never been screened and one of the protocol's databases, APA PsycINFO, has not been searched at all, so this is not a completed scoping review and must not be reported as one. The unscreened figures are in the screening block above, where they are derived on every run; this sentence restates none of them on purpose, because the two it used to restate both went stale.",
  "corrections": [
   {
    "date": "2026-09-13",
@@ -39,6 +39,12 @@
    "date": "2026-09-15",
    "what": "build_pool.py read a PubMed record's DOI as the last ArticleId of type doi anywhere in the record, which includes the cited-reference list; 2719 PubMed records were keyed by a reference's DOI and distinct records merged as duplicates.",
    "effect": "Pool rebuilt with each record's own DOI: 10223 unique records (was 10059), 1139 duplicates removed (was 1303). Re-prioritised with the same rule and threshold: 507 records in the priority stratum (was 487), of which 20 entered it after the AI screen and are listed as not screened, never as excluded; remainder 9716 (was 9572). The audit judgement of 2026-09-13 is unchanged and its estimate is recomputed over the new remainder: 291 [134-621] clearly eligible (was 287 [132-612])."
+  },
+  {
+   "date": "2026-10-21",
+   "what": "The caveat restated two figures and both had gone stale: 9579 unscreened records, which the pool rebuild of 2026-09-15 and the Scopus round of 2026-10-07 took to 11376, and two unsearched databases, which the Scopus searches of 2026-10-07 took to one.",
+   "found_by": "an independent review of the repository's self-audit",
+   "effect": "The caveat no longer carries a count. It names the one database that was not searched, which is a fact about the protocol and not a measurement, and points at the screening block for the unscreened figures, which are derived. No count in the diagram changes; what changes is that the sentence a reader carries away cannot go stale by itself again."
   }
  ]
 }
