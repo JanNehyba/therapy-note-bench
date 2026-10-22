@@ -1,0 +1,90 @@
+{
+  "version": "panel-scale-sources-v1",
+  "marker": "AUTHORED-INVESTIGATOR-TEXT",
+  "what_this_is": "The two primary sources behind the content-validity panel's rating scale and its retention rule, read on 2026-10-22, with the sentences this project rests on quoted from them. The protocol had said that neither had been retrieved and that nothing was therefore taken from them; both are now read and two of the project's own decisions turn out to be in them.",
+  "how_they_were_read": "Both are closed access and have no open copy: Unpaywall reports oa_status closed for each, Europe PMC holds Lynn as pmid 3640358 with no abstract and does not hold Davis at all. They were read on 2026-10-22 through Masaryk University's EZproxy in the investigator's browser, at the publishers' own sites. No file was taken; the quotes below were read from the publishers' PDF viewers, which is why each one names its page.",
+  "what_this_is_not": "A reading of either paper in full. Each was read for the passages that bear on this project's scale and threshold, and the one figure that would settle where this project's own labels come from was not read. That is recorded below rather than left to be assumed.",
+  "sources": [
+    {
+      "id": "lynn-1986",
+      "citation": "Lynn MR. Determination and quantification of content validity. Nursing Research 1986;35(6):382-386. doi:10.1097/00006199-198611000-00017.",
+      "doi": "10.1097/00006199-198611000-00017",
+      "pmid": "3640358",
+      "open_access": false,
+      "route": "www-ovid-com.ezproxy.muni.cz, publisher PDF, institutional access",
+      "read_on": "2026-10-22",
+      "read_by": "the coding assistant, in the browser, at the investigator's instruction",
+      "verified_by_a_person": false,
+      "quotes": [
+        {
+          "id": "four-option-scale",
+          "page": "384",
+          "quote": "The second concern would be controlled by establishment of a 4-option rating scale (1 = not relevant; 2 = unable to assess relevance without item revision or item is in need of such revision that it would no longer be relevant; 3 = relevant but needs minor alteration; 4 = very relevant and succinct) for all content validity assessments.",
+          "what_it_settles": "The four-option scale is Lynn's, and its labels are not the ones this project uses. This project's third and fourth steps say quite relevant and highly relevant; Lynn's say relevant but needs minor alteration and very relevant and succinct, which are about what to do with the item and not only about how relevant it is."
+        },
+        {
+          "id": "why-four-and-not-three-or-five",
+          "page": "384",
+          "quote": "Although a 3- or 5-point rating scale might be considered, the 4-point scale is preferable because it does not include the ambivalent middle rating common in odd number rating scales.",
+          "what_it_settles": "Why the scale has an even number of points, which this project had adopted without a stated reason."
+        },
+        {
+          "id": "minimum-of-three-experts",
+          "page": "383",
+          "quote": "Therefore, in content/domain areas of sufficient restriction to preclude large numbers of experts, a minimum of three experts should be used. The use of only two judges is not only statistically unjustifiable, but also it places the instrument developer at great risk of an erroneous conclusion that content validity has not been achieved when it actually has. The maximum number of judges which might be used has not been established, but it is unlikely to exceed 10.",
+          "what_it_settles": "Three raters is a floor this source names, not merely fewer than the five to seven S12 calls typical. It is conditional on the domain being restricted enough to preclude more, which is a condition this project has to argue rather than assume."
+        },
+        {
+          "id": "table-2-unanimity-at-three",
+          "page": "384",
+          "quote": "Table 2. Proportion of Experts (Above the Line) Whose Endorsement Is Required to Establish Content Validity Beyond the .05 Level of Significance",
+          "what_it_settles": "The table's row for three experts puts the required proportion at 1.00: with three raters, all three must endorse an item. The rule this project adopted on 2026-10-21 for its own reason -- that two of three is what a uniform rater produces half the time -- is the rule this table gives, and the project did not know that when it chose it."
+        },
+        {
+          "id": "experts-name-what-is-missing",
+          "page": "384",
+          "quote": "The experts, in addition to judging each item, should identify any area(s) that have been omitted from the instrument.",
+          "what_it_settles": "The sheet's third question, which asks each rater what is missing from the list, is this recommendation and was written without it."
+        }
+      ],
+      "not_read": "Everything else, including the part of Table 2 that governs six to ten experts and the derivation behind it."
+    },
+    {
+      "id": "davis-1992",
+      "citation": "Davis LL. Instrument review: Getting the most from a panel of experts. Applied Nursing Research 1992;5(4):194-197. doi:10.1016/S0897-1897(05)80008-4.",
+      "doi": "10.1016/S0897-1897(05)80008-4",
+      "pmid": null,
+      "open_access": false,
+      "route": "www-sciencedirect-com.ezproxy.muni.cz, publisher PDF, institutional access",
+      "read_on": "2026-10-22",
+      "read_by": "the coding assistant, in the browser, at the investigator's instruction",
+      "verified_by_a_person": false,
+      "quotes": [
+        {
+          "id": "cvi-is-the-top-two",
+          "page": "197",
+          "quote": "To calculate an overall Index of Content Validity (CVI), divide the total number of items ranked 3 or 4 by both reviewers by the total number of items.",
+          "what_it_settles": "The cut falls above the midpoint of the four points, and it falls there in the source this project's scale wording is usually attributed to."
+        },
+        {
+          "id": "agreement-both-ends",
+          "page": "196",
+          "quote": "Interrater agreement is calculated by adding the number of agreements among the two expert reviewers (all items rated 1 or 2 by both raters, plus all items rated 3 or 4 by both raters) and dividing by the total number of items.",
+          "what_it_settles": "Agreement is counted at both ends of the cut, not only where raters call an item relevant. This project reports Krippendorff's alpha over the four ordinal answers, which is a stricter measure than this and not the same one."
+        },
+        {
+          "id": "eighty-percent-for-new-instruments",
+          "page": "197",
+          "quote": "For new instruments, investigators should seek 80% or better agreement among reviewers.",
+          "what_it_settles": "A published expectation for a new instrument's interrater agreement, which this project has no answer for yet and must report against."
+        }
+      ],
+      "not_read": "Figure 1, which is the example rating scale and the one place where the labels this project uses -- not relevant, somewhat relevant, quite relevant, highly relevant -- would be confirmed or refuted as Davis's. The page it sits on was open and the figure was not read before the browser session ended."
+    }
+  ],
+  "what_this_changes": [
+    "The protocol said the primary sources had not been retrieved and that no threshold was taken from them. Both are now read, and the retention rule this project adopted on its own reasoning is the one Lynn's Table 2 gives for three raters.",
+    "The panel of three stops being only fewer than typical: Lynn names three as the floor where the domain precludes more, and names two as unjustifiable.",
+    "The scale's labels are still not traced. They are not Lynn's. Whether they are Davis's is unresolved, and the figure that would settle it is named above as unread."
+  ]
+}

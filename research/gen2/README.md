@@ -1,6 +1,6 @@
 # Gen-2: scoping review and transparent instrument development
 
-**Research protocol 2.11.0, amended 2026-10-21; 2.10.0 to 1.0.0 are retained in
+**Research protocol 2.12.0, amended 2026-10-22; 2.11.0 to 1.0.0 are retained in
 `history/`. Status: prepared and amended before any pilot run; the search of
 2026-09-13 is bounded as a scoping search with a prioritised evidence map, and the
 human selection and clinical validation are not complete.** Earlier reading, prototype

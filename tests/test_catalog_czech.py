@@ -338,6 +338,64 @@ def test_the_sheets_rule_is_the_protocols_rule(czech):
     assert "Krippendorff" in rule["agreement"] and "pairwise" in rule["agreement"]
 
 
+def test_what_the_protocol_quotes_is_in_the_file_that_read_it():
+    """The protocol said for weeks that neither primary source had been retrieved.
+
+    Both were read on 2026-10-22 and the protocol now rests four claims on them:
+    that four points with the cut above the midpoint is Lynn's, that three
+    raters is a floor she names rather than only fewer than typical, that her
+    Table 2 requires all three of three, and that the sheet's third question is
+    her recommendation. A claim quoted from a paper nobody can check is worse
+    than no claim, so every quotation lives in one artefact with its page, and
+    this holds the protocol to it.
+
+    What is deliberately asserted here too is the gap: the figure that would
+    settle where this project's own labels come from was not read, and the
+    artefact has to keep saying so.
+    """
+    artefact = json.loads((REPO / "research/gen2/panel-scale-sources.json").read_text("utf-8"))
+    protocol = json.loads((REPO / "research/gen2/protocol.json").read_text(encoding="utf-8"))
+    cv = protocol["content_validity"]
+
+    sources = {s["id"]: s for s in artefact["sources"]}
+    assert set(sources) == {"lynn-1986", "davis-1992"}
+    quoted = []
+    for source in sources.values():
+        assert source["doi"] and source["route"] and source["read_on"] == "2026-10-22"
+        # Read by the assistant in a browser. Nobody has checked a quote against
+        # the paper, and the artefact may not imply otherwise.
+        assert source["verified_by_a_person"] is False
+        assert len(source["not_read"].split()) >= 5, source["id"]
+        for quote in source["quotes"]:
+            assert quote["page"] and len(quote["what_it_settles"].split()) >= 8
+            quoted.append(quote["quote"])
+    everything = " ".join(quoted)
+
+    # Each fragment the protocol puts in quotation marks has to be one of them.
+    for fragment in (
+        "a minimum of three experts should be used",
+        "not only statistically unjustifiable",
+        "does not include the ambivalent middle rating",
+        "the total number of items ranked 3 or 4 by both reviewers",
+        "80% or better agreement among reviewers",
+        "relevant but needs minor alteration",
+        "should identify any area(s) that have been omitted",
+    ):
+        assert fragment in everything, fragment
+
+    where = "research/gen2/panel-scale-sources.json"
+    assert where in cv["retention_rule"]["supported_by"]
+    assert where in cv["procedure"]["what_the_source_recommends"]
+    relevance = next(q for q in cv["questions"] if q["id"] == "relevance")
+    assert where in relevance["scale_source"]
+    # The labels are not traced, and the protocol says so rather than implying
+    # that reading the sources settled it.
+    assert "not Lynn's" in relevance["scale_source"]
+    assert "unsettled" in relevance["scale_source"]
+    # Lawshe is still unretrieved and still gives nothing.
+    assert "Lawshe" in relevance["scale_source"] and "unretrieved" in relevance["scale_source"]
+
+
 def test_the_order_is_the_recorded_seed_and_does_not_move(codes):
     """The order is part of the method, so it is pinned, not re-drawn.
 

@@ -341,7 +341,7 @@ removed with K19 on 2026-10-05. The protocol records
 the executable count at freeze rather than capping it. The registry refuses to
 freeze while any used subject lacks an accepted decision.
 
-The feasibility pilot (protocol 2.11.0) freezes 16 generation jobs over two
+The feasibility pilot (protocol 2.12.0) freezes 16 generation jobs over two
 cohorts, two English AnnoMI conversations and their Czech translations, two
 purposes and two generator families, and balances an 8-note human sample across
 them. Two Czech psychologists, neither the instrument author, rate under a
@@ -414,9 +414,22 @@ than three and is not measured, because counting it as not relevant would
 invent a judgement and rescaling the denominator would apply a different rule
 to that item than to the rest. Agreement is Krippendorff's alpha over the three
 raters' ordinal answers with the three pairwise Cohen's kappas beside it; the
-rule named Cohen's kappa alone, which is defined for two. Three raters is below the typical range, so what the panel
-supplies is a screening of the pool and not established content validity, and
-the measured set the pilot uses is the panel's rather than the authors'. The two Czech
+rule named Cohen's kappa alone, which is defined for two. Three raters is below the five to seven that source calls typical, but it is
+not below the floor: Lynn (1986), which that source cites for the content
+validity index and which we read on 2026-10-22, holds that where the domain
+precludes large numbers "a minimum of three experts should be used" and that
+two judges are "not only statistically unjustifiable" but a risk of concluding
+that content validity is absent when it is not. The same paper's Table 2 gives,
+for three experts, a required endorsement proportion of 1.00, which is the rule
+we had adopted the day before from the chance levels of the scale; the dates are
+reported so that the agreement is read as agreement and not as the rule's
+derivation. The scale's four points and the cut above their midpoint are also
+that paper's, for the reason it gives, that an even number of options has no
+ambivalent middle; the labels, however, are not, and whether they are Davis's
+(1992) is unsettled because the figure that would settle it is one we did not
+read. What the panel supplies is still a screening of the pool and not
+established content validity, and the measured set the pilot uses is the
+panel's rather than the authors'. The two Czech
 psychologists of the pilot are raters, not independent judges of the pool, and
 a feasibility pilot does not stand in for that judgement. COSMIN's criteria
 name relevance, comprehensiveness and comprehensibility as what such a
