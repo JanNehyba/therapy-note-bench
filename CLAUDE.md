@@ -11,6 +11,14 @@ Talk with Jan in Czech; keep code, docstrings, tests, commit messages and all
 documentation in English. Jan is not a software engineer — explain plainly, skip
 jargon, and prove things in small verified steps rather than large ones.
 
+**Czech that leaves this project is written, not translated.** The panel sheet
+is the one artefact that goes to people outside it, and it is in Czech. An
+English sentence in Czech words reads as broken to the person holding it:
+"vyhrat na kriteriu" is *win on a criterion*, and it went out in a draft. Write
+the sentence as a Czech speaker would say it, read it back before it ships, and
+expect Jan to catch what is left — he has, every time. No test can check idiom,
+so this is a rule and not a check.
+
 ## Source Of Truth
 
 - What exists in this field and what does not: `docs/landscape.md` — read first

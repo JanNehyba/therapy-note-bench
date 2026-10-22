@@ -1857,16 +1857,16 @@
       ],
       [],
       [
-        "Jak by se dalo tohle kritérium obejít?"
+        "Jak by se tohle dalo obejít?"
       ],
       [
-        "Když se nějaká vlastnost začne známkovat, modely se na ni zaměří — a někdy najdou způsob, jak na ní vyhrát, aniž by byl zápis lepší."
+        "Co se začne známkovat, na to se modely zaměří. A někdy jde dobrá známka získat, aniž by zápis za něco stál."
       ],
       [
-        "Příklad: kritérium „Úspornost“ říká, že každá věta zápisu má nést podstatný obsah. Zápis o jediné větě dostane nejlepší možné skóre — ta jedna věta podstatná je a víc tam není nic. Čím míň model napíše, tím líp vyjde."
+        "Příklad: kritérium „Úspornost“ žádá, aby každá věta nesla podstatný obsah. Zápis, který má jedinou větu, dostane plný počet bodů — ta jedna věta podstatná je a nic dalšího tam není. Čím míň toho model napíše, tím líp dopadne."
       ],
       [
-        "Napadá vás u některého kritéria, jak by se na něm dalo vyhrát, aniž by byl zápis doopravdy lepší? Nebo kde by měření mohlo uškodit klientovi? Napište kód kritéria a čím."
+        "Napadá vás u některého kritéria, jak by na něm model mohl získat dobrou známku, aniž by tomu kvalita zápisu odpovídala? Nebo kde by měření mohlo uškodit klientovi? Napište kód kritéria a čím."
       ],
       [
         ""
@@ -2261,7 +2261,7 @@
       },
       {
         "label": "podstatné",
-        "anchor": "Dobrý zápis tohle má. Když to chybí, je to vada, kterou by měl někdo zmínit.",
+        "anchor": "Dobrý zápis tohle má. Když to chybí, je to vada a mělo by se na ni upozornit.",
         "counts_as_essential": true
       },
       {
@@ -2276,7 +2276,7 @@
     },
     "relevance_no_answer": {
       "label": "nevím",
-      "anchor": "Nedokážu to posoudit. Není to hlas pro ani proti — vlastnost se vykáže jako neposouzená, stejně jako prázdné políčko, ale je vidět, že jste ji četli.",
+      "anchor": "Nedokážu to posoudit. Není to hlas pro ani proti — u téhle vlastnosti pak nebude odpověď od všech čtyř, takže se měřit nebude. Oproti prázdnému políčku je ale vidět, že jste ji četli.",
       "counts_as": "missing"
     }
   },
