@@ -890,7 +890,7 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-22",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "Zápis zachycuje riziko a bezpečí tam, kde v sezení zaznělo.",
+      "statement": "Chyba, která se týká rizika a bezpečí, váží víc než táž chyba jinde.",
       "question": "Je zachycené riziko tam, kde zaznělo?",
       "definition": "Obsahové téma: suicidalita, sebepoškozování, nebezpečí pro druhé, týrání, krizové ukazatele. Není to konstrukt kvality, je to téma s nejvyšší závažností chyby. Zároveň je to průřezový důsledek: chyba věrnosti nebo pokrytí, která se dotkne rizika, je závažnější než táž chyba jinde.",
       "unit": "jednotka označená jako riziko",
@@ -902,7 +902,12 @@
       "needs_bank": true,
       "plain": "Jestli je v zápisu to, co v sezení zaznělo o riziku a bezpečí.",
       "example": "V sezení zazněla beznaděj a zápis o ní neříká nic.",
-      "example_positive": "Zmínka o beznaději je v bance označená jako riziková a zápis ji nese."
+      "example_positive": "Zmínka o beznaději je v bance označená jako riziková a zápis ji nese.",
+      "previous_wording": {
+        "statement": "Zápis zachycuje riziko a bezpečí tam, kde v sezení zaznělo."
+      },
+      "reworded_on": "2026-10-22",
+      "why_reworded": "Katalog o K08 říká, že to není konstrukt kvality, ale téma s nejvyšší závažností chyby: chyba ve věrnosti nebo pokrytí, která se dotkne rizika, váží víc než táž chyba jinde. Věta na archu z toho dělala vlastnost zápisu a ptala se, jestli je podstatná — na což by všichni odpověděli stejně a nerozlišilo by to nic. Teď se ptá na to vážení, a odpověď „nepodstatné“ už něco znamená."
     },
     "K09": {
       "name": "Opodstatněnost vytvořených souvislostí",
@@ -1226,7 +1231,7 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-15",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "Zápis nese náležitosti, které u zdravotnické dokumentace vyžaduje český předpis.",
+      "statement": "Zápis nese náležitosti, které u zdravotnické dokumentace vyžaduje český předpis. Týká se jen záznamů poskytovatele zdravotních služeb; terapeuta mimo zdravotní služby se netýká.",
       "question": "Má zápis náležitosti podle české vyhlášky?",
       "definition": "Zápis nese náležitosti, které současný český předpis vyžaduje u zdravotnické dokumentace. Vyhláška je zdroj požadavků a pozorovatelné kritérium je přítomnost těch náležitostí. Váže úzkou skupinu: záznamy vedené poskytovatelem zdravotních služeb, v praxi kliničtí psychologové. Terapeut mimo zdravotní služby zdravotnickou dokumentaci nevede a tohle kritérium na něj nedosáhne.",
       "unit": "jedna náležitost",
@@ -1238,7 +1243,12 @@
       "needs_bank": false,
       "plain": "Jestli má zápis náležitosti, které předepisuje česká vyhláška.",
       "example": "Zápis nemá pole s autorem, protože ho napsal model.",
-      "example_positive": "Zápis nese identifikaci autora záznamu."
+      "example_positive": "Zápis nese identifikaci autora záznamu.",
+      "previous_wording": {
+        "statement": "Zápis nese náležitosti, které u zdravotnické dokumentace vyžaduje český předpis."
+      },
+      "reworded_on": "2026-10-22",
+      "why_reworded": "Katalog omezuje tohle kritérium na záznamy poskytovatele zdravotních služeb a česká věta to neříkala. Hodnotitel mimo zdravotní služby by odpovídal na pravidlo, které se ho netýká, a nevěděl by to."
     },
     "K20": {
       "name": "Splnění formátu zadání",
@@ -1380,7 +1390,7 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-15",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "Zda klient zápis rozumí, pozná v něm své sezení a čtením mu to neublíží.",
+      "statement": "Zda klient zápisu rozumí, pozná v něm své sezení a čtením mu to neublíží.",
       "question": "Rozumí tomu klient a pozná v tom své sezení?",
       "definition": "Zda klient shrnutí rozumí, pozná v něm své sezení a čtením mu to neublíží.",
       "unit": "celý zápis, jeden klient",
@@ -1392,7 +1402,12 @@
       "needs_bank": false,
       "plain": "Jestli klient svému shrnutí rozumí a pozná se v něm.",
       "example": "Klient najde ve shrnutí tvrzení o sobě, ve kterém se nepoznává.",
-      "example_positive": "Klient si shrnutí přečte a potvrdí, že odpovídá tomu, co prožil."
+      "example_positive": "Klient si shrnutí přečte a potvrdí, že odpovídá tomu, co prožil.",
+      "previous_wording": {
+        "statement": "Zda klient zápis rozumí, pozná v něm své sezení a čtením mu to neublíží."
+      },
+      "reworded_on": "2026-10-22",
+      "why_reworded": "Sloveso rozumět se pojí s 3. pádem; věta měla „zápis“ místo „zápisu“."
     },
     "K25": {
       "name": "Podpora supervize",
@@ -1470,7 +1485,7 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-15",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "Kvalita zápisu systematicky neklesá u určitých skupin klientů nebo témat.",
+      "statement": "Kvalita zápisu systematicky neklesá u určitých skupin klientů, jazykových variet nebo témat.",
       "question": "Neklesá kvalita u určitých skupin klientů?",
       "definition": "Zda kvalita zápisu systematicky neklesá u určitých skupin klientů, jazykových variet nebo témat.",
       "unit": "skupina klientů",
@@ -1482,7 +1497,12 @@
       "needs_bank": false,
       "plain": "Jestli model nepíše soustavně horší zápisy pro některou skupinu klientů.",
       "example": "Model spolehlivě vynechává obsah u klientů, kteří mluví nespisovně.",
-      "example_positive": "Pokrytí rizika je srovnatelné napříč podskupinami."
+      "example_positive": "Pokrytí rizika je srovnatelné napříč podskupinami.",
+      "previous_wording": {
+        "statement": "Kvalita zápisu systematicky neklesá u určitých skupin klientů nebo témat."
+      },
+      "reworded_on": "2026-10-22",
+      "why_reworded": "Příklad u tohohle kritéria mluví o klientech, kteří mluví nespisovně, tedy o jazykové varietě, a věta jazykové variety nejmenovala."
     },
     "K28": {
       "name": "Personalizace",
@@ -2055,8 +2075,21 @@
       ],
       [
         "{anchors}"
+      ],
+      [],
+      [
+        "Sloupec „Mohlo by škodit, že se to měří? Jak?“"
+      ],
+      [
+        "Ptáme se na vedlejší účinek měření, ne na vlastnost samotnou. Když se něco začne známkovat, modely se na to začnou optimalizovat — a to může dopadnout špatně. Příklad: kdybychom známkovali nestigmatizující jazyk, model se naučí vyhýbat se každému negativnímu slovu a přestane do zápisu psát, že je klient v riziku. Pokud vás u některé vlastnosti takový vedlejší účinek napadne, napište ho jednou větou. Políčko můžete nechat prázdné."
       ]
-    ]
+    ],
+    "judged_over_overrides": {
+      "K28": {
+        "unit": "note",
+        "why": "The property is about one note: whether this note carries anything specific to this client. Only the measurement needs more, because genericness is detected by comparing a system's notes with each other, and catalog.unit_of_analysis records that measurement unit unchanged. The column tells a rater what the property is about, so for K28 the two differ and the difference is recorded rather than resolved in either direction."
+      }
+    }
   },
   "page": {
     "title": "Všechna kritéria v jedné tabulce",

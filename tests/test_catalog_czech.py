@@ -243,7 +243,14 @@ def test_the_sheet_has_one_row_per_candidate(catalog, czech, codes):
     assert len(items) == len(codes) == 39
     assert {row[0] for row in items} == set(codes)
     units = czech["vocabulary"]["unit_of_analysis"]
-    judged = {c["id"]: units[c["unit_of_analysis"]] for c in catalog["candidates"]}
+    # The column names the unit of the property, which for one candidate is not
+    # the unit its measurement is computed over; the test above holds that
+    # override to its reason.
+    overrides = czech["panel_sheet"]["judged_over_overrides"]
+    judged = {
+        c["id"]: units[overrides.get(c["id"], {}).get("unit", c["unit_of_analysis"])]
+        for c in catalog["candidates"]
+    }
     for code, name, statement, example, over, *answers in items:
         assert name == czech["candidates"][code]["name"]
         assert statement == czech["candidates"][code]["statement"]
@@ -338,6 +345,36 @@ def test_every_step_of_the_scale_reaches_the_sheet_with_what_it_means(catalog, c
     essential = [step["label"] for step in scale if step["counts_as_essential"]]
     assert essential == [step["label"] for step in scale[-2:]]
     assert all(label in text for label in essential), "the cut is named on the legend"
+
+
+def test_the_column_says_what_the_property_is_about_not_what_measures_it(catalog, czech, codes):
+    """K28 told a rater its property was about a model across clients.
+
+    Whether a note says anything specific about this client is a property of
+    that one note. Only detecting genericness needs a system's whole output,
+    because it is found by comparing a model's notes with each other, and
+    `catalog.unit_of_analysis` records that measurement unit. The column is for
+    the rater, so it names the property's unit; where the two differ the
+    override says which candidate, which unit and why, and nothing else moves.
+    """
+    sheet = czech["panel_sheet"]
+    overrides = sheet["judged_over_overrides"]
+    units = czech["vocabulary"]["unit_of_analysis"]
+    by_id = {c["id"]: c for c in catalog["candidates"]}
+    assert overrides
+    for code, override in overrides.items():
+        assert code in by_id
+        assert override["unit"] in units
+        # An override that agrees with the catalog is not an override; it is a
+        # way to make the column stop tracking anything.
+        assert override["unit"] != by_id[code]["unit_of_analysis"], code
+        assert len(override["why"].split()) >= 15, code
+
+    table = panel_sheet.rows(czech, codes, catalog)
+    shown = {row[0]: row[4] for row in table if row and row[0] in set(codes)}
+    for code, candidate in by_id.items():
+        expected = overrides.get(code, {}).get("unit", candidate["unit_of_analysis"])
+        assert shown[code] == units[expected], code
 
 
 def test_the_note_type_is_said_once_and_on_the_legend(catalog, czech, codes):

@@ -133,7 +133,16 @@ def rows(czech: dict, codes: list[str], catalog: dict, purpose: str = None) -> l
     # nobody had asked. The Czech label lives in czech.json like every other
     # word on the sheet; the catalog holds which label applies.
     units = czech["vocabulary"]["unit_of_analysis"]
-    judged_over = {c["id"]: units[c["unit_of_analysis"]] for c in catalog["candidates"]}
+    # What the column tells a rater is what the property is about, which is not
+    # always the unit the measurement is computed over. K28 is the case: whether
+    # a note says anything specific about this client is a property of that one
+    # note, and only detecting genericness needs a system's whole output. The
+    # catalog keeps the measurement unit; the override is named and reasoned.
+    overrides = sheet.get("judged_over_overrides", {})
+    judged_over = {
+        c["id"]: units[overrides.get(c["id"], {}).get("unit", c["unit_of_analysis"])]
+        for c in catalog["candidates"]
+    }
     for code in order(codes):
         entry = czech["candidates"][code]
         # One example, and it is the failing one. A pair of them -- this way,
