@@ -1,6 +1,6 @@
 {
   "id": "therapy-note-construct-review",
-  "version": "2.12.0",
+  "version": "2.13.0",
   "status": "protocol_amended_before_pilot_search_partially_executed",
   "recorded_date": "2026-10-14",
   "design": "Instrument development informed by a systematic scoping review, expert proposals and empirical observations",
@@ -298,8 +298,8 @@
     "review_completion": "Only executed searches and verified decisions count as completed; blocked sources remain named gaps",
     "scope": "Report selected and required methods, planned/applicable/assessed units, and incomplete critical-error assessment even in public aggregates"
   },
-  "supersedes": "2.11.0",
-  "amendment_reason": "D20: Lynn (1986) and Davis (1992) were read through the university's proxy on 2026-10-22. Lynn's Table 2 requires all three of three experts, which is the rule D19 adopted a day earlier on its own argument; Lynn names three as the floor and two as unjustifiable; and the scale's labels turn out not to be Lynn's.",
+  "supersedes": "2.12.0",
+  "amendment_reason": "D21: an item two of three raters accept is reported in two tiers by what the third said, which is the first use the four-point scale has had beyond its cut; the four steps get anchors; the sheet gets the catalog's examples; and the blinding claim shrinks to the investigator's statement plus a request, because the catalog is published.",
   "retrieval_gaps": "Record reports not retrieved separately from full-text eligibility exclusions; unavailable databases remain named gaps",
   "expert_inputs": "May enter throughout development. Later support does not rewrite historical origin; author or colleague proposals do not imply consensus.",
   "registration": {
@@ -577,6 +577,21 @@
       "why": "The investigator asked for the scale's source to be found. Both papers are closed access with no open copy, so they were read through the university's proxy. Three of this project's own decisions are in them and one of its claims is contradicted, and a protocol that had said the sources were unread could not say either.",
       "the_order_of_events_is_part_of_the_record": "The unanimity rule was decided on 2026-10-21 from the chance levels of a four-point scale, and Lynn was read on 2026-10-22. The rule is therefore not derived from the source and the source is not a justification written afterwards; they agree, and the dates say which came first. A reader who wants to discount the agreement can.",
       "not_decided_here": "Whether the labels are Davis's. The figure that would settle it was not read. Lawshe (1975) is still unretrieved and still nothing is taken from it."
+    },
+    {
+      "id": "D21",
+      "date": "2026-10-22",
+      "origin": "investigator",
+      "decision": "An item two of three raters call relevant is reported in two tiers, by what the third rater said: nobody against, where the third answers slightly relevant, and one against, where the third answers not relevant. Neither is measured. Each step of the scale carries an anchor sentence, the sheet shows the catalog's positive and negative example for every criterion, and the harm column asks about measuring the property rather than about the property.",
+      "replaces": "a single contested tier, four scale steps with no anchors, a sheet with no examples, and a column header that asked whether the property could do harm",
+      "affects": [
+        "what is reported about an item two raters accept: two outcomes where there was one",
+        "the sheet: an example column, four anchor lines, a repaired harm header and the answer columns moved from E, F, G to F, G, H",
+        "the time the sheet asks of a rater, which rises from an estimated 30 minutes to 45"
+      ],
+      "why": "The investigator asked why the scale is not simply yes or no, and answered it: with a binary you cannot tell agreement from indecision. That is only true if the four points are used for something, and they were not -- the rule collapsed them to the cut and nothing else read them. Now the tier an item lands in depends on the third rater's step, so the resolution is paid for. The anchors and the examples are the same argument at the other end: a rater asked to judge 'non-stigmatising language' from one sentence, on a scale of four undefined adjectives, is not being asked a question that has an answer.",
+      "the_precedent": "MentalHealthBench (OpenAI, 2026) built its rubrics with more than 80 licensed clinicians and keeps a criterion where at least two of three experts agree and the third does not contradict it. That is the middle tier here. It is not adopted as the retention rule, because their third expert adjudicates and ours does not, and because three raters rating a fixed pool is a weaker design than eighty authoring criteria.",
+      "not_decided_here": "Whether a contested item of either tier returns in a second round. No second panel is planned."
     }
   ],
   "content_validity": {
@@ -602,8 +617,8 @@
     },
     "what_is_rated": {
       "items": "every candidate of the catalog, including those the round does not measure, the one the investigator dropped on 2026-10-05, and K35 and K36, which arrived on 2026-10-07 from a source read in full",
-      "shown_per_item": "the code, the Czech name, one sentence of definition and what the property is judged over, which is one note for thirty-six of them, several sessions with one client for one and a model across clients for two; no state, no origin, no citation and no indication of what the assistant or the investigator thinks",
-      "why_blind_to_state": "a rater told that an item is already measured is being asked to ratify rather than to judge",
+      "shown_per_item": "the code, the Czech name, one sentence of definition, the catalog's positive and negative example for that criterion, and what the property is judged over, which is one note for thirty-six of them, several sessions with one client for one and a model across clients for two; no state, no origin, no citation, no measurement rule and no indication of what the assistant or the investigator thinks. The examples were added on 2026-10-22: a criterion written as the absence of a fault cannot be judged from its positive example alone, which reads as an ordinary sentence, so both halves are shown.",
+      "why_blind_to_state": "The sheet carries the code, the Czech name, one sentence, the catalog's positive and negative example, and what the property is judged over. It carries no state, no origin, no citation, no measurement rule and none of this project's own relevance ratings. That is the sheet; it is not a controlled condition. The whole catalog, including those ratings, is on a published page, and nothing prevents a rater from finding it. The investigator states that none of the three has seen that page, and the sheet asks them not to look the criteria up before answering. Both of those are reported as what they are -- his statement and a request -- and not as blinding that anyone enforced.",
       "pool_changes_before_the_panel": "A pool may grow until the first sheet is sent, and two items were added on 2026-10-07. After an answer exists it may not: adding an item then would mean some raters rated it and others did not, and the threshold is a proportion of three. If a property is found after the panel has answered, it waits for a second round and is reported as a later addition."
     },
     "questions": [
@@ -617,11 +632,12 @@
           "highly relevant"
         ],
         "counts_as_relevant": "quite relevant or highly relevant",
-        "scale_source": "Four points with the cut above the midpoint is Lynn's (1986), read on 2026-10-22: 'the 4-point scale is preferable because it does not include the ambivalent middle rating common in odd number rating scales', and Davis (1992) computes the index from 'the total number of items ranked 3 or 4 by both reviewers'. The labels are not Lynn's, whose third and fourth options are 'relevant but needs minor alteration' and 'very relevant and succinct' -- about what to do with the item, not only about how relevant it is. Whether this project's wording is Davis's is unsettled: the figure that would settle it was not read, which research/gen2/panel-scale-sources.json records as unread. Lawshe (1975) remains unretrieved and nothing is taken from it."
+        "scale_source": "Four points with the cut above the midpoint is Lynn's (1986), read on 2026-10-22: 'the 4-point scale is preferable because it does not include the ambivalent middle rating common in odd number rating scales', and Davis (1992) computes the index from 'the total number of items ranked 3 or 4 by both reviewers'. The labels are not Lynn's, whose third and fourth options are 'relevant but needs minor alteration' and 'very relevant and succinct' -- about what to do with the item, not only about how relevant it is. Whether this project's wording is Davis's is unsettled: the figure that would settle it was not read, which research/gen2/panel-scale-sources.json records as unread. Lawshe (1975) remains unretrieved and nothing is taken from it.",
+        "anchors": "Each step carries a sentence saying what it means, in research/gen2/catalog/czech.json under vocabulary.relevance_scale, and the sheet builds those lines from there. Until 2026-10-22 the four steps were four adjectives with no definition, so what the panel's agreement would have measured was agreement on vocabulary."
       },
       {
         "id": "harm",
-        "text": "Could measuring this mislead, or harm a client or a therapist?",
+        "text": "Could measuring this property mislead, or harm a client or a therapist?",
         "scale": [
           "no",
           "yes, and I say how"
@@ -645,7 +661,6 @@
       "what_registered_means_here": "recorded in this tracked protocol before use. The project has no external preregistration at all: registration.status is not_registered and local_timestamp_is_registration is false. A rule may be amended while no answer exists, which is the case here, and the amendment carries its date.",
       "index": "the proportion of the three raters who answer quite or highly relevant",
       "3_of_3": "retained for measurement where an operational rule exists",
-      "2_of_3": "published as contested, with the agreeing and the dissenting reasons, and not measured in this round. It used to be retained and marked, and two of three happens under the null below with probability 0.50.",
       "1_of_3_or_0": "removed from the measured set; the candidate stays in the catalog with the panel's rating as the reason, which is the same treatment every other unmeasured candidate gets",
       "chance_levels_under_a_uniform_rater": {
         "one_rater_calls_it_relevant": 0.5,
@@ -660,7 +675,10 @@
       "why_the_cut_is_shown_to_the_raters": "The sheet already told them what happens to their answers, and a rater who is not told where the line falls guesses. The cost is named rather than avoided: a rater who knows the cut can answer at the extremes to push an item in or out, which is a risk the alternative does not remove, it only hides.",
       "what_the_rule_does_not_do": "it does not decide whether an item is measurable, only whether the panel judges it relevant. A relevant item with no operational rule stays unmeasured for that reason and the two reasons are reported apart.",
       "supported_by": "Lynn (1986) Table 2, 'Proportion of Experts (Above the Line) Whose Endorsement Is Required to Establish Content Validity Beyond the .05 Level of Significance', whose row for three experts is 1.00. Read on 2026-10-22, the day after this rule was adopted from the chance levels above; the dates are kept so that the agreement can be read as agreement and not as the rule's derivation. See research/gen2/panel-scale-sources.json.",
-      "agreement_the_field_expects": "Davis (1992) expects of a new instrument that 'investigators should seek 80% or better agreement among reviewers', and counts agreement at both ends of the cut: items both raters put at 1 or 2, plus items both put at 3 or 4. This project reports Krippendorff's alpha over the four ordinal answers, which is stricter and not the same quantity, so the 80% is named as the expectation the field has and not as a threshold this panel is measured against. A percentage agreement computed Davis's way is published beside alpha so that the comparison a reader wants is available."
+      "agreement_the_field_expects": "Davis (1992) expects of a new instrument that 'investigators should seek 80% or better agreement among reviewers', and counts agreement at both ends of the cut: items both raters put at 1 or 2, plus items both put at 3 or 4. This project reports Krippendorff's alpha over the four ordinal answers, which is stricter and not the same quantity, so the 80% is named as the expectation the field has and not as a threshold this panel is measured against. A percentage agreement computed Davis's way is published beside alpha so that the comparison a reader wants is available.",
+      "2_of_3_nobody_against": "two raters answer quite or highly relevant and the third answers somewhat relevant. Published as contested with all three reasons, and not measured in this round. This is the shape MentalHealthBench retains on and this project does not, because its third expert adjudicates and this one does not.",
+      "2_of_3_one_against": "two raters answer quite or highly relevant and the third answers not relevant. Published as contested with the dissent given its own weight, and not measured. A yes/no answer could not tell this tier from the one above it, which is what the four points are for.",
+      "modified_kappa": "Polit, Beck and Owen (2007) proposed a modified kappa that corrects the content validity index for chance agreement, which is the fault this project found in its own rule on 2026-10-21. It is computed and published beside Krippendorff's alpha and the pairwise Cohen's kappas. Its assumption is named wherever it appears: it treats chance endorsement as a coin flip, the same null as the chance levels above, and three raters who share a training and a professional culture are not three coins."
     },
     "consequences_recorded_in_advance": [
       "The measured set after the panel may differ from the sixteen chosen before it, and the pilot runs on the panel's set.",

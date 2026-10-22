@@ -160,7 +160,7 @@ HISTORY_FIELDS = {"reworded_on", "why_reworded", "previous_wording"}
 #: `example` is its negative example from catalog.json, translated. Both are
 #: still required to say when they were written: text that appears on a page
 #: with no record of where it came from is how a working note becomes a claim.
-AUTHORED_FIELDS = {"plain", "example"}
+AUTHORED_FIELDS = {"plain", "example", "example_positive"}
 
 
 def test_every_field_says_which_generator_it_came_from(czech):
@@ -231,9 +231,16 @@ def test_the_sheet_has_one_row_per_candidate(catalog, czech, codes):
     assert {row[0] for row in items} == set(codes)
     units = czech["vocabulary"]["unit_of_analysis"]
     judged = {c["id"]: units[c["unit_of_analysis"]] for c in catalog["candidates"]}
-    for code, name, statement, over, *answers in items:
+    for code, name, statement, example, over, *answers in items:
         assert name == czech["candidates"][code]["name"]
         assert statement == czech["candidates"][code]["statement"]
+        # Both examples, because a criterion written as the absence of a fault
+        # has a positive example that reads as an ordinary sentence: "the client
+        # did not come to three sessions" says nothing about stigmatising
+        # language until the other half is beside it.
+        entry = czech["candidates"][code]
+        assert entry["example_positive"] in example, code
+        assert entry["example"] in example, code
         # What the property is judged over. The sheet did not say until
         # 2026-10-21, and three of the thirty-nine are not about one note at
         # all, so for those three the rater was answering about a single note,
@@ -290,6 +297,32 @@ def test_the_sheet_is_blind(catalog, czech, codes):
         assert source["key"] not in text
 
 
+def test_every_step_of_the_scale_reaches_the_sheet_with_what_it_means(catalog, czech, codes):
+    """Four words with no definition measure agreement on vocabulary.
+
+    The sheet carried "nepodstatne / malo podstatne / podstatne / velmi
+    podstatne" and nowhere a sentence saying what any of them meant, so three
+    people would have been scored for agreeing on four adjectives. Each step now
+    carries an anchor, the anchors live in the data beside the labels, and the
+    sheet builds them from there rather than spelling them out twice.
+    """
+    scale = czech["vocabulary"]["relevance_scale"]
+    assert len(scale) == 4
+    table = panel_sheet.rows(czech, codes, catalog)
+    text = "\n".join("\t".join(row) for row in table)
+    for step in scale:
+        assert step["label"] in text, step["label"]
+        assert len(step["anchor"].split()) >= 8, step["label"]
+        assert step["anchor"] in text, step["label"]
+    # The cut is the top two of the four, asserted by position so that this
+    # file needs no Czech of its own and no exception from the checker that
+    # looks for it.
+    essential = [step["label"] for step in scale if step["counts_as_essential"]]
+    assert essential == [step["label"] for step in scale[-2:]]
+    said = " ".join(cell for line in czech["panel_sheet"]["instructions"] for cell in line)
+    assert all(label in said for label in essential)
+
+
 def test_the_sheet_carries_no_superseded_sentence(catalog, czech, codes):
     """It told three raters a rule the protocol no longer held, and nothing caught it.
 
@@ -322,7 +355,13 @@ def test_the_sheets_rule_is_the_protocols_rule(czech):
     protocol = json.loads((REPO / "research/gen2/protocol.json").read_text(encoding="utf-8"))
     rule = protocol["content_validity"]["retention_rule"]
     assert "retained for measurement" in rule["3_of_3"]
-    assert "not measured" in rule["2_of_3"]
+    # Two of three is two outcomes, not one: the third rater either is against
+    # the item or merely does not think it essential, and a yes/no answer cannot
+    # tell those apart. Neither is measured.
+    assert "not measured" in rule["2_of_3_nobody_against"]
+    assert "not measured" in rule["2_of_3_one_against"]
+    assert "2_of_3" not in rule, "the single contested tier is gone, not renamed beside itself"
+    assert "coin flip" in rule["modified_kappa"]
     assert rule["amended_before_any_answer"] is True
     assert rule["chance_levels_under_a_uniform_rater"]["at_least_2_of_3"] == 0.5
     assert rule["chance_levels_under_a_uniform_rater"]["3_of_3"] == 0.125

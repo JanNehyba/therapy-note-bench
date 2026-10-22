@@ -341,7 +341,7 @@ removed with K19 on 2026-10-05. The protocol records
 the executable count at freeze rather than capping it. The registry refuses to
 freeze while any used subject lacks an accepted decision.
 
-The feasibility pilot (protocol 2.12.0) freezes 16 generation jobs over two
+The feasibility pilot (protocol 2.13.0) freezes 16 generation jobs over two
 cohorts, two English AnnoMI conversations and their Czech translations, two
 purposes and two generator families, and balances an 8-note human sample across
 them. Two Czech psychologists, neither the instrument author, rate under a
@@ -404,7 +404,12 @@ sheet has been sent and no answer has been collected, which the protocol
 records; the rule, amended on 2026-10-21 while that was still true, is that an
 item is measured only where all three raters call it quite or highly relevant,
 that two of three publishes it as contested and does not measure it, and that
-fewer removes it from the measured set. Two of three used to retain an item,
+fewer removes it from the measured set. Two of three is reported in two tiers,
+according to whether the third rater answers somewhat relevant or not relevant
+at all, a distinction a yes/no answer cannot make and the first use the four
+points have beyond the cut; the first of those tiers is the shape on which
+MentalHealthBench (OpenAI, 2026) retains a criterion, with more than eighty
+clinicians and a third expert who adjudicates, which ours does not. Two of three used to retain an item,
 and under a rater answering uniformly over the four points two of three agree
 with probability 0.50 against 0.125 for three of three; three of five would be
 0.50 again, so the cut and not the number of raters was the problem. That null

@@ -48,6 +48,12 @@ SEED = 20261007
 RATERS = (1, 2, 3)
 
 
+#: The instruction line the four scale steps replace. The steps live in
+#: czech.json with the rest of the Czech; a sheet that spelled them out here
+#: could drift from the rule that counts them.
+ANCHORS = "{anchors}"
+
+
 def order(codes: list[str], seed: int = SEED) -> list[str]:
     shuffled = sorted(codes)
     random.Random(seed).shuffle(shuffled)
@@ -56,12 +62,21 @@ def order(codes: list[str], seed: int = SEED) -> list[str]:
 
 def rows(czech: dict, codes: list[str], catalog: dict) -> list[list[str]]:
     sheet = czech["panel_sheet"]
+    scale = czech["vocabulary"]["relevance_scale"]
     # The instruction tells the rater how many properties follow, and it used to
     # say so in a typed number: it read 36 while the sheet listed 39, true on
     # 2026-10-07 and false from 2026-10-14, when three criteria arrived and
     # nothing re-read the sentence. The count is filled from the list it counts,
     # so the sentence cannot be wrong without the sheet being empty.
-    out = [[cell.format(count=len(codes)) for cell in line] for line in sheet["instructions"]]
+    out = []
+    for line in sheet["instructions"]:
+        # One instruction line is a placeholder for the scale, so that the four
+        # steps and what they mean are written once, in the data, and the sheet
+        # cannot disagree with the rule that reads them.
+        if line and line[0] == ANCHORS:
+            out.extend([f"{step['label']} \u2014 {step['anchor']}"] for step in scale)
+            continue
+        out.append([cell.format(count=len(codes)) for cell in line])
     out.append(list(sheet["header"]))
     # What the property is judged over. Thirty-six of the thirty-nine are about
     # one note, one is about several sessions with a client and two about a model
@@ -73,7 +88,19 @@ def rows(czech: dict, codes: list[str], catalog: dict) -> list[list[str]]:
     judged_over = {c["id"]: units[c["unit_of_analysis"]] for c in catalog["candidates"]}
     for code in order(codes):
         entry = czech["candidates"][code]
-        out.append([code, entry["name"], entry["statement"], judged_over[code], "", "", ""])
+        # A criterion written as the absence of a fault has a positive example
+        # that reads as an ordinary sentence, so the pair goes in and not the
+        # one: the rater is shown the phenomenon and its opposite rather than
+        # asked to imagine what a definition covers.
+        example = "\n".join(
+            (
+                czech["vocabulary"]["example_labels"]["positive"] + " " + entry["example_positive"],
+                czech["vocabulary"]["example_labels"]["negative"] + " " + entry["example"],
+            )
+        )
+        out.append(
+            [code, entry["name"], entry["statement"], example, judged_over[code], "", "", ""]
+        )
     out.extend(list(line) for line in sheet["tail"])
     return out
 
