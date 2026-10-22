@@ -1,6 +1,6 @@
 {
   "id": "therapy-note-construct-review",
-  "version": "2.16.0",
+  "version": "2.17.0",
   "status": "protocol_amended_before_pilot_search_partially_executed",
   "recorded_date": "2026-10-14",
   "design": "Instrument development informed by a systematic scoping review, expert proposals and empirical observations",
@@ -242,6 +242,14 @@
       "record_kind": "study_condition",
       "costs": "judge calls only, of the order of 8 notes times the active items times 2 judge families; no generation call and nothing on e-INFRA",
       "not_implemented": "pipeline.score asks its items as a tuple and has no per-item mode. The condition is declared here before the run, as the protocol's own rule requires, and the code change belongs with the run."
+    },
+    "guards_before_measurement": {
+      "what_this_is": "Checks run on a note before any measure is computed over it, and on a ratio before it is published. They exist because a benchmark creates the incentive it measures: whatever is scored is what a system will be built to maximise, and some measures can be maximised without the note getting better.",
+      "already_in_the_code": "fraction() returns no number when the denominator is zero, so nothing is reported rather than 1.00 or 0.00, and an empty note has its own branch in pipeline.score: its answers are recorded as not_in_note and its QA verdicts as omitted, not as correct. Both come from the rule that an absence is never a measurement.",
+      "missing_and_declared_here": "There is no floor above zero. A one-sentence note has a denominator of one, so its economy is 1.00 -- the best possible score for the emptiest possible note, which is the trap the sheet uses as its worked example.",
+      "the_rule": "Every ratio is published with the denominator it was computed over. A ratio whose denominator is below the floor is reported as not computed, with the denominator beside it, and never as a value. This is the rule that an absence is never a measurement, extended: a ratio over almost nothing is not a measurement either.",
+      "the_floor_comes_from_the_pilot": "Not guessed. The pilot's notes give the distribution of denominators and the floor is set from it, in the same amendment that fixes the confirmatory sample size. Until it exists no ratio from this instrument is published.",
+      "where_more_guards_come_from": "The panel's second question. A gaming shape a rater names becomes a candidate guard, and the paper reports which ones were named, which were built and which were left."
     }
   },
   "data": {
@@ -298,8 +306,8 @@
     "review_completion": "Only executed searches and verified decisions count as completed; blocked sources remain named gaps",
     "scope": "Report selected and required methods, planned/applicable/assessed units, and incomplete critical-error assessment even in public aggregates"
   },
-  "supersedes": "2.15.0",
-  "amendment_reason": "D24: the harm question leaves the table for one box under it, with a worked example from this project's own data instead of an invented one. The rater names the criterion; the retention rule reads the name.",
+  "supersedes": "2.16.0",
+  "amendment_reason": "D25: the panel is asked how a model could win on a criterion without the note being better, and every ratio gains its denominator with a floor set from the pilot, because a one-sentence note scoring 1.00 on economy is the shape that question exists for.",
   "retrieval_gaps": "Record reports not retrieved separately from full-text eligibility exclusions; unavailable databases remain named gaps",
   "expert_inputs": "May enter throughout development. Later support does not rewrite historical origin; author or colleague proposals do not imply consensus.",
   "registration": {
@@ -639,6 +647,22 @@
       "what_is_lost": "A rater is no longer prompted at the moment they read each criterion, so a trap that would have occurred to them in passing may not occur to them at the end. Nothing measures how much that costs. What is kept is the question, its rule and a case that shows what is being asked, which the column did not have.",
       "and_the_scale_gains_an_answer_that_is_not_a_step": "The rater may answer 'nevim', I cannot judge this. It is coded as missing and not as a fifth point on the ordinal axis: Krippendorff's alpha is defined for incomplete data and drops a unit with fewer than two answers, which costs nothing, while a fifth step would make the distance between the four mean nothing. The outcome for the item is what a blank already gave -- not rated by all four, so not measured -- and what is gained is knowing the criterion was read and found unjudgeable rather than skipped.",
       "not_decided_here": "Whether a criterion many raters cannot judge should be rewritten or dropped. With one panel there is no second reading to compare it with."
+    },
+    {
+      "id": "D25",
+      "date": "2026-10-22",
+      "origin": "investigator",
+      "decision": "The panel's second question asks how a model could win on a criterion without the note being better, and keeps the broader harm as its second clause. Separately, a ratio is not a measurement when its denominator is too small: every published ratio carries the denominator it was computed over, and one below the floor is reported as not computed rather than as 1.00 or 0.00. The floor is set from the pilot and is not guessed here.",
+      "replaces": "a question asking whether measuring a property could mislead or harm, which the investigator could not parse, and a ratio that reports 1.00 over a denominator of one",
+      "affects": [
+        "the sheet's second open question, which now leads with gaming",
+        "every ratio the instrument publishes, which gains its denominator",
+        "the pilot, which has to produce the floor before any ratio is published"
+      ],
+      "why": "A rater can answer how a model would win on something; whether measuring it could mislead is a question about our instrument asked in our words. And the example that makes it concrete is a gaming shape, not a harm in general: a one-sentence note scores 1.00 on economy because the sentence it has does carry content. The guard belongs in the measurement because that shape is known in advance; the question is for the shapes that are not.",
+      "the_two_are_not_the_same": "Gaming is the part of harm that has a shape, and not all of it. Coverage cannot be gamed by including more, it is satisfied by it, and what pays is privacy, through K15. A guard cannot catch that: nothing in a note that honestly covers more looks wrong. Which is why the question keeps its second clause and the two run together.",
+      "what_the_guard_does_not_do": "It catches a shape somebody thought of. The panel's answers are where the shapes nobody thought of are supposed to come from, and each one named there becomes a candidate guard rather than a finding on its own.",
+      "not_decided_here": "The floor itself. A ratio over one sentence means nothing and a ratio over fifty means something; where it turns is an empirical question the pilot answers, and writing a number here would be the guess this project keeps removing from other people's work."
     }
   ],
   "content_validity": {
@@ -692,7 +716,7 @@
       },
       {
         "id": "harm",
-        "text": "Where could measuring a property do harm? Asked once, under the table, not per item: the rater names the criterion and says how.",
+        "text": "How could a model win on this criterion without the note being better, and where could measuring one harm a client? Asked once, under the table, not per item: the rater names the criterion and says how.",
         "scale": [
           "free text, once per rater, naming the criteria it applies to"
         ],

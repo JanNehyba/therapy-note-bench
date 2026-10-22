@@ -341,7 +341,7 @@ removed with K19 on 2026-10-05. The protocol records
 the executable count at freeze rather than capping it. The registry refuses to
 freeze while any used subject lacks an accepted decision.
 
-The feasibility pilot (protocol 2.16.0) freezes 16 generation jobs over two
+The feasibility pilot (protocol 2.17.0) freezes 16 generation jobs over two
 cohorts, two English AnnoMI conversations and their Czech translations, two
 purposes and two generator families, and balances an 8-note human sample across
 them. Two Czech psychologists, neither the instrument author, rate under a
@@ -411,11 +411,15 @@ is a failing one because the positive case of a criterion written as the
 absence of a fault reads as an ordinary sentence, and we report the cost: a
 column of failures can only push a relevance answer upward, nothing in this
 round measures how far, and a round shown positive examples would. Raters are
-asked a second question once, under the table rather than per item: which
-criterion would do harm by being measured. It carries a worked example, that a
-one-sentence note scores 1.00 on economy and so grading economy by itself
-rewards writing almost nothing, and a criterion any rater names there is
-reported and not measured whatever its relevance. The
+asked a second question once, under the table rather than per item: how a model
+could win on a criterion without the note being better, and where measuring one
+could harm a client. It carries a worked example, that a one-sentence note
+scores 1.00 on economy and so grading economy by itself rewards writing almost
+nothing, and a criterion any rater names there is reported and not measured
+whatever its relevance. The same example is why every ratio this instrument
+publishes carries the denominator it was computed over, and why a ratio below a
+floor is reported as not computed rather than as a value; the floor is derived
+from the pilot and not assumed, as the sample sizes are. The
 project has no external preregistration, and a local timestamp is not one. No
 sheet has been sent and no answer has been collected, which the protocol
 records; the rule, amended on 2026-10-21 while that was still true, is that an
