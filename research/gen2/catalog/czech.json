@@ -1877,6 +1877,25 @@
       ],
       [
         ""
+      ],
+      [],
+      [
+        "Která dvě kritéria jsou podle vás to samé?"
+      ],
+      [
+        "Některá se částečně překrývají a to tak má být. Zajímá nás, kde jste narazili na dvě, která se ptájí na to samé, nebo jsou si tak blízká, že by stačilo jedno."
+      ],
+      [
+        "Napište jejich kódy a čím jsou podle vás to samé. Klidně víc párů, každý na nový řádek."
+      ],
+      [
+        ""
+      ],
+      [
+        ""
+      ],
+      [
+        ""
       ]
     ],
     "superseded_instructions": [
@@ -2119,6 +2138,11 @@
         "text": "Polovina vět je vata — „klient byl v kontaktu a spolupracoval“ — která o tomhle sezení neříká nic.",
         "until": "2026-10-22",
         "why": "Carried an em-dash, twice, in the one example a rater reads twice: it is the worked case under the table as well as K11's own row. The investigator struck the em-dash from the sheet on 2026-10-22."
+      },
+      {
+        "text": "Některá kritéria se částečně překrývají. To tak má být, posuzujte každé samo za sebe. Když vám dvě přijdou jako to samé, napište to do poznámky: to je pro nás informace, ne chyba.",
+        "until": "2026-10-22",
+        "why": "Reworded on 2026-10-22. It told a rater that an overlap is expected and left noticing one to the note column; the investigator meant the panel to be who tells us which criteria overlap, so the line points at the question that now asks."
       }
     ],
     "purposes": {
@@ -2160,7 +2184,7 @@
       ],
       [],
       [
-        "Některá kritéria se částečně překrývají. To tak má být, posuzujte každé samo za sebe. Když vám dvě přijdou jako to samé, napište to do poznámky: to je pro nás informace, ne chyba."
+        "Některá kritéria se částečně překrývají. To tak má být, posuzujte každé samo za sebe. Kde vám dvě přijdou jako to samé, ptáme se na to dole pod tabulkou."
       ]
     ],
     "judged_over_overrides": {

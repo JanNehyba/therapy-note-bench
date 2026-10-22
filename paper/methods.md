@@ -341,7 +341,7 @@ removed with K19 on 2026-10-05. The protocol records
 the executable count at freeze rather than capping it. The registry refuses to
 freeze while any used subject lacks an accepted decision.
 
-The feasibility pilot (protocol 2.21.0) freezes 16 generation jobs over two
+The feasibility pilot (protocol 2.22.0) freezes 16 generation jobs over two
 cohorts, two English AnnoMI conversations and their Czech translations, two
 purposes and two generator families, and balances an 8-note human sample across
 them. Two Czech psychologists, neither the instrument author, rate under a
@@ -411,7 +411,16 @@ is a failing one because the positive case of a criterion written as the
 absence of a fault reads as an ordinary sentence, and we report the cost: a
 column of failures can only push a relevance answer upward, nothing in this
 round measures how far, and a round shown positive examples would. Raters are
-asked a second question once, under the table rather than per item: how a model
+asked two further questions once each, under the table rather than per item.
+The first is which two of the criteria are the same thing, named by their codes:
+the catalog records an overlap for every one of the thirty-nine and all those
+records are the authors', so the panel is the first set of people qualified to
+say which two a therapist cannot tell apart. A pair two or more raters name is
+published as a candidate duplicate beside the record we already hold, and
+nothing is merged in this round, because merging changes what is measured. We
+report what the shuffled order costs that question: two near duplicates may sit
+thirty rows apart and never be read together, and a rater who names no pair is
+not evidence that none exists. The second is how a model
 could get a good mark on a criterion without the note deserving it. It carries a
 worked example, that a one-sentence note scores 1.00 on economy and so grading
 economy by itself rewards writing almost nothing, and a criterion an answer

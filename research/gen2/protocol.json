@@ -1,6 +1,6 @@
 {
   "id": "therapy-note-construct-review",
-  "version": "2.21.0",
+  "version": "2.22.0",
   "status": "protocol_amended_before_pilot_search_partially_executed",
   "recorded_date": "2026-10-14",
   "design": "Instrument development informed by a systematic scoping review, expert proposals and empirical observations",
@@ -319,8 +319,8 @@
     "review_completion": "Only executed searches and verified decisions count as completed; blocked sources remain named gaps",
     "scope": "Report selected and required methods, planned/applicable/assessed units, and incomplete critical-error assessment even in public aggregates"
   },
-  "supersedes": "2.20.0",
-  "amendment_reason": "D29: the note's format is sections, decided by the investigator, and the planner refuses any other instead of taking one from a selection file and defaulting when none is given.",
+  "supersedes": "2.21.0",
+  "amendment_reason": "D30: the panel is asked which two criteria are the same thing, because the overlap records are all the assistant's and a legend line that calls overlap expected collects nothing.",
   "retrieval_gaps": "Record reports not retrieved separately from full-text eligibility exclusions; unavailable databases remain named gaps",
   "expert_inputs": "May enter throughout development. Later support does not rewrite historical origin; author or colleague proposals do not imply consensus.",
   "registration": {
@@ -742,6 +742,21 @@
       "the_alternative_and_why_not": "SOAP or DAP: an established form with a literature behind it and direct comparability with generation 1 and TN-Eval. Rejected because it is an American medical form that fits the record and not the clinician's own note, and the profile's section names were written in the first place because SOAP does not fit all four purposes.",
       "found_by": "The investigator asked whether the format was DAP. It was not: DAP was printed because he had named it, and nothing in the protocol or the planner chose anything.",
       "not_decided_here": "The word limit, which is also a default argument at 500 and also changes the prompt. It is left as it stands rather than decided in passing."
+    },
+    {
+      "id": "D30",
+      "date": "2026-10-22",
+      "origin": "investigator",
+      "decision": "The sheet asks a third open question: which two criteria are the same thing, named by their codes. A pair named by two or more raters is published as a candidate duplicate against the catalog's own overlap record; nothing is merged in this round.",
+      "replaces": "a legend line that called overlap expected and left noticing it to the optional note column",
+      "affects": [
+        "content_validity.questions, which has three",
+        "content_validity.consequences_recorded_in_advance",
+        "the sheet's tail, which has a third question and its answer rows"
+      ],
+      "why": "The catalog records an overlap for all thirty-nine and those records are the assistant's. The panel is the first set of people qualified to say which criteria a therapist cannot tell apart, and a reassurance does not collect that.",
+      "what_it_costs": "A third question on a sheet the investigator has twice cut down, and the order works against the answer: the items are shuffled from a recorded seed, so two near duplicates may sit thirty rows apart and never be seen together. Nothing measures how much that suppresses. A rater who names no pair is not evidence that none exists.",
+      "not_decided_here": "What a confirmed duplicate does to the pool. Merging, dropping one, or rewriting both are all restructurings, and this round has one panel and no second reading to check a restructuring against."
     }
   ],
   "content_validity": {
@@ -809,6 +824,16 @@
           "free text, once per rater, not per item"
         ],
         "effect": "a property named here enters the pool as a candidate with the rater as its origin, and is rated in a second round if the panel is asked again. The question itself is Lynn's (1986) recommendation, 'The experts, in addition to judging each item, should identify any area(s) that have been omitted from the instrument', which this project had written without knowing."
+      },
+      {
+        "id": "duplicates",
+        "text": "Which two of these criteria are the same thing? Asked once, under the table, not per item: the rater names the pair by its codes and says what makes them the same.",
+        "scale": [
+          "free text, once per rater, naming pairs of codes"
+        ],
+        "shown_with": "One line in the legend saying that criteria do overlap, that this is expected, and that the question is at the bottom of the sheet. Until 2026-10-22 that line stood alone and offered the note column instead of asking.",
+        "effect": "a pair any rater names is reported with their wording; a pair two or more name is published as a candidate duplicate and compared with what catalog.json already records in that criterion's `overlaps` field, with agreement and disagreement both reported. Nothing is merged in this round.",
+        "origin": "the investigator, 2026-10-22. The mirror question, what the list is missing, is Lynn's (1986); this one is this project's and no source is claimed for it."
       }
     ],
     "retention_rule": {
@@ -843,7 +868,8 @@
       "If the panel retains the criterion the investigator dropped on 2026-10-05, that decision was wrong and the paper says so.",
       "If the panel drops a criterion the assistant proposed, the same applies in the other direction.",
       "A panel of four cannot establish content validity either, so the paper claims a screening of the pool by four independent raters and reports the gap that remains. The sentence said three until 2026-10-22: D22 made the panel four on the day before and the count here was not changed with it. The substance is unchanged, because four is still below the five to seven the field calls typical.",
-      "If the panel calls a criterion essential and the generation task asks for nothing about it, the task gains the instruction and the check that it was followed is reported beside the score and never counted into it; a criterion that is both a property of the note and a convention of the form is split. The rule is content_validity.what_an_essential_answer_leads_to and was recorded on 2026-10-22, before any answer existed (decision D28)."
+      "If the panel calls a criterion essential and the generation task asks for nothing about it, the task gains the instruction and the check that it was followed is reported beside the score and never counted into it; a criterion that is both a property of the note and a convention of the form is split. The rule is content_validity.what_an_essential_answer_leads_to and was recorded on 2026-10-22, before any answer existed (decision D28).",
+      "If raters name two criteria as the same thing, the pair is reported with their wording and, where two or more name it, published as a candidate duplicate beside what the catalog already records about that pair. Nothing is merged in this round, because merging changes what is measured and a screening of the pool is not a mandate to restructure it (decision D30)."
     ],
     "what_an_essential_answer_leads_to": {
       "declared_before_any_answer": "2026-10-22, before any sheet was sent and before any answer existed. The question came from the investigator and the rule is his; it is written now because deciding it per criterion after the answers arrive is deciding it once the direction is visible.",

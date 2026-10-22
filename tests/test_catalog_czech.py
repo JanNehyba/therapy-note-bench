@@ -377,17 +377,29 @@ def test_the_harm_question_is_asked_once_with_an_example(catalog, czech, codes):
 
     under = [row[0] for row in table[table.index(list(header)) + len(codes) + 1 :] if row]
     asked = "\n".join(under)
-    # Two open questions under the table, not one: what the list is missing,
-    # and how a good mark could be had without the note deserving it.
-    assert sum("?" in line for line in under) >= 3
+    # Three open questions under the table, not one: what the list is missing,
+    # which two criteria are the same thing, and how a good mark could be had
+    # without the note deserving it.
+    assert sum("?" in line for line in under) >= 4
+
     # The worked example is the criterion this project documented the trap on:
     # a one-sentence note scores 1.00 on economy.
     assert czech["candidates"]["K11"]["name"] in asked
-    # And the rater is not asked for the criterion's code. The instruction was
-    # cut on 2026-10-22 and the protocol's harm flag was weakened to match, so
-    # putting it back without amending the flag would leave the rule claiming a
-    # machine-readable input it does not have.
-    assert header[0].lower() not in asked.lower()
+    # A question under the table does ask for a criterion's code, and since
+    # 2026-10-22 it is the duplicates one rather than the harm one: the harm
+    # instruction was cut and the protocol's harm flag weakened to match, so
+    # that rule reads prose and claims no machine-readable input.
+    assert header[0].lower() in asked.lower()
+    # Which is why the cut has to stay recorded. The guard below proves the
+    # sentence is off the sheet; this proves the guard still has it to look for,
+    # because deleting the record would make the guard pass over an empty set.
+    retired = [
+        record
+        for record in sheet["superseded_instructions"]
+        if header[0].lower() in record["text"].lower()
+    ]
+    assert retired, "nothing records an instruction that asked for the code"
+
     # The column's header and its legend block are gone, recorded with the
     # date, and may not come back onto a built sheet.
     everything = "\n".join(
