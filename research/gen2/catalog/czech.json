@@ -890,7 +890,7 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-22",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "Chyba, která se týká rizika a bezpečí, váží víc než táž chyba jinde.",
+      "statement": "Chyba v tom, co se týká rizika a bezpečí (sebevražedné myšlenky, sebepoškozování, ohrožení druhých, zneužívání, krize), je závažnější než stejná chyba v jiné části zápisu.",
       "question": "Je zachycené riziko tam, kde zaznělo?",
       "definition": "Obsahové téma: suicidalita, sebepoškozování, nebezpečí pro druhé, týrání, krizové ukazatele. Není to konstrukt kvality, je to téma s nejvyšší závažností chyby. Zároveň je to průřezový důsledek: chyba věrnosti nebo pokrytí, která se dotkne rizika, je závažnější než táž chyba jinde.",
       "unit": "jednotka označená jako riziko",
@@ -903,11 +903,9 @@
       "plain": "Jestli je v zápisu to, co v sezení zaznělo o riziku a bezpečí.",
       "example": "V sezení zazněla beznaděj a zápis o ní neříká nic.",
       "example_positive": "Zmínka o beznaději je v bance označená jako riziková a zápis ji nese.",
-      "previous_wording": {
-        "statement": "Zápis zachycuje riziko a bezpečí tam, kde v sezení zaznělo."
-      },
+      "previous_wording": "Chyba, která se týká rizika a bezpečí, váží víc než táž chyba jinde.",
       "reworded_on": "2026-10-22",
-      "why_reworded": "Katalog o K08 říká, že to není konstrukt kvality, ale téma s nejvyšší závažností chyby: chyba ve věrnosti nebo pokrytí, která se dotkne rizika, váží víc než táž chyba jinde. Věta na archu z toho dělala vlastnost zápisu a ptala se, jestli je podstatná — na což by všichni odpověděli stejně a nerozlišilo by to nic. Teď se ptá na to vážení, a odpověď „nepodstatné“ už něco znamená."
+      "why_reworded": "Reworded on 2026-10-22. The investigator could not parse it: 'an error that touches risk weighs more than the same error elsewhere' is faithful to the English and says nothing a rater can picture. The English definition names the topics and they now stand in the sentence."
     },
     "K09": {
       "name": "Opodstatněnost vytvořených souvislostí",
@@ -996,7 +994,7 @@
       "ranking_role": "orders",
       "needs_bank": true,
       "plain": "Jestli každá věta něco nese, nebo je to vata.",
-      "example": "Polovina vět je vata — „klient byl v kontaktu a spolupracoval“ — která o tomhle sezení neříká nic.",
+      "example": "Polovina vět je vata typu „klient byl v kontaktu a spolupracoval“, která o tomhle sezení neříká nic.",
       "example_positive": "Čtyři z pěti vět nesou podstatný obsah."
     },
     "K12": {
@@ -1165,7 +1163,7 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-22",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "Údaje o osobách, které nejsou klient, jsou uvedené rolí, ne identifikací.",
+      "statement": "U lidí, kteří nejsou klient, zápis rozlišuje, jestli je označí rolí, nebo je identifikuje.",
       "question": "Nejde podle zápisu poznat osobu, která není klient?",
       "definition": "Údaje o lidech, kteří nejsou klient a nedali souhlas: partneři, děti, kolegové, další klienti ve skupině.",
       "unit": "jedna zmínka osoby",
@@ -1177,7 +1175,10 @@
       "needs_bank": false,
       "plain": "Jak zápis zachází s lidmi, kteří nejsou klient.",
       "example": "Zápis uvádí partnerku jménem a s místem, kde pracuje.",
-      "example_positive": "Klient popisuje konflikt s nadřízeným; zápis uvádí roli, ne jméno."
+      "example_positive": "Klient popisuje konflikt s nadřízeným; zápis uvádí roli, ne jméno.",
+      "previous_wording": "Údaje o osobách, které nejsou klient, jsou uvedené rolí, ne identifikací.",
+      "reworded_on": "2026-10-22",
+      "why_reworded": "Reworded on 2026-10-22. It said that non-clients are given by role and not identified, which is a rule; the English is a topic and its measurement is the distinction between role and identification. The English applicability note says that in couple and group therapy the consent status of a third party changes the rule and not the relevance, so the Czech was asserting as settled what the source calls settable. The investigator saw it without reading the English."
     },
     "K18": {
       "name": "Dohledatelnost ke zdroji",
@@ -1863,7 +1864,7 @@
         "Co se začne známkovat, na to se modely zaměří. A někdy jde dobrá známka získat, aniž by zápis za něco stál."
       ],
       [
-        "Příklad: kritérium „Úspornost“ žádá, aby každá věta nesla podstatný obsah. Zápis, který má jedinou větu, dostane plný počet bodů — ta jedna věta podstatná je a nic dalšího tam není. Čím míň toho model napíše, tím líp dopadne."
+        "Příklad: kritérium „Úspornost“ žádá, aby každá věta nesla podstatný obsah. Zápis, který má jedinou větu, dostane plný počet bodů. Ta jedna věta podstatná je a nic dalšího tam není, takže čím míň toho model napíše, tím líp dopadne."
       ],
       [
         "Napadá vás u některého kritéria, jak by na něm model mohl získat dobrou známku, aniž by tomu kvalita zápisu odpovídala?"
@@ -2093,30 +2094,48 @@
         "text": "Napadá vás u některého kritéria, jak by na něm model mohl získat dobrou známku, aniž by tomu kvalita zápisu odpovídala? Nebo kde by měření mohlo uškodit klientovi? Napište kód kritéria a čím.",
         "until": "2026-10-22",
         "why": "Cut on 2026-10-22 at the investigator's word, quoting the clause and the instruction together. What is lost is stated rather than smoothed over: the sheet no longer asks where measuring could harm a client, so the broader harm -- a measure honestly maximised that hurts through another criterion, as coverage does to privacy -- is not asked about at all, and it no longer asks the rater to name the criterion, which is the input the retention rule's harm flag reads."
+      },
+      {
+        "text": "Průběžný zápis do dokumentace — čte ho tým, který přebírá péči, a klient na něj má právo přístupu.",
+        "until": "2026-10-22",
+        "why": "The em-dash left the sheet on 2026-10-22 at the investigator's word. A long dash between a label and its sentence is the punctuation of someone else's prose and he has refused that register here before; a colon does the same work, and a dash inside a sentence becomes a full stop because a comma would join two independent clauses."
+      },
+      {
+        "text": "Terapeutova vlastní poznámka — vaše analýza sezení, vedená odděleně od dokumentace.",
+        "until": "2026-10-22",
+        "why": "The em-dash left the sheet on 2026-10-22 at the investigator's word. A long dash between a label and its sentence is the punctuation of someone else's prose and he has refused that register here before; a colon does the same work, and a dash inside a sentence becomes a full stop because a comma would join two independent clauses."
+      },
+      {
+        "text": "nevím — Nedokážu to posoudit. Není to hlas pro ani proti — u téhle vlastnosti pak nebude odpověď od všech čtyř, takže se měřit nebude. Oproti prázdnému políčku je ale vidět, že jste ji četli.",
+        "until": "2026-10-22",
+        "why": "The em-dash left the sheet on 2026-10-22 at the investigator's word. A long dash between a label and its sentence is the punctuation of someone else's prose and he has refused that register here before; a colon does the same work, and a dash inside a sentence becomes a full stop because a comma would join two independent clauses."
+      },
+      {
+        "text": "Příklad: kritérium „Úspornost“ žádá, aby každá věta nesla podstatný obsah. Zápis, který má jedinou větu, dostane plný počet bodů — ta jedna věta podstatná je a nic dalšího tam není. Čím míň toho model napíše, tím líp dopadne.",
+        "until": "2026-10-22",
+        "why": "The em-dash left the sheet on 2026-10-22 at the investigator's word. A long dash between a label and its sentence is the punctuation of someone else's prose and he has refused that register here before; a colon does the same work, and a dash inside a sentence becomes a full stop because a comma would join two independent clauses."
+      },
+      {
+        "text": "Polovina vět je vata — „klient byl v kontaktu a spolupracoval“ — která o tomhle sezení neříká nic.",
+        "until": "2026-10-22",
+        "why": "Carried an em-dash, twice, in the one example a rater reads twice: it is the worked case under the table as well as K11's own row. The investigator struck the em-dash from the sheet on 2026-10-22."
       }
     ],
     "purposes": {
       "progress_note": {
         "title": "Průběžný zápis do dokumentace",
         "maps_to_code": "continuity",
-        "legend_line": "Průběžný zápis do dokumentace — čte ho tým, který přebírá péči, a klient na něj má právo přístupu."
+        "legend_line": "Průběžný zápis do dokumentace: čte ho tým, který přebírá péči, a klient na něj má právo přístupu."
       },
       "therapeutic_note": {
         "title": "Terapeutova vlastní poznámka",
         "maps_to_code": null,
-        "legend_line": "Terapeutova vlastní poznámka — vaše analýza sezení, vedená odděleně od dokumentace."
+        "legend_line": "Terapeutova vlastní poznámka: vaše analýza sezení, vedená odděleně od dokumentace."
       }
     },
     "legend": [
       [
         "Legenda"
-      ],
-      [],
-      [
-        "Dva listy, dva typy zápisu"
-      ],
-      [
-        "{purposes}"
       ],
       [],
       [
@@ -2127,10 +2146,21 @@
       ],
       [],
       [
+        "Dva listy, dva typy zápisu"
+      ],
+      [
+        "{purposes}"
+      ],
+      [],
+      [
         "Sloupec „Podstatné?“"
       ],
       [
         "{anchors}"
+      ],
+      [],
+      [
+        "Některá kritéria se částečně překrývají. To tak má být, posuzujte každé samo za sebe. Když vám dvě přijdou jako to samé, napište to do poznámky: to je pro nás informace, ne chyba."
       ]
     ],
     "judged_over_overrides": {
@@ -2138,7 +2168,8 @@
         "unit": "note",
         "why": "The property is about one note: whether this note carries anything specific to this client. Only the measurement needs more, because genericness is detected by comparing a system's notes with each other, and catalog.unit_of_analysis records that measurement unit unchanged. The column tells a rater what the property is about, so for K28 the two differ and the difference is recorded rather than resolved in either direction."
       }
-    }
+    },
+    "legend_order_note": "Reordered on 2026-10-22. The investigator put what a rater is judging above which of the two notes each tab asks about, and moved the legend to the first tab. A rater learns what they are looking at before they learn which kind of it this tab is about."
   },
   "page": {
     "title": "Všechna kritéria v jedné tabulce",
@@ -2281,7 +2312,7 @@
     },
     "relevance_no_answer": {
       "label": "nevím",
-      "anchor": "Nedokážu to posoudit. Není to hlas pro ani proti — u téhle vlastnosti pak nebude odpověď od všech čtyř, takže se měřit nebude. Oproti prázdnému políčku je ale vidět, že jste ji četli.",
+      "anchor": "Nedokážu to posoudit. Není to hlas pro ani proti. U téhle vlastnosti pak nebude odpověď od všech čtyř, takže se měřit nebude. Oproti prázdnému políčku je ale vidět, že jste ji četli.",
       "counts_as": "missing"
     }
   },

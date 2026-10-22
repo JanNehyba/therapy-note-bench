@@ -105,13 +105,19 @@ def legend(czech: dict, codes: list[str]) -> list[list[str]]:
             out.extend([entry["legend_line"]] for entry in sheet["purposes"].values())
             continue
         if line and line[0] == ANCHORS:
-            out.extend([f"{step['label']} \u2014 {step['anchor']}"] for step in scale)
+            # A colon, not a dash. The investigator struck the em-dash from
+            # the sheet on 2026-10-22: a long dash between a label and its
+            # sentence is the punctuation of somebody else's prose, and he
+            # has refused that register here before. The anchors in
+            # czech.json carry none either, so this is the only place a
+            # dash could re-enter.
+            out.extend([f"{step['label']}: {step['anchor']}"] for step in scale)
             # And the answer that is not a step on the scale. It is coded as
             # missing, which is what Krippendorff's alpha is built for; placed
             # among the four it would make the distance between steps mean
             # nothing.
             no_answer = czech["vocabulary"]["relevance_no_answer"]
-            out.append([f"{no_answer['label']} \u2014 {no_answer['anchor']}"])
+            out.append([f"{no_answer['label']}: {no_answer['anchor']}"])
             continue
         out.append([cell.format(count=len(codes)) for cell in line])
     return out
@@ -190,6 +196,11 @@ def main() -> int:
     for rater in raters():
         first = rater.get("first") or names[0]
         order_of_tabs = [first] + [p for p in names if p != first]
+        # The legend is the workbook's first tab, which the investigator changed
+        # by hand on 2026-10-22 and is right: a rater who opens the file on a
+        # rating tab has not read what the four steps of the scale mean. The
+        # position in the file name is the position among the rating tabs, which
+        # still alternates between raters, so it keeps counting from one.
         for position, purpose in enumerate(order_of_tabs, start=1):
             table = rows(czech, codes, cat, purpose)
             name = f"hodnoceni-{rater['surname']}-{position}-{purpose}.csv"
@@ -205,6 +216,7 @@ def main() -> int:
                 "order": order(codes),
                 "items": len(codes),
                 "purposes": names,
+                "first_tab": "legenda",
                 "tab_order": {r["surname"]: r.get("first") for r in raters()},
             },
             ensure_ascii=False,
