@@ -1,7 +1,7 @@
 # Gen-2: traceable research and versioned measurement
 
-**Software: experimental v0.3.0 / protocol gen2-v3. Research protocol: 2.14.0, amended
-on 2026-10-22 before any pilot run; 2.13.0 to 1.0.0 are retained in history. The newly specified
+**Software: experimental v0.3.0 / protocol gen2-v3. Research protocol: 2.15.0, amended
+on 2026-10-22 before any pilot run; 2.14.0 to 1.0.0 are retained in history. The newly specified
 review, human pilot and clinical validation are not complete.**
 
 The existing software, prior proposals and earlier experiments are formative

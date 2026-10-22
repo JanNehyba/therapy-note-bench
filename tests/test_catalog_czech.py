@@ -234,13 +234,14 @@ def test_the_sheet_has_one_row_per_candidate(catalog, czech, codes):
     for code, name, statement, example, over, *answers in items:
         assert name == czech["candidates"][code]["name"]
         assert statement == czech["candidates"][code]["statement"]
-        # Both examples, because a criterion written as the absence of a fault
-        # has a positive example that reads as an ordinary sentence: "the client
+        # One example, and the failing one. A pair of them -- this way, not
+        # that way -- was two cells of reading for every criterion and the
+        # investigator cut it. The positive half of a criterion written as the
+        # absence of a fault reads as an ordinary sentence anyway: "the client
         # did not come to three sessions" says nothing about stigmatising
-        # language until the other half is beside it.
+        # language.
         entry = czech["candidates"][code]
-        assert entry["example_positive"] in example, code
-        assert entry["example"] in example, code
+        assert example == entry["example"], code
         # What the property is judged over. The sheet did not say until
         # 2026-10-21, and three of the thirty-nine are not about one note at
         # all, so for those three the rater was answering about a single note,
@@ -326,7 +327,7 @@ def test_every_step_of_the_scale_reaches_the_sheet_with_what_it_means(catalog, c
     assert all(label in text for label in essential), "the cut is named on the legend"
 
 
-def test_each_tab_says_which_of_the_two_notes_it_asks_about(catalog, czech, codes):
+def test_the_note_type_is_said_once_and_on_the_legend(catalog, czech, codes):
     """A sheet that asks about "a session note" asks about two different things.
 
     A progress note is part of the record: the care team and the payer read it
@@ -334,30 +335,26 @@ def test_each_tab_says_which_of_the_two_notes_it_asks_about(catalog, czech, code
     own analysis, kept apart from the record, and the American rule excludes
     diagnosis, plan, symptoms, prognosis and progress from it by name. The same
     property can be essential in one and pointless in the other, which is what
-    the panel is being asked, so each tab has to say which one it means.
+    the panel is being asked.
+
+    Each tab used to open with a heading saying which note it meant. The tab is
+    already named for that note, so the heading said it twice on one screen and
+    the investigator cut it: the table is the first row of the tab, and one
+    sentence for each note type is on the legend.
     """
     sheet = czech["panel_sheet"]
     purposes = sheet["purposes"]
     assert list(purposes) == ["progress_note", "therapeutic_note"]
-    texts = {}
-    for name, purpose in purposes.items():
-        # One row, not twenty-nine. The note type is the thing a rater must not
-        # forget while scrolling, so it sits on the tab that asks about it; it
-        # is said once and nowhere else, because the investigator read it twice
-        # in one workbook and refused that.
-        assert len(purpose["head"].split()) >= 10, name
+    said = [cell for row in panel_sheet.legend(czech, codes) for cell in row if cell]
+    for name, entry in purposes.items():
         table = panel_sheet.rows(czech, codes, catalog, name)
-        texts[name] = "\n".join("\t".join(row) for row in table)
-        assert table[0][0] == purpose["head"]
-        assert table[2][0] == "Kód", "the table starts on the fourth row"
-    for name, other in (
-        ("progress_note", "therapeutic_note"),
-        ("therapeutic_note", "progress_note"),
-    ):
-        assert purposes[other]["head"] not in texts[name], name
-    said = "\n".join("\t".join(row) for row in panel_sheet.legend(czech, codes))
-    for purpose in purposes.values():
-        assert purpose["head"] not in said, "the note type is on its tab, not repeated"
+        assert table[0][0] == sheet["header"][0], "the table is the first row of the tab"
+        assert "head" not in entry, name
+        # One sentence, on the legend, exactly once -- and nowhere on the tab,
+        # whose own name already says which note it asks about.
+        assert len(entry["legend_line"].split()) >= 8, name
+        assert said.count(entry["legend_line"]) == 1, name
+        assert entry["legend_line"] not in "\n".join("\t".join(row) for row in table), name
     # One of the two is the purpose the code already has; the other is not yet
     # built, and the mapping is recorded rather than assumed.
     assert purposes["progress_note"]["maps_to_code"] == "continuity"
@@ -530,10 +527,11 @@ def test_every_rater_gets_their_own_file_for_each_purpose(tmp_path, monkeypatch)
             (tmp_path / name).read_bytes() for name in written if name.endswith(purpose + ".csv")
         }
         assert len(same) == 1, purpose
-    # Different purpose, different sheet: the tab says which note it asks
-    # about. The legend is the same for everyone and says it for neither.
+    # The two rating tabs hold the same questions and are now byte for byte the
+    # same file: the tab's own name is what says which note it asks about, so
+    # nothing inside it differs. The legend is the same for everyone too.
     rating = [name for name in written if not name.endswith("legenda.csv")]
-    assert len({(tmp_path / name).read_bytes() for name in rating}) == 2
+    assert len({(tmp_path / name).read_bytes() for name in rating}) == 1
     assert len({(tmp_path / n).read_bytes() for n in written if n not in rating}) == 1
 
     recorded = json.loads((tmp_path / "poradi.json").read_text(encoding="utf-8"))

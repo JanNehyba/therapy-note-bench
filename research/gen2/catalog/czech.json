@@ -1798,7 +1798,7 @@
       "Kód",
       "Kritérium",
       "Jednou větou",
-      "Příklad",
+      "Příklad chyby",
       "Čeho se to týká",
       "Podstatné?",
       "Mohlo by škodit, že se to měří? Jak?",
@@ -1989,23 +1989,40 @@
         "text": "Terapeutova vlastní poznámka — vaše analýza sezení, vedená odděleně od dokumentace. Neslouží k předání ani k vykázání. Podle americké úpravy je z práva klienta na přístup vyjmutá a nepatří do ní diagnóza, plán, symptomy, prognóza ani pokrok.",
         "until": "2026-10-22",
         "why": "Left the sheet on 2026-10-22. The investigator refused the duplication and the process talk: the note type is stated once, on the tab that asks about it, and what happens to the answers goes in the message that carries the link, in the sender's own words."
+      },
+      {
+        "text": "Průběžný zápis do dokumentace. Patří do zdravotnické dokumentace; čte ho tým, který přebírá péči, a klient na něj má právo přístupu.",
+        "until": "2026-10-22",
+        "why": "Left the sheet on 2026-10-22. The tab is named for the note it asks about, so a heading row repeating it said the same thing twice on the same screen; the legend carries one sentence for each."
+      },
+      {
+        "text": "Terapeutova vlastní poznámka. Vaše analýza sezení, vedená odděleně od dokumentace; neslouží k předání ani k vykázání.",
+        "until": "2026-10-22",
+        "why": "Left the sheet on 2026-10-22. The tab is named for the note it asks about, so a heading row repeating it said the same thing twice on the same screen; the legend carries one sentence for each."
       }
     ],
     "purposes": {
       "progress_note": {
         "title": "Průběžný zápis do dokumentace",
         "maps_to_code": "continuity",
-        "head": "Průběžný zápis do dokumentace. Patří do zdravotnické dokumentace; čte ho tým, který přebírá péči, a klient na něj má právo přístupu."
+        "legend_line": "Průběžný zápis do dokumentace — čte ho tým, který přebírá péči, a klient na něj má právo přístupu."
       },
       "therapeutic_note": {
         "title": "Terapeutova vlastní poznámka",
         "maps_to_code": null,
-        "head": "Terapeutova vlastní poznámka. Vaše analýza sezení, vedená odděleně od dokumentace; neslouží k předání ani k vykázání."
+        "legend_line": "Terapeutova vlastní poznámka — vaše analýza sezení, vedená odděleně od dokumentace."
       }
     },
     "legend": [
       [
         "Legenda"
+      ],
+      [],
+      [
+        "Dva listy, dva typy zápisu"
+      ],
+      [
+        "{purposes}"
       ],
       [],
       [

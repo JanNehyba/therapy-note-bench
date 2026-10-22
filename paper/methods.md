@@ -341,7 +341,7 @@ removed with K19 on 2026-10-05. The protocol records
 the executable count at freeze rather than capping it. The registry refuses to
 freeze while any used subject lacks an accepted decision.
 
-The feasibility pilot (protocol 2.14.0) freezes 16 generation jobs over two
+The feasibility pilot (protocol 2.15.0) freezes 16 generation jobs over two
 cohorts, two English AnnoMI conversations and their Czech translations, two
 purposes and two generator families, and balances an 8-note human sample across
 them. Two Czech psychologists, neither the instrument author, rate under a
@@ -403,7 +403,14 @@ twice, once for a note that belongs to the record and once for the clinician's
 own note, on separate tabs whose order alternates between raters: the two are
 different genres, the American rule keeps diagnosis, plan, symptoms, prognosis
 and progress out of the second by name, and a property essential to the first
-may be pointless in the second. That is the finding the round is looking for. The
+may be pointless in the second. That is the finding the round is looking for. Each criterion is shown with
+its code, a one-sentence statement, what it is judged over and one example of
+the property failing; the orientation to the study that Davis (1992) asks for
+is in the message that carries the sheet rather than on it. The single example
+is a failing one because the positive case of a criterion written as the
+absence of a fault reads as an ordinary sentence, and we report the cost: a
+column of failures can only push a relevance answer upward, nothing in this
+round measures how far, and a round shown positive examples would. The
 project has no external preregistration, and a local timestamp is not one. No
 sheet has been sent and no answer has been collected, which the protocol
 records; the rule, amended on 2026-10-21 while that was still true, is that an

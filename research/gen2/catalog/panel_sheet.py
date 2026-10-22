@@ -67,6 +67,10 @@ def raters() -> list[dict]:
 #: could drift from the rule that counts them.
 ANCHORS = "{anchors}"
 
+#: The legend line the two note types replace. Each sentence sits under the
+#: purpose it describes, so the data says which note it is about.
+PURPOSES = "{purposes}"
+
 #: No text on the sheet states how many criteria it holds. One did, it read 36
 #: while the sheet listed 39, and the investigator cut the sentence that
 #: replaced it along with the rest of the preamble. The rows are the count.
@@ -97,6 +101,9 @@ def legend(czech: dict, codes: list[str]) -> list[list[str]]:
     scale = czech["vocabulary"]["relevance_scale"]
     out = []
     for line in sheet["legend"]:
+        if line and line[0] == PURPOSES:
+            out.extend([entry["legend_line"]] for entry in sheet["purposes"].values())
+            continue
         if line and line[0] == ANCHORS:
             out.extend([f"{step['label']} \u2014 {step['anchor']}"] for step in scale)
             continue
@@ -118,8 +125,7 @@ def rows(czech: dict, codes: list[str], catalog: dict, purpose: str = None) -> l
     purpose = purpose or next(iter(purposes))
     if purpose not in purposes:
         raise SystemExit(f"unknown purpose {purpose!r}")
-    out = [[purposes[purpose]["head"]], []]
-    out.append(list(sheet["header"]))
+    out = [list(sheet["header"])]
     # What the property is judged over. Thirty-six of the thirty-nine are about
     # one note, one is about several sessions with a client and two about a model
     # across clients, and until 2026-10-21 the sheet did not say so -- so for
@@ -130,16 +136,15 @@ def rows(czech: dict, codes: list[str], catalog: dict, purpose: str = None) -> l
     judged_over = {c["id"]: units[c["unit_of_analysis"]] for c in catalog["candidates"]}
     for code in order(codes):
         entry = czech["candidates"][code]
-        # A criterion written as the absence of a fault has a positive example
-        # that reads as an ordinary sentence, so the pair goes in and not the
-        # one: the rater is shown the phenomenon and its opposite rather than
-        # asked to imagine what a definition covers.
-        example = "\n".join(
-            (
-                czech["vocabulary"]["example_labels"]["positive"] + " " + entry["example_positive"],
-                czech["vocabulary"]["example_labels"]["negative"] + " " + entry["example"],
-            )
-        )
+        # One example, and it is the failing one. A pair of them -- this way,
+        # not that way -- was two cells of reading for every criterion and the
+        # investigator cut it. The failing case is the informative half: a
+        # criterion written as the absence of a fault has a positive example
+        # that reads as an ordinary sentence and says nothing about what is
+        # being asked. The cost is recorded rather than hidden: a column of
+        # nothing but failures makes every property look like a live problem,
+        # which can only push an answer up, and the protocol says so.
+        example = entry["example"]
         out.append(
             [code, entry["name"], entry["statement"], example, judged_over[code], "", "", ""]
         )
