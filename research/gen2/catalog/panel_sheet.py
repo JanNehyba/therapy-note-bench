@@ -106,6 +106,12 @@ def legend(czech: dict, codes: list[str]) -> list[list[str]]:
             continue
         if line and line[0] == ANCHORS:
             out.extend([f"{step['label']} \u2014 {step['anchor']}"] for step in scale)
+            # And the answer that is not a step on the scale. It is coded as
+            # missing, which is what Krippendorff's alpha is built for; placed
+            # among the four it would make the distance between steps mean
+            # nothing.
+            no_answer = czech["vocabulary"]["relevance_no_answer"]
+            out.append([f"{no_answer['label']} \u2014 {no_answer['anchor']}"])
             continue
         out.append([cell.format(count=len(codes)) for cell in line])
     return out
@@ -154,9 +160,7 @@ def rows(czech: dict, codes: list[str], catalog: dict, purpose: str = None) -> l
         # nothing but failures makes every property look like a live problem,
         # which can only push an answer up, and the protocol says so.
         example = entry["example"]
-        out.append(
-            [code, entry["name"], entry["statement"], example, judged_over[code], "", "", ""]
-        )
+        out.append([code, entry["name"], entry["statement"], example, judged_over[code], "", ""])
     out.extend(list(line) for line in sheet["tail"])
     return out
 

@@ -1,6 +1,6 @@
 {
   "id": "therapy-note-construct-review",
-  "version": "2.15.0",
+  "version": "2.16.0",
   "status": "protocol_amended_before_pilot_search_partially_executed",
   "recorded_date": "2026-10-14",
   "design": "Instrument development informed by a systematic scoping review, expert proposals and empirical observations",
@@ -298,8 +298,8 @@
     "review_completion": "Only executed searches and verified decisions count as completed; blocked sources remain named gaps",
     "scope": "Report selected and required methods, planned/applicable/assessed units, and incomplete critical-error assessment even in public aggregates"
   },
-  "supersedes": "2.14.0",
-  "amendment_reason": "D23: the rating tab is the table and nothing above it, each criterion shows one example and it is the failing case, and a legend tab holds what a rater needs while answering. The single example is named as pushing relevance answers upward.",
+  "supersedes": "2.15.0",
+  "amendment_reason": "D24: the harm question leaves the table for one box under it, with a worked example from this project's own data instead of an invented one. The rater names the criterion; the retention rule reads the name.",
   "retrieval_gaps": "Record reports not retrieved separately from full-text eligibility exclusions; unavailable databases remain named gaps",
   "expert_inputs": "May enter throughout development. Later support does not rewrite historical origin; author or colleague proposals do not imply consensus.",
   "registration": {
@@ -623,6 +623,22 @@
       "why": "The investigator read the built sheet and refused it. Most of the preamble was written for a reviewer of this paper and the protocol already holds every line of it: the chance levels, the amendment dates, the reason the order is shuffled. On a participant's sheet those say that we are guarding against them answering at random. The note type was stated twice on one screen, in the tab's name and in a heading under it. And two examples a row, over thirty-nine rows and two tabs, is reading that buys nothing the one failing example does not.",
       "what_the_single_example_costs": "A column of nothing but failures makes every property look like a live problem, which can only push a relevance answer upward. The pair was neutral in that respect and unreadable in every other. There is no unbiased single example: the positive one alone would push the other way and says nothing at all for a criterion written as the absence of a fault. The direction is named here, in the paper, and beside any count of retained items.",
       "not_decided_here": "Whether the bias is large enough to matter. Nothing measures it, and with one panel nothing can; a second round shown positive examples would, and none is planned."
+    },
+    {
+      "id": "D24",
+      "date": "2026-10-22",
+      "origin": "investigator",
+      "decision": "The harm question leaves the table and is asked once under it, beside the question about what the list is missing, with a worked example: a one-sentence note scores 1.00 on economy, so grading economy by itself rewards writing almost nothing. A rater who sees such a trap names the criterion and says how; there is no per-item answer.",
+      "replaces": "a column of thirty-nine cells on each tab, and a legend entry whose example was invented",
+      "affects": [
+        "what a rater fills in: two cells a row instead of three, and one box at the end",
+        "the retention rule's harm flag, which now reads a criterion the rater names",
+        "the sheet, which has seven columns"
+      ],
+      "why": "Thirty-eight of thirty-nine cells would have stayed empty on each of two tabs, and a rater had to carry a second question through every row to produce them. The investigator also refused the explanation that went with it, correctly: it claimed a model graded on non-stigmatising language would stop recording that a client is at risk, and that does not follow, because recording risk is a clinical description and not a label on a person. The example had been invented to sound convincing.",
+      "what_is_lost": "A rater is no longer prompted at the moment they read each criterion, so a trap that would have occurred to them in passing may not occur to them at the end. Nothing measures how much that costs. What is kept is the question, its rule and a case that shows what is being asked, which the column did not have.",
+      "and_the_scale_gains_an_answer_that_is_not_a_step": "The rater may answer 'nevim', I cannot judge this. It is coded as missing and not as a fifth point on the ordinal axis: Krippendorff's alpha is defined for incomplete data and drops a unit with fewer than two answers, which costs nothing, while a fifth step would make the distance between the four mean nothing. The outcome for the item is what a blank already gave -- not rated by all four, so not measured -- and what is gained is knowing the criterion was read and found unjudgeable rather than skipped.",
+      "not_decided_here": "Whether a criterion many raters cannot judge should be rewritten or dropped. With one panel there is no second reading to compare it with."
     }
   ],
   "content_validity": {
@@ -676,12 +692,12 @@
       },
       {
         "id": "harm",
-        "text": "Could measuring this property mislead, or harm a client or a therapist?",
+        "text": "Where could measuring a property do harm? Asked once, under the table, not per item: the rater names the criterion and says how.",
         "scale": [
-          "no",
-          "yes, and I say how"
+          "free text, once per rater, naming the criteria it applies to"
         ],
-        "effect": "a yes is reported for the item whatever its relevance count, and the reason is kept verbatim"
+        "shown_with": "A worked example from this project's own data: a one-sentence note scores 1.00 on economy, so grading economy by itself rewards writing almost nothing. The example the column carried until 2026-10-22 was invented -- a model graded on non-stigmatising language stopping its record of risk -- and does not follow, because recording risk is a clinical description and not a label on a person.",
+        "effect": "a criterion named here is reported with the flag and is not measured in this round whatever its relevance count, and the reason is kept verbatim"
       },
       {
         "id": "missing",
@@ -706,8 +722,8 @@
         "3_of_3_for_comparison": 0.125,
         "null": "a rater choosing uniformly among the four points. Nobody behaves like that, so these are a floor for reading the index and not a model of the panel; they are quoted with the null named. Going from three raters to four halves the chance level of the retention rule, which is why the rule did not have to be loosened to accommodate a fourth opinion."
       },
-      "missing_answer": "A blank is not an answer. Where a rater leaves an item unrated the index is not computed for it: the item is reported as rated by fewer than three and is not measured. Counting the blank as not relevant would invent a judgement nobody made, and taking the proportion over the raters who did answer would apply a different rule to that item than to every other -- and an item left blank is likely to be one of the hard ones, so the bias has a direction.",
-      "harm_flag": "an item any rater flags for harm is reported with the flag and is not measured in this round whatever its relevance count",
+      "missing_answer": "A blank is not an answer, and since 2026-10-22 a rater may say so outright: the scale offers 'nevim', I cannot judge this, coded as missing rather than as a fifth point on the ordinal axis. Either way the index is not computed for that item: it is reported as rated by fewer than four and is not measured. Counting it as not relevant would invent a judgement nobody made, and taking the proportion over the raters who did answer would apply a different rule to that item than to every other -- and an item left blank is likely to be one of the hard ones, so the bias has a direction. What the explicit answer adds is the difference between a criterion that was read and found unjudgeable and one that was skipped.",
+      "harm_flag": "a criterion any rater names in the harm question is reported with the flag and is not measured in this round whatever its relevance count. Until 2026-10-22 the question was a column and the flag was per item; it is now one answer in which the rater names the criteria, so the flag reads a name rather than a cell.",
       "agreement": "Krippendorff's alpha on the ordinal four-point answers over all three raters, with the three pairwise Cohen's kappas beside it. The rule used to name Cohen's kappa alone, which is defined for two raters and could not report the panel it described; S12 recommends kappa over the content validity ratio and index and does not say how to apply it to three. Both are published, with the caveat that three raters over a pool this size give an imprecise estimate, and alpha is the one quoted in prose.",
       "why_the_cut_is_shown_to_the_raters": "The sheet already told them what happens to their answers, and a rater who is not told where the line falls guesses. The cost is named rather than avoided: a rater who knows the cut can answer at the extremes to push an item in or out, which is a risk the alternative does not remove, it only hides.",
       "what_the_rule_does_not_do": "it does not decide whether an item is measurable, only whether the panel judges it relevant. A relevant item with no operational rule stays unmeasured for that reason and the two reasons are reported apart.",

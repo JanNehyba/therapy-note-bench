@@ -1839,13 +1839,34 @@
       "Příklad chyby",
       "Čeho se to týká",
       "Podstatné?",
-      "Mohlo by škodit, že se to měří? Jak?",
       "Poznámka"
     ],
     "tail": [
       [],
       [
         "Co v seznamu chybí? Napište prosím sem, klidně víc věcí, každou na nový řádek."
+      ],
+      [
+        ""
+      ],
+      [
+        ""
+      ],
+      [
+        ""
+      ],
+      [],
+      [
+        "Kdy by měření mohlo uškodit?"
+      ],
+      [
+        "Když se nějaká vlastnost začne známkovat, modely se na ni zaměří — a někdy to dopadne obráceně, než jsme chtěli."
+      ],
+      [
+        "Příklad: kritérium „Úspornost“ říká, že každá věta zápisu má nést podstatný obsah. Kdybychom to začali známkovat samo o sobě, nejlepší možné skóre dostane zápis o jediné větě — ta jedna věta podstatná je a víc tam není nic. Čím míň model napíše, tím líp vyjde."
+      ],
+      [
+        "Vidíte takovou past u některého z kritérií? Napište jeho kód a čím by to podle vás mohlo uškodit."
       ],
       [
         ""
@@ -1974,11 +1995,6 @@
         "why": "Left the sheet on 2026-10-22. The investigator refused the duplication and the process talk: the note type is stated once, on the tab that asks about it, and what happens to the answers goes in the message that carries the link, in the sender's own words."
       },
       {
-        "text": "Dva listy, dva typy zápisu",
-        "until": "2026-10-22",
-        "why": "Left the sheet on 2026-10-22. The investigator refused the duplication and the process talk: the note type is stated once, on the tab that asks about it, and what happens to the answers goes in the message that carries the link, in the sender's own words."
-      },
-      {
         "text": "Co je podstatné v jednom, může být v druhém zbytečné. To je to, co chceme zjistit.",
         "until": "2026-10-22",
         "why": "Left the sheet on 2026-10-22. The investigator refused the duplication and the process talk: the note type is stated once, on the tab that asks about it, and what happens to the answers goes in the message that carries the link, in the sender's own words."
@@ -2037,6 +2053,21 @@
         "text": "Terapeutova vlastní poznámka. Vaše analýza sezení, vedená odděleně od dokumentace; neslouží k předání ani k vykázání.",
         "until": "2026-10-22",
         "why": "Left the sheet on 2026-10-22. The tab is named for the note it asks about, so a heading row repeating it said the same thing twice on the same screen; the legend carries one sentence for each."
+      },
+      {
+        "text": "Sloupec „Mohlo by škodit, že se to měří? Jak?“",
+        "until": "2026-10-22",
+        "why": "Left the sheet on 2026-10-22. The question moved out of the table and under it, where it is asked once with an example, because thirty-nine cells of which thirty-eight stay empty is a lot of attention for a question most rows have no answer to."
+      },
+      {
+        "text": "Ptáme se na vedlejší účinek měření, ne na vlastnost samotnou. Když se něco začne známkovat, modely se na to začnou optimalizovat — a to může dopadnout špatně. Příklad: kdybychom známkovali nestigmatizující jazyk, model se naučí vyhýbat se každému negativnímu slovu a přestane do zápisu psát, že je klient v riziku. Pokud vás u některé vlastnosti takový vedlejší účinek napadne, napište ho jednou větou. Políčko můžete nechat prázdné.",
+        "until": "2026-10-22",
+        "why": "Left the sheet on 2026-10-22. The question moved out of the table and under it, where it is asked once with an example, because thirty-nine cells of which thirty-eight stay empty is a lot of attention for a question most rows have no answer to."
+      },
+      {
+        "text": "Mohlo by škodit, že se to měří? Jak?",
+        "until": "2026-10-22",
+        "why": "A column header a rater read on every row. The question it asked is now one box under the table, so the header may not come back."
       }
     ],
     "purposes": {
@@ -2075,13 +2106,6 @@
       ],
       [
         "{anchors}"
-      ],
-      [],
-      [
-        "Sloupec „Mohlo by škodit, že se to měří? Jak?“"
-      ],
-      [
-        "Ptáme se na vedlejší účinek měření, ne na vlastnost samotnou. Když se něco začne známkovat, modely se na to začnou optimalizovat — a to může dopadnout špatně. Příklad: kdybychom známkovali nestigmatizující jazyk, model se naučí vyhýbat se každému negativnímu slovu a přestane do zápisu psát, že je klient v riziku. Pokud vás u některé vlastnosti takový vedlejší účinek napadne, napište ho jednou větou. Políčko můžete nechat prázdné."
       ]
     ],
     "judged_over_overrides": {
@@ -2229,6 +2253,11 @@
     "example_labels": {
       "positive": "takhle ano:",
       "negative": "takhle ne:"
+    },
+    "relevance_no_answer": {
+      "label": "nevím",
+      "anchor": "Nedokážu to posoudit. Není to hlas pro ani proti — vlastnost se vykáže jako neposouzená, stejně jako prázdné políčko, ale je vidět, že jste ji četli.",
+      "counts_as": "missing"
     }
   },
   "groupings": {

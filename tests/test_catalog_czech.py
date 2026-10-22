@@ -267,7 +267,11 @@ def test_the_sheet_has_one_row_per_candidate(catalog, czech, codes):
         # all, so for those three the rater was answering about a single note,
         # which is a question nobody had asked.
         assert over == judged[code], code
-        assert answers == ["", "", ""], code
+        # Two cells to fill: the relevance answer and an optional note. The
+        # harm question was a third until 2026-10-22, when it moved under the
+        # table: thirty-nine cells of which thirty-eight stay empty is a lot of
+        # attention for a question most rows have no answer to.
+        assert answers == ["", ""], code
     assert len({judged[code] for code in codes}) == 3, "all three units reach the sheet"
 
 
@@ -345,6 +349,47 @@ def test_every_step_of_the_scale_reaches_the_sheet_with_what_it_means(catalog, c
     essential = [step["label"] for step in scale if step["counts_as_essential"]]
     assert essential == [step["label"] for step in scale[-2:]]
     assert all(label in text for label in essential), "the cut is named on the legend"
+
+
+def test_the_harm_question_is_asked_once_with_an_example(catalog, czech, codes):
+    """A rule with teeth needs an input, and the input is one box with a worked case.
+
+    Any rater naming a criterion here keeps it unmeasured this round whatever
+    its relevance, so the question cannot simply disappear. It was a column of
+    thirty-nine cells until 2026-10-22, thirty-eight of which would have stayed
+    empty, and the investigator refused both that and the invented example that
+    explained it: a model graded on non-stigmatising language does not stop
+    recording risk, because recording risk is not stigmatising language.
+
+    What replaces it is one box under the table and the case this project
+    documented itself: a one-sentence note scores 1.00 on economy, so grading
+    economy alone rewards writing almost nothing.
+    """
+    sheet = czech["panel_sheet"]
+    table = panel_sheet.rows(czech, codes, catalog)
+    header = sheet["header"]
+    assert len(header) == 7, "code, name, statement, example, unit, answer, note"
+
+    under = [row[0] for row in table[table.index(list(header)) + len(codes) + 1 :] if row]
+    asked = "\n".join(under)
+    # Two open questions under the table, not one: what the list is missing,
+    # and where measuring would backfire.
+    assert sum("?" in line for line in under) >= 3
+    # The worked example is the criterion this project documented the trap on:
+    # a one-sentence note scores 1.00 on economy.
+    assert czech["candidates"]["K11"]["name"] in asked
+    # And the rater is asked which criterion they mean, in the word the table's
+    # own first column uses for it.
+    assert header[0].lower() in asked.lower()
+    # The column's header and its legend block are gone, recorded with the
+    # date, and may not come back onto a built sheet.
+    everything = "\n".join(
+        cell for rows in (table, panel_sheet.legend(czech, codes)) for row in rows for cell in row
+    )
+    gone = [r for r in sheet["superseded_instructions"] if r["until"] == "2026-10-22"]
+    assert gone
+    for record in gone:
+        assert record["text"] not in everything
 
 
 def test_the_column_says_what_the_property_is_about_not_what_measures_it(catalog, czech, codes):
@@ -426,7 +471,14 @@ def test_the_sheet_carries_no_superseded_sentence(catalog, czech, codes):
     """
     superseded = czech["panel_sheet"]["superseded_instructions"]
     assert superseded, "nothing is recorded, so nothing is guarded"
-    text = "\n".join("\t".join(row) for row in panel_sheet.rows(czech, codes, catalog))
+    # The legend counts too. It did not until 2026-10-22, and a heading that
+    # left the legend and came back an hour later sat there recorded as gone:
+    # a false record of a removal, which is worse than no record at all.
+    text = "\n".join(
+        "\t".join(row)
+        for rows in (panel_sheet.rows(czech, codes, catalog), panel_sheet.legend(czech, codes))
+        for row in rows
+    )
     for record in superseded:
         assert record["text"] and record["until"] and len(record["why"].split()) >= 8
         assert record["text"] not in text, record["why"]
