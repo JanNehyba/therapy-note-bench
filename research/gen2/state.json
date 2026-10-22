@@ -114,9 +114,9 @@
     }
   },
   "protocol": {
-    "version": "2.22.0",
+    "version": "2.23.0",
     "recorded_date": "2026-10-14",
-    "supersedes": "2.21.0",
+    "supersedes": "2.22.0",
     "archived": [
       "1.0.0",
       "2.0.0",
@@ -140,26 +140,27 @@
       "2.18.0",
       "2.19.0",
       "2.20.0",
-      "2.21.0"
+      "2.21.0",
+      "2.22.0"
     ],
     "status": "protocol_amended_before_pilot_search_partially_executed",
     "pilot_status": "not_run",
     "registration_status": "not_registered"
   },
   "catalog": {
-    "candidates": 39,
+    "candidates": 48,
     "by_state": {
       "awaiting_raters": 1,
       "lacking_evidence": 1,
       "not_measured": 6,
-      "not_yet_operationalized": 10,
+      "not_yet_operationalized": 19,
       "out_of_scope": 5,
       "proposed": 16
     },
     "by_unit_of_analysis": {
       "case_series": 1,
       "model_over_cases": 2,
-      "note": 36
+      "note": 45
     },
     "with_a_rule_in_this_round": 12,
     "with_a_rule_written_for_a_later_round": 7,

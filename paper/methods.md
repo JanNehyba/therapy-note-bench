@@ -341,7 +341,7 @@ removed with K19 on 2026-10-05. The protocol records
 the executable count at freeze rather than capping it. The registry refuses to
 freeze while any used subject lacks an accepted decision.
 
-The feasibility pilot (protocol 2.22.0) freezes 16 generation jobs over two
+The feasibility pilot (protocol 2.23.0) freezes 16 generation jobs over two
 cohorts, two English AnnoMI conversations and their Czech translations, two
 purposes and two generator families, and balances an 8-note human sample across
 them. Two Czech psychologists, neither the instrument author, rate under a
@@ -398,7 +398,20 @@ for expert judges who "should be independent of those who developed the item
 pool" (Boateng et al., 2018) and calls five to seven of them typical. The pool
 was developed by the investigator with the assistant, and on 2026-10-07, before
 any rating existed, a retention threshold was recorded in the tracked protocol
-and the whole pool is to be put to four therapists who are neither. Each of them rates every criterion
+and the whole pool is to be put to four therapists who are neither. The pool is
+forty-eight criteria. Thirty-nine came from the review of 2026-09-13 and nine
+are a language layer added on 2026-10-23: seven of those are measured in both
+languages and two, a diacritic and a calque, in Czech alone, because neither can
+be measured on an English note. The split follows Qiu et al. (2025), who apply a
+language-agnostic core with language-specific extensions to five languages
+including Czech, and ELERRANT (Korre et al., 2021), which added two categories
+of fourteen for Greek itself; a criterion measured in one language only cannot
+say whether a model is worse in that language or the criterion merely stricter.
+We report what the layer lacks: no rule is written for any of the nine, two of
+them have no named category in any scheme we read and rest on the nearest one in
+a survey of fifteen, and Czech has no inter-rater figure at all, because the
+first generation's agreement figures for five of them are a judge against one
+native speaker. Each of them rates every criterion
 twice, once for a note that belongs to the record and once for the clinician's
 own note, on separate tabs whose order alternates between raters: the two are
 different genres, the American rule keeps diagnosis, plan, symptoms, prognosis

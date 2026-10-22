@@ -72,7 +72,7 @@ def test_it_names_exactly_the_catalog_codes(catalog, czech):
     to it.
     """
     assert set(czech["candidates"]) == set(catalog_mod.ids(catalog, "candidates"))
-    assert len(czech["candidates"]) == 39
+    assert len(czech["candidates"]) == 48
 
 
 def test_a_candidate_cannot_reach_a_sheet_without_a_name_and_a_statement(czech):
@@ -108,13 +108,16 @@ def test_partial_coverage_is_counted_and_the_gaps_are_named(catalog, czech):
     coverage block lists them.
     """
     coverage = czech["coverage"]
-    assert coverage["candidates"] == 39
-    assert coverage["by_field"]["name"] == coverage["by_field"]["statement"] == 39
+    assert coverage["candidates"] == 48
+    assert coverage["by_field"]["name"] == coverage["by_field"]["statement"] == 48
     # K35 and K36 were added on 2026-10-07, after the last generator ran, so they
     # have no question and no unit. K37 to K39 were written on 2026-10-14 with
     # both, which is why they are not in these lists.
     assert coverage["missing_by_field"]["question"] == ["K35", "K36"]
-    assert coverage["missing_by_field"]["unit"] == ["K35", "K36"]
+    # The language layer of 2026-10-23 carries a question and no unit: every one
+    # of the nine is judged over one note, which the catalog records, and the
+    # Czech word for it was not written for them.
+    assert coverage["missing_by_field"]["unit"] == ["K35", "K36"] + [f"K4{n}" for n in range(9)]
     assert coverage["candidates_with_no_explanation_of_their_state"] == ["K34", "K35", "K36"]
     assert coverage["candidates_with_no_explanation_note"]
 
@@ -240,7 +243,7 @@ def codes(catalog) -> list[str]:
 def test_the_sheet_has_one_row_per_candidate(catalog, czech, codes):
     table = panel_sheet.rows(czech, codes, catalog)
     items = [row for row in table if row and re.fullmatch(r"K\d\d", row[0])]
-    assert len(items) == len(codes) == 39
+    assert len(items) == len(codes) == 48
     assert {row[0] for row in items} == set(codes)
     units = czech["vocabulary"]["unit_of_analysis"]
     # The column names the unit of the property, which for one candidate is not
@@ -300,7 +303,7 @@ def test_no_text_on_the_sheet_states_how_many_criteria_it_holds(catalog, czech, 
     ]
     for line in everything:
         for near in range(len(codes) - 6, len(codes) + 7):
-            # Not inside a criterion code: K33 to K39 are names, not counts.
+            # Not inside a criterion code: K42 to K48 are names, not counts.
             found = re.search(rf"(?<!K){near}", line)
             assert not found, f"a count of criteria is typed into {line[:60]!r}"
 
@@ -657,7 +660,7 @@ def test_every_rater_gets_their_own_file_for_each_purpose(tmp_path, monkeypatch)
 
     recorded = json.loads((tmp_path / "poradi.json").read_text(encoding="utf-8"))
     assert recorded["seed"] == panel_sheet.SEED
-    assert recorded["items"] == 39
+    assert recorded["items"] == 48
     assert recorded["purposes"] == ["progress_note", "therapeutic_note"]
 
 
@@ -704,7 +707,7 @@ def page(catalog, czech, operational) -> str:
 
 
 def test_the_table_has_one_row_per_candidate(page, codes):
-    assert page.count("<tr class=") == len(codes) == 39
+    assert page.count("<tr class=") == len(codes) == 48
     for code in codes:
         assert f"<td class=id>{code}</td>" in page
 

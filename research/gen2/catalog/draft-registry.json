@@ -401,6 +401,46 @@
       "version": "source-v1"
     },
     {
+      "id": "S35",
+      "title": "Pugachev A, et al. REPA: Russian Error Types Annotation for Evaluating Text Generation and Judgment Capabilities. Proceedings of the 10th Workshop on Slavic Natural Language Processing (Slavic NLP 2025), 2025. doi:10.18653/v1/2025.bsnlp-1.16.",
+      "locator": "ledger:doi:10.18653/v1/2025.bsnlp-1.16",
+      "layer": "transfer",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "Russian chatbot dialogue, not clinical notes and not Czech. Nothing in it is about documentation, and the transfer is of the error types only.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S36",
+      "title": "Korre K, Chatzipanagiotou M, Pavlopoulos J. ELERRANT: Automatic Grammatical Error Type Classification for Greek. Proceedings of the International Conference on Recent Advances in Natural Language Processing (RANLP 2021), 2021. https://aclanthology.org/2021.ranlp-1.81/.",
+      "locator": "ledger:acl:2021.ranlp-1.81",
+      "layer": "transfer",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "Greek, and a learner-error scheme rather than a scheme for generated text. An accent in Greek marks stress while a Czech diacritic can change the word, so the severity is ours and only the category transfers.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S37",
+      "title": "Qiu M, et al. Multilingual Grammatical Error Annotation: Combining Language-Agnostic Framework with Language-Specific Flexibility. Proceedings of the 20th Workshop on Innovative Use of NLP for Building Educational Applications (BEA 2025), 2025. doi:10.18653/v1/2025.bea-1.15.",
+      "locator": "ledger:doi:10.18653/v1/2025.bea-1.15",
+      "layer": "transfer",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "Learner language, not generated text, and no clinical material. It gives the shape of the two layers and the Czech word-order case, not a rule for a note.",
+      "version": "source-v1"
+    },
+    {
+      "id": "S38",
+      "title": "Venturini G, et al. TalkTag: Fine-Grained Morphosyntactic Error Annotation for Transcribed Speech. Proceedings of the 20th Linguistic Annotation Workshop (LAW XX), 2026. doi:10.18653/v1/2026.law-main.20.",
+      "locator": "ledger:doi:10.18653/v1/2026.law-main.20",
+      "layer": "transfer",
+      "publication_type": "article",
+      "verification": "full_text_checked",
+      "limitations": "English, speech transcripts, learner-style morphosyntax. Nothing about notes.",
+      "version": "source-v1"
+    },
+    {
       "id": "S_abs_severity",
       "title": "Clinical AI Scribes in primary care: accuracy, error severity and implications for clinical practice. BMJ Digital Health & AI, 2025.",
       "locator": "ledger:pmid:42712320",
@@ -1806,6 +1846,234 @@
       "human_checked_by": null,
       "source_artifact_digest": "",
       "excerpt": "Error In Input: An error that is caused by an error in the input."
+    },
+    {
+      "id": "K40-e1",
+      "source_id": "S35",
+      "location": "the error type definitions, sudden_interruption",
+      "interpretation": "A response cut off is a named error type of its own in a published typology, not a transport failure.",
+      "relationship": "method_transfer",
+      "population": "Russian chatbot responses annotated for error types, with a human preference study and an evaluation of language-model judges against it",
+      "languages": [
+        "ru"
+      ],
+      "raters": "human annotators per error type; the paper reports per-type agreement with the human majority for its judges and not an inter-rater figure we transcribed",
+      "unit": "a chatbot response",
+      "response_format": "a typology of error types, each with a one-sentence definition and a question",
+      "validation": "not established",
+      "limitations": "Russian chatbot dialogue, not a clinical note. We keep the property and not the judge: whether a note is truncated is visible in the note.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Sudden Interruption: The chatbot 's response was abruptly cut off."
+    },
+    {
+      "id": "K41-e1",
+      "source_id": "S35",
+      "location": "the error type definitions, fluency",
+      "interpretation": "The published definition carries the threshold in its own words: critical, and may hinder comprehension.",
+      "relationship": "method_transfer",
+      "population": "Russian chatbot responses annotated for error types, with a human preference study and an evaluation of language-model judges against it",
+      "languages": [
+        "ru"
+      ],
+      "raters": "human annotators per error type; the paper reports per-type agreement with the human majority for its judges and not an inter-rater figure we transcribed",
+      "unit": "a chatbot response",
+      "response_format": "a typology of error types, each with a one-sentence definition and a question",
+      "validation": "not established",
+      "limitations": "Russian dialogue. Czech is as inflected and the threshold transfers; what does not transfer is the judge, whose performance the same paper reports as worse in Russian than in English.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Fluency: The response contains critical grammatical errors that may hinder text comprehension."
+    },
+    {
+      "id": "K42-e1",
+      "source_id": "S35",
+      "location": "the error type definitions, code_switching",
+      "interpretation": "The property is a named error type, and its published form is any unexpected switch rather than a failure to translate.",
+      "relationship": "method_transfer",
+      "population": "Russian chatbot responses annotated for error types, with a human preference study and an evaluation of language-model judges against it",
+      "languages": [
+        "ru"
+      ],
+      "raters": "human annotators per error type; the paper reports per-type agreement with the human majority for its judges and not an inter-rater figure we transcribed",
+      "unit": "a chatbot response",
+      "response_format": "a typology of error types, each with a one-sentence definition and a question",
+      "validation": "not established",
+      "limitations": "The widening is the whole adoption: our own question had named English as the other language, which cannot see a Czech note drifting into Slovak or German.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Code -Switching: The chatbot 's response contains unexpected switching between languages."
+    },
+    {
+      "id": "K43-e1",
+      "source_id": "S36",
+      "location": "Table 1, the error type annotation guide",
+      "interpretation": "Word order is a category of its own in a published error scheme.",
+      "relationship": "method_transfer",
+      "population": "Greek learner and native corpora, annotated by an error type classifier adapted from ERRANT; not a study of people or of notes",
+      "languages": [
+        "el"
+      ],
+      "raters": "not a rating study; a classifier and a human annotation guide",
+      "unit": "an edit between an erroneous and a corrected sentence",
+      "response_format": "an error type guide of fourteen categories, each with a label and a one-line definition, of which two were added for Greek specifically",
+      "validation": "not established",
+      "limitations": "A learner-error scheme for Greek. We keep the category and raise its bar: only an order that changes the meaning counts, because a note is not marked for style.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "WO Words Order Error in words order."
+    },
+    {
+      "id": "K43-e2",
+      "source_id": "S37",
+      "location": "the Czech and German examples, Figure 4",
+      "interpretation": "Word order is the category the only Czech-annotating source read chose to illustrate the language's own difficulty with.",
+      "relationship": "method_transfer",
+      "population": "grammatical error annotation applied to English, German, Czech, Korean and Chinese; the Czech application is over the corpus of Naplava et al. (2022)",
+      "languages": [
+        "multilingual, including cs"
+      ],
+      "raters": "not a rating study; an annotation framework and its outputs",
+      "unit": "an edit between an erroneous and a corrected sentence",
+      "response_format": "a language-agnostic core with language-specific extensions",
+      "validation": "not established",
+      "limitations": "Their unit is an edit in learner text and ours is a sentence in a generated note; what transfers is that Czech word order needs its own treatment and not the English rule.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "For Czech, the example highlights differences in word order (WO) annotation: our method distinguishes between auxiliary and main verbs by incorporating POS information"
+    },
+    {
+      "id": "K44-e1",
+      "source_id": "S36",
+      "location": "Table 1, the error type annotation guide",
+      "interpretation": "Agreement is a category of its own rather than part of an undivided grammaticality judgement.",
+      "relationship": "method_transfer",
+      "population": "Greek learner and native corpora, annotated by an error type classifier adapted from ERRANT; not a study of people or of notes",
+      "languages": [
+        "el"
+      ],
+      "raters": "not a rating study; a classifier and a human annotation guide",
+      "unit": "an edit between an erroneous and a corrected sentence",
+      "response_format": "an error type guide of fourteen categories, each with a label and a one-line definition, of which two were added for Greek specifically",
+      "validation": "not established",
+      "limitations": "Greek marks agreement in person; Czech marks it in gender and number as well, so our form of the category is wider than the one quoted.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "VERB:SVA Subject Verb Agreement The subject and the verb to be in person agreement."
+    },
+    {
+      "id": "K44-e2",
+      "source_id": "S37",
+      "location": "the applications to five languages",
+      "interpretation": "A morphosyntactic category can be carried across languages as a shared core with a language-specific extension, which is the shape this layer uses.",
+      "relationship": "method_transfer",
+      "population": "grammatical error annotation applied to English, German, Czech, Korean and Chinese; the Czech application is over the corpus of Naplava et al. (2022)",
+      "languages": [
+        "multilingual, including cs"
+      ],
+      "raters": "not a rating study; an annotation framework and its outputs",
+      "unit": "an edit between an erroneous and a corrected sentence",
+      "response_format": "a language-agnostic core with language-specific extensions",
+      "validation": "not established",
+      "limitations": "Their framework annotates edits in learner text. We take the two-layer shape and not the annotation.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Our approach combines a language-agnostic foundation with structured language-specific extensions, enabling both consistency and flexibility across languages."
+    },
+    {
+      "id": "K45-e1",
+      "source_id": "S36",
+      "location": "Table 1, the error type annotation guide",
+      "interpretation": "The nearest named category in any scheme read, and it is not the same thing: a spelling error is a known word written wrongly.",
+      "relationship": "method_transfer",
+      "population": "Greek learner and native corpora, annotated by an error type classifier adapted from ERRANT; not a study of people or of notes",
+      "languages": [
+        "el"
+      ],
+      "raters": "not a rating study; a classifier and a human annotation guide",
+      "unit": "an edit between an erroneous and a corrected sentence",
+      "response_format": "an error type guide of fourteen categories, each with a label and a one-line definition, of which two were added for Greek specifically",
+      "validation": "not established",
+      "limitations": "Recorded as the nearest match rather than as support. The gap is the finding: no scheme read has a category for a token a generator invented.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "SPELL Spelling Spelling errors."
+    },
+    {
+      "id": "K46-e1",
+      "source_id": "S34",
+      "location": "section 5, errors of form",
+      "interpretation": "A survey that collated the categories of fifteen error schemes names inappropriate style among errors of form, so register is a recognised class of defect in generated text and not only our own question.",
+      "relationship": "method_transfer",
+      "population": "15 error annotation schemes for automatically generated text, collated and merged; not a study of people or notes",
+      "languages": [
+        "en"
+      ],
+      "raters": "not a rating study; the authors align and merge other people's categories",
+      "unit": "an error category",
+      "response_format": "a survey of schemes, a minimally merged taxonomy and a maximally merged consensus taxonomy, with definitions and four orthogonal error-type dimensions",
+      "validation": "not established",
+      "limitations": "It names the class and defines no category inside it. Ours is narrower: a colloquial or emotionally coloured expression standing where a professional term belongs, which no scheme read defines.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Errors of form in NLG in general refer to flaws or mistakes in how the word sequence in the output is put togehter (rather than what it means), e.g. grammatical errors, disfluencies, or inappropriate style."
+    },
+    {
+      "id": "K47-e1",
+      "source_id": "S36",
+      "location": "Table 1, the error type annotation guide",
+      "interpretation": "A diacritic error is a named category, and one of exactly two that paper added for the language itself.",
+      "relationship": "method_transfer",
+      "population": "Greek learner and native corpora, annotated by an error type classifier adapted from ERRANT; not a study of people or of notes",
+      "languages": [
+        "el"
+      ],
+      "raters": "not a rating study; a classifier and a human annotation guide",
+      "unit": "an edit between an erroneous and a corrected sentence",
+      "response_format": "an error type guide of fourteen categories, each with a label and a one-line definition, of which two were added for Greek specifically",
+      "validation": "not established",
+      "limitations": "Greek is not Czech. A Greek accent marks stress; a Czech diacritic can change the word, so the category transfers and the severity is ours.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "ACC Accentuation Accentuation addition or removal."
+    },
+    {
+      "id": "K47-e2",
+      "source_id": "S36",
+      "location": "the description of what was added to ERRANT for Greek",
+      "interpretation": "Of fourteen error types only two were language-specific, which is the evidence that a language layer is small.",
+      "relationship": "method_transfer",
+      "population": "Greek learner and native corpora, annotated by an error type classifier adapted from ERRANT; not a study of people or of notes",
+      "languages": [
+        "el"
+      ],
+      "raters": "not a rating study; a classifier and a human annotation guide",
+      "unit": "an edit between an erroneous and a corrected sentence",
+      "response_format": "an error type guide of fourteen categories, each with a label and a one-line definition, of which two were added for Greek specifically",
+      "validation": "not established",
+      "limitations": "It is why this set has seven criteria measured in both languages and two in Czech alone, rather than a flat set of Czech questions.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "We added two more categories from scratch: ACC (Accent) and FN (Final -/nu)."
+    },
+    {
+      "id": "K48-e1",
+      "source_id": "S34",
+      "location": "section 5, the collated categories, 6",
+      "interpretation": "The nearest category in a survey of fifteen schemes: a wrong translation choice carried into the target text.",
+      "relationship": "method_transfer",
+      "population": "15 error annotation schemes for automatically generated text, collated and merged; not a study of people or notes",
+      "languages": [
+        "en"
+      ],
+      "raters": "not a rating study; the authors align and merge other people's categories",
+      "unit": "an error category",
+      "response_format": "a survey of schemes, a minimally merged taxonomy and a maximally merged consensus taxonomy, with definitions and four orthogonal error-type dimensions",
+      "validation": "not established",
+      "limitations": "Recorded as the nearest match and not as support. A calque is not a wrong word, it is a right word in a construction the target language does not have, and no scheme read has a category for it. The Latvian loanword and calque work of 2026 is in the frame and unread.",
+      "human_checked_by": null,
+      "source_artifact_digest": "",
+      "excerpt": "Lexical Choice (Costa et al., 2012): \"the translation engine chose the wrong translation candidate word.\""
     }
   ],
   "constructs": [
@@ -3281,6 +3549,333 @@
       "reviewed_by": null,
       "origin": "literature",
       "origin_reference": "catalog:K39"
+    },
+    {
+      "id": "K40",
+      "name": "Truncated note",
+      "definition": "The note ends where it was meant to end. A note cut off mid-sentence or mid-section is incomplete as an artefact, whatever the quality of what is there. Distinct from coverage: a complete note can omit something, and a truncated one stops.",
+      "families": [
+        "F4"
+      ],
+      "evidence_ids": [
+        "K40-e1"
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "high",
+        "client": "high",
+        "audit": "high"
+      },
+      "unit": "whole note",
+      "required_inputs": [
+        "note only"
+      ],
+      "examples": {
+        "positive": "The note ends with a complete final section.",
+        "negative": "The last section begins 'We agreed that before the next session the client' and the note ends there.",
+        "boundary": "A note that is short but finished: it ends on a complete sentence, so this criterion passes and coverage is the open question."
+      },
+      "candidate_formats": [
+        "binary per note; not yet defined"
+      ],
+      "applicability": "Both languages. Measuring the same property in both is the only way to say that a model holds a property in English and loses it in Czech, which is the question a benchmark for a small language exists to ask.",
+      "error_consequences": "High where the cut falls on risk or on the agreed plan, which are the last sections of the progress note, and a reader cannot tell a truncated plan from no plan.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "literature",
+      "origin_reference": "catalog:K40"
+    },
+    {
+      "id": "K41",
+      "name": "Fluency, with a comprehension threshold",
+      "definition": "A grammatical error that may stop a reader understanding what was meant. The threshold is the point: a note with a wrong ending that nobody stumbles over is not the same defect as one whose sentence cannot be resolved.",
+      "families": [
+        "F4"
+      ],
+      "evidence_ids": [
+        "K41-e1"
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "medium",
+        "client": "high",
+        "audit": "medium"
+      },
+      "unit": "whole note",
+      "required_inputs": [
+        "note only"
+      ],
+      "examples": {
+        "positive": "Every sentence resolves on one reading.",
+        "negative": "'The client said her partner did not advise her to stop the medication' leaves it undecidable who advised what.",
+        "boundary": "A wrong ending that nobody stumbles over: grammatical, and below the threshold this criterion sets."
+      },
+      "candidate_formats": [
+        "binary per note; not yet defined"
+      ],
+      "applicability": "Both languages. Measuring the same property in both is the only way to say that a model holds a property in English and loses it in Czech, which is the question a benchmark for a small language exists to ask.",
+      "error_consequences": "Moderate to high: a sentence a clinician cannot resolve is a sentence they have to go back to the recording for, which is what the note exists to prevent.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "literature",
+      "origin_reference": "catalog:K41"
+    },
+    {
+      "id": "K42",
+      "name": "Unexpected language switch",
+      "definition": "The note stays in the language it was asked for. A professional term used untranslated in practice is not a switch; a sentence or a heading in another language is.",
+      "families": [
+        "F4"
+      ],
+      "evidence_ids": [
+        "K42-e1"
+      ],
+      "relevance": {
+        "continuity": "medium",
+        "supervision": "medium",
+        "client": "high",
+        "audit": "medium"
+      },
+      "unit": "whole note",
+      "required_inputs": [
+        "note only"
+      ],
+      "examples": {
+        "positive": "The note is in the language the task asked for throughout.",
+        "negative": "A Czech note carries the heading 'Assessment and uncertainty' and two English sentences under it.",
+        "boundary": "A professional term left untranslated because it is used untranslated in practice, which is not a switch."
+      },
+      "candidate_formats": [
+        "binary per note; not yet defined"
+      ],
+      "applicability": "Both languages. Measuring the same property in both is the only way to say that a model holds a property in English and loses it in Czech, which is the question a benchmark for a small language exists to ask.",
+      "error_consequences": "Moderate: a reader who does not have the other language loses whatever the switched passage carried, and the switch is often in the section a hurried reader reads first.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "prior_proposal",
+      "origin_reference": "catalog:K42"
+    },
+    {
+      "id": "K43",
+      "name": "Word order",
+      "definition": "Word order that changes the meaning, not word order that reads oddly. In an inflected language the order carries emphasis and, where the forms are ambiguous, the roles as well.",
+      "families": [
+        "F4"
+      ],
+      "evidence_ids": [
+        "K43-e1",
+        "K43-e2"
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "medium",
+        "client": "medium",
+        "audit": "medium"
+      },
+      "unit": "whole note",
+      "required_inputs": [
+        "note only"
+      ],
+      "examples": {
+        "positive": "Word order carries the roles the source gave.",
+        "negative": "An order that puts the client where the partner stood, so the note says the reverse of the session.",
+        "boundary": "An order that reads oddly and resolves on one reading only: a naturalness question rather than this one."
+      },
+      "candidate_formats": [
+        "binary per note; not yet defined"
+      ],
+      "applicability": "Both languages. Measuring the same property in both is the only way to say that a model holds a property in English and loses it in Czech, which is the question a benchmark for a small language exists to ask.",
+      "error_consequences": "High where it flips who did what to whom, which is the same defect as a fidelity error and is invisible to a check that compares words.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "literature",
+      "origin_reference": "catalog:K43"
+    },
+    {
+      "id": "K44",
+      "name": "Agreement and case",
+      "definition": "Morphosyntactic agreement and case marking within a sentence. Narrowed from the first generation's question, which asked about grammatical correctness as a whole and therefore asked four things at once.",
+      "families": [
+        "F4"
+      ],
+      "evidence_ids": [
+        "K44-e1",
+        "K44-e2"
+      ],
+      "relevance": {
+        "continuity": "medium",
+        "supervision": "low",
+        "client": "medium",
+        "audit": "low"
+      },
+      "unit": "whole note",
+      "required_inputs": [
+        "note only"
+      ],
+      "examples": {
+        "positive": "Subject, verb and modifiers agree, and case marks the roles.",
+        "negative": "'The client said that it relieved him' where the subject is a woman: the verb and the pronoun belong to another gender.",
+        "boundary": "A case error that leaves the meaning recoverable, which is this criterion and not fluency."
+      },
+      "candidate_formats": [
+        "binary per note; not yet defined"
+      ],
+      "applicability": "Both languages. Measuring the same property in both is the only way to say that a model holds a property in English and loses it in Czech, which is the question a benchmark for a small language exists to ask.",
+      "error_consequences": "Usually low on its own and high in aggregate: a note full of wrong endings reads as machine-written and is the first thing a clinician rewrites.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "prior_proposal",
+      "origin_reference": "catalog:K44"
+    },
+    {
+      "id": "K45",
+      "name": "Non-existent word",
+      "definition": "A token that is not a word of the language. Distinct from a professional term used wrongly, which is K34, and from a calque, which is a real word formed by translating one.",
+      "families": [
+        "F4"
+      ],
+      "evidence_ids": [
+        "K45-e1"
+      ],
+      "relevance": {
+        "continuity": "medium",
+        "supervision": "low",
+        "client": "medium",
+        "audit": "low"
+      },
+      "unit": "whole note",
+      "required_inputs": [
+        "note only"
+      ],
+      "examples": {
+        "positive": "Every token is a word of the language.",
+        "negative": "The note writes that the client is 'de-anxietising her anxiousness'.",
+        "boundary": "A real professional term used for something it does not mean, which is terminology and not this."
+      },
+      "candidate_formats": [
+        "binary per note; not yet defined"
+      ],
+      "applicability": "Both languages. Measuring the same property in both is the only way to say that a model holds a property in English and loses it in Czech, which is the question a benchmark for a small language exists to ask.",
+      "error_consequences": "Low for care and high for trust: an invented word is the clearest signal to a reader that nobody checked the note.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "prior_proposal",
+      "origin_reference": "catalog:K45"
+    },
+    {
+      "id": "K46",
+      "name": "Colloquial expression where a professional term belongs",
+      "definition": "Register. The note is written in professional language; a colloquial or emotionally coloured expression in place of a term is the defect. Quoting the client's own words is not: a quotation marked as one is clinical content.",
+      "families": [
+        "F4"
+      ],
+      "evidence_ids": [
+        "K46-e1"
+      ],
+      "relevance": {
+        "continuity": "medium",
+        "supervision": "medium",
+        "client": "high",
+        "audit": "medium"
+      },
+      "unit": "whole note",
+      "required_inputs": [
+        "note only"
+      ],
+      "examples": {
+        "positive": "The register is professional throughout.",
+        "negative": "'The client is shaken up by it' where the note means a reported sleep problem.",
+        "boundary": "The client's own words quoted and marked as a quotation, which is clinical content and not register."
+      },
+      "candidate_formats": [
+        "binary per note; not yet defined"
+      ],
+      "applicability": "Both languages. Measuring the same property in both is the only way to say that a model holds a property in English and loses it in Czech, which is the question a benchmark for a small language exists to ask.",
+      "error_consequences": "Moderate: register is what a colleague reads the note's seriousness from, and a colloquial judgement reads as the writer's opinion of the client.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "prior_proposal",
+      "origin_reference": "catalog:K46"
+    },
+    {
+      "id": "K47",
+      "name": "Diacritics",
+      "definition": "A missing or wrong length mark or hacek in a Czech word. Measured for Czech alone: English domestic words carry no diacritics, so the denominator in English would be empty.",
+      "families": [
+        "F4"
+      ],
+      "evidence_ids": [
+        "K47-e1",
+        "K47-e2"
+      ],
+      "relevance": {
+        "continuity": "medium",
+        "supervision": "low",
+        "client": "medium",
+        "audit": "low"
+      },
+      "unit": "whole note",
+      "required_inputs": [
+        "note only"
+      ],
+      "examples": {
+        "positive": "Every Czech word carries the diacritics it needs.",
+        "negative": "A missing hacek turns one word into a different real word and the sentence still parses.",
+        "boundary": "A proper name written without diacritics as its bearer writes it, which is not an error."
+      },
+      "candidate_formats": [
+        "binary per note; not yet defined"
+      ],
+      "applicability": "Czech only. The property cannot be measured on an English note of this round, and a criterion measured in one language says nothing about whether the model is worse in that language or the criterion merely stricter, so it never enters a comparison of the two tracks and is reported for Czech alone.",
+      "error_consequences": "Usually low and occasionally high, because a missing hacek can produce a different real word and the sentence still parses.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "prior_proposal",
+      "origin_reference": "catalog:K47"
+    },
+    {
+      "id": "K48",
+      "name": "Calque",
+      "definition": "An expression formed by translating an English one word for word. Every word is Czech and the phrase is not. Measured for Czech alone: an English note has nothing to calque from in this round, where the source is English.",
+      "families": [
+        "F4"
+      ],
+      "evidence_ids": [
+        "K48-e1"
+      ],
+      "relevance": {
+        "continuity": "low",
+        "supervision": "low",
+        "client": "medium",
+        "audit": "low"
+      },
+      "unit": "whole note",
+      "required_inputs": [
+        "note only"
+      ],
+      "examples": {
+        "positive": "The Czech reads as Czech rather than as English in Czech words.",
+        "negative": "'The client addressed her feelings', rendered word for word, where Czech would say that she talked about them.",
+        "boundary": "A borrowing that Czech clinical writing has adopted, which is terminology and not a calque."
+      },
+      "candidate_formats": [
+        "binary per note; not yet defined"
+      ],
+      "applicability": "Czech only. The property cannot be measured on an English note of this round, and a criterion measured in one language says nothing about whether the model is worse in that language or the criterion merely stricter, so it never enters a comparison of the two tracks and is reported for Czech alone.",
+      "error_consequences": "Low for care. It is the clearest mark that the Czech was produced through English rather than written, which is the question a benchmark for a small language asks.",
+      "status": "candidate",
+      "decision_reason": "Awaiting human review",
+      "reviewed_by": null,
+      "origin": "prior_proposal",
+      "origin_reference": "catalog:K48"
     }
   ],
   "measurements": [
@@ -3420,7 +4015,7 @@
       "deterministic_checks": []
     }
   ],
-  "protocol_revision": "84d3fa508716232f5eaf9af9757e4fca429be4758641deac3de6b59414021d61",
+  "protocol_revision": "0b8c9623d6e369d9aa153798431bd70ddee8c76787a135d989ecf2daaadf213c",
   "version": "registry-v2",
   "literature_freeze": null,
   "methods": [

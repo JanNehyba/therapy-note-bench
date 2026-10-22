@@ -49,18 +49,18 @@
   },
   "statement_and_question_are_not_variants": "A statement is what a panel marks agreement with, and none of the 36 ends in a question mark; a question is what a reader of the table is asked, and 33 of the 34 do. They came from different generators for different sheets and are kept apart: the panel sheet must not be built from the questions.",
   "coverage": {
-    "candidates": 39,
+    "candidates": 48,
     "by_field": {
-      "name": 39,
-      "statement": 39,
-      "question": 37,
+      "name": 48,
+      "statement": 48,
+      "question": 46,
       "definition": 33,
       "unit": 37,
       "unit_definition": 33,
       "applicability": 33,
       "error_consequence": 33,
       "how": 16,
-      "why_not_measured": 19,
+      "why_not_measured": 28,
       "measured_otherwise": 5
     },
     "missing_by_field": {
@@ -74,11 +74,29 @@
         "K36",
         "K37",
         "K38",
-        "K39"
+        "K39",
+        "K40",
+        "K41",
+        "K42",
+        "K43",
+        "K44",
+        "K45",
+        "K46",
+        "K47",
+        "K48"
       ],
       "unit": [
         "K35",
-        "K36"
+        "K36",
+        "K40",
+        "K41",
+        "K42",
+        "K43",
+        "K44",
+        "K45",
+        "K46",
+        "K47",
+        "K48"
       ],
       "unit_definition": [
         "K34",
@@ -86,7 +104,16 @@
         "K36",
         "K37",
         "K38",
-        "K39"
+        "K39",
+        "K40",
+        "K41",
+        "K42",
+        "K43",
+        "K44",
+        "K45",
+        "K46",
+        "K47",
+        "K48"
       ],
       "applicability": [
         "K34",
@@ -94,7 +121,16 @@
         "K36",
         "K37",
         "K38",
-        "K39"
+        "K39",
+        "K40",
+        "K41",
+        "K42",
+        "K43",
+        "K44",
+        "K45",
+        "K46",
+        "K47",
+        "K48"
       ],
       "error_consequence": [
         "K34",
@@ -102,7 +138,16 @@
         "K36",
         "K37",
         "K38",
-        "K39"
+        "K39",
+        "K40",
+        "K41",
+        "K42",
+        "K43",
+        "K44",
+        "K45",
+        "K46",
+        "K47",
+        "K48"
       ],
       "how": [
         "K09",
@@ -127,7 +172,16 @@
         "K36",
         "K37",
         "K38",
-        "K39"
+        "K39",
+        "K40",
+        "K41",
+        "K42",
+        "K43",
+        "K44",
+        "K45",
+        "K46",
+        "K47",
+        "K48"
       ],
       "why_not_measured": [
         "K01",
@@ -185,7 +239,16 @@
         "K36",
         "K37",
         "K38",
-        "K39"
+        "K39",
+        "K40",
+        "K41",
+        "K42",
+        "K43",
+        "K44",
+        "K45",
+        "K46",
+        "K47",
+        "K48"
       ]
     },
     "candidates_with_no_explanation_of_their_state": [
@@ -1830,6 +1893,168 @@
         "name": "Chyba zděděná ze zdroje"
       },
       "example_positive": "V přepisu je sertralid, ačkoli klient řekl sertralin, a zápis píše sertralin."
+    },
+    "K40": {
+      "name": "Useknutý zápis",
+      "from": {
+        "name": "read on 2026-10-14 and written here",
+        "statement": "read on 2026-10-14 and written here",
+        "question": "read on 2026-10-14 and written here",
+        "plain": "napsáno 2026-10-23",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-23",
+        "why_not_measured": "read on 2026-10-14 and written here"
+      },
+      "statement": "Zápis není utnutý v půlce věty nebo oddílu.",
+      "question": "Je zápis utnutý v půlce věty nebo oddílu?",
+      "plain": "Zápis skončí tam, kde měl skončit, a ne v půlce věty.",
+      "example": "Poslední oddíl začíná větou „Dohodli jsme se, že klient do dalšího sezení“ a tím zápis končí.",
+      "why_not_measured": "Pravidlo pro měření zatím není napsáno.",
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
+    },
+    "K41": {
+      "name": "Fluence s prahem porozumění",
+      "from": {
+        "name": "read on 2026-10-14 and written here",
+        "statement": "read on 2026-10-14 and written here",
+        "question": "read on 2026-10-14 and written here",
+        "plain": "napsáno 2026-10-23",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-23",
+        "why_not_measured": "read on 2026-10-14 and written here"
+      },
+      "statement": "V zápisu není gramatická chyba, která by čtenáři mohla zabránit porozumět.",
+      "question": "Je v zápisu gramatická chyba, která může čtenáři zabránit porozumět?",
+      "plain": "Nejde o každou gramatickou chybu, ale o takovou, po které čtenář neví, co se tím mělo říct.",
+      "example": "„Klientka uvedla, že partner jí to nedoporučil léky vysadit“ – z věty nejde poznat, kdo co doporučil.",
+      "why_not_measured": "Pravidlo pro měření zatím není napsáno.",
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
+    },
+    "K42": {
+      "name": "Nečekané přepnutí jazyka",
+      "from": {
+        "name": "read on 2026-10-14 and written here",
+        "statement": "read on 2026-10-14 and written here",
+        "question": "read on 2026-10-14 and written here",
+        "plain": "napsáno 2026-10-23",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-23",
+        "why_not_measured": "read on 2026-10-14 and written here"
+      },
+      "statement": "Zápis nepřepíná nečekaně do jiného jazyka.",
+      "question": "Přepíná zápis nečekaně do jiného jazyka?",
+      "plain": "Český zápis zůstane český a anglický anglický, kromě termínu, který se bez překladu používá i v praxi.",
+      "example": "Uprostřed českého zápisu stojí oddíl „Assessment and uncertainty“ a dvě věty pod ním jsou anglicky.",
+      "why_not_measured": "Pravidlo pro měření zatím není napsáno.",
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
+    },
+    "K43": {
+      "name": "Slovosled",
+      "from": {
+        "name": "read on 2026-10-14 and written here",
+        "statement": "read on 2026-10-14 and written here",
+        "question": "read on 2026-10-14 and written here",
+        "plain": "napsáno 2026-10-23",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-23",
+        "why_not_measured": "read on 2026-10-14 and written here"
+      },
+      "statement": "Pořadí slov v zápisu nemění to, co zápis říká.",
+      "question": "Mění pořadí slov to, co zápis říká?",
+      "plain": "V češtině může přehozené pořadí slov změnit, kdo komu co udělal, i když jsou všechna slova správně.",
+      "example": "„Klientka partnerovi vyčítá pití“ proti „Klientce partner vyčítá pití“ – padá to na opačnou stranu.",
+      "why_not_measured": "Pravidlo pro měření zatím není napsáno.",
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
+    },
+    "K44": {
+      "name": "Shoda a pád",
+      "from": {
+        "name": "read on 2026-10-14 and written here",
+        "statement": "read on 2026-10-14 and written here",
+        "question": "read on 2026-10-14 and written here",
+        "plain": "napsáno 2026-10-23",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-23",
+        "why_not_measured": "read on 2026-10-14 and written here"
+      },
+      "statement": "V zápisu není věta s chybnou shodou nebo špatným pádem.",
+      "question": "Je v zápisu věta s chybnou shodou nebo špatným pádem?",
+      "plain": "Podstatné jméno a sloveso k sobě patří tvarem, a pád odpovídá tomu, co věta říká.",
+      "example": "„Klientka uvedl, že se mu ulevilo“ – sloveso i zájmeno patří k jinému rodu než podmět.",
+      "why_not_measured": "Pravidlo pro měření zatím není napsáno.",
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
+    },
+    "K45": {
+      "name": "Neexistující slovo",
+      "from": {
+        "name": "read on 2026-10-14 and written here",
+        "statement": "read on 2026-10-14 and written here",
+        "question": "read on 2026-10-14 and written here",
+        "plain": "napsáno 2026-10-23",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-23",
+        "why_not_measured": "read on 2026-10-14 and written here"
+      },
+      "statement": "V zápisu není slovo, které v daném jazyce neexistuje.",
+      "question": "Je v zápisu slovo, které v češtině neexistuje?",
+      "plain": "Tvar, který vypadá jako slovo, ale žádné také slovo není.",
+      "example": "Zápis píše, že klientka „odreagovává své úzkostnění“.",
+      "why_not_measured": "Pravidlo pro měření zatím není napsáno.",
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
+    },
+    "K46": {
+      "name": "Hovorový výraz místo odborného",
+      "from": {
+        "name": "read on 2026-10-14 and written here",
+        "statement": "read on 2026-10-14 and written here",
+        "question": "read on 2026-10-14 and written here",
+        "plain": "napsáno 2026-10-23",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-23",
+        "why_not_measured": "read on 2026-10-14 and written here"
+      },
+      "statement": "Zápis nepoužívá hovorový nebo citově zabarvený výraz tam, kam patří odborný.",
+      "question": "Je v zápisu hovorový nebo citově zabarvený výraz tam, kam patří odborný?",
+      "plain": "Rejstřík zápisu je odborný, ne mluvený a ne hodnotící.",
+      "example": "Místo „klientka uvádí zhoršení spánku“ stojí v zápisu „klientka je z toho rozházená“.",
+      "why_not_measured": "Pravidlo pro měření zatím není napsáno.",
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
+    },
+    "K47": {
+      "name": "Diakritika",
+      "from": {
+        "name": "read on 2026-10-14 and written here",
+        "statement": "read on 2026-10-14 and written here",
+        "question": "read on 2026-10-14 and written here",
+        "plain": "napsáno 2026-10-23",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-23",
+        "why_not_measured": "read on 2026-10-14 and written here"
+      },
+      "statement": "V českém zápisu není slovo s chybějící nebo špatnou délkou či háčkem.",
+      "question": "Je v zápisu české slovo s chybějící nebo špatnou délkou či háčkem?",
+      "plain": "Délka a háček v češtině mění slovo, ne jen jeho vzhled.",
+      "example": "Zápis píše „byla u ní doma“ tam, kde mělo být „byla u ničím“ – jeden háček mění větu.",
+      "why_not_measured": "Pravidlo pro měření zatím není napsáno.",
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
+    },
+    "K48": {
+      "name": "Kalk",
+      "from": {
+        "name": "read on 2026-10-14 and written here",
+        "statement": "read on 2026-10-14 and written here",
+        "question": "read on 2026-10-14 and written here",
+        "plain": "napsáno 2026-10-23",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-23",
+        "why_not_measured": "read on 2026-10-14 and written here"
+      },
+      "statement": "V zápisu není výraz utvořený doslovným překladem z angličtiny.",
+      "question": "Je v zápisu výraz utvořený doslovným překladem z angličtiny?",
+      "plain": "Všechna slova jsou česká, ale spojení je anglické a česky se tak neříká.",
+      "example": "„Klientka adresovala své pocity“ místo „klientka mluvila o svých pocitech“.",
+      "why_not_measured": "Pravidlo pro měření zatím není napsáno.",
+      "ranking_role": "not_measured_yet",
+      "needs_bank": false
     }
   },
   "panel_sheet": {
@@ -2427,7 +2652,16 @@
   "authored_here_candidates": [
     "K37",
     "K38",
-    "K39"
+    "K39",
+    "K40",
+    "K41",
+    "K42",
+    "K43",
+    "K44",
+    "K45",
+    "K46",
+    "K47",
+    "K48"
   ],
   "authored_here_note": "Every other entry was harvested from a view generator. These three criteria were accepted on 2026-10-14, after the last generator ran, so there was nothing to harvest and the Czech was written for this file.",
   "basis_means": {
@@ -2456,7 +2690,7 @@
     "orders": 11,
     "orders_with_two_raters": 3,
     "describes_only": 2,
-    "not_measured_yet": 23
+    "not_measured_yet": 32
   },
   "bank_note": "The information bank is not a criterion and is not in this list. It is the answer key: the facts of one session, written down before anyone reads a note, each with how much it matters. Seven criteria cannot be measured without it, and `needs_bank` marks them.",
   "bank_note_cs": "Banka faktů není kritérium a v seznamu není. Je to klíč správných odpovědí: fakta jednoho sezení, zapsaná dřív, než kdokoli uvidí zápis, u každého s tím, jak moc váží. Sedm kritérií se bez ní nedá změřit a jsou označená.",

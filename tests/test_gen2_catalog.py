@@ -92,7 +92,7 @@ def test_the_catalog_holds_what_the_review_proposed(catalog):
     # 36 until 2026-10-14, when the inductive half of the language layer read the
     # consensus error taxonomy and the investigator accepted three of the four
     # categories it exposed that nothing in the catalog covered.
-    assert len(catalog["candidates"]) == 39
+    assert len(catalog["candidates"]) == 48
     assert len(catalog["methods"]) == 17
     # 19 read in the round of 2026-09-13, and 6 more read on 2026-09-20 after
     # the investigator supplied them; 7 are still known from abstracts only.
@@ -102,11 +102,11 @@ def test_the_catalog_holds_what_the_review_proposed(catalog):
     # assistant read on 2026-10-07.
     # 39 until 2026-10-14, when S34, the consensus error taxonomy, was read in the
     # inductive half of the language layer.
-    assert len(catalog["sources"]) == 40
+    assert len(catalog["sources"]) == 44
     assert len(catalog["abstract_sources"]) == 6
     assert len(catalog["pilot_proposal"]["entries"]) == 13
     assert len(catalog["comparison"]) == 37
-    assert catalog_mod.ids(catalog, "candidates") == [f"K{n:02d}" for n in range(1, 40)]
+    assert catalog_mod.ids(catalog, "candidates") == [f"K{n:02d}" for n in range(1, 49)]
     assert catalog_mod.ids(catalog, "methods") == [f"ME{n:02d}" for n in range(1, 18)]
 
 
@@ -420,7 +420,11 @@ def test_every_source_is_a_report_the_ledger_sought(catalog, reports):
             # created on 2026-10-14 by AM-8 has its own search log, so a source
             # from it is traced by its DOI and checked against that log instead.
             # The carve-out is by layer, so no source escapes the ledger by name.
-            assert str(s["ledger_report_id"]).startswith("doi:"), s["id"]
+            # An identifier that resolves, not a DOI specifically: ELERRANT's
+            # venue publishes none and an ACL Anthology id is the published
+            # identifier for it. What the rule is for is that a source outside
+            # the report ledger can be looked up.
+            assert catalog_mod.ledger_url(s["ledger_report_id"]), s["id"]
             continue
         report = by_id[s["ledger_report_id"]]
         assert report["catalog_source"] == s["id"]
@@ -503,7 +507,7 @@ def test_every_candidate_says_what_entity_it_is_a_property_of(catalog):
     for candidate in catalog["candidates"]:
         assert candidate["unit_of_analysis"] in values, candidate["id"]
         counts[candidate["unit_of_analysis"]] += 1
-    assert counts == {"note": 36, "case_series": 1, "model_over_cases": 2}
+    assert counts == {"note": 45, "case_series": 1, "model_over_cases": 2}
     not_a_note = {
         c["id"]: c["unit_of_analysis"]
         for c in catalog["candidates"]
@@ -538,7 +542,7 @@ def test_a_property_of_a_generator_is_not_measured_on_one_note(catalog):
 
 def test_the_page_says_what_each_candidate_is_judged_on(catalog):
     page = PAGE.read_text(encoding="utf-8")
-    assert page.count("<dt>Judged on</dt>") == len(catalog["candidates"]) == 39
+    assert page.count("<dt>Judged on</dt>") == len(catalog["candidates"]) == 48
     # The value is a vocabulary word, so the page has to carry the vocabulary or
     # it prints `model_over_cases` at a reader and explains nothing.
     assert "What a candidate is judged on" in page
@@ -665,7 +669,24 @@ def test_a_criterion_without_a_rule_now_has_one_written_and_not_yet_adopted(oper
     # accepted on 2026-10-14 and no rule is written for any of them: the human
     # budget that writing one costs is spent. Named here rather than subtracted by
     # a date, so the exemption cannot quietly grow to cover the next arrival.
-    accepted_later = {"K37", "K39", "K38"}
+    accepted_later = {
+        "K37",
+        "K39",
+        "K38",
+        # The language layer, brought into the pool on 2026-10-23 when the
+        # investigator found the sheet had none. Its own proposal says no rule
+        # is written for any of the nine, and writing one costs the same human
+        # budget. Named one by one for the same reason the three above are.
+        "K40",
+        "K41",
+        "K42",
+        "K43",
+        "K44",
+        "K45",
+        "K46",
+        "K47",
+        "K48",
+    }
     assert covered == without - accepted_later, (
         "every criterion without a rule, except the three accepted on 2026-10-14, "
         "now has one written"
@@ -738,7 +759,7 @@ def test_every_source_evidence_line_and_candidate_maps(catalog, draft, diagnosti
     assert [c["id"] for c in draft["constructs"]] == catalog_mod.ids(catalog, "candidates")
     lines = sum(len(c["evidence"]) for c in catalog["candidates"])
     assert len(draft["evidence"]) == lines
-    assert diagnostics["mapped"] == {"sources": 46, "evidence": lines, "constructs": 39}
+    assert diagnostics["mapped"] == {"sources": 50, "evidence": lines, "constructs": 48}
     for s in draft["sources"]:
         assert s["locator"].startswith("ledger:")
 
@@ -1030,3 +1051,28 @@ def test_the_draft_carries_no_czech_but_the_authored_operational_wording(operati
     )
     assert authored, "the operational wording exists in Czech"
     assert _czech_strings(draft) == authored
+
+
+def test_a_language_layer_source_whose_identifier_resolves_nowhere_is_reported(catalog, reports):
+    """The planted defect for the rule widened on 2026-10-23.
+
+    It asked for a DOI while every language-layer source had one. ELERRANT's
+    venue publishes none, so it asks for an identifier that resolves instead --
+    and a widening has to be shown to still catch the thing it was for, or
+    loosening a check cannot be told apart from repairing the data.
+    """
+    doctored = json.loads(json.dumps(catalog))
+    source = next(s for s in doctored["sources"] if s["id"] == "S36")
+    assert catalog_mod.ledger_url(source["ledger_report_id"]), (
+        "S36 is the case the rule widened for"
+    )
+
+    for planted in ("acl:", "guid:ranlp-2021-81", "", "2021.ranlp-1.81"):
+        source["ledger_report_id"] = planted
+        assert any(
+            "traced by an identifier that resolves" in line
+            for line in catalog_mod.problems(doctored, reports)
+        ), planted
+
+    source["ledger_report_id"] = "acl:2021.ranlp-1.81"
+    assert catalog_mod.problems(doctored, reports) == [], "the repaired id is accepted again"

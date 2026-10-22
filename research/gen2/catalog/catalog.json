@@ -791,6 +791,78 @@
       "relevance": "The only source in the catalog that is a merge of other people's error schemes rather than a study. It is what K37, K38 and K39 rest on, and its stated removal of the form categories is why the six Czech language criteria could not be supported from the content literature.",
       "verification": "full_text",
       "ledger_report_id": "doi:10.26615/978-954-452-092-2_058"
+    },
+    {
+      "id": "S35",
+      "key": "pugachev-etal-2025-repa",
+      "citation": "Pugachev A, et al. REPA: Russian Error Types Annotation for Evaluating Text Generation and Judgment Capabilities. Proceedings of the 10th Workshop on Slavic Natural Language Processing (Slavic NLP 2025), 2025. doi:10.18653/v1/2025.bsnlp-1.16.",
+      "type": "peer-reviewed workshop paper, open access",
+      "layer": "language",
+      "verification": "full_text",
+      "study_family": null,
+      "population": "Russian chatbot responses annotated for error types, with a human preference study and an evaluation of language-model judges against it",
+      "language": "ru",
+      "raters": "human annotators per error type; the paper reports per-type agreement with the human majority for its judges and not an inter-rater figure we transcribed",
+      "unit": "a chatbot response",
+      "format": "a typology of error types, each with a one-sentence definition and a question",
+      "analysis": "per-type judge accuracy against the human majority, and a ranking of systems per error type",
+      "key_results": "Three of its types are properties of any generated text and are adopted here: Sudden Interruption, Fluency and Code-Switching. The paper also reports a gap between judge performance in Russian and in English, which is the warning this project carries into its own Czech track.",
+      "limitations": "Russian chatbot dialogue, not clinical notes and not Czech. Nothing in it is about documentation, and the transfer is of the error types only.",
+      "ledger_report_id": "doi:10.18653/v1/2025.bsnlp-1.16"
+    },
+    {
+      "id": "S36",
+      "key": "korre-etal-2021-elerrant",
+      "citation": "Korre K, Chatzipanagiotou M, Pavlopoulos J. ELERRANT: Automatic Grammatical Error Type Classification for Greek. Proceedings of the International Conference on Recent Advances in Natural Language Processing (RANLP 2021), 2021. https://aclanthology.org/2021.ranlp-1.81/.",
+      "type": "peer-reviewed conference paper, open access",
+      "layer": "language",
+      "verification": "full_text",
+      "study_family": null,
+      "population": "Greek learner and native corpora, annotated by an error type classifier adapted from ERRANT; not a study of people or of notes",
+      "language": "el",
+      "raters": "not a rating study; a classifier and a human annotation guide",
+      "unit": "an edit between an erroneous and a corrected sentence",
+      "format": "an error type guide of fourteen categories, each with a label and a one-line definition, of which two were added for Greek specifically",
+      "analysis": "classifier agreement with the human guide per error type",
+      "key_results": "Of fourteen error types only two were added for the language itself, which is the evidence that a language layer is small and a neutral layer carries most of the work. Four of its categories are adopted here: ACC, WO, VERB:SVA and SPELL.",
+      "limitations": "Greek, and a learner-error scheme rather than a scheme for generated text. An accent in Greek marks stress while a Czech diacritic can change the word, so the severity is ours and only the category transfers.",
+      "ledger_report_id": "acl:2021.ranlp-1.81"
+    },
+    {
+      "id": "S37",
+      "key": "qiu-etal-2025-multilingual",
+      "citation": "Qiu M, et al. Multilingual Grammatical Error Annotation: Combining Language-Agnostic Framework with Language-Specific Flexibility. Proceedings of the 20th Workshop on Innovative Use of NLP for Building Educational Applications (BEA 2025), 2025. doi:10.18653/v1/2025.bea-1.15.",
+      "type": "peer-reviewed workshop paper, open access",
+      "layer": "language",
+      "verification": "full_text",
+      "study_family": null,
+      "population": "grammatical error annotation applied to English, German, Czech, Korean and Chinese; the Czech application is over the corpus of Naplava et al. (2022)",
+      "language": "multilingual, including cs",
+      "raters": "not a rating study; an annotation framework and its outputs",
+      "unit": "an edit between an erroneous and a corrected sentence",
+      "format": "a language-agnostic core with language-specific extensions",
+      "analysis": "operation counts compared against the existing annotation of each language's corpus; for Czech 4897 against 4915",
+      "key_results": "The two-layer shape this project adopts, and the only source read that annotates Czech: it reports that its word-order annotation distinguishes auxiliary from main verbs by part of speech where the existing Czech annotation does not.",
+      "limitations": "Learner language, not generated text, and no clinical material. It gives the shape of the two layers and the Czech word-order case, not a rule for a note.",
+      "ledger_report_id": "doi:10.18653/v1/2025.bea-1.15"
+    },
+    {
+      "id": "S38",
+      "key": "venturini-etal-2026-talktag",
+      "citation": "Venturini G, et al. TalkTag: Fine-Grained Morphosyntactic Error Annotation for Transcribed Speech. Proceedings of the 20th Linguistic Annotation Workshop (LAW XX), 2026. doi:10.18653/v1/2026.law-main.20.",
+      "type": "peer-reviewed workshop paper, open access",
+      "layer": "language",
+      "verification": "full_text",
+      "study_family": null,
+      "population": "transcribed speech annotated for morphosyntactic errors",
+      "language": "en",
+      "raters": "not a rating study we transcribed; an annotation scheme and its application",
+      "unit": "a morphosyntactic error in transcribed speech",
+      "format": "a fine-grained error scheme for speech transcripts",
+      "analysis": "not transcribed; the paper was read for its handling of ambiguous cases",
+      "key_results": "Read for one thing and it is not a criterion: that a scheme over transcribed speech needs a way to record an error that can be seen and not classified. It is why the sheet's scale carries an answer that is not a step on it.",
+      "limitations": "English, speech transcripts, learner-style morphosyntax. Nothing about notes.",
+      "ledger_report_id": "doi:10.18653/v1/2026.law-main.20"
     }
   ],
   "abstract_sources": [
@@ -2782,6 +2854,396 @@
       "state": "not_yet_operationalized",
       "state_note": "Accepted into the pool by the investigator on 2026-10-14. Needs the recording to be measurable at all, which no other candidate does.",
       "decided_by": "source",
+      "unit_of_analysis": "note"
+    },
+    {
+      "id": "K40",
+      "family": "F4",
+      "kind": "construct",
+      "label": "Truncated note",
+      "definition": "The note ends where it was meant to end. A note cut off mid-sentence or mid-section is incomplete as an artefact, whatever the quality of what is there. Distinct from coverage: a complete note can omit something, and a truncated one stops.",
+      "origin": "literature",
+      "origin_note": "Found in REPA's error typology on 2026-10-14. This benchmark had treated a cut-off answer as a harness failure: finish_reason decides whether a row is usable and a truncated note never reaches scoring, so the frequency of the thing was invisible as a property of the output.",
+      "evidence": [
+        {
+          "source": "S35",
+          "location": "the error type definitions, sudden_interruption",
+          "quote": "Sudden Interruption: The chatbot 's response was abruptly cut off.",
+          "supports": "A response cut off is a named error type of its own in a published typology, not a transport failure.",
+          "our_adaptation": "Russian chatbot dialogue, not a clinical note. We keep the property and not the judge: whether a note is truncated is visible in the note."
+        }
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "high",
+        "client": "high",
+        "audit": "high"
+      },
+      "mode": "binary per note; not yet defined",
+      "unit": "whole note",
+      "inputs": "note only",
+      "applicability": "Both languages. Measuring the same property in both is the only way to say that a model holds a property in English and loses it in Czech, which is the question a benchmark for a small language exists to ask.",
+      "examples": {
+        "positive": "The note ends with a complete final section.",
+        "negative": "The last section begins 'We agreed that before the next session the client' and the note ends there.",
+        "boundary": "A note that is short but finished: it ends on a complete sentence, so this criterion passes and coverage is the open question."
+      },
+      "measurement": "Not yet defined. The proposal of 2026-10-14 gives the question a rater would be asked and no rule; writing one costs the human budget the pilot does not have.",
+      "error_consequence": "High where the cut falls on risk or on the agreed plan, which are the last sections of the progress note, and a reader cannot tell a truncated plan from no plan.",
+      "validation": "None on notes in this round. Czech has no inter-rater figure at all: the anchor had one native speaker, so no agreement number from the first generation is a reliability figure.",
+      "overlaps": "K20 (the task's format), K05 (coverage).",
+      "state": "not_yet_operationalized",
+      "state_note": "No rule is written. Proposed on 2026-10-14 in language-set-proposal.json and brought into the pool on 2026-10-23, when the investigator found that the panel's sheet had no language layer at all.",
+      "decided_by": "note",
+      "unit_of_analysis": "note"
+    },
+    {
+      "id": "K41",
+      "family": "F4",
+      "kind": "construct",
+      "label": "Fluency, with a comprehension threshold",
+      "definition": "A grammatical error that may stop a reader understanding what was meant. The threshold is the point: a note with a wrong ending that nobody stumbles over is not the same defect as one whose sentence cannot be resolved.",
+      "origin": "literature",
+      "origin_note": "Found in REPA on 2026-10-14. The first generation's Czech scorer asked about grammatical correctness without a threshold, which made every ending error the same size as an unreadable sentence.",
+      "evidence": [
+        {
+          "source": "S35",
+          "location": "the error type definitions, fluency",
+          "quote": "Fluency: The response contains critical grammatical errors that may hinder text comprehension.",
+          "supports": "The published definition carries the threshold in its own words: critical, and may hinder comprehension.",
+          "our_adaptation": "Russian dialogue. Czech is as inflected and the threshold transfers; what does not transfer is the judge, whose performance the same paper reports as worse in Russian than in English."
+        }
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "medium",
+        "client": "high",
+        "audit": "medium"
+      },
+      "mode": "binary per note; not yet defined",
+      "unit": "whole note",
+      "inputs": "note only",
+      "applicability": "Both languages. Measuring the same property in both is the only way to say that a model holds a property in English and loses it in Czech, which is the question a benchmark for a small language exists to ask.",
+      "examples": {
+        "positive": "Every sentence resolves on one reading.",
+        "negative": "'The client said her partner did not advise her to stop the medication' leaves it undecidable who advised what.",
+        "boundary": "A wrong ending that nobody stumbles over: grammatical, and below the threshold this criterion sets."
+      },
+      "measurement": "Not yet defined. The proposal of 2026-10-14 gives the question a rater would be asked and no rule; writing one costs the human budget the pilot does not have.",
+      "error_consequence": "Moderate to high: a sentence a clinician cannot resolve is a sentence they have to go back to the recording for, which is what the note exists to prevent.",
+      "validation": "None on notes in this round. Czech has no inter-rater figure at all: the anchor had one native speaker, so no agreement number from the first generation is a reliability figure.",
+      "overlaps": "K13 (comprehensibility), K30 (naturalness), K44 (agreement and case).",
+      "state": "not_yet_operationalized",
+      "state_note": "No rule is written. Proposed on 2026-10-14 in language-set-proposal.json and brought into the pool on 2026-10-23, when the investigator found that the panel's sheet had no language layer at all.",
+      "decided_by": "rater",
+      "unit_of_analysis": "note"
+    },
+    {
+      "id": "K42",
+      "family": "F4",
+      "kind": "construct",
+      "label": "Unexpected language switch",
+      "definition": "The note stays in the language it was asked for. A professional term used untranslated in practice is not a switch; a sentence or a heading in another language is.",
+      "origin": "prior_local",
+      "origin_note": "The first generation's Czech scorer asked whether a passage had been left untranslated. REPA's Code-Switching, found on 2026-10-14, widens it from untranslated English to any unexpected switch, which is the form adopted here.",
+      "evidence": [
+        {
+          "source": "S35",
+          "location": "the error type definitions, code_switching",
+          "quote": "Code -Switching: The chatbot 's response contains unexpected switching between languages.",
+          "supports": "The property is a named error type, and its published form is any unexpected switch rather than a failure to translate.",
+          "our_adaptation": "The widening is the whole adoption: our own question had named English as the other language, which cannot see a Czech note drifting into Slovak or German."
+        }
+      ],
+      "relevance": {
+        "continuity": "medium",
+        "supervision": "medium",
+        "client": "high",
+        "audit": "medium"
+      },
+      "mode": "binary per note; not yet defined",
+      "unit": "whole note",
+      "inputs": "note only",
+      "applicability": "Both languages. Measuring the same property in both is the only way to say that a model holds a property in English and loses it in Czech, which is the question a benchmark for a small language exists to ask.",
+      "examples": {
+        "positive": "The note is in the language the task asked for throughout.",
+        "negative": "A Czech note carries the heading 'Assessment and uncertainty' and two English sentences under it.",
+        "boundary": "A professional term left untranslated because it is used untranslated in practice, which is not a switch."
+      },
+      "measurement": "Not yet defined. The proposal of 2026-10-14 gives the question a rater would be asked and no rule; writing one costs the human budget the pilot does not have.",
+      "error_consequence": "Moderate: a reader who does not have the other language loses whatever the switched passage carried, and the switch is often in the section a hurried reader reads first.",
+      "validation": "None on notes in this round. Czech has no inter-rater figure at all: the anchor had one native speaker, so no agreement number from the first generation is a reliability figure.",
+      "overlaps": "K20 (the task names the language), K34 (terminology).",
+      "state": "not_yet_operationalized",
+      "state_note": "No rule is written. Proposed on 2026-10-14 in language-set-proposal.json and brought into the pool on 2026-10-23, when the investigator found that the panel's sheet had no language layer at all. The first generation's Czech scorer measures it with a different instrument: The narrow version has the highest agreement of the first generation's six: a judge and one native speaker said the same thing in 90 of 104 cases, 87%. That is a judge against one native speaker, so it is a reading and not a reliability figure.",
+      "decided_by": "rater",
+      "unit_of_analysis": "note"
+    },
+    {
+      "id": "K43",
+      "family": "F4",
+      "kind": "construct",
+      "label": "Word order",
+      "definition": "Word order that changes the meaning, not word order that reads oddly. In an inflected language the order carries emphasis and, where the forms are ambiguous, the roles as well.",
+      "origin": "literature",
+      "origin_note": "Found on 2026-10-14 in ELERRANT's category list and in the Czech application of Qiu et al., which is the only source read that annotates Czech.",
+      "evidence": [
+        {
+          "source": "S36",
+          "location": "Table 1, the error type annotation guide",
+          "quote": "WO Words Order Error in words order.",
+          "supports": "Word order is a category of its own in a published error scheme.",
+          "our_adaptation": "A learner-error scheme for Greek. We keep the category and raise its bar: only an order that changes the meaning counts, because a note is not marked for style."
+        },
+        {
+          "source": "S37",
+          "location": "the Czech and German examples, Figure 4",
+          "quote": "For Czech, the example highlights differences in word order (WO) annotation: our method distinguishes between auxiliary and main verbs by incorporating POS information",
+          "supports": "Word order is the category the only Czech-annotating source read chose to illustrate the language's own difficulty with.",
+          "our_adaptation": "Their unit is an edit in learner text and ours is a sentence in a generated note; what transfers is that Czech word order needs its own treatment and not the English rule."
+        }
+      ],
+      "relevance": {
+        "continuity": "high",
+        "supervision": "medium",
+        "client": "medium",
+        "audit": "medium"
+      },
+      "mode": "binary per note; not yet defined",
+      "unit": "whole note",
+      "inputs": "note only",
+      "applicability": "Both languages. Measuring the same property in both is the only way to say that a model holds a property in English and loses it in Czech, which is the question a benchmark for a small language exists to ask.",
+      "examples": {
+        "positive": "Word order carries the roles the source gave.",
+        "negative": "An order that puts the client where the partner stood, so the note says the reverse of the session.",
+        "boundary": "An order that reads oddly and resolves on one reading only: a naturalness question rather than this one."
+      },
+      "measurement": "Not yet defined. The proposal of 2026-10-14 gives the question a rater would be asked and no rule; writing one costs the human budget the pilot does not have.",
+      "error_consequence": "High where it flips who did what to whom, which is the same defect as a fidelity error and is invisible to a check that compares words.",
+      "validation": "None on notes in this round. Czech has no inter-rater figure at all: the anchor had one native speaker, so no agreement number from the first generation is a reliability figure.",
+      "overlaps": "K41 (fluency), K01 (support in the source, where the roles flip).",
+      "state": "not_yet_operationalized",
+      "state_note": "No rule is written. Proposed on 2026-10-14 in language-set-proposal.json and brought into the pool on 2026-10-23, when the investigator found that the panel's sheet had no language layer at all.",
+      "decided_by": "rater",
+      "unit_of_analysis": "note"
+    },
+    {
+      "id": "K44",
+      "family": "F4",
+      "kind": "construct",
+      "label": "Agreement and case",
+      "definition": "Morphosyntactic agreement and case marking within a sentence. Narrowed from the first generation's question, which asked about grammatical correctness as a whole and therefore asked four things at once.",
+      "origin": "prior_local",
+      "origin_note": "One of the first generation's six Czech questions. ELERRANT's VERB:SVA and the Czech morphosyntactic annotation of Qiu et al., both read on 2026-10-14, support it and narrow it to agreement and case.",
+      "evidence": [
+        {
+          "source": "S36",
+          "location": "Table 1, the error type annotation guide",
+          "quote": "VERB:SVA Subject Verb Agreement The subject and the verb to be in person agreement.",
+          "supports": "Agreement is a category of its own rather than part of an undivided grammaticality judgement.",
+          "our_adaptation": "Greek marks agreement in person; Czech marks it in gender and number as well, so our form of the category is wider than the one quoted."
+        },
+        {
+          "source": "S37",
+          "location": "the applications to five languages",
+          "quote": "Our approach combines a language-agnostic foundation with structured language-specific extensions, enabling both consistency and flexibility across languages.",
+          "supports": "A morphosyntactic category can be carried across languages as a shared core with a language-specific extension, which is the shape this layer uses.",
+          "our_adaptation": "Their framework annotates edits in learner text. We take the two-layer shape and not the annotation."
+        }
+      ],
+      "relevance": {
+        "continuity": "medium",
+        "supervision": "low",
+        "client": "medium",
+        "audit": "low"
+      },
+      "mode": "binary per note; not yet defined",
+      "unit": "whole note",
+      "inputs": "note only",
+      "applicability": "Both languages. Measuring the same property in both is the only way to say that a model holds a property in English and loses it in Czech, which is the question a benchmark for a small language exists to ask.",
+      "examples": {
+        "positive": "Subject, verb and modifiers agree, and case marks the roles.",
+        "negative": "'The client said that it relieved him' where the subject is a woman: the verb and the pronoun belong to another gender.",
+        "boundary": "A case error that leaves the meaning recoverable, which is this criterion and not fluency."
+      },
+      "measurement": "Not yet defined. The proposal of 2026-10-14 gives the question a rater would be asked and no rule; writing one costs the human budget the pilot does not have.",
+      "error_consequence": "Usually low on its own and high in aggregate: a note full of wrong endings reads as machine-written and is the first thing a clinician rewrites.",
+      "validation": "None on notes in this round. Czech has no inter-rater figure at all: the anchor had one native speaker, so no agreement number from the first generation is a reliability figure.",
+      "overlaps": "K41 (fluency), K43 (word order), K30 (naturalness).",
+      "state": "not_yet_operationalized",
+      "state_note": "No rule is written. Proposed on 2026-10-14 in language-set-proposal.json and brought into the pool on 2026-10-23, when the investigator found that the panel's sheet had no language layer at all. The first generation's Czech scorer measures it with a different instrument: 71 of 104, 68%, the second lowest agreement of the six. That is a judge against one native speaker, so it is a reading and not a reliability figure.",
+      "decided_by": "rater",
+      "unit_of_analysis": "note"
+    },
+    {
+      "id": "K45",
+      "family": "F4",
+      "kind": "construct",
+      "label": "Non-existent word",
+      "definition": "A token that is not a word of the language. Distinct from a professional term used wrongly, which is K34, and from a calque, which is a real word formed by translating one.",
+      "origin": "prior_local",
+      "origin_note": "One of the first generation's six Czech questions. No scheme read names this category for generated text; the nearest is ELERRANT's SPELL, which is a learner spelling error and not an invented word.",
+      "evidence": [
+        {
+          "source": "S36",
+          "location": "Table 1, the error type annotation guide",
+          "quote": "SPELL Spelling Spelling errors.",
+          "supports": "The nearest named category in any scheme read, and it is not the same thing: a spelling error is a known word written wrongly.",
+          "our_adaptation": "Recorded as the nearest match rather than as support. The gap is the finding: no scheme read has a category for a token a generator invented."
+        }
+      ],
+      "relevance": {
+        "continuity": "medium",
+        "supervision": "low",
+        "client": "medium",
+        "audit": "low"
+      },
+      "mode": "binary per note; not yet defined",
+      "unit": "whole note",
+      "inputs": "note only",
+      "applicability": "Both languages. Measuring the same property in both is the only way to say that a model holds a property in English and loses it in Czech, which is the question a benchmark for a small language exists to ask.",
+      "examples": {
+        "positive": "Every token is a word of the language.",
+        "negative": "The note writes that the client is 'de-anxietising her anxiousness'.",
+        "boundary": "A real professional term used for something it does not mean, which is terminology and not this."
+      },
+      "measurement": "Not yet defined. The proposal of 2026-10-14 gives the question a rater would be asked and no rule; writing one costs the human budget the pilot does not have.",
+      "error_consequence": "Low for care and high for trust: an invented word is the clearest signal to a reader that nobody checked the note.",
+      "validation": "None on notes in this round. Czech has no inter-rater figure at all: the anchor had one native speaker, so no agreement number from the first generation is a reliability figure.",
+      "overlaps": "K34 (terminology), K30 (naturalness), K48 (calque).",
+      "state": "not_yet_operationalized",
+      "state_note": "No rule is written. Proposed on 2026-10-14 in language-set-proposal.json and brought into the pool on 2026-10-23, when the investigator found that the panel's sheet had no language layer at all. The first generation's Czech scorer measures it with a different instrument: 86 of 104, 83%. That is a judge against one native speaker, so it is a reading and not a reliability figure.",
+      "decided_by": "norm",
+      "unit_of_analysis": "note"
+    },
+    {
+      "id": "K46",
+      "family": "F4",
+      "kind": "construct",
+      "label": "Colloquial expression where a professional term belongs",
+      "definition": "Register. The note is written in professional language; a colloquial or emotionally coloured expression in place of a term is the defect. Quoting the client's own words is not: a quotation marked as one is clinical content.",
+      "origin": "prior_local",
+      "origin_note": "One of the first generation's six Czech questions. No named category in any of the four schemes read, and the proposal of 2026-10-14 says so rather than finding one that nearly fits.",
+      "evidence": [
+        {
+          "source": "S34",
+          "location": "section 5, errors of form",
+          "quote": "Errors of form in NLG in general refer to flaws or mistakes in how the word sequence in the output is put togehter (rather than what it means), e.g. grammatical errors, disfluencies, or inappropriate style.",
+          "supports": "A survey that collated the categories of fifteen error schemes names inappropriate style among errors of form, so register is a recognised class of defect in generated text and not only our own question.",
+          "our_adaptation": "It names the class and defines no category inside it. Ours is narrower: a colloquial or emotionally coloured expression standing where a professional term belongs, which no scheme read defines."
+        }
+      ],
+      "relevance": {
+        "continuity": "medium",
+        "supervision": "medium",
+        "client": "high",
+        "audit": "medium"
+      },
+      "mode": "binary per note; not yet defined",
+      "unit": "whole note",
+      "inputs": "note only",
+      "applicability": "Both languages. Measuring the same property in both is the only way to say that a model holds a property in English and loses it in Czech, which is the question a benchmark for a small language exists to ask.",
+      "examples": {
+        "positive": "The register is professional throughout.",
+        "negative": "'The client is shaken up by it' where the note means a reported sleep problem.",
+        "boundary": "The client's own words quoted and marked as a quotation, which is clinical content and not register."
+      },
+      "measurement": "Not yet defined. The proposal of 2026-10-14 gives the question a rater would be asked and no rule; writing one costs the human budget the pilot does not have.",
+      "error_consequence": "Moderate: register is what a colleague reads the note's seriousness from, and a colloquial judgement reads as the writer's opinion of the client.",
+      "validation": "None on notes in this round. Czech has no inter-rater figure at all: the anchor had one native speaker, so no agreement number from the first generation is a reliability figure.",
+      "overlaps": "K34 (terminology), K14 (non-stigmatising language), K30 (naturalness).",
+      "state": "not_yet_operationalized",
+      "state_note": "No rule is written. Proposed on 2026-10-14 in language-set-proposal.json and brought into the pool on 2026-10-23, when the investigator found that the panel's sheet had no language layer at all. The first generation's Czech scorer measures it with a different instrument: 73 of 104, 70%. That is a judge against one native speaker, so it is a reading and not a reliability figure.",
+      "decided_by": "rater",
+      "unit_of_analysis": "note"
+    },
+    {
+      "id": "K47",
+      "family": "F4",
+      "kind": "construct",
+      "label": "Diacritics",
+      "definition": "A missing or wrong length mark or hacek in a Czech word. Measured for Czech alone: English domestic words carry no diacritics, so the denominator in English would be empty.",
+      "origin": "prior_local",
+      "origin_note": "One of the first generation's six Czech questions. ELERRANT's ACC, read on 2026-10-14, is the named category, added by that paper for Greek specifically.",
+      "evidence": [
+        {
+          "source": "S36",
+          "location": "Table 1, the error type annotation guide",
+          "quote": "ACC Accentuation Accentuation addition or removal.",
+          "supports": "A diacritic error is a named category, and one of exactly two that paper added for the language itself.",
+          "our_adaptation": "Greek is not Czech. A Greek accent marks stress; a Czech diacritic can change the word, so the category transfers and the severity is ours."
+        },
+        {
+          "source": "S36",
+          "location": "the description of what was added to ERRANT for Greek",
+          "quote": "We added two more categories from scratch: ACC (Accent) and FN (Final -/nu).",
+          "supports": "Of fourteen error types only two were language-specific, which is the evidence that a language layer is small.",
+          "our_adaptation": "It is why this set has seven criteria measured in both languages and two in Czech alone, rather than a flat set of Czech questions."
+        }
+      ],
+      "relevance": {
+        "continuity": "medium",
+        "supervision": "low",
+        "client": "medium",
+        "audit": "low"
+      },
+      "mode": "binary per note; not yet defined",
+      "unit": "whole note",
+      "inputs": "note only",
+      "applicability": "Czech only. The property cannot be measured on an English note of this round, and a criterion measured in one language says nothing about whether the model is worse in that language or the criterion merely stricter, so it never enters a comparison of the two tracks and is reported for Czech alone.",
+      "examples": {
+        "positive": "Every Czech word carries the diacritics it needs.",
+        "negative": "A missing hacek turns one word into a different real word and the sentence still parses.",
+        "boundary": "A proper name written without diacritics as its bearer writes it, which is not an error."
+      },
+      "measurement": "Not yet defined. The proposal of 2026-10-14 gives the question a rater would be asked and no rule; writing one costs the human budget the pilot does not have.",
+      "error_consequence": "Usually low and occasionally high, because a missing hacek can produce a different real word and the sentence still parses.",
+      "validation": "None on notes in this round. Czech has no inter-rater figure at all: the anchor had one native speaker, so no agreement number from the first generation is a reliability figure.",
+      "overlaps": "K45 (non-existent word), K30 (naturalness).",
+      "state": "not_yet_operationalized",
+      "state_note": "No rule is written. Proposed on 2026-10-14 in language-set-proposal.json and brought into the pool on 2026-10-23, when the investigator found that the panel's sheet had no language layer at all. The first generation's Czech scorer measures it with a different instrument: 84 of 101, 83%, with 3 unanswered. That is a judge against one native speaker, so it is a reading and not a reliability figure.",
+      "decided_by": "norm",
+      "unit_of_analysis": "note"
+    },
+    {
+      "id": "K48",
+      "family": "F4",
+      "kind": "construct",
+      "label": "Calque",
+      "definition": "An expression formed by translating an English one word for word. Every word is Czech and the phrase is not. Measured for Czech alone: an English note has nothing to calque from in this round, where the source is English.",
+      "origin": "prior_local",
+      "origin_note": "One of the first generation's six Czech questions. No named category in any of the four schemes read; the Latvian loanword and calque detector of 2026 is in the frame and unread, and the proposal names it as the next read.",
+      "evidence": [
+        {
+          "source": "S34",
+          "location": "section 5, the collated categories, 6",
+          "quote": "Lexical Choice (Costa et al., 2012): \"the translation engine chose the wrong translation candidate word.\"",
+          "supports": "The nearest category in a survey of fifteen schemes: a wrong translation choice carried into the target text.",
+          "our_adaptation": "Recorded as the nearest match and not as support. A calque is not a wrong word, it is a right word in a construction the target language does not have, and no scheme read has a category for it. The Latvian loanword and calque work of 2026 is in the frame and unread."
+        }
+      ],
+      "relevance": {
+        "continuity": "low",
+        "supervision": "low",
+        "client": "medium",
+        "audit": "low"
+      },
+      "mode": "binary per note; not yet defined",
+      "unit": "whole note",
+      "inputs": "note only",
+      "applicability": "Czech only. The property cannot be measured on an English note of this round, and a criterion measured in one language says nothing about whether the model is worse in that language or the criterion merely stricter, so it never enters a comparison of the two tracks and is reported for Czech alone.",
+      "examples": {
+        "positive": "The Czech reads as Czech rather than as English in Czech words.",
+        "negative": "'The client addressed her feelings', rendered word for word, where Czech would say that she talked about them.",
+        "boundary": "A borrowing that Czech clinical writing has adopted, which is terminology and not a calque."
+      },
+      "measurement": "Not yet defined. The proposal of 2026-10-14 gives the question a rater would be asked and no rule; writing one costs the human budget the pilot does not have.",
+      "error_consequence": "Low for care. It is the clearest mark that the Czech was produced through English rather than written, which is the question a benchmark for a small language asks.",
+      "validation": "None on notes in this round. Czech has no inter-rater figure at all: the anchor had one native speaker, so no agreement number from the first generation is a reliability figure.",
+      "overlaps": "K30 (naturalness), K45 (non-existent word), K34 (terminology).",
+      "state": "not_yet_operationalized",
+      "state_note": "No rule is written. Proposed on 2026-10-14 in language-set-proposal.json and brought into the pool on 2026-10-23, when the investigator found that the panel's sheet had no language layer at all. The first generation's Czech scorer measures it with a different instrument: 68 of 102, 67%, the lowest agreement of the six, with 2 unanswered. That is a judge against one native speaker, so it is a reading and not a reliability figure.",
+      "decided_by": "rater",
       "unit_of_analysis": "note"
     }
   ],

@@ -34,13 +34,13 @@
     "method_statement": "a rule the source uses to build its own scheme, not a property of a note"
   },
   "counts": {
-    "sources_read_in_full": 39,
+    "sources_read_in_full": 43,
     "sources_abstract_only": 6,
-    "sources_defining_properties": 40,
-    "properties": 186,
-    "properties_mapped": 168,
-    "properties_unmapped": 18,
-    "candidates_with_source_property": 38,
+    "sources_defining_properties": 43,
+    "properties": 200,
+    "properties_mapped": 178,
+    "properties_unmapped": 22,
+    "candidates_with_source_property": 47,
     "candidates_without_source_property": 1
   },
   "sources": [
@@ -2537,6 +2537,188 @@
           "quote": "any of the primary error categories can additionally be annotated with them, i.e. they necessarily result in duplication in the taxonomy if included there",
           "maps_to": [],
           "mapping": "no candidate: a test for telling a dimension from a criterion. Applied to this catalog it suggests severity and the disclosure level of a sensitive detail are dimensions rather than criteria, which is a question about the shape of the instrument and not about any one item"
+        },
+        {
+          "pid": "S34-p06",
+          "label": "Inappropriate style is an error of form",
+          "kind": "error_type",
+          "location": "section 5, errors of form",
+          "quote": "Errors of form in NLG in general refer to flaws or mistakes in how the word sequence in the output is put togehter (rather than what it means), e.g. grammatical errors, disfluencies, or inappropriate style.",
+          "maps_to": [
+            "K46"
+          ],
+          "mapping": "register is a recognised class of defect across fifteen surveyed schemes; the class is named and no category inside it is defined, so ours is narrower"
+        },
+        {
+          "pid": "S34-p07",
+          "label": "Lexical Choice",
+          "kind": "error_type",
+          "location": "section 5, the collated categories, 6",
+          "quote": "Lexical Choice (Costa et al., 2012): \"the translation engine chose the wrong translation candidate word.\"",
+          "maps_to": [
+            "K48"
+          ],
+          "mapping": "the nearest category in fifteen surveyed schemes to a calque, and not the same thing: a calque is a right word in a construction the language does not have"
+        }
+      ]
+    },
+    {
+      "id": "S35",
+      "citation": "Pugachev A, et al. REPA: Russian Error Types Annotation for Evaluating Text Generation and Judgment Capabilities. Proc. 10th Workshop on Slavic NLP, 2025.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": "Russian chatbot responses, not notes. Read on 2026-10-14 in the inductive half of the language layer; three of its error types are properties of any generated text and the rest are about dialogue.",
+      "properties": [
+        {
+          "pid": "S35-p01",
+          "label": "Sudden Interruption",
+          "kind": "error_type",
+          "location": "the error type definitions, sudden_interruption",
+          "quote": "Sudden Interruption: The chatbot 's response was abruptly cut off.",
+          "maps_to": [
+            "K40"
+          ],
+          "mapping": "a response cut off is an error type of the output, not a transport failure"
+        },
+        {
+          "pid": "S35-p02",
+          "label": "Fluency",
+          "kind": "error_type",
+          "location": "the error type definitions, fluency",
+          "quote": "Fluency: The response contains critical grammatical errors that may hinder text comprehension.",
+          "maps_to": [
+            "K41"
+          ],
+          "mapping": "grammaticality with a threshold: critical, and may hinder comprehension"
+        },
+        {
+          "pid": "S35-p03",
+          "label": "Code-Switching",
+          "kind": "error_type",
+          "location": "the error type definitions, code_switching",
+          "quote": "Code -Switching: The chatbot 's response contains unexpected switching between languages.",
+          "maps_to": [
+            "K42"
+          ],
+          "mapping": "any unexpected switch, which is wider than our own question about a passage left untranslated"
+        },
+        {
+          "pid": "S35-p04",
+          "label": "Judge performance is worse in Russian than in English",
+          "kind": "design_finding",
+          "location": "Results, the judge evaluation",
+          "quote": "Our findings reveal a notable gap between LLM judge performance in Russian and English.",
+          "maps_to": [],
+          "mapping": "a finding about judges rather than a property of a note; it is why the calibration has to be repeated in Czech"
+        }
+      ]
+    },
+    {
+      "id": "S36",
+      "citation": "Korre K, Chatzipanagiotou M, Pavlopoulos J. ELERRANT: Automatic Grammatical Error Type Classification for Greek. Proc. RANLP 2021.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": "Greek learner errors, not notes. Read on 2026-10-14. Of its fourteen error types two were added for the language itself, which is the evidence that a language layer is small and the neutral layer carries most of the work.",
+      "properties": [
+        {
+          "pid": "S36-p01",
+          "label": "WO Words Order",
+          "kind": "error_type",
+          "location": "Table 1, the error type annotation guide",
+          "quote": "WO Words Order Error in words order.",
+          "maps_to": [
+            "K43"
+          ],
+          "mapping": "word order as a category of its own; we raise its bar to an order that changes the meaning"
+        },
+        {
+          "pid": "S36-p02",
+          "label": "VERB:SVA Subject Verb Agreement",
+          "kind": "error_type",
+          "location": "Table 1, the error type annotation guide",
+          "quote": "VERB:SVA Subject Verb Agreement The subject and the verb to be in person agreement.",
+          "maps_to": [
+            "K44"
+          ],
+          "mapping": "agreement as its own category rather than part of an undivided grammaticality judgement; Czech marks gender and number as well"
+        },
+        {
+          "pid": "S36-p03",
+          "label": "SPELL Spelling",
+          "kind": "error_type",
+          "location": "Table 1, the error type annotation guide",
+          "quote": "SPELL Spelling Spelling errors.",
+          "maps_to": [
+            "K45"
+          ],
+          "mapping": "the nearest category to a token a generator invented, and not the same thing: a spelling error is a known word written wrongly"
+        },
+        {
+          "pid": "S36-p04",
+          "label": "ACC Accentuation",
+          "kind": "error_type",
+          "location": "Table 1, the error type annotation guide",
+          "quote": "ACC Accentuation Accentuation addition or removal.",
+          "maps_to": [
+            "K47"
+          ],
+          "mapping": "a diacritic error; a Greek accent marks stress and a Czech diacritic can change the word, so the severity is ours"
+        },
+        {
+          "pid": "S36-p05",
+          "label": "Only two of fourteen categories were added for the language itself",
+          "kind": "method_statement",
+          "location": "the description of what was added to ERRANT for Greek",
+          "quote": "We added two more categories from scratch: ACC (Accent) and FN (Final -/nu).",
+          "maps_to": [],
+          "mapping": "not a property of a note; a rule about how the scheme was built, and the reason this layer has seven criteria in both languages and two in Czech"
+        }
+      ]
+    },
+    {
+      "id": "S37",
+      "citation": "Qiu M, et al. Multilingual Grammatical Error Annotation: Combining Language-Agnostic Framework with Language-Specific Flexibility. Proc. BEA 2025.",
+      "read": "full_text",
+      "defines_note_quality": true,
+      "note": "Learner language in five languages, not notes. The only source read that annotates Czech. Read on 2026-10-14.",
+      "properties": [
+        {
+          "pid": "S37-p01",
+          "label": "Czech word order needs its own treatment",
+          "kind": "error_type",
+          "location": "the Czech and German examples, Figure 4",
+          "quote": "For Czech, the example highlights differences in word order (WO) annotation: our method distinguishes between auxiliary and main verbs by incorporating POS information",
+          "maps_to": [
+            "K43"
+          ],
+          "mapping": "word order is the category the only Czech-annotating source read chose to illustrate the language's own difficulty with"
+        },
+        {
+          "pid": "S37-p02",
+          "label": "A language-agnostic core with language-specific extensions",
+          "kind": "method_statement",
+          "location": "the applications to five languages",
+          "quote": "Our approach combines a language-agnostic foundation with structured language-specific extensions, enabling both consistency and flexibility across languages.",
+          "maps_to": [],
+          "mapping": "not a property of a note; a rule about how to build a layer, and the shape this set took on 2026-10-14"
+        }
+      ]
+    },
+    {
+      "id": "S38",
+      "citation": "Venturini G, et al. TalkTag: Fine-Grained Morphosyntactic Error Annotation for Transcribed Speech. Proc. 20th Linguistic Annotation Workshop, 2026.",
+      "read": "full_text",
+      "defines_note_quality": false,
+      "note": "Read on 2026-10-14 for one thing and it is not a property of a note: how a scheme records an error that can be seen and not classified.",
+      "properties": [
+        {
+          "pid": "S38-p01",
+          "label": "An error that can be detected and not corrected needs its own answer",
+          "kind": "method_statement",
+          "location": "the handling of ambiguous cases",
+          "quote": "effectively identifying instances where linguistic ambiguity makes automated tagging genuinely complex",
+          "maps_to": [],
+          "mapping": "not a property of a note; a rule about the answer scale, and the reason the sheet carries an answer that is not a step on it"
         }
       ]
     }
@@ -2871,6 +3053,34 @@
     ],
     "K39": [
       "S34-p03"
+    ],
+    "K40": [
+      "S35-p01"
+    ],
+    "K41": [
+      "S35-p02"
+    ],
+    "K42": [
+      "S35-p03"
+    ],
+    "K43": [
+      "S36-p01",
+      "S37-p01"
+    ],
+    "K44": [
+      "S36-p02"
+    ],
+    "K45": [
+      "S36-p03"
+    ],
+    "K46": [
+      "S34-p06"
+    ],
+    "K47": [
+      "S36-p04"
+    ],
+    "K48": [
+      "S34-p07"
     ]
   },
   "unmapped_properties": [
@@ -2969,6 +3179,30 @@
       "source": "S29",
       "label": "A note is also a record a later study will have to read",
       "why_unmapped": "a finding about purposes rather than a property: secondary use for research is a fifth purpose this catalog does not name, and whether to add it is a decision about the purpose list"
+    },
+    {
+      "pid": "S35-p04",
+      "source": "S35",
+      "label": "Judge performance is worse in Russian than in English",
+      "why_unmapped": "a finding about judges, not a property of a note; it is why the calibration has to be repeated in Czech rather than carried over"
+    },
+    {
+      "pid": "S36-p05",
+      "source": "S36",
+      "label": "Only two of fourteen categories were added for the language itself",
+      "why_unmapped": "not a property of a note; a method statement about how the scheme was built"
+    },
+    {
+      "pid": "S37-p02",
+      "source": "S37",
+      "label": "A language-agnostic core with language-specific extensions",
+      "why_unmapped": "not a property of a note; a method statement about building a layer"
+    },
+    {
+      "pid": "S38-p01",
+      "source": "S38",
+      "label": "An error that can be detected and not corrected needs its own answer",
+      "why_unmapped": "not a property of a note; a rule about the answer scale"
     }
   ],
   "candidates_without_source_property": [

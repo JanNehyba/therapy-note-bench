@@ -187,7 +187,8 @@ def problems(catalog: dict, reports: dict | None = None) -> list[str]:
         # Until 2026-10-14 there was one such record, the report ledger of the
         # 2026-09-13 review, so the rule was that the id matches it. The
         # language layer added by AM-8 has its own search log and no report
-        # ledger, and a source found there is traced by its DOI instead. The
+        # ledger, and a source found there is traced by a published identifier
+        # that resolves to the work instead. The
         # exception is by layer and not by source id, so a source cannot escape
         # the ledger by being named.
         by_source = {r["catalog_source"]: r["report_id"] for r in reports["reports"]}
@@ -197,8 +198,16 @@ def problems(catalog: dict, reports: dict | None = None) -> list[str]:
             # went on applying to it would let the one entry drift from the
             # catalog unseen.
             if s["layer"] == "language" and s["id"] not in by_source:
-                if not str(s["ledger_report_id"]).startswith("doi:"):
-                    out.append(f"{s['id']}: a language-layer source is traced by its DOI")
+                # Any identifier that resolves, not a DOI specifically. The rule
+                # named the DOI while every language-layer source had one, and
+                # ELERRANT does not: its venue publishes none. What the rule is
+                # for is that a source outside the report ledger can be looked
+                # up, so it asks whether the id resolves.
+                if not ledger_url(s["ledger_report_id"]):
+                    out.append(
+                        f"{s['id']}: a language-layer source is traced by an identifier "
+                        "that resolves"
+                    )
             elif by_source.get(s["id"]) != s["ledger_report_id"]:
                 out.append(f"{s['id']}: ledger report id does not match reports.json")
 
@@ -438,9 +447,14 @@ def property_problems(catalog: dict, props: dict) -> list[str]:
 #: drawn as text rather than guessed at. A dead link on a page about provenance
 #: is worse than no link, and this is why the mapping is a closed table and not
 #: a pattern.
+#: `acl` joined on 2026-10-23 for ELERRANT, whose venue publishes no DOI: RANLP
+#: 2021 is distributed through the ACL Anthology and an Anthology id is the
+#: published identifier for it. A prefix belongs here when it resolves to a
+#: landing page for the work and not to a copy somebody uploaded.
 LEDGER_URLS = {
     "doi": "https://doi.org/{}",
     "pmid": "https://pubmed.ncbi.nlm.nih.gov/{}/",
+    "acl": "https://aclanthology.org/{}/",
 }
 
 

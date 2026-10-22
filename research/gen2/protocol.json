@@ -1,6 +1,6 @@
 {
   "id": "therapy-note-construct-review",
-  "version": "2.22.0",
+  "version": "2.23.0",
   "status": "protocol_amended_before_pilot_search_partially_executed",
   "recorded_date": "2026-10-14",
   "design": "Instrument development informed by a systematic scoping review, expert proposals and empirical observations",
@@ -319,8 +319,8 @@
     "review_completion": "Only executed searches and verified decisions count as completed; blocked sources remain named gaps",
     "scope": "Report selected and required methods, planned/applicable/assessed units, and incomplete critical-error assessment even in public aggregates"
   },
-  "supersedes": "2.21.0",
-  "amendment_reason": "D30: the panel is asked which two criteria are the same thing, because the overlap records are all the assistant's and a legend line that calls overlap expected collects nothing.",
+  "supersedes": "2.22.0",
+  "amendment_reason": "D31: the language layer enters the pool, nine criteria with four sources read in full, so the panel rates 48 criteria and not 39 and the round's novel half is judged by the four therapists rather than by the assistant.",
   "retrieval_gaps": "Record reports not retrieved separately from full-text eligibility exclusions; unavailable databases remain named gaps",
   "expert_inputs": "May enter throughout development. Later support does not rewrite historical origin; author or colleague proposals do not imply consensus.",
   "registration": {
@@ -757,6 +757,30 @@
       "why": "The catalog records an overlap for all thirty-nine and those records are the assistant's. The panel is the first set of people qualified to say which criteria a therapist cannot tell apart, and a reassurance does not collect that.",
       "what_it_costs": "A third question on a sheet the investigator has twice cut down, and the order works against the answer: the items are shuffled from a recorded seed, so two near duplicates may sit thirty rows apart and never be seen together. Nothing measures how much that suppresses. A rater who names no pair is not evidence that none exists.",
       "not_decided_here": "What a confirmed duplicate does to the pool. Merging, dropping one, or rewriting both are all restructurings, and this round has one panel and no second reading to check a restructuring against."
+    },
+    {
+      "id": "D31",
+      "date": "2026-10-23",
+      "origin": "investigator",
+      "decision": "The language layer enters the pool: nine criteria, K40 to K48, seven measured in both languages and two in Czech alone. The panel rates 48 criteria twice each, 96 judgements a rater, and the shuffled order is re-drawn over the larger pool.",
+      "replaces": "a pool of 39 with no language criterion in it, and a proposal of 2026-10-14 whose own status line said nothing in it was in the catalog",
+      "affects": [
+        "content_validity.what_is_rated, where the judged-over counts change",
+        "the panel's workload: 96 judgements a rater instead of 78",
+        "the sheet's order, re-drawn over 48 codes",
+        "catalog.json, czech.json and source-properties.json"
+      ],
+      "why": "The investigator asked why the sheet had no criterion for a calque or a borrowed word and said we had settled it repeatedly. We had settled everything except putting it in the catalog, which is the only file the sheet is built from. A benchmark for a small language whose panel never sees a language criterion would have had its novel half decided by the assistant alone.",
+      "language_layer": {
+        "what_entered": "Nine language-quality criteria, K40 to K48, with four sources: REPA (Pugachev et al. 2025), ELERRANT (Korre et al. 2021), the multilingual annotation framework of Qiu et al. (2025) and TalkTag (Venturini et al. 2026). Every quote was taken from the full text and not from the proposal that summarised it, because four of the nine rested on a category named without its definition transcribed.",
+        "two_layers": "Seven are measured in both languages and two in Czech alone, a diacritic and a calque. The split is not a judgement about which matter: a criterion measured in one language cannot say whether the model is worse in that language or the criterion is merely stricter, so a property stays Czech-only only where it cannot be measured in English at all. English domestic words carry no diacritics, and an English note of this round has nothing to calque from.",
+        "source_of_the_shape": "Qiu et al. (2025), which applies a language-agnostic core with language-specific extensions to five languages including Czech, and ELERRANT, which added exactly two categories of fourteen for Greek itself. A language layer is small and the neutral layer carries the work.",
+        "what_it_costs_the_panel": "96 judgements a rater instead of 78, a fifth more work on a sheet already estimated at 45 minutes a tab. The order is re-drawn over 48 codes rather than 39, which is allowed exactly once and only because no answer exists: appending the nine would have put the whole language layer in one block at the end of the sheet, where fatigue is highest, and a block of nine related items invites being rated as a set.",
+        "five_are_already_measured_and_that_is_not_validation": "The first generation's Czech scorer measures five of the nine. Its agreement figures are a judge against one native speaker: 87% for an unexpected language switch, 83% for a diacritic and for a non-existent word, 70% for register and 67% for a calque. One rater gives no reliability figure, and REPA reports that a judge does worse in Russian than in English, so the calibration has to be repeated in Czech rather than carried over.",
+        "what_is_missing": "No rule is written for any of the nine, which is true of twenty-seven of the thirty-nine already in the pool. Czech has no inter-rater figure at all. Two of the nine, register and the calque, have no named category in any scheme read: their support is the nearest category in a survey of fifteen schemes, recorded as nearest and not as support, and the Latvian loanword and calque work of 2026 is in the frame and unread."
+      },
+      "why_now_and_not_in_a_second_round": "Nothing has been sent and no answer exists, so adding them costs a rebuild. After the sheets go out it would cost a second panel, and the relevance of the nine would be the assistant's in the meantime.",
+      "not_decided_here": "Any rule for measuring the nine, and whether the two Czech-only criteria are reported beside the seven or in a section of their own. The first costs the human budget the pilot does not have; the second is a reporting question answered when there is something to report."
     }
   ],
   "content_validity": {
@@ -782,8 +806,8 @@
       "design": "Four raters, each rating every criterion twice: once for a progress note and once for a therapeutic note, on separate tabs rather than in two columns, because an answer made beside the previous one is an answer about it. Which tab comes first alternates between raters, two and two, so that fatigue does not accumulate on the same note type and read as a difference between them. Lynn (1986) requires all four of four in the same table that requires all three of three, so the rule is unchanged in kind by the extra rater and stricter in effect."
     },
     "what_is_rated": {
-      "items": "every candidate of the catalog, including those the round does not measure, the one the investigator dropped on 2026-10-05, and K35 and K36, which arrived on 2026-10-07 from a source read in full",
-      "shown_per_item": "the code, the Czech name, one sentence of definition, one example -- the failing case, from the catalog -- and what the property is judged over, which is one note for thirty-six of them, several sessions with one client for one and a model across clients for two; no state, no origin, no citation, no measurement rule and no indication of what the assistant or the investigator thinks. The table is the first row of the tab: what stood above it until 2026-10-22 is under framing below.",
+      "items": "every candidate of the catalog, including those the round does not measure, the one the investigator dropped on 2026-10-05, and K35 and K36, which arrived on 2026-10-07 from a source read in full, and the nine of the language layer, which entered on 2026-10-23 (decision D31)",
+      "shown_per_item": "the code, the Czech name, one sentence of definition, one example -- the failing case, from the catalog -- and what the property is judged over, which is one note for forty-five of them, several sessions with one client for one and a model across clients for two; no state, no origin, no citation, no measurement rule and no indication of what the assistant or the investigator thinks. The table is the first row of the tab: what stood above it until 2026-10-22 is under framing below.",
       "why_blind_to_state": "The sheet carries the code, the Czech name, one sentence, the catalog's positive and negative example, and what the property is judged over. It carries no state, no origin, no citation, no measurement rule and none of this project's own relevance ratings. That is the sheet; it is not a controlled condition. The whole catalog, including those ratings, is on a published page, and nothing prevents a rater from finding it. The investigator states that none of the three has seen that page, and the sheet asks them not to look the criteria up before answering. Both of those are reported as what they are -- his statement and a request -- and not as blinding that anyone enforced.",
       "pool_changes_before_the_panel": "A pool may grow until the first sheet is sent, and two items were added on 2026-10-07. After an answer exists it may not: adding an item then would mean some raters rated it and others did not, and the threshold is a proportion of three. If a property is found after the panel has answered, it waits for a second round and is reported as a later addition.",
       "purposes_rated": {
