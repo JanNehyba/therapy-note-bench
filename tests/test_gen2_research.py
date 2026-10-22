@@ -1424,3 +1424,32 @@ def test_citation_severity_is_not_assumed_when_the_target_check_succeeds():
     result = measure(c, n, b, s, observed)
     assert result["has_critical_error"] is True
     assert result["critical_findings_by_method"]["citations"] == 1
+
+
+def test_the_note_format_is_the_protocols_and_not_the_callers(store):
+    """D29. It was a default argument, so nobody had decided it.
+
+    `NoteSpec` allows four formats and the protocol named none; the planner took
+    one from an optional key in the selection file and fell back to "sections".
+    The format changes the prompt, and a prompt is part of the instrument, which
+    is the class of thing the leaderboard keeps in COMPARABILITY_KEYS.
+
+    The planted defect is the shape that passed before: a caller naming a format
+    the protocol does not name must be refused, not served.
+    """
+    from therapy_note_eval.pilot import plan
+
+    active, record = start_review(store)
+    instrument = operational_toy(store, active, toy_registry(active, record))
+    base, *_ = controls.fixture("en", "continuity")
+    cases = pilot_cases(active["protocol"], base)
+    models = two_families()
+    chosen = active["protocol"]["pilot"]["note_format"]
+    assert chosen == "sections", "the investigator chose the profile's own section names"
+
+    result = plan(cases, instrument, models, models, 11, chosen, protocol=active["protocol"])
+    assert {job["spec"]["format"] for job in result["jobs"]} == {chosen}
+
+    for other in ("soap", "dap", "birp"):
+        with pytest.raises(ValidationError, match="Note format differs from the protocol"):
+            plan(cases, instrument, models, models, 11, other, protocol=active["protocol"])

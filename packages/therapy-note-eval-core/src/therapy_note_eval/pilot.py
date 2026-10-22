@@ -111,6 +111,15 @@ def plan(
     # purposes are out and why, and the plan carries that with it.
     purposes = tuple(cfg["purposes"])
     require(bool(purposes) and set(purposes) <= set(PROFILES), "Pilot names an unknown purpose")
+    # The format is the protocol's and not the caller's. It was a default
+    # argument until 2026-10-22, filled from an optional key in the selection
+    # file, so the structure of every generated note had been decided by nobody
+    # -- and the format changes the prompt, which is part of the instrument
+    # (decision D29).
+    require(
+        note_format == cfg["note_format"],
+        "Note format differs from the protocol; amend the protocol to change it",
+    )
     out_of_scope = {e["purpose"]: e for e in cfg.get("purposes_out_of_scope", ())}
     require(
         not (set(purposes) & set(out_of_scope)),

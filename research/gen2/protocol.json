@@ -1,6 +1,6 @@
 {
   "id": "therapy-note-construct-review",
-  "version": "2.20.0",
+  "version": "2.21.0",
   "status": "protocol_amended_before_pilot_search_partially_executed",
   "recorded_date": "2026-10-14",
   "design": "Instrument development informed by a systematic scoping review, expert proposals and empirical observations",
@@ -254,6 +254,15 @@
       "the_rule": "Every ratio is published with the denominator it was computed over. A ratio whose denominator is below the floor is reported as not computed, with the denominator beside it, and never as a value. This is the rule that an absence is never a measurement, extended: a ratio over almost nothing is not a measurement either.",
       "the_floor_comes_from_the_pilot": "Not guessed. The pilot's notes give the distribution of denominators and the floor is set from it, in the same amendment that fixes the confirmatory sample size. Until it exists no ratio from this instrument is published.",
       "where_more_guards_come_from": "The panel's second question. A gaming shape a rater names becomes a candidate guard, and the paper reports which ones were named, which were built and which were left."
+    },
+    "note_format": "sections",
+    "note_format_decision": {
+      "what_it_means": "The note is written under the section names the profile declares, not under SOAP, DAP or BIRP. For the progress note those are the four of profiles.DEFINITIONS: current concerns and change, interventions and response, assessment and uncertainty, risk and agreed next steps.",
+      "chosen_by": "the investigator, 2026-10-22, from two alternatives put to him",
+      "why": "The round's question is whether a property essential to a note the care team reads is pointless in a note the clinician keeps apart from the record. That contrast is only readable if the two notes differ in purpose alone. SOAP fits a progress note and not a therapist's own note, so SOAP on one tab and named sections on the other would make the tabs differ in form as well, and a criterion scoring differently between them could not be attributed to the purpose.",
+      "what_it_costs": "The four section names are this project's own and no source stands behind them, so a criterion about structure or about placing content in the right section is measured against our form rather than against a documented one. SOAP would have carried a literature and TN-Eval's comparability with it.",
+      "not_comparable_with_generation_1": "Generation 1 generates SOAP, reproduced verbatim from TN-Eval, and iCARE's own instrument. Nothing crosses: a different prompt is a different instrument, which is the rule the leaderboard already enforces through prompt_version.",
+      "where_it_is_read": "pilot.plan refuses a format that is not this one. Until 2026-10-22 it took the format from an optional key in the selection file and fell back to 'sections' when the key was absent, so the structure of every generated note was a default argument and no amendment had ever decided it."
     }
   },
   "data": {
@@ -310,8 +319,8 @@
     "review_completion": "Only executed searches and verified decisions count as completed; blocked sources remain named gaps",
     "scope": "Report selected and required methods, planned/applicable/assessed units, and incomplete critical-error assessment even in public aggregates"
   },
-  "supersedes": "2.19.0",
-  "amendment_reason": "D28: an essential property the task never asked for goes into the task, and the check that the model followed it is reported beside the score and never counted into it, because counting it would grade obedience.",
+  "supersedes": "2.20.0",
+  "amendment_reason": "D29: the note's format is sections, decided by the investigator, and the planner refuses any other instead of taking one from a selection file and defaulting when none is given.",
   "retrieval_gaps": "Record reports not retrieved separately from full-text eligibility exclusions; unavailable databases remain named gaps",
   "expert_inputs": "May enter throughout development. Later support does not rewrite historical origin; author or colleague proposals do not imply consensus.",
   "registration": {
@@ -716,6 +725,23 @@
       "found_by": "The investigator, from K18. Its own record already said what the rule now generalises -- no pilot task requires author citations, so the denominator would be empty -- and nothing said what to do when the panel disagrees with that task.",
       "and_one_count_repaired_with_it": "The fourth consequence recorded in advance said a panel of three; D22 made the panel four the day before and the count was not changed with it. The substance of the sentence is unchanged.",
       "not_decided_here": "Which criteria fall on which side. That is read from each criterion once the panel has answered, and a criterion bundling both halves is split first."
+    },
+    {
+      "id": "D29",
+      "date": "2026-10-22",
+      "origin": "investigator",
+      "decision": "Notes are generated under the section names the profile declares, and the protocol is where that is decided: the planner refuses any other format rather than accepting one from a selection file.",
+      "replaces": "a default argument. The protocol said nothing about the format and pilot.plan took it from selection.get('format', 'sections').",
+      "affects": [
+        "pilot.note_format",
+        "pilot.plan, which now refuses a format the protocol does not name",
+        "every generated note's prompt, through NoteSpec.format"
+      ],
+      "why": "The round's question is whether a property essential to a note the care team reads is pointless in a note the clinician keeps apart from the record. That contrast is only readable if the two notes differ in purpose alone. SOAP fits a progress note and not a therapist's own note, so SOAP on one tab and named sections on the other would make the tabs differ in form as well, and a criterion scoring differently between them could not be attributed to the purpose.",
+      "what_it_costs": "The four section names are this project's own and no source stands behind them, so a criterion about structure or about placing content in the right section is measured against our form rather than against a documented one. SOAP would have carried a literature and TN-Eval's comparability with it.",
+      "the_alternative_and_why_not": "SOAP or DAP: an established form with a literature behind it and direct comparability with generation 1 and TN-Eval. Rejected because it is an American medical form that fits the record and not the clinician's own note, and the profile's section names were written in the first place because SOAP does not fit all four purposes.",
+      "found_by": "The investigator asked whether the format was DAP. It was not: DAP was printed because he had named it, and nothing in the protocol or the planner chose anything.",
+      "not_decided_here": "The word limit, which is also a default argument at 500 and also changes the prompt. It is left as it stands rather than decided in passing."
     }
   ],
   "content_validity": {

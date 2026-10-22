@@ -401,7 +401,7 @@ def command(args):
             [decode(Model, m) for m in selection["generators"]],
             [decode(Model, m) for m in selection["judges"]],
             args.seed,
-            selection.get("format", "sections"),
+            selection.get("format", args.research_protocol["pilot"]["note_format"]),
             selection.get("word_limit", 500),
             protocol=args.research_protocol,
         )
