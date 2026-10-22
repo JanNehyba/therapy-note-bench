@@ -323,6 +323,37 @@ def test_every_step_of_the_scale_reaches_the_sheet_with_what_it_means(catalog, c
     assert all(label in said for label in essential)
 
 
+def test_each_tab_says_which_of_the_two_notes_it_asks_about(catalog, czech, codes):
+    """A sheet that asks about "a session note" asks about two different things.
+
+    A progress note is part of the record: the care team and the payer read it
+    and the client has a right of access. A therapeutic note is the clinician's
+    own analysis, kept apart from the record, and the American rule excludes
+    diagnosis, plan, symptoms, prognosis and progress from it by name. The same
+    property can be essential in one and pointless in the other, which is what
+    the panel is being asked, so each tab has to say which one it means.
+    """
+    purposes = czech["panel_sheet"]["purposes"]
+    assert list(purposes) == ["progress_note", "therapeutic_note"]
+    texts = {}
+    for name, purpose in purposes.items():
+        assert len(purpose["description"].split()) >= 20, name
+        table = panel_sheet.rows(czech, codes, catalog, name)
+        texts[name] = "\n".join("\t".join(row) for row in table)
+        assert purpose["description"] in texts[name]
+        # And it says that answering the same way twice is not the point.
+        assert czech["panel_sheet"]["both_tabs"] in texts[name]
+    for name, other in (
+        ("progress_note", "therapeutic_note"),
+        ("therapeutic_note", "progress_note"),
+    ):
+        assert purposes[other]["description"] not in texts[name], name
+    # One of the two is the purpose the code already has; the other is not yet
+    # built, and the mapping is recorded rather than assumed.
+    assert purposes["progress_note"]["maps_to_code"] == "continuity"
+    assert purposes["therapeutic_note"]["maps_to_code"] is None
+
+
 def test_the_sheet_carries_no_superseded_sentence(catalog, czech, codes):
     """It told three raters a rule the protocol no longer held, and nothing caught it.
 
@@ -348,23 +379,33 @@ def test_the_sheets_rule_is_the_protocols_rule(czech):
     """The rater is told what happens to the answer, so the two must agree.
 
     Checked on the protocol's side in English, because that is where the rule
-    lives: unanimity retains, two of three publishes and does not measure. The
+    lives: unanimity retains, a dissent publishes and does not measure. The
     sheet's own sentence is Czech and is guarded by the test above, which holds
     it to not being the superseded one.
+
+    The panel went from three raters to four on 2026-10-22, which made the rule
+    stricter without changing its kind: all of them, whoever they are.
     """
     protocol = json.loads((REPO / "research/gen2/protocol.json").read_text(encoding="utf-8"))
     rule = protocol["content_validity"]["retention_rule"]
-    assert "retained for measurement" in rule["3_of_3"]
-    # Two of three is two outcomes, not one: the third rater either is against
-    # the item or merely does not think it essential, and a yes/no answer cannot
-    # tell those apart. Neither is measured.
-    assert "not measured" in rule["2_of_3_nobody_against"]
-    assert "not measured" in rule["2_of_3_one_against"]
-    assert "2_of_3" not in rule, "the single contested tier is gone, not renamed beside itself"
+    raters = protocol["content_validity"]["panel"]["raters"]
+    assert raters == 4
+    assert "retained for measurement" in rule[f"{raters}_of_{raters}"]
+    # One short of unanimity is two outcomes, not one: the last rater either is
+    # against the item or merely does not think it essential, and a yes/no
+    # answer cannot tell those apart. Neither is measured.
+    assert "not measured" in rule[f"{raters - 1}_of_{raters}_nobody_against"]
+    assert "not measured" in rule[f"{raters - 1}_of_{raters}_one_against"]
+    # The tiers of the three-rater panel are gone, not left beside the new ones.
+    assert not [key for key in rule if "_of_3" in key]
     assert "coin flip" in rule["modified_kappa"]
     assert rule["amended_before_any_answer"] is True
-    assert rule["chance_levels_under_a_uniform_rater"]["at_least_2_of_3"] == 0.5
-    assert rule["chance_levels_under_a_uniform_rater"]["3_of_3"] == 0.125
+    chance = rule["chance_levels_under_a_uniform_rater"]
+    assert chance[f"{raters}_of_{raters}"] == 0.0625
+    assert chance[f"at_least_{raters - 1}_of_{raters}"] == 0.3125
+    # The figure the panel of three would have had, kept so that a reader can
+    # see that adding a rater halved the chance level rather than loosening it.
+    assert chance["3_of_3_for_comparison"] == 0.125
     # The null is stated wherever the figures are, because nobody answers
     # uniformly and a chance level read as a behaviour is worse than none.
     assert "uniformly" in rule["chance_levels_under_a_uniform_rater"]["null"]
@@ -448,26 +489,42 @@ def test_the_order_is_the_recorded_seed_and_does_not_move(codes):
     assert panel_sheet.order(codes, seed=1) != panel_sheet.order(codes)
 
 
-def test_every_rater_gets_the_same_sheet_in_its_own_file(tmp_path, monkeypatch):
-    """One file per rater, identical content.
+def test_every_rater_gets_their_own_file_for_each_purpose(tmp_path, monkeypatch):
+    """One file per rater and note type, and no name from this machine in it.
 
-    A shared sheet makes the second answer a reaction to the first; three copies
-    of the same questions make the three answers independent, which is the whole
-    reason a content-validity panel has more than one member.
+    A shared sheet makes the second answer a reaction to the first, which is the
+    whole reason a content-validity panel has more than one member. The same
+    argument splits the two note types onto separate tabs: a second answer made
+    beside the first is an answer about the first.
+
+    The raters are read from a gitignored file so that no name enters this
+    repository, which is public. Redirecting the output directory must redirect
+    that lookup too, or this test depends on one machine and prints four
+    people's names while it runs -- so what it builds here is the numbered
+    fallback.
     """
     monkeypatch.setattr(panel_sheet, "OUT_DIR", tmp_path)
     assert panel_sheet.main() == 0
     written = sorted(p.name for p in tmp_path.glob("*.csv"))
     assert written == [
-        "hodnoceni-kriterii-1.csv",
-        "hodnoceni-kriterii-2.csv",
-        "hodnoceni-kriterii-3.csv",
+        "hodnoceni-1-1-progress_note.csv",
+        "hodnoceni-1-2-therapeutic_note.csv",
+        "hodnoceni-2-1-progress_note.csv",
+        "hodnoceni-2-2-therapeutic_note.csv",
     ]
-    contents = {(tmp_path / name).read_bytes() for name in written}
-    assert len(contents) == 1
+    # Same purpose, same questions: two raters get identical files.
+    for purpose in ("progress_note", "therapeutic_note"):
+        same = {
+            (tmp_path / name).read_bytes() for name in written if name.endswith(purpose + ".csv")
+        }
+        assert len(same) == 1, purpose
+    # Different purpose, different sheet: the tab says which note it asks about.
+    assert len({(tmp_path / name).read_bytes() for name in written}) == 2
+
     recorded = json.loads((tmp_path / "poradi.json").read_text(encoding="utf-8"))
     assert recorded["seed"] == panel_sheet.SEED
     assert recorded["items"] == 39
+    assert recorded["purposes"] == ["progress_note", "therapeutic_note"]
 
 
 def test_the_sheet_refuses_to_build_from_drifted_data(tmp_path, monkeypatch):

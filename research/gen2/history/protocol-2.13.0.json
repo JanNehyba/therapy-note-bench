@@ -1,0 +1,690 @@
+{
+  "id": "therapy-note-construct-review",
+  "version": "2.13.0",
+  "status": "protocol_amended_before_pilot_search_partially_executed",
+  "recorded_date": "2026-10-14",
+  "design": "Instrument development informed by a systematic scoping review, expert proposals and empirical observations",
+  "prior_exposure": "The investigator and coding assistant have seen existing instruments, prior Gen-2 drafts and a colleague's QA suggestion. This is not a claim of hypothesis-free discovery or blinded authorship.",
+  "conduct_framework": "JBI scoping review guidance, full-text verification pending",
+  "reporting_frameworks": [
+    "PRISMA-ScR",
+    "PRISMA-S"
+  ],
+  "appraisal": "Item-level evidence mapping informed by COSMIN principles; adaptations to documentation checklists explicitly recorded. No automatic alpha, CVR, factor-analysis or agreement threshold determines content validity.",
+  "questions": [
+    "Which properties of useful and accurate psychotherapy documentation are defined in the literature and professional guidance?",
+    "For which recipients, purposes and clinical circumstances do those properties matter?",
+    "How are they operationalized and what evidence supports their measurement?",
+    "What transfers to automated English and Czech evaluation and what remains unvalidated?"
+  ],
+  "pcc": {
+    "population": "Human-written and model-generated psychotherapy session documentation; adjacent clinical documentation and summarization methods identified as transfer evidence",
+    "concept": "Documentation quality constructs, operational criteria and measurement properties",
+    "context": "Continuity of care and documentation. The search of 2026-09-13 covered supervision and client communication as well, and their findings are retained; from 2026-09-16 the instrument is built for the two purposes above only (decision D8)."
+  },
+  "languages": [
+    "en",
+    "cs"
+  ],
+  "date_limits": {
+    "lower": null,
+    "upper": "actual search date recorded for each execution"
+  },
+  "layers": [
+    "direct",
+    "transfer",
+    "requirements"
+  ],
+  "include": [
+    "Psychotherapy progress notes or session summaries with explicit quality properties, user needs or evaluation methods",
+    "Clinical documentation or general summarization methods with an explicit documentation measurement application, labelled as transfer evidence",
+    "Professional or recipient requirements with attributable authorship, jurisdiction and document version",
+    "Full text in English or Czech, including preprints and software artifacts with publication type explicitly distinguished"
+  ],
+  "exclude": [
+    "Therapeutic chatbot or treatment effectiveness evaluation without a documentation-relevant requirement or method",
+    "No identifiable quality construct, operational criterion or measurement method",
+    "Duplicate report with no additional evidence, linked to its study family rather than counted independently",
+    "Full text outside English/Czech scope, with the language restriction disclosed"
+  ],
+  "databases": [
+    "PubMed",
+    "APA PsycINFO",
+    "Scopus",
+    "ACL Anthology"
+  ],
+  "supplementary_routes": [
+    "backward citations",
+    "forward citations",
+    "professional guidance",
+    "known-source retrieval check"
+  ],
+  "metadata_services": [
+    "Crossref",
+    "OpenAlex"
+  ],
+  "reviewers": {
+    "human_count": 2,
+    "human_roles": [
+      {
+        "role": "investigator and instrument developer",
+        "screening": true,
+        "status": "active"
+      },
+      {
+        "role": "second screener",
+        "screening": true,
+        "status": "to be recruited; not yet named (D2)"
+      }
+    ],
+    "raters": "two Czech psychologists for the human anchor (D2); neither screens",
+    "clinical_panel": "not planned (D2)",
+    "ai_role": "assist retrieval, extraction and discrepancy detection; never impersonate a human decision",
+    "independent_second_screening": "planned: a second human screener will be recruited; until that person records decisions on the exact sheets, screening is single-reviewer with AI assistance and is reported as such",
+    "evidence_verification": "delegated (D9, 2026-09-21): sources and evidence lines stand on the assistant's reading; constructs were decided by the investigator item by item; the quoted passages of the nine reports the pilot rests on are checked verbatim against the retrieved full texts by the core's extraction import (D11)",
+    "operational_rules": "delegated (D10, 2026-09-21): the scope, method specifications, rubric items and Czech wording are the assistant's proposal accepted without item-by-item review",
+    "content_validity_panel": "three therapists, neither the author nor the assistant, rating every candidate of the catalog for relevance against the threshold registered in content_validity (D13, 2026-10-07)"
+  },
+  "sequence": [
+    "Record the prospective protocol revision and prior exposure before the corresponding research steps",
+    "Execute and document searches, exports, duplicate handling and retrieval gaps",
+    "Human title/abstract and full-text screening, with a second human screener once recruited (D2, D6): the priority stratum and the audit sample of the remainder, on exact sheets, disagreements retained; non-retrieval is not an eligibility exclusion",
+    "Extract source-anchored candidates without forcing the prototype taxonomy",
+    "Record expert proposals and empirical inputs before, during or after searching, preserving historical origins",
+    "Human review interpretations, proposals, merges, method choices and language-specific wording; preserve disagreements",
+    "Create versioned literature and mixed-source snapshots with explicit amendment parents; literature snapshots do not gate expert input",
+    "Carry every measurement the review supported into the first feasibility round; record the executable count at freeze, report what the human budget cannot cover as not measured, and keep catalog entries, executable measures and study conditions as distinct records (D3)",
+    "Freeze the reviewed instrument and exact unit assignments before ratings; distinguish format from granularity experiments",
+    "Use developmental results to revise measures; preregister a later independent confirmatory study before its judgments"
+  ],
+  "selection": {
+    "target_pool_size": "No quota; stop according to the documented search scope, not a desired number of constructs",
+    "mandatory_considerations": [
+      "purpose-specific importance",
+      "evidence directness and limitations",
+      "coverage of clinically consequential content",
+      "definition clarity",
+      "measurement feasibility"
+    ],
+    "not_exclusion_rules": [
+      "rare occurrence",
+      "low between-model variance",
+      "few dominance edges",
+      "membership in a small semantic cluster"
+    ],
+    "first_round_measurements": {
+      "rule": "record_not_cap",
+      "statement": "The first round carries every measurement the review supported; the executable count is recorded at instrument freeze and by pilot-plan; what the human budget cannot cover is reported as not measured, never dropped to fit a count",
+      "record_kinds": {
+        "catalog_entry": "a review-supported candidate in the research map; visible, not by itself executable",
+        "executable_measure": "an operational item (MeasurementSpec) or a selected non-item method (MethodSpec) in the frozen instrument; the only kind the count counts",
+        "study_condition": "a design manipulation or human-use outcome of the pilot; planned and reported as a condition, never counted as a measure"
+      },
+      "supported_at_amendment": {
+        "not_comparable_as_measures": "P12 is a training/reliability condition; P10 and P11 human-use outcomes; P13 a corpus-level proxy; P14 a derived ratio (audit A08)",
+        "executable_count": "recorded at freeze, not fixed here",
+        "catalog_entries_note": "The count is not recorded here. catalog/catalog.json holds the list and the page derives the figure from it; this entry said 14 while the list held 13, because P09 was removed with K19 and nothing re-read the sentence."
+      },
+      "previous_target": "8-12 in 2.0.0 came from the task brief, not from the review; a feasibility convention, not an error (audit A02); withdrawn by D3"
+    }
+  },
+  "clustering": {
+    "input": "source-derived construct definitions, not model scores",
+    "distance": "cosine",
+    "linkage": "average",
+    "representation": "explicit model/revision and exact definition digest per vector",
+    "human_pairs": {
+      "nearest": 10,
+      "middle": 10,
+      "random": 10
+    },
+    "interpretation": "Semantic organization and merge proposals, not a proof of latent structure or importance"
+  },
+  "pilot": {
+    "status": "not_run",
+    "purposes": [
+      "continuity",
+      "audit"
+    ],
+    "generator_families": 2,
+    "judge_families": 2,
+    "max_notes": 16,
+    "human_note_sample": 8,
+    "human_decisions_target": 150,
+    "blind_repeats": 30,
+    "human_hours": [
+      8,
+      12
+    ],
+    "interpretation": "Feasibility and measurement development, not confirmatory validation or model ranking",
+    "precision_targets_for_later_planning": {
+      "essential_coverage_ci95_half_width": 0.05,
+      "serious_error_sensitivity_ci95_half_width": 0.1
+    },
+    "unique_decisions": 120,
+    "preparation_included_in_hours": true,
+    "time_overrun_policy": "Reduce the documented sample through a versioned amendment; do not call unreviewed units checked",
+    "replicate_policy": "Distinct replicate IDs reserve real calls; resume caching is within a replicate only",
+    "measurement_rule": "selection.first_round_measurements",
+    "cohorts": [
+      {
+        "origin": "public_demo",
+        "language": "en",
+        "cases": 2,
+        "source": "AnnoMI conversations released through TN-Eval"
+      },
+      {
+        "origin": "translated_demo",
+        "language": "cs",
+        "cases": 2,
+        "source": "Czech translations of the same conversations by data.translation_instrument"
+      }
+    ],
+    "translation_pairing": {
+      "required": true,
+      "original": {
+        "origin": "public_demo",
+        "language": "en"
+      },
+      "translation": {
+        "origin": "translated_demo",
+        "language": "cs"
+      },
+      "rule": "every original conversation has exactly one translation sharing its translation_group; group identifiers alone do not validate meaning"
+    },
+    "excluded_cohorts": [
+      {
+        "origin": "native_real",
+        "language": "cs",
+        "reason": "one client, no consent or ethics documentation; permanently private track processed only on local/einfra; outside the paper and this pilot (D1)"
+      }
+    ],
+    "human_decisions_basis": "A budget of annotation units (item, claim and QA decisions) bounded by the investigator's 8-12 hours, not a count of notes; fewer notes leave more units per note, and unit assignment is frozen after reviewed banks exist Narrowing to two purposes on 2026-09-16 halved the generated notes and the human sample; the unit budget is unchanged, so the units per note rose again (decision D8).",
+    "human_anchor": {
+      "raters": 2,
+      "rater_profile": "Czech psychologists; neither is the instrument author",
+      "design": [
+        "crossover over languages: each rater receives one language of each conversation, so every conversation is rated in both languages and no rater sees a conversation twice",
+        "overlap block: a subset of notes rated by both raters in the same language; the only source of between-rater agreement, which the crossover alone does not measure",
+        "blinded repeats: notes re-rated by the same rater; the source of within-rater agreement"
+      ],
+      "calibration": "on notes outside the rated sample; count fixed at instrument freeze",
+      "agreement": [
+        "gwet_ac1",
+        "gwet_ac2"
+      ],
+      "reported_per": "operational item, language and purpose; disagreements retained",
+      "masking": "no model identity, no automatic verdicts, no other rater's answers",
+      "time": "actual rating time recorded per rater and per note; the confirmatory sample is derived from it",
+      "counts": "the development pilot rates its balanced human sample; counts for the confirmatory study are fixed in a later amendment from the pilot's timing and agreement, not here (audit A10)",
+      "interpretation": "A feasibility anchor for the rating task on development notes; not confirmatory validation, model ranking or clinical validation",
+      "estimate_note": "The 2026-09-13 estimate of about 25 notes per rater preceded the fixed cohorts and is superseded by the measured design"
+    },
+    "purposes_out_of_scope": [
+      {
+        "purpose": "supervision",
+        "reason": "The thinnest evidence of the four: no source found says what a supervisor needs from a note. Measuring it would mean inventing the standard.",
+        "decision": "D8"
+      },
+      {
+        "purpose": "client",
+        "reason": "A real literature exists and this round read only abstracts of it; real client readers and an ethics framework are missing. Not a judgement that it does not matter.",
+        "decision": "D8"
+      }
+    ],
+    "judge_question_granularity": {
+      "status": "declared, not run",
+      "what_varies": "how many operational items one judge call decides: batched, every item of a reference mode in one call, as pipeline.score asks today; or split, one item per call, as generation 1's judge asks",
+      "where": "the eight notes of human_note_sample, for each of the two judge families",
+      "criterion": "agreement with the two human raters on the same items",
+      "noise_floor": "the judge's own disagreement on blind_repeats of the same items, which is what a difference between the two styles has to exceed to be a difference at all",
+      "rule": "decision_ledger D18 rule_declared_in_advance",
+      "record_kind": "study_condition",
+      "costs": "judge calls only, of the order of 8 notes times the active items times 2 judge families; no generation call and nothing on e-INFRA",
+      "not_implemented": "pipeline.score asks its items as a tuple and has no per-item mode. The condition is declared here before the run, as the protocol's own rule requires, and the code change belongs with the run."
+    }
+  },
+  "data": {
+    "native_czech_policy": [
+      "local",
+      "einfra"
+    ],
+    "derived_artifacts_inherit_policy": true,
+    "translation_relatives_share_split": true,
+    "native_czech_clusters": 1,
+    "annomi_video_grouping": "Video identity is a known grouping factor, not proof of client or therapist identity",
+    "future_sessions": "excluded from available context",
+    "native_czech_track": {
+      "status": "permanently private",
+      "in_paper": false,
+      "in_development_pilot": false,
+      "reason": "one client; no consent or ethics documentation",
+      "decision": "D1"
+    },
+    "translation_instrument": {
+      "direction": "en->cs",
+      "status": "recorded on 2026-09-21: glm-5.3 on e-INFRA, chosen by the assistant under D10 from the second back-translation check; see research/gen2/translation/instrument.json",
+      "selection": "chosen by a measured back-translation check recorded before use",
+      "record": [
+        "provider",
+        "model",
+        "settings",
+        "prompt_digest",
+        "back_translation_check_digest"
+      ],
+      "provider": "einfra",
+      "model": "glm-5.3",
+      "settings": {
+        "temperature": 0.0,
+        "max_tokens": 16384,
+        "timeout_s": 600
+      },
+      "prompt_digest": null,
+      "constraint": "not a judge model of this pilot",
+      "existing_translations": "the ten earlier Claude translations are superseded; they will be redone with the selected instrument and retained as historical artifacts (D4)"
+    }
+  },
+  "reporting": {
+    "overall_quality_score": false,
+    "separate_by": [
+      "language",
+      "corpus_origin",
+      "purpose",
+      "protocol",
+      "judge"
+    ],
+    "missingness": "distinguish not applicable, insufficient source, ambiguous content and execution failure",
+    "external_validation": "not established",
+    "review_completion": "Only executed searches and verified decisions count as completed; blocked sources remain named gaps",
+    "scope": "Report selected and required methods, planned/applicable/assessed units, and incomplete critical-error assessment even in public aggregates"
+  },
+  "supersedes": "2.12.0",
+  "amendment_reason": "D21: an item two of three raters accept is reported in two tiers by what the third said, which is the first use the four-point scale has had beyond its cut; the four steps get anchors; the sheet gets the catalog's examples; and the blinding claim shrinks to the investigator's statement plus a request, because the catalog is published.",
+  "retrieval_gaps": "Record reports not retrieved separately from full-text eligibility exclusions; unavailable databases remain named gaps",
+  "expert_inputs": "May enter throughout development. Later support does not rewrite historical origin; author or colleague proposals do not imply consensus.",
+  "registration": {
+    "status": "not_registered",
+    "local_timestamp_is_registration": false,
+    "confirmatory_preregistration": "required before confirmatory judgments"
+  },
+  "recorded_before_use": true,
+  "query_amendments": "review-2026-09-13/amendments.json remains the recorded query ledger; this revision changes no query",
+  "review_scope": {
+    "name": "scoping search with a prioritised evidence map",
+    "decision": "D6",
+    "second_screener_scope": "the priority stratum and the audit sample of the remainder, on the exact sheets the first screening used",
+    "reported_as_limits": [
+      "the remainder of the pool left unscreened, with its audited estimate of eligible records",
+      "APA PsycINFO and Scopus, not searched",
+      "the requirements layer, not searched systematically"
+    ],
+    "not_claimed": "a completed scoping review",
+    "full_screening": "a possible later study with its own protocol"
+  },
+  "decision_ledger": [
+    {
+      "id": "D1",
+      "date": "2026-09-13",
+      "origin": "investigator",
+      "decision": "The ten native Czech real sessions are excluded from the paper and from the development pilot; they remain a permanently private track processed only on local/einfra",
+      "replaces": "pilot.cases.native_czech = 2 in 2.0.0",
+      "affects": [
+        "pilot.cohorts",
+        "pilot.excluded_cohorts",
+        "data.native_czech_track",
+        "pilot.max_notes",
+        "pilot.human_note_sample"
+      ]
+    },
+    {
+      "id": "D2",
+      "date": "2026-09-13",
+      "origin": "investigator",
+      "decision": "A second human screener will be recruited and a clinical panel is not planned; two Czech psychologists rate notes as the human anchor, in a crossover over languages with an overlap block and blinded repeats, after calibration on notes outside the sample, with agreement reported by Gwet AC1/AC2 per item",
+      "replaces": "reviewers.human_count = 1 and no human anchor in 2.0.0",
+      "affects": [
+        "reviewers",
+        "pilot.human_anchor",
+        "sequence"
+      ]
+    },
+    {
+      "id": "D3",
+      "date": "2026-09-15",
+      "origin": "investigator, following audit findings A02 and A08",
+      "decision": "The 8-12 measurement target came from the task brief, not from the review. The first round carries every measurement the review supported; the executable count is recorded, not capped; catalog entries, executable measures and study conditions are distinct records",
+      "replaces": "selection.pilot_measurements_target = [8, 12] and sequence item 8 in 2.0.0",
+      "affects": [
+        "selection.first_round_measurements",
+        "sequence",
+        "pilot.measurement_rule"
+      ]
+    },
+    {
+      "id": "D4",
+      "date": "2026-09-15",
+      "origin": "investigator, delegated to the developer",
+      "decision": "The AnnoMI-to-Czech translator is recorded as an instrument (provider, model, settings, prompt digest), chosen by a measured back-translation check, never a judge of this pilot; the ten earlier translations are redone with it",
+      "replaces": "no translation provenance requirement in 2.0.0",
+      "affects": [
+        "data.translation_instrument",
+        "pilot.cohorts"
+      ]
+    },
+    {
+      "id": "D5",
+      "date": "2026-09-15",
+      "origin": "investigator",
+      "decision": "The judge-side confinement guard is ported to the sibling Czech repository; its real tasks stay confined to e-INFRA and its translated tasks (public AnnoMI content) are released",
+      "replaces": "sibling policy that a judge may read a note written from a real session",
+      "affects": [
+        "data.native_czech_policy"
+      ]
+    },
+    {
+      "id": "D6",
+      "date": "2026-09-15",
+      "origin": "investigator",
+      "decision": "The review is bounded: the second screener covers the priority stratum and the audit sample; the unscreened remainder and the two unsearched databases are reported as limits; the work is named a scoping search with a prioritised evidence map, not a completed scoping review",
+      "replaces": "the completed-review ambition of 2.0.0 status",
+      "affects": [
+        "review_scope",
+        "sequence",
+        "status"
+      ]
+    },
+    {
+      "id": "D7",
+      "date": "2026-09-15",
+      "origin": "investigator",
+      "decision": "Test fixtures clean their private workspaces; the directories earlier test runs left under local/ are removed by fixture pattern only",
+      "replaces": "nothing in the protocol; recorded because it touches private workspaces",
+      "affects": []
+    },
+    {
+      "id": "D8",
+      "date": "2026-09-16",
+      "origin": "investigator",
+      "decision": "The instrument serves continuity of care and documentation. Supervision and client communication stay declared, with their candidates and evidence, and are out of scope for this round; nothing is measured or claimed for them.",
+      "replaces": "the four-purpose scope of 2.1.0 and earlier",
+      "affects": [
+        "pilot.purposes",
+        "pcc.context",
+        "catalog candidates K24 and K25",
+        "the pilot proposal's coverage criterion"
+      ]
+    },
+    {
+      "id": "D9",
+      "date": "2026-09-21",
+      "origin": "investigator",
+      "decision": "The sources and evidence lines of the catalog are accepted on the assistant's reading. The investigator, having decided every construct, does not verify each quoted passage against its source. The decision is a delegation: recorded per subject in the review mode 'delegated', which can only accept and must name this entry; listed on every frozen instrument snapshot; and reported in the paper as a limitation, the evidence being assistant-read and not human-verified item by item.",
+      "replaces": "the plan that the investigator reviews every source and evidence subject before the freeze",
+      "affects": [
+        "reviewers.evidence_verification",
+        "registry review mode 'delegated' and its import rule",
+        "instrument snapshot field 'delegated_reviews'",
+        "paper: methods (human review) and what the study does not claim"
+      ]
+    },
+    {
+      "id": "D10",
+      "date": "2026-09-21",
+      "origin": "investigator",
+      "decision": "The assessment scope, the method specifications for qa, claims and items, the three rubric items and every Czech operational wording are accepted on the assistant's proposal, by delegation, without item-by-item review; the translator is chosen by the assistant from the recorded back-translation check. Each is recorded in the review mode 'delegated', names this entry, and is listed on the frozen instrument snapshot; the paper reports the operational rules as assistant-drafted and the feasibility pilot as their first test.",
+      "replaces": "the plan that the investigator decides each operational subject on the sheet",
+      "affects": [
+        "reviewers.operational_rules",
+        "the reviewed draft's scope, method, measurement and language subjects",
+        "data.translation_instrument",
+        "paper: methods (operationalisation) and what the study does not claim"
+      ]
+    },
+    {
+      "id": "D11",
+      "date": "2026-09-21",
+      "origin": "investigator",
+      "decision": "The nine reports the pilot's constructs rest on are included in the study by delegation, in the same mode as D9 and D10, so that their extractions can carry the origin of a literature construct. A delegated screening decision names this entry, can only include, and is counted apart in the review status; the screening of the pool remains what it was, AI proposals with no human decision, and the paper reports both.",
+      "replaces": "the placeholder origin references of the draft registry",
+      "affects": [
+        "research.screen and review_status",
+        "the frozen instrument's construct origins",
+        "paper: methods (screening, operationalisation) and what the study does not claim"
+      ]
+    },
+    {
+      "id": "D12",
+      "date": "2026-09-22",
+      "origin": "investigator",
+      "decision": "The framework is reported as phase one of instrument development, item generation followed by content validity, after Boateng et al. (S12) and COSMIN (S11); the best-fit framework synthesis citation is withdrawn. A candidate may be proposed for measurement only with at least one evidence line quoting a source read in full, which the catalog validator enforces. Content validity by judges independent of the item pool's authors is not met and is reported as an open gap, which the pilot does not close.",
+      "replaces": "the framework-synthesis framing of the catalog and the methods draft",
+      "affects": [
+        "paper: design, construct framework, and what the study does not claim",
+        "research/gen2/catalog/catalog.json method block and its validator",
+        "research/gen2/catalog/README.md"
+      ]
+    },
+    {
+      "id": "D13",
+      "date": "2026-10-07",
+      "origin": "investigator",
+      "decision": "The item pool is put to a panel of three therapists against a retention threshold registered before the questionnaire is sent: three of three retains, two of three retains as contested with the dissent published, one or none removes the item from the measured set. A harm flag from any rater is reported and stops measurement in this round. Items are shown blind to their state and origin. The investigator stops being the retention rule, every decision he made about the pool returns to the panel, and the measured set the pilot uses is the panel's.",
+      "replaces": "the retention of criteria by the investigator's and the assistant's judgement",
+      "affects": [
+        "content_validity block of this protocol",
+        "the measured set of the catalog, pending the panel",
+        "paper: methods (content validity) and what the study does not claim"
+      ]
+    },
+    {
+      "id": "D14",
+      "date": "2026-10-07",
+      "origin": "assistant, from a source read in full",
+      "decision": "K35, the interaction described from both sides, and K36, the client's experience present at all, enter the item pool with the rating rule and the reliability figures of the source that defines them. Neither is measured in this round. The panel registered under D13 rates 36 items instead of 34 against the same threshold, and the sheets are not sent until the pool is settled.",
+      "replaces": "nothing; it adds to the pool D13 put to the panel",
+      "affects": [
+        "content_validity.what_is_rated of this protocol",
+        "the catalog's candidate list and its source-first table",
+        "the panel's rating sheets, which are rebuilt before they go out",
+        "paper: methods (item generation and content validity)"
+      ],
+      "why_it_is_not_the_investigator_deciding": "The property was found in a source, the rule it is measured by is the source's, and whether it stays is the panel's answer against a threshold registered before any answer existed. Adding to the pool is item generation, which is the prescribed procedure (S12); the decision D13 took off the investigator was retention, and this does not give it back."
+    },
+    {
+      "id": "D15",
+      "date": "2026-10-08",
+      "origin": "investigator",
+      "decision": "K06, acknowledged information gap, stays in the pool and is put to the panel like every other candidate. The investigator proposed removing it, on the ground that it was his own ad hoc addition and complicated the instrument, and withdrew that when the record showed the candidate is not his: its origin is a repeated finding of this project's own code reviews, where a model wrote a denial nobody had asked for and scored full marks. Whether it is kept is now the panel's answer against the threshold registered under D13.",
+      "replaces": "nothing; it declines to make a retention decision outside the panel",
+      "affects": [
+        "K06 stays in the rated pool",
+        "paper: the one candidate with no source in the literature is named as such"
+      ],
+      "what_this_records": "The mechanism D13 set up was used as intended, by the person it was set up to constrain. The investigator wanted an item out, the rule said the panel decides, and the item stayed. That is worth a line because the usual failure of a retention rule is that its author exempts himself from it.",
+      "the_open_question_it_leaves": "K06 has no source in the literature and the paper says so. The error it guards against is documented elsewhere: S25 counts as inaccurate a note in which a normal finding was recorded when the finding was not normal. What no source asks for is the remedy, that the note itself distinguish what was not discussed from what was denied and from what nobody asked. The problem has support; the requirement does not."
+    },
+    {
+      "id": "D16",
+      "date": "2026-10-08",
+      "origin": "investigator",
+      "decision": "The paper is the benchmark. The scoping search is reported as the method by which the item pool was generated, not as a study of its own: one paragraph in the methods, the full record in the public repository and the appendix. The instrument's development and the search may be published separately afterwards from the same registered record.",
+      "replaces": "the working assumption that the review and the benchmark are reported together",
+      "affects": [
+        "paper: methods, and what the review section may claim",
+        "the OSF registration, which registers the protocol this shape implies"
+      ],
+      "why": "A co-author put it that the project was running two studies in one. It is running three, counting the benchmark, and an eight-page venue holds one. Dropping the review is not the alternative: a benchmark whose criteria have no recorded origin invites the question the review exists to answer. So the review changes role rather than disappearing."
+    },
+    {
+      "id": "D17",
+      "date": "2026-10-14",
+      "origin": "assistant",
+      "decision": "An information unit is graded on the five levels of TN-Eval's Appendix C (mandatory, mandatory in certain circumstances, highly recommended, good to have, optional), taken verbatim. Coverage is reported per grade, one measure each. The core carried three grades of its own (essential, supplementary, not_required) and they are gone.",
+      "replaces": "the three grades the core package was written with, which predate the review that found the five",
+      "affects": [
+        "the bank sheet: the therapist assigns one of five grades per purpose, not one of three",
+        "coverage: five recall measures where there were two, each with its own denominator",
+        "the judge prompt, which is told the grades it may use",
+        "aggregation-v5: the shape of what measure() returns changed, so an older manifest is archived rather than recalculated"
+      ],
+      "why": "The three grades could not carry out the severity rule the pilot runs on. That rule separates the omission of an optional unit (no error) from a good-to-have one (minor) from a highly recommended or mandatory one (major), and three grades cannot tell those apart. The five also have the only reliability figure in the grading: five therapists agreed on them at Fleiss' kappa 0.68 and Krippendorff's alpha 0.73. The three had none, and were not a simplification anyone had tested. Coverage had also been reporting two of the three, so units at the third grade were neither counted nor declared missing, which is the shape this project treats as a defect wherever it appears.",
+      "costs_nothing_published": "No published number used this grading: of the 2357 result rows, none carries QA coverage. Generation 2 is a separate instrument from the leaderboard, so no comparability group is split by the change.",
+      "not_decided_here": "Whether the other three branches of the severity rule are enforced in code. They stay prose the rater reads, because a severity derived from the grade would record agreement with the rule rather than the rater's reading of the note."
+    },
+    {
+      "id": "D18",
+      "date": "2026-10-21",
+      "origin": "investigator",
+      "decision": "How many items one judge call decides is a condition of the pilot, measured, not chosen in advance. On the eight notes of the human sample every operational item is asked twice: once batched, as the pipeline asks today, with every item of a reference mode in one call, and once split, one item per call, as generation 1's judge asks. The confirmatory round uses whichever the pilot supports, and the comparison is reported either way.",
+      "replaces": "the batched call as an unexamined property of the code; it was never decided, it was written",
+      "affects": [
+        "the pilot: a second pass over the human-sample notes for every judge family, which is judge calls and no generation calls",
+        "the confirmatory round's judge-call budget, which the two styles differ on by about a factor of five",
+        "the pipeline's assess step, which takes a tuple of items and has no way to be asked one at a time"
+      ],
+      "why": "Generation 1 asks one question per call and says so in the first line of its judge module: roughly 60 calls per note, 23 rubric criteria, one per sentence for conciseness, twelve Likert ratings. Generation 2's pipeline asks every item of a reference mode at once, roughly 6 calls per note. The two generations therefore disagree about the one thing that decides whether a verdict is any good, and neither choice was ever measured against the other here. Asking it of the pilot costs a few hundred judge calls and nothing on e-INFRA, and the pilot already holds the two things the comparison needs: a human anchor on eight notes and blind repeats that measure the judge's own noise.",
+      "rule_declared_in_advance": "The split asking is adopted for the confirmatory round if its agreement with the human anchor exceeds the batched asking's by more than the judge's own blind-repeat disagreement on the same items. Below that margin the batched asking is kept, because a difference smaller than the instrument's own noise is not a finding. Either way both figures are published, and a pilot too small to separate them is reported as that and not as agreement.",
+      "not_decided_here": "Whether the split asking is better. That is what the condition measures. Nor is the number of items: the pool may still grow before the panel answers, and the style question is about how many items share a call rather than how many exist."
+    },
+    {
+      "id": "D19",
+      "date": "2026-10-21",
+      "origin": "investigator",
+      "decision": "A criterion enters the measured set only where all three raters answer quite or highly relevant. Two of three no longer retains it: the item is published as contested, with both the agreeing and the dissenting reasons, and is not measured in this round. The sheet names the cut, says that a blank is not a vote, and shows what each property is judged over. Agreement is reported as Krippendorff's alpha over the three raters' ordinal answers with the three pairwise Cohen's kappas beside it.",
+      "replaces": "the rule recorded on 2026-10-07, under which two of three retained the item and marked it contested, and which named Cohen's kappa for a panel of three",
+      "affects": [
+        "the measured set: an item two raters call relevant and one does not is reported and not measured, where it would have been measured and marked",
+        "the sheet the three raters receive: the cut, the blank rule, the renamed third step and a column saying what the property is judged over",
+        "the agreement figure in the paper, which is now alpha with the pairwise kappas beside it rather than a kappa that was not defined for three raters"
+      ],
+      "why": "Four points with the cut above the midpoint means a rater choosing uniformly calls an item relevant half the time. Under that null two of three agreeing has probability 0.50, so the old rule retained an item as often as a coin would; unanimity among three has probability 0.125. Three of five would be 0.50 again, so the problem was the cut and not the number of raters. The investigator asked for three raters and an unambiguous verdict, and unanimity is the only cut among three that gives one.",
+      "the_null_these_figures_assume": "a rater choosing uniformly among the four points, which describes nobody. The figures are a floor for reading the index, not an estimate of how this panel behaves, and the paper states the null wherever it quotes them. A real rater's answers are not independent of the item, which is the whole reason to ask them.",
+      "what_this_costs": "Items that two of three call relevant. Under the old rule they were measured and flagged; now they are reported and not measured, so the measured set can only be smaller. That is the intended direction: the round claims a screening of the pool, and an item that one in three experts does not consider relevant to note quality is not something to publish a number about.",
+      "not_decided_here": "Whether a contested item returns in a second round. The pool may not grow once an answer exists, so a contested item waits for a panel that is asked again, and no such panel is planned."
+    },
+    {
+      "id": "D20",
+      "date": "2026-10-22",
+      "origin": "investigator",
+      "decision": "Lynn (1986) and Davis (1992) are read and quoted where the panel rests on them. The retention rule stays exactly as D19 set it, and is now reported with Lynn's Table 2 beside it rather than as this project's own convention alone; the panel of three is reported with Lynn's floor of three and its condition; and the scale's labels are reported as not Lynn's, with the question of whether they are Davis's left open and named.",
+      "replaces": "the statement that neither primary source had been retrieved and that no threshold was therefore taken from them",
+      "affects": [
+        "content_validity.procedure, which named two unretrieved papers as the reason nothing was taken from them",
+        "content_validity.panel.below_the_typical_range, which had only S12's five to seven",
+        "the retention rule, which gains a published source and keeps its own argument",
+        "the paper's content-validity paragraph"
+      ],
+      "why": "The investigator asked for the scale's source to be found. Both papers are closed access with no open copy, so they were read through the university's proxy. Three of this project's own decisions are in them and one of its claims is contradicted, and a protocol that had said the sources were unread could not say either.",
+      "the_order_of_events_is_part_of_the_record": "The unanimity rule was decided on 2026-10-21 from the chance levels of a four-point scale, and Lynn was read on 2026-10-22. The rule is therefore not derived from the source and the source is not a justification written afterwards; they agree, and the dates say which came first. A reader who wants to discount the agreement can.",
+      "not_decided_here": "Whether the labels are Davis's. The figure that would settle it was not read. Lawshe (1975) is still unretrieved and still nothing is taken from it."
+    },
+    {
+      "id": "D21",
+      "date": "2026-10-22",
+      "origin": "investigator",
+      "decision": "An item two of three raters call relevant is reported in two tiers, by what the third rater said: nobody against, where the third answers slightly relevant, and one against, where the third answers not relevant. Neither is measured. Each step of the scale carries an anchor sentence, the sheet shows the catalog's positive and negative example for every criterion, and the harm column asks about measuring the property rather than about the property.",
+      "replaces": "a single contested tier, four scale steps with no anchors, a sheet with no examples, and a column header that asked whether the property could do harm",
+      "affects": [
+        "what is reported about an item two raters accept: two outcomes where there was one",
+        "the sheet: an example column, four anchor lines, a repaired harm header and the answer columns moved from E, F, G to F, G, H",
+        "the time the sheet asks of a rater, which rises from an estimated 30 minutes to 45"
+      ],
+      "why": "The investigator asked why the scale is not simply yes or no, and answered it: with a binary you cannot tell agreement from indecision. That is only true if the four points are used for something, and they were not -- the rule collapsed them to the cut and nothing else read them. Now the tier an item lands in depends on the third rater's step, so the resolution is paid for. The anchors and the examples are the same argument at the other end: a rater asked to judge 'non-stigmatising language' from one sentence, on a scale of four undefined adjectives, is not being asked a question that has an answer.",
+      "the_precedent": "MentalHealthBench (OpenAI, 2026) built its rubrics with more than 80 licensed clinicians and keeps a criterion where at least two of three experts agree and the third does not contradict it. That is the middle tier here. It is not adopted as the retention rule, because their third expert adjudicates and ours does not, and because three raters rating a fixed pool is a weaker design than eighty authoring criteria.",
+      "not_decided_here": "Whether a contested item of either tier returns in a second round. No second panel is planned."
+    }
+  ],
+  "content_validity": {
+    "status": "registered before any rating exists; no answer has been collected and no sheet has been sent. The pool was 34 items when the rule was registered and is larger now; catalog/catalog.json holds the list the sheet is built from, and the sheet takes its count from that list rather than stating one.",
+    "registered_on": "2026-10-07",
+    "procedure": {
+      "named": "expert rating of the item pool for relevance, with a retention threshold declared in advance; a screening round of a modified Delphi",
+      "source": "S12",
+      "source_quotes": [
+        "Multiple judges have been used (typically ranging from 5 to 7)",
+        "an increase in the number of experts has been found to increase the robustness of the ratings"
+      ],
+      "what_the_source_recommends": "S12 names three ways to quantify the judges' assessments, the content validity ratio, the content validity index and Cohen's kappa, and recommends kappa as the most efficient. The numeric thresholds conventionally used with the first two come from Lawshe (1975), which this project has not retrieved and takes nothing from, and Lynn (1986), which it read on 2026-10-22 through the university's proxy. What Lynn's Table 2 requires of three experts is the rule this project had already adopted a day earlier on its own argument: all three. The quotes are in research/gen2/panel-scale-sources.json, with what each one settles and what was not read beside it.",
+      "primary_sources_read": "research/gen2/panel-scale-sources.json"
+    },
+    "panel": {
+      "raters": 3,
+      "profile": "psychotherapy researchers or practising therapists, none of them the instrument's author and none the assistant",
+      "identities": "held locally; a rater is named in the paper only with their consent",
+      "independence_to_record_per_rater": "whether the rater will be an author of the paper, because a rater who will be an author is not an independent judge and must be reported as a co-author's rating",
+      "below_the_typical_range": "S12 calls five to seven typical and this panel is three. Lynn (1986), the source S12 cites for the content validity index, names three as the floor: 'in content/domain areas of sufficient restriction to preclude large numbers of experts, a minimum of three experts should be used', and calls two 'not only statistically unjustifiable' but a risk of concluding that content validity is absent when it is not. Three is therefore a floor this project meets rather than simply fewer than typical -- on a condition it has to argue rather than assume, that the domain precludes more. The arithmetic is coarse at three either way, and the round is still reported as a screening of the pool and not as established content validity.",
+      "independence_of_the_ratings": "each rater answers on their own copy and sees no other rater's answers; a shared sheet would make the second and third answer a reaction to the first"
+    },
+    "what_is_rated": {
+      "items": "every candidate of the catalog, including those the round does not measure, the one the investigator dropped on 2026-10-05, and K35 and K36, which arrived on 2026-10-07 from a source read in full",
+      "shown_per_item": "the code, the Czech name, one sentence of definition, the catalog's positive and negative example for that criterion, and what the property is judged over, which is one note for thirty-six of them, several sessions with one client for one and a model across clients for two; no state, no origin, no citation, no measurement rule and no indication of what the assistant or the investigator thinks. The examples were added on 2026-10-22: a criterion written as the absence of a fault cannot be judged from its positive example alone, which reads as an ordinary sentence, so both halves are shown.",
+      "why_blind_to_state": "The sheet carries the code, the Czech name, one sentence, the catalog's positive and negative example, and what the property is judged over. It carries no state, no origin, no citation, no measurement rule and none of this project's own relevance ratings. That is the sheet; it is not a controlled condition. The whole catalog, including those ratings, is on a published page, and nothing prevents a rater from finding it. The investigator states that none of the three has seen that page, and the sheet asks them not to look the criteria up before answering. Both of those are reported as what they are -- his statement and a request -- and not as blinding that anyone enforced.",
+      "pool_changes_before_the_panel": "A pool may grow until the first sheet is sent, and two items were added on 2026-10-07. After an answer exists it may not: adding an item then would mean some raters rated it and others did not, and the threshold is a proportion of three. If a property is found after the panel has answered, it waits for a second round and is reported as a later addition."
+    },
+    "questions": [
+      {
+        "id": "relevance",
+        "text": "Is this relevant to the quality of a psychotherapy session note?",
+        "scale": [
+          "not relevant",
+          "somewhat relevant",
+          "quite relevant",
+          "highly relevant"
+        ],
+        "counts_as_relevant": "quite relevant or highly relevant",
+        "scale_source": "Four points with the cut above the midpoint is Lynn's (1986), read on 2026-10-22: 'the 4-point scale is preferable because it does not include the ambivalent middle rating common in odd number rating scales', and Davis (1992) computes the index from 'the total number of items ranked 3 or 4 by both reviewers'. The labels are not Lynn's, whose third and fourth options are 'relevant but needs minor alteration' and 'very relevant and succinct' -- about what to do with the item, not only about how relevant it is. Whether this project's wording is Davis's is unsettled: the figure that would settle it was not read, which research/gen2/panel-scale-sources.json records as unread. Lawshe (1975) remains unretrieved and nothing is taken from it.",
+        "anchors": "Each step carries a sentence saying what it means, in research/gen2/catalog/czech.json under vocabulary.relevance_scale, and the sheet builds those lines from there. Until 2026-10-22 the four steps were four adjectives with no definition, so what the panel's agreement would have measured was agreement on vocabulary."
+      },
+      {
+        "id": "harm",
+        "text": "Could measuring this property mislead, or harm a client or a therapist?",
+        "scale": [
+          "no",
+          "yes, and I say how"
+        ],
+        "effect": "a yes is reported for the item whatever its relevance count, and the reason is kept verbatim"
+      },
+      {
+        "id": "missing",
+        "text": "What important property of a note is missing from this list?",
+        "scale": [
+          "free text, once per rater, not per item"
+        ],
+        "effect": "a property named here enters the pool as a candidate with the rater as its origin, and is rated in a second round if the panel is asked again. The question itself is Lynn's (1986) recommendation, 'The experts, in addition to judging each item, should identify any area(s) that have been omitted from the instrument', which this project had written without knowing."
+      }
+    ],
+    "retention_rule": {
+      "declared_before_any_answer": true,
+      "recorded_on": "2026-10-07",
+      "amended_on": "2026-10-21",
+      "amended_before_any_answer": true,
+      "what_registered_means_here": "recorded in this tracked protocol before use. The project has no external preregistration at all: registration.status is not_registered and local_timestamp_is_registration is false. A rule may be amended while no answer exists, which is the case here, and the amendment carries its date.",
+      "index": "the proportion of the three raters who answer quite or highly relevant",
+      "3_of_3": "retained for measurement where an operational rule exists",
+      "1_of_3_or_0": "removed from the measured set; the candidate stays in the catalog with the panel's rating as the reason, which is the same treatment every other unmeasured candidate gets",
+      "chance_levels_under_a_uniform_rater": {
+        "one_rater_calls_it_relevant": 0.5,
+        "at_least_2_of_3": 0.5,
+        "3_of_3": 0.125,
+        "at_least_3_of_5": 0.5,
+        "null": "a rater choosing uniformly among the four points. Nobody behaves like that, so these are a floor for reading the index and not a model of the panel; they are quoted with the null named."
+      },
+      "missing_answer": "A blank is not an answer. Where a rater leaves an item unrated the index is not computed for it: the item is reported as rated by fewer than three and is not measured. Counting the blank as not relevant would invent a judgement nobody made, and taking the proportion over the raters who did answer would apply a different rule to that item than to every other -- and an item left blank is likely to be one of the hard ones, so the bias has a direction.",
+      "harm_flag": "an item any rater flags for harm is reported with the flag and is not measured in this round whatever its relevance count",
+      "agreement": "Krippendorff's alpha on the ordinal four-point answers over all three raters, with the three pairwise Cohen's kappas beside it. The rule used to name Cohen's kappa alone, which is defined for two raters and could not report the panel it described; S12 recommends kappa over the content validity ratio and index and does not say how to apply it to three. Both are published, with the caveat that three raters over a pool this size give an imprecise estimate, and alpha is the one quoted in prose.",
+      "why_the_cut_is_shown_to_the_raters": "The sheet already told them what happens to their answers, and a rater who is not told where the line falls guesses. The cost is named rather than avoided: a rater who knows the cut can answer at the extremes to push an item in or out, which is a risk the alternative does not remove, it only hides.",
+      "what_the_rule_does_not_do": "it does not decide whether an item is measurable, only whether the panel judges it relevant. A relevant item with no operational rule stays unmeasured for that reason and the two reasons are reported apart.",
+      "supported_by": "Lynn (1986) Table 2, 'Proportion of Experts (Above the Line) Whose Endorsement Is Required to Establish Content Validity Beyond the .05 Level of Significance', whose row for three experts is 1.00. Read on 2026-10-22, the day after this rule was adopted from the chance levels above; the dates are kept so that the agreement can be read as agreement and not as the rule's derivation. See research/gen2/panel-scale-sources.json.",
+      "agreement_the_field_expects": "Davis (1992) expects of a new instrument that 'investigators should seek 80% or better agreement among reviewers', and counts agreement at both ends of the cut: items both raters put at 1 or 2, plus items both put at 3 or 4. This project reports Krippendorff's alpha over the four ordinal answers, which is stricter and not the same quantity, so the 80% is named as the expectation the field has and not as a threshold this panel is measured against. A percentage agreement computed Davis's way is published beside alpha so that the comparison a reader wants is available.",
+      "2_of_3_nobody_against": "two raters answer quite or highly relevant and the third answers somewhat relevant. Published as contested with all three reasons, and not measured in this round. This is the shape MentalHealthBench retains on and this project does not, because its third expert adjudicates and this one does not.",
+      "2_of_3_one_against": "two raters answer quite or highly relevant and the third answers not relevant. Published as contested with the dissent given its own weight, and not measured. A yes/no answer could not tell this tier from the one above it, which is what the four points are for.",
+      "modified_kappa": "Polit, Beck and Owen (2007) proposed a modified kappa that corrects the content validity index for chance agreement, which is the fault this project found in its own rule on 2026-10-21. It is computed and published beside Krippendorff's alpha and the pairwise Cohen's kappas. Its assumption is named wherever it appears: it treats chance endorsement as a coin flip, the same null as the chance levels above, and three raters who share a training and a professional culture are not three coins."
+    },
+    "consequences_recorded_in_advance": [
+      "The measured set after the panel may differ from the sixteen chosen before it, and the pilot runs on the panel's set.",
+      "If the panel retains the criterion the investigator dropped on 2026-10-05, that decision was wrong and the paper says so.",
+      "If the panel drops a criterion the assistant proposed, the same applies in the other direction.",
+      "A panel of three cannot establish content validity, so the paper claims a screening of the pool by three independent raters and reports the gap that remains."
+    ]
+  }
+}

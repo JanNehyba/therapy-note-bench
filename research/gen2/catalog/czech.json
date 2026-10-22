@@ -1798,9 +1798,25 @@
       [
         "Hodnocení kritérií kvality zápisu ze psychoterapeutického sezení"
       ],
+      [
+        "K čemu to je. Stavíme nástroj, kterým půjde porovnat, jak dobře umí umělá inteligence napsat zápis ze sezení. Modely takové zápisy dnes píšou v praxi, u nás i v USA, a chybí shoda na tom, podle čeho se pozná dobrý zápis. Než začneme cokoli měřit, potřebujeme vědět, které vlastnosti zápisu vůbec stojí za měření."
+      ],
       [],
       [
-        "Co se po vás chce. Níže je {count} vlastností, které by zápis ze sezení mohl mít. U každé odpovězte na dvě otázky. Odhadem 45 minut. Nepotřebujete nic číst předem."
+        "Níže je {count} vlastností, které by zápis mohl mít. Posbírali jsme je z odborné literatury a z vlastní práce."
+      ],
+      [],
+      [
+        "{purpose}"
+      ],
+      [],
+      [
+        "Co posuzujete. Zápis, který z nahrávky nebo přepisu sezení napsala umělá inteligence. Část kritérií je o obsahu (je tam to podstatné? nevymýšlí si?), část o jazyce a formě (čte se to přirozeně? sedí odborné termíny?). Posuzujte je pro češtinu i angličtinu zároveň; pokud si myslíte, že se to mezi jazyky liší, napište to do poznámky."
+      ],
+      [],
+      [],
+      [
+        "Co se po vás chce. U každé vlastnosti odpovězte na dvě otázky. Odhadem 45 minut na jeden list. Nepotřebujete nic číst předem."
       ],
       [],
       [
@@ -1827,7 +1843,7 @@
         "Pořadí kritérií je zamíchané a nic o nich neprozrazujeme, abyste je posoudili, a ne potvrzovali, co si o nich myslíme my."
       ],
       [
-        "Jak se s tím naloží: pravidlo bylo zapsané předem, 7. 10. 2026, a upřesněné 21. 10. 2026, pořád ještě než vznikla jakákoli odpověď. Měří se jen to, co za podstatné označí všichni tři. Kde se neshodnete, vlastnost se zveřejní jako sporná včetně vašich důvodů a neměří se. Dva ze tří už tedy nestačí: při odpovídání naslepo by dva ze tří vyšli v polovině případů."
+        "Jak se s tím naloží: pravidlo bylo zapsané předem, 7. 10. 2026, a upřesněné 21. 10. 2026, pořád ještě než vznikla jakákoli odpověď. Měří se jen to, co za podstatné označí všichni čtyři. Kde se neshodnete, vlastnost se zveřejní jako sporná včetně vašich důvodů a neměří se. Tři ze čtyř už tedy nestačí: při odpovídání naslepo by tři ze čtyř vyšli skoro v každém třetím případě, kdežto všichni čtyři jen v jednom ze šestnácti."
       ],
       [
         "Když odpověď u některé vlastnosti vynecháte, nepočítá se to jako „nepodstatné“. Ta vlastnost se vykáže jako neposouzená všemi třemi a neměří se, takže prázdné políčko není hlas pro ani proti."
@@ -1894,8 +1910,31 @@
         "text": "Sloupec G je nepovinná poznámka: cokoli, co vám u té vlastnosti vrtá hlavou.",
         "until": "2026-10-22",
         "why": "Named a column letter that the example column moved, or asked question 1 without the four anchors that now follow it."
+      },
+      {
+        "text": "Co se po vás chce. Níže je {count} vlastností, které by zápis ze sezení mohl mít. U každé odpovězte na dvě otázky. Odhadem 45 minut. Nepotřebujete nic číst předem.",
+        "until": "2026-10-22",
+        "why": "Named three raters where the panel is four, or stated the count and the time before the framing that now carries them."
+      },
+      {
+        "text": "Jak se s tím naloží: pravidlo bylo zapsané předem, 7. 10. 2026, a upřesněné 21. 10. 2026, pořád ještě než vznikla jakákoli odpověď. Měří se jen to, co za podstatné označí všichni tři. Kde se neshodnete, vlastnost se zveřejní jako sporná včetně vašich důvodů a neměří se. Dva ze tří už tedy nestačí: při odpovídání naslepo by dva ze tří vyšli v polovině případů.",
+        "until": "2026-10-22",
+        "why": "Named three raters where the panel is four, or stated the count and the time before the framing that now carries them."
       }
-    ]
+    ],
+    "purposes": {
+      "progress_note": {
+        "title": "Průběžný zápis do dokumentace",
+        "description": "Tenhle list se ptá na PRŮBĚŽNÝ ZÁPIS DO DOKUMENTACE. Je součástí zdravotnické dokumentace. Čte ho tým, který přebírá péči, a plátce. Klient na něj má právo přístupu. Patří do něj průběh léčby, intervence, reakce klienta, riziko a plán.",
+        "maps_to_code": "continuity"
+      },
+      "therapeutic_note": {
+        "title": "Terapeutova vlastní poznámka",
+        "description": "Tenhle list se ptá na TERAPEUTOVU VLASTNÍ POZNÁMKU. Je to analýza obsahu rozhovoru, vedená odděleně od dokumentace. Neslouží k předání ani k vykázání. Podle americké úpravy je z práva klienta na přístup vyjmutá a výslovně do ní nepatří diagnóza, plán, symptomy, prognóza ani pokrok — to všechno má být v dokumentaci.",
+        "maps_to_code": null
+      }
+    },
+    "both_tabs": "Táž vlastnost může být na jednom listu podstatná a na druhém ne. To je přesně to, co chceme zjistit, takže se nesnažte odpovídat stejně."
   },
   "page": {
     "title": "Všechna kritéria v jedné tabulce",

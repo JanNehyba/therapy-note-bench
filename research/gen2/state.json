@@ -114,9 +114,9 @@
     }
   },
   "protocol": {
-    "version": "2.13.0",
+    "version": "2.14.0",
     "recorded_date": "2026-10-14",
-    "supersedes": "2.12.0",
+    "supersedes": "2.13.0",
     "archived": [
       "1.0.0",
       "2.0.0",
@@ -131,7 +131,8 @@
       "2.9.0",
       "2.10.0",
       "2.11.0",
-      "2.12.0"
+      "2.12.0",
+      "2.13.0"
     ],
     "status": "protocol_amended_before_pilot_search_partially_executed",
     "pilot_status": "not_run",
@@ -173,7 +174,7 @@
     "catalog_status": "AI-authored proposals from the scoping search of 2026-09-13, translated to English by the coding assistant on 2026-09-16. No human acceptance decision exists for any entry; the executable registry is derived from this catalog only as a draft that the core refuses to freeze until humans review it."
   },
   "panel": {
-    "raters": 3,
+    "raters": 4,
     "registration_status_as_the_protocol_states_it": "registered before any rating exists; no answer has been collected and no sheet has been sent. The pool was 34 items when the rule was registered and is larger now; catalog/catalog.json holds the list the sheet is built from, and the sheet takes its count from that list rather than stating one.",
     "retention_rule_declared_before_any_answer": true,
     "note": "Nothing here is read from local/panel/, where the sheets are built. That directory is gitignored, so what it holds differs between machines and a state file that reported it would not be the same file twice. Whether a sheet has been sent and whether an answer exists are quoted from the protocol's own registration above, which is tracked and is the one place to correct if it is wrong."

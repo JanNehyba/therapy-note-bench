@@ -341,7 +341,7 @@ removed with K19 on 2026-10-05. The protocol records
 the executable count at freeze rather than capping it. The registry refuses to
 freeze while any used subject lacks an accepted decision.
 
-The feasibility pilot (protocol 2.13.0) freezes 16 generation jobs over two
+The feasibility pilot (protocol 2.14.0) freezes 16 generation jobs over two
 cohorts, two English AnnoMI conversations and their Czech translations, two
 purposes and two generator families, and balances an 8-note human sample across
 them. Two Czech psychologists, neither the instrument author, rate under a
@@ -398,7 +398,12 @@ for expert judges who "should be independent of those who developed the item
 pool" (Boateng et al., 2018) and calls five to seven of them typical. The pool
 was developed by the investigator with the assistant, and on 2026-10-07, before
 any rating existed, a retention threshold was recorded in the tracked protocol
-and the whole pool is to be put to three therapists who are neither. The
+and the whole pool is to be put to four therapists who are neither. Each of them rates every criterion
+twice, once for a note that belongs to the record and once for the clinician's
+own note, on separate tabs whose order alternates between raters: the two are
+different genres, the American rule keeps diagnosis, plan, symptoms, prognosis
+and progress out of the second by name, and a property essential to the first
+may be pointless in the second. That is the finding the round is looking for. The
 project has no external preregistration, and a local timestamp is not one. No
 sheet has been sent and no answer has been collected, which the protocol
 records; the rule, amended on 2026-10-21 while that was still true, is that an

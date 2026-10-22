@@ -1,6 +1,6 @@
 {
   "id": "therapy-note-construct-review",
-  "version": "2.13.0",
+  "version": "2.14.0",
   "status": "protocol_amended_before_pilot_search_partially_executed",
   "recorded_date": "2026-10-14",
   "design": "Instrument development informed by a systematic scoping review, expert proposals and empirical observations",
@@ -298,8 +298,8 @@
     "review_completion": "Only executed searches and verified decisions count as completed; blocked sources remain named gaps",
     "scope": "Report selected and required methods, planned/applicable/assessed units, and incomplete critical-error assessment even in public aggregates"
   },
-  "supersedes": "2.12.0",
-  "amendment_reason": "D21: an item two of three raters accept is reported in two tiers by what the third said, which is the first use the four-point scale has had beyond its cut; the four steps get anchors; the sheet gets the catalog's examples; and the blinding claim shrinks to the investigator's statement plus a request, because the catalog is published.",
+  "supersedes": "2.13.0",
+  "amendment_reason": "D22: the panel is four raters and rates every criterion twice, once per note type, on separate tabs with alternating order. Unanimity among four is chance 0.0625 against 0.125 among three. Audit leaves the served purposes and a therapeutic note enters; what the code calls continuity is the progress note and the mapping is recorded.",
   "retrieval_gaps": "Record reports not retrieved separately from full-text eligibility exclusions; unavailable databases remain named gaps",
   "expert_inputs": "May enter throughout development. Later support does not rewrite historical origin; author or colleague proposals do not imply consensus.",
   "registration": {
@@ -592,6 +592,22 @@
       "why": "The investigator asked why the scale is not simply yes or no, and answered it: with a binary you cannot tell agreement from indecision. That is only true if the four points are used for something, and they were not -- the rule collapsed them to the cut and nothing else read them. Now the tier an item lands in depends on the third rater's step, so the resolution is paid for. The anchors and the examples are the same argument at the other end: a rater asked to judge 'non-stigmatising language' from one sentence, on a scale of four undefined adjectives, is not being asked a question that has an answer.",
       "the_precedent": "MentalHealthBench (OpenAI, 2026) built its rubrics with more than 80 licensed clinicians and keeps a criterion where at least two of three experts agree and the third does not contradict it. That is the middle tier here. It is not adopted as the retention rule, because their third expert adjudicates and ours does not, and because three raters rating a fixed pool is a weaker design than eighty authoring criteria.",
       "not_decided_here": "Whether a contested item of either tier returns in a second round. No second panel is planned."
+    },
+    {
+      "id": "D22",
+      "date": "2026-10-22",
+      "origin": "investigator",
+      "decision": "The panel is four raters. An item enters the measured set only where all four answer quite or highly relevant; three of four is published as contested in two tiers by what the fourth said, and two or fewer removes it. Each rater rates every criterion twice, once for a progress note and once for a therapeutic note, on separate tabs whose order alternates between raters. The sheet states what the instrument is for and which note type each tab asks about.",
+      "replaces": "a panel of three rating one undifferentiated session note, and the served purposes continuity and audit",
+      "affects": [
+        "the retention rule, whose chance level falls from 0.125 to 0.0625",
+        "what each rater is asked: 78 judgements instead of 39, an estimated 45 minutes a tab",
+        "the served purposes: audit leaves the round and a therapeutic note enters it",
+        "every relevance value in the catalog, which is the assistant's and which the panel's answers replace for these two note types"
+      ],
+      "why": "The investigator named four raters and asked for the two note types to be rated apart. Both improve the instrument: four raters halve the chance level of the retention rule, and two tabs measure the thing the round is actually about, which is that a property essential to a note the care team reads may be pointless in a note the clinician keeps for themselves. Rating them in two columns of one tab would have produced a second answer anchored on the first.",
+      "the_purposes_are_not_the_code_s_purposes": "What the code calls `continuity` -- 'enable a therapist to resume care safely at the next session' -- is the progress note under another name, and the sheet records that mapping. The therapeutic note has no profile in the code. `audit` leaves the served set: it is a payer's view of a progress note, not a second genre of note. The identifiers appear in 264 places and are not renamed here; the rename is due before the pilot runs, and the pilot has not run.",
+      "not_decided_here": "How a contested item is treated if the two tabs disagree about it -- essential as a progress note and not as a therapeutic note is not a contested item, it is the finding. The reporting of that case is written when the answers exist."
     }
   ],
   "content_validity": {
@@ -608,18 +624,26 @@
       "primary_sources_read": "research/gen2/panel-scale-sources.json"
     },
     "panel": {
-      "raters": 3,
+      "raters": 4,
       "profile": "psychotherapy researchers or practising therapists, none of them the instrument's author and none the assistant",
       "identities": "held locally; a rater is named in the paper only with their consent",
       "independence_to_record_per_rater": "whether the rater will be an author of the paper, because a rater who will be an author is not an independent judge and must be reported as a co-author's rating",
       "below_the_typical_range": "S12 calls five to seven typical and this panel is three. Lynn (1986), the source S12 cites for the content validity index, names three as the floor: 'in content/domain areas of sufficient restriction to preclude large numbers of experts, a minimum of three experts should be used', and calls two 'not only statistically unjustifiable' but a risk of concluding that content validity is absent when it is not. Three is therefore a floor this project meets rather than simply fewer than typical -- on a condition it has to argue rather than assume, that the domain precludes more. The arithmetic is coarse at three either way, and the round is still reported as a screening of the pool and not as established content validity.",
-      "independence_of_the_ratings": "each rater answers on their own copy and sees no other rater's answers; a shared sheet would make the second and third answer a reaction to the first"
+      "independence_of_the_ratings": "each rater answers on their own copy and sees no other rater's answers; a shared sheet would make the second and third answer a reaction to the first",
+      "design": "Four raters, each rating every criterion twice: once for a progress note and once for a therapeutic note, on separate tabs rather than in two columns, because an answer made beside the previous one is an answer about it. Which tab comes first alternates between raters, two and two, so that fatigue does not accumulate on the same note type and read as a difference between them. Lynn (1986) requires all four of four in the same table that requires all three of three, so the rule is unchanged in kind by the extra rater and stricter in effect."
     },
     "what_is_rated": {
       "items": "every candidate of the catalog, including those the round does not measure, the one the investigator dropped on 2026-10-05, and K35 and K36, which arrived on 2026-10-07 from a source read in full",
       "shown_per_item": "the code, the Czech name, one sentence of definition, the catalog's positive and negative example for that criterion, and what the property is judged over, which is one note for thirty-six of them, several sessions with one client for one and a model across clients for two; no state, no origin, no citation, no measurement rule and no indication of what the assistant or the investigator thinks. The examples were added on 2026-10-22: a criterion written as the absence of a fault cannot be judged from its positive example alone, which reads as an ordinary sentence, so both halves are shown.",
       "why_blind_to_state": "The sheet carries the code, the Czech name, one sentence, the catalog's positive and negative example, and what the property is judged over. It carries no state, no origin, no citation, no measurement rule and none of this project's own relevance ratings. That is the sheet; it is not a controlled condition. The whole catalog, including those ratings, is on a published page, and nothing prevents a rater from finding it. The investigator states that none of the three has seen that page, and the sheet asks them not to look the criteria up before answering. Both of those are reported as what they are -- his statement and a request -- and not as blinding that anyone enforced.",
-      "pool_changes_before_the_panel": "A pool may grow until the first sheet is sent, and two items were added on 2026-10-07. After an answer exists it may not: adding an item then would mean some raters rated it and others did not, and the threshold is a proportion of three. If a property is found after the panel has answered, it waits for a second round and is reported as a later addition."
+      "pool_changes_before_the_panel": "A pool may grow until the first sheet is sent, and two items were added on 2026-10-07. After an answer exists it may not: adding an item then would mean some raters rated it and others did not, and the threshold is a proportion of three. If a property is found after the panel has answered, it waits for a second round and is reported as a later addition.",
+      "purposes_rated": {
+        "progress_note": "Part of the record. The care team that takes over and the payer read it, and the client has a right of access to it. This is the purpose the code calls `continuity`, under a name that says what the note is rather than what it is for.",
+        "therapeutic_note": "The clinician's own analysis of the session, kept apart from the record, not written to be handed over or billed. Under 45 CFR 164.501 a psychotherapy note is excluded from the client's right of access and excludes by name diagnosis, functional status, treatment plan, symptoms, prognosis and progress, which belong in the record. The code has no profile for it.",
+        "audit_leaves_the_round": "A documentation audit is a payer's or an auditor's view of a progress note, not a second genre of note, so it is not one of the two the panel is asked about. The investigator's objection recorded against K07 proposed exactly this pair.",
+        "what_this_does_to_the_catalog": "Every candidate carries a relevance value per purpose and every one of them is the assistant's. For these two note types the panel's answers replace them, which is the first time any of those values will have come from somebody qualified to make it. Until the answers exist the catalog's values stand and are labelled as the assistant's wherever they are published."
+      },
+      "framing": "The sheet opens by saying what the instrument is for -- comparing how well AI writes a session note, in a field with no agreement on what makes one good -- and that the list was assembled from the literature and from this project's own work. Davis (1992) holds that an instrument review is fragmented or misdirected when reviewers are not oriented to the study; until 2026-10-22 the sheet offered no orientation at all. The wording is the investigator's and is in research/gen2/catalog/czech.json."
     },
     "questions": [
       {
@@ -659,15 +683,13 @@
       "amended_on": "2026-10-21",
       "amended_before_any_answer": true,
       "what_registered_means_here": "recorded in this tracked protocol before use. The project has no external preregistration at all: registration.status is not_registered and local_timestamp_is_registration is false. A rule may be amended while no answer exists, which is the case here, and the amendment carries its date.",
-      "index": "the proportion of the three raters who answer quite or highly relevant",
-      "3_of_3": "retained for measurement where an operational rule exists",
-      "1_of_3_or_0": "removed from the measured set; the candidate stays in the catalog with the panel's rating as the reason, which is the same treatment every other unmeasured candidate gets",
+      "index": "the proportion of the four raters who answer quite or highly relevant",
       "chance_levels_under_a_uniform_rater": {
         "one_rater_calls_it_relevant": 0.5,
-        "at_least_2_of_3": 0.5,
-        "3_of_3": 0.125,
-        "at_least_3_of_5": 0.5,
-        "null": "a rater choosing uniformly among the four points. Nobody behaves like that, so these are a floor for reading the index and not a model of the panel; they are quoted with the null named."
+        "at_least_3_of_4": 0.3125,
+        "4_of_4": 0.0625,
+        "3_of_3_for_comparison": 0.125,
+        "null": "a rater choosing uniformly among the four points. Nobody behaves like that, so these are a floor for reading the index and not a model of the panel; they are quoted with the null named. Going from three raters to four halves the chance level of the retention rule, which is why the rule did not have to be loosened to accommodate a fourth opinion."
       },
       "missing_answer": "A blank is not an answer. Where a rater leaves an item unrated the index is not computed for it: the item is reported as rated by fewer than three and is not measured. Counting the blank as not relevant would invent a judgement nobody made, and taking the proportion over the raters who did answer would apply a different rule to that item than to every other -- and an item left blank is likely to be one of the hard ones, so the bias has a direction.",
       "harm_flag": "an item any rater flags for harm is reported with the flag and is not measured in this round whatever its relevance count",
@@ -676,9 +698,11 @@
       "what_the_rule_does_not_do": "it does not decide whether an item is measurable, only whether the panel judges it relevant. A relevant item with no operational rule stays unmeasured for that reason and the two reasons are reported apart.",
       "supported_by": "Lynn (1986) Table 2, 'Proportion of Experts (Above the Line) Whose Endorsement Is Required to Establish Content Validity Beyond the .05 Level of Significance', whose row for three experts is 1.00. Read on 2026-10-22, the day after this rule was adopted from the chance levels above; the dates are kept so that the agreement can be read as agreement and not as the rule's derivation. See research/gen2/panel-scale-sources.json.",
       "agreement_the_field_expects": "Davis (1992) expects of a new instrument that 'investigators should seek 80% or better agreement among reviewers', and counts agreement at both ends of the cut: items both raters put at 1 or 2, plus items both put at 3 or 4. This project reports Krippendorff's alpha over the four ordinal answers, which is stricter and not the same quantity, so the 80% is named as the expectation the field has and not as a threshold this panel is measured against. A percentage agreement computed Davis's way is published beside alpha so that the comparison a reader wants is available.",
-      "2_of_3_nobody_against": "two raters answer quite or highly relevant and the third answers somewhat relevant. Published as contested with all three reasons, and not measured in this round. This is the shape MentalHealthBench retains on and this project does not, because its third expert adjudicates and this one does not.",
-      "2_of_3_one_against": "two raters answer quite or highly relevant and the third answers not relevant. Published as contested with the dissent given its own weight, and not measured. A yes/no answer could not tell this tier from the one above it, which is what the four points are for.",
-      "modified_kappa": "Polit, Beck and Owen (2007) proposed a modified kappa that corrects the content validity index for chance agreement, which is the fault this project found in its own rule on 2026-10-21. It is computed and published beside Krippendorff's alpha and the pairwise Cohen's kappas. Its assumption is named wherever it appears: it treats chance endorsement as a coin flip, the same null as the chance levels above, and three raters who share a training and a professional culture are not three coins."
+      "modified_kappa": "Polit, Beck and Owen (2007) proposed a modified kappa that corrects the content validity index for chance agreement, which is the fault this project found in its own rule on 2026-10-21. It is computed and published beside Krippendorff's alpha and the pairwise Cohen's kappas. Its assumption is named wherever it appears: it treats chance endorsement as a coin flip, the same null as the chance levels above, and three raters who share a training and a professional culture are not three coins.",
+      "4_of_4": "retained for measurement where an operational rule exists",
+      "3_of_4_nobody_against": "three raters answer quite or highly relevant and the fourth answers somewhat relevant. Published as contested with all four reasons, and not measured in this round. This is the shape MentalHealthBench retains on and this project does not.",
+      "3_of_4_one_against": "three raters answer quite or highly relevant and the fourth answers not relevant. Published as contested with the dissent given its own weight, and not measured. A yes/no answer could not tell this tier from the one above it, which is what the four points are for.",
+      "2_of_4_or_fewer": "removed from the measured set; the candidate stays in the catalog with the panel's rating as the reason, which is the same treatment every other unmeasured candidate gets"
     },
     "consequences_recorded_in_advance": [
       "The measured set after the panel may differ from the sixteen chosen before it, and the pilot runs on the panel's set.",
