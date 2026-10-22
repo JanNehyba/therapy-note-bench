@@ -250,33 +250,34 @@ def test_the_sheet_has_one_row_per_candidate(catalog, czech, codes):
     assert len({judged[code] for code in codes}) == 3, "all three units reach the sheet"
 
 
-def test_the_sheet_tells_the_rater_the_number_it_then_lists(catalog, czech, codes):
+def test_no_text_on_the_sheet_states_how_many_criteria_it_holds(catalog, czech, codes):
     """The one artefact of this project that goes to people outside it.
 
-    The instruction read "Nize je 36 vlastnosti" while the sheet listed 39: true
-    on 2026-10-07, false from 2026-10-14 when three criteria arrived, and held by
-    nothing. The count is now filled from the list it counts, so the sentence
-    cannot be wrong unless the sheet is empty, and no instruction line may carry
-    a typed figure again.
+    An instruction read "Nize je 36 vlastnosti" while the sheet listed 39: true
+    on 2026-10-07, false from 2026-10-14 when three criteria arrived, and held
+    by nothing. It was repaired by filling the count from the list it counts,
+    and on 2026-10-22 the sentence went altogether with the rest of the
+    preamble. A count that no text states cannot go stale, so what is checked
+    now is that none does: the rows are the only statement of how many there
+    are.
     """
     table = panel_sheet.rows(czech, list(codes), catalog)
     # The sheet carries blank separator rows, so a row may be empty.
     items = [row for row in table if row and row[0] in set(codes)]
     assert len(items) == len(codes)
 
-    lines = len(czech["panel_sheet"]["instructions"])
-    instructions = [row[0] for row in table[:lines] if row]
-    assert any(str(len(codes)) in line for line in instructions), (
-        "no instruction tells the rater how many properties follow"
-    )
-    for line in instructions:
-        for wrong in (len(codes) - n for n in (1, 2, 3, 5, 6)):
-            assert str(wrong) not in line, f"a count other than {len(codes)} is typed in"
-
-    # The placeholder, not the value, is what the data file holds.
-    raw = " ".join(cell for line in czech["panel_sheet"]["instructions"] for cell in line)
-    assert "{count}" in raw
-    assert str(len(codes)) not in raw, "the sheet's own text states the count instead of taking it"
+    everything = [
+        cell
+        for rows in (table, panel_sheet.legend(czech, list(codes)))
+        for row in rows
+        for cell in row
+        if cell
+    ]
+    for line in everything:
+        for near in range(len(codes) - 6, len(codes) + 7):
+            # Not inside a criterion code: K33 to K39 are names, not counts.
+            found = re.search(rf"(?<!K){near}", line)
+            assert not found, f"a count of criteria is typed into {line[:60]!r}"
 
 
 def test_the_sheet_is_blind(catalog, czech, codes):
@@ -308,8 +309,11 @@ def test_every_step_of_the_scale_reaches_the_sheet_with_what_it_means(catalog, c
     """
     scale = czech["vocabulary"]["relevance_scale"]
     assert len(scale) == 4
-    table = panel_sheet.rows(czech, codes, catalog)
-    text = "\n".join("\t".join(row) for row in table)
+    # The anchors moved off the rating tab on 2026-10-22 with the rest of the
+    # preamble: twenty-nine rows stood between a therapist and the first
+    # criterion, and most of them were written for somebody else. They are on
+    # the Legend tab, which is what a rater reads while answering.
+    text = "\n".join("\t".join(row) for row in panel_sheet.legend(czech, codes))
     for step in scale:
         assert step["label"] in text, step["label"]
         assert len(step["anchor"].split()) >= 8, step["label"]
@@ -319,8 +323,7 @@ def test_every_step_of_the_scale_reaches_the_sheet_with_what_it_means(catalog, c
     # looks for it.
     essential = [step["label"] for step in scale if step["counts_as_essential"]]
     assert essential == [step["label"] for step in scale[-2:]]
-    said = " ".join(cell for line in czech["panel_sheet"]["instructions"] for cell in line)
-    assert all(label in said for label in essential)
+    assert all(label in text for label in essential), "the cut is named on the legend"
 
 
 def test_each_tab_says_which_of_the_two_notes_it_asks_about(catalog, czech, codes):
@@ -333,21 +336,28 @@ def test_each_tab_says_which_of_the_two_notes_it_asks_about(catalog, czech, code
     property can be essential in one and pointless in the other, which is what
     the panel is being asked, so each tab has to say which one it means.
     """
-    purposes = czech["panel_sheet"]["purposes"]
+    sheet = czech["panel_sheet"]
+    purposes = sheet["purposes"]
     assert list(purposes) == ["progress_note", "therapeutic_note"]
     texts = {}
     for name, purpose in purposes.items():
-        assert len(purpose["description"].split()) >= 20, name
+        # One row, not twenty-nine. The note type is the thing a rater must not
+        # forget while scrolling, so it sits on the tab that asks about it; it
+        # is said once and nowhere else, because the investigator read it twice
+        # in one workbook and refused that.
+        assert len(purpose["head"].split()) >= 10, name
         table = panel_sheet.rows(czech, codes, catalog, name)
         texts[name] = "\n".join("\t".join(row) for row in table)
-        assert purpose["description"] in texts[name]
-        # And it says that answering the same way twice is not the point.
-        assert czech["panel_sheet"]["both_tabs"] in texts[name]
+        assert table[0][0] == purpose["head"]
+        assert table[2][0] == "Kód", "the table starts on the fourth row"
     for name, other in (
         ("progress_note", "therapeutic_note"),
         ("therapeutic_note", "progress_note"),
     ):
-        assert purposes[other]["description"] not in texts[name], name
+        assert purposes[other]["head"] not in texts[name], name
+    said = "\n".join("\t".join(row) for row in panel_sheet.legend(czech, codes))
+    for purpose in purposes.values():
+        assert purpose["head"] not in said, "the note type is on its tab, not repeated"
     # One of the two is the purpose the code already has; the other is not yet
     # built, and the mapping is recorded rather than assumed.
     assert purposes["progress_note"]["maps_to_code"] == "continuity"
@@ -509,8 +519,10 @@ def test_every_rater_gets_their_own_file_for_each_purpose(tmp_path, monkeypatch)
     assert written == [
         "hodnoceni-1-1-progress_note.csv",
         "hodnoceni-1-2-therapeutic_note.csv",
+        "hodnoceni-1-legenda.csv",
         "hodnoceni-2-1-progress_note.csv",
         "hodnoceni-2-2-therapeutic_note.csv",
+        "hodnoceni-2-legenda.csv",
     ]
     # Same purpose, same questions: two raters get identical files.
     for purpose in ("progress_note", "therapeutic_note"):
@@ -518,8 +530,11 @@ def test_every_rater_gets_their_own_file_for_each_purpose(tmp_path, monkeypatch)
             (tmp_path / name).read_bytes() for name in written if name.endswith(purpose + ".csv")
         }
         assert len(same) == 1, purpose
-    # Different purpose, different sheet: the tab says which note it asks about.
-    assert len({(tmp_path / name).read_bytes() for name in written}) == 2
+    # Different purpose, different sheet: the tab says which note it asks
+    # about. The legend is the same for everyone and says it for neither.
+    rating = [name for name in written if not name.endswith("legenda.csv")]
+    assert len({(tmp_path / name).read_bytes() for name in rating}) == 2
+    assert len({(tmp_path / n).read_bytes() for n in written if n not in rating}) == 1
 
     recorded = json.loads((tmp_path / "poradi.json").read_text(encoding="utf-8"))
     assert recorded["seed"] == panel_sheet.SEED

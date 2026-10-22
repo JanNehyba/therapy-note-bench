@@ -1794,62 +1794,6 @@
     }
   },
   "panel_sheet": {
-    "instructions": [
-      [
-        "Hodnocení kritérií kvality zápisu ze psychoterapeutického sezení"
-      ],
-      [
-        "K čemu to je. Stavíme nástroj, kterým půjde porovnat, jak dobře umí umělá inteligence napsat zápis ze sezení. Modely takové zápisy dnes píšou v praxi, u nás i v USA, a chybí shoda na tom, podle čeho se pozná dobrý zápis. Než začneme cokoli měřit, potřebujeme vědět, které vlastnosti zápisu vůbec stojí za měření."
-      ],
-      [],
-      [
-        "Níže je {count} vlastností, které by zápis mohl mít. Posbírali jsme je z odborné literatury a z vlastní práce."
-      ],
-      [],
-      [
-        "{purpose}"
-      ],
-      [],
-      [
-        "Co posuzujete. Zápis, který z nahrávky nebo přepisu sezení napsala umělá inteligence. Část kritérií je o obsahu (je tam to podstatné? nevymýšlí si?), část o jazyce a formě (čte se to přirozeně? sedí odborné termíny?). Posuzujte je pro češtinu i angličtinu zároveň; pokud si myslíte, že se to mezi jazyky liší, napište to do poznámky."
-      ],
-      [],
-      [],
-      [
-        "Co se po vás chce. U každé vlastnosti odpovězte na dvě otázky. Odhadem 45 minut na jeden list. Nepotřebujete nic číst předem."
-      ],
-      [],
-      [
-        "Otázka 1, sloupec F: Je tato vlastnost podstatná pro kvalitu zápisu ze sezení? Vyberte: nepodstatné / málo podstatné / podstatné / velmi podstatné. Jako podstatné se počítají dvě horní možnosti, tedy podstatné a velmi podstatné."
-      ],
-      [
-        "{anchors}"
-      ],
-      [
-        "Otázka 2, sloupec G: Mohlo by měření této vlastnosti svádět k nesprávnému hodnocení, nebo uškodit klientovi či terapeutovi? Pokud ano, napište čím."
-      ],
-      [
-        "Sloupec H je nepovinná poznámka: cokoli, co vám u té vlastnosti vrtá hlavou."
-      ],
-      [],
-      [
-        "Na konci, pod tabulkou, je jedna otevřená otázka: co podle vás v tom seznamu chybí."
-      ],
-      [],
-      [
-        "Důležité. Vyplňujte prosím sami a nekonzultujte to s ostatními hodnotiteli: každý má vlastní kopii právě proto, aby se odpovědi neovlivňovaly."
-      ],
-      [
-        "Pořadí kritérií je zamíchané a nic o nich neprozrazujeme, abyste je posoudili, a ne potvrzovali, co si o nich myslíme my."
-      ],
-      [
-        "Jak se s tím naloží: pravidlo bylo zapsané předem, 7. 10. 2026, a upřesněné 21. 10. 2026, pořád ještě než vznikla jakákoli odpověď. Měří se jen to, co za podstatné označí všichni čtyři. Kde se neshodnete, vlastnost se zveřejní jako sporná včetně vašich důvodů a neměří se. Tři ze čtyř už tedy nestačí: při odpovídání naslepo by tři ze čtyř vyšli skoro v každém třetím případě, kdežto všichni čtyři jen v jednom ze šestnácti."
-      ],
-      [
-        "Když odpověď u některé vlastnosti vynecháte, nepočítá se to jako „nepodstatné“. Ta vlastnost se vykáže jako neposouzená všemi čtyřmi a neměří se, takže prázdné políčko není hlas pro ani proti."
-      ],
-      []
-    ],
     "header": [
       "Kód",
       "Kritérium",
@@ -1920,21 +1864,164 @@
         "text": "Jak se s tím naloží: pravidlo bylo zapsané předem, 7. 10. 2026, a upřesněné 21. 10. 2026, pořád ještě než vznikla jakákoli odpověď. Měří se jen to, co za podstatné označí všichni tři. Kde se neshodnete, vlastnost se zveřejní jako sporná včetně vašich důvodů a neměří se. Dva ze tří už tedy nestačí: při odpovídání naslepo by dva ze tří vyšli v polovině případů.",
         "until": "2026-10-22",
         "why": "Named three raters where the panel is four, or stated the count and the time before the framing that now carries them."
+      },
+      {
+        "text": "Hodnocení kritérií kvality zápisu ze psychoterapeutického sezení",
+        "until": "2026-10-22",
+        "why": "Left the sheet on 2026-10-22. The rating tab now opens with two rows and the rest is on the Legend tab; what this sentence carried was either methodology the protocol already holds -- chance levels, amendment dates, why the order is shuffled -- or orientation that belongs in the message carrying the link, in the sender's own words."
+      },
+      {
+        "text": "K čemu to je. Stavíme nástroj, kterým půjde porovnat, jak dobře umí umělá inteligence napsat zápis ze sezení. Modely takové zápisy dnes píšou v praxi, u nás i v USA, a chybí shoda na tom, podle čeho se pozná dobrý zápis. Než začneme cokoli měřit, potřebujeme vědět, které vlastnosti zápisu vůbec stojí za měření.",
+        "until": "2026-10-22",
+        "why": "Left the sheet on 2026-10-22. The rating tab now opens with two rows and the rest is on the Legend tab; what this sentence carried was either methodology the protocol already holds -- chance levels, amendment dates, why the order is shuffled -- or orientation that belongs in the message carrying the link, in the sender's own words."
+      },
+      {
+        "text": "Níže je {count} vlastností, které by zápis mohl mít. Posbírali jsme je z odborné literatury a z vlastní práce.",
+        "until": "2026-10-22",
+        "why": "Left the sheet on 2026-10-22. The rating tab now opens with two rows and the rest is on the Legend tab; what this sentence carried was either methodology the protocol already holds -- chance levels, amendment dates, why the order is shuffled -- or orientation that belongs in the message carrying the link, in the sender's own words."
+      },
+      {
+        "text": "Co posuzujete. Zápis, který z nahrávky nebo přepisu sezení napsala umělá inteligence. Část kritérií je o obsahu (je tam to podstatné? nevymýšlí si?), část o jazyce a formě (čte se to přirozeně? sedí odborné termíny?). Posuzujte je pro češtinu i angličtinu zároveň; pokud si myslíte, že se to mezi jazyky liší, napište to do poznámky.",
+        "until": "2026-10-22",
+        "why": "Left the sheet on 2026-10-22. The rating tab now opens with two rows and the rest is on the Legend tab; what this sentence carried was either methodology the protocol already holds -- chance levels, amendment dates, why the order is shuffled -- or orientation that belongs in the message carrying the link, in the sender's own words."
+      },
+      {
+        "text": "Co se po vás chce. U každé vlastnosti odpovězte na dvě otázky. Odhadem 45 minut na jeden list. Nepotřebujete nic číst předem.",
+        "until": "2026-10-22",
+        "why": "Left the sheet on 2026-10-22. The rating tab now opens with two rows and the rest is on the Legend tab; what this sentence carried was either methodology the protocol already holds -- chance levels, amendment dates, why the order is shuffled -- or orientation that belongs in the message carrying the link, in the sender's own words."
+      },
+      {
+        "text": "Otázka 1, sloupec F: Je tato vlastnost podstatná pro kvalitu zápisu ze sezení? Vyberte: nepodstatné / málo podstatné / podstatné / velmi podstatné. Jako podstatné se počítají dvě horní možnosti, tedy podstatné a velmi podstatné.",
+        "until": "2026-10-22",
+        "why": "Left the sheet on 2026-10-22. The rating tab now opens with two rows and the rest is on the Legend tab; what this sentence carried was either methodology the protocol already holds -- chance levels, amendment dates, why the order is shuffled -- or orientation that belongs in the message carrying the link, in the sender's own words."
+      },
+      {
+        "text": "Otázka 2, sloupec G: Mohlo by měření této vlastnosti svádět k nesprávnému hodnocení, nebo uškodit klientovi či terapeutovi? Pokud ano, napište čím.",
+        "until": "2026-10-22",
+        "why": "Left the sheet on 2026-10-22. The rating tab now opens with two rows and the rest is on the Legend tab; what this sentence carried was either methodology the protocol already holds -- chance levels, amendment dates, why the order is shuffled -- or orientation that belongs in the message carrying the link, in the sender's own words."
+      },
+      {
+        "text": "Sloupec H je nepovinná poznámka: cokoli, co vám u té vlastnosti vrtá hlavou.",
+        "until": "2026-10-22",
+        "why": "Left the sheet on 2026-10-22. The rating tab now opens with two rows and the rest is on the Legend tab; what this sentence carried was either methodology the protocol already holds -- chance levels, amendment dates, why the order is shuffled -- or orientation that belongs in the message carrying the link, in the sender's own words."
+      },
+      {
+        "text": "Na konci, pod tabulkou, je jedna otevřená otázka: co podle vás v tom seznamu chybí.",
+        "until": "2026-10-22",
+        "why": "Left the sheet on 2026-10-22. The rating tab now opens with two rows and the rest is on the Legend tab; what this sentence carried was either methodology the protocol already holds -- chance levels, amendment dates, why the order is shuffled -- or orientation that belongs in the message carrying the link, in the sender's own words."
+      },
+      {
+        "text": "Důležité. Vyplňujte prosím sami a nekonzultujte to s ostatními hodnotiteli: každý má vlastní kopii právě proto, aby se odpovědi neovlivňovaly.",
+        "until": "2026-10-22",
+        "why": "Left the sheet on 2026-10-22. The rating tab now opens with two rows and the rest is on the Legend tab; what this sentence carried was either methodology the protocol already holds -- chance levels, amendment dates, why the order is shuffled -- or orientation that belongs in the message carrying the link, in the sender's own words."
+      },
+      {
+        "text": "Pořadí kritérií je zamíchané a nic o nich neprozrazujeme, abyste je posoudili, a ne potvrzovali, co si o nich myslíme my.",
+        "until": "2026-10-22",
+        "why": "Left the sheet on 2026-10-22. The rating tab now opens with two rows and the rest is on the Legend tab; what this sentence carried was either methodology the protocol already holds -- chance levels, amendment dates, why the order is shuffled -- or orientation that belongs in the message carrying the link, in the sender's own words."
+      },
+      {
+        "text": "Jak se s tím naloží: pravidlo bylo zapsané předem, 7. 10. 2026, a upřesněné 21. 10. 2026, pořád ještě než vznikla jakákoli odpověď. Měří se jen to, co za podstatné označí všichni čtyři. Kde se neshodnete, vlastnost se zveřejní jako sporná včetně vašich důvodů a neměří se. Tři ze čtyř už tedy nestačí: při odpovídání naslepo by tři ze čtyř vyšli skoro v každém třetím případě, kdežto všichni čtyři jen v jednom ze šestnácti.",
+        "until": "2026-10-22",
+        "why": "Left the sheet on 2026-10-22. The rating tab now opens with two rows and the rest is on the Legend tab; what this sentence carried was either methodology the protocol already holds -- chance levels, amendment dates, why the order is shuffled -- or orientation that belongs in the message carrying the link, in the sender's own words."
+      },
+      {
+        "text": "Když odpověď u některé vlastnosti vynecháte, nepočítá se to jako „nepodstatné“. Ta vlastnost se vykáže jako neposouzená všemi čtyřmi a neměří se, takže prázdné políčko není hlas pro ani proti.",
+        "until": "2026-10-22",
+        "why": "Left the sheet on 2026-10-22. The rating tab now opens with two rows and the rest is on the Legend tab; what this sentence carried was either methodology the protocol already holds -- chance levels, amendment dates, why the order is shuffled -- or orientation that belongs in the message carrying the link, in the sender's own words."
+      },
+      {
+        "text": "Sešit se ptá na {count} vlastností, které by zápis ze sezení mohl mít.",
+        "until": "2026-10-22",
+        "why": "Left the sheet on 2026-10-22. The investigator refused the duplication and the process talk: the note type is stated once, on the tab that asks about it, and what happens to the answers goes in the message that carries the link, in the sender's own words."
+      },
+      {
+        "text": "Dva listy, dva typy zápisu",
+        "until": "2026-10-22",
+        "why": "Left the sheet on 2026-10-22. The investigator refused the duplication and the process talk: the note type is stated once, on the tab that asks about it, and what happens to the answers goes in the message that carries the link, in the sender's own words."
+      },
+      {
+        "text": "Co je podstatné v jednom, může být v druhém zbytečné. To je to, co chceme zjistit.",
+        "until": "2026-10-22",
+        "why": "Left the sheet on 2026-10-22. The investigator refused the duplication and the process talk: the note type is stated once, on the tab that asks about it, and what happens to the answers goes in the message that carries the link, in the sender's own words."
+      },
+      {
+        "text": "Sloupec „Mohlo by škodit, že se to měří?“",
+        "until": "2026-10-22",
+        "why": "Left the sheet on 2026-10-22. The investigator refused the duplication and the process talk: the note type is stated once, on the tab that asks about it, and what happens to the answers goes in the message that carries the link, in the sender's own words."
+      },
+      {
+        "text": "Pro nás stejně důležitá otázka jako ta první. Když se něco začne známkovat, modely se na to začnou optimalizovat — a někdy to jde proti klientovi. Pokud vás u některé vlastnosti něco takového napadne, napište to.",
+        "until": "2026-10-22",
+        "why": "Left the sheet on 2026-10-22. The investigator refused the duplication and the process talk: the note type is stated once, on the tab that asks about it, and what happens to the answers goes in the message that carries the link, in the sender's own words."
+      },
+      {
+        "text": "Nepovinná. Cokoli, co vám u té vlastnosti vrtá hlavou. Úplně dole pod tabulkou je místo na to, co v seznamu podle vás chybí.",
+        "until": "2026-10-22",
+        "why": "Left the sheet on 2026-10-22. The investigator refused the duplication and the process talk: the note type is stated once, on the tab that asks about it, and what happens to the answers goes in the message that carries the link, in the sender's own words."
+      },
+      {
+        "text": "Jak se s odpověďmi naloží",
+        "until": "2026-10-22",
+        "why": "Left the sheet on 2026-10-22. The investigator refused the duplication and the process talk: the note type is stated once, on the tab that asks about it, and what happens to the answers goes in the message that carries the link, in the sender's own words."
+      },
+      {
+        "text": "Měřit budeme jen to, na čem se shodnete všichni čtyři. Kde se neshodnete, vlastnost zveřejníme i s vašimi důvody a měřit ji nebudeme. Prázdné políčko není hlas proti — vlastnost se jen vykáže jako neposouzená.",
+        "until": "2026-10-22",
+        "why": "Left the sheet on 2026-10-22. The investigator refused the duplication and the process talk: the note type is stated once, on the tab that asks about it, and what happens to the answers goes in the message that carries the link, in the sender's own words."
+      },
+      {
+        "text": "Vyplňte to prosím sami, bez konzultace s ostatními. Proto má každý vlastní kopii.",
+        "until": "2026-10-22",
+        "why": "Left the sheet on 2026-10-22. The investigator refused the duplication and the process talk: the note type is stated once, on the tab that asks about it, and what happens to the answers goes in the message that carries the link, in the sender's own words."
+      },
+      {
+        "text": "Vysvětlivky ke stupňům a k oběma otázkám jsou na listu Legenda.",
+        "until": "2026-10-22",
+        "why": "Left the sheet on 2026-10-22. The investigator refused the duplication and the process talk: the note type is stated once, on the tab that asks about it, and what happens to the answers goes in the message that carries the link, in the sender's own words."
+      },
+      {
+        "text": "Průběžný zápis do dokumentace — patří do zdravotnické dokumentace. Čte ho tým, který přebírá péči, a klient na něj má právo přístupu. Patří do něj průběh léčby, intervence, reakce klienta, riziko a plán.",
+        "until": "2026-10-22",
+        "why": "Left the sheet on 2026-10-22. The investigator refused the duplication and the process talk: the note type is stated once, on the tab that asks about it, and what happens to the answers goes in the message that carries the link, in the sender's own words."
+      },
+      {
+        "text": "Terapeutova vlastní poznámka — vaše analýza sezení, vedená odděleně od dokumentace. Neslouží k předání ani k vykázání. Podle americké úpravy je z práva klienta na přístup vyjmutá a nepatří do ní diagnóza, plán, symptomy, prognóza ani pokrok.",
+        "until": "2026-10-22",
+        "why": "Left the sheet on 2026-10-22. The investigator refused the duplication and the process talk: the note type is stated once, on the tab that asks about it, and what happens to the answers goes in the message that carries the link, in the sender's own words."
       }
     ],
     "purposes": {
       "progress_note": {
         "title": "Průběžný zápis do dokumentace",
-        "description": "Tenhle list se ptá na PRŮBĚŽNÝ ZÁPIS DO DOKUMENTACE. Je součástí zdravotnické dokumentace. Čte ho tým, který přebírá péči, a plátce. Klient na něj má právo přístupu. Patří do něj průběh léčby, intervence, reakce klienta, riziko a plán.",
-        "maps_to_code": "continuity"
+        "maps_to_code": "continuity",
+        "head": "Průběžný zápis do dokumentace. Patří do zdravotnické dokumentace; čte ho tým, který přebírá péči, a klient na něj má právo přístupu."
       },
       "therapeutic_note": {
         "title": "Terapeutova vlastní poznámka",
-        "description": "Tenhle list se ptá na TERAPEUTOVU VLASTNÍ POZNÁMKU. Je to analýza obsahu rozhovoru, vedená odděleně od dokumentace. Neslouží k předání ani k vykázání. Podle americké úpravy je z práva klienta na přístup vyjmutá a výslovně do ní nepatří diagnóza, plán, symptomy, prognóza ani pokrok — to všechno má být v dokumentaci.",
-        "maps_to_code": null
+        "maps_to_code": null,
+        "head": "Terapeutova vlastní poznámka. Vaše analýza sezení, vedená odděleně od dokumentace; neslouží k předání ani k vykázání."
       }
     },
-    "both_tabs": "Táž vlastnost může být na jednom listu podstatná a na druhém ne. To je přesně to, co chceme zjistit, takže se nesnažte odpovídat stejně."
+    "legend": [
+      [
+        "Legenda"
+      ],
+      [],
+      [
+        "Co posuzujete"
+      ],
+      [
+        "Zápis, který z nahrávky nebo přepisu sezení napsala umělá inteligence. Část vlastností je o obsahu, část o jazyce a formě. Posuzujte je pro češtinu i angličtinu; pokud se to podle vás mezi jazyky liší, napište to do poznámky."
+      ],
+      [],
+      [
+        "Sloupec „Podstatné?“"
+      ],
+      [
+        "{anchors}"
+      ]
+    ]
   },
   "page": {
     "title": "Všechna kritéria v jedné tabulce",

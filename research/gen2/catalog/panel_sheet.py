@@ -67,8 +67,9 @@ def raters() -> list[dict]:
 #: could drift from the rule that counts them.
 ANCHORS = "{anchors}"
 
-#: The instruction line that the tab's own note type replaces.
-PURPOSE = "{purpose}"
+#: No text on the sheet states how many criteria it holds. One did, it read 36
+#: while the sheet listed 39, and the investigator cut the sentence that
+#: replaced it along with the rest of the preamble. The rows are the count.
 
 
 def order(codes: list[str], seed: int = SEED) -> list[str]:
@@ -77,8 +78,34 @@ def order(codes: list[str], seed: int = SEED) -> list[str]:
     return shuffled
 
 
+def legend(czech: dict, codes: list[str]) -> list[list[str]]:
+    """The tab a rater reads while answering, and the only place the method goes.
+
+    Twenty-nine rows of preamble used to stand above the first criterion, and
+    most of it was for somebody else: the chance that four people answering at
+    random would agree, the dates this protocol was amended on, why the order is
+    shuffled. Those are claims a reviewer of the paper checks and the protocol
+    holds them. Here they told four experienced therapists that we were guarding
+    against them answering randomly.
+
+    What is left is what a rater needs while answering and nowhere else: what
+    they are looking at, and what the four steps of the scale mean. The note
+    type is on the tab that asks about it and is not repeated here; what happens
+    to the answers goes in the message that carries the link.
+    """
+    sheet = czech["panel_sheet"]
+    scale = czech["vocabulary"]["relevance_scale"]
+    out = []
+    for line in sheet["legend"]:
+        if line and line[0] == ANCHORS:
+            out.extend([f"{step['label']} \u2014 {step['anchor']}"] for step in scale)
+            continue
+        out.append([cell.format(count=len(codes)) for cell in line])
+    return out
+
+
 def rows(czech: dict, codes: list[str], catalog: dict, purpose: str = None) -> list[list[str]]:
-    """One tab: the framing, the purpose it asks about, and every candidate.
+    """One rating tab: two rows of heading, then every candidate.
 
     `purpose` names which of the two note types this tab is about. The two are
     not two versions of one thing -- the American rule keeps diagnosis, plan,
@@ -87,29 +114,11 @@ def rows(czech: dict, codes: list[str], catalog: dict, purpose: str = None) -> l
     rater answers each on its own tab without seeing the other answer.
     """
     sheet = czech["panel_sheet"]
-    scale = czech["vocabulary"]["relevance_scale"]
     purposes = sheet["purposes"]
     purpose = purpose or next(iter(purposes))
     if purpose not in purposes:
         raise SystemExit(f"unknown purpose {purpose!r}")
-    # The instruction tells the rater how many properties follow, and it used to
-    # say so in a typed number: it read 36 while the sheet listed 39, true on
-    # 2026-10-07 and false from 2026-10-14, when three criteria arrived and
-    # nothing re-read the sentence. The count is filled from the list it counts,
-    # so the sentence cannot be wrong without the sheet being empty.
-    out = []
-    for line in sheet["instructions"]:
-        # One instruction line is a placeholder for the scale, so that the four
-        # steps and what they mean are written once, in the data, and the sheet
-        # cannot disagree with the rule that reads them.
-        if line and line[0] == PURPOSE:
-            out.append([purposes[purpose]["description"]])
-            out.append([sheet["both_tabs"]])
-            continue
-        if line and line[0] == ANCHORS:
-            out.extend([f"{step['label']} \u2014 {step['anchor']}"] for step in scale)
-            continue
-        out.append([cell.format(count=len(codes)) for cell in line])
+    out = [[purposes[purpose]["head"]], []]
     out.append(list(sheet["header"]))
     # What the property is judged over. Thirty-six of the thirty-nine are about
     # one note, one is about several sessions with a client and two about a model
@@ -168,6 +177,9 @@ def main() -> int:
             name = f"hodnoceni-{rater['surname']}-{position}-{purpose}.csv"
             (OUT_DIR / name).write_text(as_csv(table), encoding="utf-8")
             written += 1
+        name = f"hodnoceni-{rater['surname']}-legenda.csv"
+        (OUT_DIR / name).write_text(as_csv(legend(czech, codes)), encoding="utf-8")
+        written += 1
     (OUT_DIR / "poradi.json").write_text(
         json.dumps(
             {
