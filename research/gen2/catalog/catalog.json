@@ -1168,7 +1168,7 @@
       "applicability": "Information that was not said in the session must not be counted as omitted. The bank must exist before exposure to the candidate note.",
       "examples": {
         "positive": "Self-harm was mentioned and the note carries it; an item of the Mandatory level.",
-        "negative": "Self-harm was mentioned and the note lacks it. One Mandatory omission weighs more than three Good-to-have omissions.",
+        "negative": "Self-harm was mentioned and the note lacks it.",
         "boundary": "The session contains nothing about medication. The item is not applicable, not unmet, and does not belong in the denominator."
       },
       "measurement": "QA against a bank built from the source, with the score reported separately for each importance level. Never one average number.",
@@ -1257,7 +1257,7 @@
       "applicability": "Requires a purpose declared in advance. Otherwise relevance is unmeasurable.",
       "examples": {
         "positive": "A detail about medication is essential for continuity and optional in a client summary.",
-        "negative": "One relevance score across all four purposes.",
+        "negative": "The note for the record and the therapist's own note carry the same content, although a different person reads each one and for a different reason.",
         "boundary": "Risk information: the one topic where essentiality does not diverge across purposes."
       },
       "measurement": "Coverage is reported separately for each purpose and never summed.",
@@ -1305,7 +1305,7 @@
       "applicability": "The topic occurs rarely; rarity is not a reason to drop the item.",
       "examples": {
         "positive": "A mention of hopelessness is marked as risk-related in the bank and the note carries it.",
-        "negative": "The mention of hopelessness is missing, and yet overall coverage comes out at 85%.",
+        "negative": "Hopelessness was voiced in the session and the note says nothing about it.",
         "boundary": "The client speaks about the end ambiguously. The item is disputed, not automatically risk-related."
       },
       "measurement": "Reported as a separate, undilutable layer above coverage and fidelity. A negative claim about risk findings requires complete assessment of the declared scope.",
@@ -1450,7 +1450,7 @@
       "applicability": "An empty or very short note must not receive high economy without its coverage being reported at the same time.",
       "examples": {
         "positive": "Four of five sentences carry essential content.",
-        "negative": "A one-sentence note has economy 1.00 and coverage 0.08; only both may be reported.",
+        "negative": "Half the sentences are filler -- the client was engaged and cooperative -- that says nothing about this session.",
         "boundary": "A sentence that carries no content but holds the text together; dropping it is a debatable decision, not an error."
       },
       "measurement": "The share of sentences tied to at least one information unit; always reported beside coverage, never alone.",
@@ -1539,7 +1539,7 @@
       "applicability": "Measurable only against a specific recipient.",
       "examples": {
         "positive": "The client version uses no unexplained technical terms.",
-        "negative": "The client version contains abbreviations without explanation.",
+        "negative": "The note is full of abbreviations only the person who wrote it understands.",
         "boundary": "A technical term the client used in the session themselves."
       },
       "measurement": "Judgement against the declared recipient; automatic readability indices are a stand-in, not evidence of understanding.",
@@ -1642,7 +1642,7 @@
       "applicability": "Must not delete clinically decisive content. A conflict with a legal requirement is resolved in favour of the law and recorded.",
       "examples": {
         "positive": "The client summary mentions a family conflict without identifying the third person by name.",
-        "negative": "The note for supervision gives the full name and employer of the client's partner.",
+        "negative": "The note gives the full name and the employer of the client's partner where the partner would have done for its purpose.",
         "boundary": "A detail about a third person that is necessary for assessing risk."
       },
       "measurement": "Human judgement only for now. We propose to postpone automatic measurement.",
@@ -1739,7 +1739,7 @@
       "applicability": "Present in every setting. In individual therapy third parties enter through the client's account; in couple and group therapy they are participants with their own consent status, which changes the rule, not the relevance.",
       "examples": {
         "positive": "The client describes a conflict with his superior; the note gives the role, not the name.",
-        "negative": "The note adopts the client's judgement of his partner as a factual description of her person.",
+        "negative": "The note gives the partner by name and says where she works.",
         "boundary": "The third person is at the same time a client of the same practice."
       },
       "measurement": "Marking of mentions of third persons, distinguishing role and identification.",
@@ -2304,7 +2304,7 @@
       "applicability": "Without comparable length or without normalisation per unit of text, coverage comparisons between systems are misleading. A short note can be dense and still omit essential content; density is never read alone.",
       "examples": {
         "positive": "Two notes of the same length; one carries nine essential pieces of information, the other four.",
-        "negative": "A model has higher coverage simply because it wrote twice as much text. We report it as better coverage although per page it carries less.",
+        "negative": "Two pages of text carrying as much clinically essential content as would fit on half a page.",
         "boundary": "A longer note that additionally carries only marginal information: higher coverage, lower density, and worse for the reader."
       },
       "measurement": "Distinct essential information units, duplicates counted once, per length unit, reported beside coverage, harmful omissions and comprehensibility. The length unit is defined per language, because word-normalised ratios are not comparable between English and Czech. In addition a control condition: comparing systems at aligned length (a proposed experiment; the differences between studies S18 and S19 do not isolate length).",
@@ -2748,7 +2748,7 @@
       "family": "F1",
       "kind": "construct",
       "label": "Error inherited from the source",
-      "definition": "The note faithfully renders something the source itself got wrong. Both corpora are transcriptions of public recordings, and the Czech side is a translation of the same conversations, so a word that was already wrong before the model saw it can be copied correctly into the note and be wrong about the session while right about its source. It is the one property in the catalog that cannot be decided from the transcript, because the transcript is what is wrong.",
+      "definition": "The note faithfully renders something the source itself got wrong. Both corpora are transcriptions of public recordings, and the Czech side is a translation of the same conversations, so a word that was already wrong before the model saw it can be copied correctly into the note and be wrong about the session while right about its source. It is the one property in the catalog that cannot be decided from the transcript, because the transcript is what is wrong. Since 2026-10-22 the direction is settled: correcting the source is what a good note does, and faithfully reproducing its error is the failure this criterion counts.",
       "origin": "literature",
       "origin_note": "Found on 2026-10-14 in the consensus taxonomy and accepted the same day. The project already had the case without the criterion: the synthetic controls carry a transcription_error variant.",
       "evidence": [
@@ -2776,7 +2776,7 @@
         "boundary": "The transcript is unintelligible at that point and the note omits the medication. Whether that is an inherited error or an omission under K05 is what the rule has to settle, and the honest answer may be that it is neither and belongs with the unresolvable cases."
       },
       "measurement": "Not measured in this round. It needs the recordings, and on the Czech side also the English transcript the translation was made from.",
-      "error_consequence": "The note is wrong about the session and no measure says so. A model that copies carefully scores better than one that silently corrects the transcript, and the second may be the one a clinician wants.",
+      "error_consequence": "The note is wrong about the session and no measure says so. Which note is the good one was left open here until 2026-10-22, when the investigator decided it: the note that corrects the source is the good one, because a note is meant to be true about the session and not about the transcript. The risk that follows is now the thing to watch -- a model allowed to correct its source will also correct passages the source got right -- and it is what the measurement has to separate, not something the criterion can leave unsaid.",
       "validation": "None.",
       "overlaps": "K01 (support, which this inverts: the note is supported by the source and still wrong), K18 (traceability), K05 (omission where the source is unintelligible).",
       "state": "not_yet_operationalized",

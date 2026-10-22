@@ -124,12 +124,25 @@ def test_every_resolved_conflict_says_what_it_rejected(czech):
 
     The file keeps one and records the other with the generator it came from.
     A silent merge would leave nobody able to see that a choice was made.
+
+    A resolution can also be overtaken. K31's name was settled between two
+    generators and then changed on 2026-10-22 for a different reason: it named
+    the defect where the sheet asks about a property. The record keeps what was
+    resolved on the day and says it no longer holds, which rewriting `kept`
+    would have erased -- and it may say so only where the entry records the
+    rewording, so it cannot quietly excuse a drift.
     """
     conflicts = czech["conflicts_resolved"]
     assert conflicts
     for entry in conflicts:
-        kept = czech["candidates"][entry["candidate"]][entry["field"]]
-        assert entry["kept"]["text"] == kept
+        candidate = czech["candidates"][entry["candidate"]]
+        kept = candidate[entry["field"]]
+        if entry.get("superseded_on"):
+            assert candidate["reworded_on"] == entry["superseded_on"], entry["candidate"]
+            assert candidate["previous_wording"][entry["field"]] == entry["kept"]["text"]
+            assert len(entry["superseded_why"].split()) >= 10
+        else:
+            assert entry["kept"]["text"] == kept
         assert entry["kept"]["from"]
         assert entry["rejected"]
         for rejected in entry["rejected"]:

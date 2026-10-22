@@ -543,6 +543,19 @@ def czech_problems(catalog: dict, czech: dict) -> list[str]:
         if code not in named:
             out.append(f"czech.conflicts_resolved[{code}]: resolves a conflict for no entry")
             continue
+        # A resolution can be overtaken. K31's name was settled between two
+        # generators and then changed on 2026-10-22 for a different reason: it
+        # named the defect where the sheet asks about a property. The record
+        # keeps what was resolved that day and says it no longer holds, which a
+        # rewrite of `kept` would have erased. It may say so only where the
+        # entry carries the rewording, so this cannot quietly excuse a drift.
+        if entry.get("superseded_on"):
+            if czech["candidates"][code].get("reworded_on") != entry["superseded_on"]:
+                out.append(
+                    f"czech.conflicts_resolved[{code}].{entry['field']}: "
+                    "superseded on a date the entry does not record as a rewording"
+                )
+            continue
         kept = czech["candidates"][code].get(entry["field"])
         if kept != entry["kept"]["text"]:
             out.append(

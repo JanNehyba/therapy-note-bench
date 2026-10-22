@@ -462,7 +462,9 @@
           "from": "cz_constructs.py",
           "text": "Redundance: tentýž fakt víckrát"
         }
-      ]
+      ],
+      "superseded_on": "2026-10-22",
+      "superseded_why": "The conflict was between two generators and 'Redundance' won it on that day. The name was then changed for a different reason -- it named the defect where the sheet asks about a property -- so the record is kept as what was resolved and no longer as the entry's current text."
     },
     {
       "candidate": "K32",
@@ -795,7 +797,7 @@
         "error_consequence": "cz_constructs.py",
         "how": "stav.py",
         "plain": "napsáno 2026-10-15",
-        "example": "přeloženo z catalog.json examples.negative 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-22",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
       "statement": "Zápis nese podstatné informace ze sezení, přičemž podstatnost má stupně.",
@@ -809,7 +811,7 @@
       "ranking_role": "orders",
       "needs_bank": true,
       "plain": "Jestli je v zápisu to podstatné, co v sezení zaznělo. Podstatnost má stupně.",
-      "example": "V sezení zaznělo sebepoškozování a v zápisu chybí. Jedno vynechání povinné informace váží víc než tři vynechání těch volitelných.",
+      "example": "V sezení zaznělo sebepoškozování a v zápisu chybí.",
       "example_positive": "Zaznělo sebepoškozování a zápis to nese; položka úrovně Povinné."
     },
     "K06": {
@@ -855,7 +857,7 @@
         "error_consequence": "cz_constructs.py",
         "how": "stav.py",
         "plain": "napsáno 2026-10-15",
-        "example": "přeloženo z catalog.json examples.negative 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-22",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
       "statement": "Co je podstatné, se mění podle toho, kdo zápis čte a proč.",
@@ -869,7 +871,7 @@
       "ranking_role": "orders",
       "needs_bank": true,
       "plain": "Co je v zápisu podstatné, záleží na tom, pro koho je psaný.",
-      "example": "Jedno skóre relevance pro všechny čtyři účely: zápis pro navázání péče a shrnutí pro klienta se posuzují stejně.",
+      "example": "Zápis do dokumentace a terapeutova vlastní poznámka nesou totéž, ačkoli každý z nich čte někdo jiný a k něčemu jinému.",
       "example_positive": "Údaj o medikaci je podstatný pro návaznost péče a nepovinný ve shrnutí pro klienta."
     },
     "K08": {
@@ -885,7 +887,7 @@
         "error_consequence": "cz_constructs.py",
         "how": "stav.py",
         "plain": "napsáno 2026-10-15",
-        "example": "přeloženo z catalog.json examples.negative 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-22",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
       "statement": "Zápis zachycuje riziko a bezpečí tam, kde v sezení zaznělo.",
@@ -899,7 +901,7 @@
       "ranking_role": "orders",
       "needs_bank": true,
       "plain": "Jestli je v zápisu to, co v sezení zaznělo o riziku a bezpečí.",
-      "example": "V zápisu chybí zmínka o beznaději, a celkové pokrytí přesto vyjde na 85 %.",
+      "example": "V sezení zazněla beznaděj a zápis o ní neříká nic.",
       "example_positive": "Zmínka o beznaději je v bance označená jako riziková a zápis ji nese."
     },
     "K09": {
@@ -975,7 +977,7 @@
         "error_consequence": "cz_constructs.py",
         "how": "stav.py",
         "plain": "napsáno 2026-10-15",
-        "example": "přeloženo z catalog.json examples.negative 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-22",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
       "statement": "Každá věta zápisu nese podstatný obsah; prázdné fráze nikoli.",
@@ -989,7 +991,7 @@
       "ranking_role": "orders",
       "needs_bank": true,
       "plain": "Jestli každá věta něco nese, nebo je to vata.",
-      "example": "Jednovětý zápis má úspornost 1,00 a pokrytí 0,08. Samotná úspornost odměňuje prázdný zápis.",
+      "example": "Polovina vět je vata — „klient byl v kontaktu a spolupracoval“ — která o tomhle sezení neříká nic.",
       "example_positive": "Čtyři z pěti vět nesou podstatný obsah."
     },
     "K12": {
@@ -1035,7 +1037,7 @@
         "error_consequence": "cz_constructs.py",
         "why_not_measured": "build_doc.py",
         "plain": "napsáno 2026-10-15",
-        "example": "přeloženo z catalog.json examples.negative 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-22",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
       "statement": "Zápis je jazykově srozumitelný tomu, komu je určen.",
@@ -1049,7 +1051,7 @@
       "ranking_role": "not_measured_yet",
       "needs_bank": false,
       "plain": "Jestli zápisu rozumí ten, komu je určený.",
-      "example": "Verze pro klienta obsahuje zkratky bez vysvětlení.",
+      "example": "Zápis je plný zkratek, kterým rozumí jen ten, kdo je psal.",
       "example_positive": "Verze pro klienta neobsahuje nevysvětlené odborné termíny."
     },
     "K14": {
@@ -1095,7 +1097,7 @@
         "error_consequence": "cz_constructs.py",
         "why_not_measured": "build_doc.py",
         "plain": "napsáno 2026-10-15",
-        "example": "přeloženo z catalog.json examples.negative 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-22",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
       "statement": "Zápis obsahuje jen ten citlivý detail, který jeho účel potřebuje.",
@@ -1109,7 +1111,7 @@
       "ranking_role": "not_measured_yet",
       "needs_bank": false,
       "plain": "Citlivý detail má v zápisu být jen tehdy, když ho ten účel opravdu potřebuje.",
-      "example": "Zápis pro supervizi uvádí celé jméno a zaměstnavatele klientova partnera.",
+      "example": "Zápis uvádí celé jméno a zaměstnavatele klientova partnera, ačkoli k jeho účelu by stačilo „partner“.",
       "example_positive": "Shrnutí pro klienta zmiňuje rodinný konflikt, aniž by třetí osobu jmenovalo."
     },
     "K16": {
@@ -1155,7 +1157,7 @@
         "error_consequence": "cz_constructs.py",
         "why_not_measured": "build_doc.py",
         "plain": "napsáno 2026-10-15",
-        "example": "přeloženo z catalog.json examples.negative 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-22",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
       "statement": "Údaje o osobách, které nejsou klient, jsou uvedené rolí, ne identifikací.",
@@ -1169,7 +1171,7 @@
       "ranking_role": "not_measured_yet",
       "needs_bank": false,
       "plain": "Jak zápis zachází s lidmi, kteří nejsou klient.",
-      "example": "Zápis převezme klientův soud o partnerce jako věcný popis její osoby.",
+      "example": "Zápis uvádí partnerku jménem a s místem, kde pracuje.",
       "example_positive": "Klient popisuje konflikt s nadřízeným; zápis uvádí roli, ne jméno."
     },
     "K18": {
@@ -1528,7 +1530,7 @@
         "how": "stav.py",
         "measured_otherwise": "build_doc.py",
         "plain": "napsáno 2026-10-15",
-        "example": "přeloženo z catalog.json examples.negative 2026-10-15",
+        "example": "přeloženo z catalog.json examples.negative 2026-10-22",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
       "statement": "Kolik klinicky podstatného obsahu zápis nese na jednotku textu.",
@@ -1543,7 +1545,7 @@
       "ranking_role": "describes_only",
       "needs_bank": true,
       "plain": "Kolik různých informací zápis nese na jednotku délky.",
-      "example": "Model má vyšší pokrytí jen proto, že napsal dvakrát víc textu. Vykáže se to jako lepší pokrytí, ačkoli na stránku nese míň.",
+      "example": "Dvě stránky textu, ve kterých je tolik klinicky podstatného, co by se vešlo na půl stránky.",
       "example_positive": "Dva zápisy stejné délky; jeden nese devět podstatných informací, druhý čtyři."
     },
     "K30": {
@@ -1577,7 +1579,7 @@
       "example_positive": "Zápis se čte, jako by ho psal klinik, v běžném rejstříku jazyka."
     },
     "K31": {
-      "name": "Redundance",
+      "name": "Bez zbytečného opakování",
       "from": {
         "name": "panel_sheet.py",
         "statement": "panel_sheet.py",
@@ -1604,7 +1606,12 @@
       "needs_bank": false,
       "plain": "Jestli se v zápisu totéž neopakuje víckrát.",
       "example": "Klientovy panické ataky jsou popsané v Subjektivním, znovu v Hodnocení a znovu v Plánu, pokaždé bez čehokoli nového.",
-      "example_positive": "Každá podstatná jednotka se objeví jednou, ve své sekci."
+      "example_positive": "Každá podstatná jednotka se objeví jednou, ve své sekci.",
+      "reworded_on": "2026-10-22",
+      "why_reworded": "Název pojmenovával vadu, ne vlastnost dobrého zápisu, a arch se u všech kritérií ptá stejně: je tato vlastnost podstatná pro kvalitu zápisu? U čtyř kritérií z třiceti devíti se tak otázka obracela a hodnotitel ji musel v hlavě převracet. Anglický název v katalogu zůstává, protože je převzatý ze zdroje.",
+      "previous_wording": {
+        "name": "Redundance"
+      }
     },
     "K32": {
       "name": "Kulturní kompetence doložená v zápisu",
@@ -1719,7 +1726,7 @@
       "example_positive": "Zápis zaznamenává, že klient řekl, že týden byl jako brodit se, a že vstávání bylo nejtěžší částí dne."
     },
     "K37": {
-      "name": "Číselná odchylka",
+      "name": "Správnost čísel",
       "statement": "Čísla v zápisu odpovídají tomu, co v sezení zaznělo.",
       "question": "Uvádí zápis stejná čísla, jaká zazněla?",
       "unit": "jedno číslo",
@@ -1738,10 +1745,15 @@
       "needs_bank": false,
       "plain": "Jestli čísla v zápisu sedí s tím, co v sezení zaznělo.",
       "example": "V přepisu jsou dvě vynechané dávky, zápis uvádí čtyři.",
-      "example_positive": "V přepisu klient za poslední měsíc vynechal dvě dávky; zápis uvádí dvě."
+      "example_positive": "V přepisu klient za poslední měsíc vynechal dvě dávky; zápis uvádí dvě.",
+      "reworded_on": "2026-10-22",
+      "why_reworded": "Název pojmenovával vadu, ne vlastnost dobrého zápisu, a arch se u všech kritérií ptá stejně: je tato vlastnost podstatná pro kvalitu zápisu? U čtyř kritérií z třiceti devíti se tak otázka obracela a hodnotitel ji musel v hlavě převracet. Anglický název v katalogu zůstává, protože je převzatý ze zdroje.",
+      "previous_wording": {
+        "name": "Číselná odchylka"
+      }
     },
     "K38": {
-      "name": "Záměna jména nebo instituce",
+      "name": "Správnost jmen a institucí",
       "statement": "Jména, instituce a odesílatel v zápisu odpovídají zdroji.",
       "question": "Je v zápisu správné jméno, instituce a odesílatel?",
       "unit": "jedna pojmenovaná entita",
@@ -1760,10 +1772,15 @@
       "needs_bank": false,
       "plain": "Jestli jména, instituce a odesílatel sedí se zdrojem.",
       "example": "Zápis uvede, že klientku Janu odeslal psychiatr, ačkoli šlo o sestru Hanu a o praktického lékaře.",
-      "example_positive": "Klient mluví o sestře Haně a o doporučení od praktického lékaře; zápis uvádí sestru Hanu a doporučení od praktického lékaře."
+      "example_positive": "Klient mluví o sestře Haně a o doporučení od praktického lékaře; zápis uvádí sestru Hanu a doporučení od praktického lékaře.",
+      "reworded_on": "2026-10-22",
+      "why_reworded": "Název pojmenovával vadu, ne vlastnost dobrého zápisu, a arch se u všech kritérií ptá stejně: je tato vlastnost podstatná pro kvalitu zápisu? U čtyř kritérií z třiceti devíti se tak otázka obracela a hodnotitel ji musel v hlavě převracet. Anglický název v katalogu zůstává, protože je převzatý ze zdroje.",
+      "previous_wording": {
+        "name": "Záměna jména nebo instituce"
+      }
     },
     "K39": {
-      "name": "Chyba zděděná ze zdroje",
+      "name": "Nepřebírání chyb ze zdroje",
       "statement": "Zápis nepřebírá chyby, které byly už ve zdroji.",
       "question": "Nepřepsal zápis věrně chybu, která byla už ve zdroji — v přepisu nahrávky nebo v překladu?",
       "unit": "jedno tvrzení, jehož zdrojový text je sám špatný",
@@ -1782,13 +1799,14 @@
       "needs_bank": false,
       "plain": "Jestli zápis věrně neopsal chybu, která vznikla už dřív — při přepisu nahrávky nebo při překladu do češtiny.",
       "example": "Přepis slyšel „sertralid“ místo „sertralin“ a zápis to opíše.",
-      "reworded_on": "2026-10-21",
-      "why_reworded": "Všechna čtyři znění tvrdila, že chyba přichází z rozpoznávání řeči, a že u českých sezení je nahrávka důvěrná. Česká část článku jsou ale překlady veřejných anglických konverzací a skutečná česká sezení nejsou ani v článku, ani v pilotu. Chyba se tedy dědí z přepisu nahrávky a na české straně z překladu, a žádná otázka důvěrnosti tu nevzniká.",
+      "reworded_on": "2026-10-22",
+      "why_reworded": "Název pojmenovával vadu, ne vlastnost dobrého zápisu, a arch se u všech kritérií ptá stejně: je tato vlastnost podstatná pro kvalitu zápisu? U čtyř kritérií z třiceti devíti se tak otázka obracela a hodnotitel ji musel v hlavě převracet. Anglický název v katalogu zůstává, protože je převzatý ze zdroje.",
       "previous_wording": {
         "statement": "Zápis nepřebírá chyby, které udělal už přepis.",
         "question": "Nepřepsal zápis věrně chybu, kterou udělalo rozpoznávání řeči?",
         "plain": "Jestli zápis nepřepsal věrně chybu, kterou udělalo už rozpoznávání řeči.",
-        "why_not_measured": "Nedá se to rozhodnout z přepisu, protože špatný je ten přepis. Potřebuje to nahrávku, a u českých sezení je nahrávka důvěrná."
+        "why_not_measured": "Nedá se to rozhodnout z přepisu, protože špatný je ten přepis. Potřebuje to nahrávku, a u českých sezení je nahrávka důvěrná.",
+        "name": "Chyba zděděná ze zdroje"
       },
       "example_positive": "V přepisu je sertralid, ačkoli klient řekl sertralin, a zápis píše sertralin."
     }
