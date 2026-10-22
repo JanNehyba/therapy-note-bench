@@ -204,11 +204,14 @@ translations, produced by a recorded translation instrument that is never a judg
 Czech sessions are excluded (decision D1): the planner refuses a native case as not
 eligible, and adding a cohort is a protocol amendment, not a planner option.
 
-With the two purposes this round serves (decision D8; with four it would be and two generator families the design freezes at most 32
-generated notes. The investigator's development budget is at most 16 balanced notes
-and 120 unique annotation-unit decisions plus 30 blinded repeats within 8-12 hours
-including reference checks; that is a budget of annotation units bounded by time,
-not a count of notes. This is not the time budget for the whole review. If
+The design freezes 8 generated notes: 4 cases over 2 cohorts, 1 purpose this
+round can generate for (decision D27) and 2 generator families, of which 4 are
+rated by a human. The protocol's ceiling of 16 is a ceiling and not a plan; it
+is reached again when the therapeutic note has a profile to generate from,
+because the round serves two note types and the code holds a task for one. The
+investigator's development budget is 120 unique annotation-unit decisions plus
+30 blinded repeats within 8-12 hours including reference checks; that is a
+budget of annotation units bounded by time, not a count of notes. This is not the time budget for the whole review. If
 preparation exceeds it, amend and reduce the sample; report the actual coverage
 rather than marking unreviewed units complete.
 

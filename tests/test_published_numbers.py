@@ -1414,3 +1414,85 @@ def test_the_protocol_version_in_prose_is_the_protocol_version():
         assert newest == current, (
             f"{name} names protocol {newest} as the current one; the protocol is {current}"
         )
+
+
+# --- the frozen design, whose numbers are the protocol's ---------------------
+
+#: The workflow README states the size of the frozen pilot design. Every figure
+#: in that sentence is computed from the protocol here, because the one it held
+#: until 2026-10-22 was typed: it said thirty-two notes over four purposes, was
+#: repaired for the purpose count on 2026-10-21 by a replacement that left the
+#: sentence without its verb and the number untouched, and claimed sixteen in
+#: the clause after it. Nothing tied any of the three to the protocol.
+FROZEN_DESIGN = "research/gen2/README.md"
+
+_DESIGN = re.compile(
+    r"The design freezes (\d+) generated notes: (\d+) cases over (\d+) cohorts, (\d+) purpose\w* "
+    r"this\s+round can generate for \(decision D\d+\) and (\d+) generator families, of which "
+    r"(\d+) are\s+rated by a human\. The protocol's ceiling of (\d+)"
+)
+_BUDGET = re.compile(
+    r"budget is (\d+) unique annotation-unit decisions plus\s+(\d+) blinded repeats"
+)
+
+
+def frozen_design(pilot: dict) -> tuple[int, ...]:
+    """What the planner will produce, in the order the sentence states it.
+
+    Not read from a frozen plan: no plan exists, the pilot has not run, and a
+    sentence checked against a stored plan would only prove the two were copied
+    from each other. These are the planner's own arithmetic over the protocol --
+    one job per case, purpose and generator, and one human note per cohort,
+    purpose and generator -- so that changing any input moves the expectation.
+    """
+    cases = sum(cohort["cases"] for cohort in pilot["cohorts"])
+    purposes = len(pilot["purposes"])
+    generators = pilot["generator_families"]
+    return (
+        cases * purposes * generators,
+        cases,
+        len(pilot["cohorts"]),
+        purposes,
+        generators,
+        len(pilot["cohorts"]) * purposes * generators,
+        pilot["max_notes"],
+    )
+
+
+def _pilot() -> dict:
+    protocol = json.loads((REPO_ROOT / "research/gen2/protocol.json").read_text(encoding="utf-8"))
+    return protocol["pilot"]
+
+
+def test_the_frozen_designs_numbers_are_the_protocols():
+    """Position by position, so two right numbers in the wrong places still fail."""
+    text = (REPO_ROOT / FROZEN_DESIGN).read_text(encoding="utf-8")
+    stated = _DESIGN.search(text)
+    assert stated, f"{FROZEN_DESIGN} no longer states the frozen design; the check reads nothing"
+    pilot = _pilot()
+    assert tuple(int(group) for group in stated.groups()) == frozen_design(pilot)
+
+    budget = _BUDGET.search(text)
+    assert budget, f"{FROZEN_DESIGN} no longer states the annotation budget"
+    assert tuple(int(group) for group in budget.groups()) == (
+        pilot["unique_decisions"],
+        pilot["blind_repeats"],
+    )
+
+
+def test_the_frozen_design_moves_with_the_protocol_and_is_not_a_pinned_literal():
+    """The sensitivity test: handed a second purpose, the expectation must move.
+
+    This is what the sentence lacked. A count compared against a literal passes
+    whatever the protocol says, which is how thirty-two survived four purposes
+    becoming two, and then survived the repair that was written to fix it.
+    """
+    pilot = _pilot()
+    one = frozen_design(pilot)
+    two = frozen_design({**pilot, "purposes": [*pilot["purposes"], "planted"]})
+    assert two[0] == one[0] * 2, "the note count does not read the purposes"
+    assert two[3] == one[3] + 1 and two[5] == one[5] * 2
+    wider = frozen_design(
+        {**pilot, "cohorts": [*pilot["cohorts"], {"origin": "planted", "cases": 3}]}
+    )
+    assert wider[0] > one[0] and wider[1] == one[1] + 3 and wider[2] == one[2] + 1
