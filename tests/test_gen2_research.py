@@ -727,14 +727,25 @@ def test_balanced_pilot_is_a_plan_not_fabricated_human_data(store):
     cases = pilot_cases(active["protocol"], base)
     models = two_families()
     result = plan(cases, instrument, models, models, 11, protocol=active["protocol"])
-    # Two purposes since protocol 2.2.0, so half the jobs of the four-purpose
-    # round and half the human sample; the unit budget below did not move.
-    assert len(result["jobs"]) == 16 and len(result["human_note_sample"]) == 8
-    assert result["purposes"] == ["continuity", "audit"]
-    assert [e["purpose"] for e in result["purposes_out_of_scope"]] == ["supervision", "client"]
-    assert all(e["reason"] and e["decision"] == "D8" for e in result["purposes_out_of_scope"])
+    # One implementable purpose since D27, so a quarter of the jobs of the
+    # four-purpose round. D22 serves two note types and the therapeutic one has
+    # no profile to generate from, so the planner can only plan the progress
+    # note; sixteen return with that profile and the unit budget never moved.
+    assert len(result["jobs"]) == 8 and len(result["human_note_sample"]) == 4
+    assert result["purposes"] == ["continuity"]
+    assert [e["purpose"] for e in result["purposes_out_of_scope"]] == [
+        "supervision",
+        "client",
+        "audit",
+    ]
+    assert all(e["reason"] and e["decision"] for e in result["purposes_out_of_scope"])
+    assert [e["decision"] for e in result["purposes_out_of_scope"]] == ["D8", "D8", "D22"]
     selected = [j for j in result["jobs"] if j["id"] in result["human_note_sample"]]
-    assert set(Counter(j["case_revision"] for j in selected).values()) == {2}
+    # Every case revision appears the same number of times, which is what
+    # balanced means here; the number itself is purposes times generators over
+    # the pair, so it was two with two purposes and is one with one.
+    assert set(Counter(j["case_revision"] for j in selected).values()) == {1}
+    assert set(Counter(j["generator"]["model"] for j in selected).values()) == {2}
     assert result["human_item_budget"]["blinded_repeats"] == 30
     assert result["human_item_budget"]["unique_decisions"] == 120
     assert result["measurement_rule"] == "record_not_cap"
@@ -766,14 +777,18 @@ def _without_the_record(protocol):
 
 
 def _without_a_reason(protocol):
+    # Audit keeps its reason: dropping it from the record instead would be
+    # refused for the other rule, that every profile is planned or recorded,
+    # and this variant has to fail on the reason it is named for.
     protocol["pilot"]["purposes_out_of_scope"] = [
         {"purpose": "supervision", "reason": "", "decision": "D8"},
         {"purpose": "client", "reason": "thin", "decision": "D8"},
+        {"purpose": "audit", "reason": "a payer's view", "decision": "D22"},
     ]
 
 
 def _planned_and_dropped_at_once(protocol):
-    protocol["pilot"]["purposes"] = ["continuity", "audit", "client"]
+    protocol["pilot"]["purposes"] = ["continuity", "client"]
 
 
 def _an_invented_purpose(protocol):
@@ -838,13 +853,14 @@ def test_pilot_plans_whatever_cohorts_the_protocol_lists(store):
     native = revised["pilot"]["excluded_cohorts"].pop()
     revised["pilot"]["cohorts"].append({**native, "cases": 2})
     revised["pilot"]["max_notes"] = 24
-    revised["pilot"]["human_note_sample"] = 12
+    revised["pilot"]["human_note_sample"] = 6
     active, record = start_review(store, revised)
     instrument = operational_toy(store, active, toy_registry(active, record))
     base, *_ = controls.fixture("en", "continuity")
     models = two_families()
     result = plan(pilot_cases(revised, base), instrument, models, models, 11, protocol=revised)
-    assert len(result["jobs"]) == 24 and len(result["human_note_sample"]) == 12
+    # Three cohorts, one purpose, two generators, two cases to a pair.
+    assert len(result["jobs"]) == 12 and len(result["human_note_sample"]) == 6
     by_origin = {c["origin"]: c for c in result["cohorts"]}
     assert by_origin["native_real"]["client_groups"] == 1
     assert result["excluded_cohorts"] == []

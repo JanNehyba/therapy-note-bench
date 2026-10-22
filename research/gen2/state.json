@@ -114,9 +114,9 @@
     }
   },
   "protocol": {
-    "version": "2.18.0",
+    "version": "2.19.0",
     "recorded_date": "2026-10-14",
-    "supersedes": "2.17.0",
+    "supersedes": "2.18.0",
     "archived": [
       "1.0.0",
       "2.0.0",
@@ -136,7 +136,8 @@
       "2.14.0",
       "2.15.0",
       "2.16.0",
-      "2.17.0"
+      "2.17.0",
+      "2.18.0"
     ],
     "status": "protocol_amended_before_pilot_search_partially_executed",
     "pilot_status": "not_run",
@@ -167,14 +168,14 @@
       "audit"
     ],
     "purposes_this_round_serves": [
-      "continuity",
-      "audit"
+      "continuity"
     ],
     "purposes_out_of_scope": [
       "supervision",
-      "client"
+      "client",
+      "audit"
     ],
-    "scope_decided_by": "D8, 2026-09-16",
+    "scope_decided_by": "D8, 2026-09-16; narrowed by D22 and D27, 2026-10-22",
     "catalog_status": "AI-authored proposals from the scoping search of 2026-09-13, translated to English by the coding assistant on 2026-09-16. No human acceptance decision exists for any entry; the executable registry is derived from this catalog only as a draft that the core refuses to freeze until humans review it."
   },
   "panel": {

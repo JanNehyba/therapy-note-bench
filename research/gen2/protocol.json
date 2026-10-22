@@ -1,6 +1,6 @@
 {
   "id": "therapy-note-construct-review",
-  "version": "2.18.0",
+  "version": "2.19.0",
   "status": "protocol_amended_before_pilot_search_partially_executed",
   "recorded_date": "2026-10-14",
   "design": "Instrument development informed by a systematic scoping review, expert proposals and empirical observations",
@@ -143,13 +143,12 @@
   "pilot": {
     "status": "not_run",
     "purposes": [
-      "continuity",
-      "audit"
+      "continuity"
     ],
     "generator_families": 2,
     "judge_families": 2,
     "max_notes": 16,
-    "human_note_sample": 8,
+    "human_note_sample": 4,
     "human_decisions_target": 150,
     "blind_repeats": 30,
     "human_hours": [
@@ -199,7 +198,7 @@
         "reason": "one client, no consent or ethics documentation; permanently private track processed only on local/einfra; outside the paper and this pilot (D1)"
       }
     ],
-    "human_decisions_basis": "A budget of annotation units (item, claim and QA decisions) bounded by the investigator's 8-12 hours, not a count of notes; fewer notes leave more units per note, and unit assignment is frozen after reviewed banks exist Narrowing to two purposes on 2026-09-16 halved the generated notes and the human sample; the unit budget is unchanged, so the units per note rose again (decision D8).",
+    "human_decisions_basis": "A budget of annotation units (item, claim and QA decisions) bounded by the investigator's 8-12 hours, not a count of notes; fewer notes leave more units per note, and unit assignment is frozen after reviewed banks exist. Narrowing to two purposes on 2026-09-16 halved the generated notes and the human sample; the unit budget is unchanged, so the units per note rose again (decision D8). Dropping audit on 2026-10-22 halved both again, to eight notes and four rated by a human, because the therapeutic note that replaces it has no profile to generate from; the unit budget is unchanged a second time and the sixteen return with that profile (decision D27). Until then the units per note are higher than any round this design was sized for, which is a reason to write the profile and not a result.",
     "human_anchor": {
       "raters": 2,
       "rater_profile": "Czech psychologists; neither is the instrument author",
@@ -230,6 +229,11 @@
         "purpose": "client",
         "reason": "A real literature exists and this round read only abstracts of it; real client readers and an ethics framework are missing. Not a judgement that it does not matter.",
         "decision": "D8"
+      },
+      {
+        "purpose": "audit",
+        "reason": "A payer's view of a progress note, not a second genre of note. D22 replaced it with the therapeutic note, which the clinician keeps apart from the record, and that is the contrast the round is looking for.",
+        "decision": "D22"
       }
     ],
     "judge_question_granularity": {
@@ -306,8 +310,8 @@
     "review_completion": "Only executed searches and verified decisions count as completed; blocked sources remain named gaps",
     "scope": "Report selected and required methods, planned/applicable/assessed units, and incomplete critical-error assessment even in public aggregates"
   },
-  "supersedes": "2.17.0",
-  "amendment_reason": "D26: the panel's second question keeps the gaming half and loses the harm half, at the investigator's word, and with the instruction to name the criterion gone the retention rule's harm flag reads prose instead of a code.",
+  "supersedes": "2.18.0",
+  "amendment_reason": "D27: pilot.purposes drops audit, as D22 decided in prose a day earlier, and the plan halves to eight notes until the therapeutic note has a profile in the code.",
   "retrieval_gaps": "Record reports not retrieved separately from full-text eligibility exclusions; unavailable databases remain named gaps",
   "expert_inputs": "May enter throughout development. Later support does not rewrite historical origin; author or colleague proposals do not imply consensus.",
   "registration": {
@@ -678,6 +682,23 @@
       "why": "The investigator cut it. The gaming half is the half a rater can answer about a criterion they have just read; the harm half asked them to reason about what measuring does, which is a question about our instrument in our words.",
       "what_is_lost_and_is_not_measured": "Two things, and neither is replaced. The round no longer asks about a measure that is honestly maximised and hurts through another criterion -- coverage is not gamed by including more, it is satisfied by it, and privacy pays through K15 -- so that shape has no question. And the flag no longer has an instructed input: the rater writes prose, the investigator reads which criterion it is about, and where no criterion can be identified the answer is published verbatim and nothing is flagged. A rule read by a person is weaker than one read off a cell and this says so.",
       "not_decided_here": "Whether the harm question returns in a second round with its own wording. One panel produces no comparison, so there is nothing yet to judge the cut against."
+    },
+    {
+      "id": "D27",
+      "date": "2026-10-22",
+      "origin": "assistant",
+      "decision": "pilot.purposes is ['continuity'] and audit is recorded out of scope under D22's reason. The therapeutic note cannot enter the field until it has a profile in the code, so the round's second purpose is named in the decision ledger and in the panel sheet and is absent from the field the planner reads.",
+      "replaces": "pilot.purposes ['continuity', 'audit'], which contradicted D22 in the same file for one day",
+      "affects": [
+        "pilot.purposes",
+        "pilot.purposes_out_of_scope",
+        "pilot.human_note_sample, which halves from eight to four",
+        "the frozen plan, which is eight notes instead of sixteen until the second profile exists"
+      ],
+      "why": "D22 said audit leaves the served set and the field was not changed with it. A decision in prose beside a field that says otherwise is the defect this repository keeps finding in other people's work, and the field is the half that runs.",
+      "what_it_costs": "The plan halves. Sixteen balanced notes came from two purposes times two generator families times two cohorts; one implementable purpose gives eight and four of them rated by a human, because the planner refuses a sample that differs from the protocol rather than quietly drawing a different one. The human annotation budget is a budget of units rather than notes, so it does not move with it. Sixteen returns when the therapeutic note has a profile. Writing that profile is Phase F work and needs the investigator's review, because the sources for the genre are mostly vendor documentation and the American rule has to be read in its own text.",
+      "what_this_is_not": "Not a narrowing of the round. The panel rates both note types on separate tabs and the catalog carries both; what is narrowed is the set of purposes a note can be generated for today, which is one.",
+      "found_by": "The investigator asked why the code still holds four profiles after several audits. The audit could not have found this: C5 checks that a dotted path a decision names exists, and D22 names its targets in sentences. A check that compares the served purposes with the purposes the panel sheet is built for is added with this amendment."
     }
   ],
   "content_validity": {

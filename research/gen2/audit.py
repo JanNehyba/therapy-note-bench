@@ -586,6 +586,90 @@ def c7_execution_evidence() -> list[dict]:
     return out
 
 
+# --- C8 the served purposes against the sheet the panel answers on -----------
+
+
+#: Three files state which purposes the round serves, and nothing compared them
+#: until 2026-10-22. The protocol's field is what the planner reads; the
+#: catalog's is what every published view of the scope is built from; the panel
+#: sheet's is what four therapists are rating against. D22 moved the round to a
+#: progress note and a therapeutic note in prose and all three kept the purposes
+#: they had held since D8 -- a decision disagreeing with the data in its own file
+#: for a day, which is the defect this repository looks for in other people's
+#: work. The protocol is the one that decides; the other two are checked against
+#: it.
+SERVED_PURPOSES = "research/gen2/protocol.json"
+CATALOG_PURPOSES = "research/gen2/catalog/catalog.json"
+SHEET_PURPOSES = "research/gen2/catalog/czech.json"
+
+
+def c8_served_purposes() -> list[dict]:
+    """The protocol's served purposes against the purposes the sheet is built for.
+
+    A sheet purpose names the code profile it maps to, or null where the genre
+    has no profile yet. The comparison is therefore one-directional on one side
+    and total on the other: every code the protocol serves must be some sheet
+    purpose's profile, and every profile a sheet purpose names must be served.
+    A genre with no profile is not a finding -- it is the recorded gap, and the
+    decision ledger carries it.
+
+    C5 could not catch this. It resolves a dotted path a decision names, and a
+    decision that says "audit leaves the round" in a sentence names none.
+    """
+    protocol = load(SERVED_PURPOSES)
+    served = list(protocol["pilot"]["purposes"])
+    purposes = load(SHEET_PURPOSES)["panel_sheet"]["purposes"]
+    mapped = {entry["maps_to_code"] for entry in purposes.values() if entry["maps_to_code"]}
+    out = []
+    # The catalog states the same scope a second time, in the field every
+    # published view of it is built from, and it is checked as a whole: a set
+    # that agrees on what is served and disagrees on what was dropped is still
+    # two answers to one question.
+    scope = load(CATALOG_PURPOSES)["purposes_in_scope"]
+    dropped = sorted(
+        set(p for e in protocol["pilot"]["purposes_out_of_scope"] for p in [e["purpose"]])
+    )
+    for field, mine, theirs in (
+        ("served", sorted(scope["served"]), sorted(served)),
+        ("out_of_scope", sorted(scope["out_of_scope"]), dropped),
+    ):
+        if mine != theirs:
+            out.append(
+                finding(
+                    "C8 served purposes",
+                    f"{CATALOG_PURPOSES} purposes_in_scope.{field}",
+                    mine,
+                    f"{SERVED_PURPOSES} pilot.{'purposes' if field == 'served' else field}",
+                    theirs,
+                    "the catalog states the round's scope a second time",
+                )
+            )
+    for code in served:
+        if code not in mapped:
+            out.append(
+                finding(
+                    "C8 served purposes",
+                    f"{SERVED_PURPOSES} pilot.purposes",
+                    code,
+                    f"{SHEET_PURPOSES} panel_sheet.purposes",
+                    "no tab asks about it",
+                    "a purpose the planner serves and the panel never rates",
+                )
+            )
+    for code in sorted(mapped - set(served)):
+        out.append(
+            finding(
+                "C8 served purposes",
+                f"{SHEET_PURPOSES} panel_sheet.purposes",
+                code,
+                f"{SERVED_PURPOSES} pilot.purposes",
+                "not served",
+                "a tab the panel rates and the planner cannot generate for",
+            )
+        )
+    return out
+
+
 CHECKS = (
     ("C1", c1_pool, True),
     ("C2", c2_version, True),
@@ -594,6 +678,7 @@ CHECKS = (
     ("C5", c5_affects, False),
     ("C6", c6_state_words, False),
     ("C7", c7_execution_evidence, False),
+    ("C8", c8_served_purposes, False),
 )
 
 

@@ -3929,15 +3929,16 @@
   ],
   "purposes_in_scope": {
     "served": [
-      "continuity",
-      "audit"
+      "continuity"
     ],
     "out_of_scope": [
       "supervision",
-      "client"
+      "client",
+      "audit"
     ],
     "rule": "A candidate is kept with its evidence whichever purpose it serves; the purposes this round serves decide what is measured and claimed, not what the catalog records.",
-    "protocol_decision": "D8, 2026-09-16"
+    "protocol_decision": "D8, 2026-09-16; narrowed by D22 and D27, 2026-10-22",
+    "the_round_serves_two_note_types_and_can_generate_one": "D22 serves a progress note and a therapist's own note, and the panel rates every candidate for both on separate tabs. Only the progress note has a profile in the code -- the code calls it `continuity` -- so `served` names one purpose and not two: it is the set a note can be generated for, not the set the round is about. The therapeutic note joins it when its task text exists, which is Phase F work."
   },
   "open_source_properties": [
     {

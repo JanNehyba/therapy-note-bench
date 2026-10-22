@@ -159,13 +159,26 @@ def test_the_reopened_candidates_say_what_reopened_them(catalog):
 
 
 def test_the_round_serves_two_purposes_and_says_which_it_does_not(catalog):
-    """Decision D8 of 2026-09-16. A purpose left out keeps its candidates and
-    its evidence; what changes is what the round measures and claims."""
+    """Decision D8 of 2026-09-16, narrowed by D22 and D27 on 2026-10-22.
+
+    A purpose left out keeps its candidates and its evidence; what changes is
+    what the round measures and claims. `served` is the set a note can be
+    generated for, and since D27 that is one: the round is about a progress
+    note and a therapist's own note, and only the first has a profile in the
+    code. The field said ["continuity", "audit"] for a day after D22 dropped
+    audit in prose, which is why the audit now compares all three files that
+    state this scope.
+    """
     scope = catalog["purposes_in_scope"]
-    assert scope["served"] == ["continuity", "audit"]
-    assert scope["out_of_scope"] == ["supervision", "client"]
+    assert scope["served"] == ["continuity"]
+    assert scope["out_of_scope"] == ["supervision", "client", "audit"]
     assert scope["protocol_decision"].startswith("D8")
+    assert "D22" in scope["protocol_decision"] and "D27" in scope["protocol_decision"]
     assert set(scope["served"]) | set(scope["out_of_scope"]) == set(catalog["purposes"])
+    # And it says why one purpose is served while the round is about two, so the
+    # number is not read as a narrowing of the round.
+    why = scope["the_round_serves_two_note_types_and_can_generate_one"]
+    assert "D22" in why and "Phase F" in why
 
     by = {c["id"]: c for c in catalog["candidates"]}
     for key in ("K24", "K25"):

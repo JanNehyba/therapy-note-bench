@@ -223,3 +223,132 @@ def test_with_no_generation_two_row_it_says_what_it_cannot_see(state):
     assert two["measured"] is False
     assert "pipeline.py" in two["what_this_does_not_establish"]
     assert "gitignored" in two["what_this_does_not_establish"]
+
+
+# --- C8, the served purposes the ledger and the field disagreed about --------
+
+
+def test_a_purpose_the_planner_serves_and_the_panel_never_rates_is_found(audit, monkeypatch):
+    """The defect that stood for a day: D22 said audit leaves, the field kept it.
+
+    The investigator found it by asking why the code still holds four profiles
+    after several audits. C5 resolves a dotted path a decision names and D22
+    names its targets in sentences, so nothing compared the field the planner
+    reads with the tabs the panel answers on.
+    """
+    real = audit.load
+
+    def planted(path: str):
+        value = real(path)
+        if path == audit.SERVED_PURPOSES:
+            value["pilot"]["purposes"] = ["continuity", "audit"]
+            value["pilot"]["purposes_out_of_scope"] = [
+                e for e in value["pilot"]["purposes_out_of_scope"] if e["purpose"] != "audit"
+            ]
+        if path == audit.CATALOG_PURPOSES:
+            # The catalog is planted to agree, so what is left is the one
+            # comparison this test is about.
+            value["purposes_in_scope"]["served"] = ["continuity", "audit"]
+            value["purposes_in_scope"]["out_of_scope"] = ["supervision", "client"]
+        return value
+
+    monkeypatch.setattr(audit, "load", planted)
+    found = audit.c8_served_purposes()
+    assert [f["says"] for f in found] == ["audit"]
+    assert found[0]["holds"] == "no tab asks about it"
+
+
+def test_a_tab_the_planner_cannot_generate_for_is_found(audit, monkeypatch):
+    """The other direction, which is the failure mode of the repair itself.
+
+    Dropping a purpose from the field to silence the first finding would leave
+    the panel rating a note type nothing can be generated for, so the check has
+    to fire both ways or the repair is a way of hiding the defect.
+    """
+    real = audit.load
+
+    def planted(path: str):
+        value = real(path)
+        if path == audit.SERVED_PURPOSES:
+            value["pilot"]["purposes"] = []
+            value["pilot"]["purposes_out_of_scope"] = [
+                {"purpose": p, "reason": "planted", "decision": "D0"}
+                for p in ("supervision", "client", "audit", "continuity")
+            ]
+        if path == audit.CATALOG_PURPOSES:
+            value["purposes_in_scope"]["served"] = []
+            value["purposes_in_scope"]["out_of_scope"] = [
+                "supervision",
+                "client",
+                "audit",
+                "continuity",
+            ]
+        return value
+
+    monkeypatch.setattr(audit, "load", planted)
+    found = audit.c8_served_purposes()
+    assert [f["says"] for f in found] == ["continuity"]
+    assert found[0]["holds"] == "not served"
+
+
+def test_the_served_purposes_check_reads_two_files_that_both_say_a_scope(audit):
+    """The sensitivity test: a check pointed at nothing detects nothing.
+
+    Narrowing this check means pointing it at a file or a field that is not
+    there, which raises rather than returning a quiet zero, or emptying the
+    sheet's purposes, which this requires to be populated.
+    """
+    protocol = audit.load(audit.SERVED_PURPOSES)
+    assert protocol["pilot"]["purposes"], "a round that serves nothing detects nothing"
+    purposes = audit.load(audit.SHEET_PURPOSES)["panel_sheet"]["purposes"]
+    assert purposes, "a sheet with no tabs detects nothing"
+    assert any(entry["maps_to_code"] for entry in purposes.values()), (
+        "no tab names a profile, so the comparison has nothing to compare"
+    )
+    assert audit.c8_served_purposes() == [], "the repaired protocol has no finding left"
+
+
+def test_the_catalogs_second_statement_of_the_scope_is_compared(audit, monkeypatch):
+    """The third file, found the same way: by the investigator asking.
+
+    catalog.json states the round's scope in purposes_in_scope, and every
+    published view of the scope is built from it. It held ["continuity",
+    "audit"] under D8 on the day the protocol stopped holding them, so the
+    repair that fixed the protocol alone would have left the catalog saying the
+    old thing and the audit reporting zero.
+    """
+    real = audit.load
+
+    def planted(path: str):
+        value = real(path)
+        if path == audit.CATALOG_PURPOSES:
+            value["purposes_in_scope"]["served"] = ["continuity", "audit"]
+        return value
+
+    monkeypatch.setattr(audit, "load", planted)
+    found = audit.c8_served_purposes()
+    assert len(found) == 1
+    assert found[0]["says"] == ["audit", "continuity"]
+    assert found[0]["holds"] == ["continuity"]
+    assert "second time" in found[0]["note"]
+
+
+def test_the_catalog_dropping_a_purpose_from_its_record_is_compared(audit, monkeypatch):
+    """Agreeing on what is served is not agreeing on the scope.
+
+    A catalog that serves the same purpose and forgets which ones were dropped
+    answers the question differently, and a check that compared only `served`
+    would call that agreement.
+    """
+    real = audit.load
+
+    def planted(path: str):
+        value = real(path)
+        if path == audit.CATALOG_PURPOSES:
+            value["purposes_in_scope"]["out_of_scope"] = ["supervision", "client"]
+        return value
+
+    monkeypatch.setattr(audit, "load", planted)
+    found = audit.c8_served_purposes()
+    assert [f["says"] for f in found] == [["client", "supervision"]]
+    assert found[0]["holds"] == ["audit", "client", "supervision"]
