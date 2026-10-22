@@ -3,7 +3,7 @@
   "marker": "AUTHORED-INVESTIGATOR-TEXT",
   "what_this_is": "Every finding re-derived from the files it is about. Nothing here is written down as a finding: a finding that stops being true disappears from this file, and a new one appears without anybody noticing it first.",
   "what_it_cannot_do": "Four classes cannot be computed: two prose sentences contradicting each other, the present tense used of something not run, a claim buried in a field meant for something else, and a convention with no source. They are listed under found_by_reading with their evidence, and reading is not exhaustive.",
-  "claim_bearing_files_scanned": 130,
+  "claim_bearing_files_scanned": 131,
   "not_scanned": {
     "research/gen2/audit.py": "the checker",
     "research/gen2/audit-findings.json": "its report, which quotes what it found"
