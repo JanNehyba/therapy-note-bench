@@ -1,6 +1,6 @@
 {
   "id": "therapy-note-construct-review",
-  "version": "2.19.0",
+  "version": "2.20.0",
   "status": "protocol_amended_before_pilot_search_partially_executed",
   "recorded_date": "2026-10-14",
   "design": "Instrument development informed by a systematic scoping review, expert proposals and empirical observations",
@@ -310,8 +310,8 @@
     "review_completion": "Only executed searches and verified decisions count as completed; blocked sources remain named gaps",
     "scope": "Report selected and required methods, planned/applicable/assessed units, and incomplete critical-error assessment even in public aggregates"
   },
-  "supersedes": "2.18.0",
-  "amendment_reason": "D27: pilot.purposes drops audit, as D22 decided in prose a day earlier, and the plan halves to eight notes until the therapeutic note has a profile in the code.",
+  "supersedes": "2.19.0",
+  "amendment_reason": "D28: an essential property the task never asked for goes into the task, and the check that the model followed it is reported beside the score and never counted into it, because counting it would grade obedience.",
   "retrieval_gaps": "Record reports not retrieved separately from full-text eligibility exclusions; unavailable databases remain named gaps",
   "expert_inputs": "May enter throughout development. Later support does not rewrite historical origin; author or colleague proposals do not imply consensus.",
   "registration": {
@@ -699,6 +699,23 @@
       "what_it_costs": "The plan halves. Sixteen balanced notes came from two purposes times two generator families times two cohorts; one implementable purpose gives eight and four of them rated by a human, because the planner refuses a sample that differs from the protocol rather than quietly drawing a different one. The human annotation budget is a budget of units rather than notes, so it does not move with it. Sixteen returns when the therapeutic note has a profile. Writing that profile is Phase F work and needs the investigator's review, because the sources for the genre are mostly vendor documentation and the American rule has to be read in its own text.",
       "what_this_is_not": "Not a narrowing of the round. The panel rates both note types on separate tabs and the catalog carries both; what is narrowed is the set of purposes a note can be generated for today, which is one.",
       "found_by": "The investigator asked why the code still holds four profiles after several audits. The audit could not have found this: C5 checks that a dotted path a decision names exists, and D22 names its targets in sentences. A check that compares the served purposes with the purposes the panel sheet is built for is added with this amendment."
+    },
+    {
+      "id": "D28",
+      "date": "2026-10-22",
+      "origin": "investigator",
+      "decision": "Where the panel calls a criterion essential and the generation task asks for nothing about it, the task gains the instruction, and the check that the model followed it is reported beside the score and never counted into it. What counts into the score is whether it was done well.",
+      "replaces": "nothing; the four consequences recorded in advance did not cover this case, so it would have been decided per criterion after the answers arrived",
+      "affects": [
+        "content_validity.what_an_essential_answer_leads_to",
+        "content_validity.consequences_recorded_in_advance",
+        "the generation task, which may gain instructions the panel's answers call for",
+        "K18 and K20, which are the two halves of the line this rule draws"
+      ],
+      "why": "The investigator asked whether an essential property absent from the task goes into the task and is then measured for compliance. Both obvious answers are wrong: measuring a property nobody asked for penalises a model for not doing what it was not told, and counting compliance into the score grades obedience, which saturates and stops separating the systems.",
+      "found_by": "The investigator, from K18. Its own record already said what the rule now generalises -- no pilot task requires author citations, so the denominator would be empty -- and nothing said what to do when the panel disagrees with that task.",
+      "and_one_count_repaired_with_it": "The fourth consequence recorded in advance said a panel of three; D22 made the panel four the day before and the count was not changed with it. The substance of the sentence is unchanged.",
+      "not_decided_here": "Which criteria fall on which side. That is read from each criterion once the panel has answered, and a criterion bundling both halves is split first."
     }
   ],
   "content_validity": {
@@ -799,7 +816,20 @@
       "The measured set after the panel may differ from the sixteen chosen before it, and the pilot runs on the panel's set.",
       "If the panel retains the criterion the investigator dropped on 2026-10-05, that decision was wrong and the paper says so.",
       "If the panel drops a criterion the assistant proposed, the same applies in the other direction.",
-      "A panel of three cannot establish content validity, so the paper claims a screening of the pool by three independent raters and reports the gap that remains."
-    ]
+      "A panel of four cannot establish content validity either, so the paper claims a screening of the pool by four independent raters and reports the gap that remains. The sentence said three until 2026-10-22: D22 made the panel four on the day before and the count here was not changed with it. The substance is unchanged, because four is still below the five to seven the field calls typical.",
+      "If the panel calls a criterion essential and the generation task asks for nothing about it, the task gains the instruction and the check that it was followed is reported beside the score and never counted into it; a criterion that is both a property of the note and a convention of the form is split. The rule is content_validity.what_an_essential_answer_leads_to and was recorded on 2026-10-22, before any answer existed (decision D28)."
+    ],
+    "what_an_essential_answer_leads_to": {
+      "declared_before_any_answer": "2026-10-22, before any sheet was sent and before any answer existed. The question came from the investigator and the rule is his; it is written now because deciding it per criterion after the answers arrive is deciding it once the direction is visible.",
+      "the_rule": "Where the panel calls a criterion essential and the generation task asks for nothing about it, the task gains the instruction, and the check that the model followed it is reported beside the score and never counted into it. What counts into the score is whether it was done well.",
+      "branches": {
+        "needs_no_instruction": "A property a good note has by being good -- it does not invent, it keeps negation and uncertainty, it records assessed risk, it separates an agreement from a suggestion. It becomes a quality measure and the task is unchanged, because a note that fails it is bad whether or not we forbade the failure.",
+        "exists_only_because_it_was_asked_for": "Sections, length, language, author-provided citations. The task gains the instruction, prompt_version is bumped, and whether the model followed it is a deterministic check reported beside the score. K20 already sits there and is the shape the rest follow.",
+        "a_criterion_that_is_both": "Split, each half to its own side. K18 needs no rewriting to be split: it declares three numbers and never one, and the share of claims carrying a citation is the compliance half while whether the citation supports the claim is the quality half."
+      },
+      "why_the_compliance_check_is_not_in_the_score": "It would grade obedience. Every capable model follows a formatting instruction, so the measure saturates, the systems stop being separated by it, and a ranking that includes it is a ranking of instruction-following wearing the name of note quality. The project already asks this question of its own measures with `tnb saturation`.",
+      "what_is_reported": "Which criteria changed the task and what was added; that notes generated before the change are not comparable with notes generated after it, because prompt_version is part of the instrument; and for every criterion that stays unmeasured, that it is essential and unmeasured rather than absent from the pool.",
+      "what_this_rule_does_not_decide": "Whether a given property needs an instruction. That is read from the criterion, and a criterion whose two halves were never separated has to be split before it can be classified. Nothing automates the reading."
+    }
   }
 }

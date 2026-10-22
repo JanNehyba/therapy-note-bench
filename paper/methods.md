@@ -341,7 +341,7 @@ removed with K19 on 2026-10-05. The protocol records
 the executable count at freeze rather than capping it. The registry refuses to
 freeze while any used subject lacks an accepted decision.
 
-The feasibility pilot (protocol 2.19.0) freezes 16 generation jobs over two
+The feasibility pilot (protocol 2.20.0) freezes 16 generation jobs over two
 cohorts, two English AnnoMI conversations and their Czech translations, two
 purposes and two generator families, and balances an 8-note human sample across
 them. Two Czech psychologists, neither the instrument author, rate under a
@@ -460,7 +460,16 @@ ambivalent middle; the labels, however, are not, and whether they are Davis's
 (1992) is unsettled because the figure that would settle it is one we did not
 read. What the panel supplies is still a screening of the pool and not
 established content validity, and the measured set the pilot uses is the
-panel's rather than the authors'. The two Czech
+panel's rather than the authors'. Where the panel calls a property essential
+and the generation task asks for nothing about it, the task gains the
+instruction and the check that the model followed it is reported beside the
+score rather than counted into it; what the score carries is whether the thing
+was done well. Counting compliance would grade instruction-following, which
+every capable model satisfies and which therefore separates no systems, and a
+criterion that is both a property of the note and a convention of the form is
+split so that each half goes to its own side. The rule was recorded on
+2026-10-22, before any sheet had been sent, because deciding it per criterion
+once the answers are visible is not the same rule. The two Czech
 psychologists of the pilot are raters, not independent judges of the pool, and
 a feasibility pilot does not stand in for that judgement. COSMIN's criteria
 name relevance, comprehensiveness and comprehensibility as what such a
