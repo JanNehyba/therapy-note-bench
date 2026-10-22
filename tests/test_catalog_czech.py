@@ -354,8 +354,8 @@ def test_every_step_of_the_scale_reaches_the_sheet_with_what_it_means(catalog, c
 def test_the_harm_question_is_asked_once_with_an_example(catalog, czech, codes):
     """A rule with teeth needs an input, and the input is one box with a worked case.
 
-    Any rater naming a criterion here keeps it unmeasured this round whatever
-    its relevance, so the question cannot simply disappear. It was a column of
+    Any criterion the answer identifies stays unmeasured this round whatever its
+    relevance, so the question cannot simply disappear. It was a column of
     thirty-nine cells until 2026-10-22, thirty-eight of which would have stayed
     empty, and the investigator refused both that and the invented example that
     explained it: a model graded on non-stigmatising language does not stop
@@ -364,6 +364,11 @@ def test_the_harm_question_is_asked_once_with_an_example(catalog, czech, codes):
     What replaces it is one box under the table and the case this project
     documented itself: a one-sentence note scores 1.00 on economy, so grading
     economy alone rewards writing almost nothing.
+
+    On the same day the question lost its harm clause and its instruction to
+    write the criterion's code, at the investigator's word (D26). Asking for the
+    code again is a change to the rule that reads the answer, not a wording
+    choice, so this test holds the sheet to not asking.
     """
     sheet = czech["panel_sheet"]
     table = panel_sheet.rows(czech, codes, catalog)
@@ -373,14 +378,16 @@ def test_the_harm_question_is_asked_once_with_an_example(catalog, czech, codes):
     under = [row[0] for row in table[table.index(list(header)) + len(codes) + 1 :] if row]
     asked = "\n".join(under)
     # Two open questions under the table, not one: what the list is missing,
-    # and where measuring would backfire.
+    # and how a good mark could be had without the note deserving it.
     assert sum("?" in line for line in under) >= 3
     # The worked example is the criterion this project documented the trap on:
     # a one-sentence note scores 1.00 on economy.
     assert czech["candidates"]["K11"]["name"] in asked
-    # And the rater is asked which criterion they mean, in the word the table's
-    # own first column uses for it.
-    assert header[0].lower() in asked.lower()
+    # And the rater is not asked for the criterion's code. The instruction was
+    # cut on 2026-10-22 and the protocol's harm flag was weakened to match, so
+    # putting it back without amending the flag would leave the rule claiming a
+    # machine-readable input it does not have.
+    assert header[0].lower() not in asked.lower()
     # The column's header and its legend block are gone, recorded with the
     # date, and may not come back onto a built sheet.
     everything = "\n".join(

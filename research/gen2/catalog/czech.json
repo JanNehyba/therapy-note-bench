@@ -1866,7 +1866,7 @@
         "Příklad: kritérium „Úspornost“ žádá, aby každá věta nesla podstatný obsah. Zápis, který má jedinou větu, dostane plný počet bodů — ta jedna věta podstatná je a nic dalšího tam není. Čím míň toho model napíše, tím líp dopadne."
       ],
       [
-        "Napadá vás u některého kritéria, jak by na něm model mohl získat dobrou známku, aniž by tomu kvalita zápisu odpovídala? Nebo kde by měření mohlo uškodit klientovi? Napište kód kritéria a čím."
+        "Napadá vás u některého kritéria, jak by na něm model mohl získat dobrou známku, aniž by tomu kvalita zápisu odpovídala?"
       ],
       [
         ""
@@ -2088,6 +2088,11 @@
         "text": "Vidíte takovou past u některého z kritérií? Napište jeho kód a čím by to podle vás mohlo uškodit.",
         "until": "2026-10-22",
         "why": "Reworded on 2026-10-22. The investigator put the question the way a rater can answer it: how could a model win on this without the note being better. Gaming is the part of the harm that has a shape, and the rest of it -- a measure that is honestly maximised and hurts through another criterion, as coverage does to privacy -- stays in the second half of the sentence."
+      },
+      {
+        "text": "Napadá vás u některého kritéria, jak by na něm model mohl získat dobrou známku, aniž by tomu kvalita zápisu odpovídala? Nebo kde by měření mohlo uškodit klientovi? Napište kód kritéria a čím.",
+        "until": "2026-10-22",
+        "why": "Cut on 2026-10-22 at the investigator's word, quoting the clause and the instruction together. What is lost is stated rather than smoothed over: the sheet no longer asks where measuring could harm a client, so the broader harm -- a measure honestly maximised that hurts through another criterion, as coverage does to privacy -- is not asked about at all, and it no longer asks the rater to name the criterion, which is the input the retention rule's harm flag reads."
       }
     ],
     "purposes": {

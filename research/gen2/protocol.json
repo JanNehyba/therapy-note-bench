@@ -1,6 +1,6 @@
 {
   "id": "therapy-note-construct-review",
-  "version": "2.17.0",
+  "version": "2.18.0",
   "status": "protocol_amended_before_pilot_search_partially_executed",
   "recorded_date": "2026-10-14",
   "design": "Instrument development informed by a systematic scoping review, expert proposals and empirical observations",
@@ -306,8 +306,8 @@
     "review_completion": "Only executed searches and verified decisions count as completed; blocked sources remain named gaps",
     "scope": "Report selected and required methods, planned/applicable/assessed units, and incomplete critical-error assessment even in public aggregates"
   },
-  "supersedes": "2.16.0",
-  "amendment_reason": "D25: the panel is asked how a model could win on a criterion without the note being better, and every ratio gains its denominator with a floor set from the pilot, because a one-sentence note scoring 1.00 on economy is the shape that question exists for.",
+  "supersedes": "2.17.0",
+  "amendment_reason": "D26: the panel's second question keeps the gaming half and loses the harm half, at the investigator's word, and with the instruction to name the criterion gone the retention rule's harm flag reads prose instead of a code.",
   "retrieval_gaps": "Record reports not retrieved separately from full-text eligibility exclusions; unavailable databases remain named gaps",
   "expert_inputs": "May enter throughout development. Later support does not rewrite historical origin; author or colleague proposals do not imply consensus.",
   "registration": {
@@ -663,6 +663,21 @@
       "the_two_are_not_the_same": "Gaming is the part of harm that has a shape, and not all of it. Coverage cannot be gamed by including more, it is satisfied by it, and what pays is privacy, through K15. A guard cannot catch that: nothing in a note that honestly covers more looks wrong. Which is why the question keeps its second clause and the two run together.",
       "what_the_guard_does_not_do": "It catches a shape somebody thought of. The panel's answers are where the shapes nobody thought of are supposed to come from, and each one named there becomes a candidate guard rather than a finding on its own.",
       "not_decided_here": "The floor itself. A ratio over one sentence means nothing and a ratio over fifty means something; where it turns is an empirical question the pilot answers, and writing a number here would be the guess this project keeps removing from other people's work."
+    },
+    {
+      "id": "D26",
+      "date": "2026-10-22",
+      "origin": "investigator",
+      "decision": "The panel's second question asks only how a model could get a good mark on a criterion without the note deserving it. The clause asking where measuring could harm a client leaves the sheet, and so does the instruction to write the criterion's code. The retention rule's harm flag reads the free text instead of a code, and an answer that names no criterion flags none.",
+      "replaces": "a question with two halves and an instruction to name the criterion, which the retention rule read mechanically",
+      "affects": [
+        "the sheet's second open question, which is one sentence and its example",
+        "content_validity.retention_rule.harm_flag, whose input is prose and not a code",
+        "the paper's sentence about the second question"
+      ],
+      "why": "The investigator cut it. The gaming half is the half a rater can answer about a criterion they have just read; the harm half asked them to reason about what measuring does, which is a question about our instrument in our words.",
+      "what_is_lost_and_is_not_measured": "Two things, and neither is replaced. The round no longer asks about a measure that is honestly maximised and hurts through another criterion -- coverage is not gamed by including more, it is satisfied by it, and privacy pays through K15 -- so that shape has no question. And the flag no longer has an instructed input: the rater writes prose, the investigator reads which criterion it is about, and where no criterion can be identified the answer is published verbatim and nothing is flagged. A rule read by a person is weaker than one read off a cell and this says so.",
+      "not_decided_here": "Whether the harm question returns in a second round with its own wording. One panel produces no comparison, so there is nothing yet to judge the cut against."
     }
   ],
   "content_validity": {
@@ -716,12 +731,12 @@
       },
       {
         "id": "harm",
-        "text": "How could a model win on this criterion without the note being better, and where could measuring one harm a client? Asked once, under the table, not per item: the rater names the criterion and says how.",
+        "text": "How could a model get a good mark on this criterion without the note deserving it? Asked once, under the table, not per item, as free text.",
         "scale": [
-          "free text, once per rater, naming the criteria it applies to"
+          "free text, once per rater, not per item"
         ],
-        "shown_with": "A worked example from this project's own data: a one-sentence note scores 1.00 on economy, so grading economy by itself rewards writing almost nothing. The example the column carried until 2026-10-22 was invented -- a model graded on non-stigmatising language stopping its record of risk -- and does not follow, because recording risk is a clinical description and not a label on a person.",
-        "effect": "a criterion named here is reported with the flag and is not measured in this round whatever its relevance count, and the reason is kept verbatim"
+        "shown_with": "A worked example from this project's own data: a one-sentence note scores 1.00 on economy, so grading economy by itself rewards writing almost nothing. The example the column carried until 2026-10-22 was invented -- a model graded on non-stigmatising language stopping its record of risk -- and does not follow, because recording risk is a clinical description and not a label on a person. The question asked about harm to a client until 2026-10-22, when the investigator cut that clause; the example was always a gaming shape and is unchanged by the cut.",
+        "effect": "a criterion the answer identifies is reported with the flag and is not measured in this round whatever its relevance count, and the reason is kept verbatim. The sheet stopped asking for the criterion's code on 2026-10-22, so the identification is the investigator's reading of prose and not a field; an answer that identifies no criterion is published and flags nothing."
       },
       {
         "id": "missing",
@@ -747,7 +762,7 @@
         "null": "a rater choosing uniformly among the four points. Nobody behaves like that, so these are a floor for reading the index and not a model of the panel; they are quoted with the null named. Going from three raters to four halves the chance level of the retention rule, which is why the rule did not have to be loosened to accommodate a fourth opinion."
       },
       "missing_answer": "A blank is not an answer, and since 2026-10-22 a rater may say so outright: the scale offers 'nevim', I cannot judge this, coded as missing rather than as a fifth point on the ordinal axis. Either way the index is not computed for that item: it is reported as rated by fewer than four and is not measured. Counting it as not relevant would invent a judgement nobody made, and taking the proportion over the raters who did answer would apply a different rule to that item than to every other -- and an item left blank is likely to be one of the hard ones, so the bias has a direction. What the explicit answer adds is the difference between a criterion that was read and found unjudgeable and one that was skipped.",
-      "harm_flag": "a criterion any rater names in the harm question is reported with the flag and is not measured in this round whatever its relevance count. Until 2026-10-22 the question was a column and the flag was per item; it is now one answer in which the rater names the criteria, so the flag reads a name rather than a cell.",
+      "harm_flag": "a criterion the harm answer identifies is reported with the flag and is not measured in this round whatever its relevance count. The question was a column until 2026-10-22 and the flag was per item; on the same day the question lost its harm clause and its instruction to write the criterion's code, so the flag now reads prose that nothing asked to be machine-readable. Where the answer identifies no criterion it is published verbatim and flags none, which is weaker than the rule it replaces and is stated so.",
       "agreement": "Krippendorff's alpha on the ordinal four-point answers over all three raters, with the three pairwise Cohen's kappas beside it. The rule used to name Cohen's kappa alone, which is defined for two raters and could not report the panel it described; S12 recommends kappa over the content validity ratio and index and does not say how to apply it to three. Both are published, with the caveat that three raters over a pool this size give an imprecise estimate, and alpha is the one quoted in prose.",
       "why_the_cut_is_shown_to_the_raters": "The sheet already told them what happens to their answers, and a rater who is not told where the line falls guesses. The cost is named rather than avoided: a rater who knows the cut can answer at the extremes to push an item in or out, which is a risk the alternative does not remove, it only hides.",
       "what_the_rule_does_not_do": "it does not decide whether an item is measurable, only whether the panel judges it relevant. A relevant item with no operational rule stays unmeasured for that reason and the two reasons are reported apart.",
