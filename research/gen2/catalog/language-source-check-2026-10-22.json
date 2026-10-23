@@ -1,0 +1,4295 @@
+{
+ "version": "language-source-check-v1",
+ "date": "2026-10-22",
+ "what_this_is": "A check of whether the Czech text of each candidate says what its English entry says (all 39 candidates), and whether the English entry follows from the sources it cites (the 12 candidates with a measurement rule this round). Until this check the suite tested only that the Czech names the catalog's codes and that required fields are not empty; nothing compared meaning, and K17's statement said something other than its English.",
+ "scope": {
+  "level_1": "all 39 candidates, every Czech field against the English field(s) it renders, and the Czech of each measurement rule against its English",
+  "level_2": "the candidates with a rule in this round, derived as research/gen2/state.py catalog_state() derives them",
+  "level_2_codes": [
+   "K01",
+   "K02",
+   "K03",
+   "K04",
+   "K05",
+   "K06",
+   "K07",
+   "K08",
+   "K10",
+   "K11",
+   "K12",
+   "K14"
+  ],
+  "why": "The investigator's decision of 2026-10-22: the panel reads all 39 statements, and K17, where the failure was found, is not among the 12 with a rule. Sources for the other 27 are not checked in this round.",
+  "not_checked": "Sources of the 27 candidates without a rule this round: unchecked, not passed.",
+  "not_covered": "K40 to K48 were added to the catalog after the commit this check read (6f74f3f) and are not covered at either level."
+ },
+ "inputs": {
+  "commit": "6f74f3f",
+  "sha256": {
+   "research/gen2/catalog/catalog.json": "ee64f305b56252200e267ac3df21909f49a84ebf1169dc9eef23f1cfd0156e32",
+   "research/gen2/catalog/czech.json": "4fb4ec830e5d930928cdaa429464961136e3176b1d58ec344b2b5b064e773c5b",
+   "research/gen2/catalog/operational.json": "bef016bccf0e8091adb2ca318700570e5582b133f489ea4ac44af46ad2f75b97"
+  },
+  "full_texts": "local/gen2-review-2026-09-13/fulltext/ (gitignored): tn-eval.txt (S1), pdsqi-9.txt (S2), icare-ihope.txt (S3), cosmin-content-validity.txt/.xml (S11)"
+ },
+ "who_read": "The coding assistant: five reading passes by subagents, then a second read by the assistant of every panel-sheet row not read as the same, of every page row read as different or adds, of the three source readings that reverse or overstate a source, and of ten rows read as the same drawn at random. Sources stand on the assistant's reading: the investigator has delegated source verification and does not review it item by item.",
+ "what_reaches_whom": {
+  "panel_sheet": "name, statement and the failing example (research/gen2/catalog/panel_sheet.py)",
+  "local_czech_page": "every other field (render_catalog_cs.py writes local/kriteria-cesky.html; it is not published)"
+ },
+ "quotes": {
+  "rule": "Each quote is searched for in the source's full text after normalising whitespace, quotation marks, dashes and soft hyphens. A quote not found whole is searched for word by word in order; the remaining ones were read in the text.",
+  "counts": {
+   "verbatim_across_pdf_column_or_line_break": 6,
+   "verbatim_across_line_end_hyphenation_read_by_eye": 2,
+   "verbatim": 13
+  },
+  "rows": [
+   {
+    "code": "K01",
+    "evidence_index": 0,
+    "source": "S1",
+    "found": "verbatim_across_pdf_column_or_line_break"
+   },
+   {
+    "code": "K01",
+    "evidence_index": 1,
+    "source": "S2",
+    "found": "verbatim_across_line_end_hyphenation_read_by_eye"
+   },
+   {
+    "code": "K02",
+    "evidence_index": 0,
+    "source": "S1",
+    "found": "verbatim"
+   },
+   {
+    "code": "K03",
+    "evidence_index": 0,
+    "source": "S2",
+    "found": "verbatim"
+   },
+   {
+    "code": "K04",
+    "evidence_index": 0,
+    "source": "S1",
+    "found": "verbatim"
+   },
+   {
+    "code": "K05",
+    "evidence_index": 0,
+    "source": "S1",
+    "found": "verbatim"
+   },
+   {
+    "code": "K05",
+    "evidence_index": 1,
+    "source": "S1",
+    "found": "verbatim_across_line_end_hyphenation_read_by_eye"
+   },
+   {
+    "code": "K05",
+    "evidence_index": 2,
+    "source": "S2",
+    "found": "verbatim_across_pdf_column_or_line_break"
+   },
+   {
+    "code": "K06",
+    "evidence_index": 0,
+    "source": "S3",
+    "found": "verbatim"
+   },
+   {
+    "code": "K07",
+    "evidence_index": 0,
+    "source": "S2",
+    "found": "verbatim_across_pdf_column_or_line_break"
+   },
+   {
+    "code": "K07",
+    "evidence_index": 1,
+    "source": "S11",
+    "found": "verbatim"
+   },
+   {
+    "code": "K08",
+    "evidence_index": 0,
+    "source": "S1",
+    "found": "verbatim"
+   },
+   {
+    "code": "K08",
+    "evidence_index": 1,
+    "source": "S3",
+    "found": "verbatim"
+   },
+   {
+    "code": "K10",
+    "evidence_index": 0,
+    "source": "S1",
+    "found": "verbatim"
+   },
+   {
+    "code": "K10",
+    "evidence_index": 1,
+    "source": "S3",
+    "found": "verbatim"
+   },
+   {
+    "code": "K11",
+    "evidence_index": 0,
+    "source": "S1",
+    "found": "verbatim"
+   },
+   {
+    "code": "K11",
+    "evidence_index": 1,
+    "source": "S2",
+    "found": "verbatim"
+   },
+   {
+    "code": "K12",
+    "evidence_index": 0,
+    "source": "S2",
+    "found": "verbatim_across_pdf_column_or_line_break"
+   },
+   {
+    "code": "K12",
+    "evidence_index": 1,
+    "source": "S1",
+    "found": "verbatim_across_pdf_column_or_line_break"
+   },
+   {
+    "code": "K14",
+    "evidence_index": 0,
+    "source": "S2",
+    "found": "verbatim_across_pdf_column_or_line_break"
+   },
+   {
+    "code": "K14",
+    "evidence_index": 1,
+    "source": "S1",
+    "found": "verbatim"
+   }
+  ]
+ },
+ "level_1": {
+  "verdicts": [
+   "same",
+   "narrower",
+   "broader",
+   "different",
+   "adds",
+   "no_counterpart"
+  ],
+  "counts": {
+   "adds": 9,
+   "broader": 28,
+   "different": 9,
+   "narrower": 92,
+   "same": 363
+  },
+  "panel_sheet_counts": {
+   "adds": 3,
+   "broader": 7,
+   "different": 3,
+   "narrower": 21,
+   "same": 83
+  },
+  "second_read_counts": {
+   "accepted": 20,
+   "confirmed": 27,
+   "same_confirmed": 10
+  },
+  "not_second_read": "Page rows read as narrower or broader (questions, plain summaries, how-it-is-measured) were not re-read one by one: the page is local, and a shorter question or plain summary is shorter on purpose. They are recorded with their reasons.",
+  "rows": [
+   {
+    "code": "K01",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K01",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'Chybějící opora se dělí na vymyšlené ... a zkreslené' leaves the adjectives with no noun to agree with; 'Tvrzení bez opory je buď vymyšlené (...), nebo zkreslené (...)' is the Czech sentence, and 'deklarovaném zdroji' would usually be 'uvedeném zdroji'.",
+    "second_read": {
+     "verdict": "same_confirmed",
+     "why": "Drawn for the second read of rows read as the same."
+    }
+   },
+   {
+    "code": "K01",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K01",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K01",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K01",
+    "field": "how",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Zápis se rozloží na tvrzení a každé se ověří proti přepisu.",
+    "english": "Verification of claims against the source with four outcomes: supported, contradicted, unsupported, unassessable.",
+    "reason": "Drops the four outcomes (supported, contradicted, unsupported, unassessable) and narrows 'the source' to the transcript."
+   },
+   {
+    "code": "K01",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K01",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Všechno, co zápis tvrdí, muselo v sezení opravdu zaznít.",
+    "english": "Every factual claim in the note has support in the session transcript or in another declared source. Lack of support divides into invented (the source has nothing of the kind) and distorted (the source says something else).",
+    "reason": "Requires everything to have been said in the session, dropping 'or in another declared source'."
+   },
+   {
+    "code": "K01",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Má každé tvrzení oporu v tom, co zaznělo?",
+    "english": "definition: Every factual claim in the note has support in the session transcript or in another declared source. Lack of support divides into invented (the source has nothing of the kind) and distorted (the source says something else). | measurement: Verification of claims against the source with four outcomes: supported, contradicted, unsupported, unassessable.",
+    "reason": "Ties support to what was said, dropping 'or in another declared source', and drops 'factual' (věcné), so every claim rather than every factual claim is in scope."
+   },
+   {
+    "code": "K01",
+    "field": "rule:claims.applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'Výrok, který zápis připisuje klientovi jako řeč klienta' is redundant; a Czech writer would say 'Co zápis uvádí jako slova klienta, se ověřuje jako to, co klient řekl'."
+   },
+   {
+    "code": "K01",
+    "field": "rule:claims.definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'nese svého aktéra' calques 'carries its actor' and 'je popřené' (for 'contradicted') reads as 'is denied'; 'obsahuje aktéra' and 'je v rozporu s přepisem' are the Czech phrasing."
+   },
+   {
+    "code": "K01",
+    "field": "rule:claims.outcomes",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'přepis nese tvrzení' calques 'the transcript carries the claim'; 'přepis tvrzení obsahuje / dokládá' is the Czech verb."
+   },
+   {
+    "code": "K01",
+    "field": "rule:claims.severity_rules",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'popřené tvrzení' for 'contradicted claim' reads as 'a claim someone denied'; 'tvrzení v rozporu s přepisem' says what is meant, and 'kterou přepis nenese' again calques 'carry'."
+   },
+   {
+    "code": "K01",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "narrower",
+    "czech": "Každé věcné tvrzení v zápisu má oporu v tom, co v sezení zaznělo.",
+    "english": "definition: Every factual claim in the note has support in the session transcript or in another declared source. Lack of support divides into invented (the source has nothing of the kind) and distorted (the source says something else). | measurement: Verification of claims against the source with four outcomes: supported, contradicted, unsupported, unassessable. | examples.positive: Transcript: the client says they sleep about four hours. Note: The client reports sleeping about four hours. | examples.negative: Note: The client reports insomnia since the divorce. No divorce was mentioned in the session. | examples.boundary: Note: The client seemed tired. The transcript only contains a yawn; a therapist's observation can be neither verified nor refuted from a text transcript.",
+    "reason": "Drops 'or in another declared source': the Czech ties support to what was said in the session only, so a claim supported by earlier documentation or another declared source would fail it.",
+    "second_read": {
+     "verdict": "confirmed",
+     "why": "Ties support to what was said in the session, where the English names the transcript or another declared source; proposed together with K37 so that both read against the source, as K38 and K39 already do."
+    }
+   },
+   {
+    "code": "K01",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K01",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K02",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "broader",
+    "czech": "Vyžaduje přepis s rozlišenými mluvčími. Bez toho se to nedá měřit.",
+    "english": "Requires a transcript with speaker roles. Without diarisation it cannot be measured.",
+    "reason": "'Speaker roles' (which speaker is the client, which the therapist) becomes 'rozlišení mluvčí' (speakers told apart), which an anonymous diarisation (Speaker A/B) would satisfy; minor, since the English second sentence itself says diarisation."
+   },
+   {
+    "code": "K02",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K02",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K02",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K02",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "Uses 'partner' while the negative example uses 'partnerka'; harmless, but the pair reads as two different people."
+   },
+   {
+    "code": "K02",
+    "field": "how",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Totéž, se zaměřením na aktéra tvrzení.",
+    "english": "Part of claim comparison: agreement on the actor is a condition of the verdict supported.",
+    "reason": "'Totéž, se zaměřením na aktéra' drops that agreement on the actor is a condition of the verdict supported, and 'Totéž' only makes sense when read right after K01."
+   },
+   {
+    "code": "K02",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K02",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Musí být poznat, co řekl klient, co terapeut a co někdo třetí.",
+    "english": "The note preserves who said or observed what: the client's statement, the therapist's observation, a third party's information, information from earlier documentation.",
+    "reason": "Drops 'observed' and 'earlier documentation': it names only what the client, the therapist and a third party said."
+   },
+   {
+    "code": "K02",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Je poznat, co řekl klient, co terapeut a co někdo třetí?",
+    "english": "definition: The note preserves who said or observed what: the client's statement, the therapist's observation, a third party's information, information from earlier documentation. | measurement: Part of claim comparison: agreement on the actor is a condition of the verdict supported.",
+    "reason": "Drops 'observed' and 'earlier documentation': it asks only who said what among client, therapist and a third party."
+   },
+   {
+    "code": "K02",
+    "field": "rule:claims.applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'Výrok, který zápis připisuje klientovi jako řeč klienta' is redundant; a Czech writer would say 'Co zápis uvádí jako slova klienta, se ověřuje jako to, co klient řekl'."
+   },
+   {
+    "code": "K02",
+    "field": "rule:claims.definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'nese svého aktéra' calques 'carries its actor' and 'je popřené' (for 'contradicted') reads as 'is denied'; 'obsahuje aktéra' and 'je v rozporu s přepisem' are the Czech phrasing."
+   },
+   {
+    "code": "K02",
+    "field": "rule:claims.outcomes",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'přepis nese tvrzení' calques 'the transcript carries the claim'; 'přepis tvrzení obsahuje / dokládá' is the Czech verb."
+   },
+   {
+    "code": "K02",
+    "field": "rule:claims.severity_rules",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'popřené tvrzení' for 'contradicted claim' reads as 'a claim someone denied'; 'tvrzení v rozporu s přepisem' says what is meant, and 'kterou přepis nenese' again calques 'carry'."
+   },
+   {
+    "code": "K02",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K02",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K02",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K03",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K03",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'co je aktuální oproti minulému' is stiff; 'co platí teď a co platilo dřív' is how it would be said."
+   },
+   {
+    "code": "K03",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K03",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K03",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K03",
+    "field": "how",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Totéž, se zaměřením na čas a změnu stavu.",
+    "english": "Agreement on time is a condition of the verdict supported. A separate temporal score is not introduced before it is shown to add information over K01.",
+    "reason": "Drops both English sentences: that agreement on time is a condition of the verdict supported, and that no separate temporal score is introduced before it is shown to add information over K01."
+   },
+   {
+    "code": "K03",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "same",
+    "second_read": {
+     "verdict": "same_confirmed",
+     "why": "Drawn for the second read of rows read as the same."
+    }
+   },
+   {
+    "code": "K03",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Musí být poznat, kdy se co stalo a co z toho platí teď.",
+    "english": "The note preserves when what happened and what is current as opposed to past: current state, history, intention, plan.",
+    "reason": "Drops intention and plan; it asks only when things happened and what holds now."
+   },
+   {
+    "code": "K03",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Je poznat, kdy se co stalo a co je aktuální?",
+    "english": "definition: The note preserves when what happened and what is current as opposed to past: current state, history, intention, plan. | measurement: Agreement on time is a condition of the verdict supported. A separate temporal score is not introduced before it is shown to add information over K01.",
+    "reason": "Drops 'as opposed to past' and the list that includes intention and plan."
+   },
+   {
+    "code": "K03",
+    "field": "rule:claims.applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'Výrok, který zápis připisuje klientovi jako řeč klienta' is redundant; a Czech writer would say 'Co zápis uvádí jako slova klienta, se ověřuje jako to, co klient řekl'."
+   },
+   {
+    "code": "K03",
+    "field": "rule:claims.definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'nese svého aktéra' calques 'carries its actor' and 'je popřené' (for 'contradicted') reads as 'is denied'; 'obsahuje aktéra' and 'je v rozporu s přepisem' are the Czech phrasing."
+   },
+   {
+    "code": "K03",
+    "field": "rule:claims.outcomes",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'přepis nese tvrzení' calques 'the transcript carries the claim'; 'přepis tvrzení obsahuje / dokládá' is the Czech verb."
+   },
+   {
+    "code": "K03",
+    "field": "rule:claims.severity_rules",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'popřené tvrzení' for 'contradicted claim' reads as 'a claim someone denied'; 'tvrzení v rozporu s přepisem' says what is meant, and 'kterou přepis nenese' again calques 'carry'."
+   },
+   {
+    "code": "K03",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "narrower",
+    "czech": "Zápis zachovává, kdy se co stalo a co je aktuální oproti minulému.",
+    "english": "definition: The note preserves when what happened and what is current as opposed to past: current state, history, intention, plan. | measurement: Agreement on time is a condition of the verdict supported. A separate temporal score is not introduced before it is shown to add information over K01. | examples.positive: In the last session he refused; today he is considering it. | examples.negative: The client takes antidepressants. The session was about use two years ago. | examples.boundary: Plans to contact his brother. An intention voiced in the session, not an event that took place.",
+    "reason": "Drops the list 'current state, history, intention, plan', so intentions and plans (an intention recorded as an event is the boundary example) fall outside 'current as opposed to past'.",
+    "idiom_note": "'co je aktuální oproti minulému' is stiff; 'co platí teď a co platilo dřív' is how it would be said.",
+    "second_read": {
+     "verdict": "confirmed",
+     "why": "Intention and plan are part of the English list and fall outside 'current as opposed to past'."
+    }
+   },
+   {
+    "code": "K03",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K03",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K04",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K04",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K04",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K04",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K04",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K04",
+    "field": "how",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Totéž, se zaměřením na míru jistoty.",
+    "english": "Agreement on modality is a condition of the verdict supported; it is also tracked as a separate error type.",
+    "reason": "Drops that agreement on modality is a condition of supported and is tracked as its own error type, and 'míra jistoty' (degree of certainty) is only one part of modality (fact, hypothesis, plan, agreement, certainty)."
+   },
+   {
+    "code": "K04",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K04",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Musí být poznat, co je fakt, co terapeutova domněnka a co dohoda s klientem.",
+    "english": "The note preserves epistemic status: what is certain, what is the therapist's hypothesis, what is a suggestion and what is an agreement between therapist and client.",
+    "reason": "Drops 'suggestion', the category whose confusion with agreement is the error consequence."
+   },
+   {
+    "code": "K04",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Je poznat, co je fakt, co dohoda a co domněnka?",
+    "english": "definition: The note preserves epistemic status: what is certain, what is the therapist's hypothesis, what is a suggestion and what is an agreement between therapist and client. | measurement: Agreement on modality is a condition of the verdict supported; it is also tracked as a separate error type.",
+    "reason": "Drops 'suggestion' (the suggestion-versus-agreement line the error consequence is about) and no longer attributes the hypothesis to the therapist ('domněnka')."
+   },
+   {
+    "code": "K04",
+    "field": "rule:claims.applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'Výrok, který zápis připisuje klientovi jako řeč klienta' is redundant; a Czech writer would say 'Co zápis uvádí jako slova klienta, se ověřuje jako to, co klient řekl'."
+   },
+   {
+    "code": "K04",
+    "field": "rule:claims.definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'nese svého aktéra' calques 'carries its actor' and 'je popřené' (for 'contradicted') reads as 'is denied'; 'obsahuje aktéra' and 'je v rozporu s přepisem' are the Czech phrasing."
+   },
+   {
+    "code": "K04",
+    "field": "rule:claims.outcomes",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'přepis nese tvrzení' calques 'the transcript carries the claim'; 'přepis tvrzení obsahuje / dokládá' is the Czech verb."
+   },
+   {
+    "code": "K04",
+    "field": "rule:claims.severity_rules",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'popřené tvrzení' for 'contradicted claim' reads as 'a claim someone denied'; 'tvrzení v rozporu s přepisem' says what is meant, and 'kterou přepis nenese' again calques 'carry'."
+   },
+   {
+    "code": "K04",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K04",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K04",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K05",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K05",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K05",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K05",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K05",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K05",
+    "field": "how",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Z přepisu se předem sestaví banka faktů se stupni důležitosti; u každého se zjistí, jestli ho zápis nese.",
+    "english": "QA against a bank built from the source, with the score reported separately for each importance level. Never one average number.",
+    "reason": "Drops the reporting rule 'score reported separately for each importance level, never one average number', which is what the error consequence rests on."
+   },
+   {
+    "code": "K05",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "narrower",
+    "czech": "Pokrytí podstatného obsahu",
+    "english": "Coverage of essential content weighted by importance",
+    "reason": "Drops 'weighted by importance'; the statement restores that essentiality is graded.",
+    "second_read": {
+     "verdict": "accepted",
+     "why": "A name is a label; the statement says that essentiality is graded."
+    }
+   },
+   {
+    "code": "K05",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Jestli je v zápisu to podstatné, co v sezení zaznělo. Podstatnost má stupně.",
+    "english": "The share of essential information from the session that the note carries, where essentiality is graded and derived from the source and the purpose, not from the existence of a field in a form.",
+    "reason": "Drops that essentiality is derived from the source and the purpose and not from the fields of a form."
+   },
+   {
+    "code": "K05",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Je v zápisu to podstatné, co zaznělo? Důležitost má stupně.",
+    "english": "definition: The share of essential information from the session that the note carries, where essentiality is graded and derived from the source and the purpose, not from the existence of a field in a form. | measurement: QA against a bank built from the source, with the score reported separately for each importance level. Never one average number.",
+    "reason": "Drops that essentiality is derived from the source and the purpose and not from the fields of a form."
+   },
+   {
+    "code": "K05",
+    "field": "rule:qa.applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'se tak zaznamená' can be read as 'is thus recorded'; 'se zaznamená jako dodatečně přidaná' says 'recorded as such'."
+   },
+   {
+    "code": "K05",
+    "field": "rule:qa.definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "Two grammar slips: 'zda ho zápis nese' should be 'zda ji zápis nese' (jednotka is feminine), and 'jednotku, o které zápis říká ..., se hodnotí' mixes an accusative with the reflexive passive ('jednotka, o které ..., se hodnotí'); 'nebyla probrána' (not discussed) for 'not asked' is looser than K06's 'nikdo se nezeptal'."
+   },
+   {
+    "code": "K05",
+    "field": "rule:qa.outcomes",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'s nejasným vztažením' for 'with an unclear referent' is opaque; 'není jasné, k čemu nebo ke komu se vztahuje' is how it would be said."
+   },
+   {
+    "code": "K05",
+    "field": "rule:qa.severity_rules",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'popření jednotky' (the error 'contradicted') is the same word as the client's legitimate denial in P02 ('klient výslovně popřel'), so 'jakékoli popření ... jednotky označené jako riziko' can be misread as making a client's denial of risk a critical error; 'rozpor s jednotkou' keeps the two apart."
+   },
+   {
+    "code": "K05",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "narrower",
+    "czech": "Zápis nese podstatné informace ze sezení, přičemž podstatnost má stupně.",
+    "english": "definition: The share of essential information from the session that the note carries, where essentiality is graded and derived from the source and the purpose, not from the existence of a field in a form. | measurement: QA against a bank built from the source, with the score reported separately for each importance level. Never one average number. | examples.positive: Self-harm was mentioned and the note carries it; an item of the Mandatory level. | examples.negative: Self-harm was mentioned and the note lacks it. | examples.boundary: The session contains nothing about medication. The item is not applicable, not unmet, and does not belong in the denominator.",
+    "reason": "Drops 'derived from the source and the purpose, not from the existence of a field in a form', the clause that separates this criterion from filling in a template's fields.",
+    "idiom_note": "'Zápis nese podstatné informace' calques 'carries' ('obsahuje' / 'zachycuje'), and 'podstatnost má stupně' would read better as 'informace jsou různě podstatné'.",
+    "second_read": {
+     "verdict": "accepted",
+     "why": "The dropped clause separates the criterion from filling a template's fields; a rater judging how essential the property is does not need it."
+    }
+   },
+   {
+    "code": "K05",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K05",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K06",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K06",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K06",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'dává další péči falešné ujištění' keeps the English personification of 'further care'; 'falešně ujistí ty, kdo v péči pokračují' is the Czech way."
+   },
+   {
+    "code": "K06",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "adds",
+    "czech": "Zápis napíše „sebevražedné myšlenky: neguje“, ačkoli se na ně v sezení nikdo neptal.",
+    "english": "Suicidal thoughts: none. Nobody asked about them in the session.",
+    "reason": "'neguje' (the client denies) makes the note invent a denial by the client where the English 'none' only asserts absence; the point (a negative finding nobody asked about) survives and 'neguje' is how Czech clinicians write 'none', but under K06 it moves the error from 'absent' to 'client denied'.",
+    "second_read": {
+     "verdict": "accepted",
+     "why": "'neguje' is how Czech clinicians write 'none'; the example still shows a negative finding nobody asked about, which is the error."
+    }
+   },
+   {
+    "code": "K06",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K06",
+    "field": "how",
+    "reaches": "local_czech_page",
+    "verdict": "adds",
+    "czech": "Z téže banky: u každého faktu se rozliší, že zazněl, že klient popřel, a že se na to nikdo nezeptal. Zápis se nemá co vyjadřovat k ostatním faktům světa, jen k těm v bance.",
+    "english": "A three-way outcome per information unit: present, explicitly negated in the source, absent from the source. Absence is never converted to zero nor dropped from the denominator.",
+    "reason": "Adds 'the note has no business speaking to other facts of the world, only those in the bank', which has no English counterpart, and drops 'absence is never converted to zero nor dropped from the denominator'.",
+    "idiom_note": "'Zápis se nemá co vyjadřovat k ...' is ungrammatical ('nemá se k čemu vyjadřovat' / 'nemusí se vyjadřovat') and leaves open whether it means 'need not' or 'must not'.",
+    "second_read": {
+     "verdict": "confirmed",
+     "why": "Adds a sentence with no English counterpart and drops that absence is never converted to zero nor dropped from the denominator."
+    }
+   },
+   {
+    "code": "K06",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K06",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Zápis nesmí tvrdit, že něco není, když se o tom vůbec nemluvilo.",
+    "english": "The note distinguishes three things: that something was not said, that it was said to be absent, and that nobody asked about it.",
+    "reason": "Keeps only the ban on fabricated negatives and drops the three-way distinction (not said / said to be absent / nobody asked)."
+   },
+   {
+    "code": "K06",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Netvrdí zápis, že něco není, když se o tom nemluvilo?",
+    "english": "definition: The note distinguishes three things: that something was not said, that it was said to be absent, and that nobody asked about it. | measurement: A three-way outcome per information unit: present, explicitly negated in the source, absent from the source. Absence is never converted to zero nor dropped from the denominator.",
+    "reason": "Asks only about a fabricated negative, not the three-way distinction, and as a negative yes/no question ('Netvrdí zápis...?') its 'ano' can mean either that the note does or that it does not make the claim.",
+    "idiom_note": "A Czech negative question is often heard as 'Doesn't the note claim...?' expecting yes; a positive form ('Tvrdí zápis, že něco není, i když se o tom nemluvilo?') avoids the flip."
+   },
+   {
+    "code": "K06",
+    "field": "rule:qa.applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'se tak zaznamená' can be read as 'is thus recorded'; 'se zaznamená jako dodatečně přidaná' says 'recorded as such'."
+   },
+   {
+    "code": "K06",
+    "field": "rule:qa.definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "Two grammar slips: 'zda ho zápis nese' should be 'zda ji zápis nese' (jednotka is feminine), and 'jednotku, o které zápis říká ..., se hodnotí' mixes an accusative with the reflexive passive ('jednotka, o které ..., se hodnotí'); 'nebyla probrána' (not discussed) for 'not asked' is looser than K06's 'nikdo se nezeptal'."
+   },
+   {
+    "code": "K06",
+    "field": "rule:qa.outcomes",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'s nejasným vztažením' for 'with an unclear referent' is opaque; 'není jasné, k čemu nebo ke komu se vztahuje' is how it would be said."
+   },
+   {
+    "code": "K06",
+    "field": "rule:qa.severity_rules",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'popření jednotky' (the error 'contradicted') is the same word as the client's legitimate denial in P02 ('klient výslovně popřel'), so 'jakékoli popření ... jednotky označené jako riziko' can be misread as making a client's denial of risk a critical error; 'rozpor s jednotkou' keeps the two apart."
+   },
+   {
+    "code": "K06",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "narrower",
+    "czech": "Zápis netvrdí, že něco není, když se o tom v sezení nemluvilo; rozliší „nezaznělo“, „klient popřel“ a „nikdo se nezeptal“.",
+    "english": "definition: The note distinguishes three things: that something was not said, that it was said to be absent, and that nobody asked about it. | measurement: A three-way outcome per information unit: present, explicitly negated in the source, absent from the source. Absence is never converted to zero nor dropped from the denominator. | examples.positive: Asked about suicidal thoughts, denies. | examples.negative: Suicidal thoughts: none. Nobody asked about them in the session. | examples.boundary: No risks. A summary that cannot be assigned to any question from the session.",
+    "reason": "'klient popřel' narrows 'it was said to be absent' (by anyone, e.g. a relative in a joint session) to a denial by the client; minor.",
+    "second_read": {
+     "verdict": "accepted",
+     "why": "'klient popřel' narrows 'said to be absent' to the client, but the three-way distinction a rater judges is intact."
+    }
+   },
+   {
+    "code": "K06",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K06",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K07",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'předem deklarovaný účel' would usually be 'předem stanovený účel'."
+   },
+   {
+    "code": "K07",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K07",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K07",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K07",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K07",
+    "field": "how",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Z téže banky: každý fakt má značku účelu a pokrytí se uvádí po účelech.",
+    "english": "Coverage is reported separately for each purpose and never summed.",
+    "reason": "Drops 'never summed': reporting per purpose is kept, the ban on also adding the purposes up is not; minor."
+   },
+   {
+    "code": "K07",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K07",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K07",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K07",
+    "field": "rule:qa.applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'se tak zaznamená' can be read as 'is thus recorded'; 'se zaznamená jako dodatečně přidaná' says 'recorded as such'."
+   },
+   {
+    "code": "K07",
+    "field": "rule:qa.definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "Two grammar slips: 'zda ho zápis nese' should be 'zda ji zápis nese' (jednotka is feminine), and 'jednotku, o které zápis říká ..., se hodnotí' mixes an accusative with the reflexive passive ('jednotka, o které ..., se hodnotí'); 'nebyla probrána' (not discussed) for 'not asked' is looser than K06's 'nikdo se nezeptal'."
+   },
+   {
+    "code": "K07",
+    "field": "rule:qa.outcomes",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'s nejasným vztažením' for 'with an unclear referent' is opaque; 'není jasné, k čemu nebo ke komu se vztahuje' is how it would be said."
+   },
+   {
+    "code": "K07",
+    "field": "rule:qa.severity_rules",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'popření jednotky' (the error 'contradicted') is the same word as the client's legitimate denial in P02 ('klient výslovně popřel'), so 'jakékoli popření ... jednotky označené jako riziko' can be misread as making a client's denial of risk a critical error; 'rozpor s jednotkou' keeps the two apart."
+   },
+   {
+    "code": "K07",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "same",
+    "second_read": {
+     "verdict": "confirmed",
+     "why": "States a general truth about relevance rather than a property of the note; the sheet's column asks for the criterion in one sentence."
+    }
+   },
+   {
+    "code": "K07",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'jednotka krát účel' reads 'times' literally; 'dvojice jednotka–účel' or 'jednotka pro každý účel zvlášť' is how it would be said."
+   },
+   {
+    "code": "K07",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'informační jednotka krát účel' reads 'times' literally; 'dvojice informační jednotka–účel' is how it would be said."
+   },
+   {
+    "code": "K08",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K08",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Obsahové téma: suicidalita, sebepoškozování, nebezpečí pro druhé, týrání, krizové ukazatele. Není to konstrukt kvality, je to téma s nejvyšší závažností chyby. Zároveň je to průřezový důsledek: chyba věrnosti nebo pokrytí, která se dotkne rizika, je závažnější než táž chyba jinde.",
+    "english": "A content topic: suicidality, self-harm, danger to others, abuse, crisis markers. It is not a quality construct; it is the topic with the highest error severity. It is also a cross-cutting consequence: an error of fidelity or coverage that touches risk is more severe than the same error elsewhere.",
+    "reason": "'Abuse' becomes 'týrání' (maltreatment), which in Czech does not cover sexual abuse ('zneužívání'); the usual Czech pair is 'týrání a zneužívání'."
+   },
+   {
+    "code": "K08",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K08",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K08",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K08",
+    "field": "how",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Z téže banky: fakty označené jako riziko se uvádějí jako vlastní vrstva.",
+    "english": "Reported as a separate, undilutable layer above coverage and fidelity. A negative claim about risk findings requires complete assessment of the declared scope.",
+    "reason": "Drops 'undilutable' and 'above coverage and fidelity', and the whole second sentence: a negative claim about risk findings requires complete assessment of the declared scope."
+   },
+   {
+    "code": "K08",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K08",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Jestli je v zápisu to, co v sezení zaznělo o riziku a bezpečí.",
+    "english": "A content topic: suicidality, self-harm, danger to others, abuse, crisis markers. It is not a quality construct; it is the topic with the highest error severity. It is also a cross-cutting consequence: an error of fidelity or coverage that touches risk is more severe than the same error elsewhere.",
+    "reason": "Reduces the criterion to coverage of risk content, dropping that a fidelity or coverage error touching risk is more severe than the same error elsewhere, which is the core of the definition."
+   },
+   {
+    "code": "K08",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Je zachycené riziko tam, kde zaznělo?",
+    "english": "definition: A content topic: suicidality, self-harm, danger to others, abuse, crisis markers. It is not a quality construct; it is the topic with the highest error severity. It is also a cross-cutting consequence: an error of fidelity or coverage that touches risk is more severe than the same error elsewhere. | measurement: Reported as a separate, undilutable layer above coverage and fidelity. A negative claim about risk findings requires complete assessment of the declared scope.",
+    "reason": "Asks only whether risk that came up is recorded (coverage), dropping fidelity errors about risk and the rule that a negative risk finding needs a complete assessment.",
+    "idiom_note": "'Je zachycené riziko tam, kde zaznělo?' has English word order and an ambiguous 'tam' (in the note or in the session); 'Zachycuje zápis riziko všude, kde v sezení zaznělo?' is the Czech question."
+   },
+   {
+    "code": "K08",
+    "field": "rule:qa.applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'se tak zaznamená' can be read as 'is thus recorded'; 'se zaznamená jako dodatečně přidaná' says 'recorded as such'."
+   },
+   {
+    "code": "K08",
+    "field": "rule:qa.definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "Two grammar slips: 'zda ho zápis nese' should be 'zda ji zápis nese' (jednotka is feminine), and 'jednotku, o které zápis říká ..., se hodnotí' mixes an accusative with the reflexive passive ('jednotka, o které ..., se hodnotí'); 'nebyla probrána' (not discussed) for 'not asked' is looser than K06's 'nikdo se nezeptal'."
+   },
+   {
+    "code": "K08",
+    "field": "rule:qa.outcomes",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'s nejasným vztažením' for 'with an unclear referent' is opaque; 'není jasné, k čemu nebo ke komu se vztahuje' is how it would be said."
+   },
+   {
+    "code": "K08",
+    "field": "rule:qa.severity_rules",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'popření jednotky' (the error 'contradicted') is the same word as the client's legitimate denial in P02 ('klient výslovně popřel'), so 'jakékoli popření ... jednotky označené jako riziko' can be misread as making a client's denial of risk a critical error; 'rozpor s jednotkou' keeps the two apart."
+   },
+   {
+    "code": "K08",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "narrower",
+    "czech": "Chyba v tom, co se týká rizika a bezpečí (sebevražedné myšlenky, sebepoškozování, ohrožení druhých, zneužívání, krize), je závažnější než stejná chyba v jiné části zápisu.",
+    "english": "definition: A content topic: suicidality, self-harm, danger to others, abuse, crisis markers. It is not a quality construct; it is the topic with the highest error severity. It is also a cross-cutting consequence: an error of fidelity or coverage that touches risk is more severe than the same error elsewhere. | measurement: Reported as a separate, undilutable layer above coverage and fidelity. A negative claim about risk findings requires complete assessment of the declared scope. | examples.positive: A mention of hopelessness is marked as risk-related in the bank and the note carries it. | examples.negative: Hopelessness was voiced in the session and the note says nothing about it. | examples.boundary: The client speaks about the end ambiguously. The item is disputed, not automatically risk-related.",
+    "reason": "'Suicidality' becomes 'sebevražedné myšlenky' (suicidal thoughts, leaving out plans and attempts), 'abuse' becomes 'zneužívání', which beside the other items can be read as substance misuse and differs from 'týrání' in the definition, and 'an error of fidelity or coverage' becomes any error.",
+    "second_read": {
+     "verdict": "confirmed",
+     "why": "'sebevražedné myšlenky' is narrower than suicidality, and 'zneužívání' beside the other topics reads as substance misuse; a clinician rater will read both."
+    }
+   },
+   {
+    "code": "K08",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K08",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "second_read": {
+     "verdict": "same_confirmed",
+     "why": "Drawn for the second read of rows read as the same."
+    }
+   },
+   {
+    "code": "K09",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K09",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K09",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K09",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same",
+    "idiom_note": "'takovou souvislost v sezení nikdo neudělal' calques 'make a link'; 'takovou souvislost v sezení nikdo nevyslovil' is the Czech phrasing."
+   },
+   {
+    "code": "K09",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K09",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K09",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Souvislost, kterou zápis vytvořil, musí mít oporu v tom, co zaznělo.",
+    "english": "If the note connects pieces of information into a relation, a link or a conclusion, that relation is grounded in the source and appropriate to the purpose.",
+    "reason": "Drops the purpose-appropriateness half and keeps only support in what was said."
+   },
+   {
+    "code": "K09",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Je souvislost, kterou zápis vytvořil, opřená o zdroj?",
+    "english": "definition: If the note connects pieces of information into a relation, a link or a conclusion, that relation is grounded in the source and appropriate to the purpose. | measurement: Verification of the relation against the source plus a judgement of appropriateness to the purpose; two separate statements.",
+    "reason": "Drops 'and appropriate to the purpose', one of the two halves of the definition."
+   },
+   {
+    "code": "K09",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "narrower",
+    "czech": "Když zápis spojí informace do souvislosti nebo závěru, je ten vztah opřený o zdroj.",
+    "english": "definition: If the note connects pieces of information into a relation, a link or a conclusion, that relation is grounded in the source and appropriate to the purpose. | measurement: Verification of the relation against the source plus a judgement of appropriateness to the purpose; two separate statements. | examples.positive: The client himself links avoiding meetings to a fear of being judged by others. | examples.negative: The note concludes social phobia although no such link was made in the session. | examples.boundary: The note calls the conversation cognitive restructuring when the therapist was only exploring how the client thinks.",
+    "reason": "Drops 'and appropriate to the purpose', one of the two halves of the definition (the half the state note says is not yet measurable).",
+    "second_read": {
+     "verdict": "confirmed",
+     "why": "Drops 'appropriate to the purpose', one of the definition's two halves."
+    }
+   },
+   {
+    "code": "K09",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "jedna vytvořená souvislost",
+    "english": "created relation or abstraction",
+    "reason": "Drops 'or abstraction' (e.g. calling a conversation cognitive restructuring, the boundary example); unit_definition carries it."
+   },
+   {
+    "code": "K09",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K09",
+    "field": "why_not_measured",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K10",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K10",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K10",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K10",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K10",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K10",
+    "field": "how",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Z téže banky: fakty typu plán.",
+    "english": "Coverage of plan-type items, separately from the other content.",
+    "reason": "Drops 'coverage' and 'separately from the other content': it names the plan-type facts but not that they are scored apart."
+   },
+   {
+    "code": "K10",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K10",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Jestli je v zápisu plán, dohodnuté úkoly a další setkání.",
+    "english": "The note carries what is needed to continue: the plan, agreed tasks, open questions, the date.",
+    "reason": "Drops 'open questions'."
+   },
+   {
+    "code": "K10",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Je tam plán, úkoly a další setkání?",
+    "english": "definition: The note carries what is needed to continue: the plan, agreed tasks, open questions, the date. | measurement: Coverage of plan-type items, separately from the other content.",
+    "reason": "Drops 'open questions' (and 'agreed' on tasks)."
+   },
+   {
+    "code": "K10",
+    "field": "rule:qa.applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'se tak zaznamená' can be read as 'is thus recorded'; 'se zaznamená jako dodatečně přidaná' says 'recorded as such'."
+   },
+   {
+    "code": "K10",
+    "field": "rule:qa.definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "Two grammar slips: 'zda ho zápis nese' should be 'zda ji zápis nese' (jednotka is feminine), and 'jednotku, o které zápis říká ..., se hodnotí' mixes an accusative with the reflexive passive ('jednotka, o které ..., se hodnotí'); 'nebyla probrána' (not discussed) for 'not asked' is looser than K06's 'nikdo se nezeptal'."
+   },
+   {
+    "code": "K10",
+    "field": "rule:qa.outcomes",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'s nejasným vztažením' for 'with an unclear referent' is opaque; 'není jasné, k čemu nebo ke komu se vztahuje' is how it would be said."
+   },
+   {
+    "code": "K10",
+    "field": "rule:qa.severity_rules",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'popření jednotky' (the error 'contradicted') is the same word as the client's legitimate denial in P02 ('klient výslovně popřel'), so 'jakékoli popření ... jednotky označené jako riziko' can be misread as making a client's denial of risk a critical error; 'rozpor s jednotkou' keeps the two apart."
+   },
+   {
+    "code": "K10",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "broader",
+    "czech": "Zápis nese, co je potřeba k pokračování: plán, úkoly, otevřené otázky, termín.",
+    "english": "definition: The note carries what is needed to continue: the plan, agreed tasks, open questions, the date. | measurement: Coverage of plan-type items, separately from the other content. | examples.positive: A sleep diary agreed until the next session in a week. | examples.negative: The note states a date that was not mentioned in the session. | examples.boundary: The therapist hinted at a plan but did not agree it. A note that presents it as agreed errs in modality, not in content.",
+    "reason": "'Agreed tasks' becomes 'úkoly' (any tasks), so a task the therapist only suggested would count, which the boundary example treats as a modality error.",
+    "idiom_note": "'Zápis nese, co je potřeba' calques 'carries'; 'Zápis obsahuje, co je potřeba' is the Czech verb.",
+    "second_read": {
+     "verdict": "confirmed",
+     "why": "'úkoly' for 'agreed tasks' admits a task the therapist only suggested, which K04's boundary treats as an error."
+    }
+   },
+   {
+    "code": "K10",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K10",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K11",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K11",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'opakování tady vidět není; to je K31' follows the English; 'opakování toto kritérium nezachytí, patří pod K31' is the Czech sentence."
+   },
+   {
+    "code": "K11",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K11",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same",
+    "second_read": {
+     "verdict": "same_confirmed",
+     "why": "Drawn for the second read of rows read as the same."
+    }
+   },
+   {
+    "code": "K11",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K11",
+    "field": "how",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Každá věta se označí jednotkami, které nese; věta bez jednotky je nadbytečná.",
+    "english": "The share of sentences tied to at least one information unit; always reported beside coverage, never alone.",
+    "reason": "Drops 'always reported beside coverage, never alone', the safeguard the applicability and the error consequence rest on."
+   },
+   {
+    "code": "K11",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "narrower",
+    "czech": "Úspornost",
+    "english": "Economy: every sentence serves something",
+    "reason": "Drops 'every sentence serves something', so bare 'Úspornost' can be read as brevity, which the definition excludes ('not by the length of the text'); the statement restores it.",
+    "second_read": {
+     "verdict": "accepted",
+     "why": "The statement says every sentence carries essential content, which rules out reading the name as brevity."
+    }
+   },
+   {
+    "code": "K11",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "broader",
+    "czech": "Jestli každá věta něco nese, nebo je to vata.",
+    "english": "The share of sentences that carry essential content. Measured by the relation of a sentence to content, not by the length of the text. A repeated sentence still carries content, so repetition is not seen here; it is K31.",
+    "reason": "'něco nese' (carries something) replaces 'carries essential content'."
+   },
+   {
+    "code": "K11",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "broader",
+    "czech": "Nese každá věta informaci, nebo je to vata?",
+    "english": "definition: The share of sentences that carry essential content. Measured by the relation of a sentence to content, not by the length of the text. A repeated sentence still carries content, so repetition is not seen here; it is K31. | measurement: The share of sentences tied to at least one information unit; always reported beside coverage, never alone.",
+    "reason": "'informaci' (any information) replaces 'essential content' / a unit of the bank, so generic filler that says something would pass."
+   },
+   {
+    "code": "K11",
+    "field": "rule:M07.anchors",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K11",
+    "field": "rule:M07.definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K11",
+    "field": "rule:M07.examples",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K11",
+    "field": "rule:M07.question",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K11",
+    "field": "rule:items.applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K11",
+    "field": "rule:items.definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'kde ho šablona čeká' is colloquial for 'expects'; 'kam ho šablona řadí' reads better in a rule."
+   },
+   {
+    "code": "K11",
+    "field": "rule:items.outcomes",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K11",
+    "field": "rule:items.severity_rules",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'který přepis nenese' calques 'carry'; 'pro který v přepisu není opora' is the Czech phrasing."
+   },
+   {
+    "code": "K11",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "same",
+    "idiom_note": "'; prázdné fráze nikoli' is an elliptical tail a reader may parse as 'empty phrases do not [carry content]'; 'zápis neobsahuje prázdné fráze' says what is meant, and 'nese' again calques 'carries'.",
+    "second_read": {
+     "verdict": "same_confirmed",
+     "why": "Drawn for the second read of rows read as the same."
+    }
+   },
+   {
+    "code": "K11",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K11",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "second_read": {
+     "verdict": "same_confirmed",
+     "why": "Drawn for the second read of rows read as the same."
+    }
+   },
+   {
+    "code": "K12",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K12",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K12",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K12",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K12",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'sekce Objektivní' here, 'oddílu Subjektivní' in the negative example; one term would be clearer."
+   },
+   {
+    "code": "K12",
+    "field": "how",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "U každé jednotky se zjistí, jestli stojí v oddílu podle šablony.",
+    "english": "The share of information units in their expected place. Separately from whether they are present at all.",
+    "reason": "Drops 'separately from whether they are present at all' and that the result is a share."
+   },
+   {
+    "code": "K12",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "narrower",
+    "czech": "Uspořádání textu",
+    "english": "Organisation and orientation in the text",
+    "reason": "Drops 'orientation' (the reader finding their way); the statement restores it.",
+    "second_read": {
+     "verdict": "accepted",
+     "why": "The statement restores orientation: the reader finds what they look for."
+    }
+   },
+   {
+    "code": "K12",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Jestli obsah stojí v oddílu, kam ho šablona čeká.",
+    "english": "The note is structured so that the reader finds what they look for, and content is in its expected place.",
+    "reason": "Reduces the criterion to placement in the template's section, dropping 'the reader finds what they look for' (overall organisation).",
+    "idiom_note": "'kam ho šablona čeká' pairs 'kam' (where to) with 'čeká'; 'kde ho šablona předpokládá' or 'kam ho šablona řadí' is the Czech phrasing."
+   },
+   {
+    "code": "K12",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K12",
+    "field": "rule:M06.anchors",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K12",
+    "field": "rule:M06.definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K12",
+    "field": "rule:M06.examples",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "Uses 'část' for a section where the rest of the catalog uses 'oddíl' (and K12 also 'sekce'); one term throughout would be clearer to raters."
+   },
+   {
+    "code": "K12",
+    "field": "rule:M06.question",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K12",
+    "field": "rule:items.applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K12",
+    "field": "rule:items.definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'kde ho šablona čeká' is colloquial for 'expects'; 'kam ho šablona řadí' reads better in a rule."
+   },
+   {
+    "code": "K12",
+    "field": "rule:items.outcomes",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K12",
+    "field": "rule:items.severity_rules",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'který přepis nenese' calques 'carry'; 'pro který v přepisu není opora' is the Czech phrasing.",
+    "second_read": {
+     "verdict": "same_confirmed",
+     "why": "Drawn for the second read of rows read as the same."
+    }
+   },
+   {
+    "code": "K12",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K12",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "jednotka krát oddíl",
+    "english": "information unit times section; the whole note for overall organisation",
+    "reason": "Drops the second unit 'the whole note for overall organisation'; unit_definition carries it.",
+    "idiom_note": "'krát' reads 'times' literally; 'dvojice jednotka–oddíl' is how it would be said."
+   },
+   {
+    "code": "K12",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "Uses 'sekce' where the unit field and the rules use 'oddíl' (and M06 'část'); one term would be clearer."
+   },
+   {
+    "code": "K13",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K13",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K13",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K13",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K13",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K13",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "broader",
+    "czech": "Srozumitelnost pro čtenáře",
+    "english": "Comprehensibility for the given reader",
+    "reason": "Drops 'given': 'Srozumitelnost pro čtenáře' reads as general readability rather than comprehensibility for the particular intended reader; the statement restores it.",
+    "second_read": {
+     "verdict": "accepted",
+     "why": "The statement restores 'the person it is meant for'."
+    }
+   },
+   {
+    "code": "K13",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "broader",
+    "czech": "Jestli zápisu rozumí ten, komu je určený.",
+    "english": "The note is linguistically comprehensible to the person it is meant for. For a client that means a different language than for a colleague.",
+    "reason": "Drops 'linguistically', so understanding of the content, not only of the language, is in scope; minor."
+   },
+   {
+    "code": "K13",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "broader",
+    "czech": "Rozumí tomu ten, komu je zápis určen?",
+    "english": "definition: The note is linguistically comprehensible to the person it is meant for. For a client that means a different language than for a colleague. | measurement: Judgement against the declared recipient; automatic readability indices are a stand-in, not evidence of understanding.",
+    "reason": "Drops 'linguistically', so understanding of the content, not only of the language, is in scope; minor."
+   },
+   {
+    "code": "K13",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K13",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "adds",
+    "czech": "celý zápis, jeden čtenář",
+    "english": "whole note",
+    "reason": "Adds 'jeden čtenář' (one reader) to the English unit 'whole note', and so disagrees with the Czech unit_definition 'celý zápis'; consistent with the applicability, but not in the English unit.",
+    "second_read": {
+     "verdict": "confirmed",
+     "why": "Adds 'one reader' to the unit."
+    }
+   },
+   {
+    "code": "K13",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K13",
+    "field": "why_not_measured",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'pilot' for a pilot study is an anglicism; 'pilotní studie' or 'pilotní ověření' is the Czech term."
+   },
+   {
+    "code": "K14",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K14",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K14",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'a je to trvalý záznam' is the English 'it is a permanent record' word for word; a Czech speaker would say 'a zůstane to v dokumentaci natrvalo'."
+   },
+   {
+    "code": "K14",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same",
+    "idiom_note": "'Zápis napíše' makes the note an agent in the perfective future; 'V zápisu stojí' or 'Zápis uvádí' is what a Czech speaker would write."
+   },
+   {
+    "code": "K14",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K14",
+    "field": "how",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Hodnotitel přečte vlastní text autora, citace klienta se nepočítá.",
+    "english": "measurement: Marking of spans with an indication of whether it is a quotation or the author's wording. Not a dictionary filter.",
+    "reason": "Drops that spans are marked and labelled as quotation or the author's wording (it says only that quotation does not count), and drops 'not a dictionary filter' except as implied by a human rater."
+   },
+   {
+    "code": "K14",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K14",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Zápis nesmí o klientovi mluvit snižujícím způsobem.",
+    "english": "definition: The note does not use language that belittles the client, questions their credibility or reduces them to a diagnosis or a behaviour.",
+    "reason": "Names only belittling; questioning credibility and reduction to a diagnosis or behaviour are not named."
+   },
+   {
+    "code": "K14",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Nemluví zápis o klientovi snižujícím způsobem?",
+    "english": "definition: The note does not use language that belittles the client, questions their credibility or reduces them to a diagnosis or a behaviour. | measurement: Marking of spans with an indication of whether it is a quotation or the author's wording. Not a dictionary filter.",
+    "reason": "Names only speaking of the client in a belittling way; questioning credibility and reduction to a diagnosis or behaviour are not named.",
+    "idiom_note": "A negated yes/no question ('Nemluví zápis...?') leaves open in Czech whether 'ano' is the good answer; 'Mluví zápis o klientovi bez snižování?' or a positive form would not."
+   },
+   {
+    "code": "K14",
+    "field": "rule:M08.anchors",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K14",
+    "field": "rule:M08.definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'se čte kvůli formulacím' renders 'is read for wording'; 'se pročte a hledají se v něm formulace' is the Czech way to say it."
+   },
+   {
+    "code": "K14",
+    "field": "rule:M08.examples",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'přepis nenese ani jedno z těch slov' is 'the transcript carries neither word' in Czech words; 'ani jedno z těch slov v přepisu nezazní' is natural."
+   },
+   {
+    "code": "K14",
+    "field": "rule:M08.question",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K14",
+    "field": "rule:items.applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K14",
+    "field": "rule:items.definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'Rubrikové položky hodnocené na celém zápisu' and 'věta nese informační jednotku' follow the English closely; 'položky, které hodnotitel posuzuje u celého zápisu' reads more naturally."
+   },
+   {
+    "code": "K14",
+    "field": "rule:items.outcomes",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K14",
+    "field": "rule:items.severity_rules",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K14",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "narrower",
+    "czech": "Zápis nepoužívá jazyk, který klienta snižuje nebo ho redukuje na diagnózu.",
+    "english": "definition: The note does not use language that belittles the client, questions their credibility or reduces them to a diagnosis or a behaviour. | measurement: Marking of spans with an indication of whether it is a quotation or the author's wording. Not a dictionary filter. | examples.positive: The client did not come to three sessions in recent weeks. | examples.negative: The client is uncooperative and manipulative. | examples.boundary: The client says of himself that he is lazy; a verbatim quotation is not the same as the author's judgement.",
+    "reason": "Drops 'questions their credibility' and 'or a behaviour', keeping only belittling and reduction to a diagnosis.",
+    "second_read": {
+     "verdict": "confirmed",
+     "why": "Drops questioning the client's credibility and reduction to a behaviour, two of the three forms the English names."
+    }
+   },
+   {
+    "code": "K14",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K14",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K15",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'Nesmí smazat klinicky rozhodující obsah' has no subject in Czech (who must not?); 'Přitom se nesmí vypustit klinicky rozhodující obsah' says it."
+   },
+   {
+    "code": "K15",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "Same singular 'ten citlivý detail' calque as the statement."
+   },
+   {
+    "code": "K15",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K15",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same",
+    "idiom_note": "'k jeho účelu' directly after 'klientova partnera' reads as the partner's purpose; 'k účelu zápisu' removes the ambiguity."
+   },
+   {
+    "code": "K15",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "second_read": {
+     "verdict": "same_confirmed",
+     "why": "Drawn for the second read of rows read as the same."
+    }
+   },
+   {
+    "code": "K15",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K15",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "broader",
+    "czech": "Citlivý detail má v zápisu být jen tehdy, když ho ten účel opravdu potřebuje.",
+    "english": "definition: The note contains only the sensitive detail its declared purpose needs; the rest is generalised or left out.",
+    "reason": "Drops 'declared': 'ten účel' is a purpose the reader supplies, not the note's declared purpose."
+   },
+   {
+    "code": "K15",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "broader",
+    "czech": "Je tam jen ten citlivý detail, který účel potřebuje?",
+    "english": "definition: The note contains only the sensitive detail its declared purpose needs; the rest is generalised or left out. | measurement: Human judgement only for now. We propose to postpone automatic measurement.",
+    "reason": "Drops 'declared' and even the possessive: 'účel' is unqualified, so any purpose a rater has in mind would do.",
+    "idiom_note": "Same singular 'ten citlivý detail' calque as the statement."
+   },
+   {
+    "code": "K15",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "broader",
+    "czech": "Zápis obsahuje jen ten citlivý detail, který jeho účel potřebuje.",
+    "english": "definition: The note contains only the sensitive detail its declared purpose needs; the rest is generalised or left out. | measurement: Human judgement only for now. We propose to postpone automatic measurement. | examples.positive: The client summary mentions a family conflict without identifying the third person by name. | examples.negative: The note gives the full name and the employer of the client's partner where the partner would have done for its purpose. | examples.boundary: A detail about a third person that is necessary for assessing risk.",
+    "reason": "Drops 'declared': the English measures necessity against the note's declared purpose, the Czech against 'its purpose', which a rater may infer for himself.",
+    "idiom_note": "'jen ten citlivý detail, který' carries over the English mass noun as a singular; a Czech speaker would write 'jen ty citlivé údaje (podrobnosti), které'.",
+    "second_read": {
+     "verdict": "accepted",
+     "why": "'its purpose' for 'its declared purpose'; the difference is in how the purpose is established, not in the property a rater judges."
+    }
+   },
+   {
+    "code": "K15",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K15",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K15",
+    "field": "why_not_measured",
+    "reaches": "local_czech_page",
+    "verdict": "adds",
+    "czech": "Nemá oporu. Pozor na sloupec vlevo: ty tři zdroje se kritéria dotýkají, ale žádný nedefinuje, co je nezbytný detail vzhledem k účelu. Mluví o zdravotnické dokumentaci jako celku, ne o jednom zápisu pro jeden účel. Jediný kandidát v tomto stavu.",
+    "english": "state: lacking_evidence | state_note: No source defines purpose-relative necessity. The identifiers the decree and iCARE require concern the medical record as a whole, not every generated note for every purpose, so the candidate is unsupported, not refuted. | decided_by_note: In principle a norm decides, but no source states what a purpose requires, which is why the candidate has no support.",
+    "reason": "Adds 'the three sources in the left column touch the criterion' and 'the only candidate in this state', neither in the English, attributes 'concern the record as a whole' to those three sources instead of to the identifiers the decree and iCARE require, and drops 'unsupported, not refuted'.",
+    "second_read": {
+     "verdict": "confirmed",
+     "why": "Speaks of 'the column on the left' of a page and adds 'the only candidate in this state'; drops 'unsupported, not refuted'."
+    }
+   },
+   {
+    "code": "K16",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K16",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K16",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K16",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K16",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K16",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K16",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K16",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Je zaznamenáno, kdo a kdy zápis psal?",
+    "english": "definition: The note carries information about the circumstances in which it was created, because those affect how its content is to be read. | measurement: A check for the presence of declared fields. The presence of a field does not prove the correctness of its content.",
+    "reason": "Asks only whether author and date are recorded, which is narrower than 'the circumstances of creation' and drops the source material the English examples are about."
+   },
+   {
+    "code": "K16",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "narrower",
+    "czech": "Zápis nese informaci o okolnostech svého vzniku, například kdo a kdy ho psal.",
+    "english": "definition: The note carries information about the circumstances in which it was created, because those affect how its content is to be read. | measurement: A check for the presence of declared fields. The presence of a field does not prove the correctness of its content. | examples.positive: The note states who produced it and from what material. | examples.negative: A note created by a model presents itself as the therapist's own record. | examples.boundary: A note produced from an automatically generated transcript whose quality is not documented.",
+    "reason": "The illustration 'who and when wrote it' replaces the English 'who produced it and from what material': it adds the date, drops the source material (the boundary case of an undocumented automatic transcript), and so steers the property toward the author-and-date fields of the Czech decree (P09).",
+    "second_read": {
+     "verdict": "confirmed",
+     "why": "The illustration 'who and when' steers to the decree's author-and-date fields; the English illustration is who produced it and from what material."
+    }
+   },
+   {
+    "code": "K16",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K16",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K16",
+    "field": "why_not_measured",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Neměří se. Překrývá se s kontrolou náležitostí české vyhlášky, která je konkrétnější.",
+    "english": "state: not_measured | state_note: Second round. Overlaps P09, whose Czech required elements about the author of an entry are harder and more concrete.",
+    "reason": "Drops 'second round' (postponed, not abandoned) and that the overlapping decree elements are those about the author of an entry and are harder as well as more concrete."
+   },
+   {
+    "code": "K17",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "adds",
+    "czech": "Přítomné v každém uspořádání. V individuální terapii vstupují třetí osoby přes klientovo vyprávění; v párové a skupinové jsou to účastníci s vlastním souhlasem, což mění pravidlo, ne relevanci.",
+    "english": "applicability: Present in every setting. In individual therapy third parties enter through the client's account; in couple and group therapy they are participants with their own consent status, which changes the rule, not the relevance.",
+    "reason": "Renders 'participants with their own consent status' as 'participants with their own consent', asserting that they have consented, which the English does not say.",
+    "idiom_note": "'Přítomné v každém uspořádání' is a subjectless fragment for 'Present in every setting'; 'Týká se každé formy terapie' is what a Czech speaker would write.",
+    "second_read": {
+     "verdict": "confirmed",
+     "why": "'s vlastním souhlasem' asserts consent where the English says consent status."
+    }
+   },
+   {
+    "code": "K17",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'o lidech, kteří nejsou klient' does not agree in Czech; 'o jiných lidech než klient' is natural."
+   },
+   {
+    "code": "K17",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K17",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same",
+    "idiom_note": "'uvádí partnerku jménem a s místem, kde pracuje' is clumsy; 'uvádí jméno partnerky i to, kde pracuje' is natural."
+   },
+   {
+    "code": "K17",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K17",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K17",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "broader",
+    "czech": "Jak zápis zachází s lidmi, kteří nejsou klient.",
+    "english": "definition: Data about people who are not the client and gave no consent: partners, children, colleagues, other clients in a group.",
+    "reason": "Drops 'and gave no consent' and the population list; it covers how the note treats anyone other than the client.",
+    "idiom_note": "'s lidmi, kteří nejsou klient' does not agree in Czech."
+   },
+   {
+    "code": "K17",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "broader",
+    "czech": "Nejde podle zápisu poznat osobu, která není klient?",
+    "english": "definition: Data about people who are not the client and gave no consent: partners, children, colleagues, other clients in a group. | measurement: Marking of mentions of third persons, distinguishing role and identification.",
+    "reason": "Drops 'and gave no consent', so it covers every person other than the client, including participants who consented.",
+    "idiom_note": "A negated question ('Nejde podle zápisu poznat...?') leaves open in Czech whether 'ano' means the good state; 'Dá se podle zápisu poznat, o koho jde?' would not."
+   },
+   {
+    "code": "K17",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "different",
+    "czech": "U lidí, kteří nejsou klient, zápis rozlišuje, jestli je označí rolí, nebo je identifikuje.",
+    "english": "definition: Data about people who are not the client and gave no consent: partners, children, colleagues, other clients in a group. | measurement: Marking of mentions of third persons, distinguishing role and identification. | examples.positive: The client describes a conflict with his superior; the note gives the role, not the name. | examples.negative: The note gives the partner by name and says where she works. | examples.boundary: The third person is at the same time a client of the same practice.",
+    "reason": "It gives the note the distinction the measurement makes ('marking ... distinguishing role and identification') instead of naming the property, data about non-client persons who gave no consent, and it drops 'gave no consent' and the population (partners, children, colleagues, other group members); a rater cannot tell what state of the note is wanted.",
+    "idiom_note": "'U lidí, kteří nejsou klient' is ungrammatical in Czech (the predicate noun does not agree; 'kdo není klient' or 'jiní lidé než klient'), and 'zápis rozlišuje, jestli je označí' makes the note decide something; a Czech speaker would not say it.",
+    "second_read": {
+     "verdict": "confirmed",
+     "why": "The 2026-10-22 rewording rightly stopped asserting role-not-identification as settled, but it now gives the note the measurement's distinction and states no wanted state; the catalog's own decided_by_note supplies one: only what the purpose needs."
+    }
+   },
+   {
+    "code": "K17",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "broader",
+    "czech": "jedna zmínka osoby",
+    "english": "unit: mention of a third person",
+    "reason": "Drops 'third': 'one mention of a person' includes the client.",
+    "idiom_note": "'zmínka osoby' should be 'zmínka o osobě'."
+   },
+   {
+    "code": "K17",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K17",
+    "field": "why_not_measured",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Chybí pravidlo měření. Není definované, jak označovat třetí osoby a jak odlišit roli od identifikace.",
+    "english": "state: not_yet_operationalized | state_note: Third parties appear in individual therapy through the client's account; the marking rule and the role-versus-identification distinction still need a definition. | decided_by_note: A norm decides: identify only what the purpose needs. That list of required identifiers per purpose is not written, so the rule written for it is half a rule.",
+    "reason": "Drops the decided_by_note point that a norm decides (identify only what the purpose needs) and that the list of required identifiers per purpose is unwritten, so the rule is half a rule; also drops that in individual therapy third parties enter through the client's account."
+   },
+   {
+    "code": "K18",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K18",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'jeho skutečná opora tvrzení' copies 'its actual support of the claim'; 'to, zda tvrzení skutečně podpírá' is natural."
+   },
+   {
+    "code": "K18",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K18",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K18",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K18",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "broader",
+    "czech": "Dohledatelnost ke zdroji",
+    "english": "label: Traceability of claims to the source",
+    "reason": "Drops 'of claims': 'traceability to the source' can be read as the whole note being traceable to its source material, close to K16, rather than each claim.",
+    "idiom_note": "'Dohledatelnost ke zdroji' copies 'traceability to'; Czech says 'dohledatelnost tvrzení ve zdroji'.",
+    "second_read": {
+     "verdict": "accepted",
+     "why": "The statement is about each claim and its reference."
+    }
+   },
+   {
+    "code": "K18",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Jestli zápis u tvrzení uvádí odkaz do přepisu a jestli ten odkaz sedí.",
+    "english": "definition: For a claim, the place in the source that supports it can be shown. Distinguished are the validity of the citation, its actual support of the claim, and the share of claims that carry a citation. The object is the citation the author writes into the note; the evidence spans an evaluator attaches while checking a claim are a different thing and belong to the methods.",
+    "reason": "Says 'the transcript' where the English says 'the source'."
+   },
+   {
+    "code": "K18",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Uvádí zápis u tvrzení odkaz na místo v přepisu, a sedí ten odkaz?",
+    "english": "definition: For a claim, the place in the source that supports it can be shown. Distinguished are the validity of the citation, its actual support of the claim, and the share of claims that carry a citation. The object is the citation the author writes into the note; the evidence spans an evaluator attaches while checking a claim are a different thing and belong to the methods. | measurement: Three separate numbers: validity of the target, semantic support, coverage of claims by citations. Never one.",
+    "reason": "Says 'the transcript' where the English says 'the source'."
+   },
+   {
+    "code": "K18",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K18",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "jeden odkaz",
+    "english": "unit: a citation and the claim it cites for",
+    "reason": "Drops 'and the claim it cites for': the English unit is the citation-claim pair, the Czech only the citation."
+   },
+   {
+    "code": "K18",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'tvrzení, ke kterému odkazuje' says the citation points to the claim; it points to the source for the claim, so 'tvrzení, které má doložit' says what is meant."
+   },
+   {
+    "code": "K18",
+    "field": "why_not_measured",
+    "reaches": "local_czech_page",
+    "verdict": "broader",
+    "czech": "Neměří se. Žádná úloha po modelu nechce citace, takže by jmenovatel byl prázdný.",
+    "english": "state: not_measured | state_note: No pilot task requires author-provided citations, so the denominator would be empty. The evaluator's evidence spans are a different thing and stay in the methods.",
+    "reason": "Says 'no task' asks the model for citations where the English says 'no pilot task', and drops that the evaluator's evidence spans are a different thing and stay in the methods."
+   },
+   {
+    "code": "K19",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'anglická stopa' is 'English track' in Czech words; an outside reader will not know what a 'stopa' is here."
+   },
+   {
+    "code": "K19",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'Váže úzkou skupinu' and 'kritérium na něj nedosáhne' copy 'binds a narrow population' and 'does not reach them'; 'Týká se jen úzké skupiny' and 'se na něj nevztahuje' are Czech."
+   },
+   {
+    "code": "K19",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K19",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K19",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K19",
+    "field": "measured_otherwise",
+    "reaches": "local_czech_page",
+    "verdict": "different",
+    "czech": "Navrženo měřit jinak: deterministická kontrola náležitostí vyhlášky.",
+    "english": "state_note: Dropped from the round by the investigator on 2026-10-05. It had already been narrowed on 2026-09-16 to records kept by a provider of health services, and the investigator now judges that a presence check against one country's regulation does not belong in a benchmark of note quality. The candidate and its evidence stay as the record of what the review found; no pilot entry names it, so nothing measures it. | measurement: A deterministic check that the declared elements are present, reported on its own and never mixed into a quality score. The presence of a field is not evidence that its content is correct, and a missing element is reported as a missing element, never as a verdict that a law was broken.",
+    "reason": "Says it is proposed to be measured otherwise (a deterministic check), but the English state_note says the investigator dropped it from the round on 2026-10-05, no pilot entry names it and nothing measures it.",
+    "second_read": {
+     "verdict": "confirmed",
+     "why": "Says it is proposed to be measured otherwise; the English says the investigator dropped it on 2026-10-05 and nothing measures it."
+    }
+   },
+   {
+    "code": "K19",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "broader",
+    "czech": "Náležitosti české zdravotnické dokumentace",
+    "english": "label: Required elements of Czech medical documentation, where it applies",
+    "reason": "Drops 'where it applies', so the name reads as a requirement on every note.",
+    "second_read": {
+     "verdict": "accepted",
+     "why": "The statement restricts it to records of a provider of health services."
+    }
+   },
+   {
+    "code": "K19",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "broader",
+    "czech": "Jestli má zápis náležitosti, které předepisuje česká vyhláška.",
+    "english": "definition: The note carries the elements the current Czech regulation requires of medical documentation. The decree is a requirements source and the observable criterion is the presence of those elements. It binds a narrow population: records kept by a provider of health services, in practice clinical psychologists. A therapist working outside health services keeps no medical documentation and this criterion does not reach them.",
+    "reason": "Drops the restriction to records kept as medical documentation by a provider of health services."
+   },
+   {
+    "code": "K19",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "broader",
+    "czech": "Má zápis náležitosti podle české vyhlášky?",
+    "english": "definition: The note carries the elements the current Czech regulation requires of medical documentation. The decree is a requirements source and the observable criterion is the presence of those elements. It binds a narrow population: records kept by a provider of health services, in practice clinical psychologists. A therapist working outside health services keeps no medical documentation and this criterion does not reach them. | measurement: A deterministic check that the declared elements are present, reported on its own and never mixed into a quality score. The presence of a field is not evidence that its content is correct, and a missing element is reported as a missing element, never as a verdict that a law was broken.",
+    "reason": "Drops both the restriction to records of a provider of health services and 'medical documentation', so it asks whether any note meets 'the Czech decree'."
+   },
+   {
+    "code": "K19",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K19",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K19",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K20",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K20",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K20",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K20",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K20",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K20",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K20",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "broader",
+    "czech": "Jestli zápis dodržel, co po něm zadání chtělo.",
+    "english": "definition: The note kept to what the instruction explicitly asked for: sections, length, language, forbidden elements.",
+    "reason": "Drops 'explicitly': 'what the instruction wanted from it' includes implicit expectations, which is a quality question the criterion excludes."
+   },
+   {
+    "code": "K20",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Dodržel model zadaný formát, délku, jazyk?",
+    "english": "definition: The note kept to what the instruction explicitly asked for: sections, length, language, forbidden elements. | measurement: A deterministic check. It must not coexist with a claim that the instruction was met.",
+    "reason": "Drops 'forbidden elements' (and sections are only implied by 'format'), and makes the model rather than the note the subject."
+   },
+   {
+    "code": "K20",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "narrower",
+    "czech": "Zápis dodržel, co zadání výslovně žádalo: oddíly, délku, jazyk.",
+    "english": "definition: The note kept to what the instruction explicitly asked for: sections, length, language, forbidden elements. | measurement: A deterministic check. It must not coexist with a claim that the instruction was met. | examples.positive: The note has all four required headings. | examples.negative: The note exceeded the word limit. | examples.boundary: The note kept within the limit by leaving out risk information.",
+    "reason": "Drops 'forbidden elements' from the list of what the instruction asked for.",
+    "second_read": {
+     "verdict": "confirmed",
+     "why": "Drops forbidden elements from what the instruction asked for."
+    }
+   },
+   {
+    "code": "K20",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "different",
+    "czech": "celý zápis",
+    "english": "unit: requirement of the instruction",
+    "reason": "'celý zápis' (whole note) renders the unit of analysis, not the English unit 'requirement of the instruction' (which the Czech unit_definition does render).",
+    "second_read": {
+     "verdict": "confirmed",
+     "why": "Renders the unit of analysis, not the unit 'requirement of the instruction'."
+    }
+   },
+   {
+    "code": "K20",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K20",
+    "field": "why_not_measured",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K21",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K21",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K21",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K21",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K21",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K21",
+    "field": "how",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Člověk dostane jen zápis, bez přepisu, a zkusí z něj navázat péči.",
+    "english": "measurement: A human task with a binary or ternary answer and a free-text justification.",
+    "reason": "Drops the binary or ternary answer and the free-text justification; it describes only that a person gets the note without the transcript and tries to continue care."
+   },
+   {
+    "code": "K21",
+    "field": "measured_otherwise",
+    "reaches": "local_czech_page",
+    "verdict": "broader",
+    "czech": "Navrženo měřit jinak: otázka pro člověka, zda dokáže ze zápisu převzít péči.",
+    "english": "state_note: P10; needs therapists as raters. | measurement: A human task with a binary or ternary answer and a free-text justification.",
+    "reason": "Says 'a question for a person' where the state_note says it needs therapists as raters."
+   },
+   {
+    "code": "K21",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K21",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "broader",
+    "czech": "Jestli jiný odborník dokáže ze zápisu pokračovat v péči.",
+    "english": "definition: Another professional can meaningfully continue care from the note without access to the transcript.",
+    "reason": "Drops 'without access to the transcript'."
+   },
+   {
+    "code": "K21",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "broader",
+    "czech": "Dokáže jiný odborník ze zápisu navázat péči?",
+    "english": "definition: Another professional can meaningfully continue care from the note without access to the transcript. | measurement: A human task with a binary or ternary answer and a free-text justification.",
+    "reason": "Drops 'without access to the transcript', the condition that makes it a test of the note alone."
+   },
+   {
+    "code": "K21",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K21",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K21",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'zápis krát hodnotitel' is the English 'note times rater'; 'každá dvojice zápis a hodnotitel' is Czech."
+   },
+   {
+    "code": "K22",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K22",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K22",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K22",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "adds",
+    "czech": "Terapeut zápis přijme, ale předtím přepíše tři oddíly ze čtyř.",
+    "english": "examples.negative: The therapist rewrites three of four sections.",
+    "reason": "Adds that the therapist accepts the note ('Terapeut zápis přijme, ale předtím'), which the English example does not say.",
+    "second_read": {
+     "verdict": "accepted",
+     "why": "Accepting the note after rewriting three sections is the case the criterion is about."
+    }
+   },
+   {
+    "code": "K22",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K22",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "narrower",
+    "czech": "Rozsah nutných úprav",
+    "english": "label: Extent and nature of the edits needed",
+    "reason": "Drops 'and nature': the name says only how much, while the definition and measurement insist that the type of edit carries the information and the count alone misleads.",
+    "second_read": {
+     "verdict": "accepted",
+     "why": "The statement asks how many and what kind of edits."
+    }
+   },
+   {
+    "code": "K22",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Kolik práce dá zápis opravit, než se dá použít.",
+    "english": "definition: How many and what kinds of intervention a professional has to make before the note is usable. The type of edit carries information that a score does not.",
+    "reason": "Asks only how much work, dropping what kinds of intervention."
+   },
+   {
+    "code": "K22",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Kolik toho musí odborník přepsat, než je zápis použitelný?",
+    "english": "definition: How many and what kinds of intervention a professional has to make before the note is usable. The type of edit carries information that a score does not. | measurement: A typology of edits plus their count. The count alone, without the type, is misleading.",
+    "reason": "Asks only how much must be rewritten, dropping what kinds of intervention, and 'přepsat' (rewrite) is narrower than any edit."
+   },
+   {
+    "code": "K22",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K22",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K22",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K22",
+    "field": "why_not_measured",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K23",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'Soudcem' reads as a court judge to an outside Czech reader; the project's 'judge' is a language model scoring notes."
+   },
+   {
+    "code": "K23",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Zda by si odborník vzal zápis do vlastní praxe a dál používal systém, který ho vytvořil, a když ne, proč. Otázka je o používání, ne o vyúčtování a ne o pojišťovně. Odpovídá se na šesti parametrech, které MentalCLOUDS převzal z rámce pro přijímání zdravotnických intervencí: citový postoj, zátěž, etickost, srozumitelnost, náklady obětované příležitosti a vnímaná účinnost. Vlastností textu je z nich jen ta srozumitelnost; zbylých pět je o tom, co stojí s tím pracovat.",
+    "english": "definition: Whether a professional would take the note into their own practice and keep using the system that produced it, and if not, why. The question is about use, not about billing or any payer. It is answered on the six parameters MentalCLOUDS took from the acceptability framework for health-care interventions: affective attitude, burden, ethicality, coherence, opportunity costs and perceived effectiveness. Only coherence is a property of the text; the other five are about what working with it costs.",
+    "reason": "Renders 'not about billing or any payer' as 'not about billing and not about the insurer', excluding one payer where the English excludes all."
+   },
+   {
+    "code": "K23",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K23",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K23",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K23",
+    "field": "how",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Člověk odpoví na šest parametrů přijatelnosti ze zdroje.",
+    "english": "measurement: Structured rating on the six parameters, reported separately and never summed with textual scores. A rejection carries its reason, because the reason is the finding.",
+    "reason": "Drops that the six ratings are reported separately and never summed with textual scores, and that a rejection carries its reason.",
+    "idiom_note": "'odpoví na šest parametrů' (answers six parameters) is a calque; one rates parameters or answers questions."
+   },
+   {
+    "code": "K23",
+    "field": "measured_otherwise",
+    "reaches": "local_czech_page",
+    "verdict": "different",
+    "czech": "Navrženo měřit jinak: otázka pro člověka, zda by zápis použil v praxi.",
+    "english": "state_note: P11. Reworded on 2026-09-16 after the investigator's review: the earlier wording, 'accept the note into practice', read as a question about a payer. | measurement: Structured rating on the six parameters, reported separately and never summed with textual scores. A rejection carries its reason, because the reason is the finding.",
+    "reason": "Describes a single question whether the person would use the note in practice, where the English measurement is a structured rating on six parameters with the reason for a rejection; it also drops continued use of the system.",
+    "second_read": {
+     "verdict": "confirmed",
+     "why": "A single question about using the note, where the English is a structured rating on six parameters."
+    }
+   },
+   {
+    "code": "K23",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K23",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Jestli by odborník takový zápis u sebe v praxi použil.",
+    "english": "definition: Whether a professional would take the note into their own practice and keep using the system that produced it, and if not, why. The question is about use, not about billing or any payer. It is answered on the six parameters MentalCLOUDS took from the acceptability framework for health-care interventions: affective attitude, burden, ethicality, coherence, opportunity costs and perceived effectiveness. Only coherence is a property of the text; the other five are about what working with it costs.",
+    "reason": "Drops 'keep using the system that produced it'."
+   },
+   {
+    "code": "K23",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Použil by odborník takový zápis u sebe?",
+    "english": "definition: Whether a professional would take the note into their own practice and keep using the system that produced it, and if not, why. The question is about use, not about billing or any payer. It is answered on the six parameters MentalCLOUDS took from the acceptability framework for health-care interventions: affective attitude, burden, ethicality, coherence, opportunity costs and perceived effectiveness. Only coherence is a property of the text; the other five are about what working with it costs. | measurement: Structured rating on the six parameters, reported separately and never summed with textual scores. A rejection carries its reason, because the reason is the finding.",
+    "reason": "Drops 'keep using the system that produced it', which the boundary example turns on (acceptable note, system still rejected)."
+   },
+   {
+    "code": "K23",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "same",
+    "idiom_note": "'by si odborník zápis vzal do vlastní praxe' copies 'take into their own practice'; 'by takový zápis ve své praxi použil' is how a Czech speaker says it."
+   },
+   {
+    "code": "K23",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K23",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'zápis krát hodnotitel' is the English 'note times rater'."
+   },
+   {
+    "code": "K24",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K24",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K24",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K24",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K24",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K24",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "narrower",
+    "czech": "Porozumění ze strany klienta",
+    "english": "label: Understanding and acceptance by the client",
+    "reason": "Drops 'and acceptance'.",
+    "second_read": {
+     "verdict": "accepted",
+     "why": "Out of scope this round; the statement is proposed for change instead."
+    }
+   },
+   {
+    "code": "K24",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Jestli klient svému shrnutí rozumí a pozná se v něm.",
+    "english": "definition: Whether the client understands the summary, recognises their session in it, and is not harmed by reading it.",
+    "reason": "Drops 'is not harmed by reading it', and 'pozná se v něm' (recognises himself) replaces 'recognises their session in it'."
+   },
+   {
+    "code": "K24",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Rozumí tomu klient a pozná v tom své sezení?",
+    "english": "definition: Whether the client understands the summary, recognises their session in it, and is not harmed by reading it. | measurement: A human task. In the first pilot only as a proxy judgement by a professional, explicitly labelled as a proxy.",
+    "reason": "Drops 'and is not harmed by reading it'."
+   },
+   {
+    "code": "K24",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "broader",
+    "czech": "Zda klient zápisu rozumí, pozná v něm své sezení a čtením mu to neublíží.",
+    "english": "definition: Whether the client understands the summary, recognises their session in it, and is not harmed by reading it. | measurement: A human task. In the first pilot only as a proxy judgement by a professional, explicitly labelled as a proxy. | examples.positive: The client reads the summary and confirms that it matches what they experienced. | examples.negative: The client finds in the summary a statement they do not recognise about themselves. | examples.boundary: The summary is factually correct and the client perceives it as cold.",
+    "reason": "Says 'zápis' (the note) where the English and the Czech definition say 'the summary' written for the client, so on the sheet it reads as the client understanding the therapist's note.",
+    "second_read": {
+     "verdict": "confirmed",
+     "why": "Says 'the note' where the criterion is about the summary written for the client, and is a 'whether' clause rather than a sentence."
+    }
+   },
+   {
+    "code": "K24",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "celý zápis, jeden klient",
+    "english": "unit: note times reader",
+    "reason": "Renders 'reader' as 'one client', excluding the professional who reads as a proxy in the first pilot."
+   },
+   {
+    "code": "K24",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'zápis krát čtenář' is the English 'note times reader'."
+   },
+   {
+    "code": "K24",
+    "field": "why_not_measured",
+    "reaches": "local_czech_page",
+    "verdict": "adds",
+    "czech": "Mimo rozsah tvým rozhodnutím ze 16. 9. (nástroj slouží návaznosti péče a dokumentaci). Kandidát i jeho opora zůstávají pro další kolo.",
+    "english": "state: out_of_scope | state_note: Out of scope by decision D8 of 2026-09-16: the instrument serves continuity of care and documentation. The client purpose keeps its candidate and its evidence for a later round, and this round measures and claims nothing for it.",
+    "reason": "Attributes the decision to the reader ('tvým rozhodnutím', your decision) instead of naming decision D8, and drops 'this round measures and claims nothing for it'.",
+    "idiom_note": "Addressing the reader as 'ty' on a catalog page is a register no other field uses.",
+    "second_read": {
+     "verdict": "confirmed",
+     "why": "Attributes the decision to the reader ('tvým rozhodnutím') instead of naming decision D8, and drops that this round claims nothing for it."
+    }
+   },
+   {
+    "code": "K25",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K25",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K25",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K25",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K25",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K25",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K25",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Jestli je v zápisu i to, co dělal terapeut, ne jen o čem se mluvilo.",
+    "english": "definition: Whether a supervisor can tell from the note what the therapist did, why, and where they were unsure.",
+    "reason": "Drops 'why' and 'where they were unsure'; it asks only whether the note says what the therapist did and not only what was talked about."
+   },
+   {
+    "code": "K25",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Pozná supervizor, co terapeut dělal a proč?",
+    "english": "definition: Whether a supervisor can tell from the note what the therapist did, why, and where they were unsure. | measurement: A human task with supervisors.",
+    "reason": "Drops 'and where they were unsure' and 'from the note'."
+   },
+   {
+    "code": "K25",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K25",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K25",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'zápis krát supervizor' is the English 'note times supervisor'."
+   },
+   {
+    "code": "K25",
+    "field": "why_not_measured",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K26",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'nativní sezení' is 'native sessions' in Czech letters; an outside reader will not know what is meant."
+   },
+   {
+    "code": "K26",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K26",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K26",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "different",
+    "czech": "Zápis uvádí, že se panické ataky objevily poprvé, ačkoli je předchozí zápis obsahuje.",
+    "english": "examples.negative: The note records the first mention of panic attacks although the previous note contains them.",
+    "reason": "Says the note states the panic attacks appeared for the first time (onset), where the English says the note records their first mention.",
+    "second_read": {
+     "verdict": "accepted",
+     "why": "Onset rather than first mention, but either contradicts the previous note, which is the error shown."
+    }
+   },
+   {
+    "code": "K26",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "different",
+    "czech": "Zápis zaznamenává změnu stavu a odkazuje na tu dřívější.",
+    "english": "examples.positive: The note records a change of state and refers to the earlier one.",
+    "reason": "Feminine 'tu dřívější' agrees with 'změnu', so the note refers to the earlier change, where the English 'the earlier one' is the earlier state.",
+    "idiom_note": "'odkazuje na předchozí stav' says what the English means.",
+    "second_read": {
+     "verdict": "confirmed",
+     "why": "'tu dřívější' agrees with 'změnu', so the note refers to the earlier change, not the earlier state."
+    }
+   },
+   {
+    "code": "K26",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K26",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "broader",
+    "czech": "Jestli si zápisy téhož klienta neodporují.",
+    "english": "definition: The note does not contradict earlier notes of the same case where there is no documented reason for it.",
+    "reason": "Drops 'where there is no documented reason for it'."
+   },
+   {
+    "code": "K26",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "broader",
+    "czech": "Neodporuje zápis dřívějším zápisům téhož klienta?",
+    "english": "definition: The note does not contradict earlier notes of the same case where there is no documented reason for it. | measurement: Verification of claims against the series, not against one source.",
+    "reason": "Drops 'where there is no documented reason for it', so a contradiction that records a real change would fail; it also says 'client' for 'case'.",
+    "idiom_note": "A negated question ('Neodporuje zápis...?') leaves open in Czech whether 'ano' is the good answer."
+   },
+   {
+    "code": "K26",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K26",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K26",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K26",
+    "field": "why_not_measured",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Neměří se. Potřebuje několik sezení téhož klienta za sebou; pilotní případy pro to nejsou připravené a česká reálná sezení jsou mimo pilot.",
+    "english": "state: not_measured | state_note: The cases are not prepared or selected for longitudinal evaluation: the native sessions carry no validated session order and stay outside the pilot by decision D1.",
+    "reason": "Drops that the native sessions carry no validated session order and that they stay outside the pilot by decision D1, and drops 'selected'; it renders 'native sessions' as 'Czech real sessions'."
+   },
+   {
+    "code": "K27",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'klientským klastrem' is English jargon in Czech words; 's jedinou skupinou českých klientů' says it plainly."
+   },
+   {
+    "code": "K27",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K27",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K27",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K27",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K27",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "narrower",
+    "czech": "Rovnoměrnost napříč skupinami klientů",
+    "english": "label: Evenness of quality across client groups",
+    "reason": "Drops 'of quality': the Czech name says evenness across client groups without saying evenness of what.",
+    "second_read": {
+     "verdict": "accepted",
+     "why": "The statement says quality does not drop for certain groups."
+    }
+   },
+   {
+    "code": "K27",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Jestli model nepíše soustavně horší zápisy pro některou skupinu klientů.",
+    "english": "definition: Whether note quality does not systematically drop for certain client groups, language varieties or topics.",
+    "reason": "Covers only client groups and drops language varieties and topics."
+   },
+   {
+    "code": "K27",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Neklesá kvalita u určitých skupin klientů?",
+    "english": "definition: Whether note quality does not systematically drop for certain client groups, language varieties or topics. | measurement: A breakdown of existing scores by subgroup with intervals; no new measure.",
+    "reason": "Drops 'systematically' and two of the three groupings (language varieties, topics); it asks only about client groups."
+   },
+   {
+    "code": "K27",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K27",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "skupina klientů",
+    "english": "unit: group of cases, not an individual note",
+    "reason": "Names a group of clients where the English names a group of cases; cases grouped by language variety or topic are not client groups."
+   },
+   {
+    "code": "K27",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K27",
+    "field": "why_not_measured",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Neměří se. Potřebuje dost případů v každé skupině klientů; s jednou skupinou se to nedá rozdělit a nesmí se to předstírat.",
+    "english": "state: not_measured | state_note: Needs enough cases per subgroup; with one Czech client cluster the breakdown cannot be made and must not be pretended. | decided_by_note: Computed from the other measures across groups of clients; a gap is a defect, so the direction is clear, but it has no reference of its own.",
+    "reason": "Drops 'Czech' from 'one Czech client cluster', so it no longer says that the Czech data has only one group (the actual reason), and turns 'subgroup' into 'client group'."
+   },
+   {
+    "code": "K28",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K28",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K28",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K28",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K28",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K28",
+    "field": "how",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Spočítá se rozmanitost všech zápisů jednoho modelu, ne jeden zápis.",
+    "english": "measurement: ME17. Low diversity among the notes of one system as an indirect indicator of genericness. It is a proxy, not a direct measurement.",
+    "reason": "Drops that low diversity is only an indirect indicator of genericness, a proxy and not a direct measurement; the Czech presents the diversity count as the measurement itself."
+   },
+   {
+    "code": "K28",
+    "field": "measured_otherwise",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'ukazatel přes všechny zápisy' carries 'across' over literally; 'ukazatel spočítaný ze všech zápisů jednoho modelu' is the Czech."
+   },
+   {
+    "code": "K28",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "narrower",
+    "czech": "Personalizace",
+    "english": "label: Personalisation: a note about this person",
+    "reason": "Drops the gloss 'a note about this person'; the bare loanword 'Personalizace' usually means tailoring something to a person, whereas the English fixes it as capturing what is unique about this client (content, not style).",
+    "second_read": {
+     "verdict": "accepted",
+     "why": "The statement says what is unique to this client and session."
+    }
+   },
+   {
+    "code": "K28",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K28",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K28",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K28",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K28",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K29",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K29",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K29",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K29",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same",
+    "idiom_note": "'tolik klinicky podstatného, co by se vešlo' needs 'kolik': 'tolik ..., kolik by se vešlo na půl stránky'."
+   },
+   {
+    "code": "K29",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K29",
+    "field": "how",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Počet různých faktů z banky na jednotku délky.",
+    "english": "measurement: Distinct essential information units, duplicates counted once, per length unit, reported beside coverage, harmful omissions and comprehensibility. The length unit is defined per language, because word-normalised ratios are not comparable between English and Czech. In addition a control condition: comparing systems at aligned length (a proposed experiment; the differences between studies S18 and S19 do not isolate length).",
+    "reason": "Keeps distinct units per length but drops that the length unit is defined per language (word ratios are not comparable between English and Czech), that density is reported beside coverage, harmful omissions and comprehensibility, and the aligned-length control."
+   },
+   {
+    "code": "K29",
+    "field": "measured_otherwise",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K29",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K29",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "broader",
+    "czech": "Kolik různých informací zápis nese na jednotku délky.",
+    "english": "definition: How much clinically essential content the note carries per unit of text. Not length and not economy: the ratio between information carried and space consumed.",
+    "reason": "Counts distinct information of any kind and drops 'clinically essential'."
+   },
+   {
+    "code": "K29",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "broader",
+    "czech": "Kolik informace nese zápis na svou délku?",
+    "english": "definition: How much clinically essential content the note carries per unit of text. Not length and not economy: the ratio between information carried and space consumed. | measurement: Distinct essential information units, duplicates counted once, per length unit, reported beside coverage, harmful omissions and comprehensibility. The length unit is defined per language, because word-normalised ratios are not comparable between English and Czech. In addition a control condition: comparing systems at aligned length (a proposed experiment; the differences between studies S18 and S19 do not isolate length).",
+    "reason": "Asks about information in general and drops 'clinically essential', so marginal information would count, which the boundary example says lowers density."
+   },
+   {
+    "code": "K29",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "narrower",
+    "czech": "Kolik klinicky podstatného obsahu zápis nese na jednotku textu.",
+    "english": "definition: How much clinically essential content the note carries per unit of text. Not length and not economy: the ratio between information carried and space consumed. | measurement: Distinct essential information units, duplicates counted once, per length unit, reported beside coverage, harmful omissions and comprehensibility. The length unit is defined per language, because word-normalised ratios are not comparable between English and Czech. In addition a control condition: comparing systems at aligned length (a proposed experiment; the differences between studies S18 and S19 do not isolate length). | examples: {\"positive\": \"Two notes of the same length; one carries nine essential pieces of information, the other four.\", \"negative\": \"Two pages of text carrying as much clinically essential content as would fit on half a page.\", \"boundary\": \"A longer note that additionally carries only marginal information: higher coverage, lower density, and worse for the reader.\"}",
+    "reason": "It is the definition's 'how much' clause, not a claim of the desired state: it names the quantity without saying the note carries much essential content for its length, so a rater has no statement to agree with.",
+    "idiom_note": "An indirect-question fragment ('Kolik ... nese'), not a sentence.",
+    "second_read": {
+     "verdict": "confirmed",
+     "why": "A 'how much' clause: names a quantity and gives a rater no sentence to judge."
+    }
+   },
+   {
+    "code": "K29",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K29",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'zápisy o téže předloze' is odd: 'předloha' is a template or original to copy from; 'zápisy téhož sezení' or 'zápisy psané ze stejného přepisu' says it."
+   },
+   {
+    "code": "K30",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K30",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'Odlišné od srozumitelnosti' carries 'Distinct from' over literally; 'Liší se od srozumitelnosti' (as K33 has it) is the Czech.",
+    "second_read": {
+     "verdict": "same_confirmed",
+     "why": "Drawn for the second read of rows read as the same."
+    }
+   },
+   {
+    "code": "K30",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'Pro péči nízký' leaves the adjective without a noun, and 'Označkuje text jako strojově psaný' renders 'marks the text as' word for word; 'prozradí, že text psal stroj' is the Czech."
+   },
+   {
+    "code": "K30",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K30",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K30",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K30",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Jestli se to čte jako čeština napsaná klinikem.",
+    "english": "definition: The note reads as a clinician of that language would write it: ordinary clinical register, no machine phrasing, no idiom carried over from another language. Distinct from comprehensibility: a stilted note can be perfectly understandable.",
+    "reason": "Restricts the criterion to Czech ('čeština napsaná klinikem'), while the English covers each language."
+   },
+   {
+    "code": "K30",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Čte se to, jako by to psal český klinik?",
+    "english": "definition: The note reads as a clinician of that language would write it: ordinary clinical register, no machine phrasing, no idiom carried over from another language. Distinct from comprehensibility: a stilted note can be perfectly understandable. | measurement: Not yet defined. A human rating scale written in both languages; perplexity or judge ratings are not evidence of naturalness until checked against human ratings.",
+    "reason": "Restricts the criterion to a Czech clinician, while the English applies to each language with its own rule ('a clinician of that language')."
+   },
+   {
+    "code": "K30",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "same",
+    "idiom_note": "'jako by ho psal klinik v daném jazyce' is officialese; 'jako by ho napsal klinik, který tím jazykem běžně píše' reads naturally."
+   },
+   {
+    "code": "K30",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K30",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K30",
+    "field": "why_not_measured",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K31",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K31",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'podíl obsah nesoucích vět (K11) to nevidí' is English syntax ('content-bearing', 'does not see it'); e.g. 'podíl vět, které nesou obsah (K11), to nezachytí'."
+   },
+   {
+    "code": "K31",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'nafukuje každé srovnání, které roste s délkou' is literal (a comparison does not grow); e.g. 'nadsazuje každý ukazatel, který roste s délkou'; 'vynechávky' is an unusual word for omissions."
+   },
+   {
+    "code": "K31",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same",
+    "idiom_note": "'v Subjektivním' uses the section adjective as a noun; 'v oddílu Subjektivní' (as K33 writes it) reads naturally."
+   },
+   {
+    "code": "K31",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K31",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "broader",
+    "czech": "Bez zbytečného opakování",
+    "english": "label: Redundancy: the same fact more than once",
+    "reason": "No longer says what is repeated ('the same fact'): 'Bez zbytečného opakování' also covers repeated wording such as a template phrase, which is not an information unit and is K30's negative example.",
+    "second_read": {
+     "verdict": "accepted",
+     "why": "The statement says the same essential information."
+    }
+   },
+   {
+    "code": "K31",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K31",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K31",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K31",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K31",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K31",
+    "field": "why_not_measured",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K32",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K32",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'Posuzuje se jen ze zápisu, jako to, co zápis o péči ukazuje' follows the English clause order; e.g. 'Posuzuje se jen podle zápisu, podle toho, co zápis o péči vypovídá.'"
+   },
+   {
+    "code": "K32",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'čte klienta přes stereotyp' renders 'reads the client through a stereotype' word for word; 'vidí klienta optikou stereotypu' is the Czech."
+   },
+   {
+    "code": "K32",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K32",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'náboženské rámování viny bylo v intervenci přijato v jeho vlastních pojmech' is English syntax in Czech words; e.g. 'terapeut v intervenci navázal na to, jak klient chápe vinu nábožensky, a mluvil o ní jeho slovy'."
+   },
+   {
+    "code": "K32",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K32",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Jestli zápis nečte klienta přes stereotyp.",
+    "english": "definition: The note shows that the client's cultural, linguistic and social context was taken into account where it bore on the session: how the client's background is recorded, whether an adaptation or an interpreter is noted, and that no assumption about the client stands in for what was said. It is judged from the note alone, as what the note shows about the care.",
+    "reason": "Reduces the criterion to the absence of stereotyping and drops that the client's cultural, linguistic and social context is taken into account and recorded (background, adaptation, interpreter).",
+    "idiom_note": "'nečte klienta přes stereotyp' is the same literal rendering as in error_consequence."
+   },
+   {
+    "code": "K32",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Je v zápisu zohledněný kulturní kontext, kde se péče týkal?",
+    "english": "definition: The note shows that the client's cultural, linguistic and social context was taken into account where it bore on the session: how the client's background is recorded, whether an adaptation or an interpreter is noted, and that no assumption about the client stands in for what was said. It is judged from the note alone, as what the note shows about the care. | measurement: Not yet defined. Human rating only; needs a rule for when the item applies and for what counts as evidence, written in both languages.",
+    "reason": "Asks only about cultural context and drops linguistic and social context."
+   },
+   {
+    "code": "K32",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K32",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K32",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K32",
+    "field": "why_not_measured",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'Přijal jsi ho' follows 'pravidlo měření', so 'ho' first reads as the rule having been adopted, when it is the criterion; 'Kritérium jsi přijal 21. 9.' removes that."
+   },
+   {
+    "code": "K33",
+    "field": "applicability",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K33",
+    "field": "definition",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'když je zápis podává obě jako současná' doubles the object ('je' and 'obě'); 'když zápis podává obě jako současná'."
+   },
+   {
+    "code": "K33",
+    "field": "error_consequence",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K33",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K33",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'z posouzení nad ním' renders 'above it' literally; 'z hodnocení, které mu předchází' is the Czech."
+   },
+   {
+    "code": "K33",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "same",
+    "idiom_note": "'Vnitřní konzistence' is also the Czech psychometric term (Cronbach's alpha) that therapists know; the English adds 'within one note', and 'Vnitřní konzistence zápisu' would keep that reading off."
+   },
+   {
+    "code": "K33",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Jestli si zápis neodporuje sám se sebou.",
+    "english": "definition: No part of the note ignores or contradicts another part of the same note. Distinct from K26, which is consistency between notes of one case, and from K01: two statements can each have support in the source at different moments and still contradict each other when the note presents both as current.",
+    "reason": "Drops 'ignores' and keeps only self-contradiction."
+   },
+   {
+    "code": "K33",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Neodporuje si zápis sám?",
+    "english": "definition: No part of the note ignores or contradicts another part of the same note. Distinct from K26, which is consistency between notes of one case, and from K01: two statements can each have support in the source at different moments and still contradict each other when the note presents both as current. | measurement: Not yet defined. Locate pairs of statements in the note that cannot both hold, count them per note, and have a person check each pair.",
+    "reason": "Asks only about contradiction and drops 'ignores' (a part that does not take another into account, as in the positive example of a plan following from the assessment)."
+   },
+   {
+    "code": "K33",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "same",
+    "idiom_note": "'nepopírá' means 'denies'; for 'contradicts' Czech says 'neodporuje', as the question and plain do."
+   },
+   {
+    "code": "K33",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K33",
+    "field": "unit_definition",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K33",
+    "field": "why_not_measured",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'Přidal jsi ho' follows 'pravidlo měření', so 'ho' first reads as the rule having been added, when it is the criterion."
+   },
+   {
+    "code": "K34",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K34",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'kde to obsah sezení podpírá' renders 'supports' literally ('props up'); 'kde to obsah sezení dokládá' is the Czech."
+   },
+   {
+    "code": "K34",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "narrower",
+    "czech": "Odborná terminologie",
+    "english": "label: Correct and appropriate professional terminology",
+    "reason": "Drops 'Correct and appropriate': the Czech name names the topic, professional terminology, not the property that it is used correctly.",
+    "second_read": {
+     "verdict": "accepted",
+     "why": "A label; the proposed statement carries 'correctly'."
+    }
+   },
+   {
+    "code": "K34",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K34",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'a správně?' is elliptical; 'a to správně?' is the Czech."
+   },
+   {
+    "code": "K34",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "narrower",
+    "czech": "Zápis používá odborné termíny a používá je pro to, co znamenají.",
+    "english": "definition: The note names what happened in the words the profession uses, and uses them correctly: a term stands for what the term means, a lay paraphrase does not replace a term that carries clinical meaning, and no term is used that the session does not support. Distinct from K30, which is whether the text reads as a clinician of that language would write it: a fluent note can use the wrong term, and a correct term can sit in a stilted sentence. Distinct from K13, which is whether the intended reader understands it. | measurement: Not yet defined. A rating rule written in English and in Czech, applied by a clinician, distinguishing a wrong term, a missing term and an unsupported term. No automatic proxy is proposed: a term list would reward the word and not its use. | examples: {\"positive\": \"The note writes that the client reports early waking and loss of interest, and calls the latter anhedonia where the session's content supports it.\", \"negative\": \"The note calls the client's described worry a panic attack, which the session does not describe.\", \"boundary\": \"The note writes „the client was somehow out of it“: not a wrong term, a missing one, which is the same failure from the other side.\"}",
+    "reason": "Keeps 'uses terms' and 'for what they mean' but drops the third condition, that no term is used that the session does not support (the measurement's 'unsupported term'), and the qualifier that a term is expected where it carries clinical meaning, so it can read as rewarding terminology as such.",
+    "second_read": {
+     "verdict": "confirmed",
+     "why": "Drops that a term is expected where it carries clinical meaning and that no term is used the session does not support; as written it can reward jargon."
+    }
+   },
+   {
+    "code": "K34",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K35",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K35",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K35",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K35",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K35",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K36",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same",
+    "second_read": {
+     "verdict": "same_confirmed",
+     "why": "Drawn for the second read of rows read as the same."
+    }
+   },
+   {
+    "code": "K36",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'týden byl jako brodit se' pairs a noun with an infinitive; 'týden byl jako brodění' or 'že se týdnem brodil' reads naturally."
+   },
+   {
+    "code": "K36",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K36",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K36",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "same",
+    "idiom_note": "'jak to klient prožíval': 'to' has no antecedent on a sheet that shows nothing else; 'jak klient věci prožíval' avoids it."
+   },
+   {
+    "code": "K37",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K37",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K37",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K37",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "different",
+    "czech": "Jestli čísla v zápisu sedí s tím, co v sezení zaznělo.",
+    "english": "definition: A number in the note differs from the number in the source: a dose, a frequency, a duration, a count of sessions or episodes, a date, an age. Distinct from K01, which asks whether a claim has support at all and records a wrong number as distorted without recording that what moved was a quantity. The unit of this one is the number, so a note can be scored for how often it moves numbers independently of how often it is unsupported.",
+    "reason": "Compares with what was said in the session rather than with the source, as in the statement.",
+    "second_read": {
+     "verdict": "confirmed",
+     "why": "Follows the statement: what was said rather than the source."
+    }
+   },
+   {
+    "code": "K37",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "different",
+    "czech": "Uvádí zápis stejná čísla, jaká zazněla?",
+    "english": "definition: A number in the note differs from the number in the source: a dose, a frequency, a duration, a count of sessions or episodes, a date, an age. Distinct from K01, which asks whether a claim has support at all and records a wrong number as distorted without recording that what moved was a quantity. The unit of this one is the number, so a note can be scored for how often it moves numbers independently of how often it is unsupported. | measurement: Not measured in this round. No rule is written and the pilot's human budget is spent.",
+    "reason": "Compares with what was said ('jaká zazněla') rather than with the number in the source, as in the statement.",
+    "second_read": {
+     "verdict": "confirmed",
+     "why": "Follows the statement: what was said rather than the source."
+    }
+   },
+   {
+    "code": "K37",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "different",
+    "czech": "Čísla v zápisu odpovídají tomu, co v sezení zaznělo.",
+    "english": "definition: A number in the note differs from the number in the source: a dose, a frequency, a duration, a count of sessions or episodes, a date, an age. Distinct from K01, which asks whether a claim has support at all and records a wrong number as distorted without recording that what moved was a quantity. The unit of this one is the number, so a note can be scored for how often it moves numbers independently of how often it is unsupported. | measurement: Not measured in this round. No rule is written and the pilot's human budget is spent. | examples: {\"positive\": \"The transcript has the client missing two doses in the last month; the note says two.\", \"negative\": \"The transcript has two; the note says four.\", \"boundary\": \"The transcript has the client missing doses 'a couple of times' and the note says twice. Whether a vague quantity rendered as an exact one is a deviation or a certainty error under K04 is what the rule has to settle.\"}",
+    "reason": "Anchors the numbers to what was said in the session, where the English compares the note's number with the source (the transcript, as both examples say); the catalog keeps the two apart in K39, where the source can be wrong about the session.",
+    "second_read": {
+     "verdict": "confirmed",
+     "why": "Compares numbers with what was said in the session; the English compares them with the source, and K39 is the criterion that separates the two."
+    }
+   },
+   {
+    "code": "K37",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "jedno číslo",
+    "english": "unit: one number in the note, paired with the number in the source it renders",
+    "reason": "Drops that the number in the note is paired with the number in the source it renders, which is what makes the unit a comparison."
+   },
+   {
+    "code": "K37",
+    "field": "why_not_measured",
+    "reaches": "local_czech_page",
+    "verdict": "adds",
+    "czech": "Chybí pravidlo měření. Není napsané, která čísla se počítají a co dělat s neurčitým množstvím, které zápis uvede jako přesné.",
+    "english": "state: not_yet_operationalized | state_note: Accepted into the pool by the investigator on 2026-10-14 and in the pool the panel rates under D13; it has not been rated, because no sheet has been sent. No measurement rule exists yet.",
+    "reason": "Says the rule has yet to settle which numbers count, which no English field states (the definition lists them), and drops that the panel has not rated it because no sheet has been sent; the vague-quantity point is from the boundary example.",
+    "second_read": {
+     "verdict": "confirmed",
+     "why": "Says which numbers count is unsettled, which the English does not, and drops that no sheet has been sent."
+    }
+   },
+   {
+    "code": "K38",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "adds",
+    "czech": "Zápis uvede, že klientku Janu odeslal psychiatr, ačkoli šlo o sestru Hanu a o praktického lékaře.",
+    "english": "examples.negative: The note says the client Jana was referred by a psychiatrist.",
+    "reason": "Adds 'ačkoli šlo o sestru Hanu a o praktického lékaře', stating that the note turned the sister Hana into the client Jana; the English negative names only the wrong client name and referrer and leaves the link to the positive example implicit.",
+    "second_read": {
+     "verdict": "accepted",
+     "why": "Naming who it really was makes the error visible to a rater."
+    }
+   },
+   {
+    "code": "K38",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K38",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "narrower",
+    "czech": "Správnost jmen a institucí",
+    "english": "label: Named-entity deviation",
+    "reason": "Names only names and institutions; the English named entities also include a relative's relation, a medication and a place ('jména' is not the Czech word for drug or place names).",
+    "second_read": {
+     "verdict": "accepted",
+     "why": "A label; the proposed statement carries the full list."
+    }
+   },
+   {
+    "code": "K38",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Jestli jména, instituce a odesílatel sedí se zdrojem.",
+    "english": "definition: A name in the note differs from the name in the source: a person, a relative and their relation, an institution, a referrer, a medication, a place. Distinct from K01 for the same reason as K37: K01 records that the claim is distorted and not that what moved was a name. Distinct from K17, which asks whether a third party should be in the note at all rather than whether the name given is the right one.",
+    "reason": "Same list as the statement: drops the relative's relation, medications and places."
+   },
+   {
+    "code": "K38",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "Je v zápisu správné jméno, instituce a odesílatel?",
+    "english": "definition: A name in the note differs from the name in the source: a person, a relative and their relation, an institution, a referrer, a medication, a place. Distinct from K01 for the same reason as K37: K01 records that the claim is distorted and not that what moved was a name. Distinct from K17, which asks whether a third party should be in the note at all rather than whether the name given is the right one. | measurement: Not measured in this round, for the same reason as K37.",
+    "reason": "Same list as the statement: drops the relative's relation, medications and places."
+   },
+   {
+    "code": "K38",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "narrower",
+    "czech": "Jména, instituce a odesílatel v zápisu odpovídají zdroji.",
+    "english": "definition: A name in the note differs from the name in the source: a person, a relative and their relation, an institution, a referrer, a medication, a place. Distinct from K01 for the same reason as K37: K01 records that the claim is distorted and not that what moved was a name. Distinct from K17, which asks whether a third party should be in the note at all rather than whether the name given is the right one. | measurement: Not measured in this round, for the same reason as K37. | examples: {\"positive\": \"The client speaks of his sister Hana and of being referred by a general practitioner; the note says sister Hana, referred by a general practitioner.\", \"negative\": \"The note says the client Jana was referred by a psychiatrist.\", \"boundary\": \"The note writes the sister's name correctly but calls her the client's partner. Whether a wrong relation is a named-entity deviation or a speaker error under the existing error types is what the rule has to settle.\"}",
+    "reason": "Lists names, institutions and the referrer and drops the relative's relation, medications and places, which the English definition lists.",
+    "second_read": {
+     "verdict": "confirmed",
+     "why": "Drops a relative and their relation, medications and places from the English list."
+    }
+   },
+   {
+    "code": "K38",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "narrower",
+    "czech": "jedna pojmenovaná entita",
+    "english": "unit: one named entity in the note, paired with the one in the source it renders",
+    "reason": "Drops that the entity in the note is paired with the one in the source it renders."
+   },
+   {
+    "code": "K38",
+    "field": "why_not_measured",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K39",
+    "field": "example",
+    "reaches": "panel_sheet",
+    "verdict": "same",
+    "idiom_note": "'Přepis slyšel' personifies the transcript and 'slyšel ... opíše' mixes past and future; 'V přepisu je „sertralid“ místo „sertralin“ a zápis to opsal'."
+   },
+   {
+    "code": "K39",
+    "field": "example_positive",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K39",
+    "field": "name",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K39",
+    "field": "plain",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'věrně neopsal' puts the negation after the adverb and can read as 'copied unfaithfully'; 'neopsal' alone reads as intended."
+   },
+   {
+    "code": "K39",
+    "field": "question",
+    "reaches": "local_czech_page",
+    "verdict": "same",
+    "idiom_note": "'Nepřepsal zápis věrně chybu' sits next to 'přepis', and 'přepsat' also means 'rewrite'; 'Neopsal zápis chybu' (as the plain has it) is unambiguous."
+   },
+   {
+    "code": "K39",
+    "field": "statement",
+    "reaches": "panel_sheet",
+    "verdict": "same"
+   },
+   {
+    "code": "K39",
+    "field": "unit",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   },
+   {
+    "code": "K39",
+    "field": "why_not_measured",
+    "reaches": "local_czech_page",
+    "verdict": "same"
+   }
+  ]
+ },
+ "level_2": {
+  "evidence_verdicts": [
+   "supported",
+   "adapted_declared",
+   "adapted_undeclared",
+   "misread",
+   "location_wrong"
+  ],
+  "definition_verdicts": [
+   "follows",
+   "follows_with_declared_adaptation",
+   "goes_beyond_undeclared",
+   "contradicts_source"
+  ],
+  "evidence_counts": {
+   "adapted_declared": 6,
+   "adapted_undeclared": 7,
+   "location_wrong": 1,
+   "misread": 3,
+   "supported": 4
+  },
+  "definition_counts": {
+   "follows": 1,
+   "follows_with_declared_adaptation": 4,
+   "goes_beyond_undeclared": 7
+  },
+  "criteria": [
+   {
+    "code": "K01",
+    "definition_verdict": "goes_beyond_undeclared",
+    "definition_reason": "The fourth outcome 'unassessable' has no counterpart in either source (TN-Eval labels each sentence Out-of-nowhere, Misinterpreted Information or No Error; PDSQI-9 names fabrication and falsification) and is declared nowhere; nor is 'or in another declared source', which neither source nor the claims rule (transcript only) uses. The move from sentences to atomic claims is declared, though only under the PDSQI-9 entry.",
+    "evidence": [
+     {
+      "index": 0,
+      "source": "S1",
+      "location": "Section 4.1 Human Evaluation Protocols",
+      "verdict": "adapted_undeclared",
+      "what_the_source_says": "In the human protocol (TNH-Eval) annotators 'cross-check sentences against the therapy transcript, selecting supporting content from the source and categorizing hallucinations into (1) Out-of-nowhere, (2) Misinterpreted Information, or (3) No Error'; the passage closes Section 4.1 at the top of the right column, and the automatic protocol (4.2) does not use this typology but AlignScore.",
+      "reason": "The sentence-level three-way label becomes four claim-level outcomes, and the added 'unassessable' outcome is declared neither in this entry's adaptation (which names only automation and Czech) nor in the origin note."
+     },
+     {
+      "index": 1,
+      "source": "S2",
+      "location": "Round 2, attribute refinement",
+      "verdict": "adapted_declared",
+      "what_the_source_says": "Round 2 of the semi-Delphi process places 'a particular focus on the vulnerability of the attribute Accurate to hallucinations and the attribute Thorough to omissions', and defines hallucinations as 'falsifications or fabrications': a fabrication is 'made-up information ... based on non-existent facts', a falsification 'information distorted from the original note'. Accurate is one attribute rated for the whole summary.",
+      "reason": "Supports is correct and the invented/distorted split follows the fabrication/falsification definitions in the same paragraph; the claim as unit goes beyond the whole-summary rating and is declared as our proposal."
+     }
+    ]
+   },
+   {
+    "code": "K02",
+    "definition_verdict": "follows_with_declared_adaptation",
+    "definition_reason": "TN-Eval separates originators two ways and by section (reports from the client, family members and past records go to Subjective; the therapist's observations to Objective); K02 tells four originators apart claim by claim, which the adaptation declares as our proposal.",
+    "evidence": [
+     {
+      "index": 0,
+      "source": "S1",
+      "location": "Appendix A.2 Objective, Definition",
+      "verdict": "adapted_declared",
+      "what_the_source_says": "A.2 defines Objective as 'objective observations made during the session' and tells the writer to 'Avoid including any subjective statements or self-reported information from the client'; A.1 puts 'the subjective reports from the client, their family members, and past medical records' in Subjective. The same wording is in the generation prompt (Appendix F).",
+      "reason": "The source separates reported from observed by placing it in a section and does not ask that client, third party and earlier records be told apart; attribution inside the claim is declared as our proposal."
+     }
+    ]
+   },
+   {
+    "code": "K03",
+    "definition_verdict": "follows_with_declared_adaptation",
+    "definition_reason": "The criterion is declared local and PDSQI-9 is cited only as a caution against a separate temporal score; that caution is weaker than the catalog states, because the removed attribute was about including the latest results, not about claims keeping their time, and PDSQI-9 moved its scope into Organized.",
+    "evidence": [
+     {
+      "index": 0,
+      "source": "S2",
+      "location": "Methods, instrument development",
+      "verdict": "misread",
+      "what_the_source_says": "In Round 1 of the development of PDSQI-9, 'Two PDQI-9 attributes, Up-to-Date and Consistent, were removed as their conceptual scope was adequately captured by modifications to other attributes'; Table 1 lists Up-to-Date and Currency as relevant domains of Organized ('helps the reader understand the patient's clinical course'), and PDQI-9 defines Up-to-date as 'The note contains the most recent test results and recommendations'.",
+      "reason": "The removal is reported correctly, but Up-to-Date asked whether the most recent results and recommendations are included, not whether the note keeps when something happened and what is current versus past, so calling it 'temporality' says more than the source does.",
+      "second_read": {
+       "verdict": "confirmed_weaker",
+       "why": "PDQI-9's Up-to-date is 'The note contains the most recent test results/recommendations' (PDQI-9 form as reproduced in the negative ED study). It is about including the latest results, not about when things happened; PDSQI-9 removed it because its scope was captured by other attributes. The cautionary support is overstated rather than reversed."
+      }
+     }
+    ]
+   },
+   {
+    "code": "K04",
+    "definition_verdict": "goes_beyond_undeclared",
+    "definition_reason": "The cited passage asks the note writer to formulate its own 'clinical impressions and hypotheses' in the Assessment, whereas K04 measures whether the note keeps the status of a hypothesis that the transcript carries; this change of whose hypothesis is not declared, and under the claims rule a writer's own Assessment hypothesis would come out 'unsupported'. Certainty, suggestion and agreement are declared as a local refinement.",
+    "evidence": [
+     {
+      "index": 0,
+      "source": "S1",
+      "location": "Appendix A.3 Assessment, Definition",
+      "verdict": "adapted_undeclared",
+      "what_the_source_says": "A.3 tells the writer to 'integrate the subjective and objective information to provide a comprehensive analysis of the client's current condition' and to 'Summarize the clinical impressions and hypotheses regarding the client's issues'; the generation prompt (Appendix F) says 'Summarize your clinical impressions and hypotheses'.",
+      "reason": "The source supports that interpretation in the Assessment is framed as impressions and hypotheses, but they are the writer's own, not a status carried over from the session, so 'it should remain a hypothesis' reads in a preservation the source does not describe; the adaptation declares only that the measurement is ours."
+     }
+    ]
+   },
+   {
+    "code": "K05",
+    "definition_verdict": "goes_beyond_undeclared",
+    "definition_reason": "TN-Eval grades fixed, section-wise rubric characteristics (importance agreed once by five therapists) and scores completeness as one pooled share; K05 builds a bank of information units from each transcript, queries it by QA and carries TN-Eval's five labels and their agreement figure over to those units, a change of unit that is not declared (the weighting and the purpose dependence are). The 'micro average' entry also misreads TN-Eval's score as something other than a plain share.",
+    "evidence": [
+     {
+      "index": 0,
+      "source": "S1",
+      "location": "Appendix C, importance annotation",
+      "verdict": "location_wrong",
+      "what_the_source_says": "Appendix H.2 'Inter-Annotator Agreement on importance of rubric items' says 'The importance of each characteristic was categorized into five levels: Mandatory, Mandatory in certain circumstances, Highly recommended, Good to have, and Optional', with overall Krippendorff's alpha 0.73 and Fleiss' kappa 0.68 among five experts (Table 9, Section 3.1); the consolidated rubric in Appendix A assigns only the first three levels.",
+      "reason": "The quote is in Appendix H.2 and the Table 9 caption, not in Appendix C (annotator qualification and cost); supports is otherwise correct, but the levels grade fixed rubric characteristics, and carrying them over to units built from a transcript is not declared."
+     },
+     {
+      "index": 1,
+      "source": "S1",
+      "location": "Section 4.1",
+      "verdict": "misread",
+      "what_the_source_says": "A therapist 'marks covered rubric elements' and 'The full note score is computed as a micro average, weighted by section rubric elements'; Section 4 defines completeness as 'the ratio of covered elements aggregated across sections', and importance levels play no part in the score.",
+      "reason": "A micro average weighted by the number of rubric elements in each section is the pooled share of all covered elements, so the passage says coverage is a plain share over all items, the opposite of what supports claims.",
+      "second_read": {
+       "verdict": "confirmed",
+       "why": "TN-Eval Section 4: completeness is 'the ratio of covered elements aggregated across sections', and the micro average weighted by section rubric elements is that pooled share. The passage supports the opposite of 'not a plain share'. The same reading was marked for correction by docs/audit-and-repair-plan-2026-09-15.md and is still in the candidate."
+      }
+     },
+     {
+      "index": 2,
+      "source": "S2",
+      "location": "Round 2, omissions",
+      "verdict": "supported",
+      "what_the_source_says": "Round 2: 'omissions are only considered when classified as pertinent or potentially pertinent'; a pertinent omission is 'essential for the use case or target provider and would have adverse effects on patient care decisions', a potentially pertinent one 'relevant to a patient's expected clinical course, but would not directly influence their care'.",
+      "reason": ""
+     }
+    ]
+   },
+   {
+    "code": "K06",
+    "definition_verdict": "follows_with_declared_adaptation",
+    "definition_reason": "The three-way gap distinction is declared as the project's own and iCARE is cited only for the MSE field; the 'concrete counterexample' the origin note mentions is not at aspect 9 but in Figure 1, where the prompt says 'If any information is missing or not mentioned, respond with 'Nil'' and the annotation sample fills the MSE with 'General appearance & behavior NAD ... Judgement and Insight intact'. Separately, the definition's three cases (not said, said to be absent, not asked) are not the measurement's three outcomes (present, negated, absent).",
+    "evidence": [
+     {
+      "index": 0,
+      "source": "S3",
+      "location": "aspect 9 Current Mental Status Examination",
+      "verdict": "adapted_declared",
+      "what_the_source_says": "Aspect 9 of the 17 iCARE aspects: 'Current Mental Status Examination is an assessment of the most recent mental state (i.e., in the current counselling session), which includes the observation of the patient's mood, thought processes, cognitive function, and other behaviours'; each aspect is summarised as its own field.",
+      "reason": "That the MSE cannot be filled from a text transcript and that an empty field is not a normal finding is our conclusion and is declared as such; the source's 'includes the observation' supports its premise."
+     }
+    ]
+   },
+   {
+    "code": "K07",
+    "definition_verdict": "follows_with_declared_adaptation",
+    "definition_reason": "PDSQI makes an omission 'pertinent' relative to the use case or target provider, and COSMIN makes item relevance relative to the construct, population and context of use, so 'what is essential depends on who reads and why' follows; the purposes (now continuity and audit) and reporting coverage per purpose without summing are ours, and the catalog says the purposes are its construction.",
+    "evidence": [
+     {
+      "index": 0,
+      "source": "S2",
+      "location": "Round 2, pertinence",
+      "verdict": "adapted_declared",
+      "what_the_source_says": "In Round 2 PDSQI counts omissions (the risk to the Thorough attribute) only when 'pertinent or potentially pertinent', and an omission is pertinent when the information 'is essential for the use case or target provider and would have adverse effects on patient care decisions'; every summary in the study served a single use case, a target specialty at an index encounter.",
+      "reason": "The source defines pertinence of omissions for one use case and adds a care-decision condition; splitting coverage over several purposes (one of them audit, which is not a care decision) and never summing them is ours, and is declared as 'our construction'."
+     },
+     {
+      "index": 1,
+      "source": "S11",
+      "location": "COSMIN, components of content validity",
+      "verdict": "adapted_declared",
+      "what_the_source_says": "COSMIN defines content validity as 'the relevance, comprehensiveness, and comprehensibility of the PROM for the construct, target population, and context of use of interest', and requires that 'all items in a PROM should be relevant for the construct of interest (within a specific population and context of use)'.",
+      "reason": "COSMIN's relevance is a property of an instrument's items, not of a note's content for a reader; the declared adaptation (a documentation criterion is not a PROM) covers the transfer, which holds best at the level of the bank's units judged against the declared purpose."
+     }
+    ]
+   },
+   {
+    "code": "K08",
+    "definition_verdict": "goes_beyond_undeclared",
+    "definition_reason": "Both sources make risk a required topic (TN-Eval a Mandatory section-agnostic item, iCARE its own aspect), but neither ranks it above other content: TN-Eval gives eight other items the same Mandatory level and iCARE weights none of its 17 aspects. 'The topic with the highest error severity', the undilutable separate layer, the rule that a fidelity or coverage error touching risk is more severe, and the critical severity in the qa rule are our construction, while our_adaptation is '-' for both entries.",
+    "evidence": [
+     {
+      "index": 0,
+      "source": "S1",
+      "location": "Appendix A.5 General Items",
+      "verdict": "adapted_undeclared",
+      "what_the_source_says": "Among the 'general section-agnostic guidelines' of A.5 the rubric asks the note to 'Clearly reflect that the practitioner assessed for and addressed any safety concerns (e.g., suicide risks, self-harming behaviors, homicidal ideation, etc.)', Importance: Mandatory; the other two general items are Highly recommended.",
+      "reason": "supports is correct, but Mandatory is the same level TN-Eval gives chief complaint, symptoms, history, observed behaviour, mental status, diagnosis, future interventions and follow-up, so the criterion's 'highest error severity' and its severity escalation do not come from TN-Eval and are not declared as ours."
+     },
+     {
+      "index": 1,
+      "source": "S3",
+      "location": "aspect 8 Crisis Markers",
+      "verdict": "supported",
+      "what_the_source_says": "Aspect 8 defines Crisis Markers as 'the indicators that suggest that the patient may be at risk of harming themselves or others', including 'recent suicidal thoughts or attempts, self-harm, abuse', and the paper names crisis markers among the 'structured fields' iCARE adds to SOAP-type formats; no aspect is weighted above another.",
+      "reason": ""
+     }
+    ]
+   },
+   {
+    "code": "K10",
+    "definition_verdict": "follows",
+    "definition_reason": "",
+    "evidence": [
+     {
+      "index": 0,
+      "source": "S1",
+      "location": "Appendix A.4 Plan",
+      "verdict": "supported",
+      "what_the_source_says": "A.4 defines the Plan as the next steps, 'specifying what will be addressed in the next session', and lists Future Interventions (Mandatory), Follow-Up, 'Scheduling of the next session ... Note the date for the next appointment if decided upon' (Mandatory), adjustment of medication or intervention (Mandatory in certain circumstances) and Homework (Highly recommended).",
+      "reason": ""
+     },
+     {
+      "index": 1,
+      "source": "S3",
+      "location": "aspects 16-17 Action Plan, Next Session Details",
+      "verdict": "adapted_undeclared",
+      "what_the_source_says": "Aspect 16 Action Plan is 'a structured plan for ongoing treatment and goals for the patient' (goals, planned interventions, timelines, follow-up actions) and aspect 17 Next Session Details covers date, time, location, mode and homework; iCARE assigns no importance level to any of its 17 aspects.",
+      "reason": "supports is correct, but origin_note says 'TN-Eval and iCARE both have separate mandatory items for the plan'; iCARE grades none of its aspects, so the mandatory level rests on TN-Eval alone."
+     }
+    ]
+   },
+   {
+    "code": "K11",
+    "definition_verdict": "goes_beyond_undeclared",
+    "definition_reason": "TN-Eval's conciseness asks whether each sentence 'contributes to a rubric item' (a generic section-wise characteristic such as Client's Observed Behavior) and scores the ratio per section; K11 and its rules test each sentence against session-specific information units of the transcript bank, which can change the verdict (M07's fail example 'the client engaged well' would likely fit TN-Eval's Observed Behavior item), yet origin_note says 'Directly from TN-Eval' and our_adaptation is '-'. The PDSQI entry misreads its source.",
+    "evidence": [
+     {
+      "index": 0,
+      "source": "S1",
+      "location": "Section 4 Evaluation Protocols",
+      "verdict": "adapted_undeclared",
+      "what_the_source_says": "Section 4 defines Conciseness: 'This metric measures whether each sentence contributes to a rubric item. Annotators ... label sentences accordingly, and the score is the ratio of necessary sentences in a section'; the automatic version asks whether 'the note sentence fit in one of the rubric items'.",
+      "reason": "The unit is changed from TN-Eval's rubric item to a transcript-derived information unit of our bank (and from a per-section to a per-note share) without saying so, and the change affects which sentences count as superfluous."
+     },
+     {
+      "index": 1,
+      "source": "S2",
+      "location": "Results, substantive validity",
+      "verdict": "misread",
+      "what_the_source_says": "The abstract's Results say 'Substantive validity was supported by correlations between note length and scores for Succinct (ρ = −0.200, P = .029)'; Methods call note length an 'input characteristic' and Figure 4 plots scores against 'the token length of the patient notes provided for summarization'.",
+      "reason": "The correlation is between the length of the input notes and the Succinct score (a correlation ρ, not a beta); PDSQI does not report that a longer summary is rated less succinct, so it says nothing about output length either way.",
+      "second_read": {
+       "verdict": "confirmed",
+       "why": "PDSQI-9 Results: 'As the length of the notes increased, the quality of the generated summaries was rated lower in ... Succinct (rho -0.200)'; Figure 4 is the token length of the notes provided for summarization. It is the input's length, not the summary's, and a Spearman rho, not a beta."
+      }
+     }
+    ]
+   },
+   {
+    "code": "K12",
+    "definition_verdict": "goes_beyond_undeclared",
+    "definition_reason": "Measuring organisation as the share of units in their expected section comes from TN-Eval's section-wise completeness and is declared as our proposal; but K12 names PDSQI's Organized as its origin while dropping what Organized is for, helping the reader 'understand the patient's clinical course' (domains Structure, Up-to-Date, Currency), and puts findability in its place without saying so (the time side may be covered by K03, but K12 does not say that).",
+    "evidence": [
+     {
+      "index": 0,
+      "source": "S2",
+      "location": "Table 1, Organized",
+      "verdict": "adapted_undeclared",
+      "what_the_source_says": "Table 1 defines Organized as 'The summary is well-formed and structured in a way that helps the reader understand the patient's clinical course', maps it to Structure, Up-to-Date and Currency, and raters score it on a 5-point Likert scale for the whole summary.",
+      "reason": "supports is right, but K12 turns 'understand the clinical course' into 'finds what they look for' and measures only section placement, with our_adaptation '-'."
+     },
+     {
+      "index": 1,
+      "source": "S1",
+      "location": "Section 3.2, Rubric Quality",
+      "verdict": "adapted_declared",
+      "what_the_source_says": "Under 'Rubric Quality' the authors report 'perfect IAA among 5 experts for the appropriate section for each key characteristic' of the rubric; Section 4 then scores completeness as whether 'each rubric element appears in its corresponding note section (e.g., the chief complaint in subjective)'.",
+      "reason": "TN-Eval folds placement into completeness and separating it is declared as our proposal; one step is not stated: the experts agreed on sections for the rubric's generic characteristics, not for transcript-derived units, so 'placement is well defined' does not yet carry over to the units M06 checks."
+     }
+    ]
+   },
+   {
+    "code": "K14",
+    "definition_verdict": "goes_beyond_undeclared",
+    "definition_reason": "PDSQI defines the attribute only as 'free of stigmatizing language' and takes its meaning from the CHCS tool “Words Matter”, which is not cited here; the three named forms (belittling, questioning credibility, reducing to a diagnosis or behaviour), the split between quotation and the author's wording, and the major and critical severities are in neither cited passage and are not declared; only the rejection of a word list is.",
+    "evidence": [
+     {
+      "index": 0,
+      "source": "S2",
+      "location": "Methods, instrument development",
+      "verdict": "adapted_undeclared",
+      "what_the_source_says": "In Round 1 'Two new attributes were added to address concerns in LLM-generated summaries: use of stigmatizing language and inclusion of citations'; stigmatizing language 'was defined using the Center for Health Care Strategies tool “Words Matter”', the attribute reads 'The summary is free of stigmatizing language' and is rated yes/no, in the notes and in the summaries.",
+      "reason": "supports is right, but the criterion's three named forms and its quotation-versus-author distinction are not in PDSQI's text and are not declared; our_adaptation's 'PDSQI gives example words in English' is loose, since the paper gives none and the examples are in the CHCS tool it adopted."
+     },
+     {
+      "index": 1,
+      "source": "S1",
+      "location": "Appendix A.5 General Items, Professionalism",
+      "verdict": "supported",
+      "what_the_source_says": "Under Professionalism (Highly recommended) TN-Eval lists 'Never describe other clients and staff in a derogatory manner', 'Avoid using slang' and 'Descriptions of the patient's presenting problem should be used rather than presumptuous adjectives'; the third bullet, not quoted by the catalog, is the closer support for 'reduces them to a diagnosis or a behaviour'.",
+      "reason": ""
+     }
+    ]
+   }
+  ]
+ },
+ "side_findings": [
+  "local/gen2-review-2026-09-13/fulltext/pdsqi-9.xml and icare-ihope.xml are byte copies of the PDFs, not XML, although the retrieval log names an XML route for them; the .txt files were read instead.",
+  "TN-Eval describes completeness as a micro average over all rubric elements. limitations.md says the Gen-1 tables average the four section fractions equally and publishes the item-weighted order beside it, but no Generation 1 document was found saying which of the two the paper describes. Out of this check's scope; recorded, not acted on."
+ ],
+ "dispositions": {
+  "recorded_on": "2026-10-23",
+  "by": "the session that holds the catalog, not the one that made this record",
+  "what_was_verified_before_anything_was_applied": "The three input hashes, recomputed from commit 6f74f3f: all three match. Four of the twelve local-page findings, read against the English: all four held. The three misread verdicts and the one wrong location, re-read in the full texts in local/gen2-review-2026-09-13/fulltext and, for TN-Eval, in a copy fetched from the ACL Anthology on 2026-10-23: all four hold. The seven definitions that go beyond their sources, re-read the same way: all seven hold, and an eighth came with them.",
+  "panel_sheet_findings": "Eighteen Czech statements rewritten before any sheet was sent, recorded as decision D33 in protocol 2.25.0. Fifteen had dropped part of the English definition and six were noun phrases in a column headed 'in one sentence'. The four Google workbooks were rewritten and read back.",
+  "k17_proposal_refused": "This record's proposed wording for K17, that the note gives about a non-consenting third party only what its purpose needs, is almost word for word K15. The panel is at this moment asked which two criteria are the same thing, so a duplicate manufactured this week would be a finding we had planted. What stands is the English's own shape, a topic: how much can be learned from the note about someone who is not the client and gave no consent. Its Czech agreement was then wrong in three fields and was corrected after this record's reader caught it.",
+  "local_page_findings": "All twelve applied on 2026-10-23. None of them is on the panel sheet, which carries the code, the name, the statement, the failing example and what the property is judged over.",
+  "quotes": "Nothing to do: all twenty-one are in their sources verbatim.",
+  "misread_and_location": "All four repaired. K05's evidence drew the opposite conclusion from its own quote, which the audit of 2026-09-15 had already marked and which had stayed; the repair goes into docs/limitations.md and weighting.py as well, because generation 1's macro mean is a departure from the paper's own arithmetic and had read as one convention among several. K05's other line cited Appendix C, which is annotator qualification and cost; the quote is in H.2 beside Table 9 and the per-item labels are in Appendix A. K11 read a relation to the summary's own length where the paper measures the length of the input notes, and a beta where it reports Spearman's rho. K03 read Up-to-Date as temporality where PDQI-9's form defines it as carrying the most recent results.",
+  "goes_beyond_undeclared": "Eight origin notes now name the step that is ours, and no definition changed. Two of the eight were corrections rather than additions: K14's adaptation claimed PDSQI-9 gives example words, where it defines stigmatizing language by a tool this project cites nowhere, and K10's origin note claimed iCARE has mandatory plan items, where iCARE grades no aspect and its weighted score weights three automatic metrics. One claim framed too widely holds in its narrow form and is kept: Appendix A.5 has three general items and only safety is Mandatory.",
+  "not_covered_by_this_record": "K40 to K48, the language layer added after 6f74f3f, were read by the session that wrote them, which is a self-check and is worth less than this record. It found four defects of its own: two examples that demonstrated a different criterion than the one they sat under, a pair that was not a pair, and a typo. An independent reading of those nine is still owed.",
+  "still_open": "The sources of the twenty-seven candidates with no rule in this round are unchecked, which this record states and which nothing has changed."
+ },
+ "marker": "AUTHORED-INSTRUMENT-TEXT",
+ "side_findings_dispositions": {
+  "1": "Resolved on 2026-10-23: docs/limitations.md and weighting.py now say that the paper's own full-note score is the micro average weighted by section rubric elements, so the macro mean the tables print is a departure from the source and not one convention among several. No number changed, and `tnb weighting` already published what the item-weighted reading does to the order.",
+  "other": "The .xml files that are byte copies of PDFs are left as they are: they are in a gitignored working directory, the .txt beside each was read instead, and nothing in the repository claims they are XML."
+ }
+}
