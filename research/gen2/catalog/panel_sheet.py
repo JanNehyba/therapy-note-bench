@@ -167,7 +167,13 @@ def rows(czech: dict, codes: list[str], catalog: dict, purpose: str = None) -> l
         # which can only push an answer up, and the protocol says so.
         example = entry["example"]
         out.append([code, entry["name"], entry["statement"], example, judged_over[code], "", ""])
-    out.extend(list(line) for line in sheet["tail"])
+    # Nothing follows the last candidate. Three open questions stood here with
+    # blank rows under each until 2026-10-23, and on a phone the tab stopped
+    # looking like a table twenty rows before it ended. Two of them are about a
+    # particular criterion and are answered in its note; the third has no row to
+    # attach to and lives at the bottom of the legend.
+    if sheet["tail"]:
+        raise SystemExit("the rating tab is the table; the tail belongs on the legend")
     return out
 
 

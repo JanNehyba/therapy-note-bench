@@ -2067,62 +2067,7 @@
       "Podstatné?",
       "Poznámka"
     ],
-    "tail": [
-      [],
-      [
-        "Co v seznamu chybí? Napište prosím sem, klidně víc věcí, každou na nový řádek."
-      ],
-      [
-        ""
-      ],
-      [
-        ""
-      ],
-      [
-        ""
-      ],
-      [],
-      [
-        "Jak by se tohle dalo obejít?"
-      ],
-      [
-        "Co se začne známkovat, na to se modely zaměří. A někdy jde dobrá známka získat, aniž by zápis za něco stál."
-      ],
-      [
-        "Příklad: kritérium „Úspornost“ žádá, aby každá věta nesla podstatný obsah. Zápis, který má jedinou větu, dostane plný počet bodů. Ta jedna věta podstatná je a nic dalšího tam není, takže čím míň toho model napíše, tím líp dopadne."
-      ],
-      [
-        "Napadá vás u některého kritéria, jak by na něm model mohl získat dobrou známku, aniž by tomu kvalita zápisu odpovídala?"
-      ],
-      [
-        ""
-      ],
-      [
-        ""
-      ],
-      [
-        ""
-      ],
-      [],
-      [
-        "Která dvě kritéria jsou podle vás to samé?"
-      ],
-      [
-        "Některá se částečně překrývají a to tak má být. Zajímá nás, kde jste narazili na dvě, která se ptají na to samé, nebo jsou si tak blízká, že by stačilo jedno."
-      ],
-      [
-        "Napište jejich kódy a čím jsou podle vás to samé. Klidně víc párů, každý na nový řádek."
-      ],
-      [
-        ""
-      ],
-      [
-        ""
-      ],
-      [
-        ""
-      ]
-    ],
+    "tail": [],
     "superseded_instructions": [
       {
         "text": "Otázka 1, sloupec D: Je tato vlastnost podstatná pro kvalitu zápisu ze sezení? Vyberte: nepodstatné / spíše podstatné / podstatné / velmi podstatné.",
@@ -2368,6 +2313,51 @@
         "text": "Některá kritéria se částečně překrývají. To tak má být, posuzujte každé samo za sebe. Když vám dvě přijdou jako to samé, napište to do poznámky: to je pro nás informace, ne chyba.",
         "until": "2026-10-22",
         "why": "Reworded on 2026-10-22. It told a rater that an overlap is expected and left noticing one to the note column; the investigator meant the panel to be who tells us which criteria overlap, so the line points at the question that now asks."
+      },
+      {
+        "text": "Co v seznamu chybí? Napište prosím sem, klidně víc věcí, každou na nový řádek.",
+        "until": "2026-10-23",
+        "why": "Moved to the legend on 2026-10-23. The three questions stood under the table with blank rows under each, so a rater who scrolled past the last criterion met twenty rows of prose where the table ended and the tab stopped looking like a table. The investigator saw it on a phone and refused it. Two of the three are about a particular criterion and are now explained under the note column, where the answer goes beside the row it is about; the third is about what the list does not contain, has no row to attach to, and keeps its own space at the bottom of the legend."
+      },
+      {
+        "text": "Jak by se tohle dalo obejít?",
+        "until": "2026-10-23",
+        "why": "Moved to the legend on 2026-10-23. The three questions stood under the table with blank rows under each, so a rater who scrolled past the last criterion met twenty rows of prose where the table ended and the tab stopped looking like a table. The investigator saw it on a phone and refused it. Two of the three are about a particular criterion and are now explained under the note column, where the answer goes beside the row it is about; the third is about what the list does not contain, has no row to attach to, and keeps its own space at the bottom of the legend."
+      },
+      {
+        "text": "Co se začne známkovat, na to se modely zaměří. A někdy jde dobrá známka získat, aniž by zápis za něco stál.",
+        "until": "2026-10-23",
+        "why": "Moved to the legend on 2026-10-23. The three questions stood under the table with blank rows under each, so a rater who scrolled past the last criterion met twenty rows of prose where the table ended and the tab stopped looking like a table. The investigator saw it on a phone and refused it. Two of the three are about a particular criterion and are now explained under the note column, where the answer goes beside the row it is about; the third is about what the list does not contain, has no row to attach to, and keeps its own space at the bottom of the legend."
+      },
+      {
+        "text": "Příklad: kritérium „Úspornost“ žádá, aby každá věta nesla podstatný obsah. Zápis, který má jedinou větu, dostane plný počet bodů. Ta jedna věta podstatná je a nic dalšího tam není, takže čím míň toho model napíše, tím líp dopadne.",
+        "until": "2026-10-23",
+        "why": "Moved to the legend on 2026-10-23. The three questions stood under the table with blank rows under each, so a rater who scrolled past the last criterion met twenty rows of prose where the table ended and the tab stopped looking like a table. The investigator saw it on a phone and refused it. Two of the three are about a particular criterion and are now explained under the note column, where the answer goes beside the row it is about; the third is about what the list does not contain, has no row to attach to, and keeps its own space at the bottom of the legend."
+      },
+      {
+        "text": "Napadá vás u některého kritéria, jak by na něm model mohl získat dobrou známku, aniž by tomu kvalita zápisu odpovídala?",
+        "until": "2026-10-23",
+        "why": "Moved to the legend on 2026-10-23. The three questions stood under the table with blank rows under each, so a rater who scrolled past the last criterion met twenty rows of prose where the table ended and the tab stopped looking like a table. The investigator saw it on a phone and refused it. Two of the three are about a particular criterion and are now explained under the note column, where the answer goes beside the row it is about; the third is about what the list does not contain, has no row to attach to, and keeps its own space at the bottom of the legend."
+      },
+      {
+        "text": "Která dvě kritéria jsou podle vás to samé?",
+        "until": "2026-10-23",
+        "why": "Moved to the legend on 2026-10-23. The three questions stood under the table with blank rows under each, so a rater who scrolled past the last criterion met twenty rows of prose where the table ended and the tab stopped looking like a table. The investigator saw it on a phone and refused it. Two of the three are about a particular criterion and are now explained under the note column, where the answer goes beside the row it is about; the third is about what the list does not contain, has no row to attach to, and keeps its own space at the bottom of the legend."
+      },
+      {
+        "text": "Některá se částečně překrývají a to tak má být. Zajímá nás, kde jste narazili na dvě, která se ptají na to samé, nebo jsou si tak blízká, že by stačilo jedno.",
+        "until": "2026-10-23",
+        "why": "Moved to the legend on 2026-10-23. The three questions stood under the table with blank rows under each, so a rater who scrolled past the last criterion met twenty rows of prose where the table ended and the tab stopped looking like a table. The investigator saw it on a phone and refused it. Two of the three are about a particular criterion and are now explained under the note column, where the answer goes beside the row it is about; the third is about what the list does not contain, has no row to attach to, and keeps its own space at the bottom of the legend."
+      },
+      {
+        "text": "Napište jejich kódy a čím jsou podle vás to samé. Klidně víc párů, každý na nový řádek.",
+        "until": "2026-10-23",
+        "why": "Moved to the legend on 2026-10-23. The three questions stood under the table with blank rows under each, so a rater who scrolled past the last criterion met twenty rows of prose where the table ended and the tab stopped looking like a table. The investigator saw it on a phone and refused it. Two of the three are about a particular criterion and are now explained under the note column, where the answer goes beside the row it is about; the third is about what the list does not contain, has no row to attach to, and keeps its own space at the bottom of the legend."
+      },
+      {
+        "text": "Některá kritéria se částečně překrývají. To tak má být, posuzujte každé samo za sebe. Kde vám dvě přijdou jako to samé, ptáme se na to dole pod tabulkou.",
+        "until": "2026-10-23",
+        "why": "Moved to the legend on 2026-10-23. The three questions stood under the table with blank rows under each, so a rater who scrolled past the last criterion met twenty rows of prose where the table ended and the tab stopped looking like a table. The investigator saw it on a phone and refused it. Two of the three are about a particular criterion and are now explained under the note column, where the answer goes beside the row it is about; the third is about what the list does not contain, has no row to attach to, and keeps its own space at the bottom of the legend."
       }
     ],
     "purposes": {
@@ -2409,7 +2399,35 @@
       ],
       [],
       [
-        "Některá kritéria se částečně překrývají. To tak má být, posuzujte každé samo za sebe. Kde vám dvě přijdou jako to samé, ptáme se na to dole pod tabulkou."
+        "Sloupec „Poznámka“"
+      ],
+      [
+        "Nepovinný. Kromě čehokoli dalšího, co vás u kritéria napadne, nás tam zajímají dvě věci."
+      ],
+      [
+        "Jak by se to dalo obejít? Co se začne známkovat, na to se modely zaměří, a někdy jde dobrá známka získat, aniž by zápis za něco stál. Příklad: kritérium „Úspornost“ žádá, aby každá věta nesla podstatný obsah. Zápis, který má jedinou větu, dostane plný počet bodů, protože ta jedna věta podstatná je. Takže čím míň toho model napíše, tím líp dopadne. Když vás něco takového u některého kritéria napadne, napište to do poznámky u jeho řádku."
+      ],
+      [
+        "Která dvě jsou to samé? Některá kritéria se částečně překrývají a to tak má být. Když vám ale dvě přijdou jako to samé, napište do poznámky u jednoho z nich kód toho druhého a čím jsou podle vás stejná."
+      ],
+      [],
+      [
+        "Co v seznamu chybí?"
+      ],
+      [
+        "Tohle se k žádnému řádku neváže, takže prosím sem: vlastnost, kterou by dobrý zápis měl mít a v seznamu není. Klidně víc věcí, každou na nový řádek."
+      ],
+      [
+        ""
+      ],
+      [
+        ""
+      ],
+      [
+        ""
+      ],
+      [
+        ""
       ]
     ],
     "judged_over_overrides": {
@@ -2418,7 +2436,8 @@
         "why": "The property is about one note: whether this note carries anything specific to this client. Only the measurement needs more, because genericness is detected by comparing a system's notes with each other, and catalog.unit_of_analysis records that measurement unit unchanged. The column tells a rater what the property is about, so for K28 the two differ and the difference is recorded rather than resolved in either direction."
       }
     },
-    "legend_order_note": "Reordered on 2026-10-22. The investigator put what a rater is judging above which of the two notes each tab asks about, and moved the legend to the first tab. A rater learns what they are looking at before they learn which kind of it this tab is about."
+    "legend_order_note": "Reordered on 2026-10-22. The investigator put what a rater is judging above which of the two notes each tab asks about, and moved the legend to the first tab. A rater learns what they are looking at before they learn which kind of it this tab is about.",
+    "tail_note": "Empty since 2026-10-23. The rating tab is the header and one row per candidate, and nothing else; what stood here is on the legend. A build that puts prose back under the table fails the test that holds the tab to its rows."
   },
   "page": {
     "title": "Všechna kritéria v jedné tabulce",

@@ -354,48 +354,44 @@ def test_every_step_of_the_scale_reaches_the_sheet_with_what_it_means(catalog, c
     assert all(label in text for label in essential), "the cut is named on the legend"
 
 
-def test_the_harm_question_is_asked_once_with_an_example(catalog, czech, codes):
-    """A rule with teeth needs an input, and the input is one box with a worked case.
+def test_the_rating_tab_is_the_table_and_the_questions_are_on_the_legend(catalog, czech, codes):
+    """Nothing follows the last candidate, and the three questions still exist.
 
-    Any criterion the answer identifies stays unmeasured this round whatever its
-    relevance, so the question cannot simply disappear. It was a column of
-    thirty-nine cells until 2026-10-22, thirty-eight of which would have stayed
-    empty, and the investigator refused both that and the invented example that
-    explained it: a model graded on non-stigmatising language does not stop
-    recording risk, because recording risk is not stigmatising language.
+    They stood under the table with blank rows under each until 2026-10-23, and
+    the investigator saw on a phone what that does: a rater scrolling past the
+    last criterion meets twenty rows of prose where the table ended. Two of the
+    three are about a particular criterion and are explained under the note
+    column, where the answer goes beside the row it is about; the third is about
+    what the list does not contain, so it keeps its own space at the bottom of
+    the legend.
 
-    What replaces it is one box under the table and the case this project
-    documented itself: a one-sentence note scores 1.00 on economy, so grading
-    economy alone rewards writing almost nothing.
-
-    On the same day the question lost its harm clause and its instruction to
-    write the criterion's code, at the investigator's word (D26). Asking for the
-    code again is a change to the rule that reads the answer, not a wording
-    choice, so this test holds the sheet to not asking.
+    The questions may not quietly disappear with the move. A criterion a rater
+    names as gameable stays unmeasured this round whatever its relevance, and
+    the one about what is missing is Lynn's (1986) recommendation.
     """
     sheet = czech["panel_sheet"]
     table = panel_sheet.rows(czech, codes, catalog)
     header = sheet["header"]
     assert len(header) == 7, "code, name, statement, example, unit, answer, note"
+    assert table[0] == list(header)
+    assert len(table) == len(codes) + 1, "the tab is the header and one row per candidate"
+    assert {row[0] for row in table[1:]} == set(codes)
 
-    under = [row[0] for row in table[table.index(list(header)) + len(codes) + 1 :] if row]
-    asked = "\n".join(under)
-    # Three open questions under the table, not one: what the list is missing,
-    # which two criteria are the same thing, and how a good mark could be had
-    # without the note deserving it.
-    assert sum("?" in line for line in under) >= 4
-
+    legend = [row[0] for row in panel_sheet.legend(czech, codes) if row]
+    asked = "\n".join(legend)
+    # Three questions, on the legend: how a good mark could be had without the
+    # note deserving it, which two criteria are the same thing, and what the
+    # list is missing.
+    assert sum("?" in line for line in legend) >= 4
     # The worked example is the criterion this project documented the trap on:
     # a one-sentence note scores 1.00 on economy.
     assert czech["candidates"]["K11"]["name"] in asked
-    # A question under the table does ask for a criterion's code, and since
-    # 2026-10-22 it is the duplicates one rather than the harm one: the harm
-    # instruction was cut and the protocol's harm flag weakened to match, so
-    # that rule reads prose and claims no machine-readable input.
+    # The duplicates question asks for a criterion's code; the harm one does
+    # not, because its instruction was cut on 2026-10-22 and the protocol's harm
+    # flag was weakened to match, so that rule reads prose.
     assert header[0].lower() in asked.lower()
-    # Which is why the cut has to stay recorded. The guard below proves the
-    # sentence is off the sheet; this proves the guard still has it to look for,
-    # because deleting the record would make the guard pass over an empty set.
+    # Both row-attached questions name the column their answer goes in.
+    assert sum(header[6].lower() in line.lower() for line in legend) >= 2
     retired = [
         record
         for record in sheet["superseded_instructions"]
@@ -403,12 +399,13 @@ def test_the_harm_question_is_asked_once_with_an_example(catalog, czech, codes):
     ]
     assert retired, "nothing records an instruction that asked for the code"
 
-    # The column's header and its legend block are gone, recorded with the
-    # date, and may not come back onto a built sheet.
+    # Everything retired on either day may not come back onto a built sheet.
     everything = "\n".join(
         cell for rows in (table, panel_sheet.legend(czech, codes)) for row in rows for cell in row
     )
-    gone = [r for r in sheet["superseded_instructions"] if r["until"] == "2026-10-22"]
+    gone = [
+        r for r in sheet["superseded_instructions"] if r["until"] in ("2026-10-22", "2026-10-23")
+    ]
     assert gone
     for record in gone:
         assert record["text"] not in everything

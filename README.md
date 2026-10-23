@@ -48,7 +48,7 @@ notes, with distinct purposes for continuity, supervision, client communication
 and documentation audit. Software 0.3.0 / gen2-v3 preserves exact research and
 annotation versions and reports incomplete assessment explicitly.
 
-The [research protocol](research/gen2/README.md), version 2.23.0, amended on 2026-10-23
+The [research protocol](research/gen2/README.md), version 2.24.0, amended on 2026-10-23
 with 2.8.0 to 1.0.0 retained in history, combines a planned
 scoping review with attributed expert and empirical inputs. Historical origin and
 supporting evidence remain distinct. The first feasibility round carries every

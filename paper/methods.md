@@ -341,7 +341,7 @@ removed with K19 on 2026-10-05. The protocol records
 the executable count at freeze rather than capping it. The registry refuses to
 freeze while any used subject lacks an accepted decision.
 
-The feasibility pilot (protocol 2.23.0) freezes 16 generation jobs over two
+The feasibility pilot (protocol 2.24.0) freezes 16 generation jobs over two
 cohorts, two English AnnoMI conversations and their Czech translations, two
 purposes and two generator families, and balances an 8-note human sample across
 them. Two Czech psychologists, neither the instrument author, rate under a
@@ -424,7 +424,12 @@ is a failing one because the positive case of a criterion written as the
 absence of a fault reads as an ordinary sentence, and we report the cost: a
 column of failures can only push a relevance answer upward, nothing in this
 round measures how far, and a round shown positive examples would. Raters are
-asked two further questions once each, under the table rather than per item.
+asked two further questions, on the legend rather than on the rating tab, which
+carries the table and nothing else: a tab that ends in twenty rows of prose
+stops reading as a table before it ends. Both are about a particular criterion
+and are answered in that criterion's optional note, which already existed; the
+third question, about what the list is missing, has no row to attach to and
+keeps its own space on the legend.
 The first is which two of the criteria are the same thing, named by their codes:
 the catalog records an overlap for every one of the thirty-nine and all those
 records are the authors', so the panel is the first set of people qualified to

@@ -1,6 +1,6 @@
 {
   "id": "therapy-note-construct-review",
-  "version": "2.23.0",
+  "version": "2.24.0",
   "status": "protocol_amended_before_pilot_search_partially_executed",
   "recorded_date": "2026-10-14",
   "design": "Instrument development informed by a systematic scoping review, expert proposals and empirical observations",
@@ -319,8 +319,8 @@
     "review_completion": "Only executed searches and verified decisions count as completed; blocked sources remain named gaps",
     "scope": "Report selected and required methods, planned/applicable/assessed units, and incomplete critical-error assessment even in public aggregates"
   },
-  "supersedes": "2.22.0",
-  "amendment_reason": "D31: the language layer enters the pool, nine criteria with four sources read in full, so the panel rates 48 criteria and not 39 and the round's novel half is judged by the four therapists rather than by the assistant.",
+  "supersedes": "2.23.0",
+  "amendment_reason": "D32: the rating tab is the table and nothing else, and the three open questions move to the legend, two of them answered in the note beside the row they are about.",
   "retrieval_gaps": "Record reports not retrieved separately from full-text eligibility exclusions; unavailable databases remain named gaps",
   "expert_inputs": "May enter throughout development. Later support does not rewrite historical origin; author or colleague proposals do not imply consensus.",
   "registration": {
@@ -781,6 +781,22 @@
       },
       "why_now_and_not_in_a_second_round": "Nothing has been sent and no answer exists, so adding them costs a rebuild. After the sheets go out it would cost a second panel, and the relevance of the nine would be the assistant's in the meantime.",
       "not_decided_here": "Any rule for measuring the nine, and whether the two Czech-only criteria are reported beside the seven or in a section of their own. The first costs the human budget the pilot does not have; the second is a reporting question answered when there is something to report."
+    },
+    {
+      "id": "D32",
+      "date": "2026-10-23",
+      "origin": "investigator",
+      "decision": "The rating tab carries the table and nothing else. The gaming question and the duplicates question are explained on the legend under the note column and answered in that note, beside the row they are about; the question about what the list is missing keeps its own space at the bottom of the legend.",
+      "replaces": "three questions under the table, each with blank rows under it",
+      "affects": [
+        "the three questions' location and how each is answered",
+        "the sheet's builder, which refuses to put anything under the last candidate",
+        "the legend, which gains a block about the note column"
+      ],
+      "why": "The investigator opened the sheet on a phone. Twenty rows of prose under the forty-eighth criterion make the tab stop looking like a table well before it ends, and a rater who has just scrolled through forty-eight rows is the worst reader for a paragraph.",
+      "what_is_lost": "An answer in the note is attached to one criterion, so a rater who sees a gaming shape across two of them has to pick a row. Under the table the answer was free of any row. Nothing measures how often that happens.",
+      "and_this_is_the_second_move_for_one_of_them": "D24 took the gaming question out of the table because a column of thirty-nine cells meant thirty-eight empty ones a rater had to carry a second question through. This puts its answer back beside the row and adds nothing to fill in: the note column already existed and was already optional, and what changed is that the legend now says what it is for.",
+      "not_decided_here": "How an answer in a note is read back. A note may hold a gaming shape, a duplicate pair, or anything else the rater thought; separating them is reading, and the retention rule already says the harm flag reads prose."
     }
   ],
   "content_validity": {
@@ -839,7 +855,8 @@
           "free text, once per rater, not per item"
         ],
         "shown_with": "A worked example from this project's own data: a one-sentence note scores 1.00 on economy, so grading economy by itself rewards writing almost nothing. The example the column carried until 2026-10-22 was invented -- a model graded on non-stigmatising language stopping its record of risk -- and does not follow, because recording risk is a clinical description and not a label on a person. The question asked about harm to a client until 2026-10-22, when the investigator cut that clause; the example was always a gaming shape and is unchanged by the cut.",
-        "effect": "a criterion the answer identifies is reported with the flag and is not measured in this round whatever its relevance count, and the reason is kept verbatim. The sheet stopped asking for the criterion's code on 2026-10-22, so the identification is the investigator's reading of prose and not a field; an answer that identifies no criterion is published and flags nothing."
+        "effect": "a criterion the answer identifies is reported with the flag and is not measured in this round whatever its relevance count, and the reason is kept verbatim. The sheet stopped asking for the criterion's code on 2026-10-22, so the identification is the investigator's reading of prose and not a field; an answer that identifies no criterion is published and flags nothing.",
+        "where_it_is_asked": "On the legend, not under the table. The rating tab is the header and one row per candidate and nothing else since 2026-10-23. The two questions about a particular criterion are explained under the note column and answered in the note beside the row they are about; the question about what the list is missing has no row to attach to and keeps its own space at the bottom of the legend."
       },
       {
         "id": "missing",
@@ -847,7 +864,8 @@
         "scale": [
           "free text, once per rater, not per item"
         ],
-        "effect": "a property named here enters the pool as a candidate with the rater as its origin, and is rated in a second round if the panel is asked again. The question itself is Lynn's (1986) recommendation, 'The experts, in addition to judging each item, should identify any area(s) that have been omitted from the instrument', which this project had written without knowing."
+        "effect": "a property named here enters the pool as a candidate with the rater as its origin, and is rated in a second round if the panel is asked again. The question itself is Lynn's (1986) recommendation, 'The experts, in addition to judging each item, should identify any area(s) that have been omitted from the instrument', which this project had written without knowing.",
+        "where_it_is_asked": "On the legend, not under the table. The rating tab is the header and one row per candidate and nothing else since 2026-10-23. The two questions about a particular criterion are explained under the note column and answered in the note beside the row they are about; the question about what the list is missing has no row to attach to and keeps its own space at the bottom of the legend."
       },
       {
         "id": "duplicates",
@@ -857,7 +875,8 @@
         ],
         "shown_with": "One line in the legend saying that criteria do overlap, that this is expected, and that the question is at the bottom of the sheet. Until 2026-10-22 that line stood alone and offered the note column instead of asking.",
         "effect": "a pair any rater names is reported with their wording; a pair two or more name is published as a candidate duplicate and compared with what catalog.json already records in that criterion's `overlaps` field, with agreement and disagreement both reported. Nothing is merged in this round.",
-        "origin": "the investigator, 2026-10-22. The mirror question, what the list is missing, is Lynn's (1986); this one is this project's and no source is claimed for it."
+        "origin": "the investigator, 2026-10-22. The mirror question, what the list is missing, is Lynn's (1986); this one is this project's and no source is claimed for it.",
+        "where_it_is_asked": "On the legend, not under the table. The rating tab is the header and one row per candidate and nothing else since 2026-10-23. The two questions about a particular criterion are explained under the note column and answered in the note beside the row they are about; the question about what the list is missing has no row to attach to and keeps its own space at the bottom of the legend."
       }
     ],
     "retention_rule": {
