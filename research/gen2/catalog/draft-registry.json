@@ -563,7 +563,7 @@
       "id": "K03-e1",
       "source_id": "S2",
       "location": "Methods, instrument development",
-      "interpretation": "Temporality was a separate attribute in PDQI-9 and the PDSQI-9 authors judged it redundant.",
+      "interpretation": "PDQI-9 carried Up-to-Date as its own attribute and the PDSQI-9 authors removed it as covered by their other attributes. PDQI-9's own form defines it as whether the note contains the most recent test results and recommendations, which is recency of findings.",
       "relationship": "method_transfer",
       "population": "779 multi-document EHR summaries, multiple specialties, real-world data; psychiatry and psychotherapy notes explicitly excluded",
       "languages": [
@@ -573,7 +573,7 @@
       "unit": "whole summary",
       "response_format": "9 attributes on 5-point Likert scales",
       "validation": "not established",
-      "limitations": "We take this as a warning against a separate temporal column; we propose to measure time as part of claim agreement.",
+      "limitations": "Read until 2026-10-23 as evidence that temporality itself had been a separate attribute and was judged redundant, which is more than the source says: Up-to-Date is about carrying the most recent results, not about when something happened or what has changed since. The warning this project drew from it, against a separate temporal column, stands on weaker ground than it claimed, and we still propose to measure time as part of claim agreement.",
       "human_checked_by": null,
       "source_artifact_digest": "",
       "excerpt": "Two PDQI-9 attributes, Up-to-Date and Consistent, were removed"
@@ -600,8 +600,8 @@
     {
       "id": "K05-e1",
       "source_id": "S1",
-      "location": "Appendix C, importance annotation",
-      "interpretation": "Five-level importance of items, verified with five therapists at Fleiss' kappa 0.68 and Krippendorff's alpha 0.73.",
+      "location": "Appendix H.2, Table 9; the per-item labels are in Appendix A",
+      "interpretation": "Five-level importance of items, assigned per item in Appendix A and agreed among five therapists at Krippendorff's alpha 0.73 and Fleiss' kappa 0.68 overall, which are the Overall column of Table 9.",
       "relationship": "direct_validation",
       "population": "50 conversations from the high-quality split of AnnoMI (public motivational interviewing demonstrations, English)",
       "languages": [
@@ -611,7 +611,7 @@
       "unit": "rubric item per SOAP section; sentence for conciseness; sentence for faithfulness",
       "response_format": "binary item coverage, sentence labels, 3-way hallucination label; 5-point Likert baseline for comparison",
       "validation": "not established",
-      "limitations": "Carrying the grading into the score and adding purpose dependence is our step.",
+      "limitations": "Carrying the grading into the score and adding purpose dependence is our step. The location read 'Appendix C, importance annotation' until 2026-10-23, where Appendix C is the annotators' qualification and cost; the quote and both figures were right and only the place was wrong. Checked against the full text.",
       "human_checked_by": null,
       "source_artifact_digest": "",
       "excerpt": "Mandatory, Mandatory in certain circumstances, Highly recommended, Good to have, and Optional."
@@ -848,7 +848,7 @@
       "id": "K11-e2",
       "source_id": "S2",
       "location": "Results, substantive validity",
-      "interpretation": "In PDSQI-9 a longer summary is rated as less succinct, beta about -0.2.",
+      "interpretation": "In PDSQI-9 the longer the patient notes given for summarisation, the lower the summary is rated on Succinct, Spearman's rho -0.200. It is the input that is long, not the summary.",
       "relationship": "method_transfer",
       "population": "779 multi-document EHR summaries, multiple specialties, real-world data; psychiatry and psychotherapy notes explicitly excluded",
       "languages": [
@@ -858,7 +858,7 @@
       "unit": "whole summary",
       "response_format": "9 attributes on 5-point Likert scales",
       "validation": "not established",
-      "limitations": "We take this as a weak relation, not as proof that shorter is better.",
+      "limitations": "Read as a relation to the summary's own length, and as a beta, until 2026-10-23; it is the input's length and Spearman's rho. Figure 4 is 'Length of patient notes vs mean evaluator score ... the token length of the patient notes provided for summarization'. We take it as a weak relation and not as proof that shorter is better, and it says nothing about the length of what the model wrote.",
       "human_checked_by": null,
       "source_artifact_digest": "",
       "excerpt": "correlations between note length and scores for Succinct"

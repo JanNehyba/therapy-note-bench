@@ -906,12 +906,14 @@
       "unit_definition": "informační jednotka",
       "applicability": "Vždy, ale význam se liší podle tématu: nezmíněné riziko není vyloučené riziko.",
       "error_consequence": "Zápis, který si vyrobí negativní nález, dává další péči falešné ujištění.",
-      "how": "Z téže banky: u každého faktu se rozliší, že zazněl, že klient popřel, a že se na to nikdo nezeptal. Zápis se nemá co vyjadřovat k ostatním faktům světa, jen k těm v bance.",
+      "how": "Z téže banky: u každého faktu se rozliší, zda ve zdroji zazněl, zda byl výslovně popřen, nebo zda ve zdroji chybí. Chybějící údaj se nikdy nepočítá jako nula ani se nevyřazuje ze jmenovatele.",
       "ranking_role": "orders",
       "needs_bank": true,
       "plain": "Zápis nesmí tvrdit, že něco není, když se o tom vůbec nemluvilo.",
       "example": "Zápis napíše „sebevražedné myšlenky: neguje“, ačkoli se na ně v sezení nikdo neptal.",
-      "example_positive": "Dotázán na sebevražedné myšlenky, popírá."
+      "example_positive": "Dotázán na sebevražedné myšlenky, popírá.",
+      "reworded_on": "2026-10-23",
+      "why_reworded": "Reworded on 2026-10-23. A second session compared every Czech field with the English it was translated from; this field said something the English does not. Four of its twelve were checked here against the English before any were applied."
     },
     "K07": {
       "name": "Relevance pro adresáta",
@@ -1124,7 +1126,7 @@
       "statement": "Zápis je jazykově srozumitelný tomu, komu je určen.",
       "question": "Rozumí tomu ten, komu je zápis určen?",
       "definition": "Zápis je jazykově srozumitelný tomu, komu je určen. Pro klienta to znamená jiný jazyk než pro kolegu.",
-      "unit": "celý zápis, jeden čtenář",
+      "unit": "celý zápis",
       "unit_definition": "celý zápis",
       "applicability": "Měřitelné jen vůči konkrétnímu adresátovi.",
       "error_consequence": "Nesrozumitelné klientské shrnutí selhalo ve svém jediném účelu.",
@@ -1133,7 +1135,9 @@
       "needs_bank": false,
       "plain": "Jestli zápisu rozumí ten, komu je určený.",
       "example": "Zápis je plný zkratek, kterým rozumí jen ten, kdo je psal.",
-      "example_positive": "Verze pro klienta neobsahuje nevysvětlené odborné termíny."
+      "example_positive": "Verze pro klienta neobsahuje nevysvětlené odborné termíny.",
+      "reworded_on": "2026-10-23",
+      "why_reworded": "Reworded on 2026-10-23. A second session compared every Czech field with the English it was translated from; this field said something the English does not. Four of its twelve were checked here against the English before any were applied."
     },
     "K14": {
       "name": "Nestigmatizující jazyk",
@@ -1191,12 +1195,14 @@
       "unit_definition": "citlivý detail",
       "applicability": "Nesmí smazat klinicky rozhodující obsah. Konflikt s právním požadavkem se řeší ve prospěch práva a zapíše se.",
       "error_consequence": "Zbytečný citlivý detail poškodí klienta i třetí osoby a nejde vzít zpět.",
-      "why_not_measured": "Nemá oporu. Pozor na sloupec vlevo: ty tři zdroje se kritéria dotýkají, ale žádný nedefinuje, co je nezbytný detail vzhledem k účelu. Mluví o zdravotnické dokumentaci jako celku, ne o jednom zápisu pro jeden účel. Jediný kandidát v tomto stavu.",
+      "why_not_measured": "Nemá oporu. Žádný zdroj nedefinuje, jaký detail je nezbytný vzhledem k účelu. Identifikační údaje, které vyžaduje vyhláška a iCARE, se týkají zdravotnické dokumentace jako celku, ne každého vygenerovaného zápisu pro každý účel. Kritérium tedy nemá oporu, ale vyvrácené není.",
       "ranking_role": "not_measured_yet",
       "needs_bank": false,
       "plain": "Citlivý detail má v zápisu být jen tehdy, když ho ten účel opravdu potřebuje.",
       "example": "Zápis uvádí celé jméno a zaměstnavatele klientova partnera, ačkoli k jeho účelu by stačilo „partner“.",
-      "example_positive": "Shrnutí pro klienta zmiňuje rodinný konflikt, aniž by třetí osobu jmenovalo."
+      "example_positive": "Shrnutí pro klienta zmiňuje rodinný konflikt, aniž by třetí osobu jmenovalo.",
+      "reworded_on": "2026-10-23",
+      "why_reworded": "Reworded on 2026-10-23. A second session compared every Czech field with the English it was translated from; this field said something the English does not. Four of its twelve were checked here against the English before any were applied."
     },
     "K16": {
       "name": "Kontext vzniku záznamu",
@@ -1247,22 +1253,23 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-22",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "U lidí, kteří nejsou klient a nedali souhlas, jde o to, kolik se o nich dá ze zápisu zjistit.",
+      "statement": "U lidí, kteří nejsou klienty a nedali souhlas, jde o to, kolik se o nich dá ze zápisu zjistit.",
       "question": "Nejde podle zápisu poznat osobu, která není klient?",
-      "definition": "Údaje o lidech, kteří nejsou klient a nedali souhlas: partneři, děti, kolegové, další klienti ve skupině.",
+      "definition": "Údaje o lidech, kteří nejsou klienty a nedali souhlas: partneři, děti, kolegové, další klienti ve skupině.",
       "unit": "jedna zmínka osoby",
       "unit_definition": "zmínka o třetí osobě",
-      "applicability": "Přítomné v každém uspořádání. V individuální terapii vstupují třetí osoby přes klientovo vyprávění; v párové a skupinové jsou to účastníci s vlastním souhlasem, což mění pravidlo, ne relevanci.",
+      "applicability": "Přítomné v každém uspořádání. V individuální terapii vstupují třetí osoby přes klientovo vyprávění; v párové a skupinové terapii jsou to účastníci sezení a záleží na tom, zda souhlas dali. To mění pravidlo, ne relevanci.",
       "error_consequence": "Zasahuje do práv někoho, kdo o zápisu neví a nemá k němu přístup.",
       "why_not_measured": "Chybí pravidlo měření. Není definované, jak označovat třetí osoby a jak odlišit roli od identifikace.",
       "ranking_role": "not_measured_yet",
       "needs_bank": false,
-      "plain": "Jak zápis zachází s lidmi, kteří nejsou klient.",
+      "plain": "Jak zápis zachází s lidmi, kteří nejsou klienty.",
       "example": "Zápis uvádí partnerku jménem a s místem, kde pracuje.",
       "example_positive": "Klient popisuje konflikt s nadřízeným; zápis uvádí roli, ne jméno.",
       "previous_wording": "U lidí, kteří nejsou klient, zápis rozlišuje, jestli je označí rolí, nebo je identifikuje.",
       "reworded_on": "2026-10-23",
-      "why_reworded": "Reworded on 2026-10-23, the second time in a day. It read as a rule that non-clients are given by role and not identified, which the English leaves open; the morning's repair described what the measurement distinguishes rather than what a note has; and the second session's proposal, that the note gives only what its purpose needs, is almost word for word K15 and would have manufactured a duplicate in the week the panel is asked which two criteria are the same. This is the English's own shape, a topic. The first form of this repair was itself a noun phrase, which is the defect the same pass fixed in six other statements."
+      "why_reworded": "Reworded on 2026-10-23, the second time in a day. It read as a rule that non-clients are given by role and not identified, which the English leaves open; the morning's repair described what the measurement distinguishes rather than what a note has; and the second session's proposal, that the note gives only what its purpose needs, is almost word for word K15 and would have manufactured a duplicate in the week the panel is asked which two criteria are the same. This is the English's own shape, a topic. The first form of this repair was itself a noun phrase, which is the defect the same pass fixed in six other statements. Reworded on 2026-10-23. A second session compared every Czech field with the English it was translated from; this field said something the English does not. Four of its twelve were checked here against the English before any were applied. The agreement was wrong in three fields: 'lide, kteri nejsou klient' takes the plural instrumental, 'klienty'. Caught by the second session's reader, after it had gone onto four sheets.",
+      "previous_plain": "Jak zápis zachází s lidmi, kteří nejsou klient."
     },
     "K18": {
       "name": "Dohledatelnost ke zdroji",
@@ -1323,7 +1330,7 @@
       "unit_definition": "náležitost podle předpisu",
       "applicability": "Jen české zápisy, a jen ty vedené jako zdravotnická dokumentace poskytovatelem zdravotních služeb. Ne anglická stopa, ne klientské shrnutí, které zdravotnická dokumentace vůbec není. Vyhláška předepisuje náležitosti, ne strukturu zápisu: žádná forma SOAP, DAP ani BIRP není v ČR povinná, takže se kritérium nikdy nesmí číst jako požadavek psát v některé z nich.",
       "error_consequence": "Chybějící náležitost je dokumentační problém pro tu úzkou skupinu, ne klinická vada zápisu, a nesmí se míchat do skóre kvality. Číst to jako právní verdikt by bylo tvrzení o reálné praxi, které tahle práce neunese.",
-      "measured_otherwise": "Navrženo měřit jinak: deterministická kontrola náležitostí vyhlášky.",
+      "measured_otherwise": "Vyřazeno z kola 5. 10.: kontrola přítomnosti náležitostí podle předpisu jedné země do měření kvality zápisu nepatří. Kandidát i jeho opora zůstávají jako záznam toho, co rešerše našla; nic ho neměří.",
       "ranking_role": "not_measured_yet",
       "needs_bank": false,
       "plain": "Jestli má zápis náležitosti, které předepisuje česká vyhláška.",
@@ -1332,8 +1339,8 @@
       "previous_wording": {
         "statement": "Zápis nese náležitosti, které u zdravotnické dokumentace vyžaduje český předpis."
       },
-      "reworded_on": "2026-10-22",
-      "why_reworded": "Katalog omezuje tohle kritérium na záznamy poskytovatele zdravotních služeb a česká věta to neříkala. Hodnotitel mimo zdravotní služby by odpovídal na pravidlo, které se ho netýká, a nevěděl by to."
+      "reworded_on": "2026-10-23",
+      "why_reworded": "Katalog omezuje tohle kritérium na záznamy poskytovatele zdravotních služeb a česká věta to neříkala. Hodnotitel mimo zdravotní služby by odpovídal na pravidlo, které se ho netýká, a nevěděl by to. Reworded on 2026-10-23. A second session compared every Czech field with the English it was translated from; this field said something the English does not. Four of its twelve were checked here against the English before any were applied."
     },
     "K20": {
       "name": "Splnění formátu zadání",
@@ -1354,7 +1361,7 @@
       "statement": "Zápis dodržel, co zadání výslovně stanovilo: oddíly, délku, jazyk i to, co v něm být nesmí.",
       "question": "Dodržel model zadaný formát, délku, jazyk?",
       "definition": "Zápis dodržel, co zadání výslovně žádalo: sekce, délku, jazyk, zakázané prvky.",
-      "unit": "celý zápis",
+      "unit": "jeden požadavek zadání",
       "unit_definition": "požadavek zadání",
       "applicability": "Jen tam, kde si úloha tu kontrolu výslovně vyžádá.",
       "error_consequence": "Malý, pokud se nezamění za kvalitu.",
@@ -1366,7 +1373,7 @@
       "example_positive": "Zápis má všechny čtyři požadované nadpisy.",
       "previous_wording": "Zápis dodržel, co zadání výslovně žádalo: oddíly, délku, jazyk.",
       "reworded_on": "2026-10-23",
-      "why_reworded": "Reworded on 2026-10-23. The Czech dropped part of what the English definition says; this restores it. Found by a second session comparing every statement with its English definition."
+      "why_reworded": "Reworded on 2026-10-23. The Czech dropped part of what the English definition says; this restores it. Found by a second session comparing every statement with its English definition. Reworded on 2026-10-23. A second session compared every Czech field with the English it was translated from; this field said something the English does not. Four of its twelve were checked here against the English before any were applied."
     },
     "K21": {
       "name": "Převzetí péče ze zápisu",
@@ -1458,7 +1465,7 @@
       "applicability": "Lidské měření. Soudcem se nahradit nedá.",
       "error_consequence": "Benchmark, který měří jen text, může doporučit systém, který odborníci odmítají.",
       "how": "Člověk odpoví na šest parametrů přijatelnosti ze zdroje.",
-      "measured_otherwise": "Navrženo měřit jinak: otázka pro člověka, zda by zápis použil v praxi.",
+      "measured_otherwise": "Navrženo měřit jinak: strukturované hodnocení v šesti parametrech, vykazované zvlášť a nikdy nesčítané s textovými skóre. Odmítnutí musí mít důvod, protože důvod je výsledek.",
       "ranking_role": "orders_with_two_raters",
       "needs_bank": false,
       "plain": "Jestli by odborník takový zápis u sebe v praxi použil.",
@@ -1466,7 +1473,7 @@
       "example_positive": "Terapeut by systém používal dál a tenhle zápis by založil tak, jak je.",
       "previous_wording": "Zda by si odborník zápis vzal do vlastní praxe a dál používal systém, který ho vytvořil.",
       "reworded_on": "2026-10-23",
-      "why_reworded": "Reworded on 2026-10-23. The column is headed 'in one sentence' and this was a noun phrase, so it named the subject of the question instead of stating the property."
+      "why_reworded": "Reworded on 2026-10-23. The column is headed 'in one sentence' and this was a noun phrase, so it named the subject of the question instead of stating the property. Reworded on 2026-10-23. A second session compared every Czech field with the English it was translated from; this field said something the English does not. Four of its twelve were checked here against the English before any were applied."
     },
     "K24": {
       "name": "Porozumění ze strany klienta",
@@ -1491,7 +1498,7 @@
       "unit_definition": "zápis krát čtenář",
       "applicability": "Vyžaduje skutečné čtenáře. Do prvního pilotu se bez etického rámce nevejde.",
       "error_consequence": "Nejcitlivější účel; chyba se dotkne přímo klienta.",
-      "why_not_measured": "Mimo rozsah tvým rozhodnutím ze 16. 9. (nástroj slouží návaznosti péče a dokumentaci). Kandidát i jeho opora zůstávají pro další kolo.",
+      "why_not_measured": "Mimo rozsah podle rozhodnutí D8 ze 16. 9.: nástroj slouží návaznosti péče a dokumentaci. Kandidát i jeho opora zůstávají pro další kolo; toto kolo pro něj nic neměří ani netvrdí.",
       "ranking_role": "not_measured_yet",
       "needs_bank": false,
       "plain": "Jestli klient svému shrnutí rozumí a pozná se v něm.",
@@ -1499,7 +1506,7 @@
       "example_positive": "Klient si shrnutí přečte a potvrdí, že odpovídá tomu, co prožil.",
       "previous_wording": "Zda klient zápisu rozumí, pozná v něm své sezení a čtením mu to neublíží.",
       "reworded_on": "2026-10-23",
-      "why_reworded": "Reworded on 2026-10-23. The column is headed 'in one sentence' and this was a noun phrase, so it named the subject of the question instead of stating the property. It also said 'the note', where this criterion is about the summary a client is given."
+      "why_reworded": "Reworded on 2026-10-23. The column is headed 'in one sentence' and this was a noun phrase, so it named the subject of the question instead of stating the property. It also said 'the note', where this criterion is about the summary a client is given. Reworded on 2026-10-23. A second session compared every Czech field with the English it was translated from; this field said something the English does not. Four of its twelve were checked here against the English before any were applied."
     },
     "K25": {
       "name": "Podpora supervize",
@@ -1562,7 +1569,9 @@
       "needs_bank": false,
       "plain": "Jestli si zápisy téhož klienta neodporují.",
       "example": "Zápis uvádí, že se panické ataky objevily poprvé, ačkoli je předchozí zápis obsahuje.",
-      "example_positive": "Zápis zaznamenává změnu stavu a odkazuje na tu dřívější."
+      "example_positive": "Zápis zaznamenává změnu stavu a odkazuje na předchozí stav.",
+      "reworded_on": "2026-10-23",
+      "why_reworded": "Reworded on 2026-10-23. A second session compared every Czech field with the English it was translated from; this field said something the English does not. Four of its twelve were checked here against the English before any were applied."
     },
     "K27": {
       "name": "Rovnoměrnost napříč skupinami klientů",
@@ -1849,9 +1858,9 @@
     "K37": {
       "name": "Správnost čísel",
       "statement": "Čísla v zápisu odpovídají číslům ve zdroji.",
-      "question": "Uvádí zápis stejná čísla, jaká zazněla?",
+      "question": "Odpovídají čísla v zápisu číslům ve zdroji?",
       "unit": "jedno číslo",
-      "why_not_measured": "Chybí pravidlo měření. Není napsané, která čísla se počítají a co dělat s neurčitým množstvím, které zápis uvede jako přesné.",
+      "why_not_measured": "Chybí pravidlo měření. Do souboru pro panel zařazeno 14. 10. (D13), zatím nehodnoceno, protože list ještě nebyl rozeslán.",
       "from": {
         "name": "read on 2026-10-14 and written here",
         "statement": "read on 2026-10-14 and written here",
@@ -1864,12 +1873,13 @@
       },
       "ranking_role": "not_measured_yet",
       "needs_bank": false,
-      "plain": "Jestli čísla v zápisu sedí s tím, co v sezení zaznělo.",
+      "plain": "Jestli čísla v zápisu sedí s čísly ve zdroji.",
       "example": "V přepisu jsou dvě vynechané dávky, zápis uvádí čtyři.",
       "example_positive": "V přepisu klient za poslední měsíc vynechal dvě dávky; zápis uvádí dvě.",
       "reworded_on": "2026-10-23",
-      "why_reworded": "Reworded on 2026-10-23. It compared with what was said in the session, where the English compares with the source. The difference matters here: a transcription error is K39's, not this criterion's, and 'what was said' makes the two collide.",
-      "previous_wording": "Čísla v zápisu odpovídají tomu, co v sezení zaznělo."
+      "why_reworded": "Reworded on 2026-10-23. It compared with what was said in the session, where the English compares with the source. The difference matters here: a transcription error is K39's, not this criterion's, and 'what was said' makes the two collide. Reworded on 2026-10-23. A second session compared every Czech field with the English it was translated from; this field said something the English does not. Four of its twelve were checked here against the English before any were applied. Reworded on 2026-10-23. A second session compared every Czech field with the English it was translated from; this field said something the English does not. Four of its twelve were checked here against the English before any were applied. Reworded on 2026-10-23. A second session compared every Czech field with the English it was translated from; this field said something the English does not. Four of its twelve were checked here against the English before any were applied.",
+      "previous_wording": "Čísla v zápisu odpovídají tomu, co v sezení zaznělo.",
+      "previous_plain": "Jestli čísla v zápisu sedí s tím, co v sezení zaznělo."
     },
     "K38": {
       "name": "Správnost jmen a institucí",

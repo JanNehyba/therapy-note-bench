@@ -1128,8 +1128,8 @@
           "source": "S2",
           "location": "Methods, instrument development",
           "quote": "Two PDQI-9 attributes, Up-to-Date and Consistent, were removed",
-          "supports": "Temporality was a separate attribute in PDQI-9 and the PDSQI-9 authors judged it redundant.",
-          "our_adaptation": "We take this as a warning against a separate temporal column; we propose to measure time as part of claim agreement."
+          "supports": "PDQI-9 carried Up-to-Date as its own attribute and the PDSQI-9 authors removed it as covered by their other attributes. PDQI-9's own form defines it as whether the note contains the most recent test results and recommendations, which is recency of findings.",
+          "our_adaptation": "Read until 2026-10-23 as evidence that temporality itself had been a separate attribute and was judged redundant, which is more than the source says: Up-to-Date is about carrying the most recent results, not about when something happened or what has changed since. The warning this project drew from it, against a separate temporal column, stands on weaker ground than it claimed, and we still propose to measure time as part of claim agreement."
         }
       ],
       "relevance": {
@@ -1208,10 +1208,10 @@
       "evidence": [
         {
           "source": "S1",
-          "location": "Appendix C, importance annotation",
+          "location": "Appendix H.2, Table 9; the per-item labels are in Appendix A",
           "quote": "Mandatory, Mandatory in certain circumstances, Highly recommended, Good to have, and Optional.",
-          "supports": "Five-level importance of items, verified with five therapists at Fleiss' kappa 0.68 and Krippendorff's alpha 0.73.",
-          "our_adaptation": "Carrying the grading into the score and adding purpose dependence is our step."
+          "supports": "Five-level importance of items, assigned per item in Appendix A and agreed among five therapists at Krippendorff's alpha 0.73 and Fleiss' kappa 0.68 overall, which are the Overall column of Table 9.",
+          "our_adaptation": "Carrying the grading into the score and adding purpose dependence is our step. The location read 'Appendix C, importance annotation' until 2026-10-23, where Appendix C is the annotators' qualification and cost; the quote and both figures were right and only the place was wrong. Checked against the full text."
         },
         {
           "source": "S1",
@@ -1506,8 +1506,8 @@
           "source": "S2",
           "location": "Results, substantive validity",
           "quote": "correlations between note length and scores for Succinct",
-          "supports": "In PDSQI-9 a longer summary is rated as less succinct, beta about -0.2.",
-          "our_adaptation": "We take this as a weak relation, not as proof that shorter is better."
+          "supports": "In PDSQI-9 the longer the patient notes given for summarisation, the lower the summary is rated on Succinct, Spearman's rho -0.200. It is the input that is long, not the summary.",
+          "our_adaptation": "Read as a relation to the summary's own length, and as a beta, until 2026-10-23; it is the input's length and Spearman's rho. Figure 4 is 'Length of patient notes vs mean evaluator score ... the token length of the patient notes provided for summarization'. We take it as a weak relation and not as proof that shorter is better, and it says nothing about the length of what the model wrote."
         }
       ],
       "relevance": {
