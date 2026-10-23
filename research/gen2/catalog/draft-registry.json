@@ -3608,7 +3608,7 @@
       ],
       "examples": {
         "positive": "Every sentence resolves on one reading.",
-        "negative": "'The client said her partner did not advise her to stop the medication' leaves it undecidable who advised what.",
+        "negative": "A clause carrying two datives at once, so which of the two people the advice was given to cannot be recovered from the sentence.",
         "boundary": "A wrong ending that nobody stumbles over: grammatical, and below the threshold this criterion sets."
       },
       "candidate_formats": [
@@ -3681,7 +3681,7 @@
       ],
       "examples": {
         "positive": "Word order carries the roles the source gave.",
-        "negative": "An order that puts the client where the partner stood, so the note says the reverse of the session.",
+        "negative": "'The therapist recommended the client only rest' against 'The therapist recommended only the client rest': the first restricts what was recommended, the second who it was recommended to.",
         "boundary": "An order that reads oddly and resolves on one reading only: a naturalness question rather than this one."
       },
       "candidate_formats": [
@@ -3827,7 +3827,7 @@
       ],
       "examples": {
         "positive": "Every Czech word carries the diacritics it needs.",
-        "negative": "A missing hacek turns one word into a different real word and the sentence still parses.",
+        "negative": "One length mark turns speaking on the client's behalf into speaking behind her back, and the sentence still parses.",
         "boundary": "A proper name written without diacritics as its bearer writes it, which is not an error."
       },
       "candidate_formats": [

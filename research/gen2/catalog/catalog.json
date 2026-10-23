@@ -2926,7 +2926,7 @@
       "applicability": "Both languages. Measuring the same property in both is the only way to say that a model holds a property in English and loses it in Czech, which is the question a benchmark for a small language exists to ask.",
       "examples": {
         "positive": "Every sentence resolves on one reading.",
-        "negative": "'The client said her partner did not advise her to stop the medication' leaves it undecidable who advised what.",
+        "negative": "A clause carrying two datives at once, so which of the two people the advice was given to cannot be recovered from the sentence.",
         "boundary": "A wrong ending that nobody stumbles over: grammatical, and below the threshold this criterion sets."
       },
       "measurement": "Not yet defined. The proposal of 2026-10-14 gives the question a rater would be asked and no rule; writing one costs the human budget the pilot does not have.",
@@ -2934,7 +2934,7 @@
       "validation": "None on notes in this round. Czech has no inter-rater figure at all: the anchor had one native speaker, so no agreement number from the first generation is a reliability figure.",
       "overlaps": "K13 (comprehensibility), K30 (naturalness), K44 (agreement and case).",
       "state": "not_yet_operationalized",
-      "state_note": "No rule is written. Proposed on 2026-10-14 in language-set-proposal.json and brought into the pool on 2026-10-23, when the investigator found that the panel's sheet had no language layer at all.",
+      "state_note": "No rule is written. Proposed on 2026-10-14 in language-set-proposal.json and brought into the pool on 2026-10-23, when the investigator found that the panel's sheet had no language layer at all. Corrected on 2026-10-23. The example claimed the sentence left it undecidable who advised what, and the sentence said plainly that the partner advised against it. An example that does not show what it claims teaches the wrong threshold. The example it replaced read: \"'The client said her partner did not advise her to stop the medication' leaves it undecidable who advised what.\"",
       "decided_by": "rater",
       "unit_of_analysis": "note"
     },
@@ -3015,7 +3015,7 @@
       "applicability": "Both languages. Measuring the same property in both is the only way to say that a model holds a property in English and loses it in Czech, which is the question a benchmark for a small language exists to ask.",
       "examples": {
         "positive": "Word order carries the roles the source gave.",
-        "negative": "An order that puts the client where the partner stood, so the note says the reverse of the session.",
+        "negative": "'The therapist recommended the client only rest' against 'The therapist recommended only the client rest': the first restricts what was recommended, the second who it was recommended to.",
         "boundary": "An order that reads oddly and resolves on one reading only: a naturalness question rather than this one."
       },
       "measurement": "Not yet defined. The proposal of 2026-10-14 gives the question a rater would be asked and no rule; writing one costs the human budget the pilot does not have.",
@@ -3023,7 +3023,7 @@
       "validation": "None on notes in this round. Czech has no inter-rater figure at all: the anchor had one native speaker, so no agreement number from the first generation is a reliability figure.",
       "overlaps": "K41 (fluency), K01 (support in the source, where the roles flip).",
       "state": "not_yet_operationalized",
-      "state_note": "No rule is written. Proposed on 2026-10-14 in language-set-proposal.json and brought into the pool on 2026-10-23, when the investigator found that the panel's sheet had no language layer at all.",
+      "state_note": "No rule is written. Proposed on 2026-10-14 in language-set-proposal.json and brought into the pool on 2026-10-23, when the investigator found that the panel's sheet had no language layer at all. Corrected on 2026-10-23. The example contrasted two sentences differing in case endings, not in order, so it demonstrated K44 and not this criterion. The example it replaced read: \"An order that puts the client where the partner stood, so the note says the reverse of the session.\"",
       "decided_by": "rater",
       "unit_of_analysis": "note"
     },
@@ -3193,7 +3193,7 @@
       "applicability": "Czech only. The property cannot be measured on an English note of this round, and a criterion measured in one language says nothing about whether the model is worse in that language or the criterion merely stricter, so it never enters a comparison of the two tracks and is reported for Czech alone.",
       "examples": {
         "positive": "Every Czech word carries the diacritics it needs.",
-        "negative": "A missing hacek turns one word into a different real word and the sentence still parses.",
+        "negative": "One length mark turns speaking on the client's behalf into speaking behind her back, and the sentence still parses.",
         "boundary": "A proper name written without diacritics as its bearer writes it, which is not an error."
       },
       "measurement": "Not yet defined. The proposal of 2026-10-14 gives the question a rater would be asked and no rule; writing one costs the human budget the pilot does not have.",
@@ -3201,7 +3201,7 @@
       "validation": "None on notes in this round. Czech has no inter-rater figure at all: the anchor had one native speaker, so no agreement number from the first generation is a reliability figure.",
       "overlaps": "K45 (non-existent word), K30 (naturalness).",
       "state": "not_yet_operationalized",
-      "state_note": "No rule is written. Proposed on 2026-10-14 in language-set-proposal.json and brought into the pool on 2026-10-23, when the investigator found that the panel's sheet had no language layer at all. The first generation's Czech scorer measures it with a different instrument: 84 of 101, 83%, with 3 unanswered. That is a judge against one native speaker, so it is a reading and not a reliability figure.",
+      "state_note": "No rule is written. Proposed on 2026-10-14 in language-set-proposal.json and brought into the pool on 2026-10-23, when the investigator found that the panel's sheet had no language layer at all. The first generation's Czech scorer measures it with a different instrument: 84 of 101, 83%, with 3 unanswered. That is a judge against one native speaker, so it is a reading and not a reliability figure. Corrected on 2026-10-23. The pair was not a pair: the two forms were not one diacritic apart and the second was not a sentence. The example it replaced read: \"A missing hacek turns one word into a different real word and the sentence still parses.\"",
       "decided_by": "norm",
       "unit_of_analysis": "note"
     },

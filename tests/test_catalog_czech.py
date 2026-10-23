@@ -167,7 +167,11 @@ DERIVED_FIELDS = {"ranking_role", "needs_bank"}
 #: 2026-10-14 because it could not be told apart from K01's, and the entry keeps
 #: the date, the reason and the previous wording beside the new one: a criterion
 #: whose question changed silently is a criterion nobody can audit.
-HISTORY_FIELDS = {"reworded_on", "why_reworded", "previous_wording"}
+#: `previous_plain` joined on 2026-10-23. A retired statement or example is
+#: sheet text and goes under the superseded guard, which forbids it coming
+#: back onto a built sheet; `plain` is not on the sheet, it is the sentence
+#: the local Czech page opens a criterion with, so its history stays here.
+HISTORY_FIELDS = {"reworded_on", "why_reworded", "previous_wording", "previous_plain"}
 
 #: Fields written for this file rather than harvested from a generator, so their
 #: provenance is a date and not a filename. `plain` is the one sentence that says

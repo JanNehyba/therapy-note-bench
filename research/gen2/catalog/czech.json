@@ -1958,10 +1958,12 @@
       "statement": "V zápisu není gramatická chyba, která by čtenáři mohla zabránit porozumět.",
       "question": "Je v zápisu gramatická chyba, která může čtenáři zabránit porozumět?",
       "plain": "Nejde o každou gramatickou chybu, ale o takovou, po které čtenář neví, co se tím mělo říct.",
-      "example": "„Klientka uvedla, že partner jí to nedoporučil léky vysadit“ – z věty nejde poznat, kdo co doporučil.",
+      "example": "Zápis píše „klientka uvedla, že jí partner matce vysazení léků nedoporučil“, a z věty nejde poznat, komu to nedoporučil.",
       "why_not_measured": "Pravidlo pro měření zatím není napsáno.",
       "ranking_role": "not_measured_yet",
-      "needs_bank": false
+      "needs_bank": false,
+      "reworded_on": "2026-10-23",
+      "why_reworded": "Corrected on 2026-10-23. The example claimed the sentence left it undecidable who advised what, and the sentence said plainly that the partner advised against it. An example that does not show what it claims teaches the wrong threshold."
     },
     "K42": {
       "name": "Nečekané přepnutí jazyka",
@@ -1993,11 +1995,14 @@
       },
       "statement": "Pořadí slov v zápisu nemění to, co zápis říká.",
       "question": "Mění pořadí slov to, co zápis říká?",
-      "plain": "V češtině může přehozené pořadí slov změnit, kdo komu co udělal, i když jsou všechna slova správně.",
-      "example": "„Klientka partnerovi vyčítá pití“ proti „Klientce partner vyčítá pití“ – padá to na opačnou stranu.",
+      "plain": "V češtině záleží, kam se slovo postaví: jiné místo může změnit, co věta tvrdí, i když jsou všechna slova správně.",
+      "example": "„Terapeut doporučil klientovi jen odpočinek“ proti „Terapeut doporučil jen klientovi odpočinek“: poprvé nic víc než odpočinek, podruhé nikomu jinému.",
       "why_not_measured": "Pravidlo pro měření zatím není napsáno.",
       "ranking_role": "not_measured_yet",
-      "needs_bank": false
+      "needs_bank": false,
+      "reworded_on": "2026-10-23",
+      "why_reworded": "Corrected on 2026-10-23. The example contrasted two sentences differing in case endings, not in order, so it demonstrated K44 and not this criterion. Its plain sentence described the roles reading, which was what the wrong example showed; it now says what the new one does.",
+      "previous_plain": "V češtině může přehozené pořadí slov změnit, kdo komu co udělal, i když jsou všechna slova správně."
     },
     "K44": {
       "name": "Shoda a pád",
@@ -2029,11 +2034,14 @@
       },
       "statement": "V zápisu není slovo, které v daném jazyce neexistuje.",
       "question": "Je v zápisu slovo, které v češtině neexistuje?",
-      "plain": "Tvar, který vypadá jako slovo, ale žádné také slovo není.",
+      "plain": "Tvar, který vypadá jako slovo, ale žádné takové slovo není.",
       "example": "Zápis píše, že klientka „odreagovává své úzkostnění“.",
       "why_not_measured": "Pravidlo pro měření zatím není napsáno.",
       "ranking_role": "not_measured_yet",
-      "needs_bank": false
+      "needs_bank": false,
+      "previous_plain": "Tvar, který vypadá jako slovo, ale žádné také slovo není.",
+      "reworded_on": "2026-10-23",
+      "why_reworded": "Corrected on 2026-10-23. A typo: 'zadne take slovo' for 'zadne takove slovo'."
     },
     "K46": {
       "name": "Hovorový výraz místo odborného",
@@ -2066,10 +2074,12 @@
       "statement": "V českém zápisu není slovo s chybějící nebo špatnou délkou či háčkem.",
       "question": "Je v zápisu české slovo s chybějící nebo špatnou délkou či háčkem?",
       "plain": "Délka a háček v češtině mění slovo, ne jen jeho vzhled.",
-      "example": "Zápis píše „byla u ní doma“ tam, kde mělo být „byla u ničím“ – jeden háček mění větu.",
+      "example": "Zápis píše „terapeut mluvil za ní“ tam, kde mělo být „za ni“: jedna čárka mění, jestli mluvil místo klientky, nebo za jejími zády.",
       "why_not_measured": "Pravidlo pro měření zatím není napsáno.",
       "ranking_role": "not_measured_yet",
-      "needs_bank": false
+      "needs_bank": false,
+      "reworded_on": "2026-10-23",
+      "why_reworded": "Corrected on 2026-10-23. The pair was not a pair: the two forms were not one diacritic apart and the second was not a sentence."
     },
     "K48": {
       "name": "Kalk",
@@ -2391,6 +2401,21 @@
         "text": "Některá kritéria se částečně překrývají. To tak má být, posuzujte každé samo za sebe. Kde vám dvě přijdou jako to samé, ptáme se na to dole pod tabulkou.",
         "until": "2026-10-23",
         "why": "Moved to the legend on 2026-10-23. The three questions stood under the table with blank rows under each, so a rater who scrolled past the last criterion met twenty rows of prose where the table ended and the tab stopped looking like a table. The investigator saw it on a phone and refused it. Two of the three are about a particular criterion and are now explained under the note column, where the answer goes beside the row it is about; the third is about what the list does not contain, has no row to attach to, and keeps its own space at the bottom of the legend."
+      },
+      {
+        "text": "„Klientka uvedla, že partner jí to nedoporučil léky vysadit“ – z věty nejde poznat, kdo co doporučil.",
+        "until": "2026-10-23",
+        "why": "Corrected on 2026-10-23. The example claimed the sentence left it undecidable who advised what, and the sentence said plainly that the partner advised against it. An example that does not show what it claims teaches the wrong threshold."
+      },
+      {
+        "text": "„Klientka partnerovi vyčítá pití“ proti „Klientce partner vyčítá pití“ – padá to na opačnou stranu.",
+        "until": "2026-10-23",
+        "why": "Corrected on 2026-10-23. The example contrasted two sentences differing in case endings, not in order, so it demonstrated K44 and not this criterion. Its plain sentence described the roles reading, which was what the wrong example showed; it now says what the new one does."
+      },
+      {
+        "text": "Zápis píše „byla u ní doma“ tam, kde mělo být „byla u ničím“ – jeden háček mění větu.",
+        "until": "2026-10-23",
+        "why": "Corrected on 2026-10-23. The pair was not a pair: the two forms were not one diacritic apart and the second was not a sentence."
       }
     ],
     "purposes": {
