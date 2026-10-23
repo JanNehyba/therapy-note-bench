@@ -15,8 +15,8 @@ it does for every other script here, so this file stays public-safe.
 Writes into a gitignored directory: the sheets go to people, and what comes back
 is answers about an instrument, which belong in the record and not in a view.
 
-**Three things are not in this table and a rebuild has to carry them by hand.**
-All three were wrong in a live workbook on 2026-10-23 and none was a value, so
+**Four things are not in this table and a rebuild has to carry them by hand.**
+All four were wrong in a live workbook on 2026-10-23 and none was a value, so
 comparing the sheet with this file would not have found any of them.
 
 * **Merges.** The old layout merged each question under the table across the
@@ -30,6 +30,19 @@ comparing the sheet with this file would not have found any of them.
   value write and had gone from three rows of one tab, where a rater would have
   typed free text into the column the retention rule reads. Set it over the
   whole rating range, and read one cell back.
+* **The legend's column.** The rating tabs wrap and the legend did not, so its
+  cells kept Google's default and spilled sideways: the longest line is 439
+  characters and about 200 of them were on the screen. A rater would have read
+  half of the question about gaming a criterion and nothing would have looked
+  broken. Set the legend column to wrap, give it a width that fits a laptop,
+  make the section headings the only bold cells, and mark the rows under the
+  last question in the answer column's colour, because that question says to
+  write here and nothing else says where here is.
+
+The four were found four different ways, and only the last one by looking at
+the sheet as a reader sees it: export it to PDF and render the pages. The API
+reports a wrapped row's height as 21 pixels whether it has one line or four,
+so the question this answers cannot be asked of it.
 """
 
 from __future__ import annotations
