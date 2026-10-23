@@ -2432,6 +2432,21 @@
         "text": "„Klientka uvedl, že se mu ulevilo“ – sloveso i zájmeno patří k jinému rodu než podmět.",
         "until": "2026-10-23",
         "why": "Corrected on 2026-10-23. It carried a dash, which the investigator struck from the sheet on 2026-10-22; a colon does the same work."
+      },
+      {
+        "text": "Jak by se to dalo obejít? Co se začne známkovat, na to se modely zaměří, a někdy jde dobrá známka získat, aniž by zápis za něco stál. Příklad: kritérium „Úspornost“ žádá, aby každá věta nesla podstatný obsah. Zápis, který má jedinou větu, dostane plný počet bodů, protože ta jedna věta podstatná je. Takže čím míň toho model napíše, tím líp dopadne. Když vás něco takového u některého kritéria napadne, napište to do poznámky u jeho řádku.",
+        "until": "2026-10-23",
+        "why": "Reworded on 2026-10-23, reading the legend as Czech prose rather than against an English definition, which it has none of. 'jde dobra znamka ziskat' puts the patient of the infinitive in the nominative. The construction is heard in speech and reads as strained in an instruction; 'jde ziskat dobrou znamku' is the plain form. Nothing about what the sentence says changes."
+      },
+      {
+        "text": "Která dvě jsou to samé? Některá kritéria se částečně překrývají a to tak má být. Když vám ale dvě přijdou jako to samé, napište do poznámky u jednoho z nich kód toho druhého a čím jsou podle vás stejná.",
+        "until": "2026-10-23",
+        "why": "Reworded on 2026-10-23, reading the legend as Czech prose. 'cim jsou stejna' asks by what means they are the same; what the question wants is 'v cem jsou stejna', in what respect. The answer asked for is unchanged."
+      },
+      {
+        "text": "Tohle se k žádnému řádku neváže, takže prosím sem: vlastnost, kterou by dobrý zápis měl mít a v seznamu není. Klidně víc věcí, každou na nový řádek.",
+        "until": "2026-10-23",
+        "why": "Reworded on 2026-10-23. Two defects of the kind the sheet's own language criteria measure. One relative pronoun served an accusative slot and a nominative one: 'vlastnost, kterou by dobry zapis mel mit a v seznamu neni' needs 'a ktera v seznamu neni', which is exactly what K44 asks about. And 'takze prosim sem' dropped the verb; it was a guess at where to write, which the marked cells below the line now answer."
       }
     ],
     "purposes": {
@@ -2479,17 +2494,17 @@
         "Nepovinný. Kromě čehokoli dalšího, co vás u kritéria napadne, nás tam zajímají dvě věci."
       ],
       [
-        "Jak by se to dalo obejít? Co se začne známkovat, na to se modely zaměří, a někdy jde dobrá známka získat, aniž by zápis za něco stál. Příklad: kritérium „Úspornost“ žádá, aby každá věta nesla podstatný obsah. Zápis, který má jedinou větu, dostane plný počet bodů, protože ta jedna věta podstatná je. Takže čím míň toho model napíše, tím líp dopadne. Když vás něco takového u některého kritéria napadne, napište to do poznámky u jeho řádku."
+        "Jak by se to dalo obejít? Co se začne známkovat, na to se modely zaměří, a někdy jde získat dobrou známku, aniž by zápis za něco stál. Příklad: kritérium „Úspornost“ žádá, aby každá věta nesla podstatný obsah. Zápis, který má jedinou větu, dostane plný počet bodů, protože ta jedna věta podstatná je. Takže čím míň toho model napíše, tím líp dopadne. Když vás něco takového u některého kritéria napadne, napište to do poznámky u jeho řádku."
       ],
       [
-        "Která dvě jsou to samé? Některá kritéria se částečně překrývají a to tak má být. Když vám ale dvě přijdou jako to samé, napište do poznámky u jednoho z nich kód toho druhého a čím jsou podle vás stejná."
+        "Která dvě jsou to samé? Některá kritéria se částečně překrývají a to tak má být. Když vám ale dvě přijdou jako to samé, napište do poznámky u jednoho z nich kód toho druhého a v čem jsou podle vás stejná."
       ],
       [],
       [
         "Co v seznamu chybí?"
       ],
       [
-        "Tohle se k žádnému řádku neváže, takže prosím sem: vlastnost, kterou by dobrý zápis měl mít a v seznamu není. Klidně víc věcí, každou na nový řádek."
+        "Tohle se k žádnému řádku neváže, takže to prosím napište sem: vlastnost, kterou by dobrý zápis měl mít a která v seznamu není. Klidně víc věcí, každou na nový řádek."
       ],
       [
         ""
