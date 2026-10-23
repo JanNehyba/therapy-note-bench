@@ -1033,7 +1033,7 @@
       "label": "Support of claims in the source",
       "definition": "Every factual claim in the note has support in the session transcript or in another declared source. Lack of support divides into invented (the source has nothing of the kind) and distorted (the source says something else).",
       "origin": "prior_local",
-      "origin_note": "Existed in the project as Factual agreement, from the reproduction of the instrument. The review now adds the verbatim three-way typology from TN-Eval and the fabrication/falsification distinction from PDSQI-9. Finding a source does not change where the idea came from.",
+      "origin_note": "Existed in the project as Factual agreement, from the reproduction of the instrument. The review now adds the verbatim three-way typology from TN-Eval and the fabrication/falsification distinction from PDSQI-9. Finding a source does not change where the idea came from. What goes beyond both sources, recorded 2026-10-23: 'or in another declared source' has no support in either, and the claim rule compares with the transcript alone; and the fourth outcome, unassessable, is ours. TN-Eval labels a sentence Out-of-nowhere, Misinterpreted Information or No Error, and PDSQI-9 distinguishes falsification from fabrication. Neither has a fourth.",
       "evidence": [
         {
           "source": "S1",
@@ -1163,7 +1163,7 @@
       "label": "Certainty, hypothesis and agreement",
       "definition": "The note preserves epistemic status: what is certain, what is the therapist's hypothesis, what is a suggestion and what is an agreement between therapist and client.",
       "origin": "prior_local",
-      "origin_note": "A local refinement. The review gives it support in that TN-Eval expects hypotheses in the Assessment section as hypotheses.",
+      "origin_note": "A local refinement. The review gives it support in that TN-Eval expects hypotheses in the Assessment section as hypotheses. What goes beyond the source, recorded 2026-10-23: whose hypothesis it is. TN-Eval's Assessment section asks the writer to 'Summarize the clinical impressions and hypotheses regarding the client's issues', so a hypothesis there is the writer's own. K04 asks instead whether the note preserves a status carried from the session, and under the claim rule the writer's own hypothesis in Assessment would come out unsupported.",
       "evidence": [
         {
           "source": "S1",
@@ -1204,7 +1204,7 @@
       "label": "Coverage of essential content weighted by importance",
       "definition": "The share of essential information from the session that the note carries, where essentiality is graded and derived from the source and the purpose, not from the existence of a field in a form.",
       "origin": "literature",
-      "origin_note": "The strongest change against the previous map. TN-Eval grades importance into five levels; our reproduction treats the items as an equal-weighted checklist.",
+      "origin_note": "The strongest change against the previous map. TN-Eval grades importance into five levels; our reproduction treats the items as an equal-weighted checklist. What goes beyond the source, recorded 2026-10-23: the unit. TN-Eval scores fixed rubric characteristics per section; K05 builds a bank of information units from each transcript and carries TN-Eval's five importance levels, and their agreement, onto units the paper never graded.",
       "evidence": [
         {
           "source": "S1",
@@ -1348,7 +1348,7 @@
       "label": "Risk and safety",
       "definition": "A content topic: suicidality, self-harm, danger to others, abuse, crisis markers. It is not a quality construct; it is the topic with the highest error severity. It is also a cross-cutting consequence: an error of fidelity or coverage that touches risk is more severe than the same error elsewhere.",
       "origin": "literature",
-      "origin_note": "In TN-Eval safety is the only Mandatory-level item among the general items; in iCARE it has a separate aspect, Crisis Markers.",
+      "origin_note": "In TN-Eval safety is the only Mandatory-level item among the general items; in iCARE it has a separate aspect, Crisis Markers. What goes beyond the sources, recorded 2026-10-23: the highest severity and the escalation. Mandatory is TN-Eval's top level and nine items across the rubric carry it, so safety is at the top and not above it; the sentence that an error touching risk is more severe than the same error elsewhere is ours. iCARE grades no aspect at all. The narrower claim above holds: Appendix A.5 has three general items and only safety is Mandatory.",
       "evidence": [
         {
           "source": "S1",
@@ -1445,7 +1445,7 @@
       "label": "Follow-through and next steps",
       "definition": "The note carries what is needed to continue: the plan, agreed tasks, open questions, the date.",
       "origin": "literature",
-      "origin_note": "TN-Eval and iCARE both have separate mandatory items for the plan.",
+      "origin_note": "TN-Eval has separate mandatory items for the plan. Corrected 2026-10-23: iCARE has no mandatory items, because it grades no aspect. Its weighted score weights three automatic metrics, 30% METEOR, 30% ROUGE-L and 40% BERTScore, not its seventeen aspects. The mandatory plan items are TN-Eval's alone.",
       "evidence": [
         {
           "source": "S1",
@@ -1493,7 +1493,7 @@
       "label": "Economy: every sentence serves something",
       "definition": "The share of sentences that carry essential content. Measured by the relation of a sentence to content, not by the length of the text. A repeated sentence still carries content, so repetition is not seen here; it is K31.",
       "origin": "literature",
-      "origin_note": "Directly from TN-Eval, where conciseness is defined by the relation of a sentence to a rubric item.",
+      "origin_note": "Directly from TN-Eval, where conciseness is defined by the relation of a sentence to a rubric item. What goes beyond the source, recorded 2026-10-23: the unit and the scope. TN-Eval asks whether a sentence contributes to a rubric item, a general characteristic such as the client's observed behaviour, and 'the score is the ratio of necessary sentences in a section'. K11 asks whether a sentence carries an information unit from the transcript bank, over the whole note. A sentence this project's own failing example rejects would plausibly pass in TN-Eval as observed behaviour.",
       "evidence": [
         {
           "source": "S1",
@@ -1541,7 +1541,7 @@
       "label": "Organisation and orientation in the text",
       "definition": "The note is structured so that the reader finds what they look for, and content is in its expected place.",
       "origin": "literature",
-      "origin_note": "The PDSQI attribute Organized; TN-Eval additionally measures whether content belongs to its section.",
+      "origin_note": "The PDSQI attribute Organized; TN-Eval additionally measures whether content belongs to its section. What goes beyond the source, recorded 2026-10-23: finding. PDSQI's Organized is a summary 'well-formed and structured in a way that helps the reader understand the patient's clinical course'. K12 turns that into whether a reader finds what they look for and measures placement in a section, which is TN-Eval's and is recorded as our proposal on that line.",
       "evidence": [
         {
           "source": "S2",
@@ -1630,14 +1630,14 @@
       "label": "Non-stigmatising language",
       "definition": "The note does not use language that belittles the client, questions their credibility or reduces them to a diagnosis or a behaviour.",
       "origin": "literature",
-      "origin_note": "PDSQI added Stigmatizing as one of two entirely new attributes because of the behaviour of language models.",
+      "origin_note": "PDSQI added Stigmatizing as one of two entirely new attributes because of the behaviour of language models. What goes beyond the source, recorded 2026-10-23: the three named forms, the distinction between a quotation and the author's own words, and the major and critical severities. PDSQI-9 carries one attribute, Stigmatizing, and takes its meaning from a tool this project cites nowhere.",
       "evidence": [
         {
           "source": "S2",
           "location": "Methods, instrument development",
           "quote": "Two new attributes were added to address concerns in LLM-generated summaries: use of stigmatizing",
           "supports": "Stigmatising language is a separate attribute in PDSQI-9, introduced precisely because of the models.",
-          "our_adaptation": "PDSQI gives example words in English; converting that into a Czech list of forbidden words is an inadmissible simplification and is supported by no source."
+          "our_adaptation": "PDSQI-9 names no example words. It defines stigmatizing language by reference to the Center for Health Care Strategies tool 'Words Matter: Strategies to Reduce Bias in Electronic Health Records', which this project does not cite, so the meaning of the attribute rests on a source outside our evidence. Until 2026-10-23 this line claimed the paper gives example words in English and that converting them into a Czech list was our step; the first half is not true."
         },
         {
           "source": "S1",

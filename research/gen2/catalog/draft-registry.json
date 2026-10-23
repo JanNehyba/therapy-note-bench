@@ -934,7 +934,7 @@
       "unit": "whole summary",
       "response_format": "9 attributes on 5-point Likert scales",
       "validation": "not established",
-      "limitations": "PDSQI gives example words in English; converting that into a Czech list of forbidden words is an inadmissible simplification and is supported by no source.",
+      "limitations": "PDSQI-9 names no example words. It defines stigmatizing language by reference to the Center for Health Care Strategies tool 'Words Matter: Strategies to Reduce Bias in Electronic Health Records', which this project does not cite, so the meaning of the attribute rests on a source outside our evidence. Until 2026-10-23 this line claimed the paper gives example words in English and that converting them into a Czech list was our step; the first half is not true.",
       "human_checked_by": null,
       "source_artifact_digest": "",
       "excerpt": "Two new attributes were added to address concerns in LLM-generated summaries: use of stigmatizing"
