@@ -1914,10 +1914,10 @@
       },
       "ranking_role": "not_measured_yet",
       "needs_bank": false,
-      "plain": "Jestli zápis věrně neopsal chybu, která vznikla už dřív — při přepisu nahrávky nebo při překladu do češtiny.",
+      "plain": "Jestli zápis věrně neopsal chybu, která vznikla už dřív, při přepisu nahrávky nebo při překladu do češtiny.",
       "example": "Přepis slyšel „sertralid“ místo „sertralin“ a zápis to opíše.",
-      "reworded_on": "2026-10-22",
-      "why_reworded": "Název pojmenovával vadu, ne vlastnost dobrého zápisu, a arch se u všech kritérií ptá stejně: je tato vlastnost podstatná pro kvalitu zápisu? U čtyř kritérií z třiceti devíti se tak otázka obracela a hodnotitel ji musel v hlavě převracet. Anglický název v katalogu zůstává, protože je převzatý ze zdroje.",
+      "reworded_on": "2026-10-23",
+      "why_reworded": "Corrected on 2026-10-23. It carried a dash, which the investigator struck from the sheet on 2026-10-22; a colon does the same work.",
       "previous_wording": {
         "statement": "Zápis nepřebírá chyby, které udělal už přepis.",
         "question": "Nepřepsal zápis věrně chybu, kterou udělalo rozpoznávání řeči?",
@@ -1925,7 +1925,8 @@
         "why_not_measured": "Nedá se to rozhodnout z přepisu, protože špatný je ten přepis. Potřebuje to nahrávku, a u českých sezení je nahrávka důvěrná.",
         "name": "Chyba zděděná ze zdroje"
       },
-      "example_positive": "V přepisu je sertralid, ačkoli klient řekl sertralin, a zápis píše sertralin."
+      "example_positive": "V přepisu je sertralid, ačkoli klient řekl sertralin, a zápis píše sertralin.",
+      "previous_plain": "Jestli zápis věrně neopsal chybu, která vznikla už dřív — při přepisu nahrávky nebo při překladu do češtiny."
     },
     "K40": {
       "name": "Useknutý zápis",
@@ -2017,7 +2018,7 @@
       "statement": "V zápisu není věta s chybnou shodou nebo špatným pádem.",
       "question": "Je v zápisu věta s chybnou shodou nebo špatným pádem?",
       "plain": "Podstatné jméno a sloveso k sobě patří tvarem, a pád odpovídá tomu, co věta říká.",
-      "example": "„Klientka uvedl, že se mu ulevilo“ – sloveso i zájmeno patří k jinému rodu než podmět.",
+      "example": "„Klientka uvedl, že se mu ulevilo“: sloveso i zájmeno patří k jinému rodu než podmět.",
       "why_not_measured": "Pravidlo pro měření zatím není napsáno.",
       "ranking_role": "not_measured_yet",
       "needs_bank": false
@@ -2416,6 +2417,11 @@
         "text": "Zápis píše „byla u ní doma“ tam, kde mělo být „byla u ničím“ – jeden háček mění větu.",
         "until": "2026-10-23",
         "why": "Corrected on 2026-10-23. The pair was not a pair: the two forms were not one diacritic apart and the second was not a sentence."
+      },
+      {
+        "text": "„Klientka uvedl, že se mu ulevilo“ – sloveso i zájmeno patří k jinému rodu než podmět.",
+        "until": "2026-10-23",
+        "why": "Corrected on 2026-10-23. It carried a dash, which the investigator struck from the sheet on 2026-10-22; a colon does the same work."
       }
     ],
     "purposes": {

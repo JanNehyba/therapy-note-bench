@@ -3,7 +3,11 @@
 The leaderboard's completeness is the equal-weighted mean of a note's four SOAP
 section fractions (`tneval.aggregate`). That arithmetic is kept as it is,
 because it reproduces TN-Eval's own per-section numbers and the comparison with
-their published figures rests on it. This module never changes it.
+their published figures rests on it. This module never changes it. It is worth
+saying plainly, though, that the paper's own full-note score is the micro
+average weighted by section rubric elements, which is the item-weighted reading
+below: the macro mean is ours, it is a departure from the source, and
+`docs/limitations.md` names it as one.
 
 What it does is compute, over the same notes, the two readings a reader might
 reasonably have expected instead, and publish what each does to the order:

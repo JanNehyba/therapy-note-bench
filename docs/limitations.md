@@ -487,7 +487,12 @@ whole rubric as the denominator, which is not the arithmetic `aggregate`
 performs: it averages the four section fractions equally, over sections of
 6, 5, 8 and 4 criteria, so a criterion in the four-item plan section is worth
 twice one in the eight-item assessment section. The two readings are not
-interchangeable, and the order the tables print is the first one. Recomputed
+interchangeable, and the order the tables print is the first one. The second is
+the paper's: TN-Eval computes its full-note score as a micro average weighted by
+the number of rubric elements in each section, which is the share over all
+items, so the macro mean here is a departure from the source's own arithmetic
+and not merely one convention among several. What the comparison with their
+published figures rests on is the per-section numbers, which this does reproduce. Recomputed
 item-weighted over the same notes, 11 of the 21 systems change place under
 `gemini-3.1-pro-preview` and 9 of the 21 under `gpt-5.6-terra`; the figures,
 the notes they rest on and what the rubric's own importance grading does

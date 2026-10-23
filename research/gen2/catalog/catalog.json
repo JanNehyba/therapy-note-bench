@@ -1217,8 +1217,8 @@
           "source": "S1",
           "location": "Section 4.1",
           "quote": "The full note score is computed as a micro average, weighted by section rubric elements.",
-          "supports": "Even coverage itself is not a plain share over all items.",
-          "our_adaptation": "-"
+          "supports": "The paper's full-note score is a plain share over all items: a micro average weighted by the number of rubric elements in each section is the total of covered items over the total of items. Coverage in the source is therefore item-weighted and not section-weighted.",
+          "our_adaptation": "Read the other way round until 2026-10-23, as 'even coverage itself is not a plain share over all items', which is the opposite of what the sentence says; the audit of 2026-09-15 marked it and it stayed. Our own departure is recorded with it: generation 1's leaderboard averages the four section fractions equally, which is not this arithmetic, and docs/limitations.md says so and publishes what the item-weighted reading does to the order."
         },
         {
           "source": "S2",

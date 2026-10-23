@@ -620,7 +620,7 @@
       "id": "K05-e2",
       "source_id": "S1",
       "location": "Section 4.1",
-      "interpretation": "Even coverage itself is not a plain share over all items.",
+      "interpretation": "The paper's full-note score is a plain share over all items: a micro average weighted by the number of rubric elements in each section is the total of covered items over the total of items. Coverage in the source is therefore item-weighted and not section-weighted.",
       "relationship": "direct_validation",
       "population": "50 conversations from the high-quality split of AnnoMI (public motivational interviewing demonstrations, English)",
       "languages": [
@@ -630,7 +630,7 @@
       "unit": "rubric item per SOAP section; sentence for conciseness; sentence for faithfulness",
       "response_format": "binary item coverage, sentence labels, 3-way hallucination label; 5-point Likert baseline for comparison",
       "validation": "not established",
-      "limitations": "-",
+      "limitations": "Read the other way round until 2026-10-23, as 'even coverage itself is not a plain share over all items', which is the opposite of what the sentence says; the audit of 2026-09-15 marked it and it stayed. Our own departure is recorded with it: generation 1's leaderboard averages the four section fractions equally, which is not this arithmetic, and docs/limitations.md says so and publishes what the item-weighted reading does to the order.",
       "human_checked_by": null,
       "source_artifact_digest": "",
       "excerpt": "The full note score is computed as a micro average, weighted by section rubric elements."
