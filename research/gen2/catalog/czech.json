@@ -743,7 +743,7 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-15",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "Každé věcné tvrzení v zápisu má oporu v tom, co v sezení zaznělo.",
+      "statement": "Každé věcné tvrzení v zápisu má oporu v přepisu sezení nebo v jiném uvedeném zdroji.",
       "question": "Má každé tvrzení oporu v tom, co zaznělo?",
       "definition": "Každé věcné tvrzení v zápisu má oporu v přepisu sezení nebo v jiném deklarovaném zdroji. Chybějící opora se dělí na vymyšlené (zdroj nic takového nemá) a zkreslené (zdroj říká něco jiného).",
       "unit": "jedno tvrzení",
@@ -755,7 +755,10 @@
       "needs_bank": false,
       "plain": "Všechno, co zápis tvrdí, muselo v sezení opravdu zaznít.",
       "example": "Zápis uvede „klient uvádí nespavost od rozvodu“, ale o žádném rozvodu se v sezení nemluvilo.",
-      "example_positive": "Přepis: klient říká, že spí asi čtyři hodiny. Zápis: Klient uvádí, že spí asi čtyři hodiny."
+      "example_positive": "Přepis: klient říká, že spí asi čtyři hodiny. Zápis: Klient uvádí, že spí asi čtyři hodiny.",
+      "previous_wording": "Každé věcné tvrzení v zápisu má oporu v tom, co v sezení zaznělo.",
+      "reworded_on": "2026-10-23",
+      "why_reworded": "Reworded on 2026-10-23. It compared with what was said in the session, where the English compares with the source. The difference matters here: a transcription error is K39's, not this criterion's, and 'what was said' makes the two collide."
     },
     "K02": {
       "name": "Kdo co řekl",
@@ -803,7 +806,7 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-15",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "Zápis zachovává, kdy se co stalo a co je aktuální oproti minulému.",
+      "statement": "Zápis zachovává, kdy se co stalo, co platí teď a co dřív, a co je teprve záměr nebo plán.",
       "question": "Je poznat, kdy se co stalo a co je aktuální?",
       "definition": "Zápis zachovává, kdy se co stalo a co je aktuální oproti minulému: současný stav, anamnéza, záměr, plán.",
       "unit": "jedno tvrzení",
@@ -815,7 +818,10 @@
       "needs_bank": false,
       "plain": "Musí být poznat, kdy se co stalo a co z toho platí teď.",
       "example": "Zápis napíše „klient bere antidepresiva“, ačkoli se v sezení mluvilo o užívání před dvěma lety.",
-      "example_positive": "Na minulém sezení to odmítal, dnes o tom uvažuje."
+      "example_positive": "Na minulém sezení to odmítal, dnes o tom uvažuje.",
+      "previous_wording": "Zápis zachovává, kdy se co stalo a co je aktuální oproti minulému.",
+      "reworded_on": "2026-10-23",
+      "why_reworded": "Reworded on 2026-10-23. The Czech dropped part of what the English definition says; this restores it. Found by a second session comparing every statement with its English definition."
     },
     "K04": {
       "name": "Jistota, hypotéza, dohoda",
@@ -923,7 +929,7 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-22",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "Co je podstatné, se mění podle toho, kdo zápis čte a proč.",
+      "statement": "Zápis vybírá, co je podstatné, podle toho, kdo ho bude číst a k čemu.",
       "question": "Je tam to, co potřebuje právě tenhle čtenář?",
       "definition": "Co je podstatné, se mění podle toho, kdo zápis čte a proč. Táž informace může být nutná pro převzetí péče a zbytečná v klientském shrnutí.",
       "unit": "jednotka krát účel",
@@ -935,7 +941,10 @@
       "needs_bank": true,
       "plain": "Co je v zápisu podstatné, záleží na tom, pro koho je psaný.",
       "example": "Zápis do dokumentace a terapeutova vlastní poznámka nesou totéž, ačkoli každý z nich čte někdo jiný a k něčemu jinému.",
-      "example_positive": "Údaj o medikaci je podstatný pro návaznost péče a nepovinný ve shrnutí pro klienta."
+      "example_positive": "Údaj o medikaci je podstatný pro návaznost péče a nepovinný ve shrnutí pro klienta.",
+      "previous_wording": "Co je podstatné, se mění podle toho, kdo zápis čte a proč.",
+      "reworded_on": "2026-10-23",
+      "why_reworded": "Reworded on 2026-10-23. The column is headed 'in one sentence' and this was a noun phrase, so it named the subject of the question instead of stating the property."
     },
     "K08": {
       "name": "Riziko a bezpečí",
@@ -953,7 +962,7 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-22",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "Chyba v tom, co se týká rizika a bezpečí (sebevražedné myšlenky, sebepoškozování, ohrožení druhých, zneužívání, krize), je závažnější než stejná chyba v jiné části zápisu.",
+      "statement": "Chyba v tom, co se týká rizika a bezpečí (sebevražednost, sebepoškozování, ohrožení druhých, týrání a zneužívání, krize), je závažnější než stejná chyba v jiné části zápisu.",
       "question": "Je zachycené riziko tam, kde zaznělo?",
       "definition": "Obsahové téma: suicidalita, sebepoškozování, nebezpečí pro druhé, týrání, krizové ukazatele. Není to konstrukt kvality, je to téma s nejvyšší závažností chyby. Zároveň je to průřezový důsledek: chyba věrnosti nebo pokrytí, která se dotkne rizika, je závažnější než táž chyba jinde.",
       "unit": "jednotka označená jako riziko",
@@ -966,9 +975,9 @@
       "plain": "Jestli je v zápisu to, co v sezení zaznělo o riziku a bezpečí.",
       "example": "V sezení zazněla beznaděj a zápis o ní neříká nic.",
       "example_positive": "Zmínka o beznaději je v bance označená jako riziková a zápis ji nese.",
-      "previous_wording": "Chyba, která se týká rizika a bezpečí, váží víc než táž chyba jinde.",
-      "reworded_on": "2026-10-22",
-      "why_reworded": "Reworded on 2026-10-22. The investigator could not parse it: 'an error that touches risk weighs more than the same error elsewhere' is faithful to the English and says nothing a rater can picture. The English definition names the topics and they now stand in the sentence."
+      "previous_wording": "Chyba v tom, co se týká rizika a bezpečí (sebevražedné myšlenky, sebepoškozování, ohrožení druhých, zneužívání, krize), je závažnější než stejná chyba v jiné části zápisu.",
+      "reworded_on": "2026-10-23",
+      "why_reworded": "Reworded on 2026-10-23. The Czech dropped part of what the English definition says; this restores it. Found by a second session comparing every statement with its English definition."
     },
     "K09": {
       "name": "Opodstatněnost vytvořených souvislostí",
@@ -986,7 +995,7 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-15",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "Když zápis spojí informace do souvislosti nebo závěru, je ten vztah opřený o zdroj.",
+      "statement": "Když zápis spojí informace do souvislosti nebo závěru, je ta souvislost podložená zdrojem a odpovídá účelu zápisu.",
       "question": "Je souvislost, kterou zápis vytvořil, opřená o zdroj?",
       "definition": "Pokud zápis spojí informace do vztahu, souvislosti nebo závěru, je ten vztah opřený o zdroj a přiměřený účelu.",
       "unit": "jedna vytvořená souvislost",
@@ -998,7 +1007,10 @@
       "needs_bank": false,
       "plain": "Souvislost, kterou zápis vytvořil, musí mít oporu v tom, co zaznělo.",
       "example": "Zápis uzavře, že jde o sociální fobii, ačkoli takovou souvislost v sezení nikdo neudělal.",
-      "example_positive": "Klient sám spojuje vyhýbání se schůzkám se strachem z odsouzení druhými."
+      "example_positive": "Klient sám spojuje vyhýbání se schůzkám se strachem z odsouzení druhými.",
+      "previous_wording": "Když zápis spojí informace do souvislosti nebo závěru, je ten vztah opřený o zdroj.",
+      "reworded_on": "2026-10-23",
+      "why_reworded": "Reworded on 2026-10-23. The Czech dropped part of what the English definition says; this restores it. Found by a second session comparing every statement with its English definition."
     },
     "K10": {
       "name": "Návaznost a další kroky",
@@ -1016,7 +1028,7 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-15",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "Zápis nese, co je potřeba k pokračování: plán, úkoly, otevřené otázky, termín.",
+      "statement": "Zápis obsahuje, co je potřeba k pokračování: plán, dohodnuté úkoly, otevřené otázky, termín.",
       "question": "Je tam plán, úkoly a další setkání?",
       "definition": "Zápis nese, co je potřeba k pokračování: plán, dohodnuté úkoly, otevřené otázky, termín.",
       "unit": "jednotka typu plán",
@@ -1028,7 +1040,10 @@
       "needs_bank": true,
       "plain": "Jestli je v zápisu plán, dohodnuté úkoly a další setkání.",
       "example": "Zápis uvede datum dalšího sezení, které v sezení nepadlo.",
-      "example_positive": "Domluvený deník spánku do příštího sezení za týden."
+      "example_positive": "Domluvený deník spánku do příštího sezení za týden.",
+      "previous_wording": "Zápis nese, co je potřeba k pokračování: plán, úkoly, otevřené otázky, termín.",
+      "reworded_on": "2026-10-23",
+      "why_reworded": "Reworded on 2026-10-23. The Czech dropped part of what the English definition says; this restores it. Found by a second session comparing every statement with its English definition."
     },
     "K11": {
       "name": "Úspornost",
@@ -1136,7 +1151,7 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-15",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "Zápis nepoužívá jazyk, který klienta snižuje nebo ho redukuje na diagnózu.",
+      "statement": "Zápis nepoužívá jazyk, který klienta snižuje, zpochybňuje jeho věrohodnost nebo ho redukuje na diagnózu či chování.",
       "question": "Nemluví zápis o klientovi snižujícím způsobem?",
       "definition": "Zápis nepoužívá jazyk, který klienta snižuje, zpochybňuje jeho věrohodnost nebo ho redukuje na diagnózu či chování.",
       "unit": "úsek textu",
@@ -1148,7 +1163,10 @@
       "needs_bank": false,
       "plain": "Zápis nesmí o klientovi mluvit snižujícím způsobem.",
       "example": "Zápis napíše „klient je nespolupracující a manipulativní“.",
-      "example_positive": "Klient v posledních týdnech nepřišel na tři sezení."
+      "example_positive": "Klient v posledních týdnech nepřišel na tři sezení.",
+      "previous_wording": "Zápis nepoužívá jazyk, který klienta snižuje nebo ho redukuje na diagnózu.",
+      "reworded_on": "2026-10-23",
+      "why_reworded": "Reworded on 2026-10-23. The Czech dropped part of what the English definition says; this restores it. Found by a second session comparing every statement with its English definition."
     },
     "K15": {
       "name": "Nezbytnost citlivého detailu",
@@ -1196,7 +1214,7 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-15",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "Zápis nese informaci o okolnostech svého vzniku, například kdo a kdy ho psal.",
+      "statement": "Zápis uvádí, za jakých okolností vznikl, například kdo ho vytvořil a z jakých podkladů.",
       "question": "Je zaznamenáno, kdo a kdy zápis psal?",
       "definition": "Zápis nese informaci o okolnostech svého vzniku, protože ty ovlivňují, jak se má jeho obsah číst.",
       "unit": "celý zápis",
@@ -1208,7 +1226,10 @@
       "needs_bank": false,
       "plain": "Ze zápisu má být poznat, jak vznikl.",
       "example": "Zápis, který napsal model, se tváří jako terapeutův vlastní záznam.",
-      "example_positive": "Zápis uvádí, kdo ho vytvořil a z jakého materiálu."
+      "example_positive": "Zápis uvádí, kdo ho vytvořil a z jakého materiálu.",
+      "previous_wording": "Zápis nese informaci o okolnostech svého vzniku, například kdo a kdy ho psal.",
+      "reworded_on": "2026-10-23",
+      "why_reworded": "Reworded on 2026-10-23. The Czech dropped part of what the English definition says; this restores it. Found by a second session comparing every statement with its English definition."
     },
     "K17": {
       "name": "Informace o třetích osobách",
@@ -1226,7 +1247,7 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-22",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "U lidí, kteří nejsou klient, zápis rozlišuje, jestli je označí rolí, nebo je identifikuje.",
+      "statement": "U lidí, kteří nejsou klient a nedali souhlas, jde o to, kolik se o nich dá ze zápisu zjistit.",
       "question": "Nejde podle zápisu poznat osobu, která není klient?",
       "definition": "Údaje o lidech, kteří nejsou klient a nedali souhlas: partneři, děti, kolegové, další klienti ve skupině.",
       "unit": "jedna zmínka osoby",
@@ -1239,9 +1260,9 @@
       "plain": "Jak zápis zachází s lidmi, kteří nejsou klient.",
       "example": "Zápis uvádí partnerku jménem a s místem, kde pracuje.",
       "example_positive": "Klient popisuje konflikt s nadřízeným; zápis uvádí roli, ne jméno.",
-      "previous_wording": "Údaje o osobách, které nejsou klient, jsou uvedené rolí, ne identifikací.",
-      "reworded_on": "2026-10-22",
-      "why_reworded": "Reworded on 2026-10-22. It said that non-clients are given by role and not identified, which is a rule; the English is a topic and its measurement is the distinction between role and identification. The English applicability note says that in couple and group therapy the consent status of a third party changes the rule and not the relevance, so the Czech was asserting as settled what the source calls settable. The investigator saw it without reading the English."
+      "previous_wording": "U lidí, kteří nejsou klient, zápis rozlišuje, jestli je označí rolí, nebo je identifikuje.",
+      "reworded_on": "2026-10-23",
+      "why_reworded": "Reworded on 2026-10-23, the second time in a day. It read as a rule that non-clients are given by role and not identified, which the English leaves open; the morning's repair described what the measurement distinguishes rather than what a note has; and the second session's proposal, that the note gives only what its purpose needs, is almost word for word K15 and would have manufactured a duplicate in the week the panel is asked which two criteria are the same. This is the English's own shape, a topic. The first form of this repair was itself a noun phrase, which is the defect the same pass fixed in six other statements."
     },
     "K18": {
       "name": "Dohledatelnost ke zdroji",
@@ -1330,7 +1351,7 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-15",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "Zápis dodržel, co zadání výslovně žádalo: oddíly, délku, jazyk.",
+      "statement": "Zápis dodržel, co zadání výslovně stanovilo: oddíly, délku, jazyk i to, co v něm být nesmí.",
       "question": "Dodržel model zadaný formát, délku, jazyk?",
       "definition": "Zápis dodržel, co zadání výslovně žádalo: sekce, délku, jazyk, zakázané prvky.",
       "unit": "celý zápis",
@@ -1342,7 +1363,10 @@
       "needs_bank": false,
       "plain": "Jestli zápis dodržel, co po něm zadání chtělo.",
       "example": "Zápis překročil povolený počet slov.",
-      "example_positive": "Zápis má všechny čtyři požadované nadpisy."
+      "example_positive": "Zápis má všechny čtyři požadované nadpisy.",
+      "previous_wording": "Zápis dodržel, co zadání výslovně žádalo: oddíly, délku, jazyk.",
+      "reworded_on": "2026-10-23",
+      "why_reworded": "Reworded on 2026-10-23. The Czech dropped part of what the English definition says; this restores it. Found by a second session comparing every statement with its English definition."
     },
     "K21": {
       "name": "Převzetí péče ze zápisu",
@@ -1392,7 +1416,7 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-15",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "Kolik a jakých zásahů musí odborník udělat, než je zápis použitelný.",
+      "statement": "Než odborník zápis použije, stačí mu udělat jen málo drobných úprav.",
       "question": "Kolik toho musí odborník přepsat, než je zápis použitelný?",
       "definition": "Kolik a jakých zásahů musí odborník udělat, než je zápis použitelný. Typ úpravy nese informaci, kterou skóre nemá.",
       "unit": "jedna úprava",
@@ -1404,7 +1428,10 @@
       "needs_bank": false,
       "plain": "Kolik práce dá zápis opravit, než se dá použít.",
       "example": "Terapeut zápis přijme, ale předtím přepíše tři oddíly ze čtyř.",
-      "example_positive": "Terapeut opraví jednu formulaci."
+      "example_positive": "Terapeut opraví jednu formulaci.",
+      "previous_wording": "Kolik a jakých zásahů musí odborník udělat, než je zápis použitelný.",
+      "reworded_on": "2026-10-23",
+      "why_reworded": "Reworded on 2026-10-23. The column is headed 'in one sentence' and this was a noun phrase, so it named the subject of the question instead of stating the property."
     },
     "K23": {
       "name": "Přijatelnost pro praxi",
@@ -1423,7 +1450,7 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-15",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "Zda by si odborník zápis vzal do vlastní praxe a dál používal systém, který ho vytvořil.",
+      "statement": "Odborník by zápis použil ve vlastní praxi a systém, který ho vytvořil, by dál používal.",
       "question": "Použil by odborník takový zápis u sebe?",
       "definition": "Zda by si odborník vzal zápis do vlastní praxe a dál používal systém, který ho vytvořil, a když ne, proč. Otázka je o používání, ne o vyúčtování a ne o pojišťovně. Odpovídá se na šesti parametrech, které MentalCLOUDS převzal z rámce pro přijímání zdravotnických intervencí: citový postoj, zátěž, etickost, srozumitelnost, náklady obětované příležitosti a vnímaná účinnost. Vlastností textu je z nich jen ta srozumitelnost; zbylých pět je o tom, co stojí s tím pracovat.",
       "unit": "celý zápis, jeden hodnotitel",
@@ -1436,7 +1463,10 @@
       "needs_bank": false,
       "plain": "Jestli by odborník takový zápis u sebe v praxi použil.",
       "example": "Zápis je věcně správný, a terapeut ho přesto nepoužije, protože zkontrolovat ho stojí víc práce než napsat vlastní.",
-      "example_positive": "Terapeut by systém používal dál a tenhle zápis by založil tak, jak je."
+      "example_positive": "Terapeut by systém používal dál a tenhle zápis by založil tak, jak je.",
+      "previous_wording": "Zda by si odborník zápis vzal do vlastní praxe a dál používal systém, který ho vytvořil.",
+      "reworded_on": "2026-10-23",
+      "why_reworded": "Reworded on 2026-10-23. The column is headed 'in one sentence' and this was a noun phrase, so it named the subject of the question instead of stating the property."
     },
     "K24": {
       "name": "Porozumění ze strany klienta",
@@ -1454,7 +1484,7 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-15",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "Zda klient zápisu rozumí, pozná v něm své sezení a čtením mu to neublíží.",
+      "statement": "Klient rozumí shrnutí, které dostal, pozná v něm své sezení a čtení mu neublíží.",
       "question": "Rozumí tomu klient a pozná v tom své sezení?",
       "definition": "Zda klient shrnutí rozumí, pozná v něm své sezení a čtením mu to neublíží.",
       "unit": "celý zápis, jeden klient",
@@ -1467,11 +1497,9 @@
       "plain": "Jestli klient svému shrnutí rozumí a pozná se v něm.",
       "example": "Klient najde ve shrnutí tvrzení o sobě, ve kterém se nepoznává.",
       "example_positive": "Klient si shrnutí přečte a potvrdí, že odpovídá tomu, co prožil.",
-      "previous_wording": {
-        "statement": "Zda klient zápis rozumí, pozná v něm své sezení a čtením mu to neublíží."
-      },
-      "reworded_on": "2026-10-22",
-      "why_reworded": "Sloveso rozumět se pojí s 3. pádem; věta měla „zápis“ místo „zápisu“."
+      "previous_wording": "Zda klient zápisu rozumí, pozná v něm své sezení a čtením mu to neublíží.",
+      "reworded_on": "2026-10-23",
+      "why_reworded": "Reworded on 2026-10-23. The column is headed 'in one sentence' and this was a noun phrase, so it named the subject of the question instead of stating the property. It also said 'the note', where this criterion is about the summary a client is given."
     },
     "K25": {
       "name": "Podpora supervize",
@@ -1489,7 +1517,7 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-15",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "Zda supervizor ze zápisu pozná, co terapeut dělal, proč, a kde si nebyl jistý.",
+      "statement": "Supervizor ze zápisu pozná, co terapeut dělal, proč to dělal a kde si nebyl jistý.",
       "question": "Pozná supervizor, co terapeut dělal a proč?",
       "definition": "Zda supervizor ze zápisu pozná, co terapeut dělal, proč, a kde si nebyl jistý.",
       "unit": "celý zápis, jeden supervizor",
@@ -1501,7 +1529,10 @@
       "needs_bank": false,
       "plain": "Jestli je v zápisu i to, co dělal terapeut, ne jen o čem se mluvilo.",
       "example": "Zápis popisuje obsah sezení, ale ne to, co terapeut udělal.",
-      "example_positive": "Supervizor rozpozná zvolenou intervenci a klientovu reakci na ni."
+      "example_positive": "Supervizor rozpozná zvolenou intervenci a klientovu reakci na ni.",
+      "previous_wording": "Zda supervizor ze zápisu pozná, co terapeut dělal, proč, a kde si nebyl jistý.",
+      "reworded_on": "2026-10-23",
+      "why_reworded": "Reworded on 2026-10-23. The column is headed 'in one sentence' and this was a noun phrase, so it named the subject of the question instead of stating the property."
     },
     "K26": {
       "name": "Soulad napříč sezeními",
@@ -1617,7 +1648,7 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-22",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "Kolik klinicky podstatného obsahu zápis nese na jednotku textu.",
+      "statement": "Zápis má na svou délku hodně klinicky podstatného obsahu.",
       "question": "Kolik informace nese zápis na svou délku?",
       "definition": "Kolik klinicky podstatného obsahu zápis nese na jednotku textu. Ne délka a ne úspornost: poměr mezi nesenou informací a spotřebovaným místem.",
       "unit": "celý zápis",
@@ -1630,7 +1661,10 @@
       "needs_bank": true,
       "plain": "Kolik různých informací zápis nese na jednotku délky.",
       "example": "Dvě stránky textu, ve kterých je tolik klinicky podstatného, co by se vešlo na půl stránky.",
-      "example_positive": "Dva zápisy stejné délky; jeden nese devět podstatných informací, druhý čtyři."
+      "example_positive": "Dva zápisy stejné délky; jeden nese devět podstatných informací, druhý čtyři.",
+      "previous_wording": "Kolik klinicky podstatného obsahu zápis nese na jednotku textu.",
+      "reworded_on": "2026-10-23",
+      "why_reworded": "Reworded on 2026-10-23. The column is headed 'in one sentence' and this was a noun phrase, so it named the subject of the question instead of stating the property."
     },
     "K30": {
       "name": "Jazyková přirozenost",
@@ -1768,14 +1802,17 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-15",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "Zápis používá odborné termíny a používá je pro to, co znamenají.",
+      "statement": "Zápis používá odborné termíny tam, kde mají klinický význam, používá je ve správném smyslu a žádný nepoužívá bez opory v sezení.",
       "question": "Používá zápis odborné termíny, a správně?",
       "unit": "jeden termín",
       "ranking_role": "not_measured_yet",
       "needs_bank": false,
       "plain": "Jestli zápis používá odborné termíny správně.",
       "example": "Zápis nazve popsané obavy panickou atakou, ačkoli sezení panickou ataku nepopisuje.",
-      "example_positive": "Zápis píše, že klient uvádí časné buzení a ztrátu zájmu, a to druhé nazývá anhedonií tam, kde to obsah sezení podpírá."
+      "example_positive": "Zápis píše, že klient uvádí časné buzení a ztrátu zájmu, a to druhé nazývá anhedonií tam, kde to obsah sezení podpírá.",
+      "previous_wording": "Zápis používá odborné termíny a používá je pro to, co znamenají.",
+      "reworded_on": "2026-10-23",
+      "why_reworded": "Reworded on 2026-10-23. The Czech dropped part of what the English definition says; this restores it. Found by a second session comparing every statement with its English definition."
     },
     "K35": {
       "name": "Zachycení interakce z obou stran",
@@ -1811,7 +1848,7 @@
     },
     "K37": {
       "name": "Správnost čísel",
-      "statement": "Čísla v zápisu odpovídají tomu, co v sezení zaznělo.",
+      "statement": "Čísla v zápisu odpovídají číslům ve zdroji.",
       "question": "Uvádí zápis stejná čísla, jaká zazněla?",
       "unit": "jedno číslo",
       "why_not_measured": "Chybí pravidlo měření. Není napsané, která čísla se počítají a co dělat s neurčitým množstvím, které zápis uvede jako přesné.",
@@ -1830,15 +1867,13 @@
       "plain": "Jestli čísla v zápisu sedí s tím, co v sezení zaznělo.",
       "example": "V přepisu jsou dvě vynechané dávky, zápis uvádí čtyři.",
       "example_positive": "V přepisu klient za poslední měsíc vynechal dvě dávky; zápis uvádí dvě.",
-      "reworded_on": "2026-10-22",
-      "why_reworded": "Název pojmenovával vadu, ne vlastnost dobrého zápisu, a arch se u všech kritérií ptá stejně: je tato vlastnost podstatná pro kvalitu zápisu? U čtyř kritérií z třiceti devíti se tak otázka obracela a hodnotitel ji musel v hlavě převracet. Anglický název v katalogu zůstává, protože je převzatý ze zdroje.",
-      "previous_wording": {
-        "name": "Číselná odchylka"
-      }
+      "reworded_on": "2026-10-23",
+      "why_reworded": "Reworded on 2026-10-23. It compared with what was said in the session, where the English compares with the source. The difference matters here: a transcription error is K39's, not this criterion's, and 'what was said' makes the two collide.",
+      "previous_wording": "Čísla v zápisu odpovídají tomu, co v sezení zaznělo."
     },
     "K38": {
       "name": "Správnost jmen a institucí",
-      "statement": "Jména, instituce a odesílatel v zápisu odpovídají zdroji.",
+      "statement": "Jména osob a institucí, odesílatel, příbuzenské vztahy, léky a místa v zápisu odpovídají zdroji.",
       "question": "Je v zápisu správné jméno, instituce a odesílatel?",
       "unit": "jedna pojmenovaná entita",
       "why_not_measured": "Chybí pravidlo měření. U češtiny se navíc musí porovnávat základní tvary, jinak každé správně skloňované jméno vyjde jako odchylka.",
@@ -1857,11 +1892,9 @@
       "plain": "Jestli jména, instituce a odesílatel sedí se zdrojem.",
       "example": "Zápis uvede, že klientku Janu odeslal psychiatr, ačkoli šlo o sestru Hanu a o praktického lékaře.",
       "example_positive": "Klient mluví o sestře Haně a o doporučení od praktického lékaře; zápis uvádí sestru Hanu a doporučení od praktického lékaře.",
-      "reworded_on": "2026-10-22",
-      "why_reworded": "Název pojmenovával vadu, ne vlastnost dobrého zápisu, a arch se u všech kritérií ptá stejně: je tato vlastnost podstatná pro kvalitu zápisu? U čtyř kritérií z třiceti devíti se tak otázka obracela a hodnotitel ji musel v hlavě převracet. Anglický název v katalogu zůstává, protože je převzatý ze zdroje.",
-      "previous_wording": {
-        "name": "Záměna jména nebo instituce"
-      }
+      "reworded_on": "2026-10-23",
+      "why_reworded": "Reworded on 2026-10-23. The Czech dropped part of what the English definition says; this restores it. Found by a second session comparing every statement with its English definition.",
+      "previous_wording": "Jména, instituce a odesílatel v zápisu odpovídají zdroji."
     },
     "K39": {
       "name": "Nepřebírání chyb ze zdroje",

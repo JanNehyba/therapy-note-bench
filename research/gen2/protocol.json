@@ -1,6 +1,6 @@
 {
   "id": "therapy-note-construct-review",
-  "version": "2.24.0",
+  "version": "2.25.0",
   "status": "protocol_amended_before_pilot_search_partially_executed",
   "recorded_date": "2026-10-14",
   "design": "Instrument development informed by a systematic scoping review, expert proposals and empirical observations",
@@ -319,8 +319,8 @@
     "review_completion": "Only executed searches and verified decisions count as completed; blocked sources remain named gaps",
     "scope": "Report selected and required methods, planned/applicable/assessed units, and incomplete critical-error assessment even in public aggregates"
   },
-  "supersedes": "2.23.0",
-  "amendment_reason": "D32: the rating tab is the table and nothing else, and the three open questions move to the legend, two of them answered in the note beside the row they are about.",
+  "supersedes": "2.24.0",
+  "amendment_reason": "D33: eighteen Czech statements rewritten to say what their English definitions say, before any sheet was sent, because nothing had ever compared the two and fifteen of them had dropped part of the definition.",
   "retrieval_gaps": "Record reports not retrieved separately from full-text eligibility exclusions; unavailable databases remain named gaps",
   "expert_inputs": "May enter throughout development. Later support does not rewrite historical origin; author or colleague proposals do not imply consensus.",
   "registration": {
@@ -797,6 +797,23 @@
       "what_is_lost": "An answer in the note is attached to one criterion, so a rater who sees a gaming shape across two of them has to pick a row. Under the table the answer was free of any row. Nothing measures how often that happens.",
       "and_this_is_the_second_move_for_one_of_them": "D24 took the gaming question out of the table because a column of thirty-nine cells meant thirty-eight empty ones a rater had to carry a second question through. This puts its answer back beside the row and adds nothing to fill in: the note column already existed and was already optional, and what changed is that the legend now says what it is for.",
       "not_decided_here": "How an answer in a note is read back. A note may hold a gaming shape, a duplicate pair, or anything else the rater thought; separating them is reading, and the retention rule already says the harm flag reads prose."
+    },
+    {
+      "id": "D33",
+      "date": "2026-10-23",
+      "origin": "assistant",
+      "decision": "Eighteen of the forty-eight Czech statements were rewritten to say what their English definition says, before any sheet was sent. Fifteen had dropped part of the definition and six were noun phrases in a column headed 'in one sentence'; three criteria are in both groups.",
+      "replaces": "Czech statements that said less than the English definitions they were translated from, and that nothing had ever been checked against them",
+      "affects": [
+        "the statement column of the panel sheet, which is one of three fields a rater reads",
+        "K01, K03, K07, K08, K09, K10, K14, K16, K17, K20, K22, K23, K24, K25, K29, K34, K37, K38"
+      ],
+      "why": "czech_problems() asks that the Czech names the same codes as the catalog and leaves no required field empty. It cannot ask whether a sentence means what the English means, and nothing else did either, so the drift was invisible until a second session read the two side by side.",
+      "what_was_restored": "The intent and the plan in K03; the questioning of a client's credibility and the reduction to behaviour in K14; medicines, places and family relations in K38; the second half of the definition in K09, that a connection must also fit the note's purpose; what a note may not contain in K20; and in K08 the topic list, where suicidal ideation was narrower than suicidality and abuse alone read as substance abuse.",
+      "two_are_more_than_restoration": "K01 and K37 compared with what was said in the session where the English compares with the source. For K37 that collided with K39: an error the transcript already carried is K39's, and 'what was said' made the two the same criterion.",
+      "k17_was_reworded_twice_and_a_proposal_refused": "Its Czech asserted that non-clients are given by role and not identified, which the English leaves open; the first repair described what the measurement distinguishes rather than what a note has; and the second session proposed that the note gives only what its purpose needs, which is almost word for word K15. That was refused: the panel is at this moment asked which two criteria are the same thing, and a duplicate manufactured this week would be a finding we had planted. What stands is the English's own shape, a topic.",
+      "what_this_does_not_fix": "The English catalog against the papers it rests on. The same session found that K05 draws the opposite conclusion from the sentence it quotes, which is confirmed and repaired separately, and that K11 and K03 may misread PDSQI-9 and PDQI-9, which cannot be checked without those papers and is recorded as unverified until they are read. It also does not cover K40 to K48.",
+      "not_decided_here": "Whether a check can be built for this class at all. Two sentences meaning the same thing in two languages is not computable, and the honest answer may be that this needs a second reader each time the Czech changes."
     }
   ],
   "content_validity": {

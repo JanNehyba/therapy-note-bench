@@ -114,9 +114,9 @@
     }
   },
   "protocol": {
-    "version": "2.24.0",
+    "version": "2.25.0",
     "recorded_date": "2026-10-14",
-    "supersedes": "2.23.0",
+    "supersedes": "2.24.0",
     "archived": [
       "1.0.0",
       "2.0.0",
@@ -142,7 +142,8 @@
       "2.20.0",
       "2.21.0",
       "2.22.0",
-      "2.23.0"
+      "2.23.0",
+      "2.24.0"
     ],
     "status": "protocol_amended_before_pilot_search_partially_executed",
     "pilot_status": "not_run",
