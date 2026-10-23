@@ -14,6 +14,22 @@ it does for every other script here, so this file stays public-safe.
 
 Writes into a gitignored directory: the sheets go to people, and what comes back
 is answers about an instrument, which belong in the record and not in a view.
+
+**Three things are not in this table and a rebuild has to carry them by hand.**
+All three were wrong in a live workbook on 2026-10-23 and none was a value, so
+comparing the sheet with this file would not have found any of them.
+
+* **Merges.** The old layout merged each question under the table across the
+  row. When the list grew from thirty-nine criteria to forty-eight those merges
+  landed inside it and swallowed columns B to E, because a merged range shows
+  its top-left cell and nothing else. Two writes into them returned success and
+  changed nothing. Unmerge the whole rating range before writing it.
+* **Formatting.** Those question rows were bold, and unmerging leaves the bold.
+  Normalise the body after a rebuild; the header row is the only bold one.
+* **Data validation.** The answer column's dropdown does not travel with a
+  value write and had gone from three rows of one tab, where a rater would have
+  typed free text into the column the retention rule reads. Set it over the
+  whole rating range, and read one cell back.
 """
 
 from __future__ import annotations

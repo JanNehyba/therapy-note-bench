@@ -3,7 +3,7 @@
   "marker": "AUTHORED-INVESTIGATOR-TEXT",
   "what_this_is": "Every finding re-derived from the files it is about. Nothing here is written down as a finding: a finding that stops being true disappears from this file, and a new one appears without anybody noticing it first.",
   "what_it_cannot_do": "Four classes cannot be computed: two prose sentences contradicting each other, the present tense used of something not run, a claim buried in a field meant for something else, and a convention with no source. They are listed under found_by_reading with their evidence, and reading is not exhaustive.",
-  "claim_bearing_files_scanned": 142,
+  "claim_bearing_files_scanned": 143,
   "not_scanned": {
     "research/gen2/audit.py": "the checker",
     "research/gen2/audit-findings.json": "its report, which quotes what it found"
@@ -11,7 +11,7 @@
   "counts": {
     "live": 0,
     "in_dated_records": 1,
-    "to_triage": 20,
+    "to_triage": 24,
     "by_check": {}
   },
   "live": [],
@@ -82,6 +82,26 @@
       "path": "research/gen2/catalog/catalog.json:2543",
       "says": 20,
       "line": "\"origin_note\": \"The PDQI-9 attribute 'Internally consistent' (S4, as reproduced in S6, Table 1). PDSQI-9 removed it as redundant (S2). The s"
+    },
+    {
+      "path": "research/gen2/catalog/language-source-check-2026-10-22.json:4",
+      "says": 39,
+      "line": "\"what_this_is\": \"A check of whether the Czech text of each candidate says what its English entry says (all 39 candidates), and whether the E"
+    },
+    {
+      "path": "research/gen2/catalog/language-source-check-2026-10-22.json:4",
+      "says": 12,
+      "line": "\"what_this_is\": \"A check of whether the Czech text of each candidate says what its English entry says (all 39 candidates), and whether the E"
+    },
+    {
+      "path": "research/gen2/catalog/language-source-check-2026-10-22.json:6",
+      "says": 39,
+      "line": "\"level_1\": \"all 39 candidates, every Czech field against the English field(s) it renders, and the Czech of each measurement rule against its"
+    },
+    {
+      "path": "research/gen2/catalog/language-source-check-2026-10-22.json:23",
+      "says": 27,
+      "line": "\"not_checked\": \"Sources of the 27 candidates without a rule this round: unchecked, not passed.\","
     },
     {
       "path": "research/gen2/catalog/source-properties.json:199",
