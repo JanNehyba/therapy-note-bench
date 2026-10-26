@@ -239,6 +239,13 @@ def overview(czech: dict, codes: list[str]) -> list[list[str]]:
     for code in order(codes):
         entry = czech["candidates"][code]
         out.append([code, entry["name"], entry["statement"], ""])
+    # The question about what the list is missing sits under the list. It was on
+    # the legend from 2026-10-23, where it went when it was cut from under the
+    # rating table, and the investigator read its "napiste sem" and said what the
+    # sentence had been saying all along: the question is about the list of
+    # criteria, so it belongs with the list rather than three tabs away from it.
+    out.append([])
+    out.extend(list(row) for row in sheet["overview_tail"])
     return out
 
 
@@ -280,7 +287,10 @@ def main() -> int:
         name = f"hodnoceni-{rater['surname']}-legenda.csv"
         (OUT_DIR / name).write_text(as_csv(legend(czech, codes)), encoding="utf-8")
         written += 1
-        name = f"hodnoceni-{rater['surname']}-prehled.csv"
+        # The tab's own name is in the data, because the investigator renamed it
+        # in his workbook and the builder follows him rather than the reverse.
+        tab = czech["panel_sheet"]["overview_tab_name"].lower()
+        name = f"hodnoceni-{rater['surname']}-{tab}.csv"
         (OUT_DIR / name).write_text(as_csv(overview(czech, codes)), encoding="utf-8")
         written += 1
     (OUT_DIR / "poradi.json").write_text(

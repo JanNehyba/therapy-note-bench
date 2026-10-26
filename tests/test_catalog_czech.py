@@ -642,11 +642,11 @@ def test_every_rater_gets_their_own_file_for_each_purpose(tmp_path, monkeypatch)
         "hodnoceni-1-1-progress_note.csv",
         "hodnoceni-1-2-therapeutic_note.csv",
         "hodnoceni-1-legenda.csv",
-        "hodnoceni-1-prehled.csv",
+        "hodnoceni-1-podobnost.csv",
         "hodnoceni-2-1-progress_note.csv",
         "hodnoceni-2-2-therapeutic_note.csv",
         "hodnoceni-2-legenda.csv",
-        "hodnoceni-2-prehled.csv",
+        "hodnoceni-2-podobnost.csv",
     ]
     # Same purpose, same questions: two raters get identical files.
     for purpose in ("progress_note", "therapeutic_note"):
@@ -662,7 +662,7 @@ def test_every_rater_gets_their_own_file_for_each_purpose(tmp_path, monkeypatch)
     tabs = ("progress_note.csv", "therapeutic_note.csv")
     rating = [name for name in written if name.endswith(tabs)]
     assert len({(tmp_path / name).read_bytes() for name in rating}) == 1
-    for suffix in ("legenda.csv", "prehled.csv"):
+    for suffix in ("legenda.csv", "podobnost.csv"):
         shared = [name for name in written if name.endswith(suffix)]
         assert len(shared) == 2, suffix
         assert len({(tmp_path / name).read_bytes() for name in shared}) == 1, suffix

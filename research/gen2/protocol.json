@@ -1,6 +1,6 @@
 {
   "id": "therapy-note-construct-review",
-  "version": "2.26.0",
+  "version": "2.27.0",
   "status": "protocol_amended_before_pilot_search_partially_executed",
   "recorded_date": "2026-10-14",
   "design": "Instrument development informed by a systematic scoping review, expert proposals and empirical observations",
@@ -319,8 +319,8 @@
     "review_completion": "Only executed searches and verified decisions count as completed; blocked sources remain named gaps",
     "scope": "Report selected and required methods, planned/applicable/assessed units, and incomplete critical-error assessment even in public aggregates"
   },
-  "supersedes": "2.25.0",
-  "amendment_reason": "D34: twenty-three Czech fields on seventeen criteria rewritten after the investigator read all forty-eight aloud, one at a time, before any sheet was sent. D35: a third tab carrying the whole list on one screen with a column for naming a duplicate, which returns the duplicate answer to a field after four days as prose.",
+  "supersedes": "2.26.0",
+  "amendment_reason": "D36: the legend halved, the overview tab renamed Podobnost and moved last, and the question about what the list is missing moved from the legend to under that list.",
   "retrieval_gaps": "Record reports not retrieved separately from full-text eligibility exclusions; unavailable databases remain named gaps",
   "expert_inputs": "May enter throughout development. Later support does not rewrite historical origin; author or colleague proposals do not imply consensus.",
   "registration": {
@@ -852,6 +852,21 @@
       "what_it_restores": "On 2026-10-22 the sheet stopped asking for the criterion's code, and retention_rule records the cost: the flag became the investigator's reading of prose rather than a field. The column restores the code without restoring the instruction that was cut, because the rater writes it where the whole list is in front of them.",
       "what_this_does_not_do": "It merges nothing and reports nothing differently. The protocol's rule stands: a pair any rater names is reported with their wording, a pair two or more name is published as a candidate duplicate beside what the catalog records, and nothing is merged in this round.",
       "not_decided_here": "Whether the overview tab's column or the legend's note is the primary record when a rater fills in only one. Both are published; nothing weights them."
+    },
+    {
+      "id": "D36",
+      "date": "2026-10-26",
+      "origin": "investigator",
+      "decision": "The legend's twelve sentences go from 1944 characters to 1080. The overview tab is renamed Podobnost and sits last. Its intro goes from four sentences to one. The question about what the list is missing moves from the legend to under that list.",
+      "replaces": "A legend twice as long as it needed to be, a four-sentence introduction to a tab whose content is visible under it, and a question about the list of criteria asked three tabs away from the list",
+      "affects": [
+        "the legend tab, which is what a rater reads while answering",
+        "where the missing question is asked, which the content validity section records per question",
+        "vocabulary.relevance_scale and relevance_no_answer, whose anchors are on the legend"
+      ],
+      "why": "He read the legend as a rater meets it: a page of prose in front of somebody who came to answer ninety-six questions. Every sentence on it had been written to be defensible and several had been written twice. On the missing question he read 'napiste sem' and said what the sentence had been saying all along, that the question is about the list of criteria.",
+      "what_did_not_shrink": "The anchors stay sentences. Two were cut to six and seven words and the suite refused them: a step of the scale with no sentence under it measures agreement on an adjective, which is the fault the anchors were added to repair. They were lengthened rather than the threshold lowered.",
+      "not_decided_here": "Whether the worked example under the note column is still needed. It is the longest thing left on the legend at 171 characters and it is the only place the sheet shows what gaming a criterion looks like."
     }
   ],
   "content_validity": {
@@ -920,7 +935,7 @@
           "free text, once per rater, not per item"
         ],
         "effect": "a property named here enters the pool as a candidate with the rater as its origin, and is rated in a second round if the panel is asked again. The question itself is Lynn's (1986) recommendation, 'The experts, in addition to judging each item, should identify any area(s) that have been omitted from the instrument', which this project had written without knowing.",
-        "where_it_is_asked": "On the legend, not under the table. The rating tab is the header and one row per candidate and nothing else since 2026-10-23. The two questions about a particular criterion are explained under the note column and answered in the note beside the row they are about; the question about what the list is missing has no row to attach to and keeps its own space at the bottom of the legend."
+        "where_it_is_asked": "Under the table on the Podobnost tab since 2026-10-26, which is the list of criteria it asks about. It was on the legend from 2026-10-23, where it went when it was cut from under the rating table, and the investigator read its 'napiste sem' and said the question is about the list, so it belongs with the list. The two questions about a particular criterion are still answered in the note beside the row they are about."
       },
       {
         "id": "duplicates",

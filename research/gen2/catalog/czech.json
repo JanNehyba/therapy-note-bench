@@ -2468,18 +2468,83 @@
         "text": "Která dvě jsou to samé? Některá kritéria se částečně překrývají a to tak má být. Když vám ale dvě přijdou jako to samé, napište do poznámky u jednoho z nich kód toho druhého a v čem jsou podle vás stejná.",
         "until": "2026-10-26",
         "why": "Rewritten when the overview tab arrived. The line sent the answer about duplicates into the note column, which was the only place it could go while the rater had no way to see the list as a whole. The overview tab now holds a field for the code, so the line points there and keeps the note column for the reason."
+      },
+      {
+        "text": "Zápis, který z nahrávky nebo přepisu sezení napsala umělá inteligence. Část vlastností je o obsahu, část o jazyce a formě. Posuzujte je pro češtinu i angličtinu; pokud se to podle vás mezi jazyky liší, napište to do poznámky.",
+        "until": "2026-10-26",
+        "why": "Shortened on 2026-10-26. The investigator read the legend as a rater meets it and said it is twice as long as it needs to be."
+      },
+      {
+        "text": "Nepovinný. Kromě čehokoli dalšího, co vás u kritéria napadne, nás tam zajímají dvě věci.",
+        "until": "2026-10-26",
+        "why": "Shortened on 2026-10-26. The investigator read the legend as a rater meets it and said it is twice as long as it needs to be."
+      },
+      {
+        "text": "Jak by se to dalo obejít? Co se začne známkovat, na to se modely zaměří, a někdy jde získat dobrou známku, aniž by zápis za něco stál. Příklad: kritérium „Úspornost“ žádá, aby každá věta nesla podstatný obsah. Zápis, který má jedinou větu, dostane plný počet bodů, protože ta jedna věta podstatná je. Takže čím míň toho model napíše, tím líp dopadne. Když vás něco takového u některého kritéria napadne, napište to do poznámky u jeho řádku.",
+        "until": "2026-10-26",
+        "why": "Shortened on 2026-10-26. The investigator read the legend as a rater meets it and said it is twice as long as it needs to be."
+      },
+      {
+        "text": "Která dvě jsou to samé? Některá kritéria se částečně překrývají a to tak má být. Na to je list Přehled: jsou na něm všechna kritéria pohromadě a v posledním sloupci si u jednoho z dvojice poznamenáte kód toho druhého. Sem do poznámky napište, v čem jsou podle vás stejná.",
+        "until": "2026-10-26",
+        "why": "Shortened on 2026-10-26. The investigator read the legend as a rater meets it and said it is twice as long as it needs to be."
+      },
+      {
+        "text": "Tohle se k žádnému řádku neváže, takže to prosím napište sem: vlastnost, kterou by dobrý zápis měl mít a která v seznamu není. Klidně víc věcí, každou na nový řádek.",
+        "until": "2026-10-26",
+        "why": "Shortened on 2026-10-26. The investigator read the legend as a rater meets it and said it is twice as long as it needs to be."
+      },
+      {
+        "text": "Průběžný zápis do dokumentace: čte ho tým, který přebírá péči, a klient na něj má právo přístupu.",
+        "until": "2026-10-26",
+        "why": "Shortened on 2026-10-26. The investigator read the legend as a rater meets it and said it is twice as long as it needs to be."
+      },
+      {
+        "text": "Terapeutova vlastní poznámka: vaše analýza sezení, vedená odděleně od dokumentace.",
+        "until": "2026-10-26",
+        "why": "Shortened on 2026-10-26. The investigator read the legend as a rater meets it and said it is twice as long as it needs to be."
+      },
+      {
+        "text": "Zápis bez téhle vlastnosti je pořád dobrý zápis. Kdyby to nikdo neměřil, nic se neztratí.",
+        "until": "2026-10-26",
+        "why": "Shortened on 2026-10-26. The investigator read the legend as a rater meets it and said it is twice as long as it needs to be."
+      },
+      {
+        "text": "Je hezké to mít, ale když to chybí, není to vada.",
+        "until": "2026-10-26",
+        "why": "Shortened on 2026-10-26. The investigator read the legend as a rater meets it and said it is twice as long as it needs to be."
+      },
+      {
+        "text": "Dobrý zápis tohle má. Když to chybí, je to vada a mělo by se na ni upozornit.",
+        "until": "2026-10-26",
+        "why": "Shortened on 2026-10-26. The investigator read the legend as a rater meets it and said it is twice as long as it needs to be."
+      },
+      {
+        "text": "Bez tohohle je zápis pro svůj účel nepoužitelný, ať je zbytek jakkoli dobrý.",
+        "until": "2026-10-26",
+        "why": "Shortened on 2026-10-26. The investigator read the legend as a rater meets it and said it is twice as long as it needs to be."
+      },
+      {
+        "text": "Nedokážu to posoudit. Není to hlas pro ani proti. U téhle vlastnosti pak nebude odpověď od všech čtyř, takže se měřit nebude. Oproti prázdnému políčku je ale vidět, že jste ji četli.",
+        "until": "2026-10-26",
+        "why": "Shortened on 2026-10-26. The investigator read the legend as a rater meets it and said it is twice as long as it needs to be."
+      },
+      {
+        "text": "Přehled všech kritérií v tom pořadí, v jakém je máte na hodnoticím listu. Sem se můžete kdykoli vrátit, když budete mít pocit, že jste něco podobného už četli. Když vám dvě kritéria přijdou jako totéž, napište si u jednoho z nich do posledního sloupce kód toho druhého. Nepovinné, ale je to pro nás jedna z nejcennějších odpovědí.",
+        "until": "2026-10-26",
+        "why": "Shortened on 2026-10-26. The investigator read the legend as a rater meets it and said it is twice as long as it needs to be."
       }
     ],
     "purposes": {
       "progress_note": {
         "title": "Průběžný zápis do dokumentace",
         "maps_to_code": "continuity",
-        "legend_line": "Průběžný zápis do dokumentace: čte ho tým, který přebírá péči, a klient na něj má právo přístupu."
+        "legend_line": "Průběžný zápis do dokumentace: čte ho přebírající tým a klient do něj smí nahlížet."
       },
       "therapeutic_note": {
         "title": "Terapeutova vlastní poznámka",
         "maps_to_code": null,
-        "legend_line": "Terapeutova vlastní poznámka: vaše analýza sezení, vedená odděleně od dokumentace."
+        "legend_line": "Terapeutova vlastní poznámka: vaše analýza sezení, vedená mimo dokumentaci."
       }
     },
     "legend": [
@@ -2491,7 +2556,7 @@
         "Co posuzujete"
       ],
       [
-        "Zápis, který z nahrávky nebo přepisu sezení napsala umělá inteligence. Část vlastností je o obsahu, část o jazyce a formě. Posuzujte je pro češtinu i angličtinu; pokud se to podle vás mezi jazyky liší, napište to do poznámky."
+        "Zápis sezení, který napsala umělá inteligence. Kritéria jsou o obsahu i o jazyce. Posuzujte je pro češtinu i angličtinu; když se to mezi jazyky liší, napište to do poznámky."
       ],
       [],
       [
@@ -2512,20 +2577,20 @@
         "Sloupec „Poznámka“"
       ],
       [
-        "Nepovinný. Kromě čehokoli dalšího, co vás u kritéria napadne, nás tam zajímají dvě věci."
+        "Nepovinný. Zajímají nás dvě věci, ale napište cokoli."
       ],
       [
-        "Jak by se to dalo obejít? Co se začne známkovat, na to se modely zaměří, a někdy jde získat dobrou známku, aniž by zápis za něco stál. Příklad: kritérium „Úspornost“ žádá, aby každá věta nesla podstatný obsah. Zápis, který má jedinou větu, dostane plný počet bodů, protože ta jedna věta podstatná je. Takže čím míň toho model napíše, tím líp dopadne. Když vás něco takového u některého kritéria napadne, napište to do poznámky u jeho řádku."
+        "Jak by se dalo kritérium obejít? Model se zaměří na to, co se známkuje. Třeba „Úspornost“ žádá, aby každá věta nesla podstatný obsah: zápis o jediné větě ji splní dokonale."
       ],
       [
-        "Která dvě jsou to samé? Některá kritéria se částečně překrývají a to tak má být. Na to je list Přehled: jsou na něm všechna kritéria pohromadě a v posledním sloupci si u jednoho z dvojice poznamenáte kód toho druhého. Sem do poznámky napište, v čem jsou podle vás stejná."
+        "V čem jsou si dvě kritéria podobná? Dvojici označte kódem na listu Podobnost, důvod napište sem."
       ],
       [],
       [
         "Co v seznamu chybí?"
       ],
       [
-        "Tohle se k žádnému řádku neváže, takže to prosím napište sem: vlastnost, kterou by dobrý zápis měl mít a která v seznamu není. Klidně víc věcí, každou na nový řádek."
+        "Napište pod tabulku na listu Podobnost."
       ],
       [
         ""
@@ -2554,8 +2619,17 @@
       "Jednou větou",
       "Podobné s (kód)"
     ],
-    "overview_intro": "Přehled všech kritérií v tom pořadí, v jakém je máte na hodnoticím listu. Sem se můžete kdykoli vrátit, když budete mít pocit, že jste něco podobného už četli. Když vám dvě kritéria přijdou jako totéž, napište si u jednoho z nich do posledního sloupce kód toho druhého. Nepovinné, ale je to pro nás jedna z nejcennějších odpovědí.",
-    "overview_note": "Added on 2026-10-26. The investigator read all forty-eight criteria aloud and named nine pairs he thought were the same thing; all nine are pairs catalog.json already records in `overlaps`. He then asked the practical question the protocol does not answer: a rater meets the criteria in a shuffled order and cannot be expected to remember, forty rows later, that they read something like this before. His own proposal was to print our candidate pairs on the sheet, which would turn the duplicate question into a confirmation of our own reading. This tab is the alternative: the whole list on one screen, in the same order, with nothing grouped and nothing suggested, and a column the rater fills in as they go. It also restores what the sheet lost on 2026-10-22, when the question stopped asking for the code: the answer is a field again rather than prose that nothing asked to be machine-readable. The legend called it the third tab until the same day: the two rating tabs swap places between raters by design, so a position is not something the legend can promise."
+    "overview_intro": "Všechna kritéria pohromadě; když vám dvě přijdou jako totéž, napište si u jednoho z nich kód toho druhého.",
+    "overview_note": "Added on 2026-10-26. The investigator read all forty-eight criteria aloud and named nine pairs he thought were the same thing; all nine are pairs catalog.json already records in `overlaps`. He then asked the practical question the protocol does not answer: a rater meets the criteria in a shuffled order and cannot be expected to remember, forty rows later, that they read something like this before. His own proposal was to print our candidate pairs on the sheet, which would turn the duplicate question into a confirmation of our own reading. This tab is the alternative: the whole list on one screen, in the same order, with nothing grouped and nothing suggested, and a column the rater fills in as they go. It also restores what the sheet lost on 2026-10-22, when the question stopped asking for the code: the answer is a field again rather than prose that nothing asked to be machine-readable. The legend called it the third tab until the same day: the two rating tabs swap places between raters by design, so a position is not something the legend can promise. Renamed Podobnost and moved last by the investigator in his own workbook on 2026-10-26; the other three and the builder follow him. The question about what the list is missing moved here from the legend the same day: he read its 'napiste sem' and said the question is about the list of criteria, so it belongs under the list. The intro went from four sentences to one, because the tab explains itself.",
+    "overview_tail": [
+      [
+        "Co v seznamu chybí?"
+      ],
+      [
+        "Vlastnost, kterou by dobrý zápis měl mít a v seznamu není. Každou na nový řádek."
+      ]
+    ],
+    "overview_tab_name": "Podobnost"
   },
   "page": {
     "title": "Všechna kritéria v jedné tabulce",
@@ -2673,22 +2747,22 @@
     "relevance_scale": [
       {
         "label": "nepodstatné",
-        "anchor": "Zápis bez téhle vlastnosti je pořád dobrý zápis. Kdyby to nikdo neměřil, nic se neztratí.",
+        "anchor": "Zápis bez téhle vlastnosti je pořád dobrý zápis.",
         "counts_as_essential": false
       },
       {
         "label": "málo podstatné",
-        "anchor": "Je hezké to mít, ale když to chybí, není to vada.",
+        "anchor": "Je hezké to mít, ale když to chybí, nic se neděje.",
         "counts_as_essential": false
       },
       {
         "label": "podstatné",
-        "anchor": "Dobrý zápis tohle má. Když to chybí, je to vada a mělo by se na ni upozornit.",
+        "anchor": "Dobrý zápis tohle má; když chybí, je to vada.",
         "counts_as_essential": true
       },
       {
         "label": "velmi podstatné",
-        "anchor": "Bez tohohle je zápis pro svůj účel nepoužitelný, ať je zbytek jakkoli dobrý.",
+        "anchor": "Bez tohohle je zápis nepoužitelný, ať je zbytek jakkoli dobrý.",
         "counts_as_essential": true
       }
     ],
@@ -2698,7 +2772,7 @@
     },
     "relevance_no_answer": {
       "label": "nevím",
-      "anchor": "Nedokážu to posoudit. Není to hlas pro ani proti. U téhle vlastnosti pak nebude odpověď od všech čtyř, takže se měřit nebude. Oproti prázdnému políčku je ale vidět, že jste ji četli.",
+      "anchor": "Nedokážu posoudit. Kritérium se pak nebude měřit, ale je vidět, že jste ho četli.",
       "counts_as": "missing"
     }
   },
