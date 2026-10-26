@@ -819,7 +819,7 @@
       "id": "D34",
       "date": "2026-10-26",
       "origin": "investigator",
-      "decision": "Twenty-three Czech fields on seventeen criteria were rewritten before any sheet was sent, after the investigator read all forty-eight criteria aloud in the order a rater meets them and judged each for Czech and for whether a therapist would understand it. Twenty-five criteria passed unchanged.",
+      "decision": "Twenty-three Czech fields on seventeen criteria were rewritten before any sheet was sent, after the investigator read all forty-eight criteria aloud in the order a rater meets them and judged each for Czech and for whether a therapist would understand it. Twenty-eight criteria he passed without an objection and thirty-one are unchanged: four he had passed were touched anyway by the two instructions he gave for the whole set, and seven he objected to keep their text, because his objection there was about substance or about a duplicate and neither is repaired by rewriting a sentence.",
       "replaces": "Czech that was grammatical but not what a Czech speaker would say, five statements that described the defect instead of the property, and six that said 'zdroj' where the thing meant is the session transcript",
       "affects": [
         "the name and statement columns of the panel sheet, two of the three fields a rater reads",
@@ -833,7 +833,8 @@
       },
       "two_names_changed": "K02 is now 'Kdo co rekl v prepisu', his wording, and its statement separates what was said in the session from what came out of older records, because the old one listed a document beside three people as though it had spoken. K41's 'Fluence' was itself a calque, which is what K48 on the same sheet is about, and he caught it; it is 'Plynulost', and the comprehension threshold moved from the name into the sentence.",
       "what_this_does_not_fix": "Three criteria he objected to on substance are untouched. K08 does not describe a property of a note but the weight of an error in one part of it; K16 is a fact about how the note came to exist rather than about its content; K35 he reads as a rule about form. All three are recorded and none is changed, because relevance is the question the panel is being asked and answering it ourselves would empty the round.",
-      "not_decided_here": "Whether any criteria merge. Nine pairs he named as the same thing are nine pairs the catalog already records in `overlaps`, and that agreement is a result only if the panel answers independently. See D35."
+      "not_decided_here": "Whether any criteria merge. Nine pairs he named as the same thing are nine pairs the catalog already records in `overlaps`, and that agreement is a result only if the panel answers independently. See D35.",
+      "counted_on": "Corrected the same day. 'Twenty-five' was typed from memory and no artefact held it; research/gen2/catalog/panel-read-aloud-2026-10-26.json holds all forty-eight answers and the counts are derived from it."
     },
     {
       "id": "D35",

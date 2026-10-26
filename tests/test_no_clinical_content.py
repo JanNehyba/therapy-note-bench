@@ -61,6 +61,7 @@ DECISIONS = "research/gen2/decisions.json"
 REVIEW_RECORD = "research/gen2/review-record.json"
 EXPERT = "research/gen2/expert-input.json"
 LANGUAGE_CHECK = "research/gen2/catalog/language-source-check-2026-10-22.json"
+READ_ALOUD = "research/gen2/catalog/panel-read-aloud-2026-10-26.json"
 CORE = "packages/therapy-note-eval-core/src/therapy_note_eval/"
 ALLOWED_CZECH: dict[str, str] = {
     CORE + "profiles.py": "Original bilingual profile instructions",
@@ -91,6 +92,9 @@ ALLOWED_CZECH: dict[str, str] = {
     "into English would no longer be what the reviewer said",
     EXPERT: "AUTHORED-INVESTIGATOR-TEXT: the investigator's clinical input to the instrument, "
     "dated, because the inductive half of item generation is legitimate only if declared",
+    READ_ALOUD: "AUTHORED-INSTRUMENT-TEXT: the investigator's own answers reading the "
+    "forty-eight criteria aloud, so it quotes the instrument's Czech and his Czech about it. "
+    "It quotes no note and no client",
     LANGUAGE_CHECK: "AUTHORED-INSTRUMENT-TEXT: the record of reading every Czech field "
     "against the English it renders, so it quotes the instrument's own Czech on both sides "
     "of each comparison. It quotes no note and states no criterion of its own",
@@ -220,6 +224,7 @@ def test_czech_exceptions_are_only_authored_gen2_resources(tracked_files):
         REVIEW_RECORD,
         EXPERT,
         LANGUAGE_CHECK,
+        READ_ALOUD,
     }
     # The bibliographic exception is a separate list with a separate rule, and
     # nothing published is on it.
@@ -231,6 +236,7 @@ def test_czech_exceptions_are_only_authored_gen2_resources(tracked_files):
     assert INSTRUMENT_MARKER in (REPO_ROOT / CATALOG_CZECH).read_text(encoding="utf-8")
     assert INSTRUMENT_MARKER in (REPO_ROOT / LANGUAGE_SET).read_text(encoding="utf-8")
     assert INSTRUMENT_MARKER in (REPO_ROOT / LANGUAGE_CHECK).read_text(encoding="utf-8")
+    assert INSTRUMENT_MARKER in (REPO_ROOT / READ_ALOUD).read_text(encoding="utf-8")
     assert "AUTHORED-INVESTIGATOR-TEXT" in (REPO_ROOT / DECISIONS).read_text(encoding="utf-8")
     assert "AUTHORED-INVESTIGATOR-TEXT" in (REPO_ROOT / REVIEW_RECORD).read_text(encoding="utf-8")
     assert "AUTHORED-INVESTIGATOR-TEXT" in (REPO_ROOT / EXPERT).read_text(encoding="utf-8")

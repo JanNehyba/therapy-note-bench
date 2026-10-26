@@ -1,0 +1,450 @@
+{
+ "marker": "AUTHORED-INSTRUMENT-TEXT",
+ "what_this_is": "Every answer the investigator gave reading all forty-eight criteria aloud on 2026-10-26, in the order a rater meets them, judging each for Czech and for whether a therapist would understand it.",
+ "why_it_exists": "The pairs he thought were the same thing are written down before the panel answers. Nine out of nine are pairs catalog.json already records, and that agreement is only a result if it was recorded in advance. A record written after the answers arrive is not a prediction.",
+ "what_it_is_not": "Not an instruction to the panel and not visible to them. The sheet carries no pair we believe in, which is decision D35: printing our candidates would ask the panel to agree with us rather than to answer.",
+ "date": "2026-10-26",
+ "protocol": "2.26.0",
+ "counts": {
+  "criteria_read": 48,
+  "passed_without_an_objection": 28,
+  "carried_a_finding": 20,
+  "text_changed": 17,
+  "text_unchanged": 31,
+  "changed_though_passed": [
+   "K01",
+   "K09",
+   "K37",
+   "K40"
+  ],
+  "finding_recorded_but_text_kept": [
+   "K07",
+   "K08",
+   "K16",
+   "K17",
+   "K23",
+   "K35",
+   "K42"
+  ],
+  "merge_proposals": 7,
+  "substance_objections_recorded_and_not_applied": 3
+ },
+ "passed_unchanged": [
+  "K10",
+  "K48",
+  "K26",
+  "K28",
+  "K32",
+  "K25",
+  "K21",
+  "K46",
+  "K34",
+  "K20",
+  "K12",
+  "K11",
+  "K29",
+  "K27",
+  "K06",
+  "K43",
+  "K04",
+  "K24",
+  "K30",
+  "K13",
+  "K01",
+  "K31",
+  "K33",
+  "K09",
+  "K37",
+  "K40",
+  "K19",
+  "K15"
+ ],
+ "merge_proposals": [
+  {
+   "named": [
+    "K17",
+    "K02"
+   ],
+   "his_words": "On K17 he said the thing he remembered discussing was whether the note can tell who said what, a third person or the client, and then corrected himself: 'ale to je asi jine kriterium'.",
+   "catalog_records": "K17 overlaps K02, K15",
+   "reading": "Not a merge proposal. The name sent him to a different criterion than the statement meant, which is a finding about the name."
+  },
+  {
+   "named": [
+    "K44",
+    "K45",
+    "K47",
+    "K41"
+   ],
+   "his_words": "'ja bych ty kriteria takovahleta sdruzil proste do gramatiky ze se dodrzuje, zda se mi toto moc zbytecne podrobne', then on K47 'ano ale spojil bych to s tou gramatikou nebo ne?', then on K41 'nepreikryva se nam to nejak s gramatikou v cestine?'",
+   "catalog_records": "K44 overlaps K41, K43, K30; K45 overlaps K34, K30, K48; K47 overlaps K45, K30; K41 overlaps K13, K30, K44",
+   "reading": "One merge proposal covering the grammar criteria of the language layer."
+  },
+  {
+   "named": [
+    "K42",
+    "K48"
+   ],
+   "his_words": "'hmm neni toto kalk? ale jinak cestina je ok!'",
+   "catalog_records": "K48 overlaps K30, K45, K34; K42 overlaps K20, K34",
+   "reading": "The only pair he named that the catalog does not record directly, though both sit in the same cluster through K34 and K30."
+  },
+  {
+   "named": [
+    "K18",
+    "unnamed"
+   ],
+   "his_words": "'ano souhlasim, ale toto je fakt duplikace s jinym'",
+   "catalog_records": "K18 overlaps K01, K19",
+   "reading": "He did not name the other half; the catalog's first candidate is K01."
+  },
+  {
+   "named": [
+    "K07",
+    "unnamed"
+   ],
+   "his_words": "'ano, ale toto uz jsme resili'",
+   "catalog_records": "K07 overlaps K05, K27 to K30",
+   "reading": "Same shape: a duplicate felt but not named."
+  },
+  {
+   "named": [
+    "K05",
+    "unnamed"
+   ],
+   "his_words": "'a taky se mi to zda duplicitni s nejakym kriteriem'",
+   "catalog_records": "K05 overlaps K06, K07, K08",
+   "reading": "K07 and K05 each point at the other without either being named, which is what the catalog records between them."
+  },
+  {
+   "named": [
+    "K23",
+    "K22"
+   ],
+   "his_words": "He chose nothing on the offered merge but objected that the statement is double: 'dvojvalne system a pouzil pro praxi, ale nevim jak zni original'.",
+   "catalog_records": "K23 overlaps K21, K22",
+   "reading": "His objection is right and it comes from the source: MentalCLOUDS' six acceptability parameters mix one property of the text, coherence, with five about what working with it costs."
+  }
+ ],
+ "substance_objections": [
+  {
+   "id": "K08",
+   "his_words": "'ehm co je to za kriterium? toto nerika nic o kvalite zapisu, ale uprednostnuje to nejakou cast zapisu. davalo by mi max smysl pokud se objevuje toto v transkriptu, tak toto zapis zachyti a odlisi'",
+   "reading": "The statement describes the weight of an error rather than a property of a note. He proposed restating it as whether the note carries and distinguishes what the transcript held about risk."
+  },
+  {
+   "id": "K16",
+   "his_words": "'souhlasim, ale tohle mi prijde jako metainformace ktera do samotneho zapisu nepatri!'",
+   "reading": "A fact about how the note came to exist, not about its content."
+  },
+  {
+   "id": "K35",
+   "his_words": "'souhlasim, ale je to o formatu zapisu!'",
+   "reading": "He reads it as a rule about form rather than about quality."
+  }
+ ],
+ "general_instructions_he_gave": [
+  "Use the Czech word 'prepis', not 'transkript' and not the vaguer 'zdroj', wherever the thing meant is the transcript, and name the wider case in brackets where a note may rest on something else.",
+  "Put a statement positively where the negative obscures it. Asked for five and no more: K40, K41, K44, K45, K47."
+ ],
+ "what_was_not_checked": "The sources behind the twenty-seven candidates that carry no measurement rule. This reading was of the Czech and of comprehensibility, not of the evidence.",
+ "one_false_alarm": "He reported a wrong vowel in K28's example. The sheet was correct; the assistant had mistyped the criterion into the question using escape sequences. From then on the text put in front of him was copied from the built CSV.",
+ "verbatim_answers": [
+  {
+   "poradi": 1,
+   "kod": "K02",
+   "pole": "nazev",
+   "odpoved_doslova": "kod co řekl v přepisu",
+   "moje_cteni": "Návrh přejmenovat K02 z 'Kdo co řekl' na 'Kdo co řekl v přepisu'. Potvrdit s Janem na konci."
+  },
+  {
+   "poradi": 2,
+   "kod": "K03",
+   "pole": "veta",
+   "odpoved_doslova": "a co dřív ? nechápu jako minulsot a nemá to být tedy? kdy s eco stalo v miulsoti co platí ted aktiuálěn v zápise  a co je záměr a abdue oatit?",
+   "moje_cteni": "'co platí ted a co dřív' je nesrozumitelné. Jan čte 'dřív' jako minulost a navrhuje tři časové vrstvy výslovně: co se stalo v minulosti, co platí teď, a co je teprve záměr a bude platit. Přepsat větu."
+  },
+  {
+   "poradi": 3,
+   "kod": "K10",
+   "verdikt": "v pořádku"
+  },
+  {
+   "poradi": 4,
+   "kod": "K48",
+   "verdikt": "v pořádku",
+   "pozn": "název 'Kalk' Jan nechal být"
+  },
+  {
+   "poradi": 5,
+   "kod": "K22",
+   "pole": "veta",
+   "odpoved_doslova": "než jej potvrdí  ten zápsi ne?  a kolik upravd udělá jejak jen máo dorbnsých urpav je tao asi kvantitifkaciakc ejde naám o počet ne o to zda udělá maálo srodbnýc uprav ano ne!",
+   "moje_cteni": "Dva body. (1) Sloveso: terapeut zápis nepoužije, ale potvrdí; 'použije' je špatné sloveso. (2) 'jen málo drobných úprav' je mlhavé a čte se jako ano/ne, zatímco název říká ROZSAH. Kritérium má být o počtu nebo rozsahu úprav, ne o binární odpovědi. Přepsat větu."
+  },
+  {
+   "poradi": 6,
+   "kod": "K26",
+   "verdikt": "v pořádku"
+  },
+  {
+   "poradi": 7,
+   "kod": "K28",
+   "verdikt": "v pořádku",
+   "pozn": "Jan nahlásil u-prehlasku misto u-s-carkou. Overeno v CSV: arch ma spravne uzkost (U+00FA) a 'jakekoli'. Vada byla v me otazce, ne na listu: psal jsem ji pres unikove sekvence a spletl u-prehlasku za u-s-carkou, a 'jakekoli' jsem prepsal na 'jakoukoli'. Od 8/48 se text otazky kopiruje doslova z CSV."
+  },
+  {
+   "poradi": 8,
+   "kod": "K14",
+   "pole": "veta",
+   "odpoved_doslova": "klienta ponižuje",
+   "moje_cteni": "Sloveso: 'snižuje' nahradit za 'ponižuje'. Snižovat klienta není česky."
+  },
+  {
+   "poradi": 9,
+   "kod": "K32",
+   "verdikt": "v pořádku"
+  },
+  {
+   "poradi": 10,
+   "kod": "K25",
+   "verdikt": "v pořádku"
+  },
+  {
+   "poradi": 11,
+   "kod": "K17",
+   "pole": "nazev",
+   "typ": "nález",
+   "odpoved_doslova": "hmm divné.. jako v upehdalu jsme halvěn řešili zda odkáže zápis odličovat kdo ro co řekl zda to řekli tčetí osoyb nebo to řekl klidnet prostě zda zaápsi sodkáže odrzpozant třetí osby  ale to ej asi jiné kritopriáum...",
+   "moje_cteni": "Název 'Informace o třetích osobách' svádí ke čtení, že jde o atribuci (kdo co řekl), což je K02. K17 je přitom o soukromí. Jan si to sám opravil ('to je asi jiné kritérium'), ale název poslal čtenáře jinam, než věta míří. Zvážit přejmenování na něco o soukromí."
+  },
+  {
+   "poradi": 12,
+   "kod": "K45",
+   "pole": "veta",
+   "typ": "nález",
+   "odpoved_doslova": "dovjitý zápir necheš tam anspat spíše je slovo ?",
+   "moje_cteni": "Dvojitý zápor: 'V zápisu není slovo, které v daném jazyce neexistuje.' Přepsat kladně."
+  },
+  {
+   "poradi": 13,
+   "kod": "K44",
+   "typ": "SLOUČENÍ",
+   "odpoved_doslova": "já bych ty krot=éria takovávto sdrižil prostě do gramaitik y že se dodržuje zdá s emi toto moc zybtečně podrobné!",
+   "moje_cteni": "Návrh sloučit jazyková kritéria do jedné 'Gramatiky'. Příliš podrobné samostatně."
+  },
+  {
+   "poradi": 14,
+   "kod": "K21",
+   "verdikt": "v pořádku"
+  },
+  {
+   "poradi": 15,
+   "kod": "K46",
+   "verdikt": "v pořádku",
+   "pozn": "v mé otázce byl překlep 'citě' místo 'citově'; arch je správně"
+  },
+  {
+   "poradi": 16,
+   "kod": "K34",
+   "verdikt": "v pořádku"
+  },
+  {
+   "poradi": 17,
+   "kod": "K38",
+   "pole": "veta",
+   "typ": "nález",
+   "odpoved_doslova": "oprav na: zdroji přepisu.",
+   "moje_cteni": "'odpovídají zdroji' nahradit za 'odpovídají přepisu'. Jan chce české slovo a konkrétní zdroj."
+  },
+  {
+   "poradi": 18,
+   "kod": "K08",
+   "typ": "VĚCNÁ NÁMITKA",
+   "odpoved_doslova": "ehm co je to za kritérium? toto neříká nic o kvalitě zápisus, ale upřednustnuej to nějakou áčást zápisu jako dávalo by mi max mslys pokud se obejvuje toot v transkritpu, tak toto zápis zachytí a odliší  záěmr a jiné podle toho co je v tarsnkritptu v přepisu poizžij čeksé slovo!",
+   "moje_cteni": "K08 neměří kvalitu zápisu, ale váhu chyby: upřednostňuje část zápisu. Jan navrhuje přeformulovat na vlastnost zápisu: zda zápis zachytí a odliší to, co o riziku zaznělo v přepisu. PLUS obecný pokyn: všude psát 'přepis', ne 'transkript'."
+  },
+  {
+   "poradi": 19,
+   "kod": "K16",
+   "typ": "VĚCNÁ NÁMITKA",
+   "odpoved_doslova": "souhasl,a le tohle mi přídj ejako metafornfrmace která do samotného zápsiu nepatří!",
+   "moje_cteni": "K16 je metainformace o vzniku zápisu, ne vlastnost jeho obsahu. Jan zpochybňuje, že do zápisu patří."
+  },
+  {
+   "poradi": 20,
+   "kod": "K20",
+   "verdikt": "v pořádku"
+  },
+  {
+   "poradi": 21,
+   "kod": "K12",
+   "verdikt": "v pořádku"
+  },
+  {
+   "poradi": 22,
+   "kod": "K35",
+   "typ": "VĚCNÁ NÁMITKA",
+   "odpoved_doslova": "souhasl sale je to o formátu zápsiu!",
+   "moje_cteni": "K35 je podle Jana o formátu zápisu, ne o jeho kvalitě."
+  },
+  {
+   "poradi": 23,
+   "kod": "K47",
+   "typ": "SLOUČENÍ",
+   "odpoved_doslova": "ano ale spjil bych to s tou gramtikou nebo ne?",
+   "moje_cteni": "K47 patří do sloučené 'Gramatiky' spolu s K44 a K45."
+  },
+  {
+   "poradi": 24,
+   "kod": "K11",
+   "verdikt": "v pořádku"
+  },
+  {
+   "poradi": 25,
+   "kod": "K29",
+   "verdikt": "v pořádku",
+   "pozn": "sloučení s K11 nabídnuto, Jan nevybral"
+  },
+  {
+   "poradi": 26,
+   "kod": "K27",
+   "verdikt": "v pořádku"
+  },
+  {
+   "poradi": 27,
+   "kod": "K06",
+   "verdikt": "v pořádku"
+  },
+  {
+   "poradi": 28,
+   "kod": "K43",
+   "verdikt": "v pořádku",
+   "pozn": "sloučení do gramatiky nabídnuto, Jan nevybral"
+  },
+  {
+   "poradi": 29,
+   "kod": "K04",
+   "verdikt": "v pořádku"
+  },
+  {
+   "poradi": 30,
+   "kod": "K24",
+   "verdikt": "v pořádku"
+  },
+  {
+   "poradi": 31,
+   "kod": "K30",
+   "verdikt": "v pořádku",
+   "pozn": "sloučení s K48 nabídnuto, Jan nevybral"
+  },
+  {
+   "poradi": 32,
+   "kod": "K13",
+   "verdikt": "v pořádku"
+  },
+  {
+   "poradi": 33,
+   "kod": "K01",
+   "verdikt": "v pořádku",
+   "pozn": "'přepis' místo 'zdroj' nabídnuto, Jan nevybral"
+  },
+  {
+   "poradi": 34,
+   "kod": "K31",
+   "verdikt": "v pořádku"
+  },
+  {
+   "poradi": 35,
+   "kod": "K42",
+   "typ": "SLOUČENÍ",
+   "odpoved_doslova": "hmm není toto kalk? al ejinak čeština je ok!",
+   "moje_cteni": "Čeština OK. Jan vidí překryv K42 (přepnutí jazyka) s K48 (Kalk)."
+  },
+  {
+   "poradi": 36,
+   "kod": "K41",
+   "typ": "nález + SLOUČENÍ + OBECNÉ",
+   "odpoved_doslova": "opět je to negativně forulované nešlo by to udělat celé spíše jako že je nebo to není odobře?  gramtická chyba nepřeikrávý se nám ro nějak s graiatkou v češtiěn?  jinak je to ok.  a zpěn fluence na pylnulost to je kalk :-)",
+   "moje_cteni": "Tři věci. (1) OBECNÉ: kritéria jsou formulovaná záporně; Jan navrhuje přeformulovat celou sadu kladně. (2) K41 se překrývá s gramatikou (K44/K45/K47). (3) Název 'Fluence' je sám kalk, nahradit za 'Plynulost'."
+  },
+  {
+   "poradi": 37,
+   "kod": "K36",
+   "pole": "veta",
+   "typ": "nález",
+   "odpoved_doslova": "jak \"to\" co je to otéo  to? ze zsápisuje pousnat jakl klientovo prožívání ,ta k i co dělal nebo njeá nevím...?",
+   "moje_cteni": "Zájmeno 'to' ve 'jak to klient prožíval' nemá jasný odkaz. Jan navrhuje: 'Ze zápisu je poznat klientovo prožívání, nejen co dělal.'"
+  },
+  {
+   "poradi": 38,
+   "kod": "K33",
+   "verdikt": "v pořádku"
+  },
+  {
+   "poradi": 39,
+   "kod": "K09",
+   "verdikt": "v pořádku",
+   "pozn": "'přepis' místo 'zdroj' nabídnuto, Jan nevybral"
+  },
+  {
+   "poradi": 40,
+   "kod": "K18",
+   "typ": "SLOUČENÍ",
+   "odpoved_doslova": "ano souahsla , el toto je fakt duplikace s jiným .  azáleží tzd ato stystbném umořžnuje",
+   "moje_cteni": "Jan vidí K18 jako duplikaci s jiným kritériem (nejspíš K01, opora tvrzení). Plus podmínka: záleží, zda systém odkazy vůbec umožňuje."
+  },
+  {
+   "poradi": 41,
+   "kod": "K07",
+   "typ": "SLOUČENÍ",
+   "odpoved_doslova": "ano, ale toto už jsme řešili",
+   "moje_cteni": "Jan vidí K07 jako už pokryté jinde. Upřesnit čím: nejspíš rozlišením dvou typů zápisu, které nese samotná struktura archu (dva listy)."
+  },
+  {
+   "poradi": 42,
+   "kod": "K37",
+   "verdikt": "v pořádku",
+   "pozn": "sloučení s K38 nabídnuto, Jan nevybral"
+  },
+  {
+   "poradi": 43,
+   "kod": "K40",
+   "verdikt": "v pořádku"
+  },
+  {
+   "poradi": 44,
+   "kod": "K39",
+   "pole": "nazev+veta",
+   "typ": "nález",
+   "odpoved_doslova": "ve zdroji jako přepisu nebo jinde",
+   "moje_cteni": "Upřesnit, co je 'zdroj': jen přepis, nebo i jiné podklady. Teď to není z věty poznat."
+  },
+  {
+   "poradi": 45,
+   "kod": "K19",
+   "verdikt": "v pořádku"
+  },
+  {
+   "poradi": 46,
+   "kod": "K05",
+   "typ": "nález + SLOUČENÍ",
+   "odpoved_doslova": "přeičemž podstatnost má slstupně je enjnesrozumitelné  a taky se mi to szdá duplicitn s nějakým kroeiteem .",
+   "moje_cteni": "'přičemž podstatnost má stupně' je nesrozumitelné. Plus Jan tuší duplicitu s jiným kritériem (nejspíš K11 úspornost nebo K29 hustota, které jsou o tom, kolik podstatného zápis nese)."
+  },
+  {
+   "poradi": 47,
+   "kod": "K23",
+   "typ": "nález",
+   "odpoved_doslova": "dovjalvé systém a použil pro rpaxi ale envím jak zní originál",
+   "moje_cteni": "Věta míchá dvě věci: zda by odborník POUŽIL ten zápis, a zda by dál používal SYSTÉM, který ho vytvořil. Jan chce vidět původní znění ze zdroje."
+  },
+  {
+   "poradi": 48,
+   "kod": "K15",
+   "verdikt": "v pořádku",
+   "pozn": "sloučení s K17 nabídnuto, Jan nevybral"
+  }
+ ],
+ "counts_note": "Passing and being unchanged are not the same thing and the two numbers differ by three. Four criteria he passed were touched by the two instructions he gave for the whole set, 'prepis' not 'zdroj' and five statements put positively. Seven he objected to keep their text: three are objections to the criterion itself and four are duplicates, and neither is repaired by rewriting a sentence."
+}
