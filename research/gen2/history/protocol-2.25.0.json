@@ -1,0 +1,947 @@
+{
+  "id": "therapy-note-construct-review",
+  "version": "2.25.0",
+  "status": "protocol_amended_before_pilot_search_partially_executed",
+  "recorded_date": "2026-10-14",
+  "design": "Instrument development informed by a systematic scoping review, expert proposals and empirical observations",
+  "prior_exposure": "The investigator and coding assistant have seen existing instruments, prior Gen-2 drafts and a colleague's QA suggestion. This is not a claim of hypothesis-free discovery or blinded authorship.",
+  "conduct_framework": "JBI scoping review guidance, full-text verification pending",
+  "reporting_frameworks": [
+    "PRISMA-ScR",
+    "PRISMA-S"
+  ],
+  "appraisal": "Item-level evidence mapping informed by COSMIN principles; adaptations to documentation checklists explicitly recorded. No automatic alpha, CVR, factor-analysis or agreement threshold determines content validity.",
+  "questions": [
+    "Which properties of useful and accurate psychotherapy documentation are defined in the literature and professional guidance?",
+    "For which recipients, purposes and clinical circumstances do those properties matter?",
+    "How are they operationalized and what evidence supports their measurement?",
+    "What transfers to automated English and Czech evaluation and what remains unvalidated?"
+  ],
+  "pcc": {
+    "population": "Human-written and model-generated psychotherapy session documentation; adjacent clinical documentation and summarization methods identified as transfer evidence",
+    "concept": "Documentation quality constructs, operational criteria and measurement properties",
+    "context": "Continuity of care and documentation. The search of 2026-09-13 covered supervision and client communication as well, and their findings are retained; from 2026-09-16 the instrument is built for the two purposes above only (decision D8)."
+  },
+  "languages": [
+    "en",
+    "cs"
+  ],
+  "date_limits": {
+    "lower": null,
+    "upper": "actual search date recorded for each execution"
+  },
+  "layers": [
+    "direct",
+    "transfer",
+    "requirements"
+  ],
+  "include": [
+    "Psychotherapy progress notes or session summaries with explicit quality properties, user needs or evaluation methods",
+    "Clinical documentation or general summarization methods with an explicit documentation measurement application, labelled as transfer evidence",
+    "Professional or recipient requirements with attributable authorship, jurisdiction and document version",
+    "Full text in English or Czech, including preprints and software artifacts with publication type explicitly distinguished"
+  ],
+  "exclude": [
+    "Therapeutic chatbot or treatment effectiveness evaluation without a documentation-relevant requirement or method",
+    "No identifiable quality construct, operational criterion or measurement method",
+    "Duplicate report with no additional evidence, linked to its study family rather than counted independently",
+    "Full text outside English/Czech scope, with the language restriction disclosed"
+  ],
+  "databases": [
+    "PubMed",
+    "APA PsycINFO",
+    "Scopus",
+    "ACL Anthology"
+  ],
+  "supplementary_routes": [
+    "backward citations",
+    "forward citations",
+    "professional guidance",
+    "known-source retrieval check"
+  ],
+  "metadata_services": [
+    "Crossref",
+    "OpenAlex"
+  ],
+  "reviewers": {
+    "human_count": 2,
+    "human_roles": [
+      {
+        "role": "investigator and instrument developer",
+        "screening": true,
+        "status": "active"
+      },
+      {
+        "role": "second screener",
+        "screening": true,
+        "status": "to be recruited; not yet named (D2)"
+      }
+    ],
+    "raters": "two Czech psychologists for the human anchor (D2); neither screens",
+    "clinical_panel": "not planned (D2)",
+    "ai_role": "assist retrieval, extraction and discrepancy detection; never impersonate a human decision",
+    "independent_second_screening": "planned: a second human screener will be recruited; until that person records decisions on the exact sheets, screening is single-reviewer with AI assistance and is reported as such",
+    "evidence_verification": "delegated (D9, 2026-09-21): sources and evidence lines stand on the assistant's reading; constructs were decided by the investigator item by item; the quoted passages of the nine reports the pilot rests on are checked verbatim against the retrieved full texts by the core's extraction import (D11)",
+    "operational_rules": "delegated (D10, 2026-09-21): the scope, method specifications, rubric items and Czech wording are the assistant's proposal accepted without item-by-item review",
+    "content_validity_panel": "three therapists, neither the author nor the assistant, rating every candidate of the catalog for relevance against the threshold registered in content_validity (D13, 2026-10-07)"
+  },
+  "sequence": [
+    "Record the prospective protocol revision and prior exposure before the corresponding research steps",
+    "Execute and document searches, exports, duplicate handling and retrieval gaps",
+    "Human title/abstract and full-text screening, with a second human screener once recruited (D2, D6): the priority stratum and the audit sample of the remainder, on exact sheets, disagreements retained; non-retrieval is not an eligibility exclusion",
+    "Extract source-anchored candidates without forcing the prototype taxonomy",
+    "Record expert proposals and empirical inputs before, during or after searching, preserving historical origins",
+    "Human review interpretations, proposals, merges, method choices and language-specific wording; preserve disagreements",
+    "Create versioned literature and mixed-source snapshots with explicit amendment parents; literature snapshots do not gate expert input",
+    "Carry every measurement the review supported into the first feasibility round; record the executable count at freeze, report what the human budget cannot cover as not measured, and keep catalog entries, executable measures and study conditions as distinct records (D3)",
+    "Freeze the reviewed instrument and exact unit assignments before ratings; distinguish format from granularity experiments",
+    "Use developmental results to revise measures; preregister a later independent confirmatory study before its judgments"
+  ],
+  "selection": {
+    "target_pool_size": "No quota; stop according to the documented search scope, not a desired number of constructs",
+    "mandatory_considerations": [
+      "purpose-specific importance",
+      "evidence directness and limitations",
+      "coverage of clinically consequential content",
+      "definition clarity",
+      "measurement feasibility"
+    ],
+    "not_exclusion_rules": [
+      "rare occurrence",
+      "low between-model variance",
+      "few dominance edges",
+      "membership in a small semantic cluster"
+    ],
+    "first_round_measurements": {
+      "rule": "record_not_cap",
+      "statement": "The first round carries every measurement the review supported; the executable count is recorded at instrument freeze and by pilot-plan; what the human budget cannot cover is reported as not measured, never dropped to fit a count",
+      "record_kinds": {
+        "catalog_entry": "a review-supported candidate in the research map; visible, not by itself executable",
+        "executable_measure": "an operational item (MeasurementSpec) or a selected non-item method (MethodSpec) in the frozen instrument; the only kind the count counts",
+        "study_condition": "a design manipulation or human-use outcome of the pilot; planned and reported as a condition, never counted as a measure"
+      },
+      "supported_at_amendment": {
+        "not_comparable_as_measures": "P12 is a training/reliability condition; P10 and P11 human-use outcomes; P13 a corpus-level proxy; P14 a derived ratio (audit A08)",
+        "executable_count": "recorded at freeze, not fixed here",
+        "catalog_entries_note": "The count is not recorded here. catalog/catalog.json holds the list and the page derives the figure from it; this entry said 14 while the list held 13, because P09 was removed with K19 and nothing re-read the sentence."
+      },
+      "previous_target": "8-12 in 2.0.0 came from the task brief, not from the review; a feasibility convention, not an error (audit A02); withdrawn by D3"
+    }
+  },
+  "clustering": {
+    "input": "source-derived construct definitions, not model scores",
+    "distance": "cosine",
+    "linkage": "average",
+    "representation": "explicit model/revision and exact definition digest per vector",
+    "human_pairs": {
+      "nearest": 10,
+      "middle": 10,
+      "random": 10
+    },
+    "interpretation": "Semantic organization and merge proposals, not a proof of latent structure or importance"
+  },
+  "pilot": {
+    "status": "not_run",
+    "purposes": [
+      "continuity"
+    ],
+    "generator_families": 2,
+    "judge_families": 2,
+    "max_notes": 16,
+    "human_note_sample": 4,
+    "human_decisions_target": 150,
+    "blind_repeats": 30,
+    "human_hours": [
+      8,
+      12
+    ],
+    "interpretation": "Feasibility and measurement development, not confirmatory validation or model ranking",
+    "precision_targets_for_later_planning": {
+      "essential_coverage_ci95_half_width": 0.05,
+      "serious_error_sensitivity_ci95_half_width": 0.1
+    },
+    "unique_decisions": 120,
+    "preparation_included_in_hours": true,
+    "time_overrun_policy": "Reduce the documented sample through a versioned amendment; do not call unreviewed units checked",
+    "replicate_policy": "Distinct replicate IDs reserve real calls; resume caching is within a replicate only",
+    "measurement_rule": "selection.first_round_measurements",
+    "cohorts": [
+      {
+        "origin": "public_demo",
+        "language": "en",
+        "cases": 2,
+        "source": "AnnoMI conversations released through TN-Eval"
+      },
+      {
+        "origin": "translated_demo",
+        "language": "cs",
+        "cases": 2,
+        "source": "Czech translations of the same conversations by data.translation_instrument"
+      }
+    ],
+    "translation_pairing": {
+      "required": true,
+      "original": {
+        "origin": "public_demo",
+        "language": "en"
+      },
+      "translation": {
+        "origin": "translated_demo",
+        "language": "cs"
+      },
+      "rule": "every original conversation has exactly one translation sharing its translation_group; group identifiers alone do not validate meaning"
+    },
+    "excluded_cohorts": [
+      {
+        "origin": "native_real",
+        "language": "cs",
+        "reason": "one client, no consent or ethics documentation; permanently private track processed only on local/einfra; outside the paper and this pilot (D1)"
+      }
+    ],
+    "human_decisions_basis": "A budget of annotation units (item, claim and QA decisions) bounded by the investigator's 8-12 hours, not a count of notes; fewer notes leave more units per note, and unit assignment is frozen after reviewed banks exist. Narrowing to two purposes on 2026-09-16 halved the generated notes and the human sample; the unit budget is unchanged, so the units per note rose again (decision D8). Dropping audit on 2026-10-22 halved both again, to eight notes and four rated by a human, because the therapeutic note that replaces it has no profile to generate from; the unit budget is unchanged a second time and the sixteen return with that profile (decision D27). Until then the units per note are higher than any round this design was sized for, which is a reason to write the profile and not a result.",
+    "human_anchor": {
+      "raters": 2,
+      "rater_profile": "Czech psychologists; neither is the instrument author",
+      "design": [
+        "crossover over languages: each rater receives one language of each conversation, so every conversation is rated in both languages and no rater sees a conversation twice",
+        "overlap block: a subset of notes rated by both raters in the same language; the only source of between-rater agreement, which the crossover alone does not measure",
+        "blinded repeats: notes re-rated by the same rater; the source of within-rater agreement"
+      ],
+      "calibration": "on notes outside the rated sample; count fixed at instrument freeze",
+      "agreement": [
+        "gwet_ac1",
+        "gwet_ac2"
+      ],
+      "reported_per": "operational item, language and purpose; disagreements retained",
+      "masking": "no model identity, no automatic verdicts, no other rater's answers",
+      "time": "actual rating time recorded per rater and per note; the confirmatory sample is derived from it",
+      "counts": "the development pilot rates its balanced human sample; counts for the confirmatory study are fixed in a later amendment from the pilot's timing and agreement, not here (audit A10)",
+      "interpretation": "A feasibility anchor for the rating task on development notes; not confirmatory validation, model ranking or clinical validation",
+      "estimate_note": "The 2026-09-13 estimate of about 25 notes per rater preceded the fixed cohorts and is superseded by the measured design"
+    },
+    "purposes_out_of_scope": [
+      {
+        "purpose": "supervision",
+        "reason": "The thinnest evidence of the four: no source found says what a supervisor needs from a note. Measuring it would mean inventing the standard.",
+        "decision": "D8"
+      },
+      {
+        "purpose": "client",
+        "reason": "A real literature exists and this round read only abstracts of it; real client readers and an ethics framework are missing. Not a judgement that it does not matter.",
+        "decision": "D8"
+      },
+      {
+        "purpose": "audit",
+        "reason": "A payer's view of a progress note, not a second genre of note. D22 replaced it with the therapeutic note, which the clinician keeps apart from the record, and that is the contrast the round is looking for.",
+        "decision": "D22"
+      }
+    ],
+    "judge_question_granularity": {
+      "status": "declared, not run",
+      "what_varies": "how many operational items one judge call decides: batched, every item of a reference mode in one call, as pipeline.score asks today; or split, one item per call, as generation 1's judge asks",
+      "where": "the eight notes of human_note_sample, for each of the two judge families",
+      "criterion": "agreement with the two human raters on the same items",
+      "noise_floor": "the judge's own disagreement on blind_repeats of the same items, which is what a difference between the two styles has to exceed to be a difference at all",
+      "rule": "decision_ledger D18 rule_declared_in_advance",
+      "record_kind": "study_condition",
+      "costs": "judge calls only, of the order of 8 notes times the active items times 2 judge families; no generation call and nothing on e-INFRA",
+      "not_implemented": "pipeline.score asks its items as a tuple and has no per-item mode. The condition is declared here before the run, as the protocol's own rule requires, and the code change belongs with the run."
+    },
+    "guards_before_measurement": {
+      "what_this_is": "Checks run on a note before any measure is computed over it, and on a ratio before it is published. They exist because a benchmark creates the incentive it measures: whatever is scored is what a system will be built to maximise, and some measures can be maximised without the note getting better.",
+      "already_in_the_code": "fraction() returns no number when the denominator is zero, so nothing is reported rather than 1.00 or 0.00, and an empty note has its own branch in pipeline.score: its answers are recorded as not_in_note and its QA verdicts as omitted, not as correct. Both come from the rule that an absence is never a measurement.",
+      "missing_and_declared_here": "There is no floor above zero. A one-sentence note has a denominator of one, so its economy is 1.00 -- the best possible score for the emptiest possible note, which is the trap the sheet uses as its worked example.",
+      "the_rule": "Every ratio is published with the denominator it was computed over. A ratio whose denominator is below the floor is reported as not computed, with the denominator beside it, and never as a value. This is the rule that an absence is never a measurement, extended: a ratio over almost nothing is not a measurement either.",
+      "the_floor_comes_from_the_pilot": "Not guessed. The pilot's notes give the distribution of denominators and the floor is set from it, in the same amendment that fixes the confirmatory sample size. Until it exists no ratio from this instrument is published.",
+      "where_more_guards_come_from": "The panel's second question. A gaming shape a rater names becomes a candidate guard, and the paper reports which ones were named, which were built and which were left."
+    },
+    "note_format": "sections",
+    "note_format_decision": {
+      "what_it_means": "The note is written under the section names the profile declares, not under SOAP, DAP or BIRP. For the progress note those are the four of profiles.DEFINITIONS: current concerns and change, interventions and response, assessment and uncertainty, risk and agreed next steps.",
+      "chosen_by": "the investigator, 2026-10-22, from two alternatives put to him",
+      "why": "The round's question is whether a property essential to a note the care team reads is pointless in a note the clinician keeps apart from the record. That contrast is only readable if the two notes differ in purpose alone. SOAP fits a progress note and not a therapist's own note, so SOAP on one tab and named sections on the other would make the tabs differ in form as well, and a criterion scoring differently between them could not be attributed to the purpose.",
+      "what_it_costs": "The four section names are this project's own and no source stands behind them, so a criterion about structure or about placing content in the right section is measured against our form rather than against a documented one. SOAP would have carried a literature and TN-Eval's comparability with it.",
+      "not_comparable_with_generation_1": "Generation 1 generates SOAP, reproduced verbatim from TN-Eval, and iCARE's own instrument. Nothing crosses: a different prompt is a different instrument, which is the rule the leaderboard already enforces through prompt_version.",
+      "where_it_is_read": "pilot.plan refuses a format that is not this one. Until 2026-10-22 it took the format from an optional key in the selection file and fell back to 'sections' when the key was absent, so the structure of every generated note was a default argument and no amendment had ever decided it."
+    }
+  },
+  "data": {
+    "native_czech_policy": [
+      "local",
+      "einfra"
+    ],
+    "derived_artifacts_inherit_policy": true,
+    "translation_relatives_share_split": true,
+    "native_czech_clusters": 1,
+    "annomi_video_grouping": "Video identity is a known grouping factor, not proof of client or therapist identity",
+    "future_sessions": "excluded from available context",
+    "native_czech_track": {
+      "status": "permanently private",
+      "in_paper": false,
+      "in_development_pilot": false,
+      "reason": "one client; no consent or ethics documentation",
+      "decision": "D1"
+    },
+    "translation_instrument": {
+      "direction": "en->cs",
+      "status": "recorded on 2026-09-21: glm-5.3 on e-INFRA, chosen by the assistant under D10 from the second back-translation check; see research/gen2/translation/instrument.json",
+      "selection": "chosen by a measured back-translation check recorded before use",
+      "record": [
+        "provider",
+        "model",
+        "settings",
+        "prompt_digest",
+        "back_translation_check_digest"
+      ],
+      "provider": "einfra",
+      "model": "glm-5.3",
+      "settings": {
+        "temperature": 0.0,
+        "max_tokens": 16384,
+        "timeout_s": 600
+      },
+      "prompt_digest": null,
+      "constraint": "not a judge model of this pilot",
+      "existing_translations": "the ten earlier Claude translations are superseded; they will be redone with the selected instrument and retained as historical artifacts (D4)"
+    }
+  },
+  "reporting": {
+    "overall_quality_score": false,
+    "separate_by": [
+      "language",
+      "corpus_origin",
+      "purpose",
+      "protocol",
+      "judge"
+    ],
+    "missingness": "distinguish not applicable, insufficient source, ambiguous content and execution failure",
+    "external_validation": "not established",
+    "review_completion": "Only executed searches and verified decisions count as completed; blocked sources remain named gaps",
+    "scope": "Report selected and required methods, planned/applicable/assessed units, and incomplete critical-error assessment even in public aggregates"
+  },
+  "supersedes": "2.24.0",
+  "amendment_reason": "D33: eighteen Czech statements rewritten to say what their English definitions say, before any sheet was sent, because nothing had ever compared the two and fifteen of them had dropped part of the definition.",
+  "retrieval_gaps": "Record reports not retrieved separately from full-text eligibility exclusions; unavailable databases remain named gaps",
+  "expert_inputs": "May enter throughout development. Later support does not rewrite historical origin; author or colleague proposals do not imply consensus.",
+  "registration": {
+    "status": "not_registered",
+    "local_timestamp_is_registration": false,
+    "confirmatory_preregistration": "required before confirmatory judgments"
+  },
+  "recorded_before_use": true,
+  "query_amendments": "review-2026-09-13/amendments.json remains the recorded query ledger; this revision changes no query",
+  "review_scope": {
+    "name": "scoping search with a prioritised evidence map",
+    "decision": "D6",
+    "second_screener_scope": "the priority stratum and the audit sample of the remainder, on the exact sheets the first screening used",
+    "reported_as_limits": [
+      "the remainder of the pool left unscreened, with its audited estimate of eligible records",
+      "APA PsycINFO and Scopus, not searched",
+      "the requirements layer, not searched systematically"
+    ],
+    "not_claimed": "a completed scoping review",
+    "full_screening": "a possible later study with its own protocol"
+  },
+  "decision_ledger": [
+    {
+      "id": "D1",
+      "date": "2026-09-13",
+      "origin": "investigator",
+      "decision": "The ten native Czech real sessions are excluded from the paper and from the development pilot; they remain a permanently private track processed only on local/einfra",
+      "replaces": "pilot.cases.native_czech = 2 in 2.0.0",
+      "affects": [
+        "pilot.cohorts",
+        "pilot.excluded_cohorts",
+        "data.native_czech_track",
+        "pilot.max_notes",
+        "pilot.human_note_sample"
+      ]
+    },
+    {
+      "id": "D2",
+      "date": "2026-09-13",
+      "origin": "investigator",
+      "decision": "A second human screener will be recruited and a clinical panel is not planned; two Czech psychologists rate notes as the human anchor, in a crossover over languages with an overlap block and blinded repeats, after calibration on notes outside the sample, with agreement reported by Gwet AC1/AC2 per item",
+      "replaces": "reviewers.human_count = 1 and no human anchor in 2.0.0",
+      "affects": [
+        "reviewers",
+        "pilot.human_anchor",
+        "sequence"
+      ]
+    },
+    {
+      "id": "D3",
+      "date": "2026-09-15",
+      "origin": "investigator, following audit findings A02 and A08",
+      "decision": "The 8-12 measurement target came from the task brief, not from the review. The first round carries every measurement the review supported; the executable count is recorded, not capped; catalog entries, executable measures and study conditions are distinct records",
+      "replaces": "selection.pilot_measurements_target = [8, 12] and sequence item 8 in 2.0.0",
+      "affects": [
+        "selection.first_round_measurements",
+        "sequence",
+        "pilot.measurement_rule"
+      ]
+    },
+    {
+      "id": "D4",
+      "date": "2026-09-15",
+      "origin": "investigator, delegated to the developer",
+      "decision": "The AnnoMI-to-Czech translator is recorded as an instrument (provider, model, settings, prompt digest), chosen by a measured back-translation check, never a judge of this pilot; the ten earlier translations are redone with it",
+      "replaces": "no translation provenance requirement in 2.0.0",
+      "affects": [
+        "data.translation_instrument",
+        "pilot.cohorts"
+      ]
+    },
+    {
+      "id": "D5",
+      "date": "2026-09-15",
+      "origin": "investigator",
+      "decision": "The judge-side confinement guard is ported to the sibling Czech repository; its real tasks stay confined to e-INFRA and its translated tasks (public AnnoMI content) are released",
+      "replaces": "sibling policy that a judge may read a note written from a real session",
+      "affects": [
+        "data.native_czech_policy"
+      ]
+    },
+    {
+      "id": "D6",
+      "date": "2026-09-15",
+      "origin": "investigator",
+      "decision": "The review is bounded: the second screener covers the priority stratum and the audit sample; the unscreened remainder and the two unsearched databases are reported as limits; the work is named a scoping search with a prioritised evidence map, not a completed scoping review",
+      "replaces": "the completed-review ambition of 2.0.0 status",
+      "affects": [
+        "review_scope",
+        "sequence",
+        "status"
+      ]
+    },
+    {
+      "id": "D7",
+      "date": "2026-09-15",
+      "origin": "investigator",
+      "decision": "Test fixtures clean their private workspaces; the directories earlier test runs left under local/ are removed by fixture pattern only",
+      "replaces": "nothing in the protocol; recorded because it touches private workspaces",
+      "affects": []
+    },
+    {
+      "id": "D8",
+      "date": "2026-09-16",
+      "origin": "investigator",
+      "decision": "The instrument serves continuity of care and documentation. Supervision and client communication stay declared, with their candidates and evidence, and are out of scope for this round; nothing is measured or claimed for them.",
+      "replaces": "the four-purpose scope of 2.1.0 and earlier",
+      "affects": [
+        "pilot.purposes",
+        "pcc.context",
+        "catalog candidates K24 and K25",
+        "the pilot proposal's coverage criterion"
+      ]
+    },
+    {
+      "id": "D9",
+      "date": "2026-09-21",
+      "origin": "investigator",
+      "decision": "The sources and evidence lines of the catalog are accepted on the assistant's reading. The investigator, having decided every construct, does not verify each quoted passage against its source. The decision is a delegation: recorded per subject in the review mode 'delegated', which can only accept and must name this entry; listed on every frozen instrument snapshot; and reported in the paper as a limitation, the evidence being assistant-read and not human-verified item by item.",
+      "replaces": "the plan that the investigator reviews every source and evidence subject before the freeze",
+      "affects": [
+        "reviewers.evidence_verification",
+        "registry review mode 'delegated' and its import rule",
+        "instrument snapshot field 'delegated_reviews'",
+        "paper: methods (human review) and what the study does not claim"
+      ]
+    },
+    {
+      "id": "D10",
+      "date": "2026-09-21",
+      "origin": "investigator",
+      "decision": "The assessment scope, the method specifications for qa, claims and items, the three rubric items and every Czech operational wording are accepted on the assistant's proposal, by delegation, without item-by-item review; the translator is chosen by the assistant from the recorded back-translation check. Each is recorded in the review mode 'delegated', names this entry, and is listed on the frozen instrument snapshot; the paper reports the operational rules as assistant-drafted and the feasibility pilot as their first test.",
+      "replaces": "the plan that the investigator decides each operational subject on the sheet",
+      "affects": [
+        "reviewers.operational_rules",
+        "the reviewed draft's scope, method, measurement and language subjects",
+        "data.translation_instrument",
+        "paper: methods (operationalisation) and what the study does not claim"
+      ]
+    },
+    {
+      "id": "D11",
+      "date": "2026-09-21",
+      "origin": "investigator",
+      "decision": "The nine reports the pilot's constructs rest on are included in the study by delegation, in the same mode as D9 and D10, so that their extractions can carry the origin of a literature construct. A delegated screening decision names this entry, can only include, and is counted apart in the review status; the screening of the pool remains what it was, AI proposals with no human decision, and the paper reports both.",
+      "replaces": "the placeholder origin references of the draft registry",
+      "affects": [
+        "research.screen and review_status",
+        "the frozen instrument's construct origins",
+        "paper: methods (screening, operationalisation) and what the study does not claim"
+      ]
+    },
+    {
+      "id": "D12",
+      "date": "2026-09-22",
+      "origin": "investigator",
+      "decision": "The framework is reported as phase one of instrument development, item generation followed by content validity, after Boateng et al. (S12) and COSMIN (S11); the best-fit framework synthesis citation is withdrawn. A candidate may be proposed for measurement only with at least one evidence line quoting a source read in full, which the catalog validator enforces. Content validity by judges independent of the item pool's authors is not met and is reported as an open gap, which the pilot does not close.",
+      "replaces": "the framework-synthesis framing of the catalog and the methods draft",
+      "affects": [
+        "paper: design, construct framework, and what the study does not claim",
+        "research/gen2/catalog/catalog.json method block and its validator",
+        "research/gen2/catalog/README.md"
+      ]
+    },
+    {
+      "id": "D13",
+      "date": "2026-10-07",
+      "origin": "investigator",
+      "decision": "The item pool is put to a panel of three therapists against a retention threshold registered before the questionnaire is sent: three of three retains, two of three retains as contested with the dissent published, one or none removes the item from the measured set. A harm flag from any rater is reported and stops measurement in this round. Items are shown blind to their state and origin. The investigator stops being the retention rule, every decision he made about the pool returns to the panel, and the measured set the pilot uses is the panel's.",
+      "replaces": "the retention of criteria by the investigator's and the assistant's judgement",
+      "affects": [
+        "content_validity block of this protocol",
+        "the measured set of the catalog, pending the panel",
+        "paper: methods (content validity) and what the study does not claim"
+      ]
+    },
+    {
+      "id": "D14",
+      "date": "2026-10-07",
+      "origin": "assistant, from a source read in full",
+      "decision": "K35, the interaction described from both sides, and K36, the client's experience present at all, enter the item pool with the rating rule and the reliability figures of the source that defines them. Neither is measured in this round. The panel registered under D13 rates 36 items instead of 34 against the same threshold, and the sheets are not sent until the pool is settled.",
+      "replaces": "nothing; it adds to the pool D13 put to the panel",
+      "affects": [
+        "content_validity.what_is_rated of this protocol",
+        "the catalog's candidate list and its source-first table",
+        "the panel's rating sheets, which are rebuilt before they go out",
+        "paper: methods (item generation and content validity)"
+      ],
+      "why_it_is_not_the_investigator_deciding": "The property was found in a source, the rule it is measured by is the source's, and whether it stays is the panel's answer against a threshold registered before any answer existed. Adding to the pool is item generation, which is the prescribed procedure (S12); the decision D13 took off the investigator was retention, and this does not give it back."
+    },
+    {
+      "id": "D15",
+      "date": "2026-10-08",
+      "origin": "investigator",
+      "decision": "K06, acknowledged information gap, stays in the pool and is put to the panel like every other candidate. The investigator proposed removing it, on the ground that it was his own ad hoc addition and complicated the instrument, and withdrew that when the record showed the candidate is not his: its origin is a repeated finding of this project's own code reviews, where a model wrote a denial nobody had asked for and scored full marks. Whether it is kept is now the panel's answer against the threshold registered under D13.",
+      "replaces": "nothing; it declines to make a retention decision outside the panel",
+      "affects": [
+        "K06 stays in the rated pool",
+        "paper: the one candidate with no source in the literature is named as such"
+      ],
+      "what_this_records": "The mechanism D13 set up was used as intended, by the person it was set up to constrain. The investigator wanted an item out, the rule said the panel decides, and the item stayed. That is worth a line because the usual failure of a retention rule is that its author exempts himself from it.",
+      "the_open_question_it_leaves": "K06 has no source in the literature and the paper says so. The error it guards against is documented elsewhere: S25 counts as inaccurate a note in which a normal finding was recorded when the finding was not normal. What no source asks for is the remedy, that the note itself distinguish what was not discussed from what was denied and from what nobody asked. The problem has support; the requirement does not."
+    },
+    {
+      "id": "D16",
+      "date": "2026-10-08",
+      "origin": "investigator",
+      "decision": "The paper is the benchmark. The scoping search is reported as the method by which the item pool was generated, not as a study of its own: one paragraph in the methods, the full record in the public repository and the appendix. The instrument's development and the search may be published separately afterwards from the same registered record.",
+      "replaces": "the working assumption that the review and the benchmark are reported together",
+      "affects": [
+        "paper: methods, and what the review section may claim",
+        "the OSF registration, which registers the protocol this shape implies"
+      ],
+      "why": "A co-author put it that the project was running two studies in one. It is running three, counting the benchmark, and an eight-page venue holds one. Dropping the review is not the alternative: a benchmark whose criteria have no recorded origin invites the question the review exists to answer. So the review changes role rather than disappearing."
+    },
+    {
+      "id": "D17",
+      "date": "2026-10-14",
+      "origin": "assistant",
+      "decision": "An information unit is graded on the five levels of TN-Eval's Appendix C (mandatory, mandatory in certain circumstances, highly recommended, good to have, optional), taken verbatim. Coverage is reported per grade, one measure each. The core carried three grades of its own (essential, supplementary, not_required) and they are gone.",
+      "replaces": "the three grades the core package was written with, which predate the review that found the five",
+      "affects": [
+        "the bank sheet: the therapist assigns one of five grades per purpose, not one of three",
+        "coverage: five recall measures where there were two, each with its own denominator",
+        "the judge prompt, which is told the grades it may use",
+        "aggregation-v5: the shape of what measure() returns changed, so an older manifest is archived rather than recalculated"
+      ],
+      "why": "The three grades could not carry out the severity rule the pilot runs on. That rule separates the omission of an optional unit (no error) from a good-to-have one (minor) from a highly recommended or mandatory one (major), and three grades cannot tell those apart. The five also have the only reliability figure in the grading: five therapists agreed on them at Fleiss' kappa 0.68 and Krippendorff's alpha 0.73. The three had none, and were not a simplification anyone had tested. Coverage had also been reporting two of the three, so units at the third grade were neither counted nor declared missing, which is the shape this project treats as a defect wherever it appears.",
+      "costs_nothing_published": "No published number used this grading: of the 2357 result rows, none carries QA coverage. Generation 2 is a separate instrument from the leaderboard, so no comparability group is split by the change.",
+      "not_decided_here": "Whether the other three branches of the severity rule are enforced in code. They stay prose the rater reads, because a severity derived from the grade would record agreement with the rule rather than the rater's reading of the note."
+    },
+    {
+      "id": "D18",
+      "date": "2026-10-21",
+      "origin": "investigator",
+      "decision": "How many items one judge call decides is a condition of the pilot, measured, not chosen in advance. On the eight notes of the human sample every operational item is asked twice: once batched, as the pipeline asks today, with every item of a reference mode in one call, and once split, one item per call, as generation 1's judge asks. The confirmatory round uses whichever the pilot supports, and the comparison is reported either way.",
+      "replaces": "the batched call as an unexamined property of the code; it was never decided, it was written",
+      "affects": [
+        "the pilot: a second pass over the human-sample notes for every judge family, which is judge calls and no generation calls",
+        "the confirmatory round's judge-call budget, which the two styles differ on by about a factor of five",
+        "the pipeline's assess step, which takes a tuple of items and has no way to be asked one at a time"
+      ],
+      "why": "Generation 1 asks one question per call and says so in the first line of its judge module: roughly 60 calls per note, 23 rubric criteria, one per sentence for conciseness, twelve Likert ratings. Generation 2's pipeline asks every item of a reference mode at once, roughly 6 calls per note. The two generations therefore disagree about the one thing that decides whether a verdict is any good, and neither choice was ever measured against the other here. Asking it of the pilot costs a few hundred judge calls and nothing on e-INFRA, and the pilot already holds the two things the comparison needs: a human anchor on eight notes and blind repeats that measure the judge's own noise.",
+      "rule_declared_in_advance": "The split asking is adopted for the confirmatory round if its agreement with the human anchor exceeds the batched asking's by more than the judge's own blind-repeat disagreement on the same items. Below that margin the batched asking is kept, because a difference smaller than the instrument's own noise is not a finding. Either way both figures are published, and a pilot too small to separate them is reported as that and not as agreement.",
+      "not_decided_here": "Whether the split asking is better. That is what the condition measures. Nor is the number of items: the pool may still grow before the panel answers, and the style question is about how many items share a call rather than how many exist."
+    },
+    {
+      "id": "D19",
+      "date": "2026-10-21",
+      "origin": "investigator",
+      "decision": "A criterion enters the measured set only where all three raters answer quite or highly relevant. Two of three no longer retains it: the item is published as contested, with both the agreeing and the dissenting reasons, and is not measured in this round. The sheet names the cut, says that a blank is not a vote, and shows what each property is judged over. Agreement is reported as Krippendorff's alpha over the three raters' ordinal answers with the three pairwise Cohen's kappas beside it.",
+      "replaces": "the rule recorded on 2026-10-07, under which two of three retained the item and marked it contested, and which named Cohen's kappa for a panel of three",
+      "affects": [
+        "the measured set: an item two raters call relevant and one does not is reported and not measured, where it would have been measured and marked",
+        "the sheet the three raters receive: the cut, the blank rule, the renamed third step and a column saying what the property is judged over",
+        "the agreement figure in the paper, which is now alpha with the pairwise kappas beside it rather than a kappa that was not defined for three raters"
+      ],
+      "why": "Four points with the cut above the midpoint means a rater choosing uniformly calls an item relevant half the time. Under that null two of three agreeing has probability 0.50, so the old rule retained an item as often as a coin would; unanimity among three has probability 0.125. Three of five would be 0.50 again, so the problem was the cut and not the number of raters. The investigator asked for three raters and an unambiguous verdict, and unanimity is the only cut among three that gives one.",
+      "the_null_these_figures_assume": "a rater choosing uniformly among the four points, which describes nobody. The figures are a floor for reading the index, not an estimate of how this panel behaves, and the paper states the null wherever it quotes them. A real rater's answers are not independent of the item, which is the whole reason to ask them.",
+      "what_this_costs": "Items that two of three call relevant. Under the old rule they were measured and flagged; now they are reported and not measured, so the measured set can only be smaller. That is the intended direction: the round claims a screening of the pool, and an item that one in three experts does not consider relevant to note quality is not something to publish a number about.",
+      "not_decided_here": "Whether a contested item returns in a second round. The pool may not grow once an answer exists, so a contested item waits for a panel that is asked again, and no such panel is planned."
+    },
+    {
+      "id": "D20",
+      "date": "2026-10-22",
+      "origin": "investigator",
+      "decision": "Lynn (1986) and Davis (1992) are read and quoted where the panel rests on them. The retention rule stays exactly as D19 set it, and is now reported with Lynn's Table 2 beside it rather than as this project's own convention alone; the panel of three is reported with Lynn's floor of three and its condition; and the scale's labels are reported as not Lynn's, with the question of whether they are Davis's left open and named.",
+      "replaces": "the statement that neither primary source had been retrieved and that no threshold was therefore taken from them",
+      "affects": [
+        "content_validity.procedure, which named two unretrieved papers as the reason nothing was taken from them",
+        "content_validity.panel.below_the_typical_range, which had only S12's five to seven",
+        "the retention rule, which gains a published source and keeps its own argument",
+        "the paper's content-validity paragraph"
+      ],
+      "why": "The investigator asked for the scale's source to be found. Both papers are closed access with no open copy, so they were read through the university's proxy. Three of this project's own decisions are in them and one of its claims is contradicted, and a protocol that had said the sources were unread could not say either.",
+      "the_order_of_events_is_part_of_the_record": "The unanimity rule was decided on 2026-10-21 from the chance levels of a four-point scale, and Lynn was read on 2026-10-22. The rule is therefore not derived from the source and the source is not a justification written afterwards; they agree, and the dates say which came first. A reader who wants to discount the agreement can.",
+      "not_decided_here": "Whether the labels are Davis's. The figure that would settle it was not read. Lawshe (1975) is still unretrieved and still nothing is taken from it."
+    },
+    {
+      "id": "D21",
+      "date": "2026-10-22",
+      "origin": "investigator",
+      "decision": "An item two of three raters call relevant is reported in two tiers, by what the third rater said: nobody against, where the third answers slightly relevant, and one against, where the third answers not relevant. Neither is measured. Each step of the scale carries an anchor sentence, the sheet shows the catalog's positive and negative example for every criterion, and the harm column asks about measuring the property rather than about the property.",
+      "replaces": "a single contested tier, four scale steps with no anchors, a sheet with no examples, and a column header that asked whether the property could do harm",
+      "affects": [
+        "what is reported about an item two raters accept: two outcomes where there was one",
+        "the sheet: an example column, four anchor lines, a repaired harm header and the answer columns moved from E, F, G to F, G, H",
+        "the time the sheet asks of a rater, which rises from an estimated 30 minutes to 45"
+      ],
+      "why": "The investigator asked why the scale is not simply yes or no, and answered it: with a binary you cannot tell agreement from indecision. That is only true if the four points are used for something, and they were not -- the rule collapsed them to the cut and nothing else read them. Now the tier an item lands in depends on the third rater's step, so the resolution is paid for. The anchors and the examples are the same argument at the other end: a rater asked to judge 'non-stigmatising language' from one sentence, on a scale of four undefined adjectives, is not being asked a question that has an answer.",
+      "the_precedent": "MentalHealthBench (OpenAI, 2026) built its rubrics with more than 80 licensed clinicians and keeps a criterion where at least two of three experts agree and the third does not contradict it. That is the middle tier here. It is not adopted as the retention rule, because their third expert adjudicates and ours does not, and because three raters rating a fixed pool is a weaker design than eighty authoring criteria.",
+      "not_decided_here": "Whether a contested item of either tier returns in a second round. No second panel is planned."
+    },
+    {
+      "id": "D22",
+      "date": "2026-10-22",
+      "origin": "investigator",
+      "decision": "The panel is four raters. An item enters the measured set only where all four answer quite or highly relevant; three of four is published as contested in two tiers by what the fourth said, and two or fewer removes it. Each rater rates every criterion twice, once for a progress note and once for a therapeutic note, on separate tabs whose order alternates between raters. The sheet states what the instrument is for and which note type each tab asks about.",
+      "replaces": "a panel of three rating one undifferentiated session note, and the served purposes continuity and audit",
+      "affects": [
+        "the retention rule, whose chance level falls from 0.125 to 0.0625",
+        "what each rater is asked: 78 judgements instead of 39, an estimated 45 minutes a tab",
+        "the served purposes: audit leaves the round and a therapeutic note enters it",
+        "every relevance value in the catalog, which is the assistant's and which the panel's answers replace for these two note types"
+      ],
+      "why": "The investigator named four raters and asked for the two note types to be rated apart. Both improve the instrument: four raters halve the chance level of the retention rule, and two tabs measure the thing the round is actually about, which is that a property essential to a note the care team reads may be pointless in a note the clinician keeps for themselves. Rating them in two columns of one tab would have produced a second answer anchored on the first.",
+      "the_purposes_are_not_the_code_s_purposes": "What the code calls `continuity` -- 'enable a therapist to resume care safely at the next session' -- is the progress note under another name, and the sheet records that mapping. The therapeutic note has no profile in the code. `audit` leaves the served set: it is a payer's view of a progress note, not a second genre of note. The identifiers appear in 264 places and are not renamed here; the rename is due before the pilot runs, and the pilot has not run.",
+      "not_decided_here": "How a contested item is treated if the two tabs disagree about it -- essential as a progress note and not as a therapeutic note is not a contested item, it is the finding. The reporting of that case is written when the answers exist."
+    },
+    {
+      "id": "D23",
+      "date": "2026-10-22",
+      "origin": "investigator",
+      "decision": "The rating tab carries the table and nothing above it. Each criterion shows one example, the failing case. A legend tab holds what a rater needs and cannot get elsewhere: one sentence for each of the two note types, what they are looking at, and what the four steps of the scale mean. Everything else -- how long it takes, what happens to the answers, that each copy is private -- goes in the message that carries the link, in the sender's own words.",
+      "replaces": "twenty-nine rows of preamble above the first criterion, a heading repeating the tab's own name, and a pair of examples in every row",
+      "affects": [
+        "what a rater reads before answering, which falls from twenty-nine rows to none",
+        "the example column, which holds the failing case alone and is named for it",
+        "the relevance answers, in a direction named below"
+      ],
+      "why": "The investigator read the built sheet and refused it. Most of the preamble was written for a reviewer of this paper and the protocol already holds every line of it: the chance levels, the amendment dates, the reason the order is shuffled. On a participant's sheet those say that we are guarding against them answering at random. The note type was stated twice on one screen, in the tab's name and in a heading under it. And two examples a row, over thirty-nine rows and two tabs, is reading that buys nothing the one failing example does not.",
+      "what_the_single_example_costs": "A column of nothing but failures makes every property look like a live problem, which can only push a relevance answer upward. The pair was neutral in that respect and unreadable in every other. There is no unbiased single example: the positive one alone would push the other way and says nothing at all for a criterion written as the absence of a fault. The direction is named here, in the paper, and beside any count of retained items.",
+      "not_decided_here": "Whether the bias is large enough to matter. Nothing measures it, and with one panel nothing can; a second round shown positive examples would, and none is planned."
+    },
+    {
+      "id": "D24",
+      "date": "2026-10-22",
+      "origin": "investigator",
+      "decision": "The harm question leaves the table and is asked once under it, beside the question about what the list is missing, with a worked example: a one-sentence note scores 1.00 on economy, so grading economy by itself rewards writing almost nothing. A rater who sees such a trap names the criterion and says how; there is no per-item answer.",
+      "replaces": "a column of thirty-nine cells on each tab, and a legend entry whose example was invented",
+      "affects": [
+        "what a rater fills in: two cells a row instead of three, and one box at the end",
+        "the retention rule's harm flag, which now reads a criterion the rater names",
+        "the sheet, which has seven columns"
+      ],
+      "why": "Thirty-eight of thirty-nine cells would have stayed empty on each of two tabs, and a rater had to carry a second question through every row to produce them. The investigator also refused the explanation that went with it, correctly: it claimed a model graded on non-stigmatising language would stop recording that a client is at risk, and that does not follow, because recording risk is a clinical description and not a label on a person. The example had been invented to sound convincing.",
+      "what_is_lost": "A rater is no longer prompted at the moment they read each criterion, so a trap that would have occurred to them in passing may not occur to them at the end. Nothing measures how much that costs. What is kept is the question, its rule and a case that shows what is being asked, which the column did not have.",
+      "and_the_scale_gains_an_answer_that_is_not_a_step": "The rater may answer 'nevim', I cannot judge this. It is coded as missing and not as a fifth point on the ordinal axis: Krippendorff's alpha is defined for incomplete data and drops a unit with fewer than two answers, which costs nothing, while a fifth step would make the distance between the four mean nothing. The outcome for the item is what a blank already gave -- not rated by all four, so not measured -- and what is gained is knowing the criterion was read and found unjudgeable rather than skipped.",
+      "not_decided_here": "Whether a criterion many raters cannot judge should be rewritten or dropped. With one panel there is no second reading to compare it with."
+    },
+    {
+      "id": "D25",
+      "date": "2026-10-22",
+      "origin": "investigator",
+      "decision": "The panel's second question asks how a model could win on a criterion without the note being better, and keeps the broader harm as its second clause. Separately, a ratio is not a measurement when its denominator is too small: every published ratio carries the denominator it was computed over, and one below the floor is reported as not computed rather than as 1.00 or 0.00. The floor is set from the pilot and is not guessed here.",
+      "replaces": "a question asking whether measuring a property could mislead or harm, which the investigator could not parse, and a ratio that reports 1.00 over a denominator of one",
+      "affects": [
+        "the sheet's second open question, which now leads with gaming",
+        "every ratio the instrument publishes, which gains its denominator",
+        "the pilot, which has to produce the floor before any ratio is published"
+      ],
+      "why": "A rater can answer how a model would win on something; whether measuring it could mislead is a question about our instrument asked in our words. And the example that makes it concrete is a gaming shape, not a harm in general: a one-sentence note scores 1.00 on economy because the sentence it has does carry content. The guard belongs in the measurement because that shape is known in advance; the question is for the shapes that are not.",
+      "the_two_are_not_the_same": "Gaming is the part of harm that has a shape, and not all of it. Coverage cannot be gamed by including more, it is satisfied by it, and what pays is privacy, through K15. A guard cannot catch that: nothing in a note that honestly covers more looks wrong. Which is why the question keeps its second clause and the two run together.",
+      "what_the_guard_does_not_do": "It catches a shape somebody thought of. The panel's answers are where the shapes nobody thought of are supposed to come from, and each one named there becomes a candidate guard rather than a finding on its own.",
+      "not_decided_here": "The floor itself. A ratio over one sentence means nothing and a ratio over fifty means something; where it turns is an empirical question the pilot answers, and writing a number here would be the guess this project keeps removing from other people's work."
+    },
+    {
+      "id": "D26",
+      "date": "2026-10-22",
+      "origin": "investigator",
+      "decision": "The panel's second question asks only how a model could get a good mark on a criterion without the note deserving it. The clause asking where measuring could harm a client leaves the sheet, and so does the instruction to write the criterion's code. The retention rule's harm flag reads the free text instead of a code, and an answer that names no criterion flags none.",
+      "replaces": "a question with two halves and an instruction to name the criterion, which the retention rule read mechanically",
+      "affects": [
+        "the sheet's second open question, which is one sentence and its example",
+        "content_validity.retention_rule.harm_flag, whose input is prose and not a code",
+        "the paper's sentence about the second question"
+      ],
+      "why": "The investigator cut it. The gaming half is the half a rater can answer about a criterion they have just read; the harm half asked them to reason about what measuring does, which is a question about our instrument in our words.",
+      "what_is_lost_and_is_not_measured": "Two things, and neither is replaced. The round no longer asks about a measure that is honestly maximised and hurts through another criterion -- coverage is not gamed by including more, it is satisfied by it, and privacy pays through K15 -- so that shape has no question. And the flag no longer has an instructed input: the rater writes prose, the investigator reads which criterion it is about, and where no criterion can be identified the answer is published verbatim and nothing is flagged. A rule read by a person is weaker than one read off a cell and this says so.",
+      "not_decided_here": "Whether the harm question returns in a second round with its own wording. One panel produces no comparison, so there is nothing yet to judge the cut against."
+    },
+    {
+      "id": "D27",
+      "date": "2026-10-22",
+      "origin": "assistant",
+      "decision": "pilot.purposes is ['continuity'] and audit is recorded out of scope under D22's reason. The therapeutic note cannot enter the field until it has a profile in the code, so the round's second purpose is named in the decision ledger and in the panel sheet and is absent from the field the planner reads.",
+      "replaces": "pilot.purposes ['continuity', 'audit'], which contradicted D22 in the same file for one day",
+      "affects": [
+        "pilot.purposes",
+        "pilot.purposes_out_of_scope",
+        "pilot.human_note_sample, which halves from eight to four",
+        "the frozen plan, which is eight notes instead of sixteen until the second profile exists"
+      ],
+      "why": "D22 said audit leaves the served set and the field was not changed with it. A decision in prose beside a field that says otherwise is the defect this repository keeps finding in other people's work, and the field is the half that runs.",
+      "what_it_costs": "The plan halves. Sixteen balanced notes came from two purposes times two generator families times two cohorts; one implementable purpose gives eight and four of them rated by a human, because the planner refuses a sample that differs from the protocol rather than quietly drawing a different one. The human annotation budget is a budget of units rather than notes, so it does not move with it. Sixteen returns when the therapeutic note has a profile. Writing that profile is Phase F work and needs the investigator's review, because the sources for the genre are mostly vendor documentation and the American rule has to be read in its own text.",
+      "what_this_is_not": "Not a narrowing of the round. The panel rates both note types on separate tabs and the catalog carries both; what is narrowed is the set of purposes a note can be generated for today, which is one.",
+      "found_by": "The investigator asked why the code still holds four profiles after several audits. The audit could not have found this: C5 checks that a dotted path a decision names exists, and D22 names its targets in sentences. A check that compares the served purposes with the purposes the panel sheet is built for is added with this amendment."
+    },
+    {
+      "id": "D28",
+      "date": "2026-10-22",
+      "origin": "investigator",
+      "decision": "Where the panel calls a criterion essential and the generation task asks for nothing about it, the task gains the instruction, and the check that the model followed it is reported beside the score and never counted into it. What counts into the score is whether it was done well.",
+      "replaces": "nothing; the four consequences recorded in advance did not cover this case, so it would have been decided per criterion after the answers arrived",
+      "affects": [
+        "content_validity.what_an_essential_answer_leads_to",
+        "content_validity.consequences_recorded_in_advance",
+        "the generation task, which may gain instructions the panel's answers call for",
+        "K18 and K20, which are the two halves of the line this rule draws"
+      ],
+      "why": "The investigator asked whether an essential property absent from the task goes into the task and is then measured for compliance. Both obvious answers are wrong: measuring a property nobody asked for penalises a model for not doing what it was not told, and counting compliance into the score grades obedience, which saturates and stops separating the systems.",
+      "found_by": "The investigator, from K18. Its own record already said what the rule now generalises -- no pilot task requires author citations, so the denominator would be empty -- and nothing said what to do when the panel disagrees with that task.",
+      "and_one_count_repaired_with_it": "The fourth consequence recorded in advance said a panel of three; D22 made the panel four the day before and the count was not changed with it. The substance of the sentence is unchanged.",
+      "not_decided_here": "Which criteria fall on which side. That is read from each criterion once the panel has answered, and a criterion bundling both halves is split first."
+    },
+    {
+      "id": "D29",
+      "date": "2026-10-22",
+      "origin": "investigator",
+      "decision": "Notes are generated under the section names the profile declares, and the protocol is where that is decided: the planner refuses any other format rather than accepting one from a selection file.",
+      "replaces": "a default argument. The protocol said nothing about the format and pilot.plan took it from selection.get('format', 'sections').",
+      "affects": [
+        "pilot.note_format",
+        "pilot.plan, which now refuses a format the protocol does not name",
+        "every generated note's prompt, through NoteSpec.format"
+      ],
+      "why": "The round's question is whether a property essential to a note the care team reads is pointless in a note the clinician keeps apart from the record. That contrast is only readable if the two notes differ in purpose alone. SOAP fits a progress note and not a therapist's own note, so SOAP on one tab and named sections on the other would make the tabs differ in form as well, and a criterion scoring differently between them could not be attributed to the purpose.",
+      "what_it_costs": "The four section names are this project's own and no source stands behind them, so a criterion about structure or about placing content in the right section is measured against our form rather than against a documented one. SOAP would have carried a literature and TN-Eval's comparability with it.",
+      "the_alternative_and_why_not": "SOAP or DAP: an established form with a literature behind it and direct comparability with generation 1 and TN-Eval. Rejected because it is an American medical form that fits the record and not the clinician's own note, and the profile's section names were written in the first place because SOAP does not fit all four purposes.",
+      "found_by": "The investigator asked whether the format was DAP. It was not: DAP was printed because he had named it, and nothing in the protocol or the planner chose anything.",
+      "not_decided_here": "The word limit, which is also a default argument at 500 and also changes the prompt. It is left as it stands rather than decided in passing."
+    },
+    {
+      "id": "D30",
+      "date": "2026-10-22",
+      "origin": "investigator",
+      "decision": "The sheet asks a third open question: which two criteria are the same thing, named by their codes. A pair named by two or more raters is published as a candidate duplicate against the catalog's own overlap record; nothing is merged in this round.",
+      "replaces": "a legend line that called overlap expected and left noticing it to the optional note column",
+      "affects": [
+        "content_validity.questions, which has three",
+        "content_validity.consequences_recorded_in_advance",
+        "the sheet's tail, which has a third question and its answer rows"
+      ],
+      "why": "The catalog records an overlap for all thirty-nine and those records are the assistant's. The panel is the first set of people qualified to say which criteria a therapist cannot tell apart, and a reassurance does not collect that.",
+      "what_it_costs": "A third question on a sheet the investigator has twice cut down, and the order works against the answer: the items are shuffled from a recorded seed, so two near duplicates may sit thirty rows apart and never be seen together. Nothing measures how much that suppresses. A rater who names no pair is not evidence that none exists.",
+      "not_decided_here": "What a confirmed duplicate does to the pool. Merging, dropping one, or rewriting both are all restructurings, and this round has one panel and no second reading to check a restructuring against."
+    },
+    {
+      "id": "D31",
+      "date": "2026-10-23",
+      "origin": "investigator",
+      "decision": "The language layer enters the pool: nine criteria, K40 to K48, seven measured in both languages and two in Czech alone. The panel rates 48 criteria twice each, 96 judgements a rater, and the shuffled order is re-drawn over the larger pool.",
+      "replaces": "a pool of 39 with no language criterion in it, and a proposal of 2026-10-14 whose own status line said nothing in it was in the catalog",
+      "affects": [
+        "content_validity.what_is_rated, where the judged-over counts change",
+        "the panel's workload: 96 judgements a rater instead of 78",
+        "the sheet's order, re-drawn over 48 codes",
+        "catalog.json, czech.json and source-properties.json"
+      ],
+      "why": "The investigator asked why the sheet had no criterion for a calque or a borrowed word and said we had settled it repeatedly. We had settled everything except putting it in the catalog, which is the only file the sheet is built from. A benchmark for a small language whose panel never sees a language criterion would have had its novel half decided by the assistant alone.",
+      "language_layer": {
+        "what_entered": "Nine language-quality criteria, K40 to K48, with four sources: REPA (Pugachev et al. 2025), ELERRANT (Korre et al. 2021), the multilingual annotation framework of Qiu et al. (2025) and TalkTag (Venturini et al. 2026). Every quote was taken from the full text and not from the proposal that summarised it, because four of the nine rested on a category named without its definition transcribed.",
+        "two_layers": "Seven are measured in both languages and two in Czech alone, a diacritic and a calque. The split is not a judgement about which matter: a criterion measured in one language cannot say whether the model is worse in that language or the criterion is merely stricter, so a property stays Czech-only only where it cannot be measured in English at all. English domestic words carry no diacritics, and an English note of this round has nothing to calque from.",
+        "source_of_the_shape": "Qiu et al. (2025), which applies a language-agnostic core with language-specific extensions to five languages including Czech, and ELERRANT, which added exactly two categories of fourteen for Greek itself. A language layer is small and the neutral layer carries the work.",
+        "what_it_costs_the_panel": "96 judgements a rater instead of 78, a fifth more work on a sheet already estimated at 45 minutes a tab. The order is re-drawn over 48 codes rather than 39, which is allowed exactly once and only because no answer exists: appending the nine would have put the whole language layer in one block at the end of the sheet, where fatigue is highest, and a block of nine related items invites being rated as a set.",
+        "five_are_already_measured_and_that_is_not_validation": "The first generation's Czech scorer measures five of the nine. Its agreement figures are a judge against one native speaker: 87% for an unexpected language switch, 83% for a diacritic and for a non-existent word, 70% for register and 67% for a calque. One rater gives no reliability figure, and REPA reports that a judge does worse in Russian than in English, so the calibration has to be repeated in Czech rather than carried over.",
+        "what_is_missing": "No rule is written for any of the nine, which is true of twenty-seven of the thirty-nine already in the pool. Czech has no inter-rater figure at all. Two of the nine, register and the calque, have no named category in any scheme read: their support is the nearest category in a survey of fifteen schemes, recorded as nearest and not as support, and the Latvian loanword and calque work of 2026 is in the frame and unread."
+      },
+      "why_now_and_not_in_a_second_round": "Nothing has been sent and no answer exists, so adding them costs a rebuild. After the sheets go out it would cost a second panel, and the relevance of the nine would be the assistant's in the meantime.",
+      "not_decided_here": "Any rule for measuring the nine, and whether the two Czech-only criteria are reported beside the seven or in a section of their own. The first costs the human budget the pilot does not have; the second is a reporting question answered when there is something to report."
+    },
+    {
+      "id": "D32",
+      "date": "2026-10-23",
+      "origin": "investigator",
+      "decision": "The rating tab carries the table and nothing else. The gaming question and the duplicates question are explained on the legend under the note column and answered in that note, beside the row they are about; the question about what the list is missing keeps its own space at the bottom of the legend.",
+      "replaces": "three questions under the table, each with blank rows under it",
+      "affects": [
+        "the three questions' location and how each is answered",
+        "the sheet's builder, which refuses to put anything under the last candidate",
+        "the legend, which gains a block about the note column"
+      ],
+      "why": "The investigator opened the sheet on a phone. Twenty rows of prose under the forty-eighth criterion make the tab stop looking like a table well before it ends, and a rater who has just scrolled through forty-eight rows is the worst reader for a paragraph.",
+      "what_is_lost": "An answer in the note is attached to one criterion, so a rater who sees a gaming shape across two of them has to pick a row. Under the table the answer was free of any row. Nothing measures how often that happens.",
+      "and_this_is_the_second_move_for_one_of_them": "D24 took the gaming question out of the table because a column of thirty-nine cells meant thirty-eight empty ones a rater had to carry a second question through. This puts its answer back beside the row and adds nothing to fill in: the note column already existed and was already optional, and what changed is that the legend now says what it is for.",
+      "not_decided_here": "How an answer in a note is read back. A note may hold a gaming shape, a duplicate pair, or anything else the rater thought; separating them is reading, and the retention rule already says the harm flag reads prose."
+    },
+    {
+      "id": "D33",
+      "date": "2026-10-23",
+      "origin": "assistant",
+      "decision": "Eighteen of the forty-eight Czech statements were rewritten to say what their English definition says, before any sheet was sent. Fifteen had dropped part of the definition and six were noun phrases in a column headed 'in one sentence'; three criteria are in both groups.",
+      "replaces": "Czech statements that said less than the English definitions they were translated from, and that nothing had ever been checked against them",
+      "affects": [
+        "the statement column of the panel sheet, which is one of three fields a rater reads",
+        "K01, K03, K07, K08, K09, K10, K14, K16, K17, K20, K22, K23, K24, K25, K29, K34, K37, K38"
+      ],
+      "why": "czech_problems() asks that the Czech names the same codes as the catalog and leaves no required field empty. It cannot ask whether a sentence means what the English means, and nothing else did either, so the drift was invisible until a second session read the two side by side.",
+      "what_was_restored": "The intent and the plan in K03; the questioning of a client's credibility and the reduction to behaviour in K14; medicines, places and family relations in K38; the second half of the definition in K09, that a connection must also fit the note's purpose; what a note may not contain in K20; and in K08 the topic list, where suicidal ideation was narrower than suicidality and abuse alone read as substance abuse.",
+      "two_are_more_than_restoration": "K01 and K37 compared with what was said in the session where the English compares with the source. For K37 that collided with K39: an error the transcript already carried is K39's, and 'what was said' made the two the same criterion.",
+      "k17_was_reworded_twice_and_a_proposal_refused": "Its Czech asserted that non-clients are given by role and not identified, which the English leaves open; the first repair described what the measurement distinguishes rather than what a note has; and the second session proposed that the note gives only what its purpose needs, which is almost word for word K15. That was refused: the panel is at this moment asked which two criteria are the same thing, and a duplicate manufactured this week would be a finding we had planted. What stands is the English's own shape, a topic.",
+      "what_this_does_not_fix": "The English catalog against the papers it rests on. The same session found that K05 draws the opposite conclusion from the sentence it quotes, which is confirmed and repaired separately, and that K11 and K03 may misread PDSQI-9 and PDQI-9, which cannot be checked without those papers and is recorded as unverified until they are read. It also does not cover K40 to K48.",
+      "not_decided_here": "Whether a check can be built for this class at all. Two sentences meaning the same thing in two languages is not computable, and the honest answer may be that this needs a second reader each time the Czech changes."
+    }
+  ],
+  "content_validity": {
+    "status": "registered before any rating exists; no answer has been collected and no sheet has been sent. The pool was 34 items when the rule was registered and is larger now; catalog/catalog.json holds the list the sheet is built from, and the sheet takes its count from that list rather than stating one.",
+    "registered_on": "2026-10-07",
+    "procedure": {
+      "named": "expert rating of the item pool for relevance, with a retention threshold declared in advance; a screening round of a modified Delphi",
+      "source": "S12",
+      "source_quotes": [
+        "Multiple judges have been used (typically ranging from 5 to 7)",
+        "an increase in the number of experts has been found to increase the robustness of the ratings"
+      ],
+      "what_the_source_recommends": "S12 names three ways to quantify the judges' assessments, the content validity ratio, the content validity index and Cohen's kappa, and recommends kappa as the most efficient. The numeric thresholds conventionally used with the first two come from Lawshe (1975), which this project has not retrieved and takes nothing from, and Lynn (1986), which it read on 2026-10-22 through the university's proxy. What Lynn's Table 2 requires of three experts is the rule this project had already adopted a day earlier on its own argument: all three. The quotes are in research/gen2/panel-scale-sources.json, with what each one settles and what was not read beside it.",
+      "primary_sources_read": "research/gen2/panel-scale-sources.json"
+    },
+    "panel": {
+      "raters": 4,
+      "profile": "psychotherapy researchers or practising therapists, none of them the instrument's author and none the assistant",
+      "identities": "held locally; a rater is named in the paper only with their consent",
+      "independence_to_record_per_rater": "whether the rater will be an author of the paper, because a rater who will be an author is not an independent judge and must be reported as a co-author's rating",
+      "below_the_typical_range": "S12 calls five to seven typical and this panel is three. Lynn (1986), the source S12 cites for the content validity index, names three as the floor: 'in content/domain areas of sufficient restriction to preclude large numbers of experts, a minimum of three experts should be used', and calls two 'not only statistically unjustifiable' but a risk of concluding that content validity is absent when it is not. Three is therefore a floor this project meets rather than simply fewer than typical -- on a condition it has to argue rather than assume, that the domain precludes more. The arithmetic is coarse at three either way, and the round is still reported as a screening of the pool and not as established content validity.",
+      "independence_of_the_ratings": "each rater answers on their own copy and sees no other rater's answers; a shared sheet would make the second and third answer a reaction to the first",
+      "design": "Four raters, each rating every criterion twice: once for a progress note and once for a therapeutic note, on separate tabs rather than in two columns, because an answer made beside the previous one is an answer about it. Which tab comes first alternates between raters, two and two, so that fatigue does not accumulate on the same note type and read as a difference between them. Lynn (1986) requires all four of four in the same table that requires all three of three, so the rule is unchanged in kind by the extra rater and stricter in effect."
+    },
+    "what_is_rated": {
+      "items": "every candidate of the catalog, including those the round does not measure, the one the investigator dropped on 2026-10-05, and K35 and K36, which arrived on 2026-10-07 from a source read in full, and the nine of the language layer, which entered on 2026-10-23 (decision D31)",
+      "shown_per_item": "the code, the Czech name, one sentence of definition, one example -- the failing case, from the catalog -- and what the property is judged over, which is one note for forty-five of them, several sessions with one client for one and a model across clients for two; no state, no origin, no citation, no measurement rule and no indication of what the assistant or the investigator thinks. The table is the first row of the tab: what stood above it until 2026-10-22 is under framing below.",
+      "why_blind_to_state": "The sheet carries the code, the Czech name, one sentence, the catalog's positive and negative example, and what the property is judged over. It carries no state, no origin, no citation, no measurement rule and none of this project's own relevance ratings. That is the sheet; it is not a controlled condition. The whole catalog, including those ratings, is on a published page, and nothing prevents a rater from finding it. The investigator states that none of the three has seen that page, and the sheet asks them not to look the criteria up before answering. Both of those are reported as what they are -- his statement and a request -- and not as blinding that anyone enforced.",
+      "pool_changes_before_the_panel": "A pool may grow until the first sheet is sent, and two items were added on 2026-10-07. After an answer exists it may not: adding an item then would mean some raters rated it and others did not, and the threshold is a proportion of three. If a property is found after the panel has answered, it waits for a second round and is reported as a later addition.",
+      "purposes_rated": {
+        "progress_note": "Part of the record. The care team that takes over and the payer read it, and the client has a right of access to it. This is the purpose the code calls `continuity`, under a name that says what the note is rather than what it is for.",
+        "therapeutic_note": "The clinician's own analysis of the session, kept apart from the record, not written to be handed over or billed. Under 45 CFR 164.501 a psychotherapy note is excluded from the client's right of access and excludes by name diagnosis, functional status, treatment plan, symptoms, prognosis and progress, which belong in the record. The code has no profile for it.",
+        "audit_leaves_the_round": "A documentation audit is a payer's or an auditor's view of a progress note, not a second genre of note, so it is not one of the two the panel is asked about. The investigator's objection recorded against K07 proposed exactly this pair.",
+        "what_this_does_to_the_catalog": "Every candidate carries a relevance value per purpose and every one of them is the assistant's. For these two note types the panel's answers replace them, which is the first time any of those values will have come from somebody qualified to make it. Until the answers exist the catalog's values stand and are labelled as the assistant's wherever they are published."
+      },
+      "framing": "Not on the sheet. Until 2026-10-22 the sheet opened with twenty-nine rows that said what the instrument is for and a good deal besides -- the chance levels of the retention rule, the dates of this protocol's amendments, why the criteria are shuffled -- and the investigator refused all of it: a participant's sheet that explains the guard against random answering is telling four experienced therapists what we suspect them of. The orientation Davis (1992) asks for is in the message that carries the link, in the sender's own words, and the legend tab holds the two things a rater cannot get elsewhere: what they are looking at, and what the four steps mean. The sentences are in research/gen2/catalog/czech.json and the ones that left are kept there with their dates."
+    },
+    "questions": [
+      {
+        "id": "relevance",
+        "text": "Is this relevant to the quality of a psychotherapy session note?",
+        "scale": [
+          "not relevant",
+          "somewhat relevant",
+          "quite relevant",
+          "highly relevant"
+        ],
+        "counts_as_relevant": "quite relevant or highly relevant",
+        "scale_source": "Four points with the cut above the midpoint is Lynn's (1986), read on 2026-10-22: 'the 4-point scale is preferable because it does not include the ambivalent middle rating common in odd number rating scales', and Davis (1992) computes the index from 'the total number of items ranked 3 or 4 by both reviewers'. The labels are not Lynn's, whose third and fourth options are 'relevant but needs minor alteration' and 'very relevant and succinct' -- about what to do with the item, not only about how relevant it is. Whether this project's wording is Davis's is unsettled: the figure that would settle it was not read, which research/gen2/panel-scale-sources.json records as unread. Lawshe (1975) remains unretrieved and nothing is taken from it.",
+        "anchors": "Each step carries a sentence saying what it means, in research/gen2/catalog/czech.json under vocabulary.relevance_scale, and the sheet builds those lines from there. Until 2026-10-22 the four steps were four adjectives with no definition, so what the panel's agreement would have measured was agreement on vocabulary."
+      },
+      {
+        "id": "harm",
+        "text": "How could a model get a good mark on this criterion without the note deserving it? Asked once, under the table, not per item, as free text.",
+        "scale": [
+          "free text, once per rater, not per item"
+        ],
+        "shown_with": "A worked example from this project's own data: a one-sentence note scores 1.00 on economy, so grading economy by itself rewards writing almost nothing. The example the column carried until 2026-10-22 was invented -- a model graded on non-stigmatising language stopping its record of risk -- and does not follow, because recording risk is a clinical description and not a label on a person. The question asked about harm to a client until 2026-10-22, when the investigator cut that clause; the example was always a gaming shape and is unchanged by the cut.",
+        "effect": "a criterion the answer identifies is reported with the flag and is not measured in this round whatever its relevance count, and the reason is kept verbatim. The sheet stopped asking for the criterion's code on 2026-10-22, so the identification is the investigator's reading of prose and not a field; an answer that identifies no criterion is published and flags nothing.",
+        "where_it_is_asked": "On the legend, not under the table. The rating tab is the header and one row per candidate and nothing else since 2026-10-23. The two questions about a particular criterion are explained under the note column and answered in the note beside the row they are about; the question about what the list is missing has no row to attach to and keeps its own space at the bottom of the legend."
+      },
+      {
+        "id": "missing",
+        "text": "What important property of a note is missing from this list?",
+        "scale": [
+          "free text, once per rater, not per item"
+        ],
+        "effect": "a property named here enters the pool as a candidate with the rater as its origin, and is rated in a second round if the panel is asked again. The question itself is Lynn's (1986) recommendation, 'The experts, in addition to judging each item, should identify any area(s) that have been omitted from the instrument', which this project had written without knowing.",
+        "where_it_is_asked": "On the legend, not under the table. The rating tab is the header and one row per candidate and nothing else since 2026-10-23. The two questions about a particular criterion are explained under the note column and answered in the note beside the row they are about; the question about what the list is missing has no row to attach to and keeps its own space at the bottom of the legend."
+      },
+      {
+        "id": "duplicates",
+        "text": "Which two of these criteria are the same thing? Asked once, under the table, not per item: the rater names the pair by its codes and says what makes them the same.",
+        "scale": [
+          "free text, once per rater, naming pairs of codes"
+        ],
+        "shown_with": "One line in the legend saying that criteria do overlap, that this is expected, and that the question is at the bottom of the sheet. Until 2026-10-22 that line stood alone and offered the note column instead of asking.",
+        "effect": "a pair any rater names is reported with their wording; a pair two or more name is published as a candidate duplicate and compared with what catalog.json already records in that criterion's `overlaps` field, with agreement and disagreement both reported. Nothing is merged in this round.",
+        "origin": "the investigator, 2026-10-22. The mirror question, what the list is missing, is Lynn's (1986); this one is this project's and no source is claimed for it.",
+        "where_it_is_asked": "On the legend, not under the table. The rating tab is the header and one row per candidate and nothing else since 2026-10-23. The two questions about a particular criterion are explained under the note column and answered in the note beside the row they are about; the question about what the list is missing has no row to attach to and keeps its own space at the bottom of the legend."
+      }
+    ],
+    "retention_rule": {
+      "declared_before_any_answer": true,
+      "recorded_on": "2026-10-07",
+      "amended_on": "2026-10-21",
+      "amended_before_any_answer": true,
+      "what_registered_means_here": "recorded in this tracked protocol before use. The project has no external preregistration at all: registration.status is not_registered and local_timestamp_is_registration is false. A rule may be amended while no answer exists, which is the case here, and the amendment carries its date.",
+      "index": "the proportion of the four raters who answer quite or highly relevant",
+      "chance_levels_under_a_uniform_rater": {
+        "one_rater_calls_it_relevant": 0.5,
+        "at_least_3_of_4": 0.3125,
+        "4_of_4": 0.0625,
+        "3_of_3_for_comparison": 0.125,
+        "null": "a rater choosing uniformly among the four points. Nobody behaves like that, so these are a floor for reading the index and not a model of the panel; they are quoted with the null named. Going from three raters to four halves the chance level of the retention rule, which is why the rule did not have to be loosened to accommodate a fourth opinion."
+      },
+      "missing_answer": "A blank is not an answer, and since 2026-10-22 a rater may say so outright: the scale offers 'nevim', I cannot judge this, coded as missing rather than as a fifth point on the ordinal axis. Either way the index is not computed for that item: it is reported as rated by fewer than four and is not measured. Counting it as not relevant would invent a judgement nobody made, and taking the proportion over the raters who did answer would apply a different rule to that item than to every other -- and an item left blank is likely to be one of the hard ones, so the bias has a direction. What the explicit answer adds is the difference between a criterion that was read and found unjudgeable and one that was skipped.",
+      "harm_flag": "a criterion the harm answer identifies is reported with the flag and is not measured in this round whatever its relevance count. The question was a column until 2026-10-22 and the flag was per item; on the same day the question lost its harm clause and its instruction to write the criterion's code, so the flag now reads prose that nothing asked to be machine-readable. Where the answer identifies no criterion it is published verbatim and flags none, which is weaker than the rule it replaces and is stated so.",
+      "agreement": "Krippendorff's alpha on the ordinal four-point answers over all three raters, with the three pairwise Cohen's kappas beside it. The rule used to name Cohen's kappa alone, which is defined for two raters and could not report the panel it described; S12 recommends kappa over the content validity ratio and index and does not say how to apply it to three. Both are published, with the caveat that three raters over a pool this size give an imprecise estimate, and alpha is the one quoted in prose.",
+      "why_the_cut_is_shown_to_the_raters": "The sheet already told them what happens to their answers, and a rater who is not told where the line falls guesses. The cost is named rather than avoided: a rater who knows the cut can answer at the extremes to push an item in or out, which is a risk the alternative does not remove, it only hides.",
+      "what_the_rule_does_not_do": "it does not decide whether an item is measurable, only whether the panel judges it relevant. A relevant item with no operational rule stays unmeasured for that reason and the two reasons are reported apart.",
+      "supported_by": "Lynn (1986) Table 2, 'Proportion of Experts (Above the Line) Whose Endorsement Is Required to Establish Content Validity Beyond the .05 Level of Significance', whose row for three experts is 1.00. Read on 2026-10-22, the day after this rule was adopted from the chance levels above; the dates are kept so that the agreement can be read as agreement and not as the rule's derivation. See research/gen2/panel-scale-sources.json.",
+      "agreement_the_field_expects": "Davis (1992) expects of a new instrument that 'investigators should seek 80% or better agreement among reviewers', and counts agreement at both ends of the cut: items both raters put at 1 or 2, plus items both put at 3 or 4. This project reports Krippendorff's alpha over the four ordinal answers, which is stricter and not the same quantity, so the 80% is named as the expectation the field has and not as a threshold this panel is measured against. A percentage agreement computed Davis's way is published beside alpha so that the comparison a reader wants is available.",
+      "modified_kappa": "Polit, Beck and Owen (2007) proposed a modified kappa that corrects the content validity index for chance agreement, which is the fault this project found in its own rule on 2026-10-21. It is computed and published beside Krippendorff's alpha and the pairwise Cohen's kappas. Its assumption is named wherever it appears: it treats chance endorsement as a coin flip, the same null as the chance levels above, and three raters who share a training and a professional culture are not three coins.",
+      "4_of_4": "retained for measurement where an operational rule exists",
+      "3_of_4_nobody_against": "three raters answer quite or highly relevant and the fourth answers somewhat relevant. Published as contested with all four reasons, and not measured in this round. This is the shape MentalHealthBench retains on and this project does not.",
+      "3_of_4_one_against": "three raters answer quite or highly relevant and the fourth answers not relevant. Published as contested with the dissent given its own weight, and not measured. A yes/no answer could not tell this tier from the one above it, which is what the four points are for.",
+      "2_of_4_or_fewer": "removed from the measured set; the candidate stays in the catalog with the panel's rating as the reason, which is the same treatment every other unmeasured candidate gets"
+    },
+    "consequences_recorded_in_advance": [
+      "The measured set after the panel may differ from the sixteen chosen before it, and the pilot runs on the panel's set.",
+      "If the panel retains the criterion the investigator dropped on 2026-10-05, that decision was wrong and the paper says so.",
+      "If the panel drops a criterion the assistant proposed, the same applies in the other direction.",
+      "A panel of four cannot establish content validity either, so the paper claims a screening of the pool by four independent raters and reports the gap that remains. The sentence said three until 2026-10-22: D22 made the panel four on the day before and the count here was not changed with it. The substance is unchanged, because four is still below the five to seven the field calls typical.",
+      "If the panel calls a criterion essential and the generation task asks for nothing about it, the task gains the instruction and the check that it was followed is reported beside the score and never counted into it; a criterion that is both a property of the note and a convention of the form is split. The rule is content_validity.what_an_essential_answer_leads_to and was recorded on 2026-10-22, before any answer existed (decision D28).",
+      "If raters name two criteria as the same thing, the pair is reported with their wording and, where two or more name it, published as a candidate duplicate beside what the catalog already records about that pair. Nothing is merged in this round, because merging changes what is measured and a screening of the pool is not a mandate to restructure it (decision D30)."
+    ],
+    "what_an_essential_answer_leads_to": {
+      "declared_before_any_answer": "2026-10-22, before any sheet was sent and before any answer existed. The question came from the investigator and the rule is his; it is written now because deciding it per criterion after the answers arrive is deciding it once the direction is visible.",
+      "the_rule": "Where the panel calls a criterion essential and the generation task asks for nothing about it, the task gains the instruction, and the check that the model followed it is reported beside the score and never counted into it. What counts into the score is whether it was done well.",
+      "branches": {
+        "needs_no_instruction": "A property a good note has by being good -- it does not invent, it keeps negation and uncertainty, it records assessed risk, it separates an agreement from a suggestion. It becomes a quality measure and the task is unchanged, because a note that fails it is bad whether or not we forbade the failure.",
+        "exists_only_because_it_was_asked_for": "Sections, length, language, author-provided citations. The task gains the instruction, prompt_version is bumped, and whether the model followed it is a deterministic check reported beside the score. K20 already sits there and is the shape the rest follow.",
+        "a_criterion_that_is_both": "Split, each half to its own side. K18 needs no rewriting to be split: it declares three numbers and never one, and the share of claims carrying a citation is the compliance half while whether the citation supports the claim is the quality half."
+      },
+      "why_the_compliance_check_is_not_in_the_score": "It would grade obedience. Every capable model follows a formatting instruction, so the measure saturates, the systems stop being separated by it, and a ranking that includes it is a ranking of instruction-following wearing the name of note quality. The project already asks this question of its own measures with `tnb saturation`.",
+      "what_is_reported": "Which criteria changed the task and what was added; that notes generated before the change are not comparable with notes generated after it, because prompt_version is part of the instrument; and for every criterion that stays unmeasured, that it is essential and unmeasured rather than absent from the pool.",
+      "what_this_rule_does_not_decide": "Whether a given property needs an instruction. That is read from the criterion, and a criterion whose two halves were never separated has to be split before it can be classified. Nothing automates the reading."
+    }
+  }
+}

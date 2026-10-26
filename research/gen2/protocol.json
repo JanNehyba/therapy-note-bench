@@ -1,6 +1,6 @@
 {
   "id": "therapy-note-construct-review",
-  "version": "2.25.0",
+  "version": "2.26.0",
   "status": "protocol_amended_before_pilot_search_partially_executed",
   "recorded_date": "2026-10-14",
   "design": "Instrument development informed by a systematic scoping review, expert proposals and empirical observations",
@@ -319,8 +319,8 @@
     "review_completion": "Only executed searches and verified decisions count as completed; blocked sources remain named gaps",
     "scope": "Report selected and required methods, planned/applicable/assessed units, and incomplete critical-error assessment even in public aggregates"
   },
-  "supersedes": "2.24.0",
-  "amendment_reason": "D33: eighteen Czech statements rewritten to say what their English definitions say, before any sheet was sent, because nothing had ever compared the two and fifteen of them had dropped part of the definition.",
+  "supersedes": "2.25.0",
+  "amendment_reason": "D34: twenty-three Czech fields on seventeen criteria rewritten after the investigator read all forty-eight aloud, one at a time, before any sheet was sent. D35: a third tab carrying the whole list on one screen with a column for naming a duplicate, which returns the duplicate answer to a field after four days as prose.",
   "retrieval_gaps": "Record reports not retrieved separately from full-text eligibility exclusions; unavailable databases remain named gaps",
   "expert_inputs": "May enter throughout development. Later support does not rewrite historical origin; author or colleague proposals do not imply consensus.",
   "registration": {
@@ -814,6 +814,43 @@
       "k17_was_reworded_twice_and_a_proposal_refused": "Its Czech asserted that non-clients are given by role and not identified, which the English leaves open; the first repair described what the measurement distinguishes rather than what a note has; and the second session proposed that the note gives only what its purpose needs, which is almost word for word K15. That was refused: the panel is at this moment asked which two criteria are the same thing, and a duplicate manufactured this week would be a finding we had planted. What stands is the English's own shape, a topic.",
       "what_this_does_not_fix": "The English catalog against the papers it rests on. The same session found that K05 draws the opposite conclusion from the sentence it quotes, which is confirmed and repaired separately, and that K11 and K03 may misread PDSQI-9 and PDQI-9, which cannot be checked without those papers and is recorded as unverified until they are read. It also does not cover K40 to K48.",
       "not_decided_here": "Whether a check can be built for this class at all. Two sentences meaning the same thing in two languages is not computable, and the honest answer may be that this needs a second reader each time the Czech changes."
+    },
+    {
+      "id": "D34",
+      "date": "2026-10-26",
+      "origin": "investigator",
+      "decision": "Twenty-three Czech fields on seventeen criteria were rewritten before any sheet was sent, after the investigator read all forty-eight criteria aloud in the order a rater meets them and judged each for Czech and for whether a therapist would understand it. Twenty-five criteria passed unchanged.",
+      "replaces": "Czech that was grammatical but not what a Czech speaker would say, five statements that described the defect instead of the property, and six that said 'zdroj' where the thing meant is the session transcript",
+      "affects": [
+        "the name and statement columns of the panel sheet, two of the three fields a rater reads",
+        "K01, K02, K03, K05, K09, K14, K18, K22, K36, K37, K38, K39, K40, K41, K44, K45, K47"
+      ],
+      "why": "D33 compared every Czech sentence with the English definition behind it and repaired eighteen. That check cannot see a sentence that renders its definition faithfully and still reads as translated, and it has no purchase at all on a name. Reading the sentences aloud as Czech finds what comparing them with English cannot.",
+      "the_three_kinds": {
+        "wrong_Czech": "K14 said the note must not 'snizovat' the client, which is not what Czech does to a person. K36 asked whether the note shows 'jak to klient prozival' with no antecedent for 'to', and the investigator asked outright what 'to' was. K05's 'podstatnost ma stupne' is the category describing its own scale. K03 named two time layers where it means three, and the investigator could not tell which.",
+        "negative_where_positive_reads_better": "Five statements described the defect rather than the property, and the investigator asked for those five and no more: K40, K41, K44, K45, K47. K45 was a double negative, no word that does not exist. The other forty-three keep their shape, because he judged that a therapist reads a fault more easily than a virtue.",
+        "zdroj_versus_prepis": "Six statements said source where they mean the transcript of the session. He asked for the Czech word throughout and for the wider case to be named in brackets where a note may rest on something else, which K01 now does: the therapist's modality, the client's age."
+      },
+      "two_names_changed": "K02 is now 'Kdo co rekl v prepisu', his wording, and its statement separates what was said in the session from what came out of older records, because the old one listed a document beside three people as though it had spoken. K41's 'Fluence' was itself a calque, which is what K48 on the same sheet is about, and he caught it; it is 'Plynulost', and the comprehension threshold moved from the name into the sentence.",
+      "what_this_does_not_fix": "Three criteria he objected to on substance are untouched. K08 does not describe a property of a note but the weight of an error in one part of it; K16 is a fact about how the note came to exist rather than about its content; K35 he reads as a rule about form. All three are recorded and none is changed, because relevance is the question the panel is being asked and answering it ourselves would empty the round.",
+      "not_decided_here": "Whether any criteria merge. Nine pairs he named as the same thing are nine pairs the catalog already records in `overlaps`, and that agreement is a result only if the panel answers independently. See D35."
+    },
+    {
+      "id": "D35",
+      "date": "2026-10-26",
+      "origin": "investigator",
+      "decision": "The workbook gains a third tab, 'Prehled': all forty-eight criteria on one screen with the code, the name, the one sentence, and an empty column headed 'Podobne s (kod)'. The order is the rating tab's order. The legend's line about duplicates points there and keeps the note column for the reason.",
+      "replaces": "A duplicate question asked of a rater who met the criteria in a shuffled order with no way to see the list as a whole, and whose answer had been free prose since 2026-10-22",
+      "affects": [
+        "the panel sheet, which goes from three tabs to four per rater",
+        "questions.duplicates, whose answer is a field again rather than prose",
+        "retention_rule.harm_flag, which records that the code stopped being asked for"
+      ],
+      "why": "The investigator put it plainly: a rater cannot be expected to remember, forty rows later, that they read something like this before. The question was asking for a comparison across a list nobody could hold in their head.",
+      "what_was_refused_and_why": "His own first proposal was to print our candidate pairs beside the criteria. It was refused and he agreed. Every one of the nine pairs he named while reading is a pair catalog.json already records in `overlaps`, so printing them would hand the panel our reading and take back their agreement as a finding. The same argument rules out grouping the overview thematically, and rules out sorting it by code: the nine criteria of the language layer carry consecutive codes because they were added together, and that ordering is itself a claim about which belong together.",
+      "what_it_restores": "On 2026-10-22 the sheet stopped asking for the criterion's code, and retention_rule records the cost: the flag became the investigator's reading of prose rather than a field. The column restores the code without restoring the instruction that was cut, because the rater writes it where the whole list is in front of them.",
+      "what_this_does_not_do": "It merges nothing and reports nothing differently. The protocol's rule stands: a pair any rater names is reported with their wording, a pair two or more name is published as a candidate duplicate beside what the catalog records, and nothing is merged in this round.",
+      "not_decided_here": "Whether the overview tab's column or the legend's note is the primary record when a rater fills in only one. Both are published; nothing weights them."
     }
   ],
   "content_validity": {
