@@ -15,9 +15,10 @@ it does for every other script here, so this file stays public-safe.
 Writes into a gitignored directory: the sheets go to people, and what comes back
 is answers about an instrument, which belong in the record and not in a view.
 
-**Four things are not in this table and a rebuild has to carry them by hand.**
-All four were wrong in a live workbook on 2026-10-23 and none was a value, so
-comparing the sheet with this file would not have found any of them.
+**Five things are not in this table and a rebuild has to carry them by hand.**
+Four of them were wrong in a live workbook on 2026-10-23 and the fifth on
+2026-10-26, and none was a value, so comparing the sheet with this file would
+not have found any of them.
 
 * **Merges.** The old layout merged each question under the table across the
   row. When the list grew from thirty-nine criteria to forty-eight those merges
@@ -39,10 +40,23 @@ comparing the sheet with this file would not have found any of them.
   last question in the answer column's colour, because that question says to
   write here and nothing else says where here is.
 
-The four were found four different ways, and only the last one by looking at
-the sheet as a reader sees it: export it to PDF and render the pages. The API
-reports a wrapped row's height as 21 pixels whether it has one line or four,
-so the question this answers cannot be asked of it.
+* **The overview tab's first row.** It holds a paragraph, and the tab's first
+  column is sixty pixels wide because it holds a code. Wrapped into sixty
+  pixels a paragraph is a column of single letters, so the row has to be
+  merged across all four columns before it reads as a sentence. The tab also
+  needs its three heading rows frozen, its own column widths, and the answer
+  column filled in the colour the rating tab uses for an answer.
+
+Each was found a different way, and the last two only by looking at the sheet
+as a reader sees it: export it to PDF and read the text back out. The API
+reports a wrapped row's height as 21 pixels whether it holds one line or four,
+so the question these answer cannot be asked of it.
+
+**What the PDF cannot answer.** The rating tab prints its forty-eight rows onto
+one page and the export truncates the long cells to make them fit. That is the
+printer and not the sheet: on screen, where a rater works, the rows expand. So
+a PDF is the way to see a layout fault and the wrong way to check that a cell
+holds what it should. Read the values back through the API for that.
 """
 
 from __future__ import annotations
