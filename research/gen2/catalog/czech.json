@@ -2518,7 +2518,7 @@
         "Jak by se to dalo obejít? Co se začne známkovat, na to se modely zaměří, a někdy jde získat dobrou známku, aniž by zápis za něco stál. Příklad: kritérium „Úspornost“ žádá, aby každá věta nesla podstatný obsah. Zápis, který má jedinou větu, dostane plný počet bodů, protože ta jedna věta podstatná je. Takže čím míň toho model napíše, tím líp dopadne. Když vás něco takového u některého kritéria napadne, napište to do poznámky u jeho řádku."
       ],
       [
-        "Která dvě jsou to samé? Některá kritéria se částečně překrývají a to tak má být. Na to je třetí list Přehled: jsou na něm všechna kritéria pohromadě a v posledním sloupci si u jednoho z dvojice poznamenáte kód toho druhého. Sem do poznámky napište, v čem jsou podle vás stejná."
+        "Která dvě jsou to samé? Některá kritéria se částečně překrývají a to tak má být. Na to je list Přehled: jsou na něm všechna kritéria pohromadě a v posledním sloupci si u jednoho z dvojice poznamenáte kód toho druhého. Sem do poznámky napište, v čem jsou podle vás stejná."
       ],
       [],
       [
@@ -2555,7 +2555,7 @@
       "Podobné s (kód)"
     ],
     "overview_intro": "Přehled všech kritérií v tom pořadí, v jakém je máte na hodnoticím listu. Sem se můžete kdykoli vrátit, když budete mít pocit, že jste něco podobného už četli. Když vám dvě kritéria přijdou jako totéž, napište si u jednoho z nich do posledního sloupce kód toho druhého. Nepovinné, ale je to pro nás jedna z nejcennějších odpovědí.",
-    "overview_note": "Added on 2026-10-26. The investigator read all forty-eight criteria aloud and named nine pairs he thought were the same thing; all nine are pairs catalog.json already records in `overlaps`. He then asked the practical question the protocol does not answer: a rater meets the criteria in a shuffled order and cannot be expected to remember, forty rows later, that they read something like this before. His own proposal was to print our candidate pairs on the sheet, which would turn the duplicate question into a confirmation of our own reading. This tab is the alternative: the whole list on one screen, in the same order, with nothing grouped and nothing suggested, and a column the rater fills in as they go. It also restores what the sheet lost on 2026-10-22, when the question stopped asking for the code: the answer is a field again rather than prose that nothing asked to be machine-readable."
+    "overview_note": "Added on 2026-10-26. The investigator read all forty-eight criteria aloud and named nine pairs he thought were the same thing; all nine are pairs catalog.json already records in `overlaps`. He then asked the practical question the protocol does not answer: a rater meets the criteria in a shuffled order and cannot be expected to remember, forty rows later, that they read something like this before. His own proposal was to print our candidate pairs on the sheet, which would turn the duplicate question into a confirmation of our own reading. This tab is the alternative: the whole list on one screen, in the same order, with nothing grouped and nothing suggested, and a column the rater fills in as they go. It also restores what the sheet lost on 2026-10-22, when the question stopped asking for the code: the answer is a field again rather than prose that nothing asked to be machine-readable. The legend called it the third tab until the same day: the two rating tabs swap places between raters by design, so a position is not something the legend can promise."
   },
   "page": {
     "title": "Všechna kritéria v jedné tabulce",
