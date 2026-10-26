@@ -264,7 +264,10 @@
       "field": "name",
       "kept": {
         "from": "panel_sheet.py",
-        "text": "Kdo co řekl"
+        "text": "Kdo co řekl v přepisu",
+        "text_when_resolved": "Kdo co řekl",
+        "reworded_on": "2026-10-26",
+        "why_reworded": "The investigator renamed it when he read all forty-eight criteria aloud. Which generator won the conflict is unchanged and is what this record is for; the text it won with is kept beside the current one."
       },
       "rejected": [
         {
@@ -394,7 +397,10 @@
       "field": "name",
       "kept": {
         "from": "panel_sheet.py",
-        "text": "Dohledatelnost ke zdroji"
+        "text": "Dohledatelnost k přepisu",
+        "text_when_resolved": "Dohledatelnost ke zdroji",
+        "reworded_on": "2026-10-26",
+        "why_reworded": "The investigator renamed it when he read all forty-eight criteria aloud. Which generator won the conflict is unchanged and is what this record is for; the text it won with is kept beside the current one."
       },
       "rejected": [
         {
@@ -728,7 +734,7 @@
   ],
   "candidates": {
     "K01": {
-      "name": "Opora tvrzení ve zdroji",
+      "name": "Opora tvrzení v přepisu",
       "from": {
         "name": "panel_sheet.py",
         "statement": "panel_sheet.py",
@@ -743,7 +749,7 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-15",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "Každé věcné tvrzení v zápisu má oporu v přepisu sezení nebo v jiném uvedeném zdroji.",
+      "statement": "Každé věcné tvrzení v zápisu má oporu v přepisu sezení (případně v jiném uvedeném podkladu, třeba v terapeutově modalitě nebo ve věku klienta).",
       "question": "Má každé tvrzení oporu v tom, co zaznělo?",
       "definition": "Každé věcné tvrzení v zápisu má oporu v přepisu sezení nebo v jiném deklarovaném zdroji. Chybějící opora se dělí na vymyšlené (zdroj nic takového nemá) a zkreslené (zdroj říká něco jiného).",
       "unit": "jedno tvrzení",
@@ -757,11 +763,11 @@
       "example": "Zápis uvede „klient uvádí nespavost od rozvodu“, ale o žádném rozvodu se v sezení nemluvilo.",
       "example_positive": "Přepis: klient říká, že spí asi čtyři hodiny. Zápis: Klient uvádí, že spí asi čtyři hodiny.",
       "previous_wording": "Každé věcné tvrzení v zápisu má oporu v tom, co v sezení zaznělo.",
-      "reworded_on": "2026-10-23",
-      "why_reworded": "Reworded on 2026-10-23. It compared with what was said in the session, where the English compares with the source. The difference matters here: a transcription error is K39's, not this criterion's, and 'what was said' makes the two collide."
+      "reworded_on": "2026-10-26",
+      "why_reworded": "Reworded on 2026-10-23. It compared with what was said in the session, where the English compares with the source. The difference matters here: a transcription error is K39's, not this criterion's, and 'what was said' makes the two collide. Reworded on 2026-10-26. The investigator read all forty-eight criteria aloud, one at a time, in the order a rater meets them, and judged each for Czech and for whether a therapist would understand it. Czech word, and the thing meant. Reworded on 2026-10-26. The investigator read all forty-eight criteria aloud, one at a time, in the order a rater meets them, and judged each for Czech and for whether a therapist would understand it. The investigator asked for 'přepis' everywhere and for the wider case to be named in brackets, because a note may also rest on something that is not the transcript."
     },
     "K02": {
-      "name": "Kdo co řekl",
+      "name": "Kdo co řekl v přepisu",
       "from": {
         "name": "panel_sheet.py",
         "statement": "panel_sheet.py",
@@ -776,7 +782,7 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-15",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "Zápis zachovává, kdo co řekl nebo pozoroval: klient, terapeut, třetí osoba, starší dokumentace.",
+      "statement": "Zápis zachovává, kdo co v přepisu řekl nebo pozoroval, a co naopak pochází ze starší dokumentace: klient, terapeut, třetí osoba, dřívější záznam.",
       "question": "Je poznat, co řekl klient, co terapeut a co někdo třetí?",
       "definition": "Zápis zachovává, kdo co řekl nebo pozoroval: výpověď klienta, pozorování terapeuta, informace od třetí osoby, informace z dřívější dokumentace.",
       "unit": "jedno tvrzení",
@@ -788,7 +794,9 @@
       "needs_bank": false,
       "plain": "Musí být poznat, co řekl klient, co terapeut a co někdo třetí.",
       "example": "Klient řekne, že mu partnerka vyčítá pití. Zápis to napíše jako fakt o partnerce, ne jako to, co si myslí klient.",
-      "example_positive": "Klient uvádí, že mu partner vyčítá pití."
+      "example_positive": "Klient uvádí, že mu partner vyčítá pití.",
+      "reworded_on": "2026-10-26",
+      "why_reworded": "Reworded on 2026-10-26. The investigator read all forty-eight criteria aloud, one at a time, in the order a rater meets them, and judged each for Czech and for whether a therapist would understand it. The investigator's own wording. The old name did not say where the attribution is judged against. Reworded on 2026-10-26. The investigator read all forty-eight criteria aloud, one at a time, in the order a rater meets them, and judged each for Czech and for whether a therapist would understand it. The old statement listed older records beside the three people as though a document speaks in the session. With the name now naming the transcript, the two had to be separated. Corrected the same day, reading the new sentences back: K14 had 'ponizuje' misspelt with a long i, K02 had a comma inside a three-item list and a second sentence with no verb of its own, and K05 turned the source's graded importance into a flat prohibition."
     },
     "K03": {
       "name": "Čas a změna stavu",
@@ -806,7 +814,7 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-15",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "Zápis zachovává, kdy se co stalo, co platí teď a co dřív, a co je teprve záměr nebo plán.",
+      "statement": "Zápis zachovává, co se stalo dřív, co platí teď a co je teprve záměr nebo plán.",
       "question": "Je poznat, kdy se co stalo a co je aktuální?",
       "definition": "Zápis zachovává, kdy se co stalo a co je aktuální oproti minulému: současný stav, anamnéza, záměr, plán.",
       "unit": "jedno tvrzení",
@@ -820,8 +828,8 @@
       "example": "Zápis napíše „klient bere antidepresiva“, ačkoli se v sezení mluvilo o užívání před dvěma lety.",
       "example_positive": "Na minulém sezení to odmítal, dnes o tom uvažuje.",
       "previous_wording": "Zápis zachovává, kdy se co stalo a co je aktuální oproti minulému.",
-      "reworded_on": "2026-10-23",
-      "why_reworded": "Reworded on 2026-10-23. The Czech dropped part of what the English definition says; this restores it. Found by a second session comparing every statement with its English definition."
+      "reworded_on": "2026-10-26",
+      "why_reworded": "Reworded on 2026-10-23. The Czech dropped part of what the English definition says; this restores it. Found by a second session comparing every statement with its English definition. Reworded on 2026-10-26. The investigator read all forty-eight criteria aloud, one at a time, in the order a rater meets them, and judged each for Czech and for whether a therapist would understand it. 'co platí teď a co dřív' made the investigator stop: he read 'dřív' as the past and could not tell whether the criterion meant two time layers or three. It means three, so it now says three in their own order."
     },
     "K04": {
       "name": "Jistota, hypotéza, dohoda",
@@ -869,7 +877,7 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-22",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "Zápis nese podstatné informace ze sezení, přičemž podstatnost má stupně.",
+      "statement": "Zápis nese podstatné informace ze sezení; čím je informace důležitější, tím víc váží, když chybí.",
       "question": "Je v zápisu to podstatné, co zaznělo? Důležitost má stupně.",
       "definition": "Podíl podstatných informací ze sezení, které zápis nese, přičemž podstatnost má stupně a odvozuje se ze zdroje a z účelu, ne z toho, že ve formuláři existuje kolonka.",
       "unit": "jedna informační jednotka",
@@ -881,7 +889,9 @@
       "needs_bank": true,
       "plain": "Jestli je v zápisu to podstatné, co v sezení zaznělo. Podstatnost má stupně.",
       "example": "V sezení zaznělo sebepoškozování a v zápisu chybí.",
-      "example_positive": "Zaznělo sebepoškozování a zápis to nese; položka úrovně Povinné."
+      "example_positive": "Zaznělo sebepoškozování a zápis to nese; položka úrovně Povinné.",
+      "reworded_on": "2026-10-26",
+      "why_reworded": "Reworded on 2026-10-26. The investigator read all forty-eight criteria aloud, one at a time, in the order a rater meets them, and judged each for Czech and for whether a therapist would understand it. 'přičemž podstatnost má stupně' is the category describing its own scale. It says nothing a rater can act on. Corrected the same day, reading the new sentences back: K14 had 'ponizuje' misspelt with a long i, K02 had a comma inside a three-item list and a second sentence with no verb of its own, and K05 turned the source's graded importance into a flat prohibition."
     },
     "K06": {
       "name": "Přiznaná informační mezera",
@@ -997,7 +1007,7 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-15",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "Když zápis spojí informace do souvislosti nebo závěru, je ta souvislost podložená zdrojem a odpovídá účelu zápisu.",
+      "statement": "Když zápis spojí informace do souvislosti nebo závěru, je ta souvislost podložená přepisem a odpovídá účelu zápisu.",
       "question": "Je souvislost, kterou zápis vytvořil, opřená o zdroj?",
       "definition": "Pokud zápis spojí informace do vztahu, souvislosti nebo závěru, je ten vztah opřený o zdroj a přiměřený účelu.",
       "unit": "jedna vytvořená souvislost",
@@ -1011,8 +1021,8 @@
       "example": "Zápis uzavře, že jde o sociální fobii, ačkoli takovou souvislost v sezení nikdo neudělal.",
       "example_positive": "Klient sám spojuje vyhýbání se schůzkám se strachem z odsouzení druhými.",
       "previous_wording": "Když zápis spojí informace do souvislosti nebo závěru, je ten vztah opřený o zdroj.",
-      "reworded_on": "2026-10-23",
-      "why_reworded": "Reworded on 2026-10-23. The Czech dropped part of what the English definition says; this restores it. Found by a second session comparing every statement with its English definition."
+      "reworded_on": "2026-10-26",
+      "why_reworded": "Reworded on 2026-10-23. The Czech dropped part of what the English definition says; this restores it. Found by a second session comparing every statement with its English definition. Reworded on 2026-10-26. The investigator read all forty-eight criteria aloud, one at a time, in the order a rater meets them, and judged each for Czech and for whether a therapist would understand it. Czech word, and the thing meant."
     },
     "K10": {
       "name": "Návaznost a další kroky",
@@ -1155,7 +1165,7 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-15",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "Zápis nepoužívá jazyk, který klienta snižuje, zpochybňuje jeho věrohodnost nebo ho redukuje na diagnózu či chování.",
+      "statement": "Zápis nepoužívá jazyk, který klienta ponižuje, zpochybňuje jeho věrohodnost nebo ho redukuje na diagnózu či chování.",
       "question": "Nemluví zápis o klientovi snižujícím způsobem?",
       "definition": "Zápis nepoužívá jazyk, který klienta snižuje, zpochybňuje jeho věrohodnost nebo ho redukuje na diagnózu či chování.",
       "unit": "úsek textu",
@@ -1169,8 +1179,8 @@
       "example": "Zápis napíše „klient je nespolupracující a manipulativní“.",
       "example_positive": "Klient v posledních týdnech nepřišel na tři sezení.",
       "previous_wording": "Zápis nepoužívá jazyk, který klienta snižuje nebo ho redukuje na diagnózu.",
-      "reworded_on": "2026-10-23",
-      "why_reworded": "Reworded on 2026-10-23. The Czech dropped part of what the English definition says; this restores it. Found by a second session comparing every statement with its English definition."
+      "reworded_on": "2026-10-26",
+      "why_reworded": "Reworded on 2026-10-23. The Czech dropped part of what the English definition says; this restores it. Found by a second session comparing every statement with its English definition. Reworded on 2026-10-26. The investigator read all forty-eight criteria aloud, one at a time, in the order a rater meets them, and judged each for Czech and for whether a therapist would understand it. 'snižovat klienta' is not Czech. A person is 'ponížen', not 'snížen'. Corrected the same day, reading the new sentences back: K14 had 'ponizuje' misspelt with a long i, K02 had a comma inside a three-item list and a second sentence with no verb of its own, and K05 turned the source's graded importance into a flat prohibition."
     },
     "K15": {
       "name": "Nezbytnost citlivého detailu",
@@ -1272,7 +1282,7 @@
       "previous_plain": "Jak zápis zachází s lidmi, kteří nejsou klient."
     },
     "K18": {
-      "name": "Dohledatelnost ke zdroji",
+      "name": "Dohledatelnost k přepisu",
       "from": {
         "name": "panel_sheet.py",
         "statement": "panel_sheet.py",
@@ -1287,7 +1297,7 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-15",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "Zápis u tvrzení uvádí odkaz na místo ve zdroji a ten odkaz tvrzení opravdu podpírá.",
+      "statement": "Zápis u tvrzení uvádí odkaz na místo v přepisu a ten odkaz tvrzení opravdu podpírá.",
       "question": "Uvádí zápis u tvrzení odkaz na místo v přepisu, a sedí ten odkaz?",
       "definition": "U tvrzení lze ukázat místo ve zdroji, které ho podpírá. Rozlišuje se platnost odkazu, jeho skutečná opora tvrzení a podíl tvrzení, která odkaz nesou. Předmětem je odkaz, který do zápisu napíše autor; úseky, které si při kontrole označí hodnotitel, jsou něco jiného a patří do metod.",
       "unit": "jeden odkaz",
@@ -1297,8 +1307,8 @@
       "why_not_measured": "Neměří se. Žádná úloha po modelu nechce citace, takže by jmenovatel byl prázdný.",
       "ranking_role": "not_measured_yet",
       "needs_bank": false,
-      "reworded_on": "2026-10-14",
-      "why_reworded": "Původní znění „Lze u tvrzení ukázat místo ve zdroji?“ se nedalo odlišit od K01, protože se ptalo, jestli opora existuje. Předmětem K18 je ale odkaz, který do zápisu napsal autor, a jednotkou je jeden odkaz, ne jedno tvrzení. K01 se ptá, jestli je tvrzení podložené; K18, jestli zápis uvedl odkaz a jestli ten odkaz sedí.",
+      "reworded_on": "2026-10-26",
+      "why_reworded": "Původní znění „Lze u tvrzení ukázat místo ve zdroji?“ se nedalo odlišit od K01, protože se ptalo, jestli opora existuje. Předmětem K18 je ale odkaz, který do zápisu napsal autor, a jednotkou je jeden odkaz, ne jedno tvrzení. K01 se ptá, jestli je tvrzení podložené; K18, jestli zápis uvedl odkaz a jestli ten odkaz sedí. Reworded on 2026-10-26. The investigator read all forty-eight criteria aloud, one at a time, in the order a rater meets them, and judged each for Czech and for whether a therapist would understand it. Czech word, and the thing meant. Reworded on 2026-10-26. The investigator read all forty-eight criteria aloud, one at a time, in the order a rater meets them, and judged each for Czech and for whether a therapist would understand it. Czech word, and the thing meant.",
       "previous_wording": {
         "question": "Lze u tvrzení ukázat místo ve zdroji?",
         "statement": "U tvrzení v zápisu lze ukázat místo ve zdroji, které ho podpírá."
@@ -1423,7 +1433,7 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-15",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "Než odborník zápis použije, stačí mu udělat jen málo drobných úprav.",
+      "statement": "Než odborník zápis potvrdí, udělá v něm jen málo drobných úprav. Jde o to, kolik jich je, ne jestli vůbec nějaké byly.",
       "question": "Kolik toho musí odborník přepsat, než je zápis použitelný?",
       "definition": "Kolik a jakých zásahů musí odborník udělat, než je zápis použitelný. Typ úpravy nese informaci, kterou skóre nemá.",
       "unit": "jedna úprava",
@@ -1437,8 +1447,8 @@
       "example": "Terapeut zápis přijme, ale předtím přepíše tři oddíly ze čtyř.",
       "example_positive": "Terapeut opraví jednu formulaci.",
       "previous_wording": "Kolik a jakých zásahů musí odborník udělat, než je zápis použitelný.",
-      "reworded_on": "2026-10-23",
-      "why_reworded": "Reworded on 2026-10-23. The column is headed 'in one sentence' and this was a noun phrase, so it named the subject of the question instead of stating the property."
+      "reworded_on": "2026-10-26",
+      "why_reworded": "Reworded on 2026-10-23. The column is headed 'in one sentence' and this was a noun phrase, so it named the subject of the question instead of stating the property. Reworded on 2026-10-26. The investigator read all forty-eight criteria aloud, one at a time, in the order a rater meets them, and judged each for Czech and for whether a therapist would understand it. Two faults. The therapist does not 'use' the note, he signs it off. And the name says extent while the sentence read as yes or no; the investigator asked for the count."
     },
     "K23": {
       "name": "Přijatelnost pro praxi",
@@ -1848,16 +1858,18 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-15",
         "example_positive": "přeloženo z catalog.json examples.positive 2026-10-22"
       },
-      "statement": "Ze zápisu je poznat, jak to klient prožíval, ne jen co dělal.",
+      "statement": "Ze zápisu je poznat klientovo prožívání, nejen co dělal.",
       "ranking_role": "not_measured_yet",
       "needs_bank": false,
       "plain": "Jestli je ze zápisu poznat, jak to klient prožíval, ne jen co dělal.",
       "example": "Zápis uvádí, že klient přišel, mluvil málo a odešel včas.",
-      "example_positive": "Zápis zaznamenává, že klient řekl, že týden byl jako brodit se, a že vstávání bylo nejtěžší částí dne."
+      "example_positive": "Zápis zaznamenává, že klient řekl, že týden byl jako brodit se, a že vstávání bylo nejtěžší částí dne.",
+      "reworded_on": "2026-10-26",
+      "why_reworded": "Reworded on 2026-10-26. The investigator read all forty-eight criteria aloud, one at a time, in the order a rater meets them, and judged each for Czech and for whether a therapist would understand it. 'jak to klient prožíval' has no antecedent for 'to'. The investigator asked outright what 'to' was."
     },
     "K37": {
       "name": "Správnost čísel",
-      "statement": "Čísla v zápisu odpovídají číslům ve zdroji.",
+      "statement": "Čísla v zápisu odpovídají číslům v přepisu.",
       "question": "Odpovídají čísla v zápisu číslům ve zdroji?",
       "unit": "jedno číslo",
       "why_not_measured": "Chybí pravidlo měření. Do souboru pro panel zařazeno 14. 10. (D13), zatím nehodnoceno, protože list ještě nebyl rozeslán.",
@@ -1876,14 +1888,14 @@
       "plain": "Jestli čísla v zápisu sedí s čísly ve zdroji.",
       "example": "V přepisu jsou dvě vynechané dávky, zápis uvádí čtyři.",
       "example_positive": "V přepisu klient za poslední měsíc vynechal dvě dávky; zápis uvádí dvě.",
-      "reworded_on": "2026-10-23",
-      "why_reworded": "Reworded on 2026-10-23. It compared with what was said in the session, where the English compares with the source. The difference matters here: a transcription error is K39's, not this criterion's, and 'what was said' makes the two collide. Reworded on 2026-10-23. A second session compared every Czech field with the English it was translated from; this field said something the English does not. Four of its twelve were checked here against the English before any were applied. Reworded on 2026-10-23. A second session compared every Czech field with the English it was translated from; this field said something the English does not. Four of its twelve were checked here against the English before any were applied. Reworded on 2026-10-23. A second session compared every Czech field with the English it was translated from; this field said something the English does not. Four of its twelve were checked here against the English before any were applied.",
+      "reworded_on": "2026-10-26",
+      "why_reworded": "Reworded on 2026-10-23. It compared with what was said in the session, where the English compares with the source. The difference matters here: a transcription error is K39's, not this criterion's, and 'what was said' makes the two collide. Reworded on 2026-10-23. A second session compared every Czech field with the English it was translated from; this field said something the English does not. Four of its twelve were checked here against the English before any were applied. Reworded on 2026-10-23. A second session compared every Czech field with the English it was translated from; this field said something the English does not. Four of its twelve were checked here against the English before any were applied. Reworded on 2026-10-23. A second session compared every Czech field with the English it was translated from; this field said something the English does not. Four of its twelve were checked here against the English before any were applied. Reworded on 2026-10-26. The investigator read all forty-eight criteria aloud, one at a time, in the order a rater meets them, and judged each for Czech and for whether a therapist would understand it. Czech word, and the thing meant.",
       "previous_wording": "Čísla v zápisu odpovídají tomu, co v sezení zaznělo.",
       "previous_plain": "Jestli čísla v zápisu sedí s tím, co v sezení zaznělo."
     },
     "K38": {
       "name": "Správnost jmen a institucí",
-      "statement": "Jména osob a institucí, odesílatel, příbuzenské vztahy, léky a místa v zápisu odpovídají zdroji.",
+      "statement": "Jména osob a institucí, odesílatel, příbuzenské vztahy, léky a místa v zápisu odpovídají přepisu.",
       "question": "Je v zápisu správné jméno, instituce a odesílatel?",
       "unit": "jedna pojmenovaná entita",
       "why_not_measured": "Chybí pravidlo měření. U češtiny se navíc musí porovnávat základní tvary, jinak každé správně skloňované jméno vyjde jako odchylka.",
@@ -1902,14 +1914,14 @@
       "plain": "Jestli jména, instituce a odesílatel sedí se zdrojem.",
       "example": "Zápis uvede, že klientku Janu odeslal psychiatr, ačkoli šlo o sestru Hanu a o praktického lékaře.",
       "example_positive": "Klient mluví o sestře Haně a o doporučení od praktického lékaře; zápis uvádí sestru Hanu a doporučení od praktického lékaře.",
-      "reworded_on": "2026-10-23",
-      "why_reworded": "Reworded on 2026-10-23. The Czech dropped part of what the English definition says; this restores it. Found by a second session comparing every statement with its English definition.",
+      "reworded_on": "2026-10-26",
+      "why_reworded": "Reworded on 2026-10-23. The Czech dropped part of what the English definition says; this restores it. Found by a second session comparing every statement with its English definition. Reworded on 2026-10-26. The investigator read all forty-eight criteria aloud, one at a time, in the order a rater meets them, and judged each for Czech and for whether a therapist would understand it. 'odpovídají zdroji': the investigator asked for the Czech word and for the thing actually meant, which is the transcript.",
       "previous_wording": "Jména, instituce a odesílatel v zápisu odpovídají zdroji."
     },
     "K39": {
-      "name": "Nepřebírání chyb ze zdroje",
-      "statement": "Zápis nepřebírá chyby, které byly už ve zdroji.",
-      "question": "Nepřepsal zápis věrně chybu, která byla už ve zdroji — v přepisu nahrávky nebo v překladu?",
+      "name": "Nepřebírání chyb z přepisu",
+      "statement": "Zápis nepřebírá chyby, které byly už v přepisu, například přeslechnuté slovo.",
+      "question": "Nepřepsal zápis věrně chybu, která byla už v přepisu nahrávky nebo v překladu?",
       "unit": "jedno tvrzení, jehož zdrojový text je sám špatný",
       "why_not_measured": "Nedá se to rozhodnout z přepisu, protože špatný je právě ten přepis. Potřebuje to nahrávku, a u české části navíc anglický přepis, ze kterého se překládalo.",
       "from": {
@@ -1926,8 +1938,8 @@
       "needs_bank": false,
       "plain": "Jestli zápis věrně neopsal chybu, která vznikla už dřív, při přepisu nahrávky nebo při překladu do češtiny.",
       "example": "Přepis slyšel „sertralid“ místo „sertralin“ a zápis to opíše.",
-      "reworded_on": "2026-10-23",
-      "why_reworded": "Corrected on 2026-10-23. It carried a dash, which the investigator struck from the sheet on 2026-10-22; a colon does the same work.",
+      "reworded_on": "2026-10-26",
+      "why_reworded": "Corrected on 2026-10-23. It carried a dash, which the investigator struck from the sheet on 2026-10-22; a colon does the same work. Reworded on 2026-10-26. The investigator read all forty-eight criteria aloud, one at a time, in the order a rater meets them, and judged each for Czech and for whether a therapist would understand it. Same as K38: say which source. Reworded on 2026-10-26. The investigator read all forty-eight criteria aloud, one at a time, in the order a rater meets them, and judged each for Czech and for whether a therapist would understand it. 've zdroji' left the investigator asking whether that meant the transcript or something else. It is the transcript, and the example names the usual case. Reworded on 2026-10-26. The investigator read all forty-eight criteria aloud, one at a time, in the order a rater meets them, and judged each for Czech and for whether a therapist would understand it. Said 've zdroji' and then spelled the source out after a dash. With the source named directly the dash has nothing to join, and this project's Czech carries no dashes.",
       "previous_wording": {
         "statement": "Zápis nepřebírá chyby, které udělal už přepis.",
         "question": "Nepřepsal zápis věrně chybu, kterou udělalo rozpoznávání řeči?",
@@ -1948,16 +1960,18 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-23",
         "why_not_measured": "read on 2026-10-14 and written here"
       },
-      "statement": "Zápis není utnutý v půlce věty nebo oddílu.",
+      "statement": "Zápis je dopsaný celý: končí dokončenou větou a dokončeným oddílem.",
       "question": "Je zápis utnutý v půlce věty nebo oddílu?",
       "plain": "Zápis skončí tam, kde měl skončit, a ne v půlce věty.",
       "example": "Poslední oddíl začíná větou „Dohodli jsme se, že klient do dalšího sezení“ a tím zápis končí.",
       "why_not_measured": "Pravidlo pro měření zatím není napsáno.",
       "ranking_role": "not_measured_yet",
-      "needs_bank": false
+      "needs_bank": false,
+      "reworded_on": "2026-10-26",
+      "why_reworded": "Reworded on 2026-10-26. The investigator read all forty-eight criteria aloud, one at a time, in the order a rater meets them, and judged each for Czech and for whether a therapist would understand it. One of the five the investigator asked to be put positively: the statement described the defect rather than the property."
     },
     "K41": {
-      "name": "Fluence s prahem porozumění",
+      "name": "Plynulost",
       "from": {
         "name": "read on 2026-10-14 and written here",
         "statement": "read on 2026-10-14 and written here",
@@ -1966,15 +1980,15 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-23",
         "why_not_measured": "read on 2026-10-14 and written here"
       },
-      "statement": "V zápisu není gramatická chyba, která by čtenáři mohla zabránit porozumět.",
+      "statement": "Zápis se dá přečíst bez zakopávání: žádná gramatická chyba v něm nebrání porozumět.",
       "question": "Je v zápisu gramatická chyba, která může čtenáři zabránit porozumět?",
       "plain": "Nejde o každou gramatickou chybu, ale o takovou, po které čtenář neví, co se tím mělo říct.",
       "example": "Zápis píše „klientka uvedla, že jí partner matce vysazení léků nedoporučil“, a z věty nejde poznat, komu to nedoporučil.",
       "why_not_measured": "Pravidlo pro měření zatím není napsáno.",
       "ranking_role": "not_measured_yet",
       "needs_bank": false,
-      "reworded_on": "2026-10-23",
-      "why_reworded": "Corrected on 2026-10-23. The example claimed the sentence left it undecidable who advised what, and the sentence said plainly that the partner advised against it. An example that does not show what it claims teaches the wrong threshold."
+      "reworded_on": "2026-10-26",
+      "why_reworded": "Corrected on 2026-10-23. The example claimed the sentence left it undecidable who advised what, and the sentence said plainly that the partner advised against it. An example that does not show what it claims teaches the wrong threshold. Reworded on 2026-10-26. The investigator read all forty-eight criteria aloud, one at a time, in the order a rater meets them, and judged each for Czech and for whether a therapist would understand it. 'Fluence' is itself a calque, which is what K48 on the same sheet is about, and the investigator caught it. 's prahem porozumění' was jargon that said nothing to a therapist. Reworded on 2026-10-26. The investigator read all forty-eight criteria aloud, one at a time, in the order a rater meets them, and judged each for Czech and for whether a therapist would understand it. Put positively, and the threshold it is named for is now in the sentence rather than in the name."
     },
     "K42": {
       "name": "Nečekané přepnutí jazyka",
@@ -2025,13 +2039,15 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-23",
         "why_not_measured": "read on 2026-10-14 and written here"
       },
-      "statement": "V zápisu není věta s chybnou shodou nebo špatným pádem.",
+      "statement": "Zápis dodržuje shodu a pády: tvar slovesa i zájmena odpovídá tomu, o kom je řeč.",
       "question": "Je v zápisu věta s chybnou shodou nebo špatným pádem?",
       "plain": "Podstatné jméno a sloveso k sobě patří tvarem, a pád odpovídá tomu, co věta říká.",
       "example": "„Klientka uvedl, že se mu ulevilo“: sloveso i zájmeno patří k jinému rodu než podmět.",
       "why_not_measured": "Pravidlo pro měření zatím není napsáno.",
       "ranking_role": "not_measured_yet",
-      "needs_bank": false
+      "needs_bank": false,
+      "reworded_on": "2026-10-26",
+      "why_reworded": "Reworded on 2026-10-26. The investigator read all forty-eight criteria aloud, one at a time, in the order a rater meets them, and judged each for Czech and for whether a therapist would understand it. Put positively, and the statement now says what the rule is rather than naming the two grammatical terms and stopping."
     },
     "K45": {
       "name": "Neexistující slovo",
@@ -2043,7 +2059,7 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-23",
         "why_not_measured": "read on 2026-10-14 and written here"
       },
-      "statement": "V zápisu není slovo, které v daném jazyce neexistuje.",
+      "statement": "Každé slovo v zápisu v daném jazyce existuje.",
       "question": "Je v zápisu slovo, které v češtině neexistuje?",
       "plain": "Tvar, který vypadá jako slovo, ale žádné takové slovo není.",
       "example": "Zápis píše, že klientka „odreagovává své úzkostnění“.",
@@ -2051,8 +2067,8 @@
       "ranking_role": "not_measured_yet",
       "needs_bank": false,
       "previous_plain": "Tvar, který vypadá jako slovo, ale žádné také slovo není.",
-      "reworded_on": "2026-10-23",
-      "why_reworded": "Corrected on 2026-10-23. A typo: 'zadne take slovo' for 'zadne takove slovo'."
+      "reworded_on": "2026-10-26",
+      "why_reworded": "Corrected on 2026-10-23. A typo: 'zadne take slovo' for 'zadne takove slovo'. Reworded on 2026-10-26. The investigator read all forty-eight criteria aloud, one at a time, in the order a rater meets them, and judged each for Czech and for whether a therapist would understand it. A double negative: no word that does not exist. The investigator asked for it the other way round and it is shorter as well."
     },
     "K46": {
       "name": "Hovorový výraz místo odborného",
@@ -2082,15 +2098,15 @@
         "example": "přeloženo z catalog.json examples.negative 2026-10-23",
         "why_not_measured": "read on 2026-10-14 and written here"
       },
-      "statement": "V českém zápisu není slovo s chybějící nebo špatnou délkou či háčkem.",
+      "statement": "Každé slovo v českém zápisu má správnou délku i háčky.",
       "question": "Je v zápisu české slovo s chybějící nebo špatnou délkou či háčkem?",
       "plain": "Délka a háček v češtině mění slovo, ne jen jeho vzhled.",
       "example": "Zápis píše „terapeut mluvil za ní“ tam, kde mělo být „za ni“: jedna čárka mění, jestli mluvil místo klientky, nebo za jejími zády.",
       "why_not_measured": "Pravidlo pro měření zatím není napsáno.",
       "ranking_role": "not_measured_yet",
       "needs_bank": false,
-      "reworded_on": "2026-10-23",
-      "why_reworded": "Corrected on 2026-10-23. The pair was not a pair: the two forms were not one diacritic apart and the second was not a sentence."
+      "reworded_on": "2026-10-26",
+      "why_reworded": "Corrected on 2026-10-23. The pair was not a pair: the two forms were not one diacritic apart and the second was not a sentence. Reworded on 2026-10-26. The investigator read all forty-eight criteria aloud, one at a time, in the order a rater meets them, and judged each for Czech and for whether a therapist would understand it. Put positively."
     },
     "K48": {
       "name": "Kalk",
@@ -2447,6 +2463,11 @@
         "text": "Tohle se k žádnému řádku neváže, takže prosím sem: vlastnost, kterou by dobrý zápis měl mít a v seznamu není. Klidně víc věcí, každou na nový řádek.",
         "until": "2026-10-23",
         "why": "Reworded on 2026-10-23. Two defects of the kind the sheet's own language criteria measure. One relative pronoun served an accusative slot and a nominative one: 'vlastnost, kterou by dobry zapis mel mit a v seznamu neni' needs 'a ktera v seznamu neni', which is exactly what K44 asks about. And 'takze prosim sem' dropped the verb; it was a guess at where to write, which the marked cells below the line now answer."
+      },
+      {
+        "text": "Která dvě jsou to samé? Některá kritéria se částečně překrývají a to tak má být. Když vám ale dvě přijdou jako to samé, napište do poznámky u jednoho z nich kód toho druhého a v čem jsou podle vás stejná.",
+        "until": "2026-10-26",
+        "why": "Rewritten when the overview tab arrived. The line sent the answer about duplicates into the note column, which was the only place it could go while the rater had no way to see the list as a whole. The overview tab now holds a field for the code, so the line points there and keeps the note column for the reason."
       }
     ],
     "purposes": {
@@ -2497,7 +2518,7 @@
         "Jak by se to dalo obejít? Co se začne známkovat, na to se modely zaměří, a někdy jde získat dobrou známku, aniž by zápis za něco stál. Příklad: kritérium „Úspornost“ žádá, aby každá věta nesla podstatný obsah. Zápis, který má jedinou větu, dostane plný počet bodů, protože ta jedna věta podstatná je. Takže čím míň toho model napíše, tím líp dopadne. Když vás něco takového u některého kritéria napadne, napište to do poznámky u jeho řádku."
       ],
       [
-        "Která dvě jsou to samé? Některá kritéria se částečně překrývají a to tak má být. Když vám ale dvě přijdou jako to samé, napište do poznámky u jednoho z nich kód toho druhého a v čem jsou podle vás stejná."
+        "Která dvě jsou to samé? Některá kritéria se částečně překrývají a to tak má být. Na to je třetí list Přehled: jsou na něm všechna kritéria pohromadě a v posledním sloupci si u jednoho z dvojice poznamenáte kód toho druhého. Sem do poznámky napište, v čem jsou podle vás stejná."
       ],
       [],
       [
@@ -2526,7 +2547,15 @@
       }
     },
     "legend_order_note": "Reordered on 2026-10-22. The investigator put what a rater is judging above which of the two notes each tab asks about, and moved the legend to the first tab. A rater learns what they are looking at before they learn which kind of it this tab is about.",
-    "tail_note": "Empty since 2026-10-23. The rating tab is the header and one row per candidate, and nothing else; what stood here is on the legend. A build that puts prose back under the table fails the test that holds the tab to its rows."
+    "tail_note": "Empty since 2026-10-23. The rating tab is the header and one row per candidate, and nothing else; what stood here is on the legend. A build that puts prose back under the table fails the test that holds the tab to its rows.",
+    "overview_header": [
+      "Kód",
+      "Kritérium",
+      "Jednou větou",
+      "Podobné s (kód)"
+    ],
+    "overview_intro": "Přehled všech kritérií v tom pořadí, v jakém je máte na hodnoticím listu. Sem se můžete kdykoli vrátit, když budete mít pocit, že jste něco podobného už četli. Když vám dvě kritéria přijdou jako totéž, napište si u jednoho z nich do posledního sloupce kód toho druhého. Nepovinné, ale je to pro nás jedna z nejcennějších odpovědí.",
+    "overview_note": "Added on 2026-10-26. The investigator read all forty-eight criteria aloud and named nine pairs he thought were the same thing; all nine are pairs catalog.json already records in `overlaps`. He then asked the practical question the protocol does not answer: a rater meets the criteria in a shuffled order and cannot be expected to remember, forty rows later, that they read something like this before. His own proposal was to print our candidate pairs on the sheet, which would turn the duplicate question into a confirmation of our own reading. This tab is the alternative: the whole list on one screen, in the same order, with nothing grouped and nothing suggested, and a column the rater fills in as they go. It also restores what the sheet lost on 2026-10-22, when the question stopped asking for the code: the answer is a field again rather than prose that nothing asked to be machine-readable."
   },
   "page": {
     "title": "Všechna kritéria v jedné tabulce",

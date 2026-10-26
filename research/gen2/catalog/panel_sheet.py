@@ -206,6 +206,28 @@ def rows(czech: dict, codes: list[str], catalog: dict, purpose: str = None) -> l
     return out
 
 
+def overview(czech: dict, codes: list[str]) -> list[list[str]]:
+    """The whole list on one screen, with a column for naming a duplicate.
+
+    The panel is asked which two criteria are the same thing, and until this tab
+    existed it was asked of someone reading forty-eight items in a shuffled
+    order with no way to look back at the thirty they had passed. The
+    investigator's own proposal was to print our candidate pairs beside them,
+    which would have asked the panel to agree with us rather than to answer.
+
+    So this carries no grouping and no suggestion: the same order as the rating
+    tab, the code, the name, the one sentence, and an empty column. The order is
+    deliberate. Sorting by code would put the nine criteria of the language layer
+    together, because they were added together, and that grouping is a claim.
+    """
+    sheet = czech["panel_sheet"]
+    out = [[sheet["overview_intro"]], [], list(sheet["overview_header"])]
+    for code in order(codes):
+        entry = czech["candidates"][code]
+        out.append([code, entry["name"], entry["statement"], ""])
+    return out
+
+
 def as_csv(table: list[list[str]]) -> str:
     buf = io.StringIO()
     csv.writer(buf, lineterminator="\n").writerows(table)
@@ -243,6 +265,9 @@ def main() -> int:
             written += 1
         name = f"hodnoceni-{rater['surname']}-legenda.csv"
         (OUT_DIR / name).write_text(as_csv(legend(czech, codes)), encoding="utf-8")
+        written += 1
+        name = f"hodnoceni-{rater['surname']}-prehled.csv"
+        (OUT_DIR / name).write_text(as_csv(overview(czech, codes)), encoding="utf-8")
         written += 1
     (OUT_DIR / "poradi.json").write_text(
         json.dumps(
